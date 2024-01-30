@@ -23,6 +23,27 @@ const config: GatsbyConfig = {
         path: `src/pages`,
       },
     },
+    {
+      resolve: `gatsby-plugin-webfonts`,
+      options: {
+        fonts: {
+          google: [
+            {
+              family: "Roboto",
+              variants: ["300", "400", "500"],
+            },
+            {
+              family: "Open Sans",
+              variants: ["300", "700"],
+            },
+            {
+              family: "Ubuntu",
+              variants: ["300", "700"],
+            },
+          ],
+        },
+      },
+    },
   ],
 };
 
