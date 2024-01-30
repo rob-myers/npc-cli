@@ -36,11 +36,11 @@ export default function Comments(props: Props) {
       {articleKey && (
         <Giscus
           id={props.id}
-          repo="rob-myers/the-last-redoubt"
-          repoId="R_kgDOHVYh5w"
+          repo="rob-myers/npc-cli"
+          repoId="R_kgDOLDpQzw"
           category="Announcements"
-          categoryId="DIC_kwDOHVYh584CQ8vc"
-          mapping="specific"
+          categoryId="DIC_kwDOLDpQz84Cc0CN"
+          mapping="pathname" // or "specific"
           term={articleKey}
           reactionsEnabled="1"
           // Emits message with data `{ giscus: { discussion, message } }` to window
