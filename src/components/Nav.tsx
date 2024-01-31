@@ -5,11 +5,13 @@ import {
   Menu,
   MenuItem,
   SubMenu,
+  sidebarClasses,
   menuClasses,
 } from "react-pro-sidebar";
 
 import useUpdate from "../js/hooks/use-update";
 import useStateRef from "../js/hooks/use-state-ref";
+import Icon from "./Icon";
 
 export default function Nav() {
   const update = useUpdate();
@@ -24,13 +26,25 @@ export default function Nav() {
       collapsed={state.collapsed}
       onClick={(e) => console.log(e.target)}
     >
+      <div
+        style={{
+          position: "absolute",
+          // top: "0.5rem",
+          right: "calc(-1 * (2rem + 2 * 0.5rem))",
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          state.collapsed = !state.collapsed;
+          update();
+        }}
+      >
+        {/* <Icon name="chevron_right" size={2} padding="0.5rem" bg="#444" /> */}
+        {/* <Icon name="double_arrow" size={2} padding="0.5rem" bg="#444" /> */}
+        <Icon name="menu_open" size={2} padding="0.5rem" bg="#000" />
+      </div>
+
       <Menu className="menu">
-        <MenuItem
-          onClick={() => {
-            state.collapsed = !state.collapsed;
-            update();
-          }}
-        >
+        <MenuItem>
           <h3>NPC CLI</h3>
         </MenuItem>
         <SubMenu label="Go">
@@ -45,8 +59,12 @@ export default function Nav() {
 }
 
 const rootCss = css`
-  /* border-color: #333333 !important; */
   color: white;
+  margin-right: 4rem;
+
+  .${sidebarClasses.container} {
+    overflow: initial;
+  }
 
   .menu .${menuClasses.button} {
     &:hover {

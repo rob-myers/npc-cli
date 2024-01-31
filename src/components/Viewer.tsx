@@ -10,6 +10,7 @@ import { css } from "@emotion/css";
 
 import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
+import Icon from "./Icon";
 
 export default function Viewer() {
   const update = useUpdate();
@@ -26,13 +27,21 @@ export default function Viewer() {
       width="50%"
     >
       <Menu className="menu">
-        <MenuItem
-          onClick={() => {
-            state.collapsed = !state.collapsed;
-            update();
-          }}
-        >
-          <div className="toggle">&lt;</div>
+        <MenuItem>
+          <div
+            onClick={() => {
+              state.collapsed = !state.collapsed;
+              update();
+            }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+          >
+            <Icon name="double_arrow" size={2} bg="#000" rtl />
+          </div>
         </MenuItem>
       </Menu>
       <div style={{ direction: "ltr" }}></div>
@@ -43,6 +52,7 @@ export default function Viewer() {
 const rootCss = css`
   border-color: #333333 !important;
   color: white;
+  margin-left: 4rem;
 
   .menu .${menuClasses.button} {
     &:hover {
@@ -50,12 +60,11 @@ const rootCss = css`
     }
   }
 
-  .menu .${menuClasses.subMenuContent} {
-    background-color: #222222;
+  .menu .${menuClasses.label} {
+    height: inherit;
   }
 
-  .menu .toggle {
-    display: flex;
-    justify-content: center;
+  .menu .${menuClasses.subMenuContent} {
+    background-color: #222222;
   }
 `;
