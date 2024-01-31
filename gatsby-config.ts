@@ -27,7 +27,16 @@ const config: GatsbyConfig = {
       resolve: `gatsby-plugin-webfonts`,
       options: {
         fonts: {
+          google2: [
+            {
+              family: "Material Symbols Outlined",
+              axes: "wght@100..500",
+            },
+          ],
           google: [
+            // {
+            //   family: "Material Icons",
+            // },
             {
               family: "Roboto",
               variants: ["300", "400", "500"],
