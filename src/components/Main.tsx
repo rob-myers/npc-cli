@@ -1,10 +1,12 @@
 import React from "react";
 import { css } from "@emotion/css";
+import Title from "./Title";
 
 export default function Main(props: React.PropsWithChildren) {
   return (
     <section className={rootCss}>
-      {/* <Title /> */}
+      <Title />
+
       <main>{props.children}</main>
     </section>
   );
@@ -12,5 +14,4 @@ export default function Main(props: React.PropsWithChildren) {
 
 const rootCss = css`
   width: 100%;
-  padding: 32px;
 `;
