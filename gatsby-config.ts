@@ -30,21 +30,22 @@ const config: GatsbyConfig = {
           google2: [
             {
               family: "Material Symbols Outlined",
-              axes: "wght@100..500",
+              // axes: "wght@100..500",
+              axes: "wght@100",
             },
           ],
           google: [
             // {
             //   family: "Material Icons",
             // },
-            {
-              family: "Roboto",
-              variants: ["300", "400", "500"],
-            },
-            {
-              family: "Open Sans",
-              variants: ["300", "700"],
-            },
+            // {
+            //   family: "Roboto",
+            //   variants: ["300", "400", "500"],
+            // },
+            // {
+            //   family: "Open Sans",
+            //   variants: ["300", "700"],
+            // },
             {
               family: "Ubuntu",
               variants: ["300", "700"],
