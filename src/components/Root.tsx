@@ -24,6 +24,40 @@ export function wrapPageElement({
 }: WrapPageElementBrowserArgs | WrapPageElementNodeArgs) {
   const frontMatter = props.pageContext?.frontmatter as FrontMatter | undefined;
 
+  return (
+    <>
+      <HooksThatBreakTopLevel frontMatter={frontMatter} />
+      <QueryClientProvider client={queryClient}>
+        <div className={rootCss}>
+          <Nav />
+          <Main>
+            <article>{element}</article>
+            <Comments
+              id="comments"
+              term={
+                frontMatter?.giscusTerm ||
+                frontMatter?.path ||
+                "fallback-discussion"
+              }
+            />
+          </Main>
+          <Viewer />
+        </div>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </>
+  );
+}
+
+export const rootCss = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 100vh;
+`;
+
+function HooksThatBreakTopLevel(props: { frontMatter?: FrontMatter }) {
   const allFrontMatter = useStaticQuery(graphql`
     query {
       allMdx {
@@ -46,36 +80,9 @@ export function wrapPageElement({
 
   React.useMemo(() => {
     // clearAllBodyScrollLocks();
-    useSiteStore.api.setArticleKey(frontMatter?.key);
+    useSiteStore.api.setArticleKey(props.frontMatter?.key);
     useSiteStore.api.initiate(allFrontMatter);
-  }, [frontMatter]);
+  }, [props.frontMatter]);
 
-  return (
-    <div className={rootCss}>
-      <QueryClientProvider client={queryClient}>
-        <Nav />
-        <Main>
-          <article>{element}</article>
-          <Comments
-            id="comments"
-            term={
-              frontMatter?.giscusTerm ||
-              frontMatter?.path ||
-              "fallback-discussion"
-            }
-          />
-        </Main>
-        <Viewer />
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </div>
-  );
+  return null;
 }
-
-export const rootCss = css`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 100vh;
-`;
