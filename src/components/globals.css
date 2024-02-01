@@ -9,14 +9,6 @@ body {
 
   /* font-family: Roboto; */
   /* font-family: "Open Sans"; */
-  font-family: Ubuntu;
+  font-family: Ubuntu, Arial, sans-serif;
   font-weight: 300;
-}
-
-.material-icon {
-  font-family: "Material Symbols Outlined";
-  /** Needed for transform: */
-  display: inline-block;
-  user-select: none;
-  font-weight: 100;
 }

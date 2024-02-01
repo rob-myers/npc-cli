@@ -10,7 +10,7 @@ import { css } from "@emotion/css";
 
 import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
-import Icon from "./Icon";
+import { FontAwesomeIcon, faChevronRight } from "./Icon";
 
 export default function Viewer() {
   const update = useUpdate();
@@ -40,7 +40,13 @@ export default function Viewer() {
               height: "100%",
             }}
           >
-            <Icon name="double_arrow" size={2} bg="#000" rtl />
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              size="1x"
+              color="white"
+              width="2rem"
+              flip="horizontal"
+            />
           </div>
         </MenuItem>
       </Menu>

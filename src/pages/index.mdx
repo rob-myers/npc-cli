@@ -13,13 +13,20 @@ tags:
   - video games
 ---
 
-import Icon from '../components/Icon';
+import {
+  FontAwesomeIcon,
+  faCoffee,
+  faChevronRight,
+  faLungs,
+} from '../components/Icon';
 
 # Home Page
 
 Foo bar baz qux.
 
-Here are some icons: <Icon name='circle' />,
-<Icon name='chevron_right' size={1} bg="#ddd" />, <Icon name='chevron_right' size={1} bg="#ddd" rtl />
+Here are some icons:
+- <FontAwesomeIcon icon={faChevronRight} size="1x" beat />
+- <FontAwesomeIcon icon={faCoffee} size="1x" />
+- <FontAwesomeIcon icon={faLungs} size="1x" />
 
 export { Head } from '../components/Head';

@@ -11,7 +11,8 @@ import {
 
 import useUpdate from "../js/hooks/use-update";
 import useStateRef from "../js/hooks/use-state-ref";
-import Icon from "./Icon";
+
+import { FontAwesomeIcon, faChevronRight } from "./Icon";
 
 export default function Nav() {
   const update = useUpdate();
@@ -32,15 +33,22 @@ export default function Nav() {
           // top: "0.5rem",
           right: "calc(-1 * (2rem + 2 * 0.5rem))",
           cursor: "pointer",
+          padding: "0.5rem",
+          border: "1px solid #222",
+          background: "#000",
         }}
         onClick={() => {
           state.collapsed = !state.collapsed;
           update();
         }}
       >
-        {/* <Icon name="chevron_right" size={2} padding="0.5rem" bg="#444" /> */}
-        {/* <Icon name="double_arrow" size={2} padding="0.5rem" bg="#444" /> */}
-        <Icon name="menu_open" size={2} padding="0.5rem" bg="#000" />
+        <FontAwesomeIcon
+          icon={faChevronRight}
+          size="1x"
+          beat={false}
+          color="white"
+          width="2rem"
+        />
       </div>
 
       <Menu className="menu">
