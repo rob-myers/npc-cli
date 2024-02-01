@@ -16,6 +16,7 @@ const config: GatsbyConfig = {
   plugins: [
     "gatsby-plugin-emotion",
     `gatsby-plugin-mdx`,
+    "gatsby-plugin-fontawesome",
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -27,13 +28,13 @@ const config: GatsbyConfig = {
       resolve: `gatsby-plugin-webfonts`,
       options: {
         fonts: {
-          google2: [
-            {
-              family: "Material Symbols Outlined",
-              // axes: "wght@100..500",
-              axes: "wght@100",
-            },
-          ],
+          // google2: [
+          //   {
+          //     family: "Material Symbols Outlined",
+          //     // axes: "wght@100..500",
+          //     axes: "wght@100",
+          //   },
+          // ],
           google: [
             // {
             //   family: "Material Icons",
@@ -46,6 +47,7 @@ const config: GatsbyConfig = {
             //   family: "Open Sans",
             //   variants: ["300", "700"],
             // },
+            // 🚧 self-host so can `yarn dev` whilst not on internet
             {
               family: "Ubuntu",
               variants: ["300", "700"],
