@@ -54,6 +54,10 @@ const config: GatsbyConfig = {
       },
     },
   ],
+  flags: {
+    DEV_SSR: true,
+    // FAST_DEV: true,
+  },
 };
 
 export default config;
