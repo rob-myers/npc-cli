@@ -7,8 +7,13 @@ body {
   min-height: -webkit-fill-available;
   margin: 0;
 
-  /* font-family: Roboto; */
-  /* font-family: "Open Sans"; */
-  font-family: Ubuntu, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+h1 {
+  font-size: 2rem;
+  letter-spacing: 1px;
 }

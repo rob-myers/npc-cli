@@ -24,38 +24,6 @@ const config: GatsbyConfig = {
         path: `src/pages`,
       },
     },
-    {
-      resolve: `gatsby-plugin-webfonts`,
-      options: {
-        fonts: {
-          // google2: [
-          //   {
-          //     family: "Material Symbols Outlined",
-          //     // axes: "wght@100..500",
-          //     axes: "wght@100",
-          //   },
-          // ],
-          google: [
-            // {
-            //   family: "Material Icons",
-            // },
-            // {
-            //   family: "Roboto",
-            //   variants: ["300", "400", "500"],
-            // },
-            // {
-            //   family: "Open Sans",
-            //   variants: ["300", "700"],
-            // },
-            // 🚧 self-host so can `yarn dev` whilst not on internet
-            {
-              family: "Ubuntu",
-              variants: ["300", "700"],
-            },
-          ],
-        },
-      },
-    },
   ],
   flags: {
     DEV_SSR: true,
