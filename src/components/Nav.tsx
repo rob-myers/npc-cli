@@ -28,7 +28,7 @@ export default function Nav() {
   return (
     <Sidebar
       backgroundColor="black"
-      className={rootCss}
+      className={navCss}
       collapsed={state.collapsed}
       collapsedWidth="4rem"
       onClick={(e) => console.log(e.target)}
@@ -36,12 +36,12 @@ export default function Nav() {
       <Toggle
         onToggle={state.toggleCollapsed}
         style={{
-          top: "calc(0.5rem)",
+          top: "calc(1rem)",
           right: "calc(1rem)",
         }}
       />
 
-      <Menu className="menu">
+      <Menu>
         <MenuItem className="title" tabIndex={-1}>
           <img src={npcCliTitle} />
         </MenuItem>
@@ -56,11 +56,11 @@ export default function Nav() {
   );
 }
 
-const rootCss = css`
+const navCss = css`
   color: white;
   margin-right: 4rem;
 
-  .menu .${menuClasses.button} {
+  a.${menuClasses.button} {
     &:hover {
       background-color: transparent;
       text-decoration: underline;
@@ -68,11 +68,15 @@ const rootCss = css`
     height: 3rem;
   }
 
-  .menu .${menuClasses.menuItemRoot}.title {
+  .${menuClasses.menuItemRoot}.title {
     opacity: 1;
     transition: opacity 500ms;
 
-    .ps-menu-label {
+    .${menuClasses.button} {
+      height: 4rem;
+    }
+
+    .${menuClasses.label} {
       height: 1.4rem;
       img {
         height: 100%;
@@ -81,11 +85,11 @@ const rootCss = css`
     }
   }
 
-  &.ps-collapsed .menu .${menuClasses.menuItemRoot}.title {
+  &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
     opacity: 0;
   }
 
-  .menu .${menuClasses.subMenuContent} {
+  .${menuClasses.subMenuContent} {
     background-color: #222222;
   }
 `;
