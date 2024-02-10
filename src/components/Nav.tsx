@@ -71,6 +71,8 @@ const rootCss = css`
 
   .expand-button {
     position: absolute;
+
+    z-index: 1;
     border-radius: 50%;
     background-color: #444;
     width: 2rem;
@@ -98,7 +100,7 @@ const rootCss = css`
   .menu .${menuClasses.menuItemRoot}.title {
     opacity: 1;
     transition: opacity 300ms;
-
+    
     .ps-menu-label {
       height: 1.4rem;
       img {
