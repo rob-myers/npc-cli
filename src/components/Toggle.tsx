@@ -40,7 +40,5 @@ const toggleCss = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* top: calc(0.5rem - 0 * 4px);
-  right: calc(-1 * (-0.75rem)); */
   cursor: pointer;
 `;
