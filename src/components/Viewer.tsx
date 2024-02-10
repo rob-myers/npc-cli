@@ -1,21 +1,22 @@
 import React from "react";
 import {
   Sidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
   menuClasses,
 } from "react-pro-sidebar";
 import { css } from "@emotion/css";
 
 import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
-import { FontAwesomeIcon, faChevronRight } from "./Icon";
+import Toggle from "./Toggle";
 
 export default function Viewer() {
   const update = useUpdate();
   const state = useStateRef(() => ({
     collapsed: true,
+    toggleCollapsed() {
+      state.collapsed = !state.collapsed;
+      update();
+    },
   }));
 
   return (
@@ -24,33 +25,17 @@ export default function Viewer() {
       collapsed={state.collapsed}
       backgroundColor="black"
       className={rootCss}
+      collapsedWidth="4rem"
       width="50%"
     >
-      <Menu className="menu">
-        <MenuItem>
-          <div
-            onClick={() => {
-              state.collapsed = !state.collapsed;
-              update();
-            }}
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-            }}
-          >
-            <FontAwesomeIcon
-              icon={faChevronRight}
-              size="1x"
-              color="white"
-              width="2rem"
-              flip="horizontal"
-            />
-          </div>
-        </MenuItem>
-      </Menu>
-      <div style={{ direction: "ltr" }}></div>
+      <Toggle
+        onToggle={state.toggleCollapsed}
+        style={{
+          top: "calc(0.5rem)",
+          left: "calc(1rem)",
+        }}
+        flip="horizontal"
+      />
     </Sidebar>
   );
 }

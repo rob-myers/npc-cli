@@ -10,6 +10,8 @@ export default function Title() {
 
 const rootCss = css`
   margin: 2rem 0;
-  font-size: 3rem;
+  img {
+    height: 8rem;
+  }
   /* line-height: 1; */
 `;
