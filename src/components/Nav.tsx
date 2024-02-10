@@ -13,11 +13,16 @@ import useUpdate from "../js/hooks/use-update";
 import useStateRef from "../js/hooks/use-state-ref";
 
 import { FontAwesomeIcon, faChevronRight } from "./Icon";
+import npcCliTitle from "../../static/assets/npc-cli-title.png";
 
 export default function Nav() {
   const update = useUpdate();
   const state = useStateRef(() => ({
     collapsed: true,
+    toggleCollapsed() {
+      state.collapsed = !state.collapsed;
+      update();
+    },
   }));
 
   return (
@@ -25,22 +30,16 @@ export default function Nav() {
       backgroundColor="black"
       className={rootCss}
       collapsed={state.collapsed}
+      collapsedWidth="4rem"
       onClick={(e) => console.log(e.target)}
     >
       <div
-        style={{
-          position: "absolute",
-          // top: "0.5rem",
-          right: "calc(-1 * (2rem + 2 * 0.5rem))",
-          cursor: "pointer",
-          padding: "0.5rem",
-          border: "1px solid #222",
-          background: "#000",
-        }}
-        onClick={() => {
-          state.collapsed = !state.collapsed;
-          update();
-        }}
+        className="expand-button"
+        onClick={state.toggleCollapsed}
+        onKeyDown={(e) =>
+          ["Enter", " "].includes(e.key) && state.toggleCollapsed()
+        }
+        tabIndex={0}
       >
         <FontAwesomeIcon
           icon={faChevronRight}
@@ -52,8 +51,8 @@ export default function Nav() {
       </div>
 
       <Menu className="menu">
-        <MenuItem>
-          <h3>NPC CLI</h3>
+        <MenuItem className="title" tabIndex={-1}>
+          <img src={npcCliTitle} />
         </MenuItem>
         <SubMenu label="Go">
           <MenuItem>One</MenuItem>
@@ -70,22 +69,50 @@ const rootCss = css`
   color: white;
   margin-right: 4rem;
 
-  .${sidebarClasses.container} {
-    overflow: initial;
+  .expand-button {
+    position: absolute;
+    border-radius: 50%;
+    background-color: #444;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: calc(0.5rem - 0 * 4px);
+    right: calc(-1 * (-0.75rem));
+    cursor: pointer;
   }
+
+  /* .${sidebarClasses.container} {
+    overflow: initial;
+  } */
 
   .menu .${menuClasses.button} {
     &:hover {
-      background-color: #555;
+      background-color: transparent;
+      text-decoration: underline;
     }
+    height: 3rem;
+  }
+
+  .menu .${menuClasses.menuItemRoot}.title {
+    opacity: 1;
+    transition: opacity 300ms;
+
+    .ps-menu-label {
+      height: 1.4rem;
+      img {
+        height: 100%;
+        filter: invert();
+      }
+    }
+  }
+
+  &.ps-collapsed .${menuClasses.menuItemRoot}.title {
+    opacity: 0;
   }
 
   .menu .${menuClasses.subMenuContent} {
     background-color: #222222;
-  }
-
-  .menu .toggle {
-    display: flex;
-    justify-content: center;
   }
 `;
