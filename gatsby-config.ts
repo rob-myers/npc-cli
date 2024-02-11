@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const config: GatsbyConfig = {
   siteMetadata: {
     title: `NPC CLI`,
-    siteUrl: `https://www.yourdomain.tld`,
+    siteUrl: `https://npc-cli.netlify.app`,
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin
@@ -15,15 +15,16 @@ const config: GatsbyConfig = {
   graphqlTypegen: true,
   plugins: [
     "gatsby-plugin-emotion",
-    `gatsby-plugin-mdx`,
+    "gatsby-plugin-mdx",
     "gatsby-plugin-fontawesome",
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: "gatsby-source-filesystem",
       options: {
         name: `pages`,
         path: `src/pages`,
       },
     },
+    "gatsby-plugin-tsconfig-paths",
   ],
   flags: {
     DEV_SSR: true,
