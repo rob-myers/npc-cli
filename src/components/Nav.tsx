@@ -59,7 +59,7 @@ export default function Nav() {
 
 const navCss = css`
   color: white;
-  border: none;
+  border: none !important;
 
   a.${menuClasses.button} {
     &:hover {
