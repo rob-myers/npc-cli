@@ -6,7 +6,7 @@ import { FontAwesomeIcon, faChevronRight } from "./Icon";
 export default function Toggle(props: React.PropsWithChildren<Props>) {
   return (
     <div
-      className={cx("toggle", toggleCss)}
+      className={cx(toggleClassName, toggleCss)}
       onClick={props.onToggle}
       onKeyDown={(e) => ["Enter", " "].includes(e.key) && props.onToggle()}
       tabIndex={0}
@@ -42,3 +42,5 @@ const toggleCss = css`
   align-items: center;
   cursor: pointer;
 `;
+
+export const toggleClassName = 'toggle';
