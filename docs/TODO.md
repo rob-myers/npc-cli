@@ -13,7 +13,7 @@
 - ✅ mobile layout fixes
 
 - ✅ easier to close Nav
-- 🚧 easier to close Viewer
+- ✅ easier to close Viewer
 - 🚧 Viewer has Tabs
 
 - netlify site `npc-cli` at https://lastredoubt.co

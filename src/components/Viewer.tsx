@@ -10,6 +10,12 @@ export default function Viewer() {
   const update = useUpdate();
   const state = useStateRef(() => ({
     collapsed: true,
+    onClickViewer(e: React.MouseEvent) {
+      const el = e.target as HTMLElement;
+      if (el.classList.contains("viewer")) {
+        state.toggleCollapsed();
+      }
+    },
     toggleCollapsed() {
       state.collapsed = !state.collapsed;
       update();
@@ -17,7 +23,10 @@ export default function Viewer() {
   }));
 
   return (
-    <aside className={cx("viewer", viewerCss, { collapsed: state.collapsed })}>
+    <aside
+      className={cx("viewer", viewerCss, { collapsed: state.collapsed })}
+      onClick={state.onClickViewer}
+    >
       <Toggle
         onToggle={state.toggleCollapsed}
         flip={state.collapsed ? "horizontal" : undefined}
@@ -30,6 +39,7 @@ const viewerCss = css`
   position: relative;
   color: white;
   background: black;
+  cursor: pointer;
 
   > .${toggleClassName} {
     top: calc(0.5rem);
