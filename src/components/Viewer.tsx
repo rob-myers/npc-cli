@@ -1,13 +1,15 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
+import { breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
 import Toggle, { toggleClassName } from "./Toggle";
-import { breakpoint } from "./const";
+import Tabs from "./tabs/Tabs";
 
 export default function Viewer() {
   const update = useUpdate();
+
   const state = useStateRef(() => ({
     collapsed: true,
     onClickViewer(e: React.MouseEvent) {
@@ -27,9 +29,17 @@ export default function Viewer() {
       className={cx("viewer", viewerCss, { collapsed: state.collapsed })}
       onClick={state.onClickViewer}
     >
-      <Toggle
-        onToggle={state.toggleCollapsed}
-        flip={state.collapsed ? "horizontal" : undefined}
+      <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
+      {/* 🚧 */}
+      <Tabs
+        id="viewer-tabs" // 🚧 {page}-viewer-tabs
+        initEnabled={false}
+        tabs={[
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
+        ]}
+        // height={[400, 500]}
+        persistLayout
       />
     </aside>
   );
@@ -54,7 +64,7 @@ const viewerCss = css`
     min-width: 4rem;
   }
 
-  @media(max-width: ${breakpoint}) {
+  @media (max-width: ${breakpoint}) {
     transition: min-height 500ms;
     min-height: 50%;
     &.collapsed {

@@ -14,9 +14,13 @@
 
 - ✅ easier to close Nav
 - ✅ easier to close Viewer
-- 🚧 Viewer has Tabs
+
+- ✅ Viewer has Tabs
+  - try avoid "cannot update component" error
+- fix View Tabs minimize in large viewport
+- Viewer Tabs has id `{page}-viewer-tabs` (for persist)
+- Tabs has controls
 
 - netlify site `npc-cli` at https://lastredoubt.co
-- redo Tabs avoiding "cannot update component" error?
 - geomorph layouts via SVG, inducing current format
 - world layouts via SVG, inducing current format
