@@ -76,6 +76,8 @@ const navCss = css`
   }
 
   .${sidebarClasses.container} .${toggleClassName} {
+    position: absolute;
+    z-index: 1;
     top: calc(1rem);
     right: calc(1rem);
   }

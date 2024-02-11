@@ -31,8 +31,6 @@ interface Props {
 }
 
 const toggleCss = css`
-  position: absolute;
-  z-index: 1;
   border-radius: 50%;
   background-color: #444;
   width: 2rem;

@@ -42,6 +42,8 @@ const viewerCss = css`
   cursor: pointer;
 
   > .${toggleClassName} {
+    position: absolute;
+    z-index: 1;
     top: calc(0.5rem);
     left: calc(1rem);
   }
