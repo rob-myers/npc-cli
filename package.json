@@ -16,6 +16,9 @@
     "clean": "gatsby clean",
     "types": "tsc --noEmit"
   },
+  "prettier": {
+    "printWidth": 100
+  },
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.3",
