@@ -85,11 +85,13 @@ const navCss = css`
       }
     }
   }
-
   &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
     opacity: 0;
   }
 
+  &:not(.${sidebarClasses.collapsed}) .${menuClasses.SubMenuExpandIcon} {
+    padding-right: 0.5rem;
+  }
   .${menuClasses.subMenuContent} {
     background-color: #222222;
   }
