@@ -47,5 +47,8 @@ const viewerCss = css`
     &.collapsed {
       min-height: 4rem;
     }
+    > div {
+      transform: rotate(90deg);
+    }
   }
 `;
