@@ -46,7 +46,10 @@ export function wrapPageElement({
             <Viewer />
           </div>
         </div>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools
+          initialIsOpen={false}
+          buttonPosition="bottom-left"
+        /> */}
       </QueryClientProvider>
     </>
   );
@@ -58,6 +61,7 @@ export const rootCss = css`
   min-height: 100vh;
   
   > .main-view {
+    margin-left: 4rem;
     flex: 1;
     display: flex;
     flex-direction: row;
@@ -71,7 +75,6 @@ export const rootCss = css`
       z-index: 2;
     }
     > .main-view {
-      margin-left: 4rem; // collapsed nav width
       flex-direction: column;
       max-height: 100vh;
     }
