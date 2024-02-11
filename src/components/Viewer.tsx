@@ -1,13 +1,10 @@
 import React from "react";
-import {
-  Sidebar,
-  menuClasses,
-} from "react-pro-sidebar";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 
 import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
 import Toggle from "./Toggle";
+import { breakpoint } from "./const";
 
 export default function Viewer() {
   const update = useUpdate();
@@ -20,42 +17,35 @@ export default function Viewer() {
   }));
 
   return (
-    <Sidebar
-      // rtl
-      collapsed={state.collapsed}
-      backgroundColor="black"
-      className={rootCss}
-      collapsedWidth="4rem"
-      width="50%"
-    >
+    <aside className={cx("viewer", viewerCss, { collapsed: state.collapsed })}>
       <Toggle
         onToggle={state.toggleCollapsed}
         style={{
           top: "calc(0.5rem)",
           left: "calc(1rem)",
         }}
-        flip="horizontal"
+        flip={state.collapsed ? "horizontal" : undefined}
       />
-    </Sidebar>
+    </aside>
   );
 }
 
-const rootCss = css`
-  border-color: #333333 !important;
+const viewerCss = css`
+  position: relative;
   color: white;
-  margin-left: 4rem;
+  background: black;
 
-  .menu .${menuClasses.button} {
-    &:hover {
-      background-color: #555;
+  transition: min-width 500ms;
+  min-width: 50%;
+  &.collapsed {
+    min-width: 4rem;
+  }
+
+  @media(max-width: ${breakpoint}) {
+    transition: min-height 500ms;
+    min-height: 50%;
+    &.collapsed {
+      min-height: 4rem;
     }
-  }
-
-  .menu .${menuClasses.label} {
-    height: inherit;
-  }
-
-  .menu .${menuClasses.subMenuContent} {
-    background-color: #222222;
   }
 `;

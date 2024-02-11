@@ -8,7 +8,10 @@
 - ✅ fix initial font load: svg fontawesome
 - ✅ start new desktop layout i.e. with right-pane
 - ✅ use system fonts instead of web fonts
-- start new mobile layout i.e. with lower-pane
+
+- ✅ add mobile layout i.e. with lower-pane
+- Viewer has Tabs
+
 - netlify site `npc-cli` at https://lastredoubt.co
 - redo Tabs avoiding "cannot update component" error?
 - geomorph layouts via SVG, inducing current format

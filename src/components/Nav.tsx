@@ -31,7 +31,7 @@ export default function Nav() {
       className={navCss}
       collapsed={state.collapsed}
       collapsedWidth="4rem"
-      onClick={(e) => console.log(e.target)}
+      width="16rem"
     >
       <Toggle
         onToggle={state.toggleCollapsed}
@@ -39,6 +39,7 @@ export default function Nav() {
           top: "calc(1rem)",
           right: "calc(1rem)",
         }}
+        flip={state.collapsed ? undefined : 'horizontal'}
       />
 
       <Menu>
@@ -58,7 +59,7 @@ export default function Nav() {
 
 const navCss = css`
   color: white;
-  margin-right: 4rem;
+  border: none;
 
   a.${menuClasses.button} {
     &:hover {

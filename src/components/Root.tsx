@@ -17,6 +17,7 @@ import Nav from "./Nav";
 import Viewer from "./Viewer";
 import Main from "./Main";
 import Comments from "./Comments";
+import { breakpoint } from "./const";
 
 export function wrapPageElement({
   element,
@@ -30,18 +31,20 @@ export function wrapPageElement({
       <QueryClientProvider client={queryClient}>
         <div className={rootCss}>
           <Nav />
-          <Main>
-            <article>{element}</article>
-            <Comments
-              id="comments"
-              term={
-                frontMatter?.giscusTerm ||
-                frontMatter?.path ||
-                "fallback-discussion"
-              }
-            />
-          </Main>
-          <Viewer />
+          <div className="main-view">
+            <Main>
+              <article>{element}</article>
+              <Comments
+                id="comments"
+                term={
+                  frontMatter?.giscusTerm ||
+                  frontMatter?.path ||
+                  "fallback-discussion"
+                }
+              />
+            </Main>
+            <Viewer />
+          </div>
         </div>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
@@ -52,9 +55,19 @@ export function wrapPageElement({
 export const rootCss = css`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
   min-height: 100vh;
+
+  > .main-view {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    @media(max-width: ${breakpoint}) {
+      flex-direction: column;
+      max-height: 100vh;
+    }
+  }
 `;
 
 function HooksThatBreakTopLevel(props: { frontMatter?: FrontMatter }) {
