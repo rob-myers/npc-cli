@@ -16,7 +16,16 @@ const rootCss = css`
   width: 100%;
   padding: 0 4rem;
 
-  @media(max-width: ${breakpoint}) {
+  .title {
+    max-width: 1024px;
+    margin: 2rem auto;
+  }
+  main {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: ${breakpoint}) {
     overflow: scroll;
     width: initial;
   }
