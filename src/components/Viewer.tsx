@@ -37,6 +37,8 @@ export default function Viewer() {
         tabs={[
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-", props: {} }],
         ]}
         // height={[400, 500]}
         persistLayout
@@ -44,6 +46,8 @@ export default function Viewer() {
     </aside>
   );
 }
+
+const minWidth = "4rem";
 
 const viewerCss = css`
   position: relative;
@@ -60,8 +64,18 @@ const viewerCss = css`
 
   transition: min-width 500ms;
   min-width: 50%;
+
+  .tabs {
+    opacity: 1;
+    transition: opacity 200ms 100ms; // delay 100ms
+  }
+
   &.collapsed {
-    min-width: 4rem;
+    min-width: ${minWidth};
+    .tabs {
+      opacity: 0;
+      transition: opacity 200ms;
+    }
   }
 
   @media (max-width: ${breakpoint}) {

@@ -17,7 +17,8 @@
 
 - ✅ Viewer has Tabs
   - try avoid "cannot update component" error
-- fix View Tabs minimize in large viewport
+- ✅ fix Viewer side-by-side Tabs minimize in large viewport
+
 - Viewer Tabs has id `{page}-viewer-tabs` (for persist)
 - Tabs has controls
 

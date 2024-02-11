@@ -7,8 +7,9 @@ export default function HelloWorld(props) {
 }
 
 const helloWorldCss = css`
+  color: white;
   padding: 24px;
-  background-color: #ddd;
+  height: 100%;
 `;
 
 /**

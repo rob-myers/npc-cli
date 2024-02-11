@@ -2,7 +2,7 @@ import React from "react";
 import { Actions, Layout as FlexLayout, TabNode } from "flexlayout-react";
 import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 
 import { TabMeta, TabsDef, createOrRestoreJsonModel, factory, storeModelAsJson } from "./tabs.util";
 import useStateRef from "src/js/hooks/use-state-ref";
@@ -65,7 +65,7 @@ export default function Tabs(props: Props) {
   useBeforeunload(() => storeModelAsJson(props.id, model));
 
   return (
-    <figure className={tabsCss}>
+    <figure className={cx("tabs", tabsCss)}>
       <FlexLayout
         model={model}
         factory={(node) => factory(node, state)}
