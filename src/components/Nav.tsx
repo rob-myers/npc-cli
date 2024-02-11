@@ -13,12 +13,20 @@ import useUpdate from "../js/hooks/use-update";
 import useStateRef from "../js/hooks/use-state-ref";
 
 import npcCliTitle from "../../static/assets/npc-cli-title.png";
-import Toggle from "./Toggle";
+import Toggle, { toggleClassName } from "./Toggle";
 
 export default function Nav() {
   const update = useUpdate();
   const state = useStateRef(() => ({
     collapsed: true,
+    onClickSidebar(e: React.MouseEvent) {
+      const el = e.target as HTMLElement;
+      if (el.classList.contains(sidebarClasses.container)) {
+        state.toggleCollapsed(); // outside buttons
+      } else if (el.classList.contains(menuClasses.button) && el.parentElement?.previousSibling === null) {
+        state.toggleCollapsed(); // top-most button
+      }
+    },
     toggleCollapsed() {
       state.collapsed = !state.collapsed;
       update();
@@ -32,13 +40,10 @@ export default function Nav() {
       collapsed={state.collapsed}
       collapsedWidth="4rem"
       width="16rem"
+      onClick={state.onClickSidebar}
     >
       <Toggle
         onToggle={state.toggleCollapsed}
-        style={{
-          top: "calc(1rem)",
-          right: "calc(1rem)",
-        }}
         flip={state.collapsed ? undefined : 'horizontal'}
       />
 
@@ -60,6 +65,7 @@ export default function Nav() {
 const navCss = css`
   color: white;
   border: none !important;
+  cursor: pointer;
 
   a.${menuClasses.button} {
     &:hover {
@@ -67,6 +73,11 @@ const navCss = css`
       text-decoration: underline;
     }
     height: 3rem;
+  }
+
+  .${sidebarClasses.container} .${toggleClassName} {
+    top: calc(1rem);
+    right: calc(1rem);
   }
 
   .${menuClasses.menuItemRoot}.title {

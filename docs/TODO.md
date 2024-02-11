@@ -11,7 +11,10 @@
 
 - ✅ add mobile layout i.e. with lower-pane
 - ✅ mobile layout fixes
-- Viewer has Tabs
+
+- ✅ easier to close Nav
+- 🚧 easier to close Viewer
+- 🚧 Viewer has Tabs
 
 - netlify site `npc-cli` at https://lastredoubt.co
 - redo Tabs avoiding "cannot update component" error?
