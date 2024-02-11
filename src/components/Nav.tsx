@@ -1,4 +1,4 @@
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import React from "react";
 import {
   Sidebar,
@@ -28,7 +28,7 @@ export default function Nav() {
   return (
     <Sidebar
       backgroundColor="black"
-      className={navCss}
+      className={cx("nav", navCss)}
       collapsed={state.collapsed}
       collapsedWidth="4rem"
       width="16rem"

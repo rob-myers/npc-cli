@@ -10,6 +10,7 @@
 - ✅ use system fonts instead of web fonts
 
 - ✅ add mobile layout i.e. with lower-pane
+- ✅ mobile layout fixes
 - Viewer has Tabs
 
 - netlify site `npc-cli` at https://lastredoubt.co

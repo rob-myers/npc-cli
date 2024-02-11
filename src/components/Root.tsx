@@ -56,14 +56,22 @@ export const rootCss = css`
   display: flex;
   flex-direction: row;
   min-height: 100vh;
-
+  
   > .main-view {
     flex: 1;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+  }
 
-    @media(max-width: ${breakpoint}) {
+  @media(max-width: ${breakpoint}) {
+    > .nav {
+      position: fixed;
+      height: 100%;
+      z-index: 2;
+    }
+    > .main-view {
+      margin-left: 4rem; // collapsed nav width
       flex-direction: column;
       max-height: 100vh;
     }
