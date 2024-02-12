@@ -38,7 +38,7 @@ export default function Viewer() {
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-", props: {} }],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-4", props: {} }],
         ]}
         // height={[400, 500]}
         persistLayout
@@ -73,6 +73,7 @@ const viewerCss = css`
   &.collapsed {
     min-width: ${minWidth};
     .tabs {
+      pointer-events: none;
       opacity: 0;
       transition: opacity 200ms;
     }
