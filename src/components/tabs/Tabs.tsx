@@ -52,7 +52,8 @@ export default function Tabs(props: Props) {
           } else {
             state.componentMeta[key].disabled = false;
           }
-          update();
+          // update(); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
+          setTimeout(update);
         }
       });
     });
