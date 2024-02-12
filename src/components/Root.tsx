@@ -54,7 +54,8 @@ export function wrapPageElement({
 export const rootCss = css`
   display: flex;
   flex-direction: row;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
 
   > .main-view {
     flex: 1;
@@ -72,7 +73,7 @@ export const rootCss = css`
     > .main-view {
       margin-left: 4rem;
       flex-direction: column;
-      max-height: 100vh;
+      /* max-height: 100vh; */
     }
   }
 `;

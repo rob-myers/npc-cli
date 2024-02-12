@@ -1,5 +1,5 @@
 import React from "react";
-import loadable, { LoadableLibrary } from "@loadable/component";
+import loadable from "@loadable/component";
 import { IJsonModel, Model, TabNode } from "flexlayout-react";
 
 import { deepClone, tryLocalStorageGet, tryLocalStorageSet } from "src/js/service/generic";
