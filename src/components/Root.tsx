@@ -67,7 +67,7 @@ export const rootCss = css`
   @media (max-width: ${breakpoint}) {
     > .nav {
       position: fixed;
-      height: 100%;
+      height: inherit; // 100dvh
       z-index: 2;
     }
     > .main-view {
