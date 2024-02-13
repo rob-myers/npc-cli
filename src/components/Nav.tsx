@@ -1,13 +1,6 @@
 import { css, cx } from "@emotion/css";
 import React from "react";
-import {
-  Sidebar,
-  Menu,
-  MenuItem,
-  SubMenu,
-  sidebarClasses,
-  menuClasses,
-} from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
 import useUpdate from "../js/hooks/use-update";
 import useStateRef from "../js/hooks/use-state-ref";
@@ -17,13 +10,17 @@ import Toggle, { toggleClassName } from "./Toggle";
 
 export default function Nav() {
   const update = useUpdate();
+
   const state = useStateRef(() => ({
     collapsed: true,
     onClickSidebar(e: React.MouseEvent) {
       const el = e.target as HTMLElement;
       if (el.classList.contains(sidebarClasses.container)) {
         state.toggleCollapsed(); // outside buttons
-      } else if (el.classList.contains(menuClasses.button) && el.parentElement?.previousSibling === null) {
+      } else if (
+        el.classList.contains(menuClasses.button) &&
+        el.parentElement?.previousSibling === null
+      ) {
         state.toggleCollapsed(); // top-most button
       }
     },
@@ -36,16 +33,13 @@ export default function Nav() {
   return (
     <Sidebar
       backgroundColor="black"
-      className={cx("nav", navCss)}
+      className={cx("nav", navCss, "no-blue-flash")}
       collapsed={state.collapsed}
       collapsedWidth="4rem"
       width="16rem"
       onClick={state.onClickSidebar}
     >
-      <Toggle
-        onToggle={state.toggleCollapsed}
-        flip={state.collapsed ? undefined : 'horizontal'}
-      />
+      <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? undefined : "horizontal"} />
 
       <Menu>
         <MenuItem className="title" tabIndex={-1}>
@@ -65,6 +59,7 @@ export default function Nav() {
 const navCss = css`
   color: white;
   border: none !important;
+  -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
   a.${menuClasses.button} {

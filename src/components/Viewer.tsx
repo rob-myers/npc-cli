@@ -26,7 +26,7 @@ export default function Viewer() {
 
   return (
     <aside
-      className={cx("viewer", viewerCss, { collapsed: state.collapsed })}
+      className={cx("viewer", "no-blue-flash", viewerCss, { collapsed: state.collapsed })}
       onClick={state.onClickViewer}
     >
       <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
@@ -53,6 +53,7 @@ const viewerCss = css`
   position: relative;
   color: white;
   background: black;
+  -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
   > .${toggleClassName} {
