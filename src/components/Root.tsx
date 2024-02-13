@@ -98,7 +98,7 @@ const rootCss = css`
   @media (max-width: ${breakpoint}) {
     > .nav {
       position: fixed;
-      height: inherit; // 100dvh
+      height: 100%;
       z-index: 2;
     }
     > .main-view {
