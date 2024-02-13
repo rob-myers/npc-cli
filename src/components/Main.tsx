@@ -26,6 +26,7 @@ const rootCss = css`
   }
 
   @media (max-width: ${breakpoint}) {
+    padding: 0 2rem;
     overflow: scroll;
     width: initial;
   }
