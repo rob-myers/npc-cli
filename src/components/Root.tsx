@@ -59,7 +59,7 @@ function Root(props: Props) {
     <QueryClientProvider client={queryClient}>
       <div className={rootCss}>
         <Nav />
-        <div className="main-view">
+        <div className="root-content">
           <Main>
             <article>{props.element}</article>
             <Comments
@@ -88,7 +88,7 @@ const rootCss = css`
   height: 100vh;
   height: 100dvh;
 
-  > .main-view {
+  > .root-content {
     flex: 1;
     display: flex;
     flex-direction: row;
@@ -101,7 +101,7 @@ const rootCss = css`
       height: 100%;
       z-index: 2;
     }
-    > .main-view {
+    > .root-content {
       margin-left: 4rem;
       flex-direction: column;
     }

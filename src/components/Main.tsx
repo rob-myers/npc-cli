@@ -1,18 +1,18 @@
 import React from "react";
-import { css, cx } from "@emotion/css";
+import { css } from "@emotion/css";
 import Title from "./Title";
 import { breakpoint } from "./const";
 
 export default function Main(props: React.PropsWithChildren) {
   return (
-    <section className={cx("main", rootCss)}>
+    <section className={mainCss}>
       <Title />
       <main>{props.children}</main>
     </section>
   );
 }
 
-const rootCss = css`
+const mainCss = css`
   width: 100%;
   padding: 0 4rem;
 
