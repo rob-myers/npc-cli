@@ -12,6 +12,7 @@ export default function Title() {
 
 const titleCss = css`
   img {
-    height: 4rem;
+    // Too wide caused body extra height on mobile
+    max-width: 100%;
   }
 `;
