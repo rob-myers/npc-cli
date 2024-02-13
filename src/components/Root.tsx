@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import {
   graphql,
+  PageProps,
   useStaticQuery,
   type WrapPageElementBrowserArgs,
   type WrapPageElementNodeArgs,
@@ -23,62 +24,11 @@ export function wrapPageElement({
   element,
   props,
 }: WrapPageElementBrowserArgs | WrapPageElementNodeArgs) {
-  const frontMatter = props.pageContext?.frontmatter as FrontMatter | undefined;
-
-  return (
-    <>
-      <HooksThatBreakTopLevel frontMatter={frontMatter} />
-      <QueryClientProvider client={queryClient}>
-        <div className={rootCss}>
-          <Nav />
-          <div className="main-view">
-            <Main>
-              <article>{element}</article>
-              <Comments
-                id="comments"
-                term={frontMatter?.giscusTerm || frontMatter?.path || "fallback-discussion"}
-              />
-            </Main>
-            <Viewer />
-          </div>
-        </div>
-        {/* <ReactQueryDevtools
-          initialIsOpen={false}
-          buttonPosition="bottom-left"
-        /> */}
-      </QueryClientProvider>
-    </>
-  );
+  return <Root {...props} element={element} />;
 }
 
-export const rootCss = css`
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  height: 100dvh;
-
-  > .main-view {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  @media (max-width: ${breakpoint}) {
-    > .nav {
-      position: fixed;
-      height: inherit; // 100dvh
-      z-index: 2;
-    }
-    > .main-view {
-      margin-left: 4rem;
-      flex-direction: column;
-      /* max-height: 100vh; */
-    }
-  }
-`;
-
-function HooksThatBreakTopLevel(props: { frontMatter?: FrontMatter }) {
+function Root(props: Props) {
+  const frontMatter = props.pageContext?.frontmatter as FrontMatter | undefined;
   const allFrontMatter = useStaticQuery(graphql`
     query {
       allMdx {
@@ -101,9 +51,59 @@ function HooksThatBreakTopLevel(props: { frontMatter?: FrontMatter }) {
 
   React.useMemo(() => {
     // clearAllBodyScrollLocks();
-    useSiteStore.api.setArticleKey(props.frontMatter?.key);
+    useSiteStore.api.setArticleKey(frontMatter?.key);
     useSiteStore.api.initiate(allFrontMatter);
-  }, [props.frontMatter]);
+  }, [frontMatter]);
 
-  return null;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div className={rootCss}>
+        <Nav />
+        <div className="main-view">
+          <Main>
+            <article>{props.element}</article>
+            <Comments
+              id="comments"
+              term={frontMatter?.giscusTerm || frontMatter?.path || "fallback-discussion"}
+            />
+          </Main>
+          <Viewer />
+        </div>
+      </div>
+      {/* <ReactQueryDevtools
+      initialIsOpen={false}
+      buttonPosition="bottom-left"
+    /> */}
+    </QueryClientProvider>
+  );
 }
+
+type Props = PageProps<Record<string, unknown>, Record<string, unknown>, unknown, object> & {
+  element: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+};
+
+const rootCss = css`
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  height: 100dvh;
+
+  > .main-view {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  @media (max-width: ${breakpoint}) {
+    > .nav {
+      position: fixed;
+      height: inherit; // 100dvh
+      z-index: 2;
+    }
+    > .main-view {
+      margin-left: 4rem;
+      flex-direction: column;
+    }
+  }
+`;
