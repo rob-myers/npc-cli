@@ -59,12 +59,6 @@ export default function Nav() {
 }
 
 const navCss = css`
-  @media (max-width: ${breakpoint}) {
-    position: fixed;
-    height: 100%;
-    z-index: 2;
-  }
-
   color: white;
   border: none !important;
   -webkit-tap-highlight-color: transparent;

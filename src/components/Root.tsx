@@ -87,6 +87,15 @@ const rootCss = css`
   flex-direction: row;
   height: 100vh;
   height: 100dvh;
+
+  @media (max-width: ${breakpoint}) {
+    > aside {
+      // cannot move to Sidebar className
+      position: fixed;
+      height: 100%;
+      z-index: 2;
+    }
+  }
 `;
 
 const rootContentCss = css`
