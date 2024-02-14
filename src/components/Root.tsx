@@ -57,9 +57,9 @@ function Root(props: Props) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={rootCss}>
+      <div className={rootCss} data-testid="root">
         <Nav />
-        <div className="root-content">
+        <div className={rootContentCss} data-testid="root-content">
           <Main>
             <article>{props.element}</article>
             <Comments
@@ -87,23 +87,16 @@ const rootCss = css`
   flex-direction: row;
   height: 100vh;
   height: 100dvh;
+`;
 
-  > .root-content {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+const rootContentCss = css`
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 
   @media (max-width: ${breakpoint}) {
-    > .nav {
-      position: fixed;
-      height: 100%;
-      z-index: 2;
-    }
-    > .root-content {
-      margin-left: 4rem;
-      flex-direction: column;
-    }
+    margin-left: 4rem;
+    flex-direction: column;
   }
 `;

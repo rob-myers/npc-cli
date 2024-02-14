@@ -1,12 +1,15 @@
 import React from "react";
 import { css } from "@emotion/css";
-import Title from "./Title";
 import { breakpoint } from "./const";
+import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
 
 export default function Main(props: React.PropsWithChildren) {
   return (
-    <section className={mainCss}>
-      <Title />
+    <section className={mainCss} data-testid="main">
+      <div className={mainTitleCss} data-testid="main-title">
+        <img src={npcCliTitlePng} />
+      </div>
+
       <main>{props.children}</main>
     </section>
   );
@@ -16,18 +19,23 @@ const mainCss = css`
   width: 100%;
   padding: 0 4rem;
 
-  .title {
-    max-width: 1024px;
-    margin: 2rem auto;
-  }
-  main {
-    max-width: 1024px;
-    margin: 0 auto;
-  }
-
   @media (max-width: ${breakpoint}) {
     padding: 0 2rem;
     overflow: scroll;
     width: initial;
+  }
+
+  > main {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+`;
+
+const mainTitleCss = css`
+  max-width: 1024px;
+  margin: 2rem auto;
+  img {
+    // 🔔 Too wide caused extra body height (mobile)
+    max-width: 100%;
   }
 `;

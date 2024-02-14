@@ -26,7 +26,8 @@ export default function Viewer() {
 
   return (
     <aside
-      className={cx("viewer", "no-blue-flash", viewerCss, { collapsed: state.collapsed })}
+      className={cx(viewerCss, { collapsed: state.collapsed })}
+      data-testid="viewer"
       onClick={state.onClickViewer}
     >
       <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
