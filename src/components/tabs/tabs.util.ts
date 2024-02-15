@@ -7,18 +7,16 @@ import { Props as TabsProps, State as TabsApi } from "./Tabs";
 import { Tab } from "./Tab";
 
 export function factory(node: TabNode, api: TabsApi) {
-  if (api.maxTabNode !== null && node.getParent() !== api.maxTabNode.getParent()) {
-    // According to flexlayout-react, a selected tab is "visible" when obscured by a maximised tab.
-    // To fix this, if some tab is maximised, we only render siblings of the maximised tab.
-    return null;
-  } else if (!api.componentMeta[node.getId()]) {
-    return null;
-  } else {
+  const meta = api.componentMeta[node.getId()];
+  if (meta?.everVis) {
+    console.debug(`rendering "${node.getId()}"`);
     return React.createElement(Tab, {
       id: node.getId(),
       meta: node.getConfig() as TabMeta,
       api,
     });
+  } else {
+    return null;
   }
 }
 

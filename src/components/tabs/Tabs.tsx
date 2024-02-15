@@ -7,15 +7,28 @@ import { css, cx } from "@emotion/css";
 import { TabMeta, TabsDef, createOrRestoreJsonModel, factory, storeModelAsJson } from "./tabs.util";
 import useStateRef from "src/js/hooks/use-state-ref";
 import useUpdate from "src/js/hooks/use-update";
+import Controls from "./Controls";
 
 // 🚧 ensure components are lazy-loaded
+// 🚧 open Viewer should enable Tabs initially
 
 export default function Tabs(props: Props) {
-  const update = useUpdate();
-
   const state = useStateRef<State>(() => ({
     componentMeta: {},
     maxTabNode: null,
+    enabled: false,
+    everEnabled: false,
+    overlayColor: "black",
+
+    toggleEnabled() {
+      state.everEnabled = true;
+      state.enabled = !state.enabled;
+      state.overlayColor = state.overlayColor === "clear" ? "faded" : "clear";
+
+      const { componentMeta } = state;
+      Object.keys(componentMeta).forEach((key) => (componentMeta[key].disabled = !state.enabled));
+      update();
+    },
   }));
 
   const model = React.useMemo(() => {
@@ -28,17 +41,15 @@ export default function Tabs(props: Props) {
       }
 
       node.setEventListener("visibility", async ({ visible }) => {
-        if (model.getMaximizedTabset()) {
-          return; // If some tab maximised don't enable "visible" tabs covered by it
-        }
         const [key, tabMeta] = [node.getId(), (node as TabNode).getConfig() as TabMeta];
+        state.componentMeta[key] ??= { key, disabled: false, everVis: false };
 
         if (!visible) {
           // tab now hidden
           if (tabMeta.type === "component") {
             state.componentMeta[key].disabled = true;
-            update();
-          } // we don't disable hidden terminals
+            setTimeout(update);
+          } // but don't disable hidden terminals
         } else {
           // tab now visible
           if (tabMeta.type === "terminal") {
@@ -47,11 +58,13 @@ export default function Tabs(props: Props) {
             // const session = useSessionStore.api.getSession(getTabIdentifier(tabMeta));
             // session?.ttyShell.xterm.forceResize();
           }
-          if (!state.componentMeta[key]) {
-            state.componentMeta[key] = { key, disabled: false };
-          } else {
-            state.componentMeta[key].disabled = false;
-          }
+          state.componentMeta[key].disabled = false;
+
+          const maxNode = model.getMaximizedTabset()?.getSelectedNode();
+          // According to flexlayout-react, a selected tab is "visible" when obscured by a maximised tab.
+          // We prevent rendering in such cases
+          state.componentMeta[key].everVis ||= maxNode ? node === maxNode : true;
+
           // update(); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
           setTimeout(update);
         }
@@ -61,24 +74,29 @@ export default function Tabs(props: Props) {
     return output;
   }, [JSON.stringify(props.tabs)]);
 
-  state.maxTabNode = (model.getMaximizedTabset()?.getSelectedNode() ?? null) as TabNode | null;
-
   useBeforeunload(() => storeModelAsJson(props.id, model));
+
+  const update = useUpdate();
 
   return (
     <figure className={cx("tabs", tabsCss)}>
-      <FlexLayout
-        model={model}
-        factory={(node) => factory(node, state)}
-        realtimeResize
-        onModelChange={debounce(() => storeModelAsJson(props.id, model), 300)}
-        onAction={(act) => {
-          if (act.type === Actions.MAXIMIZE_TOGGLE && state.maxTabNode) {
-            update(); // We are minimizing a maximized tab
-          }
-          return act;
-        }}
-      />
+      {state.everEnabled && (
+        <FlexLayout
+          model={model}
+          factory={(node) => factory(node, state)}
+          realtimeResize
+          onModelChange={debounce(() => storeModelAsJson(props.id, model), 300)}
+          onAction={(act) => {
+            if (act.type === Actions.MAXIMIZE_TOGGLE && model.getMaximizedTabset()) {
+              // We are minimizing a maximized tab
+              Object.values(state.componentMeta).forEach((x) => (x.everVis = true));
+              update();
+            }
+            return act;
+          }}
+        />
+      )}
+      <Controls api={state} />
     </figure>
   );
 }
@@ -88,8 +106,12 @@ export interface Props extends TabsDef {
 }
 
 export interface State {
-  componentMeta: Record<string, { key: string; disabled: boolean }>;
-  maxTabNode: TabNode | null;
+  componentMeta: Record<string, { key: string; disabled: boolean; everVis: boolean }>;
+  enabled: boolean;
+  everEnabled: boolean;
+  /** Initially `black` afterwards `faded` or `clear` */
+  overlayColor: "black" | "faded" | "clear";
+  toggleEnabled(): void;
 }
 
 const tabsCss = css`

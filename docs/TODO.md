@@ -29,8 +29,14 @@
 - ✅ open Viewer closes Nav
 - ✅ open Nav darkens Main
 - ✅ Viewer Tabs has id `{articleKey}-viewer-tabs` (for persist)
-- Tabs has controls
 
+- 🚧 Tabs has controls
+
+  - disable/enable
+  - reset
+  - maximise/minimise
+
+- can make Viewer larger
 - toasts indicate loading assets/components
 
 - netlify site `npc-cli` at https://lastredoubt.co
