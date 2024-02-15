@@ -3,7 +3,9 @@ import { css } from "@emotion/css";
 
 /** @param {Props} props */
 export default function HelloWorld(props) {
-  return <div className={helloWorldCss}>Hello, world!</div>;
+  return (
+    <div className={helloWorldCss}>Hello, world! ({props.disabled ? "disabled" : "enabled"})</div>
+  );
 }
 
 const helloWorldCss = css`
