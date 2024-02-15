@@ -56,7 +56,12 @@ function Root(props: Props) {
     useSite.api.initiate(allFrontMatter);
   }, [frontMatter]);
 
-  useOnResize(); // Update matchMedia computations
+  // Update matchMedia computations
+  useOnResize();
+
+  React.useEffect(() => {
+    useSite.api.initiateBrowser();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
