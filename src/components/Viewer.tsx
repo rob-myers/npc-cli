@@ -9,7 +9,7 @@ import Tabs from "./tabs/Tabs";
 import useSite from "src/store/site.store";
 
 export default function Viewer() {
-  const update = useUpdate();
+  const articleKey = useSite((x) => x.articleKey);
 
   const state = useStateRef(() => ({
     collapsed: true,
@@ -21,12 +21,14 @@ export default function Viewer() {
     },
     toggleCollapsed() {
       state.collapsed = !state.collapsed;
+      update();
       if (!state.collapsed && useSite.api.isSmallViewport()) {
         useSite.api.toggleNav(false);
       }
-      update();
     },
   }));
+
+  const update = useUpdate();
 
   return (
     <aside
@@ -35,19 +37,20 @@ export default function Viewer() {
       onClick={state.onClickViewer}
     >
       <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
-      {/* 🚧 */}
-      <Tabs
-        id="viewer-tabs" // 🚧 {page}-viewer-tabs
-        initEnabled={false}
-        tabs={[
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-4", props: {} }],
-        ]}
-        // height={[400, 500]}
-        persistLayout
-      />
+
+      {articleKey && (
+        <Tabs
+          id={`${articleKey}-viewer-tabs`}
+          initEnabled={false}
+          tabs={[
+            [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
+            [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
+            [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
+          ]}
+          // height={[400, 500]}
+          persistLayout
+        />
+      )}
     </aside>
   );
 }
@@ -68,17 +71,16 @@ const viewerCss = css`
     left: calc(1rem);
   }
 
-  transition: min-width 500ms;
-  min-width: 50%;
-
-  .tabs {
+  > figure.tabs {
     opacity: 1;
     transition: opacity 200ms 100ms; // delay 100ms
   }
 
+  transition: min-width 500ms;
+  min-width: 50%;
   &.collapsed {
     min-width: ${minWidth};
-    .tabs {
+    > figure.tabs {
       pointer-events: none;
       opacity: 0;
       transition: opacity 200ms;
