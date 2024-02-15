@@ -1,5 +1,5 @@
 import React from "react";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import { breakpoint } from "./const";
 import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
 import useSite from "src/store/site.store";
@@ -9,7 +9,12 @@ export default function Main(props: React.PropsWithChildren) {
 
   return (
     <section className={mainCss} data-testid="main">
-      {navOpen && useSite.api.isSmallViewport() && <div className={overlayCss} />}
+      <div
+        className={cx(overlayCss, {
+          overlayOpen: navOpen && useSite.api.isSmallViewport(),
+        })}
+        onClick={() => useSite.api.toggleNav()}
+      />
 
       <div className={mainTitleCss} data-testid="main-title">
         <img src={npcCliTitlePng} />
@@ -50,5 +55,12 @@ const overlayCss = css`
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
+  cursor: pointer;
+  z-index: 1;
+
+  display: none;
+  &.overlayOpen {
+    display: block;
+  }
 `;
