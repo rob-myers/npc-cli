@@ -2,18 +2,15 @@ import { css } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import useUpdate from "../js/hooks/use-update";
-import useStateRef from "../js/hooks/use-state-ref";
-
 import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
+import useStateRef from "../js/hooks/use-state-ref";
 import Toggle, { toggleClassName } from "./Toggle";
-import { breakpoint } from "./const";
+import useSiteStore from "src/store/site.store";
 
 export default function Nav() {
-  const update = useUpdate();
+  const collapsed = useSiteStore(({ navOpen }) => !navOpen);
 
   const state = useStateRef(() => ({
-    collapsed: true,
     onClickSidebar(e: React.MouseEvent) {
       const el = e.target as HTMLElement;
       if (el.classList.contains(sidebarClasses.container)) {
@@ -26,8 +23,7 @@ export default function Nav() {
       }
     },
     toggleCollapsed() {
-      state.collapsed = !state.collapsed;
-      update();
+      useSiteStore.api.toggleNav();
     },
   }));
 
@@ -35,13 +31,13 @@ export default function Nav() {
     <Sidebar
       backgroundColor="black"
       className={navCss}
-      collapsed={state.collapsed}
+      collapsed={collapsed}
       collapsedWidth="4rem"
       data-testid="nav"
       onClick={state.onClickSidebar}
       width="16rem"
     >
-      <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? undefined : "horizontal"} />
+      <Toggle onToggle={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
 
       <Menu>
         <MenuItem className="title" tabIndex={-1}>

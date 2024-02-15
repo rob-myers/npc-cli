@@ -7,6 +7,8 @@ const useStore = create<State>()(
     articlesMeta: {},
     browserLoaded: false,
     discussMeta: {},
+    navOpen: false,
+
     api: {
       initiate({ allMdx: { edges } }) {
         const articlesMeta = {} as State["articlesMeta"];
@@ -22,12 +24,8 @@ const useStore = create<State>()(
 
       async initiateBrowser() {
         window.addEventListener("message", (message) => {
-          if (
-            message.origin === "https://giscus.app" &&
-            message.data.giscus?.discussion
-          ) {
-            const discussion = message.data.giscus
-              .discussion as GiscusDiscussionMeta;
+          if (message.origin === "https://giscus.app" && message.data.giscus?.discussion) {
+            const discussion = message.data.giscus.discussion as GiscusDiscussionMeta;
             console.log("giscus meta", discussion);
             const { articleKey } = get();
             if (articleKey) {
@@ -48,6 +46,14 @@ const useStore = create<State>()(
       setArticleKey(articleKey) {
         set({ articleKey: articleKey ?? null }, undefined, "set-article-key");
       },
+
+      toggleNav(next) {
+        if (next === undefined) {
+          set(({ navOpen }) => ({ navOpen: !navOpen }), undefined, "toggle-nav");
+        } else {
+          set({ navOpen: next }, undefined, `${next ? "open" : "close"}-nav`);
+        }
+      },
     },
   }))
 );
@@ -60,20 +66,15 @@ export type State = {
   browserLoaded: boolean;
   discussMeta: { [articleKey: string]: GiscusDiscussionMeta };
 
-  // navOpen: boolean;
-  // /** Components occurring in Tabs. */
-  // component: KeyedLookup<KeyedComponent>;
-  // /** <Tabs> on current page, see `useRegisterTabs` */
-  // tabs: KeyedLookup<TabsState>;
+  navOpen: boolean;
 
   api: {
     //   clickToClipboard(e: React.MouseEvent): Promise<void>;
     initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): Promise<void>;
-    //   removeComponents(tabsKey: string, ...componentKeys: string[]): void;
     setArticleKey(articleKey?: string): void;
+    toggleNav(next?: boolean): void;
     //   setTabDisabled(tabsKey: string, componentKey: string, disabled: boolean): void
-    //   toggleDarkMode(): void;
   };
 };
 
@@ -110,14 +111,7 @@ interface GiscusDiscussionMeta {
   locked: boolean;
   reactionCount: number;
   reactions: Record<
-    | "CONFUSED"
-    | "EYES"
-    | "HEART"
-    | "HOORAY"
-    | "LAUGH"
-    | "ROCKET"
-    | "THUMBS_DOWN"
-    | "THUMBS_UP",
+    "CONFUSED" | "EYES" | "HEART" | "HOORAY" | "LAUGH" | "ROCKET" | "THUMBS_DOWN" | "THUMBS_UP",
     { count: number; viewerHasReacted: boolean }
   >;
   repository: { nameWithOwner: string };
