@@ -1,5 +1,7 @@
 # TODO
 
+## Done
+
 - ✅ rename current netlify site `npc->cli` -> `the-last-redoubt`
   - https://the-last-redoubt.netlify.app/test/
   - https://staging.lastredoubt.co
@@ -19,8 +21,18 @@
   - try avoid "cannot update component" error
 - ✅ fix Viewer side-by-side Tabs minimize in large viewport
 
+## WIP
+
+- ✅ fix layout height on mobile device
+
+- ✅ useSiteStore drives Nav
+- ✅ open Viewer closes Nav
+- 🚧 open Nav darkens Main
+
 - Viewer Tabs has id `{page}-viewer-tabs` (for persist)
 - Tabs has controls
+
+- toasts indicate loading assets/components
 
 - netlify site `npc-cli` at https://lastredoubt.co
 - geomorph layouts via SVG, inducing current format
