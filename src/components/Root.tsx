@@ -19,6 +19,7 @@ import Viewer from "./Viewer";
 import Main from "./Main";
 import Comments from "./Comments";
 import { breakpoint } from "./const";
+import useOnResize from "src/js/hooks/use-on-resize";
 
 export function wrapPageElement({
   element,
@@ -54,6 +55,8 @@ function Root(props: Props) {
     useSite.api.setArticleKey(frontMatter?.key);
     useSite.api.initiate(allFrontMatter);
   }, [frontMatter]);
+
+  useOnResize(); // Update matchMedia computations
 
   return (
     <QueryClientProvider client={queryClient}>
