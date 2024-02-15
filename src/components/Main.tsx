@@ -2,10 +2,15 @@ import React from "react";
 import { css } from "@emotion/css";
 import { breakpoint } from "./const";
 import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
+import useSite from "src/store/site.store";
 
 export default function Main(props: React.PropsWithChildren) {
+  const navOpen = useSite((x) => x.navOpen);
+
   return (
     <section className={mainCss} data-testid="main">
+      {navOpen && useSite.api.isSmallViewport() && <div className={overlayCss} />}
+
       <div className={mainTitleCss} data-testid="main-title">
         <img src={npcCliTitlePng} />
       </div>
@@ -38,4 +43,12 @@ const mainTitleCss = css`
     // 🔔 Too wide caused extra body height (mobile)
     max-width: 100%;
   }
+`;
+
+const overlayCss = css`
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;

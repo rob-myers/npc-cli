@@ -45,7 +45,9 @@ const useStore = create<State>()(
       },
 
       isSmallViewport() {
-        return window.matchMedia(`(max-width: ${breakpoint})`).matches;
+        return (
+          typeof window !== "undefined" && window.matchMedia(`(max-width: ${breakpoint})`).matches
+        );
       },
 
       setArticleKey(articleKey) {

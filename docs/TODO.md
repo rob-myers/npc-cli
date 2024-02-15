@@ -27,9 +27,8 @@
 
 - ✅ useSiteStore drives Nav
 - ✅ open Viewer closes Nav
-- 🚧 open Nav darkens Main
-
-- Viewer Tabs has id `{page}-viewer-tabs` (for persist)
+- ✅ open Nav darkens Main
+- ✅ Viewer Tabs has id `{articleKey}-viewer-tabs` (for persist)
 - Tabs has controls
 
 - toasts indicate loading assets/components
