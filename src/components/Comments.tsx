@@ -1,12 +1,12 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import Giscus from "@giscus/react";
-import useSiteStore from "../store/site.store";
+import useSite from "../store/site.store";
 import { discussionsUrl } from "../js/service/const";
 // import Icon from "./Icon";
 
 export default function Comments(props: Props) {
-  const { articleKey, commentMeta } = useSiteStore(
+  const { articleKey, commentMeta } = useSite(
     (x) => ({
       articleKey: x.articleKey,
       commentMeta: x.articleKey ? x.discussMeta[x.articleKey] : null,

@@ -6,7 +6,7 @@ import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
 import Toggle, { toggleClassName } from "./Toggle";
 import Tabs from "./tabs/Tabs";
-import useSiteStore from "src/store/site.store";
+import useSite from "src/store/site.store";
 
 export default function Viewer() {
   const update = useUpdate();
@@ -21,8 +21,8 @@ export default function Viewer() {
     },
     toggleCollapsed() {
       state.collapsed = !state.collapsed;
-      if (!state.collapsed) {
-        useSiteStore.api.toggleNav(false);
+      if (!state.collapsed && useSite.api.isSmallViewport()) {
+        useSite.api.toggleNav(false);
       }
       update();
     },

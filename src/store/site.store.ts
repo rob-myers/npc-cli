@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { breakpoint } from "src/components/const";
 
 const useStore = create<State>()(
   devtools((set, get) => ({
@@ -43,6 +44,10 @@ const useStore = create<State>()(
         set(() => ({ browserLoaded: true }), undefined, "browser-load");
       },
 
+      isSmallViewport() {
+        return window.matchMedia(`(max-width: ${breakpoint})`).matches;
+      },
+
       setArticleKey(articleKey) {
         set({ articleKey: articleKey ?? null }, undefined, "set-article-key");
       },
@@ -72,6 +77,7 @@ export type State = {
     //   clickToClipboard(e: React.MouseEvent): Promise<void>;
     initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): Promise<void>;
+    isSmallViewport(): boolean;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;
     //   setTabDisabled(tabsKey: string, componentKey: string, disabled: boolean): void
@@ -121,5 +127,5 @@ interface GiscusDiscussionMeta {
   url: string;
 }
 
-const useSiteStore = Object.assign(useStore, { api: useStore.getState().api });
-export default useSiteStore;
+const useSite = Object.assign(useStore, { api: useStore.getState().api });
+export default useSite;

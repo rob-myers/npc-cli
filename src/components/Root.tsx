@@ -13,7 +13,7 @@ import {
 import type { AllFrontMatter, FrontMatter } from "../store/site.store";
 
 import { queryClient } from "../js/service/query-client";
-import useSiteStore from "../store/site.store";
+import useSite from "../store/site.store";
 import Nav from "./Nav";
 import Viewer from "./Viewer";
 import Main from "./Main";
@@ -51,8 +51,8 @@ function Root(props: Props) {
 
   React.useMemo(() => {
     // clearAllBodyScrollLocks();
-    useSiteStore.api.setArticleKey(frontMatter?.key);
-    useSiteStore.api.initiate(allFrontMatter);
+    useSite.api.setArticleKey(frontMatter?.key);
+    useSite.api.initiate(allFrontMatter);
   }, [frontMatter]);
 
   return (

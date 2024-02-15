@@ -5,10 +5,10 @@ import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "r
 import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
 import useStateRef from "../js/hooks/use-state-ref";
 import Toggle, { toggleClassName } from "./Toggle";
-import useSiteStore from "src/store/site.store";
+import useSite from "src/store/site.store";
 
 export default function Nav() {
-  const collapsed = useSiteStore(({ navOpen }) => !navOpen);
+  const collapsed = useSite(({ navOpen }) => !navOpen);
 
   const state = useStateRef(() => ({
     onClickSidebar(e: React.MouseEvent) {
@@ -23,7 +23,7 @@ export default function Nav() {
       }
     },
     toggleCollapsed() {
-      useSiteStore.api.toggleNav();
+      useSite.api.toggleNav();
     },
   }));
 
