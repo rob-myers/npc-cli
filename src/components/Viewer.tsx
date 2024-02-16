@@ -13,9 +13,9 @@ export default function Viewer() {
 
   const state = useStateRef(() => ({
     collapsed: true,
+    rootEl: /** @type {HTMLElement} */ {},
     onClickViewer(e: React.MouseEvent) {
-      const el = e.target as HTMLElement;
-      if (el.classList.contains("viewer")) {
+      if ((e.target as HTMLElement) === state.rootEl) {
         state.toggleCollapsed();
       }
     },
@@ -35,6 +35,7 @@ export default function Viewer() {
       className={cx(viewerCss, { collapsed: state.collapsed })}
       data-testid="viewer"
       onClick={state.onClickViewer}
+      ref={(el) => el && (state.rootEl = el)}
     >
       <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
 
@@ -66,7 +67,7 @@ const viewerCss = css`
 
   > .${toggleClassName} {
     position: absolute;
-    z-index: 1;
+    z-index: 5;
     top: calc(0.5rem);
     left: calc(1rem);
   }
@@ -96,7 +97,8 @@ const viewerCss = css`
     > .${toggleClassName} {
       transform: rotate(90deg);
       left: unset;
-      right: calc(1rem);
+      top: -2.2rem;
+      right: 0.2rem;
     }
   }
 `;
