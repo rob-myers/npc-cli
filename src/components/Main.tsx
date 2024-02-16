@@ -57,7 +57,7 @@ const overlayCss = css`
   width: 100%;
   height: 100dvh;
   cursor: pointer;
-  z-index: 1;
+  z-index: 6;
 
   display: none;
   &.overlayOpen {

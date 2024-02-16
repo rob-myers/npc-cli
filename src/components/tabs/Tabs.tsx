@@ -9,9 +9,6 @@ import useStateRef from "src/js/hooks/use-state-ref";
 import useUpdate from "src/js/hooks/use-update";
 import Controls from "./Controls";
 
-// 🚧 ensure components are lazy-loaded
-// 🚧 open Viewer should enable Tabs initially
-
 export default function Tabs(props: Props) {
   const state = useStateRef<State>(() => ({
     componentMeta: {},
@@ -39,32 +36,29 @@ export default function Tabs(props: Props) {
       if (node.getType() !== "tab") {
         return;
       }
-
       node.setEventListener("visibility", async ({ visible }) => {
         const [key, tabMeta] = [node.getId(), (node as TabNode).getConfig() as TabMeta];
         state.componentMeta[key] ??= { key, disabled: false, everVis: false };
 
         if (!visible) {
-          // tab now hidden
           if (tabMeta.type === "component") {
+            // we don't disable hidden terminals
             state.componentMeta[key].disabled = true;
             setTimeout(update);
-          } // but don't disable hidden terminals
+          }
         } else {
-          // tab now visible
+          state.componentMeta[key].disabled = false;
           if (tabMeta.type === "terminal") {
             // 🚧 Ensure scrollbar appears if exceeded scroll area when hidden
             // const { default: useSessionStore } = await import("projects/sh/session.store");
             // const session = useSessionStore.api.getSession(getTabIdentifier(tabMeta));
             // session?.ttyShell.xterm.forceResize();
           }
-          state.componentMeta[key].disabled = false;
 
           const maxNode = model.getMaximizedTabset()?.getSelectedNode();
           // According to flexlayout-react, a selected tab is "visible" when obscured by a maximised tab.
           // We prevent rendering in such cases
           state.componentMeta[key].everVis ||= maxNode ? node === maxNode : true;
-
           // update(); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
           setTimeout(update);
         }

@@ -32,9 +32,13 @@
 
 - 🚧 Tabs has controls
 
-  - disable/enable
-  - reset
-  - maximise/minimise
+  - 🚧 disable/enable
+  - 🚧 reset
+  - 🚧 maximise/minimise
+
+- remember if viewer is open i.e. trigger client-side
+- ensure Tab components are lazy-loaded
+- open Viewer should enable Tabs initially
 
 - can make Viewer larger
 - toasts indicate loading assets/components

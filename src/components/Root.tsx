@@ -101,7 +101,7 @@ const rootCss = css`
       // cannot move to Sidebar className
       position: fixed;
       height: 100%;
-      z-index: 2;
+      z-index: 7;
     }
   }
 `;

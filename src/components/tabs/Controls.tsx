@@ -4,14 +4,26 @@ import { css, cx } from "@emotion/css";
 import useSite from "src/store/site.store";
 import { State } from "./Tabs";
 import Spinner from "../Spinner";
+import { FontAwesomeIcon, faCirclePause, faRefresh, faMaximize } from "../Icon";
 
 export default function Controls({ api }: Props) {
   const browserLoaded = useSite((x) => x.browserLoaded);
 
   return (
-    <div className={cx(controlsCss, { enabled: api.enabled })}>
-      <div className="centred-control" onClick={api.toggleEnabled}>
+    <div>
+      <button className={cx(enableButtonCss, { enabled: api.enabled })} onClick={api.toggleEnabled}>
         {browserLoaded ? "interact" : <Spinner size={24} />}
+      </button>
+      <div className={cx(otherButtonsCss, { enabled: api.enabled, everEnabled: api.everEnabled })}>
+        <button>
+          <FontAwesomeIcon icon={faRefresh} size="2x" style={{ transform: "scale(0.7)" }} />
+        </button>
+        <button>
+          <FontAwesomeIcon icon={faMaximize} size="2x" style={{ transform: "scale(0.7)" }} />
+        </button>
+        <button style={{ backgroundColor: "black" }}>
+          <FontAwesomeIcon icon={faCirclePause} size="2x" inverse />
+        </button>
       </div>
       <div
         className={cx(overlayCss, {
@@ -27,30 +39,48 @@ interface Props {
   api: State;
 }
 
-const controlsCss = css`
-  &.enabled .centred-control {
+const enableButtonCss = css`
+  position: absolute;
+  z-index: 5;
+  left: calc(50% - 0.5 * (2 * 32px + 72px));
+  top: calc(50% - 0.5 * (2 * 16px + 1rem));
+
+  cursor: pointer;
+  color: #ddd;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 15px 32px;
+  border-radius: 4px;
+  border: 2px solid #888;
+  font-size: 1rem;
+  letter-spacing: 2px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &.enabled {
     display: none;
   }
-  .centred-control {
-    position: absolute;
-    z-index: 5;
-    left: calc(50% - (128px / 2));
-    top: calc(50% - 20px);
+`;
 
-    cursor: pointer;
-    color: #ddd;
-    background: rgba(0, 0, 0, 0.9);
-    padding: 12px 32px;
-    border-radius: 4px;
-    border: 2px solid #888;
-    font-size: 1rem;
-    letter-spacing: 2px;
+const otherButtonsCss = css`
+  position: absolute;
+  z-index: 5;
+  right: calc(3rem);
+  top: calc(-1 * 2rem - 4px);
+  padding: 0;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 70px;
-    max-height: 32px; // 🚧 not when collapsed
+  button {
+    padding: 0;
+    border: none;
+    background-color: white;
+    border: 4px solid black;
+    border-radius: 50%;
+    margin-left: 4px;
+  }
+
+  &:not(.everEnabled) {
+    display: none;
   }
 `;
 
