@@ -26,7 +26,7 @@ export default function Toggle(props: React.PropsWithChildren<Props>) {
 
 interface Props {
   onToggle(): void;
-  flip?: FontAwesomeIconProps['flip'];
+  flip?: FontAwesomeIconProps["flip"];
   style?: React.CSSProperties;
 }
 
@@ -41,4 +41,4 @@ const toggleCss = css`
   cursor: pointer;
 `;
 
-export const toggleClassName = 'toggle';
+export const toggleClassName = "toggle";

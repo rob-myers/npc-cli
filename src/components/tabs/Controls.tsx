@@ -15,13 +15,13 @@ export default function Controls({ api }: Props) {
         {browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
       <div className={cx(otherButtonsCss, { enabled: api.enabled, everEnabled: api.everEnabled })}>
-        <button>
-          <FontAwesomeIcon icon={faRefresh} size="2x" style={{ transform: "scale(0.7)" }} />
+        <button className="reset" disabled={!api.enabled}>
+          <FontAwesomeIcon icon={faRefresh} size="2x" />
         </button>
-        <button>
-          <FontAwesomeIcon icon={faMaximize} size="2x" style={{ transform: "scale(0.7)" }} />
+        <button className="max-min" disabled={!api.enabled}>
+          <FontAwesomeIcon icon={faMaximize} size="2x" />
         </button>
-        <button style={{ backgroundColor: "black" }}>
+        <button className="pause" disabled={!api.enabled} onClick={api.toggleEnabled}>
           <FontAwesomeIcon icon={faCirclePause} size="2x" inverse />
         </button>
       </div>
@@ -66,17 +66,34 @@ const enableButtonCss = css`
 const otherButtonsCss = css`
   position: absolute;
   z-index: 5;
-  right: calc(3rem);
-  top: calc(-1 * 2rem - 4px);
+  right: calc(2rem + 8px);
+  top: calc(-1 * 2rem - 3px);
   padding: 0;
 
   button {
     padding: 0;
     border: none;
     background-color: white;
-    border: 4px solid black;
+    border: 3px solid black;
     border-radius: 50%;
-    margin-left: 4px;
+    margin: 0 4px;
+    color: black;
+
+    cursor: pointer;
+    &:disabled {
+      cursor: auto;
+      opacity: 0.4;
+    }
+  }
+
+  button.reset svg {
+    transform: scale(0.7);
+  }
+  button.max-min svg {
+    transform: scale(0.7);
+  }
+  button.pause {
+    background-color: black;
   }
 
   &:not(.everEnabled) {
