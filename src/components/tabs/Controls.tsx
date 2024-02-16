@@ -4,7 +4,7 @@ import { css, cx } from "@emotion/css";
 import useSite from "src/store/site.store";
 import { State } from "./Tabs";
 import Spinner from "../Spinner";
-import { FontAwesomeIcon, faCirclePause, faRefresh, faMaximize } from "../Icon";
+import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "../Icon";
 
 export default function Controls({ api }: Props) {
   const browserLoaded = useSite((x) => x.browserLoaded);
@@ -15,14 +15,14 @@ export default function Controls({ api }: Props) {
         {browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
       <div className={cx(otherButtonsCss, { enabled: api.enabled, everEnabled: api.everEnabled })}>
-        <button className="reset" disabled={!api.enabled}>
-          <FontAwesomeIcon icon={faRefresh} size="2x" />
+        <button disabled={!api.enabled} title="reset tabs">
+          <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
-        <button className="max-min" disabled={!api.enabled}>
-          <FontAwesomeIcon icon={faMaximize} size="2x" />
+        <button disabled={!api.enabled} title="max/min tabs">
+          <FontAwesomeIcon icon={faExpandThin} size="1x" />
         </button>
-        <button className="pause" disabled={!api.enabled} onClick={api.toggleEnabled}>
-          <FontAwesomeIcon icon={faCirclePause} size="2x" inverse />
+        <button disabled={!api.enabled} onClick={api.toggleEnabled} title="pause tabs">
+          <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
       </div>
       <div
@@ -50,7 +50,7 @@ const enableButtonCss = css`
   background: rgba(0, 0, 0, 0.9);
   padding: 15px 32px;
   border-radius: 4px;
-  border: 2px solid #888;
+  border: 1px solid #888;
   font-size: 1rem;
   letter-spacing: 2px;
 
@@ -66,34 +66,27 @@ const enableButtonCss = css`
 const otherButtonsCss = css`
   position: absolute;
   z-index: 5;
-  right: calc(2rem + 8px);
-  top: calc(-1 * 2rem - 3px);
-  padding: 0;
+  transform: scale(1.8);
+  transform-origin: top right;
+  right: calc(3rem);
+  top: calc(-2rem);
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
 
   button {
     padding: 0;
     border: none;
-    background-color: white;
-    border: 3px solid black;
-    border-radius: 50%;
+    background: none;
     margin: 0 4px;
-    color: black;
-
     cursor: pointer;
+
+    opacity: 1;
+    transition: opacity 300ms;
     &:disabled {
       cursor: auto;
+      color: black;
       opacity: 0.4;
     }
-  }
-
-  button.reset svg {
-    transform: scale(0.7);
-  }
-  button.max-min svg {
-    transform: scale(0.7);
-  }
-  button.pause {
-    background-color: black;
   }
 
   &:not(.everEnabled) {
