@@ -21,6 +21,7 @@ export default function Tabs(props: Props) {
     componentMeta: {},
     enabled: false,
     everEnabled: false,
+    expanded: false,
     overlayColor: "black",
     resetCount: 0,
 
@@ -120,6 +121,7 @@ export interface Props extends TabsDef {
 export interface State {
   componentMeta: Record<string, { key: string; disabled: boolean; everVis: boolean }>;
   enabled: boolean;
+  expanded: boolean;
   everEnabled: boolean;
   /** Initially `black` afterwards `faded` or `clear` */
   overlayColor: "black" | "faded" | "clear";

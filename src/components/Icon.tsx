@@ -4,6 +4,7 @@ export {
   faCoffee,
   faChevronRight,
   faLungs,
+  faCompress,
   // faCirclePause,
   // faRefresh,
   // faExpand,

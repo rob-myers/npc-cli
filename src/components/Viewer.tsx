@@ -94,7 +94,7 @@ const viewerCss = css`
     min-height: 50%;
 
     > .${toggleClassName} {
-      transition: top 250ms 250ms;
+      transition: top 300ms 250ms;
       transform: rotate(90deg);
       left: unset;
       top: -2.1rem;

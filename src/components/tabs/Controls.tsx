@@ -6,7 +6,13 @@ import useLongPress from "src/js/hooks/use-long-press";
 
 import { State } from "./Tabs";
 import Spinner from "../Spinner";
-import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "../Icon";
+import {
+  FontAwesomeIcon,
+  faRefreshThin,
+  faExpandThin,
+  faCirclePauseThin,
+  faCompress,
+} from "../Icon";
 
 export default function Controls({ api }: Props) {
   const browserLoaded = useSite((x) => x.browserLoaded);
@@ -31,7 +37,7 @@ export default function Controls({ api }: Props) {
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
         <button title="max/min tabs" disabled={!api.enabled}>
-          <FontAwesomeIcon icon={faExpandThin} size="1x" />
+          <FontAwesomeIcon icon={api.expanded ? faCompress : faExpandThin} size="1x" />
         </button>
         <button title="pause tabs" onClick={api.toggleEnabled} disabled={!api.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
@@ -90,7 +96,7 @@ const otherButtonsCss = css`
     padding: 0;
     border: none;
     background: none;
-    margin: 0 4px;
+    margin: 0 6px;
     cursor: pointer;
 
     opacity: 1;
