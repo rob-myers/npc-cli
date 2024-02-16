@@ -2,7 +2,12 @@ import React from "react";
 import loadable from "@loadable/component";
 import { IJsonModel, Model, TabNode } from "flexlayout-react";
 
-import { deepClone, tryLocalStorageGet, tryLocalStorageSet } from "src/js/service/generic";
+import {
+  deepClone,
+  tryLocalStorageGet,
+  tryLocalStorageRemove,
+  tryLocalStorageSet,
+} from "src/js/service/generic";
 import { Props as TabsProps, State as TabsApi } from "./Tabs";
 import { Tab } from "./Tab";
 
@@ -119,6 +124,10 @@ function FallbackComponentFactory(componentKey: string) {
 //#endregion
 
 //#region persist
+
+export function clearModelFromStorage(id: string) {
+  tryLocalStorageRemove(`model@${id}`);
+}
 
 export function createOrRestoreJsonModel(props: TabsProps) {
   const jsonModelString = tryLocalStorageGet(`model@${props.id}`);

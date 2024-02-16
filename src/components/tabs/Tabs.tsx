@@ -4,7 +4,14 @@ import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
 import { css, cx } from "@emotion/css";
 
-import { TabMeta, TabsDef, createOrRestoreJsonModel, factory, storeModelAsJson } from "./tabs.util";
+import {
+  TabMeta,
+  TabsDef,
+  clearModelFromStorage,
+  createOrRestoreJsonModel,
+  factory,
+  storeModelAsJson,
+} from "./tabs.util";
 import useStateRef from "src/js/hooks/use-state-ref";
 import useUpdate from "src/js/hooks/use-update";
 import Controls from "./Controls";
@@ -12,11 +19,22 @@ import Controls from "./Controls";
 export default function Tabs(props: Props) {
   const state = useStateRef<State>(() => ({
     componentMeta: {},
-    maxTabNode: null,
     enabled: false,
     everEnabled: false,
     overlayColor: "black",
+    resetCount: 0,
 
+    hardReset() {
+      clearModelFromStorage(props.id);
+      state.reset();
+    },
+    reset() {
+      state.componentMeta = {};
+      state.enabled = state.everEnabled = false;
+      state.overlayColor = "black";
+      state.resetCount++; // Remount
+      update();
+    },
     toggleEnabled() {
       state.everEnabled = true;
       state.enabled = !state.enabled;
@@ -66,14 +84,14 @@ export default function Tabs(props: Props) {
     });
 
     return output;
-  }, [JSON.stringify(props.tabs)]);
+  }, [JSON.stringify(props.tabs), state.resetCount]);
 
   useBeforeunload(() => storeModelAsJson(props.id, model));
 
   const update = useUpdate();
 
   return (
-    <figure className={cx("tabs", tabsCss)}>
+    <figure key={state.resetCount} className={cx("tabs", tabsCss)}>
       {state.everEnabled && (
         <FlexLayout
           model={model}
@@ -105,6 +123,9 @@ export interface State {
   everEnabled: boolean;
   /** Initially `black` afterwards `faded` or `clear` */
   overlayColor: "black" | "faded" | "clear";
+  resetCount: number;
+  hardReset(): void;
+  reset(): void;
   toggleEnabled(): void;
 }
 

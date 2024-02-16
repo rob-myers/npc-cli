@@ -2,6 +2,8 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 
 import useSite from "src/store/site.store";
+import useLongPress from "src/js/hooks/use-long-press";
+
 import { State } from "./Tabs";
 import Spinner from "../Spinner";
 import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "../Icon";
@@ -9,19 +11,29 @@ import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from 
 export default function Controls({ api }: Props) {
   const browserLoaded = useSite((x) => x.browserLoaded);
 
+  const resetHandlers = useLongPress({
+    onLongPress: api.hardReset,
+    onClick: api.reset,
+    ms: 1000,
+  });
+
   return (
     <div>
-      <button className={cx(enableButtonCss, { enabled: api.enabled })} onClick={api.toggleEnabled}>
+      <button
+        title="enable tabs"
+        onClick={api.toggleEnabled}
+        className={cx(enableButtonCss, { enabled: api.enabled })}
+      >
         {browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
       <div className={cx(otherButtonsCss, { enabled: api.enabled, everEnabled: api.everEnabled })}>
-        <button disabled={!api.enabled} title="reset tabs">
+        <button title="reset tabs" {...resetHandlers} disabled={!api.enabled}>
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
-        <button disabled={!api.enabled} title="max/min tabs">
+        <button title="max/min tabs" disabled={!api.enabled}>
           <FontAwesomeIcon icon={faExpandThin} size="1x" />
         </button>
-        <button disabled={!api.enabled} onClick={api.toggleEnabled} title="pause tabs">
+        <button title="pause tabs" onClick={api.toggleEnabled} disabled={!api.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
       </div>
@@ -66,10 +78,11 @@ const enableButtonCss = css`
 const otherButtonsCss = css`
   position: absolute;
   z-index: 5;
-  transform: scale(1.8);
+  transform: scale(1.6);
   transform-origin: top right;
   right: calc(3rem);
-  top: calc(-2rem);
+  top: calc(-1.9rem);
+
   background-color: rgba(255, 255, 255, 0.5);
   display: flex;
 
