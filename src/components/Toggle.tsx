@@ -12,14 +12,7 @@ export default function Toggle(props: React.PropsWithChildren<Props>) {
       tabIndex={0}
       style={props.style}
     >
-      <FontAwesomeIcon
-        icon={faChevronRight}
-        size="1x"
-        beat={false}
-        flip={props.flip}
-        color="white"
-        width="2rem"
-      />
+      <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={props.flip} />
     </div>
   );
 }
@@ -32,9 +25,10 @@ interface Props {
 
 const toggleCss = css`
   border-radius: 50%;
-  background-color: #444;
-  width: 2rem;
-  height: 2rem;
+  background-color: white;
+  color: black;
+  width: 1.8rem;
+  height: 1.8rem;
   display: flex;
   justify-content: center;
   align-items: center;
