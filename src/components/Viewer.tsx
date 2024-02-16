@@ -37,11 +37,7 @@ export default function Viewer() {
       onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
     >
-      <Toggle
-        onToggle={state.toggleCollapsed}
-        flip={state.collapsed ? "horizontal" : undefined}
-        style={{ backgroundColor: "black" }}
-      />
+      <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
 
       {articleKey && (
         <Tabs
@@ -96,14 +92,21 @@ const viewerCss = css`
   @media (max-width: ${breakpoint}) {
     transition: min-height 500ms;
     min-height: 50%;
-    &.collapsed {
-      min-height: 4rem;
-    }
+
     > .${toggleClassName} {
+      transition: top 250ms 250ms;
       transform: rotate(90deg);
       left: unset;
-      top: -2.2rem;
-      right: 0.2rem;
+      top: -2.1rem;
+      right: 1rem;
+    }
+
+    &.collapsed {
+      min-height: 4rem;
+      > .${toggleClassName} {
+        top: 0.9rem;
+        transition: top 0s;
+      }
     }
   }
 `;
