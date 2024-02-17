@@ -69,7 +69,8 @@ const viewerCss = css`
     position: absolute;
     z-index: 6;
     top: 0.5rem;
-    left: 1rem;
+    left: -2.1rem;
+    background-color: #ddd;
   }
 
   > figure.tabs {
@@ -82,6 +83,10 @@ const viewerCss = css`
   min-width: 50%;
   &.collapsed {
     min-width: ${minWidth};
+
+    > .${toggleClassName} {
+      left: 1rem;
+    }
     > figure.tabs {
       pointer-events: none;
       opacity: 0;
@@ -106,6 +111,7 @@ const viewerCss = css`
       min-height: 4rem;
       > .${toggleClassName} {
         top: 0.9rem;
+        left: unset;
         transition: top 0s;
         background-color: white;
       }
