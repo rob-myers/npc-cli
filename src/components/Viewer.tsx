@@ -68,7 +68,7 @@ const viewerCss = css`
   > .${toggleClassName} {
     position: absolute;
     z-index: 6;
-    top: 0.5rem;
+    top: 0.6rem;
     left: -2.3rem;
 
     border: 2px solid #000;
@@ -104,11 +104,10 @@ const viewerCss = css`
     min-height: 50%;
 
     > .${toggleClassName} {
-      /* transition: top 300ms 250ms; */
       transform: rotate(90deg);
       left: unset;
       top: -2.2rem;
-      right: 0.25rem;
+      right: 0.5rem;
 
       border: 2px solid #000;
       background-color: #ddd;
@@ -120,7 +119,6 @@ const viewerCss = css`
       > .${toggleClassName} {
         top: 0.9rem;
         left: unset;
-        /* transition: top 0s; */
         background-color: white;
         color: #000;
       }

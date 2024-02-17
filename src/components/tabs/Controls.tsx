@@ -94,7 +94,6 @@ const otherButtonsCss = css`
   transform-origin: top left;
   transform: scale(1);
   flex-direction: column;
-  /* background-color: #444; */
 
   @media (max-width: ${breakpoint}) {
     flex-direction: row;
@@ -109,17 +108,12 @@ const otherButtonsCss = css`
     background-color: rgba(0, 0, 0, 1);
     color: white;
     border: 1px solid #444;
-    /* border-radius: 50%; */
     width: 3rem;
     height: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
 
-    /* margin: 6px 0; */
-    @media (max-width: ${breakpoint}) {
-      /* margin: 0 2px; */
-    }
     cursor: pointer;
     &:disabled {
       cursor: auto;
