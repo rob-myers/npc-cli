@@ -1,10 +1,10 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
-import { breakpoint } from "./const";
+import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
-import Toggle, { toggleClassName } from "./Toggle";
+import Toggle from "./Toggle";
 import { Tabs, State as TabsState } from "./tabs/Tabs";
 import useSite from "src/store/site.store";
 
@@ -69,37 +69,45 @@ const viewerCss = css`
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
-  > .${toggleClassName} {
+  > button.toggle {
     position: absolute;
     z-index: 6;
-    top: 0.4rem;
-    left: -2.3rem;
-
     border: 2px solid #000;
     background-color: #ddd;
     color: #000;
   }
-
-  > figure.tabs {
+  &:not(.collapsed) > figure.tabs {
     cursor: auto;
     opacity: 1;
     transition: opacity 200ms 100ms; // delay 100ms
   }
+  &.collapsed > figure.tabs {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 200ms;
+  }
 
-  transition: min-width 500ms;
-  min-width: 50%;
-  &.collapsed {
-    min-width: ${minWidth};
-
-    > .${toggleClassName} {
-      left: 1rem;
-      background-color: #fff;
-      color: #000;
+  @media (min-width: ${afterBreakpoint}) {
+    > button.toggle {
+      top: 0.4rem;
+      left: -2.3rem;
     }
-    > figure.tabs {
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 200ms;
+
+    transition: min-width 500ms;
+    min-width: 50%;
+    &.collapsed {
+      min-width: ${minWidth};
+
+      > button.toggle {
+        left: 1rem;
+        background-color: #fff;
+        color: #000;
+      }
+      > figure.tabs {
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 200ms;
+      }
     }
   }
 
@@ -107,9 +115,8 @@ const viewerCss = css`
     transition: min-height 500ms;
     min-height: 50%;
 
-    > .${toggleClassName} {
+    > button.toggle {
       transform: rotate(90deg);
-      left: unset;
       top: -2.2rem;
       right: 0.5rem;
 
@@ -120,9 +127,8 @@ const viewerCss = css`
 
     &.collapsed {
       min-height: 4rem;
-      > .${toggleClassName} {
+      > button.toggle {
         top: 0.9rem;
-        left: unset;
         background-color: white;
         color: #000;
       }

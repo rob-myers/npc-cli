@@ -4,7 +4,7 @@ import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "r
 
 import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
 import useStateRef from "../js/hooks/use-state-ref";
-import Toggle, { toggleClassName } from "./Toggle";
+import Toggle from "./Toggle";
 import useSite from "src/store/site.store";
 
 export default function Nav() {
@@ -68,7 +68,7 @@ const navCss = css`
     height: 3rem;
   }
 
-  .${sidebarClasses.container} .${toggleClassName} {
+  .${sidebarClasses.container} button.toggle {
     position: absolute;
     z-index: 1;
     top: calc(1rem);

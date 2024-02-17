@@ -5,7 +5,7 @@ import { FontAwesomeIcon, faChevronRight } from "./Icon";
 
 export default function Toggle(props: React.PropsWithChildren<Props>) {
   return (
-    <button className={cx(toggleClassName, toggleCss)} onClick={props.onClick} style={props.style}>
+    <button className={cx("toggle", toggleCss)} onClick={props.onClick} style={props.style}>
       <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={props.flip} />
     </button>
   );
@@ -28,5 +28,3 @@ const toggleCss = css`
   align-items: center;
   cursor: pointer;
 `;
-
-export const toggleClassName = "toggle";
