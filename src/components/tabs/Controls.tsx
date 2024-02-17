@@ -32,7 +32,7 @@ export default function Controls({ api }: Props) {
       >
         {browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
-      <div className={cx(otherButtonsCss, { enabled: api.enabled, everEnabled: api.everEnabled })}>
+      <div className={otherButtonsCss}>
         <button title="reset tabs" {...resetHandlers} disabled={!api.enabled}>
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
@@ -87,7 +87,7 @@ const otherButtonsCss = css`
   transform: scale(1.4);
   transform-origin: top right;
   right: calc(3rem);
-  top: calc(-1.9rem);
+  top: calc(-1.8rem);
 
   background-color: rgba(255, 255, 255, 0.5);
   display: flex;
@@ -104,10 +104,6 @@ const otherButtonsCss = css`
       opacity: 0.4;
     }
   }
-
-  &:not(.everEnabled) {
-    display: none;
-  }
 `;
 
 const overlayCss = css`
@@ -117,7 +113,7 @@ const overlayCss = css`
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(1, 1, 1, 0.5); // 🚧 alpha should be 1
+  background: rgba(1, 1, 1, 1);
   font-family: sans-serif;
 
   &:not(.faded) {

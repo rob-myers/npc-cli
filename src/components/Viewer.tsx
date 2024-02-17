@@ -98,7 +98,8 @@ const viewerCss = css`
       transform: rotate(90deg);
       left: unset;
       top: -2.1rem;
-      right: 1rem;
+      right: 0.5rem;
+      background-color: #ddd;
     }
 
     &.collapsed {
@@ -106,6 +107,7 @@ const viewerCss = css`
       > .${toggleClassName} {
         top: 0.9rem;
         transition: top 0s;
+        background-color: white;
       }
     }
   }
