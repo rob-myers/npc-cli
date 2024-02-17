@@ -135,7 +135,7 @@ export function createOrRestoreJsonModel(props: TabsProps) {
   if (props.persistLayout && jsonModelString) {
     try {
       const serializable = JSON.parse(jsonModelString) as IJsonModel;
-      (serializable.global ?? {}).splitterExtra = 12; // Larger splitter hit test area
+      (serializable.global ?? {}).splitterExtra = 8; // Larger splitter hit test area
       (serializable.global ?? {}).splitterSize = 2;
 
       const model = Model.fromJson(serializable);
