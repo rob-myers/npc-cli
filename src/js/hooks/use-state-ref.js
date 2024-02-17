@@ -14,10 +14,9 @@ import { equals, isPlainObject } from "../service/generic";
  * @param {Options<State>} [opts]
  */
 export default function useStateRef(initializer, opts = {}) {
-  const [state] =
-    /** @type {[State & { _prevFn?: string; _prevInit?: State; }, any]} */ (
-      React.useState(initializer)
-    );
+  const [state] = /** @type {[State & { _prevFn?: string; _prevInit?: State; }, any]} */ (
+    React.useState(initializer)
+  );
 
   React.useMemo(() => {
     const changed = initializer.toString() !== state._prevFn;
@@ -71,11 +70,7 @@ export default function useStateRef(initializer, opts = {}) {
         ) {
           // Update if initial values changed and specified `overwrite`
           state[key] = newInit[key];
-        } else if (
-          state._prevInit &&
-          opts.deeper?.includes(key) &&
-          isPlainObject(newInit)
-        ) {
+        } else if (state._prevInit && opts.deeper?.includes(key) && isPlainObject(newInit)) {
           // Sometimes functions and getter/setters are inside a top-level object
           // We could support arbitrary depth, but choose not to
           const innerNewInit = newInit[key];
@@ -92,10 +87,8 @@ export default function useStateRef(initializer, opts = {}) {
               Object.getOwnPropertyDescriptor(innerState, innerKey)?.set
             ) {
               Object.defineProperty(innerState, innerKey, {
-                get: Object.getOwnPropertyDescriptor(innerNewInit, innerKey)
-                  ?.get,
-                set: Object.getOwnPropertyDescriptor(innerNewInit, innerKey)
-                  ?.set,
+                get: Object.getOwnPropertyDescriptor(innerNewInit, innerKey)?.get,
+                set: Object.getOwnPropertyDescriptor(innerNewInit, innerKey)?.set,
               });
             }
           }
@@ -114,6 +107,7 @@ export default function useStateRef(initializer, opts = {}) {
         state._prevInit = newInit;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, opts.deps ?? []);
 
   return /** @type {State} */ (state);

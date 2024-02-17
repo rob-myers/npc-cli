@@ -4,7 +4,7 @@ import React from "react";
  * Trigger render on window resize.
  */
 export default function useOnResize() {
-  const [_, setState] = React.useState(0);
+  const [, setState] = React.useState(0);
 
   React.useEffect(() => {
     function onResize() {
