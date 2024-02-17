@@ -37,10 +37,10 @@ export default function Controls({ api }: Props) {
         <button title="pause tabs" onClick={api.toggleEnabled} disabled={!api.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
-        <button title="max/min tabs" disabled={!api.enabled}>
+        <button title="max/min tabs">
           <FontAwesomeIcon icon={api.expanded ? faCompress : faExpandThin} size="1x" />
         </button>
-        <button title="reset tabs" {...resetHandlers} disabled={!api.enabled}>
+        <button title="reset tabs" {...resetHandlers}>
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
       </div>

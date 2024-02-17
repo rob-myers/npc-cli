@@ -21,8 +21,6 @@
   - try avoid "cannot update component" error
 - ✅ fix Viewer side-by-side Tabs minimize in large viewport
 
-## WIP
-
 - ✅ fix layout height on mobile device
 
 - ✅ useSiteStore drives Nav
@@ -30,15 +28,24 @@
 - ✅ open Nav darkens Main
 - ✅ Viewer Tabs has id `{articleKey}-viewer-tabs` (for persist)
 
+## WIP
+
 - 🚧 Tabs has controls
 
-  - 🚧 disable/enable
-  - 🚧 reset
+  - ✅ small viewport ui
+  - ✅ large viewport ui
+  - ✅ disable/enable
+  - ✅ reset
   - 🚧 maximise/minimise
+    - by expanding Viewer
 
+- ✅ can reset while paused
+- close Viewer should disable Tabs
+- can max/min while paused
 - remember if viewer is open i.e. trigger client-side
 - ensure Tab components are lazy-loaded
 - open Viewer should enable Tabs initially
+- can press Escape/Enter to pause/unpause
 
 - can make Viewer larger
 - toasts indicate loading assets/components
