@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 
 import useSite from "src/store/site.store";
 import useLongPress from "src/js/hooks/use-long-press";
-import { breakpoint } from "../const";
+import { afterBreakpoint, breakpoint } from "../const";
 
 import { State } from "./Tabs";
 import Spinner from "../Spinner";
@@ -89,22 +89,33 @@ const enableButtonCss = css`
 const otherButtonsCss = css`
   position: absolute;
   z-index: 5;
-  background-color: rgba(255, 255, 255, 0.5);
   display: flex;
 
-  left: -3rem;
-  top: 3rem;
-  transform-origin: top left;
-  transform: scale(1);
   flex-direction: column;
+  background-color: #444;
+
+  @media (min-width: ${afterBreakpoint}) {
+    left: -3rem;
+    top: 0;
+    width: 3rem;
+    height: 100%;
+
+    button:nth-child(1) {
+      margin-top: 2.5rem;
+    }
+  }
 
   @media (max-width: ${breakpoint}) {
+    right: 0;
+    top: -2.5rem;
+    width: 100%;
+
     flex-direction: row;
-    transform: scale(1);
-    transform-origin: bottom right;
-    left: unset;
-    right: calc(3rem);
-    top: calc(-2.5rem);
+    justify-content: right;
+
+    button:nth-child(3) {
+      margin-right: 3rem;
+    }
   }
 
   button {
