@@ -5,15 +5,9 @@ import { FontAwesomeIcon, faChevronRight } from "./Icon";
 
 export default function Toggle(props: React.PropsWithChildren<Props>) {
   return (
-    <div
-      className={cx(toggleClassName, toggleCss)}
-      onClick={props.onToggle}
-      onKeyDown={(e) => ["Enter", " "].includes(e.key) && props.onToggle()}
-      tabIndex={0}
-      style={props.style}
-    >
+    <button className={cx(toggleClassName, toggleCss)} onClick={props.onToggle} style={props.style}>
       <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={props.flip} />
-    </div>
+    </button>
   );
 }
 
