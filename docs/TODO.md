@@ -40,7 +40,7 @@
     - by expanding Viewer
 
 - ✅ can reset while paused
-- close Viewer should disable Tabs
+- ✅ close Viewer disables Tabs
 - can max/min while paused
 - remember if viewer is open i.e. trigger client-side
 - ensure Tab components are lazy-loaded

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { Actions, Layout as FlexLayout, TabNode } from "flexlayout-react";
 import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
@@ -16,7 +16,7 @@ import useStateRef from "src/js/hooks/use-state-ref";
 import useUpdate from "src/js/hooks/use-update";
 import Controls from "./Controls";
 
-export default function Tabs(props: Props) {
+export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef<State>(() => ({
     tabsState: {},
     enabled: false,
@@ -36,13 +36,14 @@ export default function Tabs(props: Props) {
       state.resetCount++; // Remount
       update();
     },
-    toggleEnabled() {
-      state.everEnabled = true;
-      state.enabled = !state.enabled;
-      state.overlayColor = state.overlayColor === "clear" ? "faded" : "clear";
+    toggleEnabled(next) {
+      next ??= !state.enabled;
+      state.everEnabled ||= next;
+      state.enabled = next;
+      state.overlayColor = state.everEnabled ? (next ? "clear" : "faded") : "black";
 
-      const { tabsState: componentMeta } = state;
-      Object.keys(componentMeta).forEach((key) => (componentMeta[key].disabled = !state.enabled));
+      const { tabsState } = state;
+      Object.keys(tabsState).forEach((key) => (tabsState[key].disabled = !next as boolean));
       update();
     },
   }));
@@ -57,7 +58,6 @@ export default function Tabs(props: Props) {
       }
       node.setEventListener("visibility", async ({ visible }) => {
         const [key, tabDef] = [node.getId(), (node as TabNode).getConfig() as TabDef];
-
         state.tabsState[key] ??= { key, disabled: false, everVis: false };
 
         if (!visible) {
@@ -67,6 +67,10 @@ export default function Tabs(props: Props) {
             setTimeout(update);
           }
         } else {
+          if (!state.enabled) {
+            return; // Fix HMR
+          }
+
           state.tabsState[key].disabled = false;
           if (tabDef.type === "terminal") {
             // 🚧 Ensure scrollbar appears if exceeded scroll area when hidden
@@ -79,8 +83,7 @@ export default function Tabs(props: Props) {
           // According to flexlayout-react, a selected tab is "visible" when obscured by a maximised tab.
           // We prevent rendering in such cases
           state.tabsState[key].everVis ||= maxNode ? node === maxNode : true;
-          // update(); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
-          setTimeout(update);
+          setTimeout(update); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
         }
       });
     });
@@ -91,6 +94,8 @@ export default function Tabs(props: Props) {
   useBeforeunload(() => storeModelAsJson(props.id, model));
 
   const update = useUpdate();
+
+  React.useMemo(() => void (ref as Function)?.(state), []);
 
   return (
     <figure key={state.resetCount} className={cx("tabs", tabsCss)}>
@@ -113,14 +118,14 @@ export default function Tabs(props: Props) {
       <Controls api={state} />
     </figure>
   );
-}
+});
 
 export interface Props extends TabsDef {
   rootOrientationVertical?: boolean;
 }
 
 export interface State {
-  /** Indexed by tab identifier */
+  /** By tab identifier */
   tabsState: Record<string, TabState>;
   enabled: boolean;
   expanded: boolean;
@@ -130,7 +135,7 @@ export interface State {
   resetCount: number;
   hardReset(): void;
   reset(): void;
-  toggleEnabled(): void;
+  toggleEnabled(next?: boolean): void;
 }
 
 export interface TabState {

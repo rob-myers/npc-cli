@@ -5,7 +5,7 @@ import { breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
 import useUpdate from "../js/hooks/use-update";
 import Toggle, { toggleClassName } from "./Toggle";
-import Tabs from "./tabs/Tabs";
+import { Tabs, State as TabsState } from "./tabs/Tabs";
 import useSite from "src/store/site.store";
 
 export default function Viewer() {
@@ -13,7 +13,8 @@ export default function Viewer() {
 
   const state = useStateRef(() => ({
     collapsed: true,
-    rootEl: /** @type {HTMLElement} */ {},
+    rootEl: {} as HTMLElement,
+    tabsApi: {} as TabsState,
     onClickViewer(e: React.MouseEvent) {
       if ((e.target as HTMLElement) === state.rootEl) {
         state.toggleCollapsed();
@@ -22,6 +23,9 @@ export default function Viewer() {
     toggleCollapsed() {
       state.collapsed = !state.collapsed;
       update();
+      if (state.collapsed) {
+        state.tabsApi.toggleEnabled(false);
+      }
       if (!state.collapsed && useSite.api.isSmallViewport()) {
         useSite.api.toggleNav(false);
       }
@@ -41,6 +45,7 @@ export default function Viewer() {
 
       {articleKey && (
         <Tabs
+          ref={(x) => x && (state.tabsApi = x)}
           id={`${articleKey}-viewer-tabs`}
           initEnabled={false}
           tabs={[
@@ -48,7 +53,6 @@ export default function Viewer() {
             [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
             [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
           ]}
-          // height={[400, 500]}
           persistLayout
         />
       )}

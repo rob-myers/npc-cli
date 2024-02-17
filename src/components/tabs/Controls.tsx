@@ -28,13 +28,13 @@ export default function Controls({ api }: Props) {
     <div>
       <button
         title="enable tabs"
-        onClick={api.toggleEnabled}
+        onClick={() => api.toggleEnabled()}
         className={cx(enableButtonCss, { enabled: api.enabled })}
       >
         {browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
       <div className={otherButtonsCss}>
-        <button title="pause tabs" onClick={api.toggleEnabled} disabled={!api.enabled}>
+        <button title="pause tabs" onClick={() => api.toggleEnabled()} disabled={!api.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
         <button title="max/min tabs">
@@ -78,8 +78,11 @@ const enableButtonCss = css`
   justify-content: center;
   align-items: center;
 
+  opacity: 1;
+  transition: opacity 500ms;
   &.enabled {
-    display: none;
+    pointer-events: none;
+    opacity: 0;
   }
 `;
 
