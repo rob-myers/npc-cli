@@ -1,18 +1,24 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
-import useUpdate from "../js/hooks/use-update";
 import Toggle from "./Toggle";
 import { Tabs, State as TabsState } from "./tabs/Tabs";
 import useSite from "src/store/site.store";
 
 export default function Viewer() {
-  const articleKey = useSite((x) => x.articleKey);
+  const { articleKey, viewOpen, viewFull } = useSite(
+    ({ articleKey, viewOpen, viewFull }) => ({
+      articleKey,
+      viewOpen,
+      viewFull,
+    }),
+    shallow
+  );
 
   const state = useStateRef(() => ({
-    collapsed: true,
     rootEl: {} as HTMLElement,
     tabsApi: {} as TabsState,
     onClickViewer(e: React.MouseEvent) {
@@ -21,27 +27,24 @@ export default function Viewer() {
       }
     },
     toggleCollapsed() {
-      state.collapsed = !state.collapsed;
-      update();
-      if (state.collapsed) {
+      const nextViewOpen = useSite.api.toggleView();
+      if (!nextViewOpen) {
         state.tabsApi.toggleEnabled(false);
       }
-      if (!state.collapsed && useSite.api.isSmallViewport()) {
+      if (nextViewOpen && useSite.api.isSmallViewport()) {
         useSite.api.toggleNav(false);
       }
     },
   }));
 
-  const update = useUpdate();
-
   return (
     <aside
-      className={cx(viewerCss, { collapsed: state.collapsed })}
+      className={cx(viewerCss, { collapsed: !viewOpen, full: viewFull })}
       data-testid="viewer"
       onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
     >
-      <Toggle onClick={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
+      <Toggle onClick={state.toggleCollapsed} flip={!viewOpen ? "horizontal" : undefined} />
 
       {articleKey && (
         <Tabs
@@ -88,13 +91,17 @@ const viewerCss = css`
   }
 
   @media (min-width: ${afterBreakpoint}) {
+    transition: min-width 500ms;
+    min-width: 50%;
+    &.full {
+      min-width: calc(100% - 2.5rem);
+    }
+
     > button.toggle {
       top: 0.4rem;
       left: -2.3rem;
     }
 
-    transition: min-width 500ms;
-    min-width: 50%;
     &.collapsed {
       min-width: ${minWidth};
 
@@ -114,6 +121,9 @@ const viewerCss = css`
   @media (max-width: ${breakpoint}) {
     transition: min-height 500ms;
     min-height: 50%;
+    &.full {
+      min-height: calc(100% - 2.5rem);
+    }
 
     > button.toggle {
       transform: rotate(90deg);

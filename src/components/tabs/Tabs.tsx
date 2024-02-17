@@ -21,7 +21,6 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     tabsState: {},
     enabled: false,
     everEnabled: false,
-    expanded: false,
     overlayColor: "black",
     resetCount: 0,
 
@@ -128,7 +127,6 @@ export interface State {
   /** By tab identifier */
   tabsState: Record<string, TabState>;
   enabled: boolean;
-  expanded: boolean;
   everEnabled: boolean;
   /** Initially `black` afterwards `faded` or `clear` */
   overlayColor: "black" | "faded" | "clear";

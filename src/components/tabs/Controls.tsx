@@ -17,6 +17,7 @@ import {
 
 export default function Controls({ api }: Props) {
   const browserLoaded = useSite((x) => x.browserLoaded);
+  const fullViewSize = useSite(({ viewFull }) => viewFull);
 
   const resetHandlers = useLongPress({
     onLongPress: api.hardReset,
@@ -37,8 +38,8 @@ export default function Controls({ api }: Props) {
         <button title="pause tabs" onClick={() => api.toggleEnabled()} disabled={!api.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
-        <button title="max/min tabs">
-          <FontAwesomeIcon icon={api.expanded ? faCompress : faExpandThin} size="1x" />
+        <button title="max/min tabs" onClick={() => useSite.api.toggleViewSize()}>
+          <FontAwesomeIcon icon={fullViewSize ? faCompress : faExpandThin} size="1x" />
         </button>
         <button title="reset tabs" {...resetHandlers}>
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />

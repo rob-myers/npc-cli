@@ -30,18 +30,18 @@
 
 ## WIP
 
-- 🚧 Tabs has controls
+- ✅ Tabs has controls
 
   - ✅ small viewport ui
   - ✅ large viewport ui
   - ✅ disable/enable
   - ✅ reset
-  - 🚧 maximise/minimise
+  - ✅ maximise/minimise
     - by expanding Viewer
 
 - ✅ can reset while paused
 - ✅ close Viewer disables Tabs
-- can max/min while paused
+- ✅ can max/min while paused
 - remember if viewer is open i.e. trigger client-side
 - ensure Tab components are lazy-loaded
 - open Viewer should enable Tabs initially

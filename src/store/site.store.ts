@@ -9,6 +9,8 @@ const useStore = create<State>()(
     browserLoaded: false,
     discussMeta: {},
     navOpen: false,
+    viewOpen: false,
+    viewFull: false,
 
     api: {
       initiate({ allMdx: { edges } }) {
@@ -61,6 +63,28 @@ const useStore = create<State>()(
           set({ navOpen: next }, undefined, `${next ? "open" : "close"}-nav`);
         }
       },
+
+      toggleView(next) {
+        if (next === undefined) {
+          const { viewOpen } = get();
+          set({ viewOpen: !viewOpen }, undefined, "toggle-view");
+          return !viewOpen;
+        } else {
+          set({ viewOpen: next }, undefined, `${next ? "open" : "close"}-view`);
+          return next;
+        }
+      },
+
+      toggleViewSize(next) {
+        if (next === undefined) {
+          const { viewFull } = get();
+          set({ viewFull: !viewFull }, undefined, "toggle-full-view");
+          return !viewFull;
+        } else {
+          set({ viewFull: next }, undefined, next ? "view-size-full" : "view-size-half");
+          return next;
+        }
+      },
     },
   }))
 );
@@ -74,15 +98,19 @@ export type State = {
   discussMeta: { [articleKey: string]: GiscusDiscussionMeta };
 
   navOpen: boolean;
+  viewOpen: boolean;
+  viewFull: boolean;
 
   api: {
-    //   clickToClipboard(e: React.MouseEvent): Promise<void>;
+    // clickToClipboard(e: React.MouseEvent): Promise<void>;
     initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): Promise<void>;
     isSmallViewport(): boolean;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;
-    //   setTabDisabled(tabsKey: string, componentKey: string, disabled: boolean): void
+    /** Returns next value of `viewOpen` */
+    toggleView(next?: boolean): boolean;
+    toggleViewSize(next?: boolean): boolean;
   };
 };
 
