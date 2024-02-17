@@ -3,6 +3,7 @@ import { css, cx } from "@emotion/css";
 
 import useSite from "src/store/site.store";
 import useLongPress from "src/js/hooks/use-long-press";
+import { breakpoint } from "../const";
 
 import { State } from "./Tabs";
 import Spinner from "../Spinner";
@@ -71,6 +72,7 @@ const enableButtonCss = css`
   border: 1px solid #888;
   font-size: 1rem;
   letter-spacing: 2px;
+  user-select: none;
 
   display: flex;
   justify-content: center;
@@ -84,18 +86,30 @@ const enableButtonCss = css`
 const otherButtonsCss = css`
   position: absolute;
   z-index: 5;
-  transform: scale(1.4);
-  transform-origin: top right;
-  right: calc(3rem);
-  top: calc(-1.8rem);
-
   background-color: rgba(255, 255, 255, 0.5);
   display: flex;
 
-  button {
-    margin: 0 6px;
-    cursor: pointer;
+  left: -2.1rem;
+  top: 3rem;
+  transform-origin: top left;
+  transform: scale(1.3);
+  flex-direction: column;
 
+  @media (max-width: ${breakpoint}) {
+    flex-direction: row;
+    transform: scale(1.4);
+    transform-origin: top right;
+    left: unset;
+    right: calc(3rem);
+    top: calc(-1.8rem);
+  }
+
+  button {
+    margin: 6px 0;
+    @media (max-width: ${breakpoint}) {
+      margin: 0 6px;
+    }
+    cursor: pointer;
     opacity: 1;
     transition: opacity 300ms;
     &:disabled {

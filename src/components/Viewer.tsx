@@ -69,7 +69,7 @@ const viewerCss = css`
     position: absolute;
     z-index: 6;
     top: 0.5rem;
-    left: -2.1rem;
+    left: -2.3rem;
     background-color: #ddd;
   }
 
