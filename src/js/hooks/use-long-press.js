@@ -31,12 +31,17 @@ export default function useLongPress(config) {
     onMouseLeave() {
       clearTimeout(timerId.current);
     },
+    /** @param {React.KeyboardEvent} e */
+    onKeyDown(e) {
+      clearTimeout(timerId.current);
+      ["Enter", " "].includes(e.key) && config.onClick?.(e);
+    },
   };
 }
 
 /**
  * @typedef Config
  * @property {() => void} onLongPress
- * @property {(e: React.MouseEvent | React.TouchEvent) => void} [onClick]
+ * @property {(e: React.MouseEvent | React.TouchEvent | React.KeyboardEvent) => void} [onClick]
  * @property {number} [ms]
  */
