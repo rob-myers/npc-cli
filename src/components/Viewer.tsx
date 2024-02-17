@@ -41,7 +41,7 @@ export default function Viewer() {
       onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
     >
-      <Toggle onToggle={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
+      <Toggle onClick={state.toggleCollapsed} flip={state.collapsed ? "horizontal" : undefined} />
 
       {articleKey && (
         <Tabs
@@ -72,7 +72,7 @@ const viewerCss = css`
   > .${toggleClassName} {
     position: absolute;
     z-index: 6;
-    top: 0.6rem;
+    top: 0.4rem;
     left: -2.3rem;
 
     border: 2px solid #000;

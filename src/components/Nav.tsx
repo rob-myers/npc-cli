@@ -37,7 +37,7 @@ export default function Nav() {
       onClick={state.onClickSidebar}
       width="16rem"
     >
-      <Toggle onToggle={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
+      <Toggle onClick={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
 
       <Menu>
         <MenuItem className="title" tabIndex={-1}>
