@@ -84,7 +84,7 @@ const enableButtonCss = css`
 const otherButtonsCss = css`
   position: absolute;
   z-index: 5;
-  transform: scale(1.6);
+  transform: scale(1.4);
   transform-origin: top right;
   right: calc(3rem);
   top: calc(-1.9rem);
@@ -93,9 +93,6 @@ const otherButtonsCss = css`
   display: flex;
 
   button {
-    padding: 0;
-    border: none;
-    background: none;
     margin: 0 6px;
     cursor: pointer;
 
