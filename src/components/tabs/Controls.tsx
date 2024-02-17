@@ -34,14 +34,14 @@ export default function Controls({ api }: Props) {
         {browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
       <div className={otherButtonsCss}>
-        <button title="reset tabs" {...resetHandlers} disabled={!api.enabled}>
-          <FontAwesomeIcon icon={faRefreshThin} size="1x" />
+        <button title="pause tabs" onClick={api.toggleEnabled} disabled={!api.enabled}>
+          <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
         <button title="max/min tabs" disabled={!api.enabled}>
           <FontAwesomeIcon icon={api.expanded ? faCompress : faExpandThin} size="1x" />
         </button>
-        <button title="pause tabs" onClick={api.toggleEnabled} disabled={!api.enabled}>
-          <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
+        <button title="reset tabs" {...resetHandlers} disabled={!api.enabled}>
+          <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
       </div>
       <div
