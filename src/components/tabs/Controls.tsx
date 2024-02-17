@@ -89,33 +89,41 @@ const otherButtonsCss = css`
   background-color: rgba(255, 255, 255, 0.5);
   display: flex;
 
-  left: -2.1rem;
+  left: -3rem;
   top: 3rem;
   transform-origin: top left;
-  transform: scale(1.3);
+  transform: scale(1);
   flex-direction: column;
+  /* background-color: #444; */
 
   @media (max-width: ${breakpoint}) {
     flex-direction: row;
-    transform: scale(1.4);
-    transform-origin: top right;
+    transform: scale(1);
+    transform-origin: bottom right;
     left: unset;
     right: calc(3rem);
-    top: calc(-1.8rem);
+    top: calc(-2.5rem);
   }
 
   button {
-    margin: 6px 0;
+    background-color: rgba(0, 0, 0, 1);
+    color: white;
+    border: 1px solid #444;
+    /* border-radius: 50%; */
+    width: 3rem;
+    height: 2.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* margin: 6px 0; */
     @media (max-width: ${breakpoint}) {
-      margin: 0 6px;
+      /* margin: 0 2px; */
     }
     cursor: pointer;
-    opacity: 1;
-    transition: opacity 300ms;
     &:disabled {
       cursor: auto;
-      color: black;
-      opacity: 0.4;
+      color: #aaa;
     }
   }
 `;

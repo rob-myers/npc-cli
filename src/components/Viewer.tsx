@@ -70,7 +70,10 @@ const viewerCss = css`
     z-index: 6;
     top: 0.5rem;
     left: -2.3rem;
+
+    border: 2px solid #000;
     background-color: #ddd;
+    color: #000;
   }
 
   > figure.tabs {
@@ -86,6 +89,8 @@ const viewerCss = css`
 
     > .${toggleClassName} {
       left: 1rem;
+      background-color: #fff;
+      color: #000;
     }
     > figure.tabs {
       pointer-events: none;
@@ -99,12 +104,15 @@ const viewerCss = css`
     min-height: 50%;
 
     > .${toggleClassName} {
-      transition: top 300ms 250ms;
+      /* transition: top 300ms 250ms; */
       transform: rotate(90deg);
       left: unset;
-      top: -2.1rem;
-      right: 0.5rem;
+      top: -2.2rem;
+      right: 0.25rem;
+
+      border: 2px solid #000;
       background-color: #ddd;
+      color: #000;
     }
 
     &.collapsed {
@@ -112,8 +120,9 @@ const viewerCss = css`
       > .${toggleClassName} {
         top: 0.9rem;
         left: unset;
-        transition: top 0s;
+        /* transition: top 0s; */
         background-color: white;
+        color: #000;
       }
     }
   }
