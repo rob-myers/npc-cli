@@ -5,7 +5,7 @@ import { useBeforeunload } from "react-beforeunload";
 import { css, cx } from "@emotion/css";
 
 import {
-  TabMeta,
+  TabDef,
   TabsDef,
   clearModelFromStorage,
   createOrRestoreJsonModel,
@@ -18,7 +18,7 @@ import Controls from "./Controls";
 
 export default function Tabs(props: Props) {
   const state = useStateRef<State>(() => ({
-    componentMeta: {},
+    tabsState: {},
     enabled: false,
     everEnabled: false,
     expanded: false,
@@ -30,7 +30,7 @@ export default function Tabs(props: Props) {
       state.reset();
     },
     reset() {
-      state.componentMeta = {};
+      state.tabsState = {};
       state.enabled = state.everEnabled = false;
       state.overlayColor = "black";
       state.resetCount++; // Remount
@@ -41,7 +41,7 @@ export default function Tabs(props: Props) {
       state.enabled = !state.enabled;
       state.overlayColor = state.overlayColor === "clear" ? "faded" : "clear";
 
-      const { componentMeta } = state;
+      const { tabsState: componentMeta } = state;
       Object.keys(componentMeta).forEach((key) => (componentMeta[key].disabled = !state.enabled));
       update();
     },
@@ -56,18 +56,19 @@ export default function Tabs(props: Props) {
         return;
       }
       node.setEventListener("visibility", async ({ visible }) => {
-        const [key, tabMeta] = [node.getId(), (node as TabNode).getConfig() as TabMeta];
-        state.componentMeta[key] ??= { key, disabled: false, everVis: false };
+        const [key, tabDef] = [node.getId(), (node as TabNode).getConfig() as TabDef];
+
+        state.tabsState[key] ??= { key, disabled: false, everVis: false };
 
         if (!visible) {
-          if (tabMeta.type === "component") {
+          if (tabDef.type === "component") {
             // we don't disable hidden terminals
-            state.componentMeta[key].disabled = true;
+            state.tabsState[key].disabled = true;
             setTimeout(update);
           }
         } else {
-          state.componentMeta[key].disabled = false;
-          if (tabMeta.type === "terminal") {
+          state.tabsState[key].disabled = false;
+          if (tabDef.type === "terminal") {
             // 🚧 Ensure scrollbar appears if exceeded scroll area when hidden
             // const { default: useSessionStore } = await import("projects/sh/session.store");
             // const session = useSessionStore.api.getSession(getTabIdentifier(tabMeta));
@@ -77,7 +78,7 @@ export default function Tabs(props: Props) {
           const maxNode = model.getMaximizedTabset()?.getSelectedNode();
           // According to flexlayout-react, a selected tab is "visible" when obscured by a maximised tab.
           // We prevent rendering in such cases
-          state.componentMeta[key].everVis ||= maxNode ? node === maxNode : true;
+          state.tabsState[key].everVis ||= maxNode ? node === maxNode : true;
           // update(); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
           setTimeout(update);
         }
@@ -102,7 +103,7 @@ export default function Tabs(props: Props) {
           onAction={(act) => {
             if (act.type === Actions.MAXIMIZE_TOGGLE && model.getMaximizedTabset()) {
               // We are minimizing a maximized tab
-              Object.values(state.componentMeta).forEach((x) => (x.everVis = true));
+              Object.values(state.tabsState).forEach((x) => (x.everVis = true));
               update();
             }
             return act;
@@ -119,7 +120,8 @@ export interface Props extends TabsDef {
 }
 
 export interface State {
-  componentMeta: Record<string, { key: string; disabled: boolean; everVis: boolean }>;
+  /** Indexed by tab identifier */
+  tabsState: Record<string, TabState>;
   enabled: boolean;
   expanded: boolean;
   everEnabled: boolean;
@@ -129,6 +131,13 @@ export interface State {
   hardReset(): void;
   reset(): void;
   toggleEnabled(): void;
+}
+
+export interface TabState {
+  /** Tab identifier */
+  key: string;
+  disabled: boolean;
+  everVis: boolean;
 }
 
 const tabsCss = css`

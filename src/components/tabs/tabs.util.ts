@@ -9,31 +9,33 @@ import {
   tryLocalStorageSet,
 } from "src/js/service/generic";
 import { Props as TabsProps, State as TabsApi } from "./Tabs";
-import { Tab } from "./Tab";
+import { TabMemo } from "./Tab";
 
 export function factory(node: TabNode, api: TabsApi) {
-  const meta = api.componentMeta[node.getId()];
-  if (meta?.everVis) {
-    console.debug(`rendering "${node.getId()}"`);
-    return React.createElement(Tab, {
-      id: node.getId(),
-      meta: node.getConfig() as TabMeta,
-      api,
+  const state = api.tabsState[node.getId()];
+  if (state?.everVis) {
+    // console.debug(`rendering "${node.getId()}"`, state.disabled);
+    return React.createElement(TabMemo, {
+      def: node.getConfig() as TabDef,
+      state,
+      disabled: state.disabled, // For memo
     });
   } else {
     return null;
   }
 }
 
-export type TabMeta = { weight?: number } & (
+export type TabDef = { weight?: number } & (
   | ({
       type: "component";
+      /** Determines tab */
       filepath: string;
+      /** Determines component */
       class: ComponentClassKey;
     } & TabMetaComponentProps)
   | {
       type: "terminal";
-      /** Session identifier */
+      /** Session identifier (determines tab) */
       filepath: string;
       env?: Record<string, any>;
     }
@@ -43,14 +45,14 @@ export interface TabsDef {
   /** Required e.g. as identifier */
   id: string;
   /** List of rows each with a single tabset */
-  tabs: TabMeta[][];
+  tabs: TabDef[][];
   /** Initially enabled? */
   initEnabled?: boolean;
   persistLayout?: boolean;
 }
 
 /** Same as `node.getId()` ? */
-function getTabIdentifier(meta: TabMeta) {
+function getTabIdentifier(meta: TabDef) {
   return meta.filepath;
 }
 
@@ -90,7 +92,7 @@ const classToComponent = {
   // },
 };
 
-export async function getComponent(meta: Extract<TabMeta, { type: "component" }>) {
+export async function getComponent(meta: Extract<TabDef, { type: "component" }>) {
   return (
     classToComponent[meta.class]?.get(
       (await classToComponent[meta.class].loadable.load()) as any
@@ -135,7 +137,7 @@ export function createOrRestoreJsonModel(props: TabsProps) {
   if (props.persistLayout && jsonModelString) {
     try {
       const serializable = JSON.parse(jsonModelString) as IJsonModel;
-      (serializable.global ?? {}).splitterExtra = 8; // Larger splitter hit test area
+      (serializable.global ?? {}).splitterExtra = 12; // Larger splitter hit test area
       (serializable.global ?? {}).splitterSize = 2;
 
       const model = Model.fromJson(serializable);
@@ -145,7 +147,7 @@ export function createOrRestoreJsonModel(props: TabsProps) {
         .flatMap((x) => x)
         .reduce(
           (agg, item) => Object.assign(agg, { [getTabIdentifier(item)]: item }),
-          {} as Record<string, TabMeta>
+          {} as Record<string, TabDef>
         );
       model.visitNodes(
         (x) =>
@@ -173,12 +175,13 @@ export function createOrRestoreJsonModel(props: TabsProps) {
     }
   }
 
-  // Either: (a) no Tabs model found in local storage, or
+  // Either:
+  // (a) no Tabs model found in local storage, or
   // (b) Tabs prop "tabs" has different ids
   return Model.fromJson(computeJsonModel(props.tabs, props.rootOrientationVertical));
 }
 
-function computeJsonModel(tabs: TabMeta[][], rootOrientationVertical?: boolean): IJsonModel {
+function computeJsonModel(tabsDefs: TabDef[][], rootOrientationVertical?: boolean): IJsonModel {
   return {
     global: {
       tabEnableRename: false,
@@ -187,25 +190,27 @@ function computeJsonModel(tabs: TabMeta[][], rootOrientationVertical?: boolean):
       // Use `visibility: hidden` instead of `display: none`,
       // so we can e.g. getBoundingClientRect() for npc getPosition.
       enableUseVisibility: true,
+      splitterExtra: 12,
+      splitterSize: 2,
     },
     layout: {
       type: "row",
       // One row for each list in `tabs`.
-      children: tabs.map((metas) => ({
+      children: tabsDefs.map((defs) => ({
         type: "row",
-        weight: metas[0]?.weight,
+        weight: defs[0]?.weight,
         // One tabset for each list in `tabs`
         children: [
           {
             type: "tabset",
-            // One tab for each meta in `metas`
-            children: metas.map((meta) => ({
+            // One tab for each def in `defs`
+            children: defs.map((def) => ({
               type: "tab",
               // Tabs must not be duplicated within same `Tabs`,
               // for otherwise this internal `id` will conflict.
-              id: getTabIdentifier(meta),
-              name: getTabIdentifier(meta),
-              config: deepClone(meta),
+              id: getTabIdentifier(def),
+              name: getTabIdentifier(def),
+              config: deepClone(def),
             })),
           },
         ],
