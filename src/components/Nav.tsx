@@ -36,7 +36,7 @@ export default function Nav() {
       collapsedWidth="4rem"
       data-testid="nav"
       onClick={state.onClickSidebar}
-      width="16rem"
+      width="14rem"
     >
       <Toggle onClick={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
 
@@ -53,7 +53,7 @@ export default function Nav() {
           <MenuItem>One</MenuItem>
           <MenuItem>Two</MenuItem>
         </SubMenu>
-        <SubMenu label="Web dev">
+        <SubMenu label="Dev">
           <MenuItem>Tech</MenuItem>
           <MenuItem>One</MenuItem>
           <MenuItem>Two</MenuItem>
