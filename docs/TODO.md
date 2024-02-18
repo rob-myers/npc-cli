@@ -48,7 +48,8 @@
 - ✅ Viewer tabs does not need to know articleKey
 - ✅ fix darken overlay in small viewport
 - ✅ move Controls outside Tabs as ViewerControls
-- 🚧 move Toggle inside ViewerControls
+- ✅ move Toggle inside ViewerControls
+- 🚧 ViewerControls always visible
 - can drag Viewer toggle instead of max/min
 
 - Nav icons for Blog, Dev, Help, About

@@ -4,9 +4,9 @@ import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
-import Toggle from "./Toggle";
-import { Tabs, State as TabsState } from "./tabs/Tabs";
 import useSite from "src/store/site.store";
+
+import { Tabs, State as TabsState } from "./tabs/Tabs";
 import ViewerControls from "./ViewerControls";
 
 export default function Viewer() {
@@ -53,8 +53,6 @@ export default function Viewer() {
     >
       <ViewerControls api={state} />
 
-      <Toggle onClick={state.toggleCollapsed} flip={!viewOpen ? "horizontal" : undefined} />
-
       <Tabs
         ref={(x) => x && (state.tabs = x)}
         id="viewer-tabs"
@@ -87,13 +85,6 @@ const viewerCss = css`
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
-  > button.toggle {
-    position: absolute;
-    z-index: 6;
-    border: 2px solid #000;
-    background-color: #ddd;
-    color: #000;
-  }
   &:not(.collapsed) > figure.tabs {
     cursor: auto;
     opacity: 1;
@@ -111,20 +102,8 @@ const viewerCss = css`
     &.full {
       min-width: calc(100% - 2.5rem);
     }
-
-    > button.toggle {
-      top: 0.4rem;
-      left: -2.3rem;
-    }
-
     &.collapsed {
       min-width: ${minWidth};
-
-      > button.toggle {
-        left: 1rem;
-        background-color: #fff;
-        color: #000;
-      }
     }
   }
 
@@ -134,24 +113,8 @@ const viewerCss = css`
     &.full {
       min-height: calc(100% - 2.5rem);
     }
-
-    > button.toggle {
-      transform: rotate(90deg);
-      top: -2.2rem;
-      right: 0.5rem;
-
-      border: 2px solid #000;
-      background-color: #ddd;
-      color: #000;
-    }
-
     &.collapsed {
       min-height: 4rem;
-      > button.toggle {
-        top: 0.9rem;
-        background-color: white;
-        color: #000;
-      }
     }
   }
 `;

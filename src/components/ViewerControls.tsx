@@ -15,6 +15,7 @@ import {
   faCirclePauseThin,
   faCompress,
 } from "./Icon";
+import Toggle from "./Toggle";
 import useUpdate from "src/js/hooks/use-update";
 import useStateRef from "src/js/hooks/use-state-ref";
 
@@ -57,6 +58,12 @@ export default function ViewerControls({ api }: Props) {
 
   return (
     <div>
+      <Toggle
+        onClick={api.toggleCollapsed}
+        className={cx(viewerToggleCss, { collapsed: !viewOpen })}
+        flip={!viewOpen ? "horizontal" : undefined}
+      />
+
       {viewOpen && (
         <button
           onClick={state.onEnable}
@@ -79,7 +86,7 @@ export default function ViewerControls({ api }: Props) {
       </div>
 
       <div
-        className={cx(overlayCss, {
+        className={cx(darkOverlayCss, {
           clear: api.tabs.overlayColor === "clear",
           faded: api.tabs.overlayColor === "faded",
         })}
@@ -108,11 +115,6 @@ const centeredOverlayCss = css`
   color: white;
   cursor: pointer;
 
-  /* button {
-    color: white;
-    padding: 12px 24px;
-    background-color: #222;
-  } */
   &.enabled {
     pointer-events: none;
     opacity: 0;
@@ -169,7 +171,7 @@ const otherButtonsCss = css`
   }
 `;
 
-const overlayCss = css`
+const darkOverlayCss = css`
   position: absolute;
   z-index: 4;
   left: 0;
@@ -192,5 +194,38 @@ const overlayCss = css`
   &.faded {
     opacity: 0.5;
     transition: opacity 0.5s ease-in;
+  }
+`;
+
+const viewerToggleCss = css`
+  position: absolute;
+  z-index: 6;
+  border: 2px solid #000;
+  background-color: #ddd;
+  color: #000;
+  /* width: 2rem;
+  height: 2rem; */
+
+  @media (min-width: ${afterBreakpoint}) {
+    top: 0.4rem;
+    left: -2.3rem;
+
+    &.collapsed {
+      left: 1rem;
+      background-color: #fff;
+      color: #000;
+    }
+  }
+
+  @media (max-width: ${breakpoint}) {
+    transform: rotate(90deg);
+    top: -2.2rem;
+    right: 0.5rem;
+
+    &.collapsed {
+      top: 0.9rem;
+      background-color: white;
+      color: #000;
+    }
   }
 `;
