@@ -122,6 +122,8 @@ const interactOverlayCss = css`
   color: white;
   cursor: pointer;
 
+  letter-spacing: 2px;
+
   &.enabled {
     pointer-events: none;
     opacity: 0;
@@ -181,6 +183,7 @@ const viewerToggleCss = css`
 
   @media (max-width: ${breakpoint}) {
     transform: rotate(90deg);
+    margin-left: 1rem;
   }
 `;
 
