@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { breakpoint } from "src/components/const";
+import { safeJsonParse, tryLocalStorageGet, tryLocalStorageSet } from "src/js/service/generic";
 
 const useStore = create<State>()(
   devtools((set, get) => ({
@@ -44,12 +45,26 @@ const useStore = create<State>()(
           }
         });
         set(() => ({ browserLoaded: true }), undefined, "browser-load");
+
+        const topLevel: Pick<State, "navOpen" | "viewOpen"> =
+          safeJsonParse(tryLocalStorageGet("site-top-level") ?? "{}") ?? {};
+        if (topLevel.viewOpen) {
+          set(() => ({ viewOpen: topLevel.viewOpen }));
+        }
+        if (topLevel.navOpen && !get().api.isSmallViewport()) {
+          set(() => ({ navOpen: topLevel.navOpen }));
+        }
       },
 
       isSmallViewport() {
         return (
           typeof window !== "undefined" && window.matchMedia(`(max-width: ${breakpoint})`).matches
         );
+      },
+
+      onTerminate() {
+        const { navOpen, viewOpen } = get();
+        tryLocalStorageSet("site-top-level", JSON.stringify({ navOpen, viewOpen }));
       },
 
       setArticleKey(articleKey) {
@@ -106,6 +121,7 @@ export type State = {
     initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): Promise<void>;
     isSmallViewport(): boolean;
+    onTerminate(): void;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;
     /** Returns next value of `viewOpen` */

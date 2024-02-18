@@ -184,6 +184,7 @@ const viewerToggleCss = css`
   @media (max-width: ${breakpoint}) {
     transform: rotate(90deg);
     margin-left: 1rem;
+    margin-right: 1rem;
   }
 `;
 

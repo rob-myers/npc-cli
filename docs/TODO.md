@@ -51,11 +51,11 @@
 - ✅ move Toggle inside ViewerControls
 - ✅ ViewerControls always visible
 - ✅ ViewerControls buttons/Toggle not positioned absolute
-- can drag Viewer toggle instead of max/min
+- ✅ remember if Viewer is open and trigger client-side
+- 🚧 can drag Viewer toggle instead of max/min
 
 - Nav icons for Blog, Dev, Help, About
 - can add Tabs via links in blog posts
-- remember if viewer is open i.e. trigger client-side
 - ensure Tab components are lazy-loaded
 - open Viewer should enable Tabs initially
 - can press Escape/Enter to pause/unpause

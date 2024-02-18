@@ -20,6 +20,7 @@ import Main from "./Main";
 import Comments from "./Comments";
 import { breakpoint } from "./const";
 import useOnResize from "src/js/hooks/use-on-resize";
+import { useBeforeunload } from "react-beforeunload";
 
 export function wrapPageElement({
   element,
@@ -59,9 +60,9 @@ function Root(props: Props) {
   // Update matchMedia computations
   useOnResize();
 
-  React.useEffect(() => {
-    useSite.api.initiateBrowser();
-  }, []);
+  React.useEffect(() => void useSite.api.initiateBrowser(), []);
+
+  useBeforeunload(() => void useSite.api.onTerminate());
 
   return (
     <QueryClientProvider client={queryClient}>
