@@ -43,6 +43,10 @@ export default function Viewer() {
       data-testid="viewer"
       onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
+      style={{
+        //  Fix Controls "interact" overflow in large viewport
+        overflow: !viewOpen ? "hidden" : undefined,
+      }}
     >
       <Toggle onClick={state.toggleCollapsed} flip={!viewOpen ? "horizontal" : undefined} />
 

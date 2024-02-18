@@ -28,8 +28,6 @@
 - ✅ open Nav darkens Main
 - ✅ Viewer Tabs has id `{articleKey}-viewer-tabs` (for persist)
 
-## WIP
-
 - ✅ Tabs has controls
 
   - ✅ small viewport ui
@@ -42,12 +40,18 @@
 - ✅ can reset while paused
 - ✅ close Viewer disables Tabs
 - ✅ can max/min while paused
+- ✅ can make Viewer larger
+
+## WIP
+
+- ✅ fix max Viewer in large viewport
+- 🚧 move Controls (except "interact") outside Tabs
+
 - remember if viewer is open i.e. trigger client-side
 - ensure Tab components are lazy-loaded
 - open Viewer should enable Tabs initially
 - can press Escape/Enter to pause/unpause
 
-- can make Viewer larger
 - toasts indicate loading assets/components
 
 - netlify site `npc-cli` at https://lastredoubt.co
