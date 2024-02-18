@@ -67,9 +67,9 @@ export default function Nav() {
 
 const navCss = css`
   color: white;
-  border: none !important;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
+  border-right: 1px solid #444;
 
   a.${menuClasses.button}, span.${menuClasses.button} {
     &:hover {
@@ -86,8 +86,8 @@ const navCss = css`
   .${sidebarClasses.container} button.toggle {
     position: absolute;
     z-index: 1;
-    top: calc(1rem);
-    right: calc(1rem);
+    top: 1rem;
+    right: 1rem;
   }
 
   .${menuClasses.menuItemRoot}.title {

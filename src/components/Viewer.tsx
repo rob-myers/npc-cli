@@ -46,13 +46,8 @@ export default function Viewer() {
       data-testid="viewer"
       onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
-      style={{
-        //  Fix Controls "interact" overflow in large viewport
-        overflow: !viewOpen ? "hidden" : undefined,
-      }}
     >
       <ViewerControls api={state} />
-
       <Tabs
         ref={(x) => x && (state.tabs = x)}
         id="viewer-tabs"
@@ -76,7 +71,7 @@ export interface State {
   toggleCollapsed(): void;
 }
 
-const minWidth = "4rem";
+const minWidth = "3rem";
 
 const viewerCss = css`
   position: relative;
@@ -84,6 +79,8 @@ const viewerCss = css`
   background: black;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
+
+  display: flex;
 
   &:not(.collapsed) > figure.tabs {
     cursor: auto;
@@ -97,10 +94,11 @@ const viewerCss = css`
   }
 
   @media (min-width: ${afterBreakpoint}) {
+    flex-direction: row;
     transition: min-width 500ms;
     min-width: 50%;
     &.full {
-      min-width: calc(100% - 2.5rem);
+      min-width: 100%;
     }
     &.collapsed {
       min-width: ${minWidth};
@@ -108,13 +106,14 @@ const viewerCss = css`
   }
 
   @media (max-width: ${breakpoint}) {
+    flex-direction: column;
     transition: min-height 500ms;
     min-height: 50%;
     &.full {
-      min-height: calc(100% - 2.5rem);
+      min-height: 100%;
     }
     &.collapsed {
-      min-height: 4rem;
+      min-height: 3rem;
     }
   }
 `;

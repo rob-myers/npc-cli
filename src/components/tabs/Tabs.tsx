@@ -142,6 +142,10 @@ export interface TabState {
 }
 
 const tabsCss = css`
+  position: relative;
+  width: 100%;
+  height: 100%;
+
   .flexlayout__tab {
     background-color: black;
     border-top: 3px solid #444;

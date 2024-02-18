@@ -57,23 +57,15 @@ export default function ViewerControls({ api }: Props) {
   const update = useUpdate();
 
   return (
-    <div>
-      <Toggle
-        onClick={api.toggleCollapsed}
-        className={cx(viewerToggleCss, { collapsed: !viewOpen })}
-        flip={!viewOpen ? "horizontal" : undefined}
-      />
+    <>
+      <button
+        onClick={state.onEnable}
+        className={cx(interactOverlayCss, { enabled: api.tabs.enabled, collapsed: !viewOpen })}
+      >
+        {browserLoaded ? "interact" : <Spinner size={24} />}
+      </button>
 
-      {viewOpen && (
-        <button
-          onClick={state.onEnable}
-          className={cx(centeredOverlayCss, { enabled: api.tabs.enabled })}
-        >
-          {browserLoaded ? "interact" : <Spinner size={24} />}
-        </button>
-      )}
-
-      <div className={otherButtonsCss}>
+      <div className={buttonsCss}>
         <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
@@ -83,15 +75,20 @@ export default function ViewerControls({ api }: Props) {
         <button title="reset tabs" {...resetHandlers}>
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
+        <Toggle
+          onClick={api.toggleCollapsed}
+          className={cx(viewerToggleCss, { collapsed: !viewOpen })}
+          flip={!viewOpen ? "horizontal" : undefined}
+        />
       </div>
 
       <div
-        className={cx(darkOverlayCss, {
+        className={cx(faderOverlayCss, {
           clear: api.tabs.overlayColor === "clear",
           faded: api.tabs.overlayColor === "faded",
         })}
       />
-    </div>
+    </>
   );
 }
 
@@ -100,13 +97,23 @@ interface Props {
   api: State;
 }
 
-const centeredOverlayCss = css`
+const interactOverlayCss = css`
   position: absolute;
   z-index: 5;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
+
+  @media (min-width: ${afterBreakpoint}) {
+    left: 3rem;
+    top: 0;
+    width: calc(100% - 3rem);
+    height: 100%;
+  }
+  @media (max-width: ${breakpoint}) {
+    left: 0;
+    top: 3rem;
+    width: 100%;
+    height: calc(100% - 3rem);
+  }
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -119,46 +126,37 @@ const centeredOverlayCss = css`
     pointer-events: none;
     opacity: 0;
   }
+  &.collapsed {
+    display: none;
+  }
 `;
 
-const otherButtonsCss = css`
-  position: absolute;
-  z-index: 5;
+const buttonsCss = css`
   display: flex;
-
-  flex-direction: column;
-  background-color: #444;
+  justify-content: right;
+  align-items: center;
 
   @media (min-width: ${afterBreakpoint}) {
-    left: -3rem;
-    top: 0;
+    flex-direction: column-reverse;
     width: 3rem;
     height: 100%;
-
-    button:nth-child(1) {
-      margin-top: 2.5rem;
-    }
+    border-right: 2px solid #444;
   }
 
   @media (max-width: ${breakpoint}) {
     right: 0;
-    top: -2.5rem;
+    top: -3rem;
+    height: 3rem;
     width: 100%;
 
     flex-direction: row;
     justify-content: right;
-
-    button:nth-child(3) {
-      margin-right: 3rem;
-    }
   }
 
-  button {
-    background-color: rgba(0, 0, 0, 1);
+  button:not(.toggle) {
     color: white;
-    border: 1px solid #444;
     width: 3rem;
-    height: 2.5rem;
+    height: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -171,18 +169,37 @@ const otherButtonsCss = css`
   }
 `;
 
-const darkOverlayCss = css`
+const viewerToggleCss = css`
+  z-index: 6;
+  color: #000;
+  margin: 1rem 0;
+
+  &.collapsed {
+    background-color: white;
+    color: black;
+  }
+
+  @media (max-width: ${breakpoint}) {
+    transform: rotate(90deg);
+  }
+`;
+
+const faderOverlayCss = css`
   position: absolute;
   z-index: 4;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
   background: rgba(1, 1, 1, 1);
-  font-family: sans-serif;
 
-  &:not(.faded) {
-    pointer-events: none;
+  @media (min-width: ${afterBreakpoint}) {
+    left: 3rem;
+    top: 0;
+    width: calc(100% - 3rem);
+    height: 100%;
+  }
+  @media (max-width: ${breakpoint}) {
+    left: 0;
+    top: 3rem;
+    width: 100%;
+    height: calc(100% - 3rem);
   }
 
   opacity: 1;
@@ -195,37 +212,8 @@ const darkOverlayCss = css`
     opacity: 0.5;
     transition: opacity 0.5s ease-in;
   }
-`;
 
-const viewerToggleCss = css`
-  position: absolute;
-  z-index: 6;
-  border: 2px solid #000;
-  background-color: #ddd;
-  color: #000;
-  /* width: 2rem;
-  height: 2rem; */
-
-  @media (min-width: ${afterBreakpoint}) {
-    top: 0.4rem;
-    left: -2.3rem;
-
-    &.collapsed {
-      left: 1rem;
-      background-color: #fff;
-      color: #000;
-    }
-  }
-
-  @media (max-width: ${breakpoint}) {
-    transform: rotate(90deg);
-    top: -2.2rem;
-    right: 0.5rem;
-
-    &.collapsed {
-      top: 0.9rem;
-      background-color: white;
-      color: #000;
-    }
+  &:not(.faded) {
+    pointer-events: none;
   }
 `;

@@ -49,7 +49,8 @@
 - ✅ fix darken overlay in small viewport
 - ✅ move Controls outside Tabs as ViewerControls
 - ✅ move Toggle inside ViewerControls
-- 🚧 ViewerControls always visible
+- ✅ ViewerControls always visible
+- ✅ ViewerControls buttons/Toggle not positioned absolute
 - can drag Viewer toggle instead of max/min
 
 - Nav icons for Blog, Dev, Help, About
