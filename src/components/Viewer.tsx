@@ -9,9 +9,8 @@ import { Tabs, State as TabsState } from "./tabs/Tabs";
 import useSite from "src/store/site.store";
 
 export default function Viewer() {
-  const { articleKey, viewOpen, viewFull } = useSite(
-    ({ articleKey, viewOpen, viewFull }) => ({
-      articleKey,
+  const { viewOpen, viewFull } = useSite(
+    ({ viewOpen, viewFull }) => ({
       viewOpen,
       viewFull,
     }),
@@ -50,19 +49,17 @@ export default function Viewer() {
     >
       <Toggle onClick={state.toggleCollapsed} flip={!viewOpen ? "horizontal" : undefined} />
 
-      {articleKey && (
-        <Tabs
-          ref={(x) => x && (state.tabsApi = x)}
-          id={`${articleKey}-viewer-tabs`}
-          initEnabled={false}
-          tabs={[
-            [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
-            [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
-            [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
-          ]}
-          persistLayout
-        />
-      )}
+      <Tabs
+        ref={(x) => x && (state.tabsApi = x)}
+        id="viewer-tabs"
+        initEnabled={false}
+        tabs={[
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
+        ]}
+        persistLayout
+      />
     </aside>
   );
 }

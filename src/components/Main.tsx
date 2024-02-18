@@ -68,6 +68,7 @@ const overlayCss = css`
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
+  top: 0;
   width: 100%;
   height: 100dvh;
   cursor: pointer;

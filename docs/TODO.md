@@ -45,8 +45,11 @@
 ## WIP
 
 - ✅ fix max Viewer in large viewport
+- ✅ Viewer tabs does not need to know articleKey
+- ✅ fix darken overlay in small viewport
 - 🚧 move Controls (except "interact") outside Tabs
 
+- can add Tabs via links in blog posts
 - remember if viewer is open i.e. trigger client-side
 - ensure Tab components are lazy-loaded
 - open Viewer should enable Tabs initially
