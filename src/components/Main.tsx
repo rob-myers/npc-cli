@@ -1,3 +1,4 @@
+import { Link } from "gatsby";
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { afterBreakpoint, breakpoint } from "./const";
@@ -16,9 +17,11 @@ export default function Main(props: React.PropsWithChildren) {
         onClick={() => useSite.api.toggleNav()}
       />
 
-      <div className={mainTitleCss} data-testid="main-title">
-        <img src={npcCliTitlePng} />
-      </div>
+      <Link to="/">
+        <div className={mainTitleCss} data-testid="main-title">
+          <img src={npcCliTitlePng} />
+        </div>
+      </Link>
 
       <main>{props.children}</main>
     </section>

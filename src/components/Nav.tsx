@@ -1,3 +1,4 @@
+import { Link } from "gatsby";
 import { css } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
@@ -40,15 +41,25 @@ export default function Nav() {
       <Toggle onClick={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
 
       <Menu>
-        <MenuItem className="title" tabIndex={-1}>
-          <img src={npcCliTitlePng} />
+        <MenuItem className="title" tabIndex={-1} component="span">
+          <Link to="/">
+            <img src={npcCliTitlePng} />
+          </Link>
         </MenuItem>
-        <SubMenu label="Go">
+        <SubMenu label="Blog">
+          <MenuItem component="span">
+            <Link to="/intro">Intro</Link>
+          </MenuItem>
           <MenuItem>One</MenuItem>
           <MenuItem>Two</MenuItem>
         </SubMenu>
-        <MenuItem> Documentation </MenuItem>
-        <MenuItem> Calendar </MenuItem>
+        <SubMenu label="Web dev">
+          <MenuItem>Tech</MenuItem>
+          <MenuItem>One</MenuItem>
+          <MenuItem>Two</MenuItem>
+        </SubMenu>
+        <MenuItem>Help</MenuItem>
+        <MenuItem>About</MenuItem>
       </Menu>
     </Sidebar>
   );
@@ -60,12 +71,16 @@ const navCss = css`
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
-  a.${menuClasses.button} {
+  a.${menuClasses.button}, span.${menuClasses.button} {
     &:hover {
       background-color: transparent;
       text-decoration: underline;
     }
     height: 3rem;
+  }
+  span.${menuClasses.label} a {
+    color: white;
+    text-decoration: none;
   }
 
   .${sidebarClasses.container} button.toggle {
