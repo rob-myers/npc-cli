@@ -1,41 +1,73 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import { shallow } from "zustand/shallow";
 
 import useSite from "src/store/site.store";
 import useLongPress from "src/js/hooks/use-long-press";
-import { afterBreakpoint, breakpoint } from "../const";
+import { afterBreakpoint, breakpoint } from "./const";
 
-import { State } from "./Tabs";
-import Spinner from "../Spinner";
+import { State } from "./Viewer";
+import Spinner from "./Spinner";
 import {
   FontAwesomeIcon,
   faRefreshThin,
   faExpandThin,
   faCirclePauseThin,
   faCompress,
-} from "../Icon";
+} from "./Icon";
+import useUpdate from "src/js/hooks/use-update";
+import useStateRef from "src/js/hooks/use-state-ref";
 
-export default function Controls({ api }: Props) {
-  const browserLoaded = useSite((x) => x.browserLoaded);
-  const fullViewSize = useSite(({ viewFull }) => viewFull);
+export default function ViewerControls({ api }: Props) {
+  const {
+    browserLoaded,
+    viewFull: fullViewSize,
+    viewOpen,
+  } = useSite(
+    ({ browserLoaded, viewOpen, viewFull }) => ({ browserLoaded, viewOpen, viewFull }),
+    shallow
+  );
+
+  const state = useStateRef(() => ({
+    onLongReset() {
+      api.tabs.hardReset();
+      update();
+    },
+    onReset() {
+      api.tabs.reset();
+      update();
+    },
+    onEnable() {
+      api.tabs.toggleEnabled(true);
+      update();
+    },
+    onPause() {
+      api.tabs.toggleEnabled(false);
+      update();
+    },
+  }));
 
   const resetHandlers = useLongPress({
-    onLongPress: api.hardReset,
-    onClick: api.reset,
+    onLongPress: state.onLongReset,
+    onClick: state.onReset,
     ms: 1000,
   });
 
+  const update = useUpdate();
+
   return (
     <div>
-      <button
-        title="enable tabs"
-        onClick={() => api.toggleEnabled()}
-        className={cx(enableButtonCss, { enabled: api.enabled })}
-      >
-        {browserLoaded ? "interact" : <Spinner size={24} />}
-      </button>
+      {viewOpen && (
+        <button
+          onClick={state.onEnable}
+          className={cx(centeredOverlayCss, { enabled: api.tabs.enabled })}
+        >
+          {browserLoaded ? "interact" : <Spinner size={24} />}
+        </button>
+      )}
+
       <div className={otherButtonsCss}>
-        <button title="pause tabs" onClick={() => api.toggleEnabled()} disabled={!api.enabled}>
+        <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
         <button title="max/min tabs" onClick={() => useSite.api.toggleViewSize()}>
@@ -45,10 +77,11 @@ export default function Controls({ api }: Props) {
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
       </div>
+
       <div
         className={cx(overlayCss, {
-          clear: api.overlayColor === "clear",
-          faded: api.overlayColor === "faded",
+          clear: api.tabs.overlayColor === "clear",
+          faded: api.tabs.overlayColor === "faded",
         })}
       />
     </div>
@@ -56,31 +89,30 @@ export default function Controls({ api }: Props) {
 }
 
 interface Props {
+  /** Viewer API */
   api: State;
 }
 
-const enableButtonCss = css`
+const centeredOverlayCss = css`
   position: absolute;
   z-index: 5;
-  left: calc(50% - 0.5 * (2 * 32px + 72px));
-  top: calc(50% - 0.5 * (2 * 16px + 1rem));
-
-  cursor: pointer;
-  color: #ddd;
-  background: rgba(0, 0, 0, 0.9);
-  padding: 15px 32px;
-  border-radius: 4px;
-  border: 1px solid #888;
-  font-size: 1rem;
-  letter-spacing: 2px;
-  user-select: none;
-
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  opacity: 1;
-  transition: opacity 500ms;
+  background: rgba(0, 0, 0, 0);
+  color: white;
+  cursor: pointer;
+
+  /* button {
+    color: white;
+    padding: 12px 24px;
+    background-color: #222;
+  } */
   &.enabled {
     pointer-events: none;
     opacity: 0;

@@ -47,8 +47,11 @@
 - ✅ fix max Viewer in large viewport
 - ✅ Viewer tabs does not need to know articleKey
 - ✅ fix darken overlay in small viewport
-- 🚧 move Controls (except "interact") outside Tabs
+- ✅ move Controls outside Tabs as ViewerControls
+- 🚧 move Toggle inside ViewerControls
+- can drag Viewer toggle instead of max/min
 
+- Nav icons for Blog, Dev, Help, About
 - can add Tabs via links in blog posts
 - remember if viewer is open i.e. trigger client-side
 - ensure Tab components are lazy-loaded

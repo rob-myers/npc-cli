@@ -14,7 +14,6 @@ import {
 } from "./tabs.util";
 import useStateRef from "src/js/hooks/use-state-ref";
 import useUpdate from "src/js/hooks/use-update";
-import Controls from "./Controls";
 
 export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef<State>(() => ({
@@ -114,7 +113,6 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
           }}
         />
       )}
-      <Controls api={state} />
     </figure>
   );
 });

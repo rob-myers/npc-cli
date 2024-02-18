@@ -7,6 +7,7 @@ import useStateRef from "../js/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { Tabs, State as TabsState } from "./tabs/Tabs";
 import useSite from "src/store/site.store";
+import ViewerControls from "./ViewerControls";
 
 export default function Viewer() {
   const { viewOpen, viewFull } = useSite(
@@ -17,24 +18,27 @@ export default function Viewer() {
     shallow
   );
 
-  const state = useStateRef(() => ({
-    rootEl: {} as HTMLElement,
-    tabsApi: {} as TabsState,
-    onClickViewer(e: React.MouseEvent) {
-      if ((e.target as HTMLElement) === state.rootEl) {
-        state.toggleCollapsed();
-      }
-    },
-    toggleCollapsed() {
-      const nextViewOpen = useSite.api.toggleView();
-      if (!nextViewOpen) {
-        state.tabsApi.toggleEnabled(false);
-      }
-      if (nextViewOpen && useSite.api.isSmallViewport()) {
-        useSite.api.toggleNav(false);
-      }
-    },
-  }));
+  const state = useStateRef(
+    (): State => ({
+      rootEl: {} as HTMLElement,
+      tabs: {} as TabsState,
+      onClickViewer(e: React.MouseEvent) {
+        const el = e.target as HTMLElement;
+        if (!el.closest("button") && !el.closest("figure.tabs")) {
+          state.toggleCollapsed();
+        }
+      },
+      toggleCollapsed() {
+        const nextViewOpen = useSite.api.toggleView();
+        if (!nextViewOpen) {
+          state.tabs.toggleEnabled(false);
+        }
+        if (nextViewOpen && useSite.api.isSmallViewport()) {
+          useSite.api.toggleNav(false);
+        }
+      },
+    })
+  );
 
   return (
     <aside
@@ -47,10 +51,12 @@ export default function Viewer() {
         overflow: !viewOpen ? "hidden" : undefined,
       }}
     >
+      <ViewerControls api={state} />
+
       <Toggle onClick={state.toggleCollapsed} flip={!viewOpen ? "horizontal" : undefined} />
 
       <Tabs
-        ref={(x) => x && (state.tabsApi = x)}
+        ref={(x) => x && (state.tabs = x)}
         id="viewer-tabs"
         initEnabled={false}
         tabs={[
@@ -62,6 +68,14 @@ export default function Viewer() {
       />
     </aside>
   );
+}
+
+export interface State {
+  rootEl: HTMLElement;
+  /** Tabs API */
+  tabs: TabsState;
+  onClickViewer(e: React.MouseEvent): void;
+  toggleCollapsed(): void;
 }
 
 const minWidth = "4rem";
@@ -110,11 +124,6 @@ const viewerCss = css`
         left: 1rem;
         background-color: #fff;
         color: #000;
-      }
-      > figure.tabs {
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 200ms;
       }
     }
   }
