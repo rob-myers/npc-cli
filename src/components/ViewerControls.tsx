@@ -60,7 +60,7 @@ export default function ViewerControls({ api }: Props) {
       if (!isTouchDevice()) {
         document.body.addEventListener("pointerleave", state.onDragEnd);
       }
-      document.body.style.touchAction = "none";
+      // document.body.style.touchAction = "none";
       api.rootEl.style.transition = `min-width 0s, min-height 0s`;
 
       if (!useSite.getState().viewOpen) {
@@ -70,6 +70,7 @@ export default function ViewerControls({ api }: Props) {
     },
     onDrag(e: PointerEvent) {
       if (state.dragOffset !== null) {
+        // 🚧 4 * 16 -> 4rem
         let percent = useSite.api.isSmall()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
@@ -79,9 +80,9 @@ export default function ViewerControls({ api }: Props) {
         // console.log(percent);
       }
     },
-    onDragEnd(e: PointerEvent) {
+    onDragEnd(_e: PointerEvent) {
       if (state.dragOffset !== null) {
-        // console.log("drag end");
+        console.log("drag end");
         state.dragOffset = null;
         document.documentElement.classList.remove("cursor-col-resize");
         document.documentElement.classList.remove("cursor-row-resize");
@@ -89,7 +90,7 @@ export default function ViewerControls({ api }: Props) {
         document.body.removeEventListener("pointermove", state.onDrag);
         document.body.removeEventListener("pointerup", state.onDragEnd);
         document.body.removeEventListener("pointerleave", state.onDragEnd);
-        document.body.style.touchAction = "auto";
+        // document.body.style.touchAction = "auto";
         api.rootEl.style.transition = "";
 
         const percent = parseFloat(api.rootEl.style.getPropertyValue("--viewer-min"));
@@ -203,6 +204,7 @@ const buttonsCss = css`
   justify-content: right;
   align-items: center;
   background-color: #000;
+  touch-action: none;
 
   @media (min-width: ${afterBreakpoint}) {
     cursor: col-resize;
