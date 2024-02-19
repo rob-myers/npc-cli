@@ -1,5 +1,6 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
@@ -9,7 +10,10 @@ import { Tabs, State as TabsState } from "./tabs/Tabs";
 import ViewerControls from "./ViewerControls";
 
 export default function Viewer() {
-  const viewOpen = useSite(({ viewOpen }) => viewOpen);
+  const { browserLoaded, viewOpen } = useSite(
+    ({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }),
+    shallow
+  );
 
   const state = useStateRef(
     (): State => ({
@@ -38,8 +42,10 @@ export default function Viewer() {
       data-testid="viewer"
       onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
-      {...(!viewOpen &&
-        (useSite.api.isSmall() ? { style: { minHeight: "0%" } } : { style: { minWidth: "0%" } }))}
+      style={{
+        minWidth: browserLoaded && viewOpen ? "0%" : undefined,
+        minHeight: browserLoaded && !viewOpen ? "0%" : undefined,
+      }}
     >
       <ViewerControls api={state} />
       <Tabs
