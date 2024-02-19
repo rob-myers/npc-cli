@@ -63,8 +63,6 @@ interface Props {
 
 const rootCss = css`
   min-height: 322px;
-  /* border-top: 1px solid var(--page-border-color); */
-  /* margin: 32px var(--article-right-padding) 16px 0; */
 
   header {
     margin-bottom: 24px;
