@@ -9,6 +9,7 @@ const useStore = create<State>()(
     articlesMeta: {},
     browserLoaded: false,
     discussMeta: {},
+    mainOverlay: false,
     navOpen: false,
     viewOpen: false,
 
@@ -100,6 +101,7 @@ export type State = {
   browserLoaded: boolean;
   discussMeta: { [articleKey: string]: GiscusDiscussionMeta };
 
+  mainOverlay: boolean;
   navOpen: boolean;
   viewOpen: boolean;
 

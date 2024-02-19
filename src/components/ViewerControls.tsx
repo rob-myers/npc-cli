@@ -15,10 +15,7 @@ import useUpdate from "src/js/hooks/use-update";
 import useStateRef from "src/js/hooks/use-state-ref";
 
 export default function ViewerControls({ api }: Props) {
-  const { browserLoaded, viewOpen } = useSite(
-    ({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }),
-    shallow
-  );
+  const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
 
   const state = useStateRef(() => ({
     onLongReset() {
@@ -44,7 +41,11 @@ export default function ViewerControls({ api }: Props) {
 
     dragOffset: null as null | number,
     onDragStart(e: React.PointerEvent) {
-      // console.log("drag start");
+      console.log("drag start");
+      if (!(e.target as HTMLElement).matches(".viewer-buttons")) {
+        return;
+      }
+
       state.dragOffset = useSite.api.isSmall()
         ? api.rootEl.getBoundingClientRect().y - e.clientY
         : api.rootEl.getBoundingClientRect().x - e.clientX;
@@ -52,7 +53,8 @@ export default function ViewerControls({ api }: Props) {
       document.documentElement.classList.add(
         useSite.api.isSmall() ? "cursor-row-resize" : "cursor-col-resize"
       );
-      // 🚧 trigger main overlay (iframe can get in the way of body)
+      // trigger main overlay (iframe can get in the way of body)
+      useSite.setState({ mainOverlay: true });
       document.body.addEventListener("pointermove", state.onDrag);
       document.body.addEventListener("pointerup", state.onDragEnd);
       if (!isTouchDevice()) {
@@ -81,13 +83,14 @@ export default function ViewerControls({ api }: Props) {
       if (state.dragOffset !== null) {
         // console.log("drag end");
         state.dragOffset = null;
+        document.documentElement.classList.remove("cursor-col-resize");
+        document.documentElement.classList.remove("cursor-row-resize");
+        useSite.setState({ mainOverlay: false });
         document.body.removeEventListener("pointermove", state.onDrag);
         document.body.removeEventListener("pointerup", state.onDragEnd);
         document.body.removeEventListener("pointerleave", state.onDragEnd);
         document.body.style.touchAction = "auto";
         api.rootEl.style.transition = "";
-        document.documentElement.classList.remove("cursor-col-resize");
-        document.documentElement.classList.remove("cursor-row-resize");
 
         const percent = parseFloat(api.rootEl.style.getPropertyValue("--viewer-min"));
         if (percent < 5) {
@@ -110,14 +113,12 @@ export default function ViewerControls({ api }: Props) {
     <>
       <button
         onClick={state.onEnable}
-        className={cx(interactOverlayCss, { enabled: api.tabs.enabled, collapsed: !viewOpen })}
+        className={cx(interactOverlayCss, { enabled: api.tabs.enabled, collapsed: !site.viewOpen })}
       >
-        {browserLoaded ? "interact" : <Spinner size={24} />}
+        {site.browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
 
-      <div className={viewerDragBarCss} onPointerDown={state.onDragStart} />
-
-      <div className={cx("viewer-buttons", buttonsCss)}>
+      <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
         <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
@@ -129,8 +130,8 @@ export default function ViewerControls({ api }: Props) {
         </button>
         <Toggle
           onClick={api.toggleCollapsed}
-          className={cx(viewerToggleCss, { collapsed: !viewOpen })}
-          flip={!viewOpen ? "horizontal" : undefined}
+          className={cx(viewerToggleCss, { collapsed: !site.viewOpen })}
+          flip={!site.viewOpen ? "horizontal" : undefined}
         />
       </div>
 
@@ -192,6 +193,7 @@ const buttonsCss = css`
   align-items: center;
 
   @media (min-width: ${afterBreakpoint}) {
+    cursor: col-resize;
     flex-direction: column-reverse;
     width: 3rem;
     height: 100%;
@@ -199,6 +201,7 @@ const buttonsCss = css`
   }
 
   @media (max-width: ${breakpoint}) {
+    cursor: row-resize;
     right: 0;
     top: -3rem;
     height: 3rem;
@@ -221,18 +224,6 @@ const buttonsCss = css`
       cursor: auto;
       color: #aaa;
     }
-  }
-`;
-
-const viewerDragBarCss = css`
-  background-color: #444;
-  @media (min-width: ${afterBreakpoint}) {
-    cursor: col-resize;
-    min-width: 12px;
-  }
-  @media (max-width: ${breakpoint}) {
-    cursor: row-resize;
-    min-height: 12px;
   }
 `;
 

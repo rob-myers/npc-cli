@@ -19,11 +19,7 @@ export default function Viewer() {
     (): State => ({
       rootEl: {} as HTMLElement,
       tabs: {} as TabsState,
-      onClickViewer(e: React.MouseEvent) {
-        if ((e.target as HTMLElement).matches(".viewer-buttons")) {
-          state.toggleCollapsed();
-        }
-      },
+      // 🚧 move into ViewerControls
       toggleCollapsed() {
         const nextViewOpen = useSite.api.toggleView();
         if (!nextViewOpen) {
@@ -40,7 +36,6 @@ export default function Viewer() {
     <aside
       className={cx(viewerCss, { collapsed: !viewOpen })}
       data-testid="viewer"
-      onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
       style={{
         minWidth: browserLoaded && viewOpen ? "0%" : undefined,
@@ -67,7 +62,6 @@ export interface State {
   rootEl: HTMLElement;
   /** Tabs API */
   tabs: TabsState;
-  onClickViewer(e: React.MouseEvent): void;
   toggleCollapsed(): void;
 }
 

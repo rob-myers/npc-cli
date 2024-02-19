@@ -1,21 +1,20 @@
 import { Link } from "gatsby";
 import React from "react";
 import { css, cx } from "@emotion/css";
+import { shallow } from "zustand/shallow";
+
 import { afterBreakpoint, breakpoint } from "./const";
 import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
 import useSite from "src/store/site.store";
 
 export default function Main(props: React.PropsWithChildren) {
-  const navOpen = useSite((x) => x.navOpen);
+  const site = useSite(({ navOpen, mainOverlay }) => ({ navOpen, mainOverlay }), shallow);
+
+  const overlayOpen = site.mainOverlay || (site.navOpen && useSite.api.isSmall());
 
   return (
     <section className={mainCss} data-testid="main">
-      <div
-        className={cx(overlayCss, {
-          overlayOpen: navOpen && useSite.api.isSmall(),
-        })}
-        onClick={() => useSite.api.toggleNav()}
-      />
+      {overlayOpen && <div className={overlayCss} onClick={() => useSite.api.toggleNav()} />}
 
       <Link to="/">
         <div className={mainTitleCss} data-testid="main-title">
@@ -75,10 +74,5 @@ const overlayCss = css`
   width: 100%;
   height: 100dvh;
   cursor: pointer;
-  z-index: 6;
-
-  display: none;
-  &.overlayOpen {
-    display: block;
-  }
+  z-index: 0;
 `;
