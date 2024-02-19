@@ -43,7 +43,7 @@ export default function ViewerControls({ api }: Props) {
 
     dragOffset: null as null | number,
     onDragStart(e: React.PointerEvent) {
-      console.log("drag start");
+      // console.log("drag start");
       state.dragOffset = useSite.api.isSmall()
         ? api.rootEl.getBoundingClientRect().y - e.clientY
         : api.rootEl.getBoundingClientRect().x - e.clientX;
@@ -51,10 +51,11 @@ export default function ViewerControls({ api }: Props) {
       document.documentElement.classList.add(
         useSite.api.isSmall() ? "cursor-row-resize" : "cursor-col-resize"
       );
-      // 🚧 use overlay instead (iframe can get in the way of body)
+      // 🚧 trigger main overlay (iframe can get in the way of body)
       document.body.addEventListener("pointermove", state.onDrag);
       document.body.addEventListener("pointerup", state.onDragEnd);
       document.body.addEventListener("pointerleave", state.onDragEnd);
+      document.body.style.touchAction = "none";
       api.rootEl.style.transition = `min-width 0s, min-height 0s`;
 
       if (!useSite.getState().viewOpen) {
@@ -69,18 +70,18 @@ export default function ViewerControls({ api }: Props) {
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
             (window.innerWidth - 4 * 16);
         percent = Math.max(0, Math.min(100, percent));
-        console.log(percent);
-
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
+        // console.log(percent);
       }
     },
     onDragEnd(e: PointerEvent) {
       if (state.dragOffset !== null) {
-        console.log("drag end");
+        // console.log("drag end");
         state.dragOffset = null;
         document.body.removeEventListener("pointermove", state.onDrag);
         document.body.removeEventListener("pointerup", state.onDragEnd);
         document.body.removeEventListener("pointerleave", state.onDragEnd);
+        document.body.style.touchAction = "auto";
         api.rootEl.style.transition = "";
         document.documentElement.classList.remove("cursor-col-resize");
         document.documentElement.classList.remove("cursor-row-resize");
