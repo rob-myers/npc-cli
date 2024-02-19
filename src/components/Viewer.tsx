@@ -37,10 +37,13 @@ export default function Viewer() {
       className={cx(viewerCss, { collapsed: !viewOpen })}
       data-testid="viewer"
       ref={(el) => el && (state.rootEl = el)}
-      style={{
-        minWidth: browserLoaded && viewOpen ? "0%" : undefined,
-        minHeight: browserLoaded && !viewOpen ? "0%" : undefined,
-      }}
+      style={
+        browserLoaded && !viewOpen
+          ? useSite.api.isSmall()
+            ? { minHeight: "0%" }
+            : { minWidth: "0%" }
+          : undefined
+      }
     >
       <ViewerControls api={state} />
       <Tabs
