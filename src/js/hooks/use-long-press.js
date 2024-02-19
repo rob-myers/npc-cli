@@ -39,6 +39,7 @@ export default function useLongPress(config) {
         ["Enter", " "].includes(e.key) && config.onClick?.(e);
       },
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [config.onLongPress, config.onClick, ms]
   );
 }
