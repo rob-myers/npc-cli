@@ -62,14 +62,22 @@
   - ✅ get resize working on mobile
   - ❌ CSS var --view-size driven by useSite
 
-- Nav icons for Blog, Dev, Help, About
+- ✅ Couldn't scroll iframe in `<Comments>`
+
+  - Problem disappeared after restarting Chrome
+
+- ✅ Nav icons for Blog, Dev, Help, About
+  - Blog: `robot`
+  - Dev: `code`
+  - Help: `circle-question`
+  - About: `circle-info`
+- toasts indicate loading assets/components
+
 - can add Tabs via links in blog posts
   - without remounting other tabs!
 - ensure Tab components are lazy-loaded
 - open Viewer should enable Tabs initially
 - can press Escape/Enter to pause/unpause
-
-- toasts indicate loading assets/components
 
 - netlify site `npc-cli` at https://lastredoubt.co
 - geomorph layouts via SVG, inducing current format
