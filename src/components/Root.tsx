@@ -1,8 +1,3 @@
-import React from "react";
-import { css } from "@emotion/css";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
 import {
   graphql,
   PageProps,
@@ -10,15 +5,20 @@ import {
   type WrapPageElementBrowserArgs,
   type WrapPageElementNodeArgs,
 } from "gatsby";
-import type { AllFrontMatter, FrontMatter } from "../store/site.store";
+import React from "react";
+import { css } from "@emotion/css";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
+import type { AllFrontMatter, FrontMatter } from "../store/site.store";
 import { queryClient } from "../js/service/query-client";
-import useSite from "../store/site.store";
+import { breakpoint } from "./const";
+
 import Nav from "./Nav";
 import Viewer from "./Viewer";
 import Main from "./Main";
 import Comments from "./Comments";
-import { breakpoint } from "./const";
+import useSite from "../store/site.store";
 import useOnResize from "src/js/hooks/use-on-resize";
 import { useBeforeunload } from "react-beforeunload";
 
@@ -98,8 +98,8 @@ const rootCss = css`
   height: 100dvh;
 
   @media (max-width: ${breakpoint}) {
+    // cannot move to Nav due to react-pro-sidebar api
     > aside {
-      // cannot move to Sidebar className
       position: fixed;
       height: 100vh;
       height: 100dvh;
