@@ -3,6 +3,7 @@ import { css, cx } from "@emotion/css";
 import Giscus from "@giscus/react";
 import useSite from "../store/site.store";
 import { discussionsUrl } from "../js/service/const";
+import { afterBreakpoint, breakpoint } from "./const";
 // import Icon from "./Icon";
 
 export default function Comments(props: Props) {
@@ -61,18 +62,9 @@ interface Props {
 }
 
 const rootCss = css`
-  min-width: 400px;
-
   min-height: 322px;
   /* border-top: 1px solid var(--page-border-color); */
-  margin: 32px var(--article-right-padding) 16px 0;
-
-  @media (max-width: 1024px) {
-    margin: 32px var(--article-right-padding) 0 0;
-  }
-  @media (max-width: 600px) {
-    margin: 32px var(--article-right-padding) 0 8px;
-  }
+  /* margin: 32px var(--article-right-padding) 16px 0; */
 
   header {
     margin-bottom: 24px;
@@ -80,5 +72,9 @@ const rootCss = css`
       cursor: pointer;
       color: var(--page-link-color);
     }
+  }
+
+  @media (min-width: ${afterBreakpoint}) {
+    min-width: 400px;
   }
 `;

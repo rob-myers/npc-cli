@@ -30,16 +30,15 @@ export default function Main(props: React.PropsWithChildren) {
 
 const mainCss = css`
   width: 100%;
-  white-space: nowrap;
-  overflow-x: scroll;
-
   > main {
-    max-width: 1024px;
     margin: 0 auto;
   }
 
   @media (min-width: ${afterBreakpoint}) {
+    white-space: nowrap;
+    overflow-x: scroll;
     > main {
+      max-width: 1024px;
       padding: 0 4rem;
     }
   }
@@ -55,12 +54,16 @@ const mainTitleCss = css`
   margin: 2rem auto;
   img {
     width: 300px;
-    // 🔔 Too wide caused extra body height (mobile)
-    /* max-width: 100%; */
   }
 
   @media (min-width: ${afterBreakpoint}) {
     padding: 0 4rem;
+  }
+  @media (max-width: ${breakpoint}) {
+    img {
+      // 🔔 Too wide causes extra body height on mobile
+      max-width: 100%;
+    }
   }
 `;
 
