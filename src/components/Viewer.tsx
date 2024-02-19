@@ -10,35 +10,22 @@ import { Tabs, State as TabsState } from "./tabs/Tabs";
 import ViewerControls from "./ViewerControls";
 
 export default function Viewer() {
-  const { browserLoaded, viewOpen } = useSite(
-    ({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }),
-    shallow
-  );
+  const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
 
   const state = useStateRef(
     (): State => ({
       rootEl: {} as HTMLElement,
       tabs: {} as TabsState,
-      // 🚧 move into ViewerControls
-      toggleCollapsed() {
-        const nextViewOpen = useSite.api.toggleView();
-        if (!nextViewOpen) {
-          state.tabs.toggleEnabled(false);
-        }
-        if (nextViewOpen && useSite.api.isSmall()) {
-          useSite.api.toggleNav(false);
-        }
-      },
     })
   );
 
   return (
     <aside
-      className={cx(viewerCss, { collapsed: !viewOpen })}
+      className={cx(viewerCss, { collapsed: !site.viewOpen })}
       data-testid="viewer"
       ref={(el) => el && (state.rootEl = el)}
       style={
-        browserLoaded && !viewOpen
+        site.browserLoaded && !site.viewOpen
           ? useSite.api.isSmall()
             ? { minHeight: "0%" }
             : { minWidth: "0%" }
@@ -65,7 +52,6 @@ export interface State {
   rootEl: HTMLElement;
   /** Tabs API */
   tabs: TabsState;
-  toggleCollapsed(): void;
 }
 
 const viewerCss = css`
@@ -88,6 +74,7 @@ const viewerCss = css`
 
   display: flex;
 
+  // if never drag or maximise, toggle acts like this
   --viewer-min: 50%;
   &.collapsed {
     --viewer-min: 0%;

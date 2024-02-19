@@ -99,6 +99,16 @@ export default function ViewerControls({ api }: Props) {
         }
       }
     },
+
+    toggleCollapsed() {
+      const nextViewOpen = useSite.api.toggleView();
+      if (!nextViewOpen) {
+        api.tabs.toggleEnabled(false);
+      }
+      if (nextViewOpen && useSite.api.isSmall()) {
+        useSite.api.toggleNav(false);
+      }
+    },
   }));
 
   const resetHandlers = useLongPress({
@@ -129,7 +139,7 @@ export default function ViewerControls({ api }: Props) {
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
         <Toggle
-          onClick={api.toggleCollapsed}
+          onClick={state.toggleCollapsed}
           className={cx(viewerToggleCss, { collapsed: !site.viewOpen })}
           flip={!site.viewOpen ? "horizontal" : undefined}
         />
@@ -191,6 +201,8 @@ const buttonsCss = css`
   display: flex;
   justify-content: right;
   align-items: center;
+  background-color: #222;
+  z-index: 5;
 
   @media (min-width: ${afterBreakpoint}) {
     cursor: col-resize;
