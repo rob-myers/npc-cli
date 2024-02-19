@@ -198,11 +198,11 @@ const interactOverlayCss = css`
 `;
 
 const buttonsCss = css`
+  z-index: 5;
   display: flex;
   justify-content: right;
   align-items: center;
-  background-color: #222;
-  z-index: 5;
+  background-color: #000;
 
   @media (min-width: ${afterBreakpoint}) {
     cursor: col-resize;
@@ -221,6 +221,7 @@ const buttonsCss = css`
 
     flex-direction: row;
     justify-content: right;
+    border-bottom: 1px solid #444;
   }
 
   button:not(.toggle) {
