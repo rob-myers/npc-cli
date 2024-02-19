@@ -14,7 +14,7 @@ export default function Main(props: React.PropsWithChildren) {
 
   return (
     <section className={mainCss} data-testid="main">
-      {overlayOpen && <div className={overlayCss} onClick={() => useSite.api.toggleNav()} />}
+      <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
 
       <Link to="/">
         <div className={mainTitleCss} data-testid="main-title">
@@ -73,6 +73,15 @@ const overlayCss = css`
   top: 0;
   width: 100%;
   height: 100dvh;
-  cursor: pointer;
   z-index: 0;
+
+  pointer-events: none;
+  transition: opacity 300ms;
+  opacity: 0;
+
+  &.overlayOpen {
+    cursor: pointer;
+    pointer-events: all;
+    opacity: 1;
+  }
 `;
