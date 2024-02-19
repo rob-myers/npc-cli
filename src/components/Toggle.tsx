@@ -3,20 +3,17 @@ import { css, cx } from "@emotion/css";
 import { FontAwesomeIconProps } from "@fortawesome/react-fontawesome";
 import { FontAwesomeIcon, faChevronRight } from "./Icon";
 
-export default function Toggle(props: React.PropsWithChildren<Props>) {
+export default function Toggle({ className, flip, ...props }: React.PropsWithChildren<Props>) {
   return (
-    <button
-      className={cx("toggle", toggleCss, props.className)}
-      onClick={props.onClick}
-      style={props.style}
-    >
-      <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={props.flip} />
+    <button {...props} className={cx("toggle", toggleCss, className)}>
+      <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={flip} />
     </button>
   );
 }
 
 interface Props {
-  onClick(): void;
+  onClick?: (e: React.MouseEvent) => void;
+  onPointerDown?: (e: React.PointerEvent) => void;
   flip?: FontAwesomeIconProps["flip"];
   style?: React.CSSProperties;
   className?: string;

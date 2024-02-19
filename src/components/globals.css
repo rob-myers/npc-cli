@@ -1,3 +1,13 @@
+html.cursor-row-resize * {
+  cursor: row-resize !important;
+  user-select: none;
+}
+
+html.cursor-col-resize * {
+  cursor: col-resize !important;
+  user-select: none;
+}
+
 body {
   margin: 0;
   overscroll-behavior: none;

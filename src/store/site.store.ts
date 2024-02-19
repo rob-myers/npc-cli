@@ -11,7 +11,6 @@ const useStore = create<State>()(
     discussMeta: {},
     navOpen: false,
     viewOpen: false,
-    viewFull: false,
 
     api: {
       initiate({ allMdx: { edges } }) {
@@ -51,12 +50,12 @@ const useStore = create<State>()(
         if (topLevel.viewOpen) {
           set(() => ({ viewOpen: topLevel.viewOpen }));
         }
-        if (topLevel.navOpen && !get().api.isSmallViewport()) {
+        if (topLevel.navOpen && !get().api.isSmall()) {
           set(() => ({ navOpen: topLevel.navOpen }));
         }
       },
 
-      isSmallViewport() {
+      isSmall() {
         return (
           typeof window !== "undefined" && window.matchMedia(`(max-width: ${breakpoint})`).matches
         );
@@ -89,17 +88,6 @@ const useStore = create<State>()(
           return next;
         }
       },
-
-      toggleViewSize(next) {
-        if (next === undefined) {
-          const { viewFull } = get();
-          set({ viewFull: !viewFull }, undefined, "toggle-full-view");
-          return !viewFull;
-        } else {
-          set({ viewFull: next }, undefined, next ? "view-size-full" : "view-size-half");
-          return next;
-        }
-      },
     },
   }))
 );
@@ -114,19 +102,17 @@ export type State = {
 
   navOpen: boolean;
   viewOpen: boolean;
-  viewFull: boolean;
 
   api: {
     // clickToClipboard(e: React.MouseEvent): Promise<void>;
     initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): Promise<void>;
-    isSmallViewport(): boolean;
+    isSmall(): boolean;
     onTerminate(): void;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;
     /** Returns next value of `viewOpen` */
     toggleView(next?: boolean): boolean;
-    toggleViewSize(next?: boolean): boolean;
   };
 };
 

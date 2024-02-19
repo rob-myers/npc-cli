@@ -1,6 +1,5 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
-import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
@@ -10,21 +9,14 @@ import { Tabs, State as TabsState } from "./tabs/Tabs";
 import ViewerControls from "./ViewerControls";
 
 export default function Viewer() {
-  const { viewOpen, viewFull } = useSite(
-    ({ viewOpen, viewFull }) => ({
-      viewOpen,
-      viewFull,
-    }),
-    shallow
-  );
+  const viewOpen = useSite(({ viewOpen }) => viewOpen);
 
   const state = useStateRef(
     (): State => ({
       rootEl: {} as HTMLElement,
       tabs: {} as TabsState,
       onClickViewer(e: React.MouseEvent) {
-        const el = e.target as HTMLElement;
-        if (!el.closest("button") && !el.closest("figure.tabs")) {
+        if ((e.target as HTMLElement).matches(".viewer-buttons")) {
           state.toggleCollapsed();
         }
       },
@@ -33,7 +25,7 @@ export default function Viewer() {
         if (!nextViewOpen) {
           state.tabs.toggleEnabled(false);
         }
-        if (nextViewOpen && useSite.api.isSmallViewport()) {
+        if (nextViewOpen && useSite.api.isSmall()) {
           useSite.api.toggleNav(false);
         }
       },
@@ -42,10 +34,12 @@ export default function Viewer() {
 
   return (
     <aside
-      className={cx(viewerCss, { collapsed: !viewOpen, full: viewFull })}
+      className={cx(viewerCss, { collapsed: !viewOpen })}
       data-testid="viewer"
       onClick={state.onClickViewer}
       ref={(el) => el && (state.rootEl = el)}
+      {...(!viewOpen &&
+        (useSite.api.isSmall() ? { style: { minHeight: "0%" } } : { style: { minWidth: "0%" } }))}
     >
       <ViewerControls api={state} />
       <Tabs
@@ -71,16 +65,12 @@ export interface State {
   toggleCollapsed(): void;
 }
 
-const minWidth = "3rem";
-
 const viewerCss = css`
   position: relative;
   color: white;
   background: black;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
-
-  display: flex;
 
   &:not(.collapsed) > figure.tabs {
     cursor: auto;
@@ -93,27 +83,22 @@ const viewerCss = css`
     transition: opacity 200ms;
   }
 
+  display: flex;
+
+  --viewer-min: 50%;
+  &.collapsed {
+    --viewer-min: 0%;
+  }
+
   @media (min-width: ${afterBreakpoint}) {
     flex-direction: row;
     transition: min-width 500ms;
-    min-width: 50%;
-    &.full {
-      min-width: 100%;
-    }
-    &.collapsed {
-      min-width: ${minWidth};
-    }
+    min-width: var(--viewer-min);
   }
 
   @media (max-width: ${breakpoint}) {
     flex-direction: column;
     transition: min-height 500ms;
-    min-height: 50%;
-    &.full {
-      min-height: 100%;
-    }
-    &.collapsed {
-      min-height: 3rem;
-    }
+    min-height: var(--viewer-min);
   }
 `;

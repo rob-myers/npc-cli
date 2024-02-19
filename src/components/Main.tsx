@@ -12,7 +12,7 @@ export default function Main(props: React.PropsWithChildren) {
     <section className={mainCss} data-testid="main">
       <div
         className={cx(overlayCss, {
-          overlayOpen: navOpen && useSite.api.isSmallViewport(),
+          overlayOpen: navOpen && useSite.api.isSmall(),
         })}
         onClick={() => useSite.api.toggleNav()}
       />

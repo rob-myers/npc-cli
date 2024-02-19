@@ -8,24 +8,14 @@ import { afterBreakpoint, breakpoint } from "./const";
 
 import { State } from "./Viewer";
 import Spinner from "./Spinner";
-import {
-  FontAwesomeIcon,
-  faRefreshThin,
-  faExpandThin,
-  faCirclePauseThin,
-  faCompress,
-} from "./Icon";
+import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "./Icon";
 import Toggle from "./Toggle";
 import useUpdate from "src/js/hooks/use-update";
 import useStateRef from "src/js/hooks/use-state-ref";
 
 export default function ViewerControls({ api }: Props) {
-  const {
-    browserLoaded,
-    viewFull: fullViewSize,
-    viewOpen,
-  } = useSite(
-    ({ browserLoaded, viewOpen, viewFull }) => ({ browserLoaded, viewOpen, viewFull }),
+  const { browserLoaded, viewOpen } = useSite(
+    ({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }),
     shallow
   );
 
@@ -46,6 +36,62 @@ export default function ViewerControls({ api }: Props) {
       api.tabs.toggleEnabled(false);
       update();
     },
+    onMaximize() {
+      api.rootEl.style.setProperty("--viewer-min", "100%"); // 🚧 useSite
+      useSite.api.toggleView(true);
+    },
+
+    dragOffset: null as null | number,
+    onDragStart(e: React.PointerEvent) {
+      console.log("drag start");
+      state.dragOffset = useSite.api.isSmall()
+        ? api.rootEl.getBoundingClientRect().y - e.clientY
+        : api.rootEl.getBoundingClientRect().x - e.clientX;
+
+      document.documentElement.classList.add(
+        useSite.api.isSmall() ? "cursor-row-resize" : "cursor-col-resize"
+      );
+      // 🚧 use overlay instead (iframe can get in the way of body)
+      document.body.addEventListener("pointermove", state.onDrag);
+      document.body.addEventListener("pointerup", state.onDragEnd);
+      document.body.addEventListener("pointerleave", state.onDragEnd);
+      api.rootEl.style.transition = `min-width 0s, min-height 0s`;
+
+      if (!useSite.getState().viewOpen) {
+        api.rootEl.style.setProperty("--viewer-min", `${0}%`);
+        useSite.api.toggleView(true);
+      }
+    },
+    onDrag(e: PointerEvent) {
+      if (state.dragOffset !== null) {
+        let percent = useSite.api.isSmall()
+          ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
+          : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
+            (window.innerWidth - 4 * 16);
+        percent = Math.max(0, Math.min(100, percent));
+        console.log(percent);
+
+        api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
+      }
+    },
+    onDragEnd(e: PointerEvent) {
+      if (state.dragOffset !== null) {
+        console.log("drag end");
+        state.dragOffset = null;
+        document.body.removeEventListener("pointermove", state.onDrag);
+        document.body.removeEventListener("pointerup", state.onDragEnd);
+        document.body.removeEventListener("pointerleave", state.onDragEnd);
+        api.rootEl.style.transition = "";
+        document.documentElement.classList.remove("cursor-col-resize");
+        document.documentElement.classList.remove("cursor-row-resize");
+
+        const percent = parseFloat(api.rootEl.style.getPropertyValue("--viewer-min"));
+        if (percent < 5) {
+          api.rootEl.style.setProperty("--viewer-min", `${50}%`);
+          useSite.api.toggleView(false);
+        }
+      }
+    },
   }));
 
   const resetHandlers = useLongPress({
@@ -65,12 +111,14 @@ export default function ViewerControls({ api }: Props) {
         {browserLoaded ? "interact" : <Spinner size={24} />}
       </button>
 
-      <div className={buttonsCss}>
+      <div className={viewerDragBarCss} onPointerDown={state.onDragStart} />
+
+      <div className={cx("viewer-buttons", buttonsCss)}>
         <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
-        <button title="max/min tabs" onClick={() => useSite.api.toggleViewSize()}>
-          <FontAwesomeIcon icon={fullViewSize ? faCompress : faExpandThin} size="1x" />
+        <button title="max/min tabs" onClick={state.onMaximize}>
+          <FontAwesomeIcon icon={faExpandThin} size="1x" />
         </button>
         <button title="reset tabs" {...resetHandlers}>
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
@@ -121,6 +169,7 @@ const interactOverlayCss = css`
   background: rgba(0, 0, 0, 0);
   color: white;
   cursor: pointer;
+  user-select: none;
 
   letter-spacing: 2px;
 
@@ -168,6 +217,18 @@ const buttonsCss = css`
       cursor: auto;
       color: #aaa;
     }
+  }
+`;
+
+const viewerDragBarCss = css`
+  background-color: #444;
+  @media (min-width: ${afterBreakpoint}) {
+    cursor: col-resize;
+    min-width: 12px;
+  }
+  @media (max-width: ${breakpoint}) {
+    cursor: row-resize;
+    min-height: 12px;
   }
 `;
 
