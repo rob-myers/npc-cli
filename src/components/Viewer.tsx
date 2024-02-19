@@ -5,6 +5,7 @@ import { shallow } from "zustand/shallow";
 import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../js/hooks/use-state-ref";
 import useSite from "src/store/site.store";
+import { view } from "src/js/service/const";
 
 import { Tabs, State as TabsState } from "./tabs/Tabs";
 import ViewerControls from "./ViewerControls";
@@ -55,6 +56,10 @@ export interface State {
 }
 
 const viewerCss = css`
+  // For ViewerControls
+  --view-bar-size: ${view.barSize};
+  --view-icon-size: ${view.iconSize};
+
   position: relative;
   color: white;
   background: black;

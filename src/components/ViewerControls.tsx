@@ -13,6 +13,7 @@ import Toggle from "./Toggle";
 import useLongPress from "src/js/hooks/use-long-press";
 import useUpdate from "src/js/hooks/use-update";
 import useStateRef from "src/js/hooks/use-state-ref";
+import { view } from "src/js/service/const";
 
 export default function ViewerControls({ api }: Props) {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
@@ -163,16 +164,16 @@ const interactOverlayCss = css`
   z-index: 5;
 
   @media (min-width: ${afterBreakpoint}) {
-    left: 3rem;
+    left: var(--view-bar-size);
     top: 0;
-    width: calc(100% - 3rem);
+    width: calc(100% - var(--view-bar-size));
     height: 100%;
   }
   @media (max-width: ${breakpoint}) {
     left: 0;
-    top: 3rem;
+    top: var(--view-bar-size);
     width: 100%;
-    height: calc(100% - 3rem);
+    height: calc(100% - var(--view-bar-size));
   }
 
   display: flex;
@@ -206,35 +207,36 @@ const buttonsCss = css`
   @media (min-width: ${afterBreakpoint}) {
     cursor: col-resize;
     flex-direction: column-reverse;
-    width: 3rem;
+    width: var(--view-bar-size);
     height: 100%;
-    border-right: 2px solid #444;
+    border-right: 1px solid #444;
   }
 
   @media (max-width: ${breakpoint}) {
     cursor: row-resize;
-    right: 0;
-    top: -3rem;
-    height: 3rem;
-    width: 100%;
-
     flex-direction: row;
-    justify-content: right;
     border-bottom: 1px solid #444;
   }
 
   button:not(.toggle) {
-    color: white;
-    width: 3rem;
-    height: 3rem;
     display: flex;
     justify-content: center;
     align-items: center;
 
+    @media (min-width: ${afterBreakpoint}) {
+      width: var(--view-bar-size);
+      height: var(--view-icon-size);
+    }
+    @media (max-width: ${breakpoint}) {
+      width: var(--view-icon-size);
+      height: var(--view-bar-size);
+    }
+
+    color: white;
     cursor: pointer;
     &:disabled {
       cursor: auto;
-      color: #aaa;
+      color: #888;
     }
   }
 `;
@@ -242,11 +244,14 @@ const buttonsCss = css`
 const viewerToggleCss = css`
   z-index: 6;
   color: #000;
-  margin: 1rem 0;
 
   &.collapsed {
     background-color: white;
     color: black;
+  }
+
+  @media (min-width: ${afterBreakpoint}) {
+    margin: calc(0.5 * (5rem - 1.8rem)) 0;
   }
 
   @media (max-width: ${breakpoint}) {
@@ -262,16 +267,16 @@ const faderOverlayCss = css`
   background: rgba(1, 1, 1, 1);
 
   @media (min-width: ${afterBreakpoint}) {
-    left: 3rem;
+    left: var(--view-bar-size);
     top: 0;
-    width: calc(100% - 3rem);
+    width: calc(100% + (-1 * var(--view-bar-size)));
     height: 100%;
   }
   @media (max-width: ${breakpoint}) {
     left: 0;
-    top: 3rem;
+    top: var(--view-bar-size);
     width: 100%;
-    height: calc(100% - 3rem);
+    height: calc(100% + (-1 * var(--view-bar-size)));
   }
 
   opacity: 1;
