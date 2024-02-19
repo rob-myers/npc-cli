@@ -3,10 +3,11 @@ import { css } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
+import { nav } from "src/js/service/const";
 import useStateRef from "../js/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import useSite from "src/store/site.store";
+import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
 
 export default function Nav() {
   const collapsed = useSite(({ navOpen }) => !navOpen);
@@ -33,10 +34,10 @@ export default function Nav() {
       backgroundColor="black"
       className={navCss}
       collapsed={collapsed}
-      collapsedWidth="4rem"
+      collapsedWidth={nav.collapsedWidth}
       data-testid="nav"
       onClick={state.onClickSidebar}
-      width="14rem"
+      width={nav.expandedWidth}
     >
       <Toggle onClick={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
 

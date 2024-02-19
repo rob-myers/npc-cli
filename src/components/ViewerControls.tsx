@@ -35,13 +35,13 @@ export default function ViewerControls({ api }: Props) {
       update();
     },
     onMaximize() {
-      api.rootEl.style.setProperty("--viewer-min", "100%"); // 🚧 useSite
+      api.rootEl.style.setProperty("--viewer-min", "100%");
       useSite.api.toggleView(true);
     },
 
     dragOffset: null as null | number,
     onDragStart(e: React.PointerEvent) {
-      console.log("drag start");
+      // console.log("drag start");
       if (!(e.target as HTMLElement).matches(".viewer-buttons")) {
         return;
       }
@@ -60,21 +60,19 @@ export default function ViewerControls({ api }: Props) {
       if (!isTouchDevice()) {
         document.body.addEventListener("pointerleave", state.onDragEnd);
       }
-      // document.body.style.touchAction = "none";
       api.rootEl.style.transition = `min-width 0s, min-height 0s`;
 
-      if (!useSite.getState().viewOpen) {
+      if (useSite.api.isViewClosed()) {
         api.rootEl.style.setProperty("--viewer-min", `${0}%`);
         useSite.api.toggleView(true);
       }
     },
     onDrag(e: PointerEvent) {
       if (state.dragOffset !== null) {
-        // 🚧 4 * 16 -> 4rem
         let percent = useSite.api.isSmall()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
-            (window.innerWidth - 4 * 16);
+            (window.innerWidth - useSite.api.getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
@@ -82,7 +80,7 @@ export default function ViewerControls({ api }: Props) {
     },
     onDragEnd(_e: PointerEvent) {
       if (state.dragOffset !== null) {
-        console.log("drag end");
+        // console.log("drag end");
         state.dragOffset = null;
         document.documentElement.classList.remove("cursor-col-resize");
         document.documentElement.classList.remove("cursor-row-resize");
@@ -90,23 +88,22 @@ export default function ViewerControls({ api }: Props) {
         document.body.removeEventListener("pointermove", state.onDrag);
         document.body.removeEventListener("pointerup", state.onDragEnd);
         document.body.removeEventListener("pointerleave", state.onDragEnd);
-        // document.body.style.touchAction = "auto";
         api.rootEl.style.transition = "";
 
         const percent = parseFloat(api.rootEl.style.getPropertyValue("--viewer-min"));
         if (percent < 5) {
           api.rootEl.style.setProperty("--viewer-min", `${50}%`);
-          useSite.api.toggleView(false);
+          state.toggleCollapsed(false);
         }
       }
     },
 
-    toggleCollapsed() {
-      const nextViewOpen = useSite.api.toggleView();
-      if (!nextViewOpen) {
+    toggleCollapsed(next?: boolean) {
+      const willOpen = useSite.api.toggleView(next);
+      if (!willOpen) {
         api.tabs.toggleEnabled(false);
       }
-      if (nextViewOpen && useSite.api.isSmall()) {
+      if (willOpen && useSite.api.isSmall()) {
         useSite.api.toggleNav(false);
       }
     },
@@ -140,7 +137,7 @@ export default function ViewerControls({ api }: Props) {
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
         </button>
         <Toggle
-          onClick={state.toggleCollapsed}
+          onClick={() => state.toggleCollapsed()}
           className={cx(viewerToggleCss, { collapsed: !site.viewOpen })}
           flip={!site.viewOpen ? "horizontal" : undefined}
         />

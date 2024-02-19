@@ -53,13 +53,14 @@
 
 ## WIP
 
-- 🚧 can drag Viewer toggle instead of max/min
+- ✅ can drag Viewer bar
 
   - ✅ can drag "drag-bar" instead
   - ✅ drag to 0% and let go => sets viewOpen `false`
   - ✅ when viewOpen false can start dragging
   - ✅ add overlay when dragging (body can be covered by iframe)
-  - CSS var --view-size driven by useSite
+  - ✅ get resize working on mobile
+  - ❌ CSS var --view-size driven by useSite
 
 - Nav icons for Blog, Dev, Help, About
 - can add Tabs via links in blog posts

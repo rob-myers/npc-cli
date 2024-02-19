@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { breakpoint } from "src/components/const";
 import { safeJsonParse, tryLocalStorageGet, tryLocalStorageSet } from "src/js/service/generic";
+import { nav } from "src/js/service/const";
 
 const useStore = create<State>()(
   devtools((set, get) => ({
@@ -14,6 +15,11 @@ const useStore = create<State>()(
     viewOpen: false,
 
     api: {
+      getNavWidth() {
+        const baseFontPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+        return (get().navOpen ? nav.expandedRem : nav.collapsedRem) * baseFontPx;
+      },
+
       initiate({ allMdx: { edges } }) {
         const articlesMeta = {} as State["articlesMeta"];
         for (const {
@@ -62,6 +68,10 @@ const useStore = create<State>()(
         );
       },
 
+      isViewClosed() {
+        return !get().viewOpen;
+      },
+
       onTerminate() {
         const { navOpen, viewOpen } = get();
         tryLocalStorageSet("site-top-level", JSON.stringify({ navOpen, viewOpen }));
@@ -107,9 +117,12 @@ export type State = {
 
   api: {
     // clickToClipboard(e: React.MouseEvent): Promise<void>;
+    /** Navigation bar width in pixels */
+    getNavWidth(): number;
     initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): Promise<void>;
     isSmall(): boolean;
+    isViewClosed(): boolean;
     onTerminate(): void;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;
