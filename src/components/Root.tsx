@@ -101,7 +101,8 @@ const rootCss = css`
     > aside {
       // cannot move to Sidebar className
       position: fixed;
-      height: 100%;
+      height: 100vh;
+      height: 100dvh;
       z-index: 7;
     }
   }

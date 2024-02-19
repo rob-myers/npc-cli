@@ -66,9 +66,10 @@ export default function Nav() {
 }
 
 const navCss = css`
-  color: white;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
+
+  color: white;
   border-right: 1px solid #444 !important;
 
   a.${menuClasses.button}, span.${menuClasses.button} {
