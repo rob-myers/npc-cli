@@ -3,13 +3,14 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import useSite from "src/store/site.store";
-import useLongPress from "src/js/hooks/use-long-press";
+import { isTouchDevice } from "src/js/service/dom";
 import { afterBreakpoint, breakpoint } from "./const";
 
 import { State } from "./Viewer";
 import Spinner from "./Spinner";
 import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "./Icon";
 import Toggle from "./Toggle";
+import useLongPress from "src/js/hooks/use-long-press";
 import useUpdate from "src/js/hooks/use-update";
 import useStateRef from "src/js/hooks/use-state-ref";
 
@@ -54,7 +55,9 @@ export default function ViewerControls({ api }: Props) {
       // 🚧 trigger main overlay (iframe can get in the way of body)
       document.body.addEventListener("pointermove", state.onDrag);
       document.body.addEventListener("pointerup", state.onDragEnd);
-      document.body.addEventListener("pointerleave", state.onDragEnd);
+      if (!isTouchDevice()) {
+        document.body.addEventListener("pointerleave", state.onDragEnd);
+      }
       document.body.style.touchAction = "none";
       api.rootEl.style.transition = `min-width 0s, min-height 0s`;
 
