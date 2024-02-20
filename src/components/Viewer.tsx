@@ -5,7 +5,7 @@ import { shallow } from "zustand/shallow";
 import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useSite from "src/store/site.store";
-import { view } from "src/npc-cli/service/const";
+import { view } from "./const";
 
 import { Tabs, State as TabsState } from "./tabs/Tabs";
 import ViewerControls from "./ViewerControls";

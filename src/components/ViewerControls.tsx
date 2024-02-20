@@ -13,7 +13,6 @@ import Toggle from "./Toggle";
 import useLongPress from "src/npc-cli/hooks/use-long-press";
 import useUpdate from "src/npc-cli/hooks/use-update";
 import useStateRef from "src/npc-cli/hooks/use-state-ref";
-import { view } from "src/npc-cli/service/const";
 
 export default function ViewerControls({ api }: Props) {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
