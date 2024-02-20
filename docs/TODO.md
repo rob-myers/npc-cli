@@ -78,7 +78,9 @@
 - ✅ copy over sh folder
   - comment out references to e.g. World, NPC, Geom, PanZoom,
 - ✅ rename src/js -> src/npc-cli
-- add Terminal
+- 🚧 add Terminal
+  - ✅ add files to src/npc-cli/terminal
+  - can see component
 - ensure Tab components are lazy-loaded
 
 - can add Tabs via links in blog posts
