@@ -27,9 +27,7 @@ export function addToLookup(newItem, lookup) {
 export function assertDefined(value, valueName) {
   if (value === undefined) {
     throw new Error(
-      `Encountered unexpected undefined value${
-        valueName ? ` for '${valueName}'` : ""
-      }`
+      `Encountered unexpected undefined value${valueName ? ` for '${valueName}'` : ""}`
     );
   }
   return /** @type {*} */ (value);
@@ -127,9 +125,7 @@ export function equals(x, y, depth = 0) {
   } else if (typeof x?.equals === "function") {
     return x.equals(y) === true;
   } else if (Array.isArray(x)) {
-    return (
-      x.every((u, i) => equals(u, y[i]), depth + 1) && x.length === y.length
-    );
+    return x.every((u, i) => equals(u, y[i]), depth + 1) && x.length === y.length;
   } else if (isPlainObject(x)) {
     return (
       Object.keys(x).every((key) => equals(x[key], y[key]), depth + 1) &&
@@ -238,21 +234,14 @@ export function generateSelector(selector, extraArgs) {
   if (typeof selector === "function") {
     /** @param {any} x @param {any[]} xs */
     return function selectByFn(x, ...xs) {
-      return /** @type {(...args: any[]) => any} */ (selector)(
-        x,
-        ...(extraArgs ?? []),
-        ...xs
-      );
+      return /** @type {(...args: any[]) => any} */ (selector)(x, ...(extraArgs ?? []), ...xs);
     };
   }
   if (selector instanceof RegExp) {
     /** @param {string} x @param {any[]} xs */
     return function selectByRegexp(x, ...xs) {
       // 🚧 support extraArgs e.g. extract via '$2 $1'
-      return selector.test.call(
-        selector,
-        typeof x === "string" ? x : JSON.stringify(x)
-      );
+      return selector.test.call(selector, typeof x === "string" ? x : JSON.stringify(x));
     };
   }
   if (selector === undefined) {
@@ -291,6 +280,33 @@ export function mapValues(input, transform) {
   const output = /** @type {Record<Key, DstValue>} */ ({});
   keys(input).forEach((key) => (output[key] = transform(input[key], key)));
   return output;
+}
+
+/**
+ * Parse input with string fallback
+ * - preserves `undefined`
+ * - preserves empty-string
+ * @param {string} [input]
+ */
+export function parseJsArg(input) {
+  try {
+    if (input === "") return input;
+    return Function(`return ${input}`)();
+  } catch (e) {
+    return input;
+  }
+}
+
+/**
+ * JSON.parse with string fallback
+ * @param {string} input
+ */
+export function parseJsonArg(input) {
+  try {
+    return input === undefined ? undefined : JSON.parse(input);
+  } catch {
+    return input;
+  }
 }
 
 /** @returns {Promise<void>} */
@@ -353,8 +369,7 @@ export function safeStringify(input) {
   return (
     tryJsonStringify(input) ||
     safeStableStringify(input, (_k, v) => {
-      if (v instanceof HTMLElement || v instanceof Animation)
-        return `'[${v.constructor.name}]'`;
+      if (v instanceof HTMLElement || v instanceof Animation) return `'[${v.constructor.name}]'`;
       if (typeof v === "function") return zealousTrim(`${v}`);
       if (v instanceof EventEmitter) {
         // Fix pixi.js
@@ -374,9 +389,7 @@ export function safeStringify(input) {
 export function testNever(x, opts) {
   return (
     opts?.override ??
-    `testNever: ${pretty(x)} not implemented${
-      opts?.suffix ? ` (${opts.suffix})` : ""
-    }`
+    `testNever: ${pretty(x)} not implemented${opts?.suffix ? ` (${opts.suffix})` : ""}`
   );
 }
 
@@ -396,9 +409,7 @@ function tryJsonStringify(input) {
     let ownKeys = /** @type {string[]} */ ([]);
     return JSON.stringify(input, (_k, v) => {
       if (typeof v === "function") {
-        return `[Function]${
-          (ownKeys = Object.keys(v)).length ? ` ...{${ownKeys}} ` : ""
-        }`;
+        return `[Function]${(ownKeys = Object.keys(v)).length ? ` ...{${ownKeys}} ` : ""}`;
       }
       return v;
     });
@@ -460,8 +471,7 @@ export function visibleUnicodeLength(input) {
   const split = input.split("\u{200D}");
   return (
     split.reduce(
-      (sum, item) =>
-        sum + Array.from(item.split(/[\ufe00-\ufe0f]/).join("")).length,
+      (sum, item) => sum + Array.from(item.split(/[\ufe00-\ufe0f]/).join("")).length,
       0
     ) / split.length
   );

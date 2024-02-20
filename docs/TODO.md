@@ -67,18 +67,27 @@
   - Problem disappeared after restarting Chrome
 
 - ✅ Nav icons for Blog, Dev, Help, About
+
   - Blog: `robot`
   - Dev: `code`
   - Help: `circle-question`
   - About: `circle-info`
-- toasts indicate loading assets/components
+
+- ❌ toasts indicate loading assets/components
+
+- ✅ copy over sh folder
+  - comment out references to e.g. World, NPC, Geom, PanZoom,
+- rename src/js -> src/npc-cli
+- add Terminal
+- ensure Tab components are lazy-loaded
 
 - can add Tabs via links in blog posts
   - without remounting other tabs!
-- ensure Tab components are lazy-loaded
 - open Viewer should enable Tabs initially
 - can press Escape/Enter to pause/unpause
+- how does shell function versioning work in sh/scripts.ts?
 
+- install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
 - geomorph layouts via SVG, inducing current format
 - world layouts via SVG, inducing current format
