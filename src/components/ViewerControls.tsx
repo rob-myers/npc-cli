@@ -76,6 +76,10 @@ export default function ViewerControls({ api }: Props) {
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
+
+        if (e instanceof TouchEvent && e.touches.length > 1) {
+          state.onDragEnd(e);
+        }
       }
     },
     onDragEnd(_e: PointerEvent) {

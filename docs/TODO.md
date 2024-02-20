@@ -79,16 +79,25 @@
   - comment out references to e.g. World, NPC, Geom, PanZoom,
 - ✅ rename src/js -> src/npc-cli
 - ✅ add Terminal
+
   - ✅ add files to src/npc-cli/terminal
   - ✅ move tabs inside npc-cli
   - ✅ can see component in Tabs
-- ensure Tab components are lazy-loaded
 
+- ✅ try fix multi-touch flicker on drag
+- ✅ ensure Tab components are lazy-loaded
+
+- pivot to NPC fixes in repo `the-last-redoubt`
+
+- smaller collapsed nav on mobile
 - can add Tabs via links in blog posts
   - without remounting other tabs!
 - open Viewer should enable Tabs initially
 - can press Escape/Enter to pause/unpause
 - how does shell function versioning work in sh/scripts.ts?
+- fix vertical tab drag on mobile
+
+  - need repro
 
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
