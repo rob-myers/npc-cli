@@ -678,5 +678,3 @@ export const semanticsService = new semanticsServiceClass();
 
 /** Local shortcut */
 const sem = semanticsService;
-
-let pipelineCount = 0;
