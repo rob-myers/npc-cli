@@ -29,7 +29,6 @@
 - ✅ Viewer Tabs has id `{articleKey}-viewer-tabs` (for persist)
 
 - ✅ Tabs has controls
-
   - ✅ small viewport ui
   - ✅ large viewport ui
   - ✅ disable/enable
@@ -51,10 +50,7 @@
 - ✅ ViewerControls buttons/Toggle not positioned absolute
 - ✅ remember if Viewer is open and trigger client-side
 
-## WIP
-
 - ✅ can drag Viewer bar
-
   - ✅ can drag "drag-bar" instead
   - ✅ drag to 0% and let go => sets viewOpen `false`
   - ✅ when viewOpen false can start dragging
@@ -63,7 +59,6 @@
   - ❌ CSS var --view-size driven by useSite
 
 - ✅ Couldn't scroll iframe in `<Comments>`
-
   - Problem disappeared after restarting Chrome
 
 - ✅ Nav icons for Blog, Dev, Help, About
@@ -79,15 +74,18 @@
   - comment out references to e.g. World, NPC, Geom, PanZoom,
 - ✅ rename src/js -> src/npc-cli
 - ✅ add Terminal
-
   - ✅ add files to src/npc-cli/terminal
   - ✅ move tabs inside npc-cli
   - ✅ can see component in Tabs
 
-- ✅ try fix multi-touch flicker on drag
 - ✅ ensure Tab components are lazy-loaded
 
-- pivot to NPC fixes in repo `the-last-redoubt`
+## WIP
+
+- 🚧 pivot to NPC fixes in repo `the-last-redoubt`
+
+- fix multi-touch flicker on drag
+  - setup local dev on phone to debug this
 
 - smaller collapsed nav on mobile
 - can add Tabs via links in blog posts
@@ -96,7 +94,6 @@
 - can press Escape/Enter to pause/unpause
 - how does shell function versioning work in sh/scripts.ts?
 - fix vertical tab drag on mobile
-
   - need repro
 
 - install cypress to test terminal
