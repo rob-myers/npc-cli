@@ -77,7 +77,7 @@
 
 - ✅ copy over sh folder
   - comment out references to e.g. World, NPC, Geom, PanZoom,
-- rename src/js -> src/npc-cli
+- ✅ rename src/js -> src/npc-cli
 - add Terminal
 - ensure Tab components are lazy-loaded
 

@@ -3,9 +3,9 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "./const";
-import useStateRef from "../js/hooks/use-state-ref";
+import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useSite from "src/store/site.store";
-import { view } from "src/js/service/const";
+import { view } from "src/npc-cli/service/const";
 
 import { Tabs, State as TabsState } from "./tabs/Tabs";
 import ViewerControls from "./ViewerControls";

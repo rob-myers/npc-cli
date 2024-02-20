@@ -3,17 +3,17 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import useSite from "src/store/site.store";
-import { isTouchDevice } from "src/js/service/dom";
+import { isTouchDevice } from "src/npc-cli/service/dom";
 import { afterBreakpoint, breakpoint } from "./const";
 
 import { State } from "./Viewer";
 import Spinner from "./Spinner";
 import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "./Icon";
 import Toggle from "./Toggle";
-import useLongPress from "src/js/hooks/use-long-press";
-import useUpdate from "src/js/hooks/use-update";
-import useStateRef from "src/js/hooks/use-state-ref";
-import { view } from "src/js/service/const";
+import useLongPress from "src/npc-cli/hooks/use-long-press";
+import useUpdate from "src/npc-cli/hooks/use-update";
+import useStateRef from "src/npc-cli/hooks/use-state-ref";
+import { view } from "src/npc-cli/service/const";
 
 export default function ViewerControls({ api }: Props) {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);

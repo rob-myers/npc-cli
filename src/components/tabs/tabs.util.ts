@@ -7,7 +7,7 @@ import {
   tryLocalStorageGet,
   tryLocalStorageRemove,
   tryLocalStorageSet,
-} from "src/js/service/generic";
+} from "src/npc-cli/service/generic";
 import { Props as TabsProps, State as TabsApi } from "./Tabs";
 import { TabMemo } from "./Tab";
 
@@ -72,9 +72,9 @@ const classToComponent = {
   //       <module.default disabled {...props} />,
   // },
   HelloWorld: {
-    loadable: loadable(() => import("src/js/components/HelloWorld")),
+    loadable: loadable(() => import("src/npc-cli/components/HelloWorld")),
     get:
-      (module: typeof import("src/js/components/HelloWorld")) =>
+      (module: typeof import("src/npc-cli/components/HelloWorld")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },

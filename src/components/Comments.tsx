@@ -2,7 +2,7 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import Giscus from "@giscus/react";
 import useSite from "../store/site.store";
-import { discussionsUrl } from "../js/service/const";
+import { discussionsUrl } from "../npc-cli/service/const";
 import { afterBreakpoint, breakpoint } from "./const";
 // import Icon from "./Icon";
 

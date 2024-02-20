@@ -3,8 +3,8 @@ import { css } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { nav } from "src/js/service/const";
-import useStateRef from "../js/hooks/use-state-ref";
+import { nav } from "src/npc-cli/service/const";
+import useStateRef from "../npc-cli/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
 import useSite from "src/store/site.store";
@@ -119,7 +119,7 @@ const navCss = css`
   }
 
   span.${menuClasses.icon} {
-    transform: scale(1.4);
+    transform: scale(1.3);
     width: 1.5rem;
     min-width: 1.5rem;
     margin-right: 24px;

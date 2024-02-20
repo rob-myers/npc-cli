@@ -12,8 +12,8 @@ import {
   factory,
   storeModelAsJson,
 } from "./tabs.util";
-import useStateRef from "src/js/hooks/use-state-ref";
-import useUpdate from "src/js/hooks/use-update";
+import useStateRef from "src/npc-cli/hooks/use-state-ref";
+import useUpdate from "src/npc-cli/hooks/use-update";
 
 export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef<State>(() => ({

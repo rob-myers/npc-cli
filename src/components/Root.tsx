@@ -11,7 +11,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import type { AllFrontMatter, FrontMatter } from "../store/site.store";
-import { queryClient } from "../js/service/query-client";
+import { queryClient } from "../npc-cli/service/query-client";
 import { breakpoint } from "./const";
 
 import Nav from "./Nav";
@@ -19,7 +19,7 @@ import Viewer from "./Viewer";
 import Main from "./Main";
 import Comments from "./Comments";
 import useSite from "../store/site.store";
-import useOnResize from "src/js/hooks/use-on-resize";
+import useOnResize from "src/npc-cli/hooks/use-on-resize";
 import { useBeforeunload } from "react-beforeunload";
 
 export function wrapPageElement({
