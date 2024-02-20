@@ -57,8 +57,8 @@ export default function TouchHelperUI(props: { session: Session; disabled?: bool
 
   React.useMemo(() => {
     if (!tryLocalStorageGet(localStorageKey.touchTtyCanType)) {
-      // tty disabled on touch devices by default
-      tryLocalStorageSet(localStorageKey.touchTtyCanType, `${!isTouchDevice()}`);
+      // tty enabled by default (including touch devices)
+      tryLocalStorageSet(localStorageKey.touchTtyCanType, "true");
     }
     if (!tryLocalStorageGet(localStorageKey.touchTtyOpen)) {
       // touch menu closed by default
