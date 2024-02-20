@@ -45,6 +45,9 @@ export default function ViewerControls({ api }: Props) {
       if (!(e.target as HTMLElement).matches(".viewer-buttons")) {
         return;
       }
+      if (e instanceof TouchEvent && e.touches.length > 1) {
+        return;
+      }
 
       state.dragOffset = useSite.api.isSmall()
         ? api.rootEl.getBoundingClientRect().y - e.clientY
@@ -76,10 +79,6 @@ export default function ViewerControls({ api }: Props) {
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
-
-        if (e instanceof TouchEvent && e.touches.length > 1) {
-          state.onDragEnd(e);
-        }
       }
     },
     onDragEnd(_e: PointerEvent) {
