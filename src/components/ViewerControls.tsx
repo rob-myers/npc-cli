@@ -46,6 +46,7 @@ export default function ViewerControls({ api }: Props) {
         return;
       }
       if (state.dragOffset !== null) {
+        state.onDragEnd(e.nativeEvent);
         return;
       }
 
