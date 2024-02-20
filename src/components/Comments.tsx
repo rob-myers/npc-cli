@@ -1,7 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import Giscus from "@giscus/react";
-import useSite from "../store/site.store";
+import useSite from "./site.store";
 import { afterBreakpoint, discussionsUrl } from "./const";
 
 export default function Comments(props: Props) {

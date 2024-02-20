@@ -2,9 +2,9 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
-import useSite from "src/store/site.store";
-import { isTouchDevice } from "src/npc-cli/service/dom";
+import useSite from "./site.store";
 import { afterBreakpoint, breakpoint } from "./const";
+import { isTouchDevice } from "src/npc-cli/service/dom";
 
 import { State } from "./Viewer";
 import Spinner from "./Spinner";

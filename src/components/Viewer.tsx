@@ -4,7 +4,7 @@ import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
-import useSite from "src/store/site.store";
+import useSite from "./site.store";
 import { view } from "./const";
 import { profileLookup } from "../npc-cli/sh/scripts";
 

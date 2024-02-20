@@ -4,8 +4,8 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "./const";
-import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
-import useSite from "src/store/site.store";
+import npcCliTitlePng from "static/assets/npc-cli-title.png";
+import useSite from "./site.store";
 
 export default function Main(props: React.PropsWithChildren) {
   const site = useSite(({ navOpen, mainOverlay }) => ({ navOpen, mainOverlay }), shallow);

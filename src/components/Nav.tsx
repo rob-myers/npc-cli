@@ -7,8 +7,8 @@ import { nav } from "./const";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
-import useSite from "src/store/site.store";
-import npcCliTitlePng from "../../static/assets/npc-cli-title.png";
+import useSite from "./site.store";
+import npcCliTitlePng from "static/assets/npc-cli-title.png";
 
 export default function Nav() {
   const collapsed = useSite(({ navOpen }) => !navOpen);
