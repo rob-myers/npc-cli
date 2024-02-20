@@ -1,0 +1,4 @@
+{
+  "plugins": ["@babel/plugin-transform-async-generator-functions"],
+  "presets": ["babel-preset-gatsby"]
+}
