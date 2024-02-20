@@ -45,7 +45,7 @@ export default function ViewerControls({ api }: Props) {
       if (!(e.target as HTMLElement).matches(".viewer-buttons")) {
         return;
       }
-      if (e instanceof TouchEvent && e.touches.length > 1) {
+      if (state.dragOffset !== null) {
         return;
       }
 
@@ -102,6 +102,7 @@ export default function ViewerControls({ api }: Props) {
     },
 
     toggleCollapsed(next?: boolean) {
+      state.dragOffset = null;
       const willOpen = useSite.api.toggleView(next);
       if (!willOpen) {
         api.tabs.toggleEnabled(false);
