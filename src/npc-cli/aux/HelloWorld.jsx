@@ -15,5 +15,5 @@ const helloWorldCss = css`
 `;
 
 /**
- * @typedef {import("src/components/tabs/tabs.util").BaseComponentProps} Props
+ * @typedef {import("src/npc-cli/tabs/tabs.util").BaseComponentProps} Props
  */

@@ -7,7 +7,7 @@ import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useSite from "src/store/site.store";
 import { view } from "./const";
 
-import { Tabs, State as TabsState } from "./tabs/Tabs";
+import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
 
 export default function Viewer() {

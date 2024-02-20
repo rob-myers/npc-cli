@@ -80,7 +80,8 @@
 - ✅ rename src/js -> src/npc-cli
 - 🚧 add Terminal
   - ✅ add files to src/npc-cli/terminal
-  - can see component
+  - ✅ move tabs inside npc-cli
+  - 🚧 can see component in Tabs
 - ensure Tab components are lazy-loaded
 
 - can add Tabs via links in blog posts
