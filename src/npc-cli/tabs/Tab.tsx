@@ -1,12 +1,12 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import type { TabState } from "./Tabs";
-import { TabDef, getComponent } from "./tabs.util";
+import type { TabState, State as TabsApi } from "./Tabs";
+import { TabDef, getComponent, Terminal } from "./tabs.util";
 
 export const TabMemo = React.memo(Tab, (prev, next) => prev.disabled === next.disabled);
 
-export function Tab({ def, state }: TabProps) {
+export function Tab({ def, api, state }: TabProps) {
   const { data: component } = useQuery({
     queryKey: [def.type === "component" ? def.class : "null-query"],
     async queryFn() {
@@ -26,9 +26,26 @@ export function Tab({ def, state }: TabProps) {
   }
 
   if (def.type === "terminal") {
-    return `
-      __TODO__ <Terminal>
-    `;
+    return (
+      <Terminal
+        disabled={state.disabled}
+        sessionKey={def.filepath}
+        env={{
+          ...def.env,
+          CACHE_SHORTCUTS: { w: "WORLD_KEY" },
+        }}
+        onKey={(e) => {
+          if (e.key === "Escape" && api.enabled) {
+            api.toggleEnabled();
+            // Prevent subsequent Enter from propagating to TTY
+            api.focusRoot();
+          }
+          if (e.key === "Enter" && !api.enabled) {
+            api.toggleEnabled();
+          }
+        }}
+      />
+    );
   }
 
   return (
@@ -40,6 +57,7 @@ export function Tab({ def, state }: TabProps) {
 
 interface TabProps {
   def: TabDef;
+  api: TabsApi;
   state: TabState;
   disabled: boolean;
 }

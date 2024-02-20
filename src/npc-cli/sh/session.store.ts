@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 import { ansi } from "./const";
@@ -115,8 +115,6 @@ export interface Session {
     [varName: string]: any;
     PWD: string;
     OLDPWD: string;
-    /** DOM element id to return to after `choice [foo](href:#bar)` */
-    DOM_ID?: string;
     /** `processApi[key]` is `processApi.getCached(var[CACHE_SHORTCUTS[key]])` */
     CACHE_SHORTCUTS?: { [key: string]: string };
   };

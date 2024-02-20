@@ -2,6 +2,7 @@ import React from "react";
 import loadable from "@loadable/component";
 import { IJsonModel, Model, TabNode } from "flexlayout-react";
 
+import type ActualTerminal from "../terminal/Terminal";
 import {
   deepClone,
   tryLocalStorageGet,
@@ -17,6 +18,7 @@ export function factory(node: TabNode, api: TabsApi) {
     // console.debug(`rendering "${node.getId()}"`, state.disabled);
     return React.createElement(TabMemo, {
       def: node.getConfig() as TabDef,
+      api,
       state,
       disabled: state.disabled, // For memo
     });
@@ -122,6 +124,10 @@ function FallbackComponentFactory(componentKey: string) {
       `Component "${componentKey}" not found`
     );
 }
+
+export const Terminal = loadable(() => import("../terminal/Terminal"), {
+  ssr: false,
+}) as typeof ActualTerminal;
 
 //#endregion
 

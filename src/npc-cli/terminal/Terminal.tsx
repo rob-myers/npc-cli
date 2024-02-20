@@ -112,7 +112,6 @@ export default function Terminal(props: Props) {
         },
       });
       state.xterm.initialise();
-      state.session.ttyShell.initialise(state.xterm);
 
       const onKeyDisposable = xterm.onKey((e) => props.onKey?.(e.domEvent));
       xterm.loadAddon(state.fitAddon);
@@ -125,8 +124,10 @@ export default function Terminal(props: Props) {
         xterm.dispose();
       };
 
-      state.ready = true;
-      update();
+      state.session.ttyShell.initialise(state.xterm).then(() => {
+        state.ready = true;
+        update();
+      });
     }
   }, [props.disabled, state.ready]);
 

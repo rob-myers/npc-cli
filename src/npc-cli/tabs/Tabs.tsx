@@ -17,12 +17,16 @@ import useUpdate from "../hooks/use-update";
 
 export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef<State>(() => ({
-    tabsState: {},
     enabled: false,
     everEnabled: false,
     overlayColor: "black",
     resetCount: 0,
+    rootEl: {} as HTMLElement,
+    tabsState: {},
 
+    focusRoot() {
+      state.rootEl.focus();
+    },
     hardReset() {
       clearModelFromStorage(props.id);
       state.reset();
@@ -96,7 +100,11 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   React.useMemo(() => void (ref as Function)?.(state), []);
 
   return (
-    <figure key={state.resetCount} className={cx("tabs", tabsCss)}>
+    <figure
+      key={state.resetCount}
+      className={cx("tabs", tabsCss)}
+      ref={(x) => x && (state.rootEl = x)}
+    >
       {state.everEnabled && (
         <FlexLayout
           model={model}
@@ -122,13 +130,15 @@ export interface Props extends TabsDef {
 }
 
 export interface State {
-  /** By tab identifier */
-  tabsState: Record<string, TabState>;
   enabled: boolean;
   everEnabled: boolean;
   /** Initially `black` afterwards `faded` or `clear` */
   overlayColor: "black" | "faded" | "clear";
   resetCount: number;
+  rootEl: HTMLElement;
+  /** By tab identifier */
+  tabsState: Record<string, TabState>;
+  focusRoot(): void;
   hardReset(): void;
   reset(): void;
   toggleEnabled(next?: boolean): void;

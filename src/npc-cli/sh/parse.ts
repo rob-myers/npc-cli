@@ -3,9 +3,8 @@ import cloneWithRefs from "lodash.clonedeep";
 import getopts from "getopts";
 import { testNever, last } from "../service/generic";
 
-/**
- * We lazyload the shell parser `mvdan-sh`.
- */
+// We lazy-load the shell parser `mvdan-sh`.
+
 let syntax = {
   NewParser: class NewParser {
     Interactive() {
@@ -17,7 +16,9 @@ let syntax = {
   } as any,
 } as typeof MvdanSh.syntax;
 
-import("mvdan-sh").then((x) => (syntax = x.syntax));
+export async function loadMvdanSh() {
+  syntax = (await import("mvdan-sh")).syntax;
+}
 
 //#region model
 

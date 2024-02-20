@@ -6,6 +6,7 @@ import { afterBreakpoint, breakpoint } from "./const";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useSite from "src/store/site.store";
 import { view } from "./const";
+import { profileLookup } from "../npc-cli/sh/scripts";
 
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
@@ -40,8 +41,14 @@ export default function Viewer() {
         initEnabled={false}
         tabs={[
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} }],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-3", props: {} }],
+          [
+            {
+              type: "terminal",
+              filepath: "tty-1",
+              env: { WORLD_KEY: "world-1", PROFILE: profileLookup.util_0() },
+            },
+            { type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} },
+          ],
         ]}
         persistLayout
       />

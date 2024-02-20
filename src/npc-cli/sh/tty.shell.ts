@@ -5,7 +5,7 @@ import { Device, ReadResult, SigEnum } from "./io";
 
 import { ansi } from "./const";
 import { ProcessError, ShError } from "./util";
-import { parseService, srcService } from "./parse";
+import { loadMvdanSh, parseService, srcService } from "./parse";
 import useSession, { ProcessMeta, ProcessStatus } from "./session.store";
 import { semanticsService } from "./semantics.service";
 import { ttyXtermClass } from "./tty.xterm";
@@ -43,6 +43,8 @@ export class ttyShellClass implements Device {
   }
 
   async initialise(xterm: ttyXtermClass) {
+    await loadMvdanSh(); // ensure parser loaded
+
     this.xterm = xterm;
     this.cleanups.push(this.io.read(this.onMessage.bind(this)));
 
