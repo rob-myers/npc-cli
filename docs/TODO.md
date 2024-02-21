@@ -84,9 +84,11 @@
 
 - 🚧 pivot to NPC fixes in repo `the-last-redoubt`
 
+- world editor in new repo
+- geomorph editor in new repo
+
 - fix multi-touch flicker on drag
   - setup local dev on phone to debug this
-
 - smaller collapsed nav on mobile
 - can add Tabs via links in blog posts
   - without remounting other tabs!
@@ -96,7 +98,15 @@
 - fix vertical tab drag on mobile
   - need repro
 
+- more decor images
+  - `computer-2`
+  - `speaker-1`
+  - `communicator-1`
+  - `fabricator-1`
+- place decor points on many tables
+- more tables in 301
+- more tables in 101
+- World WebGL rendering pauses on pause Tabs
+
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
-- geomorph layouts via SVG, inducing current format
-- world layouts via SVG, inducing current format
