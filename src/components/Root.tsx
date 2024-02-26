@@ -9,7 +9,7 @@ import React from "react";
 import { css } from "@emotion/css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useBeforeunload } from "react-beforeunload";
-import { sidebarClasses } from "react-pro-sidebar";
+import { menuClasses, sidebarClasses } from "react-pro-sidebar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import type { AllFrontMatter, FrontMatter } from "./site.store";
@@ -112,6 +112,9 @@ const rootCss = css`
         > div {
           background-color: transparent;
           overflow: hidden;
+          .${menuClasses.root} {
+            display: none;
+          }
         }
         button.toggle {
           transform: scale(1.2);
