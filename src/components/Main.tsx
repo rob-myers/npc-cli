@@ -16,7 +16,7 @@ export default function Main(props: React.PropsWithChildren) {
     <section className={mainCss} data-testid="main">
       <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
 
-      <Link to="/">
+      <Link to="/" style={{ display: "block", margin: "0 auto" }}>
         <div className={mainTitleCss} data-testid="main-title">
           <img src={npcCliTitlePng} />
         </div>
@@ -50,7 +50,7 @@ const mainCss = css`
 
 const mainTitleCss = css`
   max-width: 1024px;
-  margin: 2rem auto;
+  margin: 2rem 0;
   img {
     width: 300px;
   }
