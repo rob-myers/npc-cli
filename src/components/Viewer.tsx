@@ -85,6 +85,7 @@ const viewerCss = css`
   }
 
   display: flex;
+  justify-content: flex-end;
 
   // if never drag or maximise, toggle acts like this
   --viewer-min: 50%;
