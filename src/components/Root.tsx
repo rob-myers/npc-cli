@@ -8,6 +8,8 @@ import {
 import React from "react";
 import { css } from "@emotion/css";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { useBeforeunload } from "react-beforeunload";
+import { sidebarClasses } from "react-pro-sidebar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import type { AllFrontMatter, FrontMatter } from "./site.store";
@@ -20,7 +22,6 @@ import Main from "./Main";
 import Comments from "./Comments";
 import useSite from "./site.store";
 import useOnResize from "src/npc-cli/hooks/use-on-resize";
-import { useBeforeunload } from "react-beforeunload";
 
 export function wrapPageElement({
   element,
@@ -104,6 +105,18 @@ const rootCss = css`
       height: 100vh;
       height: 100dvh;
       z-index: 7;
+
+      &.${sidebarClasses.collapsed} {
+        height: 80px;
+        border: none !important;
+        > div {
+          background-color: transparent;
+          overflow: hidden;
+        }
+        button.toggle {
+          filter: invert(1);
+        }
+      }
     }
   }
 `;
@@ -115,7 +128,6 @@ const rootContentCss = css`
   justify-content: space-between;
 
   @media (max-width: ${breakpoint}) {
-    margin-left: 4rem;
     flex-direction: column;
   }
 `;
