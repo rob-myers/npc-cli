@@ -114,7 +114,8 @@ const rootCss = css`
           overflow: hidden;
         }
         button.toggle {
-          filter: invert(1);
+          transform: scale(1.2);
+          outline: 2px solid #ddd;
         }
       }
     }
