@@ -42,7 +42,7 @@ const mainCss = css`
     }
   }
   @media (max-width: ${breakpoint}) {
-    padding: 0 2rem;
+    padding: 0 2rem; // 🚧
     overflow: scroll;
     width: initial;
   }

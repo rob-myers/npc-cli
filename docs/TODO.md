@@ -87,9 +87,9 @@
 - world editor in new repo
 - geomorph editor in new repo
 
+- ✅ smaller collapsed nav on mobile
 - fix multi-touch flicker on drag
   - setup local dev on phone to debug this
-- smaller collapsed nav on mobile
 - can add Tabs via links in blog posts
   - without remounting other tabs!
 - open Viewer should enable Tabs initially
@@ -97,6 +97,11 @@
 - how does shell function versioning work in sh/scripts.ts?
 - fix vertical tab drag on mobile
   - need repro
+
+- iOS issues:
+  - ✅ Nav wasn't centred
+  - ✅ Viewer initially partially occluded
+  - seems fixed on iPhone 13
 
 - more decor images
   - `computer-2`
