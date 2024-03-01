@@ -108,6 +108,15 @@ class GeomorphService {
   }
 
   /**
+   * @param {Geomorph.GeomorphKey} gmKey
+   * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
+   */
+  gmKeyToKeys(gmKey) {
+    const gmNumber = /** @type {Geomorph.GeomorphNumber} */ (Number(gmKey.split("-")[1]));
+    return { gmKey, gmNumber, hullKey: `${gmNumber}--hull` };
+  }
+
+  /**
    * @param {Geomorph.SymbolKey} symbolKey
    * @param {string} svgContents
    * @param {number} lastModified
