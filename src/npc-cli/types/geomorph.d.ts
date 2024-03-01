@@ -44,6 +44,8 @@ declare namespace Geomorph {
     | "g-302--xboat-repair-bay"
     | "g-303--passenger-deck";
 
+  type GeomorphNumber = 101 | 102 | 103 | 301 | 302 | 303;
+
   type SymbolKey =
     // | "extra--locker--001--1x0.33"
     // | "extra--table--001--1x0.2"
