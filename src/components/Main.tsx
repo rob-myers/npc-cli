@@ -36,6 +36,9 @@ const mainCss = css`
   @media (min-width: ${afterBreakpoint}) {
     white-space: nowrap;
     overflow-x: scroll;
+    > a {
+      max-width: 1024px;
+    }
     > main {
       max-width: 1024px;
       padding: 0 4rem;
