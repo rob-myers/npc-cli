@@ -8,7 +8,7 @@ export const TabMemo = React.memo(Tab, (prev, next) => prev.disabled === next.di
 
 export function Tab({ def, api, state }: TabProps) {
   const { data: component } = useQuery({
-    queryKey: [def.type === "component" ? def.class : "null-query"],
+    queryKey: def.type === "component" ? ["Tab", def.class] : ["null-query"],
     async queryFn() {
       return def.type === "component" ? await getComponent(def) : null;
     },
@@ -17,9 +17,9 @@ export function Tab({ def, api, state }: TabProps) {
   if (def.type === "component") {
     return (
       (component &&
-        React.createElement(component, {
+        React.createElement(component as React.FunctionComponent<any>, {
           disabled: state.disabled,
-          ...def.props, // propagate props from <Tabs> prop tabs
+          ...def.props,
         })) ||
       null
     );

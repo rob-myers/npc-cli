@@ -40,7 +40,28 @@ export default function Viewer() {
         id="viewer-tabs"
         initEnabled={false}
         tabs={[
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
+          [
+            {
+              type: "component",
+              class: "R3FDemo",
+              filepath: "r3f-demo",
+              props: {
+                gmDefs: [
+                  { gmKey: "g-301--bridge" },
+                  // { gmKey: 'g-103--cargo-bay', transform: [1, 0, 0, 1, 1200, 0] },
+                  { gmKey: "g-101--multipurpose", transform: [1, 0, 0, 1, 0, 600] },
+                  {
+                    gmKey: "g-302--xboat-repair-bay",
+                    transform: [1, 0, 0, -1, -1200 * 2, 600 + 1200],
+                  },
+                  { gmKey: "g-303--passenger-deck", transform: [1, 0, 0, -1, -1200, 1200 + 600] },
+                  { gmKey: "g-302--xboat-repair-bay", transform: [-1, 0, 0, 1, 1200 + 1200, 600] },
+                  { gmKey: "g-301--bridge", transform: [1, 0, 0, -1, 0, 600 + 1200 + 600] },
+                  { gmKey: "g-102--research-deck", transform: [1, 0, 0, 1, -1200, 0] },
+                ],
+              },
+            },
+          ],
           [
             {
               type: "terminal",

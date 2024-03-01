@@ -80,6 +80,13 @@ const classToComponent = {
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
+  R3FDemo: {
+    loadable: loadable(() => import("src/npc-cli/aux/R3FDemo")),
+    get:
+      (module: typeof import("src/npc-cli/aux/R3FDemo")) =>
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
+  },
   // SvgNavGraph: {
   //   loadable: loadable(() => import('projects/example/SvgNavGraph')),
   //   get: (module: typeof import('projects/example/SvgNavGraph')) =>
