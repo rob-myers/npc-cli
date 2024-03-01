@@ -90,8 +90,9 @@
 - 🚧 setup SVG symbols (simplify existing system)
   - ✅ hull symbol
   - ✅ non-hull symbol
-  - 🚧 `yarn symbols-meta`
-  - script watches files
+  - ✅ `yarn symbols-meta`
+    - ✅ try universal replacement for cheerio `htmlparser2`
+  - ✅ script watches files
   - can extract `gm.pngRect`
 
 - 🚧 given def `gms` construct each `gm.pngRect`

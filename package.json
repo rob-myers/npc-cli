@@ -14,7 +14,10 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "types": "tsc --noEmit"
+    "types": "tsc --noEmit",
+    "ts-script": "NODE_OPTIONS=\"--no-experimental-fetch\" ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
+    "symbols-meta": "yarn ts-script src/scripts/symbols-meta",
+    "watch-symbols-meta": "nodemon --delay 2s --config src/scripts/symbols-meta.nodemon.json --exec 'yarn symbols-meta'"
   },
   "prettier": {
     "printWidth": 100
@@ -43,7 +46,8 @@
     "gatsby-plugin-mdx": "^5.13.0",
     "gatsby-source-filesystem": "^5.13.0",
     "getopts": "^2.3.0",
-    "json-stringify-pretty-compact": "^4.0.0",
+    "htmlparser2": "^9.1.0",
+    "json-stringify-pretty-compact": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
     "mvdan-sh": "^0.5.0",
     "pixi.js": "^7.4.0",
@@ -55,6 +59,7 @@
     "react-pro-sidebar": "^1.1.0-alpha.2",
     "react-use-measure": "^2.1.1",
     "safe-stable-stringify": "^2.3.1",
+    "svg-path-parser": "^1.1.0",
     "three": "^0.162.0",
     "uid": "^2.0.2",
     "xterm": "^5.3.0",
@@ -71,10 +76,12 @@
     "@types/react": "^18.2.46",
     "@types/react-beforeunload": "^2.1.5",
     "@types/react-dom": "^18.2.18",
+    "@types/svg-path-parser": "^1.1.6",
     "@types/webpack": "^5.28.5",
     "@types/webpack-env": "^1.18.4",
     "babel-preset-gatsby": "^3.13.1",
     "gatsby-plugin-tsconfig-paths": "^1.0.6",
+    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }
