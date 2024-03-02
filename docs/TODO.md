@@ -104,8 +104,8 @@
 ## WIP
 
 - 🚧 try https://github.com/pmndrs/react-three-offscreen
-  - 🚧 create simple demo
-  - add prop-passing via messaging
+  - ✅ create simple demo
+  - 🚧 add prop-passing via messaging
   - try migrate R3FDemo
 - ✅ Tab doesn't need to use react-query
 - ✅ If Tabs enabled, Reset does not disable
@@ -125,6 +125,7 @@
 
 - start GeomorphEdit
 
+- sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile
 - Terminal crashing during HMR
 - (hull) walls -> quads

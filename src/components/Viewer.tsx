@@ -84,6 +84,7 @@ export default function Viewer() {
               env: { WORLD_KEY: "world-1", PROFILE: profileLookup.util_0() },
             },
             { type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} },
+            { type: "component", class: "R3FWorkerDemo", filepath: "r3-worker-demo", props: {} },
           ],
         ]}
         persistLayout
