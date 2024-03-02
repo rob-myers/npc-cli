@@ -14,9 +14,30 @@ import useMeasure from "react-use-measure";
  */
 export default function R3FDemo(props) {
 
-  const state = useStateRef(() => ({
-    rootEl: /** @type {HTMLCanvasElement} */ ({}),
+  const [measureRef, rect] = useMeasure({ scroll: false });
+
+  const state = useStateRef(/** @returns {State} */() => ({
+    rootEl: /** @type {*} */ (null),
+    disabled: !!props.disabled,
+    bounds: rect,
+    handleDisabledResize() {
+      const { style } = state.rootEl;
+      if (state.disabled) {
+        if (style.getPropertyValue("--disabled-height") === "unset") {
+          style.setProperty("--disabled-height", `${state.bounds.height}px`);
+        }
+        if (style.getPropertyValue("--disabled-width") === "unset") {
+          style.setProperty("--disabled-width", `${state.bounds.width}px`);
+        }
+      } else {
+        style.setProperty("--disabled-height", "unset");
+        style.setProperty("--disabled-width", "unset");
+      }
+    },
   }));
+
+  state.disabled = !!props.disabled;
+  state.bounds = rect;
 
   const { data: gms } = useQuery({
     queryKey: ["R3FDemo"],
@@ -33,16 +54,9 @@ export default function R3FDemo(props) {
     enabled: !props.disabled,
   });
 
-  const [measureRef, rect] = useMeasure();
 
   React.useMemo(() => {
-    if (props.disabled) {
-      if (state.rootEl.style?.getPropertyValue("--disabled-height") === "unset") {
-        state.rootEl.style?.setProperty("--disabled-height", `${rect.height}px`);
-      }
-    } else {
-      state.rootEl.style?.setProperty("--disabled-height", 'unset');
-    }
+    state.rootEl && state.handleDisabledResize();
   }, [props.disabled, rect.width, rect.height]);
 
   return gms ? (
@@ -70,6 +84,9 @@ export default function R3FDemo(props) {
 /**
  * @typedef State
  * @property {boolean} disabled
+ * @property {Geom.RectJson} bounds
+ * @property {HTMLCanvasElement} rootEl
+ * @property {() => void} handleDisabledResize
  */
 
 /**
@@ -80,19 +97,16 @@ export default function R3FDemo(props) {
  * @property {string} debugPngPath
  */
 
-/**
- * @param {number} disabledHeight 
- */
 const canvasCss = css`
   --disabled-height: unset;
+  --disabled-width: unset;
 
    background-color: white;
    
    &.disabled {
      > div {
-       background-color: #222;
+       background-color: #333;
        display: flex;
-       /* flex-direction: column; */
        align-items: center;
        justify-content: center;
     }
@@ -100,7 +114,8 @@ const canvasCss = css`
       background-color: white;
       max-height: var(--disabled-height);
       min-height: var(--disabled-height);
+      max-width: var(--disabled-width);
+      min-width: var(--disabled-width);
     }
   }
-
 `;
