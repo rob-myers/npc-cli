@@ -60,7 +60,7 @@ export default function R3FDemo(props) {
     state.rootEl && state.handleDisabledResize();
   }, [props.disabled, rect.width, rect.height]);
 
-  return gms ? (
+  return (
     <Canvas
       ref={(x) => { measureRef(x); x && (state.rootEl = x); }}
       className={state.ready ? cx(canvasCss, { disabled: props.disabled }) : undefined}
@@ -73,9 +73,9 @@ export default function R3FDemo(props) {
       }}
       onCreated={() => state.ready = true}
     >
-      <Scene gms={gms} />
+      {gms && <Scene gms={gms} />}
     </Canvas>
-  ) : null;
+  );
 }
 
 /**
@@ -113,7 +113,6 @@ const canvasCss = css`
    }
    canvas {
       background-color: white;
-      transition: width 300ms, height 300ms;
    }
    &.disabled {
     canvas {
