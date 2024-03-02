@@ -206,4 +206,11 @@ const tabsCss = css`
       fill: black;
     }
   }
+  .flexlayout__error_boundary_container {
+    background-color: black;
+    .flexlayout__error_boundary_content {
+      color: red;
+      font-size: 1.2rem;
+    }
+  }
 `;
