@@ -20,6 +20,7 @@ export default function R3FDemo(props) {
     rootEl: /** @type {*} */ (null),
     disabled: !!props.disabled,
     bounds: rect,
+    ready: false,
     handleDisabledResize() {
       const { style } = state.rootEl;
       if (state.disabled) {
@@ -62,13 +63,15 @@ export default function R3FDemo(props) {
   return gms ? (
     <Canvas
       ref={(x) => { measureRef(x); x && (state.rootEl = x); }}
-      className={cx(canvasCss, { disabled: props.disabled })}
+      className={state.ready ? cx(canvasCss, { disabled: props.disabled }) : undefined}
       frameloop={props.disabled ? 'never' : 'always'}
+      resize={{ debounce: 300 }}
       gl={{
         // powerPreference: "lower-power", // 🔔 throws
         toneMapping: 4,
         toneMappingExposure: 1,
       }}
+      onCreated={() => state.ready = true}
     >
       <Scene gms={gms} />
     </Canvas>
@@ -84,6 +87,7 @@ export default function R3FDemo(props) {
 /**
  * @typedef State
  * @property {boolean} disabled
+ * @property {boolean} ready
  * @property {Geom.RectJson} bounds
  * @property {HTMLCanvasElement} rootEl
  * @property {() => void} handleDisabledResize
@@ -101,17 +105,17 @@ const canvasCss = css`
   --disabled-height: unset;
   --disabled-width: unset;
 
-   background-color: white;
-   
-   &.disabled {
-     > div {
-       background-color: #333;
-       display: flex;
-       align-items: center;
-       justify-content: center;
-    }
-    canvas {
+   > div {
+      background-color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+   }
+   canvas {
       background-color: white;
+   }
+   &.disabled {
+    canvas {
       max-height: var(--disabled-height);
       min-height: var(--disabled-height);
       max-width: var(--disabled-width);
