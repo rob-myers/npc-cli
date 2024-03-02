@@ -1,10 +1,10 @@
 
-import React, { Suspense } from "react";
+import React from "react";
 import { useQueries } from "@tanstack/react-query";
 
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
-import { Edges, MapControls, PerspectiveCamera } from "@react-three/drei";
+import { MapControls, PerspectiveCamera } from "@react-three/drei";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -79,6 +79,7 @@ export default function Scene(props) {
           )}
         </group>
       ))}
+      {/* <Stats showPanel={0} /> */}
     </>
   );
 }
