@@ -46,7 +46,7 @@ export default function Scene(props) {
 
   return (
     <>
-      <MapControls makeDefault />
+      <MapControls makeDefault zoomToCursor />
       <ambientLight intensity={1} />
       <PerspectiveCamera position={[0, 8, 0]} makeDefault />
       <Origin />
