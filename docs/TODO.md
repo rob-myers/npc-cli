@@ -110,6 +110,8 @@
 - ✅ Tab doesn't need to use react-query
 - ✅ If Tabs enabled, Reset does not disable
 - ✅ Tabs should go disabled on when leave view
+- ❌ No resize Canvas when not rendering
+  - part of `Canvas`
 
 - 🚧 R3FDemo improvements
   - ✅ renderer stops when paused
@@ -117,6 +119,7 @@
   - ✅ initially rotates
   - ✅ fix z-fighting (hack)
   - fix untrimmed hull symbol images e.g. 102
+  - ✅ "Preserve" R3FDemo height when disabled
   - start migrating character controller with soldier.fbx
     - https://discourse.threejs.org/t/character-controller/46936
 
