@@ -109,17 +109,20 @@
   - try migrate R3FDemo
 - ✅ Tab doesn't need to use react-query
 - ✅ If Tabs enabled, Reset does not disable
+- ✅ Tabs should go disabled on when leave view
 
 - 🚧 R3FDemo improvements
   - ✅ renderer stops when paused
   - ✅ mouse zooms to point under cursor
   - ✅ initially rotates
   - ✅ fix z-fighting (hack)
+  - fix untrimmed hull symbol images e.g. 102
   - start migrating character controller with soldier.fbx
     - https://discourse.threejs.org/t/character-controller/46936
 
 - start GeomorphEdit
 
+- improve MapControls zoomToCursor on mobile
 - Terminal crashing during HMR
 - (hull) walls -> quads
 - need to remove labels from hull symbol image?

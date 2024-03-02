@@ -1,12 +1,15 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
+import debounce from "debounce";
 
-import { afterBreakpoint, breakpoint } from "./const";
-import useStateRef from "../npc-cli/hooks/use-state-ref";
-import useSite from "./site.store";
 import { view } from "./const";
 import { profileLookup } from "../npc-cli/sh/scripts";
+import { afterBreakpoint, breakpoint } from "./const";
+import useIntersection from "../npc-cli/hooks/use-intersection";
+import useStateRef from "../npc-cli/hooks/use-state-ref";
+import useSite from "./site.store";
+import useUpdate from "../npc-cli/hooks/use-update";
 
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
@@ -16,10 +19,22 @@ export default function Viewer() {
 
   const state = useStateRef(
     (): State => ({
-      rootEl: {} as HTMLElement,
+      onChangeIntersect: debounce((intersects: boolean) => {
+        !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
+        update();
+      }, 1000),
+      rootEl: null as any,
       tabs: {} as TabsState,
     })
   );
+
+  useIntersection({
+    elRef: () => state.rootEl,
+    cb: state.onChangeIntersect,
+    trackVisible: true,
+  });
+
+  const update = useUpdate();
 
   return (
     <aside
@@ -78,6 +93,7 @@ export default function Viewer() {
 }
 
 export interface State {
+  onChangeIntersect(intersects: boolean): void;
   rootEl: HTMLElement;
   /** Tabs API */
   tabs: TabsState;

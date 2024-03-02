@@ -21,7 +21,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     everEnabled: false,
     overlayColor: "black",
     resetCount: 0,
-    rootEl: {} as HTMLElement,
+    rootEl: null as any,
     tabsState: {},
 
     focusRoot() {
@@ -43,7 +43,11 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       next ??= !state.enabled;
       state.everEnabled ||= next;
       state.enabled = next;
-      state.overlayColor = state.everEnabled ? (next ? "clear" : "faded") : "black";
+      if (state.everEnabled) {
+        state.overlayColor = next ? "clear" : "faded";
+      } else {
+        state.overlayColor = "black";
+      }
 
       const { tabsState } = state;
       Object.keys(tabsState).forEach((key) => (tabsState[key].disabled = !next as boolean));
@@ -98,7 +102,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
 
   const update = useUpdate();
 
-  React.useMemo(() => void (ref as Function)?.(state), []);
+  React.useMemo(() => void (ref as Function)?.(state), []); // functional refs permitted
 
   return (
     <figure
