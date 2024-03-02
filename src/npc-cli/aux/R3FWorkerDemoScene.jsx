@@ -1,11 +1,10 @@
 import React from "react";
-import { CameraControls, Edges, PerspectiveCamera } from "@react-three/drei";
+import { CameraControls, Edges } from "@react-three/drei";
 
 export default function R3FWorkerDemoScene() {
   return <>
-    <CameraControls makeDefault />
+    <CameraControls />
     <ambientLight intensity={1} />
-    <PerspectiveCamera position={[0, 8, 0]} makeDefault />
     <mesh>
       <boxGeometry />
       <meshBasicMaterial color="white" />
