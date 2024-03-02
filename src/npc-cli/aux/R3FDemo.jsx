@@ -113,6 +113,7 @@ const canvasCss = css`
    }
    canvas {
       background-color: white;
+      transition: width 300ms, height 300ms;
    }
    &.disabled {
     canvas {
