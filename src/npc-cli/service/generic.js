@@ -477,6 +477,25 @@ export function visibleUnicodeLength(input) {
   );
 }
 
+//#region logging
+
+/** https://stackoverflow.com/a/26078207/2917822 */
+export const error = (function () {
+  return Function.prototype.bind.call(console.error, console, "\x1b[31mERROR\x1b[0m");
+})();
+
+/** https://stackoverflow.com/a/26078207/2917822 */
+export const info = (function () {
+  return Function.prototype.bind.call(console.info, console, "\x1b[34mINFO\x1b[0m");
+})();
+
+/** https://stackoverflow.com/a/26078207/2917822 */
+export const warn = (function () {
+  return Function.prototype.bind.call(console.warn, console, "\x1b[33mWARN\x1b[0m");
+})();
+
+//#endregion
+
 /**
  * @template {{ key: K}} Value
  * @template {string | number} [K=string|number]
