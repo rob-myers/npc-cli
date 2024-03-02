@@ -27,6 +27,7 @@ export default function R3FDemo(props) {
 
   return gms ? (
     <Canvas
+      frameloop={props.disabled ? 'never' : 'always'}
       gl={{
         // powerPreference: "lower-power", // 🔔 throws
         toneMapping: 4,

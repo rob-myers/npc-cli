@@ -111,7 +111,7 @@
 - ✅ If Tabs enabled, Reset does not disable
 
 - R3FDemo improvements
-  - renderer stops when paused
+  - ✅ renderer stops when paused
   - mouse zooms to point under cursor
   - ✅ initially rotates
   - ✅ fix z-fighting (hack)
