@@ -29,18 +29,18 @@ export function factory(node: TabNode, api: TabsApi) {
 
 export type TabDef = { weight?: number } & (
   | ({
-      type: "component";
-      /** Determines tab */
-      filepath: string;
-      /** Determines component */
-      class: ComponentClassKey;
-    } & TabMetaComponentProps)
+    type: "component";
+    /** Determines tab */
+    filepath: string;
+    /** Determines component */
+    class: ComponentClassKey;
+  } & TabMetaComponentProps)
   | {
-      type: "terminal";
-      /** Session identifier (determines tab) */
-      filepath: string;
-      env?: Record<string, any>;
-    }
+    type: "terminal";
+    /** Session identifier (determines tab) */
+    filepath: string;
+    env?: Record<string, any>;
+  }
 );
 
 export interface TabsDef {
@@ -77,15 +77,15 @@ const classToComponent = {
     loadable: loadable(() => import("src/npc-cli/aux/HelloWorld")),
     get:
       (module: typeof import("src/npc-cli/aux/HelloWorld")) =>
-      (props: React.ComponentProps<(typeof module)["default"]>) =>
-        React.createElement(module.default, { disabled: true, ...props }),
+        (props: React.ComponentProps<(typeof module)["default"]>) =>
+          React.createElement(module.default, { disabled: true, ...props }),
   },
   R3FDemo: {
     loadable: loadable(() => import("src/npc-cli/aux/R3FDemo")),
     get:
       (module: typeof import("src/npc-cli/aux/R3FDemo")) =>
-      (props: React.ComponentProps<(typeof module)["default"]>) =>
-        React.createElement(module.default, { disabled: true, ...props }),
+        (props: React.ComponentProps<(typeof module)["default"]>) =>
+          React.createElement(module.default, { disabled: true, ...props }),
   },
   // SvgNavGraph: {
   //   loadable: loadable(() => import('projects/example/SvgNavGraph')),

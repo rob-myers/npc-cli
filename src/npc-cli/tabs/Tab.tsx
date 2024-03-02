@@ -1,5 +1,4 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 
 import type { TabState, State as TabsApi } from "./Tabs";
 import { TabDef, getComponent, Terminal } from "./tabs.util";
@@ -7,12 +6,16 @@ import { TabDef, getComponent, Terminal } from "./tabs.util";
 export const TabMemo = React.memo(Tab, (prev, next) => prev.disabled === next.disabled);
 
 export function Tab({ def, api, state }: TabProps) {
-  const { data: component } = useQuery({
-    queryKey: def.type === "component" ? ["Tab", def.class] : ["null-query"],
-    async queryFn() {
-      return def.type === "component" ? await getComponent(def) : null;
-    },
-  });
+
+  const [component, setComponent] = React.useState<
+    Awaited<ReturnType<typeof getComponent>> | null
+  >(null);
+
+  React.useEffect(() => {
+    if (def.type === "component") {
+      getComponent(def).then(x => setComponent(() => x));
+    }
+  }, []);
 
   if (def.type === "component") {
     return (

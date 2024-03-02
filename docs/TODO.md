@@ -104,8 +104,11 @@
 ## WIP
 
 - try https://github.com/pmndrs/react-three-offscreen
+- ✅ Tab doesn't need to use react-query
+- If Tabs enabled, Reset re-enables
 
 - R3FDemo improvements
+  - renderer stops when paused
   - mouse zooms to point under cursor
   - fix z-fighting
   - start migrating character controller with soldier.fbx
