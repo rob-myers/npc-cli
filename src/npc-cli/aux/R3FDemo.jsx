@@ -1,22 +1,16 @@
 import React, { Suspense } from "react";
 import * as THREE from "three";
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { geomorphService } from "../service/geomorph";
 import useStateRef from "../hooks/use-state-ref";
 import { Edges, MapControls, PerspectiveCamera } from "@react-three/drei";
 
 /**
- * React-Three-Fiber Demo
+ * React Three Fiber Demo
  * @param {Props} props
  */
 export default function R3FDemo(props) {
-  const state = useStateRef(
-    /** @type {() => State} */ () => ({
-      disabled: !!props.disabled,
-    })
-  );
-
   const { data: gms } = useQuery({
     queryKey: ["R3FDemo"],
     /** @returns {Promise<GeomorphData[]>} */
@@ -29,7 +23,7 @@ export default function R3FDemo(props) {
         return { gmKey, transform, pngRect, debugPngPath: `/assets/debug/${gmKey}.png` };
       });
     },
-    enabled: !state.disabled,
+    enabled: !props.disabled,
   });
 
   return gms ? (
@@ -41,13 +35,7 @@ export default function R3FDemo(props) {
       }}
       style={{ background: "white" }}
     >
-      <MapControls />
-      <ambientLight intensity={1} />
-      <PerspectiveCamera makeDefault position={[0, 4, 0]} rotation={[-Math.PI / 2, 0, 0]} />
-      <Suspense fallback={null}>
-        <Origin />
-        <Geomorphs gms={gms} />
-      </Suspense>
+      <Scene gms={gms} />
     </Canvas>
   ) : null;
 }
@@ -81,38 +69,30 @@ function Origin() {
 }
 
 /**
- * @param {GeomorphsProps} props
+ * @param {SceneProps} props
  */
-function Geomorphs(props) {
-  const state = useStateRef(
-    /** @type {() => GeomorphsState} */ () => ({
-      ready: true,
-      tex: {},
+function Scene(props) {
 
-      mat4s: props.gms.map(
-        (gm, gmId) =>
-          new THREE.Matrix4(
-            gm.transform[0],
-            0,
-            gm.transform[2],
-            gm.transform[4] * scale,
-            // 0, 1, 0, gmId * 0.000001, // hack to fix z-fighting
-            0,
-            1,
-            0,
-            0,
-            gm.transform[1],
-            0,
-            gm.transform[3],
-            gm.transform[5] * scale,
-            0,
-            0,
-            0,
-            1
-          )
-      ),
-    })
-  );
+  const state = useStateRef(/** @type {() => SceneState} */() => ({
+    ready: true,
+    tex: {},
+    mat4s: props.gms.map((gm, gmId) =>
+      new THREE.Matrix4(
+        gm.transform[0], 0, gm.transform[2], gm.transform[4] * scale,
+        0, 1, 0, gmId * 0.0001, // hack to fix z-fighting
+        // 0, 1, 0, 0,
+        gm.transform[1], 0, gm.transform[3], gm.transform[5] * scale,
+        0, 0, 0, 1
+      )
+    ),
+    controls: /** @type {*} */ (null),
+  }));
+
+  state.controls = useThree((state) => /** @type {SceneState['controls']} */(state.controls));
+
+  React.useEffect(() => {
+    state.controls?.setPolarAngle(Math.PI / 4);
+  }, [state.controls]);
 
   const results = useQueries({
     queries: props.gms.map((gm) => ({
@@ -120,10 +100,25 @@ function Geomorphs(props) {
       queryFn: () => textureLoader.loadAsync(gm.debugPngPath),
     })),
   });
+
   props.gms.forEach((gm, gmId) => (state.tex[gm.gmKey] ??= results[gmId].data));
 
   return (
     <>
+      <MapControls
+        makeDefault
+      // ref={x => {
+      //   if (x && (x !== state.controls)) {
+      //     state.controls = x;
+      //     console.log('here', x);
+      //     // state.controls.position0.y = 8;
+      //     // state.controls.setPolarAngle(Math.PI / 4);
+      //   }
+      // }}
+      />
+      <ambientLight intensity={1} />
+      <PerspectiveCamera position={[0, 8, 0]} makeDefault />
+      <Origin />
       {props.gms.map((gm, gmId) => (
         <group key={gmId} onUpdate={(self) => self.applyMatrix4(state.mat4s[gmId])}>
           {state.tex[gm.gmKey] && (
@@ -138,10 +133,10 @@ function Geomorphs(props) {
                 // color="#999"
                 // toneMapped={false}
                 map={state.tex[gm.gmKey]}
-                // emissive={new THREE.Color(0.1, 0.1, 0.1)}
-                // Improves look, but causes issue with hull overlap
-                // 🚧 try simulating in geomorph-render instead
-                // alphaMap={state.tex[gm.gmKey]}
+              // emissive={new THREE.Color(0.1, 0.1, 0.1)}
+              // Improves look, but causes issue with hull overlap
+              // 🚧 try simulating in geomorph-render instead
+              // alphaMap={state.tex[gm.gmKey]}
               />
               {/* <Edges
                 // scale={1.1}
@@ -158,15 +153,16 @@ function Geomorphs(props) {
 }
 
 /**
- * @typedef GeomorphsProps
+ * @typedef SceneProps
  * @property {GeomorphData[]} gms
- */
+*/
 
 /**
- * @typedef GeomorphsState
+ * @typedef SceneState
  * @property {boolean} ready
  * @property {Partial<Record<Geomorph.GeomorphKey, THREE.Texture>>} tex
  * @property {THREE.Matrix4[]} mat4s
+ * @property {import('three-stdlib').MapControls} controls
  */
 
 const gmScale = 1;

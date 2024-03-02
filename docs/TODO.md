@@ -110,7 +110,8 @@
 - R3FDemo improvements
   - renderer stops when paused
   - mouse zooms to point under cursor
-  - fix z-fighting
+  - ✅ initially rotates
+  - ✅ fix z-fighting (hack)
   - start migrating character controller with soldier.fbx
     - https://discourse.threejs.org/t/character-controller/46936
 
