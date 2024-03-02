@@ -7,7 +7,6 @@ import { afterBreakpoint, breakpoint } from "./const";
 import { isTouchDevice } from "src/npc-cli/service/dom";
 
 import { State } from "./Viewer";
-import Spinner from "./Spinner";
 import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "./Icon";
 import Toggle from "./Toggle";
 import useLongPress from "src/npc-cli/hooks/use-long-press";
@@ -123,38 +122,22 @@ export default function ViewerControls({ api }: Props) {
   const update = useUpdate();
 
   return (
-    <>
-      <button
-        onClick={state.onEnable}
-        className={cx(interactOverlayCss, { enabled: api.tabs.enabled, collapsed: !site.viewOpen })}
-      >
-        {site.browserLoaded ? "interact" : <Spinner size={24} />}
+    <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
+      <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
+        <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
       </button>
-
-      <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
-        <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
-          <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
-        </button>
-        <button title="reset tabs" {...resetHandlers}>
-          <FontAwesomeIcon icon={faRefreshThin} size="1x" />
-        </button>
-        <button title="max/min tabs" onClick={state.onMaximize}>
-          <FontAwesomeIcon icon={faExpandThin} size="1x" />
-        </button>
-        <Toggle
-          onClick={() => state.toggleCollapsed()}
-          className={cx(viewerToggleCss, { collapsed: !site.viewOpen })}
-          flip={!site.viewOpen ? "horizontal" : undefined}
-        />
-      </div>
-
-      <div
-        className={cx(faderOverlayCss, {
-          clear: api.tabs.overlayColor === "clear",
-          faded: api.tabs.overlayColor === "faded",
-        })}
+      <button title="reset tabs" {...resetHandlers}>
+        <FontAwesomeIcon icon={faRefreshThin} size="1x" />
+      </button>
+      <button title="max/min tabs" onClick={state.onMaximize}>
+        <FontAwesomeIcon icon={faExpandThin} size="1x" />
+      </button>
+      <Toggle
+        onClick={() => state.toggleCollapsed()}
+        className={cx(viewerToggleCss, { collapsed: !site.viewOpen })}
+        flip={!site.viewOpen ? "horizontal" : undefined}
       />
-    </>
+    </div>
   );
 }
 
@@ -162,43 +145,6 @@ interface Props {
   /** Viewer API */
   api: State;
 }
-
-const interactOverlayCss = css`
-  position: absolute;
-  z-index: 5;
-
-  @media (min-width: ${afterBreakpoint}) {
-    left: var(--view-bar-size);
-    top: 0;
-    width: calc(100% - var(--view-bar-size));
-    height: 100%;
-  }
-  @media (max-width: ${breakpoint}) {
-    left: 0;
-    top: var(--view-bar-size);
-    width: 100%;
-    height: calc(100% - var(--view-bar-size));
-  }
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, 0);
-  color: white;
-  cursor: pointer;
-  user-select: none;
-
-  letter-spacing: 2px;
-
-  &.enabled {
-    pointer-events: none;
-    opacity: 0;
-  }
-  &.collapsed {
-    display: none;
-  }
-`;
 
 const buttonsCss = css`
   z-index: 5;
@@ -262,39 +208,5 @@ const viewerToggleCss = css`
     transform: rotate(90deg);
     margin-left: 1rem;
     margin-right: 1rem;
-  }
-`;
-
-const faderOverlayCss = css`
-  position: absolute;
-  z-index: 4;
-  background: rgba(1, 1, 1, 1);
-
-  @media (min-width: ${afterBreakpoint}) {
-    left: var(--view-bar-size);
-    top: 0;
-    width: calc(100% + (-1 * var(--view-bar-size)));
-    height: 100%;
-  }
-  @media (max-width: ${breakpoint}) {
-    left: 0;
-    top: var(--view-bar-size);
-    width: 100%;
-    height: calc(100% + (-1 * var(--view-bar-size)));
-  }
-
-  opacity: 1;
-  transition: opacity 1s ease-in;
-  &.clear {
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-  }
-  &.faded {
-    opacity: 0.5;
-    transition: opacity 0.5s ease-in;
-  }
-
-  &:not(.faded) {
-    pointer-events: none;
   }
 `;

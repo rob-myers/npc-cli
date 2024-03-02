@@ -4,6 +4,7 @@ import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
 import { css, cx } from "@emotion/css";
 
+import { afterBreakpoint, breakpoint } from "src/components/const";
 import {
   TabDef,
   TabsDef,
@@ -14,6 +15,7 @@ import {
 } from "./tab-factory";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import Spinner from "src/components/Spinner";
 
 export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef<State>(() => ({
@@ -52,6 +54,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       const { tabsState } = state;
       Object.keys(tabsState).forEach((key) => (tabsState[key].disabled = !next as boolean));
       update();
+      props.onToggled?.(next);
     },
   }));
 
@@ -104,7 +107,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
 
   React.useMemo(() => void (ref as Function)?.(state), []); // functional refs permitted
 
-  return (
+  return <>
     <figure
       key={state.resetCount}
       className={cx("tabs", tabsCss)}
@@ -127,11 +130,28 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
         />
       )}
     </figure>
-  );
+
+    <button
+      onClick={() => state.toggleEnabled()}
+      className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
+    >
+      {props.browserLoaded ? "interact" : <Spinner size={24} />}
+    </button>
+
+    <div
+      className={cx(faderOverlayCss, {
+        clear: state.overlayColor === "clear",
+        faded: state.overlayColor === "faded",
+      })}
+    />
+  </>;
 });
 
 export interface Props extends TabsDef {
   rootOrientationVertical?: boolean;
+  collapsed: boolean;
+  browserLoaded: boolean;
+  onToggled?(next: boolean): void;
 }
 
 export interface State {
@@ -212,5 +232,76 @@ const tabsCss = css`
       color: red;
       font-size: 1.2rem;
     }
+  }
+`;
+
+const interactOverlayCss = css`
+  position: absolute;
+  z-index: 5;
+
+  @media (min-width: ${afterBreakpoint}) {
+    left: var(--view-bar-size);
+    top: 0;
+    width: calc(100% - var(--view-bar-size));
+    height: 100%;
+  }
+  @media (max-width: ${breakpoint}) {
+    left: 0;
+    top: var(--view-bar-size);
+    width: 100%;
+    height: calc(100% - var(--view-bar-size));
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0);
+  color: white;
+  cursor: pointer;
+  user-select: none;
+
+  letter-spacing: 2px;
+
+  &.enabled {
+    pointer-events: none;
+    opacity: 0;
+  }
+  &.collapsed {
+    display: none;
+  }
+`;
+
+const faderOverlayCss = css`
+  position: absolute;
+  z-index: 4;
+  background: rgba(1, 1, 1, 1);
+
+  @media (min-width: ${afterBreakpoint}) {
+    left: var(--view-bar-size);
+    top: 0;
+    width: calc(100% + (-1 * var(--view-bar-size)));
+    height: 100%;
+  }
+  @media (max-width: ${breakpoint}) {
+    left: 0;
+    top: var(--view-bar-size);
+    width: 100%;
+    height: calc(100% + (-1 * var(--view-bar-size)));
+  }
+
+  opacity: 1;
+  transition: opacity 1s ease-in;
+  &.clear {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+  }
+  &.faded {
+    opacity: 0.5;
+    transition: opacity 0.5s ease-in;
+  }
+
+  &:not(.faded) {
+    pointer-events: none;
   }
 `;

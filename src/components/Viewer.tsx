@@ -41,7 +41,7 @@ export default function Viewer() {
       className={cx(viewerCss, { collapsed: !site.viewOpen })}
       data-testid="viewer"
       ref={(el) => el && (state.rootEl = el)}
-      style={
+      style={// 🚧 move to CSS
         site.browserLoaded && !site.viewOpen
           ? useSite.api.isSmall()
             ? { minHeight: "0%" }
@@ -53,7 +53,9 @@ export default function Viewer() {
       <Tabs
         ref={(x) => x && (state.tabs = x)}
         id="viewer-tabs"
+        browserLoaded={site.browserLoaded}
         initEnabled={false}
+        collapsed={!site.viewOpen}
         tabs={[
           [
             {
@@ -88,6 +90,7 @@ export default function Viewer() {
           ],
         ]}
         persistLayout
+        onToggled={update}
       />
     </aside>
   );
