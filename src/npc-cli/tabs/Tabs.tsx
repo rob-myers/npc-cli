@@ -11,7 +11,7 @@ import {
   createOrRestoreJsonModel,
   factory,
   storeModelAsJson,
-} from "./tabs.util";
+} from "./tab-factory";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 

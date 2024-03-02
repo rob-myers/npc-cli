@@ -1,7 +1,7 @@
 import React from "react";
 
 import type { TabState, State as TabsApi } from "./Tabs";
-import { TabDef, getComponent, Terminal } from "./tabs.util";
+import { TabDef, getComponent, Terminal } from "./tab-factory";
 
 export const TabMemo = React.memo(Tab, (prev, next) => prev.disabled === next.disabled);
 
