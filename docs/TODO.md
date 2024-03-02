@@ -103,9 +103,12 @@
 
 ## WIP
 
-- try https://github.com/pmndrs/react-three-offscreen
+- 🚧 try https://github.com/pmndrs/react-three-offscreen
+  - create simple demo
+  - add prop-passing via messaging
+  - try migrate R3FDemo
 - ✅ Tab doesn't need to use react-query
-- If Tabs enabled, Reset re-enables
+- ✅ If Tabs enabled, Reset does not disable
 
 - R3FDemo improvements
   - renderer stops when paused
@@ -117,6 +120,7 @@
 
 - start GeomorphEdit
 
+- Terminal crashing during HMR
 - (hull) walls -> quads
 - need to remove labels from hull symbol image?
 

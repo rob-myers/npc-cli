@@ -33,8 +33,9 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     },
     reset() {
       state.tabsState = {};
-      state.enabled = state.everEnabled = false;
-      state.overlayColor = "black";
+      if (!state.enabled) {
+        state.everEnabled = false;
+      }
       state.resetCount++; // Remount
       update();
     },
