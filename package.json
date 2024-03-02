@@ -35,6 +35,7 @@
     "@mdx-js/react": "^2.3.0",
     "@react-three/drei": "^9.99.5",
     "@react-three/fiber": "^8.15.16",
+    "@react-three/offscreen": "^0.0.8",
     "@tanstack/react-query": "^5.17.19",
     "braces": "^3.0.2",
     "cli-columns": "^4.0.0",
