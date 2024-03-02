@@ -105,6 +105,7 @@
 
 - 🚧 try https://github.com/pmndrs/react-three-offscreen
   - ✅ create simple demo
+  - ✅ fixing resizing
   - 🚧 add prop-passing via messaging
   - try migrate R3FDemo
 - ✅ Tab doesn't need to use react-query
