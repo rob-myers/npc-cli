@@ -76,7 +76,7 @@ export default function ViewerControls({ api }: Props) {
         let percent = useSite.api.isSmall()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
-            (window.innerWidth - useSite.api.getNavWidth());
+          (window.innerWidth - useSite.api.getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
@@ -135,11 +135,11 @@ export default function ViewerControls({ api }: Props) {
         <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
           <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
         </button>
-        <button title="max/min tabs" onClick={state.onMaximize}>
-          <FontAwesomeIcon icon={faExpandThin} size="1x" />
-        </button>
         <button title="reset tabs" {...resetHandlers}>
           <FontAwesomeIcon icon={faRefreshThin} size="1x" />
+        </button>
+        <button title="max/min tabs" onClick={state.onMaximize}>
+          <FontAwesomeIcon icon={faExpandThin} size="1x" />
         </button>
         <Toggle
           onClick={() => state.toggleCollapsed()}
