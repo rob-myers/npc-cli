@@ -1,6 +1,6 @@
 import * as htmlparser2 from "htmlparser2";
 import { Mat, Poly, Rect } from "../geom";
-import { assertDefined, parseJsArg } from "./generic";
+import { assertDefined, info, parseJsArg, warn } from "./generic";
 import { geom } from "./geom";
 
 class GeomorphService {
@@ -20,10 +20,9 @@ class GeomorphService {
     } else if (tagName === "path") {
       poly =
         geom.svgPathToPolygon(a.d) ??
-        (console.warn(`extractGeom: path must be single connected polygon with ≥ 0 holes`, a),
-        null);
+        (warn(`extractGeom: path must be single connected polygon with ≥ 0 holes`, a), null);
     } else {
-      console.warn(`extractGeom: ${tagName}: unexpected tagName`, a);
+      warn(`extractGeom: ${tagName}: unexpected tagName`, a);
     }
 
     // DOMMatrix not available server-side
@@ -33,9 +32,7 @@ class GeomorphService {
         if (!a.x || !a.y) {
           // broken when <path> lacks attribs x, y
           // 🚧 try computing bounding box of `pathEl.d`
-          console.warn(
-            `${title}: ${tagName}: unsupported "transform-box: fill-box" without x and y`
-          );
+          warn(`${title}: ${tagName}: unsupported "transform-box: fill-box" without x and y`);
         }
         transformOrigin.x += Number(a.x ?? "0");
         transformOrigin.y += Number(a.y ?? "0");
@@ -100,7 +97,7 @@ class GeomorphService {
       };
     } else {
       transformOrigin &&
-        console.warn(
+        warn(
           `extractTransformData: ${tagMeta.tagName}: ignored transform-origin with format "${transformOrigin}"`
         );
       return { transformOrigin: null, transformBox };
@@ -204,8 +201,7 @@ class GeomorphService {
       obstacles,
       pngRect:
         pngRect ??
-        (console.info(`${symbolKey} is using viewBox for pngRect ${JSON.stringify(pngRect)}`),
-        viewBoxRect),
+        (info(`${symbolKey} is using viewBox for pngRect ${JSON.stringify(pngRect)}`), viewBoxRect),
       unsorted,
       walls,
     };
