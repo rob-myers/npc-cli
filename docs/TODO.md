@@ -80,8 +80,6 @@
 
 - ✅ ensure Tab components are lazy-loaded
 
-## WIP
-
 - ❌ pivot to NPC fixes in repo `the-last-redoubt`
   - Spine-based animation not good enough
   - too many other issues e.g. collisions
@@ -103,7 +101,17 @@
 
 - ✅ add working react-three-fiber demo R3FDemo
 
-- 🚧 R3FDemo mouse zooms to point under cursor
+## WIP
+
+- try https://github.com/pmndrs/react-three-offscreen
+
+- R3FDemo improvements
+  - mouse zooms to point under cursor
+  - fix z-fighting
+  - start migrating character controller with soldier.fbx
+    - https://discourse.threejs.org/t/character-controller/46936
+
+- start GeomorphEdit
 
 - (hull) walls -> quads
 - need to remove labels from hull symbol image?
