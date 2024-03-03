@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
+import useMeasure from "react-use-measure";
 
 // import { Canvas } from "@react-three/fiber";
 // import Scene from "./R3FWorkerDemoScene";
 import { Canvas } from '@react-three/offscreen';
-import useMeasure from "react-use-measure";
 const Scene = React.lazy(() => import('./R3FWorkerDemoScene'));
 
 const worker = new Worker(new URL('./worker.jsx', import.meta.url), { type: 'module' })
@@ -35,9 +35,10 @@ export default function R3FWorkerDemo(props) {
   return (
     <div
       ref={measureRef}
-      style={{ height: '100%' }}
+      style={{ height: '100%', visibility: props.disabled ? 'hidden' : 'visible' }}
     >
       <Canvas
+        frameloop={props.disabled ? 'never' : 'demand'}
         fallback={<Scene />}
         worker={worker}
       />
