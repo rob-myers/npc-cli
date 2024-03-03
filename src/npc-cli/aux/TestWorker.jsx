@@ -5,6 +5,9 @@ import { css, cx } from "@emotion/css";
 // import { Canvas } from "@react-three/fiber";
 // import Scene from "./R3FWorkerDemoScene";
 import { Canvas } from '@react-three/offscreen';
+import useStateRef from "../hooks/use-state-ref";
+import debounce from "debounce";
+import useUpdate from "../hooks/use-update";
 const Scene = React.lazy(() => import('./TestWorkerScene'));
 
 const worker = new Worker(new URL('./worker.jsx', import.meta.url), { type: 'module' })
@@ -19,9 +22,17 @@ const worker = new Worker(new URL('./worker.jsx', import.meta.url), { type: 'mod
  */
 export default function TestWorker(props) {
 
+  const state = useStateRef(() => ({
+    resizing: false,
+    finishedResizing: debounce(() => {
+      state.resizing = false;
+      update();
+    }, 300),
+  }));
+
   const [measureRef, rect] = useMeasure();
 
-  React.useEffect(() => {
+  React.useMemo(() => {
     worker.postMessage({
       type: 'resize',
       payload: {
@@ -31,15 +42,20 @@ export default function TestWorker(props) {
         left: 0,
       },
     });
+    state.resizing = true;
+    state.finishedResizing();
   }, [rect.width, rect.height]);
+
+  const update = useUpdate();
 
   return (
     <div
       ref={measureRef}
-      className={cx(testWorkerCss, { disabled: props.disabled })}
+      className={cx(testWorkerCss, { hidden: props.disabled || state.resizing })}
     >
       <Canvas
         frameloop={props.disabled ? 'never' : 'demand'}
+        resize={{ debounce: 300, scroll: false }}
         fallback={<Scene />}
         worker={worker}
       />
@@ -56,7 +72,8 @@ const testWorkerCss = css`
   height: 100%;
   opacity: 1;
   transition: opacity 500ms;
-  &.disabled {
+  &.hidden {
     opacity: 0;
+    transition: opacity 0ms;
   }
 `;
