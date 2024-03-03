@@ -18,10 +18,11 @@ export default function Nav() {
       const el = e.target as HTMLElement;
       if (el.classList.contains(sidebarClasses.container)) {
         state.toggleCollapsed(); // outside buttons
+        return;
       }
-      const anchorEl = el.querySelector('a');
-      if (anchorEl) {
-        navigate(anchorEl.href);
+      const anchorEl = el.querySelectorAll("a");
+      if (anchorEl.length === 1) {
+        navigate(anchorEl[0].href);
       }
     },
     toggleCollapsed() {
