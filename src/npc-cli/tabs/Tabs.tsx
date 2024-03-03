@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Actions, Layout as FlexLayout, TabNode } from "flexlayout-react";
+import { Actions, Layout as FlexLayout, TabNode, TabSetNode } from "flexlayout-react";
 import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
 import { css, cx } from "@emotion/css";
@@ -66,9 +66,16 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       if (node.getType() !== "tab") {
         return;
       }
+
       node.setEventListener("visibility", async ({ visible }) => {
         const [key, tabDef] = [node.getId(), (node as TabNode).getConfig() as TabDef];
-        state.tabsState[key] ??= { key, disabled: false, everVis: false };
+        state.tabsState[key] ??= {
+          key,
+          type: tabDef.type,
+          disabled: false,
+          everUncovered: false,
+          justCovered: false,
+        };
 
         if (!visible) {
           if (tabDef.type === "component") {
@@ -82,17 +89,8 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
           }
 
           state.tabsState[key].disabled = false;
-          if (tabDef.type === "terminal") {
-            // 🚧 Ensure scrollbar appears if exceeded scroll area when hidden
-            // const { default: useSessionStore } = await import("projects/sh/session.store");
-            // const session = useSessionStore.api.getSession(getTabIdentifier(tabMeta));
-            // session?.ttyShell.xterm.forceResize();
-          }
-
           const maxNode = model.getMaximizedTabset()?.getSelectedNode();
-          // According to flexlayout-react, a selected tab is "visible" when obscured by a maximised tab.
-          // We prevent rendering in such cases
-          state.tabsState[key].everVis ||= maxNode ? node === maxNode : true;
+          state.tabsState[key].everUncovered ||= maxNode ? node === maxNode : true;
           setTimeout(update); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
         }
       });
@@ -105,7 +103,8 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
 
   const update = useUpdate();
 
-  React.useMemo(() => void (ref as Function)?.(state), []); // functional refs permitted
+  // we support initial functional ref
+  React.useMemo(() => void (ref as Function)?.(state), []);
 
   return <>
     <figure
@@ -120,10 +119,28 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
           realtimeResize
           onModelChange={debounce(() => storeModelAsJson(props.id, model), 300)}
           onAction={(act) => {
-            if (act.type === Actions.MAXIMIZE_TOGGLE && model.getMaximizedTabset()) {
-              // We are minimizing a maximized tab
-              Object.values(state.tabsState).forEach((x) => (x.everVis = true));
-              update();
+            if (act.type === Actions.MAXIMIZE_TOGGLE) {
+              if (model.getMaximizedTabset()) {
+                // On minimise, enable justCovered tabs
+                Object.values(state.tabsState).forEach((x) => {
+                  x.justCovered && (x.disabled = false);
+                  x.everUncovered = true;
+                  x.justCovered = false;
+                });
+                update();
+              } else {
+                // On maximise, disable hidden non-terminal tabs
+                const maxIds = (model.getNodeById(act.data.node) as TabSetNode).getChildren().map(x => x.getId());
+                model.visitNodes((node) => {
+                  const id = node.getId();
+                  const meta = state.tabsState[id];
+                  if (node.getType() === "tab" && !maxIds.includes(id) && meta?.type === 'component') {
+                    !meta.disabled && (meta.justCovered = true);
+                    meta.disabled = true;
+                  }
+                  update();
+                });
+              }
             }
             return act;
           }}
@@ -172,8 +189,17 @@ export interface State {
 export interface TabState {
   /** Tab identifier */
   key: string;
+  type: TabDef['type'];
   disabled: boolean;
-  everVis: boolean;
+  /**
+   * `false` iff some other tab has always been maximised.
+   * 
+   * According to flexlayout-react, a selected tab is visible when obscured by a maximised tab.
+   * We prevent rendering in such cases
+   */
+  everUncovered: boolean;
+  /** True iff was just covered by a maximised tab */
+  justCovered: boolean;
 }
 
 const tabsCss = css`

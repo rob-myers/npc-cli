@@ -14,7 +14,7 @@ import { TabMemo } from "./Tab";
 
 export function factory(node: TabNode, api: TabsApi) {
   const state = api.tabsState[node.getId()];
-  if (state?.everVis) {
+  if (state?.everUncovered) {
     // console.debug(`rendering "${node.getId()}"`, state.disabled);
     return React.createElement(TabMemo, {
       def: node.getConfig() as TabDef,

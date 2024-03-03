@@ -107,14 +107,6 @@
 - ❌ No resize Canvas when not rendering
   - part of `Canvas`
 
-## WIP
-
-- 🚧 try https://github.com/pmndrs/react-three-offscreen
-  - ✅ create simple demo
-  - ✅ fixing resizing
-  - 🚧 add prop-passing via messaging
-  - try migrate R3FDemo
-
 - ✅ R3FDemo (TestWorld) improvements
   - ✅ renderer stops when paused
   - ✅ mouse zooms to point under cursor
@@ -125,6 +117,17 @@
   - ✅ "Preserve" R3FDemo height when disabled
   - ❌ start migrating character controller with soldier.fbx
     - https://discourse.threejs.org/t/character-controller/46936
+
+## WIP
+
+- 🚧 try https://github.com/pmndrs/react-three-offscreen
+  - ✅ create simple demo
+  - ✅ fixing resizing
+  - 🚧 add prop-passing via messaging
+  - try migrate R3FDemo
+
+- ✅ non-terminal tab disabled when other tab maximized
+  - TestWorker was showing when Tab was minimized
 
 - CharacterController
   - simple demo using https://github.com/pmndrs/ecctrl
