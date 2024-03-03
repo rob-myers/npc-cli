@@ -155,6 +155,9 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
                 });
               }
             }
+            if (act.type === Actions.ADJUST_SPLIT) {
+              state.focusRoot();
+            }
             return act;
           }}
         />
@@ -165,7 +168,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       onClick={() => state.toggleEnabled()}
       className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
     >
-      {props.browserLoaded ? "interact" : <Spinner size={24} />}
+      <div>{props.browserLoaded ? "interact" : <Spinner size={24} />}</div>
     </button>
 
     <div
@@ -297,11 +300,8 @@ const interactOverlayCss = css`
   align-items: center;
 
   background: rgba(0, 0, 0, 0);
-  color: white;
   cursor: pointer;
   user-select: none;
-
-  letter-spacing: 2px;
 
   &.enabled {
     pointer-events: none;
@@ -309,6 +309,13 @@ const interactOverlayCss = css`
   }
   &.collapsed {
     display: none;
+  }
+
+  > div {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: white;
+    filter: drop-shadow(0 2px #006)
   }
 `;
 
