@@ -22,6 +22,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     enabled: false,
     everEnabled: false,
     overlayColor: "black",
+    prevFocused: null,
     resetCount: 0,
     rootEl: null as any,
     tabsState: {},
@@ -32,15 +33,6 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     hardReset() {
       clearModelFromStorage(props.id);
       state.reset();
-    },
-    // 🚧 move to Viewer?
-    onKeyDown(e) {
-      if (e.key === 'Escape' && state.enabled) {
-        state.toggleEnabled();
-      }
-      if (e.key === 'Enter' && !state.enabled) {
-        state.toggleEnabled();
-      }
     },
     reset() {
       state.tabsState = {};
@@ -60,11 +52,20 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
         state.overlayColor = "black";
       }
 
+      if (next) {
+        const prevFocused = state.prevFocused;
+        state.prevFocused = null;
+        // setTimeout prevents enter propagating to Terminal
+        setTimeout(() => (prevFocused || state.rootEl).focus());
+      } else {
+        state.prevFocused = document.activeElement as HTMLElement | null;
+        state.rootEl.focus();
+      }
+
       const { tabsState } = state;
       Object.keys(tabsState).forEach((key) => (tabsState[key].disabled = !next as boolean));
       update();
 
-      state.focusRoot(); // 🚧 focus previous tab instead?
       props.onToggled?.(next);
     },
   }));
@@ -123,7 +124,6 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       className={cx("tabs", tabsCss)}
       ref={(x) => x && (state.rootEl = x)}
       tabIndex={0}
-      onKeyDown={state.onKeyDown}
     >
       {state.everEnabled && (
         <FlexLayout
@@ -189,13 +189,13 @@ export interface State {
   everEnabled: boolean;
   /** Initially `black` afterwards `faded` or `clear` */
   overlayColor: "black" | "faded" | "clear";
+  prevFocused: null | HTMLElement;
   resetCount: number;
   rootEl: HTMLElement;
   /** By tab identifier */
   tabsState: Record<string, TabState>;
   focusRoot(): void;
   hardReset(): void;
-  onKeyDown(e: React.KeyboardEvent): void;
   reset(): void;
   toggleEnabled(next?: boolean): void;
 }

@@ -23,6 +23,14 @@ export default function Viewer() {
         !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
         update();
       }, 1000),
+      onKeyDown(e) {
+        if (e.key === 'Escape' && state.tabs.enabled) {
+          state.tabs.toggleEnabled();
+        }
+        if (e.key === 'Enter' && !state.tabs.enabled) {
+          state.tabs.toggleEnabled();
+        }
+      },
       rootEl: null as any,
       tabs: {} as TabsState,
     })
@@ -48,6 +56,8 @@ export default function Viewer() {
             : { minWidth: "0%" }
           : undefined
       }
+      tabIndex={0}
+      onKeyDown={state.onKeyDown}
     >
       <ViewerControls api={state} />
       <Tabs
@@ -98,6 +108,7 @@ export default function Viewer() {
 
 export interface State {
   onChangeIntersect(intersects: boolean): void;
+  onKeyDown(e: React.KeyboardEvent): void;
   rootEl: HTMLElement;
   /** Tabs API */
   tabs: TabsState;

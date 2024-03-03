@@ -129,7 +129,8 @@
 - ✅ non-terminal tab disabled when other tab maximized
   - TestWorker was showing when Tab was minimized
 
-- 🚧 Can Esc/Enter to enable/disable in Terminal/Tabs
+- ✅ Can Esc/Enter to enable/disable in Terminal/Tabs
+- Terminal uses WebGL
 
 - CharacterController
   - simple demo using https://github.com/pmndrs/ecctrl
