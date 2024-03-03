@@ -12,7 +12,7 @@ export function Tab({ def, api, state }: TabProps) {
   >(null);
 
   React.useEffect(() => {
-    if (def.type === "component") {
+    if (def.type === "component" && !component) {
       getComponent(def).then(x => setComponent(() => x));
     }
   }, []);
