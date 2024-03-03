@@ -39,13 +39,13 @@ export function Tab({ def, api, state }: TabProps) {
         }}
         onKey={(e) => {
           if (e.key === "Escape" && api.enabled) {
-            api.toggleEnabled();
-            // Prevent subsequent Enter from propagating to TTY
             api.focusRoot();
-          }
-          if (e.key === "Enter" && !api.enabled) {
             api.toggleEnabled();
           }
+          // Prevent subsequent Enter from propagating to TTY
+          // if (e.key === "Enter" && !api.enabled) {
+          //   api.toggleEnabled();
+          // }
         }}
       />
     );

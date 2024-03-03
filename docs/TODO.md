@@ -129,11 +129,17 @@
 - ✅ non-terminal tab disabled when other tab maximized
   - TestWorker was showing when Tab was minimized
 
+- 🚧 Can Esc/Enter to enable/disable in Terminal/Tabs
+
 - CharacterController
   - simple demo using https://github.com/pmndrs/ecctrl
   - change character
   - click to move
   - extract code, removing e.g. ray-cast
+
+- Learn about WebGl RenderTargets
+  - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
+  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 
 - start GeomorphEdit
   - migrate Triangle

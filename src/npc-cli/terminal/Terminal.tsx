@@ -26,7 +26,7 @@ export default function Terminal(props: Props) {
 
   const state = useStateRef(() => ({
     bounds,
-    cleanup: () => {},
+    cleanup: () => { },
     container: {} as HTMLDivElement,
     cursorBeforePause: undefined as number | undefined,
     fitAddon: new FitAddon(),
@@ -113,7 +113,12 @@ export default function Terminal(props: Props) {
       });
       state.xterm.initialise();
 
-      const onKeyDisposable = xterm.onKey((e) => props.onKey?.(e.domEvent));
+      const onKeyDisposable = xterm.onKey((e) => {
+        if (e.domEvent.key === 'Escape') {
+          state.xterm.xterm.textarea?.blur();
+        }
+        props.onKey?.(e.domEvent);
+      });
       xterm.loadAddon(state.fitAddon);
       xterm.open(state.container);
       state.resize();

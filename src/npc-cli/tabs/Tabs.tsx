@@ -33,6 +33,15 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       clearModelFromStorage(props.id);
       state.reset();
     },
+    // 🚧 move to Viewer?
+    onKeyDown(e) {
+      if (e.key === 'Escape' && state.enabled) {
+        state.toggleEnabled();
+      }
+      if (e.key === 'Enter' && !state.enabled) {
+        state.toggleEnabled();
+      }
+    },
     reset() {
       state.tabsState = {};
       if (!state.enabled) {
@@ -54,6 +63,8 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       const { tabsState } = state;
       Object.keys(tabsState).forEach((key) => (tabsState[key].disabled = !next as boolean));
       update();
+
+      state.focusRoot(); // 🚧 focus previous tab instead?
       props.onToggled?.(next);
     },
   }));
@@ -111,6 +122,8 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       key={state.resetCount}
       className={cx("tabs", tabsCss)}
       ref={(x) => x && (state.rootEl = x)}
+      tabIndex={0}
+      onKeyDown={state.onKeyDown}
     >
       {state.everEnabled && (
         <FlexLayout
@@ -182,6 +195,7 @@ export interface State {
   tabsState: Record<string, TabState>;
   focusRoot(): void;
   hardReset(): void;
+  onKeyDown(e: React.KeyboardEvent): void;
   reset(): void;
   toggleEnabled(next?: boolean): void;
 }
