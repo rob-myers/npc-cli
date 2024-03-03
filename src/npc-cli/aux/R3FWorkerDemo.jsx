@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import useMeasure from "react-use-measure";
 
 // import { Canvas } from "@react-three/fiber";

@@ -63,7 +63,7 @@ export class Rect {
 
   /** @returns {Geom.RectJson} */
   get json() {
-    return { 
+    return {
       x: this.x,
       y: this.y,
       width: this.width,
@@ -177,7 +177,7 @@ export class Rect {
    * @param {Geom.VectJson[]} items
    */
   static fromPoints(...items) {
-    return (new Rect).setFromPoints(...items);
+    return (new Rect()).setFromPoints(...items);
   }
 
   /** 
@@ -213,7 +213,7 @@ export class Rect {
     }
     return this;
   }
- 
+
   integerOrds() {
     this.x = Math.floor(this.x);
     this.y = Math.floor(this.y);

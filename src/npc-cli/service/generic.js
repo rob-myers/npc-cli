@@ -63,7 +63,7 @@ export function computeCliques(items, related) {
     }
     agg.push([item]); // New clique
     return agg;
-  }, /** @type {T[][]} */ ([[]]));
+  }, /** @type {T[][]} */([[]]));
 }
 
 /**
@@ -98,9 +98,9 @@ function* deepKeys(t, path = []) {
  */
 export class Deferred {
   /** @type {(value: T | PromiseLike<T>) => void} */
-  resolve = () => {};
+  resolve = () => { };
   /** @type {(reason?: any) => void} */
-  reject = () => {};
+  reject = () => { };
   /** @type {Promise<T>} */
   promise = new Promise((resolve, reject) => {
     this.resolve = resolve;
@@ -223,11 +223,11 @@ export function generateSelector(selector, extraArgs) {
     return function selectByStr(x, ...xs) {
       const selected = /** @type {string} */ (selector).split(".").reduce(
         (agg, part) => (x = agg)[part], // x is parent of possible function
-        /** @type {*} */ (x)
+        /** @type {*} */(x)
       ); // If we selected a function, invoke it
       return typeof selected === "function"
         ? // ℹ️ Forwarding ...xs can break invocation
-          selected.call(x, ...(extraArgs ?? []))
+        selected.call(x, ...(extraArgs ?? []))
         : selected;
     };
   }
@@ -291,6 +291,7 @@ export function mapValues(input, transform) {
 export function parseJsArg(input) {
   try {
     if (input === "") return input;
+    // eslint-disable-next-line no-new-func
     return Function(`return ${input}`)();
   } catch (e) {
     return input;
@@ -413,7 +414,7 @@ function tryJsonStringify(input) {
       }
       return v;
     });
-  } catch {}
+  } catch { }
 }
 
 /**

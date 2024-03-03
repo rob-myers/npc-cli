@@ -58,6 +58,7 @@ export default function R3FDemo(props) {
 
   React.useMemo(() => {
     state.rootEl && state.handleDisabledResize();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.disabled, rect.width, rect.height]);
 
   return (

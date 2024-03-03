@@ -59,7 +59,7 @@ const utilFunctionsRunDefs = [
     /** Combines map (singleton), filter (empty array) and split (of arrays) */
     flatMap: async function* (ctxt) {
       let { api, args, datum } = ctxt,
-        result;
+        result; // eslint-disable-next-line no-new-func
       const func = Function(`return ${args[0]}`)();
       while ((datum = await api.read(true)) !== api.eof)
         if (api.isDataChunk(datum)) yield api.dataChunk(datum.items.flatMap((x) => func(x, ctxt)));
@@ -68,7 +68,7 @@ const utilFunctionsRunDefs = [
     },
 
     /** Execute a javascript function */
-    call: async function* (ctxt) {
+    call: async function* (ctxt) {// eslint-disable-next-line no-new-func
       const func = Function(`return ${ctxt.args[0]}`)();
       ctxt.args = ctxt.args.slice(1);
       yield await func(ctxt);
@@ -93,7 +93,7 @@ const utilFunctionsRunDefs = [
 
     /** Reduce all items from stdin */
     reduce: async function* ({ api, args, datum }) {
-      const inputs = [];
+      const inputs = []; // eslint-disable-next-line no-new-func
       const reducer = Function(`return ${args[0]}`)();
       while ((datum = await api.read(true)) !== api.eof)
         // Spread throws: Maximum call stack size exceeded
