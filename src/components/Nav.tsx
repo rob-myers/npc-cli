@@ -91,6 +91,7 @@ const navCss = css`
 
   .${menuClasses.subMenuContent} {
     background-color: #222222;
+    padding-left: 20px;
   }
 
   span.${menuClasses.label} a {
@@ -100,8 +101,8 @@ const navCss = css`
 
   span.${menuClasses.icon} {
     transform: scale(1);
-    width: 1.5rem;
-    min-width: 1.5rem;
+    width: 1rem;
+    min-width: 1rem;
     margin-right: 24px;
   }
 
