@@ -71,6 +71,7 @@ export default function TestWorld(props) {
         // powerPreference: "lower-power", // 🔔 throws
         toneMapping: 4,
         toneMappingExposure: 1,
+        // logarithmicDepthBuffer: true,
       }}
       onCreated={() => state.ready = true}
     >
@@ -113,7 +114,7 @@ const canvasCss = css`
       justify-content: center;
    }
    canvas {
-      background-color: white;
+      background-color: rgba(255, 255, 255, 1);
    }
    &.disabled {
     canvas {

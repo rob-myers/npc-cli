@@ -4,7 +4,7 @@ import { useQueries } from "@tanstack/react-query";
 
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
-import { MapControls, PerspectiveCamera } from "@react-three/drei";
+import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -18,8 +18,8 @@ export default function TestScene(props) {
     mat4s: props.gms.map((gm, gmId) =>
       new THREE.Matrix4(
         gm.transform[0], 0, gm.transform[2], gm.transform[4] * scale,
-        0, 1, 0, gmId * 0.0001, // hack to fix z-fighting
-        // 0, 1, 0, 0,
+        // 0, 1, 0, gmId * 0.001, // hack to fix z-fighting
+        0, 1, 0, 0,
         gm.transform[1], 0, gm.transform[3], gm.transform[5] * scale,
         0, 0, 0, 1
       )
@@ -58,16 +58,12 @@ export default function TestScene(props) {
               geometry={customQuadGeometry}
               position={[gm.pngRect.x * scale, 0, gm.pngRect.y * scale]}
             >
-              <meshStandardMaterial
+              <meshBasicMaterial
+                side={THREE.DoubleSide}
                 transparent
-                // toneMapped
-                // color="#999"
-                // toneMapped={false}
+                blending={THREE.AdditiveBlending}
+                depthWrite={false}
                 map={state.tex[gm.gmKey]}
-              // emissive={new THREE.Color(0.1, 0.1, 0.1)}
-              // Improves look, but causes issue with hull overlap
-              // 🚧 try simulating in geomorph-render instead
-              // alphaMap={state.tex[gm.gmKey]}
               />
               {/* <Edges
                 // scale={1.1}

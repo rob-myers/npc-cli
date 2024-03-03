@@ -101,6 +101,12 @@
 
 - ✅ add working react-three-fiber demo R3FDemo
 
+- ✅ Tab doesn't need to use react-query
+- ✅ If Tabs enabled, Reset does not disable
+- ✅ Tabs should go disabled on when leave view
+- ❌ No resize Canvas when not rendering
+  - part of `Canvas`
+
 ## WIP
 
 - 🚧 try https://github.com/pmndrs/react-three-offscreen
@@ -108,19 +114,14 @@
   - ✅ fixing resizing
   - 🚧 add prop-passing via messaging
   - try migrate R3FDemo
-- ✅ Tab doesn't need to use react-query
-- ✅ If Tabs enabled, Reset does not disable
-- ✅ Tabs should go disabled on when leave view
-- ❌ No resize Canvas when not rendering
-  - part of `Canvas`
 
-- 🚧 R3FDemo improvements
+- ✅ R3FDemo (TestWorld) improvements
   - ✅ renderer stops when paused
   - ✅ mouse zooms to point under cursor
   - ✅ initially rotates
   - ✅ fix z-fighting (hack)
   - ✅ rename as TestWorld; rename worker demo as TestWorker
-  - 🚧 fix untrimmed hull symbol images e.g. 102
+  - ✅ fix z-fighting properly: additive blending, depthWrite false
   - ✅ "Preserve" R3FDemo height when disabled
   - ❌ start migrating character controller with soldier.fbx
     - https://discourse.threejs.org/t/character-controller/46936
