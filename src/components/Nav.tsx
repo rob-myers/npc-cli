@@ -99,7 +99,7 @@ const navCss = css`
   }
 
   span.${menuClasses.icon} {
-    transform: scale(1.3);
+    transform: scale(1);
     width: 1.5rem;
     min-width: 1.5rem;
     margin-right: 24px;
