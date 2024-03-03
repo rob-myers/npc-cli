@@ -107,7 +107,8 @@ const rootCss = css`
       z-index: 7;
 
       &.${sidebarClasses.collapsed} {
-        height: 80px;
+        pointer-events: none;
+
         border: none !important;
         > div {
           background-color: transparent;
@@ -119,6 +120,7 @@ const rootCss = css`
         button.toggle {
           transform: scale(1.2);
           outline: 2px solid #ddd;
+          pointer-events: all;
         }
       }
     }
