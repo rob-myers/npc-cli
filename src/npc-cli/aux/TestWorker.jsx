@@ -1,5 +1,6 @@
 import React from "react";
 import useMeasure from "react-use-measure";
+import { css, cx } from "@emotion/css";
 
 // import { Canvas } from "@react-three/fiber";
 // import Scene from "./R3FWorkerDemoScene";
@@ -16,7 +17,7 @@ const worker = new Worker(new URL('./worker.jsx', import.meta.url), { type: 'mod
 /**
  * @param {Props} props 
  */
-export default function R3FWorkerDemo(props) {
+export default function TestWorker(props) {
 
   const [measureRef, rect] = useMeasure();
 
@@ -35,7 +36,7 @@ export default function R3FWorkerDemo(props) {
   return (
     <div
       ref={measureRef}
-      style={{ height: '100%', visibility: props.disabled ? 'hidden' : 'visible' }}
+      className={cx(testWorkerCss, { disabled: props.disabled })}
     >
       <Canvas
         frameloop={props.disabled ? 'never' : 'demand'}
@@ -50,3 +51,12 @@ export default function R3FWorkerDemo(props) {
  * @typedef Props
  * @property {boolean} [disabled]
  */
+
+const testWorkerCss = css`
+  height: 100%;
+  opacity: 1;
+  transition: opacity 500ms;
+  &.disabled {
+    opacity: 0;
+  }
+`;
