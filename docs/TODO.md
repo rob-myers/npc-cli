@@ -119,12 +119,20 @@
   - ✅ mouse zooms to point under cursor
   - ✅ initially rotates
   - ✅ fix z-fighting (hack)
-  - fix untrimmed hull symbol images e.g. 102
+  - ✅ rename as TestWorld; rename worker demo as TestWorker
+  - 🚧 fix untrimmed hull symbol images e.g. 102
   - ✅ "Preserve" R3FDemo height when disabled
-  - start migrating character controller with soldier.fbx
+  - ❌ start migrating character controller with soldier.fbx
     - https://discourse.threejs.org/t/character-controller/46936
 
+- CharacterController
+  - simple demo using https://github.com/pmndrs/ecctrl
+  - change character
+  - click to move
+  - extract code, removing e.g. ray-cast
+
 - start GeomorphEdit
+  - migrate Triangle
 
 - sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile
@@ -134,6 +142,8 @@
 
 - world editor in new repo
 - geomorph editor in new repo
+- despite our "generic aim" (fabricating game masters),
+  some context will help e.g. The Last Redoubt
 
 - ✅ smaller collapsed nav on mobile
 - fix multi-touch flicker on drag

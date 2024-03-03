@@ -10,7 +10,7 @@ import useStateRef from "../hooks/use-state-ref";
 /**
  * @param {SceneProps} props
  */
-export default function Scene(props) {
+export default function TestScene(props) {
 
   const state = useStateRef(/** @type {() => SceneState} */() => ({
     ready: true,
@@ -86,7 +86,7 @@ export default function Scene(props) {
 
 /**
  * @typedef SceneProps
- * @property {import('./R3FDemo').GeomorphData[]} gms
+ * @property {import('./TestWorld').GeomorphData[]} gms
 */
 
 /**

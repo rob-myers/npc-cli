@@ -4,7 +4,7 @@ import useMeasure from "react-use-measure";
 // import { Canvas } from "@react-three/fiber";
 // import Scene from "./R3FWorkerDemoScene";
 import { Canvas } from '@react-three/offscreen';
-const Scene = React.lazy(() => import('./R3FWorkerDemoScene'));
+const Scene = React.lazy(() => import('./TestWorkerScene'));
 
 const worker = new Worker(new URL('./worker.jsx', import.meta.url), { type: 'module' })
 

@@ -4,7 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { css, cx } from "@emotion/css";
 
 import { geomorphService } from "../service/geomorph";
-import Scene from "./R3FDemoScene";
+import TestScene from "./TestWorldScene";
 import useStateRef from "../hooks/use-state-ref";
 import useMeasure from "react-use-measure";
 
@@ -12,7 +12,7 @@ import useMeasure from "react-use-measure";
  * React Three Fiber Demo
  * @param {Props} props
  */
-export default function R3FDemo(props) {
+export default function TestWorld(props) {
 
   const [measureRef, rect] = useMeasure({ scroll: false });
 
@@ -74,7 +74,7 @@ export default function R3FDemo(props) {
       }}
       onCreated={() => state.ready = true}
     >
-      {gms && <Scene gms={gms} />}
+      {gms && <TestScene gms={gms} />}
     </Canvas>
   );
 }

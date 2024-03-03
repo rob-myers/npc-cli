@@ -58,15 +58,7 @@ function getTabIdentifier(meta: TabDef) {
   return meta.filepath;
 }
 
-//#region components
-
 const classToComponent = {
-  // WorldPixi: {
-  //   loadable: loadable(() => import('projects/world-pixi/WorldPixi')),
-  //   get: (module: typeof import('projects/world-pixi/WorldPixi')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
   // GeomorphEdit: {
   //   loadable: loadable(() => import('projects/geomorph/GeomorphEdit')),
   //   get: (module: typeof import('projects/geomorph/GeomorphEdit')) =>
@@ -80,33 +72,21 @@ const classToComponent = {
         (props: React.ComponentProps<(typeof module)["default"]>) =>
           React.createElement(module.default, { disabled: true, ...props }),
   },
-  R3FDemo: {
-    loadable: loadable(() => import("src/npc-cli/aux/R3FDemo")),
+  TestWorld: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestWorld")),
     get:
-      (module: typeof import("src/npc-cli/aux/R3FDemo")) =>
+      (module: typeof import("src/npc-cli/aux/TestWorld")) =>
         (props: React.ComponentProps<(typeof module)["default"]>) =>
           React.createElement(module.default, { disabled: true, ...props }),
   },
-  R3FWorkerDemo: {
-    loadable: loadable(() => import("src/npc-cli/aux/R3FWorkerDemo")),
+  TestWorker: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestWorker")),
     get:
-      (module: typeof import("src/npc-cli/aux/R3FWorkerDemo")) =>
+      (module: typeof import("src/npc-cli/aux/TestWorker")) =>
         (props: React.ComponentProps<(typeof module)["default"]>) =>
           React.createElement(module.default, { disabled: true, ...props }),
 
   },
-  // SvgNavGraph: {
-  //   loadable: loadable(() => import('projects/example/SvgNavGraph')),
-  //   get: (module: typeof import('projects/example/SvgNavGraph')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
-  // SvgStringPull: {
-  //   loadable: loadable(() => import('projects/example/SvgStringPull')),
-  //   get: (module: typeof import('projects/example/SvgStringPull')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
 };
 
 export async function getComponent(meta: Extract<TabDef, { type: "component" }>) {
@@ -143,8 +123,6 @@ function FallbackComponentFactory(componentKey: string) {
 export const Terminal = loadable(() => import("../terminal/Terminal"), {
   ssr: false,
 }) as typeof ActualTerminal;
-
-//#endregion
 
 //#region persist
 
