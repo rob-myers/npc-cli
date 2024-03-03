@@ -130,7 +130,8 @@
   - TestWorker was showing when Tab was minimized
 
 - ✅ Can Esc/Enter to enable/disable in Terminal/Tabs
-- Terminal uses WebGL
+- ✅ Terminal rendered using WebGL
+  - fix HMR via `npm i xterm-addon-webgl` https://github.com/xtermjs/xterm.js/issues/4757
 
 - CharacterController
   - simple demo using https://github.com/pmndrs/ecctrl

@@ -1,9 +1,10 @@
 import React from "react";
 import { css } from "@emotion/css";
-import { IDisposable, Terminal as XTermTerminal } from "xterm";
+import { Terminal as XTermTerminal } from "xterm";
 import loadable from "@loadable/component";
 import useMeasure from "react-use-measure";
 import { FitAddon } from "xterm-addon-fit";
+import { WebglAddon } from "xterm-addon-webgl";
 
 import { ttyXtermClass } from "../sh/tty.xterm";
 import { ansi } from "../sh/const";
@@ -26,7 +27,6 @@ export default function Terminal(props: Props) {
 
   const state = useStateRef(() => ({
     bounds,
-    cleanup: () => { },
     container: {} as HTMLDivElement,
     cursorBeforePause: undefined as number | undefined,
     fitAddon: new FitAddon(),
@@ -34,6 +34,13 @@ export default function Terminal(props: Props) {
     hasEverDisabled: false,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
+    pausedPids: {} as Record<number, true>,
+    ready: false,
+    session: {} as Session,
+    webglAddon: new WebglAddon(),
+    xterm: {} as ttyXtermClass,
+
+    cleanup: () => { },
     onFocus() {
       if (state.inputOnFocus) {
         state.xterm.setInput(state.inputOnFocus.input);
@@ -41,8 +48,6 @@ export default function Terminal(props: Props) {
         state.inputOnFocus = undefined;
       }
     },
-    pausedPids: {} as Record<number, true>,
-    ready: false,
     async resize() {
       if (state.isTouchDevice) {
         state.fitAddon.fit();
@@ -56,8 +61,6 @@ export default function Terminal(props: Props) {
         setTimeout(() => state.fitAddon.fit());
       }
     },
-    session: {} as Session,
-    xterm: {} as ttyXtermClass,
   }));
 
   React.useEffect(() => {
@@ -114,12 +117,14 @@ export default function Terminal(props: Props) {
       state.xterm.initialise();
 
       const onKeyDisposable = xterm.onKey((e) => {
-        if (e.domEvent.key === 'Escape') {
-          state.xterm.xterm.textarea?.blur();
-        }
         props.onKey?.(e.domEvent);
       });
       xterm.loadAddon(state.fitAddon);
+      xterm.loadAddon(state.webglAddon);
+      // state.webglAddon.onContextLoss(e => {
+      //   state.webglAddon.dispose();
+      // });
+
       xterm.open(state.container);
       state.resize();
       xterm.textarea?.addEventListener("focus", state.onFocus);
