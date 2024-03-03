@@ -1,5 +1,5 @@
-import { Link } from "gatsby";
-import { css } from "@emotion/css";
+import { Link, navigate } from "gatsby";
+import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
@@ -18,11 +18,10 @@ export default function Nav() {
       const el = e.target as HTMLElement;
       if (el.classList.contains(sidebarClasses.container)) {
         state.toggleCollapsed(); // outside buttons
-      } else if (
-        el.classList.contains(menuClasses.button) &&
-        el.parentElement?.previousSibling === null
-      ) {
-        state.toggleCollapsed(); // top-most button
+      }
+      const anchorEl = el.querySelector('a');
+      if (anchorEl) {
+        navigate(anchorEl.href);
       }
     },
     toggleCollapsed() {
@@ -33,7 +32,7 @@ export default function Nav() {
   return (
     <Sidebar
       backgroundColor="black"
-      className={navCss}
+      className={cx(navCss, navTitleCss)}
       collapsed={collapsed}
       collapsedWidth={nav.collapsedWidth}
       data-testid="nav"
@@ -81,26 +80,6 @@ const navCss = css`
     right: 1rem;
   }
 
-  .${menuClasses.menuItemRoot}.title {
-    opacity: 1;
-    transition: opacity 500ms;
-
-    .${menuClasses.button} {
-      height: 5rem;
-    }
-
-    .${menuClasses.label} {
-      height: 1.6rem;
-      img {
-        height: 100%;
-        filter: invert();
-      }
-    }
-  }
-  &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
-    opacity: 0;
-  }
-
   a.${menuClasses.button}, span.${menuClasses.button} {
     &:hover {
       background-color: transparent;
@@ -130,6 +109,29 @@ const navCss = css`
   }
   &:not(.${sidebarClasses.collapsed}) .${menuClasses.SubMenuExpandIcon} {
     padding-right: 0.5rem;
+  }
+`;
+
+const navTitleCss = css`
+  .${menuClasses.menuItemRoot}.title {
+    opacity: 1;
+    transition: opacity 500ms;
+
+    .${menuClasses.button} {
+      height: 5rem;
+    }
+
+    .${menuClasses.label} {
+      height: 1.5rem;
+      img {
+        height: 100%;
+        filter: invert();
+      }
+    }
+  }
+
+  &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
+    opacity: 0;
   }
 `;
 
