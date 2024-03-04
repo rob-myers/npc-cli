@@ -14,6 +14,7 @@
     "build": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
+    "postinstall": "patch-package",
     "types": "tsc --noEmit",
     "ts-script": "NODE_OPTIONS=\"--no-experimental-fetch\" ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
     "symbols-meta": "yarn ts-script src/scripts/symbols-meta",
@@ -83,6 +84,7 @@
     "@types/webpack-env": "^1.18.4",
     "babel-preset-gatsby": "^3.13.1",
     "gatsby-plugin-tsconfig-paths": "^1.0.6",
+    "patch-package": "^8.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
