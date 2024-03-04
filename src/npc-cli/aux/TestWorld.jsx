@@ -13,29 +13,30 @@ import useMeasure from "react-use-measure";
  * @param {Props} props
  */
 export default function TestWorld(props) {
-
   const [measureRef, rect] = useMeasure({ scroll: false });
 
-  const state = useStateRef(/** @returns {State} */() => ({
-    rootEl: /** @type {*} */ (null),
-    disabled: !!props.disabled,
-    bounds: rect,
-    ready: false,
-    handleDisabledResize() {
-      const { style } = state.rootEl;
-      if (state.disabled) {
-        if (style.getPropertyValue("--disabled-height") === "unset") {
-          style.setProperty("--disabled-height", `${state.bounds.height}px`);
+  const state = useStateRef(
+    /** @returns {State} */ () => ({
+      rootEl: /** @type {*} */ (null),
+      disabled: !!props.disabled,
+      bounds: rect,
+      ready: false,
+      handleDisabledResize() {
+        const { style } = state.rootEl;
+        if (state.disabled) {
+          if (style.getPropertyValue("--disabled-height") === "unset") {
+            style.setProperty("--disabled-height", `${state.bounds.height}px`);
+          }
+          if (style.getPropertyValue("--disabled-width") === "unset") {
+            style.setProperty("--disabled-width", `${state.bounds.width}px`);
+          }
+        } else {
+          style.setProperty("--disabled-height", "unset");
+          style.setProperty("--disabled-width", "unset");
         }
-        if (style.getPropertyValue("--disabled-width") === "unset") {
-          style.setProperty("--disabled-width", `${state.bounds.width}px`);
-        }
-      } else {
-        style.setProperty("--disabled-height", "unset");
-        style.setProperty("--disabled-width", "unset");
-      }
-    },
-  }));
+      },
+    })
+  );
 
   state.disabled = !!props.disabled;
   state.bounds = rect;
@@ -55,7 +56,6 @@ export default function TestWorld(props) {
     enabled: !props.disabled,
   });
 
-
   React.useMemo(() => {
     state.rootEl && state.handleDisabledResize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,9 +63,12 @@ export default function TestWorld(props) {
 
   return (
     <Canvas
-      ref={(x) => { measureRef(x); x && (state.rootEl = x); }}
-      className={state.ready ? cx(canvasCss, { disabled: props.disabled }) : undefined}
-      frameloop={props.disabled ? 'never' : 'always'}
+      ref={(x) => {
+        measureRef(x);
+        x && (state.rootEl = x);
+      }}
+      className={cx(canvasCss, { disabled: props.disabled })}
+      frameloop={props.disabled ? "never" : "always"}
       resize={{ debounce: 300 }}
       gl={{
         // powerPreference: "lower-power", // 🔔 throws
@@ -73,7 +76,6 @@ export default function TestWorld(props) {
         toneMappingExposure: 1,
         // logarithmicDepthBuffer: true,
       }}
-      onCreated={() => state.ready = true}
     >
       {gms && <TestScene gms={gms} />}
     </Canvas>
@@ -107,16 +109,18 @@ const canvasCss = css`
   --disabled-height: unset;
   --disabled-width: unset;
 
-   > div {
-      background-color: black;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-   }
-   canvas {
-      background-color: rgba(255, 255, 255, 1);
-   }
-   &.disabled {
+  > div {
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas {
+    background-color: rgba(255, 255, 255, 1);
+    width: 100%;
+    height: 100%;
+  }
+  &.disabled {
     canvas {
       max-height: var(--disabled-height);
       min-height: var(--disabled-height);

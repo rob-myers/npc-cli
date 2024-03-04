@@ -50,7 +50,7 @@ export default function TestCanvas(props) {
         measureRef(x);
         x && (state.rootEl = x);
       }}
-      className={state.ready ? cx(canvasCss, { disabled: props.disabled }) : undefined}
+      className={cx(canvasCss, { disabled: props.disabled })}
       frameloop={props.disabled ? "never" : "always"}
       resize={{ debounce: 300 }}
       gl={{
@@ -59,7 +59,6 @@ export default function TestCanvas(props) {
         toneMappingExposure: 1,
         // logarithmicDepthBuffer: true,
       }}
-      onCreated={() => (state.ready = true)}
     >
       {props.childComponent ? React.createElement(props.childComponent, props.childProps) : null}
     </Canvas>
@@ -103,6 +102,8 @@ const canvasCss = css`
   }
   canvas {
     background-color: rgba(255, 255, 255, 1);
+    width: 100%;
+    height: 100%;
   }
   &.disabled {
     canvas {
