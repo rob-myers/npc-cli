@@ -24,10 +24,10 @@ export default function Viewer() {
         update();
       }, 1000),
       onKeyDown(e) {
-        if (e.key === 'Escape' && state.tabs.enabled) {
+        if (e.key === "Escape" && state.tabs.enabled) {
           state.tabs.toggleEnabled();
         }
-        if (e.key === 'Enter' && !state.tabs.enabled) {
+        if (e.key === "Enter" && !state.tabs.enabled) {
           state.tabs.toggleEnabled();
         }
       },
@@ -49,7 +49,8 @@ export default function Viewer() {
       className={cx(viewerCss, { collapsed: !site.viewOpen })}
       data-testid="viewer"
       ref={(el) => el && (state.rootEl = el)}
-      style={// 🚧 move to CSS
+      style={
+        // 🚧 move to CSS
         site.browserLoaded && !site.viewOpen
           ? useSite.api.isSmall()
             ? { minHeight: "0%" }
