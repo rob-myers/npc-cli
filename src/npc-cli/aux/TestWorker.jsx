@@ -8,9 +8,9 @@ import { Canvas } from '@react-three/offscreen';
 import useStateRef from "../hooks/use-state-ref";
 import debounce from "debounce";
 import useUpdate from "../hooks/use-update";
+import { worker } from "./create-worker";
 const Scene = React.lazy(() => import('./TestWorkerScene'));
 
-const worker = new Worker(new URL('./worker.jsx', import.meta.url), { type: 'module' })
 
 // /** @param {MessageEvent} e  */
 // worker.addEventListener('message', e => {
@@ -55,9 +55,10 @@ export default function TestWorker(props) {
     >
       <Canvas
         frameloop={props.disabled ? 'never' : 'demand'}
-        resize={{ debounce: 300, scroll: false }}
-        fallback={<Scene />}
+        resize={{ debounce: 100, scroll: false }}
+        fallback={<Scene testProp="hello, world! (fallback)" />}
         worker={worker}
+        sceneProps={{ testProp: "hello, world!!" }}
       />
     </div>
   );

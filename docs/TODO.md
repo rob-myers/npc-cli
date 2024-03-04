@@ -120,11 +120,13 @@
 
 ## WIP
 
-- 🚧 try https://github.com/pmndrs/react-three-offscreen
+- ✅ try https://github.com/pmndrs/react-three-offscreen
   - ✅ create simple demo
   - ✅ fixing resizing
-  - 🚧 add prop-passing via messaging
-  - try migrate R3FDemo
+  - ✅ add prop-passing via messaging
+    - ✅ keep worker in another file
+    - ✅ test patch
+    - https://github.com/pmndrs/react-three-offscreen/issues/8#issuecomment-1975397224
 
 - ✅ non-terminal tab disabled when other tab maximized
   - TestWorker was showing when Tab was minimized
@@ -145,6 +147,8 @@
 
 - start GeomorphEdit
   - migrate Triangle
+
+- try migrate R3FDemo to react-three-offscreen
 
 - sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile

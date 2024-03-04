@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from '@react-three/offscreen';
 import Scene from "./TestWorkerScene";
 
@@ -7,4 +6,4 @@ import Scene from "./TestWorkerScene";
 //   console.log('worker received message', e.data);
 // });
 
-render(<Scene />);
+render(Scene);
