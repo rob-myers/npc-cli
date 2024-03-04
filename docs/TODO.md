@@ -135,8 +135,13 @@
 - ✅ Terminal rendered using WebGL
   - fix HMR via `npm i xterm-addon-webgl` https://github.com/xtermjs/xterm.js/issues/4757
 
-- CharacterController
-  - simple demo using https://github.com/pmndrs/ecctrl
+- ✅ abstract `TestWorld` as `TestCanvas`
+  - ✅ `TestCanvas` has generic prop `childComponent` e.g. `Scene` not `<Scene />`
+  - ✅ `TestCanvas` has prop `sceneProps` to be used as `<Scene {...sceneProps} />`
+  - 🚧 create test scene `TestCharacter` and hook up to `Viewer`
+
+- 🚧 CharacterController
+  - 🚧 simple demo using https://github.com/pmndrs/ecctrl
   - change character
   - click to move
   - extract code, removing e.g. ray-cast

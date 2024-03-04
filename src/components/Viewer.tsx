@@ -96,7 +96,16 @@ export default function Viewer() {
               filepath: "tty-1",
               env: { WORLD_KEY: "world-1", PROFILE: profileLookup.util_0() },
             },
-            { type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} },
+            {
+              type: "component",
+              class: "TestCanvas",
+              filepath: "test-character",
+              props: {
+                childComponent: "TestCharacter", // special Tabs prop
+                childProps: { testProp: "hello" },
+              },
+            },
+            { type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} },
             { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],
         ]}

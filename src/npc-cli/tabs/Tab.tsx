@@ -2,27 +2,48 @@ import React from "react";
 
 import type { TabState, State as TabsApi } from "./Tabs";
 import { TabDef, getComponent, Terminal } from "./tab-factory";
+import useUpdate from "../hooks/use-update";
+import useStateRef from "../hooks/use-state-ref";
 
-export const TabMemo = React.memo(Tab, (prev, next) => prev.disabled === next.disabled);
+export function Tab({ def, api, state: tabState }: TabProps) {
+  const state = useStateRef(() => ({
+    /** e.g. react-three-fiber Canvas */
+    component: null as Awaited<ReturnType<typeof getComponent>> | null,
+    /** e.g. always null, or react-three-fiber Scene*/
+    childComponent: null as Awaited<ReturnType<typeof getComponent>> | null,
+  }));
 
-export function Tab({ def, api, state }: TabProps) {
-
-  const [component, setComponent] = React.useState<
-    Awaited<ReturnType<typeof getComponent>> | null
-  >(null);
+  const update = useUpdate();
 
   React.useEffect(() => {
-    if (def.type === "component" && !component) {
-      getComponent(def).then(x => setComponent(() => x));
-    }
+    def.type === "component" &&
+      getComponent(def.class, def.filepath).then((component) => {
+        state.component ??= component;
+        update();
+      });
   }, []);
+
+  React.useMemo(() => {
+    if (!("props" in def)) {
+      return;
+    }
+    state.childComponent = null;
+    update();
+    def.props.childComponent &&
+      getComponent(def.props.childComponent, def.filepath).then((childComponent) => {
+        state.childComponent = childComponent;
+        update();
+      });
+  }, ["props" in def && def.props.childComponent]);
 
   if (def.type === "component") {
     return (
-      (component &&
-        React.createElement(component as React.FunctionComponent<any>, {
-          disabled: state.disabled,
+      (state.component &&
+        (!def.props.childComponent || state.childComponent) &&
+        React.createElement(state.component as React.FunctionComponent<any>, {
+          disabled: tabState.disabled,
           ...def.props,
+          childComponent: state.childComponent ?? undefined,
         })) ||
       null
     );
@@ -31,7 +52,7 @@ export function Tab({ def, api, state }: TabProps) {
   if (def.type === "terminal") {
     return (
       <Terminal
-        disabled={state.disabled}
+        disabled={tabState.disabled}
         sessionKey={def.filepath}
         env={{
           ...def.env,
@@ -58,4 +79,10 @@ interface TabProps {
   api: TabsApi;
   state: TabState;
   disabled: boolean;
+  forceUpdate: boolean;
 }
+
+export const TabMemo = React.memo(
+  Tab,
+  (prev, next) => prev.disabled === next.disabled && !next.forceUpdate
+);

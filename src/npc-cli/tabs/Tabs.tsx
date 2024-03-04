@@ -21,6 +21,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef<State>(() => ({
     enabled: false,
     everEnabled: false,
+    hash: "",
     overlayColor: "black",
     prevFocused: null,
     resetCount: 0,
@@ -70,6 +71,10 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     },
   }));
 
+  const hash = JSON.stringify(props.tabs);
+  const tabsDefChanged = state.hash !== hash;
+  state.hash = hash;
+
   const model = React.useMemo(() => {
     const output = createOrRestoreJsonModel(props);
 
@@ -109,7 +114,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     });
 
     return output;
-  }, [JSON.stringify(props.tabs), state.resetCount]);
+  }, [tabsDefChanged, state.resetCount]);
 
   useBeforeunload(() => storeModelAsJson(props.id, model));
 
@@ -118,66 +123,74 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
   // we support initial functional ref
   React.useMemo(() => void (ref as Function)?.(state), []);
 
-  return <>
-    <figure
-      key={state.resetCount}
-      className={cx("tabs", tabsCss)}
-      ref={(x) => x && (state.rootEl = x)}
-      tabIndex={0}
-    >
-      {state.everEnabled && (
-        <FlexLayout
-          model={model}
-          factory={(node) => factory(node, state)}
-          realtimeResize
-          onModelChange={debounce(() => storeModelAsJson(props.id, model), 300)}
-          onAction={(act) => {
-            if (act.type === Actions.MAXIMIZE_TOGGLE) {
-              if (model.getMaximizedTabset()) {
-                // On minimise, enable justCovered tabs
-                Object.values(state.tabsState).forEach((x) => {
-                  x.justCovered && (x.disabled = false);
-                  x.everUncovered = true;
-                  x.justCovered = false;
-                });
-                update();
-              } else {
-                // On maximise, disable hidden non-terminal tabs
-                const maxIds = (model.getNodeById(act.data.node) as TabSetNode).getChildren().map(x => x.getId());
-                model.visitNodes((node) => {
-                  const id = node.getId();
-                  const meta = state.tabsState[id];
-                  if (node.getType() === "tab" && !maxIds.includes(id) && meta?.type === 'component') {
-                    !meta.disabled && (meta.justCovered = true);
-                    meta.disabled = true;
-                  }
+  return (
+    <>
+      <figure
+        key={state.resetCount}
+        className={cx("tabs", tabsCss)}
+        ref={(x) => x && (state.rootEl = x)}
+        tabIndex={0}
+      >
+        {state.everEnabled && (
+          <FlexLayout
+            model={model}
+            factory={(node) => factory(node, state, tabsDefChanged)}
+            realtimeResize
+            onModelChange={debounce(() => storeModelAsJson(props.id, model), 300)}
+            onAction={(act) => {
+              if (act.type === Actions.MAXIMIZE_TOGGLE) {
+                if (model.getMaximizedTabset()) {
+                  // On minimise, enable justCovered tabs
+                  Object.values(state.tabsState).forEach((x) => {
+                    x.justCovered && (x.disabled = false);
+                    x.everUncovered = true;
+                    x.justCovered = false;
+                  });
                   update();
-                });
+                } else {
+                  // On maximise, disable hidden non-terminal tabs
+                  const maxIds = (model.getNodeById(act.data.node) as TabSetNode)
+                    .getChildren()
+                    .map((x) => x.getId());
+                  model.visitNodes((node) => {
+                    const id = node.getId();
+                    const meta = state.tabsState[id];
+                    if (
+                      node.getType() === "tab" &&
+                      !maxIds.includes(id) &&
+                      meta?.type === "component"
+                    ) {
+                      !meta.disabled && (meta.justCovered = true);
+                      meta.disabled = true;
+                    }
+                    update();
+                  });
+                }
               }
-            }
-            if (act.type === Actions.ADJUST_SPLIT) {
-              state.focusRoot();
-            }
-            return act;
-          }}
-        />
-      )}
-    </figure>
+              if (act.type === Actions.ADJUST_SPLIT) {
+                state.focusRoot();
+              }
+              return act;
+            }}
+          />
+        )}
+      </figure>
 
-    <button
-      onClick={() => state.toggleEnabled()}
-      className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
-    >
-      <div>{props.browserLoaded ? "interact" : <Spinner size={24} />}</div>
-    </button>
+      <button
+        onClick={() => state.toggleEnabled()}
+        className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
+      >
+        <div>{props.browserLoaded ? "interact" : <Spinner size={24} />}</div>
+      </button>
 
-    <div
-      className={cx(faderOverlayCss, {
-        clear: state.overlayColor === "clear",
-        faded: state.overlayColor === "faded",
-      })}
-    />
-  </>;
+      <div
+        className={cx(faderOverlayCss, {
+          clear: state.overlayColor === "clear",
+          faded: state.overlayColor === "faded",
+        })}
+      />
+    </>
+  );
 });
 
 export interface Props extends TabsDef {
@@ -190,6 +203,7 @@ export interface Props extends TabsDef {
 export interface State {
   enabled: boolean;
   everEnabled: boolean;
+  hash: string;
   /** Initially `black` afterwards `faded` or `clear` */
   overlayColor: "black" | "faded" | "clear";
   prevFocused: null | HTMLElement;
@@ -206,11 +220,11 @@ export interface State {
 export interface TabState {
   /** Tab identifier */
   key: string;
-  type: TabDef['type'];
+  type: TabDef["type"];
   disabled: boolean;
   /**
    * `false` iff some other tab has always been maximised.
-   * 
+   *
    * According to flexlayout-react, a selected tab is visible when obscured by a maximised tab.
    * We prevent rendering in such cases
    */
@@ -315,7 +329,7 @@ const interactOverlayCss = css`
     font-size: 1.2rem;
     letter-spacing: 2px;
     color: white;
-    filter: drop-shadow(0 2px #006)
+    filter: drop-shadow(0 2px #006);
   }
 `;
 

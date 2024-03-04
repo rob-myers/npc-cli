@@ -12,7 +12,7 @@ import {
 import { Props as TabsProps, State as TabsApi } from "./Tabs";
 import { TabMemo } from "./Tab";
 
-export function factory(node: TabNode, api: TabsApi) {
+export function factory(node: TabNode, api: TabsApi, forceUpdate: boolean) {
   const state = api.tabsState[node.getId()];
   if (state?.everUncovered) {
     // console.debug(`rendering "${node.getId()}"`, state.disabled);
@@ -21,6 +21,7 @@ export function factory(node: TabNode, api: TabsApi) {
       api,
       state,
       disabled: state.disabled, // For memo
+      forceUpdate, // For memo
     });
   } else {
     return null;
@@ -29,18 +30,18 @@ export function factory(node: TabNode, api: TabsApi) {
 
 export type TabDef = { weight?: number } & (
   | ({
-    type: "component";
-    /** Determines tab */
-    filepath: string;
-    /** Determines component */
-    class: ComponentClassKey;
-  } & TabMetaComponentProps)
+      type: "component";
+      /** Determines tab */
+      filepath: string;
+      /** Determines component */
+      class: ComponentClassKey;
+    } & TabMetaComponentProps)
   | {
-    type: "terminal";
-    /** Session identifier (determines tab) */
-    filepath: string;
-    env?: Record<string, any>;
-  }
+      type: "terminal";
+      /** Session identifier (determines tab) */
+      filepath: string;
+      env?: Record<string, any>;
+    }
 );
 
 export interface TabsDef {
@@ -65,35 +66,49 @@ const classToComponent = {
   //     (props: ComponentProps<typeof module['default']>) =>
   //       <module.default disabled {...props} />,
   // },
+  TestCanvas: {
+    // supports props.childComponent
+    loadable: loadable(() => import("src/npc-cli/aux/TestCanvas")),
+    get:
+      (module: typeof import("src/npc-cli/aux/TestCanvas")) =>
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
+  },
+  TestCharacter: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestCharacter")),
+    get:
+      (module: typeof import("src/npc-cli/aux/TestCharacter")) =>
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
+  },
   HelloWorld: {
     loadable: loadable(() => import("src/npc-cli/aux/HelloWorld")),
     get:
       (module: typeof import("src/npc-cli/aux/HelloWorld")) =>
-        (props: React.ComponentProps<(typeof module)["default"]>) =>
-          React.createElement(module.default, { disabled: true, ...props }),
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
   },
   TestWorld: {
     loadable: loadable(() => import("src/npc-cli/aux/TestWorld")),
     get:
       (module: typeof import("src/npc-cli/aux/TestWorld")) =>
-        (props: React.ComponentProps<(typeof module)["default"]>) =>
-          React.createElement(module.default, { disabled: true, ...props }),
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
   },
   TestWorker: {
     loadable: loadable(() => import("src/npc-cli/aux/TestWorker")),
     get:
       (module: typeof import("src/npc-cli/aux/TestWorker")) =>
-        (props: React.ComponentProps<(typeof module)["default"]>) =>
-          React.createElement(module.default, { disabled: true, ...props }),
-
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
   },
 };
 
-export async function getComponent(meta: Extract<TabDef, { type: "component" }>) {
+export async function getComponent(componentClassKey: ComponentClassKey, errorIdentifier?: string) {
   return (
-    classToComponent[meta.class]?.get(
-      (await classToComponent[meta.class].loadable.load()) as any
-    ) ?? FallbackComponentFactory(meta.filepath)
+    classToComponent[componentClassKey]?.get(
+      (await classToComponent[componentClassKey].loadable.load()) as any
+    ) ?? FallbackComponentFactory(errorIdentifier ?? componentClassKey)
   );
 }
 
@@ -103,7 +118,13 @@ export type ComponentClassKey = keyof typeof classToComponent;
 type TabMetaComponentProps = {
   [K in ComponentClassKey]: {
     class: K;
-    props: Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0];
+    props: Omit<
+      Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0],
+      "childComponent"
+    > & {
+      /** If defined this is resolved as e.g. functional component. */
+      childComponent?: ComponentClassKey;
+    };
   };
 }[ComponentClassKey];
 
