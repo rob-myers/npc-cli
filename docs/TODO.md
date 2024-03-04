@@ -138,10 +138,11 @@
 - ✅ abstract `TestWorld` as `TestCanvas`
   - ✅ `TestCanvas` has generic prop `childComponent` e.g. `Scene` not `<Scene />`
   - ✅ `TestCanvas` has prop `sceneProps` to be used as `<Scene {...sceneProps} />`
-  - 🚧 create test scene `TestCharacter` and hook up to `Viewer`
+  - ✅ create test scene `TestCharacter` and hook up to `Viewer`
 
 - 🚧 CharacterController
-  - 🚧 simple demo using https://github.com/pmndrs/ecctrl
+  - ✅ simple demo using https://github.com/pmndrs/ecctrl
+  - BUG ecctrl is panning on drag outside canvas
   - change character
   - click to move
   - extract code, removing e.g. ray-cast
