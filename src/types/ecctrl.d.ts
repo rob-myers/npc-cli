@@ -89,5 +89,7 @@ declare module "ecctrl" {
     props?: RigidBodyProps;
   }
 
-  export = React.ForwardRefExoticComponent<EcctrlProps & React.RefAttributes<RapierRigidBody>>;
+  const Ecctrl: React.ForwardRefExoticComponent<EcctrlProps & React.RefAttributes<RapierRigidBody>>;
+
+  export = Ecctrl;
 }
