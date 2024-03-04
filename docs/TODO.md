@@ -140,10 +140,18 @@
   - ✅ `TestCanvas` has prop `sceneProps` to be used as `<Scene {...sceneProps} />`
   - ✅ create test scene `TestCharacter` and hook up to `Viewer`
 
-- 🚧 CharacterController
+- 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
-  - BUG ecctrl is panning on drag outside canvas
-  - change character
+  - 🚧 BUG ecctrl is panning on drag outside canvas
+    - https://github.com/pmndrs/ecctrl/issues/34
+    - create patch in the meantime
+  - 🚧 sporadic issue with pause i.e. scene disappears
+    - ❌ `THREE.WebGLRenderer: Context Lost`
+    - ✅ pause physics
+    - ✅ disable CameraControls
+    - 🚧 frameloop must be `demand` instead of `never`?
+  - use character Soldier with animations
+  - use custom character via Mixamo (use Blender to combine animations)
   - click to move
   - extract code, removing e.g. ray-cast
 

@@ -20,10 +20,10 @@ export default function TestCharacter(props) {
   return (
     <>
       {/* <MapControls makeDefault zoomToCursor position={[0, 8, 0]} /> */}
+      <CameraControls makeDefault enabled={!props.disabled} />
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
-      <CameraControls makeDefault />
       <ambientLight intensity={1} />
-      <Physics debug>
+      <Physics debug paused={props.disabled}>
         <KeyboardControls map={keyboardMap}>
           <Ecctrl>
             <capsuleGeometry args={[0.3, 0.7]} />

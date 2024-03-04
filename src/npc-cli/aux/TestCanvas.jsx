@@ -7,7 +7,7 @@ import useMeasure from "react-use-measure";
 
 /**
  * React Three Fiber Canvas wrapper
- * @template {{}} [ChildProps={}]
+ * @template {{ disabled?: boolean; }} [ChildProps={}]
  * @param {Props<ChildProps>} props
  */
 export default function TestCanvas(props) {
@@ -51,7 +51,8 @@ export default function TestCanvas(props) {
         x && (state.rootEl = x);
       }}
       className={cx(canvasCss, { disabled: props.disabled })}
-      frameloop={props.disabled ? "never" : "always"}
+      // "never" broke TestCharacter sporadically
+      frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
       gl={{
         // powerPreference: "lower-power", // 🔔 throws
@@ -60,13 +61,18 @@ export default function TestCanvas(props) {
         // logarithmicDepthBuffer: true,
       }}
     >
-      {props.childComponent ? React.createElement(props.childComponent, props.childProps) : null}
+      {props.childComponent
+        ? React.createElement(
+            props.childComponent,
+            /** @type {ChildProps} */ ({ ...props.childProps, disabled: props.disabled })
+          )
+        : null}
     </Canvas>
   );
 }
 
 /**
- * @template {{}} [ChildProps={}]
+ * @template {{ disabled?: boolean; }} [ChildProps={}]
  * @typedef Props
  * @property {boolean} [disabled]
  * @property {React.ComponentType<ChildProps>} [childComponent]
