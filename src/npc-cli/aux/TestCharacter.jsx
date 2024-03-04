@@ -11,8 +11,6 @@ import { Physics, RigidBody } from "@react-three/rapier";
 import Ecctrl from "ecctrl";
 import { customQuadGeometry } from "./TestWorldScene";
 
-// 0;
-
 /**
  * @param {Props} props
  */
