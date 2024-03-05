@@ -116,20 +116,22 @@ type TabMetaPropsDistributed<
   U extends ComponentClassKey
 > = K extends infer A
   ? A extends ComponentClassKey
-    ? U extends infer B
-      ? B extends ComponentClassKey
-        ? TabMetaPropsGeneric<A, B>
+    ? ComponentClassKeyToProps[A] extends { childComponent?: React.ComponentType }
+      ? U extends infer B
+        ? B extends ComponentClassKey
+          ? TabMetaPropsGeneric<A, B>
+          : never
         : never
-      : never
+      : TabMetaPropsGeneric<A, undefined>
     : never
   : never;
 
-type TabMetaPropsGeneric<K extends ComponentClassKey, U extends ComponentClassKey> = {
+type TabMetaPropsGeneric<K extends ComponentClassKey, U extends ComponentClassKey | undefined> = {
   class: K;
   props: Omit<ComponentClassKeyToProps[K], "childComponent"> & {
     /** If defined this is resolved as e.g. functional component. */
     childComponent?: U;
-    childProps?: ComponentClassKeyToProps[U];
+    childProps?: U extends ComponentClassKey ? ComponentClassKeyToProps[U] : undefined;
   };
 };
 
