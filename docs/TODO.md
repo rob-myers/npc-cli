@@ -118,8 +118,6 @@
   - ❌ start migrating character controller with soldier.fbx
     - https://discourse.threejs.org/t/character-controller/46936
 
-## WIP
-
 - ✅ try https://github.com/pmndrs/react-three-offscreen
   - ✅ create simple demo
   - ✅ fixing resizing
@@ -140,6 +138,8 @@
   - ✅ `TestCanvas` has prop `sceneProps` to be used as `<Scene {...sceneProps} />`
   - ✅ create test scene `TestCharacter` and hook up to `Viewer`
 
+## WIP
+
 - 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
   - 🚧 BUG ecctrl is panning on drag outside canvas
@@ -155,17 +155,19 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
+- 🚧 start GeomorphEdit
+  - start map-level UI with `HTMLSelectElement`s
+  - can detect click geomorphs or hull doors
+  - migrate Triangle
+
 - Learn about WebGl RenderTargets
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 
-- start GeomorphEdit
-  - migrate Triangle
-
 - try migrate R3FDemo to react-three-offscreen
-
 - sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile
+- use 
 - Terminal crashing during HMR
 - (hull) walls -> quads
 - need to remove labels from hull symbol image?
