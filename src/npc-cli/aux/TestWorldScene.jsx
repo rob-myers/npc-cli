@@ -1,45 +1,75 @@
-
 import React from "react";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 import useStateRef from "../hooks/use-state-ref";
+import { geomorphService } from "../service/geomorph";
 
 /**
  * @param {SceneProps} props
  */
 export default function TestScene(props) {
+  const state = useStateRef(
+    /** @type {() => SceneState} */ () => ({
+      ready: true,
+      tex: {},
+      mat4s: props.gmDefs.map(
+        ({ transform = [1, 0, 0, 1, 0, 0] }) =>
+          new THREE.Matrix4(
+            transform[0],
+            0,
+            transform[2],
+            transform[4] * scale,
+            // 0, 1, 0, gmId * 0.001, // hack to fix z-fighting
+            0,
+            1,
+            0,
+            0,
+            transform[1],
+            0,
+            transform[3],
+            transform[5] * scale,
+            0,
+            0,
+            0,
+            1
+          )
+      ),
+      controls: /** @type {*} */ (null),
+    })
+  );
 
-  const state = useStateRef(/** @type {() => SceneState} */() => ({
-    ready: true,
-    tex: {},
-    mat4s: props.gms.map((gm, gmId) =>
-      new THREE.Matrix4(
-        gm.transform[0], 0, gm.transform[2], gm.transform[4] * scale,
-        // 0, 1, 0, gmId * 0.001, // hack to fix z-fighting
-        0, 1, 0, 0,
-        gm.transform[1], 0, gm.transform[3], gm.transform[5] * scale,
-        0, 0, 0, 1
-      )
-    ),
-    controls: /** @type {*} */ (null),
-  }));
-
-  state.controls = useThree((state) => /** @type {SceneState['controls']} */(state.controls));
+  state.controls = useThree((state) => /** @type {SceneState['controls']} */ (state.controls));
 
   React.useEffect(() => {
     state.controls?.setPolarAngle(Math.PI / 4);
   }, [state.controls]);
 
+  const { data: gms = [] } = useQuery({
+    queryKey: ["R3FDemo"],
+    /** @returns {Promise<GeomorphData[]>} */
+    async queryFn() {
+      const symbolsJson = /** @type {import('static/assets/symbol/symbols-meta.json')} */ (
+        await fetch(`/assets/symbol/symbols-meta.json`).then((x) => x.json())
+      );
+      return props.gmDefs.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }) => {
+        const { pngRect } = symbolsJson[geomorphService.gmKeyToKeys(gmKey).hullKey];
+        return { gmKey, transform, pngRect, debugPngPath: `/assets/debug/${gmKey}.png` };
+      });
+    },
+    enabled: !props.disabled, // 🚧 what happens to `data` when goes disabled?
+  });
+
   useQueries({
-    queries: props.gms.map((gm) => ({
-      queryKey: ["R3FDemo", gm.gmKey],
-      queryFn: () => textureLoader.loadAsync(gm.debugPngPath),
-    })),
+    queries:
+      gms.map((gm) => ({
+        queryKey: ["R3FDemo", gm.gmKey],
+        queryFn: () => textureLoader.loadAsync(gm.debugPngPath),
+      })) ?? [],
     combine(results) {
-      props.gms.forEach((gm, gmId) => (state.tex[gm.gmKey] ??= results[gmId].data));
+      gms.forEach((gm, gmId) => (state.tex[gm.gmKey] ??= results[gmId].data));
       return results;
     },
   });
@@ -50,7 +80,7 @@ export default function TestScene(props) {
       <ambientLight intensity={1} />
       <PerspectiveCamera position={[0, 8, 0]} makeDefault />
       <Origin />
-      {props.gms.map((gm, gmId) => (
+      {gms.map((gm, gmId) => (
         <group key={gmId} onUpdate={(self) => self.applyMatrix4(state.mat4s[gmId])}>
           {state.tex[gm.gmKey] && (
             <mesh
@@ -82,8 +112,10 @@ export default function TestScene(props) {
 
 /**
  * @typedef SceneProps
- * @property {import('./TestWorld').GeomorphData[]} gms
-*/
+ * @property {boolean} [disabled]
+ * @property {Geomorph.GeomorphsDefItem[]} gmDefs
+ * //@property {import('./TestWorld').GeomorphData[]} gms
+ */
 
 /**
  * @typedef SceneState
@@ -91,6 +123,14 @@ export default function TestScene(props) {
  * @property {Partial<Record<Geomorph.GeomorphKey, THREE.Texture>>} tex
  * @property {THREE.Matrix4[]} mat4s
  * @property {import('three-stdlib').MapControls} controls
+ */
+
+/**
+ * @typedef GeomorphData
+ * @property {Geomorph.GeomorphKey} gmKey
+ * @property {[number, number, number, number, number, number]} transform
+ * @property {Geom.RectJson} pngRect
+ * @property {string} debugPngPath
  */
 
 function Origin() {

@@ -35,7 +35,7 @@ export type TabDef = { weight?: number } & (
       filepath: string;
       /** Determines component */
       class: ComponentClassKey;
-    } & TabMetaComponentProps)
+    } & TabMetaProps)
   | {
       type: "terminal";
       /** Session identifier (determines tab) */
@@ -60,12 +60,6 @@ function getTabIdentifier(meta: TabDef) {
 }
 
 const classToComponent = {
-  // GeomorphEdit: {
-  //   loadable: loadable(() => import('projects/geomorph/GeomorphEdit')),
-  //   get: (module: typeof import('projects/geomorph/GeomorphEdit')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
   TestCanvas: {
     // supports props.childComponent
     loadable: loadable(() => import("src/npc-cli/aux/TestCanvas")),
@@ -88,10 +82,10 @@ const classToComponent = {
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
-  TestWorld: {
-    loadable: loadable(() => import("src/npc-cli/aux/TestWorld")),
+  TestWorldScene: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestWorldScene")),
     get:
-      (module: typeof import("src/npc-cli/aux/TestWorld")) =>
+      (module: typeof import("src/npc-cli/aux/TestWorldScene")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
@@ -115,18 +109,33 @@ export async function getComponent(componentClassKey: ComponentClassKey, errorId
 /** Components we can instantiate inside a tab */
 export type ComponentClassKey = keyof typeof classToComponent;
 
-type TabMetaComponentProps = {
-  [K in ComponentClassKey]: {
-    class: K;
-    props: Omit<
-      Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0],
-      "childComponent"
-    > & {
-      /** If defined this is resolved as e.g. functional component. */
-      childComponent?: ComponentClassKey;
-    };
+type TabMetaProps = TabMetaPropsDistributed<ComponentClassKey, ComponentClassKey>;
+
+type TabMetaPropsDistributed<
+  K extends ComponentClassKey,
+  U extends ComponentClassKey
+> = K extends infer A
+  ? A extends ComponentClassKey
+    ? U extends infer B
+      ? B extends ComponentClassKey
+        ? TabMetaPropsGeneric<A, B>
+        : never
+      : never
+    : never
+  : never;
+
+type TabMetaPropsGeneric<K extends ComponentClassKey, U extends ComponentClassKey> = {
+  class: K;
+  props: Omit<ComponentClassKeyToProps[K], "childComponent"> & {
+    /** If defined this is resolved as e.g. functional component. */
+    childComponent?: U;
+    childProps?: ComponentClassKeyToProps[U];
   };
-}[ComponentClassKey];
+};
+
+type ComponentClassKeyToProps = {
+  [K in ComponentClassKey]: Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0];
+};
 
 export interface BaseComponentProps {
   disabled?: boolean;

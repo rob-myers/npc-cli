@@ -155,7 +155,9 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
-- 🚧 start GeomorphEdit
+- 🚧 start "GeomorphEdit" in TestWorld
+  - ✅ `TestWorld` -> `TestWorldScene` in `TestCanvas`
+  - ✅ remove `TestWorld`
   - start map-level UI with `HTMLSelectElement`s
   - can detect click geomorphs or hull doors
   - migrate Triangle
@@ -171,6 +173,7 @@
 - Terminal crashing during HMR
 - (hull) walls -> quads
 - need to remove labels from hull symbol image?
+- try avoid alphaBlend geomorphs via alphaMap
 
 - world editor in new repo
 - geomorph editor in new repo
