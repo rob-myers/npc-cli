@@ -8,7 +8,7 @@
     "gatsby"
   ],
   "scripts": {
-    "dev": "npm run develop",
+    "dev": "concurrently 'npm run develop' 'npm run watch-symbols-meta'",
     "develop": "gatsby develop -p 8011",
     "start": "gatsby develop",
     "build": "gatsby build",
@@ -85,7 +85,9 @@
     "@types/webpack": "^5.28.5",
     "@types/webpack-env": "^1.18.4",
     "babel-preset-gatsby": "^3.13.1",
+    "concurrently": "^8.2.2",
     "gatsby-plugin-tsconfig-paths": "^1.0.6",
+    "nodemon": "^3.1.0",
     "patch-package": "^8.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

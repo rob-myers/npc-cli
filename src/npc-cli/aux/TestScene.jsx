@@ -6,9 +6,10 @@ import { useThree } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 import useStateRef from "../hooks/use-state-ref";
 import { geomorphService } from "../service/geomorph";
+import { customQuadGeometry } from "../service/three";
 
 /**
- * @param {SceneProps} props
+ * @param {Props} props
  */
 export default function TestScene(props) {
   const state = useStateRef(
@@ -105,16 +106,21 @@ export default function TestScene(props) {
           )}
         </group>
       ))}
-      {/* <Stats showPanel={0} /> */}
+      <gridHelper
+        args={[100, 100 * (3 / 2)]}
+        onPointerUp={(e) => {
+          e.stopPropagation();
+          console.log("gridHelper onPointerUp", e);
+        }}
+      />
     </>
   );
 }
 
 /**
- * @typedef SceneProps
+ * @typedef Props
  * @property {boolean} [disabled]
  * @property {Geomorph.GeomorphsDefItem[]} gmDefs
- * //@property {import('./TestWorld').GeomorphData[]} gms
  */
 
 /**
@@ -135,7 +141,7 @@ export default function TestScene(props) {
 
 function Origin() {
   return (
-    <mesh scale={[0.025, 0, 0.025]} position={[0, 0.05, 0]}>
+    <mesh scale={[0.025, 0, 0.025]} position={[0, 0, 0]}>
       <boxGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color="red" />
     </mesh>
@@ -150,13 +156,3 @@ const gmScale = 1;
 const scale = (1 / gmScale) * (1 / 60) * (2 / 3);
 
 const textureLoader = new THREE.TextureLoader();
-
-export const customQuadGeometry = new THREE.BufferGeometry();
-const vertices = new Float32Array([0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1]);
-
-const uvs = new Float32Array([0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0]);
-
-const indices = [0, 1, 2, 0, 3, 1];
-customQuadGeometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-customQuadGeometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
-customQuadGeometry.setIndex(indices);

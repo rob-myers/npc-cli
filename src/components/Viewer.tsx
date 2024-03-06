@@ -74,7 +74,7 @@ export default function Viewer() {
               class: "TestCanvas",
               filepath: "r3f-demo",
               props: {
-                childComponent: "TestWorldScene",
+                childComponent: "TestScene",
                 childProps: {
                   gmDefs: [
                     { gmKey: "g-301--bridge" },
@@ -93,6 +93,7 @@ export default function Viewer() {
                     { gmKey: "g-102--research-deck", transform: [1, 0, 0, 1, -1200, 0] },
                   ],
                 },
+                stats: true,
               },
             },
           ],

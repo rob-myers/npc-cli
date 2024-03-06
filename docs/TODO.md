@@ -155,18 +155,33 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
+- ✅ Fix remount issue
+  - `TestScene` was exporting `customQuadGeometry` which broke HMR
+
+- ✅ geomorph 301 position slightly wrong?
+
 - 🚧 start "GeomorphEdit" in TestWorld
   - ✅ `TestWorld` -> `TestWorldScene` in `TestCanvas`
   - ✅ remove `TestWorld`
-  - start map-level UI with `HTMLSelectElement`s
+  - ❌ start map-level UI with `HTMLSelectElement`s
+  - 🚧 `TestCanvas` has div ContextMenu shown on LongPress or RMB
+    - populate with geomorph select (hard-code for now)
   - can detect click geomorphs or hull doors
   - migrate Triangle
 
+- ✅ Don't use a web worker, here's why:
+  - `<NPC>` should use react-three-fiber
+  - But then js representation `state` inaccessible from main thread
+  - TTY code runs in main thread, so would need another rep + communication
+  - More generally would have to wrap THREE in a communication API.
+  - We can return to "web worker approach" once the project is more mature
+
 - Learn about WebGl RenderTargets
+  - Towards "Pixi.js RenderTexture" functionality
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 
-- try migrate R3FDemo to react-three-offscreen
+- ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile
 - use 
