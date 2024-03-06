@@ -1,7 +1,7 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { Stats } from "@react-three/drei";
-import { css, cx } from "@emotion/css";
+import { css } from "@emotion/css";
 
 import useStateRef from "../hooks/use-state-ref";
 
@@ -21,27 +21,42 @@ export default function TestCanvas(props) {
   state.disabled = !!props.disabled;
 
   return (
-    <Canvas
-      className={cx(canvasCss, { disabled: props.disabled })}
-      // "never" broke TestCharacter sporadically
-      frameloop={props.disabled ? "demand" : "always"}
-      resize={{ debounce: 300 }}
-      gl={{
-        // powerPreference: "lower-power", // 🔔 throws
-        toneMapping: 4,
-        toneMappingExposure: 1,
-        // logarithmicDepthBuffer: true,
-      }}
-    >
-      {props.childComponent
-        ? React.createElement(
-            props.childComponent,
-            /** @type {ChildProps} */ ({ ...props.childProps, disabled: props.disabled })
-          )
-        : null}
+    <>
+      <Canvas
+        className={canvasCss}
+        // "never" broke TestCharacter sporadically
+        frameloop={props.disabled ? "demand" : "always"}
+        resize={{ debounce: 300 }}
+        gl={{ toneMapping: 4, toneMappingExposure: 1 }}
+        // onPointerUp={}
+        onPointerMissed={(e) => {
+          console.log("onPointerMissed");
+        }}
+      >
+        {props.childComponent
+          ? React.createElement(
+              props.childComponent,
+              /** @type {ChildProps} */ ({
+                ...props.childProps,
+                disabled: props.disabled,
+              })
+            )
+          : null}
 
-      {props.stats && <Stats showPanel={0} />}
-    </Canvas>
+        {props.stats && <Stats showPanel={0} />}
+      </Canvas>
+
+      <div className={contextMenuCss}>
+        {/* 🚧 */}
+        ContextMenu
+        <select defaultValue={undefined} style={{ width: "100%" }}>
+          <option>choose geomorph</option>
+          <option value="foo">foo</option>
+          <option value="bar">bar</option>
+          <option value="baz">baz</option>
+        </select>
+      </div>
+    </>
   );
 }
 
@@ -80,4 +95,15 @@ const canvasCss = css`
     width: 100%;
     height: 100%;
   }
+`;
+
+const contextMenuCss = css`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 100;
+  background-color: black;
+  color: white;
+  height: 100px;
+  width: 150px;
 `;
