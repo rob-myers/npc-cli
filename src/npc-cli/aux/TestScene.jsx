@@ -107,7 +107,7 @@ export default function TestScene(props) {
         </group>
       ))}
       <gridHelper
-        args={[200, 200 * (3 / 2)]}
+        args={[100, 100 * (3 / 2)]}
         onPointerUp={(e) => {
           e.stopPropagation();
           console.log("gridHelper onPointerUp", e);
