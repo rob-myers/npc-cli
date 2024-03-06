@@ -162,6 +162,13 @@
   - can detect click geomorphs or hull doors
   - migrate Triangle
 
+- ✅ Don't use a web worker, here's why:
+  - `<NPC>` should use react-three-fiber
+  - But then js representation `state` inaccessible from main thread
+  - TTY code runs in main thread, so would need another rep + communication
+  - More generally would have to wrap THREE in a communication API.
+  - We can return to "web worker approach" once the project is more mature
+
 - Learn about WebGl RenderTargets
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
