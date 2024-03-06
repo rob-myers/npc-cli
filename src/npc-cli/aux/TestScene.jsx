@@ -88,9 +88,6 @@ export default function TestScene(props) {
               scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
               geometry={customQuadGeometry}
               position={[gm.pngRect.x * scale, 0, gm.pngRect.y * scale]}
-              onPointerUp={(e) => {
-                console.log("onPointerUp", e);
-              }}
             >
               <meshBasicMaterial
                 side={THREE.DoubleSide}
@@ -109,7 +106,13 @@ export default function TestScene(props) {
           )}
         </group>
       ))}
-      {/* <gridHelper args={[20, 20]} /> */}
+      <gridHelper
+        args={[200, 200 * (3 / 2)]}
+        onPointerUp={(e) => {
+          e.stopPropagation();
+          console.log("gridHelper onPointerUp", e);
+        }}
+      />
     </>
   );
 }
