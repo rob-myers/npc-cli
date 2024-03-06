@@ -8,7 +8,7 @@ import useStateRef from "../hooks/use-state-ref";
 import { geomorphService } from "../service/geomorph";
 
 /**
- * @param {SceneProps} props
+ * @param {Props} props
  */
 export default function TestScene(props) {
   const state = useStateRef(
@@ -105,16 +105,14 @@ export default function TestScene(props) {
           )}
         </group>
       ))}
-      {/* <Stats showPanel={0} /> */}
     </>
   );
 }
 
 /**
- * @typedef SceneProps
+ * @typedef Props
  * @property {boolean} [disabled]
  * @property {Geomorph.GeomorphsDefItem[]} gmDefs
- * //@property {import('./TestWorld').GeomorphData[]} gms
  */
 
 /**

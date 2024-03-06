@@ -9,7 +9,7 @@ import {
 } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 import Ecctrl from "ecctrl";
-import { customQuadGeometry } from "./TestWorldScene";
+import { customQuadGeometry } from "./TestScene";
 
 /**
  * @param {Props} props
