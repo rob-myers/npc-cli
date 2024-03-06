@@ -158,6 +158,8 @@
 - ✅ Fix remount issue
   - `TestScene` was exporting `customQuadGeometry` which broke HMR
 
+- ✅ geomorph 301 position slightly wrong?
+
 - 🚧 start "GeomorphEdit" in TestWorld
   - ✅ `TestWorld` -> `TestWorldScene` in `TestCanvas`
   - ✅ remove `TestWorld`
