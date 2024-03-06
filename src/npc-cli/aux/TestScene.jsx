@@ -107,7 +107,7 @@ export default function TestScene(props) {
         </group>
       ))}
       <gridHelper
-        args={[100, 100 * (3 / 2)]}
+        args={[150, 150 / 1.5]}
         onPointerUp={(e) => {
           e.stopPropagation();
           console.log("gridHelper onPointerUp", e);
@@ -153,6 +153,6 @@ const gmScale = 1;
  * - Undo image scale (i.e. `gmScale`).
  * - Next, `1/60` -> 1 grid side -> `1.5m`
  */
-const scale = (1 / gmScale) * (1 / 60) * (2 / 3);
+const scale = (1 / gmScale) * (1 / 60) * 1.5;
 
 const textureLoader = new THREE.TextureLoader();
