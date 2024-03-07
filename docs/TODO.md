@@ -164,6 +164,8 @@
   - ✅ `TestWorld` -> `TestWorldScene` in `TestCanvas`
   - ✅ remove `TestWorld`
   - ❌ start map-level UI with `HTMLSelectElement`s
+  - ✅ THREE gridHelper -> single quad infiniteGridHelper
+    - fix jsx type
   - 🚧 `TestCanvas` has div ContextMenu shown on LongPress or RMB
     - populate with geomorph select (hard-code for now)
   - can detect click geomorphs or hull doors
