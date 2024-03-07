@@ -92,9 +92,10 @@ export default function TestScene(props) {
       ))}
       <infiniteGridHelper
         args={[1.5, 1.5, "#bbbbbb"]}
-        position={[0, -0.001, 0]}
+        // position={[0, -0.001, 0]}
+        rotation={[Math.PI / 2, 0, 0]}
         onPointerUp={(e) => {
-          console.log("TestScene onPointerUp", e.point);
+          console.log("TestScene onPointerUp", e, e.point);
         }}
       />
     </>
