@@ -2,23 +2,31 @@ import React from "react";
 import { Canvas } from "@react-three/fiber";
 import { Stats } from "@react-three/drei";
 import { css } from "@emotion/css";
+import { Subject } from "rxjs";
 
 import useStateRef from "../hooks/use-state-ref";
 
 /**
- * React Three Fiber Canvas wrapper
  * @template {{ disabled?: boolean; }} [ChildProps={}]
  * @param {Props<ChildProps>} props
  */
 export default function TestCanvas(props) {
   const state = useStateRef(
     /** @returns {State} */ () => ({
-      rootEl: /** @type {*} */ (null),
-      disabled: !!props.disabled,
+      menuEl: /** @type {*} */ (null),
+      // 🚧 provide via useTestCanvasContext
+      events: new Subject(),
     })
   );
 
-  state.disabled = !!props.disabled;
+  React.useEffect(() => {
+    const sub = state.events.subscribe((e) => {
+      if (e.key === "pointerup") {
+        // 🚧 can show/hide ContextMenu
+      }
+    });
+    return () => sub.unsubscribe();
+  }, []);
 
   return (
     <>
@@ -28,26 +36,24 @@ export default function TestCanvas(props) {
         frameloop={props.disabled ? "demand" : "always"}
         resize={{ debounce: 300 }}
         gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
-        // onPointerUp={}
         onPointerMissed={(e) => {
-          console.log("onPointerMissed");
+          console.log("onPointerMissed", e);
+          // 🚧 can show/hide ContextMenu
         }}
       >
-        {props.childComponent
-          ? React.createElement(
-              props.childComponent,
-              /** @type {ChildProps} */ ({
-                ...props.childProps,
-                disabled: props.disabled,
-              })
-            )
-          : null}
+        {React.createElement(
+          props.childComponent,
+          /** @type {ChildProps} */ ({
+            ...props.childProps,
+            disabled: props.disabled,
+          })
+        )}
 
         {props.stats && <Stats showPanel={0} />}
       </Canvas>
 
-      <div className={contextMenuCss}>
-        {/* 🚧 */}
+      {/* 🚧 */}
+      <div ref={(x) => x && (state.menuEl = x)} className={contextMenuCss}>
         ContextMenu
         <select defaultValue={undefined} style={{ width: "100%" }}>
           <option>choose geomorph</option>
@@ -65,14 +71,14 @@ export default function TestCanvas(props) {
  * @typedef Props
  * @property {boolean} [disabled]
  * @property {boolean} [stats]
- * @property {React.ComponentType<ChildProps>} [childComponent]
+ * @property {React.ComponentType<ChildProps>} childComponent
  * @property {ChildProps} [childProps]
  */
 
 /**
  * @typedef State
- * @property {boolean} disabled
- * @property {HTMLCanvasElement} rootEl
+ * @property {HTMLDivElement} menuEl
+ * @property {Subject<NPC.Event>} events
  */
 
 /**
