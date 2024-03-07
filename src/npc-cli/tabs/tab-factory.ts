@@ -128,11 +128,16 @@ type TabMetaPropsDistributed<
 
 type TabMetaPropsGeneric<K extends ComponentClassKey, U extends ComponentClassKey | undefined> = {
   class: K;
-  props: Omit<ComponentClassKeyToProps[K], "childComponent"> & {
-    /** If defined this is resolved as e.g. functional component. */
-    childComponent?: U;
-    childProps?: U extends ComponentClassKey ? ComponentClassKeyToProps[U] : undefined;
-  };
+  props: Omit<ComponentClassKeyToProps[K], "childComponent"> &
+    (U extends ComponentClassKey
+      ? {
+          /** This will be resolved as e.g. a functional component. */
+          childComponent: U;
+          childProps?: ComponentClassKeyToProps[U];
+        }
+      : {
+          childComponent?: undefined;
+        });
 };
 
 type ComponentClassKeyToProps = {
