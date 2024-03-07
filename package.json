@@ -87,6 +87,7 @@
     "@types/webpack-env": "^1.18.4",
     "babel-preset-gatsby": "^3.13.1",
     "concurrently": "^8.2.2",
+    "gatsby-plugin-compile-es6-packages": "^2.1.1",
     "gatsby-plugin-tsconfig-paths": "^1.0.6",
     "nodemon": "^3.1.0",
     "patch-package": "^8.0.0",
