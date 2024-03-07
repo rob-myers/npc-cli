@@ -1,6 +1,10 @@
 # Background
 
-Whenever I've tried to create a video game...
+In my attempts to create a video game,
+I've always been drawn towards Non-Player Character behaviour.
+Films and books are non-interactive (the information flows in one way),
+whereas sports are interactive but only with other humans.
+The fabrication of interactive characters distinguishes video games from other entertainment or creative works.
 
 🚧
 
