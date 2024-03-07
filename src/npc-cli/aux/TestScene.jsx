@@ -20,24 +20,12 @@ export default function TestScene(props) {
       tex: {},
       mat4s: props.gmDefs.map(
         ({ transform = [1, 0, 0, 1, 0, 0] }) =>
+          // prettier-ignore
           new THREE.Matrix4(
-            transform[0],
-            0,
-            transform[2],
-            transform[4] * scale,
-            // 0, 1, 0, gmId * 0.001, // hack to fix z-fighting
-            0,
-            1,
-            0,
-            0,
-            transform[1],
-            0,
-            transform[3],
-            transform[5] * scale,
-            0,
-            0,
-            0,
-            1
+            transform[0], 0, transform[2], transform[4] * scale,
+            0, 1, 0, 0,
+            transform[1], 0, transform[3], transform[5] * scale,
+            0, 0, 0, 1
           )
       ),
       controls: /** @type {*} */ (null),
