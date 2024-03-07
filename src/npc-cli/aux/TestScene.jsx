@@ -8,6 +8,8 @@ import useStateRef from "../hooks/use-state-ref";
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
 
+import "./infinite-grid-helper.js";
+
 /**
  * @param {Props} props
  */
@@ -64,11 +66,10 @@ export default function TestScene(props) {
   });
 
   useQueries({
-    queries:
-      gms.map((gm) => ({
-        queryKey: ["R3FDemo", gm.gmKey],
-        queryFn: () => textureLoader.loadAsync(gm.debugPngPath),
-      })) ?? [],
+    queries: gms.map((gm) => ({
+      queryKey: ["R3FDemo", gm.gmKey],
+      queryFn: () => textureLoader.loadAsync(gm.debugPngPath),
+    })),
     combine(results) {
       gms.forEach((gm, gmId) => (state.tex[gm.gmKey] ??= results[gmId].data));
       return results;
@@ -92,25 +93,20 @@ export default function TestScene(props) {
               <meshBasicMaterial
                 side={THREE.DoubleSide}
                 transparent
+                // 🚧 remove blending, depthWrite
                 blending={THREE.AdditiveBlending}
                 depthWrite={false}
                 map={state.tex[gm.gmKey]}
               />
-              {/* <Edges
-                // scale={1.1}
-                scale={1}
-                threshold={15} // degrees
-                color="red"
-              /> */}
             </mesh>
           )}
         </group>
       ))}
-      <gridHelper
-        args={[150, 150 / 1.5]}
+      <infiniteGridHelper
+        args={[1.5, 1.5, "#bbbbbb"]}
+        position={[0, -0.001, 0]}
         onPointerUp={(e) => {
-          e.stopPropagation();
-          console.log("gridHelper onPointerUp", e);
+          console.log("infiniteGridHelper onPointerUp", e, e.point);
         }}
       />
     </>

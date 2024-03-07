@@ -27,7 +27,7 @@ export default function TestCanvas(props) {
         // "never" broke TestCharacter sporadically
         frameloop={props.disabled ? "demand" : "always"}
         resize={{ debounce: 300 }}
-        gl={{ toneMapping: 4, toneMappingExposure: 1 }}
+        gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
         // onPointerUp={}
         onPointerMissed={(e) => {
           console.log("onPointerMissed");
