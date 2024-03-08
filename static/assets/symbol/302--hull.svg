@@ -21,7 +21,7 @@
   <path d="M 1079.9 304.3 L 600.6 423.8 L 548.4 423.8 L 548.4 424 L 418 424 L 420 409.9 L 427 415.9 L 479.4 416 L 598.7 416 L 1076 297 L 1076 0 L 1084 0 L 1084 300 L 1079.9 304.3 Z" style="fill: rgb(255, 0, 0);">
     <title>hull-wall</title>
   </path>
-  <path d="M 73.163 325.605 L 280.763 325.605 L 286.863 323.505 L 293.163 327.705 L 289.163 333.605 L 73.163 333.605 L 66.863 329.305 L 68.863 326.005 L 73.163 325.605 Z" style="transform-box: fill-box; transform-origin: 50% 50%; fill: rgb(255, 0, 0);" transform="matrix(0.559193, 0.829038, -0.829038, 0.559193, 0.000016, 0.000014)">
+  <path d="M 122.709 238.323 L 238.797 410.431 L 243.949 414.314 L 243.99 421.885 L 236.862 421.868 L 116.077 242.796 L 116.119 235.169 L 119.973 234.981 L 122.709 238.323 Z" style="fill: rgb(255, 0, 0); transform-origin: 180.013px 328.555px;">
     <title>hull-wall</title>
   </path>
   <rect x="107.1" y="120.8" width="12.9" height="115.6" style="fill-opacity: 0.4; fill: rgb(255, 0, 0);">
@@ -127,7 +127,7 @@
     <title>poly fillColor=#fff strokeColor=#000 strokeWidth=4</title>
   </path>
   <path d="M 60.6 240 L 60 480 L 120 540 L 240 540 L 240 420 L 120 240 L 60 240 L 60.6 240 Z" style="stroke: rgb(0, 0, 0); stroke-width: 4px; fill: rgb(255, 0, 0); opacity: 0.5;">
-    <title>wall machine no-fill</title>
+    <title>hull-wall machine no-fill</title>
   </path>
   <rect x="1077.5" y="542" width="5" height="54" style="opacity: 0.25;">
     <title>wall</title>

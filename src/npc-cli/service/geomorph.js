@@ -194,7 +194,8 @@ class GeomorphService {
 
     return {
       key: symbolKey,
-      ...(hullWalls.length && { hullWalls }),
+      isHull: symbolKey.endsWith("--hull"),
+      hullWalls,
       width: viewBoxRect.width,
       height: viewBoxRect.height,
       lastModified,
@@ -216,7 +217,8 @@ class GeomorphService {
   serializeSymbol(parsed) {
     return {
       key: parsed.key,
-      hullWalls: parsed.hullWalls?.map((x) => x.geoJson),
+      isHull: parsed.isHull,
+      hullWalls: parsed.hullWalls.map((x) => x.geoJson),
       obstacles: parsed.obstacles.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),
       walls: parsed.walls.map((x) => x.geoJson),
       unsorted: parsed.unsorted.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),

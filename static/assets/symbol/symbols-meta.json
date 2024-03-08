@@ -1,6 +1,7 @@
 {
   "101--hull": {
     "key": "101--hull",
+    "isHull": true,
     "hullWalls": [
       {
         "type": "Polygon",
@@ -284,6 +285,7 @@
   },
   "102--hull": {
     "key": "102--hull",
+    "isHull": true,
     "hullWalls": [
       {
         "type": "Polygon",
@@ -493,6 +495,7 @@
   },
   "103--hull": {
     "key": "103--hull",
+    "isHull": true,
     "hullWalls": [
       {
         "type": "Polygon",
@@ -625,6 +628,7 @@
   },
   "301--hull": {
     "key": "301--hull",
+    "isHull": true,
     "hullWalls": [
       {
         "type": "Polygon",
@@ -1033,6 +1037,7 @@
   },
   "302--hull": {
     "key": "302--hull",
+    "isHull": true,
     "hullWalls": [
       {
         "type": "Polygon",
@@ -1083,15 +1088,15 @@
         "type": "Polygon",
         "coordinates": [
           [
-            [-229.0267, 242.731],
-            [-112.9382, 414.8392],
-            [-107.7861, 418.7221],
-            [-107.7452, 426.2936],
-            [-114.8733, 426.2767],
-            [-235.659, 247.2045],
-            [-235.617, 239.577],
-            [-231.7628, 239.3898],
-            [-229.0267, 242.731]
+            [122.709, 238.323],
+            [238.797, 410.431],
+            [243.949, 414.314],
+            [243.99, 421.885],
+            [236.862, 421.868],
+            [116.077, 242.796],
+            [116.119, 235.169],
+            [119.973, 234.981],
+            [122.709, 238.323]
           ]
         ]
       },
@@ -1116,10 +1121,7 @@
             [64, -4]
           ]
         ]
-      }
-    ],
-    "obstacles": [],
-    "walls": [
+      },
       {
         "type": "Polygon",
         "coordinates": [
@@ -1134,7 +1136,10 @@
             [60.6, 240]
           ]
         ]
-      },
+      }
+    ],
+    "obstacles": [],
+    "walls": [
       {
         "type": "Polygon",
         "coordinates": [
@@ -1468,10 +1473,11 @@
     "width": 1200,
     "height": 600,
     "pngRect": {"x": -6, "y": -61, "width": 1212, "height": 667},
-    "lastModified": 1709316605101.3545
+    "lastModified": 1709914561622.5771
   },
   "303--hull": {
     "key": "303--hull",
+    "isHull": true,
     "hullWalls": [
       {
         "type": "Polygon",
@@ -2326,6 +2332,8 @@
   },
   "stateroom--014--2x2": {
     "key": "stateroom--014--2x2",
+    "isHull": false,
+    "hullWalls": [],
     "obstacles": [
       {
         "meta": {"obstacle": true, "toilet": true},

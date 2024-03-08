@@ -7,8 +7,9 @@ declare namespace Geomorph {
 
   interface ParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> extends SvgGroups<T> {
     key: SymbolKey;
-    /** Hull walls, only in hull */
-    hullWalls?: T[];
+    isHull: boolean;
+    /** Hull walls, only non-empty in hull */
+    hullWalls: T[];
     /** Original SVG's width, inferred from `viewBox` */
     width: number;
     /** Original SVG's height, inferred from `viewBox` */
