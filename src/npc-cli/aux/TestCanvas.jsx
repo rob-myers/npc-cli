@@ -87,7 +87,7 @@ export default function TestCanvas(props) {
       >
         <div>ContextMenu</div>
         <select defaultValue={undefined} style={{ width: "100%" }}>
-          <option>choose geomorph</option>
+          <option>demo select</option>
           <option value="foo">foo</option>
           <option value="bar">bar</option>
           <option value="baz">baz</option>
@@ -140,15 +140,17 @@ const contextMenuCss = css`
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 100;
+  z-index: 0;
   height: 100px;
-  width: 120px;
 
   font-size: 0.9rem;
   color: white;
-  background-color: black;
+  background-color: #222;
+  border-radius: 5px;
+  border: 2px solid #aaa;
 
   padding: 8px;
+
   select {
     max-width: 100px;
     margin: 8px 0;
