@@ -160,16 +160,18 @@
 
 - ✅ geomorph 301 position slightly wrong?
 
-- 🚧 start "GeomorphEdit" in TestWorld
+- ❌ start "GeomorphEdit" in TestWorld
   - ✅ `TestWorld` -> `TestWorldScene` in `TestCanvas`
   - ✅ remove `TestWorld`
   - ❌ start map-level UI with `HTMLSelectElement`s
   - ✅ THREE gridHelper -> single quad infiniteGridHelper
     - fix jsx type
-  - 🚧 `TestCanvas` has div ContextMenu shown on LongPress or RMB
-    - populate with geomorph select (hard-code for now)
-  - can detect click geomorphs or hull doors
-  - migrate Triangle
+  - ❌ can detect click geomorphs or hull doors
+  - ℹ️ use SVG editor instead, rep gms as e.g. 1200 * 1200 boxes
+
+- 🚧 `TestCanvas` has div ContextMenu shown on LongPress or RMB
+    - ✅ when click outside scene
+    - 🚧 when click in scene, showing point data
 
 - ✅ Don't use a web worker, here's why:
   - `<NPC>` should use react-three-fiber
@@ -183,6 +185,7 @@
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 
+- migrate Triangle
 - ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile
