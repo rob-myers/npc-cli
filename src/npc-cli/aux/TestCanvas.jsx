@@ -127,6 +127,8 @@ export default function TestCanvas(props) {
  */
 
 const canvasCss = css`
+  user-select: none;
+
   > div {
     background-color: black;
     display: flex;
