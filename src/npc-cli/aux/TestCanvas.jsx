@@ -4,6 +4,8 @@ import { Stats } from "@react-three/drei";
 import { css } from "@emotion/css";
 import { Subject } from "rxjs";
 
+import { Vect } from "../geom";
+import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -15,7 +17,6 @@ export default function TestCanvas(props) {
     /** @returns {State} */ () => ({
       canvasEl: /** @type {*} */ (null),
       menuEl: /** @type {*} */ (null),
-      // 🚧 provide via useTestCanvasContext
       events: new Subject(),
       down: undefined,
     })
@@ -23,15 +24,27 @@ export default function TestCanvas(props) {
 
   React.useEffect(() => {
     const sub = state.events.subscribe((e) => {
-      if (e.key === "pointerup") {
-        // 🚧 can show/hide ContextMenu
+      console.log("event", e);
+
+      switch (e.key) {
+        case "pointerup":
+        case "pointerup-outside":
+          // show/hide ContextMenu
+          if ((e.rmb || e.longPress) && e.distance <= 5) {
+            state.menuEl.style.transform = `translate(${e.screenPoint.x}px, ${e.screenPoint.y}px)`;
+            state.menuEl.style.display = "block";
+          } else {
+            state.menuEl.style.display = "none";
+          }
+          state.down = undefined;
+          break;
       }
     });
     return () => sub.unsubscribe();
   }, []);
 
   return (
-    <>
+    <TestCanvasContext.Provider value={state}>
       <Canvas
         ref={(x) => x && (state.canvasEl = x)}
         className={canvasCss}
@@ -41,8 +54,7 @@ export default function TestCanvas(props) {
         gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
         onPointerDown={(e) => {
           state.down = {
-            clientX: e.clientX,
-            clientY: e.clientY,
+            clientPos: new Vect(e.clientX, e.clientY),
             distance: 0, // or getDistance(state.input.touches)
             epochMs: Date.now(),
           };
@@ -50,22 +62,14 @@ export default function TestCanvas(props) {
         }}
         onPointerMissed={(e) => {
           // console.log("onPointerMissed", e.clientX, e.clientY, e);
-          if (!state.down) {
-            return;
-          }
-          const distance = Math.sqrt(
-            (e.clientX - state.down.clientX) ** 2 + (e.clientY - state.down.clientY) ** 2
-          );
-          const timeMs = Date.now() - state.down.epochMs;
-          if ((e.buttons === 2 || timeMs >= 300) && distance <= 5) {
-            // RMB or longPress
-            const { x, y } = state.canvasEl.getBoundingClientRect();
-            state.menuEl.style.display = "block";
-            state.menuEl.style.transform = `translate(${e.clientX - x}px, ${e.clientY - y - 10}px)`;
-          } else {
-            state.menuEl.style.display = "none";
-          }
-          state.down = undefined;
+          state.down &&
+            state.events.next({
+              key: "pointerup-outside",
+              distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+              longPress: Date.now() - state.down.epochMs >= 300,
+              rmb: e.button === 2,
+              screenPoint: { x: e.offsetX, y: e.offsetY },
+            });
         }}
       >
         {React.createElement(
@@ -93,7 +97,7 @@ export default function TestCanvas(props) {
           <option value="baz">baz</option>
         </select>
       </div>
-    </>
+    </TestCanvasContext.Provider>
   );
 }
 
@@ -111,7 +115,7 @@ export default function TestCanvas(props) {
  * @property {HTMLCanvasElement} canvasEl
  * @property {HTMLDivElement} menuEl
  * @property {Subject<NPC.Event>} events
- * @property {{ clientX: number; clientY: number; distance: number; epochMs: number; }} [down]
+ * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; }} [down]
  */
 
 /**

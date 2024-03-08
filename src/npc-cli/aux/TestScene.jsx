@@ -8,6 +8,7 @@ import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
 import "./infinite-grid-helper.js";
+import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
@@ -33,15 +34,13 @@ export default function TestScene(props) {
     })
   );
 
-  const update = useUpdate();
-
   // Initialize view
   state.controls = useThree((state) => /** @type {SceneState['controls']} */ (state.controls));
   React.useEffect(() => {
     state.controls?.setPolarAngle(Math.PI / 4);
   }, [state.controls]);
 
-  // 🚧 get events from context
+  const api = React.useContext(TestCanvasContext);
 
   // gmDefs -> gms; load textures
   const { data: gms = [] } = useQuery({
@@ -62,6 +61,8 @@ export default function TestScene(props) {
     },
     enabled: !props.disabled,
   });
+
+  const update = useUpdate();
 
   return (
     <>
@@ -94,7 +95,26 @@ export default function TestScene(props) {
         // position={[0, -0.001, 0]}
         rotation={[Math.PI / 2, 0, 0]}
         onPointerUp={(e) => {
+          if (!api.down) {
+            return;
+          }
           console.log("TestScene onPointerUp", e, e.point);
+          const distance = api.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
+          const timeMs = Date.now() - api.down.epochMs;
+          api.events.next({
+            key: "pointerup",
+            distance,
+            height: e.point.y,
+            longPress: timeMs >= 300,
+            point: { x: e.point.x, y: e.point.z },
+            rmb: e.button === 2,
+            // 🤔 or clientX,Y minus canvas bounds?
+            screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+            meta: {
+              floor: true,
+              targetCenter: undefined,
+            },
+          });
         }}
       />
     </>

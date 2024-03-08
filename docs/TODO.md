@@ -169,9 +169,9 @@
   - ❌ can detect click geomorphs or hull doors
   - ℹ️ use SVG editor instead, rep gms as e.g. 1200 * 1200 boxes
 
-- 🚧 `TestCanvas` has div ContextMenu shown on LongPress or RMB
+- ✅ `TestCanvas` has div ContextMenu shown on LongPress or RMB
     - ✅ when click outside scene
-    - 🚧 when click in scene, showing point data
+    - ✅ when click on floor in TestScene
 
 - ✅ Don't use a web worker, here's why:
   - `<NPC>` should use react-three-fiber
@@ -179,6 +179,11 @@
   - TTY code runs in main thread, so would need another rep + communication
   - More generally would have to wrap THREE in a communication API.
   - We can return to "web worker approach" once the project is more mature
+
+- can layout map using SVG with geomorph placeholders (rects)
+  - create example layout svg
+  - parse layout(s) and store in `layouts.json`
+  - `TestScene` reads from JSON and updates onchange
 
 - Learn about WebGl RenderTargets
   - Towards "Pixi.js RenderTexture" functionality

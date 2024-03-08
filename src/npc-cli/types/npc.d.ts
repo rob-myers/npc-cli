@@ -1,5 +1,6 @@
 declare namespace NPC {
   type Event =
+    | PointerUpOutsideEvent
     | PointerUpEvent
     | PointerMoveEvent
     | { key: "disabled" }
@@ -19,25 +20,32 @@ declare namespace NPC {
     screenPoint: Geom.VectJson;
   }
 
-  interface PointerUpEvent {
+  interface PointerUpEvent extends BasePointerUpEvent {
     key: "pointerup";
-    /**  */
-    clickId?: string;
-    /** Distance in XZ plane from pointerdown */
-    distance: number;
     /** Ordinate `y` */
     height: number;
-    /** Was this a long press? */
-    longPress: boolean;
     /** Coords `(x, z)` */
     point: Geom.VectJson;
-    /** Was the right mouse button used?  */
-    rmb: boolean;
     /** Properties of the thing we clicked. */
     meta: Geomorph.Meta<{
       /** `(x, z)` of target element centre if any */
       targetCenter?: Geom.VectJson;
     }>;
+  }
+
+  interface PointerUpOutsideEvent extends BasePointerUpEvent {
+    key: "pointerup-outside";
+  }
+
+  interface BasePointerUpEvent {
+    /** 🚧 */
+    clickId?: string;
+    /** Distance in XZ plane from pointerdown */
+    distance: number;
+    /** Was this a long press? */
+    longPress: boolean;
+    /** Was the right mouse button used?  */
+    rmb: boolean;
     screenPoint: Geom.VectJson;
   }
 }
