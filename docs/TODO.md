@@ -181,9 +181,13 @@
   - extract code, removing e.g. ray-cast
 
 - 🚧 can layout map using SVG with geomorph placeholders (rects)
-  - create example layout svg
-  - parse layout(s) and store in `layouts.json`
+  - ✅ create example layout svg
+  - 🚧 parse layout(s) and store in `layouts.json`
   - `TestScene` reads from JSON and updates onchange
+
+- hull symbols have folder symbols using placeholders
+  - add stateroom symbol
+  - extract during `yarn symbols-meta`
 
 - Learn about WebGl RenderTargets
   - Towards "Pixi.js RenderTexture" functionality
@@ -194,8 +198,8 @@
 - ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile
-- use 
 - Terminal crashing during HMR
+  - possibly fixed via `xterm-addon-webgl@beta`
 - (hull) walls -> quads
 - need to remove labels from hull symbol image?
 - try avoid alphaBlend geomorphs via alphaMap
