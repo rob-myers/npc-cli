@@ -1,14 +1,15 @@
 import React from "react";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 import * as THREE from "three";
 import { useThree } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
-import useStateRef from "../hooks/use-state-ref";
+
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
-
 import "./infinite-grid-helper.js";
+import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -32,16 +33,25 @@ export default function TestScene(props) {
     })
   );
 
-  state.controls = useThree((state) => /** @type {SceneState['controls']} */ (state.controls));
+  const update = useUpdate();
 
+  // Initialize view
+  state.controls = useThree((state) => /** @type {SceneState['controls']} */ (state.controls));
   React.useEffect(() => {
     state.controls?.setPolarAngle(Math.PI / 4);
   }, [state.controls]);
 
+  // 🚧 get events from context
+
+  // gmDefs -> gms; load textures
   const { data: gms = [] } = useQuery({
     queryKey: ["R3FDemo"],
     /** @returns {Promise<GeomorphData[]>} */
     async queryFn() {
+      props.gmDefs.forEach(async ({ gmKey }) => {
+        state.tex[gmKey] ??= await textureLoader.loadAsync(`/assets/debug/${gmKey}.png`);
+        update();
+      });
       const symbolsJson = /** @type {import('static/assets/symbol/symbols-meta.json')} */ (
         await fetch(`/assets/symbol/symbols-meta.json`).then((x) => x.json())
       );
@@ -50,18 +60,7 @@ export default function TestScene(props) {
         return { gmKey, transform, pngRect, debugPngPath: `/assets/debug/${gmKey}.png` };
       });
     },
-    enabled: !props.disabled, // 🚧 what happens to `data` when goes disabled?
-  });
-
-  useQueries({
-    queries: gms.map((gm) => ({
-      queryKey: ["R3FDemo", gm.gmKey],
-      queryFn: () => textureLoader.loadAsync(gm.debugPngPath),
-    })),
-    combine(results) {
-      gms.forEach((gm, gmId) => (state.tex[gm.gmKey] ??= results[gmId].data));
-      return results;
-    },
+    enabled: !props.disabled,
   });
 
   return (
