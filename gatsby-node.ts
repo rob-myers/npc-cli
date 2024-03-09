@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/** @param {import('gatsby').CreateWebpackConfigArgs} opts */
-exports.onCreateWebpackConfig = (opts) => {
+import type { CreateWebpackConfigArgs } from "gatsby";
+
+export function onCreateWebpackConfig(opts: CreateWebpackConfigArgs) {
   console.log({ "GATSBY STAGE": opts.stage, NODE_ENV: process.env.NODE_ENV });
 
   /** @type {import('webpack').Configuration} */
@@ -35,4 +35,4 @@ exports.onCreateWebpackConfig = (opts) => {
   };
 
   opts.actions.setWebpackConfig(cfg);
-};
+}
