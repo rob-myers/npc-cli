@@ -262,7 +262,7 @@ class geomServiceClass {
       } else {
         return closest;
       }
-    }, /** @type {null | Geom.VectJson} */(null));
+    }, /** @type {null | Geom.VectJson} */ (null));
   }
 
   /**
@@ -277,12 +277,12 @@ class geomServiceClass {
     const tangents = poly.tangents.outer;
     const edges = ring.map(
       (p, i) =>
-        /** @type {[Vect, Vect]} */([
-        p.clone().translate(amount * -tangents[i].y, amount * tangents[i].x),
-        ring[(i + 1) % ring.length]
-          .clone()
-          .translate(amount * -tangents[i].y, amount * tangents[i].x),
-      ])
+        /** @type {[Vect, Vect]} */ ([
+          p.clone().translate(amount * -tangents[i].y, amount * tangents[i].x),
+          ring[(i + 1) % ring.length]
+            .clone()
+            .translate(amount * -tangents[i].y, amount * tangents[i].x),
+        ])
     );
     return edges.map((edge, i) => {
       const nextIndex = (i + 1) % edges.length;
@@ -292,6 +292,14 @@ class geomServiceClass {
         ? edge[1].translate(lambda * tangents[i].x, lambda * tangents[i].y)
         : Vect.average([edge[1], nextEdge[0]]); // Fallback
     });
+  }
+
+  /**
+   * @param {any} input
+   * @returns {input is [number, number, number, number, number, number]}
+   */
+  isTransformTuple(input) {
+    return Array.isArray(input) && input.length === 6 && input.every((x) => typeof x === "number");
   }
 
   /**
@@ -682,7 +690,7 @@ class geomServiceClass {
       tris.push(
         ...decomp.tris.map(
           // eslint-disable-next-line no-loop-func
-          (tri) => /** @type {[number, number, number]} */(tri.map((x) => (x += offset)))
+          (tri) => /** @type {[number, number, number]} */ (tri.map((x) => (x += offset)))
         )
       );
       offset += decomp.vs.length;
@@ -804,11 +812,12 @@ class geomServiceClass {
     let c = false;
     let i, j;
     for (i = 0, j = length - 1; i < length; i++) {
-      if (// eslint-disable-next-line no-mixed-operators
+      if (
+        // eslint-disable-next-line no-mixed-operators
         outline[i].y > p.y !== outline[j].y > p.y &&
         p.x <
-        ((outline[j].x - outline[i].x) * (p.y - outline[i].y)) / (outline[j].y - outline[i].y) +
-        outline[i].x
+          ((outline[j].x - outline[i].x) * (p.y - outline[i].y)) / (outline[j].y - outline[i].y) +
+            outline[i].x
       ) {
         c = !c;
       }
@@ -894,10 +903,10 @@ class geomServiceClass {
   raycastPolySansHoles(p, q, { outline: vs }) {
     return vs.length >= 2
       ? Math.min(
-        ...vs.map(
-          (v, i) => this.getLineSegsIntersection(p, q, v, vs[i + 1] ?? vs[0], true) ?? Infinity
+          ...vs.map(
+            (v, i) => this.getLineSegsIntersection(p, q, v, vs[i + 1] ?? vs[0], true) ?? Infinity
+          )
         )
-      )
       : null;
   }
 
@@ -932,11 +941,11 @@ class geomServiceClass {
     let prev = path[0];
     return prev
       ? path.reduce((agg, p) => {
-        if (!(p.x === prev.x && p.y === prev.y)) {
-          agg.push((prev = p));
-        }
-        return agg;
-      }, /** @type {typeof path} */([prev]))
+          if (!(p.x === prev.x && p.y === prev.y)) {
+            agg.push((prev = p));
+          }
+          return agg;
+        }, /** @type {typeof path} */ ([prev]))
       : path;
   }
 
@@ -969,8 +978,8 @@ class geomServiceClass {
         case "V":
         case "Z":
           add(
-            /** @type {import('svg-path-parser').MoveToCommand} */(cmd).x || 0,
-            /** @type {import('svg-path-parser').MoveToCommand} */(cmd).y || 0
+            /** @type {import('svg-path-parser').MoveToCommand} */ (cmd).x || 0,
+            /** @type {import('svg-path-parser').MoveToCommand} */ (cmd).y || 0
           );
           break;
         default:
