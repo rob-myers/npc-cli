@@ -210,7 +210,7 @@ class GeomorphService {
 
   /**
    * Create serializable data associated to a static/assets/symbol/{symbol},
-   * e.g. to store inside symbols-meta.json.
+   * e.g. to store inside assets-meta.json.
    * @param {Geomorph.ParsedSymbol<Poly>} parsed
    * @returns {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>}
    */

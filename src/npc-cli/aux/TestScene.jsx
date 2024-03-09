@@ -51,9 +51,9 @@ export default function TestScene(props) {
         state.tex[gmKey] ??= await textureLoader.loadAsync(`/assets/debug/${gmKey}.png`);
         update();
       });
-      const symbolsJson = /** @type {import('static/assets/symbol/symbols-meta.json')} */ (
-        await fetch(`/assets/symbol/symbols-meta.json`).then((x) => x.json())
-      );
+      const symbolsJson = /** @type {import('static/assets/assets-meta.json')} */ (
+        await fetch(`/assets/assets-meta.json`).then((x) => x.json())
+      ).symbols;
       return props.gmDefs.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }) => {
         const { pngRect } = symbolsJson[geomorphService.gmKeyToKeys(gmKey).hullKey];
         return { gmKey, transform, pngRect, debugPngPath: `/assets/debug/${gmKey}.png` };

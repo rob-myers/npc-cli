@@ -1,4 +1,0 @@
-{
-  "ext": "svg",
-  "watch": ["static/assets/symbol/", "src/scripts/symbols-meta.js"]
-}

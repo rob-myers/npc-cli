@@ -8,7 +8,7 @@
     "gatsby"
   ],
   "scripts": {
-    "dev": "concurrently 'npm run develop' 'npm run watch-symbols-meta'",
+    "dev": "concurrently 'npm run develop' 'npm run watch-assets-meta'",
     "develop": "gatsby develop -p 8011",
     "start": "gatsby develop",
     "build": "gatsby build",
@@ -17,8 +17,8 @@
     "postinstall": "patch-package",
     "types": "tsc --noEmit",
     "ts-script": "NODE_OPTIONS=\"--no-experimental-fetch\" ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
-    "symbols-meta": "yarn ts-script src/scripts/symbols-meta",
-    "watch-symbols-meta": "nodemon --delay 2s --config src/scripts/symbols-meta.nodemon.json --exec 'yarn symbols-meta'"
+    "assets-meta": "yarn ts-script src/scripts/assets-meta",
+    "watch-assets-meta": "nodemon --delay 2s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta'"
   },
   "prettier": {
     "printWidth": 100
