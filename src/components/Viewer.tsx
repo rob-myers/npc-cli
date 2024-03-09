@@ -76,6 +76,7 @@ export default function Viewer() {
               props: {
                 childComponent: "TestScene",
                 childProps: {
+                  mapKey: "demo-map-1",
                   map: {
                     gms: [
                       { gmKey: "g-301--bridge" },
