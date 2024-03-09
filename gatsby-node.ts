@@ -1,10 +1,11 @@
-import type { CreateWebpackConfigArgs } from "gatsby";
+import type { CreateDevServerArgs, CreateWebpackConfigArgs } from "gatsby";
+import type { Configuration } from "webpack";
+import type { Application } from "express";
 
 export function onCreateWebpackConfig(opts: CreateWebpackConfigArgs) {
   console.log({ "GATSBY STAGE": opts.stage, NODE_ENV: process.env.NODE_ENV });
 
-  /** @type {import('webpack').Configuration} */
-  const cfg = {
+  const cfg: Configuration = {
     module: {
       rules: [
         // { test: /\/raw-loader.js$/, use: 'raw-loader' },
@@ -35,4 +36,9 @@ export function onCreateWebpackConfig(opts: CreateWebpackConfigArgs) {
   };
 
   opts.actions.setWebpackConfig(cfg);
+}
+
+export function onCreateDevServer(args: CreateDevServerArgs) {
+  const app = args.app as Application;
+  app.get("/hello", (req, res) => res.json({ greetings: "human" }));
 }
