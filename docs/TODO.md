@@ -184,7 +184,11 @@
   - ✅ create example layout svg
   - ✅ `symbols-meta.json` -> `assets-meta.json`
   - ✅ parse maps and store in `assets-meta.json`
-  - 🚧 `TestScene` reads from JSON and updates onchange
+  - ✅ why is loaded map "in wrong position" ?
+    - was referencing stale prop
+  - ✅ `TestScene` reads from JSON and updates onchange
+    - requires window refocus
+  - 🚧 avoid window refocus
 
 - hull symbols have folder `symbols`, using placeholders
   - add stateroom symbol

@@ -20,16 +20,7 @@ export default function TestScene(props) {
       controls: /** @type {*} */ (null),
       gms: [],
       map: null,
-      mat4s: props.map.gms.map(
-        ({ transform = [1, 0, 0, 1, 0, 0] }) =>
-          // prettier-ignore
-          new THREE.Matrix4(
-            transform[0], 0, transform[2], transform[4] * scale,
-            0, 1, 0, 0,
-            transform[1], 0, transform[3], transform[5] * scale,
-            0, 0, 0, 1
-          )
-      ),
+      mat4s: [],
       tex: {},
     })
   );
@@ -39,9 +30,8 @@ export default function TestScene(props) {
   const { data: assetsJson } = useQuery({
     queryKey: ["assets-meta.json"],
     /** @returns {Promise<Geomorph.AssetsJson>} */
-    queryFn: () => {
-      return /** @type {*} */ (import("static/assets/assets-meta.json"));
-    },
+    queryFn: () => fetch("/assets/assets-meta.json").then((x) => x.json()),
+    refetchOnWindowFocus: "always",
   });
 
   React.useEffect(() => {
@@ -56,30 +46,19 @@ export default function TestScene(props) {
         const { pngRect } = assetsJson.symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
         return { gmKey, transform, pngRect };
       });
+      state.mat4s = state.map.gms.map(
+        ({ transform = [1, 0, 0, 1, 0, 0] }) =>
+          // prettier-ignore
+          new THREE.Matrix4(
+            transform[0], 0, transform[2], transform[4] * scale,
+            0, 1, 0, 0,
+            transform[1], 0, transform[3], transform[5] * scale,
+            0, 0, 0, 1
+          )
+      );
       update();
     }
   }, [assetsJson, props.mapKey]);
-
-  // // gmDefs -> gms
-  // const { data: gms = [] } = useQuery({
-  //   queryKey: ["R3FDemo"],
-  //   /** @returns {Promise<GeomorphData[]>} */
-  //   async queryFn() {
-  //     // load textures
-  //     props.map.gms.forEach(async ({ gmKey }) => {
-  //       state.tex[gmKey] ??= await textureLoader.loadAsync(`/assets/debug/${gmKey}.png`);
-  //       update();
-  //     });
-  //     const { symbols, maps } = /** @type {import('static/assets/assets-meta.json')} */ (
-  //       await fetch(`/assets/assets-meta.json`).then((x) => x.json())
-  //     );
-  //     return props.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }) => {
-  //       const { pngRect } = symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
-  //       return { gmKey, transform, pngRect };
-  //     });
-  //   },
-  //   enabled: !props.disabled,
-  // });
 
   // Initialize view
   React.useEffect(() => {
@@ -96,13 +75,7 @@ export default function TestScene(props) {
       <Origin />
 
       {state.gms.map((gm, gmId) => (
-        <group
-          key={gmId}
-          onUpdate={(self) => {
-            self.applyMatrix4(state.mat4s[gmId]);
-            // console.log("update", gmId, state.mat4s[gmId].toArray());
-          }}
-        >
+        <group key={`${gmId}${gm.gmKey}`} onUpdate={(self) => self.applyMatrix4(state.mat4s[gmId])}>
           {state.tex[gm.gmKey] && (
             <mesh
               scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
@@ -157,7 +130,6 @@ export default function TestScene(props) {
  * @typedef Props
  * @property {boolean} [disabled]
  * @property {string} mapKey
- * @property {Geomorph.MapLayout} map
  */
 
 /**
