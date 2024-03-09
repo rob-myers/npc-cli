@@ -183,12 +183,12 @@
 - 🚧 can layout map using SVG with geomorph placeholders (rects)
   - ✅ create example layout svg
   - ✅ `symbols-meta.json` -> `assets-meta.json`
-  - 🚧 parse maps and store in `assets-meta.json`
-  - `TestScene` reads from JSON and updates onchange
+  - ✅ parse maps and store in `assets-meta.json`
+  - 🚧 `TestScene` reads from JSON and updates onchange
 
-- hull symbols have folder symbols using placeholders
+- hull symbols have folder `symbols`, using placeholders
   - add stateroom symbol
-  - extract during `yarn symbols-meta`
+  - extract during `yarn assets-meta`
 
 - Learn about WebGl RenderTargets
   - Towards "Pixi.js RenderTexture" functionality

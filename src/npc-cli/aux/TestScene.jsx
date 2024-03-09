@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 
 import { geomorphService } from "../service/geomorph";
@@ -35,7 +34,6 @@ export default function TestScene(props) {
   );
 
   // Initialize view
-  state.controls = useThree((state) => /** @type {SceneState['controls']} */ (state.controls));
   React.useEffect(() => {
     state.controls?.setPolarAngle(Math.PI / 4);
   }, [state.controls]);
@@ -66,7 +64,7 @@ export default function TestScene(props) {
 
   return (
     <>
-      <MapControls makeDefault zoomToCursor />
+      <MapControls makeDefault zoomToCursor ref={(x) => x && (state.controls = x)} />
       <ambientLight intensity={1} />
       <PerspectiveCamera position={[0, 8, 0]} makeDefault />
       <Origin />
