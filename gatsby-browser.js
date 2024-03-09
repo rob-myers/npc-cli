@@ -12,11 +12,23 @@ import { focusManager } from "@tanstack/react-query";
  */
 if (process.env.NODE_ENV !== "production") {
   focusManager.setEventListener((handleFocus) => {
-    if (typeof window !== "undefined" && window.addEventListener) {
-      window.addEventListener("focus", handleFocus, false);
+    if (typeof window === "undefined" || !window.addEventListener || !window.EventSource) {
+      return;
     }
+
+    window.addEventListener("focus", handleFocus, false);
+
+    const eventSource = new window.EventSource("/dev-events");
+    /** @param {MessageEvent} e */
+    function eventHandler(e) {
+      console.log("/dev-events message:", e);
+      handleFocus(true); // 🚧 only trigger on file change
+    }
+    eventSource.addEventListener("message", eventHandler);
+
     return () => {
       window.removeEventListener("focus", handleFocus);
+      eventSource.removeEventListener("message", eventHandler);
     };
   });
 }
