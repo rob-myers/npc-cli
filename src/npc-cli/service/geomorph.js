@@ -1,9 +1,29 @@
 import * as htmlparser2 from "htmlparser2";
 import { Mat, Poly, Rect } from "../geom";
-import { assertDefined, info, parseJsArg, warn } from "./generic";
+import { assertDefined, info, parseJsArg, warn, debug, safeJsonParse } from "./generic";
 import { geom } from "./geom";
 
 class GeomorphService {
+  /** @type {Record<Geomorph.GeomorphNumber, Geomorph.GeomorphKey>} */
+  toGmKey = {
+    101: "g-101--multipurpose",
+    102: "g-102--research-deck",
+    103: "g-103--cargo-bay",
+    301: "g-301--bridge",
+    302: "g-302--xboat-repair-bay",
+    303: "g-303--passenger-deck",
+  };
+
+  /** @type {Record<Geomorph.GeomorphKey, Geomorph.GeomorphNumber>} */
+  toGmNum = {
+    "g-101--multipurpose": 101,
+    "g-102--research-deck": 102,
+    "g-103--cargo-bay": 103,
+    "g-301--bridge": 301,
+    "g-302--xboat-repair-bay": 302,
+    "g-303--passenger-deck": 303,
+  };
+
   /**
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
@@ -109,8 +129,76 @@ class GeomorphService {
    * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
    */
   gmKeyToKeys(gmKey) {
-    const gmNumber = /** @type {Geomorph.GeomorphNumber} */ (Number(gmKey.split("-")[1]));
+    const gmNumber = this.toGmNum[gmKey];
     return { gmKey, gmNumber, hullKey: `${gmNumber}--hull` };
+  }
+
+  /**
+   * @param {Geomorph.GeomorphNumber} gmNumber
+   * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
+   */
+  gmNumToKeys(gmNumber) {
+    return { gmKey: this.toGmKey[gmNumber], gmNumber, hullKey: `${gmNumber}--hull` };
+  }
+
+  /**
+   * @param {number} input
+   * @returns {input is Geomorph.GeomorphNumber}
+   */
+  isValidGmNumber(input) {
+    return input in this.toGmKey;
+    // return (
+    //   (101 <= input && input < 300) || // standard
+    //   (301 <= input && input < 500) || // edge
+    //   (501 <= input && input < 700) // corner
+    // );
+  }
+
+  /**
+   * @param {string} mapKey
+   * @param {string} svgContents
+   * @param {number} lastModified
+   * @returns {Geomorph.MapLayout}
+   */
+  parseMap(mapKey, svgContents, lastModified) {
+    const gms = /** @type {Geomorph.MapLayout['gms']} */ ([]);
+    const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
+
+    const parser = new htmlparser2.Parser({
+      onopentag(name, attributes) {
+        tagStack.push({ tagName: name, attributes });
+      },
+      ontext(contents) {
+        if (tagStack.at(-1)?.tagName !== "title") {
+          return;
+        }
+        const gmNumericKey = Number(contents); // e.g. 301
+        if (!geomorphService.isValidGmNumber(gmNumericKey)) {
+          return warn(`parseMap: "${contents}": expected valid gm number`);
+        }
+        const parentTagMeta = assertDefined(tagStack.at(-2));
+        const trAttr = parentTagMeta.attributes.transform?.trim() || "matrix(1, 0, 0, 1, 0, 0)";
+        const transform = safeJsonParse(`[${trAttr.slice("matrix(".length, -1)}]`);
+        if (!geom.isTransformTuple(transform)) {
+          return warn(
+            `parseMap: ${gmNumericKey}: "${trAttr}": expected transform attr value "matrix(a, b, c, d, e, f)"`
+          );
+        }
+
+        gms.push({ gmKey: geomorphService.toGmKey[gmNumericKey], transform });
+        // console.log({ gmNumericKey, parentTagMeta });
+      },
+      onclosetag() {
+        tagStack.pop();
+      },
+    });
+
+    parser.write(svgContents);
+    parser.end();
+
+    return {
+      gms,
+    };
   }
 
   /**
@@ -185,6 +273,8 @@ class GeomorphService {
         tagStack.pop();
       },
     });
+
+    debug(`parsing ${symbolKey}`);
     parser.write(svgContents);
     parser.end();
 

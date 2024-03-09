@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 import stringify from "json-stringify-pretty-compact";
 
-import { keys } from "src/npc-cli/service/generic";
+import { info, keys } from "src/npc-cli/service/generic";
 import { geomorphService } from "src/npc-cli/service/geomorph";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
@@ -31,16 +31,23 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 })();
 
 /**
- * 🚧 eventually create maps and geomorph layouts
+ * 🚧 parse maps AND geomorph layouts
  * @param {null | OutputJson} prevOutput
  * @returns {OutputJson['maps']}
  */
 function parseMaps(prevOutput) {
-  const prevMapLookup = prevOutput?.maps ?? null;
   const mapLookup = /** @type {OutputJson['maps']} */ ({});
   const mapFilenames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg"));
 
-  // 🚧
+  for (const filename of mapFilenames) {
+    const filepath = path.resolve(mapsDir, filename);
+    const contents = fs.readFileSync(filepath).toString();
+    const mapName = filename.slice(0, -".svg".length);
+    const lastModified = fs.statSync(filepath).mtimeMs;
+
+    const parsed = geomorphService.parseMap(mapName, contents, lastModified);
+    mapLookup[mapName] = parsed;
+  }
 
   return mapLookup;
 }
@@ -50,8 +57,8 @@ function parseMaps(prevOutput) {
  * @returns {OutputJson['symbols']}
  */
 function parseSymbols(prevOutput) {
-  const prevSymbolsLookup = prevOutput?.symbols ?? null;
-  const symbolsLookup = /** @type {OutputJson['symbols']} */ ({});
+  const prevSymbolLookup = prevOutput?.symbols ?? null;
+  const symbolLookup = /** @type {OutputJson['symbols']} */ ({});
   const symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
   for (const filename of symbolFilenames) {
@@ -62,18 +69,18 @@ function parseSymbols(prevOutput) {
 
     const parsed = geomorphService.parseStarshipSymbol(symbolName, contents, lastModified);
     const serialized = geomorphService.serializeSymbol(parsed);
-    symbolsLookup[symbolName] = serialized;
+    symbolLookup[symbolName] = serialized;
   }
 
-  const changedSymbols = keys(symbolsLookup).filter(
+  const changedSymbols = keys(symbolLookup).filter(
     (symbolName) =>
-      !prevSymbolsLookup ||
-      !(symbolName in prevSymbolsLookup) ||
-      prevSymbolsLookup[symbolName].lastModified !== symbolsLookup[symbolName].lastModified
+      !prevSymbolLookup ||
+      !(symbolName in prevSymbolLookup) ||
+      prevSymbolLookup[symbolName].lastModified !== symbolLookup[symbolName].lastModified
   );
-  console.info({ changedSymbols });
+  info({ changedSymbols });
 
-  return symbolsLookup;
+  return symbolLookup;
 }
 
 /**
