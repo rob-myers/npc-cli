@@ -103,7 +103,7 @@ export default function TestScene(props) {
           if (!api.down) {
             return;
           }
-          console.log("TestScene onPointerUp", e, e.point);
+          console.log("infiniteGridHelper onPointerUp", e, e.point);
           const distance = api.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
           const timeMs = Date.now() - api.down.epochMs;
           api.events.next({

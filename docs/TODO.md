@@ -189,6 +189,11 @@
   - ✅ `TestScene` reads from JSON and updates onchange
     - requires window refocus
   - 🚧 avoid window refocus
+    - 🚧 can extend gatsby with dev-only endpoints
+    - endpoint `GET /dev-events` (for EventSource) and `POST /dev-files-changed`
+      - https://www.digitalocean.com/community/tutorials/nodejs-server-sent-events-build-realtime-app
+    - onmessage, client triggers react-query focusManager
+    - on asset-meta.json recomputed, server POSTs
 
 - hull symbols have folder `symbols`, using placeholders
   - add stateroom symbol
