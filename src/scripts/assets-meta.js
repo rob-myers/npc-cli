@@ -4,8 +4,8 @@ import fs from "fs";
 import path from "path";
 import stringify from "json-stringify-pretty-compact";
 
-import { info, keys } from "src/npc-cli/service/generic";
-import { geomorphService } from "src/npc-cli/service/geomorph";
+import { info, keys } from "../npc-cli/service/generic";
+import { geomorphService } from "../npc-cli/service/geomorph";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const symbolsDir = path.resolve(staticAssetsDir, "symbol");

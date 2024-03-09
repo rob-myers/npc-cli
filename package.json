@@ -18,7 +18,9 @@
     "types": "tsc --noEmit",
     "ts-script": "NODE_OPTIONS=\"--no-experimental-fetch\" ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
     "assets-meta": "yarn ts-script src/scripts/assets-meta",
-    "watch-assets-meta": "nodemon --delay 2s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta'"
+    "assets-meta-fast": "sucrase-node src/scripts/assets-meta",
+    "watch-assets-meta": "nodemon --delay 2s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta-fast'",
+    "ws-server": "node src/scripts/ws-server.mjs"
   },
   "prettier": {
     "printWidth": 100
@@ -44,6 +46,7 @@
     "debounce": "^2.0.0",
     "earcut": "^2.2.4",
     "ecctrl": "^1.0.66",
+    "express-ws": "^5.0.2",
     "flexlayout-react": "^0.7.15",
     "gatsby": "^5.13.3",
     "gatsby-plugin-emotion": "^8.13.0",
@@ -77,6 +80,7 @@
     "@types/braces": "^3.0.4",
     "@types/earcut": "^2.1.4",
     "@types/express": "^4.17.21",
+    "@types/express-ws": "^3.0.4",
     "@types/loadable__component": "^5.13.8",
     "@types/lodash.clonedeep": "^4.5.9",
     "@types/node": "^20.10.6",
@@ -93,6 +97,7 @@
     "gatsby-plugin-tsconfig-paths": "^1.0.6",
     "nodemon": "^3.1.0",
     "patch-package": "^8.0.0",
+    "sucrase": "^3.35.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   },
