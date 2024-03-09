@@ -1,5 +1,4 @@
 import prettyCompact from "json-stringify-pretty-compact";
-import { EventEmitter } from "eventemitter3"; // align with pixi.js
 import safeStableStringify from "safe-stable-stringify";
 
 /**
@@ -372,10 +371,10 @@ export function safeStringify(input) {
     safeStableStringify(input, (_k, v) => {
       if (v instanceof HTMLElement || v instanceof Animation) return `'[${v.constructor.name}]'`;
       if (typeof v === "function") return zealousTrim(`${v}`);
-      if (v instanceof EventEmitter) {
-        // Fix pixi.js
-        return `'[${v.constructor?.name ?? "EventEmitter"}]'`;
-      }
+      // if (v instanceof EventEmitter) {
+      //   // Fix pixi.js
+      //   return `'[${v.constructor?.name ?? "EventEmitter"}]'`;
+      // }
       return v;
     })
   );
