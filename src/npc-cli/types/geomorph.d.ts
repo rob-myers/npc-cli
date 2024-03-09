@@ -1,4 +1,9 @@
 declare namespace Geomorph {
+  interface AssetsJson {
+    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>>;
+    maps: Record<string, Geomorph.MapLayout>;
+  }
+
   interface ParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> extends SvgGroups<T> {
     key: SymbolKey;
     isHull: boolean;

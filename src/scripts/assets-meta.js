@@ -13,7 +13,7 @@ const mapsDir = path.resolve(staticAssetsDir, "map");
 const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 
 (function main() {
-  /** @type {null | OutputJson} */
+  /** @type {null | Geomorph.AssetsJson} */
   const prevOutput = fs.existsSync(outputFilename)
     ? JSON.parse(fs.readFileSync(outputFilename).toString())
     : null;
@@ -21,7 +21,7 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
   const symbols = parseSymbols(prevOutput);
   const maps = parseMaps(prevOutput);
 
-  /** @type {OutputJson} */
+  /** @type {Geomorph.AssetsJson} */
   const output = {
     symbols,
     maps,
@@ -32,11 +32,11 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 
 /**
  * 🚧 parse maps AND geomorph layouts
- * @param {null | OutputJson} prevOutput
- * @returns {OutputJson['maps']}
+ * @param {null | Geomorph.AssetsJson} prevOutput
+ * @returns {Geomorph.AssetsJson['maps']}
  */
 function parseMaps(prevOutput) {
-  const mapLookup = /** @type {OutputJson['maps']} */ ({});
+  const mapLookup = /** @type {Geomorph.AssetsJson['maps']} */ ({});
   const mapFilenames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg"));
 
   for (const filename of mapFilenames) {
@@ -53,12 +53,12 @@ function parseMaps(prevOutput) {
 }
 
 /**
- * @param {null | OutputJson} prevOutput
- * @returns {OutputJson['symbols']}
+ * @param {null | Geomorph.AssetsJson} prevOutput
+ * @returns {Geomorph.AssetsJson['symbols']}
  */
 function parseSymbols(prevOutput) {
   const prevSymbolLookup = prevOutput?.symbols ?? null;
-  const symbolLookup = /** @type {OutputJson['symbols']} */ ({});
+  const symbolLookup = /** @type {Geomorph.AssetsJson['symbols']} */ ({});
   const symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
   for (const filename of symbolFilenames) {
@@ -82,9 +82,3 @@ function parseSymbols(prevOutput) {
 
   return symbolLookup;
 }
-
-/**
- * @typedef OutputJson
- * @property {Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>>} symbols
- * @property {Record<string, Geomorph.MapLayout>} maps
- */
