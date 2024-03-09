@@ -183,7 +183,7 @@
 - 🚧 can layout map using SVG with geomorph placeholders (rects)
   - ✅ create example layout svg
   - ✅ `symbols-meta.json` -> `assets-meta.json`
-  - parse layout(s) and store in `assets-meta.json`
+  - 🚧 parse maps and store in `assets-meta.json`
   - `TestScene` reads from JSON and updates onchange
 
 - hull symbols have folder symbols using placeholders

@@ -10,17 +10,48 @@ import { geomorphService } from "src/npc-cli/service/geomorph";
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const symbolsDir = path.resolve(staticAssetsDir, "symbol");
 const mapsDir = path.resolve(staticAssetsDir, "map");
-
 const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 
 (function main() {
-  const prevSymbolsLookup = fs.existsSync(outputFilename)
-    ? /** @type {typeof symbolsLookup} */ (JSON.parse(fs.readFileSync(outputFilename).toString()))
+  /** @type {null | OutputJson} */
+  const prevOutput = fs.existsSync(outputFilename)
+    ? JSON.parse(fs.readFileSync(outputFilename).toString())
     : null;
 
-  const symbolsLookup =
-    /** @type {Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>>} */ ({});
+  const symbols = parseSymbols(prevOutput);
+  const maps = parseMaps(prevOutput);
 
+  /** @type {OutputJson} */
+  const output = {
+    symbols,
+    maps,
+  };
+
+  fs.writeFileSync(outputFilename, stringify(output));
+})();
+
+/**
+ * 🚧 eventually create maps and geomorph layouts
+ * @param {null | OutputJson} prevOutput
+ * @returns {OutputJson['maps']}
+ */
+function parseMaps(prevOutput) {
+  const prevMapLookup = prevOutput?.maps ?? null;
+  const mapLookup = /** @type {OutputJson['maps']} */ ({});
+  const mapFilenames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg"));
+
+  // 🚧
+
+  return mapLookup;
+}
+
+/**
+ * @param {null | OutputJson} prevOutput
+ * @returns {OutputJson['symbols']}
+ */
+function parseSymbols(prevOutput) {
+  const prevSymbolsLookup = prevOutput?.symbols ?? null;
+  const symbolsLookup = /** @type {OutputJson['symbols']} */ ({});
   const symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
   for (const filename of symbolFilenames) {
@@ -42,10 +73,11 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
   );
   console.info({ changedSymbols });
 
-  fs.writeFileSync(
-    outputFilename,
-    stringify({
-      symbols: symbolsLookup,
-    })
-  );
-})();
+  return symbolsLookup;
+}
+
+/**
+ * @typedef OutputJson
+ * @property {Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>>} symbols
+ * @property {Record<string, Geomorph.MapLayout>} maps
+ */

@@ -1,10 +1,4 @@
 declare namespace Geomorph {
-  interface GeomorphsDefItem {
-    gmKey: GeomorphKey;
-    /** Default `[1, 0, 0, 1, 0, 0]` */
-    transform?: [number, number, number, number, number, number];
-  }
-
   interface ParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> extends SvgGroups<T> {
     key: SymbolKey;
     isHull: boolean;
@@ -36,6 +30,14 @@ declare namespace Geomorph {
 
   /** Previously called `PointMeta` */
   type Meta<T extends {} = {}> = Record<string, any> & T;
+
+  interface MapLayout {
+    gms: {
+      gmKey: GeomorphKey;
+      /** Default `[1, 0, 0, 1, 0, 0]` */
+      transform?: [number, number, number, number, number, number];
+    }[];
+  }
 
   type GeomorphKey =
     | "g-101--multipurpose"

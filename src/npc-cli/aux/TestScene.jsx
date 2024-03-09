@@ -20,7 +20,7 @@ export default function TestScene(props) {
     /** @type {() => SceneState} */ () => ({
       ready: true,
       tex: {},
-      mat4s: props.gmDefs.map(
+      mat4s: props.map.gms.map(
         ({ transform = [1, 0, 0, 1, 0, 0] }) =>
           // prettier-ignore
           new THREE.Matrix4(
@@ -47,14 +47,14 @@ export default function TestScene(props) {
     queryKey: ["R3FDemo"],
     /** @returns {Promise<GeomorphData[]>} */
     async queryFn() {
-      props.gmDefs.forEach(async ({ gmKey }) => {
+      props.map.gms.forEach(async ({ gmKey }) => {
         state.tex[gmKey] ??= await textureLoader.loadAsync(`/assets/debug/${gmKey}.png`);
         update();
       });
       const symbolsJson = /** @type {import('static/assets/assets-meta.json')} */ (
         await fetch(`/assets/assets-meta.json`).then((x) => x.json())
       ).symbols;
-      return props.gmDefs.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }) => {
+      return props.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }) => {
         const { pngRect } = symbolsJson[geomorphService.gmKeyToKeys(gmKey).hullKey];
         return { gmKey, transform, pngRect, debugPngPath: `/assets/debug/${gmKey}.png` };
       });
@@ -124,7 +124,7 @@ export default function TestScene(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
- * @property {Geomorph.GeomorphsDefItem[]} gmDefs
+ * @property {Geomorph.MapLayout} map
  */
 
 /**
