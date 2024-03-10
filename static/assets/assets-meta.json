@@ -318,6 +318,7 @@
       "width": 1200,
       "height": 1200,
       "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 1212},
+      "symbols": [],
       "lastModified": 1709333776786.7654
     },
     "102--hull": {
@@ -551,6 +552,7 @@
       "width": 1200,
       "height": 1200,
       "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 1212},
+      "symbols": [],
       "lastModified": 1709333776787.4368
     },
     "103--hull": {
@@ -700,6 +702,7 @@
       "width": 1200,
       "height": 1200,
       "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 1212},
+      "symbols": [],
       "lastModified": 1709333776788.2112
     },
     "301--hull": {
@@ -1113,7 +1116,15 @@
       "width": 1200,
       "height": 600,
       "pngRect": {"x": -6, "y": -22, "width": 1212, "height": 628},
-      "lastModified": 1709749520990.515
+      "symbols": [
+        {
+          "symbolKey": "stateroom--014--2x2",
+          "meta": {"key": "stateroom--014--2x2"},
+          "rect": {"x": 0, "y": -480, "width": 120, "height": 120},
+          "transform": [1, 0, 0, -1, 0, 840]
+        }
+      ],
+      "lastModified": 1710109704723.2341
     },
     "302--hull": {
       "key": "302--hull",
@@ -1583,6 +1594,7 @@
       "width": 1200,
       "height": 600,
       "pngRect": {"x": -6, "y": -61, "width": 1212, "height": 667},
+      "symbols": [],
       "lastModified": 1709967225007.1345
     },
     "303--hull": {
@@ -2458,6 +2470,7 @@
       "width": 1200,
       "height": 600,
       "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 613},
+      "symbols": [],
       "lastModified": 1709333776790.4497
     },
     "stateroom--014--2x2": {
@@ -2584,6 +2597,7 @@
       "width": 600,
       "height": 600,
       "pngRect": {"x": -10, "y": -10, "width": 620, "height": 620},
+      "symbols": [],
       "lastModified": 1709333776790.7505
     }
   },
@@ -2608,7 +2622,7 @@
         },
         {
           "gmKey": "g-302--xboat-repair-bay",
-          "transform": [-1, 0, 0, -1, 2400, 1800]
+          "transform": [-1, 0, 0, 1, 2400, 1200]
         }
       ]
     }

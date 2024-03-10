@@ -18,6 +18,14 @@ declare namespace Geomorph {
      * May be offset e.g. because doors are centred along edges.
      */
     pngRect: Geom.RectJson;
+    /**
+     * Hull symbols have sub symbols, defining the layout of the geomorph.
+     */
+    symbols: Geomorph.WithMeta<{
+      symbolKey: Geomorph.SymbolKey;
+      rect: Geom.RectJson;
+      transform: Geom.SixTuple;
+    }>[];
     /** Epoch ms */
     lastModified: number;
   }
@@ -28,13 +36,14 @@ declare namespace Geomorph {
     /** 🚧 split further? */
     unsorted: PolyWithMeta<T>[];
   }
-  interface PolyWithMeta<T> {
+  type PolyWithMeta<T extends Geom.Poly | Geom.GeoJsonPolygon = Geom.Poly> = WithMeta<{
     poly: T;
-    meta: Geomorph.Meta;
-  }
+  }>;
 
   /** Previously called `PointMeta` */
   type Meta<T extends {} = {}> = Record<string, any> & T;
+
+  type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
 
   interface MapLayout {
     gms: {

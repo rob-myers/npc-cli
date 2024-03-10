@@ -24,6 +24,17 @@ class GeomorphService {
     "g-303--passenger-deck": 303,
   };
 
+  /** @type {Record<Geomorph.SymbolKey, true>} */
+  fromSymbolKey = {
+    "101--hull": true,
+    "102--hull": true,
+    "103--hull": true,
+    "301--hull": true,
+    "302--hull": true,
+    "303--hull": true,
+    "stateroom--014--2x2": true,
+  };
+
   /**
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
@@ -78,6 +89,20 @@ class GeomorphService {
       agg[k] = v;
       return agg;
     }, /** @type {Record<string, string>} */ ({}));
+  }
+
+  /**
+   * @param {string} transformAttribute
+   * @returns {Geom.SixTuple | null}
+   */
+  extractSixTuple(transformAttribute = "matrix(1, 0, 0, 1, 0, 0)", rounded = true) {
+    const transform = safeJsonParse(`[${transformAttribute.slice("matrix(".length, -1)}]`);
+    if (geom.isTransformTuple(transform)) {
+      return rounded ? /** @type {Geom.SixTuple} */ (transform.map(Math.round)) : transform;
+    } else {
+      warn(`extractSixTuple: "${transformAttribute}": expected format "matrix(a, b, c, d, e, f)"`);
+      return null;
+    }
   }
 
   /**
@@ -145,13 +170,21 @@ class GeomorphService {
    * @param {number} input
    * @returns {input is Geomorph.GeomorphNumber}
    */
-  isValidGmNumber(input) {
+  isGmNumber(input) {
     return input in this.toGmKey;
     // return (
     //   (101 <= input && input < 300) || // standard
     //   (301 <= input && input < 500) || // edge
     //   (501 <= input && input < 700) // corner
     // );
+  }
+
+  /**
+   * @param {string} input
+   * @returns {input is Geomorph.SymbolKey}
+   */
+  isSymbolKey(input) {
+    return input in this.fromSymbolKey;
   }
 
   /**
@@ -173,23 +206,17 @@ class GeomorphService {
           return;
         }
         const gmNumericKey = Number(contents); // e.g. 301
-        if (!geomorphService.isValidGmNumber(gmNumericKey)) {
+        if (!geomorphService.isGmNumber(gmNumericKey)) {
           return warn(`parseMap: "${contents}": expected valid gm number`);
         }
         const parentTagMeta = assertDefined(tagStack.at(-2));
-        const trAttr = parentTagMeta.attributes.transform?.trim() || "matrix(1, 0, 0, 1, 0, 0)";
-        const transform = safeJsonParse(`[${trAttr.slice("matrix(".length, -1)}]`);
-        if (!geom.isTransformTuple(transform)) {
-          return warn(
-            `parseMap: ${gmNumericKey}: "${trAttr}": expected transform attr value "matrix(a, b, c, d, e, f)"`
-          );
-        }
+        const transform = geomorphService.extractSixTuple(parentTagMeta.attributes.transform);
 
-        gms.push({
-          gmKey: geomorphService.toGmKey[gmNumericKey],
-          // fix rounding errors in Boxy
-          transform: /** @type {Geom.SixTuple} */ (transform.map(Math.round)),
-        });
+        transform &&
+          gms.push({
+            gmKey: geomorphService.toGmKey[gmNumericKey], // fix rounding errors in Boxy
+            transform: /** @type {Geom.SixTuple} */ (transform.map(Math.round)),
+          });
         // console.log({ gmNumericKey, parentTagMeta });
       },
       onclosetag() {
@@ -215,11 +242,14 @@ class GeomorphService {
     // console.info("parseStarshipSymbol", symbolKey, "...");
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
+    const folderStack = /** @type {string[]} */ ([]);
+
     let viewBoxRect = /** @type {Geom.RectJson | null} */ (null);
     let pngRect = /** @type {Geom.RectJson | null} */ (null);
+    const symbols = /** @type {Geomorph.ParsedSymbol<Geom.Poly>['symbols']} */ ([]);
     const hullWalls = /** @type {Geom.Poly[]} */ ([]);
-    const obstacles = /** @type {Geomorph.PolyWithMeta<Geom.Poly>[]} */ ([]);
-    const unsorted = /** @type {Geomorph.PolyWithMeta<Geom.Poly>[]} */ ([]);
+    const obstacles = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
+    const unsorted = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
     const walls = /** @type {Geom.Poly[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
@@ -233,10 +263,10 @@ class GeomorphService {
         }
         if (name === "image") {
           pngRect = {
-            x: Number(attributes.x ?? 0),
-            y: Number(attributes.y ?? 0),
-            width: Number(attributes.width ?? 0),
-            height: Number(attributes.height ?? 0),
+            x: Number(attributes.x || 0),
+            y: Number(attributes.y || 0),
+            width: Number(attributes.width || 0),
+            height: Number(attributes.height || 0),
           };
         }
 
@@ -247,38 +277,74 @@ class GeomorphService {
           return;
         }
 
-        const parentTagMeta = assertDefined(tagStack.at(-2));
+        const parent = assertDefined(tagStack.at(-2));
+
+        if (parent.tagName === "g") {
+          folderStack.push(contents);
+          return;
+        }
+
         const ownTags = contents.split(" ");
-        // console.log({ parentTag, contents });
+        // info({ parentTag, ownTags });
+
+        if (folderStack.length === 1 && folderStack[0] === "symbols") {
+          const [symbolKey, ...symbolTags] = ownTags;
+          if (parent.tagName !== "rect") {
+            return warn(
+              `parseStarshipSymbol: ${parent.tagName}: ignored non-rect in symbols folder`
+            );
+          }
+          if (!geomorphService.isSymbolKey(symbolKey)) {
+            return warn(
+              `parseStarshipSymbol: symbols: ${contents}: first tag must be a symbol key`
+            );
+          }
+
+          const [x, y, width, height] = ["x", "y", "width", "height"].map((x) =>
+            Math.round(Number(parent.attributes[x] || 0))
+          );
+          const transform = geomorphService.extractSixTuple(parent.attributes.transform);
+          transform &&
+            symbols.push({
+              symbolKey,
+              meta: geomorphService.tagsToMeta(symbolTags, { key: symbolKey }),
+              rect: { x, y, width, height },
+              transform,
+            });
+          return;
+        }
 
         if (ownTags.includes("hull-wall")) {
-          hullWalls.push(...geomorphService.extractGeom({ ...parentTagMeta, title: contents }));
+          hullWalls.push(...geomorphService.extractGeom({ ...parent, title: contents }));
         } else if (ownTags.includes("wall")) {
-          walls.push(...geomorphService.extractGeom({ ...parentTagMeta, title: contents }));
+          walls.push(...geomorphService.extractGeom({ ...parent, title: contents }));
         } else if (ownTags.includes("obstacle")) {
           const meta = geomorphService.tagsToMeta(ownTags, {});
           obstacles.push(
             ...geomorphService
-              .extractGeom({ ...parentTagMeta, title: contents })
+              .extractGeom({ ...parent, title: contents })
               .map((poly) => ({ poly, meta }))
           );
-        } else if (parentTagMeta.tagName === "image") {
+        } else if (parent.tagName === "image") {
           return;
         } else {
           const meta = geomorphService.tagsToMeta(ownTags, {});
           unsorted.push(
             ...geomorphService
-              .extractGeom({ ...parentTagMeta, title: contents })
+              .extractGeom({ ...parent, title: contents })
               .map((poly) => ({ poly, meta }))
           );
         }
       },
-      onclosetag() {
+      onclosetag(name) {
         tagStack.pop();
+        if (name === "g") {
+          folderStack.pop();
+        }
       },
     });
 
-    debug(`parsing ${symbolKey}`);
+    debug(`parsedStarshipSymbol: parsing ${symbolKey}`);
     parser.write(svgContents);
     parser.end();
 
@@ -297,6 +363,7 @@ class GeomorphService {
       pngRect:
         pngRect ??
         (info(`${symbolKey} is using viewBox for pngRect ${JSON.stringify(pngRect)}`), viewBoxRect),
+      symbols,
       unsorted,
       walls,
     };
@@ -319,6 +386,7 @@ class GeomorphService {
       width: parsed.width,
       height: parsed.height,
       pngRect: parsed.pngRect,
+      symbols: parsed.symbols,
       lastModified: parsed.lastModified,
     };
   }

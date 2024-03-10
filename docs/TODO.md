@@ -209,8 +209,9 @@
 
 - 🚧 hull symbols have folder `symbols`, using placeholders
   - ℹ️ placeholders are partially transparent boxes of symbol filename's dimension
-  - 🚧 add stateroom symbol
-  - extract during `yarn assets-meta`
+  - ✅ add stateroom symbol
+  - ✅ extract during `yarn assets-meta`
+  - 🚧 clarify conversion from { rect, transform } -> transform
 
 - Learn about WebGl RenderTargets
   - Towards "Pixi.js RenderTexture" functionality
@@ -222,6 +223,7 @@
   - ✅ improve remount keys
 - ✅ integer accuracy when parsing maps
   - Boxy has rounding errors e.g. when reflect
+  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
 - migrate Triangle
 - ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
