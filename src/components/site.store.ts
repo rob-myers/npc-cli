@@ -48,7 +48,7 @@ const useStore = create<State>()(
            */
           const wsClient = new WebSocket(`ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`);
           wsClient.onmessage = (e) => {
-            // info("/dev-events message:", e);
+            info("/dev-events message:", e);
             setTimeout(() => {
               // timeout seems necessary, despite file being
               // written before message in assets-meta.js
@@ -57,7 +57,7 @@ const useStore = create<State>()(
                   return queryKey === "assets-meta.json";
                 },
               });
-            }, 100);
+            }, 300);
           };
 
           /**

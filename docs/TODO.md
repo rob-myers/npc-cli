@@ -207,6 +207,10 @@
     - ✅ script assets-meta triggers websocket (if it exists)
     - ✅ browser triggers react-query refetch
 
+- 🚧 try fix sporadic missing updates
+  - e.g. work/watch new folder `dev-assets`,
+    only copying to static/assets (watched by gatsby)
+
 - hull symbols have folder `symbols`, using placeholders
   - placeholders are partially transparent boxes of symbol filename's dimension
   - add stateroom symbol
