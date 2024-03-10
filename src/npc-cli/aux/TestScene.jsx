@@ -74,8 +74,11 @@ export default function TestScene(props) {
       <PerspectiveCamera position={[0, 8, 0]} makeDefault />
       <Origin />
 
-      {state.gms.map((gm, gmId) => (
-        <group key={`${gmId}${gm.gmKey}`} onUpdate={(self) => self.applyMatrix4(state.mat4s[gmId])}>
+      {state.gms.map((gm, gmId, i) => (
+        <group
+          key={gm.transform.toString()}
+          onUpdate={(self) => self.applyMatrix4(state.mat4s[gmId])}
+        >
           {state.tex[gm.gmKey] && (
             <mesh
               scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
