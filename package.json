@@ -20,7 +20,7 @@
     "assets-meta": "yarn ts-script src/scripts/assets-meta",
     "assets-meta-fast": "sucrase-node src/scripts/assets-meta",
     "watch-assets-meta": "nodemon --delay 2s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta-fast'",
-    "ws-server": "node src/scripts/ws-server.mjs"
+    "ws-server": "PORT=8012 node src/scripts/ws-server.mjs"
   },
   "prettier": {
     "printWidth": 100

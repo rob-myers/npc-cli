@@ -189,11 +189,18 @@
   - ✅ `TestScene` reads from JSON and updates onchange
     - requires window refocus
   - 🚧 avoid window refocus
-    - 🚧 can extend gatsby with dev-only endpoints
-    - endpoint `GET /dev-events` (for EventSource) and `POST /dev-files-changed`
-      - https://www.digitalocean.com/community/tutorials/nodejs-server-sent-events-build-realtime-app
-    - onmessage, client triggers react-query focusManager
-    - on asset-meta.json recomputed, server POSTs
+    - ✅ can extend gatsby with dev-only endpoints
+    - ❌ endpoint `GET /dev-events` (for EventSource) and `POST /dev-files-changed`
+    - ✅ create websocket server and test browser connect
+      ```js
+      const url = "ws://localhost:8012/test"
+      const mywsServer = new WebSocket(url)
+      mywsServer.onmessage = e => console.log('message', e)
+      mywsServer.send(JSON.stringify({ yo: 'dawg' }));
+      ```
+    - script assets-meta triggers websocket (if it exists)
+    - browser triggers react-query focus
+
 
 - hull symbols have folder `symbols`, using placeholders
   - add stateroom symbol
@@ -213,6 +220,12 @@
 - (hull) walls -> quads
 - need to remove labels from hull symbol image?
 - try avoid alphaBlend geomorphs via alphaMap
+- Firefox android allows unbounded scrolling on "interact"
+  - debug locally using about:debugging#/runtime/this-firefox
+
+- if Viewer maximised and choose menu item, halve size of the Viewer
+
+- if only open Viewer a tiny amount then it should close itself
 
 - world editor in new repo
 - geomorph editor in new repo
