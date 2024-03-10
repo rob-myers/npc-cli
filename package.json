@@ -5,10 +5,14 @@
   "description": "npc-cli",
   "author": "robmyers",
   "keywords": [
-    "gatsby"
+    "npc",
+    "cli",
+    "video games",
+    "three.js",
+    "react three fiber"
   ],
   "scripts": {
-    "dev": "concurrently 'yarn ws-server' 'yarn develop' 'yarn watch-assets-meta'",
+    "dev": "concurrently 'npm run ws-server' 'npm run develop' 'npm run watch-assets-meta'",
     "develop": "gatsby develop -p 8011",
     "start": "gatsby develop",
     "build": "gatsby build",
@@ -17,9 +21,9 @@
     "postinstall": "patch-package",
     "types": "tsc --noEmit",
     "ts-script": "ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
-    "assets-meta": "yarn ts-script src/scripts/assets-meta",
+    "assets-meta": "npm run ts-script src/scripts/assets-meta",
     "assets-meta-fast": "sucrase-node src/scripts/assets-meta",
-    "watch-assets-meta": "yarn assets-meta && nodemon --on-change-only --delay 1s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta-fast'",
+    "watch-assets-meta": "npm run assets-meta && nodemon --on-change-only --delay 1s --config src/scripts/assets-meta.nodemon.json --exec 'npm run assets-meta-fast'",
     "ws-server": "sucrase-node src/scripts/ws-server.js"
   },
   "prettier": {
