@@ -14,7 +14,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import type { AllFrontMatter, FrontMatter } from "./site.store";
 import { queryClient } from "../npc-cli/service/query-client";
-import { breakpoint } from "./const";
+import { breakpoint, view } from "./const";
 
 import Nav from "./Nav";
 import Viewer from "./Viewer";
@@ -118,9 +118,11 @@ const rootCss = css`
           }
         }
         button.toggle {
-          transform: scale(1.2);
           outline: 2px solid #ddd;
           pointer-events: all;
+          top: calc(0.5 * (${view.barSize} - 1.8rem));
+          width: 1.8rem;
+          height: 1.8rem;
         }
       }
     }

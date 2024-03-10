@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { nav } from "./const";
+import { nav, view } from "./const";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
@@ -77,8 +77,10 @@ const navCss = css`
   .${sidebarClasses.container} button.toggle {
     position: absolute;
     z-index: 1;
-    top: calc(0.5 * (5rem - 1.8rem));
-    right: 1rem;
+    top: calc(0.5 * (${view.barSize} - 1.5rem));
+    right: calc(0.5 * (${view.barSize} - 1.5rem));
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   a.${menuClasses.button}, span.${menuClasses.button} {
@@ -120,7 +122,7 @@ const navTitleCss = css`
     transition: opacity 500ms;
 
     .${menuClasses.button} {
-      height: 5rem;
+      height: ${view.barSize};
     }
 
     .${menuClasses.label} {

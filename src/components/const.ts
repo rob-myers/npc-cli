@@ -12,7 +12,7 @@ export const nav = /** @type {const} */ {
 
 export const view = /** @type {const} */ {
   /** Small viewport: height; Large viewport: width */
-  barSize: "3rem",
+  barSize: "4rem",
   /** Small viewport: width; Large viewport: height */
   iconSize: "3.5rem",
 };

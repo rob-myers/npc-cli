@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import useSite from "./site.store";
-import { afterBreakpoint, breakpoint } from "./const";
+import { afterBreakpoint, breakpoint, view } from "./const";
 import { isTouchDevice } from "src/npc-cli/service/dom";
 
 import { State } from "./Viewer";
@@ -75,7 +75,7 @@ export default function ViewerControls({ api }: Props) {
         let percent = useSite.api.isSmall()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
-          (window.innerWidth - useSite.api.getNavWidth());
+            (window.innerWidth - useSite.api.getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
@@ -166,6 +166,7 @@ const buttonsCss = css`
     cursor: row-resize;
     flex-direction: row;
     border-bottom: 1px solid #444;
+    height: ${view.barSize};
   }
 
   button:not(.toggle) {
@@ -195,18 +196,21 @@ const viewerToggleCss = css`
   z-index: 6;
   color: #000;
 
+  width: 1.5rem;
+  height: 1.5rem;
+
   &.collapsed {
     background-color: white;
     color: black;
   }
 
   @media (min-width: ${afterBreakpoint}) {
-    margin: calc(0.5 * (5rem - 1.8rem)) 0;
+    margin: calc(0.5 * (${view.barSize} - 1.5rem)) 0;
   }
 
   @media (max-width: ${breakpoint}) {
     transform: rotate(90deg);
     margin-left: 1rem;
-    margin-right: 1rem;
+    margin-right: 1.5rem;
   }
 `;
