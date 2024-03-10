@@ -7,6 +7,7 @@ import { Subject } from "rxjs";
 import { Vect } from "../geom";
 import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /**
  * @template {{ disabled?: boolean; }} [ChildProps={}]
@@ -17,8 +18,15 @@ export default function TestCanvas(props) {
     /** @returns {State} */ () => ({
       canvasEl: /** @type {*} */ (null),
       menuEl: /** @type {*} */ (null),
+      rootEl: /** @type {*} */ (null),
       events: new Subject(),
       down: undefined,
+      canvasRef(canvasEl) {
+        if (canvasEl && !state.canvasEl) {
+          state.canvasEl = canvasEl;
+          state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
+        }
+      },
     })
   );
 
@@ -43,10 +51,12 @@ export default function TestCanvas(props) {
     return () => sub.unsubscribe();
   }, []);
 
+  const update = useUpdate();
+
   return (
     <TestCanvasContext.Provider value={state}>
       <Canvas
-        ref={(x) => x && (state.canvasEl = x)}
+        ref={state.canvasRef}
         className={canvasCss}
         // "never" broke TestCharacter sporadically
         frameloop={props.disabled ? "demand" : "always"}
@@ -71,6 +81,7 @@ export default function TestCanvas(props) {
               screenPoint: { x: e.offsetX, y: e.offsetY },
             });
         }}
+        onCreated={update} // show stats
       >
         {React.createElement(
           props.childComponent,
@@ -80,10 +91,11 @@ export default function TestCanvas(props) {
           })
         )}
 
-        {props.stats && <Stats showPanel={0} />}
+        {props.stats && state.rootEl && (
+          <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
+        )}
       </Canvas>
 
-      {/* 🚧 */}
       <div
         ref={(x) => x && (state.menuEl = x)}
         className={contextMenuCss}
@@ -114,8 +126,10 @@ export default function TestCanvas(props) {
  * @typedef State
  * @property {HTMLCanvasElement} canvasEl
  * @property {HTMLDivElement} menuEl
+ * @property {HTMLDivElement} rootEl
  * @property {Subject<NPC.Event>} events
  * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; }} [down]
+ * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  */
 
 /**
@@ -161,4 +175,10 @@ const contextMenuCss = css`
     max-width: 100px;
     margin: 8px 0;
   }
+`;
+
+const statsCss = css`
+  position: absolute !important;
+  right: 0px;
+  left: unset !important;
 `;
