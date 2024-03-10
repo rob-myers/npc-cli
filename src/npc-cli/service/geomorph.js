@@ -185,7 +185,11 @@ class GeomorphService {
           );
         }
 
-        gms.push({ gmKey: geomorphService.toGmKey[gmNumericKey], transform });
+        gms.push({
+          gmKey: geomorphService.toGmKey[gmNumericKey],
+          // fix rounding errors in Boxy
+          transform: /** @type {Geom.SixTuple} */ (transform.map(Math.round)),
+        });
         // console.log({ gmNumericKey, parentTagMeta });
       },
       onclosetag() {
