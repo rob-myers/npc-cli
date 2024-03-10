@@ -1,7 +1,7 @@
 import express from "express";
 import expressWs from "express-ws";
 
-const port = Number(process.env.PORT || 3000);
+const port = Number(process.env.DEV_WEBSOCKET_PORT || 3000);
 
 const { app } = expressWs(express());
 
