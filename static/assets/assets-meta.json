@@ -2605,6 +2605,10 @@
         {
           "gmKey": "g-302--xboat-repair-bay",
           "transform": [1, 0, 0, -1, -2400, 1800]
+        },
+        {
+          "gmKey": "g-302--xboat-repair-bay",
+          "transform": [-1, 0, 0, -1, 2400, 1799.99987793]
         }
       ]
     }

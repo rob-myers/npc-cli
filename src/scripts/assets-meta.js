@@ -10,8 +10,9 @@ import { geomorphService } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
+const mediaDir = path.resolve(__dirname, "../../media");
 const symbolsDir = path.resolve(staticAssetsDir, "symbol");
-const mapsDir = path.resolve(staticAssetsDir, "map");
+const mapsDir = path.resolve(mediaDir, "map");
 const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 
 (function main() {
