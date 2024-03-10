@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "concurrently 'npm run develop' 'npm run watch-assets-meta'",
-    "develop": ". dev-env.sh; gatsby develop -p $DEV_GATSBY_PORT",
+    "develop": "gatsby develop -p 8011",
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
@@ -20,7 +20,7 @@
     "assets-meta": "yarn ts-script src/scripts/assets-meta",
     "assets-meta-fast": "sucrase-node src/scripts/assets-meta",
     "watch-assets-meta": "yarn assets-meta && nodemon --delay 2s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta-fast'",
-    "ws-server": ". dev-env.sh; node src/scripts/ws-server.mjs"
+    "ws-server": "sucrase-node src/scripts/ws-server.js"
   },
   "prettier": {
     "printWidth": 100
