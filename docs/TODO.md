@@ -207,11 +207,7 @@
     - ✅ script assets-meta triggers websocket (if it exists)
     - ✅ browser triggers react-query refetch
 
-- 🚧 try fix sporadic missing updates
-  - e.g. work/watch new folder `dev-assets`,
-    only copying to static/assets (watched by gatsby)
-
-- hull symbols have folder `symbols`, using placeholders
+- 🚧 hull symbols have folder `symbols`, using placeholders
   - placeholders are partially transparent boxes of symbol filename's dimension
   - add stateroom symbol
   - extract during `yarn assets-meta`
@@ -221,6 +217,11 @@
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 
+- 🚧 try fix sporadic missing updates
+  - ✅ move maps to `media/map`
+  - ✅ improve remount keys
+- integer accuracy when parsing maps
+  - Boxy has rounding errors e.g. when reflect
 - migrate Triangle
 - ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
