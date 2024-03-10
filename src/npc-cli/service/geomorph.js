@@ -283,6 +283,9 @@ class GeomorphService {
           folderStack.push(contents);
           return;
         }
+        if (parent.tagName === "pattern") {
+          return; // Ignore <title> inside <defs>
+        }
 
         const ownTags = contents.split(" ");
         // info({ parentTag, ownTags });
