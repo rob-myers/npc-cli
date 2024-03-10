@@ -1,7 +1,7 @@
 import express from "express";
 import expressWs from "express-ws";
 
-import { DEV_WEBSOCKET_PORT } from "../npc-cli/service/const";
+import { DEV_WEBSOCKET_PORT } from "../const";
 
 const port = Number(DEV_WEBSOCKET_PORT || 3000);
 

@@ -14,7 +14,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import type { AllFrontMatter, FrontMatter } from "./site.store";
 import { queryClient } from "../npc-cli/service/query-client";
-import { breakpoint, view } from "./const";
+import { breakpoint, view } from "../const";
 
 import Nav from "./Nav";
 import Viewer from "./Viewer";

@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { nav, view } from "./const";
+import { nav, view } from "../const";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";

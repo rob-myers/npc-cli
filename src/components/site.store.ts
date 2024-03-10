@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { breakpoint, nav } from "src/components/const";
+import { breakpoint, nav } from "src/const";
 import { safeJsonParse, tryLocalStorageGet, tryLocalStorageSet } from "src/npc-cli/service/generic";
 
 const useStore = create<State>()(

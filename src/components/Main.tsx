@@ -3,7 +3,7 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
-import { afterBreakpoint, breakpoint } from "./const";
+import { afterBreakpoint, breakpoint } from "../const";
 import npcCliTitlePng from "static/assets/npc-cli-title.png";
 import useSite from "./site.store";
 

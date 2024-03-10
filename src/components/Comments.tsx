@@ -2,7 +2,7 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 import Giscus from "@giscus/react";
 import useSite from "./site.store";
-import { afterBreakpoint, discussionsUrl } from "./const";
+import { afterBreakpoint, discussionsUrl } from "../const";
 
 export default function Comments(props: Props) {
   const { articleKey, commentMeta } = useSite(

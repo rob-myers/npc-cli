@@ -3,9 +3,9 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 import debounce from "debounce";
 
-import { view } from "./const";
+import { view } from "../const";
 import { profileLookup } from "../npc-cli/sh/scripts";
-import { afterBreakpoint, breakpoint } from "./const";
+import { afterBreakpoint, breakpoint } from "../const";
 import useIntersection from "../npc-cli/hooks/use-intersection";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useSite from "./site.store";

@@ -4,7 +4,7 @@ import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
 import { css, cx } from "@emotion/css";
 
-import { afterBreakpoint, breakpoint } from "src/components/const";
+import { afterBreakpoint, breakpoint } from "src/const";
 import {
   TabDef,
   TabsDef,
