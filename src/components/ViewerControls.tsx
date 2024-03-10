@@ -7,8 +7,13 @@ import { afterBreakpoint, breakpoint, view } from "./const";
 import { isTouchDevice } from "src/npc-cli/service/dom";
 
 import { State } from "./Viewer";
-import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "./Icon";
-import Toggle from "./Toggle";
+import {
+  FontAwesomeIcon,
+  faRefreshThin,
+  faExpandThin,
+  faCirclePauseThin,
+  faChevronRight,
+} from "./Icon";
 import useLongPress from "src/npc-cli/hooks/use-long-press";
 import useUpdate from "src/npc-cli/hooks/use-update";
 import useStateRef from "src/npc-cli/hooks/use-state-ref";
@@ -132,11 +137,13 @@ export default function ViewerControls({ api }: Props) {
       <button title="max/min tabs" onClick={state.onMaximize}>
         <FontAwesomeIcon icon={faExpandThin} size="1x" />
       </button>
-      <Toggle
-        onClick={() => state.toggleCollapsed()}
-        className={cx(viewerToggleCss, { collapsed: !site.viewOpen })}
-        flip={!site.viewOpen ? "horizontal" : undefined}
-      />
+      <button onClick={() => state.toggleCollapsed()}>
+        <FontAwesomeIcon
+          icon={faChevronRight}
+          size="1x"
+          flip={!site.viewOpen ? "horizontal" : undefined}
+        />
+      </button>
     </div>
   );
 }
@@ -169,7 +176,7 @@ const buttonsCss = css`
     height: ${view.barSize};
   }
 
-  button:not(.toggle) {
+  button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -188,6 +195,16 @@ const buttonsCss = css`
     &:disabled {
       cursor: auto;
       color: #888;
+    }
+  }
+
+  button:last-child {
+    @media (min-width: ${afterBreakpoint}) {
+      height: ${view.barSize};
+    }
+    @media (max-width: ${breakpoint}) {
+      transform: rotate(90deg);
+      margin-right: 1rem;
     }
   }
 `;
