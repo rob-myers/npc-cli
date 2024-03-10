@@ -1122,9 +1122,15 @@
           "meta": {"key": "stateroom--014--2x2"},
           "rect": {"x": 0, "y": -480, "width": 120, "height": 120},
           "transform": [1, 0, 0, -1, 0, 840]
+        },
+        {
+          "symbolKey": "stateroom--014--2x2",
+          "meta": {"key": "stateroom--014--2x2"},
+          "rect": {"x": 120, "y": -480, "width": 120, "height": 120},
+          "transform": [1, 0, 0, -1, 0, 840]
         }
       ],
-      "lastModified": 1710109704723.2341
+      "lastModified": 1710111102727.7542
     },
     "302--hull": {
       "key": "302--hull",
