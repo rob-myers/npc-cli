@@ -193,16 +193,16 @@
     - ❌ endpoint `GET /dev-events` (for EventSource) and `POST /dev-files-changed`
     - ✅ create websocket server and test browser connect
       ```js
-      const url = "ws://localhost:8012/test"
-      const mywsServer = new WebSocket(url)
-      mywsServer.onmessage = e => console.log('message', e)
-      mywsServer.send(JSON.stringify({ yo: 'dawg' }));
+      const url = "ws://localhost:8012/echo"
+      const wsClient = new WebSocket(url)
+      wsClient.onmessage = e => console.log('message', e)
+      wsClient.send(JSON.stringify({ yo: 'dawg' }))
       ```
-    - script assets-meta triggers websocket (if it exists)
+    - ✅ script assets-meta triggers websocket (if it exists)
     - browser triggers react-query focus
 
-
 - hull symbols have folder `symbols`, using placeholders
+  - placeholders are partially transparent boxes of symbol filename's dimension
   - add stateroom symbol
   - extract during `yarn assets-meta`
 

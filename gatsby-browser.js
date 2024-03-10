@@ -5,6 +5,8 @@ import "xterm/css/xterm.css";
 export { wrapPageElement } from "./src/components/Root";
 
 import { focusManager } from "@tanstack/react-query";
+import { DEV_WEBSOCKET_PORT } from "./src/const";
+import { info } from "./src/npc-cli/service/generic";
 
 /**
  * In development refetch on refocus can automate changes.
@@ -18,17 +20,14 @@ if (process.env.NODE_ENV !== "production") {
 
     window.addEventListener("focus", handleFocus, false);
 
-    const eventSource = new window.EventSource("/dev-events");
-    /** @param {MessageEvent} e */
-    function eventHandler(e) {
-      console.log("/dev-events message:", e);
-      handleFocus(true); // 🚧 only trigger on file change
-    }
-    eventSource.addEventListener("message", eventHandler);
+    const wsClient = new WebSocket(`ws://localhost:${DEV_WEBSOCKET_PORT}/dev-events`);
+    wsClient.onmessage = (e) => {
+      info("/dev-events message:", e);
+    };
 
     return () => {
       window.removeEventListener("focus", handleFocus);
-      eventSource.removeEventListener("message", eventHandler);
+      wsClient.close();
     };
   });
 }
