@@ -1,7 +1,16 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { focusManager } from "@tanstack/react-query";
 import { breakpoint, nav } from "src/const";
-import { safeJsonParse, tryLocalStorageGet, tryLocalStorageSet } from "src/npc-cli/service/generic";
+
+import {
+  safeJsonParse,
+  tryLocalStorageGet,
+  tryLocalStorageSet,
+  info,
+} from "src/npc-cli/service/generic";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "src/const";
+import { queryClient } from "src/npc-cli/service/query-client";
 
 const useStore = create<State>()(
   devtools((set, get) => ({
@@ -32,10 +41,44 @@ const useStore = create<State>()(
       },
 
       async initiateBrowser() {
+        if (process.env.NODE_ENV !== "production") {
+          /**
+           * Dev-only event handling:
+           * - trigger component refresh on file change
+           */
+          const wsClient = new WebSocket(`ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`);
+          wsClient.onmessage = (e) => {
+            // info("/dev-events message:", e);
+            setTimeout(() => {
+              // timeout seems necessary, despite file being
+              // written before message in assets-meta.js
+              queryClient.refetchQueries({
+                predicate({ queryKey: [queryKey] }) {
+                  return queryKey === "assets-meta.json";
+                },
+              });
+            }, 100);
+          };
+
+          /**
+           * In development refetch on refocus can automate changes.
+           * In production, see https://github.com/TanStack/query/pull/4805.
+           */
+          focusManager.setEventListener((handleFocus) => {
+            if (typeof window !== "undefined" && "addEventListener" in window) {
+              window.addEventListener("focus", handleFocus as (e?: FocusEvent) => void, false);
+              return () => {
+                window.removeEventListener("focus", handleFocus as (e?: FocusEvent) => void);
+                wsClient.close();
+              };
+            }
+          });
+        }
+
         window.addEventListener("message", (message) => {
           if (message.origin === "https://giscus.app" && message.data.giscus?.discussion) {
             const discussion = message.data.giscus.discussion as GiscusDiscussionMeta;
-            console.log("giscus meta", discussion);
+            info("giscus meta", discussion);
             const { articleKey } = get();
             if (articleKey) {
               set(
@@ -49,6 +92,7 @@ const useStore = create<State>()(
             }
           }
         });
+
         set(() => ({ browserLoaded: true }), undefined, "browser-load");
 
         const topLevel: Pick<State, "navOpen" | "viewOpen"> =

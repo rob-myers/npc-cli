@@ -2,10 +2,10 @@ import express from "express";
 import expressWs from "express-ws";
 import bodyParser from "body-parser";
 
-import { DEV_WEBSOCKET_PORT } from "../const";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
 import { info } from "../npc-cli/service/generic";
 
-const port = Number(DEV_WEBSOCKET_PORT || 3000);
+const port = Number(DEV_EXPRESS_WEBSOCKET_PORT || 3000);
 
 const { app } = expressWs(express());
 
@@ -40,4 +40,4 @@ app.post("/send-dev-event", function (req, res, next) {
   res.json();
 });
 
-app.listen(port).on("listening", () => info(`websocket server listening on port ${port}`));
+app.listen(port).on("listening", () => info(`express websocket server listening on port ${port}`));

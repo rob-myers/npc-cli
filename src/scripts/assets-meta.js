@@ -7,7 +7,7 @@ import stringify from "json-stringify-pretty-compact";
 // relative urls for sucrase-node
 import { info, keys, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
-import { DEV_GATSBY_PORT } from "../const";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const symbolsDir = path.resolve(staticAssetsDir, "symbol");
@@ -31,7 +31,7 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 
   fs.writeFileSync(outputFilename, stringify(output));
 
-  const sendDevEventUrl = `http://localhost:${DEV_GATSBY_PORT}/send-dev-event`;
+  const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
   fetch(sendDevEventUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },

@@ -479,22 +479,34 @@ export function visibleUnicodeLength(input) {
 
 //#region logging
 
-/** https://stackoverflow.com/a/26078207/2917822 */
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
 export const debug = (function () {
   return Function.prototype.bind.call(console.debug, console, "\x1b[34mDEBUG\x1b[0m");
 })();
 
-/** https://stackoverflow.com/a/26078207/2917822 */
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
 export const error = (function () {
   return Function.prototype.bind.call(console.error, console, "\x1b[31mERROR\x1b[0m");
 })();
 
-/** https://stackoverflow.com/a/26078207/2917822 */
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
 export const info = (function () {
   return Function.prototype.bind.call(console.info, console, "\x1b[34mINFO\x1b[0m");
 })();
 
-/** https://stackoverflow.com/a/26078207/2917822 */
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
 export const warn = (function () {
   return Function.prototype.bind.call(console.warn, console, "\x1b[33mWARN\x1b[0m");
 })();

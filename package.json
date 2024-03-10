@@ -19,7 +19,7 @@
     "ts-script": "ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
     "assets-meta": "yarn ts-script src/scripts/assets-meta",
     "assets-meta-fast": "sucrase-node src/scripts/assets-meta",
-    "watch-assets-meta": "yarn assets-meta && nodemon --on-change-only --delay 2s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta-fast'",
+    "watch-assets-meta": "yarn assets-meta && nodemon --on-change-only --delay 1s --config src/scripts/assets-meta.nodemon.json --exec 'yarn assets-meta-fast'",
     "ws-server": "sucrase-node src/scripts/ws-server.js"
   },
   "prettier": {

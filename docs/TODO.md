@@ -180,7 +180,7 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
-- 🚧 can layout map using SVG with geomorph placeholders (rects)
+- ✅ can layout map using SVG with geomorph placeholders (rects)
   - ✅ create example layout svg
   - ✅ `symbols-meta.json` -> `assets-meta.json`
   - ✅ parse maps and store in `assets-meta.json`
@@ -188,7 +188,7 @@
     - was referencing stale prop
   - ✅ `TestScene` reads from JSON and updates onchange
     - requires window refocus
-  - 🚧 avoid window refocus
+  - ✅ avoid window refocus
     - ✅ can extend gatsby with dev-only endpoints
     - ❌ endpoint `GET /dev-events` (for EventSource) and `POST /dev-files-changed`
     - ✅ create websocket server and test browser connect
@@ -198,8 +198,14 @@
       wsClient.onmessage = e => console.log('message', e)
       wsClient.send(JSON.stringify({ yo: 'dawg' }))
       ```
+    - ✅ can trigger websocket via curl
+      ```sh
+      curl -XPOST -H 'content-type: application/json' \
+        localhost:8012/send-dev-event \
+        --data '{ "hello": "world!" }'
+      ```
     - ✅ script assets-meta triggers websocket (if it exists)
-    - browser triggers react-query focus
+    - ✅ browser triggers react-query refetch
 
 - hull symbols have folder `symbols`, using placeholders
   - placeholders are partially transparent boxes of symbol filename's dimension
