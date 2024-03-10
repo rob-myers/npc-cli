@@ -179,6 +179,7 @@ const contextMenuCss = css`
 
 const statsCss = css`
   position: absolute !important;
-  right: 0px;
+  z-index: 4 !important;
   left: unset !important;
+  right: 0px;
 `;
