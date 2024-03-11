@@ -23,8 +23,9 @@ body {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.8rem;
   letter-spacing: 1px;
+  font-weight: 300;
 }
 
 aside {
