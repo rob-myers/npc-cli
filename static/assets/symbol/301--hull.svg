@@ -3,17 +3,17 @@
   <defs>
     <pattern x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-0" bx:pinned="true">
       <title>symbol-rect-pattern</title>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0);" y="-2" x="0.5"/>
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
       <defs>
         <bx:grid x="0" y="0" width="60" height="60"/>
       </defs>
-      <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0);" y="58" x="0.5"/>
-      <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px;" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
-      <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px;" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px;" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
-      <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px;" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
+      <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);"/>
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
+      <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);"/>
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
+      <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
+      <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
     </pattern>
     <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, 0.00032043457, -840.000017209629)" xlink:href="#pattern-0"/>
     <bx:grid x="0" y="0" width="60" height="60"/>
@@ -24,10 +24,10 @@
   </image>
   <g style="pointer-events: none;">
     <title>symbols</title>
-    <rect y="-480.000183" width="120" height="119.999992" style="stroke: rgb(0, 0, 0); opacity: 1; filter: none; fill: url('#pattern-0-0'); fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; transform-origin: 60.0003px -420px;" x="0.000168" transform="matrix(1, 0, 0, -1, 0, 840.000061035157)">
+    <rect y="-480.000183" width="120" height="119.999992" style="opacity: 1; filter: none; fill: url('#pattern-0-0'); fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; transform-origin: 60.0003px -420px; stroke: rgb(255, 0, 0);" x="0.000168" transform="matrix(1, 0, 0, -1, 0, 840.000061035157)">
       <title>stateroom--014--2x2</title>
     </rect>
-    <rect y="-480.000183" width="120" height="119.999992" style="stroke: rgb(0, 0, 0); opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-1'); transform-origin: 180px -420px;" x="120.000168" transform="matrix(1, 0, 0, -1, 0, 840.000000000001)">
+    <rect y="-480.000183" width="120" height="119.999992" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-1'); transform-origin: 180px -420px; stroke: rgb(255, 0, 0);" x="120.000168" transform="matrix(1, 0, 0, -1, 0, 840.000000000001)">
       <title>stateroom--014--2x2</title>
     </rect>
   </g>
