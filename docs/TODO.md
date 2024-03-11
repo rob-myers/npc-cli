@@ -212,20 +212,30 @@
   - ✅ add stateroom symbol
   - ✅ extract during `yarn assets-meta`
   - ✅ maps: represent geomorph as single rect (via pattern)
-  - clarify conversion { rect, transform } -> transform
+  - ✅ clarify conversion { rect, transform } -> transform
+  - 🚧 compute affine transform we could apply to rect [0, 0, width, height]
+    - ℹ️ want to eliminate rect.x, rect.y and transform-origin
+      - let t_M be top-left of transformed rect under affine transform M
+      - let t_S be top-left of transformed rect under 2x2 submatrix S of M
+      - new affine transform is S plus translation (-t_{S,x} + t_{M,x}, -t_{S,y} + t_{M,y})
 
-- learn about WebGl RenderTargets
-  - Towards "Pixi.js RenderTexture" functionality
-  - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
-  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
+- show hull 3d walls
+- show sub-symbol 3d walls
+- show sub-symbol chairs, beds
 
-- 🚧 try fix sporadic missing updates
+- avoid updating unchanged symbols via content hash
+- try fix sporadic missing updates
   - ✅ move maps to `media/map`
   - ✅ improve remount keys
+  - still seeing occasional issues?
 - ✅ integer accuracy when parsing maps
   - Boxy has rounding errors e.g. when reflect
   - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
 - migrate Triangle
+- learn about WebGl RenderTargets
+  - Towards "Pixi.js RenderTexture" functionality
+  - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
+  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 - ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
 - improve MapControls zoomToCursor on mobile
@@ -243,7 +253,7 @@
 
 - world editor in new repo
 - geomorph editor in new repo
-- despite our "generic aim" (fabricating game masters),
+- 🤔 despite our "generic aim" (fabricating game masters),
   some context will help e.g. The Last Redoubt
 
 - ✅ smaller collapsed nav on mobile
