@@ -227,7 +227,14 @@
 - ✅ fix HMR by moving consts elsewhere
 - ✅ prevent multiple websocket connections on HMR
 
-- show hull 3d walls
+- 🚧 show hull 3d walls
+  - ✅ TestGeomorphs can see `api.scene` in TestCanvasContext
+  - 🚧 Geomorph.Layout has walls
+    - instanced two-sided quad
+    - symbols have "floor": defaults to `(0, 0, width, height)`
+    - rect -> edge(s) inside "symbol floor"
+    - path -> edge(s) inside "symbol floor"
+  - ...
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 

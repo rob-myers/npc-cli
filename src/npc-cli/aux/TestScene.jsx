@@ -6,11 +6,14 @@ import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
+import { isDevelopment } from "../service/generic";
+import { Rect } from "../geom";
+
 import "./infinite-grid-helper.js";
 import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { isDevelopment } from "../service/generic";
+import TestGeomorphs from "./TestGeomorphs";
 
 /**
  * @param {Props} props
@@ -26,7 +29,8 @@ export default function TestScene(props) {
     })
   );
 
-  const api = React.useContext(TestCanvasContext);
+  const api = /** @type {Api} */ (React.useContext(TestCanvasContext));
+  api.scene = state;
 
   const { data: assetsJson } = useQuery({
     queryKey: ["assets-meta.json"],
@@ -45,7 +49,7 @@ export default function TestScene(props) {
       });
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }) => {
         const { pngRect } = assetsJson.symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
-        return { gmKey, transform, pngRect };
+        return { key: gmKey, transform, pngRect: Rect.fromJson(pngRect) };
       });
       state.mat4s = state.map.gms.map(
         ({ transform = [1, 0, 0, 1, 0, 0] }) =>
@@ -80,7 +84,7 @@ export default function TestScene(props) {
           key={gm.transform.toString()}
           onUpdate={(self) => self.applyMatrix4(state.mat4s[gmId])}
         >
-          {state.tex[gm.gmKey] && (
+          {state.tex[gm.key] && (
             <mesh
               scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
               geometry={customQuadGeometry}
@@ -92,12 +96,14 @@ export default function TestScene(props) {
                 // 🚧 remove blending, depthWrite
                 blending={THREE.AdditiveBlending}
                 depthWrite={false}
-                map={state.tex[gm.gmKey]}
+                map={state.tex[gm.key]}
               />
             </mesh>
           )}
         </group>
       ))}
+
+      <TestGeomorphs disabled={props.disabled} />
 
       <infiniteGridHelper
         args={[1.5, 1.5, "#bbbbbb"]}
@@ -139,17 +145,14 @@ export default function TestScene(props) {
 /**
  * @typedef State
  * @property {import('three-stdlib').MapControls} controls
- * @property {GeomorphData[]} gms
+ * @property {Geomorph.Layout[]} gms
  * @property {null | Geomorph.MapLayout} map
  * @property {THREE.Matrix4[]} mat4s
  * @property {Partial<Record<Geomorph.GeomorphKey, THREE.Texture>>} tex
  */
 
 /**
- * @typedef GeomorphData
- * @property {Geomorph.GeomorphKey} gmKey
- * @property {[number, number, number, number, number, number]} transform
- * @property {Geom.RectJson} pngRect
+ * @typedef {import('./TestCanvas').State<{ scene: State }>} Api
  */
 
 function Origin() {

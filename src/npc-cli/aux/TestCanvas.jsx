@@ -123,21 +123,18 @@ export default function TestCanvas(props) {
  */
 
 /**
- * @typedef State
+ * @template {{}} [T={}]
+ * @typedef {BaseState & T} State<T> Generic so child components can extend it.
+ */
+
+/**
+ * @typedef BaseState
  * @property {HTMLCanvasElement} canvasEl
  * @property {HTMLDivElement} menuEl
  * @property {HTMLDivElement} rootEl
  * @property {Subject<NPC.Event>} events
  * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; }} [down]
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
- */
-
-/**
- * @typedef GeomorphData
- * @property {Geomorph.GeomorphKey} gmKey
- * @property {[number, number, number, number, number, number]} transform
- * @property {Geom.RectJson} pngRect
- * @property {string} debugPngPath
  */
 
 const canvasCss = css`

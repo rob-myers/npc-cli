@@ -57,6 +57,14 @@ declare namespace Geomorph {
     }[];
   }
 
+  /** Layout of a single geomorph */
+  interface Layout {
+    key: GeomorphKey;
+    transform: Geom.SixTuple;
+    pngRect: Geom.Rect;
+    // 🚧 ... e.g. walls
+  }
+
   type GeomorphKey =
     | "g-101--multipurpose"
     | "g-102--research-deck"
