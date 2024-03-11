@@ -13,11 +13,11 @@ export default function Main(props: React.PropsWithChildren) {
 
   return (
     <section className={mainCss} data-testid="main">
-      <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
-
-      <header className={cx(mainTitleCss, { overlayOpen })} data-testid="main-title">
+      <header className={mainTitleCss} data-testid="main-title">
         NPC CLI
       </header>
+
+      <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
 
       <main>{props.children}</main>
     </section>
@@ -49,25 +49,22 @@ const mainCss = css`
 `;
 
 const mainTitleCss = css`
-  margin: 2rem auto;
+  margin: 3rem auto 2rem auto;
   letter-spacing: 1rem;
-  font-size: 4rem;
 
   transition: filter 300ms;
 
-  &.overlayOpen {
-    filter: none;
-  }
-
   @media (min-width: ${afterBreakpoint}) {
     max-width: 1024px;
+    font-size: 4rem;
     padding: 0 4rem;
-    filter: drop-shadow(8px 0px #ddd);
+    filter: drop-shadow(1px -1px 2px #777);
   }
   @media (max-width: ${breakpoint}) {
     // 🔔 Too wide causes extra body height on mobile
     max-width: 100%;
-    filter: drop-shadow(4px 0px #ddd);
+    font-size: 3.5rem;
+    filter: drop-shadow(2px -2px 2px #777);
   }
 `;
 

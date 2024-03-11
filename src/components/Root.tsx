@@ -118,12 +118,13 @@ const rootCss = css`
           }
         }
         button.toggle {
-          outline: 2px solid #ddd;
-          pointer-events: all;
-          top: calc(0.5 * (${view.barSize} - 1.8rem));
-          width: 1.8rem;
-          height: 1.8rem;
+          top: calc(0.5 * (${view.barSize} - 2rem));
+          width: 2rem;
+          height: 2rem;
           margin-top: 0;
+          pointer-events: all;
+
+          outline: 2px solid #999;
         }
       }
     }
