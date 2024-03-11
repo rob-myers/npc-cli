@@ -50,21 +50,21 @@ const mainCss = css`
 
 const mainTitleCss = css`
   margin: 3rem auto 2rem auto;
-  letter-spacing: 1rem;
+  letter-spacing: 1.5rem;
 
-  transition: filter 300ms;
+  /* transition: filter 300ms; */
 
   @media (min-width: ${afterBreakpoint}) {
     max-width: 1024px;
     font-size: 4rem;
     padding: 0 4rem;
-    filter: drop-shadow(1px -1px 2px #777);
+    filter: drop-shadow(-6px 0px 2px #777);
   }
   @media (max-width: ${breakpoint}) {
     // 🔔 Too wide causes extra body height on mobile
     max-width: 100%;
     font-size: 3.5rem;
-    filter: drop-shadow(2px -2px 2px #777);
+    filter: drop-shadow(-4px 0px 2px #777);
   }
 `;
 

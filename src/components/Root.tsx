@@ -124,7 +124,7 @@ const rootCss = css`
           margin-top: 0;
           pointer-events: all;
 
-          outline: 2px solid #999;
+          outline: 2px solid #ccc;
         }
       }
     }
