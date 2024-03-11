@@ -80,6 +80,17 @@ class GeomorphService {
   }
 
   /**
+   * @param {Record<string, string>} attributes
+   * @returns {Geom.RectJson}
+   */
+  extractRect(attributes) {
+    const [x, y, width, height] = ["x", "y", "width", "height"].map((x) =>
+      Math.round(Number(attributes[x] || 0))
+    );
+    return { x, y, width, height };
+  }
+
+  /**
    * @private
    * @param {string} styleAttrValue
    */
@@ -205,21 +216,32 @@ class GeomorphService {
         if (tagStack.at(-1)?.tagName !== "title") {
           return;
         }
+        const parent = assertDefined(tagStack.at(-2));
+        const gmNumber = Number(contents); // e.g. 301
 
-        const parentTagMeta = assertDefined(tagStack.at(-2));
-        const gmNumericKey = Number(contents); // e.g. 301
-        if (parentTagMeta.tagName === "pattern") {
-          return; // ignore <pattern> in <defs>
+        if (parent.tagName !== "rect") {
+          return warn(`parseMap: ${parent.tagName} ${contents}: ignored non-rect in map`);
         }
-        if (!geomorphService.isGmNumber(gmNumericKey)) {
+        if (!geomorphService.isGmNumber(gmNumber)) {
           return warn(`parseMap: "${contents}": expected valid gm number`);
         }
-        const transform = geomorphService.extractSixTuple(parentTagMeta.attributes.transform);
+
+        const rect = geomorphService.extractRect(parent.attributes);
+        const transform = geomorphService.extractSixTuple(parent.attributes.transform);
+        // 🚧 can we ignore transformBox?
+        const { transformOrigin, transformBox } = geomorphService.extractTransformData({
+          ...parent,
+          title: contents,
+        });
 
         transform &&
           gms.push({
-            gmKey: geomorphService.toGmKey[gmNumericKey], // fix rounding errors in Boxy
-            transform: /** @type {Geom.SixTuple} */ (transform.map(Math.round)),
+            gmKey: geomorphService.toGmKey[gmNumber],
+            transform: geom.reduceAffineTransform(
+              { ...rect },
+              transform,
+              transformOrigin ?? { x: 0, y: 0 }
+            ),
           });
         // console.log({ gmNumericKey, parentTagMeta });
       },
@@ -298,7 +320,7 @@ class GeomorphService {
           const [symbolKey, ...symbolTags] = ownTags;
           if (parent.tagName !== "rect") {
             return warn(
-              `parseStarshipSymbol: ${parent.tagName}: ignored non-rect in symbols folder`
+              `parseStarshipSymbol: ${parent.tagName} ${contents}: ignored non-rect in symbols folder`
             );
           }
           if (!geomorphService.isSymbolKey(symbolKey)) {
@@ -307,9 +329,7 @@ class GeomorphService {
             );
           }
 
-          const [x, y, width, height] = ["x", "y", "width", "height"].map((x) =>
-            Math.round(Number(parent.attributes[x] || 0))
-          );
+          const rect = geomorphService.extractRect(parent.attributes);
           const transform = geomorphService.extractSixTuple(parent.attributes.transform);
           // 🚧 can we ignore transformBox?
           const { transformOrigin, transformBox } = geomorphService.extractTransformData({
@@ -321,10 +341,10 @@ class GeomorphService {
             symbols.push({
               symbolKey,
               meta: geomorphService.tagsToMeta(symbolTags, { key: symbolKey }),
-              width,
-              height,
+              width: rect.width,
+              height: rect.height,
               transform: geom.reduceAffineTransform(
-                { x, y, width, height },
+                { ...rect },
                 transform,
                 transformOrigin ?? { x: 0, y: 0 }
               ),

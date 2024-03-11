@@ -2613,13 +2613,25 @@
     "demo-map-1": {
       "gms": [
         {"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0, 0]},
-        {"gmKey": "g-101--multipurpose", "transform": [1, 0, 0, 1, 0, 0]},
-        {"gmKey": "g-302--xboat-repair-bay", "transform": [-1, 0, 0, 1, 0, 0]},
-        {"gmKey": "g-301--bridge", "transform": [1, 0, 0, -1, 0, 0]},
-        {"gmKey": "g-102--research-deck", "transform": [1, 0, 0, 1, 0, 0]},
-        {"gmKey": "g-303--passenger-deck", "transform": [1, 0, 0, 1, 0, 0]},
-        {"gmKey": "g-302--xboat-repair-bay", "transform": [1, 0, 0, -1, 0, 0]},
-        {"gmKey": "g-302--xboat-repair-bay", "transform": [-1, 0, 0, 1, 0, 0]}
+        {"gmKey": "g-101--multipurpose", "transform": [1, 0, 0, 1, 0, 600]},
+        {
+          "gmKey": "g-302--xboat-repair-bay",
+          "transform": [-1, 0, 0, 1, 2400, 600]
+        },
+        {"gmKey": "g-301--bridge", "transform": [1, 0, 0, -1, 0, 2400]},
+        {"gmKey": "g-102--research-deck", "transform": [1, 0, 0, 1, -1200, 0]},
+        {
+          "gmKey": "g-303--passenger-deck",
+          "transform": [1, 0, 0, 1, -1200, 1200]
+        },
+        {
+          "gmKey": "g-302--xboat-repair-bay",
+          "transform": [1, 0, 0, -1, -2400, 1800]
+        },
+        {
+          "gmKey": "g-302--xboat-repair-bay",
+          "transform": [-1, 0, 0, 1, 2400, 1200]
+        }
       ]
     }
   }

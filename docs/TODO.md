@@ -207,7 +207,7 @@
     - ✅ script assets-meta triggers websocket (if it exists)
     - ✅ browser triggers react-query refetch
 
-- 🚧 hull symbols have folder `symbols`, using placeholders
+- ✅ hull symbols have folder `symbols`, using placeholders
   - ℹ️ placeholders are partially transparent boxes of symbol filename's dimension
   - ✅ add stateroom symbol
   - ✅ extract during `yarn assets-meta`
@@ -219,7 +219,7 @@
       - let t_S be top-left of [0, 0, rect.width, rect.height] transformed under 2x2 submatrix S of M
       - new affine transform is S plus translation (-t_{S,x} + t_{M,x}, -t_{S,y} + t_{M,y})
 
-- maps parsing should support transform-origin too
+- ✅ maps parsing should support transform-origin too
   - ℹ️ can arise if rect starts with x, y attribs
 
 - show hull 3d walls
