@@ -53,7 +53,6 @@ const mainTitleCss = css`
   letter-spacing: 1rem;
   font-size: 4rem;
 
-  filter: drop-shadow(8px 0px #ddd);
   transition: filter 300ms;
 
   &.overlayOpen {
@@ -63,10 +62,12 @@ const mainTitleCss = css`
   @media (min-width: ${afterBreakpoint}) {
     max-width: 1024px;
     padding: 0 4rem;
+    filter: drop-shadow(8px 0px #ddd);
   }
   @media (max-width: ${breakpoint}) {
     // 🔔 Too wide causes extra body height on mobile
     max-width: 100%;
+    filter: drop-shadow(4px 0px #ddd);
   }
 `;
 
