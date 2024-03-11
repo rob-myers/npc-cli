@@ -7,7 +7,7 @@ export const nav = /** @type {const} */ {
   collapsedRem: 4,
   collapsedWidth: "4rem",
   expandedRem: 12,
-  expandedWidth: "14rem",
+  expandedWidth: "15rem",
   titleMarginTop: "0.5rem",
 };
 
