@@ -16,11 +16,9 @@ export default function Main(props: React.PropsWithChildren) {
     <section className={mainCss} data-testid="main">
       <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
 
-      <Link to="/" style={{ display: "block", margin: "0 auto" }}>
-        <div className={mainTitleCss} data-testid="main-title">
-          <img src={npcCliTitlePng} />
-        </div>
-      </Link>
+      <div className={mainTitleCss} data-testid="main-title">
+        <img src={npcCliTitlePng} />
+      </div>
 
       <main>{props.children}</main>
     </section>
@@ -53,7 +51,7 @@ const mainCss = css`
 
 const mainTitleCss = css`
   max-width: 1024px;
-  margin: 2rem 0;
+  margin: 2rem auto;
   img {
     width: 300px;
   }
