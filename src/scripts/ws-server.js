@@ -2,7 +2,7 @@ import express from "express";
 import expressWs from "express-ws";
 import bodyParser from "body-parser";
 
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
 import { info } from "../npc-cli/service/generic";
 
 const port = Number(DEV_EXPRESS_WEBSOCKET_PORT || 3000);
@@ -34,8 +34,12 @@ app.ws("/dev-events", function (ws, req) {
 
 app.post("/send-dev-event", function (req, res, next) {
   devEventsWs.forEach((client) => {
-    info("received", req.body);
-    client.send(JSON.stringify(req.body));
+    if (client.readyState === client.CLOSED) {
+      devEventsWs.delete(client); // remove stale
+    } else {
+      info("received", client.readyState, req.body);
+      client.send(JSON.stringify(req.body));
+    }
   });
   res.json();
 });

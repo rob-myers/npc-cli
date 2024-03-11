@@ -13,6 +13,7 @@ import useUpdate from "../npc-cli/hooks/use-update";
 
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
+import { isSmallView } from "./layout";
 
 export default function Viewer() {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
@@ -52,7 +53,7 @@ export default function Viewer() {
       style={
         // 🚧 move to CSS
         site.browserLoaded && !site.viewOpen
-          ? useSite.api.isSmall()
+          ? isSmallView()
             ? { minHeight: "0%" }
             : { minWidth: "0%" }
           : undefined

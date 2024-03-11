@@ -4,11 +4,12 @@ import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "../const";
 import useSite from "./site.store";
+import { isSmallView } from "./layout";
 
 export default function Main(props: React.PropsWithChildren) {
   const site = useSite(({ navOpen, mainOverlay }) => ({ navOpen, mainOverlay }), shallow);
 
-  const overlayOpen = site.mainOverlay || (site.navOpen && useSite.api.isSmall());
+  const overlayOpen = site.mainOverlay || (site.navOpen && isSmallView());
 
   return (
     <section className={mainCss} data-testid="main">

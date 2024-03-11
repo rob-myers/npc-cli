@@ -224,7 +224,8 @@
 
 - ✅ improve title
 
-- try fix HMR by moving PORT consts elsewhere
+- ✅ fix HMR by moving consts elsewhere
+- ✅ prevent multiple websocket connections on HMR
 
 - show hull 3d walls
 - show sub-symbol 3d walls

@@ -7,7 +7,7 @@ import stringify from "json-stringify-pretty-compact";
 // relative urls for sucrase-node
 import { info, keys, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");

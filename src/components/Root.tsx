@@ -61,7 +61,7 @@ function Root(props: Props) {
   // Update matchMedia computations
   useOnResize();
 
-  React.useEffect(() => void useSite.api.initiateBrowser(), []);
+  React.useEffect(() => useSite.api.initiateBrowser(), []);
 
   useBeforeunload(() => void useSite.api.onTerminate());
 

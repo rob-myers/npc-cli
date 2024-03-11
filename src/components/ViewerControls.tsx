@@ -3,8 +3,9 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import useSite from "./site.store";
-import { afterBreakpoint, breakpoint, view } from "../const";
+import { afterBreakpoint, breakpoint, nav, view } from "../const";
 import { isTouchDevice } from "src/npc-cli/service/dom";
+import { getNavWidth, isSmallView } from "./layout";
 
 import { State } from "./Viewer";
 import {
@@ -54,12 +55,12 @@ export default function ViewerControls({ api }: Props) {
         return;
       }
 
-      state.dragOffset = useSite.api.isSmall()
+      state.dragOffset = isSmallView()
         ? api.rootEl.getBoundingClientRect().y - e.clientY
         : api.rootEl.getBoundingClientRect().x - e.clientX;
 
       document.documentElement.classList.add(
-        useSite.api.isSmall() ? "cursor-row-resize" : "cursor-col-resize"
+        isSmallView() ? "cursor-row-resize" : "cursor-col-resize"
       );
       // trigger main overlay (iframe can get in the way of body)
       useSite.setState({ mainOverlay: true });
@@ -77,10 +78,10 @@ export default function ViewerControls({ api }: Props) {
     },
     onDrag(e: PointerEvent) {
       if (state.dragOffset !== null) {
-        let percent = useSite.api.isSmall()
+        let percent = isSmallView()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
-            (window.innerWidth - useSite.api.getNavWidth());
+            (window.innerWidth - getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
@@ -112,7 +113,7 @@ export default function ViewerControls({ api }: Props) {
       if (!willOpen) {
         api.tabs.toggleEnabled(false);
       }
-      if (willOpen && useSite.api.isSmall()) {
+      if (willOpen && isSmallView()) {
         useSite.api.toggleNav(false);
       }
     },

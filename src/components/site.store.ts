@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { focusManager } from "@tanstack/react-query";
-import { breakpoint, nav } from "src/const";
 
 import {
   safeJsonParse,
@@ -9,8 +8,10 @@ import {
   tryLocalStorageSet,
   info,
 } from "src/npc-cli/service/generic";
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "src/const";
+// 🔔 avoid unnecessary HMR: do not reference view-related consts
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "src/scripts/const";
 import { queryClient } from "src/npc-cli/service/query-client";
+import { isSmallView } from "./layout";
 
 const useStore = create<State>()(
   devtools((set, get) => ({
@@ -23,11 +24,6 @@ const useStore = create<State>()(
     viewOpen: false,
 
     api: {
-      getNavWidth() {
-        const baseFontPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        return (get().navOpen ? nav.expandedRem : nav.collapsedRem) * baseFontPx;
-      },
-
       initiate({ allMdx: { edges } }) {
         const articlesMeta = {} as State["articlesMeta"];
         for (const {
@@ -40,7 +36,9 @@ const useStore = create<State>()(
         set({ articlesMeta }, undefined, "initiate");
       },
 
-      async initiateBrowser() {
+      initiateBrowser() {
+        const cleanUps = [] as (() => void)[];
+
         if (process.env.NODE_ENV !== "production") {
           /**
            * Dev-only event handling:
@@ -59,6 +57,7 @@ const useStore = create<State>()(
               });
             }, 300);
           };
+          cleanUps.push(() => wsClient.close());
 
           /**
            * In development refetch on refocus can automate changes.
@@ -75,7 +74,7 @@ const useStore = create<State>()(
           });
         }
 
-        window.addEventListener("message", (message) => {
+        function onGiscusMessage(message: MessageEvent) {
           if (message.origin === "https://giscus.app" && message.data.giscus?.discussion) {
             const discussion = message.data.giscus.discussion as GiscusDiscussionMeta;
             info("giscus meta", discussion);
@@ -91,7 +90,10 @@ const useStore = create<State>()(
               return true;
             }
           }
-        });
+        }
+
+        window.addEventListener("message", onGiscusMessage);
+        cleanUps.push(() => window.removeEventListener("message", onGiscusMessage));
 
         set(() => ({ browserLoaded: true }), undefined, "browser-load");
 
@@ -100,15 +102,11 @@ const useStore = create<State>()(
         if (topLevel.viewOpen) {
           set(() => ({ viewOpen: topLevel.viewOpen }));
         }
-        if (topLevel.navOpen && !get().api.isSmall()) {
+        if (topLevel.navOpen && !isSmallView()) {
           set(() => ({ navOpen: topLevel.navOpen }));
         }
-      },
 
-      isSmall() {
-        return (
-          typeof window !== "undefined" && window.matchMedia(`(max-width: ${breakpoint})`).matches
-        );
+        return () => cleanUps.forEach((cleanup) => cleanup());
       },
 
       isViewClosed() {
@@ -160,11 +158,8 @@ export type State = {
 
   api: {
     // clickToClipboard(e: React.MouseEvent): Promise<void>;
-    /** Navigation bar width in pixels */
-    getNavWidth(): number;
     initiate(allFm: AllFrontMatter): void;
-    initiateBrowser(): Promise<void>;
-    isSmall(): boolean;
+    initiateBrowser(): () => void;
     isViewClosed(): boolean;
     onTerminate(): void;
     setArticleKey(articleKey?: string): void;
