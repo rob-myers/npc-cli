@@ -105,6 +105,7 @@ const navCss = css`
     width: 1rem;
     min-width: 1rem;
     margin-right: 24px;
+    margin-left: 12px;
   }
 
   &.${sidebarClasses.collapsed} .${menuClasses.SubMenuExpandIcon} {
@@ -120,6 +121,7 @@ const navTitleCss = css`
     opacity: 1;
     transition: opacity 500ms;
     margin-top: ${nav.titleMarginTop};
+    margin-left: 12px;
 
     .${menuClasses.button} {
       height: calc(1 * ${view.barSize});

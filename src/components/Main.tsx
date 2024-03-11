@@ -51,6 +51,7 @@ const mainCss = css`
 const mainTitleCss = css`
   margin: 3rem auto 2rem auto;
   letter-spacing: 1.5rem;
+  color: #444;
 
   @media (min-width: ${afterBreakpoint}) {
     max-width: 1024px;
