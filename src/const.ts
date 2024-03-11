@@ -12,7 +12,8 @@ export const nav = /** @type {const} */ {
   collapsedRem: 4,
   collapsedWidth: "4rem",
   expandedRem: 12,
-  expandedWidth: "12rem",
+  expandedWidth: "14rem",
+  titleMarginTop: "0.5rem",
 };
 
 export const view = /** @type {const} */ {

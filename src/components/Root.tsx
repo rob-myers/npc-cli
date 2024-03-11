@@ -123,6 +123,7 @@ const rootCss = css`
           top: calc(0.5 * (${view.barSize} - 1.8rem));
           width: 1.8rem;
           height: 1.8rem;
+          margin-top: 0;
         }
       }
     }

@@ -8,7 +8,6 @@ import useStateRef from "../npc-cli/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
 import useSite from "./site.store";
-import npcCliTitlePng from "static/assets/npc-cli-title.png";
 
 export default function Nav() {
   const collapsed = useSite(({ navOpen }) => !navOpen);
@@ -44,9 +43,7 @@ export default function Nav() {
 
       <Menu>
         <MenuItem className="title" tabIndex={-1} component="span">
-          <Link to="/">
-            <img src={npcCliTitlePng} />
-          </Link>
+          <Link to="/">NPC CLI</Link>
         </MenuItem>
         <SubMenu icon={icon.blog} label="Blog">
           <MenuItem component="span">
@@ -81,6 +78,8 @@ const navCss = css`
     right: calc(0.5 * (${view.barSize} - 1.5rem));
     width: 1.5rem;
     height: 1.5rem;
+    transition: margin-top 300ms;
+    margin-top: ${nav.titleMarginTop};
   }
 
   a.${menuClasses.button}, span.${menuClasses.button} {
@@ -120,17 +119,19 @@ const navTitleCss = css`
   .${menuClasses.menuItemRoot}.title {
     opacity: 1;
     transition: opacity 500ms;
+    margin-top: ${nav.titleMarginTop};
 
     .${menuClasses.button} {
-      height: ${view.barSize};
+      height: calc(1 * ${view.barSize});
     }
 
     .${menuClasses.label} {
-      height: 1.5rem;
-      img {
-        height: 100%;
-        filter: invert();
-      }
+      display: flex;
+      align-items: center;
+
+      font-size: 1.5rem;
+      letter-spacing: 0.4rem;
+      filter: drop-shadow(3px 0 #336);
     }
   }
 

@@ -1,10 +1,8 @@
-import { Link } from "gatsby";
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import { afterBreakpoint, breakpoint } from "../const";
-import npcCliTitlePng from "static/assets/npc-cli-title.png";
 import useSite from "./site.store";
 
 export default function Main(props: React.PropsWithChildren) {
@@ -16,9 +14,9 @@ export default function Main(props: React.PropsWithChildren) {
     <section className={mainCss} data-testid="main">
       <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
 
-      <div className={mainTitleCss} data-testid="main-title">
-        <img src={npcCliTitlePng} />
-      </div>
+      <header className={cx(mainTitleCss, { overlayOpen })} data-testid="main-title">
+        NPC CLI
+      </header>
 
       <main>{props.children}</main>
     </section>
@@ -50,20 +48,24 @@ const mainCss = css`
 `;
 
 const mainTitleCss = css`
-  max-width: 1024px;
   margin: 2rem auto;
-  img {
-    width: 300px;
+  letter-spacing: 1rem;
+  font-size: 4rem;
+
+  filter: drop-shadow(8px 0px #ddd);
+  transition: filter 300ms;
+
+  &.overlayOpen {
+    filter: none;
   }
 
   @media (min-width: ${afterBreakpoint}) {
+    max-width: 1024px;
     padding: 0 4rem;
   }
   @media (max-width: ${breakpoint}) {
-    img {
-      // 🔔 Too wide causes extra body height on mobile
-      max-width: 100%;
-    }
+    // 🔔 Too wide causes extra body height on mobile
+    max-width: 100%;
   }
 `;
 

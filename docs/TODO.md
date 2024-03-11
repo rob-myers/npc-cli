@@ -222,6 +222,10 @@
 - ✅ maps parsing should support transform-origin too
   - ℹ️ can arise if rect starts with x, y attribs
 
+- ✅ improve title
+
+- try fix HMR by moving PORT consts elsewhere
+
 - show hull 3d walls
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
