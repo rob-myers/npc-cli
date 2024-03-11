@@ -163,23 +163,6 @@
   - More generally would have to wrap THREE in a communication API.
   - We can return to "web worker approach" once the project is more mature
 
-## WIP
-
-- 🚧 TestCharacter (character controller)
-  - ✅ simple demo using https://github.com/pmndrs/ecctrl
-  - 🚧 BUG ecctrl is panning on drag outside canvas
-    - https://github.com/pmndrs/ecctrl/issues/34
-    - create patch in the meantime
-  - 🚧 sporadic issue with pause i.e. scene disappears
-    - ❌ `THREE.WebGLRenderer: Context Lost`
-    - ✅ pause physics
-    - ✅ disable CameraControls
-    - 🚧 frameloop must be `demand` instead of `never`?
-  - use character Soldier with animations
-  - use custom character via Mixamo (use Blender to combine animations)
-  - click to move
-  - extract code, removing e.g. ray-cast
-
 - ✅ can layout map using SVG with geomorph placeholders (rects)
   - ✅ create example layout svg
   - ✅ `symbols-meta.json` -> `assets-meta.json`
@@ -227,17 +210,36 @@
 - ✅ fix HMR by moving consts elsewhere
 - ✅ prevent multiple websocket connections on HMR
 
+## WIP
+
+- 🚧 TestCharacter (character controller)
+  - ✅ simple demo using https://github.com/pmndrs/ecctrl
+  - 🚧 BUG ecctrl is panning on drag outside canvas
+    - https://github.com/pmndrs/ecctrl/issues/34
+    - create patch in the meantime
+  - 🚧 sporadic issue with pause i.e. scene disappears
+    - ❌ `THREE.WebGLRenderer: Context Lost`
+    - ✅ pause physics
+    - ✅ disable CameraControls
+    - 🚧 frameloop must be `demand` instead of `never`?
+  - use character Soldier with animations
+  - use custom character via Mixamo (use Blender to combine animations)
+  - click to move
+  - extract code, removing e.g. ray-cast
+
 - 🚧 show hull 3d walls
   - ✅ TestGeomorphs can see `api.scene` in TestCanvasContext
   - ✅ remove `transform` from `Geomorph.Layout`
-  - 🚧 symbols have "floor"
-    - hull defaults to union of hullWalls sans holes
-    - non-hull defaults to `(0, 0, width, height)`
-  - 🚧 Geomorph.Layout has walls
-    - instanced two-sided quad
+  - ✅ precompute symbols "floor"
+    - hull defaults to union of hullWalls sans holes, insetted
+    - non-hull likewise, with fallback `(0, 0, width, height)`
+  - 🚧 render floor polys in `TestScene`
+    - use canvas texture
+    - canvas -> image -> texture
+  - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
-  - ...
+  - instanced two-sided quads
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 

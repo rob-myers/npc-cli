@@ -232,7 +232,10 @@ class GeomorphService {
         const gmNumber = Number(contents); // e.g. 301
 
         if (parent.tagName !== "rect") {
-          return warn(`parseMap: ${parent.tagName} ${contents}: ignored non-rect in map`);
+          return (
+            parent.tagName !== "pattern" &&
+            warn(`parseMap: ${parent.tagName} ${contents}: ignored non-rect in map`)
+          );
         }
         if (!geomorphService.isGmNumber(gmNumber)) {
           return warn(`parseMap: "${contents}": expected valid gm number`);
@@ -277,7 +280,8 @@ class GeomorphService {
    * @returns {Geomorph.ParsedSymbol<Geom.Poly>}
    */
   parseStarshipSymbol(symbolKey, svgContents, lastModified) {
-    // console.info("parseStarshipSymbol", symbolKey, "...");
+    // info("parseStarshipSymbol", symbolKey, "...");
+    const isHull = symbolKey.endsWith("--hull");
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
@@ -291,15 +295,15 @@ class GeomorphService {
     const walls = /** @type {Geom.Poly[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
-      onopentag(name, attributes) {
+      onopentag(tag, attributes) {
         // console.info(name, attributes);
 
-        if (name === "svg") {
+        if (tag === "svg") {
           // viewBox -> viewbox
           const [x, y, width, height] = attributes.viewbox.trim().split(/\s+/).map(Number);
           viewBoxRect = { x, y, width, height };
         }
-        if (name === "image") {
+        if (tag === "image") {
           pngRect = {
             x: Number(attributes.x || 0),
             y: Number(attributes.y || 0),
@@ -308,7 +312,7 @@ class GeomorphService {
           };
         }
 
-        tagStack.push({ tagName: name, attributes });
+        tagStack.push({ tagName: tag, attributes });
       },
       ontext(contents) {
         if (tagStack.at(-1)?.tagName !== "title") {
@@ -402,20 +406,53 @@ class GeomorphService {
       throw Error(`parseStarshipSymbol: ${symbolKey} must have viewBox (or viewbox)`);
     }
 
-    return {
-      key: symbolKey,
-      isHull: symbolKey.endsWith("--hull"),
+    const key = symbolKey;
+    const { width, height } = viewBoxRect;
+    /** @type {Parameters<GeomorphService['postParseStarshipSymbol']>[0]} */
+    const partial = {
+      key,
       hullWalls,
-      width: viewBoxRect.width,
-      height: viewBoxRect.height,
+      isHull,
+      walls,
+      width,
+      height,
+    };
+    const { floor } = this.postParseStarshipSymbol(partial);
+
+    return {
+      ...partial,
+      floor,
       lastModified,
       obstacles,
-      pngRect:
-        pngRect ??
-        (info(`${symbolKey} is using viewBox for pngRect ${JSON.stringify(pngRect)}`), viewBoxRect),
+      pngRect: pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect),
       symbols,
       unsorted,
-      walls,
+    };
+  }
+
+  /**
+   * @param {Pick<Geomorph.ParsedSymbol<Geom.Poly>, 'key' | 'height' | 'hullWalls' | 'isHull' | 'walls' | 'width'>} partial
+   */
+  postParseStarshipSymbol(partial) {
+    let floor = /** @type {null | Geom.Poly} */ (null);
+    const wallsKey = partial.isHull ? "hullWalls" : "walls";
+    const union = Poly.union(partial[wallsKey]);
+
+    if (union.length > 1) {
+      warn(`${partial.key}: ${wallsKey} are not connected`);
+    }
+    if (union.length > 0) {
+      const [insetted] = geom.createInset(union[0], wallsKey === "walls" ? 1 : 2);
+      floor = insetted?.outline.length ? insetted : null;
+    }
+    if (floor === null) {
+      warn(`${partial.key}: ${wallsKey} are empty`);
+      warn(`${partial.key}: falling back to rectangular floor`);
+      floor = Poly.fromRect({ x: 0, y: 0, ...partial });
+    }
+
+    return {
+      floor,
     };
   }
 
@@ -438,6 +475,7 @@ class GeomorphService {
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
       lastModified: parsed.lastModified,
+      floor: parsed.floor.geoJson,
     };
   }
 
@@ -459,3 +497,5 @@ class GeomorphService {
 }
 
 export const geomorphService = new GeomorphService();
+
+const tmpPoly1 = new Poly();

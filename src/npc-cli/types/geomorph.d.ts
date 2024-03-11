@@ -18,9 +18,7 @@ declare namespace Geomorph {
      * May be offset e.g. because doors are centred along edges.
      */
     pngRect: Geom.RectJson;
-    /**
-     * Hull symbols have sub symbols, defining the layout of the geomorph.
-     */
+    /** Hull symbols have sub symbols, defining the layout of the geomorph. */
     symbols: Geomorph.WithMeta<{
       symbolKey: Geomorph.SymbolKey;
       /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
@@ -32,6 +30,7 @@ declare namespace Geomorph {
     }>[];
     /** Epoch ms */
     lastModified: number;
+    floor: T;
   }
 
   interface SvgGroups<T> {
