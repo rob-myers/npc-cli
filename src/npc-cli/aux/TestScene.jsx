@@ -7,7 +7,6 @@ import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
 import { isDevelopment } from "../service/generic";
-import { Rect } from "../geom";
 
 import "./infinite-grid-helper.js";
 import { TestCanvasContext } from "./test-canvas-context";
@@ -24,7 +23,6 @@ export default function TestScene(props) {
       controls: /** @type {*} */ (null),
       gms: [],
       map: null,
-      mat4s: [],
       tex: {},
     })
   );
@@ -47,20 +45,21 @@ export default function TestScene(props) {
         state.tex[gmKey] ??= await textureLoader.loadAsync(`/assets/debug/${gmKey}.png`);
         update();
       });
-      state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }) => {
-        const { pngRect } = assetsJson.symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
-        return { key: gmKey, transform, pngRect: Rect.fromJson(pngRect) };
+      state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
+        const layout = geomorphService.computeLayout(gmKey, assetsJson);
+        return {
+          ...layout,
+          gmId,
+          transform,
+          mat4: // prettier-ignore
+            new THREE.Matrix4(
+              transform[0], 0, transform[2], transform[4] * scale,
+              0, 1, 0, 0,
+              transform[1], 0, transform[3], transform[5] * scale,
+              0, 0, 0, 1
+            ),
+        };
       });
-      state.mat4s = state.map.gms.map(
-        ({ transform = [1, 0, 0, 1, 0, 0] }) =>
-          // prettier-ignore
-          new THREE.Matrix4(
-            transform[0], 0, transform[2], transform[4] * scale,
-            0, 1, 0, 0,
-            transform[1], 0, transform[3], transform[5] * scale,
-            0, 0, 0, 1
-          )
-      );
       update();
     }
   }, [assetsJson, props.mapKey]);
@@ -79,11 +78,8 @@ export default function TestScene(props) {
       <PerspectiveCamera position={[0, 8, 0]} makeDefault />
       <Origin />
 
-      {state.gms.map((gm, gmId, i) => (
-        <group
-          key={gm.transform.toString()}
-          onUpdate={(self) => self.applyMatrix4(state.mat4s[gmId])}
-        >
+      {state.gms.map((gm) => (
+        <group key={gm.transform.toString()} onUpdate={(self) => self.applyMatrix4(gm.mat4)}>
           {state.tex[gm.key] && (
             <mesh
               scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
@@ -145,9 +141,8 @@ export default function TestScene(props) {
 /**
  * @typedef State
  * @property {import('three-stdlib').MapControls} controls
- * @property {Geomorph.Layout[]} gms
+ * @property {Geomorph.LayoutInstance[]} gms
  * @property {null | Geomorph.MapLayout} map
- * @property {THREE.Matrix4[]} mat4s
  * @property {Partial<Record<Geomorph.GeomorphKey, THREE.Texture>>} tex
  */
 

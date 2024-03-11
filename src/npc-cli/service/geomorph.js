@@ -36,6 +36,18 @@ class GeomorphService {
   };
 
   /**
+   * 🚧 cache
+   * @param {Geomorph.GeomorphKey} gmKey
+   * @param {Geomorph.AssetsJson} assetsJson
+   * @returns {Geomorph.Layout}
+   */
+  computeLayout(gmKey, assetsJson) {
+    // 🚧
+    const { pngRect } = assetsJson.symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
+    return { key: gmKey, pngRect: Rect.fromJson(pngRect) };
+  }
+
+  /**
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @returns {Geom.Poly[]} Either empty or a singleton

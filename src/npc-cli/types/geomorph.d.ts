@@ -57,10 +57,15 @@ declare namespace Geomorph {
     }[];
   }
 
+  interface LayoutInstance extends Layout {
+    gmId: number;
+    transform: Geom.SixTuple;
+    mat4: import("three").Matrix4;
+  }
+
   /** Layout of a single geomorph */
   interface Layout {
     key: GeomorphKey;
-    transform: Geom.SixTuple;
     pngRect: Geom.Rect;
     // 🚧 ... e.g. walls
   }

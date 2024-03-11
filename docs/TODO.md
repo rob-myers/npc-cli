@@ -229,9 +229,12 @@
 
 - 🚧 show hull 3d walls
   - ✅ TestGeomorphs can see `api.scene` in TestCanvasContext
+  - ✅ remove `transform` from `Geomorph.Layout`
+  - 🚧 symbols have "floor"
+    - hull defaults to union of hullWalls sans holes
+    - non-hull defaults to `(0, 0, width, height)`
   - 🚧 Geomorph.Layout has walls
     - instanced two-sided quad
-    - symbols have "floor": defaults to `(0, 0, width, height)`
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
   - ...
