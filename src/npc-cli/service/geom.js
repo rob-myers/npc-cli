@@ -911,6 +911,35 @@ class geomServiceClass {
   }
 
   /**
+   * Given `rect`, `affineTransform`, `transformOrigin`, output "equivalent"
+   * affine transform which acts on rect `(0, 0, rect.width, rect.height)`.
+   * @param {Geom.RectJson} rect
+   * @param {Geom.SixTuple} sixTuple
+   * @param {Geom.VectJson} transformOrigin
+   * @returns {Geom.SixTuple}
+   */
+  reduceAffineTransform(rect, sixTuple, { x, y }) {
+    // console.log({ rect, sixTuple, transformOrigin: { x, y } });
+    /** @type {Geom.SixTuple} */
+    const sansTranslate = [sixTuple[0], sixTuple[1], sixTuple[2], sixTuple[3], 0, 0];
+
+    tmpMat1.setMatrixValue(sansTranslate);
+    tmpRect1.set(0, 0, rect.width, rect.height).applyMatrix(tmpMat1);
+    const topLeft1 = tmpRect1.topLeft;
+
+    tmpMat1
+      .setMatrixValue(sixTuple)
+      .preMultiply([1, 0, 0, 1, -x, -y])
+      .postMultiply([1, 0, 0, 1, x, y]);
+    tmpRect1.copy(rect).applyMatrix(tmpMat1);
+    const topLeft2 = tmpRect1.topLeft;
+
+    sansTranslate[4] = -topLeft1.x + topLeft2.x;
+    sansTranslate[5] = -topLeft1.y + topLeft2.y;
+    return sansTranslate;
+  }
+
+  /**
    * Test for intersection of line segment `[p, q]` with outline of polygon
    * without holes. We ignore colinear intersections.
    * @param {Geom.Poly} poly
@@ -1053,3 +1082,5 @@ export function sortByXThenY(point1, point2) {
 
 const tmpVec1 = new Vect();
 const tmpVec2 = new Vect();
+const tmpRect1 = new Rect();
+const tmpMat1 = new Mat();

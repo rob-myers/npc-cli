@@ -17,7 +17,7 @@ Given a rectangle
 > `{ x: 0, y: -480, width: 120, height: 120 }`
 
 we'll apply the affine transform:
-> `matrix(1, 0, 0, -1, 840, 1)` relative to the transform-origin `(60, -420)`.
+> `matrix(1, 0, 0, -1, 0, 840)` relative to the transform-origin `(60, -420)`.
 
 
 Now, the affine transform has matrix representation shown below left.
