@@ -57,13 +57,13 @@ const mainTitleCss = css`
     max-width: 1024px;
     font-size: 4rem;
     padding: 0 4rem;
-    filter: drop-shadow(-3px 0px 2px #777);
+    filter: drop-shadow(2px 0px 2px #777);
   }
   @media (max-width: ${breakpoint}) {
     // 🔔 Too wide causes extra body height on mobile
     max-width: 100%;
     font-size: 3.5rem;
-    filter: drop-shadow(-2px 0px 2px #777);
+    filter: drop-shadow(1px 0px 2px #777);
   }
 `;
 
