@@ -23,7 +23,11 @@ declare namespace Geomorph {
      */
     symbols: Geomorph.WithMeta<{
       symbolKey: Geomorph.SymbolKey;
-      rect: Geom.RectJson;
+      /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
+      width: number;
+      /** Original height (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
+      height: number;
+      /** Normalized affine transform */
       transform: Geom.SixTuple;
     }>[];
     /** Epoch ms */

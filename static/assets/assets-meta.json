@@ -1120,14 +1120,16 @@
         {
           "symbolKey": "stateroom--014--2x2",
           "meta": {"key": "stateroom--014--2x2"},
-          "rect": {"x": 0, "y": -480, "width": 120, "height": 120},
-          "transform": [1, 0, 0, -1, 0, 840]
+          "width": 120,
+          "height": 120,
+          "transform": [1, 0, 0, -1, 0, 480]
         },
         {
           "symbolKey": "stateroom--014--2x2",
           "meta": {"key": "stateroom--014--2x2"},
-          "rect": {"x": 120, "y": -480, "width": 120, "height": 120},
-          "transform": [1, 0, 0, -1, 0, 840]
+          "width": 120,
+          "height": 120,
+          "transform": [1, 0, 0, -1, 120, 480]
         }
       ],
       "lastModified": 1710151439478.8333

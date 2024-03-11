@@ -213,11 +213,14 @@
   - ✅ extract during `yarn assets-meta`
   - ✅ maps: represent geomorph as single rect (via pattern)
   - ✅ clarify conversion { rect, transform } -> transform
-  - 🚧 compute affine transform we could apply to rect [0, 0, width, height]
+  - ✅ compute affine transform we could apply to rect [0, 0, width, height]
     - ℹ️ want to eliminate rect.x, rect.y and transform-origin
-      - let t_M be top-left of transformed rect under affine transform M
-      - let t_S be top-left of transformed rect under 2x2 submatrix S of M
+      - let t_M be top-left of rect transformed under affine transform M
+      - let t_S be top-left of [0, 0, rect.width, rect.height] transformed under 2x2 submatrix S of M
       - new affine transform is S plus translation (-t_{S,x} + t_{M,x}, -t_{S,y} + t_{M,y})
+
+- maps parsing should support transform-origin too
+  - ℹ️ can arise if rect starts with x, y attribs
 
 - show hull 3d walls
 - show sub-symbol 3d walls

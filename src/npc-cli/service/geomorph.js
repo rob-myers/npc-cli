@@ -311,12 +311,23 @@ class GeomorphService {
             Math.round(Number(parent.attributes[x] || 0))
           );
           const transform = geomorphService.extractSixTuple(parent.attributes.transform);
+          // 🚧 can we ignore transformBox?
+          const { transformOrigin, transformBox } = geomorphService.extractTransformData({
+            ...parent,
+            title: contents,
+          });
+
           transform &&
             symbols.push({
               symbolKey,
               meta: geomorphService.tagsToMeta(symbolTags, { key: symbolKey }),
-              rect: { x, y, width, height },
-              transform,
+              width,
+              height,
+              transform: geom.reduceAffineTransform(
+                { x, y, width, height },
+                transform,
+                transformOrigin ?? { x: 0, y: 0 }
+              ),
             });
           return;
         }
