@@ -10,6 +10,7 @@ import "./infinite-grid-helper.js";
 import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import { isDevelopment } from "../service/generic";
 
 /**
  * @param {Props} props
@@ -31,7 +32,7 @@ export default function TestScene(props) {
     queryKey: ["assets-meta.json"],
     /** @returns {Promise<Geomorph.AssetsJson>} */
     queryFn: () => fetch("/assets/assets-meta.json").then((x) => x.json()),
-    refetchOnWindowFocus: "always",
+    refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
   });
 
   React.useEffect(() => {

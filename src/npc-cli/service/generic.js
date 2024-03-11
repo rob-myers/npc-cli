@@ -266,6 +266,10 @@ export function keysDeep(obj) {
   return Array.from(deepKeys(obj));
 }
 
+export function isDevelopment() {
+  return process.env.NODE_ENV !== "production";
+}
+
 /**
  * @template SrcValue
  * @template DstValue

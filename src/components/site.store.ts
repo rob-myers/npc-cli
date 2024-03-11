@@ -7,6 +7,7 @@ import {
   tryLocalStorageGet,
   tryLocalStorageSet,
   info,
+  isDevelopment,
 } from "src/npc-cli/service/generic";
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
 import { DEV_EXPRESS_WEBSOCKET_PORT } from "src/scripts/const";
@@ -39,7 +40,7 @@ const useStore = create<State>()(
       initiateBrowser() {
         const cleanUps = [] as (() => void)[];
 
-        if (process.env.NODE_ENV !== "production") {
+        if (isDevelopment()) {
           /**
            * Dev-only event handling:
            * - trigger component refresh on file change
