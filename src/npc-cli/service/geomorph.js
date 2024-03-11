@@ -205,11 +205,15 @@ class GeomorphService {
         if (tagStack.at(-1)?.tagName !== "title") {
           return;
         }
+
+        const parentTagMeta = assertDefined(tagStack.at(-2));
         const gmNumericKey = Number(contents); // e.g. 301
+        if (parentTagMeta.tagName === "pattern") {
+          return; // ignore <pattern> in <defs>
+        }
         if (!geomorphService.isGmNumber(gmNumericKey)) {
           return warn(`parseMap: "${contents}": expected valid gm number`);
         }
-        const parentTagMeta = assertDefined(tagStack.at(-2));
         const transform = geomorphService.extractSixTuple(parentTagMeta.attributes.transform);
 
         transform &&

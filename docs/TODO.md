@@ -211,9 +211,10 @@
   - ℹ️ placeholders are partially transparent boxes of symbol filename's dimension
   - ✅ add stateroom symbol
   - ✅ extract during `yarn assets-meta`
-  - 🚧 clarify conversion from { rect, transform } -> transform
+  - ✅ maps: represent geomorph as single rect (via pattern)
+  - clarify conversion { rect, transform } -> transform
 
-- Learn about WebGl RenderTargets
+- learn about WebGl RenderTargets
   - Towards "Pixi.js RenderTexture" functionality
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
