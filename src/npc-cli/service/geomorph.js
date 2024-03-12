@@ -213,10 +213,9 @@ class GeomorphService {
   /**
    * @param {string} mapKey
    * @param {string} svgContents
-   * @param {number} lastModified
    * @returns {Geomorph.MapLayout}
    */
-  parseMap(mapKey, svgContents, lastModified) {
+  parseMap(mapKey, svgContents) {
     const gms = /** @type {Geomorph.MapLayout['gms']} */ ([]);
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
 
@@ -276,10 +275,9 @@ class GeomorphService {
   /**
    * @param {Geomorph.SymbolKey} symbolKey
    * @param {string} svgContents
-   * @param {number} lastModified
    * @returns {Geomorph.ParsedSymbol<Geom.Poly>}
    */
-  parseStarshipSymbol(symbolKey, svgContents, lastModified) {
+  parseStarshipSymbol(symbolKey, svgContents) {
     // info("parseStarshipSymbol", symbolKey, "...");
     const isHull = symbolKey.endsWith("--hull");
 
@@ -422,7 +420,6 @@ class GeomorphService {
     return {
       ...partial,
       floor,
-      lastModified,
       obstacles,
       pngRect: pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect),
       symbols,
@@ -474,7 +471,6 @@ class GeomorphService {
       height: parsed.height,
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
-      lastModified: parsed.lastModified,
       floor: parsed.floor.geoJson,
     };
   }

@@ -136,14 +136,20 @@ export function equals(x, y, depth = 0) {
 }
 
 /**
- * https://stackoverflow.com/a/15710692/2917822
- * @param {string} s
+ * Returns a hash code from a string
+ * @param  {string} str The string to hash.
+ * @return {number} A 32bit integer
+ * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+ * @see https://stackoverflow.com/a/8831937/2917822
  */
-export function hashText(s) {
-  return s.split("").reduce(function (a, b) {
-    a = (a << 5) - a + b.charCodeAt(0);
-    return a & a;
-  }, 0);
+export function hashText(str) {
+  let hash = 0;
+  for (let i = 0, len = str.length; i < len; i++) {
+    let chr = str.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
 }
 
 /**

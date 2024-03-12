@@ -2,6 +2,13 @@ declare namespace Geomorph {
   interface AssetsJson {
     symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>>;
     maps: Record<string, Geomorph.MapLayout>;
+    meta: {
+      [symbolOrMapKey: string]: {
+        contentHash: number;
+        /** Epoch ms */
+        lastModified: number;
+      };
+    };
   }
 
   interface ParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> extends SvgGroups<T> {
@@ -28,8 +35,6 @@ declare namespace Geomorph {
       /** Normalized affine transform */
       transform: Geom.SixTuple;
     }>[];
-    /** Epoch ms */
-    lastModified: number;
     floor: T;
   }
 

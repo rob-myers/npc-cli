@@ -5,7 +5,7 @@ import path from "path";
 import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
-import { info, keys, warn } from "../npc-cli/service/generic";
+import { hashText, info, keys, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
 
@@ -21,11 +21,14 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
     ? JSON.parse(fs.readFileSync(outputFilename).toString())
     : null;
 
-  const symbols = parseSymbols(prevOutput);
-  const maps = parseMaps(prevOutput);
+  const meta = /** @type {Geomorph.AssetsJson['meta']} */ ({});
+
+  const symbols = parseSymbols(prevOutput, meta);
+  const maps = parseMaps(prevOutput, meta);
 
   /** @type {Geomorph.AssetsJson} */
   const output = {
+    meta,
     symbols,
     maps,
   };
@@ -45,9 +48,10 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 /**
  * 🚧 parse maps AND geomorph layouts
  * @param {null | Geomorph.AssetsJson} prevOutput
+ * @param {Geomorph.AssetsJson['meta']} nextMeta
  * @returns {Geomorph.AssetsJson['maps']}
  */
-function parseMaps(prevOutput) {
+function parseMaps(prevOutput, nextMeta) {
   const mapLookup = /** @type {Geomorph.AssetsJson['maps']} */ ({});
   const mapFilenames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg"));
 
@@ -55,10 +59,13 @@ function parseMaps(prevOutput) {
     const filepath = path.resolve(mapsDir, filename);
     const contents = fs.readFileSync(filepath).toString();
     const mapName = filename.slice(0, -".svg".length);
-    const lastModified = fs.statSync(filepath).mtimeMs;
 
-    const parsed = geomorphService.parseMap(mapName, contents, lastModified);
+    const parsed = geomorphService.parseMap(mapName, contents);
     mapLookup[mapName] = parsed;
+    nextMeta[mapName] = {
+      lastModified: fs.statSync(filepath).mtimeMs,
+      contentHash: hashText(contents),
+    };
   }
 
   return mapLookup;
@@ -66,9 +73,10 @@ function parseMaps(prevOutput) {
 
 /**
  * @param {null | Geomorph.AssetsJson} prevOutput
+ * @param {Geomorph.AssetsJson['meta']} nextMeta
  * @returns {Geomorph.AssetsJson['symbols']}
  */
-function parseSymbols(prevOutput) {
+function parseSymbols(prevOutput, nextMeta) {
   const prevSymbolLookup = prevOutput?.symbols ?? null;
   const symbolLookup = /** @type {Geomorph.AssetsJson['symbols']} */ ({});
   const symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
@@ -77,18 +85,21 @@ function parseSymbols(prevOutput) {
     const filepath = path.resolve(symbolsDir, filename);
     const contents = fs.readFileSync(filepath).toString();
     const symbolName = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
-    const lastModified = fs.statSync(filepath).mtimeMs;
 
-    const parsed = geomorphService.parseStarshipSymbol(symbolName, contents, lastModified);
+    const parsed = geomorphService.parseStarshipSymbol(symbolName, contents);
     const serialized = geomorphService.serializeSymbol(parsed);
     symbolLookup[symbolName] = serialized;
+    nextMeta[symbolName] = {
+      lastModified: fs.statSync(filepath).mtimeMs,
+      contentHash: hashText(contents),
+    };
   }
 
   const changedSymbols = keys(symbolLookup).filter(
     (symbolName) =>
-      !prevSymbolLookup ||
-      !(symbolName in prevSymbolLookup) ||
-      prevSymbolLookup[symbolName].lastModified !== symbolLookup[symbolName].lastModified
+      !prevOutput ||
+      !(symbolName in prevOutput.symbols) ||
+      prevOutput.meta?.[symbolName].contentHash !== nextMeta[symbolName].contentHash
   );
   info({ changedSymbols });
 
