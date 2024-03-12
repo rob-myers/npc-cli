@@ -24,22 +24,14 @@ const devEventsWs = new Set();
 
 app.ws("/dev-events", function (ws, req) {
   devEventsWs.add(ws);
-  ws.on("message", function (msg) {
-    if (msg.toString() === "bye") {
-      devEventsWs.delete(ws);
-      ws.close();
-    }
-  });
+  ws.on("message", function (_msg) {});
+  ws.on("close", () => devEventsWs.delete(ws));
 });
 
 app.post("/send-dev-event", function (req, res, next) {
   devEventsWs.forEach((client) => {
-    if (client.readyState === client.CLOSED) {
-      devEventsWs.delete(client); // remove stale
-    } else {
-      info("received", client.readyState, req.body);
-      client.send(JSON.stringify(req.body));
-    }
+    info(req.body);
+    client.send(JSON.stringify(req.body));
   });
   res.json();
 });
