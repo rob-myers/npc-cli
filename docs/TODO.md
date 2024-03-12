@@ -246,6 +246,7 @@
 - try fix HMR full-refresh onchange src/const
 
 - ✅ avoid recomputing unchanged symbols via content hash
+- ❌ try unify parseMaps and parseSymbols
 - try fix sporadic missing updates
   - ✅ move maps to `media/map`
   - ✅ improve remount keys
