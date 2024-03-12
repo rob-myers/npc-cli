@@ -234,7 +234,7 @@
     - hull defaults to union of hullWalls sans holes, insetted
     - non-hull likewise, with fallback `(0, 0, width, height)`
   - 🚧 render floor polys in `TestScene`
-    - use canvas texture
+    - 🚧 use canvas texture
     - canvas -> image -> texture
   - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
@@ -243,7 +243,9 @@
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
-- avoid updating unchanged symbols via content hash
+- try fix HMR full-refresh onchange src/const
+
+- ✅ avoid recomputing unchanged symbols via content hash
 - try fix sporadic missing updates
   - ✅ move maps to `media/map`
   - ✅ improve remount keys
@@ -262,6 +264,7 @@
 - Terminal crashing during HMR
   - possibly fixed via `xterm-addon-webgl@beta`
 - (hull) walls -> quads
+  - 🚧 trying alternative i.e. "edges outside floor"
 - need to remove labels from hull symbol image?
 - try avoid alphaBlend geomorphs via alphaMap
 - Firefox android allows unbounded scrolling on "interact"
