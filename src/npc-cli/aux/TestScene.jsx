@@ -4,9 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 import * as THREE from "three";
 import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 
+import { Poly, Rect } from "../geom";
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
-import { assertNonNull, isDevelopment } from "../service/generic";
+import { assertDefined, assertNonNull, isDevelopment } from "../service/generic";
+import { fillPolygons } from "../service/dom";
 
 import "./infinite-grid-helper.js";
 import { TestCanvasContext } from "./test-canvas-context";
@@ -23,7 +25,6 @@ export default function TestScene(props) {
       controls: /** @type {*} */ (null),
       gms: [],
       map: null,
-      tex: {}, // debug/{gmKey}.png
       canvas: {},
       canvasTex: {},
     })
@@ -42,26 +43,47 @@ export default function TestScene(props) {
   React.useEffect(() => {
     state.map = assetsJson?.maps[props.mapKey] ?? null;
 
+    if (state.map) {
+      state.map.gms.forEach(({ gmKey }) => {
+        const canvas = (state.canvas[gmKey] ??= document.createElement("canvas"));
+        state.canvasTex[gmKey] ??= new THREE.CanvasTexture(canvas);
+      });
+    }
+
     if (assetsJson && state.map) {
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
         const layout = geomorphService.computeLayout(gmKey, assetsJson);
-        if (!state.tex[gmKey]) {
-          textureLoader
-            .loadAsync(`/assets/debug/${gmKey}.png`)
-            .then((x) => (state.tex[gmKey] = x) && update());
-        }
-        if (!state.canvas[gmKey]) {
-          const canvas = document.createElement("canvas");
-          state.canvas[gmKey] = canvas;
-          canvas.width = layout.pngRect.width;
-          canvas.height = layout.pngRect.height;
 
-          // 🚧 draw floor polygon
-          const ctxt = assertNonNull(canvas.getContext("2d"));
+        const canvas = assertDefined(state.canvas[gmKey]);
+        const ctxt = assertNonNull(canvas.getContext("2d"));
+        canvas.width = layout.pngRect.width;
+        canvas.height = layout.pngRect.height;
+
+        textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((x) => {
+          const img = /** @type {HTMLImageElement} */ (x.source.data);
+
+          ctxt.drawImage(img, 0, 0);
+          // ctxt.clearRect(0, 0, canvas.width, canvas.height);
+          const rect = new Rect(0, 0, layout.pngRect.width, layout.pngRect.height);
+          // const poly = new Poly(rect.points, [rect.clone().inset(10).points]); // 👈 why didn't this work?
+          const polys = Poly.cutOut(
+            [Poly.fromRect(rect.clone().inset(6 + 6))],
+            [Poly.fromRect(rect)]
+          );
+          // console.log(polys);
+
+          ctxt.fillStyle = "green";
           ctxt.strokeStyle = "red";
           ctxt.lineWidth = 4;
-          ctxt.strokeRect(0, 0, layout.pngRect.width, layout.pngRect.height);
-        }
+          // ctxt.strokeRect(0, 0, layout.pngRect.width, layout.pngRect.height);
+          // 🚧 fix z-fighting
+          fillPolygons(ctxt, polys);
+          // 🚧 draw floor polygon
+
+          assertDefined(state.canvasTex[gmKey]).needsUpdate = true;
+          update();
+        });
+
         return {
           ...layout,
           gmId,
@@ -79,9 +101,8 @@ export default function TestScene(props) {
     }
   }, [assetsJson, props.mapKey]);
 
-  // Initialize view
   React.useEffect(() => {
-    state.controls?.setPolarAngle(Math.PI / 4);
+    state.controls?.setPolarAngle(Math.PI / 4); // Initialize view
   }, [state.controls]);
 
   const update = useUpdate();
@@ -93,45 +114,19 @@ export default function TestScene(props) {
       <PerspectiveCamera position={[0, 8, 0]} makeDefault />
       <Origin />
 
-      {state.gms.map((gm) => (
+      {state.gms.map((gm, gmId) => (
         <group key={gm.transform.toString()} onUpdate={(self) => self.applyMatrix4(gm.mat4)}>
-          {state.tex[gm.key] && (
-            <>
-              <mesh
-                scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
-                geometry={customQuadGeometry}
-                position={[gm.pngRect.x * scale, 0, gm.pngRect.y * scale]}
-              >
-                <meshBasicMaterial
-                  side={THREE.DoubleSide}
-                  transparent
-                  // 🚧 remove blending, depthWrite
-                  blending={THREE.AdditiveBlending}
-                  depthWrite={false}
-                  map={state.tex[gm.key]}
-                />
-              </mesh>
-              <mesh
-                scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
-                geometry={customQuadGeometry}
-                position={[gm.pngRect.x * scale, 0, gm.pngRect.y * scale]}
-              >
-                <meshBasicMaterial
-                  side={THREE.DoubleSide}
-                  transparent
-                  // 🚧 remove blending, depthWrite
-                  blending={THREE.AdditiveBlending}
-                  depthWrite={false}
-                >
-                  <canvasTexture
-                    ref={(x) => x && (state.canvasTex[gm.key] = x)}
-                    attach="map"
-                    image={state.canvas[gm.key]}
-                  />
-                </meshBasicMaterial>
-              </mesh>
-            </>
-          )}
+          <mesh
+            scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
+            geometry={customQuadGeometry}
+            position={[gm.pngRect.x * scale, 0, gm.pngRect.y * scale]}
+          >
+            <meshBasicMaterial
+              side={THREE.DoubleSide}
+              transparent
+              map={state.canvasTex[gm.key]}
+            ></meshBasicMaterial>
+          </mesh>
         </group>
       ))}
 
@@ -179,7 +174,6 @@ export default function TestScene(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {Geomorph.LayoutInstance[]} gms
  * @property {null | Geomorph.MapLayout} map
- * @property {{ [key in Geomorph.GeomorphKey]?: THREE.Texture }} tex
  * @property {{ [key in Geomorph.GeomorphKey]?: HTMLCanvasElement }} canvas
  * @property {{ [key in Geomorph.GeomorphKey]?: THREE.CanvasTexture }} canvasTex
  */

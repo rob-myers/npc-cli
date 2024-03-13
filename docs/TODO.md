@@ -236,7 +236,7 @@
   - 🚧 render floor polys in `TestScene`
     - 🚧 use canvas texture
     - ❌ canvas -> image -> texture
-    - move debug.image into canvas
+    - ✅ move debug.image into canvas
   - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
@@ -244,9 +244,10 @@
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
-- try avoid alphaBlend geomorph PNGs by adding black walls to PNGs
-  - debug.png -> debug.orig.png (or webp)
-  - debug.png has labels removed, black walls added
+- 🚧 try avoid blending THREE.AdditiveBlend geomorph PNGs by adding black walls to PNGs
+  - ❌ try fix z-fighting by manually adding black rects
+  - ✅ try fix z-fighting by drawing into canvas
+  - don't draw over hull doors
 
 - try fix HMR full-refresh onchange `src/const`
 
@@ -260,6 +261,7 @@
   - Boxy has rounding errors e.g. when reflect
   - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
 - migrate Triangle
+  - png -> webp script applied to assets/debug
 - learn about WebGl RenderTargets
   - Towards "Pixi.js RenderTexture" functionality
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
