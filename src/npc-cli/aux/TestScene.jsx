@@ -28,31 +28,26 @@ export default function TestScene(props) {
       map: null,
       canvas: {},
       canvasTex: {},
-      drawGeomorph(gmKey, origImg) {
-        // 🚧
+      drawGeomorph(gmKey, origImg, assetsJson) {
         const layout = assertDefined(state.layout[gmKey]);
         const canvas = assertDefined(state.canvas[gmKey]);
         const ctxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
 
-        canvas.width = layout.pngRect.width;
-        canvas.height = layout.pngRect.height;
-
         ctxt.drawImage(origImg, 0, 0);
-        // ctxt.clearRect(0, 0, canvas.width, canvas.height);
-        const rect = new Rect(0, 0, layout.pngRect.width, layout.pngRect.height);
-        // const poly = new Poly(rect.points, [rect.clone().inset(10).points]); // 👈 why didn't this work?
-        const polys = Poly.cutOut(
-          [Poly.fromRect(rect.clone().inset(6 + 6))],
-          [Poly.fromRect(rect)]
-        );
-        // console.log(polys);
+        const bounds = new Rect(0, 0, layout.pngRect.width, layout.pngRect.height);
+        // prettier-ignore
+        const extHull = new Poly(bounds.points, [bounds.clone().inset(6 + 6).points.reverse()]);
 
         ctxt.fillStyle = "green";
         ctxt.strokeStyle = "red";
         ctxt.lineWidth = 4;
-        // ctxt.strokeRect(0, 0, layout.pngRect.width, layout.pngRect.height);
-        // 🚧 fix z-fighting
-        fillPolygons(ctxt, polys);
+        // fix z-fighting
+        fillPolygons(ctxt, [extHull]);
+        // 🚧 draw hull doors
+        const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
+        console.log("doors", assetsJson.symbols[hullKey].doors);
+
+        // ctxt.strokeRect(0, 0, bounds.width, bounds.height);
         // 🚧 draw floor polygon
       },
     })
@@ -105,7 +100,7 @@ export default function TestScene(props) {
 
         textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
           const img = /** @type {HTMLImageElement} */ (tex.source.data);
-          state.drawGeomorph(gmKey, img);
+          state.drawGeomorph(gmKey, img, assetsJson);
           assertDefined(state.canvasTex[gmKey]).needsUpdate = true;
           update();
         });
@@ -191,7 +186,7 @@ export default function TestScene(props) {
  * @property {null | Geomorph.MapLayout} map
  * @property {{ [key in Geomorph.GeomorphKey]?: HTMLCanvasElement }} canvas
  * @property {{ [key in Geomorph.GeomorphKey]?: THREE.CanvasTexture }} canvasTex
- * @property {(gmKey: Geomorph.GeomorphKey, origImg: HTMLImageElement) => void} drawGeomorph
+ * @property {(gmKey: Geomorph.GeomorphKey, origImg: HTMLImageElement, assetsJson: Geomorph.AssetsJson) => void} drawGeomorph
  */
 
 /**

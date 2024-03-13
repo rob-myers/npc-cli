@@ -247,7 +247,8 @@
 - 🚧 try avoid blending THREE.AdditiveBlend geomorph PNGs by adding black walls to PNGs
   - ❌ try fix z-fighting by manually adding black rects
   - ✅ try fix z-fighting by drawing into canvas
-  - don't draw over hull doors
+  - 🚧 draw hull doors on-top
+  - handle edge geomorphs
 
 - try fix HMR full-refresh onchange `src/const`
 
