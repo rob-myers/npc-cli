@@ -3,8 +3,8 @@
 /**
  * Usage:
  * ```sh
- * yarn assets-meta [--force]
  * npm run assets-meta [-- --force]
+ * yarn assets-meta [--force]
  * ```
  *
  * We need to --force update on schema change.
@@ -16,7 +16,7 @@ import stringify from "json-stringify-pretty-compact";
 import getOpts from "getopts";
 
 // relative urls for sucrase-node
-import { hashText, info, warn } from "../npc-cli/service/generic";
+import { hashText, info, keys, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
 
@@ -30,21 +30,23 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
 (function main() {
-  const prev =
-    fs.existsSync(outputFilename) && !forceUpdate
-      ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(outputFilename).toString()))
-      : null;
+  const prev = fs.existsSync(outputFilename) && !forceUpdate
+    ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(outputFilename).toString()))
+    : null;
 
   const { symbols, meta: symbolsMeta, changed: changedSymbols } = parseSymbols(prev);
   const { maps, meta: mapsMeta, changed: changedMaps } = parseMaps(prev);
+  const meta = { ...symbolsMeta, ...mapsMeta };
   info({ changedSymbols, changedMaps });
 
   /** @type {Geomorph.AssetsJson} */
-  const output = {
-    meta: { ...symbolsMeta, ...mapsMeta },
-    symbols,
-    maps,
-  };
+  const output = { meta, symbols, maps };
+
+  // fix lastModified when forceUpdate
+  forceUpdate && prev && keys(meta).forEach((key) =>
+    prev.meta[key].contentHash === meta[key].contentHash &&
+    (meta[key].lastModified = prev.meta[key].lastModified)
+  );
 
   fs.writeFileSync(outputFilename, stringify(output));
 
@@ -78,7 +80,7 @@ function parseMaps(prev) {
     if (!prev || prevHash !== contentHash) {
       const parsed = geomorphService.parseMap(mapKey, contents);
       maps[mapKey] = parsed;
-      meta[mapKey] = { lastModified: fs.statSync(filepath).mtimeMs, contentHash };
+      meta[mapKey] = { lastModified: Date.now(), contentHash };
       changedKeys.push(mapKey);
     } else {
       maps[mapKey] = prev.maps[mapKey];
@@ -111,7 +113,7 @@ function parseSymbols(prev) {
       const parsed = geomorphService.parseStarshipSymbol(symbolKey, contents);
       const serialized = geomorphService.serializeSymbol(parsed);
       symbols[symbolKey] = serialized;
-      meta[symbolKey] = { lastModified: fs.statSync(filepath).mtimeMs, contentHash };
+      meta[symbolKey] = { lastModified: Date.now(), contentHash };
       changedKeys.push(symbolKey);
     } else {
       symbols[symbolKey] = prev.symbols[symbolKey];
