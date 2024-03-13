@@ -68,7 +68,7 @@ export default function TestScene(props) {
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
   });
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     state.map = assetsJson?.maps[props.mapKey] ?? null;
 
     state.map?.gms.forEach(({ gmKey }) => {
@@ -85,7 +85,7 @@ export default function TestScene(props) {
         //   layout = state.layout[gmKey] = geomorphService.computeLayout(gmKey, assetsJson);
         // }
 
-        // 🔔 Must set width, height initially, otherwise blank later (!)
+        // 🔔 MUST set width, height BEFORE <mesh> with <canvasTexture> mounts
         const canvas = assertDefined(state.canvas[gmKey]);
         canvas.width = layout.pngRect.width;
         canvas.height = layout.pngRect.height;
