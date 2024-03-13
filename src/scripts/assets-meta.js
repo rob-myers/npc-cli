@@ -18,12 +18,12 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
 
 (function main() {
   /** @type {null | Geomorph.AssetsJson} */
-  const prevOutput = fs.existsSync(outputFilename)
+  const prev = fs.existsSync(outputFilename)
     ? JSON.parse(fs.readFileSync(outputFilename).toString())
     : null;
 
-  const { symbols, changed: changedSymbols, meta: symbolsMeta } = parseSymbols(prevOutput);
-  const { maps, changed: changedMaps, meta: mapsMeta } = parseMaps(prevOutput);
+  const { symbols, changed: changedSymbols, meta: symbolsMeta } = parseSymbols(prev);
+  const { maps, changed: changedMaps, meta: mapsMeta } = parseMaps(prev);
   info({ changedSymbols, changedMaps });
 
   /** @type {Geomorph.AssetsJson} */
