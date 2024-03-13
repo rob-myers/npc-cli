@@ -68,6 +68,7 @@ const mainTitleCss = css`
 `;
 
 const overlayCss = css`
+  -webkit-tap-highlight-color: transparent;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
