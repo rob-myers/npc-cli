@@ -22,15 +22,13 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     ? JSON.parse(fs.readFileSync(outputFilename).toString())
     : null;
 
-  const meta = /** @type {Geomorph.AssetsJson['meta']} */ ({});
-
-  const { symbols, changedKeys: changedSymbols } = parseSymbols(prevOutput, meta);
-  const { maps, changedKeys: changedMaps } = parseMaps(prevOutput, meta);
+  const { symbols, changed: changedSymbols, meta: symbolsMeta } = parseSymbols(prevOutput);
+  const { maps, changed: changedMaps, meta: mapsMeta } = parseMaps(prevOutput);
   info({ changedSymbols, changedMaps });
 
   /** @type {Geomorph.AssetsJson} */
   const output = {
-    meta,
+    meta: { ...symbolsMeta, ...mapsMeta },
     symbols,
     maps,
   };
@@ -48,11 +46,11 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
 
 /**
  * @param {null | Geomorph.AssetsJson} prev
- * @param {Geomorph.AssetsJson['meta']} nextMeta
- * @returns {{ maps: Geomorph.AssetsJson['maps']; changedKeys: string[] }}
+ * @returns {Pick<Geomorph.AssetsJson, 'maps' | 'meta'> & { changed: string[] }}
  */
-function parseMaps(prev, nextMeta) {
+function parseMaps(prev) {
   const prevMeta = prev?.meta;
+  const meta = /** @type {Geomorph.AssetsJson['meta']} */ ({});
   const mapLookup = /** @type {Geomorph.AssetsJson['maps']} */ ({});
   const mapFilenames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg"));
   const changedKeys = /** @type {string[]} */ ([]);
@@ -67,24 +65,24 @@ function parseMaps(prev, nextMeta) {
     if (!prev || prevHash !== contentHash) {
       const parsed = geomorphService.parseMap(mapKey, contents);
       mapLookup[mapKey] = parsed;
-      nextMeta[mapKey] = { lastModified: fs.statSync(filepath).mtimeMs, contentHash };
+      meta[mapKey] = { lastModified: fs.statSync(filepath).mtimeMs, contentHash };
       changedKeys.push(mapKey);
     } else {
       mapLookup[mapKey] = prev.maps[mapKey];
-      nextMeta[mapKey] = prev.meta[mapKey];
+      meta[mapKey] = prev.meta[mapKey];
     }
   }
 
-  return { maps: mapLookup, changedKeys };
+  return { maps: mapLookup, meta, changed: changedKeys };
 }
 
 /**
  * @param {null | Geomorph.AssetsJson} prev
- * @param {Geomorph.AssetsJson['meta']} nextMeta
- * @returns {{ symbols: Geomorph.AssetsJson['symbols']; changedKeys: Geomorph.SymbolKey[] }}
+ * @returns {Pick<Geomorph.AssetsJson, 'symbols' | 'meta'> & { changed: Geomorph.SymbolKey[] }}
  */
-function parseSymbols(prev, nextMeta) {
+function parseSymbols(prev) {
   const prevMeta = prev?.meta;
+  const meta = /** @type {Geomorph.AssetsJson['meta']} */ ({});
   const symbolLookup = /** @type {Geomorph.AssetsJson['symbols']} */ ({});
   const symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
   const changedKeys = /** @type {Geomorph.SymbolKey[]} */ ([]);
@@ -100,13 +98,13 @@ function parseSymbols(prev, nextMeta) {
       const parsed = geomorphService.parseStarshipSymbol(symbolKey, contents);
       const serialized = geomorphService.serializeSymbol(parsed);
       symbolLookup[symbolKey] = serialized;
-      nextMeta[symbolKey] = { lastModified: fs.statSync(filepath).mtimeMs, contentHash };
+      meta[symbolKey] = { lastModified: fs.statSync(filepath).mtimeMs, contentHash };
       changedKeys.push(symbolKey);
     } else {
       symbolLookup[symbolKey] = prev.symbols[symbolKey];
-      nextMeta[symbolKey] = prev.meta[symbolKey];
+      meta[symbolKey] = prev.meta[symbolKey];
     }
   }
 
-  return { symbols: symbolLookup, changedKeys };
+  return { symbols: symbolLookup, meta, changed: changedKeys };
 }
