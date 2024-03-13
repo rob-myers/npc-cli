@@ -1,13 +1,26 @@
 /// <reference path="./deps.d.ts"/>
 
+/**
+ * Usage:
+ * ```sh
+ * yarn assets-meta [--force]
+ * npm run assets-meta [-- --force]
+ * ```
+ *
+ * We need to --force update on schema change.
+ */
+
 import fs from "fs";
 import path from "path";
 import stringify from "json-stringify-pretty-compact";
+import getOpts from "getopts";
 
 // relative urls for sucrase-node
 import { hashText, info, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
+
+const { force: forceUpdate } = getOpts(process.argv, { boolean: ["force"] });
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
@@ -17,9 +30,10 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
 (function main() {
-  const prev = fs.existsSync(outputFilename)
-    ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(outputFilename).toString()))
-    : null;
+  const prev =
+    fs.existsSync(outputFilename) && !forceUpdate
+      ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(outputFilename).toString()))
+      : null;
 
   const { symbols, meta: symbolsMeta, changed: changedSymbols } = parseSymbols(prev);
   const { maps, meta: mapsMeta, changed: changedMaps } = parseMaps(prev);
