@@ -41,6 +41,7 @@ declare namespace Geomorph {
   interface SvgGroups<T> {
     obstacles: PolyWithMeta<T>[];
     walls: T[];
+    doors: PolyWithMeta<T>[];
     /** 🚧 split further? */
     unsorted: PolyWithMeta<T>[];
   }

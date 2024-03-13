@@ -289,6 +289,7 @@ class GeomorphService {
     const symbols = /** @type {Geomorph.ParsedSymbol<Geom.Poly>['symbols']} */ ([]);
     const hullWalls = /** @type {Geom.Poly[]} */ ([]);
     const obstacles = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
+    const doors = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
     const unsorted = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
     const walls = /** @type {Geom.Poly[]} */ ([]);
 
@@ -377,6 +378,13 @@ class GeomorphService {
               .extractGeom({ ...parent, title: contents })
               .map((poly) => ({ poly, meta }))
           );
+        } else if (ownTags.includes("door")) {
+          const meta = geomorphService.tagsToMeta(ownTags, {});
+          doors.push(
+            ...geomorphService
+              .extractGeom({ ...parent, title: contents })
+              .map((poly) => ({ poly, meta }))
+          );
         } else if (parent.tagName === "image") {
           return;
         } else {
@@ -423,6 +431,7 @@ class GeomorphService {
       obstacles,
       pngRect: pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect),
       symbols,
+      doors,
       unsorted,
     };
   }
@@ -466,6 +475,7 @@ class GeomorphService {
       hullWalls: parsed.hullWalls.map((x) => x.geoJson),
       obstacles: parsed.obstacles.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),
       walls: parsed.walls.map((x) => x.geoJson),
+      doors: parsed.doors.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),
       unsorted: parsed.unsorted.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),
       width: parsed.width,
       height: parsed.height,
