@@ -37,7 +37,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   fetch(sendDevEventUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ key: "update-browser" }),
+    body: JSON.stringify({ key: "update-browser", changedSymbols, changedMaps }),
   }).catch((e) => {
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
