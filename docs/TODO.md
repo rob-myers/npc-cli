@@ -235,7 +235,8 @@
     - non-hull likewise, with fallback `(0, 0, width, height)`
   - 🚧 render floor polys in `TestScene`
     - 🚧 use canvas texture
-    - canvas -> image -> texture
+    - ❌ canvas -> image -> texture
+    - move debug.image into canvas
   - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
@@ -243,7 +244,11 @@
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
-- try fix HMR full-refresh onchange src/const
+- try avoid alphaBlend geomorph PNGs by adding black walls to PNGs
+  - debug.png -> debug.orig.png (or webp)
+  - debug.png has labels removed, black walls added
+
+- try fix HMR full-refresh onchange `src/const`
 
 - ✅ avoid recomputing unchanged symbols via content hash
 - ❌ try unify parseMaps and parseSymbols
