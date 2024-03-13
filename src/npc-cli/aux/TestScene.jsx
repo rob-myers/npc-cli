@@ -23,10 +23,38 @@ export default function TestScene(props) {
   const state = useStateRef(
     /** @type {() => State} */ () => ({
       controls: /** @type {*} */ (null),
+      layout: {},
       gms: [],
       map: null,
       canvas: {},
       canvasTex: {},
+      drawGeomorph(gmKey, origImg) {
+        // 🚧
+        const layout = assertDefined(state.layout[gmKey]);
+        const canvas = assertDefined(state.canvas[gmKey]);
+        const ctxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
+
+        canvas.width = layout.pngRect.width;
+        canvas.height = layout.pngRect.height;
+
+        ctxt.drawImage(origImg, 0, 0);
+        // ctxt.clearRect(0, 0, canvas.width, canvas.height);
+        const rect = new Rect(0, 0, layout.pngRect.width, layout.pngRect.height);
+        // const poly = new Poly(rect.points, [rect.clone().inset(10).points]); // 👈 why didn't this work?
+        const polys = Poly.cutOut(
+          [Poly.fromRect(rect.clone().inset(6 + 6))],
+          [Poly.fromRect(rect)]
+        );
+        // console.log(polys);
+
+        ctxt.fillStyle = "green";
+        ctxt.strokeStyle = "red";
+        ctxt.lineWidth = 4;
+        // ctxt.strokeRect(0, 0, layout.pngRect.width, layout.pngRect.height);
+        // 🚧 fix z-fighting
+        fillPolygons(ctxt, polys);
+        // 🚧 draw floor polygon
+      },
     })
   );
 
@@ -43,48 +71,26 @@ export default function TestScene(props) {
   React.useEffect(() => {
     state.map = assetsJson?.maps[props.mapKey] ?? null;
 
-    if (state.map) {
-      state.map.gms.forEach(({ gmKey }) => {
-        const canvas = (state.canvas[gmKey] ??= document.createElement("canvas"));
-        state.canvasTex[gmKey] ??= new THREE.CanvasTexture(canvas);
-      });
-    }
+    state.map?.gms.forEach(({ gmKey }) => {
+      const canvas = (state.canvas[gmKey] ??= document.createElement("canvas"));
+      state.canvasTex[gmKey] ??= new THREE.CanvasTexture(canvas);
+    });
 
-    if (assetsJson && state.map) {
-      state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        const layout = geomorphService.computeLayout(gmKey, assetsJson);
+    assetsJson &&
+      state.map?.gms.forEach(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
+        let layout = (state.layout[gmKey] ??= geomorphService.computeLayout(gmKey, assetsJson));
+        // 🚧 recompute layout if hash changes
+        // 🚧 need assetsJson.meta[gmKey] (determined by hull and sub-symbols)
+        // if (false) {
+        //   layout = state.layout[gmKey] = geomorphService.computeLayout(gmKey, assetsJson);
+        // }
 
+        // 🔔 Must set width, height initially, otherwise blank later (!)
         const canvas = assertDefined(state.canvas[gmKey]);
-        const ctxt = assertNonNull(canvas.getContext("2d"));
         canvas.width = layout.pngRect.width;
         canvas.height = layout.pngRect.height;
 
-        textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((x) => {
-          const img = /** @type {HTMLImageElement} */ (x.source.data);
-
-          ctxt.drawImage(img, 0, 0);
-          // ctxt.clearRect(0, 0, canvas.width, canvas.height);
-          const rect = new Rect(0, 0, layout.pngRect.width, layout.pngRect.height);
-          // const poly = new Poly(rect.points, [rect.clone().inset(10).points]); // 👈 why didn't this work?
-          const polys = Poly.cutOut(
-            [Poly.fromRect(rect.clone().inset(6 + 6))],
-            [Poly.fromRect(rect)]
-          );
-          // console.log(polys);
-
-          ctxt.fillStyle = "green";
-          ctxt.strokeStyle = "red";
-          ctxt.lineWidth = 4;
-          // ctxt.strokeRect(0, 0, layout.pngRect.width, layout.pngRect.height);
-          // 🚧 fix z-fighting
-          fillPolygons(ctxt, polys);
-          // 🚧 draw floor polygon
-
-          assertDefined(state.canvasTex[gmKey]).needsUpdate = true;
-          update();
-        });
-
-        return {
+        state.gms[gmId] = {
           ...layout,
           gmId,
           transform,
@@ -96,12 +102,20 @@ export default function TestScene(props) {
               0, 0, 0, 1
             ),
         };
+
+        textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
+          const img = /** @type {HTMLImageElement} */ (tex.source.data);
+          state.drawGeomorph(gmKey, img);
+          assertDefined(state.canvasTex[gmKey]).needsUpdate = true;
+          update();
+        });
       });
-      update();
-    }
+
+    // update();
   }, [assetsJson, props.mapKey]);
 
   React.useEffect(() => {
+    // 🚧 do not trigger on HMR
     state.controls?.setPolarAngle(Math.PI / 4); // Initialize view
   }, [state.controls]);
 
@@ -172,10 +186,12 @@ export default function TestScene(props) {
 /**
  * @typedef State
  * @property {import('three-stdlib').MapControls} controls
+ * @property {{ [key in Geomorph.GeomorphKey]?: Geomorph.Layout}} layout
  * @property {Geomorph.LayoutInstance[]} gms
  * @property {null | Geomorph.MapLayout} map
  * @property {{ [key in Geomorph.GeomorphKey]?: HTMLCanvasElement }} canvas
  * @property {{ [key in Geomorph.GeomorphKey]?: THREE.CanvasTexture }} canvasTex
+ * @property {(gmKey: Geomorph.GeomorphKey, origImg: HTMLImageElement) => void} drawGeomorph
  */
 
 /**
