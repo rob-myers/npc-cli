@@ -3,7 +3,7 @@ import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
-// import "./infinite-grid-helper.js";
+import "./infinite-grid-helper.js";
 import { Vect } from "../geom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -93,24 +93,25 @@ export default function TestWorldCanvas(props) {
         }}
         onCreated={update} // show stats
       >
+        {props.stats && state.rootEl && (
+          <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
+        )}
+
         <MapControls makeDefault zoomToCursor ref={(x) => x && (state.controls = x)} />
         <ambientLight intensity={1} />
         <PerspectiveCamera position={[0, 8, 0]} makeDefault />
         <Origin />
-
-        {props.children}
-
         <infiniteGridHelper
           args={[1.5, 1.5, "#bbbbbb"]}
           // position={[0, -0.001, 0]}
           rotation={[Math.PI / 2, 0, 0]}
           onPointerUp={(e) => {
-            if (!api.view.down) {
+            if (!state.down) {
               return;
             }
             console.log("infiniteGridHelper onPointerUp", e, e.point);
-            const distance = api.view.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
-            const timeMs = Date.now() - api.view.down.epochMs;
+            const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
+            const timeMs = Date.now() - state.down.epochMs;
             api.events.next({
               key: "pointerup",
               distance,
@@ -128,9 +129,7 @@ export default function TestWorldCanvas(props) {
           }}
         />
 
-        {props.stats && state.rootEl && (
-          <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
-        )}
+        {props.children}
       </Canvas>
 
       <div

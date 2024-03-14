@@ -32,7 +32,7 @@ export default function TestWorld(props) {
 
   return (
     <TestWorldContext.Provider value={state}>
-      <TestWorldCanvas disabled={props.disabled}>
+      <TestWorldCanvas disabled={props.disabled} stats>
         {state.map && <TestWorldScene disabled={props.disabled} map={state.map} />}
       </TestWorldCanvas>
     </TestWorldContext.Provider>

@@ -1,6 +1,5 @@
 import React from "react";
 
-import "./infinite-grid-helper.js";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 
