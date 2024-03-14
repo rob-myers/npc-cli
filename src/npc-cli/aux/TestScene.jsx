@@ -15,6 +15,7 @@ import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import TestGeomorphs from "./TestGeomorphs";
+import { Origin } from "./MiscThree";
 
 /**
  * @param {Props} props
@@ -36,7 +37,7 @@ export default function TestScene(props) {
         ctxt.drawImage(origImg, 0, 0);
         const bounds = new Rect(0, 0, layout.pngRect.width, layout.pngRect.height);
         // prettier-ignore
-        const extHull = new Poly(bounds.points, [bounds.clone().inset(6 + 6).points.reverse()]);
+        const extHull = new Poly(bounds.points, [bounds.clone().inset(6.5 + 6.5).points.reverse()]);
 
         ctxt.fillStyle = "green";
         ctxt.strokeStyle = "red";
@@ -183,7 +184,7 @@ export default function TestScene(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {{ [key in Geomorph.GeomorphKey]?: Geomorph.Layout}} layout
  * @property {Geomorph.LayoutInstance[]} gms
- * @property {null | Geomorph.MapLayout} map
+ * @property {null | Geomorph.MapDef} map
  * @property {{ [key in Geomorph.GeomorphKey]?: HTMLCanvasElement }} canvas
  * @property {{ [key in Geomorph.GeomorphKey]?: THREE.CanvasTexture }} canvasTex
  * @property {(gmKey: Geomorph.GeomorphKey, origImg: HTMLImageElement, assetsJson: Geomorph.AssetsJson) => void} drawGeomorph
@@ -192,15 +193,6 @@ export default function TestScene(props) {
 /**
  * @typedef {import('./TestCanvas').State<{ scene: State }>} Api
  */
-
-function Origin() {
-  return (
-    <mesh scale={[0.025, 0, 0.025]} position={[0, 0, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color="red" />
-    </mesh>
-  );
-}
 
 const gmScale = 1;
 /**

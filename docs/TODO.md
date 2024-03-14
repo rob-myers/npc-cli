@@ -212,6 +212,11 @@
 
 ## WIP
 
+- 🚧 New setup: `TestWorld` -> `TestWorldCanvas` -> `TestWorldScene`
+  - ✅ create files
+  - ✅ get infinite grid working
+  - add geomorph canvases
+
 - 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
   - 🚧 BUG ecctrl is panning on drag outside canvas
@@ -247,7 +252,7 @@
 - 🚧 try avoid blending THREE.AdditiveBlend geomorph PNGs by adding black walls to PNGs
   - ❌ try fix z-fighting by manually adding black rects
   - ✅ try fix z-fighting by drawing into canvas
-  - 🚧 draw hull doors on-top
+  - draw hull doors on-top
   - handle edge geomorphs
 
 - try fix HMR full-refresh onchange `src/const`
@@ -283,7 +288,8 @@
 
 - if only open Viewer a tiny amount then it should close itself
 
-- world editor in new repo
+- ❌ world editor in new repo
+  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
 - geomorph editor in new repo
 - 🤔 despite our "generic aim" (fabricating game masters),
   some context will help e.g. The Last Redoubt

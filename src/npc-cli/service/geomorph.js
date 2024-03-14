@@ -213,10 +213,10 @@ class GeomorphService {
   /**
    * @param {string} mapKey
    * @param {string} svgContents
-   * @returns {Geomorph.MapLayout}
+   * @returns {Geomorph.MapDef}
    */
   parseMap(mapKey, svgContents) {
-    const gms = /** @type {Geomorph.MapLayout['gms']} */ ([]);
+    const gms = /** @type {Geomorph.MapDef['gms']} */ ([]);
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
 
     const parser = new htmlparser2.Parser({

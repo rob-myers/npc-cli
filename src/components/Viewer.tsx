@@ -96,6 +96,12 @@ export default function Viewer() {
                 childProps: { testProp: "hello" },
               },
             },
+            {
+              type: "component",
+              class: "TestWorld",
+              filepath: "test-world-1",
+              props: { mapKey: "demo-map-1" },
+            },
             { type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} },
             { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],

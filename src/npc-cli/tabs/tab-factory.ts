@@ -96,6 +96,13 @@ const classToComponent = {
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
+  TestWorld: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestWorld")),
+    get:
+      (module: typeof import("src/npc-cli/aux/TestWorld")) =>
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
+  },
 };
 
 export async function getComponent(componentClassKey: ComponentClassKey, errorIdentifier?: string) {

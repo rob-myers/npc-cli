@@ -1,7 +1,7 @@
 declare namespace Geomorph {
   interface AssetsJson {
     symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>>;
-    maps: Record<string, Geomorph.MapLayout>;
+    maps: Record<string, Geomorph.MapDef>;
     meta: {
       [symbolOrMapKey: string]: {
         contentHash: number;
@@ -54,7 +54,7 @@ declare namespace Geomorph {
 
   type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
 
-  interface MapLayout {
+  interface MapDef {
     gms: {
       gmKey: GeomorphKey;
       /** Default `[1, 0, 0, 1, 0, 0]` */
