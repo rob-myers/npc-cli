@@ -36,11 +36,9 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
 
   const { symbols, meta: symbolsMeta, changed: changedSymbols } = parseSymbols(prev);
   const { maps, meta: mapsMeta, changed: changedMaps } = parseMaps(prev);
-  const meta = { ...symbolsMeta, ...mapsMeta };
   info({ changedSymbols, changedMaps });
-
-  /** @type {Geomorph.AssetsJson} */
-  const output = { meta, symbols, maps };
+  
+  const meta = { ...symbolsMeta, ...mapsMeta };
 
   // fix lastModified when forceUpdate
   forceUpdate && prev && keys(meta).forEach((key) =>
@@ -48,12 +46,14 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     (meta[key].lastModified = prev.meta[key].lastModified)
   );
 
+  /** @type {Geomorph.AssetsJson} */
+  const output = { meta, symbols, maps };
   fs.writeFileSync(outputFilename, stringify(output));
 
   fetch(sendDevEventUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },
-    body: JSON.stringify({ key: "update-browser", changedSymbols, changedMaps }),
+    body: JSON.stringify({ key: "update-browser" }),
   }).catch((e) => {
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
