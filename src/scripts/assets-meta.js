@@ -110,7 +110,7 @@ function parseSymbols(prev) {
     const contentHash = hashText(contents);
 
     if (!prev || prevHash !== contentHash) {
-      const parsed = geomorphService.parseStarshipSymbol(symbolKey, contents);
+      const parsed = geomorphService.parseSymbol(symbolKey, contents);
       const serialized = geomorphService.serializeSymbol(parsed);
       symbols[symbolKey] = serialized;
       meta[symbolKey] = { lastModified: Date.now(), contentHash };

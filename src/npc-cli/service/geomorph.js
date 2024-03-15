@@ -82,9 +82,10 @@ class GeomorphService {
   /**
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
+   * @param {number} [scale]
    * @returns {Geom.Poly[]} Either empty or a singleton
    */
-  extractGeom(tagMeta) {
+  extractGeom(tagMeta, scale) {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
 
@@ -119,6 +120,8 @@ class GeomorphService {
     } else if (a.transform) {
       poly?.applyMatrix(new Mat(a.transform));
     }
+
+    typeof scale === "number" && poly?.scale(scale);
 
     return poly ? [poly.precision(4).cleanFinalReps()] : [];
   }
@@ -313,13 +316,16 @@ class GeomorphService {
   }
 
   /**
+   * Parse Starship Symbol
    * @param {Geomorph.SymbolKey} symbolKey
    * @param {string} svgContents
    * @returns {Geomorph.ParsedSymbol<Geom.Poly>}
    */
-  parseStarshipSymbol(symbolKey, svgContents) {
+  parseSymbol(symbolKey, svgContents) {
     // info("parseStarshipSymbol", symbolKey, "...");
     const isHull = symbolKey.endsWith("--hull");
+    /** Non-hull symbol are scaled up by 5 inside SVGs */
+    const geomScale = isHull ? 1 : 1 / 5;
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
@@ -362,6 +368,7 @@ class GeomorphService {
 
         if (parent.tagName === "g") {
           folderStack.push(contents);
+          contents !== "symbols" && warn(`unexpected folder: "${contents}" will be ignored`);
           return;
         }
         if (parent.tagName === "pattern") {
@@ -369,19 +376,15 @@ class GeomorphService {
         }
 
         const ownTags = contents.split(" ");
-        // info({ parentTag, ownTags });
+        // info({ parent, ownTags });
 
         if (folderStack.length === 1 && folderStack[0] === "symbols") {
           const [symbolKey, ...symbolTags] = ownTags;
           if (parent.tagName !== "rect") {
-            return warn(
-              `parseStarshipSymbol: ${parent.tagName} ${contents}: ignored non-rect in symbols folder`
-            );
+            return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: ignored non-rect`);
           }
           if (!geomorphService.isSymbolKey(symbolKey)) {
-            return warn(
-              `parseStarshipSymbol: symbols: ${contents}: first tag must be a symbol key`
-            );
+            return warn(`parseSymbol: symbols: ${contents}: first tag must be a symbol key`);
           }
 
           const rect = geomorphService.extractRect(parent.attributes);
@@ -407,22 +410,27 @@ class GeomorphService {
           return;
         }
 
+        if (folderStack.length) {
+          return; // Only depth 0 and folder 'symbols' supported
+        }
+
         if (ownTags.includes("hull-wall")) {
+          // hull symbols only
           hullWalls.push(...geomorphService.extractGeom({ ...parent, title: contents }));
         } else if (ownTags.includes("wall")) {
-          walls.push(...geomorphService.extractGeom({ ...parent, title: contents }));
+          walls.push(...geomorphService.extractGeom({ ...parent, title: contents }, geomScale));
         } else if (ownTags.includes("obstacle")) {
           const meta = geomorphService.tagsToMeta(ownTags, {});
           obstacles.push(
             ...geomorphService
-              .extractGeom({ ...parent, title: contents })
+              .extractGeom({ ...parent, title: contents }, geomScale)
               .map((poly) => ({ poly, meta }))
           );
         } else if (ownTags.includes("door")) {
           const meta = geomorphService.tagsToMeta(ownTags, {});
           doors.push(
             ...geomorphService
-              .extractGeom({ ...parent, title: contents })
+              .extractGeom({ ...parent, title: contents }, geomScale)
               .map((poly) => ({ poly, meta }))
           );
         } else if (parent.tagName === "image") {
@@ -431,7 +439,7 @@ class GeomorphService {
           const meta = geomorphService.tagsToMeta(ownTags, {});
           unsorted.push(
             ...geomorphService
-              .extractGeom({ ...parent, title: contents })
+              .extractGeom({ ...parent, title: contents }, geomScale)
               .map((poly) => ({ poly, meta }))
           );
         }
@@ -454,7 +462,7 @@ class GeomorphService {
 
     const key = symbolKey;
     const { width, height } = viewBoxRect;
-    /** @type {Parameters<GeomorphService['postParseStarshipSymbol']>[0]} */
+    /** @type {Parameters<GeomorphService['postParseSymbol']>[0]} */
     const partial = {
       key,
       hullWalls,
@@ -463,7 +471,7 @@ class GeomorphService {
       width,
       height,
     };
-    const { floor } = this.postParseStarshipSymbol(partial);
+    const { floor } = this.postParseSymbol(partial);
 
     return {
       ...partial,
@@ -479,7 +487,7 @@ class GeomorphService {
   /**
    * @param {Pick<Geomorph.ParsedSymbol<Geom.Poly>, 'key' | 'height' | 'hullWalls' | 'isHull' | 'walls' | 'width'>} partial
    */
-  postParseStarshipSymbol(partial) {
+  postParseSymbol(partial) {
     let floor = /** @type {null | Geom.Poly} */ (null);
     const wallsKey = partial.isHull ? "hullWalls" : "walls";
     const union = Poly.union(partial[wallsKey]).map((poly) => poly.removeHoles());
