@@ -25,7 +25,7 @@ export default function TestWorld(props) {
       gms: [],
       scene: /** @type {*} */ (null),
       view: /** @type {*} */ (null),
-      ensureClass(gmKey) {
+      ensureGmData(gmKey) {
         const { assets } = state;
         if (!state.gmData[gmKey]) {
           const canvas = document.createElement("canvas");
@@ -64,7 +64,7 @@ export default function TestWorld(props) {
   React.useMemo(() => {
     if (assets && state.map) {
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        const { layout } = state.ensureClass(gmKey);
+        const { layout } = state.ensureGmData(gmKey);
         return {
           ...layout,
           gmId,
@@ -106,7 +106,7 @@ export default function TestWorld(props) {
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureClass
+ * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
  */
 
 /**
