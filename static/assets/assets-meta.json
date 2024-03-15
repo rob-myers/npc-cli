@@ -1,16 +1,25 @@
 {
   "meta": {
-    "101--hull": {"lastModified": 1710506977696, "contentHash": -822791544},
-    "102--hull": {"lastModified": 1710506977706, "contentHash": 1358490121},
-    "103--hull": {"lastModified": 1710506977708, "contentHash": -675159501},
-    "301--hull": {"lastModified": 1710507878481, "contentHash": -1107160115},
-    "302--hull": {"lastModified": 1710506977725, "contentHash": 411100715},
-    "303--hull": {"lastModified": 1710506977729, "contentHash": 480977991},
+    "101--hull": {"lastModified": 1710512608242, "contentHash": -822791544},
+    "102--hull": {"lastModified": 1710512608242, "contentHash": 1358490121},
+    "103--hull": {"lastModified": 1710512608242, "contentHash": -675159501},
+    "301--hull": {"lastModified": 1710512608242, "contentHash": -1107160115},
+    "302--hull": {"lastModified": 1710512608242, "contentHash": 411100715},
+    "303--hull": {"lastModified": 1710512608242, "contentHash": 480977991},
     "stateroom--014--2x2": {
-      "lastModified": 1710506977731,
+      "lastModified": 1710512608242,
       "contentHash": 269183967
     },
-    "demo-map-1": {"lastModified": 1710507980458, "contentHash": -380436121}
+    "demo-map-1": {"lastModified": 1710512608242, "contentHash": -380436121},
+    "g-101--multipurpose": {"lastModified": 1710512608242, "contentHash": -1},
+    "g-102--research-deck": {"lastModified": 1710512608242, "contentHash": -1},
+    "g-103--cargo-bay": {"lastModified": 1710512608242, "contentHash": -1},
+    "g-301--bridge": {"lastModified": 1710512608242, "contentHash": -1},
+    "g-302--xboat-repair-bay": {
+      "lastModified": 1710512608242,
+      "contentHash": -1
+    },
+    "g-303--passenger-deck": {"lastModified": 1710512608242, "contentHash": -1}
   },
   "symbols": {
     "101--hull": {

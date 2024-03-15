@@ -30,12 +30,14 @@ const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
 (function main() {
-  const prev = fs.existsSync(outputFilename) && !forceUpdate
+  const prev = fs.existsSync(outputFilename)
     ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(outputFilename).toString()))
     : null;
 
-  const { symbols, meta: symbolsMeta, changed: changedSymbols } = parseSymbols(prev);
-  const { maps, meta: mapsMeta, changed: changedMaps } = parseMaps(prev);
+  const lastModified = Date.now(); // synchronised
+
+  const { symbols, meta: symbolsMeta, changed: changedSymbols } = parseSymbols(prev, lastModified, forceUpdate);
+  const { maps, meta: mapsMeta, changed: changedMaps } = parseMaps(prev, lastModified, forceUpdate);
   info({ changedSymbols, changedMaps });
   
   const meta = { ...symbolsMeta, ...mapsMeta };
@@ -45,6 +47,18 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     prev.meta[key].contentHash === meta[key].contentHash &&
     (meta[key].lastModified = prev.meta[key].lastModified)
   );
+
+  // detect geomorph layout update
+  geomorphService.gmKeys.forEach(gmKey => {
+    const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
+    if (!meta[hullKey]) {
+      return; // geomorph key exists but file does not
+    } else if ([meta[hullKey].lastModified, ...symbols[hullKey].symbols.map(({ symbolKey }) => meta[symbolKey]?.lastModified)].some(x => x === lastModified)) {
+      meta[gmKey] = { lastModified, contentHash: -1 }; // updated
+    } else { // not-updated or first-time-added
+      meta[gmKey] = { lastModified: prev?.meta[gmKey]?.lastModified ?? lastModified, contentHash: -1 };
+    }
+  });
 
   /** @type {Geomorph.AssetsJson} */
   const output = { meta, symbols, maps };
@@ -61,9 +75,12 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
 
 /**
  * @param {null | Geomorph.AssetsJson} prev
+ * @param {number} lastModified
+ * @param {boolean} [forceUpdate]
  * @returns {Pick<Geomorph.AssetsJson, 'maps' | 'meta'> & { changed: string[] }}
  */
-function parseMaps(prev) {
+function parseMaps(prev, lastModified, forceUpdate) {
+  forceUpdate && (prev = null);
   const prevMeta = prev?.meta;
   const meta = /** @type {Geomorph.AssetsJson['meta']} */ ({});
   const maps = /** @type {Geomorph.AssetsJson['maps']} */ ({});
@@ -80,7 +97,7 @@ function parseMaps(prev) {
     if (!prev || prevHash !== contentHash) {
       const parsed = geomorphService.parseMap(mapKey, contents);
       maps[mapKey] = parsed;
-      meta[mapKey] = { lastModified: Date.now(), contentHash };
+      meta[mapKey] = { lastModified, contentHash };
       changedKeys.push(mapKey);
     } else {
       maps[mapKey] = prev.maps[mapKey];
@@ -93,9 +110,12 @@ function parseMaps(prev) {
 
 /**
  * @param {null | Geomorph.AssetsJson} prev
+ * @param {number} lastModified
+ * @param {boolean} [forceUpdate]
  * @returns {Pick<Geomorph.AssetsJson, 'symbols' | 'meta'> & { changed: Geomorph.SymbolKey[] }}
  */
-function parseSymbols(prev) {
+function parseSymbols(prev, lastModified, forceUpdate) {
+  forceUpdate && (prev = null);
   const prevMeta = prev?.meta;
   const meta = /** @type {Geomorph.AssetsJson['meta']} */ ({});
   const symbols = /** @type {Geomorph.AssetsJson['symbols']} */ ({});
@@ -113,7 +133,7 @@ function parseSymbols(prev) {
       const parsed = geomorphService.parseSymbol(symbolKey, contents);
       const serialized = geomorphService.serializeSymbol(parsed);
       symbols[symbolKey] = serialized;
-      meta[symbolKey] = { lastModified: Date.now(), contentHash };
+      meta[symbolKey] = { lastModified, contentHash };
       changedKeys.push(symbolKey);
     } else {
       symbols[symbolKey] = prev.symbols[symbolKey];

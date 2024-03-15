@@ -267,6 +267,7 @@
 - ✅ fix HMR full-refresh onchange `layout.js`
 
 - 🚧 recompute layout on `assets.meta[gmKey].lastModified` change
+  - ✅ compute `assets.meta[gmKey].lastModified`
 
 - avoid dev-server crash on save symbol to static/assets
   ```sh
