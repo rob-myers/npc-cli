@@ -14,7 +14,10 @@ declare namespace Geomorph {
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon>;
   type Assets = AssetsGeneric<Geom.Poly>;
 
-  interface ParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> extends SvgGroups<T> {
+  interface ParsedSymbol<
+    T extends Geom.GeoJsonPolygon | Geom.Poly,
+    P extends Geom.VectJson | Geom.Vect = Geom.VectJson
+  > extends SvgGroups<T> {
     key: SymbolKey;
     isHull: boolean;
     /** Hull walls, only non-empty in hull */
@@ -38,8 +41,15 @@ declare namespace Geomorph {
       /** Normalized affine transform */
       transform: Geom.SixTuple;
     }>[];
+
     floor: T;
+    wallEdges: [P, P][];
   }
+
+  type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pick<
+    Geomorph.ParsedSymbol<T>,
+    "key" | "isHull" | "walls" | "hullWalls" | "width" | "height"
+  >;
 
   interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {
     obstacles: WithMeta<T>[];

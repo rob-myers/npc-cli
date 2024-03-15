@@ -1,5 +1,5 @@
 import * as htmlparser2 from "htmlparser2";
-import { Mat, Poly, Rect } from "../geom";
+import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   assertDefined,
   info,
@@ -63,6 +63,31 @@ class GeomorphService {
   }
 
   /**
+   * Computation differs for hull vs non-hull symbols.
+   * @param {Geomorph.PreParsedSymbol<Geom.Poly>} partial
+   */
+  computeSymbolFloor(partial) {
+    let floor = /** @type {null | Geom.Poly} */ (null);
+
+    const wallsKey = partial.isHull ? "hullWalls" : "walls";
+    const union = Poly.union(partial[wallsKey]).map((poly) => poly.removeHoles());
+
+    if (union.length > 1) {
+      warn(`${partial.key}: ${wallsKey} are not connected`);
+    }
+    if (union.length > 0) {
+      // 🚧 hard-coded
+      const [insetted] = geom.createInset(union[0], wallsKey === "walls" ? 1 : 2);
+      floor = insetted?.outline.length ? insetted : null;
+    }
+    if (floor === null) {
+      warn(`${partial.key}: ${wallsKey} empty: using rectangular floor`);
+      floor = Poly.fromRect({ x: 0, y: 0, ...partial });
+    }
+    return floor;
+  }
+
+  /**
    * @param {Geomorph.AssetsJson} assetsJson
    * @return {Geomorph.Assets}
    */
@@ -76,7 +101,7 @@ class GeomorphService {
 
   /**
    * @param {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>} json
-   * @returns {Geomorph.ParsedSymbol<Poly>}
+   * @returns {Geomorph.ParsedSymbol<Poly, Geom.Vect>}
    */
   deserializeSymbol(json) {
     return {
@@ -92,6 +117,7 @@ class GeomorphService {
       pngRect: json.pngRect,
       symbols: json.symbols,
       floor: Poly.from(json.floor),
+      wallEdges: json.wallEdges.map(([u, v]) => [Vect.from(u), Vect.from(v)]),
     };
   }
 
@@ -335,7 +361,7 @@ class GeomorphService {
    * Parse Starship Symbol
    * @param {Geomorph.SymbolKey} symbolKey
    * @param {string} svgContents
-   * @returns {Geomorph.ParsedSymbol<Geom.Poly>}
+   * @returns {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>}
    */
   parseSymbol(symbolKey, svgContents) {
     // info("parseStarshipSymbol", symbolKey, "...");
@@ -478,8 +504,8 @@ class GeomorphService {
 
     const key = symbolKey;
     const { width, height } = viewBoxRect;
-    /** @type {Parameters<GeomorphService['postParseSymbol']>[0]} */
-    const partial = {
+    /** @type {Geomorph.PreParsedSymbol<Geom.Poly>} */
+    const preParse = {
       key,
       hullWalls,
       isHull,
@@ -487,49 +513,47 @@ class GeomorphService {
       width,
       height,
     };
-    const { floor } = this.postParseSymbol(partial);
+    const { floor, wallEdges } = this.postParseSymbol(preParse);
 
     return {
-      ...partial,
-      floor,
+      ...preParse,
       obstacles,
       pngRect: pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect),
       symbols,
       doors,
       unsorted,
+      floor,
+      wallEdges,
     };
   }
 
   /**
-   * @param {Pick<Geomorph.ParsedSymbol<Geom.Poly>, 'key' | 'height' | 'hullWalls' | 'isHull' | 'walls' | 'width'>} partial
+   * @param {Geomorph.PreParsedSymbol<Geom.Poly>} partial
    */
   postParseSymbol(partial) {
-    let floor = /** @type {null | Geom.Poly} */ (null);
-    const wallsKey = partial.isHull ? "hullWalls" : "walls";
-    const union = Poly.union(partial[wallsKey]).map((poly) => poly.removeHoles());
+    const floor = this.computeSymbolFloor(partial);
+    const walls = partial.hullWalls.concat(partial.walls);
 
-    if (union.length > 1) {
-      warn(`${partial.key}: ${wallsKey} are not connected`);
+    if (partial.isHull) {
+      console.log(partial.hullWalls.length, partial.walls.length);
+      console.log(partial.hullWalls.flatMap((x) => x.outline));
     }
-    if (union.length > 0) {
-      const [insetted] = geom.createInset(union[0], wallsKey === "walls" ? 1 : 2);
-      floor = insetted?.outline.length ? insetted : null;
-    }
-    if (floor === null) {
-      warn(`${partial.key}: ${wallsKey} are empty`);
-      warn(`${partial.key}: falling back to rectangular floor`);
-      floor = Poly.fromRect({ x: 0, y: 0, ...partial });
-    }
+
+    /** Those edges contained outside @see {floor} */
+    const wallEdges = walls
+      .flatMap((poly) => poly.lineSegs)
+      .filter(([u, v]) => !floor.contains(u) && !floor.contains(v));
 
     return {
       floor,
+      wallEdges,
     };
   }
 
   /**
    * Create serializable data associated to a static/assets/symbol/{symbol},
    * e.g. to store inside assets-meta.json.
-   * @param {Geomorph.ParsedSymbol<Poly>} parsed
+   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>} parsed
    * @returns {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>}
    */
   serializeSymbol(parsed) {
@@ -546,6 +570,7 @@ class GeomorphService {
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
       floor: parsed.floor.geoJson,
+      wallEdges: parsed.wallEdges.map(([u, v]) => [u.json, v.json]),
     };
   }
 
