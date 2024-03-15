@@ -41,8 +41,11 @@ export default function TestWorld(props) {
 
   const { data: assets } = useQuery({
     queryKey: ["assets-meta.json"],
-    /** @returns {Promise<Geomorph.AssetsJson>} */
-    queryFn: () => fetch("/assets/assets-meta.json").then((x) => x.json()),
+    queryFn: async () => {
+      /** @type {Geomorph.AssetsJson} */
+      const json = await fetch("/assets/assets-meta.json").then((x) => x.json());
+      return geomorphService.deserializeAssets(json);
+    },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
   });
 
@@ -89,7 +92,7 @@ export default function TestWorld(props) {
 /**
  * @typedef State
  * @property {Subject<NPC.Event>} events
- * @property {Geomorph.AssetsJson} assets
+ * @property {Geomorph.Assets} assets
  * @property {Geomorph.MapDef | null} map
  * @property {import('./TestWorldScene').State} scene
  * @property {import('./TestWorldCanvas').State} view
@@ -97,7 +100,7 @@ export default function TestWorld(props) {
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
- * @property {(gmKey: Geomorph.GeomorphKey, assetsJson: Geomorph.AssetsJson) => GmData} createClass
+ * @property {(gmKey: Geomorph.GeomorphKey, assetsJson: Geomorph.Assets) => GmData} createClass
  */
 
 /**

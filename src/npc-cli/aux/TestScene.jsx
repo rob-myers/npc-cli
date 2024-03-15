@@ -17,6 +17,8 @@ import useUpdate from "../hooks/use-update";
 import TestGeomorphs from "./TestGeomorphs";
 import { Origin } from "./MiscThree";
 
+// 🚧 remove geomorphs (now in TestWorldScene)
+
 /**
  * @param {Props} props
  */
@@ -57,24 +59,27 @@ export default function TestScene(props) {
   const api = /** @type {Api} */ (React.useContext(TestCanvasContext));
   api.scene = state;
 
-  const { data: assetsJson } = useQuery({
+  const { data: assets } = useQuery({
     queryKey: ["assets-meta.json"],
-    /** @returns {Promise<Geomorph.AssetsJson>} */
-    queryFn: () => fetch("/assets/assets-meta.json").then((x) => x.json()),
+    /** @returns {Promise<Geomorph.Assets>} */
+    queryFn: () =>
+      fetch("/assets/assets-meta.json")
+        .then((x) => x.json())
+        .then(geomorphService.deserializeAssets),
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
   });
 
   React.useLayoutEffect(() => {
-    state.map = assetsJson?.maps[props.mapKey] ?? null;
+    state.map = assets?.maps[props.mapKey] ?? null;
 
     state.map?.gms.forEach(({ gmKey }) => {
       const canvas = (state.canvas[gmKey] ??= document.createElement("canvas"));
       state.canvasTex[gmKey] ??= new THREE.CanvasTexture(canvas);
     });
 
-    assetsJson &&
+    assets &&
       state.map?.gms.forEach(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        let layout = (state.layout[gmKey] ??= geomorphService.computeLayout(gmKey, assetsJson));
+        let layout = (state.layout[gmKey] ??= geomorphService.computeLayout(gmKey, assets));
         // 🚧 recompute layout if hash changes
         // 🚧 need assetsJson.meta[gmKey] (determined by hull and sub-symbols)
         // if (false) {
@@ -101,14 +106,14 @@ export default function TestScene(props) {
 
         textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
           const img = /** @type {HTMLImageElement} */ (tex.source.data);
-          state.drawGeomorph(gmKey, img, assetsJson);
+          state.drawGeomorph(gmKey, img, assets);
           assertDefined(state.canvasTex[gmKey]).needsUpdate = true;
           update();
         });
       });
 
     // update();
-  }, [assetsJson, props.mapKey]);
+  }, [assets, props.mapKey]);
 
   React.useEffect(() => {
     // 🚧 do not trigger on HMR
@@ -187,7 +192,7 @@ export default function TestScene(props) {
  * @property {null | Geomorph.MapDef} map
  * @property {{ [key in Geomorph.GeomorphKey]?: HTMLCanvasElement }} canvas
  * @property {{ [key in Geomorph.GeomorphKey]?: THREE.CanvasTexture }} canvasTex
- * @property {(gmKey: Geomorph.GeomorphKey, origImg: HTMLImageElement, assetsJson: Geomorph.AssetsJson) => void} drawGeomorph
+ * @property {(gmKey: Geomorph.GeomorphKey, origImg: HTMLImageElement, assets: Geomorph.Assets) => void} drawGeomorph
  */
 
 /**

@@ -1,6 +1,6 @@
 declare namespace Geomorph {
-  interface AssetsJson {
-    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>>;
+  interface AssetsGeneric<T extends Geom.GeoJsonPolygon | Geom.Poly> {
+    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<T>>;
     maps: Record<string, Geomorph.MapDef>;
     meta: {
       [symbolOrMapKey: string]: {
@@ -10,6 +10,9 @@ declare namespace Geomorph {
       };
     };
   }
+
+  type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon>;
+  type Assets = AssetsGeneric<Geom.Poly>;
 
   interface ParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> extends SvgGroups<T> {
     key: SymbolKey;

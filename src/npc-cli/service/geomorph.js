@@ -1,6 +1,6 @@
 import * as htmlparser2 from "htmlparser2";
 import { Mat, Poly, Rect } from "../geom";
-import { assertDefined, info, parseJsArg, warn, debug, safeJsonParse } from "./generic";
+import { assertDefined, info, parseJsArg, warn, debug, safeJsonParse, mapValues } from "./generic";
 import { geom } from "./geom";
 
 class GeomorphService {
@@ -36,15 +36,47 @@ class GeomorphService {
   };
 
   /**
-   * 🚧 cache
    * @param {Geomorph.GeomorphKey} gmKey
-   * @param {Geomorph.AssetsJson} assetsJson
+   * @param {Geomorph.Assets} assets
    * @returns {Geomorph.Layout}
    */
-  computeLayout(gmKey, assetsJson) {
+  computeLayout(gmKey, assets) {
     // 🚧
-    const { pngRect } = assetsJson.symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
+    const { pngRect } = assets.symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
     return { key: gmKey, pngRect: Rect.fromJson(pngRect) };
+  }
+
+  /**
+   * @param {Geomorph.AssetsJson} assetsJson
+   * @return {Geomorph.Assets}
+   */
+  deserializeAssets({ maps, meta, symbols }) {
+    return {
+      meta,
+      symbols: mapValues(symbols, this.deserializeSymbol),
+      maps,
+    };
+  }
+
+  /**
+   * @param {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>} json
+   * @returns {Geomorph.ParsedSymbol<Poly>}
+   */
+  deserializeSymbol(json) {
+    return {
+      key: json.key,
+      isHull: json.isHull,
+      hullWalls: json.hullWalls.map(Poly.from),
+      obstacles: json.obstacles.map(({ meta, poly }) => ({ meta, poly: Poly.from(poly) })),
+      walls: json.walls.map(Poly.from),
+      doors: json.doors.map(({ meta, poly }) => ({ meta, poly: Poly.from(poly) })),
+      unsorted: json.unsorted.map(({ meta, poly }) => ({ meta, poly: Poly.from(poly) })),
+      width: json.width,
+      height: json.height,
+      pngRect: json.pngRect,
+      symbols: json.symbols,
+      floor: Poly.from(json.floor),
+    };
   }
 
   /**

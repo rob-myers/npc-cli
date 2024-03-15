@@ -210,12 +210,19 @@
 - ✅ fix HMR by moving consts elsewhere
 - ✅ prevent multiple websocket connections on HMR
 
-## WIP
-
-- 🚧 New setup: `TestWorld` -> `TestWorldCanvas` -> `TestWorldScene`
+- ✅ New setup: `TestWorld` -> `TestWorldCanvas` -> `TestWorldScene`
   - ✅ create files
   - ✅ get infinite grid working
-  - add geomorph canvases
+  - ✅ add geomorph canvases
+
+## WIP
+
+- ✅ avoid blending THREE.AdditiveBlend geomorph PNGs i.e. depthWrite false only
+  - ❌ try fix z-fighting by manually adding black rects
+  - ✅ try fix z-fighting by drawing into canvas
+  - ✅ fix edge geomorphs
+  - ✅ try fix edge mismatches
+  - ✅ handle edge geomorphs
 
 - 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
@@ -239,21 +246,17 @@
     - hull defaults to union of hullWalls sans holes, insetted
     - non-hull likewise, with fallback `(0, 0, width, height)`
   - 🚧 render floor polys in `TestScene`
-    - 🚧 use canvas texture
+    - ✅ use canvas texture
     - ❌ canvas -> image -> texture
     - ✅ move debug.image into canvas
+  - 🚧 try draw hull doors on canvas
+    - ✅ api.assets is deserialized
   - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
   - instanced two-sided quads
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
-
-- 🚧 try avoid blending THREE.AdditiveBlend geomorph PNGs by adding black walls to PNGs
-  - ❌ try fix z-fighting by manually adding black rects
-  - ✅ try fix z-fighting by drawing into canvas
-  - draw hull doors on-top
-  - handle edge geomorphs
 
 - try fix HMR full-refresh onchange `src/const`
 
