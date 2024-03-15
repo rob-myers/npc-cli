@@ -249,6 +249,8 @@
     - ✅ use canvas texture
     - ❌ canvas -> image -> texture
     - ✅ move debug.image into canvas
+    - ✅ hull symbol floor polys 
+    - 🚧 sub-symbol floor polys 
   - ✅ try draw hull doors on canvas
     - ✅ api.assets is deserialized
     - ✅ change hull doors back to original size
@@ -260,6 +262,8 @@
 - show sub-symbol chairs, beds
 
 - try fix HMR full-refresh onchange `src/const`
+
+- recompute layout on `assets.meta[gmKey].lastModified` change
 
 - ✅ avoid recomputing unchanged symbols via content hash
 - ❌ try unify parseMaps and parseSymbols

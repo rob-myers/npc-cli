@@ -8,7 +8,7 @@ import { Poly, Rect } from "../geom";
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
 import { assertDefined, assertNonNull, isDevelopment } from "../service/generic";
-import { fillPolygons } from "../service/dom";
+import { drawPolygons } from "../service/dom";
 
 import "./infinite-grid-helper.js";
 import { TestCanvasContext } from "./test-canvas-context";
@@ -45,7 +45,7 @@ export default function TestScene(props) {
         ctxt.strokeStyle = "red";
         ctxt.lineWidth = 4;
         // fix z-fighting
-        fillPolygons(ctxt, [extHull]);
+        drawPolygons(ctxt, [extHull]);
         // 🚧 draw hull doors
         const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
         console.log("doors", assetsJson.symbols[hullKey].doors);

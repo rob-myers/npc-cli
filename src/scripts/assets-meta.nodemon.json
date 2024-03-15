@@ -1,4 +1,9 @@
 {
   "ext": "svg",
-  "watch": ["static/assets/symbol/", "media/map/", "src/scripts/assets-meta.js"]
+  "watch": [
+    "src/scripts/assets-meta.js",
+    "src/npc-cli/service/geomorph.js",
+    "static/assets/symbol/",
+    "media/map/"
+  ]
 }

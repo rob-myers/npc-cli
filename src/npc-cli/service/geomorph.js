@@ -482,7 +482,7 @@ class GeomorphService {
   postParseStarshipSymbol(partial) {
     let floor = /** @type {null | Geom.Poly} */ (null);
     const wallsKey = partial.isHull ? "hullWalls" : "walls";
-    const union = Poly.union(partial[wallsKey]);
+    const union = Poly.union(partial[wallsKey]).map((poly) => poly.removeHoles());
 
     if (union.length > 1) {
       warn(`${partial.key}: ${wallsKey} are not connected`);

@@ -13,17 +13,20 @@ export function fillRing(ctxt, ring, fill = true) {
 
 /**
  * @param {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D} ctxt
- * @param {Geom.Poly[]} polys
- * @param {boolean} [stroke]
+ * @param {Geom.Poly | Geom.Poly[]} polys
+ * @param {'fill' | 'stroke' | 'fill-stroke'} [effect]
  */
-export function fillPolygons(ctxt, polys, stroke = false) {
+export function drawPolygons(ctxt, polys, effect = "fill") {
+  polys = Array.isArray(polys) ? polys : [polys];
+  const fill = effect === "fill" || effect === "fill-stroke";
+  const stroke = effect === "stroke" || effect === "fill-stroke";
   for (const poly of polys) {
     ctxt.beginPath();
     fillRing(ctxt, poly.outline, false);
     for (const hole of poly.holes) {
       fillRing(ctxt, hole, false);
     }
-    ctxt.fill();
+    fill && ctxt.fill();
     stroke && ctxt.stroke();
   }
 }
