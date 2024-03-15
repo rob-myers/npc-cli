@@ -26,10 +26,6 @@ export default function TestWorld(props) {
       view: /** @type {*} */ (null),
       ensureClass(gmKey) {
         const { assets } = state;
-        console.log({
-          pre: state.gmData[gmKey]?.layout.lastModified,
-          post: assets.meta[gmKey].lastModified,
-        });
         if (!state.gmData[gmKey]) {
           const canvas = document.createElement("canvas");
           const layout = geomorphService.computeLayout(gmKey, assets);
