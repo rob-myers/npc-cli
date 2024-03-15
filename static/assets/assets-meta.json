@@ -10,7 +10,7 @@
       "lastModified": 1710366754739,
       "contentHash": 269183967
     },
-    "demo-map-1": {"lastModified": 1710366754741, "contentHash": 533232404}
+    "demo-map-1": {"lastModified": 1710497405208, "contentHash": -380436121}
   },
   "symbols": {
     "101--hull": {
@@ -2822,7 +2822,7 @@
         {"gmKey": "g-102--research-deck", "transform": [1, 0, 0, 1, -1200, 0]},
         {
           "gmKey": "g-303--passenger-deck",
-          "transform": [1, 0, 0, 1, -1200, 1200]
+          "transform": [1, 0, 0, -1, -1200, 1800]
         },
         {
           "gmKey": "g-302--xboat-repair-bay",
@@ -2830,7 +2830,7 @@
         },
         {
           "gmKey": "g-302--xboat-repair-bay",
-          "transform": [-1, 0, 0, 1, 2400, 1200]
+          "transform": [-1, 0, 0, -1, 2400, 1800]
         }
       ]
     }

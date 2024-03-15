@@ -17,9 +17,9 @@
     <pattern id="pattern-0-0" xlink:href="#pattern-0"/>
     <pattern id="pattern-0-1" xlink:href="#pattern-0"/>
     <pattern id="pattern-0-2" xlink:href="#pattern-0"/>
-    <pattern id="pattern-0-3" xlink:href="#pattern-0"/>
+    <pattern id="pattern-0-3" patternTransform="matrix(1, 0, 0, 1, 0, -3000)" xlink:href="#pattern-0"/>
     <pattern id="pattern-0-4" xlink:href="#pattern-0"/>
-    <pattern id="pattern-0-5" xlink:href="#pattern-0"/>
+    <pattern id="pattern-0-5" patternTransform="matrix(1, 0, 0, 1, 0, -3000)" xlink:href="#pattern-0"/>
     <pattern id="pattern-0-6" xlink:href="#pattern-0"/>
     <pattern id="pattern-0-7" xlink:href="#pattern-0"/>
   </defs>
@@ -38,13 +38,13 @@
   <rect width="1200" height="1200" style="stroke: rgb(0, 0, 0); fill: url('#pattern-0-6'); stroke-width: 16px;" x="-1200">
     <title>102</title>
   </rect>
-  <rect width="1200" height="600" style="stroke: rgb(0, 0, 0); fill: url('#pattern-0-5'); stroke-width: 16px;" x="-1200" y="1200">
+  <rect width="1200" height="600" style="stroke: rgb(0, 0, 0); fill: url('#pattern-0-5'); stroke-width: 16px;" x="-1200" y="-1800" transform="matrix(1, 0, 0, -1, 0, 0)">
     <title>303</title>
   </rect>
   <rect width="1200" height="600" style="stroke: rgb(0, 0, 0); fill: url('#pattern-0-4'); stroke-width: 16px;" transform="matrix(1, 0, 0, -1, 0, 0)" x="-2400" y="-1800">
     <title>302</title>
   </rect>
-  <rect width="1200" height="600" style="stroke: rgb(0, 0, 0); fill: url('#pattern-0-3'); stroke-width: 16px;" transform="matrix(-1, 0, 0, 1, 0, 0)" x="-2400" y="1200">
+  <rect width="1200" height="600" style="stroke: rgb(0, 0, 0); fill: url('#pattern-0-3'); stroke-width: 16px;" transform="matrix(-1, 0, 0, -1, 0, 0)" x="-2400" y="-1800">
     <title>302</title>
   </rect>
 </svg>
