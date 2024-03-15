@@ -1,6 +1,15 @@
 import * as htmlparser2 from "htmlparser2";
 import { Mat, Poly, Rect } from "../geom";
-import { assertDefined, info, parseJsArg, warn, debug, safeJsonParse, mapValues } from "./generic";
+import {
+  assertDefined,
+  info,
+  parseJsArg,
+  warn,
+  debug,
+  safeJsonParse,
+  mapValues,
+  keys,
+} from "./generic";
 import { geom } from "./geom";
 
 class GeomorphService {
@@ -23,6 +32,11 @@ class GeomorphService {
     "g-302--xboat-repair-bay": 302,
     "g-303--passenger-deck": 303,
   };
+
+  /** @type {Geomorph.GeomorphKey[]} */
+  get gmKeys() {
+    return keys(this.toGmNum);
+  }
 
   /** @type {Record<Geomorph.SymbolKey, true>} */
   fromSymbolKey = {
