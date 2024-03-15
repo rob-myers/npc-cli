@@ -263,7 +263,8 @@
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
-- 🚧 try fix HMR full-refresh onchange `src/const`
+- ✅ fix HMR full-refresh onchange `src/const`
+- ✅ fix HMR full-refresh onchange `layout.js`
 
 - 🚧 recompute layout on `assets.meta[gmKey].lastModified` change
 

@@ -12,7 +12,6 @@ import {
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
 import { DEV_EXPRESS_WEBSOCKET_PORT } from "src/scripts/const";
 import { queryClient } from "src/npc-cli/service/query-client";
-import { isSmallView } from "./layout";
 
 const useStore = create<State>()(
   devtools((set, get) => ({
@@ -103,7 +102,7 @@ const useStore = create<State>()(
         if (topLevel.viewOpen) {
           set(() => ({ viewOpen: topLevel.viewOpen }));
         }
-        if (topLevel.navOpen && !isSmallView()) {
+        if (topLevel.navOpen) {
           set(() => ({ navOpen: topLevel.navOpen }));
         }
 

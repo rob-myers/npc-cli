@@ -23,14 +23,7 @@ import Comments from "./Comments";
 import useSite from "./site.store";
 import useOnResize from "src/npc-cli/hooks/use-on-resize";
 
-export function wrapPageElement({
-  element,
-  props,
-}: WrapPageElementBrowserArgs | WrapPageElementNodeArgs) {
-  return <Root {...props} element={element} />;
-}
-
-function Root(props: Props) {
+export default function Root(props: Props) {
   const frontMatter = props.pageContext?.frontmatter as FrontMatter | undefined;
   const allFrontMatter = useStaticQuery(graphql`
     query {

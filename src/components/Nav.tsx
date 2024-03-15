@@ -4,10 +4,10 @@ import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
 import { nav, view } from "../const";
+import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
-import useSite from "./site.store";
 
 export default function Nav() {
   const collapsed = useSite(({ navOpen }) => !navOpen);
