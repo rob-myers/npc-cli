@@ -189,13 +189,15 @@ export class Poly {
    * Ensure final point of each ring doesn't equal 1st point.
    * Such loops arise e.g. from npm module 'polygon-clipping',
    * but are unsupported by npm module 'poly2tri'.
+   *
+   * Have seen multiple reps at end in the wild.
    */
   cleanFinalReps() {
+    /** @type {Geom.Vect | undefined} */
+    let last = undefined;
     for (const ring of [this.outline, ...this.holes]) {
-      const last = ring.pop();
-      if (last && !last.equals(ring[0])) {
-        ring.push(last);
-      }
+      while ((last = ring.pop()) && last.equals(ring[0]));
+      last && ring.push(last);
     }
     return this;
   }
