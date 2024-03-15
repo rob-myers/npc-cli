@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import * as THREE from "three";
 import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 
+import { ASSETS_META_JSON_FILENAME } from "src/scripts/const";
 import { Poly, Rect } from "../geom";
 import { geomorphService } from "../service/geomorph";
 import { customQuadGeometry } from "../service/three";
@@ -60,10 +61,10 @@ export default function TestScene(props) {
   api.scene = state;
 
   const { data: assets } = useQuery({
-    queryKey: ["assets-meta.json"],
+    queryKey: [ASSETS_META_JSON_FILENAME],
     /** @returns {Promise<Geomorph.Assets>} */
     queryFn: () =>
-      fetch("/assets/assets-meta.json")
+      fetch(`/assets/${ASSETS_META_JSON_FILENAME}`)
         .then((x) => x.json())
         .then(geomorphService.deserializeAssets),
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,

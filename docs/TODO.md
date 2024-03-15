@@ -222,6 +222,12 @@
   - ✅ try fix edge mismatches
   - ✅ handle edge geomorphs
 
+- ✅ fix HMR full-refresh onchange `src/const`
+- ✅ fix HMR full-refresh onchange `layout.js`
+
+- ✅ recompute layout on `assets.meta[gmKey].lastModified` change
+  - ✅ compute `assets.meta[gmKey].lastModified`
+
 ## WIP
 
 - 🚧 TestCharacter (character controller)
@@ -255,7 +261,8 @@
   - ✅ try draw hull doors on canvas
     - ✅ api.assets is deserialized
     - ✅ change hull doors back to original size
-  - show 3d hull walls
+  - 🚧 show 3d hull walls
+  - 🚧 show 3d hull walls sans doors
   - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
@@ -263,13 +270,7 @@
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
-- ✅ fix HMR full-refresh onchange `src/const`
-- ✅ fix HMR full-refresh onchange `layout.js`
-
-- ✅ recompute layout on `assets.meta[gmKey].lastModified` change
-  - ✅ compute `assets.meta[gmKey].lastModified`
-
-- avoid dev-server crash on save symbol to static/assets
+- 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh
   [1]   Error: ENOENT: no such file or directory, lstat '/Users/Robert.Myers/coding/np
   [1]   c-cli/static/assets/symbol/301--hull.svg.crswap'
@@ -294,13 +295,16 @@
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 - ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
-- improve MapControls zoomToCursor on mobile
+- ❌ improve MapControls zoomToCursor on mobile
+  - two fingers leftwards to rotate
+  - two fingers upwards to set polar
 - Terminal crashing during HMR
   - possibly fixed via `xterm-addon-webgl@beta`
 - (hull) walls -> quads
   - 🚧 trying alternative i.e. "edges outside floor"
 - need to remove labels from hull symbol image?
-- try avoid alphaBlend geomorphs via alphaMap
+- ❌ try avoid alphaBlend geomorphs via alphaMap
+  - we only need depthWrite false
 - Firefox android allows unbounded scrolling on "interact"
   - debug locally using about:debugging#/runtime/this-firefox
 

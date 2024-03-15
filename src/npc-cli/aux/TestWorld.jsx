@@ -3,8 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
 
-import { assertNonNull, isDevelopment } from "../service/generic";
+import { ASSETS_META_JSON_FILENAME } from "src/scripts/const";
 import { worldScale } from "../service/const";
+import { assertNonNull, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -46,10 +47,10 @@ export default function TestWorld(props) {
   );
 
   const { data: assets } = useQuery({
-    queryKey: ["assets-meta.json"],
+    queryKey: [ASSETS_META_JSON_FILENAME],
     queryFn: async () => {
       /** @type {Geomorph.AssetsJson} */
-      const json = await fetch("/assets/assets-meta.json").then((x) => x.json());
+      const json = await fetch(`/assets/${ASSETS_META_JSON_FILENAME}`).then((x) => x.json());
       return geomorphService.deserializeAssets(json);
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,

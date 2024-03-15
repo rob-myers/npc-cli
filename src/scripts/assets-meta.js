@@ -18,7 +18,7 @@ import getOpts from "getopts";
 // relative urls for sucrase-node
 import { hashText, info, keys, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
+import { ASSETS_META_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
 
 const { force: forceUpdate } = getOpts(process.argv, { boolean: ["force"] });
 
@@ -26,7 +26,7 @@ const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
 const symbolsDir = path.resolve(staticAssetsDir, "symbol");
 const mapsDir = path.resolve(mediaDir, "map");
-const outputFilename = path.resolve(staticAssetsDir, `assets-meta.json`);
+const outputFilename = path.resolve(staticAssetsDir, ASSETS_META_JSON_FILENAME);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
 (function main() {

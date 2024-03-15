@@ -10,7 +10,7 @@ import {
   isDevelopment,
 } from "src/npc-cli/service/generic";
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "src/scripts/const";
+import { DEV_EXPRESS_WEBSOCKET_PORT, ASSETS_META_JSON_FILENAME } from "src/scripts/const";
 import { queryClient } from "src/npc-cli/service/query-client";
 
 const useStore = create<State>()(
@@ -52,7 +52,7 @@ const useStore = create<State>()(
               // written before message in assets-meta.js
               queryClient.refetchQueries({
                 predicate({ queryKey: [queryKey] }) {
-                  return queryKey === "assets-meta.json";
+                  return queryKey === ASSETS_META_JSON_FILENAME;
                 },
               });
             }, 300);
