@@ -101,18 +101,26 @@ const navCss = css`
   }
 
   span.${menuClasses.icon} {
-    transform: scale(1);
     width: 1rem;
     min-width: 1rem;
-    margin-right: 24px;
-    margin-left: 12px;
   }
 
-  &.${sidebarClasses.collapsed} .${menuClasses.SubMenuExpandIcon} {
-    display: none;
+  &.${sidebarClasses.collapsed} {
+    span.${menuClasses.icon} {
+      margin-left: 4px;
+    }
+    .${menuClasses.SubMenuExpandIcon} {
+      display: none;
+    }
   }
-  &:not(.${sidebarClasses.collapsed}) .${menuClasses.SubMenuExpandIcon} {
-    padding-right: 0.5rem;
+  &:not(.${sidebarClasses.collapsed}) {
+    span.${menuClasses.icon} {
+      margin-right: 24px;
+      margin-left: 12px;
+    }
+    .${menuClasses.SubMenuExpandIcon} {
+      padding-right: 0.5rem;
+    }
   }
 `;
 
