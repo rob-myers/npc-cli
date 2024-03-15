@@ -190,6 +190,14 @@ class GeomorphService {
   }
 
   /**
+   * @param {Geomorph.GeomorphKey | Geomorph.GeomorphNumber} input
+   */
+  isEdgeGm(input) {
+    input = typeof input === "string" ? this.toGmNum[input] : input;
+    return 301 <= input && input < 500;
+  }
+
+  /**
    * @param {number} input
    * @returns {input is Geomorph.GeomorphNumber}
    */
