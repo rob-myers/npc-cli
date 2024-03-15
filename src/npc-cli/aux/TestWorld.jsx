@@ -20,21 +20,31 @@ export default function TestWorld(props) {
       events: new Subject(),
       assets: /** @type {*} */ (null),
       map: null,
-      gmClass: /** @type {*} */ ({}),
+      gmData: /** @type {*} */ ({}),
       gms: [],
       scene: /** @type {*} */ (null),
       view: /** @type {*} */ (null),
-      createClass(gmKey, assets) {
-        const canvas = document.createElement("canvas");
-        const layout = geomorphService.computeLayout(gmKey, assets);
-        canvas.width = layout.pngRect.width;
-        canvas.height = layout.pngRect.height;
-        return (state.gmClass[gmKey] = {
-          canvas,
-          ctxt: assertNonNull(canvas.getContext("2d")),
-          layout, // 🚧 update onchange layout
-          tex: new THREE.CanvasTexture(canvas),
+      ensureClass(gmKey) {
+        const { assets } = state;
+        console.log({
+          pre: state.gmData[gmKey]?.layout.lastModified,
+          post: assets.meta[gmKey].lastModified,
         });
+        if (!state.gmData[gmKey]) {
+          const canvas = document.createElement("canvas");
+          const layout = geomorphService.computeLayout(gmKey, assets);
+          canvas.width = layout.pngRect.width;
+          canvas.height = layout.pngRect.height;
+          state.gmData[gmKey] = {
+            canvas,
+            ctxt: assertNonNull(canvas.getContext("2d")),
+            layout,
+            tex: new THREE.CanvasTexture(canvas),
+          };
+        } else if (state.gmData[gmKey].layout.lastModified !== assets.meta[gmKey].lastModified) {
+          state.gmData[gmKey].layout = geomorphService.computeLayout(gmKey, assets);
+        }
+        return state.gmData[gmKey];
       },
     })
   );
@@ -57,7 +67,7 @@ export default function TestWorld(props) {
   React.useMemo(() => {
     if (assets && state.map) {
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        const { layout } = (state.gmClass[gmKey] ??= state.createClass(gmKey, assets));
+        const { layout } = state.ensureClass(gmKey);
         return {
           ...layout,
           gmId,
@@ -72,7 +82,7 @@ export default function TestWorld(props) {
         };
       });
     }
-  }, [state.map]);
+  }, [assets, state.map]);
 
   return (
     <TestWorldContext.Provider value={state}>
@@ -96,11 +106,10 @@ export default function TestWorld(props) {
  * @property {Geomorph.MapDef | null} map
  * @property {import('./TestWorldScene').State} scene
  * @property {import('./TestWorldCanvas').State} view
- * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
+ * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
- * @property {Geomorph.LayoutInstance[]} gms
- * Aligned to `map.gms`.
- * @property {(gmKey: Geomorph.GeomorphKey, assetsJson: Geomorph.Assets) => GmData} createClass
+ * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
+ * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureClass
  */
 
 /**

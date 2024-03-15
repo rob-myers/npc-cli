@@ -18,7 +18,7 @@ export default function TestWorldScene(props) {
   /** @type {State} */
   const state = useStateRef(() => ({
     drawGeomorph(gmKey, img) {
-      const { ctxt, layout } = api.gmClass[gmKey];
+      const { ctxt, layout } = api.gmData[gmKey];
       const { pngRect } = layout;
       const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
       const { doors, floor, symbols: subSymbols } = api.assets.symbols[hullKey];
@@ -49,15 +49,15 @@ export default function TestWorldScene(props) {
   api.scene = state;
 
   React.useLayoutEffect(() => {
-    keys(api.gmClass).forEach((gmKey) => {
+    keys(api.gmData).forEach((gmKey) => {
       textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
         const img = /** @type {HTMLImageElement} */ (tex.source.data);
         state.drawGeomorph(gmKey, img);
-        assertDefined(api.gmClass[gmKey].tex).needsUpdate = true;
+        assertDefined(api.gmData[gmKey].tex).needsUpdate = true;
         update();
       });
     });
-  }, [api.map]);
+  }, [api.assets, api.map]);
 
   const update = useUpdate();
 
@@ -73,7 +73,7 @@ export default function TestWorldScene(props) {
             <meshBasicMaterial
               side={THREE.DoubleSide}
               transparent
-              map={api.gmClass[gm.key].tex}
+              map={api.gmData[gm.key].tex}
               depthWrite={false} // fix z-fighting
             ></meshBasicMaterial>
           </mesh>

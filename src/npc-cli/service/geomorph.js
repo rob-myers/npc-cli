@@ -56,8 +56,10 @@ class GeomorphService {
    */
   computeLayout(gmKey, assets) {
     // 🚧
-    const { pngRect } = assets.symbols[geomorphService.gmKeyToKeys(gmKey).hullKey];
-    return { key: gmKey, pngRect: Rect.fromJson(pngRect) };
+    const { hullKey } = this.gmKeyToKeys(gmKey);
+    const { pngRect } = assets.symbols[hullKey];
+    const { lastModified } = assets.meta[gmKey];
+    return { key: gmKey, pngRect: Rect.fromJson(pngRect), lastModified };
   }
 
   /**

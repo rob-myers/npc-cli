@@ -75,6 +75,8 @@ declare namespace Geomorph {
   interface Layout {
     key: GeomorphKey;
     pngRect: Geom.Rect;
+    /** Epoch ms */
+    lastModified: number;
     // 🚧 ... e.g. walls
   }
 
