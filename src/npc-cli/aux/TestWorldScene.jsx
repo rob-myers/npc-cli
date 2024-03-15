@@ -30,7 +30,7 @@ export default function TestWorldScene(props) {
       const { doors } = api.assets.symbols[hullKey];
       const hullDoors = doors.flatMap(({ meta, poly }) => (meta.hull ? poly : []));
       ctxt.translate(-pngRect.x, -pngRect.y);
-      // fillPolygons(ctxt, hullDoors);
+      fillPolygons(ctxt, hullDoors);
       // fillPolygons(ctxt, [extHull]);
       ctxt.resetTransform();
     },

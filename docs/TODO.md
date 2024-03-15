@@ -215,14 +215,14 @@
   - ✅ get infinite grid working
   - ✅ add geomorph canvases
 
-## WIP
-
 - ✅ avoid blending THREE.AdditiveBlend geomorph PNGs i.e. depthWrite false only
   - ❌ try fix z-fighting by manually adding black rects
   - ✅ try fix z-fighting by drawing into canvas
   - ✅ fix edge geomorphs
   - ✅ try fix edge mismatches
   - ✅ handle edge geomorphs
+
+## WIP
 
 - 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
@@ -249,8 +249,9 @@
     - ✅ use canvas texture
     - ❌ canvas -> image -> texture
     - ✅ move debug.image into canvas
-  - 🚧 try draw hull doors on canvas
+  - ✅ try draw hull doors on canvas
     - ✅ api.assets is deserialized
+    - ✅ change hull doors back to original size
   - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
