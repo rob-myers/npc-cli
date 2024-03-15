@@ -32,6 +32,18 @@ export function drawPolygons(ctxt, polys, effect = "fill") {
 }
 
 /**
+ * @param {CanvasRenderingContext2D} ctxt
+ * @param {Geom.VectJson} from
+ * @param {Geom.VectJson} to
+ */
+export function strokeLine(ctxt, from, to) {
+  ctxt.beginPath();
+  ctxt.moveTo(from.x, from.y);
+  ctxt.lineTo(to.x, to.y);
+  ctxt.stroke();
+}
+
+/**
  * https://stackoverflow.com/a/4819886/2917822
  * If Chrome devtool initially open as mobile device,
  * `'ontouchstart' in window` continues to be true if switch to desktop.

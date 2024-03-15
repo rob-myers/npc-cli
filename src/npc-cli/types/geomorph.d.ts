@@ -43,7 +43,7 @@ declare namespace Geomorph {
     }>[];
 
     floor: T;
-    wallEdges: [P, P][];
+    wallSegs: [P, P][];
   }
 
   type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pick<
@@ -85,6 +85,7 @@ declare namespace Geomorph {
     /** Epoch ms */
     lastModified: number;
     // 🚧 walls i.e. hull + sub-symbols
+    wallSegs: [Geom.Vect, Geom.Vect][];
     // 🚧 doors i.e. hull + sub-symbols
   }
 

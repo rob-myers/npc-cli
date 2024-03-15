@@ -8,7 +8,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { customQuadGeometry } from "../service/three";
 import { Mat, Poly, Rect } from "../geom";
-import { drawPolygons } from "../service/dom";
+import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
 
 /**
@@ -19,7 +19,7 @@ export default function TestWorldScene(props) {
   const state = useStateRef(() => ({
     drawGeomorph(gmKey, img) {
       const { ctxt, layout } = api.gmData[gmKey];
-      const { pngRect } = layout;
+      const { pngRect, wallSegs } = layout;
       const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
       const { doors: hullDoors, floor, symbols: subSymbols } = api.assets.symbols[hullKey];
       const floors = subSymbols.map(({ symbolKey, transform }) =>
@@ -32,15 +32,18 @@ export default function TestWorldScene(props) {
       // 🚧
       ctxt.lineWidth = 2;
       ctxt.translate(-pngRect.x, -pngRect.y);
-      ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
-      ctxt.fillStyle = "rgba(255, 255, 255, 1)";
-      // drawPolygons(ctxt, hullDoors, "fill-stroke");
-      drawPolygons(ctxt, hullDoors, "fill-stroke");
       ctxt.strokeStyle = "rgba(0, 0, 0, 0)";
       ctxt.fillStyle = "rgba(0, 255, 0, 0.2)";
       drawPolygons(ctxt, floor, "fill-stroke");
       ctxt.fillStyle = "rgba(0, 0, 255, 0.2)";
       drawPolygons(ctxt, floors, "fill-stroke");
+      ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
+      ctxt.fillStyle = "rgba(255, 255, 255, 1)";
+      drawPolygons(ctxt, hullDoors, "fill-stroke");
+
+      ctxt.lineWidth = 4;
+      ctxt.strokeStyle = "rgba(255, 0, 0, 1)";
+      wallSegs.map(([u, v]) => strokeLine(ctxt, u, v));
       ctxt.resetTransform();
     },
   }));

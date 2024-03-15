@@ -55,11 +55,29 @@ class GeomorphService {
    * @returns {Geomorph.Layout}
    */
   computeLayout(gmKey, assets) {
-    // 🚧
+    // 🚧 wallSegs should be computed inside hull symbol
     const { hullKey } = this.gmKeyToKeys(gmKey);
-    const { pngRect } = assets.symbols[hullKey];
+    const { pngRect, wallSegs, symbols } = assets.symbols[hullKey];
     const { lastModified } = assets.meta[gmKey];
-    return { key: gmKey, pngRect: Rect.fromJson(pngRect), lastModified };
+
+    /** @type {[Geom.Vect, Geom.Vect][]} */
+    const allWallSegs = wallSegs.map(([u, v]) => [Vect.from(u), Vect.from(v)]);
+    symbols.forEach(({ symbolKey, transform }) => {
+      tmpMat1.feedFromArray(transform);
+      assets.symbols[symbolKey].wallSegs.forEach(([u, v]) =>
+        allWallSegs.push([
+          tmpMat1.transformPoint(Vect.from(u)),
+          tmpMat1.transformPoint(Vect.from(v)),
+        ])
+      );
+    });
+
+    return {
+      key: gmKey,
+      pngRect: Rect.fromJson(pngRect),
+      lastModified,
+      wallSegs: allWallSegs,
+    };
   }
 
   /**
@@ -117,7 +135,7 @@ class GeomorphService {
       pngRect: json.pngRect,
       symbols: json.symbols,
       floor: Poly.from(json.floor),
-      wallEdges: json.wallEdges.map(([u, v]) => [Vect.from(u), Vect.from(v)]),
+      wallSegs: json.wallSegs.map(([u, v]) => [Vect.from(u), Vect.from(v)]),
     };
   }
 
@@ -523,7 +541,7 @@ class GeomorphService {
       doors,
       unsorted,
       floor,
-      wallEdges,
+      wallSegs: wallEdges,
     };
   }
 
@@ -570,7 +588,7 @@ class GeomorphService {
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
       floor: parsed.floor.geoJson,
-      wallEdges: parsed.wallEdges.map(([u, v]) => [u.json, v.json]),
+      wallSegs: parsed.wallSegs.map(([u, v]) => [u.json, v.json]),
     };
   }
 
@@ -594,3 +612,4 @@ class GeomorphService {
 export const geomorphService = new GeomorphService();
 
 const tmpPoly1 = new Poly();
+const tmpMat1 = new Mat();

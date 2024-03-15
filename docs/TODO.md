@@ -261,11 +261,11 @@
   - ✅ try draw hull doors on canvas
     - ✅ api.assets is deserialized
     - ✅ change hull doors back to original size
-  - 🚧 show 3d hull walls
-  - 🚧 show 3d hull walls sans doors
-  - precompute wallEdges
+  - ✅ precompute wallEdges per symbols
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
+  - ✅ show wallEdges
+  - 🚧 precompute layout wallEdges in hull symbol
   - instanced two-sided quads
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
