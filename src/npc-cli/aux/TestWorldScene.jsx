@@ -9,6 +9,7 @@ import useUpdate from "../hooks/use-update";
 import { customQuadGeometry } from "../service/three";
 import { Poly, Rect } from "../geom";
 import { fillPolygons } from "../service/dom";
+import { geomorphService } from "../service/geomorph";
 
 /**
  * @param {Props} props
@@ -17,18 +18,21 @@ export default function TestWorldScene(props) {
   /** @type {State} */
   const state = useStateRef(() => ({
     drawGeomorph(gmKey, img) {
-      // 🚧
       const { ctxt, layout } = api.gmClass[gmKey];
-      const bounds = new Rect(0, 0, layout.pngRect.width, layout.pngRect.height);
+      const { pngRect } = layout;
 
-      ctxt.clearRect(0, 0, bounds.width, bounds.height);
+      ctxt.clearRect(0, 0, pngRect.width, pngRect.width);
       ctxt.drawImage(img, 0, 0);
 
-      // prettier-ignore
-      const extHull = new Poly(bounds.points, [bounds.clone().inset(6.5 + 6.5).points.reverse()]);
-      // fix z-fighting
+      // 🚧
       ctxt.fillStyle = "green";
-      fillPolygons(ctxt, [extHull]);
+      const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
+      const { doors } = api.assets.symbols[hullKey];
+      const hullDoors = doors.flatMap(({ meta, poly }) => (meta.hull ? poly : []));
+      ctxt.translate(-pngRect.x, -pngRect.y);
+      // fillPolygons(ctxt, hullDoors);
+      // fillPolygons(ctxt, [extHull]);
+      ctxt.resetTransform();
     },
   }));
 
@@ -44,7 +48,7 @@ export default function TestWorldScene(props) {
         update();
       });
     });
-  }, [props.map]);
+  }, [api.map]);
 
   const update = useUpdate();
 
@@ -61,6 +65,7 @@ export default function TestWorldScene(props) {
               side={THREE.DoubleSide}
               transparent
               map={api.gmClass[gm.key].tex}
+              depthWrite={false} // fix z-fighting
             ></meshBasicMaterial>
           </mesh>
         </group>
@@ -72,7 +77,6 @@ export default function TestWorldScene(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
- * @property {Geomorph.MapDef} map
  */
 
 /**

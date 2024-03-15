@@ -46,7 +46,10 @@ export default function TestWorld(props) {
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
   });
 
-  state.map = assets?.maps[props.mapKey ?? ""] ?? null;
+  if (assets) {
+    state.assets = assets;
+    state.map = assets.maps[props.mapKey ?? ""] ?? null;
+  }
 
   React.useMemo(() => {
     if (assets && state.map) {
@@ -71,7 +74,7 @@ export default function TestWorld(props) {
   return (
     <TestWorldContext.Provider value={state}>
       <TestWorldCanvas disabled={props.disabled} stats>
-        {state.map && <TestWorldScene disabled={props.disabled} map={state.map} />}
+        {state.map && <TestWorldScene disabled={props.disabled} />}
       </TestWorldCanvas>
     </TestWorldContext.Provider>
   );
