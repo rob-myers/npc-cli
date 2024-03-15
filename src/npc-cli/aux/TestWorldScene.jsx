@@ -21,8 +21,7 @@ export default function TestWorldScene(props) {
       const { ctxt, layout } = api.gmData[gmKey];
       const { pngRect } = layout;
       const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
-      const { doors, floor, symbols: subSymbols } = api.assets.symbols[hullKey];
-      const hullDoors = doors.flatMap(({ meta, poly }) => (meta.hull ? poly : []));
+      const { doors: hullDoors, floor, symbols: subSymbols } = api.assets.symbols[hullKey];
       const floors = subSymbols.map(({ symbolKey, transform }) =>
         api.assets.symbols[symbolKey].floor.clone().applyMatrix(tmpMat1.feedFromArray(transform))
       );
@@ -35,6 +34,7 @@ export default function TestWorldScene(props) {
       ctxt.translate(-pngRect.x, -pngRect.y);
       ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
       ctxt.fillStyle = "rgba(255, 255, 255, 1)";
+      // drawPolygons(ctxt, hullDoors, "fill-stroke");
       drawPolygons(ctxt, hullDoors, "fill-stroke");
       ctxt.strokeStyle = "rgba(0, 0, 0, 0)";
       ctxt.fillStyle = "rgba(0, 255, 0, 0.2)";

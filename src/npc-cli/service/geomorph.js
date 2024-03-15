@@ -83,10 +83,10 @@ class GeomorphService {
       key: json.key,
       isHull: json.isHull,
       hullWalls: json.hullWalls.map(Poly.from),
-      obstacles: json.obstacles.map(({ meta, poly }) => ({ meta, poly: Poly.from(poly) })),
+      obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map(Poly.from),
-      doors: json.doors.map(({ meta, poly }) => ({ meta, poly: Poly.from(poly) })),
-      unsorted: json.unsorted.map(({ meta, poly }) => ({ meta, poly: Poly.from(poly) })),
+      doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
+      unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
       pngRect: json.pngRect,
@@ -350,9 +350,9 @@ class GeomorphService {
     let pngRect = /** @type {Geom.RectJson | null} */ (null);
     const symbols = /** @type {Geomorph.ParsedSymbol<Geom.Poly>['symbols']} */ ([]);
     const hullWalls = /** @type {Geom.Poly[]} */ ([]);
-    const obstacles = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
-    const doors = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
-    const unsorted = /** @type {Geomorph.PolyWithMeta[]} */ ([]);
+    const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const unsorted = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const walls = /** @type {Geom.Poly[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
@@ -440,14 +440,14 @@ class GeomorphService {
           obstacles.push(
             ...geomorphService
               .extractGeom({ ...parent, title: contents }, geomScale)
-              .map((poly) => ({ poly, meta }))
+              .map((poly) => Object.assign(poly, { meta }))
           );
         } else if (ownTags.includes("door")) {
           const meta = geomorphService.tagsToMeta(ownTags, {});
           doors.push(
             ...geomorphService
               .extractGeom({ ...parent, title: contents }, geomScale)
-              .map((poly) => ({ poly, meta }))
+              .map((poly) => Object.assign(poly, { meta }))
           );
         } else if (parent.tagName === "image") {
           return;
@@ -456,7 +456,7 @@ class GeomorphService {
           unsorted.push(
             ...geomorphService
               .extractGeom({ ...parent, title: contents }, geomScale)
-              .map((poly) => ({ poly, meta }))
+              .map((poly) => Object.assign(poly, { meta }))
           );
         }
       },
@@ -537,10 +537,10 @@ class GeomorphService {
       key: parsed.key,
       isHull: parsed.isHull,
       hullWalls: parsed.hullWalls.map((x) => x.geoJson),
-      obstacles: parsed.obstacles.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),
+      obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => x.geoJson),
-      doors: parsed.doors.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),
-      unsorted: parsed.unsorted.map(({ meta, poly }) => ({ meta, poly: poly.geoJson })),
+      doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,
       pngRect: parsed.pngRect,

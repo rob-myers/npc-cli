@@ -41,16 +41,13 @@ declare namespace Geomorph {
     floor: T;
   }
 
-  interface SvgGroups<T> {
-    obstacles: PolyWithMeta<T>[];
+  interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {
+    obstacles: WithMeta<T>[];
     walls: T[];
-    doors: PolyWithMeta<T>[];
+    doors: WithMeta<T>[];
     /** 🚧 split further? */
-    unsorted: PolyWithMeta<T>[];
+    unsorted: WithMeta<T>[];
   }
-  type PolyWithMeta<T extends Geom.Poly | Geom.GeoJsonPolygon = Geom.Poly> = WithMeta<{
-    poly: T;
-  }>;
 
   /** Previously called `PointMeta` */
   type Meta<T extends {} = {}> = Record<string, any> & T;
@@ -77,7 +74,8 @@ declare namespace Geomorph {
     pngRect: Geom.Rect;
     /** Epoch ms */
     lastModified: number;
-    // 🚧 ... e.g. walls
+    // 🚧 walls i.e. hull + sub-symbols
+    // 🚧 doors i.e. hull + sub-symbols
   }
 
   type GeomorphKey =
