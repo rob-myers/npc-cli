@@ -7,7 +7,7 @@ import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { customQuadGeometry } from "../service/three";
-import { Poly, Rect } from "../geom";
+import { Mat, Poly, Rect } from "../geom";
 import { drawPolygons } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
 
@@ -21,8 +21,11 @@ export default function TestWorldScene(props) {
       const { ctxt, layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
       const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
-      const { doors, floor } = api.assets.symbols[hullKey];
+      const { doors, floor, symbols: subSymbols } = api.assets.symbols[hullKey];
       const hullDoors = doors.flatMap(({ meta, poly }) => (meta.hull ? poly : []));
+      const floors = subSymbols.map(({ symbolKey, transform }) =>
+        api.assets.symbols[symbolKey].floor.clone().applyMatrix(tmpMat1.feedFromArray(transform))
+      );
 
       ctxt.clearRect(0, 0, pngRect.width, pngRect.width);
       ctxt.drawImage(img, 0, 0);
@@ -36,6 +39,8 @@ export default function TestWorldScene(props) {
       ctxt.strokeStyle = "rgba(0, 0, 0, 0)";
       ctxt.fillStyle = "rgba(0, 255, 0, 0.2)";
       drawPolygons(ctxt, floor, "fill-stroke");
+      ctxt.fillStyle = "rgba(0, 0, 255, 0.2)";
+      drawPolygons(ctxt, floors, "fill-stroke");
       ctxt.resetTransform();
     },
   }));
@@ -89,3 +94,4 @@ export default function TestWorldScene(props) {
  */
 
 const textureLoader = new THREE.TextureLoader();
+const tmpMat1 = new Mat();

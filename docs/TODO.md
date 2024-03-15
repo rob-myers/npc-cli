@@ -245,15 +245,17 @@
   - ✅ precompute symbols "floor"
     - hull defaults to union of hullWalls sans holes, insetted
     - non-hull likewise, with fallback `(0, 0, width, height)`
-  - 🚧 render floor polys in `TestScene`
+  - ✅ render floor polys in `TestScene`
     - ✅ use canvas texture
     - ❌ canvas -> image -> texture
     - ✅ move debug.image into canvas
     - ✅ hull symbol floor polys 
-    - 🚧 sub-symbol floor polys 
+    - ✅ non-hull symbols scaled down to world coords in assets-meta.json
+    - ✅ sub-symbol floor polys 
   - ✅ try draw hull doors on canvas
     - ✅ api.assets is deserialized
     - ✅ change hull doors back to original size
+  - show 3d hull walls
   - precompute wallEdges
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
@@ -261,9 +263,17 @@
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
-- try fix HMR full-refresh onchange `src/const`
+- 🚧 try fix HMR full-refresh onchange `src/const`
 
-- recompute layout on `assets.meta[gmKey].lastModified` change
+- 🚧 recompute layout on `assets.meta[gmKey].lastModified` change
+
+- avoid dev-server crash on save symbol to static/assets
+  ```sh
+  [1]   Error: ENOENT: no such file or directory, lstat '/Users/Robert.Myers/coding/np
+  [1]   c-cli/static/assets/symbol/301--hull.svg.crswap'
+  ```
+  - save to media/symbols instead
+  - nodemon copies to static/assets (so can fetch)
 
 - ✅ avoid recomputing unchanged symbols via content hash
 - ❌ try unify parseMaps and parseSymbols
