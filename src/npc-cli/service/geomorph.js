@@ -49,34 +49,27 @@ class GeomorphService {
     "stateroom--014--2x2": true,
   };
 
+  /** @type {Geomorph.SymbolKey[]} */
+  get hullKeys() {
+    return keys(this.fromSymbolKey).filter(this.isHullKey);
+  }
+
   /**
+   * 🚧
    * @param {Geomorph.GeomorphKey} gmKey
    * @param {Geomorph.Assets} assets
    * @returns {Geomorph.Layout}
    */
   computeLayout(gmKey, assets) {
-    // 🚧 wallSegs should be computed inside hull symbol
     const { hullKey } = this.gmKeyToKeys(gmKey);
     const { pngRect, wallSegs, symbols } = assets.symbols[hullKey];
     const { lastModified } = assets.meta[gmKey];
-
-    /** @type {[Geom.Vect, Geom.Vect][]} */
-    const allWallSegs = wallSegs.map(([u, v]) => [Vect.from(u), Vect.from(v)]);
-    symbols.forEach(({ symbolKey, transform }) => {
-      tmpMat1.feedFromArray(transform);
-      assets.symbols[symbolKey].wallSegs.forEach(([u, v]) =>
-        allWallSegs.push([
-          tmpMat1.transformPoint(Vect.from(u)),
-          tmpMat1.transformPoint(Vect.from(v)),
-        ])
-      );
-    });
 
     return {
       key: gmKey,
       pngRect: Rect.fromJson(pngRect),
       lastModified,
-      wallSegs: allWallSegs,
+      wallSegs,
     };
   }
 
@@ -306,6 +299,13 @@ class GeomorphService {
   }
 
   /**
+   * @param {Geomorph.SymbolKey} symbolKey
+   */
+  isHullKey(symbolKey) {
+    return symbolKey.endsWith("--hull");
+  }
+
+  /**
    * @param {string} input
    * @returns {input is Geomorph.SymbolKey}
    */
@@ -383,7 +383,7 @@ class GeomorphService {
    */
   parseSymbol(symbolKey, svgContents) {
     // info("parseStarshipSymbol", symbolKey, "...");
-    const isHull = symbolKey.endsWith("--hull");
+    const isHull = this.isHullKey(symbolKey);
     /** Non-hull symbol are scaled up by 5 inside SVGs */
     const geomScale = isHull ? 1 : 1 / 5;
 
@@ -531,7 +531,7 @@ class GeomorphService {
       width,
       height,
     };
-    const { floor, wallEdges } = this.postParseSymbol(preParse);
+    const { floor, wallSegs } = this.postParseSymbol(preParse);
 
     return {
       ...preParse,
@@ -541,7 +541,7 @@ class GeomorphService {
       doors,
       unsorted,
       floor,
-      wallSegs: wallEdges,
+      wallSegs,
     };
   }
 
@@ -552,19 +552,14 @@ class GeomorphService {
     const floor = this.computeSymbolFloor(partial);
     const walls = partial.hullWalls.concat(partial.walls);
 
-    if (partial.isHull) {
-      console.log(partial.hullWalls.length, partial.walls.length);
-      console.log(partial.hullWalls.flatMap((x) => x.outline));
-    }
-
     /** Those edges contained outside @see {floor} */
-    const wallEdges = walls
+    const wallSegs = walls
       .flatMap((poly) => poly.lineSegs)
       .filter(([u, v]) => !floor.contains(u) && !floor.contains(v));
 
     return {
       floor,
-      wallEdges,
+      wallSegs,
     };
   }
 
