@@ -7,10 +7,7 @@ import useStateRef from "../hooks/use-state-ref";
 
 export function Tab({ def, api, state: tabState }: TabProps) {
   const state = useStateRef(() => ({
-    /** e.g. react-three-fiber Canvas */
     component: null as Awaited<ReturnType<typeof getComponent>> | null,
-    /** e.g. always null, or react-three-fiber Scene*/
-    childComponent: null as Awaited<ReturnType<typeof getComponent>> | null,
   }));
 
   const update = useUpdate();
@@ -23,27 +20,12 @@ export function Tab({ def, api, state: tabState }: TabProps) {
       });
   }, []);
 
-  React.useMemo(() => {
-    if (!("props" in def)) {
-      return;
-    }
-    state.childComponent = null;
-    update();
-    def.props.childComponent &&
-      getComponent(def.props.childComponent, def.filepath).then((childComponent) => {
-        state.childComponent = childComponent;
-        update();
-      });
-  }, ["props" in def && def.props.childComponent]);
-
   if (def.type === "component") {
     return (
       (state.component &&
-        (!def.props.childComponent || state.childComponent) &&
         React.createElement(state.component as React.FunctionComponent<any>, {
           disabled: tabState.disabled,
           ...def.props,
-          childComponent: state.childComponent ?? undefined,
         })) ||
       null
     );

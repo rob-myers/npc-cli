@@ -270,7 +270,7 @@
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
-- 🚧 remove childComponent feature from Tabs
+- ✅ remove childComponent feature from Tabs
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh
@@ -280,6 +280,7 @@
   - save to media/symbols instead
   - nodemon copies to static/assets (so can fetch)
 
+- slow resize on maximize desktop (but not mobile)
 - ✅ avoid recomputing unchanged symbols via content hash
 - ❌ try unify parseMaps and parseSymbols
 - try fix sporadic missing updates

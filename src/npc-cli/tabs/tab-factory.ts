@@ -60,14 +60,6 @@ function getTabIdentifier(meta: TabDef) {
 }
 
 const classToComponent = {
-  TestCanvas: {
-    // supports props.childComponent
-    loadable: loadable(() => import("src/npc-cli/aux/TestCanvas")),
-    get:
-      (module: typeof import("src/npc-cli/aux/TestCanvas")) =>
-      (props: React.ComponentProps<(typeof module)["default"]>) =>
-        React.createElement(module.default, { disabled: true, ...props }),
-  },
   TestCharacter: {
     loadable: loadable(() => import("src/npc-cli/aux/TestCharacter")),
     get:
@@ -116,35 +108,17 @@ export async function getComponent(componentClassKey: ComponentClassKey, errorId
 /** Components we can instantiate inside a tab */
 export type ComponentClassKey = keyof typeof classToComponent;
 
-type TabMetaProps = TabMetaPropsDistributed<ComponentClassKey, ComponentClassKey>;
+type TabMetaProps = TabMetaPropsDistributed<ComponentClassKey>;
 
-type TabMetaPropsDistributed<
-  K extends ComponentClassKey,
-  U extends ComponentClassKey
-> = K extends infer A
+type TabMetaPropsDistributed<K extends ComponentClassKey> = K extends infer A
   ? A extends ComponentClassKey
-    ? ComponentClassKeyToProps[A] extends { childComponent?: React.ComponentType }
-      ? U extends infer B
-        ? B extends ComponentClassKey
-          ? TabMetaPropsGeneric<A, B>
-          : never
-        : never
-      : TabMetaPropsGeneric<A, undefined>
+    ? TabMetaPropsGeneric<A>
     : never
   : never;
 
-type TabMetaPropsGeneric<K extends ComponentClassKey, U extends ComponentClassKey | undefined> = {
+type TabMetaPropsGeneric<K extends ComponentClassKey> = {
   class: K;
-  props: Omit<ComponentClassKeyToProps[K], "childComponent"> &
-    (U extends ComponentClassKey
-      ? {
-          /** This will be resolved as e.g. a functional component. */
-          childComponent: U;
-          childProps?: ComponentClassKeyToProps[U];
-        }
-      : {
-          childComponent?: undefined;
-        });
+  props: ComponentClassKeyToProps[K];
 };
 
 type ComponentClassKeyToProps = {

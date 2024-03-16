@@ -1,5 +1,12 @@
 import React, { forwardRef } from "react";
-import { Actions, Layout as FlexLayout, TabNode, TabSetNode } from "flexlayout-react";
+import {
+  Action,
+  Actions,
+  Layout as FlexLayout,
+  Model,
+  TabNode,
+  TabSetNode,
+} from "flexlayout-react";
 import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
 import { css, cx } from "@emotion/css";
@@ -27,6 +34,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     resetCount: 0,
     rootEl: null as any,
     tabsState: {},
+    model: {} as Model,
 
     focusRoot() {
       state.rootEl.focus();
@@ -35,6 +43,40 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       clearModelFromStorage(props.id);
       state.reset();
     },
+    onAction(act) {
+      if (act.type === Actions.MAXIMIZE_TOGGLE) {
+        if (state.model.getMaximizedTabset()) {
+          // On minimise, enable justCovered tabs
+          Object.values(state.tabsState).forEach((x) => {
+            x.justCovered && (x.disabled = false);
+            x.everUncovered = true;
+            x.justCovered = false;
+          });
+          update();
+        } else {
+          // On maximise, disable hidden non-terminal tabs
+          const maxIds = (state.model.getNodeById(act.data.node) as TabSetNode)
+            .getChildren()
+            .map((x) => x.getId());
+          state.model.visitNodes((node) => {
+            const id = node.getId();
+            const meta = state.tabsState[id];
+            if (node.getType() === "tab" && !maxIds.includes(id) && meta?.type === "component") {
+              !meta.disabled && (meta.justCovered = true);
+              meta.disabled = true;
+            }
+            update();
+          });
+        }
+      }
+      if (act.type === Actions.ADJUST_SPLIT) {
+        state.focusRoot();
+      }
+      return act;
+    },
+    onModelChange: debounce(() => {
+      storeModelAsJson(props.id, state.model);
+    }, 300),
     reset() {
       state.tabsState = {};
       if (!state.enabled) {
@@ -71,11 +113,12 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     },
   }));
 
+  // 🚧 move to state.updateHash
   const hash = JSON.stringify(props.tabs);
   const tabsDefChanged = state.hash !== hash;
   state.hash = hash;
 
-  const model = React.useMemo(() => {
+  state.model = React.useMemo(() => {
     const output = createOrRestoreJsonModel(props);
 
     // Enable and disable tabs relative to visibility
@@ -106,7 +149,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
           }
 
           state.tabsState[key].disabled = false;
-          const maxNode = model.getMaximizedTabset()?.getSelectedNode();
+          const maxNode = state.model.getMaximizedTabset()?.getSelectedNode();
           state.tabsState[key].everUncovered ||= maxNode ? node === maxNode : true;
           setTimeout(update); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
         }
@@ -116,12 +159,11 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
     return output;
   }, [tabsDefChanged, state.resetCount]);
 
-  useBeforeunload(() => storeModelAsJson(props.id, model));
+  useBeforeunload(() => storeModelAsJson(props.id, state.model));
+
+  React.useMemo(() => void (ref as Function)?.(state), [ref]);
 
   const update = useUpdate();
-
-  // we support initial functional ref
-  React.useMemo(() => void (ref as Function)?.(state), []);
 
   return (
     <>
@@ -133,45 +175,11 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
       >
         {state.everEnabled && (
           <FlexLayout
-            model={model}
+            model={state.model}
             factory={(node) => factory(node, state, tabsDefChanged)}
             realtimeResize
-            onModelChange={debounce(() => storeModelAsJson(props.id, model), 300)}
-            onAction={(act) => {
-              if (act.type === Actions.MAXIMIZE_TOGGLE) {
-                if (model.getMaximizedTabset()) {
-                  // On minimise, enable justCovered tabs
-                  Object.values(state.tabsState).forEach((x) => {
-                    x.justCovered && (x.disabled = false);
-                    x.everUncovered = true;
-                    x.justCovered = false;
-                  });
-                  update();
-                } else {
-                  // On maximise, disable hidden non-terminal tabs
-                  const maxIds = (model.getNodeById(act.data.node) as TabSetNode)
-                    .getChildren()
-                    .map((x) => x.getId());
-                  model.visitNodes((node) => {
-                    const id = node.getId();
-                    const meta = state.tabsState[id];
-                    if (
-                      node.getType() === "tab" &&
-                      !maxIds.includes(id) &&
-                      meta?.type === "component"
-                    ) {
-                      !meta.disabled && (meta.justCovered = true);
-                      meta.disabled = true;
-                    }
-                    update();
-                  });
-                }
-              }
-              if (act.type === Actions.ADJUST_SPLIT) {
-                state.focusRoot();
-              }
-              return act;
-            }}
+            onModelChange={state.onModelChange}
+            onAction={state.onAction}
           />
         )}
       </figure>
@@ -211,8 +219,11 @@ export interface State {
   rootEl: HTMLElement;
   /** By tab identifier */
   tabsState: Record<string, TabState>;
+  model: Model;
   focusRoot(): void;
   hardReset(): void;
+  onAction(act: Action): Action | undefined;
+  onModelChange(): void;
   reset(): void;
   toggleEnabled(next?: boolean): void;
 }
