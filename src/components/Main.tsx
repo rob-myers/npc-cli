@@ -50,20 +50,21 @@ const mainCss = css`
 
 const mainTitleCss = css`
   margin: 3rem auto 2rem auto;
-  letter-spacing: 1.5rem;
   color: #444;
 
   @media (min-width: ${afterBreakpoint}) {
     max-width: 1024px;
     font-size: 4rem;
     padding: 0 4rem;
+    letter-spacing: 1.5rem;
     filter: drop-shadow(2px 0px 2px #777);
   }
   @media (max-width: ${breakpoint}) {
     // 🔔 Too wide causes extra body height on mobile
     max-width: 100%;
-    font-size: 3.5rem;
-    filter: drop-shadow(1px 0px 2px #777);
+    font-size: 3rem;
+    letter-spacing: 1.2rem;
+    filter: drop-shadow(1px 0px 1px #777);
   }
 `;
 
