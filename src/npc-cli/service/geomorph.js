@@ -60,6 +60,8 @@ class GeomorphService {
     "302--hull": true,
     "303--hull": true,
     "stateroom--014--2x2": true,
+    "stateroom--036--2x4": true,
+    // 🚧 must extend when adding new symbols
   };
 
   /** @type {Geomorph.SymbolKey[]} */
@@ -487,7 +489,7 @@ class GeomorphService {
             return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: ignored non-rect`);
           }
           if (!geomorphService.isSymbolKey(symbolKey)) {
-            return warn(`parseSymbol: symbols: ${contents}: first tag must be a symbol key`);
+            return warn(`parseSymbol: symbols: ${contents}: must start with a symbol key`);
           }
 
           const rect = geomorphService.extractRect(parent.attributes);

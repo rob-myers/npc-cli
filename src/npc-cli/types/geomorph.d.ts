@@ -184,12 +184,12 @@ declare namespace Geomorph {
     // | "shop--027--1.6x0.4"
     // | "shop--028--1.6x0.8"
     // | "stateroom--012--2x2"
-    | "stateroom--014--2x2";
-  // | "stateroom--018--2x3"
-  // | "stateroom--019--2x3"
-  // | "stateroom--020--2x3"
-  // | "stateroom--035--2x3"
-  // | "stateroom--036--2x4"
+    | "stateroom--014--2x2"
+    // | "stateroom--018--2x3"
+    // | "stateroom--019--2x3"
+    // | "stateroom--020--2x3"
+    // | "stateroom--035--2x3"
+    | "stateroom--036--2x4";
   // | "stateroom--100--3x4"
   // | "table--009--0.8x0.8"
   // | "weaponry--013--1x2"
