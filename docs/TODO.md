@@ -266,11 +266,15 @@
     - path -> edge(s) inside "symbol floor"
   - ✅ show wallEdges
   - ✅ precompute layout wallSegs in hull symbol
-  - instanced two-sided quads
-- show sub-symbol 3d walls
+  - ✅ instanced two-sided quads for one geomorph
+    - need wallSegs local gm -> world coords
+  - ✅ instanced two-sided quads for all geomorphs
+- ✅ show sub-symbol 3d walls
 - show sub-symbol chairs, beds
 
 - ✅ remove childComponent feature from Tabs
+- assume `demo-map-1` always available as fallback
+  - `api.map` should only be null before assets-meta.json loaded
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh

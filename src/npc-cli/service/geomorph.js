@@ -1,4 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
+import * as THREE from "three";
+
+import { worldScale } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   assertDefined,
@@ -31,6 +34,16 @@ class GeomorphService {
     "g-301--bridge": 301,
     "g-302--xboat-repair-bay": 302,
     "g-303--passenger-deck": 303,
+  };
+
+  /** @type {Record<Geomorph.GeomorphKey, Geomorph.SymbolKey>} */
+  toHullKey = {
+    "g-101--multipurpose": "101--hull",
+    "g-102--research-deck": "102--hull",
+    "g-103--cargo-bay": "103--hull",
+    "g-301--bridge": "301--hull",
+    "g-302--xboat-repair-bay": "302--hull",
+    "g-303--passenger-deck": "303--hull",
   };
 
   /** @type {Geomorph.GeomorphKey[]} */
@@ -70,6 +83,21 @@ class GeomorphService {
       pngRect: Rect.fromJson(pngRect),
       lastModified,
       wallSegs,
+    };
+  }
+
+  /**
+   * @param {Geomorph.Layout} layout
+   * @param {number} gmId
+   * @param {Geom.SixTuple} transform
+   * @returns {Geomorph.LayoutInstance}
+   */
+  computeLayoutInstance(layout, gmId, transform) {
+    return {
+      ...layout,
+      gmId,
+      transform,
+      mat4: geomorphService.embedXZMat4(transform),
     };
   }
 
@@ -130,6 +158,21 @@ class GeomorphService {
       floor: Poly.from(json.floor),
       wallSegs: json.wallSegs.map(([u, v]) => [Vect.from(u), Vect.from(v)]),
     };
+  }
+
+  /**
+   * Embed a 2D affine transform into three.js XZ plane.
+   * @param {Geom.SixTuple} transform
+   * @param {THREE.Matrix4} [mat4]
+   */
+  embedXZMat4(transform, mat4 = new THREE.Matrix4()) {
+    // prettier-ignore
+    return mat4.set(
+      transform[0], 0, transform[2], transform[4] * worldScale,
+      0, 1, 0, 0,
+      transform[1], 0, transform[3], transform[5] * worldScale,
+      0, 0, 0, 1
+    );
   }
 
   /**

@@ -20,7 +20,7 @@ export default function TestWorld(props) {
     /** @returns {State} */ () => ({
       events: new Subject(),
       assets: /** @type {*} */ (null),
-      map: null,
+      map: /** @type {*} */ (null),
       gmData: /** @type {*} */ ({}),
       gms: [],
       scene: /** @type {*} */ (null),
@@ -58,25 +58,14 @@ export default function TestWorld(props) {
 
   if (assets) {
     state.assets = assets;
-    state.map = assets.maps[props.mapKey ?? ""] ?? null;
+    state.map = assets.maps[props.mapKey ?? "demo-map-1"];
   }
 
   React.useMemo(() => {
     if (assets && state.map) {
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
         const { layout } = state.ensureGmData(gmKey);
-        return {
-          ...layout,
-          gmId,
-          transform,
-          mat4: // prettier-ignore
-            new THREE.Matrix4(
-              transform[0], 0, transform[2], transform[4] * worldScale,
-              0, 1, 0, 0,
-              transform[1], 0, transform[3], transform[5] * worldScale,
-              0, 0, 0, 1
-            ),
-        };
+        return geomorphService.computeLayoutInstance(layout, gmId, transform);
       });
     }
   }, [assets, state.map]);
@@ -100,7 +89,7 @@ export default function TestWorld(props) {
  * @typedef State
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Assets} assets
- * @property {Geomorph.MapDef | null} map
+ * @property {Geomorph.MapDef} map
  * @property {import('./TestWorldScene').State} scene
  * @property {import('./TestWorldCanvas').State} view
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
