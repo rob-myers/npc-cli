@@ -265,10 +265,12 @@
     - rect -> edge(s) inside "symbol floor"
     - path -> edge(s) inside "symbol floor"
   - ✅ show wallEdges
-  - ✅ precompute layout wallEdges in hull symbol
+  - ✅ precompute layout wallSegs in hull symbol
   - instanced two-sided quads
 - show sub-symbol 3d walls
 - show sub-symbol chairs, beds
+
+- 🚧 remove childComponent feature from Tabs
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh

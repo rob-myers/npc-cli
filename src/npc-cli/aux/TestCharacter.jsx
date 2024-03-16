@@ -11,10 +11,12 @@ import { Physics, RigidBody } from "@react-three/rapier";
 import Ecctrl from "ecctrl";
 import { customQuadGeometry } from "../service/three";
 
+import TestCanvas from "./TestCanvas";
+
 /**
  * @param {Props} props
  */
-export default function TestCharacter(props) {
+export function TestCharacter(props) {
   // console.log("TestCharacter received props", props);
 
   return (
@@ -65,3 +67,17 @@ const keyboardMap = [
   { name: "action3", keys: ["3"] },
   { name: "action4", keys: ["KeyF"] },
 ];
+
+/**
+ * @param {Pick<import('./TestCanvas').Props, 'disabled' | 'stats'>} props
+ */
+export default function WrappedTestCharacter(props) {
+  return (
+    <TestCanvas
+      disabled={props.disabled}
+      stats={props.stats}
+      childComponent={TestCharacter}
+      childProps={{ disabled: props.disabled, testProp: "hello" }}
+    />
+  );
+}

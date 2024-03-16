@@ -18,12 +18,14 @@ import useUpdate from "../hooks/use-update";
 import TestGeomorphs from "./TestGeomorphs";
 import { Origin } from "./MiscThree";
 
+import TestCanvas from "./TestCanvas";
+
 // 🚧 remove geomorphs (now in TestWorldScene)
 
 /**
  * @param {Props} props
  */
-export default function TestScene(props) {
+export function TestScene(props) {
   const state = useStateRef(
     /** @type {() => State} */ () => ({
       controls: /** @type {*} */ (null),
@@ -208,3 +210,17 @@ const gmScale = 1;
 const scale = (1 / gmScale) * (1 / 60) * 1.5;
 
 const textureLoader = new THREE.TextureLoader();
+
+/**
+ * @param {Pick<import('./TestCanvas').Props, 'disabled' | 'stats'>} props
+ */
+export default function WrappedTestScene(props) {
+  return (
+    <TestCanvas
+      disabled={props.disabled}
+      stats={props.stats}
+      childComponent={TestScene}
+      childProps={{ disabled: props.disabled, mapKey: "demo-map-1" }}
+    />
+  );
+}

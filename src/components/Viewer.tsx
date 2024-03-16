@@ -13,7 +13,6 @@ import useUpdate from "../npc-cli/hooks/use-update";
 
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
-import { isSmallView } from "./layout";
 
 export default function Viewer() {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
@@ -50,14 +49,6 @@ export default function Viewer() {
       className={cx(viewerCss, { collapsed: !site.viewOpen })}
       data-testid="viewer"
       ref={(el) => el && (state.rootEl = el)}
-      style={
-        // 🚧 move to CSS
-        site.browserLoaded && !site.viewOpen
-          ? isSmallView()
-            ? { minHeight: "0%" }
-            : { minWidth: "0%" }
-          : undefined
-      }
       tabIndex={0}
       onKeyDown={state.onKeyDown}
     >
@@ -72,13 +63,9 @@ export default function Viewer() {
           [
             {
               type: "component",
-              class: "TestCanvas",
+              class: "TestScene",
               filepath: "r3f-demo",
-              props: {
-                childComponent: "TestScene",
-                childProps: { mapKey: "demo-map-1" },
-                stats: true,
-              },
+              props: { stats: true },
             },
           ],
           [
@@ -89,12 +76,9 @@ export default function Viewer() {
             },
             {
               type: "component",
-              class: "TestCanvas",
+              class: "TestCharacter",
               filepath: "test-character",
-              props: {
-                childComponent: "TestCharacter", // special Tabs prop
-                childProps: { testProp: "hello" },
-              },
+              props: {},
             },
             {
               type: "component",
@@ -156,11 +140,17 @@ const viewerCss = css`
     flex-direction: row;
     transition: min-width 500ms;
     min-width: var(--viewer-min);
+    &.collapsed {
+      min-width: 0%;
+    }
   }
 
   @media (max-width: ${breakpoint}) {
     flex-direction: column;
     transition: min-height 500ms;
     min-height: var(--viewer-min);
+    &.collapsed {
+      min-height: 0%;
+    }
   }
 `;
