@@ -34,7 +34,7 @@ export default function TestWorldScene(props) {
         // draw hull doors
         ctxt.translate(-pngRect.x, -pngRect.y);
         ctxt.lineWidth = 2;
-        ctxt.strokeStyle = "rgba(0, 0, 0, 0)";
+        ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
         ctxt.fillStyle = "rgba(255, 255, 255, 1)";
         drawPolygons(ctxt, hullDoors, "fill-stroke");
 

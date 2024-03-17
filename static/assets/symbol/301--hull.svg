@@ -15,6 +15,7 @@
       <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
       <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
     </pattern>
+    <pattern id="pattern-0-1" patternTransform="matrix(1, 0, 0, 1, -0.000259520311, 600.000183105469)" xlink:href="#pattern-0"/>
     <pattern id="pattern-0-0" patternTransform="matrix(1.000014781952, 0, 0, 1, 0.000234714971, 480.000015258789)" xlink:href="#pattern-0"/>
     <bx:grid x="0" y="0" width="60" height="60"/>
   </defs>
@@ -37,6 +38,9 @@
     </rect>
     <rect width="120.001778" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-0-0'); transform-origin: 60.0011px 600.002px; stroke: rgb(0, 0, 255);" x="0.00016" y="479.999664" transform="matrix(0, -1, 1, 0, 60.001384735108, -60.00093460083)">
       <title>stateroom--036--2x4</title>
+    </rect>
+    <rect y="120" width="120" height="119.999992" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0-1'); stroke: rgb(0, 0, 255); transform-origin: 180px 180px; pointer-events: auto;" x="119.999908">
+      <title>office--001--2x2 doors=['s']</title>
     </rect>
   </g>
   <path d="M 424.654 118.297 L 437.817 106.761 L 455.502 93.227 L 474.309 81.559 L 493.501 71.36 L 513.75 62.68 L 534.512 56.544 L 556.935 51.623 L 578.318 49.318 L 600 47.792 L 621.663 48.831 L 643.493 51.496 L 664.725 56.77 L 686.007 63.076 L 705.997 70.934 L 726.186 81.594 L 744.291 93.328 L 761.565 106.644 L 774.546 118.304 L 777.819 122.371 L 769.343 130.446 L 766.5 127.449 L 754.325 115.944 L 737.618 103.329 L 720 92.138 L 701.217 82.48 L 681.811 74.219 L 661.384 68.065 L 641.622 63.696 L 621 61 L 600 60 L 579.133 61.085 L 557.974 63.7 L 537.834 68.462 L 518.03 74.494 L 498.515 82.532 L 480 92.259 L 462.375 103.775 L 445.383 116.172 L 429.21 132.33 L 420 123.43 L 424.654 118.297 Z" style="stroke: rgb(0, 0, 0); fill-opacity: 0.31; fill: rgb(255, 0, 0);" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">

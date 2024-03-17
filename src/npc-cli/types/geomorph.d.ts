@@ -59,13 +59,18 @@ declare namespace Geomorph {
   >;
 
   type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
-    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "hullWalls" | "walls" | "wallSegs">
+    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "origWalls" | "hullWalls" | "walls" | "wallSegs">
   >;
 
   interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {
-    obstacles: WithMeta<T>[];
-    walls: T[];
     doors: WithMeta<T>[];
+    obstacles: WithMeta<T>[];
+    /**
+     * Walls before doors are cut from them.
+     * This permits restricting the doors later in hull symbol "symbols" folder.
+     */
+    origWalls: T[];
+    walls: T[];
     /** 🚧 split further? */
     unsorted: WithMeta<T>[];
   }
@@ -173,7 +178,7 @@ declare namespace Geomorph {
     // | "medical-bed--006--1.6x3.6"
     // | "misc-stellar-cartography--020--10x10"
     // | "misc-stellar-cartography--023--4x4"
-    // | "office--001--2x2"
+    | "office--001--2x2"
     // | "office--004--2x2"
     // | "office--006--2x2"
     // | "office--020--2x3"

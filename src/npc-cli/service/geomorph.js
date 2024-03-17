@@ -61,6 +61,7 @@ class GeomorphService {
     "303--hull": true,
     "stateroom--014--2x2": true,
     "stateroom--036--2x4": true,
+    "office--001--2x2": true,
     // 🚧 must extend when adding new symbols
   };
 
@@ -149,6 +150,7 @@ class GeomorphService {
       hullWalls: json.hullWalls.map(Poly.from),
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map(Poly.from),
+      origWalls: json.origWalls.map(Poly.from),
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
@@ -486,12 +488,12 @@ class GeomorphService {
             return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: ignored non-rect`);
           }
           if (!geomorphService.isSymbolKey(symbolKey)) {
-            return warn(`parseSymbol: symbols: ${contents}: must start with a symbol key`);
+            throw Error(`parseSymbol: symbols: ${contents}: must start with a symbol key`);
           }
 
+          // 🚧 can we ignore transformBox?
           const rect = geomorphService.extractRect(parent.attributes);
           const transform = geomorphService.extractSixTuple(parent.attributes.transform);
-          // 🚧 can we ignore transformBox?
           const { transformOrigin, transformBox } = geomorphService.extractTransformData({
             ...parent,
             title: contents,
@@ -596,10 +598,27 @@ class GeomorphService {
    */
   postParseSymbol(partial) {
     const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls));
-    const walls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls.concat(partial.walls)));
+    const origWalls = Poly.union(partial.hullWalls.concat(partial.walls));
+    const walls = Poly.cutOut(partial.doors, origWalls);
 
     return {
       hullWalls,
+      origWalls,
+      walls,
+      wallSegs: walls.flatMap((poly) => poly.lineSegs),
+    };
+  }
+
+  /**
+   * When hull symbols reference non-hull symbols, they may restricted the doors.
+   * @param {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon, Geom.VectJson>} symbol
+   * @param {string[]} doorTags
+   */
+  restrictSymbolDoors(symbol, doorTags) {
+    const doors = symbol.doors.filter(({ meta }) => doorTags.some((tag) => meta[tag] === true));
+    const walls = Poly.cutOut(doors.map(Poly.from), symbol.origWalls.map(Poly.from));
+    return {
+      doors,
       walls,
       wallSegs: walls.flatMap((poly) => poly.lineSegs),
     };
@@ -618,6 +637,7 @@ class GeomorphService {
       hullWalls: parsed.hullWalls.map((x) => x.geoJson),
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => x.geoJson),
+      origWalls: parsed.origWalls.map((x) => x.geoJson),
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,

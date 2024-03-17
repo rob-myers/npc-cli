@@ -270,7 +270,7 @@
     - need wallSegs local gm -> world coords
   - ✅ instanced two-sided quads for all geomorphs
 - ✅ show sub-symbol 3d walls
-- 🚧 wall segs change on edit map
+- ✅ wall segs change on edit map
 - show sub-symbol chairs, beds
 - clean
 
@@ -278,7 +278,8 @@
 
 - ✅ remove childComponent feature from Tabs
 - assume `demo-map-1` always available as fallback
-  - `api.map` should only be null before assets-meta.json loaded
+  - ✅ `api.map` should only be null before assets-meta.json loaded
+  - document it somewhere
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh

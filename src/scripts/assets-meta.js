@@ -37,7 +37,7 @@ const tmpMat1 = new Mat();
   const { maps, meta: mapsMeta } = parseMaps(prev, lastModified);
   
   const changedMaps = Object.keys(mapsMeta).filter(key => mapsMeta[key].contentHash !== prev?.meta[key].contentHash);
-  const changedSymbols = Object.keys(symbolsMeta).filter(key => symbolsMeta[key].outputHash !== prev?.meta[key].outputHash);
+  const changedSymbols = Object.keys(symbolsMeta).filter(key => symbolsMeta[key].outputHash !== prev?.meta[key]?.outputHash);
   info({ changedSymbols, changedMaps });
   
   const meta = { ...symbolsMeta, ...mapsMeta };
@@ -123,14 +123,26 @@ function parseSymbols(prev, nextModified) {
     };
   }
 
+  // 🚧 WIP
   // extend hull symbols via inner symbols
   const hullKeys = geomorphService.hullKeys.filter(x => symbols[x]);
   for (const hullKey of hullKeys) {
     const { wallSegs, symbols: innerSymbols } = symbols[hullKey];
-    innerSymbols.forEach(({ symbolKey, transform }) => {
+    innerSymbols.forEach(({ symbolKey, transform, meta }) => {
       tmpMat1.feedFromArray(transform);
-      symbols[symbolKey].wallSegs.forEach(([u, v]) =>
-      wallSegs.push([tmpMat1.transformPoint({...u}), tmpMat1.transformPoint({...v})]));
+
+      if (Array.isArray(meta.doors)) {
+        // restrict symbol instance e.g. `doors=['s']`
+        info(`${hullKey}: restricting ${symbolKey} by`, meta);
+        const restricted = geomorphService.restrictSymbolDoors(symbols[symbolKey], meta.doors)
+        restricted.wallSegs.forEach(([u, v]) =>
+          wallSegs.push([tmpMat1.transformPoint({...u}), tmpMat1.transformPoint({...v})])
+        );
+      } else {
+        symbols[symbolKey].wallSegs.forEach(([u, v]) =>
+          wallSegs.push([tmpMat1.transformPoint({...u}), tmpMat1.transformPoint({...v})])
+        );
+      }
     });
   }
 
