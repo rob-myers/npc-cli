@@ -116,19 +116,13 @@ declare namespace Geomorph {
   type GeomorphNumber = 101 | 102 | 103 | 301 | 302 | 303;
 
   type SymbolKey =
-    // | "extra--locker--001--1x0.33"
-    // | "extra--table--001--1x0.2"
-    // | "extra--table--002--0.4x0.4"
-    // | "extra--table--003--0.2x0.2"
-    // | "extra--table--004--0.4x0.2"
-    //
     | "101--hull"
     | "102--hull"
     | "103--hull"
     | "301--hull"
     | "302--hull"
     | "303--hull"
-    // | "bridge--042--8x9"
+    | "bridge--042--8x9"
     // | "cargo--002--2x2"
     // | "cargo--003--2x4"
     // | "cargo--010--2x4"
@@ -177,7 +171,7 @@ declare namespace Geomorph {
     // | "medical--008--3x2"
     // | "medical-bed--006--1.6x3.6"
     // | "misc-stellar-cartography--020--10x10"
-    // | "misc-stellar-cartography--023--4x4"
+    | "misc-stellar-cartography--023--4x4"
     | "office--001--2x2"
     // | "office--004--2x2"
     // | "office--006--2x2"

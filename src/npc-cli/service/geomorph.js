@@ -62,6 +62,8 @@ class GeomorphService {
     "stateroom--014--2x2": true,
     "stateroom--036--2x4": true,
     "office--001--2x2": true,
+    "misc-stellar-cartography--023--4x4": true,
+    "bridge--042--8x9": true,
     // 🚧 must extend when adding new symbols
   };
 
