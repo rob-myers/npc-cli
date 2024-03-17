@@ -53,9 +53,15 @@ const tmpMat1 = new Mat();
   // detect geomorph layout update
   geomorphService.gmKeys.forEach(gmKey => {
     const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
+    const subKeys = symbols[hullKey].symbols.map(x => x.symbolKey);
     if (!meta[hullKey]) {
-      return; // geomorph key exists but file does not
-    } else if ([meta[hullKey].lastModified, ...symbols[hullKey].symbols.map(({ symbolKey }) => meta[symbolKey]?.lastModified)].some(x => x === lastModified)) {
+      return warn(`${hullKey}: hull symbol not found`);
+    } else if (
+      [hullKey, ...subKeys].some(key =>
+        prev?.meta[key].contentHash !== meta[key].contentHash // SVG content changed
+        || meta[key].lastModified === lastModified // Schema changed and we force updated
+      )
+    ) {
       meta[gmKey] = { lastModified, contentHash: -1 }; // updated
     } else { // not-updated or first-time-added
       meta[gmKey] = { lastModified: prev?.meta[gmKey]?.lastModified ?? lastModified, contentHash: -1 };
