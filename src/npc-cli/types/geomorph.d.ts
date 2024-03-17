@@ -7,7 +7,10 @@ declare namespace Geomorph {
     maps: Record<string, Geomorph.MapDef>;
     meta: {
       [symbolOrMapKey: string]: {
-        contentHash: number;
+        /** Defined for mapKeys and symbolKeys */
+        contentHash?: number;
+        /** Defined for symbolKeys */
+        outputHash?: number;
         /** Epoch ms */
         lastModified: number;
       };
