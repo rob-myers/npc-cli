@@ -49,9 +49,15 @@ declare namespace Geomorph {
     wallSegs: [P, P][];
   }
 
-  type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pick<
-    Geomorph.ParsedSymbol<T>,
-    "key" | "isHull" | "walls" | "hullWalls" | "width" | "height"
+  type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
+    Pick<
+      Geomorph.ParsedSymbol<T, Geom.Vect>,
+      "key" | "doors" | "isHull" | "walls" | "hullWalls" | "width" | "height"
+    >
+  >;
+
+  type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
+    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "floor" | "hullWalls" | "walls" | "wallSegs">
   >;
 
   interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {

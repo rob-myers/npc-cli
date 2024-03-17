@@ -117,7 +117,7 @@ class GeomorphService {
       warn(`${partial.key}: ${wallsKey} are not connected`);
     }
     if (union.length > 0) {
-      // 🚧 hard-coded
+      // 🚧 clarify inset constants
       const [insetted] = geom.createInset(union[0], wallsKey === "walls" ? 1 : 2);
       floor = insetted?.outline.length ? insetted : null;
     }
@@ -567,35 +567,40 @@ class GeomorphService {
 
     const key = symbolKey;
     const { width, height } = viewBoxRect;
+
     /** @type {Geomorph.PreParsedSymbol<Geom.Poly>} */
     const preParse = {
       key,
+      doors,
       hullWalls,
       isHull,
       walls,
       width,
       height,
     };
-    const { floor, wallSegs } = this.postParseSymbol(preParse);
+
+    const postParse = this.postParseSymbol(preParse);
 
     return {
       ...preParse,
+
       obstacles,
       pngRect: pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect),
       symbols,
-      doors,
       unsorted,
-      floor,
-      wallSegs,
+
+      ...postParse,
     };
   }
 
   /**
    * @param {Geomorph.PreParsedSymbol<Geom.Poly>} partial
+   * @returns {Geomorph.PostParsedSymbol<Geom.Poly>}
    */
   postParseSymbol(partial) {
     const floor = this.computeSymbolFloor(partial);
-    const walls = partial.hullWalls.concat(partial.walls);
+    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls));
+    const walls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls.concat(partial.walls)));
 
     /** Those edges contained outside @see {floor} */
     const wallSegs = walls
@@ -604,6 +609,8 @@ class GeomorphService {
 
     return {
       floor,
+      hullWalls,
+      walls,
       wallSegs,
     };
   }
