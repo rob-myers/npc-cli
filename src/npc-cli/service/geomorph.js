@@ -155,7 +155,6 @@ class GeomorphService {
       height: json.height,
       pngRect: json.pngRect,
       symbols: json.symbols,
-      floor: Poly.from(json.floor),
       wallSegs: json.wallSegs.map(([u, v]) => [Vect.from(u), Vect.from(v)]),
     };
   }
@@ -596,20 +595,13 @@ class GeomorphService {
    * @returns {Geomorph.PostParsedSymbol<Geom.Poly>}
    */
   postParseSymbol(partial) {
-    const floor = this.computeSymbolFloor(partial);
     const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls));
     const walls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls.concat(partial.walls)));
 
-    /** Those edges contained outside @see {floor} */
-    const wallSegs = walls
-      .flatMap((poly) => poly.lineSegs)
-      .filter(([u, v]) => !floor.contains(u) && !floor.contains(v));
-
     return {
-      floor,
       hullWalls,
       walls,
-      wallSegs,
+      wallSegs: walls.flatMap((poly) => poly.lineSegs),
     };
   }
 
@@ -632,7 +624,6 @@ class GeomorphService {
       height: parsed.height,
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
-      floor: parsed.floor.geoJson,
       wallSegs: parsed.wallSegs.map(([u, v]) => [u.json, v.json]),
     };
   }

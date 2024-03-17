@@ -3,11 +3,9 @@
 /**
  * Usage:
  * ```sh
- * npm run assets-meta [-- --force]
- * yarn assets-meta [--force]
+ * npm run assets-meta
+ * yarn assets-meta
  * ```
- *
- * We need to --force update on schema change.
  */
 
 import fs from "fs";

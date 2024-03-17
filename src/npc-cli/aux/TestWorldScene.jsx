@@ -24,36 +24,25 @@ export default function TestWorldScene(props) {
       wallInstances: /** @type {*} */ (null),
       drawGeomorph(gmKey, img) {
         const { ctxt, layout } = api.gmData[gmKey];
-        const { pngRect, wallSegs } = layout;
+        const { pngRect } = layout;
         const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
-        const { doors: hullDoors, floor, symbols: subSymbols } = api.assets.symbols[hullKey];
-        const floors = subSymbols.map(({ symbolKey, transform }) =>
-          api.assets.symbols[symbolKey].floor.clone().applyMatrix(tmpMat1.feedFromArray(transform))
-        );
+        const { doors: hullDoors, symbols: subSymbols } = api.assets.symbols[hullKey];
 
         ctxt.clearRect(0, 0, pngRect.width, pngRect.width);
         ctxt.drawImage(img, 0, 0);
 
-        // 🚧
-        ctxt.lineWidth = 2;
+        // draw hull doors
         ctxt.translate(-pngRect.x, -pngRect.y);
+        ctxt.lineWidth = 2;
         ctxt.strokeStyle = "rgba(0, 0, 0, 0)";
-        // ctxt.fillStyle = "rgba(0, 255, 0, 0.2)";
-        // drawPolygons(ctxt, floor, "fill-stroke");
-        // ctxt.fillStyle = "rgba(0, 0, 255, 0.2)";
-        // drawPolygons(ctxt, floors, "fill-stroke");
-        ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
         ctxt.fillStyle = "rgba(255, 255, 255, 1)";
         drawPolygons(ctxt, hullDoors, "fill-stroke");
 
-        ctxt.lineWidth = 4;
-        ctxt.strokeStyle = "rgba(255, 0, 0, 1)";
-        // wallSegs.map(([u, v]) => strokeLine(ctxt, u, v));
         ctxt.resetTransform();
       },
       positionWalls() {
         const instances = state.wallInstances;
-        const height = 4;
+        const height = 2;
         const [src, dst] = [new Vect(), new Vect()];
         let offset = 0;
         api.gms.forEach(({ key: gmKey, wallSegs, transform }, gmId) => {
@@ -96,7 +85,7 @@ export default function TestWorldScene(props) {
 
   const update = useUpdate();
 
-  const testUvTex = useLoader(THREE.TextureLoader, "/assets/debug/test-uv-texture.png");
+  // const testUvTex = useLoader(THREE.TextureLoader, "/assets/debug/test-uv-texture.png");
 
   return (
     <>
@@ -126,10 +115,10 @@ export default function TestWorldScene(props) {
         args={[quadGeometryXY, undefined, state.numWalls]}
       >
         <meshBasicMaterial
-          // side={THREE.DoubleSide}
+          side={THREE.DoubleSide}
           // side={THREE.BackSide}
-          map={testUvTex}
-          // color="black"
+          // map={testUvTex}
+          color="black"
         />
       </instancedMesh>
     </>

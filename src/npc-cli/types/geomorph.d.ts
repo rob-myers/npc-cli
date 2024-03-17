@@ -48,7 +48,6 @@ declare namespace Geomorph {
       transform: Geom.SixTuple;
     }>[];
 
-    floor: T;
     wallSegs: [P, P][];
   }
 
@@ -60,7 +59,7 @@ declare namespace Geomorph {
   >;
 
   type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
-    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "floor" | "hullWalls" | "walls" | "wallSegs">
+    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "hullWalls" | "walls" | "wallSegs">
   >;
 
   interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {
