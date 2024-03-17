@@ -602,10 +602,10 @@ class GeomorphService {
     const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls));
     const walls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls.concat(partial.walls)));
 
-    /** Those edges contained outside @see {floor} */
+    /** Those edges contained inside @see {floor} */
     const wallSegs = walls
       .flatMap((poly) => poly.lineSegs)
-      .filter(([u, v]) => !floor.contains(u) && !floor.contains(v));
+      .filter(([u, v]) => floor.contains(u) && floor.contains(v));
 
     return {
       floor,
