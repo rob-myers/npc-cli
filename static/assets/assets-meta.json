@@ -16,8 +16,8 @@
       "outputHash": -672432033
     },
     "301--hull": {
-      "lastModified": 1710673242336,
-      "contentHash": 1328548134,
+      "lastModified": 1710677218397,
+      "contentHash": 987393382,
       "outputHash": 948865064
     },
     "302--hull": {
@@ -40,11 +40,11 @@
       "contentHash": -643644447,
       "outputHash": -1031271894
     },
-    "demo-map-1": {"lastModified": 1710512608242, "contentHash": -380436121},
+    "demo-map-1": {"lastModified": 1710678677190, "contentHash": -380436121},
     "g-101--multipurpose": {"lastModified": 1710673103817},
     "g-102--research-deck": {"lastModified": 1710673103817},
     "g-103--cargo-bay": {"lastModified": 1710673103817},
-    "g-301--bridge": {"lastModified": 1710673242336},
+    "g-301--bridge": {"lastModified": 1710677218397},
     "g-302--xboat-repair-bay": {"lastModified": 1710673103817},
     "g-303--passenger-deck": {"lastModified": 1710673103817}
   },

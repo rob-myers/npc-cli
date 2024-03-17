@@ -23,19 +23,19 @@
   </image>
   <g style="pointer-events: none;">
     <title>symbols</title>
-    <rect y="-480" width="120" height="120" style="opacity: 1; filter: none; fill: url('#pattern-0'); fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; stroke: rgb(255, 0, 0); transform-origin: 60px -420px;" transform="matrix(1, 0, 0, -1, 0, 839.999634)">
+    <rect y="-480" width="120" height="120" style="opacity: 1; filter: none; fill: url('#pattern-0'); fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; transform-origin: 60px -420px; stroke: rgb(0, 0, 255);" transform="matrix(1, 0, 0, -1, 0, 839.999634)">
       <title>stateroom--014--2x2</title>
     </rect>
-    <rect y="-480.000183" width="120" height="119.999992" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-0'); stroke: rgb(255, 0, 0); transform-origin: 180px -420px;" x="120.000168" transform="matrix(1, 0, 0, -1, 0, 840.000000000001)">
+    <rect y="-480.000183" width="120" height="119.999992" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 180px -420px; stroke: rgb(0, 0, 255);" x="120.000168" transform="matrix(1, 0, 0, -1, 0, 840.000000000001)">
       <title>stateroom--014--2x2</title>
     </rect>
-    <rect width="120.000008" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; stroke: rgb(255, 0, 0); fill: url('#pattern-0'); transform-origin: 60px 120.002px;" x="0.00016">
+    <rect width="120.000008" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 60px 120.002px; stroke: rgb(0, 0, 255);" x="0.00016">
       <title>stateroom--036--2x4</title>
     </rect>
-    <rect width="120.000008" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; stroke: rgb(255, 0, 0); fill: url('#pattern-0'); transform-origin: -1140px 120.002px;" x="-1200" transform="matrix(-1, 0, 0, 1, 2279.998535156253, 0)">
+    <rect width="120.000008" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-0'); transform-origin: -1140px 120.002px; stroke: rgb(0, 0, 255);" x="-1200" transform="matrix(-1, 0, 0, 1, 2279.998535156253, 0)">
       <title>stateroom--036--2x4</title>
     </rect>
-    <rect width="120.001778" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; stroke: rgb(255, 0, 0); fill: url('#pattern-0-0'); transform-origin: 60.0011px 600.002px;" x="0.00016" y="479.999664" transform="matrix(0, -1, 1, 0, 60.001384735108, -60.00093460083)">
+    <rect width="120.001778" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; pointer-events: auto; stroke-width: 4px; fill: url('#pattern-0-0'); transform-origin: 60.0011px 600.002px; stroke: rgb(0, 0, 255);" x="0.00016" y="479.999664" transform="matrix(0, -1, 1, 0, 60.001384735108, -60.00093460083)">
       <title>stateroom--036--2x4</title>
     </rect>
   </g>
