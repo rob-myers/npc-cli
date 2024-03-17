@@ -40,24 +40,7 @@ const useStore = create<State>()(
         const cleanUps = [] as (() => void)[];
 
         if (isDevelopment()) {
-          /**
-           * Dev-only event handling:
-           * - trigger component refresh on file change
-           */
-          const wsClient = new WebSocket(`ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`);
-          wsClient.onmessage = (e) => {
-            info("/dev-events message:", e);
-            setTimeout(() => {
-              // timeout seems necessary, despite file being
-              // written before message in assets-meta.js
-              queryClient.refetchQueries({
-                predicate({ queryKey: [queryKey] }) {
-                  return queryKey === ASSETS_META_JSON_FILENAME;
-                },
-              });
-            }, 300);
-          };
-          cleanUps.push(() => wsClient.close());
+          get().api.connectDevEventsWebsocket();
 
           /**
            * In development refetch on refocus can automate changes.
@@ -68,7 +51,6 @@ const useStore = create<State>()(
               window.addEventListener("focus", handleFocus as (e?: FocusEvent) => void, false);
               return () => {
                 window.removeEventListener("focus", handleFocus as (e?: FocusEvent) => void);
-                wsClient.close();
               };
             }
           });
@@ -107,6 +89,34 @@ const useStore = create<State>()(
         }
 
         return () => cleanUps.forEach((cleanup) => cleanup());
+      },
+
+      connectDevEventsWebsocket() {
+        /**
+         * Dev-only event handling:
+         * - trigger component refresh on file change
+         */
+        const url = `ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`;
+        const wsClient = new WebSocket(url);
+        wsClient.onmessage = (e) => {
+          info(`${url} message:`, e.data);
+          setTimeout(() => {
+            // timeout seems necessary, probably due to gatsby handling of static/assets
+            queryClient.refetchQueries({
+              predicate({ queryKey: [queryKey] }) {
+                return queryKey === ASSETS_META_JSON_FILENAME;
+              },
+            });
+          }, 300);
+        };
+
+        wsClient.onopen = (e) => {
+          info(`${url} connected`);
+        };
+        wsClient.onclose = (e) => {
+          info(`${url} closed: reconnecting...`);
+          setTimeout(() => get().api.connectDevEventsWebsocket(), 300);
+        };
       },
 
       isViewClosed() {
@@ -161,6 +171,7 @@ export type State = {
     initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): () => void;
     isViewClosed(): boolean;
+    connectDevEventsWebsocket(): void;
     onTerminate(): void;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;

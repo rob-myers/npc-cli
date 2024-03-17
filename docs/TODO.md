@@ -270,7 +270,11 @@
     - need wallSegs local gm -> world coords
   - ✅ instanced two-sided quads for all geomorphs
 - ✅ show sub-symbol 3d walls
+- 🚧 wall segs change on edit map
 - show sub-symbol chairs, beds
+- clean
+
+- ✅ websocket connection reconnects on close/open laptop
 
 - ✅ remove childComponent feature from Tabs
 - assume `demo-map-1` always available as fallback
@@ -307,13 +311,15 @@
   - two fingers upwards to set polar
 - Terminal crashing during HMR
   - possibly fixed via `xterm-addon-webgl@beta`
-- (hull) walls -> quads
-  - 🚧 trying alternative i.e. "edges outside floor"
+- ❌ (hull) walls -> quads
+  - ℹ️ trying alternative i.e. "edges outside floor"
 - need to remove labels from hull symbol image?
 - ❌ try avoid alphaBlend geomorphs via alphaMap
   - we only need depthWrite false
 - Firefox android allows unbounded scrolling on "interact"
   - debug locally using about:debugging#/runtime/this-firefox
+- 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
+  - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
 
 - if Viewer maximised and choose menu item, halve size of the Viewer
 
