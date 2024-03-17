@@ -1,12 +1,13 @@
 import React from "react";
 import * as THREE from "three";
+import { useLoader } from "@react-three/fiber";
 
 import { assertDefined, keys, warn } from "../service/generic";
 import { worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { customQuadGeometry } from "../service/three";
+import { quadGeometryXY, quadGeometryXZ } from "../service/three";
 import { Mat, Vect } from "../geom";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
@@ -65,16 +66,12 @@ export default function TestWorldScene(props) {
             tmpMat1.transformPoint(src.copy(u));
             tmpMat1.transformPoint(dst.copy(v));
             const radians = Math.atan2(dst.y - src.y, dst.x - src.x);
-
             // prettier-ignore
-            geomorphService.embedXZMat4(
+            instances.setMatrixAt(offset, geomorphService.embedXZMat4(
               [segLength * Math.cos(radians), segLength * Math.sin(radians), -Math.sin(radians), Math.cos(radians), src.x, src.y],
-              tmpMatFour1
-            );
-            tmpMatFour1
-              .multiply(tmpMatFour2.makeRotationX(-Math.PI / 2))
-              .multiply(tmpMatFour2.makeScale(1, 1, height));
-            instances.setMatrixAt(offset, tmpMatFour1);
+              height,
+              tmpMatFour1,
+            ));
             offset++;
           });
         });
@@ -99,13 +96,15 @@ export default function TestWorldScene(props) {
 
   const update = useUpdate();
 
+  const testUvTex = useLoader(THREE.TextureLoader, "/assets/debug/test-uv-texture.png");
+
   return (
     <>
       {api.gms.map((gm, gmId) => (
         <group key={gm.transform.toString()} onUpdate={(self) => self.applyMatrix4(gm.mat4)}>
           <mesh
             scale={[gm.pngRect.width * worldScale, 1, gm.pngRect.height * worldScale]}
-            geometry={customQuadGeometry}
+            geometry={quadGeometryXZ}
             position={[gm.pngRect.x * worldScale, 0, gm.pngRect.y * worldScale]}
           >
             <meshBasicMaterial
@@ -124,9 +123,14 @@ export default function TestWorldScene(props) {
           state.wallInstances = instances;
           state.positionWalls();
         }}
-        args={[customQuadGeometry, undefined, state.numWalls]}
+        args={[quadGeometryXY, undefined, state.numWalls]}
       >
-        <meshBasicMaterial side={THREE.DoubleSide} color="black" />
+        <meshBasicMaterial
+          // side={THREE.DoubleSide}
+          // side={THREE.BackSide}
+          map={testUvTex}
+          // color="black"
+        />
       </instancedMesh>
     </>
   );

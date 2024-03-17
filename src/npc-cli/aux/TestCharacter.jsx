@@ -9,7 +9,7 @@ import {
 } from "@react-three/drei";
 import { Physics, RigidBody } from "@react-three/rapier";
 import Ecctrl from "ecctrl";
-import { customQuadGeometry } from "../service/three";
+import { quadGeometryXZ } from "../service/three";
 
 import TestCanvas from "./TestCanvas";
 
@@ -36,7 +36,7 @@ export function TestCharacter(props) {
           <mesh // ground
             scale={[scale, scale, scale]}
             position={[-scale / 2, -scale / 2, -scale / 2]}
-            geometry={customQuadGeometry}
+            geometry={quadGeometryXZ}
           >
             <meshBasicMaterial side={THREE.DoubleSide} transparent color="blue" opacity={0.2} />
           </mesh>

@@ -111,17 +111,15 @@ class GeomorphService {
     let floor = /** @type {null | Geom.Poly} */ (null);
 
     const wallsKey = partial.isHull ? "hullWalls" : "walls";
-    const union = Poly.union(partial[wallsKey]).map((poly) => poly.removeHoles());
+    const union = Poly.union(partial[wallsKey]);
 
     if (union.length > 1) {
       warn(`${partial.key}: ${wallsKey} are not connected`);
     }
-    if (union.length > 0) {
-      // 🚧 clarify inset constants
-      const [insetted] = geom.createInset(union[0], wallsKey === "walls" ? 1 : 2);
-      floor = insetted?.outline.length ? insetted : null;
+    if (union.length > 0 && union[0].holes[0]) {
+      [floor] = geom.createOutset(new Poly(union[0].holes[0]).fixOrientation(), 0.5);
     }
-    if (floor === null) {
+    if (floor === null || floor.outline.length === 0) {
       warn(`${partial.key}: ${wallsKey} empty: using rectangular floor`);
       floor = Poly.fromRect({ x: 0, y: 0, ...partial });
     }
@@ -167,13 +165,13 @@ class GeomorphService {
    * @param {Geom.SixTuple} transform
    * @param {THREE.Matrix4} [mat4]
    */
-  embedXZMat4(transform, mat4 = new THREE.Matrix4()) {
+  embedXZMat4(transform, yScale = 1, mat4 = new THREE.Matrix4()) {
     // prettier-ignore
     return mat4.set(
-      transform[0], 0, transform[2], transform[4] * worldScale,
-      0, 1, 0, 0,
-      transform[1], 0, transform[3], transform[5] * worldScale,
-      0, 0, 0, 1
+      transform[0], 0,      transform[2], transform[4] * worldScale,
+      0,            yScale, 0,            0,
+      transform[1], 0,      transform[3], transform[5] * worldScale,
+      0,            0,      0,             1
     );
   }
 
@@ -602,10 +600,10 @@ class GeomorphService {
     const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls));
     const walls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls.concat(partial.walls)));
 
-    /** Those edges contained inside @see {floor} */
+    /** Those edges contained outside @see {floor} */
     const wallSegs = walls
       .flatMap((poly) => poly.lineSegs)
-      .filter(([u, v]) => floor.contains(u) && floor.contains(v));
+      .filter(([u, v]) => !floor.contains(u) && !floor.contains(v));
 
     return {
       floor,

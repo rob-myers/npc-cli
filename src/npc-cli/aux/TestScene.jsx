@@ -7,7 +7,7 @@ import { MapControls, PerspectiveCamera, Edges } from "@react-three/drei";
 import { ASSETS_META_JSON_FILENAME } from "src/scripts/const";
 import { Poly, Rect } from "../geom";
 import { geomorphService } from "../service/geomorph";
-import { customQuadGeometry } from "../service/three";
+import { quadGeometryXZ } from "../service/three";
 import { assertDefined, assertNonNull, isDevelopment } from "../service/generic";
 import { drawPolygons } from "../service/dom";
 
@@ -136,7 +136,7 @@ export function TestScene(props) {
         <group key={gm.transform.toString()} onUpdate={(self) => self.applyMatrix4(gm.mat4)}>
           <mesh
             scale={[gm.pngRect.width * scale, 1, gm.pngRect.height * scale]}
-            geometry={customQuadGeometry}
+            geometry={quadGeometryXZ}
             position={[gm.pngRect.x * scale, 0, gm.pngRect.y * scale]}
           >
             <meshBasicMaterial
