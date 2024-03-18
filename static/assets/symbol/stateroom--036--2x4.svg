@@ -60,10 +60,10 @@
   <rect x="58.999973" y="1261.999425" width="150.999931" height="153.99993" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" transform="matrix(0.865996397928, -0.500050236252, 0.500050236252, 0.865996397928, -658.163940429687, 6.550229072571)">
     <title>obstacle</title>
   </rect>
-  <rect y="290" width="600" height="20" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
+  <rect y="290" width="600" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
     <title>wall</title>
   </rect>
-  <rect y="1190" width="600" height="20" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
+  <rect y="1190" width="609.99999" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
     <title>wall</title>
   </rect>
   <rect x="-10" y="-10" width="20" height="1220" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;">
