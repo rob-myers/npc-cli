@@ -21,7 +21,8 @@ export default function Nav() {
       }
       const anchorEl = el.querySelectorAll("a");
       if (anchorEl.length === 1) {
-        navigate(anchorEl[0].href);
+        const { pathname, search, hash } = new URL(anchorEl[0].href, location.href);
+        navigate(`${pathname}${search}${hash}`);
       }
     },
     toggleCollapsed() {
