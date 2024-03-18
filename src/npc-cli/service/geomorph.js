@@ -603,9 +603,11 @@ class GeomorphService {
    * @returns {Geomorph.PostParsedSymbol<Geom.Poly>}
    */
   postParseSymbol(partial) {
-    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls));
+    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls)).map((x) =>
+      x.cleanFinalReps()
+    );
     const origWalls = Poly.union(partial.hullWalls.concat(partial.walls));
-    const walls = Poly.cutOut(partial.doors, origWalls);
+    const walls = Poly.cutOut(partial.doors, origWalls).map((x) => x.cleanFinalReps());
 
     const restricts = partial.doors.flatMap((door, doorId) =>
       door.meta.optional ? { doorId, wall: Poly.intersect([door], origWalls)[0] } : []
