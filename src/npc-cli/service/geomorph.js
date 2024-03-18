@@ -623,17 +623,17 @@ class GeomorphService {
   /**
    * When hull symbols reference non-hull symbols, they may restricted the doors.
    * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>} symbol
-   * @param {string[]} doorTags
+   * @param {string[]} doorTags e.g. `['s']`
    */
   restrictSymbolDoors(symbol, doorTags) {
     if (Array.isArray(doorTags)) {
-      const restrictions = symbol.restricts.filter(({ doorId }) => {
+      const doorsToRemove = symbol.restricts.filter(({ doorId }) => {
         const { meta } = symbol.doors[doorId];
-        return doorTags.some((tag) => meta[tag] === true);
+        return !doorTags.some((tag) => meta[tag] === true);
       });
       return {
-        doors: symbol.doors.filter((_, doorId) => !restrictions.some((x) => x.doorId === doorId)),
-        walls: symbol.walls.concat(restrictions.map((x) => x.wall)).map((x) => x.cleanFinalReps()),
+        doors: symbol.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)),
+        walls: symbol.walls.concat(doorsToRemove.map((x) => x.wall)).map((x) => x.cleanFinalReps()),
       };
     } else {
       return { doors: symbol.doors, walls: symbol.walls };
