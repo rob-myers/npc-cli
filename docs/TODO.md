@@ -228,6 +228,15 @@
 - ✅ recompute layout on `assets.meta[gmKey].lastModified` change
   - ✅ compute `assets.meta[gmKey].lastModified`
 
+- ✅ websocket connection reconnects on close/open laptop
+
+- ✅ remove childComponent feature from Tabs
+- assume `demo-map-1` always available as fallback
+  - ✅ `api.map` should only be null before assets-meta.json loaded
+  - document it somewhere
+
+- ✅ avoid recomputing unchanged symbols via content hash
+
 ## WIP
 
 - 🚧 TestCharacter (character controller)
@@ -271,15 +280,9 @@
   - ✅ instanced two-sided quads for all geomorphs
 - ✅ show sub-symbol 3d walls
 - ✅ wall segs change on edit map
-- show sub-symbol chairs, beds
+- 🚧 show sub-symbol chairs, beds
+  - use floating XZ planes
 - clean
-
-- ✅ websocket connection reconnects on close/open laptop
-
-- ✅ remove childComponent feature from Tabs
-- assume `demo-map-1` always available as fallback
-  - ✅ `api.map` should only be null before assets-meta.json loaded
-  - document it somewhere
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh
@@ -290,7 +293,6 @@
   - nodemon copies to static/assets (so can fetch)
 
 - slow resize on maximize desktop (but not mobile)
-- ✅ avoid recomputing unchanged symbols via content hash
 - ❌ try unify parseMaps and parseSymbols
 - try fix sporadic missing updates
   - ✅ move maps to `media/map`
