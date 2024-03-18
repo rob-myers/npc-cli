@@ -178,7 +178,7 @@ declare namespace Geomorph {
     // | "office--020--2x3"
     // | "office--023--2x3"
     // | "office--025--2x3"
-    // | "office--026--2x3"
+    | "office--026--2x3"
     // | "office--055--2x4"
     // | "office--061--3x4"
     // | "office--074--4x4"
@@ -194,7 +194,7 @@ declare namespace Geomorph {
     | "stateroom--014--2x2"
     // | "stateroom--018--2x3"
     // | "stateroom--019--2x3"
-    // | "stateroom--020--2x3"
+    | "stateroom--020--2x3"
     // | "stateroom--035--2x3"
     | "stateroom--036--2x4";
   // | "stateroom--100--3x4"

@@ -271,6 +271,7 @@
   - ✅ instanced two-sided quads for all geomorphs
 - ✅ show sub-symbol 3d walls
 - ✅ wall segs change on edit map
+- 🚧 fix case where `transform-box` is `content-box` or `fill-box`
 - show sub-symbol chairs, beds
 - clean
 

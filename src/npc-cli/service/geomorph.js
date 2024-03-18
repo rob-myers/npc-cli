@@ -59,11 +59,14 @@ class GeomorphService {
     "301--hull": true,
     "302--hull": true,
     "303--hull": true,
-    "stateroom--014--2x2": true,
-    "stateroom--036--2x4": true,
-    "office--001--2x2": true,
-    "misc-stellar-cartography--023--4x4": true,
+
     "bridge--042--8x9": true,
+    "stateroom--014--2x2": true,
+    "stateroom--020--2x3": true,
+    "stateroom--036--2x4": true,
+    "misc-stellar-cartography--023--4x4": true,
+    "office--001--2x2": true,
+    "office--026--2x3": true,
     // 🚧 must extend when adding new symbols
   };
 
@@ -211,6 +214,7 @@ class GeomorphService {
         }
         transformOrigin.x += Number(a.x ?? "0");
         transformOrigin.y += Number(a.y ?? "0");
+        console.log("!!! extractGeom", transformOrigin);
       }
       poly
         ?.translate(-transformOrigin.x, -transformOrigin.y)
@@ -272,7 +276,8 @@ class GeomorphService {
     const { "transform-origin": transformOrigin = "", "transform-box": transformBox = null } =
       style;
 
-    // Support e.g. `76.028px 97.3736px`, `50% 50%`
+    // Support format `76.028px 97.3736px`
+    // Support format `50% 50%`
     const [xPart, yPart] = transformOrigin.split(/\s+/);
     if (!xPart || !yPart) {
       return { transformOrigin: null, transformBox };
@@ -501,6 +506,13 @@ class GeomorphService {
             title: contents,
           });
 
+          console.log(symbolKey, {
+            rect,
+            transform,
+            transformOrigin,
+            transformBox,
+          });
+
           transform &&
             symbols.push({
               symbolKey,
@@ -558,7 +570,7 @@ class GeomorphService {
       },
     });
 
-    debug(`parsedStarshipSymbol: parsing ${symbolKey}`);
+    debug(`parsing ${symbolKey}`);
     parser.write(svgContents);
     parser.end();
 
