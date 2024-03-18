@@ -47,8 +47,6 @@ declare namespace Geomorph {
       /** Normalized affine transform */
       transform: Geom.SixTuple;
     }>[];
-
-    wallSegs: [P, P][];
   }
 
   type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
@@ -59,7 +57,7 @@ declare namespace Geomorph {
   >;
 
   type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
-    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "origWalls" | "hullWalls" | "walls" | "wallSegs">
+    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "origWalls" | "hullWalls" | "walls">
   >;
 
   interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {

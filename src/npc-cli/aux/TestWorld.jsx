@@ -29,7 +29,7 @@ export default function TestWorld(props) {
         const { assets } = state;
         if (!state.gmData[gmKey]) {
           const canvas = document.createElement("canvas");
-          const layout = geomorphService.computeLayout(gmKey, assets);
+          const layout = geomorphService.computeLayoutInBrowser(gmKey, assets);
           canvas.width = layout.pngRect.width;
           canvas.height = layout.pngRect.height;
           state.gmData[gmKey] = {
@@ -39,7 +39,7 @@ export default function TestWorld(props) {
             tex: new THREE.CanvasTexture(canvas),
           };
         } else if (state.gmData[gmKey].layout.lastModified !== assets.meta[gmKey].lastModified) {
-          state.gmData[gmKey].layout = geomorphService.computeLayout(gmKey, assets);
+          state.gmData[gmKey].layout = geomorphService.computeLayoutInBrowser(gmKey, assets);
         }
         return state.gmData[gmKey];
       },

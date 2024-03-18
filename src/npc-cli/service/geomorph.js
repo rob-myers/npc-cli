@@ -81,10 +81,39 @@ class GeomorphService {
    * @param {Geomorph.Assets} assets
    * @returns {Geomorph.Layout}
    */
-  computeLayout(gmKey, assets) {
+  computeLayoutInBrowser(gmKey, assets) {
     const { hullKey } = this.gmKeyToKeys(gmKey);
-    const { pngRect, wallSegs, symbols } = assets.symbols[hullKey];
+    const { pngRect, symbols, walls: hullWalls } = assets.symbols[hullKey];
     const { lastModified } = assets.meta[gmKey];
+
+    const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
+    // Extend wallSegs
+    for (const { symbolKey, transform, meta } of symbols) {
+      tmpMat1.feedFromArray(transform);
+      if (Array.isArray(meta.doors)) {
+        // 🚧 cleaner approach to door restriction
+        // restrict symbol instance e.g. `doors=['s']`
+        info(`${hullKey}: restricting ${symbolKey} by`, meta);
+        const restricted = geomorphService.restrictSymbolDoors(
+          assets.symbols[symbolKey],
+          meta.doors
+        );
+        restricted.wallSegs.forEach(([u, v]) =>
+          wallSegs.push([
+            tmpMat1.transformPoint(Vect.from(u)),
+            tmpMat1.transformPoint(Vect.from(v)),
+          ])
+        );
+      } else {
+        const symbolWallSegs = assets.symbols[symbolKey].walls.flatMap((x) => x.lineSegs);
+        symbolWallSegs.forEach(([u, v]) =>
+          wallSegs.push([
+            tmpMat1.transformPoint(Vect.from(u)),
+            tmpMat1.transformPoint(Vect.from(v)),
+          ])
+        );
+      }
+    }
 
     return {
       key: gmKey,
@@ -107,29 +136,6 @@ class GeomorphService {
       transform,
       mat4: geomorphService.embedXZMat4(transform),
     };
-  }
-
-  /**
-   * Computation differs for hull vs non-hull symbols.
-   * @param {Geomorph.PreParsedSymbol<Geom.Poly>} partial
-   */
-  computeSymbolFloor(partial) {
-    let floor = /** @type {null | Geom.Poly} */ (null);
-
-    const wallsKey = partial.isHull ? "hullWalls" : "walls";
-    const union = Poly.union(partial[wallsKey]);
-
-    if (union.length > 1) {
-      warn(`${partial.key}: ${wallsKey} are not connected`);
-    }
-    if (union.length > 0 && union[0].holes[0]) {
-      [floor] = geom.createOutset(new Poly(union[0].holes[0]).fixOrientation(), 0.5);
-    }
-    if (floor === null || floor.outline.length === 0) {
-      warn(`${partial.key}: ${wallsKey} empty: using rectangular floor`);
-      floor = Poly.fromRect({ x: 0, y: 0, ...partial });
-    }
-    return floor;
   }
 
   /**
@@ -162,7 +168,6 @@ class GeomorphService {
       height: json.height,
       pngRect: json.pngRect,
       symbols: json.symbols,
-      wallSegs: json.wallSegs.map(([u, v]) => [Vect.from(u), Vect.from(v)]),
     };
   }
 
@@ -618,18 +623,17 @@ class GeomorphService {
       hullWalls,
       origWalls,
       walls,
-      wallSegs: walls.flatMap((poly) => poly.lineSegs),
     };
   }
 
   /**
    * When hull symbols reference non-hull symbols, they may restricted the doors.
-   * @param {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon, Geom.VectJson>} symbol
+   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>} symbol
    * @param {string[]} doorTags
    */
   restrictSymbolDoors(symbol, doorTags) {
     const doors = symbol.doors.filter(({ meta }) => doorTags.some((tag) => meta[tag] === true));
-    const walls = Poly.cutOut(doors.map(Poly.from), symbol.origWalls.map(Poly.from));
+    const walls = Poly.cutOut(doors, symbol.origWalls);
     return {
       doors,
       walls,
@@ -657,7 +661,6 @@ class GeomorphService {
       height: parsed.height,
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
-      wallSegs: parsed.wallSegs.map(([u, v]) => [u.json, v.json]),
     };
   }
 

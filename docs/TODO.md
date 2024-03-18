@@ -280,7 +280,10 @@
   - ✅ instanced two-sided quads for all geomorphs
 - ✅ show sub-symbol 3d walls
 - ✅ wall segs change on edit map
-- 🚧 show sub-symbol chairs, beds
+- ✅ compute layout wallSegs in browser
+- restrict doors in browser too
+  - avoid origWalls i.e. store missing wall instead 
+- show sub-symbol chairs, beds
   - use floating XZ planes
 - clean
 

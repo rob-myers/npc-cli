@@ -82,13 +82,10 @@ export function TestScene(props) {
 
     assets &&
       state.map?.gms.forEach(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        let layout = (state.layout[gmKey] ??= geomorphService.computeLayout(gmKey, assets));
-        // 🚧 recompute layout if hash changes
-        // 🚧 need assetsJson.meta[gmKey] (determined by hull and sub-symbols)
-        // if (false) {
-        //   layout = state.layout[gmKey] = geomorphService.computeLayout(gmKey, assetsJson);
-        // }
-
+        const layout = (state.layout[gmKey] ??= geomorphService.computeLayoutInBrowser(
+          gmKey,
+          assets
+        ));
         // 🔔 MUST set width, height BEFORE <mesh> with <canvasTexture> mounts
         const canvas = assertDefined(state.canvas[gmKey]);
         canvas.width = layout.pngRect.width;
