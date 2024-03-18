@@ -271,7 +271,6 @@
   - ✅ instanced two-sided quads for all geomorphs
 - ✅ show sub-symbol 3d walls
 - ✅ wall segs change on edit map
-- 🚧 fix case where `transform-box` is `content-box` or `fill-box`
 - show sub-symbol chairs, beds
 - clean
 
@@ -322,6 +321,9 @@
   - debug locally using about:debugging#/runtime/this-firefox
 - 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
   - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
+- 🚧 fix case where `transform-box` is `content-box` or `fill-box`
+  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
+  - ℹ️ seen in parseSymbol of hull symbol
 
 - if Viewer maximised and choose menu item, halve size of the Viewer
 
