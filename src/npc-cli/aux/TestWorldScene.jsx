@@ -113,10 +113,12 @@ export default function TestWorldScene(props) {
           // state.positionWalls();
         }}
         args={[quadGeometryXY, undefined, state.numWalls]}
+        frustumCulled={false}
       >
         <meshBasicMaterial
           side={THREE.DoubleSide}
           // map={testUvTex}
+          // toneMapped={false}
           color="black"
         />
       </instancedMesh>
