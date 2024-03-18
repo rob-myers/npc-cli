@@ -214,7 +214,6 @@ class GeomorphService {
         }
         transformOrigin.x += Number(a.x ?? "0");
         transformOrigin.y += Number(a.y ?? "0");
-        console.log("!!! extractGeom", transformOrigin);
       }
       poly
         ?.translate(-transformOrigin.x, -transformOrigin.y)
@@ -378,20 +377,20 @@ class GeomorphService {
         tagStack.push({ tagName: name, attributes });
       },
       ontext(contents) {
-        if (tagStack.at(-1)?.tagName !== "title") {
-          return;
-        }
-        const parent = assertDefined(tagStack.at(-2));
         const gmNumber = Number(contents); // e.g. 301
+        const parent = tagStack.at(-2);
 
-        if (parent.tagName !== "rect") {
-          return (
-            parent.tagName !== "pattern" &&
-            warn(`parseMap: ${parent.tagName} ${contents}: ignored non-rect in map`)
-          );
+        if (!parent || tagStack.at(-1)?.tagName !== "title") {
+          return;
         }
         if (!geomorphService.isGmNumber(gmNumber)) {
           return warn(`parseMap: "${contents}": expected valid gm number`);
+        }
+        if (parent.tagName !== "rect") {
+          return void (
+            parent?.tagName === "pattern" ||
+            warn(`parseMap: ${parent?.tagName} ${contents}: ignored non-rect in map`)
+          );
         }
 
         const rect = geomorphService.extractRect(parent.attributes);
@@ -401,6 +400,12 @@ class GeomorphService {
           ...parent,
           title: contents,
         });
+        // console.log(mapKey, gmNumber, {
+        //   rect,
+        //   transform,
+        //   transformOrigin,
+        //   transformBox,
+        // });
 
         transform &&
           gms.push({
@@ -411,7 +416,6 @@ class GeomorphService {
               transformOrigin ?? { x: 0, y: 0 }
             ),
           });
-        // console.log({ gmNumericKey, parentTagMeta });
       },
       onclosetag() {
         tagStack.pop();
@@ -471,25 +475,24 @@ class GeomorphService {
         tagStack.push({ tagName: tag, attributes });
       },
       ontext(contents) {
-        if (tagStack.at(-1)?.tagName !== "title") {
-          return;
+        const parent = tagStack.at(-2);
+
+        if (!parent || tagStack.at(-1)?.tagName !== "title" || parent.tagName === "pattern") {
+          return; // Only consider <title> outside <defs>
         }
-
-        const parent = assertDefined(tagStack.at(-2));
-
         if (parent.tagName === "g") {
           folderStack.push(contents);
           contents !== "symbols" && warn(`unexpected folder: "${contents}" will be ignored`);
           return;
         }
-        if (parent.tagName === "pattern") {
-          return; // Ignore <title> inside <defs>
+        if (folderStack.length >= 2 || (folderStack.length && folderStack[0] !== "symbols")) {
+          return; // Only depth 0 and folder 'symbols' supported
         }
 
         const ownTags = contents.split(" ");
-        // info({ parent, ownTags });
 
-        if (folderStack.length === 1 && folderStack[0] === "symbols") {
+        // Hull symbol has folder "symbols" defining layout
+        if (folderStack[0] === "symbols") {
           const [symbolKey, ...symbolTags] = ownTags;
           if (parent.tagName !== "rect") {
             return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: ignored non-rect`);
@@ -505,13 +508,12 @@ class GeomorphService {
             ...parent,
             title: contents,
           });
-
-          console.log(symbolKey, {
-            rect,
-            transform,
-            transformOrigin,
-            transformBox,
-          });
+          // console.log(symbolKey, {
+          //   rect,
+          //   transform,
+          //   transformOrigin,
+          //   transformBox,
+          // });
 
           transform &&
             symbols.push({
@@ -525,11 +527,8 @@ class GeomorphService {
                 transformOrigin ?? { x: 0, y: 0 }
               ),
             });
-          return;
-        }
 
-        if (folderStack.length) {
-          return; // Only depth 0 and folder 'symbols' supported
+          return;
         }
 
         if (ownTags.includes("hull-wall")) {
