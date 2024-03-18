@@ -3,6 +3,7 @@ import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
+import { isTouchDevice } from "../service/dom.js";
 import "./infinite-grid-helper.js";
 import { Vect } from "../geom";
 import { TestWorldContext } from "./test-world-context";
@@ -97,7 +98,15 @@ export default function TestWorldCanvas(props) {
           <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
         )}
 
-        <MapControls makeDefault zoomToCursor ref={(x) => x && (state.controls = x)} />
+        <MapControls
+          ref={(x) => x && (state.controls = x)}
+          makeDefault
+          zoomToCursor
+          {...(isTouchDevice() && {
+            minAzimuthAngle: 0,
+            maxAzimuthAngle: 0,
+          })}
+        />
         <ambientLight intensity={1} />
         <PerspectiveCamera position={[0, 8, 0]} makeDefault />
         <Origin />
