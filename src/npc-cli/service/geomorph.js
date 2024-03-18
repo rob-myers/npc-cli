@@ -87,32 +87,20 @@ class GeomorphService {
     const { lastModified } = assets.meta[gmKey];
 
     const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
-    // Extend wallSegs
+
     for (const { symbolKey, transform, meta } of symbols) {
+      const symbol = assets.symbols[symbolKey];
+      const { doors, walls } = geomorphService.restrictSymbolDoors(symbol, meta.doors);
+
       tmpMat1.feedFromArray(transform);
-      if (Array.isArray(meta.doors)) {
-        // 🚧 cleaner approach to door restriction
-        // restrict symbol instance e.g. `doors=['s']`
-        info(`${hullKey}: restricting ${symbolKey} by`, meta);
-        const restricted = geomorphService.restrictSymbolDoors(
-          assets.symbols[symbolKey],
-          meta.doors
-        );
-        restricted.wallSegs.forEach(([u, v]) =>
+      walls.forEach((x) =>
+        x.lineSegs.forEach(([u, v]) =>
           wallSegs.push([
             tmpMat1.transformPoint(Vect.from(u)),
             tmpMat1.transformPoint(Vect.from(v)),
           ])
-        );
-      } else {
-        const symbolWallSegs = assets.symbols[symbolKey].walls.flatMap((x) => x.lineSegs);
-        symbolWallSegs.forEach(([u, v]) =>
-          wallSegs.push([
-            tmpMat1.transformPoint(Vect.from(u)),
-            tmpMat1.transformPoint(Vect.from(v)),
-          ])
-        );
-      }
+        )
+      );
     }
 
     return {
@@ -161,13 +149,13 @@ class GeomorphService {
       hullWalls: json.hullWalls.map(Poly.from),
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map(Poly.from),
-      origWalls: json.origWalls.map(Poly.from),
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
       pngRect: json.pngRect,
       symbols: json.symbols,
+      restricts: json.restricts.map(({ doorId, wall }) => ({ doorId, wall: Poly.from(wall) })),
     };
   }
 
@@ -619,10 +607,14 @@ class GeomorphService {
     const origWalls = Poly.union(partial.hullWalls.concat(partial.walls));
     const walls = Poly.cutOut(partial.doors, origWalls);
 
+    const restricts = partial.doors.flatMap((door, doorId) =>
+      door.meta.optional ? { doorId, wall: Poly.intersect([door], origWalls)[0] } : []
+    );
+
     return {
       hullWalls,
-      origWalls,
       walls,
+      restricts,
     };
   }
 
@@ -632,13 +624,18 @@ class GeomorphService {
    * @param {string[]} doorTags
    */
   restrictSymbolDoors(symbol, doorTags) {
-    const doors = symbol.doors.filter(({ meta }) => doorTags.some((tag) => meta[tag] === true));
-    const walls = Poly.cutOut(doors, symbol.origWalls);
-    return {
-      doors,
-      walls,
-      wallSegs: walls.flatMap((poly) => poly.lineSegs),
-    };
+    if (Array.isArray(doorTags)) {
+      const restrictions = symbol.restricts.filter(({ doorId }) => {
+        const { meta } = symbol.doors[doorId];
+        return doorTags.some((tag) => meta[tag] === true);
+      });
+      return {
+        doors: symbol.doors.filter((_, doorId) => !restrictions.some((x) => x.doorId === doorId)),
+        walls: symbol.walls.concat(restrictions.map((x) => x.wall)),
+      };
+    } else {
+      return { doors: symbol.doors, walls: symbol.walls };
+    }
   }
 
   /**
@@ -654,13 +651,13 @@ class GeomorphService {
       hullWalls: parsed.hullWalls.map((x) => x.geoJson),
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => x.geoJson),
-      origWalls: parsed.origWalls.map((x) => x.geoJson),
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
+      restricts: parsed.restricts.map(({ doorId, wall }) => ({ doorId, wall: wall.geoJson })),
     };
   }
 

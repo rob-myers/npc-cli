@@ -15,7 +15,6 @@ import stringify from "json-stringify-pretty-compact";
 // relative urls for sucrase-node
 import { ASSETS_META_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
 import { hashText, info, warn } from "../npc-cli/service/generic";
-import { Mat } from "../npc-cli/geom";
 import { geomorphService } from "../npc-cli/service/geomorph";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
@@ -24,7 +23,6 @@ const symbolsDir = path.resolve(staticAssetsDir, "symbol");
 const mapsDir = path.resolve(mediaDir, "map");
 const outputFilename = path.resolve(staticAssetsDir, ASSETS_META_JSON_FILENAME);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
-const tmpMat1 = new Mat();
 
 (function main() {
   const prev = fs.existsSync(outputFilename)

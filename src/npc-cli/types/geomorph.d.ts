@@ -37,6 +37,7 @@ declare namespace Geomorph {
      * May be offset e.g. because doors are centred along edges.
      */
     pngRect: Geom.RectJson;
+
     /** Hull symbols have sub symbols, defining the layout of the geomorph. */
     symbols: Geomorph.WithMeta<{
       symbolKey: Geomorph.SymbolKey;
@@ -47,6 +48,14 @@ declare namespace Geomorph {
       /** Normalized affine transform */
       transform: Geom.SixTuple;
     }>[];
+
+    /** Doors tagged with `optional` can be removed */
+    restricts: {
+      /** The door `doors[doorId]` we can remove */
+      doorId: number;
+      /** The wall we need to add back in */
+      wall: T;
+    }[];
   }
 
   type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
@@ -57,17 +66,12 @@ declare namespace Geomorph {
   >;
 
   type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
-    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "origWalls" | "hullWalls" | "walls">
+    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "hullWalls" | "walls" | "restricts">
   >;
 
   interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {
     doors: WithMeta<T>[];
     obstacles: WithMeta<T>[];
-    /**
-     * Walls before doors are cut from them.
-     * This permits restricting the doors later in hull symbol "symbols" folder.
-     */
-    origWalls: T[];
     walls: T[];
     /** 🚧 split further? */
     unsorted: WithMeta<T>[];

@@ -281,8 +281,8 @@
 - ✅ show sub-symbol 3d walls
 - ✅ wall segs change on edit map
 - ✅ compute layout wallSegs in browser
-- restrict doors in browser too
-  - avoid origWalls i.e. store missing wall instead 
+- ✅ restrict doors in browser too
+  - ✅ avoid origWalls i.e. store missing wall in symbol
 - show sub-symbol chairs, beds
   - use floating XZ planes
 - clean
