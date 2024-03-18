@@ -283,9 +283,12 @@
 - ✅ compute layout wallSegs in browser
 - ✅ restrict doors in browser too
   - ✅ avoid origWalls i.e. store missing wall in symbol
-- show sub-symbol chairs, beds
+- ✅ fix degenerate wallSeg
+- 🚧 show sub-symbol chairs, beds
   - use floating XZ planes
 - clean
+
+- show doors
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh

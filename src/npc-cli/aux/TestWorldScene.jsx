@@ -49,7 +49,7 @@ export default function TestWorldScene(props) {
           tmpMat1.feedFromArray(transform);
           wallSegs.forEach(([u, v], segId) => {
             if (u.equalsAlmost(v)) {
-              return warn(`${gmKey}: ${segId}: ignored degenerate wallSeg`);
+              return warn(`${gmKey}: ${segId}: ignored degen wallSeg: ${JSON.stringify(u.json)}`);
             }
             const segLength = u.distanceTo(v) * worldScale;
             tmpMat1.transformPoint(src.copy(u));
@@ -110,13 +110,12 @@ export default function TestWorldScene(props) {
         key={state.numWalls}
         onUpdate={(instances) => {
           state.wallInstances = instances;
-          state.positionWalls();
+          // state.positionWalls();
         }}
         args={[quadGeometryXY, undefined, state.numWalls]}
       >
         <meshBasicMaterial
           side={THREE.DoubleSide}
-          // side={THREE.BackSide}
           // map={testUvTex}
           color="black"
         />

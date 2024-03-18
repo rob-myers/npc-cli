@@ -633,7 +633,7 @@ class GeomorphService {
       });
       return {
         doors: symbol.doors.filter((_, doorId) => !restrictions.some((x) => x.doorId === doorId)),
-        walls: symbol.walls.concat(restrictions.map((x) => x.wall)),
+        walls: symbol.walls.concat(restrictions.map((x) => x.wall)).map((x) => x.cleanFinalReps()),
       };
     } else {
       return { doors: symbol.doors, walls: symbol.walls };
