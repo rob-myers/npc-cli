@@ -69,6 +69,7 @@ export default function TestWorld(props) {
       });
       // Remount walls on HMR
       state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
+      state.scene.doorsKey = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
     }
   }, [assets, state.map]);
 

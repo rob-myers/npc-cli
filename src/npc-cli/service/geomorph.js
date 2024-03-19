@@ -83,10 +83,11 @@ class GeomorphService {
    */
   computeLayoutInBrowser(gmKey, assets) {
     const { hullKey } = this.gmKeyToKeys(gmKey);
-    const { pngRect, symbols, walls: hullWalls } = assets.symbols[hullKey];
+    const { pngRect, symbols, walls: hullWalls, doors: hullDoors } = assets.symbols[hullKey];
     const { lastModified } = assets.meta[gmKey];
 
     const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
+    const doorSegs = hullDoors.flatMap((poly) => poly.lineSegs);
 
     for (const { symbolKey, transform, meta } of symbols) {
       const symbol = assets.symbols[symbolKey];
@@ -94,8 +95,19 @@ class GeomorphService {
 
       tmpMat1.feedFromArray(transform);
       walls.forEach((x) =>
-        x.lineSegs.forEach(([u, v]) =>
+        x.lineSegs.forEach(([u, v], segId) => {
+          if (u.equalsAlmost(v)) {
+            return warn(`${gmKey}: ${segId}: ignored degen wallSeg: ${JSON.stringify(u.json)}`);
+          }
           wallSegs.push([
+            tmpMat1.transformPoint(Vect.from(u)),
+            tmpMat1.transformPoint(Vect.from(v)),
+          ]);
+        })
+      );
+      doors.forEach((poly) =>
+        poly.lineSegs.forEach(([u, v]) =>
+          doorSegs.push([
             tmpMat1.transformPoint(Vect.from(u)),
             tmpMat1.transformPoint(Vect.from(v)),
           ])
@@ -107,6 +119,7 @@ class GeomorphService {
       key: gmKey,
       pngRect: Rect.fromJson(pngRect),
       lastModified,
+      doorSegs,
       wallSegs,
     };
   }

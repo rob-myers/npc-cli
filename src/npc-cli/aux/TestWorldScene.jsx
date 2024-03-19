@@ -20,8 +20,32 @@ export default function TestWorldScene(props) {
 
   const state = useStateRef(
     /** @returns {State} */ () => ({
-      wallsKey: api.scene.wallsKey,
+      wallsKey: api.scene.wallsKey ?? 0,
       wallInstances: /** @type {*} */ (null),
+      doorsKey: api.scene.doorsKey ?? 0,
+      doorInstances: /** @type {*} */ (null),
+
+      computeInstMat(u, v, transform) {
+        const height = 2;
+        const [src, dst] = [tmpVec1, tmpVec2];
+        const segLength = u.distanceTo(v) * worldScale;
+        tmpMat1.feedFromArray(transform);
+        tmpMat1.transformPoint(tmpVec1.copy(u));
+        tmpMat1.transformPoint(tmpVec2.copy(v));
+        const radians = Math.atan2(dst.y - src.y, dst.x - src.x);
+        return geomorphService.embedXZMat4(
+          [
+            segLength * Math.cos(radians),
+            segLength * Math.sin(radians),
+            -Math.sin(radians),
+            Math.cos(radians),
+            src.x,
+            src.y,
+          ],
+          height,
+          tmpMatFour1
+        );
+      },
       drawGeomorph(gmKey, img) {
         const { ctxt, layout } = api.gmData[gmKey];
         const { pngRect } = layout;
@@ -41,30 +65,20 @@ export default function TestWorldScene(props) {
         ctxt.resetTransform();
       },
       positionWalls() {
-        const instances = state.wallInstances;
-        const height = 2;
-        const [src, dst] = [new Vect(), new Vect()];
-        let offset = 0;
-        api.gms.forEach(({ key: gmKey, wallSegs, transform }, gmId) => {
-          tmpMat1.feedFromArray(transform);
-          wallSegs.forEach(([u, v], segId) => {
-            if (u.equalsAlmost(v)) {
-              return warn(`${gmKey}: ${segId}: ignored degen wallSeg: ${JSON.stringify(u.json)}`);
-            }
-            const segLength = u.distanceTo(v) * worldScale;
-            tmpMat1.transformPoint(src.copy(u));
-            tmpMat1.transformPoint(dst.copy(v));
-            const radians = Math.atan2(dst.y - src.y, dst.x - src.x);
-            // prettier-ignore
-            instances.setMatrixAt(offset, geomorphService.embedXZMat4(
-              [segLength * Math.cos(radians), segLength * Math.sin(radians), -Math.sin(radians), Math.cos(radians), src.x, src.y],
-              height,
-              tmpMatFour1,
-            ));
-            offset++;
-          });
+        const { wallInstances: ws, doorInstances: ds } = state;
+        let wOffset = 0;
+        let dOffset = 0;
+
+        api.gms.forEach(({ wallSegs, doorSegs, transform }) => {
+          wallSegs.forEach(([u, v]) =>
+            ws.setMatrixAt(wOffset++, state.computeInstMat(u, v, transform))
+          );
+          doorSegs.forEach(([u, v]) =>
+            ds.setMatrixAt(dOffset++, state.computeInstMat(u, v, transform))
+          );
         });
-        instances.instanceMatrix.needsUpdate = true;
+        ws.instanceMatrix.needsUpdate = true;
+        ds.instanceMatrix.needsUpdate = true;
       },
     })
   );
@@ -108,19 +122,24 @@ export default function TestWorldScene(props) {
 
       <instancedMesh
         key={state.wallsKey}
-        onUpdate={(instances) => {
-          state.wallInstances = instances;
-          // state.positionWalls();
-        }}
+        onUpdate={(instances) => (state.wallInstances = instances)}
         args={[quadGeometryXY, undefined, state.wallsKey]}
         frustumCulled={false}
       >
         <meshBasicMaterial
           side={THREE.DoubleSide}
-          // map={testUvTex}
-          // toneMapped={false}
           color="black"
+          // map={testUvTex}
         />
+      </instancedMesh>
+
+      <instancedMesh
+        key={state.doorsKey}
+        onUpdate={(instances) => (state.doorInstances = instances)}
+        args={[quadGeometryXY, undefined, state.doorsKey]}
+        frustumCulled={false}
+      >
+        <meshBasicMaterial side={THREE.DoubleSide} color="red" />
       </instancedMesh>
     </>
   );
@@ -133,13 +152,18 @@ export default function TestWorldScene(props) {
 
 /**
  * @typedef State
- * @property {number} wallsKey Used to remount walls
+ * @property {number} doorsKey Number of doors, also used to remount them
+ * @property {number} wallsKey Number of walls, also used to remount them
  * @property {THREE.InstancedMesh} wallInstances
+ * @property {THREE.InstancedMesh} doorInstances
+ * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple) => THREE.Matrix4} computeInstMat
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
  * @property {() => void} positionWalls
  */
 
 const textureLoader = new THREE.TextureLoader();
+const tmpVec1 = new Vect();
+const tmpVec2 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
 const tmpMatFour2 = new THREE.Matrix4();

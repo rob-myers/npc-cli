@@ -237,24 +237,7 @@
 
 - ✅ avoid recomputing unchanged symbols via content hash
 
-## WIP
-
-- 🚧 TestCharacter (character controller)
-  - ✅ simple demo using https://github.com/pmndrs/ecctrl
-  - 🚧 BUG ecctrl is panning on drag outside canvas
-    - https://github.com/pmndrs/ecctrl/issues/34
-    - create patch in the meantime
-  - 🚧 sporadic issue with pause i.e. scene disappears
-    - ❌ `THREE.WebGLRenderer: Context Lost`
-    - ✅ pause physics
-    - ✅ disable CameraControls
-    - 🚧 frameloop must be `demand` instead of `never`?
-  - use character Soldier with animations
-  - use custom character via Mixamo (use Blender to combine animations)
-  - click to move
-  - extract code, removing e.g. ray-cast
-
-- 🚧 show hull 3d walls
+- ✅ show hull 3d walls
   - ✅ TestGeomorphs can see `api.scene` in TestCanvasContext
   - ✅ remove `transform` from `Geomorph.Layout`
   - ✅ precompute symbols "floor"
@@ -289,10 +272,32 @@
   - ℹ️ try single raised floor-sized texture
 - ✅ changing map should change walls
 
-- if computeLayoutInBrowser changes then layout should reload
+## WIP
 
-- show doors
+- 🚧 TestCharacter (character controller)
+  - ✅ simple demo using https://github.com/pmndrs/ecctrl
+  - 🚧 BUG ecctrl is panning on drag outside canvas
+    - https://github.com/pmndrs/ecctrl/issues/34
+    - create patch in the meantime
+  - 🚧 sporadic issue with pause i.e. scene disappears
+    - ❌ `THREE.WebGLRenderer: Context Lost`
+    - ✅ pause physics
+    - ✅ disable CameraControls
+    - 🚧 frameloop must be `demand` instead of `never`?
+  - use character Soldier with animations
+  - use custom character via Mixamo (use Blender to combine animations)
+  - click to move
+  - extract code, removing e.g. ray-cast
+
+
+- 🚧 show doors
+  - ✅ try four segs (flickers)
+  - try two segs
+  - try one segs
+
 - show tables via raised "floor texture"
+
+- if computeLayoutInBrowser changes then layout should reload
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh

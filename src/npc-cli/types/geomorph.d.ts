@@ -102,9 +102,9 @@ declare namespace Geomorph {
     pngRect: Geom.Rect;
     /** Epoch ms */
     lastModified: number;
-    // 🚧 walls i.e. hull + sub-symbols
+    // 🚧
     wallSegs: [Geom.Vect, Geom.Vect][];
-    // 🚧 doors i.e. hull + sub-symbols
+    doorSegs: [Geom.Vect, Geom.Vect][];
   }
 
   type GeomorphKey =
