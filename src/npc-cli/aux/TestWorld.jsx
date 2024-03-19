@@ -4,7 +4,6 @@ import { Subject } from "rxjs";
 import * as THREE from "three";
 
 import { ASSETS_META_JSON_FILENAME } from "src/scripts/const";
-import { worldScale } from "../service/const";
 import { assertNonNull, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
@@ -23,7 +22,7 @@ export default function TestWorld(props) {
       map: /** @type {*} */ (null),
       gmData: /** @type {*} */ ({}),
       gms: [],
-      scene: /** @type {*} */ (null),
+      scene: /** @type {*} */ ({}),
       view: /** @type {*} */ (null),
       ensureGmData(gmKey) {
         const { assets } = state;
@@ -39,6 +38,7 @@ export default function TestWorld(props) {
             tex: new THREE.CanvasTexture(canvas),
           };
         } else if (state.gmData[gmKey].layout.lastModified !== assets.meta[gmKey].lastModified) {
+          // Recompute layout on HMR
           state.gmData[gmKey].layout = geomorphService.computeLayoutInBrowser(gmKey, assets);
         }
         return state.gmData[gmKey];
@@ -67,6 +67,8 @@ export default function TestWorld(props) {
         const { layout } = state.ensureGmData(gmKey);
         return geomorphService.computeLayoutInstance(layout, gmId, transform);
       });
+      // Remount walls on HMR
+      state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
     }
   }, [assets, state.map]);
 

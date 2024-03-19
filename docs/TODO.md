@@ -284,11 +284,15 @@
 - ✅ restrict doors in browser too
   - ✅ avoid origWalls i.e. store missing wall in symbol
 - ✅ fix degenerate wallSeg
-- 🚧 show sub-symbol chairs, beds
-  - use floating XZ planes
-- clean
+- ❌ show sub-symbol chairs, beds
+  - ❌ use floating XZ planes
+  - ℹ️ try single raised floor-sized texture
+- ✅ changing map should change walls
+
+- if computeLayoutInBrowser changes then layout should reload
 
 - show doors
+- show tables via raised "floor texture"
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh
@@ -298,6 +302,7 @@
   - save to media/symbols instead
   - nodemon copies to static/assets (so can fetch)
 
+- start using cypress
 - slow resize on maximize desktop (but not mobile)
 - ❌ try unify parseMaps and parseSymbols
 - try fix sporadic missing updates

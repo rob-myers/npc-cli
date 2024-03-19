@@ -20,7 +20,7 @@ export default function TestWorldScene(props) {
 
   const state = useStateRef(
     /** @returns {State} */ () => ({
-      numWalls: api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0),
+      wallsKey: api.scene.wallsKey,
       wallInstances: /** @type {*} */ (null),
       drawGeomorph(gmKey, img) {
         const { ctxt, layout } = api.gmData[gmKey];
@@ -107,12 +107,12 @@ export default function TestWorldScene(props) {
       ))}
 
       <instancedMesh
-        key={state.numWalls}
+        key={state.wallsKey}
         onUpdate={(instances) => {
           state.wallInstances = instances;
           // state.positionWalls();
         }}
-        args={[quadGeometryXY, undefined, state.numWalls]}
+        args={[quadGeometryXY, undefined, state.wallsKey]}
         frustumCulled={false}
       >
         <meshBasicMaterial
@@ -133,7 +133,7 @@ export default function TestWorldScene(props) {
 
 /**
  * @typedef State
- * @property {number} numWalls
+ * @property {number} wallsKey Used to remount walls
  * @property {THREE.InstancedMesh} wallInstances
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
  * @property {() => void} positionWalls
