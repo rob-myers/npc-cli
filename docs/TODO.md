@@ -274,21 +274,30 @@
 
 ## WIP
 
+- 🚧 avoid dev-server crash on save symbol to static/assets
+  ```sh
+  [1]   Error: ENOENT: no such file or directory, lstat '/Users/Robert.Myers/coding/np
+  [1]   c-cli/static/assets/symbol/301--hull.svg.crswap'
+  ```
+  - save to media/symbols instead
+  - nodemon copies to static/assets (so can fetch)
+
 - 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
   - 🚧 BUG ecctrl is panning on drag outside canvas
     - https://github.com/pmndrs/ecctrl/issues/34
     - create patch in the meantime
-  - 🚧 sporadic issue with pause i.e. scene disappears
+  - ✅ sporadic issue with pause i.e. scene disappears
     - ❌ `THREE.WebGLRenderer: Context Lost`
     - ✅ pause physics
     - ✅ disable CameraControls
-    - 🚧 frameloop must be `demand` instead of `never`?
+    - ✅ frameloop must be `demand` instead of `never`?
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
   - click to move
   - extract code, removing e.g. ray-cast
 
+- if computeLayoutInBrowser changes then layout should reload
 
 - 🚧 show doors
   - ✅ try four segs (flickers)
@@ -299,17 +308,7 @@
   - ✅ `walls` does not include optional one
   - ✅ can add in optional ones based on sub-symbols
 
-- 🚧 avoid dev-server crash on save symbol to static/assets
-  ```sh
-  [1]   Error: ENOENT: no such file or directory, lstat '/Users/Robert.Myers/coding/np
-  [1]   c-cli/static/assets/symbol/301--hull.svg.crswap'
-  ```
-  - save to media/symbols instead
-  - nodemon copies to static/assets (so can fetch)
-
 - show tables via raised "floor texture"
-
-- if computeLayoutInBrowser changes then layout should reload
 
 - start using cypress
 - slow resize on maximize desktop (but not mobile)

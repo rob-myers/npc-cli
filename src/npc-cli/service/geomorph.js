@@ -65,6 +65,8 @@ class GeomorphService {
     "misc-stellar-cartography--023--4x4": true,
     "office--001--2x2": true,
     "office--026--2x3": true,
+    "office--020--2x3": true,
+    "office--023--2x3": true,
     "stateroom--014--2x2": true,
     "stateroom--020--2x3": true,
     "stateroom--036--2x4": true,

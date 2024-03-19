@@ -1,9 +1,9 @@
 {
   "meta": {
     "101--hull": {
-      "lastModified": 1710885707906,
-      "contentHash": -1170012680,
-      "outputHash": 1447555167
+      "lastModified": 1710887213589,
+      "contentHash": -740908075,
+      "outputHash": 1469174596
     },
     "102--hull": {
       "lastModified": 1710882766449,
@@ -50,6 +50,16 @@
       "contentHash": 2135680825,
       "outputHash": 410917231
     },
+    "office--020--2x3": {
+      "lastModified": 1710886480626,
+      "contentHash": -1639819156,
+      "outputHash": 2014898658
+    },
+    "office--023--2x3": {
+      "lastModified": 1710886811733,
+      "contentHash": -725557747,
+      "outputHash": -923305598
+    },
     "office--026--2x3": {
       "lastModified": 1710882766449,
       "contentHash": -738690952,
@@ -71,7 +81,7 @@
       "outputHash": 1886165333
     },
     "demo-map-1": {"lastModified": 1710691881459, "contentHash": -380436121},
-    "g-101--multipurpose": {"lastModified": 1710885707906},
+    "g-101--multipurpose": {"lastModified": 1710887213589},
     "g-102--research-deck": {"lastModified": 1710882766449},
     "g-103--cargo-bay": {"lastModified": 1710882766449},
     "g-301--bridge": {"lastModified": 1710882766449},
@@ -512,6 +522,41 @@
           "width": 120,
           "height": 180,
           "transform": [0, -1, -1, 0, 180, 840]
+        },
+        {
+          "symbolKey": "empty-room--013--2x3",
+          "meta": {"key": "empty-room--013--2x3", "walls": ["e"]},
+          "width": 120,
+          "height": 180,
+          "transform": [0, 1, -1, 0, 180, 360]
+        },
+        {
+          "symbolKey": "office--020--2x3",
+          "meta": {"key": "office--020--2x3"},
+          "width": 120,
+          "height": 180,
+          "transform": [1, 0, 0, 1, 360, 780]
+        },
+        {
+          "symbolKey": "office--020--2x3",
+          "meta": {"key": "office--020--2x3"},
+          "width": 120,
+          "height": 180,
+          "transform": [-1, 0, 0, 1, 840, 780]
+        },
+        {
+          "symbolKey": "office--023--2x3",
+          "meta": {"key": "office--023--2x3"},
+          "width": 120,
+          "height": 180,
+          "transform": [0, -1, -1, 0, 1200, 480]
+        },
+        {
+          "symbolKey": "office--023--2x3",
+          "meta": {"key": "office--023--2x3"},
+          "width": 120,
+          "height": 180,
+          "transform": [0, 1, -1, 0, 1200, 720]
         }
       ],
       "removableDoors": [],
@@ -4059,6 +4104,226 @@
           }
         }
       ],
+      "addableWalls": []
+    },
+    "office--020--2x3": {
+      "key": "office--020--2x3",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[0, 0], [0, 150.24], [29.96, 150.24], [29.96, 0]]],
+          "meta": {"obstacle": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[0, 150.24], [0, 180], [120, 180], [120, 150.24]]],
+          "meta": {"obstacle": true, "surface": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[29.96, 0.2], [29.96, 29.96], [120, 29.96], [120, 0.2]]
+          ],
+          "meta": {"obstacle": true, "surface": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[60, 33.8], [60, 60.2], [89.6, 60.2], [89.6, 33.8]]],
+          "meta": {"obstacle": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[60, 119.8], [60, 146.2], [89.6, 146.2], [89.6, 119.8]]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-2, -2],
+              [122, -2],
+              [122, 68],
+              [118, 68],
+              [118, 2],
+              [2, 2],
+              [2, 178],
+              [118, 178],
+              [118, 112],
+              [122, 112],
+              [122, 182],
+              [-2, 182]
+            ]
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[117, 68], [117, 112], [123, 112], [123, 68]]],
+          "meta": {"door": true}
+        }
+      ],
+      "unsorted": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[60, 79.98], [60, 81.98], [62, 81.98], [62, 79.98]]],
+          "meta": {"decor": true, "go": true, "label": "office"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[74, 44], [74, 46], [76, 46], [76, 44]]],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 270
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[74, 136], [74, 138], [76, 138], [76, 136]]],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 90
+          }
+        }
+      ],
+      "width": 600,
+      "height": 900,
+      "pngRect": {"x": -9, "y": -7, "width": 620, "height": 920},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "office--023--2x3": {
+      "key": "office--023--2x3",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[89.6, 60], [89.6, 180], [120, 180], [120, 60]]],
+          "meta": {"obstacle": true, "surface": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[11.18, 10.04], [11.18, 49.44], [109.84, 49.44], [109.84, 10.04]]
+          ],
+          "meta": {"obstacle": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[67.08, 80.04], [67.08, 100.22], [86.64, 100.22], [86.64, 80.04]]
+          ],
+          "meta": {"obstacle": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[67.08, 140.04], [67.08, 160.22], [86.64, 160.22], [86.64, 140.04]]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-2, -2],
+              [122, -2],
+              [122, 180],
+              [120, 180],
+              [120, 182],
+              [52, 182],
+              [52, 178],
+              [118, 178],
+              [118, 2],
+              [2, 2],
+              [2, 178],
+              [8, 178],
+              [8, 182],
+              [0, 182],
+              [0, 180],
+              [-2, 180]
+            ]
+          ]
+        }
+      ],
+      "doors": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[8, 177], [8, 183], [52, 183], [52, 177]]],
+          "meta": {"door": true}
+        }
+      ],
+      "unsorted": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[58, 30], [58, 32], [60, 32], [60, 30]]],
+          "meta": {"decor": true, "go": true, "label": "cpu"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[32.84, 110], [32.84, 112], [34.84, 112], [34.84, 110]]
+          ],
+          "meta": {"decor": true, "go": true, "label": "office"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [78.8442, 89.4664],
+              [78.8442, 91.4664],
+              [80.8442, 91.4664],
+              [80.8442, 89.4664]
+            ]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 0
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [78.8442, 149.4664],
+              [78.8442, 151.4664],
+              [80.8442, 151.4664],
+              [80.8442, 149.4664]
+            ]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 0
+          }
+        }
+      ],
+      "width": 600,
+      "height": 900,
+      "pngRect": {"x": -10, "y": -10, "width": 620, "height": 920},
+      "symbols": [],
+      "removableDoors": [],
       "addableWalls": []
     },
     "office--026--2x3": {
