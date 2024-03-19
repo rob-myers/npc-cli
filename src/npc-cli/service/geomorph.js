@@ -61,12 +61,13 @@ class GeomorphService {
     "303--hull": true,
 
     "bridge--042--8x9": true,
-    "stateroom--014--2x2": true,
-    "stateroom--020--2x3": true,
-    "stateroom--036--2x4": true,
+    "empty-room--013--2x3": true,
     "misc-stellar-cartography--023--4x4": true,
     "office--001--2x2": true,
     "office--026--2x3": true,
+    "stateroom--014--2x2": true,
+    "stateroom--020--2x3": true,
+    "stateroom--036--2x4": true,
     // 🚧 must extend when adding new symbols
   };
 
@@ -159,16 +160,21 @@ class GeomorphService {
     return {
       key: json.key,
       isHull: json.isHull,
-      hullWalls: json.hullWalls.map(Poly.from),
+      hullWalls: json.hullWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
-      walls: json.walls.map(Poly.from),
+      walls: json.walls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
       pngRect: json.pngRect,
       symbols: json.symbols,
-      restricts: json.restricts.map(({ doorId, wall }) => ({ doorId, wall: Poly.from(wall) })),
+
+      removableDoors: json.removableDoors.map(({ doorId, wall }) => ({
+        doorId,
+        wall: Poly.from(wall),
+      })),
+      addableWalls: json.addableWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
     };
   }
 
@@ -454,11 +460,11 @@ class GeomorphService {
     let viewBoxRect = /** @type {Geom.RectJson | null} */ (null);
     let pngRect = /** @type {Geom.RectJson | null} */ (null);
     const symbols = /** @type {Geomorph.ParsedSymbol<Geom.Poly>['symbols']} */ ([]);
-    const hullWalls = /** @type {Geom.Poly[]} */ ([]);
+    const hullWalls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const unsorted = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const walls = /** @type {Geom.Poly[]} */ ([]);
+    const walls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -537,20 +543,28 @@ class GeomorphService {
           return;
         }
 
+        const meta = geomorphService.tagsToMeta(ownTags, {});
+
         if (ownTags.includes("hull-wall")) {
           // hull symbols only
-          hullWalls.push(...geomorphService.extractGeom({ ...parent, title: contents }));
+          hullWalls.push(
+            ...geomorphService
+              .extractGeom({ ...parent, title: contents })
+              .map((poly) => Object.assign(poly, { meta }))
+          );
         } else if (ownTags.includes("wall")) {
-          walls.push(...geomorphService.extractGeom({ ...parent, title: contents }, geomScale));
+          walls.push(
+            ...geomorphService
+              .extractGeom({ ...parent, title: contents }, geomScale)
+              .map((poly) => Object.assign(poly, { meta }))
+          );
         } else if (ownTags.includes("obstacle")) {
-          const meta = geomorphService.tagsToMeta(ownTags, {});
           obstacles.push(
             ...geomorphService
               .extractGeom({ ...parent, title: contents }, geomScale)
               .map((poly) => Object.assign(poly, { meta }))
           );
         } else if (ownTags.includes("door")) {
-          const meta = geomorphService.tagsToMeta(ownTags, {});
           doors.push(
             ...geomorphService
               .extractGeom({ ...parent, title: contents }, geomScale)
@@ -559,7 +573,6 @@ class GeomorphService {
         } else if (parent.tagName === "image") {
           return;
         } else {
-          const meta = geomorphService.tagsToMeta(ownTags, {});
           unsorted.push(
             ...geomorphService
               .extractGeom({ ...parent, title: contents }, geomScale)
@@ -619,17 +632,20 @@ class GeomorphService {
     const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls)).map((x) =>
       x.cleanFinalReps()
     );
-    const origWalls = Poly.union(partial.hullWalls.concat(partial.walls));
-    const walls = Poly.cutOut(partial.doors, origWalls).map((x) => x.cleanFinalReps());
+    const nonOptionalWalls = partial.walls.filter((x) => x.meta.optional !== true);
+    const uncutWalls = Poly.union(partial.hullWalls.concat(nonOptionalWalls));
+    const walls = Poly.cutOut(partial.doors, uncutWalls).map((x) => x.cleanFinalReps());
 
-    const restricts = partial.doors.flatMap((door, doorId) =>
-      door.meta.optional ? { doorId, wall: Poly.intersect([door], origWalls)[0] } : []
+    const removableDoors = partial.doors.flatMap((door, doorId) =>
+      door.meta.optional ? { doorId, wall: Poly.intersect([door], uncutWalls)[0] } : []
     );
+    const addableWalls = partial.walls.filter((x) => x.meta.optional === true);
 
     return {
       hullWalls,
       walls,
-      restricts,
+      removableDoors,
+      addableWalls,
     };
   }
 
@@ -640,7 +656,7 @@ class GeomorphService {
    */
   restrictSymbolDoors(symbol, doorTags) {
     if (Array.isArray(doorTags)) {
-      const doorsToRemove = symbol.restricts.filter(({ doorId }) => {
+      const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
         const { meta } = symbol.doors[doorId];
         return !doorTags.some((tag) => meta[tag] === true);
       });
@@ -663,16 +679,20 @@ class GeomorphService {
     return {
       key: parsed.key,
       isHull: parsed.isHull,
-      hullWalls: parsed.hullWalls.map((x) => x.geoJson),
+      hullWalls: parsed.hullWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      walls: parsed.walls.map((x) => x.geoJson),
+      walls: parsed.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
-      restricts: parsed.restricts.map(({ doorId, wall }) => ({ doorId, wall: wall.geoJson })),
+      removableDoors: parsed.removableDoors.map(({ doorId, wall }) => ({
+        doorId,
+        wall: wall.geoJson,
+      })),
+      addableWalls: parsed.addableWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
     };
   }
 

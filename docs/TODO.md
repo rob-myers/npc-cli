@@ -295,6 +295,10 @@
   - try two segs
   - try one segs
 
+- 🚧 support optional walls e.g. `wall optional n`
+  - ✅ `walls` does not include optional one
+  - add in optional ones based on sub-symbols
+
 - show tables via raised "floor texture"
 
 - if computeLayoutInBrowser changes then layout should reload

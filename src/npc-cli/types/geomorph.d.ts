@@ -23,11 +23,9 @@ declare namespace Geomorph {
   interface ParsedSymbol<
     T extends Geom.GeoJsonPolygon | Geom.Poly,
     P extends Geom.VectJson | Geom.Vect = Geom.VectJson
-  > extends SvgGroups<T> {
+  > {
     key: SymbolKey;
     isHull: boolean;
-    /** Hull walls, only non-empty in hull */
-    hullWalls: T[];
     /** Original SVG's width, inferred from `viewBox` */
     width: number;
     /** Original SVG's height, inferred from `viewBox` */
@@ -38,8 +36,16 @@ declare namespace Geomorph {
      */
     pngRect: Geom.RectJson;
 
+    /** Hull walls, only non-empty in hull */
+    hullWalls: WithMeta<T>[];
+    walls: WithMeta<T>[];
+    obstacles: WithMeta<T>[];
+    doors: WithMeta<T>[];
+    /** 🚧 split further? */
+    unsorted: WithMeta<T>[];
+
     /** Hull symbols have sub symbols, defining the layout of the geomorph. */
-    symbols: Geomorph.WithMeta<{
+    symbols: WithMeta<{
       symbolKey: Geomorph.SymbolKey;
       /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
       width: number;
@@ -50,12 +56,15 @@ declare namespace Geomorph {
     }>[];
 
     /** Doors tagged with `optional` can be removed */
-    restricts: {
+    removableDoors: {
       /** The door `doors[doorId]` we can remove */
       doorId: number;
       /** The wall we need to add back in */
       wall: T;
     }[];
+
+    /** Walls tagged with `optional` can be added */
+    addableWalls: WithMeta<T>[];
   }
 
   type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
@@ -66,16 +75,11 @@ declare namespace Geomorph {
   >;
 
   type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
-    Pick<Geomorph.ParsedSymbol<T, Geom.Vect>, "hullWalls" | "walls" | "restricts">
+    Pick<
+      Geomorph.ParsedSymbol<T, Geom.Vect>,
+      "hullWalls" | "walls" | "removableDoors" | "addableWalls"
+    >
   >;
-
-  interface SvgGroups<T extends Geom.Poly | Geom.GeoJsonPolygon> {
-    doors: WithMeta<T>[];
-    obstacles: WithMeta<T>[];
-    walls: T[];
-    /** 🚧 split further? */
-    unsorted: WithMeta<T>[];
-  }
 
   /** Previously called `PointMeta` */
   type Meta<T extends {} = {}> = Record<string, any> & T;
@@ -133,7 +137,7 @@ declare namespace Geomorph {
     // | "console--031--1x1"
     // | "couch-and-chairs--006--0.4x2"
     // | "empty-room--006--2x2"
-    // | "empty-room--013--2x3"
+    | "empty-room--013--2x3"
     // | "empty-room--019--2x4"
     // | "empty-room--020--2x4"
     // | "empty-room--039--3x4"
