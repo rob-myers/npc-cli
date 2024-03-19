@@ -139,7 +139,7 @@ export default function TestWorldScene(props) {
         args={[quadGeometryXY, undefined, state.doorsKey]}
         frustumCulled={false}
       >
-        <meshBasicMaterial side={THREE.DoubleSide} color="red" />
+        <meshBasicMaterial side={THREE.DoubleSide} color="#444" />
       </instancedMesh>
     </>
   );
