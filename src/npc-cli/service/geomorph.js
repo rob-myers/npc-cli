@@ -77,6 +77,29 @@ class GeomorphService {
   }
 
   /**
+   * When hull symbols reference non-hull symbols, they may:
+   * - remove doors tagged with `optional`
+   * - add walls tagged with `optional`
+   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>} symbol
+   * @param {string[]} doorTags e.g. `['s']`
+   * @param {string[]} wallTags e.g. `['e']`
+   */
+  augmentSymbol(symbol, doorTags = [], wallTags = []) {
+    const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
+      const { meta } = symbol.doors[doorId];
+      return !doorTags.some((tag) => meta[tag] === true);
+    });
+    const walls = symbol.walls.concat(
+      doorsToRemove.map((x) => x.wall),
+      symbol.addableWalls.filter(({ meta }) => wallTags.some((tag) => meta[tag] === true))
+    );
+    return {
+      doors: symbol.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)),
+      walls: walls.map((x) => x.cleanFinalReps()),
+    };
+  }
+
+  /**
    * 🚧
    * @param {Geomorph.GeomorphKey} gmKey
    * @param {Geomorph.Assets} assets
@@ -92,7 +115,7 @@ class GeomorphService {
 
     for (const { symbolKey, transform, meta } of symbols) {
       const symbol = assets.symbols[symbolKey];
-      const { doors, walls } = geomorphService.restrictSymbolDoors(symbol, meta.doors);
+      const { doors, walls } = geomorphService.augmentSymbol(symbol, meta.doors, meta.walls);
 
       tmpMat1.feedFromArray(transform);
       walls.forEach((x) =>
@@ -647,26 +670,6 @@ class GeomorphService {
       removableDoors,
       addableWalls,
     };
-  }
-
-  /**
-   * When hull symbols reference non-hull symbols, they may restricted the doors.
-   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>} symbol
-   * @param {string[]} doorTags e.g. `['s']`
-   */
-  restrictSymbolDoors(symbol, doorTags) {
-    if (Array.isArray(doorTags)) {
-      const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
-        const { meta } = symbol.doors[doorId];
-        return !doorTags.some((tag) => meta[tag] === true);
-      });
-      return {
-        doors: symbol.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)),
-        walls: symbol.walls.concat(doorsToRemove.map((x) => x.wall)).map((x) => x.cleanFinalReps()),
-      };
-    } else {
-      return { doors: symbol.doors, walls: symbol.walls };
-    }
   }
 
   /**

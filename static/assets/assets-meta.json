@@ -1,9 +1,9 @@
 {
   "meta": {
     "101--hull": {
-      "lastModified": 1710882766449,
-      "contentHash": -1375963268,
-      "outputHash": 1096633954
+      "lastModified": 1710885707906,
+      "contentHash": -1170012680,
+      "outputHash": 1447555167
     },
     "102--hull": {
       "lastModified": 1710882766449,
@@ -71,7 +71,7 @@
       "outputHash": 1886165333
     },
     "demo-map-1": {"lastModified": 1710691881459, "contentHash": -380436121},
-    "g-101--multipurpose": {"lastModified": 1710882766449},
+    "g-101--multipurpose": {"lastModified": 1710885707906},
     "g-102--research-deck": {"lastModified": 1710882766449},
     "g-103--cargo-bay": {"lastModified": 1710882766449},
     "g-301--bridge": {"lastModified": 1710882766449},
@@ -505,6 +505,13 @@
           "width": 120,
           "height": 180,
           "transform": [0, 1, 1, 0, 360, 120]
+        },
+        {
+          "symbolKey": "empty-room--013--2x3",
+          "meta": {"key": "empty-room--013--2x3", "walls": ["e"]},
+          "width": 120,
+          "height": 180,
+          "transform": [0, -1, -1, 0, 180, 840]
         }
       ],
       "removableDoors": [],

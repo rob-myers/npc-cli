@@ -295,13 +295,9 @@
   - try two segs
   - try one segs
 
-- 🚧 support optional walls e.g. `wall optional n`
+- ✅ support optional walls e.g. `wall optional n`
   - ✅ `walls` does not include optional one
-  - add in optional ones based on sub-symbols
-
-- show tables via raised "floor texture"
-
-- if computeLayoutInBrowser changes then layout should reload
+  - ✅ can add in optional ones based on sub-symbols
 
 - 🚧 avoid dev-server crash on save symbol to static/assets
   ```sh
@@ -310,6 +306,10 @@
   ```
   - save to media/symbols instead
   - nodemon copies to static/assets (so can fetch)
+
+- show tables via raised "floor texture"
+
+- if computeLayoutInBrowser changes then layout should reload
 
 - start using cypress
 - slow resize on maximize desktop (but not mobile)
