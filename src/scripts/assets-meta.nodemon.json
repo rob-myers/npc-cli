@@ -3,7 +3,7 @@
   "watch": [
     "src/scripts/assets-meta.js",
     "src/npc-cli/service/geomorph.js",
-    "static/assets/symbol/",
+    "media/symbol/",
     "media/map/"
   ]
 }

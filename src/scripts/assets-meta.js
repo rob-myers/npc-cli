@@ -19,7 +19,7 @@ import { geomorphService } from "../npc-cli/service/geomorph";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
-const symbolsDir = path.resolve(staticAssetsDir, "symbol");
+const symbolsDir = path.resolve(mediaDir, "symbol");
 const mapsDir = path.resolve(mediaDir, "map");
 const outputFilename = path.resolve(staticAssetsDir, ASSETS_META_JSON_FILENAME);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;

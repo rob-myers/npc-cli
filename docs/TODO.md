@@ -274,13 +274,13 @@
 
 ## WIP
 
-- 🚧 avoid dev-server crash on save symbol to static/assets
+- ✅ avoid dev-server crash on save symbol to static/assets
   ```sh
   [1]   Error: ENOENT: no such file or directory, lstat '/Users/Robert.Myers/coding/np
   [1]   c-cli/static/assets/symbol/301--hull.svg.crswap'
   ```
-  - save to media/symbols instead
-  - nodemon copies to static/assets (so can fetch)
+  - ✅ store and read from media/symbols instead
+  - ✅ still save to static/assets/assets-meta.json (so can fetch)
 
 - 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
