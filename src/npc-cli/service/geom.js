@@ -395,26 +395,22 @@ class geomServiceClass {
   }
 
   /**
-   * @param {Geom.AngledRect<Geom.RectJson>} angledRect
-   */
-  getAngledRectCenter(angledRect) {
-    return this.getAngledRectSeg(angledRect)
-      .reduce((agg, x) => agg.add(x))
-      .scale(0.5);
-  }
-
-  /**
    * Get segment through center along 'x+'.
    * @param {Geom.AngledRect<Geom.RectJson>} _
+   * @param {1 | -1} [yDownwards] if y-axis points downwards this must be `-1`,
+   * e.g. when embedding into three.js XZ plane
    */
-  getAngledRectSeg({ angle, baseRect }) {
-    const widthNormal = tempVect.set(Math.cos(angle), Math.sin(angle));
-    const heightNormal = tempVect2.set(-Math.sin(angle), Math.cos(angle));
+  getAngledRectSeg({ angle, baseRect }, yDownwards = 1) {
+    const widthNormal = tempVect.set(Math.cos(angle), yDownwards * Math.sin(angle));
+    const heightNormal = tempVect2.set(-Math.sin(angle), yDownwards * Math.cos(angle));
     const src = new Vect(baseRect.x, baseRect.y).addScaledVector(
       heightNormal,
       0.5 * baseRect.height
     );
-    return [src, src.clone().addScaledVector(widthNormal, baseRect.width)];
+    return {
+      seg: [src, src.clone().addScaledVector(widthNormal, baseRect.width)],
+      normal: heightNormal.clone(),
+    };
   }
 
   /**
@@ -858,9 +854,15 @@ class geomServiceClass {
    * Convert a polygonal rectangle back into a `Rect` and `angle`.
    * We ensure the width is greater than or equal to the height.
    * @param {Geom.Poly} poly
+   * @param {1 | -1} [yDownwards] if y-axis points downwards this must be `-1`,
+   * e.g. when embedding into three.js XZ plane
    * @returns {Geom.AngledRect<Geom.Rect>}
    */
-  polyToAngledRect(poly) {
+  polyToAngledRect(poly, yDownwards = 1) {
+    if (poly.outline.length !== 4) {
+      return { angle: 0, baseRect: poly.rect }; // Fallback to AABB
+    }
+
     const ps = poly.outline;
     const w = tempVect.copy(ps[1]).sub(ps[0]).length;
     const h = tempVect2.copy(ps[2]).sub(ps[1]).length;
@@ -868,12 +870,12 @@ class geomServiceClass {
     if (w >= h) {
       return {
         baseRect: new Rect(ps[0].x, ps[0].y, w, h),
-        angle: Math.atan2(tempVect.y, tempVect.x),
+        angle: yDownwards * Math.atan2(tempVect.y, tempVect.x),
       };
     } else {
       return {
         baseRect: new Rect(ps[1].x, ps[1].y, h, w),
-        angle: Math.atan2(tempVect2.y, tempVect2.x),
+        angle: yDownwards * Math.atan2(tempVect2.y, tempVect2.x),
       };
     }
   }

@@ -1,93 +1,93 @@
 {
   "meta": {
-    "global": {"lastModified": 1710944187800, "browserHash": 575791210},
+    "global": {"lastModified": 1710951199589, "browserHash": 1654943966},
     "101--hull": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": -740908075,
-      "outputHash": -2134481583
+      "outputHash": -835243657
     },
     "102--hull": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 1358490121,
-      "outputHash": -1647740638
+      "outputHash": 419304967
     },
     "103--hull": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": -675159501,
-      "outputHash": -2027925201
+      "outputHash": -1469385153
     },
     "301--hull": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 1818068925,
-      "outputHash": -542285214
+      "outputHash": -1783762510
     },
     "302--hull": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 411100715,
-      "outputHash": 997534892
+      "outputHash": -310469217
     },
     "303--hull": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 480977991,
-      "outputHash": 263911787
+      "outputHash": 1371119628
     },
     "bridge--042--8x9": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": -1122062891,
-      "outputHash": 194449215
+      "outputHash": 2094328247
     },
     "empty-room--013--2x3": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 1745832409,
-      "outputHash": -565199574
+      "outputHash": 1010597385
     },
     "misc-stellar-cartography--023--4x4": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 1239557246,
-      "outputHash": -677508305
+      "outputHash": -459218517
     },
     "office--001--2x2": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 2135680825,
-      "outputHash": -1269144484
+      "outputHash": -130475023
     },
     "office--020--2x3": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": -1639819156,
-      "outputHash": 1104424497
+      "outputHash": -1325035515
     },
     "office--023--2x3": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": -725557747,
-      "outputHash": -1395644284
+      "outputHash": 2024079687
     },
     "office--026--2x3": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": -738690952,
-      "outputHash": -810729543
+      "outputHash": 149030745
     },
     "stateroom--014--2x2": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 269183967,
-      "outputHash": -288462576
+      "outputHash": 1369318380
     },
     "stateroom--020--2x3": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": 1693180601,
-      "outputHash": -1575119395
+      "outputHash": 300550113
     },
     "stateroom--036--2x4": {
-      "lastModified": 1710944187800,
+      "lastModified": 1710951199589,
       "contentHash": -1894493195,
-      "outputHash": 1342013568
+      "outputHash": -181649714
     },
-    "demo-map-1": {"lastModified": 1710939449212, "contentHash": -1213101529},
-    "g-101--multipurpose": {"lastModified": 1710944187800},
-    "g-102--research-deck": {"lastModified": 1710944187800},
-    "g-103--cargo-bay": {"lastModified": 1710944187800},
-    "g-301--bridge": {"lastModified": 1710944187800},
-    "g-302--xboat-repair-bay": {"lastModified": 1710944187800},
-    "g-303--passenger-deck": {"lastModified": 1710944187800}
+    "demo-map-1": {"lastModified": 1710949233933, "contentHash": -1213101529},
+    "g-101--multipurpose": {"lastModified": 1710951199589},
+    "g-102--research-deck": {"lastModified": 1710951199589},
+    "g-103--cargo-bay": {"lastModified": 1710951199589},
+    "g-301--bridge": {"lastModified": 1710951199589},
+    "g-302--xboat-repair-bay": {"lastModified": 1710951199589},
+    "g-303--passenger-deck": {"lastModified": 1710951199589}
   },
   "symbols": {
     "101--hull": {
@@ -336,7 +336,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 250], [-6, 350], [6, 350], [6, 250]]],
@@ -345,14 +345,14 @@
           "center": {"x": 0, "y": 300},
           "rect": {"x": -6, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 250}, {"x": -12, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 250}, {"x": 0, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 300}, {"x": 6.05, "y": 300}],
+          "entries": [{"x": 6.05, "y": 300}, {"x": -6.05, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 850], [-6, 950], [6, 950], [6, 850]]],
@@ -361,14 +361,14 @@
           "center": {"x": 0, "y": 900},
           "rect": {"x": -6, "y": 850, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 850}, {"x": -12, "y": 950}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 850}, {"x": 0, "y": 950}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 900}, {"x": 6.05, "y": 900}],
+          "entries": [{"x": 6.05, "y": 900}, {"x": -6.05, "y": 900}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -379,14 +379,14 @@
           "center": {"x": 1200, "y": 300},
           "rect": {"x": 1194, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 250}, {"x": 1188, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 250}, {"x": 1200, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 300}, {"x": 1206.05, "y": 300}],
+          "entries": [{"x": 1206.05, "y": 300}, {"x": 1193.95, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -397,10 +397,10 @@
           "center": {"x": 1200, "y": 900},
           "rect": {"x": 1194, "y": 850, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 850}, {"x": 1188, "y": 950}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 850}, {"x": 1200, "y": 950}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 900}, {"x": 1206.05, "y": 900}],
+          "entries": [{"x": 1206.05, "y": 900}, {"x": 1193.95, "y": 900}],
           "navGroupId": -1
         },
         {
@@ -413,10 +413,10 @@
           "center": {"x": 900, "y": 0},
           "rect": {"x": 850, "y": -6, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 12}, {"x": 950, "y": 12}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 0}, {"x": 950, "y": 0}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 6.05}, {"x": 900, "y": -6.05}],
+          "entries": [{"x": 900, "y": -6.05}, {"x": 900, "y": 6.05}],
           "navGroupId": -1
         },
         {
@@ -429,10 +429,10 @@
           "center": {"x": 300, "y": 0},
           "rect": {"x": 250, "y": -6, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 12}, {"x": 350, "y": 12}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 0}, {"x": 350, "y": 0}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 6.05}, {"x": 300, "y": -6.05}],
+          "entries": [{"x": 300, "y": -6.05}, {"x": 300, "y": 6.05}],
           "navGroupId": -1
         },
         {
@@ -447,10 +447,10 @@
           "center": {"x": 900, "y": 1200},
           "rect": {"x": 850, "y": 1194, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 1212}, {"x": 950, "y": 1212}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 1200}, {"x": 950, "y": 1200}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 1206.05}, {"x": 900, "y": 1193.95}],
+          "entries": [{"x": 900, "y": 1193.95}, {"x": 900, "y": 1206.05}],
           "navGroupId": -1
         },
         {
@@ -465,10 +465,10 @@
           "center": {"x": 300, "y": 1200},
           "rect": {"x": 250, "y": 1194, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 1212}, {"x": 350, "y": 1212}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 1200}, {"x": 350, "y": 1200}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 1206.05}, {"x": 300, "y": 1193.95}],
+          "entries": [{"x": 300, "y": 1193.95}, {"x": 300, "y": 1206.05}],
           "navGroupId": -1
         },
         {
@@ -483,10 +483,10 @@
           "center": {"x": 209.5, "y": 359.8},
           "rect": {"x": 186.5, "y": 356.8, "width": 46, "height": 6},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 186.5, "y": 365.8}, {"x": 232.5, "y": 365.8}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 186.5, "y": 359.8}, {"x": 232.5, "y": 359.8}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 209.5, "y": 362.85}, {"x": 209.5, "y": 356.75}],
+          "entries": [{"x": 209.5, "y": 356.75}, {"x": 209.5, "y": 362.85}],
           "navGroupId": -1
         },
         {
@@ -501,10 +501,10 @@
           "center": {"x": 209.5, "y": 840},
           "rect": {"x": 186.5, "y": 837, "width": 46, "height": 6},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 186.5, "y": 846}, {"x": 232.5, "y": 846}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 186.5, "y": 840}, {"x": 232.5, "y": 840}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 209.5, "y": 843.05}, {"x": 209.5, "y": 836.95}],
+          "entries": [{"x": 209.5, "y": 836.95}, {"x": 209.5, "y": 843.05}],
           "navGroupId": -1
         },
         {
@@ -519,10 +519,10 @@
           "center": {"x": 989.5, "y": 840.1},
           "rect": {"x": 966.5, "y": 837.1, "width": 46, "height": 6},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 966.5, "y": 846.1}, {"x": 1012.5, "y": 846.1}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 966.5, "y": 840.1}, {"x": 1012.5, "y": 840.1}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 989.5, "y": 843.15}, {"x": 989.5, "y": 837.05}],
+          "entries": [{"x": 989.5, "y": 837.05}, {"x": 989.5, "y": 843.15}],
           "navGroupId": -1
         },
         {
@@ -537,14 +537,14 @@
           "center": {"x": 989.5, "y": 360.2},
           "rect": {"x": 966.5, "y": 357.2, "width": 46, "height": 6},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 966.5, "y": 366.2}, {"x": 1012.5, "y": 366.2}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 966.5, "y": 360.2}, {"x": 1012.5, "y": 360.2}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 989.5, "y": 363.25}, {"x": 989.5, "y": 357.15}],
+          "entries": [{"x": 989.5, "y": 357.15}, {"x": 989.5, "y": 363.25}],
           "navGroupId": -1
         },
         {
-          "angle": 3.141592653589793,
+          "angle": -3.141592653589793,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -560,17 +560,17 @@
           "center": {"x": 571.4928, "y": 540},
           "rect": {"x": 548.4928, "y": 537, "width": 46, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 594.4928, "y": 534}, {"x": 548.4928, "y": 534}],
-          "normal": {"x": 0, "y": -1},
+          "seg": [{"x": 594.4928, "y": 540}, {"x": 548.4928, "y": 540}],
+          "normal": {"x": 0, "y": 1},
           "roomIds": [null, null],
           "entries": [
-            {"x": 571.4928, "y": 536.95},
-            {"x": 571.4928, "y": 543.05}
+            {"x": 571.4928, "y": 543.05},
+            {"x": 571.4928, "y": 536.95}
           ],
           "navGroupId": -1
         },
         {
-          "angle": 3.141592653589793,
+          "angle": -3.141592653589793,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -586,17 +586,17 @@
           "center": {"x": 627.4928, "y": 540},
           "rect": {"x": 604.4928, "y": 537, "width": 46, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 650.4928, "y": 534}, {"x": 604.4928, "y": 534}],
-          "normal": {"x": 0, "y": -1},
+          "seg": [{"x": 650.4928, "y": 540}, {"x": 604.4928, "y": 540}],
+          "normal": {"x": 0, "y": 1},
           "roomIds": [null, null],
           "entries": [
-            {"x": 627.4928, "y": 536.95},
-            {"x": 627.4928, "y": 543.05}
+            {"x": 627.4928, "y": 543.05},
+            {"x": 627.4928, "y": 536.95}
           ],
           "navGroupId": -1
         },
         {
-          "angle": 3.141592653589793,
+          "angle": -3.141592653589793,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -612,17 +612,17 @@
           "center": {"x": 571.4928, "y": 660},
           "rect": {"x": 548.4928, "y": 657, "width": 46, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 594.4928, "y": 654}, {"x": 548.4928, "y": 654}],
-          "normal": {"x": 0, "y": -1},
+          "seg": [{"x": 594.4928, "y": 660}, {"x": 548.4928, "y": 660}],
+          "normal": {"x": 0, "y": 1},
           "roomIds": [null, null],
           "entries": [
-            {"x": 571.4928, "y": 656.95},
-            {"x": 571.4928, "y": 663.05}
+            {"x": 571.4928, "y": 663.05},
+            {"x": 571.4928, "y": 656.95}
           ],
           "navGroupId": -1
         },
         {
-          "angle": 3.141592653589793,
+          "angle": -3.141592653589793,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -638,12 +638,12 @@
           "center": {"x": 627.4928, "y": 660},
           "rect": {"x": 604.4928, "y": 657, "width": 46, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 650.4928, "y": 654}, {"x": 604.4928, "y": 654}],
-          "normal": {"x": 0, "y": -1},
+          "seg": [{"x": 650.4928, "y": 660}, {"x": 604.4928, "y": 660}],
+          "normal": {"x": 0, "y": 1},
           "roomIds": [null, null],
           "entries": [
-            {"x": 627.4928, "y": 656.95},
-            {"x": 627.4928, "y": 663.05}
+            {"x": 627.4928, "y": 663.05},
+            {"x": 627.4928, "y": 656.95}
           ],
           "navGroupId": -1
         }
@@ -924,7 +924,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 250], [-6, 350], [6, 350], [6, 250]]],
@@ -933,14 +933,14 @@
           "center": {"x": 0, "y": 300},
           "rect": {"x": -6, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 250}, {"x": -12, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 250}, {"x": 0, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 300}, {"x": 6.05, "y": 300}],
+          "entries": [{"x": 6.05, "y": 300}, {"x": -6.05, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 850], [-6, 950], [6, 950], [6, 850]]],
@@ -949,14 +949,14 @@
           "center": {"x": 0, "y": 900},
           "rect": {"x": -6, "y": 850, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 850}, {"x": -12, "y": 950}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 850}, {"x": 0, "y": 950}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 900}, {"x": 6.05, "y": 900}],
+          "entries": [{"x": 6.05, "y": 900}, {"x": -6.05, "y": 900}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -967,14 +967,14 @@
           "center": {"x": 1200, "y": 300},
           "rect": {"x": 1194, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 250}, {"x": 1188, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 250}, {"x": 1200, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 300}, {"x": 1206.05, "y": 300}],
+          "entries": [{"x": 1206.05, "y": 300}, {"x": 1193.95, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -985,10 +985,10 @@
           "center": {"x": 1200, "y": 900},
           "rect": {"x": 1194, "y": 850, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 850}, {"x": 1188, "y": 950}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 850}, {"x": 1200, "y": 950}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 900}, {"x": 1206.05, "y": 900}],
+          "entries": [{"x": 1206.05, "y": 900}, {"x": 1193.95, "y": 900}],
           "navGroupId": -1
         },
         {
@@ -1001,10 +1001,10 @@
           "center": {"x": 900, "y": 0},
           "rect": {"x": 850, "y": -6, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 12}, {"x": 950, "y": 12}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 0}, {"x": 950, "y": 0}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 6.05}, {"x": 900, "y": -6.05}],
+          "entries": [{"x": 900, "y": -6.05}, {"x": 900, "y": 6.05}],
           "navGroupId": -1
         },
         {
@@ -1017,10 +1017,10 @@
           "center": {"x": 300, "y": 0},
           "rect": {"x": 250, "y": -6, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 12}, {"x": 350, "y": 12}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 0}, {"x": 350, "y": 0}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 6.05}, {"x": 300, "y": -6.05}],
+          "entries": [{"x": 300, "y": -6.05}, {"x": 300, "y": 6.05}],
           "navGroupId": -1
         },
         {
@@ -1035,10 +1035,10 @@
           "center": {"x": 900, "y": 1200},
           "rect": {"x": 850, "y": 1194, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 1212}, {"x": 950, "y": 1212}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 1200}, {"x": 950, "y": 1200}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 1206.05}, {"x": 900, "y": 1193.95}],
+          "entries": [{"x": 900, "y": 1193.95}, {"x": 900, "y": 1206.05}],
           "navGroupId": -1
         },
         {
@@ -1053,10 +1053,10 @@
           "center": {"x": 300, "y": 1200},
           "rect": {"x": 250, "y": 1194, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 1212}, {"x": 350, "y": 1212}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 1200}, {"x": 350, "y": 1200}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 1206.05}, {"x": 300, "y": 1193.95}],
+          "entries": [{"x": 300, "y": 1193.95}, {"x": 300, "y": 1206.05}],
           "navGroupId": -1
         },
         {
@@ -1076,10 +1076,10 @@
           "center": {"x": 1050.2, "y": 239.7},
           "rect": {"x": 1027.2, "y": 236.7, "width": 46, "height": 6},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 1027.2, "y": 245.7}, {"x": 1073.2, "y": 245.7}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 1027.2, "y": 239.7}, {"x": 1073.2, "y": 239.7}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 1050.2, "y": 242.75}, {"x": 1050.2, "y": 236.65}],
+          "entries": [{"x": 1050.2, "y": 236.65}, {"x": 1050.2, "y": 242.75}],
           "navGroupId": -1
         }
       ],
@@ -1272,7 +1272,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 250], [-6, 350], [6, 350], [6, 250]]],
@@ -1281,14 +1281,14 @@
           "center": {"x": 0, "y": 300},
           "rect": {"x": -6, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 250}, {"x": -12, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 250}, {"x": 0, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 300}, {"x": 6.05, "y": 300}],
+          "entries": [{"x": 6.05, "y": 300}, {"x": -6.05, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 850], [-6, 950], [6, 950], [6, 850]]],
@@ -1297,14 +1297,14 @@
           "center": {"x": 0, "y": 900},
           "rect": {"x": -6, "y": 850, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 850}, {"x": -12, "y": 950}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 850}, {"x": 0, "y": 950}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 900}, {"x": 6.05, "y": 900}],
+          "entries": [{"x": 6.05, "y": 900}, {"x": -6.05, "y": 900}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -1315,14 +1315,14 @@
           "center": {"x": 1200, "y": 300},
           "rect": {"x": 1194, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 250}, {"x": 1188, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 250}, {"x": 1200, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 300}, {"x": 1206.05, "y": 300}],
+          "entries": [{"x": 1206.05, "y": 300}, {"x": 1193.95, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -1333,10 +1333,10 @@
           "center": {"x": 1200, "y": 900},
           "rect": {"x": 1194, "y": 850, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 850}, {"x": 1188, "y": 950}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 850}, {"x": 1200, "y": 950}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 900}, {"x": 1206.05, "y": 900}],
+          "entries": [{"x": 1206.05, "y": 900}, {"x": 1193.95, "y": 900}],
           "navGroupId": -1
         },
         {
@@ -1349,10 +1349,10 @@
           "center": {"x": 900, "y": 0},
           "rect": {"x": 850, "y": -6, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 12}, {"x": 950, "y": 12}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 0}, {"x": 950, "y": 0}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 6.05}, {"x": 900, "y": -6.05}],
+          "entries": [{"x": 900, "y": -6.05}, {"x": 900, "y": 6.05}],
           "navGroupId": -1
         },
         {
@@ -1365,10 +1365,10 @@
           "center": {"x": 300, "y": 0},
           "rect": {"x": 250, "y": -6, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 12}, {"x": 350, "y": 12}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 0}, {"x": 350, "y": 0}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 6.05}, {"x": 300, "y": -6.05}],
+          "entries": [{"x": 300, "y": -6.05}, {"x": 300, "y": 6.05}],
           "navGroupId": -1
         },
         {
@@ -1383,10 +1383,10 @@
           "center": {"x": 900, "y": 1200},
           "rect": {"x": 850, "y": 1194, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 1212}, {"x": 950, "y": 1212}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 1200}, {"x": 950, "y": 1200}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 1206.05}, {"x": 900, "y": 1193.95}],
+          "entries": [{"x": 900, "y": 1193.95}, {"x": 900, "y": 1206.05}],
           "navGroupId": -1
         },
         {
@@ -1401,10 +1401,10 @@
           "center": {"x": 300, "y": 1200},
           "rect": {"x": 250, "y": 1194, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 1212}, {"x": 350, "y": 1212}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 1200}, {"x": 350, "y": 1200}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 1206.05}, {"x": 300, "y": 1193.95}],
+          "entries": [{"x": 300, "y": 1193.95}, {"x": 300, "y": 1206.05}],
           "navGroupId": -1
         }
       ],
@@ -1643,7 +1643,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 250], [-6, 350], [6, 350], [6, 250]]],
@@ -1652,14 +1652,14 @@
           "center": {"x": 0, "y": 300},
           "rect": {"x": -6, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 250}, {"x": -12, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 250}, {"x": 0, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 300}, {"x": 6.05, "y": 300}],
+          "entries": [{"x": 6.05, "y": 300}, {"x": -6.05, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -1670,10 +1670,10 @@
           "center": {"x": 1200, "y": 300},
           "rect": {"x": 1194, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 250}, {"x": 1188, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 250}, {"x": 1200, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 300}, {"x": 1206.05, "y": 300}],
+          "entries": [{"x": 1206.05, "y": 300}, {"x": 1193.95, "y": 300}],
           "navGroupId": -1
         },
         {
@@ -1686,10 +1686,10 @@
           "center": {"x": 300, "y": 600},
           "rect": {"x": 250, "y": 594, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 612}, {"x": 350, "y": 612}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 600}, {"x": 350, "y": 600}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 606.05}, {"x": 300, "y": 593.95}],
+          "entries": [{"x": 300, "y": 593.95}, {"x": 300, "y": 606.05}],
           "navGroupId": -1
         },
         {
@@ -1702,14 +1702,14 @@
           "center": {"x": 900, "y": 600},
           "rect": {"x": 850, "y": 594, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 612}, {"x": 950, "y": 612}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 600}, {"x": 950, "y": 600}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 606.05}, {"x": 900, "y": 593.95}],
+          "entries": [{"x": 900, "y": 593.95}, {"x": 900, "y": 606.05}],
           "navGroupId": -1
         },
         {
-          "angle": 3.141592653589793,
+          "angle": -3.141592653589793,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -1725,17 +1725,17 @@
           "center": {"x": 269.7573, "y": 240.5},
           "rect": {"x": 246.7573, "y": 237.5, "width": 46, "height": 6},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 292.7573, "y": 234.5}, {"x": 246.7573, "y": 234.5}],
-          "normal": {"x": 0, "y": -1},
+          "seg": [{"x": 292.7573, "y": 240.5}, {"x": 246.7573, "y": 240.5}],
+          "normal": {"x": 0, "y": 1},
           "roomIds": [null, null],
           "entries": [
-            {"x": 269.7573, "y": 237.45},
-            {"x": 269.7573, "y": 243.55}
+            {"x": 269.7573, "y": 243.55},
+            {"x": 269.7573, "y": 237.45}
           ],
           "navGroupId": -1
         },
         {
-          "angle": 3.141592653589793,
+          "angle": -3.141592653589793,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -1752,14 +1752,14 @@
           "rect": {"x": 907.7573, "y": 237.5002, "width": 46, "height": 6},
           "meta": {"door": true, "iris": true},
           "seg": [
-            {"x": 953.7573, "y": 234.5002},
-            {"x": 907.7573, "y": 234.5002}
+            {"x": 953.7573, "y": 240.5002},
+            {"x": 907.7573, "y": 240.5002}
           ],
-          "normal": {"x": 0, "y": -1},
+          "normal": {"x": 0, "y": 1},
           "roomIds": [null, null],
           "entries": [
-            {"x": 930.7573, "y": 237.4502},
-            {"x": 930.7573, "y": 243.5502}
+            {"x": 930.7573, "y": 243.5502},
+            {"x": 930.7573, "y": 237.4502}
           ],
           "navGroupId": -1
         }
@@ -2212,7 +2212,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 250], [-6, 350], [6, 350], [6, 250]]],
@@ -2221,14 +2221,14 @@
           "center": {"x": 0, "y": 300},
           "rect": {"x": -6, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 250}, {"x": -12, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 250}, {"x": 0, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 300}, {"x": 6.05, "y": 300}],
+          "entries": [{"x": 6.05, "y": 300}, {"x": -6.05, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -2239,10 +2239,10 @@
           "center": {"x": 1200, "y": 300},
           "rect": {"x": 1194, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 250}, {"x": 1188, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 250}, {"x": 1200, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 300}, {"x": 1206.05, "y": 300}],
+          "entries": [{"x": 1206.05, "y": 300}, {"x": 1193.95, "y": 300}],
           "navGroupId": -1
         },
         {
@@ -2255,10 +2255,10 @@
           "center": {"x": 300, "y": 600},
           "rect": {"x": 250, "y": 594, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 612}, {"x": 350, "y": 612}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 600}, {"x": 350, "y": 600}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 606.05}, {"x": 300, "y": 593.95}],
+          "entries": [{"x": 300, "y": 593.95}, {"x": 300, "y": 606.05}],
           "navGroupId": -1
         },
         {
@@ -2271,10 +2271,10 @@
           "center": {"x": 900, "y": 600},
           "rect": {"x": 850, "y": 594, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 612}, {"x": 950, "y": 612}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 600}, {"x": 950, "y": 600}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 606.05}, {"x": 900, "y": 593.95}],
+          "entries": [{"x": 900, "y": 593.95}, {"x": 900, "y": 606.05}],
           "navGroupId": -1
         },
         {
@@ -2287,14 +2287,14 @@
           "center": {"x": 510, "y": 420},
           "rect": {"x": 485, "y": 416, "width": 50, "height": 8},
           "meta": {"door": true, "iris": true, "sealed": true, "hull": true},
-          "seg": [{"x": 485, "y": 428}, {"x": 535, "y": 428}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 485, "y": 420}, {"x": 535, "y": 420}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 510, "y": 424.05}, {"x": 510, "y": 415.95}],
+          "entries": [{"x": 510, "y": 415.95}, {"x": 510, "y": 424.05}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[1076, 10], [1076, 110], [1084, 110], [1084, 10]]],
@@ -2303,10 +2303,10 @@
           "center": {"x": 1080, "y": 60},
           "rect": {"x": 1076, "y": 10, "width": 8, "height": 100},
           "meta": {"door": true, "sealed": true, "hull": true},
-          "seg": [{"x": 1072, "y": 10}, {"x": 1072, "y": 110}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1080, "y": 10}, {"x": 1080, "y": 110}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1075.95, "y": 60}, {"x": 1084.05, "y": 60}],
+          "entries": [{"x": 1084.05, "y": 60}, {"x": 1075.95, "y": 60}],
           "navGroupId": -1
         },
         {
@@ -2319,14 +2319,14 @@
           "center": {"x": 750, "y": 539.5},
           "rect": {"x": 728, "y": 537, "width": 44, "height": 5},
           "meta": {"door": true},
-          "seg": [{"x": 728, "y": 544.5}, {"x": 772, "y": 544.5}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 728, "y": 539.5}, {"x": 772, "y": 539.5}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 750, "y": 542.05}, {"x": 750, "y": 536.95}],
+          "entries": [{"x": 750, "y": 536.95}, {"x": 750, "y": 542.05}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -2337,14 +2337,14 @@
           "center": {"x": 900, "y": 450},
           "rect": {"x": 897.5, "y": 428, "width": 5, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 895, "y": 428}, {"x": 895, "y": 472}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 900, "y": 428}, {"x": 900, "y": 472}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 897.45, "y": 450}, {"x": 902.55, "y": 450}],
+          "entries": [{"x": 902.55, "y": 450}, {"x": 897.45, "y": 450}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -2355,14 +2355,14 @@
           "center": {"x": 1080, "y": 388.5},
           "rect": {"x": 1077.5, "y": 366, "width": 5, "height": 45},
           "meta": {"door": true},
-          "seg": [{"x": 1075, "y": 366}, {"x": 1075, "y": 411}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1080, "y": 366}, {"x": 1080, "y": 411}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1077.45, "y": 388.5}, {"x": 1082.55, "y": 388.5}],
+          "entries": [{"x": 1082.55, "y": 388.5}, {"x": 1077.45, "y": 388.5}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -2373,14 +2373,14 @@
           "center": {"x": 1170, "y": 209},
           "rect": {"x": 1167, "y": 187, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 1164, "y": 187}, {"x": 1164, "y": 231}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1170, "y": 187}, {"x": 1170, "y": 231}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1166.95, "y": 209}, {"x": 1173.05, "y": 209}],
+          "entries": [{"x": 1173.05, "y": 209}, {"x": 1166.95, "y": 209}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -2391,14 +2391,14 @@
           "center": {"x": 1170, "y": 149},
           "rect": {"x": 1167, "y": 127, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 1164, "y": 127}, {"x": 1164, "y": 171}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1170, "y": 127}, {"x": 1170, "y": 171}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1166.95, "y": 149}, {"x": 1173.05, "y": 149}],
+          "entries": [{"x": 1173.05, "y": 149}, {"x": 1166.95, "y": 149}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[1173, 67], [1167, 67], [1167, 111], [1173, 111]]],
@@ -2407,14 +2407,14 @@
           "center": {"x": 1170, "y": 89},
           "rect": {"x": 1167, "y": 67, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 1164, "y": 67}, {"x": 1164, "y": 111}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1170, "y": 67}, {"x": 1170, "y": 111}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1166.95, "y": 89}, {"x": 1173.05, "y": 89}],
+          "entries": [{"x": 1173.05, "y": 89}, {"x": 1166.95, "y": 89}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[1173, 8], [1167, 8], [1167, 52], [1173, 52]]],
@@ -2423,14 +2423,14 @@
           "center": {"x": 1170, "y": 30},
           "rect": {"x": 1167, "y": 8, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 1164, "y": 8}, {"x": 1164, "y": 52}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1170, "y": 8}, {"x": 1170, "y": 52}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1166.95, "y": 30}, {"x": 1173.05, "y": 30}],
+          "entries": [{"x": 1173.05, "y": 30}, {"x": 1166.95, "y": 30}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -2441,14 +2441,14 @@
           "center": {"x": 1080, "y": 448.5},
           "rect": {"x": 1077.5, "y": 426, "width": 5, "height": 45},
           "meta": {"door": true},
-          "seg": [{"x": 1075, "y": 426}, {"x": 1075, "y": 471}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1080, "y": 426}, {"x": 1080, "y": 471}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1077.45, "y": 448.5}, {"x": 1082.55, "y": 448.5}],
+          "entries": [{"x": 1082.55, "y": 448.5}, {"x": 1077.45, "y": 448.5}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -2459,10 +2459,10 @@
           "center": {"x": 1080, "y": 568.5},
           "rect": {"x": 1077.5, "y": 546, "width": 5, "height": 45},
           "meta": {"door": true},
-          "seg": [{"x": 1075, "y": 546}, {"x": 1075, "y": 591}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1080, "y": 546}, {"x": 1080, "y": 591}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1077.45, "y": 568.5}, {"x": 1082.55, "y": 568.5}],
+          "entries": [{"x": 1082.55, "y": 568.5}, {"x": 1077.45, "y": 568.5}],
           "navGroupId": -1
         }
       ],
@@ -2479,10 +2479,10 @@
           "center": {"x": 330, "y": 416.95000000000005},
           "rect": {"x": 240, "y": 409.9, "width": 180, "height": 14.1},
           "meta": {"window": true},
-          "seg": [{"x": 240, "y": 431.05}, {"x": 420, "y": 431.05}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 240, "y": 416.95}, {"x": 420, "y": 416.95}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 330, "y": 424.05}, {"x": 330, "y": 409.85}],
+          "entries": [{"x": 330, "y": 409.85}, {"x": 330, "y": 424.05}],
           "navGroupId": -1
         }
       ],
@@ -2988,7 +2988,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-6, 250], [-6, 350], [6, 350], [6, 250]]],
@@ -2997,14 +2997,14 @@
           "center": {"x": 0, "y": 300},
           "rect": {"x": -6, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": -12, "y": 250}, {"x": -12, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 250}, {"x": 0, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.05, "y": 300}, {"x": 6.05, "y": 300}],
+          "entries": [{"x": 6.05, "y": 300}, {"x": -6.05, "y": 300}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -3015,10 +3015,10 @@
           "center": {"x": 1200, "y": 300},
           "rect": {"x": 1194, "y": 250, "width": 12, "height": 100},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 1188, "y": 250}, {"x": 1188, "y": 350}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 1200, "y": 250}, {"x": 1200, "y": 350}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 1193.95, "y": 300}, {"x": 1206.05, "y": 300}],
+          "entries": [{"x": 1206.05, "y": 300}, {"x": 1193.95, "y": 300}],
           "navGroupId": -1
         },
         {
@@ -3031,10 +3031,10 @@
           "center": {"x": 300, "y": 600},
           "rect": {"x": 250, "y": 594, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 250, "y": 612}, {"x": 350, "y": 612}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 250, "y": 600}, {"x": 350, "y": 600}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 300, "y": 606.05}, {"x": 300, "y": 593.95}],
+          "entries": [{"x": 300, "y": 593.95}, {"x": 300, "y": 606.05}],
           "navGroupId": -1
         },
         {
@@ -3047,10 +3047,10 @@
           "center": {"x": 900, "y": 600},
           "rect": {"x": 850, "y": 594, "width": 100, "height": 12},
           "meta": {"door": true, "hull": true},
-          "seg": [{"x": 850, "y": 612}, {"x": 950, "y": 612}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 850, "y": 600}, {"x": 950, "y": 600}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 900, "y": 606.05}, {"x": 900, "y": 593.95}],
+          "entries": [{"x": 900, "y": 593.95}, {"x": 900, "y": 606.05}],
           "navGroupId": -1
         },
         {
@@ -3065,10 +3065,10 @@
           "center": {"x": 149.5, "y": 241},
           "rect": {"x": 127.5, "y": 238, "width": 44, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 127.5, "y": 247}, {"x": 171.5, "y": 247}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 127.5, "y": 241}, {"x": 171.5, "y": 241}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 149.5, "y": 244.05}, {"x": 149.5, "y": 237.95}],
+          "entries": [{"x": 149.5, "y": 237.95}, {"x": 149.5, "y": 244.05}],
           "navGroupId": -1
         },
         {
@@ -3083,14 +3083,14 @@
           "center": {"x": 30.857, "y": 368},
           "rect": {"x": 7.857, "y": 364.5, "width": 46, "height": 7},
           "meta": {"door": true},
-          "seg": [{"x": 7.857, "y": 375}, {"x": 53.857, "y": 375}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 7.857, "y": 368}, {"x": 53.857, "y": 368}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 30.857, "y": 371.55}, {"x": 30.857, "y": 364.45}],
+          "entries": [{"x": 30.857, "y": 364.45}, {"x": 30.857, "y": 371.55}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -3106,10 +3106,10 @@
           "center": {"x": 233, "y": 570.054},
           "rect": {"x": 229.5, "y": 547.054, "width": 7, "height": 46},
           "meta": {"door": true},
-          "seg": [{"x": 226, "y": 547.054}, {"x": 226, "y": 593.054}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 233, "y": 547.054}, {"x": 233, "y": 593.054}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 229.45, "y": 570.054}, {"x": 236.55, "y": 570.054}],
+          "entries": [{"x": 236.55, "y": 570.054}, {"x": 229.45, "y": 570.054}],
           "navGroupId": -1
         },
         {
@@ -3124,14 +3124,14 @@
           "center": {"x": 209.5, "y": 241},
           "rect": {"x": 187.5, "y": 238, "width": 44, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 187.5, "y": 247}, {"x": 231.5, "y": 247}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 187.5, "y": 241}, {"x": 231.5, "y": 241}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 209.5, "y": 244.05}, {"x": 209.5, "y": 237.95}],
+          "entries": [{"x": 209.5, "y": 237.95}, {"x": 209.5, "y": 244.05}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -3147,17 +3147,17 @@
           "center": {"x": 240.5, "y": 210.5562},
           "rect": {"x": 237.5, "y": 188.5562, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 234.5, "y": 188.5562}, {"x": 234.5, "y": 232.5562}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 240.5, "y": 188.5562}, {"x": 240.5, "y": 232.5562}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
           "entries": [
-            {"x": 237.45, "y": 210.5562},
-            {"x": 243.55, "y": 210.5562}
+            {"x": 243.55, "y": 210.5562},
+            {"x": 237.45, "y": 210.5562}
           ],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -3168,14 +3168,14 @@
           "center": {"x": 300, "y": 330.5},
           "rect": {"x": 297, "y": 308.5, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 294, "y": 308.5}, {"x": 294, "y": 352.5}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 300, "y": 308.5}, {"x": 300, "y": 352.5}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 296.95, "y": 330.5}, {"x": 303.05, "y": 330.5}],
+          "entries": [{"x": 303.05, "y": 330.5}, {"x": 296.95, "y": 330.5}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -3186,14 +3186,14 @@
           "center": {"x": 959.9, "y": 210},
           "rect": {"x": 956.9, "y": 188, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 953.9, "y": 188}, {"x": 953.9, "y": 232}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 959.9, "y": 188}, {"x": 959.9, "y": 232}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 956.85, "y": 210}, {"x": 962.95, "y": 210}],
+          "entries": [{"x": 962.95, "y": 210}, {"x": 956.85, "y": 210}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[897, 309], [897, 353], [903, 353], [903, 309]]],
@@ -3202,10 +3202,10 @@
           "center": {"x": 900, "y": 331},
           "rect": {"x": 897, "y": 309, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 894, "y": 309}, {"x": 894, "y": 353}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 900, "y": 309}, {"x": 900, "y": 353}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 896.95, "y": 331}, {"x": 903.05, "y": 331}],
+          "entries": [{"x": 903.05, "y": 331}, {"x": 896.95, "y": 331}],
           "navGroupId": -1
         }
       ],
@@ -3222,10 +3222,10 @@
           "center": {"x": 119.6, "y": 1.0499999999999998},
           "rect": {"x": 88.5, "y": -6, "width": 62.2, "height": 14.1},
           "meta": {"window": true, "hull": true},
-          "seg": [{"x": 88.5, "y": 15.15}, {"x": 150.7, "y": 15.15}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 88.5, "y": 1.05}, {"x": 150.7, "y": 1.05}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 119.6, "y": 8.15}, {"x": 119.6, "y": -6.05}],
+          "entries": [{"x": 119.6, "y": -6.05}, {"x": 119.6, "y": 8.15}],
           "navGroupId": -1
         },
         {
@@ -3240,10 +3240,10 @@
           "center": {"x": 299.6, "y": 1.0499999999999998},
           "rect": {"x": 268.5, "y": -6, "width": 62.2, "height": 14.1},
           "meta": {"window": true, "hull": true},
-          "seg": [{"x": 268.5, "y": 15.15}, {"x": 330.7, "y": 15.15}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 268.5, "y": 1.05}, {"x": 330.7, "y": 1.05}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 299.6, "y": 8.15}, {"x": 299.6, "y": -6.05}],
+          "entries": [{"x": 299.6, "y": -6.05}, {"x": 299.6, "y": 8.15}],
           "navGroupId": -1
         },
         {
@@ -3258,10 +3258,10 @@
           "center": {"x": 419.6, "y": 1.0499999999999998},
           "rect": {"x": 388.5, "y": -6, "width": 62.2, "height": 14.1},
           "meta": {"window": true, "hull": true},
-          "seg": [{"x": 388.5, "y": 15.15}, {"x": 450.7, "y": 15.15}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 388.5, "y": 1.05}, {"x": 450.7, "y": 1.05}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 419.6, "y": 8.15}, {"x": 419.6, "y": -6.05}],
+          "entries": [{"x": 419.6, "y": -6.05}, {"x": 419.6, "y": 8.15}],
           "navGroupId": -1
         },
         {
@@ -3276,10 +3276,10 @@
           "center": {"x": 539.6, "y": 1.0499999999999998},
           "rect": {"x": 508.5, "y": -6, "width": 62.2, "height": 14.1},
           "meta": {"window": true, "hull": true},
-          "seg": [{"x": 508.5, "y": 15.15}, {"x": 570.7, "y": 15.15}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 508.5, "y": 1.05}, {"x": 570.7, "y": 1.05}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 539.6, "y": 8.15}, {"x": 539.6, "y": -6.05}],
+          "entries": [{"x": 539.6, "y": -6.05}, {"x": 539.6, "y": 8.15}],
           "navGroupId": -1
         },
         {
@@ -3294,10 +3294,10 @@
           "center": {"x": 659.6, "y": 1.0499999999999998},
           "rect": {"x": 628.5, "y": -6, "width": 62.2, "height": 14.1},
           "meta": {"window": true, "hull": true},
-          "seg": [{"x": 628.5, "y": 15.15}, {"x": 690.7, "y": 15.15}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 628.5, "y": 1.05}, {"x": 690.7, "y": 1.05}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 659.6, "y": 8.15}, {"x": 659.6, "y": -6.05}],
+          "entries": [{"x": 659.6, "y": -6.05}, {"x": 659.6, "y": 8.15}],
           "navGroupId": -1
         },
         {
@@ -3312,10 +3312,10 @@
           "center": {"x": 899.5999999999999, "y": 1.0499999999999998},
           "rect": {"x": 868.5, "y": -6, "width": 62.2, "height": 14.1},
           "meta": {"window": true, "hull": true},
-          "seg": [{"x": 868.5, "y": 15.15}, {"x": 930.7, "y": 15.15}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 868.5, "y": 1.05}, {"x": 930.7, "y": 1.05}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 899.6, "y": 8.15}, {"x": 899.6, "y": -6.05}],
+          "entries": [{"x": 899.6, "y": -6.05}, {"x": 899.6, "y": 8.15}],
           "navGroupId": -1
         }
       ],
@@ -4239,7 +4239,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -4255,14 +4255,14 @@
           "center": {"x": 120.02759999999999, "y": 389},
           "rect": {"x": 117.6276, "y": 366, "width": 4.8, "height": 46},
           "meta": {"door": true},
-          "seg": [{"x": 115.2276, "y": 366}, {"x": 115.2276, "y": 412}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 120.0276, "y": 366}, {"x": 120.0276, "y": 412}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 117.5776, "y": 389}, {"x": 122.4776, "y": 389}],
+          "entries": [{"x": 122.4776, "y": 389}, {"x": 117.5776, "y": 389}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -4273,14 +4273,14 @@
           "center": {"x": 360.1, "y": 389},
           "rect": {"x": 357.7, "y": 366, "width": 4.8, "height": 46},
           "meta": {"door": true},
-          "seg": [{"x": 355.3, "y": 366}, {"x": 355.3, "y": 412}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 360.1, "y": 366}, {"x": 360.1, "y": 412}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 357.65, "y": 389}, {"x": 362.55, "y": 389}],
+          "entries": [{"x": 362.55, "y": 389}, {"x": 357.65, "y": 389}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -4291,14 +4291,14 @@
           "center": {"x": 360.1, "y": 263.119},
           "rect": {"x": 357.7, "y": 243, "width": 4.8, "height": 40.238},
           "meta": {"door": true},
-          "seg": [{"x": 355.3, "y": 243}, {"x": 355.3, "y": 283.238}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 360.1, "y": 243}, {"x": 360.1, "y": 283.238}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 357.65, "y": 263.119}, {"x": 362.55, "y": 263.119}],
+          "entries": [{"x": 362.55, "y": 263.119}, {"x": 357.65, "y": 263.119}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -4309,10 +4309,10 @@
           "center": {"x": 120, "y": 270},
           "rect": {"x": 117.6, "y": 247, "width": 4.8, "height": 46},
           "meta": {"door": true},
-          "seg": [{"x": 115.2, "y": 247}, {"x": 115.2, "y": 293}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 120, "y": 247}, {"x": 120, "y": 293}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 117.55, "y": 270}, {"x": 122.45, "y": 270}],
+          "entries": [{"x": 122.45, "y": 270}, {"x": 117.55, "y": 270}],
           "navGroupId": -1
         },
         {
@@ -4327,10 +4327,10 @@
           "center": {"x": 150, "y": 150.2},
           "rect": {"x": 127, "y": 147.8, "width": 46, "height": 4.8},
           "meta": {"door": true},
-          "seg": [{"x": 127, "y": 155}, {"x": 173, "y": 155}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 127, "y": 150.2}, {"x": 173, "y": 150.2}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 150, "y": 152.65}, {"x": 150, "y": 147.75}],
+          "entries": [{"x": 150, "y": 147.75}, {"x": 150, "y": 152.65}],
           "navGroupId": -1
         },
         {
@@ -4345,10 +4345,10 @@
           "center": {"x": 330, "y": 150.2},
           "rect": {"x": 307, "y": 147.8, "width": 46, "height": 4.8},
           "meta": {"door": true},
-          "seg": [{"x": 307, "y": 155}, {"x": 353, "y": 155}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 307, "y": 150.2}, {"x": 353, "y": 150.2}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 330, "y": 152.65}, {"x": 330, "y": 147.75}],
+          "entries": [{"x": 330, "y": 147.75}, {"x": 330, "y": 152.65}],
           "navGroupId": -1
         },
         {
@@ -4363,14 +4363,14 @@
           "center": {"x": 150, "y": 300.6},
           "rect": {"x": 127, "y": 298.2, "width": 46, "height": 4.8},
           "meta": {"door": true},
-          "seg": [{"x": 127, "y": 305.4}, {"x": 173, "y": 305.4}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 127, "y": 300.6}, {"x": 173, "y": 300.6}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 150, "y": 303.05}, {"x": 150, "y": 298.15}],
+          "entries": [{"x": 150, "y": 298.15}, {"x": 150, "y": 303.05}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -4386,14 +4386,14 @@
           "center": {"x": 480.0238, "y": 210},
           "rect": {"x": 477.5032, "y": 187, "width": 5.0412, "height": 46},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 474.9826, "y": 187}, {"x": 474.9826, "y": 233}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 480.0238, "y": 187}, {"x": 480.0238, "y": 233}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 477.4532, "y": 210}, {"x": 482.5944, "y": 210}],
+          "entries": [{"x": 482.5944, "y": 210}, {"x": 477.4532, "y": 210}],
           "navGroupId": -1
         },
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[-2.4, 187], [-2.4, 233], [2.4, 233], [2.4, 187]]],
@@ -4402,10 +4402,10 @@
           "center": {"x": 0, "y": 210},
           "rect": {"x": -2.4, "y": 187, "width": 4.8, "height": 46},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": -4.8, "y": 187}, {"x": -4.8, "y": 233}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 0, "y": 187}, {"x": 0, "y": 233}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -2.45, "y": 210}, {"x": 2.45, "y": 210}],
+          "entries": [{"x": 2.45, "y": 210}, {"x": -2.45, "y": 210}],
           "navGroupId": -1
         },
         {
@@ -4420,10 +4420,10 @@
           "center": {"x": 270, "y": 180.4},
           "rect": {"x": 247, "y": 178, "width": 46, "height": 4.8},
           "meta": {"door": true, "iris": true},
-          "seg": [{"x": 247, "y": 185.2}, {"x": 293, "y": 185.2}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 247, "y": 180.4}, {"x": 293, "y": 180.4}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 270, "y": 182.85}, {"x": 270, "y": 177.95}],
+          "entries": [{"x": 270, "y": 177.95}, {"x": 270, "y": 182.85}],
           "navGroupId": -1
         }
       ],
@@ -4484,12 +4484,12 @@
             "height": 83.676
           },
           "meta": {"window": true},
-          "seg": [{"x": 61.0232, "y": 29.104}, {"x": 420, "y": 29.104}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 61.0232, "y": -54.572}, {"x": 420, "y": -54.572}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
           "entries": [
-            {"x": 240.2809, "y": 62.3483},
-            {"x": 240.2809, "y": -21.4277}
+            {"x": 240.2809, "y": -21.4277},
+            {"x": 240.2809, "y": 62.3483}
           ],
           "navGroupId": -1
         },
@@ -4505,10 +4505,10 @@
           "center": {"x": 269.2, "y": 306.6},
           "rect": {"x": 180, "y": 300.4, "width": 178.4, "height": 12.4},
           "meta": {"window": true, "frosted": true},
-          "seg": [{"x": 180, "y": 319}, {"x": 358.4, "y": 319}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 180, "y": 306.6}, {"x": 358.4, "y": 306.6}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 269.2, "y": 312.85}, {"x": 269.2, "y": 300.35}],
+          "entries": [{"x": 269.2, "y": 300.35}, {"x": 269.2, "y": 312.85}],
           "navGroupId": -1
         }
       ],
@@ -4892,10 +4892,10 @@
           "center": {"x": 90, "y": 0},
           "rect": {"x": 68, "y": -3, "width": 44, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 68, "y": 6}, {"x": 112, "y": 6}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 68, "y": 0}, {"x": 112, "y": 0}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 90, "y": 3.05}, {"x": 90, "y": -3.05}],
+          "entries": [{"x": 90, "y": -3.05}, {"x": 90, "y": 3.05}],
           "navGroupId": -1
         }
       ],
@@ -4997,7 +4997,7 @@
       ],
       "doors": [
         {
-          "angle": 0.7853999311657293,
+          "angle": -0.7853999311657293,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -5018,12 +5018,12 @@
             "height": 31.6784
           },
           "meta": {"door": true},
-          "seg": [{"x": 192.633, "y": 19.3948}, {"x": 220.9172, "y": 47.6791}],
-          "normal": {"x": -0.7071, "y": 0.7071},
+          "seg": [{"x": 196.0272, "y": 16.0006}, {"x": 224.3114, "y": 44.2849}],
+          "normal": {"x": 0.7071, "y": -0.7071},
           "roomIds": [null, null],
           "entries": [
-            {"x": 208.4368, "y": 31.8752},
-            {"x": 211.9017, "y": 28.4104}
+            {"x": 211.9017, "y": 28.4104},
+            {"x": 208.4368, "y": 31.8752}
           ],
           "navGroupId": -1
         }
@@ -5141,7 +5141,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -5152,10 +5152,10 @@
           "center": {"x": 120, "y": 87.5},
           "rect": {"x": 117.6, "y": 60, "width": 4.8, "height": 55},
           "meta": {"door": true, "optional": true, "e": true},
-          "seg": [{"x": 115.2, "y": 60}, {"x": 115.2, "y": 115}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 120, "y": 60}, {"x": 120, "y": 115}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 117.55, "y": 87.5}, {"x": 122.45, "y": 87.5}],
+          "entries": [{"x": 122.45, "y": 87.5}, {"x": 117.55, "y": 87.5}],
           "navGroupId": -1
         },
         {
@@ -5170,10 +5170,10 @@
           "center": {"x": 89, "y": 120},
           "rect": {"x": 66, "y": 117.6, "width": 46, "height": 4.8},
           "meta": {"door": true, "optional": true, "s": true},
-          "seg": [{"x": 66, "y": 124.8}, {"x": 112, "y": 124.8}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 66, "y": 120}, {"x": 112, "y": 120}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 89, "y": 122.45}, {"x": 89, "y": 117.55}],
+          "entries": [{"x": 89, "y": 117.55}, {"x": 89, "y": 122.45}],
           "navGroupId": -1
         }
       ],
@@ -5274,7 +5274,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[117, 68], [117, 112], [123, 112], [123, 68]]],
@@ -5283,10 +5283,10 @@
           "center": {"x": 120, "y": 90},
           "rect": {"x": 117, "y": 68, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 114, "y": 68}, {"x": 114, "y": 112}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 120, "y": 68}, {"x": 120, "y": 112}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 116.95, "y": 90}, {"x": 123.05, "y": 90}],
+          "entries": [{"x": 123.05, "y": 90}, {"x": 116.95, "y": 90}],
           "navGroupId": -1
         }
       ],
@@ -5395,10 +5395,10 @@
           "center": {"x": 30, "y": 180},
           "rect": {"x": 8, "y": 177, "width": 44, "height": 6},
           "meta": {"door": true},
-          "seg": [{"x": 8, "y": 186}, {"x": 52, "y": 186}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 8, "y": 180}, {"x": 52, "y": 180}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 30, "y": 183.05}, {"x": 30, "y": 176.95}],
+          "entries": [{"x": 30, "y": 176.95}, {"x": 30, "y": 183.05}],
           "navGroupId": -1
         }
       ],
@@ -5528,7 +5528,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[117, 8], [117, 52], [123, 52], [123, 8]]],
@@ -5537,16 +5537,16 @@
           "center": {"x": 120, "y": 30},
           "rect": {"x": 117, "y": 8, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 114, "y": 8}, {"x": 114, "y": 52}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 120, "y": 8}, {"x": 120, "y": 52}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 116.95, "y": 30}, {"x": 123.05, "y": 30}],
+          "entries": [{"x": 123.05, "y": 30}, {"x": 116.95, "y": 30}],
           "navGroupId": -1
         }
       ],
       "windows": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [
@@ -5557,10 +5557,10 @@
           "center": {"x": -0.10000000000000009, "y": 60.1},
           "rect": {"x": -6.8, "y": 29.4, "width": 13.4, "height": 61.4},
           "meta": {"window": true},
-          "seg": [{"x": -13.5, "y": 29.4}, {"x": -13.5, "y": 90.8}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": -0.1, "y": 29.4}, {"x": -0.1, "y": 90.8}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": -6.85, "y": 60.1}, {"x": 6.65, "y": 60.1}],
+          "entries": [{"x": 6.65, "y": 60.1}, {"x": -6.85, "y": 60.1}],
           "navGroupId": -1
         }
       ],
@@ -5671,10 +5671,10 @@
           "center": {"x": 90, "y": 120},
           "rect": {"x": 67, "y": 117.6, "width": 46, "height": 4.8},
           "meta": {"door": true},
-          "seg": [{"x": 67, "y": 124.8}, {"x": 113, "y": 124.8}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 67, "y": 120}, {"x": 113, "y": 120}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 90, "y": 122.45}, {"x": 90, "y": 117.55}],
+          "entries": [{"x": 90, "y": 117.55}, {"x": 90, "y": 122.45}],
           "navGroupId": -1
         },
         {
@@ -5687,10 +5687,10 @@
           "center": {"x": 90, "y": 60},
           "rect": {"x": 67, "y": 57.6, "width": 46, "height": 4.8},
           "meta": {"door": true},
-          "seg": [{"x": 67, "y": 64.8}, {"x": 113, "y": 64.8}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 67, "y": 60}, {"x": 113, "y": 60}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 90, "y": 62.45}, {"x": 90, "y": 57.55}],
+          "entries": [{"x": 90, "y": 57.55}, {"x": 90, "y": 62.45}],
           "navGroupId": -1
         }
       ],
@@ -5838,7 +5838,7 @@
       ],
       "doors": [
         {
-          "angle": 1.5707963267948966,
+          "angle": -1.5707963267948966,
           "poly": {
             "type": "Polygon",
             "coordinates": [[[117, 128], [117, 172], [123, 172], [123, 128]]],
@@ -5847,10 +5847,10 @@
           "center": {"x": 120, "y": 150},
           "rect": {"x": 117, "y": 128, "width": 6, "height": 44},
           "meta": {"door": true},
-          "seg": [{"x": 114, "y": 128}, {"x": 114, "y": 172}],
-          "normal": {"x": -1, "y": 0},
+          "seg": [{"x": 120, "y": 128}, {"x": 120, "y": 172}],
+          "normal": {"x": 1, "y": 0},
           "roomIds": [null, null],
-          "entries": [{"x": 116.95, "y": 150}, {"x": 123.05, "y": 150}],
+          "entries": [{"x": 123.05, "y": 150}, {"x": 116.95, "y": 150}],
           "navGroupId": -1
         }
       ],
@@ -6020,10 +6020,10 @@
           "center": {"x": 90, "y": 60},
           "rect": {"x": 68, "y": 57.6, "width": 44, "height": 4.8},
           "meta": {"door": true},
-          "seg": [{"x": 68, "y": 64.8}, {"x": 112, "y": 64.8}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 68, "y": 60}, {"x": 112, "y": 60}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 90, "y": 62.45}, {"x": 90, "y": 57.55}],
+          "entries": [{"x": 90, "y": 57.55}, {"x": 90, "y": 62.45}],
           "navGroupId": -1
         },
         {
@@ -6038,10 +6038,10 @@
           "center": {"x": 89, "y": 240},
           "rect": {"x": 66, "y": 237.6, "width": 46, "height": 4.8},
           "meta": {"door": true},
-          "seg": [{"x": 66, "y": 244.8}, {"x": 112, "y": 244.8}],
-          "normal": {"x": 0, "y": 1},
+          "seg": [{"x": 66, "y": 240}, {"x": 112, "y": 240}],
+          "normal": {"x": 0, "y": -1},
           "roomIds": [null, null],
-          "entries": [{"x": 89, "y": 242.45}, {"x": 89, "y": 237.55}],
+          "entries": [{"x": 89, "y": 237.55}, {"x": 89, "y": 242.45}],
           "navGroupId": -1
         }
       ],

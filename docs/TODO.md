@@ -301,14 +301,15 @@
     - ✅ disable CameraControls
     - ✅ frameloop must be `demand` instead of `never`?
 
-- 🚧 show doors
+- ✅ show doors
   - ✅ try four segs (flickers)
   - ✅ doors -> connectors?
     - connector.roomIds unknown until know `rooms` i.e. in browser
     - connector.navGroupId unknown too
-  - try one/two segs
+  - ✅ try one/two segs
 
 - compute navPoly per geomorph
+  - extend door/window connectors with correct roomIds
 
 - show tables via raised "floor texture"
 

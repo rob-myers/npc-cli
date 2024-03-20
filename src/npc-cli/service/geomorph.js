@@ -113,7 +113,8 @@ class GeomorphService {
     const { lastModified } = assets.meta[gmKey];
 
     const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
-    const doorSegs = hullDoors.flatMap(({ poly }) => poly.lineSegs);
+    /** @type {[Geom.Vect, Geom.Vect][]} */
+    const doorSegs = hullDoors.map(({ seg: [u, v] }) => [u.clone(), v.clone()]);
 
     for (const { symbolKey, transform, meta } of symbols) {
       const symbol = assets.symbols[symbolKey];
@@ -131,13 +132,8 @@ class GeomorphService {
           ]);
         })
       );
-      doors.forEach(({ poly }) =>
-        poly.lineSegs.forEach(([u, v]) =>
-          doorSegs.push([
-            tmpMat1.transformPoint(Vect.from(u)),
-            tmpMat1.transformPoint(Vect.from(v)),
-          ])
-        )
+      doors.forEach(({ seg: [u, v] }) =>
+        doorSegs.push([tmpMat1.transformPoint(Vect.from(u)), tmpMat1.transformPoint(Vect.from(v))])
       );
     }
 
@@ -661,15 +657,12 @@ class GeomorphService {
    */
   polyToConnector(poly) {
     const { meta } = poly;
-    // for curved windows `baseRect` is AABB
-    const { angle, baseRect } =
-      poly.outline.length === 4 ? geom.polyToAngledRect(poly) : { baseRect: poly.rect, angle: 0 };
-    const [u, v] = geom.getAngledRectSeg({ angle, baseRect });
-    const normal = v
-      .clone()
-      .sub(u)
-      .rotate(Math.PI / 2)
-      .normalize();
+    // fallback to AABB for e.g. curved windows
+    const { angle, baseRect } = geom.polyToAngledRect(poly, -1);
+    const {
+      seg: [u, v],
+      normal,
+    } = geom.getAngledRectSeg({ angle, baseRect }, -1);
 
     const doorEntryDelta = Math.min(baseRect.width, baseRect.height) / 2 + 0.05;
     const inFront = poly.center.addScaledVector(normal, doorEntryDelta).precision(precision);
