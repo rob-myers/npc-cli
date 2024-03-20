@@ -24,7 +24,8 @@ export default function TestWorld(props) {
       gms: [],
       scene: /** @type {*} */ ({}),
       view: /** @type {*} */ (null),
-      ensureGmData(gmKey) {
+
+      ensureGmData(gmKey, forceLayout) {
         const { assets } = state;
         if (!state.gmData[gmKey]) {
           const canvas = document.createElement("canvas");
@@ -37,8 +38,11 @@ export default function TestWorld(props) {
             layout,
             tex: new THREE.CanvasTexture(canvas),
           };
-        } else if (state.gmData[gmKey].layout.lastModified !== assets.meta[gmKey].lastModified) {
-          // Recompute layout on HMR
+        } else if (
+          forceLayout ||
+          state.gmData[gmKey].layout.lastModified !== assets.meta[gmKey].lastModified
+        ) {
+          // HMR: recompute onchange: (a) browser layout function, or (b) precomputed layout data
           state.gmData[gmKey].layout = geomorphService.computeLayoutInBrowser(gmKey, assets);
         }
         return state.gmData[gmKey];
@@ -56,15 +60,14 @@ export default function TestWorld(props) {
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
   });
 
-  if (assets) {
-    state.assets = assets;
-    state.map = assets.maps[props.mapKey ?? "demo-map-1"];
-  }
-
   React.useMemo(() => {
-    if (assets && state.map) {
+    if (assets) {
+      const forceLayout = assets.meta.global.browserHash !== state.assets?.meta.global.browserHash;
+      state.assets = assets;
+      state.map = assets.maps[props.mapKey ?? "demo-map-1"];
+
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        const { layout } = state.ensureGmData(gmKey);
+        const { layout } = state.ensureGmData(gmKey, forceLayout);
         return geomorphService.computeLayoutInstance(layout, gmId, transform);
       });
       // Remount walls on HMR
@@ -98,7 +101,7 @@ export default function TestWorld(props) {
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
+ * @property {(gmKey: Geomorph.GeomorphKey, forceLayout?: boolean) => GmData} ensureGmData
  */
 
 /**

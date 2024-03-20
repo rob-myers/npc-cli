@@ -420,14 +420,14 @@ class GeomorphService {
         if (!parent || tagStack.at(-1)?.tagName !== "title") {
           return;
         }
-        if (!geomorphService.isGmNumber(gmNumber)) {
-          return warn(`parseMap: "${contents}": expected valid gm number`);
-        }
         if (parent.tagName !== "rect") {
           return void (
             parent?.tagName === "pattern" ||
             warn(`parseMap: ${parent?.tagName} ${contents}: ignored non-rect in map`)
           );
+        }
+        if (!geomorphService.isGmNumber(gmNumber)) {
+          return warn(`parseMap: "${contents}": expected valid gm number`);
         }
 
         const rect = geomorphService.extractRect(parent.attributes);

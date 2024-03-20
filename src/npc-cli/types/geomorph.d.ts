@@ -5,12 +5,21 @@ declare namespace Geomorph {
   > {
     symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<T, P>>;
     maps: Record<string, Geomorph.MapDef>;
+    /**
+     * `metaKey` can be:
+     * - any `Geomorph.SymbolKey` e.g. `301--hull` or `office--001--2x2`
+     * - any mapKey e.g. `demo-map-1`
+     * - any `Geomorph.GeomorphKey` e.g. `g-301--bridge`
+     * - `global`
+     */
     meta: {
-      [symbolOrMapKey: string]: {
+      [metaKey: string]: {
         /** Defined for mapKeys and symbolKeys */
         contentHash?: number;
         /** Defined for symbolKeys */
         outputHash?: number;
+        /** Defined for `global` i.e. hash of browser layout function */
+        browserHash?: number;
         /** Epoch ms */
         lastModified: number;
       };

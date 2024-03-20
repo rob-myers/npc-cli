@@ -297,7 +297,9 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
-- if computeLayoutInBrowser changes then layout should reload
+- ✅ on computeLayoutInBrowser change then layout should reload
+  - ✅ onchange `geomorphService.computeLayoutInBrowser` recompute assets-meta
+  - ✅ hash computeLayoutInBrowser function and provide in assets-meta
 
 - 🚧 show doors
   - ✅ try four segs (flickers)
@@ -345,6 +347,9 @@
 - 🚧 fix case where `transform-box` is `content-box` or `fill-box`
   - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
   - ℹ️ seen in parseSymbol of hull symbol
+
+- only show ContextMenu on right click on desktop
+- show ContextMenu on double tap instead of long tap
 
 - if Viewer maximised and choose menu item, halve size of the Viewer
 

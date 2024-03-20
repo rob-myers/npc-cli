@@ -38,7 +38,11 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   const changedSymbols = Object.keys(symbolsMeta).filter(key => symbolsMeta[key].outputHash !== prev?.meta[key]?.outputHash);
   info({ changedSymbols, changedMaps });
   
-  const meta = { ...symbolsMeta, ...mapsMeta };
+  let meta = { ...symbolsMeta, ...mapsMeta };
+  meta = { global: {
+    lastModified: Math.max(...Object.values(meta).map(x => x.lastModified)),
+    browserHash: hashText(geomorphService.computeLayoutInBrowser.toString()),
+  }, ...meta };
 
   // detect geomorph layout update
   geomorphService.gmKeys.forEach(gmKey => {
