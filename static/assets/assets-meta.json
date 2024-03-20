@@ -1,93 +1,93 @@
 {
   "meta": {
-    "global": {"lastModified": 1710939449212, "browserHash": 973821994},
+    "global": {"lastModified": 1710942077770, "browserHash": 973821994},
     "101--hull": {
-      "lastModified": 1710887213589,
+      "lastModified": 1710942077770,
       "contentHash": -740908075,
-      "outputHash": 1469174596
+      "outputHash": -256560057
     },
     "102--hull": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 1358490121,
-      "outputHash": 515484690
+      "outputHash": 660957625
     },
     "103--hull": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": -675159501,
-      "outputHash": 278818028
+      "outputHash": 914399407
     },
     "301--hull": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 1818068925,
-      "outputHash": -1428503296
+      "outputHash": 2000618313
     },
     "302--hull": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 411100715,
-      "outputHash": -668041976
+      "outputHash": 2058602239
     },
     "303--hull": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 480977991,
-      "outputHash": -1000303809
+      "outputHash": 1574859132
     },
     "bridge--042--8x9": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": -1122062891,
-      "outputHash": -1348335213
+      "outputHash": 1603568696
     },
     "empty-room--013--2x3": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 1745832409,
-      "outputHash": 555111843
+      "outputHash": 791301818
     },
     "misc-stellar-cartography--023--4x4": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 1239557246,
-      "outputHash": -1124286409
+      "outputHash": -1804685762
     },
     "office--001--2x2": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 2135680825,
-      "outputHash": 410917231
+      "outputHash": 649306006
     },
     "office--020--2x3": {
-      "lastModified": 1710886480626,
+      "lastModified": 1710942077770,
       "contentHash": -1639819156,
-      "outputHash": 2014898658
+      "outputHash": 704522847
     },
     "office--023--2x3": {
-      "lastModified": 1710886811733,
+      "lastModified": 1710942077770,
       "contentHash": -725557747,
-      "outputHash": -923305598
+      "outputHash": 1155439833
     },
     "office--026--2x3": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": -738690952,
-      "outputHash": 543980623
+      "outputHash": 373888406
     },
     "stateroom--014--2x2": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 269183967,
-      "outputHash": -1519384515
+      "outputHash": 1500335694
     },
     "stateroom--020--2x3": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": 1693180601,
-      "outputHash": -1201597217
+      "outputHash": -1601750370
     },
     "stateroom--036--2x4": {
-      "lastModified": 1710882766449,
+      "lastModified": 1710942077770,
       "contentHash": -1894493195,
-      "outputHash": 1886165333
+      "outputHash": -1915208662
     },
     "demo-map-1": {"lastModified": 1710939449212, "contentHash": -1213101529},
-    "g-101--multipurpose": {"lastModified": 1710887213589},
-    "g-102--research-deck": {"lastModified": 1710882766449},
-    "g-103--cargo-bay": {"lastModified": 1710882766449},
-    "g-301--bridge": {"lastModified": 1710882766449},
-    "g-302--xboat-repair-bay": {"lastModified": 1710882766449},
-    "g-303--passenger-deck": {"lastModified": 1710882766449}
+    "g-101--multipurpose": {"lastModified": 1710942077770},
+    "g-102--research-deck": {"lastModified": 1710942077770},
+    "g-103--cargo-bay": {"lastModified": 1710942077770},
+    "g-301--bridge": {"lastModified": 1710942077770},
+    "g-302--xboat-repair-bay": {"lastModified": 1710942077770},
+    "g-303--passenger-deck": {"lastModified": 1710942077770}
   },
   "symbols": {
     "101--hull": {
@@ -432,6 +432,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -754,6 +755,7 @@
           "meta": {"door": true, "iris": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -982,6 +984,7 @@
           "meta": {"door": true, "hull": true}
         }
       ],
+      "windows": [],
       "unsorted": [],
       "width": 1200,
       "height": 1200,
@@ -1260,6 +1263,7 @@
           "meta": {"door": true, "iris": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -1790,6 +1794,13 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[240, 409.9], [240, 424], [420, 424], [420, 409.9]]],
+          "meta": {"window": true}
+        }
+      ],
       "unsorted": [
         {
           "type": "Polygon",
@@ -1894,11 +1905,6 @@
             "strokeColor": "#000",
             "strokeWidth": 4
           }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[240, 409.9], [240, 424], [420, 424], [420, 409.9]]],
-          "meta": {"window": true}
         }
       ],
       "width": 1200,
@@ -2381,6 +2387,48 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[88.5, -6], [88.5, 8.1], [150.7, 8.1], [150.7, -6]]],
+          "meta": {"window": true, "hull": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[268.5, -6], [268.5, 8.1], [330.7, 8.1], [330.7, -6]]
+          ],
+          "meta": {"window": true, "hull": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[388.5, -6], [388.5, 8.1], [450.7, 8.1], [450.7, -6]]
+          ],
+          "meta": {"window": true, "hull": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[508.5, -6], [508.5, 8.1], [570.7, 8.1], [570.7, -6]]
+          ],
+          "meta": {"window": true, "hull": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[628.5, -6], [628.5, 8.1], [690.7, 8.1], [690.7, -6]]
+          ],
+          "meta": {"window": true, "hull": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[868.5, -6], [868.5, 8.1], [930.7, 8.1], [930.7, -6]]
+          ],
+          "meta": {"window": true, "hull": true}
+        }
+      ],
       "unsorted": [
         {
           "type": "Polygon",
@@ -2676,46 +2724,6 @@
             "strokeWidth": 2,
             "chair": true
           }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[88.5, -6], [88.5, 8.1], [150.7, 8.1], [150.7, -6]]],
-          "meta": {"window": true, "hull": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[268.5, -6], [268.5, 8.1], [330.7, 8.1], [330.7, -6]]
-          ],
-          "meta": {"window": true, "hull": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[388.5, -6], [388.5, 8.1], [450.7, 8.1], [450.7, -6]]
-          ],
-          "meta": {"window": true, "hull": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[508.5, -6], [508.5, 8.1], [570.7, 8.1], [570.7, -6]]
-          ],
-          "meta": {"window": true, "hull": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[628.5, -6], [628.5, 8.1], [690.7, 8.1], [690.7, -6]]
-          ],
-          "meta": {"window": true, "hull": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[868.5, -6], [868.5, 8.1], [930.7, 8.1], [930.7, -6]]
-          ],
-          "meta": {"window": true, "hull": true}
         }
       ],
       "width": 1200,
@@ -3405,6 +3413,61 @@
           "meta": {"door": true, "iris": true}
         }
       ],
+      "windows": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [77.4138, 46.3794],
+              [95.081, 32.756],
+              [113.7204, 20.96],
+              [133.1672, 10.6032],
+              [153.6312, 2.292],
+              [174.5616, -4.5336],
+              [196.3848, -9.098],
+              [218.2014, -11.977],
+              [240.3952, -12.734],
+              [262.213, -11.9556],
+              [283.9328, -9.0628],
+              [305.4386, -4.4626],
+              [326.7646, 2.4278],
+              [347.2776, 10.742],
+              [366.9554, 21.263],
+              [385.3294, 32.8244],
+              [403.1838, 46.6978],
+              [420, 62.3134],
+              [411.7012, 70.942],
+              [395.2988, 55.7992],
+              [378.597, 42.7608],
+              [360.987, 31.5064],
+              [342.1732, 21.6944],
+              [322.8782, 13.6888],
+              [302.5128, 7.3586],
+              [282.2802, 2.7706],
+              [261.5514, 0],
+              [240, -0.6586],
+              [219.2056, 0],
+              [198.4408, 2.7042],
+              [177.747, 7.25],
+              [157.9338, 13.5574],
+              [138.4172, 21.5664],
+              [119.5708, 31.5582],
+              [102.0192, 42.5378],
+              [85.1162, 55.5848],
+              [69.5706, 70.1048],
+              [61.0232, 61.3298]
+            ]
+          ],
+          "meta": {"window": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[180, 300.4], [180, 312.8], [358.4, 312.8], [358.4, 300.4]]
+          ],
+          "meta": {"window": true, "frosted": true}
+        }
+      ],
       "unsorted": [
         {
           "type": "Polygon",
@@ -3737,59 +3800,6 @@
             [[455, 252.3716], [455, 254.3716], [457, 254.3716], [457, 252.3716]]
           ],
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [77.4138, 46.3794],
-              [95.081, 32.756],
-              [113.7204, 20.96],
-              [133.1672, 10.6032],
-              [153.6312, 2.292],
-              [174.5616, -4.5336],
-              [196.3848, -9.098],
-              [218.2014, -11.977],
-              [240.3952, -12.734],
-              [262.213, -11.9556],
-              [283.9328, -9.0628],
-              [305.4386, -4.4626],
-              [326.7646, 2.4278],
-              [347.2776, 10.742],
-              [366.9554, 21.263],
-              [385.3294, 32.8244],
-              [403.1838, 46.6978],
-              [420, 62.3134],
-              [411.7012, 70.942],
-              [395.2988, 55.7992],
-              [378.597, 42.7608],
-              [360.987, 31.5064],
-              [342.1732, 21.6944],
-              [322.8782, 13.6888],
-              [302.5128, 7.3586],
-              [282.2802, 2.7706],
-              [261.5514, 0],
-              [240, -0.6586],
-              [219.2056, 0],
-              [198.4408, 2.7042],
-              [177.747, 7.25],
-              [157.9338, 13.5574],
-              [138.4172, 21.5664],
-              [119.5708, 31.5582],
-              [102.0192, 42.5378],
-              [85.1162, 55.5848],
-              [69.5706, 70.1048],
-              [61.0232, 61.3298]
-            ]
-          ],
-          "meta": {"window": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[180, 300.4], [180, 312.8], [358.4, 312.8], [358.4, 300.4]]
-          ],
-          "meta": {"window": true, "frosted": true}
         }
       ],
       "width": 2400,
@@ -3834,6 +3844,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [],
       "width": 600,
       "height": 900,
@@ -3943,6 +3954,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -4069,6 +4081,7 @@
           "meta": {"door": true, "optional": true, "s": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -4170,6 +4183,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -4270,6 +4284,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -4400,6 +4415,15 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[-6.8, 29.4], [-6.8, 90.8], [6.6, 90.8], [6.6, 29.4]]
+          ],
+          "meta": {"window": true}
+        }
+      ],
       "unsorted": [
         {
           "type": "Polygon",
@@ -4427,13 +4451,6 @@
             "chair": true,
             "orient": 180
           }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[-6.8, 29.4], [-6.8, 90.8], [6.6, 90.8], [6.6, 29.4]]
-          ],
-          "meta": {"window": true}
         }
       ],
       "width": 600,
@@ -4515,6 +4532,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -4663,6 +4681,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -4831,6 +4850,7 @@
           "meta": {"door": true}
         }
       ],
+      "windows": [],
       "unsorted": [
         {
           "type": "Polygon",

@@ -189,6 +189,7 @@ class GeomorphService {
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
+      windows: json.windows.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
@@ -490,6 +491,7 @@ class GeomorphService {
     const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const unsorted = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const walls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const windows = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -520,6 +522,9 @@ class GeomorphService {
         if (parent.tagName === "g") {
           folderStack.push(contents);
           contents !== "symbols" && warn(`unexpected folder: "${contents}" will be ignored`);
+          return;
+        }
+        if (parent.tagName === "image") {
           return;
         }
         if (folderStack.length >= 2 || (folderStack.length && folderStack[0] !== "symbols")) {
@@ -570,40 +575,22 @@ class GeomorphService {
 
         const meta = geomorphService.tagsToMeta(ownTags, {});
 
-        if (ownTags.includes("hull-wall")) {
-          // hull symbols only
-          hullWalls.push(
-            ...geomorphService
-              .extractGeom({ ...parent, title: contents })
-              .map((poly) => Object.assign(poly, { meta }))
-          );
-        } else if (ownTags.includes("wall")) {
-          walls.push(
-            ...geomorphService
-              .extractGeom({ ...parent, title: contents }, geomScale)
-              .map((poly) => Object.assign(poly, { meta }))
-          );
-        } else if (ownTags.includes("obstacle")) {
-          obstacles.push(
-            ...geomorphService
-              .extractGeom({ ...parent, title: contents }, geomScale)
-              .map((poly) => Object.assign(poly, { meta }))
-          );
-        } else if (ownTags.includes("door")) {
-          doors.push(
-            ...geomorphService
-              .extractGeom({ ...parent, title: contents }, geomScale)
-              .map((poly) => Object.assign(poly, { meta }))
-          );
-        } else if (parent.tagName === "image") {
-          return;
-        } else {
-          unsorted.push(
-            ...geomorphService
-              .extractGeom({ ...parent, title: contents }, geomScale)
-              .map((poly) => Object.assign(poly, { meta }))
-          );
-        }
+        /** @type {const} */ ([
+          ["hull-wall", hullWalls],
+          ["wall", walls, geomScale],
+          ["obstacle", obstacles, geomScale],
+          ["door", doors, geomScale],
+          ["window", windows, geomScale],
+          [null, unsorted, geomScale],
+        ]).some(
+          ([tag, polys, scale]) =>
+            (tag === null || ownTags.includes(tag)) &&
+            polys.push(
+              ...geomorphService
+                .extractGeom({ ...parent, title: contents }, scale)
+                .map((poly) => Object.assign(poly, { meta }))
+            )
+        );
       },
       onclosetag(name) {
         tagStack.pop();
@@ -628,6 +615,7 @@ class GeomorphService {
     const preParse = {
       key,
       doors,
+      windows,
       hullWalls,
       isHull,
       walls,
@@ -688,6 +676,7 @@ class GeomorphService {
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      windows: parsed.windows.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,

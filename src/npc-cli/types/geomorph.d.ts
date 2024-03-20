@@ -50,6 +50,7 @@ declare namespace Geomorph {
     walls: WithMeta<T>[];
     obstacles: WithMeta<T>[];
     doors: WithMeta<T>[];
+    windows: WithMeta<T>[];
     /** 🚧 split further? */
     unsorted: WithMeta<T>[];
 
@@ -79,7 +80,7 @@ declare namespace Geomorph {
   type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
     Pick<
       Geomorph.ParsedSymbol<T, Geom.Vect>,
-      "key" | "doors" | "isHull" | "walls" | "hullWalls" | "width" | "height"
+      "key" | "doors" | "isHull" | "walls" | "hullWalls" | "windows" | "width" | "height"
     >
   >;
 

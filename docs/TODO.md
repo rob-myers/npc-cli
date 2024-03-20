@@ -272,7 +272,9 @@
   - ℹ️ try single raised floor-sized texture
 - ✅ changing map should change walls
 
-## WIP
+- ✅ support optional walls e.g. `wall optional n`
+  - ✅ `walls` does not include optional one
+  - ✅ can add in optional ones based on sub-symbols
 
 - ✅ avoid dev-server crash on save symbol to static/assets
   ```sh
@@ -281,6 +283,12 @@
   ```
   - ✅ store and read from media/symbols instead
   - ✅ still save to static/assets/assets-meta.json (so can fetch)
+
+- ✅ on computeLayoutInBrowser change then layout should reload
+  - ✅ onchange `geomorphService.computeLayoutInBrowser` recompute assets-meta
+  - ✅ hash computeLayoutInBrowser function and provide in assets-meta
+
+## WIP
 
 - 🚧 TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
@@ -292,25 +300,21 @@
     - ✅ pause physics
     - ✅ disable CameraControls
     - ✅ frameloop must be `demand` instead of `never`?
+
+- 🚧 show doors
+  - ✅ try four segs (flickers)
+  - 🚧 doors -> connectors?
+  - try one/two segs
+
+- compute navPoly per geomorph
+
+- show tables via raised "floor texture"
+
+- extend TestCharacter
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
   - click to move
   - extract code, removing e.g. ray-cast
-
-- ✅ on computeLayoutInBrowser change then layout should reload
-  - ✅ onchange `geomorphService.computeLayoutInBrowser` recompute assets-meta
-  - ✅ hash computeLayoutInBrowser function and provide in assets-meta
-
-- 🚧 show doors
-  - ✅ try four segs (flickers)
-  - try two segs
-  - try one segs
-
-- ✅ support optional walls e.g. `wall optional n`
-  - ✅ `walls` does not include optional one
-  - ✅ can add in optional ones based on sub-symbols
-
-- show tables via raised "floor texture"
 
 - start using cypress
 - slow resize on maximize desktop (but not mobile)
