@@ -303,7 +303,9 @@
 
 - 🚧 show doors
   - ✅ try four segs (flickers)
-  - 🚧 doors -> connectors?
+  - ✅ doors -> connectors?
+    - connector.roomIds unknown until know `rooms` i.e. in browser
+    - connector.navGroupId unknown too
   - try one/two segs
 
 - compute navPoly per geomorph

@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { worldScale } from "./const";
+import { worldScale, precision } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   assertDefined,
@@ -113,7 +113,7 @@ class GeomorphService {
     const { lastModified } = assets.meta[gmKey];
 
     const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
-    const doorSegs = hullDoors.flatMap((poly) => poly.lineSegs);
+    const doorSegs = hullDoors.flatMap(({ poly }) => poly.lineSegs);
 
     for (const { symbolKey, transform, meta } of symbols) {
       const symbol = assets.symbols[symbolKey];
@@ -131,7 +131,7 @@ class GeomorphService {
           ]);
         })
       );
-      doors.forEach((poly) =>
+      doors.forEach(({ poly }) =>
         poly.lineSegs.forEach(([u, v]) =>
           doorSegs.push([
             tmpMat1.transformPoint(Vect.from(u)),
@@ -172,8 +172,25 @@ class GeomorphService {
   deserializeAssets({ maps, meta, symbols }) {
     return {
       meta,
-      symbols: mapValues(symbols, this.deserializeSymbol),
+      symbols: mapValues(symbols, (x) => this.deserializeSymbol(x)),
       maps,
+    };
+  }
+
+  /**
+   * @param {Geomorph.ConnectorRectJson} x
+   * @returns {Geomorph.ConnectorRect}
+   */
+  deserializeConnectorRect(x) {
+    const poly = Poly.from(x.poly);
+    return {
+      ...x,
+      poly,
+      center: poly.center,
+      rect: poly.rect,
+      normal: Vect.from(x.normal),
+      seg: [Vect.from(x.seg[0]), Vect.from(x.seg[1])],
+      entries: [Vect.from(x.entries[0]), Vect.from(x.entries[1])],
     };
   }
 
@@ -188,8 +205,8 @@ class GeomorphService {
       hullWalls: json.hullWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
-      doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
-      windows: json.windows.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
+      doors: json.doors.map(this.deserializeConnectorRect),
+      windows: json.windows.map(this.deserializeConnectorRect),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
@@ -263,7 +280,7 @@ class GeomorphService {
 
     typeof scale === "number" && poly?.scale(scale);
 
-    return poly ? [poly.precision(4).cleanFinalReps()] : [];
+    return poly ? [poly.precision(precision).cleanFinalReps()] : [];
   }
 
   /**
@@ -614,8 +631,8 @@ class GeomorphService {
     /** @type {Geomorph.PreParsedSymbol<Geom.Poly>} */
     const preParse = {
       key,
-      doors,
-      windows,
+      doors: doors.map((x) => this.polyToConnector(x)),
+      windows: windows.map((x) => this.polyToConnector(x)),
       hullWalls,
       isHull,
       walls,
@@ -638,19 +655,70 @@ class GeomorphService {
   }
 
   /**
+   * Cannot compute `roomIds` or `navGroupId` yet.
+   * @param {Geomorph.WithMeta<Geom.Poly>} poly
+   * @returns {Geomorph.ConnectorRect}
+   */
+  polyToConnector(poly) {
+    const { meta } = poly;
+    // for curved windows `baseRect` is AABB
+    const { angle, baseRect } =
+      poly.outline.length === 4 ? geom.polyToAngledRect(poly) : { baseRect: poly.rect, angle: 0 };
+    const [u, v] = geom.getAngledRectSeg({ angle, baseRect });
+    const normal = v
+      .clone()
+      .sub(u)
+      .rotate(Math.PI / 2)
+      .normalize();
+
+    const doorEntryDelta = Math.min(baseRect.width, baseRect.height) / 2 + 0.05;
+    const inFront = poly.center.addScaledVector(normal, doorEntryDelta).precision(precision);
+    const behind = poly.center.addScaledVector(normal, -doorEntryDelta).precision(precision);
+    // const moreInfront = infront.clone().addScaledVector(normal, hullDoorOutset);
+    // const moreBehind = behind.clone().addScaledVector(normal, -hullDoorOutset);
+
+    // /** @type {[null | number, null | number]} */
+    // const roomIds = rooms.reduce((agg, room, roomId) => {
+    //   // Support doors connecting a room to itself e.g.
+    //   // galley-and-mess-halls--006--4x2
+    //   if (room.contains(moreInfront)) agg[0] = roomId;
+    //   if (room.contains(moreBehind)) agg[1] = roomId;
+    //   return agg;
+    // }, /** @type {[null | number, null | number]} */ ([null, null]));
+
+    return {
+      angle,
+      poly,
+      center: poly.center,
+      rect: poly.rect.precision(precision),
+      meta,
+      seg: [u.precision(precision), v.precision(precision)],
+      normal: normal.precision(precision),
+      roomIds: [null, null], // added in browser
+      entries: [inFront, behind],
+      navGroupId: -1, // added later
+    };
+  }
+
+  /**
    * @param {Geomorph.PreParsedSymbol<Geom.Poly>} partial
    * @returns {Geomorph.PostParsedSymbol<Geom.Poly>}
    */
   postParseSymbol(partial) {
-    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls)).map((x) =>
-      x.cleanFinalReps()
-    );
+    // assume hull doors cannot be optional
+    const hullWalls = Poly.cutOut(
+      partial.doors.map((x) => x.poly),
+      Poly.union(partial.hullWalls)
+    ).map((x) => x.cleanFinalReps());
     const nonOptionalWalls = partial.walls.filter((x) => x.meta.optional !== true);
     const uncutWalls = Poly.union(partial.hullWalls.concat(nonOptionalWalls));
-    const walls = Poly.cutOut(partial.doors, uncutWalls).map((x) => x.cleanFinalReps());
+    const walls = Poly.cutOut(
+      partial.doors.map((x) => x.poly),
+      uncutWalls
+    ).map((x) => x.cleanFinalReps());
 
-    const removableDoors = partial.doors.flatMap((door, doorId) =>
-      door.meta.optional ? { doorId, wall: Poly.intersect([door], uncutWalls)[0] } : []
+    const removableDoors = partial.doors.flatMap(({ poly, meta }, doorId) =>
+      meta.optional ? { doorId, wall: Poly.intersect([poly], uncutWalls)[0] } : []
     );
     const addableWalls = partial.walls.filter((x) => x.meta.optional === true);
 
@@ -675,17 +743,14 @@ class GeomorphService {
       hullWalls: parsed.hullWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      windows: parsed.windows.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      doors: parsed.doors.map((x) => ({ ...x, poly: x.poly.geoJson })),
+      windows: parsed.windows.map((x) => ({ ...x, poly: x.poly.geoJson })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,
       pngRect: parsed.pngRect,
       symbols: parsed.symbols,
-      removableDoors: parsed.removableDoors.map(({ doorId, wall }) => ({
-        doorId,
-        wall: wall.geoJson,
-      })),
+      removableDoors: parsed.removableDoors.map((x) => ({ ...x, wall: x.wall.geoJson })),
       addableWalls: parsed.addableWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
     };
   }

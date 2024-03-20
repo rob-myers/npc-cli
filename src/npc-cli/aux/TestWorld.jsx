@@ -58,6 +58,7 @@ export default function TestWorld(props) {
       return geomorphService.deserializeAssets(json);
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
+    throwOnError: true,
   });
 
   React.useMemo(() => {

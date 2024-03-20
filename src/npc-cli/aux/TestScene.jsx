@@ -68,8 +68,9 @@ export function TestScene(props) {
     queryFn: () =>
       fetch(`/assets/${ASSETS_META_JSON_FILENAME}`)
         .then((x) => x.json())
-        .then(geomorphService.deserializeAssets),
+        .then((x) => geomorphService.deserializeAssets(x)),
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
+    throwOnError: true,
   });
 
   React.useLayoutEffect(() => {
