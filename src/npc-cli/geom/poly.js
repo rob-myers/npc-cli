@@ -128,6 +128,11 @@ export class Poly {
     return sum > 0;
   }
 
+  anticlockwiseConvex() {
+    const [p, q, r] = this.outline;
+    return (q.x - p.x) * (q.y + p.y) + (r.x - q.x) * (r.y + q.y) + (p.x - r.x) * (p.y + r.y) > 0;
+  }
+
   /**
    * @param {import('./mat').Mat} m
    */
@@ -276,6 +281,10 @@ export class Poly {
 
   fixOrientation() {
     return this.anticlockwise() ? this.reverse() : this;
+  }
+
+  fixOrientationConvex() {
+    return this.anticlockwiseConvex() ? this.reverse() : this;
   }
 
   /** @param {Geom.GeoJsonPolygon | Geom.GeoJsonPolygon['coordinates']} input  */

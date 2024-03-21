@@ -15,44 +15,6 @@ class geomServiceClass {
   }
 
   /**
-   * By assumption `a, b, c, d in {-1, 1}`
-   * and the corresponding 2x2 matrix is invertible.
-   * That is, we permit arbitrary translations,
-   * scaling by -1 in either axis, rotation by 90°,
-   * and closure under composition.
-   *
-   * We convert these matrices into a pixi.js format.
-   * We also account for the pngRect offset.
-   * @param {Geom.SixTuple} transform
-   * @param {Geom.VectJson} pngOffset
-   * @returns {Geom.PixiTransform}
-   */
-  gmTransformToPixi([a, b, c, d, e, f], pngOffset) {
-    let degrees = 0,
-      scaleX = 1,
-      scaleY = 1;
-    if (a === 1) {
-      // degrees is 0
-      scaleY = d;
-    } else if (a === -1) {
-      degrees = 180;
-      scaleY = -d;
-    } else if (b === 1) {
-      degrees = 90;
-      scaleX = -c;
-    } else if (b === -1) {
-      degrees = 270;
-      scaleX = c;
-    }
-    return {
-      scale: { x: scaleX, y: scaleY },
-      angle: degrees,
-      x: e + pngOffset.x,
-      y: f + pngOffset.y,
-    };
-  }
-
-  /**
    * https://github.com/davidfig/intersects/blob/master/polygon-circle.js
    * @param {Geom.VectJson} center
    * @param {number} radius
@@ -251,10 +213,10 @@ class geomServiceClass {
   findClosestPoint(candidates, target, maxDistSqr = Number.POSITIVE_INFINITY) {
     let minSeenDistSqr = Number.POSITIVE_INFINITY;
     let currDistSqr = 0;
-    tempVect.copy(target);
+    tempVect1.copy(target);
     return candidates.reduce((closest, candidate) => {
       if (
-        (currDistSqr = tempVect.distanceToSquared(candidate)) < minSeenDistSqr &&
+        (currDistSqr = tempVect1.distanceToSquared(candidate)) < minSeenDistSqr &&
         currDistSqr <= maxDistSqr
       ) {
         minSeenDistSqr = currDistSqr;
@@ -367,7 +329,7 @@ class geomServiceClass {
    * @param {number} radius
    */
   lineSegIntersectsCircle(a, b, center, radius) {
-    const ab = tempVect.copy(b).sub(a);
+    const ab = tempVect1.copy(b).sub(a);
     const ac = tempVect2.copy(center).sub(a);
     const ab2 = ab.dot(ab); // |ab|^2
     const acab = ac.dot(ab);
@@ -397,12 +359,10 @@ class geomServiceClass {
   /**
    * Get segment through center along 'x+'.
    * @param {Geom.AngledRect<Geom.RectJson>} _
-   * @param {1 | -1} [yDownwards] if y-axis points downwards this must be `-1`,
-   * e.g. when embedding into three.js XZ plane
    */
-  getAngledRectSeg({ angle, baseRect }, yDownwards = 1) {
-    const widthNormal = tempVect.set(Math.cos(angle), yDownwards * Math.sin(angle));
-    const heightNormal = tempVect2.set(-Math.sin(angle), yDownwards * Math.cos(angle));
+  getAngledRectSeg({ angle, baseRect }) {
+    const widthNormal = tempVect1.set(Math.cos(angle), Math.sin(angle));
+    const heightNormal = tempVect2.set(-Math.sin(angle), Math.cos(angle));
     const src = new Vect(baseRect.x, baseRect.y).addScaledVector(
       heightNormal,
       0.5 * baseRect.height
@@ -470,7 +430,7 @@ class geomServiceClass {
   getClosestOnOutline(point, outline) {
     const p = outline;
     const { x, y } = point;
-    const a1 = tempVect;
+    const a1 = tempVect1;
     const b1 = tempVect2;
     const b2 = tempVect3;
     // var c = tp[4] // is assigned a value but never used.
@@ -825,11 +785,11 @@ class geomServiceClass {
     if (typeof tolerance === "number") {
       // Check edges too
       for (i = 0; i < length; i++) {
-        tempVect.copy(i === length - 1 ? outline[0] : outline[i + 1]);
+        tempVect1.copy(i === length - 1 ? outline[0] : outline[i + 1]);
         if (
           geom.lineSegIntersectsPoint(
             tempVect3.copy(outline[i]),
-            tempVect,
+            tempVect1,
             tempVect2.copy(p),
             tolerance
           )
@@ -854,28 +814,26 @@ class geomServiceClass {
    * Convert a polygonal rectangle back into a `Rect` and `angle`.
    * We ensure the width is greater than or equal to the height.
    * @param {Geom.Poly} poly
-   * @param {1 | -1} [yDownwards] if y-axis points downwards this must be `-1`,
-   * e.g. when embedding into three.js XZ plane
    * @returns {Geom.AngledRect<Geom.Rect>}
    */
-  polyToAngledRect(poly, yDownwards = 1) {
+  polyToAngledRect(poly) {
     if (poly.outline.length !== 4) {
       return { angle: 0, baseRect: poly.rect }; // Fallback to AABB
     }
 
     const ps = poly.outline;
-    const w = tempVect.copy(ps[1]).sub(ps[0]).length;
+    const w = tempVect1.copy(ps[1]).sub(ps[0]).length;
     const h = tempVect2.copy(ps[2]).sub(ps[1]).length;
 
     if (w >= h) {
       return {
         baseRect: new Rect(ps[0].x, ps[0].y, w, h),
-        angle: yDownwards * Math.atan2(tempVect.y, tempVect.x),
+        angle: Math.atan2(tempVect1.y, tempVect1.x),
       };
     } else {
       return {
         baseRect: new Rect(ps[1].x, ps[1].y, h, w),
-        angle: yDownwards * Math.atan2(tempVect2.y, tempVect2.x),
+        angle: Math.atan2(tempVect2.y, tempVect2.x),
       };
     }
   }
@@ -1043,7 +1001,7 @@ class geomServiceClass {
   }
 }
 
-const tempVect = new Vect();
+const tempVect1 = new Vect();
 const tempVect2 = new Vect();
 const tempVect3 = new Vect();
 

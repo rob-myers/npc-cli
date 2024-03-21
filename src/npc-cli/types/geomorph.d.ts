@@ -1,9 +1,10 @@
 declare namespace Geomorph {
   interface AssetsGeneric<
     T extends Geom.GeoJsonPolygon | Geom.Poly,
-    P extends Geom.VectJson | Geom.Vect
+    P extends Geom.VectJson | Geom.Vect,
+    R extends Geom.RectJson | Geom.Rect
   > {
-    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<T, P>>;
+    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
     /**
      * `metaKey` can be:
@@ -26,45 +27,8 @@ declare namespace Geomorph {
     };
   }
 
-  type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson>;
-  type Assets = AssetsGeneric<Geom.Poly, Geom.Vect>;
-
-  interface ConnectorRectGeneric<
-    P extends Geom.GeoJsonPolygon | Geom.Poly,
-    V extends Geom.Vect | Geom.VectJson,
-    R extends Geom.Rect | Geom.RectJson
-  > extends WithMeta {
-    poly: P;
-    /** `poly.center` */
-    center: V;
-    /** `poly.rect` i.e. rotated rectangle */
-    rect: R;
-    /** Segment through middle of door */
-    seg: [V, V];
-    /** Points towards `entries[0]`. */
-    normal: V;
-    /** Radians 🚧 clarify */
-    angle: number;
-    /**
-     * `[id of room infront, id of room behind]`
-     * where a room is *infront* if `normal` is pointing towards it.
-     * Hull doors have exactly one non-null entry.
-     */
-    roomIds: [null | number, null | number];
-    /**
-     * Aligned to `roomIds` i.e. `[infront, behind]`
-     * where a room is *infront* if `normal` is pointing towards it.
-     */
-    entries: [V, V];
-    /**
-     * 🚧 migrate to recast/detour?
-     * This door is connected to navmesh navZone.groups[navGroupId].
-     */
-    navGroupId: number;
-  }
-
-  type ConnectorRect = ConnectorRectGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
-  type ConnectorRectJson = ConnectorRectGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
+  type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
+  type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
 
   interface ParsedSymbol<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
@@ -87,8 +51,8 @@ declare namespace Geomorph {
     hullWalls: WithMeta<P>[];
     walls: WithMeta<P>[];
     obstacles: WithMeta<P>[];
-    doors: ConnectorRectGeneric<P, V, R>[];
-    windows: ConnectorRectGeneric<P, V, R>[];
+    doors: Geom.ConnectorRectGeneric<P, V, R>[];
+    windows: Geom.ConnectorRectGeneric<P, V, R>[];
     /** 🚧 split further? */
     unsorted: WithMeta<P>[];
 
@@ -117,14 +81,14 @@ declare namespace Geomorph {
 
   type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
     Pick<
-      Geomorph.ParsedSymbol<T, Geom.Vect>,
+      Geomorph.ParsedSymbol<T, Geom.Vect, Geom.Rect>,
       "key" | "doors" | "isHull" | "walls" | "hullWalls" | "windows" | "width" | "height"
     >
   >;
 
   type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
     Pick<
-      Geomorph.ParsedSymbol<T, Geom.Vect>,
+      Geomorph.ParsedSymbol<T, Geom.Vect, Geom.Rect>,
       "hullWalls" | "walls" | "removableDoors" | "addableWalls"
     >
   >;

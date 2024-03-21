@@ -1,19 +1,18 @@
 declare namespace Geom {
+  type Vect = import(".").Vect;
+  type Rect = import(".").Rect;
+  type Poly = import(".").Poly;
+  type Ray = import(".").Ray;
+  type Mat = import(".").Mat;
+  type SpacialHash<T> = import(".").SpacialHash<T>;
 
-  export type Vect = import('.').Vect;
-  export type Rect = import('.').Rect;
-  export type Poly = import('.').Poly;
-  export type Ray = import('.').Ray;
-  export type Mat = import('.').Mat;
-  export type SpacialHash<T> = import('.').SpacialHash<T>;
-  
-  export type Coord = [number, number];
-  export type Seg = { src: VectJson; dst: VectJson };
-  export type Circle = { radius: number; center: VectJson; };
+  type Coord = [number, number];
+  type Seg = { src: VectJson; dst: VectJson };
+  type Circle = { radius: number; center: VectJson };
 
-  export interface GeoJsonPolygon {
+  interface GeoJsonPolygon {
     /** Identifier amongst GeoJSON formats. */
-    type: 'Polygon';
+    type: "Polygon";
     /**
      * The 1st array defines the _outer polygon_,
      * the others define non-nested _holes_.
@@ -22,30 +21,30 @@ declare namespace Geom {
     meta?: Record<string, string>;
   }
 
-  export interface VectJson {
+  interface VectJson {
     x: number;
     y: number;
   }
 
-  export interface RectJson {
+  interface RectJson {
     x: number;
     y: number;
     width: number;
     height: number;
   }
 
-  export interface Triangulation {
-    vs: Vect[]; 
+  interface Triangulation {
+    vs: Vect[];
     tris: [number, number, number][];
   }
 
-  export interface TriangulationJson {
-    vs: VectJson[]; 
+  interface TriangulationJson {
+    vs: VectJson[];
     tris: [number, number, number][];
   }
 
   /** Rotated around `(baseRect.x, baseRect.y) */
-  export interface AngledRect<T> {
+  interface AngledRect<T> {
     /** The unrotated rectangle */
     baseRect: T;
     /** Radians */
@@ -53,23 +52,54 @@ declare namespace Geom {
   }
 
   /** 'n' | 'e' | 's' | 'w' */
-  export type Direction = 0 | 1 | 2 | 3;
+  type Direction = 0 | 1 | 2 | 3;
 
-  export interface ClosestOnOutlineResult {
+  interface ClosestOnOutlineResult {
     point: Geom.VectJson;
     norm: Geom.VectJson;
     dist: number;
     edgeId: number;
   }
 
-  export type SixTuple = [number, number, number, number, number, number];
+  type SixTuple = [number, number, number, number, number, number];
 
-  export interface PixiTransform {
-    /** Identity is `{ x: 1, y: 1 }` */
-    scale: Geom.VectJson;
-    /** degrees */
+  interface ConnectorRectGeneric<
+    P extends Geom.GeoJsonPolygon | Geom.Poly,
+    V extends Geom.Vect | Geom.VectJson,
+    R extends Geom.Rect | Geom.RectJson
+  > {
+    /** Originally `Geomorph.Meta` but Geom should not depend on that namespace */
+    meta: Record<string, any>;
+
+    poly: P;
+    /** `poly.center` */
+    center: V;
+    /** `poly.rect` i.e. rotated rectangle */
+    rect: R;
+    /** Segment through middle of door */
+    seg: [V, V];
+    /** Points towards `entries[0]`. */
+    normal: V;
+    /** Radians 🚧 clarify */
     angle: number;
-    x: number;
-    y: number;
+    /**
+     * `[id of room infront, id of room behind]`
+     * where a room is *infront* if `normal` is pointing towards it.
+     * Hull doors have exactly one non-null entry.
+     */
+    roomIds: [null | number, null | number];
+    /**
+     * Aligned to `roomIds` i.e. `[infront, behind]`
+     * where a room is *infront* if `normal` is pointing towards it.
+     */
+    entries: [V, V];
+    /**
+     * 🚧 migrate to recast/detour?
+     * This door is connected to navmesh navZone.groups[navGroupId].
+     */
+    navGroupId: number;
   }
+
+  type ConnectorRect = ConnectorRectGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
+  type ConnectorRectJson = ConnectorRectGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
 }

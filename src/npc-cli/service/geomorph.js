@@ -82,11 +82,14 @@ class GeomorphService {
    * When hull symbols reference non-hull symbols, they may:
    * - remove doors tagged with `optional`
    * - add walls tagged with `optional`
-   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>} symbol
+   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect, Geom.Rect>} symbol
    * @param {string[]} doorTags e.g. `['s']`
    * @param {string[]} wallTags e.g. `['e']`
+   * @param {Geom.SixTuple} transform
+   * @returns {{ doors: Geom.ConnectorRect[], walls: Geom.Poly[] }}
    */
-  augmentSymbol(symbol, doorTags = [], wallTags = []) {
+  augmentSymbolInBrowser(symbol, doorTags, wallTags, transform) {
+    tmpMat1.feedFromArray(transform);
     const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
       const { meta } = symbol.doors[doorId];
       return !doorTags.some((tag) => meta[tag] === true);
@@ -95,9 +98,12 @@ class GeomorphService {
       doorsToRemove.map((x) => x.wall),
       symbol.addableWalls.filter(({ meta }) => wallTags.some((tag) => meta[tag] === true))
     );
+
     return {
-      doors: symbol.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)),
-      walls: walls.map((x) => x.cleanFinalReps()),
+      doors: symbol.doors
+        .filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId))
+        .map((x) => geomorphService.polyToConnector(x.poly.clone().applyMatrix(tmpMat1))),
+      walls: walls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
     };
   }
 
@@ -118,7 +124,12 @@ class GeomorphService {
 
     for (const { symbolKey, transform, meta } of symbols) {
       const symbol = assets.symbols[symbolKey];
-      const { doors, walls } = geomorphService.augmentSymbol(symbol, meta.doors, meta.walls);
+      const { doors, walls } = geomorphService.augmentSymbolInBrowser(
+        symbol,
+        meta.doors || [],
+        meta.walls || [],
+        transform
+      );
 
       tmpMat1.feedFromArray(transform);
       walls.forEach((x) =>
@@ -126,15 +137,10 @@ class GeomorphService {
           if (u.equalsAlmost(v)) {
             return warn(`${gmKey}: ${segId}: ignored degen wallSeg: ${JSON.stringify(u.json)}`);
           }
-          wallSegs.push([
-            tmpMat1.transformPoint(Vect.from(u)),
-            tmpMat1.transformPoint(Vect.from(v)),
-          ]);
+          wallSegs.push([u, v]);
         })
       );
-      doors.forEach(({ seg: [u, v] }) =>
-        doorSegs.push([tmpMat1.transformPoint(Vect.from(u)), tmpMat1.transformPoint(Vect.from(v))])
-      );
+      doors.forEach(({ seg: [u, v] }) => doorSegs.push([u, v]));
     }
 
     return {
@@ -174,8 +180,8 @@ class GeomorphService {
   }
 
   /**
-   * @param {Geomorph.ConnectorRectJson} x
-   * @returns {Geomorph.ConnectorRect}
+   * @param {Geom.ConnectorRectJson} x
+   * @returns {Geom.ConnectorRect}
    */
   deserializeConnectorRect(x) {
     const poly = Poly.from(x.poly);
@@ -192,7 +198,7 @@ class GeomorphService {
 
   /**
    * @param {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>} json
-   * @returns {Geomorph.ParsedSymbol<Poly, Geom.Vect>}
+   * @returns {Geomorph.ParsedSymbol<Poly, Geom.Vect, Geom.Rect>}
    */
   deserializeSymbol(json) {
     return {
@@ -651,18 +657,23 @@ class GeomorphService {
   }
 
   /**
-   * Cannot compute `roomIds` or `navGroupId` yet.
+   * - Convert polygon 4-gon into connector
+   * - For other n-gons we take aabb.
+   * - Orientation must be "fixed" i.e. clockwise w.r.t. y downwards.
+   * - Cannot compute `roomIds` or `navGroupId` yet.
    * @param {Geomorph.WithMeta<Geom.Poly>} poly
-   * @returns {Geomorph.ConnectorRect}
+   * @returns {Geom.ConnectorRect}
    */
   polyToConnector(poly) {
+    // 🔔 orientation MUST be clockwise w.r.t y-downwards
+    poly.fixOrientationConvex();
+
     const { meta } = poly;
-    // fallback to AABB for e.g. curved windows
-    const { angle, baseRect } = geom.polyToAngledRect(poly, -1);
+    const { angle, baseRect } = geom.polyToAngledRect(poly);
     const {
       seg: [u, v],
       normal,
-    } = geom.getAngledRectSeg({ angle, baseRect }, -1);
+    } = geom.getAngledRectSeg({ angle, baseRect });
 
     const doorEntryDelta = Math.min(baseRect.width, baseRect.height) / 2 + 0.05;
     const inFront = poly.center.addScaledVector(normal, doorEntryDelta).precision(precision);

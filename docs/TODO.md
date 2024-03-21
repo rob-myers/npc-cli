@@ -308,7 +308,17 @@
     - connector.navGroupId unknown too
   - ✅ try one/two segs
 
-- compute navPoly per geomorph
+- 🚧 cleanup connector computation
+  - ✅ apply transform to connector
+  - ✅ cleanup "sign of polygon" issue
+  - 🚧 ParsedSymbol -> ParsedSymbolGeneric
+  - 🚧 geomorphService.polyToConnector -> geom.polyToConnector
+  - 🚧 do not compute connectors in assets-meta json
+
+- 🚧 compute navPoly per geomorph
+  - transform connector rects in browser
+  - maybe only provide doors/windows as polys in assets-meta
+  - browser computes `rooms` and `doors` (cannot earlier)
   - extend door/window connectors with correct roomIds
 
 - show tables via raised "floor texture"
