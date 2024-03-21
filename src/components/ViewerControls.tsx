@@ -205,7 +205,7 @@ const buttonsCss = css`
     }
     @media (max-width: ${breakpoint}) {
       transform: rotate(90deg);
-      margin-right: 1rem;
+      margin-right: 0.5rem;
     }
   }
 `;
