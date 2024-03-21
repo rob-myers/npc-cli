@@ -19,10 +19,8 @@ declare namespace Geomorph {
         contentHash?: number;
         /** Defined for symbolKeys */
         outputHash?: number;
-        /** Defined for `global` i.e. hash of browser layout function */
-        browserHash?: number;
-        /** Epoch ms */
-        lastModified: number;
+        /** ISO string */
+        lastModified: string;
       };
     };
   }
@@ -111,8 +109,8 @@ declare namespace Geomorph {
   interface Layout {
     key: GeomorphKey;
     pngRect: Geom.Rect;
-    /** Epoch ms */
-    lastModified: number;
+    /** ISO Date */
+    lastModified: string;
     // 🚧
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];

@@ -29,7 +29,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(outputFilename).toString()))
     : null;
 
-  const lastModified = Date.now();
+  const lastModified = new Date().toISOString();
 
   const { symbols, meta: symbolsMeta } = parseSymbols(prev, lastModified);
   const { maps, meta: mapsMeta } = parseMaps(prev, lastModified);
@@ -40,8 +40,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   
   let meta = { ...symbolsMeta, ...mapsMeta };
   meta = { global: {
-    lastModified: Math.max(...Object.values(meta).map(x => x.lastModified)),
-    browserHash: hashText(geomorphService.computeLayoutInBrowser.toString()),
+    lastModified: Object.values(meta).map(x => x.lastModified).reduce((x, y) => x < y ? x : y),
   }, ...meta };
 
   // detect geomorph layout update
@@ -72,7 +71,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
 
 /**
  * @param {null | Geomorph.AssetsJson} prev
- * @param {number} nextModified
+ * @param {string} nextModified
  * @returns {Pick<Geomorph.AssetsJson, 'maps' | 'meta'>}
  */
 function parseMaps(prev, nextModified) {
@@ -98,7 +97,7 @@ function parseMaps(prev, nextModified) {
 
 /**
  * @param {null | Geomorph.AssetsJson} prev
- * @param {number} nextModified
+ * @param {string} nextModified
  * @returns {Pick<Geomorph.AssetsJson, 'symbols' | 'meta'>}
  */
 function parseSymbols(prev, nextModified) {
