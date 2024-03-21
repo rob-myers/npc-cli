@@ -319,6 +319,7 @@
 - 🚧 compute navPoly per geomorph
   - ✅ transform connector rects in browser
   - ✅ maybe only provide doors/windows as polys in assets-meta
+  - ✅ optional walls are present by default
   - 🚧 browser computes `rooms` and `doors` (cannot earlier)
   - extend door/window connectors with correct roomIds
 

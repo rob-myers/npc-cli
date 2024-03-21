@@ -88,7 +88,8 @@ class GeomorphService {
     const { hullKey } = this.gmKeyToKeys(gmKey);
     const { pngRect, symbols, walls: hullWalls, doors: hullDoorPolys } = assets.symbols[hullKey];
     const { lastModified } = assets.meta[gmKey];
-    /** Doors in hull symbols needn't be hull-doors */
+
+    /** Start with doors in hull symbol, which needn't be "hull doors" */
     const doors = hullDoorPolys.map((x) => geom.polyToConnector(x));
 
     const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
@@ -98,10 +99,12 @@ class GeomorphService {
       const symbol = assets.symbols[symbolKey];
       const transformed = geomorphService.instantiateLayoutSymbol(
         symbol,
-        meta.doors || [],
-        meta.walls || [],
+        meta.doors,
+        meta.walls,
         transform
       );
+
+      doors.push(...transformed.doors);
 
       // Extend wallSegs, doorSegs
       tmpMat1.feedFromArray(transform);
@@ -360,14 +363,14 @@ class GeomorphService {
   /**
    * When hull symbols reference non-hull symbols, they may:
    * - remove doors tagged with `optional`
-   * - add walls tagged with `optional`
+   * - remove walls tagged with `optional`
    * @param {Geomorph.ParsedSymbol} symbol
-   * @param {string[]} doorTags e.g. `['s']`
-   * @param {string[]} wallTags e.g. `['e']`
+   * @param {string[] | undefined} doorTags e.g. `['s']`
+   * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
    * @param {Geom.SixTuple} transform
    * @returns {{ doors: Geom.ConnectorRect[], walls: Geom.Poly[] }}
    */
-  instantiateLayoutSymbol(symbol, doorTags, wallTags, transform) {
+  instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
     tmpMat1.feedFromArray(transform);
     const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
       const { meta } = symbol.doors[doorId];
@@ -375,7 +378,9 @@ class GeomorphService {
     });
     const walls = symbol.walls.concat(
       doorsToRemove.map((x) => x.wall),
-      symbol.addableWalls.filter(({ meta }) => wallTags.some((tag) => meta[tag] === true))
+      symbol.addableWalls.filter(
+        ({ meta }) => !wallTags || wallTags.some((tag) => meta[tag] === true)
+      )
     );
 
     return {
