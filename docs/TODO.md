@@ -317,9 +317,9 @@
   -  ✅ Geomorph.{Meta,WithMeta} -> Geom
 
 - 🚧 compute navPoly per geomorph
-  - transform connector rects in browser
-  - maybe only provide doors/windows as polys in assets-meta
-  - browser computes `rooms` and `doors` (cannot earlier)
+  - ✅ transform connector rects in browser
+  - ✅ maybe only provide doors/windows as polys in assets-meta
+  - 🚧 browser computes `rooms` and `doors` (cannot earlier)
   - extend door/window connectors with correct roomIds
 
 - show tables via raised "floor texture"
