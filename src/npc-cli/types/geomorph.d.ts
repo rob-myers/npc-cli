@@ -51,8 +51,8 @@ declare namespace Geomorph {
     hullWalls: WithMeta<P>[];
     walls: WithMeta<P>[];
     obstacles: WithMeta<P>[];
-    doors: Geom.ConnectorRectGeneric<P, V, R>[];
-    windows: Geom.ConnectorRectGeneric<P, V, R>[];
+    doors: WithMeta<P>[];
+    windows: WithMeta<P>[];
     /** 🚧 split further? */
     unsorted: WithMeta<P>[];
 

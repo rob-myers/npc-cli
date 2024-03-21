@@ -102,7 +102,7 @@ class GeomorphService {
     return {
       doors: symbol.doors
         .filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId))
-        .map((x) => geomorphService.polyToConnector(x.poly.clone().applyMatrix(tmpMat1))),
+        .map((poly) => geom.polyToConnector(poly.clone().applyMatrix(tmpMat1))),
       walls: walls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
     };
   }
@@ -115,24 +115,26 @@ class GeomorphService {
    */
   computeLayoutInBrowser(gmKey, assets) {
     const { hullKey } = this.gmKeyToKeys(gmKey);
-    const { pngRect, symbols, walls: hullWalls, doors: hullDoors } = assets.symbols[hullKey];
+    const { pngRect, symbols, walls: hullWalls, doors: hullDoorPolys } = assets.symbols[hullKey];
     const { lastModified } = assets.meta[gmKey];
+    /** Doors in hull symbols needn't be hull-doors */
+    const doors = hullDoorPolys.map((x) => geom.polyToConnector(x));
 
     const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
-    /** @type {[Geom.Vect, Geom.Vect][]} */
-    const doorSegs = hullDoors.map(({ seg: [u, v] }) => [u.clone(), v.clone()]);
+    const doorSegs = doors.map(({ seg }) => seg);
 
     for (const { symbolKey, transform, meta } of symbols) {
       const symbol = assets.symbols[symbolKey];
-      const { doors, walls } = geomorphService.augmentSymbolInBrowser(
+      const transformed = geomorphService.augmentSymbolInBrowser(
         symbol,
         meta.doors || [],
         meta.walls || [],
         transform
       );
 
+      // Extend wallSegs, doorSegs
       tmpMat1.feedFromArray(transform);
-      walls.forEach((x) =>
+      transformed.walls.forEach((x) =>
         x.lineSegs.forEach(([u, v], segId) => {
           if (u.equalsAlmost(v)) {
             return warn(`${gmKey}: ${segId}: ignored degen wallSeg: ${JSON.stringify(u.json)}`);
@@ -140,7 +142,7 @@ class GeomorphService {
           wallSegs.push([u, v]);
         })
       );
-      doors.forEach(({ seg: [u, v] }) => doorSegs.push([u, v]));
+      transformed.doors.forEach(({ seg: [u, v] }) => doorSegs.push([u, v]));
     }
 
     return {
@@ -207,8 +209,8 @@ class GeomorphService {
       hullWalls: json.hullWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
-      doors: json.doors.map(this.deserializeConnectorRect),
-      windows: json.windows.map(this.deserializeConnectorRect),
+      doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
+      windows: json.windows.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
@@ -633,8 +635,8 @@ class GeomorphService {
     /** @type {Geomorph.PreParsedSymbol} */
     const preParse = {
       key,
-      doors: doors.map((x) => this.polyToConnector(x)),
-      windows: windows.map((x) => this.polyToConnector(x)),
+      doors,
+      windows,
       hullWalls,
       isHull,
       walls,
@@ -657,72 +659,20 @@ class GeomorphService {
   }
 
   /**
-   * - Convert polygon 4-gon into connector
-   * - For other n-gons we take aabb.
-   * - Orientation must be "fixed" i.e. clockwise w.r.t. y downwards.
-   * - Cannot compute `roomIds` or `navGroupId` yet.
-   * @param {Geomorph.WithMeta<Geom.Poly>} poly
-   * @returns {Geom.ConnectorRect}
-   */
-  polyToConnector(poly) {
-    // 🔔 orientation MUST be clockwise w.r.t y-downwards
-    poly.fixOrientationConvex();
-
-    const { meta } = poly;
-    const { angle, baseRect } = geom.polyToAngledRect(poly);
-    const {
-      seg: [u, v],
-      normal,
-    } = geom.getAngledRectSeg({ angle, baseRect });
-
-    const doorEntryDelta = Math.min(baseRect.width, baseRect.height) / 2 + 0.05;
-    const inFront = poly.center.addScaledVector(normal, doorEntryDelta).precision(precision);
-    const behind = poly.center.addScaledVector(normal, -doorEntryDelta).precision(precision);
-    // const moreInfront = infront.clone().addScaledVector(normal, hullDoorOutset);
-    // const moreBehind = behind.clone().addScaledVector(normal, -hullDoorOutset);
-
-    // /** @type {[null | number, null | number]} */
-    // const roomIds = rooms.reduce((agg, room, roomId) => {
-    //   // Support doors connecting a room to itself e.g.
-    //   // galley-and-mess-halls--006--4x2
-    //   if (room.contains(moreInfront)) agg[0] = roomId;
-    //   if (room.contains(moreBehind)) agg[1] = roomId;
-    //   return agg;
-    // }, /** @type {[null | number, null | number]} */ ([null, null]));
-
-    return {
-      angle,
-      poly,
-      center: poly.center,
-      rect: poly.rect.precision(precision),
-      meta,
-      seg: [u.precision(precision), v.precision(precision)],
-      normal: normal.precision(precision),
-      roomIds: [null, null], // added in browser
-      entries: [inFront, behind],
-      navGroupId: -1, // added later
-    };
-  }
-
-  /**
    * @param {Geomorph.PreParsedSymbol} partial
    * @returns {Geomorph.PostParsedSymbol}
    */
   postParseSymbol(partial) {
     // assume hull doors cannot be optional
-    const hullWalls = Poly.cutOut(
-      partial.doors.map((x) => x.poly),
-      Poly.union(partial.hullWalls)
-    ).map((x) => x.cleanFinalReps());
+    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls)).map((x) =>
+      x.cleanFinalReps()
+    );
     const nonOptionalWalls = partial.walls.filter((x) => x.meta.optional !== true);
     const uncutWalls = Poly.union(partial.hullWalls.concat(nonOptionalWalls));
-    const walls = Poly.cutOut(
-      partial.doors.map((x) => x.poly),
-      uncutWalls
-    ).map((x) => x.cleanFinalReps());
+    const walls = Poly.cutOut(partial.doors, uncutWalls).map((x) => x.cleanFinalReps());
 
-    const removableDoors = partial.doors.flatMap(({ poly, meta }, doorId) =>
-      meta.optional ? { doorId, wall: Poly.intersect([poly], uncutWalls)[0] } : []
+    const removableDoors = partial.doors.flatMap((poly, doorId) =>
+      poly.meta.optional ? { doorId, wall: Poly.intersect([poly], uncutWalls)[0] } : []
     );
     const addableWalls = partial.walls.filter((x) => x.meta.optional === true);
 
@@ -747,8 +697,8 @@ class GeomorphService {
       hullWalls: parsed.hullWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      doors: parsed.doors.map((x) => ({ ...x, poly: x.poly.geoJson })),
-      windows: parsed.windows.map((x) => ({ ...x, poly: x.poly.geoJson })),
+      doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      windows: parsed.windows.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,

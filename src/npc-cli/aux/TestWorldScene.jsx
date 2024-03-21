@@ -60,11 +60,7 @@ export default function TestWorldScene(props) {
         ctxt.lineWidth = 2;
         ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
         ctxt.fillStyle = "rgba(255, 255, 255, 1)";
-        drawPolygons(
-          ctxt,
-          hullDoors.map((x) => x.poly),
-          "fill-stroke"
-        );
+        drawPolygons(ctxt, hullDoors, "fill-stroke");
 
         ctxt.resetTransform();
       },
