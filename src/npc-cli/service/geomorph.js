@@ -507,12 +507,12 @@ class GeomorphService {
     let viewBoxRect = /** @type {Geom.RectJson | null} */ (null);
     let pngRect = /** @type {Geom.RectJson | null} */ (null);
     const symbols = /** @type {Geomorph.ParsedSymbol['symbols']} */ ([]);
-    const hullWalls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const unsorted = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const walls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const windows = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const hullWalls = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
+    const obstacles = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
+    const doors = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
+    const unsorted = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
+    const walls = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
+    const windows = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -711,7 +711,7 @@ class GeomorphService {
 
   /**
    * @param {string[]} tags
-   * @param {Geomorph.Meta} baseMeta
+   * @param {Geom.Meta} baseMeta
    */
   tagsToMeta(tags, baseMeta) {
     return tags.reduce((meta, tag) => {

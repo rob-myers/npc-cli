@@ -308,13 +308,13 @@
     - connector.navGroupId unknown too
   - ✅ try one/two segs
 
-- 🚧 cleanup connector computation
+- ✅ clean connector computation
   - ✅ apply transform to connector
   - ✅ cleanup "sign of polygon" issue
   - ✅ ParsedSymbol -> ParsedSymbolGeneric
   - ✅ geomorphService.polyToConnector -> geom.polyToConnector
   - ✅ do not compute connectors in assets-meta json
-  - 🚧 Geomorph.{Meta,WithMeta} -> Geom
+  -  ✅ Geomorph.{Meta,WithMeta} -> Geom
 
 - 🚧 compute navPoly per geomorph
   - transform connector rects in browser

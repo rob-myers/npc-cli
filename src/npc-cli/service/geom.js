@@ -842,7 +842,7 @@ class geomServiceClass {
    * - Convert polygonal rect into connector
    * - For non 4-gons we take aabb.
    * - Orientation must be "fixed" i.e. clockwise w.r.t. y downwards.
-   * @param {Geomorph.WithMeta<Geom.Poly>} poly
+   * @param {Geom.WithMeta<Geom.Poly>} poly
    * @returns {Geom.ConnectorRect}
    */
   polyToConnector(poly, precision = 4) {

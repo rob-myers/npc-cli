@@ -63,14 +63,16 @@ declare namespace Geom {
 
   type SixTuple = [number, number, number, number, number, number];
 
+  /** Previously called `PointMeta` */
+  type Meta<T extends {} = {}> = Record<string, any> & T;
+
+  type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
+
   interface ConnectorRectGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.Vect | Geom.VectJson,
     R extends Geom.Rect | Geom.RectJson
-  > {
-    /** Originally `Geomorph.Meta` but Geom should not depend on that namespace */
-    meta: Record<string, any>;
-
+  > extends WithMeta {
     poly: P;
     /** `poly.center` */
     center: V;

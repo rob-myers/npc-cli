@@ -48,16 +48,16 @@ declare namespace Geomorph {
     pngRect: Geom.RectJson;
 
     /** Hull walls, only non-empty in hull */
-    hullWalls: WithMeta<P>[];
-    walls: WithMeta<P>[];
-    obstacles: WithMeta<P>[];
-    doors: WithMeta<P>[];
-    windows: WithMeta<P>[];
+    hullWalls: Geom.WithMeta<P>[];
+    walls: Geom.WithMeta<P>[];
+    obstacles: Geom.WithMeta<P>[];
+    doors: Geom.WithMeta<P>[];
+    windows: Geom.WithMeta<P>[];
     /** 🚧 split further? */
-    unsorted: WithMeta<P>[];
+    unsorted: Geom.WithMeta<P>[];
 
     /** Hull symbols have sub symbols, defining the layout of the geomorph. */
-    symbols: WithMeta<{
+    symbols: Geom.WithMeta<{
       symbolKey: Geomorph.SymbolKey;
       /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
       width: number;
@@ -76,7 +76,7 @@ declare namespace Geomorph {
     }[];
 
     /** Walls tagged with `optional` can be added */
-    addableWalls: WithMeta<P>[];
+    addableWalls: Geom.WithMeta<P>[];
   }
 
   type ParsedSymbol = ParsedSymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
@@ -92,11 +92,6 @@ declare namespace Geomorph {
   type PostParsedSymbol = Pretty<
     Pick<Geomorph.ParsedSymbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
   >;
-
-  /** Previously called `PointMeta` */
-  type Meta<T extends {} = {}> = Record<string, any> & T;
-
-  type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
 
   interface MapDef {
     gms: {
