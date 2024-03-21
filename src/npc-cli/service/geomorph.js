@@ -79,35 +79,6 @@ class GeomorphService {
   }
 
   /**
-   * When hull symbols reference non-hull symbols, they may:
-   * - remove doors tagged with `optional`
-   * - add walls tagged with `optional`
-   * @param {Geomorph.ParsedSymbol} symbol
-   * @param {string[]} doorTags e.g. `['s']`
-   * @param {string[]} wallTags e.g. `['e']`
-   * @param {Geom.SixTuple} transform
-   * @returns {{ doors: Geom.ConnectorRect[], walls: Geom.Poly[] }}
-   */
-  augmentSymbolInBrowser(symbol, doorTags, wallTags, transform) {
-    tmpMat1.feedFromArray(transform);
-    const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
-      const { meta } = symbol.doors[doorId];
-      return !doorTags.some((tag) => meta[tag] === true);
-    });
-    const walls = symbol.walls.concat(
-      doorsToRemove.map((x) => x.wall),
-      symbol.addableWalls.filter(({ meta }) => wallTags.some((tag) => meta[tag] === true))
-    );
-
-    return {
-      doors: symbol.doors
-        .filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId))
-        .map((poly) => geom.polyToConnector(poly.clone().applyMatrix(tmpMat1))),
-      walls: walls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
-    };
-  }
-
-  /**
    * 🚧
    * @param {Geomorph.GeomorphKey} gmKey
    * @param {Geomorph.Assets} assets
@@ -125,7 +96,7 @@ class GeomorphService {
 
     for (const { symbolKey, transform, meta } of symbols) {
       const symbol = assets.symbols[symbolKey];
-      const transformed = geomorphService.augmentSymbolInBrowser(
+      const transformed = geomorphService.instantiateLayoutSymbol(
         symbol,
         meta.doors || [],
         meta.walls || [],
@@ -384,6 +355,35 @@ class GeomorphService {
    */
   gmNumToKeys(gmNumber) {
     return { gmKey: this.toGmKey[gmNumber], gmNumber, hullKey: `${gmNumber}--hull` };
+  }
+
+  /**
+   * When hull symbols reference non-hull symbols, they may:
+   * - remove doors tagged with `optional`
+   * - add walls tagged with `optional`
+   * @param {Geomorph.ParsedSymbol} symbol
+   * @param {string[]} doorTags e.g. `['s']`
+   * @param {string[]} wallTags e.g. `['e']`
+   * @param {Geom.SixTuple} transform
+   * @returns {{ doors: Geom.ConnectorRect[], walls: Geom.Poly[] }}
+   */
+  instantiateLayoutSymbol(symbol, doorTags, wallTags, transform) {
+    tmpMat1.feedFromArray(transform);
+    const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
+      const { meta } = symbol.doors[doorId];
+      return !doorTags.some((tag) => meta[tag] === true);
+    });
+    const walls = symbol.walls.concat(
+      doorsToRemove.map((x) => x.wall),
+      symbol.addableWalls.filter(({ meta }) => wallTags.some((tag) => meta[tag] === true))
+    );
+
+    return {
+      doors: symbol.doors
+        .filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId))
+        .map((poly) => geom.polyToConnector(poly.clone().applyMatrix(tmpMat1))),
+      walls: walls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
+    };
   }
 
   /**
