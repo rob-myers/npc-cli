@@ -25,7 +25,11 @@ export default function TestWorld(props) {
       scene: /** @type {*} */ ({}),
       view: /** @type {*} */ (null),
 
-      ensureGmData(gmKey, forceLayout) {
+      /**
+       * - we avoid recomputing this per geomorph instance
+       * - in development, we recompute this on `assets` change e.g. window 'focus'
+       */
+      ensureGmData(gmKey, forceRecompute) {
         const { assets } = state;
         if (!state.gmData[gmKey]) {
           const canvas = document.createElement("canvas");
@@ -38,10 +42,7 @@ export default function TestWorld(props) {
             layout,
             tex: new THREE.CanvasTexture(canvas),
           };
-        } else if (
-          forceLayout ||
-          state.gmData[gmKey].layout.lastModified !== assets.meta[gmKey].lastModified
-        ) {
+        } else if (forceRecompute) {
           // HMR: recompute onchange: (a) browser layout function, or (b) precomputed layout data
           state.gmData[gmKey].layout = geomorphService.computeLayoutInBrowser(gmKey, assets);
         }
@@ -63,12 +64,12 @@ export default function TestWorld(props) {
 
   React.useMemo(() => {
     if (assets) {
-      const forceLayout = assets.meta.global.browserHash !== state.assets?.meta.global.browserHash;
+      const recomputeLayout = assets !== state.assets; // initial or HMR
       state.assets = assets;
       state.map = assets.maps[props.mapKey ?? "demo-map-1"];
 
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        const { layout } = state.ensureGmData(gmKey, forceLayout);
+        const { layout } = state.ensureGmData(gmKey, recomputeLayout);
         return geomorphService.computeLayoutInstance(layout, gmId, transform);
       });
       // Remount walls on HMR
