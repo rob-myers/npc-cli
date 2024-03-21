@@ -48,7 +48,7 @@ export default function TestWorldScene(props) {
       },
       drawGeomorph(gmKey, img) {
         const { ctxt, layout } = api.gmData[gmKey];
-        const { pngRect } = layout;
+        const { pngRect, rooms } = layout;
         const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
         const { doors: hullDoors, symbols: subSymbols } = api.assets.symbols[hullKey];
 
@@ -61,6 +61,12 @@ export default function TestWorldScene(props) {
         ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
         ctxt.fillStyle = "rgba(255, 255, 255, 1)";
         drawPolygons(ctxt, hullDoors, "fill-stroke");
+
+        // 🚧 debug draw rooms
+        ctxt.lineWidth = 0;
+        ctxt.fillStyle = "rgba(255, 0, 0, 0)";
+        ctxt.strokeStyle = "rgba(255, 0, 0, 1)";
+        drawPolygons(ctxt, rooms, "fill-stroke");
 
         ctxt.resetTransform();
       },

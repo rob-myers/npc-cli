@@ -320,8 +320,10 @@
   - ✅ transform connector rects in browser
   - ✅ maybe only provide doors/windows as polys in assets-meta
   - ✅ optional walls are present by default
-  - 🚧 browser computes `rooms` and `doors` (cannot earlier)
+  - ✅ browser computes `rooms` and `doors` (cannot earlier)
+    - test draw room outlines
   - extend door/window connectors with correct roomIds
+  - clarify handling of windows
 
 - show tables via raised "floor texture"
 

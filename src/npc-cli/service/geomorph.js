@@ -86,16 +86,23 @@ class GeomorphService {
    */
   computeLayoutInBrowser(gmKey, assets) {
     const { hullKey } = this.gmKeyToKeys(gmKey);
-    const { pngRect, symbols, walls: hullWalls, doors: hullDoorPolys } = assets.symbols[hullKey];
+    const hullSym = assets.symbols[hullKey];
     const { lastModified } = assets.meta[gmKey];
 
     /** Start with doors in hull symbol, which needn't be "hull doors" */
-    const doors = hullDoorPolys.map((x) => geom.polyToConnector(x));
+    const doors = hullSym.doors.map((x) => geom.polyToConnector(x));
+    /**
+     * Start with walls in hull symbol, which needn't be "hull walls".
+     * They induce wall segs.
+     */
+    const walls = hullSym.walls.slice();
+    /** Rooms are computed using uncut walls  */
+    const uncutWalls = hullSym.uncutWalls.slice();
 
-    const wallSegs = hullWalls.flatMap((poly) => poly.lineSegs);
+    const wallSegs = walls.flatMap((poly) => poly.lineSegs);
     const doorSegs = doors.map(({ seg }) => seg);
 
-    for (const { symbolKey, transform, meta } of symbols) {
+    for (const { symbolKey, transform, meta } of hullSym.symbols) {
       const symbol = assets.symbols[symbolKey];
       const transformed = geomorphService.instantiateLayoutSymbol(
         symbol,
@@ -105,6 +112,8 @@ class GeomorphService {
       );
 
       doors.push(...transformed.doors);
+      walls.push(...transformed.walls);
+      uncutWalls.push(...transformed.uncutWalls);
 
       // Extend wallSegs, doorSegs
       tmpMat1.feedFromArray(transform);
@@ -119,12 +128,24 @@ class GeomorphService {
       transformed.doors.forEach(({ seg: [u, v] }) => doorSegs.push([u, v]));
     }
 
+    // uncutWalls -> rooms
+    const [largeWall, pillars] = Poly.union(uncutWalls).sort(
+      (a, b) => (a.rect.area > b.rect.area ? -1 : 1) // Descending by area
+    );
+    // 🤔 could support "pillars" i.e. holes in rooms
+    const rooms = largeWall.holes.map((ring) => new Poly(ring));
+
+    // 🚧 doors need `roomIds`
+
     return {
       key: gmKey,
-      pngRect: Rect.fromJson(pngRect),
+      pngRect: hullSym.pngRect,
       lastModified,
+
       doorSegs,
       wallSegs,
+      rooms,
+      doors,
     };
   }
 
@@ -182,13 +203,14 @@ class GeomorphService {
       isHull: json.isHull,
       hullWalls: json.hullWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
+      uncutWalls: json.uncutWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       windows: json.windows.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
-      pngRect: json.pngRect,
+      pngRect: Rect.fromJson(json.pngRect),
       symbols: json.symbols,
 
       removableDoors: json.removableDoors.map(({ doorId, wall }) => ({
@@ -368,7 +390,7 @@ class GeomorphService {
    * @param {string[] | undefined} doorTags e.g. `['s']`
    * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
    * @param {Geom.SixTuple} transform
-   * @returns {{ doors: Geom.ConnectorRect[], walls: Geom.Poly[] }}
+   * @returns {{ doors: Geom.ConnectorRect[]; uncutWalls: Geom.Poly[]; walls: Geom.Poly[] }}
    */
   instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
     tmpMat1.feedFromArray(transform);
@@ -388,6 +410,7 @@ class GeomorphService {
         .filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId))
         .map((poly) => geom.polyToConnector(poly.clone().applyMatrix(tmpMat1))),
       walls: walls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
+      uncutWalls: symbol.uncutWalls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
     };
   }
 
@@ -655,7 +678,9 @@ class GeomorphService {
       ...preParse,
 
       obstacles,
-      pngRect: pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect),
+      pngRect: Rect.fromJson(
+        pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect)
+      ),
       symbols,
       unsorted,
 
@@ -668,12 +693,13 @@ class GeomorphService {
    * @returns {Geomorph.PostParsedSymbol}
    */
   postParseSymbol(partial) {
-    // assume hull doors cannot be optional
-    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls)).map((x) =>
-      x.cleanFinalReps()
+    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls)).map(
+      (x) => x.cleanFinalReps() // hull doors are never optional
     );
     const nonOptionalWalls = partial.walls.filter((x) => x.meta.optional !== true);
-    const uncutWalls = Poly.union(partial.hullWalls.concat(nonOptionalWalls));
+    const uncutWalls = Poly.union(partial.hullWalls.concat(nonOptionalWalls)).map((x) =>
+      x.cleanFinalReps()
+    );
     const walls = Poly.cutOut(partial.doors, uncutWalls).map((x) => x.cleanFinalReps());
 
     const removableDoors = partial.doors.flatMap((poly, doorId) =>
@@ -683,6 +709,7 @@ class GeomorphService {
 
     return {
       hullWalls,
+      uncutWalls,
       walls,
       removableDoors,
       addableWalls,
@@ -701,6 +728,7 @@ class GeomorphService {
       isHull: parsed.isHull,
       hullWalls: parsed.hullWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      uncutWalls: parsed.uncutWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       windows: parsed.windows.map((x) => Object.assign(x.geoJson, { meta: x.meta })),

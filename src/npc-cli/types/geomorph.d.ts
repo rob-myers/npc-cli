@@ -43,15 +43,27 @@ declare namespace Geomorph {
      * Bounds of original image in symbol SVG.
      * May be offset e.g. because doors are centred along edges.
      */
-    pngRect: Geom.RectJson;
+    pngRect: R;
 
-    /** Hull walls, only non-empty in hull */
+    /**
+     * Hull walls: only non-empty in hull.
+     * A hull symbol may have other walls too.
+     */
     hullWalls: Geom.WithMeta<P>[];
+    /** Union of non-optional walls including hull walls. */
+    uncutWalls: Geom.WithMeta<P>[];
+    /**
+     * Union of non-optional walls including hull walls,
+     * such that all (possibly optional) doors have been cut out.
+     *
+     * We may have to add walls when we instantiate in the browser,
+     * i.e. (a) optional walls, (b) walls replacing removed doors.
+     */
     walls: Geom.WithMeta<P>[];
     obstacles: Geom.WithMeta<P>[];
     doors: Geom.WithMeta<P>[];
     windows: Geom.WithMeta<P>[];
-    /** 🚧 split further? */
+    /** 🚧 refine? */
     unsorted: Geom.WithMeta<P>[];
 
     /** Hull symbols have sub symbols, defining the layout of the geomorph. */
@@ -88,7 +100,10 @@ declare namespace Geomorph {
   >;
 
   type PostParsedSymbol = Pretty<
-    Pick<Geomorph.ParsedSymbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
+    Pick<
+      Geomorph.ParsedSymbol,
+      "hullWalls" | "uncutWalls" | "walls" | "removableDoors" | "addableWalls"
+    >
   >;
 
   interface MapDef {
@@ -114,6 +129,8 @@ declare namespace Geomorph {
     // 🚧
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];
+    rooms: Geom.Poly[];
+    doors: Geom.ConnectorRect[];
   }
 
   type GeomorphKey =
