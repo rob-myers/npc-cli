@@ -82,7 +82,7 @@ class GeomorphService {
    * When hull symbols reference non-hull symbols, they may:
    * - remove doors tagged with `optional`
    * - add walls tagged with `optional`
-   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect, Geom.Rect>} symbol
+   * @param {Geomorph.ParsedSymbol} symbol
    * @param {string[]} doorTags e.g. `['s']`
    * @param {string[]} wallTags e.g. `['e']`
    * @param {Geom.SixTuple} transform
@@ -197,8 +197,8 @@ class GeomorphService {
   }
 
   /**
-   * @param {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>} json
-   * @returns {Geomorph.ParsedSymbol<Poly, Geom.Vect, Geom.Rect>}
+   * @param {Geomorph.ParsedSymbolJson} json
+   * @returns {Geomorph.ParsedSymbol}
    */
   deserializeSymbol(json) {
     return {
@@ -491,7 +491,7 @@ class GeomorphService {
    * Parse Starship Symbol
    * @param {Geomorph.SymbolKey} symbolKey
    * @param {string} svgContents
-   * @returns {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>}
+   * @returns {Geomorph.ParsedSymbol}
    */
   parseSymbol(symbolKey, svgContents) {
     // info("parseStarshipSymbol", symbolKey, "...");
@@ -504,7 +504,7 @@ class GeomorphService {
 
     let viewBoxRect = /** @type {Geom.RectJson | null} */ (null);
     let pngRect = /** @type {Geom.RectJson | null} */ (null);
-    const symbols = /** @type {Geomorph.ParsedSymbol<Geom.Poly>['symbols']} */ ([]);
+    const symbols = /** @type {Geomorph.ParsedSymbol['symbols']} */ ([]);
     const hullWalls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
@@ -630,7 +630,7 @@ class GeomorphService {
     const key = symbolKey;
     const { width, height } = viewBoxRect;
 
-    /** @type {Geomorph.PreParsedSymbol<Geom.Poly>} */
+    /** @type {Geomorph.PreParsedSymbol} */
     const preParse = {
       key,
       doors: doors.map((x) => this.polyToConnector(x)),
@@ -705,8 +705,8 @@ class GeomorphService {
   }
 
   /**
-   * @param {Geomorph.PreParsedSymbol<Geom.Poly>} partial
-   * @returns {Geomorph.PostParsedSymbol<Geom.Poly>}
+   * @param {Geomorph.PreParsedSymbol} partial
+   * @returns {Geomorph.PostParsedSymbol}
    */
   postParseSymbol(partial) {
     // assume hull doors cannot be optional
@@ -737,8 +737,8 @@ class GeomorphService {
   /**
    * Create serializable data associated to a static/assets/symbol/{symbol},
    * e.g. to store inside assets-meta.json.
-   * @param {Geomorph.ParsedSymbol<Geom.Poly, Geom.Vect>} parsed
-   * @returns {Geomorph.ParsedSymbol<Geom.GeoJsonPolygon>}
+   * @param {Geomorph.ParsedSymbol} parsed
+   * @returns {Geomorph.ParsedSymbolJson}
    */
   serializeSymbol(parsed) {
     return {

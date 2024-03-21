@@ -311,7 +311,7 @@
 - 🚧 cleanup connector computation
   - ✅ apply transform to connector
   - ✅ cleanup "sign of polygon" issue
-  - 🚧 ParsedSymbol -> ParsedSymbolGeneric
+  - ✅ ParsedSymbol -> ParsedSymbolGeneric
   - 🚧 geomorphService.polyToConnector -> geom.polyToConnector
   - 🚧 do not compute connectors in assets-meta json
 

@@ -4,7 +4,7 @@ declare namespace Geomorph {
     P extends Geom.VectJson | Geom.Vect,
     R extends Geom.RectJson | Geom.Rect
   > {
-    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbol<T, P, R>>;
+    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
     /**
      * `metaKey` can be:
@@ -30,10 +30,10 @@ declare namespace Geomorph {
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
 
-  interface ParsedSymbol<
+  interface ParsedSymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
-    V extends Geom.VectJson | Geom.Vect = Geom.VectJson,
-    R extends Geom.RectJson | Geom.Rect = Geom.RectJson
+    V extends Geom.VectJson | Geom.Vect,
+    R extends Geom.RectJson | Geom.Rect
   > {
     key: SymbolKey;
     isHull: boolean;
@@ -79,18 +79,18 @@ declare namespace Geomorph {
     addableWalls: WithMeta<P>[];
   }
 
-  type PreParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
+  type ParsedSymbol = ParsedSymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
+  type ParsedSymbolJson = ParsedSymbolGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
+
+  type PreParsedSymbol = Pretty<
     Pick<
-      Geomorph.ParsedSymbol<T, Geom.Vect, Geom.Rect>,
+      Geomorph.ParsedSymbol,
       "key" | "doors" | "isHull" | "walls" | "hullWalls" | "windows" | "width" | "height"
     >
   >;
 
-  type PostParsedSymbol<T extends Geom.GeoJsonPolygon | Geom.Poly> = Pretty<
-    Pick<
-      Geomorph.ParsedSymbol<T, Geom.Vect, Geom.Rect>,
-      "hullWalls" | "walls" | "removableDoors" | "addableWalls"
-    >
+  type PostParsedSymbol = Pretty<
+    Pick<Geomorph.ParsedSymbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
   >;
 
   /** Previously called `PointMeta` */
