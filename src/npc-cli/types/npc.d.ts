@@ -14,7 +14,7 @@ declare namespace NPC {
     /** Ordinate `y` */
     height: number;
     /** Properties of the thing we clicked. */
-    meta: Geom.Meta;
+    meta: Geomorph.Meta;
     /** Coords `(x, z)` */
     point: Geom.VectJson;
     screenPoint: Geom.VectJson;
@@ -27,7 +27,7 @@ declare namespace NPC {
     /** Coords `(x, z)` */
     point: Geom.VectJson;
     /** Properties of the thing we clicked. */
-    meta: Geom.Meta<{
+    meta: Geomorph.Meta<{
       /** `(x, z)` of target element centre if any */
       targetCenter?: Geom.VectJson;
     }>;

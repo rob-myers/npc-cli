@@ -28,6 +28,16 @@ declare namespace Geomorph {
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
 
+  interface ConnectorJson {
+    poly: Geomorph.WithMeta<Geom.GeoJsonPolygon>;
+    /**
+     * `[id of room infront, id of room behind]`
+     * where a room is *infront* if `normal` is pointing towards it.
+     * Hull doors have exactly one non-null entry.
+     */
+    roomIds: [null | number, null | number];
+  }
+
   interface ParsedSymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,
@@ -49,9 +59,9 @@ declare namespace Geomorph {
      * Hull walls: only non-empty in hull.
      * A hull symbol may have other walls too.
      */
-    hullWalls: Geom.WithMeta<P>[];
+    hullWalls: Geomorph.WithMeta<P>[];
     /** Union of non-optional walls including hull walls. */
-    uncutWalls: Geom.WithMeta<P>[];
+    uncutWalls: Geomorph.WithMeta<P>[];
     /**
      * Union of non-optional walls including hull walls,
      * such that all (possibly optional) doors have been cut out.
@@ -59,15 +69,15 @@ declare namespace Geomorph {
      * We may have to add walls when we instantiate in the browser,
      * i.e. (a) optional walls, (b) walls replacing removed doors.
      */
-    walls: Geom.WithMeta<P>[];
-    obstacles: Geom.WithMeta<P>[];
-    doors: Geom.WithMeta<P>[];
-    windows: Geom.WithMeta<P>[];
+    walls: Geomorph.WithMeta<P>[];
+    obstacles: Geomorph.WithMeta<P>[];
+    doors: Geomorph.WithMeta<P>[];
+    windows: Geomorph.WithMeta<P>[];
     /** 🚧 refine? */
-    unsorted: Geom.WithMeta<P>[];
+    unsorted: Geomorph.WithMeta<P>[];
 
     /** Hull symbols have sub symbols, defining the layout of the geomorph. */
-    symbols: Geom.WithMeta<{
+    symbols: Geomorph.WithMeta<{
       symbolKey: Geomorph.SymbolKey;
       /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
       width: number;
@@ -86,7 +96,7 @@ declare namespace Geomorph {
     }[];
 
     /** Walls tagged with `optional` can be added */
-    addableWalls: Geom.WithMeta<P>[];
+    addableWalls: Geomorph.WithMeta<P>[];
   }
 
   type ParsedSymbol = ParsedSymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
@@ -130,8 +140,12 @@ declare namespace Geomorph {
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];
     rooms: Geom.Poly[];
-    doors: Geom.ConnectorRect[];
+    doors: Geom.Connector[];
   }
+
+  type Meta<T extends {} = {}> = Record<string, any> & T;
+
+  type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
 
   type GeomorphKey =
     | "g-101--multipurpose"

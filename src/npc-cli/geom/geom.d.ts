@@ -62,46 +62,4 @@ declare namespace Geom {
   }
 
   type SixTuple = [number, number, number, number, number, number];
-
-  /** Previously called `PointMeta` */
-  type Meta<T extends {} = {}> = Record<string, any> & T;
-
-  type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
-
-  interface ConnectorRectGeneric<
-    P extends Geom.GeoJsonPolygon | Geom.Poly,
-    V extends Geom.Vect | Geom.VectJson,
-    R extends Geom.Rect | Geom.RectJson
-  > extends WithMeta {
-    poly: P;
-    /** `poly.center` */
-    center: V;
-    /** `poly.rect` i.e. rotated rectangle */
-    rect: R;
-    /** Segment through middle of door */
-    seg: [V, V];
-    /** Points towards `entries[0]`. */
-    normal: V;
-    /** Radians 🚧 clarify */
-    angle: number;
-    /**
-     * `[id of room infront, id of room behind]`
-     * where a room is *infront* if `normal` is pointing towards it.
-     * Hull doors have exactly one non-null entry.
-     */
-    roomIds: [null | number, null | number];
-    /**
-     * Aligned to `roomIds` i.e. `[infront, behind]`
-     * where a room is *infront* if `normal` is pointing towards it.
-     */
-    entries: [V, V];
-    /**
-     * 🚧 migrate to recast/detour?
-     * This door is connected to navmesh navZone.groups[navGroupId].
-     */
-    navGroupId: number;
-  }
-
-  type ConnectorRect = ConnectorRectGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
-  type ConnectorRectJson = ConnectorRectGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
 }

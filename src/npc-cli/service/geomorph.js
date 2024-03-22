@@ -90,7 +90,7 @@ class GeomorphService {
     const { lastModified } = assets.meta[gmKey];
 
     /** Start with doors in hull symbol, which needn't be "hull doors" */
-    const doors = hullSym.doors.map((x) => geom.polyToConnector(x));
+    const doors = hullSym.doors.map((x) => new Connector(x));
     /**
      * Start with walls in hull symbol, which needn't be "hull walls".
      * They induce wall segs.
@@ -173,23 +173,6 @@ class GeomorphService {
       meta,
       symbols: mapValues(symbols, (x) => this.deserializeSymbol(x)),
       maps,
-    };
-  }
-
-  /**
-   * @param {Geom.ConnectorRectJson} x
-   * @returns {Geom.ConnectorRect}
-   */
-  deserializeConnectorRect(x) {
-    const poly = Poly.from(x.poly);
-    return {
-      ...x,
-      poly,
-      center: poly.center,
-      rect: poly.rect,
-      normal: Vect.from(x.normal),
-      seg: [Vect.from(x.seg[0]), Vect.from(x.seg[1])],
-      entries: [Vect.from(x.entries[0]), Vect.from(x.entries[1])],
     };
   }
 
@@ -390,7 +373,7 @@ class GeomorphService {
    * @param {string[] | undefined} doorTags e.g. `['s']`
    * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
    * @param {Geom.SixTuple} transform
-   * @returns {{ doors: Geom.ConnectorRect[]; uncutWalls: Geom.Poly[]; walls: Geom.Poly[] }}
+   * @returns {{ doors: Connector[]; uncutWalls: Geom.Poly[]; walls: Geom.Poly[] }}
    */
   instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
     tmpMat1.feedFromArray(transform);
@@ -408,7 +391,7 @@ class GeomorphService {
     return {
       doors: symbol.doors
         .filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId))
-        .map((poly) => geom.polyToConnector(poly.clone().applyMatrix(tmpMat1))),
+        .map((poly) => new Connector(poly.clone().applyMatrix(tmpMat1))),
       walls: walls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
       uncutWalls: symbol.uncutWalls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
     };
@@ -535,12 +518,12 @@ class GeomorphService {
     let viewBoxRect = /** @type {Geom.RectJson | null} */ (null);
     let pngRect = /** @type {Geom.RectJson | null} */ (null);
     const symbols = /** @type {Geomorph.ParsedSymbol['symbols']} */ ([]);
-    const hullWalls = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
-    const obstacles = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
-    const doors = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
-    const unsorted = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
-    const walls = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
-    const windows = /** @type {Geom.WithMeta<Geom.Poly>[]} */ ([]);
+    const hullWalls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const unsorted = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const walls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const windows = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -744,7 +727,7 @@ class GeomorphService {
 
   /**
    * @param {string[]} tags
-   * @param {Geom.Meta} baseMeta
+   * @param {Geomorph.Meta} baseMeta
    */
   tagsToMeta(tags, baseMeta) {
     return tags.reduce((meta, tag) => {
@@ -760,6 +743,85 @@ class GeomorphService {
 }
 
 export const geomorphService = new GeomorphService();
+
+export class Connector {
+  /**
+   * @param {Geomorph.WithMeta<Geom.Poly>} poly
+   * usually a rotated rectangle, but could be a curved window, in which case we'll view it as its AABB
+   * @param {[null | number, null | number]} [roomIds]
+   * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
+   */
+  constructor(poly, roomIds = [null, null]) {
+    // 🔔 orientation MUST be clockwise w.r.t y-downwards
+    poly.fixOrientationConvex();
+
+    /** @type {Geom.Poly} usually a rotated rectangle, but could be a curved window, in which case we'll view it as its AABB */
+    this.poly = poly;
+    /** @type {Geom.Vect} */
+    this.center = poly.center;
+    /** @type {Geomorph.Meta} */
+    this.meta = poly.meta;
+
+    const { angle, baseRect } = geom.polyToAngledRect(poly);
+
+    /** @type {Geom.Rect} */
+    this.baseRect = baseRect;
+    /** @type {number} radians */
+    this.angle = angle;
+
+    const {
+      seg: [u, v],
+      normal,
+    } = geom.getAngledRectSeg({ angle, baseRect });
+
+    /** @type {[Geom.Vect, Geom.Vect]} segment through middle of door */
+    this.seg = [u, v];
+    /** @type {Geom.Vect} */
+    this.normal = normal;
+
+    // 🚧 offset needed?
+    const doorEntryDelta = Math.min(baseRect.width, baseRect.height) / 2 + 0.05;
+    const inFront = poly.center.addScaledVector(normal, doorEntryDelta).precision(precision);
+    const behind = poly.center.addScaledVector(normal, -doorEntryDelta).precision(precision);
+
+    /**
+     * @type {[Geom.Vect, Geom.Vect]}
+     * Aligned to roomIds i.e. `[infront, behind]` where a room is infront if normal is pointing towards it.
+     */
+    this.entries = [inFront, behind];
+
+    /**
+     * @type {[null | number, null | number]}
+     * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
+     */
+    this.roomIds = roomIds;
+  }
+
+  /** @returns {Geomorph.ConnectorJson} */
+  get json() {
+    return {
+      poly: Object.assign(this.poly.geoJson, { meta: this.meta }),
+      roomIds: [this.roomIds[0], this.roomIds[1]],
+    };
+  }
+
+  /** @param {Geomorph.ConnectorJson} json */
+  static from(json) {
+    return new Connector(Poly.from(json.poly), json.roomIds);
+  }
+
+  /** @param {Geom.Poly[]} rooms */
+  computeRoomIds(rooms) {
+    const [infront, behind] = this.entries;
+    this.roomIds = rooms.reduce((agg, room, roomId) => {
+      // Support doors connecting a room to itself e.g.
+      // galley-and-mess-halls--006--4x2
+      if (room.contains(infront)) agg[0] = roomId;
+      if (room.contains(behind)) agg[1] = roomId;
+      return agg;
+    }, /** @type {[null | number, null | number]} */ ([null, null]));
+  }
+}
 
 const tmpPoly1 = new Poly();
 const tmpMat1 = new Mat();

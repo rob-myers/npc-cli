@@ -839,53 +839,6 @@ class geomServiceClass {
   }
 
   /**
-   * - Convert polygonal rect into connector
-   * - For non 4-gons we take aabb.
-   * - Orientation must be "fixed" i.e. clockwise w.r.t. y downwards.
-   * @param {Geom.WithMeta<Geom.Poly>} poly
-   * @returns {Geom.ConnectorRect}
-   */
-  polyToConnector(poly, precision = 4) {
-    // 🔔 orientation MUST be clockwise w.r.t y-downwards
-    poly.fixOrientationConvex();
-
-    const { meta } = poly;
-    const { angle, baseRect } = geom.polyToAngledRect(poly);
-    const {
-      seg: [u, v],
-      normal,
-    } = geom.getAngledRectSeg({ angle, baseRect });
-
-    const doorEntryDelta = Math.min(baseRect.width, baseRect.height) / 2 + 0.05;
-    const inFront = poly.center.addScaledVector(normal, doorEntryDelta).precision(precision);
-    const behind = poly.center.addScaledVector(normal, -doorEntryDelta).precision(precision);
-    // const moreInfront = infront.clone().addScaledVector(normal, hullDoorOutset);
-    // const moreBehind = behind.clone().addScaledVector(normal, -hullDoorOutset);
-
-    // /** @type {[null | number, null | number]} */
-    // const roomIds = rooms.reduce((agg, room, roomId) => {
-    //   // Support doors connecting a room to itself e.g.
-    //   // galley-and-mess-halls--006--4x2
-    //   if (room.contains(moreInfront)) agg[0] = roomId;
-    //   if (room.contains(moreBehind)) agg[1] = roomId;
-    //   return agg;
-    // }, /** @type {[null | number, null | number]} */ ([null, null]));
-
-    return {
-      angle,
-      poly,
-      center: poly.center,
-      rect: poly.rect.precision(precision),
-      meta,
-      seg: [u.precision(precision), v.precision(precision)],
-      normal: normal.precision(precision),
-      roomIds: [null, null], // added in browser
-      entries: [inFront, behind],
-      navGroupId: -1, // added later
-    };
-  }
-
-  /**
    * Force radian to range [0, 2pi).
    * @param {number} radian
    */
