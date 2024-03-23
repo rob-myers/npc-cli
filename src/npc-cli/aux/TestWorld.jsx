@@ -63,6 +63,7 @@ export default function TestWorld(props) {
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
         state.ensureGmData(gmKey);
         const layout = geomorphs.layout[gmKey];
+        state.gmData[gmKey].layout = layout; // update on HMR
         return geomorphService.computeLayoutInstance(layout, gmId, transform);
       });
 
