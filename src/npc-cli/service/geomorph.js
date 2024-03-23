@@ -416,9 +416,6 @@ class GeomorphService {
       return !doorTags ? false : !doorTags.some((tag) => meta[tag] === true);
     });
 
-    doorTags?.length && console.log(symbol.key, doorTags, symbol.removableDoors);
-    // doorsToRemove.length && console.log(symbol.key, doorsToRemove);
-
     const doors = symbol.doors.filter(
       (_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)
     );
@@ -723,11 +720,6 @@ class GeomorphService {
     const hullWalls = partial.hullWalls.map((x) => x.cleanFinalReps());
     const nonOptionalWalls = partial.walls.filter((x) => x.meta.optional !== true);
     const uncutWalls = partial.hullWalls.concat(nonOptionalWalls).map((x) => x.cleanFinalReps());
-
-    console.log(
-      partial.key,
-      partial.doors.map((x) => ({ ...x.meta }))
-    );
 
     const removableDoors = partial.doors.flatMap((doorPoly, doorId) =>
       doorPoly.meta.optional ? { doorId, wall: Poly.intersect([doorPoly], uncutWalls)[0] } : []
