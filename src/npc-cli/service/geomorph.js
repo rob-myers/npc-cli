@@ -69,6 +69,7 @@ class GeomorphService {
     "medical--008--3x2": true,
     "misc-stellar-cartography--023--4x4": true,
     "office--001--2x2": true,
+    "office--006--2x2": true,
     "office--026--2x3": true,
     "office--020--2x3": true,
     "office--023--2x3": true,

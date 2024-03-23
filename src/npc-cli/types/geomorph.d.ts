@@ -219,7 +219,7 @@ declare namespace Geomorph {
     | "misc-stellar-cartography--023--4x4"
     | "office--001--2x2"
     // | "office--004--2x2"
-    // | "office--006--2x2"
+    | "office--006--2x2"
     | "office--020--2x3"
     | "office--023--2x3"
     // | "office--025--2x3"
