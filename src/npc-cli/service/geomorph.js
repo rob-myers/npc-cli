@@ -62,12 +62,19 @@ class GeomorphService {
 
     "bridge--042--8x9": true,
     "empty-room--013--2x3": true,
+    "empty-room--039--3x4": true,
+    "fresher--020--2x2": true,
+    "fresher--025--3x2": true,
+    "medical--007--3x2": true,
+    "medical--008--3x2": true,
     "misc-stellar-cartography--023--4x4": true,
     "office--001--2x2": true,
     "office--026--2x3": true,
     "office--020--2x3": true,
     "office--023--2x3": true,
+    "office--061--3x4": true,
     "stateroom--014--2x2": true,
+    "stateroom--018--2x3": true,
     "stateroom--020--2x3": true,
     "stateroom--036--2x4": true,
     // 🚧 must extend when adding new symbols
@@ -395,13 +402,16 @@ class GeomorphService {
    * @param {Geom.SixTuple} transform
    * @returns {Pick<Geomorph.ParsedSymbol, 'decor' | 'obstacles' | 'walls'> & { doors: Connector[] }}
    */
-  instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
+  instantiateLayoutSymbol(symbol, doorTags, wallTags, transform) {
     tmpMat1.feedFromArray(transform);
 
     const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
       const { meta } = symbol.doors[doorId];
-      return !doorTags.some((tag) => meta[tag] === true);
+      return !doorTags ? false : !doorTags.some((tag) => meta[tag] === true);
     });
+
+    doorTags?.length && console.log(symbol.key, doorTags, symbol.removableDoors);
+    // doorsToRemove.length && console.log(symbol.key, doorsToRemove);
 
     const doors = symbol.doors.filter(
       (_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)
@@ -707,6 +717,11 @@ class GeomorphService {
     const hullWalls = partial.hullWalls.map((x) => x.cleanFinalReps());
     const nonOptionalWalls = partial.walls.filter((x) => x.meta.optional !== true);
     const uncutWalls = partial.hullWalls.concat(nonOptionalWalls).map((x) => x.cleanFinalReps());
+
+    console.log(
+      partial.key,
+      partial.doors.map((x) => ({ ...x.meta }))
+    );
 
     const removableDoors = partial.doors.flatMap((doorPoly, doorId) =>
       doorPoly.meta.optional ? { doorId, wall: Poly.intersect([doorPoly], uncutWalls)[0] } : []
