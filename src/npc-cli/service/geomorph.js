@@ -106,7 +106,7 @@ class GeomorphService {
     const hullSym = assets.symbols[hullKey];
 
     const doors = hullSym.doors.map((x) => new Connector(x));
-    const uncutWalls = hullSym.uncutWalls.slice();
+    const uncutWalls = hullSym.walls.slice();
     for (const { symbolKey, transform, meta } of hullSym.symbols) {
       const symbol = assets.symbols[symbolKey];
       const transformed = geomorphService.instantiateLayoutSymbol(
@@ -116,7 +116,7 @@ class GeomorphService {
         transform
       );
       doors.push(...transformed.doors);
-      uncutWalls.push(...transformed.uncutWalls);
+      uncutWalls.push(...transformed.walls);
     }
 
     const joinedUncutWalls = Poly.union(uncutWalls).sort(
@@ -186,7 +186,6 @@ class GeomorphService {
       isHull: json.isHull,
       hullWalls: json.hullWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       obstacles: json.obstacles.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
-      uncutWalls: json.uncutWalls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       walls: json.walls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       windows: json.windows.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
@@ -373,7 +372,7 @@ class GeomorphService {
    * @param {string[] | undefined} doorTags e.g. `['s']`
    * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
    * @param {Geom.SixTuple} transform
-   * @returns {{ doors: Connector[]; uncutWalls: Geom.Poly[]; walls: Geom.Poly[] }}
+   * @returns {{ doors: Connector[]; walls: Geom.Poly[] }}
    */
   instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
     tmpMat1.feedFromArray(transform);
@@ -397,10 +396,7 @@ class GeomorphService {
         // cloning poly removes meta
         (x) => new Connector(x.clone().applyMatrix(tmpMat1).precision(precision), { meta: x.meta })
       ),
-      walls: symbol.walls // 🚧 remove i.e. only provide uncutWalls
-        .concat(wallsToAdd)
-        .map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
-      uncutWalls: symbol.uncutWalls
+      walls: symbol.walls
         .concat(wallsToAdd)
         .map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
     };
@@ -745,7 +741,6 @@ class GeomorphService {
       isHull: parsed.isHull,
       hullWalls: parsed.hullWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       obstacles: parsed.obstacles.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      uncutWalls: parsed.uncutWalls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: parsed.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       windows: parsed.windows.map((x) => Object.assign(x.geoJson, { meta: x.meta })),

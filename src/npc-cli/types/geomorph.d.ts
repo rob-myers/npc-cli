@@ -65,15 +65,7 @@ declare namespace Geomorph {
      * A hull symbol may have other walls too.
      */
     hullWalls: Geomorph.WithMeta<P>[];
-    /** Union of non-optional walls including hull walls. */
-    uncutWalls: Geomorph.WithMeta<P>[];
-    /**
-     * Union of non-optional walls including hull walls,
-     * such that all (possibly optional) doors have been cut out.
-     *
-     * We may have to add walls when we instantiate in the browser,
-     * i.e. (a) optional walls, (b) walls replacing removed doors.
-     */
+    /** Union of uncut non-optional walls including hull walls. */
     walls: Geomorph.WithMeta<P>[];
     obstacles: Geomorph.WithMeta<P>[];
     doors: Geomorph.WithMeta<P>[];
