@@ -333,7 +333,7 @@
   - ✅ compute Geomorph.Layout server-side
   - ✅ connect geomorphs.json to browser
   - ✅ wallsSegs, doorSegs derived from layout
-  - 🚧 remove symbol.walls from assets-meta and instantiateLayoutSymbol
+  - ✅ symbol.uncutWalls -> symbol.walls
 
 - simplify polygon JSON format e.g. flat arrays
 

@@ -688,7 +688,6 @@ class GeomorphService {
     const uncutWalls = Poly.union(partial.hullWalls.concat(nonOptionalWalls)).map((x) =>
       x.cleanFinalReps()
     );
-    const walls = Poly.cutOut(partial.doors, uncutWalls).map((x) => x.cleanFinalReps());
 
     const removableDoors = partial.doors.flatMap((poly, doorId) =>
       poly.meta.optional ? { doorId, wall: Poly.intersect([poly], uncutWalls)[0] } : []
@@ -697,8 +696,7 @@ class GeomorphService {
 
     return {
       hullWalls,
-      uncutWalls,
-      walls, // 🚧 remove
+      walls: uncutWalls,
       removableDoors,
       addableWalls,
     };

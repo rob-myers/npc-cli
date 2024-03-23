@@ -107,10 +107,7 @@ declare namespace Geomorph {
   >;
 
   type PostParsedSymbol = Pretty<
-    Pick<
-      Geomorph.ParsedSymbol,
-      "hullWalls" | "uncutWalls" | "walls" | "removableDoors" | "addableWalls"
-    >
+    Pick<Geomorph.ParsedSymbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
   >;
 
   interface MapDef {
