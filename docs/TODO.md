@@ -336,6 +336,12 @@
   - ✅ symbol.uncutWalls -> symbol.walls
 
 - ✅ geomorphs.json has navPolys
+- ✅ debug draw fast-triangulated navPoly
+- ✅ fix auto-update
+- ✅ fix navPoly
+- ✅ navPoly should include hull doorways
+- ✅ uncut walls inherit meta
+- ✅ rooms have meta via tag `decor meta`
 
 - show tables via raised "floor texture"
 

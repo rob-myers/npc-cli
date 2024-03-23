@@ -191,6 +191,15 @@ export class Poly {
   }
 
   /**
+   * @param {Geom.Mat} [mat]
+   */
+  cleanClone(mat, precision = 4) {
+    return mat
+      ? this.clone().applyMatrix(mat).fixOrientation().precision(precision)
+      : this.clone().fixOrientation();
+  }
+
+  /**
    * Ensure final point of each ring doesn't equal 1st point.
    * Such loops arise e.g. from npm module 'polygon-clipping',
    * but are unsupported by npm module 'poly2tri'.

@@ -70,6 +70,7 @@ declare namespace Geomorph {
     obstacles: Geomorph.WithMeta<P>[];
     doors: Geomorph.WithMeta<P>[];
     windows: Geomorph.WithMeta<P>[];
+    decor: Geomorph.WithMeta<P>[];
     /** 🚧 refine? */
     unsorted: Geomorph.WithMeta<P>[];
 
@@ -127,9 +128,9 @@ declare namespace Geomorph {
     key: GeomorphKey;
     pngRect: R;
 
-    rooms: P[];
+    rooms: WithMeta<P>[];
     doors: C[];
-    walls: P[];
+    walls: WithMeta<P>[];
     navPolys: P[];
   }
 

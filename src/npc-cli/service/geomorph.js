@@ -87,11 +87,12 @@ class GeomorphService {
   computeLayout(gmKey, assets) {
     const { hullKey } = this.gmKeyToKeys(gmKey);
     const hullSym = assets.symbols[hullKey];
-    const hullOutline = Poly.union(hullSym.hullWalls.map((x) => x.removeHoles()));
+    const hullOutline = Poly.union(hullSym.hullWalls).map((x) => x.clone().removeHoles());
 
     const doors = hullSym.doors.map((x) => new Connector(x));
     const uncutWalls = hullSym.walls.slice();
     const obstacles = hullSym.obstacles.slice();
+    const decor = hullSym.decor.slice();
     for (const { symbolKey, transform, meta } of hullSym.symbols) {
       const symbol = assets.symbols[symbolKey];
       const transformed = geomorphService.instantiateLayoutSymbol(
@@ -103,24 +104,28 @@ class GeomorphService {
       doors.push(...transformed.doors);
       uncutWalls.push(...transformed.walls);
       obstacles.push(...transformed.obstacles);
+      decor.push(...transformed.decor);
     }
 
-    const joinedUncutWalls = Poly.union(uncutWalls).sort(
-      (a, b) => (a.rect.area > b.rect.area ? -1 : 1) // Descending by area
+    const doorPolys = doors.map((x) => x.poly);
+    // Cutting pointwise avoids errors (e.g. for 301), and can propagate meta
+    const cutWalls = uncutWalls.flatMap((x) =>
+      Poly.cutOut(doorPolys, [x]).map((x) => Object.assign(x, { meta: x.meta }))
     );
 
-    const cutWalls = Poly.cutOut(
-      doors.map((x) => x.poly),
-      joinedUncutWalls
-    ).map((x) => x.cleanFinalReps());
-
-    const rooms = Poly.union(uncutWalls).flatMap((x) => x.holes.map((ring) => new Poly(ring)));
+    // room meta follows from `decor meta`
+    const rooms = Poly.union(uncutWalls).flatMap((x) =>
+      x.holes.map((ring) => new Poly(ring).fixOrientation())
+    );
+    // prettier-ignore
+    rooms.forEach((room) => Object.assign(room.meta = {}, ...decor.flatMap((x) =>
+      x.meta.meta === true && room.contains(x.outline[0]) ? x.meta : []
+    ), { meta: undefined }));
 
     const navPolyWithDoors = Poly.cutOut(
       [
-        // Non-unioned walls avoids outset issue (self-intersection)
-        ...uncutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
-        ...obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
+        ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
+        ...obstacles.flatMap((x) => geom.createOutset(x.fixOrientation(), obstacleOutset)),
       ],
       hullOutline
     ).map((x) => x.cleanFinalReps().precision(precision));
@@ -204,6 +209,7 @@ class GeomorphService {
       walls: json.walls.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       windows: json.windows.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
+      decor: json.decor.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
@@ -387,7 +393,7 @@ class GeomorphService {
    * @param {string[] | undefined} doorTags e.g. `['s']`
    * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
    * @param {Geom.SixTuple} transform
-   * @returns {{ doors: Connector[]; walls: Geom.Poly[]; obstacles: Geom.Poly[]; }}
+   * @returns {Pick<Geomorph.ParsedSymbol, 'decor' | 'obstacles' | 'walls'> & { doors: Connector[] }}
    */
   instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
     tmpMat1.feedFromArray(transform);
@@ -407,14 +413,11 @@ class GeomorphService {
     );
 
     return {
-      doors: doors.map(
-        // cloning poly removes meta
-        (x) => new Connector(x.clone().applyMatrix(tmpMat1).precision(precision), { meta: x.meta })
-      ),
-      walls: symbol.walls
-        .concat(wallsToAdd)
-        .map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
-      obstacles: symbol.obstacles.map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
+      // cloning poly removes meta
+      decor: symbol.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      doors: doors.map((x) => new Connector(x.cleanClone(tmpMat1), { meta: x.meta })),
+      obstacles: symbol.obstacles.map((x) => x.cleanClone(tmpMat1)),
+      walls: symbol.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
     };
   }
 
@@ -545,6 +548,7 @@ class GeomorphService {
     const unsorted = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const walls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const windows = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const decor = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -629,11 +633,12 @@ class GeomorphService {
         const meta = geomorphService.tagsToMeta(ownTags, {});
 
         /** @type {const} */ ([
-          ["hull-wall", hullWalls],
+          ["hull-wall", hullWalls, 1],
           ["wall", walls, geomScale],
           ["obstacle", obstacles, geomScale],
           ["door", doors, geomScale],
           ["window", windows, geomScale],
+          ["decor", decor, geomScale],
           [null, unsorted, geomScale],
         ]).some(
           ([tag, polys, scale]) =>
@@ -686,6 +691,7 @@ class GeomorphService {
         pngRect ?? (info(`${symbolKey}: using viewBox for pngRect`), viewBoxRect)
       ),
       symbols,
+      decor,
       unsorted,
 
       ...postParse,
@@ -735,8 +741,8 @@ class GeomorphService {
       key: layout.key,
       pngRect: layout.pngRect,
       doors: layout.doors.map((x) => x.json),
-      rooms: layout.rooms.map((x) => x.geoJson),
-      walls: layout.walls.map((x) => x.geoJson),
+      rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       navPolys: layout.navPolys.map((x) => x.geoJson),
     };
   }
@@ -756,6 +762,7 @@ class GeomorphService {
       walls: parsed.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       windows: parsed.windows.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      decor: parsed.decor.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,
