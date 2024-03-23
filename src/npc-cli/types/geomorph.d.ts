@@ -134,8 +134,8 @@ declare namespace Geomorph {
   }
 
   interface LayoutNewGeneric<
-    T extends Geom.GeoJsonPolygon | Geom.Poly,
-    P extends Geom.VectJson | Geom.Vect,
+    P extends Geom.GeoJsonPolygon | Geom.Poly,
+    V extends Geom.VectJson | Geom.Vect,
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {

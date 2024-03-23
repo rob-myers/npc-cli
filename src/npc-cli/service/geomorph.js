@@ -177,19 +177,33 @@ class GeomorphService {
 
     for (const { symbolKey, transform, meta } of hullSym.symbols) {
       const symbol = assets.symbols[symbolKey];
+      const transformed = geomorphService.instantiateLayoutSymbol(
+        symbol,
+        meta.doors,
+        meta.walls,
+        transform
+      );
+      doors.push(...transformed.doors);
+      uncutWalls.push(...transformed.uncutWalls);
     }
 
-    const walls = Poly.cutOut(
+    const [largeWall, ...pillars] = Poly.union(uncutWalls).sort(
+      (a, b) => (a.rect.area > b.rect.area ? -1 : 1) // Descending by area
+    );
+    const rooms = largeWall.holes.map((ring) => new Poly(ring));
+
+    // 🚧 provide wallSegs?
+    const cutWalls = Poly.cutOut(
       doors.map((x) => x.poly),
-      uncutWalls
+      Poly.union(uncutWalls)
     ).map((x) => x.cleanFinalReps());
 
     return {
       key: gmKey,
       pngRect: hullSym.pngRect.clone(),
       // 🚧
-      doors: [],
-      rooms: [],
+      doors,
+      rooms,
     };
   }
 
@@ -406,23 +420,29 @@ class GeomorphService {
    */
   instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
     tmpMat1.feedFromArray(transform);
+
     const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
       const { meta } = symbol.doors[doorId];
       return !doorTags.some((tag) => meta[tag] === true);
     });
-    const walls = symbol.walls.concat(
+
+    const doors = symbol.doors.filter(
+      (_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)
+    );
+
+    const wallsToAdd = /** @type {Geom.Poly[]} */ ([]).concat(
       doorsToRemove.map((x) => x.wall),
-      symbol.addableWalls.filter(
-        ({ meta }) => !wallTags || wallTags.some((tag) => meta[tag] === true)
-      )
+      symbol.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
     );
 
     return {
-      doors: symbol.doors
-        .filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId))
-        .map((poly) => new Connector(poly.clone().applyMatrix(tmpMat1))),
-      walls: walls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
-      uncutWalls: symbol.uncutWalls.map((x) => x.clone().applyMatrix(tmpMat1).cleanFinalReps()),
+      doors: doors.map((x) => new Connector(x.clone().applyMatrix(tmpMat1).precision(precision))),
+      walls: symbol.walls // 🚧 remove i.e. only provide uncutWalls
+        .concat(wallsToAdd)
+        .map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
+      uncutWalls: symbol.uncutWalls
+        .concat(wallsToAdd)
+        .map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
     };
   }
 
@@ -747,7 +767,7 @@ class GeomorphService {
       key: layout.key,
       pngRect: layout.pngRect,
       doors: layout.doors.map((x) => x.json),
-      rooms: layout.rooms.map((x) => x.json),
+      rooms: layout.rooms.map((x) => x.geoJson),
     };
   }
 
