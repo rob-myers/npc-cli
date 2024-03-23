@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { worldScale, precision } from "./const";
+import { worldScale, precision, wallOutset, obstacleOutset } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   assertDefined,
@@ -79,6 +79,64 @@ class GeomorphService {
   }
 
   /**
+   * 🚧
+   * @param {Geomorph.GeomorphKey} gmKey
+   * @param {Geomorph.Assets} assets
+   * @returns {Geomorph.Layout}
+   */
+  computeLayout(gmKey, assets) {
+    const { hullKey } = this.gmKeyToKeys(gmKey);
+    const hullSym = assets.symbols[hullKey];
+    const hullOutline = Poly.union(hullSym.hullWalls.map((x) => x.removeHoles()));
+
+    const doors = hullSym.doors.map((x) => new Connector(x));
+    const uncutWalls = hullSym.walls.slice();
+    const obstacles = hullSym.obstacles.slice();
+    for (const { symbolKey, transform, meta } of hullSym.symbols) {
+      const symbol = assets.symbols[symbolKey];
+      const transformed = geomorphService.instantiateLayoutSymbol(
+        symbol,
+        meta.doors,
+        meta.walls,
+        transform
+      );
+      doors.push(...transformed.doors);
+      uncutWalls.push(...transformed.walls);
+      obstacles.push(...transformed.obstacles);
+    }
+
+    const joinedUncutWalls = Poly.union(uncutWalls).sort(
+      (a, b) => (a.rect.area > b.rect.area ? -1 : 1) // Descending by area
+    );
+
+    const cutWalls = Poly.cutOut(
+      doors.map((x) => x.poly),
+      joinedUncutWalls
+    ).map((x) => x.cleanFinalReps());
+
+    const rooms = Poly.union(uncutWalls).flatMap((x) => x.holes.map((ring) => new Poly(ring)));
+
+    const navPolyWithDoors = Poly.cutOut(
+      [
+        // Non-unioned walls avoids outset issue (self-intersection)
+        ...uncutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
+        ...obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
+      ],
+      hullOutline
+    ).map((x) => x.cleanFinalReps().precision(precision));
+
+    return {
+      key: gmKey,
+      pngRect: hullSym.pngRect.clone(),
+      // 🚧
+      doors,
+      rooms,
+      walls: cutWalls,
+      navPolys: navPolyWithDoors,
+    };
+  }
+
+  /**
    * @param {Geomorph.Layout} layout
    * @param {number} gmId
    * @param {Geom.SixTuple} transform
@@ -92,50 +150,6 @@ class GeomorphService {
       mat4: geomorphService.embedXZMat4(transform),
       doorSegs: layout.doors.map(({ seg }) => seg),
       wallSegs: layout.walls.flatMap((x) => x.lineSegs),
-    };
-  }
-
-  /**
-   * 🚧
-   * @param {Geomorph.GeomorphKey} gmKey
-   * @param {Geomorph.Assets} assets
-   * @returns {Geomorph.Layout}
-   */
-  computeLayout(gmKey, assets) {
-    const { hullKey } = this.gmKeyToKeys(gmKey);
-    const hullSym = assets.symbols[hullKey];
-
-    const doors = hullSym.doors.map((x) => new Connector(x));
-    const uncutWalls = hullSym.walls.slice();
-    for (const { symbolKey, transform, meta } of hullSym.symbols) {
-      const symbol = assets.symbols[symbolKey];
-      const transformed = geomorphService.instantiateLayoutSymbol(
-        symbol,
-        meta.doors,
-        meta.walls,
-        transform
-      );
-      doors.push(...transformed.doors);
-      uncutWalls.push(...transformed.walls);
-    }
-
-    const joinedUncutWalls = Poly.union(uncutWalls).sort(
-      (a, b) => (a.rect.area > b.rect.area ? -1 : 1) // Descending by area
-    );
-    const rooms = joinedUncutWalls.flatMap((x) => x.holes.map((ring) => new Poly(ring)));
-
-    const cutWalls = Poly.cutOut(
-      doors.map((x) => x.poly),
-      Poly.union(uncutWalls)
-    ).map((x) => x.cleanFinalReps());
-
-    return {
-      key: gmKey,
-      pngRect: hullSym.pngRect.clone(),
-      // 🚧
-      doors,
-      rooms,
-      walls: cutWalls,
     };
   }
 
@@ -173,6 +187,7 @@ class GeomorphService {
       doors: json.doors.map(Connector.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
+      navPolys: json.navPolys.map(Poly.from),
     };
   }
 
@@ -372,7 +387,7 @@ class GeomorphService {
    * @param {string[] | undefined} doorTags e.g. `['s']`
    * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
    * @param {Geom.SixTuple} transform
-   * @returns {{ doors: Connector[]; walls: Geom.Poly[] }}
+   * @returns {{ doors: Connector[]; walls: Geom.Poly[]; obstacles: Geom.Poly[]; }}
    */
   instantiateLayoutSymbol(symbol, doorTags = [], wallTags, transform) {
     tmpMat1.feedFromArray(transform);
@@ -399,6 +414,7 @@ class GeomorphService {
       walls: symbol.walls
         .concat(wallsToAdd)
         .map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
+      obstacles: symbol.obstacles.map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
     };
   }
 
@@ -681,16 +697,13 @@ class GeomorphService {
    * @returns {Geomorph.PostParsedSymbol}
    */
   postParseSymbol(partial) {
-    const hullWalls = Poly.cutOut(partial.doors, Poly.union(partial.hullWalls)).map(
-      (x) => x.cleanFinalReps() // hull doors are never optional
-    );
+    // Don't take unions of walls yet
+    const hullWalls = partial.hullWalls.map((x) => x.cleanFinalReps());
     const nonOptionalWalls = partial.walls.filter((x) => x.meta.optional !== true);
-    const uncutWalls = Poly.union(partial.hullWalls.concat(nonOptionalWalls)).map((x) =>
-      x.cleanFinalReps()
-    );
+    const uncutWalls = partial.hullWalls.concat(nonOptionalWalls).map((x) => x.cleanFinalReps());
 
-    const removableDoors = partial.doors.flatMap((poly, doorId) =>
-      poly.meta.optional ? { doorId, wall: Poly.intersect([poly], uncutWalls)[0] } : []
+    const removableDoors = partial.doors.flatMap((doorPoly, doorId) =>
+      doorPoly.meta.optional ? { doorId, wall: Poly.intersect([doorPoly], uncutWalls)[0] } : []
     );
     const addableWalls = partial.walls.filter((x) => x.meta.optional === true);
 
@@ -724,6 +737,7 @@ class GeomorphService {
       doors: layout.doors.map((x) => x.json),
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),
+      navPolys: layout.navPolys.map((x) => x.geoJson),
     };
   }
 

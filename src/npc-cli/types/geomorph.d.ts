@@ -61,8 +61,8 @@ declare namespace Geomorph {
     pngRect: R;
 
     /**
-     * Hull walls: only non-empty in hull.
-     * A hull symbol may have other walls too.
+     * Uncut hull walls: only present in hull symbols.
+     * A hull symbol may have other walls, but they'll be in `walls`.
      */
     hullWalls: Geomorph.WithMeta<P>[];
     /** Union of uncut non-optional walls including hull walls. */
@@ -130,6 +130,7 @@ declare namespace Geomorph {
     rooms: P[];
     doors: C[];
     walls: P[];
+    navPolys: P[];
   }
 
   type Layout = LayoutGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
