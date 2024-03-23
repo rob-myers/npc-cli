@@ -48,28 +48,24 @@ export default function TestWorldScene(props) {
       },
       drawGeomorph(gmKey, img) {
         const { ctxt, layout } = api.gmData[gmKey];
-        const { pngRect, rooms, doors } = layout;
+        const { pngRect, rooms, doors, navPolys } = layout;
 
         ctxt.clearRect(0, 0, pngRect.width, pngRect.width);
         ctxt.drawImage(img, 0, 0);
+        ctxt.translate(-pngRect.x, -pngRect.y);
 
         // draw hull doors
-        ctxt.translate(-pngRect.x, -pngRect.y);
-        ctxt.lineWidth = 2;
-        ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
-        ctxt.fillStyle = "rgba(255, 255, 255, 1)";
         drawPolygons(
           ctxt,
-          doors.filter((x) => x.meta.hull).map((x) => x.poly),
-          "fill-stroke"
+          doors.flatMap((x) => (x.meta.hull ? x.poly : [])),
+          ["white", "#000", 2]
         );
 
         // 🚧 debug draw rooms
-        ctxt.lineWidth = 0;
-        ctxt.fillStyle = "rgba(255, 0, 0, 0)";
-        ctxt.strokeStyle = "rgba(255, 0, 0, 1)";
-        drawPolygons(ctxt, rooms, "fill-stroke");
+        // drawPolygons(ctxt, rooms, [null, "green", 0]);
 
+        // 🚧 debug draw navPolys
+        drawPolygons(ctxt, navPolys, ["rgba(0, 0, 255, 0.2", "green"]);
         ctxt.resetTransform();
       },
       positionWalls() {
