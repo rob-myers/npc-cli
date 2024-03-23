@@ -1,0 +1,40 @@
+{
+  "layout": {
+    "g-101--multipurpose": {
+      "key": "g-101--multipurpose",
+      "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 1212},
+      "doors": [],
+      "rooms": []
+    },
+    "g-102--research-deck": {
+      "key": "g-102--research-deck",
+      "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 1212},
+      "doors": [],
+      "rooms": []
+    },
+    "g-103--cargo-bay": {
+      "key": "g-103--cargo-bay",
+      "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 1212},
+      "doors": [],
+      "rooms": []
+    },
+    "g-301--bridge": {
+      "key": "g-301--bridge",
+      "pngRect": {"x": -6, "y": -22, "width": 1212, "height": 628},
+      "doors": [],
+      "rooms": []
+    },
+    "g-302--xboat-repair-bay": {
+      "key": "g-302--xboat-repair-bay",
+      "pngRect": {"x": -6, "y": -61, "width": 1212, "height": 667},
+      "doors": [],
+      "rooms": []
+    },
+    "g-303--passenger-deck": {
+      "key": "g-303--passenger-deck",
+      "pngRect": {"x": -6, "y": -6, "width": 1212, "height": 613},
+      "doors": [],
+      "rooms": []
+    }
+  }
+}

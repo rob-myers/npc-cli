@@ -1,96 +1,22 @@
 {
   "meta": {
-    "global": {"lastModified": "2024-03-21T16:43:20.338Z"},
-    "101--hull": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": -740908075,
-      "outputHash": -603694476
-    },
-    "102--hull": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 1358490121,
-      "outputHash": 776617345
-    },
-    "103--hull": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": -675159501,
-      "outputHash": 1907721852
-    },
-    "301--hull": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 1818068925,
-      "outputHash": 1885992133
-    },
-    "302--hull": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 411100715,
-      "outputHash": 577601850
-    },
-    "303--hull": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 480977991,
-      "outputHash": -1329409110
-    },
-    "bridge--042--8x9": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": -1122062891,
-      "outputHash": 1281842894
-    },
-    "empty-room--013--2x3": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 1745832409,
-      "outputHash": 1490535795
-    },
-    "misc-stellar-cartography--023--4x4": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 1239557246,
-      "outputHash": 191408239
-    },
-    "office--001--2x2": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 2135680825,
-      "outputHash": 1418997953
-    },
-    "office--020--2x3": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": -1639819156,
-      "outputHash": -1916810858
-    },
-    "office--023--2x3": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": -725557747,
-      "outputHash": -842449962
-    },
-    "office--026--2x3": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": -738690952,
-      "outputHash": 917391723
-    },
-    "stateroom--014--2x2": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 269183967,
-      "outputHash": 286536107
-    },
-    "stateroom--020--2x3": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": 1693180601,
-      "outputHash": 462187265
-    },
-    "stateroom--036--2x4": {
-      "lastModified": "2024-03-21T18:15:29.761Z",
-      "contentHash": -1894493195,
-      "outputHash": -437945247
-    },
-    "demo-map-1": {
-      "lastModified": "2024-03-21T16:43:20.338Z",
-      "contentHash": -1213101529
-    },
-    "g-101--multipurpose": {"lastModified": "2024-03-21T18:15:29.761Z"},
-    "g-102--research-deck": {"lastModified": "2024-03-21T18:15:29.761Z"},
-    "g-103--cargo-bay": {"lastModified": "2024-03-21T18:15:29.761Z"},
-    "g-301--bridge": {"lastModified": "2024-03-21T18:15:29.761Z"},
-    "g-302--xboat-repair-bay": {"lastModified": "2024-03-21T18:15:29.761Z"},
-    "g-303--passenger-deck": {"lastModified": "2024-03-21T18:15:29.761Z"}
+    "101--hull": {"outputHash": -603694476},
+    "102--hull": {"outputHash": 776617345},
+    "103--hull": {"outputHash": 1907721852},
+    "301--hull": {"outputHash": 1885992133},
+    "302--hull": {"outputHash": 577601850},
+    "303--hull": {"outputHash": -1329409110},
+    "bridge--042--8x9": {"outputHash": 1281842894},
+    "empty-room--013--2x3": {"outputHash": 1490535795},
+    "misc-stellar-cartography--023--4x4": {"outputHash": 191408239},
+    "office--001--2x2": {"outputHash": 1418997953},
+    "office--020--2x3": {"outputHash": -1916810858},
+    "office--023--2x3": {"outputHash": -842449962},
+    "office--026--2x3": {"outputHash": 917391723},
+    "stateroom--014--2x2": {"outputHash": 286536107},
+    "stateroom--020--2x3": {"outputHash": 462187265},
+    "stateroom--036--2x4": {"outputHash": -437945247},
+    "demo-map-1": {"outputHash": 606505542}
   },
   "symbols": {
     "101--hull": {

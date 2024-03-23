@@ -9,3 +9,5 @@ export const DEV_EXPRESS_WEBSOCKET_PORT = 8012;
  * - Also a react-query `queryKey`.
  */
 export const ASSETS_META_JSON_FILENAME = "assets-meta.json";
+
+export const GEOMORPHS_JSON_FILENAME = "geomorphs.json";

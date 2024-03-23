@@ -87,7 +87,6 @@ class GeomorphService {
   computeLayoutInBrowser(gmKey, assets) {
     const { hullKey } = this.gmKeyToKeys(gmKey);
     const hullSym = assets.symbols[hullKey];
-    const { lastModified } = assets.meta[gmKey];
 
     /** Start with doors in hull symbol, which needn't be "hull doors" */
     const doors = hullSym.doors.map((x) => new Connector(x));
@@ -116,7 +115,6 @@ class GeomorphService {
       uncutWalls.push(...transformed.uncutWalls);
 
       // Extend wallSegs, doorSegs
-      tmpMat1.feedFromArray(transform);
       transformed.walls.forEach((x) =>
         x.lineSegs.forEach(([u, v], segId) => {
           if (u.equalsAlmost(v)) {
@@ -140,7 +138,6 @@ class GeomorphService {
     return {
       key: gmKey,
       pngRect: hullSym.pngRect,
-      lastModified,
 
       doorSegs,
       wallSegs,
@@ -161,6 +158,38 @@ class GeomorphService {
       gmId,
       transform,
       mat4: geomorphService.embedXZMat4(transform),
+    };
+  }
+
+  /**
+   * 🚧
+   * @param {Geomorph.GeomorphKey} gmKey
+   * @param {Geomorph.Assets} assets
+   * @returns {Geomorph.LayoutNew}
+   */
+  computeLayoutNew(gmKey, assets) {
+    const { hullKey } = this.gmKeyToKeys(gmKey);
+    const hullSym = assets.symbols[hullKey];
+
+    // Initialize arrays
+    const doors = hullSym.doors.map((x) => new Connector(x));
+    const uncutWalls = hullSym.uncutWalls.slice();
+
+    for (const { symbolKey, transform, meta } of hullSym.symbols) {
+      const symbol = assets.symbols[symbolKey];
+    }
+
+    const walls = Poly.cutOut(
+      doors.map((x) => x.poly),
+      uncutWalls
+    ).map((x) => x.cleanFinalReps());
+
+    return {
+      key: gmKey,
+      pngRect: hullSym.pngRect.clone(),
+      // 🚧
+      doors: [],
+      rooms: [],
     };
   }
 
@@ -693,9 +722,32 @@ class GeomorphService {
     return {
       hullWalls,
       uncutWalls,
-      walls,
+      walls, // 🚧 remove
       removableDoors,
       addableWalls,
+    };
+  }
+
+  /**
+   * @param {Geomorph.Geomorphs} geomorphs
+   * @returns {Geomorph.GeomorphsJson}
+   */
+  serializeGeomorphs(geomorphs) {
+    return {
+      layout: mapValues(geomorphs.layout, (x) => geomorphService.serializeLayout(x)),
+    };
+  }
+
+  /**
+   * @param {Geomorph.LayoutNew} layout
+   * @returns {Geomorph.LayoutNewJson}
+   */
+  serializeLayout(layout) {
+    return {
+      key: layout.key,
+      pngRect: layout.pngRect,
+      doors: layout.doors.map((x) => x.json),
+      rooms: layout.rooms.map((x) => x.json),
     };
   }
 

@@ -7,26 +7,17 @@ declare namespace Geomorph {
     symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
     /**
-     * `metaKey` can be:
-     * - any `Geomorph.SymbolKey` e.g. `301--hull` or `office--001--2x2`
-     * - any mapKey e.g. `demo-map-1`
-     * - any `Geomorph.GeomorphKey` e.g. `g-301--bridge`
-     * - `global`
+     * `metaKey` is a `Geomorph.SymbolKey` e.g. `301--hull` or `office--001--2x2`,
+     * or a mapKey e.g. `demo-map-1`
      */
-    meta: {
-      [metaKey: string]: {
-        /** Defined for mapKeys and symbolKeys */
-        contentHash?: number;
-        /** Defined for symbolKeys */
-        outputHash?: number;
-        /** ISO string */
-        lastModified: string;
-      };
-    };
+    meta: { [metaKey: string]: { outputHash: number } };
   }
 
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
+
+  // 🚧 move this file parallel to geomorph.js ?
+  type Connector = import("../service/geomorph").Connector;
 
   interface ConnectorJson {
     poly: Geomorph.WithMeta<Geom.GeoJsonPolygon>;
@@ -37,6 +28,24 @@ declare namespace Geomorph {
      */
     roomIds: [null | number, null | number];
   }
+
+  interface GeomorphsGeneric<
+    T extends Geom.GeoJsonPolygon | Geom.Poly,
+    P extends Geom.VectJson | Geom.Vect,
+    R extends Geom.RectJson | Geom.Rect,
+    C extends Geomorph.Connector | Geomorph.ConnectorJson
+  > {
+    // 🚧
+    layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutNewGeneric<T, P, R, C>>;
+  }
+
+  type Geomorphs = GeomorphsGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
+  type GeomorphsJson = GeomorphsGeneric<
+    Geom.GeoJsonPolygon,
+    Geom.VectJson,
+    Geom.RectJson,
+    ConnectorJson
+  >;
 
   interface ParsedSymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
@@ -124,18 +133,43 @@ declare namespace Geomorph {
     }[];
   }
 
+  interface LayoutNewGeneric<
+    T extends Geom.GeoJsonPolygon | Geom.Poly,
+    P extends Geom.VectJson | Geom.Vect,
+    R extends Geom.RectJson | Geom.Rect,
+    C extends Geomorph.Connector | Geomorph.ConnectorJson
+  > {
+    key: GeomorphKey;
+    pngRect: R;
+
+    rooms: P[];
+    doors: C[];
+
+    // wallSegs: [V, V][];
+    // doorSegs: [V, V][];
+  }
+
+  type LayoutNew = LayoutNewGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
+  type LayoutNewJson = LayoutNewGeneric<
+    Geom.GeoJsonPolygon,
+    Geom.VectJson,
+    Geom.RectJson,
+    ConnectorJson
+  >;
+
   interface LayoutInstance extends Layout {
     gmId: number;
     transform: Geom.SixTuple;
     mat4: import("three").Matrix4;
   }
 
-  /** Layout of a single geomorph */
+  /**
+   * 🚧 remove
+   * Layout of a single geomorph
+   */
   interface Layout {
     key: GeomorphKey;
     pngRect: Geom.Rect;
-    /** ISO Date */
-    lastModified: string;
     // 🚧
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];
