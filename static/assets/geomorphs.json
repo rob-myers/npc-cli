@@ -4674,7 +4674,7 @@
           "poly": {
             "type": "Polygon",
             "coordinates": [[[44, 243], [12, 243], [12, 237], [44, 237]]],
-            "meta": {"door": true, "e": true}
+            "meta": {"door": true, "optional": true, "e": true}
           },
           "roomIds": [null, null]
         },
@@ -4682,7 +4682,7 @@
           "poly": {
             "type": "Polygon",
             "coordinates": [[[3, 203], [-3, 203], [-3, 157], [3, 157]]],
-            "meta": {"door": true, "s": true}
+            "meta": {"door": true, "optional": true, "s": true}
           },
           "roomIds": [null, null]
         },
@@ -4690,7 +4690,7 @@
           "poly": {
             "type": "Polygon",
             "coordinates": [[[44, 123], [12, 123], [12, 117], [44, 117]]],
-            "meta": {"door": true, "w": true}
+            "meta": {"door": true, "optional": true, "w": true}
           },
           "roomIds": [null, null]
         }

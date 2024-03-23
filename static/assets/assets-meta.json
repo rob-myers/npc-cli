@@ -15,7 +15,7 @@
     "medical--008--3x2": {"outputHash": 1685444328},
     "misc-stellar-cartography--023--4x4": {"outputHash": -2040210374},
     "office--001--2x2": {"outputHash": 1932532261},
-    "office--006--2x2": {"outputHash": -1539950983},
+    "office--006--2x2": {"outputHash": -1252726331},
     "office--020--2x3": {"outputHash": -184397905},
     "office--023--2x3": {"outputHash": -747402951},
     "office--026--2x3": {"outputHash": -1119355112},
@@ -4643,17 +4643,17 @@
         {
           "type": "Polygon",
           "coordinates": [[[117, 76], [117, 108], [123, 108], [123, 76]]],
-          "meta": {"door": true, "e": true}
+          "meta": {"door": true, "optional": true, "e": true}
         },
         {
           "type": "Polygon",
           "coordinates": [[[37, 117], [37, 123], [83, 123], [83, 117]]],
-          "meta": {"door": true, "s": true}
+          "meta": {"door": true, "optional": true, "s": true}
         },
         {
           "type": "Polygon",
           "coordinates": [[[-3, 76], [-3, 108], [3, 108], [3, 76]]],
-          "meta": {"door": true, "w": true}
+          "meta": {"door": true, "optional": true, "w": true}
         }
       ],
       "windows": [
@@ -4707,7 +4707,33 @@
       "height": 600,
       "pngRect": {"x": -10, "y": -10, "width": 620, "height": 620},
       "symbols": [],
-      "removableDoors": [],
+      "removableDoors": [
+        {
+          "doorId": 0,
+          "wall": {
+            "type": "Polygon",
+            "coordinates": [
+              [[118, 76], [122, 76], [122, 108], [118, 108], [118, 76]]
+            ]
+          }
+        },
+        {
+          "doorId": 1,
+          "wall": {
+            "type": "Polygon",
+            "coordinates": [
+              [[37, 118], [83, 118], [83, 122], [37, 122], [37, 118]]
+            ]
+          }
+        },
+        {
+          "doorId": 2,
+          "wall": {
+            "type": "Polygon",
+            "coordinates": [[[-2, 76], [2, 76], [2, 108], [-2, 108], [-2, 76]]]
+          }
+        }
+      ],
       "addableWalls": []
     },
     "office--020--2x3": {

@@ -16,13 +16,13 @@
                 <title>decor do sit chair orient=270</title>
         </rect>
         <rect x="585" y="380" width="30" height="160" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-                <title>door e</title>
+                <title>door optional e</title>
         </rect>
         <rect x="185" y="585" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-                <title>door s</title>
+                <title>door optional s</title>
         </rect>
         <rect y="380" width="30" height="160" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;" x="-15">
-                <title>door w</title>
+                <title>door optional w</title>
         </rect>
         <rect width="600" height="20" style="stroke: rgb(0, 0, 0); fill: rgb(221, 221, 221); fill-opacity: 0.3;" y="445.426">
                 <title>relate-connectors</title>
