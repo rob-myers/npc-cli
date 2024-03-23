@@ -66,6 +66,7 @@ class GeomorphService {
     "fresher--020--2x2": true,
     "fresher--025--3x2": true,
     "lifeboat--small-craft--2x4": true,
+    "lounge--015--4x2": true,
     "medical--007--3x2": true,
     "medical--008--3x2": true,
     "misc-stellar-cartography--023--4x4": true,

@@ -200,7 +200,7 @@ declare namespace Geomorph {
     // | "lab--023--4x4"
     // | "lab--030--3x1"
     // | "lounge--009--3x2"
-    // | "lounge--015--4x2"
+    | "lounge--015--4x2"
     // | "lounge--017--4x2"
     // | "low-berth--003--1x1"
     // | "machinery--001--0.4x1"
