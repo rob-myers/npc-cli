@@ -14,7 +14,7 @@ import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
 import { ASSETS_META_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
-import { hashText, info, warn } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
@@ -51,12 +51,11 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     assetsMetaFilename,
     stringify(assetsJson),
   );
-    
-  const geomorphs = {
-    layout: geomorphService.gmKeys.reduce((agg, gmKey) => ({ ...agg,
-      [gmKey]: geomorphService.computeLayoutNew(gmKey, assets),
-    }), /** @type {Geomorph.Geomorphs['layout']} */ ({}))
-  };
+  
+  /** @type {Geomorph.Geomorphs} */
+  const geomorphs = { layout: keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>
+    geomorphService.computeLayoutNew(gmKey, assets)
+  ))};
   fs.writeFileSync(
     geomorphsFilename,
     stringify(geomorphService.serializeGeomorphs(geomorphs)),

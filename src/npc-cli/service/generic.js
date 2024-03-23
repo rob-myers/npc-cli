@@ -256,6 +256,23 @@ export function generateSelector(selector, extraArgs) {
 }
 
 /**
+ * Assumes items have a property named `key`.
+ * @template {string | number} Key
+ * @template {{ key: Key }} Item
+ * @param {Item[]} items
+ * @returns {Record<Key, Item>}
+ */
+export function keyedItemsToLookup(items) {
+  return items.reduce(
+    (agg, item) => ({
+      ...agg,
+      [item.key]: item,
+    }),
+    /** @type {Record<Key, Item>} */ ({})
+  );
+}
+
+/**
  * @template {string | number} K
  * @param {Partial<Record<K, any>> | Record<K, any>} record
  * Typed `Object.keys`, usually as finitely many string literals.
