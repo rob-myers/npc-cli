@@ -4,13 +4,13 @@
                 <title>empty-room--039--3x4</title>
         </image>
         <rect width="900" height="20" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);" y="-10">
-                <title>wall</title>
+                <title>wall optional n</title>
         </rect>
         <rect x="890" width="20" height="1210" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
                 <title>wall e</title>
         </rect>
         <rect y="1190" width="900" height="20" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
-                <title>wall s</title>
+                <title>wall optional s</title>
         </rect>
         <rect x="-9" width="20" height="1210" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
                 <title>wall w</title>
