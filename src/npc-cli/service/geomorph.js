@@ -79,74 +79,6 @@ class GeomorphService {
   }
 
   /**
-   * 🚧
-   * @param {Geomorph.GeomorphKey} gmKey
-   * @param {Geomorph.Assets} assets
-   * @returns {Geomorph.Layout}
-   */
-  computeLayoutInBrowser(gmKey, assets) {
-    const { hullKey } = this.gmKeyToKeys(gmKey);
-    const hullSym = assets.symbols[hullKey];
-
-    /** Start with doors in hull symbol, which needn't be "hull doors" */
-    const doors = hullSym.doors.map((x) => new Connector(x));
-    /**
-     * Start with walls in hull symbol, which needn't be "hull walls".
-     * They induce wall segs.
-     */
-    const walls = hullSym.walls.slice();
-    /** Rooms are computed using uncut walls  */
-    const uncutWalls = hullSym.uncutWalls.slice();
-
-    const wallSegs = walls.flatMap((poly) => poly.lineSegs);
-    const doorSegs = doors.map(({ seg }) => seg);
-
-    for (const { symbolKey, transform, meta } of hullSym.symbols) {
-      const symbol = assets.symbols[symbolKey];
-      const transformed = geomorphService.instantiateLayoutSymbol(
-        symbol,
-        meta.doors,
-        meta.walls,
-        transform
-      );
-
-      doors.push(...transformed.doors);
-      walls.push(...transformed.walls);
-      uncutWalls.push(...transformed.uncutWalls);
-
-      // Extend wallSegs, doorSegs
-      transformed.walls.forEach((x) =>
-        x.lineSegs.forEach(([u, v], segId) => {
-          if (u.equalsAlmost(v)) {
-            return warn(`${gmKey}: ${segId}: ignored degen wallSeg: ${JSON.stringify(u.json)}`);
-          }
-          wallSegs.push([u, v]);
-        })
-      );
-      transformed.doors.forEach(({ seg: [u, v] }) => doorSegs.push([u, v]));
-    }
-
-    // uncutWalls -> rooms
-    const [largeWall, pillars] = Poly.union(uncutWalls).sort(
-      (a, b) => (a.rect.area > b.rect.area ? -1 : 1) // Descending by area
-    );
-    // 🤔 could support "pillars" i.e. holes in rooms
-    const rooms = largeWall.holes.map((ring) => new Poly(ring));
-
-    // 🚧 doors need `roomIds`
-
-    return {
-      key: gmKey,
-      pngRect: hullSym.pngRect,
-
-      doorSegs,
-      wallSegs,
-      rooms,
-      doors,
-    };
-  }
-
-  /**
    * @param {Geomorph.Layout} layout
    * @param {number} gmId
    * @param {Geom.SixTuple} transform
@@ -158,6 +90,8 @@ class GeomorphService {
       gmId,
       transform,
       mat4: geomorphService.embedXZMat4(transform),
+      doorSegs: layout.doors.map(({ seg }) => seg),
+      wallSegs: layout.walls.flatMap((x) => x.lineSegs),
     };
   }
 
@@ -165,16 +99,14 @@ class GeomorphService {
    * 🚧
    * @param {Geomorph.GeomorphKey} gmKey
    * @param {Geomorph.Assets} assets
-   * @returns {Geomorph.LayoutNew}
+   * @returns {Geomorph.Layout}
    */
-  computeLayoutNew(gmKey, assets) {
+  computeLayout(gmKey, assets) {
     const { hullKey } = this.gmKeyToKeys(gmKey);
     const hullSym = assets.symbols[hullKey];
 
-    // Initialize arrays
     const doors = hullSym.doors.map((x) => new Connector(x));
     const uncutWalls = hullSym.uncutWalls.slice();
-
     for (const { symbolKey, transform, meta } of hullSym.symbols) {
       const symbol = assets.symbols[symbolKey];
       const transformed = geomorphService.instantiateLayoutSymbol(
@@ -187,12 +119,11 @@ class GeomorphService {
       uncutWalls.push(...transformed.uncutWalls);
     }
 
-    const [largeWall, ...pillars] = Poly.union(uncutWalls).sort(
+    const joinedUncutWalls = Poly.union(uncutWalls).sort(
       (a, b) => (a.rect.area > b.rect.area ? -1 : 1) // Descending by area
     );
-    const rooms = largeWall.holes.map((ring) => new Poly(ring));
+    const rooms = joinedUncutWalls.flatMap((x) => x.holes.map((ring) => new Poly(ring)));
 
-    // 🚧 provide wallSegs?
     const cutWalls = Poly.cutOut(
       doors.map((x) => x.poly),
       Poly.union(uncutWalls)
@@ -204,6 +135,7 @@ class GeomorphService {
       // 🚧
       doors,
       rooms,
+      walls: cutWalls,
     };
   }
 
@@ -216,6 +148,31 @@ class GeomorphService {
       meta,
       symbols: mapValues(symbols, (x) => this.deserializeSymbol(x)),
       maps,
+    };
+  }
+
+  /**
+   * @param {Geomorph.GeomorphsJson} geomorphsJson
+   * @return {Geomorph.Geomorphs}
+   */
+  deserializeGeomorphs({ layout, map }) {
+    return {
+      map,
+      layout: mapValues(layout, (x) => this.deserializeLayout(x)),
+    };
+  }
+
+  /**
+   * @param {Geomorph.LayoutJson} json
+   * @returns {Geomorph.Layout}
+   */
+  deserializeLayout(json) {
+    return {
+      key: json.key,
+      pngRect: Rect.fromJson(json.pngRect),
+      doors: json.doors.map(Connector.from),
+      rooms: json.rooms.map(Poly.from),
+      walls: json.walls.map(Poly.from),
     };
   }
 
@@ -436,7 +393,10 @@ class GeomorphService {
     );
 
     return {
-      doors: doors.map((x) => new Connector(x.clone().applyMatrix(tmpMat1).precision(precision))),
+      doors: doors.map(
+        // cloning poly removes meta
+        (x) => new Connector(x.clone().applyMatrix(tmpMat1).precision(precision), { meta: x.meta })
+      ),
       walls: symbol.walls // 🚧 remove i.e. only provide uncutWalls
         .concat(wallsToAdd)
         .map((x) => x.clone().applyMatrix(tmpMat1).precision(precision)),
@@ -754,13 +714,14 @@ class GeomorphService {
    */
   serializeGeomorphs(geomorphs) {
     return {
+      map: geomorphs.map,
       layout: mapValues(geomorphs.layout, (x) => geomorphService.serializeLayout(x)),
     };
   }
 
   /**
-   * @param {Geomorph.LayoutNew} layout
-   * @returns {Geomorph.LayoutNewJson}
+   * @param {Geomorph.Layout} layout
+   * @returns {Geomorph.LayoutJson}
    */
   serializeLayout(layout) {
     return {
@@ -768,6 +729,7 @@ class GeomorphService {
       pngRect: layout.pngRect,
       doors: layout.doors.map((x) => x.json),
       rooms: layout.rooms.map((x) => x.geoJson),
+      walls: layout.walls.map((x) => x.geoJson),
     };
   }
 
@@ -820,10 +782,12 @@ export class Connector {
   /**
    * @param {Geomorph.WithMeta<Geom.Poly>} poly
    * usually a rotated rectangle, but could be a curved window, in which case we'll view it as its AABB
-   * @param {[null | number, null | number]} [roomIds]
+   * @param {Object} [options]
+   * @param {[null | number, null | number]} [options.roomIds]
+   * @param {Geomorph.Meta} [options.meta]
    * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
    */
-  constructor(poly, roomIds = [null, null]) {
+  constructor(poly, options) {
     // 🔔 orientation MUST be clockwise w.r.t y-downwards
     poly.fixOrientationConvex();
 
@@ -832,7 +796,7 @@ export class Connector {
     /** @type {Geom.Vect} */
     this.center = poly.center;
     /** @type {Geomorph.Meta} */
-    this.meta = poly.meta;
+    this.meta = poly.meta || options?.meta || {};
 
     const { angle, baseRect } = geom.polyToAngledRect(poly);
 
@@ -866,7 +830,7 @@ export class Connector {
      * @type {[null | number, null | number]}
      * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
      */
-    this.roomIds = roomIds;
+    this.roomIds = options?.roomIds || [null, null];
   }
 
   /** @returns {Geomorph.ConnectorJson} */
@@ -879,7 +843,9 @@ export class Connector {
 
   /** @param {Geomorph.ConnectorJson} json */
   static from(json) {
-    return new Connector(Poly.from(json.poly), json.roomIds);
+    return new Connector(Object.assign(Poly.from(json.poly), { meta: json.poly.meta }), {
+      roomIds: json.roomIds,
+    });
   }
 
   /** @param {Geom.Poly[]} rooms */

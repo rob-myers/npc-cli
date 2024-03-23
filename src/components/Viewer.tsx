@@ -63,12 +63,10 @@ export default function Viewer() {
           [
             {
               type: "component",
-              class: "TestScene",
-              filepath: "r3f-demo",
-              props: { stats: true },
+              class: "TestWorld",
+              filepath: "test-world-1",
+              props: { mapKey: "demo-map-1" },
             },
-          ],
-          [
             {
               type: "terminal",
               filepath: "tty-1",
@@ -80,15 +78,9 @@ export default function Viewer() {
               filepath: "test-character",
               props: {},
             },
-            {
-              type: "component",
-              class: "TestWorld",
-              filepath: "test-world-1",
-              props: { mapKey: "demo-map-1" },
-            },
-            { type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} },
             { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
         ]}
         persistLayout
         onToggled={update}

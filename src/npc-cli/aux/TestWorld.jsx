@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
 
-import { ASSETS_META_JSON_FILENAME } from "src/scripts/const";
+import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { assertNonNull, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
@@ -18,22 +18,18 @@ export default function TestWorld(props) {
   const state = useStateRef(
     /** @returns {State} */ () => ({
       events: new Subject(),
-      assets: /** @type {*} */ (null),
+      geomorphs: /** @type {*} */ (null),
       map: /** @type {*} */ (null),
       gmData: /** @type {*} */ ({}),
       gms: [],
       scene: /** @type {*} */ ({}),
       view: /** @type {*} */ (null),
 
-      /**
-       * - we avoid recomputing this per geomorph instance
-       * - in development, we recompute this on `assets` change e.g. window 'focus'
-       */
-      ensureGmData(gmKey, forceRecompute) {
-        const { assets } = state;
+      ensureGmData(gmKey) {
+        const { geomorphs } = state;
         if (!state.gmData[gmKey]) {
           const canvas = document.createElement("canvas");
-          const layout = geomorphService.computeLayoutInBrowser(gmKey, assets);
+          const layout = geomorphs.layout[gmKey];
           canvas.width = layout.pngRect.width;
           canvas.height = layout.pngRect.height;
           state.gmData[gmKey] = {
@@ -42,41 +38,38 @@ export default function TestWorld(props) {
             layout,
             tex: new THREE.CanvasTexture(canvas),
           };
-        } else if (forceRecompute) {
-          // HMR: recompute onchange: (a) browser layout function, or (b) precomputed layout data
-          state.gmData[gmKey].layout = geomorphService.computeLayoutInBrowser(gmKey, assets);
         }
-        return state.gmData[gmKey];
       },
     })
   );
 
-  const { data: assets } = useQuery({
-    queryKey: [ASSETS_META_JSON_FILENAME],
+  const { data: geomorphs } = useQuery({
+    queryKey: [GEOMORPHS_JSON_FILENAME],
     queryFn: async () => {
-      /** @type {Geomorph.AssetsJson} */
-      const json = await fetch(`/assets/${ASSETS_META_JSON_FILENAME}`).then((x) => x.json());
-      return geomorphService.deserializeAssets(json);
+      /** @type {Geomorph.GeomorphsJson} */
+      const json = await fetch(`/assets/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json());
+      return geomorphService.deserializeGeomorphs(json);
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
     throwOnError: true,
   });
 
   React.useMemo(() => {
-    if (assets) {
-      const recomputeLayout = assets !== state.assets; // initial or HMR
-      state.assets = assets;
-      state.map = assets.maps[props.mapKey ?? "demo-map-1"];
+    if (geomorphs) {
+      state.geomorphs = geomorphs;
+      state.map = geomorphs.map[props.mapKey ?? "demo-map-1"];
 
+      // 🚧 clean
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        const { layout } = state.ensureGmData(gmKey, recomputeLayout);
+        state.ensureGmData(gmKey);
+        const layout = geomorphs.layout[gmKey];
         return geomorphService.computeLayoutInstance(layout, gmId, transform);
       });
-      // Remount walls on HMR
+
       state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
       state.scene.doorsKey = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
     }
-  }, [assets, state.map]);
+  }, [geomorphs, state.map]);
 
   return (
     <TestWorldContext.Provider value={state}>
@@ -96,14 +89,14 @@ export default function TestWorld(props) {
 /**
  * @typedef State
  * @property {Subject<NPC.Event>} events
- * @property {Geomorph.Assets} assets
+ * @property {Geomorph.Geomorphs} geomorphs
  * @property {Geomorph.MapDef} map
  * @property {import('./TestWorldScene').State} scene
  * @property {import('./TestWorldCanvas').State} view
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {(gmKey: Geomorph.GeomorphKey, forceLayout?: boolean) => GmData} ensureGmData
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureGmData
  */
 
 /**

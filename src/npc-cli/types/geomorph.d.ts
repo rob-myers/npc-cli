@@ -6,17 +6,13 @@ declare namespace Geomorph {
   > {
     symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
-    /**
-     * `metaKey` is a `Geomorph.SymbolKey` e.g. `301--hull` or `office--001--2x2`,
-     * or a mapKey e.g. `demo-map-1`
-     */
+    /** `metaKey` is a `Geomorph.SymbolKey` or a mapKey e.g. `demo-map-1` */
     meta: { [metaKey: string]: { outputHash: number } };
   }
 
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
 
-  // 🚧 move this file parallel to geomorph.js ?
   type Connector = import("../service/geomorph").Connector;
 
   interface ConnectorJson {
@@ -35,8 +31,8 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
-    // 🚧
-    layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutNewGeneric<T, P, R, C>>;
+    map: Record<string, Geomorph.MapDef>;
+    layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
   }
 
   type Geomorphs = GeomorphsGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
@@ -133,7 +129,7 @@ declare namespace Geomorph {
     }[];
   }
 
-  interface LayoutNewGeneric<
+  interface LayoutGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,
     R extends Geom.RectJson | Geom.Rect,
@@ -144,37 +140,19 @@ declare namespace Geomorph {
 
     rooms: P[];
     doors: C[];
-
-    // wallSegs: [V, V][];
-    // doorSegs: [V, V][];
+    walls: P[];
   }
 
-  type LayoutNew = LayoutNewGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
-  type LayoutNewJson = LayoutNewGeneric<
-    Geom.GeoJsonPolygon,
-    Geom.VectJson,
-    Geom.RectJson,
-    ConnectorJson
-  >;
+  type Layout = LayoutGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
+  type LayoutJson = LayoutGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson, ConnectorJson>;
 
   interface LayoutInstance extends Layout {
     gmId: number;
     transform: Geom.SixTuple;
     mat4: import("three").Matrix4;
-  }
-
-  /**
-   * 🚧 remove
-   * Layout of a single geomorph
-   */
-  interface Layout {
-    key: GeomorphKey;
-    pngRect: Geom.Rect;
-    // 🚧
+    //
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];
-    rooms: Geom.Poly[];
-    doors: Geom.Connector[];
   }
 
   type Meta<T extends {} = {}> = Record<string, any> & T;

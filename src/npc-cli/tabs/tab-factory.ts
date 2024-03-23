@@ -74,13 +74,6 @@ const classToComponent = {
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
-  TestScene: {
-    loadable: loadable(() => import("src/npc-cli/aux/TestScene")),
-    get:
-      (module: typeof import("src/npc-cli/aux/TestScene")) =>
-      (props: React.ComponentProps<(typeof module)["default"]>) =>
-        React.createElement(module.default, { disabled: true, ...props }),
-  },
   TestWorker: {
     loadable: loadable(() => import("src/npc-cli/aux/TestWorker")),
     get:

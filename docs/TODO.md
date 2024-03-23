@@ -331,8 +331,9 @@
   - ✅ types Geomorph.Geomorphs, Geomorph.GeomorphsJson
   - ✅ assets-meta.js creates geomorphs.json
   - ✅ compute Geomorph.Layout server-side
-  - wallsSegs, doorSegs derived from layout
-  - remove symbol.walls from assets-meta (only keep symbol.uncutWalls)
+  - ✅ connect geomorphs.json to browser
+  - ✅ wallsSegs, doorSegs derived from layout
+  - 🚧 remove symbol.walls from assets-meta and instantiateLayoutSymbol
 
 - simplify polygon JSON format e.g. flat arrays
 

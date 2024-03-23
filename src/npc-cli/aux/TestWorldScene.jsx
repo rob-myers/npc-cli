@@ -48,9 +48,7 @@ export default function TestWorldScene(props) {
       },
       drawGeomorph(gmKey, img) {
         const { ctxt, layout } = api.gmData[gmKey];
-        const { pngRect, rooms } = layout;
-        const { hullKey } = geomorphService.gmKeyToKeys(gmKey);
-        const { doors: hullDoors, symbols: subSymbols } = api.assets.symbols[hullKey];
+        const { pngRect, rooms, doors } = layout;
 
         ctxt.clearRect(0, 0, pngRect.width, pngRect.width);
         ctxt.drawImage(img, 0, 0);
@@ -60,7 +58,11 @@ export default function TestWorldScene(props) {
         ctxt.lineWidth = 2;
         ctxt.strokeStyle = "rgba(0, 0, 0, 1)";
         ctxt.fillStyle = "rgba(255, 255, 255, 1)";
-        drawPolygons(ctxt, hullDoors, "fill-stroke");
+        drawPolygons(
+          ctxt,
+          doors.filter((x) => x.meta.hull).map((x) => x.poly),
+          "fill-stroke"
+        );
 
         // 🚧 debug draw rooms
         ctxt.lineWidth = 0;
@@ -101,7 +103,7 @@ export default function TestWorldScene(props) {
       });
     });
     state.wallInstances && state.positionWalls();
-  }, [api.assets, api.map]);
+  }, [api.geomorphs, api.map]);
 
   const update = useUpdate();
 

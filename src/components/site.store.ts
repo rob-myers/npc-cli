@@ -10,7 +10,11 @@ import {
   isDevelopment,
 } from "src/npc-cli/service/generic";
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
-import { DEV_EXPRESS_WEBSOCKET_PORT, ASSETS_META_JSON_FILENAME } from "src/scripts/const";
+import {
+  ASSETS_META_JSON_FILENAME,
+  DEV_EXPRESS_WEBSOCKET_PORT,
+  GEOMORPHS_JSON_FILENAME,
+} from "src/scripts/const";
 import { queryClient } from "src/npc-cli/service/query-client";
 
 const useStore = create<State>()(
@@ -104,7 +108,10 @@ const useStore = create<State>()(
             // timeout seems necessary, probably due to gatsby handling of static/assets
             queryClient.refetchQueries({
               predicate({ queryKey: [queryKey] }) {
-                return queryKey === ASSETS_META_JSON_FILENAME;
+                return (
+                  GEOMORPHS_JSON_FILENAME === queryKey ||
+                  ASSETS_META_JSON_FILENAME.includes === queryKey
+                );
               },
             });
           }, 300);
