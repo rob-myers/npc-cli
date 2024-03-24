@@ -352,6 +352,12 @@
     - ℹ️ failing with single 301
     - ✅ try construct BufferGeometry as OBJ and import into
       https://navmesh.isaacmason.com/
+    - ℹ️ normals were geting flipped
+  - 🚧 fix threeToSoloNavMesh for `demo-map-1`
+    - ℹ️ normals getting flipped again
+    - ℹ️ seems need BufferGeometry per instance (bad)
+    - ❌ try non-three API: recast-navigation/generators seems to block main thread
+    - 🚧 try @recast-navigation/three in `TestWorld` i.e. BufferGeometry per instance, then dispose
   - 🚧 try threeToTiledNavMesh
   - try threeToTileCache
   - 🚧 test against `small-map-1` + `demo-map-1`
@@ -448,3 +454,33 @@
 
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
+
+
+## Scratch Pad
+
+```jsx
+// Why does this seemingly block main thread?
+React.useEffect(() => {
+  // 🚧
+  import("recast-navigation").then(({ init }) =>
+    init().then(() => {
+      // compute vertices, indices
+      let offset = 0;
+      const vs = /** @type {number[]} */ ([]);
+      const is = /** @type {number[]} */ ([]);
+      state.gms.forEach(({ navPolys }) => {
+        const { vertices, indices } = polysToAttribs(navPolys);
+        vs.push(...vertices);
+        is.push(...indices.map((x) => x + offset)); // 🚧 needs flip under conditions
+        offset += vertices.length / 3;
+      });
+      is.reverse();
+
+      import("recast-navigation/generators").then(({ generateSoloNavMesh }) => {
+        const { navMesh, success } = generateSoloNavMesh(vs, is, {});
+        console.log({ navMesh, success });
+      });
+    })
+  );
+}, [geomorphs]);
+```

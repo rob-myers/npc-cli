@@ -4,12 +4,12 @@ import { useLoader } from "@react-three/fiber";
 import { NavMeshHelper, threeToSoloNavMesh } from "@recast-navigation/three";
 import { init as initRecastNav } from "recast-navigation";
 
-import { assertDefined, error, keys, warn } from "../service/generic";
+import { assertDefined, error, hashText, keys, warn } from "../service/generic";
 import { worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { quadGeometryXY, quadGeometryXZ } from "../service/three";
+import { polysToAttribs, quadGeometryXY, quadGeometryXZ } from "../service/three";
 import { Mat, Vect } from "../geom";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
@@ -28,6 +28,7 @@ export default function TestWorldScene(props) {
     doorInstances: /** @type {*} */ (null),
 
     rootGroup: /** @type {*} */ (null),
+    sceneHash: 0, // 🚧 WIP
 
     computeInstMat(u, v, transform) {
       const height = 2;
@@ -98,6 +99,7 @@ export default function TestWorldScene(props) {
       });
     });
     state.wallInstances && state.positionWalls();
+    state.sceneHash = hashText(JSON.stringify(api.geomorphs));
   }, [api.geomorphs, api.map]);
 
   React.useEffect(() => {
@@ -129,7 +131,8 @@ export default function TestWorldScene(props) {
     <group onUpdate={(group) => (state.rootGroup = group)}>
       {api.gms.map((gm, gmId) => (
         <group
-          key={gm.transform.toString()}
+          // 🚧 fix stale
+          key={`${gm.transform} ${state.sceneHash}`}
           onUpdate={(self) => self.applyMatrix4(gm.mat4)}
           scale={[worldScale, 1, worldScale]}
         >
@@ -149,9 +152,10 @@ export default function TestWorldScene(props) {
             name="debugNavPoly"
             geometry={api.gmData[gm.key].debugNavPoly}
             position={[0, 0.001, 0]}
-            visible={false}
+            visible
+            // visible={false}
           >
-            <meshStandardMaterial side={THREE.DoubleSide} color="green" wireframe />
+            <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe />
           </mesh>
         </group>
       ))}
@@ -193,6 +197,7 @@ export default function TestWorldScene(props) {
  * @property {THREE.InstancedMesh} wallInstances
  * @property {THREE.InstancedMesh} doorInstances
  * @property {THREE.Group} rootGroup
+ * @property {number} sceneHash
  * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple) => THREE.Matrix4} computeInstMat
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
  * @property {() => void} positionWalls

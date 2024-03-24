@@ -30,6 +30,21 @@ export const tmpBufferGeom1 = new THREE.BufferGeometry();
  */
 export function polysToXZGeometry(polys, { reverse = false } = {}) {
   const geometry = new THREE.BufferGeometry();
+  const { vertices, indices, uvs } = polysToAttribs(polys);
+  if (reverse) {
+    indices.reverse();
+  }
+
+  geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices), 3));
+  geometry.setIndex(indices);
+  geometry.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(uvs), 2));
+  return geometry;
+}
+
+/**
+ * @param {Geom.Poly[]} polys
+ */
+export function polysToAttribs(polys) {
   const vertices = /** @type {number[]} */ ([]);
   const indices = /** @type {number[]} */ ([]);
   const uvs = /** @type {number[]} */ ([]);
@@ -44,13 +59,9 @@ export function polysToXZGeometry(polys, { reverse = false } = {}) {
     offset += vs.length;
   }
 
-  if (reverse) {
-    indices.reverse();
-  }
-
-  geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices), 3));
-  geometry.setIndex(indices);
-  geometry.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(uvs), 2));
-
-  return geometry;
+  return {
+    vertices,
+    indices,
+    uvs,
+  };
 }
