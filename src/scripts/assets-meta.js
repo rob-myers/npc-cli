@@ -107,7 +107,6 @@ function parseSymbols(prev) {
     const contents = fs.readFileSync(filepath).toString();
     const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
 
-    // We transform even when contentHash same, because we're changing schema
     const parsed = geomorphService.parseSymbol(symbolKey, contents);
     const serialized = geomorphService.serializeSymbol(parsed);
     symbols[symbolKey] = serialized;

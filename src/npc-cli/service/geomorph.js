@@ -402,35 +402,33 @@ class GeomorphService {
    * When hull symbols reference non-hull symbols, they may:
    * - remove doors tagged with `optional`
    * - remove walls tagged with `optional`
-   * @param {Geomorph.ParsedSymbol} symbol
+   * @param {Geomorph.ParsedSymbol} sym
    * @param {string[] | undefined} doorTags e.g. `['s']`
    * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
    * @param {Geom.SixTuple} transform
    * @returns {Pick<Geomorph.ParsedSymbol, 'decor' | 'obstacles' | 'walls'> & { doors: Connector[] }}
    */
-  instantiateLayoutSymbol(symbol, doorTags, wallTags, transform) {
+  instantiateLayoutSymbol(sym, doorTags, wallTags, transform) {
     tmpMat1.feedFromArray(transform);
 
-    const doorsToRemove = symbol.removableDoors.filter(({ doorId }) => {
-      const { meta } = symbol.doors[doorId];
+    const doorsToRemove = sym.removableDoors.filter(({ doorId }) => {
+      const { meta } = sym.doors[doorId];
       return !doorTags ? false : !doorTags.some((tag) => meta[tag] === true);
     });
 
-    const doors = symbol.doors.filter(
-      (_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId)
-    );
+    const doors = sym.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId));
 
     const wallsToAdd = /** @type {Geom.Poly[]} */ ([]).concat(
       doorsToRemove.map((x) => x.wall),
-      symbol.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
+      sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
     );
 
     return {
       // cloning poly removes meta
-      decor: symbol.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      decor: sym.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
       doors: doors.map((x) => new Connector(x.cleanClone(tmpMat1), { meta: x.meta })),
-      obstacles: symbol.obstacles.map((x) => x.cleanClone(tmpMat1)),
-      walls: symbol.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
+      obstacles: sym.obstacles.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
     };
   }
 
