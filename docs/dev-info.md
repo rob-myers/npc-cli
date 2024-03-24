@@ -1,4 +1,13 @@
+
 ## Bits and pieces
+
+### Hush npm
+
+```sh
+# https://stackoverflow.com/a/76563661/2917822
+npm config set audit false
+npm config set fund false
+```
 
 ### Understanding affine transforms
 
