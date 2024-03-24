@@ -341,13 +341,13 @@
     - ✅ disable CameraControls
     - ✅ frameloop must be `demand` instead of `never`?
 
-- show tables via raised "floor texture"
-
 - ✅ fix stellar cartography nav
   - ℹ️ transform-box `fill-box` issue
-- start using recast/detour
-- extend door/window connectors with correct roomIds
-- clarify handling of windows
+
+- 🚧 start using recast/detour
+
+- start generating geomorphs *.webp ourselves
+- show tables via raised "floor texture"
 
 - extend TestCharacter
   - use character Soldier with animations
@@ -355,6 +355,9 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
+- extend door/window connectors with correct roomIds
+- clarify handling of windows
+- try gradient fill shader for doors
 - simplify polygon JSON format e.g. flat arrays
 - start using cypress
 - slow resize on maximize desktop (but not mobile)
@@ -412,7 +415,7 @@
 - can add Tabs via links in blog posts
   - without remounting other tabs!
 - open Viewer should enable Tabs initially
-- can press Escape/Enter to pause/unpause
+- ✅ can press Escape/Enter to pause/unpause
 - how does shell function versioning work in sh/scripts.ts?
 - fix vertical tab drag on mobile
   - need repro
