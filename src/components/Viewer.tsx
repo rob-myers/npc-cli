@@ -1,12 +1,15 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
+import debounce from "debounce";
 
-import { afterBreakpoint, breakpoint } from "./const";
+import { view } from "../const";
+import { profileLookup } from "../npc-cli/sh/scripts";
+import { afterBreakpoint, breakpoint } from "../const";
+import useIntersection from "../npc-cli/hooks/use-intersection";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useSite from "./site.store";
-import { view } from "./const";
-import { profileLookup } from "../npc-cli/sh/scripts";
+import useUpdate from "../npc-cli/hooks/use-update";
 
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
@@ -16,47 +19,79 @@ export default function Viewer() {
 
   const state = useStateRef(
     (): State => ({
-      rootEl: {} as HTMLElement,
+      onChangeIntersect: debounce((intersects: boolean) => {
+        !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
+        update();
+      }, 1000),
+      onKeyDown(e) {
+        if (e.key === "Escape" && state.tabs.enabled) {
+          state.tabs.toggleEnabled();
+        }
+        if (e.key === "Enter" && !state.tabs.enabled) {
+          state.tabs.toggleEnabled();
+        }
+      },
+      rootEl: null as any,
       tabs: {} as TabsState,
     })
   );
+
+  useIntersection({
+    elRef: () => state.rootEl,
+    cb: state.onChangeIntersect,
+    trackVisible: true,
+  });
+
+  const update = useUpdate();
 
   return (
     <aside
       className={cx(viewerCss, { collapsed: !site.viewOpen })}
       data-testid="viewer"
       ref={(el) => el && (state.rootEl = el)}
-      style={
-        site.browserLoaded && !site.viewOpen
-          ? useSite.api.isSmall()
-            ? { minHeight: "0%" }
-            : { minWidth: "0%" }
-          : undefined
-      }
+      tabIndex={0}
+      onKeyDown={state.onKeyDown}
     >
       <ViewerControls api={state} />
       <Tabs
         ref={(x) => x && (state.tabs = x)}
         id="viewer-tabs"
+        browserLoaded={site.browserLoaded}
         initEnabled={false}
+        collapsed={!site.viewOpen}
         tabs={[
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
           [
+            {
+              type: "component",
+              class: "TestWorld",
+              filepath: "test-world-1",
+              props: { mapKey: "demo-map-1" },
+            },
             {
               type: "terminal",
               filepath: "tty-1",
               env: { WORLD_KEY: "world-1", PROFILE: profileLookup.util_0() },
             },
-            { type: "component", class: "HelloWorld", filepath: "hello-world-2", props: {} },
+            {
+              type: "component",
+              class: "TestCharacter",
+              filepath: "test-character",
+              props: {},
+            },
+            { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],
+          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
         ]}
         persistLayout
+        onToggled={update}
       />
     </aside>
   );
 }
 
 export interface State {
+  onChangeIntersect(intersects: boolean): void;
+  onKeyDown(e: React.KeyboardEvent): void;
   rootEl: HTMLElement;
   /** Tabs API */
   tabs: TabsState;
@@ -97,11 +132,17 @@ const viewerCss = css`
     flex-direction: row;
     transition: min-width 500ms;
     min-width: var(--viewer-min);
+    &.collapsed {
+      min-width: 0%;
+    }
   }
 
   @media (max-width: ${breakpoint}) {
     flex-direction: column;
     transition: min-height 500ms;
     min-height: var(--viewer-min);
+    &.collapsed {
+      min-height: 0%;
+    }
   }
 `;

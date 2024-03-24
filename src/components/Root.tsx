@@ -14,7 +14,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import type { AllFrontMatter, FrontMatter } from "./site.store";
 import { queryClient } from "../npc-cli/service/query-client";
-import { breakpoint } from "./const";
+import { breakpoint, view } from "../const";
 
 import Nav from "./Nav";
 import Viewer from "./Viewer";
@@ -23,14 +23,7 @@ import Comments from "./Comments";
 import useSite from "./site.store";
 import useOnResize from "src/npc-cli/hooks/use-on-resize";
 
-export function wrapPageElement({
-  element,
-  props,
-}: WrapPageElementBrowserArgs | WrapPageElementNodeArgs) {
-  return <Root {...props} element={element} />;
-}
-
-function Root(props: Props) {
+export default function Root(props: Props) {
   const frontMatter = props.pageContext?.frontmatter as FrontMatter | undefined;
   const allFrontMatter = useStaticQuery(graphql`
     query {
@@ -61,7 +54,7 @@ function Root(props: Props) {
   // Update matchMedia computations
   useOnResize();
 
-  React.useEffect(() => void useSite.api.initiateBrowser(), []);
+  React.useEffect(() => useSite.api.initiateBrowser(), []);
 
   useBeforeunload(() => void useSite.api.onTerminate());
 
@@ -107,7 +100,8 @@ const rootCss = css`
       z-index: 7;
 
       &.${sidebarClasses.collapsed} {
-        height: 80px;
+        pointer-events: none;
+
         border: none !important;
         > div {
           background-color: transparent;
@@ -117,8 +111,13 @@ const rootCss = css`
           }
         }
         button.toggle {
-          transform: scale(1.2);
-          outline: 2px solid #ddd;
+          top: calc(0.5 * (${view.barSize} - 2rem));
+          width: 2rem;
+          height: 2rem;
+          margin-top: 0;
+          pointer-events: all;
+
+          outline: 2px solid #ccc;
         }
       }
     }

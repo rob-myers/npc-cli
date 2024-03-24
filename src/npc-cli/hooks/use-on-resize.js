@@ -1,16 +1,15 @@
 import React from "react";
+import useUpdate from "./use-update";
 
 /**
  * Trigger render on window resize.
  */
 export default function useOnResize() {
-  const [, setState] = React.useState(0);
+  const update = useUpdate();
 
   React.useEffect(() => {
-    function onResize() {
-      setState((x) => x + 1);
-    }
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

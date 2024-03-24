@@ -1,25 +1,31 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 
 import type { TabState, State as TabsApi } from "./Tabs";
-import { TabDef, getComponent, Terminal } from "./tabs.util";
+import { TabDef, getComponent, Terminal } from "./tab-factory";
+import useUpdate from "../hooks/use-update";
+import useStateRef from "../hooks/use-state-ref";
 
-export const TabMemo = React.memo(Tab, (prev, next) => prev.disabled === next.disabled);
+export function Tab({ def, api, state: tabState }: TabProps) {
+  const state = useStateRef(() => ({
+    component: null as Awaited<ReturnType<typeof getComponent>> | null,
+  }));
 
-export function Tab({ def, api, state }: TabProps) {
-  const { data: component } = useQuery({
-    queryKey: [def.type === "component" ? def.class : "null-query"],
-    async queryFn() {
-      return def.type === "component" ? await getComponent(def) : null;
-    },
-  });
+  const update = useUpdate();
+
+  React.useEffect(() => {
+    def.type === "component" &&
+      getComponent(def.class, def.filepath).then((component) => {
+        state.component ??= component;
+        update();
+      });
+  }, []);
 
   if (def.type === "component") {
     return (
-      (component &&
-        React.createElement(component, {
-          disabled: state.disabled,
-          ...def.props, // propagate props from <Tabs> prop tabs
+      (state.component &&
+        React.createElement(state.component as React.FunctionComponent<any>, {
+          disabled: tabState.disabled,
+          ...def.props,
         })) ||
       null
     );
@@ -28,7 +34,7 @@ export function Tab({ def, api, state }: TabProps) {
   if (def.type === "terminal") {
     return (
       <Terminal
-        disabled={state.disabled}
+        disabled={tabState.disabled}
         sessionKey={def.filepath}
         env={{
           ...def.env,
@@ -36,11 +42,6 @@ export function Tab({ def, api, state }: TabProps) {
         }}
         onKey={(e) => {
           if (e.key === "Escape" && api.enabled) {
-            api.toggleEnabled();
-            // Prevent subsequent Enter from propagating to TTY
-            api.focusRoot();
-          }
-          if (e.key === "Enter" && !api.enabled) {
             api.toggleEnabled();
           }
         }}
@@ -60,4 +61,10 @@ interface TabProps {
   api: TabsApi;
   state: TabState;
   disabled: boolean;
+  forceUpdate: boolean;
 }
+
+export const TabMemo = React.memo(
+  Tab,
+  (prev, next) => prev.disabled === next.disabled && !next.forceUpdate
+);

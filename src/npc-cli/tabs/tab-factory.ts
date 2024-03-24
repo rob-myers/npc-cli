@@ -12,15 +12,16 @@ import {
 import { Props as TabsProps, State as TabsApi } from "./Tabs";
 import { TabMemo } from "./Tab";
 
-export function factory(node: TabNode, api: TabsApi) {
+export function factory(node: TabNode, api: TabsApi, forceUpdate: boolean) {
   const state = api.tabsState[node.getId()];
-  if (state?.everVis) {
+  if (state?.everUncovered) {
     // console.debug(`rendering "${node.getId()}"`, state.disabled);
     return React.createElement(TabMemo, {
       def: node.getConfig() as TabDef,
       api,
       state,
       disabled: state.disabled, // For memo
+      forceUpdate, // For memo
     });
   } else {
     return null;
@@ -34,7 +35,7 @@ export type TabDef = { weight?: number } & (
       filepath: string;
       /** Determines component */
       class: ComponentClassKey;
-    } & TabMetaComponentProps)
+    } & TabMetaProps)
   | {
       type: "terminal";
       /** Session identifier (determines tab) */
@@ -58,21 +59,14 @@ function getTabIdentifier(meta: TabDef) {
   return meta.filepath;
 }
 
-//#region components
-
 const classToComponent = {
-  // WorldPixi: {
-  //   loadable: loadable(() => import('projects/world-pixi/WorldPixi')),
-  //   get: (module: typeof import('projects/world-pixi/WorldPixi')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
-  // GeomorphEdit: {
-  //   loadable: loadable(() => import('projects/geomorph/GeomorphEdit')),
-  //   get: (module: typeof import('projects/geomorph/GeomorphEdit')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
+  TestCharacter: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestCharacter")),
+    get:
+      (module: typeof import("src/npc-cli/aux/TestCharacter")) =>
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
+  },
   HelloWorld: {
     loadable: loadable(() => import("src/npc-cli/aux/HelloWorld")),
     get:
@@ -80,37 +74,49 @@ const classToComponent = {
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
-  // SvgNavGraph: {
-  //   loadable: loadable(() => import('projects/example/SvgNavGraph')),
-  //   get: (module: typeof import('projects/example/SvgNavGraph')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
-  // SvgStringPull: {
-  //   loadable: loadable(() => import('projects/example/SvgStringPull')),
-  //   get: (module: typeof import('projects/example/SvgStringPull')) =>
-  //     (props: ComponentProps<typeof module['default']>) =>
-  //       <module.default disabled {...props} />,
-  // },
+  TestWorker: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestWorker")),
+    get:
+      (module: typeof import("src/npc-cli/aux/TestWorker")) =>
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
+  },
+  TestWorld: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestWorld")),
+    get:
+      (module: typeof import("src/npc-cli/aux/TestWorld")) =>
+      (props: React.ComponentProps<(typeof module)["default"]>) =>
+        React.createElement(module.default, { disabled: true, ...props }),
+  },
 };
 
-export async function getComponent(meta: Extract<TabDef, { type: "component" }>) {
+export async function getComponent(componentClassKey: ComponentClassKey, errorIdentifier?: string) {
   return (
-    classToComponent[meta.class]?.get(
-      (await classToComponent[meta.class].loadable.load()) as any
-    ) ?? FallbackComponentFactory(meta.filepath)
+    classToComponent[componentClassKey]?.get(
+      (await classToComponent[componentClassKey].loadable.load()) as any
+    ) ?? FallbackComponentFactory(errorIdentifier ?? componentClassKey)
   );
 }
 
 /** Components we can instantiate inside a tab */
 export type ComponentClassKey = keyof typeof classToComponent;
 
-type TabMetaComponentProps = {
-  [K in ComponentClassKey]: {
-    class: K;
-    props: Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0];
-  };
-}[ComponentClassKey];
+type TabMetaProps = TabMetaPropsDistributed<ComponentClassKey>;
+
+type TabMetaPropsDistributed<K extends ComponentClassKey> = K extends infer A
+  ? A extends ComponentClassKey
+    ? TabMetaPropsGeneric<A>
+    : never
+  : never;
+
+type TabMetaPropsGeneric<K extends ComponentClassKey> = {
+  class: K;
+  props: ComponentClassKeyToProps[K];
+};
+
+type ComponentClassKeyToProps = {
+  [K in ComponentClassKey]: Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0];
+};
 
 export interface BaseComponentProps {
   disabled?: boolean;
@@ -128,8 +134,6 @@ function FallbackComponentFactory(componentKey: string) {
 export const Terminal = loadable(() => import("../terminal/Terminal"), {
   ssr: false,
 }) as typeof ActualTerminal;
-
-//#endregion
 
 //#region persist
 

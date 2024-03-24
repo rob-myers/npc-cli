@@ -1,14 +1,13 @@
-import { Link } from "gatsby";
-import { css } from "@emotion/css";
+import { Link, navigate } from "gatsby";
+import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { nav } from "./const";
+import { nav, view } from "../const";
+import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import Toggle from "./Toggle";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
-import useSite from "./site.store";
-import npcCliTitlePng from "static/assets/npc-cli-title.png";
 
 export default function Nav() {
   const collapsed = useSite(({ navOpen }) => !navOpen);
@@ -18,11 +17,12 @@ export default function Nav() {
       const el = e.target as HTMLElement;
       if (el.classList.contains(sidebarClasses.container)) {
         state.toggleCollapsed(); // outside buttons
-      } else if (
-        el.classList.contains(menuClasses.button) &&
-        el.parentElement?.previousSibling === null
-      ) {
-        state.toggleCollapsed(); // top-most button
+        return;
+      }
+      const anchorEl = el.querySelectorAll("a");
+      if (anchorEl.length === 1) {
+        const { pathname, search, hash } = new URL(anchorEl[0].href, location.href);
+        navigate(`${pathname}${search}${hash}`);
       }
     },
     toggleCollapsed() {
@@ -33,7 +33,7 @@ export default function Nav() {
   return (
     <Sidebar
       backgroundColor="black"
-      className={navCss}
+      className={cx(navCss, navTitleCss)}
       collapsed={collapsed}
       collapsedWidth={nav.collapsedWidth}
       data-testid="nav"
@@ -44,9 +44,7 @@ export default function Nav() {
 
       <Menu>
         <MenuItem className="title" tabIndex={-1} component="span">
-          <Link to="/">
-            <img src={npcCliTitlePng} />
-          </Link>
+          <Link to="/">NPC CLI</Link>
         </MenuItem>
         <SubMenu icon={icon.blog} label="Blog">
           <MenuItem component="span">
@@ -77,28 +75,12 @@ const navCss = css`
   .${sidebarClasses.container} button.toggle {
     position: absolute;
     z-index: 1;
-    top: calc(0.5 * (5rem - 1.8rem));
-    right: 1rem;
-  }
-
-  .${menuClasses.menuItemRoot}.title {
-    opacity: 1;
-    transition: opacity 500ms;
-
-    .${menuClasses.button} {
-      height: 5rem;
-    }
-
-    .${menuClasses.label} {
-      height: 1.6rem;
-      img {
-        height: 100%;
-        filter: invert();
-      }
-    }
-  }
-  &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
-    opacity: 0;
+    top: calc(0.5 * (${view.barSize} - 1.5rem));
+    right: calc(0.5 * (${view.barSize} - 1.5rem));
+    width: 1.5rem;
+    height: 1.5rem;
+    transition: margin-top 300ms;
+    margin-top: ${nav.titleMarginTop};
   }
 
   a.${menuClasses.button}, span.${menuClasses.button} {
@@ -111,6 +93,7 @@ const navCss = css`
 
   .${menuClasses.subMenuContent} {
     background-color: #222222;
+    padding-left: 20px;
   }
 
   span.${menuClasses.label} a {
@@ -119,17 +102,52 @@ const navCss = css`
   }
 
   span.${menuClasses.icon} {
-    transform: scale(1.3);
-    width: 1.5rem;
-    min-width: 1.5rem;
-    margin-right: 24px;
+    width: 1rem;
+    min-width: 1rem;
   }
 
-  &.${sidebarClasses.collapsed} .${menuClasses.SubMenuExpandIcon} {
-    display: none;
+  &.${sidebarClasses.collapsed} {
+    span.${menuClasses.icon} {
+      margin-left: 4px;
+    }
+    .${menuClasses.SubMenuExpandIcon} {
+      display: none;
+    }
   }
-  &:not(.${sidebarClasses.collapsed}) .${menuClasses.SubMenuExpandIcon} {
-    padding-right: 0.5rem;
+  &:not(.${sidebarClasses.collapsed}) {
+    span.${menuClasses.icon} {
+      margin-right: 24px;
+      margin-left: 12px;
+    }
+    .${menuClasses.SubMenuExpandIcon} {
+      padding-right: 0.5rem;
+    }
+  }
+`;
+
+const navTitleCss = css`
+  .${menuClasses.menuItemRoot}.title {
+    opacity: 1;
+    transition: opacity 500ms;
+    margin-top: ${nav.titleMarginTop};
+    margin-left: 12px;
+
+    .${menuClasses.button} {
+      height: calc(1 * ${view.barSize});
+    }
+
+    .${menuClasses.label} {
+      display: flex;
+      align-items: center;
+
+      font-size: 1.5rem;
+      letter-spacing: 0.4rem;
+      filter: drop-shadow(3px 0 #336);
+    }
+  }
+
+  &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
+    opacity: 0;
   }
 `;
 

@@ -25,6 +25,12 @@ const config: GatsbyConfig = {
       },
     },
     "gatsby-plugin-tsconfig-paths",
+    {
+      resolve: `gatsby-plugin-compile-es6-packages`,
+      options: {
+        modules: [`three`],
+      },
+    },
   ],
   flags: {
     DEV_SSR: true,

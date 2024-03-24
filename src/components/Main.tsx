@@ -1,26 +1,23 @@
-import { Link } from "gatsby";
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
-import { afterBreakpoint, breakpoint } from "./const";
-import npcCliTitlePng from "static/assets/npc-cli-title.png";
+import { afterBreakpoint, breakpoint } from "../const";
 import useSite from "./site.store";
+import { isSmallView } from "./layout";
 
 export default function Main(props: React.PropsWithChildren) {
   const site = useSite(({ navOpen, mainOverlay }) => ({ navOpen, mainOverlay }), shallow);
 
-  const overlayOpen = site.mainOverlay || (site.navOpen && useSite.api.isSmall());
+  const overlayOpen = site.mainOverlay || (site.navOpen && isSmallView());
 
   return (
     <section className={mainCss} data-testid="main">
-      <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
+      <header className={mainTitleCss} data-testid="main-title">
+        NPC CLI
+      </header>
 
-      <Link to="/" style={{ display: "block", margin: "0 auto" }}>
-        <div className={mainTitleCss} data-testid="main-title">
-          <img src={npcCliTitlePng} />
-        </div>
-      </Link>
+      <div className={cx(overlayCss, { overlayOpen })} onClick={() => useSite.api.toggleNav()} />
 
       <main>{props.children}</main>
     </section>
@@ -52,24 +49,27 @@ const mainCss = css`
 `;
 
 const mainTitleCss = css`
-  max-width: 1024px;
-  margin: 2rem 0;
-  img {
-    width: 300px;
-  }
+  margin: 3rem auto 2rem auto;
+  color: #444;
 
   @media (min-width: ${afterBreakpoint}) {
+    max-width: 1024px;
+    font-size: 4rem;
     padding: 0 4rem;
+    letter-spacing: 1.5rem;
+    filter: drop-shadow(2px 0px 2px #777);
   }
   @media (max-width: ${breakpoint}) {
-    img {
-      // 🔔 Too wide causes extra body height on mobile
-      max-width: 100%;
-    }
+    // 🔔 Too wide causes extra body height on mobile
+    max-width: 100%;
+    font-size: 3rem;
+    letter-spacing: 1.2rem;
+    filter: drop-shadow(1px 0px 1px #777);
   }
 `;
 
 const overlayCss = css`
+  -webkit-tap-highlight-color: transparent;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;

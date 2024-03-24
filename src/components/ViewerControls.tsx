@@ -3,13 +3,18 @@ import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 
 import useSite from "./site.store";
-import { afterBreakpoint, breakpoint } from "./const";
+import { afterBreakpoint, breakpoint, nav, view } from "../const";
 import { isTouchDevice } from "src/npc-cli/service/dom";
+import { getNavWidth, isSmallView } from "./layout";
 
 import { State } from "./Viewer";
-import Spinner from "./Spinner";
-import { FontAwesomeIcon, faRefreshThin, faExpandThin, faCirclePauseThin } from "./Icon";
-import Toggle from "./Toggle";
+import {
+  FontAwesomeIcon,
+  faRefreshThin,
+  faExpandThin,
+  faCirclePauseThin,
+  faChevronRight,
+} from "./Icon";
 import useLongPress from "src/npc-cli/hooks/use-long-press";
 import useUpdate from "src/npc-cli/hooks/use-update";
 import useStateRef from "src/npc-cli/hooks/use-state-ref";
@@ -50,12 +55,12 @@ export default function ViewerControls({ api }: Props) {
         return;
       }
 
-      state.dragOffset = useSite.api.isSmall()
+      state.dragOffset = isSmallView()
         ? api.rootEl.getBoundingClientRect().y - e.clientY
         : api.rootEl.getBoundingClientRect().x - e.clientX;
 
       document.documentElement.classList.add(
-        useSite.api.isSmall() ? "cursor-row-resize" : "cursor-col-resize"
+        isSmallView() ? "cursor-row-resize" : "cursor-col-resize"
       );
       // trigger main overlay (iframe can get in the way of body)
       useSite.setState({ mainOverlay: true });
@@ -73,10 +78,10 @@ export default function ViewerControls({ api }: Props) {
     },
     onDrag(e: PointerEvent) {
       if (state.dragOffset !== null) {
-        let percent = useSite.api.isSmall()
+        let percent = isSmallView()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
-            (window.innerWidth - useSite.api.getNavWidth());
+            (window.innerWidth - getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
@@ -108,7 +113,7 @@ export default function ViewerControls({ api }: Props) {
       if (!willOpen) {
         api.tabs.toggleEnabled(false);
       }
-      if (willOpen && useSite.api.isSmall()) {
+      if (willOpen && isSmallView()) {
         useSite.api.toggleNav(false);
       }
     },
@@ -123,38 +128,24 @@ export default function ViewerControls({ api }: Props) {
   const update = useUpdate();
 
   return (
-    <>
-      <button
-        onClick={state.onEnable}
-        className={cx(interactOverlayCss, { enabled: api.tabs.enabled, collapsed: !site.viewOpen })}
-      >
-        {site.browserLoaded ? "interact" : <Spinner size={24} />}
+    <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
+      <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
+        <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
       </button>
-
-      <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
-        <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
-          <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
-        </button>
-        <button title="max/min tabs" onClick={state.onMaximize}>
-          <FontAwesomeIcon icon={faExpandThin} size="1x" />
-        </button>
-        <button title="reset tabs" {...resetHandlers}>
-          <FontAwesomeIcon icon={faRefreshThin} size="1x" />
-        </button>
-        <Toggle
-          onClick={() => state.toggleCollapsed()}
-          className={cx(viewerToggleCss, { collapsed: !site.viewOpen })}
+      <button title="reset tabs" {...resetHandlers}>
+        <FontAwesomeIcon icon={faRefreshThin} size="1x" />
+      </button>
+      <button title="max/min tabs" onClick={state.onMaximize}>
+        <FontAwesomeIcon icon={faExpandThin} size="1x" />
+      </button>
+      <button onClick={() => state.toggleCollapsed()}>
+        <FontAwesomeIcon
+          icon={faChevronRight}
+          size="1x"
           flip={!site.viewOpen ? "horizontal" : undefined}
         />
-      </div>
-
-      <div
-        className={cx(faderOverlayCss, {
-          clear: api.tabs.overlayColor === "clear",
-          faded: api.tabs.overlayColor === "faded",
-        })}
-      />
-    </>
+      </button>
+    </div>
   );
 }
 
@@ -162,43 +153,6 @@ interface Props {
   /** Viewer API */
   api: State;
 }
-
-const interactOverlayCss = css`
-  position: absolute;
-  z-index: 5;
-
-  @media (min-width: ${afterBreakpoint}) {
-    left: var(--view-bar-size);
-    top: 0;
-    width: calc(100% - var(--view-bar-size));
-    height: 100%;
-  }
-  @media (max-width: ${breakpoint}) {
-    left: 0;
-    top: var(--view-bar-size);
-    width: 100%;
-    height: calc(100% - var(--view-bar-size));
-  }
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, 0);
-  color: white;
-  cursor: pointer;
-  user-select: none;
-
-  letter-spacing: 2px;
-
-  &.enabled {
-    pointer-events: none;
-    opacity: 0;
-  }
-  &.collapsed {
-    display: none;
-  }
-`;
 
 const buttonsCss = css`
   z-index: 5;
@@ -220,9 +174,10 @@ const buttonsCss = css`
     cursor: row-resize;
     flex-direction: row;
     border-bottom: 1px solid #444;
+    height: ${view.barSize};
   }
 
-  button:not(.toggle) {
+  button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -243,11 +198,24 @@ const buttonsCss = css`
       color: #888;
     }
   }
+
+  button:last-child {
+    @media (min-width: ${afterBreakpoint}) {
+      height: ${view.barSize};
+    }
+    @media (max-width: ${breakpoint}) {
+      transform: rotate(90deg);
+      margin-right: 0.5rem;
+    }
+  }
 `;
 
 const viewerToggleCss = css`
   z-index: 6;
   color: #000;
+
+  width: 1.5rem;
+  height: 1.5rem;
 
   &.collapsed {
     background-color: white;
@@ -255,46 +223,12 @@ const viewerToggleCss = css`
   }
 
   @media (min-width: ${afterBreakpoint}) {
-    margin: calc(0.5 * (5rem - 1.8rem)) 0;
+    margin: calc(0.5 * (${view.barSize} - 1.5rem)) 0;
   }
 
   @media (max-width: ${breakpoint}) {
     transform: rotate(90deg);
     margin-left: 1rem;
-    margin-right: 1rem;
-  }
-`;
-
-const faderOverlayCss = css`
-  position: absolute;
-  z-index: 4;
-  background: rgba(1, 1, 1, 1);
-
-  @media (min-width: ${afterBreakpoint}) {
-    left: var(--view-bar-size);
-    top: 0;
-    width: calc(100% + (-1 * var(--view-bar-size)));
-    height: 100%;
-  }
-  @media (max-width: ${breakpoint}) {
-    left: 0;
-    top: var(--view-bar-size);
-    width: 100%;
-    height: calc(100% + (-1 * var(--view-bar-size)));
-  }
-
-  opacity: 1;
-  transition: opacity 1s ease-in;
-  &.clear {
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-  }
-  &.faded {
-    opacity: 0.5;
-    transition: opacity 0.5s ease-in;
-  }
-
-  &:not(.faded) {
-    pointer-events: none;
+    margin-right: 1.5rem;
   }
 `;

@@ -1,0 +1,96 @@
+diff --git a/node_modules/@react-three/offscreen/dist/Canvas.d.ts b/node_modules/@react-three/offscreen/dist/Canvas.d.ts
+index 7084e67..e79c825 100644
+--- a/node_modules/@react-three/offscreen/dist/Canvas.d.ts
++++ b/node_modules/@react-three/offscreen/dist/Canvas.d.ts
+@@ -13,5 +13,6 @@ export interface CanvasProps extends Omit<RenderProps<HTMLCanvasElement>, 'size'
+     eventSource?: HTMLElement | React.MutableRefObject<HTMLElement>;
+     /** The event prefix that is cast into canvas pointer x/y events, default: "offset" */
+     eventPrefix?: 'offset' | 'client' | 'page' | 'layer' | 'screen';
++    sceneProps?: Record<string, any>;
+ }
+ export declare function Canvas({ eventSource, worker, fallback, style, className, id, ...props }: CanvasProps): JSX.Element;
+diff --git a/node_modules/@react-three/offscreen/dist/index.mjs b/node_modules/@react-three/offscreen/dist/index.mjs
+index acf1918..9282957 100644
+--- a/node_modules/@react-three/offscreen/dist/index.mjs
++++ b/node_modules/@react-three/offscreen/dist/index.mjs
+@@ -86,6 +86,7 @@ function Canvas({
+   style,
+   className,
+   id,
++  sceneProps = {},
+   ...props
+ }) {
+   const [shouldFallback, setFallback] = React.useState(false);
+@@ -111,7 +112,7 @@ function Canvas({
+     worker.postMessage({
+       type: 'init',
+       payload: {
+-        props,
++        props: { sceneProps, ...props },
+         drawingSurface: offscreen,
+         width: canvas.clientWidth,
+         height: canvas.clientHeight,
+@@ -181,9 +182,9 @@ function Canvas({
+     if (!worker) return;
+     worker.postMessage({
+       type: 'props',
+-      payload: props
++      payload: { sceneProps, ...props }
+     });
+-  }, [worker, props]);
++  }, [worker, props, sceneProps]);
+   return shouldFallback ? /*#__PURE__*/React.createElement(Canvas$1, _extends({
+     id: id,
+     className: className,
+@@ -203,7 +204,7 @@ function Canvas({
+   });
+ }
+ 
+-function render(children) {
++function render(component) {
+   extend(THREE);
+   let root;
+   let dpr = [1, 2];
+@@ -218,6 +219,7 @@ function render(children) {
+   const handleInit = payload => {
+     const {
+       props,
++      sceneProps,
+       drawingSurface: canvas,
+       width,
+       top,
+@@ -281,7 +283,7 @@ function render(children) {
+       });
+ 
+       // Render children once
+-      root.render(children);
++      root.render(React.createElement(component, sceneProps));
+     } catch (e) {
+       postMessage({
+         type: 'error',
+@@ -317,14 +319,15 @@ function render(children) {
+       stopPropagation() {}
+     });
+   };
+-  const handleProps = payload => {
++  const handleProps = ({ sceneProps, ...payload }) => {
+     if (!root) return;
+     if (payload.dpr) dpr = payload.dpr;
+     root.configure({
+       size,
+       dpr,
+-      ...payload
++      ...payload,
+     });
++    root.render(React.createElement(component, sceneProps));
+   };
+   const handlerMap = {
+     resize: handleResize,
+diff --git a/node_modules/@react-three/offscreen/dist/render.d.ts b/node_modules/@react-three/offscreen/dist/render.d.ts
+index 2be3f9c..0cceb2b 100644
+--- a/node_modules/@react-three/offscreen/dist/render.d.ts
++++ b/node_modules/@react-three/offscreen/dist/render.d.ts
+@@ -1,2 +1,2 @@
+ /// <reference types="react" />
+-export declare function render(children: React.ReactNode): void;
++export declare function render<P extends {}>(component: React.FunctionComponent<P> | React.ComponentClass<P>): void;

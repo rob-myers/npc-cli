@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="620" height="620" x="-10" y="-10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmwAAAJsAgMAAAA9+xe2AAAABGdBTUEAALGPC/xhBQAAAAd0SU1FB+UJEAkFLeAthsAAAAAJUExURQAAAAAAAP///4Pdz9IAAAABdFJOUwBA5thmAAAAAWJLR0QCZgt8ZAAABJJJREFUeNrt3b114kAYhtEhUAnqxyUQMARbgvtRCQS4yg0w/sFI881obGSf+4QO3r0rCeyzi6WUhvyUttdFlfNhg7acDyntct7ggbuohpzzfoOnNOd9GjdpG99sh03aDilv0pbfbBuNjY3tt9hePjfdfuHlJR9vv3LO/26/dMrPL32m2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2B5q8xkMNja2jp9HenxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsPWyn/PUOMI2FpsK28/XmD+th0amobXq/M8XaYxeeCto+3TbjuP4qCk3FbDf39Dj2oi1PhWxT7oarmYrYTl/vhvKv/fUZnwrY3l5Wh/R+85jnda/Q0FTAdr1xzPuDGJvPat1U2XbKN08PHJvPauVU0XY5Dfvb5x22vAfXThVtU/76rMqx7cDVTpVs57uPgxxbXg7VUyXb9OHavXlU5LHlsNVMFWznfP+prbv6A1c/VbBNcw9GHauvuPqpZdv5/mm4norqw1Y3tWyb5p/DO1QeuIapZdvSI1srD1zD1KLttPT44qHq1dAytWhbftJt1dvI1DC1ZDsvP/V5qDipTVNLtqnwgOCKV8M0+yJdmFqylR76PMRPatPUgu1c+LumXfjV0Da1YJuKz8oeoye1bWrBVn7++S56Utum5m3nwKOygye1cWredgo8/nyIndTGqaX79+bIE+aPscutZWreFnr6eeztt3Fq1nYOPdF+iFxwrVOztsh5SGkXueBap2ZtwQfaRy641qk5W+w8pDSWL7jmqTnbqfhuGb7gmqcW7t8b2bv+m0bpJrztU3dtoWskhW5LvGbq7lf3scEhYFszddf2lLqd1DVTqfkaiZ3UNVOp/Rq5/jNVh8vt/lRqPw+RC27VVKo68j8WGxsbGxsb27fbhh4/lrVOFWxjl599GqfY2NiCtoV/5qi11U6xsW3DNix/Wuhc8U21capoy4XBp4pv85VT87ZxefBUYWucYmPbiu3y/z2zg8/hN7nGKTY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2Nja232c7sFXaDmncuG2/OdvliA2bte3T7s4nlR5vez1id2+U9Wjb6xEbvv4Zj7el2V9dvQ7OVm+rnRrm1jdg+4nBb7M98HpjY2Nj+y7bufBB62Pc1mvqbfBU+hB43NZriu2P2xZ/OajO1mPq0+DzzODLVG3rMfVhcHbu9Q2rwtZnio2Nja2TrVDl96wOU2xsbL/K5r23wVa6q/FU9TvFfabY/qpt6Dc4PMj2w1Mf/ouwOLj/6an3v29h8CFTbGxsX96X+tw5r+MU21+17foN7n7adnjI1McfvPrcOK/jlCRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJ0kbb5daeAuvjqvVxo7bDmsP2zbb8lIbN2vabto2btR3Y2kqZjY3Ne8gKm++nbbYt/4y05Z8tN/wz+X9Y7EEGgqh8ZAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wOS0xNlQwOTowNTozOCswMDowMM0ctWAAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDktMTZUMDk6MDU6MzgrMDA6MDC8QQ3cAAAAAElFTkSuQmCC">
+                <title>office--006--2x2</title>
+        </image>
+        <rect width="10" height="10" style="fill: rgb(216, 216, 216); fill-opacity: 0.5;" x="275" y="400">
+                <title>decor go label=office</title>
+        </rect>
+        <rect x="145" y="278" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+                <title>decor do sit chair orient=270</title>
+        </rect>
+        <rect x="446" y="278" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+                <title>decor do sit chair orient=270</title>
+        </rect>
+        <rect x="585" y="380" width="30" height="160" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+                <title>door optional e</title>
+        </rect>
+        <rect x="185" y="585" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+                <title>door optional s</title>
+        </rect>
+        <rect y="380" width="30" height="160" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;" x="-15">
+                <title>door optional w</title>
+        </rect>
+        <rect width="600" height="20" style="stroke: rgb(0, 0, 0); fill: rgb(221, 221, 221); fill-opacity: 0.3;" y="445.426">
+                <title>relate-connectors</title>
+        </rect>
+        <rect y="590" width="610" height="20" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
+                <title>wall</title>
+        </rect>
+        <rect width="20" height="610" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);" x="590">
+                <title>wall</title>
+        </rect>
+        <rect width="20" height="610" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);" x="-10">
+                <title>wall</title>
+        </rect>
+        <rect width="580" height="61.5" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="10">
+                <title>window</title>
+        </rect>
+        <rect x="370.3" y="226.5" width="157.3" height="138.6" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+                <title>obstacle</title>
+        </rect>
+        <rect x="70.3" y="226.5" width="157.3" height="138.6" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+                <title>obstacle</title>
+        </rect>
+        <path d="M 591.4 214 L 532.839 214 L 511.25 191.275 L 470.5 177 L 431.4 177 L 395.728 188.921 L 365.6 214 L 235 214 L 204.872 188.921 L 169.2 177 L 130.1 177 L 89.35 191.275 L 67.761 214 L 9.2 214 L 9.2 140.6 L 591.4 140.6 L 591.4 214 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+                <title>obstacle</title>
+        </path>
+        <rect width="580" height="61.5" style="fill: rgb(255, 0, 0); fill-opacity: 0.5; pointer-events: auto;" x="10" y="0.000001">
+                <title>wall window</title>
+        </rect>
+        <rect y="590.000001" width="610" height="20" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;">
+                <title>wall</title>
+        </rect>
+        <rect y="-9.999999" width="20" height="620" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="-10">
+                <title>wall</title>
+        </rect>
+        <rect y="-9.999999" width="20" height="620" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="590">
+                <title>wall</title>
+        </rect>
+</svg>

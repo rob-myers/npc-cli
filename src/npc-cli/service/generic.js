@@ -1,5 +1,4 @@
 import prettyCompact from "json-stringify-pretty-compact";
-import { EventEmitter } from "eventemitter3"; // align with pixi.js
 import safeStableStringify from "safe-stable-stringify";
 
 /**
@@ -137,14 +136,20 @@ export function equals(x, y, depth = 0) {
 }
 
 /**
- * https://stackoverflow.com/a/15710692/2917822
- * @param {string} s
+ * Returns a hash code from a string
+ * @param  {string} str The string to hash.
+ * @return {number} A 32bit integer
+ * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+ * @see https://stackoverflow.com/a/8831937/2917822
  */
-export function hashText(s) {
-  return s.split("").reduce(function (a, b) {
-    a = (a << 5) - a + b.charCodeAt(0);
-    return a & a;
-  }, 0);
+export function hashText(str) {
+  let hash = 0;
+  for (let i = 0, len = str.length; i < len; i++) {
+    let chr = str.charCodeAt(i);
+    hash = (hash << 5) - hash + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash;
 }
 
 /**
@@ -251,6 +256,23 @@ export function generateSelector(selector, extraArgs) {
 }
 
 /**
+ * Assumes items have a property named `key`.
+ * @template {string | number} Key
+ * @template {{ key: Key }} Item
+ * @param {Item[]} items
+ * @returns {Record<Key, Item>}
+ */
+export function keyedItemsToLookup(items) {
+  return items.reduce(
+    (agg, item) => ({
+      ...agg,
+      [item.key]: item,
+    }),
+    /** @type {Record<Key, Item>} */ ({})
+  );
+}
+
+/**
  * @template {string | number} K
  * @param {Partial<Record<K, any>> | Record<K, any>} record
  * Typed `Object.keys`, usually as finitely many string literals.
@@ -265,6 +287,10 @@ export function keys(record) {
  */
 export function keysDeep(obj) {
   return Array.from(deepKeys(obj));
+}
+
+export function isDevelopment() {
+  return process.env.NODE_ENV !== "production";
 }
 
 /**
@@ -291,6 +317,7 @@ export function mapValues(input, transform) {
 export function parseJsArg(input) {
   try {
     if (input === "") return input;
+    // eslint-disable-next-line no-new-func
     return Function(`return ${input}`)();
   } catch (e) {
     return input;
@@ -371,10 +398,10 @@ export function safeStringify(input) {
     safeStableStringify(input, (_k, v) => {
       if (v instanceof HTMLElement || v instanceof Animation) return `'[${v.constructor.name}]'`;
       if (typeof v === "function") return zealousTrim(`${v}`);
-      if (v instanceof EventEmitter) {
-        // Fix pixi.js
-        return `'[${v.constructor?.name ?? "EventEmitter"}]'`;
-      }
+      // if (v instanceof EventEmitter) {
+      //   // Fix pixi.js
+      //   return `'[${v.constructor?.name ?? "EventEmitter"}]'`;
+      // }
       return v;
     })
   );
@@ -476,6 +503,42 @@ export function visibleUnicodeLength(input) {
     ) / split.length
   );
 }
+
+//#region logging
+
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
+export const debug = (function () {
+  return Function.prototype.bind.call(console.debug, console, "\x1b[34mDEBUG\x1b[0m");
+})();
+
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
+export const error = (function () {
+  return Function.prototype.bind.call(console.error, console, "\x1b[31mERROR\x1b[0m");
+})();
+
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
+export const info = (function () {
+  return Function.prototype.bind.call(console.info, console, "\x1b[34mINFO\x1b[0m");
+})();
+
+/**
+ * https://stackoverflow.com/a/26078207/2917822
+ * @type {(...args: any[]) => void}
+ */
+export const warn = (function () {
+  return Function.prototype.bind.call(console.warn, console, "\x1b[33mWARN\x1b[0m");
+})();
+
+//#endregion
 
 /**
  * @template {{ key: K}} Value

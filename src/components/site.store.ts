@@ -1,7 +1,21 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { breakpoint, nav } from "src/components/const";
-import { safeJsonParse, tryLocalStorageGet, tryLocalStorageSet } from "src/npc-cli/service/generic";
+import { focusManager } from "@tanstack/react-query";
+
+import {
+  safeJsonParse,
+  tryLocalStorageGet,
+  tryLocalStorageSet,
+  info,
+  isDevelopment,
+} from "src/npc-cli/service/generic";
+// 🔔 avoid unnecessary HMR: do not reference view-related consts
+import {
+  ASSETS_META_JSON_FILENAME,
+  DEV_EXPRESS_WEBSOCKET_PORT,
+  GEOMORPHS_JSON_FILENAME,
+} from "src/scripts/const";
+import { queryClient } from "src/npc-cli/service/query-client";
 
 const useStore = create<State>()(
   devtools((set, get) => ({
@@ -14,11 +28,6 @@ const useStore = create<State>()(
     viewOpen: false,
 
     api: {
-      getNavWidth() {
-        const baseFontPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        return (get().navOpen ? nav.expandedRem : nav.collapsedRem) * baseFontPx;
-      },
-
       initiate({ allMdx: { edges } }) {
         const articlesMeta = {} as State["articlesMeta"];
         for (const {
@@ -31,11 +40,30 @@ const useStore = create<State>()(
         set({ articlesMeta }, undefined, "initiate");
       },
 
-      async initiateBrowser() {
-        window.addEventListener("message", (message) => {
+      initiateBrowser() {
+        const cleanUps = [] as (() => void)[];
+
+        if (isDevelopment()) {
+          get().api.connectDevEventsWebsocket();
+
+          /**
+           * In development refetch on refocus can automate changes.
+           * In production, see https://github.com/TanStack/query/pull/4805.
+           */
+          focusManager.setEventListener((handleFocus) => {
+            if (typeof window !== "undefined" && "addEventListener" in window) {
+              window.addEventListener("focus", handleFocus as (e?: FocusEvent) => void, false);
+              return () => {
+                window.removeEventListener("focus", handleFocus as (e?: FocusEvent) => void);
+              };
+            }
+          });
+        }
+
+        function onGiscusMessage(message: MessageEvent) {
           if (message.origin === "https://giscus.app" && message.data.giscus?.discussion) {
             const discussion = message.data.giscus.discussion as GiscusDiscussionMeta;
-            console.log("giscus meta", discussion);
+            info("giscus meta", discussion);
             const { articleKey } = get();
             if (articleKey) {
               set(
@@ -48,7 +76,11 @@ const useStore = create<State>()(
               return true;
             }
           }
-        });
+        }
+
+        window.addEventListener("message", onGiscusMessage);
+        cleanUps.push(() => window.removeEventListener("message", onGiscusMessage));
+
         set(() => ({ browserLoaded: true }), undefined, "browser-load");
 
         const topLevel: Pick<State, "navOpen" | "viewOpen"> =
@@ -56,15 +88,42 @@ const useStore = create<State>()(
         if (topLevel.viewOpen) {
           set(() => ({ viewOpen: topLevel.viewOpen }));
         }
-        if (topLevel.navOpen && !get().api.isSmall()) {
+        if (topLevel.navOpen) {
           set(() => ({ navOpen: topLevel.navOpen }));
         }
+
+        return () => cleanUps.forEach((cleanup) => cleanup());
       },
 
-      isSmall() {
-        return (
-          typeof window !== "undefined" && window.matchMedia(`(max-width: ${breakpoint})`).matches
-        );
+      connectDevEventsWebsocket() {
+        /**
+         * Dev-only event handling:
+         * - trigger component refresh on file change
+         */
+        const url = `ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`;
+        const wsClient = new WebSocket(url);
+        wsClient.onmessage = (e) => {
+          info(`${url} message:`, e.data);
+          setTimeout(() => {
+            // timeout seems necessary, probably due to gatsby handling of static/assets
+            queryClient.refetchQueries({
+              predicate({ queryKey: [queryKey] }) {
+                return (
+                  GEOMORPHS_JSON_FILENAME === queryKey ||
+                  ASSETS_META_JSON_FILENAME.includes === queryKey
+                );
+              },
+            });
+          }, 300);
+        };
+
+        wsClient.onopen = (e) => {
+          info(`${url} connected`);
+        };
+        wsClient.onclose = (e) => {
+          info(`${url} closed: reconnecting...`);
+          setTimeout(() => get().api.connectDevEventsWebsocket(), 300);
+        };
       },
 
       isViewClosed() {
@@ -116,12 +175,10 @@ export type State = {
 
   api: {
     // clickToClipboard(e: React.MouseEvent): Promise<void>;
-    /** Navigation bar width in pixels */
-    getNavWidth(): number;
     initiate(allFm: AllFrontMatter): void;
-    initiateBrowser(): Promise<void>;
-    isSmall(): boolean;
+    initiateBrowser(): () => void;
     isViewClosed(): boolean;
+    connectDevEventsWebsocket(): void;
     onTerminate(): void;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;
