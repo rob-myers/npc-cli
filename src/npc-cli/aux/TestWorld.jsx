@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { assertNonNull, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
+import { polysToXZGeometry } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import TestWorldCanvas from "./TestWorldCanvas";
@@ -37,6 +38,7 @@ export default function TestWorld(props) {
             ctxt: assertNonNull(canvas.getContext("2d")),
             layout,
             tex: new THREE.CanvasTexture(canvas),
+            debugNavPoly: polysToXZGeometry(layout.navPolys),
           };
         }
       },
@@ -105,5 +107,6 @@ export default function TestWorld(props) {
  * @property {HTMLCanvasElement} canvas
  * @property {CanvasRenderingContext2D} ctxt
  * @property {Geomorph.Layout} layout
+ * @property {THREE.BufferGeometry} debugNavPoly
  * @property {THREE.CanvasTexture} tex
  */

@@ -55,11 +55,8 @@ export default function TestWorldScene(props) {
         ctxt.translate(-pngRect.x, -pngRect.y);
 
         // draw hull doors
-        drawPolygons(
-          ctxt,
-          doors.flatMap((x) => (x.meta.hull ? x.poly : [])),
-          ["white", "#000", 2]
-        );
+        const hullPolys = doors.flatMap((x) => (x.meta.hull ? x.poly : []));
+        drawPolygons(ctxt, hullPolys, ["white", "#000", 2]);
 
         // 🚧 debug draw rooms
         // drawPolygons(ctxt, rooms, [null, "green", 0]);
@@ -92,9 +89,8 @@ export default function TestWorldScene(props) {
   React.useEffect(() => {
     keys(api.gmData).forEach((gmKey) => {
       textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
-        const img = /** @type {HTMLImageElement} */ (tex.source.data);
-        state.drawGeomorph(gmKey, img);
-        assertDefined(api.gmData[gmKey].tex).needsUpdate = true;
+        state.drawGeomorph(gmKey, tex.source.data);
+        api.gmData[gmKey].tex.needsUpdate = true;
         update();
       });
     });
@@ -108,11 +104,16 @@ export default function TestWorldScene(props) {
   return (
     <>
       {api.gms.map((gm, gmId) => (
-        <group key={gm.transform.toString()} onUpdate={(self) => self.applyMatrix4(gm.mat4)}>
+        <group
+          key={gm.transform.toString()}
+          onUpdate={(self) => self.applyMatrix4(gm.mat4)}
+          scale={[worldScale, 1, worldScale]}
+          // position={[gm.pngRect.x * worldScale, 0, gm.pngRect.y * worldScale]}
+        >
           <mesh
-            scale={[gm.pngRect.width * worldScale, 1, gm.pngRect.height * worldScale]}
             geometry={quadGeometryXZ}
-            position={[gm.pngRect.x * worldScale, 0, gm.pngRect.y * worldScale]}
+            scale={[gm.pngRect.width, 1, gm.pngRect.height]}
+            position={[gm.pngRect.x, 0, gm.pngRect.y]}
           >
             <meshBasicMaterial
               side={THREE.DoubleSide}
@@ -120,6 +121,9 @@ export default function TestWorldScene(props) {
               map={api.gmData[gm.key].tex}
               depthWrite={false} // fix z-fighting
             />
+          </mesh>
+          <mesh geometry={api.gmData[gm.key].debugNavPoly} position={[0, 0.001, 0]}>
+            <meshStandardMaterial side={THREE.DoubleSide} color="green" wireframe />
           </mesh>
         </group>
       ))}
