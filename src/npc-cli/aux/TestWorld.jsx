@@ -2,14 +2,11 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
-// import { NavMeshHelper, threeToSoloNavMesh } from "@recast-navigation/three";
-// import { init as initRecastNav } from "recast-navigation";
-// import { generateSoloNavMesh } from "recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { assertNonNull, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
-import { polysToAttribs, polysToXZGeometry, tmpBufferGeom1 } from "../service/three";
+import { polysToXZGeometry, tmpBufferGeom1 } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import TestWorldCanvas from "./TestWorldCanvas";

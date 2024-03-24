@@ -65,3 +65,8 @@ export function polysToAttribs(polys) {
     uvs,
   };
 }
+
+export const wireFrameMaterial = new THREE.MeshStandardMaterial({
+  wireframe: true,
+  color: "green",
+});

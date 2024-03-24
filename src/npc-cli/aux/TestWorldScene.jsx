@@ -9,7 +9,12 @@ import { worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { polysToAttribs, quadGeometryXY, quadGeometryXZ } from "../service/three";
+import {
+  polysToXZGeometry,
+  quadGeometryXY,
+  quadGeometryXZ,
+  wireFrameMaterial,
+} from "../service/three";
 import { Mat, Vect } from "../geom";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
@@ -103,16 +108,20 @@ export default function TestWorldScene(props) {
   }, [api.geomorphs, api.map]);
 
   React.useEffect(() => {
-    const meshes = /** @type {THREE.Mesh[]} */ ([]);
-    state.rootGroup.traverse(
-      (x) => x.name === "debugNavPoly" && x instanceof THREE.Mesh && meshes.push(x)
-    );
+    // 🚧 break up this computation
+    const meshes = api.gms.map(({ navPolys, mat4, transform: [a, b, c, d] }, gmId) => {
+      const determinant = a * d - b * c;
+      const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
+      mesh.scale.set(worldScale, 1, worldScale);
+      mesh.applyMatrix4(mat4);
+      return mesh;
+    });
 
     initRecastNav().then(() => {
-      const { navMesh, success } = threeToSoloNavMesh(meshes, {});
+      const { navMesh, success } = threeToSoloNavMesh(meshes, { cs: 0.1 });
       console.log({ numMeshes: meshes.length, navMesh, success });
       if (navMesh) {
-        const navMeshHelper = new NavMeshHelper({ navMesh });
+        const navMeshHelper = new NavMeshHelper({ navMesh, navMeshMaterial: undefined });
         navMeshHelper.name = "navMeshHelper";
         navMeshHelper.position.y = 0.001;
         state.rootGroup.getObjectByName("navMeshHelper")?.removeFromParent();
@@ -120,8 +129,9 @@ export default function TestWorldScene(props) {
       } else {
         error("navMesh build failed");
       }
+      meshes.forEach((x) => x.geometry.dispose());
     });
-  }, [api.geomorphs, api.map.key]);
+  }, [api.geomorphs]);
 
   const update = useUpdate();
 
@@ -152,8 +162,7 @@ export default function TestWorldScene(props) {
             name="debugNavPoly"
             geometry={api.gmData[gm.key].debugNavPoly}
             position={[0, 0.001, 0]}
-            visible
-            // visible={false}
+            visible={false}
           >
             <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe />
           </mesh>

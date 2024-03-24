@@ -353,12 +353,12 @@
     - ✅ try construct BufferGeometry as OBJ and import into
       https://navmesh.isaacmason.com/
     - ℹ️ normals were geting flipped
-  - 🚧 fix threeToSoloNavMesh for `demo-map-1`
+  - ✅ fix threeToSoloNavMesh for `demo-map-1`
     - ℹ️ normals getting flipped again
     - ℹ️ seems need BufferGeometry per instance (bad)
     - ❌ try non-three API: recast-navigation/generators seems to block main thread
-    - 🚧 try @recast-navigation/three in `TestWorld` i.e. BufferGeometry per instance, then dispose
-  - 🚧 try threeToTiledNavMesh
+    - ✅ try @recast-navigation/three with BufferGeometry per instance, then dispose
+  - try threeToTiledNavMesh
   - try threeToTileCache
   - 🚧 test against `small-map-1` + `demo-map-1`
 
