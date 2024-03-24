@@ -345,6 +345,9 @@
   - ℹ️ transform-box `fill-box` issue
 
 - 🚧 start using recast/detour
+  - https://github.com/isaac-mason/recast-navigation-js/tree/main/packages/recast-navigation-three
+  - generate navPolys as three.js Mesh
+  - 🚧 start with simpler map `small-map-1` i.e. single 301
 
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"

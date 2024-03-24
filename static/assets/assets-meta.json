@@ -29,7 +29,8 @@
     "stateroom--020--2x3": {"outputHash": -2008784182},
     "stateroom--035--2x3": {"outputHash": 1257506110},
     "stateroom--036--2x4": {"outputHash": 1888669408},
-    "demo-map-1": {"outputHash": 606505542}
+    "demo-map-1": {"outputHash": 606505542},
+    "small-map-1": {"outputHash": 2120678041}
   },
   "symbols": {
     "101--hull": {
@@ -7044,6 +7045,9 @@
           "transform": [-1, 0, 0, -1, 2400, 1800]
         }
       ]
+    },
+    "small-map-1": {
+      "gms": [{"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0, 0]}]
     }
   }
 }

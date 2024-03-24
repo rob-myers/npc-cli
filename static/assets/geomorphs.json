@@ -23,6 +23,9 @@
           "transform": [-1, 0, 0, -1, 2400, 1800]
         }
       ]
+    },
+    "small-map-1": {
+      "gms": [{"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0, 0]}]
     }
   },
   "layout": {
