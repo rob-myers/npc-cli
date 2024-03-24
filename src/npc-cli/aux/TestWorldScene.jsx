@@ -119,7 +119,7 @@ export default function TestWorldScene(props) {
         error("navMesh build failed");
       }
     });
-  }, []);
+  }, [api.map.key]);
 
   const update = useUpdate();
 

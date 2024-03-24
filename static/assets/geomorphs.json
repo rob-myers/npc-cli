@@ -1,6 +1,7 @@
 {
   "map": {
     "demo-map-1": {
+      "key": "demo-map-1",
       "gms": [
         {"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0, 0]},
         {"gmKey": "g-101--multipurpose", "transform": [1, 0, 0, 1, 0, 600]},
@@ -25,6 +26,7 @@
       ]
     },
     "small-map-1": {
+      "key": "small-map-1",
       "gms": [{"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0, 0]}]
     }
   },

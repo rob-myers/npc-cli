@@ -112,6 +112,8 @@ declare namespace Geomorph {
   >;
 
   interface MapDef {
+    /** e.g. `demo-map-1` */
+    key: string;
     gms: {
       gmKey: GeomorphKey;
       /** Default `[1, 0, 0, 1, 0, 0]` */

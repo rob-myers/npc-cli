@@ -531,6 +531,7 @@ class GeomorphService {
     parser.end();
 
     return {
+      key: mapKey,
       gms,
     };
   }
