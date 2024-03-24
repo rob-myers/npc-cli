@@ -70,7 +70,7 @@ export default function TestWorld(props) {
       state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
       state.scene.doorsKey = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
     }
-  }, [geomorphs, state.map]);
+  }, [geomorphs, props.mapKey]);
 
   return (
     <TestWorldContext.Provider value={state}>

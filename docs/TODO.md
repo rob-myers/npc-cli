@@ -358,6 +358,7 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
+- ✅ changing props.mapKey should change map 
 - extend door/window connectors with correct roomIds
 - clarify handling of windows
 - try gradient fill shader for doors
