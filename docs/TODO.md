@@ -346,8 +346,15 @@
 
 - 🚧 start using recast/detour
   - https://github.com/isaac-mason/recast-navigation-js/tree/main/packages/recast-navigation-three
-  - ✅ start with simpler map `small-map-1` i.e. single 301
+  - ✅ create `small-map-1` i.e. single 301
   - ✅ generate navPolys as three.js Mesh (earcut triangulation)
+  - ✅ try threeToSoloNavMesh
+    - ℹ️ failing with single 301
+    - ✅ try construct BufferGeometry as OBJ and import into
+      https://navmesh.isaacmason.com/
+  - 🚧 try threeToTiledNavMesh
+  - try threeToTileCache
+  - 🚧 test against `small-map-1` + `demo-map-1`
 
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"

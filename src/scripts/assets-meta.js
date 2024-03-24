@@ -1,6 +1,8 @@
 /// <reference path="./deps.d.ts"/>
 
 /**
+ * Generates assets-meta.json and geomorphs.json.
+ * 
  * Usage:
  * ```sh
  * npm run assets-meta

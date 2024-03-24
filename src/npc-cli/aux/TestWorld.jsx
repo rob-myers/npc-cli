@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { assertNonNull, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
-import { polysToXZGeometry } from "../service/three";
+import { polysToXZGeometry, tmpBufferGeom1 } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import TestWorldCanvas from "./TestWorldCanvas";
@@ -23,24 +23,29 @@ export default function TestWorld(props) {
       map: /** @type {*} */ (null),
       gmData: /** @type {*} */ ({}),
       gms: [],
+      nav: {}, // 🚧
       scene: /** @type {*} */ ({}),
       view: /** @type {*} */ (null),
 
       ensureGmData(gmKey) {
-        const { geomorphs } = state;
-        if (!state.gmData[gmKey]) {
+        const layout = state.geomorphs.layout[gmKey];
+        let gmData = state.gmData[gmKey];
+        if (!gmData) {
           const canvas = document.createElement("canvas");
-          const layout = geomorphs.layout[gmKey];
           canvas.width = layout.pngRect.width;
           canvas.height = layout.pngRect.height;
-          state.gmData[gmKey] = {
+          gmData = state.gmData[gmKey] = {
             canvas,
             ctxt: assertNonNull(canvas.getContext("2d")),
             layout,
             tex: new THREE.CanvasTexture(canvas),
-            debugNavPoly: polysToXZGeometry(layout.navPolys),
+            debugNavPoly: tmpBufferGeom1,
           };
         }
+        gmData.layout = layout;
+        // 🔔 fix normals for recast/detour
+        gmData.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
+        return gmData;
       },
     })
   );
@@ -60,14 +65,9 @@ export default function TestWorld(props) {
     if (geomorphs) {
       state.geomorphs = geomorphs;
       state.map = geomorphs.map[props.mapKey ?? "demo-map-1"];
-
-      // 🚧 clean
-      state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) => {
-        state.ensureGmData(gmKey);
-        const layout = geomorphs.layout[gmKey];
-        state.gmData[gmKey].layout = layout; // update on HMR
-        return geomorphService.computeLayoutInstance(layout, gmId, transform);
-      });
+      state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
+        geomorphService.computeLayoutInstance(state.ensureGmData(gmKey).layout, gmId, transform)
+      );
 
       state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
       state.scene.doorsKey = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
@@ -99,7 +99,8 @@ export default function TestWorld(props) {
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureGmData
+ * @property {{}} nav
+ * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
  */
 
 /**

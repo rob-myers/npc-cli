@@ -20,11 +20,15 @@ quadGeometryXY.setAttribute("position", new THREE.BufferAttribute(xyVertices.sli
 quadGeometryXY.setAttribute("uv", new THREE.BufferAttribute(xyUvs.slice(), 2));
 quadGeometryXY.setIndex(xyIndices.slice());
 
+export const tmpBufferGeom1 = new THREE.BufferGeometry();
+
 /**
  * @param {Geom.Poly[]} polys
+ * @param {Object} opts
+ * @param {boolean} [opts.reverse] e.g. fix normals for recast/detour
  * @returns {THREE.BufferGeometry}
  */
-export function polysToXZGeometry(polys) {
+export function polysToXZGeometry(polys, { reverse = false } = {}) {
   const geometry = new THREE.BufferGeometry();
   const vertices = /** @type {number[]} */ ([]);
   const indices = /** @type {number[]} */ ([]);
@@ -33,11 +37,15 @@ export function polysToXZGeometry(polys) {
 
   for (const poly of polys) {
     const { tris, vs } = poly.fastTriangulate();
-    const { rect } = poly;
+    const rect = poly.rect;
     vertices.push(...vs.flatMap(({ x, y }) => [x, 0, y]));
     indices.push(...tris.flatMap((x) => x).map((x) => x + offset));
     uvs.push(...vs.flatMap(({ x, y }) => [(x - rect.x) / rect.width, (y - rect.y) / rect.height]));
     offset += vs.length;
+  }
+
+  if (reverse) {
+    indices.reverse();
   }
 
   geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices), 3));
