@@ -41,7 +41,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   
   info({
     changedSymbols: Object.keys(symbolsMeta).filter(key => symbolsMeta[key].outputHash !== prev?.meta[key]?.outputHash),
-    changedMaps: Object.keys(mapsMeta).filter(key => mapsMeta[key].outputHash !== prev?.meta[key].outputHash),
+    changedMaps: Object.keys(mapsMeta).filter(key => mapsMeta[key].outputHash !== prev?.meta[key]?.outputHash),
   });
   
   /** @type {Geomorph.AssetsJson} */
