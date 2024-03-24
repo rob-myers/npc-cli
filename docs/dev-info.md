@@ -1,6 +1,19 @@
 
 ## Bits and pieces
 
+### Export to OBJ in Browser
+
+```js
+import { OBJExporter } from "three-stdlib";
+const objContents = new OBJExporter().parse(
+  new THREE.Group().add(...meshes.map((x) => x.clone()))
+);
+// can copy-paste into foo.obj
+// can import into https://navmesh.isaacmason.com/
+// can import into https://threejs.org/editor/
+console.log(objContents);
+```
+
 ### Hush npm
 
 ```sh
