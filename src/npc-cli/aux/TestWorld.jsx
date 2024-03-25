@@ -74,6 +74,12 @@ export default function TestWorld(props) {
     }
   }, [geomorphs, props.mapKey]);
 
+  React.useEffect(() => {
+    const url = new URL("./test-recast.worker", import.meta.url);
+    const worker = new Worker(url, { type: "module" });
+    return () => void worker.terminate();
+  }, [isDevelopment() && geomorphs]); // Basic worker HMR i.e. reload on focus
+
   return (
     <TestWorldContext.Provider value={state}>
       <TestWorldCanvas disabled={props.disabled} stats>

@@ -4,7 +4,6 @@ import { useLoader } from "@react-three/fiber";
 import { NavMeshHelper, threeToSoloNavMesh } from "@recast-navigation/three";
 import { init as initRecastNav } from "recast-navigation";
 
-import { testWorldSceneWorker } from "./create-worker";
 import { assertDefined, error, hashText, keys, warn } from "../service/generic";
 import { worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";

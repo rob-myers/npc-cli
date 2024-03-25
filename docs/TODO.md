@@ -377,7 +377,10 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
-- implement web worker HMR ?
+- ✅ get web worker HMR "working"
+  - ❌ https://github.com/webpack/webpack/issues/14722
+  - ℹ️ gatsby does not support "webpack multi-compiler"
+  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
 - ✅ changing props.mapKey should change map 
 - extend door/window connectors with correct roomIds
 - clarify handling of windows
