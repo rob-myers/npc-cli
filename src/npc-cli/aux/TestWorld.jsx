@@ -75,8 +75,11 @@ export default function TestWorld(props) {
   }, [geomorphs, props.mapKey]);
 
   React.useEffect(() => {
-    const url = new URL("./test-recast.worker", import.meta.url);
-    const worker = new Worker(url, { type: "module" });
+    // 🔔 strange behaviour when inlined `new URL`.
+    const worker = new Worker(new URL("./test-recast.worker", import.meta.url), {
+      type: "module",
+    });
+    worker.postMessage({ mapKey: "demo-map-1" });
     return () => void worker.terminate();
   }, [isDevelopment() && geomorphs]); // Basic worker HMR i.e. reload on focus
 

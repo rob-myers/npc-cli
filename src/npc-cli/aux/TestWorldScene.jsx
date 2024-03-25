@@ -107,8 +107,8 @@ export default function TestWorldScene(props) {
     state.sceneHash = hashText(JSON.stringify(api.geomorphs));
   }, [api.geomorphs, api.map]);
 
+  // 🚧 move to web worker
   React.useEffect(() => {
-    // 🚧 try move to web worker
     const meshes = api.gms.map(({ navPolys, mat4, transform: [a, b, c, d] }, gmId) => {
       const determinant = a * d - b * c;
       const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
@@ -118,10 +118,12 @@ export default function TestWorldScene(props) {
     });
 
     initRecastNav().then(() => {
-      const { navMesh, success } = threeToSoloNavMesh(meshes, { cs: 0.1 });
+      const { navMesh, success } = threeToSoloNavMesh(meshes, {
+        // cs: 0.1
+      });
       console.log({ numMeshes: meshes.length, navMesh, success });
       if (navMesh) {
-        const navMeshHelper = new NavMeshHelper({ navMesh, navMeshMaterial: undefined });
+        const navMeshHelper = new NavMeshHelper({ navMesh, navMeshMaterial: wireFrameMaterial });
         navMeshHelper.name = "navMeshHelper";
         navMeshHelper.position.y = 0.001;
         state.rootGroup.getObjectByName("navMeshHelper")?.removeFromParent();

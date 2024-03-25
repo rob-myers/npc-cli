@@ -360,8 +360,8 @@
     - ✅ try @recast-navigation/three with BufferGeometry per instance, then dispose
   - 🚧 move to web worker
     - ✅ create web worker test-world-scene.worker.jsx
-    - can send messages from TestWorldScene to worker e.g. `{ mapKey }`
-    - worker initializes recast/detour wasm
+    - ✅ can send messages from TestWorld to worker e.g. `{ mapKey }`
+    - 🚧 worker initializes recast/detour wasm
     - worker fetches geomorphs
     - worker constructs threeToSoloNavMesh
   - try threeToTiledNavMesh
