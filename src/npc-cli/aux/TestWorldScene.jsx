@@ -4,6 +4,7 @@ import { useLoader } from "@react-three/fiber";
 import { NavMeshHelper, threeToSoloNavMesh } from "@recast-navigation/three";
 import { init as initRecastNav } from "recast-navigation";
 
+import { testWorldSceneWorker } from "./create-worker";
 import { assertDefined, error, hashText, keys, warn } from "../service/generic";
 import { worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
@@ -108,7 +109,7 @@ export default function TestWorldScene(props) {
   }, [api.geomorphs, api.map]);
 
   React.useEffect(() => {
-    // 🚧 break up this computation
+    // 🚧 try move to web worker
     const meshes = api.gms.map(({ navPolys, mat4, transform: [a, b, c, d] }, gmId) => {
       const determinant = a * d - b * c;
       const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));

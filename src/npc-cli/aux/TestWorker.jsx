@@ -4,13 +4,12 @@ import { css, cx } from "@emotion/css";
 
 // import { Canvas } from "@react-three/fiber";
 // import Scene from "./R3FWorkerDemoScene";
-import { Canvas } from '@react-three/offscreen';
+import { Canvas } from "@react-three/offscreen";
 import useStateRef from "../hooks/use-state-ref";
 import debounce from "debounce";
 import useUpdate from "../hooks/use-update";
-import { worker } from "./create-worker";
-const Scene = React.lazy(() => import('./TestWorkerScene'));
-
+import { testWorkerWorker } from "./create-worker";
+const Scene = React.lazy(() => import("./TestWorkerScene"));
 
 // /** @param {MessageEvent} e  */
 // worker.addEventListener('message', e => {
@@ -18,10 +17,9 @@ const Scene = React.lazy(() => import('./TestWorkerScene'));
 // });
 
 /**
- * @param {Props} props 
+ * @param {Props} props
  */
 export default function TestWorker(props) {
-
   const state = useStateRef(() => ({
     resizing: false,
     finishedResizing: debounce(() => {
@@ -33,8 +31,8 @@ export default function TestWorker(props) {
   const [measureRef, rect] = useMeasure();
 
   React.useMemo(() => {
-    worker.postMessage({
-      type: 'resize',
+    testWorkerWorker.postMessage({
+      type: "resize",
       payload: {
         width: rect.width,
         height: rect.height,
@@ -54,10 +52,10 @@ export default function TestWorker(props) {
       className={cx(testWorkerCss, { hidden: props.disabled || state.resizing })}
     >
       <Canvas
-        frameloop={props.disabled ? 'never' : 'demand'}
+        frameloop={props.disabled ? "never" : "demand"}
         resize={{ debounce: 100, scroll: false }}
         fallback={<Scene testProp="hello, world! (fallback)" />}
-        worker={worker}
+        worker={testWorkerWorker}
         sceneProps={{ testProp: "hello, world!!" }}
       />
     </div>

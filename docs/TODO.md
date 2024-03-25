@@ -358,6 +358,12 @@
     - ℹ️ seems need BufferGeometry per instance (bad)
     - ❌ try non-three API: recast-navigation/generators seems to block main thread
     - ✅ try @recast-navigation/three with BufferGeometry per instance, then dispose
+  - 🚧 move to web worker
+    - ✅ create web worker test-world-scene.worker.jsx
+    - can send messages from TestWorldScene to worker e.g. `{ mapKey }`
+    - worker initializes recast/detour wasm
+    - worker fetches geomorphs
+    - worker constructs threeToSoloNavMesh
   - try threeToTiledNavMesh
   - try threeToTileCache
   - 🚧 test against `small-map-1` + `demo-map-1`
@@ -371,6 +377,7 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
+- implement web worker HMR ?
 - ✅ changing props.mapKey should change map 
 - extend door/window connectors with correct roomIds
 - clarify handling of windows
