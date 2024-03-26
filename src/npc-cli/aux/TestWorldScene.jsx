@@ -138,7 +138,7 @@ export default function TestWorldScene(props) {
             position={[0, 0.001, 0]}
             visible={false}
           >
-            <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe />
+            <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe={true} />
           </mesh>
         </group>
       ))}

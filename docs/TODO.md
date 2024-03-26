@@ -370,9 +370,11 @@
       - already provides state as ctxt.view
     - ✅ main thread shows navMesh via helper
     - ✅ remove orig approach in TestWorldScene
-  - try threeToTiledNavMesh
+  - ✅ try threeToTiledNavMesh
+  - ✅ fix disconnect at a 301 hull door
+    - bridge--042 has many transform-box: fill-box
   - try threeToTileCache
-  - 🚧 test against `small-map-1` + `demo-map-1`
+  - ✅ test against `small-map-1` + `demo-map-1`
 
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"

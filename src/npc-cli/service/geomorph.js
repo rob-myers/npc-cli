@@ -138,7 +138,7 @@ class GeomorphService {
     const navPolyWithDoors = Poly.cutOut(
       [
         ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
-        ...obstacles.flatMap((x) => geom.createOutset(x.fixOrientation(), obstacleOutset)),
+        ...obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
       ],
       hullOutline
     ).map((x) => x.cleanFinalReps().precision(precision));
