@@ -361,9 +361,14 @@
   - 🚧 move to web worker
     - ✅ create web worker test-world-scene.worker.jsx
     - ✅ can send messages from TestWorld to worker e.g. `{ mapKey }`
-    - 🚧 worker initializes recast/detour wasm
-    - worker fetches geomorphs
-    - worker constructs threeToSoloNavMesh
+    - ✅ worker fetches geomorphs.json initially
+    - ✅ worker creates initial meshes
+    - ✅ worker initializes recast/detour wasm
+    - ✅ worker constructs threeToSoloNavMesh
+    - ✅ worker serializes and main thread deserializes
+    - 🚧 TestWorldCanvas provides ref (State) to parent TestWorld
+    - 🚧 main thread shows navMesh via helper
+    - remove orig approach in TestWorldScene
   - try threeToTiledNavMesh
   - try threeToTileCache
   - 🚧 test against `small-map-1` + `demo-map-1`
@@ -377,6 +382,9 @@
   - click to move
   - extract code, removing e.g. ray-cast
 
+- ✅ type worker.postMessage in main thread and worker
+  - ✅ main thread
+  - ✅ worker
 - ✅ get web worker HMR "working"
   - ❌ https://github.com/webpack/webpack/issues/14722
   - ℹ️ gatsby does not support "webpack multi-compiler"

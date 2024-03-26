@@ -21,12 +21,18 @@ export default function TestWorldCanvas(props) {
       controls: /** @type {*} */ (null),
       menuEl: /** @type {*} */ (null),
       rootEl: /** @type {*} */ (null),
+      rootState: /** @type {*} */ (null),
       down: undefined,
+
       canvasRef(canvasEl) {
         if (canvasEl && !state.canvasEl) {
           state.canvasEl = canvasEl;
           state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
         }
+      },
+      onCreated(rootState) {
+        state.rootState = rootState;
+        update(); // show stats
       },
     })
   );
@@ -92,7 +98,8 @@ export default function TestWorldCanvas(props) {
               screenPoint: { x: e.offsetX, y: e.offsetY },
             });
         }}
-        onCreated={update} // show stats
+        //
+        onCreated={state.onCreated}
       >
         {props.stats && state.rootEl && (
           <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
@@ -171,8 +178,10 @@ export default function TestWorldCanvas(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {HTMLDivElement} menuEl
  * @property {HTMLDivElement} rootEl
+ * @property {import('@react-three/fiber').RootState} rootState
  * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; }} [down]
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
+ * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  */
 
 const canvasCss = css`

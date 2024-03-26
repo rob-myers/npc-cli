@@ -2,9 +2,10 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
+import { importNavMesh, init as initRecastNav } from "recast-navigation";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
-import { assertNonNull, isDevelopment } from "../service/generic";
+import { assertNonNull, info, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry, tmpBufferGeom1 } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
@@ -76,12 +77,24 @@ export default function TestWorld(props) {
 
   React.useEffect(() => {
     // 🔔 strange behaviour when inlined `new URL`.
+    // 🔔 assume worker already listening for events
+    /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
     const worker = new Worker(new URL("./test-recast.worker", import.meta.url), {
       type: "module",
     });
-    worker.postMessage({ mapKey: "demo-map-1" });
+    worker.addEventListener("message", async (e) => {
+      const msg = e.data;
+      info("main thread received message", msg);
+      if (msg.type === "nav-mesh-response") {
+        await initRecastNav();
+        const { navMesh } = importNavMesh(msg.exportedNavMesh);
+        info("deserialized navMesh", navMesh);
+        // 🚧 add navMesh helper to scene
+      }
+    });
+    worker.postMessage({ type: "request-nav-mesh", mapKey: "demo-map-1" });
     return () => void worker.terminate();
-  }, [isDevelopment() && geomorphs]); // Basic worker HMR i.e. reload on focus
+  }, [geomorphs]); // In development Provides basic worker HMR i.e. reload on focus
 
   return (
     <TestWorldContext.Provider value={state}>
