@@ -3,11 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
 import { importNavMesh, init as initRecastNav } from "recast-navigation";
+import { NavMeshHelper } from "@recast-navigation/three";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { assertNonNull, info, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
-import { polysToXZGeometry, tmpBufferGeom1 } from "../service/three";
+import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import TestWorldCanvas from "./TestWorldCanvas";
@@ -25,8 +26,9 @@ export default function TestWorld(props) {
       gmData: /** @type {*} */ ({}),
       gms: [],
       nav: {}, // 🚧
-      scene: /** @type {*} */ ({}),
-      view: /** @type {*} */ (null),
+
+      view: /** @type {*} */ (null), // TestWorldCanvas state
+      scene: /** @type {*} */ ({}), // TestWorldScene state
 
       ensureGmData(gmKey) {
         const layout = state.geomorphs.layout[gmKey];
@@ -88,8 +90,19 @@ export default function TestWorld(props) {
       if (msg.type === "nav-mesh-response") {
         await initRecastNav();
         const { navMesh } = importNavMesh(msg.exportedNavMesh);
-        info("deserialized navMesh", navMesh);
-        // 🚧 add navMesh helper to scene
+        // info("deserialized navMesh", navMesh);
+
+        // add navMesh helper to scene
+        const threeScene = state.view.rootState.scene;
+        const navMeshHelper = new NavMeshHelper({
+          navMesh,
+          navMeshMaterial: wireFrameMaterial,
+        });
+        navMeshHelper.name = "NavMeshHelper";
+        navMeshHelper.position.y = 0.01;
+        threeScene.getObjectByName(navMeshHelper.name)?.removeFromParent();
+        threeScene.add(navMeshHelper);
+        // console.log({ threeScene });
       }
     });
     worker.postMessage({ type: "request-nav-mesh", mapKey: "demo-map-1" });

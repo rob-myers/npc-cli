@@ -107,34 +107,6 @@ export default function TestWorldScene(props) {
     state.sceneHash = hashText(JSON.stringify(api.geomorphs));
   }, [api.geomorphs, api.map]);
 
-  // 🚧 move to web worker
-  // React.useEffect(() => {
-  //   const meshes = api.gms.map(({ navPolys, mat4, transform: [a, b, c, d] }, gmId) => {
-  //     const determinant = a * d - b * c;
-  //     const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
-  //     mesh.scale.set(worldScale, 1, worldScale);
-  //     mesh.applyMatrix4(mat4);
-  //     return mesh;
-  //   });
-
-  //   initRecastNav().then(() => {
-  //     const { navMesh, success } = threeToSoloNavMesh(meshes, {
-  //       // cs: 0.1
-  //     });
-  //     console.log({ numMeshes: meshes.length, navMesh, success });
-  //     if (navMesh) {
-  //       const navMeshHelper = new NavMeshHelper({ navMesh, navMeshMaterial: wireFrameMaterial });
-  //       navMeshHelper.name = "navMeshHelper";
-  //       navMeshHelper.position.y = 0.001;
-  //       state.rootGroup.getObjectByName("navMeshHelper")?.removeFromParent();
-  //       state.rootGroup.add(navMeshHelper);
-  //     } else {
-  //       error("navMesh build failed");
-  //     }
-  //     meshes.forEach((x) => x.geometry.dispose());
-  //   });
-  // }, [api.geomorphs]);
-
   const update = useUpdate();
 
   // const testUvTex = useLoader(THREE.TextureLoader, "/assets/debug/test-uv-texture.png");

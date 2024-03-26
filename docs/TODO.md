@@ -358,7 +358,7 @@
     - ℹ️ seems need BufferGeometry per instance (bad)
     - ❌ try non-three API: recast-navigation/generators seems to block main thread
     - ✅ try @recast-navigation/three with BufferGeometry per instance, then dispose
-  - 🚧 move to web worker
+  - ✅ move to web worker
     - ✅ create web worker test-world-scene.worker.jsx
     - ✅ can send messages from TestWorld to worker e.g. `{ mapKey }`
     - ✅ worker fetches geomorphs.json initially
@@ -366,9 +366,10 @@
     - ✅ worker initializes recast/detour wasm
     - ✅ worker constructs threeToSoloNavMesh
     - ✅ worker serializes and main thread deserializes
-    - 🚧 TestWorldCanvas provides ref (State) to parent TestWorld
-    - 🚧 main thread shows navMesh via helper
-    - remove orig approach in TestWorldScene
+    - ❌ TestWorldCanvas provides ref (State) to parent TestWorld
+      - already provides state as ctxt.view
+    - ✅ main thread shows navMesh via helper
+    - ✅ remove orig approach in TestWorldScene
   - try threeToTiledNavMesh
   - try threeToTileCache
   - 🚧 test against `small-map-1` + `demo-map-1`
