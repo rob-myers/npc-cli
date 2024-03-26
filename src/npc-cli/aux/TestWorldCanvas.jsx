@@ -8,7 +8,6 @@ import "./infinite-grid-helper.js";
 import { Vect } from "../geom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import useUpdate from "../hooks/use-update";
 import { Origin } from "./MiscThree";
 
 /**
@@ -32,7 +31,8 @@ export default function TestWorldCanvas(props) {
       },
       onCreated(rootState) {
         state.rootState = rootState;
-        update(); // show stats
+        api.threeReady = true;
+        api.update(); // e.g. show stats
       },
     })
   );
@@ -67,8 +67,6 @@ export default function TestWorldCanvas(props) {
     // 🚧 do not trigger on HMR
     state.controls?.setPolarAngle(Math.PI / 4); // Initialize view
   }, [state.controls]);
-
-  const update = useUpdate();
 
   return (
     <>

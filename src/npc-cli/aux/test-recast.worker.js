@@ -38,20 +38,18 @@ async function handleMessages(e) {
         return mesh;
       });
 
-      // 🚧
-      initRecastNav().then(() => {
-        const { navMesh, success } = threeToSoloNavMesh(meshes, {});
-        info({ numMeshes: meshes.length, navMesh, success });
+      await initRecastNav();
+      const { navMesh, success } = threeToSoloNavMesh(meshes, {});
+      info({ numMeshes: meshes.length, navMesh, success });
 
-        if (navMesh) {
-          const exportedNavMesh = exportNavMesh(navMesh);
-          /** @type {WW.MessageFromWorker} */
-          const msg = { type: "nav-mesh-response", mapKey, exportedNavMesh };
-          self.postMessage(msg);
-        } else {
-          error("failed to compute navMesh");
-        }
-      });
+      if (navMesh) {
+        const exportedNavMesh = exportNavMesh(navMesh);
+        /** @type {WW.MessageFromWorker} */
+        const msg = { type: "nav-mesh-response", mapKey, exportedNavMesh };
+        self.postMessage(msg);
+      } else {
+        error("failed to compute navMesh");
+      }
 
       meshes.forEach((mesh) => mesh.geometry.dispose());
       break;

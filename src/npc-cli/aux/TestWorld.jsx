@@ -10,6 +10,7 @@ import { assertNonNull, info, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
+import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import TestWorldCanvas from "./TestWorldCanvas";
 import TestWorldScene from "./TestWorldScene";
@@ -18,6 +19,8 @@ import TestWorldScene from "./TestWorldScene";
  * @param {Props} props
  */
 export default function TestWorld(props) {
+  const update = useUpdate();
+
   const state = useStateRef(
     /** @returns {State} */ () => ({
       events: new Subject(),
@@ -27,6 +30,7 @@ export default function TestWorld(props) {
       gms: [],
       nav: {}, // 🚧
 
+      threeReady: false,
       view: /** @type {*} */ (null), // TestWorldCanvas state
       scene: /** @type {*} */ ({}), // TestWorldScene state
 
@@ -50,6 +54,8 @@ export default function TestWorld(props) {
         gmData.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
         return gmData;
       },
+
+      update,
     })
   );
 
@@ -78,6 +84,9 @@ export default function TestWorld(props) {
   }, [geomorphs, props.mapKey]);
 
   React.useEffect(() => {
+    if (!state.threeReady) {
+      return;
+    }
     // 🔔 strange behaviour when inlined `new URL`.
     // 🔔 assume worker already listening for events
     /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
@@ -90,7 +99,6 @@ export default function TestWorld(props) {
       if (msg.type === "nav-mesh-response") {
         await initRecastNav();
         const { navMesh } = importNavMesh(msg.exportedNavMesh);
-        // info("deserialized navMesh", navMesh);
 
         // add navMesh helper to scene
         const threeScene = state.view.rootState.scene;
@@ -102,12 +110,11 @@ export default function TestWorld(props) {
         navMeshHelper.position.y = 0.01;
         threeScene.getObjectByName(navMeshHelper.name)?.removeFromParent();
         threeScene.add(navMeshHelper);
-        // console.log({ threeScene });
       }
     });
-    worker.postMessage({ type: "request-nav-mesh", mapKey: "demo-map-1" });
+    worker.postMessage({ type: "request-nav-mesh", mapKey: state.map.key });
     return () => void worker.terminate();
-  }, [geomorphs]); // In development Provides basic worker HMR i.e. reload on focus
+  }, [state.threeReady, state.map]); // 🚧 reload on focus in development should be optional
 
   return (
     <TestWorldContext.Provider value={state}>
@@ -129,13 +136,15 @@ export default function TestWorld(props) {
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {Geomorph.MapDef} map
- * @property {import('./TestWorldScene').State} scene
+ * @property {boolean} threeReady
  * @property {import('./TestWorldCanvas').State} view
+ * @property {import('./TestWorldScene').State} scene
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {{}} nav
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
+ * @property {() => void} update
  */
 
 /**
