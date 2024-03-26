@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
-import { importNavMesh, init as initRecastNav } from "recast-navigation";
+import { importNavMesh, init as initRecastNav } from "@recast-navigation/core";
 import { NavMeshHelper } from "@recast-navigation/three";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";

@@ -1,8 +1,6 @@
 import React from "react";
 import * as THREE from "three";
 import { useLoader } from "@react-three/fiber";
-import { NavMeshHelper, threeToSoloNavMesh } from "@recast-navigation/three";
-import { init as initRecastNav } from "recast-navigation";
 
 import { assertDefined, error, hashText, keys, warn } from "../service/generic";
 import { worldScale } from "../service/const";

@@ -373,7 +373,7 @@
   - ✅ try threeToTiledNavMesh
   - ✅ fix disconnect at a 301 hull door
     - bridge--042 has many transform-box: fill-box
-  - try threeToTileCache
+  - 🚧 try threeToTileCache
   - ✅ test against `small-map-1` + `demo-map-1`
 
 - start generating geomorphs *.webp ourselves

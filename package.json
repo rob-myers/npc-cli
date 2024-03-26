@@ -70,7 +70,6 @@
     "react-dom": "^18.2.0",
     "react-pro-sidebar": "^1.1.0-alpha.2",
     "react-use-measure": "^2.1.1",
-    "recast-navigation": "^0.17.0",
     "safe-stable-stringify": "^2.3.1",
     "svg-path-parser": "^1.1.0",
     "three": "^0.162.0",
