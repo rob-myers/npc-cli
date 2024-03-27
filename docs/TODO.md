@@ -379,10 +379,12 @@
 ## WIP
 
 - 🚧 TestCharacter:
-  - @react-three/rapier
-  - extract basics from:
-    - https://github.com/visionary-3d/advanced-character-controller/tree/main
-    - not need for ray etc.
+  - ✅ use @react-three/rapier
+  - 🚧 extract basics from:
+    - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
+    - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
+    - ℹ️ no need for: keyboard controls, ray, ...
+    - ✅ kinematic-position-based
   - click to move
   - acceleration?
 
