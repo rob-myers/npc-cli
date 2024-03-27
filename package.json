@@ -50,7 +50,6 @@
     "cli-columns": "^4.0.0",
     "debounce": "^2.0.0",
     "earcut": "^2.2.4",
-    "ecctrl": "^1.0.66",
     "express-ws": "^5.0.2",
     "flexlayout-react": "^0.7.15",
     "gatsby": "^5.13.3",
