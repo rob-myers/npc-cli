@@ -50,6 +50,7 @@ async function handleMessages(e) {
       // });
       const { navMesh, tileCache, success } = threeToTileCache(meshes, {
         tileSize: 30,
+        ch: 0.0001,
       });
       info({ numMeshes: meshes.length, navMesh, success });
 

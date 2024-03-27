@@ -134,9 +134,10 @@ export default function TestWorldScene(props) {
             name="debugNavPoly"
             geometry={api.gmData[gm.key].debugNavPoly}
             position={[0, 0.001, 0]}
+            // scale={[1, -1, 1]}
             visible={false}
           >
-            <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe={true} />
+            <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe={false} />
           </mesh>
         </group>
       ))}

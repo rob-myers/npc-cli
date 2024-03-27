@@ -389,8 +389,9 @@
   - acceleration?
 
 - 🚧 recast/detour continued
-  - 🚧 single agent crowd seen via CrowdHelper
-  - visualize navPath
+  - ✅ single agent crowd seen via CrowdHelper
+  - ✅ iterate crowd.update, pausing on disable Tabs
+  - 🚧 visualize navPath
   - single agent can navigate to a point
   - two agents and can navigate both
   - can alter polygon weights e.g. closed door
