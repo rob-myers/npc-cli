@@ -388,12 +388,13 @@
   - click to move
   - acceleration?
 
-- recast/detour continued
-  - single agent crowd seen via CrowdHelper
+- 🚧 recast/detour continued
+  - 🚧 single agent crowd seen via CrowdHelper
+  - visualize navPath
   - single agent can navigate to a point
   - two agents and can navigate both
   - can alter polygon weights e.g. closed door
-  - visualize navPath without a Crowd
+  - visualize agent via character controller
 
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"

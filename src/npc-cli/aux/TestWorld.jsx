@@ -29,12 +29,24 @@ export default function TestWorld(props) {
       map: /** @type {*} */ (null),
       gmData: /** @type {*} */ ({}),
       gms: [],
-      nav: {}, // 🚧
 
       threeReady: false,
+      nav: /** @type {*} */ (null),
       view: /** @type {*} */ (null), // TestWorldCanvas state
       scene: /** @type {*} */ ({}), // TestWorldScene state
 
+      addNavMeshHelper() {
+        // add navMesh helper to scene
+        const threeScene = state.view.rootState.scene;
+        const navMeshHelper = new NavMeshHelper({
+          navMesh: state.nav.navMesh,
+          navMeshMaterial: wireFrameMaterial,
+        });
+        navMeshHelper.name = "NavMeshHelper";
+        navMeshHelper.position.y = 0.01;
+        threeScene.getObjectByName(navMeshHelper.name)?.removeFromParent();
+        threeScene.add(navMeshHelper);
+      },
       ensureGmData(gmKey) {
         const layout = state.geomorphs.layout[gmKey];
         let gmData = state.gmData[gmKey];
@@ -55,7 +67,18 @@ export default function TestWorld(props) {
         gmData.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
         return gmData;
       },
-
+      async handleMessageFromWorker(e) {
+        const msg = e.data;
+        info("main thread received message", msg);
+        if (msg.type === "nav-mesh-response") {
+          await initRecastNav();
+          const tileCacheMeshProcess = createDefaultTileCacheMeshProcess();
+          state.nav = /** @type {TiledCacheResult} */ (
+            importNavMesh(msg.exportedNavMesh, tileCacheMeshProcess)
+          );
+          state.addNavMeshHelper();
+        }
+      },
       update,
     })
   );
@@ -94,29 +117,7 @@ export default function TestWorld(props) {
     const worker = new Worker(new URL("./test-recast.worker", import.meta.url), {
       type: "module",
     });
-    worker.addEventListener("message", async (e) => {
-      const msg = e.data;
-      info("main thread received message", msg);
-      if (msg.type === "nav-mesh-response") {
-        await initRecastNav();
-        const tileCacheMeshProcess = createDefaultTileCacheMeshProcess();
-        const imported =
-          /** @type {Extract<ReturnType<typeof importNavMesh>, { tileCache?: any }>} */ (
-            importNavMesh(msg.exportedNavMesh, tileCacheMeshProcess)
-          );
-
-        // add navMesh helper to scene
-        const threeScene = state.view.rootState.scene;
-        const navMeshHelper = new NavMeshHelper({
-          navMesh: imported.navMesh,
-          navMeshMaterial: wireFrameMaterial,
-        });
-        navMeshHelper.name = "NavMeshHelper";
-        navMeshHelper.position.y = 0.01;
-        threeScene.getObjectByName(navMeshHelper.name)?.removeFromParent();
-        threeScene.add(navMeshHelper);
-      }
-    });
+    worker.addEventListener("message", state.handleMessageFromWorker);
     worker.postMessage({ type: "request-nav-mesh", mapKey: state.map.key });
     return () => void worker.terminate();
   }, [state.threeReady, state.map]); // 🚧 reload on focus in development should be optional
@@ -147,8 +148,10 @@ export default function TestWorld(props) {
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {{}} nav
+ * @property {TiledCacheResult} nav
+ * @property {() => void} addNavMeshHelper
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
+ * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => void} update
  */
 
@@ -159,4 +162,8 @@ export default function TestWorld(props) {
  * @property {Geomorph.Layout} layout
  * @property {THREE.BufferGeometry} debugNavPoly
  * @property {THREE.CanvasTexture} tex
+ */
+
+/**
+ * @typedef {Extract<ReturnType<typeof importNavMesh>, { tileCache?: any }>} TiledCacheResult
  */
