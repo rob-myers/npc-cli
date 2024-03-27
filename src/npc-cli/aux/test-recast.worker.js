@@ -1,5 +1,10 @@
 import * as THREE from "three";
-import { NavMeshHelper, threeToSoloNavMesh, threeToTiledNavMesh } from "@recast-navigation/three";
+import {
+  NavMeshHelper,
+  threeToSoloNavMesh,
+  threeToTiledNavMesh,
+  threeToTileCache,
+} from "@recast-navigation/three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
@@ -40,13 +45,16 @@ async function handleMessages(e) {
 
       await initRecastNav();
       // const { navMesh, success } = threeToSoloNavMesh(meshes, {});
-      const { navMesh, success } = threeToTiledNavMesh(meshes, {
+      // const { navMesh, success } = threeToTiledNavMesh(meshes, {
+      //   tileSize: 30,
+      // });
+      const { navMesh, tileCache, success } = threeToTileCache(meshes, {
         tileSize: 30,
       });
       info({ numMeshes: meshes.length, navMesh, success });
 
-      if (navMesh) {
-        const exportedNavMesh = exportNavMesh(navMesh);
+      if (navMesh && tileCache) {
+        const exportedNavMesh = exportNavMesh(navMesh, tileCache);
         /** @type {WW.MessageFromWorker} */
         const msg = { type: "nav-mesh-response", mapKey, exportedNavMesh };
         self.postMessage(msg);

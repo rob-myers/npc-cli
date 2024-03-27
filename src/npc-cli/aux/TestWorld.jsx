@@ -4,6 +4,7 @@ import { Subject } from "rxjs";
 import * as THREE from "three";
 import { importNavMesh, init as initRecastNav } from "@recast-navigation/core";
 import { NavMeshHelper } from "@recast-navigation/three";
+import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { assertNonNull, info, isDevelopment } from "../service/generic";
@@ -98,12 +99,16 @@ export default function TestWorld(props) {
       info("main thread received message", msg);
       if (msg.type === "nav-mesh-response") {
         await initRecastNav();
-        const { navMesh } = importNavMesh(msg.exportedNavMesh);
+        const tileCacheMeshProcess = createDefaultTileCacheMeshProcess();
+        const imported =
+          /** @type {Extract<ReturnType<typeof importNavMesh>, { tileCache?: any }>} */ (
+            importNavMesh(msg.exportedNavMesh, tileCacheMeshProcess)
+          );
 
         // add navMesh helper to scene
         const threeScene = state.view.rootState.scene;
         const navMeshHelper = new NavMeshHelper({
-          navMesh,
+          navMesh: imported.navMesh,
           navMeshMaterial: wireFrameMaterial,
         });
         navMeshHelper.name = "NavMeshHelper";

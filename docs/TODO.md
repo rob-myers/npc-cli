@@ -344,7 +344,7 @@
 - ✅ fix stellar cartography nav
   - ℹ️ transform-box `fill-box` issue
 
-- 🚧 start using recast/detour
+- ✅ start using recast/detour
   - https://github.com/isaac-mason/recast-navigation-js/tree/main/packages/recast-navigation-three
   - ✅ create `small-map-1` i.e. single 301
   - ✅ generate navPolys as three.js Mesh (earcut triangulation)
@@ -373,7 +373,7 @@
   - ✅ try threeToTiledNavMesh
   - ✅ fix disconnect at a 301 hull door
     - bridge--042 has many transform-box: fill-box
-  - 🚧 try threeToTileCache
+  - ✅ try threeToTileCache
   - ✅ test against `small-map-1` + `demo-map-1`
 
 - start generating geomorphs *.webp ourselves
