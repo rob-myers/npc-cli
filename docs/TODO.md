@@ -328,11 +328,9 @@
 - ✅ uncut walls inherit meta
 - ✅ rooms have meta via tag `decor meta`
 
-## WIP
-
-- 🚧 TestCharacter (character controller)
+- ❌ TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
-  - 🚧 BUG ecctrl is panning on drag outside canvas
+  - ❌ BUG ecctrl is panning on drag outside canvas
     - https://github.com/pmndrs/ecctrl/issues/34
     - create patch in the meantime
   - ✅ sporadic issue with pause i.e. scene disappears
@@ -340,6 +338,7 @@
     - ✅ pause physics
     - ✅ disable CameraControls
     - ✅ frameloop must be `demand` instead of `never`?
+  - ℹ️ we'll only use rapier3d for Kinematic-Position Player vs Sensors
 
 - ✅ fix stellar cartography nav
   - ℹ️ transform-box `fill-box` issue
@@ -376,14 +375,32 @@
   - ✅ try threeToTileCache
   - ✅ test against `small-map-1` + `demo-map-1`
 
+
+## WIP
+
+- 🚧 TestCharacter:
+  - @react-three/rapier
+  - extract basics from:
+    - https://github.com/visionary-3d/advanced-character-controller/tree/main
+    - not need for ray etc.
+  - click to move
+  - acceleration?
+
+- recast/detour continued
+  - single agent crowd seen via CrowdHelper
+  - single agent can navigate to a point
+  - two agents and can navigate both
+  - can alter polygon weights e.g. closed door
+  - visualize navPath without a Crowd
+
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"
 
-- extend TestCharacter
+- TestCharacter: animation
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
-  - click to move
-  - extract code, removing e.g. ray-cast
+  - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
 
 - ✅ type worker.postMessage in main thread and worker
   - ✅ main thread
