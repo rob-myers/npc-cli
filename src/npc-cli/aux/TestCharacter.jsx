@@ -5,7 +5,7 @@ import { Physics, RigidBody } from "@react-three/rapier";
 import { quadGeometryXZ } from "../service/three";
 
 import TestCanvas from "./TestCanvas";
-import TestCharacterController from "./TestCharacterController";
+import { TestCharacterController } from "./TestCharacterController";
 
 /**
  * @param {Props} props
