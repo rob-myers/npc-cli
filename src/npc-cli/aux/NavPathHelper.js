@@ -54,7 +54,7 @@ const colors = {
 
 const pathLineMaterial = new LineMaterial({
   color: colors.PATH,
-  linewidth: 0.01,
+  linewidth: 0.005,
   // vertexColors: true,
 });
 const pathPointMaterial = new THREE.MeshBasicMaterial({ color: colors.WAYPOINT });
