@@ -16,6 +16,7 @@ import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import TestWorldCanvas from "./TestWorldCanvas";
 import TestWorldScene from "./TestWorldScene";
+import { wallOutset, worldScale } from "../service/const";
 
 /**
  * @param {Props} props
@@ -55,6 +56,7 @@ export default function TestWorld(props) {
         state.helper.navMesh.position.y = 0.01;
 
         threeScene.add(state.helper.navMesh, state.helper.crowd);
+        // threeScene.add(state.helper.crowd);
       },
       ensureGmData(gmKey) {
         const layout = state.geomorphs.layout[gmKey];
@@ -89,7 +91,7 @@ export default function TestWorld(props) {
           state.crowd?.destroy();
           state.crowd = new Crowd({
             maxAgents: 10,
-            maxAgentRadius: 0.6,
+            maxAgentRadius: wallOutset * worldScale,
             navMesh: state.nav.navMesh,
           });
 
@@ -101,7 +103,7 @@ export default function TestWorld(props) {
             z: 5 * 1.5,
           });
           const agent = state.crowd.addAgent(initialAgentPosition, {
-            radius: 0.5,
+            radius: wallOutset * worldScale,
             height: 1.5,
             maxAcceleration: 4.0,
             maxSpeed: 1.0,
