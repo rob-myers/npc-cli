@@ -13,7 +13,7 @@ export default class InfiniteGridHelper extends THREE.Mesh {
    * @param {number} [distance]
    * @param {string} [axes]
    */
-  constructor(size1 = 10, size2 = 10, color, distance = 2000, axes = "xyz") {
+  constructor(size1 = 10, size2 = 10, color, distance = 200, axes = "xyz") {
     const planeAxes = axes.slice(0, 2); // e.g. 'xy'
 
     const geometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
