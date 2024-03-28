@@ -22,10 +22,7 @@ declare namespace NPC {
 
   interface PointerUpEvent extends BasePointerUpEvent {
     key: "pointerup";
-    /** Ordinate `y` */
-    height: number;
-    /** Coords `(x, z)` */
-    point: Geom.VectJson;
+    point: import("three").Vector3Like;
     /** Properties of the thing we clicked. */
     meta: Geomorph.Meta<{
       /** `(x, z)` of target element centre if any */

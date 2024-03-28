@@ -394,7 +394,10 @@
   - ✅ visualize navPath
     - https://github.com/donmccurdy/three-pathfinding/blob/main/src/PathfindingHelper.js
     - https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html
-  - 🚧 can navigate single agent to a clicked point
+  - ✅ can navigate single agent to a clicked point
+    - ℹ️ off-mesh target produced different paths via crowd vs query
+    - ✅ works when edit map
+  - can preserve agent position across HMR map edit
   - two agents and can navigate both
   - can alter polygon weights e.g. closed door
   - visualize agent via character controller

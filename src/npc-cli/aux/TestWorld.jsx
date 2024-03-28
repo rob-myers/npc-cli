@@ -8,16 +8,17 @@ import { NavMeshHelper, CrowdHelper } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
-import { assertNonNull, info, isDevelopment } from "../service/generic";
+import { wallOutset, worldScale } from "../service/const";
+import { assertNonNull, hashText, info, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
+import useHandleEvents from "./use-test-handle-events";
 import NavPathHelper from "./NavPathHelper";
 import TestWorldCanvas from "./TestWorldCanvas";
 import TestWorldScene from "./TestWorldScene";
-import { wallOutset, worldScale } from "../service/const";
 
 /**
  * @param {Props} props
@@ -28,38 +29,40 @@ export default function TestWorld(props) {
   const state = useStateRef(
     /** @returns {State} */ () => ({
       disabled: !!props.disabled,
-      events: new Subject(),
-      geomorphs: /** @type {*} */ (null),
-      map: /** @type {*} */ (null),
-      gmData: /** @type {*} */ ({}),
-      gms: [],
-
+      mapKey: props.mapKey,
+      mapHash: 0,
       threeReady: false,
       reqAnimId: 0,
       timer: new Timer(),
+
+      events: new Subject(),
+      geomorphs: /** @type {*} */ (null),
+      gmData: /** @type {*} */ ({}),
+      gms: [],
+
       nav: /** @type {*} */ (null),
       crowd: /** @type {*} */ (null),
-      helper: /** @type {*} */ ({}),
+      agents: [],
+      help: /** @type {*} */ ({}),
       view: /** @type {*} */ (null), // TestWorldCanvas state
       scene: /** @type {*} */ ({}), // TestWorldScene state
 
       addHelpers() {
         const threeScene = state.view.rootState.scene;
+        Object.values(state.help).map((x) => x?.removeFromParent());
 
-        state.helper.navMesh?.removeFromParent();
-        state.helper.crowd?.removeFromParent();
-        state.helper.navMesh = new NavMeshHelper({
+        state.help.navMesh = new NavMeshHelper({
           navMesh: state.nav.navMesh,
           navMeshMaterial: wireFrameMaterial,
         });
-        state.helper.crowd = new CrowdHelper({ crowd: state.crowd, agentMaterial: undefined });
+        state.help.crowd = new CrowdHelper({ crowd: state.crowd, agentMaterial: undefined });
 
-        state.helper.navMesh.position.y = 0.01;
+        state.help.navMesh.position.y = 0.01;
 
-        state.helper.navPath?.dispose();
-        state.helper.navPath = new NavPathHelper();
+        state.help.navPath?.dispose();
+        state.help.navPath = new NavPathHelper();
 
-        threeScene.add(state.helper.navPath, state.helper.navMesh, state.helper.crowd);
+        threeScene.add(state.help.navPath, state.help.navMesh, state.help.crowd);
       },
       ensureGmData(gmKey) {
         const layout = state.geomorphs.layout[gmKey];
@@ -86,48 +89,53 @@ export default function TestWorld(props) {
         info("main thread received message", msg);
         if (msg.type === "nav-mesh-response") {
           await initRecastNav();
-          const tileCacheMeshProcess = createDefaultTileCacheMeshProcess();
-          state.nav = /** @type {TiledCacheResult} */ (
-            importNavMesh(msg.exportedNavMesh, tileCacheMeshProcess)
-          );
+          state.loadTiledMesh(msg.exportedNavMesh);
+        }
+      },
+      loadTiledMesh(exportedNavMesh) {
+        const tcmProcess = createDefaultTileCacheMeshProcess();
+        const result = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, tcmProcess));
+        state.nav = Object.assign(result, {
+          query: new NavMeshQuery({ navMesh: result.navMesh }),
+        });
 
-          state.crowd?.destroy();
-          state.crowd = new Crowd({
-            maxAgents: 10,
-            maxAgentRadius: wallOutset * worldScale,
-            navMesh: state.nav.navMesh,
-          });
+        if (state.crowd) {
+          state.agents.forEach((x) => state.crowd.removeAgent(x));
+          state.agents.length = 0;
+          state.crowd.destroy();
+        }
+        state.crowd = new Crowd({
+          maxAgents: 10,
+          maxAgentRadius: wallOutset * worldScale,
+          navMesh: state.nav.navMesh,
+        });
 
-          state.setupDemoCrowd();
+        state.addHelpers();
+        state.setupDemoCrowd();
 
-          if (!state.disabled) {
-            state.timer.reset();
-            state.updateCrowd();
-          }
+        if (!state.disabled) {
+          state.timer.reset();
+          state.updateCrowd();
         }
       },
       setupDemoCrowd() {
-        const navMeshQuery = new NavMeshQuery({ navMesh: state.nav.navMesh });
+        const { query } = state.nav;
 
-        const startPoint = { x: 3 * 1.5, y: 0, z: 5 * 1.5 };
-        const endPoint = { x: 0, y: 0, z: 0 };
+        const src = query.getClosestPoint({ x: 3 * 1.5, y: 0, z: 5 * 1.5 });
+        const dst = query.getClosestPoint({ x: 5 * 1.5, y: 0, z: 9 * 1.5 });
 
-        const initialAgentPosition = navMeshQuery.getClosestPoint(startPoint);
-        const agent = state.crowd.addAgent(initialAgentPosition, {
+        const agent = state.crowd.addAgent(src, {
           radius: wallOutset * worldScale,
           height: 1.5,
-          maxAcceleration: 4.0,
-          maxSpeed: 1.0,
-          collisionQueryRange: 0.5,
-          pathOptimizationRange: 0.0,
-          separationWeight: 1.0,
+          maxAcceleration: 4,
+          maxSpeed: 2,
+          collisionQueryRange: 0.3,
+          pathOptimizationRange: 0,
+          separationWeight: 1,
         });
-        state.addHelpers();
-        agent.goto(endPoint);
+        state.agents.push(agent);
 
-        // 🚧 depict navPath
-        const path = navMeshQuery.computePath(startPoint, endPoint, {});
-        state.helper.navPath.setPath(path);
+        state.walkTo(dst);
       },
       update,
       updateCrowd() {
@@ -135,12 +143,23 @@ export default function TestWorld(props) {
         state.timer.update();
         const deltaMs = state.timer.getDelta();
         state.crowd.update(deltaMs);
-        state.helper.crowd.update();
+        state.help.crowd.update();
+      },
+      walkTo(dst) {
+        const [agent] = state.agents;
+        const src = agent.position();
+        // debug path
+        const path = state.crowd.navMeshQuery.computePath(src, dst, {});
+        state.help.navPath.setPath(path);
+        agent.goto(dst); // navigate
       },
     })
   );
 
   state.disabled = !!props.disabled;
+  state.mapKey = props.mapKey;
+
+  useHandleEvents(state);
 
   const { data: geomorphs } = useQuery({
     queryKey: [GEOMORPHS_JSON_FILENAME],
@@ -165,17 +184,19 @@ export default function TestWorld(props) {
   React.useMemo(() => {
     if (geomorphs) {
       state.geomorphs = geomorphs;
-      state.map = geomorphs.map[props.mapKey];
-      state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
+      const map = geomorphs.map[props.mapKey];
+      state.gms = map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
         geomorphService.computeLayoutInstance(state.ensureGmData(gmKey).layout, gmId, transform)
       );
+      state.mapHash = hashText(JSON.stringify(map));
+
       state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
       state.scene.doorsKey = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
     }
   }, [geomorphs, props.mapKey]);
 
   React.useEffect(() => {
-    if (!state.threeReady) {
+    if (!state.threeReady || !state.mapHash) {
       return;
     }
     // 🔔 strange behaviour when inlined `new URL`.
@@ -189,14 +210,14 @@ export default function TestWorld(props) {
     return () => void worker.terminate();
   }, [
     state.threeReady,
-    props.mapKey,
+    state.mapHash,
     // geomorphs, // HMR reload on focus hack
   ]);
 
   return (
     <TestWorldContext.Provider value={state}>
       <TestWorldCanvas disabled={props.disabled} stats>
-        {state.map && <TestWorldScene disabled={props.disabled} />}
+        {geomorphs && <TestWorldScene disabled={props.disabled} />}
       </TestWorldCanvas>
     </TestWorldContext.Provider>
   );
@@ -211,27 +232,32 @@ export default function TestWorld(props) {
 /**
  * @typedef State
  * @property {boolean} disabled
+ * @property {string} mapKey
+ * @property {number} mapHash For HMR
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
- * @property {Geomorph.MapDef} map
- * @property {number} reqAnimId
  * @property {boolean} threeReady
+ * @property {number} reqAnimId
+ * @property {Timer} timer
+ *
  * @property {import('./TestWorldCanvas').State} view
  * @property {import('./TestWorldScene').State} scene
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {Timer} timer
- * @property {TiledCacheResult} nav
+ * @property {TiledCacheResult & { query: NavMeshQuery }} nav
  * @property {Crowd} crowd
- * @property {{ navMesh: NavMeshHelper; crowd: CrowdHelper; navPath: NavPathHelper }} helper
+ * @property {import('@recast-navigation/core').CrowdAgent[]} agents
+ * @property {{ navMesh: NavMeshHelper; crowd: CrowdHelper; navPath: NavPathHelper }} help
  *
  * @property {() => void} addHelpers
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
+ * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} setupDemoCrowd
  * @property {() => void} update
  * @property {() => void} updateCrowd
+ * @property {(dst: import('three').Vector3Like) => void} walkTo
  */
 
 /**

@@ -103,7 +103,7 @@ export default function TestWorldScene(props) {
     });
     state.wallInstances && state.positionWalls();
     state.sceneHash = hashText(JSON.stringify(api.geomorphs));
-  }, [api.geomorphs, api.map]);
+  }, [api.geomorphs, api.mapKey]);
 
   const update = useUpdate();
 
@@ -114,7 +114,7 @@ export default function TestWorldScene(props) {
       {api.gms.map((gm, gmId) => (
         <group
           // 🚧 fix stale
-          key={`${gm.transform} ${state.sceneHash}`}
+          key={`${gm.key} ${gmId} ${gm.transform}`}
           onUpdate={(self) => self.applyMatrix4(gm.mat4)}
           scale={[worldScale, 1, worldScale]}
         >

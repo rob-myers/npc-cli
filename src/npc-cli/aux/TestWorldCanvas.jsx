@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { isTouchDevice } from "../service/dom.js";
+import { info } from "../service/generic.js";
 import "./infinite-grid-helper.js";
 import { Vect } from "../geom";
 import { TestWorldContext } from "./test-world-context";
@@ -123,15 +124,14 @@ export default function TestWorldCanvas(props) {
             if (!state.down) {
               return;
             }
-            console.log("infiniteGridHelper onPointerUp", e, e.point);
+            info("infiniteGridHelper onPointerUp", e, e.point);
             const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
             const timeMs = Date.now() - state.down.epochMs;
             api.events.next({
               key: "pointerup",
               distance,
-              height: e.point.y,
               longPress: timeMs >= 300,
-              point: { x: e.point.x, y: e.point.z },
+              point: e.point,
               rmb: e.button === 2,
               // 🤔 or clientX,Y minus canvas bounds?
               screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
