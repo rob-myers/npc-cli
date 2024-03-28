@@ -54,12 +54,16 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     stringify(assetsJson),
   );
   
+  const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>
+    geomorphService.computeLayout(gmKey, assets)
+  ))
+
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
+    mapsHash: hashText(JSON.stringify(maps)),
+    layoutsHash: hashText(JSON.stringify(layout)),
     map: maps,
-    layout: keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>
-      geomorphService.computeLayout(gmKey, assets)
-    )),
+    layout,
   };
   fs.writeFileSync(
     geomorphsFilename,

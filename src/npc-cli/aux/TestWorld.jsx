@@ -9,7 +9,7 @@ import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { wallOutset, worldScale } from "../service/const";
-import { assertNonNull, hashText, info, isDevelopment } from "../service/generic";
+import { assertNonNull, info, isDevelopment } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
@@ -31,6 +31,7 @@ export default function TestWorld(props) {
       disabled: !!props.disabled,
       mapKey: props.mapKey,
       mapHash: 0,
+      layoutsHash: 0,
       threeReady: false,
       reqAnimId: 0,
       timer: new Timer(),
@@ -103,6 +104,7 @@ export default function TestWorld(props) {
           state.agents.forEach((x) => state.crowd.removeAgent(x));
           state.agents.length = 0;
           state.crowd.destroy();
+          cancelAnimationFrame(state.reqAnimId);
         }
         state.crowd = new Crowd({
           maxAgents: 10,
@@ -188,7 +190,8 @@ export default function TestWorld(props) {
       state.gms = map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
         geomorphService.computeLayoutInstance(state.ensureGmData(gmKey).layout, gmId, transform)
       );
-      state.mapHash = hashText(JSON.stringify(map));
+      state.mapHash = geomorphs.mapsHash;
+      state.layoutsHash = geomorphs.layoutsHash;
 
       state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
       state.scene.doorsKey = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
@@ -211,6 +214,7 @@ export default function TestWorld(props) {
   }, [
     state.threeReady,
     state.mapHash,
+    state.layoutsHash,
     // geomorphs, // HMR reload on focus hack
   ]);
 
@@ -233,6 +237,7 @@ export default function TestWorld(props) {
  * @typedef State
  * @property {boolean} disabled
  * @property {string} mapKey
+ * @property {number} layoutsHash For HMR
  * @property {number} mapHash For HMR
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs

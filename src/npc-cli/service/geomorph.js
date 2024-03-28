@@ -187,8 +187,10 @@ class GeomorphService {
    * @param {Geomorph.GeomorphsJson} geomorphsJson
    * @return {Geomorph.Geomorphs}
    */
-  deserializeGeomorphs({ layout, map }) {
+  deserializeGeomorphs({ mapsHash, layoutsHash, map, layout }) {
     return {
+      mapsHash,
+      layoutsHash,
       map,
       layout: mapValues(layout, (x) => this.deserializeLayout(x)),
     };
@@ -737,10 +739,12 @@ class GeomorphService {
    * @param {Geomorph.Geomorphs} geomorphs
    * @returns {Geomorph.GeomorphsJson}
    */
-  serializeGeomorphs(geomorphs) {
+  serializeGeomorphs({ mapsHash, layoutsHash, map, layout }) {
     return {
-      map: geomorphs.map,
-      layout: mapValues(geomorphs.layout, (x) => geomorphService.serializeLayout(x)),
+      mapsHash,
+      layoutsHash,
+      map,
+      layout: mapValues(layout, (x) => geomorphService.serializeLayout(x)),
     };
   }
 

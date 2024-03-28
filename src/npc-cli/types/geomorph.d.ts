@@ -31,6 +31,8 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
+    mapsHash: number;
+    layoutsHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
   }
