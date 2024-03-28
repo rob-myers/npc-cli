@@ -146,10 +146,10 @@ export default function TestWorld(props) {
   });
 
   React.useMemo(() => {
+    state.timer.reset();
     if (state.disabled) {
       cancelAnimationFrame(state.reqAnimId);
     } else {
-      state.timer.reset();
       state.crowd && state.updateCrowd();
     }
   }, [state.disabled]);
@@ -157,11 +157,10 @@ export default function TestWorld(props) {
   React.useMemo(() => {
     if (geomorphs) {
       state.geomorphs = geomorphs;
-      state.map = geomorphs.map[props.mapKey ?? "demo-map-1"];
+      state.map = geomorphs.map[props.mapKey];
       state.gms = state.map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
         geomorphService.computeLayoutInstance(state.ensureGmData(gmKey).layout, gmId, transform)
       );
-
       state.scene.wallsKey = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
       state.scene.doorsKey = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
     }
@@ -178,9 +177,9 @@ export default function TestWorld(props) {
       type: "module",
     });
     worker.addEventListener("message", state.handleMessageFromWorker);
-    worker.postMessage({ type: "request-nav-mesh", mapKey: state.map.key });
+    worker.postMessage({ type: "request-nav-mesh", mapKey: props.mapKey });
     return () => void worker.terminate();
-  }, [state.threeReady, state.map, geomorphs]); // 🚧 reload on focus in development should be optional
+  }, [state.threeReady, props.mapKey]);
 
   return (
     <TestWorldContext.Provider value={state}>
@@ -194,7 +193,7 @@ export default function TestWorld(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
- * @property {string} [mapKey]
+ * @property {keyof import('static/assets/geomorphs.json')['map']} mapKey
  */
 
 /**
