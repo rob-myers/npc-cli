@@ -103,6 +103,7 @@ export default function TestWorldCanvas(props) {
         {props.stats && state.rootEl && (
           <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
         )}
+        <PerspectiveCamera position={[0, 8, 0]} makeDefault />
 
         <MapControls
           ref={(x) => x && (state.controls = x)}
@@ -113,8 +114,8 @@ export default function TestWorldCanvas(props) {
             maxAzimuthAngle: 0,
           })}
         />
+
         <ambientLight intensity={1} />
-        <PerspectiveCamera position={[0, 8, 0]} makeDefault />
         <Origin />
         <infiniteGridHelper
           args={[1.5, 1.5, "#bbbbbb"]}
