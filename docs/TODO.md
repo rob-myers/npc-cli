@@ -397,10 +397,26 @@
   - ✅ can navigate single agent to a clicked point
     - ℹ️ off-mesh target produced different paths via crowd vs query
     - ✅ works when edit map
-  - can preserve agent position across HMR map edit
-  - two agents and can navigate both
+  - 🚧 can preserve agent position across HMR map edit
+  - 🚧 two agents and can navigate both
+    - can select agent somehow
   - can alter polygon weights e.g. closed door
   - visualize agent via character controller
+
+- 🚧 try shader for instanced walls/doors
+  - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
+  - ✅ try gradient fill shader for doors
+    - works, but the instance ordering is broken!
+  - ✅ why does meshBasicMaterial order things correctly, but not my custom shader?
+    > It's the shader material you're using. Three materials have routines build in that handle instanced meshes, the instancing is done in shaders
+    > You can piece a working shader together from 'shaderchunks', or modify an existing shader with material.onbeforecompile
+    > https://www.reddit.com/r/threejs/comments/scwjwb/comment/huafmn6/?utm_source=share&utm_medium=web2x&context=3
+  - ℹ️ https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderLib
+  - ℹ️ https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshbasic.glsl.js
+  - ✅ create `<shaderMaterial>` using copies of mesh basic material vertex/fragment shaders
+  - 🚧 create simplified versions with just enough
+
+You can piece a working shader together from 'shaderchunks', or modify an existing shader with material.onbeforecompile
 
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"
@@ -410,7 +426,7 @@
   - use custom character via Mixamo (use Blender to combine animations)
   - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
 
-
+- ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
 - ✅ type worker.postMessage in main thread and worker
   - ✅ main thread
   - ✅ worker
@@ -421,10 +437,9 @@
 - ✅ changing props.mapKey should change map 
 - extend door/window connectors with correct roomIds
 - clarify handling of windows
-- try gradient fill shader for doors
 - simplify polygon JSON format e.g. flat arrays
 - start using cypress
-- slow resize on maximize desktop (but not mobile)
+- saw slow resize on maximize desktop (but not mobile)
 - ❌ try unify parseMaps and parseSymbols
 - try fix sporadic missing updates
   - ✅ move maps to `media/map`
@@ -433,11 +448,10 @@
 - ✅ integer accuracy when parsing maps
   - Boxy has rounding errors e.g. when reflect
   - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
-- migrate Triangle
+- ❌ migrate Triangle
   - png -> webp script applied to assets/debug
-- learn about WebGl RenderTargets
+- ❌ learn about WebGl RenderTargets
   - Towards "Pixi.js RenderTexture" functionality
-  - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
 - ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
@@ -469,7 +483,7 @@
 
 - ❌ world editor in new repo
   - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
-- geomorph editor in new repo
+- ❌ geomorph editor in new repo
 - 🤔 despite our "generic aim" (fabricating game masters),
   some context will help e.g. The Last Redoubt
 

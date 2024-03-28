@@ -17,14 +17,16 @@ import { Mat, Vect } from "../geom";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
 
+import vertexShader from "!!raw-loader!../glsl/mesh-basic.v.glsl";
+import fragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
+
 /**
  * @param {Props} props
  */
 export default function TestWorldScene(props) {
   const api = React.useContext(TestWorldContext);
 
-  // prettier-ignore
-  const state = useStateRef(/** @returns {State} */ () => ({
+  const state = /** @type {typeof useStateRef<State>} */ (useStateRef)(() => ({
     wallsKey: api.scene.wallsKey ?? 0,
     wallInstances: /** @type {*} */ (null),
     doorsKey: api.scene.doorsKey ?? 0,
@@ -113,7 +115,6 @@ export default function TestWorldScene(props) {
     <group onUpdate={(group) => (state.rootGroup = group)}>
       {api.gms.map((gm, gmId) => (
         <group
-          // 🚧 fix stale
           key={`${gm.key} ${gmId} ${gm.transform}`}
           onUpdate={(self) => self.applyMatrix4(gm.mat4)}
           scale={[worldScale, 1, worldScale]}
@@ -143,6 +144,7 @@ export default function TestWorldScene(props) {
       ))}
 
       <instancedMesh
+        name="walls"
         key={state.wallsKey}
         onUpdate={(instances) => (state.wallInstances = instances)}
         args={[quadGeometryXY, undefined, state.wallsKey]}
@@ -156,12 +158,22 @@ export default function TestWorldScene(props) {
       </instancedMesh>
 
       <instancedMesh
-        key={state.doorsKey}
-        onUpdate={(instances) => (state.doorInstances = instances)}
+        name="doors"
+        key={`${state.doorsKey} ${JSON.stringify(uniforms)}`}
+        onUpdate={(instances) => {
+          state.doorInstances = instances;
+        }}
         args={[quadGeometryXY, undefined, state.doorsKey]}
+        // args={[quadGeometryXY, shaderMat, state.doorsKey]}
         frustumCulled={false}
       >
-        <meshBasicMaterial side={THREE.DoubleSide} color="#444" />
+        {/* <meshBasicMaterial side={THREE.DoubleSide} color="#444" /> */}
+        <shaderMaterial
+          side={THREE.DoubleSide}
+          vertexShader={vertexShader}
+          fragmentShader={fragmentShader}
+          uniforms={uniforms}
+        />
       </instancedMesh>
     </group>
   );
@@ -191,3 +203,7 @@ const tmpVec2 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
 const tmpMatFour2 = new THREE.Matrix4();
+
+const uniforms = {
+  diffuse: { value: new THREE.Vector3(1, 1, 0) },
+};
