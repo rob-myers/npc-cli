@@ -403,7 +403,7 @@
   - can alter polygon weights e.g. closed door
   - visualize agent via character controller
 
-- 🚧 try shader for instanced walls/doors
+- ✅ try shader for instanced walls/doors
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - ✅ try gradient fill shader for doors
     - works, but the instance ordering is broken!
@@ -414,7 +414,8 @@
   - ℹ️ https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderLib
   - ℹ️ https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshbasic.glsl.js
   - ✅ create `<shaderMaterial>` using copies of mesh basic material vertex/fragment shaders
-  - 🚧 create simplified versions with just enough
+  - ✅ create simplified versions with just enough
+  - ✅ doors have gradient fill
 
 You can piece a working shader together from 'shaderchunks', or modify an existing shader with material.onbeforecompile
 

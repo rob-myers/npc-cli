@@ -17,8 +17,8 @@ import { Mat, Vect } from "../geom";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
 
-import vertexShader from "!!raw-loader!../glsl/mesh-basic.v.glsl";
-import fragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
+import vertexShader from "!!raw-loader!../glsl/mesh-basic-simplified.v.glsl";
+import fragmentShader from "!!raw-loader!../glsl/mesh-basic-simplified.f.glsl";
 
 /**
  * @param {Props} props
@@ -111,6 +111,8 @@ export default function TestWorldScene(props) {
 
   // const testUvTex = useLoader(THREE.TextureLoader, "/assets/debug/test-uv-texture.png");
 
+  const shaderKey = hashText(JSON.stringify({ vertexShader, fragmentShader, uniforms }));
+
   return (
     <group onUpdate={(group) => (state.rootGroup = group)}>
       {api.gms.map((gm, gmId) => (
@@ -159,7 +161,7 @@ export default function TestWorldScene(props) {
 
       <instancedMesh
         name="doors"
-        key={`${state.doorsKey} ${JSON.stringify(uniforms)}`}
+        key={`${state.doorsKey} ${shaderKey}`}
         onUpdate={(instances) => {
           state.doorInstances = instances;
         }}
@@ -206,4 +208,5 @@ const tmpMatFour2 = new THREE.Matrix4();
 
 const uniforms = {
   diffuse: { value: new THREE.Vector3(1, 1, 0) },
+  opacity: { value: 1 },
 };
