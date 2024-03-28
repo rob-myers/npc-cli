@@ -391,8 +391,10 @@
 - 🚧 recast/detour continued
   - ✅ single agent crowd seen via CrowdHelper
   - ✅ iterate crowd.update, pausing on disable Tabs
-  - 🚧 visualize navPath
-  - single agent can navigate to a point
+  - ✅ visualize navPath
+    - https://github.com/donmccurdy/three-pathfinding/blob/main/src/PathfindingHelper.js
+    - https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html
+  - 🚧 can navigate single agent to a clicked point
   - two agents and can navigate both
   - can alter polygon weights e.g. closed door
   - visualize agent via character controller

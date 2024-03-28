@@ -14,6 +14,7 @@ import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
+import NavPathHelper from "./NavPathHelper";
 import TestWorldCanvas from "./TestWorldCanvas";
 import TestWorldScene from "./TestWorldScene";
 import { wallOutset, worldScale } from "../service/const";
@@ -55,8 +56,10 @@ export default function TestWorld(props) {
 
         state.helper.navMesh.position.y = 0.01;
 
-        threeScene.add(state.helper.navMesh, state.helper.crowd);
-        // threeScene.add(state.helper.crowd);
+        state.helper.navPath?.dispose();
+        state.helper.navPath = new NavPathHelper();
+
+        threeScene.add(state.helper.navPath, state.helper.navMesh, state.helper.crowd);
       },
       ensureGmData(gmKey) {
         const layout = state.geomorphs.layout[gmKey];
@@ -95,31 +98,36 @@ export default function TestWorld(props) {
             navMesh: state.nav.navMesh,
           });
 
-          // 🚧 move an agent
-          const navMeshQuery = new NavMeshQuery({ navMesh: state.nav.navMesh });
-          const initialAgentPosition = navMeshQuery.getClosestPoint({
-            x: 3 * 1.5,
-            y: 0,
-            z: 5 * 1.5,
-          });
-          const agent = state.crowd.addAgent(initialAgentPosition, {
-            radius: wallOutset * worldScale,
-            height: 1.5,
-            maxAcceleration: 4.0,
-            maxSpeed: 1.0,
-            collisionQueryRange: 0.5,
-            pathOptimizationRange: 0.0,
-            separationWeight: 1.0,
-          });
-          state.addHelpers();
+          state.setupDemoCrowd();
 
           if (!state.disabled) {
             state.timer.reset();
             state.updateCrowd();
           }
-
-          agent.goto({ x: 0, y: 0, z: 0 });
         }
+      },
+      setupDemoCrowd() {
+        const navMeshQuery = new NavMeshQuery({ navMesh: state.nav.navMesh });
+
+        const startPoint = { x: 3 * 1.5, y: 0, z: 5 * 1.5 };
+        const endPoint = { x: 0, y: 0, z: 0 };
+
+        const initialAgentPosition = navMeshQuery.getClosestPoint(startPoint);
+        const agent = state.crowd.addAgent(initialAgentPosition, {
+          radius: wallOutset * worldScale,
+          height: 1.5,
+          maxAcceleration: 4.0,
+          maxSpeed: 1.0,
+          collisionQueryRange: 0.5,
+          pathOptimizationRange: 0.0,
+          separationWeight: 1.0,
+        });
+        state.addHelpers();
+        agent.goto(endPoint);
+
+        // 🚧 depict navPath
+        const path = navMeshQuery.computePath(startPoint, endPoint, {});
+        state.helper.navPath.setPath(path);
       },
       update,
       updateCrowd() {
@@ -179,7 +187,11 @@ export default function TestWorld(props) {
     worker.addEventListener("message", state.handleMessageFromWorker);
     worker.postMessage({ type: "request-nav-mesh", mapKey: props.mapKey });
     return () => void worker.terminate();
-  }, [state.threeReady, props.mapKey]);
+  }, [
+    state.threeReady,
+    props.mapKey,
+    // geomorphs, // HMR reload on focus hack
+  ]);
 
   return (
     <TestWorldContext.Provider value={state}>
@@ -212,11 +224,12 @@ export default function TestWorld(props) {
  * @property {Timer} timer
  * @property {TiledCacheResult} nav
  * @property {Crowd} crowd
- * @property {{ navMesh: NavMeshHelper; crowd: CrowdHelper; }} helper
+ * @property {{ navMesh: NavMeshHelper; crowd: CrowdHelper; navPath: NavPathHelper }} helper
  *
  * @property {() => void} addHelpers
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
+ * @property {() => void} setupDemoCrowd
  * @property {() => void} update
  * @property {() => void} updateCrowd
  */
