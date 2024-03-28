@@ -8,12 +8,9 @@ export default class NavPathHelper extends THREE.Object3D {
   /** Contains `Line2` and `Mesh` per node */
   group = new THREE.Group();
   linesGeometry = new LineGeometry();
-  /** @type {THREE.Mesh[]} */
-  unusedNodes = [];
 
   constructor() {
     super();
-
     this.group.visible = false;
     this.add(this.group);
   }
@@ -22,30 +19,19 @@ export default class NavPathHelper extends THREE.Object3D {
    * @param {THREE.Vector3Like[]} path
    */
   setPath(path) {
-    this.group.children.forEach((x) => {
-      x.visible = false;
-      x.name === navPathNodeName && x instanceof THREE.Mesh && this.unusedNodes.push(x);
-    });
+    this.group.children.forEach((x) => (x.visible = false));
     this.group.remove(...this.group.children);
 
-    this.linesGeometry.setPositions(path.flatMap(({ x, y, z }) => [x, y + GROUND_OFFSET, z]));
+    this.linesGeometry.dispose();
+    this.linesGeometry = new LineGeometry();
+
+    if (path.length) {
+      this.linesGeometry.setPositions(path.flatMap(({ x, y, z }) => [x, y + GROUND_OFFSET, z]));
+      this.group.add(...path.map(() => new THREE.Mesh(pathPointGeometry, pathPointMaterial)));
+    }
     this.group.add(new Line2(this.linesGeometry, pathLineMaterial));
 
-    if (this.unusedNodes.length) {
-      this.group.add(...this.unusedNodes.splice(0, path.length));
-    }
-
-    if (this.group.children.length - 1 < path.length) {
-      this.group.add(
-        ...path.slice(this.group.children.length - 1).map(() =>
-          Object.assign(new THREE.Mesh(pathPointGeometry, pathPointMaterial), {
-            name: navPathNodeName,
-          })
-        )
-      );
-    }
-
-    this.group.children.slice(1).forEach((x, i) => {
+    this.group.children.slice(0, -1).forEach((x, i) => {
       x.visible = true;
       x.position.copy(path[i]);
       x.position.y += GROUND_OFFSET;
@@ -54,8 +40,9 @@ export default class NavPathHelper extends THREE.Object3D {
   }
 
   dispose() {
-    this.unusedNodes.length = 0;
+    this.group.children.forEach((x) => (x.visible = false));
     this.group.remove(...this.group.children);
+    this.group.visible = false;
     this.linesGeometry.dispose();
   }
 }
@@ -74,5 +61,3 @@ const pathPointMaterial = new THREE.MeshBasicMaterial({ color: colors.WAYPOINT }
 const pathPointGeometry = new THREE.SphereGeometry(0.08);
 
 const GROUND_OFFSET = 0.01;
-
-const navPathNodeName = "NavPathNode";
