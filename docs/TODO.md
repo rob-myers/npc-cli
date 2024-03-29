@@ -1,5 +1,162 @@
 # TODO
 
+## WIP
+
+- 🚧 TestCharacter:
+  - ✅ use @react-three/rapier
+  - 🚧 extract basics from:
+    - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
+    - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
+    - ℹ️ no need for: keyboard controls, ray, ...
+    - ✅ kinematic-position-based
+  - click to move
+  - acceleration?
+
+- 🚧 recast/detour continued
+  - ✅ single agent crowd seen via CrowdHelper
+  - ✅ iterate crowd.update, pausing on disable Tabs
+  - ✅ visualize navPath
+    - https://github.com/donmccurdy/three-pathfinding/blob/main/src/PathfindingHelper.js
+    - https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html
+  - ✅ can navigate single agent to a clicked point
+    - ℹ️ off-mesh target produced different paths via crowd vs query
+    - ✅ works when edit map
+  - 🚧 can preserve agent position across HMR map edit
+  - 🚧 two agents and can navigate both
+    - can select agent somehow
+  - can alter polygon weights e.g. closed door
+  - visualize agent via character controller
+
+- start generating geomorphs *.webp ourselves
+- show tables via raised "floor texture"
+
+- TestCharacter: animation
+  - use character Soldier with animations
+  - use custom character via Mixamo (use Blender to combine animations)
+  - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
+- ✅ type worker.postMessage in main thread and worker
+  - ✅ main thread
+  - ✅ worker
+- ✅ get web worker HMR "working"
+  - ❌ https://github.com/webpack/webpack/issues/14722
+  - ℹ️ gatsby does not support "webpack multi-compiler"
+  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
+- ✅ changing props.mapKey should change map 
+- extend door/window connectors with correct roomIds
+- clarify handling of windows
+- simplify polygon JSON format e.g. flat arrays
+- start using cypress
+- saw slow resize on maximize desktop (but not mobile)
+- ❌ try unify parseMaps and parseSymbols
+- try fix sporadic missing updates
+  - ✅ move maps to `media/map`
+  - ✅ improve remount keys
+  - still seeing occasional issues?
+- ✅ integer accuracy when parsing maps
+  - Boxy has rounding errors e.g. when reflect
+  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
+- ❌ migrate Triangle
+  - png -> webp script applied to assets/debug
+- ❌ learn about WebGl RenderTargets
+  - Towards "Pixi.js RenderTexture" functionality
+  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
+- ❌ try migrate R3FDemo to react-three-offscreen
+- sh `test {fn}` evaluates function with `map` args
+- ❌ improve MapControls zoomToCursor on mobile
+  - two fingers leftwards to rotate
+  - two fingers upwards to set polar
+- Terminal crashing during HMR
+  - possibly fixed via `xterm-addon-webgl@beta`
+  - ℹ️ haven't seen for a while
+- ❌ (hull) walls -> quads
+  - ℹ️ trying alternative i.e. "edges outside floor"
+- need to remove labels from hull symbol image?
+- ❌ try avoid alphaBlend geomorphs via alphaMap
+  - we only need depthWrite false
+- Firefox android allows unbounded scrolling on "interact"
+  - debug locally using about:debugging#/runtime/this-firefox
+- 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
+  - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
+- 🚧 fix case where `transform-box` is `content-box` or `fill-box`
+  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
+  - ℹ️ seen in parseSymbol of hull symbol
+
+- only show ContextMenu on right click on desktop
+- show ContextMenu on double tap instead of long tap
+
+- if Viewer maximised and choose menu item, halve size of the Viewer
+
+- if only open Viewer a tiny amount then it should close itself
+
+- ❌ world editor in new repo
+  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
+- ❌ geomorph editor in new repo
+- 🤔 despite our "generic aim" (fabricating game masters),
+  some context will help e.g. The Last Redoubt
+
+- ✅ smaller collapsed nav on mobile
+- fix multi-touch flicker on drag
+  - setup local dev on phone to debug this
+- can add Tabs via links in blog posts
+  - without remounting other tabs!
+- open Viewer should enable Tabs initially
+- ✅ can press Escape/Enter to pause/unpause
+- how does shell function versioning work in sh/scripts.ts?
+- fix vertical tab drag on mobile
+  - need repro
+
+- iOS issues:
+  - ✅ Nav wasn't centred
+  - ✅ Viewer initially partially occluded
+  - seems fixed on iPhone 13
+
+- more decor images
+  - `computer-2`
+  - `speaker-1`
+  - `communicator-1`
+  - `fabricator-1`
+- place decor points on many tables
+- more tables in 301
+- more tables in 101
+- World WebGL rendering pauses on pause Tabs
+
+- install cypress to test terminal
+- netlify site `npc-cli` at https://lastredoubt.co
+
+
+## Scratch Pad
+
+```jsx
+// Why does this seemingly block main thread?
+React.useEffect(() => {
+  // 🚧
+  import("recast-navigation").then(({ init }) =>
+    init().then(() => {
+      // compute vertices, indices
+      let offset = 0;
+      const vs = /** @type {number[]} */ ([]);
+      const is = /** @type {number[]} */ ([]);
+      state.gms.forEach(({ navPolys }) => {
+        const { vertices, indices } = polysToAttribs(navPolys);
+        vs.push(...vertices);
+        is.push(...indices.map((x) => x + offset)); // 🚧 needs flip under conditions
+        offset += vertices.length / 3;
+      });
+      is.reverse();
+
+      import("recast-navigation/generators").then(({ generateSoloNavMesh }) => {
+        const { navMesh, success } = generateSoloNavMesh(vs, is, {});
+        console.log({ navMesh, success });
+      });
+    })
+  );
+}, [geomorphs]);
+```
+
+## Done
+
 ## Done
 
 - ✅ rename current netlify site `npc->cli` -> `the-last-redoubt`
@@ -375,34 +532,6 @@
   - ✅ try threeToTileCache
   - ✅ test against `small-map-1` + `demo-map-1`
 
-
-## WIP
-
-- 🚧 TestCharacter:
-  - ✅ use @react-three/rapier
-  - 🚧 extract basics from:
-    - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
-    - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
-    - ℹ️ no need for: keyboard controls, ray, ...
-    - ✅ kinematic-position-based
-  - click to move
-  - acceleration?
-
-- 🚧 recast/detour continued
-  - ✅ single agent crowd seen via CrowdHelper
-  - ✅ iterate crowd.update, pausing on disable Tabs
-  - ✅ visualize navPath
-    - https://github.com/donmccurdy/three-pathfinding/blob/main/src/PathfindingHelper.js
-    - https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html
-  - ✅ can navigate single agent to a clicked point
-    - ℹ️ off-mesh target produced different paths via crowd vs query
-    - ✅ works when edit map
-  - 🚧 can preserve agent position across HMR map edit
-  - 🚧 two agents and can navigate both
-    - can select agent somehow
-  - can alter polygon weights e.g. closed door
-  - visualize agent via character controller
-
 - ✅ try shader for instanced walls/doors
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
   - ✅ try gradient fill shader for doors
@@ -416,133 +545,3 @@
   - ✅ create `<shaderMaterial>` using copies of mesh basic material vertex/fragment shaders
   - ✅ create simplified versions with just enough
   - ✅ doors have gradient fill
-
-You can piece a working shader together from 'shaderchunks', or modify an existing shader with material.onbeforecompile
-
-- start generating geomorphs *.webp ourselves
-- show tables via raised "floor texture"
-
-- TestCharacter: animation
-  - use character Soldier with animations
-  - use custom character via Mixamo (use Blender to combine animations)
-  - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
-
-- ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
-- ✅ type worker.postMessage in main thread and worker
-  - ✅ main thread
-  - ✅ worker
-- ✅ get web worker HMR "working"
-  - ❌ https://github.com/webpack/webpack/issues/14722
-  - ℹ️ gatsby does not support "webpack multi-compiler"
-  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
-- ✅ changing props.mapKey should change map 
-- extend door/window connectors with correct roomIds
-- clarify handling of windows
-- simplify polygon JSON format e.g. flat arrays
-- start using cypress
-- saw slow resize on maximize desktop (but not mobile)
-- ❌ try unify parseMaps and parseSymbols
-- try fix sporadic missing updates
-  - ✅ move maps to `media/map`
-  - ✅ improve remount keys
-  - still seeing occasional issues?
-- ✅ integer accuracy when parsing maps
-  - Boxy has rounding errors e.g. when reflect
-  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
-- ❌ migrate Triangle
-  - png -> webp script applied to assets/debug
-- ❌ learn about WebGl RenderTargets
-  - Towards "Pixi.js RenderTexture" functionality
-  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
-- ❌ try migrate R3FDemo to react-three-offscreen
-- sh `test {fn}` evaluates function with `map` args
-- ❌ improve MapControls zoomToCursor on mobile
-  - two fingers leftwards to rotate
-  - two fingers upwards to set polar
-- Terminal crashing during HMR
-  - possibly fixed via `xterm-addon-webgl@beta`
-  - ℹ️ haven't seen for a while
-- ❌ (hull) walls -> quads
-  - ℹ️ trying alternative i.e. "edges outside floor"
-- need to remove labels from hull symbol image?
-- ❌ try avoid alphaBlend geomorphs via alphaMap
-  - we only need depthWrite false
-- Firefox android allows unbounded scrolling on "interact"
-  - debug locally using about:debugging#/runtime/this-firefox
-- 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
-  - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
-- 🚧 fix case where `transform-box` is `content-box` or `fill-box`
-  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
-  - ℹ️ seen in parseSymbol of hull symbol
-
-- only show ContextMenu on right click on desktop
-- show ContextMenu on double tap instead of long tap
-
-- if Viewer maximised and choose menu item, halve size of the Viewer
-
-- if only open Viewer a tiny amount then it should close itself
-
-- ❌ world editor in new repo
-  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
-- ❌ geomorph editor in new repo
-- 🤔 despite our "generic aim" (fabricating game masters),
-  some context will help e.g. The Last Redoubt
-
-- ✅ smaller collapsed nav on mobile
-- fix multi-touch flicker on drag
-  - setup local dev on phone to debug this
-- can add Tabs via links in blog posts
-  - without remounting other tabs!
-- open Viewer should enable Tabs initially
-- ✅ can press Escape/Enter to pause/unpause
-- how does shell function versioning work in sh/scripts.ts?
-- fix vertical tab drag on mobile
-  - need repro
-
-- iOS issues:
-  - ✅ Nav wasn't centred
-  - ✅ Viewer initially partially occluded
-  - seems fixed on iPhone 13
-
-- more decor images
-  - `computer-2`
-  - `speaker-1`
-  - `communicator-1`
-  - `fabricator-1`
-- place decor points on many tables
-- more tables in 301
-- more tables in 101
-- World WebGL rendering pauses on pause Tabs
-
-- install cypress to test terminal
-- netlify site `npc-cli` at https://lastredoubt.co
-
-
-## Scratch Pad
-
-```jsx
-// Why does this seemingly block main thread?
-React.useEffect(() => {
-  // 🚧
-  import("recast-navigation").then(({ init }) =>
-    init().then(() => {
-      // compute vertices, indices
-      let offset = 0;
-      const vs = /** @type {number[]} */ ([]);
-      const is = /** @type {number[]} */ ([]);
-      state.gms.forEach(({ navPolys }) => {
-        const { vertices, indices } = polysToAttribs(navPolys);
-        vs.push(...vertices);
-        is.push(...indices.map((x) => x + offset)); // 🚧 needs flip under conditions
-        offset += vertices.length / 3;
-      });
-      is.reverse();
-
-      import("recast-navigation/generators").then(({ generateSoloNavMesh }) => {
-        const { navMesh, success } = generateSoloNavMesh(vs, is, {});
-        console.log({ navMesh, success });
-      });
-    })
-  );
-}, [geomorphs]);
-```
