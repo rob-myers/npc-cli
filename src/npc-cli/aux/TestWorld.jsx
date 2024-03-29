@@ -49,20 +49,21 @@ export default function TestWorld(props) {
       scene: /** @type {*} */ ({}), // TestWorldScene state
 
       addHelpers() {
-        const threeScene = state.view.rootState.scene;
         Object.values(state.help).map((x) => x?.removeFromParent());
 
         state.help.navMesh = new NavMeshHelper({
           navMesh: state.nav.navMesh,
           navMeshMaterial: wireFrameMaterial,
         });
-        state.help.crowd = new CrowdHelper({ crowd: state.crowd, agentMaterial: undefined });
-
         state.help.navMesh.position.y = 0.01;
+        state.help.navMesh.visible = false; // Hide
+
+        state.help.crowd = new CrowdHelper({ crowd: state.crowd, agentMaterial: undefined });
 
         state.help.navPath?.dispose();
         state.help.navPath = new NavPathHelper();
 
+        const threeScene = state.view.rootState.scene;
         threeScene.add(state.help.navPath, state.help.navMesh, state.help.crowd);
       },
       ensureGmData(gmKey) {
@@ -100,6 +101,11 @@ export default function TestWorld(props) {
           query: new NavMeshQuery({ navMesh: result.navMesh }),
         });
 
+        // remember agent positions
+        const positions = state.agents.length
+          ? state.agents.map((x) => x.position())
+          : [{ x: 3 * 1.5, y: 0, z: 5 * 1.5 }];
+
         if (state.crowd) {
           state.agents.forEach((x) => state.crowd.removeAgent(x));
           state.agents.length = 0;
@@ -113,31 +119,31 @@ export default function TestWorld(props) {
         });
 
         state.addHelpers();
-        state.setupDemoCrowd();
+        state.setupDemoCrowd(positions);
 
         if (!state.disabled) {
           state.timer.reset();
           state.updateCrowd();
         }
       },
-      setupDemoCrowd() {
-        const { query } = state.nav;
+      setupDemoCrowd(positions) {
+        // const { query } = state.nav;
+        state.agents.push(
+          ...positions.map((p) =>
+            // state.crowd.addAgent(query.getClosestPoint(p), {
+            state.crowd.addAgent(p, {
+              radius: wallOutset * worldScale,
+              height: 1.5,
+              maxAcceleration: 4,
+              maxSpeed: 2,
+              collisionQueryRange: 0.3,
+              pathOptimizationRange: 0,
+              separationWeight: 1,
+            })
+          )
+        );
 
-        const src = query.getClosestPoint({ x: 3 * 1.5, y: 0, z: 5 * 1.5 });
-        const dst = query.getClosestPoint({ x: 5 * 1.5, y: 0, z: 9 * 1.5 });
-
-        const agent = state.crowd.addAgent(src, {
-          radius: wallOutset * worldScale,
-          height: 1.5,
-          maxAcceleration: 4,
-          maxSpeed: 2,
-          collisionQueryRange: 0.3,
-          pathOptimizationRange: 0,
-          separationWeight: 1,
-        });
-        state.agents.push(agent);
-
-        state.walkTo(dst);
+        // state.walkTo(dst);
       },
       update,
       updateCrowd() {
@@ -259,7 +265,7 @@ export default function TestWorld(props) {
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {() => void} setupDemoCrowd
+ * @property {(agentPositions: THREE.Vector3Like[]) => void} setupDemoCrowd
  * @property {() => void} update
  * @property {() => void} updateCrowd
  * @property {(dst: import('three').Vector3Like) => void} walkTo

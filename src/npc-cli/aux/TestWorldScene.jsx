@@ -111,8 +111,6 @@ export default function TestWorldScene(props) {
 
   // const testUvTex = useLoader(THREE.TextureLoader, "/assets/debug/test-uv-texture.png");
 
-  const shaderKey = hashText(JSON.stringify({ vertexShader, fragmentShader, uniforms }));
-
   return (
     <group onUpdate={(group) => (state.rootGroup = group)}>
       {api.gms.map((gm, gmId) => (
@@ -210,3 +208,5 @@ const uniforms = {
   diffuse: { value: new THREE.Vector3(1, 1, 0) },
   opacity: { value: 1 },
 };
+
+const shaderKey = hashText(JSON.stringify({ vertexShader, fragmentShader, uniforms }));
