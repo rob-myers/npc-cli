@@ -26,7 +26,7 @@
     - ✅ crowd helper -> TestNpcs
     - ✅ fix HMR
     - 🚧 tilecache helper -> TestNpcs
-    - add two agents
+    - ✅ add two agents
     - can select agent
     - can navigate agent
   - can alter polygon weights e.g. closed door

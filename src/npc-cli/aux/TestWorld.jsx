@@ -122,7 +122,12 @@ export default function TestWorld(props) {
       });
 
       state.addHelpers();
-      state.setupCrowdAgents(nextPositions.length ? nextPositions : [state.nav.query.getClosestPoint({ x: 3 * 1.5, y: 0, z: 5 * 1.5 })]);
+      state.setupCrowdAgents(nextPositions.length
+          ? nextPositions
+          : [{ x: 3 * 1.5, y: 0, z: 5 * 1.5 }, { x: 5 * 1.5, y: 0, z: 7 * 1.5 }].map(
+            x => state.nav.query.getClosestPoint(x)
+          )
+      );
       
       // 🚧 demo obstacle
       const obstacle = state.nav.tileCache.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
@@ -136,7 +141,7 @@ export default function TestWorld(props) {
           height: 1.5,
           maxAcceleration: 4,
           maxSpeed: 2,
-          collisionQueryRange: 0.3,
+          collisionQueryRange: 1, // jerky push at 0.3
           pathOptimizationRange: 0,
           separationWeight: 1,
           // obstacleAvoidanceType: 1,
