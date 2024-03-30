@@ -23,7 +23,8 @@
   - ✅ can preserve agent position across HMR edit
   - ✅ add obstacle and depict using TileCacheHelper
   - 🚧 two agents and can navigate both
-    - 🚧 make our own crowd/tilecache helper
+    - ✅ crowd helper -> TestNpcs
+    - 🚧 tilecache helper -> TestNpcs
     - add two agents
     - can select agent
     - can navigate agent
@@ -46,6 +47,8 @@
   - can directly change a single door's material e.g. make wireframe
     - https://www.npmjs.com/package/three-instanced-uniforms-mesh
     - https://codesandbox.io/p/sandbox/instanceduniformsmesh-r3f-lss90?file=%2Fsrc%2Findex.js
+
+- stop using prettier i.e. use eslint instead
 
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
 - ✅ type worker.postMessage in main thread and worker

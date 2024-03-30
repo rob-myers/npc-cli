@@ -45,4 +45,6 @@ declare namespace NPC {
     rmb: boolean;
     screenPoint: Geom.VectJson;
   }
+
+  type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 }
