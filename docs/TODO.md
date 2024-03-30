@@ -22,7 +22,7 @@
     - ✅ works when edit map
   - ✅ can preserve agent position across HMR edit
   - 🚧 two agents and can navigate both
-    - make our own crowd helper
+    - 🚧 make our own crowd helper
     - can select agent
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 

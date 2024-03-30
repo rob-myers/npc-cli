@@ -25,14 +25,12 @@ import gradientFragmentShader from "!!raw-loader!../glsl/gradient.f.glsl";
 export default function TestWorldScene(props) {
   const api = React.useContext(TestWorldContext);
 
-  const state = /** @type {typeof useStateRef<State>} */ (useStateRef)(() => ({
-    wallsKey: api.scene.wallsKey ?? 0,
+  // prettier-ignore
+  const state = useStateRef(/** @returns {State} */ () => ({
     wallInstances: /** @type {*} */ (null),
-    doorsKey: api.scene.doorsKey ?? 0,
     doorInstances: /** @type {*} */ (null),
 
     rootGroup: /** @type {*} */ (null),
-    sceneHash: 0, // 🚧 WIP
 
     computeInstMat(u, v, transform) {
       const height = 2;
@@ -74,6 +72,12 @@ export default function TestWorldScene(props) {
       drawPolygons(ctxt, navPolys, ["rgba(0, 0, 255, 0.2", "green"]);
       ctxt.resetTransform();
     },
+    getNumDoors() {
+      return api.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
+    },
+    getNumWalls() {
+      return api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
+    },
     positionWalls() {
       const { wallInstances: ws, doorInstances: ds } = state;
       let wOffset = 0;
@@ -103,7 +107,6 @@ export default function TestWorldScene(props) {
       });
     });
     state.wallInstances && state.positionWalls();
-    state.sceneHash = hashText(JSON.stringify(api.geomorphs));
   }, [api.geomorphs, api.mapKey]);
 
   const update = useUpdate();
@@ -142,9 +145,9 @@ export default function TestWorldScene(props) {
 
       <instancedMesh
         name="walls"
-        key={state.wallsKey}
+        key={`${api.mapHash} ${api.layoutsHash}`}
         onUpdate={(instances) => (state.wallInstances = instances)}
-        args={[quadGeometryXY, undefined, state.wallsKey]}
+        args={[quadGeometryXY, undefined, state.getNumWalls()]}
         frustumCulled={false}
       >
         <meshBasicMaterial side={THREE.DoubleSide} color="black" />
@@ -152,11 +155,9 @@ export default function TestWorldScene(props) {
 
       <instancedMesh
         name="doors"
-        key={`${state.doorsKey} ${shaderKey}`}
-        onUpdate={(instances) => {
-          state.doorInstances = instances;
-        }}
-        args={[quadGeometryXY, undefined, state.doorsKey]}
+        key={`${api.mapHash} ${api.layoutsHash} ${doorShaderHash}`}
+        onUpdate={(instances) => (state.doorInstances = instances)}
+        args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}
         onPointerUp={(e) => info("door click", e.point, e.instanceId)}
       >
@@ -178,14 +179,13 @@ export default function TestWorldScene(props) {
 
 /**
  * @typedef State
- * @property {number} doorsKey Number of doors, also used to remount them
- * @property {number} wallsKey Number of walls, also used to remount them
  * @property {THREE.InstancedMesh} wallInstances
  * @property {THREE.InstancedMesh} doorInstances
  * @property {THREE.Group} rootGroup
- * @property {number} sceneHash
  * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple) => THREE.Matrix4} computeInstMat
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
+ * @property {() => number} getNumDoors
+ * @property {() => number} getNumWalls
  * @property {() => void} positionWalls
  */
 
@@ -201,7 +201,7 @@ const uniforms = {
   opacity: { value: 1 },
 };
 
-const shaderKey = hashText(
+const doorShaderHash = hashText(
   JSON.stringify({
     basicVertexShader,
     gradientFragmentShader,
