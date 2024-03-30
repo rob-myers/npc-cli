@@ -21,8 +21,9 @@
     - ℹ️ off-mesh target produced different paths via crowd vs query
     - ✅ works when edit map
   - ✅ can preserve agent position across HMR edit
+  - 🚧 add obstacle and depict using TileCacheHelper
   - 🚧 two agents and can navigate both
-    - 🚧 make our own crowd helper
+    - make our own crowd/tilecache helper
     - can select agent
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 
