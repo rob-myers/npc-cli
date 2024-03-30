@@ -20,10 +20,12 @@ export default function TestNpcs(props) {
     moveMesh(agent, mesh) {
       const position = agent.position();
       mesh.position.set(position.x, position.y + agentHeight/2, position.z);
-      mesh.lookAt(tmpVector3.copy(mesh.position).add(agent.velocity()));
+
+      // 🚧 lerp angle
+      const velocity = agent.velocity();
+      mesh.lookAt(tmpVector3.copy(mesh.position).add(velocity));
     },
     update() {
-      // 🚧
       for (const agent of api.crowd.getAgents()) {
         const mesh = state.toMesh[agent.agentIndex];
         state.moveMesh(agent, mesh);
