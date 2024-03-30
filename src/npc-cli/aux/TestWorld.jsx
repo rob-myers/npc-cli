@@ -45,7 +45,6 @@ export default function TestWorld(props) {
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
-    agents: [],
     help: /** @type {*} */ ({}),
 
     view: /** @type {*} */ (null), // TestWorldCanvas state
@@ -105,14 +104,14 @@ export default function TestWorld(props) {
         query: new NavMeshQuery({ navMesh: result.navMesh }),
       });
 
-      // remember agent positions, or create one agent
-      const positions = state.agents.length
-        ? state.agents.map((x) => x.position())
-        : [state.nav.query.getClosestPoint({ x: 3 * 1.5, y: 0, z: 5 * 1.5 })];
+      // remember agent positions
+      const nextPositions = /** @type {THREE.Vector3Like[]} */ ([]);
 
       if (state.crowd) {
-        state.agents.forEach((x) => state.crowd.removeAgent(x));
-        state.agents = [];
+        state.crowd.getAgents().forEach((x) => {
+          nextPositions.push(x.position());
+          state.crowd.removeAgent(x);
+        });
         state.crowd.destroy();
         cancelAnimationFrame(state.reqAnimId);
       }
@@ -123,15 +122,15 @@ export default function TestWorld(props) {
       });
 
       state.addHelpers();
-      state.setupCrowdAgents(positions);
+      state.setupCrowdAgents(nextPositions.length ? nextPositions : [state.nav.query.getClosestPoint({ x: 3 * 1.5, y: 0, z: 5 * 1.5 })]);
       
-      // 🚧
+      // 🚧 demo obstacle
       const obstacle = state.nav.tileCache.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
       state.nav.tileCache.update(state.nav.navMesh);
       // state.nav.removeObstacle(obstacle);
     },
     setupCrowdAgents(positions) {
-      state.agents = positions.map((p) =>
+      positions.map((p) =>
         state.crowd.addAgent(p, {
           radius: wallOutset * worldScale,
           height: 1.5,
@@ -155,8 +154,8 @@ export default function TestWorld(props) {
       state.npcs.update();
     },
     walkTo(dst) {
-      const [agent] = state.agents;
-      // const [agent] = Object.values(state.npcs.toAgent);
+      // const [agent] = state.agents;
+      const [agent] = Object.values(state.npcs.toAgent);
       const src = agent.position();
       // debug path
       const path = state.crowd.navMeshQuery.computePath(src, dst, {});
@@ -254,7 +253,6 @@ export default function TestWorld(props) {
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {TiledCacheResult & { query: NavMeshQuery }} nav
  * @property {Crowd} crowd
- * @property {import('@recast-navigation/core').CrowdAgent[]} agents
  * @property {{ navMesh: NavMeshHelper; navPath: NavPathHelper; tileCache: TileCacheHelper }} help
  *
  * @property {() => void} addHelpers
