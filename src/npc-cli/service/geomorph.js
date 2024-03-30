@@ -385,6 +385,14 @@ class GeomorphService {
   }
 
   /**
+   * @param {number} gmId
+   * @param {number} doorId
+   */
+  getGmDoorKey(gmId, doorId) {
+    return `g${gmId}-d${doorId}`;
+  }
+
+  /**
    * @param {Geomorph.GeomorphKey} gmKey
    * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
    */

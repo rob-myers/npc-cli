@@ -24,9 +24,9 @@ export default function TestWorldScene(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     wallInstances: /** @type {*} */ (null),
     doorInstances: /** @type {*} */ (null),
+    doorHeights: {},
 
-    computeInstMat(u, v, transform) {
-      const height = 2;
+    computeInstMat(u, v, transform, height = wallDoorHeight) {
       const [src, dst] = [tmpVec1, tmpVec2];
       const segLength = u.distanceTo(v) * worldScale;
       tmpMat1.feedFromArray(transform);
@@ -52,7 +52,7 @@ export default function TestWorldScene(props) {
     getNumWalls() {
       return api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
     },
-    positionWalls() {
+    positionInstances() {
       const { wallInstances: ws, doorInstances: ds } = state;
       let wOffset = 0;
       let dOffset = 0;
@@ -62,7 +62,7 @@ export default function TestWorldScene(props) {
           ws.setMatrixAt(wOffset++, state.computeInstMat(u, v, transform))
         );
         doorSegs.forEach(([u, v]) =>
-          ds.setMatrixAt(dOffset++, state.computeInstMat(u, v, transform))
+          ds.setMatrixAt(dOffset++, state.computeInstMat(u, v, transform, state.doorHeights[`${u.x},${u.y}`]))
         );
       });
       ws.instanceMatrix.needsUpdate = true;
@@ -71,8 +71,8 @@ export default function TestWorldScene(props) {
   }));
 
   React.useEffect(() => {
-    state.wallInstances && state.positionWalls();
-  }, [api.geomorphs, api.mapKey]);
+    state.wallInstances && state.positionInstances();
+  }, [api.mapHash, api.layoutsHash]);
 
   return (
     <>
@@ -92,7 +92,24 @@ export default function TestWorldScene(props) {
         onUpdate={(instances) => (state.doorInstances = instances)}
         args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}
-        onPointerUp={(e) => info("door click", e.point, e.instanceId)}
+        onPointerUp={(e) => {
+          info("door click", e.point, e.instanceId);
+          let doorId = /** @type {number} */ (e.instanceId);
+          const gm = assertDefined(
+            api.gms.find(({ doors }) =>
+              doorId < doors.length ? true : void (doorId -= doors.length)
+            )
+          );
+          const [{ x, y }] = gm.doors[doorId].seg;
+          const key = `${x},${y}`;
+          if (key in state.doorHeights) {
+            delete state.doorHeights[key];
+          } else {
+            state.doorHeights[key] = 0.1;
+          }
+          state.positionInstances(); // 🚧 only reposition doors
+          e.stopPropagation();
+        }}
       >
         <shaderMaterial
           side={THREE.DoubleSide}
@@ -114,10 +131,12 @@ export default function TestWorldScene(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} wallInstances
  * @property {THREE.InstancedMesh} doorInstances
- * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple) => THREE.Matrix4} computeInstMat
+ * @property {{ [positionKey: string]: number }} doorHeights
+ * positionKey has format `${x},${y}` i.e. world position of src of door segment
+ * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, height?: number) => THREE.Matrix4} computeInstMat
  * @property {() => number} getNumDoors
  * @property {() => number} getNumWalls
- * @property {() => void} positionWalls
+ * @property {() => void} positionInstances
  */
 
 const textureLoader = new THREE.TextureLoader();
@@ -139,3 +158,5 @@ const doorShaderHash = hashText(
     uniforms,
   })
 );
+
+const wallDoorHeight = 2;

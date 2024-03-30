@@ -41,9 +41,9 @@
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"
 
-- 🚧 can open doors on direct click (demo)
+- 🚧 can open doors on direct click (DEMO only)
   - ✅ onPointerUp provides point and instanceId
-  - can directly open a single door (sans animation)
+  - ✅ can directly open a single door (sans animation)
   - can directly change a single door's material e.g. make wireframe
     - https://www.npmjs.com/package/three-instanced-uniforms-mesh
     - https://codesandbox.io/p/sandbox/instanceduniformsmesh-r3f-lss90?file=%2Fsrc%2Findex.js
