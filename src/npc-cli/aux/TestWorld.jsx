@@ -4,7 +4,7 @@ import { Subject } from "rxjs";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
-import { NavMeshHelper, CrowdHelper } from "@recast-navigation/three";
+import { NavMeshHelper, CrowdHelper, TileCacheHelper } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
@@ -26,143 +26,143 @@ import TestWorldScene from "./TestWorldScene";
 export default function TestWorld(props) {
   const update = useUpdate();
 
-  const state = useStateRef(
-    /** @returns {State} */ () => ({
-      disabled: !!props.disabled,
-      mapKey: props.mapKey,
-      mapHash: 0,
-      layoutsHash: 0,
-      threeReady: false,
-      reqAnimId: 0,
-      timer: new Timer(),
+  // prettier-ignore
+  const state = useStateRef(/** @returns {State} */ () => ({
+    disabled: !!props.disabled,
+    mapKey: props.mapKey,
+    mapHash: 0,
+    layoutsHash: 0,
+    threeReady: false,
+    reqAnimId: 0,
+    timer: new Timer(),
 
-      events: new Subject(),
-      geomorphs: /** @type {*} */ (null),
-      gmData: /** @type {*} */ ({}),
-      gms: [],
+    events: new Subject(),
+    geomorphs: /** @type {*} */ (null),
+    gmData: /** @type {*} */ ({}),
+    gms: [],
 
-      nav: /** @type {*} */ (null),
-      crowd: /** @type {*} */ (null),
-      agents: [],
-      help: /** @type {*} */ ({}),
-      view: /** @type {*} */ (null), // TestWorldCanvas state
-      scene: /** @type {*} */ ({}), // TestWorldScene state
+    nav: /** @type {*} */ (null),
+    crowd: /** @type {*} */ (null),
+    agents: [],
+    help: /** @type {*} */ ({}),
+    view: /** @type {*} */ (null), // TestWorldCanvas state
+    scene: /** @type {*} */ ({}), // TestWorldScene state
 
-      addHelpers() {
-        Object.values(state.help).map((x) => x?.removeFromParent());
+    addHelpers() {
+      Object.values(state.help).map((x) => x?.removeFromParent());
 
-        state.help.navMesh = new NavMeshHelper({
-          navMesh: state.nav.navMesh,
-          navMeshMaterial: wireFrameMaterial,
-        });
-        state.help.navMesh.position.y = 0.01;
-        state.help.navMesh.visible = false; // Hide
+      state.help.navMesh = new NavMeshHelper({
+        navMesh: state.nav.navMesh,
+        navMeshMaterial: wireFrameMaterial,
+      });
+      state.help.navMesh.position.y = 0.01;
+      state.help.navMesh.visible = false; // Hide
 
-        state.help.crowd = new CrowdHelper({ crowd: state.crowd, agentMaterial: undefined });
+      state.help.crowd = new CrowdHelper({ crowd: state.crowd, agentMaterial: undefined });
 
-        state.help.navPath?.dispose();
-        state.help.navPath = new NavPathHelper();
+      state.help.tileCache = new TileCacheHelper({ tileCache: state.nav.tileCache, obstacleMaterial: undefined });
 
-        const threeScene = state.view.rootState.scene;
-        threeScene.add(state.help.navPath, state.help.navMesh, state.help.crowd);
-      },
-      ensureGmData(gmKey) {
-        const layout = state.geomorphs.layout[gmKey];
-        let gmData = state.gmData[gmKey];
-        if (!gmData) {
-          const canvas = document.createElement("canvas");
-          canvas.width = layout.pngRect.width;
-          canvas.height = layout.pngRect.height;
-          gmData = state.gmData[gmKey] = {
-            canvas,
-            ctxt: assertNonNull(canvas.getContext("2d")),
-            layout,
-            tex: new THREE.CanvasTexture(canvas),
-            debugNavPoly: tmpBufferGeom1,
-          };
-        }
-        gmData.layout = layout;
-        // fix normals for recast/detour... maybe due to earcut ordering?
-        gmData.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
-        return gmData;
-      },
-      async handleMessageFromWorker(e) {
-        const msg = e.data;
-        info("main thread received message", msg);
-        if (msg.type === "nav-mesh-response") {
-          await initRecastNav();
-          state.loadTiledMesh(msg.exportedNavMesh);
-        }
-      },
-      loadTiledMesh(exportedNavMesh) {
-        const tcmProcess = createDefaultTileCacheMeshProcess();
-        const result = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, tcmProcess));
-        state.nav = Object.assign(result, {
-          query: new NavMeshQuery({ navMesh: result.navMesh }),
-        });
+      state.help.navPath?.dispose();
+      state.help.navPath = new NavPathHelper();
 
-        // remember agent positions
-        const positions = state.agents.length
-          ? state.agents.map((x) => x.position())
-          : [{ x: 3 * 1.5, y: 0, z: 5 * 1.5 }];
+      const threeScene = state.view.rootState.scene;
+      threeScene.add(...Object.values(state.help));
+    },
+    ensureGmData(gmKey) {
+      const layout = state.geomorphs.layout[gmKey];
+      let gmData = state.gmData[gmKey];
+      if (!gmData) {
+        const canvas = document.createElement("canvas");
+        canvas.width = layout.pngRect.width;
+        canvas.height = layout.pngRect.height;
+        gmData = state.gmData[gmKey] = {
+          canvas,
+          ctxt: assertNonNull(canvas.getContext("2d")),
+          layout,
+          tex: new THREE.CanvasTexture(canvas),
+          debugNavPoly: tmpBufferGeom1,
+        };
+      }
+      gmData.layout = layout;
+      // fix normals for recast/detour... maybe due to earcut ordering?
+      gmData.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
+      return gmData;
+    },
+    async handleMessageFromWorker(e) {
+      const msg = e.data;
+      info("main thread received message", msg);
+      if (msg.type === "nav-mesh-response") {
+        await initRecastNav();
+        state.loadTiledMesh(msg.exportedNavMesh);
+      }
+    },
+    loadTiledMesh(exportedNavMesh) {
+      const tcmProcess = createDefaultTileCacheMeshProcess();
+      const result = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, tcmProcess));
+      state.nav = Object.assign(result, {
+        query: new NavMeshQuery({ navMesh: result.navMesh }),
+      });
 
-        if (state.crowd) {
-          state.agents.forEach((x) => state.crowd.removeAgent(x));
-          state.agents.length = 0;
-          state.crowd.destroy();
-          cancelAnimationFrame(state.reqAnimId);
-        }
-        state.crowd = new Crowd({
-          maxAgents: 10,
-          maxAgentRadius: wallOutset * worldScale,
-          navMesh: state.nav.navMesh,
-        });
+      // remember agent positions, or create one agent
+      const positions = state.agents.length
+        ? state.agents.map((x) => x.position())
+        : [state.nav.query.getClosestPoint({ x: 3 * 1.5, y: 0, z: 5 * 1.5 })];
 
-        state.addHelpers();
-        state.setupDemoCrowd(positions);
+      if (state.crowd) {
+        state.agents.forEach((x) => state.crowd.removeAgent(x));
+        state.agents = [];
+        state.crowd.destroy();
+        cancelAnimationFrame(state.reqAnimId);
+      }
+      state.crowd = new Crowd({
+        maxAgents: 10,
+        maxAgentRadius: wallOutset * worldScale,
+        navMesh: state.nav.navMesh,
+      });
 
-        if (!state.disabled) {
-          state.timer.reset();
-          state.updateCrowd();
-        }
-      },
-      setupDemoCrowd(positions) {
-        // const { query } = state.nav;
-        state.agents.push(
-          ...positions.map((p) =>
-            // state.crowd.addAgent(query.getClosestPoint(p), {
-            state.crowd.addAgent(p, {
-              radius: wallOutset * worldScale,
-              height: 1.5,
-              maxAcceleration: 4,
-              maxSpeed: 2,
-              collisionQueryRange: 0.3,
-              pathOptimizationRange: 0,
-              separationWeight: 1,
-            })
-          )
-        );
+      state.addHelpers();
+      state.setupCrowdAgents(positions);
+      
+      // 🚧
+      state.nav.tileCache.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
 
-        // state.walkTo(dst);
-      },
-      update,
-      updateCrowd() {
-        state.reqAnimId = requestAnimationFrame(state.updateCrowd);
-        state.timer.update();
-        const deltaMs = state.timer.getDelta();
-        state.crowd.update(deltaMs);
-        state.help.crowd.update();
-      },
-      walkTo(dst) {
-        const [agent] = state.agents;
-        const src = agent.position();
-        // debug path
-        const path = state.crowd.navMeshQuery.computePath(src, dst, {});
-        state.help.navPath.setPath(path);
-        agent.goto(dst); // navigate
-      },
-    })
-  );
+      if (!state.disabled) {
+        state.timer.reset();
+        state.updateCrowd();
+      }
+    },
+    setupCrowdAgents(positions) {
+      state.agents = positions.map((p) =>
+        state.crowd.addAgent(p, {
+          radius: wallOutset * worldScale,
+          height: 1.5,
+          maxAcceleration: 4,
+          maxSpeed: 2,
+          collisionQueryRange: 0.3,
+          pathOptimizationRange: 0,
+          separationWeight: 1,
+          // obstacleAvoidanceType: 1,
+        })
+      );
+    },
+    update,
+    updateCrowd() {
+      state.reqAnimId = requestAnimationFrame(state.updateCrowd);
+      state.timer.update();
+      const deltaMs = state.timer.getDelta();
+      state.crowd.update(deltaMs);
+      state.help.crowd.update();
+      state.help.tileCache.update();
+    },
+    walkTo(dst) {
+      const [agent] = state.agents;
+      const src = agent.position();
+      // debug path
+      const path = state.crowd.navMeshQuery.computePath(src, dst, {});
+      state.help.navPath.setPath(path);
+      agent.goto(dst); // navigate
+    },
+  }));
 
   state.disabled = !!props.disabled;
   state.mapKey = props.mapKey;
@@ -256,13 +256,13 @@ export default function TestWorld(props) {
  * @property {TiledCacheResult & { query: NavMeshQuery }} nav
  * @property {Crowd} crowd
  * @property {import('@recast-navigation/core').CrowdAgent[]} agents
- * @property {{ navMesh: NavMeshHelper; crowd: CrowdHelper; navPath: NavPathHelper }} help
+ * @property {{ navMesh: NavMeshHelper; crowd: CrowdHelper; navPath: NavPathHelper; tileCache: TileCacheHelper }} help
  *
  * @property {() => void} addHelpers
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {(agentPositions: THREE.Vector3Like[]) => void} setupDemoCrowd
+ * @property {(agentPositions: THREE.Vector3Like[]) => void} setupCrowdAgents
  * @property {() => void} update
  * @property {() => void} updateCrowd
  * @property {(dst: import('three').Vector3Like) => void} walkTo
