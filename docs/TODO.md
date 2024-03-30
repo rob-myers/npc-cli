@@ -4,13 +4,12 @@
 
 - 🚧 TestCharacter:
   - ✅ use @react-three/rapier
-  - 🚧 extract basics from:
+  - ✅ extract basics from:
     - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
     - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
     - ℹ️ no need for: keyboard controls, ray, ...
     - ✅ kinematic-position-based
-  - click to move
-  - acceleration?
+  - 🚧 check anything is missing
 
 - 🚧 recast/detour continued
   - ✅ single agent crowd seen via CrowdHelper
@@ -23,18 +22,20 @@
     - ✅ works when edit map
   - ✅ can preserve agent position across HMR edit
   - 🚧 two agents and can navigate both
-    - can select agent somehow
+    - make our own crowd helper
+    - can select agent
   - can alter polygon weights e.g. closed door
-  - visualize agent via character controller
   - can replan moving agent path on HMR edit 
 
-- start generating geomorphs *.webp ourselves
-- show tables via raised "floor texture"
+- integrate TestCharacter into TestWorld
 
 - TestCharacter: animation
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
   - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- start generating geomorphs *.webp ourselves
+- show tables via raised "floor texture"
 
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
 - ✅ type worker.postMessage in main thread and worker
