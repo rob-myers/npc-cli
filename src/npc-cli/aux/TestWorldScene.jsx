@@ -1,8 +1,7 @@
 import React from "react";
 import * as THREE from "three";
-import { useLoader } from "@react-three/fiber";
 
-import { assertDefined, error, hashText, keys, warn } from "../service/generic";
+import { assertDefined, error, hashText, info, keys, warn } from "../service/generic";
 import { worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -17,8 +16,8 @@ import { Mat, Vect } from "../geom";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
 
-import vertexShader from "!!raw-loader!../glsl/mesh-basic-simplified.v.glsl";
-import fragmentShader from "!!raw-loader!../glsl/mesh-basic-simplified.f.glsl";
+import basicVertexShader from "!!raw-loader!../glsl/mesh-basic-simplified.v.glsl";
+import gradientFragmentShader from "!!raw-loader!../glsl/gradient.f.glsl";
 
 /**
  * @param {Props} props
@@ -109,8 +108,6 @@ export default function TestWorldScene(props) {
 
   const update = useUpdate();
 
-  // const testUvTex = useLoader(THREE.TextureLoader, "/assets/debug/test-uv-texture.png");
-
   return (
     <group onUpdate={(group) => (state.rootGroup = group)}>
       {api.gms.map((gm, gmId) => (
@@ -150,11 +147,7 @@ export default function TestWorldScene(props) {
         args={[quadGeometryXY, undefined, state.wallsKey]}
         frustumCulled={false}
       >
-        <meshBasicMaterial
-          side={THREE.DoubleSide}
-          color="black"
-          // map={testUvTex}
-        />
+        <meshBasicMaterial side={THREE.DoubleSide} color="black" />
       </instancedMesh>
 
       <instancedMesh
@@ -164,14 +157,13 @@ export default function TestWorldScene(props) {
           state.doorInstances = instances;
         }}
         args={[quadGeometryXY, undefined, state.doorsKey]}
-        // args={[quadGeometryXY, shaderMat, state.doorsKey]}
         frustumCulled={false}
+        onPointerUp={(e) => info("door click", e.point, e.instanceId)}
       >
-        {/* <meshBasicMaterial side={THREE.DoubleSide} color="#444" /> */}
         <shaderMaterial
           side={THREE.DoubleSide}
-          vertexShader={vertexShader}
-          fragmentShader={fragmentShader}
+          vertexShader={basicVertexShader}
+          fragmentShader={gradientFragmentShader}
           uniforms={uniforms}
         />
       </instancedMesh>
@@ -209,4 +201,10 @@ const uniforms = {
   opacity: { value: 1 },
 };
 
-const shaderKey = hashText(JSON.stringify({ vertexShader, fragmentShader, uniforms }));
+const shaderKey = hashText(
+  JSON.stringify({
+    basicVertexShader,
+    gradientFragmentShader,
+    uniforms,
+  })
+);

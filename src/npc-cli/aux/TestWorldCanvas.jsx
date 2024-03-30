@@ -42,10 +42,8 @@ export default function TestWorldCanvas(props) {
   api.view = state;
 
   React.useEffect(() => {
-    // state.controls?.setPolarAngle(Math.PI / 4); // Initialize view
-
     const sub = api.events.subscribe((e) => {
-      console.log("event", e);
+      // console.log("event", e);
 
       switch (e.key) {
         case "pointerup":

@@ -6,8 +6,8 @@ uniform float opacity;
 // #include <uv_pars_fragment>
 #include <logdepthbuf_pars_fragment>
 
-vec3 colorA = vec3(0.1, 0.1, 0.1);
-vec3 colorB = vec3(0.2, 0.2, 0.2);
+vec3 colorA = vec3(0, 0, 0);
+vec3 colorB = vec3(0.4, 0.4, 0.4);
 
 void main() {
 
