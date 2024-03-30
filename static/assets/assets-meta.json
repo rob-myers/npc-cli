@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": -1178633012},
+    "101--hull": {"outputHash": -1735777342},
     "102--hull": {"outputHash": -766366508},
     "103--hull": {"outputHash": 1220829134},
     "301--hull": {"outputHash": 432613799},
@@ -11,6 +11,7 @@
     "empty-room--039--3x4": {"outputHash": -459302483},
     "fresher--020--2x2": {"outputHash": -2130334648},
     "fresher--025--3x2": {"outputHash": 1875683850},
+    "fuel--010--4x2": {"outputHash": -1407643869},
     "lifeboat--small-craft--2x4": {"outputHash": -1665133809},
     "lounge--015--4x2": {"outputHash": 1045109240},
     "medical--007--3x2": {"outputHash": -721585240},
@@ -395,6 +396,62 @@
           "width": 120,
           "height": 240,
           "transform": [1, 0, 0, 1, 0, 480]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 0, 0]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 360, 0]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 600, 0]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 960, 0]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 960, 1080]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 360, 1080]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 600, 1080]
+        },
+        {
+          "symbolKey": "fuel--010--4x2",
+          "meta": {"key": "fuel--010--4x2"},
+          "width": 240,
+          "height": 120,
+          "transform": [1, 0, 0, 1, 0, 1080]
         }
       ],
       "removableDoors": [],
@@ -4132,6 +4189,35 @@
       "width": 900,
       "height": 600,
       "pngRect": {"x": -10, "y": -10, "width": 920, "height": 620},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "fuel--010--4x2": {
+      "key": "fuel--010--4x2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[-4, -4], [-4, 123.8], [243.6, 123.8], [243.6, -4]]],
+          "meta": {"obstacle": true, "no-fill": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[118, 26], [118, 30], [122, 30], [122, 26]]],
+          "meta": {"decor": true, "label": "fuel"}
+        }
+      ],
+      "unsorted": [],
+      "width": 1200,
+      "height": 600,
+      "pngRect": {"x": -19, "y": -19.6, "width": 1238, "height": 639},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []

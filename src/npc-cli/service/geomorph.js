@@ -65,6 +65,7 @@ class GeomorphService {
     "empty-room--039--3x4": true,
     "fresher--020--2x2": true,
     "fresher--025--3x2": true,
+    "fuel--010--4x2": true,
     "lifeboat--small-craft--2x4": true,
     "lounge--015--4x2": true,
     "medical--007--3x2": true,
