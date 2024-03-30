@@ -21,19 +21,21 @@
     - ℹ️ off-mesh target produced different paths via crowd vs query
     - ✅ works when edit map
   - ✅ can preserve agent position across HMR edit
-  - 🚧 add obstacle and depict using TileCacheHelper
+  - ✅ add obstacle and depict using TileCacheHelper
   - 🚧 two agents and can navigate both
-    - make our own crowd/tilecache helper
+    - 🚧 make our own crowd/tilecache helper
+    - add two agents
     - can select agent
+    - can navigate agent
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 
-
-- integrate TestCharacter into TestWorld
 
 - TestCharacter: animation
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
   - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- integrate TestCharacter into TestWorld
 
 - start generating geomorphs *.webp ourselves
 - show tables via raised "floor texture"

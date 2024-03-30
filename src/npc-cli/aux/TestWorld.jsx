@@ -18,7 +18,9 @@ import useStateRef from "../hooks/use-state-ref";
 import useHandleEvents from "./use-test-handle-events";
 import NavPathHelper from "./NavPathHelper";
 import TestWorldCanvas from "./TestWorldCanvas";
-import TestWorldScene from "./TestWorldScene";
+import TestGeomorphs from "./TestGeomorphs";
+import TestWallsAndDoors from "./TestWallsAndDoors";
+import TestNpcs from "./TestNpcs";
 
 /**
  * @param {Props} props
@@ -46,7 +48,6 @@ export default function TestWorld(props) {
     agents: [],
     help: /** @type {*} */ ({}),
     view: /** @type {*} */ (null), // TestWorldCanvas state
-    scene: /** @type {*} */ ({}), // TestWorldScene state
 
     addHelpers() {
       Object.values(state.help).map((x) => x?.removeFromParent());
@@ -226,7 +227,13 @@ export default function TestWorld(props) {
   return (
     <TestWorldContext.Provider value={state}>
       <TestWorldCanvas disabled={props.disabled} stats>
-        {geomorphs && <TestWorldScene disabled={props.disabled} />}
+        {geomorphs && (
+          <group>
+            <TestGeomorphs disabled={props.disabled} />
+            <TestWallsAndDoors />
+            <TestNpcs />
+          </group>
+        )}
       </TestWorldCanvas>
     </TestWorldContext.Provider>
   );
@@ -251,7 +258,6 @@ export default function TestWorld(props) {
  * @property {Timer} timer
  *
  * @property {import('./TestWorldCanvas').State} view
- * @property {import('./TestWorldScene').State} scene
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
