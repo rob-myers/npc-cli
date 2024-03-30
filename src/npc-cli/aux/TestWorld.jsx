@@ -156,6 +156,7 @@ export default function TestWorld(props) {
     },
     walkTo(dst) {
       const [agent] = state.agents;
+      // const [agent] = Object.values(state.npcs.toAgent);
       const src = agent.position();
       // debug path
       const path = state.crowd.navMeshQuery.computePath(src, dst, {});

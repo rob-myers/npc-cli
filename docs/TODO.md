@@ -24,6 +24,7 @@
   - ✅ add obstacle and depict using TileCacheHelper
   - 🚧 two agents and can navigate both
     - ✅ crowd helper -> TestNpcs
+    - ✅ fix HMR
     - 🚧 tilecache helper -> TestNpcs
     - add two agents
     - can select agent

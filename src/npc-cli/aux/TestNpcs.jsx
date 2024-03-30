@@ -2,6 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { wallOutset, worldScale } from "../service/const";
+import { info } from "../service/generic";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -22,7 +23,7 @@ export default function TestNpcs(props) {
     },
     update() {
       // 🚧
-      for (const agent of props.crowd.getAgents()) {
+      for (const agent of api.crowd.getAgents()) {
         const mesh = state.toMesh[agent.agentIndex];
         state.moveMesh(agent, mesh);
       }
@@ -39,7 +40,7 @@ export default function TestNpcs(props) {
     } else {
       api.updateCrowd();
     }
-  }, [api.disabled]);
+  }, [api.disabled, props.crowd]);
 
   return Object.values(state.toAgent).map((agent) => (
     <mesh
@@ -47,6 +48,9 @@ export default function TestNpcs(props) {
       onUpdate={(mesh) => {
         state.toMesh[agent.agentIndex] = mesh;
         state.moveMesh(agent, mesh);
+      }}
+      onPointerUp={(e) => {
+        info("clicked npc", agent.agentIndex);
       }}
     >
       <meshBasicMaterial color="blue" />
