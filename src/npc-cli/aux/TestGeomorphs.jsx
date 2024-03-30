@@ -33,7 +33,7 @@ export default function TestWorldScene(props) {
       // drawPolygons(ctxt, rooms, [null, "green", 0]);
 
       // 🚧 debug draw navPolys
-      drawPolygons(ctxt, navPolys, ["rgba(0, 0, 255, 0.2", "green"]);
+      // drawPolygons(ctxt, navPolys, ["rgba(0, 0, 255, 0)", "rgba(0, 0, 0, 1)", 1]);
       ctxt.resetTransform();
     },
   }));
@@ -50,39 +50,35 @@ export default function TestWorldScene(props) {
 
   const update = useUpdate();
 
-  return (
-    <>
-      {api.gms.map((gm, gmId) => (
-        <group
-          key={`${gm.key} ${gmId} ${gm.transform}`}
-          onUpdate={(self) => self.applyMatrix4(gm.mat4)}
-          scale={[worldScale, 1, worldScale]}
-        >
-          <mesh
-            geometry={quadGeometryXZ}
-            scale={[gm.pngRect.width, 1, gm.pngRect.height]}
-            position={[gm.pngRect.x, 0, gm.pngRect.y]}
-          >
-            <meshBasicMaterial
-              side={THREE.DoubleSide}
-              transparent
-              map={api.gmData[gm.key].tex}
-              depthWrite={false} // fix z-fighting
-            />
-          </mesh>
-          <mesh
-            name="debugNavPoly"
-            geometry={api.gmData[gm.key].debugNavPoly}
-            position={[0, 0.001, 0]}
-            // scale={[1, -1, 1]}
-            visible={false}
-          >
-            <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe={false} />
-          </mesh>
-        </group>
-      ))}
-    </>
-  );
+  return api.gms.map((gm, gmId) => (
+    <group
+      key={`${gm.key} ${gmId} ${gm.transform}`}
+      onUpdate={(self) => self.applyMatrix4(gm.mat4)}
+      scale={[worldScale, 1, worldScale]}
+    >
+      <mesh
+        geometry={quadGeometryXZ}
+        scale={[gm.pngRect.width, 1, gm.pngRect.height]}
+        position={[gm.pngRect.x, 0, gm.pngRect.y]}
+      >
+        <meshBasicMaterial
+          side={THREE.DoubleSide}
+          transparent
+          map={api.gmData[gm.key].tex}
+          depthWrite={false} // fix z-fighting
+        />
+      </mesh>
+      <mesh
+        name="debugNavPoly"
+        geometry={api.gmData[gm.key].debugNavPoly}
+        position={[0, 0.001, 0]}
+        // scale={[1, -1, 1]}
+        visible={false}
+      >
+        <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe={false} />
+      </mesh>
+    </group>
+  ));
 }
 
 /**
