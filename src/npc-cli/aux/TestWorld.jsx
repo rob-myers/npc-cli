@@ -124,7 +124,9 @@ export default function TestWorld(props) {
       state.setupCrowdAgents(positions);
       
       // 🚧
-      state.nav.tileCache.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
+      const obstacle = state.nav.tileCache.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
+      state.nav.tileCache.update(state.nav.navMesh);
+      // state.nav.removeObstacle(obstacle);
 
       if (!state.disabled) {
         state.timer.reset();
