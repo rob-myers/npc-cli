@@ -24,11 +24,11 @@ export default function TestWorldScene(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     wallInstances: /** @type {*} */ (null),
     doorInstances: /** @type {*} */ (null),
-    doorHeights: {},
+    doorWidths: {},
 
-    computeInstMat(u, v, transform, height = wallDoorHeight) {
+    computeInstMat(u, v, transform, doorWidth) {
       const [src, dst] = [tmpVec1, tmpVec2];
-      const segLength = u.distanceTo(v) * worldScale;
+      const segLength = doorWidth ?? u.distanceTo(v) * worldScale;
       tmpMat1.feedFromArray(transform);
       tmpMat1.transformPoint(tmpVec1.copy(u));
       tmpMat1.transformPoint(tmpVec2.copy(v));
@@ -42,7 +42,7 @@ export default function TestWorldScene(props) {
           src.x,
           src.y,
         ],
-        height,
+        wallDoorHeight,
         tmpMatFour1
       );
     },
@@ -62,7 +62,7 @@ export default function TestWorldScene(props) {
           ws.setMatrixAt(wOffset++, state.computeInstMat(u, v, transform))
         );
         doorSegs.forEach(([u, v]) =>
-          ds.setMatrixAt(dOffset++, state.computeInstMat(u, v, transform, state.doorHeights[`${u.x},${u.y}`]))
+          ds.setMatrixAt(dOffset++, state.computeInstMat(u, v, transform, state.doorWidths[`${u.x},${u.y}`]))
         );
       });
       ws.instanceMatrix.needsUpdate = true;
@@ -102,10 +102,10 @@ export default function TestWorldScene(props) {
           );
           const [{ x, y }] = gm.doors[doorId].seg;
           const key = `${x},${y}`;
-          if (key in state.doorHeights) {
-            delete state.doorHeights[key];
+          if (key in state.doorWidths) {
+            delete state.doorWidths[key];
           } else {
-            state.doorHeights[key] = 0.1;
+            state.doorWidths[key] = 0.15;
           }
           state.positionInstances(); // 🚧 only reposition doors
           e.stopPropagation();
@@ -131,9 +131,9 @@ export default function TestWorldScene(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} wallInstances
  * @property {THREE.InstancedMesh} doorInstances
- * @property {{ [positionKey: string]: number }} doorHeights
+ * @property {{ [positionKey: string]: number }} doorWidths
  * positionKey has format `${x},${y}` i.e. world position of src of door segment
- * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, height?: number) => THREE.Matrix4} computeInstMat
+ * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} computeInstMat
  * @property {() => number} getNumDoors
  * @property {() => number} getNumWalls
  * @property {() => void} positionInstances
