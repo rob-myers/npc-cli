@@ -107,7 +107,7 @@ export default function TestWorld(props) {
       // remember agent positions
       const nextPositions = /** @type {THREE.Vector3Like[]} */ ([]);
 
-      if (state.crowd) {
+      if (state.crowd) {// cleanup
         state.crowd.getAgents().forEach((x) => {
           nextPositions.push(x.position());
           state.crowd.removeAgent(x);
@@ -159,8 +159,7 @@ export default function TestWorld(props) {
       state.npcs.update();
     },
     walkTo(dst) {
-      // const [agent] = state.agents;
-      const [agent] = Object.values(state.npcs.toAgent);
+      const agent = state.npcs.toAgent[state.npcs.selected];
       const src = agent.position();
       // debug path
       const path = state.crowd.navMeshQuery.computePath(src, dst, {});

@@ -14,6 +14,7 @@ export default function TestNpcs(props) {
 
   // prettier-ignore
   const state = useStateRef(/** @returns {State} */ () => ({
+    selected: 0,
     toAgent: {},
     toMesh: {}, // 🚧 on remove agent need to update this
     moveMesh(agent, mesh) {
@@ -27,6 +28,10 @@ export default function TestNpcs(props) {
         const mesh = state.toMesh[agent.agentIndex];
         state.moveMesh(agent, mesh);
       }
+    },
+    updateAgentColor(agentId) {
+      const mesh = state.toMesh[agentId];
+      /** @type {THREE.MeshBasicMaterial} */ (mesh.material).color = state.selected === agentId ? greenColor : redColor
     },
   }));
 
@@ -48,13 +53,19 @@ export default function TestNpcs(props) {
       onUpdate={(mesh) => {
         state.toMesh[agent.agentIndex] = mesh;
         state.moveMesh(agent, mesh);
+        state.updateAgentColor(Number(agent.agentIndex));
       }}
       onPointerUp={(e) => {
         info("clicked npc", agent.agentIndex);
+        state.selected = agent.agentIndex;
+        Object.keys(state.toMesh).forEach((agentIdStr) =>
+          state.updateAgentColor(Number(agentIdStr))
+        );
+        e.stopPropagation();
       }}
     >
-      <meshBasicMaterial color="blue" />
-      <capsuleGeometry args={[agentRadius, agentHeight / 2]} />
+      <meshBasicMaterial />
+      <capsuleGeometry args={[agentRadius, agentHeight / 2, 5, 5]} />
     </mesh>
   ));
 }
@@ -67,8 +78,10 @@ export default function TestNpcs(props) {
 
 /**
  * @typedef State
+ * @property {number} selected
  * @property {Record<string, NPC.CrowdAgent>} toAgent
  * @property {Record<string, THREE.Mesh>} toMesh
+ * @property {(agentId: number) => void} updateAgentColor
  * @property {(agent: NPC.CrowdAgent, mesh: THREE.Mesh) => void} moveMesh
  * @property {() => void} update
  */
@@ -76,3 +89,5 @@ export default function TestNpcs(props) {
 const agentRadius = wallOutset * worldScale;
 const agentHeight = 1.5;
 const tmpVector3 = new THREE.Vector3();
+const redColor = new THREE.Color("red");
+const greenColor = new THREE.Color("green");

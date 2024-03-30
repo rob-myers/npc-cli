@@ -25,10 +25,9 @@
   - 🚧 two agents and can navigate both
     - ✅ crowd helper -> TestNpcs
     - ✅ fix HMR
-    - 🚧 tilecache helper -> TestNpcs
     - ✅ add two agents
-    - can select agent
-    - can navigate agent
+    - ✅ can select agent and navigate selected
+    - 🚧 tilecache helper -> TestNpcs
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 
 
