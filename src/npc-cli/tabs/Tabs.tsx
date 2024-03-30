@@ -161,7 +161,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
 
   useBeforeunload(() => storeModelAsJson(props.id, state.model));
 
-  React.useMemo(() => void (ref as Function)?.(state), [ref]);
+  React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
 
   const update = useUpdate();
 
