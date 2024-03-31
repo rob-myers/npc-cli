@@ -3,11 +3,11 @@ import * as THREE from "three";
 
 import { keys } from "../service/generic";
 import { worldScale } from "../service/const";
+import { quadGeometryXZ } from "../service/three";
+import { drawPolygons, strokeLine } from "../service/dom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { quadGeometryXZ } from "../service/three";
-import { drawPolygons, strokeLine } from "../service/dom";
 
 /**
  * @param {Props} props
@@ -33,7 +33,7 @@ export default function TestGeomorphs(props) {
       // drawPolygons(ctxt, rooms, [null, "green", 0]);
 
       // 🚧 debug draw navPolys
-      // drawPolygons(ctxt, navPolys, ["rgba(0, 0, 255, 0)", "rgba(0, 0, 0, 1)", 1]);
+      drawPolygons(ctxt, navPolys, ["rgba(0, 0, 0, 0.04)", "rgba(0, 0, 0, 0)", 1]);
       ctxt.resetTransform();
     },
   }));

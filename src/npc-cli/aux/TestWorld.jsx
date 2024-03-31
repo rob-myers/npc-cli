@@ -140,9 +140,8 @@ export default function TestWorld(props) {
           maxAcceleration: 4,
           maxSpeed: 2,
           collisionQueryRange: 1, // jerky push at 0.3
-          pathOptimizationRange: 0,
+          pathOptimizationRange: wallOutset * worldScale * 20,
           separationWeight: 1,
-          // obstacleAvoidanceType: 1,
         })
       );
     },
@@ -165,7 +164,6 @@ export default function TestWorld(props) {
       agent.goto(dst); // navigate
     },
   }));
-
   state.disabled = !!props.disabled;
 
   useHandleEvents(state);
@@ -194,18 +192,15 @@ export default function TestWorld(props) {
   }, [geomorphs, props.mapKey]);
 
   React.useEffect(() => {
-    if (!state.threeReady || !state.mapHash) {
-      return;
+    if (state.threeReady && state.mapHash) {
+      // 🔔 strange behaviour when inlined `new URL`.
+      // 🔔 assume worker already listening for events
+      /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
+      const worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
+      worker.addEventListener("message", state.handleMessageFromWorker);
+      worker.postMessage({ type: "request-nav-mesh", mapKey: props.mapKey });
+      return () => void worker.terminate();
     }
-    // 🔔 strange behaviour when inlined `new URL`.
-    // 🔔 assume worker already listening for events
-    /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
-    const worker = new Worker(new URL("./test-recast.worker", import.meta.url), {
-      type: "module",
-    });
-    worker.addEventListener("message", state.handleMessageFromWorker);
-    worker.postMessage({ type: "request-nav-mesh", mapKey: props.mapKey });
-    return () => void worker.terminate();
   }, [
     state.threeReady,
     state.mapHash,
