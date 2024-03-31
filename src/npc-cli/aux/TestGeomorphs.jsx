@@ -12,7 +12,7 @@ import { drawPolygons, strokeLine } from "../service/dom";
 /**
  * @param {Props} props
  */
-export default function TestWorldScene(props) {
+export default function TestGeomorphs(props) {
   const api = React.useContext(TestWorldContext);
 
   // prettier-ignore
@@ -46,7 +46,7 @@ export default function TestWorldScene(props) {
         update();
       });
     });
-  }, [api.geomorphs, api.mapKey]);
+  }, [api.geomorphs, api.mapHash]);
 
   const update = useUpdate();
 

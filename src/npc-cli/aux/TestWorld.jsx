@@ -28,10 +28,8 @@ import TestNpcs from "./TestNpcs";
 export default function TestWorld(props) {
   const update = useUpdate();
 
-  // prettier-ignore
   const state = useStateRef(/** @returns {State} */ () => ({
     disabled: !!props.disabled,
-    mapKey: props.mapKey,
     mapHash: 0,
     layoutsHash: 0,
     threeReady: false,
@@ -47,8 +45,8 @@ export default function TestWorld(props) {
     crowd: /** @type {*} */ (null),
     help: /** @type {*} */ ({}),
 
-    view: /** @type {*} */ (null), // TestWorldCanvas state
-    npcs: /** @type {*} */ (null), // TestNpcs state
+    view: /** @type {*} */ (null), // TestWorldCanvas
+    npcs: /** @type {*} */ (null), // TestNpcs
 
     addHelpers() {
       Object.values(state.help).map((x) => x?.removeFromParent());
@@ -169,7 +167,6 @@ export default function TestWorld(props) {
   }));
 
   state.disabled = !!props.disabled;
-  state.mapKey = props.mapKey;
 
   useHandleEvents(state);
 
@@ -240,7 +237,6 @@ export default function TestWorld(props) {
 /**
  * @typedef State
  * @property {boolean} disabled
- * @property {string} mapKey
  * @property {number} layoutsHash For HMR
  * @property {number} mapHash For HMR
  * @property {Subject<NPC.Event>} events
