@@ -33,7 +33,7 @@ export default function TestGeomorphs(props) {
       // drawPolygons(ctxt, rooms, [null, "green", 0]);
 
       // 🚧 debug draw navPolys
-      drawPolygons(ctxt, navPolys, ["rgba(0, 0, 0, 0.04)", "rgba(0, 0, 0, 0)", 1]);
+      drawPolygons(ctxt, navPolys, ["rgba(0, 0, 0, 0.08)", "rgba(0, 0, 0, 0)", 1]);
       ctxt.resetTransform();
     },
   }));
