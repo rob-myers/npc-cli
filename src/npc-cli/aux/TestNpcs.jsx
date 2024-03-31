@@ -43,14 +43,7 @@ export default function TestNpcs(props) {
   state.toAgent = props.crowd.agents;
   api.npcs = state;
 
-  React.useEffect(() => {
-    api.timer.reset();
-    if (api.disabled) {
-      cancelAnimationFrame(api.reqAnimId);
-    } else {
-      api.updateCrowd();
-    }
-  }, [api.disabled, props.crowd]);
+  React.useEffect(() => void api.update(), []);
 
   return Object.values(state.toAgent).map((agent) => (
     <group

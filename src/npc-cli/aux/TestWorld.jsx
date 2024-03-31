@@ -208,6 +208,15 @@ export default function TestWorld(props) {
     // geomorphs, // HMR reload on focus hack
   ]);
 
+  React.useEffect(() => {
+    state.timer.reset();
+    if (state.disabled) {
+      cancelAnimationFrame(state.reqAnimId);
+    } else {
+      state.npcs && state.updateCrowd();
+    }
+  }, [state.disabled, state.npcs]);
+
   return (
     <TestWorldContext.Provider value={state}>
       <TestWorldCanvas disabled={props.disabled} stats>
