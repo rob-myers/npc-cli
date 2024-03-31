@@ -25,7 +25,7 @@ export default function TestWallsAndDoors(props) {
 
     doorByPos: {},
     doorByInstId: [],
-    movingDoors: {},
+    movingDoors: new Map,
 
     buildLookups() {
       let dId = 0;
@@ -76,22 +76,23 @@ export default function TestWallsAndDoors(props) {
       const instanceId = /** @type {number} */ (e.instanceId);
       const meta = state.doorByInstId[instanceId];
       meta.open = !meta.open;
-      state.movingDoors[meta.instanceId] = meta;
+      state.movingDoors.set(meta.instanceId, meta);
       e.stopPropagation();
     },
     onTick() {
+      if (state.movingDoors.size === 0) {
+        return;
+      }
       const deltaMs = api.timer.getDelta();
       const { instanceMatrix } = state.doorsInst;
 
-      for (const meta of Object.values(state.movingDoors)) {
+      for (const [instanceId, meta] of state.movingDoors.entries()) {
         const dstRatio = meta.open ? 0.1 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
-        
         const length = meta.ratio * meta.segLength * worldScale;
-        instanceMatrix.array[meta.instanceId * 16 + 0] = meta.dir.x * length;
-        instanceMatrix.array[meta.instanceId * 16 + 2] = meta.dir.y * length;
-
-        if (meta.ratio === dstRatio) delete state.movingDoors[meta.instanceId]
+        instanceMatrix.array[instanceId * 16 + 0] = meta.dir.x * length;
+        instanceMatrix.array[instanceId * 16 + 2] = meta.dir.y * length;
+        if (meta.ratio === dstRatio) state.movingDoors.delete(instanceId);
       }
       instanceMatrix.needsUpdate = true;
     },
@@ -160,7 +161,7 @@ export default function TestWallsAndDoors(props) {
  * @property {THREE.InstancedMesh} doorsInst
  * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
  * @property {{ [instanceId: number]: Geomorph.DoorMeta }} doorByInstId
- * @property {{ [instanceId: number]: Geomorph.DoorMeta }} movingDoors To be animated until they open/close.
+ * @property {Map<number, Geomorph.DoorMeta>} movingDoors To be animated until they open/close.
  *
  * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
