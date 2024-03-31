@@ -165,6 +165,7 @@ export default function TestWorld(props) {
       agent.goto(dst); // navigate
     },
   }));
+
   state.disabled = !!props.disabled;
 
   useHandleEvents(state);
@@ -211,12 +212,11 @@ export default function TestWorld(props) {
 
   React.useEffect(() => {
     state.timer.reset();
-    if (state.disabled) {
-      cancelAnimationFrame(state.reqAnimId);
-    } else {
-      state.npcs && state.onTick();
+    cancelAnimationFrame(state.reqAnimId);
+    if (!state.disabled && !!state.npcs) {
+      state.onTick();
     }
-  }, [state.disabled, state.npcs]);
+  }, [state.disabled, state.npcs, state.geomorphs]);
 
   return (
     <TestWorldContext.Provider value={state}>
