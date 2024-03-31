@@ -61,6 +61,7 @@
     "htmlparser2": "^9.1.0",
     "json-stringify-pretty-compact": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
+    "maath": "^0.10.7",
     "mvdan-sh": "^0.5.0",
     "poly2tri": "^1.5.0",
     "polygon-clipping": "^0.15.7",
