@@ -1,14 +1,12 @@
 import React from "react";
 import * as THREE from "three";
 
-import { assertDefined, error, hashText, info, keys, warn } from "../service/generic";
+import { hashText, info } from "../service/generic";
 import { worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import useUpdate from "../hooks/use-update";
 import { quadGeometryXY } from "../service/three";
 import { Mat, Vect } from "../geom";
-import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
 
 import basicVertexShader from "!!raw-loader!../glsl/mesh-basic-simplified.v.glsl";
@@ -21,14 +19,35 @@ export default function TestWallsAndDoors(props) {
   const api = React.useContext(TestWorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    wallInstances: /** @type {*} */ (null),
-    doorInstances: /** @type {*} */ (null),
-    doorWidths: {},
+    wallsInst: /** @type {*} */ (null),
+    doorsInst: /** @type {*} */ (null),
 
     doorByPos: {},
     doorByInstId: [],
     movingDoors: [],
 
+    buildLookups() {
+      let dId = 0;
+      api.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
+        const { seg: [u, v] } = door;
+        tmpMat1.feedFromArray(gm.transform);
+        tmpMat1.transformPoint(tmpVec1.copy(u));
+        tmpMat1.transformPoint(tmpVec2.copy(v));
+        const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+        const key = /** @type {const} */ (`${tmpVec1.x},${tmpVec1.y}`);
+        const prev = state.doorByPos[key];
+        state.doorByPos[key] = state.doorByInstId[dId] = {
+          gmId, doorId, door, srcSegKey: key,
+          instanceId: dId,
+          open : prev?.open ?? false,
+          ratio: prev?.ratio ?? 0,
+          src: tmpVec1.json,
+          dir: { x : Math.cos(radians), y: Math.sin(radians) },
+          segLength: u.distanceTo(v),
+        };
+        dId++;
+      }));
+    },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength } = meta;
       const length = segLength * (1  - ratio) * worldScale;
@@ -58,7 +77,7 @@ export default function TestWallsAndDoors(props) {
       return api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
     },
     positionInstances() {
-      const { wallInstances: ws, doorInstances: ds } = state;
+      const { wallsInst: ws, doorsInst: ds } = state;
 
       let wId = 0;
       api.gms.forEach(({ wallSegs, transform }) =>
@@ -74,28 +93,7 @@ export default function TestWallsAndDoors(props) {
   }));
 
   React.useEffect(() => {
-    // 🚧 move to function
-    let offset = 0;
-    api.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
-      const { seg: [u, v] } = door;
-      tmpMat1.feedFromArray(gm.transform);
-      tmpMat1.transformPoint(tmpVec1.copy(u));
-      tmpMat1.transformPoint(tmpVec2.copy(v));
-      const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-      const key = /** @type {const} */ (`${tmpVec1.x},${tmpVec1.y}`);
-      const prev = state.doorByPos[key];
-      state.doorByPos[key] = state.doorByInstId[offset] = {
-        gmId, doorId, door, srcSegKey: key,
-        instanceId: offset,
-        open : prev?.open ?? false,
-        ratio: prev?.ratio ?? 0,
-        src: tmpVec1.json,
-        dir: { x : Math.cos(radians), y: Math.sin(radians) },
-        segLength: u.distanceTo(v),
-      };
-      offset++;
-    }));
-
+    state.buildLookups();
     state.positionInstances();
   }, [api.mapHash, api.layoutsHash]);
 
@@ -104,7 +102,7 @@ export default function TestWallsAndDoors(props) {
       <instancedMesh
         name="walls"
         key={`${api.mapHash} ${api.layoutsHash}`}
-        onUpdate={(instances) => (state.wallInstances = instances)}
+        ref={instances => instances && (state.wallsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumWalls()]}
         frustumCulled={false}
       >
@@ -114,7 +112,7 @@ export default function TestWallsAndDoors(props) {
       <instancedMesh
         name="doors"
         key={`${api.mapHash} ${api.layoutsHash} ${doorShaderHash}`}
-        onUpdate={(instances) => (state.doorInstances = instances)}
+        ref={instances => instances && (state.doorsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}
         onPointerUp={(e) => {
@@ -124,8 +122,8 @@ export default function TestWallsAndDoors(props) {
           const instanceId = /** @type {number} */ (e.instanceId);
           const meta = state.doorByInstId[instanceId];
           meta.ratio = meta.ratio ? 0 : (1 - 0.1);
-          state.doorInstances.setMatrixAt(instanceId, state.getDoorMat(meta));
-          state.doorInstances.instanceMatrix.needsUpdate = true;
+          state.doorsInst.setMatrixAt(instanceId, state.getDoorMat(meta));
+          state.doorsInst.instanceMatrix.needsUpdate = true;
 
           e.stopPropagation();
         }}
@@ -148,15 +146,15 @@ export default function TestWallsAndDoors(props) {
 
 /**
  * @typedef State
- * @property {THREE.InstancedMesh} wallInstances
- * @property {THREE.InstancedMesh} doorInstances
- * @property {{ [positionKey: string]: number | undefined }} doorWidths // 🚧 remove
- * Can override door width, where key has format `${x},${y}` i.e. world position of src of door segment
+ * @property {THREE.InstancedMesh} wallsInst
+ * @property {THREE.InstancedMesh} doorsInst
  * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
  * @property {{ [instanceId: number]: Geomorph.DoorMeta }} doorByInstId
  * @property {Geomorph.DoorMeta[]} movingDoors
- * These will be animated until they close/open and are removed
+ * To be animated until they open/close i.e.
+ * open && ratio === 1, or close && ratio === 0
  *
+ * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
  * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} getWallMat
  * @property {() => number} getNumDoors
