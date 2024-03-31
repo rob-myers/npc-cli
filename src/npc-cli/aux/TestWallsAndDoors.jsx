@@ -40,7 +40,7 @@ export default function TestWallsAndDoors(props) {
           gmId, doorId, door, srcSegKey: key,
           instanceId: dId,
           open : prev?.open ?? false,
-          ratio: prev?.ratio ?? 0,
+          ratio: prev?.ratio ?? 1, // closed ~ ratio 1
           src: tmpVec1.json,
           dir: { x : Math.cos(radians), y: Math.sin(radians) },
           segLength: u.distanceTo(v),
@@ -50,7 +50,7 @@ export default function TestWallsAndDoors(props) {
     },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength } = meta;
-      const length = segLength * (1  - ratio) * worldScale;
+      const length = segLength * ratio * worldScale;
       return geomorphService.embedXZMat4(
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y],
         wallHeight,
@@ -119,9 +119,10 @@ export default function TestWallsAndDoors(props) {
           info("door click", e.point, e.instanceId);
 
           // 🚧 animate width
+          // 🚧 ratio should get changed during animation
           const instanceId = /** @type {number} */ (e.instanceId);
           const meta = state.doorByInstId[instanceId];
-          meta.ratio = meta.ratio ? 0 : (1 - 0.1);
+          meta.ratio = meta.ratio === 1 ? 0.1 : 1;
           state.doorsInst.setMatrixAt(instanceId, state.getDoorMat(meta));
           state.doorsInst.instanceMatrix.needsUpdate = true;
 
@@ -150,9 +151,7 @@ export default function TestWallsAndDoors(props) {
  * @property {THREE.InstancedMesh} doorsInst
  * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
  * @property {{ [instanceId: number]: Geomorph.DoorMeta }} doorByInstId
- * @property {Geomorph.DoorMeta[]} movingDoors
- * To be animated until they open/close i.e.
- * open && ratio === 1, or close && ratio === 0
+ * @property {Geomorph.DoorMeta[]} movingDoors To be animated until they open/close.
  *
  * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
