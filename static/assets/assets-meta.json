@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": -1735777342},
+    "101--hull": {"outputHash": -1117287218},
     "102--hull": {"outputHash": -766366508},
     "103--hull": {"outputHash": 1220829134},
     "301--hull": {"outputHash": 432613799},
@@ -332,7 +332,7 @@
           "meta": {"key": "fresher--020--2x2"},
           "width": 120,
           "height": 120,
-          "transform": [0, -1, 1, 0, 540, 240]
+          "transform": [0, 1, 1, 0, 540, 120]
         },
         {
           "symbolKey": "stateroom--018--2x3",
