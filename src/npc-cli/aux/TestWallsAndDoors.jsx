@@ -52,23 +52,17 @@ export default function TestWallsAndDoors(props) {
       const { src, dir, ratio, segLength } = meta;
       const length = segLength * ratio * worldScale;
       return geomorphService.embedXZMat4(
-        [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y],
-        wallHeight,
-        tmpMatFour1
+        [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y], wallHeight, tmpMatFour1
       );
     },
     getWallMat(u, v, transform) {
-      const segLength = u.distanceTo(v) * worldScale;
-      tmpVec1.copy(u); tmpVec2.copy(v);
       tmpMat1.feedFromArray(transform);
-      tmpMat1.transformPoint(tmpVec1); tmpMat1.transformPoint(tmpVec2);
-      const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+      [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
+      const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+      const len = u.distanceTo(v) * worldScale;
       return geomorphService.embedXZMat4([
-        segLength * Math.cos(radians), segLength * Math.sin(radians),
-        -Math.sin(radians), Math.cos(radians),
-        tmpVec1.x, tmpVec1.y,
-      ], wallHeight, tmpMatFour1
-    );
+        len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y,
+      ], wallHeight, tmpMatFour1);
     },
     getNumDoors() {
       return api.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
