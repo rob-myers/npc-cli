@@ -31,13 +31,6 @@
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 
 
-- ✅ can open doors on direct click (DEMO only)
-  - ✅ onPointerUp provides point and instanceId
-  - ✅ can directly open a single door (sans animation)
-  - ✅ can directly open a single door (animated)
-    - can directly mutate instanceMatrix.array
-    - https://github.com/mrdoob/three.js/blob/b7015c89d57e24c5a2d4cdaad34559bc8d5c599a/src/objects/InstancedMesh.js#L218
-
 - TestCharacter: animation
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
@@ -178,8 +171,6 @@ React.useEffect(() => {
   );
 }, [geomorphs]);
 ```
-
-## Done
 
 ## Done
 
@@ -569,3 +560,10 @@ React.useEffect(() => {
   - ✅ create `<shaderMaterial>` using copies of mesh basic material vertex/fragment shaders
   - ✅ create simplified versions with just enough
   - ✅ doors have gradient fill
+
+- ✅ can open doors on direct click (DEMO only)
+  - ✅ onPointerUp provides point and instanceId
+  - ✅ can directly open a single door (sans animation)
+  - ✅ can directly open a single door (animated)
+    - can directly mutate instanceMatrix.array
+    - https://github.com/mrdoob/three.js/blob/b7015c89d57e24c5a2d4cdaad34559bc8d5c599a/src/objects/InstancedMesh.js#L218
