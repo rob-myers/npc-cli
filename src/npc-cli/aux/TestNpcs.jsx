@@ -26,7 +26,7 @@ export default function TestNpcs(props) {
         dampLookAt(mesh, tmpV3_2.copy(mesh.position).add(velocity), 0.25, api.timer.getDelta());
       }
     },
-    update() {
+    onTick() {
       for (const agent of api.crowd.getAgents()) {
         const mesh = state.toGroup[agent.agentIndex];
         state.moveGroup(agent, mesh);
@@ -86,9 +86,9 @@ export default function TestNpcs(props) {
  * @property {number} selected
  * @property {Record<string, NPC.CrowdAgent>} toAgent
  * @property {Record<string, THREE.Group>} toGroup
+ * @property {() => void} onTick
  * @property {(agentId: number) => void} updateAgentColor
  * @property {(agent: NPC.CrowdAgent, mesh: THREE.Group) => void} moveGroup
- * @property {() => void} update
  */
 
 const agentRadius = wallOutset * worldScale;

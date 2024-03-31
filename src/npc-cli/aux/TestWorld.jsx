@@ -46,6 +46,7 @@ export default function TestWorld(props) {
     help: /** @type {*} */ ({}),
 
     view: /** @type {*} */ (null), // TestWorldCanvas
+    doors: /** @type {*} */ (null), // TestWallsAndDoors
     npcs: /** @type {*} */ (null), // TestNpcs
 
     addHelpers() {
@@ -132,6 +133,15 @@ export default function TestWorld(props) {
       state.nav.tileCache.update(state.nav.navMesh);
       // state.nav.removeObstacle(obstacle);
     },
+    onTick() {
+      state.reqAnimId = requestAnimationFrame(state.onTick);
+      state.timer.update();
+      const deltaMs = state.timer.getDelta();
+      state.crowd.update(deltaMs);
+      state.help.tileCache.update(); // 🚧 absorb
+      state.npcs.onTick();
+      state.doors.onTick();
+    },
     setupCrowdAgents(positions) {
       positions.map((p) =>
         state.crowd.addAgent(p, {
@@ -146,15 +156,6 @@ export default function TestWorld(props) {
       );
     },
     update,
-    updateCrowd() {
-      state.reqAnimId = requestAnimationFrame(state.updateCrowd);
-      state.timer.update();
-      const deltaMs = state.timer.getDelta();
-      state.crowd.update(deltaMs);
-
-      state.help.tileCache.update();
-      state.npcs.update();
-    },
     walkTo(dst) {
       const agent = state.npcs.toAgent[state.npcs.selected];
       const src = agent.position();
@@ -213,7 +214,7 @@ export default function TestWorld(props) {
     if (state.disabled) {
       cancelAnimationFrame(state.reqAnimId);
     } else {
-      state.npcs && state.updateCrowd();
+      state.npcs && state.onTick();
     }
   }, [state.disabled, state.npcs]);
 
@@ -250,6 +251,7 @@ export default function TestWorld(props) {
  * @property {Timer} timer
  *
  * @property {import('./TestWorldCanvas').State} view
+ * @property {import('./TestWallsAndDoors').State} doors
  * @property {import('./TestNpcs').State} npcs
  *
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
@@ -265,7 +267,7 @@ export default function TestWorld(props) {
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {(agentPositions: THREE.Vector3Like[]) => void} setupCrowdAgents
  * @property {() => void} update
- * @property {() => void} updateCrowd
+ * @property {() => void} onTick
  * @property {(dst: import('three').Vector3Like) => void} walkTo
  */
 

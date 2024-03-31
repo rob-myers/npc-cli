@@ -31,13 +31,12 @@
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 
 
-- 🚧 can open doors on direct click (DEMO only)
+- ✅ can open doors on direct click (DEMO only)
   - ✅ onPointerUp provides point and instanceId
   - ✅ can directly open a single door (sans animation)
-  - 🚧 can directly open a single door (animated)
+  - ✅ can directly open a single door (animated)
     - can directly mutate instanceMatrix.array
     - https://github.com/mrdoob/three.js/blob/b7015c89d57e24c5a2d4cdaad34559bc8d5c599a/src/objects/InstancedMesh.js#L218
-  - fix non-aligning hull doors (?)
 
 - TestCharacter: animation
   - use character Soldier with animations
@@ -53,6 +52,10 @@
   - prettier ignore everything
 - start using eslint with auto-format if possible
 
+- Player view could be top-down with high walls
+  - try fixing door height with black wall above
+
+- fix open/close non-aligning hull doors
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
 - ✅ type worker.postMessage in main thread and worker
   - ✅ main thread

@@ -1,5 +1,6 @@
 import React from "react";
 import * as THREE from "three";
+import { damp } from "maath/easing"
 
 import { hashText, info } from "../service/generic";
 import { worldScale } from "../service/const";
@@ -24,7 +25,7 @@ export default function TestWallsAndDoors(props) {
 
     doorByPos: {},
     doorByInstId: [],
-    movingDoors: [],
+    movingDoors: {},
 
     buildLookups() {
       let dId = 0;
@@ -70,6 +71,30 @@ export default function TestWallsAndDoors(props) {
     getNumWalls() {
       return api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
     },
+    handleDoorClick(e) {
+      info("door click", e.point, e.instanceId);
+      const instanceId = /** @type {number} */ (e.instanceId);
+      const meta = state.doorByInstId[instanceId];
+      meta.open = !meta.open;
+      state.movingDoors[meta.instanceId] = meta;
+      e.stopPropagation();
+    },
+    onTick() {
+      const deltaMs = api.timer.getDelta();
+      const { instanceMatrix } = state.doorsInst;
+
+      for (const meta of Object.values(state.movingDoors)) {
+        const dstRatio = meta.open ? 0.1 : 1;
+        damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
+        
+        const length = meta.ratio * meta.segLength * worldScale;
+        instanceMatrix.array[meta.instanceId * 16 + 0] = meta.dir.x * length;
+        instanceMatrix.array[meta.instanceId * 16 + 2] = meta.dir.y * length;
+
+        if (meta.ratio === dstRatio) delete state.movingDoors[meta.instanceId]
+      }
+      instanceMatrix.needsUpdate = true;
+    },
     positionInstances() {
       const { wallsInst: ws, doorsInst: ds } = state;
 
@@ -85,6 +110,8 @@ export default function TestWallsAndDoors(props) {
       ds.instanceMatrix.needsUpdate = true;
     },
   }));
+
+  api.doors = state;
 
   React.useEffect(() => {
     state.buildLookups();
@@ -109,19 +136,7 @@ export default function TestWallsAndDoors(props) {
         ref={instances => instances && (state.doorsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}
-        onPointerUp={(e) => {
-          info("door click", e.point, e.instanceId);
-
-          // 🚧 animate width
-          // 🚧 ratio should get changed during animation
-          const instanceId = /** @type {number} */ (e.instanceId);
-          const meta = state.doorByInstId[instanceId];
-          meta.ratio = meta.ratio === 1 ? 0.1 : 1;
-          state.doorsInst.setMatrixAt(instanceId, state.getDoorMat(meta));
-          state.doorsInst.instanceMatrix.needsUpdate = true;
-
-          e.stopPropagation();
-        }}
+        onPointerUp={state.handleDoorClick}
       >
         <shaderMaterial
           side={THREE.DoubleSide}
@@ -145,13 +160,15 @@ export default function TestWallsAndDoors(props) {
  * @property {THREE.InstancedMesh} doorsInst
  * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
  * @property {{ [instanceId: number]: Geomorph.DoorMeta }} doorByInstId
- * @property {Geomorph.DoorMeta[]} movingDoors To be animated until they open/close.
+ * @property {{ [instanceId: number]: Geomorph.DoorMeta }} movingDoors To be animated until they open/close.
  *
  * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
  * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} getWallMat
  * @property {() => number} getNumDoors
  * @property {() => number} getNumWalls
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleDoorClick
+ * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
 

@@ -32,7 +32,7 @@ declare namespace Geomorph {
     srcSegKey: `${number},${number}`;
     /** Is the door open? */
     open: boolean;
-    /** Between `0` (closed) and `1` (open) inclusive */
+    /** Between `0.1` (open) and `1` (closed) */
     ratio: number;
     /** Source of transformed door segment */
     src: Geom.VectJson;
