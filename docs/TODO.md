@@ -46,8 +46,9 @@
   - ✅ can directly open a single door (sans animation)
   - 🚧 can directly open a single door (animated)
 
-- stop using prettier i.e. use eslint instead
-  - disable prettier in workspace (no auto format)
+- ✅ stop using prettier i.e. use eslint instead
+  - prettier ignore everything
+- start using eslint with auto-format if possible
 
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
 - ✅ type worker.postMessage in main thread and worker
