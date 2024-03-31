@@ -25,6 +25,23 @@ declare namespace Geomorph {
     roomIds: [null | number, null | number];
   }
 
+  interface DoorMeta extends Geomorph.GmDoorId {
+    door: Geomorph.Connector;
+    instanceId: number;
+    /** `${door.seg.x},${door.seg.y}` */
+    srcSegKey: `${number},${number}`;
+    /** Is the door open? */
+    open: boolean;
+    /** Between `0` (closed) and `1` (open) inclusive */
+    ratio: number;
+    /** Source of transformed door segment */
+    src: Geom.VectJson;
+    /** Direction of transformed door segment */
+    dir: Geom.VectJson;
+    /** Length of `door.seg` */
+    segLength: number;
+  }
+
   interface GeomorphsGeneric<
     T extends Geom.GeoJsonPolygon | Geom.Poly,
     P extends Geom.VectJson | Geom.Vect,

@@ -17,7 +17,7 @@ import gradientFragmentShader from "!!raw-loader!../glsl/gradient.f.glsl";
 /**
  * @param {Props} props
  */
-export default function TestWorldScene(props) {
+export default function TestWallsAndDoors(props) {
   const api = React.useContext(TestWorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
@@ -25,34 +25,31 @@ export default function TestWorldScene(props) {
     doorInstances: /** @type {*} */ (null),
     doorWidths: {},
 
-    computeInstMat(u, v, transform, doorWidth) {
-      const [src, dst] = [tmpVec1, tmpVec2];
-      const segLength = doorWidth ?? u.distanceTo(v) * worldScale;
-      tmpMat1.feedFromArray(transform);
-      tmpMat1.transformPoint(tmpVec1.copy(u));
-      tmpMat1.transformPoint(tmpVec2.copy(v));
-      const radians = Math.atan2(dst.y - src.y, dst.x - src.x);
+    doorByPos: {},
+    doorByInstId: [],
+    movingDoors: [],
+
+    getDoorMat(meta) {
+      const { src, dir, ratio, segLength } = meta;
+      const length = segLength * (1  - ratio) * worldScale;
       return geomorphService.embedXZMat4(
-        [
-          segLength * Math.cos(radians),
-          segLength * Math.sin(radians),
-          -Math.sin(radians),
-          Math.cos(radians),
-          src.x,
-          src.y,
-        ],
-        wallDoorHeight,
+        [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y],
+        wallHeight,
         tmpMatFour1
       );
     },
-    getDoorCtxt(instanceId) {
-      let doorId = instanceId;
-      const gmId = assertDefined(api.gms.findIndex(({ doors }) =>
-        doorId < doors.length ? true : void (doorId -= doors.length)
-      ));
-      const gm = api.gms[gmId];
-      const door = gm.doors[doorId];
-      return { gmId, doorId, gm, door };
+    getWallMat(u, v, transform) {
+      const segLength = u.distanceTo(v) * worldScale;
+      tmpVec1.copy(u); tmpVec2.copy(v);
+      tmpMat1.feedFromArray(transform);
+      tmpMat1.transformPoint(tmpVec1); tmpMat1.transformPoint(tmpVec2);
+      const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+      return geomorphService.embedXZMat4([
+        segLength * Math.cos(radians), segLength * Math.sin(radians),
+        -Math.sin(radians), Math.cos(radians),
+        tmpVec1.x, tmpVec1.y,
+      ], wallHeight, tmpMatFour1
+    );
     },
     getNumDoors() {
       return api.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
@@ -62,24 +59,44 @@ export default function TestWorldScene(props) {
     },
     positionInstances() {
       const { wallInstances: ws, doorInstances: ds } = state;
-      let wOffset = 0;
-      let dOffset = 0;
 
-      api.gms.forEach(({ wallSegs, doorSegs, transform }) => {
-        wallSegs.forEach(([u, v]) =>
-          ws.setMatrixAt(wOffset++, state.computeInstMat(u, v, transform))
-        );
-        doorSegs.forEach(([u, v]) =>
-          ds.setMatrixAt(dOffset++, state.computeInstMat(u, v, transform, state.doorWidths[`${u.x},${u.y}`]))
-        );
-      });
+      let wId = 0;
+      api.gms.forEach(({ wallSegs, transform }) =>
+        wallSegs.forEach(([u, v]) => ws.setMatrixAt(wId++, state.getWallMat(u, v, transform)))
+      );
       ws.instanceMatrix.needsUpdate = true;
+
+      Object.values(state.doorByPos).forEach(meta =>
+        ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta))
+      );
       ds.instanceMatrix.needsUpdate = true;
     },
   }));
 
   React.useEffect(() => {
-    state.wallInstances && state.positionInstances();
+    // 🚧 move to function
+    let offset = 0;
+    api.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
+      const { seg: [u, v] } = door;
+      tmpMat1.feedFromArray(gm.transform);
+      tmpMat1.transformPoint(tmpVec1.copy(u));
+      tmpMat1.transformPoint(tmpVec2.copy(v));
+      const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+      const key = /** @type {const} */ (`${tmpVec1.x},${tmpVec1.y}`);
+      const prev = state.doorByPos[key];
+      state.doorByPos[key] = state.doorByInstId[offset] = {
+        gmId, doorId, door, srcSegKey: key,
+        instanceId: offset,
+        open : prev?.open ?? false,
+        ratio: prev?.ratio ?? 0,
+        src: tmpVec1.json,
+        dir: { x : Math.cos(radians), y: Math.sin(radians) },
+        segLength: u.distanceTo(v),
+      };
+      offset++;
+    }));
+
+    state.positionInstances();
   }, [api.mapHash, api.layoutsHash]);
 
   return (
@@ -105,15 +122,11 @@ export default function TestWorldScene(props) {
 
           // 🚧 animate width
           const instanceId = /** @type {number} */ (e.instanceId);
-          const { door: { seg: [u, v] }, gm } = state.getDoorCtxt(instanceId);
-          const key = `${u.x},${u.y}`;
-          state.doorWidths[key] = state.doorWidths[key] ? undefined : 0.15;
-          
-          state.doorInstances.setMatrixAt(
-            instanceId,
-            state.computeInstMat(u, v, gm.transform, state.doorWidths[key]),
-          );
+          const meta = state.doorByInstId[instanceId];
+          meta.ratio = meta.ratio ? 0 : (1 - 0.1);
+          state.doorInstances.setMatrixAt(instanceId, state.getDoorMat(meta));
           state.doorInstances.instanceMatrix.needsUpdate = true;
+
           e.stopPropagation();
         }}
       >
@@ -137,10 +150,15 @@ export default function TestWorldScene(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} wallInstances
  * @property {THREE.InstancedMesh} doorInstances
- * @property {{ [positionKey: string]: number | undefined }} doorWidths
+ * @property {{ [positionKey: string]: number | undefined }} doorWidths // 🚧 remove
  * Can override door width, where key has format `${x},${y}` i.e. world position of src of door segment
- * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} computeInstMat
- * @property {(instanceId: number) => Geomorph.GmDoorId & { gm: Geomorph.LayoutInstance; door: Geomorph.Connector; }} getDoorCtxt
+ * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
+ * @property {{ [instanceId: number]: Geomorph.DoorMeta }} doorByInstId
+ * @property {Geomorph.DoorMeta[]} movingDoors
+ * These will be animated until they close/open and are removed
+ *
+ * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
+ * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} getWallMat
  * @property {() => number} getNumDoors
  * @property {() => number} getNumWalls
  * @property {() => void} positionInstances
@@ -166,4 +184,4 @@ const doorShaderHash = hashText(
   })
 );
 
-const wallDoorHeight = 2;
+const wallHeight = 2;
