@@ -44,11 +44,10 @@
 - 🚧 can open doors on direct click (DEMO only)
   - ✅ onPointerUp provides point and instanceId
   - ✅ can directly open a single door (sans animation)
-  - can directly change a single door's material e.g. make wireframe
-    - https://www.npmjs.com/package/three-instanced-uniforms-mesh
-    - https://codesandbox.io/p/sandbox/instanceduniformsmesh-r3f-lss90?file=%2Fsrc%2Findex.js
+  - 🚧 can directly open a single door (animated)
 
 - stop using prettier i.e. use eslint instead
+  - disable prettier in workspace (no auto format)
 
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
 - ✅ type worker.postMessage in main thread and worker
@@ -58,7 +57,10 @@
   - ❌ https://github.com/webpack/webpack/issues/14722
   - ℹ️ gatsby does not support "webpack multi-compiler"
   - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
-- ✅ changing props.mapKey should change map 
+- ✅ changing props.mapKey should change map
+- can directly change a single door's material e.g. make wireframe
+  - https://www.npmjs.com/package/three-instanced-uniforms-mesh
+  - https://codesandbox.io/p/sandbox/instanceduniformsmesh-r3f-lss90?file=%2Fsrc%2Findex.js
 - extend door/window connectors with correct roomIds
 - clarify handling of windows
 - simplify polygon JSON format e.g. flat arrays

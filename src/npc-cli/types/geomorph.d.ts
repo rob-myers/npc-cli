@@ -45,6 +45,11 @@ declare namespace Geomorph {
     ConnectorJson
   >;
 
+  interface GmDoorId {
+    gmId: number;
+    doorId: number;
+  }
+
   interface ParsedSymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,

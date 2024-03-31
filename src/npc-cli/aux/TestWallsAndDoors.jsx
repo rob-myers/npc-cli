@@ -20,7 +20,6 @@ import gradientFragmentShader from "!!raw-loader!../glsl/gradient.f.glsl";
 export default function TestWorldScene(props) {
   const api = React.useContext(TestWorldContext);
 
-  // prettier-ignore
   const state = useStateRef(/** @returns {State} */ () => ({
     wallInstances: /** @type {*} */ (null),
     doorInstances: /** @type {*} */ (null),
@@ -45,6 +44,15 @@ export default function TestWorldScene(props) {
         wallDoorHeight,
         tmpMatFour1
       );
+    },
+    getDoorCtxt(instanceId) {
+      let doorId = instanceId;
+      const gmId = assertDefined(api.gms.findIndex(({ doors }) =>
+        doorId < doors.length ? true : void (doorId -= doors.length)
+      ));
+      const gm = api.gms[gmId];
+      const door = gm.doors[doorId];
+      return { gmId, doorId, gm, door };
     },
     getNumDoors() {
       return api.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
@@ -94,20 +102,18 @@ export default function TestWorldScene(props) {
         frustumCulled={false}
         onPointerUp={(e) => {
           info("door click", e.point, e.instanceId);
-          let doorId = /** @type {number} */ (e.instanceId);
-          const gm = assertDefined(
-            api.gms.find(({ doors }) =>
-              doorId < doors.length ? true : void (doorId -= doors.length)
-            )
+
+          // 🚧 animate width
+          const instanceId = /** @type {number} */ (e.instanceId);
+          const { door: { seg: [u, v] }, gm } = state.getDoorCtxt(instanceId);
+          const key = `${u.x},${u.y}`;
+          state.doorWidths[key] = state.doorWidths[key] ? undefined : 0.15;
+          
+          state.doorInstances.setMatrixAt(
+            instanceId,
+            state.computeInstMat(u, v, gm.transform, state.doorWidths[key]),
           );
-          const [{ x, y }] = gm.doors[doorId].seg;
-          const key = `${x},${y}`;
-          if (key in state.doorWidths) {
-            delete state.doorWidths[key];
-          } else {
-            state.doorWidths[key] = 0.15;
-          }
-          state.positionInstances(); // 🚧 only reposition doors
+          state.doorInstances.instanceMatrix.needsUpdate = true;
           e.stopPropagation();
         }}
       >
@@ -131,9 +137,10 @@ export default function TestWorldScene(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} wallInstances
  * @property {THREE.InstancedMesh} doorInstances
- * @property {{ [positionKey: string]: number }} doorWidths
- * positionKey has format `${x},${y}` i.e. world position of src of door segment
+ * @property {{ [positionKey: string]: number | undefined }} doorWidths
+ * Can override door width, where key has format `${x},${y}` i.e. world position of src of door segment
  * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} computeInstMat
+ * @property {(instanceId: number) => Geomorph.GmDoorId & { gm: Geomorph.LayoutInstance; door: Geomorph.Connector; }} getDoorCtxt
  * @property {() => number} getNumDoors
  * @property {() => number} getNumWalls
  * @property {() => void} positionInstances
