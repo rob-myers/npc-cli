@@ -67,7 +67,7 @@ export default function TestNpcs(props) {
       }}
     >
       <meshBasicMaterial />
-      <capsuleGeometry args={[agentRadius, agentHeight / 2, 5, 5]} />
+      <cylinderGeometry args={[agentRadius, agentRadius, agentHeight]} />
     </mesh>
   ));
 }
