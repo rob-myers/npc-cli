@@ -29,7 +29,7 @@
     - ✅ can select agent and navigate selected
   - ✅ tileCache helper -> TestNpcs
   - ✅ api.help.navMesh -> TestDebug
-  - navPath helper -> TestDebug
+  - ✅ navPath helper -> TestDebug
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 
 

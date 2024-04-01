@@ -44,21 +44,12 @@ export default function TestWorld(props) {
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
-    help: /** @type {*} */ ({}),
 
     view: /** @type {*} */ (null), // TestWorldCanvas
     doors: /** @type {*} */ (null), // TestWallsAndDoors
     npcs: /** @type {*} */ (null), // TestNpcs
+    debug: /** @type {*} */ (null), // TestDebug
 
-    addHelpers() {
-      Object.values(state.help).map((x) => x?.removeFromParent());
-
-      state.help.navPath?.dispose();
-      state.help.navPath = new NavPathHelper();
-
-      const threeScene = state.view.rootState.scene;
-      threeScene.add(...Object.values(state.help));
-    },
     ensureGmData(gmKey) {
       const layout = state.geomorphs.layout[gmKey];
       let gmData = state.gmData[gmKey];
@@ -113,7 +104,6 @@ export default function TestWorld(props) {
       });
       state.crowd.timeStep = 1 / 60;
 
-      state.addHelpers();
       state.setupCrowdAgents(nextPositions.length
           ? nextPositions
           : [{ x: 3 * 1.5, y: 0, z: 5 * 1.5 }, { x: 5 * 1.5, y: 0, z: 7 * 1.5 }].map(
@@ -151,9 +141,9 @@ export default function TestWorld(props) {
     walkTo(dst) {
       const agent = state.npcs.toAgent[state.npcs.selected];
       const src = agent.position();
-      // debug path
+
       const path = state.crowd.navMeshQuery.computePath(src, dst, {});
-      state.help.navPath.setPath(path);
+      state.debug.navPath.setPath(path);
       agent.goto(dst); // navigate
     },
   }));
@@ -251,15 +241,14 @@ export default function TestWorld(props) {
  * @property {import('./TestWorldCanvas').State} view
  * @property {import('./TestWallsAndDoors').State} doors
  * @property {import('./TestNpcs').State} npcs
+ * @property {import('./TestDebug').State} debug
  *
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {TiledCacheResult & { query: NavMeshQuery }} nav
  * @property {Crowd} crowd
- * @property {{ navPath: NavPathHelper }} help
  *
- * @property {() => void} addHelpers
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
