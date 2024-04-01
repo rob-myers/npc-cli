@@ -17,6 +17,15 @@ export default function TestNpcs(props) {
     selected: 0,
     toAgent: {},
     toGroup: {}, // 🚧 on remove agent need to update this
+    groupRef(agent, group) {
+      if (group) {
+        state.toGroup[agent.agentIndex] = group;
+        state.moveGroup(agent, group);
+        state.updateAgentColor(Number(agent.agentIndex));
+      } else {
+        delete state.toGroup[agent.agentIndex];
+      }
+    },
     moveGroup(agent, mesh) {
       const position = agent.position();
       mesh.position.set(position.x, position.y + agentHeight/2, position.z);
@@ -25,6 +34,14 @@ export default function TestNpcs(props) {
       if (velocity.length() > 0.2) {
         dampLookAt(mesh, tmpV3_2.copy(mesh.position).add(velocity), 0.25, api.timer.getDelta());
       }
+    },
+    onClickNpc(agent, e) {
+      info("clicked npc", agent.agentIndex);
+      state.selected = agent.agentIndex;
+      Object.keys(state.toGroup).forEach((agentIdStr) =>
+        state.updateAgentColor(Number(agentIdStr))
+      );
+      e.stopPropagation();
     },
     onTick() {
       for (const agent of api.crowd.getAgents()) {
@@ -43,36 +60,25 @@ export default function TestNpcs(props) {
   state.toAgent = props.crowd.agents;
   api.npcs = state;
 
-  React.useEffect(() => void api.update(), []);
+  React.useEffect(() => void api.update(), []); // Trigger ticker
 
-  return Object.values(state.toAgent).map((agent) => (
-    <group
-      key={agent.agentIndex}
-      ref={(group) => {
-        if (group) {
-          state.toGroup[agent.agentIndex] = group;
-          state.moveGroup(agent, group);
-          state.updateAgentColor(Number(agent.agentIndex));
-        }
-      }}
-    >
-      <mesh
-        onPointerUp={(e) => {
-          info("clicked npc", agent.agentIndex);
-          state.selected = agent.agentIndex;
-          Object.keys(state.toGroup).forEach((agentIdStr) =>
-            state.updateAgentColor(Number(agentIdStr))
-          );
-          e.stopPropagation();
-        }}
+  return <>
+  
+    {Object.values(state.toAgent).map((agent) => (
+      <group
+        key={agent.agentIndex}
+        ref={group => state.groupRef(agent, group)}
       >
-        <meshBasicMaterial />
-        <cylinderGeometry args={[agentRadius, agentRadius, agentHeight]} />
-        {/* <capsuleGeometry args={[agentRadius, agentHeight / 2]} /> */}
-      </mesh>
-      <arrowHelper args={[tmpV3_unitZ, undefined, 0.7, "blue", undefined, 0.1]} />
-    </group>
-  ));
+        <mesh onPointerUp={e => state.onClickNpc(agent, e)}>
+          <meshBasicMaterial />
+          <cylinderGeometry args={[agentRadius, agentRadius, agentHeight]} />
+          {/* <capsuleGeometry args={[agentRadius, agentHeight / 2]} /> */}
+        </mesh>
+        <arrowHelper args={[tmpV3_unitZ, undefined, 0.7, "blue", undefined, 0.1]} />
+      </group>
+    ))}
+  
+  </>;
 }
 
 /**
@@ -86,9 +92,11 @@ export default function TestNpcs(props) {
  * @property {number} selected
  * @property {Record<string, NPC.CrowdAgent>} toAgent
  * @property {Record<string, THREE.Group>} toGroup
+ * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
  * @property {() => void} onTick
+ * @property {(agent: NPC.CrowdAgent, group: THREE.Group | null) => void} groupRef
+ * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
  * @property {(agentId: number) => void} updateAgentColor
- * @property {(agent: NPC.CrowdAgent, mesh: THREE.Group) => void} moveGroup
  */
 
 const agentRadius = wallOutset * worldScale;
