@@ -4,7 +4,6 @@ import { Subject } from "rxjs";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
-import { NavMeshHelper, TileCacheHelper } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
@@ -22,6 +21,7 @@ import TestWorldCanvas from "./TestWorldCanvas";
 import TestGeomorphs from "./TestGeomorphs";
 import TestWallsAndDoors from "./TestWallsAndDoors";
 import TestNpcs from "./TestNpcs";
+import TestDebug from "./TestDebug";
 
 /**
  * @param {Props} props
@@ -52,13 +52,6 @@ export default function TestWorld(props) {
 
     addHelpers() {
       Object.values(state.help).map((x) => x?.removeFromParent());
-
-      state.help.navMesh = new NavMeshHelper({
-        navMesh: state.nav.navMesh,
-        navMeshMaterial: wireFrameMaterial,
-      });
-      state.help.navMesh.position.y = 0.01;
-      state.help.navMesh.visible = false; // Hide
 
       state.help.navPath?.dispose();
       state.help.navPath = new NavPathHelper();
@@ -227,7 +220,10 @@ export default function TestWorld(props) {
           <group>
             <TestGeomorphs/>
             <TestWallsAndDoors />
-            {state.crowd && <TestNpcs/>}
+            {state.crowd && <>
+              <TestNpcs/>
+              <TestDebug/>
+            </>}
           </group>
         )}
       </TestWorldCanvas>
@@ -261,7 +257,7 @@ export default function TestWorld(props) {
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {TiledCacheResult & { query: NavMeshQuery }} nav
  * @property {Crowd} crowd
- * @property {{ navMesh: NavMeshHelper; navPath: NavPathHelper }} help
+ * @property {{ navPath: NavPathHelper }} help
  *
  * @property {() => void} addHelpers
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
