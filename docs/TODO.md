@@ -30,8 +30,16 @@
   - ✅ tileCache helper -> TestNpcs
   - ✅ api.help.navMesh -> TestDebug
   - ✅ navPath helper -> TestDebug
-  - can alter polygon weights e.g. closed door
-  - can replan moving agent path on HMR edit 
+  - 🚧 can alter polygon weights e.g. closed door
+    - https://recastnav.com/classdtNavMeshQuery.html#details
+    - findNearestPoly
+    - https://github.com/isaac-mason/recast-navigation-js/discussions/299
+    - https://github.com/isaac-mason/recast-navigation-js/issues/286
+  - can re-plan moving agent path on HMR edit 
+
+- HMR issue i.e. onchange map sometimes animation doesn't restart
+
+- Try `HeightfieldHelper` i.e. visualize refined navMesh
 
 - TestCharacter: animation
   - use character Soldier with animations

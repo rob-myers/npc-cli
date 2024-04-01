@@ -43,6 +43,8 @@ async function handleMessages(e) {
         return mesh;
       });
 
+      info('total triangles', meshes.reduce((agg, mesh) => agg + (mesh.geometry.index?.count ?? 0) / 3, 0));
+
       await initRecastNav();
       // const { navMesh, success } = threeToSoloNavMesh(meshes, {});
       // const { navMesh, success } = threeToTiledNavMesh(meshes, {
