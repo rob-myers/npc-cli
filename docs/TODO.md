@@ -27,7 +27,9 @@
     - ✅ fix HMR
     - ✅ add two agents
     - ✅ can select agent and navigate selected
-    - 🚧 tilecache helper -> TestNpcs
+  - 🚧 tileCache helper -> TestNpcs
+  - navPath helper -> TestNpcs
+  - api.help.navPath -> `<primitive>`
   - can alter polygon weights e.g. closed door
   - can replan moving agent path on HMR edit 
 

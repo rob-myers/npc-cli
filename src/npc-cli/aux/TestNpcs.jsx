@@ -16,7 +16,9 @@ export default function TestNpcs(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     selected: 0,
     toAgent: {},
-    toGroup: {}, // 🚧 on remove agent need to update this
+    toGroup: {},
+    toObstacle: new Map(),
+
     groupRef(agent, group) {
       if (group) {
         state.toGroup[agent.agentIndex] = group;
@@ -57,7 +59,8 @@ export default function TestNpcs(props) {
     },
   }));
 
-  state.toAgent = props.crowd.agents;
+  state.toAgent = api.crowd.agents;
+  state.toObstacle = api.nav.tileCache.obstacles;
   api.npcs = state;
 
   React.useEffect(() => void api.update(), []); // Trigger ticker
@@ -84,14 +87,14 @@ export default function TestNpcs(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
- * @property {import("@recast-navigation/core").Crowd} crowd
  */
 
 /**
  * @typedef State
- * @property {number} selected
+ * @property {number} selected Selected agent
  * @property {Record<string, NPC.CrowdAgent>} toAgent
  * @property {Record<string, THREE.Group>} toGroup
+ * @property {Map<import("@recast-navigation/core").ObstacleRef, NPC.CrowdObstacle>} toObstacle
  * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
  * @property {() => void} onTick
  * @property {(agent: NPC.CrowdAgent, group: THREE.Group | null) => void} groupRef

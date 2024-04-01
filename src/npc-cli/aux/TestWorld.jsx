@@ -213,10 +213,10 @@ export default function TestWorld(props) {
 
   React.useEffect(() => {
     state.timer.reset();
-    cancelAnimationFrame(state.reqAnimId);
     if (!state.disabled && !!state.npcs) {
       state.onTick();
     }
+    return () => cancelAnimationFrame(state.reqAnimId);
   }, [state.disabled, state.npcs, state.geomorphs]);
 
   return (
@@ -224,9 +224,9 @@ export default function TestWorld(props) {
       <TestWorldCanvas disabled={props.disabled} stats>
         {geomorphs && (
           <group>
-            <TestGeomorphs disabled={props.disabled} />
+            <TestGeomorphs/>
             <TestWallsAndDoors />
-            {state.crowd && <TestNpcs crowd={state.crowd} />}
+            {state.crowd && <TestNpcs/>}
           </group>
         )}
       </TestWorldCanvas>
