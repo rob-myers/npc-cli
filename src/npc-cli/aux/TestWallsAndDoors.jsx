@@ -79,6 +79,9 @@ export default function TestWallsAndDoors(props) {
       state.movingDoors.set(meta.instanceId, meta);
       e.stopPropagation();
     },
+    handleWallClick(e) {
+      e.stopPropagation();
+    },
     onTick() {
       if (state.movingDoors.size === 0) {
         return;
@@ -127,6 +130,7 @@ export default function TestWallsAndDoors(props) {
         ref={instances => instances && (state.wallsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumWalls()]}
         frustumCulled={false}
+        onPointerUp={state.handleWallClick}
       >
         <meshBasicMaterial side={THREE.DoubleSide} color="black" />
       </instancedMesh>
@@ -169,6 +173,7 @@ export default function TestWallsAndDoors(props) {
  * @property {() => number} getNumDoors
  * @property {() => number} getNumWalls
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleDoorClick
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleWallClick
  * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
