@@ -119,6 +119,7 @@ export default function TestWorld(props) {
         maxAgentRadius: wallOutset * worldScale,
         navMesh: state.nav.navMesh,
       });
+      state.crowd.timeStep = 1 / 60;
 
       state.addHelpers();
       state.setupCrowdAgents(nextPositions.length
