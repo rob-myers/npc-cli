@@ -33,8 +33,9 @@
   - 🚧 can alter polygon weights e.g. closed door
     - https://recastnav.com/classdtNavMeshQuery.html#details
     - findNearestPoly
-    - https://github.com/isaac-mason/recast-navigation-js/discussions/299
     - https://github.com/isaac-mason/recast-navigation-js/issues/286
+    - https://groups.google.com/g/recastnavigation/c/OqJRHFoiVX8
+    - 🚧 fix scale i.e. pre-scale by worldScale so tileSize 30 correct
   - can re-plan moving agent path on HMR edit 
 
 - HMR issue i.e. onchange map sometimes animation doesn't restart

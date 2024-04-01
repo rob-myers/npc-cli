@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
+import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery, QueryFilter } from "@recast-navigation/core";
 import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
@@ -103,6 +103,21 @@ export default function TestWorld(props) {
         navMesh: state.nav.navMesh,
       });
       state.crowd.timeStep = 1 / 60;
+
+      // 🚧 iterate over all polys setting flags
+      // 🚧 fix 120 tiles by pre-scaling by worldScale
+      const { navMesh } = state.nav;
+      console.log({
+        maxTiles: navMesh.getMaxTiles(),
+        tiles: [...Array(256)].map((_, i) => navMesh.getTile(i).dataSize()),
+      });
+
+      // 🚧 find and exclude a poly
+      const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly({ x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 }, {});
+      const filter = state.crowd.navMeshQuery.defaultFilter;
+      // filter.raw.setExcludeFlags(2 ** 0); // 🚧 must set other polys flags first e.g. 2 ** 1
+      state.nav.navMesh.setPolyFlags(polyRef, 2 ** 0);
+      // console.log(filter.excludeFlags)
 
       state.setupCrowdAgents(nextPositions.length
           ? nextPositions

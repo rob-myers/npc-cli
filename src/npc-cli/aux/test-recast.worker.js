@@ -43,6 +43,7 @@ async function handleMessages(e) {
         return mesh;
       });
 
+      info('total vertices', meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0));
       info('total triangles', meshes.reduce((agg, mesh) => agg + (mesh.geometry.index?.count ?? 0) / 3, 0));
 
       await initRecastNav();
