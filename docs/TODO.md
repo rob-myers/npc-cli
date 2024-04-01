@@ -27,7 +27,7 @@
     - ✅ fix HMR
     - ✅ add two agents
     - ✅ can select agent and navigate selected
-  - 🚧 tileCache helper -> TestNpcs
+  - ✅ tileCache helper -> TestNpcs
   - navPath helper -> TestNpcs
   - api.help.navPath -> `<primitive>`
   - can alter polygon weights e.g. closed door
@@ -50,6 +50,7 @@
 - Player view could be top-down with high walls
   - try fixing door height with black wall above
 
+- avoid recomputing npcs/obstacles in TestNpcs
 - fix open/close non-aligning hull doors
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
 - ✅ type worker.postMessage in main thread and worker

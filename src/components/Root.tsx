@@ -73,10 +73,10 @@ export default function Root(props: Props) {
           <Viewer />
         </div>
       </div>
-      {/* <ReactQueryDevtools
-      initialIsOpen={false}
-      buttonPosition="bottom-left"
-    /> */}
+      <ReactQueryDevtools
+        initialIsOpen={false}
+        buttonPosition="bottom-left"
+      />
     </QueryClientProvider>
   );
 }

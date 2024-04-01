@@ -16,16 +16,17 @@ export default function TestNpcs(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     selected: 0,
     toAgent: {},
-    toGroup: {},
     toObstacle: new Map(),
+    toAgentGroup: {},
+    toObstacleMesh: {},
 
-    groupRef(agent, group) {
+    agentRef(agent, group) {
       if (group) {
-        state.toGroup[agent.agentIndex] = group;
+        state.toAgentGroup[agent.agentIndex] = group;
         state.moveGroup(agent, group);
         state.updateAgentColor(Number(agent.agentIndex));
       } else {
-        delete state.toGroup[agent.agentIndex];
+        delete state.toAgentGroup[agent.agentIndex];
       }
     },
     moveGroup(agent, mesh) {
@@ -37,22 +38,29 @@ export default function TestNpcs(props) {
         dampLookAt(mesh, tmpV3_2.copy(mesh.position).add(velocity), 0.25, api.timer.getDelta());
       }
     },
+    obstacleRef(obstacle, mesh) {
+      if (mesh) {
+        state.toObstacleMesh[obstacle.ref.ptr] = mesh;
+      } else {
+        delete state.toObstacleMesh[obstacle.ref.ptr];
+      }
+    },
     onClickNpc(agent, e) {
       info("clicked npc", agent.agentIndex);
       state.selected = agent.agentIndex;
-      Object.keys(state.toGroup).forEach((agentIdStr) =>
+      Object.keys(state.toAgentGroup).forEach((agentIdStr) =>
         state.updateAgentColor(Number(agentIdStr))
       );
       e.stopPropagation();
     },
     onTick() {
       for (const agent of api.crowd.getAgents()) {
-        const mesh = state.toGroup[agent.agentIndex];
+        const mesh = state.toAgentGroup[agent.agentIndex];
         state.moveGroup(agent, mesh);
       }
     },
     updateAgentColor(agentId) {
-      const mesh = state.toGroup[agentId].children[0];
+      const mesh = state.toAgentGroup[agentId].children[0];
       if (mesh instanceof THREE.Mesh && mesh.material instanceof THREE.MeshBasicMaterial) {
         mesh.material.color = state.selected === agentId ? greenColor : redColor
       }
@@ -60,7 +68,7 @@ export default function TestNpcs(props) {
   }));
 
   state.toAgent = api.crowd.agents;
-  state.toObstacle = api.nav.tileCache.obstacles;
+  state.toObstacle = /** @type {Map<NPC.ObstacleRef, NPC.Obstacle>} */ (api.nav.tileCache.obstacles);
   api.npcs = state;
 
   React.useEffect(() => void api.update(), []); // Trigger ticker
@@ -70,7 +78,7 @@ export default function TestNpcs(props) {
     {Object.values(state.toAgent).map((agent) => (
       <group
         key={agent.agentIndex}
-        ref={group => state.groupRef(agent, group)}
+        ref={group => state.agentRef(agent, group)}
       >
         <mesh onPointerUp={e => state.onClickNpc(agent, e)}>
           <meshBasicMaterial />
@@ -79,6 +87,20 @@ export default function TestNpcs(props) {
         </mesh>
         <arrowHelper args={[tmpV3_unitZ, undefined, 0.7, "blue", undefined, 0.1]} />
       </group>
+    ))}
+
+    {Array.from(state.toObstacle.values()).map((obstacle) => (
+      <mesh
+        key={obstacle.ref.ptr}
+        ref={mesh => state.obstacleRef(obstacle, mesh)}
+        position={[obstacle.position.x, obstacle.position.y, obstacle.position.z]}
+      >
+        <meshBasicMaterial wireframe color="red" />
+        {obstacle.type === 'box'
+          ? <boxGeometry args={[obstacle.extent.x * 2, obstacle.extent.y * 2, obstacle.extent.z * 2]} />
+          : <cylinderGeometry args={[obstacle.radius, obstacle.radius, obstacle.height]} />
+        }
+      </mesh>
     ))}
   
   </>;
@@ -93,11 +115,13 @@ export default function TestNpcs(props) {
  * @typedef State
  * @property {number} selected Selected agent
  * @property {Record<string, NPC.CrowdAgent>} toAgent
- * @property {Record<string, THREE.Group>} toGroup
- * @property {Map<import("@recast-navigation/core").ObstacleRef, NPC.CrowdObstacle>} toObstacle
+ * @property {Map<NPC.ObstacleRef, NPC.Obstacle>} toObstacle
+ * @property {Record<string, THREE.Group>} toAgentGroup
+ * @property {Record<string, THREE.Mesh>} toObstacleMesh
  * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
  * @property {() => void} onTick
- * @property {(agent: NPC.CrowdAgent, group: THREE.Group | null) => void} groupRef
+ * @property {(agent: NPC.CrowdAgent, group: THREE.Group | null) => void} agentRef
+ * @property {(obstacle: NPC.Obstacle, mesh: THREE.Mesh | null) => void} obstacleRef
  * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
  * @property {(agentId: number) => void} updateAgentColor
  */

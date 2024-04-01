@@ -48,5 +48,7 @@ declare namespace NPC {
 
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
-  type CrowdObstacle = import("@recast-navigation/core").Obstacle;
+  type Obstacle = import("@recast-navigation/core").Obstacle;
+
+  type ObstacleRef = import("@recast-navigation/core").ObstacleRef;
 }

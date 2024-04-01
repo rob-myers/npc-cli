@@ -10,6 +10,7 @@ import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { wallOutset, worldScale } from "../service/const";
 import { assertNonNull, info, isDevelopment } from "../service/generic";
+import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
@@ -58,8 +59,6 @@ export default function TestWorld(props) {
       });
       state.help.navMesh.position.y = 0.01;
       state.help.navMesh.visible = false; // Hide
-
-      state.help.tileCache = new TileCacheHelper({ tileCache: state.nav.tileCache, obstacleMaterial: undefined });
 
       state.help.navPath?.dispose();
       state.help.navPath = new NavPathHelper();
@@ -139,7 +138,6 @@ export default function TestWorld(props) {
       state.timer.update();
       const deltaMs = state.timer.getDelta();
       state.crowd.update(deltaMs);
-      state.help.tileCache.update(); // 🚧 absorb
       state.npcs.onTick();
       state.doors.onTick();
     },
@@ -191,6 +189,9 @@ export default function TestWorld(props) {
       );
       state.mapHash = geomorphs.mapsHash;
       state.layoutsHash = geomorphs.layoutsHash;
+
+      setCached(['world', props.mapKey], state);
+      return () => removeCached(['world', props.mapKey]);
     }
   }, [geomorphs, props.mapKey]);
 
@@ -260,7 +261,7 @@ export default function TestWorld(props) {
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {TiledCacheResult & { query: NavMeshQuery }} nav
  * @property {Crowd} crowd
- * @property {{ navMesh: NavMeshHelper; navPath: NavPathHelper; tileCache: TileCacheHelper }} help
+ * @property {{ navMesh: NavMeshHelper; navPath: NavPathHelper }} help
  *
  * @property {() => void} addHelpers
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
