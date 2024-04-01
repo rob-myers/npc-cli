@@ -29,6 +29,9 @@ export default function TestWallsAndDoors(props) {
 
     buildLookups() {
       let dId = 0;
+      const prevDoorByPos = state.doorByPos;
+      state.doorByPos = {};
+      state.doorByInstId = {};
       api.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
         const { seg: [u, v] } = door;
         tmpMat1.feedFromArray(gm.transform);
@@ -36,12 +39,12 @@ export default function TestWallsAndDoors(props) {
         tmpMat1.transformPoint(tmpVec2.copy(v));
         const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
         const key = /** @type {const} */ (`${tmpVec1.x},${tmpVec1.y}`);
-        const prev = state.doorByPos[key];
+        const prev = prevDoorByPos[key];
         state.doorByPos[key] = state.doorByInstId[dId] = {
           gmId, doorId, door, srcSegKey: key,
           instanceId: dId,
           open : prev?.open ?? false,
-          ratio: prev?.ratio ?? 1, // closed ~ ratio 1
+          ratio: prev?.ratio ?? 1, // closed ~ ratio 1 i.e. maximal door length
           src: tmpVec1.json,
           dir: { x : Math.cos(radians), y: Math.sin(radians) },
           segLength: u.distanceTo(v),
