@@ -5,7 +5,7 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {import('./TestWorld').State} api
  */
 export default function useHandleEvents(api) {
-  const state = /** @type {typeof useStateRef<State>} */ (useStateRef)(() => ({
+  const state = useStateRef(/** @returns {State} */ () => ({
     handleEvents(e) {
       switch (e.key) {
         case "pointerup":

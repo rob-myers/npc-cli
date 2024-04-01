@@ -35,6 +35,46 @@ export default function TestWorldCanvas(props) {
         api.threeReady = true;
         api.update(); // e.g. show stats
       },
+      onPointerDown(e) {
+        state.down = {
+          clientPos: new Vect(e.clientX, e.clientY),
+          distance: 0, // or getDistance(state.input.touches)
+          epochMs: Date.now(),
+        };
+        state.menuEl.style.display = "none";
+      },
+      onPointerUp(e) {
+        if (!state.down) {
+          return;
+        }
+        info("infiniteGridHelper onPointerUp", e, e.point);
+        const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
+        const timeMs = Date.now() - state.down.epochMs;
+        api.events.next({
+          key: "pointerup",
+          distance,
+          longPress: timeMs >= 300,
+          point: e.point,
+          rmb: e.button === 2,
+          // 🤔 or clientX,Y minus canvas bounds?
+          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+          meta: {
+            floor: true,
+            targetCenter: undefined,
+          },
+        });
+      },
+      onPointerMissed(e) {
+        // console.log("onPointerMissed", e.clientX, e.clientY, e);
+        state.down &&
+          api.events.next({
+            key: "pointerup-outside",
+            distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+            longPress: Date.now() - state.down.epochMs >= 300,
+            rmb: e.button === 2,
+            screenPoint: { x: e.offsetX, y: e.offsetY },
+          });
+      },
     })
   );
 
@@ -76,26 +116,8 @@ export default function TestWorldCanvas(props) {
         frameloop={props.disabled ? "demand" : "always"}
         resize={{ debounce: 300 }}
         gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
-        onPointerDown={(e) => {
-          state.down = {
-            clientPos: new Vect(e.clientX, e.clientY),
-            distance: 0, // or getDistance(state.input.touches)
-            epochMs: Date.now(),
-          };
-          state.menuEl.style.display = "none";
-        }}
-        onPointerMissed={(e) => {
-          // console.log("onPointerMissed", e.clientX, e.clientY, e);
-          state.down &&
-            api.events.next({
-              key: "pointerup-outside",
-              distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
-              longPress: Date.now() - state.down.epochMs >= 300,
-              rmb: e.button === 2,
-              screenPoint: { x: e.offsetX, y: e.offsetY },
-            });
-        }}
-        //
+        onPointerDown={state.onPointerDown}
+        onPointerMissed={state.onPointerMissed}
         onCreated={state.onCreated}
       >
         {props.stats && state.rootEl && (
@@ -120,27 +142,7 @@ export default function TestWorldCanvas(props) {
         <infiniteGridHelper
           args={[1.5, 1.5, "#bbbbbb"]}
           rotation={[Math.PI / 2, 0, 0]}
-          onPointerUp={(e) => {
-            if (!state.down) {
-              return;
-            }
-            info("infiniteGridHelper onPointerUp", e, e.point);
-            const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
-            const timeMs = Date.now() - state.down.epochMs;
-            api.events.next({
-              key: "pointerup",
-              distance,
-              longPress: timeMs >= 300,
-              point: e.point,
-              rmb: e.button === 2,
-              // 🤔 or clientX,Y minus canvas bounds?
-              screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-              meta: {
-                floor: true,
-                targetCenter: undefined,
-              },
-            });
-          }}
+          onPointerUp={state.onPointerUp}
         />
 
         {props.children}
@@ -180,6 +182,9 @@ export default function TestWorldCanvas(props) {
  * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; }} [down]
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
+ * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
+ * @property {(e: MouseEvent) => void} onPointerMissed
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  */
 
 const canvasCss = css`
