@@ -114,10 +114,11 @@ export default function TestWorldCanvas(props) {
         />
 
         <ambientLight intensity={1} />
+
         <Origin />
+
         <infiniteGridHelper
           args={[1.5, 1.5, "#bbbbbb"]}
-          // position={[0, -0.001, 0]}
           rotation={[Math.PI / 2, 0, 0]}
           onPointerUp={(e) => {
             if (!state.down) {

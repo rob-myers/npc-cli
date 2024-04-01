@@ -16,7 +16,8 @@ export default class InfiniteGridHelper extends THREE.Mesh {
   constructor(size1 = 10, size2 = 10, color, distance = 200, axes = "xyz") {
     const planeAxes = axes.slice(0, 2); // e.g. 'xy'
 
-    const geometry = new THREE.PlaneGeometry(1000, 1000, 1, 1);
+    // jitter with only 1 subdivision when camera close
+    const geometry = new THREE.PlaneGeometry(1000, 1000, 2, 2);
 
     const material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
@@ -50,7 +51,6 @@ export default class InfiniteGridHelper extends THREE.Mesh {
          `,
 
       fragmentShader: `
-         
         varying vec3 worldPosition;
         
         uniform float uSize1;
