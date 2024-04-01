@@ -30,7 +30,7 @@
   - ✅ tileCache helper -> TestNpcs
   - ✅ api.help.navMesh -> TestDebug
   - ✅ navPath helper -> TestDebug
-  - 🚧 can alter polygon weights e.g. closed door
+  - 🚧 can make polygon un-walkable e.g. closed door
     - https://recastnav.com/classdtNavMeshQuery.html#details
     - findNearestPoly
     - https://github.com/isaac-mason/recast-navigation-js/issues/286
