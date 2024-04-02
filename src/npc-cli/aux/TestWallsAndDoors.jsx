@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { hashText, info } from "../service/generic";
-import { worldScale } from "../service/const";
+import { wallHeight, worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import { quadGeometryXY } from "../service/three";
@@ -200,5 +200,3 @@ const doorShaderHash = hashText(
     uniforms,
   })
 );
-
-const wallHeight = 2;
