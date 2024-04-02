@@ -38,8 +38,9 @@
     - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-core/src/nav-mesh.ts#L429
     - https://www.gamedev.net/blog/33/entry-2210775-more-recast-and-detour/
     - ✅ retrieve polygon points (messy)
-    - get filter working
-    - cleanup
+    - ✅ get filter working
+    - 🚧 first attempt probably failed because we didn't "get enough" polygons?
+    - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
 - ✅ fix transform-box parsing

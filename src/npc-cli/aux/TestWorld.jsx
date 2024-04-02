@@ -105,10 +105,15 @@ export default function TestWorld(props) {
 
       // ✅ find and exclude a poly
       // ✅ visualize found poly
-      // 🚧 maybe need to exclude more polys for it to take effect
+      // 🚧 cleanup
       const { navMesh } = state.nav;
-      const filter = state.crowd.navMeshQuery.defaultFilter;
-      const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly({ x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 }, {});
+      // const filter = state.crowd.navMeshQuery.defaultFilter;
+      const filter = state.crowd.getFilter(0);
+      const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly(
+        // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 }, // 👈 not working
+        { x: 1 * 1.5, y: 0, z: 3.5 * 1.5 },
+        {},
+      );
       const polyResult = navMesh.getTileAndPolyByRef(polyRef);
       const tile = polyResult.tile();
       const poly = polyResult.poly();
@@ -128,11 +133,8 @@ export default function TestWorld(props) {
         vertices: vertexIds.map(id => tileUnVertices[id]),
       });
 
-
-      filter.raw.setExcludeFlags(2 ** 0); // 🚧 must set other polys flags first e.g. 2 ** 1
-      state.nav.navMesh.setPolyFlags(polyRef, 2 ** 0);
-      // state.nav.navMesh.setPolyArea(polyRef, Raw.Recast.NULL_AREA);
-      // console.log(filter.excludeFlags)
+      filter.excludeFlags = 2 ** 0; // all polys should already be set differently
+      const setPolyFlagsResultFlag = navMesh.setPolyFlags(polyRef, 2 ** 0);
 
       state.setupCrowdAgents(nextPositions.length
           ? nextPositions
@@ -164,6 +166,7 @@ export default function TestWorld(props) {
           collisionQueryRange: 1, // jerky push at 0.3
           pathOptimizationRange: agentRadius * 20,
           separationWeight: 1,
+          queryFilterType: 0,
         })
       );
     },
@@ -172,7 +175,9 @@ export default function TestWorld(props) {
       const agent = state.npcs.toAgent[state.npcs.selected];
       const src = agent.position();
 
-      const path = state.crowd.navMeshQuery.computePath(src, dst, {});
+      const path = state.crowd.navMeshQuery.computePath(src, dst, {
+        filter: state.crowd.getFilter(0),
+      });
       state.debug.navPath.setPath(path);
       agent.goto(dst); // navigate
     },
