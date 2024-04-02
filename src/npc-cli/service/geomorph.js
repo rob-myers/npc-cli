@@ -6,6 +6,7 @@ import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   assertDefined,
   info,
+  error,
   parseJsArg,
   warn,
   debug,
@@ -278,17 +279,8 @@ class GeomorphService {
     }
 
     // DOMMatrix not available server-side
-    const { transformOrigin, transformBox } = geomorphService.extractTransformData(tagMeta);
+    const { transformOrigin } = geomorphService.extractTransformData(tagMeta);
     if (a.transform && transformOrigin) {
-      if (transformBox === "fill-box") {
-        if (!a.x || !a.y) {
-          // broken when <path> lacks attribs x, y
-          // 🚧 try computing bounding box of `pathEl.d`
-          warn(`${title}: ${tagName}: unsupported "transform-box: fill-box" without x and y`);
-        }
-        transformOrigin.x += Number(a.x ?? "0");
-        transformOrigin.y += Number(a.y ?? "0");
-      }
       poly
         ?.translate(-transformOrigin.x, -transformOrigin.y)
         .applyMatrix(new Mat(a.transform))
@@ -340,29 +332,52 @@ class GeomorphService {
   }
 
   /**
-   * In SVG initial CSS value is `0 0` (elsewhere `50% 50% 0`)
+   * - Support transform-origin `0 0`
+   * - Support transform-origin `76.028px 97.3736px`
+   * - Support transform-origin `50% 50%`
+   * - Support transform-box `fill-box`
+   * - In SVG initial CSS value of transform-origin is `0 0` (elsewhere `50% 50%`)
+   *
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    */
   extractTransformData(tagMeta) {
-    const style = geomorphService.extractStyles(tagMeta.attributes.style ?? "");
-    const { "transform-origin": transformOrigin = "", "transform-box": transformBox = null } =
-      style;
+    const { tagName, attributes: a } = tagMeta;
+    const style = geomorphService.extractStyles(a.style ?? "");
+    let { "transform-origin": transformOrigin = "", "transform-box": transformBox = null } = style;
+    transformOrigin = transformOrigin.trim();
+    /** For `transform-box: fill-box` */
+    let bounds = /** @type {Rect | undefined} */ (undefined);
 
-    // Support format `76.028px 97.3736px`
-    // Support format `50% 50%`
     const [xPart, yPart] = transformOrigin.split(/\s+/);
     if (!xPart || !yPart) {
+      transformOrigin && error(`unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
       return { transformOrigin: null, transformBox };
+    }
+    if (transformBox && transformBox !== 'fill-box') {
+      error(`unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
+      return { transformOrigin: null, transformBox };
+    }
+
+    if (transformBox === 'fill-box') {
+      if (tagName === 'rect') {
+        bounds = new Rect(Number(a.x), Number(a.y), Number(a.width), Number(a.height));
+      } else if (tagName === 'path') {
+        const pathPoly = geom.svgPathToPolygon(a.d);
+        pathPoly && (bounds = pathPoly.rect) || error(`path.d parse failed: ${a.d}`);
+      }
     }
 
     const [x, y] = [xPart, yPart].map((rep, i) => {
       /** @type {RegExpMatchArray | null} */ let match = null;
-      if ((match = rep.match(/^(-?\d+(?:.\d+)?)%$/))) {
-        return (
-          (Number(match[1]) / 100) * Number(tagMeta.attributes[i === 0 ? "width" : "height"] ?? "0")
+      if ((match = rep.match(/^(-?\d+(?:.\d+)?)%$/))) {// e.g. -50.02%
+        if (transformBox !== 'fill-box' || !bounds) {
+          return null; // only support percentages for fill-box
+        }
+        return (i === 0 ? bounds.x : bounds.y) + (
+          (Number(match[1]) / 100) * (i === 0 ? bounds.width : bounds.height)
         );
-      } else if ((match = rep.match(/^(-?\d+(?:.\d+)?)px$/))) {
+      } else if ((match = rep.match(/^(-?\d+(?:.\d+)?)(?:px)$/))) {// e.g. 48.44px
         return Number(match[1]);
       } else {
         return null;
@@ -370,16 +385,12 @@ class GeomorphService {
     });
 
     if (Number.isFinite(x) && Number.isFinite(y)) {
-      // console.log({ transformOrigin }, x, y);
       return {
-        transformOrigin: { x: /** @type {number} */ (x), y: /** @type {number} */ (y) },
+        transformOrigin: /** @type {Geom.VectJson} */ ({ x, y }),
         transformBox,
       };
     } else {
-      transformOrigin &&
-        warn(
-          `extractTransformData: ${tagMeta.tagName}: ignored transform-origin with format "${transformOrigin}"`
-        );
+      transformOrigin && error(`${tagName}: unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
       return { transformOrigin: null, transformBox };
     }
   }
@@ -511,17 +522,10 @@ class GeomorphService {
 
         const rect = geomorphService.extractRect(parent.attributes);
         const transform = geomorphService.extractSixTuple(parent.attributes.transform);
-        // 🚧 can we ignore transformBox?
-        const { transformOrigin, transformBox } = geomorphService.extractTransformData({
+        const { transformOrigin } = geomorphService.extractTransformData({
           ...parent,
           title: contents,
         });
-        // console.log(mapKey, gmNumber, {
-        //   rect,
-        //   transform,
-        //   transformOrigin,
-        //   transformBox,
-        // });
 
         transform &&
           gms.push({
@@ -623,19 +627,12 @@ class GeomorphService {
             throw Error(`parseSymbol: symbols: ${contents}: must start with a symbol key`);
           }
 
-          // 🚧 can we ignore transformBox?
           const rect = geomorphService.extractRect(parent.attributes);
           const transform = geomorphService.extractSixTuple(parent.attributes.transform);
-          const { transformOrigin, transformBox } = geomorphService.extractTransformData({
+          const { transformOrigin } = geomorphService.extractTransformData({
             ...parent,
             title: contents,
           });
-          // console.log(symbolKey, {
-          //   rect,
-          //   transform,
-          //   transformOrigin,
-          //   transformBox,
-          // });
 
           transform &&
             symbols.push({

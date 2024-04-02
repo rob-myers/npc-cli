@@ -35,8 +35,13 @@
     - findNearestPoly
     - https://github.com/isaac-mason/recast-navigation-js/issues/286
     - https://groups.google.com/g/recastnavigation/c/OqJRHFoiVX8
-    - 🚧 fix scale i.e. pre-scale by worldScale so tileSize 30 correct
+    - wallInset needs scaling too
   - can re-plan moving agent path on HMR edit 
+
+- ✅ fix transform-box parsing
+  - ✅ transform-box`fill-box` working for `rect`
+  - ✅ transform-box `fill-box` working for `path`
+- fix scale i.e. pre-scale by worldScale so tileSize 30 correct
 
 - HMR issue i.e. onchange map sometimes animation doesn't restart
 
@@ -108,7 +113,7 @@
   - debug locally using about:debugging#/runtime/this-firefox
 - 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
   - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
-- 🚧 fix case where `transform-box` is `content-box` or `fill-box`
+- ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
   - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
   - ℹ️ seen in parseSymbol of hull symbol
 
