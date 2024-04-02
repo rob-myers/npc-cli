@@ -15,12 +15,10 @@ export const worldScale = (1 / 60) * 1.5;
 /** Decimal place precision */
 export const precision = 4;
 
-// 🚧 -> world coords
-export const wallOutset = 12;
+export const wallOutset = 12 * worldScale;
 
-// 🚧 -> world coords
-export const obstacleOutset = 12;
+export const obstacleOutset = 12 * worldScale;
 
-export const agentRadius = wallOutset * worldScale;
+export const agentRadius = wallOutset;
 
 export const wallHeight = 2;

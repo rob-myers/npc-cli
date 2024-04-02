@@ -345,7 +345,7 @@ export function pause(ms = 0) {
  * @param {number} number
  * @param {number} [decimalPlaces] default 2
  */
-export function precision(number, decimalPlaces = 2) {
+export function toPrecision(number, decimalPlaces = 2) {
   return Number(number.toFixed(decimalPlaces));
 }
 

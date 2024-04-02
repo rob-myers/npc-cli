@@ -13,6 +13,7 @@ import {
   safeJsonParse,
   mapValues,
   keys,
+  toPrecision,
 } from "./generic";
 import { geom } from "./geom";
 
@@ -132,7 +133,6 @@ class GeomorphService {
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
-    // prettier-ignore
     rooms.forEach((room) => Object.assign(room.meta = {}, ...decor.flatMap((x) =>
       x.meta.meta === true && room.contains(x.outline[0]) ? x.meta : []
     ), { meta: undefined }));
@@ -148,10 +148,9 @@ class GeomorphService {
     return {
       key: gmKey,
       pngRect: hullSym.pngRect.clone(),
-      // 🚧
       doors,
-      rooms,
-      walls: cutWalls,
+      rooms: rooms.map(x => x.precision(precision)),
+      walls: cutWalls.map(x => x.precision(precision)),
       navPolys: navPolyWithDoors,
     };
   }
@@ -249,9 +248,9 @@ class GeomorphService {
   embedXZMat4(transform, yScale = 1, mat4 = new THREE.Matrix4()) {
     // prettier-ignore
     return mat4.set(
-      transform[0], 0,      transform[2], transform[4] * worldScale,
+      transform[0], 0,      transform[2], transform[4],
       0,            yScale, 0,            0,
-      transform[1], 0,      transform[3], transform[5] * worldScale,
+      transform[1], 0,      transform[3], transform[5],
       0,            0,      0,             1
     );
   }
@@ -527,15 +526,16 @@ class GeomorphService {
           title: contents,
         });
 
-        transform &&
-          gms.push({
-            gmKey: geomorphService.toGmKey[gmNumber],
-            transform: geom.reduceAffineTransform(
-              { ...rect },
-              transform,
-              transformOrigin ?? { x: 0, y: 0 }
-            ),
-          });
+        if (transform) {
+          const reduced = geom.reduceAffineTransform(
+            { ...rect },
+            transform,
+            transformOrigin ?? { x: 0, y: 0 }
+          );
+          reduced[4] = toPrecision(reduced[4] * worldScale, precision);
+          reduced[5] = toPrecision(reduced[5] * worldScale, precision);
+          gms.push({ gmKey: geomorphService.toGmKey[gmNumber], transform: reduced });
+        }
       },
       onclosetag() {
         tagStack.pop();
@@ -566,8 +566,8 @@ class GeomorphService {
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
 
-    let viewBoxRect = /** @type {Geom.RectJson | null} */ (null);
-    let pngRect = /** @type {Geom.RectJson | null} */ (null);
+    let viewBoxRect = /** @type {Geom.Rect | null} */ (null);
+    let pngRect = /** @type {Geom.Rect | null} */ (null);
     const symbols = /** @type {Geomorph.ParsedSymbol['symbols']} */ ([]);
     const hullWalls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
@@ -584,15 +584,12 @@ class GeomorphService {
         if (tag === "svg") {
           // viewBox -> viewbox
           const [x, y, width, height] = attributes.viewbox.trim().split(/\s+/).map(Number);
-          viewBoxRect = { x, y, width, height };
+          viewBoxRect = new Rect(x, y, width, height);
+          viewBoxRect.scale(worldScale).precision(precision);
         }
         if (tag === "image") {
-          pngRect = {
-            x: Number(attributes.x || 0),
-            y: Number(attributes.y || 0),
-            width: Number(attributes.width || 0),
-            height: Number(attributes.height || 0),
-          };
+          pngRect = new Rect(Number(attributes.x || 0), Number(attributes.y || 0), Number(attributes.width || 0), Number(attributes.height || 0));
+          pngRect.scale(worldScale).precision(precision);
         }
 
         tagStack.push({ tagName: tag, attributes });
@@ -634,18 +631,24 @@ class GeomorphService {
             title: contents,
           });
 
-          transform &&
+          if (transform) {
+            const reduced = geom.reduceAffineTransform(
+              { ...rect },
+              transform,
+              transformOrigin ?? { x: 0, y: 0 }
+            );
+            // 🔔 small error when precision 4
+            reduced[4] = toPrecision(reduced[4] * worldScale, 2);
+            reduced[5] = toPrecision(reduced[5] * worldScale, 2);
+
             symbols.push({
               symbolKey,
               meta: geomorphService.tagsToMeta(symbolTags, { key: symbolKey }),
-              width: rect.width,
-              height: rect.height,
-              transform: geom.reduceAffineTransform(
-                { ...rect },
-                transform,
-                transformOrigin ?? { x: 0, y: 0 }
-              ),
+              width: toPrecision(rect.width * worldScale),
+              height: toPrecision(rect.height * worldScale),
+              transform: reduced,
             });
+          }
 
           return;
         }
@@ -665,7 +668,7 @@ class GeomorphService {
             (tag === null || ownTags.includes(tag)) &&
             polys.push(
               ...geomorphService
-                .extractGeom({ ...parent, title: contents }, scale)
+                .extractGeom({ ...parent, title: contents }, scale * worldScale)
                 .map((poly) => Object.assign(poly, { meta }))
             )
         );

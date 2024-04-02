@@ -15,25 +15,24 @@ import useUpdate from "../hooks/use-update";
 export default function TestGeomorphs(props) {
   const api = React.useContext(TestWorldContext);
 
-  // prettier-ignore
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGeomorph(gmKey, img) {
       const { ctxt, layout } = api.gmData[gmKey];
       const { pngRect, rooms, doors, navPolys } = layout;
+      const canvas = ctxt.canvas;
 
-      ctxt.clearRect(0, 0, pngRect.width, pngRect.width);
+      ctxt.clearRect(0, 0, canvas.width, canvas.width);
       ctxt.drawImage(img, 0, 0);
-      ctxt.translate(-pngRect.x, -pngRect.y);
+      ctxt.setTransform(1 / worldScale, 0, 0, 1 / worldScale, -pngRect.x / worldScale, -pngRect.y / worldScale)
 
       // draw hull doors
-      const hullPolys = doors.flatMap((x) => (x.meta.hull ? x.poly : []));
-      drawPolygons(ctxt, hullPolys, ["white", "#000", 2]);
-
+      const hullDoorPolys = doors.flatMap((x) => (x.meta.hull ? x.poly : []));
+      drawPolygons(ctxt, hullDoorPolys, ["white", "#000", 0.05]);
       // 🚧 debug draw rooms
       // drawPolygons(ctxt, rooms, [null, "green", 0]);
-
       // 🚧 debug draw navPolys
       drawPolygons(ctxt, navPolys, ["rgba(0, 0, 0, 0.08)", "rgba(0, 0, 0, 0)", 1]);
+
       ctxt.resetTransform();
     },
   }));
@@ -53,8 +52,8 @@ export default function TestGeomorphs(props) {
   return api.gms.map((gm, gmId) => (
     <group
       key={`${gm.key} ${gmId} ${gm.transform}`}
-      onUpdate={(self) => self.applyMatrix4(gm.mat4)}
-      scale={[worldScale, 1, worldScale]}
+      onUpdate={(group) => group.applyMatrix4(gm.mat4)}
+      // ref={(group) => group?.applyMatrix4(gm.mat4)}
     >
       <mesh
         geometry={quadGeometryXZ}

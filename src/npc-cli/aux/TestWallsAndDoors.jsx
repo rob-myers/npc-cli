@@ -54,7 +54,7 @@ export default function TestWallsAndDoors(props) {
     },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength } = meta;
-      const length = segLength * ratio * worldScale;
+      const length = segLength * ratio;
       return geomorphService.embedXZMat4(
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y], wallHeight, tmpMatFour1
       );
@@ -63,7 +63,7 @@ export default function TestWallsAndDoors(props) {
       tmpMat1.feedFromArray(transform);
       [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
       const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-      const len = u.distanceTo(v) * worldScale;
+      const len = u.distanceTo(v);
       return geomorphService.embedXZMat4([
         len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y,
       ], wallHeight, tmpMatFour1);
@@ -95,7 +95,7 @@ export default function TestWallsAndDoors(props) {
       for (const [instanceId, meta] of state.movingDoors.entries()) {
         const dstRatio = meta.open ? 0.1 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
-        const length = meta.ratio * meta.segLength * worldScale;
+        const length = meta.ratio * meta.segLength;
         instanceMatrix.array[instanceId * 16 + 0] = meta.dir.x * length;
         instanceMatrix.array[instanceId * 16 + 2] = meta.dir.y * length;
         if (meta.ratio === dstRatio) state.movingDoors.delete(instanceId);

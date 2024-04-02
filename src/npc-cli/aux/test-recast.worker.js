@@ -6,12 +6,13 @@ import {
   threeToTileCache,
 } from "@recast-navigation/three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
+import { tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
-import { worldScale } from "../service/const";
 import { error, info } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry } from "../service/three";
+import { getTileCacheMeshProcess } from "../service/recast-detour";
 
 info("web worker started", import.meta.url);
 
@@ -38,8 +39,8 @@ async function handleMessages(e) {
       const meshes = gms.map(({ navPolys, mat4, transform: [a, b, c, d] }, gmId) => {
         const determinant = a * d - b * c;
         const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
-        mesh.scale.set(worldScale, 1, worldScale);
         mesh.applyMatrix4(mat4);
+        mesh.updateMatrixWorld();
         return mesh;
       });
 
@@ -51,9 +52,16 @@ async function handleMessages(e) {
       // const { navMesh, success } = threeToTiledNavMesh(meshes, {
       //   tileSize: 30,
       // });
+      
+      // console.log({ tileCacheGeneratorConfigDefaults })
       const { navMesh, tileCache, success } = threeToTileCache(meshes, {
         tileSize: 30,
         ch: 0.0001,
+        borderSize: 0,
+        expectedLayersPerTile: 1,
+        detailSampleDist: 0,
+        walkableClimb: 0,
+        tileCacheMeshProcess: getTileCacheMeshProcess(),
       });
       info({ numMeshes: meshes.length, navMesh, success });
 

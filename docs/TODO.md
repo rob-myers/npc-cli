@@ -41,9 +41,13 @@
 - ✅ fix transform-box parsing
   - ✅ transform-box`fill-box` working for `rect`
   - ✅ transform-box `fill-box` working for `path`
-- fix scale i.e. pre-scale by worldScale so tileSize 30 correct
+- ✅ fix scale i.e. pre-scale by worldScale so tileSize 30 correct
+  - Seems tileSize 30 was already correct.
+    We thought there were many extra tiles by inspecting tile `dataSize`, but seems it can be non-zero without meaning anything
 
-- HMR issue i.e. onchange map sometimes animation doesn't restart
+- HMR issue
+  - onchange mapKey in Viewer
+  - onchange map sometimes animation doesn't restart
 
 - Try `HeightfieldHelper` i.e. visualize refined navMesh
 

@@ -4,14 +4,14 @@ import { Subject } from "rxjs";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery, QueryFilter } from "@recast-navigation/core";
-import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
-import { agentRadius } from "../service/const";
+import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, isDevelopment } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service/three";
+import { getTileCacheMeshProcess } from "../service/recast-detour";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
@@ -55,8 +55,9 @@ export default function TestWorld(props) {
       let gmData = state.gmData[gmKey];
       if (!gmData) {
         const canvas = document.createElement("canvas");
-        canvas.width = layout.pngRect.width;
-        canvas.height = layout.pngRect.height;
+        // standard non-edge geomorph ~ 1200 * 1200 (extends beyond edges)
+        canvas.width = layout.pngRect.width / worldScale;
+        canvas.height = layout.pngRect.height / worldScale;
         gmData = state.gmData[gmKey] = {
           canvas,
           ctxt: assertNonNull(canvas.getContext("2d")),
@@ -80,8 +81,7 @@ export default function TestWorld(props) {
       }
     },
     loadTiledMesh(exportedNavMesh) {
-      const tcmProcess = createDefaultTileCacheMeshProcess();
-      const result = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, tcmProcess));
+      const result = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
       state.nav = Object.assign(result, {
         query: new NavMeshQuery({ navMesh: result.navMesh }),
       });
@@ -104,18 +104,11 @@ export default function TestWorld(props) {
       });
       state.crowd.timeStep = 1 / 60;
 
-      // 🚧 iterate over all polys setting flags
-      // 🚧 fix 120 tiles by pre-scaling by worldScale
-      const { navMesh } = state.nav;
-      console.log({
-        maxTiles: navMesh.getMaxTiles(),
-        tiles: [...Array(256)].map((_, i) => navMesh.getTile(i).dataSize()),
-      });
-
-      // 🚧 find and exclude a poly
+      // ✅ find and exclude a poly
+      // 🚧 maybe need to exclude more polys for it to take effect
       const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly({ x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 }, {});
       const filter = state.crowd.navMeshQuery.defaultFilter;
-      // filter.raw.setExcludeFlags(2 ** 0); // 🚧 must set other polys flags first e.g. 2 ** 1
+      filter.raw.setExcludeFlags(2 ** 0); // 🚧 must set other polys flags first e.g. 2 ** 1
       state.nav.navMesh.setPolyFlags(polyRef, 2 ** 0);
       // console.log(filter.excludeFlags)
 
