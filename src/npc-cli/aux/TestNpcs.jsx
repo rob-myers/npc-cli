@@ -1,8 +1,8 @@
 import React from "react";
 import * as THREE from "three";
-import { dampLookAt, dampAngle } from "maath/easing";
+import { dampLookAt } from "maath/easing";
 
-import { wallOutset, worldScale } from "../service/const";
+import { agentRadius } from "../service/const";
 import { info } from "../service/generic";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -126,7 +126,6 @@ export default function TestNpcs(props) {
  * @property {(agentId: number) => void} updateAgentColor
  */
 
-const agentRadius = wallOutset * worldScale;
 const agentHeight = 1.5;
 const tmpV3_1 = new THREE.Vector3();
 const tmpV3_2 = new THREE.Vector3();

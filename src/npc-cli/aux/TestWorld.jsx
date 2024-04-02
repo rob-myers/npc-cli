@@ -7,7 +7,7 @@ import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery, QueryFilter 
 import { createDefaultTileCacheMeshProcess } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
-import { wallOutset, worldScale } from "../service/const";
+import { agentRadius } from "../service/const";
 import { assertNonNull, info, isDevelopment } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
@@ -99,7 +99,7 @@ export default function TestWorld(props) {
       }
       state.crowd = new Crowd({
         maxAgents: 10,
-        maxAgentRadius: wallOutset * worldScale,
+        maxAgentRadius: agentRadius,
         navMesh: state.nav.navMesh,
       });
       state.crowd.timeStep = 1 / 60;
@@ -142,12 +142,12 @@ export default function TestWorld(props) {
     setupCrowdAgents(positions) {
       positions.map((p) =>
         state.crowd.addAgent(p, {
-          radius: wallOutset * worldScale,
+          radius: agentRadius,
           height: 1.5,
           maxAcceleration: 4,
           maxSpeed: 2,
           collisionQueryRange: 1, // jerky push at 0.3
-          pathOptimizationRange: wallOutset * worldScale * 20,
+          pathOptimizationRange: agentRadius * 20,
           separationWeight: 1,
         })
       );

@@ -18,3 +18,5 @@ export const precision = 4;
 export const wallOutset = 12;
 
 export const obstacleOutset = 12;
+
+export const agentRadius = wallOutset * worldScale;
