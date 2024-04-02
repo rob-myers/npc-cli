@@ -32,10 +32,14 @@
   - ✅ navPath helper -> TestDebug
   - 🚧 can make polygon un-walkable e.g. closed door
     - https://recastnav.com/classdtNavMeshQuery.html#details
-    - findNearestPoly
     - https://github.com/isaac-mason/recast-navigation-js/issues/286
     - https://groups.google.com/g/recastnavigation/c/OqJRHFoiVX8
-    - wallInset needs scaling too
+    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation/.storybook/stories/advanced/custom-areas-generator.ts#L371
+    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-core/src/nav-mesh.ts#L429
+    - https://www.gamedev.net/blog/33/entry-2210775-more-recast-and-detour/
+    - ✅ retrieve polygon points (messy)
+    - get filter working
+    - cleanup
   - can re-plan moving agent path on HMR edit 
 
 - ✅ fix transform-box parsing

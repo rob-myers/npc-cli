@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery, QueryFilter } from "@recast-navigation/core";
+import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { agentRadius, worldScale } from "../service/const";
@@ -16,7 +16,6 @@ import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import useHandleEvents from "./use-test-handle-events";
-import NavPathHelper from "./NavPathHelper";
 import TestWorldCanvas from "./TestWorldCanvas";
 import TestGeomorphs from "./TestGeomorphs";
 import TestWallsAndDoors from "./TestWallsAndDoors";
@@ -105,11 +104,34 @@ export default function TestWorld(props) {
       state.crowd.timeStep = 1 / 60;
 
       // ✅ find and exclude a poly
+      // ✅ visualize found poly
       // 🚧 maybe need to exclude more polys for it to take effect
-      const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly({ x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 }, {});
+      const { navMesh } = state.nav;
       const filter = state.crowd.navMeshQuery.defaultFilter;
+      const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly({ x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 }, {});
+      const polyResult = navMesh.getTileAndPolyByRef(polyRef);
+      const tile = polyResult.tile();
+      const poly = polyResult.poly();
+      // ✅ undetailed verts?
+      const vertexIds = [...Array(poly.vertCount())].map((_, i) => poly.verts(i));
+      const tileHeader = assertNonNull(tile.header());
+      // ✅ get tile's un-detailed navmesh verts
+      const tileUnVertices = [...Array((tileHeader.vertCount() * 3) + 1)].map(Number).reduce((agg, _, i) => 
+        (i > 0) && (i % 3 === 0) ? agg.concat({ x: tile.verts(i - 3), y: tile.verts(i - 2), z: tile.verts(i - 1) }) : agg,
+        /** @type {THREE.Vector3Like[]} */ ([]),
+      );
+      console.log({
+        polyRef,
+        poly,
+        vertexIds,
+        tileUnVertices,
+        vertices: vertexIds.map(id => tileUnVertices[id]),
+      });
+
+
       filter.raw.setExcludeFlags(2 ** 0); // 🚧 must set other polys flags first e.g. 2 ** 1
       state.nav.navMesh.setPolyFlags(polyRef, 2 ** 0);
+      // state.nav.navMesh.setPolyArea(polyRef, Raw.Recast.NULL_AREA);
       // console.log(filter.excludeFlags)
 
       state.setupCrowdAgents(nextPositions.length

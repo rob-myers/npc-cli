@@ -31,7 +31,7 @@ export default function TestDebug(props) {
       name="NavMeshHelper"
       position={[0, 0.01, 0]}
       object={state.navMesh}
-      visible={false}
+      // visible={false}
     />
 
     <primitive
