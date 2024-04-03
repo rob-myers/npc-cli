@@ -7,10 +7,10 @@ import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@reca
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { agentRadius, worldScale } from "../service/const";
-import { assertNonNull, info, isDevelopment } from "../service/generic";
+import { assertNonNull, info, isDevelopment, range } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
-import { polysToXZGeometry, tmpBufferGeom1, wireFrameMaterial } from "../service/three";
+import { polysToXZGeometry, tmpBufferGeom1, tmpVectThree1, wireFrameMaterial } from "../service/three";
 import { getTileCacheMeshProcess } from "../service/recast-detour";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
@@ -102,6 +102,7 @@ export default function TestWorld(props) {
         navMesh: state.nav.navMesh,
       });
       state.crowd.timeStep = 1 / 60;
+      // state.crowd.timeFactor
 
       // ✅ find and exclude a poly
       // ✅ visualize found poly
@@ -110,18 +111,17 @@ export default function TestWorld(props) {
       // const filter = state.crowd.navMeshQuery.defaultFilter;
       const filter = state.crowd.getFilter(0);
       const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly(
-        // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 }, // 👈 not working
-        { x: 1 * 1.5, y: 0, z: 3.5 * 1.5 },
+        { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
+        // { x: 1 * 1.5, y: 0, z: 3.5 * 1.5 },
         {},
       );
       const polyResult = navMesh.getTileAndPolyByRef(polyRef);
       const tile = polyResult.tile();
       const poly = polyResult.poly();
-      // ✅ undetailed verts?
-      const vertexIds = [...Array(poly.vertCount())].map((_, i) => poly.verts(i));
-      const tileHeader = assertNonNull(tile.header());
+      const vertexIds = range(poly.vertCount()).map((i) => poly.verts(i));
+      const tileHeader = /** @type {import("@recast-navigation/core").DetourMeshHeader} */ (tile.header());
       // ✅ get tile's un-detailed navmesh verts
-      const tileUnVertices = [...Array((tileHeader.vertCount() * 3) + 1)].map(Number).reduce((agg, _, i) => 
+      const tileUnVertices = range((tileHeader.vertCount() * 3) + 1).reduce((agg, i) => 
         (i > 0) && (i % 3 === 0) ? agg.concat({ x: tile.verts(i - 3), y: tile.verts(i - 2), z: tile.verts(i - 1) }) : agg,
         /** @type {THREE.Vector3Like[]} */ ([]),
       );
@@ -134,7 +134,7 @@ export default function TestWorld(props) {
       });
 
       filter.excludeFlags = 2 ** 0; // all polys should already be set differently
-      const setPolyFlagsResultFlag = navMesh.setPolyFlags(polyRef, 2 ** 0);
+      navMesh.setPolyFlags(polyRef, 2 ** 0);
 
       state.setupCrowdAgents(nextPositions.length
           ? nextPositions
@@ -178,8 +178,11 @@ export default function TestWorld(props) {
       const path = state.crowd.navMeshQuery.computePath(src, dst, {
         filter: state.crowd.getFilter(0),
       });
-      state.debug.navPath.setPath(path);
-      agent.goto(dst); // navigate
+
+      if (path.length && tmpVectThree1.copy(dst).distanceTo(path[path.length - 1]) < 0.05) {
+        state.debug.navPath.setPath(path);
+        agent.goto(dst); // navigate
+      }
     },
   }));
 

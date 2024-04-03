@@ -70,3 +70,5 @@ export const wireFrameMaterial = new THREE.MeshStandardMaterial({
   wireframe: true,
   color: "green",
 });
+
+export const tmpVectThree1 = new THREE.Vector3();

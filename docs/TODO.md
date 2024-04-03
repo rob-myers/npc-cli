@@ -52,6 +52,8 @@
   - Seems tileSize 30 was already correct.
     We thought there were many extra tiles by inspecting tile `dataSize`, but seems it can be non-zero without meaning anything
 
+- Detect `dst` unreachable without computing a path and checking its final point is not close to `dst`
+
 - HMR issue
   - onchange mapKey in Viewer
   - onchange map sometimes animation doesn't restart
