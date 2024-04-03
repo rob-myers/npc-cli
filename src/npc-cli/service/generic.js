@@ -359,6 +359,11 @@ export function pretty(input) {
   return prettyCompact(input);
 }
 
+/** @param {number} n */
+export function range(n) {
+  return [...Array(n)].map((_, i) => i);
+}
+
 /**
  * @template T
  * @param {T[]} items
