@@ -12,7 +12,7 @@ import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { error, info } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry } from "../service/three";
-import { getTileCacheMeshProcess } from "../service/recast-detour";
+import { getTileCacheGeneratorConfig } from "../service/recast-detour";
 
 info("web worker started", import.meta.url);
 
@@ -54,15 +54,7 @@ async function handleMessages(e) {
       // });
       
       // console.log({ tileCacheGeneratorConfigDefaults })
-      const { navMesh, tileCache, success } = threeToTileCache(meshes, {
-        tileSize: 30,
-        ch: 0.0001,
-        borderSize: 0,
-        expectedLayersPerTile: 1,
-        detailSampleDist: 0,
-        walkableClimb: 0,
-        tileCacheMeshProcess: getTileCacheMeshProcess(),
-      });
+      const { navMesh, tileCache, success } = threeToTileCache(meshes, getTileCacheGeneratorConfig());
       info({ numMeshes: meshes.length, navMesh, success });
 
       if (navMesh && tileCache) {

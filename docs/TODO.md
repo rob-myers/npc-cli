@@ -39,7 +39,9 @@
     - https://www.gamedev.net/blog/33/entry-2210775-more-recast-and-detour/
     - ✅ retrieve polygon points (messy)
     - ✅ get filter working
-    - 🚧 first attempt probably failed because we didn't "get enough" polygons?
+    - ℹ️ first attempt probably failed because we didn't "get enough" polygons?
+    - ✅ navMesh has polys roughly corresponding to doors
+    - 🚧 can indicate found poly 
     - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
