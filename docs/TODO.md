@@ -145,6 +145,8 @@
 - ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
   - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
   - ℹ️ seen in parseSymbol of hull symbol
+- react-three-fiber onPointerUp not updating when instance transformed
+  - possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
 
 - only show ContextMenu on right click on desktop
 - show ContextMenu on double tap instead of long tap

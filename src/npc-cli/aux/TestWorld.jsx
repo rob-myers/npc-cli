@@ -224,6 +224,7 @@ export default function TestWorld(props) {
               <TestNpcs/>
               <TestDebug/>
             </>}
+            {/* 🔔 saw onPointerUp instances not updating */}
             <TestWallsAndDoors />
           </group>
         )}
