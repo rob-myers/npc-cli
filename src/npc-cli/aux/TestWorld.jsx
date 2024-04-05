@@ -221,10 +221,10 @@ export default function TestWorld(props) {
           <group>
             <TestGeomorphs/>
             {state.crowd && <>
-              <TestWallsAndDoors />
               <TestNpcs/>
               <TestDebug/>
             </>}
+            <TestWallsAndDoors />
           </group>
         )}
       </TestWorldCanvas>

@@ -74,15 +74,14 @@ export default function TestWallsAndDoors(props) {
     getNumWalls() {
       return api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
     },
-    handleDoorClick(e) {
-      info("door click", e.point, e.instanceId);
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const meta = state.doorByInstId[instanceId];
-      meta.open = !meta.open;
-      state.movingDoors.set(meta.instanceId, meta);
-      e.stopPropagation();
-    },
-    handleWallClick(e) {
+    handleClick(e) {
+      const target = /** @type {'walls' | 'doors'} */ (e.object.name);
+      if (target === 'doors') {
+        const instanceId = /** @type {number} */ (e.instanceId);
+        const meta = state.doorByInstId[instanceId];
+        meta.open = !meta.open;
+        state.movingDoors.set(meta.instanceId, meta);
+      }
       e.stopPropagation();
     },
     onTick() {
@@ -133,7 +132,7 @@ export default function TestWallsAndDoors(props) {
         ref={instances => instances && (state.wallsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumWalls()]}
         frustumCulled={false}
-        onPointerUp={state.handleWallClick}
+        onPointerUp={state.handleClick}
       >
         <meshBasicMaterial side={THREE.DoubleSide} color="black" />
       </instancedMesh>
@@ -144,7 +143,7 @@ export default function TestWallsAndDoors(props) {
         ref={instances => instances && (state.doorsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}
-        onPointerUp={state.handleDoorClick}
+        onPointerUp={state.handleClick}
       >
         <shaderMaterial
           side={THREE.DoubleSide}
@@ -175,8 +174,7 @@ export default function TestWallsAndDoors(props) {
  * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} getWallMat
  * @property {() => number} getNumDoors
  * @property {() => number} getNumWalls
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleDoorClick
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleWallClick
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleClick
  * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
