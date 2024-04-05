@@ -45,6 +45,16 @@
     - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
+- ✅ PR for recast-navigation-js extending dtNavMeshQuery
+  - ℹ️ https://github.com/isaac-mason/recast-navigation-js/discussions/298
+  - ✅ https://github.com/isaac-mason/recast-navigation-js/blob/main/DEVELOPMENT.md
+  - ✅ re-build @recast-navigation/wasm 
+  - ✅ add findPolysAroundCircle
+  - ✅ add queryPolygons
+  - ✅ test findPolysAroundCircle
+  - ✅ test queryPolygons
+  - https://github.com/isaac-mason/recast-navigation-js/pull/300
+
 - ✅ fix transform-box parsing
   - ✅ transform-box`fill-box` working for `rect`
   - ✅ transform-box `fill-box` working for `path`
@@ -52,7 +62,27 @@
   - Seems tileSize 30 was already correct.
     We thought there were many extra tiles by inspecting tile `dataSize`, but seems it can be non-zero without meaning anything
 
-- Detect `dst` unreachable without computing a path and checking its final point is not close to `dst`
+- 🚧 get obstacle working again
+  - probably something to do with filters...
+
+- 🚧 Detect `dst` unreachable without computing a path and checking its final point is not close to `dst`
+  - currently, `goto` is using `findNearestPoly`
+  - maybe this should be optional
+  ```tsx
+  goto(position: Vector3): boolean {
+    const { nearestPoint, nearestRef } =
+      this.crowd.navMeshQuery.findNearestPoly(position, {
+        halfExtents: this.crowd.navMeshQuery.defaultQueryHalfExtents,
+        filter: this.crowd.navMeshQuery.defaultFilter,
+      });
+
+    return this.crowd.raw.requestMoveTarget(
+      this.agentIndex,
+      nearestRef,
+      vec3.toArray(nearestPoint)
+    );
+  }
+  ```
 
 - HMR issue
   - onchange mapKey in Viewer

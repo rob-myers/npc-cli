@@ -22,7 +22,7 @@ npm config set audit false
 npm config set fund false
 ```
 
-### Understanding affine transforms
+### Affine transform example
 
 Given a rectangle
 > `{ x: 0, y: -480, width: 120, height: 120 }`

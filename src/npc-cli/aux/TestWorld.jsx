@@ -110,6 +110,12 @@ export default function TestWorld(props) {
       const { navMesh } = state.nav;
       // const filter = state.crowd.navMeshQuery.defaultFilter;
       const filter = state.crowd.getFilter(0);
+
+      const { polyRefs } =  state.crowd.navMeshQuery.queryPolygons(
+        { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
+        { x: 0.2, y: 0.01, z: 0.2 },
+      );
+
       const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly(
         { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
         // { x: 1 * 1.5, y: 0, z: 3.5 * 1.5 },
@@ -127,6 +133,7 @@ export default function TestWorld(props) {
       );
       console.log({
         polyRef,
+        polyRefs,
         poly,
         vertexIds,
         tileUnVertices,
@@ -143,10 +150,6 @@ export default function TestWorld(props) {
           )
       );
       
-      // 🚧 demo obstacle
-      const obstacle = state.nav.tileCache.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
-      state.nav.tileCache.update(state.nav.navMesh);
-      // state.nav.removeObstacle(obstacle);
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);

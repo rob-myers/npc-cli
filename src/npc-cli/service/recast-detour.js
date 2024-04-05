@@ -21,9 +21,8 @@ export function getTileCacheMeshProcess() {
 export function getTileCacheGeneratorConfig() {
   return {
     tileSize: 30,
-    cs: 0.05,
-    // ch: 0.0001,
-    ch: Number.EPSILON,
+    cs: 0.05, // Small `cs` means more tileCache updates when e.g. add obstacles
+    ch: 0.0001, // EPSILON breaks obstacles
     borderSize: 0,
     expectedLayersPerTile: 1,
     detailSampleDist: 0,
