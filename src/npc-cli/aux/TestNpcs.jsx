@@ -26,6 +26,7 @@ export default function TestNpcs(props) {
       const id = state.nextObstacleId++;
       
       // 🚧 spread out updates
+      // 🚧 also for removeObstacle
       for (let i = 0; i < 5; i++) {
         console.log('addBoxObstacle', id, `update ${i}`);
         if (api.nav.tileCache.update(api.nav.navMesh).upToDate) break;

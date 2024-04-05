@@ -94,7 +94,7 @@ export default function TestWorld(props) {
           state.crowd.removeAgent(x);
         });
         state.crowd.destroy();
-        cancelAnimationFrame(state.reqAnimId);
+        // cancelAnimationFrame(state.reqAnimId);
       }
       state.crowd = new Crowd({
         maxAgents: 10,
@@ -105,43 +105,14 @@ export default function TestWorld(props) {
       // state.crowd.timeFactor
 
       // ✅ find and exclude a poly
-      // ✅ visualize found poly
-      // 🚧 cleanup
-      const { navMesh } = state.nav;
-      // const filter = state.crowd.navMeshQuery.defaultFilter;
-      const filter = state.crowd.getFilter(0);
-
       const { polyRefs } =  state.crowd.navMeshQuery.queryPolygons(
         { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-        { x: 0.2, y: 0.01, z: 0.2 },
+        { x: 0.4, y: 0.01, z: 0.4 },
       );
-
-      const { nearestRef: polyRef } = state.crowd.navMeshQuery.findNearestPoly(
-        { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-        // { x: 1 * 1.5, y: 0, z: 3.5 * 1.5 },
-        {},
-      );
-      const polyResult = navMesh.getTileAndPolyByRef(polyRef);
-      const tile = polyResult.tile();
-      const poly = polyResult.poly();
-      const vertexIds = range(poly.vertCount()).map((i) => poly.verts(i));
-      const tileHeader = /** @type {import("@recast-navigation/core").DetourMeshHeader} */ (tile.header());
-      // ✅ get tile's un-detailed navmesh verts
-      const tileUnVertices = range((tileHeader.vertCount() * 3) + 1).reduce((agg, i) => 
-        (i > 0) && (i % 3 === 0) ? agg.concat({ x: tile.verts(i - 3), y: tile.verts(i - 2), z: tile.verts(i - 1) }) : agg,
-        /** @type {THREE.Vector3Like[]} */ ([]),
-      );
-      console.log({
-        polyRef,
-        polyRefs,
-        poly,
-        vertexIds,
-        tileUnVertices,
-        vertices: vertexIds.map(id => tileUnVertices[id]),
-      });
-
+      console.log({ polyRefs });
+      const filter = state.crowd.getFilter(0);
       filter.excludeFlags = 2 ** 0; // all polys should already be set differently
-      navMesh.setPolyFlags(polyRef, 2 ** 0);
+      polyRefs.forEach(polyRef => state.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
 
       state.setupCrowdAgents(nextPositions.length
           ? nextPositions
@@ -149,7 +120,6 @@ export default function TestWorld(props) {
             x => state.nav.query.getClosestPoint(x)
           )
       );
-      
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);

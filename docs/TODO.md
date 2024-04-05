@@ -62,10 +62,15 @@
   - Seems tileSize 30 was already correct.
     We thought there were many extra tiles by inspecting tile `dataSize`, but seems it can be non-zero without meaning anything
 
-- 🚧 get obstacle working again
-  - probably something to do with filters...
+- ✅ get obstacle working again
+  - https://github.com/isaac-mason/recast-navigation-js/discussions/272#discussioncomment-9020184
 
-- 🚧 Detect `dst` unreachable without computing a path and checking its final point is not close to `dst`
+- split hull doors in two for easier doorPolys
+
+- prevent agent going through door
+  - prevent dst polyId when respective door closed?
+
+- Detect `dst` unreachable without computing a path and checking its final point is not close to `dst`
   - currently, `goto` is using `findNearestPoly`
   - maybe this should be optional
   ```tsx
