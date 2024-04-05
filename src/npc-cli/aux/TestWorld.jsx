@@ -220,8 +220,8 @@ export default function TestWorld(props) {
         {geomorphs && (
           <group>
             <TestGeomorphs/>
-            <TestWallsAndDoors />
             {state.crowd && <>
+              <TestWallsAndDoors />
               <TestNpcs/>
               <TestDebug/>
             </>}
