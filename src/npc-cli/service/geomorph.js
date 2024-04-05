@@ -63,6 +63,7 @@ class GeomorphService {
     "303--hull": true,
 
     "bridge--042--8x9": true,
+    "console--022--1x2": true,
     "empty-room--013--2x3": true,
     "empty-room--039--3x4": true,
     "engineering--045--6x4": true,
@@ -80,6 +81,7 @@ class GeomorphService {
     "machinery--156--2x4": true,
     "machinery--158--1.8x3.6": true,
     "machinery--357--4x2": true,
+    "medical-bed--006--1.6x3.6": true,
     "medical--007--3x2": true,
     "medical--008--3x2": true,
     "misc-stellar-cartography--020--10x10": true,
@@ -92,6 +94,7 @@ class GeomorphService {
     "office--023--2x3": true,
     "office--061--3x4": true,
     "office--074--4x4": true,
+    "office--089--4x4": true,
     "stateroom--012--2x2": true,
     "stateroom--014--2x2": true,
     "stateroom--018--2x3": true,
