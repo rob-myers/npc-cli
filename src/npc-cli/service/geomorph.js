@@ -130,7 +130,7 @@ class GeomorphService {
         symbol,
         meta.doors,
         meta.walls,
-        transform
+        transform,
       );
       doors.push(...transformed.doors);
       uncutWalls.push(...transformed.walls);
@@ -144,10 +144,10 @@ class GeomorphService {
       Poly.cutOut(doorPolys, [x]).map((x) => Object.assign(x, { meta: x.meta }))
     );
 
-    // room meta follows from `decor meta`
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
+    // room meta follows from `decor meta`
     rooms.forEach((room) => Object.assign(room.meta = {}, ...decor.flatMap((x) =>
       x.meta.meta === true && room.contains(x.outline[0]) ? x.meta : []
     ), { meta: undefined }));
@@ -305,7 +305,7 @@ class GeomorphService {
 
     typeof scale === "number" && poly?.scale(scale);
 
-    return poly ? [poly.precision(precision).cleanFinalReps()] : [];
+    return poly ? [poly.precision(precision).cleanFinalReps().fixOrientation()] : [];
   }
 
   /**

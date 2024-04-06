@@ -48,6 +48,9 @@
 
 - split hull doors in two for easier doorPolys
 
+- ✅ fix obstacle outsets in hull symbols
+  - we now fixOrientation in extractGeom
+
 - prevent agent going through door
   - prevent dst polyId when respective door closed?
 
@@ -70,7 +73,7 @@
   }
   ```
 
-- HMR issue
+- 🚧 HMR issue
   - onchange mapKey in Viewer
   - onchange map sometimes animation doesn't restart
 
