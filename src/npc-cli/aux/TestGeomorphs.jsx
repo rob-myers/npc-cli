@@ -71,10 +71,15 @@ export default function TestGeomorphs(props) {
         name="debugNavPoly"
         geometry={api.gmData[gm.key].debugNavPoly}
         position={[0, 0.001, 0]}
-        // scale={[1, -1, 1]}
-        visible={false}
+        visible={props.showOrigNavPoly}
       >
-        <meshStandardMaterial side={THREE.FrontSide} color="green" wireframe={false} />
+        <meshStandardMaterial
+          side={THREE.FrontSide}
+          color="green"
+          wireframe={false}
+          transparent
+          opacity={0.4}
+        />
       </mesh>
     </group>
   ));
@@ -82,6 +87,7 @@ export default function TestGeomorphs(props) {
 
 /**
  * @typedef Props
+ * @property {boolean} [showOrigNavPoly]
  * @property {boolean} [disabled]
  */
 

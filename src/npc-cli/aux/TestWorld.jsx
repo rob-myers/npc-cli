@@ -218,7 +218,7 @@ export default function TestWorld(props) {
       <TestWorldCanvas disabled={props.disabled} stats>
         {geomorphs && (
           <group>
-            <TestGeomorphs/>
+            <TestGeomorphs showOrigNavPoly={false} />
             {state.crowd && <>
               <TestNpcs/>
               <TestDebug/>
