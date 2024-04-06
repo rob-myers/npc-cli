@@ -136,7 +136,6 @@ export default function TestWorld(props) {
           height: 1.5,
           maxAcceleration: 4,
           maxSpeed: 2,
-          collisionQueryRange: 1, // jerky push at 0.3
           pathOptimizationRange: agentRadius * 20,
           separationWeight: 1,
           queryFilterType: 0,
