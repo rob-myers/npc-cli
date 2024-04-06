@@ -46,7 +46,7 @@
   - can re-plan moving agent path on HMR edit 
 
 
-- split hull doors in two for easier doorPolys
+- ✅ split hull doors in two for easier doorPolys
 
 - ✅ fix obstacle outsets in hull symbols
   - we now fixOrientation in extractGeom

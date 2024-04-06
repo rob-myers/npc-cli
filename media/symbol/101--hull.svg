@@ -183,29 +183,53 @@
         <rect x="900" y="230" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);">
                 <title>decor go label=corridor</title>
         </rect>
-        <rect x="-6" y="250" width="12" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull</title>
+        <rect x="-4" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="-6" y="850" width="12" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull</title>
+        <rect x="-4" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="1194" y="250" width="12" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull</title>
+        <rect x="-4" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="1194" y="850" width="12" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull</title>
+        <rect x="-4" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="850" width="100" height="12" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-6">
-                <title>door hull</title>
+        <rect x="1196" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="250" y="-6" width="100" height="12" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull</title>
+        <rect x="1196" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="850" y="1194" width="100" height="12" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull</title>
+        <rect x="1196" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="250" y="1194" width="100" height="12" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull</title>
+        <rect x="1196" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="850" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
+        <title>door hull</title>
+        </rect>
+        <rect x="910" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
+        <title>door hull</title>
+        </rect>
+        <rect x="250" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="310" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="850" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="910" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="250" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="310" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
         <rect x="186.5" y="356.8" width="46" height="6" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;">
                 <title>door iris</title>

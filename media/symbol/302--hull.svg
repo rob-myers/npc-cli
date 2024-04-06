@@ -91,17 +91,29 @@
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="49.1" y="528.6">
                 <title>decor go label=corridor</title>
         </rect>
-        <rect x="-6" y="250" width="12" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
-                <title>door hull</title>
+        <rect x="-4" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="1194" y="250" width="12" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
-                <title>door hull</title>
+        <rect x="-4" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="250" y="594" width="100" height="12" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
-                <title>door hull</title>
+        <rect x="1196" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
-        <rect x="850" y="594" width="100" height="12" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
-                <title>door hull</title>
+        <rect x="1196" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="250" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="310" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="850" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
+        </rect>
+        <rect x="910" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <title>door hull</title>
         </rect>
         <rect x="485" y="416" width="50" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door iris sealed hull</title>
