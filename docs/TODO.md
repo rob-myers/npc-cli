@@ -52,6 +52,7 @@
   - way too many i.e. `1382`
 
 - 🚧 reduce number of tiles used...
+  - single 301 has `137` tiles, each with at most `5` polygons
 
 - 🚧 HMR issue
   - onchange mapKey in Viewer

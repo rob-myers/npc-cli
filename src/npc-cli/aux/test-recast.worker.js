@@ -12,7 +12,7 @@ import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { alloc, error, info } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry } from "../service/three";
-import { getTileCacheGeneratorConfig } from "../service/recast-detour";
+import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
 
 info("web worker started", import.meta.url);
 
@@ -49,14 +49,21 @@ async function handleMessages(e) {
       info('total meshes', meshes.length);
 
       await initRecastNav();
-      const { navMesh, tileCache } = threeToTileCache(meshes, getTileCacheGeneratorConfig());
+
+      const { navMesh, tileCache } = customThreeToTileCache(meshes, getTileCacheGeneratorConfig());
       
       if (navMesh && tileCache) {
-        info('total tiles', alloc(navMesh.getMaxTiles()).reduce((sum, _, i) => sum + (navMesh.getTile(i).header()?.polyCount ? 1 : 0), 0));
-        const exportedNavMesh = exportNavMesh(navMesh, tileCache);
-        /** @type {WW.MessageFromWorker} */
-        const msg = { type: "nav-mesh-response", mapKey, exportedNavMesh };
-        self.postMessage(msg);
+        info('total tiles', alloc(navMesh.getMaxTiles()).reduce((agg, _, i) => {
+          const polyCount = navMesh.getTile(i).header()?.polyCount();
+          polyCount && (agg[0]++, agg[1].push(polyCount));
+          return agg;
+        }, /** @type {[number, number[]]} */ ([0, []]) ));
+
+        selfTyped.postMessage({
+          type: "nav-mesh-response",
+          mapKey,
+          exportedNavMesh: exportNavMesh(navMesh, tileCache),
+        });
       } else {
         error("failed to compute navMesh");
       }
