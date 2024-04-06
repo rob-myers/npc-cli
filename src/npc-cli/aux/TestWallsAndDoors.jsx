@@ -109,11 +109,13 @@ export default function TestWallsAndDoors(props) {
         wallSegs.forEach(([u, v]) => ws.setMatrixAt(wId++, state.getWallMat(u, v, transform)))
       );
       ws.instanceMatrix.needsUpdate = true;
+      ws.computeBoundingSphere();
 
       Object.values(state.doorByPos).forEach(meta =>
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta))
       );
       ds.instanceMatrix.needsUpdate = true;
+      ds.computeBoundingSphere();
     },
   }));
 
