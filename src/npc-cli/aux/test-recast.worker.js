@@ -49,12 +49,6 @@ async function handleMessages(e) {
       info('total meshes', meshes.length);
 
       await initRecastNav();
-      // const { navMesh, success } = threeToSoloNavMesh(meshes, {});
-      // const { navMesh, success } = threeToTiledNavMesh(meshes, {
-      //   tileSize: 30,
-      // });
-      
-      // console.log({ tileCacheGeneratorConfigDefaults })
       const { navMesh, tileCache } = threeToTileCache(meshes, getTileCacheGeneratorConfig());
       
       if (navMesh && tileCache) {

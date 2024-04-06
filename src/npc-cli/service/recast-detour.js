@@ -1,4 +1,7 @@
 import { TileCacheMeshProcess } from "@recast-navigation/core";
+import { getPositionsAndIndices } from "@recast-navigation/three";
+import { generateTileCache } from "@recast-navigation/generators";
+import * as THREE from "three";
 
 /**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
@@ -30,4 +33,25 @@ export function getTileCacheGeneratorConfig() {
     tileCacheMeshProcess: getTileCacheMeshProcess(),
     // maxSimplificationError: 0,
   };
+}
+
+/**
+ * 
+ * @param {THREE.Mesh[]} meshes 
+ * @param {Partial<import("@recast-navigation/generators").TileCacheGeneratorConfig>} navMeshGeneratorConfig 
+ */
+export function customThreeToTileCache(
+  meshes,
+  navMeshGeneratorConfig = {},
+  keepIntermediates = false  
+) {
+
+  const [positions, indices] = getPositionsAndIndices(meshes);
+
+  return generateTileCache(
+    positions,
+    indices,
+    navMeshGeneratorConfig,
+    keepIntermediates
+  );
 }
