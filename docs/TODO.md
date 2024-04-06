@@ -22,7 +22,7 @@
     - ✅ works when edit map
   - ✅ can preserve agent position across HMR edit
   - ✅ add obstacle and depict using TileCacheHelper
-  - 🚧 two agents and can navigate both
+  - ✅ two agents and can navigate both
     - ✅ crowd helper -> TestNpcs
     - ✅ fix HMR
     - ✅ add two agents
@@ -41,10 +41,17 @@
     - ✅ get filter working
     - ℹ️ first attempt probably failed because we didn't "get enough" polygons?
     - ✅ navMesh has polys roughly corresponding to doors
-    - 🚧 can indicate found poly 
+    - 🚧 can indicate found poly
+      - packages/recast-navigation-core/src/nav-mesh.ts
+      - seems we need exactly what's in `getDebugNavMesh` i.e. extra triangles inside poly is exactly so-called detailed-mesh (?)
     - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
+- 🚧 count number of tiles we're using
+
+- 🚧 HMR issue
+  - onchange mapKey in Viewer
+  - onchange map sometimes animation doesn't restart
 
 - ✅ split hull doors in two for easier doorPolys
 
@@ -72,10 +79,6 @@
     );
   }
   ```
-
-- 🚧 HMR issue
-  - onchange mapKey in Viewer
-  - onchange map sometimes animation doesn't restart
 
 - Try `HeightfieldHelper` i.e. visualize refined navMesh
 

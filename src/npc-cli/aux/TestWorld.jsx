@@ -80,10 +80,7 @@ export default function TestWorld(props) {
       }
     },
     loadTiledMesh(exportedNavMesh) {
-      const result = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
-      state.nav = Object.assign(result, {
-        query: new NavMeshQuery({ navMesh: result.navMesh }),
-      });
+      state.nav = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
 
       // remember agent positions
       const nextPositions = /** @type {THREE.Vector3Like[]} */ ([]);
@@ -96,6 +93,7 @@ export default function TestWorld(props) {
         state.crowd.destroy();
         // cancelAnimationFrame(state.reqAnimId);
       }
+
       state.crowd = new Crowd({
         maxAgents: 10,
         maxAgentRadius: agentRadius,
@@ -104,22 +102,11 @@ export default function TestWorld(props) {
       state.crowd.timeStep = 1 / 60;
       // state.crowd.timeFactor
 
-      // find and exclude a poly
-      // 🚧 move to debug
-      const { polyRefs } =  state.crowd.navMeshQuery.queryPolygons(
-        { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-        { x: 0.4, y: 0.01, z: 0.4 },
-      );
-      console.log({ polyRefs });
-      const filter = state.crowd.getFilter(0);
-      filter.excludeFlags = 2 ** 0; // all polys should already be set differently
-      polyRefs.forEach(polyRef => state.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
-
       state.setupCrowdAgents(nextPositions.length
-          ? nextPositions
-          : [{ x: 3 * 1.5, y: 0, z: 5 * 1.5 }, { x: 5 * 1.5, y: 0, z: 7 * 1.5 }].map(
-            x => state.nav.query.getClosestPoint(x)
-          )
+        ? nextPositions
+        : [{ x: 3 * 1.5, y: 0, z: 5 * 1.5 }, { x: 5 * 1.5, y: 0, z: 7 * 1.5 }].map(
+          x => state.crowd.navMeshQuery.getClosestPoint(x)
+        )
       );
     },
     onTick() {
@@ -223,6 +210,7 @@ export default function TestWorld(props) {
             {state.crowd && <>
               <TestNpcs/>
               <TestDebug
+                showNavMesh
                 showOrigNavPoly={false}
               />
             </>}
@@ -260,7 +248,7 @@ export default function TestWorld(props) {
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
  * Only populated for geomorphs seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {TiledCacheResult & { query: NavMeshQuery }} nav
+ * @property {TiledCacheResult} nav
  * @property {Crowd} crowd
  *
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
