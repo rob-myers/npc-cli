@@ -67,27 +67,12 @@ export default function TestGeomorphs(props) {
           depthWrite={false} // fix z-fighting
         />
       </mesh>
-      <mesh
-        name="debugNavPoly"
-        geometry={api.gmData[gm.key].debugNavPoly}
-        position={[0, 0.001, 0]}
-        visible={props.showOrigNavPoly}
-      >
-        <meshStandardMaterial
-          side={THREE.FrontSide}
-          color="green"
-          wireframe={false}
-          transparent
-          opacity={0.4}
-        />
-      </mesh>
     </group>
   ));
 }
 
 /**
  * @typedef Props
- * @property {boolean} [showOrigNavPoly]
  * @property {boolean} [disabled]
  */
 

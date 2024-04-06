@@ -8,7 +8,8 @@ export const zIndex = /** @type {const} */ ({
 });
 
 /**
- * `1/60` -> 1 grid side -> `1.5m`
+ * Convert Starship Geomorph units (sgu) into world coordinates (meters).
+ * e.g. 1 tile ~ 60 sgu -> 1.5 meters
  */
 export const worldScale = (1 / 60) * 1.5;
 

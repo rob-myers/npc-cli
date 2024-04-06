@@ -54,7 +54,7 @@ export default function TestWorld(props) {
       let gmData = state.gmData[gmKey];
       if (!gmData) {
         const canvas = document.createElement("canvas");
-        // standard non-edge geomorph ~ 1200 * 1200 (extends beyond edges)
+        // Standard non-edge geomorph ~ 1200 * 1200 (extends beyond edges)
         canvas.width = layout.pngRect.width / worldScale;
         canvas.height = layout.pngRect.height / worldScale;
         gmData = state.gmData[gmKey] = {
@@ -66,7 +66,7 @@ export default function TestWorld(props) {
         };
       }
       gmData.layout = layout;
-      // fix normals for recast/detour... maybe due to earcut ordering?
+      // Fix normals for recast/detour... maybe due to earcut ordering?
       gmData.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
       return gmData;
     },
@@ -104,7 +104,8 @@ export default function TestWorld(props) {
       state.crowd.timeStep = 1 / 60;
       // state.crowd.timeFactor
 
-      // ✅ find and exclude a poly
+      // find and exclude a poly
+      // 🚧 move to debug
       const { polyRefs } =  state.crowd.navMeshQuery.queryPolygons(
         { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
         { x: 0.4, y: 0.01, z: 0.4 },
@@ -218,10 +219,12 @@ export default function TestWorld(props) {
       <TestWorldCanvas disabled={props.disabled} stats>
         {geomorphs && (
           <group>
-            <TestGeomorphs showOrigNavPoly={false} />
+            <TestGeomorphs />
             {state.crowd && <>
               <TestNpcs/>
-              <TestDebug/>
+              <TestDebug
+                showOrigNavPoly={false}
+              />
             </>}
             {/* 🔔 saw onPointerUp instances not updating */}
             <TestWallsAndDoors />

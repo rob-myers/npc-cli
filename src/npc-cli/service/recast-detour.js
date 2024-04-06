@@ -28,5 +28,6 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
+    // maxSimplificationError: 0,
   };
 }
