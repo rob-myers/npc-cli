@@ -9,7 +9,7 @@ import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 import { tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
-import { error, info } from "../service/generic";
+import { alloc, error, info } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { polysToXZGeometry } from "../service/three";
 import { getTileCacheGeneratorConfig } from "../service/recast-detour";
@@ -46,6 +46,7 @@ async function handleMessages(e) {
 
       info('total vertices', meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0));
       info('total triangles', meshes.reduce((agg, mesh) => agg + (mesh.geometry.index?.count ?? 0) / 3, 0));
+      info('total meshes', meshes.length);
 
       await initRecastNav();
       // const { navMesh, success } = threeToSoloNavMesh(meshes, {});
@@ -54,10 +55,10 @@ async function handleMessages(e) {
       // });
       
       // console.log({ tileCacheGeneratorConfigDefaults })
-      const { navMesh, tileCache, success } = threeToTileCache(meshes, getTileCacheGeneratorConfig());
-      info({ numMeshes: meshes.length, navMesh, success });
-
+      const { navMesh, tileCache } = threeToTileCache(meshes, getTileCacheGeneratorConfig());
+      
       if (navMesh && tileCache) {
+        info('total tiles', alloc(navMesh.getMaxTiles()).reduce((sum, _, i) => sum + (navMesh.getTile(i).header()?.polyCount ? 1 : 0), 0));
         const exportedNavMesh = exportNavMesh(navMesh, tileCache);
         /** @type {WW.MessageFromWorker} */
         const msg = { type: "nav-mesh-response", mapKey, exportedNavMesh };

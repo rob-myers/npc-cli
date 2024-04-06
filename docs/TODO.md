@@ -47,7 +47,11 @@
     - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
-- 🚧 count number of tiles we're using
+- ✅ count number of tiles we're using
+  - verify `tile.header()?.polyCount` truthy
+  - way too many i.e. `1382`
+
+- 🚧 reduce number of tiles used...
 
 - 🚧 HMR issue
   - onchange mapKey in Viewer

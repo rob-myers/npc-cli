@@ -365,6 +365,14 @@ export function range(n) {
 }
 
 /**
+ * @param {number} n
+ * @returns {null[]} Usage `alloc(10).forEach((_, i) => { ... })`
+ */
+export function alloc(n) {
+  return Array(n).fill(null);
+}
+
+/**
  * @template T
  * @param {T[]} items
  */
