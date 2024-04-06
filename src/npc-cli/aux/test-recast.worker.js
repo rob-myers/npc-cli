@@ -50,9 +50,10 @@ async function handleMessages(e) {
 
       await initRecastNav();
 
-      const { navMesh, tileCache } = customThreeToTileCache(meshes, getTileCacheGeneratorConfig());
+      const result = customThreeToTileCache(meshes, getTileCacheGeneratorConfig());
       
-      if (navMesh && tileCache) {
+      if (result.success) {
+        const { navMesh, tileCache } = result;
         info('total tiles', alloc(navMesh.getMaxTiles()).reduce((agg, _, i) => {
           const polyCount = navMesh.getTile(i).header()?.polyCount();
           polyCount && (agg[0]++, agg[1].push(polyCount));
@@ -65,7 +66,7 @@ async function handleMessages(e) {
           exportedNavMesh: exportNavMesh(navMesh, tileCache),
         });
       } else {
-        error("failed to compute navMesh");
+        error(`Failed to compute navMesh: ${'error' in result ? result.error : 'unknown error'}`);
       }
 
       meshes.forEach((mesh) => mesh.geometry.dispose());
