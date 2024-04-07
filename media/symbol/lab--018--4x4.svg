@@ -21,10 +21,10 @@
   <rect x="390.634" y="895.056" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
     <title>decor do sit chair orient=315</title>
   </rect>
-  <rect x="638.388" y="-15" width="220" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+  <rect x="680.000004" y="-15.000001" width="220" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
     <title>door</title>
   </rect>
-  <rect y="-9.71" width="1220" height="20" style="stroke: rgb(0, 0, 0); fill-opacity: 0.5; fill: rgb(255, 255, 0);" x="-10">
+  <rect width="1220" height="24.71" style="stroke: rgb(0, 0, 0); fill-opacity: 0.5; fill: rgb(255, 255, 0);" x="-10" y="-9.71">
     <title>wall</title>
   </rect>
   <rect x="940.104004" width="299.539001" height="58.028999" style="fill-opacity: 0.5; fill: rgb(204, 204, 204);" y="102.100998" transform="matrix(0.999999999999, 0.000001, -0.001255000474, 0.999999998745, -786.398559570311, -128.101943969727)">

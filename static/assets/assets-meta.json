@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": -107540303},
     "102--hull": {"outputHash": -523527192},
     "103--hull": {"outputHash": -64291354},
-    "301--hull": {"outputHash": -1236589742},
+    "301--hull": {"outputHash": -1325711841},
     "302--hull": {"outputHash": -1068420198},
     "303--hull": {"outputHash": -657514412},
     "bridge--042--8x9": {"outputHash": 15319169},
@@ -17,7 +17,7 @@
     "fresher--036--4x2": {"outputHash": -919696035},
     "fuel--010--4x2": {"outputHash": -1853750708},
     "lab--012--4x3": {"outputHash": 44465332},
-    "lab--018--4x4": {"outputHash": 907432134},
+    "lab--018--4x4": {"outputHash": 474791244},
     "lab--023--4x4": {"outputHash": -1731263410},
     "lifeboat--small-craft--2x4": {"outputHash": 1972236519},
     "lounge--015--4x2": {"outputHash": 2040518487},
@@ -30,7 +30,7 @@
     "medical-bed--006--1.6x3.6": {"outputHash": -89334666},
     "misc-stellar-cartography--020--10x10": {"outputHash": -1039282618},
     "misc-stellar-cartography--023--4x4": {"outputHash": -1363831256},
-    "office--001--2x2": {"outputHash": -1691286540},
+    "office--001--2x2": {"outputHash": 505561570},
     "office--004--2x2": {"outputHash": -1575845194},
     "office--006--2x2": {"outputHash": -291754642},
     "office--020--2x3": {"outputHash": -1453938058},
@@ -40,7 +40,7 @@
     "office--074--4x4": {"outputHash": -1870683692},
     "office--089--4x4": {"outputHash": 524746137},
     "stateroom--012--2x2": {"outputHash": 1148933129},
-    "stateroom--014--2x2": {"outputHash": 748992512},
+    "stateroom--014--2x2": {"outputHash": -1449389553},
     "stateroom--018--2x3": {"outputHash": -2025463227},
     "stateroom--020--2x3": {"outputHash": 311371729},
     "stateroom--035--2x3": {"outputHash": -523679848},
@@ -1226,7 +1226,15 @@
           "meta": {"hull-wall": true}
         }
       ],
-      "obstacles": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[8.975, 6.0375], [8.975, 6.225], [7.6515, 6.225], [7.6515, 6.0375]]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
       "walls": [
         {
           "type": "Polygon",
@@ -5988,7 +5996,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[6.05, -0.0486], [6.05, 0.0515], [-0.05, 0.0515], [-0.05, -0.0486]]
+            [[6.05, -0.0486], [6.05, 0.075], [-0.05, 0.075], [-0.05, -0.0486]]
           ],
           "meta": {"wall": true}
         },
@@ -6018,12 +6026,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [
-              [4.2919, -0.075],
-              [4.2919, 0.075],
-              [3.1919, 0.075],
-              [3.1919, -0.075]
-            ]
+            [[4.5, -0.075], [4.5, 0.075], [3.4, 0.075], [3.4, -0.075]]
           ],
           "meta": {"door": true}
         }
@@ -8011,7 +8014,12 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[1.067, 1.591], [1.5945, 1.056], [2.087, 1.537], [1.5365, 2.0865]]
+            [
+              [1.1083, 1.5353],
+              [1.5273, 1.0922],
+              [1.9185, 1.4905],
+              [1.4812, 1.9456]
+            ]
           ],
           "meta": {"obstacle": true}
         },
@@ -9902,10 +9910,10 @@
             [
               [1.9865, 0.04],
               [2.513, 0.04],
-              [2.513, 0.5408],
-              [2.4019, 0.7814],
-              [2.1006, 0.7817],
-              [1.9865, 0.554]
+              [2.513, 0.4752],
+              [2.4019, 0.6843],
+              [2.1006, 0.6845],
+              [1.9865, 0.4867]
             ]
           ],
           "meta": {"obstacle": true, "toilet": true}

@@ -18,7 +18,7 @@
   <rect width="10" height="10" style="fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="295" y="295">
     <title>decor do sit orient=225</title>
   </rect>
-  <path d="M 213.4 318.2 L 318.9 211.2 L 417.4 307.4 L 307.3 417.3 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
+  <path d="M 221.664786 307.05399 L 305.46152 218.441987 L 383.698281 298.109975 L 296.247851 389.123611 L 221.664786 307.05399 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
     <title>obstacle</title>
   </path>
   <path d="M -0.008292 599.973734 L -0.008292 -0.026266 L 599.991708 -0.026266 L 599.991708 147.373734 L 299.991708 147.373734 L 150.291708 299.973734 L 148.791708 599.973734 L -0.008292 599.973734 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
