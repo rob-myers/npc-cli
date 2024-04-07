@@ -89,13 +89,17 @@ export default function TestNpcs(props) {
   api.npcs = state;
 
   React.useEffect(() => {// 🚧 DEMO
+    // create an obstacle (before query)
+    const obstacle = state.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
+
     // find and exclude a poly
     const { polyRefs } =  api.crowd.navMeshQuery.queryPolygons(
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-      { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
+      { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
+      // { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
       // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
       // { x: (3 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
-      { x: 0.4, y: 0.1, z: 0.2 },
+      // { x: (3 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
+      { x: 0.2, y: 0.1, z: 0.01 },
     );
     console.log({ polyRefs });
     const filter = api.crowd.getFilter(0);
@@ -104,9 +108,6 @@ export default function TestNpcs(props) {
 
     // display via debug
     api.debug.selectNavPolys(polyRefs);
-
-    // create an obstacle
-    const obstacle = state.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
 
     api.update(); // Trigger ticker
     return () => state.removeObstacle(obstacle.id);

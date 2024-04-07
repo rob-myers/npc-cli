@@ -104,7 +104,10 @@ export default function TestWorld(props) {
 
       state.setupCrowdAgents(nextPositions.length
         ? nextPositions
-        : [{ x: 3 * 1.5, y: 0, z: 5 * 1.5 }, { x: 5 * 1.5, y: 0, z: 7 * 1.5 }].map(
+        : [
+            { x: 1 * 1.5, y: 0, z: 5 * 1.5 },
+            { x: 5 * 1.5, y: 0, z: 7 * 1.5 },
+          ].map(
           x => state.crowd.navMeshQuery.getClosestPoint(x)
         )
       );
@@ -134,14 +137,15 @@ export default function TestWorld(props) {
     walkTo(dst) {
       const agent = state.npcs.toAgent[state.npcs.selected];
       const src = agent.position();
-
-      const path = state.crowd.navMeshQuery.computePath(src, dst, {
+      const query = state.crowd.navMeshQuery;
+      const path = query.computePath(src, dst, {
         filter: state.crowd.getFilter(0),
       });
 
       if (path.length && tmpVectThree1.copy(dst).distanceTo(path[path.length - 1]) < 0.05) {
         state.debug.navPath.setPath(path);
-        agent.goto(dst); // navigate
+        // 🚧 break apart
+        agent.goto(dst);
       }
     },
   }));
@@ -211,7 +215,7 @@ export default function TestWorld(props) {
               <TestNpcs/>
               <TestDebug
                 showNavMesh
-                showOrigNavPoly={false}
+                // showOrigNavPoly
               />
             </>}
             {/* 🔔 saw onPointerUp instances not updating */}
