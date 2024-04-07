@@ -1,7 +1,7 @@
-import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, freeHeightfieldLayerSet, Arrays, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer } from "@recast-navigation/core";
+import * as THREE from "three";
+import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, freeHeightfieldLayerSet, Arrays, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer, allocContourSet, buildContours, buildRegions, buildRegionsMonotone } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
-import * as THREE from "three";
 
 /**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
@@ -22,16 +22,25 @@ export function getTileCacheMeshProcess() {
 
 /** @returns {Partial<import("@recast-navigation/generators").TileCacheGeneratorConfig>} */
 export function getTileCacheGeneratorConfig() {
+  // const cs = 0.05;
+  // const cs = 0.1472;
+  // const cs = 0.148;
+  // const cs = 0.15;
+  const cs = 0.149;
   return {
-    tileSize: 30,
-    cs: 0.05, // Small `cs` means more tileCache updates when e.g. add obstacles
-    ch: 0.0001, // EPSILON breaks obstacles
+    tileSize: 7 / cs,
+    cs, // Small `cs` means more tileCache updates when e.g. add obstacles
+    ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
     expectedLayersPerTile: 1,
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    // maxSimplificationError: 0,
+    maxSimplificationError: 0.5, // 👈
+    walkableRadius: 0,
+    detailSampleMaxError: 0,
+    // maxVertsPerPoly: 3,
+    // maxEdgeLen: 5,
   };
 }
 
@@ -45,7 +54,6 @@ export function customThreeToTileCache(
   navMeshGeneratorConfig = {},
   keepIntermediates = false  
 ) {
-
   const [positions, indices] = getPositionsAndIndices(meshes);
 
   return customGenerateTileCache(
@@ -505,7 +513,7 @@ export function customGenerateTileCache(
           if (Raw.Detour.statusFailed(addResult.status)) {
             buildContext.log(
               Raw.Module.RC_LOG_WARNING,
-              `Failed to add tile to tile cache - tx: ${x}, ty: ${y}`
+              `Failed to add tile to tile cache: (${x}, ${y})`
             );
             continue;
           }
@@ -520,7 +528,7 @@ export function customGenerateTileCache(
       const dtStatus = tileCache.buildNavMeshTilesAt(x, y, navMesh);
 
       if (Raw.Detour.statusFailed(dtStatus)) {
-        return fail(`Failed to build nav mesh tiles at ${x}, ${y}`);
+        return fail(`Failed to build nav mesh tiles at: (${x}, ${y})`);
       }
     }
   }
