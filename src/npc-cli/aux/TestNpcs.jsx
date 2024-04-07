@@ -23,15 +23,8 @@ export default function TestNpcs(props) {
 
     addBoxObstacle(position, extent, angle) {
       const obstacle = api.nav.tileCache.addBoxObstacle(position, extent, angle);
+      state.updateTileCache();
       const id = state.nextObstacleId++;
-      
-      // 🚧 spread out updates
-      // 🚧 also for removeObstacle
-      for (let i = 0; i < 5; i++) {
-        console.log('addBoxObstacle', id, `update ${i}`);
-        if (api.nav.tileCache.update(api.nav.navMesh).upToDate) break;
-      }
-
       return state.toObstacle[id] = { id, o: obstacle, mesh: tmpMesh1 };
     },
 
@@ -74,6 +67,7 @@ export default function TestNpcs(props) {
       if (obstacle) {
         delete state.toObstacle[obstacleId];
         api.nav.tileCache.removeObstacle(obstacle.o);
+        state.updateTileCache();
       }
     },
 
@@ -82,6 +76,12 @@ export default function TestNpcs(props) {
       if (mesh instanceof THREE.Mesh && mesh.material instanceof THREE.MeshBasicMaterial) {
         mesh.material.color = state.selected === agentId ? greenColor : redColor
       }
+    },
+    updateTileCache() {
+      // 🚧 spread out updates
+      const { tileCache, navMesh } = api.nav;
+      for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
+      console.log(`updateTileCache: ${tileCache.update(navMesh).upToDate}`);
     },
   }));
 
@@ -165,6 +165,7 @@ export default function TestNpcs(props) {
  * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
  * @property {(obstacleId: number) => void} removeObstacle
  * @property {(agentId: number) => void} updateAgentColor
+ * @property {() => void} updateTileCache
  */
 
 const agentHeight = 1.5;

@@ -47,9 +47,13 @@
     - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
-- 🚧 HMR issue
+- 🚧 HMR issues
   - ✅ onchange mapKey in Viewer
+  - ✅ obstacles stop working
   - onchange map sometimes animation doesn't restart
+
+- show toast while navmesh loading
+- show results e.g. number of tiles
 
 - 🚧 recast-detour strategy
   - 😀 keep using recast-navigation-js
