@@ -6,7 +6,7 @@ export const quadGeometryXZ = new THREE.BufferGeometry();
 // prettier-ignore
 const xzVertices = new Float32Array([0, 0, 0,  1, 0, 1,  1, 0, 0,  0, 0, 1]);
 const xzUvs = new Float32Array([0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0]);
-const xzIndices = [0, 1, 2, 0, 1, 3];
+const xzIndices = [0, 1, 2, 0, 3, 1];
 quadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(xzVertices.slice(), 3));
 quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setIndex(xzIndices.slice());

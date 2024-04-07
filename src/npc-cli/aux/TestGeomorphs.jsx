@@ -61,7 +61,7 @@ export default function TestGeomorphs(props) {
         position={[gm.pngRect.x, 0, gm.pngRect.y]}
       >
         <meshBasicMaterial
-          side={THREE.DoubleSide}
+          side={THREE.FrontSide}
           transparent
           map={api.gmData[gm.key].tex}
           depthWrite={false} // fix z-fighting
