@@ -124,13 +124,13 @@ export default function TestWallsAndDoors(props) {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
-  }, [api.mapHash, api.layoutsHash]);
+  }, [api.mapKey, api.mapsHash, api.layoutsHash]);
 
   return (
     <>
       <instancedMesh
         name="walls"
-        key={`${api.mapHash} ${api.layoutsHash}`}
+        key={`${api.mapsHash} ${api.layoutsHash}`}
         ref={instances => instances && (state.wallsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumWalls()]}
         frustumCulled={false}
@@ -141,7 +141,7 @@ export default function TestWallsAndDoors(props) {
 
       <instancedMesh
         name="doors"
-        key={`${api.mapHash} ${api.layoutsHash} ${doorShaderHash}`}
+        key={`${api.mapsHash} ${api.layoutsHash} ${doorShaderHash}`}
         ref={instances => instances && (state.doorsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}

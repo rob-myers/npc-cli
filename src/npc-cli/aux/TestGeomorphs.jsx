@@ -45,7 +45,7 @@ export default function TestGeomorphs(props) {
         update();
       });
     });
-  }, [api.geomorphs, api.mapHash]);
+  }, [api.geomorphs, api.mapsHash]);
 
   const update = useUpdate();
 

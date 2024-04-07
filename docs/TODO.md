@@ -41,22 +41,49 @@
     - ✅ get filter working
     - ℹ️ first attempt probably failed because we didn't "get enough" polygons?
     - ✅ navMesh has polys roughly corresponding to doors
-    - 🚧 can indicate found poly
+    - ✅ can indicate found poly
       - packages/recast-navigation-core/src/nav-mesh.ts
       - seems we need exactly what's in `getDebugNavMesh` i.e. extra triangles inside poly is exactly so-called detailed-mesh (?)
     - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
+- 🚧 HMR issue
+  - ✅ onchange mapKey in Viewer
+  - onchange map sometimes animation doesn't restart
+
+- 🚧 recast-detour strategy
+  - 😀 keep using recast-navigation-js
+  - in parallel, start porting https://github.com/crowdedjs/recast-detour (js port) 
+    - to understand what recast outputs
+    - to understand what detour inputs
+  - tune `cs` so most doors can be locked
+
 - ✅ count number of tiles we're using
   - verify `tile.header()?.polyCount` truthy
   - way too many i.e. `1382`
+  - currently `105`
 
-- 🚧 reduce number of tiles used...
-  - single 301 has `137` tiles, each with at most `5` polygons
+- ✅ something is wrong with polygon selection
+  - polygon selection is fine
+  - seems sometimes doorway polys have hidden extras connections
 
-- 🚧 HMR issue
-  - onchange mapKey in Viewer
-  - onchange map sometimes animation doesn't restart
+- ❌ reduce number of tiles used...
+  - ℹ️ single 301 has `137` tiles, each with at most `5` polygons
+  - ❌ try restricting single 301 geometry to (0, 0, 0) -> (30, 0, 15)
+  - ❌ try modifying input geometry
+    - ❌ widen navigable doorways slightly to preserve door polygons (?)
+    - ❌ add y-raised points in doorways to preserve door polygons (?) 👈
+    - wider doors, so can use larger `cs`
+  - ❌ try removing doors and using off-mesh connections
+    - unclear if can enable/disable
+
+- ✅ try feeding different triangulation into recast
+  - ❌ try a qualityTriangulate fed into recast
+  - ❌ try piece-wise constructed triangulation 
+  - ❌ try Triangle-generated triangulation
+
+- ❌ try "cuts" i.e. non-outset alterations to symbols
+  - possibly auto-added
 
 - ✅ split hull doors in two for easier doorPolys
 
@@ -103,6 +130,8 @@
 
 - Player view could be top-down with high walls
   - try fixing door height with black wall above
+
+- migrate gm.roomGraph and gmRoomGraph
 
 - avoid recomputing npcs/obstacles in TestNpcs
 - fix open/close non-aligning hull doors

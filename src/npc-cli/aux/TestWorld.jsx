@@ -30,7 +30,8 @@ export default function TestWorld(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     disabled: !!props.disabled,
-    mapHash: 0,
+    mapKey: props.mapKey,
+    mapsHash: 0,
     layoutsHash: 0,
     threeReady: false,
     reqAnimId: 0,
@@ -172,8 +173,9 @@ export default function TestWorld(props) {
       state.gms = map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
         geomorphService.computeLayoutInstance(state.ensureGmData(gmKey).layout, gmId, transform)
       );
-      state.mapHash = geomorphs.mapsHash;
+      state.mapsHash = geomorphs.mapsHash;
       state.layoutsHash = geomorphs.layoutsHash;
+      state.mapKey = props.mapKey;
 
       setCached(['world', props.mapKey], state);
       return () => removeCached(['world', props.mapKey]);
@@ -181,7 +183,7 @@ export default function TestWorld(props) {
   }, [geomorphs, props.mapKey]);
 
   React.useEffect(() => {
-    if (state.threeReady && state.mapHash) {
+    if (state.threeReady && state.mapsHash) {
       // 🔔 strange behaviour when inlined `new URL`.
       // 🔔 assume worker already listening for events
       /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
@@ -192,7 +194,7 @@ export default function TestWorld(props) {
     }
   }, [
     state.threeReady,
-    state.mapHash,
+    state.mapsHash,
     state.layoutsHash,
     // geomorphs, // HMR reload on focus hack
   ]);
@@ -214,7 +216,7 @@ export default function TestWorld(props) {
             {state.crowd && <>
               <TestNpcs/>
               <TestDebug
-                showNavMesh
+                // showNavMesh
                 // showOrigNavPoly
               />
             </>}
@@ -237,7 +239,8 @@ export default function TestWorld(props) {
  * @typedef State
  * @property {boolean} disabled
  * @property {number} layoutsHash For HMR
- * @property {number} mapHash For HMR
+ * @property {string} mapKey
+ * @property {number} mapsHash For HMR
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
