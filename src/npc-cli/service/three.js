@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Vect } from "../geom";
 
 /** Unit quad extending from origin to (1, 0, 1) */
 export const quadGeometryXZ = new THREE.BufferGeometry();
@@ -51,7 +52,7 @@ export function polysToAttribs(polys) {
   let offset = 0;
 
   for (const poly of polys) {
-    const { tris, vs } = poly.fastTriangulate();
+    const { tris, vs } = poly.qualityTriangulate();
     const rect = poly.rect;
     vertices.push(...vs.flatMap(({ x, y }) => [x, 0, y]));
     indices.push(...tris.flatMap((x) => x).map((x) => x + offset));
