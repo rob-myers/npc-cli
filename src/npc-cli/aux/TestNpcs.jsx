@@ -88,18 +88,20 @@ export default function TestNpcs(props) {
   state.toAgent = api.crowd.agents;
   api.npcs = state;
 
-  React.useEffect(() => {
-    // 🚧 demo setup
+  React.useEffect(() => {// 🚧 DEMO
     // find and exclude a poly
     const { polyRefs } =  api.crowd.navMeshQuery.queryPolygons(
-      { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-      { x: 0.4, y: 0.01, z: 0.4 },
+      // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
+      { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
+      // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
+      // { x: (3 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
+      { x: 0.4, y: 0.1, z: 0.2 },
     );
     console.log({ polyRefs });
     const filter = api.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
     polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
-    
+
     // display via debug
     api.debug.selectNavPolys(polyRefs);
 

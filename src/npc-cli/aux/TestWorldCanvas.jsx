@@ -47,7 +47,7 @@ export default function TestWorldCanvas(props) {
         if (!state.down) {
           return;
         }
-        info("infiniteGridHelper onPointerUp", e, e.point);
+        // info("infiniteGridHelper onPointerUp", e, e.point);
         const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
         const timeMs = Date.now() - state.down.epochMs;
         api.events.next({
