@@ -1,12 +1,5 @@
 import * as THREE from "three";
-import {
-  NavMeshHelper,
-  threeToSoloNavMesh,
-  threeToTiledNavMesh,
-  threeToTileCache,
-} from "@recast-navigation/three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
-import { tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { alloc, error, info } from "../service/generic";
@@ -49,16 +42,14 @@ async function handleMessages(e) {
       info('total meshes', meshes.length);
 
       await initRecastNav();
-
       const result = customThreeToTileCache(meshes, getTileCacheGeneratorConfig());
       
       if (result.success) {
         const { navMesh, tileCache } = result;
-        info('total tiles', alloc(navMesh.getMaxTiles()).reduce((agg, _, i) => {
-          const polyCount = navMesh.getTile(i).header()?.polyCount();
-          polyCount && (agg[0]++, agg[1].push(polyCount));
-          return agg;
-        }, /** @type {[number, number[]]} */ ([0, []]) ));
+        const tilePolyCounts = alloc(navMesh.getMaxTiles()).flatMap((_, i) =>
+          navMesh.getTile(i).header()?.polyCount() ?? []
+        );
+        info('total tiles', tilePolyCounts.length, { tilePolyCounts });
 
         selfTyped.postMessage({
           type: "nav-mesh-response",

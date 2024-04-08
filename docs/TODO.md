@@ -47,13 +47,8 @@
     - 🚧 cleanup
   - can re-plan moving agent path on HMR edit 
 
-- 🚧 HMR issues
-  - ✅ onchange mapKey in Viewer
-  - ✅ obstacles stop working
-  - onchange map sometimes animation doesn't restart
-
 - show toast while navmesh loading
-- show results e.g. number of tiles
+  - also show results e.g. number of tiles
 
 - 🚧 recast-detour strategy
   - 😀 keep using recast-navigation-js
@@ -61,38 +56,6 @@
     - to understand what recast outputs
     - to understand what detour inputs
   - tune `cs` so most doors can be locked
-
-- ✅ count number of tiles we're using
-  - verify `tile.header()?.polyCount` truthy
-  - way too many i.e. `1382`
-  - currently `105`
-
-- ✅ something is wrong with polygon selection
-  - polygon selection is fine
-  - seems sometimes doorway polys have hidden extras connections
-
-- ❌ reduce number of tiles used...
-  - ℹ️ single 301 has `137` tiles, each with at most `5` polygons
-  - ❌ try restricting single 301 geometry to (0, 0, 0) -> (30, 0, 15)
-  - ❌ try modifying input geometry
-    - ❌ widen navigable doorways slightly to preserve door polygons (?)
-    - ❌ add y-raised points in doorways to preserve door polygons (?) 👈
-    - wider doors, so can use larger `cs`
-  - ❌ try removing doors and using off-mesh connections
-    - unclear if can enable/disable
-
-- ✅ try feeding different triangulation into recast
-  - ❌ try a qualityTriangulate fed into recast
-  - ❌ try piece-wise constructed triangulation 
-  - ❌ try Triangle-generated triangulation
-
-- ❌ try "cuts" i.e. non-outset alterations to symbols
-  - possibly auto-added
-
-- ✅ split hull doors in two for easier doorPolys
-
-- ✅ fix obstacle outsets in hull symbols
-  - we now fixOrientation in extractGeom
 
 - prevent agent going through door
   - prevent dst polyId when respective door closed?
@@ -116,7 +79,7 @@
   }
   ```
 
-- Try `HeightfieldHelper` i.e. visualize refined navMesh
+- Try `HeightfieldHelper`
 
 - TestCharacter: animation
   - use character Soldier with animations
@@ -680,3 +643,41 @@ React.useEffect(() => {
 
 - ✅ get obstacle working again
   - https://github.com/isaac-mason/recast-navigation-js/discussions/272#discussioncomment-9020184
+
+- ✅ count number of tiles we're using
+  - verify `tile.header()?.polyCount` truthy
+  - way too many i.e. `1382`
+  - currently `105`
+
+- ✅ something is wrong with polygon selection
+  - polygon selection is fine
+  - seems sometimes doorway polys have hidden extras connections
+
+- ❌ reduce number of tiles used...
+  - ℹ️ single 301 has `137` tiles, each with at most `5` polygons
+  - ❌ try restricting single 301 geometry to (0, 0, 0) -> (30, 0, 15)
+  - ❌ try modifying input geometry
+    - ❌ widen navigable doorways slightly to preserve door polygons (?)
+    - ❌ add y-raised points in doorways to preserve door polygons (?) 👈
+    - wider doors, so can use larger `cs`
+  - ❌ try removing doors and using off-mesh connections
+    - unclear if can enable/disable
+
+- ✅ try feeding different triangulation into recast
+  - ❌ try a qualityTriangulate fed into recast
+  - ❌ try piece-wise constructed triangulation 
+  - ❌ try Triangle-generated triangulation
+
+- ❌ try "cuts" i.e. non-outset alterations to symbols
+  - possibly auto-added
+
+- ✅ split hull doors in two for easier doorPolys
+
+- ✅ fix obstacle outsets in hull symbols
+  - we now fixOrientation in extractGeom
+
+- ✅ HMR issues
+  - ✅ onchange mapKey in Viewer
+  - ✅ obstacles stop working
+  - ❌ onchange map sometimes animation doesn't restart
+    - no repro
