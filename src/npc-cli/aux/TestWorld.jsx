@@ -84,12 +84,18 @@ export default function TestWorld(props) {
       state.nav = /** @type {NPC.TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
 
       // remember agent positions
-      const nextPositions = /** @type {THREE.Vector3Like[]} */ ([]);
+      const positions = /** @type {THREE.Vector3Like[]} */ ([]);
+      const targets = /** @type {(null | THREE.Vector3Like)[]} */ ([]);
 
       if (state.crowd) {// cleanup
-        state.crowd.getAgents().forEach((x) => {
-          nextPositions.push(x.position());
-          state.crowd.removeAgent(x);
+        state.crowd.getAgents().forEach((agent) => {
+          positions.push(agent.position());
+          targets.push(agent.corners().length ? {
+            x: agent.raw.get_targetPos(0),
+            y: agent.raw.get_targetPos(1),
+            z: agent.raw.get_targetPos(2),
+          } : null);
+          state.crowd.removeAgent(agent);
         });
         state.crowd.destroy();
       }
@@ -102,14 +108,13 @@ export default function TestWorld(props) {
       state.crowd.timeStep = 1 / 60;
       // state.crowd.timeFactor
 
-      state.setupCrowdAgents(nextPositions.length
-        ? nextPositions
+      state.setupCrowdAgents(positions.length
+        ? positions
         : [
             { x: 1 * 1.5, y: 0, z: 5 * 1.5 },
             { x: 5 * 1.5, y: 0, z: 7 * 1.5 },
-          ].map(
-          x => state.crowd.navMeshQuery.getClosestPoint(x)
-        )
+          ].map(x => state.crowd.navMeshQuery.getClosestPoint(x)),
+        targets,
       );
     },
     onTick() {
@@ -120,18 +125,22 @@ export default function TestWorld(props) {
       state.npcs.onTick();
       state.doors.onTick();
     },
-    setupCrowdAgents(positions) {
-      positions.map((p) =>
-        state.crowd.addAgent(p, {
+    setupCrowdAgents(positions, targets) {
+      positions.map((p, i) => {
+        const agent = state.crowd.addAgent(p, {
           radius: agentRadius,
           height: 1.5,
           maxAcceleration: 4,
           maxSpeed: 2,
           pathOptimizationRange: agentRadius * 20,
+          // collisionQueryRange: 2.5,
           separationWeight: 1,
           queryFilterType: 0,
-        })
-      );
+          // obstacleAvoidanceType
+        });
+        const target = targets[i];
+        target && agent.goto(target);
+      });
     },
     update,
     walkTo(dst) {
@@ -259,7 +268,7 @@ export default function TestWorld(props) {
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmClass
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {(agentPositions: THREE.Vector3Like[]) => void} setupCrowdAgents
+ * @property {(agentPositions: THREE.Vector3Like[], agentTargets: (THREE.Vector3Like | null)[]) => void} setupCrowdAgents
  * @property {() => void} update
  * @property {() => void} onTick
  * @property {(dst: import('three').Vector3Like) => void} walkTo

@@ -11,42 +11,6 @@
     - ✅ kinematic-position-based
   - 🚧 check anything is missing
 
-- 🚧 recast/detour continued
-  - ✅ single agent crowd seen via CrowdHelper
-  - ✅ iterate crowd.update, pausing on disable Tabs
-  - ✅ visualize navPath
-    - https://github.com/donmccurdy/three-pathfinding/blob/main/src/PathfindingHelper.js
-    - https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html
-  - ✅ can navigate single agent to a clicked point
-    - ℹ️ off-mesh target produced different paths via crowd vs query
-    - ✅ works when edit map
-  - ✅ can preserve agent position across HMR edit
-  - ✅ add obstacle and depict using TileCacheHelper
-  - ✅ two agents and can navigate both
-    - ✅ crowd helper -> TestNpcs
-    - ✅ fix HMR
-    - ✅ add two agents
-    - ✅ can select agent and navigate selected
-  - ✅ tileCache helper -> TestNpcs
-  - ✅ api.help.navMesh -> TestDebug
-  - ✅ navPath helper -> TestDebug
-  - 🚧 can make polygon un-walkable e.g. closed door
-    - https://recastnav.com/classdtNavMeshQuery.html#details
-    - https://github.com/isaac-mason/recast-navigation-js/issues/286
-    - https://groups.google.com/g/recastnavigation/c/OqJRHFoiVX8
-    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation/.storybook/stories/advanced/custom-areas-generator.ts#L371
-    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-core/src/nav-mesh.ts#L429
-    - https://www.gamedev.net/blog/33/entry-2210775-more-recast-and-detour/
-    - ✅ retrieve polygon points (messy)
-    - ✅ get filter working
-    - ℹ️ first attempt probably failed because we didn't "get enough" polygons?
-    - ✅ navMesh has polys roughly corresponding to doors
-    - ✅ can indicate found poly
-      - packages/recast-navigation-core/src/nav-mesh.ts
-      - seems we need exactly what's in `getDebugNavMesh` i.e. extra triangles inside poly is exactly so-called detailed-mesh (?)
-    - ✅ cleanup
-  - 🚧 can re-plan moving agent path on HMR edit 
-
 - TestCharacter: animation
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
@@ -59,6 +23,8 @@
 - migrate gmRoomGraph
 - migrate fast gmRoomId lookup via image pixels
 - prevent agent going through door
+  - e.g. when avoiding another agent, could use obstacle
+  - e.g. use gmRoomGraph to avoid going thru closed door
 
 - 🚧 recast-detour strategy
   - 😀 keep using recast-navigation-js
@@ -663,3 +629,39 @@ React.useEffect(() => {
   - ✅ obstacles stop working
   - ❌ onchange map sometimes animation doesn't restart
     - no repro
+
+- ✅ recast/detour continued
+  - ✅ single agent crowd seen via CrowdHelper
+  - ✅ iterate crowd.update, pausing on disable Tabs
+  - ✅ visualize navPath
+    - https://github.com/donmccurdy/three-pathfinding/blob/main/src/PathfindingHelper.js
+    - https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html
+  - ✅ can navigate single agent to a clicked point
+    - ℹ️ off-mesh target produced different paths via crowd vs query
+    - ✅ works when edit map
+  - ✅ can preserve agent position across HMR edit
+  - ✅ add obstacle and depict using TileCacheHelper
+  - ✅ two agents and can navigate both
+    - ✅ crowd helper -> TestNpcs
+    - ✅ fix HMR
+    - ✅ add two agents
+    - ✅ can select agent and navigate selected
+  - ✅ tileCache helper -> TestNpcs
+  - ✅ api.help.navMesh -> TestDebug
+  - ✅ navPath helper -> TestDebug
+  - 🚧 can make polygon un-walkable e.g. closed door
+    - https://recastnav.com/classdtNavMeshQuery.html#details
+    - https://github.com/isaac-mason/recast-navigation-js/issues/286
+    - https://groups.google.com/g/recastnavigation/c/OqJRHFoiVX8
+    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation/.storybook/stories/advanced/custom-areas-generator.ts#L371
+    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-core/src/nav-mesh.ts#L429
+    - https://www.gamedev.net/blog/33/entry-2210775-more-recast-and-detour/
+    - ✅ retrieve polygon points (messy)
+    - ✅ get filter working
+    - ℹ️ first attempt probably failed because we didn't "get enough" polygons?
+    - ✅ navMesh has polys roughly corresponding to doors
+    - ✅ can indicate found poly
+      - packages/recast-navigation-core/src/nav-mesh.ts
+      - seems we need exactly what's in `getDebugNavMesh` i.e. extra triangles inside poly is exactly so-called detailed-mesh (?)
+    - ✅ cleanup
+  - ✅ can re-plan moving agent path on HMR edit

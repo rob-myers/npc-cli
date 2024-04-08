@@ -20,6 +20,6 @@ export const wallOutset = 12 * worldScale;
 
 export const obstacleOutset = 12 * worldScale;
 
-export const agentRadius = wallOutset;
+export const agentRadius = 12 * worldScale;
 
 export const wallHeight = 2;

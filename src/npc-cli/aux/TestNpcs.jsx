@@ -81,7 +81,7 @@ export default function TestNpcs(props) {
       // 🚧 spread out updates
       const { tileCache, navMesh } = api.nav;
       for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
-      console.log(`updateTileCache: ${tileCache.update(navMesh).upToDate}`);
+      console.log(`updateTileCached: ${tileCache.update(navMesh).upToDate}`);
     },
   }));
 
