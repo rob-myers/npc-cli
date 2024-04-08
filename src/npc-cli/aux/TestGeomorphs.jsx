@@ -17,7 +17,7 @@ export default function TestGeomorphs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGeomorph(gmKey, img) {
-      const { ctxt, layout } = api.gmData[gmKey];
+      const { ctxt, layout } = api.gmClass[gmKey];
       const { pngRect, rooms, doors, navPolys } = layout;
       const canvas = ctxt.canvas;
 
@@ -29,7 +29,7 @@ export default function TestGeomorphs(props) {
       const hullDoorPolys = doors.flatMap((x) => (x.meta.hull ? x.poly : []));
       drawPolygons(ctxt, hullDoorPolys, ["white", "#000", 0.05]);
       // 🚧 debug draw rooms
-      // drawPolygons(ctxt, rooms, [null, "green", 0]);
+      // drawPolygons(ctxt, rooms, ["rgba(255, 0, 0, 0.2)", "green", 0]);
       // 🚧 debug draw navPolys
       drawPolygons(ctxt, navPolys, ["rgba(0, 0, 0, 0.08)", "rgba(0, 0, 0, 0)", 1]);
 
@@ -38,10 +38,10 @@ export default function TestGeomorphs(props) {
   }));
 
   React.useEffect(() => {
-    keys(api.gmData).forEach((gmKey) => {
+    keys(api.gmClass).forEach((gmKey) => {
       textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
         state.drawGeomorph(gmKey, tex.source.data);
-        api.gmData[gmKey].tex.needsUpdate = true;
+        api.gmClass[gmKey].tex.needsUpdate = true;
         update();
       });
     });
@@ -63,7 +63,7 @@ export default function TestGeomorphs(props) {
         <meshBasicMaterial
           side={THREE.FrontSide}
           transparent
-          map={api.gmData[gm.key].tex}
+          map={api.gmClass[gm.key].tex}
           depthWrite={false} // fix z-fighting
         />
       </mesh>

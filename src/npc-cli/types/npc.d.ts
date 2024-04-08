@@ -46,6 +46,11 @@ declare namespace NPC {
     screenPoint: Geom.VectJson;
   }
 
+  type TiledCacheResult = Extract<
+    import("@recast-navigation/core").NavMeshImporterResult,
+    { tileCache?: any }
+  >;
+
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
   type Obstacle = {

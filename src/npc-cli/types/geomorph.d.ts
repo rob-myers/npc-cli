@@ -140,8 +140,7 @@ declare namespace Geomorph {
     key: string;
     gms: {
       gmKey: GeomorphKey;
-      /** Default `[1, 0, 0, 1, 0, 0]` */
-      transform?: [number, number, number, number, number, number];
+      transform: Geom.SixTuple;
     }[];
   }
 

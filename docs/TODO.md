@@ -44,47 +44,29 @@
     - ✅ can indicate found poly
       - packages/recast-navigation-core/src/nav-mesh.ts
       - seems we need exactly what's in `getDebugNavMesh` i.e. extra triangles inside poly is exactly so-called detailed-mesh (?)
-    - 🚧 cleanup
-  - can re-plan moving agent path on HMR edit 
-
-- show toast while navmesh loading
-  - also show results e.g. number of tiles
-
-- 🚧 recast-detour strategy
-  - 😀 keep using recast-navigation-js
-  - in parallel, start porting https://github.com/crowdedjs/recast-detour (js port) 
-    - to understand what recast outputs
-    - to understand what detour inputs
-  - tune `cs` so most doors can be locked
-
-- prevent agent going through door
-  - prevent dst polyId when respective door closed?
-
-- Detect `dst` unreachable without computing a path and checking its final point is not close to `dst`
-  - currently, `goto` is using `findNearestPoly`
-  - maybe this should be optional
-  ```tsx
-  goto(position: Vector3): boolean {
-    const { nearestPoint, nearestRef } =
-      this.crowd.navMeshQuery.findNearestPoly(position, {
-        halfExtents: this.crowd.navMeshQuery.defaultQueryHalfExtents,
-        filter: this.crowd.navMeshQuery.defaultFilter,
-      });
-
-    return this.crowd.raw.requestMoveTarget(
-      this.agentIndex,
-      nearestRef,
-      vec3.toArray(nearestPoint)
-    );
-  }
-  ```
-
-- Try `HeightfieldHelper`
+    - ✅ cleanup
+  - 🚧 can re-plan moving agent path on HMR edit 
 
 - TestCharacter: animation
   - use character Soldier with animations
   - use custom character via Mixamo (use Blender to combine animations)
   - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- show toast while navmesh loading
+  - also show results e.g. number of tiles
+
+- migrate roomGraph per geomorph
+- migrate gmRoomGraph
+- migrate fast gmRoomId lookup via image pixels
+- prevent agent going through door
+
+- 🚧 recast-detour strategy
+  - 😀 keep using recast-navigation-js
+  - in parallel, start going through https://github.com/recastnavigation/recastnavigation
+    - to understand what recast outputs
+    - to understand what detour inputs
+  - ✅ tune `cs` so most doors can be locked
+  - better understand heightfield via `HeightfieldHelper`
 
 - integrate TestCharacter into TestWorld
 

@@ -26,7 +26,7 @@ async function handleMessages(e) {
 
       const { mapKey } = msg;
       const map = geomorphs.map[mapKey ?? "demo-map-1"];
-      const gms = map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
+      const gms = map.gms.map(({ gmKey, transform }, gmId) =>
         geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
       );
       const meshes = gms.map(({ navPolys, mat4, transform: [a, b, c, d] }, gmId) => {

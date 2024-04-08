@@ -21,6 +21,7 @@ export default function TestDebug(props) {
     ptrToTilePolyId: {},
     selectedNavPolys: new THREE.BufferGeometry(),
 
+    // 🚧 better approach e.g. expose underlying encode/decode
     buildTilePolyIdLookup() {
       const { navMesh } = api.nav;
       const numTiles = navMesh.getMaxTiles();
@@ -132,7 +133,7 @@ export default function TestDebug(props) {
       >
         <mesh
           name="origNavPoly"
-          args={[api.gmData[gm.key].debugNavPoly, origNavPolyMaterial]}
+          args={[api.gmClass[gm.key].debugNavPoly, origNavPolyMaterial]}
           position={[0, 0.001, 0]}
           visible={props.showOrigNavPoly}
         />

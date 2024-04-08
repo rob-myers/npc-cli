@@ -39,7 +39,7 @@ export default function TestWorld(props) {
 
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
-    gmData: /** @type {*} */ ({}),
+    gmClass: /** @type {*} */ ({}),
     gms: [],
 
     nav: /** @type {*} */ (null),
@@ -50,15 +50,15 @@ export default function TestWorld(props) {
     npcs: /** @type {*} */ (null), // TestNpcs
     debug: /** @type {*} */ (null), // TestDebug
 
-    ensureGmData(gmKey) {
+    ensureGmClass(gmKey) {
       const layout = state.geomorphs.layout[gmKey];
-      let gmData = state.gmData[gmKey];
-      if (!gmData) {
+      let gmClass = state.gmClass[gmKey];
+      if (!gmClass) {
         const canvas = document.createElement("canvas");
         // Standard non-edge geomorph ~ 1200 * 1200 (extends beyond edges)
         canvas.width = layout.pngRect.width / worldScale;
         canvas.height = layout.pngRect.height / worldScale;
-        gmData = state.gmData[gmKey] = {
+        gmClass = state.gmClass[gmKey] = {
           canvas,
           ctxt: assertNonNull(canvas.getContext("2d")),
           layout,
@@ -66,10 +66,10 @@ export default function TestWorld(props) {
           debugNavPoly: tmpBufferGeom1,
         };
       }
-      gmData.layout = layout;
+      gmClass.layout = layout;
       // Fix normals for recast/detour... maybe due to earcut ordering?
-      gmData.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
-      return gmData;
+      gmClass.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
+      return gmClass;
     },
     async handleMessageFromWorker(e) {
       const msg = e.data;
@@ -81,7 +81,7 @@ export default function TestWorld(props) {
       }
     },
     loadTiledMesh(exportedNavMesh) {
-      state.nav = /** @type {TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
+      state.nav = /** @type {NPC.TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
 
       // remember agent positions
       const nextPositions = /** @type {THREE.Vector3Like[]} */ ([]);
@@ -92,7 +92,6 @@ export default function TestWorld(props) {
           state.crowd.removeAgent(x);
         });
         state.crowd.destroy();
-        // cancelAnimationFrame(state.reqAnimId);
       }
 
       state.crowd = new Crowd({
@@ -139,14 +138,14 @@ export default function TestWorld(props) {
       const agent = state.npcs.toAgent[state.npcs.selected];
       const src = agent.position();
       const query = state.crowd.navMeshQuery;
+      // Agent may follow different path
       const path = query.computePath(src, dst, {
         filter: state.crowd.getFilter(0),
       });
 
       if (path.length && tmpVectThree1.copy(dst).distanceTo(path[path.length - 1]) < 0.05) {
         state.debug.navPath.setPath(path);
-        // 🚧 break apart
-        agent.goto(dst);
+        agent.goto(dst); // nearest point/polygon relative to crowd defaults
       }
     },
   }));
@@ -170,8 +169,8 @@ export default function TestWorld(props) {
     if (geomorphs) {
       state.geomorphs = geomorphs;
       const map = geomorphs.map[props.mapKey];
-      state.gms = map.gms.map(({ gmKey, transform = [1, 0, 0, 1, 0, 0] }, gmId) =>
-        geomorphService.computeLayoutInstance(state.ensureGmData(gmKey).layout, gmId, transform)
+      state.gms = map.gms.map(({ gmKey, transform }, gmId) =>
+        geomorphService.computeLayoutInstance(state.ensureGmClass(gmKey).layout, gmId, transform)
       );
       state.mapsHash = geomorphs.mapsHash;
       state.layoutsHash = geomorphs.layoutsHash;
@@ -196,7 +195,6 @@ export default function TestWorld(props) {
     state.threeReady,
     state.mapsHash,
     state.layoutsHash,
-    // geomorphs, // HMR reload on focus hack
   ]);
 
   React.useEffect(() => {
@@ -252,13 +250,13 @@ export default function TestWorld(props) {
  * @property {import('./TestNpcs').State} npcs
  * @property {import('./TestDebug').State} debug
  *
- * @property {Record<Geomorph.GeomorphKey, GmData>} gmData
- * Only populated for geomorphs seen in some map.
+ * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
+ * Only populated for geomorph keys seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
- * @property {TiledCacheResult} nav
+ * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
- * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmData
+ * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmClass
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {(agentPositions: THREE.Vector3Like[]) => void} setupCrowdAgents
@@ -274,8 +272,4 @@ export default function TestWorld(props) {
  * @property {Geomorph.Layout} layout
  * @property {THREE.BufferGeometry} debugNavPoly
  * @property {THREE.CanvasTexture} tex
- */
-
-/**
- * @typedef {Extract<ReturnType<typeof importNavMesh>, { tileCache?: any }>} TiledCacheResult
  */
