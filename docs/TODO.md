@@ -2,19 +2,26 @@
 
 ## WIP
 
-- 🚧 TestCharacter:
+- ❌ TestCharacter:
   - ✅ use @react-three/rapier
   - ✅ extract basics from:
     - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
     - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
     - ℹ️ no need for: keyboard controls, ray, ...
     - ✅ kinematic-position-based
-  - 🚧 check anything is missing
+  - ❌ check anything is missing
+  - ℹ️ we'll use rapier 3d in webworker i.e. kinematics vs sensors
 
-- TestCharacter: animation
-  - use character Soldier with animations
-  - use custom character via Mixamo (use Blender to combine animations)
-  - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+- 🚧 Restart TestCharacter: animation, no physics
+  - ✅ clean away `@react-three/rapier`
+  - ✅ show custom character FBX
+  - 🚧 scale character to desired height
+  - import FBX into Blender and export as GLTF
+  - https://discourse.threejs.org/t/character-controller/46936
+    - https://character-controller-three.netlify.app/
+    - https://github.com/abhicominin/Character-Controller-three.js
+  - show a Mixamo animation (use Blender to combine animations)
+    - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
 
 - show toast while navmesh loading
   - also show results e.g. number of tiles

@@ -1,7 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { CameraControls, Edges, MapControls, PerspectiveCamera } from "@react-three/drei";
-import { Physics, RigidBody } from "@react-three/rapier";
+import { CameraControls, PerspectiveCamera } from "@react-three/drei";
 import { quadGeometryXZ } from "../service/three";
 
 import TestCanvas from "./TestCanvas";
@@ -17,19 +16,14 @@ export function TestCharacter(props) {
       <CameraControls makeDefault enabled={!props.disabled} />
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
       <ambientLight intensity={1} />
-      <Physics debug paused={props.disabled}>
         <TestCharacterController />
-
-        <RigidBody type="fixed" colliders="cuboid" position={[0, 0, 0]}>
-          <mesh // ground
-            scale={[scale, scale, scale]}
-            position={[-scale / 2, 0, -scale / 2]}
-            geometry={quadGeometryXZ}
-          >
-            <meshBasicMaterial side={THREE.DoubleSide} transparent color="blue" opacity={0.2} />
-          </mesh>
-        </RigidBody>
-      </Physics>
+        <mesh // ground
+          scale={[scale, scale, scale]}
+          position={[-scale / 2, 0, -scale / 2]}
+          geometry={quadGeometryXZ}
+        >
+          <meshBasicMaterial side={THREE.DoubleSide} transparent color="blue" opacity={0.2} />
+        </mesh>
     </>
   );
 }
