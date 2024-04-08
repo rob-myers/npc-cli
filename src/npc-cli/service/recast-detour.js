@@ -26,9 +26,10 @@ export function getTileCacheGeneratorConfig() {
   // const cs = 0.1472;
   // const cs = 0.148;
   // const cs = 0.15;
-  const cs = 0.149;
+  // const cs = 0.149;
+  const cs = 0.15;
   return {
-    tileSize: 7 / cs,
+    tileSize: 8 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
     ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
@@ -36,11 +37,10 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    maxSimplificationError: 0.5, // 👈
+    // maxSimplificationError: 1,
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
-    // maxEdgeLen: 5,
   };
 }
 
