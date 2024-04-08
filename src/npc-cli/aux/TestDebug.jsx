@@ -162,7 +162,7 @@ export default function TestDebug(props) {
 const origNavPolyMaterial = new THREE.MeshBasicMaterial({
   side: THREE.FrontSide,
   color: "green",
-  wireframe: false,
+  wireframe: true,
   transparent: true,
   opacity: 0.4,
 });
