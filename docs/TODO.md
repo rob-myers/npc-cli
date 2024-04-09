@@ -10,13 +10,14 @@
     - ℹ️ no need for: keyboard controls, ray, ...
     - ✅ kinematic-position-based
   - ❌ check anything is missing
-  - ℹ️ we'll use rapier 3d in webworker i.e. kinematics vs sensors
+  - ℹ️ we'll use rapier 3d in webworker i.e. kinematic rigid-bodies vs sensors
 
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
   - ✅ show custom character FBX
-  - 🚧 scale character to desired height
-  - import FBX into Blender and export as GLTF
+  - ✅ scale character to desired height
+  - ✅ import FBX into Blender and export as GLTF
+    - ✅ install blender 4.1 (latest)
   - https://discourse.threejs.org/t/character-controller/46936
     - https://character-controller-three.netlify.app/
     - https://github.com/abhicominin/Character-Controller-three.js

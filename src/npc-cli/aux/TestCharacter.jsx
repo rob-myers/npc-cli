@@ -16,7 +16,9 @@ export function TestCharacter(props) {
       <CameraControls makeDefault enabled={!props.disabled} />
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
       <ambientLight intensity={1} />
+
         <TestCharacterController />
+
         <mesh // ground
           scale={[scale, scale, scale]}
           position={[-scale / 2, 0, -scale / 2]}

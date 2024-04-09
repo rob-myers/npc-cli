@@ -1,6 +1,7 @@
 import React from "react";
+import * as THREE from "three";
+import { useGLTF } from "@react-three/drei";
 import useStateRef from "../hooks/use-state-ref";
-import { useFBX } from "@react-three/drei";
 
 /**
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
@@ -13,17 +14,13 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
     // 🚧
   }));
 
-  const fbx = useFBX('/assets/fbx/base-mesh-246-tri.fbx');
+  const { scene: gltf } = useGLTF('/assets/fbx/base-mesh-246-tri.glb');
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
 
   return (
     <group>
-      <primitive scale={0.01} object={fbx} />
-      {/* <mesh name="debug-character-mesh" visible={true}>
-        <capsuleGeometry args={[capsuleRadius, capsuleHalfHeight * 2]} />
-        <meshStandardMaterial color="blue" />
-      </mesh> */}
+      <primitive object={gltf} />
     </group>
   );
 });
