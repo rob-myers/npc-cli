@@ -26,6 +26,7 @@
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
+- can make agent look at point
 - migrate roomGraph per geomorph
 - migrate gmRoomGraph
 - migrate fast gmRoomId lookup via image pixels
