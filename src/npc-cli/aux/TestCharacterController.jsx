@@ -22,6 +22,7 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
     gltf.traverse(x => {
       if (x instanceof THREE.Mesh && x.material instanceof THREE.MeshStandardMaterial) {
         x.material.metalness = 0;
+        x.castShadow = true;
         // x.material = new THREE.MeshToonMaterial({ color : 0xffffff, wireframe : false})
       }
     })
