@@ -15,17 +15,26 @@ export function TestCharacter(props) {
       {/* <MapControls makeDefault zoomToCursor position={[0, 8, 0]} /> */}
       <CameraControls makeDefault enabled={!props.disabled} />
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
-      <ambientLight color="white" intensity={0.5} />
-      <pointLight position={[0, 3, 1]} intensity={2} />
+      <ambientLight color="white" intensity={0.25} />
+      <pointLight
+        position={[0, 3, 2]}
+        intensity={2}
+        castShadow
+      />
 
         <TestCharacterController />
 
         <mesh // ground
-          scale={[scale, scale, scale]}
+          scale={[scale, 1, scale]}
           position={[-scale / 2, 0, -scale / 2]}
           geometry={quadGeometryXZ}
+          receiveShadow
         >
-          <meshBasicMaterial side={THREE.DoubleSide} transparent color="blue" opacity={0.2} />
+          <meshStandardMaterial
+            side={THREE.DoubleSide}
+            color="#ddf"
+            // transparent opacity={0.3}
+          />
         </mesh>
     </>
   );
@@ -49,6 +58,7 @@ export default function WrappedTestCharacter(props) {
       stats={props.stats}
       childComponent={TestCharacter}
       childProps={{ disabled: props.disabled, testProp: "hello" }}
+      shadows
     />
   );
 }

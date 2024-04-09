@@ -18,7 +18,7 @@
   - ✅ scale character to desired height
   - ✅ import FBX into Blender and export as GLTF
     - ✅ install blender 4.1 (latest)
-  - https://discourse.threejs.org/t/character-controller/46936
+  - 🚧 summarise https://discourse.threejs.org/t/character-controller/46936
     - https://character-controller-three.netlify.app/
     - https://github.com/abhicominin/Character-Controller-three.js
   - show a Mixamo animation (use Blender to combine animations)
