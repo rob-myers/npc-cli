@@ -134,6 +134,7 @@ export default function TestWorld(props) {
           maxSpeed: 2,
           pathOptimizationRange: agentRadius * 20,
           // collisionQueryRange: 2.5,
+          collisionQueryRange: 0.7,
           separationWeight: 1,
           queryFilterType: 0,
           // obstacleAvoidanceType
