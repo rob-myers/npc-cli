@@ -18,6 +18,14 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
 
+  React.useMemo(() => {
+    gltf.traverse(x => {
+      if (x instanceof THREE.Mesh && x.material instanceof THREE.MeshStandardMaterial) {
+        x.material.metalness = 0;
+      }
+    })
+  }, []);
+
   return (
     <group>
       <primitive object={gltf} />

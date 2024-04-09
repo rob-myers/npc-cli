@@ -15,7 +15,8 @@ export function TestCharacter(props) {
       {/* <MapControls makeDefault zoomToCursor position={[0, 8, 0]} /> */}
       <CameraControls makeDefault enabled={!props.disabled} />
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
-      <ambientLight intensity={1} />
+      <ambientLight color="white" intensity={0.5} />
+      <pointLight position={[0, 3, 1]} intensity={2} />
 
         <TestCharacterController />
 
