@@ -363,12 +363,12 @@ class geomServiceClass {
   getAngledRectSeg({ angle, baseRect }) {
     const widthNormal = tempVect1.set(Math.cos(angle), Math.sin(angle));
     const heightNormal = tempVect2.set(-Math.sin(angle), Math.cos(angle));
-    const src = new Vect(baseRect.x, baseRect.y).addScaledVector(
+    const src = new Vect(baseRect.x, baseRect.y).addScaled(
       heightNormal,
       0.5 * baseRect.height
     );
     return {
-      seg: [src, src.clone().addScaledVector(widthNormal, baseRect.width)],
+      seg: [src, src.clone().addScaled(widthNormal, baseRect.width)],
       normal: heightNormal.clone(),
     };
   }
@@ -492,7 +492,7 @@ class geomServiceClass {
   getLinesIntersectInfo(p0, d0, p1, d1) {
     const lambda1 = this.getLinesIntersect(p0, d0, p1, d1);
     if (lambda1 !== null) {
-      const point = Vect.from(p0).addScaledVector(d0, lambda1);
+      const point = Vect.from(p0).addScaled(d0, lambda1);
       const offset = point.clone().sub(p1);
       const lambda2 = offset.dot(d1) >= 0 ? offset.length : -offset.length;
       return { lambda1, point, lambda2 };
@@ -684,11 +684,11 @@ class geomServiceClass {
         // Put it first for early exits
         pos
           .clone()
-          .addScaledVector(d, -2)
+          .addScaled(d, -2)
           .translate(-d.y * range * 2, d.x * range * 2),
         pos
           .clone()
-          .addScaledVector(d, -2)
+          .addScaled(d, -2)
           .translate(-1 * -d.y * range * 2, -1 * d.x * range * 2),
       ]);
     }

@@ -2,15 +2,11 @@
 
 ## WIP
 
-- ❌ TestCharacter:
-  - ✅ use @react-three/rapier
-  - ✅ extract basics from:
-    - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
-    - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
-    - ℹ️ no need for: keyboard controls, ray, ...
-    - ✅ kinematic-position-based
-  - ❌ check anything is missing
-  - ℹ️ we'll use rapier 3d in webworker i.e. kinematic rigid-bodies vs sensors
+- 🚧 recast/detour try use areas to preserve door polygons
+  - https://github.com/isaac-mason/recast-navigation-js/discussions/306#discussioncomment-9069840
+  - ✅ construct triangulation where door-triangles known
+  - 🚧 forward triangulation to recast
+  - 🚧 make door triangles for recast
 
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
@@ -674,3 +670,13 @@ React.useEffect(() => {
       - seems we need exactly what's in `getDebugNavMesh` i.e. extra triangles inside poly is exactly so-called detailed-mesh (?)
     - ✅ cleanup
   - ✅ can re-plan moving agent path on HMR edit
+
+  - ❌ TestCharacter:
+  - ✅ use @react-three/rapier
+  - ✅ extract basics from:
+    - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
+    - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
+    - ℹ️ no need for: keyboard controls, ray, ...
+    - ✅ kinematic-position-based
+  - ❌ check anything is missing
+  - ℹ️ we'll use rapier 3d in webworker i.e. kinematics vs sensors

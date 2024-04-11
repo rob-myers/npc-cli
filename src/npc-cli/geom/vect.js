@@ -52,7 +52,7 @@
    * @param {Geom.VectJson} v 
    * @param {number} s 
    */
-	addScaledVector(v, s) {
+	addScaled(v, s) {
 		this.x += v.x * s;
 		this.y += v.y * s;
 		return this;

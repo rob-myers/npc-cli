@@ -116,6 +116,7 @@ class GeomorphService {
    * @returns {Geomorph.Layout}
    */
   computeLayout(gmKey, assets) {
+    debug(`computeLayout ${gmKey}`);
     const { hullKey } = this.gmKeyToKeys(gmKey);
     const hullSym = assets.symbols[hullKey];
     const hullOutline = Poly.union(hullSym.hullWalls).map((x) => x.clone().removeHoles());
@@ -152,13 +153,12 @@ class GeomorphService {
       x.meta.meta === true && room.contains(x.outline[0]) ? x.meta : []
     ), { meta: undefined }));
 
-    const navPolyWithDoors = Poly.cutOut(
-      [
-        ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
-        ...obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
-      ],
-      hullOutline
-    ).map((x) => x.cleanFinalReps().precision(precision));
+    const navPolyWithDoors = Poly.cutOut([
+      ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
+      ...obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
+      // hull doorways only include half the door, so must remove rest
+      ...doors.flatMap(x => x.meta.hull ? x.poly : []),
+    ], hullOutline).map((x) => x.cleanFinalReps().precision(precision));
 
     return {
       key: gmKey,
@@ -166,7 +166,7 @@ class GeomorphService {
       doors,
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
-      navPolys: navPolyWithDoors,
+      nav: geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
     };
   }
 
@@ -184,6 +184,30 @@ class GeomorphService {
       mat4: geomorphService.embedXZMat4(transform),
       doorSegs: layout.doors.map(({ seg }) => seg),
       wallSegs: layout.walls.flatMap((x) => x.lineSegs),
+    };
+  }
+
+  /**
+   * @param {Geom.Poly[]} navPolyWithDoors 
+   * @param {Connector[]} doors 
+   * @returns {Geomorph.Layout['nav']}
+   */
+  decomposeLayoutNav(navPolyWithDoors, doors) {
+    const navDoorways = doors.map((connector) => connector.computeDoorway());
+    const navPolySansDoorways = Poly.cutOut(navDoorways, navPolyWithDoors);
+    const navDecomp = geom.joinTriangulations(navPolySansDoorways.map(poly => poly.cleanFinalReps().qualityTriangulate()));
+    // index where doorway triangles will begin
+    const doorwaysOffset = navDecomp.tris.length;
+    // add two triangles for each doorway (we dup some verts)
+    navDoorways.forEach(doorway => {
+      const vId = navDecomp.vs.length;
+      navDecomp.vs.push(...doorway.outline);
+      navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
+    });
+    return {
+      polys: navPolyWithDoors,
+      decomp: navDecomp,
+      doorwaysOffset,
     };
   }
 
@@ -223,7 +247,11 @@ class GeomorphService {
       doors: json.doors.map(Connector.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
-      navPolys: json.navPolys.map(Poly.from),
+      nav: {
+        polys: json.nav.polys.map(Poly.from),
+        decomp: { vs: json.nav.decomp.vs.map(Vect.from), tris: json.nav.decomp.tris },
+        doorwaysOffset: json.nav.doorwaysOffset,
+      },
     };
   }
 
@@ -783,7 +811,11 @@ class GeomorphService {
       doors: layout.doors.map((x) => x.json),
       rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      navPolys: layout.navPolys.map((x) => x.geoJson),
+      nav: {
+        polys: layout.nav.polys.map((x) => x.geoJson),
+        decomp: { vs: layout.nav.decomp.vs, tris: layout.nav.decomp.tris },
+        doorwaysOffset: layout.nav.doorwaysOffset,
+      },
     };
   }
 
@@ -869,10 +901,22 @@ export class Connector {
     /** @type {Geom.Vect} */
     this.normal = normal;
 
+    if (this.meta.hull) {
+      if (// hull door normals should point outwards
+        this.meta.n && this.normal.y > 0
+        || this.meta.e && this.normal.x < 0
+        || this.meta.s && this.normal.y < 0
+        || this.meta.w && this.normal.x > 0
+      ) {
+        this.normal.scale(-1);
+        this.seg = [this.seg[1], this.seg[0]];
+      }
+    }
+
     // 🚧 offset needed?
-    const doorEntryDelta = Math.min(baseRect.width, baseRect.height) / 2 + 0.05;
-    const inFront = poly.center.addScaledVector(normal, doorEntryDelta).precision(precision);
-    const behind = poly.center.addScaledVector(normal, -doorEntryDelta).precision(precision);
+    const doorEntryDelta = 0.5 * baseRect.height + 0.05;
+    const inFront = poly.center.addScaled(normal, doorEntryDelta).precision(precision);
+    const behind = poly.center.addScaled(normal, -doorEntryDelta).precision(precision);
 
     /**
      * @type {[Geom.Vect, Geom.Vect]}
@@ -913,7 +957,34 @@ export class Connector {
       return agg;
     }, /** @type {[null | number, null | number]} */ ([null, null]));
   }
+
+  /** @returns {Geom.Poly} */
+  computeDoorway() {
+    const width = this.baseRect.width;
+    // 🚧 clarify hull-wall vs wall width
+    const height = (this.meta.hull ? 8 : 20/5) * worldScale;
+    const hNormal = this.normal;
+    const wNormal = tmpVect1.set(this.normal.y, -this.normal.x);
+
+    if (this.meta.hull) {
+      // hull doorways only contain half of door,
+      // to avoid overlapping adjacent hull door
+      const topLeft = this.seg[0].clone().addScaled(wNormal, wallOutset);
+      const botLeft = topLeft.clone().addScaled(hNormal, -(height/2 + wallOutset));
+      const botRight = botLeft.clone().addScaled(wNormal, width - 2 * wallOutset);
+      const topRight = botRight.clone().addScaled(hNormal, (wallOutset + height/2));
+      return new Poly([topLeft, botLeft, botRight, topRight]);
+    } else {
+      const topLeft = this.seg[0].clone().addScaled(wNormal, wallOutset).addScaled(hNormal, -height/2 - wallOutset);
+      const botLeft = topLeft.clone().addScaled(hNormal, wallOutset + height + wallOutset);
+      const botRight = botLeft.clone().addScaled(wNormal, width - 2 * wallOutset);
+      const topRight = botRight.clone().addScaled(hNormal, -wallOutset - height - wallOutset);
+      return new Poly([topLeft, botLeft, botRight, topRight]);
+    }
+  }
 }
 
+const tmpVect1 = new Vect();
+const tmpVect2 = new Vect();
 const tmpPoly1 = new Poly();
 const tmpMat1 = new Mat();

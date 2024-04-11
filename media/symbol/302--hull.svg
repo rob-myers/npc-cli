@@ -92,28 +92,28 @@
                 <title>decor go label=corridor</title>
         </rect>
         <rect x="-4" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull w</title>
         </rect>
         <rect x="-4" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull w</title>
         </rect>
         <rect x="1196" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull e</title>
         </rect>
         <rect x="1196" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull e</title>
         </rect>
         <rect x="250" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull s</title>
         </rect>
         <rect x="310" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull s</title>
         </rect>
         <rect x="850" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull s</title>
         </rect>
         <rect x="910" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-        <title>door hull</title>
+                <title>door hull s</title>
         </rect>
         <rect x="485" y="416" width="50" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door iris sealed hull</title>

@@ -9,51 +9,51 @@
     <title>hull-wall hull--20x20</title>
   </path>
   <rect x="-4" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="-4" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="-4" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="-4" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="1196" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="1196" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="1196" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="1196" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="850" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
-      <title>door hull</title>
-    </rect>
-    <rect x="910" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
-      <title>door hull</title>
-    </rect>
-    <rect x="250" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="310" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="850" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="910" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="250" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
-    <rect x="310" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-      <title>door hull</title>
-    </rect>
+          <title>door hull w</title>
+  </rect>
+  <rect x="-4" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull w</title>
+  </rect>
+  <rect x="-4" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull w</title>
+  </rect>
+  <rect x="-4" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull w</title>
+  </rect>
+  <rect x="1196" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull e</title>
+  </rect>
+  <rect x="1196" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull e</title>
+  </rect>
+  <rect x="1196" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull e</title>
+  </rect>
+  <rect x="1196" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull e</title>
+  </rect>
+  <rect x="250" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull n</title>
+  </rect>
+  <rect x="310" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull n</title>
+  </rect>
+  <rect x="850" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
+          <title>door hull n</title>
+  </rect>
+  <rect x="910" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
+          <title>door hull n</title>
+  </rect>
+  <rect x="250" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull s</title>
+  </rect>
+  <rect x="310" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull s</title>
+  </rect>
+  <rect x="850" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull s</title>
+  </rect>
+  <rect x="910" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+          <title>door hull s</title>
+  </rect>
 </svg>

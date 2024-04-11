@@ -29,7 +29,8 @@ async function handleMessages(e) {
       const gms = map.gms.map(({ gmKey, transform }, gmId) =>
         geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
       );
-      const meshes = gms.map(({ navPolys, mat4, transform: [a, b, c, d] }, gmId) => {
+      // 🚧 use nav.decomp
+      const meshes = gms.map(({ nav: { polys: navPolys }, mat4, transform: [a, b, c, d] }, gmId) => {
         const determinant = a * d - b * c;
         const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
         mesh.applyMatrix4(mat4);

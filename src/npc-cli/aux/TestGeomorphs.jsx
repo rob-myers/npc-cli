@@ -18,7 +18,7 @@ export default function TestGeomorphs(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGeomorph(gmKey, img) {
       const { ctxt, layout } = api.gmClass[gmKey];
-      const { pngRect, rooms, doors, navPolys } = layout;
+      const { pngRect, rooms, doors, nav: { polys: navPolys } } = layout;
       const canvas = ctxt.canvas;
 
       ctxt.clearRect(0, 0, canvas.width, canvas.width);

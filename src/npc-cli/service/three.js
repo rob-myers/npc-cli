@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { Rect, Vect } from "../geom";
 
 /** Unit quad extending from origin to (1, 0, 1) */
 export const quadGeometryXZ = new THREE.BufferGeometry();
@@ -29,16 +30,29 @@ export const tmpBufferGeom1 = new THREE.BufferGeometry();
 /**
  * @param {Geom.Poly[]} polys
  * @param {Object} opts
- * @param {boolean} [opts.reverse] e.g. fix normals for recast/detour
+ * @param {boolean} [opts.reverse]
  * @returns {THREE.BufferGeometry}
  */
 export function polysToXZGeometry(polys, { reverse = false } = {}) {
   const geometry = new THREE.BufferGeometry();
-  const { vertices, indices, uvs } = polysToAttribs(polys);
-  if (reverse) {
-    indices.reverse();
-  }
+  const { vertices, indices, uvs } = polysToXZAttribs(polys);
+  reverse && indices.reverse();
+  geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices), 3));
+  geometry.setIndex(indices);
+  geometry.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(uvs), 2));
+  return geometry;
+}
 
+/**
+ * @param {Geom.Triangulation} decomp
+ * @param {Object} opts
+ * @param {boolean} [opts.reverse]
+ * @returns {THREE.BufferGeometry}
+ */
+export function decompToXZGeometry(decomp, { reverse = false } = {}) {
+  const geometry = new THREE.BufferGeometry();
+  const { vertices, indices, uvs } = decompToXZAttribs(decomp);
+  reverse && indices.reverse();
   geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(vertices), 3));
   geometry.setIndex(indices);
   geometry.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(uvs), 2));
@@ -48,12 +62,11 @@ export function polysToXZGeometry(polys, { reverse = false } = {}) {
 /**
  * @param {Geom.Poly[]} polys
  */
-export function polysToAttribs(polys) {
+function polysToXZAttribs(polys) {
   const vertices = /** @type {number[]} */ ([]);
   const indices = /** @type {number[]} */ ([]);
   const uvs = /** @type {number[]} */ ([]);
   let offset = 0;
-
   for (const poly of polys) {
     const { tris, vs } = poly.cleanFinalReps().qualityTriangulate();
     const rect = poly.rect;
@@ -62,12 +75,18 @@ export function polysToAttribs(polys) {
     uvs.push(...vs.flatMap(({ x, y }) => [(x - rect.x) / rect.width, (y - rect.y) / rect.height]));
     offset += vs.length;
   }
+  return { vertices, indices, uvs };
+}
 
-  return {
-    vertices,
-    indices,
-    uvs,
-  };
+/**
+ * @param {Geom.Triangulation} decomp
+ */
+function decompToXZAttribs(decomp) {
+  const vertices = decomp.vs.flatMap(v => [v.x, 0, v.y]);
+  const indices = decomp.tris.flatMap(t => t);
+  const bounds = Rect.fromPoints(...decomp.vs);
+  const uvs = decomp.vs.flatMap(({ x, y }) => [(x - bounds.x) / bounds.width, (y - bounds.y) / bounds.height]);
+  return { vertices, indices, uvs };
 }
 
 export const wireFrameMaterial = new THREE.MeshStandardMaterial({

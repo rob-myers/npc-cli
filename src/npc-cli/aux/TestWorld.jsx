@@ -10,7 +10,7 @@ import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, isDevelopment, range } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
-import { polysToXZGeometry, tmpBufferGeom1, tmpVectThree1, wireFrameMaterial } from "../service/three";
+import { decompToXZGeometry, polysToXZGeometry, tmpBufferGeom1, tmpVectThree1, wireFrameMaterial } from "../service/three";
 import { getTileCacheMeshProcess } from "../service/recast-detour";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
@@ -68,7 +68,7 @@ export default function TestWorld(props) {
       }
       gmClass.layout = layout;
       // Fix normals for recast/detour... maybe due to earcut ordering?
-      gmClass.debugNavPoly = polysToXZGeometry(layout.navPolys, { reverse: true });
+      gmClass.debugNavPoly = decompToXZGeometry(layout.nav.decomp, { reverse: true });
       return gmClass;
     },
     async handleMessageFromWorker(e) {
@@ -225,7 +225,7 @@ export default function TestWorld(props) {
               <TestNpcs/>
               <TestDebug
                 // showNavMesh
-                // showOrigNavPoly
+                showOrigNavPoly
               />
             </>}
             {/* 🔔 saw onPointerUp instances not updating */}

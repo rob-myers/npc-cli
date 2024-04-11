@@ -197,20 +197,14 @@ export class Rect {
   }
 
   /**
-   * Bounded version of `lambda x.this.outset(-x)`
-   * @param {number} nonNegAmount 
+   * @param {number} nonNegDx 
+   * @param {number} [nonNegDy] 
    */
-  inset(nonNegAmount) {
-    const [cx, cy] = [this.cx, this.cy];
-    this.outset(-nonNegAmount);
-    if (this.width < 0) {
-      this.x = cx;
-      this.width = 0;
-    }
-    if (this.height < 0) {
-      this.y = cy;
-      this.height = 0;
-    }
+  inset(nonNegDx, nonNegDy = nonNegDx) {
+    this.x += nonNegDx;
+    this.y += nonNegDy;
+    this.width -= 2 * nonNegDx;
+    this.height -= 2 * nonNegDy;
     return this;
   }
 
