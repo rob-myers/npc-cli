@@ -156,8 +156,6 @@ class GeomorphService {
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
       ...obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
-      // hull doorways only include half the door, so must remove rest
-      ...doors.flatMap(x => x.meta.hull ? x.poly : []),
     ], hullOutline).map((x) => x.cleanFinalReps().precision(precision));
 
     return {
@@ -194,11 +192,17 @@ class GeomorphService {
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     const navDoorways = doors.map((connector) => connector.computeDoorway());
-    const navPolySansDoorways = Poly.cutOut(navDoorways, navPolyWithDoors);
-    const navDecomp = geom.joinTriangulations(navPolySansDoorways.map(poly => poly.cleanFinalReps().qualityTriangulate()));
-    // index where doorway triangles will begin
-    const doorwaysOffset = navDecomp.tris.length;
+    const navPolySansDoorways = Poly.cutOut([
+      ...navDoorways, // Hull `navDoorways` only include half the door.
+      // We must remove the rest before constructing triangulation
+      ...doors.flatMap(x => x.meta.hull ? x.poly : []),
+    ], navPolyWithDoors);
+
+    const navDecomp = geom.joinTriangulations(
+      navPolySansDoorways.map(poly => poly.cleanFinalReps().qualityTriangulate())
+    );
     // add two triangles for each doorway (we dup some verts)
+    const doorwaysOffset = navDecomp.tris.length;
     navDoorways.forEach(doorway => {
       const vId = navDecomp.vs.length;
       navDecomp.vs.push(...doorway.outline);

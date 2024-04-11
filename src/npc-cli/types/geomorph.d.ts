@@ -159,6 +159,7 @@ declare namespace Geomorph {
     nav: {
       polys: P[];
       decomp: Geom.TriangulationGeneric<V>;
+      /** Index where doorway triangles will begin */
       doorwaysOffset: number;
     };
   }
