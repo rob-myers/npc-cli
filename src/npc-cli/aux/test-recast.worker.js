@@ -4,7 +4,7 @@ import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
 import { alloc, error, info } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
-import { polysToXZGeometry } from "../service/three";
+import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
 
 info("web worker started", import.meta.url);
@@ -29,10 +29,11 @@ async function handleMessages(e) {
       const gms = map.gms.map(({ gmKey, transform }, gmId) =>
         geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
       );
-      // 🚧 use nav.decomp
-      const meshes = gms.map(({ nav: { polys: navPolys }, mat4, transform: [a, b, c, d] }, gmId) => {
+      // 🚧 feed in custom areas
+      const meshes = gms.map(({ nav: { polys: navPolys, decomp: navDecomp }, mat4, transform: [a, b, c, d] }, gmId) => {
         const determinant = a * d - b * c;
-        const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
+        // const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
+        const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
         mesh.applyMatrix4(mat4);
         mesh.updateMatrixWorld();
         return mesh;
@@ -43,7 +44,10 @@ async function handleMessages(e) {
       info('total meshes', meshes.length);
 
       await initRecastNav();
-      const result = customThreeToTileCache(meshes, getTileCacheGeneratorConfig());
+      const result = customThreeToTileCache(
+        meshes,
+        getTileCacheGeneratorConfig(),
+      );
       
       if (result.success) {
         const { navMesh, tileCache } = result;

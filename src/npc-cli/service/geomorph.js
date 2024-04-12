@@ -196,11 +196,13 @@ class GeomorphService {
       ...navDoorways, // Hull `navDoorways` only include half the door.
       // We must remove the rest before constructing triangulation
       ...doors.flatMap(x => x.meta.hull ? x.poly : []),
-    ], navPolyWithDoors);
+    ], navPolyWithDoors).map(x => x.cleanFinalReps());
 
-    const navDecomp = geom.joinTriangulations(
-      navPolySansDoorways.map(poly => poly.cleanFinalReps().qualityTriangulate())
-    );
+    const navDecomp = geom.joinTriangulations(navPolySansDoorways.map(poly => poly.qualityTriangulate()));
+    // 🔔 earlier precision can break qualityTriangulate
+    navDecomp.vs.forEach(v => v.precision(precision));
+    navDoorways.forEach(poly => poly.precision(precision));
+
     // add two triangles for each doorway (we dup some verts)
     const doorwaysOffset = navDecomp.tris.length;
     navDoorways.forEach(doorway => {
@@ -977,13 +979,13 @@ export class Connector {
       const botLeft = topLeft.clone().addScaled(hNormal, -(height/2 + wallOutset));
       const botRight = botLeft.clone().addScaled(wNormal, width - 2 * wallOutset);
       const topRight = botRight.clone().addScaled(hNormal, (wallOutset + height/2));
-      return new Poly([topLeft, botLeft, botRight, topRight]);
+      return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
     } else {
       const topLeft = this.seg[0].clone().addScaled(wNormal, wallOutset).addScaled(hNormal, -height/2 - wallOutset);
       const botLeft = topLeft.clone().addScaled(hNormal, wallOutset + height + wallOutset);
       const botRight = botLeft.clone().addScaled(wNormal, width - 2 * wallOutset);
       const topRight = botRight.clone().addScaled(hNormal, -wallOutset - height - wallOutset);
-      return new Poly([topLeft, botLeft, botRight, topRight]);
+      return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
     }
   }
 }

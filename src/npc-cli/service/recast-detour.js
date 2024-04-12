@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, freeHeightfieldLayerSet, Arrays, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer, allocContourSet, buildContours, buildRegions, buildRegionsMonotone } from "@recast-navigation/core";
+import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, freeHeightfieldLayerSet, Arrays, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer, markBoxArea } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
@@ -20,13 +20,13 @@ export function getTileCacheMeshProcess() {
   });
 }
 
-/** @returns {Partial<import("@recast-navigation/generators").TileCacheGeneratorConfig>} */
+/** @returns {Partial<TileCacheGeneratorConfig>} */
 export function getTileCacheGeneratorConfig() {
   // const cs = 0.05;
   // const cs = 0.1472;
   // const cs = 0.148;
-  // const cs = 0.15;
-  const cs = 0.1495;
+  const cs = 0.15;
+  // const cs = 0.1495;
   return {
     // tileSize: 7.6 / cs,
     tileSize: 7.2 / cs,
@@ -48,21 +48,12 @@ export function getTileCacheGeneratorConfig() {
 /**
  * 
  * @param {THREE.Mesh[]} meshes 
- * @param {Partial<import("@recast-navigation/generators").TileCacheGeneratorConfig>} navMeshGeneratorConfig 
+ * @param {Partial<TileCacheGeneratorConfig>} navMeshGeneratorConfig 
+ * @param {TileCacheCustomOptions} [options]
  */
-export function customThreeToTileCache(
-  meshes,
-  navMeshGeneratorConfig = {},
-  keepIntermediates = false  
-) {
+export function customThreeToTileCache(meshes, navMeshGeneratorConfig = {}, options = {}) {
   const [positions, indices] = getPositionsAndIndices(meshes);
-
-  return customGenerateTileCache(
-    positions,
-    indices,
-    navMeshGeneratorConfig,
-    keepIntermediates
-  );
+  return customGenerateTileCache(positions, indices, navMeshGeneratorConfig, options);
 }
 
 /**
@@ -70,13 +61,14 @@ export function customThreeToTileCache(
  * @param {ArrayLike<number>} positions 
  * @param {ArrayLike<number>} indices 
  * @param {Partial<TileCacheGeneratorConfig>} [navMeshGeneratorConfig ]
+ * @param {TileCacheCustomOptions} [options]
  * @returns {TileCacheGeneratorResult}
  */
 export function customGenerateTileCache(
   positions,
   indices,
   navMeshGeneratorConfig = {},
-  keepIntermediates = false
+  options = {}
 ) {
 
   const buildContext = new RecastBuildContext();
@@ -93,7 +85,7 @@ export function customGenerateTileCache(
   const navMesh = new NavMesh();
 
   function cleanup() {
-    if (!keepIntermediates) {
+    if (!options.keepIntermediates) {
       for (let i = 0; i < intermediates.tileIntermediates.length; i++) {
         const tileIntermediate = intermediates.tileIntermediates[i];
 
@@ -197,14 +189,7 @@ export function customGenerateTileCache(
     navMeshGeneratorConfig.tileCacheMeshProcess ??
     createDefaultTileCacheMeshProcess();
 
-  if (
-    !tileCache.init(
-      tileCacheParams,
-      allocator,
-      compressor,
-      tileCacheMeshProcess
-    )
-  ) {
+  if (!tileCache.init(tileCacheParams, allocator, compressor, tileCacheMeshProcess)) {
     return fail('Failed to initialize tile cache');
   }
 
@@ -400,7 +385,7 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    if (!keepIntermediates) {
+    if (!options.keepIntermediates) {
       freeHeightfield(tileIntermediates.heightfield);
       tileIntermediates.heightfield = undefined;
     }
@@ -416,6 +401,20 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
+    // 🚧 construct { bmin, bmax } for each doorway
+    // 🚧 Create Detour data from Recast poly mesh
+    for (const { areaId, bounds } of options.areas ?? []) {
+      for (const { bmin, bmax } of bounds) {
+        markBoxArea(
+          buildContext,
+          bmin,
+          bmax,
+          areaId,
+          compactHeightfield
+        );
+      }
+    }
+
     const heightfieldLayerSet = allocHeightfieldLayerSet();
     if (
       !buildHeightfieldLayers(
@@ -429,7 +428,7 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    if (!keepIntermediates) {
+    if (!options.keepIntermediates) {
       freeCompactHeightfield(compactHeightfield);
       tileIntermediates.compactHeightfield = undefined;
     }
@@ -490,7 +489,7 @@ export function customGenerateTileCache(
       tiles.push(tile);
     }
 
-    if (!keepIntermediates) {
+    if (!options.keepIntermediates) {
       freeHeightfieldLayerSet(heightfieldLayerSet);
       tileIntermediates.heightfieldLayerSet = undefined;
     }
@@ -568,4 +567,16 @@ export function customGenerateTileCache(
  * @property {false} success
  * @property {string} error
  * @property {TileCacheGeneratorIntermediates} intermediates
+ */
+
+/**
+ * @typedef TileCacheCustomOptions
+ * @property {boolean} [keepIntermediates]
+ * @property {TileCacheAreaDef[]} [areas]
+ */
+
+/**
+ * @typedef TileCacheAreaDef
+ * @property {number} areaId
+ * @property {{ bmin: THREE.Vector3Tuple; bmax: THREE.Vector3Tuple; }[]} bounds
  */

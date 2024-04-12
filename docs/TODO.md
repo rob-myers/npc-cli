@@ -5,8 +5,9 @@
 - 🚧 recast/detour try use areas to preserve door polygons
   - https://github.com/isaac-mason/recast-navigation-js/discussions/306#discussioncomment-9069840
   - ✅ construct triangulation where door-triangles known
-  - 🚧 forward triangulation to recast
-  - 🚧 make door triangles for recast
+  - ✅ forward triangulation to recast
+  - 🚧 flatten layout.nav
+  - 🚧 mark door triangles for recast
 
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`

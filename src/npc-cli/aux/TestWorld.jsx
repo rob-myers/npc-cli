@@ -224,8 +224,8 @@ export default function TestWorld(props) {
             {state.crowd && <>
               <TestNpcs/>
               <TestDebug
-                // showNavMesh
-                showOrigNavPoly
+                showNavMesh
+                // showOrigNavPoly
               />
             </>}
             {/* 🔔 saw onPointerUp instances not updating */}
