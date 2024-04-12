@@ -34,7 +34,7 @@ const outputDir = path.resolve(staticAssetsDir, "2d");
 
   for (const { key: gmKey, pngRect } of layouts) {
 
-    // e.g. 1.5m --> 60sgu (Spaceship Geomorph Units)
+    // e.g. 1.5m --> 60sgu (Starship Geomorph Units)
     pngRect.scale(1 / worldScale);
 
     canvas.width = pngRect.width;
