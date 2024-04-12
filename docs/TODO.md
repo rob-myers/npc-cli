@@ -20,6 +20,9 @@
   - show a Mixamo animation (use Blender to combine animations)
     - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
 
+- redo nav toggle
+  - install tailwind
+
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
