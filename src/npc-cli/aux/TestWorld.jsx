@@ -68,7 +68,7 @@ export default function TestWorld(props) {
       }
       gmClass.layout = layout;
       // Fix normals for recast/detour... maybe due to earcut ordering?
-      gmClass.debugNavPoly = decompToXZGeometry(layout.nav.decomp, { reverse: true });
+      gmClass.debugNavPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
       return gmClass;
     },
     async handleMessageFromWorker(e) {

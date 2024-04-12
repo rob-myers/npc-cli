@@ -164,7 +164,7 @@ class GeomorphService {
       doors,
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
-      nav: geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
+      ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
     };
   }
 
@@ -188,7 +188,7 @@ class GeomorphService {
   /**
    * @param {Geom.Poly[]} navPolyWithDoors 
    * @param {Connector[]} doors 
-   * @returns {Geomorph.Layout['nav']}
+   * @returns {Pick<Geomorph.Layout, 'navPolys' | 'navDecomp' | 'navDoorwaysOffset'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     const navDoorways = doors.map((connector) => connector.computeDoorway());
@@ -204,16 +204,16 @@ class GeomorphService {
     navDoorways.forEach(poly => poly.precision(precision));
 
     // add two triangles for each doorway (we dup some verts)
-    const doorwaysOffset = navDecomp.tris.length;
+    const navDoorwaysOffset = navDecomp.tris.length;
     navDoorways.forEach(doorway => {
       const vId = navDecomp.vs.length;
       navDecomp.vs.push(...doorway.outline);
       navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
     });
     return {
-      polys: navPolyWithDoors,
-      decomp: navDecomp,
-      doorwaysOffset,
+      navPolys: navPolyWithDoors,
+      navDecomp,
+      navDoorwaysOffset,
     };
   }
 
@@ -253,11 +253,9 @@ class GeomorphService {
       doors: json.doors.map(Connector.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
-      nav: {
-        polys: json.nav.polys.map(Poly.from),
-        decomp: { vs: json.nav.decomp.vs.map(Vect.from), tris: json.nav.decomp.tris },
-        doorwaysOffset: json.nav.doorwaysOffset,
-      },
+      navPolys: json.navPolys.map(Poly.from),
+      navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
+      navDoorwaysOffset: json.navDoorwaysOffset,
     };
   }
 
@@ -817,11 +815,9 @@ class GeomorphService {
       doors: layout.doors.map((x) => x.json),
       rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      nav: {
-        polys: layout.nav.polys.map((x) => x.geoJson),
-        decomp: { vs: layout.nav.decomp.vs, tris: layout.nav.decomp.tris },
-        doorwaysOffset: layout.nav.doorwaysOffset,
-      },
+      navPolys: layout.navPolys.map((x) => x.geoJson),
+      navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
+      navDoorwaysOffset: layout.navDoorwaysOffset,
     };
   }
 

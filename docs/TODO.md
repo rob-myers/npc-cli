@@ -6,7 +6,7 @@
   - https://github.com/isaac-mason/recast-navigation-js/discussions/306#discussioncomment-9069840
   - ✅ construct triangulation where door-triangles known
   - ✅ forward triangulation to recast
-  - 🚧 flatten layout.nav
+  - ✅ flatten layout.nav
   - 🚧 mark door triangles for recast
 
 - 🚧 Restart TestCharacter: animation, no physics

@@ -30,7 +30,7 @@ async function handleMessages(e) {
         geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
       );
       // 🚧 feed in custom areas
-      const meshes = gms.map(({ nav: { polys: navPolys, decomp: navDecomp }, mat4, transform: [a, b, c, d] }, gmId) => {
+      const meshes = gms.map(({ navDecomp, mat4, transform: [a, b, c, d] }, gmId) => {
         const determinant = a * d - b * c;
         // const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
         const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));

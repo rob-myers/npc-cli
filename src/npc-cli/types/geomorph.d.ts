@@ -156,12 +156,10 @@ declare namespace Geomorph {
     rooms: WithMeta<P>[];
     doors: C[];
     walls: WithMeta<P>[];
-    nav: {
-      polys: P[];
-      decomp: Geom.TriangulationGeneric<V>;
-      /** Index where doorway triangles will begin */
-      doorwaysOffset: number;
-    };
+    navPolys: P[];
+    navDecomp: Geom.TriangulationGeneric<V>;
+    /** Index where doorway triangles will begin */
+    navDoorwaysOffset: number;
   }
 
   type Layout = LayoutGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
