@@ -29,13 +29,23 @@ async function handleMessages(e) {
       const gms = map.gms.map(({ gmKey, transform }, gmId) =>
         geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
       );
-      // 🚧 feed in custom areas
-      const meshes = gms.map(({ navDecomp, mat4, transform: [a, b, c, d] }, gmId) => {
+
+      const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);
+      const meshes = gms.map(({ navDecomp, navDoorwaysOffset, mat4, transform: [a, b, c, d] }, gmId) => {
         const determinant = a * d - b * c;
         // const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
         const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
         mesh.applyMatrix4(mat4);
         mesh.updateMatrixWorld();
+        
+        // 🚧 hard-coded area, height
+        // 🚧 need to transform vs
+        const { tris, vs, tris: { length: numTris }  } = navDecomp;
+        for (let i = navDoorwaysOffset; i < numTris; i++) {
+          customAreaDefs.push({ areaId: 1, areas: [
+            { hmin: 0, hmax: 0.02, verts: tris[i].map(id => [vs[id].x, 0, vs[id].y]) },
+          ]});
+        }
         return mesh;
       });
 
@@ -47,6 +57,7 @@ async function handleMessages(e) {
       const result = customThreeToTileCache(
         meshes,
         getTileCacheGeneratorConfig(),
+        { areas: customAreaDefs },
       );
       
       if (result.success) {

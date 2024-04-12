@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, freeHeightfieldLayerSet, Arrays, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer, markBoxArea } from "@recast-navigation/core";
+import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, freeHeightfieldLayerSet, Arrays, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
@@ -27,10 +27,11 @@ export function getTileCacheGeneratorConfig() {
   // const cs = 0.148;
   const cs = 0.15;
   // const cs = 0.1495;
+  // const cs = 0.1;
   return {
     // tileSize: 7.6 / cs,
-    tileSize: 7.2 / cs,
-    // tileSize: 8 / cs,
+    // tileSize: 7.2 / cs,
+    tileSize: 7.5 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
     ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
@@ -38,7 +39,7 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    maxSimplificationError: 0.5,
+    // maxSimplificationError: 0.5,
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
@@ -51,7 +52,7 @@ export function getTileCacheGeneratorConfig() {
  * @param {Partial<TileCacheGeneratorConfig>} navMeshGeneratorConfig 
  * @param {TileCacheCustomOptions} [options]
  */
-export function customThreeToTileCache(meshes, navMeshGeneratorConfig = {}, options = {}) {
+export function customThreeToTileCache(meshes, navMeshGeneratorConfig = {}, options) {
   const [positions, indices] = getPositionsAndIndices(meshes);
   return customGenerateTileCache(positions, indices, navMeshGeneratorConfig, options);
 }
@@ -401,16 +402,20 @@ export function customGenerateTileCache(
       return { n: 0 };
     }
 
-    // 🚧 construct { bmin, bmax } for each doorway
     // 🚧 Create Detour data from Recast poly mesh
-    for (const { areaId, bounds } of options.areas ?? []) {
-      for (const { bmin, bmax } of bounds) {
-        markBoxArea(
+    for (const { areaId, areas } of options.areas ?? []) {
+      for (const { hmin, hmax, verts } of areas) {
+        const vertsArray = new Raw.Module.FloatArray();
+        const numVerts = verts.length;
+        vertsArray.copy(verts.flatMap(v => v), numVerts * 3);
+        markConvexPolyArea(
           buildContext,
-          bmin,
-          bmax,
+          vertsArray,
+          numVerts,
+          hmin,
+          hmax,
           areaId,
-          compactHeightfield
+          compactHeightfield,
         );
       }
     }
@@ -572,11 +577,6 @@ export function customGenerateTileCache(
 /**
  * @typedef TileCacheCustomOptions
  * @property {boolean} [keepIntermediates]
- * @property {TileCacheAreaDef[]} [areas]
+ * @property {NPC.TileCacheConvexAreaDef[]} [areas]
  */
 
-/**
- * @typedef TileCacheAreaDef
- * @property {number} areaId
- * @property {{ bmin: THREE.Vector3Tuple; bmax: THREE.Vector3Tuple; }[]} bounds
- */

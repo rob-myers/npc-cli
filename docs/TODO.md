@@ -7,7 +7,9 @@
   - ✅ construct triangulation where door-triangles known
   - ✅ forward triangulation to recast
   - ✅ flatten layout.nav
-  - 🚧 mark door triangles for recast
+  - ✅ mark door triangles for recast
+  - ✅ working for a single geomorph
+  - 🚧 working for transformed geomorphs
 
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`

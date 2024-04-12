@@ -51,6 +51,16 @@ declare namespace NPC {
     { tileCache?: any }
   >;
 
+  interface TileCacheConvexAreaDef {
+    areaId: number;
+    areas: {
+      /** Must define a convex polygon */
+      verts: import("three").Vector3Tuple[];
+      hmin: number;
+      hmax: number;
+    }[];
+  }
+
   type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
   type Obstacle = {
@@ -60,4 +70,5 @@ declare namespace NPC {
   };
 
   type ObstacleRef = import("@recast-navigation/core").ObstacleRef;
+
 }
