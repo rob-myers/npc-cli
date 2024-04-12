@@ -407,7 +407,7 @@ export function customGenerateTileCache(
       for (const { hmin, hmax, verts } of areas) {
         const vertsArray = new Raw.Module.FloatArray();
         const numVerts = verts.length;
-        vertsArray.copy(verts.flatMap(v => v), numVerts * 3);
+        vertsArray.copy(verts.flatMap(v => [v.x, v.y, v.z]), numVerts * 3);
         markConvexPolyArea(
           buildContext,
           vertsArray,

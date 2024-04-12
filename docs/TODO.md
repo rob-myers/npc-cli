@@ -2,14 +2,14 @@
 
 ## WIP
 
-- 🚧 recast/detour try use areas to preserve door polygons
+- ✅ recast/detour try use areas to preserve door polygons
   - https://github.com/isaac-mason/recast-navigation-js/discussions/306#discussioncomment-9069840
   - ✅ construct triangulation where door-triangles known
   - ✅ forward triangulation to recast
   - ✅ flatten layout.nav
   - ✅ mark door triangles for recast
   - ✅ working for a single geomorph
-  - 🚧 working for transformed geomorphs
+  - ✅ working for transformed geomorphs
 
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`

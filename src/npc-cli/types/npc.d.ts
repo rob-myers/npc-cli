@@ -55,7 +55,7 @@ declare namespace NPC {
     areaId: number;
     areas: {
       /** Must define a convex polygon */
-      verts: import("three").Vector3Tuple[];
+      verts: import("three").Vector3Like[];
       hmin: number;
       hmax: number;
     }[];
