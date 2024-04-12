@@ -14,7 +14,7 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
     // 🚧
   }));
 
-  const { scene: gltf } = useGLTF('/assets/fbx/base-mesh-246-tri.glb');
+  const { scene: gltf } = useGLTF('/assets/3d/base-mesh-246-tri.glb');
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
 
