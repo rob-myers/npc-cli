@@ -17,11 +17,29 @@
   - ✅ scale character to desired height
   - ✅ import FBX into Blender and export as GLTF
     - ✅ install blender 4.1 (latest)
+  - download two FBX animations from mixamo and somehow load into GLTF
+    - show a Mixamo animation (use Blender to combine animations)
+      - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
   - 🚧 summarise https://discourse.threejs.org/t/character-controller/46936
     - https://character-controller-three.netlify.app/
     - https://github.com/abhicominin/Character-Controller-three.js
-  - show a Mixamo animation (use Blender to combine animations)
-    - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- integrate TestCharacter into TestWorld
+
+- 🚧 start generating geomorphs *.webp ourselves
+- 🚧 floor images: one per geomorph
+  - 🚧 migrate simplified layout PNG script
+- raised images: via spritesheet
+- show tables via raised "floor texture"
+
+- ✅ stop using prettier i.e. use eslint instead
+  - prettier ignore everything
+- start using eslint with auto-format if possible
+
+- Player view could be top-down with high walls
+  - try fixing door height with black wall above
+
+- migrate gm.roomGraph and gmRoomGraph
 
 - redo nav toggle
   - install tailwind
@@ -42,22 +60,8 @@
   - in parallel, start going through https://github.com/recastnavigation/recastnavigation
     - to understand what recast outputs
     - to understand what detour inputs
-  - ✅ tune `cs` so most doors can be locked
-  - better understand heightfield via `HeightfieldHelper`
-
-- integrate TestCharacter into TestWorld
-
-- start generating geomorphs *.webp ourselves
-- show tables via raised "floor texture"
-
-- ✅ stop using prettier i.e. use eslint instead
-  - prettier ignore everything
-- start using eslint with auto-format if possible
-
-- Player view could be top-down with high walls
-  - try fixing door height with black wall above
-
-- migrate gm.roomGraph and gmRoomGraph
+  - ❌ tune `cs` so most doors can be locked
+  - can use areas to preserve door polygons
 
 - avoid recomputing npcs/obstacles in TestNpcs
 - fix open/close non-aligning hull doors

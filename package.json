@@ -23,6 +23,10 @@
     "ts-script": "ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
     "assets-meta": "npm run ts-script src/scripts/assets-meta",
     "assets-meta-fast": "sucrase-node src/scripts/assets-meta",
+    "image-gen": "npm run ts-script src/scripts/image-gen",
+    "image-gen-fast": "sucrase-node src/scripts/image-gen",
+    "cwebp": "npm run ts-script src/scripts/cwebp",
+    "cwebp-fast": "sucrase-node src/scripts/cwebp",
     "watch-assets-meta": "npm run assets-meta && nodemon --on-change-only --delay 1s --config src/scripts/assets-meta.nodemon.json --exec 'npm run assets-meta-fast'",
     "ws-server": "sucrase-node src/scripts/ws-server.js"
   },
@@ -44,6 +48,7 @@
     "@recast-navigation/three": "^0.18.0",
     "@tanstack/react-query": "^5.17.19",
     "braces": "^3.0.2",
+    "canvas": "^2.11.2",
     "cli-columns": "^4.0.0",
     "debounce": "^2.0.0",
     "earcut": "^2.2.4",

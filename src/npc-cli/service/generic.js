@@ -396,7 +396,7 @@ export function safeJsonParse(input) {
   try {
     return JSON.parse(input);
   } catch {
-    console.warn(`failed to JSON.parse: "${input}"`);
+    warn(`failed to JSON.parse: "${input}"`);
     return undefined;
   }
 }
