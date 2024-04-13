@@ -153,9 +153,11 @@ declare namespace Geomorph {
     key: GeomorphKey;
     pngRect: R;
 
+    hullPoly: P[];
     rooms: WithMeta<P>[];
     doors: C[];
     walls: WithMeta<P>[];
+
     navPolys: P[];
     navDecomp: Geom.TriangulationGeneric<V>;
     /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */

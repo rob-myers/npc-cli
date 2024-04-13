@@ -119,7 +119,8 @@ class GeomorphService {
     debug(`computeLayout ${gmKey}`);
     const { hullKey } = this.gmKeyToKeys(gmKey);
     const hullSym = assets.symbols[hullKey];
-    const hullOutline = Poly.union(hullSym.hullWalls).map((x) => x.clone().removeHoles());
+    const hullPoly = Poly.union(hullSym.hullWalls);
+    const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
     const doors = hullSym.doors.map((x) => new Connector(x));
     const uncutWalls = hullSym.walls.slice();
@@ -162,6 +163,7 @@ class GeomorphService {
       key: gmKey,
       pngRect: hullSym.pngRect.clone(),
       doors,
+      hullPoly,
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
       ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
@@ -250,6 +252,7 @@ class GeomorphService {
     return {
       key: json.key,
       pngRect: Rect.fromJson(json.pngRect),
+      hullPoly: json.hullPoly.map(Poly.from),
       doors: json.doors.map(Connector.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
@@ -812,6 +815,7 @@ class GeomorphService {
     return {
       key: layout.key,
       pngRect: layout.pngRect,
+      hullPoly: layout.hullPoly.map(x => x.geoJson),
       doors: layout.doors.map((x) => x.json),
       rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),

@@ -2,15 +2,6 @@
 
 ## WIP
 
-- ✅ recast/detour try use areas to preserve door polygons
-  - https://github.com/isaac-mason/recast-navigation-js/discussions/306#discussioncomment-9069840
-  - ✅ construct triangulation where door-triangles known
-  - ✅ forward triangulation to recast
-  - ✅ flatten layout.nav
-  - ✅ mark door triangles for recast
-  - ✅ working for a single geomorph
-  - ✅ working for transformed geomorphs
-
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
   - ✅ show custom character FBX
@@ -32,7 +23,10 @@
   - ❌ replace nodemon with nodemon.js
   - ✅ check file timestamps in assets.js
   - ✅ avoid recomputing symbols in assets.js
-  - 🚧 images script generates simplified floors
+  - ✅ images script generates simplified floors
+    - ✅ floor
+    - ✅ navPoly
+    - ✅ walls
 - towards recursive non-hull symbols
   - stratified dependency graph
 
@@ -698,3 +692,12 @@ React.useEffect(() => {
     - ✅ kinematic-position-based
   - ❌ check anything is missing
   - ℹ️ we'll use rapier 3d in webworker i.e. kinematics vs sensors
+
+  - ✅ recast/detour try use areas to preserve door polygons
+  - https://github.com/isaac-mason/recast-navigation-js/discussions/306#discussioncomment-9069840
+  - ✅ construct triangulation where door-triangles known
+  - ✅ forward triangulation to recast
+  - ✅ flatten layout.nav
+  - ✅ mark door triangles for recast
+  - ✅ working for a single geomorph
+  - ✅ working for transformed geomorphs

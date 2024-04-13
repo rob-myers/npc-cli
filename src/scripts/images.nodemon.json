@@ -1,0 +1,6 @@
+{
+  "ext": "svg",
+  "watch": [
+    "src/scripts/images.js"
+  ]
+}

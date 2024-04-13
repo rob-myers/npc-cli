@@ -1,8 +1,9 @@
 import React from "react";
 import * as THREE from "three";
+import { useQuery } from "@tanstack/react-query";
 
 import { keys } from "../service/generic";
-import { worldScale } from "../service/const";
+import { FLOOR_IMAGES_QUERY_KEY } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { TestWorldContext } from "./test-world-context";
@@ -17,36 +18,28 @@ export default function TestGeomorphs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGeomorph(gmKey, img) {
-      const { ctxt, layout } = api.gmClass[gmKey];
-      const { pngRect, rooms, doors, navPolys } = layout;
+      // 🚧 use floor texture instead, if HMR works
+      const { ctxt } = api.gmClass[gmKey];
       const canvas = ctxt.canvas;
-
       ctxt.clearRect(0, 0, canvas.width, canvas.width);
       ctxt.drawImage(img, 0, 0);
-      ctxt.setTransform(1 / worldScale, 0, 0, 1 / worldScale, -pngRect.x / worldScale, -pngRect.y / worldScale)
-
-      // draw hull doors
-      const hullDoorPolys = doors.flatMap((x) => (x.meta.hull ? x.poly : []));
-      drawPolygons(ctxt, hullDoorPolys, ["white", "#000", 0.05]);
-      // 🚧 debug draw rooms
-      // drawPolygons(ctxt, rooms, ["rgba(255, 0, 0, 0.2)", "green", 0]);
-      // 🚧 debug draw navPolys
-      drawPolygons(ctxt, navPolys, ["rgba(0, 0, 0, 0.08)", "rgba(0, 0, 0, 0)", 1]);
-
-      ctxt.resetTransform();
     },
   }));
 
-  React.useEffect(() => {
-    keys(api.gmClass).forEach((gmKey) => {
-      // textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
-      textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.png.webp`).then((tex) => {
-        state.drawGeomorph(gmKey, tex.source.data);
-        api.gmClass[gmKey].tex.needsUpdate = true;
-        update();
+  useQuery({
+    queryKey: [FLOOR_IMAGES_QUERY_KEY, api.layoutsHash, api.mapsHash],
+    queryFn() {
+      keys(api.gmClass).forEach((gmKey) => {
+        // textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
+        textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.png.webp`).then((tex) => {
+          state.drawGeomorph(gmKey, tex.source.data);
+          api.gmClass[gmKey].tex.needsUpdate = true;
+          update();
+        });
       });
-    });
-  }, [api.geomorphs, api.mapsHash]);
+      return null;
+    },
+  });
 
   const update = useUpdate();
 
