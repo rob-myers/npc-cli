@@ -35,6 +35,7 @@ const assetsFilename = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsFilename = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
+// 🚧 dependency graph
 
 (function main() {
   const prev = fs.existsSync(assetsFilename)

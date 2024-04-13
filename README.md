@@ -2,6 +2,16 @@
 
 Towards believable NPCs.
 
+```sh
+# full dev env e.g. auto-update assets/images
+npm run dev
+yarn dev
+
+# manual dev env
+npm run develop
+yarn develop
+```
+
 ## Gotchas
 
 Configure Giscus using https://giscus.app/.

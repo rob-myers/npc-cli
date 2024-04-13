@@ -30,9 +30,10 @@
 
 - ✅ can show origNavPoly via floor image
 - ✅ remove origNavPoly from geomorphs.json
-- door over hull doors in floors images (avoid debug flicker)
+- ✅ draw doors in floor images (e.g. over hull door debug flicker)
 
 - 🚧 towards recursive non-hull symbols
+  - 🚧 base-graph stratify (tested)
   - stratified dependency graph
 
 - raised images: via spritesheet
@@ -55,7 +56,7 @@
 
 - closed doors have filtered doorPolys
 - can make agent look at point
-- migrate roomGraph per geomorph
+- ✅ migrate roomGraph per geomorph
 - migrate gmRoomGraph
 - migrate fast gmRoomId lookup via image pixels
 - prevent agent going through door
@@ -70,6 +71,7 @@
   - ❌ tune `cs` so most doors can be locked
   - can use areas to preserve door polygons
 
+- optionally increase floor image resolution e.g. 2x
 - avoid recomputing npcs/obstacles in TestNpcs
 - fix open/close non-aligning hull doors
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
