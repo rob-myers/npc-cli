@@ -190,7 +190,7 @@ class GeomorphService {
   /**
    * @param {Geom.Poly[]} navPolyWithDoors 
    * @param {Connector[]} doors 
-   * @returns {Pick<Geomorph.Layout, 'navPolys' | 'navDecomp' | 'navDoorwaysOffset'>}
+   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navDoorwaysOffset'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     const navDoorways = doors.map((connector) => connector.computeDoorway());
@@ -213,7 +213,6 @@ class GeomorphService {
       navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
     });
     return {
-      navPolys: navPolyWithDoors,
       navDecomp,
       navDoorwaysOffset,
     };
@@ -256,7 +255,6 @@ class GeomorphService {
       doors: json.doors.map(Connector.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
-      navPolys: json.navPolys.map(Poly.from),
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
       navDoorwaysOffset: json.navDoorwaysOffset,
     };
@@ -819,7 +817,6 @@ class GeomorphService {
       doors: layout.doors.map((x) => x.json),
       rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      navPolys: layout.navPolys.map((x) => x.geoJson),
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
       navDoorwaysOffset: layout.navDoorwaysOffset,
     };

@@ -11,6 +11,7 @@ import { worldScale } from '../npc-cli/service/const';
 import { warn } from '../npc-cli/service/generic';
 import { drawPolygons } from '../npc-cli/service/dom';
 import { geomorphService } from '../npc-cli/service/geomorph';
+import { Poly } from '../npc-cli/geom';
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
@@ -21,8 +22,10 @@ const assetsJson = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsJson = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 /** e.g. 1.5m --> 60sgu (Starship Geomorph Units) */
 const worldToSgu = 1 / worldScale;
-
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
+
+const debugNavPoly = true;
+const debugNavTris = false;
 
 (async function main() {
   fs.mkdirSync(assets2dDir, { recursive: true }); // ensure output directory
@@ -34,7 +37,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   const pngToProm = /** @type {{ [pngPath: string]: Promise<any> }} */ ({});
 
   for (const layout of layouts) {
-    const { key: gmKey, pngRect, walls, navPolys, hullPoly } = layout;
+    const { key: gmKey, pngRect, walls, navDecomp, hullPoly } = layout;
 
     const pngPath = path.resolve(assets2dDir, `${gmKey}.floor.png`);
     
@@ -46,7 +49,11 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     ct.transform(worldToSgu, 0, 0, worldToSgu, -worldToSgu * pngRect.x, -worldToSgu * pngRect.y);
 
     drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['white', null]);
-    drawPolygons(ct, navPolys, ['rgba(100, 100, 200, 0.4)', null]);
+
+    (debugNavPoly || debugNavTris) && drawPolygons(ct, navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i]))), [
+      debugNavPoly ? 'rgba(100, 100, 200, 0.4)' : null,
+      debugNavTris ? 'rgba(0, 0, 0, 0.3)' : null, 0.02,
+    ]);
     // drawPolygons(ct, walls, ['black', null]);
     drawPolygons(ct, walls, ['black', 'black', 0.04]);
     // 🚧

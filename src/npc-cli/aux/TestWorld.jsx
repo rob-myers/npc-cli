@@ -224,7 +224,7 @@ export default function TestWorld(props) {
             {state.crowd && <>
               <TestNpcs/>
               <TestDebug
-                showNavMesh
+                // showNavMesh
                 // showOrigNavPoly
               />
             </>}

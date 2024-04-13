@@ -18,7 +18,7 @@
 - integrate TestCharacter into TestWorld
 
 - ✅ start generating geomorphs *.webp ourselves
-- 🚧 floor images: one per geomorph
+- ✅ floor images: one per geomorph (first attempt)
   - ✅ fix cwebp.js
   - ❌ replace nodemon with nodemon.js
   - ✅ check file timestamps in assets.js
@@ -27,7 +27,12 @@
     - ✅ floor
     - ✅ navPoly
     - ✅ walls
-- towards recursive non-hull symbols
+
+- ✅ can show origNavPoly via floor image
+- ✅ remove origNavPoly from geomorphs.json
+- door over hull doors in floors images (avoid debug flicker)
+
+- 🚧 towards recursive non-hull symbols
   - stratified dependency graph
 
 - raised images: via spritesheet
