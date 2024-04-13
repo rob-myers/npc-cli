@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { Vect } from "../geom/vect";
-import { deepClone, flatten, removeFirst } from "../service/generic";
+import { deepClone, flatten, removeFirst, warn } from "../service/generic";
 
 /**
  * @template {Graph.BaseNode} [Node=Graph.BaseNode]
@@ -295,9 +295,9 @@ export class BaseGraph {
   }
 
   /**
-   * We assume graph is currently empty.
-   * We assume serializable node has same type as graph node.
-   * If not, we'll add a custom method e.g. `from`.
+   * - We assume graph is currently empty.
+   * - We assume serializable node has same type as graph node.
+   * - If not, we should add a custom method e.g. `from`.
    * @param {Graph.GraphJson<Node, EdgeOpts>} json
    * @returns {this}
    */
@@ -424,6 +424,29 @@ export class BaseGraph {
     this.edgesArray = [];
     this.idToNode.clear();
     this.idToEdge.clear();
+  }
+
+  /**
+   * @param {boolean} [throwOnLoop] 
+   * @returns {Node[][]}
+   */
+  stratify(throwOnLoop = false) {
+    const nodes = this.nodesArray;
+    const seen = /** @type {Set<Node>} */ (new Set());
+    const output = /** @type {Node[][]} */ ([]);
+    let frontier = /** @type {Node[]} */ ([]);
+    
+    const onAlreadySeen = /** @type {(x: Node) => void} */ (throwOnLoop
+      ? (x) => { throw Error(`stratify: already seen node: ${x.id}`) }
+      : (x) => warn(`stratify: ignoring already seen node: ${x.id}`)
+    );
+
+    while ((frontier = nodes.filter(x => (
+      this.getPreds(x).every(y => frontier.includes(y))) && (
+        seen.has(x) ? (onAlreadySeen(x), false) : (seen.add(x), true)
+    ))).length && output.push(frontier));
+
+    return output;
   }
 
 }

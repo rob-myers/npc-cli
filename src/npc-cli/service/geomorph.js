@@ -123,6 +123,7 @@ class GeomorphService {
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
     const doors = hullSym.doors.map((x) => new Connector(x));
+    const windows = hullSym.windows.map((x) => new Connector(x));
     const uncutWalls = hullSym.walls.slice();
     const obstacles = hullSym.obstacles.slice();
     const decor = hullSym.decor.slice();
@@ -162,10 +163,12 @@ class GeomorphService {
     return {
       key: gmKey,
       pngRect: hullSym.pngRect.clone(),
-      doors,
       hullPoly,
+      hullDoors: doors.filter(x => x.meta.hull),
+      doors,
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
+      windows,
       ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
     };
   }
@@ -248,11 +251,14 @@ class GeomorphService {
    * @returns {Geomorph.Layout}
    */
   deserializeLayout(json) {
+    const doors = json.doors.map(Connector.from);
     return {
       key: json.key,
       pngRect: Rect.fromJson(json.pngRect),
       hullPoly: json.hullPoly.map(Poly.from),
-      doors: json.doors.map(Connector.from),
+      hullDoors: doors.filter(x => x.meta.hull),
+      doors,
+      windows: json.windows.map(Connector.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
@@ -814,7 +820,9 @@ class GeomorphService {
       key: layout.key,
       pngRect: layout.pngRect,
       hullPoly: layout.hullPoly.map(x => x.geoJson),
+      hullDoors: layout.hullDoors.map((x) => x.json),
       doors: layout.doors.map((x) => x.json),
+      windows: layout.windows.map((x) => x.json),
       rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },

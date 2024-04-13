@@ -155,7 +155,9 @@ declare namespace Geomorph {
 
     hullPoly: P[];
     rooms: WithMeta<P>[];
+    hullDoors: C[];
     doors: C[];
+    windows: C[];
     walls: WithMeta<P>[];
 
     navDecomp: Geom.TriangulationGeneric<V>;
