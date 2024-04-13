@@ -39,7 +39,8 @@ export default function TestGeomorphs(props) {
 
   React.useEffect(() => {
     keys(api.gmClass).forEach((gmKey) => {
-      textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
+      // textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
+      textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.png.webp`).then((tex) => {
         state.drawGeomorph(gmKey, tex.source.data);
         api.gmClass[gmKey].tex.needsUpdate = true;
         update();
