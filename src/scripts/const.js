@@ -8,6 +8,6 @@ export const DEV_EXPRESS_WEBSOCKET_PORT = 8012;
  * - Parsed JSON stored at `static/assets/${ASSETS_META_JSON_FILENAME}`
  * - Also a react-query `queryKey`.
  */
-export const ASSETS_META_JSON_FILENAME = "assets-meta.json";
+export const ASSETS_JSON_FILENAME = "assets.json";
 
 export const GEOMORPHS_JSON_FILENAME = "geomorphs.json";

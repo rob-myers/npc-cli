@@ -11,7 +11,7 @@ import {
 } from "src/npc-cli/service/generic";
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
 import {
-  ASSETS_META_JSON_FILENAME,
+  ASSETS_JSON_FILENAME,
   DEV_EXPRESS_WEBSOCKET_PORT,
   GEOMORPHS_JSON_FILENAME,
 } from "src/scripts/const";
@@ -110,7 +110,7 @@ const useStore = create<State>()(
               predicate({ queryKey: [queryKey] }) {
                 return (
                   GEOMORPHS_JSON_FILENAME === queryKey ||
-                  ASSETS_META_JSON_FILENAME.includes === queryKey
+                  ASSETS_JSON_FILENAME.includes === queryKey
                 );
               },
             });

@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { createCanvas, loadImage } from 'canvas';
 
-import { ASSETS_META_JSON_FILENAME, GEOMORPHS_JSON_FILENAME } from './const';
+import { ASSETS_JSON_FILENAME, GEOMORPHS_JSON_FILENAME } from './const';
 import { saveCanvasAsFile } from './service';
 import { worldScale } from '../npc-cli/service/const'; // sucrase-node needs relative paths
 import { geomorphService } from '../npc-cli/service/geomorph';
@@ -20,7 +20,7 @@ const outputDir = path.resolve(staticAssetsDir, "2d");
   fs.mkdirSync(outputDir, { recursive: true });
 
   const assets = geomorphService.deserializeAssets(
-    JSON.parse(fs.readFileSync(path.resolve(staticAssetsDir, ASSETS_META_JSON_FILENAME)).toString())
+    JSON.parse(fs.readFileSync(path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME)).toString())
   );
   const geomorphs = geomorphService.deserializeGeomorphs(
     JSON.parse(fs.readFileSync(path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME)).toString())

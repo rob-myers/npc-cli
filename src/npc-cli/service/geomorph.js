@@ -822,8 +822,7 @@ class GeomorphService {
   }
 
   /**
-   * Create serializable data associated to a static/assets/symbol/{symbol},
-   * e.g. to store inside assets-meta.json.
+   * Create serializable data associated to a static/assets/symbol/{symbol}.
    * @param {Geomorph.ParsedSymbol} parsed
    * @returns {Geomorph.ParsedSymbolJson}
    */

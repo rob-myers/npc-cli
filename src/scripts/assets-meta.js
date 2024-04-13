@@ -1,7 +1,9 @@
 /// <reference path="./deps.d.ts"/>
 
 /**
- * Generates assets-meta.json and geomorphs.json.
+ * Generates:
+ * - assets.json
+ * - geomorphs.json
  * 
  * Usage:
  * ```sh
@@ -15,7 +17,7 @@ import path from "path";
 import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
-import { ASSETS_META_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
 import { hashText, info, keyedItemsToLookup, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 
@@ -25,7 +27,7 @@ const symbolsDir = path.resolve(mediaDir, "symbol");
 const mapsDir = path.resolve(mediaDir, "map");
 
 /** Assets metadata JSON output */
-const assetsMetaFilename = path.resolve(staticAssetsDir, ASSETS_META_JSON_FILENAME);
+const assetsMetaFilename = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 /** Geomorphs layout JSON output */
 const geomorphsFilename = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 
