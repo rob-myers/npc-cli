@@ -35,9 +35,9 @@ const assets2dDir = path.resolve(staticAssetsDir, "2d");
   for (const { key: gmKey, pngRect } of layouts) {
     // e.g. 1.5m --> 60sgu (Starship Geomorph Units)
     pngRect.scale(1 / worldScale);
-
     canvas.width = pngRect.width;
     canvas.height = pngRect.height;
+
     // 🚧
     ct.fillStyle = "red";
     ct.fillRect(0, 0, canvas.width, canvas.height);
@@ -51,6 +51,6 @@ const assets2dDir = path.resolve(staticAssetsDir, "2d");
   }
 
   await Promise.all(Object.values(pngToProm));
-  await runYarnScript('cwebp-fast', JSON.stringify({ files: Object.keys(pngToProm) }), '--webp=50', '--quality=90');
+  await runYarnScript('cwebp-fast', JSON.stringify({ files: Object.keys(pngToProm) }), '--quality=50');
 
 })();
