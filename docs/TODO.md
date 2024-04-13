@@ -32,12 +32,12 @@
   - ❌ replace nodemon with nodemon.js
   - ✅ check file timestamps in assets.js
   - ✅ avoid recomputing symbols in assets.js
-  - images script generates simplified floors
+  - 🚧 images script generates simplified floors
 - towards recursive non-hull symbols
   - stratified dependency graph
 
 - raised images: via spritesheet
-- show tables via raised "floor texture"
+- ❌ show tables via raised "floor texture"
 
 - ✅ stop using prettier i.e. use eslint instead
   - prettier ignore everything
@@ -54,6 +54,7 @@
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
+- closed doors have filtered doorPolys
 - can make agent look at point
 - migrate roomGraph per geomorph
 - migrate gmRoomGraph
