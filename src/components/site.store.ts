@@ -114,10 +114,15 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
 
       wsClient.onopen = (e) => {
         info(`${url} connected`);
+        wsAttempts = 0;
       };
       wsClient.onclose = (e) => {
         info(`${url} closed: reconnecting...`);
-        setTimeout(() => get().api.connectDevEventsWebsocket(), 300);
+        if (++wsAttempts <= 5) {
+          setTimeout(() => get().api.connectDevEventsWebsocket(), (2 ** wsAttempts) * 300);
+        } else {
+          info(`${url} closed: gave up reconnecting`);
+        }
       };
     },
 
@@ -229,6 +234,8 @@ interface GiscusDiscussionMeta {
   /** e.g. `"https://github.com/rob-myers/the-last-redoubt/discussions/5"` */
   url: string;
 }
+
+let wsAttempts = 0;
 
 const useSite = Object.assign(useStore, { api: useStore.getState().api });
 export default useSite;
