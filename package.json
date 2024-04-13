@@ -21,7 +21,7 @@
     "postinstall": "patch-package",
     "types": "tsc --noEmit",
     "ts-script": "ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
-    "assets": "npm run ts-script src/scripts/assets",
+    "assets": "npm run ts-script src/scripts/assets -- --all",
     "assets-fast": "sucrase-node src/scripts/assets",
     "images": "npm run ts-script src/scripts/images",
     "images-fast": "sucrase-node src/scripts/images",

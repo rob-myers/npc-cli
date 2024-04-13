@@ -29,7 +29,9 @@
 - ✅ start generating geomorphs *.webp ourselves
 - 🚧 floor images: one per geomorph
   - ✅ fix cwebp.js
-  - replace nodemon with nodemon.js
+  - ❌ replace nodemon with nodemon.js
+  - ✅ check file timestamps in assets.js
+  - ✅ avoid recomputing symbols in assets.js
   - images script generates simplified floors
 - towards recursive non-hull symbols
   - stratified dependency graph
