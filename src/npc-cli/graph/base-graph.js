@@ -59,6 +59,22 @@ export class BaseGraph {
   }
 
   /**
+   * Get co-reachable nodes in breadth-first manner.
+   * @param {Node} node
+   * @returns {Node[]}
+   */
+  getCoReachableNodes(node) {
+    const coReachable = new Set([node]);
+    let [count, frontier] = [0, [node]];
+    while (coReachable.size > count) {
+      count = coReachable.size;
+      frontier = flatten(frontier.map((node) => this.getPreds(node)));
+      frontier.forEach((node) => coReachable.add(node));
+    }
+    return Array.from(coReachable.values());
+  }
+
+  /**
    * Get reachable nodes in breadth-first manner.
    * @param {Node} node
    * @returns {Node[]}
