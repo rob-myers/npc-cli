@@ -30,19 +30,19 @@ const mediaDir = path.resolve(__dirname, "../../media");
 const symbolsDir = path.resolve(mediaDir, "symbol");
 const mapsDir = path.resolve(mediaDir, "map");
 /** Assets metadata JSON output */
-const assetsMetaFilename = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+const assetsFilename = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 /** Geomorphs layout JSON output */
 const geomorphsFilename = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
 
 (function main() {
-  const prev = fs.existsSync(assetsMetaFilename)
-    ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(assetsMetaFilename).toString()))
+  const prev = fs.existsSync(assetsFilename)
+    ? /** @type {Geomorph.AssetsJson} */ (JSON.parse(fs.readFileSync(assetsFilename).toString()))
     : null;
   
   const schemaChanged = !!opts.all || (prev
-    ? [assetsMetaFilename, geomorphsFilename].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
+    ? [assetsFilename, geomorphsFilename].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
     : true);
 
   // main computation
@@ -58,11 +58,11 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   /** @type {Geomorph.AssetsJson} */
   const assetsJson = { meta, symbols, maps };
   const assets = geomorphService.deserializeAssets(assetsJson);
-  fs.writeFileSync(assetsMetaFilename, stringify(assetsJson));
+  fs.writeFileSync(assetsFilename, stringify(assetsJson));
   
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>
     geomorphService.computeLayout(gmKey, assets)
-  ))
+  ));
 
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
