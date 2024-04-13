@@ -7,8 +7,8 @@
  * 
  * Usage:
  * ```sh
- * npm run assets-meta
- * yarn assets-meta
+ * npm run assets
+ * yarn assets
  * ```
  */
 
