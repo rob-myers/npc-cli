@@ -30,7 +30,7 @@ export default function Main(props: React.PropsWithChildren) {
 }
 
 const mainCss = css`
-  /* width: 100%; */
+  width: 100% !important;
   margin: 0 auto;
   
   @media (min-width: ${afterBreakpoint}) {
