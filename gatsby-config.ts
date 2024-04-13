@@ -31,6 +31,7 @@ const config: GatsbyConfig = {
         modules: [`three`],
       },
     },
+    "gatsby-plugin-postcss",
   ],
   flags: {
     DEV_SSR: true,

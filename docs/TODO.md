@@ -17,21 +17,6 @@
 
 - integrate TestCharacter into TestWorld
 
-- ✅ start generating geomorphs *.webp ourselves
-- ✅ floor images: one per geomorph (first attempt)
-  - ✅ fix cwebp.js
-  - ❌ replace nodemon with nodemon.js
-  - ✅ check file timestamps in assets.js
-  - ✅ avoid recomputing symbols in assets.js
-  - ✅ images script generates simplified floors
-    - ✅ floor
-    - ✅ navPoly
-    - ✅ walls
-
-- ✅ can show origNavPoly via floor image
-- ✅ remove origNavPoly from geomorphs.json
-- ✅ draw doors in floor images (e.g. over hull door debug flicker)
-
 - 🚧 towards recursive non-hull symbols
   - 🚧 base-graph stratify (tested)
   - stratified dependency graph
@@ -43,13 +28,10 @@
   - prettier ignore everything
 - start using eslint with auto-format if possible
 
-- Player view could be top-down with high walls
-  - try fixing door height with black wall above
-
-- migrate gm.roomGraph and gmRoomGraph
-
+- ✅ install tailwind
+- ✅ use tailwind/typography in mdx
+- 🚧 improve layout width
 - redo nav toggle
-  - install tailwind
 
 - show toast while navmesh loading
   - also show results e.g. number of tiles
@@ -71,6 +53,9 @@
   - ❌ tune `cs` so most doors can be locked
   - can use areas to preserve door polygons
 
+- scripts assets/images trigger different useQuery
+- Player view could be top-down with high walls
+  - try fixing door height with black wall above
 - optionally increase floor image resolution e.g. 2x
 - avoid recomputing npcs/obstacles in TestNpcs
 - fix open/close non-aligning hull doors
@@ -708,3 +693,18 @@ React.useEffect(() => {
   - ✅ mark door triangles for recast
   - ✅ working for a single geomorph
   - ✅ working for transformed geomorphs
+
+- ✅ start generating geomorphs *.webp ourselves
+- ✅ floor images: one per geomorph (first attempt)
+  - ✅ fix cwebp.js
+  - ❌ replace nodemon with nodemon.js
+  - ✅ check file timestamps in assets.js
+  - ✅ avoid recomputing symbols in assets.js
+  - ✅ images script generates simplified floors
+    - ✅ floor
+    - ✅ navPoly
+    - ✅ walls
+
+- ✅ can show origNavPoly via floor image
+- ✅ remove origNavPoly from geomorphs.json
+- ✅ draw doors in floor images (e.g. over hull door debug flicker)

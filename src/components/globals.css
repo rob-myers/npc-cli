@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html {
   overscroll-behavior: none;
 }
@@ -20,34 +24,4 @@ body {
     "Helvetica Neue", sans-serif;
   font-weight: 300;
   letter-spacing: 0.5px;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-  letter-spacing: 4px;
-  font-weight: 300;
-}
-
-h1 {
-  font-size: 1.8rem;
-}
-
-aside {
-  margin: 0;
-}
-button {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 1rem;
-}
-figure {
-  margin: 0;
-}
-
-* {
-  box-sizing: border-box;
 }
