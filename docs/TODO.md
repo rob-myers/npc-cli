@@ -26,9 +26,14 @@
 
 - integrate TestCharacter into TestWorld
 
-- 🚧 start generating geomorphs *.webp ourselves
+- ✅ start generating geomorphs *.webp ourselves
 - 🚧 floor images: one per geomorph
-  - 🚧 migrate simplified layout PNG script
+  - ✅ fix cwebp.js
+  - replace nodemon with nodemon.js
+  - images script generates simplified floors
+- towards recursive non-hull symbols
+  - stratified dependency graph
+
 - raised images: via spritesheet
 - show tables via raised "floor texture"
 
