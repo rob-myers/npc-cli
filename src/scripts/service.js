@@ -25,11 +25,13 @@ export async function runYarnScript(scriptName, ...args) {
       proc.stdout.on('data', (data) => info(scriptName, data.toString()));
       // stderr needn't contain error messages
       proc.stderr.on('data', (data) => info(scriptName, data.toString()));
-      proc.stdout.on('close', () => resolve());
+      // proc.stdout.on('close', () => resolve());
       proc.on('error', (e) => reject(e));
       proc.on('exit', (errorCode) => {
         if (typeof errorCode === 'number' && errorCode !== 0) {
           reject({ errorCode });
+        } else {
+          resolve();
         }
       });
   }));
