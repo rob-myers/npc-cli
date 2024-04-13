@@ -33,11 +33,9 @@ const debugNavTris = false;
   const assets = geomorphService.deserializeAssets(JSON.parse(fs.readFileSync(assetsJson).toString()));
   const geomorphs = geomorphService.deserializeGeomorphs(JSON.parse(fs.readFileSync(geomorphsJson).toString()));
   const layouts = Object.values(geomorphs.layout);
-
   const pngToProm = /** @type {{ [pngPath: string]: Promise<any> }} */ ({});
 
-  for (const layout of layouts) {
-    const { key: gmKey, pngRect, walls, navDecomp, hullPoly } = layout;
+  for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of layouts) {
 
     const pngPath = path.resolve(assets2dDir, `${gmKey}.floor.png`);
     
@@ -58,12 +56,15 @@ const debugNavTris = false;
     drawPolygons(ct, walls, ['black', 'black', 0.04]);
     // 🚧
 
-    ct.resetTransform();
-
     // debug
     ct.globalAlpha = 0.4;
     const debugImg = await loadImage(fs.readFileSync(path.resolve(staticAssetsDir, 'debug', `${gmKey}.png`)))
-    ct.drawImage(debugImg, 0, 0);
+    ct.drawImage(debugImg, 0, 0, debugImg.width, debugImg.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
+    ct.globalAlpha = 1;
+
+    drawPolygons(ct, doors.map((x) => x.poly), ["white", "black", 0.05]);
+
+    ct.resetTransform();
 
     pngToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
   }
@@ -72,7 +73,7 @@ const debugNavTris = false;
 
   await runYarnScript('cwebp-fast', JSON.stringify({ files: Object.keys(pngToProm) }), '--quality=50');
 
-  fetch(sendDevEventUrl, {
+  await fetch(sendDevEventUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({ key: "update-browser" }), // 🚧 specific event for images
