@@ -48,10 +48,7 @@ const debugNavTris = false;
 
     drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['white', null]);
 
-    (debugNavPoly || debugNavTris) && drawPolygons(ct, navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i]))), [
-      debugNavPoly ? 'rgba(100, 100, 200, 0.4)' : null,
-      debugNavTris ? 'rgba(0, 0, 0, 0.3)' : null, 0.02,
-    ]);
+    (debugNavPoly || debugNavTris) && debugDrawNav(ct, navDecomp);
     // drawPolygons(ct, walls, ['black', null]);
     drawPolygons(ct, walls, ['black', 'black', 0.04]);
     // 🚧
@@ -82,3 +79,14 @@ const debugNavTris = false;
   });
 
 })();
+
+/**
+ * @param {import('canvas').CanvasRenderingContext2D} ct
+ * @param {Geomorph.Layout['navDecomp']} navDecomp
+ */
+function debugDrawNav(ct, navDecomp) {
+  const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
+  const navPoly = Poly.union(triangles);
+  debugNavPoly && drawPolygons(ct, navPoly, ['rgba(100, 100, 200, 0.4)', null]);
+  debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
+}
