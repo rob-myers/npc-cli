@@ -26,23 +26,23 @@ const assets2dDir = path.resolve(staticAssetsDir, "2d");
     JSON.parse(fs.readFileSync(path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME)).toString())
   );
 
-  const canvas = createCanvas(0, 0);
-  const ct = canvas.getContext('2d');
-
+  
   const layouts = Object.values(geomorphs.layout);
   const pngToProm = /** @type {{ [pngFilename: string]: Promise<any> }} */ ({});
-
+  
   for (const { key: gmKey, pngRect } of layouts) {
+    const canvas = createCanvas(0, 0);
+    const ct = canvas.getContext('2d');
     // e.g. 1.5m --> 60sgu (Starship Geomorph Units)
     pngRect.scale(1 / worldScale);
     canvas.width = pngRect.width;
     canvas.height = pngRect.height;
+    
 
     // 🚧
-    ct.fillStyle = "red";
-    ct.fillRect(0, 0, canvas.width, canvas.height);
-    ct.fill();
-
+    // ct.fillStyle = "red";
+    // ct.fillRect(0, 0, canvas.width, canvas.height);
+    // ct.fill();
     const debugImg = await loadImage(fs.readFileSync(path.resolve(staticAssetsDir, 'debug', `${gmKey}.png`)))
     ct.drawImage(debugImg, 0, 0);
 
