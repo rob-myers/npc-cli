@@ -4,17 +4,6 @@ import stream from 'stream/promises';
 import { info } from '../npc-cli/service/generic';
 
 /**
- * @param {import('canvas').Canvas} canvas 
- * @param {string} outputPath 
- */
-export async function saveCanvasAsFile(canvas, outputPath) {
-  return stream.pipeline(
-    canvas.createPNGStream(), 
-    fs.createWriteStream(outputPath),
-  );
-}
-
-/**
  * Options can be provided as single args like `--quality=75`.
  * @param {string} scriptName
  * @param {string[]} args
@@ -36,3 +25,26 @@ export async function runYarnScript(scriptName, ...args) {
       });
   }));
 }
+
+/**
+ * @param {import('canvas').Canvas} canvas 
+ * @param {string} outputPath 
+ */
+export async function saveCanvasAsFile(canvas, outputPath) {
+  return stream.pipeline(
+    canvas.createPNGStream(), 
+    fs.createWriteStream(outputPath),
+  );
+}
+
+/**
+ * @typedef FileMeta
+ * @property {string} srcName
+ * @property {number} id Numeric identifier from Starship Geomorphs 2.0
+ * @property {number[]} ids Sometimes a range is given
+ * @property {string} [extendedId]
+ * @property {[number, number]} gridDim Dimension in grid squares of Starship Geomorphs 2.0
+ * @property {string} dstName
+ * @property {string[]} is
+ * @property {string[]} has
+ */
