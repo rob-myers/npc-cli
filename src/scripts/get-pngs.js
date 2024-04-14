@@ -13,13 +13,12 @@ import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilen
  * 
  * Usage:
  * ```sh
- * yarn get-pngs {input_type} {src_folder} {dst_folder}
- * yarn get-pngs-fast {input_type} {src_folder} {dst_folder}
- * # where:
  * # {input_type} in ['root', 'geomorph', 'symbol', 'small-craft']
  * # {src_folder} relative to {repo_root}/media
  * # {src_folder} exists
  * # {dst_folder} relative to {repo_root}/media/extracted
+ * yarn get-pngs {input_type} {src_folder} {dst_folder}
+ * yarn get-pngs-fast {input_type} {src_folder} {dst_folder}
  * ```
  * 
  * Examples:
@@ -28,6 +27,7 @@ import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilen
  * yarn get-pngs geomorph 'Geomorphs/100x50 Edge' geomorph-edge
  * yarn get-pngs symbol Symbols/Bridge symbol-bridge
  * yarn get-pngs small-craft 'Small Craft' symbol-small-craft
+ * yarn get-pngs symbol 'Symbols/Furniture, Consoles, & Equipment' symbol-furniture-consoles-equipment
  * ```
  */
 const [,, inputType, srcFolder, dstFolder] = process.argv;
