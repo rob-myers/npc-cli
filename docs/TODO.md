@@ -30,8 +30,10 @@
 
 - ✅ install tailwind
 - ✅ use tailwind/typography in mdx
-- 🚧 improve layout width
-- redo nav toggle
+- ✅ css fixes
+  - ✅ improve layout width
+  - ✅ fix header css change
+- ✅ adjust nav toggle
 
 - show toast while navmesh loading
   - also show results e.g. number of tiles

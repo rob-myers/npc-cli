@@ -65,6 +65,7 @@ export default function Nav() {
   );
 }
 
+// See parent component for more CSS
 const navCss = css`
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
@@ -81,6 +82,7 @@ const navCss = css`
     height: 1.5rem;
     transition: margin-top 300ms;
     margin-top: ${nav.titleMarginTop};
+    filter: invert(1);
   }
 
   a.${menuClasses.button}, span.${menuClasses.button} {
@@ -114,6 +116,7 @@ const navCss = css`
       display: none;
     }
   }
+
   &:not(.${sidebarClasses.collapsed}) {
     span.${menuClasses.icon} {
       margin-right: 24px;

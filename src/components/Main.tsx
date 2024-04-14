@@ -12,15 +12,18 @@ export default function Main(props: React.PropsWithChildren) {
   const overlayOpen = site.mainOverlay || (site.navOpen && isSmallView());
 
   return (
-    <section className={cx(mainCss, "prose")} data-testid="main">
-      <header className={mainTitleCss} data-testid="main-title">
-        NPC CLI
-      </header>
-
+    <section
+      className={cx(mainCss, "prose max-w-screen-lg")}
+      data-testid="main"
+    >
       <div
         className={cx(overlayCss, { overlayOpen })}
         onClick={() => useSite.api.toggleNav()}
       />
+
+      <header className={mainTitleCss} data-testid="main-title">
+        NPC CLI
+      </header>
 
       <main>
         {props.children}
@@ -30,19 +33,18 @@ export default function Main(props: React.PropsWithChildren) {
 }
 
 const mainCss = css`
-  width: 100% !important;
-  margin: 0 auto;
-  
   @media (min-width: ${afterBreakpoint}) {
     white-space: nowrap;
     overflow-x: scroll;
     > main {
       max-width: 1024px;
     }
+    margin: 0 auto;
+    padding: 0 32px;
   }
   @media (max-width: ${breakpoint}) {
     overflow: scroll;
-    width: initial;
+    padding: 0 12px;
   }
 `;
 
