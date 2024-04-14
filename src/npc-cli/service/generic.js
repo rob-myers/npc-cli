@@ -527,6 +527,11 @@ export const debug = (function () {
   return Function.prototype.bind.call(console.debug, console, "\x1b[34mDEBUG\x1b[0m");
 })();
 
+/** @param {string} text */
+export function yellow(text) {
+  return `\x1b[33m${text}\x1b[0m`;
+}
+
 /**
  * https://stackoverflow.com/a/26078207/2917822
  * @type {(...args: any[]) => void}

@@ -17,9 +17,21 @@
 
 - integrate TestCharacter into TestWorld
 
+- 🚧 script get-pngs extracts starship symbols from source
+  - ✅ extract from media/Symbols
+  - extract from media/Geomorphs/
+  - extract from media/Symbols/
+  - extract from media/Small Craft
+
+- new source material from Robert Pearce?
+  - https://drive.google.com/drive/folders/1apcZgZKXV5qOxNtQxtnQG0QNpkLzor-f
+
 - 🚧 towards recursive non-hull symbols
   - 🚧 base-graph stratify (tested)
+  - 🚧 non-hull symbols have sub-symbols
+  - 🚧 non-hull sub-symbols are parsed
   - stratified dependency graph
+
 
 - raised images: via spritesheet
 - ❌ show tables via raised "floor texture"
