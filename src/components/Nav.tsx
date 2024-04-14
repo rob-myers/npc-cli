@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { breakpoint, nav, view } from "../const";
+import { nav, view } from "../const";
 import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo, faChevronRight } from "./Icon";
@@ -105,6 +105,9 @@ const navCss = css`
     .${menuClasses.SubMenuExpandIcon} {
       display: none;
     }
+    button.toggle {
+      outline: 2px solid #ccc;
+    }
   }
 
   &:not(.${sidebarClasses.collapsed}) {
@@ -171,9 +174,4 @@ const toggleCss = css`
   align-items: center;
   cursor: pointer;
   filter: invert(1);
-
-  @media (max-width: ${breakpoint}) {
-    outline: 2px solid #ccc;
-  }
-
 `;
