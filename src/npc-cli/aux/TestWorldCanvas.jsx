@@ -219,6 +219,7 @@ const contextMenuCss = css`
   padding: 8px;
 
   select {
+    color: black;
     max-width: 100px;
     margin: 8px 0;
   }
