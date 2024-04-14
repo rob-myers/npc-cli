@@ -16,10 +16,6 @@ export default function Main(props: React.PropsWithChildren) {
       className={cx(mainCss, "prose max-w-screen-lg")}
       data-testid="main"
     >
-      <div
-        className={cx(overlayCss, { overlayOpen })}
-        onClick={() => useSite.api.toggleNav()}
-      />
 
       <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
@@ -28,6 +24,11 @@ export default function Main(props: React.PropsWithChildren) {
       <main>
         {props.children}
       </main>
+
+      <div
+        className={cx(overlayCss, { overlayOpen })}
+        onClick={() => useSite.api.toggleNav()}
+      />
     </section>
   );
 }
@@ -47,35 +48,39 @@ const mainCss = css`
 `;
 
 const mainHeaderCss = css`
+  position: sticky;
+  top: 0;
+
   display: flex;
   justify-content: right;
   align-items: center;
   height: 4rem;
-  margin-bottom: 2rem;
-
-  color: #444;
-  border-bottom: 1px solid #aaa;
   
+  color: #444;
+  background-color: #fff;
+  border-bottom: 1px solid rgba(200, 200, 200, 0.5);
   font-size: 1.2rem;
   letter-spacing: 1.5rem;
-
+  
   @media (min-width: ${afterBreakpoint}) {
     justify-content: left;
+    margin-bottom: 2.5rem;
   }
   @media (max-width: ${breakpoint}) {
     justify-content: right;
+    margin-bottom: 2rem;
   }
 `;
 
 const overlayCss = css`
   -webkit-tap-highlight-color: transparent;
   position: absolute;
+  /* z-index: 1; */
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
   top: 0;
   width: 100%;
   height: 100dvh;
-  z-index: 0;
 
   pointer-events: none;
   transition: opacity 300ms;

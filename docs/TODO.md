@@ -34,6 +34,8 @@
   - ✅ improve layout width
   - ✅ fix header css change
 - ✅ adjust nav toggle
+- ✅ header `NPC CLI` -> top bar
+  - FontAwesomeIcon beat was visible over position sticky
 
 - show toast while navmesh loading
   - also show results e.g. number of tiles
@@ -46,14 +48,6 @@
 - prevent agent going through door
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
-
-- 🚧 recast-detour strategy
-  - 😀 keep using recast-navigation-js
-  - in parallel, start going through https://github.com/recastnavigation/recastnavigation
-    - to understand what recast outputs
-    - to understand what detour inputs
-  - ❌ tune `cs` so most doors can be locked
-  - can use areas to preserve door polygons
 
 - scripts assets/images trigger different useQuery
 - Player view could be top-down with high walls
@@ -111,8 +105,12 @@
 - ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
   - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
   - ℹ️ seen in parseSymbol of hull symbol
-- react-three-fiber onPointerUp not updating when instance transformed
-  - possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
+- ❌ react-three-fiber onPointerUp not updating when instance transformed
+  - ❌ possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
+  - ℹ️ fixed by updating sphere bounds
+- in parallel, start going through https://github.com/recastnavigation/recastnavigation
+  - to understand what recast outputs
+  - to understand what detour inputs
 
 - only show ContextMenu on right click on desktop
 - show ContextMenu on double tap instead of long tap
