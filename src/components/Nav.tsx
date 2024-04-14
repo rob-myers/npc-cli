@@ -74,17 +74,6 @@ const navCss = css`
   color: white;
   border-right: 1px solid #444 !important;
 
-  .${sidebarClasses.container} button.toggle {
-    position: absolute;
-    z-index: 1;
-    top: calc(0.5 * (${view.barSize} - 1.5rem));
-    right: calc(0.5 * (${view.barSize} - 1.5rem));
-    width: 1.5rem;
-    height: 1.5rem;
-    transition: margin-top 300ms;
-    margin-top: ${nav.titleMarginTop};
-    filter: invert(1);
-  }
 
   a.${menuClasses.button}, span.${menuClasses.button} {
     &:hover {
@@ -163,6 +152,15 @@ const icon = {
 };
 
 const toggleCss = css`
+  position: absolute;
+  z-index: 1;
+  top: calc(0.5 * (${view.barSize} - 1.5rem));
+  right: calc(0.5 * (${view.barSize} - 1.5rem));
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: margin-top 300ms;
+  margin-top: ${nav.titleMarginTop};
+
   border-radius: 50%;
   background-color: white;
   color: black;
@@ -172,4 +170,6 @@ const toggleCss = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  outline: 2px solid #ccc;
+  filter: invert(1);
 `;

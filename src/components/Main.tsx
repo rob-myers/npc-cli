@@ -36,9 +36,6 @@ const mainCss = css`
   @media (min-width: ${afterBreakpoint}) {
     white-space: nowrap;
     overflow-x: scroll;
-    > main {
-      max-width: 1024px;
-    }
     margin: 0 auto;
     padding: 0 32px;
   }
@@ -49,21 +46,17 @@ const mainCss = css`
 `;
 
 const mainTitleCss = css`
-  margin: 3rem auto 2rem auto;
+  margin: 1.5rem auto 1.5rem auto;
   color: #444;
+  /* font-weight: 500; */
 
   @media (min-width: ${afterBreakpoint}) {
-    /* max-width: 1024px; */
     font-size: 4rem;
     letter-spacing: 1.5rem;
-    filter: drop-shadow(2px 0px 2px #777);
   }
   @media (max-width: ${breakpoint}) {
-    // 🔔 Too wide causes extra body height on mobile
-    /* max-width: 100%; */
-    font-size: 3rem;
-    letter-spacing: 1.2rem;
-    filter: drop-shadow(1px 0px 1px #777);
+    font-size: 4rem;
+    letter-spacing: 1.5rem;
   }
 `;
 

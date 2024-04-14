@@ -116,8 +116,6 @@ const rootCss = css`
           height: 2rem;
           margin-top: 0;
           pointer-events: all;
-
-          outline: 2px solid #ccc;
         }
       }
     }
