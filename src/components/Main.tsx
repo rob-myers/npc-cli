@@ -13,7 +13,7 @@ export default function Main(props: React.PropsWithChildren) {
 
   return (
     <section
-      className={cx(mainCss, "prose max-w-screen-lg")}
+      className={cx(mainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
     >
 
