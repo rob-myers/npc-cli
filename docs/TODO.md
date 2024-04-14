@@ -17,11 +17,11 @@
 
 - integrate TestCharacter into TestWorld
 
-- 🚧 script get-pngs extracts starship symbols from source
+- ✅ script get-pngs extracts starship symbols from source
   - ✅ extract from media/Symbols
-  - extract from media/Geomorphs/
-  - extract from media/Symbols/
-  - extract from media/Small Craft
+  - ✅ extract a folder from media/Geomorphs/
+  - ✅ extract a folder from media/Symbols/
+  - ✅ extract from media/Small Craft
 
 - new source material from Robert Pearce?
   - https://drive.google.com/drive/folders/1apcZgZKXV5qOxNtQxtnQG0QNpkLzor-f

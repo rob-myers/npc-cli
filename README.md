@@ -47,6 +47,7 @@ convert -colorspace Gray myImage.png  myImage.gray.png
 
 Symbol PNGs should be unzipped in /media
 - [SymbolsHighRes.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/SymbolsHighRes.zip)
+- [SmallCraftHighRes.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/SmallCraftHighRes.zip)
 
 Geomorph PNGs (background in hull symbols) should be unzipped in /media
 - [Geomorphs.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/Geomorphs.zip)

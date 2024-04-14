@@ -11,19 +11,23 @@ import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilen
  * - Starship Symbols 2.0 by Robert Pearce https://travellerrpgblog.blogspot.com/
  * - Source PNGs extracted by Eric B. Smith http://gurpsland.no-ip.org/geomorphs/
  * 
+ * Usage:
  * ```sh
+ * yarn get-pngs {input_type} {src_folder} {dst_folder}
+ * yarn get-pngs-fast {input_type} {src_folder} {dst_folder}
+ * # where:
  * # {input_type} in ['root', 'geomorph', 'symbol', 'small-craft']
  * # {src_folder} relative to {repo_root}/media
  * # {src_folder} exists
  * # {dst_folder} relative to {repo_root}/media/extracted
- * yarn get-pngs {input_type} {src_folder} {dst_folder}
- * yarn get-pngs-fast {input_type} {src_folder} {dst_folder}
  * ```
  * 
  * Examples:
  * ```sh
  * yarn get-pngs root Symbols symbol-root
- * # 🚧
+ * yarn get-pngs geomorph 'Geomorphs/100x50 Edge' geomorph-edge
+ * yarn get-pngs symbol Symbols/Bridge symbol-bridge
+ * yarn get-pngs small-craft 'Small Craft' symbol-small-craft
  * ```
  */
 const [,, inputType, srcFolder, dstFolder] = process.argv;
