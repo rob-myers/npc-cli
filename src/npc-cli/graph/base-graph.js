@@ -431,20 +431,23 @@ export class BaseGraph {
    * @returns {Node[][]}
    */
   stratify(throwOnLoop = false) {
-    const nodes = this.nodesArray;
+    let unseen = this.nodesArray.slice();
+    let frontier = /** @type {Node[]} */ ([]);
     const seen = /** @type {Set<Node>} */ (new Set());
     const output = /** @type {Node[][]} */ ([]);
-    let frontier = /** @type {Node[]} */ ([]);
     
     const onAlreadySeen = /** @type {(x: Node) => void} */ (throwOnLoop
       ? (x) => { throw Error(`stratify: already seen node: ${x.id}`) }
       : (x) => warn(`stratify: ignoring already seen node: ${x.id}`)
     );
 
-    while ((frontier = nodes.filter(x => (
-      this.getPreds(x).every(y => frontier.includes(y))) && (
-        seen.has(x) ? (onAlreadySeen(x), false) : (seen.add(x), true)
-    ))).length && output.push(frontier));
+    while ((
+      frontier = [],
+      unseen = unseen.filter(x =>
+        this.getPreds(x).every(y => seen.has(y)) && (
+          seen.has(x) ? (onAlreadySeen(x), false) : (seen.add(x), frontier.push(x), true)
+      )
+    )).length && output.push(frontier));
 
     return output;
   }
