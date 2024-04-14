@@ -90,7 +90,7 @@ export default function TestNpcs(props) {
 
   React.useEffect(() => {// 🚧 DEMO
     // create an obstacle (before query)
-    const obstacle = state.addBoxObstacle({ x: 1 * 1.5, y: 0.5, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
+    const obstacle = state.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
 
     // find and exclude a poly
     const { polyRefs } =  api.crowd.navMeshQuery.queryPolygons(
