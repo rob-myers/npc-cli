@@ -6,8 +6,7 @@ import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "r
 import { nav, view } from "../const";
 import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
-import Toggle from "./Toggle";
-import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
+import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo, faChevronRight } from "./Icon";
 
 export default function Nav() {
   const collapsed = useSite(({ navOpen }) => !navOpen);
@@ -40,7 +39,9 @@ export default function Nav() {
       onClick={state.onClickSidebar}
       width={nav.expandedWidth}
     >
-      <Toggle onClick={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
+      <button onClick={state.toggleCollapsed} className={cx("toggle", toggleCss)}>
+        <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={collapsed ? undefined : "horizontal"} />
+      </button>
 
       <Menu>
         <MenuItem className="title" tabIndex={-1} component="span">
@@ -160,3 +161,15 @@ const icon = {
   help: <FontAwesomeIcon icon={faCircleQuestion} color="white" size="1x" />,
   about: <FontAwesomeIcon icon={faCircleInfo} color="white" size="1x" />,
 };
+
+const toggleCss = css`
+  border-radius: 50%;
+  background-color: white;
+  color: black;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
