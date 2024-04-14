@@ -34,10 +34,11 @@ export default function Main(props: React.PropsWithChildren) {
 
 const mainCss = css`
   @media (min-width: ${afterBreakpoint}) {
-    white-space: nowrap;
-    overflow-x: scroll;
+    width: 100%;
     margin: 0 auto;
     padding: 0 32px;
+    white-space: nowrap;
+    overflow-x: scroll;
   }
   @media (max-width: ${breakpoint}) {
     overflow: scroll;
