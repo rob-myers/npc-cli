@@ -21,7 +21,7 @@ export default function Main(props: React.PropsWithChildren) {
         onClick={() => useSite.api.toggleNav()}
       />
 
-      <header className={mainTitleCss} data-testid="main-title">
+      <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
       </header>
 
@@ -45,18 +45,24 @@ const mainCss = css`
   }
 `;
 
-const mainTitleCss = css`
-  margin: 1.5rem auto 1.5rem auto;
+const mainHeaderCss = css`
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  height: 4rem;
+  margin-bottom: 2rem;
+
   color: #444;
-  /* font-weight: 500; */
+  border-bottom: 1px solid #aaa;
+  
+  font-size: 1.2rem;
+  letter-spacing: 1.5rem;
 
   @media (min-width: ${afterBreakpoint}) {
-    font-size: 4rem;
-    letter-spacing: 1.5rem;
+    justify-content: left;
   }
   @media (max-width: ${breakpoint}) {
-    font-size: 4rem;
-    letter-spacing: 1.5rem;
+    justify-content: right;
   }
 `;
 
