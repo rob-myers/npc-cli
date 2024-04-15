@@ -6,6 +6,8 @@
     "301--hull": {"outputHash": 2351756},
     "302--hull": {"outputHash": -1920485050},
     "303--hull": {"outputHash": -421857240},
+    "bed--004--0.8x1.4": {"outputHash": -200178763},
+    "bed--005--0.6x1.2": {"outputHash": -115062400},
     "bridge--042--8x9": {"outputHash": 473128220},
     "console--022--1x2": {"outputHash": 1976759579},
     "console--051--0.4x0.6": {"outputHash": -995708418},
@@ -47,7 +49,7 @@
     "stateroom--018--2x3": {"outputHash": -2025463227},
     "stateroom--020--2x3": {"outputHash": 311371729},
     "stateroom--035--2x3": {"outputHash": -523679848},
-    "stateroom--036--2x4": {"outputHash": -2019829885},
+    "stateroom--036--2x4": {"outputHash": -1960992165},
     "demo-map-1": {"outputHash": 901270641},
     "small-map-1": {"outputHash": 546414224}
   },
@@ -3272,6 +3274,77 @@
           "transform": [-1, 0, 0, 1, 6, 1.5]
         }
       ],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "bed--004--0.8x1.4": {
+      "key": "bed--004--0.8x1.4",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 11.25,
+      "height": 5.625,
+      "pngRect": {"x": 0.35, "y": -0.3312, "width": 10.55, "height": 6.55},
+      "symbols": [
+        {
+          "symbolKey": "bed--005--0.6x1.2",
+          "meta": {"key": "bed--005--0.6x1.2"},
+          "width": 9.38,
+          "height": 5.63,
+          "transform": [1, 0, 0, 1, 0.45, -0.6]
+        },
+        {
+          "symbolKey": "bed--005--0.6x1.2",
+          "meta": {"key": "bed--005--0.6x1.2"},
+          "width": 9.38,
+          "height": 5.63,
+          "transform": [1, 0, 0, 1, 1.33, 0.13]
+        }
+      ],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "bed--005--0.6x1.2": {
+      "key": "bed--005--0.6x1.2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.875, 0.05], [1.875, 1.075], [0, 1.075], [0, 0.05]]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.465, 0.5375], [0.465, 0.5875], [0.415, 0.5875], [0.415, 0.5375]]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "lie": true,
+            "bed": true,
+            "orient": 0
+          }
+        }
+      ],
+      "unsorted": [],
+      "width": 9.375,
+      "height": 5.625,
+      "pngRect": {"x": -0.0875, "y": 0.2875, "width": 9.55, "height": 5.05},
+      "symbols": [],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -10875,6 +10948,27 @@
           "width": 3.75,
           "height": 3.75,
           "transform": [0, -1, 1, 0, -4.14, 24.1]
+        },
+        {
+          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "meta": {"key": "extra--fresher--001--0.5x0.5"},
+          "width": 3.75,
+          "height": 3.75,
+          "transform": [0, 1, -1, 0, 25.25, 29.29]
+        },
+        {
+          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "meta": {"key": "extra--fresher--002--0.5x0.5"},
+          "width": 3.75,
+          "height": 3.75,
+          "transform": [0, 1, -1, 0, 25.27, 24.79]
+        },
+        {
+          "symbolKey": "bed--004--0.8x1.4",
+          "meta": {"key": "bed--004--0.8x1.4"},
+          "width": 11.25,
+          "height": 5.63,
+          "transform": [-1, 0, 0, 1, 17.19, 20.4]
         }
       ],
       "removableDoors": [],
