@@ -105,9 +105,6 @@ const navCss = css`
     .${menuClasses.SubMenuExpandIcon} {
       display: none;
     }
-    button.toggle {
-      outline: 2px solid #ccc;
-    }
   }
 
   &:not(.${sidebarClasses.collapsed}) {
