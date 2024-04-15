@@ -27,7 +27,7 @@
                 <pattern id="pattern-4-1" patternTransform="matrix(1, 0, 0, 1, 389.999996185303, -509.999824523926)" xlink:href="#pattern-4"/>
                 <pattern id="pattern-4-2" patternTransform="matrix(1, 0, 0, 1, -690.000003814697, -510.000007629394)" xlink:href="#pattern-4"/>
                 <pattern id="pattern-4-3" patternTransform="matrix(1, 0, 0, 1, -810.000003814697, -509.999824523926)" xlink:href="#pattern-4"/>
-                <pattern id="pattern-4-4" patternTransform="matrix(1, 0, 0, 1, 29.999997185303, 89.999992370605)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-4" xlink:href="#pattern-4"/>
                 <pattern id="pattern-4-5" patternTransform="matrix(1, 0, 0, 1, -1109.999877929687, -509.999847412109)" xlink:href="#pattern-4"/>
                 <pattern id="pattern-4-6" patternTransform="matrix(1, 0, 0, 1, -239.999989988241, 89.999992370605)" xlink:href="#pattern-4"/>
         </defs>
@@ -60,7 +60,7 @@
                 <rect y="-0.000002" width="120" height="180" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-8'); transform-origin: 300px 90px;" x="239.999878">
                         <title>stateroom--035--2x3</title>
                 </rect>
-                <rect width="119.99999" height="239.999985" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); transform-origin: 60px 120px; fill: url('#pattern-4-4');" x="0.000001">
+                <rect width="96" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-4-4'); transform-origin: 48px 120px;">
                         <title>medical-bed--006--1.6x3.6</title>
                 </rect>
                 <rect y="-599.999512" width="240.000061" height="239.999451" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-4-5'); transform-origin: -1080px -480px;" x="-1200" transform="matrix(0, -1, 1, 0, 2159.999999999999, 960)">

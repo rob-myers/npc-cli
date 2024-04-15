@@ -5,51 +5,51 @@
     "103--hull": {"outputHash": -509327146},
     "301--hull": {"outputHash": 2351756},
     "302--hull": {"outputHash": -1920485050},
-    "303--hull": {"outputHash": -421857240},
-    "bed--004--0.8x1.4": {"outputHash": -200178763},
-    "bed--005--0.6x1.2": {"outputHash": -115062400},
-    "bridge--042--8x9": {"outputHash": 473128220},
-    "console--022--1x2": {"outputHash": 1976759579},
-    "console--051--0.4x0.6": {"outputHash": -995708418},
-    "empty-room--013--2x3": {"outputHash": -1464533956},
-    "empty-room--039--3x4": {"outputHash": 790563234},
-    "engineering--045--6x4": {"outputHash": -157964644},
-    "engineering--047--4x7": {"outputHash": -43767230},
-    "extra--fresher--001--0.5x0.5": {"outputHash": -285819775},
-    "extra--fresher--002--0.5x0.5": {"outputHash": 484182043},
-    "fresher--020--2x2": {"outputHash": -312653774},
-    "fresher--025--3x2": {"outputHash": 1839588519},
-    "fresher--036--4x2": {"outputHash": -919696035},
-    "fuel--010--4x2": {"outputHash": -1853750708},
-    "lab--012--4x3": {"outputHash": 44465332},
-    "lab--018--4x4": {"outputHash": 474791244},
-    "lab--023--4x4": {"outputHash": -1731263410},
-    "lifeboat--small-craft--2x4": {"outputHash": 1972236519},
-    "lounge--015--4x2": {"outputHash": 2040518487},
-    "machinery--155--1.8x3.6": {"outputHash": 1640727088},
-    "machinery--156--2x4": {"outputHash": 2140905635},
-    "machinery--158--1.8x3.6": {"outputHash": 1957156148},
-    "machinery--357--4x2": {"outputHash": 1870195067},
-    "medical--007--3x2": {"outputHash": 1940877300},
-    "medical--008--3x2": {"outputHash": -948756688},
-    "medical-bed--006--1.6x3.6": {"outputHash": -89334666},
-    "misc-stellar-cartography--020--10x10": {"outputHash": -1039282618},
-    "misc-stellar-cartography--023--4x4": {"outputHash": -1363831256},
-    "office--001--2x2": {"outputHash": 505561570},
-    "office--004--2x2": {"outputHash": -1575845194},
-    "office--006--2x2": {"outputHash": -291754642},
-    "office--020--2x3": {"outputHash": -1453938058},
-    "office--023--2x3": {"outputHash": 1235211982},
-    "office--026--2x3": {"outputHash": -1538386644},
-    "office--061--3x4": {"outputHash": -2121390610},
-    "office--074--4x4": {"outputHash": -1870683692},
-    "office--089--4x4": {"outputHash": 524746137},
-    "stateroom--012--2x2": {"outputHash": 1148933129},
-    "stateroom--014--2x2": {"outputHash": -1449389553},
-    "stateroom--018--2x3": {"outputHash": -2025463227},
-    "stateroom--020--2x3": {"outputHash": 311371729},
-    "stateroom--035--2x3": {"outputHash": -523679848},
-    "stateroom--036--2x4": {"outputHash": -1960992165},
+    "303--hull": {"outputHash": -467474707},
+    "bed--004--0.8x1.4": {"outputHash": 1788033128},
+    "bed--005--0.6x1.2": {"outputHash": -973113728},
+    "bridge--042--8x9": {"outputHash": -1739733693},
+    "console--022--1x2": {"outputHash": 1043901961},
+    "console--051--0.4x0.6": {"outputHash": -411518758},
+    "empty-room--013--2x3": {"outputHash": 9947101},
+    "empty-room--039--3x4": {"outputHash": -727316405},
+    "engineering--045--6x4": {"outputHash": 1463379812},
+    "engineering--047--4x7": {"outputHash": 834580297},
+    "extra--fresher--001--0.5x0.5": {"outputHash": 1046077418},
+    "extra--fresher--002--0.5x0.5": {"outputHash": -449556257},
+    "fresher--020--2x2": {"outputHash": -485836024},
+    "fresher--025--3x2": {"outputHash": -375470300},
+    "fresher--036--4x2": {"outputHash": -953846613},
+    "fuel--010--4x2": {"outputHash": 239889046},
+    "lab--012--4x3": {"outputHash": 549816909},
+    "lab--018--4x4": {"outputHash": -444682747},
+    "lab--023--4x4": {"outputHash": 1038919828},
+    "lifeboat--small-craft--2x4": {"outputHash": 1990238086},
+    "lounge--015--4x2": {"outputHash": 2054081445},
+    "machinery--155--1.8x3.6": {"outputHash": -934557972},
+    "machinery--156--2x4": {"outputHash": -466271879},
+    "machinery--158--1.8x3.6": {"outputHash": -1424353065},
+    "machinery--357--4x2": {"outputHash": -307199098},
+    "medical--007--3x2": {"outputHash": 1153145495},
+    "medical--008--3x2": {"outputHash": -1495668525},
+    "medical-bed--006--1.6x3.6": {"outputHash": 2036847340},
+    "misc-stellar-cartography--020--10x10": {"outputHash": -1589868870},
+    "misc-stellar-cartography--023--4x4": {"outputHash": -1790331102},
+    "office--001--2x2": {"outputHash": 222217656},
+    "office--004--2x2": {"outputHash": 1298782092},
+    "office--006--2x2": {"outputHash": 913429188},
+    "office--020--2x3": {"outputHash": -2112021606},
+    "office--023--2x3": {"outputHash": -753081617},
+    "office--026--2x3": {"outputHash": 495548312},
+    "office--061--3x4": {"outputHash": 1681586199},
+    "office--074--4x4": {"outputHash": 719616206},
+    "office--089--4x4": {"outputHash": 552276513},
+    "stateroom--012--2x2": {"outputHash": -406959521},
+    "stateroom--014--2x2": {"outputHash": -1270154395},
+    "stateroom--018--2x3": {"outputHash": -1024630746},
+    "stateroom--020--2x3": {"outputHash": 1721931954},
+    "stateroom--035--2x3": {"outputHash": 1050672697},
+    "stateroom--036--2x4": {"outputHash": 180124893},
     "demo-map-1": {"outputHash": 901270641},
     "small-map-1": {"outputHash": 546414224}
   },
@@ -3255,7 +3255,7 @@
         {
           "symbolKey": "medical-bed--006--1.6x3.6",
           "meta": {"key": "medical-bed--006--1.6x3.6"},
-          "width": 3,
+          "width": 2.4,
           "height": 6,
           "transform": [1, 0, 0, 1, 0, 0]
         },
@@ -3287,22 +3287,22 @@
       "windows": [],
       "decor": [],
       "unsorted": [],
-      "width": 11.25,
-      "height": 5.625,
-      "pngRect": {"x": 0.35, "y": -0.3312, "width": 10.55, "height": 6.55},
+      "width": 2.25,
+      "height": 1.125,
+      "pngRect": {"x": 0.07, "y": -0.0662, "width": 2.11, "height": 1.31},
       "symbols": [
         {
           "symbolKey": "bed--005--0.6x1.2",
           "meta": {"key": "bed--005--0.6x1.2"},
-          "width": 9.38,
-          "height": 5.63,
+          "width": 9.375,
+          "height": 5.625,
           "transform": [1, 0, 0, 1, 0.45, -0.6]
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
           "meta": {"key": "bed--005--0.6x1.2"},
-          "width": 9.38,
-          "height": 5.63,
+          "width": 9.375,
+          "height": 5.625,
           "transform": [1, 0, 0, 1, 1.33, 0.13]
         }
       ],
@@ -3341,9 +3341,9 @@
         }
       ],
       "unsorted": [],
-      "width": 9.375,
-      "height": 5.625,
-      "pngRect": {"x": -0.0875, "y": 0.2875, "width": 9.55, "height": 5.05},
+      "width": 1.875,
+      "height": 1.125,
+      "pngRect": {"x": -0.0175, "y": 0.0575, "width": 1.91, "height": 1.01},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -4548,9 +4548,9 @@
         }
       ],
       "unsorted": [],
-      "width": 60,
-      "height": 67.5,
-      "pngRect": {"x": -0.475, "y": -1.725, "width": 60.975, "height": 69.75},
+      "width": 12,
+      "height": 13.5,
+      "pngRect": {"x": -0.095, "y": -0.345, "width": 12.195, "height": 13.95},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -4604,9 +4604,9 @@
         }
       ],
       "unsorted": [],
-      "width": 7.5,
-      "height": 15,
-      "pngRect": {"x": -0.0875, "y": -0.0875, "width": 7.675, "height": 15.175},
+      "width": 1.5,
+      "height": 3,
+      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 1.535, "height": 3.035},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -4643,9 +4643,9 @@
         }
       ],
       "unsorted": [],
-      "width": 3.75,
-      "height": 3.75,
-      "pngRect": {"x": 0.1625, "y": -0.0625, "width": 3.425, "height": 3.875},
+      "width": 0.75,
+      "height": 0.75,
+      "pngRect": {"x": 0.0325, "y": -0.0125, "width": 0.685, "height": 0.775},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -4686,9 +4686,9 @@
       "windows": [],
       "decor": [],
       "unsorted": [],
-      "width": 15,
-      "height": 22.5,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 23},
+      "width": 3,
+      "height": 4.5,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": [
@@ -4753,9 +4753,9 @@
       "windows": [],
       "decor": [],
       "unsorted": [],
-      "width": 22.5,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 23, "height": 30.5},
+      "width": 4.5,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 6.1},
       "symbols": [],
       "removableDoors": [
         {
@@ -4957,9 +4957,9 @@
         }
       ],
       "unsorted": [],
-      "width": 45,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 45.5, "height": 30.5},
+      "width": 9,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 9.1, "height": 6.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5187,9 +5187,9 @@
           "meta": {"parallel-connectors": true}
         }
       ],
-      "width": 30,
-      "height": 52.5,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 53},
+      "width": 6,
+      "height": 10.5,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 10.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5235,9 +5235,9 @@
         }
       ],
       "unsorted": [],
-      "width": 3.75,
-      "height": 3.75,
-      "pngRect": {"x": 0.1625, "y": 0, "width": 3.425, "height": 2.925},
+      "width": 0.75,
+      "height": 0.75,
+      "pngRect": {"x": 0.0325, "y": 0, "width": 0.685, "height": 0.585},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5283,9 +5283,9 @@
         }
       ],
       "unsorted": [],
-      "width": 3.75,
-      "height": 3.75,
-      "pngRect": {"x": 0.45, "y": -0.075, "width": 2.85, "height": 3.9},
+      "width": 0.75,
+      "height": 0.75,
+      "pngRect": {"x": 0.09, "y": -0.015, "width": 0.57, "height": 0.78},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5403,9 +5403,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 15.5},
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5615,9 +5615,9 @@
         }
       ],
       "unsorted": [],
-      "width": 22.5,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 23, "height": 15.5},
+      "width": 4.5,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 3.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5868,9 +5868,9 @@
         }
       ],
       "unsorted": [],
-      "width": 30,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 15.5},
+      "width": 6,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5901,9 +5901,9 @@
         }
       ],
       "unsorted": [],
-      "width": 30,
-      "height": 15,
-      "pngRect": {"x": -0.475, "y": -0.49, "width": 30.95, "height": 15.975},
+      "width": 6,
+      "height": 3,
+      "pngRect": {"x": -0.095, "y": -0.098, "width": 6.19, "height": 3.195},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -6064,9 +6064,9 @@
           "meta": {"parallel-connectors": true}
         }
       ],
-      "width": 30,
-      "height": 22.5,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 23},
+      "width": 6,
+      "height": 4.5,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -6328,9 +6328,9 @@
         }
       ],
       "unsorted": [],
-      "width": 30,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.8125, "width": 30.5, "height": 31.075},
+      "width": 6,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.1625, "width": 6.1, "height": 6.215},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -6512,9 +6512,9 @@
         }
       ],
       "unsorted": [],
-      "width": 30,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 30.5},
+      "width": 6,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 6.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": [
@@ -6813,9 +6813,9 @@
           }
         }
       ],
-      "width": 15,
-      "height": 30,
-      "pngRect": {"x": -0.5, "y": -0.5, "width": 16, "height": 30.95},
+      "width": 3,
+      "height": 6,
+      "pngRect": {"x": -0.1, "y": -0.1, "width": 3.2, "height": 6.19},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -7132,9 +7132,9 @@
         }
       ],
       "unsorted": [],
-      "width": 30,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 15.5},
+      "width": 6,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -7148,23 +7148,23 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [0.1517, 0],
-              [0.7421, 0],
-              [0.7428, 0.1438],
-              [1.6177, 0.1664],
-              [1.6344, 0.9916],
-              [2.0661, 0.9961],
-              [2.0752, 0],
-              [2.65, 0],
-              [2.65, 4.9755],
-              [2.2082, 5.4002],
-              [0.1517, 5.4],
-              [0.1517, 2.3608],
-              [0.895, 2.3582],
-              [0.8983, 1.8132],
-              [0.454, 1.8073],
-              [0.4492, 1.3184],
-              [0.1517, 1.3105]
+              [0.3017, 0.3],
+              [0.8921, 0.3],
+              [0.8928, 0.4438],
+              [1.7677, 0.4664],
+              [1.7844, 1.2916],
+              [2.2161, 1.2961],
+              [2.2252, 0.3],
+              [2.8, 0.3],
+              [2.8, 5.2755],
+              [2.3582, 5.7002],
+              [0.3017, 5.7],
+              [0.3017, 2.6608],
+              [1.045, 2.6582],
+              [1.0483, 2.1132],
+              [0.604, 2.1073],
+              [0.5992, 1.6184],
+              [0.3017, 1.6105]
             ]
           ],
           "meta": {"obstacle": true}
@@ -7175,9 +7175,9 @@
       "windows": [],
       "decor": [],
       "unsorted": [],
-      "width": 13.5,
-      "height": 27,
-      "pngRect": {"x": 0.25, "y": -0.25, "width": 13, "height": 27.5},
+      "width": 3,
+      "height": 6,
+      "pngRect": {"x": 0.2, "y": 0.25, "width": 2.6, "height": 5.5},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -7228,9 +7228,9 @@
       "windows": [],
       "decor": [],
       "unsorted": [],
-      "width": 15,
-      "height": 30,
-      "pngRect": {"x": 0.5, "y": 1.25, "width": 14, "height": 27.5},
+      "width": 3,
+      "height": 6,
+      "pngRect": {"x": 0.1, "y": 0.25, "width": 2.8, "height": 5.5},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -7271,9 +7271,9 @@
       "windows": [],
       "decor": [],
       "unsorted": [],
-      "width": 15,
-      "height": 30,
-      "pngRect": {"x": 0.5116, "y": 1.25, "width": 14, "height": 27.5},
+      "width": 3,
+      "height": 6,
+      "pngRect": {"x": 0.1023, "y": 0.25, "width": 2.8, "height": 5.5},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -7296,9 +7296,9 @@
       "windows": [],
       "decor": [],
       "unsorted": [],
-      "width": 30,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -1.8125, "width": 30.5, "height": 17.075},
+      "width": 6,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.3625, "width": 6.1, "height": 3.415},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -7446,9 +7446,9 @@
         }
       ],
       "unsorted": [],
-      "width": 22.5,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 23, "height": 15.5},
+      "width": 4.5,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 3.1},
       "symbols": [],
       "removableDoors": [
         {
@@ -7593,9 +7593,9 @@
         }
       ],
       "unsorted": [],
-      "width": 22.5,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 23, "height": 15.5},
+      "width": 4.5,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 3.1},
       "symbols": [],
       "removableDoors": [
         {
@@ -7744,9 +7744,9 @@
         }
       ],
       "unsorted": [],
-      "width": 12,
-      "height": 30,
-      "pngRect": {"x": 0.375, "y": 1.325, "width": 11.25, "height": 27.35},
+      "width": 2.4,
+      "height": 6,
+      "pngRect": {"x": 0.075, "y": 0.265, "width": 2.25, "height": 5.47},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -8037,9 +8037,9 @@
           "meta": {"ignore-nav": true}
         }
       ],
-      "width": 75,
-      "height": 75,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 75.5, "height": 75.5},
+      "width": 15,
+      "height": 15,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 15.1, "height": 15.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -8188,9 +8188,9 @@
         }
       ],
       "unsorted": [],
-      "width": 30,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 30.5},
+      "width": 6,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 6.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -8286,9 +8286,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 15.5},
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [
         {
@@ -8431,9 +8431,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 15.5},
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -8609,9 +8609,9 @@
           "meta": {"relate-connectors": true}
         }
       ],
-      "width": 15,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 15.5},
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [
         {
@@ -8761,9 +8761,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 22.5,
-      "pngRect": {"x": -0.225, "y": -0.175, "width": 15.5, "height": 23},
+      "width": 3,
+      "height": 4.5,
+      "pngRect": {"x": -0.045, "y": -0.035, "width": 3.1, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -8887,9 +8887,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 22.5,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 23},
+      "width": 3,
+      "height": 4.5,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -9017,9 +9017,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 22.5,
-      "pngRect": {"x": -0.85, "y": -0.25, "width": 16.1, "height": 23},
+      "width": 3,
+      "height": 4.5,
+      "pngRect": {"x": -0.17, "y": -0.05, "width": 3.22, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -9243,9 +9243,9 @@
           "meta": {"parallel-connectors": true}
         }
       ],
-      "width": 22.5,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 23, "height": 30.5},
+      "width": 4.5,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 6.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -9706,9 +9706,9 @@
         }
       ],
       "unsorted": [],
-      "width": 30,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 30.5},
+      "width": 6,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 6.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -9976,9 +9976,9 @@
           "meta": {"view": true, "reverse": true}
         }
       ],
-      "width": 30,
-      "height": 30,
-      "pngRect": {"x": 0.1875, "y": 0.315, "width": 29.525, "height": 29.55},
+      "width": 6,
+      "height": 6,
+      "pngRect": {"x": 0.0375, "y": 0.063, "width": 5.905, "height": 5.91},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -10081,9 +10081,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 15.5},
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -10216,9 +10216,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 15,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 15.5},
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -10348,9 +10348,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 22.5,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 23},
+      "width": 3,
+      "height": 4.5,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -10531,9 +10531,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 22.5,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 23},
+      "width": 3,
+      "height": 4.5,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -10693,9 +10693,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 22.5,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 23},
+      "width": 3,
+      "height": 4.5,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 4.6},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -10931,9 +10931,9 @@
         }
       ],
       "unsorted": [],
-      "width": 15,
-      "height": 30,
-      "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 30.5},
+      "width": 3,
+      "height": 6,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 6.1},
       "symbols": [
         {
           "symbolKey": "console--051--0.4x0.6",
@@ -10967,7 +10967,7 @@
           "symbolKey": "bed--004--0.8x1.4",
           "meta": {"key": "bed--004--0.8x1.4"},
           "width": 11.25,
-          "height": 5.63,
+          "height": 5.625,
           "transform": [-1, 0, 0, 1, 17.19, 20.4]
         }
       ],

@@ -645,11 +645,11 @@ class GeomorphService {
           // viewBox -> viewbox
           const [x, y, width, height] = attributes.viewbox.trim().split(/\s+/).map(Number);
           viewBoxRect = new Rect(x, y, width, height);
-          viewBoxRect.scale(worldScale).precision(precision);
+          viewBoxRect.scale(worldScale * geomScale).precision(precision);
         }
         if (tag === "image") {
           pngRect = new Rect(Number(attributes.x || 0), Number(attributes.y || 0), Number(attributes.width || 0), Number(attributes.height || 0));
-          pngRect.scale(worldScale).precision(precision);
+          pngRect.scale(worldScale * geomScale).precision(precision);
         }
 
         tagStack.push({ tagName: tag, attributes });
@@ -701,12 +701,15 @@ class GeomorphService {
             // 🔔 small error when precision 4
             reduced[4] = toPrecision(reduced[4] * worldScale, 2);
             reduced[5] = toPrecision(reduced[5] * worldScale, 2);
+            // high precision for comparison to expected symbol dimension
+            const width = toPrecision(rect.width * worldScale, 6);
+            const height = toPrecision(rect.height * worldScale, 6);
 
             symbols.push({
               symbolKey,
               meta: geomorphService.tagsToMeta(symbolTags, { key: symbolKey }),
-              width: toPrecision(rect.width * worldScale),
-              height: toPrecision(rect.height * worldScale),
+              width,
+              height,
               transform: reduced,
             });
           }

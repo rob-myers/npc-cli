@@ -74,9 +74,9 @@ declare namespace Geomorph {
   > {
     key: SymbolKey;
     isHull: boolean;
-    /** Original SVG's width, inferred from `viewBox` */
+    /** SVG's width (from `viewBox`) in world coordinates */
     width: number;
-    /** Original SVG's height, inferred from `viewBox` */
+    /** SVG's height (from `viewBox`) in world coordinates */
     height: number;
     /**
      * Bounds of original image in symbol SVG.

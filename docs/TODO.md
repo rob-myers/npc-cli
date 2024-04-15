@@ -31,8 +31,14 @@
   - ✅ a non-hull symbol has sub-symbols
   - ✅ split fresher--001--0.6x1 into extra--fresher--*
   - ✅ more non-hull symbols have sub-symbols
-  - 🚧 non-hull sub-symbols are parsed
-  - stratified dependency graph
+  - ✅ non-hull sub-symbols are parsed
+  - ✅ warn if sub-symbols dimension does not match original
+  - define symbol dependency graph
+  - build symbol dependency graph
+  - stratify symbol dependency graph
+  - depict graph using graphviz
+    - generate `dot` digraph
+    - https://dreampuf.github.io/GraphvizOnline
 
 
 - raised images: via spritesheet

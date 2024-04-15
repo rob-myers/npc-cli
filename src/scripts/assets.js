@@ -19,6 +19,7 @@ import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
+import { worldScale } from "../npc-cli/service/const";
 import { hashText, info, keyedItemsToLookup, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 
@@ -135,5 +136,22 @@ function parseSymbols(prev, schemaChanged) {
     meta[symbolKey] = { outputHash: hashText(JSON.stringify(serialized)) };
   }
 
+  validateSubSymbolDimension(symbols);
+
   return { symbols, meta };
+}
+
+/**
+ * 
+ * @param {Geomorph.AssetsJson['symbols']} symbols 
+ */
+function validateSubSymbolDimension(symbols) {
+  Object.values(symbols).forEach(({ key: parentKey, symbols: subSymbols }) => {
+    subSymbols.forEach(({ symbolKey, width, height }) => {
+      const expected = { width: symbols[symbolKey].width, height: symbols[symbolKey].height };
+      if (expected.width !== width || expected.height !== height) {
+        warn(`${parentKey}: ${symbolKey}: unexpected symbol dimension`, { expected, observed: { width, height} });
+      }
+    });
+  });
 }
