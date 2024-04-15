@@ -6,7 +6,7 @@
     "301--hull": {"outputHash": 2351756},
     "302--hull": {"outputHash": -1920485050},
     "303--hull": {"outputHash": -467474707},
-    "bed--004--0.8x1.4": {"outputHash": 1788033128},
+    "bed--004--0.8x1.4": {"outputHash": -1285959108},
     "bed--005--0.6x1.2": {"outputHash": -973113728},
     "bridge--042--8x9": {"outputHash": -1739733693},
     "console--022--1x2": {"outputHash": 1043901961},
@@ -49,7 +49,7 @@
     "stateroom--018--2x3": {"outputHash": -1024630746},
     "stateroom--020--2x3": {"outputHash": 1721931954},
     "stateroom--035--2x3": {"outputHash": 1050672697},
-    "stateroom--036--2x4": {"outputHash": 180124893},
+    "stateroom--036--2x4": {"outputHash": 1177007668},
     "demo-map-1": {"outputHash": 901270641},
     "small-map-1": {"outputHash": 546414224}
   },
@@ -3294,16 +3294,16 @@
         {
           "symbolKey": "bed--005--0.6x1.2",
           "meta": {"key": "bed--005--0.6x1.2"},
-          "width": 9.375,
-          "height": 5.625,
-          "transform": [1, 0, 0, 1, 0.45, -0.6]
+          "width": 1.875,
+          "height": 1.125,
+          "transform": [1, 0, 0, 1, 0.09, -0.12]
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
           "meta": {"key": "bed--005--0.6x1.2"},
-          "width": 9.375,
-          "height": 5.625,
-          "transform": [1, 0, 0, 1, 1.33, 0.13]
+          "width": 1.875,
+          "height": 1.125,
+          "transform": [1, 0, 0, 1, 0.27, 0.03]
         }
       ],
       "removableDoors": [],
@@ -10938,37 +10938,37 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6"},
-          "width": 3.75,
-          "height": 3.75,
-          "transform": [1, -1, 1, 1, -0.7, 22.2]
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, -1, 1, 1, -0.14, 4.44]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6"},
-          "width": 3.75,
-          "height": 3.75,
-          "transform": [0, -1, 1, 0, -4.14, 24.1]
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, -1, 1, 0, -0.83, 4.82]
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
           "meta": {"key": "extra--fresher--001--0.5x0.5"},
-          "width": 3.75,
-          "height": 3.75,
-          "transform": [0, 1, -1, 0, 25.25, 29.29]
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, 1, -1, 0, 5.05, 5.86]
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
           "meta": {"key": "extra--fresher--002--0.5x0.5"},
-          "width": 3.75,
-          "height": 3.75,
-          "transform": [0, 1, -1, 0, 25.27, 24.79]
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, 1, -1, 0, 5.05, 4.96]
         },
         {
           "symbolKey": "bed--004--0.8x1.4",
           "meta": {"key": "bed--004--0.8x1.4"},
-          "width": 11.25,
-          "height": 5.625,
-          "transform": [-1, 0, 0, 1, 17.19, 20.4]
+          "width": 2.25,
+          "height": 1.125,
+          "transform": [-1, 0, 0, 1, 3.44, 4.08]
         }
       ],
       "removableDoors": [],
