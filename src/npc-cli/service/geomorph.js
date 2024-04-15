@@ -64,6 +64,7 @@ class GeomorphService {
 
     "bridge--042--8x9": true,
     "console--022--1x2": true,
+    "console--051--0.4x0.6": true,
     "empty-room--013--2x3": true,
     "empty-room--039--3x4": true,
     "engineering--045--6x4": true,
@@ -669,6 +670,7 @@ class GeomorphService {
         const ownTags = contents.split(" ");
 
         // Hull symbol has folder "symbols" defining layout
+        // 🚧 all symbols can have such a folder
         if (folderStack[0] === "symbols") {
           const [symbolKey, ...symbolTags] = ownTags;
           if (parent.tagName !== "rect") {

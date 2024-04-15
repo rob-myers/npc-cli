@@ -28,7 +28,9 @@
 
 - 🚧 towards recursive non-hull symbols
   - 🚧 base-graph stratify (tested)
-  - 🚧 non-hull symbols have sub-symbols
+  - ✅ a non-hull symbols has sub-symbols
+  - 🚧 how to split fresher--001--0.6x1 naturally?
+  - 🚧 more non-hull symbols have sub-symbols
   - 🚧 non-hull sub-symbols are parsed
   - stratified dependency graph
 

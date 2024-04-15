@@ -8,6 +8,7 @@
     "303--hull": {"outputHash": -421857240},
     "bridge--042--8x9": {"outputHash": 473128220},
     "console--022--1x2": {"outputHash": 1976759579},
+    "console--051--0.4x0.6": {"outputHash": -995708418},
     "empty-room--013--2x3": {"outputHash": -1464533956},
     "empty-room--039--3x4": {"outputHash": 790563234},
     "engineering--045--6x4": {"outputHash": -157964644},
@@ -44,7 +45,7 @@
     "stateroom--018--2x3": {"outputHash": -2025463227},
     "stateroom--020--2x3": {"outputHash": 311371729},
     "stateroom--035--2x3": {"outputHash": -523679848},
-    "stateroom--036--2x4": {"outputHash": -935051516},
+    "stateroom--036--2x4": {"outputHash": -2019829885},
     "demo-map-1": {"outputHash": 901270641},
     "small-map-1": {"outputHash": 546414224}
   },
@@ -4531,6 +4532,45 @@
       "width": 7.5,
       "height": 15,
       "pngRect": {"x": -0.0875, "y": -0.0875, "width": 7.675, "height": 15.175},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "console--051--0.4x0.6": {
+      "key": "console--051--0.4x0.6",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.3504, 0.35], [0.3504, 0.4], [0.2996, 0.4], [0.2996, 0.35]]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 180
+          }
+        }
+      ],
+      "unsorted": [],
+      "width": 3.75,
+      "height": 3.75,
+      "pngRect": {"x": 0.1625, "y": -0.0625, "width": 3.425, "height": 3.875},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -10723,7 +10763,22 @@
       "width": 15,
       "height": 30,
       "pngRect": {"x": -0.25, "y": -0.25, "width": 15.5, "height": 30.5},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 3.75,
+          "height": 3.75,
+          "transform": [1, -1, 1, 1, -0.7, 22.2]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 3.75,
+          "height": 3.75,
+          "transform": [0, -1, 1, 0, -4.14, 24.1]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     }
