@@ -621,7 +621,7 @@ class GeomorphService {
     // info("parseStarshipSymbol", symbolKey, "...");
     const isHull = this.isHullKey(symbolKey);
     /** Non-hull symbol are scaled up by 5 inside SVGs */
-    const geomScale = isHull ? 1 : 1 / 5;
+    const scale = worldScale * (isHull ? 1 : 1 / 5);
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
@@ -645,11 +645,11 @@ class GeomorphService {
           // viewBox -> viewbox
           const [x, y, width, height] = attributes.viewbox.trim().split(/\s+/).map(Number);
           viewBoxRect = new Rect(x, y, width, height);
-          viewBoxRect.scale(worldScale * geomScale).precision(precision);
+          viewBoxRect.scale(scale).precision(precision);
         }
         if (tag === "image") {
           pngRect = new Rect(Number(attributes.x || 0), Number(attributes.y || 0), Number(attributes.width || 0), Number(attributes.height || 0));
-          pngRect.scale(worldScale * geomScale).precision(precision);
+          pngRect.scale(scale).precision(precision);
         }
 
         tagStack.push({ tagName: tag, attributes });
@@ -699,11 +699,11 @@ class GeomorphService {
               transformOrigin ?? { x: 0, y: 0 }
             );
             // 🔔 small error when precision 4
-            reduced[4] = toPrecision(reduced[4] * worldScale, 2);
-            reduced[5] = toPrecision(reduced[5] * worldScale, 2);
+            reduced[4] = toPrecision(reduced[4] * scale, 2);
+            reduced[5] = toPrecision(reduced[5] * scale, 2);
             // high precision for comparison to expected symbol dimension
-            const width = toPrecision(rect.width * worldScale, 6);
-            const height = toPrecision(rect.height * worldScale, 6);
+            const width = toPrecision(rect.width * scale, 6);
+            const height = toPrecision(rect.height * scale, 6);
 
             symbols.push({
               symbolKey,
@@ -720,19 +720,19 @@ class GeomorphService {
         const meta = geomorphService.tagsToMeta(ownTags, {});
 
         /** @type {const} */ ([
-          ["hull-wall", hullWalls, 1],
-          ["wall", walls, geomScale],
-          ["obstacle", obstacles, geomScale],
-          ["door", doors, geomScale],
-          ["window", windows, geomScale],
-          ["decor", decor, geomScale],
-          [null, unsorted, geomScale],
+          ["hull-wall", hullWalls],
+          ["wall", walls],
+          ["obstacle", obstacles],
+          ["door", doors],
+          ["window", windows],
+          ["decor", decor],
+          [null, unsorted],
         ]).some(
-          ([tag, polys, scale]) =>
+          ([tag, polys]) =>
             (tag === null || ownTags.includes(tag)) &&
             polys.push(
               ...geomorphService
-                .extractGeom({ ...parent, title: contents }, scale * worldScale)
+                .extractGeom({ ...parent, title: contents }, scale)
                 .map((poly) => Object.assign(poly, { meta }))
             )
         );
