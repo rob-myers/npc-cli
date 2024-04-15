@@ -45,6 +45,13 @@ convert -fuzz 1% -trim "$srcPath" "$dstPath" && mv "$dstPath" "$srcPath"
 convert -colorspace Gray myImage.png  myImage.gray.png
 ```
 
+We use `dot` (graphviz) to visualized directed graphs.
+> https://graphviz.org/documentation/
+
+```sh
+brew install graphviz
+```
+
 ## Starship Symbols Source PNGs
 
 Symbol PNGs should be unzipped in /media

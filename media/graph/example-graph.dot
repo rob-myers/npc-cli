@@ -1,0 +1,899 @@
+// Render it using this command:
+// ```sh
+// dot -Tsvg payments-tracking.dot >payments-tracking.svg
+// ```
+
+// Preview in VSCode:
+// 1. Get extension "Graphviz (dot) language support for Visual Studio Code"
+// 2. Right-Click a *.dot file and "Open Preview To Side"
+
+// All tracking labels should have prefix P2PPayment
+// e.g. LearnMoreClick should be P2PPaymentLearnMoreClick
+
+digraph PaymentsTracking {
+
+  // Permits arrows between clusters e.g. [ltail=clusterVIP lhead=clusterPaymentsOnboarding]
+  compound=true
+  // rankdir=LR
+
+  node [
+    shape=plain
+    fontsize=10
+  ]
+  edge [
+    arrowhead=open
+    arrowtail=open
+    fontsize=10
+  ]
+
+//#section my details
+
+  id_icon_unverified [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>ID (Unverified)</b>
+      </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>LearnMoreClick</td>
+          <td bgcolor='#dddddd'>ID status</td>
+        </tr>
+      </table>
+    </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>StatusIcon</td>
+          <td bgcolor='#dddddd'>ID unverified</td>
+        </tr>
+      </table>
+    </td></tr>
+    <tr><td>
+      LinkBegin
+    </td></tr>
+    </table>
+  >]
+  id_icon_pending [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>ID (Pending)</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>StatusIcon</td>
+            <td bgcolor='#dddddd'>ID pending</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>LearnMoreClick</td>
+            <td bgcolor='#dddddd'>ID status</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  id_icon_verified [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>ID (Verified)</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>StatusIcon</td>
+            <td bgcolor='#dddddd'>ID verified</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>LearnMoreClick</td>
+          <td bgcolor='#dddddd'>ID status</td>
+        </tr>
+      </table>
+    </td></tr>
+    </table>
+  >]
+  id_icon_failed [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>ID (Failed)</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>StatusIcon</td>
+            <td bgcolor='#dddddd'>ID failed</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        ContactOPPClick
+      </td></tr>
+    </table>
+  >]
+  
+  bank_icon_unverified [label=<
+     <table border='1' cellborder='0'>
+       <tr><td><B>Bank (Unverified)</B></td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>StatusIcon</td>
+            <td bgcolor='#dddddd'>Bank unverified</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>LearnMoreClick</td>
+            <td bgcolor='#dddddd'>Bank status</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        LinkBegin
+      </td></tr>
+     </table>
+  >]
+  bank_icon_pending [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+      <b>Bank (Pending)</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>StatusIcon</td>
+            <td bgcolor='#dddddd'>Bank pending</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>LearnMoreClick</td>
+            <td bgcolor='#dddddd'>Bank status</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  bank_icon_verified [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Bank (Verified)</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>StatusIcon</td>
+            <td bgcolor='#dddddd'>Bank verified</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>LearnMoreClick</td>
+            <td bgcolor='#dddddd'>Bank status</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  bank_icon_failed [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Bank (Failed)</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>StatusIcon</td>
+            <td bgcolor='#dddddd'>Bank failed</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        ContactOPPClick
+      </td></tr>
+    </table>
+  >]
+
+  subgraph clusterMyDetails {
+    label=<
+      <table border='0' cellborder='0'>
+        <tr><td>
+          <b>My Details</b>
+        </td></tr>
+        <tr><td>
+          https://my.gumtree.com/manage-account/
+        </td></tr>
+      </table>
+    >
+    href="https://my.gumtree.com/manage-account/"
+    fontcolor=blue
+    fontsize=12
+    id_icon_unverified -> id_icon_pending -> id_icon_verified, id_icon_failed
+    bank_icon_unverified -> bank_icon_pending -> bank_icon_verified, bank_icon_failed
+  }
+
+//#section message center
+
+  seller_sees_send_pr_button [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Seller sees</b>
+      </td></tr>
+      <tr><td>
+        <b>Send PR button</b>
+      </td></tr>
+      <tr><td>
+        RequestBegin
+      </td></tr>
+     </table>
+  >]
+  seller_creating_pr [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Modal: Seller can create PR</b>
+      </td></tr>
+      <tr><td>
+        RequestSellerClose
+      </td></tr>
+      <tr><td>
+        RequestAttempt
+      </td></tr>
+      <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>RequestSuccess</td>
+          <td bgcolor='#dddddd'>{ paymentRequestId }</td>
+        </tr>
+      </table>
+    </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td align='left'>RequestFail</td>
+          <td bgcolor='#dddddd'>{ error }</td>
+        </tr>
+      </table>
+    </td></tr>
+    </table>
+  >]
+  seller_sees_cancel_pr_link [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Seller sees</b>
+      </td></tr>
+      <tr><td>
+        <b>Cancel PR link</b>
+      </td></tr>
+    </table>
+  >]
+  seller_cancelling_pr [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Modal: Seller can cancel PR</b>
+      </td></tr>
+      <tr>
+      <td>RequestCancelAttempt</td>
+    </tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>RequestCancelSuccess</td>
+          <td bgcolor='#dddddd'>{ paymentRequestId }</td>
+        </tr>
+      </table>
+    </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>RequestCancelFail</td>
+          <td bgcolor='#dddddd'>{ paymentRequestId, error }</td>
+        </tr>
+      </table>
+    </td></tr>
+    </table>
+  >]
+  buyer_sees_pay_now_button [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Buyer sees</b>
+      </td></tr>
+      <tr><td>
+        <b>Pay Now Button</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>SendBegin</td> // paymentId is a paymentRequestId
+            <td bgcolor='#dddddd'>{ paymentId }</td>
+          </tr>
+        </table>
+      </td></tr>
+     </table>
+  >]
+  buyer_sees_pay_now_link [label=<
+    <table border='1' cellborder='0'>
+      <tr><td><b>Buyer sees</b></td></tr>
+      <tr><td><b>Pay Now link</b></td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>SendBegin</td> // paymentId is a paymentRequestId
+            <td bgcolor='#dddddd'>{ paymentId }</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  buyer_viewing_pr [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Modal: Buyer views PR</b>
+      </td></tr>
+      <tr><td>
+        RequestBuyerClose
+      </td></tr>
+      <tr><td>
+        VIPLinkClick
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>SendPayNowClick</td>
+            // paymentId is a paymentRequestId
+            <td bgcolor='#dddddd'>{ paymentId }</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  buyer_sees_payment_failed_alert [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Buyer sees</b>
+      </td></tr>
+      <tr><td>
+        <b>Payment failed alert</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>SendPayNowClick</td>
+            // paymentId is a paymentRequestId
+            <td bgcolor='#dddddd'>{ paymentId }</td>
+          </tr>
+        </table>
+      </td></tr>
+     </table>
+  >]
+  // Buyer or Seller
+  user_sees_transactions_button [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>User sees</b>
+      </td></tr>
+      <tr><td>
+        <b>Transactions Button</b>
+      </td></tr>
+      <tr><td>
+        ViewTransactionClick
+      </td></tr>
+    </table>
+  >]
+  pr_modal_closed [label=<
+     <table border='1' cellborder='0'>
+       <tr><td>
+        <b>Modal closed</b>
+       </td></tr>
+     </table>
+  >]
+
+  subgraph clusterMessageCentre {
+    label=<
+      <table border='0' cellborder='0'>
+        <tr><td>
+          <b>Message Center</b>
+        </td></tr>
+       <tr><td>
+          https://my.gumtree.com/manage/messages
+      </td></tr>
+     </table>
+    >
+    href="https://my.gumtree.com/manage/messages"
+    fontcolor=blue
+    fontsize=12
+    seller_sees_send_pr_button -> seller_creating_pr
+    seller_creating_pr -> pr_modal_closed [label="RequestSellerClose\nRequestSuccess"]
+    seller_sees_cancel_pr_link -> seller_cancelling_pr
+    seller_cancelling_pr -> pr_modal_closed [label="  RequestCancelSuccess"]
+    buyer_sees_pay_now_link, buyer_sees_pay_now_button -> buyer_viewing_pr
+    buyer_viewing_pr -> pr_modal_closed [label="RequestBuyerClose\nSendPayNowClick"]
+    buyer_sees_payment_failed_alert
+    user_sees_transactions_button
+  }
+
+//#section /payments/onboarding
+
+  onboarding_start [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Start onboarding</b>
+      </td></tr>
+      <tr><td>
+        LinkBegin
+      </td></tr>
+    </table>
+  >]
+
+  onboarding_verify_id [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Interstitial: Verify ID</b>
+      </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>GoToOPP</td>
+          <td bgcolor='#dddddd'>Manual</td>
+        </tr>
+      </table>
+    </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>GoToOPP</td>
+          <td bgcolor='#dddddd'>Auto</td>
+        </tr>
+      </table>
+    </td></tr>
+    </table>
+  >]
+
+  opp_onboarding_verify_id [label=<
+    <table border='1' cellborder='0' bgcolor='black'>
+      <tr><td>
+        <b>OPP ID Verify</b>
+      </td></tr>
+    </table>
+  > fontcolor=white]
+
+  onboarding_id_failed [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>ID Failed</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>LinkFail</td>
+            <td bgcolor='#dddddd'>IdVerification</td>
+          </tr>
+          <tr>
+            <td></td>
+            <td bgcolor='#dddddd'>{ isBankVerified }</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+
+  onboarding_buyer_id_pending [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Buyer ID Pending</b>
+      </td></tr>
+      <tr><td>
+        MyAccountClick
+      </td></tr>
+      <tr><td>
+        ViewMyAdClick
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>ReturnedFromOPP</td>
+            <td bgcolor='#dddddd'>ID pending</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+
+  onboarding_verify_bank [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+      <b>Interstitial: Verify Bank</b>
+    </td></tr>
+    <tr><td>
+      Frame 6
+    </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>GoToOPP</td>
+          <td bgcolor='#dddddd'>Manual</td>
+        </tr>
+      </table>
+    </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>GoToOPP</td>
+          <td bgcolor='#dddddd'>Auto</td>
+        </tr>
+      </table>
+    </td></tr>
+    <tr><td>
+      <table border='1' cellborder='0'>
+        <tr>
+          <td>ReturnedFromOPP</td>
+          <td bgcolor='#dddddd'>ID pending</td>
+        </tr>
+      </table>
+    </td></tr>
+    </table>
+  >]
+
+  opp_onboarding_verify_bank [label=<
+    <table border='1' cellborder='0' bgcolor='black'>
+      <tr><td>
+        <b>OPP Bank Verify</b>
+      </td></tr>
+    </table>
+  > fontcolor=white]
+
+  onboarding_bank_failed [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Bank Failed</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>LinkFail</td>
+            <td bgcolor='#dddddd'>BankAccountVerification</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>ReturnedFromOPP</td>
+            <td bgcolor='#dddddd'>ID pending</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+
+  onboarding_seller_complete [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Seller Complete</b>
+      </td></tr>
+      <tr><td>
+        <i>Frame 11</i>
+      </td></tr>
+      <tr><td>
+        MyAccountClick
+      </td></tr>
+      <tr><td>
+        ViewMyAdClick
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>ReturnedFromOPP</td>
+            <td bgcolor='#dddddd'>Bank pending</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+
+  onboarding_success [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Onboarding success</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>LinkSuccess</td>
+            <td bgcolor='#dddddd'>{ permission }</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+
+  subgraph clusterPaymentsOnboarding {
+    label=<
+      <table border='0' cellborder='0'>
+        <tr><td>
+          <b>Payments Onboarding</b>
+        </td></tr>
+        <tr><td>
+          https://www.gumtree.com/payments/onboarding
+        </td></tr>
+      </table>
+    >
+    href="https://www.gumtree.com/payments/onboarding"
+    fontcolor=blue
+    fontsize=12
+    onboarding_start -> onboarding_verify_id, onboarding_id_failed, onboarding_verify_bank, onboarding_bank_failed
+    onboarding_verify_id -> opp_onboarding_verify_id -> onboarding_verify_bank
+    opp_onboarding_verify_id -> onboarding_buyer_id_pending
+    opp_onboarding_verify_id -> onboarding_bank_failed // previously failed Bank
+    // opp_onboarding_verify_id -> onboarding_success // too soon for verify
+    // opp_onboarding_verify_id -> onboarding_seller_complete
+    onboarding_verify_bank -> opp_onboarding_verify_bank -> onboarding_seller_complete
+    onboarding_start -> onboarding_success
+    // opp_onboarding_verify_bank -> onboarding_bank_failed
+    // opp_onboarding_verify_id -> onboarding_id_failed
+  }
+
+//#section transactions
+
+  transaction_interstitial [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Interstitial</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>GoToCheckout</td>
+            <td bgcolor='#dddddd'>Manual</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>GoToCheckout</td>
+            <td bgcolor='#dddddd'>Auto</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+
+  opp_transaction_checkout [label=<
+    <table border='1' cellborder='0' bgcolor='black'>
+      <tr><td>
+        <b>OPP Make Payment</b>
+      </td></tr>
+    </table>
+  > fontcolor=white]
+  
+  transaction_pay_failed [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Failed</b>
+      </td></tr>
+      <tr><td>
+        SendFail
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>SendPayNowClick</td>
+            // paymentId is a paymentRequestId
+            <td bgcolor='#dddddd'>{ paymentId }</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  transaction_pay_expired [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Expired</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>SendPayNowClick</td>
+            // paymentId is a paymentRequestId
+            <td bgcolor='#dddddd'>{ paymentId }</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  transaction_pay_success [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Success</b>
+      </td></tr>
+      <tr><td>
+        SendSuccess
+      </td></tr>
+    </table>
+  >]
+
+  transaction_overview_awaiting [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Overview (Awaiting)</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>SendPayNowClick</td>
+            // paymentId is a paymentRequestId
+            <td bgcolor='#dddddd'>{ paymentId }</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+  transaction_overview_complete [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Overview (Complete)</b>
+      </td></tr>
+      <tr><td>
+        ViewTransactionClick
+      </td></tr>
+      <tr><td>
+        BuyerActionsClick
+      </td></tr>
+    </table>
+  >]
+
+  mock_transaction_interstitial [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Mock Interstitial</b>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>GoToCheckout</td>
+            <td bgcolor='#dddddd'>Manual</td>
+          </tr>
+        </table>
+      </td></tr>
+      <tr><td>
+        <table border='1' cellborder='0'>
+          <tr>
+            <td>GoToCheckout</td>
+            <td bgcolor='#dddddd'>Auto</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  >]
+
+  subgraph clusterTransactions {
+    label=<
+      <table border='0' cellborder='0'>
+        <tr><td>
+          <b>Transactions</b>
+        </td></tr>
+        <tr><td>
+          https://www.gumtree.com/payments/details/transactions
+        </td></tr>
+      </table>
+    >
+    href="https://www.gumtree.com/payments/details/transactions"
+    fontcolor=blue
+    fontsize=12
+    transaction_interstitial -> opp_transaction_checkout
+    opp_transaction_checkout -> transaction_pay_success, transaction_pay_failed, transaction_pay_expired
+    transaction_overview_awaiting
+    transaction_overview_complete
+    mock_transaction_interstitial
+  }
+
+//#section VIP
+
+  vip_modal_closed [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Onboarded Seller Car VIP</b>
+      </td></tr>
+      <tr><td>
+        SellerBadgeClick
+      </td></tr>
+    </table>
+  >]
+
+  vip_modal_open [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Payments Modal Open</b>
+      </td></tr>
+      <tr><td>
+        OnboardingBuyerClose
+      </td></tr>
+      <tr><td>
+        LinkBegin
+      </td></tr>
+    </table>
+  >]
+
+  subgraph clusterVIP {
+    label=<
+      <table border='0' cellborder='0'>
+        <tr><td>
+          <b>VIP</b>
+        </td></tr>
+        <tr><td>
+          https://www.gumtree.com/p/{car-type}/{ad-title}/{ad-id}
+        </td></tr>
+      </table>
+    >
+    href="https://www.connect.gumtree.io/p/vauxhall/vauxhall-vectra-hatchback-2002-manual-1796-cc-5-doors/1000082528"
+    fontcolor=blue
+    fontsize=12
+    vip_modal_closed
+    vip_modal_open
+  }
+
+//#section SYI
+
+  post_private_car_ad [label=<
+    <table border='1' cellborder='0'>
+      <tr><td>
+        <b>Post Private Car Ad</b>
+      </td></tr>
+    </table>
+  >]
+
+  subgraph clusterSYI {
+    label=<
+      <table border='0' cellborder='0'>
+        <tr><td>
+          <b>SYI</b>
+        </td></tr>
+        <tr><td>
+          https://my.gumtree.com/postad
+        </td></tr>
+      </table>
+    >
+    href="https://my.gumtree.com/postad"
+    fontcolor=blue
+    fontsize=12
+    post_private_car_ad
+  }
+
+
+//#section edges between different clusters
+
+  vip_modal_open -> onboarding_start [
+    ltail=clusterVIP
+    lhead=clusterPaymentsOnboarding
+    minlen=2
+  ]
+  id_icon_unverified -> onboarding_start [
+    ltail=clusterMyDetails
+    lhead=clusterPaymentsOnboarding
+    minlen=2
+  ]
+  user_sees_transactions_button -> transaction_overview_complete [
+    ltail=clusterMessageCentre
+    lhead=clusterTransactions
+    minlen=2
+  ]
+  post_private_car_ad -> onboarding_start [
+    ltail=clusterSYI
+    lhead=clusterPaymentsOnboarding
+    minlen=2
+  ]
+}
