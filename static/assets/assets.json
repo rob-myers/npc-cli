@@ -13,6 +13,8 @@
     "empty-room--039--3x4": {"outputHash": 790563234},
     "engineering--045--6x4": {"outputHash": -157964644},
     "engineering--047--4x7": {"outputHash": -43767230},
+    "extra--fresher--001--0.5x0.5": {"outputHash": -285819775},
+    "extra--fresher--002--0.5x0.5": {"outputHash": 484182043},
     "fresher--020--2x2": {"outputHash": -312653774},
     "fresher--025--3x2": {"outputHash": 1839588519},
     "fresher--036--4x2": {"outputHash": -919696035},
@@ -5115,6 +5117,102 @@
       "width": 30,
       "height": 52.5,
       "pngRect": {"x": -0.25, "y": -0.25, "width": 30.5, "height": 53},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--fresher--001--0.5x0.5": {
+      "key": "extra--fresher--001--0.5x0.5",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.0325, 0],
+              [0.7175, 0],
+              [0.7047, 0.3056],
+              [0.6461, 0.4421],
+              [0.545, 0.5286],
+              [0.3742, 0.5553],
+              [0.1595, 0.4958],
+              [0.0325, 0.3254]
+            ]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.4148, 0.65], [0.4148, 0.7], [0.3641, 0.7], [0.3641, 0.65]]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 180
+          }
+        }
+      ],
+      "unsorted": [],
+      "width": 3.75,
+      "height": 3.75,
+      "pngRect": {"x": 0.1625, "y": 0, "width": 3.425, "height": 2.925},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--fresher--002--0.5x0.5": {
+      "key": "extra--fresher--002--0.5x0.5",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.0958, 0.0203],
+              [0.6551, 0.02],
+              [0.59, 0.4659],
+              [0.495, 0.6945],
+              [0.375, 0.7433],
+              [0.235, 0.6945],
+              [0.15, 0.4659],
+              [0.096, 0.02]
+            ]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.4004, 0.45], [0.4004, 0.5], [0.3496, 0.5], [0.3496, 0.45]]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 180
+          }
+        }
+      ],
+      "unsorted": [],
+      "width": 3.75,
+      "height": 3.75,
+      "pngRect": {"x": 0.45, "y": -0.075, "width": 2.85, "height": 3.9},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []

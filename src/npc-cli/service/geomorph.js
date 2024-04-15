@@ -102,7 +102,10 @@ class GeomorphService {
     "stateroom--020--2x3": true,
     "stateroom--035--2x3": true,
     "stateroom--036--2x4": true,
+
     // 🚧 must extend when adding new symbols
+    "extra--fresher--001--0.5x0.5": true,
+    "extra--fresher--002--0.5x0.5": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */
