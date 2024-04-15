@@ -27,12 +27,12 @@ const opts = getopts(process.argv, { boolean: ['all'] });
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
-const symbolsDir = path.resolve(mediaDir, "symbol");
 const mapsDir = path.resolve(mediaDir, "map");
-/** Assets metadata JSON output */
-const assetsFilename = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
-/** Geomorphs layout JSON output */
-const geomorphsFilename = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
+const symbolsDir = path.resolve(mediaDir, "symbol");
+const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
+const assetsScriptFilepath = __filename;
+const geomorphsScriptFilepath = path.resolve(__dirname, 'geomorphs.js');
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
 // 🚧 dependency graph
@@ -41,16 +41,16 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   
   const assetsJson = /** @type {Geomorph.AssetsJson} */ ({ meta: {}, symbols: {}, maps: {} });
 
-  /** @type {Geomorph.AssetsJson | null} Previous assetsJson */
-  const prevAssets = fs.existsSync(assetsFilename) ? JSON.parse(fs.readFileSync(assetsFilename).toString()) : null;
+  /** @type {Geomorph.AssetsJson | null} Previous `assetsJson` */
+  const prevAssets = fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null;
   
-  const schemaChanged = !!opts.all || !prevAssets || (
-    [assetsFilename, geomorphsFilename].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
+  const updateAll = !!opts.all || !prevAssets || (
+    [assetsScriptFilepath, geomorphsScriptFilepath].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
   );
 
   let symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
-  if (!prevAssets || schemaChanged) {
+  if (updateAll) {
     info(`updating all symbols`);
   } else {// Avoid re-computing
     symbolFilenames = symbolFilenames.filter(filename => {
@@ -69,7 +69,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   info({ changedSymbolsMaps: Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash) });
   
   const assets = geomorphService.deserializeAssets(assetsJson);
-  fs.writeFileSync(assetsFilename, stringify(assetsJson));
+  fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>
     geomorphService.computeLayout(gmKey, assets)
@@ -82,7 +82,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     map: assetsJson.maps,
     layout,
   };
-  fs.writeFileSync(geomorphsFilename, stringify(geomorphService.serializeGeomorphs(geomorphs)));
+  fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
 
   fetch(sendDevEventUrl, {
     method: "POST",
@@ -128,7 +128,6 @@ function parseSymbols({ symbols, meta }, symbolFilenames) {
 }
 
 /**
- * 
  * @param {Geomorph.AssetsJson['symbols']} symbols 
  */
 function validateSubSymbolDimension(symbols) {
