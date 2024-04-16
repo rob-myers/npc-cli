@@ -17,46 +17,11 @@
 
 - integrate TestCharacter into TestWorld
 
-- ✅ script get-pngs extracts starship symbols from source
-  - ✅ extract from media/Symbols
-  - ✅ extract a folder from media/Geomorphs/
-  - ✅ extract a folder from media/Symbols/
-  - ✅ extract from media/Small Craft
-
-- new source material from Robert Pearce?
-  - https://drive.google.com/drive/folders/1apcZgZKXV5qOxNtQxtnQG0QNpkLzor-f
-
-- 🚧 towards recursive non-hull symbols
-  - 🚧 base-graph stratify (tested)
-  - ✅ a non-hull symbol has sub-symbols
-  - ✅ split fresher--001--0.6x1 into extra--fresher--*
-  - ✅ more non-hull symbols have sub-symbols
-  - ✅ non-hull sub-symbols are parsed
-  - ✅ warn if sub-symbols dimension does not match original
-  - ✅ define symbol dependency graph
-  - ✅ build symbol dependency graph
-  - ✅ depict graph using graphviz
-    - ✅ base-graph generates `dot` digraph
-    - https://graphviz.org/doc/info/lang.html
-    - https://dreampuf.github.io/GraphvizOnline
-  - ✅ stratify symbol dependency graph
-
+- 🚧 generate recursive symbols
+  - instantiateFlatSymbol
 
 - raised images: via spritesheet
 - ❌ show tables via raised "floor texture"
-
-- ✅ stop using prettier i.e. use eslint instead
-  - prettier ignore everything
-- start using eslint with auto-format if possible
-
-- ✅ install tailwind
-- ✅ use tailwind/typography in mdx
-- ✅ css fixes
-  - ✅ improve layout width
-  - ✅ fix header css change
-- ✅ adjust nav toggle
-- ✅ header `NPC CLI` -> top bar
-  - FontAwesomeIcon beat was visible over position sticky
 
 - show toast while navmesh loading
   - also show results e.g. number of tiles
@@ -729,3 +694,40 @@ React.useEffect(() => {
 - ✅ can show origNavPoly via floor image
 - ✅ remove origNavPoly from geomorphs.json
 - ✅ draw doors in floor images (e.g. over hull door debug flicker)
+
+- ✅ stop using prettier i.e. use eslint instead
+  - prettier ignore everything
+- start using eslint with auto-format if possible
+
+- ✅ install tailwind
+- ✅ use tailwind/typography in mdx
+- ✅ css fixes
+  - ✅ improve layout width
+  - ✅ fix header css change
+- ✅ adjust nav toggle
+- ✅ header `NPC CLI` -> top bar
+  - FontAwesomeIcon beat was visible over position sticky
+
+- ✅ script get-pngs extracts starship symbols from source
+  - ✅ extract from media/Symbols
+  - ✅ extract a folder from media/Geomorphs/
+  - ✅ extract a folder from media/Symbols/
+  - ✅ extract from media/Small Craft
+
+- new source material from Robert Pearce?
+  - https://drive.google.com/drive/folders/1apcZgZKXV5qOxNtQxtnQG0QNpkLzor-f
+
+- ✅ towards recursive non-hull symbols
+  - ✅ base-graph stratify (tested)
+  - ✅ a non-hull symbol has sub-symbols
+  - ✅ split fresher--001--0.6x1 into extra--fresher--*
+  - ✅ more non-hull symbols have sub-symbols
+  - ✅ non-hull sub-symbols are parsed
+  - ✅ warn if sub-symbols dimension does not match original
+  - ✅ define symbol dependency graph
+  - ✅ build symbol dependency graph
+  - ✅ depict graph using graphviz
+    - ✅ base-graph generates `dot` digraph
+    - https://graphviz.org/doc/info/lang.html
+    - https://dreampuf.github.io/GraphvizOnline
+  - ✅ stratify symbol dependency graph

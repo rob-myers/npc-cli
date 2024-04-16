@@ -41,6 +41,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   
   /** @type {Geomorph.AssetsJson} */
   const assetsJson = { meta: {}, symbols: /** @type {*} */ ({}), maps: {} };
+
   /** @type {Geomorph.AssetsJson | null} Previous `assetsJson` */
   const prevAssets = fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null;
   
@@ -70,10 +71,14 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   const assets = geomorphService.deserializeAssets(assetsJson);
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   
-  // 🚧 use stratification
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
   info(util.inspect({ symbolsStratified }, false, 5))
+
+  // 🚧 new approach:
+  // - traverse stratified symbols from leaves to co-leaves, creating
+  //   `FlatSymbol`s via `flattenSymbol` and `instantiateFlatSymbol`
+  // - each hull symbol induces a layout e.g. doorPolys -> connectors
 
   // Compute geomorphs.json
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>

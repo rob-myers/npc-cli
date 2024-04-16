@@ -135,6 +135,21 @@ declare namespace Geomorph {
     Pick<Geomorph.ParsedSymbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
   >;
 
+  /**
+   * @see ParsedSymbolGeneric` where `symbols` has been absorbed into the other fields.
+   */
+  type FlatSymbolGeneric<
+    P extends Geom.GeoJsonPolygon | Geom.Poly,
+    V extends Geom.VectJson | Geom.Vect,
+    R extends Geom.RectJson | Geom.Rect
+  > = Pretty<Omit<
+    ParsedSymbolGeneric<P, V, R>,
+    'symbols' | 'pngRect' | 'width' | 'height' | 'hullWalls'
+  >>;
+
+  type FlatSymbol = FlatSymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
+  type FlatSymbolJson = FlatSymbolGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
+
   interface MapDef {
     /** e.g. `demo-map-1` */
     key: string;

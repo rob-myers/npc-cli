@@ -128,23 +128,22 @@ class GeomorphService {
     const hullPoly = Poly.union(hullSym.hullWalls);
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
-    const doors = hullSym.doors.map((x) => new Connector(x));
-    const windows = hullSym.windows.map((x) => new Connector(x));
-    const uncutWalls = hullSym.walls.slice();
-    const obstacles = hullSym.obstacles.slice();
     const decor = hullSym.decor.slice();
+    const doors = hullSym.doors.map((x) => new Connector(x));
+    const obstacles = hullSym.obstacles.slice();
+    const uncutWalls = hullSym.walls.slice();
+    const unsorted = hullSym.unsorted.slice();
+    const windows = hullSym.windows.map((x) => new Connector(x));
+
     for (const { symbolKey, transform, meta } of hullSym.symbols) {
       const symbol = assets.symbols[symbolKey];
-      const transformed = geomorphService.instantiateLayoutSymbol(
-        symbol,
-        meta.doors,
-        meta.walls,
-        transform,
-      );
-      doors.push(...transformed.doors);
-      uncutWalls.push(...transformed.walls);
-      obstacles.push(...transformed.obstacles);
+      const transformed = geomorphService.instantiateLayoutSymbol(symbol, meta, transform);
       decor.push(...transformed.decor);
+      doors.push(...transformed.doors);
+      obstacles.push(...transformed.obstacles);
+      windows.push(...transformed.windows);
+      uncutWalls.push(...transformed.walls);
+      unsorted.push(...transformed.unsorted);
     }
 
     const doorPolys = doors.map((x) => x.poly);
@@ -455,6 +454,46 @@ class GeomorphService {
   }
 
   /**
+   * Mutates `flattened`, using pre-existing entries.
+   * Expects dependent flattened symbols to be in `flattened`.
+   * @param {Geomorph.ParsedSymbol} symbol 
+   * @param {{ [symbolKey in Geomorph.SymbolKey]?: Geomorph.FlatSymbol }} flattened 
+   * @returns {void}
+   */
+  flattenSymbol(symbol, flattened) {
+    const {
+      key, isHull, width, height, pngRect,
+      addableWalls, removableDoors, hullWalls,
+      walls, obstacles, doors, windows, decor, unsorted,
+      symbols,
+    } = symbol;
+
+    // ✅ instantiateFlatLayout transforms a FlatSymbol without connectors
+    // 🚧 setup loop which applies this function
+    // 🚧 this function combines `symbol` with instantiations of existing FlatSymbols
+    // 🚧 after `flattened` is complete, create layout
+    
+
+    // symbols.map(({ symbolKey, meta, transform }) =>
+    //   this.instantiateLayoutSymbol(flattened[symbolKey], doorTags, wallTags, transform)
+    // );
+
+    /** @type {Geomorph.FlatSymbol} */
+    const flatSymbol = {
+      key, isHull,
+      addableWalls, removableDoors, // not aggregated
+      // 🚧 ...
+      walls: [],
+      obstacles: [],
+      doors: [],
+      decor: [],
+      unsorted: [],
+      windows: [],
+    };
+    flattened[key] = flatSymbol;
+  }
+
+  /**
    * @param {number} gmId
    * @param {number} doorId
    */
@@ -480,16 +519,59 @@ class GeomorphService {
   }
 
   /**
-   * When hull symbols reference non-hull symbols, they may:
-   * - remove doors tagged with `optional`
-   * - remove walls tagged with `optional`
-   * @param {Geomorph.ParsedSymbol} sym
-   * @param {string[] | undefined} doorTags e.g. `['s']`
-   * @param {string[] | undefined} wallTags e.g. `['e']`, or `undefined` for all walls
+   * @param {Geomorph.FlatSymbol} sym
+   * @param {Geomorph.Meta} meta
    * @param {Geom.SixTuple} transform
-   * @returns {Pick<Geomorph.ParsedSymbol, 'decor' | 'obstacles' | 'walls'> & { doors: Connector[] }}
+   * @returns {Geomorph.FlatSymbol}
    */
-  instantiateLayoutSymbol(sym, doorTags, wallTags, transform) {
+  instantiateFlatSymbol(sym, meta, transform) {
+    /** e.g. `['e']`, `['s']`  */
+    const doorTags = /** @type {string[] | undefined} */ (meta.doors);
+    const wallTags = /** @type {string[] | undefined} */ (meta.wall);
+    tmpMat1.feedFromArray(transform);
+
+    const doorsToRemove = sym.removableDoors.filter(({ doorId }) => {
+      const { meta } = sym.doors[doorId];
+      return !doorTags ? false : !doorTags.some((tag) => meta[tag] === true);
+    });
+
+    const doors = sym.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId));
+
+    const wallsToAdd = /** @type {Geom.Poly[]} */ ([]).concat(
+      doorsToRemove.map((x) => x.wall),
+      sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
+    );
+
+    return {
+      key: sym.key,
+      isHull: sym.isHull,
+      addableWalls: [],
+      removableDoors: [],
+      // cloning poly removes meta
+      decor: sym.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      doors: doors.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      obstacles: sym.obstacles.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
+      windows: sym.windows.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      unsorted: sym.unsorted.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+    };
+  }
+
+  /**
+   * 🚧 remove this, in favour instantiateFlatSymbol
+   * When symbols reference other symbols, they:
+   * - transform them
+   * - may remove doors originally tagged with `optional`
+   * - may remove walls originally tagged with `optional`
+   * @param {Geomorph.ParsedSymbol} sym
+   * @param {Geomorph.Meta} meta
+   * @param {Geom.SixTuple} transform
+   * @returns {Pick<Geomorph.ParsedSymbol, 'decor' | 'obstacles' | 'walls' | 'unsorted'> & { doors: Connector[]; windows: Connector[]; }}
+   */
+  instantiateLayoutSymbol(sym, meta, transform) {
+    /** e.g. `['e']`, `['s']`  */
+    const doorTags = /** @type {string[] | undefined} */ (meta.doors);
+    const wallTags = /** @type {string[] | undefined} */ (meta.wall);
     tmpMat1.feedFromArray(transform);
 
     const doorsToRemove = sym.removableDoors.filter(({ doorId }) => {
@@ -510,6 +592,8 @@ class GeomorphService {
       doors: doors.map((x) => new Connector(x.cleanClone(tmpMat1), { meta: x.meta })),
       obstacles: sym.obstacles.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
       walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
+      windows: sym.windows.map((x) => new Connector(x.cleanClone(tmpMat1), { meta: x.meta })),
+      unsorted: sym.unsorted.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
     };
   }
 

@@ -443,6 +443,7 @@ ${this.edgesArray.map(x => `  "${x.src.id}" -> "${x.dst.id}" ${edgeLabel(x) || '
   }
 
   /**
+   * From leaves to co-leaves
    * @param {boolean} [throwOnLoop] 
    * @returns {Node[][]}
    */
