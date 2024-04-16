@@ -219,7 +219,7 @@ declare namespace Graph {
   
   interface SymbolGraphEdgeOpts extends BaseEdgeOpts {
     transform: Geom.SixTuple;
-    meta?: Geomorph.Meta;
+    meta: Geomorph.Meta;
   }
 
   type SymbolGraphJson = GraphJson<SymbolGraphNode, SymbolGraphEdgeOpts>;

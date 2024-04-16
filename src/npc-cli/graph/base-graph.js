@@ -457,15 +457,21 @@ ${this.edgesArray.map(x => `  "${x.src.id}" -> "${x.dst.id}" ${edgeLabel(x) || '
       : (x) => warn(`stratify: ignoring already seen node: ${x.id}`)
     );
 
-    while ((
+    while (
       frontier = [],
-      unseen = unseen.filter(x =>
-        this.getSuccs(x).every(y => seen.has(y))
-          ? seen.has(x) ? onAlreadySeen(x) : (seen.add(x), frontier.push(x))
-          : true
-      )).length && output.push(frontier)
+      unseen = unseen.filter(x => {
+        if (!this.getSuccs(x).every(y => seen.has(y))) {
+          return true;
+        } else if (!seen.has(x)) {
+          seen.add(x);
+          frontier.push(x);
+        } else {// Warn or throw
+          onAlreadySeen(x);
+        }
+      }),
+      output.push(frontier),
+      unseen.length
     );
-
     return output;
   }
 

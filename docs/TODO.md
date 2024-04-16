@@ -33,12 +33,13 @@
   - ✅ more non-hull symbols have sub-symbols
   - ✅ non-hull sub-symbols are parsed
   - ✅ warn if sub-symbols dimension does not match original
-  - define symbol dependency graph
-  - build symbol dependency graph
-  - stratify symbol dependency graph
-  - depict graph using graphviz
-    - generate `dot` digraph
+  - ✅ define symbol dependency graph
+  - ✅ build symbol dependency graph
+  - ✅ depict graph using graphviz
+    - ✅ base-graph generates `dot` digraph
+    - https://graphviz.org/doc/info/lang.html
     - https://dreampuf.github.io/GraphvizOnline
+  - ✅ stratify symbol dependency graph
 
 
 - raised images: via spritesheet

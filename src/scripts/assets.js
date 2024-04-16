@@ -15,14 +15,16 @@
 
 import fs from "fs";
 import path from "path";
+import util from "util";
+import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
 import { hashText, info, keyedItemsToLookup, warn } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
+import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 
-import getopts from 'getopts';
 const opts = getopts(process.argv, { boolean: ['all'] });
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
@@ -32,23 +34,22 @@ const symbolsDir = path.resolve(mediaDir, "symbol");
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
-const geomorphsScriptFilepath = path.resolve(__dirname, 'geomorphs.js');
+const geomorphServicepath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
-
-// 🚧 dependency graph
 
 (function main() {
   
-  const assetsJson = /** @type {Geomorph.AssetsJson} */ ({ meta: {}, symbols: {}, maps: {} });
-
+  /** @type {Geomorph.AssetsJson} */
+  const assetsJson = { meta: {}, symbols: /** @type {*} */ ({}), maps: {} };
   /** @type {Geomorph.AssetsJson | null} Previous `assetsJson` */
   const prevAssets = fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null;
   
-  const updateAll = !!opts.all || !prevAssets || (
-    [assetsScriptFilepath, geomorphsScriptFilepath].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
-  );
-
+  // Source SVGs
   let symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
+
+  const updateAll = !!opts.all || !prevAssets || (
+    [assetsScriptFilepath, geomorphServicepath].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
+  );
 
   if (updateAll) {
     info(`updating all symbols`);
@@ -62,15 +63,19 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     info(`updating symbols: ${JSON.stringify(symbolFilenames)}`);
   }
 
-  // Main computation
+  // Compute assets.json
   parseSymbols(assetsJson, symbolFilenames);
   parseMaps(assetsJson);
-  
   info({ changedSymbolsMaps: Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash) });
-  
   const assets = geomorphService.deserializeAssets(assetsJson);
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   
+  // 🚧 use stratification
+  const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
+  const symbolsStratified = symbolGraph.stratify();
+  info(util.inspect({ symbolsStratified }, false, 5))
+
+  // Compute geomorphs.json
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>
     geomorphService.computeLayout(gmKey, assets)
   ));
