@@ -17,8 +17,16 @@
 
 - integrate TestCharacter into TestWorld
 
-- 🚧 generate recursive symbols
-  - instantiateFlatSymbol
+- ✅ generate recursive symbols
+  - ✅ instantiateFlatLayout transforms a FlatSymbol without connectors
+  - ✅ assets.js applies this function in a loop
+  - ✅ flattenSymbol combines `symbol` with instantiations of existing FlatSymbols
+  - ✅ after `flattened` is complete, create layout
+  - ✅ understand/fix stateroom--036
+    - symbol `<g>` was transformed
+
+- refine recursive symbol example i.e. stateroom--036
+- more examples
 
 - raised images: via spritesheet
 - ❌ show tables via raised "floor texture"

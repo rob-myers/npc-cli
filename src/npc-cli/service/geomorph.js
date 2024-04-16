@@ -116,58 +116,42 @@ class GeomorphService {
   }
 
   /**
-   * 🚧
-   * @param {Geomorph.GeomorphKey} gmKey
-   * @param {Geomorph.Assets} assets
+   * @param {Geomorph.GeomorphKey} gmKey 
+   * @param {Geomorph.FlatSymbol} symbol
+   * @param {Pick<Geomorph.ParsedSymbol, 'hullWalls' | 'pngRect'>} context
    * @returns {Geomorph.Layout}
    */
-  computeLayout(gmKey, assets) {
-    debug(`computeLayout ${gmKey}`);
-    const { hullKey } = this.gmKeyToKeys(gmKey);
-    const hullSym = assets.symbols[hullKey];
-    const hullPoly = Poly.union(hullSym.hullWalls);
+  createLayout(gmKey, symbol, { hullWalls, pngRect }) {
+    debug(`createLayout ${gmKey}`);
+    const hullPoly = Poly.union(hullWalls);
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
-    const decor = hullSym.decor.slice();
-    const doors = hullSym.doors.map((x) => new Connector(x));
-    const obstacles = hullSym.obstacles.slice();
-    const uncutWalls = hullSym.walls.slice();
-    const unsorted = hullSym.unsorted.slice();
-    const windows = hullSym.windows.map((x) => new Connector(x));
+    const uncutWalls = symbol.walls;
 
-    for (const { symbolKey, transform, meta } of hullSym.symbols) {
-      const symbol = assets.symbols[symbolKey];
-      const transformed = geomorphService.instantiateLayoutSymbol(symbol, meta, transform);
-      decor.push(...transformed.decor);
-      doors.push(...transformed.doors);
-      obstacles.push(...transformed.obstacles);
-      windows.push(...transformed.windows);
-      uncutWalls.push(...transformed.walls);
-      unsorted.push(...transformed.unsorted);
-    }
-
-    const doorPolys = doors.map((x) => x.poly);
     // Cutting pointwise avoids errors (e.g. for 301), and can propagate meta
     const cutWalls = uncutWalls.flatMap((x) =>
-      Poly.cutOut(doorPolys, [x]).map((x) => Object.assign(x, { meta: x.meta }))
+      Poly.cutOut(symbol.doors, [x]).map((x) => Object.assign(x, { meta: x.meta }))
     );
-
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
-    // room meta follows from `decor meta`
-    rooms.forEach((room) => Object.assign(room.meta = {}, ...decor.flatMap((x) =>
-      x.meta.meta === true && room.contains(x.outline[0]) ? x.meta : []
-    ), { meta: undefined }));
+    // room meta follows from decor meta tagged "meta"
+    const metaDecor = symbol.decor.filter(x => x.meta.meta);
+    rooms.forEach((room) => Object.assign(
+      room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined })
+    );
 
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
-      ...obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
+      ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
     ], hullOutline).map((x) => x.cleanFinalReps().precision(precision));
+
+    const doors = symbol.doors.map(x => new Connector(x));
+    const windows = symbol.windows.map(x => new Connector(x));
 
     return {
       key: gmKey,
-      pngRect: hullSym.pngRect.clone(),
+      pngRect: pngRect.clone(),
       hullPoly,
       hullDoors: doors.filter(x => x.meta.hull),
       doors,
@@ -457,40 +441,36 @@ class GeomorphService {
    * Mutates `flattened`, using pre-existing entries.
    * Expects dependent flattened symbols to be in `flattened`.
    * @param {Geomorph.ParsedSymbol} symbol 
-   * @param {{ [symbolKey in Geomorph.SymbolKey]?: Geomorph.FlatSymbol }} flattened 
+   * @param {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} flattened 
+   * This lookup only needs to contain sub-symbols of `symbol`.
    * @returns {void}
    */
   flattenSymbol(symbol, flattened) {
     const {
-      key, isHull, width, height, pngRect,
-      addableWalls, removableDoors, hullWalls,
+      key, isHull,
+      addableWalls, removableDoors,
       walls, obstacles, doors, windows, decor, unsorted,
       symbols,
     } = symbol;
 
-    // ✅ instantiateFlatLayout transforms a FlatSymbol without connectors
-    // 🚧 setup loop which applies this function
-    // 🚧 this function combines `symbol` with instantiations of existing FlatSymbols
-    // 🚧 after `flattened` is complete, create layout
-    
+    const flats = symbols.map(({ symbolKey, meta, transform, }) =>
+      this.instantiateFlatSymbol(flattened[symbolKey], meta, transform)
+    );
 
-    // symbols.map(({ symbolKey, meta, transform }) =>
-    //   this.instantiateLayoutSymbol(flattened[symbolKey], doorTags, wallTags, transform)
-    // );
-
-    /** @type {Geomorph.FlatSymbol} */
-    const flatSymbol = {
-      key, isHull,
-      addableWalls, removableDoors, // not aggregated
-      // 🚧 ...
-      walls: [],
-      obstacles: [],
-      doors: [],
-      decor: [],
-      unsorted: [],
-      windows: [],
+    flattened[key] = {
+      key,
+      isHull,
+      // not aggregated, only cloned
+      addableWalls: addableWalls.map(x => Object.assign(x.cleanClone(), { meta: x.meta })),
+      removableDoors: removableDoors.map(x => ({ ...x, wall: x.wall.cleanClone() })),
+      // aggregated and cloned
+      walls: walls.concat(flats.flatMap(x => x.walls)),
+      obstacles: obstacles.concat(flats.flatMap(x => x.obstacles)),
+      doors: doors.concat(flats.flatMap(x => x.doors)),
+      decor: decor.concat(flats.flatMap(x => x.decor)),
+      unsorted: unsorted.concat(flats.flatMap(x => x.unsorted)),
+      windows: windows.concat(flats.flatMap(x => x.windows)),
     };
-    flattened[key] = flatSymbol;
   }
 
   /**
@@ -519,6 +499,10 @@ class GeomorphService {
   }
 
   /**
+   * When instantiating flat symbols we:
+   * - can transform them
+   * - can remove doors tagged with `optional`
+   * - can remove walls tagged with `optional`
    * @param {Geomorph.FlatSymbol} sym
    * @param {Geomorph.Meta} meta
    * @param {Geom.SixTuple} transform
@@ -553,46 +537,6 @@ class GeomorphService {
       obstacles: sym.obstacles.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
       walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
       windows: sym.windows.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
-      unsorted: sym.unsorted.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
-    };
-  }
-
-  /**
-   * 🚧 remove this, in favour instantiateFlatSymbol
-   * When symbols reference other symbols, they:
-   * - transform them
-   * - may remove doors originally tagged with `optional`
-   * - may remove walls originally tagged with `optional`
-   * @param {Geomorph.ParsedSymbol} sym
-   * @param {Geomorph.Meta} meta
-   * @param {Geom.SixTuple} transform
-   * @returns {Pick<Geomorph.ParsedSymbol, 'decor' | 'obstacles' | 'walls' | 'unsorted'> & { doors: Connector[]; windows: Connector[]; }}
-   */
-  instantiateLayoutSymbol(sym, meta, transform) {
-    /** e.g. `['e']`, `['s']`  */
-    const doorTags = /** @type {string[] | undefined} */ (meta.doors);
-    const wallTags = /** @type {string[] | undefined} */ (meta.wall);
-    tmpMat1.feedFromArray(transform);
-
-    const doorsToRemove = sym.removableDoors.filter(({ doorId }) => {
-      const { meta } = sym.doors[doorId];
-      return !doorTags ? false : !doorTags.some((tag) => meta[tag] === true);
-    });
-
-    const doors = sym.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId));
-
-    const wallsToAdd = /** @type {Geom.Poly[]} */ ([]).concat(
-      doorsToRemove.map((x) => x.wall),
-      sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
-    );
-
-    return {
-      // cloning poly removes meta
-      decor: sym.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
-      doors: doors.map((x) => new Connector(x.cleanClone(tmpMat1), { meta: x.meta })),
-      obstacles: sym.obstacles.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
-      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
-      windows: sym.windows.map((x) => new Connector(x.cleanClone(tmpMat1), { meta: x.meta })),
       unsorted: sym.unsorted.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
     };
   }
@@ -764,6 +708,9 @@ class GeomorphService {
           const [symbolKey, ...symbolTags] = ownTags;
           if (parent.tagName !== "rect") {
             return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: ignored non-rect`);
+          }
+          if (symbolKey.startsWith("_")) {
+            return warn(`parseSymbol: symbols: ignored ${contents} with underscore prefix`);
           }
           if (!geomorphService.isSymbolKey(symbolKey)) {
             throw Error(`parseSymbol: symbols: ${contents}: must start with a symbol key`);

@@ -75,15 +75,22 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   const symbolsStratified = symbolGraph.stratify();
   info(util.inspect({ symbolsStratified }, false, 5))
 
-  // 🚧 new approach:
-  // - traverse stratified symbols from leaves to co-leaves, creating
-  //   `FlatSymbol`s via `flattenSymbol` and `instantiateFlatSymbol`
-  // - each hull symbol induces a layout e.g. doorPolys -> connectors
-
-  // Compute geomorphs.json
-  const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey =>
-    geomorphService.computeLayout(gmKey, assets)
+  // traverse stratified symbols from leaves to co-leaves, creating
+  // FlatSymbols via flattenSymbol and instantiateFlatSymbol
+  const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
+  symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
+    geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
+  
+  // Compute geomorphs.json
+  const newLayouts = geomorphService.gmKeys.map(gmKey => {
+    const hullKey = geomorphService.toHullKey[gmKey];
+    const { pngRect, hullWalls } = assets.symbols[hullKey];
+    const flatSymbol = flattened[hullKey];
+    return geomorphService.createLayout(gmKey, flatSymbol, { pngRect, hullWalls });
+  });
+
+  const layout = keyedItemsToLookup(newLayouts);
 
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
