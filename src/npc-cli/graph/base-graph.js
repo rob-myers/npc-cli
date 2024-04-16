@@ -180,6 +180,22 @@ export class BaseGraph {
   }
 
   /**
+   * 
+   * @param {string} graphName 
+   * @param {(edge: Edge) => string | null} [edgeLabel] 
+   */
+  getGraphviz(graphName, edgeLabel = () => null) {
+    return `
+digraph ${graphName} {
+  
+${this.nodesArray.map(x => `  "${x.id}"\n`).join('')}
+
+${this.edgesArray.map(x => `  "${x.src.id}" -> "${x.dst.id}" ${edgeLabel(x) || ''}\n`).join('')}
+
+}`;
+  }
+
+  /**
    * Get `node` where `node.id === id`, or null.
    * @param {string} id
    */
@@ -432,9 +448,9 @@ export class BaseGraph {
    */
   stratify(throwOnLoop = false) {
     let unseen = this.nodesArray.slice();
-    let frontier = /** @type {Node[]} */ ([]);
     const seen = /** @type {Set<Node>} */ (new Set());
     const output = /** @type {Node[][]} */ ([]);
+    let frontier = /** @type {Node[]} */ ([]);
     
     const onAlreadySeen = /** @type {(x: Node) => void} */ (throwOnLoop
       ? (x) => { throw Error(`stratify: already seen node: ${x.id}`) }
@@ -444,10 +460,11 @@ export class BaseGraph {
     while ((
       frontier = [],
       unseen = unseen.filter(x =>
-        this.getPreds(x).every(y => seen.has(y)) && (
-          seen.has(x) ? (onAlreadySeen(x), false) : (seen.add(x), frontier.push(x), true)
-      )
-    )).length && output.push(frontier));
+        this.getSuccs(x).every(y => seen.has(y))
+          ? seen.has(x) ? onAlreadySeen(x) : (seen.add(x), frontier.push(x))
+          : true
+      )).length && output.push(frontier)
+    );
 
     return output;
   }
