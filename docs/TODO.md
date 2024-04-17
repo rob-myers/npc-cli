@@ -25,8 +25,12 @@
   - ✅ understand/fix stateroom--036
     - symbol `<g>` was transformed
 
-- refine recursive symbol example i.e. stateroom--036
-- more examples
+- 🚧 refine recursive symbol example i.e. stateroom--036
+- 🚧 sub-symbol decor meta.orient (degrees) is transformed too
+  - ✅ layout.decor exists
+  - see modifySinglesMeta in repo the-last-redoubt
+- layout.decor are points, rects or circles
+- more recursive symbols
 
 - raised images: via spritesheet
 - ❌ show tables via raised "floor texture"

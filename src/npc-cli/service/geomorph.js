@@ -127,7 +127,6 @@ class GeomorphService {
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
     const uncutWalls = symbol.walls;
-
     // Cutting pointwise avoids errors (e.g. for 301), and can propagate meta
     const cutWalls = uncutWalls.flatMap((x) =>
       Poly.cutOut(symbol.doors, [x]).map((x) => Object.assign(x, { meta: x.meta }))
@@ -135,11 +134,11 @@ class GeomorphService {
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
-    // room meta follows from decor meta tagged "meta"
+    // room meta comes from decor.meta tagged meta
     const metaDecor = symbol.decor.filter(x => x.meta.meta);
     rooms.forEach((room) => Object.assign(
-      room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined })
-    );
+      room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
+    ));
 
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
@@ -151,10 +150,11 @@ class GeomorphService {
 
     return {
       key: gmKey,
+      decor: symbol.decor,
       pngRect: pngRect.clone(),
+      doors,
       hullPoly,
       hullDoors: doors.filter(x => x.meta.hull),
-      doors,
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
       windows,
@@ -244,12 +244,15 @@ class GeomorphService {
     return {
       key: json.key,
       pngRect: Rect.fromJson(json.pngRect),
+
+      decor: json.decor.map(Poly.from),
+      doors,
       hullPoly: json.hullPoly.map(Poly.from),
       hullDoors: doors.filter(x => x.meta.hull),
-      doors,
-      windows: json.windows.map(Connector.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
+      windows: json.windows.map(Connector.from),
+
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
       navDoorwaysOffset: json.navDoorwaysOffset,
     };
@@ -499,10 +502,10 @@ class GeomorphService {
   }
 
   /**
-   * When instantiating flat symbols we:
-   * - can transform them
-   * - can remove doors tagged with `optional`
-   * - can remove walls tagged with `optional`
+   * When instantiating flat symbols:
+   * - we can transform them
+   * - we can remove doors tagged with `optional`
+   * - we can remove walls tagged with `optional`
    * @param {Geomorph.FlatSymbol} sym
    * @param {Geomorph.Meta} meta
    * @param {Geom.SixTuple} transform
@@ -525,6 +528,8 @@ class GeomorphService {
       doorsToRemove.map((x) => x.wall),
       sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
     );
+
+    // 🚧 transform decor.meta.orient
 
     return {
       key: sym.key,
@@ -860,12 +865,15 @@ class GeomorphService {
     return {
       key: layout.key,
       pngRect: layout.pngRect,
-      hullPoly: layout.hullPoly.map(x => x.geoJson),
+
+      decor: layout.decor.map(x => Object.assign(x.geoJson, { meta: x.meta })),
+      doors: layout.doors.map(x => x.json),
       hullDoors: layout.hullDoors.map((x) => x.json),
-      doors: layout.doors.map((x) => x.json),
-      windows: layout.windows.map((x) => x.json),
+      hullPoly: layout.hullPoly.map(x => x.geoJson),
       rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      windows: layout.windows.map((x) => x.json),
+
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
       navDoorwaysOffset: layout.navDoorwaysOffset,
     };

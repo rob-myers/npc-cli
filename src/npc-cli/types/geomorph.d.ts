@@ -89,12 +89,12 @@ declare namespace Geomorph {
      * A hull symbol may have other walls, but they'll be in `walls`.
      */
     hullWalls: Geomorph.WithMeta<P>[];
+    decor: Geomorph.WithMeta<P>[];
+    doors: Geomorph.WithMeta<P>[];
+    obstacles: Geomorph.WithMeta<P>[];
     /** Union of uncut non-optional walls including hull walls. */
     walls: Geomorph.WithMeta<P>[];
-    obstacles: Geomorph.WithMeta<P>[];
-    doors: Geomorph.WithMeta<P>[];
     windows: Geomorph.WithMeta<P>[];
-    decor: Geomorph.WithMeta<P>[];
     /** 🚧 refine? */
     unsorted: Geomorph.WithMeta<P>[];
 
@@ -142,7 +142,9 @@ declare namespace Geomorph {
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,
     R extends Geom.RectJson | Geom.Rect
-  > = Pretty<Omit<ParsedSymbolGeneric<P, V, R>, 'symbols' | 'pngRect' | 'width' | 'height' | 'hullWalls'>>;
+  > = Pretty<
+    Omit<ParsedSymbolGeneric<P, V, R>, 'symbols' | 'pngRect' | 'width' | 'height' | 'hullWalls'>
+  >;
 
   type FlatSymbol = FlatSymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
   type FlatSymbolJson = FlatSymbolGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
@@ -165,6 +167,8 @@ declare namespace Geomorph {
     key: GeomorphKey;
     pngRect: R;
 
+    /** 🚧 points, rects or circles */
+    decor: WithMeta<P>[];
     hullPoly: P[];
     rooms: WithMeta<P>[];
     hullDoors: C[];
