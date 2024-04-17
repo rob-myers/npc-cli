@@ -98,7 +98,7 @@ declare namespace Geomorph {
     /** 🚧 refine? */
     unsorted: Geomorph.WithMeta<P>[];
 
-    /** Hull symbols have sub symbols, defining the layout of the geomorph. */
+    /** Symbols can have sub symbols, e.g. hull symbols use them to layout a geomorph. */
     symbols: Geomorph.WithMeta<{
       symbolKey: Geomorph.SymbolKey;
       /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */

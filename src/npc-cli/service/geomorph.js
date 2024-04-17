@@ -366,7 +366,7 @@ class GeomorphService {
    * @param {string} transformAttribute
    * @returns {Geom.SixTuple | null}
    */
-  extractSixTuple(transformAttribute = "matrix(1, 0, 0, 1, 0, 0)", rounded = true) {
+  extractSixTuple(transformAttribute = "matrix(1, 0, 0, 1, 0, 0)", rounded = false) {
     const transform = safeJsonParse(`[${transformAttribute.slice("matrix(".length, -1)}]`);
     if (geom.isTransformTuple(transform)) {
       return rounded ? /** @type {Geom.SixTuple} */ (transform.map(Math.round)) : transform;
@@ -382,34 +382,37 @@ class GeomorphService {
    * - Support transform-origin `50% 50%`
    * - Support transform-box `fill-box`
    * - In SVG initial CSS value of transform-origin is `0 0` (elsewhere `50% 50%`)
-   *
+   * - transform-origin is relative to <rect> or <path>, ignoring transform.
    * @private
-   * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
+   * @param {object} opts
+   * @param {string} opts.tagName
+   * @param {Record<string, string>} opts.attributes
    */
-  extractTransformData(tagMeta) {
-    const { tagName, attributes: a } = tagMeta;
+  extractTransformData({ tagName, attributes: a }) {
     const style = geomorphService.extractStyles(a.style ?? "");
-    let { "transform-origin": transformOrigin = "", "transform-box": transformBox = null } = style;
-    transformOrigin = transformOrigin.trim();
+    const transformOrigin = (style['transform-origin'] || '').trim();
+    const transformBox = style['transform-box'] || null;
+    
     /** For `transform-box: fill-box` */
     let bounds = /** @type {Rect | undefined} */ (undefined);
-
     const [xPart, yPart] = transformOrigin.split(/\s+/);
+
     if (!xPart || !yPart) {
       transformOrigin && error(`unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
       return { transformOrigin: null, transformBox };
     }
-    if (transformBox && transformBox !== 'fill-box') {
-      error(`unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
-      return { transformOrigin: null, transformBox };
-    }
 
-    if (transformBox === 'fill-box') {
-      if (tagName === 'rect') {
-        bounds = new Rect(Number(a.x), Number(a.y), Number(a.width), Number(a.height));
-      } else if (tagName === 'path') {
-        const pathPoly = geom.svgPathToPolygon(a.d);
-        pathPoly && (bounds = pathPoly.rect) || error(`path.d parse failed: ${a.d}`);
+    if (transformBox) {
+      if (transformBox === 'fill-box') {
+        if (tagName === 'rect') {
+          bounds = new Rect(Number(a.x), Number(a.y), Number(a.width), Number(a.height));
+        } else if (tagName === 'path') {
+          const pathPoly = geom.svgPathToPolygon(a.d);
+          pathPoly && (bounds = pathPoly.rect) || error(`path.d parse failed: ${a.d}`);
+        }
+      } else {
+        error(`unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
+        return { transformOrigin: null, transformBox };
       }
     }
 
@@ -418,10 +421,11 @@ class GeomorphService {
       if ((match = rep.match(/^(-?\d+(?:.\d+)?)%$/))) {// e.g. -50.02%
         if (transformBox !== 'fill-box' || !bounds) {
           return null; // only support percentages for fill-box
+        } else {
+          return (i === 0 ? bounds.x : bounds.y) + (
+            (Number(match[1]) / 100) * (i === 0 ? bounds.width : bounds.height)
+          );
         }
-        return (i === 0 ? bounds.x : bounds.y) + (
-          (Number(match[1]) / 100) * (i === 0 ? bounds.width : bounds.height)
-        );
       } else if ((match = rep.match(/^(-?\d+(?:.\d+)?)(?:px)$/))) {// e.g. 48.44px
         return Number(match[1]);
       } else {
@@ -430,10 +434,7 @@ class GeomorphService {
     });
 
     if (Number.isFinite(x) && Number.isFinite(y)) {
-      return {
-        transformOrigin: /** @type {Geom.VectJson} */ ({ x, y }),
-        transformBox,
-      };
+      return { transformOrigin: Vect.from(/** @type {Geom.VectJson} */ ({ x, y })), transformBox };
     } else {
       transformOrigin && error(`${tagName}: unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
       return { transformOrigin: null, transformBox };
@@ -456,7 +457,7 @@ class GeomorphService {
       symbols,
     } = symbol;
 
-    const flats = symbols.map(({ symbolKey, meta, transform, }) =>
+    const flats = symbols.map(({ symbolKey, meta, transform }) =>
       this.instantiateFlatSymbol(flattened[symbolKey], meta, transform)
     );
 
@@ -529,8 +530,6 @@ class GeomorphService {
       sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
     );
 
-    // 🚧 transform decor.meta.orient
-
     return {
       key: sym.key,
       isHull: sym.isHull,
@@ -590,6 +589,7 @@ class GeomorphService {
   parseMap(mapKey, svgContents) {
     const gms = /** @type {Geomorph.MapDef['gms']} */ ([]);
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
+    const scale = worldScale * 1; // map scaled like hull symbols
 
     const parser = new htmlparser2.Parser({
       onopentag(name, attributes) {
@@ -613,11 +613,9 @@ class GeomorphService {
         }
 
         const rect = geomorphService.extractRect(parent.attributes);
-        const transform = geomorphService.extractSixTuple(parent.attributes.transform);
-        const { transformOrigin } = geomorphService.extractTransformData({
-          ...parent,
-          title: contents,
-        });
+        // 🔔 Rounded because map transforms must preserve axis-aligned rects
+        const transform = geomorphService.extractSixTuple(parent.attributes.transform, true);
+        const { transformOrigin } = geomorphService.extractTransformData(parent);
 
         if (transform) {
           const reduced = geom.reduceAffineTransform(
@@ -625,8 +623,8 @@ class GeomorphService {
             transform,
             transformOrigin ?? { x: 0, y: 0 }
           );
-          reduced[4] = toPrecision(reduced[4] * worldScale, precision);
-          reduced[5] = toPrecision(reduced[5] * worldScale, precision);
+          reduced[4] = toPrecision(reduced[4] * scale, precision);
+          reduced[5] = toPrecision(reduced[5] * scale, precision);
           gms.push({ gmKey: geomorphService.toGmKey[gmNumber], transform: reduced });
         }
       },
@@ -707,33 +705,30 @@ class GeomorphService {
 
         const ownTags = contents.split(" ");
 
-        // Hull symbol has folder "symbols" defining layout
-        // 🚧 all symbols can have such a folder
+        // symbol may have folder "symbols" defining layout
         if (folderStack[0] === "symbols") {
-          const [symbolKey, ...symbolTags] = ownTags;
+          const [subSymbolKey, ...symbolTags] = ownTags;
           if (parent.tagName !== "rect") {
             return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: ignored non-rect`);
           }
-          if (symbolKey.startsWith("_")) {
+          if (subSymbolKey.startsWith("_")) {
             return warn(`parseSymbol: symbols: ignored ${contents} with underscore prefix`);
           }
-          if (!geomorphService.isSymbolKey(symbolKey)) {
+          if (!geomorphService.isSymbolKey(subSymbolKey)) {
             throw Error(`parseSymbol: symbols: ${contents}: must start with a symbol key`);
           }
 
           const rect = geomorphService.extractRect(parent.attributes);
           const transform = geomorphService.extractSixTuple(parent.attributes.transform);
-          const { transformOrigin } = geomorphService.extractTransformData({
-            ...parent,
-            title: contents,
-          });
+          const { transformOrigin } = geomorphService.extractTransformData(parent);
 
           if (transform) {
             const reduced = geom.reduceAffineTransform(
               { ...rect },
               transform,
-              transformOrigin ?? { x: 0, y: 0 }
+              transformOrigin ?? { x: 0, y: 0},
             );
+            // Convert into world coords
             // 🔔 small error when precision 4
             reduced[4] = toPrecision(reduced[4] * scale, 2);
             reduced[5] = toPrecision(reduced[5] * scale, 2);
@@ -742,8 +737,8 @@ class GeomorphService {
             const height = toPrecision(rect.height * scale, 6);
 
             symbols.push({
-              symbolKey,
-              meta: geomorphService.tagsToMeta(symbolTags, { key: symbolKey }),
+              symbolKey: subSymbolKey,
+              meta: geomorphService.tagsToMeta(symbolTags, { key: subSymbolKey }),
               width,
               height,
               transform: reduced,
@@ -928,9 +923,10 @@ class GeomorphService {
   transformMeta(meta, mat) {
     if (typeof meta.orient === 'number') {
       const newDegrees = (180 / Math.PI) * mat.transformAngle(meta.orient * (Math.PI / 180));
+      const newOrient =  Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees);
       return {
         ...meta,
-        orient: Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees),
+        orient: newOrient,
       };
     } else {
       return meta; 
