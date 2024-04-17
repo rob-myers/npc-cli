@@ -242,6 +242,7 @@ declare namespace Geomorph {
     | "301--hull"
     | "302--hull"
     | "303--hull"
+    | "bed--003--1x1.6"
     | "bed--004--0.8x1.4"
     | "bed--005--0.6x1.2"
     | "bridge--042--8x9"

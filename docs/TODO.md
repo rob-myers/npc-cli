@@ -33,6 +33,7 @@
   - reduceAffineTransform
 - ✅ layout.decor are points, rects or circles
 - 🚧 more recursive symbols
+  - 🚧 stateroom--014--2x2 e.g. use bed--003--1x1.6
 
 - 🚧 PR for recast-navigation-js
 - switch back to TestCharacter

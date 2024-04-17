@@ -6,6 +6,7 @@
     "301--hull": {"outputHash": 1773914555},
     "302--hull": {"outputHash": -1920485050},
     "303--hull": {"outputHash": -467474707},
+    "bed--003--1x1.6": {"outputHash": 1581912590},
     "bed--004--0.8x1.4": {"outputHash": -1285959108},
     "bed--005--0.6x1.2": {"outputHash": -973113728},
     "bridge--042--8x9": {"outputHash": -1739733693},
@@ -47,7 +48,7 @@
     "office--074--4x4": {"outputHash": 719616206},
     "office--089--4x4": {"outputHash": 552276513},
     "stateroom--012--2x2": {"outputHash": -406959521},
-    "stateroom--014--2x2": {"outputHash": -1270154395},
+    "stateroom--014--2x2": {"outputHash": -2131820982},
     "stateroom--018--2x3": {"outputHash": -1024630746},
     "stateroom--020--2x3": {"outputHash": 1721931954},
     "stateroom--035--2x3": {"outputHash": 1050672697},
@@ -3290,6 +3291,62 @@
           "transform": [-1, 0, 0, 1, 6, 1.5]
         }
       ],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "bed--003--1x1.6": {
+      "key": "bed--003--1x1.6",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.6119, 0.0025],
+              [0.6119, 1.5025],
+              [0.015, 1.5025],
+              [0.015, 0.0025]
+            ]
+          ],
+          "meta": {"obstacle": true, "surface": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [2.5035, 0.2599],
+              [2.5035, 1.2618],
+              [0.615, 1.2618],
+              [0.615, 0.2599]
+            ]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.13, 0.69], [1.13, 0.74], [1.08, 0.74], [1.08, 0.69]]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "lie": true,
+            "bed": true,
+            "orient": 0
+          }
+        }
+      ],
+      "unsorted": [],
+      "width": 2.5,
+      "height": 1.5,
+      "pngRect": {"x": -0.005, "y": -0.0175, "width": 2.51, "height": 1.535},
+      "symbols": [],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -10192,9 +10249,14 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[1.242, 0.5935], [1.242, 2.4725], [0.248, 2.4725], [0.248, 0.5935]]
+            [
+              [0.4516, 0.1453],
+              [-1.0484, 0.1453],
+              [-1.0484, -0.4516],
+              [0.4516, -0.4516]
+            ]
           ],
-          "meta": {"obstacle": true, "bed": true}
+          "meta": {"obstacle": true, "surface": true}
         }
       ],
       "walls": [
@@ -10259,22 +10321,9 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[1.85, 2.13], [1.85, 2.18], [1.8, 2.18], [1.8, 2.13]]
+            [[1.825, 2.13], [1.825, 2.155], [1.8, 2.155], [1.8, 2.13]]
           ],
           "meta": {"decor": true, "meta": true, "label": "stateroom"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.775, 1.05], [0.775, 1.1], [0.725, 1.1], [0.725, 1.05]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "lie": true,
-            "bed": true,
-            "orient": 90
-          }
         },
         {
           "type": "Polygon",
@@ -10301,7 +10350,15 @@
       "width": 3,
       "height": 3,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "bed--004--0.8x1.4",
+          "meta": {"key": "bed--004--0.8x1.4"},
+          "width": 1.875,
+          "height": 1.125,
+          "transform": [0, 1, -1, 0, 1.31, 0.62]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },

@@ -62,6 +62,7 @@ class GeomorphService {
     "302--hull": true,
     "303--hull": true,
 
+    "bed--003--1x1.6": true,
     "bed--004--0.8x1.4": true,
     "bed--005--0.6x1.2": true,
     "bridge--042--8x9": true,
