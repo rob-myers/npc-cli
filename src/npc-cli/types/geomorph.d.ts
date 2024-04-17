@@ -124,19 +124,17 @@ declare namespace Geomorph {
   type Symbol = SymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
   type SymbolJson = SymbolGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
 
-  type PreSymbol = Pretty<
-    Pick<
-      Geomorph.Symbol,
-      "key" | "doors" | "isHull" | "walls" | "hullWalls" | "windows" | "width" | "height"
-    >
-  >;
+  type PreSymbol = Pretty<Pick<
+    Geomorph.Symbol,
+    "key" | "doors" | "isHull" | "walls" | "hullWalls" | "windows" | "width" | "height"
+  >>;
 
-  type PostSymbol = Pretty<
-    Pick<Geomorph.Symbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
-  >;
+  type PostSymbol = Pretty<Pick<
+    Geomorph.Symbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls"
+  >>;
 
   /**
-   * @see SymbolGeneric` where `symbols` has been absorbed into the other fields.
+   * Much like `SymbolGeneric` where `symbols` has been absorbed into the other fields.
    */
   type FlatSymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
@@ -152,10 +150,7 @@ declare namespace Geomorph {
   interface MapDef {
     /** e.g. `demo-map-1` */
     key: string;
-    gms: {
-      gmKey: GeomorphKey;
-      transform: Geom.SixTuple;
-    }[];
+    gms: { gmKey: GeomorphKey; transform: Geom.SixTuple; }[];
   }
 
   interface LayoutGeneric<
@@ -168,7 +163,7 @@ declare namespace Geomorph {
     pngRect: R;
 
     /** 🚧 points, rects or circles */
-    decor: WithMeta<P>[];
+    decor: Decor[];
     hullPoly: P[];
     rooms: WithMeta<P>[];
     hullDoors: C[];
@@ -188,7 +183,7 @@ declare namespace Geomorph {
     gmId: number;
     transform: Geom.SixTuple;
     mat4: import("three").Matrix4;
-    //
+    // ...
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];
   }
@@ -196,6 +191,39 @@ declare namespace Geomorph {
   type Meta<T extends {} = {}> = Record<string, any> & T;
 
   type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
+
+  //#region decor
+
+  /** Serializable */
+  type Decor = (
+    | DecorCircle
+    | DecorPoint
+    | DecorRect
+  );
+
+  interface DecorPoint extends BaseDecor, Geom.VectJson {
+    type: 'point';
+  }
+
+  interface DecorCircle extends BaseDecor, Geom.Circle {
+    type: 'circle';
+  }
+  
+  interface DecorRect extends BaseDecor, Geom.RectJson {
+    type: 'rect';
+    angle?: number;
+  }
+
+  interface BaseDecor {
+    key: string;
+    meta: Geomorph.Meta<Geomorph.GmRoomId>;
+    /** Epoch ms when last updated (overwritten) */
+    updatedAt?: number;
+    /** For defining decor via CLI (more succinct) */
+    tags?: string[];
+  }
+  
+  //#endregion
 
   type GeomorphKey =
     | "g-101--multipurpose"

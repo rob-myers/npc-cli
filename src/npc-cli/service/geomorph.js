@@ -116,6 +116,27 @@ class GeomorphService {
   }
 
   /**
+   * @param {string} decorKey
+   * @param {Geomorph.WithMeta<Geom.Poly>} poly
+   * @returns {Geomorph.Decor}
+   */
+  decorFromPoly(decorKey, poly) {
+    const { meta } = poly;
+    if (meta.rect) {
+      const { angle, baseRect } = geom.polyToAngledRect(poly);
+      return { type: 'rect', key: decorKey, ...baseRect.precision(precision).json, meta, angle };
+    } else if (meta.circle) {
+      const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
+      const center = poly.center.precision(precision);
+      const radius = Math.max(baseRect.width, baseRect.height);
+      return { type: 'circle', key: decorKey, meta, radius, center };
+    } else {
+      const center = poly.center.precision(precision);
+      return { type: 'point', key: decorKey, meta, x: center.x, y: center.y };
+    }
+  }
+
+  /**
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol
    * @param {Pick<Geomorph.Symbol, 'hullWalls' | 'pngRect'>} context
@@ -150,7 +171,7 @@ class GeomorphService {
 
     return {
       key: gmKey,
-      decor: symbol.decor,
+      decor: symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey}-${i}`, d)),
       pngRect: pngRect.clone(),
       doors,
       hullPoly,
@@ -245,7 +266,7 @@ class GeomorphService {
       key: json.key,
       pngRect: Rect.fromJson(json.pngRect),
 
-      decor: json.decor.map(Poly.from),
+      decor: json.decor,
       doors,
       hullPoly: json.hullPoly.map(Poly.from),
       hullDoors: doors.filter(x => x.meta.hull),
@@ -861,7 +882,7 @@ class GeomorphService {
       key: layout.key,
       pngRect: layout.pngRect,
 
-      decor: layout.decor.map(x => Object.assign(x.geoJson, { meta: x.meta })),
+      decor: layout.decor,
       doors: layout.doors.map(x => x.json),
       hullDoors: layout.hullDoors.map((x) => x.json),
       hullPoly: layout.hullPoly.map(x => x.geoJson),

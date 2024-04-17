@@ -29,9 +29,9 @@
 - ✅ sub-symbol decor meta.orient (degrees) is transformed too
   - ✅ layout.decor exists
   - ℹ️ see modifySinglesMeta in repo the-last-redoubt
-- 🚧 meta.orient not working
+- ✅ meta.orient not working
   - reduceAffineTransform
-- 🚧 layout.decor are points, rects or circles
+- ✅ layout.decor are points, rects or circles
 - more recursive symbols
 
 - PR for recast-navigation-js
