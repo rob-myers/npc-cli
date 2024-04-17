@@ -1,6 +1,6 @@
 {
   "mapsHash": 1563462381,
-  "layoutsHash": 1044396972,
+  "layoutsHash": -816696128,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -100,7 +100,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
           }
         },
         {
@@ -142,7 +142,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
           }
         },
         {
@@ -179,7 +179,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -216,7 +216,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -241,7 +241,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -259,7 +259,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
           }
         },
         {
@@ -272,7 +272,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 160
+            "orient": 70
           }
         },
         {
@@ -285,7 +285,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 200
+            "orient": 110
           }
         },
         {
@@ -310,7 +310,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90
+            "orient": 180
           }
         },
         {
@@ -328,7 +328,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
           }
         },
         {
@@ -341,7 +341,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 160
+            "orient": 110
           }
         },
         {
@@ -354,7 +354,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 200
+            "orient": 70
           }
         },
         {
@@ -379,7 +379,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90
+            "orient": 0
           }
         },
         {
@@ -392,7 +392,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -405,7 +405,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 160
+            "orient": 290
           }
         },
         {
@@ -418,7 +418,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 200
+            "orient": 250
           }
         },
         {
@@ -526,7 +526,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -544,7 +544,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -576,7 +576,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -594,7 +594,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -624,7 +624,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 0
           }
         },
         {
@@ -642,7 +642,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 180
           }
         },
         {
@@ -704,7 +704,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -717,7 +717,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -730,7 +730,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -760,7 +760,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -778,7 +778,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -796,7 +796,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -814,7 +814,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 180
           }
         },
         {
@@ -832,7 +832,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 180
           }
         },
         {
@@ -862,7 +862,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 0
           }
         },
         {
@@ -880,7 +880,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 0
           }
         },
         {
@@ -898,7 +898,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 0
           }
         },
         {
@@ -916,7 +916,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 180
           }
         },
         {
@@ -934,7 +934,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 180
           }
         },
         {
@@ -1038,7 +1038,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 180
           }
         },
         {
@@ -1052,7 +1052,7 @@
             "lie": true,
             "pod": true,
             "medical": true,
-            "orient": 270,
+            "orient": 360,
             "obscured": true
           }
         },
@@ -1067,7 +1067,7 @@
             "lie": true,
             "pod": true,
             "medical": true,
-            "orient": 270,
+            "orient": 360,
             "obscured": true
           }
         },
@@ -4954,7 +4954,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -4992,7 +4992,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -5035,7 +5035,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -5065,7 +5065,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -5083,7 +5083,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -5101,7 +5101,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -5119,7 +5119,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -5137,7 +5137,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -5155,7 +5155,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -5173,7 +5173,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -5203,7 +5203,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 45
+            "orient": 315
           }
         },
         {
@@ -5240,7 +5240,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 45
+            "orient": 225
           }
         },
         {
@@ -5258,7 +5258,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 135
+            "orient": 315
           }
         },
         {
@@ -5276,7 +5276,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 225
+            "orient": 45
           }
         },
         {
@@ -5294,7 +5294,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 315
+            "orient": 135
           }
         },
         {
@@ -5319,7 +5319,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 45
+            "orient": 315
           }
         },
         {
@@ -5337,7 +5337,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 135
+            "orient": 225
           }
         },
         {
@@ -5355,7 +5355,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 225
+            "orient": 135
           }
         },
         {
@@ -5373,7 +5373,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 315
+            "orient": 45
           }
         },
         {
@@ -5398,7 +5398,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -5416,7 +5416,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
           }
         },
         {
@@ -5441,7 +5441,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -5459,7 +5459,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -5472,7 +5472,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 180
           }
         },
         {
@@ -5497,7 +5497,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -5515,7 +5515,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -5528,7 +5528,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 0
           }
         },
         {
@@ -5553,7 +5553,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5571,7 +5571,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5589,7 +5589,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5607,7 +5607,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5625,7 +5625,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5643,7 +5643,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5661,7 +5661,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5674,7 +5674,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 45
+            "orient": 135
           }
         },
         {
@@ -5687,7 +5687,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 135
+            "orient": 45
           }
         },
         {
@@ -5700,7 +5700,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 225
+            "orient": 315
           }
         },
         {
@@ -5713,7 +5713,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 315
+            "orient": 225
           }
         },
         {
@@ -5731,7 +5731,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -5749,7 +5749,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -5762,7 +5762,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -5775,7 +5775,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -5788,7 +5788,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -5823,7 +5823,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -9750,7 +9750,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -9763,7 +9763,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -9797,7 +9797,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -9810,7 +9810,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -9955,7 +9955,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 45
           }
         },
         {
@@ -9968,7 +9968,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 360
           }
         },
         {
@@ -10007,7 +10007,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -10020,7 +10020,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -10122,7 +10122,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 30
+            "orient": 150
           }
         },
         {
@@ -10140,7 +10140,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 330
+            "orient": 210
           }
         },
         {
@@ -10170,7 +10170,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 135
           }
         },
         {
@@ -10196,7 +10196,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -10209,7 +10209,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -10227,7 +10227,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -10245,7 +10245,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 90
           }
         },
         {
@@ -10275,7 +10275,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 360,
             "height": 1
           }
         },
@@ -10289,7 +10289,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 360,
             "height": 0,
             "obscured": true
           }
@@ -10316,7 +10316,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 360
           }
         },
         {
@@ -10329,7 +10329,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 180
           }
         },
         {
@@ -10347,7 +10347,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 30
+            "orient": 300
           }
         },
         {
@@ -10365,7 +10365,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 330
+            "orient": 240
           }
         },
         {
@@ -10378,7 +10378,7 @@
               [0.725, 14.5759]
             ]
           ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 180}
         },
         {
           "type": "Polygon",
@@ -10395,7 +10395,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 315
           }
         },
         {
@@ -10408,7 +10408,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           }
         },
         {
@@ -10421,7 +10421,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
           }
         },
         {
@@ -10434,7 +10434,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
           }
         },
         {
@@ -10452,7 +10452,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 360
           }
         },
         {
@@ -10470,7 +10470,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 360
           }
         },
         {
@@ -10483,7 +10483,7 @@
           "coordinates": [
             [[4.525, 4.475], [4.525, 4.525], [4.475, 4.525], [4.475, 4.475]]
           ],
-          "meta": {"decor": true, "do": true, "sit": true, "orient": 225}
+          "meta": {"decor": true, "do": true, "sit": true, "orient": 315}
         },
         {
           "type": "Polygon",
@@ -10526,7 +10526,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 70
+            "orient": 110
           }
         },
         {
@@ -10544,7 +10544,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 200
+            "orient": 340
           }
         },
         {
@@ -13955,7 +13955,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
+            "orient": 360
           }
         },
         {
@@ -13968,7 +13968,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
+            "orient": 360
           }
         },
         {
@@ -14000,7 +14000,7 @@
             "do": true,
             "sit": true,
             "sofa": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -14013,7 +14013,7 @@
             "do": true,
             "sit": true,
             "sofa": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -14026,7 +14026,7 @@
             "do": true,
             "sit": true,
             "sofa": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -14039,7 +14039,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 110
+            "orient": 290
           }
         },
         {
@@ -14052,7 +14052,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 70
+            "orient": 250
           }
         },
         {
@@ -14065,7 +14065,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -14078,7 +14078,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -14096,7 +14096,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 180
+            "orient": 360
           }
         }
       ],
@@ -15690,7 +15690,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 1
           }
         },
@@ -15704,7 +15704,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 0,
             "obscured": true
           }
@@ -15736,7 +15736,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -15754,7 +15754,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -15772,7 +15772,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 30
+            "orient": 210
           }
         },
         {
@@ -15790,7 +15790,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 330
+            "orient": 150
           }
         },
         {
@@ -15803,7 +15803,7 @@
               [20.5759, 14.275]
             ]
           ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 90}
         },
         {
           "type": "Polygon",
@@ -15820,7 +15820,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 225
           }
         },
         {
@@ -15851,7 +15851,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 360
           }
         },
         {
@@ -15869,7 +15869,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 360
           }
         },
         {
@@ -15887,7 +15887,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -15905,7 +15905,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -15947,7 +15947,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 1
           }
         },
@@ -15961,7 +15961,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 0,
             "obscured": true
           }
@@ -15993,7 +15993,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -16011,7 +16011,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -16029,7 +16029,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 30
+            "orient": 210
           }
         },
         {
@@ -16047,7 +16047,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 330
+            "orient": 150
           }
         },
         {
@@ -16060,7 +16060,7 @@
               [17.5759, 14.275]
             ]
           ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 90}
         },
         {
           "type": "Polygon",
@@ -16077,7 +16077,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 225
           }
         },
         {
@@ -16108,7 +16108,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 360
           }
         },
         {
@@ -16126,7 +16126,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 360
           }
         },
         {
@@ -16144,7 +16144,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -16162,7 +16162,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -16194,7 +16194,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 1
           }
         },
@@ -16208,7 +16208,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 0,
             "obscured": true
           }
@@ -16240,7 +16240,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -16258,7 +16258,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -16276,7 +16276,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 30
+            "orient": 330
           }
         },
         {
@@ -16294,7 +16294,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 330
+            "orient": 30
           }
         },
         {
@@ -16307,7 +16307,7 @@
               [9.4741, 14.275]
             ]
           ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 90}
         },
         {
           "type": "Polygon",
@@ -16324,7 +16324,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 315
           }
         },
         {
@@ -16337,7 +16337,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -16391,7 +16391,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -16409,7 +16409,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -16451,7 +16451,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 1
           }
         },
@@ -16465,7 +16465,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 90,
+            "orient": 270,
             "height": 0,
             "obscured": true
           }
@@ -16497,7 +16497,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 270
           }
         },
         {
@@ -16515,7 +16515,7 @@
             "do": true,
             "stand": true,
             "sink": true,
-            "orient": 270
+            "orient": 90
           }
         },
         {
@@ -16533,7 +16533,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 30
+            "orient": 330
           }
         },
         {
@@ -16551,7 +16551,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 330
+            "orient": 30
           }
         },
         {
@@ -16564,7 +16564,7 @@
               [12.4741, 14.275]
             ]
           ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 90}
         },
         {
           "type": "Polygon",
@@ -16581,7 +16581,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 315
           }
         },
         {
@@ -16594,7 +16594,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -16648,7 +16648,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -16666,7 +16666,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 270
           }
         },
         {
@@ -16691,7 +16691,7 @@
             "do": true,
             "lie": true,
             "bed": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -16709,7 +16709,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         },
         {
@@ -16727,7 +16727,7 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 0
+            "orient": 180
           }
         },
         {
@@ -16960,7 +16960,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 135
+            "orient": 45
           }
         },
         {
@@ -16978,7 +16978,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 305
+            "orient": 215
           }
         },
         {
@@ -16996,7 +16996,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 325
+            "orient": 235
           }
         },
         {
@@ -17009,7 +17009,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 0
           }
         }
       ],

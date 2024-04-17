@@ -26,9 +26,9 @@
     - symbol `<g>` was transformed
 
 - 🚧 refine recursive symbol example i.e. stateroom--036
-- 🚧 sub-symbol decor meta.orient (degrees) is transformed too
+- ✅ sub-symbol decor meta.orient (degrees) is transformed too
   - ✅ layout.decor exists
-  - see modifySinglesMeta in repo the-last-redoubt
+  - ℹ️ see modifySinglesMeta in repo the-last-redoubt
 - layout.decor are points, rects or circles
 - more recursive symbols
 

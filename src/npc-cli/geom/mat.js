@@ -180,7 +180,7 @@ export class Mat {
 
   /**
    * Compute action of `this` on unit direction vector with angle
-   * @see {radians} converting the latter back into an angle.
+   * @see {radians} , then convert the latter back into an angle.
    * @param {number} radians
    */
   transformAngle(radians) {

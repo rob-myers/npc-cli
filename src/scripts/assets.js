@@ -21,7 +21,7 @@ import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
-import { hashText, info, keyedItemsToLookup, warn } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn, debug } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 
@@ -73,15 +73,16 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
-  info(util.inspect({ symbolsStratified }, false, 5))
+  // debug(util.inspect({ symbolsStratified }, false, 5))
 
-  // traverse stratified symbols from leaves to co-leaves,
+  // Traverse stratified symbols from leaves to co-leaves,
   // creating FlatSymbols via flattenSymbol and instantiateFlatSymbol
   const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
     geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
-  
+  // debug("stateroom--036--2x4", util.inspect(flattened["stateroom--036--2x4"], false, 5));
+
   // Compute geomorphs.json
   const newLayouts = geomorphService.gmKeys.map(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];

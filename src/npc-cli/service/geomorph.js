@@ -537,7 +537,7 @@ class GeomorphService {
       addableWalls: [],
       removableDoors: [],
       // cloning poly removes meta
-      decor: sym.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      decor: sym.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: this.transformMeta(x.meta, tmpMat1) })),
       doors: doors.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
       obstacles: sym.obstacles.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
       walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
@@ -918,6 +918,23 @@ class GeomorphService {
       }
       return meta;
     }, baseMeta);
+  }
+
+  /**
+   * @param {Geomorph.Meta} meta 
+   * @param {Geom.Mat} mat
+   * @returns {Geomorph.Meta}
+   */
+  transformMeta(meta, mat) {
+    if (typeof meta.orient === 'number') {
+      const newDegrees = (180 / Math.PI) * mat.transformAngle(meta.orient * (Math.PI / 180));
+      return {
+        ...meta,
+        orient: Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees),
+      };
+    } else {
+      return meta; 
+    }
   }
 }
 
