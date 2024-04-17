@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": -544020543},
     "102--hull": {"outputHash": 1504295160},
     "103--hull": {"outputHash": -509327146},
-    "301--hull": {"outputHash": 2351756},
+    "301--hull": {"outputHash": 1773914555},
     "302--hull": {"outputHash": -1920485050},
     "303--hull": {"outputHash": -467474707},
     "bed--004--0.8x1.4": {"outputHash": -1285959108},
@@ -11,6 +11,7 @@
     "bridge--042--8x9": {"outputHash": -1739733693},
     "console--019--2x2": {"outputHash": -1790878123},
     "console--022--1x2": {"outputHash": 1043901961},
+    "console--031--1x1.2": {"outputHash": 1056904373},
     "console--051--0.4x0.6": {"outputHash": -411518758},
     "empty-room--013--2x3": {"outputHash": 9947101},
     "empty-room--039--3x4": {"outputHash": -727316405},
@@ -50,7 +51,7 @@
     "stateroom--018--2x3": {"outputHash": -1024630746},
     "stateroom--020--2x3": {"outputHash": 1721931954},
     "stateroom--035--2x3": {"outputHash": 1050672697},
-    "stateroom--036--2x4": {"outputHash": 1751025798},
+    "stateroom--036--2x4": {"outputHash": -2035170818},
     "demo-map-1": {"outputHash": 901270641},
     "small-map-1": {"outputHash": 546414224}
   },
@@ -1680,6 +1681,20 @@
           "width": 12,
           "height": 13.5,
           "transform": [1, 0, 0, 1, 9, 1.5]
+        },
+        {
+          "symbolKey": "console--031--1x1.2",
+          "meta": {"key": "console--031--1x1.2"},
+          "width": 1.5,
+          "height": 1.5,
+          "transform": [-1, 0, 0, 1, 9, 1.5]
+        },
+        {
+          "symbolKey": "console--031--1x1.2",
+          "meta": {"key": "console--031--1x1.2"},
+          "width": 1.5,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 21, 1.5]
         }
       ],
       "removableDoors": [],
@@ -4665,6 +4680,49 @@
       "height": 3,
       "pngRect": {"x": -0.0175, "y": -0.0175, "width": 1.535, "height": 3.035},
       "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "console--031--1x1.2": {
+      "key": "console--031--1x1.2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [-0.015, -0.015],
+              [1.1625, -0.01],
+              [1.2362, 0.0758],
+              [1.1639, 0.2873],
+              [1.053, 0.6748],
+              [1.1043, 1.0744],
+              [1.2403, 1.4158],
+              [1.1665, 1.515],
+              [-0.015, 1.515]
+            ]
+          ],
+          "meta": {"obstacle": true, "surface": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 1.5,
+      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 1.885, "height": 1.535},
+      "symbols": [
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-1, 0.000073310599, 0.000073310599, 1, 1.9, 0.37]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -10783,7 +10841,7 @@
         },
         {
           "type": "Polygon",
-          "coordinates": [[[1.8, 4.5], [1.8, 4.6], [1.7, 4.6], [1.7, 4.5]]],
+          "coordinates": [[[1.75, 4.5], [1.75, 4.55], [1.7, 4.55], [1.7, 4.5]]],
           "meta": {"decor": true, "meta": true, "label": "stateroom"}
         },
         {

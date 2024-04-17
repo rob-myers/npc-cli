@@ -30,7 +30,7 @@
         <rect width="180" height="300" style="fill-opacity: 0.5; fill: rgb(119, 119, 119);">
                 <title>decor rect shower</title>
         </rect>
-        <rect width="20" height="20" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="340" y="900">
+        <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="340" y="900">
                 <title>decor meta label=stateroom</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="142.8" y="144.8">

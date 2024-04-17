@@ -73,7 +73,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
-  // debug(util.inspect({ symbolsStratified }, false, 5))
+  debug(util.inspect({ symbolsStratified }, false, 5))
 
   // Traverse stratified symbols from leaves to co-leaves,
   // creating FlatSymbols via flattenSymbol and instantiateFlatSymbol
