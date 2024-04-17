@@ -118,7 +118,7 @@ class GeomorphService {
   /**
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol
-   * @param {Pick<Geomorph.ParsedSymbol, 'hullWalls' | 'pngRect'>} context
+   * @param {Pick<Geomorph.Symbol, 'hullWalls' | 'pngRect'>} context
    * @returns {Geomorph.Layout}
    */
   createLayout(gmKey, symbol, { hullWalls, pngRect }) {
@@ -259,8 +259,8 @@ class GeomorphService {
   }
 
   /**
-   * @param {Geomorph.ParsedSymbolJson} json
-   * @returns {Geomorph.ParsedSymbol}
+   * @param {Geomorph.SymbolJson} json
+   * @returns {Geomorph.Symbol}
    */
   deserializeSymbol(json) {
     return {
@@ -444,7 +444,7 @@ class GeomorphService {
   /**
    * Mutates `flattened`, using pre-existing entries.
    * Expects dependent flattened symbols to be in `flattened`.
-   * @param {Geomorph.ParsedSymbol} symbol 
+   * @param {Geomorph.Symbol} symbol 
    * @param {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} flattened 
    * This lookup only needs to contain sub-symbols of `symbol`.
    * @returns {void}
@@ -646,7 +646,7 @@ class GeomorphService {
    * Parse Starship Symbol
    * @param {Geomorph.SymbolKey} symbolKey
    * @param {string} svgContents
-   * @returns {Geomorph.ParsedSymbol}
+   * @returns {Geomorph.Symbol}
    */
   parseSymbol(symbolKey, svgContents) {
     // info("parseStarshipSymbol", symbolKey, "...");
@@ -659,7 +659,7 @@ class GeomorphService {
 
     let viewBoxRect = /** @type {Geom.Rect | null} */ (null);
     let pngRect = /** @type {Geom.Rect | null} */ (null);
-    const symbols = /** @type {Geomorph.ParsedSymbol['symbols']} */ ([]);
+    const symbols = /** @type {Geomorph.Symbol['symbols']} */ ([]);
     const hullWalls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
     const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
@@ -787,7 +787,7 @@ class GeomorphService {
     const key = symbolKey;
     const { width, height } = viewBoxRect;
 
-    /** @type {Geomorph.PreParsedSymbol} */
+    /** @type {Geomorph.PreSymbol} */
     const preParse = {
       key,
       doors,
@@ -817,8 +817,8 @@ class GeomorphService {
   }
 
   /**
-   * @param {Geomorph.PreParsedSymbol} partial
-   * @returns {Geomorph.PostParsedSymbol}
+   * @param {Geomorph.PreSymbol} partial
+   * @returns {Geomorph.PostSymbol}
    */
   postParseSymbol(partial) {
     // Don't take unions of walls yet
@@ -876,8 +876,8 @@ class GeomorphService {
 
   /**
    * Create serializable data associated to a static/assets/symbol/{symbol}.
-   * @param {Geomorph.ParsedSymbol} parsed
-   * @returns {Geomorph.ParsedSymbolJson}
+   * @param {Geomorph.Symbol} parsed
+   * @returns {Geomorph.SymbolJson}
    */
   serializeSymbol(parsed) {
     return {

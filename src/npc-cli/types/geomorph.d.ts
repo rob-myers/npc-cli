@@ -4,7 +4,7 @@ declare namespace Geomorph {
     P extends Geom.VectJson | Geom.Vect,
     R extends Geom.RectJson | Geom.Rect
   > {
-    symbols: Record<Geomorph.SymbolKey, Geomorph.ParsedSymbolGeneric<T, P, R>>;
+    symbols: Record<Geomorph.SymbolKey, Geomorph.SymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
     /** `metaKey` is a `Geomorph.SymbolKey` or a mapKey e.g. `demo-map-1` */
     meta: { [metaKey: string]: { outputHash: number } };
@@ -67,7 +67,7 @@ declare namespace Geomorph {
     doorId: number;
   }
 
-  interface ParsedSymbolGeneric<
+  interface SymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,
     R extends Geom.RectJson | Geom.Rect
@@ -121,29 +121,29 @@ declare namespace Geomorph {
     addableWalls: Geomorph.WithMeta<P>[];
   }
 
-  type ParsedSymbol = ParsedSymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
-  type ParsedSymbolJson = ParsedSymbolGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
+  type Symbol = SymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
+  type SymbolJson = SymbolGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
 
-  type PreParsedSymbol = Pretty<
+  type PreSymbol = Pretty<
     Pick<
-      Geomorph.ParsedSymbol,
+      Geomorph.Symbol,
       "key" | "doors" | "isHull" | "walls" | "hullWalls" | "windows" | "width" | "height"
     >
   >;
 
-  type PostParsedSymbol = Pretty<
-    Pick<Geomorph.ParsedSymbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
+  type PostSymbol = Pretty<
+    Pick<Geomorph.Symbol, "hullWalls" | "walls" | "removableDoors" | "addableWalls">
   >;
 
   /**
-   * @see ParsedSymbolGeneric` where `symbols` has been absorbed into the other fields.
+   * @see SymbolGeneric` where `symbols` has been absorbed into the other fields.
    */
   type FlatSymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,
     R extends Geom.RectJson | Geom.Rect
   > = Pretty<
-    Omit<ParsedSymbolGeneric<P, V, R>, 'symbols' | 'pngRect' | 'width' | 'height' | 'hullWalls'>
+    Omit<SymbolGeneric<P, V, R>, 'symbols' | 'pngRect' | 'width' | 'height' | 'hullWalls'>
   >;
 
   type FlatSymbol = FlatSymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
