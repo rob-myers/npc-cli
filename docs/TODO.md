@@ -25,16 +25,16 @@
   - ✅ understand/fix stateroom--036
     - symbol `<g>` was transformed
 
-- 🚧 refine recursive symbol example i.e. stateroom--036
+- ✅ refine recursive symbol example i.e. stateroom--036
 - ✅ sub-symbol decor meta.orient (degrees) is transformed too
   - ✅ layout.decor exists
   - ℹ️ see modifySinglesMeta in repo the-last-redoubt
 - ✅ meta.orient not working
   - reduceAffineTransform
 - ✅ layout.decor are points, rects or circles
-- more recursive symbols
+- 🚧 more recursive symbols
 
-- PR for recast-navigation-js
+- 🚧 PR for recast-navigation-js
 - switch back to TestCharacter
 
 - raised images: via spritesheet

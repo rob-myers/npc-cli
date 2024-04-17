@@ -249,6 +249,7 @@ declare namespace Geomorph {
     // | "cargo--003--2x4"
     // | "cargo--010--2x4"
     // | "console--018--1x1"
+    | "console--019--2x2"
     | "console--022--1x2"
     // | "console--031--1x1"
     | "console--051--0.4x0.6"
