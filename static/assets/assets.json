@@ -9,6 +9,7 @@
     "bed--004--0.8x1.4": {"outputHash": -1285959108},
     "bed--005--0.6x1.2": {"outputHash": -973113728},
     "bridge--042--8x9": {"outputHash": -1739733693},
+    "console--019--2x2": {"outputHash": -1790878123},
     "console--022--1x2": {"outputHash": 1043901961},
     "console--051--0.4x0.6": {"outputHash": -411518758},
     "empty-room--013--2x3": {"outputHash": 9947101},
@@ -35,7 +36,7 @@
     "medical-bed--006--1.6x3.6": {"outputHash": 2036847340},
     "misc-stellar-cartography--020--10x10": {"outputHash": -1589868870},
     "misc-stellar-cartography--023--4x4": {"outputHash": -1790331102},
-    "office--001--2x2": {"outputHash": 222217656},
+    "office--001--2x2": {"outputHash": 1064956886},
     "office--004--2x2": {"outputHash": 1298782092},
     "office--006--2x2": {"outputHash": 913429188},
     "office--020--2x3": {"outputHash": -2112021606},
@@ -4555,6 +4556,62 @@
       "removableDoors": [],
       "addableWalls": []
     },
+    "console--019--2x2": {
+      "key": "console--019--2x2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0, 2.9999],
+              [0, -0.0001],
+              [3, -0.0001],
+              [3, 0.7369],
+              [1.5, 0.7369],
+              [0.7515, 1.4999],
+              [0.744, 2.9999]
+            ]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.525, 1.475], [1.525, 1.525], [1.475, 1.525], [1.475, 1.475]]
+          ],
+          "meta": {"decor": true, "do": true, "sit": true, "orient": 225}
+        }
+      ],
+      "unsorted": [],
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 3.035, "height": 3.035},
+      "symbols": [
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [
+            0.707054972649,
+            0.707158625126,
+            -0.707158625126,
+            0.707054972649,
+            1.55,
+            1.03
+          ]
+        }
+      ],
+      "removableDoors": [],
+      "addableWalls": []
+    },
     "console--022--1x2": {
       "key": "console--022--1x2",
       "isHull": false,
@@ -8193,35 +8250,7 @@
       "key": "office--001--2x2",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.1083, 1.5353],
-              [1.5273, 1.0922],
-              [1.9185, 1.4905],
-              [1.4812, 1.9456]
-            ]
-          ],
-          "meta": {"obstacle": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0, 2.9999],
-              [0, -0.0001],
-              [3, -0.0001],
-              [3, 0.7369],
-              [1.5, 0.7369],
-              [0.7515, 1.4999],
-              [0.744, 2.9999]
-            ]
-          ],
-          "meta": {"obstacle": true}
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -8270,20 +8299,21 @@
           "type": "Polygon",
           "coordinates": [[[0.8, 0.65], [0.8, 0.75], [0.7, 0.75], [0.7, 0.65]]],
           "meta": {"decor": true, "go": true, "label": "office"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.525, 1.475], [1.525, 1.525], [1.475, 1.525], [1.475, 1.475]]
-          ],
-          "meta": {"decor": true, "do": true, "sit": true, "orient": 225}
         }
       ],
       "unsorted": [],
       "width": 3,
       "height": 3,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "console--019--2x2",
+          "meta": {"key": "console--019--2x2"},
+          "width": 3,
+          "height": 3,
+          "transform": [1, 0.000073293391, -0.000073293391, 1, 0, 0]
+        }
+      ],
       "removableDoors": [
         {
           "doorId": 0,
