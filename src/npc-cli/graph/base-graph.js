@@ -444,35 +444,27 @@ ${this.edgesArray.map(x => `  "${x.src.id}" -> "${x.dst.id}" ${edgeLabel(x) || '
 
   /**
    * From leaves to co-leaves
-   * @param {boolean} [throwOnLoop] 
    * @returns {Node[][]}
    */
-  stratify(throwOnLoop = false) {
+  stratify() {
+    let frontier = /** @type {Node[]} */ ([]);
     let unseen = this.nodesArray.slice();
     const seen = /** @type {Set<Node>} */ (new Set());
     const output = /** @type {Node[][]} */ ([]);
-    let frontier = /** @type {Node[]} */ ([]);
     
-    const onAlreadySeen = /** @type {(x: Node) => void} */ (throwOnLoop
-      ? (x) => { throw Error(`stratify: already seen node: ${x.id}`) }
-      : (x) => warn(`stratify: ignoring already seen node: ${x.id}`)
-    );
-
     while (
       frontier = [],
       unseen = unseen.filter(x => {
-        if (!this.getSuccs(x).every(y => seen.has(y))) {
-          return true;
-        } else if (!seen.has(x)) {
-          seen.add(x);
+        if (this.getSuccs(x).every(y => seen.has(y))) {
           frontier.push(x);
-        } else {// Warn or throw
-          onAlreadySeen(x);
+        } else {
+          return true;
         }
       }),
-      output.push(frontier),
-      unseen.length
+      frontier.map(x => seen.add(x)).length && output.push(frontier)
     );
+
+    unseen.length && warn(`stratify: ignoring ${unseen.length} nodes`);
     return output;
   }
 
