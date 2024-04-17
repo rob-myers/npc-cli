@@ -16,7 +16,7 @@
     "engineering--045--6x4": {"outputHash": 1463379812},
     "engineering--047--4x7": {"outputHash": 834580297},
     "extra--fresher--001--0.5x0.5": {"outputHash": 1046077418},
-    "extra--fresher--002--0.5x0.5": {"outputHash": -449556257},
+    "extra--fresher--002--0.5x0.5": {"outputHash": 984362531},
     "fresher--020--2x2": {"outputHash": -485836024},
     "fresher--025--3x2": {"outputHash": -375470300},
     "fresher--036--4x2": {"outputHash": -953846613},
@@ -49,7 +49,7 @@
     "stateroom--018--2x3": {"outputHash": -1024630746},
     "stateroom--020--2x3": {"outputHash": 1721931954},
     "stateroom--035--2x3": {"outputHash": 1050672697},
-    "stateroom--036--2x4": {"outputHash": 1441898675},
+    "stateroom--036--2x4": {"outputHash": 1723403107},
     "demo-map-1": {"outputHash": 901270641},
     "small-map-1": {"outputHash": 546414224}
   },
@@ -5251,14 +5251,14 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [0.0958, 0.0203],
+              [0.096, 0.02],
               [0.6551, 0.02],
               [0.59, 0.4659],
               [0.495, 0.6945],
               [0.375, 0.7433],
               [0.235, 0.6945],
               [0.15, 0.4659],
-              [0.096, 0.02]
+              [0.1179, 0.2012]
             ]
           ],
           "meta": {"obstacle": true}
@@ -10704,64 +10704,7 @@
       "key": "stateroom--036--2x4",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [2.055, 0.05],
-              [2.74, 0.05],
-              [2.7272, 0.322],
-              [2.5675, 0.5205],
-              [2.3967, 0.5444],
-              [2.2406, 0.535],
-              [2.055, 0.3397]
-            ]
-          ],
-          "meta": {"obstacle": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.205, 0.05],
-              [1.795, 0.05],
-              [1.715, 0.485],
-              [1.62, 0.706],
-              [1.5, 0.7531],
-              [1.36, 0.706],
-              [1.275, 0.485]
-            ]
-          ],
-          "meta": {"obstacle": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.5, 1.7], [1.5, 3.795], [0.185, 3.795], [0.185, 1.7]]
-          ],
-          "meta": {"obstacle": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.503, 3.9518],
-              [1.0919, 4.2918],
-              [0.7144, 4.9457],
-              [0.1255, 4.6057]
-            ]
-          ],
-          "meta": {"obstacle": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.7738, 4.9721], [1.1588, 5.639], [0.505, 6.0165], [0.12, 5.3497]]
-          ],
-          "meta": {"obstacle": true}
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -10817,14 +10760,14 @@
         {
           "type": "Polygon",
           "coordinates": [[[1.8, 4.5], [1.8, 4.6], [1.7, 4.6], [1.7, 4.5]]],
-          "meta": {"decor": true, "go": true, "label": "stateroom"}
+          "meta": {"decor": true, "meta": true, "label": "stateroom"}
         },
         {
           "type": "Polygon",
           "coordinates": [
             [[0.764, 0.724], [0.764, 0.774], [0.714, 0.774], [0.714, 0.724]]
           ],
-          "meta": {"decor": true, "go": true, "label": "bathroom"}
+          "meta": {"decor": true, "meta": true, "label": "bathroom"}
         },
         {
           "type": "Polygon",
@@ -10933,7 +10876,7 @@
       "unsorted": [],
       "width": 3,
       "height": 6,
-      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 6.1},
+      "pngRect": {"x": -0.055, "y": -0.05, "width": 3.1, "height": 6.1},
       "symbols": [
         {
           "symbolKey": "console--051--0.4x0.6",
@@ -10961,7 +10904,7 @@
           "meta": {"key": "extra--fresher--002--0.5x0.5"},
           "width": 0.75,
           "height": 0.75,
-          "transform": [1, 0, 0, 1, 1.13, 0]
+          "transform": [1, 0, 0, 1, 1.12, -0.01]
         },
         {
           "symbolKey": "bed--004--0.8x1.4",
