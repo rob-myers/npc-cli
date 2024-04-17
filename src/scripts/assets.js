@@ -34,7 +34,7 @@ const symbolsDir = path.resolve(mediaDir, "symbol");
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
-const geomorphServicepath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
+const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
 (function main() {
@@ -49,7 +49,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   let symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
   const updateAll = !!opts.all || !prevAssets || (
-    [assetsScriptFilepath, geomorphServicepath].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
+    [assetsScriptFilepath, geomorphServicePath].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
   );
 
   if (updateAll) {
@@ -67,7 +67,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   // Compute assets.json
   parseSymbols(assetsJson, symbolFilenames);
   parseMaps(assetsJson);
-  info({ changedSymbolsMaps: Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash) });
+  info({ changed: Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash) });
   const assets = geomorphService.deserializeAssets(assetsJson);
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   
@@ -75,8 +75,8 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   const symbolsStratified = symbolGraph.stratify();
   info(util.inspect({ symbolsStratified }, false, 5))
 
-  // traverse stratified symbols from leaves to co-leaves, creating
-  // FlatSymbols via flattenSymbol and instantiateFlatSymbol
+  // traverse stratified symbols from leaves to co-leaves,
+  // creating FlatSymbols via flattenSymbol and instantiateFlatSymbol
   const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
     geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
