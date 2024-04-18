@@ -139,6 +139,7 @@ function parseSymbols({ symbols, meta }, symbolFilenames) {
     const parsed = geomorphService.parseSymbol(symbolKey, contents);
     const serialized = geomorphService.serializeSymbol(parsed);
     symbols[symbolKey] = serialized;
+    // console.log({ symbolKey }, typeof serialized)
     meta[symbolKey] = { outputHash: hashText(JSON.stringify(serialized)) };
   }
 

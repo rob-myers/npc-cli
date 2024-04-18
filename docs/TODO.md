@@ -45,6 +45,11 @@
   - stateroom--014
   - stateroom--036
   - stateroom--014--2x2 e.g. use bed--003--1x1.6
+  - 🚧 decompose desk--003--0.8x1 as two symbols
+  -   🚧 extras--chair--003
+  -   🚧 extra--desk--004-0.5x1
+  - 🚧 table--004--1.2x2.4
+- create smaller-pngs.js and compare to https://tinypng.com/
 
 - 🚧 PR for recast-navigation-js
 - switch back to TestCharacter
