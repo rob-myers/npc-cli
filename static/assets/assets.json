@@ -20,6 +20,7 @@
     "engineering--047--4x7": {"outputHash": 834580297},
     "extra--fresher--001--0.5x0.5": {"outputHash": 732453667},
     "extra--fresher--002--0.5x0.5": {"outputHash": -93535183},
+    "fresher--002--0.4x0.6": {"outputHash": -997708529},
     "fresher--020--2x2": {"outputHash": -485836024},
     "fresher--025--3x2": {"outputHash": -375470300},
     "fresher--036--4x2": {"outputHash": -953846613},
@@ -48,7 +49,7 @@
     "office--074--4x4": {"outputHash": 719616206},
     "office--089--4x4": {"outputHash": 552276513},
     "stateroom--012--2x2": {"outputHash": -406959521},
-    "stateroom--014--2x2": {"outputHash": -2131820982},
+    "stateroom--014--2x2": {"outputHash": -471122793},
     "stateroom--018--2x3": {"outputHash": -1024630746},
     "stateroom--020--2x3": {"outputHash": 1721931954},
     "stateroom--035--2x3": {"outputHash": 1050672697},
@@ -5456,6 +5457,46 @@
       "removableDoors": [],
       "addableWalls": []
     },
+    "fresher--002--0.4x0.6": {
+      "key": "fresher--002--0.4x0.6",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.1135, 0.0155],
+              [0.64, 0.0155],
+              [0.64, 0.4506],
+              [0.5289, 0.7598],
+              [0.2276, 0.76],
+              [0.1135, 0.4622]
+            ]
+          ],
+          "meta": {"obstacle": true, "toilet": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.4004, 0.61], [0.4004, 0.66], [0.3496, 0.66], [0.3496, 0.61]]
+          ],
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+        }
+      ],
+      "unsorted": [],
+      "width": 0.75,
+      "height": 0.75,
+      "pngRect": {"x": 0.11, "y": -0.015, "width": 0.53, "height": 0.9},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
     "fresher--020--2x2": {
       "key": "fresher--020--2x2",
       "isHull": false,
@@ -10245,18 +10286,6 @@
             ]
           ],
           "meta": {"obstacle": true, "toilet": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.4516, 0.1453],
-              [-1.0484, 0.1453],
-              [-1.0484, -0.4516],
-              [0.4516, -0.4516]
-            ]
-          ],
-          "meta": {"obstacle": true, "surface": true}
         }
       ],
       "walls": [
@@ -10328,19 +10357,6 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[2.275, 0.6], [2.275, 0.65], [2.225, 0.65], [2.225, 0.6]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 90
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
             [[2.775, 0.725], [2.775, 0.775], [2.725, 0.775], [2.725, 0.725]]
           ],
           "meta": {"decor": true, "button": true, "shower": true}
@@ -10352,11 +10368,18 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [
         {
-          "symbolKey": "bed--004--0.8x1.4",
-          "meta": {"key": "bed--004--0.8x1.4"},
-          "width": 1.875,
-          "height": 1.125,
-          "transform": [0, 1, -1, 0, 1.31, 0.62]
+          "symbolKey": "bed--003--1x1.6",
+          "meta": {"key": "bed--003--1x1.6"},
+          "width": 2.5,
+          "height": 1.5,
+          "transform": [0, 1, -1, 0, 1.5, 0]
+        },
+        {
+          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "meta": {"key": "extra--fresher--002--0.5x0.5"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 1.87, 0]
         }
       ],
       "removableDoors": [],

@@ -1,6 +1,6 @@
 {
   "mapsHash": 1563462381,
-  "layoutsHash": -1870761238,
+  "layoutsHash": 746358024,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -9316,22 +9316,22 @@
         {
           "type": "point",
           "key": "g-301--bridge-6",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 270
-          },
-          "x": 2.25,
-          "y": 11.375
+          "meta": {"decor": true, "button": true, "shower": true},
+          "x": 2.75,
+          "y": 11.25
         },
         {
           "type": "point",
           "key": "g-301--bridge-7",
-          "meta": {"decor": true, "button": true, "shower": true},
-          "x": 2.75,
-          "y": 11.25
+          "meta": {
+            "decor": true,
+            "do": true,
+            "lie": true,
+            "bed": true,
+            "orient": 270
+          },
+          "x": 0.785,
+          "y": 10.895
         },
         {
           "type": "point",
@@ -9339,29 +9339,16 @@
           "meta": {
             "decor": true,
             "do": true,
-            "lie": true,
-            "bed": true,
+            "sit": true,
+            "toilet": true,
             "orient": 270
           },
-          "x": 0.8675,
-          "y": 10.85
-        },
-        {
-          "type": "point",
-          "key": "g-301--bridge-9",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "lie": true,
-            "bed": true,
-            "orient": 270
-          },
-          "x": 0.7175,
-          "y": 10.67
+          "x": 2.245,
+          "y": 11.525
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-10",
+          "key": "g-301--bridge-9",
           "x": 4.55,
           "y": 11,
           "width": 1.375,
@@ -9371,10 +9358,17 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-11",
+          "key": "g-301--bridge-10",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
           "x": 4.8125,
           "y": 9.8575
+        },
+        {
+          "type": "point",
+          "key": "g-301--bridge-11",
+          "meta": {"decor": true, "button": true, "shower": true},
+          "x": 5.75,
+          "y": 11.25
         },
         {
           "type": "point",
@@ -9382,49 +9376,29 @@
           "meta": {
             "decor": true,
             "do": true,
-            "sit": true,
-            "toilet": true,
+            "lie": true,
+            "bed": true,
             "orient": 270
           },
-          "x": 5.25,
-          "y": 11.375
+          "x": 3.785,
+          "y": 10.895
         },
         {
           "type": "point",
           "key": "g-301--bridge-13",
-          "meta": {"decor": true, "button": true, "shower": true},
-          "x": 5.75,
-          "y": 11.25
-        },
-        {
-          "type": "point",
-          "key": "g-301--bridge-14",
           "meta": {
             "decor": true,
             "do": true,
-            "lie": true,
-            "bed": true,
+            "sit": true,
+            "toilet": true,
             "orient": 270
           },
-          "x": 3.8675,
-          "y": 10.85
-        },
-        {
-          "type": "point",
-          "key": "g-301--bridge-15",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "lie": true,
-            "bed": true,
-            "orient": 270
-          },
-          "x": 3.7175,
-          "y": 10.67
+          "x": 5.245,
+          "y": 11.525
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-16",
+          "key": "g-301--bridge-14",
           "x": 0.9,
           "y": 0,
           "width": 1.5,
@@ -9434,35 +9408,35 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-17",
+          "key": "g-301--bridge-15",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
           "x": 1.725,
           "y": 4.525
         },
         {
           "type": "point",
-          "key": "g-301--bridge-18",
+          "key": "g-301--bridge-16",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
           "x": 0.739,
           "y": 0.749
         },
         {
           "type": "point",
-          "key": "g-301--bridge-19",
+          "key": "g-301--bridge-17",
           "meta": {"decor": true, "button": true, "shower": true},
           "x": 0.4491,
           "y": 0.25
         },
         {
           "type": "point",
-          "key": "g-301--bridge-20",
+          "key": "g-301--bridge-18",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
           "x": 0.4491,
           "y": 0.75
         },
         {
           "type": "point",
-          "key": "g-301--bridge-21",
+          "key": "g-301--bridge-19",
           "meta": {
             "decor": true,
             "do": true,
@@ -9475,7 +9449,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-22",
+          "key": "g-301--bridge-20",
           "meta": {
             "decor": true,
             "do": true,
@@ -9488,14 +9462,14 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-23",
+          "key": "g-301--bridge-21",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
           "x": 2.4194,
           "y": 0.685
         },
         {
           "type": "point",
-          "key": "g-301--bridge-24",
+          "key": "g-301--bridge-22",
           "meta": {
             "decor": true,
             "do": true,
@@ -9508,7 +9482,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-25",
+          "key": "g-301--bridge-23",
           "meta": {
             "decor": true,
             "do": true,
@@ -9521,7 +9495,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-26",
+          "key": "g-301--bridge-24",
           "meta": {
             "decor": true,
             "do": true,
@@ -9534,7 +9508,7 @@
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-27",
+          "key": "g-301--bridge-25",
           "x": 30,
           "y": 0,
           "width": 1.5,
@@ -9544,35 +9518,35 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-28",
+          "key": "g-301--bridge-26",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
           "x": 28.275,
           "y": 4.525
         },
         {
           "type": "point",
-          "key": "g-301--bridge-29",
+          "key": "g-301--bridge-27",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
           "x": 29.261,
           "y": 0.749
         },
         {
           "type": "point",
-          "key": "g-301--bridge-30",
+          "key": "g-301--bridge-28",
           "meta": {"decor": true, "button": true, "shower": true},
           "x": 29.5509,
           "y": 0.25
         },
         {
           "type": "point",
-          "key": "g-301--bridge-31",
+          "key": "g-301--bridge-29",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
           "x": 29.5509,
           "y": 0.75
         },
         {
           "type": "point",
-          "key": "g-301--bridge-32",
+          "key": "g-301--bridge-30",
           "meta": {
             "decor": true,
             "do": true,
@@ -9585,7 +9559,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-33",
+          "key": "g-301--bridge-31",
           "meta": {
             "decor": true,
             "do": true,
@@ -9598,14 +9572,14 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-34",
+          "key": "g-301--bridge-32",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
           "x": 27.5806,
           "y": 0.685
         },
         {
           "type": "point",
-          "key": "g-301--bridge-35",
+          "key": "g-301--bridge-33",
           "meta": {
             "decor": true,
             "do": true,
@@ -9618,7 +9592,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-36",
+          "key": "g-301--bridge-34",
           "meta": {
             "decor": true,
             "do": true,
@@ -9631,7 +9605,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-37",
+          "key": "g-301--bridge-35",
           "meta": {
             "decor": true,
             "do": true,
@@ -9644,7 +9618,7 @@
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-38",
+          "key": "g-301--bridge-36",
           "x": 0,
           "y": 14.1,
           "width": 1.5,
@@ -9654,35 +9628,35 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-39",
+          "key": "g-301--bridge-37",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
           "x": 4.525,
           "y": 13.275
         },
         {
           "type": "point",
-          "key": "g-301--bridge-40",
+          "key": "g-301--bridge-38",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
           "x": 0.749,
           "y": 14.261
         },
         {
           "type": "point",
-          "key": "g-301--bridge-41",
+          "key": "g-301--bridge-39",
           "meta": {"decor": true, "button": true, "shower": true},
           "x": 0.25,
           "y": 14.5509
         },
         {
           "type": "point",
-          "key": "g-301--bridge-42",
+          "key": "g-301--bridge-40",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
           "x": 0.75,
           "y": 14.5509
         },
         {
           "type": "point",
-          "key": "g-301--bridge-43",
+          "key": "g-301--bridge-41",
           "meta": {
             "decor": true,
             "do": true,
@@ -9695,7 +9669,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-44",
+          "key": "g-301--bridge-42",
           "meta": {
             "decor": true,
             "do": true,
@@ -9708,14 +9682,14 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-45",
+          "key": "g-301--bridge-43",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
           "x": 0.685,
           "y": 12.5806
         },
         {
           "type": "point",
-          "key": "g-301--bridge-46",
+          "key": "g-301--bridge-44",
           "meta": {
             "decor": true,
             "do": true,
@@ -9728,7 +9702,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-47",
+          "key": "g-301--bridge-45",
           "meta": {
             "decor": true,
             "do": true,
@@ -9741,7 +9715,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-48",
+          "key": "g-301--bridge-46",
           "meta": {
             "decor": true,
             "do": true,
@@ -9754,21 +9728,21 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-49",
+          "key": "g-301--bridge-47",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 5.25,
           "y": 3.7
         },
         {
           "type": "point",
-          "key": "g-301--bridge-50",
+          "key": "g-301--bridge-48",
           "meta": {"decor": true, "do": true, "sit": true, "orient": 315},
           "x": 4.5001,
           "y": 4.5001
         },
         {
           "type": "point",
-          "key": "g-301--bridge-51",
+          "key": "g-301--bridge-49",
           "meta": {
             "decor": true,
             "do": true,
@@ -9781,21 +9755,21 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-52",
+          "key": "g-301--bridge-50",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 24.75,
           "y": 3.7
         },
         {
           "type": "point",
-          "key": "g-301--bridge-53",
+          "key": "g-301--bridge-51",
           "meta": {"decor": true, "do": true, "sit": true, "orient": 225},
           "x": 25.4999,
           "y": 4.5001
         },
         {
           "type": "point",
-          "key": "g-301--bridge-54",
+          "key": "g-301--bridge-52",
           "meta": {
             "decor": true,
             "do": true,
@@ -9808,7 +9782,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-55",
+          "key": "g-301--bridge-53",
           "meta": {
             "decor": true,
             "go": true,
@@ -9820,7 +9794,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-56",
+          "key": "g-301--bridge-54",
           "meta": {
             "decor": true,
             "do": true,
@@ -9833,7 +9807,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-57",
+          "key": "g-301--bridge-55",
           "meta": {
             "decor": true,
             "do": true,
@@ -9846,7 +9820,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-58",
+          "key": "g-301--bridge-56",
           "meta": {
             "decor": true,
             "do": true,
@@ -9859,7 +9833,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-59",
+          "key": "g-301--bridge-57",
           "meta": {
             "decor": true,
             "do": true,
@@ -9872,7 +9846,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-60",
+          "key": "g-301--bridge-58",
           "meta": {
             "decor": true,
             "do": true,
@@ -9885,7 +9859,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-61",
+          "key": "g-301--bridge-59",
           "meta": {
             "decor": true,
             "do": true,
@@ -9898,7 +9872,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-62",
+          "key": "g-301--bridge-60",
           "meta": {
             "decor": true,
             "do": true,
@@ -9911,7 +9885,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-63",
+          "key": "g-301--bridge-61",
           "meta": {
             "decor": true,
             "do": true,
@@ -9924,94 +9898,120 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-64",
+          "key": "g-301--bridge-62",
           "meta": {"decor": true, "go": true, "label": "bridge"},
           "x": 15,
           "y": 4.5
         },
         {
           "type": "point",
-          "key": "g-301--bridge-65",
+          "key": "g-301--bridge-63",
           "meta": {"decor": true, "go": true, "label": "locker"},
           "x": 12.815,
           "y": 5.625
         },
         {
           "type": "point",
-          "key": "g-301--bridge-66",
+          "key": "g-301--bridge-64",
           "meta": {"decor": true, "go": true, "label": "locker"},
           "x": 17.065,
           "y": 5.675
         },
         {
           "type": "point",
-          "key": "g-301--bridge-67",
+          "key": "g-301--bridge-65",
           "meta": {"decor": true, "go": true, "label": "locker"},
           "x": 10.515,
           "y": 8.295
         },
         {
           "type": "point",
-          "key": "g-301--bridge-68",
+          "key": "g-301--bridge-66",
           "meta": {"decor": true, "go": true, "label": "toilet"},
           "x": 19.515,
           "y": 8.095
         },
         {
           "type": "point",
-          "key": "g-301--bridge-69",
+          "key": "g-301--bridge-67",
           "meta": {"decor": true, "go": true, "label": "briefing"},
           "x": 15,
           "y": 10.825
         },
         {
           "type": "point",
-          "key": "g-301--bridge-70",
+          "key": "g-301--bridge-68",
           "meta": {"decor": true, "go": true, "label": "fuel"},
           "x": 11.06,
           "y": 13.15
         },
         {
           "type": "point",
-          "key": "g-301--bridge-71",
+          "key": "g-301--bridge-69",
           "meta": {"decor": true, "go": true, "label": "fuel"},
           "x": 19.05,
           "y": 13.15
         },
         {
           "type": "point",
-          "key": "g-301--bridge-72",
+          "key": "g-301--bridge-70",
           "meta": {"decor": true, "label": "cpu"},
           "x": 10.55,
           "y": 4.85
         },
         {
           "type": "point",
-          "key": "g-301--bridge-73",
+          "key": "g-301--bridge-71",
           "meta": {"decor": true, "label": "cpu"},
           "x": 19.4,
           "y": 4.8
         },
         {
           "type": "point",
-          "key": "g-301--bridge-74",
+          "key": "g-301--bridge-72",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
           "x": 18.91,
           "y": 11.145
         },
         {
           "type": "point",
-          "key": "g-301--bridge-75",
+          "key": "g-301--bridge-73",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 11.065,
           "y": 11.045
         },
         {
           "type": "point",
-          "key": "g-301--bridge-76",
+          "key": "g-301--bridge-74",
           "meta": {"decor": true, "go": true, "label": "corridor"},
           "x": 14.9643,
           "y": 7.3175
+        },
+        {
+          "type": "point",
+          "key": "g-301--bridge-75",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 90
+          },
+          "x": 14.1,
+          "y": 10.125
+        },
+        {
+          "type": "point",
+          "key": "g-301--bridge-76",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 90
+          },
+          "x": 14.7,
+          "y": 10.125
         },
         {
           "type": "point",
@@ -10023,7 +10023,7 @@
             "chair": true,
             "orient": 90
           },
-          "x": 14.1,
+          "x": 15.3,
           "y": 10.125
         },
         {
@@ -10036,38 +10036,12 @@
             "chair": true,
             "orient": 90
           },
-          "x": 14.7,
-          "y": 10.125
-        },
-        {
-          "type": "point",
-          "key": "g-301--bridge-79",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 90
-          },
-          "x": 15.3,
-          "y": 10.125
-        },
-        {
-          "type": "point",
-          "key": "g-301--bridge-80",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 90
-          },
           "x": 15.9,
           "y": 10.125
         },
         {
           "type": "point",
-          "key": "g-301--bridge-81",
+          "key": "g-301--bridge-79",
           "meta": {
             "decor": true,
             "do": true,
@@ -10080,7 +10054,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-82",
+          "key": "g-301--bridge-80",
           "meta": {
             "decor": true,
             "do": true,
@@ -10093,7 +10067,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-83",
+          "key": "g-301--bridge-81",
           "meta": {
             "decor": true,
             "do": true,
@@ -10106,7 +10080,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-84",
+          "key": "g-301--bridge-82",
           "meta": {
             "decor": true,
             "do": true,
@@ -10119,7 +10093,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-85",
+          "key": "g-301--bridge-83",
           "meta": {
             "decor": true,
             "do": true,
@@ -10132,7 +10106,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-86",
+          "key": "g-301--bridge-84",
           "meta": {
             "decor": true,
             "do": true,
@@ -10145,7 +10119,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-87",
+          "key": "g-301--bridge-85",
           "meta": {
             "decor": true,
             "do": true,
@@ -10158,7 +10132,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-88",
+          "key": "g-301--bridge-86",
           "meta": {
             "decor": true,
             "do": true,
@@ -10171,7 +10145,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-89",
+          "key": "g-301--bridge-87",
           "meta": {
             "decor": true,
             "do": true,
@@ -10181,37 +10155,37 @@
           },
           "x": 19.5,
           "y": 8.5843
+        },
+        {
+          "type": "point",
+          "key": "g-301--bridge-88",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "toilet": true,
+            "orient": 270
+          },
+          "x": 20.4,
+          "y": 8.5843
+        },
+        {
+          "type": "point",
+          "key": "g-301--bridge-89",
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "x": 19.5,
+          "y": 7.8343
         },
         {
           "type": "point",
           "key": "g-301--bridge-90",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 270
-          },
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
           "x": 20.4,
-          "y": 8.5843
+          "y": 7.8343
         },
         {
           "type": "point",
           "key": "g-301--bridge-91",
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
-          "x": 19.5,
-          "y": 7.8343
-        },
-        {
-          "type": "point",
-          "key": "g-301--bridge-92",
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
-          "x": 20.4,
-          "y": 7.8343
-        },
-        {
-          "type": "point",
-          "key": "g-301--bridge-93",
           "meta": {
             "decor": true,
             "do": true,
@@ -10224,7 +10198,7 @@
         },
         {
           "type": "point",
-          "key": "g-301--bridge-94",
+          "key": "g-301--bridge-92",
           "meta": {
             "decor": true,
             "do": true,
@@ -12186,10 +12160,6 @@
           {"x": 1.15, "y": 12.35},
           {"x": 1.15, "y": 14.6},
           {"x": 0.4, "y": 14.6},
-          {"x": 0.7516, "y": 11.59},
-          {"x": 1.15, "y": 11.59},
-          {"x": 1.15, "y": 11.65},
-          {"x": 0.7516, "y": 11.65},
           {"x": 1.0526, "y": 4.9709},
           {"x": 1.5067, "y": 4.1845},
           {"x": 1.2822, "y": 4.0549},
@@ -12198,19 +12168,22 @@
           {"x": 2.65, "y": 1.85},
           {"x": 2.65, "y": 5.65},
           {"x": 1.4447, "y": 5.65},
-          {"x": 1.68, "y": 9.35},
+          {"x": 1.5401, "y": 9.35},
           {"x": 2.65, "y": 9.35},
           {"x": 2.65, "y": 10.15},
-          {"x": 1.68, "y": 10.15},
+          {"x": 1.5401, "y": 10.15},
           {"x": 1.85, "y": 10.85},
           {"x": 2.65, "y": 10.85},
           {"x": 2.65, "y": 11.1433},
           {"x": 2.5823, "y": 11.0158},
+          {"x": 2.4488, "y": 11.0157},
+          {"x": 2.2531, "y": 10.9362},
+          {"x": 2.0257, "y": 11.0155},
           {"x": 1.9274, "y": 11.0154},
-          {"x": 1.85, "y": 11.1495},
-          {"x": 1.85, "y": 12.7516},
-          {"x": 3.7516, "y": 12.7516},
-          {"x": 3.7516, "y": 12.35},
+          {"x": 1.9026, "y": 11.0583},
+          {"x": 1.873, "y": 11.0687},
+          {"x": 1.85, "y": 11.1305},
+          {"x": 1.85, "y": 12.35},
           {"x": 5.65, "y": 12.35},
           {"x": 5.65, "y": 13.5553},
           {"x": 4.9709, "y": 13.9474},
@@ -12235,20 +12208,21 @@
           {"x": 4.9512, "y": 5.0141},
           {"x": 4.9544, "y": 5.65},
           {"x": 3.35, "y": 5.65},
-          {"x": 3.7516, "y": 11.59},
-          {"x": 4.15, "y": 11.59},
-          {"x": 4.15, "y": 11.65},
-          {"x": 3.7516, "y": 11.65},
-          {"x": 4.68, "y": 9.35},
+          {"x": 4.5401, "y": 9.35},
           {"x": 5.65, "y": 9.35},
           {"x": 5.65, "y": 10.15},
-          {"x": 4.68, "y": 10.15},
+          {"x": 4.5401, "y": 10.15},
           {"x": 4.85, "y": 10.85},
           {"x": 5.65, "y": 10.85},
           {"x": 5.65, "y": 11.1433},
           {"x": 5.5823, "y": 11.0158},
+          {"x": 5.4488, "y": 11.0157},
+          {"x": 5.2531, "y": 10.9362},
+          {"x": 5.0257, "y": 11.0155},
           {"x": 4.9274, "y": 11.0154},
-          {"x": 4.85, "y": 11.1495},
+          {"x": 4.9026, "y": 11.0583},
+          {"x": 4.873, "y": 11.0687},
+          {"x": 4.85, "y": 11.1305},
           {"x": 9.35, "y": 6.3525},
           {"x": 15.475, "y": 6.359},
           {"x": 15.475, "y": 6.36},
@@ -12699,49 +12673,53 @@
           [30, 31, 28],
           [29, 30, 28],
           [31, 32, 33],
-          [38, 39, 36],
-          [38, 36, 37],
-          [47, 40, 41],
-          [47, 41, 46],
-          [41, 43, 46],
-          [41, 42, 43],
-          [43, 45, 46],
-          [43, 44, 45],
+          [43, 36, 37],
+          [43, 37, 42],
+          [37, 39, 42],
+          [37, 38, 39],
+          [39, 41, 42],
+          [39, 40, 41],
+          [47, 45, 46],
+          [47, 44, 45],
+          [57, 58, 48],
+          [55, 57, 48],
+          [56, 57, 55],
+          [54, 55, 48],
+          [53, 54, 48],
+          [53, 48, 49],
+          [52, 53, 49],
+          [51, 52, 49],
           [51, 49, 50],
-          [51, 48, 49],
-          [57, 52, 56],
-          [56, 52, 53],
-          [55, 56, 53],
-          [55, 53, 54],
-          [67, 59, 66],
-          [67, 58, 59],
-          [66, 59, 61],
-          [64, 66, 61],
-          [65, 66, 64],
-          [64, 61, 62],
-          [63, 64, 62],
-          [59, 60, 61],
-          [77, 70, 76],
-          [77, 69, 70],
-          [77, 68, 69],
-          [76, 70, 71],
-          [72, 76, 71],
-          [75, 76, 72],
-          [75, 72, 74],
-          [72, 73, 74],
-          [84, 81, 83],
-          [84, 80, 81],
-          [80, 84, 78],
-          [80, 78, 79],
-          [81, 82, 83],
-          [88, 86, 87],
-          [88, 85, 86],
-          [92, 90, 91],
-          [92, 89, 90],
-          [98, 93, 97],
-          [97, 93, 94],
-          [96, 97, 94],
-          [96, 94, 95],
+          [66, 59, 65],
+          [65, 59, 60],
+          [63, 65, 60],
+          [64, 65, 63],
+          [63, 60, 61],
+          [62, 63, 61],
+          [76, 69, 75],
+          [76, 68, 69],
+          [76, 67, 68],
+          [75, 69, 70],
+          [71, 75, 70],
+          [74, 75, 71],
+          [74, 71, 73],
+          [71, 72, 73],
+          [83, 80, 82],
+          [83, 79, 80],
+          [79, 83, 77],
+          [79, 77, 78],
+          [80, 81, 82],
+          [87, 85, 86],
+          [87, 84, 85],
+          [97, 98, 88],
+          [95, 97, 88],
+          [96, 97, 95],
+          [94, 95, 88],
+          [93, 94, 88],
+          [93, 88, 89],
+          [92, 93, 89],
+          [91, 92, 89],
+          [91, 89, 90],
           [123, 124, 99],
           [123, 99, 100],
           [100, 101, 123],
@@ -13066,7 +13044,7 @@
           [515, 516, 513]
         ]
       },
-      "navDoorwaysOffset": 329
+      "navDoorwaysOffset": 333
     },
     "g-302--xboat-repair-bay": {
       "key": "g-302--xboat-repair-bay",

@@ -265,6 +265,7 @@ declare namespace Geomorph {
     // | "empty-room--076--3x5"
     | "engineering--045--6x4"
     | "engineering--047--4x7"
+    | "fresher--002--0.4x0.6"
     // | "fresher--002--0.4x0.6"
     | "fresher--020--2x2"
     | "fresher--025--3x2"
