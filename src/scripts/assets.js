@@ -21,7 +21,7 @@ import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
-import { hashText, info, keyedItemsToLookup, warn, debug } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn, debug, error } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 
@@ -152,10 +152,15 @@ function parseSymbols({ symbols, meta }, symbolFilenames) {
 function validateSubSymbolDimension(symbols) {
   Object.values(symbols).forEach(({ key: parentKey, symbols: subSymbols }) => {
     subSymbols.forEach(({ symbolKey, width, height }) => {
-      const expected = { width: symbols[symbolKey].width, height: symbols[symbolKey].height };
-      const observed = { width, height };
-      if (expected.width !== width || expected.height !== height) {
-        warn(`${parentKey}: ${symbolKey}: unexpected symbol dimension`, { expected, observed });
+      try {
+        const expected = { width: symbols[symbolKey].width, height: symbols[symbolKey].height };
+        const observed = { width, height };
+        if (expected.width !== width || expected.height !== height) {
+          warn(`${parentKey}: ${symbolKey}: unexpected symbol dimension`, { expected, observed });
+        }
+      } catch (e) {
+        debug(`parent ${parentKey}: sub-symbol: ${symbolKey}`);
+        throw e;
       }
     })
   });

@@ -331,4 +331,6 @@ declare namespace Geomorph {
   // | "window--007--3x0.2"
     | "extra--fresher--001--0.5x0.5"
     | "extra--fresher--002--0.5x0.5"
+    | "extra--chair--003--0.25x0.25"
+    | "extra--desk--004--0.5x1"
 }

@@ -45,11 +45,13 @@
   - stateroom--014
   - stateroom--036
   - stateroom--014--2x2 e.g. use bed--003--1x1.6
-  - 🚧 decompose desk--003--0.8x1 as two symbols
-  -   🚧 extras--chair--003
-  -   🚧 extra--desk--004-0.5x1
+  - ✅ decompose desk--003--0.8x1 as two symbols
+  -   ✅ extra--chair--003--0.25x0.25
+  -   ✅ extra--desk--004--0.5x1
   - 🚧 table--004--1.2x2.4
-- create smaller-pngs.js and compare to https://tinypng.com/
+- 🚧 only one lookup needs to be extended when adding symbols
+  - SymbolKey derived from it
+
 
 - 🚧 PR for recast-navigation-js
 - switch back to TestCharacter
@@ -74,6 +76,7 @@
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 
+- create smaller-pngs.js and compare to https://tinypng.com/
 - scripts assets/images trigger different useQuery
 - Player view could be top-down with high walls
   - try fixing door height with black wall above
