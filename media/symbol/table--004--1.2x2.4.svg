@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <image width="344" height="724" x="-22" y="-62" xlink:href="data:image/png;base64,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">
+                <title>table--004--1.2x2.4</title>
+        </image>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="386.398438" y="451.649414" transform="matrix(0, 1, -1, 0, -103.3984375, -337.731567382812)">
+                <title>decor do sit chair orient=90</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="506.398438" y="451.649414" transform="matrix(0, 1, -1, 0, -223.3984375, -217.731567382812)">
+                <title>decor do sit chair orient=90</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="626.398438" y="451.649414" transform="matrix(0, 1, -1, 0, -343.3984375, -97.731567382812)">
+                <title>decor do sit chair orient=90</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="746.398438" y="451.649414" transform="matrix(0, 1, -1, 0, -463.3984375, 22.268432617188)">
+                <title>decor do sit chair orient=90</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="386.398438" y="726.649414" transform="matrix(0, 1, -1, 0, -378.3984375, -612.731567382812)">
+                <title>decor do sit chair orient=270</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="506.398438" y="726.649414" transform="matrix(0, 1, -1, 0, -498.3984375, -492.731567382812)">
+                <title>decor do sit chair orient=270</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="626.398438" y="723.507446" transform="matrix(0, 1, -1, 0, -615.256469726562, -369.589599609375)">
+                <title>decor do sit chair orient=270</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="746.398438" y="726.649414" transform="matrix(0, 1, -1, 0, -738.3984375, -252.731567382812)">
+                <title>decor do sit chair orient=270</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="236.398438" y="586.649414" transform="matrix(0, 1, -1, 0, -88.3984375, -622.731567382812)">
+                <title>decor do sit chair orient=0</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="896.398438" y="586.649414" transform="matrix(0, 1, -1, 0, -748.3984375, 37.268432617188)">
+                <title>decor do sit chair orient=180</title>
+        </rect>
+        <path d="M 169.448025 597.252509 L 105.926025 593.252509 L 65.926025 559.252509 L 51.926025 523.252509 L 46.218025 437.195509 L 46.218025 397.195509 L 46.218025 317.195509 L 46.218025 277.195509 L 46.218025 197.195509 L 46.218025 157.195509 L 49.926025 75.252509 L 87.926025 17.252509 L 137.297025 2.447509 L 172.257025 2.319509 L 215.926025 22.252509 L 256.926025 70.252509 L 257.426025 157.252509 L 257.426025 197.252509 L 257.426025 277.252509 L 257.426025 317.252509 L 257.426025 397.252509 L 257.426025 437.252509 L 254.926025 523.252509 L 215.926025 577.252509 L 169.448025 597.252509 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 151.822px 299.786px;">
+                <title>obstacle table surface</title>
+        </path>
+        <path d="M 177.977053 -53.747506 L 196.248053 -32.809506 L 196.930053 1.252494 L 190.926053 11.252494 L 111.451053 11.252494 L 106.595053 1.252494 L 107.865053 -32.414506 L 127.513053 -53.747506 L 153.194053 -61.408506 L 177.977053 -53.747506 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 151.763px -25.078px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 177.977238 656.592382 L 196.248238 635.654382 L 196.930238 601.592382 L 190.926238 591.592382 L 111.451238 591.592382 L 106.595238 601.592382 L 107.865238 635.259382 L 127.513238 656.592382 L 153.194238 664.253382 L 177.977238 656.592382 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 151.766px 627.923px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 296.00763 455.600945 L 288.30963 437.329945 L 254.24763 436.647945 L 244.24763 442.651945 L 244.24763 522.126945 L 254.24763 526.982945 L 287.91463 525.712945 L 296.00763 506.064945 L 296.00763 455.600945 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 270.127px 481.813px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 296.007905 335.600392 L 288.309905 317.329392 L 254.247905 316.647392 L 244.247905 322.651392 L 244.247905 402.126392 L 254.247905 406.982392 L 287.914905 405.712392 L 296.007905 386.064392 L 296.007905 335.600392 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 270.127px 361.813px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 296.005765 215.600284 L 288.307765 197.329284 L 254.245765 196.647284 L 244.245765 202.651284 L 244.245765 282.126284 L 254.245765 286.982284 L 287.912765 285.712284 L 296.005765 266.064284 L 296.005765 215.600284 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 270.126px 241.812px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 296.00553 95.600433 L 288.30753 77.329433 L 254.24553 76.647433 L 244.24553 82.651433 L 244.24553 162.126433 L 254.24553 166.982433 L 287.91253 165.712433 L 296.00553 146.064433 L 296.00553 95.600433 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 270.126px 121.812px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 3.000052 148.029349 L 14.845052 166.300349 L 48.907052 166.982349 L 58.907052 160.978349 L 58.907052 81.503349 L 48.907052 76.647349 L 15.240052 77.917349 L 3.000052 97.565349 L 3.000052 148.029349 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 30.9564px 121.812px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 3.001713 268.029804 L 14.846713 286.300804 L 48.908713 286.982804 L 58.908713 280.978804 L 58.908713 201.503804 L 48.908713 196.647804 L 15.241713 197.917804 L 3.001713 217.565804 L 3.001713 268.029804 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 30.9565px 241.813px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 3.000504 388.029165 L 14.845504 406.300165 L 48.907504 406.982165 L 58.907504 400.978165 L 58.907504 321.503165 L 48.907504 316.647165 L 15.240504 317.917165 L 3.000504 337.565165 L 3.000504 388.029165 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 30.9566px 361.812px;">
+                <title>obstacle chair</title>
+        </path>
+        <path d="M 2.999633 508.02912 L 14.844633 526.30012 L 48.906633 526.98212 L 58.906633 520.97812 L 58.906633 441.50312 L 48.906633 436.64712 L 15.239633 437.91712 L 2.999633 457.56512 L 2.999633 508.02912 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 30.956px 481.812px;">
+                <title>obstacle chair</title>
+        </path>
+</svg>

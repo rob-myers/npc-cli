@@ -4,7 +4,6 @@ import * as THREE from "three";
 import { worldScale, precision, wallOutset, obstacleOutset } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
-  assertDefined,
   info,
   error,
   parseJsArg,
@@ -109,6 +108,7 @@ class GeomorphService {
     "stateroom--020--2x3": true,
     "stateroom--035--2x3": true,
     "stateroom--036--2x4": true,
+    "table--004--1.2x2.4": true,
 
     // 🚧 must extend when adding new symbols
     "extra--fresher--001--0.5x0.5": true,

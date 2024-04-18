@@ -48,10 +48,10 @@
   - ✅ decompose desk--003--0.8x1 as two symbols
   -   ✅ extra--chair--003--0.25x0.25
   -   ✅ extra--desk--004--0.5x1
-  - 🚧 table--004--1.2x2.4
+  - ✅ table--004--1.2x2.4
+  - 🚧 bridge--042--8x9
 - 🚧 only one lookup needs to be extended when adding symbols
   - SymbolKey derived from it
-
 
 - 🚧 PR for recast-navigation-js
 - switch back to TestCharacter
