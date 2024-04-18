@@ -149,7 +149,7 @@ function parseSymbols({ symbols, meta }, symbolFilenames) {
  * @param {Geomorph.AssetsJson['symbols']} symbols 
  */
 function validateSubSymbolDimension(symbols) {
-  Object.values(symbols).forEach(({ key: parentKey, symbols: subSymbols }) => 
+  Object.values(symbols).forEach(({ key: parentKey, symbols: subSymbols }) => {
     subSymbols.forEach(({ symbolKey, width, height }) => {
       const expected = { width: symbols[symbolKey].width, height: symbols[symbolKey].height };
       const observed = { width, height };
@@ -157,5 +157,5 @@ function validateSubSymbolDimension(symbols) {
         warn(`${parentKey}: ${symbolKey}: unexpected symbol dimension`, { expected, observed });
       }
     })
-  );
+  });
 }

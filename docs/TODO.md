@@ -49,7 +49,12 @@
 - 🚧 PR for recast-navigation-js
 - switch back to TestCharacter
 
-- raised images: via spritesheet
+- symbols induced raised images via spritesheet
+  - obstacle polys embed into rects (?)
+  - obstacle polys have `y={y}`
+  - InstancedMesh with raised XZ planes
+  - obstacle polys induce spritesheet with uv-map
+  - InstancedMesh uses uvs
 - ❌ show tables via raised "floor texture"
 
 - show toast while navmesh loading

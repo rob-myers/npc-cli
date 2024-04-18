@@ -10,6 +10,7 @@
     "bed--004--0.8x1.4": {"outputHash": -1285959108},
     "bed--005--0.6x1.2": {"outputHash": -973113728},
     "bridge--042--8x9": {"outputHash": -1739733693},
+    "console--005--1.2x4": {"outputHash": 828405474},
     "console--019--2x2": {"outputHash": -1790878123},
     "console--022--1x2": {"outputHash": 1043901961},
     "console--031--1x1.2": {"outputHash": 1056904373},
@@ -49,7 +50,7 @@
     "office--074--4x4": {"outputHash": 719616206},
     "office--089--4x4": {"outputHash": 552276513},
     "stateroom--012--2x2": {"outputHash": -406959521},
-    "stateroom--014--2x2": {"outputHash": -471122793},
+    "stateroom--014--2x2": {"outputHash": 578850517},
     "stateroom--018--2x3": {"outputHash": -1024630746},
     "stateroom--020--2x3": {"outputHash": 1721931954},
     "stateroom--035--2x3": {"outputHash": 1050672697},
@@ -4626,6 +4627,81 @@
       "height": 13.5,
       "pngRect": {"x": -0.095, "y": -0.345, "width": 12.195, "height": 13.95},
       "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "console--005--1.2x4": {
+      "key": "console--005--1.2x4",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.005, 6],
+              [0.005, 0],
+              [1.027, 0],
+              [1.027, 0.3237],
+              [0.8713, 0.6198],
+              [0.8713, 0.898],
+              [1.027, 1.1785],
+              [1.027, 1.8559],
+              [0.8659, 2.1005],
+              [0.8659, 2.3866],
+              [1.027, 2.6598],
+              [1.027, 3.3424],
+              [0.8648, 3.6284],
+              [0.8648, 3.851],
+              [1.027, 4.1612],
+              [1.027, 4.843],
+              [0.8576, 5.1236],
+              [0.8576, 5.3561],
+              [1.027, 5.6589],
+              [1.027, 6]
+            ]
+          ],
+          "meta": {"obstacle": true}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 6,
+      "pngRect": {"x": -0.02, "y": -0.0175, "width": 1.835, "height": 6.035},
+      "symbols": [
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-1, 0.000073310599, 0.000073310599, 1, 1.85, 4.87]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-1, 0.000073310599, 0.000073310599, 1, 1.85, 3.38]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-1, 0.000073310599, 0.000073310599, 1, 1.85, 1.87]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-1, 0.000073310599, 0.000073310599, 1, 1.85, 0.38]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -10272,22 +10348,7 @@
       "key": "stateroom--014--2x2",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.9865, 0.04],
-              [2.513, 0.04],
-              [2.513, 0.4752],
-              [2.4019, 0.6843],
-              [2.1006, 0.6845],
-              [1.9865, 0.4867]
-            ]
-          ],
-          "meta": {"obstacle": true, "toilet": true}
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -10344,7 +10405,7 @@
       "decor": [
         {
           "type": "Polygon",
-          "coordinates": [[[2.925, 0.05], [2.925, 1], [1.55, 1], [1.55, 0.05]]],
+          "coordinates": [[[3, 0.05], [3, 1.5], [1.55, 1.5], [1.55, 0.05]]],
           "meta": {"decor": true, "rect": true, "shower": true}
         },
         {
