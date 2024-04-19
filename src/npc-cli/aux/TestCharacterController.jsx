@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { useGLTF, useKeyboardControls } from "@react-three/drei";
 import { info } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
-import CharacterControls from "./character-controller";
+import CharacterController from "./character-controller";
 
 /**
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
@@ -14,7 +14,7 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
   ref
 ) {
 
-  const { camera, controls } = useThree();
+  const { camera } = useThree();
 
   // const { scene: gltf } = useGLTF('/assets/3d/base-mesh-246-tri.glb');
   const { scene: model, animations } = useGLTF('/assets/3d/Soldier.glb');
@@ -47,15 +47,14 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
     }
     );
 
-    return new CharacterControls({
+    return new CharacterController({
       model,
       mixer,
       animationMap,
       camera: /** @type {THREE.PerspectiveCamera} */ (camera),
       initialAction: 'Idle',
-      orbitControls: /** @type {import('three-stdlib').OrbitControls} */ (controls),
     });
-  }, [controls]);
+  }, []);
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
 
@@ -88,6 +87,6 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
 /**
  * @typedef State
  * @property {Record<import('./TestCharacter').KeyNames, boolean>} keyPressed
- * @property {CharacterControls} characterController
+ * @property {CharacterController} characterController
  * @property {(deltaMs: number) => void} update
  */

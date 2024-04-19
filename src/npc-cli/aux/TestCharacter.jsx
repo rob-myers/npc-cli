@@ -9,14 +9,11 @@ import TestCanvas from "./TestCanvas";
 import { TestCharacterController } from "./TestCharacterController";
 
 // 🚧 eliminate KeyboardControls
-// 🚧 CharacterControls doesn't need orbitControls?
 
 /**
  * @param {Props} props
  */
 export function TestCharacter(props) {
-  const { controls } = useThree();
-
   return (
     <>
       <MapControls makeDefault zoomToCursor position={[0, 8, 0]} />
@@ -30,7 +27,7 @@ export function TestCharacter(props) {
         castShadow
       />
 
-        {controls && <TestCharacterController />}
+        <TestCharacterController />
 
         <mesh
           name="ground"
@@ -79,10 +76,10 @@ export default function WrappedTestCharacter(props) {
  * @type {import('@react-three/drei').KeyboardControlsEntry<KeyNames>[]}
  */
 const keyboardMap = [
-  { name: 'w', keys: ['Up', 'KeyW'] },
-  { name: 's', keys: ['Down', 'KeyS'] },
-  { name: 'a', keys: ['Right', 'KeyA'] },
-  { name: 'd', keys: ['Left', 'KeyD'] },
+  { name: 'w', keys: ['ArrowUp', 'KeyW'] },
+  { name: 's', keys: ['ArrowDown', 'KeyS'] },
+  { name: 'a', keys: ['ArrowRight', 'KeyA'] },
+  { name: 'd', keys: ['ArrowLeft', 'KeyD'] },
   { name: 'shift', keys: ['Shift'] },
 ];
 

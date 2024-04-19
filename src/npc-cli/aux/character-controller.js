@@ -3,14 +3,13 @@ import * as THREE from "three";
 /**
  * https://github.com/abhicominin/Character-Controller-three.js/blob/52d9893f890ac974c3241e3ca98fc68586f2e392/src/characterControls.js#L8
  */
-export default class CharacterControls {
+export default class CharacterController {
 
   /**
    * @param {object} opts
    * @param {THREE.Group} opts.model 
    * @param {THREE.AnimationMixer} opts.mixer 
    * @param {Record<AnimKey, THREE.AnimationAction>} opts.animationMap 
-   * @param {import('three-stdlib').OrbitControls} opts.orbitControls 
    * @param {THREE.PerspectiveCamera} opts.camera 
    * @param {AnimKey} opts.initialAction 
    */
@@ -18,7 +17,6 @@ export default class CharacterControls {
     model,
     mixer,
     animationMap,
-    orbitControls,
     camera,
     initialAction
   }) {
@@ -39,7 +37,6 @@ export default class CharacterControls {
     
     this.animationMap[this.currentAction].play();
 
-    this.orbitControls = orbitControls;
     this.camera = camera;
   }
 
@@ -106,46 +103,26 @@ export default class CharacterControls {
       const deltaZ = this.walkDir.z * speed * deltaMs;
       this.model.position.x += deltaX
       this.model.position.z += deltaZ
-
-      this.updateCameraTarget(deltaX , deltaZ);
     }
   }
 
-  /**
-   * @param {number} deltaX 
-   * @param {number} deltaY 
-   */
-  updateCameraTarget(deltaX, deltaY) {
-    // // move camera
-    // this.camera.position.x = deltaX
-    // this.camera.position.z = deltaY
 
-    // update camera target
-    this.orbitControls.target = this.camTarget.set(
-      this.model.position.x,
-      this.model.position.y + 1,
-      this.model.position.z,
-    );
-  }
+  /** @type {THREE.Vector3} */ walkDir
+  /** @type {THREE.Vector3} */ rotAxis
+  /** @type {THREE.Quaternion} */ rotQuat
+  /** @type {THREE.Vector3} */ camTarget
 
+  /** @type {number} */ fadeDuration
+  /** @type {number} */ walkSpeed
+  /** @type {number} */ runSpeed
 
-    /** @type {THREE.Vector3} */ walkDir
-    /** @type {THREE.Vector3} */ rotAxis
-    /** @type {THREE.Quaternion} */ rotQuat
-    /** @type {THREE.Vector3} */ camTarget
+  /** @type {AnimKey} */ currentAction
+  /** @type {boolean} */ canRun
+  /** @type {THREE.Group} */ model
+  /** @type {THREE.AnimationMixer} */ mixer
+  /** @type {Record<AnimKey, THREE.AnimationAction>} */ animationMap
 
-    /** @type {number} */ fadeDuration
-    /** @type {number} */ walkSpeed
-    /** @type {number} */ runSpeed
-
-    /** @type {AnimKey} */ currentAction
-    /** @type {boolean} */ canRun
-    /** @type {THREE.Group} */ model
-    /** @type {THREE.AnimationMixer} */ mixer
-    /** @type {Record<AnimKey, THREE.AnimationAction>} */ animationMap
-
-    /** @type {import('three-stdlib').OrbitControls} */ orbitControls
-    /** @type {THREE.PerspectiveCamera} */ camera;
+  /** @type {THREE.PerspectiveCamera} */ camera;
 
 }
 

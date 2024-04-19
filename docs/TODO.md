@@ -4,7 +4,7 @@
 
 - 🚧 switch back to TestCharacter
   - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
-  - clean up
+  - ✅ CharacterController does not depend on orbitControls
   - remove keyboard controls
 
 - 🚧 Restart TestCharacter: animation, no physics
