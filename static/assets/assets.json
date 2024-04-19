@@ -57,7 +57,7 @@
     "stateroom--020--2x3": {"outputHash": 1721931954},
     "stateroom--035--2x3": {"outputHash": 1050672697},
     "stateroom--036--2x4": {"outputHash": -2035170818},
-    "table--004--1.2x2.4": {"outputHash": 436079141},
+    "table--004--1.2x2.4": {"outputHash": -1121331566},
     "demo-map-1": {"outputHash": 901270641},
     "small-map-1": {"outputHash": 546414224}
   },
@@ -10986,7 +10986,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 180
           }
         },
         {
@@ -10999,7 +10999,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 180
           }
         },
         {
@@ -11012,7 +11012,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 180
           }
         },
         {
@@ -11025,7 +11025,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 180
           }
         },
         {
@@ -11038,7 +11038,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
+            "orient": 0
           }
         },
         {
@@ -11051,7 +11051,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
+            "orient": 0
           }
         },
         {
@@ -11069,7 +11069,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
+            "orient": 0
           }
         },
         {
@@ -11082,33 +11082,38 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.79, -0.1304], [0.74, -0.1304], [0.74, -0.1804], [0.79, -0.1804]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
             "orient": 0
           }
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.79, 3.1696], [0.74, 3.1696], [0.74, 3.1196], [0.79, 3.1196]]
+            [
+              [0.775, -0.1304],
+              [0.725, -0.1304],
+              [0.725, -0.1804],
+              [0.775, -0.1804]
+            ]
           ],
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 90
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.775, 3.1696], [0.725, 3.1696], [0.725, 3.1196], [0.775, 3.1196]]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 270
           }
         }
       ],

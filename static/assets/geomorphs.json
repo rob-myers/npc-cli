@@ -1,6 +1,6 @@
 {
   "mapsHash": 1563462381,
-  "layoutsHash": 469533212,
+  "layoutsHash": 1264822996,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -10213,7 +10213,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           },
           "x": 15.9054,
           "y": 11.51
@@ -10226,7 +10226,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           },
           "x": 15.3054,
           "y": 11.51
@@ -10239,7 +10239,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           },
           "x": 14.7054,
           "y": 11.51
@@ -10252,7 +10252,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 270
           },
           "x": 14.1054,
           "y": 11.51
@@ -10265,7 +10265,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 360
+            "orient": 90
           },
           "x": 15.9054,
           "y": 10.135
@@ -10278,7 +10278,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 360
+            "orient": 90
           },
           "x": 15.3054,
           "y": 10.135
@@ -10291,7 +10291,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 360
+            "orient": 90
           },
           "x": 14.7054,
           "y": 10.1507
@@ -10304,7 +10304,7 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 360
+            "orient": 90
           },
           "x": 14.1054,
           "y": 10.135
@@ -10317,10 +10317,10 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 90
+            "orient": 180
           },
           "x": 16.6554,
-          "y": 10.835
+          "y": 10.82
         },
         {
           "type": "point",
@@ -10330,10 +10330,10 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
+            "orient": 360
           },
           "x": 13.3554,
-          "y": 10.835
+          "y": 10.82
         },
         {
           "type": "point",

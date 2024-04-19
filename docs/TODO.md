@@ -53,7 +53,8 @@
 - 🚧 only one lookup needs to be extended when adding symbols
   - SymbolKey derived from it
 
-- 🚧 PR for recast-navigation-js
+- ✅ PR for recast-navigation-js
+  - https://github.com/isaac-mason/recast-navigation-js/pull/325
 - switch back to TestCharacter
 
 - symbols induced raised images via spritesheet
