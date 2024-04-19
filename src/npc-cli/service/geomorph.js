@@ -52,7 +52,6 @@ class GeomorphService {
     return keys(this.toGmNum);
   }
 
-  /** @type {Record<Geomorph.SymbolKey, true>} */
   fromSymbolKey = {
     // 🚧 must extend when adding new symbols
 
@@ -1090,3 +1089,7 @@ const tmpVect1 = new Vect();
 const tmpVect2 = new Vect();
 const tmpPoly1 = new Poly();
 const tmpMat1 = new Mat();
+
+/**
+ * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey
+ */
