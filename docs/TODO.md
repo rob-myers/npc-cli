@@ -2,6 +2,7 @@
 
 ## WIP
 
+- 🚧 switch back to TestCharacter
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
   - ✅ show custom character FBX
@@ -16,46 +17,6 @@
     - https://github.com/abhicominin/Character-Controller-three.js
 
 - integrate TestCharacter into TestWorld
-
-- ✅ generate recursive symbols
-  - ✅ instantiateFlatLayout transforms a FlatSymbol without connectors
-  - ✅ assets.js applies this function in a loop
-  - ✅ flattenSymbol combines `symbol` with instantiations of existing FlatSymbols
-  - ✅ after `flattened` is complete, create layout
-  - ✅ understand/fix stateroom--036
-    - symbol `<g>` was transformed
-
-- ✅ refine recursive symbol example i.e. stateroom--036
-- ✅ sub-symbol decor meta.orient (degrees) is transformed too
-  - ✅ layout.decor exists
-  - ℹ️ see modifySinglesMeta in repo the-last-redoubt
-- ✅ meta.orient not working
-  - reduceAffineTransform
-- ✅ layout.decor are points, rects or circles
-- ✅ more recursive symbols
-  - extra--fresher--001
-  - extra--fresher--002
-  - fresher-002
-  - bed--003
-  - bed--004
-  - bed--005
-  - console--019
-  - console--031
-  - console--051
-  - stateroom--014
-  - stateroom--036
-  - stateroom--014--2x2 e.g. use bed--003--1x1.6
-  - ✅ decompose desk--003--0.8x1 as two symbols
-  -   ✅ extra--chair--003--0.25x0.25
-  -   ✅ extra--desk--004--0.5x1
-  - ✅ table--004--1.2x2.4
-  - ✅ bridge--042--8x9
-- ✅ only one lookup needs to be extended when adding symbols
-  - SymbolKey derived from it
-
-- ✅ PR for recast-navigation-js
-  - https://github.com/isaac-mason/recast-navigation-js/pull/325
-- switch back to TestCharacter
 
 - symbols induced raised images via spritesheet
   - obstacle polys embed into rects (?)
@@ -774,3 +735,42 @@ React.useEffect(() => {
     - https://graphviz.org/doc/info/lang.html
     - https://dreampuf.github.io/GraphvizOnline
   - ✅ stratify symbol dependency graph
+
+- ✅ generate recursive symbols
+  - ✅ instantiateFlatLayout transforms a FlatSymbol without connectors
+  - ✅ assets.js applies this function in a loop
+  - ✅ flattenSymbol combines `symbol` with instantiations of existing FlatSymbols
+  - ✅ after `flattened` is complete, create layout
+  - ✅ understand/fix stateroom--036
+    - symbol `<g>` was transformed
+
+- ✅ refine recursive symbol example i.e. stateroom--036
+- ✅ sub-symbol decor meta.orient (degrees) is transformed too
+  - ✅ layout.decor exists
+  - ℹ️ see modifySinglesMeta in repo the-last-redoubt
+- ✅ meta.orient not working
+  - reduceAffineTransform
+- ✅ layout.decor are points, rects or circles
+- ✅ more recursive symbols
+  - extra--fresher--001
+  - extra--fresher--002
+  - fresher-002
+  - bed--003
+  - bed--004
+  - bed--005
+  - console--019
+  - console--031
+  - console--051
+  - stateroom--014
+  - stateroom--036
+  - stateroom--014--2x2 e.g. use bed--003--1x1.6
+  - ✅ decompose desk--003--0.8x1 as two symbols
+  -   ✅ extra--chair--003--0.25x0.25
+  -   ✅ extra--desk--004--0.5x1
+  - ✅ table--004--1.2x2.4
+  - ✅ bridge--042--8x9
+- ✅ only one lookup needs to be extended when adding symbols
+  - SymbolKey derived from it
+
+- ✅ PR for recast-navigation-js
+  - https://github.com/isaac-mason/recast-navigation-js/pull/325
