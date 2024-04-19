@@ -1,19 +1,27 @@
 import React from "react";
 import * as THREE from "three";
-import { CameraControls, PerspectiveCamera } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
+import { CameraControls, MapControls, PerspectiveCamera, KeyboardControls } from "@react-three/drei";
 import { quadGeometryXZ } from "../service/three";
 
+import { info } from "../service/generic";
 import TestCanvas from "./TestCanvas";
 import { TestCharacterController } from "./TestCharacterController";
+
+// 🚧 eliminate KeyboardControls
+// 🚧 CharacterControls doesn't need orbitControls?
 
 /**
  * @param {Props} props
  */
 export function TestCharacter(props) {
+  const { controls } = useThree();
+
   return (
     <>
-      {/* <MapControls makeDefault zoomToCursor position={[0, 8, 0]} /> */}
-      <CameraControls makeDefault enabled={!props.disabled} />
+      <MapControls makeDefault zoomToCursor position={[0, 8, 0]} />
+
+      {/* <CameraControls makeDefault enabled={!props.disabled} /> */}
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
       <ambientLight color="white" intensity={0.25} />
       <pointLight
@@ -22,9 +30,10 @@ export function TestCharacter(props) {
         castShadow
       />
 
-        <TestCharacterController />
+        {controls && <TestCharacterController />}
 
-        <mesh // ground
+        <mesh
+          name="ground"
           scale={[scale, 1, scale]}
           position={[-scale / 2, 0, -scale / 2]}
           geometry={quadGeometryXZ}
@@ -43,7 +52,6 @@ export function TestCharacter(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
- * @property {string} testProp
  */
 
 const scale = 20;
@@ -53,12 +61,31 @@ const scale = 20;
  */
 export default function WrappedTestCharacter(props) {
   return (
-    <TestCanvas
-      disabled={props.disabled}
-      stats={props.stats}
-      childComponent={TestCharacter}
-      childProps={{ disabled: props.disabled, testProp: "hello" }}
-      shadows
-    />
+    <KeyboardControls map={keyboardMap}>
+      <TestCanvas
+        disabled={props.disabled}
+        stats={props.stats}
+        childComponent={TestCharacter}
+        childProps={{
+          disabled: props.disabled,
+        }}
+        shadows
+      />
+    </KeyboardControls>
   );
 }
+
+/**
+ * @type {import('@react-three/drei').KeyboardControlsEntry<KeyNames>[]}
+ */
+const keyboardMap = [
+  { name: 'w', keys: ['Up', 'KeyW'] },
+  { name: 's', keys: ['Down', 'KeyS'] },
+  { name: 'a', keys: ['Right', 'KeyA'] },
+  { name: 'd', keys: ['Left', 'KeyD'] },
+  { name: 'shift', keys: ['Shift'] },
+];
+
+/**
+ * @typedef {import('./character-controller').DirectionKey | 'shift'} KeyNames
+ */

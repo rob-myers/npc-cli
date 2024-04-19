@@ -3,6 +3,10 @@
 ## WIP
 
 - 🚧 switch back to TestCharacter
+  - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
+  - clean up
+  - remove keyboard controls
+
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
   - ✅ show custom character FBX
