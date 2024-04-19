@@ -54,6 +54,8 @@ class GeomorphService {
 
   /** @type {Record<Geomorph.SymbolKey, true>} */
   fromSymbolKey = {
+    // 🚧 must extend when adding new symbols
+
     "101--hull": true,
     "102--hull": true,
     "103--hull": true,
@@ -70,6 +72,7 @@ class GeomorphService {
     "console--022--1x2": true,
     "console--031--1x1.2": true,
     "console--051--0.4x0.6": true,
+    "counter--009--0.4x0.4": true,
     "empty-room--013--2x3": true,
     "empty-room--039--3x4": true,
     "engineering--045--6x4": true,
@@ -110,7 +113,6 @@ class GeomorphService {
     "stateroom--036--2x4": true,
     "table--004--1.2x2.4": true,
 
-    // 🚧 must extend when adding new symbols
     "extra--fresher--001--0.5x0.5": true,
     "extra--fresher--002--0.5x0.5": true,
     "extra--chair--003--0.25x0.25": true,

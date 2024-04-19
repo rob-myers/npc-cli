@@ -32,7 +32,7 @@
 - ✅ meta.orient not working
   - reduceAffineTransform
 - ✅ layout.decor are points, rects or circles
-- 🚧 more recursive symbols
+- ✅ more recursive symbols
   - extra--fresher--001
   - extra--fresher--002
   - fresher-002
@@ -49,7 +49,7 @@
   -   ✅ extra--chair--003--0.25x0.25
   -   ✅ extra--desk--004--0.5x1
   - ✅ table--004--1.2x2.4
-  - 🚧 bridge--042--8x9
+  - ✅ bridge--042--8x9
 - 🚧 only one lookup needs to be extended when adding symbols
   - SymbolKey derived from it
 

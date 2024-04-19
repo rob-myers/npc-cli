@@ -255,6 +255,7 @@ declare namespace Geomorph {
     | "console--022--1x2"
     | "console--031--1x1.2"
     | "console--051--0.4x0.6"
+    | "counter--009--0.4x0.4"
     // | "couch-and-chairs--006--0.4x2"
     // | "empty-room--006--2x2"
     | "empty-room--013--2x3"
