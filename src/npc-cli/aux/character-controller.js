@@ -55,6 +55,12 @@ export default class CharacterController {
       if (d) return -3/4 * Math.PI;
       return Math.PI;
     }
+    if (a) {
+      return Math.PI/2;
+    }
+    if (d) {
+      return -Math.PI/2;
+    }
     return 0;
   }
 
@@ -82,20 +88,15 @@ export default class CharacterController {
     this.mixer.update(deltaMs);
 
     if (this.currentAction === 'Run' || this.currentAction === 'Walk') {
-      
-      const modelCamAngle = Math.atan2(// 🚧 why not switched
-        this.camera.position.x - this.model.position.x,
-        this.camera.position.z - this.model.position.z,
-      );
-      const offsetAngle = this.getOffsetAngle(keysPressed);
+      const targetAngle = this.getOffsetAngle(keysPressed);
 
       // Turn towards target angle
-      this.rotQuat.setFromAxisAngle(this.rotAxis, modelCamAngle + offsetAngle);
+      this.rotQuat.setFromAxisAngle(this.rotAxis, targetAngle);
       this.model.quaternion.rotateTowards(this.rotQuat, 0.2);
 
       // Compute walk direction
       this.camera.getWorldDirection(this.walkDir)
-      this.walkDir.setY(0).normalize().applyAxisAngle( this.rotAxis , offsetAngle);
+      this.walkDir.setY(0).normalize().applyAxisAngle( this.rotAxis , targetAngle);
 
       // Move
       const speed = this.currentAction === 'Run' ? this.runSpeed : this.walkSpeed;

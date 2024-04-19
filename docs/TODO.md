@@ -5,6 +5,7 @@
 - 🚧 switch back to TestCharacter
   - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
   - ✅ CharacterController does not depend on orbitControls
+  - 🚧 can click to move
   - remove keyboard controls
 
 - 🚧 Restart TestCharacter: animation, no physics
