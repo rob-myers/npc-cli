@@ -27,7 +27,7 @@
   - obstacle polys embed into rects (?)
   - obstacle polys have `y={y}`
   - InstancedMesh with raised XZ planes
-  - obstacle polys induce spritesheet with uv-map
+  - obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
 - ❌ show tables via raised "floor texture"
 
