@@ -1,5 +1,186 @@
 # TODO
 
+## WIP
+
+- 🚧 switch back to TestCharacter
+  - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
+    - https://discourse.threejs.org/t/character-controller/46936
+    - https://character-controller-three.netlify.app/
+  - ✅ CharacterController does not depend on orbitControls
+  - ✅ can click to move
+    - ✅ on click ground set CharacterController target
+    - ✅ move to target
+    - ✅ turn to target
+  - remove keyboard controls
+
+- 🚧 Restart TestCharacter: animation, no physics
+  - ✅ clean away `@react-three/rapier`
+  - ✅ show custom character FBX
+  - ✅ scale character to desired height
+  - ✅ import FBX into Blender and export as GLTF
+    - ✅ install blender 4.1 (latest)
+  - 🚧 download two FBX animations from mixamo and somehow load into GLTF
+    - show a Mixamo animation (use Blender to combine animations)
+      - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- integrate TestCharacter into TestWorld
+
+- symbols induced raised images via spritesheet
+  - obstacle polys embed into rects (?)
+  - obstacle polys have `y={y}`
+  - InstancedMesh with raised XZ planes
+  - obstacle polys induce sprite-sheet with uv-map
+  - InstancedMesh uses uvs
+- ❌ show tables via raised "floor texture"
+
+- show toast while navmesh loading
+  - also show results e.g. number of tiles
+
+- closed doors have filtered doorPolys
+- can make agent look at point
+- ✅ migrate roomGraph per geomorph
+- migrate gmRoomGraph
+- migrate fast gmRoomId lookup via image pixels
+- prevent agent going through door
+  - e.g. when avoiding another agent, could use obstacle
+  - e.g. use gmRoomGraph to avoid going thru closed door
+
+- create smaller-pngs.js and compare to https://tinypng.com/
+- scripts assets/images trigger different useQuery
+- Player view could be top-down with high walls
+  - try fixing door height with black wall above
+- optionally increase floor image resolution e.g. 2x
+- avoid recomputing npcs/obstacles in TestNpcs
+- fix open/close non-aligning hull doors
+- ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
+- ✅ type worker.postMessage in main thread and worker
+  - ✅ main thread
+  - ✅ worker
+- ✅ get web worker HMR "working"
+  - ❌ https://github.com/webpack/webpack/issues/14722
+  - ℹ️ gatsby does not support "webpack multi-compiler"
+  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
+- ✅ changing props.mapKey should change map
+- can directly change a single door's material e.g. make wireframe
+  - https://www.npmjs.com/package/three-instanced-uniforms-mesh
+  - https://codesandbox.io/p/sandbox/instanceduniformsmesh-r3f-lss90?file=%2Fsrc%2Findex.js
+- extend door/window connectors with correct roomIds
+- clarify handling of windows
+- simplify polygon JSON format e.g. flat arrays
+- start using cypress
+- saw slow resize on maximize desktop (but not mobile)
+- ❌ try unify parseMaps and parseSymbols
+- try fix sporadic missing updates
+  - ✅ move maps to `media/map`
+  - ✅ improve remount keys
+  - still seeing occasional issues?
+- ✅ integer accuracy when parsing maps
+  - Boxy has rounding errors e.g. when reflect
+  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
+- ❌ migrate Triangle
+  - png -> webp script applied to assets/debug
+- ❌ learn about WebGl RenderTargets
+  - Towards "Pixi.js RenderTexture" functionality
+  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
+- ❌ try migrate R3FDemo to react-three-offscreen
+- sh `test {fn}` evaluates function with `map` args
+- ❌ improve MapControls zoomToCursor on mobile
+  - two fingers leftwards to rotate
+  - two fingers upwards to set polar
+- Terminal crashing during HMR
+  - possibly fixed via `xterm-addon-webgl@beta`
+  - ℹ️ haven't seen for a while
+- ❌ (hull) walls -> quads
+  - ℹ️ trying alternative i.e. "edges outside floor"
+- need to remove labels from hull symbol image?
+- ❌ try avoid alphaBlend geomorphs via alphaMap
+  - we only need depthWrite false
+- Firefox android allows unbounded scrolling on "interact"
+  - debug locally using about:debugging#/runtime/this-firefox
+- 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
+  - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
+- ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
+  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
+  - ℹ️ seen in parseSymbol of hull symbol
+- ❌ react-three-fiber onPointerUp not updating when instance transformed
+  - ❌ possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
+  - ℹ️ fixed by updating sphere bounds
+- in parallel, start going through https://github.com/recastnavigation/recastnavigation
+  - to understand what recast outputs
+  - to understand what detour inputs
+
+- only show ContextMenu on right click on desktop
+- show ContextMenu on double tap instead of long tap
+
+- if Viewer maximised and choose menu item, halve size of the Viewer
+
+- if only open Viewer a tiny amount then it should close itself
+
+- ❌ world editor in new repo
+  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
+- ❌ geomorph editor in new repo
+- 🤔 despite our "generic aim" (fabricating game masters),
+  some context will help e.g. The Last Redoubt
+
+- ✅ smaller collapsed nav on mobile
+- fix multi-touch flicker on drag
+  - setup local dev on phone to debug this
+- can add Tabs via links in blog posts
+  - without remounting other tabs!
+- open Viewer should enable Tabs initially
+- ✅ can press Escape/Enter to pause/unpause
+- how does shell function versioning work in sh/scripts.ts?
+- fix vertical tab drag on mobile
+  - need repro
+
+- iOS issues:
+  - ✅ Nav wasn't centred
+  - ✅ Viewer initially partially occluded
+  - seems fixed on iPhone 13
+
+- more decor images
+  - `computer-2`
+  - `speaker-1`
+  - `communicator-1`
+  - `fabricator-1`
+- place decor points on many tables
+- more tables in 301
+- more tables in 101
+- World WebGL rendering pauses on pause Tabs
+
+- install cypress to test terminal
+- netlify site `npc-cli` at https://lastredoubt.co
+
+
+## Scratch Pad
+
+```jsx
+// Why does this seemingly block main thread?
+React.useEffect(() => {
+  // 🚧
+  import("recast-navigation").then(({ init }) =>
+    init().then(() => {
+      // compute vertices, indices
+      let offset = 0;
+      const vs = /** @type {number[]} */ ([]);
+      const is = /** @type {number[]} */ ([]);
+      state.gms.forEach(({ navPolys }) => {
+        const { vertices, indices } = polysToAttribs(navPolys);
+        vs.push(...vertices);
+        is.push(...indices.map((x) => x + offset)); // 🚧 needs flip under conditions
+        offset += vertices.length / 3;
+      });
+      is.reverse();
+
+      import("recast-navigation/generators").then(({ generateSoloNavMesh }) => {
+        const { navMesh, success } = generateSoloNavMesh(vs, is, {});
+        console.log({ navMesh, success });
+      });
+    })
+  );
+}, [geomorphs]);
+```
+
 ## Done
 
 - ✅ rename current netlify site `npc->cli` -> `the-last-redoubt`
@@ -328,11 +509,9 @@
 - ✅ uncut walls inherit meta
 - ✅ rooms have meta via tag `decor meta`
 
-## WIP
-
-- 🚧 TestCharacter (character controller)
+- ❌ TestCharacter (character controller)
   - ✅ simple demo using https://github.com/pmndrs/ecctrl
-  - 🚧 BUG ecctrl is panning on drag outside canvas
+  - ❌ BUG ecctrl is panning on drag outside canvas
     - https://github.com/pmndrs/ecctrl/issues/34
     - create patch in the meantime
   - ✅ sporadic issue with pause i.e. scene disappears
@@ -340,97 +519,265 @@
     - ✅ pause physics
     - ✅ disable CameraControls
     - ✅ frameloop must be `demand` instead of `never`?
-
-- show tables via raised "floor texture"
+  - ℹ️ we'll only use rapier3d for Kinematic-Position Player vs Sensors
 
 - ✅ fix stellar cartography nav
   - ℹ️ transform-box `fill-box` issue
-- start using recast/detour
-- extend door/window connectors with correct roomIds
-- clarify handling of windows
 
-- extend TestCharacter
-  - use character Soldier with animations
-  - use custom character via Mixamo (use Blender to combine animations)
-  - click to move
-  - extract code, removing e.g. ray-cast
+- ✅ start using recast/detour
+  - https://github.com/isaac-mason/recast-navigation-js/tree/main/packages/recast-navigation-three
+  - ✅ create `small-map-1` i.e. single 301
+  - ✅ generate navPolys as three.js Mesh (earcut triangulation)
+  - ✅ try threeToSoloNavMesh
+    - ℹ️ failing with single 301
+    - ✅ try construct BufferGeometry as OBJ and import into
+      https://navmesh.isaacmason.com/
+    - ℹ️ normals were geting flipped
+  - ✅ fix threeToSoloNavMesh for `demo-map-1`
+    - ℹ️ normals getting flipped again
+    - ℹ️ seems need BufferGeometry per instance (bad)
+    - ❌ try non-three API: recast-navigation/generators seems to block main thread
+    - ✅ try @recast-navigation/three with BufferGeometry per instance, then dispose
+  - ✅ move to web worker
+    - ✅ create web worker test-world-scene.worker.jsx
+    - ✅ can send messages from TestWorld to worker e.g. `{ mapKey }`
+    - ✅ worker fetches geomorphs.json initially
+    - ✅ worker creates initial meshes
+    - ✅ worker initializes recast/detour wasm
+    - ✅ worker constructs threeToSoloNavMesh
+    - ✅ worker serializes and main thread deserializes
+    - ❌ TestWorldCanvas provides ref (State) to parent TestWorld
+      - already provides state as ctxt.view
+    - ✅ main thread shows navMesh via helper
+    - ✅ remove orig approach in TestWorldScene
+  - ✅ try threeToTiledNavMesh
+  - ✅ fix disconnect at a 301 hull door
+    - bridge--042 has many transform-box: fill-box
+  - ✅ try threeToTileCache
+  - ✅ test against `small-map-1` + `demo-map-1`
 
-- simplify polygon JSON format e.g. flat arrays
-- start using cypress
-- slow resize on maximize desktop (but not mobile)
-- ❌ try unify parseMaps and parseSymbols
-- try fix sporadic missing updates
-  - ✅ move maps to `media/map`
-  - ✅ improve remount keys
-  - still seeing occasional issues?
-- ✅ integer accuracy when parsing maps
-  - Boxy has rounding errors e.g. when reflect
-  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
-- migrate Triangle
-  - png -> webp script applied to assets/debug
-- learn about WebGl RenderTargets
-  - Towards "Pixi.js RenderTexture" functionality
+- ✅ try shader for instanced walls/doors
   - https://blog.maximeheckel.com/posts/the-study-of-shaders-with-react-three-fiber/
-  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
-- ❌ try migrate R3FDemo to react-three-offscreen
-- sh `test {fn}` evaluates function with `map` args
-- ❌ improve MapControls zoomToCursor on mobile
-  - two fingers leftwards to rotate
-  - two fingers upwards to set polar
-- Terminal crashing during HMR
-  - possibly fixed via `xterm-addon-webgl@beta`
-  - ℹ️ haven't seen for a while
-- ❌ (hull) walls -> quads
-  - ℹ️ trying alternative i.e. "edges outside floor"
-- need to remove labels from hull symbol image?
-- ❌ try avoid alphaBlend geomorphs via alphaMap
-  - we only need depthWrite false
-- Firefox android allows unbounded scrolling on "interact"
-  - debug locally using about:debugging#/runtime/this-firefox
-- 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
-  - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
-- 🚧 fix case where `transform-box` is `content-box` or `fill-box`
-  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
-  - ℹ️ seen in parseSymbol of hull symbol
+  - ✅ try gradient fill shader for doors
+    - works, but the instance ordering is broken!
+  - ✅ why does meshBasicMaterial order things correctly, but not my custom shader?
+    > It's the shader material you're using. Three materials have routines build in that handle instanced meshes, the instancing is done in shaders
+    > You can piece a working shader together from 'shaderchunks', or modify an existing shader with material.onbeforecompile
+    > https://www.reddit.com/r/threejs/comments/scwjwb/comment/huafmn6/?utm_source=share&utm_medium=web2x&context=3
+  - ℹ️ https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderLib
+  - ℹ️ https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshbasic.glsl.js
+  - ✅ create `<shaderMaterial>` using copies of mesh basic material vertex/fragment shaders
+  - ✅ create simplified versions with just enough
+  - ✅ doors have gradient fill
 
-- only show ContextMenu on right click on desktop
-- show ContextMenu on double tap instead of long tap
+- ✅ can open doors on direct click (DEMO only)
+  - ✅ onPointerUp provides point and instanceId
+  - ✅ can directly open a single door (sans animation)
+  - ✅ can directly open a single door (animated)
+    - can directly mutate instanceMatrix.array
+    - https://github.com/mrdoob/three.js/blob/b7015c89d57e24c5a2d4cdaad34559bc8d5c599a/src/objects/InstancedMesh.js#L218
 
-- if Viewer maximised and choose menu item, halve size of the Viewer
 
-- if only open Viewer a tiny amount then it should close itself
+- ✅ PR for recast-navigation-js extending dtNavMeshQuery
+  - ℹ️ https://github.com/isaac-mason/recast-navigation-js/discussions/298
+  - ✅ https://github.com/isaac-mason/recast-navigation-js/blob/main/DEVELOPMENT.md
+  - ✅ re-build @recast-navigation/wasm 
+  - ✅ add findPolysAroundCircle
+  - ✅ add queryPolygons
+  - ✅ test findPolysAroundCircle
+  - ✅ test queryPolygons
+  - https://github.com/isaac-mason/recast-navigation-js/pull/300
 
-- ❌ world editor in new repo
-  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
-- geomorph editor in new repo
-- 🤔 despite our "generic aim" (fabricating game masters),
-  some context will help e.g. The Last Redoubt
+- ✅ fix transform-box parsing
+  - ✅ transform-box`fill-box` working for `rect`
+  - ✅ transform-box `fill-box` working for `path`
+- ✅ fix scale i.e. pre-scale by worldScale so tileSize 30 correct
+  - Seems tileSize 30 was already correct.
+    We thought there were many extra tiles by inspecting tile `dataSize`, but seems it can be non-zero without meaning anything
 
-- ✅ smaller collapsed nav on mobile
-- fix multi-touch flicker on drag
-  - setup local dev on phone to debug this
-- can add Tabs via links in blog posts
-  - without remounting other tabs!
-- open Viewer should enable Tabs initially
-- can press Escape/Enter to pause/unpause
-- how does shell function versioning work in sh/scripts.ts?
-- fix vertical tab drag on mobile
-  - need repro
+- ✅ get obstacle working again
+  - https://github.com/isaac-mason/recast-navigation-js/discussions/272#discussioncomment-9020184
 
-- iOS issues:
-  - ✅ Nav wasn't centred
-  - ✅ Viewer initially partially occluded
-  - seems fixed on iPhone 13
+- ✅ count number of tiles we're using
+  - verify `tile.header()?.polyCount` truthy
+  - way too many i.e. `1382`
+  - currently `105`
 
-- more decor images
-  - `computer-2`
-  - `speaker-1`
-  - `communicator-1`
-  - `fabricator-1`
-- place decor points on many tables
-- more tables in 301
-- more tables in 101
-- World WebGL rendering pauses on pause Tabs
+- ✅ something is wrong with polygon selection
+  - polygon selection is fine
+  - seems sometimes doorway polys have hidden extras connections
 
-- install cypress to test terminal
-- netlify site `npc-cli` at https://lastredoubt.co
+- ❌ reduce number of tiles used...
+  - ℹ️ single 301 has `137` tiles, each with at most `5` polygons
+  - ❌ try restricting single 301 geometry to (0, 0, 0) -> (30, 0, 15)
+  - ❌ try modifying input geometry
+    - ❌ widen navigable doorways slightly to preserve door polygons (?)
+    - ❌ add y-raised points in doorways to preserve door polygons (?) 👈
+    - wider doors, so can use larger `cs`
+  - ❌ try removing doors and using off-mesh connections
+    - unclear if can enable/disable
+
+- ✅ try feeding different triangulation into recast
+  - ❌ try a qualityTriangulate fed into recast
+  - ❌ try piece-wise constructed triangulation 
+  - ❌ try Triangle-generated triangulation
+
+- ❌ try "cuts" i.e. non-outset alterations to symbols
+  - possibly auto-added
+
+- ✅ split hull doors in two for easier doorPolys
+
+- ✅ fix obstacle outsets in hull symbols
+  - we now fixOrientation in extractGeom
+
+- ✅ HMR issues
+  - ✅ onchange mapKey in Viewer
+  - ✅ obstacles stop working
+  - ❌ onchange map sometimes animation doesn't restart
+    - no repro
+
+- ✅ recast/detour continued
+  - ✅ single agent crowd seen via CrowdHelper
+  - ✅ iterate crowd.update, pausing on disable Tabs
+  - ✅ visualize navPath
+    - https://github.com/donmccurdy/three-pathfinding/blob/main/src/PathfindingHelper.js
+    - https://github.com/mrdoob/three.js/blob/master/examples/webgl_lines_fat.html
+  - ✅ can navigate single agent to a clicked point
+    - ℹ️ off-mesh target produced different paths via crowd vs query
+    - ✅ works when edit map
+  - ✅ can preserve agent position across HMR edit
+  - ✅ add obstacle and depict using TileCacheHelper
+  - ✅ two agents and can navigate both
+    - ✅ crowd helper -> TestNpcs
+    - ✅ fix HMR
+    - ✅ add two agents
+    - ✅ can select agent and navigate selected
+  - ✅ tileCache helper -> TestNpcs
+  - ✅ api.help.navMesh -> TestDebug
+  - ✅ navPath helper -> TestDebug
+  - 🚧 can make polygon un-walkable e.g. closed door
+    - https://recastnav.com/classdtNavMeshQuery.html#details
+    - https://github.com/isaac-mason/recast-navigation-js/issues/286
+    - https://groups.google.com/g/recastnavigation/c/OqJRHFoiVX8
+    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation/.storybook/stories/advanced/custom-areas-generator.ts#L371
+    - https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-core/src/nav-mesh.ts#L429
+    - https://www.gamedev.net/blog/33/entry-2210775-more-recast-and-detour/
+    - ✅ retrieve polygon points (messy)
+    - ✅ get filter working
+    - ℹ️ first attempt probably failed because we didn't "get enough" polygons?
+    - ✅ navMesh has polys roughly corresponding to doors
+    - ✅ can indicate found poly
+      - packages/recast-navigation-core/src/nav-mesh.ts
+      - seems we need exactly what's in `getDebugNavMesh` i.e. extra triangles inside poly is exactly so-called detailed-mesh (?)
+    - ✅ cleanup
+  - ✅ can re-plan moving agent path on HMR edit
+
+  - ❌ TestCharacter:
+  - ✅ use @react-three/rapier
+  - ✅ extract basics from:
+    - ℹ️ https://github.com/pmndrs/ecctrl/tree/main
+    - ℹ️ https://github.com/visionary-3d/advanced-character-controller/tree/main
+    - ℹ️ no need for: keyboard controls, ray, ...
+    - ✅ kinematic-position-based
+  - ❌ check anything is missing
+  - ℹ️ we'll use rapier 3d in webworker i.e. kinematics vs sensors
+
+  - ✅ recast/detour try use areas to preserve door polygons
+  - https://github.com/isaac-mason/recast-navigation-js/discussions/306#discussioncomment-9069840
+  - ✅ construct triangulation where door-triangles known
+  - ✅ forward triangulation to recast
+  - ✅ flatten layout.nav
+  - ✅ mark door triangles for recast
+  - ✅ working for a single geomorph
+  - ✅ working for transformed geomorphs
+
+- ✅ start generating geomorphs *.webp ourselves
+- ✅ floor images: one per geomorph (first attempt)
+  - ✅ fix cwebp.js
+  - ❌ replace nodemon with nodemon.js
+  - ✅ check file timestamps in assets.js
+  - ✅ avoid recomputing symbols in assets.js
+  - ✅ images script generates simplified floors
+    - ✅ floor
+    - ✅ navPoly
+    - ✅ walls
+
+- ✅ can show origNavPoly via floor image
+- ✅ remove origNavPoly from geomorphs.json
+- ✅ draw doors in floor images (e.g. over hull door debug flicker)
+
+- ✅ stop using prettier i.e. use eslint instead
+  - prettier ignore everything
+- start using eslint with auto-format if possible
+
+- ✅ install tailwind
+- ✅ use tailwind/typography in mdx
+- ✅ css fixes
+  - ✅ improve layout width
+  - ✅ fix header css change
+- ✅ adjust nav toggle
+- ✅ header `NPC CLI` -> top bar
+  - FontAwesomeIcon beat was visible over position sticky
+
+- ✅ script get-pngs extracts starship symbols from source
+  - ✅ extract from media/Symbols
+  - ✅ extract a folder from media/Geomorphs/
+  - ✅ extract a folder from media/Symbols/
+  - ✅ extract from media/Small Craft
+
+- new source material from Robert Pearce?
+  - https://drive.google.com/drive/folders/1apcZgZKXV5qOxNtQxtnQG0QNpkLzor-f
+
+- ✅ towards recursive non-hull symbols
+  - ✅ base-graph stratify (tested)
+  - ✅ a non-hull symbol has sub-symbols
+  - ✅ split fresher--001--0.6x1 into extra--fresher--*
+  - ✅ more non-hull symbols have sub-symbols
+  - ✅ non-hull sub-symbols are parsed
+  - ✅ warn if sub-symbols dimension does not match original
+  - ✅ define symbol dependency graph
+  - ✅ build symbol dependency graph
+  - ✅ depict graph using graphviz
+    - ✅ base-graph generates `dot` digraph
+    - https://graphviz.org/doc/info/lang.html
+    - https://dreampuf.github.io/GraphvizOnline
+  - ✅ stratify symbol dependency graph
+
+- ✅ generate recursive symbols
+  - ✅ instantiateFlatLayout transforms a FlatSymbol without connectors
+  - ✅ assets.js applies this function in a loop
+  - ✅ flattenSymbol combines `symbol` with instantiations of existing FlatSymbols
+  - ✅ after `flattened` is complete, create layout
+  - ✅ understand/fix stateroom--036
+    - symbol `<g>` was transformed
+
+- ✅ refine recursive symbol example i.e. stateroom--036
+- ✅ sub-symbol decor meta.orient (degrees) is transformed too
+  - ✅ layout.decor exists
+  - ℹ️ see modifySinglesMeta in repo the-last-redoubt
+- ✅ meta.orient not working
+  - reduceAffineTransform
+- ✅ layout.decor are points, rects or circles
+- ✅ more recursive symbols
+  - extra--fresher--001
+  - extra--fresher--002
+  - fresher-002
+  - bed--003
+  - bed--004
+  - bed--005
+  - console--019
+  - console--031
+  - console--051
+  - stateroom--014
+  - stateroom--036
+  - stateroom--014--2x2 e.g. use bed--003--1x1.6
+  - ✅ decompose desk--003--0.8x1 as two symbols
+  -   ✅ extra--chair--003--0.25x0.25
+  -   ✅ extra--desk--004--0.5x1
+  - ✅ table--004--1.2x2.4
+  - ✅ bridge--042--8x9
+- ✅ only one lookup needs to be extended when adding symbols
+  - SymbolKey derived from it
+
+- ✅ PR for recast-navigation-js
+  - https://github.com/isaac-mason/recast-navigation-js/pull/325

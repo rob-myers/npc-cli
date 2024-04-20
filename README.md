@@ -2,6 +2,16 @@
 
 Towards believable NPCs.
 
+```sh
+# full dev env e.g. auto-update assets/images
+npm run dev
+yarn dev
+
+# manual dev env
+npm run develop
+yarn develop
+```
+
 ## Gotchas
 
 Configure Giscus using https://giscus.app/.
@@ -9,52 +19,48 @@ Configure Giscus using https://giscus.app/.
 Use VSCode plugin `Prettier - Code formatter`,
 published by `Prettier`.
 
-## Bits and pieces
+## Optional Dependencies
 
-### Understanding affine transforms
+We use `xargs` for parallelisation of commands.
 
-Given a rectangle
-> `{ x: 0, y: -480, width: 120, height: 120 }`
-
-we'll apply the affine transform:
-> `matrix(1, 0, 0, -1, 0, 840)` relative to the transform-origin `(60, -420)`.
-
-
-Now, the affine transform has matrix representation shown below left.
-Moreover the affine translation matrix `T(x, y)` is shown below right.
-
-<div style="max-width:240px; columns: 2">
-
-```
-1  0   0 
-0 -1 840
-0  0   1
+```sh
+# for `yarn cwebp '{ "files": [...] }'`
+brew install webp
 ```
 
-```
-1  0  x 
-0  1  y
-0  0  1
-```
+We use `convert` from ImageMagick.
 
-</div>
+```sh
+brew install imagemagick
 
-Let `P := (0, -480, 1)` and `Q := (120, -360, 1)` be the top-left and bottom-right of the rectangle.
-Then:
+# exit code 0 <=> installed
+convert --version | grep ImageMagick >/dev/null && echo $?
 
-```js
-T(60, -420) ·  M · T(-60, 420) · P
-= T(60, -420) · M · (-60, -60, 1)
-= T(60, -420) · (-60, 900, 1)
-= (0, 480)
-```
+# autocrop an image using ImageMagick
+srcPath=media/edited/extra--fresher--002--0.5x0.5.png
+dstPath=media/edited/extra--fresher--002--0.5x0.5.trim.png
+convert -fuzz 1% -trim "$srcPath" "$dstPath" && mv "$dstPath" "$srcPath"
 
-```js
-T(60, -420) · M · T(-60, 420) · Q
-= T(60, -420) · M · (60, 60, 1)
-= T(60, -420) · (60, 780, 1)
-= (120, 360)
+# greyscale
+convert -colorspace Gray myImage.png  myImage.gray.png
 ```
 
-Due to the special nature of the affine transform,
-these diagonals induce the transformed rectangle by swapping ordinates.
+We use `dot` (graphviz) to visualized directed graphs.
+> https://graphviz.org/documentation/
+
+```sh
+brew install graphviz
+```
+
+## Starship Symbols Source PNGs
+
+Symbol PNGs should be unzipped in /media
+- [SymbolsHighRes.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/SymbolsHighRes.zip)
+- [SmallCraftHighRes.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/SmallCraftHighRes.zip)
+
+Geomorph PNGs (background in hull symbols) should be unzipped in /media
+- [Geomorphs.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/Geomorphs.zip)
+
+Related resources (less/more resolution)
+- [Symbols.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/Symbols.zip)
+- [GeomorphsHighRes.zip](http://ericbsmith.no-ip.org/zip/Geomorphs/GeomorphsHighRes.zip)

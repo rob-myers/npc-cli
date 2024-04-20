@@ -211,34 +211,20 @@ declare namespace Graph {
 
   //#endregion
 
-  //#region FloorGraph
+  //#region SymbolGraph
 
-  /**
-   * Based on `Nav.GraphNode`
-   */
-  interface FloorGraphNodeBase {
-    type: "tri";
-    /** `tri-${index} */
-    id: string;
-    /**
-     * Index of this node in its parent array,
-     * originally `Nav.GraphNode[]`.
-     */
-    index: number;
-    /**
-     * `portals[succId]` are the two vertex ids shared with their `succId`th successor.
-     * The original representation has an edge-ordering, available as `Array.from(succ.get(thisNode))`.
-     * They are ordered w.r.t their index in `vertexIds` (lower to higher).
-     */
-    portals: number[][];
-    vertexIds: number[];
+  interface SymbolGraphNode {
+    id: Geomorph.SymbolKey;
+  }
+  
+  interface SymbolGraphEdgeOpts extends BaseEdgeOpts {
+    transform: Geom.SixTuple;
+    meta: Geomorph.Meta;
   }
 
-  interface FloorGraphNodeJson extends FloorGraphNodeBase {
-    centroid: Geom.VectJson;
-  }
+  type SymbolGraphJson = GraphJson<SymbolGraphNode, SymbolGraphEdgeOpts>;
 
-  interface FloorGraphNode extends FloorGraphNodeBase, AStarNode {}
+  //#endregion
 
   interface AStarNode {
     astar: {
@@ -255,66 +241,4 @@ declare namespace Graph {
     };
   }
 
-  type FloorGraphEdgeOpts = BaseEdgeOpts;
-
-  /** We use Nav.Zone instead. */
-  type FloorGraphJson = never;
-
-  // 🚧
-  type FloorGraph = import("./floor-graph").floorGraphClass;
-
-  interface NavNodeMeta {
-    doorId: number;
-    roomId: number;
-    nearDoorId?: number;
-  }
-
-  // 🚧 remove
-  type NavPartition = ({ nodes: Graph.FloorGraphNode[] } & (
-    | { key: "door"; doorId: number }
-    | { key: "room"; roomId: number }
-  ))[];
-
-  interface PfData {
-    graph: Graph.FloorGraph;
-  }
-
-  /**
-   * A path through a `FloorGraph`.
-   */
-  interface FloorGraphNavPath {
-    path: Geom.Vect[];
-    /** Aligned to edges of `path` i.e. the nav node ids along each edge. */
-    partition: number[][];
-    navMetas: FloorGraphNavMeta[];
-    /** `[startDoorId, endDoorId]` respectively */
-    doorIds: [null | { id: number; hull: boolean }, null | { id: number; hull: boolean }];
-    /** Only for vertices where roomId changes, starting from `0` */
-    roomIds: { [vertexId: number]: number };
-  }
-
-  /**
-   * Metadata concerning some point along a path through a `FloorGraph`.
-   */
-  type FloorGraphNavMeta = {
-    /** Pointer into `path` */
-    index: number;
-  } & ( // | { key: 'decor-collide'; decor: NPC.DecorRef; type: 'enter' | 'exit' | 'start-inside' } // | { key: 'at-door'; currentRoomId: number; doorId: number; hullDoorId: number; otherRoomId: null | number; }
-    | { key: "enter-room"; enteredRoomId: number; doorId: number; otherRoomId: null | number }
-    | {
-        key: "exit-room";
-        exitedRoomId: number;
-        doorId: number;
-        hullDoorId: number;
-        otherRoomId: null | number;
-      }
-    // | { key: 'npcs-collide'; otherNpcKey: string; }
-    | { key: "vertex" }
-  );
-
-  type NavMetaKey = FloorGraphNavMeta["key"];
-
-  type FloorGraphNavMetaVertex = Extract<Graph.FloorGraphNavMeta, { key: "vertex" }>;
-
-  //#endregion
 }

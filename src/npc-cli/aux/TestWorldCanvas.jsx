@@ -4,11 +4,11 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { isTouchDevice } from "../service/dom.js";
+import { info } from "../service/generic.js";
 import "./infinite-grid-helper.js";
 import { Vect } from "../geom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import useUpdate from "../hooks/use-update";
 import { Origin } from "./MiscThree";
 
 /**
@@ -21,12 +21,59 @@ export default function TestWorldCanvas(props) {
       controls: /** @type {*} */ (null),
       menuEl: /** @type {*} */ (null),
       rootEl: /** @type {*} */ (null),
+      rootState: /** @type {*} */ (null),
       down: undefined,
+
       canvasRef(canvasEl) {
         if (canvasEl && !state.canvasEl) {
           state.canvasEl = canvasEl;
           state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
         }
+      },
+      onCreated(rootState) {
+        state.rootState = rootState;
+        api.threeReady = true;
+        api.update(); // e.g. show stats
+      },
+      onPointerDown(e) {
+        state.down = {
+          clientPos: new Vect(e.clientX, e.clientY),
+          distance: 0, // or getDistance(state.input.touches)
+          epochMs: Date.now(),
+        };
+        state.menuEl.style.display = "none";
+      },
+      onPointerUp(e) {
+        if (!state.down) {
+          return;
+        }
+        // info("infiniteGridHelper onPointerUp", e, e.point);
+        const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
+        const timeMs = Date.now() - state.down.epochMs;
+        api.events.next({
+          key: "pointerup",
+          distance,
+          longPress: timeMs >= 300,
+          point: e.point,
+          rmb: e.button === 2,
+          // 🤔 or clientX,Y minus canvas bounds?
+          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+          meta: {
+            floor: true,
+            targetCenter: undefined,
+          },
+        });
+      },
+      onPointerMissed(e) {
+        // console.log("onPointerMissed", e.clientX, e.clientY, e);
+        state.down &&
+          api.events.next({
+            key: "pointerup-outside",
+            distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+            longPress: Date.now() - state.down.epochMs >= 300,
+            rmb: e.button === 2,
+            screenPoint: { x: e.offsetX, y: e.offsetY },
+          });
       },
     })
   );
@@ -35,10 +82,8 @@ export default function TestWorldCanvas(props) {
   api.view = state;
 
   React.useEffect(() => {
-    // state.controls?.setPolarAngle(Math.PI / 4); // Initialize view
-
     const sub = api.events.subscribe((e) => {
-      console.log("event", e);
+      // console.log("event", e);
 
       switch (e.key) {
         case "pointerup":
@@ -62,8 +107,6 @@ export default function TestWorldCanvas(props) {
     state.controls?.setPolarAngle(Math.PI / 4); // Initialize view
   }, [state.controls]);
 
-  const update = useUpdate();
-
   return (
     <>
       <Canvas
@@ -73,30 +116,14 @@ export default function TestWorldCanvas(props) {
         frameloop={props.disabled ? "demand" : "always"}
         resize={{ debounce: 300 }}
         gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
-        onPointerDown={(e) => {
-          state.down = {
-            clientPos: new Vect(e.clientX, e.clientY),
-            distance: 0, // or getDistance(state.input.touches)
-            epochMs: Date.now(),
-          };
-          state.menuEl.style.display = "none";
-        }}
-        onPointerMissed={(e) => {
-          // console.log("onPointerMissed", e.clientX, e.clientY, e);
-          state.down &&
-            api.events.next({
-              key: "pointerup-outside",
-              distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
-              longPress: Date.now() - state.down.epochMs >= 300,
-              rmb: e.button === 2,
-              screenPoint: { x: e.offsetX, y: e.offsetY },
-            });
-        }}
-        onCreated={update} // show stats
+        onPointerDown={state.onPointerDown}
+        onPointerMissed={state.onPointerMissed}
+        onCreated={state.onCreated}
       >
         {props.stats && state.rootEl && (
           <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
         )}
+        <PerspectiveCamera position={[0, 8, 0]} makeDefault />
 
         <MapControls
           ref={(x) => x && (state.controls = x)}
@@ -107,35 +134,15 @@ export default function TestWorldCanvas(props) {
             maxAzimuthAngle: 0,
           })}
         />
+
         <ambientLight intensity={1} />
-        <PerspectiveCamera position={[0, 8, 0]} makeDefault />
+
         <Origin />
+
         <infiniteGridHelper
           args={[1.5, 1.5, "#bbbbbb"]}
-          // position={[0, -0.001, 0]}
           rotation={[Math.PI / 2, 0, 0]}
-          onPointerUp={(e) => {
-            if (!state.down) {
-              return;
-            }
-            console.log("infiniteGridHelper onPointerUp", e, e.point);
-            const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
-            const timeMs = Date.now() - state.down.epochMs;
-            api.events.next({
-              key: "pointerup",
-              distance,
-              height: e.point.y,
-              longPress: timeMs >= 300,
-              point: { x: e.point.x, y: e.point.z },
-              rmb: e.button === 2,
-              // 🤔 or clientX,Y minus canvas bounds?
-              screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-              meta: {
-                floor: true,
-                targetCenter: undefined,
-              },
-            });
-          }}
+          onPointerUp={state.onPointerUp}
         />
 
         {props.children}
@@ -171,8 +178,13 @@ export default function TestWorldCanvas(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {HTMLDivElement} menuEl
  * @property {HTMLDivElement} rootEl
+ * @property {import('@react-three/fiber').RootState} rootState
  * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; }} [down]
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
+ * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
+ * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
+ * @property {(e: MouseEvent) => void} onPointerMissed
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  */
 
 const canvasCss = css`
@@ -207,6 +219,7 @@ const contextMenuCss = css`
   padding: 8px;
 
   select {
+    color: black;
     max-width: 100px;
     margin: 8px 0;
   }

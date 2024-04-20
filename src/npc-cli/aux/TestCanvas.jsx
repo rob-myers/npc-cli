@@ -82,6 +82,7 @@ export default function TestCanvas(props) {
             });
         }}
         onCreated={update} // show stats
+        shadows={props.shadows}
       >
         {React.createElement(
           props.childComponent,
@@ -118,6 +119,7 @@ export default function TestCanvas(props) {
  * @typedef Props
  * @property {boolean} [disabled]
  * @property {boolean} [stats]
+ * @property {boolean} [shadows]
  * @property {React.ComponentType<ChildProps>} childComponent
  * @property {ChildProps} [childProps]
  */

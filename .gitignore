@@ -3,3 +3,11 @@ node_modules/
 public
 src/gatsby-types.d.ts
 .DS_Store
+
+media/Geomorphs
+media/GeomorphsHighRes
+media/CustomTiles
+media/CustomTilesHighRes
+media/Symbols
+media/SymbolsHighRes
+media/Small Craft

@@ -363,12 +363,12 @@ class geomServiceClass {
   getAngledRectSeg({ angle, baseRect }) {
     const widthNormal = tempVect1.set(Math.cos(angle), Math.sin(angle));
     const heightNormal = tempVect2.set(-Math.sin(angle), Math.cos(angle));
-    const src = new Vect(baseRect.x, baseRect.y).addScaledVector(
+    const src = new Vect(baseRect.x, baseRect.y).addScaled(
       heightNormal,
       0.5 * baseRect.height
     );
     return {
-      seg: [src, src.clone().addScaledVector(widthNormal, baseRect.width)],
+      seg: [src, src.clone().addScaled(widthNormal, baseRect.width)],
       normal: heightNormal.clone(),
     };
   }
@@ -492,7 +492,7 @@ class geomServiceClass {
   getLinesIntersectInfo(p0, d0, p1, d1) {
     const lambda1 = this.getLinesIntersect(p0, d0, p1, d1);
     if (lambda1 !== null) {
-      const point = Vect.from(p0).addScaledVector(d0, lambda1);
+      const point = Vect.from(p0).addScaled(d0, lambda1);
       const offset = point.clone().sub(p1);
       const lambda2 = offset.dot(d1) >= 0 ? offset.length : -offset.length;
       return { lambda1, point, lambda2 };
@@ -630,6 +630,19 @@ class geomServiceClass {
   }
 
   /**
+   * Get top left of bounds of transformed rect.
+   * @param {Geom.Rect} rect 
+   * @param {Geom.Mat} mat 
+   * @returns {Geom.Vect}
+   */
+  getTransformRectTopLeft(rect, mat) {
+    const vs = rect.points.map(v => mat.transformPoint(v));
+    const mx = Math.min(...vs.map(({ x }) => x));
+    const my = Math.min(...vs.map(({ y }) => y));
+    return new Vect(mx, my);
+  }
+
+  /**
    * Join disjoint triangulations
    * @param {Geom.Triangulation[]} triangulations
    * @returns {Geom.Triangulation}
@@ -684,11 +697,11 @@ class geomServiceClass {
         // Put it first for early exits
         pos
           .clone()
-          .addScaledVector(d, -2)
+          .addScaled(d, -2)
           .translate(-d.y * range * 2, d.x * range * 2),
         pos
           .clone()
-          .addScaledVector(d, -2)
+          .addScaled(d, -2)
           .translate(-1 * -d.y * range * 2, -1 * d.x * range * 2),
       ]);
     }
@@ -871,28 +884,28 @@ class geomServiceClass {
   }
 
   /**
-   * Given `rect`, `affineTransform`, `transformOrigin`, output "equivalent"
-   * affine transform which acts on rect `(0, 0, rect.width, rect.height)`.
+   * Given `rect`, `sixTuple` (affine transform) and `transformOrigin`,
+   * we output an "equivalent" affine transform acting on rect `(0, 0, rect.width, rect.height)`.
+   * 
    * @param {Geom.RectJson} rect
    * @param {Geom.SixTuple} sixTuple
-   * @param {Geom.VectJson} transformOrigin
+   * @param {Geom.VectJson} transformOrigin the transform-origin of `<rect>`,
+   * ignores transform of `<rect>` (so needn't be in world coords).
    * @returns {Geom.SixTuple}
    */
   reduceAffineTransform(rect, sixTuple, { x, y }) {
-    // console.log({ rect, sixTuple, transformOrigin: { x, y } });
     /** @type {Geom.SixTuple} */
     const sansTranslate = [sixTuple[0], sixTuple[1], sixTuple[2], sixTuple[3], 0, 0];
 
-    tmpMat1.setMatrixValue(sansTranslate);
-    tmpRect1.set(0, 0, rect.width, rect.height).applyMatrix(tmpMat1);
-    const topLeft1 = tmpRect1.topLeft;
+    const topLeft1 = geom.getTransformRectTopLeft(
+      tmpRect1.set(0, 0, rect.width, rect.height),
+      tmpMat1.setMatrixValue(sansTranslate),
+    );
 
-    tmpMat1
-      .setMatrixValue(sixTuple)
-      .preMultiply([1, 0, 0, 1, -x, -y])
-      .postMultiply([1, 0, 0, 1, x, y]);
-    tmpRect1.copy(rect).applyMatrix(tmpMat1);
-    const topLeft2 = tmpRect1.topLeft;
+    const topLeft2 = geom.getTransformRectTopLeft(
+      tmpRect1.copy(rect),
+      tmpMat1.setMatrixValue(sixTuple).preMultiply([1, 0, 0, 1, -x, -y]).postMultiply([1, 0, 0, 1, x, y]),
+    );
 
     sansTranslate[4] = -topLeft1.x + topLeft2.x;
     sansTranslate[5] = -topLeft1.y + topLeft2.y;
@@ -1043,4 +1056,5 @@ export function sortByXThenY(point1, point2) {
 const tmpVec1 = new Vect();
 const tmpVec2 = new Vect();
 const tmpRect1 = new Rect();
+const tmpPoly1 = new Poly();
 const tmpMat1 = new Mat();

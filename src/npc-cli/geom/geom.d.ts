@@ -33,15 +33,13 @@ declare namespace Geom {
     height: number;
   }
 
-  interface Triangulation {
-    vs: Vect[];
+  interface TriangulationGeneric<V extends Vect | VectJson> {
+    vs: V[];
     tris: [number, number, number][];
   }
 
-  interface TriangulationJson {
-    vs: VectJson[];
-    tris: [number, number, number][];
-  }
+  type Triangulation = TriangulationGeneric<Vect>;
+  type TriangulationJson = TriangulationGeneric<VectJson>;
 
   /** Rotated around `(baseRect.x, baseRect.y) */
   interface AngledRect<T> {

@@ -6,8 +6,7 @@ import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "r
 import { nav, view } from "../const";
 import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
-import Toggle from "./Toggle";
-import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo } from "./Icon";
+import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo, faChevronRight } from "./Icon";
 
 export default function Nav() {
   const collapsed = useSite(({ navOpen }) => !navOpen);
@@ -40,7 +39,9 @@ export default function Nav() {
       onClick={state.onClickSidebar}
       width={nav.expandedWidth}
     >
-      <Toggle onClick={state.toggleCollapsed} flip={collapsed ? undefined : "horizontal"} />
+      <button onClick={state.toggleCollapsed} className={cx("toggle", toggleCss)}>
+        <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={collapsed ? undefined : "horizontal"} />
+      </button>
 
       <Menu>
         <MenuItem className="title" tabIndex={-1} component="span">
@@ -65,6 +66,7 @@ export default function Nav() {
   );
 }
 
+// See parent component for more CSS
 const navCss = css`
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
@@ -72,16 +74,6 @@ const navCss = css`
   color: white;
   border-right: 1px solid #444 !important;
 
-  .${sidebarClasses.container} button.toggle {
-    position: absolute;
-    z-index: 1;
-    top: calc(0.5 * (${view.barSize} - 1.5rem));
-    right: calc(0.5 * (${view.barSize} - 1.5rem));
-    width: 1.5rem;
-    height: 1.5rem;
-    transition: margin-top 300ms;
-    margin-top: ${nav.titleMarginTop};
-  }
 
   a.${menuClasses.button}, span.${menuClasses.button} {
     &:hover {
@@ -114,6 +106,7 @@ const navCss = css`
       display: none;
     }
   }
+
   &:not(.${sidebarClasses.collapsed}) {
     span.${menuClasses.icon} {
       margin-right: 24px;
@@ -157,3 +150,25 @@ const icon = {
   help: <FontAwesomeIcon icon={faCircleQuestion} color="white" size="1x" />,
   about: <FontAwesomeIcon icon={faCircleInfo} color="white" size="1x" />,
 };
+
+const toggleCss = css`
+  position: absolute;
+  z-index: 1;
+  top: calc(0.5 * (${view.barSize} - 1.5rem));
+  right: calc(0.5 * (${view.barSize} - 1.5rem));
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: margin-top 300ms;
+  margin-top: ${nav.titleMarginTop};
+
+  border-radius: 50%;
+  background-color: white;
+  color: black;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  filter: invert(1);
+`;

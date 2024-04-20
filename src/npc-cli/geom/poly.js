@@ -1,5 +1,4 @@
 import * as poly2tri from "poly2tri";
-// Namespace import broke CodeSandbox
 import polygonClipping from "polygon-clipping";
 import earcut from "earcut";
 import { Rect } from "./rect";

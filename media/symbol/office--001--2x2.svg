@@ -1,39 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
-  <defs>
-    <bx:grid x="0" y="0" width="300" height="300"/>
-  </defs>
-  <image width="620" height="620" x="-10" y="-10" style="" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmwAAAJsAgMAAAA9+xe2AAAABGdBTUEAALGPC/xhBQAAAAd0SU1FB+UJDgw4EGSgYCgAAAAJUExURQAAAAAAAP///4Pdz9IAAAABdFJOUwBA5thmAAAAAWJLR0QCZgt8ZAAACB1JREFUeNrt3U1u20gUReHL18ycDQS9hl4GB1lAT7xKZ5AFZMD9ZBDOTYA94I9kx4xs1nlWIbiaBjEOqE8qSnbVa/TpP1X5+DGEKk3TZ0VTaZoa/fXp31rj/omu1jR10Vfb1obqfbjtj2trfN3c5ja3uc1tz25EJEkPtWU9+jl1m9vc5ja3uc1tbnOb29zmNre5zW1uc5vb3OY2t7nNbW5zm9vc5ja3uc1tbnOb29zmNre5zW1uc5vb3OY2t7nNbW5zm9vc5ja3uc1tbnOb29zmNre5zW1uc5vb3OY2t7nNbW5zm9vc5ja3uc1tbnNb6aMlf9j8td7rNlX8nI4Vtw31ts0Vv06nittgbuh7yKCnb9CPeoCv20xfuUC5DbW2jfQLNUhu1a4Lc8XrwlTxujBWvC4M9a4LPDeujefGtfHcuDaeG9aWwA1rS+CGtSVww9oSuFFtGdyotgxuVFsGN6otgxvUlsINakvhBrWlcIPaUrgxbTncmLYcbkxbDjemLYcb0pbEDWlL4oa0JXFD2pK4EW1Z3Ii2LG5EWxY3oi2LG9CWxg1oS+MGtKVxA9rSuJW35XErb8vjVt6Wx628LY9bcVsit+K2RG7FbYncitsSuZW2ZXIrbcvkVtqWya20LZNbYVsqt8K2VG6FbancCttSuZW15XIra8vlVtaWy62sLZdbUVsyt6K2ZG5FbcncitqSuZW0ZXMracvmVtJ2yK15uHvbIbdW/Z3bjrl16u7cdsyth/76NRK4Sc2d237DTQy4YLk99FInMeAC5daoW65Ze9e2V7m1atVIHQMuUG6dmr6VvjDgAuXWS12npmHABctNanu10DtcsNy0cGPABcvtsi70d2s74tbu60J3t7Yjbn/v60J7t7Yjbv2+LjR3azt6d7taF/o7tR1zG5cLhoALlFu3L6UEuGC5PXt+79N2yE3b7jYCXLDc1K1XlAAXMLd2+ycAXMDcmu2SAuCC5tZz4ILlhoILlhsKLlhuKLiAuZHgAuZGgguYGwkuYG4kuKC5Sb2eGHBBc5O69UktBhc0N6nd4kvBBc1Narb7pFJwgXOT+rW+FFzg3DhwgXPjwAXOjQMXPDcMXPDcMHDBc8PABc8NAxcJ3ChwkcCNAhcJ3ChwkcCNAhcZ3CBwkcENAhcZ3CBwkcENAhcp3BhwkcKNARcp3BhwkcKNARc53BBwkcMNARc53BBwkcMNARdJ3AhwkcSNABdJ3AhwkcSNABdZ3KT/SsFFFrf1y9X58Ty4yOK2frk6aTgNLrK4afk2/5vG0+AijZskzbM0nQYXadykQfouzafBRRo3zeu3+afBRR63qe3X/3kSXORxG7tuveInwUUit77V8uutk+Aik1sj6ct5cJHITerVNAu4TG9nuEmdPu+/T81dF97Lbfmr907zyX0Ob3dw4t1NzcOy5P84de3esy68m9v2+Hluh0jJfpmb3LZX+MkdIiVtN7ldnM762Lbb3C5Opw9u05u4zUcv8uy2t3HrT25IKt0b+wZuzUd8H/Km5f9Xbu3Z+96S34UN/dPjw21u3YnbkMfS53Q8flafc8u+7339vunoWb3mpvT73oNlbLrNTdn3vUcv0/k2N2Xf974P3It3t+T73oPF/gDcc27534ccLFnTbW5nHyVtzeWPBH/L7ez+3pK2dv0UdZPbyZ3RhfeWzavX5CW3+ePve5edWNNtbh9/37vuxJrfwu2j73vb9X1rSOJW0tatO7HGJG4lbf26E2tK4lbQ1mw7seYkbgVt7b4Ta8jhVtDW7TuxxhxupevCK+AwbsBnwJfgMG7F9+S/gsO4AecSvASHcSPOc3gOjuNGnIPxHBzHjTg/5Dk4jhtx7spzcBw35Lyaa3AgN+S7mmtwIDfkfKRrcCA35Fypa3AgN+Y8rgs4khtzjtkFHMmNOf/tAo7kxpybdwFHcoPOG9zAodygcxo3cCg36HzLDRzKDToXdAOHcqPOU13Asdyoc2gXcCw36vzeBRzLjTr3eAHHcsPOi+410dywc7Y7zTQ37HzyVhpgbti57o00wty48/B7PcHcuDkC3eV3sRA3bv5Ce/nNEMSNm1tx9aEB4gbO+7h8aIC4gXNS9g8NFDdwvsz+oYHiBs7l2cFR3Mh5Rhs4ihs5B2oFh3Ej52et4DBu5NyxFRzGDZ3X1rPc+Dl3HDd0PuCAvruhcxWXK8ZxI+dRbn8hSHEj53iOalBu5PzTQS3KDZwbi3Nj5+2y3Og5xSQ3dr7zgHID52I30ohyI+eJ95pQbuQc9k4zyo2cX99K30luVNsODuRGta3gRHKj2uZtFxbIDdu/sIIjuWFtKziSG9a2g+O4YW3bOxzIjdsvs4IbOG5c2/4Ox805wtr2JZWbc4S1XcBhY7W4/Vn7PRw2VotrG5d9piM3VqsVCe6HNHFjtbjrNks/Jc3cFDdwP+D1h4ba2kZpWxeqa5skTcu6UF3bLGkcxQ0NJPefDtIwiRsaSLaNmtGhgWTbtCylQ41t+7oAPVqwTY+Snr6qxutGP9zmNre5zW1uc5vb3OY2t7nNbW5zm9vc5ja3uc1tbnOb29zmNre5zW1uc5vb3OY2t7nNbW5zm9vc5ja3uc1tbnOb29zmNre5zW1uc5vb3OY2t7nNbW5zm9vc5ja3uc1tbnOb29zmNre5zW1uc5vb3OY2t7nNbW5zm9vc5ja3uc1tbnOb29zmNre5zW1uc5vb3OY2t7nNbW67fjQP8A989HPqNre5zW1uc5vb/oC2oeK2seK2qeK2uebXwrdq2/4Hl9mrG1xqM3UAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDktMTRUMTI6NTY6MDMrMDA6MDAmkoqOAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA5LTE0VDEyOjU2OjAzKzAwOjAwV88yMgAAAABJRU5ErkJggg==">
-    <title>office--001--2x2</title>
-  </image>
-  <rect x="588" y="300" width="24" height="275" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door optional e</title>
-  </rect>
-  <rect x="330" y="588" width="230" height="24" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door optional s</title>
-  </rect>
-  <rect width="20" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 255);" x="140" y="130">
-    <title>decor go label=office</title>
-  </rect>
-  <rect width="10" height="10" style="fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="295" y="295">
-    <title>decor do sit orient=225</title>
-  </rect>
-  <path d="M 213.4 318.2 L 318.9 211.2 L 417.4 307.4 L 307.3 417.3 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle</title>
-  </path>
-  <path d="M -0.008292 599.973734 L -0.008292 -0.026266 L 599.991708 -0.026266 L 599.991708 147.373734 L 299.991708 147.373734 L 150.291708 299.973734 L 148.791708 599.973734 L -0.008292 599.973734 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle</title>
-  </path>
-  <rect y="-9.999999" width="590" height="20" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;">
-    <title>wall</title>
-  </rect>
-  <rect y="-9.999999" width="20" height="620" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="-10">
-    <title>wall</title>
-  </rect>
-  <rect y="590" width="610" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
-    <title>wall</title>
-  </rect>
-  <rect width="20" height="620" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="590" y="-10">
-    <title>wall</title>
-  </rect>
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+                <pattern id="pattern-0-0" patternTransform="matrix(2 0.000039391725, -0.000039391969, 2, 176.298812848317, 3235.306884765626)" xlink:href="#pattern-0"/>
+                <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+                        <title>symbol-rect-pattern</title>
+                        <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+                                <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+                                <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+                                <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+                                <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+                        </g>
+                        <defs>
+                                <bx:grid x="0" y="0" width="300" height="300"/>
+                        </defs>
+                </pattern>
+        </defs>
+        <image width="620" height="620" x="-10" y="-10" style="" xlink:href="data:image/png;base64,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">
+                <title>office--001--2x2</title>
+        </image>
+        <rect x="588" y="300" width="24" height="275" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+                <title>door optional e</title>
+        </rect>
+        <rect x="330" y="588" width="230" height="24" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+                <title>door optional s</title>
+        </rect>
+        <rect width="20" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 255);" x="140" y="130">
+                <title>decor go label=office</title>
+        </rect>
+        <rect y="-9.999999" width="590" height="20" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;">
+                <title>wall</title>
+        </rect>
+        <rect y="-9.999999" width="20" height="620" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="-10">
+                <title>wall</title>
+        </rect>
+        <rect y="590" width="610" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
+        <rect width="20" height="620" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="590" y="-10">
+                <title>wall</title>
+        </rect>
+        <g>
+                <title>symbols</title>
+                <rect width="600.000002" height="600.000002" style="fill: url('#pattern-0-0'); stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; transform-origin: 476.322px 2935.32px; opacity: 0.5;" y="2635.315925" x="176.320221" transform="matrix(1, 0.000073293391, -0.000073293391, 1, -176.298223668877, -2635.293946167794)">
+                        <title>console--019--2x2</title>
+                </rect>
+        </g>
 </svg>

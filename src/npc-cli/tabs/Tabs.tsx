@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import {
   Action,
   Actions,
@@ -24,7 +24,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import Spinner from "src/components/Spinner";
 
-export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
+export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef<State>(() => ({
     enabled: false,
     everEnabled: false,
@@ -161,7 +161,7 @@ export const Tabs = forwardRef<State, Props>(function Tabs(props, ref) {
 
   useBeforeunload(() => storeModelAsJson(props.id, state.model));
 
-  React.useMemo(() => void (ref as Function)?.(state), [ref]);
+  React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
 
   const update = useUpdate();
 

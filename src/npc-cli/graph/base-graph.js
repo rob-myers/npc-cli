@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { Vect } from "../geom/vect";
-import { deepClone, flatten, removeFirst } from "../service/generic";
+import { deepClone, flatten, removeFirst, warn } from "../service/generic";
 
 /**
  * @template {Graph.BaseNode} [Node=Graph.BaseNode]
@@ -59,6 +59,170 @@ export class BaseGraph {
   }
 
   /**
+   * Ensure nodes `src` and `dst` are connected.
+   * Return their `Edge` if so, otherwise
+   * connect them and return their new `Edge`.
+   * @param {EdgeOpts} opts
+   */
+  connect(opts) {
+    const src = this.getNodeById(opts.src);
+    const dst = this.getNodeById(opts.dst);
+
+    if (src && dst) {
+      let edge = this.getEdge(src, dst);
+      if (edge) {
+        return { edge, isNew: false };
+      } else {
+        // otherwise, instantiate one
+        this.registerEdge(opts);
+        return { edge, isNew: true };
+      }
+    }
+    // can't connect a non-existent node
+    console.error("Can't connect nodes:", src, dst, "given", opts, "in", this);
+    //
+    return { isNew: false, edge: null };
+  }
+
+  /**
+   * Returns true iff was previously connected.
+   * @param {Node} src;
+   * @param {Node} dst
+   */
+  disconnect(src, dst) {
+    const edge = this.getEdge(src, dst);
+    if (edge) {
+      this.removeEdge(edge);
+      return true;
+    } else {
+      console.error("Failed to disconnect", src, dst, "in", this);
+    }
+    return false;
+  }
+
+  /** @param {string} edgeid */
+  disconnectById(edgeid) {
+    const edge = this.idToEdge.get(edgeid);
+    if (edge) {
+      return this.disconnect(edge.src, edge.dst);
+    } else {
+      console.error(`Cannot remove non-existent edge '${edgeid}'.`);
+    }
+    return false;
+  }
+
+  /**
+   * @param {string} srcid
+   * @param {string} dstid
+   */
+  disconnectByIds(srcid, dstid) {
+    const src = this.idToNode.get(srcid);
+    const dst = this.idToNode.get(dstid);
+    if (src && dst) {
+      // console.log(`Disconnecting`, src, dst);
+      return this.disconnect(src, dst);
+    } else {
+      console.error(`Cannot remove edge ('${srcid}' -> '${dstid}') from`, src, "to", dst);
+    }
+    return false;
+  }
+  
+  /**
+   * Get co-reachable nodes in breadth-first manner.
+   * @param {Node} node
+   * @returns {Node[]}
+   */
+  getCoReachableNodes(node) {
+    const coReachable = new Set([node]);
+    let [count, frontier] = [0, [node]];
+    while (coReachable.size > count) {
+      count = coReachable.size;
+      frontier = flatten(frontier.map((node) => this.getPreds(node)));
+      frontier.forEach((node) => coReachable.add(node));
+    }
+    return Array.from(coReachable.values());
+  }
+
+  /**
+   * Get `edge` from `src` to `dst`, or null.
+   * @param {Node} src
+   * @param {Node} dst
+   */
+  getEdge(src, dst) {
+    const nhood = this.succ.get(src);
+    return nhood ? nhood.get(dst) || null : null;
+  }
+
+  /**
+   * Get all edges starting from `node`.
+   * @param {Node} node
+   */
+  getEdgesFrom(node) {
+    const succ = this.succ.get(node);
+    return (succ && Array.from(succ.values())) || [];
+  }
+
+  /**
+   * Get all edges ending at `node`.
+   * @param {Node} node
+   */
+  getEdgesTo(node) {
+    const pred = this.pred.get(node);
+    return (pred && Array.from(pred.values())) || [];
+  }
+
+  /**
+   * Get `edge` where `edge.id === id`, or null.
+   * @param {string} id
+   */
+  getEdgeById(id) {
+    return this.idToEdge.get(id) || null;
+  }
+
+  /**
+   * 
+   * @param {string} graphName 
+   * @param {(edge: Edge) => string | null} [edgeLabel] 
+   */
+  getGraphviz(graphName, edgeLabel = () => null) {
+    return `
+digraph ${graphName} {
+  
+${this.nodesArray.map(x => `  "${x.id}"\n`).join('')}
+
+${this.edgesArray.map(x => `  "${x.src.id}" -> "${x.dst.id}" ${edgeLabel(x) || ''}\n`).join('')}
+
+}`;
+  }
+
+  /**
+   * Get `node` where `node.id === id`, or null.
+   * @param {string} id
+   */
+  getNodeById(id) {
+    return this.idToNode.get(id) || null;
+  }
+
+  /**
+   * We say a `node` _has a parent_ iff it has a single predecessor.
+   * @param {Node} node
+   */
+  getParent(node) {
+    const preds = this.getPreds(node);
+    return preds.length === 1 ? preds[0] : null;
+  }
+
+  /**
+   * Get all predecessor nodes of `node`.
+   * @param {Node} node
+   */
+  getPreds(node) {
+    // log(`Getting preds of:`, node);
+    const pred = this.pred.get(node);
+    return (pred && Array.from(pred.keys())) || [];
+  }
+
+  /**
    * Get reachable nodes in breadth-first manner.
    * @param {Node} node
    * @returns {Node[]}
@@ -101,110 +265,13 @@ export class BaseGraph {
     return Array.from(reachable.values());
   }
 
-  reset() {
-    this.nodes.clear();
-    this.succ.clear();
-    this.pred.clear();
-    this.nodesArray = [];
-    this.edgesArray = [];
-    this.idToNode.clear();
-    this.idToEdge.clear();
-  }
-
-  /** @param {Node} node */
-  removeNode(node) {
-    if (this.nodes.has(node)) {
-      this.nodes.delete(node);
-      removeFirst(this.nodesArray, node);
-      this.idToNode.delete(node.id);
-      // remove edges to `node`
-      this.getPreds(node).forEach((other) => this.removeEdge(this.getEdge(other, node)));
-      // remove edges from `node`
-      this.getSuccs(node).forEach((other) => this.removeEdge(this.getEdge(node, other)));
-
-      this.succ.delete(node);
-      this.pred.delete(node);
-      return true;
-    }
-    return false;
-  }
-
   /**
-   * Ensure nodes `src` and `dst` are connected.
-   * Return their `Edge` if so, otherwise
-   * connect them and return their new `Edge`.
-   * @param {EdgeOpts} opts
+   * Get all successor nodes of `node`.
+   * @param {Node} node
    */
-  connect(opts) {
-    const src = this.getNodeById(opts.src);
-    const dst = this.getNodeById(opts.dst);
-
-    if (src && dst) {
-      let edge = this.getEdge(src, dst);
-      if (edge) {
-        return { edge, isNew: false };
-      } else {
-        // otherwise, instantiate one
-        this.registerEdge(opts);
-        return { edge, isNew: true };
-      }
-    }
-    // can't connect a non-existent node
-    console.error("Can't connect nodes:", src, dst, "given", opts, "in", this);
-    //
-    return { isNew: false, edge: null };
-  }
-
-  /**
-   * Returns true iff was previously connected.
-   * @param {Node} src;
-   * @param {Node} dst
-   */
-  disconnect(src, dst) {
-    const edge = this.getEdge(src, dst);
-    if (edge) {
-      this.removeEdge(edge);
-      return true;
-    } else {
-      console.error("Failed to disconnect", src, dst, "in", this);
-    }
-    return false;
-  }
-
-  /** @param {string} id */
-  removeNodeById(id) {
-    const node = this.idToNode.get(id);
-    if (node) {
-      return this.removeNode(node);
-    }
-    return false;
-  }
-
-  /** @param {string} edgeid */
-  disconnectById(edgeid) {
-    const edge = this.idToEdge.get(edgeid);
-    if (edge) {
-      return this.disconnect(edge.src, edge.dst);
-    } else {
-      console.error(`Cannot remove non-existent edge '${edgeid}'.`);
-    }
-    return false;
-  }
-
-  /**
-   * @param {string} srcid
-   * @param {string} dstid
-   */
-  disconnectByIds(srcid, dstid) {
-    const src = this.idToNode.get(srcid);
-    const dst = this.idToNode.get(dstid);
-    if (src && dst) {
-      // console.log(`Disconnecting`, src, dst);
-      return this.disconnect(src, dst);
-    } else {
-      console.error(`Cannot remove edge ('${srcid}' -> '${dstid}') from`, src, "to", dst);
-    }
-    return false;
+  getSuccs(node) {
+    const succ = this.succ.get(node);
+    return (succ && Array.from(succ.keys())) || [];
   }
 
   /**
@@ -225,66 +292,13 @@ export class BaseGraph {
     return (succ && succ.has(dst)) || false;
   }
 
-  /** @param {Edge | null} edge */
-  removeEdge(edge) {
-    if (edge) {
-      const succ = this.succ.get(edge.src);
-      if (succ) {
-        succ.delete(edge.dst);
-      }
-      const pred = this.pred.get(edge.dst);
-      if (pred) {
-        pred.delete(edge.src);
-      }
-      this.idToEdge.delete(edge.id);
-      removeFirst(this.edgesArray, edge);
-    }
-  }
-
   /**
-   * We say a `node` _has a parent_ iff it has a single predecessor.
+   * Return true iff `node` has some predecessor.
    * @param {Node} node
    */
-  getParent(node) {
-    const preds = this.getPreds(node);
-    return preds.length === 1 ? preds[0] : null;
-  }
-
-  /**
-   * Get all successor nodes of `node`.
-   * @param {Node} node
-   */
-  getSuccs(node) {
-    const succ = this.succ.get(node);
-    return (succ && Array.from(succ.keys())) || [];
-  }
-
-  /**
-   * Get all predecessor nodes of `node`.
-   * @param {Node} node
-   */
-  getPreds(node) {
-    // log(`Getting preds of:`, node);
+  nodeHasPred(node) {
     const pred = this.pred.get(node);
-    return (pred && Array.from(pred.keys())) || [];
-  }
-
-  /**
-   * Get all edges starting from `node`.
-   * @param {Node} node
-   */
-  getEdgesFrom(node) {
-    const succ = this.succ.get(node);
-    return (succ && Array.from(succ.values())) || [];
-  }
-
-  /**
-   * Get all edges ending at `node`.
-   * @param {Node} node
-   */
-  getEdgesTo(node) {
-    const pred = this.pred.get(node);
-    return (pred && Array.from(pred.values())) || [];
+    return (pred && pred.size > 0) || false;
   }
 
   /**
@@ -297,38 +311,32 @@ export class BaseGraph {
   }
 
   /**
-   * Return true iff `node` has some predecessor.
-   * @param {Node} node
+   * - We assume graph is currently empty.
+   * - We assume serializable node has same type as graph node.
+   * - If not, we should add a custom method e.g. `from`.
+   * @param {Graph.GraphJson<Node, EdgeOpts>} json
+   * @returns {this}
    */
-  nodeHasPred(node) {
-    const pred = this.pred.get(node);
-    return (pred && pred.size > 0) || false;
+  plainFrom(json) {
+    const nodes = json.nodes.map(deepClone);
+    this.registerNodes(nodes);
+    json.edges.forEach((def) => this.registerEdge(def));
+    return this;
   }
 
   /**
-   * Get `node` where `node.id === id`, or null.
-   * @param {string} id
+   * We assume serializable node has same type as graph node.
+   * If not, we'll add a custom method e.g. `json`.
+   * @returns {Graph.GraphJson<Node, EdgeOpts>}
    */
-  getNodeById(id) {
-    return this.idToNode.get(id) || null;
-  }
-
-  /**
-   * Get `edge` where `edge.id === id`, or null.
-   * @param {string} id
-   */
-  getEdgeById(id) {
-    return this.idToEdge.get(id) || null;
-  }
-
-  /**
-   * Get `edge` from `src` to `dst`, or null.
-   * @param {Node} src
-   * @param {Node} dst
-   */
-  getEdge(src, dst) {
-    const nhood = this.succ.get(src);
-    return nhood ? nhood.get(dst) || null : null;
+  plainJson() {
+    return {
+      nodes: this.nodesArray.map(deepClone),
+      edges: this.edgesArray.map(
+        (edge) =>
+          /** @type {*} */ (deepClone({ ...edge, id: edge.id, src: edge.src.id, dst: edge.dst.id }))
+      ),
+    };
   }
 
   /**
@@ -381,34 +389,85 @@ export class BaseGraph {
     }
   }
 
-  /**
-   * We assume serializable node has same type as graph node.
-   * If not, we'll add a custom method e.g. `json`.
-   * @returns {Graph.GraphJson<Node, EdgeOpts>}
-   */
-  plainJson() {
-    return {
-      nodes: this.nodesArray.map(deepClone),
-      edges: this.edgesArray.map(
-        (edge) =>
-          /** @type {*} */ (deepClone({ ...edge, id: edge.id, src: edge.src.id, dst: edge.dst.id }))
-      ),
-    };
+  /** @param {Edge | null} edge */
+  removeEdge(edge) {
+    if (edge) {
+      const succ = this.succ.get(edge.src);
+      if (succ) {
+        succ.delete(edge.dst);
+      }
+      const pred = this.pred.get(edge.dst);
+      if (pred) {
+        pred.delete(edge.src);
+      }
+      this.idToEdge.delete(edge.id);
+      removeFirst(this.edgesArray, edge);
+    }
+  }
+
+  /** @param {Node} node */
+  removeNode(node) {
+    if (this.nodes.has(node)) {
+      this.nodes.delete(node);
+      removeFirst(this.nodesArray, node);
+      this.idToNode.delete(node.id);
+      // remove edges to `node`
+      this.getPreds(node).forEach((other) => this.removeEdge(this.getEdge(other, node)));
+      // remove edges from `node`
+      this.getSuccs(node).forEach((other) => this.removeEdge(this.getEdge(node, other)));
+
+      this.succ.delete(node);
+      this.pred.delete(node);
+      return true;
+    }
+    return false;
+  }
+
+  /** @param {string} id */
+  removeNodeById(id) {
+    const node = this.idToNode.get(id);
+    if (node) {
+      return this.removeNode(node);
+    }
+    return false;
+  }
+
+  reset() {
+    this.nodes.clear();
+    this.succ.clear();
+    this.pred.clear();
+    this.nodesArray = [];
+    this.edgesArray = [];
+    this.idToNode.clear();
+    this.idToEdge.clear();
   }
 
   /**
-   * We assume graph is currently empty.
-   * We assume serializable node has same type as graph node.
-   * If not, we'll add a custom method e.g. `from`.
-   * @param {Graph.GraphJson<Node, EdgeOpts>} json
-   * @returns {this}
+   * From leaves to co-leaves
+   * @returns {Node[][]}
    */
-  plainFrom(json) {
-    const nodes = json.nodes.map(deepClone);
-    this.registerNodes(nodes);
-    json.edges.forEach((def) => this.registerEdge(def));
-    return this;
+  stratify() {
+    let frontier = /** @type {Node[]} */ ([]);
+    let unseen = this.nodesArray.slice();
+    const seen = /** @type {Set<Node>} */ (new Set());
+    const output = /** @type {Node[][]} */ ([]);
+    
+    while (
+      frontier = [],
+      unseen = unseen.filter(x => {
+        if (this.getSuccs(x).every(y => seen.has(y))) {
+          frontier.push(x);
+        } else {
+          return true;
+        }
+      }),
+      frontier.map(x => seen.add(x)).length && output.push(frontier)
+    );
+
+    unseen.length && warn(`stratify: ignoring ${unseen.length} nodes`);
+    return output;
   }
+
 }
 
 /**

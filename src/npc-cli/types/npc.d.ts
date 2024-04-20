@@ -22,10 +22,7 @@ declare namespace NPC {
 
   interface PointerUpEvent extends BasePointerUpEvent {
     key: "pointerup";
-    /** Ordinate `y` */
-    height: number;
-    /** Coords `(x, z)` */
-    point: Geom.VectJson;
+    point: import("three").Vector3Like;
     /** Properties of the thing we clicked. */
     meta: Geomorph.Meta<{
       /** `(x, z)` of target element centre if any */
@@ -48,4 +45,30 @@ declare namespace NPC {
     rmb: boolean;
     screenPoint: Geom.VectJson;
   }
+
+  type TiledCacheResult = Extract<
+    import("@recast-navigation/core").NavMeshImporterResult,
+    { tileCache?: any }
+  >;
+
+  interface TileCacheConvexAreaDef {
+    areaId: number;
+    areas: {
+      /** Must define a convex polygon */
+      verts: import("three").Vector3Like[];
+      hmin: number;
+      hmax: number;
+    }[];
+  }
+
+  type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
+
+  type Obstacle = {
+    id: number;
+    o: import("@recast-navigation/core").Obstacle;
+    mesh: THREE.Mesh;
+  };
+
+  type ObstacleRef = import("@recast-navigation/core").ObstacleRef;
+
 }

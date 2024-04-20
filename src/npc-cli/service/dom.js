@@ -1,18 +1,9 @@
 /**
- * @param {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D} ctxt
- * @param  {Geom.VectJson[]} ring
+ * @typedef {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | import('canvas').CanvasRenderingContext2D} CanvasContext2DType
  */
-export function fillRing(ctxt, ring, fill = true) {
-  if (ring.length) {
-    ctxt.moveTo(ring[0].x, ring[0].y);
-    ring.forEach((p) => ctxt.lineTo(p.x, p.y));
-    fill && ctxt.fill();
-    ctxt.closePath();
-  }
-}
 
 /**
- * @param {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D} ctxt
+ * @param {CanvasContext2DType} ctxt
  * @param {Geom.Poly | Geom.Poly[]} polys
  * @param {[fillStyle?: string | null, strokeStyle?: string | null, lineWidth?: number | null]} [style]
  */
@@ -33,7 +24,20 @@ export function drawPolygons(ctxt, polys, [fillStyle, strokeStyle, lineWidth] = 
 }
 
 /**
- * @param {CanvasRenderingContext2D} ctxt
+ * @param {CanvasContext2DType} ctxt
+ * @param  {Geom.VectJson[]} ring
+ */
+export function fillRing(ctxt, ring, fill = true) {
+  if (ring.length) {
+    ctxt.moveTo(ring[0].x, ring[0].y);
+    ring.forEach((p) => ctxt.lineTo(p.x, p.y));
+    fill && ctxt.fill();
+    ctxt.closePath();
+  }
+}
+
+/**
+ * @param {CanvasContext2DType} ctxt
  * @param {Geom.VectJson} from
  * @param {Geom.VectJson} to
  */

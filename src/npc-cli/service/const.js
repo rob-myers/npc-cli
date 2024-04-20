@@ -7,14 +7,21 @@ export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });
 
+export const FLOOR_IMAGES_QUERY_KEY = 'draw-floors';
+
 /**
- * `1/60` -> 1 grid side -> `1.5m`
+ * Convert Starship Geomorph units (sgu) into world coordinates (meters).
+ * e.g. 1 tile is 60 sgu, which becomes 1.5 meters
  */
 export const worldScale = (1 / 60) * 1.5;
 
 /** Decimal place precision */
 export const precision = 4;
 
-export const wallOutset = 12;
+export const wallOutset = 10 * worldScale;
 
-export const obstacleOutset = 12;
+export const obstacleOutset = 10 * worldScale;
+
+export const agentRadius = 10 * worldScale;
+
+export const wallHeight = 2;

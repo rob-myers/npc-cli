@@ -73,10 +73,10 @@ export default function Root(props: Props) {
           <Viewer />
         </div>
       </div>
-      {/* <ReactQueryDevtools
-      initialIsOpen={false}
-      buttonPosition="bottom-left"
-    /> */}
+      <ReactQueryDevtools
+        initialIsOpen={false}
+        buttonPosition="bottom-left"
+      />
     </QueryClientProvider>
   );
 }
@@ -116,8 +116,6 @@ const rootCss = css`
           height: 2rem;
           margin-top: 0;
           pointer-events: all;
-
-          outline: 2px solid #ccc;
         }
       }
     }

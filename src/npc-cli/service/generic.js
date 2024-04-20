@@ -345,7 +345,7 @@ export function pause(ms = 0) {
  * @param {number} number
  * @param {number} [decimalPlaces] default 2
  */
-export function precision(number, decimalPlaces = 2) {
+export function toPrecision(number, decimalPlaces = 2) {
   return Number(number.toFixed(decimalPlaces));
 }
 
@@ -357,6 +357,19 @@ export function precision(number, decimalPlaces = 2) {
 export function pretty(input) {
   // return JSON.stringify(input, null, '\t');
   return prettyCompact(input);
+}
+
+/** @param {number} n */
+export function range(n) {
+  return [...Array(n)].map((_, i) => i);
+}
+
+/**
+ * @param {number} n
+ * @returns {null[]} Usage `alloc(10).forEach((_, i) => { ... })`
+ */
+export function alloc(n) {
+  return Array(n).fill(null);
 }
 
 /**
@@ -383,7 +396,7 @@ export function safeJsonParse(input) {
   try {
     return JSON.parse(input);
   } catch {
-    console.warn(`failed to JSON.parse: "${input}"`);
+    warn(`failed to JSON.parse: "${input}"`);
     return undefined;
   }
 }
@@ -513,6 +526,11 @@ export function visibleUnicodeLength(input) {
 export const debug = (function () {
   return Function.prototype.bind.call(console.debug, console, "\x1b[34mDEBUG\x1b[0m");
 })();
+
+/** @param {string} text */
+export function yellow(text) {
+  return `\x1b[33m${text}\x1b[0m`;
+}
 
 /**
  * https://stackoverflow.com/a/26078207/2917822

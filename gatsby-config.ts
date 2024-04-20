@@ -14,6 +14,12 @@ const config: GatsbyConfig = {
   // Learn more at: https://gatsby.dev/graphql-typegen
   graphqlTypegen: true,
   plugins: [
+    {
+      resolve: `gatsby-plugin-postcss`,
+      options: {
+        postCssPlugins: [require('tailwindcss')],
+      },
+    },
     "gatsby-plugin-emotion",
     "gatsby-plugin-mdx",
     "gatsby-plugin-fontawesome",
