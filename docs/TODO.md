@@ -2,7 +2,7 @@
 
 ## WIP
 
-- 🚧 switch back to TestCharacter
+- ✅ switch back to TestCharacter
   - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
     - https://discourse.threejs.org/t/character-controller/46936
     - https://character-controller-three.netlify.app/
@@ -11,7 +11,7 @@
     - ✅ on click ground set CharacterController target
     - ✅ move to target
     - ✅ turn to target
-  - 🚧 remove keyboard controls
+  - ✅ remove keyboard controls
 
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
