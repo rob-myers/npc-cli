@@ -1,6 +1,5 @@
 import React from "react";
 import * as THREE from "three";
-import { useThree } from "@react-three/fiber";
 import { CameraControls, MapControls, PerspectiveCamera, KeyboardControls } from "@react-three/drei";
 import { quadGeometryXZ } from "../service/three";
 
@@ -31,8 +30,8 @@ export function TestCharacter(props) {
 
         <mesh
           name="ground"
-          scale={[scale, 1, scale]}
-          position={[-scale / 2, 0, -scale / 2]}
+          scale={[groundScale, 1, groundScale]}
+          position={[-groundScale / 2, 0, -groundScale / 2]}
           geometry={quadGeometryXZ}
           receiveShadow
         >
@@ -51,7 +50,7 @@ export function TestCharacter(props) {
  * @property {boolean} [disabled]
  */
 
-const scale = 20;
+const groundScale = 20;
 
 /**
  * @param {Pick<import('./TestCanvas').Props, 'disabled' | 'stats'>} props

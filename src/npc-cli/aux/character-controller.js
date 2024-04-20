@@ -10,20 +10,17 @@ export default class CharacterController {
    * @param {THREE.Group} opts.model 
    * @param {THREE.AnimationMixer} opts.mixer 
    * @param {Record<AnimKey, THREE.AnimationAction>} opts.animationMap 
-   * @param {THREE.PerspectiveCamera} opts.camera 
    * @param {AnimKey} opts.initialAction 
    */
   constructor({
     model,
     mixer,
     animationMap,
-    camera,
     initialAction
   }) {
     this.walkDir = new THREE.Vector3();
     this.rotAxis = new THREE.Vector3(0, 1, 0);
     this.rotQuat = new THREE.Quaternion();
-    this.camTarget = new THREE.Vector3();
 
     this.fadeDuration = 0.2
     this.walkSpeed = 2;
@@ -36,8 +33,6 @@ export default class CharacterController {
     this.currentAction = initialAction;
     
     this.animationMap[this.currentAction].play();
-
-    this.camera = camera;
   }
 
   /**
@@ -95,8 +90,7 @@ export default class CharacterController {
       this.model.quaternion.rotateTowards(this.rotQuat, 0.2);
 
       // Compute walk direction
-      this.camera.getWorldDirection(this.walkDir)
-      this.walkDir.setY(0).normalize().applyAxisAngle( this.rotAxis , targetAngle);
+      this.walkDir.set(0, 0, -1).applyAxisAngle(this.rotAxis , targetAngle);
 
       // Move
       const speed = this.currentAction === 'Run' ? this.runSpeed : this.walkSpeed;
@@ -111,7 +105,6 @@ export default class CharacterController {
   /** @type {THREE.Vector3} */ walkDir
   /** @type {THREE.Vector3} */ rotAxis
   /** @type {THREE.Quaternion} */ rotQuat
-  /** @type {THREE.Vector3} */ camTarget
 
   /** @type {number} */ fadeDuration
   /** @type {number} */ walkSpeed
@@ -122,8 +115,6 @@ export default class CharacterController {
   /** @type {THREE.Group} */ model
   /** @type {THREE.AnimationMixer} */ mixer
   /** @type {Record<AnimKey, THREE.AnimationAction>} */ animationMap
-
-  /** @type {THREE.PerspectiveCamera} */ camera;
 
 }
 
