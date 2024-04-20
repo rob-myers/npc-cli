@@ -11,7 +11,7 @@
     - ✅ on click ground set CharacterController target
     - ✅ move to target
     - ✅ turn to target
-  - remove keyboard controls
+  - 🚧 remove keyboard controls
 
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
@@ -35,6 +35,9 @@
 
 - show toast while navmesh loading
   - also show results e.g. number of tiles
+
+- mobile extra space at bottom again
+  - probably caused by new sticky header
 
 - closed doors have filtered doorPolys
 - can make agent look at point
