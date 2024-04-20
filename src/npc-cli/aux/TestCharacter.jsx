@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { CameraControls, MapControls, PerspectiveCamera, KeyboardControls } from "@react-three/drei";
 import { quadGeometryXZ } from "../service/three";
 
-import { info } from "../service/generic";
+import useStateRef from "../hooks/use-state-ref";
 import TestCanvas from "./TestCanvas";
 import { TestCharacterController } from "./TestCharacterController";
 
@@ -13,6 +13,11 @@ import { TestCharacterController } from "./TestCharacterController";
  * @param {Props} props
  */
 export function TestCharacter(props) {
+
+  const state = useStateRef(/** @returns {State} */ () => ({
+    controller: /** @type {*} */ (null),
+  }));
+
   return (
     <>
       <MapControls makeDefault zoomToCursor position={[0, 8, 0]} />
@@ -26,7 +31,7 @@ export function TestCharacter(props) {
         castShadow
       />
 
-        <TestCharacterController />
+        <TestCharacterController ref={x => x && (state.controller = x)} />
 
         <mesh
           name="ground"
@@ -34,6 +39,9 @@ export function TestCharacter(props) {
           position={[-groundScale / 2, 0, -groundScale / 2]}
           geometry={quadGeometryXZ}
           receiveShadow
+          onClick={e => {
+            state.controller.setTarget(e.point);
+          }}
         >
           <meshStandardMaterial
             side={THREE.DoubleSide}
@@ -48,6 +56,11 @@ export function TestCharacter(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
+ */
+
+/**
+ * @typedef State
+ * @property {import('./TestCharacterController').State} controller
  */
 
 const groundScale = 20;

@@ -22,8 +22,12 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
     keyPressed: { w: false, a: false, s: false, d: false, shift: false },
     characterController: /** @type {*} */ (null),
 
+    setTarget(target) {
+      state.characterController.setTarget(target);
+    },
     update(deltaMs) {
-      state.characterController.update(deltaMs, state.keyPressed);
+      // state.characterController.updateOnKey(deltaMs, state.keyPressed);
+      state.characterController.updateOnTarget(deltaMs);
     },
   }));
 
@@ -36,7 +40,6 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
       if (x instanceof THREE.Mesh && x.material instanceof THREE.MeshStandardMaterial) {
         x.material.metalness = 0;
         x.castShadow = true;
-        // x.material = new THREE.MeshToonMaterial({ color : 0xffffff, wireframe : false})
       }
     });
 
@@ -60,7 +63,7 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
   React.useEffect(() => 
     sub((x) => x, (keyState) => {
       info('keypress', keyState);
-      state.characterController.canRun = keyState.shift;
+      state.characterController.shouldRun = keyState.shift;
       Object.entries(keyState).forEach(([k, v]) =>
         state.keyPressed[/** @type {import('./TestCharacter').KeyNames} */ (k)] = v
       );
@@ -71,11 +74,14 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
 
   return (
     <group ref={x => x && (state.group = x)}>
-      <mesh position={[0, capsuleHalfHeight, 0]} visible={false} >
+      <mesh
+        position={[0, capsuleHalfHeight, 0]}
+        visible={false}
+      >
         <meshStandardMaterial color="red" wireframe />
         <cylinderGeometry args={[capsuleRadius, capsuleRadius, capsuleHalfHeight * 2]} />
       </mesh>
-      <primitive object={model} />
+      <primitive object={model} rotation={[0, Math.PI, 0]} />
     </group>
   );
 });
@@ -91,5 +97,6 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
  * @property {THREE.Group} group
  * @property {Record<import('./TestCharacter').KeyNames, boolean>} keyPressed
  * @property {CharacterController} characterController
+ * @property {(target: THREE.Vector3Like) => void} setTarget
  * @property {(deltaMs: number) => void} update
  */

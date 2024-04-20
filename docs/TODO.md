@@ -7,7 +7,10 @@
     - https://discourse.threejs.org/t/character-controller/46936
     - https://character-controller-three.netlify.app/
   - ✅ CharacterController does not depend on orbitControls
-  - 🚧 can click to move
+  - ✅ can click to move
+    - ✅ on click ground set CharacterController target
+    - ✅ move to target
+    - ✅ turn to target
   - remove keyboard controls
 
 - 🚧 Restart TestCharacter: animation, no physics
