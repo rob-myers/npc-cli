@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { dampLookAt } from "maath/easing";
 
 import { agentRadius } from "../service/const";
-import { info } from "../service/generic";
+import { info, warn } from "../service/generic";
 import { tmpMesh1 } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -22,10 +22,15 @@ export default function TestNpcs(props) {
     toAgentGroup: {},
 
     addBoxObstacle(position, extent, angle) {
-      const obstacle = api.nav.tileCache.addBoxObstacle(position, extent, angle);
+      const { obstacle } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
       state.updateTileCache();
       const id = state.nextObstacleId++;
-      return state.toObstacle[id] = { id, o: obstacle, mesh: tmpMesh1 };
+      if (obstacle) {
+        return state.toObstacle[id] = { id, o: obstacle, mesh: tmpMesh1 };
+      } else {
+        warn(`failed to add obstacle at ${JSON.stringify(position)}`);
+        return null;
+      }
     },
 
     agentRef(agent, group) {
@@ -111,7 +116,7 @@ export default function TestNpcs(props) {
     api.debug.selectNavPolys(polyRefs);
 
     api.update(); // Trigger ticker
-    return () => state.removeObstacle(obstacle.id);
+    return () => void (obstacle && state.removeObstacle(obstacle.id));
   }, [api.crowd]); 
 
   return <>
@@ -161,7 +166,7 @@ export default function TestNpcs(props) {
  * @property {Record<string, THREE.Group>} toAgentGroup
  * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
  * @property {() => void} onTick
- * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle} addBoxObstacle
+ * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
  * @property {(agent: NPC.CrowdAgent, group: THREE.Group | null) => void} agentRef
  * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
  * @property {(obstacleId: number) => void} removeObstacle
