@@ -13,8 +13,9 @@
     - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
 
 - integrate TestCharacter into TestWorld
+  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
-- symbols induced raised images via spritesheet
+- symbols induce raised images via spritesheet
   - obstacle polys embed into rects (?)
   - obstacle polys have `y={y}`
   - InstancedMesh with raised XZ planes
