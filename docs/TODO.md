@@ -2,17 +2,6 @@
 
 ## WIP
 
-- ✅ switch back to TestCharacter
-  - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
-    - https://discourse.threejs.org/t/character-controller/46936
-    - https://character-controller-three.netlify.app/
-  - ✅ CharacterController does not depend on orbitControls
-  - ✅ can click to move
-    - ✅ on click ground set CharacterController target
-    - ✅ move to target
-    - ✅ turn to target
-  - ✅ remove keyboard controls
-
 - 🚧 Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
   - ✅ show custom character FBX
@@ -784,3 +773,14 @@ React.useEffect(() => {
 
 - ✅ PR for recast-navigation-js
   - https://github.com/isaac-mason/recast-navigation-js/pull/325
+
+- ✅ switch back to TestCharacter
+  - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
+    - https://discourse.threejs.org/t/character-controller/46936
+    - https://character-controller-three.netlify.app/
+  - ✅ CharacterController does not depend on orbitControls
+  - ✅ can click to move
+    - ✅ on click ground set CharacterController target
+    - ✅ move to target
+    - ✅ turn to target
+  - ✅ remove keyboard controls
