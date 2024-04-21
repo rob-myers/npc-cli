@@ -15,19 +15,18 @@
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
-- symbols induce raised images via spritesheet
-  - obstacle polys embed into rects (?)
-  - obstacle polys have `y={y}`
-  - InstancedMesh with raised XZ planes
+- 🚧 symbols induce raised images via spritesheet
+  - 🚧 obstacle polys can `y={y}`
+  - 🚧 sub-symbols can `dy={dy}` and it aggregates
+  - 🚧 TestGeomorphs has InstancedMesh with raised XZ planes
   - obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
 - ❌ show tables via raised "floor texture"
 
+- start writing first article
+
 - show toast while navmesh loading
   - also show results e.g. number of tiles
-
-- mobile extra space at bottom again
-  - probably caused by new sticky header
 
 - closed doors have filtered doorPolys
 - can make agent look at point
@@ -38,6 +37,8 @@
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 
+- mobile extra space at bottom again (?)
+  - probably caused by new sticky header
 - create smaller-pngs.js and compare to https://tinypng.com/
 - scripts assets/images trigger different useQuery
 - Player view could be top-down with high walls

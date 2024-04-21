@@ -7,23 +7,23 @@
     "302--hull": {"outputHash": -1920485050},
     "303--hull": {"outputHash": -467474707},
     "bed--003--1x1.6": {"outputHash": 1581912590},
-    "bed--004--0.8x1.4": {"outputHash": -1285959108},
-    "bed--005--0.6x1.2": {"outputHash": -973113728},
+    "bed--004--0.8x1.4": {"outputHash": 1670706940},
+    "bed--005--0.6x1.2": {"outputHash": -1279215325},
     "bridge--042--8x9": {"outputHash": 1904763250},
     "console--005--1.2x4": {"outputHash": 828405474},
     "console--019--2x2": {"outputHash": -1790878123},
     "console--022--1x2": {"outputHash": 1043901961},
     "console--031--1x1.2": {"outputHash": 1056904373},
-    "console--051--0.4x0.6": {"outputHash": -411518758},
+    "console--051--0.4x0.6": {"outputHash": 850112670},
     "counter--009--0.4x0.4": {"outputHash": 1768735993},
     "empty-room--013--2x3": {"outputHash": 9947101},
-    "empty-room--039--3x4": {"outputHash": -727316405},
+    "empty-room--039--3x4": {"outputHash": -1205933257},
     "engineering--045--6x4": {"outputHash": 1463379812},
     "engineering--047--4x7": {"outputHash": 834580297},
     "extra--chair--003--0.25x0.25": {"outputHash": -1551081646},
     "extra--desk--004--0.5x1": {"outputHash": -940493985},
-    "extra--fresher--001--0.5x0.5": {"outputHash": 732453667},
-    "extra--fresher--002--0.5x0.5": {"outputHash": -93535183},
+    "extra--fresher--001--0.5x0.5": {"outputHash": -1583804263},
+    "extra--fresher--002--0.5x0.5": {"outputHash": 1445921255},
     "fresher--002--0.4x0.6": {"outputHash": -997708529},
     "fresher--020--2x2": {"outputHash": -485836024},
     "fresher--025--3x2": {"outputHash": -375470300},
@@ -38,14 +38,14 @@
     "machinery--156--2x4": {"outputHash": -466271879},
     "machinery--158--1.8x3.6": {"outputHash": -1424353065},
     "machinery--357--4x2": {"outputHash": -307199098},
-    "medical--007--3x2": {"outputHash": 1153145495},
-    "medical--008--3x2": {"outputHash": -1495668525},
+    "medical--007--3x2": {"outputHash": -1469449737},
+    "medical--008--3x2": {"outputHash": 1580126771},
     "medical-bed--006--1.6x3.6": {"outputHash": 2036847340},
     "misc-stellar-cartography--020--10x10": {"outputHash": -1589868870},
     "misc-stellar-cartography--023--4x4": {"outputHash": -1790331102},
-    "office--001--2x2": {"outputHash": 1064956886},
+    "office--001--2x2": {"outputHash": -1931795786},
     "office--004--2x2": {"outputHash": 1298782092},
-    "office--006--2x2": {"outputHash": 913429188},
+    "office--006--2x2": {"outputHash": 1511033551},
     "office--020--2x3": {"outputHash": -2112021606},
     "office--023--2x3": {"outputHash": -753081617},
     "office--026--2x3": {"outputHash": 495548312},
@@ -3379,7 +3379,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
-          "meta": {"key": "bed--005--0.6x1.2"},
+          "meta": {"key": "bed--005--0.6x1.2", "dy": 1},
           "width": 1.875,
           "height": 1.125,
           "transform": [1, 0, 0, 1, 0.27, 0.03]
@@ -3398,7 +3398,7 @@
           "coordinates": [
             [[1.875, 0.05], [1.875, 1.075], [0, 1.075], [0, 0.05]]
           ],
-          "meta": {"obstacle": true}
+          "meta": {"obstacle": true, "y": 0.6}
         }
       ],
       "walls": [],
@@ -4442,7 +4442,7 @@
           "coordinates": [
             [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
           ],
-          "meta": {"obstacle": true}
+          "meta": {"obstacle": true, "y": 0.5}
         }
       ],
       "walls": [],
@@ -4624,7 +4624,8 @@
                 [-0.045, 2.8],
                 [-0.045, 1.7]
               ]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -4639,7 +4640,8 @@
                 [-0.045, 4.2],
                 [-0.045, 3.1]
               ]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -4648,7 +4650,8 @@
             "type": "Polygon",
             "coordinates": [
               [[4.45, 1.7], [4.55, 1.7], [4.55, 2.8], [4.45, 2.8], [4.45, 1.7]]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -4657,7 +4660,8 @@
             "type": "Polygon",
             "coordinates": [
               [[4.45, 3.1], [4.55, 3.1], [4.55, 4.2], [4.45, 4.2], [4.45, 3.1]]
-            ]
+            ],
+            "meta": {}
           }
         }
       ],
@@ -5141,7 +5145,7 @@
               [0.0325, 0.3254]
             ]
           ],
-          "meta": {"obstacle": true}
+          "meta": {"obstacle": true, "y": 1}
         }
       ],
       "walls": [],
@@ -5183,7 +5187,7 @@
               [0.1179, 0.2012]
             ]
           ],
-          "meta": {"obstacle": true}
+          "meta": {"obstacle": true, "y": 1}
         }
       ],
       "walls": [],
@@ -7425,7 +7429,8 @@
                 [-0.05, 1.3],
                 [-0.05, 0.2]
               ]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -7440,7 +7445,8 @@
                 [0.2, 0.05],
                 [0.2, -0.05]
               ]
-            ]
+            ],
+            "meta": {}
           }
         }
       ],
@@ -7572,7 +7578,8 @@
                 [-0.05, 1.3],
                 [-0.05, 0.2]
               ]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -7587,7 +7594,8 @@
                 [0.2, 0.05],
                 [0.2, -0.05]
               ]
-            ]
+            ],
+            "meta": {}
           }
         }
       ],
@@ -8238,7 +8246,8 @@
                 [2.95, 2.875],
                 [2.95, 1.5]
               ]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -8253,7 +8262,8 @@
                 [1.65, 3.05],
                 [1.65, 2.95]
               ]
-            ]
+            ],
+            "meta": {}
           }
         }
       ],
@@ -8555,7 +8565,8 @@
             "type": "Polygon",
             "coordinates": [
               [[2.95, 1.9], [3.05, 1.9], [3.05, 2.7], [2.95, 2.7], [2.95, 1.9]]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -8570,7 +8581,8 @@
                 [0.925, 3.05],
                 [0.925, 2.95]
               ]
-            ]
+            ],
+            "meta": {}
           }
         },
         {
@@ -8585,7 +8597,8 @@
                 [-0.05, 2.7],
                 [-0.05, 1.9]
               ]
-            ]
+            ],
+            "meta": {}
           }
         }
       ],
