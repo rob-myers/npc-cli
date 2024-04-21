@@ -397,10 +397,11 @@ class GeomorphService {
    * @param {string} transformAttribute
    * @returns {Geom.SixTuple | null}
    */
-  extractSixTuple(transformAttribute = "matrix(1, 0, 0, 1, 0, 0)", rounded = false) {
+  extractSixTuple(transformAttribute = "matrix(1, 0, 0, 1, 0, 0)") {
     const transform = safeJsonParse(`[${transformAttribute.slice("matrix(".length, -1)}]`);
     if (geom.isTransformTuple(transform)) {
-      return rounded ? /** @type {Geom.SixTuple} */ (transform.map(Math.round)) : transform;
+      // 🔔 precision 3?
+      return /** @type {Geom.SixTuple} */ (transform.map(x => toPrecision(x, 3)));
     } else {
       warn(`extractSixTuple: "${transformAttribute}": expected format "matrix(a, b, c, d, e, f)"`);
       return null;
@@ -569,11 +570,12 @@ class GeomorphService {
       removableDoors: [],
       decor: sym.decor.map((x) => x.cleanClone(tmpMat1, this.transformMeta(x.meta, tmpMat1))),
       doors: doors.map((x) => x.cleanClone(tmpMat1)),
-      obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1,
-        typeof meta.dy === 'number' && typeof x.meta.y === 'number'
-          ? { y: meta.dy + x.meta.y } // aggregate height  
-          : undefined,
-      )),
+      obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1, {
+        // aggregate height
+        ...typeof meta.dy === 'number' && typeof x.meta.y === 'number' && { y: meta.dy + x.meta.y },
+        // aggregate transform
+        ...{ transform: tmpMat1.preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
+      })),
       walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
       windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
       unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
@@ -649,7 +651,7 @@ class GeomorphService {
 
         const rect = geomorphService.extractRect(parent.attributes);
         // 🔔 Rounded because map transforms must preserve axis-aligned rects
-        const transform = geomorphService.extractSixTuple(parent.attributes.transform, true);
+        const transform = geomorphService.extractSixTuple(parent.attributes.transform);
         const { transformOrigin } = geomorphService.extractTransformData(parent);
 
         if (transform) {
@@ -806,6 +808,7 @@ class GeomorphService {
 
         if (meta.obstacle) {// Link to original symbol
           meta.symId = toSymId[symbolKey];
+          meta.symKey = symbolKey; // Debug?
           meta.obsId = obstacles.length - 1;
         }
       },

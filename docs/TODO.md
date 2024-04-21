@@ -20,6 +20,9 @@
   - ✅ sub-symbols can `dy={dy}` and it aggregates
   - ✅ link layout obstacle to symbol obstacle
   - 🚧 TestGeomorphs has InstancedMesh with raised XZ planes
+    - ❌ given symbol obstacle poly, and transformed obstacle poly, infer the affine transform
+    - ✅ maintain transform in obstacle.meta
+    - part of precomputation done inside geomorphs.json
   - obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
 - ❌ show tables via raised "floor texture"
