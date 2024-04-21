@@ -32,7 +32,8 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
   React.useEffect(() => {
     model.traverse(x => {
       if (x instanceof THREE.Mesh && x.material instanceof THREE.MeshStandardMaterial) {
-        x.material.metalness = 0;
+        // x.material.metalness = 0;
+        x.material.metalness = 1;
         x.castShadow = true;
       }
     });

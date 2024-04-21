@@ -25,7 +25,7 @@ export function TestCharacter(props) {
       <ambientLight color="white" intensity={0.25} />
       <pointLight
         position={[0, 3, 2]}
-        intensity={2}
+        intensity={4}
         castShadow
       />
 
@@ -47,7 +47,7 @@ export function TestCharacter(props) {
         >
           <meshStandardMaterial
             side={THREE.DoubleSide}
-            color="#ddf"
+            color="#fff"
             // transparent opacity={0.3}
           />
         </mesh>
