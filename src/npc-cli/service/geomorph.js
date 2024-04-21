@@ -336,38 +336,38 @@ class GeomorphService {
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {number} [scale]
-   * @returns {Geom.Poly[]} Either empty or a singleton
+   * @returns {Geom.Poly | null}
    */
   extractGeom(tagMeta, scale) {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
 
     if (tagName === "rect" || tagName === "image") {
-      poly = Poly.fromRect(
-        new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0))
-      );
+      poly = Poly.fromRect(new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0)));
     } else if (tagName === "path") {
-      poly =
-        geom.svgPathToPolygon(a.d) ??
-        (warn(`extractGeom: path must be single connected polygon with ≥ 0 holes`, a), null);
+      poly = geom.svgPathToPolygon(a.d);
+      if (!poly) {
+        warn(`extractGeom: path must be single connected polygon with ≥ 0 holes`, a);
+        return null;
+      }
     } else {
       warn(`extractGeom: ${tagName}: unexpected tagName`, a);
+      return null;
     }
 
     // DOMMatrix not available server-side
     const { transformOrigin } = geomorphService.extractTransformData(tagMeta);
     if (a.transform && transformOrigin) {
-      poly
-        ?.translate(-transformOrigin.x, -transformOrigin.y)
+      poly.translate(-transformOrigin.x, -transformOrigin.y)
         .applyMatrix(new Mat(a.transform))
         .translate(transformOrigin.x, transformOrigin.y);
     } else if (a.transform) {
-      poly?.applyMatrix(new Mat(a.transform));
+      poly.applyMatrix(new Mat(a.transform));
     }
 
-    typeof scale === "number" && poly?.scale(scale);
+    typeof scale === "number" && poly.scale(scale);
 
-    return poly ? [poly.precision(precision).cleanFinalReps().fixOrientation()] : [];
+    return poly.precision(precision).cleanFinalReps().fixOrientation();
   }
 
   /**
@@ -740,7 +740,7 @@ class GeomorphService {
 
         const ownTags = contents.split(" ");
 
-        // symbol may have folder "symbols" defining layout
+        // symbol may have folder "symbols"
         if (folderStack[0] === "symbols") {
           const [subSymbolKey, ...symbolTags] = ownTags;
           if (parent.tagName !== "rect") {
@@ -783,8 +783,12 @@ class GeomorphService {
           return;
         }
 
-        const meta = geomorphService.tagsToMeta(ownTags, {});
-
+        const poly = geomorphService.extractGeom({ ...parent, title: contents }, scale);
+        
+        if (poly === null) {
+          return;
+        }
+        
         /** @type {const} */ ([
           ["hull-wall", hullWalls],
           ["wall", walls],
@@ -793,15 +797,17 @@ class GeomorphService {
           ["window", windows],
           ["decor", decor],
           [null, unsorted],
-        ]).some(
-          ([tag, polys]) =>
-            (tag === null || ownTags.includes(tag)) &&
-            polys.push(
-              ...geomorphService
-                .extractGeom({ ...parent, title: contents }, scale)
-                .map((poly) => Object.assign(poly, { meta }))
-            )
+        ]).some(([tag, polys]) =>
+          (tag === null || ownTags.includes(tag)) && polys.push(poly)
         );
+
+        const meta = geomorphService.tagsToMeta(ownTags, {});
+        poly.meta = meta;
+
+        if (meta.obstacle) {// Link to original symbol
+          meta.symId = toSymId[symbolKey];
+          meta.obsId = obstacles.length - 1;
+        }
       },
       onclosetag(name) {
         tagStack.pop();
@@ -1100,3 +1106,11 @@ const tmpMat1 = new Mat();
 /**
  * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey
  */
+
+const symbolKeys = keys(geomorphService.fromSymbolKey);
+const toSymId = symbolKeys.reduce((agg, key, id) =>
+  (agg[key] = id, agg), /** @type {Record<Geomorph.SymbolKey, number>} */ ({})
+);
+const fromSymId = symbolKeys.reduce((agg, key, id) =>
+  (agg[id] = key, agg), /** @type {Record<number, Geomorph.SymbolKey>} */ ({})
+);

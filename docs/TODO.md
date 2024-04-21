@@ -16,8 +16,9 @@
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
 - 🚧 symbols induce raised images via spritesheet
-  - 🚧 obstacle polys can `y={y}`
-  - 🚧 sub-symbols can `dy={dy}` and it aggregates
+  - ✅ obstacle polys can `y={y}`
+  - ✅ sub-symbols can `dy={dy}` and it aggregates
+  - ✅ link layout obstacle to symbol obstacle
   - 🚧 TestGeomorphs has InstancedMesh with raised XZ planes
   - obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
