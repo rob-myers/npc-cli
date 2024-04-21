@@ -167,9 +167,9 @@ declare namespace Geomorph {
     doors: C[];
     hullDoors: C[];
     hullPoly: P[];
-    obstacles: WithMeta<P>[];
-    rooms: WithMeta<P>[];
-    walls: WithMeta<P>[];
+    obstacles: { origPoly: P; transform: Geom.SixTuple; }[];
+    rooms: P[];
+    walls: P[];
     windows: C[];
 
     navDecomp: Geom.TriangulationGeneric<V>;

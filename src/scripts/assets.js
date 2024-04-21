@@ -86,9 +86,8 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   // Compute geomorphs.json
   const newLayouts = geomorphService.gmKeys.map(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];
-    const { pngRect, hullWalls } = assets.symbols[hullKey];
     const flatSymbol = flattened[hullKey];
-    return geomorphService.createLayout(gmKey, flatSymbol, { pngRect, hullWalls });
+    return geomorphService.createLayout(gmKey, flatSymbol, assets);
   });
 
   const layout = keyedItemsToLookup(newLayouts);

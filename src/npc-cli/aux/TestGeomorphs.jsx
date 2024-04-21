@@ -3,11 +3,12 @@ import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
 import { keys } from "../service/generic";
-import { FLOOR_IMAGES_QUERY_KEY } from "../service/const";
+import { FLOOR_IMAGES_QUERY_KEY, worldScale } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import { drawPolygons } from "../service/dom";
 
 /**
  * @param {Props} props
@@ -17,9 +18,19 @@ export default function TestGeomorphs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGeomorph(gmKey, img) {
-      const { ctxt, canvas: { width, height } } = api.gmClass[gmKey];
+      const { ctxt, canvas: { width, height }, layout } = api.gmClass[gmKey];
       ctxt.clearRect(0, 0, width, height);
       ctxt.drawImage(img, 0, 0);
+
+      // 🚧 debug obstacles
+      const { pngRect } = layout;
+      const scale = 1 / worldScale;
+      layout.obstacles.forEach(({ origPoly, transform }) => {
+        ctxt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
+        ctxt.transform(...transform);
+        drawPolygons(ctxt, [origPoly], ['red', null]);
+      });
+      ctxt.resetTransform();
     },
   }));
 

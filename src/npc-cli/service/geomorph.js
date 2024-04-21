@@ -147,11 +147,14 @@ class GeomorphService {
   /**
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol Flat hull symbol
-   * @param {Pick<Geomorph.Symbol, 'hullWalls' | 'pngRect'>} context
+   * @param {Geomorph.Assets} assets
+   * //@param {Pick<Geomorph.Symbol, 'hullWalls' | 'pngRect'>} context
    * @returns {Geomorph.Layout}
    */
-  createLayout(gmKey, symbol, { hullWalls, pngRect }) {
+  createLayout(gmKey, symbol, assets) {
     debug(`createLayout ${gmKey}`);
+
+    const { pngRect, hullWalls } = assets.symbols[geomorphService.toHullKey[gmKey]];
     const hullPoly = Poly.union(hullWalls);
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
@@ -184,7 +187,11 @@ class GeomorphService {
       doors,
       hullPoly,
       hullDoors: doors.filter(x => x.meta.hull),
-      obstacles: symbol.obstacles,
+      // 🚧 different format
+      obstacles: symbol.obstacles.map(o => ({
+        origPoly: assets.symbols[/** @type {Geomorph.SymbolKey} */ (o.meta.symKey)].obstacles[o.meta.obsId],
+        transform: o.meta.transform ?? [1, 0, 0, 1, 0, 0],
+      })),
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
       windows,
@@ -279,7 +286,10 @@ class GeomorphService {
       doors,
       hullPoly: json.hullPoly.map(x => Poly.from(x)),
       hullDoors: doors.filter(x => x.meta.hull),
-      obstacles: json.obstacles.map(Poly.from),
+      obstacles: json.obstacles.map(x => ({
+        origPoly: Poly.from(x.origPoly),
+        transform: x.transform,
+      })),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       windows: json.windows.map(Connector.from),
@@ -574,7 +584,7 @@ class GeomorphService {
         // aggregate height
         ...typeof meta.dy === 'number' && typeof x.meta.y === 'number' && { y: meta.dy + x.meta.y },
         // aggregate transform
-        ...{ transform: tmpMat1.preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
+        ...{ transform: tmpMat2.feedFromArray(transform).preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
       })),
       walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
       windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
@@ -909,7 +919,7 @@ class GeomorphService {
       doors: layout.doors.map(x => x.json),
       hullDoors: layout.hullDoors.map((x) => x.json),
       hullPoly: layout.hullPoly.map(x => x.geoJson),
-      obstacles: layout.obstacles.map(x => x.geoJson),
+      obstacles: layout.obstacles.map(x => ({ origPoly: x.origPoly.geoJson, transform: x.transform })),
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),
       windows: layout.windows.map((x) => x.json),
@@ -1105,6 +1115,7 @@ const tmpVect1 = new Vect();
 const tmpVect2 = new Vect();
 const tmpPoly1 = new Poly();
 const tmpMat1 = new Mat();
+const tmpMat2 = new Mat();
 
 /**
  * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey

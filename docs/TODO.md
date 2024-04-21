@@ -15,14 +15,16 @@
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
-- 🚧 symbols induce raised images via spritesheet
+- 🚧 raised obstacles
   - ✅ obstacle polys can `y={y}`
   - ✅ sub-symbols can `dy={dy}` and it aggregates
   - ✅ link layout obstacle to symbol obstacle
-  - 🚧 TestGeomorphs has InstancedMesh with raised XZ planes
-    - ❌ given symbol obstacle poly, and transformed obstacle poly, infer the affine transform
-    - ✅ maintain transform in obstacle.meta
-    - part of precomputation done inside geomorphs.json
+  - ❌ given symbol obstacle poly, and transformed obstacle poly, infer the affine transform
+  - ✅ maintain transform in obstacle.meta
+  - ✅ layout.obstacles as { origPoly, transform }
+  - ✅ verify by drawing into floor canvas
+  - 🚧 InstancedMesh with unit XZ plane
+    - ...
   - obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
 - ❌ show tables via raised "floor texture"
