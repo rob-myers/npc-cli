@@ -29,7 +29,9 @@ export function TestCharacter(props) {
         castShadow
       />
 
-        <TestCharacterController ref={x => x && (state.controller = x)} />
+        <TestCharacterController
+          ref={x => x && (state.controller = x)}
+        />
 
         <mesh
           name="ground"

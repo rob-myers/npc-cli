@@ -15,7 +15,8 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
 }, ref) {
 
   // const { scene: gltf } = useGLTF('/assets/3d/base-mesh-246-tri.glb');
-  const { scene: model, animations } = useGLTF('/assets/3d/Soldier.glb');
+  // const { scene: model, animations } = useGLTF('/assets/3d/Soldier.glb');
+  const { scene: model, animations } = useGLTF('/assets/3d/mixamo-test.glb');
 
   const state = useStateRef(/** @returns {State} */ () => ({
     group: /** @type {*} */ (null),
@@ -64,7 +65,10 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
         <meshStandardMaterial color="red" wireframe />
         <cylinderGeometry args={[capsuleRadius, capsuleRadius, capsuleHalfHeight * 2]} />
       </mesh>
-      <primitive object={model} rotation={[0, Math.PI, 0]} />
+      <primitive
+        object={model}
+        // rotation={[0, Math.PI, 0]}
+      />
     </group>
   );
 });

@@ -2,15 +2,15 @@
 
 ## WIP
 
-- 🚧 Restart TestCharacter: animation, no physics
+- ✅ Restart TestCharacter: animation, no physics
   - ✅ clean away `@react-three/rapier`
   - ✅ show custom character FBX
   - ✅ scale character to desired height
   - ✅ import FBX into Blender and export as GLTF
     - ✅ install blender 4.1 (latest)
-  - 🚧 download two FBX animations from mixamo and somehow load into GLTF
+  - ✅ download three FBX animations from mixamo and somehow load into GLTF
     - show a Mixamo animation (use Blender to combine animations)
-      - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+    - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
 
 - integrate TestCharacter into TestWorld
 
