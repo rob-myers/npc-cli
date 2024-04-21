@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import { keys } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
-import { drawPolygons, strokeLine } from "../service/dom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -18,19 +17,16 @@ export default function TestGeomorphs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGeomorph(gmKey, img) {
-      // 🚧 use floor texture instead, if HMR works
-      const { ctxt } = api.gmClass[gmKey];
-      const canvas = ctxt.canvas;
-      ctxt.clearRect(0, 0, canvas.width, canvas.width);
+      const { ctxt, canvas: { width, height } } = api.gmClass[gmKey];
+      ctxt.clearRect(0, 0, width, height);
       ctxt.drawImage(img, 0, 0);
     },
   }));
 
-  useQuery({
+  useQuery({// auto-updates with `yarn images`
     queryKey: [FLOOR_IMAGES_QUERY_KEY, api.layoutsHash, api.mapsHash],
     queryFn() {
       keys(api.gmClass).forEach((gmKey) => {
-        // textureLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((tex) => {
         textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.png.webp`).then((tex) => {
           state.drawGeomorph(gmKey, tex.source.data);
           api.gmClass[gmKey].tex.needsUpdate = true;

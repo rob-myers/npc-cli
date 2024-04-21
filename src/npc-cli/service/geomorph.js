@@ -125,7 +125,7 @@ class GeomorphService {
 
   /**
    * @param {string} decorKey
-   * @param {Geomorph.WithMeta<Geom.Poly>} poly
+   * @param {Geom.Poly} poly
    * @returns {Geomorph.Decor}
    */
   decorFromPoly(decorKey, poly) {
@@ -146,7 +146,7 @@ class GeomorphService {
 
   /**
    * @param {Geomorph.GeomorphKey} gmKey 
-   * @param {Geomorph.FlatSymbol} symbol
+   * @param {Geomorph.FlatSymbol} symbol Flat hull symbol
    * @param {Pick<Geomorph.Symbol, 'hullWalls' | 'pngRect'>} context
    * @returns {Geomorph.Layout}
    */
@@ -184,6 +184,7 @@ class GeomorphService {
       doors,
       hullPoly,
       hullDoors: doors.filter(x => x.meta.hull),
+      obstacles: symbol.obstacles,
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
       windows,
@@ -276,8 +277,9 @@ class GeomorphService {
 
       decor: json.decor,
       doors,
-      hullPoly: json.hullPoly.map(Poly.from),
+      hullPoly: json.hullPoly.map(x => Poly.from(x)),
       hullDoors: doors.filter(x => x.meta.hull),
+      obstacles: json.obstacles.map(Poly.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       windows: json.windows.map(Connector.from),
@@ -494,7 +496,7 @@ class GeomorphService {
       key,
       isHull,
       // not aggregated, only cloned
-      addableWalls: addableWalls.map(x => Object.assign(x.cleanClone(), { meta: x.meta })),
+      addableWalls: addableWalls.map(x => x.cleanClone()),
       removableDoors: removableDoors.map(x => ({ ...x, wall: x.wall.cleanClone() })),
       // aggregated and cloned
       walls: walls.concat(flats.flatMap(x => x.walls)),
@@ -537,13 +539,14 @@ class GeomorphService {
    * - we can remove doors tagged with `optional`
    * - we can remove walls tagged with `optional`
    * @param {Geomorph.FlatSymbol} sym
-   * @param {Geomorph.Meta} meta
+   * @param {Geom.Meta} meta
    * @param {Geom.SixTuple} transform
    * @returns {Geomorph.FlatSymbol}
    */
   instantiateFlatSymbol(sym, meta, transform) {
     /** e.g. `['e']`, `['s']`  */
     const doorTags = /** @type {string[] | undefined} */ (meta.doors);
+    /** e.g. `['e']`, `['s']`  */
     const wallTags = /** @type {string[] | undefined} */ (meta.wall);
     tmpMat1.feedFromArray(transform);
 
@@ -564,13 +567,16 @@ class GeomorphService {
       isHull: sym.isHull,
       addableWalls: [],
       removableDoors: [],
-      // cloning poly removes meta
-      decor: sym.decor.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: this.transformMeta(x.meta, tmpMat1) })),
-      doors: doors.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
-      obstacles: sym.obstacles.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      decor: sym.decor.map((x) => x.cleanClone(tmpMat1, this.transformMeta(x.meta, tmpMat1))),
+      doors: doors.map((x) => x.cleanClone(tmpMat1)),
+      obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1,
+        typeof meta.dy === 'number' && typeof x.meta.y === 'number'
+          ? { y: meta.dy + x.meta.y } // aggregate height  
+          : undefined,
+      )),
       walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
-      windows: sym.windows.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
-      unsorted: sym.unsorted.map((x) => Object.assign(x.cleanClone(tmpMat1), { meta: x.meta })),
+      windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
+      unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
     };
   }
 
@@ -689,13 +695,13 @@ class GeomorphService {
     let viewBoxRect = /** @type {Geom.Rect | null} */ (null);
     let pngRect = /** @type {Geom.Rect | null} */ (null);
     const symbols = /** @type {Geomorph.Symbol['symbols']} */ ([]);
-    const hullWalls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const obstacles = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const doors = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const unsorted = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const walls = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const windows = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
-    const decor = /** @type {Geomorph.WithMeta<Geom.Poly>[]} */ ([]);
+    const hullWalls = /** @type {Geom.Poly[]} */ ([]);
+    const obstacles = /** @type {Geom.Poly[]} */ ([]);
+    const doors = /** @type {Geom.Poly[]} */ ([]);
+    const unsorted = /** @type {Geom.Poly[]} */ ([]);
+    const walls = /** @type {Geom.Poly[]} */ ([]);
+    const windows = /** @type {Geom.Poly[]} */ ([]);
+    const decor = /** @type {Geom.Poly[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -894,8 +900,9 @@ class GeomorphService {
       doors: layout.doors.map(x => x.json),
       hullDoors: layout.hullDoors.map((x) => x.json),
       hullPoly: layout.hullPoly.map(x => x.geoJson),
-      rooms: layout.rooms.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
-      walls: layout.walls.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      obstacles: layout.obstacles.map(x => x.geoJson),
+      rooms: layout.rooms.map((x) => x.geoJson),
+      walls: layout.walls.map((x) => x.geoJson),
       windows: layout.windows.map((x) => x.json),
 
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
@@ -930,7 +937,7 @@ class GeomorphService {
 
   /**
    * @param {string[]} tags
-   * @param {Geomorph.Meta} baseMeta
+   * @param {Geom.Meta} baseMeta
    */
   tagsToMeta(tags, baseMeta) {
     return tags.reduce((meta, tag) => {
@@ -945,9 +952,9 @@ class GeomorphService {
   }
 
   /**
-   * @param {Geomorph.Meta} meta 
+   * @param {Geom.Meta} meta 
    * @param {Geom.Mat} mat
-   * @returns {Geomorph.Meta}
+   * @returns {Geom.Meta}
    */
   transformMeta(meta, mat) {
     if (typeof meta.orient === 'number') {
@@ -967,11 +974,11 @@ export const geomorphService = new GeomorphService();
 
 export class Connector {
   /**
-   * @param {Geomorph.WithMeta<Geom.Poly>} poly
+   * @param {Geom.Poly} poly
    * usually a rotated rectangle, but could be a curved window, in which case we'll view it as its AABB
    * @param {Object} [options]
    * @param {[null | number, null | number]} [options.roomIds]
-   * @param {Geomorph.Meta} [options.meta]
+   * @param {Geom.Meta} [options.meta]
    * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
    */
   constructor(poly, options) {
@@ -982,7 +989,7 @@ export class Connector {
     this.poly = poly;
     /** @type {Geom.Vect} */
     this.center = poly.center;
-    /** @type {Geomorph.Meta} */
+    /** @type {Geom.Meta} */
     this.meta = poly.meta || options?.meta || {};
 
     const { angle, baseRect } = geom.polyToAngledRect(poly);

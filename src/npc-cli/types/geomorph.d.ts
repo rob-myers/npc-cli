@@ -16,7 +16,7 @@ declare namespace Geomorph {
   type Connector = import("../service/geomorph").Connector;
 
   interface ConnectorJson {
-    poly: Geomorph.WithMeta<Geom.GeoJsonPolygon>;
+    poly: Geom.GeoJsonPolygon;
     /**
      * `[id of room infront, id of room behind]`
      * where a room is *infront* if `normal` is pointing towards it.
@@ -88,18 +88,18 @@ declare namespace Geomorph {
      * Uncut hull walls: only present in hull symbols.
      * A hull symbol may have other walls, but they'll be in `walls`.
      */
-    hullWalls: Geomorph.WithMeta<P>[];
-    decor: Geomorph.WithMeta<P>[];
-    doors: Geomorph.WithMeta<P>[];
-    obstacles: Geomorph.WithMeta<P>[];
+    hullWalls: P[];
+    decor: P[];
+    doors: P[];
+    obstacles: P[];
     /** Union of uncut non-optional walls including hull walls. */
-    walls: Geomorph.WithMeta<P>[];
-    windows: Geomorph.WithMeta<P>[];
+    walls: P[];
+    windows: P[];
     /** 🚧 refine? */
-    unsorted: Geomorph.WithMeta<P>[];
+    unsorted: P[];
 
     /** Symbols can have sub symbols, e.g. hull symbols use them to layout a geomorph. */
-    symbols: Geomorph.WithMeta<{
+    symbols: {
       symbolKey: Geomorph.SymbolKey;
       /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
       width: number;
@@ -107,7 +107,8 @@ declare namespace Geomorph {
       height: number;
       /** Normalized affine transform */
       transform: Geom.SixTuple;
-    }>[];
+      meta: Geom.Meta;
+    }[];
 
     /** Doors tagged with `optional` can be removed */
     removableDoors: {
@@ -118,7 +119,7 @@ declare namespace Geomorph {
     }[];
 
     /** Walls tagged with `optional` can be added */
-    addableWalls: Geomorph.WithMeta<P>[];
+    addableWalls: P[];
   }
 
   type Symbol = SymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
@@ -162,14 +163,14 @@ declare namespace Geomorph {
     key: GeomorphKey;
     pngRect: R;
 
-    /** 🚧 points, rects or circles */
     decor: Decor[];
-    hullPoly: P[];
-    rooms: WithMeta<P>[];
-    hullDoors: C[];
     doors: C[];
-    windows: C[];
+    hullDoors: C[];
+    hullPoly: P[];
+    obstacles: WithMeta<P>[];
+    rooms: WithMeta<P>[];
     walls: WithMeta<P>[];
+    windows: C[];
 
     navDecomp: Geom.TriangulationGeneric<V>;
     /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
@@ -187,10 +188,6 @@ declare namespace Geomorph {
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];
   }
-
-  type Meta<T extends {} = {}> = Record<string, any> & T;
-
-  type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
 
   //#region decor
 
@@ -216,7 +213,7 @@ declare namespace Geomorph {
 
   interface BaseDecor {
     key: string;
-    meta: Geomorph.Meta<Geomorph.GmRoomId>;
+    meta: Geom.Meta<Geomorph.GmRoomId>;
     /** Epoch ms when last updated (overwritten) */
     updatedAt?: number;
     /** For defining decor via CLI (more succinct) */

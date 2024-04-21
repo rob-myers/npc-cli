@@ -224,11 +224,10 @@ export default function TestWorld(props) {
             {state.crowd && <>
               <TestNpcs/>
               <TestDebug
-                showNavMesh
+                // showNavMesh
                 // showOrigNavPoly
               />
             </>}
-            {/* 🔔 saw onPointerUp instances not updating */}
             <TestWallsAndDoors />
           </group>
         )}

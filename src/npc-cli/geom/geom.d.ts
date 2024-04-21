@@ -18,7 +18,7 @@ declare namespace Geom {
      * the others define non-nested _holes_.
      */
     coordinates: Coord[][];
-    meta?: Record<string, string>;
+    meta: Record<string, string>;
   }
 
   interface VectJson {
@@ -60,4 +60,6 @@ declare namespace Geom {
   }
 
   type SixTuple = [number, number, number, number, number, number];
+
+  type Meta<T extends {} = {}> = Record<string, any> & T;
 }
