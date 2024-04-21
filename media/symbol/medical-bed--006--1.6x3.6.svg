@@ -16,18 +16,18 @@
     <title>decor do lie pod medical orient=0 obscured</title>
   </rect>
   <path d="M 50.4 106.064 L 145.81 54 L 432.677 110.394 L 432.677 196.797 L 145.096 251.979 L 50.4 202.443 L 50.4 106.064 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
-    <title>obstacle</title>
+    <title>obstacle pod</title>
   </path>
   <rect width="450" height="54.700001" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;" y="368.799988" x="15">
     <title>obstacle</title>
   </rect>
+  <path d="M 50.4 554.064 L 145.81 502 L 432.677 558.394 L 432.677 644.797 L 145.096 699.979 L 50.4 650.443 L 50.4 554.064 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+    <title>obstacle pod</title>
+  </path>
   <rect width="450" height="54.700001" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;" y="814" x="15">
     <title>obstacle</title>
   </rect>
-  <path d="M 50.4 554.064 L 145.81 502 L 432.677 558.394 L 432.677 644.797 L 145.096 699.979 L 50.4 650.443 L 50.4 554.064 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
-    <title>obstacle</title>
-  </path>
   <path d="M 50.4 996.064 L 145.81 944 L 432.677 1000.394 L 432.677 1086.797 L 145.096 1141.979 L 50.4 1092.443 L 50.4 996.064 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
-    <title>obstacle</title>
+    <title>obstacle pod</title>
   </path>
 </svg>
