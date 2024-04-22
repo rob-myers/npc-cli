@@ -24,10 +24,9 @@
   - ✅ layout.obstacles as { origPoly, transform }
   - ✅ verify by drawing into floor canvas
   - 🚧 InstancedMesh with unit XZ plane
-    - ...
-  - obstacle polys induce sprite-sheet with uv-map
+    - show raised rects
+  - raised obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
-- ❌ show tables via raised "floor texture"
 
 - start writing first article
 
@@ -69,7 +68,6 @@
 - simplify polygon JSON format e.g. flat arrays
 - start using cypress
 - saw slow resize on maximize desktop (but not mobile)
-- ❌ try unify parseMaps and parseSymbols
 - try fix sporadic missing updates
   - ✅ move maps to `media/map`
   - ✅ improve remount keys
@@ -77,24 +75,11 @@
 - ✅ integer accuracy when parsing maps
   - Boxy has rounding errors e.g. when reflect
   - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
-- ❌ migrate Triangle
-  - png -> webp script applied to assets/debug
-- ❌ learn about WebGl RenderTargets
-  - Towards "Pixi.js RenderTexture" functionality
-  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
-- ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
-- ❌ improve MapControls zoomToCursor on mobile
-  - two fingers leftwards to rotate
-  - two fingers upwards to set polar
 - Terminal crashing during HMR
   - possibly fixed via `xterm-addon-webgl@beta`
   - ℹ️ haven't seen for a while
-- ❌ (hull) walls -> quads
-  - ℹ️ trying alternative i.e. "edges outside floor"
 - need to remove labels from hull symbol image?
-- ❌ try avoid alphaBlend geomorphs via alphaMap
-  - we only need depthWrite false
 - Firefox android allows unbounded scrolling on "interact"
   - debug locally using about:debugging#/runtime/this-firefox
 - 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
@@ -102,8 +87,6 @@
 - ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
   - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
   - ℹ️ seen in parseSymbol of hull symbol
-- ❌ react-three-fiber onPointerUp not updating when instance transformed
-  - ❌ possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
   - ℹ️ fixed by updating sphere bounds
 - in parallel, start going through https://github.com/recastnavigation/recastnavigation
   - to understand what recast outputs
@@ -115,12 +98,6 @@
 - if Viewer maximised and choose menu item, halve size of the Viewer
 
 - if only open Viewer a tiny amount then it should close itself
-
-- ❌ world editor in new repo
-  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
-- ❌ geomorph editor in new repo
-- 🤔 despite our "generic aim" (fabricating game masters),
-  some context will help e.g. The Last Redoubt
 
 - ✅ smaller collapsed nav on mobile
 - fix multi-touch flicker on drag
@@ -792,3 +769,27 @@ React.useEffect(() => {
     - ✅ move to target
     - ✅ turn to target
   - ✅ remove keyboard controls
+
+- ❌ try unify parseMaps and parseSymbols
+- ❌ migrate Triangle
+  - png -> webp script applied to assets/debug
+- ❌ learn about WebGl RenderTargets
+  - Towards "Pixi.js RenderTexture" functionality
+  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
+- ❌ try migrate R3FDemo to react-three-offscreen
+- ❌ improve MapControls zoomToCursor on mobile
+  - two fingers leftwards to rotate
+  - two fingers upwards to set polar
+- ❌ (hull) walls -> quads
+  - ℹ️ trying alternative i.e. "edges outside floor"
+- ❌ try avoid alphaBlend geomorphs via alphaMap
+  - we only need depthWrite false
+- ❌ react-three-fiber onPointerUp not updating when instance transformed
+  - ❌ possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
+- ❌ world editor in new repo
+  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
+- ❌ geomorph editor in new repo
+- ❌ despite our "generic aim" (fabricating game masters),
+  some context will help e.g. The Last Redoubt
+  
+- ❌ show tables via raised "floor texture"
