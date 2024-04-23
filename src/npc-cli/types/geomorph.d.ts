@@ -191,14 +191,20 @@ declare namespace Geomorph {
 
   /**
    * - Given `origPoly` and `symbolKey` we can extract the respective part of the symbol's PNG.
-   * - Applying `transform` to `origPoly` yields the polygon within geomorph space.
+   * - Applying `transform` to `origPoly` yields the polygon in Geomorph space.
    */
   interface LayoutObstacleGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
   > {
+    /** The `symbol` the obstacle originally comes from */
     symbolKey: SymbolKey;
+    /** The index in `symbol.obstacles` this obstacle corresponds to */
+    obstacleId: number;
+    /** The height of this particular instance */
     height: number;
+    /** `symbol.obstacles[symObsId]` -- could be inferred from `assets` */
     origPoly: P;
+    /** Transform from original symbol coords into Geomorph coords */
     transform: Geom.SixTuple;
   }
 
@@ -254,9 +260,18 @@ declare namespace Geomorph {
   type SymbolKey = import('../service/geomorph').SymbolKey;
 
   interface ObstaclesSpriteSheet {
-    lookup: Record<string, Geom.RectJson & {
-      name: string;
-    }>;
+    /**
+     * - key has format `{symbolKey} ${obstacleId}`
+     * - `rect` in Starship Geomorphs Units (sgu)
+     */
+    lookup: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & SymbolObstacleContext>;
+  }
+
+  interface SymbolObstacleContext {
+    symbolKey: Geomorph.SymbolKey;
+    obstacleId: number;
+    /** e.g. `chair` */
+    type: string;
   }
 
 }

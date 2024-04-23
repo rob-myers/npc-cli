@@ -17,7 +17,9 @@
     - ✅ show (possibly raised) rects
   - 🚧 obstacles induce sprite-sheet with uv-map
     - ✅ create sprite-sheet json
-    - 🚧 improve names
+    - ✅ name -> { symbolKey, obstacleKey, type }
+    - ✅ one rect per (symbolKey, obstacleId)
+    - ✅ packed rects should be in Starship Geomorphs units
     - 🚧 create sprite-sheet png/webp
   - InstancedMesh uses uvs
 

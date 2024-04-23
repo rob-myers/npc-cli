@@ -1,7 +1,7 @@
 /**
  * Create:
- * - floor images (one per geomorph)
- * - obstacle sprite-sheets (over all geomorphs)
+ * - one floor images per geomorph
+ * - obstacle sprite-sheet (over all geomorphs)
  * 
  * Usage
  * - npm run images
@@ -20,7 +20,7 @@ import { runYarnScript, saveCanvasAsFile } from './service';
 // sucrase-node needs relative paths
 import { ansi } from "../npc-cli/sh/const";
 import { precision, worldScale } from '../npc-cli/service/const';
-import { info, warn } from '../npc-cli/service/generic';
+import { info, toPrecision, warn } from '../npc-cli/service/generic';
 import { drawPolygons } from '../npc-cli/service/dom';
 import { geomorphService } from '../npc-cli/service/geomorph';
 import { Poly } from '../npc-cli/geom';
@@ -36,8 +36,6 @@ const obstaclesSpriteSheetJsonPath = path.resolve(staticAssetsDir, OBSTACLES_SPR
 const worldToSgu = 1 / worldScale;
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
-const rectsToPack = /** @type {import("maxrects-packer").Rectangle[]} */ ([]);
-
 const opts = {
   debugImage: true,
   debugNavPoly: true,
@@ -48,13 +46,13 @@ const opts = {
 (async function main() {
   fs.mkdirSync(assets2dDir, { recursive: true }); // ensure output directory
 
-  // const assets = geomorphService.deserializeAssets(JSON.parse(fs.readFileSync(assetsJson).toString()));
+  const assets = geomorphService.deserializeAssets(JSON.parse(fs.readFileSync(assetsJson).toString()));
   const geomorphs = geomorphService.deserializeGeomorphs(JSON.parse(fs.readFileSync(geomorphsJson).toString()));
   const pngToProm = /** @type {{ [pngPath: string]: Promise<any> }} */ ({});
 
   await drawFloorImages(geomorphs, pngToProm);
 
-  await drawObstacleSpritesheets(geomorphs, pngToProm);
+  await drawObstacleSpritesheets(assets, pngToProm);
 
   await Promise.all(Object.values(pngToProm));
 
@@ -115,18 +113,29 @@ async function drawFloorImages(geomorphs, pngToProm) {
 }
 
 /**
- * @param {Geomorph.Geomorphs} geomorphs 
+ * @param {Geomorph.Assets} assets 
  * @param {{ [pngPath: string]: Promise<any> }} pngToProm 
  */
-async function drawObstacleSpritesheets(geomorphs, pngToProm) {
-  const layouts = Object.values(geomorphs.layout);
+async function drawObstacleSpritesheets(assets, pngToProm) {
 
-  for (const { key: gmKey, obstacles } of layouts) {
-    const gmNumber = geomorphService.toGmNum[gmKey]
-    for (const [obstacleId, { origPoly, symbolKey }] of obstacles.entries()) {
-      const { rect } = origPoly;
-      rect.precision(precision);
-      addRectToPack(rect.width, rect.height, `gm ${gmNumber}: ${ansi.Purple}${JSON.stringify(origPoly.meta)} ${obstacleId}${ansi.Reset}`);
+  /** @type {Record<`${Geomorph.SymbolKey} ${number}`, import("maxrects-packer").Rectangle>} */
+  const rectsToPackLookup = {};
+
+  // Each symbol obstacle induces a packed rect
+  for (const { key: symbolKey, obstacles } of Object.values(assets.symbols)) {
+    /** Scale from world coords to Starship Geomorph coords (hull symbol coords)  */
+    const scale = 1 / worldScale;
+
+    for (const [obstacleId, poly] of obstacles.entries()) {
+      const rect = poly.rect.scale(scale).precision(precision);
+      const [width, height] = [rect.width, rect.height]
+      
+      const r = new Rectangle(width, height);
+      /** @type {Geomorph.SymbolObstacleContext} */
+      const rectData = { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) };
+      r.data = rectData;
+      rectsToPackLookup[`${symbolKey} ${obstacleId}`] = r;
+      info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
     }
   }
 
@@ -135,6 +144,7 @@ async function drawObstacleSpritesheets(geomorphs, pngToProm) {
     border: opts.packedPadding,
     // smart: false,
   });
+  const rectsToPack = Object.values(rectsToPackLookup);
   packer.addArray(rectsToPack);
   const { bins } = packer;
 
@@ -149,10 +159,17 @@ async function drawObstacleSpritesheets(geomorphs, pngToProm) {
   const packedHeight = bin.height;
   
   // Metadata
-  const json = /** @type {Geomorph.ObstaclesSpriteSheet} */ ({ lookup: {} });
-  bin.rects.forEach(r => json.lookup[r.data.name] = {
-    name: r.data.name,
-    x: r.x, y: r.y, width: r.width, height: r.height,
+  /** @type {Geomorph.ObstaclesSpriteSheet} */
+  const json = ({ lookup: {} });
+  bin.rects.forEach(r => {
+    const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
+    json.lookup[`${symbolKey} ${obstacleId}`] = {
+      x: toPrecision(r.x),
+      y: toPrecision(r.y),
+      width: r.width,
+      height: r.height,
+      symbolKey, obstacleId, type,
+    }
   });
   fs.writeFileSync(obstaclesSpriteSheetJsonPath, stringify(json));
 
@@ -180,14 +197,6 @@ async function drawObstacleSpritesheets(geomorphs, pngToProm) {
   // await runYarnScript('pngs-to-webp', outputPngPath);
 }
 
-/** @param {number} width @param {number} height @param {string} name */
-function addRectToPack(width, height, name) {
-  info(`images will pack:`, name, { width, height });
-  const r = new Rectangle(width, height);
-  r.data = { name };
-  rectsToPack.push(r);
-}
-
 /**
  * @param {import('canvas').CanvasRenderingContext2D} ct
  * @param {Geomorph.Layout['navDecomp']} navDecomp
@@ -197,4 +206,12 @@ function debugDrawNav(ct, navDecomp) {
   const navPoly = Poly.union(triangles);
   opts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(100, 100, 200, 0.4)', null]);
   opts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
+}
+
+/** @param {Geom.Meta} meta */
+function extractObstacleDescriptor(meta) {
+  for (const tag of ['table', 'chair', 'bed', 'shower', 'surface']) {
+    if (meta[tag] === true) return tag;
+  }
+  return 'obstacle';
 }

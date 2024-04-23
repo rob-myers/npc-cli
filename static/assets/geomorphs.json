@@ -1,6 +1,6 @@
 {
   "mapsHash": 1563462381,
-  "layoutsHash": 1799217099,
+  "layoutsHash": 1946912675,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -1804,6 +1804,7 @@
       "obstacles": [
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1831,6 +1832,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1848,6 +1850,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1865,6 +1868,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1892,6 +1896,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1909,6 +1914,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1926,6 +1932,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1953,6 +1960,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1970,6 +1978,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -1987,6 +1996,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2014,6 +2024,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2031,6 +2042,7 @@
         },
         {
           "symbolKey": "office--026--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2048,6 +2060,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2063,6 +2076,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2085,6 +2099,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2107,6 +2122,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2122,6 +2138,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2144,6 +2161,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2166,6 +2184,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2192,6 +2211,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2207,6 +2227,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2229,6 +2250,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2251,6 +2273,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2266,6 +2289,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2288,6 +2312,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2310,6 +2335,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2336,6 +2362,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2351,6 +2378,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2373,6 +2401,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2395,6 +2424,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2410,6 +2440,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2432,6 +2463,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2454,6 +2486,7 @@
         },
         {
           "symbolKey": "stateroom--020--2x3",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2480,6 +2513,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2495,6 +2529,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2511,6 +2546,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2529,6 +2565,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2546,6 +2583,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2563,6 +2601,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2578,6 +2617,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2594,6 +2634,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2612,6 +2653,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2629,6 +2671,7 @@
         },
         {
           "symbolKey": "office--020--2x3",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2646,6 +2689,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2662,6 +2706,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2679,6 +2724,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2696,6 +2742,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2713,6 +2760,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2729,6 +2777,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2746,6 +2795,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2763,6 +2813,7 @@
         },
         {
           "symbolKey": "office--023--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2780,6 +2831,7 @@
         },
         {
           "symbolKey": "fresher--020--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2797,6 +2849,7 @@
         },
         {
           "symbolKey": "fresher--020--2x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2825,6 +2878,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2847,6 +2901,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2862,6 +2917,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2884,6 +2940,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2906,6 +2963,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2923,6 +2981,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2938,6 +2997,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2960,6 +3020,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2975,6 +3036,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -2997,6 +3059,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3019,6 +3082,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3036,6 +3100,7 @@
         },
         {
           "symbolKey": "stateroom--018--2x3",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3051,6 +3116,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3066,6 +3132,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3094,6 +3161,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3122,6 +3190,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3150,6 +3219,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3165,6 +3235,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3193,6 +3264,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3221,6 +3293,7 @@
         },
         {
           "symbolKey": "fresher--025--3x2",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3249,6 +3322,7 @@
         },
         {
           "symbolKey": "office--061--3x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3282,6 +3356,7 @@
         },
         {
           "symbolKey": "office--061--3x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3310,6 +3385,7 @@
         },
         {
           "symbolKey": "office--061--3x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3327,6 +3403,7 @@
         },
         {
           "symbolKey": "office--061--3x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3344,6 +3421,7 @@
         },
         {
           "symbolKey": "office--061--3x4",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3361,6 +3439,7 @@
         },
         {
           "symbolKey": "office--061--3x4",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3383,6 +3462,7 @@
         },
         {
           "symbolKey": "office--061--3x4",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3411,6 +3491,7 @@
         },
         {
           "symbolKey": "medical--007--3x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3435,6 +3516,7 @@
         },
         {
           "symbolKey": "medical--007--3x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3451,6 +3533,7 @@
         },
         {
           "symbolKey": "medical--007--3x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3466,6 +3549,7 @@
         },
         {
           "symbolKey": "medical--007--3x2",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3490,6 +3574,7 @@
         },
         {
           "symbolKey": "medical--008--3x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3505,6 +3590,7 @@
         },
         {
           "symbolKey": "medical--008--3x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3527,6 +3613,7 @@
         },
         {
           "symbolKey": "medical--008--3x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3555,6 +3642,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3572,6 +3660,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3589,6 +3678,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3606,6 +3696,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3623,6 +3714,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3640,6 +3732,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3657,6 +3750,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3674,6 +3768,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 7,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3691,6 +3786,7 @@
         },
         {
           "symbolKey": "lifeboat--small-craft--2x4",
+          "obstacleId": 8,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3708,6 +3804,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3726,6 +3823,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3744,6 +3842,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3762,6 +3861,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3780,6 +3880,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3798,6 +3899,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3816,6 +3918,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3834,6 +3937,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3852,6 +3956,7 @@
         },
         {
           "symbolKey": "machinery--158--1.8x3.6",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3887,6 +3992,7 @@
         },
         {
           "symbolKey": "machinery--156--2x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -3932,6 +4038,7 @@
         },
         {
           "symbolKey": "machinery--155--1.8x3.6",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8377,6 +8484,7 @@
       "obstacles": [
         {
           "symbolKey": "stateroom--012--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8392,6 +8500,7 @@
         },
         {
           "symbolKey": "stateroom--012--2x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8414,6 +8523,7 @@
         },
         {
           "symbolKey": "stateroom--012--2x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8436,6 +8546,7 @@
         },
         {
           "symbolKey": "stateroom--012--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8451,6 +8562,7 @@
         },
         {
           "symbolKey": "stateroom--012--2x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8473,6 +8585,7 @@
         },
         {
           "symbolKey": "stateroom--012--2x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8495,6 +8608,7 @@
         },
         {
           "symbolKey": "office--004--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8517,6 +8631,7 @@
         },
         {
           "symbolKey": "office--004--2x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8546,6 +8661,7 @@
         },
         {
           "symbolKey": "office--004--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8568,6 +8684,7 @@
         },
         {
           "symbolKey": "office--004--2x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8597,6 +8714,7 @@
         },
         {
           "symbolKey": "fresher--036--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8612,6 +8730,7 @@
         },
         {
           "symbolKey": "fresher--036--4x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8640,6 +8759,7 @@
         },
         {
           "symbolKey": "fresher--036--4x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8668,6 +8788,7 @@
         },
         {
           "symbolKey": "fresher--036--4x2",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8696,6 +8817,7 @@
         },
         {
           "symbolKey": "fresher--036--4x2",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8724,6 +8846,7 @@
         },
         {
           "symbolKey": "engineering--045--6x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8739,6 +8862,7 @@
         },
         {
           "symbolKey": "engineering--045--6x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8783,6 +8907,7 @@
         },
         {
           "symbolKey": "engineering--045--6x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8808,6 +8933,7 @@
         },
         {
           "symbolKey": "engineering--045--6x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8830,6 +8956,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8885,6 +9012,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8910,6 +9038,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8935,6 +9064,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8960,6 +9090,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -8985,6 +9116,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9040,6 +9172,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9065,6 +9198,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9090,6 +9224,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9115,6 +9250,7 @@
         },
         {
           "symbolKey": "lab--018--4x4",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9140,6 +9276,7 @@
         },
         {
           "symbolKey": "lab--012--4x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9174,6 +9311,7 @@
         },
         {
           "symbolKey": "lab--012--4x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9200,6 +9338,7 @@
         },
         {
           "symbolKey": "lab--012--4x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9226,6 +9365,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9254,6 +9394,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9280,6 +9421,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9306,6 +9448,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9332,6 +9475,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9360,6 +9504,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9386,6 +9531,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9412,6 +9558,7 @@
         },
         {
           "symbolKey": "lab--023--4x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9438,6 +9585,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9454,6 +9602,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9470,6 +9619,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9486,6 +9636,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9502,6 +9653,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9518,6 +9670,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9534,6 +9687,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9550,6 +9704,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 7,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9565,6 +9720,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 8,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9580,6 +9736,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 9,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9595,6 +9752,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 10,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9610,6 +9768,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 11,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9625,6 +9784,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 12,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9640,6 +9800,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 13,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9655,6 +9816,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 14,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9680,6 +9842,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 15,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9708,6 +9871,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 16,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9735,6 +9899,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 17,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9759,6 +9924,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 18,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9783,6 +9949,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 19,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9807,6 +9974,7 @@
         },
         {
           "symbolKey": "office--074--4x4",
+          "obstacleId": 20,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9831,6 +9999,7 @@
         },
         {
           "symbolKey": "engineering--047--4x7",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9869,6 +10038,7 @@
         },
         {
           "symbolKey": "engineering--047--4x7",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9886,6 +10056,7 @@
         },
         {
           "symbolKey": "engineering--047--4x7",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9903,6 +10074,7 @@
         },
         {
           "symbolKey": "engineering--047--4x7",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9920,6 +10092,7 @@
         },
         {
           "symbolKey": "engineering--047--4x7",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9937,6 +10110,7 @@
         },
         {
           "symbolKey": "engineering--047--4x7",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -9967,6 +10141,7 @@
         },
         {
           "symbolKey": "engineering--047--4x7",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -10013,6 +10188,7 @@
         },
         {
           "symbolKey": "misc-stellar-cartography--020--10x10",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -10079,6 +10255,7 @@
         },
         {
           "symbolKey": "misc-stellar-cartography--020--10x10",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -10101,6 +10278,7 @@
         },
         {
           "symbolKey": "misc-stellar-cartography--020--10x10",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15117,6 +15295,7 @@
       "obstacles": [
         {
           "symbolKey": "bed--003--1x1.6",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15140,6 +15319,7 @@
         },
         {
           "symbolKey": "bed--003--1x1.6",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15162,6 +15342,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15189,6 +15370,7 @@
         },
         {
           "symbolKey": "bed--003--1x1.6",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15212,6 +15394,7 @@
         },
         {
           "symbolKey": "bed--003--1x1.6",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15234,6 +15417,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15261,6 +15445,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15279,6 +15464,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15297,6 +15483,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15324,6 +15511,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15351,6 +15539,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -15369,6 +15558,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 1.6,
           "origPoly": {
             "type": "Polygon",
@@ -15387,6 +15577,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15405,6 +15596,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15423,6 +15615,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15450,6 +15643,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15477,6 +15671,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -15495,6 +15690,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 1.6,
           "origPoly": {
             "type": "Polygon",
@@ -15513,6 +15709,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15531,6 +15728,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15549,6 +15747,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15576,6 +15775,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -15603,6 +15803,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -15621,6 +15822,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 1.6,
           "origPoly": {
             "type": "Polygon",
@@ -15639,6 +15841,7 @@
         },
         {
           "symbolKey": "console--019--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15664,6 +15867,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15682,6 +15886,7 @@
         },
         {
           "symbolKey": "console--019--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15707,6 +15912,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15725,6 +15931,7 @@
         },
         {
           "symbolKey": "misc-stellar-cartography--023--4x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15747,6 +15954,7 @@
         },
         {
           "symbolKey": "misc-stellar-cartography--023--4x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15769,6 +15977,7 @@
         },
         {
           "symbolKey": "misc-stellar-cartography--023--4x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15807,6 +16016,7 @@
         },
         {
           "symbolKey": "bridge--042--8x9",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15830,6 +16040,7 @@
         },
         {
           "symbolKey": "bridge--042--8x9",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15853,6 +16064,7 @@
         },
         {
           "symbolKey": "bridge--042--8x9",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15875,6 +16087,7 @@
         },
         {
           "symbolKey": "bridge--042--8x9",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15906,6 +16119,7 @@
         },
         {
           "symbolKey": "bridge--042--8x9",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -15959,6 +16173,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15977,6 +16192,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -15995,6 +16211,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -16013,6 +16230,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -16031,6 +16249,7 @@
         },
         {
           "symbolKey": "extra--chair--003--0.25x0.25",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16056,6 +16275,7 @@
         },
         {
           "symbolKey": "extra--chair--003--0.25x0.25",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16081,6 +16301,7 @@
         },
         {
           "symbolKey": "extra--desk--004--0.5x1",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16099,6 +16320,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16143,6 +16365,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16171,6 +16394,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16199,6 +16423,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16226,6 +16451,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16253,6 +16479,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16280,6 +16507,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16307,6 +16535,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 7,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16334,6 +16563,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 8,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16361,6 +16591,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 9,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16388,6 +16619,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 10,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16415,6 +16647,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -16433,6 +16666,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -16460,6 +16694,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -16487,6 +16722,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -16514,6 +16750,7 @@
         },
         {
           "symbolKey": "counter--009--0.4x0.4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16532,6 +16769,7 @@
         },
         {
           "symbolKey": "console--031--1x1.2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16560,6 +16798,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -16578,6 +16817,7 @@
         },
         {
           "symbolKey": "console--031--1x1.2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -16606,6 +16846,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -19734,6 +19975,7 @@
       "obstacles": [
         {
           "symbolKey": "office--006--2x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19756,6 +19998,7 @@
         },
         {
           "symbolKey": "office--006--2x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19778,6 +20021,7 @@
         },
         {
           "symbolKey": "office--006--2x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19812,6 +20056,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19837,6 +20082,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19852,6 +20098,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19870,6 +20117,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19898,6 +20146,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19926,6 +20175,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19944,6 +20194,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19961,6 +20212,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 7,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -19983,6 +20235,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 8,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -20005,6 +20258,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 9,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -20032,6 +20286,7 @@
         },
         {
           "symbolKey": "lounge--015--4x2",
+          "obstacleId": 10,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22546,6 +22801,7 @@
       "obstacles": [
         {
           "symbolKey": "303--hull",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22564,6 +22820,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22587,6 +22844,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22610,6 +22868,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22633,6 +22892,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22663,6 +22923,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 5,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22686,6 +22947,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 6,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22709,6 +22971,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 7,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22732,6 +22995,7 @@
         },
         {
           "symbolKey": "303--hull",
+          "obstacleId": 8,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -22755,6 +23019,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -22773,6 +23038,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -22791,6 +23057,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -22818,6 +23085,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -22845,6 +23113,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -22863,6 +23132,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 1.6,
           "origPoly": {
             "type": "Polygon",
@@ -22881,6 +23151,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -22899,6 +23170,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -22917,6 +23189,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -22944,6 +23217,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -22971,6 +23245,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -22989,6 +23264,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 1.6,
           "origPoly": {
             "type": "Polygon",
@@ -23007,6 +23283,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -23025,6 +23302,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -23043,6 +23321,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -23070,6 +23349,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -23097,6 +23377,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -23115,6 +23396,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 1.6,
           "origPoly": {
             "type": "Polygon",
@@ -23133,6 +23415,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -23151,6 +23434,7 @@
         },
         {
           "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
             "type": "Polygon",
@@ -23169,6 +23453,7 @@
         },
         {
           "symbolKey": "extra--fresher--001--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -23196,6 +23481,7 @@
         },
         {
           "symbolKey": "extra--fresher--002--0.5x0.5",
+          "obstacleId": 0,
           "height": 1,
           "origPoly": {
             "type": "Polygon",
@@ -23223,6 +23509,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
             "type": "Polygon",
@@ -23241,6 +23528,7 @@
         },
         {
           "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
           "height": 1.6,
           "origPoly": {
             "type": "Polygon",
@@ -23259,6 +23547,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23276,6 +23565,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23292,6 +23582,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23318,6 +23609,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23342,6 +23634,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23359,6 +23652,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23375,6 +23669,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23401,6 +23696,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23425,6 +23721,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23442,6 +23739,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23458,6 +23756,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23484,6 +23783,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23508,6 +23808,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23525,6 +23826,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23541,6 +23843,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23567,6 +23870,7 @@
         },
         {
           "symbolKey": "stateroom--035--2x3",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23591,6 +23895,7 @@
         },
         {
           "symbolKey": "medical-bed--006--1.6x3.6",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23616,6 +23921,7 @@
         },
         {
           "symbolKey": "medical-bed--006--1.6x3.6",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23633,6 +23939,7 @@
         },
         {
           "symbolKey": "medical-bed--006--1.6x3.6",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23658,6 +23965,7 @@
         },
         {
           "symbolKey": "medical-bed--006--1.6x3.6",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23675,6 +23983,7 @@
         },
         {
           "symbolKey": "medical-bed--006--1.6x3.6",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23700,6 +24009,7 @@
         },
         {
           "symbolKey": "office--089--4x4",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23722,6 +24032,7 @@
         },
         {
           "symbolKey": "office--089--4x4",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23744,6 +24055,7 @@
         },
         {
           "symbolKey": "office--089--4x4",
+          "obstacleId": 2,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23766,6 +24078,7 @@
         },
         {
           "symbolKey": "office--089--4x4",
+          "obstacleId": 3,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23792,6 +24105,7 @@
         },
         {
           "symbolKey": "office--089--4x4",
+          "obstacleId": 4,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23823,6 +24137,7 @@
         },
         {
           "symbolKey": "console--022--1x2",
+          "obstacleId": 0,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
@@ -23851,6 +24166,7 @@
         },
         {
           "symbolKey": "console--022--1x2",
+          "obstacleId": 1,
           "height": 0,
           "origPoly": {
             "type": "Polygon",
