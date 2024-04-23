@@ -20,7 +20,7 @@ import { runYarnScript, saveCanvasAsFile } from './service';
 // sucrase-node needs relative paths
 import { ansi } from "../npc-cli/sh/const";
 import { precision, worldScale } from '../npc-cli/service/const';
-import { info, toPrecision, warn } from '../npc-cli/service/generic';
+import { error, info, toPrecision, warn } from '../npc-cli/service/generic';
 import { drawPolygons } from '../npc-cli/service/dom';
 import { geomorphService } from '../npc-cli/service/geomorph';
 import { Poly } from '../npc-cli/geom';
@@ -176,10 +176,23 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const ct = canvas.getContext('2d');
   
   for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(json.lookup)) {
-    // 🚧 debug
-    drawPolygons(ct, Poly.fromRect({ x, y, width, height }), ['red', null])
-    // 🚧 extract data-url PNG from SVG symbol
-    // ct.drawImage(image, rect.x, rect.y);
+    // drawPolygons(ct, Poly.fromRect({ x, y, width, height }), ['red', null])
+
+    // extract data-url PNG from SVG symbol
+    // 🚧 draw polygonal masked image
+    const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
+    const matched = fs.readFileSync(symbolPath).toString().match(/"data:image\/png(.*)"/);
+    if (matched) {
+      const dataUrl = matched[0].slice(1, -1);
+      const image = await loadImage(dataUrl);
+      const symbol = assets.symbols[symbolKey];
+      const { rect: srcRect } = symbol.obstacles[obstacleId];
+      srcRect.scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
+      ct.drawImage(image, srcRect.x, srcRect.y, srcRect.width, srcRect.height, x, y, width, height);
+      info(`images: drew ${symbolKey}`);
+    } else {
+      error(`${symbolPath}: expected data:image/png inside SVG symbol`);
+    }
   }
 
   const pngPath = path.resolve(assets2dDir, `obstacles.png`);
