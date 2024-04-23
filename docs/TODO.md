@@ -15,7 +15,10 @@
   - ✅ verify by drawing into floor canvas
   - ✅ InstancedMesh with unit XZ plane
     - ✅ show (possibly raised) rects
-  - 🚧 obstacle polys induce sprite-sheet with uv-map
+  - 🚧 obstacles induce sprite-sheet with uv-map
+    - ✅ create sprite-sheet json
+    - 🚧 improve names
+    - 🚧 create sprite-sheet png/webp
   - InstancedMesh uses uvs
 
 - start writing first article
@@ -32,6 +35,7 @@
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 
+- images script avoids recomputing
 - mobile extra space at bottom again (?)
   - probably caused by new sticky header
 - create smaller-pngs.js and compare to https://tinypng.com/

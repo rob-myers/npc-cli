@@ -253,4 +253,10 @@ declare namespace Geomorph {
    */
   type SymbolKey = import('../service/geomorph').SymbolKey;
 
+  interface ObstaclesSpriteSheet {
+    lookup: Record<string, Geom.RectJson & {
+      name: string;
+    }>;
+  }
+
 }

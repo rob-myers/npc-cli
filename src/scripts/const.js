@@ -11,3 +11,5 @@ export const DEV_EXPRESS_WEBSOCKET_PORT = 8012;
 export const ASSETS_JSON_FILENAME = "assets.json";
 
 export const GEOMORPHS_JSON_FILENAME = "geomorphs.json";
+
+export const OBSTACLES_SPRITE_SHEET_JSON_FILENAME = "obstacles.json";
