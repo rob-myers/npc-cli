@@ -337,15 +337,17 @@ class GeomorphService {
   /**
    * Embed a 2D affine transform into three.js XZ plane.
    * @param {Geom.SixTuple} transform
-   * @param {THREE.Matrix4} [mat4]
+   * @param {object} options
+   * @param {number} [options.yScale]
+   * @param {number} [options.yHeight]
+   * @param {THREE.Matrix4} [options.mat4]
    */
-  embedXZMat4(transform, yScale = 1, mat4 = new THREE.Matrix4()) {
-    // prettier-ignore
-    return mat4.set(
-      transform[0], 0,      transform[2], transform[4],
-      0,            yScale, 0,            0,
-      transform[1], 0,      transform[3], transform[5],
-      0,            0,      0,             1
+  embedXZMat4(transform, { yScale, yHeight, mat4 } = {}) {
+    return (mat4 ?? new THREE.Matrix4()).set(
+      transform[0], 0,            transform[2], transform[4],
+      0,            yScale ?? 1,  0,            yHeight ?? 0,
+      transform[1], 0,            transform[3], transform[5],
+      0,            0,            0,             1
     );
   }
 
