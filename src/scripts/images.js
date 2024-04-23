@@ -155,10 +155,8 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   }
 
   const bin = bins[0];
-  const packedWidth = bin.width;
-  const packedHeight = bin.height;
   
-  // Metadata
+  // Create metadata
   /** @type {Geomorph.ObstaclesSpriteSheet} */
   const json = ({ lookup: {} });
   bin.rects.forEach(r => {
@@ -173,28 +171,19 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   });
   fs.writeFileSync(obstaclesSpriteSheetJsonPath, stringify(json));
 
-  // 🚧
-  // Sprite-sheet
+  // Create sprite-sheet
+  const canvas = createCanvas(bin.width, bin.height);
+  const ct = canvas.getContext('2d');
   
-  // // Create PNG, WEBP
-  // for (const [index, filename] of filenames.entries()) {
-  //   const rect = assertDefined(bin.rects.find((x) => x.data.name === filenameToKey(filename)));
-  //   const { svgContents, width, height } = metas[index];
-  
-  //   // transform SVG to specified dimension
-  //   const $ = cheerio.load(svgContents);
-  //   const svgEl = $('svg').first();
-  //   svgEl.attr('width', `${width}`);
-  //   svgEl.attr('height', `${height}`);
-  //   const transformedSvgContents = svgEl.toString();
-  
-  //   // draw image via data url
-  //   const dataUrl = `data:image/svg+xml;utf8,${transformedSvgContents}`;
-  //   const image = await loadImage(dataUrl);
-  //   ctxt.drawImage(image, rect.x, rect.y);
-  // }
-  // await saveCanvasAsFile(canvas, outputPngPath);
-  // await runYarnScript('pngs-to-webp', outputPngPath);
+  for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(json.lookup)) {
+    // 🚧 debug
+    drawPolygons(ct, Poly.fromRect({ x, y, width, height }), ['red', null])
+    // 🚧 extract data-url PNG from SVG symbol
+    // ct.drawImage(image, rect.x, rect.y);
+  }
+
+  const pngPath = path.resolve(assets2dDir, `obstacles.png`);
+  pngToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
 }
 
 /**

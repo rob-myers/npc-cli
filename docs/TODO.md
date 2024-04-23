@@ -21,6 +21,8 @@
     - ✅ one rect per (symbolKey, obstacleId)
     - ✅ packed rects should be in Starship Geomorphs units
     - 🚧 create sprite-sheet png/webp
+      - ✅ draw images as filled squares
+      - extract PNG from SVG symbol
   - InstancedMesh uses uvs
 
 - start writing first article
