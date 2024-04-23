@@ -2,11 +2,12 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { Poly } from "../geom";
+import { Mat } from "../geom";
 import { info, keys } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, worldScale } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
 import { drawPolygons } from "../service/dom";
+import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -52,12 +53,15 @@ export default function TestGeomorphs(props) {
     },
     positionObstacles() {
       const { obsInst } = state;
+      const [mat, mat4] = [tmpMat1, tmpMatFour1];
       let oId = 0;
       api.gms.forEach(({ obstacles, transform: gmTransform }) => {
-        obstacles.forEach(({ origPoly: { rect }, transform }) => {
-          // 🚧 1st transform unit XZ square to rect
-          // 🚧 then apply `transform` followed by `gmTransform`
-          // obsInst.setMatrixAt(oId++, state.getObsMat(u, v, transform))
+        obstacles.forEach(({ origPoly: { rect }, transform, height }) => {
+          // 1st transform unit XZ square to rect
+          // then apply `transform` followed by `gmTransform`
+          mat.feedFromArray([rect.width, 0, 0, rect.height, rect.x, rect.y]);
+          mat.postMultiply(transform).postMultiply(gmTransform);
+          obsInst.setMatrixAt(oId++, geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: height }));
         });
       });
       obsInst.instanceMatrix.needsUpdate = true;
@@ -115,6 +119,7 @@ export default function TestGeomorphs(props) {
       args={[quadGeometryXZ, undefined, state.getNumObs()]}
       frustumCulled={false}
       onPointerUp={state.onClickObstacle}
+      position={[0, 0.001, 0]} // 🚧 temp
     >
       <meshBasicMaterial side={THREE.DoubleSide} color="green" />
     </instancedMesh>
@@ -138,4 +143,6 @@ export default function TestGeomorphs(props) {
  */
 
 const textureLoader = new THREE.TextureLoader();
-const tmpPoly1 = new Poly();
+const tmpMat1 = new Mat();
+const tmpMatFour1 = new THREE.Matrix4();
+

@@ -13,9 +13,9 @@
   - ✅ maintain transform in obstacle.meta
   - ✅ layout.obstacles as { origPoly, transform }
   - ✅ verify by drawing into floor canvas
-  - 🚧 InstancedMesh with unit XZ plane
-    - 🚧 show raised rects
-  - raised obstacle polys induce sprite-sheet with uv-map
+  - ✅ InstancedMesh with unit XZ plane
+    - ✅ show (possibly raised) rects
+  - 🚧 obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
 
 - start writing first article
