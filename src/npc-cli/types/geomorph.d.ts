@@ -167,7 +167,7 @@ declare namespace Geomorph {
     doors: C[];
     hullDoors: C[];
     hullPoly: P[];
-    obstacles: { origPoly: P; transform: Geom.SixTuple; }[];
+    obstacles: LayoutObstacleGeneric<P>[];
     rooms: P[];
     walls: P[];
     windows: C[];
@@ -188,6 +188,21 @@ declare namespace Geomorph {
     wallSegs: [Geom.Vect, Geom.Vect][];
     doorSegs: [Geom.Vect, Geom.Vect][];
   }
+
+  /**
+   * - Given `origPoly` and `symbolKey` we can extract the respective part of the symbol's PNG.
+   * - Applying `transform` to `origPoly` yields the polygon within geomorph space.
+   */
+  interface LayoutObstacleGeneric<
+    P extends Geom.GeoJsonPolygon | Geom.Poly,
+  > {
+    symbolKey: SymbolKey;
+    height: number;
+    origPoly: P;
+    transform: Geom.SixTuple;
+  }
+
+  type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
 
   //#region decor
 

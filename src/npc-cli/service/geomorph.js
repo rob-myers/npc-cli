@@ -187,11 +187,16 @@ class GeomorphService {
       doors,
       hullPoly,
       hullDoors: doors.filter(x => x.meta.hull),
-      // 🚧 different format
-      obstacles: symbol.obstacles.map(o => ({
-        origPoly: assets.symbols[/** @type {Geomorph.SymbolKey} */ (o.meta.symKey)].obstacles[o.meta.obsId],
-        transform: o.meta.transform ?? [1, 0, 0, 1, 0, 0],
-      })),
+      obstacles: symbol.obstacles.map(o => {
+        const symbolKey = /** @type {Geomorph.SymbolKey} */ (o.meta.symKey);
+        const origPoly = assets.symbols[symbolKey].obstacles[o.meta.obsId];
+        return {
+          symbolKey,
+          origPoly,
+          height: typeof o.meta.y === 'number' ? o.meta.y : 0,
+          transform: o.meta.transform ?? [1, 0, 0, 1, 0, 0],
+        };
+      }),
       rooms: rooms.map(x => x.precision(precision)),
       walls: cutWalls.map(x => x.precision(precision)),
       windows,
@@ -287,6 +292,8 @@ class GeomorphService {
       hullPoly: json.hullPoly.map(x => Poly.from(x)),
       hullDoors: doors.filter(x => x.meta.hull),
       obstacles: json.obstacles.map(x => ({
+        symbolKey: x.symbolKey,
+        height: x.height,
         origPoly: Poly.from(x.origPoly),
         transform: x.transform,
       })),
@@ -919,7 +926,12 @@ class GeomorphService {
       doors: layout.doors.map(x => x.json),
       hullDoors: layout.hullDoors.map((x) => x.json),
       hullPoly: layout.hullPoly.map(x => x.geoJson),
-      obstacles: layout.obstacles.map(x => ({ origPoly: x.origPoly.geoJson, transform: x.transform })),
+      obstacles: layout.obstacles.map(x => ({
+        symbolKey: x.symbolKey,
+        height: x.height,
+        origPoly: x.origPoly.geoJson,
+        transform: x.transform,
+      })),
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),
       windows: layout.windows.map((x) => x.json),

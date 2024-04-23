@@ -2,16 +2,6 @@
 
 ## WIP
 
-- ✅ Restart TestCharacter: animation, no physics
-  - ✅ clean away `@react-three/rapier`
-  - ✅ show custom character FBX
-  - ✅ scale character to desired height
-  - ✅ import FBX into Blender and export as GLTF
-    - ✅ install blender 4.1 (latest)
-  - ✅ download three FBX animations from mixamo and somehow load into GLTF
-    - show a Mixamo animation (use Blender to combine animations)
-    - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
-
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
@@ -24,7 +14,7 @@
   - ✅ layout.obstacles as { origPoly, transform }
   - ✅ verify by drawing into floor canvas
   - 🚧 InstancedMesh with unit XZ plane
-    - show raised rects
+    - 🚧 show raised rects
   - raised obstacle polys induce sprite-sheet with uv-map
   - InstancedMesh uses uvs
 
@@ -793,3 +783,13 @@ React.useEffect(() => {
   some context will help e.g. The Last Redoubt
   
 - ❌ show tables via raised "floor texture"
+
+- ✅ Restart TestCharacter: animation, no physics
+  - ✅ clean away `@react-three/rapier`
+  - ✅ show custom character FBX
+  - ✅ scale character to desired height
+  - ✅ import FBX into Blender and export as GLTF
+    - ✅ install blender 4.1 (latest)
+  - ✅ download three FBX animations from mixamo and somehow load into GLTF
+    - show a Mixamo animation (use Blender to combine animations)
+    - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
