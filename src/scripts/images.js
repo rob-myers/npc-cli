@@ -185,16 +185,23 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
     // drawPolygons(ct, Poly.fromRect({ x, y, width, height }), ['red', null])
 
     // extract data-url PNG from SVG symbol
-    // 🚧 draw polygonal masked image
+    // 🚧 try inverted polygon to avoid red shading
     const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
     const matched = fs.readFileSync(symbolPath).toString().match(/"data:image\/png(.*)"/);
     if (matched) {
       const dataUrl = matched[0].slice(1, -1);
       const image = await loadImage(dataUrl);
       const symbol = assets.symbols[symbolKey];
-      const { rect: srcRect } = symbol.obstacles[obstacleId];
-      srcRect.scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
-      ct.drawImage(image, srcRect.x, srcRect.y, srcRect.width, srcRect.height, x, y, width, height);
+      const scale = (1 / worldScale) * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
+      
+      const srcPoly = symbol.obstacles[obstacleId].clone();
+      const srcRect = srcPoly.rect;
+      const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
+      const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
+      drawPolygons(ct, dstPngPoly, ['red', null]);
+      ct.globalCompositeOperation = 'source-atop';
+      ct.drawImage(image, srcPngRect.x, srcPngRect.y, srcPngRect.width, srcPngRect.height, x, y, width, height);
+      ct.globalCompositeOperation = 'source-over';
       info(`images: drew ${symbolKey}`);
     } else {
       error(`${symbolPath}: expected data:image/png inside SVG symbol`);
