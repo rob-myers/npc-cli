@@ -19,6 +19,7 @@ export default function TestGeomorphs(props) {
   const api = React.useContext(TestWorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    extendedQuadGeometryXZ: quadGeometryXZ.clone(),
     obsInst: /** @type {*} */ (null),
 
     drawGeomorph(gmKey, img) {
@@ -84,6 +85,13 @@ export default function TestGeomorphs(props) {
   });
 
   React.useEffect(() => {
+    // 🚧 8 per instance i.e. (gmId, obstacleId) -> spritesheet subrect of [0, 1] ⨉ [0, 1]
+    const uvOffsets = /** @type {number[]} */ ([]);
+    state.extendedQuadGeometryXZ.setAttribute(
+      'myInstanceUvs',
+      new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 * 4 ),
+    );
+
     state.positionObstacles();
   }, [api.mapKey, api.mapsHash, api.layoutsHash]);
 
@@ -134,6 +142,7 @@ export default function TestGeomorphs(props) {
 
 /**
  * @typedef State
+ * @property {THREE.BufferGeometry} extendedQuadGeometryXZ
  * @property {THREE.InstancedMesh} obsInst
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
  * @property {(o: Geomorph.LayoutObstacle) => THREE.Matrix4} getObsMat
@@ -145,4 +154,3 @@ export default function TestGeomorphs(props) {
 const textureLoader = new THREE.TextureLoader();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
-

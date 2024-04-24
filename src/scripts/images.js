@@ -185,7 +185,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
     // drawPolygons(ct, Poly.fromRect({ x, y, width, height }), ['red', null])
 
     // extract data-url PNG from SVG symbol
-    // 🚧 try inverted polygon to avoid red shading
+
     const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
     const matched = fs.readFileSync(symbolPath).toString().match(/"data:image\/png(.*)"/);
     if (matched) {
@@ -202,7 +202,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
        * 🔔 draws white under obstacle even when original transparent,
        * e.g. misc-stellar-cartography--020--10x10
        * 
-       * Alternatively we need to aggregate and cut-out.
+       * Alternatively draw polys first, then copy image over.
        */
       drawPolygons(ct, dstPngPoly, ['white', null]);
       ct.globalCompositeOperation = 'source-atop';
