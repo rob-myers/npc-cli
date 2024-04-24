@@ -198,7 +198,13 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
       const srcRect = srcPoly.rect;
       const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
       const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
-      drawPolygons(ct, dstPngPoly, ['red', null]);
+      /**
+       * 🔔 draws white under obstacle even when original transparent,
+       * e.g. misc-stellar-cartography--020--10x10
+       * 
+       * Alternatively we need to aggregate and cut-out.
+       */
+      drawPolygons(ct, dstPngPoly, ['white', null]);
       ct.globalCompositeOperation = 'source-atop';
       ct.drawImage(image, srcPngRect.x, srcPngRect.y, srcPngRect.width, srcPngRect.height, x, y, width, height);
       ct.globalCompositeOperation = 'source-over';
