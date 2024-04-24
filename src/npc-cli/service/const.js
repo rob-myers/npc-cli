@@ -15,6 +15,9 @@ export const FLOOR_IMAGES_QUERY_KEY = 'draw-floors';
  */
 export const worldScale = (1 / 60) * 1.5;
 
+/** Can be any value in `[1, 5]`. */
+export const spriteSheetNonHullExtraScale = 2.5;
+
 /** Decimal place precision */
 export const precision = 4;
 

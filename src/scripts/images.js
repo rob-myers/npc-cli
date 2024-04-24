@@ -14,12 +14,11 @@ import { createCanvas, loadImage } from 'canvas';
 import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 import stringify from 'json-stringify-pretty-compact';
 
+// sucrase-node needs relative paths
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, OBSTACLES_SPRITE_SHEET_JSON_FILENAME } from './const';
 import { runYarnScript, saveCanvasAsFile } from './service';
-
-// sucrase-node needs relative paths
 import { ansi } from "../npc-cli/sh/const";
-import { precision, worldScale } from '../npc-cli/service/const';
+import { spriteSheetNonHullExtraScale, worldScale,  } from '../npc-cli/service/const';
 import { error, info, toPrecision, warn } from '../npc-cli/service/generic';
 import { drawPolygons } from '../npc-cli/service/dom';
 import { geomorphService } from '../npc-cli/service/geomorph';
@@ -122,12 +121,18 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const rectsToPackLookup = {};
 
   // Each symbol obstacle induces a packed rect
-  for (const { key: symbolKey, obstacles } of Object.values(assets.symbols)) {
-    /** Scale from world coords to Starship Geomorph coords (hull symbol coords)  */
-    const scale = 1 / worldScale;
+  for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
+    /**
+     * Scale from world coords to Starship Geomorph coords,
+     * and additionally scale up for non-hull symbols.
+     * We can additionally scale up by any `1 ≤ x ≤ 5`,
+     * making use of the larger size of non-hull symbols.
+     */
+    const scale = (1 / worldScale) * (isHull ? 1 : spriteSheetNonHullExtraScale);
 
     for (const [obstacleId, poly] of obstacles.entries()) {
-      const rect = poly.rect.scale(scale).precision(precision);
+      // width, height should be integers
+      const rect = poly.rect.scale(scale).precision(0);
       const [width, height] = [rect.width, rect.height]
       
       const r = new Rectangle(width, height);
@@ -149,6 +154,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const { bins } = packer;
 
   if (bins.length !== 1) {// 🔔 support more than one sprite-sheet
+    // warn(`images: expected exactly one bin (${bins.length})`);
     throw Error(`images: expected exactly one bin (${bins.length})`);
   } else if (bins[0].rects.length !== rectsToPack.length) {
     throw Error(`images: expected every image to be packed (${bins.length} of ${rectsToPack.length})`);
