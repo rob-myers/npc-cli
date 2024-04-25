@@ -12,4 +12,4 @@ export const ASSETS_JSON_FILENAME = "assets.json";
 
 export const GEOMORPHS_JSON_FILENAME = "geomorphs.json";
 
-export const OBSTACLES_SPRITE_SHEET_JSON_FILENAME = "obstacles.json";
+export const SPRITE_SHEET_JSON_FILENAME = "spritesheet.json";

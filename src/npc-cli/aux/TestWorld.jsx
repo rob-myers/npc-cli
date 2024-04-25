@@ -166,11 +166,9 @@ export default function TestWorld(props) {
 
   const { data: geomorphs } = useQuery({
     queryKey: [GEOMORPHS_JSON_FILENAME],
-    queryFn: async () => {
-      /** @type {Geomorph.GeomorphsJson} */
-      const json = await fetch(`/assets/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json());
-      return geomorphService.deserializeGeomorphs(json);
-    },
+    queryFn: async () =>
+      geomorphService.deserializeGeomorphs(await fetch(`/assets/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json()))
+    ,
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
     // throwOnError: true, // breaks on restart dev env
   });

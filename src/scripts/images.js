@@ -15,11 +15,11 @@ import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 import stringify from 'json-stringify-pretty-compact';
 
 // sucrase-node needs relative paths
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, OBSTACLES_SPRITE_SHEET_JSON_FILENAME } from './const';
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from './const';
 import { runYarnScript, saveCanvasAsFile } from './service';
 import { ansi } from "../npc-cli/sh/const";
 import { spriteSheetNonHullExtraScale, worldScale,  } from '../npc-cli/service/const';
-import { error, info, toPrecision, warn } from '../npc-cli/service/generic';
+import { error, hashText, info, toPrecision, warn } from '../npc-cli/service/generic';
 import { drawPolygons } from '../npc-cli/service/dom';
 import { geomorphService } from '../npc-cli/service/geomorph';
 import { Poly } from '../npc-cli/geom';
@@ -28,9 +28,9 @@ const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
 const symbolsDir = path.resolve(mediaDir, "symbol");
 const assets2dDir = path.resolve(staticAssetsDir, "2d");
-const assetsJson = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
-const geomorphsJson = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
-const obstaclesSpriteSheetJsonPath = path.resolve(staticAssetsDir, OBSTACLES_SPRITE_SHEET_JSON_FILENAME);
+const assetsJsonPath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+const geomorphsJsonPath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
+const spriteSheetJsonPath = path.resolve(staticAssetsDir, SPRITE_SHEET_JSON_FILENAME);
 /** e.g. 1.5m --> 60sgu (Starship Geomorph Units) */
 const worldToSgu = 1 / worldScale;
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
@@ -45,13 +45,19 @@ const opts = {
 (async function main() {
   fs.mkdirSync(assets2dDir, { recursive: true }); // ensure output directory
 
-  const assets = geomorphService.deserializeAssets(JSON.parse(fs.readFileSync(assetsJson).toString()));
-  const geomorphs = geomorphService.deserializeGeomorphs(JSON.parse(fs.readFileSync(geomorphsJson).toString()));
+  const assets = geomorphService.deserializeAssets(JSON.parse(fs.readFileSync(assetsJsonPath).toString()));
+  const geomorphs = geomorphService.deserializeGeomorphs(JSON.parse(fs.readFileSync(geomorphsJsonPath).toString()));
   const pngToProm = /** @type {{ [pngPath: string]: Promise<any> }} */ ({});
 
   await drawFloorImages(geomorphs, pngToProm);
 
-  await drawObstacleSpritesheets(assets, pngToProm);
+  const sheet = await drawObstacleSpritesheets(assets, pngToProm);
+
+  // update geomorphs.json
+  geomorphs.sheetsHash = hashText(JSON.stringify(sheet));
+  geomorphs.sheet = sheet;
+  fs.writeFileSync(geomorphsJsonPath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
+
 
   await Promise.all(Object.values(pngToProm));
 
@@ -114,6 +120,7 @@ async function drawFloorImages(geomorphs, pngToProm) {
 /**
  * @param {Geomorph.Assets} assets 
  * @param {{ [pngPath: string]: Promise<any> }} pngToProm 
+ * @returns {Promise<Geomorph.SpriteSheetMeta>}
  */
 async function drawObstacleSpritesheets(assets, pngToProm) {
 
@@ -163,11 +170,11 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const bin = bins[0];
   
   // Create metadata
-  /** @type {Geomorph.ObstaclesSpriteSheet} */
-  const json = ({ lookup: {} });
+  /** @type {Geomorph.SpriteSheetMeta} */
+  const json = ({ obstacle: {} });
   bin.rects.forEach(r => {
     const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
-    json.lookup[`${symbolKey} ${obstacleId}`] = {
+    json.obstacle[`${symbolKey} ${obstacleId}`] = {
       x: toPrecision(r.x),
       y: toPrecision(r.y),
       width: r.width,
@@ -175,13 +182,13 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
       symbolKey, obstacleId, type,
     }
   });
-  fs.writeFileSync(obstaclesSpriteSheetJsonPath, stringify(json));
+  fs.writeFileSync(spriteSheetJsonPath, stringify(json));
 
   // Create sprite-sheet
   const canvas = createCanvas(bin.width, bin.height);
   const ct = canvas.getContext('2d');
   
-  for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(json.lookup)) {
+  for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(json.obstacle)) {
     // extract data-url PNG from SVG symbol
     const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
     const matched = fs.readFileSync(symbolPath).toString().match(/"data:image\/png(.*)"/);
@@ -208,6 +215,8 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
 
   const pngPath = path.resolve(assets2dDir, `obstacles.png`);
   pngToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
+
+  return json;
 }
 
 /**

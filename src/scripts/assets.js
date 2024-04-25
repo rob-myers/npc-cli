@@ -20,7 +20,7 @@ import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 
 // relative urls for sucrase-node
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from "./const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
@@ -33,6 +33,7 @@ const mapsDir = path.resolve(mediaDir, "map");
 const symbolsDir = path.resolve(mediaDir, "symbol");
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
+const spriteSheetFilepath = path.resolve(staticAssetsDir, SPRITE_SHEET_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
 const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
@@ -92,12 +93,20 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
 
   const layout = keyedItemsToLookup(newLayouts);
 
+  /** @type {Geomorph.SpriteSheetMeta | null} */
+  const currSheet = fs.existsSync(spriteSheetFilepath) ? JSON.parse(fs.readFileSync(spriteSheetFilepath).toString()) : null;
+  if (currSheet === null) {
+    warn(`sprite-sheet not found: geomorphs.sheet will be empty`);
+  }
+
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
     mapsHash: hashText(JSON.stringify(assetsJson.maps)),
     layoutsHash: hashText(JSON.stringify(layout)),
+    sheetsHash: currSheet ? hashText(JSON.stringify(currSheet)) : 0,
     map: assetsJson.maps,
     layout,
+    sheet: currSheet ?? { obstacle: {} },
   };
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
 

@@ -50,8 +50,10 @@ declare namespace Geomorph {
   > {
     mapsHash: number;
     layoutsHash: number;
+    sheetsHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
+    sheet: SpriteSheetMeta;
   }
 
   type Geomorphs = GeomorphsGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
@@ -259,12 +261,12 @@ declare namespace Geomorph {
    */
   type SymbolKey = import('../service/geomorph').SymbolKey;
 
-  interface ObstaclesSpriteSheet {
+  interface SpriteSheetMeta {
     /**
      * - key has format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu)
      */
-    lookup: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & SymbolObstacleContext>;
+    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & SymbolObstacleContext>;
   }
 
   interface SymbolObstacleContext {
