@@ -1,7 +1,7 @@
 {
   "mapsHash": 1563462381,
   "layoutsHash": 1946912675,
-  "sheetsHash": 1137079082,
+  "sheetsHash": 784266489,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -28433,6 +28433,8 @@
         "obstacleId": 8,
         "type": "chair"
       }
-    }
+    },
+    "obstaclesHeight": 2246,
+    "obstaclesWidth": 2280
   }
 }

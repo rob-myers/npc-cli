@@ -171,7 +171,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   
   // Create metadata
   /** @type {Geomorph.SpriteSheetMeta} */
-  const json = ({ obstacle: {} });
+  const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
   bin.rects.forEach(r => {
     const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
     json.obstacle[`${symbolKey} ${obstacleId}`] = {

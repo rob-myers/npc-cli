@@ -1674,5 +1674,7 @@
       "obstacleId": 8,
       "type": "chair"
     }
-  }
+  },
+  "obstaclesHeight": 2246,
+  "obstaclesWidth": 2280
 }

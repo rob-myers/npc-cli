@@ -106,7 +106,7 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
     sheetsHash: currSheet ? hashText(JSON.stringify(currSheet)) : 0,
     map: assetsJson.maps,
     layout,
-    sheet: currSheet ?? { obstacle: {} },
+    sheet: currSheet ?? { obstacle: {}, obstaclesHeight: 0, obstaclesWidth: 0 },
   };
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
 

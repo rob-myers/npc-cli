@@ -263,10 +263,12 @@ declare namespace Geomorph {
 
   interface SpriteSheetMeta {
     /**
-     * - key has format `{symbolKey} ${obstacleId}`
-     * - `rect` in Starship Geomorphs Units (sgu)
+     * - key format `{symbolKey} ${obstacleId}`
+     * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
     obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & SymbolObstacleContext>;
+    obstaclesWidth: number;
+    obstaclesHeight: number;
   }
 
   interface SymbolObstacleContext {
