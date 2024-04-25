@@ -20,13 +20,12 @@
     - ✅ name -> { symbolKey, obstacleKey, type }
     - ✅ one rect per (symbolKey, obstacleId)
     - ✅ packed rects should be in Starship Geomorphs units
-    - 🚧 create sprite-sheet png/webp
+    - ✅ create sprite-sheet png/webp
       - ✅ draw images as filled squares
       - ✅ extract PNG from SVG symbol
       - ✅ packed rects scale x2.5 for non-hull symbols
       - ✅ extract polygonal mask
-      - 🚧 avoid drawing white poly underneath
-        - ℹ️ copy image to another canvas so can "cut out at once"
+      - ✅ avoid drawing white poly underneath
   - 🚧 InstancedMesh uses uvs
     - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
     - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4

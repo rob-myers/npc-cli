@@ -6,8 +6,9 @@
  * @param {CanvasContext2DType} ctxt
  * @param {Geom.Poly | Geom.Poly[]} polys
  * @param {[fillStyle?: string | null, strokeStyle?: string | null, lineWidth?: number | null]} [style]
+ * @param {false | 'clip'} [clip]
  */
-export function drawPolygons(ctxt, polys, [fillStyle, strokeStyle, lineWidth] = []) {
+export function drawPolygons(ctxt, polys, [fillStyle, strokeStyle, lineWidth] = [], clip = false) {
   polys = Array.isArray(polys) ? polys : [polys];
   ctxt.fillStyle = fillStyle || ctxt.fillStyle;
   ctxt.strokeStyle = strokeStyle || ctxt.strokeStyle;
@@ -18,7 +19,7 @@ export function drawPolygons(ctxt, polys, [fillStyle, strokeStyle, lineWidth] = 
     for (const hole of poly.holes) {
       fillRing(ctxt, hole, false);
     }
-    fillStyle !== null && ctxt.fill();
+    fillStyle !== null && clip === false ? ctxt.fill() : ctxt.clip();
     strokeStyle !== null && ctxt.stroke();
   }
 }

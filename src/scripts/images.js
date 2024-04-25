@@ -1,7 +1,7 @@
 /**
  * Create:
- * - one floor images per geomorph
- * - obstacle sprite-sheet (over all geomorphs)
+ * - a floor image for each geomorph
+ * - an obstacle sprite-sheet
  * 
  * Usage
  * - npm run images
@@ -198,16 +198,11 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
       const srcRect = srcPoly.rect;
       const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
       const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
-      /**
-       * 🔔 draws white under obstacle even when original transparent,
-       * e.g. misc-stellar-cartography--020--10x10
-       * 
-       * Alternatively draw polys first, then copy image over.
-       */
-      drawPolygons(ct, dstPngPoly, ['white', null]);
-      ct.globalCompositeOperation = 'source-atop';
+
+      ct.save();
+      drawPolygons(ct, dstPngPoly, ['white', null], 'clip');
       ct.drawImage(image, srcPngRect.x, srcPngRect.y, srcPngRect.width, srcPngRect.height, x, y, width, height);
-      ct.globalCompositeOperation = 'source-over';
+      ct.restore();
       info(`images: drew ${symbolKey}`);
     } else {
       error(`${symbolPath}: expected data:image/png inside SVG symbol`);
