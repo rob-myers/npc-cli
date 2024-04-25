@@ -1,6 +1,7 @@
 import React from "react";
 import * as THREE from "three";
-import { useTexture } from "@react-three/drei";
+import { extend } from "@react-three/fiber";
+import { useTexture, shaderMaterial } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
 import { Mat } from "../geom";
@@ -14,6 +15,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
 import meshInstanceUvsVertexShader from "!!raw-loader!../glsl/mesh-instance-uvs.v.glsl";
+import meshBasicVertexShader from "!!raw-loader!../glsl/mesh-basic.v.glsl";
 import meshBasicFragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
 
 /**
@@ -108,12 +110,13 @@ export default function TestGeomorphs(props) {
     },
   });
 
-  const instHash = `${api.mapKey} ${api.mapsHash} ${api.layoutsHash} ${obstaclesShaderHash}`
-
+  const instHash = `${api.mapKey} ${api.mapsHash} ${api.layoutsHash}`
+  
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [instHash]);
+
+  }, [instHash, shaderMaterial]);
 
   const update = useUpdate();
 
@@ -142,6 +145,17 @@ export default function TestGeomorphs(props) {
       </group>
     ))}
 
+    <mesh position={[0, 4, 0]}>
+      <planeGeometry />
+      <obstacleShaderMaterial
+        key={ObstacleShaderMaterial.key}
+        side={THREE.DoubleSide}
+        // diffuse={new THREE.Vector3(1, 0, 1)}
+        //@ts-expect-error
+        map={debugTex}
+      />
+    </mesh>
+
     <instancedMesh
       name="static-obstacles"
       key={instHash}
@@ -151,17 +165,16 @@ export default function TestGeomorphs(props) {
       onPointerUp={state.onClickObstacle}
       position={[0, 0.001, 0]} // 🚧 temp
     >
-      {/* <meshBasicMaterial
+      <meshBasicMaterial
         side={THREE.DoubleSide}
-        // color="green"
+        map={debugTex}
+      />
+      {/* <obstacleShaderMaterial
+        key={ObstacleShaderMaterial.key}
+        side={THREE.DoubleSide}
+        // diffuse={new THREE.Vector3(1, 0, 1)}
         map={debugTex}
       /> */}
-      <shaderMaterial
-        side={THREE.DoubleSide}
-        vertexShader={meshInstanceUvsVertexShader}
-        fragmentShader={meshBasicFragmentShader}
-        uniforms={uniforms}
-      />
     </instancedMesh>
   </>
   
@@ -188,8 +201,29 @@ const textureLoader = new THREE.TextureLoader();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
 
+const ObstacleShaderMaterial = shaderMaterial(
+  {
+    // 🚧
+    // diffuse: new THREE.Vector3(1, 1, 0),
+    map: null,
+  },
+  // meshBasicVertexShader,
+  /*glsl*/`
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewPosition; 
+  }
+  `,
+  // meshBasicFragmentShader,
+  /*glsl*/`
+  varying vec2 vUv;
+  uniform sampler2D map;
+  void main() {
+    gl_FragColor = texture2D( map, vUv );
+  }
+  `
+);
 
-const uniforms = {// Debug
-  diffuse: { value: new THREE.Vector3(0, 0, 1) },
-};
-const obstaclesShaderHash = hashJson({ meshInstanceUvsVertexShader, meshBasicFragmentShader, uniforms });
+extend({ ObstacleShaderMaterial });

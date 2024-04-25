@@ -36,6 +36,9 @@
     - ✅ compute uvs for every obstacle in world (untested)
     - 🚧 try attach uvs in vertex shader
       - ✅ get custom shader working in same way as meshStandardMaterial
+      - ✅ get `map` working in a custom shader (non-instanced mesh)
+        - https://stackoverflow.com/questions/59448702/map-image-as-texture-to-plane-in-a-custom-shader-in-three-js
+      - 🚧 get `map` working in custom shader based on meshBasicMaterial (non-instanced mesh)
       - provide uvOffsets, uvDimensions as uniforms to vertex shader
       - vertex shader modifies uvs based on uniforms
 
