@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { damp } from "maath/easing"
 
-import { hashText, info } from "../service/generic";
+import { hashJson, info } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -126,7 +126,7 @@ export default function TestWallsAndDoors(props) {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
-  }, [api.mapKey, api.mapsHash, api.layoutsHash]);
+  }, [api.mapKey, api.mapsHash, api.layoutsHash, doorShaderHash]);
 
   return (
     <>
@@ -153,7 +153,7 @@ export default function TestWallsAndDoors(props) {
           side={THREE.DoubleSide}
           vertexShader={basicVertexShader}
           fragmentShader={gradientFragmentShader}
-          uniforms={uniforms}
+          // uniforms={uniforms}
         />
       </instancedMesh>
     </>
@@ -190,15 +190,4 @@ const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
 const tmpMatFour2 = new THREE.Matrix4();
 
-const uniforms = {
-  diffuse: { value: new THREE.Vector3(1, 1, 0) },
-  opacity: { value: 1 },
-};
-
-const doorShaderHash = hashText(
-  JSON.stringify({
-    basicVertexShader,
-    gradientFragmentShader,
-    uniforms,
-  })
-);
+const doorShaderHash = hashJson({ basicVertexShader, gradientFragmentShader });

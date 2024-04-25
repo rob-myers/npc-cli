@@ -136,6 +136,18 @@ export function equals(x, y, depth = 0) {
 }
 
 /**
+ * Returns a hash code from serializable object
+ * - `prettyCompact` is useful when it corresponds to file contents
+ * @param  {any} json A serializable object
+ * @return {number} A 32bit integer
+ * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+ * @see https://stackoverflow.com/a/8831937/2917822
+ */
+export function hashJson(json, pretty = true) {
+  return hashText((pretty ? prettyCompact : JSON.stringify)(json));
+}
+
+/**
  * Returns a hash code from a string
  * @param  {string} str The string to hash.
  * @return {number} A 32bit integer

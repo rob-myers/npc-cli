@@ -4,7 +4,7 @@ import { useTexture } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
 import { Mat } from "../geom";
-import { info, keys } from "../service/generic";
+import { hashJson, info, keys } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, worldScale } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
 import { drawPolygons } from "../service/dom";
@@ -12,6 +12,9 @@ import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+
+import meshInstanceUvsVertexShader from "!!raw-loader!../glsl/mesh-instance-uvs.v.glsl";
+import meshBasicFragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
 
 /**
  * @param {Props} props
@@ -105,10 +108,12 @@ export default function TestGeomorphs(props) {
     },
   });
 
+  const instHash = `${api.mapKey} ${api.mapsHash} ${api.layoutsHash} ${obstaclesShaderHash}`
+
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [api.mapKey, api.mapsHash, api.layoutsHash]);
+  }, [instHash]);
 
   const update = useUpdate();
 
@@ -139,17 +144,23 @@ export default function TestGeomorphs(props) {
 
     <instancedMesh
       name="static-obstacles"
-      key={`${api.mapsHash} ${api.layoutsHash}`}
+      key={instHash}
       ref={instances => instances && (state.obsInst = instances)}
       args={[quadGeometryXZ, undefined, state.getNumObs()]}
       frustumCulled={false}
       onPointerUp={state.onClickObstacle}
       position={[0, 0.001, 0]} // 🚧 temp
     >
-      <meshBasicMaterial
+      {/* <meshBasicMaterial
         side={THREE.DoubleSide}
         // color="green"
         map={debugTex}
+      /> */}
+      <shaderMaterial
+        side={THREE.DoubleSide}
+        vertexShader={meshInstanceUvsVertexShader}
+        fragmentShader={meshBasicFragmentShader}
+        uniforms={uniforms}
       />
     </instancedMesh>
   </>
@@ -176,3 +187,9 @@ export default function TestGeomorphs(props) {
 const textureLoader = new THREE.TextureLoader();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
+
+
+const uniforms = {// Debug
+  diffuse: { value: new THREE.Vector3(0, 0, 1) },
+};
+const obstaclesShaderHash = hashJson({ meshInstanceUvsVertexShader, meshBasicFragmentShader, uniforms });

@@ -27,19 +27,17 @@
       - ✅ extract polygonal mask
       - ✅ avoid drawing white poly underneath
   - 🚧 InstancedMesh uses uvs
+    - https://discourse.threejs.org/t/sprite-instancing-with-uv-mapping/17234/2
+    - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
+    - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4
     - ✅ single image applied to every instance
     - ✅ assets script includes `spritesheet.json` in `geomorphs.json`
     - ✅ images script mutates `geomorphs.json`
     - ✅ compute uvs for every obstacle in world (untested)
     - 🚧 try attach uvs in vertex shader
-    - https://discourse.threejs.org/t/sprite-instancing-with-uv-mapping/17234/2
-    - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
-    - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4
-    - simulate `map_fragment` i.e. this:
-      ```glsl
-      vec4 sampledDiffuseColor = texture2D( map, vMapUv );
-      diffuseColor *= sampledDiffuseColor;
-      ```
+      - ✅ get custom shader working in same way as meshStandardMaterial
+      - provide uvOffsets, uvDimensions as uniforms to vertex shader
+      - vertex shader modifies uvs based on uniforms
 
 
 - 🚧 HMR issues
