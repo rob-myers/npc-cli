@@ -1,5 +1,6 @@
 import React from "react";
 import * as THREE from "three";
+import { useTexture } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
 import { Mat } from "../geom";
@@ -36,6 +37,26 @@ export default function TestGeomorphs(props) {
         drawPolygons(ctxt, [origPoly], ['red', null]);
       });
       ctxt.resetTransform();
+    },
+    addObstacleUvs() {
+      const { obstacle: obstaclesSheet, obstaclesWidth, obstaclesHeight } = api.geomorphs.sheet;
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
+  
+      api.gms.forEach(({ obstacles }) =>
+        obstacles.forEach(({ symbolKey, obstacleId }) => {
+          const { x, y, width, height } = obstaclesSheet[`${symbolKey} ${obstacleId}`];
+          uvOffsets.push(x / obstaclesWidth, y / obstaclesWidth);
+          uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
+        })
+      );
+
+      state.extendedQuadGeometryXZ.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      );
+      state.extendedQuadGeometryXZ.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
     },
     getNumObs() {
       return api.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
@@ -85,17 +106,13 @@ export default function TestGeomorphs(props) {
   });
 
   React.useEffect(() => {
-    // 🚧 8 per instance i.e. (gmId, obstacleId) -> spritesheet subrect of [0, 1] ⨉ [0, 1]
-    const uvOffsets = /** @type {number[]} */ ([]);
-    state.extendedQuadGeometryXZ.setAttribute(
-      'myInstanceUvs',
-      new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 * 4 ),
-    );
-
+    state.addObstacleUvs();
     state.positionObstacles();
   }, [api.mapKey, api.mapsHash, api.layoutsHash]);
 
   const update = useUpdate();
+
+  const debugTex = useTexture('/assets/debug/test-uv-texture.png');
 
   return <>
     {api.gms.map((gm, gmId) => (
@@ -129,7 +146,11 @@ export default function TestGeomorphs(props) {
       onPointerUp={state.onClickObstacle}
       position={[0, 0.001, 0]} // 🚧 temp
     >
-      <meshBasicMaterial side={THREE.DoubleSide} color="green" />
+      <meshBasicMaterial
+        side={THREE.DoubleSide}
+        // color="green"
+        map={debugTex}
+      />
     </instancedMesh>
   </>
   
@@ -144,6 +165,7 @@ export default function TestGeomorphs(props) {
  * @typedef State
  * @property {THREE.BufferGeometry} extendedQuadGeometryXZ
  * @property {THREE.InstancedMesh} obsInst
+ * @property {() => void} addObstacleUvs
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
  * @property {(o: Geomorph.LayoutObstacle) => THREE.Matrix4} getObsMat
  * @property {() => number} getNumObs

@@ -30,7 +30,8 @@
     - ✅ single image applied to every instance
     - ✅ assets script includes `spritesheet.json` in `geomorphs.json`
     - ✅ images script mutates `geomorphs.json`
-    - 🚧 compute uvs for every obstacle in world
+    - ✅ compute uvs for every obstacle in world (untested)
+    - 🚧 try attach uvs in vertex shader
     - https://discourse.threejs.org/t/sprite-instancing-with-uv-mapping/17234/2
     - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
     - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4
