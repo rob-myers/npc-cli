@@ -101,9 +101,10 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
 
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
-    mapsHash: hashText(JSON.stringify(assetsJson.maps)),
-    layoutsHash: hashText(JSON.stringify(layout)),
-    sheetsHash: currSheet ? hashText(JSON.stringify(currSheet)) : 0,
+    // 🔔 prefer `stringify` to `JSON.stringify` because corresponds to file contents
+    mapsHash: hashText(stringify(assetsJson.maps)),
+    layoutsHash: hashText(stringify(layout)), // don't bother serializing
+    sheetsHash: currSheet ? hashText(stringify(currSheet)) : 0,
     map: assetsJson.maps,
     layout,
     sheet: currSheet ?? { obstacle: {}, obstaclesHeight: 0, obstaclesWidth: 0 },
@@ -130,7 +131,7 @@ function parseMaps({ meta, maps }) {
     const contents = fs.readFileSync(filepath).toString();
     const mapKey = filename.slice(0, -".svg".length);
     maps[mapKey] = geomorphService.parseMap(mapKey, contents);
-    meta[mapKey] = { outputHash: hashText(JSON.stringify(maps[mapKey])) };
+    meta[mapKey] = { outputHash: hashText(stringify(maps[mapKey])) };
   }
 }
 
@@ -148,7 +149,7 @@ function parseSymbols({ symbols, meta }, symbolFilenames) {
     const serialized = geomorphService.serializeSymbol(parsed);
     symbols[symbolKey] = serialized;
     // console.log({ symbolKey }, typeof serialized)
-    meta[symbolKey] = { outputHash: hashText(JSON.stringify(serialized)) };
+    meta[symbolKey] = { outputHash: hashText(stringify(serialized)) };
   }
 
   validateSubSymbolDimension(symbols);

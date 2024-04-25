@@ -41,8 +41,14 @@
       diffuseColor *= sampledDiffuseColor;
       ```
 
-- HMR issue: onchange layout obstacles should trigger `yarn images`
-  - we assume that symbol `<image>` does not change
+
+- 🚧 HMR issues
+  - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
+    i.e. same as file contents.
+  - ✅ avoid recomputing obstacles.png
+  - onchange layout obstacles should trigger `yarn images`
+    - we assume that symbol `<image>` does not change
+  - avoid recomputing png -> webp
 
 - start writing first article
 

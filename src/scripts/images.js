@@ -51,10 +51,10 @@ const opts = {
 
   await drawFloorImages(geomorphs, pngToProm);
 
-  const sheet = await drawObstacleSpritesheets(assets, pngToProm);
-
+  const { sheet, sheetsHash } = await drawObstacleSpritesheets(assets, pngToProm);
+  
   // update geomorphs.json
-  geomorphs.sheetsHash = hashText(JSON.stringify(sheet));
+  geomorphs.sheetsHash = sheetsHash;
   geomorphs.sheet = sheet;
   fs.writeFileSync(geomorphsJsonPath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
 
@@ -110,6 +110,7 @@ async function drawFloorImages(geomorphs, pngToProm) {
       ct.globalAlpha = 1;
     }
 
+    // Doors
     drawPolygons(ct, doors.map((x) => x.poly), ["white", "black", 0.05]);
 
     const pngPath = path.resolve(assets2dDir, `${gmKey}.floor.png`);
@@ -118,9 +119,11 @@ async function drawFloorImages(geomorphs, pngToProm) {
 }
 
 /**
+ * - Write spritesheet.json
+ * - Draw obstacles.png
  * @param {Geomorph.Assets} assets 
  * @param {{ [pngPath: string]: Promise<any> }} pngToProm 
- * @returns {Promise<Geomorph.SpriteSheetMeta>}
+ * @returns {Promise<{ sheet: Geomorph.SpriteSheetMeta; sheetsHash: number; }>}
  */
 async function drawObstacleSpritesheets(assets, pngToProm) {
 
@@ -182,7 +185,15 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
       symbolKey, obstacleId, type,
     }
   });
-  fs.writeFileSync(spriteSheetJsonPath, stringify(json));
+
+  const jsonString = stringify(json);
+  const prevHash = fs.existsSync(spriteSheetJsonPath) ? hashText(fs.readFileSync(spriteSheetJsonPath).toString()) : null;
+  const sheetsHash = hashText(jsonString);
+  fs.writeFileSync(spriteSheetJsonPath, jsonString);
+  if (sheetsHash === prevHash) {
+    info(`sheetsHash unchanged: won't redraw sprite-sheet`);
+    return { sheet: json, sheetsHash };
+  }
 
   // Create sprite-sheet
   const canvas = createCanvas(bin.width, bin.height);
@@ -216,7 +227,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const pngPath = path.resolve(assets2dDir, `obstacles.png`);
   pngToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
 
-  return json;
+  return { sheet: json, sheetsHash };
 }
 
 /**
