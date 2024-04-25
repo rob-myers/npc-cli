@@ -182,10 +182,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const ct = canvas.getContext('2d');
   
   for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(json.lookup)) {
-    // drawPolygons(ct, Poly.fromRect({ x, y, width, height }), ['red', null])
-
     // extract data-url PNG from SVG symbol
-
     const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
     const matched = fs.readFileSync(symbolPath).toString().match(/"data:image\/png(.*)"/);
     if (matched) {
