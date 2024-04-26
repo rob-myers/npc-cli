@@ -111,7 +111,7 @@ async function drawFloorImages(geomorphs, pngToProm) {
     }
 
     // Doors
-    drawPolygons(ct, doors.map((x) => x.poly), ["white", "black", 0.05]);
+    drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
     const pngPath = path.resolve(assets2dDir, `${gmKey}.floor.png`);
     pngToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
@@ -239,7 +239,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
 function debugDrawNav(ct, navDecomp) {
   const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
   const navPoly = Poly.union(triangles);
-  opts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(100, 100, 200, 0.4)', null]);
+  opts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(200, 200, 200, 0.4)', 'black', 0.01]);
   opts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
 }
 
