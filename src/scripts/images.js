@@ -104,7 +104,7 @@ async function drawFloorImages(geomorphs, pngToProm) {
     drawPolygons(ct, walls, ['black', 'black', 0.04]);
 
     if (opts.debugImage) {
-      ct.globalAlpha = 0.4;
+      ct.globalAlpha = 0.2;
       const debugImg = await loadImage(fs.readFileSync(path.resolve(staticAssetsDir, 'debug', `${gmKey}.png`)))
       ct.drawImage(debugImg, 0, 0, debugImg.width, debugImg.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
       ct.globalAlpha = 1;
@@ -182,7 +182,9 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
       y: toPrecision(r.y),
       width: r.width,
       height: r.height,
-      symbolKey, obstacleId, type,
+      symbolKey,
+      obstacleId,
+      type,
     }
   });
 
