@@ -14,9 +14,6 @@ import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
-import meshInstanceUvsVertexShader from "!!raw-loader!../glsl/mesh-instance-uvs.v.glsl";
-import meshBasicVertexShader from "!!raw-loader!../glsl/mesh-basic.v.glsl";
-import meshBasicFragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
 
 /**
  * @param {Props} props
@@ -25,7 +22,6 @@ export default function TestGeomorphs(props) {
   const api = React.useContext(TestWorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    extendedQuadGeometryXZ: quadGeometryXZ.clone(),
     obsInst: /** @type {*} */ (null),
 
     drawGeomorph(gmKey, img) {
@@ -39,7 +35,7 @@ export default function TestGeomorphs(props) {
       layout.obstacles.forEach(({ origPoly, transform }) => {
         ctxt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
         ctxt.transform(...transform);
-        drawPolygons(ctxt, [origPoly], ['red', null]);
+        drawPolygons(ctxt, [origPoly], ['rgba(0, 0, 0, 0.4)', null]);
       });
       ctxt.resetTransform();
     },
@@ -51,15 +47,15 @@ export default function TestGeomorphs(props) {
       api.gms.forEach(({ obstacles }) =>
         obstacles.forEach(({ symbolKey, obstacleId }) => {
           const { x, y, width, height } = obstaclesSheet[`${symbolKey} ${obstacleId}`];
-          uvOffsets.push(x / obstaclesWidth, y / obstaclesWidth);
+          uvOffsets.push(x / obstaclesWidth,  1 - (y + height) / obstaclesHeight);
           uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
         })
       );
 
-      state.extendedQuadGeometryXZ.setAttribute('uvOffsets',
+      state.obsInst.geometry.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
       );
-      state.extendedQuadGeometryXZ.setAttribute('uvDimensions',
+      state.obsInst.geometry.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
     },
@@ -120,8 +116,9 @@ export default function TestGeomorphs(props) {
 
   const update = useUpdate();
 
-  const debugTex = useTexture('/assets/debug/test-uv-texture.png');
-
+  // const obstaclesTex = useTexture('/assets/debug/test-uv-texture.png');
+  const obstaclesTex = useTexture('/assets/2d/obstacles.png');
+  
   return <>
     {api.gms.map((gm, gmId) => (
       <group
@@ -145,18 +142,6 @@ export default function TestGeomorphs(props) {
       </group>
     ))}
 
-    {/* 🚧 get custom attributes working */}
-    <mesh position={[0, 4, 0]}>
-      <planeGeometry />
-      <obstacleShaderMaterial
-        key={ObstacleShaderMaterial.key}
-        side={THREE.DoubleSide}
-        // diffuse={new THREE.Vector3(1, 0, 1)}
-        //@ts-expect-error
-        map={debugTex}
-      />
-    </mesh>
-
 
     <instancedMesh
       name="static-obstacles"
@@ -176,7 +161,8 @@ export default function TestGeomorphs(props) {
         side={THREE.DoubleSide}
         //@ts-expect-error
         diffuse={new THREE.Vector3(1, 0, 1)}
-        map={debugTex}
+        map={obstaclesTex}
+        transparent
       />
     </instancedMesh>
   </>
@@ -190,7 +176,6 @@ export default function TestGeomorphs(props) {
 
 /**
  * @typedef State
- * @property {THREE.BufferGeometry} extendedQuadGeometryXZ
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
@@ -206,9 +191,7 @@ const tmpMatFour1 = new THREE.Matrix4();
 
 const ObstacleShaderMaterial = shaderMaterial(
   {
-    // 🚧
     map: null,
-    mapTransform: new THREE.Matrix3(), // 🔔 needed for map to work
     diffuse: new THREE.Vector3(1, 1, 1),
     opacity: 1,
   },
@@ -216,11 +199,16 @@ const ObstacleShaderMaterial = shaderMaterial(
   /*glsl*/`
   varying vec2 vUv;
 
+  attribute vec2 uvDimensions;
+  attribute vec2 uvOffsets;
+
   #include <common>
   #include <logdepthbuf_pars_vertex>
 
   void main() {
-    vUv = uv;
+    // vUv = uv;
+    vUv = (uv * uvDimensions) + uvOffsets;
+
     vec4 modelViewPosition = vec4(position, 1.0);
     
     #ifdef USE_BATCHING
@@ -236,7 +224,6 @@ const ObstacleShaderMaterial = shaderMaterial(
     gl_Position = projectionMatrix * modelViewPosition;
 
     #include <logdepthbuf_vertex>
-
   }
   `,
   // meshBasicFragmentShader,
@@ -249,13 +236,9 @@ const ObstacleShaderMaterial = shaderMaterial(
 
   void main() {
     gl_FragColor = texture2D( map, vUv );
-
     #include <logdepthbuf_fragment>
   }
   `,
-  (material) => {
-    console.log(material)
-  }
 );
 
 extend({ ObstacleShaderMaterial });

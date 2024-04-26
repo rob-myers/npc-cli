@@ -5,7 +5,7 @@
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
-- 🚧 raised obstacles
+- ✅ raised obstacles
   - ✅ obstacle polys can `y={y}`
   - ✅ sub-symbols can `dy={dy}` and it aggregates
   - ✅ link layout obstacle to symbol obstacle
@@ -15,7 +15,7 @@
   - ✅ verify by drawing into floor canvas
   - ✅ InstancedMesh with unit XZ plane
     - ✅ show (possibly raised) rects
-  - 🚧 obstacles induce sprite-sheet with uv-map
+  - ✅ obstacles induce sprite-sheet with uv-map
     - ✅ create sprite-sheet json
     - ✅ name -> { symbolKey, obstacleKey, type }
     - ✅ one rect per (symbolKey, obstacleId)
@@ -26,7 +26,7 @@
       - ✅ packed rects scale x2.5 for non-hull symbols
       - ✅ extract polygonal mask
       - ✅ avoid drawing white poly underneath
-  - 🚧 InstancedMesh uses uvs
+  - ✅ InstancedMesh uses uvs
     - https://discourse.threejs.org/t/sprite-instancing-with-uv-mapping/17234/2
     - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
     - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4
@@ -41,8 +41,9 @@
       - ✅ get `map` working in custom shader based on meshBasicMaterial (non-instanced mesh)
       - ✅ get `map` working in custom shader based on meshBasicMaterial (instanced mesh)
     - ✅ switch to manually specified custom shader with working map/instances
-    - 🚧 get custom shader working which uses `uvOffsets`, `uvDimensions`
+    - ✅ get custom shader working which uses `uvOffsets`, `uvDimensions`
 
+- more raised obstacles
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
@@ -51,6 +52,7 @@
   - onchange layout obstacles should trigger `yarn images`
     - we assume that symbol `<image>` does not change
   - avoid recomputing png -> webp
+  - obstacles.png reloads e.g. via `debugTex.needsUpdate = true`
 
 - start writing first article
 
