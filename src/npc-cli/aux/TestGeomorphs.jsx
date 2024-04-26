@@ -204,26 +204,28 @@ const tmpMatFour1 = new THREE.Matrix4();
 const ObstacleShaderMaterial = shaderMaterial(
   {
     // 🚧
-    // diffuse: new THREE.Vector3(1, 1, 0),
     map: null,
+    diffuse: new THREE.Vector3(1, 1, 1),
+    opacity: 1,
+    mapTransform: new THREE.Matrix3(), // 🔔 needed for map to work
   },
-  // meshBasicVertexShader,
-  /*glsl*/`
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_Position = projectionMatrix * modelViewPosition; 
-  }
-  `,
-  // meshBasicFragmentShader,
-  /*glsl*/`
-  varying vec2 vUv;
-  uniform sampler2D map;
-  void main() {
-    gl_FragColor = texture2D( map, vUv );
-  }
-  `
+  meshBasicVertexShader,
+  // /*glsl*/`
+  // varying vec2 vUv;
+  // void main() {
+  //   vUv = uv;
+  //   vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+  //   gl_Position = projectionMatrix * modelViewPosition; 
+  // }
+  // `,
+  meshBasicFragmentShader,
+  // /*glsl*/`
+  // varying vec2 vUv;
+  // uniform sampler2D map;
+  // void main() {
+  //   gl_FragColor = texture2D( map, vUv );
+  // }
+  // `
 );
 
 extend({ ObstacleShaderMaterial });
