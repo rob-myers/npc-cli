@@ -5,7 +5,7 @@ import { useTexture, shaderMaterial } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
 import { Mat } from "../geom";
-import { hashJson, info, keys } from "../service/generic";
+import { info, keys } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, worldScale } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
 import { drawPolygons } from "../service/dom";
@@ -14,6 +14,9 @@ import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
+// import meshInstanceUvsVertexShader from "!!raw-loader!../glsl/mesh-instance-uvs.v.glsl";
+// import meshBasicVertexShader from "!!raw-loader!../glsl/mesh-basic.v.glsl";
+// import meshBasicFragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
 
 /**
  * @param {Props} props
@@ -152,17 +155,13 @@ export default function TestGeomorphs(props) {
       onPointerUp={state.onClickObstacle}
       position={[0, 0.001, 0]} // 🚧 temp
     >
-      {/* <meshBasicMaterial
-        side={THREE.DoubleSide}
-        map={debugTex}
-      /> */}
       <obstacleShaderMaterial
         key={ObstacleShaderMaterial.key}
         side={THREE.DoubleSide}
-        //@ts-expect-error
-        diffuse={new THREE.Vector3(1, 0, 1)}
-        map={obstaclesTex}
         transparent
+        //@ts-expect-error
+        map={obstaclesTex}
+        // diffuse={new THREE.Vector3(1, 0, 1)}
       />
     </instancedMesh>
   </>
@@ -192,6 +191,7 @@ const tmpMatFour1 = new THREE.Matrix4();
 const ObstacleShaderMaterial = shaderMaterial(
   {
     map: null,
+    // mapTransform: new THREE.Matrix3(),
     diffuse: new THREE.Vector3(1, 1, 1),
     opacity: 1,
   },
@@ -208,7 +208,6 @@ const ObstacleShaderMaterial = shaderMaterial(
   void main() {
     // vUv = uv;
     vUv = (uv * uvDimensions) + uvOffsets;
-
     vec4 modelViewPosition = vec4(position, 1.0);
     
     #ifdef USE_BATCHING
@@ -220,7 +219,6 @@ const ObstacleShaderMaterial = shaderMaterial(
     #endif
     
     modelViewPosition = modelViewMatrix * modelViewPosition;
-
     gl_Position = projectionMatrix * modelViewPosition;
 
     #include <logdepthbuf_vertex>
@@ -236,6 +234,8 @@ const ObstacleShaderMaterial = shaderMaterial(
 
   void main() {
     gl_FragColor = texture2D( map, vUv );
+    if(gl_FragColor.a < 0.5)
+      discard;
     #include <logdepthbuf_fragment>
   }
   `,
