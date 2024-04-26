@@ -139,22 +139,11 @@ export default function TestGeomorphs(props) {
             transparent
             map={api.gmClass[gm.key].tex}
             depthWrite={false} // fix z-fighting
-            // visible={false}
+            visible={true}
           />
         </mesh>
       </group>
     ))}
-
-    <mesh position={[0, 4, 0]}>
-      <planeGeometry />
-      <obstacleShaderMaterial
-        key={ObstacleShaderMaterial.key}
-        side={THREE.DoubleSide}
-        // diffuse={new THREE.Vector3(1, 0, 1)}
-        //@ts-expect-error
-        map={debugTex}
-      />
-    </mesh>
 
     <instancedMesh
       name="static-obstacles"
@@ -165,16 +154,17 @@ export default function TestGeomorphs(props) {
       onPointerUp={state.onClickObstacle}
       position={[0, 0.001, 0]} // 🚧 temp
     >
-      <meshBasicMaterial
+      {/* <meshBasicMaterial
         side={THREE.DoubleSide}
-        map={debugTex}
-      />
-      {/* <obstacleShaderMaterial
-        key={ObstacleShaderMaterial.key}
-        side={THREE.DoubleSide}
-        // diffuse={new THREE.Vector3(1, 0, 1)}
         map={debugTex}
       /> */}
+      <obstacleShaderMaterial
+        key={ObstacleShaderMaterial.key}
+        side={THREE.DoubleSide}
+        //@ts-expect-error
+        diffuse={new THREE.Vector3(1, 0, 1)}
+        map={debugTex}
+      />
     </instancedMesh>
   </>
   
