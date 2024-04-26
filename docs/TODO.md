@@ -40,8 +40,8 @@
         - https://stackoverflow.com/questions/59448702/map-image-as-texture-to-plane-in-a-custom-shader-in-three-js
       - ✅ get `map` working in custom shader based on meshBasicMaterial (non-instanced mesh)
       - ✅ get `map` working in custom shader based on meshBasicMaterial (instanced mesh)
-      - 🚧 provide uvOffsets, uvDimensions as uniforms to vertex shader
-      - vertex shader modifies uvs based on uniforms
+    - ✅ switch to manually specified custom shader with working map/instances
+    - 🚧 get custom shader working which uses `uvOffsets`, `uvDimensions`
 
 
 - 🚧 HMR issues

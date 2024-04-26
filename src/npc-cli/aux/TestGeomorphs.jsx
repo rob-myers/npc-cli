@@ -145,6 +145,19 @@ export default function TestGeomorphs(props) {
       </group>
     ))}
 
+    {/* 🚧 get custom attributes working */}
+    <mesh position={[0, 4, 0]}>
+      <planeGeometry />
+      <obstacleShaderMaterial
+        key={ObstacleShaderMaterial.key}
+        side={THREE.DoubleSide}
+        // diffuse={new THREE.Vector3(1, 0, 1)}
+        //@ts-expect-error
+        map={debugTex}
+      />
+    </mesh>
+
+
     <instancedMesh
       name="static-obstacles"
       key={instHash}
@@ -195,27 +208,54 @@ const ObstacleShaderMaterial = shaderMaterial(
   {
     // 🚧
     map: null,
+    mapTransform: new THREE.Matrix3(), // 🔔 needed for map to work
     diffuse: new THREE.Vector3(1, 1, 1),
     opacity: 1,
-    mapTransform: new THREE.Matrix3(), // 🔔 needed for map to work
   },
-  meshBasicVertexShader,
-  // /*glsl*/`
-  // varying vec2 vUv;
-  // void main() {
-  //   vUv = uv;
-  //   vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
-  //   gl_Position = projectionMatrix * modelViewPosition; 
-  // }
-  // `,
-  meshBasicFragmentShader,
-  // /*glsl*/`
-  // varying vec2 vUv;
-  // uniform sampler2D map;
-  // void main() {
-  //   gl_FragColor = texture2D( map, vUv );
-  // }
-  // `
+  // meshBasicVertexShader,
+  /*glsl*/`
+  varying vec2 vUv;
+
+  #include <common>
+  #include <logdepthbuf_pars_vertex>
+
+  void main() {
+    vUv = uv;
+    vec4 modelViewPosition = vec4(position, 1.0);
+    
+    #ifdef USE_BATCHING
+      modelViewPosition = batchingMatrix * modelViewPosition;
+    #endif
+
+    #ifdef USE_INSTANCING
+      modelViewPosition = instanceMatrix * modelViewPosition;
+    #endif
+    
+    modelViewPosition = modelViewMatrix * modelViewPosition;
+
+    gl_Position = projectionMatrix * modelViewPosition;
+
+    #include <logdepthbuf_vertex>
+
+  }
+  `,
+  // meshBasicFragmentShader,
+  /*glsl*/`
+  varying vec2 vUv;
+  uniform sampler2D map;
+
+  #include <common>
+  #include <logdepthbuf_pars_fragment>
+
+  void main() {
+    gl_FragColor = texture2D( map, vUv );
+
+    #include <logdepthbuf_fragment>
+  }
+  `,
+  (material) => {
+    console.log(material)
+  }
 );
 
 extend({ ObstacleShaderMaterial });
