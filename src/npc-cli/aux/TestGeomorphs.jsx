@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Mat } from "../geom";
 import { info, keys } from "../service/generic";
-import { FLOOR_IMAGES_QUERY_KEY, worldScale } from "../service/const";
+import { FLOOR_IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
 import { drawPolygons } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
@@ -28,19 +28,26 @@ export default function TestGeomorphs(props) {
     obsInst: /** @type {*} */ (null),
 
     drawGeomorph(gmKey, img) {
-      const { ctxt, canvas: { width, height }, layout } = api.gmClass[gmKey];
-      ctxt.clearRect(0, 0, width, height);
-      ctxt.drawImage(img, 0, 0);
+      const { floorCt, ceilCt, floorEl: { width, height }, layout } = api.gmClass[gmKey];
+      const { pngRect } = layout;
+
+      floorCt.clearRect(0, 0, width, height);
+      floorCt.drawImage(img, 0, 0);
 
       // 🚧 debug obstacles
-      const { pngRect } = layout;
       const scale = 1 / worldScale;
       layout.obstacles.forEach(({ origPoly, transform }) => {
-        ctxt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-        ctxt.transform(...transform);
-        drawPolygons(ctxt, [origPoly], ['rgba(0, 0, 0, 0.4)', null]);
+        floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
+        floorCt.transform(...transform);
+        drawPolygons(floorCt, origPoly, ['rgba(0, 0, 0, 0.4)', null]);
       });
-      ctxt.resetTransform();
+      floorCt.resetTransform();
+      
+      ceilCt.clearRect(0, 0, width, height);
+      ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
+      // wall tops
+      drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
+      ceilCt.resetTransform();
     },
     addObstacleUvs() {
       const { obstacle: obstaclesSheet, obstaclesWidth, obstaclesHeight } = api.geomorphs.sheet;
@@ -101,7 +108,9 @@ export default function TestGeomorphs(props) {
       keys(api.gmClass).forEach((gmKey) => {
         textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.png.webp`).then((tex) => {
           state.drawGeomorph(gmKey, tex.source.data);
-          api.gmClass[gmKey].tex.needsUpdate = true;
+          const { floor, ceil } = api.gmClass[gmKey];
+          floor.needsUpdate = true;
+          ceil.needsUpdate = true;
           update();
         });
       });
@@ -114,12 +123,10 @@ export default function TestGeomorphs(props) {
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-
   }, [instHash, shaderMaterial]);
 
   const update = useUpdate();
 
-  // const obstaclesTex = useTexture('/assets/debug/test-uv-texture.png');
   const obstaclesTex = useTexture('/assets/2d/obstacles.png');
   
   return <>
@@ -130,6 +137,7 @@ export default function TestGeomorphs(props) {
         // ref={(group) => group?.applyMatrix4(gm.mat4)}
       >
         <mesh
+          name={`floor-gm-${gmId}`}
           geometry={quadGeometryXZ}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
           position={[gm.pngRect.x, 0, gm.pngRect.y]}
@@ -137,9 +145,23 @@ export default function TestGeomorphs(props) {
           <meshBasicMaterial
             side={THREE.FrontSide}
             transparent
-            map={api.gmClass[gm.key].tex}
+            map={api.gmClass[gm.key].floor}
             depthWrite={false} // fix z-fighting
-            visible={true}
+          />
+        </mesh>
+
+        <mesh
+          name={`ceil-gm-${gmId}`}
+          geometry={quadGeometryXZ}
+          scale={[gm.pngRect.width, 1, gm.pngRect.height]}
+          position={[gm.pngRect.x, wallHeight + 0.001, gm.pngRect.y]}
+        >
+          <meshBasicMaterial
+            side={THREE.FrontSide}
+            transparent
+            map={api.gmClass[gm.key].ceil}
+            // depthWrite={false} // fix z-fighting
+            alphaTest={0.5}
           />
         </mesh>
       </group>
@@ -234,8 +256,8 @@ const ObstacleShaderMaterial = shaderMaterial(
 
   void main() {
     gl_FragColor = texture2D( map, vUv );
-    if(gl_FragColor.a < 0.5)
-      discard;
+    // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
+    if(gl_FragColor.a < 0.5) discard;
     #include <logdepthbuf_fragment>
   }
   `,

@@ -54,15 +54,19 @@ export default function TestWorld(props) {
       const layout = state.geomorphs.layout[gmKey];
       let gmClass = state.gmClass[gmKey];
       if (!gmClass) {
-        const canvas = document.createElement("canvas");
-        // Standard non-edge geomorph ~ 1200 * 1200 (extends beyond edges)
-        canvas.width = layout.pngRect.width / worldScale;
-        canvas.height = layout.pngRect.height / worldScale;
+        const floorEl = document.createElement("canvas");
+        const ceilEl = document.createElement("canvas");
+        // Standard non-edge geomorph approx. 1200 * 1200 (extends beyond edges)
+        ceilEl.width = floorEl.width = layout.pngRect.width / worldScale;
+        ceilEl.height = floorEl.height = layout.pngRect.height / worldScale;
         gmClass = state.gmClass[gmKey] = {
-          canvas,
-          ctxt: assertNonNull(canvas.getContext("2d")),
+          ceil: new THREE.CanvasTexture(ceilEl),
+          ceilCt: assertNonNull(ceilEl.getContext("2d")),
+          ceilEl,
+          floor: new THREE.CanvasTexture(floorEl),
+          floorCt: assertNonNull(floorEl.getContext("2d")),
+          floorEl,
           layout,
-          tex: new THREE.CanvasTexture(canvas),
           debugNavPoly: tmpBufferGeom1,
         };
       }
@@ -274,9 +278,12 @@ export default function TestWorld(props) {
 
 /**
  * @typedef GmData
- * @property {HTMLCanvasElement} canvas
- * @property {CanvasRenderingContext2D} ctxt
+ * @property {THREE.CanvasTexture} ceil
+ * @property {HTMLCanvasElement} ceilEl
+ * @property {CanvasRenderingContext2D} ceilCt
+ * @property {THREE.CanvasTexture} floor
+ * @property {HTMLCanvasElement} floorEl
+ * @property {CanvasRenderingContext2D} floorCt
  * @property {Geomorph.Layout} layout
  * @property {THREE.BufferGeometry} debugNavPoly
- * @property {THREE.CanvasTexture} tex
  */

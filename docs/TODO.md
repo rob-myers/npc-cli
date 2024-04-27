@@ -5,6 +5,12 @@
 - 🚧 more raised obstacles
 - 🚧 clean custom shader approach
 - 🚧 draw top of walls e.g. to obscure piercing obstacles
+  - ✅ remove over-approx from floor images
+  - ❌ could union walls, triangulate, use InstancedMesh triangles
+  - ✅ could use ceiling texture per gmKey
+    - could extend with labels
+    - could change to per gmId and hide rooms via ceilings (Player FOV)
+  - clean e.g. table seen in bridge
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
@@ -15,7 +21,10 @@
     - we assume that symbol `<image>` does not change
   - avoid recomputing png -> webp
     - dev uses pngs
-    - pre-push hook generates webp if outdated (compare timestamps)
+  - pre-push hook
+    - create {assets,geomorphs,spritesheet}.json if outdated
+    - draws sprite-sheet it outdated
+    - generates webp if outdated (compare timestamps)
   - obstacles.png reloads e.g. via `debugTex.needsUpdate = true`
 
 - integrate TestCharacter into TestWorld
