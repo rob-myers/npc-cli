@@ -8,7 +8,7 @@ import { Mat } from "../geom";
 import { info, keys } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
 import { quadGeometryXZ } from "../service/three";
-import { drawPolygons } from "../service/dom";
+import { drawPolygons, strokeLine } from "../service/dom";
 import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -47,6 +47,11 @@ export default function TestGeomorphs(props) {
       ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
       // wall tops
       drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
+      // door tops
+      // drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(50, 50, 50, 1)'])
+      ceilCt.strokeStyle = 'black';
+      ceilCt.lineWidth = 0.03;
+      layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
       ceilCt.resetTransform();
     },
     addObstacleUvs() {
