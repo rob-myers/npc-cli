@@ -10,7 +10,7 @@
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
     - i.e. same as file contents.
   - ✅ avoid recomputing obstacles.png
-  - can `yarn images --all`
+  - ✅ can `yarn images-fast --all`
   - onchange layout obstacles, trigger `yarn images --all`
     - we assume that symbol `<image>` does not change
   - avoid recomputing png -> webp

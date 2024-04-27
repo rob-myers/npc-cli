@@ -6,6 +6,8 @@
  * Usage
  * - npm run images
  * - yarn images
+ * - yarn images-fast
+ * - yarn images-fast --all
  */
 /// <reference path="./deps.d.ts"/>
 import fs from 'fs';
@@ -13,6 +15,7 @@ import path from 'path';
 import { createCanvas, loadImage } from 'canvas';
 import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 import stringify from 'json-stringify-pretty-compact';
+import getopts from 'getopts';
 
 // sucrase-node needs relative paths
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from './const';
@@ -23,6 +26,8 @@ import { error, hashText, info, toPrecision, warn } from '../npc-cli/service/gen
 import { drawPolygons } from '../npc-cli/service/dom';
 import { geomorphService } from '../npc-cli/service/geomorph';
 import { Poly } from '../npc-cli/geom';
+
+const opts = getopts(process.argv, { boolean: ['all'] });
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
@@ -35,8 +40,9 @@ const spriteSheetJsonPath = path.resolve(staticAssetsDir, SPRITE_SHEET_JSON_FILE
 const worldToSgu = 1 / worldScale;
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 
-const opts = {
+const options = {
   debugImage: true,
+  // debugImage: false,
   debugNavPoly: true,
   debugNavTris: false,
   packedPadding: 2,
@@ -53,11 +59,9 @@ const opts = {
 
   const { sheet, sheetsHash } = await drawObstacleSpritesheets(assets, pngToProm);
   
-  // update geomorphs.json
   geomorphs.sheetsHash = sheetsHash;
   geomorphs.sheet = sheet;
   fs.writeFileSync(geomorphsJsonPath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
-
 
   await Promise.all(Object.values(pngToProm));
 
@@ -95,15 +99,16 @@ async function drawFloorImages(geomorphs, pngToProm) {
 
     // White floor
     // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['white', null]);
-    if (opts.debugNavPoly || opts.debugNavTris) {
+    if (options.debugNavPoly || options.debugNavTris) {
       debugDrawNav(ct, navDecomp);
     }
 
-    // 🚧 
-    // drawPolygons(ct, walls, ['black', null]);
-    drawPolygons(ct, walls, ['black', 'black', 0.04]);
+    drawPolygons(ct, walls, ['black', null]);
+    // drawPolygons(ct, walls, ['black', 'black', 0.04]);
+    // ℹ️ technically we support walls with holes, but they may also arise e.g. via door inside wall
+    walls.forEach(wall => wall.holes.length && warn(`${gmKey}: saw wall with hole (${wall.outline.length} outer points)`));
 
-    if (opts.debugImage) {
+    if (options.debugImage) {
       ct.globalAlpha = 0.2;
       const debugImg = await loadImage(fs.readFileSync(path.resolve(staticAssetsDir, 'debug', `${gmKey}.png`)))
       ct.drawImage(debugImg, 0, 0, debugImg.width, debugImg.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
@@ -154,9 +159,9 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
     }
   }
 
-  const packer = new MaxRectsPacker(4096, 4096, opts.packedPadding, {
+  const packer = new MaxRectsPacker(4096, 4096, options.packedPadding, {
     pot: false,
-    border: opts.packedPadding,
+    border: options.packedPadding,
     // smart: false,
   });
   const rectsToPack = Object.values(rectsToPackLookup);
@@ -192,7 +197,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const prevHash = fs.existsSync(spriteSheetJsonPath) ? hashText(fs.readFileSync(spriteSheetJsonPath).toString()) : null;
   const sheetsHash = hashText(jsonString);
   fs.writeFileSync(spriteSheetJsonPath, jsonString);
-  if (sheetsHash === prevHash) {
+  if (!opts.all && sheetsHash === prevHash) {
     info(`sheetsHash unchanged: won't redraw sprite-sheet`);
     return { sheet: json, sheetsHash };
   }
@@ -239,8 +244,8 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
 function debugDrawNav(ct, navDecomp) {
   const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
   const navPoly = Poly.union(triangles);
-  opts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(200, 200, 200, 0.4)', 'black', 0.01]);
-  opts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
+  options.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(200, 200, 200, 0.4)', 'black', 0.01]);
+  options.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
 }
 
 /** @param {Geom.Meta} meta */
