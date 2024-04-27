@@ -4,14 +4,18 @@
 
 - 🚧 more raised obstacles
 - 🚧 clean custom shader approach
+- 🚧 draw top of walls e.g. to obscure piercing obstacles
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
-    i.e. same as file contents.
+    - i.e. same as file contents.
   - ✅ avoid recomputing obstacles.png
-  - onchange layout obstacles should trigger `yarn images`
+  - can `yarn images --all`
+  - onchange layout obstacles, trigger `yarn images --all`
     - we assume that symbol `<image>` does not change
   - avoid recomputing png -> webp
+    - dev uses pngs
+    - pre-push hook generates webp if outdated (compare timestamps)
   - obstacles.png reloads e.g. via `debugTex.needsUpdate = true`
 
 - integrate TestCharacter into TestWorld
@@ -31,6 +35,9 @@
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 
+- permit holes in symbol walls?
+  - currently supported
+  - ✅ eliminated only examples (2)
 - images script avoids recomputing
 - mobile extra space at bottom again (?)
   - probably caused by new sticky header
