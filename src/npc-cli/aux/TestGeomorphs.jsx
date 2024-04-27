@@ -14,7 +14,7 @@ import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
-// import meshInstanceUvsVertexShader from "!!raw-loader!../glsl/mesh-instance-uvs.v.glsl";
+// import meshInstanceUvsVertexShader from "!!raw-loader!../glsl/instanced-uvs.v.glsl";
 // import meshBasicVertexShader from "!!raw-loader!../glsl/mesh-basic.v.glsl";
 // import meshBasicFragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
 

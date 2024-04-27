@@ -2,48 +2,8 @@
 
 ## WIP
 
-- integrate TestCharacter into TestWorld
-  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
-
-- ✅ raised obstacles
-  - ✅ obstacle polys can `y={y}`
-  - ✅ sub-symbols can `dy={dy}` and it aggregates
-  - ✅ link layout obstacle to symbol obstacle
-  - ❌ given symbol obstacle poly, and transformed obstacle poly, infer the affine transform
-  - ✅ maintain transform in obstacle.meta
-  - ✅ layout.obstacles as { origPoly, transform }
-  - ✅ verify by drawing into floor canvas
-  - ✅ InstancedMesh with unit XZ plane
-    - ✅ show (possibly raised) rects
-  - ✅ obstacles induce sprite-sheet with uv-map
-    - ✅ create sprite-sheet json
-    - ✅ name -> { symbolKey, obstacleKey, type }
-    - ✅ one rect per (symbolKey, obstacleId)
-    - ✅ packed rects should be in Starship Geomorphs units
-    - ✅ create sprite-sheet png/webp
-      - ✅ draw images as filled squares
-      - ✅ extract PNG from SVG symbol
-      - ✅ packed rects scale x2.5 for non-hull symbols
-      - ✅ extract polygonal mask
-      - ✅ avoid drawing white poly underneath
-  - ✅ InstancedMesh uses uvs
-    - https://discourse.threejs.org/t/sprite-instancing-with-uv-mapping/17234/2
-    - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
-    - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4
-    - ✅ single image applied to every instance
-    - ✅ assets script includes `spritesheet.json` in `geomorphs.json`
-    - ✅ images script mutates `geomorphs.json`
-    - ✅ compute uvs for every obstacle in world (untested)
-    - 🚧 try attach uvs in vertex shader
-      - ✅ get custom shader working in same way as meshStandardMaterial
-      - ✅ get `map` working in a custom shader (non-instanced mesh)
-        - https://stackoverflow.com/questions/59448702/map-image-as-texture-to-plane-in-a-custom-shader-in-three-js
-      - ✅ get `map` working in custom shader based on meshBasicMaterial (non-instanced mesh)
-      - ✅ get `map` working in custom shader based on meshBasicMaterial (instanced mesh)
-    - ✅ switch to manually specified custom shader with working map/instances
-    - ✅ get custom shader working which uses `uvOffsets`, `uvDimensions`
-
-- more raised obstacles
+- 🚧 more raised obstacles
+- 🚧 clean custom shader approach
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
@@ -53,6 +13,9 @@
     - we assume that symbol `<image>` does not change
   - avoid recomputing png -> webp
   - obstacles.png reloads e.g. via `debugTex.needsUpdate = true`
+
+- integrate TestCharacter into TestWorld
+  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
 - start writing first article
 
@@ -830,3 +793,41 @@ React.useEffect(() => {
   - ✅ download three FBX animations from mixamo and somehow load into GLTF
     - show a Mixamo animation (use Blender to combine animations)
     - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- ✅ raised obstacles
+  - ✅ obstacle polys can `y={y}`
+  - ✅ sub-symbols can `dy={dy}` and it aggregates
+  - ✅ link layout obstacle to symbol obstacle
+  - ❌ given symbol obstacle poly, and transformed obstacle poly, infer the affine transform
+  - ✅ maintain transform in obstacle.meta
+  - ✅ layout.obstacles as { origPoly, transform }
+  - ✅ verify by drawing into floor canvas
+  - ✅ InstancedMesh with unit XZ plane
+    - ✅ show (possibly raised) rects
+  - ✅ obstacles induce sprite-sheet with uv-map
+    - ✅ create sprite-sheet json
+    - ✅ name -> { symbolKey, obstacleKey, type }
+    - ✅ one rect per (symbolKey, obstacleId)
+    - ✅ packed rects should be in Starship Geomorphs units
+    - ✅ create sprite-sheet png/webp
+      - ✅ draw images as filled squares
+      - ✅ extract PNG from SVG symbol
+      - ✅ packed rects scale x2.5 for non-hull symbols
+      - ✅ extract polygonal mask
+      - ✅ avoid drawing white poly underneath
+  - ✅ InstancedMesh uses uvs
+    - https://discourse.threejs.org/t/sprite-instancing-with-uv-mapping/17234/2
+    - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
+    - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4
+    - ✅ single image applied to every instance
+    - ✅ assets script includes `spritesheet.json` in `geomorphs.json`
+    - ✅ images script mutates `geomorphs.json`
+    - ✅ compute uvs for every obstacle in world (untested)
+    - 🚧 try attach uvs in vertex shader
+      - ✅ get custom shader working in same way as meshStandardMaterial
+      - ✅ get `map` working in a custom shader (non-instanced mesh)
+        - https://stackoverflow.com/questions/59448702/map-image-as-texture-to-plane-in-a-custom-shader-in-three-js
+      - ✅ get `map` working in custom shader based on meshBasicMaterial (non-instanced mesh)
+      - ✅ get `map` working in custom shader based on meshBasicMaterial (instanced mesh)
+    - ✅ switch to manually specified custom shader with working map/instances
+    - ✅ get custom shader working which uses `uvOffsets`, `uvDimensions`
