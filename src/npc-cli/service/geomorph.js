@@ -72,6 +72,7 @@ class GeomorphService {
     "console--051--0.4x0.6": true,
     "counter--009--0.4x0.4": true,
     "empty-room--013--2x3": true,
+    "empty-room--020--2x4": true,
     "empty-room--039--3x4": true,
     "engineering--045--6x4": true,
     "engineering--047--4x7": true,
