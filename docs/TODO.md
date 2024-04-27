@@ -10,7 +10,10 @@
   - ✅ could use ceiling texture per gmKey
     - could extend with labels
     - could change to per gmId and hide rooms via ceilings (Player FOV)
-  - clean e.g. table seen in bridge
+  - 🚧 clean e.g. table seen in bridge
+- fix height convention
+  - e.g. usually provided in symbol tag?
+  - e.g. chair wouldn't specify height
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`

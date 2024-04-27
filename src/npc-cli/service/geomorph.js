@@ -52,8 +52,7 @@ class GeomorphService {
     return keys(this.toGmNum);
   }
 
-  fromSymbolKey = {
-    // 🚧 must extend when adding new symbols
+  fromSymbolKey = {// 🚧 must extend when adding new symbols
 
     "101--hull": true,
     "102--hull": true,
@@ -116,6 +115,7 @@ class GeomorphService {
     "extra--fresher--002--0.5x0.5": true,
     "extra--chair--003--0.25x0.25": true,
     "extra--desk--004--0.5x1": true,
+    "extra--chair--005-0.25x0.25": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */

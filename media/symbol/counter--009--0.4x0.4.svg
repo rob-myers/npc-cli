@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
-        <defs>
-                <bx:grid x="0" y="0" width="300" height="300"/>
-        </defs>
-        <image width="103" height="108" x="23.5" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGcAAABsCAQAAADdj2SxAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gEDhAuKXYP0IwAAAHuSURBVHja7ZzbbsMgEEQN8v//Mn1wXS7FLSi74wHNeYkUx3gPy8UmCSEdXoSHolNwu+QR/Yqe1bTg9AhyrP7nz4DpPNd4fSAMnPEJLo1tPlQrOVOddMxGNX8GUOc/HIc0H52RgOtub6toqnOHNj5OzZ8B1HkfI52ydsdqev6MEcym0fmQPG521NiY2Uyne3dhez+VC7PsLP2eVw0Fnrfu1lyxtlJnfXg1QqqVzicZC7t+4/q85LrckLLQWcuskaI7ytsi5yj2PrYKZbxXSmLOjbeMx+NB+7wU8wEM9tcpS9xsGt1Nx3++8X+k/r5Ocs4OeqQMKb5zYVvy+LZb33k7AOlIZ1Gkw4zZOttfoO4L3LODnp7Bjc1bz72xYfOz2VAgHWakw4x0mJEOM9JhRjrMSIcZ6TCzmY77w3W5iuP/oO2cHdySFEQHLQfRsf558cs6OEA6qD4E0fn5efEeOjiAS+6I4UBr1MxIhxnpMCMdZqTDjHSYkQ4z0mFGOsxIhxnpMCMdZqTDjHSY2VMH/ZWsNXf8W2QnJyP+fmtdUoiee9mhZY4j5t0YVvUq416+77Q7S5Qvx2r/780ynd0krg+s0+hamSIt7T/jubNUV3kezsLv/TL4dZ5kOjvKrLZfTrMXn/+mTBiRi2UH6v70/wVaa2HdMi1vnAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNC0wNC0xNFQxNjo0Njo0MSswMDowMEjSR/QAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjQtMDQtMTRUMTY6NDY6NDErMDA6MDA5j/9IAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI0LTA0LTE0VDE2OjQ2OjQxKzAwOjAwbprelwAAAABJRU5ErkJggg==">
-                <title>counter--009--0.4x0.4</title>
-        </image>
-        <rect x="23.540652" y="-0.000005" width="103.293503" height="107.672447" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
-                <title>obstacle sink</title>
-        </rect>
-        <rect x="69.925926" y="120" width="10.14815" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-                <title>decor do stand orient=270</title>
-        </rect>
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <image width="103" height="108" x="23.5" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGcAAABsCAQAAADdj2SxAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gEDhAuKXYP0IwAAAHuSURBVHja7ZzbbsMgEEQN8v//Mn1wXS7FLSi74wHNeYkUx3gPy8UmCSEdXoSHolNwu+QR/Yqe1bTg9AhyrP7nz4DpPNd4fSAMnPEJLo1tPlQrOVOddMxGNX8GUOc/HIc0H52RgOtub6toqnOHNj5OzZ8B1HkfI52ydsdqev6MEcym0fmQPG521NiY2Uyne3dhez+VC7PsLP2eVw0Fnrfu1lyxtlJnfXg1QqqVzicZC7t+4/q85LrckLLQWcuskaI7ytsi5yj2PrYKZbxXSmLOjbeMx+NB+7wU8wEM9tcpS9xsGt1Nx3++8X+k/r5Ocs4OeqQMKb5zYVvy+LZb33k7AOlIZ1Gkw4zZOttfoO4L3LODnp7Bjc1bz72xYfOz2VAgHWakw4x0mJEOM9JhRjrMSIcZ6TCzmY77w3W5iuP/oO2cHdySFEQHLQfRsf558cs6OEA6qD4E0fn5efEeOjiAS+6I4UBr1MxIhxnpMCMdZqTDjHSYkQ4z0mFGOsxIhxnpMCMdZqTDjHSY2VMH/ZWsNXf8W2QnJyP+fmtdUoiee9mhZY4j5t0YVvUq416+77Q7S5Qvx2r/780ynd0krg+s0+hamSIt7T/jubNUV3kezsLv/TL4dZ5kOjvKrLZfTrMXn/+mTBiRi2UH6v70/wVaa2HdMi1vnAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNC0wNC0xNFQxNjo0Njo0MSswMDowMEjSR/QAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjQtMDQtMTRUMTY6NDY6NDErMDA6MDA5j/9IAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI0LTA0LTE0VDE2OjQ2OjQxKzAwOjAwbprelwAAAABJRU5ErkJggg==">
+    <title>counter--009--0.4x0.4</title>
+  </image>
+  <rect x="23.540652" y="-0.000005" width="103.293503" height="107.672447" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+    <title>obstacle sink y=0.6</title>
+  </rect>
+  <rect x="69.925926" y="120" width="10.14815" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+    <title>decor do stand orient=270</title>
+  </rect>
 </svg>
