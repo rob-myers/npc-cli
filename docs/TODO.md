@@ -11,9 +11,9 @@
     - could extend with labels
     - could change to per gmId and hide rooms via ceilings (Player FOV)
   - ✅ clean e.g. table seen in bridge
-- 🚧 fix height convention
-  - e.g. usually provided in symbol tag?
-  - e.g. chair wouldn't specify height
+- ✅ fix symbol height convention
+  - ✅ chair, sink, table have `obstacle y=0` for seat/surface
+  - ✅ symbols height set via tag e.g. `dy=0.5`
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
