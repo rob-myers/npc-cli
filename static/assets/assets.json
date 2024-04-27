@@ -43,7 +43,7 @@
     "medical--008--3x2": {"outputHash": -194754134},
     "medical-bed--006--1.6x3.6": {"outputHash": -543810242},
     "misc-stellar-cartography--020--10x10": {"outputHash": -51191993},
-    "misc-stellar-cartography--023--4x4": {"outputHash": -1930904179},
+    "misc-stellar-cartography--023--4x4": {"outputHash": 1388704648},
     "office--001--2x2": {"outputHash": -4947941},
     "office--004--2x2": {"outputHash": -1827603845},
     "office--006--2x2": {"outputHash": -2024620942},
@@ -8594,40 +8594,6 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [3.5406, 3.5187],
-              [3.7063, 4.1833],
-              [2.9485, 4.3723],
-              [2.7828, 3.7076]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 38,
-            "symKey": "misc-stellar-cartography--023--4x4",
-            "obsId": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.8302, 2.289],
-              [2.4978, 2.4554],
-              [2.3088, 3.2132],
-              [1.6413, 3.0468]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 38,
-            "symKey": "misc-stellar-cartography--023--4x4",
-            "obsId": 1
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
               [2.7841, 1.4995],
               [2.1012, 1.778],
               [1.6437, 2.361],
@@ -8652,9 +8618,10 @@
           ],
           "meta": {
             "obstacle": true,
+            "y": 0.7,
             "symId": 38,
             "symKey": "misc-stellar-cartography--023--4x4",
-            "obsId": 2
+            "obsId": 0
           }
         }
       ],
@@ -8708,38 +8675,14 @@
       "decor": [
         {
           "type": "Polygon",
-          "coordinates": [[[2.42, 1.2], [2.42, 1.7], [1.92, 1.7], [1.92, 1.2]]],
+          "coordinates": [
+            [[2.62, 1.2], [2.62, 1.25], [2.57, 1.25], [2.57, 1.2]]
+          ],
           "meta": {
             "decor": true,
             "go": true,
             "label": "stellar",
             "cartography": true
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[3.325, 4.0158], [3.325, 4.0658], [3.275, 4.0658], [3.275, 4.0158]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 70
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[2.03, 2.7158], [2.03, 2.7658], [1.98, 2.7658], [1.98, 2.7158]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 200
           }
         }
       ],
@@ -8747,7 +8690,22 @@
       "width": 6,
       "height": 6,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 6.1},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6", "dy": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-0.259, -0.966, 0.966, -0.259, 2.99, 4.4]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6", "dy": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0.966, 0.259, -0.259, 0.966, 1.8, 2.28]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },

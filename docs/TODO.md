@@ -3,6 +3,8 @@
 ## WIP
 
 - 🚧 more raised obstacles
+  - ✅ 301
+  - 302
 - 🚧 clean custom shader approach
 - ✅ draw top of walls e.g. to obscure piercing obstacles
   - ✅ remove over-approx from floor images
