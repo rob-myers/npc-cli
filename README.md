@@ -16,8 +16,7 @@ yarn develop
 
 Configure Giscus using https://giscus.app/.
 
-Use VSCode plugin `Prettier - Code formatter`,
-published by `Prettier`.
+Use VSCode plugin ` WebGL GLSL Editor` for syntax highlighting (*.glsl + inline-strings).
 
 ## Optional Dependencies
 
