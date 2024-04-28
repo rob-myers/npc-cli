@@ -7,7 +7,7 @@
     <title>bed--003--1x1.6</title>
   </image>
   <rect x="3.000009" y="0.499999" width="119.379723" height="300" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle surface y=0.4</title>
+    <title>obstacle surface y=0.2</title>
   </rect>
   <rect x="123.000007" y="51.974155" width="377.696472" height="200.393341" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
     <title>obstacle</title>
