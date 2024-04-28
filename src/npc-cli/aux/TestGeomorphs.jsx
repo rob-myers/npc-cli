@@ -7,16 +7,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Mat } from "../geom";
 import { info, keys } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
-import { quadGeometryXZ } from "../service/three";
 import { drawPolygons, strokeLine } from "../service/dom";
+import { quadGeometryXZ } from "../service/three";
+import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-
-// import meshInstanceUvsVertexShader from "!!raw-loader!../glsl/instanced-uvs.v.glsl";
-// import meshBasicVertexShader from "!!raw-loader!../glsl/mesh-basic.v.glsl";
-// import meshBasicFragmentShader from "!!raw-loader!../glsl/mesh-basic.f.glsl";
 
 /**
  * @param {Props} props
@@ -218,54 +215,15 @@ const tmpMatFour1 = new THREE.Matrix4();
 const ObstacleShaderMaterial = shaderMaterial(
   {
     map: null,
-    // mapTransform: new THREE.Matrix3(),
-    diffuse: new THREE.Vector3(1, 1, 1),
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
     opacity: 1,
+    alphaTest: 0.5,
+    // mapTransform: new THREE.Matrix3(),
   },
-  // meshBasicVertexShader,
-  /*glsl*/`
-  varying vec2 vUv;
-
-  attribute vec2 uvDimensions;
-  attribute vec2 uvOffsets;
-
-  #include <common>
-  #include <logdepthbuf_pars_vertex>
-
-  void main() {
-    // vUv = uv;
-    vUv = (uv * uvDimensions) + uvOffsets;
-    vec4 modelViewPosition = vec4(position, 1.0);
-    
-    #ifdef USE_BATCHING
-      modelViewPosition = batchingMatrix * modelViewPosition;
-    #endif
-
-    #ifdef USE_INSTANCING
-      modelViewPosition = instanceMatrix * modelViewPosition;
-    #endif
-    
-    modelViewPosition = modelViewMatrix * modelViewPosition;
-    gl_Position = projectionMatrix * modelViewPosition;
-
-    #include <logdepthbuf_vertex>
-  }
-  `,
-  // meshBasicFragmentShader,
-  /*glsl*/`
-  varying vec2 vUv;
-  uniform sampler2D map;
-
-  #include <common>
-  #include <logdepthbuf_pars_fragment>
-
-  void main() {
-    gl_FragColor = texture2D( map, vUv );
-    // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
-    if(gl_FragColor.a < 0.5) discard;
-    #include <logdepthbuf_fragment>
-  }
-  `,
+  glsl.meshBasic.instanceUvsVert,
+  // glsl.minimalInstanceUvsVert,
+  glsl.meshBasic.Frag,
+  // glsl.minimalInstanceUvsFrag,
 );
 
 extend({ ObstacleShaderMaterial });

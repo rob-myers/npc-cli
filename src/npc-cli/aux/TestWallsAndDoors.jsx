@@ -4,14 +4,12 @@ import { damp } from "maath/easing"
 
 import { hashJson, info } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
+import * as glsl from "../service/glsl";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import { quadGeometryXY } from "../service/three";
 import { Mat, Vect } from "../geom";
 import { geomorphService } from "../service/geomorph";
-
-import basicVertexShader from "!!raw-loader!../glsl/mesh-basic-simplified.v.glsl";
-import gradientFragmentShader from "!!raw-loader!../glsl/gradient.f.glsl";
 
 /**
  * @param {Props} props
@@ -143,16 +141,17 @@ export default function TestWallsAndDoors(props) {
 
       <instancedMesh
         name="doors"
-        key={`${api.mapsHash} ${api.layoutsHash} ${doorShaderHash}`}
+        key={`${api.mapsHash} ${api.layoutsHash}`}
         ref={instances => instances && (state.doorsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}
         onPointerUp={state.handleClick}
       >
         <shaderMaterial
+          key={doorShaderHash}
           side={THREE.DoubleSide}
-          vertexShader={basicVertexShader}
-          fragmentShader={gradientFragmentShader}
+          vertexShader={glsl.meshBasic.simplifiedVert}
+          fragmentShader={glsl.basicGradientFrag}
           // uniforms={uniforms}
         />
       </instancedMesh>
@@ -190,4 +189,4 @@ const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
 const tmpMatFour2 = new THREE.Matrix4();
 
-const doorShaderHash = hashJson({ basicVertexShader, gradientFragmentShader });
+const doorShaderHash = hashJson([glsl.meshBasic.simplifiedVert, glsl.basicGradientFrag]);

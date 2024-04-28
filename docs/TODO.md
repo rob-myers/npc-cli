@@ -4,8 +4,8 @@
 
 - 🚧 more raised obstacles
   - ✅ 301
-  - 302
-- 🚧 clean custom shader approach
+  - 🚧 302
+- ✅ clean custom shader approach
 - ✅ draw top of walls e.g. to obscure piercing obstacles
   - ✅ remove over-approx from floor images
   - ❌ could union walls, triangulate, use InstancedMesh triangles
@@ -43,6 +43,7 @@
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
+- static obstacles can specify color or shade
 - closed doors have filtered doorPolys
 - can make agent look at point
 - ✅ migrate roomGraph per geomorph
