@@ -27,11 +27,12 @@
     "extra--chair--003--0.25x0.25": {"outputHash": -1182025100},
     "extra--chair--005-0.25x0.25": {"outputHash": -1502263225},
     "extra--desk--004--0.5x1": {"outputHash": -46710918},
+    "extra--desk--006--0.4x1": {"outputHash": -1526970556},
     "extra--fresher--001--0.5x0.5": {"outputHash": -1960546859},
     "extra--fresher--002--0.5x0.5": {"outputHash": 267446923},
     "fresher--002--0.4x0.6": {"outputHash": -1639251506},
     "fresher--020--2x2": {"outputHash": -476453297},
-    "fresher--025--3x2": {"outputHash": -2104527746},
+    "fresher--025--3x2": {"outputHash": 479467433},
     "fresher--036--4x2": {"outputHash": 176454093},
     "fuel--010--4x2": {"outputHash": -1452973763},
     "lab--012--4x3": {"outputHash": -852313839},
@@ -5611,6 +5612,42 @@
       "removableDoors": [],
       "addableWalls": []
     },
+    "extra--desk--006--0.4x1": {
+      "key": "extra--desk--006--0.4x1",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [1.5175, -0.0175],
+              [1.5175, 0.6175],
+              [-0.0175, 0.6175],
+              [-0.0175, -0.0175]
+            ]
+          ],
+          "meta": {
+            "obstacle": true,
+            "surface": true,
+            "symId": 65,
+            "symKey": "extra--desk--006--0.4x1",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 0.6,
+      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 1.535, "height": 0.635},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
     "extra--fresher--001--0.5x0.5": {
       "key": "extra--fresher--001--0.5x0.5",
       "isHull": false,
@@ -6000,11 +6037,11 @@
           "transform": [1, 0, 0, 1, 0, 0]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.6},
-          "width": 0.75,
-          "height": 1.5,
-          "transform": [0, 1, -1, 0, 1.5, 0]
+          "symbolKey": "extra--desk--006--0.4x1",
+          "meta": {"key": "extra--desk--006--0.4x1", "y": 0.6},
+          "width": 1.5,
+          "height": 0.6,
+          "transform": [1, 0, 0, 1, 0, 0]
         }
       ],
       "removableDoors": [],

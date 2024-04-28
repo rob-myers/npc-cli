@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <image width="307" height="127" x="-3.5" y="-3.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATMAAAB/BAMAAABxmzjOAAAAIVBMVEX///8AAAD///////8AAAChoaF4eHg9PT2pqamNjY1kZGQKnct8AAAAA3RSTlO6AHaL2WsRAAAAr0lEQVR42u3csQ3CQAAEwS/hXQsSsYUckVMTJdAuiUNf4uj0mq1gKthxtDbRbrSjLUh7f+r6nbT9UdcTDe06tIrQ0EJoFaGhhdAqQkMLoVWEhhZCqwgNLYRWERpaCK0iNLQQWkVoaCG0itDQQmgVoaGF0CpCQwuhVYSGFkKrCA0thFYRGloIrSI0tBBaRWhoIbSK0NBCaBWhLUp7jbq+/YOWztAWoxWPp+bYjs62+Qf3qeZs5vF4KAAAAABJRU5ErkJggg==">
+    <title>extra--desk--006--0.4x1</title>
+  </image>
+  <rect width="308" height="128.000001" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;" x="-4" y="-4">
+    <title>obstacle surface</title>
+  </rect>
+</svg>
