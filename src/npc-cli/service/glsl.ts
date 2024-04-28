@@ -1,3 +1,8 @@
+import * as THREE from "three";
+import { extend, Object3DNode } from "@react-three/fiber";
+import { shaderMaterial } from "@react-three/drei";
+
+
 export const minimalInstanceUvsVert = /*glsl*/`
 
   varying vec2 vUv;
@@ -279,3 +284,27 @@ export const basicGradientFrag = /*glsl*/`
 
   }
 `;
+
+export const ObstacleShaderMaterial = shaderMaterial(
+  {
+    map: null,
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
+    opacity: 1,
+    alphaTest: 0.5,
+    // mapTransform: new THREE.Matrix3(),
+  },
+  meshBasic.instanceUvsVert,
+  // minimalInstanceUvsVert,
+  meshBasic.Frag,
+  // minimalInstanceUvsFrag,
+);
+
+extend({ ObstacleShaderMaterial });
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      obstacleShaderMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial>;
+    }
+  }
+}

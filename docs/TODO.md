@@ -5,7 +5,9 @@
 - 🚧 more raised obstacles
   - ✅ 301
   - 🚧 302
+
 - ✅ clean custom shader approach
+- ✅ clean custom shaders again
 - ✅ draw top of walls e.g. to obscure piercing obstacles
   - ✅ remove over-approx from floor images
   - ❌ could union walls, triangulate, use InstancedMesh triangles

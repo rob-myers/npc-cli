@@ -37,7 +37,7 @@ export default class InfiniteGridHelper extends THREE.Mesh {
         },
       },
       transparent: true,
-      vertexShader: `
+      vertexShader: /*glsl*/`
          varying vec3 worldPosition;
          uniform float uDistance;
          
@@ -50,7 +50,7 @@ export default class InfiniteGridHelper extends THREE.Mesh {
          }
          `,
 
-      fragmentShader: `
+      fragmentShader: /*glsl*/`
         varying vec3 worldPosition;
         
         uniform float uSize1;

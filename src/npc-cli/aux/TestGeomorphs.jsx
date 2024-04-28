@@ -1,6 +1,5 @@
 import React from "react";
 import * as THREE from "three";
-import { extend } from "@react-three/fiber";
 import { useTexture, shaderMaterial } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
@@ -180,7 +179,7 @@ export default function TestGeomorphs(props) {
       position={[0, 0.001, 0]} // 🚧 temp
     >
       <obstacleShaderMaterial
-        key={ObstacleShaderMaterial.key}
+        key={glsl.ObstacleShaderMaterial.key}
         side={THREE.DoubleSide}
         transparent
         //@ts-expect-error
@@ -211,19 +210,3 @@ export default function TestGeomorphs(props) {
 const textureLoader = new THREE.TextureLoader();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
-
-const ObstacleShaderMaterial = shaderMaterial(
-  {
-    map: null,
-    diffuse: new THREE.Vector3(1, 0.9, 0.6),
-    opacity: 1,
-    alphaTest: 0.5,
-    // mapTransform: new THREE.Matrix3(),
-  },
-  glsl.meshBasic.instanceUvsVert,
-  // glsl.minimalInstanceUvsVert,
-  glsl.meshBasic.Frag,
-  // glsl.minimalInstanceUvsFrag,
-);
-
-extend({ ObstacleShaderMaterial });
