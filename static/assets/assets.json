@@ -24,48 +24,49 @@
     "empty-room--039--3x4": {"outputHash": 314268617},
     "engineering--045--6x4": {"outputHash": -1413835510},
     "engineering--047--4x7": {"outputHash": -643000557},
-    "extra--chair--003--0.25x0.25": {"outputHash": -1182025100},
-    "extra--chair--005-0.25x0.25": {"outputHash": -1502263225},
-    "extra--desk--004--0.5x1": {"outputHash": -46710918},
-    "extra--desk--006--0.4x1": {"outputHash": -1526970556},
-    "extra--fresher--001--0.5x0.5": {"outputHash": -1960546859},
-    "extra--fresher--002--0.5x0.5": {"outputHash": 267446923},
-    "fresher--002--0.4x0.6": {"outputHash": -1639251506},
-    "fresher--020--2x2": {"outputHash": -476453297},
+    "extra--chair--003--0.25x0.25": {"outputHash": -243334893},
+    "extra--chair--005-0.25x0.25": {"outputHash": -1457867162},
+    "extra--desk--004--0.5x1": {"outputHash": 1048115515},
+    "extra--desk--006--0.4x1": {"outputHash": -477221999},
+    "extra--desk--007--0.4x0.66": {"outputHash": -1559288945},
+    "extra--fresher--001--0.5x0.5": {"outputHash": -1241491242},
+    "extra--fresher--002--0.5x0.5": {"outputHash": -1887233588},
+    "fresher--002--0.4x0.6": {"outputHash": -302613971},
+    "fresher--020--2x2": {"outputHash": 108430827},
     "fresher--025--3x2": {"outputHash": 479467433},
-    "fresher--036--4x2": {"outputHash": 176454093},
-    "fuel--010--4x2": {"outputHash": -1452973763},
-    "lab--012--4x3": {"outputHash": -852313839},
-    "lab--018--4x4": {"outputHash": -299847055},
-    "lab--023--4x4": {"outputHash": 223938714},
+    "fresher--036--4x2": {"outputHash": -2094917106},
+    "fuel--010--4x2": {"outputHash": -265014244},
+    "lab--012--4x3": {"outputHash": 1445351655},
+    "lab--018--4x4": {"outputHash": 1150024818},
+    "lab--023--4x4": {"outputHash": -1778052744},
     "lifeboat--small-craft--2x4": {"outputHash": 737229891},
-    "lounge--015--4x2": {"outputHash": -966188902},
-    "machinery--155--1.8x3.6": {"outputHash": -199440051},
-    "machinery--156--2x4": {"outputHash": -1538351620},
-    "machinery--158--1.8x3.6": {"outputHash": 699099303},
+    "lounge--015--4x2": {"outputHash": -535222341},
+    "machinery--155--1.8x3.6": {"outputHash": 1902388494},
+    "machinery--156--2x4": {"outputHash": -1487666627},
+    "machinery--158--1.8x3.6": {"outputHash": -54924986},
     "machinery--357--4x2": {"outputHash": -1391570688},
     "medical--007--3x2": {"outputHash": -26044782},
-    "medical--008--3x2": {"outputHash": -1485215615},
-    "medical-bed--005--0.6x1.2": {"outputHash": -534929266},
-    "medical-bed--006--1.6x3.6": {"outputHash": 704571651},
-    "misc-stellar-cartography--020--10x10": {"outputHash": 342652845},
-    "misc-stellar-cartography--023--4x4": {"outputHash": -818841962},
+    "medical--008--3x2": {"outputHash": -1641490400},
+    "medical-bed--005--0.6x1.2": {"outputHash": -547036785},
+    "medical-bed--006--1.6x3.6": {"outputHash": 1043491225},
+    "misc-stellar-cartography--020--10x10": {"outputHash": 1844520172},
+    "misc-stellar-cartography--023--4x4": {"outputHash": 1773167447},
     "office--001--2x2": {"outputHash": -4947941},
-    "office--004--2x2": {"outputHash": -914793359},
-    "office--006--2x2": {"outputHash": -557060115},
-    "office--020--2x3": {"outputHash": 365784986},
-    "office--023--2x3": {"outputHash": -1896782591},
-    "office--026--2x3": {"outputHash": 1887214474},
-    "office--061--3x4": {"outputHash": -877672942},
-    "office--074--4x4": {"outputHash": 613436588},
-    "office--089--4x4": {"outputHash": -1040893310},
-    "stateroom--012--2x2": {"outputHash": -1800780718},
+    "office--004--2x2": {"outputHash": -1591224721},
+    "office--006--2x2": {"outputHash": -1981534868},
+    "office--020--2x3": {"outputHash": -2105884137},
+    "office--023--2x3": {"outputHash": -514414719},
+    "office--026--2x3": {"outputHash": -65678613},
+    "office--061--3x4": {"outputHash": 1590622353},
+    "office--074--4x4": {"outputHash": -1610982279},
+    "office--089--4x4": {"outputHash": -1543669185},
+    "stateroom--012--2x2": {"outputHash": 1872775189},
     "stateroom--014--2x2": {"outputHash": -570553752},
     "stateroom--018--2x3": {"outputHash": 1345545395},
     "stateroom--020--2x3": {"outputHash": 190186949},
-    "stateroom--035--2x3": {"outputHash": 1501859225},
+    "stateroom--035--2x3": {"outputHash": -2005837159},
     "stateroom--036--2x4": {"outputHash": -1776975145},
-    "table--004--1.2x2.4": {"outputHash": -714891684},
+    "table--004--1.2x2.4": {"outputHash": -1861783930},
     "demo-map-1": {"outputHash": 1429562441},
     "small-map-1": {"outputHash": -65292346}
   },
@@ -5487,7 +5488,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 62,
+            "symId": 63,
             "symKey": "extra--chair--003--0.25x0.25",
             "obsId": 0
           }
@@ -5546,7 +5547,7 @@
           "meta": {
             "obstacle": true,
             "chair": true,
-            "symId": 64,
+            "symId": 65,
             "symKey": "extra--chair--005-0.25x0.25",
             "obsId": 0
           }
@@ -5594,7 +5595,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 63,
+            "symId": 64,
             "symKey": "extra--desk--004--0.5x1",
             "obsId": 0
           }
@@ -5620,17 +5621,12 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [
-              [1.5175, -0.0175],
-              [1.5175, 0.6175],
-              [-0.0175, 0.6175],
-              [-0.0175, -0.0175]
-            ]
+            [[1.52, -0.02], [1.52, 0.62], [-0.02, 0.62], [-0.02, -0.02]]
           ],
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 65,
+            "symId": 66,
             "symKey": "extra--desk--006--0.4x1",
             "obsId": 0
           }
@@ -5644,6 +5640,37 @@
       "width": 1.5,
       "height": 0.6,
       "pngRect": {"x": -0.0175, "y": -0.0175, "width": 1.535, "height": 0.635},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--desk--007--0.4x0.66": {
+      "key": "extra--desk--007--0.4x0.66",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.02, -0.02], [1.02, 0.62], [-0.02, 0.62], [-0.02, -0.02]]
+          ],
+          "meta": {
+            "obstacle": true,
+            "surface": true,
+            "symId": 24,
+            "symKey": "extra--desk--007--0.4x0.66",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 1,
+      "height": 0.6,
+      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 1.035, "height": 0.635},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -5669,7 +5696,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 60,
+            "symId": 61,
             "symKey": "extra--fresher--001--0.5x0.5",
             "obsId": 0
           }
@@ -5717,7 +5744,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 61,
+            "symId": 62,
             "symKey": "extra--fresher--002--0.5x0.5",
             "obsId": 0
           }
@@ -5771,7 +5798,7 @@
           "meta": {
             "obstacle": true,
             "toilet": true,
-            "symId": 24,
+            "symId": 25,
             "symKey": "fresher--002--0.4x0.6",
             "obsId": 0
           }
@@ -5801,41 +5828,7 @@
       "key": "fresher--020--2x2",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[3, 0], [3, 0.5975], [2.0115, 0.5975], [2.0115, 0]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 25,
-            "symKey": "fresher--020--2x2",
-            "obsId": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.215, 0.05],
-              [1.79, 0.05],
-              [1.7767, 0.2416],
-              [1.7163, 0.555],
-              [1.6574, 0.6762],
-              [1.5736, 0.7583],
-              [1.4419, 0.7583],
-              [1.3573, 0.6975],
-              [1.2758, 0.5496],
-              [1.2166, 0.2489]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 25,
-            "symKey": "fresher--020--2x2",
-            "obsId": 1
-          }
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -5891,39 +5884,35 @@
             [[1.3095, 1.941], [1.3095, 1.991], [1.2595, 1.991], [1.2595, 1.941]]
           ],
           "meta": {"decor": true, "meta": true, "label": "bathroom"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.525, 0.5446], [1.525, 0.5946], [1.475, 0.5946], [1.475, 0.5446]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 90
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[2.525, 0.6946], [2.525, 0.7446], [2.475, 0.7446], [2.475, 0.6946]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "stand": true,
-            "sink": true,
-            "orient": 270
-          }
         }
       ],
       "unsorted": [],
       "width": 3,
       "height": 3,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "extra--desk--007--0.4x0.66",
+          "meta": {"key": "extra--desk--007--0.4x0.66", "y": 0.6},
+          "width": 1,
+          "height": 0.6,
+          "transform": [1, 0, 0, 1, 2, 0]
+        },
+        {
+          "symbolKey": "counter--010--0.4x0.4",
+          "meta": {"key": "counter--010--0.4x0.4", "y": 0.65},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 2.13, 0]
+        },
+        {
+          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 1.13, 0]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -6057,7 +6046,7 @@
           "coordinates": [[[2, 0], [2, 0.625], [0, 0.625], [0, 0]]],
           "meta": {
             "obstacle": true,
-            "symId": 27,
+            "symId": 28,
             "symKey": "fresher--036--4x2",
             "obsId": 0
           }
@@ -6080,7 +6069,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 27,
+            "symId": 28,
             "symKey": "fresher--036--4x2",
             "obsId": 1
           }
@@ -6103,7 +6092,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 27,
+            "symId": 28,
             "symKey": "fresher--036--4x2",
             "obsId": 2
           }
@@ -6126,7 +6115,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 27,
+            "symId": 28,
             "symKey": "fresher--036--4x2",
             "obsId": 3
           }
@@ -6149,7 +6138,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 27,
+            "symId": 28,
             "symKey": "fresher--036--4x2",
             "obsId": 4
           }
@@ -6337,7 +6326,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 28,
+            "symId": 29,
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6415,7 +6404,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 29,
+            "symId": 30,
             "symKey": "lab--012--4x3",
             "obsId": 0
           }
@@ -6436,7 +6425,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 29,
+            "symId": 30,
             "symKey": "lab--012--4x3",
             "obsId": 1
           }
@@ -6457,7 +6446,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 29,
+            "symId": 30,
             "symKey": "lab--012--4x3",
             "obsId": 2
           }
@@ -6615,7 +6604,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 30,
+            "symId": 31,
             "symKey": "lab--018--4x4",
             "obsId": 0
           }
@@ -6635,7 +6624,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 30,
+            "symId": 31,
             "symKey": "lab--018--4x4",
             "obsId": 1
           }
@@ -6655,7 +6644,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 30,
+            "symId": 31,
             "symKey": "lab--018--4x4",
             "obsId": 2
           }
@@ -6675,7 +6664,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 30,
+            "symId": 31,
             "symKey": "lab--018--4x4",
             "obsId": 3
           }
@@ -6695,7 +6684,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 30,
+            "symId": 31,
             "symKey": "lab--018--4x4",
             "obsId": 4
           }
@@ -6878,7 +6867,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 31,
+            "symId": 32,
             "symKey": "lab--023--4x4",
             "obsId": 0
           }
@@ -6899,7 +6888,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 31,
+            "symId": 32,
             "symKey": "lab--023--4x4",
             "obsId": 1
           }
@@ -6920,7 +6909,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 31,
+            "symId": 32,
             "symKey": "lab--023--4x4",
             "obsId": 2
           }
@@ -6941,7 +6930,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 31,
+            "symId": 32,
             "symKey": "lab--023--4x4",
             "obsId": 3
           }
@@ -7254,7 +7243,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 0
           }
@@ -7264,7 +7253,7 @@
           "coordinates": [[[2.1165, 1.5], [2.1165, 3], [1.5, 3], [1.5, 1.5]]],
           "meta": {
             "obstacle": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 1
           }
@@ -7277,7 +7266,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 2
           }
@@ -7300,7 +7289,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 3
           }
@@ -7323,7 +7312,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 4
           }
@@ -7336,7 +7325,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 5
           }
@@ -7348,7 +7337,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 6
           }
@@ -7360,7 +7349,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 7
           }
@@ -7372,7 +7361,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 8
           }
@@ -7394,7 +7383,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 9
           }
@@ -7416,7 +7405,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 33,
+            "symId": 34,
             "symKey": "lounge--015--4x2",
             "obsId": 10
           }
@@ -7642,7 +7631,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 34,
+            "symId": 35,
             "symKey": "machinery--155--1.8x3.6",
             "obsId": 0
           }
@@ -7700,7 +7689,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 35,
+            "symId": 36,
             "symKey": "machinery--156--2x4",
             "obsId": 0
           }
@@ -7748,7 +7737,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 36,
+            "symId": 37,
             "symKey": "machinery--158--1.8x3.6",
             "obsId": 0
           }
@@ -7932,7 +7921,7 @@
           "meta": {
             "obstacle": true,
             "y": 0.5,
-            "symId": 41,
+            "symId": 42,
             "symKey": "medical--008--3x2",
             "obsId": 0
           }
@@ -8056,7 +8045,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 38,
+            "symId": 39,
             "symKey": "medical-bed--005--0.6x1.2",
             "obsId": 0
           }
@@ -8110,7 +8099,7 @@
           "meta": {
             "obstacle": true,
             "pod": true,
-            "symId": 39,
+            "symId": 40,
             "symKey": "medical-bed--006--1.6x3.6",
             "obsId": 0
           }
@@ -8122,7 +8111,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 39,
+            "symId": 40,
             "symKey": "medical-bed--006--1.6x3.6",
             "obsId": 1
           }
@@ -8142,7 +8131,7 @@
           "meta": {
             "obstacle": true,
             "pod": true,
-            "symId": 39,
+            "symId": 40,
             "symKey": "medical-bed--006--1.6x3.6",
             "obsId": 2
           }
@@ -8154,7 +8143,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 39,
+            "symId": 40,
             "symKey": "medical-bed--006--1.6x3.6",
             "obsId": 3
           }
@@ -8174,7 +8163,7 @@
           "meta": {
             "obstacle": true,
             "pod": true,
-            "symId": 39,
+            "symId": 40,
             "symKey": "medical-bed--006--1.6x3.6",
             "obsId": 4
           }
@@ -8299,7 +8288,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 42,
+            "symId": 43,
             "symKey": "misc-stellar-cartography--020--10x10",
             "obsId": 0
           }
@@ -8316,7 +8305,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 42,
+            "symId": 43,
             "symKey": "misc-stellar-cartography--020--10x10",
             "obsId": 1
           }
@@ -8333,7 +8322,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 42,
+            "symId": 43,
             "symKey": "misc-stellar-cartography--020--10x10",
             "obsId": 2
           }
@@ -8580,7 +8569,7 @@
           "meta": {
             "obstacle": true,
             "y": 0.7,
-            "symId": 43,
+            "symId": 44,
             "symKey": "misc-stellar-cartography--023--4x4",
             "obsId": 0
           }
@@ -8791,7 +8780,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 45,
+            "symId": 46,
             "symKey": "office--004--2x2",
             "obsId": 0
           }
@@ -8815,7 +8804,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 45,
+            "symId": 46,
             "symKey": "office--004--2x2",
             "obsId": 1
           }
@@ -8916,7 +8905,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 46,
+            "symId": 47,
             "symKey": "office--006--2x2",
             "obsId": 0
           }
@@ -8933,7 +8922,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 46,
+            "symId": 47,
             "symKey": "office--006--2x2",
             "obsId": 1
           }
@@ -8962,7 +8951,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 46,
+            "symId": 47,
             "symKey": "office--006--2x2",
             "obsId": 2
           }
@@ -9145,7 +9134,7 @@
           "coordinates": [[[0.749, 0], [0.749, 3.756], [0, 3.756], [0, 0]]],
           "meta": {
             "obstacle": true,
-            "symId": 48,
+            "symId": 49,
             "symKey": "office--020--2x3",
             "obsId": 0
           }
@@ -9156,7 +9145,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 48,
+            "symId": 49,
             "symKey": "office--020--2x3",
             "obsId": 1
           }
@@ -9169,7 +9158,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 48,
+            "symId": 49,
             "symKey": "office--020--2x3",
             "obsId": 2
           }
@@ -9181,7 +9170,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 48,
+            "symId": 49,
             "symKey": "office--020--2x3",
             "obsId": 3
           }
@@ -9193,7 +9182,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 48,
+            "symId": 49,
             "symKey": "office--020--2x3",
             "obsId": 4
           }
@@ -9285,7 +9274,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 49,
+            "symId": 50,
             "symKey": "office--023--2x3",
             "obsId": 0
           }
@@ -9297,7 +9286,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 49,
+            "symId": 50,
             "symKey": "office--023--2x3",
             "obsId": 1
           }
@@ -9309,7 +9298,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 49,
+            "symId": 50,
             "symKey": "office--023--2x3",
             "obsId": 2
           }
@@ -9321,7 +9310,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 49,
+            "symId": 50,
             "symKey": "office--023--2x3",
             "obsId": 3
           }
@@ -9443,7 +9432,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 47,
+            "symId": 48,
             "symKey": "office--026--2x3",
             "obsId": 0
           }
@@ -9455,7 +9444,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 47,
+            "symId": 48,
             "symKey": "office--026--2x3",
             "obsId": 1
           }
@@ -9467,7 +9456,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 47,
+            "symId": 48,
             "symKey": "office--026--2x3",
             "obsId": 2
           }
@@ -9594,7 +9583,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "office--061--3x4",
             "obsId": 0
           }
@@ -9617,7 +9606,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "office--061--3x4",
             "obsId": 1
           }
@@ -9629,7 +9618,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "office--061--3x4",
             "obsId": 2
           }
@@ -9641,7 +9630,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "office--061--3x4",
             "obsId": 3
           }
@@ -9653,7 +9642,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "office--061--3x4",
             "obsId": 4
           }
@@ -9665,7 +9654,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "office--061--3x4",
             "obsId": 5
           }
@@ -9688,7 +9677,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "office--061--3x4",
             "obsId": 6
           }
@@ -9841,7 +9830,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 0
           }
@@ -9852,7 +9841,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 1
           }
@@ -9863,7 +9852,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 2
           }
@@ -9874,7 +9863,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 3
           }
@@ -9885,7 +9874,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 4
           }
@@ -9896,7 +9885,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 5
           }
@@ -9907,7 +9896,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 6
           }
@@ -9917,7 +9906,7 @@
           "coordinates": [[[0.65, 0.5], [0.65, 1], [0.2, 1], [0.2, 0.5]]],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 7
           }
@@ -9927,7 +9916,7 @@
           "coordinates": [[[2.15, 0.5], [2.15, 1], [1.7, 1], [1.7, 0.5]]],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 8
           }
@@ -9937,7 +9926,7 @@
           "coordinates": [[[3.65, 0.5], [3.65, 1], [3.2, 1], [3.2, 0.5]]],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 9
           }
@@ -9947,7 +9936,7 @@
           "coordinates": [[[5.15, 0.5], [5.15, 1], [4.7, 1], [4.7, 0.5]]],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 10
           }
@@ -9957,7 +9946,7 @@
           "coordinates": [[[2.15, 5], [2.15, 5.5], [1.7, 5.5], [1.7, 5]]],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 11
           }
@@ -9967,7 +9956,7 @@
           "coordinates": [[[3.65, 5], [3.65, 5.5], [3.2, 5.5], [3.2, 5]]],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 12
           }
@@ -9977,7 +9966,7 @@
           "coordinates": [[[5.15, 5], [5.15, 5.5], [4.7, 5.5], [4.7, 5]]],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 13
           }
@@ -9997,7 +9986,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 14
           }
@@ -10020,7 +10009,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 15
           }
@@ -10042,7 +10031,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 16
           }
@@ -10061,7 +10050,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 17
           }
@@ -10080,7 +10069,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 18
           }
@@ -10099,7 +10088,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 19
           }
@@ -10118,7 +10107,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 51,
+            "symId": 52,
             "symKey": "office--074--4x4",
             "obsId": 20
           }
@@ -10423,7 +10412,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 52,
+            "symId": 53,
             "symKey": "office--089--4x4",
             "obsId": 0
           }
@@ -10440,7 +10429,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 52,
+            "symId": 53,
             "symKey": "office--089--4x4",
             "obsId": 1
           }
@@ -10457,7 +10446,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 52,
+            "symId": 53,
             "symKey": "office--089--4x4",
             "obsId": 2
           }
@@ -10478,7 +10467,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 52,
+            "symId": 53,
             "symKey": "office--089--4x4",
             "obsId": 3
           }
@@ -10504,7 +10493,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 52,
+            "symId": 53,
             "symKey": "office--089--4x4",
             "obsId": 4
           }
@@ -10713,7 +10702,7 @@
           "coordinates": [[[0.6087, 0], [0.6087, 1.5], [0, 1.5], [0, 0]]],
           "meta": {
             "obstacle": true,
-            "symId": 53,
+            "symId": 54,
             "symKey": "stateroom--012--2x2",
             "obsId": 0
           }
@@ -10725,7 +10714,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 53,
+            "symId": 54,
             "symKey": "stateroom--012--2x2",
             "obsId": 1
           }
@@ -10742,7 +10731,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 53,
+            "symId": 54,
             "symKey": "stateroom--012--2x2",
             "obsId": 2
           }
@@ -11114,7 +11103,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 57,
+            "symId": 58,
             "symKey": "stateroom--035--2x3",
             "obsId": 0
           }
@@ -11125,7 +11114,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 57,
+            "symId": 58,
             "symKey": "stateroom--035--2x3",
             "obsId": 1
           }
@@ -11146,7 +11135,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 57,
+            "symId": 58,
             "symKey": "stateroom--035--2x3",
             "obsId": 2
           }
@@ -11165,7 +11154,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 57,
+            "symId": 58,
             "symKey": "stateroom--035--2x3",
             "obsId": 3
           }
@@ -11453,7 +11442,7 @@
             "table": true,
             "surface": true,
             "y": 0.65,
-            "symId": 59,
+            "symId": 60,
             "symKey": "table--004--1.2x2.4",
             "obsId": 0
           }
