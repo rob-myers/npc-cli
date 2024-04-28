@@ -16,12 +16,16 @@
 - ✅ fix symbol height convention
   - ✅ chair, sink, table have `obstacle y=0` for seat/surface
   - ✅ symbols height set via tag e.g. `dy=0.5`
+- ✅ simplify symbol height convention
+  - only use `y`
+  - applies to all obstacles
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
     - i.e. same as file contents.
   - ✅ avoid recomputing obstacles.png
   - ✅ can `yarn images-fast --all`
+  - 🚧 obstacles.png reloads e.g. via `debugTex.needsUpdate = true`
   - onchange layout obstacles, trigger `yarn images --all`
     - we assume that symbol `<image>` does not change
   - avoid recomputing png -> webp
@@ -30,7 +34,6 @@
     - create {assets,geomorphs,spritesheet}.json if outdated
     - draws sprite-sheet it outdated
     - generates webp if outdated (compare timestamps)
-  - obstacles.png reloads e.g. via `debugTex.needsUpdate = true`
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed

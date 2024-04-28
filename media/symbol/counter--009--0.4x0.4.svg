@@ -7,7 +7,7 @@
     <title>counter--009--0.4x0.4</title>
   </image>
   <rect x="23.540652" y="-0.000005" width="103.293503" height="107.672447" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
-    <title>obstacle sink y=0</title>
+    <title>obstacle sink</title>
   </rect>
   <rect x="69.925926" y="120" width="10.14815" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
     <title>decor do stand orient=270</title>

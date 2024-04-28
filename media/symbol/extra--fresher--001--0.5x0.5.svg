@@ -7,7 +7,7 @@
     <title>extra--fresher--001--0.5x0.5</title>
   </image>
   <path d="M 6.500001 0.000002 L 143.500001 0.000002 L 140.937001 70.11565 L 129.229727 97.415214 L 108.994001 110.713008 L 74.839001 118.06932 L 31.901956 108.1516 L 6.500001 74.086824 L 6.500001 0.000002 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle y=0</title>
+    <title>obstacle</title>
   </path>
   <rect x="72.812683" y="130" width="10.14815" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
     <title>decor do stand orient=270</title>

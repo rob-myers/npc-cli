@@ -597,7 +597,7 @@ class GeomorphService {
       doors: doors.map((x) => x.cleanClone(tmpMat1)),
       obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1, {
         // aggregate height
-        ...typeof meta.dy === 'number' && typeof x.meta.y === 'number' && { y: meta.dy + x.meta.y },
+        ...typeof meta.y === 'number' && { y: meta.y + (Number(x.meta.y) || 0) },
         // aggregate transform
         ...{ transform: tmpMat2.feedFromArray(transform).preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
       })),

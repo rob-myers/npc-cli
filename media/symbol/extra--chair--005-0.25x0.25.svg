@@ -7,7 +7,7 @@
     <title>extra--chair--005-0.25x0.25</title>
   </image>
   <path d="M 16.266 -9.80538 L 59.11553 -9.80203 L 85 16.22607 L 85 58.39445 L 58.73862 84.80072 L 15.88436 84.80191 L -10.3358 58.43626 L -10.3358 16.94318 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
-    <title>obstacle chair y=0</title>
+    <title>obstacle chair</title>
   </path>
   <rect x="32.425925" y="32.5" width="10.14815" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
     <title>decor do sit chair orient=0</title>

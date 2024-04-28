@@ -1,71 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+<svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:bx="https://boxy-svg.com">
   <defs>
-    <bx:grid x="0" y="0" width="300" height="300"/>
-    <pattern id="pattern-4" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860573989354, 157.704223632813)" xlink:href="#pattern-0"/>
+    <bx:grid x="0" y="0" width="300" height="300" />
+    <pattern id="pattern-4"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860573989354, 157.704223632813)"
+      xlink:href="#pattern-0" />
     <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
-        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
-        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
-        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
-        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193"
+          x="-7.586937" />
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z"
+          style="stroke: rgb(0, 0, 0);" />
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113"
+          x="-7.586937" />
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z"
+          style="stroke: rgb(0, 0, 0);" />
+        <rect width="141.961975" height="18.928265"
+          style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131"
+          x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)" />
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z"
+          style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;"
+          transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)" />
+        <rect width="141.961975" height="18.928265"
+          style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131"
+          x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)" />
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z"
+          style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;"
+          transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)" />
       </g>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300"/>
+        <bx:grid x="0" y="0" width="300" height="300" />
       </defs>
     </pattern>
-    <pattern id="pattern-1" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860565185547, 277.704223632813)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-2" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860565185547, 397.704223632813)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-3" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860565185547, 517.704223632813)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-5" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 157.704223632813)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-6" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 277.704223632813)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-7" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 397.704223632813)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-8" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 517.704223632813)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-9" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, 112.501345280659, 23.704210868265)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-10" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -112.498678207397, 126.291101455688)" xlink:href="#pattern-0"/>
+    <pattern id="pattern-1"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860565185547, 277.704223632813)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-2"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860565185547, 397.704223632813)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-3"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -312.860565185547, 517.704223632813)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-5"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 157.704223632813)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-6"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 277.704223632813)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-7"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 397.704223632813)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-8"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -12.13676071167, 517.704223632813)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-9"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, 112.501345280659, 23.704210868265)"
+      xlink:href="#pattern-0" />
+    <pattern id="pattern-10"
+      patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -112.498678207397, 126.291101455688)"
+      xlink:href="#pattern-0" />
   </defs>
-  <image width="344" height="724" x="-22" y="-62" xlink:href="data:image/png;base64,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">
+  <image width="344" height="724" x="-22" y="-62"
+    xlink:href="data:image/png;base64,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">
     <title>table--004--1.2x2.4</title>
   </image>
-  <path d="M 169.448025 602.252509 L 105.926025 598.252509 L 60.926025 564.252509 L 46.926025 523.252509 L 41.218025 437.195509 L 41.218025 397.195509 L 41.218025 317.195509 L 41.218025 277.195509 L 41.218025 197.195509 L 41.218025 157.195509 L 44.926025 75.252509 L 87.926025 12.252509 L 137.297025 -2.552491 L 172.257025 -2.680491 L 215.926025 17.252509 L 256.926025 70.252509 L 257.426025 157.252509 L 257.426025 197.252509 L 257.426025 277.252509 L 257.426025 317.252509 L 257.426025 397.252509 L 257.426025 437.252509 L 254.926025 523.252509 L 215.926025 582.252509 L 169.448025 602.252509 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 151.822px 299.786px;">
+  <path
+    d="M 169.448025 602.252509 L 105.926025 598.252509 L 60.926025 564.252509 L 46.926025 523.252509 L 41.218025 437.195509 L 41.218025 397.195509 L 41.218025 317.195509 L 41.218025 277.195509 L 41.218025 197.195509 L 41.218025 157.195509 L 44.926025 75.252509 L 87.926025 12.252509 L 137.297025 -2.552491 L 172.257025 -2.680491 L 215.926025 17.252509 L 256.926025 70.252509 L 257.426025 157.252509 L 257.426025 197.252509 L 257.426025 277.252509 L 257.426025 317.252509 L 257.426025 397.252509 L 257.426025 437.252509 L 254.926025 523.252509 L 215.926025 582.252509 L 169.448025 602.252509 Z"
+    style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 151.822px 299.786px;">
     <title>obstacle table surface y=0.65</title>
   </path>
   <g>
     <title>symbols</title>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: -275.356px 120.205px;" y="82.706543" x="-312.861893" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: -275.356px 120.205px;"
+      y="82.706543" x="-312.861893" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: -275.356px 240.205px;" y="202.706543" x="-312.861908" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: -275.356px 240.205px;"
+      y="202.706543" x="-312.861908" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: -275.356px 360.205px;" y="322.706543" x="-312.861908" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: -275.356px 360.205px;"
+      y="322.706543" x="-312.861908" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: -275.356px 480.205px;" y="442.706543" x="-312.861908" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: -275.356px 480.205px;"
+      y="442.706543" x="-312.861908" transform="matrix(-1, 0, 0, 1, 550.711975097656, 0)">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-5'); transform-origin: 25.3678px 120.205px;" y="82.706543" x="-12.138103">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-5'); transform-origin: 25.3678px 120.205px;"
+      y="82.706543" x="-12.138103">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 25.3678px 240.205px;" y="202.706543" x="-12.138103">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 25.3678px 240.205px;"
+      y="202.706543" x="-12.138103">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-7'); transform-origin: 25.3678px 360.205px;" y="322.706543" x="-12.138103">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-7'); transform-origin: 25.3678px 360.205px;"
+      y="322.706543" x="-12.138103">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-8'); transform-origin: 25.3678px 480.205px;" y="442.706543" x="-12.138103">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-8'); transform-origin: 25.3678px 480.205px;"
+      y="442.706543" x="-12.138103">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-9'); transform-origin: 150.006px -13.795px;" y="-51.293446" x="112.5" transform="matrix(0, 1, -1, 0, 0.000004768372, 0.00003528595)">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-9'); transform-origin: 150.006px -13.795px;"
+      y="-51.293446" x="112.5" transform="matrix(0, 1, -1, 0, 0.000004768372, 0.00003528595)">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-10'); transform-origin: -74.994px 88.7919px;" y="51.293446" x="-112.5" transform="matrix(0, -1, -1, 0, 224.999992370605, 527.413108825684)">
-      <title>extra--chair--005-0.25x0.25 dy=0.3</title>
+    <rect width="75" height="75"
+      style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-10'); transform-origin: -74.994px 88.7919px;"
+      y="51.293446" x="-112.5" transform="matrix(0, -1, -1, 0, 224.999992370605, 527.413108825684)">
+      <title>extra--chair--005-0.25x0.25 y=0.3</title>
     </rect>
   </g>
 </svg>

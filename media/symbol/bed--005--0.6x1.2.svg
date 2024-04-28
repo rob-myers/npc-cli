@@ -9,7 +9,7 @@
     <title>bed--005--0.6x1.2</title>
   </image>
   <rect x="0.000009" y="10.000001" width="375" height="205.000014" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle y=0</title>
+    <title>obstacle</title>
   </rect>
   <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="83" y="107.5">
     <title>decor do lie bed orient=0</title>

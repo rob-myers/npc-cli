@@ -7,7 +7,7 @@
     <title>extra--fresher--002--0.5x0.5</title>
   </image>
   <path d="M 19.2 -3 L 131.025335 -3 L 132.006241 47.279819 L 122 101.189764 L 99 146.903763 L 71 154.651601 L 47 143.903763 L 27 101.189764 L 17.587502 48.233341 L 19.2 -3 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle y=0</title>
+    <title>obstacle</title>
   </path>
   <rect x="69.925926" y="90" width="10.14815" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
     <title>decor do sit toilet orient=90</title>
