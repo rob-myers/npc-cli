@@ -128,7 +128,7 @@ export default function TestGeomorphs(props) {
 
   const update = useUpdate();
 
-  const obstaclesTex = useTexture('/assets/2d/obstacles.png');
+  const obstaclesTex = useTexture('/assets/2d/obstacles.png.webp');
   
   return <>
     {api.gms.map((gm, gmId) => (
