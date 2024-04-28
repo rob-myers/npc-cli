@@ -4,23 +4,7 @@
 
 - 🚧 more raised obstacles
   - ✅ 301
-  - 🚧 302
-
-- ✅ clean custom shader approach
-- ✅ clean custom shaders again
-- ✅ draw top of walls e.g. to obscure piercing obstacles
-  - ✅ remove over-approx from floor images
-  - ❌ could union walls, triangulate, use InstancedMesh triangles
-  - ✅ could use ceiling texture per gmKey
-    - could extend with labels
-    - could change to per gmId and hide rooms via ceilings (Player FOV)
-  - ✅ clean e.g. table seen in bridge
-- ✅ fix symbol height convention
-  - ✅ chair, sink, table have `obstacle y=0` for seat/surface
-  - ✅ symbols height set via tag e.g. `dy=0.5`
-- ✅ simplify symbol height convention
-  - only use `y`
-  - applies to all obstacles
+  - 🚧 101
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
@@ -858,3 +842,19 @@ React.useEffect(() => {
       - ✅ get `map` working in custom shader based on meshBasicMaterial (instanced mesh)
     - ✅ switch to manually specified custom shader with working map/instances
     - ✅ get custom shader working which uses `uvOffsets`, `uvDimensions`
+
+- ✅ clean custom shader approach
+- ✅ clean custom shaders again
+- ✅ draw top of walls e.g. to obscure piercing obstacles
+  - ✅ remove over-approx from floor images
+  - ❌ could union walls, triangulate, use InstancedMesh triangles
+  - ✅ could use ceiling texture per gmKey
+    - could extend with labels
+    - could change to per gmId and hide rooms via ceilings (Player FOV)
+  - ✅ clean e.g. table seen in bridge
+- ✅ fix symbol height convention
+  - ✅ chair, sink, table have `obstacle y=0` for seat/surface
+  - ✅ symbols height set via tag e.g. `dy=0.5`
+- ✅ simplify symbol height convention
+  - only use `y`
+  - applies to all obstacles

@@ -4,7 +4,7 @@ import { useTexture, shaderMaterial } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
 import { Mat } from "../geom";
-import { info, keys } from "../service/generic";
+import { info, keys, warn } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
@@ -57,9 +57,16 @@ export default function TestGeomorphs(props) {
   
       api.gms.forEach(({ obstacles }) =>
         obstacles.forEach(({ symbolKey, obstacleId }) => {
-          const { x, y, width, height } = obstaclesSheet[`${symbolKey} ${obstacleId}`];
-          uvOffsets.push(x / obstaclesWidth,  1 - (y + height) / obstaclesHeight);
-          uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
+          const item = obstaclesSheet[`${symbolKey} ${obstacleId}`];
+          if (item) {
+            const { x, y, width, height } = item;
+            uvOffsets.push(x / obstaclesWidth,  1 - (y + height) / obstaclesHeight);
+            uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
+          } else {
+            warn(`${symbolKey} (${obstacleId}) not found in sprite-sheet`);
+            uvOffsets.push(0,  0);
+            uvDimensions.push(1, 1);
+          }
         })
       );
 
