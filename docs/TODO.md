@@ -5,6 +5,7 @@
 - 🚧 more raised obstacles
   - ✅ 301
   - 🚧 101
+  - ℹ️ raising to wall height can cause flicker
 
 - 🚧 HMR issues
   - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`

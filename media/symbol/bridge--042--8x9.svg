@@ -108,10 +108,10 @@
                 <title>door iris</title>
         </rect>
         <path d="M 56 863 L 569 869 L 572 640 L 316 389 L 175.4 600 L 56 863 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-                <title>obstacle y=1.5</title>
+                <title>obstacle cpu y=1.5</title>
         </path>
         <path d="M 2354 869 L 2242.2 617.3 L 2088 388 L 1829 644 L 1831 870 L 2354 869 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-                <title>obstacle y=1.5</title>
+                <title>obstacle cpu y=1.5</title>
         </path>
         <path d="M 807.999976 2214.000161 L 1025.999976 2272.000161 L 1200.999976 2284.000161 L 1424.999976 2263.000161 L 1635.999976 2193.000161 L 1800.999976 2098.000161 L 1800.999976 2225.000161 L 1628.899976 2318.300161 L 1363.099976 2400.000161 L 1078.299976 2400.000161 L 794.599976 2315.400161 L 600.999976 2221.000161 L 600.999976 2098.000161 L 807.999976 2214.000161 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 1201px 2249px;">
                 <title>obstacle y=0.6</title>

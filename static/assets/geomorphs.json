@@ -1,6 +1,6 @@
 {
   "mapsHash": 998814433,
-  "layoutsHash": -1024409416,
+  "layoutsHash": 1368595452,
   "sheetsHash": 1968496511,
   "map": {
     "demo-map-1": {
@@ -4049,7 +4049,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 1.8,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -4067,7 +4067,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 1.8,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -16521,6 +16521,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "cpu": true,
               "y": 1.5,
               "symId": 9,
               "symKey": "bridge--042--8x9",
@@ -16546,6 +16547,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "cpu": true,
               "y": 1.5,
               "symId": 9,
               "symKey": "bridge--042--8x9",

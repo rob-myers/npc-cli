@@ -137,7 +137,7 @@ export function equals(x, y, depth = 0) {
 
 /**
  * Returns a hash code from serializable object
- * - `prettyCompact` is useful when it corresponds to file contents
+ * - 🔔 `prettyCompact` is useful when it corresponds to file contents
  * @param  {any} json A serializable object
  * @return {number} A 32bit integer
  * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/

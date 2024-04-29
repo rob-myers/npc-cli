@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": -244156496},
+    "101--hull": {"outputHash": -1776227568},
     "102--hull": {"outputHash": -376616954},
     "103--hull": {"outputHash": -1995702532},
     "301--hull": {"outputHash": 1084187675},
@@ -9,7 +9,7 @@
     "bed--003--1x1.6": {"outputHash": -1662354240},
     "bed--004--0.8x1.4": {"outputHash": -787864450},
     "bed--005--0.6x1.2": {"outputHash": -182352138},
-    "bridge--042--8x9": {"outputHash": 619839658},
+    "bridge--042--8x9": {"outputHash": -59820784},
     "console--005--1.2x4": {"outputHash": 1654694813},
     "console--018--1x1": {"outputHash": -2045835674},
     "console--019--2x2": {"outputHash": 4982500},
@@ -562,14 +562,14 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 1.8},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 9.03, 0]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 1.8},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 15, 0]
@@ -3531,6 +3531,7 @@
           ],
           "meta": {
             "obstacle": true,
+            "cpu": true,
             "y": 1.5,
             "symId": 9,
             "symKey": "bridge--042--8x9",
@@ -3550,6 +3551,7 @@
           ],
           "meta": {
             "obstacle": true,
+            "cpu": true,
             "y": 1.5,
             "symId": 9,
             "symKey": "bridge--042--8x9",
