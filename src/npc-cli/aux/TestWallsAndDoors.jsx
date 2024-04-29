@@ -130,7 +130,7 @@ export default function TestWallsAndDoors(props) {
     <>
       <instancedMesh
         name="walls"
-        key={`${api.mapsHash} ${api.layoutsHash}`}
+        key={`${api.mapsHash} ${api.layoutsHash} walls`}
         ref={instances => instances && (state.wallsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumWalls()]}
         frustumCulled={false}
@@ -141,7 +141,7 @@ export default function TestWallsAndDoors(props) {
 
       <instancedMesh
         name="doors"
-        key={`${api.mapsHash} ${api.layoutsHash}`}
+        key={`${api.mapsHash} ${api.layoutsHash} doors`}
         ref={instances => instances && (state.doorsInst = instances)}
         args={[quadGeometryXY, undefined, state.getNumDoors()]}
         frustumCulled={false}
