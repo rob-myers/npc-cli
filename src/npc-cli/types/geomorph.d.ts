@@ -53,7 +53,7 @@ declare namespace Geomorph {
     sheetsHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
-    sheet: SpriteSheetMeta;
+    sheet: SpriteSheet;
   }
 
   type Geomorphs = GeomorphsGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
@@ -261,7 +261,7 @@ declare namespace Geomorph {
    */
   type SymbolKey = import('../service/geomorph').SymbolKey;
 
-  interface SpriteSheetMeta {
+  interface SpriteSheet {
     /**
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images

@@ -1,6 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { useTexture, shaderMaterial } from "@react-three/drei";
+import { shaderMaterial } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
 import { Mat } from "../geom";
@@ -23,6 +23,33 @@ export default function TestGeomorphs(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     obsInst: /** @type {*} */ (null),
 
+    addObstacleUvs() {
+      const { obstacle: obstaclesSheet, obstaclesWidth, obstaclesHeight } = api.geomorphs.sheet;
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
+  
+      api.gms.forEach(({ obstacles }) =>
+        obstacles.forEach(({ symbolKey, obstacleId }) => {
+          const item = obstaclesSheet[`${symbolKey} ${obstacleId}`];
+          if (item) {
+            const { x, y, width, height } = item;
+            uvOffsets.push(x / obstaclesWidth,  1 - (y + height) / obstaclesHeight);
+            uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
+          } else {
+            warn(`${symbolKey} (${obstacleId}) not found in sprite-sheet`);
+            uvOffsets.push(0,  0);
+            uvDimensions.push(1, 1);
+          }
+        })
+      );
+
+      state.obsInst.geometry.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      );
+      state.obsInst.geometry.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
+    },
     drawFloorAndCeil(gmKey, img) {
       const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
@@ -50,32 +77,10 @@ export default function TestGeomorphs(props) {
       layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
       ceilCt.resetTransform();
     },
-    addObstacleUvs() {
-      const { obstacle: obstaclesSheet, obstaclesWidth, obstaclesHeight } = api.geomorphs.sheet;
-      const uvOffsets = /** @type {number[]} */ ([]);
-      const uvDimensions = /** @type {number[]} */ ([]);
-  
-      api.gms.forEach(({ obstacles }) =>
-        obstacles.forEach(({ symbolKey, obstacleId }) => {
-          const item = obstaclesSheet[`${symbolKey} ${obstacleId}`];
-          if (item) {
-            const { x, y, width, height } = item;
-            uvOffsets.push(x / obstaclesWidth,  1 - (y + height) / obstaclesHeight);
-            uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
-          } else {
-            warn(`${symbolKey} (${obstacleId}) not found in sprite-sheet`);
-            uvOffsets.push(0,  0);
-            uvDimensions.push(1, 1);
-          }
-        })
-      );
-
-      state.obsInst.geometry.setAttribute('uvOffsets',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
-      );
-      state.obsInst.geometry.setAttribute('uvDimensions',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
-      );
+    drawObstaclesSheet(img) {
+      const [ct, _tex, { width, height }] = api.sheet.obstacle;
+      ct.clearRect(0, 0, width, height);
+      ct.drawImage(img, 0, 0);
     },
     getNumObs() {
       return api.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
@@ -110,7 +115,8 @@ export default function TestGeomorphs(props) {
     },
   }));
 
-  useQuery({// auto-updates with `yarn images`
+  useQuery({
+    // 🚧 IMAGES_QUERY_KEY
     queryKey: [FLOOR_IMAGES_QUERY_KEY, api.layoutsHash, api.mapsHash],
     queryFn() {
       keys(api.gmClass).forEach((gmKey) => {
@@ -122,13 +128,12 @@ export default function TestGeomorphs(props) {
           update();
         });
       });
-      // textureLoader.loadAsync('/assets/2d/obstacles.png.webp').then((tex) => {
-      //   state.drawGeomorph(gmKey, tex.source.data);
-      //   const { floor, ceil } = api.gmClass[gmKey];
-      //   floor.needsUpdate = true;
-      //   ceil.needsUpdate = true;
-      //   update();
-      // });
+      textureLoader.loadAsync('/assets/2d/obstacles.png.webp').then((tex) => {
+        state.drawObstaclesSheet(tex.source.data);
+        const [, obstacles] = api.sheet.obstacle;
+        obstacles.needsUpdate = true;
+        update();
+      });
       return null;
     },
   });
@@ -142,8 +147,6 @@ export default function TestGeomorphs(props) {
 
   const update = useUpdate();
 
-  // 🚧
-  const obstaclesTex = useTexture('/assets/2d/obstacles.png.webp');
   
   return <>
     {api.gms.map((gm, gmId) => (
@@ -198,7 +201,8 @@ export default function TestGeomorphs(props) {
         side={THREE.DoubleSide}
         transparent
         //@ts-expect-error
-        map={obstaclesTex}
+        // map={obstaclesTex}
+        map={api.sheet?.obstacle[1] ?? emptyTex}
         // diffuse={new THREE.Vector3(1, 0, 1)}
       />
     </instancedMesh>
@@ -216,6 +220,7 @@ export default function TestGeomorphs(props) {
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
  * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawFloorAndCeil
+ * @property {(img: HTMLImageElement) => void} drawObstaclesSheet
  * @property {(o: Geomorph.LayoutObstacle) => THREE.Matrix4} getObsMat
  * @property {() => number} getNumObs
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onClickObstacle
@@ -225,3 +230,4 @@ export default function TestGeomorphs(props) {
 const textureLoader = new THREE.TextureLoader();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
+const emptyTex = new THREE.Texture();

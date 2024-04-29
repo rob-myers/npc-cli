@@ -41,7 +41,7 @@ export default function TestWorld(props) {
     geomorphs: /** @type {*} */ (null),
     gmClass: /** @type {*} */ ({}),
     gms: [],
-    sheet: /** @type {*} */ ({}),
+    sheet: /** @type {*} */ (null),
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
@@ -71,6 +71,17 @@ export default function TestWorld(props) {
       // Fix normals for recast/detour... maybe due to earcut ordering?
       gmClass.debugNavPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
       return gmClass;
+    },
+    ensureSheetTex() {
+      if (!state.sheet) {
+        const obsEl = document.createElement("canvas");
+        obsEl.width = state.geomorphs.sheet.obstaclesWidth;
+        obsEl.height = state.geomorphs.sheet.obstaclesHeight;
+        state.sheet = {
+          obstacle: [assertNonNull(obsEl.getContext("2d")), new THREE.CanvasTexture(obsEl), obsEl],
+          // ...
+        };
+      }
     },
     async handleMessageFromWorker(e) {
       const msg = e.data;
@@ -198,6 +209,7 @@ export default function TestWorld(props) {
       const worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
       worker.addEventListener("message", state.handleMessageFromWorker);
       worker.postMessage({ type: "request-nav-mesh", mapKey: props.mapKey });
+      state.ensureSheetTex();
       return () => void worker.terminate();
     }
   }, [
@@ -266,6 +278,7 @@ export default function TestWorld(props) {
  * @property {Crowd} crowd
  *
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmClass
+ * @property {() => void} ensureSheetTex
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {(agentPositions: THREE.Vector3Like[], agentTargets: (THREE.Vector3Like | null)[]) => void} setupCrowdAgents
