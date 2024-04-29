@@ -333,13 +333,13 @@
       "obstacleId": 2,
       "type": "obstacle"
     },
-    "office--026--2x3 2": {
+    "office--026--2x3 1": {
       "x": 1640,
       "y": 1460,
       "width": 250,
       "height": 100,
       "symbolKey": "office--026--2x3",
-      "obstacleId": 2,
+      "obstacleId": 1,
       "type": "obstacle"
     },
     "office--023--2x3 1": {
@@ -819,18 +819,9 @@
       "obstacleId": 5,
       "type": "obstacle"
     },
-    "office--026--2x3 1": {
-      "x": 2221,
-      "y": 1674,
-      "width": 66,
-      "height": 76,
-      "symbolKey": "office--026--2x3",
-      "obstacleId": 1,
-      "type": "obstacle"
-    },
     "office--061--3x4 3": {
       "x": 2221,
-      "y": 1752,
+      "y": 1674,
       "width": 65,
       "height": 76,
       "symbolKey": "office--061--3x4",
@@ -839,7 +830,7 @@
     },
     "office--061--3x4 4": {
       "x": 2221,
-      "y": 1830,
+      "y": 1752,
       "width": 65,
       "height": 76,
       "symbolKey": "office--061--3x4",
@@ -856,8 +847,8 @@
       "type": "obstacle"
     },
     "engineering--047--4x7 1": {
-      "x": 1014,
-      "y": 2020,
+      "x": 2221,
+      "y": 1830,
       "width": 65,
       "height": 75,
       "symbolKey": "engineering--047--4x7",
@@ -865,7 +856,7 @@
       "type": "obstacle"
     },
     "engineering--047--4x7 3": {
-      "x": 1081,
+      "x": 1014,
       "y": 2020,
       "width": 65,
       "height": 75,
@@ -874,8 +865,8 @@
       "type": "obstacle"
     },
     "engineering--047--4x7 4": {
-      "x": 1148,
-      "y": 1970,
+      "x": 1081,
+      "y": 2020,
       "width": 65,
       "height": 75,
       "symbolKey": "engineering--047--4x7",
@@ -946,8 +937,8 @@
       "type": "obstacle"
     },
     "fresher--036--4x2 2": {
-      "x": 2225,
-      "y": 2083,
+      "x": 1148,
+      "y": 2020,
       "width": 58,
       "height": 71,
       "symbolKey": "fresher--036--4x2",
@@ -955,8 +946,8 @@
       "type": "obstacle"
     },
     "fresher--036--4x2 3": {
-      "x": 1153,
-      "y": 2047,
+      "x": 2225,
+      "y": 2083,
       "width": 57,
       "height": 71,
       "symbolKey": "fresher--036--4x2",
@@ -964,8 +955,8 @@
       "type": "obstacle"
     },
     "fresher--036--4x2 4": {
-      "x": 1212,
-      "y": 2047,
+      "x": 1153,
+      "y": 2093,
       "width": 57,
       "height": 71,
       "symbolKey": "fresher--036--4x2",
@@ -973,7 +964,7 @@
       "type": "obstacle"
     },
     "extra--fresher--001--0.5x0.5 0": {
-      "x": 1271,
+      "x": 1208,
       "y": 2020,
       "width": 69,
       "height": 59,
@@ -982,8 +973,8 @@
       "type": "obstacle"
     },
     "lounge--015--4x2 0": {
-      "x": 956,
-      "y": 477,
+      "x": 2221,
+      "y": 1907,
       "width": 50,
       "height": 69,
       "symbolKey": "lounge--015--4x2",
@@ -1010,7 +1001,7 @@
     },
     "counter--009--0.4x0.4 0": {
       "x": 956,
-      "y": 548,
+      "y": 477,
       "width": 52,
       "height": 54,
       "symbolKey": "counter--009--0.4x0.4",
@@ -1028,7 +1019,7 @@
     },
     "lounge--015--4x2 5": {
       "x": 2249,
-      "y": 1908,
+      "y": 1978,
       "width": 33,
       "height": 53,
       "symbolKey": "lounge--015--4x2",
@@ -1037,7 +1028,7 @@
     },
     "extra--chair--003--0.25x0.25 0": {
       "x": 956,
-      "y": 604,
+      "y": 533,
       "width": 49,
       "height": 52,
       "symbolKey": "extra--chair--003--0.25x0.25",
@@ -1045,8 +1036,8 @@
       "type": "obstacle"
     },
     "office--023--2x3 2": {
-      "x": 1153,
-      "y": 2120,
+      "x": 956,
+      "y": 587,
       "width": 49,
       "height": 50,
       "symbolKey": "office--023--2x3",
@@ -1054,8 +1045,8 @@
       "type": "obstacle"
     },
     "office--023--2x3 3": {
-      "x": 1204,
-      "y": 2120,
+      "x": 956,
+      "y": 639,
       "width": 49,
       "height": 50,
       "symbolKey": "office--023--2x3",
@@ -1063,8 +1054,8 @@
       "type": "obstacle"
     },
     "office--074--4x4 7": {
-      "x": 1255,
-      "y": 2120,
+      "x": 1801,
+      "y": 1918,
       "width": 45,
       "height": 50,
       "symbolKey": "office--074--4x4",
@@ -1073,7 +1064,7 @@
     },
     "office--074--4x4 8": {
       "x": 1801,
-      "y": 1918,
+      "y": 1970,
       "width": 45,
       "height": 50,
       "symbolKey": "office--074--4x4",
@@ -1081,8 +1072,8 @@
       "type": "obstacle"
     },
     "office--074--4x4 9": {
-      "x": 1801,
-      "y": 1970,
+      "x": 765,
+      "y": 226,
       "width": 45,
       "height": 50,
       "symbolKey": "office--074--4x4",
@@ -1090,8 +1081,8 @@
       "type": "obstacle"
     },
     "office--074--4x4 10": {
-      "x": 765,
-      "y": 226,
+      "x": 956,
+      "y": 691,
       "width": 45,
       "height": 50,
       "symbolKey": "office--074--4x4",
@@ -1100,7 +1091,7 @@
     },
     "office--074--4x4 11": {
       "x": 956,
-      "y": 658,
+      "y": 743,
       "width": 45,
       "height": 50,
       "symbolKey": "office--074--4x4",
@@ -1108,8 +1099,8 @@
       "type": "obstacle"
     },
     "office--074--4x4 12": {
-      "x": 956,
-      "y": 710,
+      "x": 1212,
+      "y": 2081,
       "width": 45,
       "height": 50,
       "symbolKey": "office--074--4x4",
@@ -1117,8 +1108,8 @@
       "type": "obstacle"
     },
     "office--074--4x4 13": {
-      "x": 956,
-      "y": 762,
+      "x": 1259,
+      "y": 2081,
       "width": 45,
       "height": 50,
       "symbolKey": "office--074--4x4",
@@ -1126,8 +1117,8 @@
       "type": "obstacle"
     },
     "stateroom--035--2x3 2": {
-      "x": 1302,
-      "y": 2081,
+      "x": 1279,
+      "y": 2022,
       "width": 45,
       "height": 50,
       "symbolKey": "stateroom--035--2x3",
@@ -1190,7 +1181,7 @@
     },
     "lab--012--4x3 1": {
       "x": 2249,
-      "y": 1963,
+      "y": 2033,
       "width": 38,
       "height": 36,
       "symbolKey": "lab--012--4x3",
@@ -1198,7 +1189,7 @@
       "type": "obstacle"
     },
     "lab--012--4x3 2": {
-      "x": 1302,
+      "x": 1212,
       "y": 2133,
       "width": 38,
       "height": 36,
@@ -1207,7 +1198,7 @@
       "type": "obstacle"
     },
     "lab--023--4x4 1": {
-      "x": 1342,
+      "x": 1252,
       "y": 2133,
       "width": 38,
       "height": 37,
@@ -1216,8 +1207,8 @@
       "type": "obstacle"
     },
     "lab--023--4x4 2": {
-      "x": 2249,
-      "y": 2001,
+      "x": 1292,
+      "y": 2133,
       "width": 38,
       "height": 37,
       "symbolKey": "lab--023--4x4",
@@ -1225,8 +1216,8 @@
       "type": "obstacle"
     },
     "lab--023--4x4 3": {
-      "x": 2249,
-      "y": 2040,
+      "x": 1949,
+      "y": 1352,
       "width": 38,
       "height": 37,
       "symbolKey": "lab--023--4x4",
@@ -1234,8 +1225,8 @@
       "type": "obstacle"
     },
     "lounge--015--4x2 9": {
-      "x": 1949,
-      "y": 1352,
+      "x": 514,
+      "y": 2122,
       "width": 38,
       "height": 37,
       "symbolKey": "lounge--015--4x2",
@@ -1243,8 +1234,8 @@
       "type": "surface"
     },
     "lounge--015--4x2 10": {
-      "x": 514,
-      "y": 2122,
+      "x": 1332,
+      "y": 2129,
       "width": 38,
       "height": 37,
       "symbolKey": "lounge--015--4x2",
@@ -1270,7 +1261,7 @@
       "type": "chair"
     },
     "303--hull 3": {
-      "x": 1382,
+      "x": 1372,
       "y": 2154,
       "width": 14,
       "height": 16,
@@ -1279,7 +1270,7 @@
       "type": "chair"
     },
     "303--hull 5": {
-      "x": 1398,
+      "x": 1388,
       "y": 2154,
       "width": 16,
       "height": 16,
@@ -1288,7 +1279,7 @@
       "type": "chair"
     },
     "303--hull 6": {
-      "x": 1416,
+      "x": 1406,
       "y": 2154,
       "width": 16,
       "height": 16,
