@@ -23,8 +23,8 @@ export default function TestGeomorphs(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     obsInst: /** @type {*} */ (null),
 
-    drawGeomorph(gmKey, img) {
-      const { floorCt, ceilCt, floorEl: { width, height }, layout } = api.gmClass[gmKey];
+    drawFloorAndCeil(gmKey, img) {
+      const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
 
       floorCt.clearRect(0, 0, width, height);
@@ -115,13 +115,20 @@ export default function TestGeomorphs(props) {
     queryFn() {
       keys(api.gmClass).forEach((gmKey) => {
         textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.png.webp`).then((tex) => {
-          state.drawGeomorph(gmKey, tex.source.data);
-          const { floor, ceil } = api.gmClass[gmKey];
+          state.drawFloorAndCeil(gmKey, tex.source.data);
+          const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
           floor.needsUpdate = true;
           ceil.needsUpdate = true;
           update();
         });
       });
+      // textureLoader.loadAsync('/assets/2d/obstacles.png.webp').then((tex) => {
+      //   state.drawGeomorph(gmKey, tex.source.data);
+      //   const { floor, ceil } = api.gmClass[gmKey];
+      //   floor.needsUpdate = true;
+      //   ceil.needsUpdate = true;
+      //   update();
+      // });
       return null;
     },
   });
@@ -135,6 +142,7 @@ export default function TestGeomorphs(props) {
 
   const update = useUpdate();
 
+  // 🚧
   const obstaclesTex = useTexture('/assets/2d/obstacles.png.webp');
   
   return <>
@@ -153,7 +161,7 @@ export default function TestGeomorphs(props) {
           <meshBasicMaterial
             side={THREE.FrontSide}
             transparent
-            map={api.gmClass[gm.key].floor}
+            map={api.gmClass[gm.key].floor[1]}
             depthWrite={false} // fix z-fighting
           />
         </mesh>
@@ -167,7 +175,7 @@ export default function TestGeomorphs(props) {
           <meshBasicMaterial
             side={THREE.FrontSide}
             transparent
-            map={api.gmClass[gm.key].ceil}
+            map={api.gmClass[gm.key].ceil[1]}
             // depthWrite={false} // fix z-fighting
             alphaTest={0.5}
           />
@@ -207,7 +215,7 @@ export default function TestGeomorphs(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
- * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawGeomorph
+ * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawFloorAndCeil
  * @property {(o: Geomorph.LayoutObstacle) => THREE.Matrix4} getObsMat
  * @property {() => number} getNumObs
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onClickObstacle

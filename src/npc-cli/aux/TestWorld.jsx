@@ -41,6 +41,7 @@ export default function TestWorld(props) {
     geomorphs: /** @type {*} */ (null),
     gmClass: /** @type {*} */ ({}),
     gms: [],
+    sheet: /** @type {*} */ ({}),
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
@@ -60,12 +61,8 @@ export default function TestWorld(props) {
         ceilEl.width = floorEl.width = layout.pngRect.width / worldScale;
         ceilEl.height = floorEl.height = layout.pngRect.height / worldScale;
         gmClass = state.gmClass[gmKey] = {
-          ceil: new THREE.CanvasTexture(ceilEl),
-          ceilCt: assertNonNull(ceilEl.getContext("2d")),
-          ceilEl,
-          floor: new THREE.CanvasTexture(floorEl),
-          floorCt: assertNonNull(floorEl.getContext("2d")),
-          floorEl,
+          ceil: [assertNonNull(ceilEl.getContext("2d")), new THREE.CanvasTexture(ceilEl), ceilEl],
+          floor: [assertNonNull(floorEl.getContext("2d")), new THREE.CanvasTexture(floorEl), floorEl],
           layout,
           debugNavPoly: tmpBufferGeom1,
         };
@@ -262,6 +259,7 @@ export default function TestWorld(props) {
  * @property {import('./TestDebug').State} debug
  *
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
+ * @property {Record<'obstacle', CanvasTexDef>} sheet
  * Only populated for geomorph keys seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {NPC.TiledCacheResult} nav
@@ -278,12 +276,16 @@ export default function TestWorld(props) {
 
 /**
  * @typedef GmData
- * @property {THREE.CanvasTexture} ceil
- * @property {HTMLCanvasElement} ceilEl
- * @property {CanvasRenderingContext2D} ceilCt
- * @property {THREE.CanvasTexture} floor
- * @property {HTMLCanvasElement} floorEl
- * @property {CanvasRenderingContext2D} floorCt
+ * @property {CanvasTexDef} ceil
+ * @property {Pretty<CanvasTexDef>} floor
  * @property {Geomorph.Layout} layout
  * @property {THREE.BufferGeometry} debugNavPoly
+ */
+
+/**
+ * @typedef {Pretty<[
+ *  CanvasRenderingContext2D,
+ *  THREE.CanvasTexture,
+ *  HTMLCanvasElement,
+ * ]>} CanvasTexDef
  */
