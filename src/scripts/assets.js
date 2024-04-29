@@ -24,7 +24,7 @@ import { createCanvas, loadImage } from 'canvas';
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from "./const";
 import { worldScale } from "../npc-cli/service/const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
@@ -91,7 +91,10 @@ const worldToSgu = 1 / worldScale;
    */
   parseSymbols(assetsJson, svgSymbolFilenames);
   parseMaps(assetsJson);
-  info({ changed: Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash) });
+
+  const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash);
+  info({ changedKeys: changedSymbolAndMapKeys });
+
   const assets = geomorphService.deserializeAssets(assetsJson);
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   
@@ -108,6 +111,13 @@ const worldToSgu = 1 / worldScale;
     geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
   // debug("stateroom--036--2x4", util.inspect(flattened["stateroom--036--2x4"], false, 5));
+
+  const changedGmKeys = geomorphService.gmKeys.filter(gmKey => {
+    const hullKey = geomorphService.toHullKey[gmKey];
+    const hullNode = assertNonNull(symbolGraph.getNodeById(hullKey));
+    return symbolGraph.getReachableNodes(hullNode).find(x => changedSymbolAndMapKeys.includes(x.id));
+  });
+  info({ changedGmKeys });
 
   /**
    * Compute geomorphs.json
@@ -136,6 +146,12 @@ const worldToSgu = 1 / worldScale;
     sheet: currSheet ?? { obstacle: {}, obstaclesHeight: 0, obstaclesWidth: 0 },
   };
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
+
+  /**
+   * Draw geomorph floors
+   */
+  // const pngToProm = /** @type {{ [pngPath: string]: Promise<any> }} */ ({});
+  // drawFloorImages(geomorphs, pngToProm)
 
   fetch(sendDevEventUrl, {
     method: "POST",
