@@ -9,7 +9,7 @@
     "bed--003--1x1.6": {"outputHash": -1662354240},
     "bed--004--0.8x1.4": {"outputHash": -787864450},
     "bed--005--0.6x1.2": {"outputHash": -182352138},
-    "bridge--042--8x9": {"outputHash": 600718059},
+    "bridge--042--8x9": {"outputHash": 1816789772},
     "console--005--1.2x4": {"outputHash": 1654694813},
     "console--018--1x1": {"outputHash": -2045835674},
     "console--019--2x2": {"outputHash": 4982500},
@@ -4212,21 +4212,21 @@
         },
         {
           "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25"},
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.4},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, -1, 1, 0, 1.01, 8.15]
         },
         {
           "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25"},
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.4},
           "width": 0.375,
           "height": 0.375,
           "transform": [0.259, 0.966, -0.966, 0.259, 1.67, 9.07]
         },
         {
           "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.6},
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [0, 1, -1, 0, 1.95, 8.25]
