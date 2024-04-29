@@ -47,9 +47,6 @@
         <rect width="20" height="20" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="293" y="1349">
                 <title>decor label=locker</title>
         </rect>
-        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="2093" y="1309">
-                <title>decor label=toilet</title>
-        </rect>
         <rect width="20" height="20" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="1190" y="1855">
                 <title>decor label=briefing</title>
         </rect>
@@ -73,9 +70,6 @@
         </rect>
         <rect x="1182.856" y="1153.5" width="20" height="20" style="fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);">
                 <title>decor go label=corridor</title>
-        </rect>
-        <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="1925" y="1631.858">
-                <title>decor do lie bed orient=0</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="2095" y="1261.858">
                 <title>decor do stand orient=90</title>

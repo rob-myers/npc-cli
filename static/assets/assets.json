@@ -9,7 +9,7 @@
     "bed--003--1x1.6": {"outputHash": -1662354240},
     "bed--004--0.8x1.4": {"outputHash": -787864450},
     "bed--005--0.6x1.2": {"outputHash": -182352138},
-    "bridge--042--8x9": {"outputHash": -1572327672},
+    "bridge--042--8x9": {"outputHash": 619839658},
     "console--005--1.2x4": {"outputHash": 1654694813},
     "console--018--1x1": {"outputHash": -2045835674},
     "console--019--2x2": {"outputHash": 4982500},
@@ -4026,13 +4026,6 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[10.515, 6.545], [10.515, 6.595], [10.465, 6.595], [10.465, 6.545]]
-          ],
-          "meta": {"decor": true, "label": "toilet"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
             [[6.05, 9.275], [6.05, 9.375], [5.95, 9.375], [5.95, 9.275]]
           ],
           "meta": {"decor": true, "label": "briefing"}
@@ -4086,19 +4079,6 @@
             ]
           ],
           "meta": {"decor": true, "go": true, "label": "corridor"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[9.675, 8.1593], [9.675, 8.2093], [9.625, 8.2093], [9.625, 8.1593]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "lie": true,
-            "bed": true,
-            "orient": 0
-          }
         },
         {
           "type": "Polygon",
