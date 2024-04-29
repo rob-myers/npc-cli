@@ -1,17 +1,18 @@
-/// <reference path="./deps.d.ts"/>
-
 /**
- * Generates:
- * - assets.json
- * - geomorphs.json
- * 
  * Usage:
  * ```sh
  * npm run assets
  * yarn assets
- * yarn assets-fast
+ * yarn assets-fast --all --staleMs=2000
  * ```
+ *
+ * Generates:
+ * - assets.json
+ * - geomorphs.json
+ * - floor images (one per gmKey)
+ * - obstacles sprite-sheet
  */
+/// <reference path="./deps.d.ts"/>
 
 import fs from "fs";
 import path from "path";
@@ -23,14 +24,14 @@ import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from "./const";
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from "../const";
 import { spriteSheetNonHullExtraScale, worldScale } from "../npc-cli/service/const";
 import { ansi } from "../npc-cli/sh/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
-import { saveCanvasAsFile } from "./service";
+import { runYarnScript, saveCanvasAsFile } from "./service";
 
 const opts = getopts(process.argv, {
   boolean: ['all'],
@@ -55,9 +56,9 @@ const symbolsDir = path.resolve(mediaDir, "symbol");
 const assets2dDir = path.resolve(staticAssetsDir, "2d");
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
-const spriteSheetFilepath = path.resolve(staticAssetsDir, SPRITE_SHEET_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
 const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
+const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const worldToSgu = 1 / worldScale;
 
@@ -126,7 +127,7 @@ const worldToSgu = 1 / worldScale;
   info({ changedGmKeys });
 
   /**
-   * Compute spritesheet json
+   * Compute sprite-sheet json
    */
   const { sheet, sheetsHash } = await createSheetJson(assets);
 
@@ -154,9 +155,7 @@ const worldToSgu = 1 / worldScale;
   /**
    * Draw geomorph floors
    */
-  await drawFloorImages(geomorphs, changedGmKeys);
-
-  // 🚧 png(s) -> webp
+  const createdPngPaths = await drawFloorImages(geomorphs, changedGmKeys);
 
   fetch(sendDevEventUrl, {
     method: "POST",
@@ -165,6 +164,22 @@ const worldToSgu = 1 / worldScale;
   }).catch((e) => {
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
+  
+  /**
+   * Draw obstacles sprite-sheet
+   */
+  // 🚧 only draw when changed
+  if (updateAll) {
+    await drawObstaclesSheet(assets, geomorphs);
+    createdPngPaths.push(obstaclesPngPath);
+  }
+
+  await runYarnScript(
+    'cwebp-fast',
+    JSON.stringify({ files: createdPngPaths }),
+    '--quality=50',
+  );
+
 })();
 
 /**
@@ -225,10 +240,11 @@ function validateSubSymbolDimension(symbols) {
 /**
  * @param {Geomorph.Geomorphs} geomorphs 
  * @param {Geomorph.GeomorphKey[]} gmKeys 
+ * @returns {Promise<string[]>} Paths of created PNGs
  */
 async function drawFloorImages(geomorphs, gmKeys) {
   const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => gmKeys.includes(key));
-  const saveFilePromises = /** @type {Promise<any>[]} */ ([]);
+  const pngPathToProm = /** @type {Record<String, Promise<any>>} */ ({});
 
   for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of changedLayouts) {
     
@@ -260,10 +276,12 @@ async function drawFloorImages(geomorphs, gmKeys) {
     drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
     const pngPath = path.resolve(assets2dDir, `${gmKey}.floor.png`);
-    saveFilePromises.push(saveCanvasAsFile(canvas, pngPath));
+    pngPathToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
   }
 
-  await Promise.all(saveFilePromises);
+  await Promise.all(Object.values(pngPathToProm));
+
+  return Object.keys(pngPathToProm);
 }
 
 /**
@@ -327,6 +345,46 @@ async function createSheetJson(assets) {
 
   return { sheet: json, sheetsHash: hashText(stringify(json)) };
 }
+
+/**
+ * 🚧 only draw changed
+ * @param {Geomorph.Assets} assets 
+ * @param {Geomorph.Geomorphs} geomorphs 
+ */
+async function drawObstaclesSheet(assets, geomorphs) {
+
+  const { obstaclesWidth, obstaclesHeight, obstacle } = geomorphs.sheet;
+  const canvas = createCanvas(obstaclesWidth, obstaclesHeight);
+  const ct = canvas.getContext('2d');
+  
+  for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(obstacle)) {
+    // extract data-url PNG from SVG symbol
+    const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
+    const matched = fs.readFileSync(symbolPath).toString().match(/"data:image\/png(.*)"/);
+    if (matched) {
+      const dataUrl = matched[0].slice(1, -1);
+      const image = await loadImage(dataUrl);
+      const symbol = assets.symbols[symbolKey];
+      const scale = (1 / worldScale) * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
+      
+      const srcPoly = symbol.obstacles[obstacleId].clone();
+      const srcRect = srcPoly.rect;
+      const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
+      const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
+
+      ct.save();
+      drawPolygons(ct, dstPngPoly, ['white', null], 'clip');
+      ct.drawImage(image, srcPngRect.x, srcPngRect.y, srcPngRect.width, srcPngRect.height, x, y, width, height);
+      ct.restore();
+      info(`images: drew ${symbolKey}`);
+    } else {
+      error(`${symbolPath}: expected data:image/png inside SVG symbol`);
+    }
+  }
+
+  saveCanvasAsFile(canvas, obstaclesPngPath);
+}
+
 
 /**
  * @param {import('canvas').CanvasRenderingContext2D} ct

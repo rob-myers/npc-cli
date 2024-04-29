@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
+import { GEOMORPHS_JSON_FILENAME } from "src/const";
 import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, isDevelopment, range } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";

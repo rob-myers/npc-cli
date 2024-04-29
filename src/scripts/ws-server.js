@@ -2,7 +2,7 @@ import express from "express";
 import expressWs from "express-ws";
 import bodyParser from "body-parser";
 
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
 import { info, safeStringify, warn } from "../npc-cli/service/generic";
 
 const port = Number(DEV_EXPRESS_WEBSOCKET_PORT || 3000);

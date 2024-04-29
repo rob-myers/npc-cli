@@ -18,7 +18,7 @@ import stringify from 'json-stringify-pretty-compact';
 import getopts from 'getopts';
 
 // sucrase-node needs relative paths
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from './const';
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from '../const';
 import { runYarnScript, saveCanvasAsFile } from './service';
 import { ansi } from "../npc-cli/sh/const";
 import { spriteSheetNonHullExtraScale, worldScale,  } from '../npc-cli/service/const';

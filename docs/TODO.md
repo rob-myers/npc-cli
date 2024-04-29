@@ -15,13 +15,14 @@
   - ✅ `yarn images-fast --staleMs=2000`
   - ✅ obstacles sprite-sheet needs to update
   - 🚧 merge images.js into assets.js
-    - 🚧 draw floors
-    - create spritesheet
-    - draw spritesheet
-  - copy unchanged sprites i.e. check whether origPoly or data-url changed
+    - ✅ draw floors
+    - ✅ create spritesheet
+    - ✅ draw spritesheet
+    - 🚧 copy unchanged sprites i.e. check whether origPoly or data-url changed
   - not-found sprite i.e. small red rect
   - avoid recomputing png -> webp
     - dev uses pngs
+    - pre-push hook checks `webp.png` available
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed

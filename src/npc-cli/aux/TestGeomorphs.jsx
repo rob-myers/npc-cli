@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { shaderMaterial } from "@react-three/drei";
 import { useQuery } from "@tanstack/react-query";
 
+import { imgExt } from "src/const";
 import { Mat } from "../geom";
 import { info, keys, warn } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
@@ -119,16 +120,17 @@ export default function TestGeomorphs(props) {
     // 🚧 IMAGES_QUERY_KEY
     queryKey: [FLOOR_IMAGES_QUERY_KEY, api.layoutsHash, api.mapsHash],
     queryFn() {
-      keys(api.gmClass).forEach((gmKey) => {
-        textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.png.webp`).then((tex) => {
-          state.drawFloorAndCeil(gmKey, tex.source.data);
-          const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
-          floor.needsUpdate = true;
-          ceil.needsUpdate = true;
-          update();
-        });
-      });
-      textureLoader.loadAsync('/assets/2d/obstacles.png.webp').then((tex) => {
+      keys(api.gmClass).forEach((gmKey) =>
+        textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.${imgExt}`)
+          .then((tex) => {
+            state.drawFloorAndCeil(gmKey, tex.source.data);
+            const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
+            floor.needsUpdate = true;
+            ceil.needsUpdate = true;
+            update();
+          })
+      );
+      textureLoader.loadAsync(`/assets/2d/obstacles.${imgExt}`).then((tex) => {
         state.drawObstaclesSheet(tex.source.data);
         const [, obstacles] = api.sheet.obstacle;
         obstacles.needsUpdate = true;
