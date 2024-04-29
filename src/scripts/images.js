@@ -128,7 +128,7 @@ async function drawFloorImages(geomorphs, pngToProm) {
  * - Draw obstacles.png
  * @param {Geomorph.Assets} assets 
  * @param {{ [pngPath: string]: Promise<any> }} pngToProm 
- * @returns {Promise<{ sheet: Geomorph.SpriteSheetMeta; sheetsHash: number; }>}
+ * @returns {Promise<{ sheet: Geomorph.SpriteSheet; sheetsHash: number; }>}
  */
 async function drawObstacleSpritesheets(assets, pngToProm) {
 
@@ -178,7 +178,7 @@ async function drawObstacleSpritesheets(assets, pngToProm) {
   const bin = bins[0];
   
   // Create metadata
-  /** @type {Geomorph.SpriteSheetMeta} */
+  /** @type {Geomorph.SpriteSheet} */
   const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
   bin.rects.forEach(r => {
     const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);

@@ -19,12 +19,14 @@ import util from "util";
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 import { createCanvas, loadImage } from 'canvas';
+import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from "./const";
-import { worldScale } from "../npc-cli/service/const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull } from "../npc-cli/service/generic";
+import { spriteSheetNonHullExtraScale, worldScale } from "../npc-cli/service/const";
+import { ansi } from "../npc-cli/sh/const";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
@@ -59,18 +61,22 @@ const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomo
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const worldToSgu = 1 / worldScale;
 
-(function main() {
+(async function main() {
   
-  const assetsJson = /** @type {Geomorph.AssetsJson} */ (
-    { meta: {}, symbols: /** @type {*} */ ({}), maps: {} }
-  );
   const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
     fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null
+  );
+  const prevGeomorphs = /** @type {Geomorph.GeomorphsJson | null} */ (
+    fs.existsSync(geomorphsFilepath) ? JSON.parse(fs.readFileSync(geomorphsFilepath).toString()) : null
+  );
+
+  const assetsJson = /** @type {Geomorph.AssetsJson} */ (
+    { meta: {}, symbols: /** @type {*} */ ({}), maps: {} }
   );
   
   let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
-  const updateAll = !!opts.all || !prevAssets || opts.staleMs && (
+  const updateAll = !!opts.all || !prevAssets || !opts.staleMs || (
     [assetsScriptFilepath, geomorphServicePath].some(x => fs.statSync(x).atimeMs > Date.now() - Number(opts.staleMs)
   ));
 
@@ -120,6 +126,11 @@ const worldToSgu = 1 / worldScale;
   info({ changedGmKeys });
 
   /**
+   * Compute spritesheet json
+   */
+  const { sheet, sheetsHash } = await createSheetJson(assets);
+
+  /**
    * Compute geomorphs.json
    */
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
@@ -128,30 +139,24 @@ const worldToSgu = 1 / worldScale;
     return geomorphService.createLayout(gmKey, flatSymbol, assets);
   }));
 
-  // 🚧 compute sprite-sheet json here instead
-  /** @type {Geomorph.SpriteSheetMeta | null} */
-  const currSheet = fs.existsSync(spriteSheetFilepath) ? JSON.parse(fs.readFileSync(spriteSheetFilepath).toString()) : null;
-  if (currSheet === null) {
-    warn(`sprite-sheet not found: geomorphs.sheet will be empty`);
-  }
-
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
-    // 🔔 prefer `stringify` to `JSON.stringify` because corresponds to file contents
-    mapsHash: hashText(stringify(assetsJson.maps)),
-    layoutsHash: hashText(stringify(layout)), // don't bother serializing
-    sheetsHash: currSheet ? hashText(stringify(currSheet)) : 0,
+    mapsHash: hashJson(assetsJson.maps),
+    layoutsHash: hashJson(layout), // don't bother serializing
+    sheetsHash,
     map: assetsJson.maps,
     layout,
-    sheet: currSheet ?? { obstacle: {}, obstaclesHeight: 0, obstaclesWidth: 0 },
+    sheet,
   };
+
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
 
   /**
    * Draw geomorph floors
    */
-  // const pngToProm = /** @type {{ [pngPath: string]: Promise<any> }} */ ({});
-  // drawFloorImages(geomorphs, pngToProm)
+  await drawFloorImages(geomorphs, changedGmKeys);
+
+  // 🚧 png(s) -> webp
 
   fetch(sendDevEventUrl, {
     method: "POST",
@@ -219,12 +224,13 @@ function validateSubSymbolDimension(symbols) {
 
 /**
  * @param {Geomorph.Geomorphs} geomorphs 
- * @param {{ [pngPath: string]: Promise<any> }} pngToProm 
+ * @param {Geomorph.GeomorphKey[]} gmKeys 
  */
-async function drawFloorImages(geomorphs, pngToProm) {
-  const layouts = Object.values(geomorphs.layout);
+async function drawFloorImages(geomorphs, gmKeys) {
+  const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => gmKeys.includes(key));
+  const saveFilePromises = /** @type {Promise<any>[]} */ ([]);
 
-  for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of layouts) {
+  for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of changedLayouts) {
     
     const canvas = createCanvas(0, 0);
     const ct = canvas.getContext('2d');
@@ -254,8 +260,72 @@ async function drawFloorImages(geomorphs, pngToProm) {
     drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
     const pngPath = path.resolve(assets2dDir, `${gmKey}.floor.png`);
-    pngToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
+    saveFilePromises.push(saveCanvasAsFile(canvas, pngPath));
   }
+
+  await Promise.all(saveFilePromises);
+}
+
+/**
+ * @param {Geomorph.Assets} assets 
+ * @returns {Promise<{ sheet: Geomorph.SpriteSheet; sheetsHash: number; }>}
+ */
+async function createSheetJson(assets) {
+
+  const rectsToPackLookup = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, import("maxrects-packer").Rectangle>} */ ({});
+
+  // Each symbol obstacle induces a packed rect
+  for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
+    /** World coords -> Starship Geomorph coords, modulo additonal scale in [1, 5] non-hull symbols. */
+    const worldToSguScaled = (1 / worldScale) * (isHull ? 1 : spriteSheetNonHullExtraScale);
+
+    for (const [obstacleId, poly] of obstacles.entries()) {
+      const rect = poly.rect.scale(worldToSguScaled).precision(0); // width, height integers
+      const [width, height] = [rect.width, rect.height]
+      
+      const r = new Rectangle(width, height);
+      /** @type {Geomorph.SymbolObstacleContext} */
+      const rectData = { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) };
+      r.data = rectData;
+      rectsToPackLookup[`${symbolKey} ${obstacleId}`] = r;
+      info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
+    }
+  }
+
+  const packer = new MaxRectsPacker(4096, 4096, imgOpts.packedPadding, {
+    pot: false,
+    border: imgOpts.packedPadding,
+    // smart: false,
+  });
+  const rectsToPack = Object.values(rectsToPackLookup);
+  packer.addArray(rectsToPack);
+  const { bins } = packer;
+
+  if (bins.length !== 1) {// 🔔 support more than one sprite-sheet
+    // warn(`images: expected exactly one bin (${bins.length})`);
+    throw Error(`images: expected exactly one bin (${bins.length})`);
+  } else if (bins[0].rects.length !== rectsToPack.length) {
+    throw Error(`images: expected every image to be packed (${bins.length} of ${rectsToPack.length})`);
+  }
+
+  const bin = bins[0];
+  
+  /** @type {Geomorph.SpriteSheet} */
+  const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
+  bin.rects.forEach(r => {
+    const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
+    json.obstacle[`${symbolKey} ${obstacleId}`] = {
+      x: toPrecision(r.x),
+      y: toPrecision(r.y),
+      width: r.width,
+      height: r.height,
+      symbolKey,
+      obstacleId,
+      type,
+    }
+  });
+
+  return { sheet: json, sheetsHash: hashText(stringify(json)) };
 }
 
 /**
@@ -267,4 +337,12 @@ function debugDrawNav(ct, navDecomp) {
   const navPoly = Poly.union(triangles);
   imgOpts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(200, 200, 200, 0.4)', 'black', 0.01]);
   imgOpts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
+}
+
+/** @param {Geom.Meta} meta */
+function extractObstacleDescriptor(meta) {
+  for (const tag of ['table', 'chair', 'bed', 'shower', 'surface']) {
+    if (meta[tag] === true) return tag;
+  }
+  return 'obstacle';
 }
