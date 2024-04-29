@@ -30,7 +30,7 @@
     "cwebp-fast": "sucrase-node src/scripts/cwebp",
     "get-pngs": "npm run ts-script src/scripts/get-pngs",
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
-    "watch-assets": "npm run assets && nodemon --on-change-only --delay 1s --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast'",
+    "watch-assets": "npm run assets && nodemon --on-change-only --delay 1s --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast -- --staleMs=2000'",
     "watch-images": "npm run images && nodemon --on-change-only --delay 1s --config src/scripts/images.nodemon.json --exec 'npm run images-fast' || echo '🔔 watch-images failed'",
     "ws-server": "sucrase-node src/scripts/ws-server.js"
   },

@@ -11,15 +11,14 @@
     - i.e. same as file contents.
   - ✅ avoid recomputing obstacles.png
   - ✅ can `yarn images-fast --all`
-  - 🚧 obstacles.png reloads e.g. via `debugTex.needsUpdate = true`
-  - onchange layout obstacles, trigger `yarn images --all`
-    - we assume that symbol `<image>` does not change
+  - ✅ `yarn images-fast --staleMs=2000`
+  - 🚧 merge images.js into assets.js
+    - 🚧 draw floors
+    - create spritesheet
+    - draw spritesheet
+  - copy unchanged sprites i.e. check whether origPoly or data-url changed
   - avoid recomputing png -> webp
     - dev uses pngs
-  - pre-push hook
-    - create {assets,geomorphs,spritesheet}.json if outdated
-    - draws sprite-sheet it outdated
-    - generates webp if outdated (compare timestamps)
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
