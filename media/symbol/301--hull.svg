@@ -15,9 +15,10 @@
                         <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
                         <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
                 </pattern>
+                <pattern id="pattern-0-3" patternTransform="matrix(1, 0, 0, 1, -0.000171661377, 0.000183105469)" xlink:href="#pattern-0"/>
                 <pattern id="pattern-0-2" patternTransform="matrix(1.99999666214, 0, 0, 2, -1439.99824869732, 1320.000549316406)" xlink:href="#pattern-0"/>
                 <pattern id="pattern-0-1" patternTransform="matrix(1, 0, 0, 1, -360.000268588521, 600.000183105469)" xlink:href="#pattern-0"/>
-                <pattern id="pattern-0-0" patternTransform="matrix(1.000014781952, 0, 0, 1, 0.000234714971, 480.000015258789)" xlink:href="#pattern-0"/>
+                <pattern id="pattern-0-0" patternTransform="matrix(1.000014781952, 0, 0, 1, 0.000253788516, 480.000061035156)" xlink:href="#pattern-0"/>
                 <bx:grid x="0" y="0" width="60" height="60"/>
                 <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, 840, 600.000183105469)" xlink:href="#pattern-0"/>
                 <pattern id="pattern-2" patternTransform="matrix(1, 0, 0, 1, 1199.998779296875, 0)" xlink:href="#pattern-0"/>
@@ -32,7 +33,7 @@
                 <rect y="-480" width="120" height="120" style="opacity: 1; filter: none; fill: url('#pattern-0'); fill-rule: nonzero; paint-order: fill; stroke-width: 4px; transform-origin: 60px -420px; stroke: rgb(0, 0, 255);" transform="matrix(1, 0, 0, -1, 0, 839.999634)">
                         <title>stateroom--014--2x2</title>
                 </rect>
-                <rect y="-480.000183" width="120" height="119.999992" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 180px -420px; stroke: rgb(0, 0, 255);" x="120.000168" transform="matrix(1, 0, 0, -1, 0, 840.000000000001)">
+                <rect y="-479.999634" width="120" height="119.999992" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0-3'); stroke: rgb(0, 0, 255); transform-origin: 180px -420px;" x="120" transform="matrix(1, 0, 0, -1, 0, 840)">
                         <title>stateroom--014--2x2</title>
                 </rect>
                 <rect width="120.000008" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 60px 120.002px; stroke: rgb(0, 0, 255);" x="0.00016">
@@ -41,7 +42,7 @@
                 <rect width="120.000008" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0'); transform-origin: -1140px 120.002px; stroke: rgb(0, 0, 255);" x="-1200" transform="matrix(-1, 0, 0, 1, 2279.998535156253, 0)">
                         <title>stateroom--036--2x4</title>
                 </rect>
-                <rect width="120.001778" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0-0'); transform-origin: 60.0011px 600.002px; stroke: rgb(0, 0, 255);" x="0.00016" y="479.999664" transform="matrix(0, -1, 1, 0, 60.001384735108, -60.00093460083)">
+                <rect width="120.001778" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0-0'); stroke: rgb(0, 0, 255); transform-origin: 60.0011px 600.002px;" x="0.00016" y="479.999664" transform="matrix(0, -1, 1, 0, 60.001342773438, -60.000915527344)">
                         <title>stateroom--036--2x4</title>
                 </rect>
                 <rect y="120" width="120" height="119.999992" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0-1'); stroke: rgb(0, 0, 255); transform-origin: -180px 180px;" x="-240.000092" transform="matrix(-1, 0, 0, 1, 360.000030517578, 0)">
