@@ -8,6 +8,7 @@ import {
   tryLocalStorageSet,
   info,
   isDevelopment,
+  pause,
 } from "src/npc-cli/service/generic";
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
 import {
@@ -97,19 +98,17 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
     connectDevEventsWebsocket() {
       const url = `ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`;
       const wsClient = new WebSocket(url);
-      wsClient.onmessage = (e) => {
+      wsClient.onmessage = async (e) => {
         info(`${url} message:`, e.data);
-        setTimeout(() => {
-          // 🔔 timeout seems necessary, probably due to gatsby handling of static/assets
-          queryClient.refetchQueries({
-            predicate({ queryKey: [queryKey] }) {
-              return (
-                GEOMORPHS_JSON_FILENAME === queryKey ||
-                FLOOR_IMAGES_QUERY_KEY === queryKey
-              );
-            },
-          });
-        }, 300);
+        await pause(300); // 🔔 seems necessary, probably due to gatsby handling of static/assets
+        queryClient.refetchQueries({
+          predicate({ queryKey: [queryKey] }) {
+            return (
+              GEOMORPHS_JSON_FILENAME === queryKey ||
+              FLOOR_IMAGES_QUERY_KEY === queryKey
+            );
+          },
+        });
       };
 
       wsClient.onopen = (e) => {

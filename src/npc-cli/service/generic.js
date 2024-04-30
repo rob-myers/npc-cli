@@ -40,7 +40,7 @@ export function assertDefined(value, valueName) {
  * @returns {T extends undefined | null ? never : T}
  */
 export function assertNonNull(value, ensureNull = true) {
-  if (ensureNull && value == null) {
+  if (ensureNull === true && value == null) {
     throw new Error(`Encountered unexpected null or undefined value`);
   }
   return /** @type {*} */ (value);

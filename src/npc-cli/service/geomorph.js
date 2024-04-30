@@ -265,10 +265,11 @@ class GeomorphService {
    * @param {Geomorph.AssetsJson} assetsJson
    * @return {Geomorph.Assets}
    */
-  deserializeAssets({ maps, meta, symbols }) {
+  deserializeAssets({ maps, meta, symbols, sheet }) {
     return {
       meta,
       symbols: mapValues(symbols, (x) => this.deserializeSymbol(x)),
+      sheet,
       maps,
     };
   }

@@ -6,8 +6,16 @@ declare namespace Geomorph {
   > {
     symbols: Record<Geomorph.SymbolKey, Geomorph.SymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
+    sheet: SpriteSheet;
     /** `metaKey` is a `Geomorph.SymbolKey` or a mapKey e.g. `demo-map-1` */
-    meta: { [metaKey: string]: { outputHash: number } };
+    meta: { [metaKey: string]: {
+      /** Hash of parsed symbol */
+      outputHash: number;
+      /** Hash of `"data:image/png..."` (including quotes) */
+      pngHash?: number;
+      /** Hash of each obstacle polygon */
+      obsHashes?: number[];
+    } };
   }
 
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
@@ -266,10 +274,12 @@ declare namespace Geomorph {
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
-    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & SymbolObstacleContext>;
+    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, SymbolObstacle>;
     obstaclesWidth: number;
     obstaclesHeight: number;
   }
+
+  interface SymbolObstacle extends SymbolObstacleContext, Geom.RectJson {};
 
   interface SymbolObstacleContext {
     symbolKey: Geomorph.SymbolKey;
