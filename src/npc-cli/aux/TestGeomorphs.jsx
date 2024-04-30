@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { imgExt } from "src/const";
 import { Mat } from "../geom";
-import { info, keys, warn } from "../service/generic";
+import { info, isDevelopment, keys, warn } from "../service/generic";
 import { FLOOR_IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
@@ -139,6 +139,7 @@ export default function TestGeomorphs(props) {
       });
       return null;
     },
+    refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
   });
 
   const instHash = `${api.mapKey} ${api.mapsHash} ${api.layoutsHash}`
