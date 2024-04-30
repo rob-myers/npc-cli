@@ -69,8 +69,9 @@ export default function TestGeomorphs(props) {
       
       ceilCt.clearRect(0, 0, width, height);
       ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      // wall tops
-      drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
+      // wall tops (stroke gaps e.g. bridge desk)
+      // drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
+      drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', 'rgba(50, 50, 50, 1)', 0.06])
       // door tops
       // drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(50, 50, 50, 1)'])
       ceilCt.strokeStyle = 'black';
