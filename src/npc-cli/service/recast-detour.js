@@ -31,7 +31,7 @@ export function getTileCacheGeneratorConfig() {
   return {
     // tileSize: 7.6 / cs,
     // tileSize: 7.2 / cs,
-    tileSize: 7.5 / cs,
+    tileSize: 8.1 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
     ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
@@ -39,7 +39,7 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    // maxSimplificationError: 0.5,
+    // maxSimplificationError: 0.8,
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
