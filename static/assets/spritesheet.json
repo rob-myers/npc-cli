@@ -838,9 +838,9 @@
       "type": "obstacle"
     },
     "console--051--0.4x0.6 0": {
-      "x": 943,
-      "y": 2020,
-      "width": 69,
+      "x": 2225,
+      "y": 2083,
+      "width": 58,
       "height": 75,
       "symbolKey": "console--051--0.4x0.6",
       "obstacleId": 0,
@@ -856,7 +856,7 @@
       "type": "obstacle"
     },
     "engineering--047--4x7 3": {
-      "x": 1014,
+      "x": 943,
       "y": 2020,
       "width": 65,
       "height": 75,
@@ -865,7 +865,7 @@
       "type": "obstacle"
     },
     "engineering--047--4x7 4": {
-      "x": 1081,
+      "x": 1010,
       "y": 2020,
       "width": 65,
       "height": 75,
@@ -928,8 +928,8 @@
       "type": "obstacle"
     },
     "fresher--036--4x2 1": {
-      "x": 1093,
-      "y": 2097,
+      "x": 1077,
+      "y": 2020,
       "width": 58,
       "height": 71,
       "symbolKey": "fresher--036--4x2",
@@ -937,8 +937,8 @@
       "type": "obstacle"
     },
     "fresher--036--4x2 2": {
-      "x": 1148,
-      "y": 2020,
+      "x": 1093,
+      "y": 2093,
       "width": 58,
       "height": 71,
       "symbolKey": "fresher--036--4x2",
@@ -946,8 +946,8 @@
       "type": "obstacle"
     },
     "fresher--036--4x2 3": {
-      "x": 2225,
-      "y": 2083,
+      "x": 1137,
+      "y": 2020,
       "width": 57,
       "height": 71,
       "symbolKey": "fresher--036--4x2",
@@ -964,7 +964,7 @@
       "type": "obstacle"
     },
     "extra--fresher--001--0.5x0.5 0": {
-      "x": 1208,
+      "x": 1196,
       "y": 2020,
       "width": 69,
       "height": 59,
@@ -1117,7 +1117,7 @@
       "type": "obstacle"
     },
     "stateroom--035--2x3 2": {
-      "x": 1279,
+      "x": 1267,
       "y": 2022,
       "width": 45,
       "height": 50,
@@ -1270,8 +1270,8 @@
       "type": "chair"
     },
     "303--hull 5": {
-      "x": 1388,
-      "y": 2154,
+      "x": 1314,
+      "y": 2020,
       "width": 16,
       "height": 16,
       "symbolKey": "303--hull",
@@ -1279,7 +1279,7 @@
       "type": "chair"
     },
     "303--hull 6": {
-      "x": 1406,
+      "x": 1388,
       "y": 2154,
       "width": 16,
       "height": 16,
