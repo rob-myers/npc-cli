@@ -355,6 +355,8 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   const prevPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
   const changedObstacles = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
   
+  info({ changedObstacles });
+
   if (changedObstacles.size === 0) {
     return false;
   }
@@ -369,7 +371,7 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
       const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
       const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
 
-      if (changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
+      if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
         info(`${symbolKey} ${obstacleId} obstacle did not change`);
         const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets).sheet.obstacle[`${symbolKey} ${obstacleId}`];
         ct.drawImage(/** @type {import('canvas').Image} */ (prevPng),
