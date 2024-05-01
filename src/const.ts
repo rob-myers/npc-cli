@@ -36,3 +36,13 @@ export const view = /** @type {const} */ {
 export const imgExt = process.env.NODE_ENV === 'development' ? 'png' : 'png.webp';
 
 export const imgExtFallback = 'png';
+
+/**
+ * Gatsby serves `static/assets/*` in development as `/assets/*`.
+ * However, it can be slow to update, breaking Hot Module Reloading.
+ * In development we serve assets directly to overcome this.
+ */
+export const assetsEndpoint = process.env.NODE_ENV === 'development'
+  ? `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-assets`
+  : '/assets'
+;

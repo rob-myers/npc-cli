@@ -12,8 +12,8 @@
     "react three fiber"
   ],
   "scripts": {
-    "dev": "concurrently 'npm run ws-server' 'npm run develop' 'npm run watch-assets'",
-    "develop": "gatsby develop -p 8011",
+    "dev": "concurrently 'npm run develop' 'npm run watch-assets'",
+    "develop": "concurrently 'npm run ws-server' 'gatsby develop -p 8011'",
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",

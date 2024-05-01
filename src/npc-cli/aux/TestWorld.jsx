@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME, imgExt, imgExtFallback } from "src/const";
+import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt, imgExtFallback } from "src/const";
 import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, isDevelopment, keys, range } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";
@@ -188,16 +188,19 @@ export default function TestWorld(props) {
     queryFn: async () => {
       
       const geomorphs = geomorphService.deserializeGeomorphs(
-        await fetch(`/assets/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json())
+        await fetch(`${assetsEndpoint}/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json())
       );
-      // recreate sprite CanvasTexture in case dimension changed
-      if (state.geomorphs) state.ensureSheetTex(true);
+      
+      if (state.geomorphs) {// recreate CanvasTexture in case dimension changed
+        state.geomorphs = geomorphs; // 🔔 must update before ensureSheetTex
+        state.ensureSheetTex(true);
+      }
 
       if (state.surfaces) {
         keys(state.gmClass).forEach((gmKey) =>
           texLoadAsyncFallback(
-            `/assets/2d/${gmKey}.floor.${imgExt}`,
-            `/assets/2d/${gmKey}.floor.${imgExtFallback}`,
+            `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}`,
+            `${assetsEndpoint}/2d/${gmKey}.floor.${imgExtFallback}`,
           ).then((tex) => {
             state.surfaces.drawFloorAndCeil(gmKey, tex.source.data);
             const { floor: [, floor], ceil: [, ceil] } = state.gmClass[gmKey];
@@ -208,14 +211,14 @@ export default function TestWorld(props) {
         );
   
         texLoadAsyncFallback(
-          `/assets/2d/obstacles.${imgExt}`,
-          `/assets/2d/obstacles.${imgExtFallback}`,
+          `${assetsEndpoint}/2d/obstacles.${imgExt}?v=${Date.now()}`,
+          `${assetsEndpoint}/2d/obstacles.${imgExtFallback}`,
         ).then((tex) => {
           state.surfaces.drawObstaclesSheet(tex.source.data);
           const [, obstacles] = state.sheet.obstacle;
           obstacles.needsUpdate = true;
           
-          // 🚧 WIP HMR edit can fix spritesheet
+          // 🚧 WIP HMR edit 2
           update();
         });
 

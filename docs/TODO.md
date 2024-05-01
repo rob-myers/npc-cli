@@ -27,11 +27,16 @@
     - ✅ dev uses pngs
     - ✅ pre-push hook runs `npm run assets-fast --all`
     - ✅ images fallback from `webp` to `png`
-  - 🚧 obstacles sprite-sheet out of sync
+  - ✅ obstacles sprite-sheet out of sync
     - ℹ️ texture size needs to change!
     - ✅ try force 4096 x 4096
     - ✅ recreate texture with different size on-the-fly
-  - 🚧 try serve images separately in development i.e. avoid gatsby /assets endpoints
+  - ✅ try serve images separately in development i.e. avoid gatsby /assets endpoints
+    - ✅ ws-server serves images
+    - ✅ remove delay from site.store
+    - ✅ `yarn develop` still works
+  - 🚧 out-of-sync sprite-sheet persists
+    - 🚧 might have fix i.e. state.geomorphs was stale
 
 - ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
   - definitely wrong?

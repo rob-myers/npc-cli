@@ -98,11 +98,7 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
       const url = `ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`;
       const wsClient = new WebSocket(url);
       wsClient.onmessage = async (e) => {
-        info(`${url} message:`, e.data);
-
-        // 🔔 seems necessary, probably due to gatsby handling of static/assets
-        // 🚧 try serving images ourselves in development
-        await pause(800);
+        info(`received websocket message:`, { url, data: e.data });
 
         queryClient.refetchQueries({
           predicate({ queryKey: [queryKey] }) {
