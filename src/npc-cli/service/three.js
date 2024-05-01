@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { error } from "./generic";
 import { Rect, Vect } from "../geom";
 
 /** Unit quad extending from origin to (1, 0, 1) */
@@ -97,3 +98,19 @@ export const wireFrameMaterial = new THREE.MeshStandardMaterial({
 export const tmpVectThree1 = new THREE.Vector3();
 export const tmpMesh1 = new THREE.Mesh();
 export const tmpBox1 = new THREE.Box3();
+
+const textureLoader = new THREE.TextureLoader();
+
+/**
+ * @param {string} src 
+ * @param {string} fallbackSrc 
+ */
+export function texLoadAsyncFallback(src, fallbackSrc) {
+  return textureLoader
+    .loadAsync(src)
+    .catch(e => {
+      error(`texture not found: ${src}; falling back to ${fallbackSrc}`);
+      console.error(e);
+      return textureLoader.loadAsync(fallbackSrc);
+    });
+}

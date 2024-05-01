@@ -36,3 +36,5 @@ export const view = /** @type {const} */ {
 };
 
 export const imgExt = process.env.NODE_ENV === 'development' ? 'png' : 'png.webp';
+
+export const imgExtFallback = 'png';

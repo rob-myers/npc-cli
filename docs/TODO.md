@@ -23,9 +23,10 @@
     - ✅ remove images.js
   - not-found sprite i.e. small red rect
   - initially force complete assets recompute
-  - avoid recomputing png -> webp
-    - dev uses pngs
-    - pre-push hook checks `webp.png` available
+  - 🚧 avoid recomputing png -> webp
+    - ✅ dev uses pngs
+    - ✅ pre-push hook runs `npm run assets-fast --all`
+    - ✅ images fallback from `webp` to `png`
 
 - 🚧 fix sprite-sheet creation i.e. account for `<image>` offset properly
   - definitely wrong
