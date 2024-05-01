@@ -151,13 +151,12 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
   /**
    * Draw geomorph floors
    */
-  const createdPngPaths = await drawFloorImages(geomorphs, changedGmKeys);
+  await drawFloorImages(geomorphs, changedGmKeys);
   
   /**
    * Draw obstacles sprite-sheet
    */
-  const changed = await drawObstaclesSheet(assets, geomorphs, prevAssets);
-  changed && createdPngPaths.push(obstaclesPngPath);
+  await drawObstaclesSheet(assets, geomorphs, prevAssets);
 
   fetch(sendDevEventUrl, {
     method: "POST",
@@ -168,9 +167,10 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
   });
 
   // Dev uses PNGs to avoid HMR delay
+  const pngPaths = geomorphService.gmKeys.map(getFloorPngPath).concat(obstaclesPngPath);
   Boolean(opts.all) && await runYarnScript(
     'cwebp-fast',
-    JSON.stringify({ files: createdPngPaths }),
+    JSON.stringify({ files: pngPaths }),
     '--quality=50',
   );
 
@@ -238,11 +238,10 @@ function validateSubSymbolDimension(symbols) {
 /**
  * @param {Geomorph.Geomorphs} geomorphs 
  * @param {Geomorph.GeomorphKey[]} gmKeys 
- * @returns {Promise<string[]>} Paths of created PNGs
  */
 async function drawFloorImages(geomorphs, gmKeys) {
   const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => gmKeys.includes(key));
-  const pngPathToProm = /** @type {Record<String, Promise<any>>} */ ({});
+  const promises = /** @type {Promise<any>[]} */ ([]);
 
   for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of changedLayouts) {
     
@@ -273,13 +272,10 @@ async function drawFloorImages(geomorphs, gmKeys) {
     // Doors
     drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
-    const pngPath = path.resolve(assets2dDir, `${gmKey}.floor.png`);
-    pngPathToProm[pngPath] = saveCanvasAsFile(canvas, pngPath);
+    promises.push(saveCanvasAsFile(canvas, getFloorPngPath(gmKey)));
   }
 
-  await Promise.all(Object.values(pngPathToProm));
-
-  return Object.keys(pngPathToProm);
+  await Promise.all(promises);
 }
 
 /**
@@ -342,6 +338,7 @@ function createSheetJson(assets) {
 
   assets.sheet = json;
 }
+
 /**
  * @param {Geomorph.Assets} assets
  * @param {Geomorph.Geomorphs} geomorphs
@@ -426,7 +423,6 @@ function detectChangedObstacles(obstacles, assets, prevAssets) {
   }
 }
 
-
 /**
  * @param {import('canvas').CanvasRenderingContext2D} ct
  * @param {Geomorph.Layout['navDecomp']} navDecomp
@@ -444,6 +440,11 @@ function extractObstacleDescriptor(meta) {
     if (meta[tag] === true) return tag;
   }
   return 'obstacle';
+}
+
+/** @param {Geomorph.GeomorphKey} gmKey */
+function getFloorPngPath(gmKey) {
+  return path.resolve(assets2dDir, `${gmKey}.floor.png`);
 }
 
 const emptyStringHash = hashText('');
