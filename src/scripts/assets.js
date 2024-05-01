@@ -75,7 +75,9 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
   
   let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
-  const updateAllSymbols = !!opts.all || !prevAssets || !opts.staleMs || (
+  // Partial update only for `npm run assets -- --staleMs={ms}`
+  // s.t. this file and geomorphsService have not changed in `ms`
+  const updateAllSymbols = Boolean(opts.all) || !prevAssets || !opts.staleMs || (
     [assetsScriptFilepath, geomorphServicePath].some(x => fs.statSync(x).atimeMs > Date.now() - Number(opts.staleMs)
   ));
 
@@ -165,7 +167,8 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
 
-  createdPngPaths.length && await runYarnScript(
+  // Dev uses PNGs to avoid HMR delay
+  Boolean(opts.all) && await runYarnScript(
     'cwebp-fast',
     JSON.stringify({ files: createdPngPaths }),
     '--quality=50',
