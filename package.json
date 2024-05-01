@@ -24,15 +24,15 @@
     "assets": "npm run ts-script src/scripts/assets -- --all",
     "assets-fast": "sucrase-node src/scripts/assets",
     "clean-assets": "rm static/assets/assets.json static/assets/geomorphs.json",
-    "images": "npm run ts-script src/scripts/images",
-    "images-fast": "sucrase-node src/scripts/images",
     "cwebp": "npm run ts-script src/scripts/cwebp",
     "cwebp-fast": "sucrase-node src/scripts/cwebp",
     "get-pngs": "npm run ts-script src/scripts/get-pngs",
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
     "watch-assets": "npm run assets && nodemon --on-change-only --delay 300ms --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast -- --staleMs=2000'",
-    "ws-server": "sucrase-node src/scripts/ws-server.js"
+    "ws-server": "sucrase-node src/scripts/ws-server.js",
+    "pre-push": "npm run assets-fast -- --all"
   },
+  "pre-push": ["pre-push"],
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.3",
@@ -112,6 +112,7 @@
     "gatsby-plugin-tsconfig-paths": "^1.0.6",
     "nodemon": "^3.1.0",
     "patch-package": "^8.0.0",
+    "pre-push": "^0.1.4",
     "sucrase": "^3.35.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
