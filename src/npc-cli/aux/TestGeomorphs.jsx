@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { imgExt } from "src/const";
 import { Mat } from "../geom";
 import { info, isDevelopment, keys, warn } from "../service/generic";
-import { FLOOR_IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
+import { IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
@@ -118,10 +118,10 @@ export default function TestGeomorphs(props) {
   }));
 
   useQuery({
-    // 🚧 IMAGES_QUERY_KEY
-    queryKey: [FLOOR_IMAGES_QUERY_KEY, api.layoutsHash, api.mapsHash],
+    // queryKey: [IMAGES_QUERY_KEY, api.layoutsHash, api.mapsHash],
+    queryKey: [IMAGES_QUERY_KEY],
     queryFn() {
-      keys(api.gmClass).forEach((gmKey) =>
+      keys(api.gmClass).map((gmKey) =>
         textureLoader.loadAsync(`/assets/2d/${gmKey}.floor.${imgExt}`)
           .then((tex) => {
             state.drawFloorAndCeil(gmKey, tex.source.data);

@@ -15,7 +15,7 @@ import {
   DEV_EXPRESS_WEBSOCKET_PORT,
   GEOMORPHS_JSON_FILENAME,
 } from "src/const";
-import { FLOOR_IMAGES_QUERY_KEY } from "src/npc-cli/service/const";
+import { IMAGES_QUERY_KEY } from "src/npc-cli/service/const";
 import { queryClient } from "src/npc-cli/service/query-client";
 
 const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devtools((set, get) => ({
@@ -105,7 +105,7 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
           predicate({ queryKey: [queryKey] }) {
             return (
               GEOMORPHS_JSON_FILENAME === queryKey ||
-              FLOOR_IMAGES_QUERY_KEY === queryKey
+              IMAGES_QUERY_KEY === queryKey
             );
           },
         });

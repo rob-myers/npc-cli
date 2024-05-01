@@ -7,7 +7,7 @@ export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });
 
-export const FLOOR_IMAGES_QUERY_KEY = 'draw-floors';
+export const IMAGES_QUERY_KEY = 'floors-and-sprite-sheets';
 
 /**
  * Convert Starship Geomorph units (sgu) into world coordinates (meters).
