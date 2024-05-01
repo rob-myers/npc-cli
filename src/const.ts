@@ -12,8 +12,6 @@ export const ASSETS_JSON_FILENAME = "assets.json";
 
 export const GEOMORPHS_JSON_FILENAME = "geomorphs.json";
 
-export const SPRITE_SHEET_JSON_FILENAME = "spritesheet.json";
-
 
 export const afterBreakpoint = "1201px";
 export const breakpoint = "1200px";

@@ -24,7 +24,7 @@ import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, SPRITE_SHEET_JSON_FILENAME } from "../const";
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "../const";
 import { spriteSheetNonHullExtraScale, worldScale } from "../npc-cli/service/const";
 import { ansi } from "../npc-cli/sh/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision } from "../npc-cli/service/generic";
@@ -323,6 +323,7 @@ function createSheetJson(assets) {
   
   /** @type {Geomorph.SpriteSheet} */
   const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
+  // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
   bin.rects.forEach(r => {
     const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
     json.obstacle[`${symbolKey} ${obstacleId}`] = {
@@ -352,6 +353,8 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   const canvas = createCanvas(obstaclesWidth, obstaclesHeight);
   const ct = canvas.getContext('2d');
 
+  // 🚧 redraw all obstacles when opts.all
+  // 🚧 redraw all obstacles when --staleMs={ms} and this file changed
   const prevPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
   const changedObstacles = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
   

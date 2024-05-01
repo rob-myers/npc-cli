@@ -22,14 +22,21 @@
     - ✅ changed symbol obstacle detected
     - ✅ remove images.js
   - not-found sprite i.e. small red rect
-  - initially force complete assets recompute
+  - 🚧 initially force complete assets recompute
   - 🚧 avoid recomputing png -> webp
     - ✅ dev uses pngs
     - ✅ pre-push hook runs `npm run assets-fast --all`
     - ✅ images fallback from `webp` to `png`
+  - 🚧 obstacles sprite-sheet out of sync
+    - ℹ️ texture size needs to change!
+    - ✅ try force 4096 x 4096
+    - ✅ recreate texture with different size on-the-fly
+  - 🚧 try serve images separately in development i.e. avoid gatsby /assets endpoints
 
-- 🚧 fix sprite-sheet creation i.e. account for `<image>` offset properly
-  - definitely wrong
+- ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
+  - definitely wrong?
+  - seems fixed, not sure why
+
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed

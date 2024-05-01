@@ -5,12 +5,12 @@ import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME } from "src/const";
+import { GEOMORPHS_JSON_FILENAME, imgExt, imgExtFallback } from "src/const";
 import { agentRadius, worldScale } from "../service/const";
-import { assertNonNull, info, isDevelopment, range } from "../service/generic";
+import { assertNonNull, info, isDevelopment, keys, range } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
-import { decompToXZGeometry, polysToXZGeometry, tmpBufferGeom1, tmpVectThree1, wireFrameMaterial } from "../service/three";
+import { decompToXZGeometry, polysToXZGeometry, texLoadAsyncFallback, tmpBufferGeom1, tmpVectThree1, wireFrameMaterial } from "../service/three";
 import { getTileCacheMeshProcess } from "../service/recast-detour";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
@@ -47,6 +47,7 @@ export default function TestWorld(props) {
     crowd: /** @type {*} */ (null),
 
     view: /** @type {*} */ (null), // TestWorldCanvas
+    surfaces: /** @type {*} */ (null), // TestGeomorphs
     doors: /** @type {*} */ (null), // TestWallsAndDoors
     npcs: /** @type {*} */ (null), // TestNpcs
     debug: /** @type {*} */ (null), // TestDebug
@@ -72,15 +73,21 @@ export default function TestWorld(props) {
       gmClass.debugNavPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
       return gmClass;
     },
-    ensureSheetTex() {
+    ensureSheetTex(overwrite = false) {
       if (!state.sheet) {
-        const obsEl = document.createElement("canvas");
-        obsEl.width = state.geomorphs.sheet.obstaclesWidth;
-        obsEl.height = state.geomorphs.sheet.obstaclesHeight;
+        const canvas = document.createElement("canvas");
+        canvas.width = state.geomorphs.sheet.obstaclesWidth;
+        canvas.height = state.geomorphs.sheet.obstaclesHeight;
         state.sheet = {
-          obstacle: [assertNonNull(obsEl.getContext("2d")), new THREE.CanvasTexture(obsEl), obsEl],
+          obstacle: [assertNonNull(canvas.getContext("2d")), new THREE.CanvasTexture(canvas), canvas],
           // ...
         };
+      } else if (overwrite) {
+        const [, tex, canvas] = state.sheet.obstacle;
+        canvas.width = state.geomorphs.sheet.obstaclesWidth;
+        canvas.height = state.geomorphs.sheet.obstaclesHeight;
+        state.sheet.obstacle[1] = new THREE.CanvasTexture(canvas);
+        // tex.dispose();
       }
     },
     async handleMessageFromWorker(e) {
@@ -177,10 +184,45 @@ export default function TestWorld(props) {
   useHandleEvents(state);
 
   const { data: geomorphs } = useQuery({
-    queryKey: [GEOMORPHS_JSON_FILENAME],
-    queryFn: async () =>
-      geomorphService.deserializeGeomorphs(await fetch(`/assets/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json()))
-    ,
+    queryKey: [GEOMORPHS_JSON_FILENAME, !!state.surfaces],
+    queryFn: async () => {
+      
+      const geomorphs = geomorphService.deserializeGeomorphs(
+        await fetch(`/assets/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json())
+      );
+      // recreate sprite CanvasTexture in case dimension changed
+      if (state.geomorphs) state.ensureSheetTex(true);
+
+      if (state.surfaces) {
+        keys(state.gmClass).forEach((gmKey) =>
+          texLoadAsyncFallback(
+            `/assets/2d/${gmKey}.floor.${imgExt}`,
+            `/assets/2d/${gmKey}.floor.${imgExtFallback}`,
+          ).then((tex) => {
+            state.surfaces.drawFloorAndCeil(gmKey, tex.source.data);
+            const { floor: [, floor], ceil: [, ceil] } = state.gmClass[gmKey];
+            floor.needsUpdate = true;
+            ceil.needsUpdate = true;
+            update();
+          })
+        );
+  
+        texLoadAsyncFallback(
+          `/assets/2d/obstacles.${imgExt}`,
+          `/assets/2d/obstacles.${imgExtFallback}`,
+        ).then((tex) => {
+          state.surfaces.drawObstaclesSheet(tex.source.data);
+          const [, obstacles] = state.sheet.obstacle;
+          obstacles.needsUpdate = true;
+          
+          // 🚧 WIP HMR edit can fix spritesheet
+          update();
+        });
+
+      }
+
+      return geomorphs;
+    },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
     // throwOnError: true, // breaks on restart dev env
   });
@@ -266,6 +308,7 @@ export default function TestWorld(props) {
  * @property {Timer} timer
  *
  * @property {import('./TestWorldCanvas').State} view
+ * @property {import('./TestGeomorphs').State} surfaces
  * @property {import('./TestWallsAndDoors').State} doors
  * @property {import('./TestNpcs').State} npcs
  * @property {import('./TestDebug').State} debug
@@ -278,7 +321,7 @@ export default function TestWorld(props) {
  * @property {Crowd} crowd
  *
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmClass
- * @property {() => void} ensureSheetTex
+ * @property {(overwrite?: boolean) => void} ensureSheetTex
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {(agentPositions: THREE.Vector3Like[], agentTargets: (THREE.Vector3Like | null)[]) => void} setupCrowdAgents

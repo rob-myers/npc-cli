@@ -1,19 +1,15 @@
 import React from "react";
 import * as THREE from "three";
-import { shaderMaterial } from "@react-three/drei";
-import { useQuery } from "@tanstack/react-query";
 
-import { imgExt, imgExtFallback } from "src/const";
 import { Mat } from "../geom";
-import { info, isDevelopment, keys, warn } from "../service/generic";
-import { IMAGES_QUERY_KEY, wallHeight, worldScale } from "../service/const";
+import { info, warn } from "../service/generic";
+import { wallHeight, worldScale } from "../service/const";
 import { drawPolygons, strokeLine } from "../service/dom";
-import { quadGeometryXZ, texLoadAsyncFallback } from "../service/three";
+import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -117,44 +113,15 @@ export default function TestGeomorphs(props) {
     },
   }));
 
-  useQuery({
-    // queryKey: [IMAGES_QUERY_KEY, api.layoutsHash, api.mapsHash],
-    queryKey: [IMAGES_QUERY_KEY],
-    queryFn() {
-      keys(api.gmClass).forEach((gmKey) =>
-        texLoadAsyncFallback(
-          `/assets/2d/${gmKey}.floor.${imgExt}`,
-          `/assets/2d/${gmKey}.floor.${imgExtFallback}`,
-        ).then((tex) => {
-          state.drawFloorAndCeil(gmKey, tex.source.data);
-          const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
-          floor.needsUpdate = true;
-          ceil.needsUpdate = true;
-          update();
-        })
-      );
-      texLoadAsyncFallback(
-        `/assets/2d/obstacles.${imgExt}`,
-        `/assets/2d/obstacles.${imgExtFallback}`,
-      ).then((tex) => {
-        state.drawObstaclesSheet(tex.source.data);
-        const [, obstacles] = api.sheet.obstacle;
-        obstacles.needsUpdate = true;
-        update();
-      });
-      return null;
-    },
-    refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
-  });
+  api.surfaces = state;
 
-  const instHash = `${api.mapKey} ${api.mapsHash} ${api.layoutsHash}`
+  const instHash = `${api.mapKey} ${api.mapsHash} ${api.layoutsHash} ${api.geomorphs.sheetsHash}`
   
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [instHash, shaderMaterial]);
+  }, [instHash]);
 
-  const update = useUpdate();
 
   
   return <>

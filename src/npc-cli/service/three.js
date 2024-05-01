@@ -100,6 +100,7 @@ export const tmpMesh1 = new THREE.Mesh();
 export const tmpBox1 = new THREE.Box3();
 
 const textureLoader = new THREE.TextureLoader();
+// console.log('cache enabled', THREE.Cache.enabled); // false
 
 /**
  * @param {string} src 

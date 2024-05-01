@@ -15,7 +15,6 @@ import {
   DEV_EXPRESS_WEBSOCKET_PORT,
   GEOMORPHS_JSON_FILENAME,
 } from "src/const";
-import { IMAGES_QUERY_KEY } from "src/npc-cli/service/const";
 import { queryClient } from "src/npc-cli/service/query-client";
 
 const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devtools((set, get) => ({
@@ -100,13 +99,14 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
       const wsClient = new WebSocket(url);
       wsClient.onmessage = async (e) => {
         info(`${url} message:`, e.data);
-        await pause(300); // 🔔 seems necessary, probably due to gatsby handling of static/assets
+
+        // 🔔 seems necessary, probably due to gatsby handling of static/assets
+        // 🚧 try serving images ourselves in development
+        await pause(800);
+
         queryClient.refetchQueries({
           predicate({ queryKey: [queryKey] }) {
-            return (
-              GEOMORPHS_JSON_FILENAME === queryKey ||
-              IMAGES_QUERY_KEY === queryKey
-            );
+            return GEOMORPHS_JSON_FILENAME === queryKey;
           },
         });
       };

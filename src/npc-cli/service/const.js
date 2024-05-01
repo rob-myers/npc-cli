@@ -7,8 +7,6 @@ export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });
 
-export const IMAGES_QUERY_KEY = 'floors-and-sprite-sheets';
-
 /**
  * Convert Starship Geomorph units (sgu) into world coordinates (meters).
  * e.g. 1 tile is 60 sgu, which becomes 1.5 meters
