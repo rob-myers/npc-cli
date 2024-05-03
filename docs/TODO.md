@@ -23,7 +23,13 @@
   - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
   - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
   - 🚧 could be problem with smart-sprite-sheet-update
-  - could relate to adding symbol key to geomorph.js before we're ready?
+  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
+  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
+  - 🚧 try repro with single geomorph
+  - 🚧 try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
+
+- rethink webp generation
+- map switching not working?
 
 - integrate TestCharacter into TestWorld
   - try convert into jsx

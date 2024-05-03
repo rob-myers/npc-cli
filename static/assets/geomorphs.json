@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 1898958716 1773244722",
+  "hash": "610044716 1488475394 1773244722",
   "mapsHash": 610044716,
-  "layoutsHash": 1898958716,
+  "layoutsHash": 1488475394,
   "sheetsHash": 1773244722,
   "map": {
     "demo-map-1": {
@@ -10299,7 +10299,7 @@
         {
           "symbolKey": "lab--023--4x4",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -10318,6 +10318,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "y": 0.6,
               "symId": 34,
               "symKey": "lab--023--4x4",
               "obsId": 0
@@ -10409,7 +10410,7 @@
         {
           "symbolKey": "lab--023--4x4",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -10428,6 +10429,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "y": 0.6,
               "symId": 34,
               "symKey": "lab--023--4x4",
               "obsId": 0

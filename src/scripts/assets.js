@@ -54,11 +54,13 @@ const mediaDir = path.resolve(__dirname, "../../media");
 const mapsDir = path.resolve(mediaDir, "map");
 const symbolsDir = path.resolve(mediaDir, "symbol");
 const assets2dDir = path.resolve(staticAssetsDir, "2d");
+const graphDir = path.resolve(mediaDir, "graph");
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
 const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
 const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
+const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
 const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const worldToSgu = 1 / worldScale;
 const dataUrlRegEx = /"data:image\/png(.*)"/;
@@ -119,6 +121,7 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
     geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
   // debug("stateroom--036--2x4", util.inspect(flattened["stateroom--036--2x4"], false, 5));
+  // fs.writeFileSync(symbolGraphVizPath, symbolGraph.getGraphviz('symbolGraph'));
 
   const changedGmKeys = geomorphService.gmKeys.filter(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];
@@ -328,6 +331,9 @@ function createSheetJson(assets) {
   const bin = bins[0];
   
   /** @type {Geomorph.SpriteSheet} */
+  /**
+   * 🚧 try 4096 x 4096 and see if sprite-sheet edit/hmr issue persists
+   */
   const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
   // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
   bin.rects.forEach(r => {
