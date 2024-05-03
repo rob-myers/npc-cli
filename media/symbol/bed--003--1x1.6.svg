@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
-  <defs>
-    <bx:grid x="0" y="0" width="300" height="300"/>
-  </defs>
-  <image width="502" height="307" x="-1" y="-3.5" xlink:href="data:image/png;base64,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">
-    <title>bed--003--1x1.6</title>
-  </image>
-  <rect x="3.000009" y="0.499999" width="119.379723" height="300" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle surface y=0.2</title>
-  </rect>
-  <rect x="123.000007" y="51.974155" width="377.696472" height="200.393341" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>obstacle</title>
-  </rect>
-  <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="216" y="138">
-    <title>decor do lie bed orient=0</title>
-  </rect>
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="502" height="307" x="-1" y="-3.5" xlink:href="data:image/png;base64,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">
+                <title>bed--003--1x1.6</title>
+        </image>
+        <rect x="3.000009" y="0.499999" width="119.379723" height="300" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
+                <title>obstacle surface y=0.2</title>
+        </rect>
+        <rect x="123.000007" y="51.974155" width="377.696472" height="200.393341" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
+                <title>obstacle</title>
+        </rect>
+        <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="216" y="138">
+                <title>decor do lie bed orient=0</title>
+        </rect>
 </svg>
