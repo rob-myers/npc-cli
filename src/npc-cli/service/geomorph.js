@@ -81,7 +81,6 @@ class GeomorphService {
     "empty-room--060--4x4": true,
     "engineering--045--6x4": true,
     "engineering--047--4x7": true,
-    "extra--desk--007--0.4x0.66": true,
     "fresher--002--0.4x0.6": true,
     "fresher--020--2x2": true,
     "fresher--025--3x2": true,
@@ -131,6 +130,8 @@ class GeomorphService {
     "extra--desk--004--0.5x1": true,
     "extra--chair--005-0.25x0.25": true,
     "extra--desk--006--0.4x1": true,
+    "extra--desk--007--0.4x0.66": true,
+    "extra--desk--008--0.4x1.33": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */

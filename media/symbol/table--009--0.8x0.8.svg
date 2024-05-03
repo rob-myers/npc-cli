@@ -29,18 +29,6 @@
         <path d="M 242.735 128.96914 L 242.735 170.06188 L 214.92876 216.61126 L 170.56038 243.592 L 129.4461 243.592 L 80.22954 214.06554 L 58.399 170.6273 L 58.399 129.63278 L 83.76848 84.16626 L 129.42322 55.444 L 170.57926 55.444 L 216.9334 84.75342 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
                 <title>obstacle surface table y=0.7</title>
         </path>
-        <rect y="60" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="60">
-                <title>decor do sit chair orient=45</title>
-        </rect>
-        <rect y="230" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="60">
-                <title>decor do sit chair orient=315</title>
-        </rect>
-        <rect x="230" y="230" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-                <title>decor do sit chair orient=225</title>
-        </rect>
-        <rect x="230" y="60" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-                <title>decor do sit chair orient=135</title>
-        </rect>
         <g>
                 <title>symbols</title>
                 <rect width="75.000039" height="75.000039" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 227.506px 227.494px;" y="190.000128" x="190.000128" transform="matrix(0.70710682869, 0.70710682869, -0.70710682869, 0.70710682869, -0.000029314262, -0.000038684569)">
