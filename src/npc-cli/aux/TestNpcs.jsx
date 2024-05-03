@@ -63,7 +63,8 @@ export default function TestNpcs(props) {
     onTick() {
       for (const agent of api.crowd.getAgents()) {
         const mesh = state.toAgentGroup[agent.agentIndex];
-        state.moveGroup(agent, mesh);
+        // 🚧 avoid issue on level change
+        mesh !== undefined && state.moveGroup(agent, mesh);
       }
     },
 
