@@ -5,44 +5,12 @@
 - 🚧 more raised obstacles
   - ✅ 301
   - 🚧 101
+  - 🚧 102
   - ℹ️ raising to wall height can cause flicker
 
-- 🚧 HMR issues
-  - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
-    - i.e. same as file contents.
-  - ✅ avoid recomputing obstacles.png
-  - ✅ can `yarn images-fast --all`
-  - ✅ `yarn images-fast --staleMs=2000`
-  - ✅ obstacles sprite-sheet needs to update
-  - ✅ merge images.js into assets.js
-    - ✅ draw floors
-    - ✅ create spritesheet
-    - ✅ draw spritesheet
-    - ✅ avoid redrawing unchanged obstacle sprites
-    - ✅ changed symbol obstacle detected
-    - ✅ remove images.js
-  - not-found sprite i.e. small red rect
-  - ✅ obstacles sprite-sheet out of sync
-    - ℹ️ texture size needs to change!
-    - ✅ try force 4096 x 4096
-    - ✅ recreate texture with different size on-the-fly
-  - ✅ try serve images separately in development i.e. avoid gatsby /assets endpoints
-    - ✅ ws-server serves images
-    - ✅ remove delay from site.store
-    - ✅ `yarn develop` still works
-  - ✅ out-of-sync sprite-sheet persists
-    - ✅ might have fix i.e. state.geomorphs was stale
-  - ✅ geomorphs.hash
-  - ✅ clean assets query
-  - ✅ clean up hashes
-  - ✅ avoid recomputing png -> webp
-    - ✅ dev uses pngs
-    - ✅ pre-push hook runs `npm run assets-fast --all`
-    - ✅ images fallback from `webp` to `png`
-    - ✅ pre-push hook should not commit if generates new webp
-
-- ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
-  - seems fixed, not sure why
+- ✅ create Character demo with options Outline/Wireframe/CustomShaderWireframe
+  - CustomShaderWireframe doesn't work, so ask https://discourse.threejs.org
+  - get working shareable CodeSandbox link
 
 - integrate TestCharacter into TestWorld
   - try convert into jsx
@@ -885,3 +853,40 @@ React.useEffect(() => {
 - ✅ simplify symbol height convention
   - only use `y`
   - applies to all obstacles
+
+- ✅ HMR issues
+  - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
+    - i.e. same as file contents.
+  - ✅ avoid recomputing obstacles.png
+  - ✅ can `yarn images-fast --all`
+  - ✅ `yarn images-fast --staleMs=2000`
+  - ✅ obstacles sprite-sheet needs to update
+  - ✅ merge images.js into assets.js
+    - ✅ draw floors
+    - ✅ create spritesheet
+    - ✅ draw spritesheet
+    - ✅ avoid redrawing unchanged obstacle sprites
+    - ✅ changed symbol obstacle detected
+    - ✅ remove images.js
+  - not-found sprite i.e. small red rect
+  - ✅ obstacles sprite-sheet out of sync
+    - ℹ️ texture size needs to change!
+    - ✅ try force 4096 x 4096
+    - ✅ recreate texture with different size on-the-fly
+  - ✅ try serve images separately in development i.e. avoid gatsby /assets endpoints
+    - ✅ ws-server serves images
+    - ✅ remove delay from site.store
+    - ✅ `yarn develop` still works
+  - ✅ out-of-sync sprite-sheet persists
+    - ✅ might have fix i.e. state.geomorphs was stale
+  - ✅ geomorphs.hash
+  - ✅ clean assets query
+  - ✅ clean up hashes
+  - ✅ avoid recomputing png -> webp
+    - ✅ dev uses pngs
+    - ✅ pre-push hook runs `npm run assets-fast --all`
+    - ✅ images fallback from `webp` to `png`
+    - ✅ pre-push hook should not commit if generates new webp
+
+- ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
+  - seems fixed, not sure why
