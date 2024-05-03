@@ -27,6 +27,8 @@
     - ✅ dev uses pngs
     - ✅ pre-push hook runs `npm run assets-fast --all`
     - ✅ images fallback from `webp` to `png`
+    - 🚧 pre-push hook should commit new webp?
+      - 🔔 need to fix this somehow
   - ✅ obstacles sprite-sheet out of sync
     - ℹ️ texture size needs to change!
     - ✅ try force 4096 x 4096
@@ -37,6 +39,8 @@
     - ✅ `yarn develop` still works
   - 🚧 out-of-sync sprite-sheet persists
     - 🚧 might have fix i.e. state.geomorphs was stale
+  - ✅ geomorphs.hash
+  - ✅ clean assets query
 
 - ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
   - definitely wrong?

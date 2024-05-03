@@ -56,6 +56,8 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
+    /** `${mapsHash} ${layoutsHash} ${sheetsHash}` */
+    hash: string;
     mapsHash: number;
     layoutsHash: number;
     sheetsHash: number;

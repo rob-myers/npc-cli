@@ -7,7 +7,7 @@ import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@reca
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt, imgExtFallback } from "src/const";
 import { agentRadius, worldScale } from "../service/const";
-import { assertNonNull, info, isDevelopment, keys, range } from "../service/generic";
+import { assertNonNull, info, debug, isDevelopment, keys, range } from "../service/generic";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry, texLoadAsyncFallback, tmpBufferGeom1, tmpVectThree1, wireFrameMaterial } from "../service/three";
@@ -30,9 +30,10 @@ export default function TestWorld(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     disabled: !!props.disabled,
+    everDrewImages: false,
     mapKey: props.mapKey,
-    mapsHash: 0,
-    layoutsHash: 0,
+    mapsHash: 0, // 🚧 remove
+    layoutsHash: 0, // 🚧 remove
     threeReady: false,
     reqAnimId: 0,
     timer: new Timer(),
@@ -184,67 +185,89 @@ export default function TestWorld(props) {
   useHandleEvents(state);
 
   const { data: geomorphs } = useQuery({
-    queryKey: [GEOMORPHS_JSON_FILENAME, !!state.surfaces],
+    queryKey: [GEOMORPHS_JSON_FILENAME, state.surfaces ? props.mapKey : false],
     queryFn: async () => {
-      
-      const geomorphs = geomorphService.deserializeGeomorphs(
+      const prevGeomorphs = state.geomorphs;
+      const geomorphsJson = /** @type {Geomorph.GeomorphsJson} */ (
         await fetch(`${assetsEndpoint}/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json())
       );
+
+      const dataChanged = !prevGeomorphs || state.geomorphs.hash !== geomorphsJson.hash;
+      const mapChanged = dataChanged || state.mapKey !== props.mapKey;
+      const sheetDimChanged = !!prevGeomorphs && (
+        prevGeomorphs.sheet.obstaclesWidth !== geomorphsJson.sheet.obstaclesWidth
+        || prevGeomorphs.sheet.obstaclesHeight !== geomorphsJson.sheet.obstaclesHeight
+      );
+      const shouldDraw = !!state.surfaces && (!state.everDrewImages || dataChanged || sheetDimChanged);
+
+      debug({
+        prevGeomorphs: !!prevGeomorphs,
+        dataChanged,
+        mapChanged,
+        sheetDimChanged,
+        shouldDraw,
+      });
+
+      if (dataChanged) {
+        state.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
+      }
+
+      if (mapChanged) {
+        state.mapKey = props.mapKey;
+        const map = state.geomorphs.map[state.mapKey];
+        state.gms = map.gms.map(({ gmKey, transform }, gmId) =>
+          geomorphService.computeLayoutInstance(state.ensureGmClass(gmKey).layout, gmId, transform)
+        );
+        state.mapsHash = state.geomorphs.mapsHash;
+        state.layoutsHash = state.geomorphs.layoutsHash;
+      }
       
-      if (state.geomorphs) {// recreate CanvasTexture in case dimension changed
-        state.geomorphs = geomorphs; // 🔔 must update before ensureSheetTex
+      if (sheetDimChanged) {
+        // must re-create texture if sprite-sheet dimensions changed 
         state.ensureSheetTex(true);
       }
 
-      if (state.surfaces) {
-        keys(state.gmClass).forEach((gmKey) =>
-          texLoadAsyncFallback(
-            `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}`,
-            `${assetsEndpoint}/2d/${gmKey}.floor.${imgExtFallback}`,
-          ).then((tex) => {
-            state.surfaces.drawFloorAndCeil(gmKey, tex.source.data);
-            const { floor: [, floor], ceil: [, ceil] } = state.gmClass[gmKey];
-            floor.needsUpdate = true;
-            ceil.needsUpdate = true;
-            update();
-          })
-        );
-  
-        texLoadAsyncFallback(
-          `${assetsEndpoint}/2d/obstacles.${imgExt}?v=${Date.now()}`,
-          `${assetsEndpoint}/2d/obstacles.${imgExtFallback}`,
-        ).then((tex) => {
-          state.surfaces.drawObstaclesSheet(tex.source.data);
-          const [, obstacles] = state.sheet.obstacle;
-          obstacles.needsUpdate = true;
-          
-          // 🚧 WIP HMR edit 2
-          update();
-        });
-
+      if (!shouldDraw) {
+        return state.geomorphs;
       }
 
-      return geomorphs;
+      keys(state.gmClass).forEach((gmKey) =>
+        texLoadAsyncFallback(
+          `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}`,
+          `${assetsEndpoint}/2d/${gmKey}.floor.${imgExtFallback}`,
+        ).then((tex) => {
+          state.surfaces.drawFloorAndCeil(gmKey, tex.source.data);
+          const { floor: [, floor], ceil: [, ceil] } = state.gmClass[gmKey];
+          floor.needsUpdate = true;
+          ceil.needsUpdate = true;
+          update();
+        })
+      );
+
+      texLoadAsyncFallback(
+        `${assetsEndpoint}/2d/obstacles.${imgExt}?v=${Date.now()}`,
+        `${assetsEndpoint}/2d/obstacles.${imgExtFallback}`,
+      ).then((tex) => {
+        state.surfaces.drawObstaclesSheet(tex.source.data);
+        const [, obstacles] = state.sheet.obstacle;
+        obstacles.needsUpdate = true;
+        // 🚧 WIP HMR edit 2
+        update();
+      });
+
+      state.everDrewImages = true;
+
+      return state.geomorphs; // e.g. for ReactQueryDevtools
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
+    gcTime: 5000,
     // throwOnError: true, // breaks on restart dev env
   });
 
   React.useMemo(() => {
-    if (geomorphs) {
-      state.geomorphs = geomorphs;
-      const map = geomorphs.map[props.mapKey];
-      state.gms = map.gms.map(({ gmKey, transform }, gmId) =>
-        geomorphService.computeLayoutInstance(state.ensureGmClass(gmKey).layout, gmId, transform)
-      );
-      state.mapsHash = geomorphs.mapsHash;
-      state.layoutsHash = geomorphs.layoutsHash;
-      state.mapKey = props.mapKey;
-
-      setCached(['world', props.mapKey], state);
-      return () => removeCached(['world', props.mapKey]);
-    }
-  }, [geomorphs, props.mapKey]);
+    setCached(['world', props.mapKey], state);
+    return () => removeCached(['world', props.mapKey]);
+  }, []);
 
   React.useEffect(() => {
     if (state.threeReady && state.mapsHash) {
@@ -301,9 +324,10 @@ export default function TestWorld(props) {
 /**
  * @typedef State
  * @property {boolean} disabled
- * @property {number} layoutsHash For HMR
+ * @property {boolean} everDrewImages
+ * @property {number} layoutsHash 🚧 remove
+ * @property {number} mapsHash 🚧 remove
  * @property {string} mapKey
- * @property {number} mapsHash For HMR
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady

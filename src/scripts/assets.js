@@ -136,11 +136,17 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
     return geomorphService.createLayout(gmKey, flatSymbol, assets);
   }));
 
+  const mapsHash = hashJson(assetsJson.maps);
+  const layoutsHash = hashJson(layout);
+  const sheetsHash = hashJson(assetsJson.sheet);
+  const hash = `${mapsHash} ${layoutsHash} ${sheetsHash}`;
+
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
-    mapsHash: hashJson(assetsJson.maps),
-    layoutsHash: hashJson(layout), // don't bother serializing
-    sheetsHash: hashJson(assetsJson.sheet),
+    hash,
+    mapsHash,
+    layoutsHash,
+    sheetsHash,
     map: assetsJson.maps,
     layout,
     sheet: assetsJson.sheet,
