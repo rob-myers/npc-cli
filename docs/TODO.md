@@ -43,11 +43,11 @@
   - ✅ clean assets query
 
 - ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
-  - definitely wrong?
   - seems fixed, not sure why
 
-
 - integrate TestCharacter into TestWorld
+  - try convert into jsx
+    > `npx gltfjsx model.glb --transform`
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
 - start writing first article
