@@ -78,6 +78,7 @@ class GeomorphService {
     "empty-room--019--2x4": true,
     "empty-room--020--2x4": true,
     "empty-room--039--3x4": true,
+    "empty-room--060--4x4": true,
     "engineering--045--6x4": true,
     "engineering--047--4x7": true,
     "extra--desk--007--0.4x0.66": true,
@@ -86,6 +87,7 @@ class GeomorphService {
     "fresher--025--3x2": true,
     "fresher--036--4x2": true,
     "fuel--010--4x2": true,
+    "iris-valves--005--1x1": true,
     "lab--012--4x3": true,
     "lab--018--4x4": true,
     "lab--023--4x4": true,
@@ -147,7 +149,7 @@ class GeomorphService {
     } else if (meta.circle) {
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
       const center = poly.center.precision(precision);
-      const radius = Math.max(baseRect.width, baseRect.height);
+      const radius = Math.max(baseRect.width, baseRect.height) / 2;
       return { type: 'circle', key: decorKey, meta, radius, center };
     } else {
       const center = poly.center.precision(precision);
