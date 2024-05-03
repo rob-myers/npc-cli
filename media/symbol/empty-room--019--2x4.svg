@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 600 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="620" height="1220" x="-10" y="-10" style="pointer-events: none;" xlink:href="data:image/png;base64,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">
+                <title>empty-room--019--2x4</title>
+        </image>
+        <rect x="585" width="30" height="240" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;" y="640">
+                <title>door</title>
+        </rect>
+        <rect x="585" width="30" height="240" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;" y="920">
+                <title>door</title>
+        </rect>
+        <rect y="1190" width="620" height="20" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="-10">
+                <title>wall</title>
+        </rect>
+        <rect x="590" y="-10" width="20" height="1200" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
+        <rect x="-10" y="-10" width="20" height="1220" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;">
+                <title>wall</title>
+        </rect>
+        <rect y="-10" width="620" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="-10">
+                <title>wall</title>
+        </rect>
+        <rect width="620" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="-10" y="1190">
+                <title>wall</title>
+        </rect>
+</svg>
