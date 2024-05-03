@@ -229,6 +229,7 @@ export default function TestWorld(props) {
       }
 
       if (!shouldDraw) {
+        update();
         return state.geomorphs;
       }
 
@@ -250,7 +251,6 @@ export default function TestWorld(props) {
         state.surfaces.drawObstaclesSheet(tex.source.data);
         const [, obstacles] = state.sheet.obstacle;
         obstacles.needsUpdate = true;
-        // 🚧 WIP HMR edit 2
         update();
       });
 
@@ -287,7 +287,7 @@ export default function TestWorld(props) {
       state.onTick();
     }
     return () => cancelAnimationFrame(state.reqAnimId);
-  }, [state.disabled, state.npcs, state.geomorphs]);
+  }, [state.disabled, state.npcs, state.hash]);
 
   return (
     <TestWorldContext.Provider value={state}>
