@@ -34,14 +34,12 @@
     - ✅ might have fix i.e. state.geomorphs was stale
   - ✅ geomorphs.hash
   - ✅ clean assets query
-  - 🚧 initially force complete assets recompute
-  - 🚧 clean up hashes
-  - 🚧 avoid recomputing png -> webp
+  - ✅ clean up hashes
+  - ✅ avoid recomputing png -> webp
     - ✅ dev uses pngs
     - ✅ pre-push hook runs `npm run assets-fast --all`
     - ✅ images fallback from `webp` to `png`
-    - 🚧 pre-push hook should not commit if generates new webp
-  - 🚧 remove `. ~/.bash_profile` from pre-push hook
+    - ✅ pre-push hook should not commit if generates new webp
 
 - ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
   - seems fixed, not sure why
@@ -66,6 +64,8 @@
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 
+- 🚧 remove `. ~/.bash_profile` from pre-push hook
+- 🚧 initially force complete assets recompute
 - permit holes in symbol walls?
   - currently supported
   - ✅ eliminated only examples (2)

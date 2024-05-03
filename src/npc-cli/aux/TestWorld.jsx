@@ -32,8 +32,7 @@ export default function TestWorld(props) {
     disabled: !!props.disabled,
     everDrewImages: false,
     mapKey: props.mapKey,
-    mapsHash: 0, // 🚧 remove
-    layoutsHash: 0, // 🚧 remove
+    hash: '',
     threeReady: false,
     reqAnimId: 0,
     timer: new Timer(),
@@ -200,13 +199,6 @@ export default function TestWorld(props) {
       );
       const shouldDraw = !!state.surfaces && (!state.everDrewImages || dataChanged || sheetDimChanged);
 
-      debug({
-        prevGeomorphs: !!prevGeomorphs,
-        dataChanged,
-        mapChanged,
-        sheetDimChanged,
-        shouldDraw,
-      });
 
       if (dataChanged) {
         state.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
@@ -218,10 +210,19 @@ export default function TestWorld(props) {
         state.gms = map.gms.map(({ gmKey, transform }, gmId) =>
           geomorphService.computeLayoutInstance(state.ensureGmClass(gmKey).layout, gmId, transform)
         );
-        state.mapsHash = state.geomorphs.mapsHash;
-        state.layoutsHash = state.geomorphs.layoutsHash;
       }
       
+      state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
+
+      debug({
+        prevGeomorphs: !!prevGeomorphs,
+        dataChanged,
+        mapChanged,
+        sheetDimChanged,
+        shouldDraw,
+        hash: state.hash,
+      });
+
       if (sheetDimChanged) {
         // must re-create texture if sprite-sheet dimensions changed 
         state.ensureSheetTex(true);
@@ -270,7 +271,7 @@ export default function TestWorld(props) {
   }, []);
 
   React.useEffect(() => {
-    if (state.threeReady && state.mapsHash) {
+    if (state.threeReady && state.hash) {
       // 🔔 strange behaviour when inlined `new URL`.
       // 🔔 assume worker already listening for events
       /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
@@ -280,11 +281,7 @@ export default function TestWorld(props) {
       state.ensureSheetTex();
       return () => void worker.terminate();
     }
-  }, [
-    state.threeReady,
-    state.mapsHash,
-    state.layoutsHash,
-  ]);
+  }, [state.threeReady, state.hash]);
 
   React.useEffect(() => {
     state.timer.reset();
@@ -325,9 +322,8 @@ export default function TestWorld(props) {
  * @typedef State
  * @property {boolean} disabled
  * @property {boolean} everDrewImages
- * @property {number} layoutsHash 🚧 remove
- * @property {number} mapsHash 🚧 remove
  * @property {string} mapKey
+ * @property {string} hash
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady

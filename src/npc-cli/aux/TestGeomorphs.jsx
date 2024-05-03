@@ -115,12 +115,10 @@ export default function TestGeomorphs(props) {
 
   api.surfaces = state;
 
-  const instHash = `${api.mapKey} ${api.mapsHash} ${api.layoutsHash} ${api.geomorphs.sheetsHash}`
-  
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [instHash]);
+  }, [api.hash]);
 
 
   
@@ -165,7 +163,7 @@ export default function TestGeomorphs(props) {
 
     <instancedMesh
       name="static-obstacles"
-      key={instHash}
+      key={`${api.hash} static-obstacles`}
       ref={instances => instances && (state.obsInst = instances)}
       args={[quadGeometryXZ, undefined, state.getNumObs()]}
       frustumCulled={false}
