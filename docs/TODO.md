@@ -12,6 +12,12 @@
   - CustomShaderWireframe doesn't work, so ask https://discourse.threejs.org
   - get working shareable CodeSandbox link
 
+  - 🚧 fix floor texture HMR
+    - ✅ on edit TestGeomorphs
+    - 🚧 on change map
+    - 🚧 on change geomorph
+    - 🚧 on change spritesheet
+
 - integrate TestCharacter into TestWorld
   - try convert into jsx
     > `npx gltfjsx model.glb --transform`

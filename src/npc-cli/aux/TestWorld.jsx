@@ -237,10 +237,8 @@ export default function TestWorld(props) {
           `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}`,
           `${assetsEndpoint}/2d/${gmKey}.floor.${imgExtFallback}`,
         ).then((tex) => {
-          state.surfaces.drawFloorAndCeil(gmKey, tex.source.data);
-          const { floor: [, floor], ceil: [, ceil] } = state.gmClass[gmKey];
-          floor.needsUpdate = true;
-          ceil.needsUpdate = true;
+          state.surfaces.floorImg[gmKey] = tex.source.data;
+          state.surfaces.drawFloorAndCeil(gmKey);
           update();
         })
       );

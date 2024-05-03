@@ -2,9 +2,9 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat } from "../geom";
-import { info, warn } from "../service/generic";
+import { info, isDevelopment, warn } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
-import { drawPolygons, strokeLine } from "../service/dom";
+import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
@@ -19,6 +19,7 @@ export default function TestGeomorphs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     obsInst: /** @type {*} */ (null),
+    floorImg: /** @type {*} */ ({}),
 
     addObstacleUvs() {
       const { obstacle: obstaclesSheet, obstaclesWidth, obstaclesHeight } = api.geomorphs.sheet;
@@ -47,10 +48,12 @@ export default function TestGeomorphs(props) {
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
     },
-    drawFloorAndCeil(gmKey, img) {
+    drawFloorAndCeil(gmKey) {
+      const img = state.floorImg[gmKey];
       const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
 
+      //#region floor
       floorCt.clearRect(0, 0, width, height);
       floorCt.drawImage(img, 0, 0);
 
@@ -61,8 +64,19 @@ export default function TestGeomorphs(props) {
         floorCt.transform(...transform);
         drawPolygons(floorCt, origPoly, ['rgba(0, 0, 0, 0.4)', null]);
       });
+
+      // 🚧 debug decor
+      floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
+      layout.decor.forEach((decor) => {
+        if (decor.type === 'circle') {
+          drawCircle(floorCt, decor.center, decor.radius, [null, '#500', 0.04]);
+        }
+      });
+
       floorCt.resetTransform();
+      //#endregion
       
+      //#region ceiling
       ceilCt.clearRect(0, 0, width, height);
       ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
       // wall tops (stroke gaps e.g. bridge desk)
@@ -74,6 +88,11 @@ export default function TestGeomorphs(props) {
       ceilCt.lineWidth = 0.03;
       layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
       ceilCt.resetTransform();
+      //#endregion
+
+      const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
+      floor.needsUpdate = true;
+      ceil.needsUpdate = true;
     },
     drawObstaclesSheet(img) {
       const [ct, _tex, { width, height }] = api.sheet.obstacle;
@@ -120,8 +139,12 @@ export default function TestGeomorphs(props) {
     state.positionObstacles();
   }, [api.hash]);
 
+  React.useEffect(() => {// HMR onchange this file
+    isDevelopment() && geomorphService.gmKeys.forEach(
+      gmKey => state.floorImg[gmKey] && state.drawFloorAndCeil(gmKey)
+    );
+  }, []);
 
-  
   return <>
     {api.gms.map((gm, gmId) => (
       <group
@@ -192,8 +215,9 @@ export default function TestGeomorphs(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} obsInst
+ * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
  * @property {() => void} addObstacleUvs
- * @property {(gmKey: Geomorph.GeomorphKey, img: HTMLImageElement) => void} drawFloorAndCeil
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
  * @property {(img: HTMLImageElement) => void} drawObstaclesSheet
  * @property {(o: Geomorph.LayoutObstacle) => THREE.Matrix4} getObsMat
  * @property {() => number} getNumObs
