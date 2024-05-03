@@ -22,13 +22,6 @@
     - ✅ changed symbol obstacle detected
     - ✅ remove images.js
   - not-found sprite i.e. small red rect
-  - 🚧 initially force complete assets recompute
-  - 🚧 avoid recomputing png -> webp
-    - ✅ dev uses pngs
-    - ✅ pre-push hook runs `npm run assets-fast --all`
-    - ✅ images fallback from `webp` to `png`
-    - 🚧 pre-push hook should commit new webp?
-      - 🔔 need to fix this somehow
   - ✅ obstacles sprite-sheet out of sync
     - ℹ️ texture size needs to change!
     - ✅ try force 4096 x 4096
@@ -37,10 +30,18 @@
     - ✅ ws-server serves images
     - ✅ remove delay from site.store
     - ✅ `yarn develop` still works
-  - 🚧 out-of-sync sprite-sheet persists
-    - 🚧 might have fix i.e. state.geomorphs was stale
+  - ✅ out-of-sync sprite-sheet persists
+    - ✅ might have fix i.e. state.geomorphs was stale
   - ✅ geomorphs.hash
   - ✅ clean assets query
+  - 🚧 initially force complete assets recompute
+  - 🚧 clean up hashes
+  - 🚧 avoid recomputing png -> webp
+    - ✅ dev uses pngs
+    - ✅ pre-push hook runs `npm run assets-fast --all`
+    - ✅ images fallback from `webp` to `png`
+    - 🚧 pre-push hook should commit new webp?
+      - 🔔 need to fix this somehow
 
 - ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
   - seems fixed, not sure why
