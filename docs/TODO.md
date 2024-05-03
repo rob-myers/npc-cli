@@ -12,16 +12,26 @@
   - CustomShaderWireframe doesn't work, so ask https://discourse.threejs.org
   - get working shareable CodeSandbox link
 
-  - 🚧 fix floor texture HMR
-    - ✅ on edit TestGeomorphs
-    - 🚧 on change map
-    - 🚧 on change geomorph
-    - 🚧 on change spritesheet
+- ✅ fix floor texture HMR
+  - ✅ on edit TestGeomorphs
+  - ✅ on change map
+  - ✅ on change geomorph
+  - ✅ on change spritesheet
+
+- 🚧 fix sprite-sheet HMR
+  - ℹ️ on add new symbol with obstacles
+  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
+  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
+  - 🚧 could be problem with smart-sprite-sheet-update
+  - could relate to adding symbol key to geomorph.js before we're ready?
 
 - integrate TestCharacter into TestWorld
   - try convert into jsx
     > `npx gltfjsx model.glb --transform`
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+
+- support obstacle click
+  - check whether clicked point is transparent via spritesheet lookup
 
 - start writing first article
 

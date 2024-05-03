@@ -93,6 +93,7 @@ class GeomorphService {
     "lab--023--4x4": true,
     "lifeboat--small-craft--2x4": true,
     "lounge--015--4x2": true,
+    "lounge--017--4x2": true,
     "machinery--155--1.8x3.6": true,
     "machinery--156--2x4": true,
     "machinery--158--1.8x3.6": true,
@@ -122,6 +123,7 @@ class GeomorphService {
     "stateroom--035--2x3": true,
     "stateroom--036--2x4": true,
     "table--004--1.2x2.4": true,
+    "table--009--0.8x0.8": true,
 
     "extra--fresher--001--0.5x0.5": true,
     "extra--fresher--002--0.5x0.5": true,
