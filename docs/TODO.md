@@ -40,8 +40,8 @@
     - ✅ dev uses pngs
     - ✅ pre-push hook runs `npm run assets-fast --all`
     - ✅ images fallback from `webp` to `png`
-    - 🚧 pre-push hook should commit new webp?
-      - 🔔 need to fix this somehow
+    - 🚧 pre-push hook should not commit if generates new webp
+  - 🚧 remove `. ~/.bash_profile` from pre-push hook
 
 - ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
   - seems fixed, not sure why

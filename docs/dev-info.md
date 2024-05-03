@@ -1,6 +1,14 @@
 
 ## Bits and pieces
 
+### Detect uncommitted files
+
+```sh
+# none -> 0
+# some -> 1
+git diff --quiet HEAD; echo $?
+```
+
 ### Export to OBJ in Browser
 
 ```js

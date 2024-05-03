@@ -30,7 +30,7 @@
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
     "watch-assets": "npm run assets && nodemon --on-change-only --delay 300ms --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast -- --staleMs=2000'",
     "ws-server": "sucrase-node src/scripts/ws-server.js",
-    "pre-push": ". ~/.bash_profile && nvm use && npm run assets-fast -- --all"
+    "pre-push": ". ~/.bash_profile && nvm use && npm run assets-fast -- --all && git diff --quiet HEAD"
   },
   "pre-push": ["pre-push"],
   "dependencies": {
