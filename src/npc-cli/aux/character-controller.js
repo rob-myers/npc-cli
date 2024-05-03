@@ -3,6 +3,7 @@ import { dampLookAt } from "maath/easing";
 import { info } from "../service/generic";
 
 /**
+ * Originally based on:
  * https://github.com/abhicominin/Character-Controller-three.js/blob/52d9893f890ac974c3241e3ca98fc68586f2e392/src/characterControls.js#L8
  */
 export default class CharacterController {
