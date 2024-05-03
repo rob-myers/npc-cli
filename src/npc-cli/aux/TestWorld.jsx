@@ -17,7 +17,7 @@ import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import useHandleEvents from "./use-test-handle-events";
 import TestWorldCanvas from "./TestWorldCanvas";
-import TestGeomorphs from "./TestGeomorphs";
+import TestSurfaces from "./TestSurfaces";
 import TestWallsAndDoors from "./TestWallsAndDoors";
 import TestNpcs from "./TestNpcs";
 import TestDebug from "./TestDebug";
@@ -294,7 +294,7 @@ export default function TestWorld(props) {
       <TestWorldCanvas disabled={props.disabled} stats>
         {geomorphs && (
           <group>
-            <TestGeomorphs />
+            <TestSurfaces />
             {state.crowd && <>
               <TestNpcs/>
               <TestDebug
@@ -329,7 +329,7 @@ export default function TestWorld(props) {
  * @property {Timer} timer
  *
  * @property {import('./TestWorldCanvas').State} view
- * @property {import('./TestGeomorphs').State} surfaces
+ * @property {import('./TestSurfaces').State} surfaces
  * @property {import('./TestWallsAndDoors').State} doors
  * @property {import('./TestNpcs').State} npcs
  * @property {import('./TestDebug').State} debug

@@ -14,7 +14,7 @@ import useStateRef from "../hooks/use-state-ref";
 /**
  * @param {Props} props
  */
-export default function TestGeomorphs(props) {
+export default function TestSurfaces(props) {
   const api = React.useContext(TestWorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
