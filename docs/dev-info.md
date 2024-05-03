@@ -1,6 +1,14 @@
 
 ## Bits and pieces
 
+### Find Local IP address on Mobile Hotspot
+
+```sh
+# Find local ip address for mobile development
+ifconfig | grep "inet " | grep -v 127.0.0.1
+```
+
+
 ### Detect uncommitted files
 
 ```sh

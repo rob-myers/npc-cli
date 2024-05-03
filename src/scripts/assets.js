@@ -330,10 +330,10 @@ function createSheetJson(assets) {
 
   const bin = bins[0];
   
-  /** @type {Geomorph.SpriteSheet} */
   /**
    * 🚧 try 4096 x 4096 and see if sprite-sheet edit/hmr issue persists
-   */
+  */
+  /** @type {Geomorph.SpriteSheet} */
   const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
   // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
   bin.rects.forEach(r => {
