@@ -9,7 +9,7 @@ export default function useHandleEvents(api) {
     handleEvents(e) {
       switch (e.key) {
         case "pointerup":
-          e.distance < 1 && api.walkTo(e.point);
+          e.distance < 1 && api.npcs && api.walkTo(e.point);
           break;
       }
     },
