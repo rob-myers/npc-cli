@@ -23,7 +23,7 @@
     "ts-script": "ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
     "assets": "npm run ts-script src/scripts/assets -- --all",
     "assets-fast": "sucrase-node src/scripts/assets",
-    "clean-assets": "rm static/assets/assets.json static/assets/geomorphs.json",
+    "clean-assets": "rm static/assets/{assets.json,geomorphs.json} static/assets/2d/obstacles.png{,.webp}",
     "cwebp": "npm run ts-script src/scripts/cwebp",
     "cwebp-fast": "sucrase-node src/scripts/cwebp",
     "get-pngs": "npm run ts-script src/scripts/get-pngs",
