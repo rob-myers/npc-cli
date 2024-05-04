@@ -28,8 +28,10 @@
   - 🚧 try repro with single geomorph
   - 🚧 try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
 
+- ✅ map switching not working?
+- 🚧 no need for CanvasTexture for obstacles sprite-sheet
+- 🚧 reset still not working on mobile (not loading)
 - rethink webp generation
-- map switching not working?
 
 - integrate TestCharacter into TestWorld
   - try convert into jsx

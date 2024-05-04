@@ -2,6 +2,7 @@
  * @typedef {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | import('canvas').CanvasRenderingContext2D} CanvasContext2DType
  */
 
+import { isDevelopment } from './generic';
 
 /**
  * @param {CanvasContext2DType} ct
@@ -54,16 +55,9 @@ export function fillRing(ct, ring, fill = true) {
   }
 }
 
-/**
- * @param {CanvasContext2DType} ct
- * @param {Geom.VectJson} from
- * @param {Geom.VectJson} to
- */
-export function strokeLine(ct, from, to) {
-  ct.beginPath();
-  ct.moveTo(from.x, from.y);
-  ct.lineTo(to.x, to.y);
-  ct.stroke();
+/** Override cache in development */
+export function getAssetQueryParam() {
+  return isDevelopment() ? `?v=${Date.now()}` : '';
 }
 
 /**
@@ -78,4 +72,16 @@ export function isTouchDevice() {
       navigator.maxTouchPoints > 0 ||
       /** @type {*} */ (navigator).msMaxTouchPoints > 0)
   );
+}
+
+/**
+ * @param {CanvasContext2DType} ct
+ * @param {Geom.VectJson} from
+ * @param {Geom.VectJson} to
+ */
+export function strokeLine(ct, from, to) {
+  ct.beginPath();
+  ct.moveTo(from.x, from.y);
+  ct.lineTo(to.x, to.y);
+  ct.stroke();
 }

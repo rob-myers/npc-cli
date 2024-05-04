@@ -3,14 +3,15 @@ import { useQuery } from "@tanstack/react-query";
 import { Subject } from "rxjs";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importNavMesh, init as initRecastNav, Crowd, NavMeshQuery } from "@recast-navigation/core";
+import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt, imgExtFallback } from "src/const";
 import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, debug, isDevelopment, keys } from "../service/generic";
+import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
-import { decompToXZGeometry, polysToXZGeometry, texLoadAsyncFallback, tmpBufferGeom1, tmpVectThree1, wireFrameMaterial } from "../service/three";
+import { decompToXZGeometry, texLoadAsyncFallback, tmpBufferGeom1, tmpVectThree1 } from "../service/three";
 import { getTileCacheMeshProcess } from "../service/recast-detour";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
@@ -47,7 +48,7 @@ export default function TestWorld(props) {
     crowd: /** @type {*} */ (null),
 
     view: /** @type {*} */ (null), // TestWorldCanvas
-    surfaces: /** @type {*} */ (null), // TestGeomorphs
+    surfaces: /** @type {*} */ (null), // TestSurfaces
     doors: /** @type {*} */ (null), // TestWallsAndDoors
     npcs: /** @type {*} */ (null), // TestNpcs
     debug: /** @type {*} */ (null), // TestDebug
@@ -186,9 +187,12 @@ export default function TestWorld(props) {
   useQuery({
     queryKey: [GEOMORPHS_JSON_FILENAME, props.mapKey], // avoid stale props.mapKey
     queryFn: async () => {
+
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = /** @type {Geomorph.GeomorphsJson} */ (
-        await fetch(`${assetsEndpoint}/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json())
+        await fetch(
+          `${assetsEndpoint}/${GEOMORPHS_JSON_FILENAME}${getAssetQueryParam()}`
+        ).then((x) => x.json())
       );
 
       const dataChanged = !prevGeomorphs || state.geomorphs.hash !== geomorphsJson.hash;
@@ -234,9 +238,7 @@ export default function TestWorld(props) {
 
       keys(state.gmClass).forEach((gmKey) => {
         texLoadAsyncFallback(
-          `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${
-            isDevelopment() ? `?v=${Date.now()}` : ''
-          }`,
+          `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${getAssetQueryParam()}`,
           `${assetsEndpoint}/2d/${gmKey}.floor.${imgExtFallback}`,
         ).then((tex) => {
           state.floorImg[gmKey] = tex.source.data;
@@ -245,9 +247,7 @@ export default function TestWorld(props) {
       });
 
       texLoadAsyncFallback(
-        `${assetsEndpoint}/2d/obstacles.${imgExt}${
-          isDevelopment() ? `?v=${Date.now()}` : ''
-        }`,
+        `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`,
         `${assetsEndpoint}/2d/obstacles.${imgExtFallback}`,
       ).then((tex) => {
         // 🚧 why not simply use texture?
