@@ -70,6 +70,7 @@ class GeomorphService {
     "console--019--2x2": true, 
     "console--022--1x2": true,
     "console--031--1x1.2": true,
+    "console--033--0.4x0.6": true,
     "console--051--0.4x0.6": true,
     "couch-and-chairs--007--0.6x1.4": true,
     "counter--009--0.4x0.4": true,
@@ -132,6 +133,7 @@ class GeomorphService {
     "extra--desk--006--0.4x1": true,
     "extra--desk--007--0.4x0.66": true,
     "extra--desk--008--0.4x1.33": true,
+    "extra--table--009--4x4": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */
