@@ -596,7 +596,7 @@ class GeomorphService {
     /** e.g. `['e']`, `['s']`  */
     const doorTags = /** @type {string[] | undefined} */ (meta.doors);
     /** e.g. `['e']`, `['s']`  */
-    const wallTags = /** @type {string[] | undefined} */ (meta.wall);
+    const wallTags = /** @type {string[] | undefined} */ (meta.walls);
     tmpMat1.feedFromArray(transform);
 
     const doorsToRemove = sym.removableDoors.filter(({ doorId }) => {
