@@ -429,7 +429,8 @@ function detectChangedObstacles(obstacles, assets, prevAssets) {
     obstacles.forEach(({ symbolKey, obstacleId }) => {
       const key = geomorphService.symbolObstacleToKey({ symbolKey, obstacleId });
       removed.delete(key);
-      (currMeta[symbolKey].pngHash !== prevMeta[symbolKey].pngHash
+      // optional-chaining in case symbol is new
+      (currMeta[symbolKey].pngHash !== prevMeta[symbolKey]?.pngHash
         || currMeta[symbolKey].obsHashes?.[obstacleId] !== prevMeta[symbolKey].obsHashes?.[obstacleId]
       ) && changed.add(key);
     });
