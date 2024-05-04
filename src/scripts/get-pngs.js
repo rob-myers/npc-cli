@@ -29,6 +29,7 @@ import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilen
  * yarn get-pngs small-craft 'Small Craft' symbol-small-craft
  * yarn get-pngs symbol 'Symbols/Furniture, Consoles, & Equipment' symbol-furniture-consoles-equipment
  * yarn get-pngs symbol 'Symbols/Machinery' symbol-machinery
+ * yarn get-pngs symbol 'Symbols/Lab' symbol-lab
  * ```
  */
 const [,, inputType, srcFolder, dstFolder] = process.argv;
