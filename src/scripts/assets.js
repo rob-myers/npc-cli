@@ -368,11 +368,11 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   // 🚧 redraw all obstacles when opts.all
   // 🚧 redraw all obstacles when --staleMs={ms} and this file changed
   const prevPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
-  const changedObstacles = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
+  const {changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
   
-  info({ changedObstacles });
+  info({ changedObstacles, removedObstacles });
 
-  if (changedObstacles.size === 0) {
+  if (changedObstacles.size === 0 && removedObstacles.size === 0) {
     return false;
   }
 
@@ -419,22 +419,26 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
  * @param {Geomorph.SymbolObstacle[]} obstacles
  * @param {Geomorph.Assets} assets
  * @param {Geomorph.AssetsJson | null} prevAssets
- * @returns {Set<`${Geomorph.SymbolKey} ${number}`>}
+ * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
  */
 function detectChangedObstacles(obstacles, assets, prevAssets) {
   if (prevAssets) {
-    const changedObstacles = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
+    const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
+    const removed = new Set(Object.values(prevAssets.sheet.obstacle).map(geomorphService.symbolObstacleToKey));
     const [currMeta, prevMeta] = [assets.meta, prevAssets.meta];
     obstacles.forEach(({ symbolKey, obstacleId }) => {
-      currMeta[symbolKey].pngHash !== prevMeta[symbolKey].pngHash ||
-        currMeta[symbolKey].obsHashes?.[obstacleId] !== prevMeta[symbolKey].obsHashes?.[obstacleId] &&
-        changedObstacles.add(`${symbolKey} ${obstacleId}`);
+      const key = geomorphService.symbolObstacleToKey({ symbolKey, obstacleId });
+      removed.delete(key);
+      (currMeta[symbolKey].pngHash !== prevMeta[symbolKey].pngHash
+        || currMeta[symbolKey].obsHashes?.[obstacleId] !== prevMeta[symbolKey].obsHashes?.[obstacleId]
+      ) && changed.add(key);
     });
-    return changedObstacles;
+    return { changed, removed };
   } else {
-    return new Set(obstacles.map(({ symbolKey, obstacleId }) =>
-      /** @type {const} */ (`${symbolKey} ${obstacleId}`)
-    ));
+    return {
+      changed: new Set(obstacles.map(geomorphService.symbolObstacleToKey)),
+      removed: new Set(),
+    };
   }
 }
 

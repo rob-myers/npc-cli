@@ -1000,6 +1000,11 @@ class GeomorphService {
     };
   }
 
+  /** @param {Pick<Geomorph.SymbolObstacle, 'symbolKey' | 'obstacleId'>} arg0 */
+  symbolObstacleToKey({ symbolKey, obstacleId }) {
+    return /** @type {const} */ (`${symbolKey} ${obstacleId}`);
+  }
+
   /**
    * @param {string[]} tags
    * @param {Geom.Meta} baseMeta
