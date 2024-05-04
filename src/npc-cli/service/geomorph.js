@@ -138,6 +138,7 @@ class GeomorphService {
     "extra--table--009--4x4": true,
     "extra--machine--010--2x1": true,
     "extra--machine--011--1x3": true,
+    "extra--battery--012--3x2": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */
