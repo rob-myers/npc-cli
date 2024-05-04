@@ -42,7 +42,7 @@ export default function TestWorld(props) {
     geomorphs: /** @type {*} */ (null),
     gmClass: /** @type {*} */ ({}),
     gms: [],
-    sheet: /** @type {*} */ (null),
+    obsTex: new THREE.Texture(),
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
@@ -73,23 +73,6 @@ export default function TestWorld(props) {
       // Fix normals for recast/detour... maybe due to earcut ordering?
       gmClass.debugNavPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
       return gmClass;
-    },
-    ensureSheetTex(overwrite = false) {
-      if (!state.sheet) {
-        const canvas = document.createElement("canvas");
-        canvas.width = state.geomorphs.sheet.obstaclesWidth;
-        canvas.height = state.geomorphs.sheet.obstaclesHeight;
-        state.sheet = {
-          obstacle: [assertNonNull(canvas.getContext("2d")), new THREE.CanvasTexture(canvas), canvas],
-          // ...
-        };
-      } else if (overwrite) {
-        const [, tex, canvas] = state.sheet.obstacle;
-        canvas.width = state.geomorphs.sheet.obstaclesWidth;
-        canvas.height = state.geomorphs.sheet.obstaclesHeight;
-        state.sheet.obstacle[1] = new THREE.CanvasTexture(canvas);
-        // tex.dispose();
-      }
     },
     async handleMessageFromWorker(e) {
       const msg = e.data;
@@ -197,11 +180,6 @@ export default function TestWorld(props) {
 
       const dataChanged = !prevGeomorphs || state.geomorphs.hash !== geomorphsJson.hash;
       const mapChanged = dataChanged || state.mapKey !== props.mapKey;
-      const sheetDimChanged = !prevGeomorphs || (
-        prevGeomorphs.sheet.obstaclesWidth !== geomorphsJson.sheet.obstaclesWidth
-        || prevGeomorphs.sheet.obstaclesHeight !== geomorphsJson.sheet.obstaclesHeight
-      );
-      const shouldDraw = dataChanged || sheetDimChanged;
 
       if (dataChanged) {
         state.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
@@ -221,18 +199,10 @@ export default function TestWorld(props) {
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
         mapChanged,
-        sheetDimChanged,
-        shouldDraw,
         hash: state.hash,
       });
 
-      if (sheetDimChanged) {
-        // 🚧 rethink e.g. just pass texture through?
-        // must re-create texture if sprite-sheet dimensions changed 
-        state.ensureSheetTex(true);
-      }
-
-      if (!shouldDraw) {
+      if (!dataChanged) {
         return null;
       }
 
@@ -249,20 +219,13 @@ export default function TestWorld(props) {
       texLoadAsyncFallback(
         `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`,
         `${assetsEndpoint}/2d/obstacles.${imgExtFallback}`,
-      ).then((tex) => {
-        // 🚧 why not simply use texture?
-        const img = tex.source.data;
-        const [ct, obstaclesTex, { width, height }] = state.sheet.obstacle;
-        ct.clearRect(0, 0, width, height);
-        ct.drawImage(img, 0, 0);
-        obstaclesTex.needsUpdate = true;
-      });
+      ).then((tex) => state.obsTex = tex);
 
       return null;
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
-    gcTime: 0,
+    gcTime: 0, // concurrent queries with different mapKey can break HMR
     // throwOnError: true, // breaks on restart dev env
   });
 
@@ -338,14 +301,13 @@ export default function TestWorld(props) {
  *
  * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
- * @property {Record<'obstacle', CanvasTexDef>} sheet
+ * @property {THREE.Texture} obsTex
  * Only populated for geomorph keys seen in some map.
  * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmClass
- * @property {(overwrite?: boolean) => void} ensureSheetTex
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {(agentPositions: THREE.Vector3Like[], agentTargets: (THREE.Vector3Like | null)[]) => void} setupCrowdAgents

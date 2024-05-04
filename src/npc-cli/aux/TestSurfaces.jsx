@@ -93,11 +93,6 @@ export default function TestSurfaces(props) {
       floor.needsUpdate = true;
       ceil.needsUpdate = true;
     },
-    drawObstaclesSheet(img) {
-      const [ct, _tex, { width, height }] = api.sheet.obstacle;
-      ct.clearRect(0, 0, width, height);
-      ct.drawImage(img, 0, 0);
-    },
     getNumObs() {
       return api.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
     },
@@ -108,10 +103,6 @@ export default function TestSurfaces(props) {
     onClickObstacle(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
       info(`instanceId: ${instanceId}`)
-      // const meta = state.doorByInstId[instanceId];
-      // meta.open = !meta.open;
-      // state.movingDoors.set(meta.instanceId, meta);
-      // e.stopPropagation();
     },
     positionObstacles() {
       const { obsInst } = state;
@@ -198,8 +189,7 @@ export default function TestSurfaces(props) {
         side={THREE.DoubleSide}
         transparent
         //@ts-expect-error
-        // map={obstaclesTex}
-        map={api.sheet?.obstacle[1] ?? emptyTex}
+        map={api.obsTex}
         // diffuse={new THREE.Vector3(1, 0, 1)}
       />
     </instancedMesh>
@@ -217,7 +207,6 @@ export default function TestSurfaces(props) {
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
- * @property {(img: HTMLImageElement) => void} drawObstaclesSheet
  * @property {(o: Geomorph.LayoutObstacle) => THREE.Matrix4} getObsMat
  * @property {() => number} getNumObs
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onClickObstacle

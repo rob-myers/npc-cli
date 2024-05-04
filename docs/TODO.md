@@ -30,9 +30,9 @@
   - 🚧 multiple websockets open in single browser tab?
 
 - ✅ map switching not working?
-- 🚧 no need for CanvasTexture for obstacles sprite-sheet
-- 🚧 reset still not working on mobile (not loading)
+- ✅ reset still not working on mobile (not loading)
   - works when leave and return to tab
+- ✅ no need for CanvasTexture for obstacles sprite-sheet
 - rethink webp generation
 
 - integrate TestCharacter into TestWorld
