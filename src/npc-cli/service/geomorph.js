@@ -862,7 +862,7 @@ class GeomorphService {
       },
     });
 
-    debug(`parsing ${symbolKey}`);
+    // debug(`parsing ${symbolKey}`);
     parser.write(svgContents);
     parser.end();
 
