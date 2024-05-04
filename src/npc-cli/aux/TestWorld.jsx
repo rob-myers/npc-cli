@@ -185,8 +185,7 @@ export default function TestWorld(props) {
   useHandleEvents(state);
 
   useQuery({
-    queryKey: [GEOMORPHS_JSON_FILENAME, props.worldKey],
-    queryHash: props.mapKey,
+    queryKey: [GEOMORPHS_JSON_FILENAME, props.worldKey, props.mapKey],
     queryFn: async () => {
 
       const prevGeomorphs = state.geomorphs;
@@ -263,6 +262,7 @@ export default function TestWorld(props) {
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
+    gcTime: 0,
     // throwOnError: true, // breaks on restart dev env
   });
 
