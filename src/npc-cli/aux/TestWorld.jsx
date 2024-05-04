@@ -185,7 +185,8 @@ export default function TestWorld(props) {
   useHandleEvents(state);
 
   useQuery({
-    queryKey: [GEOMORPHS_JSON_FILENAME, props.mapKey], // avoid stale props.mapKey
+    queryKey: [GEOMORPHS_JSON_FILENAME, props.worldKey],
+    queryHash: props.mapKey,
     queryFn: async () => {
 
       const prevGeomorphs = state.geomorphs;
@@ -261,23 +262,22 @@ export default function TestWorld(props) {
       return null;
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
-    gcTime: 0, // 🔔 Avoid multiple queries: else we'll refetch them all via /dev-events
+    enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
     // throwOnError: true, // breaks on restart dev env
   });
 
-  React.useMemo(() => {
+  React.useMemo(() => {// props.worldKey should never change
     setCached(['world', props.worldKey], state);
     return () => removeCached(['world', props.worldKey]);
-  }, [props.worldKey]);
+  }, []);
 
   React.useEffect(() => {
     if (state.threeReady && state.hash) {
-      // 🔔 strange behaviour when inlined `new URL`.
-      // 🔔 assume worker already listening for events
+      // 🔔 saw strange behaviour when inlined `new URL`.
       /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
       const worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
       worker.addEventListener("message", state.handleMessageFromWorker);
-      worker.postMessage({ type: "request-nav-mesh", mapKey: props.mapKey });
+      worker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
       // state.ensureSheetTex();
       return () => void worker.terminate();
     }

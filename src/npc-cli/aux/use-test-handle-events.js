@@ -8,7 +8,6 @@ import useStateRef from "../hooks/use-state-ref";
 export default function useHandleEvents(api) {
   const state = useStateRef(/** @returns {State} */ () => ({
     handleEvents(e) {
-      info({ e });
       switch (e.key) {
         case "pointerup":
           if (!api.npcs)

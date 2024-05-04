@@ -24,7 +24,7 @@ import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "../const";
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
 import { spriteSheetNonHullExtraScale, worldScale } from "../npc-cli/service/const";
 import { ansi } from "../npc-cli/sh/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision } from "../npc-cli/service/generic";
@@ -61,7 +61,7 @@ const assetsScriptFilepath = __filename;
 const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
 const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
 const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
-const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
+const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const worldToSgu = 1 / worldScale;
 const dataUrlRegEx = /"data:image\/png(.*)"/;
 
@@ -114,7 +114,7 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
   const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
-  debug(util.inspect({ symbolsStratified }, false, 5))
+  // debug(util.inspect({ symbolsStratified }, false, 5))
   // Traverse stratified symbols from leaves to co-leaves,
   // creating FlatSymbols via flattenSymbol and instantiateFlatSymbol
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
@@ -308,7 +308,7 @@ function createSheetJson(assets) {
       const rectData = { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) };
       r.data = rectData;
       rectsToPackLookup[`${symbolKey} ${obstacleId}`] = r;
-      info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
+      // info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
     }
   }
 
@@ -387,7 +387,7 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
       const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
 
       if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
-        info(`${symbolKey} ${obstacleId} obstacle did not change`);
+        // info(`${symbolKey} ${obstacleId} obstacle did not change`);
         const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets).sheet.obstacle[`${symbolKey} ${obstacleId}`];
         ct.drawImage(/** @type {import('canvas').Image} */ (prevPng),
           prev.x, prev.y, prev.width, prev.height,

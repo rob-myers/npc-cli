@@ -14,6 +14,7 @@ import {
 import {
   DEV_EXPRESS_WEBSOCKET_PORT,
   GEOMORPHS_JSON_FILENAME,
+  DEV_ORIGIN,
 } from "src/const";
 import { queryClient } from "src/npc-cli/service/query-client";
 
@@ -95,7 +96,7 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
     },
 
     connectDevEventsWebsocket() {
-      const url = `ws://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`;
+      const url = `ws://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`;
       const wsClient = new WebSocket(url);
       wsClient.onmessage = async (e) => {
         info(`received websocket message:`, { url, data: e.data });
