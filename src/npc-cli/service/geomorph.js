@@ -135,6 +135,8 @@ class GeomorphService {
     "extra--desk--007--0.4x0.66": true,
     "extra--desk--008--0.4x1.33": true,
     "extra--table--009--4x4": true,
+    "extra--machine--010--2x1": true,
+    "extra--machine--011--1x3": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */

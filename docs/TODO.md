@@ -34,6 +34,7 @@
   - works when leave and return to tab
 - ✅ no need for CanvasTexture for obstacles sprite-sheet
 - rethink webp generation
+- missing symbolKey in geomorphsService can break script i.e. have to `yarn clean-assets`
 
 - integrate TestCharacter into TestWorld
   - try convert into jsx

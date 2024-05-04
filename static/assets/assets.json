@@ -101,11 +101,7 @@
       "pngHash": -1132388510,
       "obsHashes": [-1415228638, -52289929, -1595231063, 233106770]
     },
-    "engineering--047--4x7": {
-      "outputHash": 1029555987,
-      "pngHash": 541808283,
-      "obsHashes": [1351671696, -498003335]
-    },
+    "engineering--047--4x7": {"outputHash": 1700674965, "pngHash": 541808283},
     "extra--chair--003--0.25x0.25": {
       "outputHash": -2147399755,
       "pngHash": -1668511435,
@@ -145,6 +141,16 @@
       "outputHash": -2103139478,
       "pngHash": 482008010,
       "obsHashes": [-386291056]
+    },
+    "extra--machine--010--2x1": {
+      "outputHash": 599891708,
+      "pngHash": -1673441387,
+      "obsHashes": [843850496]
+    },
+    "extra--machine--011--1x3": {
+      "outputHash": -1949640680,
+      "pngHash": 1878326814,
+      "obsHashes": [353296674]
     },
     "extra--table--009--4x4": {
       "outputHash": -1060367023,
@@ -503,13 +509,13 @@
         "obstacleId": 6,
         "type": "surface"
       },
-      "engineering--047--4x7 1": {
+      "extra--machine--011--1x3 0": {
         "x": 1246,
         "y": 1531,
         "width": 125,
         "height": 395,
-        "symbolKey": "engineering--047--4x7",
-        "obstacleId": 1,
+        "symbolKey": "extra--machine--011--1x3",
+        "obstacleId": 0,
         "type": "obstacle"
       },
       "engineering--045--6x4 1": {
@@ -665,12 +671,12 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "engineering--047--4x7 0": {
+      "extra--machine--010--2x1 0": {
         "x": 1420,
         "y": 544,
         "width": 250,
         "height": 100,
-        "symbolKey": "engineering--047--4x7",
+        "symbolKey": "extra--machine--010--2x1",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -6979,45 +6985,7 @@
       "key": "engineering--047--4x7",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[5.75, 0.25], [5.75, 1.25], [3.25, 1.25], [3.25, 0.25]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 27,
-            "symKey": "engineering--047--4x7",
-            "obsId": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.5, 4.45],
-              [1.384, 4.45],
-              [1.3605, 5.05],
-              [1.244, 5.05],
-              [1.2412, 5.7],
-              [0.25, 5.7],
-              [0.25, 1.75],
-              [1.2412, 1.75],
-              [1.244, 2.4],
-              [1.3605, 2.4],
-              [1.384, 3],
-              [1.5, 3]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 27,
-            "symKey": "engineering--047--4x7",
-            "obsId": 1
-          }
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -7090,6 +7058,20 @@
           "width": 3,
           "height": 6,
           "transform": [0, -1, 1, 0, 0, 10.5]
+        },
+        {
+          "symbolKey": "extra--machine--010--2x1",
+          "meta": {"key": "extra--machine--010--2x1", "y": 1.2},
+          "width": 3,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 3, 0]
+        },
+        {
+          "symbolKey": "extra--machine--011--1x3",
+          "meta": {"key": "extra--machine--011--1x3", "y": 1.2},
+          "width": 1.5,
+          "height": 4.5,
+          "transform": [1, 0, 0, 1, 0, 1.5]
         }
       ],
       "removableDoors": [],
@@ -7440,6 +7422,81 @@
       "width": 0.75,
       "height": 0.75,
       "pngRect": {"x": 0.09, "y": -0.015, "width": 0.57, "height": 0.78},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--machine--010--2x1": {
+      "key": "extra--machine--010--2x1",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[2.75, 0.25], [2.75, 1.25], [0.25, 1.25], [0.25, 0.25]]
+          ],
+          "meta": {
+            "obstacle": true,
+            "machine": true,
+            "symId": 79,
+            "symKey": "extra--machine--010--2x1",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 3,
+      "height": 1.5,
+      "pngRect": {"x": 0.25, "y": 0.25, "width": 2.5, "height": 1},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--machine--011--1x3": {
+      "key": "extra--machine--011--1x3",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [1.375, 2.975],
+              [1.259, 2.975],
+              [1.2355, 3.575],
+              [1.119, 3.575],
+              [1.1162, 4.225],
+              [0.125, 4.225],
+              [0.125, 0.275],
+              [1.1162, 0.275],
+              [1.119, 0.925],
+              [1.2355, 0.925],
+              [1.259, 1.525],
+              [1.375, 1.525]
+            ]
+          ],
+          "meta": {
+            "obstacle": true,
+            "machine": true,
+            "symId": 80,
+            "symKey": "extra--machine--011--1x3",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 4.5,
+      "pngRect": {"x": 0.1, "y": 0.25, "width": 1.3, "height": 4},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
