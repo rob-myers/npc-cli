@@ -36,6 +36,7 @@ export default function TestWorld(props) {
     threeReady: false,
     reqAnimId: 0,
     timer: new Timer(),
+    r3f: /** @type {*} */ (null),
 
     events: new Subject(),
     floorImg: /** @type {*} */ ({}),
@@ -127,6 +128,7 @@ export default function TestWorld(props) {
       state.crowd.update(deltaMs);
       state.npcs.onTick();
       state.doors.onTick();
+      // info(state.r3f.gl.info.render);
     },
     setupCrowdAgents(positions, targets) {
       positions.map((p, i) => {
@@ -291,6 +293,7 @@ export default function TestWorld(props) {
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
  * @property {number} reqAnimId
+ * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
  *
  * @property {import('./TestWorldCanvas').State} view

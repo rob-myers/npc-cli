@@ -33,6 +33,7 @@ export default function TestWorldCanvas(props) {
       onCreated(rootState) {
         state.rootState = rootState;
         api.threeReady = true;
+        api.r3f = rootState;
         api.update(); // e.g. show stats
       },
       onPointerDown(e) {
