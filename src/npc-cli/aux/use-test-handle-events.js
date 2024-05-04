@@ -1,4 +1,5 @@
 import React from "react";
+import { info, warn } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -7,23 +8,28 @@ import useStateRef from "../hooks/use-state-ref";
 export default function useHandleEvents(api) {
   const state = useStateRef(/** @returns {State} */ () => ({
     handleEvents(e) {
+      info({ e });
       switch (e.key) {
         case "pointerup":
-          e.distance < 1 && api.npcs && api.walkTo(e.point);
+          if (!api.npcs)
+            return warn('saw "pointerup" before api.npcs');
+          e.distance < 1 && api.walkTo(e.point);
+          break;
+        case "draw-floor-ceil":
+          if (!api.floorImg[e.gmKey])
+            return warn(`saw "draw-floor-ceil" before api.floorImg['${e.gmKey}']`);
+          api.surfaces.drawFloorAndCeil(e.gmKey);
           break;
       }
     },
   }));
 
   React.useEffect(() => {
-    if (!api.threeReady) {
-      return;
-    }
     const sub = api.events.subscribe(state.handleEvents);
     return () => {
       sub.unsubscribe();
     };
-  }, [api.threeReady]);
+  }, []);
 }
 
 /**

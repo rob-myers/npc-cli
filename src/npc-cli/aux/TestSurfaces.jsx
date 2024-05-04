@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat } from "../geom";
-import { info, isDevelopment, warn } from "../service/generic";
+import { info, warn } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
 import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
@@ -19,7 +19,6 @@ export default function TestSurfaces(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     obsInst: /** @type {*} */ (null),
-    floorImg: /** @type {*} */ ({}),
 
     addObstacleUvs() {
       const { obstacle: obstaclesSheet, obstaclesWidth, obstaclesHeight } = api.geomorphs.sheet;
@@ -49,7 +48,7 @@ export default function TestSurfaces(props) {
       );
     },
     drawFloorAndCeil(gmKey) {
-      const img = state.floorImg[gmKey];
+      const img = api.floorImg[gmKey];
       const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
 
@@ -139,9 +138,10 @@ export default function TestSurfaces(props) {
     state.positionObstacles();
   }, [api.hash]);
 
-  React.useEffect(() => {// HMR onchange this file
-    isDevelopment() && geomorphService.gmKeys.forEach(
-      gmKey => state.floorImg[gmKey] && state.drawFloorAndCeil(gmKey)
+  React.useEffect(() => {
+    // (a) ensure initial draw (b) redraw onchange this file
+    geomorphService.gmKeys.forEach(
+      gmKey => api.floorImg[gmKey] && state.drawFloorAndCeil(gmKey)
     );
   }, []);
 
@@ -215,7 +215,6 @@ export default function TestSurfaces(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} obsInst
- * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
  * @property {() => void} addObstacleUvs
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
  * @property {(img: HTMLImageElement) => void} drawObstaclesSheet

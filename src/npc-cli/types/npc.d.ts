@@ -6,7 +6,8 @@ declare namespace NPC {
     | { key: "disabled" }
     | { key: "enabled" }
     | { key: "spawned-npc"; npcKey: string }
-    | { key: "removed-npc"; npcKey: string };
+    | { key: "removed-npc"; npcKey: string }
+    | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey };
   // ...
 
   interface PointerMoveEvent {
