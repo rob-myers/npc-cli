@@ -1,7 +1,7 @@
 {
   "meta": {
     "101--hull": {"outputHash": -1776227568, "pngHash": 568633107},
-    "102--hull": {"outputHash": -1270219241, "pngHash": 184103855},
+    "102--hull": {"outputHash": 1420591994, "pngHash": 184103855},
     "103--hull": {"outputHash": -1995702532, "pngHash": -1937509879},
     "301--hull": {"outputHash": 1084187675, "pngHash": 787602800},
     "302--hull": {"outputHash": -318699656, "pngHash": -1557128953},
@@ -97,7 +97,7 @@
     "empty-room--039--3x4": {"outputHash": 314268617, "pngHash": 1412287547},
     "empty-room--060--4x4": {"outputHash": 1087452409, "pngHash": -1687214872},
     "engineering--045--6x4": {
-      "outputHash": -1702033654,
+      "outputHash": 298616131,
       "pngHash": -1132388510,
       "obsHashes": [-1415228638, -52289929, -1595231063, 233106770]
     },
@@ -172,9 +172,9 @@
     },
     "iris-valves--005--1x1": {"outputHash": -1502830503, "pngHash": 1810420148},
     "lab--012--4x3": {
-      "outputHash": -1253463891,
+      "outputHash": 1623565736,
       "pngHash": -261688393,
-      "obsHashes": [1651488151]
+      "obsHashes": [-1036968004]
     },
     "lab--018--4x4": {"outputHash": -1313251352, "pngHash": -113261385},
     "lab--023--4x4": {
@@ -2116,7 +2116,7 @@
         },
         {
           "symbolKey": "engineering--045--6x4",
-          "meta": {"key": "engineering--045--6x4"},
+          "meta": {"key": "engineering--045--6x4", "walls": []},
           "width": 9,
           "height": 6,
           "transform": [0, -1, 1, 0, 15, 30]
@@ -6598,13 +6598,6 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[3.05, -0.05], [3.05, 6.05], [2.95, 6.05], [2.95, -0.05]]
-          ],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
             [[9.05, -0.05], [9.05, 0.05], [-0.05, 0.05], [-0.05, -0.05]]
           ],
           "meta": {"wall": true}
@@ -6655,7 +6648,15 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 9.1, "height": 6.1},
       "symbols": [],
       "removableDoors": [],
-      "addableWalls": []
+      "addableWalls": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[3.05, -0.05], [3.05, 6.05], [2.95, 6.05], [2.95, -0.05]]
+          ],
+          "meta": {"wall": true, "optional": true, "w": true}
+        }
+      ]
     },
     "engineering--047--4x7": {
       "key": "engineering--047--4x7",
@@ -7860,6 +7861,7 @@
             "obstacle": true,
             "table": true,
             "surface": true,
+            "y": 0.6,
             "symId": 34,
             "symKey": "lab--012--4x3",
             "obsId": 0

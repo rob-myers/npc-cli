@@ -117,7 +117,7 @@
                         <title>fresher--036--4x2 doors=['w']</title>
                 </rect>
                 <rect width="360" height="240.000641" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-4-3'); transform-origin: -719.985px -1020px;" x="-899.98468" y="-1140.029663" transform="matrix(0, -1, 1, 0, 1439.969970703125, 2040)">
-                        <title>engineering--045--6x4</title>
+                        <title>engineering--045--6x4 walls=[]</title>
                 </rect>
                 <rect width="240.000015" height="240.000015" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-4-1'); transform-origin: -719.998px -120px;" x="-839.995972" y="-240.000259" transform="matrix(-1, 0, 0, -1, 1439.996093749999, 240)">
                         <title>lab--018--4x4</title>
