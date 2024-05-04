@@ -125,6 +125,7 @@ class GeomorphService {
     "stateroom--036--2x4": true,
     "table--004--1.2x2.4": true,
     "table--009--0.8x0.8": true,
+    "table--012--0.8x0.8": true,
 
     "extra--fresher--001--0.5x0.5": true,
     "extra--fresher--002--0.5x0.5": true,

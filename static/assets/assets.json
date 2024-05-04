@@ -103,59 +103,59 @@
     },
     "engineering--047--4x7": {"outputHash": 1700674965, "pngHash": 541808283},
     "extra--chair--003--0.25x0.25": {
-      "outputHash": -2147399755,
+      "outputHash": -1208709548,
       "pngHash": -1668511435,
-      "obsHashes": [-1076732701]
+      "obsHashes": [-1323045788]
     },
     "extra--chair--005-0.25x0.25": {
-      "outputHash": -125985272,
+      "outputHash": -81589209,
       "pngHash": -372042423,
-      "obsHashes": [-1998072669]
+      "obsHashes": [626381058]
     },
     "extra--desk--004--0.5x1": {
-      "outputHash": -466829863,
+      "outputHash": 627996570,
       "pngHash": -1144971495,
-      "obsHashes": [-1926616402]
+      "obsHashes": [193670797]
     },
     "extra--desk--006--0.4x1": {
-      "outputHash": -803185869,
+      "outputHash": 617604434,
       "pngHash": -244410489,
-      "obsHashes": [739966703]
+      "obsHashes": [-1434713394]
     },
     "extra--desk--007--0.4x0.66": {
-      "outputHash": -1470230804,
+      "outputHash": -375404371,
       "pngHash": -25585608,
-      "obsHashes": [-1627916432]
+      "obsHashes": [2058974001]
     },
     "extra--desk--008--0.4x1.33": {
-      "outputHash": -1193860581,
+      "outputHash": -99034148,
       "pngHash": 702037169,
-      "obsHashes": [1197986193]
+      "obsHashes": [589909330]
     },
     "extra--fresher--001--0.5x0.5": {
-      "outputHash": -1144659212,
+      "outputHash": -425603595,
       "pngHash": 1247120224,
-      "obsHashes": [-970442965]
+      "obsHashes": [-1216756052]
     },
     "extra--fresher--002--0.5x0.5": {
-      "outputHash": -2103139478,
+      "outputHash": 37147307,
       "pngHash": 482008010,
-      "obsHashes": [-386291056]
+      "obsHashes": [-632604143]
     },
     "extra--machine--010--2x1": {
-      "outputHash": 599891708,
+      "outputHash": 1727345682,
       "pngHash": -1673441387,
-      "obsHashes": [843850496]
+      "obsHashes": [-524258538]
     },
     "extra--machine--011--1x3": {
-      "outputHash": -1949640680,
+      "outputHash": 1591302327,
       "pngHash": 1878326814,
-      "obsHashes": [353296674]
+      "obsHashes": [1657690403]
     },
     "extra--table--009--4x4": {
-      "outputHash": -1060367023,
+      "outputHash": -1145176494,
       "pngHash": 1827472801,
-      "obsHashes": [-1247866472]
+      "obsHashes": [-1456564775]
     },
     "fresher--002--0.4x0.6": {
       "outputHash": -587668662,
@@ -285,33 +285,7 @@
         1808750445
       ]
     },
-    "office--074--4x4": {
-      "outputHash": 151825274,
-      "pngHash": 194408083,
-      "obsHashes": [
-        273864020,
-        477125291,
-        -1904801348,
-        -1164898989,
-        -1726744188,
-        -350581419,
-        795061676,
-        -2107849240,
-        884919037,
-        -56730684,
-        1050325036,
-        1510161181,
-        -264550824,
-        -2047656187,
-        -206330974,
-        1074885959,
-        -30048052,
-        -1982345862,
-        -915610013,
-        1564245059,
-        -463650203
-      ]
-    },
+    "office--074--4x4": {"outputHash": -781481906, "pngHash": 194408083},
     "office--089--4x4": {
       "outputHash": 237418736,
       "pngHash": -1241808431,
@@ -342,6 +316,11 @@
       "outputHash": -195493430,
       "pngHash": 1533034663,
       "obsHashes": [448023342]
+    },
+    "table--012--0.8x0.8": {
+      "outputHash": -661519268,
+      "pngHash": 293366403,
+      "obsHashes": [1093559313]
     },
     "demo-map-1": {"outputHash": 1429562441},
     "small-map-1": {"outputHash": -1987240735}
@@ -843,69 +822,6 @@
         "obstacleId": 1,
         "type": "obstacle"
       },
-      "office--074--4x4 0": {
-        "x": 1101,
-        "y": 1970,
-        "width": 75,
-        "height": 150,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "office--074--4x4 1": {
-        "x": 1985,
-        "y": 1956,
-        "width": 75,
-        "height": 150,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 1,
-        "type": "surface"
-      },
-      "office--074--4x4 2": {
-        "x": 2062,
-        "y": 1956,
-        "width": 75,
-        "height": 150,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 2,
-        "type": "surface"
-      },
-      "office--074--4x4 3": {
-        "x": 899,
-        "y": 631,
-        "width": 75,
-        "height": 150,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 3,
-        "type": "surface"
-      },
-      "office--074--4x4 4": {
-        "x": 1638,
-        "y": 1050,
-        "width": 75,
-        "height": 150,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 4,
-        "type": "surface"
-      },
-      "office--074--4x4 5": {
-        "x": 1638,
-        "y": 1202,
-        "width": 75,
-        "height": 150,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 5,
-        "type": "surface"
-      },
-      "office--074--4x4 6": {
-        "x": 1638,
-        "y": 1354,
-        "width": 75,
-        "height": 150,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 6,
-        "type": "surface"
-      },
       "303--hull 0": {
         "x": 1391,
         "y": 776,
@@ -924,9 +840,18 @@
         "obstacleId": 4,
         "type": "table"
       },
+      "table--012--0.8x0.8 0": {
+        "x": 1638,
+        "y": 1050,
+        "width": 110,
+        "height": 112,
+        "symbolKey": "table--012--0.8x0.8",
+        "obstacleId": 0,
+        "type": "table"
+      },
       "engineering--045--6x4 3": {
-        "x": 1178,
-        "y": 2010,
+        "x": 899,
+        "y": 631,
         "width": 104,
         "height": 104,
         "symbolKey": "engineering--045--6x4",
@@ -943,7 +868,7 @@
         "type": "surface"
       },
       "office--089--4x4 2": {
-        "x": 1284,
+        "x": 1101,
         "y": 2010,
         "width": 103,
         "height": 103,
@@ -969,15 +894,6 @@
         "obstacleId": 1,
         "type": "obstacle"
       },
-      "office--074--4x4 16": {
-        "x": 297,
-        "y": 2020,
-        "width": 100,
-        "height": 100,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 16,
-        "type": "surface"
-      },
       "lounge--015--4x2 7": {
         "x": 1450,
         "y": 1833,
@@ -997,7 +913,7 @@
         "type": "obstacle"
       },
       "table--009--0.8x0.8 0": {
-        "x": 399,
+        "x": 297,
         "y": 2020,
         "width": 92,
         "height": 94,
@@ -1015,8 +931,8 @@
         "type": "obstacle"
       },
       "stateroom--035--2x3 3": {
-        "x": 2017,
-        "y": 1088,
+        "x": 899,
+        "y": 737,
         "width": 87,
         "height": 49,
         "symbolKey": "stateroom--035--2x3",
@@ -1024,7 +940,7 @@
         "type": "obstacle"
       },
       "console--033--0.4x0.6 0": {
-        "x": 493,
+        "x": 391,
         "y": 2020,
         "width": 67,
         "height": 81,
@@ -1033,7 +949,7 @@
         "type": "chair"
       },
       "extra--fresher--002--0.5x0.5 0": {
-        "x": 562,
+        "x": 460,
         "y": 2020,
         "width": 57,
         "height": 79,
@@ -1042,8 +958,8 @@
         "type": "obstacle"
       },
       "office--006--2x2 0": {
-        "x": 1389,
-        "y": 2010,
+        "x": 519,
+        "y": 2020,
         "width": 79,
         "height": 69,
         "symbolKey": "office--006--2x2",
@@ -1051,8 +967,8 @@
         "type": "obstacle"
       },
       "office--006--2x2 1": {
-        "x": 2017,
-        "y": 1139,
+        "x": 600,
+        "y": 2020,
         "width": 79,
         "height": 69,
         "symbolKey": "office--006--2x2",
@@ -1060,8 +976,8 @@
         "type": "obstacle"
       },
       "misc-stellar-cartography--020--10x10 1": {
-        "x": 1470,
-        "y": 2004,
+        "x": 1206,
+        "y": 2010,
         "width": 70,
         "height": 78,
         "symbolKey": "misc-stellar-cartography--020--10x10",
@@ -1069,8 +985,8 @@
         "type": "obstacle"
       },
       "office--061--3x4 2": {
-        "x": 1542,
-        "y": 2010,
+        "x": 1638,
+        "y": 1164,
         "width": 78,
         "height": 70,
         "symbolKey": "office--061--3x4",
@@ -1078,8 +994,8 @@
         "type": "obstacle"
       },
       "office--061--3x4 5": {
-        "x": 2017,
-        "y": 1210,
+        "x": 1638,
+        "y": 1236,
         "width": 78,
         "height": 64,
         "symbolKey": "office--061--3x4",
@@ -1087,7 +1003,7 @@
         "type": "obstacle"
       },
       "office--061--3x4 3": {
-        "x": 1622,
+        "x": 1278,
         "y": 2010,
         "width": 65,
         "height": 76,
@@ -1096,7 +1012,7 @@
         "type": "obstacle"
       },
       "office--061--3x4 4": {
-        "x": 1689,
+        "x": 1345,
         "y": 2010,
         "width": 65,
         "height": 76,
@@ -1105,7 +1021,7 @@
         "type": "obstacle"
       },
       "console--051--0.4x0.6 0": {
-        "x": 1756,
+        "x": 1412,
         "y": 2010,
         "width": 69,
         "height": 75,
@@ -1123,8 +1039,8 @@
         "type": "obstacle"
       },
       "office--020--2x3 3": {
-        "x": 2017,
-        "y": 1276,
+        "x": 1638,
+        "y": 1302,
         "width": 74,
         "height": 66,
         "symbolKey": "office--020--2x3",
@@ -1132,8 +1048,8 @@
         "type": "obstacle"
       },
       "office--020--2x3 4": {
-        "x": 1827,
-        "y": 2005,
+        "x": 1638,
+        "y": 1370,
         "width": 74,
         "height": 66,
         "symbolKey": "office--020--2x3",
@@ -1141,8 +1057,8 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 3": {
-        "x": 1903,
-        "y": 2005,
+        "x": 1638,
+        "y": 1438,
         "width": 72,
         "height": 54,
         "symbolKey": "lounge--015--4x2",
@@ -1150,26 +1066,17 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 4": {
-        "x": 1903,
-        "y": 2061,
+        "x": 2017,
+        "y": 1088,
         "width": 72,
         "height": 54,
         "symbolKey": "lounge--015--4x2",
         "obstacleId": 4,
         "type": "obstacle"
       },
-      "office--074--4x4 15": {
-        "x": 1118,
-        "y": 1234,
-        "width": 72,
-        "height": 54,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 15,
-        "type": "obstacle"
-      },
       "extra--fresher--001--0.5x0.5 0": {
-        "x": 1118,
-        "y": 1290,
+        "x": 1483,
+        "y": 2010,
         "width": 69,
         "height": 59,
         "symbolKey": "extra--fresher--001--0.5x0.5",
@@ -1177,26 +1084,17 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 0": {
-        "x": 1192,
-        "y": 1234,
+        "x": 757,
+        "y": 226,
         "width": 50,
         "height": 69,
         "symbolKey": "lounge--015--4x2",
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "office--074--4x4 14": {
-        "x": 1189,
-        "y": 1305,
-        "width": 50,
-        "height": 67,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 14,
-        "type": "obstacle"
-      },
       "counter--010--0.4x0.4 0": {
-        "x": 1827,
-        "y": 2073,
+        "x": 1483,
+        "y": 2071,
         "width": 57,
         "height": 48,
         "symbolKey": "counter--010--0.4x0.4",
@@ -1204,8 +1102,8 @@
         "type": "obstacle"
       },
       "counter--009--0.4x0.4 0": {
-        "x": 757,
-        "y": 226,
+        "x": 2082,
+        "y": 252,
         "width": 52,
         "height": 54,
         "symbolKey": "counter--009--0.4x0.4",
@@ -1213,8 +1111,8 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 2": {
-        "x": 976,
-        "y": 631,
+        "x": 1718,
+        "y": 1164,
         "width": 32,
         "height": 53,
         "symbolKey": "lounge--015--4x2",
@@ -1222,8 +1120,8 @@
         "type": "surface"
       },
       "lounge--015--4x2 5": {
-        "x": 1715,
-        "y": 1050,
+        "x": 1714,
+        "y": 1302,
         "width": 33,
         "height": 53,
         "symbolKey": "lounge--015--4x2",
@@ -1240,8 +1138,8 @@
         "type": "obstacle"
       },
       "office--023--2x3 2": {
-        "x": 1261,
-        "y": 378,
+        "x": 1542,
+        "y": 2071,
         "width": 49,
         "height": 50,
         "symbolKey": "office--023--2x3",
@@ -1249,80 +1147,17 @@
         "type": "obstacle"
       },
       "office--023--2x3 3": {
-        "x": 2082,
-        "y": 252,
+        "x": 1261,
+        "y": 378,
         "width": 49,
         "height": 50,
         "symbolKey": "office--023--2x3",
         "obstacleId": 3,
         "type": "obstacle"
       },
-      "office--074--4x4 7": {
-        "x": 2093,
-        "y": 1276,
-        "width": 45,
-        "height": 50,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 7,
-        "type": "obstacle"
-      },
-      "office--074--4x4 8": {
-        "x": 2093,
-        "y": 1328,
-        "width": 45,
-        "height": 50,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 8,
-        "type": "obstacle"
-      },
-      "office--074--4x4 9": {
-        "x": 2082,
-        "y": 304,
-        "width": 45,
-        "height": 50,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 9,
-        "type": "obstacle"
-      },
-      "office--074--4x4 10": {
-        "x": 621,
-        "y": 2020,
-        "width": 45,
-        "height": 50,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 10,
-        "type": "obstacle"
-      },
-      "office--074--4x4 11": {
-        "x": 2012,
-        "y": 1344,
-        "width": 45,
-        "height": 50,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 11,
-        "type": "obstacle"
-      },
-      "office--074--4x4 12": {
-        "x": 2059,
-        "y": 1380,
-        "width": 45,
-        "height": 50,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 12,
-        "type": "obstacle"
-      },
-      "office--074--4x4 13": {
-        "x": 2012,
-        "y": 1396,
-        "width": 45,
-        "height": 50,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 13,
-        "type": "obstacle"
-      },
       "stateroom--035--2x3 2": {
-        "x": 2059,
-        "y": 1432,
+        "x": 2091,
+        "y": 1088,
         "width": 45,
         "height": 50,
         "symbolKey": "stateroom--035--2x3",
@@ -1330,8 +1165,8 @@
         "type": "obstacle"
       },
       "extra--chair--005-0.25x0.25 0": {
-        "x": 621,
-        "y": 2072,
+        "x": 2082,
+        "y": 308,
         "width": 48,
         "height": 47,
         "symbolKey": "extra--chair--005-0.25x0.25",
@@ -1339,49 +1174,13 @@
         "type": "chair"
       },
       "lounge--017--4x2 0": {
-        "x": 2012,
-        "y": 1484,
+        "x": 2091,
+        "y": 1140,
         "width": 47,
         "height": 46,
         "symbolKey": "lounge--017--4x2",
         "obstacleId": 0,
         "type": "table"
-      },
-      "office--074--4x4 17": {
-        "x": 2061,
-        "y": 1484,
-        "width": 47,
-        "height": 47,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 17,
-        "type": "obstacle"
-      },
-      "office--074--4x4 18": {
-        "x": 2,
-        "y": 2123,
-        "width": 47,
-        "height": 47,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 18,
-        "type": "obstacle"
-      },
-      "office--074--4x4 19": {
-        "x": 51,
-        "y": 2123,
-        "width": 47,
-        "height": 47,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 19,
-        "type": "obstacle"
-      },
-      "office--074--4x4 20": {
-        "x": 100,
-        "y": 2123,
-        "width": 47,
-        "height": 47,
-        "symbolKey": "office--074--4x4",
-        "obstacleId": 20,
-        "type": "obstacle"
       },
       "couch-and-chairs--007--0.6x1.4 0": {
         "x": 1752,
@@ -1393,8 +1192,8 @@
         "type": "surface"
       },
       "lounge--015--4x2 9": {
-        "x": 1178,
-        "y": 1970,
+        "x": 1712,
+        "y": 1438,
         "width": 38,
         "height": 37,
         "symbolKey": "lounge--015--4x2",
@@ -1402,8 +1201,8 @@
         "type": "surface"
       },
       "lounge--015--4x2 10": {
-        "x": 2098,
-        "y": 1139,
+        "x": 1712,
+        "y": 1477,
         "width": 38,
         "height": 37,
         "symbolKey": "lounge--015--4x2",
@@ -1411,8 +1210,8 @@
         "type": "surface"
       },
       "303--hull 1": {
-        "x": 1752,
-        "y": 1579,
+        "x": 460,
+        "y": 2101,
         "width": 19,
         "height": 20,
         "symbolKey": "303--hull",
@@ -1456,8 +1255,8 @@
         "type": "chair"
       },
       "303--hull 7": {
-        "x": 1886,
-        "y": 2073,
+        "x": 1409,
+        "y": 1909,
         "width": 15,
         "height": 15,
         "symbolKey": "303--hull",
@@ -1465,8 +1264,8 @@
         "type": "chair"
       },
       "303--hull 8": {
-        "x": 1420,
-        "y": 342,
+        "x": 1638,
+        "y": 1516,
         "width": 13,
         "height": 13,
         "symbolKey": "303--hull",
@@ -1474,7 +1273,7 @@
         "type": "chair"
       }
     },
-    "obstaclesHeight": 2172,
+    "obstaclesHeight": 2123,
     "obstaclesWidth": 2140
   },
   "symbols": {
@@ -6979,7 +6778,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 72,
+            "symId": 73,
             "symKey": "extra--chair--003--0.25x0.25",
             "obsId": 0
           }
@@ -7038,7 +6837,7 @@
           "meta": {
             "obstacle": true,
             "chair": true,
-            "symId": 74,
+            "symId": 75,
             "symKey": "extra--chair--005-0.25x0.25",
             "obsId": 0
           }
@@ -7086,7 +6885,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 73,
+            "symId": 74,
             "symKey": "extra--desk--004--0.5x1",
             "obsId": 0
           }
@@ -7117,7 +6916,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 75,
+            "symId": 76,
             "symKey": "extra--desk--006--0.4x1",
             "obsId": 0
           }
@@ -7148,7 +6947,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 76,
+            "symId": 77,
             "symKey": "extra--desk--007--0.4x0.66",
             "obsId": 0
           }
@@ -7184,7 +6983,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 77,
+            "symId": 78,
             "symKey": "extra--desk--008--0.4x1.33",
             "obsId": 0
           }
@@ -7223,7 +7022,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 70,
+            "symId": 71,
             "symKey": "extra--fresher--001--0.5x0.5",
             "obsId": 0
           }
@@ -7271,7 +7070,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 71,
+            "symId": 72,
             "symKey": "extra--fresher--002--0.5x0.5",
             "obsId": 0
           }
@@ -7316,7 +7115,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 79,
+            "symId": 80,
             "symKey": "extra--machine--010--2x1",
             "obsId": 0
           }
@@ -7360,7 +7159,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 80,
+            "symId": 81,
             "symKey": "extra--machine--011--1x3",
             "obsId": 0
           }
@@ -7429,7 +7228,7 @@
             "obstacle": true,
             "table": true,
             "surface": true,
-            "symId": 78,
+            "symId": 79,
             "symKey": "extra--table--009--4x4",
             "obsId": 0
           }
@@ -11251,296 +11050,7 @@
       "key": "office--074--4x4",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[1.5, 0], [1.5, 1.5], [0.75, 1.5], [0.75, 0]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[3, 0], [3, 1.5], [2.25, 1.5], [2.25, 0]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 1
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[4.5, 0], [4.5, 1.5], [3.75, 1.5], [3.75, 0]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 2
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[6, 0], [6, 1.5], [5.25, 1.5], [5.25, 0]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 3
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[3, 4.5], [3, 6], [2.25, 6], [2.25, 4.5]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 4
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[4.5, 4.5], [4.5, 6], [3.75, 6], [3.75, 4.5]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 5
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[6, 4.5], [6, 6], [5.25, 6], [5.25, 4.5]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 6
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[0.65, 0.5], [0.65, 1], [0.2, 1], [0.2, 0.5]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 7
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[2.15, 0.5], [2.15, 1], [1.7, 1], [1.7, 0.5]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 8
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[3.65, 0.5], [3.65, 1], [3.2, 1], [3.2, 0.5]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 9
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[5.15, 0.5], [5.15, 1], [4.7, 1], [4.7, 0.5]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 10
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[2.15, 5], [2.15, 5.5], [1.7, 5.5], [1.7, 5]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 11
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[3.65, 5], [3.65, 5.5], [3.2, 5.5], [3.2, 5]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 12
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[5.15, 5], [5.15, 5.5], [4.7, 5.5], [4.7, 5]]],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 13
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.05, 3.4188],
-              [0.34, 3.4188],
-              [0.4914, 3.5222],
-              [0.55, 3.7554],
-              [0.4793, 3.9889],
-              [0.2844, 4.091],
-              [0.05, 4.091]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 14
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.7573, 5.3201],
-              [0.6238, 5.4343],
-              [0.4627, 5.4887],
-              [0.2406, 5.5226],
-              [0.0423, 5.5226],
-              [0.0423, 4.9776],
-              [0.2406, 4.9776],
-              [0.4627, 5.0115],
-              [0.6238, 5.0659],
-              [0.7573, 5.1801]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 15
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.25, 2.8008],
-              [3.5532, 2.5],
-              [3.9492, 2.5],
-              [4.25, 2.8047],
-              [4.25, 3.1985],
-              [3.9534, 3.5],
-              [3.5469, 3.5],
-              [3.25, 3.205]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 16
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [4.2432, 3.1859],
-              [4.4126, 3.3553],
-              [4.3864, 3.5661],
-              [4.3156, 3.6374],
-              [4.1115, 3.6605],
-              [3.94, 3.489]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 17
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.5751, 3.4931],
-              [3.4057, 3.6625],
-              [3.1949, 3.6363],
-              [3.1236, 3.5655],
-              [3.1005, 3.3614],
-              [3.272, 3.19]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 18
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.2579, 2.82],
-              [3.0885, 2.6506],
-              [3.1147, 2.4398],
-              [3.1855, 2.3685],
-              [3.3896, 2.3454],
-              [3.561, 2.5169]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 19
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.9409, 2.5178],
-              [4.1104, 2.3484],
-              [4.3211, 2.3746],
-              [4.3925, 2.4454],
-              [4.4156, 2.6495],
-              [4.2441, 2.821]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 57,
-            "symKey": "office--074--4x4",
-            "obsId": 20
-          }
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -11607,219 +11117,133 @@
             [[2.175, 3], [2.175, 3.05], [2.125, 3.05], [2.125, 3]]
           ],
           "meta": {"decor": true, "go": true, "label": "office"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.9821, 5.2352],
-              [1.9821, 5.2852],
-              [1.9321, 5.2852],
-              [1.9321, 5.2352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.4821, 5.2352],
-              [3.4821, 5.2852],
-              [3.4321, 5.2852],
-              [3.4321, 5.2352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [4.9821, 5.2352],
-              [4.9821, 5.2852],
-              [4.9321, 5.2852],
-              [4.9321, 5.2352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.9821, 0.7352],
-              [1.9821, 0.7852],
-              [1.9321, 0.7852],
-              [1.9321, 0.7352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.4821, 0.7352],
-              [3.4821, 0.7852],
-              [3.4321, 0.7852],
-              [3.4321, 0.7352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [4.9821, 0.7352],
-              [4.9821, 0.7852],
-              [4.9321, 0.7852],
-              [4.9321, 0.7352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.4821, 0.7352],
-              [0.4821, 0.7852],
-              [0.4321, 0.7852],
-              [0.4321, 0.7352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[3.3, 2.5], [3.3, 2.55], [3.25, 2.55], [3.25, 2.5]]],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 45
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[4.25, 2.5], [4.25, 2.55], [4.2, 2.55], [4.2, 2.5]]],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 135
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[4.25, 3.45], [4.25, 3.5], [4.2, 3.5], [4.2, 3.45]]],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 225
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[3.3, 3.45], [3.3, 3.5], [3.25, 3.5], [3.25, 3.45]]],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 315
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.5321, 5.2352],
-              [0.5321, 5.2852],
-              [0.4821, 5.2852],
-              [0.4821, 5.2352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.6321, 3.7352],
-              [0.6321, 3.7852],
-              [0.5821, 3.7852],
-              [0.5821, 3.7352]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "stand": true,
-            "sink": true,
-            "orient": 180
-          }
         }
       ],
       "unsorted": [],
       "width": 6,
       "height": 6,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 6.1},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "extra--desk--004--0.5x1",
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 5.25, 4.5]
+        },
+        {
+          "symbolKey": "extra--chair--003--0.25x0.25",
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, 1, 5.13, 5.08]
+        },
+        {
+          "symbolKey": "extra--desk--004--0.5x1",
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 3.75, 4.5]
+        },
+        {
+          "symbolKey": "extra--chair--003--0.25x0.25",
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, 1, 3.63, 5.08]
+        },
+        {
+          "symbolKey": "extra--desk--004--0.5x1",
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 2.25, 4.5]
+        },
+        {
+          "symbolKey": "extra--chair--003--0.25x0.25",
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, 1, 2.13, 5.08]
+        },
+        {
+          "symbolKey": "extra--desk--004--0.5x1",
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 5.25, 0]
+        },
+        {
+          "symbolKey": "extra--chair--003--0.25x0.25",
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, 1, 5.13, 0.58]
+        },
+        {
+          "symbolKey": "extra--desk--004--0.5x1",
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 3.75, 0]
+        },
+        {
+          "symbolKey": "extra--chair--003--0.25x0.25",
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, 1, 3.63, 0.58]
+        },
+        {
+          "symbolKey": "extra--desk--004--0.5x1",
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 2.25, 0]
+        },
+        {
+          "symbolKey": "extra--chair--003--0.25x0.25",
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, 1, 2.13, 0.58]
+        },
+        {
+          "symbolKey": "extra--desk--004--0.5x1",
+          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 0.75, 0]
+        },
+        {
+          "symbolKey": "extra--chair--003--0.25x0.25",
+          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, 1, 0.63, 0.58]
+        },
+        {
+          "symbolKey": "table--012--0.8x0.8",
+          "meta": {"key": "table--012--0.8x0.8"},
+          "width": 1.5,
+          "height": 1.5,
+          "transform": [0, -1, -1, 0, 4.5, 3.75]
+        },
+        {
+          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "meta": {"key": "extra--fresher--001--0.5x0.5", "y": 0.7},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, -1, 1, 0, 0, 5.63]
+        },
+        {
+          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.5},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, -1, 1, 0, 0, 4.13]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -13174,6 +12598,81 @@
           "width": 0.375,
           "height": 0.375,
           "transform": [0.707, -0.707, -0.707, -0.707, 1.14, 0.6]
+        }
+      ],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "table--012--0.8x0.8": {
+      "key": "table--012--0.8x0.8",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.202, 0.8745],
+              [0.202, 0.6248],
+              [0.3515, 0.3569],
+              [0.6212, 0.1872],
+              [0.879, 0.1872],
+              [1.1513, 0.3594],
+              [1.3037, 0.6205],
+              [1.3037, 0.8751],
+              [1.1405, 1.1484],
+              [0.878, 1.308],
+              [0.6223, 1.308],
+              [0.3325, 1.1341]
+            ]
+          ],
+          "meta": {
+            "obstacle": true,
+            "surface": true,
+            "table": true,
+            "y": 0.7,
+            "symId": 70,
+            "symKey": "table--012--0.8x0.8",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 1.5,
+      "pngRect": {"x": 0.0775, "y": 0.0775, "width": 1.345, "height": 1.345},
+      "symbols": [
+        {
+          "symbolKey": "extra--chair--005-0.25x0.25",
+          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [0.707, -0.707, -0.707, -0.707, 1.2, 0.57]
+        },
+        {
+          "symbolKey": "extra--chair--005-0.25x0.25",
+          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [0.707, 0.707, 0.707, -0.707, 0.94, 1.2]
+        },
+        {
+          "symbolKey": "extra--chair--005-0.25x0.25",
+          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-0.707, 0.707, 0.707, 0.707, 0.3, 0.94]
+        },
+        {
+          "symbolKey": "extra--chair--005-0.25x0.25",
+          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-0.707, -0.707, -0.707, 0.707, 0.57, 0.3]
         }
       ],
       "removableDoors": [],
