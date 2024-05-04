@@ -66,6 +66,7 @@ class GeomorphService {
     "bed--005--0.6x1.2": true,
     "bridge--042--8x9": true,
     "console--005--1.2x4": true,
+    "console--006--1.2x3": true,
     "console--018--1x1": true, 
     "console--019--2x2": true, 
     "console--022--1x2": true,
