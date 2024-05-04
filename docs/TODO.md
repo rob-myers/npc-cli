@@ -28,6 +28,26 @@
   - 🚧 try repro with single geomorph
   - 🚧 try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
   - 🚧 multiple websockets open in single browser tab?
+  - 🚧 saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
+    - this seems wrong 👉 `changedObstacles: Set(0)`
+    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
+```sh
+T2MHTVXCH7:npc-cli robmyers$ yarn assets-fast 
+yarn run v1.22.21
+$ sucrase-node src/scripts/assets
+INFO updating all symbols
+WARN parseMap: "_301": expected valid gm number
+INFO { changedKeys: [ 'office--004--2x2' ] }
+INFO { changedGmKeys: [ 'g-102--research-deck' ] }
+DEBUG createLayout g-101--multipurpose
+DEBUG createLayout g-102--research-deck
+DEBUG createLayout g-103--cargo-bay
+DEBUG createLayout g-301--bridge
+DEBUG createLayout g-302--xboat-repair-bay
+DEBUG createLayout g-303--passenger-deck
+INFO { changedObstacles: Set(0) {} }
+✨  Done in 1.58s.
+```
 
 - ✅ map switching not working?
 - ✅ reset still not working on mobile (not loading)
