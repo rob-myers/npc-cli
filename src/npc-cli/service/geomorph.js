@@ -125,6 +125,7 @@ class GeomorphService {
     "stateroom--012--2x2": true,
     "stateroom--014--2x2": true,
     "stateroom--018--2x3": true,
+    "stateroom--019--2x3": true,
     "stateroom--020--2x3": true,
     "stateroom--035--2x3": true,
     "stateroom--036--2x4": true,
