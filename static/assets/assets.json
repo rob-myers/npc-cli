@@ -332,7 +332,7 @@
     "stateroom--018--2x3": {"outputHash": 1345545395, "pngHash": -932858017},
     "stateroom--019--2x3": {"outputHash": 443413681, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 190186949, "pngHash": 987326316},
-    "stateroom--035--2x3": {"outputHash": 2019962413, "pngHash": -866865591},
+    "stateroom--035--2x3": {"outputHash": 2078448553, "pngHash": -866865591},
     "stateroom--036--2x4": {"outputHash": -1776975145, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": -1121441652,
@@ -12390,7 +12390,7 @@
         },
         {
           "symbolKey": "extra--desk--006--0.4x1",
-          "meta": {"key": "extra--desk--006--0.4x1"},
+          "meta": {"key": "extra--desk--006--0.4x1", "y": 0.7},
           "width": 1.5,
           "height": 0.6,
           "transform": [0, -1, 1, 0, 0, 3]

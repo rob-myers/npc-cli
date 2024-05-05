@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -1976549666 1139759687",
+  "hash": "610044716 -2023936546 1139759687",
   "mapsHash": 610044716,
-  "layoutsHash": -1976549666,
+  "layoutsHash": -2023936546,
   "sheetsHash": 1139759687,
   "map": {
     "demo-map-1": {
@@ -25660,7 +25660,7 @@
         {
           "symbolKey": "extra--desk--006--0.4x1",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.7,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -25786,7 +25786,7 @@
         {
           "symbolKey": "extra--desk--006--0.4x1",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.7,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -25912,7 +25912,7 @@
         {
           "symbolKey": "extra--desk--006--0.4x1",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.7,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -26038,7 +26038,7 @@
         {
           "symbolKey": "extra--desk--006--0.4x1",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.7,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [

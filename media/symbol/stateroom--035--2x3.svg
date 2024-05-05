@@ -90,7 +90,7 @@
       <title>extra--chair--003--0.25x0.25 y=0.3</title>
     </rect>
     <rect width="300" height="120" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 150.005px 359.996px;" y="300" transform="matrix(0, -1, 1, 0, -90.008697509766, 89.998809814453)">
-      <title>extra--desk--006--0.4x1</title>
+      <title>extra--desk--006--0.4x1 y=0.7</title>
     </rect>
   </g>
 </svg>
