@@ -8,16 +8,6 @@
   - 🚧 102
   - ℹ️ raising to wall height can cause flicker
 
-- ✅ create Character demo with options Outline/Wireframe/CustomShaderWireframe
-  - CustomShaderWireframe doesn't work, so ask https://discourse.threejs.org
-  - get working shareable CodeSandbox link
-
-- ✅ fix floor texture HMR
-  - ✅ on edit TestGeomorphs
-  - ✅ on change map
-  - ✅ on change geomorph
-  - ✅ on change spritesheet
-
 - 🚧 fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles
   - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
@@ -34,14 +24,13 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- ✅ map switching not working?
-- ✅ reset still not working on mobile (not loading)
-  - works when leave and return to tab
-- ✅ no need for CanvasTexture for obstacles sprite-sheet
-- ✅ missing symbolKey in geomorphsService can break script i.e. have to `yarn clean-assets`
-- rethink webp generation
+- get a blender minecraft rig working in mixamo
+
 - rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
 - walls can have different heights e.g. for privacy-screen
+
+- fix webp generation
+  - ensure up-to-date before push, unless --no-verify
 
 - integrate TestCharacter into TestWorld
   - try convert into jsx
@@ -924,3 +913,19 @@ React.useEffect(() => {
 
 - ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
   - seems fixed, not sure why
+
+- ✅ create Character demo with options Outline/Wireframe/CustomShaderWireframe
+  - CustomShaderWireframe doesn't work, so ask https://discourse.threejs.org
+  - get working shareable CodeSandbox link
+
+- ✅ fix floor texture HMR
+  - ✅ on edit TestGeomorphs
+  - ✅ on change map
+  - ✅ on change geomorph
+  - ✅ on change spritesheet
+
+- ✅ map switching not working?
+- ✅ reset still not working on mobile (not loading)
+  - works when leave and return to tab
+- ✅ no need for CanvasTexture for obstacles sprite-sheet
+- ✅ missing symbolKey in geomorphsService can break script i.e. have to `yarn clean-assets`
