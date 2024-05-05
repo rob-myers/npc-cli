@@ -95,6 +95,7 @@ class GeomorphService {
     "lifeboat--small-craft--2x4": true,
     "lounge--015--4x2": true,
     "lounge--017--4x2": true,
+    "low-berth--003--1x1": true,
     "machinery--155--1.8x3.6": true,
     "machinery--156--2x4": true,
     "machinery--158--1.8x3.6": true,
