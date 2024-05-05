@@ -24,7 +24,29 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- get a blender minecraft rig working in mixamo
+- ✅ get a blender minecraft rig working in mixamo
+  - ℹ️ https://www.nari3d.com/boxscape
+  - ℹ️ https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?dl=0&e=1&file_subpath=%2FCycles_Minecraft_Rig+BSS+Edit+V6.5%2FAdvanced_Mob_Rig
+  - ✅ select armature; pose mode; select {l,r}-arm and g-x-{-1,+1} upload to mixamo
+  - triangle count
+    - https://poly.pizza/m/isC73B8SKq ~`2000`
+    - https://www.youtube.com/watch?v=8Ox6EUxYqzA ~`2200`
+    - https://ridz25.itch.io/low-poly-minecraft-like-character ~ `520`, ~`360` without gloves (?)
+      - ✅ can rig when add cubes: Groin, Neck, Left/Right Shoulder
+    - https://sketchfab.com/3d-models/ultra-low-poly-animated-character-mixamo-based-186f3f7ffc30449a9bfce39f647abc92 `324`
+      - ✅ auto-rigs from mesh
+  - ℹ️ blender:
+    - `F3` to open search e.g. type 'fbx' to import FBX
+    - `/` to focus
+    - `Shift + S` -> `Cursor to Selection`
+    - `.` set pivot point as cursor
+    - setting -> Input -> emulate numpad -> 1, 2, 3, ... to change camera
+    - animation action: change: ensure armature selected 1st
+    - animation action: delete: shift-click "x" 
+
+  - mixamo minecraft again
+    - https://ridz25.itch.io/low-poly-minecraft-like-character
+    - try keeping mesh in-place and adding transparent cubes Groin/Neck/Shoulders
 
 - rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
 - walls can have different heights e.g. for privacy-screen

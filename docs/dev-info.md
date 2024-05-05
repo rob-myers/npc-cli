@@ -1,6 +1,14 @@
 
 ## Bits and pieces
 
+### unrar on Mac
+
+```sh
+export HOMEBREW_NO_AUTO_UPDATE=; # optional
+brew install --cask rar
+rar x Model.rar
+```
+
 ### Find Local IP address on Mobile Hotspot
 
 ```sh
