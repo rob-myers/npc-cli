@@ -159,7 +159,7 @@ export default function TestWorld(props) {
       });
 
       if (path.length && tmpVectThree1.copy(dst).distanceTo(path[path.length - 1]) < 0.05) {
-        state.debug.navPath.setPath(path);
+        state.debug.setNavPath(path);
         agent.goto(dst); // nearest point/polygon relative to crowd defaults
       }
     },

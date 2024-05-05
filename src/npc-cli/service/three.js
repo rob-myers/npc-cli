@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import { LineMaterial } from "three-stdlib";
 import { error } from "./generic";
 import { Rect, Vect } from "../geom";
 
@@ -115,3 +116,18 @@ export function texLoadAsyncFallback(src, fallbackSrc) {
       return textureLoader.loadAsync(fallbackSrc);
     });
 }
+
+const navPathColor = 0x00aa00;
+const navNodeColor = 0xaa0000;
+export const navMeta = {
+  pathColor: navPathColor,
+  nodeColor: navNodeColor,
+  groundOffset: 0.01,
+  lineMaterial: new LineMaterial({
+    color: navPathColor,
+    linewidth: 0.005,
+    // vertexColors: true,
+  }),
+  nodeMaterial: new THREE.MeshBasicMaterial({ color: navNodeColor }),
+  nodeGeometry: new THREE.SphereGeometry(0.08),
+};
