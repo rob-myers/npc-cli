@@ -1,6 +1,33 @@
 
 ## Bits and pieces
 
+### Blender on MacBook
+
+#### User Interface
+
+- On Laptop, Settings -> Input -> Emulate numpad -> 1, 2, 3, ... to change camera
+  - BUT then lose Verts/Edges/Faces switch in Edit Mode
+  - So maybe Emulate numpad off, and use Tilde overlay to switch view instead
+
+- `F3` to open search e.g. type 'fbx' to import FBX
+- `/` to focus
+- `Shift + S` -> `Cursor to Selection`
+- `.` set pivot point as cursor
+- Animation Action
+  - change: ensure armature selected 1st
+  - delete: shift-click "x"
+- `n` in Edit mode shows Transform tool
+- `Shift + F12` to switch between Timeline / ActionEditor
+- `Shift + Left` return to frame 1
+- `Shift + A` for "Add something menu"
+
+- Add texture
+  - Choose `Shading` workspace.
+  - Select mesh, then click "New" in Shader Editor.
+    - Shift+A, Image > Image Texture.
+    - Open, then choose image
+    - Connect "Color" to "Base Color"
+
 ### unrar on Mac
 
 ```sh

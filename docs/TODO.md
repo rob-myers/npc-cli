@@ -35,18 +35,39 @@
       - ✅ can rig when add cubes: Groin, Neck, Left/Right Shoulder
     - https://sketchfab.com/3d-models/ultra-low-poly-animated-character-mixamo-based-186f3f7ffc30449a9bfce39f647abc92 `324`
       - ✅ auto-rigs from mesh
-  - ℹ️ blender:
-    - `F3` to open search e.g. type 'fbx' to import FBX
-    - `/` to focus
-    - `Shift + S` -> `Cursor to Selection`
-    - `.` set pivot point as cursor
-    - setting -> Input -> emulate numpad -> 1, 2, 3, ... to change camera
-    - animation action: change: ensure armature selected 1st
-    - animation action: delete: shift-click "x" 
 
-  - mixamo minecraft again
-    - https://ridz25.itch.io/low-poly-minecraft-like-character
-    - try keeping mesh in-place and adding transparent cubes Groin/Neck/Shoulders
+- ❌ mixamo minecraft again
+  - https://ridz25.itch.io/low-poly-minecraft-like-character
+  - ℹ️ will make our own animations, but maybe use provided idle/walk/run
+    - focus on npc behaviour sort-of demands it?
+  - 🚧 clean veryminecraftylookingman
+    - jpg skin -> png; delete gloves
+    - center edit mesh?
+  - ❌ Fixing transformed Body
+    - Problem: `Body` inside group has z transform `-4.06447 m`
+    - Seems we'd need to (a) undo this, (b) transform every frame (changing initial pose won't work)
+    - But maybe doesn't matter
+    - Btw mesh/bones align as follows: "Object mode; Click Armature, Shift-Click Body; Edit mode"
+  - ℹ️ Minecraft measurements
+    - 1 block means 1m³ means 16³ pixels
+      - **BUT** seems 1m ~ 16pixels does not apply to character models
+    - Player height: 1.8 blocks i.e. 1.8m
+      - https://gaming.stackexchange.com/questions/398125/what-is-the-scale-of-the-minecraft-skin-overlay
+    - Player heights:
+      - head ~ 8 pixels ~ 8/32 * 1.8 = 0.45m
+      - arms/legs ~ 12 pixels = 12/32 * 1.8 = 0.675m
+- ❌ create rig ourselves:
+  - https://www.youtube.com/watch?v=GB9phnNlzjQ&ab_channel=SharpWind
+  - https://www.youtube.com/watch?v=JlzzU_dxp3c&list=PLGKIkAXk1OeQWaDCO0sYdgT2nN_Qu46HO&index=3&ab_channel=TutsByKai
+- ❌ simplify high poly rig
+  - https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?e=1&dl=0
+  - too complex; possibly incorrect dimensions
+- ❌ try UV mapping `base-mesh-246-tri`
+  - blender uv map tutorial
+    - https://www.youtube.com/watch?v=nLJK2ExMhxU&ab_channel=IronbarkGamesStudio
+
+- 🚧 go through minecraft rig tutorial after all
+  - https://www.youtube.com/watch?v=pbwEHN15HbI&ab_channel=TutsByKai
 
 - rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
 - walls can have different heights e.g. for privacy-screen
