@@ -293,10 +293,10 @@ export const ObstacleShaderMaterial = shaderMaterial(
     alphaTest: 0.5,
     // mapTransform: new THREE.Matrix3(),
   },
-  meshBasic.instanceUvsVert,
-  // minimalInstanceUvsVert,
-  meshBasic.Frag,
-  // minimalInstanceUvsFrag,
+  // meshBasic.instanceUvsVert,
+  minimalInstanceUvsVert,
+  // meshBasic.Frag,
+  minimalInstanceUvsFrag,
 );
 
 extend({ ObstacleShaderMaterial });
