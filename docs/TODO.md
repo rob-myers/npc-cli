@@ -40,7 +40,7 @@
   - https://ridz25.itch.io/low-poly-minecraft-like-character
   - ℹ️ will make our own animations, but maybe use provided idle/walk/run
     - focus on npc behaviour sort-of demands it?
-  - 🚧 clean veryminecraftylookingman
+  - ❌ clean veryminecraftylookingman
     - jpg skin -> png; delete gloves
     - center edit mesh?
   - ❌ Fixing transformed Body
@@ -69,6 +69,9 @@
 - 🚧 go through minecraft rig tutorial after all
   - https://www.youtube.com/watch?v=pbwEHN15HbI&ab_channel=TutsByKai
 
+- minecraft walk cycle
+  - https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
+
 - rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
 - walls can have different heights e.g. for privacy-screen
 
@@ -88,7 +91,8 @@
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
-- static obstacles can specify color or shade
+- ❌ static obstacles can specify color or shade
+- use decor cuboids under e.g. machines and desks
 - closed doors have filtered doorPolys
 - can make agent look at point
 - ✅ migrate roomGraph per geomorph

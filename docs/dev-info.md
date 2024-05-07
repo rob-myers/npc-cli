@@ -28,6 +28,12 @@
     - Open, then choose image
     - Connect "Color" to "Base Color"
 
+- Concerning Forward Kinematics vs Inverse Kinematics
+  - FK/IK switch requires a modified skeleton, maybe avoid for now i.e. FK suffices
+    - https://www.youtube.com/watch?v=xEnu_EsnzjI&ab_channel=richstubbsanimation
+  - Could also try Inverse Kinematic Constraint with weighting
+    - https://docs.blender.org/manual/en/latest/animation/constraints/tracking/ik_solver.html
+
 ### unrar on Mac
 
 ```sh

@@ -18,9 +18,9 @@ export const minimalInstanceUvsVert = /*glsl*/`
     vUv = (uv * uvDimensions) + uvOffsets;
     vec4 modelViewPosition = vec4(position, 1.0);
     
-    #ifdef USE_BATCHING
-      modelViewPosition = batchingMatrix * modelViewPosition;
-    #endif
+    // #ifdef USE_BATCHING
+    //   modelViewPosition = batchingMatrix * modelViewPosition;
+    // #endif
 
     #ifdef USE_INSTANCING
       modelViewPosition = instanceMatrix * modelViewPosition;
