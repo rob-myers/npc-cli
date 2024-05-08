@@ -67,10 +67,14 @@
     - https://www.youtube.com/watch?v=nLJK2ExMhxU&ab_channel=IronbarkGamesStudio
 
 - 🚧 go through minecraft rig tutorial after all
-  - https://www.youtube.com/watch?v=pbwEHN15HbI&ab_channel=TutsByKai
+  - ✅ 1/4 modelling https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
+    - don't subdivide until after uv-mapping
+  - 🚧 2/4 uv-mapping https://www.youtube.com/watch?v=iMU_xnfKCpE&ab_channel=TutsByKai
+  - found original uv map textures in Cycles_Minecraft_Rig BSS Edit V6.5
+    - https://www.nari3d.com/boxscape
+    - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
 
 - minecraft walk cycle
-  - https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
 
 - rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
 - walls can have different heights e.g. for privacy-screen

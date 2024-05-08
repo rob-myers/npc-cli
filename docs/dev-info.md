@@ -34,6 +34,8 @@
   - Could also try Inverse Kinematic Constraint with weighting
     - https://docs.blender.org/manual/en/latest/animation/constraints/tracking/ik_solver.html
 
+- Pixelated texture: Shading Editor > Image Texture > Interpolation > `Closest` not `Linear`
+
 ### unrar on Mac
 
 ```sh
