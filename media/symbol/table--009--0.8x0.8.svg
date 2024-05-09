@@ -32,16 +32,16 @@
         <g>
                 <title>symbols</title>
                 <rect width="75.000039" height="75.000039" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 227.506px 227.494px;" y="190.000128" x="190.000128" transform="matrix(0.70710682869, 0.70710682869, -0.70710682869, 0.70710682869, -0.000029314262, -0.000038684569)">
-                        <title>extra--chair--003--0.25x0.25 y=0.3</title>
+                        <title>extra--003--chair--0.25x0.25 y=0.3</title>
                 </rect>
                 <rect width="75.000181" height="75.000181" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: -152.495px -152.507px;" y="-190.000409" x="-190.000409" transform="matrix(-0.70710682869, 0.70710682869, 0.70710682869, 0.70710682869, 220.000770674527, 380.000778971222)">
-                        <title>extra--chair--003--0.25x0.25 y=0.3</title>
+                        <title>extra--003--chair--0.25x0.25 y=0.3</title>
                 </rect>
                 <rect width="75.000325" height="75.000325" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: 227.507px 227.494px;" y="190.000699" x="190.000699" transform="matrix(-0.70710682869, -0.70710682869, 0.70710682869, -0.70710682869, -160.001784049742, -160.002035387846)">
-                        <title>extra--chair--003--0.25x0.25 y=0.3</title>
+                        <title>extra--003--chair--0.25x0.25 y=0.3</title>
                 </rect>
                 <rect width="75.000455" height="75.000455" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: -152.494px -152.51px;" y="-190.000959" x="-190.000959" transform="matrix(0.70710682869, -0.70710682869, -0.70710682869, -0.70710682869, 379.998084444735, 220.001982025846)">
-                        <title>extra--chair--003--0.25x0.25 y=0.3</title>
+                        <title>extra--003--chair--0.25x0.25 y=0.3</title>
                 </rect>
         </g>
 </svg>

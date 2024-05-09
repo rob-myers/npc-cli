@@ -84,10 +84,10 @@
       <title>machinery--156--2x4 y=1</title>
     </rect>
     <rect width="600" height="300" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-4-6'); transform-origin: 899.975px 150.003px;" y="-0.000001" x="600.00415">
-      <title>extra--machine--010--2x1 y=1.2</title>
+      <title>extra--010--machine--2x1 y=1.2</title>
     </rect>
     <rect width="300" height="900" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-2'); transform-origin: 149.985px 750.009px;" y="300">
-      <title>extra--machine--011--1x3 y=1.2</title>
+      <title>extra--011--machine--1x3 y=1.2</title>
     </rect>
   </g>
 </svg>

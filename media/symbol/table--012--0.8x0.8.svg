@@ -32,16 +32,16 @@
   <g>
     <title>symbols</title>
     <rect width="75.000608" height="75.000608" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: -152.494px -152.512px;" y="-190.001264" x="-190.001264" transform="matrix(0.70710682869, -0.70710682869, -0.70710682869, -0.70710682869, 393.040353962995, 213.048643008205)">
-      <title>extra--chair--005-0.25x0.25 y=0.35</title>
+      <title>extra--005--chair-0.25x0.25 y=0.35</title>
     </rect>
     <rect width="75.000753" height="75.000753" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: 227.509px 227.492px;" y="190.001554" x="190.001554" transform="matrix(0.70710682869, 0.70710682869, 0.70710682869, -0.70710682869, 13.038454097303, 13.045311667396)">
-      <title>extra--chair--005-0.25x0.25 y=0.35</title>
+      <title>extra--005--chair-0.25x0.25 y=0.35</title>
     </rect>
     <rect width="75.000913" height="75.000913" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: -152.495px -152.511px;" y="-190.001874" x="-190.001874" transform="matrix(-0.70710682869, 0.70710682869, 0.70710682869, 0.70710682869, 213.043282655381, 393.046985674053)">
-      <title>extra--chair--005-0.25x0.25 y=0.35</title>
+      <title>extra--005--chair-0.25x0.25 y=0.35</title>
     </rect>
     <rect width="75.001058" height="75.001058" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 227.51px 227.493px;" y="190.002164" x="190.002164" transform="matrix(-0.70710682869, -0.70710682869, -0.70710682869, 0.70710682869, -166.962887129386, -166.955939200943)">
-      <title>extra--chair--005-0.25x0.25 y=0.35</title>
+      <title>extra--005--chair-0.25x0.25 y=0.35</title>
     </rect>
   </g>
 </svg>

@@ -69,10 +69,10 @@
       <title>bed--003--1x1.6 y=0.5</title>
     </rect>
     <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 212.318px -450.464px;" y="-487.960175" x="174.811493" transform="matrix(1, 0, 0, -1, 0, 900.927978515625)">
-      <title>extra--chair--003--0.25x0.25 y=0.3</title>
+      <title>extra--003--chair--0.25x0.25 y=0.3</title>
     </rect>
     <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 75.003px 449.99px;" y="300.000015">
-      <title>extra--desk--004--0.5x1 y=0.7</title>
+      <title>extra--004--desk--0.5x1 y=0.7</title>
     </rect>
   </g>
 </svg>

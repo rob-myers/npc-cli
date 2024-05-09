@@ -203,13 +203,13 @@
                         <title>console--051--0.4x0.6 y=0.4</title>
                 </rect>
                 <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: 243.882px 1578.28px;" y="1540.78186" x="206.376282" transform="matrix(0, -1, 1, 0, -5.000045776367, 13.99934387207)">
-                        <title>extra--chair--003--0.25x0.25 y=0.4</title>
+                        <title>extra--003--chair--0.25x0.25 y=0.4</title>
                 </rect>
                 <rect width="75.000024" height="75.000024" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-5'); transform-origin: 243.884px 1578.28px;" y="1540.782497" x="206.376362" transform="matrix(0.258819162846, 0.965925872326, -0.965925872326, 0.258819162846, 64.467589548522, 281.66043576113)">
-                        <title>extra--chair--003--0.25x0.25 y=0.4</title>
+                        <title>extra--003--chair--0.25x0.25 y=0.4</title>
                 </rect>
                 <rect width="150.000748" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 225.002px 1649.99px;" y="1500" x="149.999268" transform="matrix(0, 1, -1, 0, 15.264129638671, 75.011993408203)">
-                        <title>extra--desk--004--0.5x1 y=0.7</title>
+                        <title>extra--004--desk--0.5x1 y=0.7</title>
                 </rect>
                 <rect width="300" height="600" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-7'); transform-origin: 1050.08px 1881.49px;" y="1581.49292" x="900" transform="matrix(0, 1, -1, 0, 149.94873046875, -16.854248046875)">
                         <title>table--004--1.2x2.4</title>
@@ -218,13 +218,13 @@
                         <title>bed--005--0.6x1.2 y=0.3</title>
                 </rect>
                 <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-9'); transform-origin: 30.9254px -583.833px;" y="-658.832338" x="-44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 1889.081985686491, 2008.832571707468)">
-                        <title>extra--fresher--001--0.5x0.5 y=0.7</title>
+                        <title>extra--001--fresher--0.5x0.5 y=0.7</title>
                 </rect>
                 <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-10'); transform-origin: 119.085px 733.831px;" y="658.832338" x="44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 1981.923253218414, 691.169126238719)">
-                        <title>extra--fresher--002--0.5x0.5 y=0.4</title>
+                        <title>extra--002--fresher--0.5x0.5 y=0.4</title>
                 </rect>
                 <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-11'); transform-origin: 119.085px 733.831px;" y="658.832338" x="44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 2161.923253218413, 691.169126238719)">
-                        <title>extra--fresher--002--0.5x0.5 y=0.4</title>
+                        <title>extra--002--fresher--0.5x0.5 y=0.4</title>
                 </rect>
                 <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-12'); transform-origin: 119.085px 733.831px;" y="658.832338" x="44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 1081.166051061028, 1591.168393830267)">
                         <title>counter--009--0.4x0.4 y=0.6+0.1</title>

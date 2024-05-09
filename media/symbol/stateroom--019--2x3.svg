@@ -45,13 +45,13 @@
   <g transform="matrix(1, 0, 0, 1, 0, -2.500289916992)">
     <title>symbols</title>
     <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: 153.843px -216.19px;" y="-253.691162" x="116.339691" transform="matrix(0, 1, 1, 0, -3.842819213867, 433.693862915039)">
-      <title>extra--chair--003--0.25x0.25 y=0.3</title>
+      <title>extra--003--chair--0.25x0.25 y=0.3</title>
     </rect>
     <rect width="500" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: 250.007px 752.55px;" y="602.50029">
       <title>bed--003--1x1.6 y=0.5</title>
     </rect>
     <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 150.005px 74.9951px;" y="-74.995056" x="75.002502" transform="matrix(0, 1, -1, 0, 0.004844665527, 2.507713317871)">
-      <title>extra--desk--004--0.5x1 y=0.7</title>
+      <title>extra--004--desk--0.5x1 y=0.7</title>
     </rect>
     <rect width="150.000767" height="150.000782" style="fill: url('#pattern-0-0'); stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; transform-origin: 119.08px 733.833px;" y="658.832416" x="44.080282" transform="matrix(0.707158684731, -0.707054913044, 0.707054913044, 0.707158684731, 366.98621408435, -620.266418801783)">
       <title>console--051--0.4x0.6 y=0.4</title>

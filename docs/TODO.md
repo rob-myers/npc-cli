@@ -83,8 +83,8 @@
 
 - minecraft walk cycle
 
-- rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
-- walls can have different heights e.g. for privacy-screen
+- ✅ rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
+- 🚧 walls can have different heights e.g. for privacy-screen
 - fix webp generation
   - ensure up-to-date before push, unless --no-verify
 - change mapKey should request-nav-mesh but shouldn't restart worker
@@ -826,8 +826,8 @@ React.useEffect(() => {
   - stateroom--036
   - stateroom--014--2x2 e.g. use bed--003--1x1.6
   - ✅ decompose desk--003--0.8x1 as two symbols
-  -   ✅ extra--chair--003--0.25x0.25
-  -   ✅ extra--desk--004--0.5x1
+  -   ✅ extra--003--chair--0.25x0.25
+  -   ✅ extra--004--desk--0.5x1
   - ✅ table--004--1.2x2.4
   - ✅ bridge--042--8x9
 - ✅ only one lookup needs to be extended when adding symbols

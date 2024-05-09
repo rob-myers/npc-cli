@@ -87,10 +87,10 @@
       <title>fresher--002--0.4x0.6 y=0.4</title>
     </rect>
     <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: 172.502px -448.493px;" y="-485.991333" x="134.994728" transform="matrix(1, 0, 0, -1, 0, 896.986816406251)">
-      <title>extra--chair--003--0.25x0.25 y=0.3</title>
+      <title>extra--003--chair--0.25x0.25 y=0.3</title>
     </rect>
     <rect width="300" height="120" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 150.005px 359.996px;" y="300" transform="matrix(0, -1, 1, 0, -90.008697509766, 89.998809814453)">
-      <title>extra--desk--006--0.4x1 y=0.7</title>
+      <title>extra--006--desk--0.4x1 y=0.7</title>
     </rect>
   </g>
 </svg>

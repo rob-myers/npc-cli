@@ -4,7 +4,7 @@
     <bx:grid x="0" y="0" width="300" height="300"/>
   </defs>
   <image width="95" height="95" x="-10" y="-10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF8AAABfAgMAAADzIvNmAAAACVBMVEUAAAD///8AAABzxoNxAAAAAXRSTlMAQObYZgAAAUJJREFUSMfdlcGtwjAQRJGPKSX9LAdKSBVugjuXLzmp8mM85snxYhROiD16NPPWkr17eta03SueKM5dJWyqvbDVunVBtVwDFgi+Zc4HZnbeN1bOpaQWfbVHXUoWSaupmiwM2UJfQYZKSSAwmC1AZrWkLCBKAi9IUBJZSYiaRJYQNYm+ohB/Zh6kIoAUITwRQBLsHaQIqy/MsKHHLMCGHmmqbws2bWUhwDboaSBMNNX06wpWhKsncI3uIgPBzLvIa2HzhHMW1p8Wki8YQuf4ynt8JAxeySEhHn+iL7/BQDj8B4P3nQf/fDQZ/CEzEPx5NRx9AToTmfHaNwW9ZUOHjQCkme1BEJIS+6NNur3bOFOTxSLst5q7B5eCYHNiyAiyKmUpCLIUdmHTq6/iWdjnZKnUE3gVBiwYegsGqjcQxnlb7fk/Dq3718w77FMAAAAASUVORK5CYII=">
-    <title>extra--chair--005-0.25x0.25</title>
+    <title>extra--005--chair-0.25x0.25</title>
   </image>
   <path d="M 16.266 -9.80538 L 59.11553 -9.80203 L 85 16.22607 L 85 58.39445 L 58.73862 84.80072 L 15.88436 84.80191 L -10.3358 58.43626 L -10.3358 16.94318 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
     <title>obstacle chair</title>

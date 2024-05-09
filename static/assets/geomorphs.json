@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 1999153516 -472546669",
+  "hash": "610044716 375420524 -1364234593",
   "mapsHash": 610044716,
-  "layoutsHash": 1999153516,
-  "sheetsHash": -472546669,
+  "layoutsHash": 375420524,
+  "sheetsHash": -1364234593,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -2076,7 +2076,7 @@
           "transform": [1, 0, 0, 1, 9.63, 12.19]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -2100,14 +2100,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, -1, 0, 12.95, 12.62]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -2119,7 +2119,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
@@ -2239,7 +2239,7 @@
           "transform": [-1, 0, 0, 1, 20.37, 12.19]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -2263,14 +2263,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 17.05, 12.62]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -2282,7 +2282,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
@@ -2402,7 +2402,7 @@
           "transform": [1, 0, 0, -1, 9.63, 4.3100000000000005]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -2426,14 +2426,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 12.95, 3.88]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -2445,7 +2445,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
@@ -2840,7 +2840,7 @@
           "transform": [0, 1, -1, 0, 30, 18]
         },
         {
-          "symbolKey": "extra--desk--007--0.4x0.66",
+          "symbolKey": "extra--007--desk--0.4x0.66",
           "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
@@ -2852,7 +2852,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 83,
-              "symKey": "extra--desk--007--0.4x0.66",
+              "symKey": "extra--007--desk--0.4x0.66",
               "obsId": 0
             }
           },
@@ -2886,7 +2886,7 @@
           "transform": [0, 1, 1, 0, 13.5, 5.13]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -2907,7 +2907,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -3000,7 +3000,7 @@
           "transform": [1, 0, 0, 1, 9.63, 9.19]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -3024,14 +3024,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 9.88, 8.44]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -3043,7 +3043,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
@@ -3136,7 +3136,7 @@
           "transform": [-1, 0, 0, 1, 20.37, 9.19]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -3160,14 +3160,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, -1, 20.12, 8.44]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -3179,14 +3179,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 21, 7.5]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -3207,14 +3207,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 21, 11.879999999999999]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -3235,14 +3235,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 21, 10.879999999999999]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -3263,7 +3263,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -3324,7 +3324,7 @@
           "transform": [0, -1, 1, 0, 21, 13.5]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
+          "symbolKey": "extra--006--desk--0.4x1",
           "obstacleId": 0,
           "height": 0,
           "origPoly": {
@@ -3336,14 +3336,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 82,
-              "symKey": "extra--desk--006--0.4x1",
+              "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 21, 13.5]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -3364,14 +3364,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [0, 1, 1, 0, 21, 18.12]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -3392,14 +3392,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [0, 1, 1, 0, 21, 19.12]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -3420,7 +3420,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -3481,7 +3481,7 @@
           "transform": [0, 1, 1, 0, 21, 16.5]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
+          "symbolKey": "extra--006--desk--0.4x1",
           "obstacleId": 0,
           "height": 0,
           "origPoly": {
@@ -3493,7 +3493,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 82,
-              "symKey": "extra--desk--006--0.4x1",
+              "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
           },
@@ -3669,7 +3669,7 @@
           "transform": [1, 0, 0, 1, 25.5, 12]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -3681,14 +3681,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, -1, 6.75, 18]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -3712,7 +3712,7 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
@@ -9579,7 +9579,7 @@
           "transform": [-1, 0, 0, -1, 15.7, 10.870000000000001]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -9600,14 +9600,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 26.13, 15]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -9628,14 +9628,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 27.13, 15]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -9656,14 +9656,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 28.13, 15]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -9684,14 +9684,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 29.13, 15]
         },
         {
-          "symbolKey": "extra--desk--008--0.4x1.33",
+          "symbolKey": "extra--008--desk--0.4x1.33",
           "obstacleId": 0,
           "height": 0.6,
           "origPoly": {
@@ -9708,7 +9708,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 84,
-              "symKey": "extra--desk--008--0.4x1.33",
+              "symKey": "extra--008--desk--0.4x1.33",
               "obsId": 0
             }
           },
@@ -9779,7 +9779,7 @@
           "transform": [-1, 0, 0, -1, 21, 30]
         },
         {
-          "symbolKey": "extra--battery--012--3x2",
+          "symbolKey": "extra--012--battery--3x2",
           "obstacleId": 0,
           "height": 0.8,
           "origPoly": {
@@ -9818,14 +9818,14 @@
               "obstacle": true,
               "battery": true,
               "symId": 88,
-              "symKey": "extra--battery--012--3x2",
+              "symKey": "extra--012--battery--3x2",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 15, 25.5]
         },
         {
-          "symbolKey": "extra--table--009--4x4",
+          "symbolKey": "extra--009--table--4x4",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -9875,7 +9875,7 @@
               "table": true,
               "surface": true,
               "symId": 85,
-              "symKey": "extra--table--009--4x4",
+              "symKey": "extra--009--table--4x4",
               "obsId": 0
             }
           },
@@ -10009,7 +10009,7 @@
           "transform": [0.707, -0.707, -0.707, -0.707, 19.07, 2.02]
         },
         {
-          "symbolKey": "extra--table--009--4x4",
+          "symbolKey": "extra--009--table--4x4",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10059,7 +10059,7 @@
               "table": true,
               "surface": true,
               "symId": 85,
-              "symKey": "extra--table--009--4x4",
+              "symKey": "extra--009--table--4x4",
               "obsId": 0
             }
           },
@@ -10223,7 +10223,7 @@
           "transform": [0, -1, 1, 0, 16.5, 15]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10244,14 +10244,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 19.86, 12.94]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10272,7 +10272,7 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
@@ -10309,7 +10309,7 @@
           "transform": [0, 1, -1, 0, 21, 15]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10330,14 +10330,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 20.13, 15.76]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10358,14 +10358,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 17.13, 15.76]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10386,7 +10386,7 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
@@ -10423,7 +10423,7 @@
           "transform": [0, 1, 1, 0, 24, 15]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10444,14 +10444,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, 1, 0, 24.87, 15.76]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10472,14 +10472,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, 1, 0, 27.87, 15.76]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10500,14 +10500,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, 1, 0, 28.87, 17.14]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10519,14 +10519,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 24.75, 28.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10550,14 +10550,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 24.87, 29.08]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10569,14 +10569,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 26.25, 28.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10600,14 +10600,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 26.37, 29.08]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10619,14 +10619,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 27.75, 28.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10650,14 +10650,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 27.87, 29.08]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10669,14 +10669,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 24.75, 24]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10700,14 +10700,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 24.87, 24.58]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10719,14 +10719,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 26.25, 24]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10750,14 +10750,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 26.37, 24.58]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10769,14 +10769,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 27.75, 24]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10800,14 +10800,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 27.87, 24.58]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -10819,14 +10819,14 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 29.25, 24]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -10850,7 +10850,7 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
@@ -10891,7 +10891,7 @@
           "transform": [0, -1, 1, 0, 25.5, 27.75]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.35,
           "origPoly": {
@@ -10912,14 +10912,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-0.707, -0.707, -0.707, 0.707, 26.07, 26.55]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.35,
           "origPoly": {
@@ -10940,14 +10940,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0.707, -0.707, -0.707, -0.707, 26.7, 26.81]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.35,
           "origPoly": {
@@ -10968,14 +10968,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0.707, 0.707, 0.707, -0.707, 26.44, 27.45]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.35,
           "origPoly": {
@@ -10996,14 +10996,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-0.707, 0.707, 0.707, 0.707, 25.8, 27.18]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -11023,14 +11023,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [0, -1, -1, 0, 30, 29.63]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -11051,7 +11051,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -11197,7 +11197,7 @@
           "transform": [1, 0, 0, 1, 0, 9]
         },
         {
-          "symbolKey": "extra--machine--010--2x1",
+          "symbolKey": "extra--010--machine--2x1",
           "obstacleId": 0,
           "height": 1.2,
           "origPoly": {
@@ -11209,14 +11209,14 @@
               "obstacle": true,
               "machine": true,
               "symId": 86,
-              "symKey": "extra--machine--010--2x1",
+              "symKey": "extra--010--machine--2x1",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 10.5, 12]
         },
         {
-          "symbolKey": "extra--machine--011--1x3",
+          "symbolKey": "extra--011--machine--1x3",
           "obstacleId": 0,
           "height": 1.2,
           "origPoly": {
@@ -11241,7 +11241,7 @@
               "obstacle": true,
               "machine": true,
               "symId": 87,
-              "symKey": "extra--machine--011--1x3",
+              "symKey": "extra--011--machine--1x3",
               "obsId": 0
             }
           },
@@ -11546,7 +11546,7 @@
           "transform": [1, 0, 0, 1, 27, 10.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11570,14 +11570,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0.707, 0.707, -0.707, 0.707, 28.14, 11.370000000000001]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11601,14 +11601,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-0.707, 0.707, 0.707, 0.707, 27.34, 11.370000000000001]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11632,14 +11632,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-0.707, -0.707, 0.707, -0.707, 27.34, 11.1]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11663,7 +11663,7 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
@@ -11704,7 +11704,7 @@
           "transform": [1, 0, 0, 1, 25.5, 10.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11728,14 +11728,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0.707, 0.707, -0.707, 0.707, 26.64, 11.370000000000001]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11759,14 +11759,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-0.707, 0.707, 0.707, 0.707, 25.84, 11.370000000000001]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11790,14 +11790,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-0.707, -0.707, 0.707, -0.707, 25.84, 11.1]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -11821,7 +11821,7 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
@@ -17538,7 +17538,7 @@
           "transform": [-0.866, 0.5, -0.5, -0.866, 1.13, 5.64]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -17558,14 +17558,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 2.03, 0.01]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -17586,7 +17586,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -17665,7 +17665,7 @@
           "transform": [0.866, 0.5, 0.5, -0.866, 28.87, 5.64]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -17685,14 +17685,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, 1, 27.97, 0.01]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -17713,7 +17713,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -17792,7 +17792,7 @@
           "transform": [0.5, 0.866, -0.866, 0.5, 5.64, 13.870000000000001]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -17812,14 +17812,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 0.01, 12.97]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -17840,7 +17840,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -18264,7 +18264,7 @@
           "transform": [0, 1, -1, 0, 17.619999999999997, 3.05]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -18288,14 +18288,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 10.01, 9.65]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -18319,14 +18319,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0.259, 0.966, -0.966, 0.259, 10.67, 10.57]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
+          "symbolKey": "extra--004--desk--0.5x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -18338,7 +18338,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 80,
-              "symKey": "extra--desk--004--0.5x1",
+              "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
           },
@@ -18391,7 +18391,7 @@
           "transform": [0, 1, -1, 0, 16.5, 10.07]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18412,14 +18412,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, -1, 0, 16.08, 11.64]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18440,14 +18440,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, -1, 0, 15.48, 11.64]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18468,14 +18468,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, -1, 0, 14.879999999999999, 11.64]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18496,14 +18496,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, -1, -1, 0, 14.28, 11.64]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18524,14 +18524,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 16.08, 10.01]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18552,14 +18552,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 15.48, 10.01]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18580,14 +18580,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 14.879999999999999, 10.01]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18608,14 +18608,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [0, 1, -1, 0, 14.28, 10.01]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18636,14 +18636,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, -1, 16.75, 11.01]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -18664,7 +18664,7 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
@@ -18689,7 +18689,7 @@
           "transform": [1, 0, 0, 1, 18.21, 9.129999999999999]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -18709,14 +18709,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 18.23, 9]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -18737,14 +18737,14 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 19.130000000000003, 9]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.4,
           "origPoly": {
@@ -18765,7 +18765,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -25024,7 +25024,7 @@
           "transform": [0.866, -0.5, 0.5, 0.866, 19.87, 9.36]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25044,14 +25044,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, -1, 18.97, 14.99]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -25072,7 +25072,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -25151,7 +25151,7 @@
           "transform": [0.866, -0.5, 0.5, 0.866, 16.87, 9.36]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25171,14 +25171,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, -1, 15.97, 14.99]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -25199,7 +25199,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -25278,7 +25278,7 @@
           "transform": [-0.866, -0.5, -0.5, 0.866, 10.129999999999999, 9.36]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25298,14 +25298,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 11.03, 14.99]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -25326,7 +25326,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -25405,7 +25405,7 @@
           "transform": [-0.866, -0.5, -0.5, 0.866, 13.129999999999999, 9.36]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
+          "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25425,14 +25425,14 @@
             "meta": {
               "obstacle": true,
               "symId": 77,
-              "symKey": "extra--fresher--001--0.5x0.5",
+              "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 14.03, 14.99]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
+          "symbolKey": "extra--002--fresher--0.5x0.5",
           "obstacleId": 0,
           "height": 0.5,
           "origPoly": {
@@ -25453,7 +25453,7 @@
             "meta": {
               "obstacle": true,
               "symId": 78,
-              "symKey": "extra--fresher--002--0.5x0.5",
+              "symKey": "extra--002--fresher--0.5x0.5",
               "obsId": 0
             }
           },
@@ -25567,7 +25567,7 @@
           "transform": [0, -1, -1, 0, 18, 4.13]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -25591,14 +25591,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [-1, 0, 0, -1, 17.32, 2.43]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
+          "symbolKey": "extra--006--desk--0.4x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25610,7 +25610,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 82,
-              "symKey": "extra--desk--006--0.4x1",
+              "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
           },
@@ -25688,7 +25688,7 @@
           "transform": [0, -1, 1, 0, 12, 4.13]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -25712,14 +25712,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 12.68, 2.43]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
+          "symbolKey": "extra--006--desk--0.4x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25731,7 +25731,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 82,
-              "symKey": "extra--desk--006--0.4x1",
+              "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
           },
@@ -25809,7 +25809,7 @@
           "transform": [0, -1, 1, 0, 9, 4.13]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -25833,14 +25833,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 9.68, 2.43]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
+          "symbolKey": "extra--006--desk--0.4x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25852,7 +25852,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 82,
-              "symKey": "extra--desk--006--0.4x1",
+              "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
           },
@@ -25930,7 +25930,7 @@
           "transform": [0, -1, 1, 0, 6, 4.13]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
+          "symbolKey": "extra--003--chair--0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -25954,14 +25954,14 @@
             "meta": {
               "obstacle": true,
               "symId": 79,
-              "symKey": "extra--chair--003--0.25x0.25",
+              "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, -1, 6.68, 2.43]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
+          "symbolKey": "extra--006--desk--0.4x1",
           "obstacleId": 0,
           "height": 0.7,
           "origPoly": {
@@ -25973,7 +25973,7 @@
               "obstacle": true,
               "surface": true,
               "symId": 82,
-              "symKey": "extra--desk--006--0.4x1",
+              "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
           },
@@ -26268,7 +26268,7 @@
           "transform": [-1, 0, 0, 1, 5.2, 2.63]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -26289,14 +26289,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 26.98, 5.45]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -26317,14 +26317,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 27.8, 5.2]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -26345,14 +26345,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 28.65, 5.08]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -26373,14 +26373,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 29.5, 5]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -26401,14 +26401,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 10.25, 8.33]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -26429,14 +26429,14 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
           "transform": [1, 0, 0, 1, 10.25, 7.33]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
+          "symbolKey": "extra--005--chair-0.25x0.25",
           "obstacleId": 0,
           "height": 0.3,
           "origPoly": {
@@ -26457,7 +26457,7 @@
               "obstacle": true,
               "chair": true,
               "symId": 81,
-              "symKey": "extra--chair--005-0.25x0.25",
+              "symKey": "extra--005--chair-0.25x0.25",
               "obsId": 0
             }
           },
@@ -29200,12 +29200,12 @@
         "obstacleId": 0,
         "type": "table"
       },
-      "extra--table--009--4x4 0": {
+      "extra--009--table--4x4 0": {
         "x": 408,
         "y": 816,
         "width": 600,
         "height": 600,
-        "symbolKey": "extra--table--009--4x4",
+        "symbolKey": "extra--009--table--4x4",
         "obstacleId": 0,
         "type": "table"
       },
@@ -29299,21 +29299,21 @@
         "obstacleId": 6,
         "type": "surface"
       },
-      "extra--machine--011--1x3 0": {
+      "extra--011--machine--1x3 0": {
         "x": 1312,
         "y": 776,
         "width": 125,
         "height": 395,
-        "symbolKey": "extra--machine--011--1x3",
+        "symbolKey": "extra--011--machine--1x3",
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "extra--battery--012--3x2 0": {
+      "extra--012--battery--3x2 0": {
         "x": 1312,
         "y": 1173,
         "width": 392,
         "height": 211,
-        "symbolKey": "extra--battery--012--3x2",
+        "symbolKey": "extra--012--battery--3x2",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -29443,12 +29443,12 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "extra--machine--010--2x1 0": {
+      "extra--010--machine--2x1 0": {
         "x": 2,
         "y": 2020,
         "width": 250,
         "height": 100,
-        "symbolKey": "extra--machine--010--2x1",
+        "symbolKey": "extra--010--machine--2x1",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -29506,12 +29506,12 @@
         "obstacleId": 2,
         "type": "obstacle"
       },
-      "extra--desk--008--0.4x1.33 0": {
+      "extra--008--desk--0.4x1.33 0": {
         "x": 1929,
         "y": 908,
         "width": 204,
         "height": 64,
-        "symbolKey": "extra--desk--008--0.4x1.33",
+        "symbolKey": "extra--008--desk--0.4x1.33",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -29551,12 +29551,12 @@
         "obstacleId": 1,
         "type": "obstacle"
       },
-      "extra--desk--006--0.4x1 0": {
+      "extra--006--desk--0.4x1 0": {
         "x": 659,
         "y": 160,
         "width": 154,
         "height": 64,
-        "symbolKey": "extra--desk--006--0.4x1",
+        "symbolKey": "extra--006--desk--0.4x1",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -29569,12 +29569,12 @@
         "obstacleId": 0,
         "type": "surface"
       },
-      "extra--desk--004--0.5x1 0": {
+      "extra--004--desk--0.5x1 0": {
         "x": 1548,
         "y": 1843,
         "width": 76,
         "height": 152,
-        "symbolKey": "extra--desk--004--0.5x1",
+        "symbolKey": "extra--004--desk--0.5x1",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -29668,12 +29668,12 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "extra--desk--007--0.4x0.66 0": {
+      "extra--007--desk--0.4x0.66 0": {
         "x": 1842,
         "y": 2051,
         "width": 104,
         "height": 64,
-        "symbolKey": "extra--desk--007--0.4x0.66",
+        "symbolKey": "extra--007--desk--0.4x0.66",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -29749,12 +29749,12 @@
         "obstacleId": 0,
         "type": "chair"
       },
-      "extra--fresher--002--0.5x0.5 0": {
+      "extra--002--fresher--0.5x0.5 0": {
         "x": 1567,
         "y": 1997,
         "width": 57,
         "height": 79,
-        "symbolKey": "extra--fresher--002--0.5x0.5",
+        "symbolKey": "extra--002--fresher--0.5x0.5",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -29875,12 +29875,12 @@
         "obstacleId": 4,
         "type": "obstacle"
       },
-      "extra--fresher--001--0.5x0.5 0": {
+      "extra--001--fresher--0.5x0.5 0": {
         "x": 82,
         "y": 2122,
         "width": 69,
         "height": 59,
-        "symbolKey": "extra--fresher--001--0.5x0.5",
+        "symbolKey": "extra--001--fresher--0.5x0.5",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -29947,12 +29947,12 @@
         "obstacleId": 5,
         "type": "surface"
       },
-      "extra--chair--003--0.25x0.25 0": {
+      "extra--003--chair--0.25x0.25 0": {
         "x": 1379,
         "y": 472,
         "width": 49,
         "height": 52,
-        "symbolKey": "extra--chair--003--0.25x0.25",
+        "symbolKey": "extra--003--chair--0.25x0.25",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -29974,12 +29974,12 @@
         "obstacleId": 3,
         "type": "obstacle"
       },
-      "extra--chair--005-0.25x0.25 0": {
+      "extra--005--chair-0.25x0.25 0": {
         "x": 1898,
         "y": 1696,
         "width": 48,
         "height": 47,
-        "symbolKey": "extra--chair--005-0.25x0.25",
+        "symbolKey": "extra--005--chair-0.25x0.25",
         "obstacleId": 0,
         "type": "chair"
       },

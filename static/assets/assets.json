@@ -6,7 +6,7 @@
     "301--hull": {"outputHash": 1084187675, "pngHash": 787602800},
     "302--hull": {"outputHash": -318699656, "pngHash": -1557128953},
     "303--hull": {
-      "outputHash": -2054520873,
+      "outputHash": -794330153,
       "pngHash": -299838577,
       "obsHashes": [-1954561532, -950489146]
     },
@@ -22,7 +22,7 @@
       "obsHashes": [-672105631]
     },
     "bridge--042--8x9": {
-      "outputHash": -69996163,
+      "outputHash": 1365776485,
       "pngHash": 628461375,
       "obsHashes": [-1021291620, -1945941059, 862350345, 806906030]
     },
@@ -109,84 +109,81 @@
     "empty-room--020--2x4": {"outputHash": -1357419133, "pngHash": 485549422},
     "empty-room--039--3x4": {"outputHash": 314268617, "pngHash": 1412287547},
     "empty-room--060--4x4": {"outputHash": 1087452409, "pngHash": -1687214872},
-    "engineering--045--6x4": {
-      "outputHash": -1854523678,
-      "pngHash": -1132388510
+    "engineering--045--6x4": {"outputHash": 21392850, "pngHash": -1132388510},
+    "engineering--047--4x7": {"outputHash": -388809063, "pngHash": 541808283},
+    "extra--001--fresher--0.5x0.5": {
+      "outputHash": 1432827259,
+      "pngHash": 1247120224,
+      "obsHashes": [405420614]
     },
-    "engineering--047--4x7": {"outputHash": 1700674965, "pngHash": 541808283},
+    "extra--002--fresher--0.5x0.5": {
+      "outputHash": 569706353,
+      "pngHash": 482008010,
+      "obsHashes": [-997644599]
+    },
+    "extra--003--chair--0.25x0.25": {
+      "outputHash": -1726431346,
+      "pngHash": -1668511435,
+      "obsHashes": [1637941006]
+    },
+    "extra--004--desk--0.5x1": {
+      "outputHash": 1009125329,
+      "pngHash": -1144971495,
+      "obsHashes": [-1174533788]
+    },
+    "extra--005--chair-0.25x0.25": {
+      "outputHash": 872877420,
+      "pngHash": -372042423,
+      "obsHashes": [1560101543]
+    },
+    "extra--006--desk--0.4x1": {
+      "outputHash": -1543599813,
+      "pngHash": -244410489,
+      "obsHashes": [1449980965]
+    },
+    "extra--007--desk--0.4x0.66": {
+      "outputHash": 787450184,
+      "pngHash": -25585608,
+      "obsHashes": [-1870881990]
+    },
+    "extra--008--desk--0.4x1.33": {
+      "outputHash": 942303223,
+      "pngHash": 702037169,
+      "obsHashes": [1391108635]
+    },
+    "extra--009--table--4x4": {
+      "outputHash": -133880831,
+      "pngHash": 1827472801,
+      "obsHashes": [1478692350]
+    },
+    "extra--010--machine--2x1": {
+      "outputHash": -549206248,
+      "pngHash": -1673441387,
+      "obsHashes": [147108748]
+    },
+    "extra--011--machine--1x3": {
+      "outputHash": 462428465,
+      "pngHash": 1878326814,
+      "obsHashes": [-1026207305]
+    },
+    "extra--012--battery--3x2": {
+      "outputHash": -230472424,
+      "pngHash": 639710287,
+      "obsHashes": [1068283760]
+    },
     "extra--013--privacy-screen--1.5x0.2": {
       "outputHash": -792086717,
       "pngHash": -1193937783,
       "obsHashes": [933615188]
-    },
-    "extra--battery--012--3x2": {
-      "outputHash": -1105419224,
-      "pngHash": 639710287,
-      "obsHashes": [1937676536]
-    },
-    "extra--chair--003--0.25x0.25": {
-      "outputHash": 128464398,
-      "pngHash": -1668511435,
-      "obsHashes": [1494042986]
-    },
-    "extra--chair--005-0.25x0.25": {
-      "outputHash": 1117104492,
-      "pngHash": -372042423,
-      "obsHashes": [-1527812345]
-    },
-    "extra--desk--004--0.5x1": {
-      "outputHash": 123539189,
-      "pngHash": -1144971495,
-      "obsHashes": [1606850322]
-    },
-    "extra--desk--006--0.4x1": {
-      "outputHash": 324236951,
-      "pngHash": -244410489,
-      "obsHashes": [-21533869]
-    },
-    "extra--desk--007--0.4x0.66": {
-      "outputHash": -879861752,
-      "pngHash": -25585608,
-      "obsHashes": [-1474199412]
-    },
-    "extra--desk--008--0.4x1.33": {
-      "outputHash": -603491529,
-      "pngHash": 702037169,
-      "obsHashes": [1351703213]
-    },
-    "extra--fresher--001--0.5x0.5": {
-      "outputHash": -406237189,
-      "pngHash": 1247120224,
-      "obsHashes": [1600332722]
-    },
-    "extra--fresher--002--0.5x0.5": {
-      "outputHash": -6033871,
-      "pngHash": 482008010,
-      "obsHashes": [-2110482665]
-    },
-    "extra--machine--010--2x1": {
-      "outputHash": 473026840,
-      "pngHash": -1673441387,
-      "obsHashes": [-1287830756]
-    },
-    "extra--machine--011--1x3": {
-      "outputHash": 1362123889,
-      "pngHash": 1878326814,
-      "obsHashes": [894118185]
-    },
-    "extra--table--009--4x4": {
-      "outputHash": 859935085,
-      "pngHash": 1827472801,
-      "obsHashes": [1498515636]
     },
     "fresher--002--0.4x0.6": {
       "outputHash": -1531468655,
       "pngHash": -1792259774,
       "obsHashes": [1616861922]
     },
-    "fresher--020--2x2": {"outputHash": 108430827, "pngHash": 1107295627},
-    "fresher--025--3x2": {"outputHash": -206953020, "pngHash": -1324814803},
-    "fresher--036--4x2": {"outputHash": -1257646302, "pngHash": 633687707},
+    "fresher--020--2x2": {"outputHash": 1286748459, "pngHash": 1107295627},
+    "fresher--025--3x2": {"outputHash": 1465272992, "pngHash": -1324814803},
+    "fresher--036--4x2": {"outputHash": -1158095618, "pngHash": 633687707},
     "fuel--010--4x2": {
       "outputHash": -1361886080,
       "pngHash": 858873613,
@@ -194,13 +191,13 @@
     },
     "iris-valves--005--1x1": {"outputHash": -1502830503, "pngHash": 1810420148},
     "lab--012--4x3": {
-      "outputHash": 813802924,
+      "outputHash": -887317076,
       "pngHash": -261688393,
       "obsHashes": [715070008]
     },
-    "lab--018--4x4": {"outputHash": -1313251352, "pngHash": -113261385},
+    "lab--018--4x4": {"outputHash": -1324000044, "pngHash": -113261385},
     "lab--023--4x4": {
-      "outputHash": -1616437691,
+      "outputHash": 122458693,
       "pngHash": -1594118441,
       "obsHashes": [785496447]
     },
@@ -255,7 +252,7 @@
       "pngHash": -763382708,
       "obsHashes": [1330549602]
     },
-    "medical--007--3x2": {"outputHash": -26044782, "pngHash": -74184864},
+    "medical--007--3x2": {"outputHash": -1524356726, "pngHash": -74184864},
     "medical--008--3x2": {
       "outputHash": 2103925857,
       "pngHash": -1263266565,
@@ -315,7 +312,7 @@
         1020805511
       ]
     },
-    "office--074--4x4": {"outputHash": -781481906, "pngHash": 194408083},
+    "office--074--4x4": {"outputHash": -1796410054, "pngHash": 194408083},
     "office--089--4x4": {
       "outputHash": 50147874,
       "pngHash": -1241808431,
@@ -329,23 +326,23 @@
     },
     "stateroom--012--2x2": {"outputHash": 555484505, "pngHash": 285590873},
     "stateroom--014--2x2": {"outputHash": -570553752, "pngHash": 810806279},
-    "stateroom--018--2x3": {"outputHash": 1345545395, "pngHash": -932858017},
-    "stateroom--019--2x3": {"outputHash": 443413681, "pngHash": 464993285},
-    "stateroom--020--2x3": {"outputHash": 190186949, "pngHash": 987326316},
-    "stateroom--035--2x3": {"outputHash": 2078448553, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": -1776975145, "pngHash": 1301313076},
+    "stateroom--018--2x3": {"outputHash": -1759605333, "pngHash": -932858017},
+    "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
+    "stateroom--020--2x3": {"outputHash": 1890909885, "pngHash": 987326316},
+    "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
+    "stateroom--036--2x4": {"outputHash": -1834598581, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
-      "outputHash": -1121441652,
+      "outputHash": 1588076684,
       "pngHash": 1027833859,
       "obsHashes": [1703698388]
     },
     "table--009--0.8x0.8": {
-      "outputHash": 1948383759,
+      "outputHash": -1758413185,
       "pngHash": 1533034663,
       "obsHashes": [-1122320845]
     },
     "table--012--0.8x0.8": {
-      "outputHash": 549030934,
+      "outputHash": -1290564586,
       "pngHash": 293366403,
       "obsHashes": [1699031115]
     },
@@ -417,12 +414,12 @@
         "obstacleId": 0,
         "type": "table"
       },
-      "extra--table--009--4x4 0": {
+      "extra--009--table--4x4 0": {
         "x": 408,
         "y": 816,
         "width": 600,
         "height": 600,
-        "symbolKey": "extra--table--009--4x4",
+        "symbolKey": "extra--009--table--4x4",
         "obstacleId": 0,
         "type": "table"
       },
@@ -516,21 +513,21 @@
         "obstacleId": 6,
         "type": "surface"
       },
-      "extra--machine--011--1x3 0": {
+      "extra--011--machine--1x3 0": {
         "x": 1312,
         "y": 776,
         "width": 125,
         "height": 395,
-        "symbolKey": "extra--machine--011--1x3",
+        "symbolKey": "extra--011--machine--1x3",
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "extra--battery--012--3x2 0": {
+      "extra--012--battery--3x2 0": {
         "x": 1312,
         "y": 1173,
         "width": 392,
         "height": 211,
-        "symbolKey": "extra--battery--012--3x2",
+        "symbolKey": "extra--012--battery--3x2",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -660,12 +657,12 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "extra--machine--010--2x1 0": {
+      "extra--010--machine--2x1 0": {
         "x": 2,
         "y": 2020,
         "width": 250,
         "height": 100,
-        "symbolKey": "extra--machine--010--2x1",
+        "symbolKey": "extra--010--machine--2x1",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -723,12 +720,12 @@
         "obstacleId": 2,
         "type": "obstacle"
       },
-      "extra--desk--008--0.4x1.33 0": {
+      "extra--008--desk--0.4x1.33 0": {
         "x": 1929,
         "y": 908,
         "width": 204,
         "height": 64,
-        "symbolKey": "extra--desk--008--0.4x1.33",
+        "symbolKey": "extra--008--desk--0.4x1.33",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -768,12 +765,12 @@
         "obstacleId": 1,
         "type": "obstacle"
       },
-      "extra--desk--006--0.4x1 0": {
+      "extra--006--desk--0.4x1 0": {
         "x": 659,
         "y": 160,
         "width": 154,
         "height": 64,
-        "symbolKey": "extra--desk--006--0.4x1",
+        "symbolKey": "extra--006--desk--0.4x1",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -786,12 +783,12 @@
         "obstacleId": 0,
         "type": "surface"
       },
-      "extra--desk--004--0.5x1 0": {
+      "extra--004--desk--0.5x1 0": {
         "x": 1548,
         "y": 1843,
         "width": 76,
         "height": 152,
-        "symbolKey": "extra--desk--004--0.5x1",
+        "symbolKey": "extra--004--desk--0.5x1",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -885,12 +882,12 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "extra--desk--007--0.4x0.66 0": {
+      "extra--007--desk--0.4x0.66 0": {
         "x": 1842,
         "y": 2051,
         "width": 104,
         "height": 64,
-        "symbolKey": "extra--desk--007--0.4x0.66",
+        "symbolKey": "extra--007--desk--0.4x0.66",
         "obstacleId": 0,
         "type": "surface"
       },
@@ -966,12 +963,12 @@
         "obstacleId": 0,
         "type": "chair"
       },
-      "extra--fresher--002--0.5x0.5 0": {
+      "extra--002--fresher--0.5x0.5 0": {
         "x": 1567,
         "y": 1997,
         "width": 57,
         "height": 79,
-        "symbolKey": "extra--fresher--002--0.5x0.5",
+        "symbolKey": "extra--002--fresher--0.5x0.5",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -1092,12 +1089,12 @@
         "obstacleId": 4,
         "type": "obstacle"
       },
-      "extra--fresher--001--0.5x0.5 0": {
+      "extra--001--fresher--0.5x0.5 0": {
         "x": 82,
         "y": 2122,
         "width": 69,
         "height": 59,
-        "symbolKey": "extra--fresher--001--0.5x0.5",
+        "symbolKey": "extra--001--fresher--0.5x0.5",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -1164,12 +1161,12 @@
         "obstacleId": 5,
         "type": "surface"
       },
-      "extra--chair--003--0.25x0.25 0": {
+      "extra--003--chair--0.25x0.25 0": {
         "x": 1379,
         "y": 472,
         "width": 49,
         "height": 52,
-        "symbolKey": "extra--chair--003--0.25x0.25",
+        "symbolKey": "extra--003--chair--0.25x0.25",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -1191,12 +1188,12 @@
         "obstacleId": 3,
         "type": "obstacle"
       },
-      "extra--chair--005-0.25x0.25 0": {
+      "extra--005--chair-0.25x0.25 0": {
         "x": 1898,
         "y": 1696,
         "width": 48,
         "height": 47,
-        "symbolKey": "extra--chair--005-0.25x0.25",
+        "symbolKey": "extra--005--chair-0.25x0.25",
         "obstacleId": 0,
         "type": "chair"
       },
@@ -4296,50 +4293,50 @@
           "transform": [-1, 0, 0, 1, 6, 1.5]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 26.98, 5.45]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 27.8, 5.2]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 28.65, 5.08]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 29.5, 5]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 10.25, 8.33]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 10.25, 7.33]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 10.25, 6.33]
@@ -5104,22 +5101,22 @@
           "transform": [0, 1, -1, 0, 8.62, 1.55]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.4},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.4},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, -1, 1, 0, 1.01, 8.15]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.4},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.4},
           "width": 0.375,
           "height": 0.375,
           "transform": [0.259, 0.966, -0.966, 0.259, 1.67, 9.07]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [0, 1, -1, 0, 1.95, 8.25]
@@ -5139,22 +5136,22 @@
           "transform": [1, 0, 0, 1, 9.21, 7.63]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
-          "meta": {"key": "extra--fresher--001--0.5x0.5", "y": 0.7},
+          "symbolKey": "extra--001--fresher--0.5x0.5",
+          "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.7},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, -1, 9.23, 7.5]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, -1, 10.13, 7.5]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, -1, 11.03, 7.5]
@@ -6639,8 +6636,8 @@
           "transform": [0, -1, 1, 0, 0, 6]
         },
         {
-          "symbolKey": "extra--battery--012--3x2",
-          "meta": {"key": "extra--battery--012--3x2", "y": 0.8},
+          "symbolKey": "extra--012--battery--3x2",
+          "meta": {"key": "extra--012--battery--3x2", "y": 0.8},
           "width": 4.5,
           "height": 3,
           "transform": [1, 0, 0, 1, 4.5, 0]
@@ -6736,15 +6733,15 @@
           "transform": [0, -1, 1, 0, 0, 10.5]
         },
         {
-          "symbolKey": "extra--machine--010--2x1",
-          "meta": {"key": "extra--machine--010--2x1", "y": 1.2},
+          "symbolKey": "extra--010--machine--2x1",
+          "meta": {"key": "extra--010--machine--2x1", "y": 1.2},
           "width": 3,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 3, 0]
         },
         {
-          "symbolKey": "extra--machine--011--1x3",
-          "meta": {"key": "extra--machine--011--1x3", "y": 1.2},
+          "symbolKey": "extra--011--machine--1x3",
+          "meta": {"key": "extra--011--machine--1x3", "y": 1.2},
           "width": 1.5,
           "height": 4.5,
           "transform": [1, 0, 0, 1, 0, 1.5]
@@ -6753,49 +6750,8 @@
       "removableDoors": [],
       "addableWalls": []
     },
-    "extra--013--privacy-screen--1.5x0.2": {
-      "key": "extra--013--privacy-screen--1.5x0.2",
-      "isHull": false,
-      "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[2.25, 0], [2.25, 0.3], [0, 0.3], [0, 0]]],
-          "meta": {
-            "obstacle": true,
-            "privacy-screen": true,
-            "y": 1.5,
-            "symId": 89,
-            "symKey": "extra--013--privacy-screen--1.5x0.2",
-            "obsId": 0
-          }
-        }
-      ],
-      "walls": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[2.25, 0.3], [2.25, 0.35], [0, 0.35], [0, 0.3]]],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[2.25, -0.05], [2.25, 0], [0, 0], [0, -0.05]]],
-          "meta": {"wall": true}
-        }
-      ],
-      "doors": [],
-      "windows": [],
-      "decor": [],
-      "unsorted": [],
-      "width": 2.25,
-      "height": 0.3,
-      "pngRect": {"x": 0, "y": 0.015, "width": 2.25, "height": 0.27},
-      "symbols": [],
-      "removableDoors": [],
-      "addableWalls": []
-    },
-    "extra--battery--012--3x2": {
-      "key": "extra--battery--012--3x2",
+    "extra--001--fresher--0.5x0.5": {
+      "key": "extra--001--fresher--0.5x0.5",
       "isHull": false,
       "hullWalls": [],
       "obstacles": [
@@ -6803,39 +6759,20 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [0.5016, 0.4631],
-              [1.0287, 0.4631],
-              [1.255, 0.853],
-              [1.781, 0.851],
-              [2.0005, 0.4516],
-              [2.4525, 0.4542],
-              [2.7203, 0.8456],
-              [3.2516, 0.8456],
-              [3.479, 0.4494],
-              [3.9377, 0.4473],
-              [4.1936, 0.8656],
-              [3.9581, 1.2929],
-              [4.2094, 1.7166],
-              [3.9595, 2.123],
-              [3.4621, 2.1354],
-              [3.2343, 2.5479],
-              [2.7032, 2.5412],
-              [2.4765, 2.1439],
-              [2.0027, 2.1425],
-              [1.7834, 2.5485],
-              [1.2623, 2.5527],
-              [1.0219, 2.1435],
-              [0.5351, 2.1354],
-              [0.2906, 1.716],
-              [0.5141, 1.2857],
-              [0.3023, 0.8455]
+              [0.0325, 0],
+              [0.7175, 0],
+              [0.7047, 0.3506],
+              [0.6461, 0.4871],
+              [0.545, 0.5536],
+              [0.3742, 0.5903],
+              [0.1595, 0.5408],
+              [0.0325, 0.3704]
             ]
           ],
           "meta": {
             "obstacle": true,
-            "battery": true,
-            "symId": 88,
-            "symKey": "extra--battery--012--3x2",
+            "symId": 77,
+            "symKey": "extra--001--fresher--0.5x0.5",
             "obsId": 0
           }
         }
@@ -6843,17 +6780,79 @@
       "walls": [],
       "doors": [],
       "windows": [],
-      "decor": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.4148, 0.65], [0.4148, 0.7], [0.3641, 0.7], [0.3641, 0.65]]
+          ],
+          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+        }
+      ],
       "unsorted": [],
-      "width": 4.5,
-      "height": 3,
-      "pngRect": {"x": 0.25, "y": 0.395, "width": 4, "height": 2.21},
+      "width": 0.75,
+      "height": 0.75,
+      "pngRect": {"x": 0.0325, "y": 0, "width": 0.685, "height": 0.585},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
     },
-    "extra--chair--003--0.25x0.25": {
-      "key": "extra--chair--003--0.25x0.25",
+    "extra--002--fresher--0.5x0.5": {
+      "key": "extra--002--fresher--0.5x0.5",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.096, -0.015],
+              [0.6551, -0.015],
+              [0.66, 0.2364],
+              [0.61, 0.5059],
+              [0.495, 0.7345],
+              [0.355, 0.7733],
+              [0.235, 0.7195],
+              [0.135, 0.5059],
+              [0.0879, 0.2412]
+            ]
+          ],
+          "meta": {
+            "obstacle": true,
+            "symId": 78,
+            "symKey": "extra--002--fresher--0.5x0.5",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.4004, 0.45], [0.4004, 0.5], [0.3496, 0.5], [0.3496, 0.45]]
+          ],
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "toilet": true,
+            "orient": 90
+          }
+        }
+      ],
+      "unsorted": [],
+      "width": 0.75,
+      "height": 0.75,
+      "pngRect": {"x": 0.09, "y": -0.015, "width": 0.57, "height": 0.78},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--003--chair--0.25x0.25": {
+      "key": "extra--003--chair--0.25x0.25",
       "isHull": false,
       "hullWalls": [],
       "obstacles": [
@@ -6878,7 +6877,7 @@
           "meta": {
             "obstacle": true,
             "symId": 79,
-            "symKey": "extra--chair--003--0.25x0.25",
+            "symKey": "extra--003--chair--0.25x0.25",
             "obsId": 0
           }
         }
@@ -6914,8 +6913,37 @@
       "removableDoors": [],
       "addableWalls": []
     },
-    "extra--chair--005-0.25x0.25": {
-      "key": "extra--chair--005-0.25x0.25",
+    "extra--004--desk--0.5x1": {
+      "key": "extra--004--desk--0.5x1",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[0.7551, 0], [0.7551, 1.5175], [0, 1.5175], [0, 0]]],
+          "meta": {
+            "obstacle": true,
+            "surface": true,
+            "symId": 80,
+            "symKey": "extra--004--desk--0.5x1",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 0.75,
+      "height": 1.5,
+      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 0.785, "height": 1.535},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--005--chair-0.25x0.25": {
+      "key": "extra--005--chair-0.25x0.25",
       "isHull": false,
       "hullWalls": [],
       "obstacles": [
@@ -6937,7 +6965,7 @@
             "obstacle": true,
             "chair": true,
             "symId": 81,
-            "symKey": "extra--chair--005-0.25x0.25",
+            "symKey": "extra--005--chair-0.25x0.25",
             "obsId": 0
           }
         }
@@ -6973,37 +7001,8 @@
       "removableDoors": [],
       "addableWalls": []
     },
-    "extra--desk--004--0.5x1": {
-      "key": "extra--desk--004--0.5x1",
-      "isHull": false,
-      "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[0.7551, 0], [0.7551, 1.5175], [0, 1.5175], [0, 0]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 80,
-            "symKey": "extra--desk--004--0.5x1",
-            "obsId": 0
-          }
-        }
-      ],
-      "walls": [],
-      "doors": [],
-      "windows": [],
-      "decor": [],
-      "unsorted": [],
-      "width": 0.75,
-      "height": 1.5,
-      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 0.785, "height": 1.535},
-      "symbols": [],
-      "removableDoors": [],
-      "addableWalls": []
-    },
-    "extra--desk--006--0.4x1": {
-      "key": "extra--desk--006--0.4x1",
+    "extra--006--desk--0.4x1": {
+      "key": "extra--006--desk--0.4x1",
       "isHull": false,
       "hullWalls": [],
       "obstacles": [
@@ -7016,7 +7015,7 @@
             "obstacle": true,
             "surface": true,
             "symId": 82,
-            "symKey": "extra--desk--006--0.4x1",
+            "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
         }
@@ -7033,8 +7032,8 @@
       "removableDoors": [],
       "addableWalls": []
     },
-    "extra--desk--007--0.4x0.66": {
-      "key": "extra--desk--007--0.4x0.66",
+    "extra--007--desk--0.4x0.66": {
+      "key": "extra--007--desk--0.4x0.66",
       "isHull": false,
       "hullWalls": [],
       "obstacles": [
@@ -7047,7 +7046,7 @@
             "obstacle": true,
             "surface": true,
             "symId": 83,
-            "symKey": "extra--desk--007--0.4x0.66",
+            "symKey": "extra--007--desk--0.4x0.66",
             "obsId": 0
           }
         }
@@ -7064,8 +7063,8 @@
       "removableDoors": [],
       "addableWalls": []
     },
-    "extra--desk--008--0.4x1.33": {
-      "key": "extra--desk--008--0.4x1.33",
+    "extra--008--desk--0.4x1.33": {
+      "key": "extra--008--desk--0.4x1.33",
       "isHull": false,
       "hullWalls": [],
       "obstacles": [
@@ -7083,7 +7082,7 @@
             "obstacle": true,
             "surface": true,
             "symId": 84,
-            "symKey": "extra--desk--008--0.4x1.33",
+            "symKey": "extra--008--desk--0.4x1.33",
             "obsId": 0
           }
         }
@@ -7100,184 +7099,8 @@
       "removableDoors": [],
       "addableWalls": []
     },
-    "extra--fresher--001--0.5x0.5": {
-      "key": "extra--fresher--001--0.5x0.5",
-      "isHull": false,
-      "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.0325, 0],
-              [0.7175, 0],
-              [0.7047, 0.3506],
-              [0.6461, 0.4871],
-              [0.545, 0.5536],
-              [0.3742, 0.5903],
-              [0.1595, 0.5408],
-              [0.0325, 0.3704]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 77,
-            "symKey": "extra--fresher--001--0.5x0.5",
-            "obsId": 0
-          }
-        }
-      ],
-      "walls": [],
-      "doors": [],
-      "windows": [],
-      "decor": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.4148, 0.65], [0.4148, 0.7], [0.3641, 0.7], [0.3641, 0.65]]
-          ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
-        }
-      ],
-      "unsorted": [],
-      "width": 0.75,
-      "height": 0.75,
-      "pngRect": {"x": 0.0325, "y": 0, "width": 0.685, "height": 0.585},
-      "symbols": [],
-      "removableDoors": [],
-      "addableWalls": []
-    },
-    "extra--fresher--002--0.5x0.5": {
-      "key": "extra--fresher--002--0.5x0.5",
-      "isHull": false,
-      "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.096, -0.015],
-              [0.6551, -0.015],
-              [0.66, 0.2364],
-              [0.61, 0.5059],
-              [0.495, 0.7345],
-              [0.355, 0.7733],
-              [0.235, 0.7195],
-              [0.135, 0.5059],
-              [0.0879, 0.2412]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 78,
-            "symKey": "extra--fresher--002--0.5x0.5",
-            "obsId": 0
-          }
-        }
-      ],
-      "walls": [],
-      "doors": [],
-      "windows": [],
-      "decor": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.4004, 0.45], [0.4004, 0.5], [0.3496, 0.5], [0.3496, 0.45]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 90
-          }
-        }
-      ],
-      "unsorted": [],
-      "width": 0.75,
-      "height": 0.75,
-      "pngRect": {"x": 0.09, "y": -0.015, "width": 0.57, "height": 0.78},
-      "symbols": [],
-      "removableDoors": [],
-      "addableWalls": []
-    },
-    "extra--machine--010--2x1": {
-      "key": "extra--machine--010--2x1",
-      "isHull": false,
-      "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[2.75, 0.25], [2.75, 1.25], [0.25, 1.25], [0.25, 0.25]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "machine": true,
-            "symId": 86,
-            "symKey": "extra--machine--010--2x1",
-            "obsId": 0
-          }
-        }
-      ],
-      "walls": [],
-      "doors": [],
-      "windows": [],
-      "decor": [],
-      "unsorted": [],
-      "width": 3,
-      "height": 1.5,
-      "pngRect": {"x": 0.25, "y": 0.25, "width": 2.5, "height": 1},
-      "symbols": [],
-      "removableDoors": [],
-      "addableWalls": []
-    },
-    "extra--machine--011--1x3": {
-      "key": "extra--machine--011--1x3",
-      "isHull": false,
-      "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [1.375, 2.975],
-              [1.259, 2.975],
-              [1.2355, 3.575],
-              [1.119, 3.575],
-              [1.1162, 4.225],
-              [0.125, 4.225],
-              [0.125, 0.275],
-              [1.1162, 0.275],
-              [1.119, 0.925],
-              [1.2355, 0.925],
-              [1.259, 1.525],
-              [1.375, 1.525]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "machine": true,
-            "symId": 87,
-            "symKey": "extra--machine--011--1x3",
-            "obsId": 0
-          }
-        }
-      ],
-      "walls": [],
-      "doors": [],
-      "windows": [],
-      "decor": [],
-      "unsorted": [],
-      "width": 1.5,
-      "height": 4.5,
-      "pngRect": {"x": 0.1, "y": 0.25, "width": 1.3, "height": 4},
-      "symbols": [],
-      "removableDoors": [],
-      "addableWalls": []
-    },
-    "extra--table--009--4x4": {
-      "key": "extra--table--009--4x4",
+    "extra--009--table--4x4": {
+      "key": "extra--009--table--4x4",
       "isHull": false,
       "hullWalls": [],
       "obstacles": [
@@ -7328,7 +7151,7 @@
             "table": true,
             "surface": true,
             "symId": 85,
-            "symKey": "extra--table--009--4x4",
+            "symKey": "extra--009--table--4x4",
             "obsId": 0
           }
         }
@@ -7341,6 +7164,180 @@
       "width": 6,
       "height": 6,
       "pngRect": {"x": 0, "y": 0, "width": 6, "height": 6},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--010--machine--2x1": {
+      "key": "extra--010--machine--2x1",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[2.75, 0.25], [2.75, 1.25], [0.25, 1.25], [0.25, 0.25]]
+          ],
+          "meta": {
+            "obstacle": true,
+            "machine": true,
+            "symId": 86,
+            "symKey": "extra--010--machine--2x1",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 3,
+      "height": 1.5,
+      "pngRect": {"x": 0.25, "y": 0.25, "width": 2.5, "height": 1},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--011--machine--1x3": {
+      "key": "extra--011--machine--1x3",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [1.375, 2.975],
+              [1.259, 2.975],
+              [1.2355, 3.575],
+              [1.119, 3.575],
+              [1.1162, 4.225],
+              [0.125, 4.225],
+              [0.125, 0.275],
+              [1.1162, 0.275],
+              [1.119, 0.925],
+              [1.2355, 0.925],
+              [1.259, 1.525],
+              [1.375, 1.525]
+            ]
+          ],
+          "meta": {
+            "obstacle": true,
+            "machine": true,
+            "symId": 87,
+            "symKey": "extra--011--machine--1x3",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 4.5,
+      "pngRect": {"x": 0.1, "y": 0.25, "width": 1.3, "height": 4},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--012--battery--3x2": {
+      "key": "extra--012--battery--3x2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.5016, 0.4631],
+              [1.0287, 0.4631],
+              [1.255, 0.853],
+              [1.781, 0.851],
+              [2.0005, 0.4516],
+              [2.4525, 0.4542],
+              [2.7203, 0.8456],
+              [3.2516, 0.8456],
+              [3.479, 0.4494],
+              [3.9377, 0.4473],
+              [4.1936, 0.8656],
+              [3.9581, 1.2929],
+              [4.2094, 1.7166],
+              [3.9595, 2.123],
+              [3.4621, 2.1354],
+              [3.2343, 2.5479],
+              [2.7032, 2.5412],
+              [2.4765, 2.1439],
+              [2.0027, 2.1425],
+              [1.7834, 2.5485],
+              [1.2623, 2.5527],
+              [1.0219, 2.1435],
+              [0.5351, 2.1354],
+              [0.2906, 1.716],
+              [0.5141, 1.2857],
+              [0.3023, 0.8455]
+            ]
+          ],
+          "meta": {
+            "obstacle": true,
+            "battery": true,
+            "symId": 88,
+            "symKey": "extra--012--battery--3x2",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 4.5,
+      "height": 3,
+      "pngRect": {"x": 0.25, "y": 0.395, "width": 4, "height": 2.21},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "extra--013--privacy-screen--1.5x0.2": {
+      "key": "extra--013--privacy-screen--1.5x0.2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[2.25, 0], [2.25, 0.3], [0, 0.3], [0, 0]]],
+          "meta": {
+            "obstacle": true,
+            "privacy-screen": true,
+            "y": 1.5,
+            "symId": 89,
+            "symKey": "extra--013--privacy-screen--1.5x0.2",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[2.25, 0.3], [2.25, 0.35], [0, 0.35], [0, 0.3]]],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[2.25, -0.05], [2.25, 0], [0, 0], [0, -0.05]]],
+          "meta": {"wall": true}
+        }
+      ],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 2.25,
+      "height": 0.3,
+      "pngRect": {"x": 0, "y": 0.015, "width": 2.25, "height": 0.27},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
@@ -7461,8 +7458,8 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
       "symbols": [
         {
-          "symbolKey": "extra--desk--007--0.4x0.66",
-          "meta": {"key": "extra--desk--007--0.4x0.66", "y": 0.6},
+          "symbolKey": "extra--007--desk--0.4x0.66",
+          "meta": {"key": "extra--007--desk--0.4x0.66", "y": 0.6},
           "width": 1,
           "height": 0.6,
           "transform": [1, 0, 0, 1, 2, 0]
@@ -7475,8 +7472,8 @@
           "transform": [1, 0, 0, 1, 2.13, 0]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 1.13, 0]
@@ -7560,22 +7557,22 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 3.1},
       "symbols": [
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 1.62, 0]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 2.62, 0]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 3.62, 0]
@@ -7595,8 +7592,8 @@
           "transform": [1, 0, 0, 1, 0, 0]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
-          "meta": {"key": "extra--desk--006--0.4x1"},
+          "symbolKey": "extra--006--desk--0.4x1",
+          "meta": {"key": "extra--006--desk--0.4x1"},
           "width": 1.5,
           "height": 0.6,
           "transform": [1, 0, 0, 1, 0, 0]
@@ -7778,36 +7775,36 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 3.1},
       "symbols": [
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 2.13, 0]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 3.13, 0]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 4.13, 0]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.4},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 5.13, 0]
         },
         {
-          "symbolKey": "extra--desk--008--0.4x1.33",
-          "meta": {"key": "extra--desk--008--0.4x1.33", "y": 0.6},
+          "symbolKey": "extra--008--desk--0.4x1.33",
+          "meta": {"key": "extra--008--desk--0.4x1.33", "y": 0.6},
           "width": 2,
           "height": 0.6,
           "transform": [1, 0, 0, 1, 0, 0]
@@ -8032,15 +8029,15 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 4.6},
       "symbols": [
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 2.06, 3.36]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 0.76, 2.06]
@@ -8134,8 +8131,8 @@
       "pngRect": {"x": -0.05, "y": -0.1625, "width": 6.1, "height": 6.215},
       "symbols": [
         {
-          "symbolKey": "extra--table--009--4x4",
-          "meta": {"key": "extra--table--009--4x4", "y": 0.7},
+          "symbolKey": "extra--009--table--4x4",
+          "meta": {"key": "extra--009--table--4x4", "y": 0.7},
           "width": 6,
           "height": 6,
           "transform": [1, 0, 0, 1, 0, 0]
@@ -8274,22 +8271,22 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 6.1},
       "symbols": [
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 0.76, 0.87]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 0.76, 3.87]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 2.14, 4.87]
@@ -9255,15 +9252,15 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 3.1},
       "symbols": [
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [0, 1, -1, 0, 1.5, 2.25]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, -1, -1, 0, 0.92, 2.13]
@@ -11182,99 +11179,99 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 6.1},
       "symbols": [
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 5.25, 4.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 5.13, 5.08]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 3.75, 4.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 3.63, 5.08]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 2.25, 4.5]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 2.13, 5.08]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 5.25, 0]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 5.13, 0.58]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 3.75, 0]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 3.63, 0.58]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 2.25, 0]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 2.13, 0.58]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 0.75, 0]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 0.63, 0.58]
@@ -11287,15 +11284,15 @@
           "transform": [0, -1, -1, 0, 4.5, 3.75]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
-          "meta": {"key": "extra--fresher--001--0.5x0.5", "y": 0.7},
+          "symbolKey": "extra--001--fresher--0.5x0.5",
+          "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.7},
           "width": 0.75,
           "height": 0.75,
           "transform": [0, -1, 1, 0, 0, 5.63]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.5},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.5},
           "width": 0.75,
           "height": 0.75,
           "transform": [0, -1, 1, 0, 0, 4.13]
@@ -12036,15 +12033,15 @@
           "transform": [1, 0, 0, 1, 0, 3]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, -1, 0.88, 2.44]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 0, 1.5]
@@ -12109,8 +12106,8 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.165, "height": 4.6},
       "symbols": [
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, 1, 1, 0, 0.56, 0.9]
@@ -12123,8 +12120,8 @@
           "transform": [1, 0, 0, 1, 0, 3.02]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [0, 1, -1, 0, 1.5, 0.01]
@@ -12208,15 +12205,15 @@
           "transform": [0, 1, -1, 0, 1.5, 0]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, -1, 0.88, 3.95]
         },
         {
-          "symbolKey": "extra--desk--004--0.5x1",
-          "meta": {"key": "extra--desk--004--0.5x1", "y": 0.7},
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
           "width": 0.75,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 0, 3]
@@ -12350,15 +12347,15 @@
           "transform": [0, -1, 1, 0, 0, 4.13]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, -1, 0.68, 2.43]
         },
         {
-          "symbolKey": "extra--desk--006--0.4x1",
-          "meta": {"key": "extra--desk--006--0.4x1", "y": 0.7},
+          "symbolKey": "extra--006--desk--0.4x1",
+          "meta": {"key": "extra--006--desk--0.4x1", "y": 0.7},
           "width": 1.5,
           "height": 0.6,
           "transform": [0, -1, 1, 0, 0, 3]
@@ -12471,15 +12468,15 @@
           "transform": [-0.866, 0.5, -0.5, -0.866, 1.13, 5.64]
         },
         {
-          "symbolKey": "extra--fresher--001--0.5x0.5",
-          "meta": {"key": "extra--fresher--001--0.5x0.5", "y": 0.7},
+          "symbolKey": "extra--001--fresher--0.5x0.5",
+          "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.7},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 2.03, 0.01]
         },
         {
-          "symbolKey": "extra--fresher--002--0.5x0.5",
-          "meta": {"key": "extra--fresher--002--0.5x0.5", "y": 0.5},
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.5},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 1.12, -0.01]
@@ -12551,71 +12548,71 @@
       "pngRect": {"x": -0.11, "y": -0.31, "width": 1.72, "height": 3.62},
       "symbols": [
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 0.42]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 1.02]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 1.62]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 2.22]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 0.42]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 1.02]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 1.62]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 2.22]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, 1, -1, 0, 0.94, -0.25]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, -1, -1, 0, 0.94, 3.27]
@@ -12668,29 +12665,29 @@
       "pngRect": {"x": 0.1125, "y": 0.115, "width": 1.275, "height": 1.27},
       "symbols": [
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [0.707, 0.707, -0.707, 0.707, 1.14, 0.87]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-0.707, 0.707, 0.707, 0.707, 0.34, 0.87]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [-0.707, -0.707, 0.707, -0.707, 0.34, 0.6]
         },
         {
-          "symbolKey": "extra--chair--003--0.25x0.25",
-          "meta": {"key": "extra--chair--003--0.25x0.25", "y": 0.3},
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
           "transform": [0.707, -0.707, -0.707, -0.707, 1.14, 0.6]
@@ -12743,29 +12740,29 @@
       "pngRect": {"x": 0.0775, "y": 0.0775, "width": 1.345, "height": 1.345},
       "symbols": [
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
           "transform": [0.707, -0.707, -0.707, -0.707, 1.2, 0.57]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
           "transform": [0.707, 0.707, 0.707, -0.707, 0.94, 1.2]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
           "transform": [-0.707, 0.707, 0.707, 0.707, 0.3, 0.94]
         },
         {
-          "symbolKey": "extra--chair--005-0.25x0.25",
-          "meta": {"key": "extra--chair--005-0.25x0.25", "y": 0.35},
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
           "transform": [-0.707, -0.707, -0.707, 0.707, 0.57, 0.3]

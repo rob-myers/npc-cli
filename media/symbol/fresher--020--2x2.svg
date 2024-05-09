@@ -81,13 +81,13 @@
         <g>
                 <title>symbols</title>
                 <rect x="400" width="199.999985" height="119.999992" style="fill: url('#pattern-0-0'); stroke: rgb(0, 0, 255);" y="0.000008">
-                        <title>extra--desk--007--0.4x0.66 y=0.6</title>
+                        <title>extra--007--desk--0.4x0.66 y=0.6</title>
                 </rect>
                 <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 30.9244px -583.834px;" y="-658.832338" x="-44.080277" transform="matrix(1, 0.000073310599, -0.000073310599, 1, 469.08576996909, 658.837838376492)">
                         <title>counter--010--0.4x0.4 y=0.65</title>
                 </rect>
                 <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: 30.9244px -583.834px;" y="-658.832338" x="-44.080277" transform="matrix(1, 0.000073310599, -0.000073310599, 1, 269.08576996909, 658.837838376492)">
-                        <title>extra--fresher--002--0.5x0.5 y=0.4</title>
+                        <title>extra--002--fresher--0.5x0.5 y=0.4</title>
                 </rect>
         </g>
 </svg>

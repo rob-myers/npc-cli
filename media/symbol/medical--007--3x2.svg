@@ -50,10 +50,10 @@
   <g>
     <title>symbols</title>
     <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 150.005px 74.9951px;" y="-74.995056" x="75.002502" transform="matrix(0, 1, -1, 0, 0.004776000977, 450.007385253906)">
-      <title>extra--desk--004--0.5x1 y=0.7</title>
+      <title>extra--004--desk--0.5x1 y=0.7</title>
     </rect>
     <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: -72.5072px -312.829px;" y="-350.326477" x="-110.0131" transform="matrix(0, -1, -1, 0, 220.026191711425, 700.652961730957)">
-      <title>extra--chair--003--0.25x0.25 y=0.3</title>
+      <title>extra--003--chair--0.25x0.25 y=0.3</title>
     </rect>
     <rect width="380" height="200" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: 428.671px 114.885px;" y="14.89326" x="238.665588" transform="matrix(0, -1, 1, 0, 17.396629333496, 238.053016662598)">
       <title>medical-bed--005--0.6x1.2 y=0.5</title>
