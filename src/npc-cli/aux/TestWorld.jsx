@@ -38,6 +38,7 @@ export default function TestWorld(props) {
     timer: new Timer(),
     r3f: /** @type {*} */ (null),
 
+    derived: /** @type {*} */ ({}),
     events: new Subject(),
     floorImg: /** @type {*} */ ({}),
     geomorphs: /** @type {*} */ (null),
@@ -208,6 +209,9 @@ export default function TestWorld(props) {
         return null;
       }
 
+      state.derived.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
+      state.derived.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
+
       keys(state.gmClass).forEach((gmKey) => {
         texLoadAsyncFallback(
           `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${getAssetQueryParam()}`,
@@ -288,6 +292,7 @@ export default function TestWorld(props) {
  * @property {boolean} disabled
  * @property {string} mapKey
  * @property {string} hash
+ * @property {{ wallCount: number; doorCount: number; }} derived Data derived from other sources
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady

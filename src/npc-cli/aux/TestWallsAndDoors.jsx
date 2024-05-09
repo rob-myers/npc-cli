@@ -23,7 +23,7 @@ export default function TestWallsAndDoors(props) {
 
     doorByPos: {},
     doorByInstId: [],
-    movingDoors: new Map,
+    movingDoors: new Map(),
 
     buildLookups() {
       let dId = 0;
@@ -67,12 +67,6 @@ export default function TestWallsAndDoors(props) {
         [len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y],
         { yScale: wallHeight, mat4: tmpMatFour1 },
       );
-    },
-    getNumDoors() {
-      return api.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
-    },
-    getNumWalls() {
-      return api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
     },
     handleClick(e) {
       const target = /** @type {'walls' | 'doors'} */ (e.object.name);
@@ -132,7 +126,7 @@ export default function TestWallsAndDoors(props) {
         name="walls"
         key={`${api.hash} walls`}
         ref={instances => instances && (state.wallsInst = instances)}
-        args={[quadGeometryXY, undefined, state.getNumWalls()]}
+        args={[quadGeometryXY, undefined, api.derived.wallCount]}
         frustumCulled={false}
         onPointerUp={state.handleClick}
       >
@@ -143,7 +137,7 @@ export default function TestWallsAndDoors(props) {
         name="doors"
         key={`${api.hash} doors`}
         ref={instances => instances && (state.doorsInst = instances)}
-        args={[quadGeometryXY, undefined, state.getNumDoors()]}
+        args={[quadGeometryXY, undefined, api.derived.doorCount]}
         frustumCulled={false}
         onPointerUp={state.handleClick}
       >
@@ -175,8 +169,6 @@ export default function TestWallsAndDoors(props) {
  * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
  * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} getWallMat
- * @property {() => number} getNumDoors
- * @property {() => number} getNumWalls
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleClick
  * @property {() => void} onTick
  * @property {() => void} positionInstances
