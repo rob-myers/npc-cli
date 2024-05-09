@@ -191,7 +191,7 @@ class GeomorphService {
     const uncutWalls = symbol.walls;
     // Cutting pointwise avoids errors (e.g. for 301), and can propagate meta
     const cutWalls = uncutWalls.flatMap((x) =>
-      Poly.cutOut(symbol.doors, [x]).map((x) => Object.assign(x, { meta: x.meta }))
+      Poly.cutOut(symbol.doors, [x]).map((y) => Object.assign(y, { meta: x.meta }))
     );
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
@@ -249,7 +249,7 @@ class GeomorphService {
       transform,
       mat4: geomorphService.embedXZMat4(transform),
       doorSegs: layout.doors.map(({ seg }) => seg),
-      wallSegs: layout.walls.flatMap((x) => x.lineSegs),
+      wallSegs: layout.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta }))),
     };
   }
 
@@ -595,6 +595,7 @@ class GeomorphService {
    * - we can transform them
    * - we can remove doors tagged with `optional`
    * - we can remove walls tagged with `optional`
+   * - we can modify every wall's baseHeight and height
    * @param {Geomorph.FlatSymbol} sym
    * @param {Geom.Meta} meta
    * @param {Geom.SixTuple} transform
@@ -619,6 +620,10 @@ class GeomorphService {
       sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
     );
 
+    let extraWallMeta = /** @type {undefined | Geom.Meta} */ (undefined)
+    typeof meta.wallsY === 'number' && Object.assign(extraWallMeta ??= {}, { y: meta.wallsY });
+    typeof meta.wallsH === 'number' && Object.assign(extraWallMeta ??= {}, { h: meta.wallsH });
+
     return {
       key: sym.key,
       isHull: sym.isHull,
@@ -632,7 +637,7 @@ class GeomorphService {
         // aggregate transform
         ...{ transform: tmpMat2.feedFromArray(transform).preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
       })),
-      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
+      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1, extraWallMeta)),
       windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
       unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
     };

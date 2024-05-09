@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": -1776227568, "pngHash": 568633107},
+    "101--hull": {"outputHash": 1070343218, "pngHash": 568633107},
     "102--hull": {"outputHash": 1420591994, "pngHash": 184103855},
     "103--hull": {"outputHash": -1995702532, "pngHash": -1937509879},
     "301--hull": {"outputHash": 1084187675, "pngHash": 787602800},
@@ -172,9 +172,9 @@
       "obsHashes": [1068283760]
     },
     "extra--013--privacy-screen--1.5x0.2": {
-      "outputHash": -792086717,
+      "outputHash": -730546844,
       "pngHash": -1193937783,
-      "obsHashes": [933615188]
+      "obsHashes": [-533553139]
     },
     "fresher--002--0.4x0.6": {
       "outputHash": -1531468655,
@@ -325,7 +325,7 @@
       "pngHash": -1355686256
     },
     "stateroom--012--2x2": {"outputHash": 555484505, "pngHash": 285590873},
-    "stateroom--014--2x2": {"outputHash": -570553752, "pngHash": 810806279},
+    "stateroom--014--2x2": {"outputHash": -164360094, "pngHash": 810806279},
     "stateroom--018--2x3": {"outputHash": -1759605333, "pngHash": -932858017},
     "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 1890909885, "pngHash": 987326316},
@@ -1722,7 +1722,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 0.9, "wallsH": 1},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 0, 0]
@@ -7312,7 +7312,7 @@
           "meta": {
             "obstacle": true,
             "privacy-screen": true,
-            "y": 1.5,
+            "y": 1,
             "symId": 89,
             "symKey": "extra--013--privacy-screen--1.5x0.2",
             "obsId": 0
@@ -7323,12 +7323,12 @@
         {
           "type": "Polygon",
           "coordinates": [[[2.25, 0.3], [2.25, 0.35], [0, 0.35], [0, 0.3]]],
-          "meta": {"wall": true}
+          "meta": {"wall": true, "h": 1}
         },
         {
           "type": "Polygon",
           "coordinates": [[[2.25, -0.05], [2.25, 0], [0, 0], [0, -0.05]]],
-          "meta": {"wall": true}
+          "meta": {"wall": true, "h": 1}
         }
       ],
       "doors": [],
@@ -11871,7 +11871,7 @@
       "walls": [
         {
           "type": "Polygon",
-          "coordinates": [[[2.95, 2.95], [2.95, 3.05], [0, 3.05], [0, 2.95]]],
+          "coordinates": [[[3, 2.95], [3, 3.05], [0.05, 3.05], [0.05, 2.95]]],
           "meta": {"wall": true}
         },
         {

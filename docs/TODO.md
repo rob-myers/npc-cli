@@ -84,7 +84,12 @@
 - minecraft walk cycle
 
 - ✅ rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
-- 🚧 walls can have different heights e.g. for privacy-screen
+- ✅ walls can have different base-height and height e.g. for privacy-screen
+  - ✅ can `wall y={baseHeight} h={height}`
+  - ✅ can `{symbolKey} wallsY={baseHeight} wallsH={height}`
+  - ✅ only draw ceiling if wall touches ceiling
+- can color obstacle instances
+  - need to modify custom shader
 - fix webp generation
   - ensure up-to-date before push, unless --no-verify
 - change mapKey should request-nav-mesh but shouldn't restart worker

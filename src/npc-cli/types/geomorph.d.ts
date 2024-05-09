@@ -197,7 +197,7 @@ declare namespace Geomorph {
     transform: Geom.SixTuple;
     mat4: import("three").Matrix4;
     // ...
-    wallSegs: [Geom.Vect, Geom.Vect][];
+    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
     doorSegs: [Geom.Vect, Geom.Vect][];
   }
 

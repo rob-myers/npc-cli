@@ -211,6 +211,7 @@ export default function TestWorld(props) {
 
       state.derived.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
       state.derived.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
+      state.derived.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
 
       keys(state.gmClass).forEach((gmKey) => {
         texLoadAsyncFallback(
@@ -292,7 +293,8 @@ export default function TestWorld(props) {
  * @property {boolean} disabled
  * @property {string} mapKey
  * @property {string} hash
- * @property {{ wallCount: number; doorCount: number; }} derived Data derived from other sources
+ * @property {{ wallCount: number; doorCount: number; obstaclesCount: number; }} derived
+ * Data derived from other sources
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady

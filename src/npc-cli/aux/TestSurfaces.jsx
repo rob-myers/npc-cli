@@ -80,7 +80,10 @@ export default function TestSurfaces(props) {
       ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
       // wall tops (stroke gaps e.g. bridge desk)
       // drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
-      drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', 'rgba(50, 50, 50, 1)', 0.06])
+      const wallsTouchingCeil = layout.walls.filter(x =>
+        x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
+      );
+      drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(50, 50, 50, 1)', 'rgba(50, 50, 50, 1)', 0.06])
       // door tops
       // drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(50, 50, 50, 1)'])
       ceilCt.strokeStyle = 'black';
@@ -92,13 +95,6 @@ export default function TestSurfaces(props) {
       const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
       floor.needsUpdate = true;
       ceil.needsUpdate = true;
-    },
-    getNumObs() {
-      return api.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
-    },
-    getObsMat() {
-      // 🚧 transform unit rect to world rect
-      return new THREE.Matrix4();
     },
     onClickObstacle(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
@@ -179,7 +175,7 @@ export default function TestSurfaces(props) {
       name="static-obstacles"
       key={`${api.hash} static-obstacles`}
       ref={instances => instances && (state.obsInst = instances)}
-      args={[quadGeometryXZ, undefined, state.getNumObs()]}
+      args={[quadGeometryXZ, undefined, api.derived.obstaclesCount]}
       frustumCulled={false}
       onPointerUp={state.onClickObstacle}
       position={[0, 0.001, 0]} // 🚧 temp
@@ -207,8 +203,6 @@ export default function TestSurfaces(props) {
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
- * @property {(o: Geomorph.LayoutObstacle) => THREE.Matrix4} getObsMat
- * @property {() => number} getNumObs
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onClickObstacle
  * @property {() => void} positionObstacles
  */

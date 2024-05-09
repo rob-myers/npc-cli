@@ -58,14 +58,14 @@ export default function TestWallsAndDoors(props) {
         { yScale: wallHeight, mat4: tmpMatFour1 },
       );
     },
-    getWallMat(u, v, transform) {
+    getWallMat([u, v], transform, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
       [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
       const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
       const len = u.distanceTo(v);
       return geomorphService.embedXZMat4(
         [len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y],
-        { yScale: wallHeight, mat4: tmpMatFour1 },
+        { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
       );
     },
     handleClick(e) {
@@ -100,7 +100,12 @@ export default function TestWallsAndDoors(props) {
 
       let wId = 0;
       api.gms.forEach(({ wallSegs, transform }) =>
-        wallSegs.forEach(([u, v]) => ws.setMatrixAt(wId++, state.getWallMat(u, v, transform)))
+        wallSegs.forEach(({ seg, meta }) => ws.setMatrixAt(wId++, state.getWallMat(
+          seg,
+          transform,
+          typeof meta.h === 'number' ? meta.h : undefined,
+          typeof meta.y === 'number' ? meta.y : undefined,
+        ))),
       );
       ws.instanceMatrix.needsUpdate = true;
       ws.computeBoundingSphere();
@@ -168,7 +173,12 @@ export default function TestWallsAndDoors(props) {
  *
  * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
- * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} getWallMat
+ * @property {(
+ *  seg: [Geom.Vect, Geom.Vect],
+ *  transform: Geom.SixTuple,
+ *  height?: number,
+ *  baseHeight?: number,
+ * ) => THREE.Matrix4} getWallMat
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleClick
  * @property {() => void} onTick
  * @property {() => void} positionInstances
