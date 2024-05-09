@@ -20,6 +20,7 @@
 - `Shift + F12` to switch between Timeline / ActionEditor
 - `Shift + Left` return to frame 1
 - `Shift + A` for "Add something menu"
+- `5` for orthographic mode (when Emulate numpad)
 
 - Add texture
   - Choose `Shading` workspace.
@@ -45,6 +46,12 @@
   - Ensure "Proportional editing" is turned off via `o`
 - Edge loop cut
   - `Cmd + R`
+- X-Ray for Armature might be:
+  - Armature > Properties > Data > Viewport Display > In Front
+- Extend Bone
+  - Select tip and E to extrude
+- Duplicate Bone
+  - Select tip and Shift-D
 
 ### unrar on Mac
 

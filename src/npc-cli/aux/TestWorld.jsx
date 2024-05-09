@@ -243,7 +243,6 @@ export default function TestWorld(props) {
       const worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
       worker.addEventListener("message", state.handleMessageFromWorker);
       worker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
-      // state.ensureSheetTex();
       return () => void worker.terminate();
     }
   }, [state.threeReady, state.hash]);
