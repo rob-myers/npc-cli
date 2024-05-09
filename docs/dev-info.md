@@ -9,6 +9,7 @@
   - BUT then lose Verts/Edges/Faces switch in Edit Mode
   - So maybe Emulate numpad off, and use Tilde overlay to switch view instead
 
+- Hold Ctrl-Tab to show available modes e.g. Object/Edit/Pose/Weight Paint Mode, 
 - `F3` to open search e.g. type 'fbx' to import FBX
 - `/` to focus
 - `Shift + S` -> `Cursor to Selection`
@@ -52,6 +53,14 @@
   - Select tip and E to extrude
 - Duplicate Bone
   - Select tip and Shift-D
+- Automatically weight bone
+  - One part of mesh at a time
+  - Pose mode; (1) click body part, (2) shift-click bone; Ctrl-P > with automatic weights
+- Weight paint mode
+  - Object mode; (1) click armature, (2) shift-body body part(s); Weight paint mode now available 
+  - You paint the _vertices_ (not faces)
+- Show weights on mesh by selecting bone in Weight paint mode
+  - Weight Paint Mode > Ctrl+Shift+LMB to select a bone.
 
 ### unrar on Mac
 
