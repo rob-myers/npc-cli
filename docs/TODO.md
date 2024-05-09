@@ -69,18 +69,23 @@
 - 🚧 go through minecraft rig tutorial after all
   - ✅ 1/4 modelling https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
     - don't subdivide until after uv-mapping
-  - 🚧 2/4 uv-mapping https://www.youtube.com/watch?v=iMU_xnfKCpE&ab_channel=TutsByKai
-  - found original uv map textures in Cycles_Minecraft_Rig BSS Edit V6.5
-    - https://www.nari3d.com/boxscape
-    - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
+  - ✅ 2/4 uv-mapping https://www.youtube.com/watch?v=iMU_xnfKCpE&ab_channel=TutsByKai
+    - found original uv map textures in Cycles_Minecraft_Rig BSS Edit V6.5
+      - https://www.nari3d.com/boxscape
+      - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
+  - 🚧 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
+  - https://www.minecraft.net/en-us/usage-guidelines
+    > We are very relaxed about things you create for yourself. Pretty much anything goes there - so go for it and have fun, just remember the policies and don’t do anything illegal or infringing on others.
+    > ...
+    > This applies, for example, if you want to set up and run any non-commercial blogs, servers, community forums, fan sites, fan clubs, news groups, events, and gatherings.
 
 - minecraft walk cycle
 
 - rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
 - walls can have different heights e.g. for privacy-screen
-
 - fix webp generation
   - ensure up-to-date before push, unless --no-verify
+- change mapKey should request-nav-mesh but shouldn't restart worker
 
 - integrate TestCharacter into TestWorld
   - try convert into jsx
