@@ -34,7 +34,17 @@
   - Could also try Inverse Kinematic Constraint with weighting
     - https://docs.blender.org/manual/en/latest/animation/constraints/tracking/ik_solver.html
 
-- Pixelated texture: Shading Editor > Image Texture > Interpolation > `Closest` not `Linear`
+- Pixelated texture:
+  - Shading Editor > Image Texture > Interpolation > `Closest` not `Linear`
+
+- Edge loop select
+  - Option+Click
+- Change mesh without changing UV
+  - 3D Viewport > Options > Correct Face Attribute
+- If moving a vertex moves others
+  - Ensure "Proportional editing" is turned off via `o`
+- Edge loop cut
+  - `Cmd + R`
 
 ### unrar on Mac
 

@@ -74,10 +74,12 @@
       - https://www.nari3d.com/boxscape
       - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
   - 🚧 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
+
+- ℹ️ copyright issues
   - https://www.minecraft.net/en-us/usage-guidelines
-    > We are very relaxed about things you create for yourself. Pretty much anything goes there - so go for it and have fun, just remember the policies and don’t do anything illegal or infringing on others.
-    > ...
-    > This applies, for example, if you want to set up and run any non-commercial blogs, servers, community forums, fan sites, fan clubs, news groups, events, and gatherings.
+  > We are very relaxed about things you create for yourself. Pretty much anything goes there - so go for it and have fun, just remember the policies and don’t do anything illegal or infringing on others.
+  > ...
+  > This applies, for example, if you want to set up and run any non-commercial blogs, servers, community forums, fan sites, fan clubs, news groups, events, and gatherings.
 
 - minecraft walk cycle
 
