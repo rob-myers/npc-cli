@@ -227,7 +227,10 @@ export default function TestWorld(props) {
       texLoadAsyncFallback(
         `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`,
         `${assetsEndpoint}/2d/obstacles.${imgExtFallback}`,
-      ).then((tex) => state.obsTex = tex);
+      ).then((tex) => {
+        state.obsTex = tex;
+        update();
+      });
 
       return null;
     },
