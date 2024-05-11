@@ -56,9 +56,9 @@
 - 🚧 context menu
   - ❌ use `tunnel-rat`
   - ✅ move into own component TestContextMenu
-  - works when right-click walls
-  - avoid navigating when right-click floor
-  - rethink mobile long-press or double-tab
+  - ✅ works when right-click walls
+  - ✅ avoid navigating when right-click floor
+  - 🚧 rethink mobile long-press or double-tab
   - add onPointerDown to infiniteGridHelper (?)
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet

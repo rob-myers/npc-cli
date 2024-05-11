@@ -61,16 +61,22 @@ export function getAssetQueryParam() {
 }
 
 /**
+ * @param {MouseEvent} e 
+ */
+export function wasRMBReleased(e) {
+  // return (e.buttons & 2) !== 0;
+  return e.button === 2;
+}
+
+/**
  * https://stackoverflow.com/a/4819886/2917822
- * If Chrome devtool initially open as mobile device,
+ * ℹ️ If Chrome devtool initially open as mobile device,
  * `'ontouchstart' in window` continues to be true if switch to desktop.
  */
 export function isTouchDevice() {
-  return (
-    typeof window !== "undefined" &&
-    ("ontouchstart" in window ||
-      navigator.maxTouchPoints > 0 ||
-      /** @type {*} */ (navigator).msMaxTouchPoints > 0)
+  return typeof window !== "undefined" && (
+    "ontouchstart" in window || navigator.maxTouchPoints > 0 ||
+    /** @type {*} */ (navigator).msMaxTouchPoints > 0
   );
 }
 

@@ -2,14 +2,15 @@ import React from "react";
 import * as THREE from "three";
 import { damp } from "maath/easing"
 
+import { Mat, Vect } from "../geom";
 import { hashJson, info } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
 import * as glsl from "../service/glsl";
+import { quadGeometryXY } from "../service/three";
+import { geomorphService } from "../service/geomorph";
+import { wasRMBReleased, isTouchDevice } from "../service/dom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import { quadGeometryXY } from "../service/three";
-import { Mat, Vect } from "../geom";
-import { geomorphService } from "../service/geomorph";
 
 /**
  * @param {Props} props
@@ -70,13 +71,13 @@ export default function TestWallsAndDoors(props) {
     },
     handleClick(e) {
       const target = /** @type {'walls' | 'doors'} */ (e.object.name);
-      if (target === 'doors') {
+      if (target === 'doors' && (isTouchDevice() || !wasRMBReleased(e.nativeEvent))) {
         const instanceId = /** @type {number} */ (e.instanceId);
         const meta = state.doorByInstId[instanceId];
         meta.open = !meta.open;
         state.movingDoors.set(meta.instanceId, meta);
+        e.stopPropagation(); // prevents ContextMenu
       }
-      e.stopPropagation();
     },
     onTick() {
       if (state.movingDoors.size === 0) {

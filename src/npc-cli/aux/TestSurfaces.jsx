@@ -170,7 +170,6 @@ export default function TestSurfaces(props) {
       </group>
     ))}
 
-
     <instancedMesh
       name="static-obstacles"
       key={`${api.hash} static-obstacles`}

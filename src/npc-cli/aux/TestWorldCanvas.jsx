@@ -3,7 +3,7 @@ import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
-import { isTouchDevice } from "../service/dom.js";
+import { wasRMBReleased, isTouchDevice } from "../service/dom.js";
 import "./infinite-grid-helper.js";
 import { Vect } from "../geom";
 import { TestWorldContext } from "./test-world-context";
@@ -55,7 +55,7 @@ export default function TestWorldCanvas(props) {
         distance,
         longPress: timeMs >= 300,
         point: e.point,
-        rmb: e.button === 2,
+        rmb: wasRMBReleased(e.nativeEvent),
         // 🤔 or clientX,Y minus canvas bounds?
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         meta: {
@@ -66,13 +66,12 @@ export default function TestWorldCanvas(props) {
       state.down = undefined;
     },
     onPointerMissed(e) {
-      // console.log("onPointerMissed", e.clientX, e.clientY, e);
       state.down &&
         api.events.next({
           key: "pointerup-outside",
           distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
           longPress: Date.now() - state.down.epochMs >= 300,
-          rmb: e.button === 2,
+          rmb: wasRMBReleased(e),
           screenPoint: { x: e.offsetX, y: e.offsetY },
         });
       state.down = undefined;
