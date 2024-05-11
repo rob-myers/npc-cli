@@ -46,7 +46,7 @@ export default function TestWorldCanvas(props) {
           state.justLongDown = true;
           api.events.next({
             key: "long-pointerdown",
-            distance: state.mouseClientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+            distancePx: state.mouseClientPos.distanceTo({ x: e.clientX, y: e.clientY }),
             screenPoint,
           })
         }, longPressMs),
@@ -63,13 +63,13 @@ export default function TestWorldCanvas(props) {
         return;
       }
       // info("infiniteGridHelper onPointerUp", e, e.point);
-      const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
+      const distancePx = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
       const timeMs = Date.now() - state.down.epochMs;
       window.clearTimeout(state.down.longTimeoutId);
       
       api.events.next({
         key: "pointerup",
-        distance,
+        distancePx,
         longPress: timeMs >= longPressMs,
         point: e.point,
         rmb: wasRMBReleased(e.nativeEvent),
@@ -92,7 +92,7 @@ export default function TestWorldCanvas(props) {
 
       api.events.next({
         key: "pointerup-outside",
-        distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+        distancePx: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
         longPress: Date.now() - state.down.epochMs >= 300,
         rmb: wasRMBReleased(e),
         justLongDown: state.justLongDown,
@@ -136,6 +136,7 @@ export default function TestWorldCanvas(props) {
         {...(isTouchDevice() && {
           minAzimuthAngle: 0,
           maxAzimuthAngle: 0,
+          dampingFactor: 0.1,
         })}
       />
 

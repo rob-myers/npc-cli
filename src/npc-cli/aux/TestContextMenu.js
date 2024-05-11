@@ -19,8 +19,8 @@ export default function TestContextMenu() {
 
       switch (e.key) {
         case "long-pointerdown":
-          if (e.distance <= 5) {// mobile/desktop show/hide ContextMenu
-            state.menuEl.style.transform = `translate(${e.screenPoint.x - 15}px, ${e.screenPoint.y - 15}px)`;
+          if (e.distancePx <= 5) {// mobile/desktop show/hide ContextMenu
+            state.menuEl.style.transform = `translate(${Math.max(0, e.screenPoint.x - 64)}px, ${Math.max(0, e.screenPoint.y - 64)}px)`;
             state.menuEl.style.display = "block";
           } else {
             state.menuEl.style.display = "none";
@@ -31,8 +31,8 @@ export default function TestContextMenu() {
           break;
         case "pointerup":
         case "pointerup-outside":
-          if (e.rmb && e.distance <= 5) {// desktop show ContextMenu
-            state.menuEl.style.transform = `translate(${e.screenPoint.x}px, ${e.screenPoint.y}px)`;
+          if (e.rmb && e.distancePx <= 5) {// desktop show ContextMenu
+            state.menuEl.style.transform = `translate(${Math.max(0, e.screenPoint.x - 64)}px, ${Math.max(0, e.screenPoint.y - 64)}px)`;
             state.menuEl.style.display = "block";
           } else if (!isTouchDevice()) {// desktop hide ContextMenu
             state.menuEl.style.display = "none";
@@ -66,6 +66,7 @@ const contextMenuCss = css`
   top: 0;
   z-index: 0;
   height: 100px;
+  user-select: none;
 
   font-size: 0.9rem;
   color: white;

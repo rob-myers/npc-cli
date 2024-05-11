@@ -44,14 +44,15 @@ declare namespace NPC {
   
   interface LongPointerDownEvent {
     key: "long-pointerdown";
-    distance: number;
+    /** Distance in screen pixels from pointerdown */
+    distancePx: number;
     screenPoint: Geom.VectJson;
   }
 
   interface BasePointerUpEvent {
     clickId?: string;
-    /** Distance in XZ plane from pointerdown */
-    distance: number;
+    /** Distance in screen pixels from pointerdown */
+    distancePx: number;
     /** Was this a long press? */
     longPress: boolean;
     /** Was the right mouse button used?  */
