@@ -19,7 +19,7 @@ export default function TestContextMenu() {
 
       switch (e.key) {
         case "long-pointerdown":
-          if (e.distancePx <= 5) {// mobile/desktop show/hide ContextMenu
+          if (e.distancePx <= (isTouchDevice() ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
             state.menuEl.style.transform = `translate(${Math.max(0, e.screenPoint.x - 64)}px, ${Math.max(0, e.screenPoint.y - 64)}px)`;
             state.menuEl.style.display = "block";
           } else {

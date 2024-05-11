@@ -38,8 +38,9 @@ export default function TestWorldCanvas(props) {
     },
     onPointerDown(e) {
       const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+      state.mouseClientPos.set(e.clientX, e.clientY);
       state.down = {
-        clientPos: new Vect(e.clientX, e.clientY),
+        clientPos: state.mouseClientPos.clone(),
         distance: 0, // or getDistance(state.input.touches)
         epochMs: Date.now(),
         longTimeoutId: window.setTimeout(() => {
@@ -48,7 +49,7 @@ export default function TestWorldCanvas(props) {
             key: "long-pointerdown",
             distancePx: state.mouseClientPos.distanceTo({ x: e.clientX, y: e.clientY }),
             screenPoint,
-          })
+          });
         }, longPressMs),
       };
       api.events.next({
@@ -124,9 +125,10 @@ export default function TestWorldCanvas(props) {
       onPointerMove={state.onPointerMove}
       onCreated={state.onCreated}
     >
-      {props.stats && state.rootEl && (
+      {props.stats && state.rootEl &&
         <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
-      )}
+      }
+
       <PerspectiveCamera position={[0, 8, 0]} makeDefault />
 
       <MapControls
@@ -136,7 +138,6 @@ export default function TestWorldCanvas(props) {
         {...(isTouchDevice() && {
           minAzimuthAngle: 0,
           maxAzimuthAngle: 0,
-          dampingFactor: 0.1,
         })}
       />
 
