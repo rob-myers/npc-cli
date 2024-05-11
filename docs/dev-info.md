@@ -61,6 +61,8 @@
   - You paint the _vertices_ (not faces)
 - Show weights on mesh by selecting bone in Weight paint mode
   - Weight Paint Mode > Ctrl+Shift+LMB to select a bone.
+- Reset bone rotation
+  - Option+R
 
 ### unrar on Mac
 

@@ -32,8 +32,11 @@
       - https://www.nari3d.com/boxscape
       - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
   - 🚧 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
-  - Shape keys for knee 90 degree bends
-  - IK bones for feet e.g. keep them still
+  - ❌ Shape keys for knee 90 degree leg bends
+    - i.e. "morph targets" in three.js, requiring manually animation
+  - ✅ slightly scale "back of knee" inwards to avoid z-fighting
+    - maybe our "view from above" will hide the issue
+  - 🚧 IK bones for feet e.g. keep them still
 
 - minecraft walk cycle
 
