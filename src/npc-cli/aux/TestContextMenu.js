@@ -1,6 +1,7 @@
 import React from "react";
 import { css } from "@emotion/css";
 
+import { isTouchDevice } from "../service/dom";
 import useStateRef from "../hooks/use-state-ref";
 import { TestWorldContext } from "./test-world-context";
 
@@ -17,17 +18,23 @@ export default function TestContextMenu() {
       // console.log("event", e);
 
       switch (e.key) {
+        case "long-pointerdown":
+          if (e.distance <= 5) {// mobile/desktop show/hide ContextMenu
+            state.menuEl.style.transform = `translate(${e.screenPoint.x - 15}px, ${e.screenPoint.y - 15}px)`;
+            state.menuEl.style.display = "block";
+          } else {
+            state.menuEl.style.display = "none";
+          }
+          break;
         case "pointerdown":
           state.menuEl.style.display = "none";
           break;
         case "pointerup":
         case "pointerup-outside":
-          // show/hide ContextMenu
-          // 🚧 double-tap instead of long-press
-          if ((e.rmb || e.longPress) && e.distance <= 5) {
+          if (e.rmb && e.distance <= 5) {// desktop show ContextMenu
             state.menuEl.style.transform = `translate(${e.screenPoint.x}px, ${e.screenPoint.y}px)`;
             state.menuEl.style.display = "block";
-          } else {
+          } else if (!isTouchDevice()) {// desktop hide ContextMenu
             state.menuEl.style.display = "none";
           }
           break;

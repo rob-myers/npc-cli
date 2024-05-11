@@ -64,7 +64,7 @@
   - ✅ move into own component TestContextMenu
   - ✅ works when right-click walls
   - ✅ avoid navigating when right-click floor
-  - 🚧 rethink mobile long-press or double-tap
+  - ✅ rethink mobile long-press
   - add onPointerDown to infiniteGridHelper (?)
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet

@@ -11,7 +11,7 @@ export default function useHandleEvents(api) {
       switch (e.key) {
         case "pointerup":
           if (!api.npcs) return warn('saw "pointerup" before api.npcs');
-          !e.rmb && e.distance < 1 && api.walkTo(e.point);
+          !(e.rmb || e.justLongDown) && e.distance < 1 && api.walkTo(e.point);
           break;
         case "draw-floor-ceil":
           if (!api.floorImg[e.gmKey])

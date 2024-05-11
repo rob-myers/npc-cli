@@ -3,6 +3,8 @@ export const localStorageKey = {
   touchTtyOpen: "touch-tty-open",
 };
 
+export const longPressMs = 500;
+
 export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });

@@ -3,9 +3,10 @@ import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
-import { wasRMBReleased, isTouchDevice } from "../service/dom.js";
-import "./infinite-grid-helper.js";
 import { Vect } from "../geom";
+import "./infinite-grid-helper.js";
+import { wasRMBReleased, isTouchDevice } from "../service/dom.js";
+import { longPressMs } from "../service/const.js";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import { Origin } from "./MiscThree";
@@ -18,6 +19,8 @@ export default function TestWorldCanvas(props) {
     canvasEl: /** @type {*} */ (null),
     controls: /** @type {*} */ (null),
     down: undefined,
+    justLongDown: false,
+    mouseClientPos: new Vect(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
 
@@ -34,14 +37,26 @@ export default function TestWorldCanvas(props) {
       api.update(); // e.g. show stats
     },
     onPointerDown(e) {
+      const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
       state.down = {
         clientPos: new Vect(e.clientX, e.clientY),
         distance: 0, // or getDistance(state.input.touches)
         epochMs: Date.now(),
+        longTimeoutId: window.setTimeout(() => {
+          state.justLongDown = true;
+          api.events.next({
+            key: "long-pointerdown",
+            distance: state.mouseClientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+            screenPoint,
+          })
+        }, longPressMs),
       };
       api.events.next({
         key: "pointerdown",
       });
+    },
+    onPointerMove(e) {
+      state.mouseClientPos.set(e.clientX, e.clientY);
     },
     onPointerUp(e) {
       if (!state.down) {
@@ -50,12 +65,15 @@ export default function TestWorldCanvas(props) {
       // info("infiniteGridHelper onPointerUp", e, e.point);
       const distance = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
       const timeMs = Date.now() - state.down.epochMs;
+      window.clearTimeout(state.down.longTimeoutId);
+      
       api.events.next({
         key: "pointerup",
         distance,
-        longPress: timeMs >= 300,
+        longPress: timeMs >= longPressMs,
         point: e.point,
         rmb: wasRMBReleased(e.nativeEvent),
+        justLongDown: state.justLongDown,
         // 🤔 or clientX,Y minus canvas bounds?
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         meta: {
@@ -63,17 +81,24 @@ export default function TestWorldCanvas(props) {
           targetCenter: undefined,
         },
       });
+
       state.down = undefined;
+      state.justLongDown = false;
     },
     onPointerMissed(e) {
-      state.down &&
-        api.events.next({
-          key: "pointerup-outside",
-          distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
-          longPress: Date.now() - state.down.epochMs >= 300,
-          rmb: wasRMBReleased(e),
-          screenPoint: { x: e.offsetX, y: e.offsetY },
-        });
+      if (!state.down) {
+        return;
+      }
+
+      api.events.next({
+        key: "pointerup-outside",
+        distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+        longPress: Date.now() - state.down.epochMs >= 300,
+        rmb: wasRMBReleased(e),
+        justLongDown: state.justLongDown,
+        screenPoint: { x: e.offsetX, y: e.offsetY },
+      });
+      state.justLongDown = false;
       state.down = undefined;
     },
   }));
@@ -96,6 +121,7 @@ export default function TestWorldCanvas(props) {
       gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
       onPointerDown={state.onPointerDown}
       onPointerMissed={state.onPointerMissed}
+      onPointerMove={state.onPointerMove}
       onCreated={state.onCreated}
     >
       {props.stats && state.rootEl && (
@@ -138,14 +164,17 @@ export default function TestWorldCanvas(props) {
 /**
  * @typedef State
  * @property {HTMLCanvasElement} canvasEl
+ * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('three-stdlib').MapControls} controls
- * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; }} [down]
+ * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; longTimeoutId: number; } | undefined} down
+ * @property {boolean} justLongDown
+ * @property {Geom.Vect} mouseClientPos
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
- * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
  * @property {(e: MouseEvent) => void} onPointerMissed
+ * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  */
 

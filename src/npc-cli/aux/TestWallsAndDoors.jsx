@@ -76,7 +76,7 @@ export default function TestWallsAndDoors(props) {
         const meta = state.doorByInstId[instanceId];
         meta.open = !meta.open;
         state.movingDoors.set(meta.instanceId, meta);
-        e.stopPropagation(); // prevents ContextMenu
+        // e.stopPropagation(); // prevents ContextMenu
       }
     },
     onTick() {

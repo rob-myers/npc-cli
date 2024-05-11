@@ -4,6 +4,7 @@ declare namespace NPC {
     | PointerUpEvent
     // | PointerMoveEvent
     | PointerDownEvent
+    | LongPointerDownEvent
     | { key: "disabled" }
     | { key: "enabled" }
     | { key: "spawned-npc"; npcKey: string }
@@ -40,6 +41,12 @@ declare namespace NPC {
     key: "pointerdown";
     // 🚧 ...
   }
+  
+  interface LongPointerDownEvent {
+    key: "long-pointerdown";
+    distance: number;
+    screenPoint: Geom.VectJson;
+  }
 
   interface BasePointerUpEvent {
     clickId?: string;
@@ -49,6 +56,7 @@ declare namespace NPC {
     longPress: boolean;
     /** Was the right mouse button used?  */
     rmb: boolean;
+    justLongDown: boolean;
     screenPoint: Geom.VectJson;
   }
 
