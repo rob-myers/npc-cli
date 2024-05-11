@@ -24,48 +24,6 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- ✅ get a blender minecraft rig working in mixamo
-  - ℹ️ https://www.nari3d.com/boxscape
-  - ℹ️ https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?dl=0&e=1&file_subpath=%2FCycles_Minecraft_Rig+BSS+Edit+V6.5%2FAdvanced_Mob_Rig
-  - ✅ select armature; pose mode; select {l,r}-arm and g-x-{-1,+1} upload to mixamo
-  - triangle count
-    - https://poly.pizza/m/isC73B8SKq ~`2000`
-    - https://www.youtube.com/watch?v=8Ox6EUxYqzA ~`2200`
-    - https://ridz25.itch.io/low-poly-minecraft-like-character ~ `520`, ~`360` without gloves (?)
-      - ✅ can rig when add cubes: Groin, Neck, Left/Right Shoulder
-    - https://sketchfab.com/3d-models/ultra-low-poly-animated-character-mixamo-based-186f3f7ffc30449a9bfce39f647abc92 `324`
-      - ✅ auto-rigs from mesh
-
-- ❌ mixamo minecraft again
-  - https://ridz25.itch.io/low-poly-minecraft-like-character
-  - ℹ️ will make our own animations, but maybe use provided idle/walk/run
-    - focus on npc behaviour sort-of demands it?
-  - ❌ clean veryminecraftylookingman
-    - jpg skin -> png; delete gloves
-    - center edit mesh?
-  - ❌ Fixing transformed Body
-    - Problem: `Body` inside group has z transform `-4.06447 m`
-    - Seems we'd need to (a) undo this, (b) transform every frame (changing initial pose won't work)
-    - But maybe doesn't matter
-    - Btw mesh/bones align as follows: "Object mode; Click Armature, Shift-Click Body; Edit mode"
-  - ℹ️ Minecraft measurements
-    - 1 block means 1m³ means 16³ pixels
-      - **BUT** seems 1m ~ 16pixels does not apply to character models
-    - Player height: 1.8 blocks i.e. 1.8m
-      - https://gaming.stackexchange.com/questions/398125/what-is-the-scale-of-the-minecraft-skin-overlay
-    - Player heights:
-      - head ~ 8 pixels ~ 8/32 * 1.8 = 0.45m
-      - arms/legs ~ 12 pixels = 12/32 * 1.8 = 0.675m
-- ❌ create rig ourselves:
-  - https://www.youtube.com/watch?v=GB9phnNlzjQ&ab_channel=SharpWind
-  - https://www.youtube.com/watch?v=JlzzU_dxp3c&list=PLGKIkAXk1OeQWaDCO0sYdgT2nN_Qu46HO&index=3&ab_channel=TutsByKai
-- ❌ simplify high poly rig
-  - https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?e=1&dl=0
-  - too complex; possibly incorrect dimensions
-- ❌ try UV mapping `base-mesh-246-tri`
-  - blender uv map tutorial
-    - https://www.youtube.com/watch?v=nLJK2ExMhxU&ab_channel=IronbarkGamesStudio
-
 - 🚧 go through minecraft rig tutorial after all
   - ✅ 1/4 modelling https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
     - don't subdivide until after uv-mapping
@@ -75,32 +33,25 @@
       - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
   - 🚧 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
 
-- ℹ️ copyright issues
-  - https://www.minecraft.net/en-us/usage-guidelines
-  > We are very relaxed about things you create for yourself. Pretty much anything goes there - so go for it and have fun, just remember the policies and don’t do anything illegal or infringing on others.
-  > ...
-  > This applies, for example, if you want to set up and run any non-commercial blogs, servers, community forums, fan sites, fan clubs, news groups, events, and gatherings.
-
 - minecraft walk cycle
 
-- ✅ rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
-- ✅ walls can have different base-height and height e.g. for privacy-screen
-  - ✅ can `wall y={baseHeight} h={height}`
-  - ✅ can `{symbolKey} wallsY={baseHeight} wallsH={height}`
-  - ✅ only draw ceiling if wall touches ceiling
-- can color obstacle instances
-  - need to modify custom shader
+- ❌ can color obstacle instances
+  - should alter image directly instead
 - fix webp generation
   - ensure up-to-date before push, unless --no-verify
 - change mapKey should request-nav-mesh but shouldn't restart worker
 
 - integrate TestCharacter into TestWorld
-  - try convert into jsx
+  - convert into jsx
     > `npx gltfjsx model.glb --transform`
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
-- support obstacle click
-  - check whether clicked point is transparent via spritesheet lookup
+- 🚧 context menu
+  - use `tunnel-rat`
+  - mobile triggered on double-tap (not long-press)
+- 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
+  - clicked point -> unit XZ square -> sprite-sheet
+  - clicked if respective pixel is non-transparent
 
 - start writing first article
 
@@ -992,3 +943,57 @@ React.useEffect(() => {
   - works when leave and return to tab
 - ✅ no need for CanvasTexture for obstacles sprite-sheet
 - ✅ missing symbolKey in geomorphsService can break script i.e. have to `yarn clean-assets`
+
+- ✅ get a blender minecraft rig working in mixamo
+  - ℹ️ https://www.nari3d.com/boxscape
+  - ℹ️ https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?dl=0&e=1&file_subpath=%2FCycles_Minecraft_Rig+BSS+Edit+V6.5%2FAdvanced_Mob_Rig
+  - ✅ select armature; pose mode; select {l,r}-arm and g-x-{-1,+1} upload to mixamo
+  - triangle count
+    - https://poly.pizza/m/isC73B8SKq ~`2000`
+    - https://www.youtube.com/watch?v=8Ox6EUxYqzA ~`2200`
+    - https://ridz25.itch.io/low-poly-minecraft-like-character ~ `520`, ~`360` without gloves (?)
+      - ✅ can rig when add cubes: Groin, Neck, Left/Right Shoulder
+    - https://sketchfab.com/3d-models/ultra-low-poly-animated-character-mixamo-based-186f3f7ffc30449a9bfce39f647abc92 `324`
+      - ✅ auto-rigs from mesh
+
+- ❌ mixamo minecraft again
+  - https://ridz25.itch.io/low-poly-minecraft-like-character
+  - ℹ️ will make our own animations, but maybe use provided idle/walk/run
+    - focus on npc behaviour sort-of demands it?
+  - ❌ clean veryminecraftylookingman
+    - jpg skin -> png; delete gloves
+    - center edit mesh?
+  - ❌ Fixing transformed Body
+    - Problem: `Body` inside group has z transform `-4.06447 m`
+    - Seems we'd need to (a) undo this, (b) transform every frame (changing initial pose won't work)
+    - But maybe doesn't matter
+    - Btw mesh/bones align as follows: "Object mode; Click Armature, Shift-Click Body; Edit mode"
+  - ℹ️ Minecraft measurements
+    - 1 block means 1m³ means 16³ pixels
+      - **BUT** seems 1m ~ 16pixels does not apply to character models
+    - Player height: 1.8 blocks i.e. 1.8m
+      - https://gaming.stackexchange.com/questions/398125/what-is-the-scale-of-the-minecraft-skin-overlay
+    - Player heights:
+      - head ~ 8 pixels ~ 8/32 * 1.8 = 0.45m
+      - arms/legs ~ 12 pixels = 12/32 * 1.8 = 0.675m
+- ❌ create rig ourselves:
+  - https://www.youtube.com/watch?v=GB9phnNlzjQ&ab_channel=SharpWind
+  - https://www.youtube.com/watch?v=JlzzU_dxp3c&list=PLGKIkAXk1OeQWaDCO0sYdgT2nN_Qu46HO&index=3&ab_channel=TutsByKai
+- ❌ simplify high poly rig
+  - https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?e=1&dl=0
+  - too complex; possibly incorrect dimensions
+- ❌ try UV mapping `base-mesh-246-tri`
+  - blender uv map tutorial
+    - https://www.youtube.com/watch?v=nLJK2ExMhxU&ab_channel=IronbarkGamesStudio
+
+- ✅ rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
+- ✅ walls can have different base-height and height e.g. for privacy-screen
+  - ✅ can `wall y={baseHeight} h={height}`
+  - ✅ can `{symbolKey} wallsY={baseHeight} wallsH={height}`
+  - ✅ only draw ceiling if wall touches ceiling
+
+- ℹ️ minecraft copyright issues
+  - https://www.minecraft.net/en-us/usage-guidelines
+  > We are very relaxed about things you create for yourself. Pretty much anything goes there - so go for it and have fun, just remember the policies and don’t do anything illegal or infringing on others.
+  > ...
+  > This applies, for example, if you want to set up and run any non-commercial blogs, servers, community forums, fan sites, fan clubs, news groups, events, and gatherings.
