@@ -2,7 +2,8 @@ declare namespace NPC {
   type Event =
     | PointerUpOutsideEvent
     | PointerUpEvent
-    | PointerMoveEvent
+    // | PointerMoveEvent
+    | PointerDownEvent
     | { key: "disabled" }
     | { key: "enabled" }
     | { key: "spawned-npc"; npcKey: string }
@@ -10,16 +11,16 @@ declare namespace NPC {
     | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey };
   // ...
 
-  interface PointerMoveEvent {
-    key: "pointermove";
-    /** Ordinate `y` */
-    height: number;
-    /** Properties of the thing we clicked. */
-    meta: Geom.Meta;
-    /** Coords `(x, z)` */
-    point: Geom.VectJson;
-    screenPoint: Geom.VectJson;
-  }
+  // interface PointerMoveEvent {
+  //   key: "pointermove";
+  //   /** Ordinate `y` */
+  //   height: number;
+  //   /** Properties of the thing we clicked. */
+  //   meta: Geom.Meta;
+  //   /** Coords `(x, z)` */
+  //   point: Geom.VectJson;
+  //   screenPoint: Geom.VectJson;
+  // }
 
   interface PointerUpEvent extends BasePointerUpEvent {
     key: "pointerup";
@@ -35,8 +36,12 @@ declare namespace NPC {
     key: "pointerup-outside";
   }
 
+  interface PointerDownEvent {
+    key: "pointerdown";
+    // 🚧 ...
+  }
+
   interface BasePointerUpEvent {
-    /** 🚧 */
     clickId?: string;
     /** Distance in XZ plane from pointerdown */
     distance: number;

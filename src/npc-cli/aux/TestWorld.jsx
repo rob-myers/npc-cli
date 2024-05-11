@@ -22,6 +22,7 @@ import TestSurfaces from "./TestSurfaces";
 import TestWallsAndDoors from "./TestWallsAndDoors";
 import TestNpcs from "./TestNpcs";
 import TestDebug from "./TestDebug";
+import TestContextMenu from "./TestContextMenu";
 
 /**
  * @param {Props} props
@@ -277,6 +278,7 @@ export default function TestWorld(props) {
           </group>
         )}
       </TestWorldCanvas>
+      <TestContextMenu />
     </TestWorldContext.Provider>
   );
 }
