@@ -32,6 +32,8 @@
       - https://www.nari3d.com/boxscape
       - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
   - 🚧 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
+  - Shape keys for knee 90 degree bends
+  - IK bones for feet e.g. keep them still
 
 - minecraft walk cycle
 
@@ -47,8 +49,11 @@
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
 - 🚧 context menu
-  - use `tunnel-rat`
-  - mobile triggered on double-tap (not long-press)
+  - ❌ use `tunnel-rat`
+  - ✅ move into own component TestContextMenu
+  - works when right-click walls
+  - avoid navigating when right-click floor
+  - rethink mobile long-press or double-tab
   - add onPointerDown to infiniteGridHelper (?)
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
