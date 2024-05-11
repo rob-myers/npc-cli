@@ -64,6 +64,12 @@
 - Reset bone rotation
   - Option+R
 
+- Basic IK setup for "feet to stay in place when move root up/down"
+  - edit mode, ensure top of legs are parented to root
+  - pose mode, select target bone of IK, properties > bone constraints > IK > set chain length 2
+  - edit mode, move knees forwards a bit
+  - pose mode, can move root down and feet stay in place
+
 ### unrar on Mac
 
 ```sh

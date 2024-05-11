@@ -24,21 +24,23 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- 🚧 go through minecraft rig tutorial after all
+- ✅ go through minecraft rig tutorial after all
   - ✅ 1/4 modelling https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
     - don't subdivide until after uv-mapping
   - ✅ 2/4 uv-mapping https://www.youtube.com/watch?v=iMU_xnfKCpE&ab_channel=TutsByKai
     - found original uv map textures in Cycles_Minecraft_Rig BSS Edit V6.5
       - https://www.nari3d.com/boxscape
       - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
-  - 🚧 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
+  - ✅ 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
   - ❌ Shape keys for knee 90 degree leg bends
     - i.e. "morph targets" in three.js, requiring manually animation
   - ✅ slightly scale "back of knee" inwards to avoid z-fighting
     - maybe our "view from above" will hide the issue
-  - 🚧 IK bones for feet e.g. keep them still
+  - ✅ IK bones for feet e.g. keep them still
+    - https://www.youtube.com/watch?v=OMwFPBoXiMw&t=101s&ab_channel=Nekomatata
 
-- minecraft walk cycle
+- 🚧 minecraft walk cycle
+  - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
 
 - ❌ can color obstacle instances
   - should alter image directly instead
