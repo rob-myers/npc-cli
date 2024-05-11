@@ -61,8 +61,8 @@
   - You paint the _vertices_ (not faces)
 - Show weights on mesh by selecting bone in Weight paint mode
   - Weight Paint Mode > Ctrl+Shift+LMB to select a bone.
-- Reset bone rotation
-  - Option+R
+- Reset bone rotation/position
+  - Option+R/G
 - Collapse/Expand Outliner
   - Shift-click
 

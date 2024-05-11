@@ -41,6 +41,12 @@
 
 - 🚧 minecraft walk cycle
   - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
+  - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
+  - our mesh is 2.5 larger than `Zamination_Rig_V4`
+
+- minecraft idle animation
+- minecraft walk cycle
+  - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
 
 - ❌ can color obstacle instances
   - should alter image directly instead
@@ -58,7 +64,7 @@
   - ✅ move into own component TestContextMenu
   - ✅ works when right-click walls
   - ✅ avoid navigating when right-click floor
-  - 🚧 rethink mobile long-press or double-tab
+  - 🚧 rethink mobile long-press or double-tap
   - add onPointerDown to infiniteGridHelper (?)
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
