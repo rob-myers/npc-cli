@@ -4,9 +4,9 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { Vect } from "../geom";
-import "./infinite-grid-helper.js";
 import { wasRMBReleased, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
+import { InfiniteGrid } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import { Origin } from "./MiscThree";
@@ -145,10 +145,12 @@ export default function TestWorldCanvas(props) {
 
       <Origin />
 
-      <infiniteGridHelper
-        args={[1.5, 1.5, "#bbbbbb"]}
+      <InfiniteGrid
         rotation={[Math.PI / 2, 0, 0]}
         onPointerUp={state.onPointerUp}
+        size1={1.5}
+        size2={1.5}
+        color="#bbbbbb"
       />
 
       {props.children}

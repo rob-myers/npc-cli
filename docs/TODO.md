@@ -56,6 +56,7 @@
 - minecraft run cycle
   - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
 
+- ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
 - ❌ can color obstacle instances
   - should alter image directly instead
 - fix webp generation
