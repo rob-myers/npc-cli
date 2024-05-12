@@ -44,7 +44,10 @@
   - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
   - our mesh is 2.5 larger than `Zamination_Rig_V4`
   - ✅ control feet rotation via ik
+  - ✅ foot should pivot around heel
+    - to pivot around toe, set IK position first, set IK angle second 
   - 🚧 merge feet position/rotation into same ik bone
+    - to pivot around toe, set IK angle first, set IK position second
 
 - minecraft idle animation
 - minecraft walk cycle
