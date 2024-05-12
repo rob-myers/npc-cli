@@ -43,6 +43,8 @@
   - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
   - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
   - our mesh is 2.5 larger than `Zamination_Rig_V4`
+  - ✅ control feet rotation via ik
+  - 🚧 merge feet position/rotation into same ik bone
 
 - minecraft idle animation
 - minecraft walk cycle
