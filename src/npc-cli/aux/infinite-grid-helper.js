@@ -13,11 +13,11 @@ export default class InfiniteGridHelper extends THREE.Mesh {
    * @param {number} [distance]
    * @param {string} [axes]
    */
-  constructor(size1 = 10, size2 = 10, color, distance = 200, axes = "xyz") {
+  constructor(size1 = 10, size2 = 10, color, distance = 100, axes = "xyz") {
     const planeAxes = axes.slice(0, 2); // e.g. 'xy'
 
     // jitter with only 1 subdivision when camera close
-    const geometry = new THREE.PlaneGeometry(1000, 1000, 2, 2);
+    const geometry = new THREE.PlaneGeometry(1000, 1000, 4, 4);
 
     const material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
