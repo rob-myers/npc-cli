@@ -50,9 +50,10 @@
   - ❌ maybe add vertices above foot
   - ✅ merge feet position/rotation into same ik bone
     - to pivot around toe/heel, set IK angle first, set IK position second
+  - 🚧 at `2:20` first frame (nothing keyframed)
 
 - minecraft idle animation
-- minecraft walk cycle
+- minecraft run cycle
   - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
 
 - ❌ can color obstacle instances

@@ -30,6 +30,11 @@
     - Open, then choose image
     - Connect "Color" to "Base Color"
 
+- Blender Lighter Theme
+  - Preferences > Themes > `White` (at top)
+- Lighter Texture
+  - Material Preview > Viewport shading > Set Strength `5`
+
 - Concerning Forward Kinematics vs Inverse Kinematics
   - FK/IK switch requires a modified skeleton, maybe avoid for now i.e. FK suffices
     - https://www.youtube.com/watch?v=xEnu_EsnzjI&ab_channel=richstubbsanimation
