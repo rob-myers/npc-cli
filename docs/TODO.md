@@ -46,8 +46,10 @@
   - ✅ control feet rotation via ik
   - ✅ foot should pivot around heel
     - to pivot around toe, set IK position first, set IK angle second 
-  - 🚧 merge feet position/rotation into same ik bone
-    - to pivot around toe, set IK angle first, set IK position second
+  - ✅ revert to foot in the middle
+  - ❌ maybe add vertices above foot
+  - ✅ merge feet position/rotation into same ik bone
+    - to pivot around toe/heel, set IK angle first, set IK position second
 
 - minecraft idle animation
 - minecraft walk cycle
