@@ -43,6 +43,7 @@
   - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
   - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
   - our mesh is 2.5 larger than `Zamination_Rig_V4`
+  - timeline > keying > Location and Rotation
   - ✅ control feet rotation via ik
   - ✅ foot should pivot around heel
     - to pivot around toe, set IK position first, set IK angle second 
@@ -51,6 +52,7 @@
   - ✅ merge feet position/rotation into same ik bone
     - to pivot around toe/heel, set IK angle first, set IK position second
   - 🚧 at `2:20` first frame (nothing keyframed)
+  - can we remove bones `ik.*` from gltf export?
 
 - minecraft idle animation
 - minecraft run cycle

@@ -22,6 +22,7 @@
 - `Shift + Left` return to frame 1
 - `Shift + A` for "Add something menu"
 - `5` for orthographic mode (when Emulate numpad)
+- Backtick + "View  Selected" to centre selected item
 
 - Add texture
   - Choose `Shading` workspace.
