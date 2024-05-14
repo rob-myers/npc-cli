@@ -25,6 +25,8 @@
 - Backtick + "View  Selected" to centre selected item
 - Switch bone direction
   - edit mode, select bone, Armature > Switch Direction
+- Rename bones in Properties > Bone (not Outliner)
+  - Else "vertex group" names get out-of-sync
 
 - Add texture
   - Choose `Shading` workspace.
