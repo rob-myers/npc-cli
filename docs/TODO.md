@@ -39,6 +39,16 @@
   - ✅ IK bones for feet e.g. keep them still
     - https://www.youtube.com/watch?v=OMwFPBoXiMw&t=101s&ab_channel=Nekomatata
 
+- 🚧 adjust rig
+  - ✅ bone naming convention `*_L` and `*_R`
+  - ✅ work out how to do foot rigging i.e. heel roll
+    - https://youtu.be/OMwFPBoXiMw?si=qns-Wq4Q6L2MjDd5&t=164
+    - ❌ try pivot constraint on bones
+    - ❌ try move leg backwards
+    - ❌ try two foot bones: leg-base -> heel -> toe
+    - ✅ try one ik bone with weight-painting, with head at heel
+  - 🚧 extra vertices above foot?
+
 - 🚧 minecraft walk cycle
   - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
   - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
@@ -51,8 +61,12 @@
   - ❌ maybe add vertices above foot
   - ✅ merge feet position/rotation into same ik bone
     - to pivot around toe/heel, set IK angle first, set IK position second
-  - 🚧 at `2:20` first frame (nothing keyframed)
-  - can we remove bones `ik.*` from gltf export?
+  - ✅ 1st attempt at 1st frame
+  - ✅ rename bones to align with Blender naming convention
+  - ✅ Cmd-C, Cmd-Shift-V to mirror 1st to 12; dup 1st at 24
+  - 🚧 bob up-and-down @3:55
+  
+- can we remove bones `ik.*` from gltf export?
 
 - minecraft idle animation
 - minecraft run cycle

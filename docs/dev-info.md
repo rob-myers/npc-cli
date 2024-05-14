@@ -23,6 +23,8 @@
 - `Shift + A` for "Add something menu"
 - `5` for orthographic mode (when Emulate numpad)
 - Backtick + "View  Selected" to centre selected item
+- Switch bone direction
+  - edit mode, select bone, Armature > Switch Direction
 
 - Add texture
   - Choose `Shading` workspace.
