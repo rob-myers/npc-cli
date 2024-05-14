@@ -47,9 +47,9 @@
     - ❌ try move leg backwards
     - ❌ try two foot bones: leg-base -> heel -> toe
     - ✅ try one ik bone with weight-painting, with head at heel
-  - 🚧 extra vertices above foot?
+  - ❌ extra vertices above foot?
 
-- 🚧 minecraft walk cycle
+- ✅ minecraft walk cycle (first attempt)
   - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
   - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
   - our mesh is 2.5 larger than `Zamination_Rig_V4`
@@ -64,9 +64,10 @@
   - ✅ 1st attempt at 1st frame
   - ✅ rename bones to align with Blender naming convention
   - ✅ Cmd-C, Cmd-Shift-V to mirror 1st to 12; dup 1st at 24
-  - 🚧 bob up-and-down @3:55
+  - ✅ continue from frame 12
   
-- can we remove bones `ik.*` from gltf export?
+
+-  minecraft walk cycle (second attempt)
 
 - minecraft idle animation
 - minecraft run cycle
