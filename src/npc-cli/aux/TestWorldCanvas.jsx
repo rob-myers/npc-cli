@@ -58,6 +58,11 @@ export default function TestWorldCanvas(props) {
       };
       api.events.next({
         key: "pointerdown",
+        is3d: false,
+        distancePx: 0,
+        justLongDown: false,
+        rmb: wasRMBReleased(e.nativeEvent),
+        screenPoint,
       });
     },
     onGridPointerUp(e) {
@@ -71,13 +76,13 @@ export default function TestWorldCanvas(props) {
       
       api.events.next({
         key: "pointerup",
-        distancePx,
-        longPress: timeMs >= longPressMs,
-        point: e.point,
+        is3d: true,
         rmb: wasRMBReleased(e.nativeEvent),
+        distancePx,
         justLongDown: state.justLongDown,
         // 🤔 or clientX,Y minus canvas bounds?
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        point: e.point,
         meta: {
           floor: true,
           targetCenter: undefined,
@@ -97,10 +102,10 @@ export default function TestWorldCanvas(props) {
 
       api.events.next({
         key: "pointerup-outside",
+        is3d: false,
         distancePx: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
-        longPress: Date.now() - state.down.epochMs >= 300,
-        rmb: wasRMBReleased(e),
         justLongDown: state.justLongDown,
+        rmb: wasRMBReleased(e),
         screenPoint: { x: e.offsetX, y: e.offsetY },
       });
       state.justLongDown = false;

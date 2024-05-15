@@ -38,7 +38,7 @@ export default function TestCanvas(props) {
         case "pointerup":
         case "pointerup-outside":
           // show/hide ContextMenu
-          if ((e.rmb || e.longPress) && e.distancePx <= 5) {
+          if ((e.rmb || e.justLongDown) && e.distancePx <= 5) {
             state.menuEl.style.transform = `translate(${e.screenPoint.x}px, ${e.screenPoint.y}px)`;
             state.menuEl.style.display = "block";
           } else {
@@ -75,8 +75,9 @@ export default function TestCanvas(props) {
           state.down &&
             state.events.next({
               key: "pointerup-outside",
+              is3d: false,
               distancePx: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
-              longPress: Date.now() - state.down.epochMs >= 300,
+              justLongDown: Date.now() - state.down.epochMs >= 300,
               rmb: e.button === 2,
               screenPoint: { x: e.offsetX, y: e.offsetY },
             });

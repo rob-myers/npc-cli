@@ -12,7 +12,7 @@ export default function useHandleEvents(api) {
         case "pointerup":
           if (!api.npcs)
             return warn('saw "pointerup" before api.npcs');
-          if (e.rmb || e.justLongDown || e.distancePx >= 1)
+          if (!e.is3d || e.rmb || e.justLongDown || e.distancePx >= 1)
             return;
           api.walkTo(e.point);
           break;

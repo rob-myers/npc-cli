@@ -67,7 +67,8 @@
   - ✅ continue from frame 12
   
 - 🚧 minecraft walk cycle (second attempt)
-  -  https://youtu.be/nRtT7Gr6S2o?si=QvqDEtCqhsXRA_Dj
+  - https://youtu.be/nRtT7Gr6S2o?si=QvqDEtCqhsXRA_Dj
+  - https://youtu.be/nRtT7Gr6S2o?si=SjFKStaPyuiBiCB6&t=402
 
 - minecraft idle animation
 - minecraft run cycle
@@ -93,9 +94,9 @@
   - ✅ rethink mobile long-press
 
 - 🚧 clarify pointer{down,up} i.e. 2d, 3d
+  - ✅ pointerdown, pointerup have boolean `is3d`
+  - ✅ pointerup-outside has `is3d` `false`
   - infiniteGrid, walls, obstacles have onPointer{Down,Up}
-  - pointerdown, pointerup are 3d
-  - pointerdown-2d, pointerup-2d, pointerup-outside are 2d
 
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet

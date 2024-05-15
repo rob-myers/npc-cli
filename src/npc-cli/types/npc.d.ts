@@ -2,45 +2,28 @@ declare namespace NPC {
   type Event =
     | PointerUpOutsideEvent
     | PointerUpEvent
-    // | PointerMoveEvent
     | PointerDownEvent
     | LongPointerDownEvent
+    // | PointerMoveEvent
     | { key: "disabled" }
     | { key: "enabled" }
     | { key: "spawned-npc"; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey };
-  // ...
-
-  // interface PointerMoveEvent {
-  //   key: "pointermove";
-  //   /** Ordinate `y` */
-  //   height: number;
-  //   /** Properties of the thing we clicked. */
-  //   meta: Geom.Meta;
-  //   /** Coords `(x, z)` */
-  //   point: Geom.VectJson;
-  //   screenPoint: Geom.VectJson;
-  // }
-
-  interface PointerUpEvent extends BasePointerUpEvent {
-    key: "pointerup";
-    point: import("three").Vector3Like;
-    /** Properties of the thing we clicked. */
-    meta: Geom.Meta<{
-      /** `(x, z)` of target element centre if any */
-      targetCenter?: Geom.VectJson;
-    }>;
-  }
-
-  interface PointerUpOutsideEvent extends BasePointerUpEvent {
-    key: "pointerup-outside";
-  }
-
-  interface PointerDownEvent {
-    key: "pointerdown";
     // 🚧 ...
-  }
+
+  type PointerUpEvent = Pretty<BasePointerEvent & {
+    key: "pointerup";
+  }>;
+
+  type PointerUpOutsideEvent = Pretty<BasePointerEvent & {
+    key: "pointerup-outside";
+    is3d: false;
+  }>;
+
+  type PointerDownEvent = Pretty<BasePointerEvent & {
+    key: "pointerdown";
+  }>;
   
   interface LongPointerDownEvent {
     key: "long-pointerdown";
@@ -49,17 +32,35 @@ declare namespace NPC {
     screenPoint: Geom.VectJson;
   }
 
-  interface BasePointerUpEvent {
+  type BasePointerEvent = {
+    /** For future use with CLI */
     clickId?: string;
-    /** Distance in screen pixels from pointerdown */
+    /**
+     * Distance in screen pixels from previous pointerdown.
+     * Only for `pointerup`.
+    */
     distancePx: number;
-    /** Was this a long press? */
-    longPress: boolean;
-    /** Was the right mouse button used?  */
-    rmb: boolean;
+    /**
+      * Was previous pointerdown held down for long?
+      * Only for `pointerup`.
+      */
     justLongDown: boolean;
+    /** Screen position of pointer */
     screenPoint: Geom.VectJson;
-  }
+    /** Was the right mouse button being pressed?  */
+    rmb: boolean;
+  } & (
+    | {
+        is3d: true;
+        point: import("three").Vector3Like;
+        /** Properties of the thing we clicked. */
+        meta: Geom.Meta<{
+          /** `(x, z)` of target element centre if any */
+          targetCenter?: Geom.VectJson;
+        }>;
+      }
+    | { is3d: false; }
+  );
 
   type TiledCacheResult = Extract<
     import("@recast-navigation/core").NavMeshImporterResult,
