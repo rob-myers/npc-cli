@@ -66,8 +66,8 @@
   - ✅ Cmd-C, Cmd-Shift-V to mirror 1st to 12; dup 1st at 24
   - ✅ continue from frame 12
   
-
--  minecraft walk cycle (second attempt)
+- 🚧 minecraft walk cycle (second attempt)
+  -  https://youtu.be/nRtT7Gr6S2o?si=QvqDEtCqhsXRA_Dj
 
 - minecraft idle animation
 - minecraft run cycle
