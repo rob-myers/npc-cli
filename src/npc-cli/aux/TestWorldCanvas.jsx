@@ -36,6 +36,10 @@ export default function TestWorldCanvas(props) {
       api.r3f = rootState;
       api.update(); // e.g. show stats
     },
+    onGridPointerDown(e) {
+      console.log('grid onPointerDown');
+      // 🚧
+    },
     onPointerDown(e) {
       const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
       state.mouseClientPos.set(e.clientX, e.clientY);
@@ -56,10 +60,7 @@ export default function TestWorldCanvas(props) {
         key: "pointerdown",
       });
     },
-    onPointerMove(e) {
-      state.mouseClientPos.set(e.clientX, e.clientY);
-    },
-    onPointerUp(e) {
+    onGridPointerUp(e) {
       if (!state.down) {
         return;
       }
@@ -85,6 +86,9 @@ export default function TestWorldCanvas(props) {
 
       state.down = undefined;
       state.justLongDown = false;
+    },
+    onPointerMove(e) {
+      state.mouseClientPos.set(e.clientX, e.clientY);
     },
     onPointerMissed(e) {
       if (!state.down) {
@@ -146,11 +150,12 @@ export default function TestWorldCanvas(props) {
       <Origin />
 
       <InfiniteGrid
-        rotation={[Math.PI / 2, 0, 0]}
-        onPointerUp={state.onPointerUp}
         size1={1.5}
         size2={1.5}
         color="#bbbbbb"
+        rotation={[Math.PI / 2, 0, 0]}
+        onPointerDown={state.onGridPointerDown}
+        onPointerUp={state.onGridPointerUp}
       />
 
       {props.children}
@@ -179,7 +184,8 @@ export default function TestWorldCanvas(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
  * @property {(e: MouseEvent) => void} onPointerMissed
  * @property {(e: React.PointerEvent) => void} onPointerMove
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
  */
 
 const canvasCss = css`
