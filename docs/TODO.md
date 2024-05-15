@@ -85,13 +85,18 @@
     > `npx gltfjsx model.glb --transform`
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
-- 🚧 context menu
+- ✅ context menu
   - ❌ use `tunnel-rat`
   - ✅ move into own component TestContextMenu
   - ✅ works when right-click walls
   - ✅ avoid navigating when right-click floor
   - ✅ rethink mobile long-press
-  - add onPointerDown to infiniteGridHelper (?)
+
+- 🚧 clarify pointer{down,up} i.e. 2d, 3d
+  - infiniteGrid, walls, obstacles have onPointer{Down,Up}
+  - pointerdown, pointerup are 3d
+  - pointerdown-2d, pointerup-2d, pointerup-outside are 2d
+
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
   - clicked if respective pixel is non-transparent
