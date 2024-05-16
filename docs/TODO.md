@@ -24,50 +24,10 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- ✅ go through minecraft rig tutorial after all
-  - ✅ 1/4 modelling https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
-    - don't subdivide until after uv-mapping
-  - ✅ 2/4 uv-mapping https://www.youtube.com/watch?v=iMU_xnfKCpE&ab_channel=TutsByKai
-    - found original uv map textures in Cycles_Minecraft_Rig BSS Edit V6.5
-      - https://www.nari3d.com/boxscape
-      - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
-  - ✅ 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
-  - ❌ Shape keys for knee 90 degree leg bends
-    - i.e. "morph targets" in three.js, requiring manually animation
-  - ✅ slightly scale "back of knee" inwards to avoid z-fighting
-    - maybe our "view from above" will hide the issue
-  - ✅ IK bones for feet e.g. keep them still
-    - https://www.youtube.com/watch?v=OMwFPBoXiMw&t=101s&ab_channel=Nekomatata
+- 🚧 adjust rig again
+  - ✅ remove dup vertices
+  - try remove knees/elbows
 
-- ✅ adjust rig
-  - ✅ bone naming convention `*_L` and `*_R`
-  - ✅ work out how to do foot rigging i.e. heel roll
-    - https://youtu.be/OMwFPBoXiMw?si=qns-Wq4Q6L2MjDd5&t=164
-    - ❌ try pivot constraint on bones
-    - ❌ try move leg backwards
-    - ❌ try two foot bones: leg-base -> heel -> toe
-    - ✅ try one ik bone with weight-painting, with head at heel
-  - ❌ extra vertices above foot?
-  - ✅ decided against foot (and extra vertices)
-  - ✅ sharper knees
-
-- ✅ minecraft walk cycle (first attempt)
-  - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
-  - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
-  - our mesh is 2.5 larger than `Zamination_Rig_V4`
-  - timeline > keying > Location and Rotation
-  - ✅ control feet rotation via ik
-  - ✅ foot should pivot around heel
-    - to pivot around toe, set IK position first, set IK angle second 
-  - ✅ revert to foot in the middle
-  - ❌ maybe add vertices above foot
-  - ✅ merge feet position/rotation into same ik bone
-    - to pivot around toe/heel, set IK angle first, set IK position second
-  - ✅ 1st attempt at 1st frame
-  - ✅ rename bones to align with Blender naming convention
-  - ✅ Cmd-C, Cmd-Shift-V to mirror 1st to 12; dup 1st at 24
-  - ✅ continue from frame 12
-  
 - 🚧 minecraft walk cycle (second attempt)
   - https://youtu.be/nRtT7Gr6S2o?si=QvqDEtCqhsXRA_Dj
   - https://youtu.be/nRtT7Gr6S2o?si=SjFKStaPyuiBiCB6&t=402
@@ -1048,3 +1008,47 @@ React.useEffect(() => {
   > We are very relaxed about things you create for yourself. Pretty much anything goes there - so go for it and have fun, just remember the policies and don’t do anything illegal or infringing on others.
   > ...
   > This applies, for example, if you want to set up and run any non-commercial blogs, servers, community forums, fan sites, fan clubs, news groups, events, and gatherings.
+
+- ✅ go through minecraft rig tutorial after all
+  - ✅ 1/4 modelling https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
+    - don't subdivide until after uv-mapping
+  - ✅ 2/4 uv-mapping https://www.youtube.com/watch?v=iMU_xnfKCpE&ab_channel=TutsByKai
+    - found original uv map textures in Cycles_Minecraft_Rig BSS Edit V6.5
+      - https://www.nari3d.com/boxscape
+      - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
+  - ✅ 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
+  - ❌ Shape keys for knee 90 degree leg bends
+    - i.e. "morph targets" in three.js, requiring manually animation
+  - ✅ slightly scale "back of knee" inwards to avoid z-fighting
+    - maybe our "view from above" will hide the issue
+  - ✅ IK bones for feet e.g. keep them still
+    - https://www.youtube.com/watch?v=OMwFPBoXiMw&t=101s&ab_channel=Nekomatata
+
+- ✅ adjust rig
+  - ✅ bone naming convention `*_L` and `*_R`
+  - ✅ work out how to do foot rigging i.e. heel roll
+    - https://youtu.be/OMwFPBoXiMw?si=qns-Wq4Q6L2MjDd5&t=164
+    - ❌ try pivot constraint on bones
+    - ❌ try move leg backwards
+    - ❌ try two foot bones: leg-base -> heel -> toe
+    - ✅ try one ik bone with weight-painting, with head at heel
+  - ❌ extra vertices above foot?
+  - ✅ decided against foot (and extra vertices)
+  - ✅ sharper knees
+
+- ✅ minecraft walk cycle (first attempt)
+  - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
+  - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
+  - our mesh is 2.5 larger than `Zamination_Rig_V4`
+  - timeline > keying > Location and Rotation
+  - ✅ control feet rotation via ik
+  - ✅ foot should pivot around heel
+    - to pivot around toe, set IK position first, set IK angle second 
+  - ✅ revert to foot in the middle
+  - ❌ maybe add vertices above foot
+  - ✅ merge feet position/rotation into same ik bone
+    - to pivot around toe/heel, set IK angle first, set IK position second
+  - ✅ 1st attempt at 1st frame
+  - ✅ rename bones to align with Blender naming convention
+  - ✅ Cmd-C, Cmd-Shift-V to mirror 1st to 12; dup 1st at 24
+  - ✅ continue from frame 12

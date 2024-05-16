@@ -75,6 +75,8 @@
   - Option+R/G
 - Collapse/Expand Outliner
   - Shift-click
+- Small-delta grab
+  - Shift+G+...
 
 - Basic IK setup for "feet to stay in place when move root up/down"
   - edit mode, ensure top of legs are parented to root
@@ -85,6 +87,11 @@
 - Mirroring
   - edit mode, 3d viewport, n to show "Item, Tool, View", Tool > "X-Axis Mirror"
   - Doesn't work in pose mode
+
+- Blender's rotation quaternions
+  - https://en.wikipedia.org/wiki/Euler%27s_rotation_theorem
+  - `angle = 2 arccos W`
+    - https://docs.blender.org/manual/en/latest/advanced/appendices/rotations.html
 
 ### unrar on Mac
 
