@@ -39,7 +39,7 @@
   - ✅ IK bones for feet e.g. keep them still
     - https://www.youtube.com/watch?v=OMwFPBoXiMw&t=101s&ab_channel=Nekomatata
 
-- 🚧 adjust rig
+- ✅ adjust rig
   - ✅ bone naming convention `*_L` and `*_R`
   - ✅ work out how to do foot rigging i.e. heel roll
     - https://youtu.be/OMwFPBoXiMw?si=qns-Wq4Q6L2MjDd5&t=164
@@ -48,6 +48,8 @@
     - ❌ try two foot bones: leg-base -> heel -> toe
     - ✅ try one ik bone with weight-painting, with head at heel
   - ❌ extra vertices above foot?
+  - ✅ decided against foot (and extra vertices)
+  - ✅ sharper knees
 
 - ✅ minecraft walk cycle (first attempt)
   - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
@@ -96,7 +98,7 @@
 - 🚧 clarify pointer{down,up} i.e. 2d, 3d
   - ✅ pointerdown, pointerup have boolean `is3d`
   - ✅ pointerup-outside has `is3d` `false`
-  - infiniteGrid, walls, obstacles have onPointer{Down,Up}
+  - 🚧 infiniteGrid, walls, obstacles have onPointer{Down,Up}
 
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
