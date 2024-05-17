@@ -38,28 +38,25 @@ declare namespace NPC {
     /**
      * Distance in screen pixels from previous pointerdown.
      * Only for `pointerup`.
-    */
+     */
     distancePx: number;
     /**
-      * Was previous pointerdown held down for long?
-      * Only for `pointerup`.
-      */
+     * Was previous pointerdown held down for long?
+     * Only for `pointerup`.
+     */
     justLongDown: boolean;
     /** Screen position of pointer */
     screenPoint: Geom.VectJson;
     /** Was the right mouse button being pressed?  */
     rmb: boolean;
   } & (
+    | { is3d: false; }
     | {
         is3d: true;
         point: import("three").Vector3Like;
         /** Properties of the thing we clicked. */
-        meta: Geom.Meta<{
-          /** `(x, z)` of target element centre if any */
-          targetCenter?: Geom.VectJson;
-        }>;
+        meta: Geom.Meta;
       }
-    | { is3d: false; }
   );
 
   type TiledCacheResult = Extract<
