@@ -32,6 +32,9 @@
 - 🚧 minecraft walk cycle (2nd attempt)
   - https://www.youtube.com/watch?v=e_COc0ZVHr0&ab_channel=MarkMasters
   - https://youtu.be/nRtT7Gr6S2o?si=bN2xQQ7XdXcBGvqL&t=717
+  - do arms last to avoid hip adjustments causing conflicts
+  - head https://www.youtube.com/watch?v=nRtT7Gr6S2o&ab_channel=JoeyCarlino
+  - arms https://youtu.be/nRtT7Gr6S2o?si=TbFcm0wRxxHcs04O&t=1148
 
 - test gltf export does not need ik bones (feet, knees)
 
