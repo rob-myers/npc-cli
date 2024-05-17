@@ -79,6 +79,8 @@
   - Shift+G+...
 - Insert Keyframe Menu
   - K
+- Insert/Replace Single Keyframe
+  - RMB on numeric UI input e.g. "Location X"
 
 - Basic IK setup for "feet to stay in place when move root up/down"
   - edit mode, ensure top of legs are parented to root
