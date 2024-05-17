@@ -24,13 +24,15 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- 🚧 adjust rig again
+- ✅ adjust rig again
   - ✅ remove dup vertices
-  - try remove knees/elbows
+  - ❌ try remove knees/elbows
+  - ℹ️ can avoid bent elbow z-fighting per animation
 
-- 🚧 minecraft walk cycle (second attempt)
+- 🚧 minecraft walk cycle (2nd attempt)
+  - https://www.youtube.com/watch?v=e_COc0ZVHr0&ab_channel=MarkMasters
   - https://youtu.be/nRtT7Gr6S2o?si=QvqDEtCqhsXRA_Dj
-  - https://youtu.be/nRtT7Gr6S2o?si=SjFKStaPyuiBiCB6&t=402
+  - https://youtu.be/nRtT7Gr6S2o?si=pVWLgP_xtkCLyzmC&t=567
 
 - minecraft idle animation
 - minecraft run cycle
