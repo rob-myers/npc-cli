@@ -31,8 +31,9 @@
 
 - 🚧 minecraft walk cycle (2nd attempt)
   - https://www.youtube.com/watch?v=e_COc0ZVHr0&ab_channel=MarkMasters
-  - https://youtu.be/nRtT7Gr6S2o?si=QvqDEtCqhsXRA_Dj
-  - https://youtu.be/nRtT7Gr6S2o?si=pVWLgP_xtkCLyzmC&t=567
+  - https://youtu.be/nRtT7Gr6S2o?si=bN2xQQ7XdXcBGvqL&t=717
+
+- test gltf export does not need ik bones (feet, knees)
 
 - minecraft idle animation
 - minecraft run cycle
