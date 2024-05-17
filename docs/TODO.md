@@ -35,6 +35,7 @@
   - do arms last to avoid hip adjustments causing conflicts
   - head https://www.youtube.com/watch?v=nRtT7Gr6S2o&ab_channel=JoeyCarlino
   - arms https://youtu.be/nRtT7Gr6S2o?si=TbFcm0wRxxHcs04O&t=1148
+  - graph editor https://youtu.be/nRtT7Gr6S2o?si=kyDo19TLbpWdkzC1&t=1236
 
 - test gltf export does not need ik bones (feet, knees)
 

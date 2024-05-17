@@ -81,6 +81,8 @@
   - K
 - Insert/Replace Single Keyframe
   - RMB on numeric UI input e.g. "Location X"
+- Copy partial pose from left-to-right
+  - Select left bones, Cmd+C, Select right bones, Cmd+Shift+C
 
 - Basic IK setup for "feet to stay in place when move root up/down"
   - edit mode, ensure top of legs are parented to root
