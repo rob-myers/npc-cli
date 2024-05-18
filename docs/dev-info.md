@@ -83,6 +83,10 @@
   - RMB on numeric UI input e.g. "Location X"
 - Copy partial pose from left-to-right
   - Select left bones, Cmd+C, Select right bones, Cmd+Shift+C
+- Switch between Dope Sheet and Graph Editor
+  - Ctrl+Tab
+- Graph Editor toggle channel visibility
+  - Shift+H, unhide via Option+H
 
 - Basic IK setup for "feet to stay in place when move root up/down"
   - edit mode, ensure top of legs are parented to root
