@@ -74,6 +74,11 @@
   - clicked point -> unit XZ square -> sprite-sheet
   - clicked if respective pixel is non-transparent
 
+- rethink sh/scripts.ts and sh/raw-loader.js
+  - maybe sh/functions.sh
+  - maybe sh/generators.js
+  - support HMR of both files
+
 - start writing first article
 
 - show toast while navmesh loading

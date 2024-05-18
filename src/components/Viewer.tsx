@@ -71,7 +71,11 @@ export default function Viewer() {
             {
               type: "terminal",
               filepath: "tty-1",
-              env: { WORLD_KEY: "world-1", PROFILE: profileLookup.util_0() },
+              env: {
+                WORLD_KEY: "world-1",
+                PROFILE: profileLookup.util_0(),
+                // PROFILE: profileLookup.game_0(),
+              },
             },
             {
               type: "component",
