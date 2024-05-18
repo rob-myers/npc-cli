@@ -88,12 +88,19 @@ export default function TestWallsAndDoors(props) {
     },
     onPointerUp(e) {
       const target = /** @type {keyof typeof meshName} */ (e.object.name);
-      if (target === 'doors' && (isTouchDevice() || !isRMB(e.nativeEvent))) {
-        const instanceId = /** @type {number} */ (e.instanceId);
-        const meta = state.doorByInstId[instanceId];
-        meta.open = !meta.open;
-        state.movingDoors.set(meta.instanceId, meta);
-      }
+      api.events.next({
+        key: "pointerup",
+        is3d: true,
+        distancePx: api.view.getDownDistancePx(),
+        justLongDown: api.view.justLongDown,
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        point: e.point,
+        meta: {
+          ...target === 'doors' && { doors: true, instanceId: e.instanceId },
+          ...target === 'walls' && { walls: true, instanceId: e.instanceId },
+        },
+      });
       e.stopPropagation();
     },
     onTick() {
@@ -112,6 +119,11 @@ export default function TestWallsAndDoors(props) {
         if (meta.ratio === dstRatio) state.movingDoors.delete(instanceId);
       }
       instanceMatrix.needsUpdate = true;
+    },
+    toggleDoor(instanceId) {
+      const doorMeta = state.doorByInstId[instanceId];
+      doorMeta.open = !doorMeta.open;
+      state.movingDoors.set(doorMeta.instanceId, doorMeta);
     },
     positionInstances() {
       const { wallsInst: ws, doorsInst: ds } = state;
@@ -201,6 +213,7 @@ export default function TestWallsAndDoors(props) {
  * ) => THREE.Matrix4} getWallMat
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * @property {(instanceId: number) => void} toggleDoor
  * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
