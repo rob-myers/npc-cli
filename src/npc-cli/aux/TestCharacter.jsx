@@ -22,7 +22,7 @@ export function TestCharacter(props) {
 
       {/* <CameraControls makeDefault enabled={!props.disabled} /> */}
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
-      <ambientLight color="white" intensity={0.25} />
+      <ambientLight color="white" intensity={3} />
       <pointLight
         position={[0, 3, 2]}
         intensity={4}
@@ -47,7 +47,7 @@ export function TestCharacter(props) {
         >
           <meshStandardMaterial
             side={THREE.DoubleSide}
-            color="#fff"
+            color="#888"
             // transparent opacity={0.3}
           />
         </mesh>

@@ -6,17 +6,24 @@ import { info } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
 import CharacterController from "./character-controller";
 
+const meta = /** @type {const} */ ({
+  'base-mesh-246-tri': { url: '/assets/3d/base-mesh-246-tri.glb', scale: 1, height: 1.7, rotation: undefined },
+  soldier: { url: '/assets/3d/Soldier.glb', scale: 1, height: 1.7, rotation: /** @type {THREE.Vector3Tuple} */ ([0, Math.PI, 0]) },
+  mixamo: { url: '/assets/3d/mixamo-test.glb', scale: 1, height: 1.7, rotation: undefined },
+  minecraft: { url: '/assets/3d/minecraft-anim.glb', scale: 0.25, height: 2, rotation: undefined },
+});
+
+const chosen = meta.minecraft;
+
 /**
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
 export const TestCharacterController = React.forwardRef(function TestCharacterController({
-  capsuleHalfHeight = 1.7 / 2,
-  capsuleRadius = 0.3 
+  cylinderHalfHeight = chosen.height / 2,
+  cylinderRadius = 0.3,
 }, ref) {
 
-  // const { scene: gltf } = useGLTF('/assets/3d/base-mesh-246-tri.glb');
-  // const { scene: model, animations } = useGLTF('/assets/3d/Soldier.glb');
-  const { scene: model, animations } = useGLTF('/assets/3d/mixamo-test.glb');
+  const { scene: model, animations } = useGLTF(chosen.url);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     group: /** @type {*} */ (null),
@@ -33,7 +40,7 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
     model.traverse(x => {
       if (x instanceof THREE.Mesh && x.material instanceof THREE.MeshStandardMaterial) {
         // x.material.metalness = 0;
-        x.material.metalness = 1;
+        // x.material.metalness = 1;
         x.castShadow = true;
       }
     });
@@ -58,17 +65,21 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
   useFrame((_, deltaMs) => state.update(deltaMs));
 
   return (
-    <group ref={x => x && (state.group = x)}>
+    <group
+      ref={x => x && (state.group = x)}
+      scale={chosen.scale}
+    >
       <mesh
-        position={[0, capsuleHalfHeight, 0]}
+        position={[0, cylinderHalfHeight / chosen.scale, 0]}
+        scale={1 / chosen.scale}
         visible={false}
       >
         <meshStandardMaterial color="red" wireframe />
-        <cylinderGeometry args={[capsuleRadius, capsuleRadius, capsuleHalfHeight * 2]} />
+        <cylinderGeometry args={[cylinderRadius, cylinderRadius, cylinderHalfHeight * 2]} />
       </mesh>
       <primitive
         object={model}
-        // rotation={[0, Math.PI, 0]}
+        rotation={chosen.rotation}
       />
     </group>
   );
@@ -76,8 +87,8 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
 
 /**
  * @typedef Props
- * @property {number} [capsuleHalfHeight]
- * @property {number} [capsuleRadius]
+ * @property {number} [cylinderHalfHeight]
+ * @property {number} [cylinderRadius]
  */
 
 /**

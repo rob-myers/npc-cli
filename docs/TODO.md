@@ -38,11 +38,17 @@
   - graph editor https://youtu.be/nRtT7Gr6S2o?si=kyDo19TLbpWdkzC1&t=1236
 
 - ✅ copy minecraft-anim-test.2.blend -> minecraft-anim.blend
+- ✅ try gltf export
+  - ✅ scale: 8m (blender) -> 2m (three.js) i.e. 0.25
+  - ✅ textures: must use `Principled BSDF material`
+    - https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html#usage
 - 🚧 test gltf export does not need ik bones (feet, knees)
+  - export deformation bones only (?)
 - minecraft idle animation
   - multiple animations in one file
 - minecraft run cycle
   - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
+- TestCharacter foot sliding i.e. calculate foot motions and use to set speed
 
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
 - ❌ can color obstacle instances
