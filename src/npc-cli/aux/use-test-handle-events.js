@@ -10,15 +10,18 @@ export default function useHandleEvents(api) {
     handleEvents(e) {
       switch (e.key) {
         case "pointerup":
-          if (!api.npcs)
-            return warn('saw "pointerup" before api.npcs');
-          if (!e.is3d || e.rmb || e.justLongDown || e.distancePx >= 1)
+          if (!api.npcs) {
+            return warn(`saw "${e.key}" before api.npcs`);
+          }
+          if (!e.is3d || e.rmb || e.justLongDown || e.distancePx >= 1) {
             return;
+          }
           api.walkTo(e.point);
           break;
         case "draw-floor-ceil":
-          if (!api.floorImg[e.gmKey])
-            return warn(`saw "draw-floor-ceil" before api.floorImg['${e.gmKey}']`);
+          if (!api.floorImg[e.gmKey]) {
+            return warn(`saw "${e.key}" before api.floorImg['${e.gmKey}']`);
+          }
           api.surfaces.drawFloorAndCeil(e.gmKey);
           break;
       }

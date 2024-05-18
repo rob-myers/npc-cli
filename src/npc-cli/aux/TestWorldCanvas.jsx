@@ -4,7 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { Vect } from "../geom";
-import { isRMBDutton, isTouchDevice } from "../service/dom.js";
+import { isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { InfiniteGrid } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
@@ -30,6 +30,9 @@ export default function TestWorldCanvas(props) {
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
     },
+    getDownDistancePx(e) {
+      return state.down?.offset.distanceTo({ x: e.offsetX, y: e.offsetY }) ?? 0;
+    },
     onCreated(rootState) {
       state.rootState = rootState;
       api.threeReady = true;
@@ -43,7 +46,7 @@ export default function TestWorldCanvas(props) {
         is3d: true,
         distancePx: 0,
         justLongDown: false,
-        rmb: isRMBDutton(e.nativeEvent), // 🚧 rename?
+        rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         point: e.point,
         meta: {
@@ -57,15 +60,14 @@ export default function TestWorldCanvas(props) {
       }
 
       window.clearTimeout(state.down.longTimeoutId);
-      const distancePx = state.down.offset.distanceTo({ x: e.clientX, y: e.clientY });
       // const timeMs = Date.now() - state.down.epochMs;
 
       api.events.next({
         key: "pointerup",
         is3d: true,
-        distancePx,
+        distancePx: state.getDownDistancePx(e.nativeEvent),
         justLongDown: state.justLongDown,
-        rmb: isRMBDutton(e.nativeEvent),
+        rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         point: e.point,
         meta: {
@@ -88,10 +90,7 @@ export default function TestWorldCanvas(props) {
           state.justLongDown = true;
           api.events.next({
             key: "long-pointerdown",
-            distancePx: state.pointerOffset.distanceTo({
-              x: e.nativeEvent.offsetX,
-              y: e.nativeEvent.offsetY,
-            }),
+            distancePx: state.getDownDistancePx(e.nativeEvent),
             screenPoint,
           });
         }, longPressMs),
@@ -102,7 +101,7 @@ export default function TestWorldCanvas(props) {
         is3d: false,
         distancePx: 0,
         justLongDown: false,
-        rmb: isRMBDutton(e.nativeEvent),
+        rmb: isRMB(e.nativeEvent),
         screenPoint,
       });
     },
@@ -117,9 +116,9 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerup-outside",
         is3d: false,
-        distancePx: state.down.offset.distanceTo({ x: e.clientX, y: e.clientY }),
+        distancePx: state.getDownDistancePx(e),
         justLongDown: state.justLongDown,
-        rmb: isRMBDutton(e),
+        rmb: isRMB(e),
         screenPoint: { x: e.offsetX, y: e.offsetY },
       });
       state.justLongDown = false;
@@ -193,6 +192,7 @@ export default function TestWorldCanvas(props) {
  * @typedef State
  * @property {HTMLCanvasElement} canvasEl
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
+ * @property {(e: PointerEvent | MouseEvent) => number} getDownDistancePx
  * @property {import('three-stdlib').MapControls} controls
  * @property {{ offset: Geom.Vect; distance: number; epochMs: number; longTimeoutId: number; } | undefined} down
  * @property {boolean} justLongDown

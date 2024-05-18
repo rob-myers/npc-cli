@@ -64,7 +64,7 @@ export function getAssetQueryParam() {
  * Is Right Mouse Button (RMB) down?
  * @param {MouseEvent} e 
  */
-export function isRMBDutton(e) {
+export function isRMB(e) {
   // return (e.buttons & 2) !== 0;
   return e.button === 2;
 }
