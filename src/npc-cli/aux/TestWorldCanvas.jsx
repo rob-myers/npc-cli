@@ -55,13 +55,6 @@ export default function TestWorldCanvas(props) {
       });
     },
     onGridPointerUp(e) {
-      if (!state.down) {
-        return;
-      }
-
-      // window.clearTimeout(state.down.longTimeoutId);
-      // const timeMs = Date.now() - state.down.epochMs;
-
       api.events.next({
         key: "pointerup",
         is3d: true,
@@ -74,9 +67,6 @@ export default function TestWorldCanvas(props) {
           floor: true,
         },
       });
-
-      state.down = undefined;
-      state.justLongDown = false;
     },
     onPointerDown(e) {
       const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -112,8 +102,23 @@ export default function TestWorldCanvas(props) {
     onPointerMove(e) {
       state.pointerOffset.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
-    onPointerUp(e) {
-      window.clearTimeout(state.down?.longTimeoutId);
+    onPointerUp(e) {// After 3D pointerup
+      if (!state.down) {
+        return;
+      }
+      window.clearTimeout(state.down.longTimeoutId);
+      
+      api.events.next({
+        key: "pointerup",
+        is3d: false,
+        distancePx: state.getDownDistancePx(),
+        justLongDown: state.justLongDown,
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+      });
+
+      state.down = undefined;
+      state.justLongDown = false;
     },
     onPointerMissed(e) {
       if (!state.down) {
