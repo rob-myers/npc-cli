@@ -37,8 +37,8 @@
   - arms https://youtu.be/nRtT7Gr6S2o?si=TbFcm0wRxxHcs04O&t=1148
   - graph editor https://youtu.be/nRtT7Gr6S2o?si=kyDo19TLbpWdkzC1&t=1236
 
+- ✅ copy minecraft-anim-test.2.blend -> minecraft-anim.blend
 - 🚧 test gltf export does not need ik bones (feet, knees)
-- copy minecraft-anim-test.2.blend -> minecraft-anim.blend
 - minecraft idle animation
   - multiple animations in one file
 - minecraft run cycle
