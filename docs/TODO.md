@@ -24,9 +24,11 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- 🚧 test gltf export does not need ik bones (feet, knees)
+- ✅ test gltf export does not need ik bones (feet, knees)
   - ✅ avoid many `SkinnedMesh` by joining meshes in Blender
-  - export deformation bones only (?)
+  - ✅ must ALSO key {upper,lower}-leg bones for each keyframe
+  - ✅ must uncheck `Properties > Bone > Deform` for IK bones
+  - ✅ export gltf options > Data > Armature > Export deformation bones only
 - minecraft idle animation
   - multiple animations in one file
 - minecraft run cycle

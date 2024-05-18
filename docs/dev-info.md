@@ -96,12 +96,16 @@
 
 - Mirroring
   - edit mode, 3d viewport, n to show "Item, Tool, View", Tool > "X-Axis Mirror"
-  - Doesn't work in pose mode
 
 - Blender's rotation quaternions
   - https://en.wikipedia.org/wiki/Euler%27s_rotation_theorem
   - `angle = 2 arccos W`
     - https://docs.blender.org/manual/en/latest/advanced/appendices/rotations.html
+
+- Avoid export IK bones (for three.js performance)
+  - must ALSO key effected bones e.g. {upper,lower}-leg bones, for each keyframe
+  - must uncheck `Properties > Bone > Deform` for IK bones
+  - export gltf options > Data > Armature > Export deformation bones only
 
 ### unrar on Mac
 
