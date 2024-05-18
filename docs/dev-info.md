@@ -107,6 +107,10 @@
   - must uncheck `Properties > Bone > Deform` for IK bones
   - export gltf options > Data > Armature > Export deformation bones only
 
+- Remove unused animation channels
+  - Dope Sheet > Channel > Clean channels
+  - But sometimes want to keep e.g. static legs out-turned by IK pole targets
+
 ### unrar on Mac
 
 ```sh

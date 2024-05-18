@@ -29,9 +29,9 @@
   - ✅ must ALSO key {upper,lower}-leg bones for each keyframe
   - ✅ must uncheck `Properties > Bone > Deform` for IK bones
   - ✅ export gltf options > Data > Armature > Export deformation bones only
-- minecraft idle animation
-  - multiple animations in one file
-- minecraft run cycle
+- ✅ multiple animations in one file
+- ✅ minecraft idle animation
+- 🚧 minecraft run cycle
   - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
 - TestCharacter foot sliding i.e. calculate foot motions and use to set speed
 
