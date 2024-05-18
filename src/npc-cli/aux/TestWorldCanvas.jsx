@@ -30,8 +30,8 @@ export default function TestWorldCanvas(props) {
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
     },
-    getDownDistancePx(e) {
-      return state.down?.offset.distanceTo({ x: e.offsetX, y: e.offsetY }) ?? 0;
+    getDownDistancePx() {
+      return state.down?.offset.distanceTo(state.pointerOffset) ?? 0;
     },
     onCreated(rootState) {
       state.rootState = rootState;
@@ -65,7 +65,7 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerup",
         is3d: true,
-        distancePx: state.getDownDistancePx(e.nativeEvent),
+        distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
@@ -90,7 +90,7 @@ export default function TestWorldCanvas(props) {
           state.justLongDown = true;
           api.events.next({
             key: "long-pointerdown",
-            distancePx: state.getDownDistancePx(e.nativeEvent),
+            distancePx: state.getDownDistancePx(),
             screenPoint,
           });
         }, longPressMs),
@@ -116,7 +116,7 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerup-outside",
         is3d: false,
-        distancePx: state.getDownDistancePx(e),
+        distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         rmb: isRMB(e),
         screenPoint: { x: e.offsetX, y: e.offsetY },
@@ -192,11 +192,11 @@ export default function TestWorldCanvas(props) {
  * @typedef State
  * @property {HTMLCanvasElement} canvasEl
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
- * @property {(e: PointerEvent | MouseEvent) => number} getDownDistancePx
+ * @property {() => number} getDownDistancePx
  * @property {import('three-stdlib').MapControls} controls
  * @property {{ offset: Geom.Vect; distance: number; epochMs: number; longTimeoutId: number; } | undefined} down
  * @property {boolean} justLongDown
- * @property {Geom.Vect} pointerOffset
+ * @property {Geom.Vect} pointerOffset `PointerEvent.offset{X,Y}` updated `onPointerMove`
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
