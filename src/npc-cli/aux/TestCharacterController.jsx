@@ -25,6 +25,7 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
 
   const { scene: model, animations } = useGLTF(chosen.url);
   // console.log(model.children[0].children);
+  // console.log(animations);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     group: /** @type {*} */ (null),

@@ -33,6 +33,7 @@
 - ✅ minecraft idle animation
 - 🚧 minecraft run cycle
   - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
+  - https://archive.org/details/TheAnimatorsSurvivalKitRichardWilliams/page/n181/mode/2up
 - TestCharacter foot sliding i.e. calculate foot motions and use to set speed
 
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
@@ -58,10 +59,12 @@
   - ✅ pointerdown, pointerup have boolean `is3d`
   - ✅ pointerup-outside has `is3d` `false`
   - ✅ infiniteGrid has onPointer{Down,Up}
-  - 🚧 walls has onPointer{Down,Up}
+  - ✅ walls, doors has onPointer{Down,Up}
+  - 🚧 3d onPointerDown should set api.view.down3d
   - 🚧 obstacles has onPointer{Down,Up}
+    - will decode actual obstacle hit later
 
-- 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
+- obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
   - clicked if respective pixel is non-transparent
 

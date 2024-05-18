@@ -59,7 +59,7 @@ export default function TestWorldCanvas(props) {
         return;
       }
 
-      window.clearTimeout(state.down.longTimeoutId);
+      // window.clearTimeout(state.down.longTimeoutId);
       // const timeMs = Date.now() - state.down.epochMs;
 
       api.events.next({
@@ -86,6 +86,10 @@ export default function TestWorldCanvas(props) {
         offset: state.pointerOffset.clone(),
         distance: 0,
         epochMs: Date.now(),
+        /**
+         * Only runs for 2d pointerdown e.g. because 3d pointerdown may not reach floor.
+         * 🚧 need to store ALL 3d "pointerdown" point and meta as e.g. state.down3d
+         */
         longTimeoutId: window.setTimeout(() => {
           state.justLongDown = true;
           api.events.next({
@@ -107,6 +111,9 @@ export default function TestWorldCanvas(props) {
     },
     onPointerMove(e) {
       state.pointerOffset.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+    },
+    onPointerUp(e) {
+      window.clearTimeout(state.down?.longTimeoutId);
     },
     onPointerMissed(e) {
       if (!state.down) {
@@ -145,6 +152,7 @@ export default function TestWorldCanvas(props) {
       onPointerDown={state.onPointerDown}
       onPointerMissed={state.onPointerMissed}
       onPointerMove={state.onPointerMove}
+      onPointerUp={state.onPointerUp}
       onCreated={state.onCreated}
     >
       {props.stats && state.rootEl &&
@@ -203,6 +211,7 @@ export default function TestWorldCanvas(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
  * @property {(e: MouseEvent) => void} onPointerMissed
  * @property {(e: React.PointerEvent) => void} onPointerMove
+ * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
  */

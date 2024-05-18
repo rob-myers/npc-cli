@@ -69,15 +69,32 @@ export default function TestWallsAndDoors(props) {
         { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
       );
     },
-    handleClick(e) {
-      const target = /** @type {'walls' | 'doors'} */ (e.object.name);
+    onPointerDown(e) {
+      const target = /** @type {keyof typeof meshName} */ (e.object.name);
+      api.events.next({
+        key: "pointerdown",
+        is3d: true,
+        distancePx: 0,
+        justLongDown: false,
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        point: e.point,
+        meta: {
+          ...target === 'doors' && { doors: true, instanceId: e.instanceId },
+          ...target === 'walls' && { walls: true, instanceId: e.instanceId },
+        },
+      });
+      e.stopPropagation();
+    },
+    onPointerUp(e) {
+      const target = /** @type {keyof typeof meshName} */ (e.object.name);
       if (target === 'doors' && (isTouchDevice() || !isRMB(e.nativeEvent))) {
         const instanceId = /** @type {number} */ (e.instanceId);
         const meta = state.doorByInstId[instanceId];
         meta.open = !meta.open;
         state.movingDoors.set(meta.instanceId, meta);
-        // e.stopPropagation(); // prevents ContextMenu
       }
+      e.stopPropagation();
     },
     onTick() {
       if (state.movingDoors.size === 0) {
@@ -129,23 +146,25 @@ export default function TestWallsAndDoors(props) {
   return (
     <>
       <instancedMesh
-        name="walls"
-        key={`${api.hash} walls`}
+        name={meshName.walls}
+        key={`${api.hash} ${meshName.walls}`}
         ref={instances => instances && (state.wallsInst = instances)}
         args={[quadGeometryXY, undefined, api.derived.wallCount]}
         frustumCulled={false}
-        onPointerUp={state.handleClick}
-      >
+        onPointerUp={state.onPointerUp}
+        onPointerDown={state.onPointerDown}
+        >
         <meshBasicMaterial side={THREE.DoubleSide} color="black" />
       </instancedMesh>
 
       <instancedMesh
-        name="doors"
-        key={`${api.hash} doors`}
+        name={meshName.doors}
+        key={`${api.hash} ${meshName.doors}`}
         ref={instances => instances && (state.doorsInst = instances)}
         args={[quadGeometryXY, undefined, api.derived.doorCount]}
         frustumCulled={false}
-        onPointerUp={state.handleClick}
+        onPointerUp={state.onPointerUp}
+        onPointerDown={state.onPointerDown}
       >
         <shaderMaterial
           key={doorShaderHash}
@@ -180,7 +199,8 @@ export default function TestWallsAndDoors(props) {
  *  height?: number,
  *  baseHeight?: number,
  * ) => THREE.Matrix4} getWallMat
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleClick
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
@@ -193,3 +213,8 @@ const tmpMatFour1 = new THREE.Matrix4();
 const tmpMatFour2 = new THREE.Matrix4();
 
 const doorShaderHash = hashJson([glsl.meshBasic.simplifiedVert, glsl.basicGradientFrag]);
+
+const meshName = /** @type {const} */ ({
+  doors: 'doors',
+  walls: 'walls',
+});
