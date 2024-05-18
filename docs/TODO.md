@@ -24,25 +24,8 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- ✅ adjust rig again
-  - ✅ remove dup vertices
-  - ❌ try remove knees/elbows
-  - ℹ️ can avoid bent elbow z-fighting per animation
-
-- ✅ minecraft walk cycle (2nd attempt)
-  - https://www.youtube.com/watch?v=e_COc0ZVHr0&ab_channel=MarkMasters
-  - https://youtu.be/nRtT7Gr6S2o?si=bN2xQQ7XdXcBGvqL&t=717
-  - do arms last to avoid hip adjustments causing conflicts
-  - head https://www.youtube.com/watch?v=nRtT7Gr6S2o&ab_channel=JoeyCarlino
-  - arms https://youtu.be/nRtT7Gr6S2o?si=TbFcm0wRxxHcs04O&t=1148
-  - graph editor https://youtu.be/nRtT7Gr6S2o?si=kyDo19TLbpWdkzC1&t=1236
-
-- ✅ copy minecraft-anim-test.2.blend -> minecraft-anim.blend
-- ✅ try gltf export
-  - ✅ scale: 8m (blender) -> 2m (three.js) i.e. 0.25
-  - ✅ textures: must use `Principled BSDF material`
-    - https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html#usage
 - 🚧 test gltf export does not need ik bones (feet, knees)
+  - ✅ avoid many `SkinnedMesh` by joining meshes in Blender
   - export deformation bones only (?)
 - minecraft idle animation
   - multiple animations in one file
@@ -1073,3 +1056,22 @@ React.useEffect(() => {
   - ✅ rename bones to align with Blender naming convention
   - ✅ Cmd-C, Cmd-Shift-V to mirror 1st to 12; dup 1st at 24
   - ✅ continue from frame 12
+
+- ✅ adjust rig again
+  - ✅ remove dup vertices
+  - ❌ try remove knees/elbows
+  - ℹ️ can avoid bent elbow z-fighting per animation
+
+- ✅ minecraft walk cycle (2nd attempt)
+  - https://www.youtube.com/watch?v=e_COc0ZVHr0&ab_channel=MarkMasters
+  - https://youtu.be/nRtT7Gr6S2o?si=bN2xQQ7XdXcBGvqL&t=717
+  - do arms last to avoid hip adjustments causing conflicts
+  - head https://www.youtube.com/watch?v=nRtT7Gr6S2o&ab_channel=JoeyCarlino
+  - arms https://youtu.be/nRtT7Gr6S2o?si=TbFcm0wRxxHcs04O&t=1148
+  - graph editor https://youtu.be/nRtT7Gr6S2o?si=kyDo19TLbpWdkzC1&t=1236
+
+- ✅ copy minecraft-anim-test.2.blend -> minecraft-anim.blend
+- ✅ try gltf export
+  - ✅ scale: 8m (blender) -> 2m (three.js) i.e. 0.25
+  - ✅ textures: must use `Principled BSDF material`
+    - https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html#usage
