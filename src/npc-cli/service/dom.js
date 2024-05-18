@@ -61,9 +61,10 @@ export function getAssetQueryParam() {
 }
 
 /**
+ * Is Right Mouse Button (RMB) down?
  * @param {MouseEvent} e 
  */
-export function wasRMBReleased(e) {
+export function isRMBDutton(e) {
   // return (e.buttons & 2) !== 0;
   return e.button === 2;
 }

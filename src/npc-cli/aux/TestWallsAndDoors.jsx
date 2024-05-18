@@ -8,7 +8,7 @@ import { wallHeight, worldScale } from "../service/const";
 import * as glsl from "../service/glsl";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
-import { wasRMBReleased, isTouchDevice } from "../service/dom";
+import { isRMBDutton, isTouchDevice } from "../service/dom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -71,7 +71,7 @@ export default function TestWallsAndDoors(props) {
     },
     handleClick(e) {
       const target = /** @type {'walls' | 'doors'} */ (e.object.name);
-      if (target === 'doors' && (isTouchDevice() || !wasRMBReleased(e.nativeEvent))) {
+      if (target === 'doors' && (isTouchDevice() || !isRMBDutton(e.nativeEvent))) {
         const instanceId = /** @type {number} */ (e.instanceId);
         const meta = state.doorByInstId[instanceId];
         meta.open = !meta.open;

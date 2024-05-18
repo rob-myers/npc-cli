@@ -29,7 +29,7 @@
   - ❌ try remove knees/elbows
   - ℹ️ can avoid bent elbow z-fighting per animation
 
-- 🚧 minecraft walk cycle (2nd attempt)
+- ✅ minecraft walk cycle (2nd attempt)
   - https://www.youtube.com/watch?v=e_COc0ZVHr0&ab_channel=MarkMasters
   - https://youtu.be/nRtT7Gr6S2o?si=bN2xQQ7XdXcBGvqL&t=717
   - do arms last to avoid hip adjustments causing conflicts
@@ -37,9 +37,10 @@
   - arms https://youtu.be/nRtT7Gr6S2o?si=TbFcm0wRxxHcs04O&t=1148
   - graph editor https://youtu.be/nRtT7Gr6S2o?si=kyDo19TLbpWdkzC1&t=1236
 
-- test gltf export does not need ik bones (feet, knees)
-
+- 🚧 test gltf export does not need ik bones (feet, knees)
+- copy minecraft-anim-test.2.blend -> minecraft-anim.blend
 - minecraft idle animation
+  - multiple animations in one file
 - minecraft run cycle
   - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
 
@@ -65,7 +66,9 @@
 - 🚧 clarify pointer{down,up} i.e. 2d, 3d
   - ✅ pointerdown, pointerup have boolean `is3d`
   - ✅ pointerup-outside has `is3d` `false`
-  - 🚧 infiniteGrid, walls, obstacles have onPointer{Down,Up}
+  - ✅ infiniteGrid has onPointer{Down,Up}
+  - 🚧 walls has onPointer{Down,Up}
+  - 🚧 obstacles has onPointer{Down,Up}
 
 - 🚧 obstacle right-click/double-tap shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet

@@ -4,7 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { Vect } from "../geom";
-import { wasRMBReleased, isTouchDevice } from "../service/dom.js";
+import { isRMBDutton, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { InfiniteGrid } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
@@ -20,7 +20,7 @@ export default function TestWorldCanvas(props) {
     controls: /** @type {*} */ (null),
     down: undefined,
     justLongDown: false,
-    mouseClientPos: new Vect(),
+    pointerOffset: new Vect(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
 
@@ -37,63 +37,77 @@ export default function TestWorldCanvas(props) {
       api.update(); // e.g. show stats
     },
     onGridPointerDown(e) {
-      console.log('grid onPointerDown');
-      // 🚧
-    },
-    onPointerDown(e) {
-      const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
-      state.mouseClientPos.set(e.clientX, e.clientY);
-      state.down = {
-        clientPos: state.mouseClientPos.clone(),
-        distance: 0, // or getDistance(state.input.touches)
-        epochMs: Date.now(),
-        longTimeoutId: window.setTimeout(() => {
-          state.justLongDown = true;
-          api.events.next({
-            key: "long-pointerdown",
-            distancePx: state.mouseClientPos.distanceTo({ x: e.clientX, y: e.clientY }),
-            screenPoint,
-          });
-        }, longPressMs),
-      };
+      // state.downPoint = e.point.clone();
       api.events.next({
         key: "pointerdown",
-        is3d: false,
+        is3d: true,
         distancePx: 0,
         justLongDown: false,
-        rmb: wasRMBReleased(e.nativeEvent),
-        screenPoint,
+        rmb: isRMBDutton(e.nativeEvent), // 🚧 rename?
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        point: e.point,
+        meta: {
+          floor: true,
+        },
       });
     },
     onGridPointerUp(e) {
       if (!state.down) {
         return;
       }
-      // info("infiniteGridHelper onPointerUp", e, e.point);
-      const distancePx = state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY });
-      const timeMs = Date.now() - state.down.epochMs;
+
       window.clearTimeout(state.down.longTimeoutId);
-      
+      const distancePx = state.down.offset.distanceTo({ x: e.clientX, y: e.clientY });
+      // const timeMs = Date.now() - state.down.epochMs;
+
       api.events.next({
         key: "pointerup",
         is3d: true,
-        rmb: wasRMBReleased(e.nativeEvent),
         distancePx,
         justLongDown: state.justLongDown,
-        // 🤔 or clientX,Y minus canvas bounds?
+        rmb: isRMBDutton(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         point: e.point,
         meta: {
           floor: true,
-          targetCenter: undefined,
         },
       });
 
       state.down = undefined;
       state.justLongDown = false;
     },
+    onPointerDown(e) {
+      const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+      state.pointerOffset.set(screenPoint.x, screenPoint.y);
+
+      state.down = {
+        offset: state.pointerOffset.clone(),
+        distance: 0,
+        epochMs: Date.now(),
+        longTimeoutId: window.setTimeout(() => {
+          state.justLongDown = true;
+          api.events.next({
+            key: "long-pointerdown",
+            distancePx: state.pointerOffset.distanceTo({
+              x: e.nativeEvent.offsetX,
+              y: e.nativeEvent.offsetY,
+            }),
+            screenPoint,
+          });
+        }, longPressMs),
+      };
+
+      api.events.next({
+        key: "pointerdown",
+        is3d: false,
+        distancePx: 0,
+        justLongDown: false,
+        rmb: isRMBDutton(e.nativeEvent),
+        screenPoint,
+      });
+    },
     onPointerMove(e) {
-      state.mouseClientPos.set(e.clientX, e.clientY);
+      state.pointerOffset.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
     onPointerMissed(e) {
       if (!state.down) {
@@ -103,9 +117,9 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerup-outside",
         is3d: false,
-        distancePx: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+        distancePx: state.down.offset.distanceTo({ x: e.clientX, y: e.clientY }),
         justLongDown: state.justLongDown,
-        rmb: wasRMBReleased(e),
+        rmb: isRMBDutton(e),
         screenPoint: { x: e.offsetX, y: e.offsetY },
       });
       state.justLongDown = false;
@@ -180,9 +194,9 @@ export default function TestWorldCanvas(props) {
  * @property {HTMLCanvasElement} canvasEl
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('three-stdlib').MapControls} controls
- * @property {{ clientPos: Geom.Vect; distance: number; epochMs: number; longTimeoutId: number; } | undefined} down
+ * @property {{ offset: Geom.Vect; distance: number; epochMs: number; longTimeoutId: number; } | undefined} down
  * @property {boolean} justLongDown
- * @property {Geom.Vect} mouseClientPos
+ * @property {Geom.Vect} pointerOffset
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
