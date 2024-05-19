@@ -14,6 +14,7 @@ export function TestCharacter(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     controller: /** @type {*} */ (null),
+    downAt: 0,
   }));
 
   return (
@@ -40,10 +41,12 @@ export function TestCharacter(props) {
           geometry={quadGeometryXZ}
           receiveShadow
           onClick={e => {
+            if (Date.now() - state.downAt >= 300) return;
             const { characterController } = state.controller;
             characterController.setTarget(e.point);
             characterController.shouldRun = e.shiftKey;
           }}
+          onPointerDown={() => state.downAt = Date.now()}
         >
           <meshStandardMaterial
             side={THREE.DoubleSide}
@@ -63,6 +66,7 @@ export function TestCharacter(props) {
 /**
  * @typedef State
  * @property {import('./TestCharacterController').State} controller
+ * @property {number} downAt
  */
 
 const groundScale = 20;
