@@ -72,6 +72,9 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       if (act.type === Actions.ADJUST_SPLIT) {
         state.focusRoot();
       }
+      if (act.type === Actions.SELECT_TAB) {
+        state.focusRoot();
+      }
       return act;
     },
     onModelChange: debounce(() => {
