@@ -46,6 +46,8 @@ const contextMenuCss = css`
   height: 100px;
   user-select: none;
 
+  display: none;
+
   font-size: 0.9rem;
   color: white;
   background-color: #222;

@@ -3,8 +3,6 @@
 
 ### Blender on MacBook
 
-#### User Interface
-
 - On Laptop, Settings -> Input -> Emulate numpad -> 1, 2, 3, ... to change camera
   - BUT then lose Verts/Edges/Faces switch in Edit Mode
   - So maybe Emulate numpad off, and use Tilde overlay to switch view instead
@@ -110,6 +108,11 @@
 - Remove unused animation channels
   - Dope Sheet > Channel > Clean channels
   - But sometimes want to keep e.g. static legs out-turned by IK pole targets
+
+
+### The Animators Survival Kit (Richard Williams)
+
+> https://archive.org/details/TheAnimatorsSurvivalKitRichardWilliams/page/n181/mode/2up
 
 ### unrar on Mac
 
