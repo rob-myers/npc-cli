@@ -1,47 +1,25 @@
 import React from "react";
 import { css } from "@emotion/css";
 
-import { isTouchDevice } from "../service/dom";
 import useStateRef from "../hooks/use-state-ref";
 import { TestWorldContext } from "./test-world-context";
 
 export default function TestContextMenu() {
 
-  const state = useStateRef(/** @returns {State} */ () => ({
-    menuEl: /** @type {*} */ (null),
-  }));
-
   const api = React.useContext(TestWorldContext);
 
-  React.useEffect(() => {
-    const sub = api.events.subscribe((e) => {
-      // console.log("event", e);
+  const state = useStateRef(/** @returns {State} */ () => ({
+    menuEl: /** @type {*} */ (null),
+    hide() {
+      state.menuEl.style.display = "none";
+    },
+    show(at) {
+      state.menuEl.style.transform = `translate(${at.x}px, ${at.y}px)`;
+      state.menuEl.style.display = "block";
+    },
+  }));
 
-      switch (e.key) {
-        case "long-pointerdown":
-          if (e.distancePx <= (isTouchDevice() ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
-            state.menuEl.style.transform = `translate(${Math.max(0, e.screenPoint.x - 64)}px, ${Math.max(0, e.screenPoint.y - 64)}px)`;
-            state.menuEl.style.display = "block";
-          } else {
-            state.menuEl.style.display = "none";
-          }
-          break;
-        case "pointerdown":
-          state.menuEl.style.display = "none";
-          break;
-        case "pointerup":
-        case "pointerup-outside":
-          if (e.rmb && e.distancePx <= 5) {// desktop show ContextMenu
-            state.menuEl.style.transform = `translate(${Math.max(0, e.screenPoint.x - 64)}px, ${Math.max(0, e.screenPoint.y - 64)}px)`;
-            state.menuEl.style.display = "block";
-          } else if (!isTouchDevice()) {// desktop hide ContextMenu
-            state.menuEl.style.display = "none";
-          }
-          break;
-      }
-    });
-    return () => sub.unsubscribe();
-  }, []);
+  api.menu = state;
 
   return (
     <div
@@ -86,4 +64,6 @@ const contextMenuCss = css`
 /**
  * @typedef State
  * @property {HTMLDivElement} menuEl
+ * @property {() => void} hide
+ * @property {(at: Geom.VectJson) => void} show
  */

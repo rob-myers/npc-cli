@@ -54,6 +54,7 @@ export default function TestWorld(props) {
     surfaces: /** @type {*} */ (null), // TestSurfaces
     doors: /** @type {*} */ (null), // TestWallsAndDoors
     npcs: /** @type {*} */ (null), // TestNpcs
+    menu: /** @type {*} */ (null), // TestContextMenu
     debug: /** @type {*} */ (null), // TestDebug
 
     ensureGmClass(gmKey) {
@@ -311,6 +312,7 @@ export default function TestWorld(props) {
  * @property {import('./TestSurfaces').State} surfaces
  * @property {import('./TestWallsAndDoors').State} doors
  * @property {import('./TestNpcs').State} npcs
+ * @property {import('./TestContextMenu').State} menu
  * @property {import('./TestDebug').State} debug
  *
  * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
