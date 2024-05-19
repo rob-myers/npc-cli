@@ -33,10 +33,16 @@
 - ✅ minecraft idle animation
 
 - 🚧 minecraft run cycle
+  - ℹ️ body 0.3 down
+  - ℹ️ arms strategy
+    - rest-pose elbows initially pointing backwards
+    - bend elbow via upper/lower arms initially
+    - can rotate around local y afterwards
+  - ✅ apply each keyframes to lower/upper legs, since we'll remove ik
   - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
   - https://archive.org/details/TheAnimatorsSurvivalKitRichardWilliams/page/n181/mode/2up
 
-- Fix TestCharacter foot sliding
+- 🚧 fix TestCharacter foot sliding
   - try animate root bone in Blender with linear interpolation
 
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
