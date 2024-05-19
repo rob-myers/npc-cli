@@ -31,10 +31,13 @@
   - ✅ export gltf options > Data > Armature > Export deformation bones only
 - ✅ multiple animations in one file
 - ✅ minecraft idle animation
+
 - 🚧 minecraft run cycle
-  - https://youtu.be/MHawhAnxJgs?si=zY0pwXtsNDkN2T07
+  - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
   - https://archive.org/details/TheAnimatorsSurvivalKitRichardWilliams/page/n181/mode/2up
-- TestCharacter foot sliding i.e. calculate foot motions and use to set speed
+
+- Fix TestCharacter foot sliding
+  - try animate root bone in Blender with linear interpolation
 
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
 - ❌ can color obstacle instances
@@ -60,7 +63,10 @@
   - ✅ pointerup-outside has `is3d` `false`
   - ✅ infiniteGrid has onPointer{Down,Up}
   - ✅ walls, doors has onPointer{Down,Up}
-  - 🚧 3d onPointerDown should set api.view.down3d
+  - api.view.lastDown
+    - ℹ️ r3f onPointerMissed only for pointerup, not pointerdown
+    - 3d onPointerDown sets
+    - 2d onPointerDown clears 3d stuff if 2d point doesn't match
   - 🚧 obstacles has onPointer{Down,Up}
     - will decode actual obstacle hit later
 
