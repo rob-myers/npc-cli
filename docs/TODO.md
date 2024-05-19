@@ -24,15 +24,7 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- ✅ test gltf export does not need ik bones (feet, knees)
-  - ✅ avoid many `SkinnedMesh` by joining meshes in Blender
-  - ✅ must ALSO key {upper,lower}-leg bones for each keyframe
-  - ✅ must uncheck `Properties > Bone > Deform` for IK bones
-  - ✅ export gltf options > Data > Armature > Export deformation bones only
-- ✅ multiple animations in one file
-- ✅ minecraft idle animation
-
-- 🚧 minecraft run cycle
+- 🚧 minecraft run-cycle
   - ℹ️ body 0.3 down
   - ℹ️ arms strategy
     - rest-pose elbows initially pointing backwards
@@ -40,10 +32,12 @@
     - can rotate around local y afterwards
   - ✅ apply each keyframes to lower/upper legs, since we'll remove ik
   - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
-  - https://archive.org/details/TheAnimatorsSurvivalKitRichardWilliams/page/n181/mode/2up
+  - https://youtu.be/60Tn5ljVoDg?si=sikCrT9fosYESD2l&t=109
 
-- 🚧 fix TestCharacter foot sliding
+- 🚧 fix TestCharacter foot-sliding
   - try animate root bone in Blender with linear interpolation
+  - walk
+  - run
 
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
 - ❌ can color obstacle instances
@@ -69,7 +63,7 @@
   - ✅ pointerup-outside has `is3d` `false`
   - ✅ infiniteGrid has onPointer{Down,Up}
   - ✅ walls, doors has onPointer{Down,Up}
-  - api.view.lastDown
+  - ✅ api.view.lastDown
     - ℹ️ r3f onPointerMissed only for pointerup, not pointerdown
     - 3d onPointerDown sets
     - 2d onPointerDown clears 3d stuff if 2d point doesn't match
@@ -1092,3 +1086,11 @@ React.useEffect(() => {
   - ✅ scale: 8m (blender) -> 2m (three.js) i.e. 0.25
   - ✅ textures: must use `Principled BSDF material`
     - https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html#usage
+
+- ✅ test gltf export does not need ik bones (feet, knees)
+  - ✅ avoid many `SkinnedMesh` by joining meshes in Blender
+  - ✅ must ALSO key {upper,lower}-leg bones for each keyframe
+  - ✅ must uncheck `Properties > Bone > Deform` for IK bones
+  - ✅ export gltf options > Data > Armature > Export deformation bones only
+- ✅ multiple animations in one file
+- ✅ minecraft idle animation

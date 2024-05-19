@@ -27,6 +27,7 @@ export default function useHandleEvents(api) {
           }
           break;
         case "pointerdown":
+          api.view.setLastDown(e);
           api.menu.hide();
           break;
         case "pointerup":

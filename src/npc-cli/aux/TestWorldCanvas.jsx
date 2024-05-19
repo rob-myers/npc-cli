@@ -1,4 +1,5 @@
 import React from "react";
+import * as THREE from "three";
 import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
@@ -20,7 +21,8 @@ export default function TestWorldCanvas(props) {
     controls: /** @type {*} */ (null),
     down: undefined,
     justLongDown: false,
-    pointerOffset: new Vect(),
+    lastDown: undefined,
+    lastScreenPoint: new Vect(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
 
@@ -31,7 +33,7 @@ export default function TestWorldCanvas(props) {
       }
     },
     getDownDistancePx() {
-      return state.down?.offset.distanceTo(state.pointerOffset) ?? 0;
+      return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
     },
     onCreated(rootState) {
       state.rootState = rootState;
@@ -70,16 +72,11 @@ export default function TestWorldCanvas(props) {
     },
     onPointerDown(e) {
       const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
-      state.pointerOffset.set(screenPoint.x, screenPoint.y);
+      state.lastScreenPoint.set(screenPoint.x, screenPoint.y);
 
       state.down = {
-        offset: state.pointerOffset.clone(),
-        distance: 0,
+        screenPoint: state.lastScreenPoint.clone(),
         epochMs: Date.now(),
-        /**
-         * Only runs for 2d pointerdown e.g. because 3d pointerdown may not reach floor.
-         * 🚧 need to store ALL 3d "pointerdown" point and meta as e.g. state.down3d
-         */
         longTimeoutId: window.setTimeout(() => {
           state.justLongDown = true;
           api.events.next({
@@ -100,7 +97,7 @@ export default function TestWorldCanvas(props) {
       });
     },
     onPointerMove(e) {
-      state.pointerOffset.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
     onPointerUp(e) {// After 3D pointerup
       if (!state.down) {
@@ -135,6 +132,21 @@ export default function TestWorldCanvas(props) {
       });
       state.justLongDown = false;
       state.down = undefined;
+    },
+    setLastDown(e) {
+      if (e.is3d || !state.lastDown) {
+        state.lastDown = {
+          epochMs: Date.now(),
+          screenPoint: Vect.from(e.screenPoint),
+          threeD: e.is3d ? { point: new THREE.Vector3().copy(e.point), meta: e.meta } : null,
+        };
+      } else {
+        state.lastDown.epochMs = Date.now();
+        if (!state.lastDown.screenPoint.equals(e.screenPoint)) {
+          state.lastDown.screenPoint.copy(e.screenPoint);
+          state.lastDown.threeD = null; // 3d pointerdown happens before 2d pointerdown
+        }
+      }
     },
   }));
 
@@ -207,18 +219,23 @@ export default function TestWorldCanvas(props) {
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {() => number} getDownDistancePx
  * @property {import('three-stdlib').MapControls} controls
- * @property {{ offset: Geom.Vect; distance: number; epochMs: number; longTimeoutId: number; } | undefined} down
+ * @property {(BaseDown & { longTimeoutId: number; }) | undefined} down
+ * Defined iff pointer is down.
+ * @property {BaseDown & { threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
+ * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
- * @property {Geom.Vect} pointerOffset `PointerEvent.offset{X,Y}` updated `onPointerMove`
+ * @property {Geom.Vect} lastScreenPoint
+ * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
  * @property {(e: MouseEvent) => void} onPointerMissed
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
+ * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  */
 
 const canvasCss = css`
@@ -243,3 +260,9 @@ const statsCss = css`
   left: unset !important;
   right: 0px;
 `;
+
+/**
+ * @typedef BaseDown
+ * @property {Geom.Vect} screenPoint
+ * @property {number} epochMs
+ */
