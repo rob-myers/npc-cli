@@ -50,7 +50,7 @@ export default function TestWorld(props) {
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
 
-    view: /** @type {*} */ (null), // TestWorldCanvas
+    ui: /** @type {*} */ (null), // TestWorldCanvas
     surfaces: /** @type {*} */ (null), // TestSurfaces
     doors: /** @type {*} */ (null), // TestWallsAndDoors
     npcs: /** @type {*} */ (null), // TestNpcs
@@ -308,7 +308,7 @@ export default function TestWorld(props) {
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
  *
- * @property {import('./TestWorldCanvas').State} view
+ * @property {import('./TestWorldCanvas').State} ui
  * @property {import('./TestSurfaces').State} surfaces
  * @property {import('./TestWallsAndDoors').State} doors
  * @property {import('./TestNpcs').State} npcs

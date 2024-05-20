@@ -19,7 +19,7 @@ export default function TestContextMenu() {
     },
     show(at) {
       const menuDim = state.menuEl.getBoundingClientRect();
-      const canvasDim = api.view.canvasEl.getBoundingClientRect();
+      const canvasDim = api.ui.canvas.getBoundingClientRect();
       const x = clamp(at.x, 0, canvasDim.width - menuDim.width);
       const y = clamp(at.y, 0, canvasDim.height - menuDim.height);
       state.menuEl.style.transform = `translate(${x}px, ${y}px)`;

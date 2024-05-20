@@ -92,8 +92,8 @@ export default function TestWallsAndDoors(props) {
       api.events.next({
         key: "pointerup",
         is3d: true,
-        distancePx: api.view.getDownDistancePx(),
-        justLongDown: api.view.justLongDown,
+        distancePx: api.ui.getDownDistancePx(),
+        justLongDown: api.ui.justLongDown,
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),

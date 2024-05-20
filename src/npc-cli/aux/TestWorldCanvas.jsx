@@ -17,7 +17,7 @@ import { Origin } from "./MiscThree";
  */
 export default function TestWorldCanvas(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
-    canvasEl: /** @type {*} */ (null),
+    canvas: /** @type {*} */ (null),
     controls: /** @type {*} */ (null),
     down: undefined,
     justLongDown: false,
@@ -27,8 +27,8 @@ export default function TestWorldCanvas(props) {
     rootState: /** @type {*} */ (null),
 
     canvasRef(canvasEl) {
-      if (canvasEl && !state.canvasEl) {
-        state.canvasEl = canvasEl;
+      if (canvasEl && !state.canvas) {
+        state.canvas = canvasEl;
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
     },
@@ -159,7 +159,7 @@ export default function TestWorldCanvas(props) {
   }));
 
   const api = React.useContext(TestWorldContext);
-  api.view = state;
+  api.ui = state;
 
   React.useEffect(() => {
     // 🚧 do not trigger on HMR
@@ -223,7 +223,7 @@ export default function TestWorldCanvas(props) {
 
 /**
  * @typedef State
- * @property {HTMLCanvasElement} canvasEl
+ * @property {HTMLCanvasElement} canvas
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {() => number} getDownDistancePx
  * @property {import('three-stdlib').MapControls} controls

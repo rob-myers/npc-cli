@@ -19,14 +19,14 @@ export default function useHandleEvents(api) {
           if (e.distancePx <= (e.touch ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
             api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
-            api.view.controls.saveState();
-            api.view.controls.reset();
+            api.ui.controls.saveState();
+            api.ui.controls.reset();
           } else {
             api.menu.hide();
           }
           break;
         case "pointerdown":
-          api.view.setLastDown(e);
+          api.ui.setLastDown(e);
           api.menu.hide();
           break;
         case "pointerup":
