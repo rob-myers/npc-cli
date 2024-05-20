@@ -157,6 +157,12 @@ export default function TestWorldCanvas(props) {
       state.justLongDown = false;
       state.down = undefined;
     },
+    onWheel(e) {
+      if (api.menu.isOpen === true) {
+        api.menu.hide();
+        api.menu.justOpen = false;
+      }
+    },
     setLastDown(e) {
       if (e.is3d || !state.lastDown) {
         state.lastDown = {
@@ -190,11 +196,12 @@ export default function TestWorldCanvas(props) {
       frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
       gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
+      onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}
       onPointerMissed={state.onPointerMissed}
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
-      onCreated={state.onCreated}
+      onWheel={state.onWheel}
     >
       {props.stats && state.rootEl &&
         <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
@@ -260,6 +267,7 @@ export default function TestWorldCanvas(props) {
  * @property {(e: MouseEvent) => void} onPointerMissed
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
+ * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
  * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  */
 
