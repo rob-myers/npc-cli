@@ -32,12 +32,13 @@ export default function TestWorld(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     disabled: !!props.disabled,
-    mapKey: props.mapKey,
     hash: '',
+    mapKey: props.mapKey,
     threeReady: false,
+    r3f: /** @type {*} */ (null),
     reqAnimId: 0,
     timer: new Timer(),
-    r3f: /** @type {*} */ (null),
+    worker: /** @type {*} */ (null),
 
     derived: /** @type {*} */ ({}),
     events: new Subject(),
@@ -196,6 +197,9 @@ export default function TestWorld(props) {
         state.gms = map.gms.map(({ gmKey, transform }, gmId) =>
           geomorphService.computeLayoutInstance(state.ensureGmClass(gmKey).layout, gmId, transform)
         );
+        state.derived.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
+        state.derived.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
+        state.derived.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
@@ -210,10 +214,6 @@ export default function TestWorld(props) {
       if (!dataChanged) {
         return null;
       }
-
-      state.derived.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
-      state.derived.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
-      state.derived.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
 
       keys(state.gmClass).forEach((gmKey) => {
         texLoadAsyncFallback(
@@ -241,23 +241,26 @@ export default function TestWorld(props) {
     // throwOnError: true, // breaks on restart dev env
   });
 
-  React.useMemo(() => {// props.worldKey should never change
+  React.useMemo(() => {// expose world for terminal
     setCached(['world', props.worldKey], state);
     return () => removeCached(['world', props.worldKey]);
   }, []);
 
-  React.useEffect(() => {
+  React.useEffect(() => {// restart worker onchange geomorphs.json
     if (state.threeReady && state.hash) {
-      // 🔔 saw strange behaviour when inlined `new URL`.
-      /** @type {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>}  */
-      const worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
-      worker.addEventListener("message", state.handleMessageFromWorker);
-      worker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
-      return () => void worker.terminate();
+      state.worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
+      state.worker.addEventListener("message", state.handleMessageFromWorker);
+      return () => void state.worker.terminate();
+    }
+  }, [state.threeReady, state.geomorphs?.hash]);
+
+  React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
+    if (state.threeReady && state.hash) {
+      state.worker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
     }
   }, [state.threeReady, state.hash]);
 
-  React.useEffect(() => {
+  React.useEffect(() => {// enable/disable animation
     state.timer.reset();
     if (!state.disabled && !!state.npcs) {
       state.onTick();
@@ -307,6 +310,7 @@ export default function TestWorld(props) {
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
+ * @property {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>} worker
  *
  * @property {import('./TestWorldCanvas').State} ui
  * @property {import('./TestSurfaces').State} surfaces

@@ -24,37 +24,18 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- ✅ minecraft run-cycle
-  - ℹ️ body 0.3 down
-  - ℹ️ arms strategy
-    - rest-pose elbows initially pointing backwards
-    - bend elbow via upper/lower arms initially
-    - can rotate around local y afterwards
-  - ✅ apply every keyframe to lower/upper legs, since we'll remove ik
-  - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
-  - https://youtu.be/60Tn5ljVoDg?si=sikCrT9fosYESD2l&t=109
-
-- ✅ fix TestCharacter foot-sliding
-  - ✅ add root bone with Deform unchecked
-  - ℹ️ must also mute (linear) root motion before export
-  - ✅ walk cycle root motion ~ 5m
-    - `.25 * 5 = 1.25m` after scaling i.e. speed `1.25m / s` (24 frames, 24 fps)
-  - ✅ run cycle root motion ~ 10m
-    - root motion `.25 * 10 = 2.5m` after scaling
-    - 20 frames -> 24 frames via scale `24 / 20 = 1.2`
-    - https://devtalk.blender.org/t/animating-in-blender-changing-the-frame-rate-should-have-the-option-to-preserve-animation-timing/21629/3
-
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
 - ❌ can color obstacle instances
   - should alter image directly instead
-- fix webp generation
-  - ensure up-to-date before push, unless --no-verify
-- change mapKey should request-nav-mesh but shouldn't restart worker
+- ✅ change mapKey should request-nav-mesh but shouldn't restart worker
 
 - integrate TestCharacter into TestWorld
   - convert into jsx
     > `npx gltfjsx model.glb --transform`
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+
+- fix webp generation
+  - ensure up-to-date before push, unless --no-verify
 
 - ✅ context menu
   - ❌ use `tunnel-rat`
@@ -1099,3 +1080,23 @@ React.useEffect(() => {
   - ✅ export gltf options > Data > Armature > Export deformation bones only
 - ✅ multiple animations in one file
 - ✅ minecraft idle animation
+
+- ✅ minecraft run-cycle
+  - ℹ️ body 0.3 down
+  - ℹ️ arms strategy
+    - rest-pose elbows initially pointing backwards
+    - bend elbow via upper/lower arms initially
+    - can rotate around local y afterwards
+  - ✅ apply every keyframe to lower/upper legs, since we'll remove ik
+  - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
+  - https://youtu.be/60Tn5ljVoDg?si=sikCrT9fosYESD2l&t=109
+
+- ✅ fix TestCharacter foot-sliding
+  - ✅ add root bone with Deform unchecked
+  - ℹ️ must also mute (linear) root motion before export
+  - ✅ walk cycle root motion ~ 5m
+    - `.25 * 5 = 1.25m` after scaling i.e. speed `1.25m / s` (24 frames, 24 fps)
+  - ✅ run cycle root motion ~ 10m
+    - root motion `.25 * 10 = 2.5m` after scaling
+    - 20 frames -> 24 frames via scale `24 / 20 = 1.2`
+    - https://devtalk.blender.org/t/animating-in-blender-changing-the-frame-rate-should-have-the-option-to-preserve-animation-timing/21629/3
