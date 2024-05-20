@@ -31,8 +31,9 @@ export default function useHandleEvents(api) {
           api.menu.hide();
           break;
         case "pointerup":
-          e.is3d && state.onPointerUp3d(e);
+          e.is3d && !api.menu.justOpen && state.onPointerUp3d(e);
           state.onPointerUpHandleMenu(e);
+          api.menu.justOpen = api.menu.isOpen;
           break;
         case "pointerup-outside":
           state.onPointerUpHandleMenu(e);

@@ -11,8 +11,11 @@ export default function TestContextMenu() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     menuEl: /** @type {*} */ (null),
+    isOpen: false,
+    justOpen: false,
     hide() {
       state.menuEl.style.visibility = "hidden";
+      state.isOpen = false;
     },
     show(at) {
       const menuDim = state.menuEl.getBoundingClientRect();
@@ -21,6 +24,7 @@ export default function TestContextMenu() {
       const y = clamp(at.y, 0, canvasDim.height - menuDim.height);
       state.menuEl.style.transform = `translate(${x}px, ${y}px)`;
       state.menuEl.style.visibility = "visible";
+      state.isOpen = true;
     },
   }));
 
@@ -71,6 +75,8 @@ const contextMenuCss = css`
 
 /**
  * @typedef State
+ * @property {boolean} isOpen
+ * @property {boolean} justOpen
  * @property {HTMLDivElement} menuEl
  * @property {() => void} hide
  * @property {(at: Geom.VectJson) => void} show
