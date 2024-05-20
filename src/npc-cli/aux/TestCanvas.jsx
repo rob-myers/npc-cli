@@ -79,6 +79,7 @@ export default function TestCanvas(props) {
               is3d: false,
               distancePx: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
               justLongDown: Date.now() - state.down.epochMs >= 300,
+              pointers: 0,
               rmb: e.button === 2,
               screenPoint: { x: e.offsetX, y: e.offsetY },
               touch: isTouchDevice(),

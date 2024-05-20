@@ -17,7 +17,7 @@ export default function useHandleEvents(api) {
           break;
         case "long-pointerdown":
           if (e.distancePx <= (e.touch ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
-            api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
+            api.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
             api.ui.controls.saveState();
             api.ui.controls.reset();
@@ -41,26 +41,28 @@ export default function useHandleEvents(api) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
+        api.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
       } else if (!e.justLongDown) {
         api.menu.hide();
       }
     },
     onPointerUp3d(e) {
+      if (e.rmb === true || e.justLongDown === true || e.pointers !== 1) {
+        return;
+      }
+
       if (e.meta.floor === true) {
         if (!api.npcs) {// 🚧 eliminate
           return warn(`saw "${e.key}" before api.npcs`);
         }
-        if (!e.rmb && !e.justLongDown && e.distancePx < 1) {
+        if (e.distancePx < 1) {
           api.walkTo(e.point);
         }
       }
 
       if (e.meta.doors === true) {
-        if (!e.rmb && !e.justLongDown) {
-          const instanceId = /** @type {number} */ (e.meta.instanceId);
-          api.doors.toggleDoor(instanceId);
-        }
+        const instanceId = /** @type {number} */ (e.meta.instanceId);
+        api.doors.toggleDoor(instanceId);
       }
     },
   }));

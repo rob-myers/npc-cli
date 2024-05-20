@@ -35,6 +35,9 @@ export default function TestWorldCanvas(props) {
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
     },
+    getNumPointers() {
+      return state.down?.pointerIds.length ?? 0;
+    },
     onCreated(rootState) {
       state.rootState = rootState;
       api.threeReady = true;
@@ -48,6 +51,7 @@ export default function TestWorldCanvas(props) {
         is3d: true,
         distancePx: 0,
         justLongDown: false,
+        pointers: state.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
@@ -63,6 +67,7 @@ export default function TestWorldCanvas(props) {
         is3d: true,
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
+        pointers: state.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
@@ -85,11 +90,16 @@ export default function TestWorldCanvas(props) {
           state.justLongDown = true;
           api.events.next({
             key: "long-pointerdown",
+            is3d: false,
             distancePx: state.getDownDistancePx(),
+            justLongDown: false,
+            pointers: state.getNumPointers(),
+            rmb: false, // could track
             screenPoint,
             touch: isTouchDevice(),
           });
         }, longPressMs),
+        pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
       };
 
       api.events.next({
@@ -97,6 +107,7 @@ export default function TestWorldCanvas(props) {
         is3d: false,
         distancePx: 0,
         justLongDown: false,
+        pointers: state.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint,
         touch: isTouchDevice(),
@@ -116,13 +127,17 @@ export default function TestWorldCanvas(props) {
         is3d: false,
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
+        pointers: state.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
       });
 
-      state.down = undefined;
       state.justLongDown = false;
+      state.down.pointerIds = state.down.pointerIds.filter(x => x !== e.pointerId);
+      if (state.down.pointerIds.length === 0) {
+        state.down = undefined;
+      }
     },
     onPointerMissed(e) {
       if (!state.down) {
@@ -134,6 +149,7 @@ export default function TestWorldCanvas(props) {
         is3d: false,
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
+        pointers: state.getNumPointers(),
         rmb: isRMB(e),
         screenPoint: { x: e.offsetX, y: e.offsetY },
         touch: isTouchDevice(),
@@ -225,10 +241,9 @@ export default function TestWorldCanvas(props) {
  * @typedef State
  * @property {HTMLCanvasElement} canvas
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
- * @property {() => number} getDownDistancePx
  * @property {import('three-stdlib').MapControls} controls
- * @property {(BaseDown & { longTimeoutId: number; }) | undefined} down
- * Defined iff pointer is down.
+ * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down
+ * Defined iff at least one pointer is down.
  * @property {BaseDown & { threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
@@ -236,6 +251,8 @@ export default function TestWorldCanvas(props) {
  * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
+ * @property {() => number} getDownDistancePx
+ * @property {() => number} getNumPointers
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
@@ -271,6 +288,6 @@ const statsCss = css`
 
 /**
  * @typedef BaseDown
- * @property {Geom.Vect} screenPoint
  * @property {number} epochMs
+ * @property {Geom.Vect} screenPoint
  */

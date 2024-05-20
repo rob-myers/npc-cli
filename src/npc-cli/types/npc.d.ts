@@ -25,33 +25,27 @@ declare namespace NPC {
     key: "pointerdown";
   }>;
   
-  interface LongPointerDownEvent {
+  type LongPointerDownEvent = BasePointerEvent & {
     key: "long-pointerdown";
-    /** Distance in screen pixels from pointerdown */
-    distancePx: number;
-    screenPoint: Geom.VectJson;
-    touch: boolean;
+    is3d: false; // could extend to 3d
   }
 
   type BasePointerEvent = {
     /** For future use with CLI */
     clickId?: string;
-    /**
-     * Distance in screen pixels from previous pointerdown.
-     * Only for `pointerup`.
-     */
+    /** Distance in screen pixels from previous pointerdown. */
     distancePx: number;
-    /**
-     * Was previous pointerdown held down for long?
-     * Only for `pointerup`.
-     */
+    /** Was previous pointerdown held down for long? */
     justLongDown: boolean;
-    /** Screen position of pointer */
-    screenPoint: Geom.VectJson;
+    /** Number of active pointers */
+    pointers: number;
     /** Was the right mouse button being pressed?  */
     rmb: boolean;
+    /** Screen position of pointer */
+    screenPoint: Geom.VectJson;
+    /** Touch device? */
     touch: boolean;
-  } & (
+  } &  (
     | { is3d: false; }
     | {
         is3d: true;

@@ -29,7 +29,7 @@
   - should alter image directly instead
 - ✅ change mapKey should request-nav-mesh but shouldn't restart worker
 
-- integrate TestCharacter into TestWorld
+- 🚧 integrate TestCharacter into TestWorld
   - convert into jsx
     > `npx gltfjsx model.glb --transform`
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
