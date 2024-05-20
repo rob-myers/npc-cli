@@ -6,15 +6,6 @@ import { info } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
 import CharacterController from "./character-controller";
 
-const meta = /** @type {const} */ ({
-  'base-mesh-246-tri': { url: '/assets/3d/base-mesh-246-tri.glb', scale: 1, height: 1.7, rotation: undefined },
-  soldier: { url: '/assets/3d/Soldier.glb', scale: 1, height: 1.7, rotation: /** @type {THREE.Vector3Tuple} */ ([0, Math.PI, 0]) },
-  mixamo: { url: '/assets/3d/mixamo-test.glb', scale: 1, height: 1.7, rotation: undefined },
-  minecraft: { url: '/assets/3d/minecraft-anim.glb', scale: 0.25, height: 2, rotation: undefined },
-});
-
-const chosen = meta.minecraft;
-
 /**
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
@@ -60,7 +51,7 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
       model: state.group,
       mixer,
       animationMap,
-      initialAction: 'Idle',
+      opts: { initAnimKey: 'Idle', walkSpeed: chosen.walkSpeed, runSpeed: chosen.runSpeed, },
     });
   }, []);
 
@@ -99,3 +90,24 @@ export const TestCharacterController = React.forwardRef(function TestCharacterCo
  * @property {CharacterController} characterController
  * @property {(deltaMs: number) => void} update
  */
+
+const meta = /** @type {const} */ ({
+  'base-mesh-246-tri': {
+    url: '/assets/3d/base-mesh-246-tri.glb', scale: 1, height: 1.7, rotation: undefined,
+    walkSpeed: 2, runSpeed: 5,
+  },
+  soldier: {
+    url: '/assets/3d/Soldier.glb', scale: 1, height: 1.7, rotation: /** @type {THREE.Vector3Tuple} */ ([0, Math.PI,0]),
+    walkSpeed: 2, runSpeed: 5,
+  },
+  mixamo: {
+    url: '/assets/3d/mixamo-test.glb', scale: 1, height: 1.7, rotation: undefined,
+    walkSpeed: 2, runSpeed: 5,
+  },
+  minecraft: {
+    url: '/assets/3d/minecraft-anim.glb', scale: 0.25, height: 2, rotation: undefined,
+    walkSpeed: 1.25, runSpeed: 5,
+  },
+});
+
+const chosen = meta.minecraft;

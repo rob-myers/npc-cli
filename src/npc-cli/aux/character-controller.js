@@ -13,24 +13,25 @@ export default class CharacterController {
    * @param {THREE.Group} opts.model 
    * @param {THREE.AnimationMixer} opts.mixer 
    * @param {Record<AnimKey, THREE.AnimationAction>} opts.animationMap 
-   * @param {AnimKey} opts.initialAction 
+   * @param {CharacterOpts} opts.opts 
    */
   constructor({
     model,
     mixer,
     animationMap,
-    initialAction
+    opts,
   }) {
     this.shouldRun = false;
-    this.currentAction = initialAction;
+    this.currentAction = opts.initAnimKey;
     this.target = null;
 
     this.walkDir = new THREE.Vector3();
     this.worldPos = new THREE.Vector3();
 
-    this.fadeDuration = 0.2
-    this.walkSpeed = 2;
-    this.runSpeed = 5
+    this.fadeDuration = 0.2;
+
+    this.walkSpeed = opts.walkSpeed;
+    this.runSpeed = opts.runSpeed;
 
     this.model = model;
     this.mixer = mixer;
@@ -104,4 +105,11 @@ export default class CharacterController {
 
 /**
  * @typedef {'Idle' | 'Walk' | 'Run'} AnimKey
+ */
+
+/**
+ * @typedef CharacterOpts
+ * @property {AnimKey} initAnimKey
+ * @property {number} walkSpeed m/s
+ * @property {number} runSpeed m/s
  */

@@ -30,14 +30,16 @@
     - rest-pose elbows initially pointing backwards
     - bend elbow via upper/lower arms initially
     - can rotate around local y afterwards
-  - ✅ apply each keyframes to lower/upper legs, since we'll remove ik
+  - ✅ apply every keyframe to lower/upper legs, since we'll remove ik
   - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
   - https://youtu.be/60Tn5ljVoDg?si=sikCrT9fosYESD2l&t=109
 
 - 🚧 fix TestCharacter foot-sliding
-  - try animate root bone in Blender with linear interpolation
-  - walk
-  - run
+  - ✅ add root bone with Deform unchecked
+  - ℹ️ must also mute (linear) root motion before export
+  - ✅ walk cycle root motion ~ 5m
+    - `.25 * 5 = 1.25m` after scaling i.e. speed `1.25m / s` (24 frames, 24 fps)
+  - 🚧 run
 
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
 - ❌ can color obstacle instances
