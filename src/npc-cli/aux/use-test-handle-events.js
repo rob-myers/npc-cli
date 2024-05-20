@@ -18,7 +18,7 @@ export default function useHandleEvents(api) {
           break;
         case "long-pointerdown":
           if (e.distancePx <= (isTouchDevice() ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
-            api.menu.show({ x: Math.max(0, e.screenPoint.x - 64), y: Math.max(0, e.screenPoint.y - 64) });
+            api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
             api.view.controls.saveState();
             api.view.controls.reset();
@@ -32,18 +32,18 @@ export default function useHandleEvents(api) {
           break;
         case "pointerup":
           e.is3d && state.onPointerUp3d(e);
-          state.handleMenuPointerUp(e);
+          state.onPointerUpHandleMenu(e);
           break;
         case "pointerup-outside":
-          state.handleMenuPointerUp(e);
+          state.onPointerUpHandleMenu(e);
           break;
       }
     },
-    handleMenuPointerUp(e) {
+    onPointerUpHandleMenu(e) {
       if (!isTouchDevice()) {// Desktop
         if (e.rmb && e.distancePx <= 5) {
-          api.menu.show({ x: Math.max(0, e.screenPoint.x - 64), y: Math.max(0, e.screenPoint.y - 64) });
-        } else {
+          api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
+        } else if (!e.justLongDown) {
           api.menu.hide();
         }
       }
@@ -78,6 +78,6 @@ export default function useHandleEvents(api) {
 /**
  * @typedef State
  * @property {(e: NPC.Event) => void} handleEvents
- * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} handleMenuPointerUp
+ * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpHandleMenu
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  */

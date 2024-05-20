@@ -1,5 +1,6 @@
 import React from "react";
 import { css } from "@emotion/css";
+import { clamp } from "three/src/math/MathUtils";
 
 import useStateRef from "../hooks/use-state-ref";
 import { TestWorldContext } from "./test-world-context";
@@ -11,11 +12,15 @@ export default function TestContextMenu() {
   const state = useStateRef(/** @returns {State} */ () => ({
     menuEl: /** @type {*} */ (null),
     hide() {
-      state.menuEl.style.display = "none";
+      state.menuEl.style.visibility = "hidden";
     },
     show(at) {
-      state.menuEl.style.transform = `translate(${at.x}px, ${at.y}px)`;
-      state.menuEl.style.display = "block";
+      const menuDim = state.menuEl.getBoundingClientRect();
+      const canvasDim = api.view.canvasEl.getBoundingClientRect();
+      const x = clamp(at.x, 0, canvasDim.width - menuDim.width);
+      const y = clamp(at.y, 0, canvasDim.height - menuDim.height);
+      state.menuEl.style.transform = `translate(${x}px, ${y}px)`;
+      state.menuEl.style.visibility = "visible";
     },
   }));
 
@@ -46,7 +51,8 @@ const contextMenuCss = css`
   height: 100px;
   user-select: none;
 
-  display: none;
+  visibility: hidden;
+  opacity: 0.8;
 
   font-size: 0.9rem;
   color: white;
