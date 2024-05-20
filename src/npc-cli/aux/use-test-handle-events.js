@@ -1,6 +1,5 @@
 import React from "react";
 import { warn } from "../service/generic";
-import { isTouchDevice } from "../service/dom";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -17,7 +16,7 @@ export default function useHandleEvents(api) {
           api.surfaces.drawFloorAndCeil(e.gmKey);
           break;
         case "long-pointerdown":
-          if (e.distancePx <= (isTouchDevice() ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
+          if (e.distancePx <= (e.touch ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
             api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
             api.view.controls.saveState();
@@ -32,21 +31,19 @@ export default function useHandleEvents(api) {
           break;
         case "pointerup":
           e.is3d && !api.menu.justOpen && state.onPointerUp3d(e);
-          state.onPointerUpHandleMenu(e);
+          !e.touch && state.onPointerUpMenuDesktop(e);
           api.menu.justOpen = api.menu.isOpen;
           break;
         case "pointerup-outside":
-          state.onPointerUpHandleMenu(e);
+          !e.touch && state.onPointerUpMenuDesktop(e);
           break;
       }
     },
-    onPointerUpHandleMenu(e) {
-      if (!isTouchDevice()) {// Desktop
-        if (e.rmb && e.distancePx <= 5) {
-          api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
-        } else if (!e.justLongDown) {
-          api.menu.hide();
-        }
+    onPointerUpMenuDesktop(e) {
+      if (e.rmb && e.distancePx <= 5) {
+        api.menu.show({ x: e.screenPoint.x + 32, y: e.screenPoint.y });
+      } else if (!e.justLongDown) {
+        api.menu.hide();
       }
     },
     onPointerUp3d(e) {
@@ -79,6 +76,6 @@ export default function useHandleEvents(api) {
 /**
  * @typedef State
  * @property {(e: NPC.Event) => void} handleEvents
- * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpHandleMenu
+ * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  */

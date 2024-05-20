@@ -30,6 +30,7 @@ declare namespace NPC {
     /** Distance in screen pixels from pointerdown */
     distancePx: number;
     screenPoint: Geom.VectJson;
+    touch: boolean;
   }
 
   type BasePointerEvent = {
@@ -49,6 +50,7 @@ declare namespace NPC {
     screenPoint: Geom.VectJson;
     /** Was the right mouse button being pressed?  */
     rmb: boolean;
+    touch: boolean;
   } & (
     | { is3d: false; }
     | {

@@ -78,6 +78,7 @@ export default function TestWallsAndDoors(props) {
         justLongDown: false,
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
         point: e.point,
         meta: {
           ...target === 'doors' && { doors: true, instanceId: e.instanceId },
@@ -95,6 +96,7 @@ export default function TestWallsAndDoors(props) {
         justLongDown: api.view.justLongDown,
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
         point: e.point,
         meta: {
           ...target === 'doors' && { doors: true, instanceId: e.instanceId },

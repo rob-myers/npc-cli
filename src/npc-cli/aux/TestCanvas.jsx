@@ -5,6 +5,7 @@ import { css } from "@emotion/css";
 import { Subject } from "rxjs";
 
 import { Vect } from "../geom";
+import { isTouchDevice } from "../service/dom";
 import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -80,6 +81,7 @@ export default function TestCanvas(props) {
               justLongDown: Date.now() - state.down.epochMs >= 300,
               rmb: e.button === 2,
               screenPoint: { x: e.offsetX, y: e.offsetY },
+              touch: isTouchDevice(),
             });
         }}
         onCreated={update} // show stats

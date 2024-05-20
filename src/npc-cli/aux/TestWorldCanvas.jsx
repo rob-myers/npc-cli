@@ -50,6 +50,7 @@ export default function TestWorldCanvas(props) {
         justLongDown: false,
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
         point: e.point,
         meta: {
           floor: true,
@@ -64,6 +65,7 @@ export default function TestWorldCanvas(props) {
         justLongDown: state.justLongDown,
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
         point: e.point,
         meta: {
           floor: true,
@@ -85,6 +87,7 @@ export default function TestWorldCanvas(props) {
             key: "long-pointerdown",
             distancePx: state.getDownDistancePx(),
             screenPoint,
+            touch: isTouchDevice(),
           });
         }, longPressMs),
       };
@@ -96,6 +99,7 @@ export default function TestWorldCanvas(props) {
         justLongDown: false,
         rmb: isRMB(e.nativeEvent),
         screenPoint,
+        touch: isTouchDevice(),
       });
     },
     onPointerMove(e) {
@@ -114,6 +118,7 @@ export default function TestWorldCanvas(props) {
         justLongDown: state.justLongDown,
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
       });
 
       state.down = undefined;
@@ -131,6 +136,7 @@ export default function TestWorldCanvas(props) {
         justLongDown: state.justLongDown,
         rmb: isRMB(e),
         screenPoint: { x: e.offsetX, y: e.offsetY },
+        touch: isTouchDevice(),
       });
       state.justLongDown = false;
       state.down = undefined;
