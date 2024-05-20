@@ -106,7 +106,7 @@ const meta = /** @type {const} */ ({
   },
   minecraft: {
     url: '/assets/3d/minecraft-anim.glb', scale: 0.25, height: 2, rotation: undefined,
-    walkSpeed: 1.25, runSpeed: 5,
+    walkSpeed: 1.25, runSpeed: 2.5,
   },
 });
 

@@ -24,7 +24,7 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- 🚧 minecraft run-cycle
+- ✅ minecraft run-cycle
   - ℹ️ body 0.3 down
   - ℹ️ arms strategy
     - rest-pose elbows initially pointing backwards
@@ -34,12 +34,15 @@
   - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
   - https://youtu.be/60Tn5ljVoDg?si=sikCrT9fosYESD2l&t=109
 
-- 🚧 fix TestCharacter foot-sliding
+- ✅ fix TestCharacter foot-sliding
   - ✅ add root bone with Deform unchecked
   - ℹ️ must also mute (linear) root motion before export
   - ✅ walk cycle root motion ~ 5m
     - `.25 * 5 = 1.25m` after scaling i.e. speed `1.25m / s` (24 frames, 24 fps)
-  - 🚧 run
+  - ✅ run cycle root motion ~ 10m
+    - root motion `.25 * 10 = 2.5m` after scaling
+    - 20 frames -> 24 frames via scale `24 / 20 = 1.2`
+    - https://devtalk.blender.org/t/animating-in-blender-changing-the-frame-rate-should-have-the-option-to-preserve-animation-timing/21629/3
 
 - ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
 - ❌ can color obstacle instances
