@@ -73,11 +73,13 @@ export default function TestWorldCanvas(props) {
     onPointerDown(e) {
       const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
       state.lastScreenPoint.set(screenPoint.x, screenPoint.y);
+      // No MultiTouch Long Press
+      window.clearTimeout(state.down?.longTimeoutId);
 
       state.down = {
         screenPoint: state.lastScreenPoint.clone(),
         epochMs: Date.now(),
-        longTimeoutId: window.setTimeout(() => {
+        longTimeoutId: state.down ? 0 : window.setTimeout(() => {
           state.justLongDown = true;
           api.events.next({
             key: "long-pointerdown",
