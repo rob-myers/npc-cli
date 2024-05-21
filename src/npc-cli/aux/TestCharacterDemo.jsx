@@ -6,7 +6,7 @@ import { quadGeometryXZ } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 import TestCanvas from "./TestCanvas";
 // import { TestCharacterOld } from "./TestCharacterOld";
-import TestCharacters from "./TestCharacters";
+import { TestCharacters } from "./TestCharacters";
 
 /**
  * @param {Props} props
@@ -14,8 +14,10 @@ import TestCharacters from "./TestCharacters";
 export function TestCharacterDemo(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    controller: /** @type {*} */ (null),
+    characters: /** @type {*} */ (null), // TestCharacters
+    controller: /** @type {*} */ (null), // TestCharacterOld
     downAt: 0,
+    selected: 0,
   }));
 
   return (
@@ -34,12 +36,12 @@ export function TestCharacterDemo(props) {
         {/* <TestCharacterOld
           ref={x => x && (state.controller = x)}
         />
-        <TestCharacterOld
-          ref={x => x && (state.controller = x)}
-          position={[2, 0, 0]}
-        /> */}
+        */}
 
-        <TestCharacters />
+        <TestCharacters
+          ref={x => x && (state.characters = x)}
+          onClick={(charIndex) => state.selected = charIndex}
+        />
 
         <mesh
           name="ground"
@@ -47,12 +49,12 @@ export function TestCharacterDemo(props) {
           position={[-groundScale / 2, 0, -groundScale / 2]}
           geometry={quadGeometryXZ}
           receiveShadow
-          // onClick={e => {
-          //   if (Date.now() - state.downAt >= 300) return;
-          //   const { characterController } = state.controller;
-          //   characterController.setTarget(e.point);
-          //   characterController.shouldRun = e.shiftKey;
-          // }}
+          onClick={e => {
+            if (Date.now() - state.downAt >= 300) return;
+            const { controller } = state.characters.models[state.selected];
+            controller.setTarget(e.point);
+            controller.shouldRun = e.shiftKey;
+          }}
           onPointerDown={() => state.downAt = Date.now()}
         >
           <meshStandardMaterial side={THREE.DoubleSide} color="#888" />
@@ -68,8 +70,10 @@ export function TestCharacterDemo(props) {
 
 /**
  * @typedef State
+ * @property {import('./TestCharacters').State} characters
  * @property {import('./TestCharacterOld').State} controller
  * @property {number} downAt
+ * @property {number} selected
  */
 
 const groundScale = 20;
