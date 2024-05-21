@@ -188,7 +188,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       </figure>
 
       <button
-        onClick={() => state.toggleEnabled()}
+        onPointerDown={() => state.toggleEnabled()}
         className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
       >
         <div>{props.browserLoaded ? "interact" : <Spinner size={24} />}</div>
