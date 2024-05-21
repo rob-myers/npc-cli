@@ -164,3 +164,22 @@ export function InfiniteGrid(props) {
  * @property {THREE.Color | string | number} [color]
  * @property {number} [distance]
  */
+
+/**
+ * Collects nodes and materials from a THREE.Object3D.
+ * @param {THREE.Object3D} object 
+ * @returns {import("@react-three/fiber").ObjectMap}
+ */
+export function buildGraph(object) {
+  /** @type {import("@react-three/fiber").ObjectMap} */
+  const data = { nodes: {}, materials: {}};
+  if (object) {
+    object.traverse(/** @param {THREE.Object3D & { material?: THREE.Material }} obj */ obj => {
+      if (obj.name) data.nodes[obj.name] = obj;
+      if (obj.material && !data.materials[obj.material.name]) {
+        data.materials[obj.material.name] = obj.material;
+      }
+    });
+  }
+  return data;
+}

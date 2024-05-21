@@ -5,8 +5,8 @@ import { quadGeometryXZ } from "../service/three";
 
 import useStateRef from "../hooks/use-state-ref";
 import TestCanvas from "./TestCanvas";
-import { TestCharacterOld } from "./TestCharacterOld";
-// import { MinecraftAnim } from "./Minecraft-anim";
+// import { TestCharacterOld } from "./TestCharacterOld";
+import TestCharacters from "./TestCharacters";
 
 /**
  * @param {Props} props
@@ -31,15 +31,15 @@ export function TestCharacterDemo(props) {
         castShadow
       />
 
-        <TestCharacterOld
+        {/* <TestCharacterOld
           ref={x => x && (state.controller = x)}
         />
         <TestCharacterOld
           ref={x => x && (state.controller = x)}
           position={[2, 0, 0]}
-        />
+        /> */}
 
-        {/* <MinecraftAnim /> */}
+        <TestCharacters />
 
         <mesh
           name="ground"
@@ -47,12 +47,12 @@ export function TestCharacterDemo(props) {
           position={[-groundScale / 2, 0, -groundScale / 2]}
           geometry={quadGeometryXZ}
           receiveShadow
-          onClick={e => {
-            if (Date.now() - state.downAt >= 300) return;
-            const { characterController } = state.controller;
-            characterController.setTarget(e.point);
-            characterController.shouldRun = e.shiftKey;
-          }}
+          // onClick={e => {
+          //   if (Date.now() - state.downAt >= 300) return;
+          //   const { characterController } = state.controller;
+          //   characterController.setTarget(e.point);
+          //   characterController.shouldRun = e.shiftKey;
+          // }}
           onPointerDown={() => state.downAt = Date.now()}
         >
           <meshStandardMaterial side={THREE.DoubleSide} color="#888" />
