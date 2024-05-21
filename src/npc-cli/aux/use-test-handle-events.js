@@ -50,14 +50,15 @@ export default function useHandleEvents(api) {
       if (e.rmb === true || e.justLongDown === true || e.pointers !== 1) {
         return;
       }
+      if (e.distancePx > (e.touch === true ? 5 : 1)) {
+        return;
+      }
 
       if (e.meta.floor === true) {
         if (!api.npcs) {// 🚧 eliminate
           return warn(`saw "${e.key}" before api.npcs`);
         }
-        if (e.distancePx < 1) {
-          api.walkTo(e.point);
-        }
+        api.walkTo(e.point);
       }
 
       if (e.meta.doors === true) {
