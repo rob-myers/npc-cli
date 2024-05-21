@@ -192,7 +192,6 @@ export default function TestWorldCanvas(props) {
     <Canvas
       ref={state.canvasRef}
       className={canvasCss}
-      // "never" broke TestCharacter sporadically
       frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
       gl={{ toneMapping: 4, toneMappingExposure: 1, logarithmicDepthBuffer: true }}

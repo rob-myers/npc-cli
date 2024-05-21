@@ -60,10 +60,10 @@ function getTabIdentifier(meta: TabDef) {
 }
 
 const classToComponent = {
-  TestCharacter: {
-    loadable: loadable(() => import("src/npc-cli/aux/TestCharacter")),
+  TestCharacterDemo: {
+    loadable: loadable(() => import("src/npc-cli/aux/TestCharacterDemo")),
     get:
-      (module: typeof import("src/npc-cli/aux/TestCharacter")) =>
+      (module: typeof import("src/npc-cli/aux/TestCharacterDemo")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },

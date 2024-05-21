@@ -83,8 +83,8 @@ export default function Viewer() {
             },
             {
               type: "component",
-              class: "TestCharacter",
-              filepath: "test-character",
+              class: "TestCharacterDemo",
+              filepath: "test-character-demo",
               props: {},
             },
             // { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },

@@ -9,7 +9,7 @@ import CharacterController from "./character-controller";
 /**
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
-export const TestCharacterController = React.forwardRef(function TestCharacterController({
+export const TestCharacterOld = React.forwardRef(function TestCharacterOld({
   cylinderHalfHeight = chosen.height / 2,
   cylinderRadius = 0.3,
 }, ref) {

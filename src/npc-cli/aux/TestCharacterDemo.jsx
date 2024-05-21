@@ -5,12 +5,13 @@ import { quadGeometryXZ } from "../service/three";
 
 import useStateRef from "../hooks/use-state-ref";
 import TestCanvas from "./TestCanvas";
-import { TestCharacterController } from "./TestCharacterController";
+import { TestCharacterOld } from "./TestCharacterOld";
+// import { MinecraftAnim } from "./Minecraft-anim";
 
 /**
  * @param {Props} props
  */
-export function TestCharacter(props) {
+export function TestCharacterDemo(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     controller: /** @type {*} */ (null),
@@ -30,9 +31,11 @@ export function TestCharacter(props) {
         castShadow
       />
 
-        <TestCharacterController
+        <TestCharacterOld
           ref={x => x && (state.controller = x)}
         />
+
+        {/* <MinecraftAnim /> */}
 
         <mesh
           name="ground"
@@ -48,11 +51,7 @@ export function TestCharacter(props) {
           }}
           onPointerDown={() => state.downAt = Date.now()}
         >
-          <meshStandardMaterial
-            side={THREE.DoubleSide}
-            color="#888"
-            // transparent opacity={0.3}
-          />
+          <meshStandardMaterial side={THREE.DoubleSide} color="#888" />
         </mesh>
     </>
   );
@@ -65,7 +64,7 @@ export function TestCharacter(props) {
 
 /**
  * @typedef State
- * @property {import('./TestCharacterController').State} controller
+ * @property {import('./TestCharacterOld').State} controller
  * @property {number} downAt
  */
 
@@ -79,7 +78,7 @@ export default function WrappedTestCharacter(props) {
     <TestCanvas
       disabled={props.disabled}
       stats={props.stats}
-      childComponent={TestCharacter}
+      childComponent={TestCharacterDemo}
       childProps={{
         disabled: props.disabled,
       }}

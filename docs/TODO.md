@@ -30,8 +30,11 @@
 - ✅ change mapKey should request-nav-mesh but shouldn't restart worker
 
 - 🚧 extend TestCharacter to multiple characters
-  - convert into jsx
-    > `npx gltfjsx model.glb --transform`
+  - ✅ try convert into jsx `npx gltfjsx minecraft-anim.glb --transform`
+  - ✅ rename -> TestCharacterDemo, TestCharacterOld
+  - TestCharacters based on `gltfjsx` output
+    - only one instance of hook `useGLTF`
+    - hook up to TestCharacter
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
