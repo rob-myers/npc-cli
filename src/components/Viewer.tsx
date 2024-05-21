@@ -6,9 +6,10 @@ import debounce from "debounce";
 import { view } from "../const";
 import { profileLookup } from "../npc-cli/sh/scripts";
 import { afterBreakpoint, breakpoint } from "../const";
+import { isSmallView } from "./layout";
+import useSite from "./site.store";
 import useIntersection from "../npc-cli/hooks/use-intersection";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
-import useSite from "./site.store";
 import useUpdate from "../npc-cli/hooks/use-update";
 
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
@@ -57,8 +58,11 @@ export default function Viewer() {
         ref={(x) => x && (state.tabs = x)}
         id="viewer-tabs"
         browserLoaded={site.browserLoaded}
-        initEnabled={false}
         collapsed={!site.viewOpen}
+        initEnabled={false}
+        onToggled={update}
+        persistLayout
+        rootOrientationVertical={isSmallView()}
         tabs={[
           [
             {
@@ -87,8 +91,6 @@ export default function Viewer() {
           ],
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
         ]}
-        persistLayout
-        onToggled={update}
       />
     </aside>
   );
