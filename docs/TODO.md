@@ -30,9 +30,12 @@
 - ✅ change mapKey should request-nav-mesh but shouldn't restart worker
 
 - 🚧 extend TestCharacter to multiple characters
-  - ✅ try convert into jsx `npx gltfjsx minecraft-anim.glb --transform`
+  - ✅ try convert into jsx `npx gltfjsx minecraft-anim.glb`
   - ✅ rename -> TestCharacterDemo, TestCharacterOld
-  - TestCharacters based on `gltfjsx` output
+  - 🚧 TestCharacters based on `gltfjsx` output
+    - ✅ without using transform glb i.e. no `--transform`
+    - ✅ support multiple instances via `SkeletonUtils.clone`
+      - https://discourse.threejs.org/t/multiple-instances-of-skinned-mesh-wont-show-react-three-fiber/47678/2
     - only one instance of hook `useGLTF`
     - hook up to TestCharacter
 

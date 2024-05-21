@@ -1,6 +1,7 @@
 import React from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { SkeletonUtils } from 'three-stdlib'
 import { useGLTF } from "@react-three/drei";
 import { info } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
@@ -12,9 +13,11 @@ import CharacterController from "./character-controller";
 export const TestCharacterOld = React.forwardRef(function TestCharacterOld({
   cylinderHalfHeight = chosen.height / 2,
   cylinderRadius = 0.3,
+  position,
 }, ref) {
 
-  const { scene: model, animations } = useGLTF(chosen.url);
+  const gltf = useGLTF(chosen.url);
+  const model = React.useMemo(() => SkeletonUtils.clone(gltf.scene), [gltf.scene])
   // console.log(model.children[0].children);
   // console.log(animations);
 
@@ -40,7 +43,7 @@ export const TestCharacterOld = React.forwardRef(function TestCharacterOld({
 
     const mixer = new THREE.AnimationMixer(model);
     const animationMap = /** @type {Record<import("./character-controller").AnimKey, THREE.AnimationAction>} */ ({});
-    animations.forEach(a => {
+    gltf.animations.forEach(a => {
       info('saw animation:', a.name);
       if (a.name === 'Idle' || a.name === 'Walk' || a.name === 'Run') {
         animationMap[a.name] = mixer.clipAction(a);
@@ -61,6 +64,7 @@ export const TestCharacterOld = React.forwardRef(function TestCharacterOld({
     <group
       ref={x => x && (state.group = x)}
       scale={chosen.scale}
+      position={position}
     >
       <mesh
         position={[0, cylinderHalfHeight / chosen.scale, 0]}
@@ -79,7 +83,11 @@ export const TestCharacterOld = React.forwardRef(function TestCharacterOld({
 });
 
 /**
- * @typedef Props
+ * @typedef {BaseProps & Omit<import("@react-three/fiber").GroupProps, 'ref'>} Props
+ */
+
+/**
+ * @typedef BaseProps
  * @property {number} [cylinderHalfHeight]
  * @property {number} [cylinderRadius]
  */

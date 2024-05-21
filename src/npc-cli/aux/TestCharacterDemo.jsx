@@ -34,6 +34,10 @@ export function TestCharacterDemo(props) {
         <TestCharacterOld
           ref={x => x && (state.controller = x)}
         />
+        <TestCharacterOld
+          ref={x => x && (state.controller = x)}
+          position={[2, 0, 0]}
+        />
 
         {/* <MinecraftAnim /> */}
 
