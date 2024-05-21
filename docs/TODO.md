@@ -29,12 +29,15 @@
   - should alter image directly instead
 - ✅ change mapKey should request-nav-mesh but shouldn't restart worker
 
-- 🚧 integrate TestCharacter into TestWorld
+- 🚧 extend TestCharacter to multiple characters
   - convert into jsx
     > `npx gltfjsx model.glb --transform`
+
+- integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
 
 - fix webp generation
+  - on push generate webp and fail with message if git detects changed
   - ensure up-to-date before push, unless --no-verify
 
 - ✅ context menu
@@ -56,7 +59,7 @@
   - 🚧 obstacles has onPointer{Down,Up}
     - will decode actual obstacle hit later
 
-- obstacle right-click/double-tap shows clicked type e.g. `bed`
+- obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
   - clicked if respective pixel is non-transparent
 
