@@ -191,6 +191,11 @@
       "pngHash": 2031632593,
       "obsHashes": [197495145]
     },
+    "extra--017--table--2x0.5": {
+      "outputHash": -1048583511,
+      "pngHash": -1220359814,
+      "obsHashes": [823987640]
+    },
     "fresher--002--0.4x0.6": {
       "outputHash": -1531468655,
       "pngHash": -1792259774,
@@ -300,11 +305,7 @@
       "obsHashes": [1165351826, -1213204321, -32393070]
     },
     "office--020--2x3": {"outputHash": 1700953575, "pngHash": 1677157900},
-    "office--023--2x3": {
-      "outputHash": -128339007,
-      "pngHash": 112007124,
-      "obsHashes": [-1957128487, -201337775, 107716408, 1245751757]
-    },
+    "office--023--2x3": {"outputHash": -87124561, "pngHash": 112007124},
     "office--026--2x3": {
       "outputHash": 1986298589,
       "pngHash": -1111441141,
@@ -575,6 +576,15 @@
         "obstacleId": 0,
         "type": "table"
       },
+      "extra--017--table--2x0.5 0": {
+        "x": 604,
+        "y": 1418,
+        "width": 300,
+        "height": 75,
+        "symbolKey": "extra--017--table--2x0.5",
+        "obstacleId": 0,
+        "type": "surface"
+      },
       "medical--008--3x2 0": {
         "x": 948,
         "y": 1693,
@@ -584,17 +594,8 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "office--023--2x3 0": {
-        "x": 1126,
-        "y": 1693,
-        "width": 76,
-        "height": 300,
-        "symbolKey": "office--023--2x3",
-        "obstacleId": 0,
-        "type": "surface"
-      },
       "office--026--2x3 0": {
-        "x": 1204,
+        "x": 1126,
         "y": 1693,
         "width": 106,
         "height": 300,
@@ -612,8 +613,8 @@
         "type": "surface"
       },
       "office--006--2x2 2": {
-        "x": 604,
-        "y": 1418,
+        "x": 304,
+        "y": 2024,
         "width": 291,
         "height": 37,
         "symbolKey": "office--006--2x2",
@@ -622,7 +623,7 @@
       },
       "bridge--042--8x9 1": {
         "x": 304,
-        "y": 2024,
+        "y": 2063,
         "width": 263,
         "height": 241,
         "symbolKey": "bridge--042--8x9",
@@ -631,7 +632,7 @@
       },
       "bridge--042--8x9 0": {
         "x": 569,
-        "y": 2024,
+        "y": 2063,
         "width": 258,
         "height": 240,
         "symbolKey": "bridge--042--8x9",
@@ -647,18 +648,9 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "office--023--2x3 1": {
-        "x": 829,
-        "y": 2097,
-        "width": 247,
-        "height": 99,
-        "symbolKey": "office--023--2x3",
-        "obstacleId": 1,
-        "type": "obstacle"
-      },
       "extra--013--privacy-screen--1.5x0.2 0": {
-        "x": 604,
-        "y": 1457,
+        "x": 304,
+        "y": 2306,
         "width": 225,
         "height": 30,
         "symbolKey": "extra--013--privacy-screen--1.5x0.2",
@@ -666,8 +658,8 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 6": {
-        "x": 304,
-        "y": 2267,
+        "x": 829,
+        "y": 2097,
         "width": 208,
         "height": 69,
         "symbolKey": "lounge--015--4x2",
@@ -675,8 +667,8 @@
         "type": "obstacle"
       },
       "couch-and-chairs--006--0.4x2 2": {
-        "x": 1951,
-        "y": 1755,
+        "x": 1234,
+        "y": 1693,
         "width": 62,
         "height": 207,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -684,8 +676,8 @@
         "type": "obstacle"
       },
       "extra--008--desk--0.4x1.33 0": {
-        "x": 514,
-        "y": 2267,
+        "x": 829,
+        "y": 2168,
         "width": 204,
         "height": 64,
         "symbolKey": "extra--008--desk--0.4x1.33",
@@ -694,7 +686,7 @@
       },
       "medical-bed--005--0.6x1.2 0": {
         "x": 829,
-        "y": 2198,
+        "y": 2234,
         "width": 189,
         "height": 99,
         "symbolKey": "medical-bed--005--0.6x1.2",
@@ -703,7 +695,7 @@
       },
       "bed--005--0.6x1.2 0": {
         "x": 1020,
-        "y": 2198,
+        "y": 2234,
         "width": 188,
         "height": 102,
         "symbolKey": "bed--005--0.6x1.2",
@@ -720,8 +712,8 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 1": {
-        "x": 1081,
-        "y": 1995,
+        "x": 1039,
+        "y": 2097,
         "width": 164,
         "height": 102,
         "symbolKey": "cargo--010--2x4",
@@ -747,8 +739,8 @@
         "type": "surface"
       },
       "extra--004--desk--0.5x1 0": {
-        "x": 1814,
-        "y": 1757,
+        "x": 1951,
+        "y": 1755,
         "width": 76,
         "height": 152,
         "symbolKey": "extra--004--desk--0.5x1",
@@ -774,8 +766,8 @@
         "type": "table"
       },
       "lounge--015--4x2 1": {
-        "x": 1210,
-        "y": 2099,
+        "x": 1814,
+        "y": 1757,
         "width": 62,
         "height": 150,
         "symbolKey": "lounge--015--4x2",
@@ -783,7 +775,7 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 3": {
-        "x": 1274,
+        "x": 1205,
         "y": 1995,
         "width": 141,
         "height": 139,
@@ -801,8 +793,8 @@
         "type": "table"
       },
       "303--hull 1": {
-        "x": 720,
-        "y": 2299,
+        "x": 597,
+        "y": 2024,
         "width": 116,
         "height": 36,
         "symbolKey": "303--hull",
@@ -810,8 +802,8 @@
         "type": "table"
       },
       "table--012--0.8x0.8 0": {
-        "x": 1271,
-        "y": 476,
+        "x": 715,
+        "y": 1947,
         "width": 110,
         "height": 112,
         "symbolKey": "table--012--0.8x0.8",
@@ -819,8 +811,8 @@
         "type": "table"
       },
       "cargo--010--2x4 2": {
-        "x": 1312,
-        "y": 1804,
+        "x": 1271,
+        "y": 476,
         "width": 90,
         "height": 111,
         "symbolKey": "cargo--010--2x4",
@@ -828,7 +820,7 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 4": {
-        "x": 1404,
+        "x": 1298,
         "y": 1804,
         "width": 110,
         "height": 109,
@@ -837,8 +829,8 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 0": {
-        "x": 1516,
-        "y": 1745,
+        "x": 1210,
+        "y": 2136,
         "width": 78,
         "height": 105,
         "symbolKey": "cargo--010--2x4",
@@ -846,8 +838,8 @@
         "type": "obstacle"
       },
       "extra--007--desk--0.4x0.66 0": {
-        "x": 706,
-        "y": 1947,
+        "x": 1234,
+        "y": 1915,
         "width": 104,
         "height": 64,
         "symbolKey": "extra--007--desk--0.4x0.66",
@@ -855,7 +847,7 @@
         "type": "surface"
       },
       "office--089--4x4 2": {
-        "x": 1274,
+        "x": 1290,
         "y": 2136,
         "width": 103,
         "height": 103,
@@ -864,8 +856,8 @@
         "type": "obstacle"
       },
       "office--089--4x4 0": {
-        "x": 1379,
-        "y": 2136,
+        "x": 1081,
+        "y": 1995,
         "width": 102,
         "height": 100,
         "symbolKey": "office--089--4x4",
@@ -873,8 +865,8 @@
         "type": "obstacle"
       },
       "office--089--4x4 1": {
-        "x": 1417,
-        "y": 1964,
+        "x": 1348,
+        "y": 1915,
         "width": 100,
         "height": 102,
         "symbolKey": "office--089--4x4",
@@ -882,8 +874,8 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 7": {
-        "x": 659,
-        "y": 226,
+        "x": 1210,
+        "y": 2243,
         "width": 96,
         "height": 90,
         "symbolKey": "lounge--015--4x2",
@@ -891,8 +883,8 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 8": {
-        "x": 1274,
-        "y": 2241,
+        "x": 659,
+        "y": 226,
         "width": 96,
         "height": 90,
         "symbolKey": "lounge--015--4x2",
@@ -900,7 +892,7 @@
         "type": "obstacle"
       },
       "table--009--0.8x0.8 0": {
-        "x": 1372,
+        "x": 1308,
         "y": 2241,
         "width": 92,
         "height": 94,
@@ -918,8 +910,8 @@
         "type": "obstacle"
       },
       "console--033--0.4x0.6 0": {
-        "x": 1078,
-        "y": 2099,
+        "x": 1878,
+        "y": 1757,
         "width": 67,
         "height": 81,
         "symbolKey": "console--033--0.4x0.6",
@@ -927,8 +919,8 @@
         "type": "chair"
       },
       "extra--002--fresher--0.5x0.5 0": {
-        "x": 1892,
-        "y": 1757,
+        "x": 1363,
+        "y": 476,
         "width": 57,
         "height": 79,
         "symbolKey": "extra--002--fresher--0.5x0.5",
@@ -936,8 +928,8 @@
         "type": "obstacle"
       },
       "office--006--2x2 0": {
-        "x": 1312,
-        "y": 1917,
+        "x": 1410,
+        "y": 1804,
         "width": 79,
         "height": 69,
         "symbolKey": "office--006--2x2",
@@ -945,8 +937,8 @@
         "type": "obstacle"
       },
       "office--006--2x2 1": {
-        "x": 1596,
-        "y": 1745,
+        "x": 1348,
+        "y": 2019,
         "width": 79,
         "height": 69,
         "symbolKey": "office--006--2x2",
@@ -954,8 +946,8 @@
         "type": "obstacle"
       },
       "misc-stellar-cartography--020--10x10 1": {
-        "x": 1466,
-        "y": 2238,
+        "x": 1878,
+        "y": 1840,
         "width": 70,
         "height": 78,
         "symbolKey": "misc-stellar-cartography--020--10x10",
@@ -963,8 +955,8 @@
         "type": "obstacle"
       },
       "console--051--0.4x0.6 0": {
-        "x": 1516,
-        "y": 1852,
+        "x": 1950,
+        "y": 1909,
         "width": 69,
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
@@ -972,8 +964,8 @@
         "type": "obstacle"
       },
       "misc-stellar-cartography--020--10x10 2": {
-        "x": 1417,
-        "y": 2068,
+        "x": 1395,
+        "y": 2090,
         "width": 74,
         "height": 65,
         "symbolKey": "misc-stellar-cartography--020--10x10",
@@ -981,7 +973,7 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 3": {
-        "x": 1312,
+        "x": 1298,
         "y": 1745,
         "width": 72,
         "height": 54,
@@ -990,7 +982,7 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 4": {
-        "x": 1386,
+        "x": 1372,
         "y": 1745,
         "width": 72,
         "height": 54,
@@ -999,8 +991,8 @@
         "type": "obstacle"
       },
       "extra--001--fresher--0.5x0.5 0": {
-        "x": 1483,
-        "y": 2135,
+        "x": 1429,
+        "y": 2019,
         "width": 69,
         "height": 59,
         "symbolKey": "extra--001--fresher--0.5x0.5",
@@ -1008,8 +1000,8 @@
         "type": "obstacle"
       },
       "lounge--015--4x2 0": {
-        "x": 1383,
-        "y": 476,
+        "x": 1984,
+        "y": 604,
         "width": 50,
         "height": 69,
         "symbolKey": "lounge--015--4x2",
@@ -1017,8 +1009,8 @@
         "type": "obstacle"
       },
       "couch-and-chairs--006--0.4x2 0": {
-        "x": 1210,
-        "y": 2251,
+        "x": 1410,
+        "y": 1875,
         "width": 62,
         "height": 33,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -1026,8 +1018,8 @@
         "type": "surface"
       },
       "couch-and-chairs--006--0.4x2 1": {
-        "x": 1393,
-        "y": 1929,
+        "x": 1363,
+        "y": 557,
         "width": 62,
         "height": 33,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -1035,8 +1027,8 @@
         "type": "surface"
       },
       "counter--010--0.4x0.4 0": {
-        "x": 1892,
-        "y": 1838,
+        "x": 1446,
+        "y": 1745,
         "width": 57,
         "height": 48,
         "symbolKey": "counter--010--0.4x0.4",
@@ -1045,7 +1037,7 @@
       },
       "counter--009--0.4x0.4 0": {
         "x": 1984,
-        "y": 604,
+        "y": 675,
         "width": 52,
         "height": 54,
         "symbolKey": "counter--009--0.4x0.4",
@@ -1054,7 +1046,7 @@
       },
       "lounge--015--4x2 2": {
         "x": 2003,
-        "y": 660,
+        "y": 731,
         "width": 32,
         "height": 53,
         "symbolKey": "lounge--015--4x2",
@@ -1063,7 +1055,7 @@
       },
       "lounge--015--4x2 5": {
         "x": 2003,
-        "y": 715,
+        "y": 786,
         "width": 33,
         "height": 53,
         "symbolKey": "lounge--015--4x2",
@@ -1079,27 +1071,9 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "office--023--2x3 2": {
-        "x": 897,
-        "y": 1418,
-        "width": 49,
-        "height": 50,
-        "symbolKey": "office--023--2x3",
-        "obstacleId": 2,
-        "type": "obstacle"
-      },
-      "office--023--2x3 3": {
+      "extra--005--chair-0.25x0.25 0": {
         "x": 1261,
         "y": 690,
-        "width": 49,
-        "height": 50,
-        "symbolKey": "office--023--2x3",
-        "obstacleId": 3,
-        "type": "obstacle"
-      },
-      "extra--005--chair-0.25x0.25 0": {
-        "x": 1457,
-        "y": 1915,
         "width": 48,
         "height": 47,
         "symbolKey": "extra--005--chair-0.25x0.25",
@@ -1107,7 +1081,7 @@
         "type": "chair"
       },
       "lounge--017--4x2 0": {
-        "x": 812,
+        "x": 827,
         "y": 1947,
         "width": 47,
         "height": 46,
@@ -1116,8 +1090,8 @@
         "type": "table"
       },
       "couch-and-chairs--007--0.6x1.4 0": {
-        "x": 1261,
-        "y": 742,
+        "x": 1348,
+        "y": 2090,
         "width": 43,
         "height": 42,
         "symbolKey": "couch-and-chairs--007--0.6x1.4",
@@ -1125,8 +1099,8 @@
         "type": "surface"
       },
       "lounge--015--4x2 9": {
-        "x": 838,
-        "y": 2299,
+        "x": 1271,
+        "y": 589,
         "width": 38,
         "height": 37,
         "symbolKey": "lounge--015--4x2",
@@ -1134,8 +1108,8 @@
         "type": "surface"
       },
       "lounge--015--4x2 10": {
-        "x": 1271,
-        "y": 590,
+        "x": 906,
+        "y": 1418,
         "width": 38,
         "height": 37,
         "symbolKey": "lounge--015--4x2",
@@ -7378,6 +7352,35 @@
       "removableDoors": [],
       "addableWalls": []
     },
+    "extra--017--table--2x0.5": {
+      "key": "extra--017--table--2x0.5",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[3, 0.75], [0, 0.75], [0, 0], [3, 0]]],
+          "meta": {
+            "obstacle": true,
+            "surface": true,
+            "symId": 93,
+            "symKey": "extra--017--table--2x0.5",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 3,
+      "height": 0.75,
+      "pngRect": {"x": 0, "y": 0, "width": 3, "height": 0.75},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
     "fresher--002--0.4x0.6": {
       "key": "fresher--002--0.4x0.6",
       "isHull": false,
@@ -10542,55 +10545,7 @@
       "key": "office--023--2x3",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[3, 1.5], [3, 4.5], [2.24, 4.5], [2.24, 1.5]]],
-          "meta": {
-            "obstacle": true,
-            "surface": true,
-            "symId": 60,
-            "symKey": "office--023--2x3",
-            "obsId": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[2.746, 0.251], [2.746, 1.236], [0.2795, 1.236], [0.2795, 0.251]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 60,
-            "symKey": "office--023--2x3",
-            "obsId": 1
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[2.166, 2.001], [2.166, 2.5055], [1.677, 2.5055], [1.677, 2.001]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 60,
-            "symKey": "office--023--2x3",
-            "obsId": 2
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[2.166, 3.501], [2.166, 4.0055], [1.677, 4.0055], [1.677, 3.501]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 60,
-            "symKey": "office--023--2x3",
-            "obsId": 3
-          }
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -10681,7 +10636,36 @@
       "width": 3,
       "height": 4.5,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 4.6},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "extra--010--machine--2x1",
+          "meta": {"key": "extra--010--machine--2x1", "y": 1},
+          "width": 3,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 0, 0]
+        },
+        {
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, -1, 2.13, 3.95]
+        },
+        {
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
+          "width": 0.375,
+          "height": 0.375,
+          "transform": [-1, 0, 0, -1, 2.13, 2.45]
+        },
+        {
+          "symbolKey": "extra--017--table--2x0.5",
+          "meta": {"key": "extra--017--table--2x0.5", "y": 0.8},
+          "width": 3,
+          "height": 0.75,
+          "transform": [0, 1, -1, 0, 3, 1.5]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },

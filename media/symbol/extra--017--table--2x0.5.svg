@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 600 150" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <image width="600" height="150" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAACWAgMAAAB/dR6iAAAACVBMVEX///8AAAD8/PzOjTNvAAAAu0lEQVR42u3cMQ2EUBQAQZpzeOCQBpWQgIHtXvJnFYyC3faRYWF9rcM6rnGdD+u/jeuHhfWGVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVVqJNXRnODIsrK9VWDdxNKSgaM3PuAAAAABJRU5ErkJggg==">
+    <title>extra--017--table--2x0.5</title>
+  </image>
+  <path d="M 599.999982 150 L -0.000003 150 L -0.000003 0 L 599.999982 0 L 599.999982 150 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+    <title>obstacle surface</title>
+  </path>
+</svg>
