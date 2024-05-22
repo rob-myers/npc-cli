@@ -24,14 +24,35 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- 🚧 TestCharacterDemo skins
+- ✅  TestCharacterDemo skins
   - ✅ can change skin
-  - 🚧 know uv body part ordering
-  - 🚧 can change sub-skin
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
+
+- can change sub-skin
+  - fix number of verts in mesh i.e. 278 is too many
+  - know uv body part ordering
+    - either via Blender or node-ordering?
+    ```
+    Scene
+    Armature
+    minecraft-character-mesh
+    hips
+    chest
+    head
+    r-shoulder
+    r-u-arm
+    r-l-arm
+    l-shoulder
+    l-u-arm
+    l-l-arm
+    upper-leg_R
+    lower-leg_R
+    upper-leg_L
+    lower-leg_L
+    ```
 
 - fix webp generation
   - on push generate webp and fail with message if git detects changed
