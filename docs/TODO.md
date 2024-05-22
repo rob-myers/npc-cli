@@ -8,6 +8,9 @@
   - 🚧 102
   - ℹ️ raising to wall height can cause flicker
 
+- 🚧 office--061--3x4
+  - table obstacles -> 2 symbols
+
 - 🚧 fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles
   - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh

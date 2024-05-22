@@ -301,17 +301,9 @@
       "obsHashes": [-2071652012]
     },
     "office--061--3x4": {
-      "outputHash": 798365170,
+      "outputHash": 239216168,
       "pngHash": 1103253101,
-      "obsHashes": [
-        -106078146,
-        1737266094,
-        -2033040553,
-        -1300878370,
-        -1012279575,
-        76504298,
-        1020805511
-      ]
+      "obsHashes": [-106078146, 1737266094, 1765758083]
     },
     "office--074--4x4": {"outputHash": -1796410054, "pngHash": 194408083},
     "office--089--4x4": {
@@ -505,13 +497,13 @@
         "obstacleId": 1,
         "type": "surface"
       },
-      "office--061--3x4 6": {
+      "office--061--3x4 2": {
         "x": 1688,
         "y": 81,
         "width": 450,
         "height": 77,
         "symbolKey": "office--061--3x4",
-        "obstacleId": 6,
+        "obstacleId": 2,
         "type": "surface"
       },
       "extra--014--table--2x3 0": {
@@ -973,45 +965,9 @@
         "obstacleId": 1,
         "type": "obstacle"
       },
-      "office--061--3x4 2": {
-        "x": 692,
-        "y": 2010,
-        "width": 78,
-        "height": 70,
-        "symbolKey": "office--061--3x4",
-        "obstacleId": 2,
-        "type": "obstacle"
-      },
-      "office--061--3x4 5": {
-        "x": 1031,
-        "y": 2193,
-        "width": 78,
-        "height": 64,
-        "symbolKey": "office--061--3x4",
-        "obstacleId": 5,
-        "type": "obstacle"
-      },
-      "office--061--3x4 3": {
+      "console--051--0.4x0.6 0": {
         "x": 1294,
         "y": 2008,
-        "width": 65,
-        "height": 76,
-        "symbolKey": "office--061--3x4",
-        "obstacleId": 3,
-        "type": "obstacle"
-      },
-      "office--061--3x4 4": {
-        "x": 1707,
-        "y": 1680,
-        "width": 65,
-        "height": 76,
-        "symbolKey": "office--061--3x4",
-        "obstacleId": 4,
-        "type": "obstacle"
-      },
-      "console--051--0.4x0.6 0": {
-        "x": 1309,
-        "y": 2086,
         "width": 69,
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
@@ -1109,8 +1065,8 @@
         "type": "surface"
       },
       "lounge--015--4x2 5": {
-        "x": 1774,
-        "y": 1680,
+        "x": 957,
+        "y": 2199,
         "width": 33,
         "height": 53,
         "symbolKey": "lounge--015--4x2",
@@ -1136,7 +1092,7 @@
         "type": "obstacle"
       },
       "office--023--2x3 3": {
-        "x": 957,
+        "x": 992,
         "y": 2199,
         "width": 49,
         "height": 50,
@@ -1154,8 +1110,8 @@
         "type": "chair"
       },
       "lounge--017--4x2 0": {
-        "x": 1361,
-        "y": 2038,
+        "x": 2090,
+        "y": 908,
         "width": 47,
         "height": 46,
         "symbolKey": "lounge--017--4x2",
@@ -1182,7 +1138,7 @@
       },
       "lounge--015--4x2 10": {
         "x": 2090,
-        "y": 908,
+        "y": 956,
         "width": 38,
         "height": 37,
         "symbolKey": "lounge--015--4x2",
@@ -10829,54 +10785,6 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[1.592, 0.675], [1.592, 1.37], [0.808, 1.37], [0.808, 0.675]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 61,
-            "symKey": "office--061--3x4",
-            "obsId": 2
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[3.788, 1.5], [3.788, 2.2645], [3.138, 2.2645], [3.138, 1.5]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 61,
-            "symKey": "office--061--3x4",
-            "obsId": 3
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[3.788, 3.75], [3.788, 4.5145], [3.138, 4.5145], [3.138, 3.75]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 61,
-            "symKey": "office--061--3x4",
-            "obsId": 4
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.592, 4.6435], [1.592, 5.2885], [0.808, 5.2885], [0.808, 4.6435]]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 61,
-            "symKey": "office--061--3x4",
-            "obsId": 5
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
             [
               [0, 5.2375],
               [0.5845, 5.2375],
@@ -10894,7 +10802,7 @@
             "surface": true,
             "symId": 61,
             "symKey": "office--061--3x4",
-            "obsId": 6
+            "obsId": 2
           }
         }
       ],
@@ -10954,83 +10862,42 @@
           "type": "Polygon",
           "coordinates": [[[1.8, 2.75], [1.8, 2.8], [1.75, 2.8], [1.75, 2.75]]],
           "meta": {"decor": true, "go": true, "label": "office"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.6049, 1.8548],
-              [3.6049, 1.9048],
-              [3.5549, 1.9048],
-              [3.5549, 1.8548]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [3.6049, 4.1048],
-              [3.6049, 4.1548],
-              [3.5549, 4.1548],
-              [3.5549, 4.1048]
-            ]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.225, 5.0548], [1.225, 5.1048], [1.175, 5.1048], [1.175, 5.0548]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 90
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.225, 0.9048], [1.225, 0.9548], [1.175, 0.9548], [1.175, 0.9048]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 270
-          }
         }
       ],
-      "unsorted": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.025, 2.65], [0.025, 3.3789], [-0.025, 3.3789], [-0.025, 2.65]]
-          ],
-          "meta": {"parallel-connectors": true}
-        }
-      ],
+      "unsorted": [],
       "width": 4.5,
       "height": 6,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 6.1},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, 1, -1, 0, 1.57, 0.65]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, -1, 1, 0, 0.82, 5.35]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-1, 0, 0, 1, 3.85, 3.75]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [-1, 0, 0, 1, 3.85, 1.5]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },
