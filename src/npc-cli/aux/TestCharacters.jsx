@@ -4,7 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 import { info, range } from "../service/generic";
-import { buildGraph } from "../service/three";
+import { buildGraph, textureLoader } from "../service/three";
 import CharacterController from "./character-controller";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -24,6 +24,27 @@ export const TestCharacters = React.forwardRef(function TestCharacters({
 
   const state = useStateRef(/** @returns {State} */ () => ({
     models: /** @type {*} */ ([]),
+    changeSkin(charIndex, skinKey) {
+      const model = state.models[charIndex];
+      if (!model) {
+        return;
+      }
+      const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (
+        model.graph.nodes['minecraft-character-mesh']
+      );
+      const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
+
+      textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
+        // console.log(material.map, tex);
+        tex.flipY = false;
+        tex.wrapS = tex.wrapT = 1000;
+        tex.colorSpace = "srgb";
+        tex.minFilter = 1004;
+        tex.magFilter = 1003;
+        clonedMaterial.map = tex;
+        skinnedMesh.material = clonedMaterial;
+      });
+    },
     update(deltaMs) {
       state.models.forEach(({ controller }) => controller.update(deltaMs));
     },
@@ -39,25 +60,27 @@ export const TestCharacters = React.forwardRef(function TestCharacters({
       const mixer = new THREE.AnimationMixer(model);
       const animationMap = /** @type {Record<import("./character-controller").AnimKey, THREE.AnimationAction>} */ ({});
       gltf.animations.forEach(a => {
-        info('saw animation:', a.name);
+        // info('saw animation:', a.name);
         if (a.name === 'Idle' || a.name === 'Walk' || a.name === 'Run') {
           animationMap[a.name] = mixer.clipAction(a);
         }
       });
-      const characterController = new CharacterController({
+      const controller = new CharacterController({
         model: /** @type {THREE.Group} */ (model),
         mixer,
         animationMap,
         opts: { initAnimKey: 'Idle', walkSpeed: meta.walkSpeed, runSpeed: meta.runSpeed, },
       });
 
-      return {
-        model,
-        controller: characterController,
-        graph: buildGraph(model),
-      };
+      return { model, controller, graph: buildGraph(model) };
     });
   }, [gltf.scene]);
+
+  React.useEffect(() => {
+    state.changeSkin(0, 'Minecraft-Alex-Default-Skin-1-20-on-planetminecraft-com.png');
+    state.changeSkin(2, 'Vaccino-64x64.png');
+  }, [gltf.scene]);
+
 
   return state.models.map(({ model }, i) =>
     <primitive
@@ -80,7 +103,25 @@ export const TestCharacters = React.forwardRef(function TestCharacters({
 /**
  * @typedef State
  * @property {{ model: THREE.Object3D; controller: CharacterController; graph: import("@react-three/fiber").ObjectMap }[]} models
+ * @property {(charIndex: number, skinKey: SkinKey) => void} changeSkin
  * @property {(deltaMs: number) => void} update
  */
 
 useGLTF.preload(meta.url);
+
+/**
+ * @typedef {(
+ * | 'Dystopian-on-planetminecraft-com.png'
+ * | 'Minecraft-Alex-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Ari-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Efe-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Kai-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Makena-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Noor-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Steve-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Sunny-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Minecraft-Zuri-Default-Skin-1-20-on-planetminecraft-com.png'
+ * | 'Vaccino-64x64.png'
+ * | 'Vaccino-on-planetminecraft-com.png'
+ * )} SkinKey
+ */
