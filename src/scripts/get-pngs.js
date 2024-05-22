@@ -33,6 +33,7 @@ import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilen
  * yarn get-pngs symbol 'Symbols/Battery' symbol-battery
  * yarn get-pngs symbol 'Symbols/Medical' symbol-medical
  * yarn get-pngs symbol 'Symbols/Misc' symbol-misc
+ * yarn get-pngs symbol 'Symbols/Offices' symbol-offices
  * ```
  */
 const [,, inputType, srcFolder, dstFolder] = process.argv;

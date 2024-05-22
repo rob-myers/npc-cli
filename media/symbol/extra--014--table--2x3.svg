@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="597" height="896" x="1.5" y="2" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlUAAAOAAgMAAABu7G4JAAAACVBMVEUAAAD///8AAABzxoNxAAAAAXRSTlMAQObYZgAAAyFJREFUeNrszjuNAgAABUFMXnMSUIEJTKCSglC+kG34zgrYzOHyjp2wsG5hlX6Jdf57s45YWLewSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlglrBJWCauEVcIqYZWwSlill7H+L8/ts1nHBxcsrK9jHZ4cFtY9LCwsrBkWFhbWDAsLC2uGhYWFNcPCwsKaYWFhYc2wsLCwZlhYWFgzLCwsrBkWFhbWDAsLC2uGhYWFNcPCwsKaYWFhYc2wsLCwZlhYWFgzLCwsrBkWFhbWDAsLC2uGhYWFNcPCwsKaYWFhYc2wsLCwZlhYWFgzLCwsrBkWFhbWDAsLC2uGhYWFNcPCwsKaYWFhYc2wsLCwZlhYWFgzLCwsrBkWFhbWDAsLC2uGhXVld45tEAYAIAbuyQhMwegUVBRW9E0SKecBrMPCyrCwsLAyLCwsrAwLCwsrw8LCwsqwsLCwMiwsLKwMCwsLK8PCwsLKsLCwsDIsLCysDAsLCyvDwsLCyrCwsLAyLCwsrAwLCwsrw8LCwsqwsLCwMiwsLKwMCwsLK8PCwsLKsLCwsDIsLCysDAsLCyvDwsLCyrCwsLAyLCwsrAwLCwsrw8LCwsqwsLCwMiwsLKwMCwsLK8PCwsLKsLCwsDIsLCysDAsLCyvDwsLCyrCwsLAyLCwsrAwLCwsrw8LCwsqwsLCwMiwsLKwMCwsLK8PCwsLKsLCwsDIsLCysDAsLCyvDwsLCyi5indwH6yms18EF66/hmO2sm/XGwvqFtYS1hLWEtYS1hLWEtYS1hLWEtYS1hLWEtYS1hLWEtYS1hLWEtYS1hLWEtYS1hLWEtYS1hPVtd45pAABAAIb5d82DgX0ktApaaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVahVahVWgVWoVWoVVoFVqFVqFVaBVaxa/WQVpaS6t40xodUBFpPLnt0wAAAABJRU5ErkJggg==">
+                <title>extra--014--table--2x3</title>
+        </image>
+        <path d="M 600.00001 2 L 600 155 L 152 155 L 152 746 L 600 746 L 600 898 L 0 898 L 0 1 L 600.00001 2 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+                <title>obstacle surface</title>
+        </path>
+</svg>
