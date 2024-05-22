@@ -18,11 +18,13 @@
   - ❌ try repro with single geomorph
   - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
   - 🤔 multiple websockets open in single browser tab?
-  - 🚧 saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
+  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
     - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
     - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
-  - 🚧 saw issue on WARN about mismatched size
+  - ✅ saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
+  - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
+  - 🚧 saw issue on remove obstacle, then add back in
 
 - ✅  TestCharacterDemo skins
   - ✅ can change skin
