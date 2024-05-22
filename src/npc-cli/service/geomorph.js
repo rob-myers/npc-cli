@@ -147,6 +147,8 @@ class GeomorphService {
     "extra--012--battery--3x2": true,
     "extra--013--privacy-screen--1.5x0.2": true,
     "extra--014--table--2x3": true,
+    "extra--015--table--3x0.5": true,
+    "extra--016--table--4x0.5": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */
