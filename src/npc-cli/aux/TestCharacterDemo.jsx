@@ -26,10 +26,10 @@ export function TestCharacterDemo(props) {
 
       {/* <CameraControls makeDefault enabled={!props.disabled} /> */}
       <PerspectiveCamera makeDefault position={[0, 8, 0]} />
-      <ambientLight color="white" intensity={3} />
+      <ambientLight color="white" intensity={1} />
       <pointLight
         position={[0, 3, 2]}
-        intensity={4}
+        intensity={2}
         castShadow
       />
 

@@ -24,24 +24,14 @@
   - 🚧 saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
 
-- ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
-- ❌ can color obstacle instances
-  - should alter image directly instead
-- ✅ change mapKey should request-nav-mesh but shouldn't restart worker
-
-- ✅ extend TestCharacterDemo to multiple characters
-  - ✅ try convert into jsx `npx gltfjsx minecraft-anim.glb`
-  - ✅ rename -> TestCharacterDemo, TestCharacterOld
-  - ✅ TestCharacters
-    - ✅ don't use transform glb i.e. no `--transform`
-    - ✅ support multiple instances via `SkeletonUtils.clone`
-      - https://discourse.threejs.org/t/multiple-instances-of-skinned-mesh-wont-show-react-three-fiber/47678/2
-    - ✅ only one instance of hook `useGLTF`
-    - ✅ hook up to TestCharacterDemo
-  - ✅ can click character and make it walk
+- 🚧 TestCharacterDemo skins
+  - ✅ can change skin
+  - 🚧 know uv body part ordering
+  - 🚧 can change sub-skin
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+  - ℹ️ can use Blender to pull in alternate textures
 
 - fix webp generation
   - on push generate webp and fail with message if git detects changed
@@ -1110,3 +1100,20 @@ React.useEffect(() => {
     - root motion `.25 * 10 = 2.5m` after scaling
     - 20 frames -> 24 frames via scale `24 / 20 = 1.2`
     - https://devtalk.blender.org/t/animating-in-blender-changing-the-frame-rate-should-have-the-option-to-preserve-animation-timing/21629/3
+
+
+- ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
+- ❌ can color obstacle instances
+  - should alter image directly instead
+- ✅ change mapKey should request-nav-mesh but shouldn't restart worker
+
+- ✅ extend TestCharacterDemo to multiple characters
+  - ✅ try convert into jsx `npx gltfjsx minecraft-anim.glb`
+  - ✅ rename -> TestCharacterDemo, TestCharacterOld
+  - ✅ TestCharacters
+    - ✅ don't use transform glb i.e. no `--transform`
+    - ✅ support multiple instances via `SkeletonUtils.clone`
+      - https://discourse.threejs.org/t/multiple-instances-of-skinned-mesh-wont-show-react-three-fiber/47678/2
+    - ✅ only one instance of hook `useGLTF`
+    - ✅ hook up to TestCharacterDemo
+  - ✅ can click character and make it walk
