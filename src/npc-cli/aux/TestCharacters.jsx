@@ -76,7 +76,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters({
       return { model, controller, graph: buildGraph(model) };
     });
   }, [gltf.scene]);
-  // console.log(state.models[0]?.graph.nodes["minecraft-character-mesh"].geometry.attributes.position);
+  // console.log(/** @type {THREE.SkinnedMesh} */ (state.models[0]?.graph.nodes["minecraft-character-mesh"]).geometry.attributes.position);
 
   React.useEffect(() => {
     state.changeSkin(0, 'minecraft-alex-with-arms.png');

@@ -42,12 +42,15 @@
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
 
-- 🚧 understand number of verts in mesh i.e. 278 is too many
+- ✅ understand number of verts in mesh i.e. 278 is too many
   - ℹ️ 96 vertices in Blender:
     > `96 = 8 + (8*2*4) + 6*4`
     > i.e. head + (2 * arms + 2 * legs) + body
   - extras come from UVs i.e. need to duplicate vertex if has different UV
   - ✅ reduce to 241
+  - ✅ reduce to 236
+  - can probably reduce vertices more by re-arranging UVs, but:
+    triangle count (168) and bone count (13) are probably dominating factor
 
 - 🚧 can change sub-skin
   - know uv body part ordering
