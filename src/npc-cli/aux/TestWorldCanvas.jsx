@@ -117,6 +117,9 @@ export default function TestWorldCanvas(props) {
       if (!state.down) {
         return;
       }
+      state.justLongDown = false;
+      window.clearTimeout(state.down.longTimeoutId);
+
       state.down.pointerIds = state.down.pointerIds.filter(x => x !== e.pointerId);
       if (state.down.pointerIds.length === 0) {
         state.down = undefined;
@@ -129,7 +132,6 @@ export default function TestWorldCanvas(props) {
       if (!state.down) {
         return;
       }
-      window.clearTimeout(state.down.longTimeoutId);
       
       api.events.next({
         key: "pointerup",
@@ -142,11 +144,7 @@ export default function TestWorldCanvas(props) {
         touch: isTouchDevice(),
       });
 
-      state.justLongDown = false;
-      state.down.pointerIds = state.down.pointerIds.filter(x => x !== e.pointerId);
-      if (state.down.pointerIds.length === 0) {
-        state.down = undefined;
-      }
+      state.onPointerLeave(e);
     },
     onPointerMissed(e) {
       if (!state.down) {
@@ -163,8 +161,6 @@ export default function TestWorldCanvas(props) {
         screenPoint: { x: e.offsetX, y: e.offsetY },
         touch: isTouchDevice(),
       });
-      state.justLongDown = false;
-      state.down = undefined;
     },
     onWheel(e) {
       if (api.menu.isOpen === true) {
