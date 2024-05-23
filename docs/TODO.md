@@ -4,12 +4,18 @@
 
 - 🚧 more raised obstacles
   - ✅ 301
-  - 🚧 101
-  - 🚧 102
+  - ✅ 101
+  - ✅ 102
+  - 🚧 302
+  - 🚧 303
   - ℹ️ raising to wall height can cause flicker
 
-- 🚧 office--061--3x4
+- ✅ office--061--3x4
   - table obstacles -> 2 symbols
+
+- ✅ support obstacle tag `no-shadow`
+- ❌ support sub-symbol tag `no-shadow`
+- ✅ take union when drawing obstacle drop shadows
 
 - 🚧 fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles

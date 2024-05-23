@@ -1,7 +1,7 @@
 import React from "react";
 import * as THREE from "three";
 
-import { Mat } from "../geom";
+import { Mat, Poly } from "../geom";
 import { info, warn } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
 import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
@@ -56,13 +56,14 @@ export default function TestSurfaces(props) {
       floorCt.clearRect(0, 0, width, height);
       floorCt.drawImage(img, 0, 0);
 
-      // 🚧 debug obstacles
+      // obstacles drop shadows
       const scale = 1 / worldScale;
-      layout.obstacles.forEach(({ origPoly, transform }) => {
-        floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-        floorCt.transform(...transform);
-        drawPolygons(floorCt, origPoly, ['rgba(0, 0, 0, 0.4)', null]);
-      });
+      floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
+      // avoid doubling shadows e.g. bunk bed, overlapping tables
+      const shadowPolys = Poly.union(layout.obstacles.flatMap(x =>
+        x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
+      ));
+      drawPolygons(floorCt, shadowPolys, ['rgba(0, 0, 0, 0.4)', null]);
 
       // 🚧 debug decor
       floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
