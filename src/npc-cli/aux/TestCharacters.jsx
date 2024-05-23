@@ -9,7 +9,8 @@ import CharacterController from "./character-controller";
 import useStateRef from "../hooks/use-state-ref";
 
 const meta = {
-  url: '/assets/3d/minecraft-anim.glb', scale: 0.25, height: 2, rotation: undefined,
+  url: '/assets/3d/minecraft-anim.glb',
+  scale: 0.25, height: 2, rotation: undefined,
   walkSpeed: 1.25, runSpeed: 2.5,
 };
 
@@ -75,10 +76,13 @@ export const TestCharacters = React.forwardRef(function TestCharacters({
       return { model, controller, graph: buildGraph(model) };
     });
   }, [gltf.scene]);
+  // console.log(state.models[0]?.graph.nodes["minecraft-character-mesh"].geometry.attributes.position);
 
   React.useEffect(() => {
-    state.changeSkin(0, 'Minecraft-Alex-Default-Skin-1-20-on-planetminecraft-com.png');
-    state.changeSkin(2, 'Vaccino-64x64.png');
+    state.changeSkin(0, 'minecraft-alex-with-arms.png');
+    state.changeSkin(1, 'minecraft-steve.png');
+    state.changeSkin(2, 'vaccino-64x64.png');
+    state.changeSkin(3, 'minecraft-zuri.png');
   }, [gltf.scene]);
 
 
@@ -111,17 +115,15 @@ useGLTF.preload(meta.url);
 
 /**
  * @typedef {(
- * | 'Dystopian-on-planetminecraft-com.png'
- * | 'Minecraft-Alex-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Ari-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Efe-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Kai-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Makena-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Noor-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Steve-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Sunny-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Minecraft-Zuri-Default-Skin-1-20-on-planetminecraft-com.png'
- * | 'Vaccino-64x64.png'
- * | 'Vaccino-on-planetminecraft-com.png'
+ * | 'minecraft-alex-with-arms.png'
+ * | 'minecraft-ari.png'
+ * | 'minecraft-efe-with-arms.png'
+ * | 'minecraft-kai.png'
+ * | 'minecraft-makena-with-arms.png'
+ * | 'minecraft-noor-with-arms.png'
+ * | 'minecraft-steve.png'
+ * | 'minecraft-sunny.png'
+ * | 'minecraft-zuri.png'
+ * | 'vaccino-64x64.png'
  * )} SkinKey
  */
