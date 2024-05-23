@@ -113,6 +113,15 @@ export default function TestWorldCanvas(props) {
         touch: isTouchDevice(),
       });
     },
+    onPointerLeave(e) {
+      if (!state.down) {
+        return;
+      }
+      state.down.pointerIds = state.down.pointerIds.filter(x => x !== e.pointerId);
+      if (state.down.pointerIds.length === 0) {
+        state.down = undefined;
+      }
+    },
     onPointerMove(e) {
       state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
@@ -200,6 +209,7 @@ export default function TestWorldCanvas(props) {
       onPointerMissed={state.onPointerMissed}
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
+      onPointerLeave={state.onPointerLeave}
       onWheel={state.onWheel}
     >
       {props.stats && state.rootEl &&
@@ -264,6 +274,7 @@ export default function TestWorldCanvas(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
  * @property {(e: MouseEvent) => void} onPointerMissed
+ * @property {(e: React.PointerEvent) => void} onPointerLeave
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
