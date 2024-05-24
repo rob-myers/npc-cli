@@ -70,6 +70,7 @@ class GeomorphService {
     "cargo--003--2x4.svg": true,
     "console--005--1.2x4": true,
     "console--006--1.2x3": true,
+    "console--010--1.2x2": true,
     "console--018--1x1": true, 
     "console--019--2x2": true, 
     "console--022--1x2": true,
