@@ -78,10 +78,16 @@ export default function TestWorldCanvas(props) {
       });
     },
     onPointerDown(e) {
-      const screenPoint = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
-      state.lastScreenPoint.set(screenPoint.x, screenPoint.y);
+      const sp = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+      state.lastScreenPoint.set(sp.x, sp.y);
+
       // No MultiTouch Long Press
       window.clearTimeout(state.down?.longTimeoutId);
+      // Ignore pointers outside view
+      const bounds = state.canvas.getBoundingClientRect();
+      if (!(sp.x >= 0 && sp.x <= bounds.width && sp.y >= 0 && sp.y <= bounds.height)) {
+        return;
+      }
 
       state.down = {
         screenPoint: state.lastScreenPoint.clone(),
@@ -95,7 +101,7 @@ export default function TestWorldCanvas(props) {
             justLongDown: false,
             pointers: state.getNumPointers(),
             rmb: false, // could track
-            screenPoint,
+            screenPoint: sp,
             touch: isTouchDevice(),
           });
         }, longPressMs),
@@ -109,7 +115,7 @@ export default function TestWorldCanvas(props) {
         justLongDown: false,
         pointers: state.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
-        screenPoint,
+        screenPoint: sp,
         touch: isTouchDevice(),
       });
     },
