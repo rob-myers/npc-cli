@@ -6,7 +6,7 @@
   - ✅ 301
   - ✅ 101
   - ✅ 102
-  - 🚧 302
+  - ✅ 302
   - 🚧 303
   - ℹ️ raising to wall height can cause flicker
 - 🚧 migrate sub-symbols to actual symbols
