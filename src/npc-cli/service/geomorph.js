@@ -89,6 +89,7 @@ class GeomorphService {
     "engineering--045--6x4": true,
     "engineering--047--4x7": true,
     "fresher--002--0.4x0.6": true,
+    "fresher--015--1x2": true,
     "fresher--020--2x2": true,
     "fresher--025--3x2": true,
     "fresher--036--4x2": true,

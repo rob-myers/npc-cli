@@ -116,183 +116,184 @@
     "engineering--045--6x4": {"outputHash": 21392850, "pngHash": -1132388510},
     "engineering--047--4x7": {"outputHash": -388809063, "pngHash": 541808283},
     "extra--001--fresher--0.5x0.5": {
-      "outputHash": 91548055,
+      "outputHash": 810603672,
       "pngHash": 1247120224,
-      "obsHashes": [2098588770]
+      "obsHashes": [1852275683]
     },
     "extra--002--fresher--0.5x0.5": {
-      "outputHash": 368194189,
+      "outputHash": -1786486322,
       "pngHash": 482008010,
-      "obsHashes": [695523557]
+      "obsHashes": [449210470]
     },
     "extra--003--chair--0.25x0.25": {
-      "outputHash": -1212909326,
+      "outputHash": -274219119,
       "pngHash": -1668511435,
-      "obsHashes": [-963858134]
+      "obsHashes": [-1210171221]
     },
     "extra--004--desk--0.5x1": {
-      "outputHash": 82975768,
+      "outputHash": 1177802201,
       "pngHash": -1144971495,
-      "obsHashes": [782574717]
+      "obsHashes": [-1392105380]
     },
     "extra--005--chair-0.25x0.25": {
-      "outputHash": 1183649861,
+      "outputHash": 1228045924,
       "pngHash": -372042423,
-      "obsHashes": [-1543558848]
+      "obsHashes": [1080894879]
     },
     "extra--006--desk--0.4x1": {
-      "outputHash": -188002284,
+      "outputHash": 1004613310,
       "pngHash": -244410489,
-      "obsHashes": [-887877826]
+      "obsHashes": [-1486199704]
     },
     "extra--007--desk--0.4x0.66": {
-      "outputHash": 1377819236,
+      "outputHash": -1822321627,
       "pngHash": -25585608,
-      "obsHashes": [-1717164970]
+      "obsHashes": [1969725463]
     },
     "extra--008--desk--0.4x1.33": {
-      "outputHash": 1532672275,
+      "outputHash": -1667468588,
       "pngHash": 702037169,
-      "obsHashes": [1544825655]
+      "obsHashes": [936748792]
     },
     "extra--009--table--4x4": {
-      "outputHash": 1786421277,
+      "outputHash": 1701611806,
       "pngHash": 1827472801,
-      "obsHashes": [-69892838]
+      "obsHashes": [-278591141]
     },
     "extra--010--machine--2x1": {
-      "outputHash": -676071116,
+      "outputHash": 546531509,
       "pngHash": -1673441387,
-      "obsHashes": [-1984572504]
+      "obsHashes": [-680178775]
     },
     "extra--011--machine--1x3": {
-      "outputHash": 824584853,
+      "outputHash": 70560564,
       "pngHash": 1878326814,
-      "obsHashes": [1137078739]
+      "obsHashes": [-1853494828]
     },
     "extra--012--battery--3x2": {
-      "outputHash": -1888526284,
+      "outputHash": 506524533,
       "pngHash": 639710287,
-      "obsHashes": [-1063397492]
+      "obsHashes": [240996237]
     },
     "extra--013--privacy-screen--1.5x0.2": {
-      "outputHash": 1859939200,
+      "outputHash": 111756289,
       "pngHash": -1193937783,
-      "obsHashes": [448501361]
+      "obsHashes": [1557316560]
     },
     "extra--014--table--2x3": {
-      "outputHash": 1501749646,
+      "outputHash": 1197892111,
       "pngHash": -729764103,
-      "obsHashes": [-2146500862]
+      "obsHashes": [1939768131]
     },
     "extra--015--table--3x0.5": {
-      "outputHash": 916788340,
+      "outputHash": -2989613,
       "pngHash": -1811554071,
-      "obsHashes": [1328722288]
+      "obsHashes": [-1661851279]
     },
     "extra--016--table--4x0.5": {
-      "outputHash": -1116415245,
+      "outputHash": -1220839970,
       "pngHash": 2031632593,
-      "obsHashes": [738316656]
+      "obsHashes": [-670320113]
     },
     "extra--017--table--2x0.5": {
-      "outputHash": 800438848,
+      "outputHash": -2030890431,
       "pngHash": -1220359814,
-      "obsHashes": [-54225117]
+      "obsHashes": [1250168612]
     },
     "extra--018--table-0.25x0.25": {
-      "outputHash": -1468624250,
+      "outputHash": -1476004571,
       "pngHash": -372042423,
-      "obsHashes": [-1797065697]
+      "obsHashes": [827388030]
     },
     "fresher--002--0.4x0.6": {
       "outputHash": -194831120,
       "pngHash": -1792259774,
       "obsHashes": [-190985599]
     },
+    "fresher--015--1x2": {"outputHash": 15485796, "pngHash": -243127075},
     "fresher--020--2x2": {"outputHash": 1286748459, "pngHash": 1107295627},
     "fresher--025--3x2": {"outputHash": 1465272992, "pngHash": -1324814803},
     "fresher--036--4x2": {"outputHash": -1158095618, "pngHash": 633687707},
     "fuel--010--4x2": {
-      "outputHash": -173926561,
+      "outputHash": 1014032958,
       "pngHash": 858873613,
-      "obsHashes": [-793268711]
+      "obsHashes": [-99876006]
     },
     "iris-valves--005--1x1": {"outputHash": -1502830503, "pngHash": 1810420148},
     "lab--012--4x3": {
-      "outputHash": 2131467693,
+      "outputHash": -174744125,
       "pngHash": -261688393,
-      "obsHashes": [1153079511]
+      "obsHashes": [-2095613311]
     },
     "lab--018--4x4": {"outputHash": -1324000044, "pngHash": -113261385},
     "lab--023--4x4": {
-      "outputHash": -576641850,
+      "outputHash": -1275742393,
       "pngHash": -1594118441,
-      "obsHashes": [1223505950]
+      "obsHashes": [1661515453]
     },
     "lifeboat--small-craft--2x4": {
       "outputHash": 737229891,
       "pngHash": -2036140918
     },
     "lounge--015--4x2": {
-      "outputHash": -392609896,
+      "outputHash": 844014557,
       "pngHash": 222627377,
-      "obsHashes": [1195027795, 101581406, -758695554, 1586830773]
+      "obsHashes": [-155463650]
     },
     "lounge--017--4x2": {
-      "outputHash": 1060791105,
+      "outputHash": 1559950018,
       "pngHash": -236167751,
-      "obsHashes": [1602054920]
+      "obsHashes": [-2062453751]
     },
     "low-berth--003--1x1": {
-      "outputHash": 718092744,
+      "outputHash": -201685209,
       "pngHash": 177413432,
-      "obsHashes": [-1329230073]
+      "obsHashes": [-1228318106]
     },
     "machinery--155--1.8x3.6": {
-      "outputHash": 441425198,
+      "outputHash": -1751713553,
       "pngHash": -2012657603,
-      "obsHashes": [1582592814]
+      "obsHashes": [-592087283]
     },
     "machinery--156--2x4": {
-      "outputHash": -21738268,
+      "outputHash": 28946725,
       "pngHash": -1501888534,
-      "obsHashes": [-479531498]
+      "obsHashes": [-378619531]
     },
     "machinery--158--1.8x3.6": {
-      "outputHash": 1586101542,
+      "outputHash": 832077253,
       "pngHash": -542298279,
-      "obsHashes": [1246868135]
+      "obsHashes": [-927811962]
     },
     "machinery--357--4x2": {
-      "outputHash": -2016455602,
+      "outputHash": -1425120776,
       "pngHash": -763382708,
-      "obsHashes": [1431461569]
+      "obsHashes": [-643442453]
     },
     "medical--007--3x2": {"outputHash": -1524356726, "pngHash": -74184864},
     "medical--008--3x2": {
-      "outputHash": 1947651072,
+      "outputHash": 1791376287,
       "pngHash": -1263266565,
-      "obsHashes": [-681364836]
+      "obsHashes": [1682983355]
     },
     "medical-bed--005--0.6x1.2": {
-      "outputHash": -1188735292,
+      "outputHash": -1200842811,
       "pngHash": -172295595,
-      "obsHashes": [-672345197]
+      "obsHashes": [1109154738]
     },
     "medical-bed--006--1.6x3.6": {
       "outputHash": 1212434630,
       "pngHash": -839723950
     },
     "misc-stellar-cartography--020--10x10": {
-      "outputHash": 1540043524,
+      "outputHash": -1539826907,
       "pngHash": -1181495790,
-      "obsHashes": [317776368, -466800976, 1576961833]
+      "obsHashes": [331309169, -453268175, 1590494634]
     },
     "misc-stellar-cartography--023--4x4": {
-      "outputHash": -1181877385,
+      "outputHash": 1410132024,
       "pngHash": 1510139639,
-      "obsHashes": [1265973118]
+      "obsHashes": [2133025343]
     },
     "office--001--2x2": {"outputHash": -4947941, "pngHash": -2056159100},
     "office--004--2x2": {"outputHash": -1475972967, "pngHash": -945108248},
@@ -300,16 +301,16 @@
     "office--020--2x3": {"outputHash": 1700953575, "pngHash": 1677157900},
     "office--023--2x3": {"outputHash": -476701925, "pngHash": 112007124},
     "office--026--2x3": {
-      "outputHash": -729024324,
+      "outputHash": -336586266,
       "pngHash": -1111441141,
-      "obsHashes": [-1441193387]
+      "obsHashes": [-456005525]
     },
     "office--061--3x4": {"outputHash": -266355886, "pngHash": 1103253101},
     "office--074--4x4": {"outputHash": -1796410054, "pngHash": 194408083},
     "office--089--4x4": {
-      "outputHash": -452628001,
+      "outputHash": -955403876,
       "pngHash": -1241808431,
-      "obsHashes": [662775933, -1511458152, 536825878, -808823362, -1614649099]
+      "obsHashes": [1293234558, -880999527, 1167284503, -178364737, -984190474]
     },
     "ships-locker--003--1x1": {"outputHash": 1430100666, "pngHash": 780413933},
     "ships-locker--007--2x1": {"outputHash": 216555499, "pngHash": 1054035955},
@@ -318,34 +319,34 @@
       "pngHash": -1355686256
     },
     "shop--027--1.6x0.4": {
-      "outputHash": -1099933475,
+      "outputHash": 1862234620,
       "pngHash": -1803328706,
-      "obsHashes": [598826324]
+      "obsHashes": [879176213]
     },
     "shop--028--1.6x0.8": {
-      "outputHash": 2114220971,
+      "outputHash": -1437557675,
       "pngHash": 705406547,
-      "obsHashes": [100942254]
+      "obsHashes": [1973672516]
     },
     "shop--031--0.4x0.8": {
-      "outputHash": -1729445816,
+      "outputHash": -497314521,
       "pngHash": 118440221,
-      "obsHashes": [-1819832189]
+      "obsHashes": [-1539482300]
     },
     "shop--033--0.6x1.6": {
-      "outputHash": -1849991083,
+      "outputHash": 1690951924,
       "pngHash": -1689615057,
-      "obsHashes": [188536083]
+      "obsHashes": [468885972]
     },
     "shop--035--0.4x0.8": {
-      "outputHash": -1417136130,
+      "outputHash": -185004835,
       "pngHash": -1395436823,
-      "obsHashes": [-1403905527]
+      "obsHashes": [-1123555638]
     },
     "shop--037--0.4x0.8": {
-      "outputHash": 886502361,
+      "outputHash": 2118633656,
       "pngHash": -765449158,
-      "obsHashes": [-1195942196]
+      "obsHashes": [-915592307]
     },
     "stateroom--012--2x2": {"outputHash": 555484505, "pngHash": 285590873},
     "stateroom--014--2x2": {"outputHash": -164360094, "pngHash": 810806279},
@@ -353,21 +354,21 @@
     "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 1561771062, "pngHash": 987326316},
     "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": -1834598581, "pngHash": 1301313076},
+    "stateroom--036--2x4": {"outputHash": -632384119, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
-      "outputHash": 518847216,
+      "outputHash": 1247618895,
       "pngHash": 1027833859,
-      "obsHashes": [234266168]
+      "obsHashes": [335178135]
     },
     "table--009--0.8x0.8": {
-      "outputHash": 2055595491,
+      "outputHash": -569240318,
       "pngHash": 1533034663,
-      "obsHashes": [1703214231]
+      "obsHashes": [1804126198]
     },
     "table--012--0.8x0.8": {
-      "outputHash": 63702394,
+      "outputHash": -1882022887,
       "pngHash": 293366403,
-      "obsHashes": [229598895]
+      "obsHashes": [330510862]
     },
     "demo-map-1": {"outputHash": 1429562441},
     "small-map-1": {"outputHash": -1987240735}
@@ -824,13 +825,13 @@
         "obstacleId": 0,
         "type": "table"
       },
-      "lounge--015--4x2 1": {
+      "lounge--015--4x2 0": {
         "x": 1098,
         "y": 1388,
         "width": 62,
         "height": 150,
         "symbolKey": "lounge--015--4x2",
-        "obstacleId": 1,
+        "obstacleId": 0,
         "type": "obstacle"
       },
       "cargo--010--2x4 3": {
@@ -1004,39 +1005,12 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "lounge--015--4x2 2": {
-        "x": 906,
-        "y": 1338,
-        "width": 72,
-        "height": 54,
-        "symbolKey": "lounge--015--4x2",
-        "obstacleId": 2,
-        "type": "obstacle"
-      },
-      "lounge--015--4x2 3": {
-        "x": 980,
-        "y": 1338,
-        "width": 72,
-        "height": 54,
-        "symbolKey": "lounge--015--4x2",
-        "obstacleId": 3,
-        "type": "obstacle"
-      },
       "extra--001--fresher--0.5x0.5 0": {
         "x": 1098,
         "y": 1623,
         "width": 69,
         "height": 59,
         "symbolKey": "extra--001--fresher--0.5x0.5",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "lounge--015--4x2 0": {
-        "x": 853,
-        "y": 2113,
-        "width": 50,
-        "height": 69,
-        "symbolKey": "lounge--015--4x2",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -1068,8 +1042,8 @@
         "type": "obstacle"
       },
       "counter--009--0.4x0.4 0": {
-        "x": 905,
-        "y": 2091,
+        "x": 906,
+        "y": 1338,
         "width": 52,
         "height": 54,
         "symbolKey": "counter--009--0.4x0.4",
@@ -1104,8 +1078,8 @@
         "type": "chair"
       },
       "lounge--017--4x2 0": {
-        "x": 865,
-        "y": 2184,
+        "x": 960,
+        "y": 1338,
         "width": 47,
         "height": 46,
         "symbolKey": "lounge--017--4x2",
@@ -6735,7 +6709,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 84,
+            "symId": 85,
             "symKey": "extra--001--fresher--0.5x0.5",
             "obsId": 0
           }
@@ -6783,7 +6757,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 85,
+            "symId": 86,
             "symKey": "extra--002--fresher--0.5x0.5",
             "obsId": 0
           }
@@ -6840,7 +6814,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 86,
+            "symId": 87,
             "symKey": "extra--003--chair--0.25x0.25",
             "obsId": 0
           }
@@ -6888,7 +6862,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 87,
+            "symId": 88,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -6928,7 +6902,7 @@
           "meta": {
             "obstacle": true,
             "chair": true,
-            "symId": 88,
+            "symId": 89,
             "symKey": "extra--005--chair-0.25x0.25",
             "obsId": 0
           }
@@ -6978,7 +6952,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 89,
+            "symId": 90,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -7009,7 +6983,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 90,
+            "symId": 91,
             "symKey": "extra--007--desk--0.4x0.66",
             "obsId": 0
           }
@@ -7045,7 +7019,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 91,
+            "symId": 92,
             "symKey": "extra--008--desk--0.4x1.33",
             "obsId": 0
           }
@@ -7114,7 +7088,7 @@
             "obstacle": true,
             "table": true,
             "surface": true,
-            "symId": 92,
+            "symId": 93,
             "symKey": "extra--009--table--4x4",
             "obsId": 0
           }
@@ -7145,7 +7119,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 93,
+            "symId": 94,
             "symKey": "extra--010--machine--2x1",
             "obsId": 0
           }
@@ -7189,7 +7163,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 94,
+            "symId": 95,
             "symKey": "extra--011--machine--1x3",
             "obsId": 0
           }
@@ -7247,7 +7221,7 @@
           "meta": {
             "obstacle": true,
             "battery": true,
-            "symId": 95,
+            "symId": 96,
             "symKey": "extra--012--battery--3x2",
             "obsId": 0
           }
@@ -7277,7 +7251,7 @@
             "obstacle": true,
             "privacy-screen": true,
             "y": 1,
-            "symId": 96,
+            "symId": 97,
             "symKey": "extra--013--privacy-screen--1.5x0.2",
             "obsId": 0
           }
@@ -7328,7 +7302,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 97,
+            "symId": 98,
             "symKey": "extra--014--table--2x3",
             "obsId": 0
           }
@@ -7369,7 +7343,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 98,
+            "symId": 99,
             "symKey": "extra--015--table--3x0.5",
             "obsId": 0
           }
@@ -7415,7 +7389,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 99,
+            "symId": 100,
             "symKey": "extra--016--table--4x0.5",
             "obsId": 0
           }
@@ -7444,7 +7418,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 100,
+            "symId": 101,
             "symKey": "extra--017--table--2x0.5",
             "obsId": 0
           }
@@ -7489,7 +7463,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 101,
+            "symId": 102,
             "symKey": "extra--018--table-0.25x0.25",
             "obsId": 0
           }
@@ -7552,6 +7526,105 @@
       "height": 0.75,
       "pngRect": {"x": 0.11, "y": -0.015, "width": 0.53, "height": 0.9},
       "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "fresher--015--1x2": {
+      "key": "fresher--015--1x2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [],
+      "walls": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.05, -0.05], [0.05, 3.05], [-0.05, 3.05], [-0.05, -0.05]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.55, 1.5], [1.55, 3.05], [1.45, 3.05], [1.45, 1.5]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[1.55, -0.05], [1.55, 0.05], [0, 0.05], [0, -0.05]]],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.8012, 1.0046], [0.8012, 1.1042], [0, 1.1042], [0, 1.0046]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.8012, 1.9754], [0.8012, 2.075], [0, 2.075], [0, 1.9754]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[1.55, 2.95], [1.55, 3.05], [0, 3.05], [0, 2.95]]],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[1.55, 0], [1.55, 3.05], [1.45, 3.05], [1.45, 0]]],
+          "meta": {"wall": true}
+        }
+      ],
+      "doors": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.575, 0.175], [1.575, 1.325], [1.425, 1.325], [1.425, 0.175]]
+          ],
+          "meta": {"door": true}
+        }
+      ],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.084, 0.302], [1.084, 0.352], [1.034, 0.352], [1.034, 0.302]]
+          ],
+          "meta": {"decor": true, "go": true, "label": "fresher"}
+        }
+      ],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 3,
+      "pngRect": {"x": -0.045, "y": -0.055, "width": 1.67, "height": 3.1},
+      "symbols": [
+        {
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, -1, 1, 0, 0, 1.9]
+        },
+        {
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, -1, 1, 0, 0, 2.9]
+        },
+        {
+          "symbolKey": "extra--001--fresher--0.5x0.5",
+          "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.6},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [0, -1, 0.995, 0, 0, 0.98]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -8017,7 +8090,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 37,
+            "symId": 38,
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -8122,7 +8195,7 @@
             "table": true,
             "surface": true,
             "y": 0.6,
-            "symId": 39,
+            "symId": 40,
             "symKey": "lab--012--4x3",
             "obsId": 0
           }
@@ -8358,7 +8431,7 @@
             "obstacle": true,
             "surface": true,
             "y": 0.6,
-            "symId": 41,
+            "symId": 42,
             "symKey": "lab--023--4x4",
             "obsId": 0
           }
@@ -8641,87 +8714,16 @@
       "obstacles": [
         {
           "type": "Polygon",
-          "coordinates": [
-            [
-              [0.046, 0.257],
-              [0.3337, 0.2673],
-              [0.5264, 0.4634],
-              [0.5505, 0.6327],
-              [0.5026, 0.7854],
-              [0.3204, 0.95],
-              [0.046, 0.95]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 43,
-            "symKey": "lounge--015--4x2",
-            "obsId": 0
-          }
-        },
-        {
-          "type": "Polygon",
           "coordinates": [[[2.1165, 1.5], [2.1165, 3], [1.5, 3], [1.5, 1.5]]],
           "meta": {
             "obstacle": true,
-            "symId": 43,
+            "symId": 44,
             "symKey": "lounge--015--4x2",
-            "obsId": 1
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.7543, 2.5977],
-              [0.6208, 2.7119],
-              [0.4596, 2.7663],
-              [0.2376, 2.8002],
-              [0.0393, 2.8002],
-              [0.0393, 2.2552],
-              [0.2376, 2.2552],
-              [0.4596, 2.2891],
-              [0.6208, 2.3435],
-              [0.7543, 2.4576]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 43,
-            "symKey": "lounge--015--4x2",
-            "obsId": 2
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.7543, 1.5977],
-              [0.6208, 1.7119],
-              [0.4596, 1.7663],
-              [0.2376, 1.8002],
-              [0.0393, 1.8002],
-              [0.0393, 1.2552],
-              [0.2376, 1.2552],
-              [0.4596, 1.2891],
-              [0.6208, 1.3435],
-              [0.7543, 1.4576]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "symId": 43,
-            "symKey": "lounge--015--4x2",
-            "obsId": 3
+            "obsId": 0
           }
         }
       ],
       "walls": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[1.55, 0], [1.55, 3.05], [1.45, 3.05], [1.45, 0]]],
-          "meta": {"wall": true}
-        },
         {
           "type": "Polygon",
           "coordinates": [[[6.049, 2.95], [6.049, 3.05], [0, 3.05], [0, 2.95]]],
@@ -8730,53 +8732,12 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.05, -0.05], [0.05, 3.05], [-0.05, 3.05], [-0.05, -0.05]]
-          ],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.55, 1.5], [1.55, 3.05], [1.45, 3.05], [1.45, 1.5]]
-          ],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
             [[6.05, -0.05], [6.05, 3.05], [5.95, 3.05], [5.95, -0.05]]
           ],
           "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[1.55, -0.05], [1.55, 0.05], [0, 0.05], [0, -0.05]]],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.8012, 1.0046], [0.8012, 1.1042], [0, 1.1042], [0, 1.0046]]
-          ],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.8012, 1.9754], [0.8012, 2.075], [0, 2.075], [0, 1.9754]]
-          ],
-          "meta": {"wall": true}
         }
       ],
-      "doors": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[1.575, 0.175], [1.575, 1.325], [1.425, 1.325], [1.425, 0.175]]
-          ],
-          "meta": {"door": true}
-        }
-      ],
+      "doors": [],
       "windows": [],
       "decor": [
         {
@@ -8785,52 +8746,6 @@
             [[4.425, 1.375], [4.425, 1.425], [4.375, 1.425], [4.375, 1.375]]
           ],
           "meta": {"decor": true, "go": true, "label": "lounge"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.734, 0.302], [0.734, 0.352], [0.684, 0.352], [0.684, 0.302]]
-          ],
-          "meta": {"decor": true, "go": true, "label": "toilet"}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.565, 2.5], [0.565, 2.55], [0.515, 2.55], [0.515, 2.5]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.565, 1.5], [0.565, 1.55], [0.515, 1.55], [0.515, 1.5]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "toilet": true,
-            "orient": 0
-          }
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[0.665, 0.5875], [0.665, 0.6375], [0.615, 0.6375], [0.615, 0.5875]]
-          ],
-          "meta": {
-            "decor": true,
-            "do": true,
-            "stand": true,
-            "sink": true,
-            "orient": 180
-          }
         }
       ],
       "unsorted": [],
@@ -8858,6 +8773,13 @@
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, 5.48, 0.6]
+        },
+        {
+          "symbolKey": "fresher--015--1x2",
+          "meta": {"key": "fresher--015--1x2"},
+          "width": 1.5,
+          "height": 3,
+          "transform": [1, 0, 0, 1, -0.01, -0.01]
         }
       ],
       "removableDoors": [],
@@ -8887,7 +8809,7 @@
             "table": true,
             "surface": true,
             "y": 0.5,
-            "symId": 44,
+            "symId": 45,
             "symKey": "lounge--017--4x2",
             "obsId": 0
           }
@@ -8998,7 +8920,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 45,
+            "symId": 46,
             "symKey": "low-berth--003--1x1",
             "obsId": 0
           }
@@ -9046,7 +8968,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 46,
+            "symId": 47,
             "symKey": "machinery--155--1.8x3.6",
             "obsId": 0
           }
@@ -9105,7 +9027,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 47,
+            "symId": 48,
             "symKey": "machinery--156--2x4",
             "obsId": 0
           }
@@ -9153,7 +9075,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 48,
+            "symId": 49,
             "symKey": "machinery--158--1.8x3.6",
             "obsId": 0
           }
@@ -9184,7 +9106,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 49,
+            "symId": 50,
             "symKey": "machinery--357--4x2",
             "obsId": 0
           }
@@ -9343,7 +9265,7 @@
           "meta": {
             "obstacle": true,
             "y": 0.5,
-            "symId": 53,
+            "symId": 54,
             "symKey": "medical--008--3x2",
             "obsId": 0
           }
@@ -9467,7 +9389,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 50,
+            "symId": 51,
             "symKey": "medical-bed--005--0.6x1.2",
             "obsId": 0
           }
@@ -9597,7 +9519,7 @@
           "meta": {
             "obstacle": true,
             "y": 1,
-            "symId": 54,
+            "symId": 55,
             "symKey": "misc-stellar-cartography--020--10x10",
             "obsId": 0
           }
@@ -9625,7 +9547,7 @@
           "meta": {
             "obstacle": true,
             "no-shadow": true,
-            "symId": 54,
+            "symId": 55,
             "symKey": "misc-stellar-cartography--020--10x10",
             "obsId": 1
           }
@@ -9655,7 +9577,7 @@
           "meta": {
             "obstacle": true,
             "no-shadow": true,
-            "symId": 54,
+            "symId": 55,
             "symKey": "misc-stellar-cartography--020--10x10",
             "obsId": 2
           }
@@ -9881,7 +9803,7 @@
           "meta": {
             "obstacle": true,
             "y": 0.7,
-            "symId": 55,
+            "symId": 56,
             "symKey": "misc-stellar-cartography--023--4x4",
             "obsId": 0
           }
@@ -10506,7 +10428,7 @@
             "obstacle": true,
             "surface": true,
             "y": 0.8,
-            "symId": 59,
+            "symId": 60,
             "symKey": "office--026--2x3",
             "obsId": 0
           }
@@ -10946,7 +10868,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 64,
+            "symId": 65,
             "symKey": "office--089--4x4",
             "obsId": 0
           }
@@ -10963,7 +10885,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 64,
+            "symId": 65,
             "symKey": "office--089--4x4",
             "obsId": 1
           }
@@ -10980,7 +10902,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 64,
+            "symId": 65,
             "symKey": "office--089--4x4",
             "obsId": 2
           }
@@ -11001,7 +10923,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 64,
+            "symId": 65,
             "symKey": "office--089--4x4",
             "obsId": 3
           }
@@ -11027,7 +10949,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 64,
+            "symId": 65,
             "symKey": "office--089--4x4",
             "obsId": 4
           }
@@ -11430,7 +11352,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 68,
+            "symId": 69,
             "symKey": "shop--027--1.6x0.4",
             "obsId": 0
           }
@@ -11458,7 +11380,7 @@
           "coordinates": [[[2.41, 0], [2.41, 1.2], [-0.01, 1.2], [-0.01, 0]]],
           "meta": {
             "obstacle": true,
-            "symId": 69,
+            "symId": 70,
             "symKey": "shop--028--1.6x0.8",
             "obsId": 0
           }
@@ -11488,7 +11410,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 70,
+            "symId": 71,
             "symKey": "shop--031--0.4x0.8",
             "obsId": 0
           }
@@ -11539,7 +11461,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 71,
+            "symId": 72,
             "symKey": "shop--033--0.6x1.6",
             "obsId": 0
           }
@@ -11569,7 +11491,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 72,
+            "symId": 73,
             "symKey": "shop--035--0.4x0.8",
             "obsId": 0
           }
@@ -11599,7 +11521,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 73,
+            "symId": 74,
             "symKey": "shop--037--0.4x0.8",
             "obsId": 0
           }
@@ -12296,17 +12218,17 @@
         },
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
-          "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.7},
+          "meta": {"key": "extra--001--fresher--0.5x0.5"},
           "width": 0.75,
           "height": 0.75,
-          "transform": [1, 0, 0, 1, 2.03, 0.01]
+          "transform": [1, 0, 0, 1, 2.02, 0]
         },
         {
           "symbolKey": "extra--002--fresher--0.5x0.5",
-          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.5},
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [1, 0, 0, 1, 1.12, -0.01]
+          "transform": [1, 0, 0, 1, 1.13, 0]
         },
         {
           "symbolKey": "bed--004--0.8x1.4",
@@ -12359,7 +12281,7 @@
             "table": true,
             "surface": true,
             "y": 0.65,
-            "symId": 81,
+            "symId": 82,
             "symKey": "table--004--1.2x2.4",
             "obsId": 0
           }
@@ -12476,7 +12398,7 @@
             "surface": true,
             "table": true,
             "y": 0.7,
-            "symId": 82,
+            "symId": 83,
             "symKey": "table--009--0.8x0.8",
             "obsId": 0
           }
@@ -12551,7 +12473,7 @@
             "surface": true,
             "table": true,
             "y": 0.7,
-            "symId": 83,
+            "symId": 84,
             "symKey": "table--012--0.8x0.8",
             "obsId": 0
           }
