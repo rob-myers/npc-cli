@@ -29,27 +29,10 @@
   - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
   - 🚧 saw issue on remove obstacle, then add back in
 
-- 🚧 can change sub-skin
+- ❌ can change sub-skin
+  - ℹ️ wait until we have a skin where we need to do this
   - know uv body part ordering
     - either via Blender or node-ordering?
-    ```
-    Scene
-    Armature
-    minecraft-character-mesh
-    hips
-    chest
-    head
-    r-shoulder
-    r-u-arm
-    r-l-arm
-    l-shoulder
-    l-u-arm
-    l-l-arm
-    upper-leg_R
-    lower-leg_R
-    upper-leg_L
-    lower-leg_L
-    ```
 
 - fix webp generation
   - on push generate webp and fail with message if git detects changed
@@ -66,7 +49,7 @@
   - ✅ avoid navigating when right-click floor
   - ✅ rethink mobile long-press
 
-- 🚧 clarify pointer{down,up} i.e. 2d, 3d
+- ✅ clarify pointer{down,up} i.e. 2d, 3d
   - ✅ pointerdown, pointerup have boolean `is3d`
   - ✅ pointerup-outside has `is3d` `false`
   - ✅ infiniteGrid has onPointer{Down,Up}
@@ -75,7 +58,7 @@
     - ℹ️ r3f onPointerMissed only for pointerup, not pointerdown
     - 3d onPointerDown sets
     - 2d onPointerDown clears 3d stuff if 2d point doesn't match
-  - 🚧 obstacles has onPointer{Down,Up}
+  - ✅ obstacles has onPointer{Down,Up}
     - will decode actual obstacle hit later
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`

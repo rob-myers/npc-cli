@@ -1,19 +1,21 @@
 import React from "react";
-import { warn } from "../service/generic";
+import { warn, info } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
  * @param {import('./TestWorld').State} api
  */
-export default function useHandleEvents(api) {
+export default function useTestHandleEvents(api) {
   const state = useStateRef(/** @returns {State} */ () => ({
     handleEvents(e) {
+      // info('useTestHandleEvents', e);      
+
       switch (e.key) {
         case "draw-floor-ceil":
           if (!api.floorImg[e.gmKey]) {// 🚧 eliminate
             return warn(`saw "${e.key}" before api.floorImg['${e.gmKey}']`);
           }
-          api.surfaces.drawFloorAndCeil(e.gmKey);
+          api.faces.drawFloorAndCeil(e.gmKey);
           break;
         case "long-pointerdown":
           if (e.distancePx <= (e.touch ? 10 : 5)) {// mobile/desktop show/hide ContextMenu

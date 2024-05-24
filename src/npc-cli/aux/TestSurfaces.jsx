@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Mat, Poly } from "../geom";
 import { info, warn } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
-import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
+import { drawCircle, drawPolygons, isRMB, isTouchDevice, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
@@ -98,9 +98,49 @@ export default function TestSurfaces(props) {
       floor.needsUpdate = true;
       ceil.needsUpdate = true;
     },
-    onClickObstacle(e) {
+    onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
-      info(`instanceId: ${instanceId}`)
+
+      api.events.next({
+        key: "pointerdown",
+        is3d: true,
+        distancePx: 0,
+        justLongDown: false,
+        pointers: api.ui.getNumPointers(),
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
+        point: e.point,
+        meta: {
+          obstacles: true,
+          instanceId,
+          // 🚧 infer actual obstacle, ignoring transparent pixels
+        },
+      });
+      e.stopPropagation();
+    },
+    onPointerUp(e) {
+      const instanceId = /** @type {number} */ (e.instanceId);
+      // info(`instanceId: ${instanceId}`);
+
+      api.events.next({
+        key: "pointerup",
+        is3d: true,
+        distancePx: api.ui.getDownDistancePx(),
+        justLongDown: api.ui.justLongDown,
+        pointers: api.ui.getNumPointers(),
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
+        point: e.point,
+        meta: {
+          obstacles: true,
+          instanceId,
+          // 🚧 infer actual obstacle, ignoring transparent pixels
+        },
+      });
+
+      e.stopPropagation();
     },
     positionObstacles() {
       const { obsInst } = state;
@@ -120,7 +160,7 @@ export default function TestSurfaces(props) {
     },
   }));
 
-  api.surfaces = state;
+  api.faces = state;
 
   React.useEffect(() => {
     state.addObstacleUvs();
@@ -166,7 +206,7 @@ export default function TestSurfaces(props) {
             transparent
             map={api.gmClass[gm.key].ceil[1]}
             // depthWrite={false} // fix z-fighting
-            alphaTest={0.9} // 0.5 flickered on 301, 101 border
+            alphaTest={0.9} // 0.5 flickered on (301, 101) border
           />
         </mesh>
       </group>
@@ -178,7 +218,8 @@ export default function TestSurfaces(props) {
       ref={instances => instances && (state.obsInst = instances)}
       args={[quadGeometryXZ, undefined, api.derived.obstaclesCount]}
       frustumCulled={false}
-      onPointerUp={state.onClickObstacle}
+      onPointerUp={state.onPointerUp}
+      onPointerDown={state.onPointerDown}
       position={[0, 0.001, 0]} // 🚧 temp
     >
       <obstacleShaderMaterial
@@ -204,7 +245,8 @@ export default function TestSurfaces(props) {
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onClickObstacle
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionObstacles
  */
 

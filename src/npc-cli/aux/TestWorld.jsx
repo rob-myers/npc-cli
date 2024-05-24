@@ -16,7 +16,7 @@ import { getTileCacheMeshProcess } from "../service/recast-detour";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
-import useHandleEvents from "./use-test-handle-events";
+import useTestHandleEvents from "./use-test-handle-events";
 import TestWorldCanvas from "./TestWorldCanvas";
 import TestSurfaces from "./TestSurfaces";
 import TestWallsAndDoors from "./TestWallsAndDoors";
@@ -52,7 +52,7 @@ export default function TestWorld(props) {
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // TestWorldCanvas
-    surfaces: /** @type {*} */ (null), // TestSurfaces
+    faces: /** @type {*} */ (null), // TestSurfaces
     doors: /** @type {*} */ (null), // TestWallsAndDoors
     npcs: /** @type {*} */ (null), // TestNpcs
     menu: /** @type {*} */ (null), // TestContextMenu
@@ -171,7 +171,7 @@ export default function TestWorld(props) {
 
   state.disabled = !!props.disabled;
 
-  useHandleEvents(state);
+  useTestHandleEvents(state);
 
   useQuery({
     queryKey: [GEOMORPHS_JSON_FILENAME, props.worldKey, props.mapKey],
@@ -221,7 +221,7 @@ export default function TestWorld(props) {
           `${assetsEndpoint}/2d/${gmKey}.floor.${imgExtFallback}`,
         ).then((tex) => {
           state.floorImg[gmKey] = tex.source.data;
-          state.surfaces && state.events.next({ key: 'draw-floor-ceil', gmKey });
+          state.faces && state.events.next({ key: 'draw-floor-ceil', gmKey });
         })
       });
 
@@ -313,7 +313,7 @@ export default function TestWorld(props) {
  * @property {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>} worker
  *
  * @property {import('./TestWorldCanvas').State} ui
- * @property {import('./TestSurfaces').State} surfaces
+ * @property {import('./TestSurfaces').State} faces
  * @property {import('./TestWallsAndDoors').State} doors
  * @property {import('./TestNpcs').State} npcs
  * @property {import('./TestContextMenu').State} menu
