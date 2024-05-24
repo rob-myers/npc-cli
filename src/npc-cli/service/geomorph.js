@@ -122,6 +122,8 @@ class GeomorphService {
     "ships-locker--003--1x1": true,
     "ships-locker--007--2x1": true,
     "ships-locker--020--2x2": true,
+    "shop--027--1.6x0.4": true,
+    "shop--028--1.6x0.8": true,
     "stateroom--012--2x2": true,
     "stateroom--014--2x2": true,
     "stateroom--018--2x3": true,

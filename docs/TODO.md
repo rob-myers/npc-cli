@@ -52,6 +52,7 @@
   - also show results e.g. number of tiles
 
 - ❌ static obstacles can specify color or shade
+- tag `hull-wall` -> `wall hull`
 - use decor cuboids under e.g. machines and desks
 - closed doors have filtered doorPolys
 - can make agent look at point
