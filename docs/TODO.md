@@ -29,13 +29,13 @@
   - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
   - 🚧 saw issue on remove obstacle, then add back in
 
-- 🚧 integrate TestCharacter into TestWorld
-  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
-  - ℹ️ can use Blender to pull in alternate textures
-
-- fix webp generation
+- 🚧 fix webp generation
   - on push generate webp and fail with message if git detects changed
   - ensure up-to-date before push, unless --no-verify
+
+- integrate TestCharacter into TestWorld
+  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+  - ℹ️ can use Blender to pull in alternate textures
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
