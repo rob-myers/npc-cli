@@ -83,11 +83,6 @@ export default function TestWorldCanvas(props) {
 
       // No MultiTouch Long Press
       window.clearTimeout(state.down?.longTimeoutId);
-      // Ignore pointers outside view
-      const bounds = state.canvas.getBoundingClientRect();
-      if (!(sp.x >= 0 && sp.x <= bounds.width && sp.y >= 0 && sp.y <= bounds.height)) {
-        return;
-      }
 
       state.down = {
         screenPoint: state.lastScreenPoint.clone(),
