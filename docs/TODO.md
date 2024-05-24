@@ -29,37 +29,13 @@
   - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
   - 🚧 saw issue on remove obstacle, then add back in
 
-- ❌ can change sub-skin
-  - ℹ️ wait until we have a skin where we need to do this
-  - know uv body part ordering
-    - either via Blender or node-ordering?
+- 🚧 integrate TestCharacter into TestWorld
+  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+  - ℹ️ can use Blender to pull in alternate textures
 
 - fix webp generation
   - on push generate webp and fail with message if git detects changed
   - ensure up-to-date before push, unless --no-verify
-
-- integrate TestCharacter into TestWorld
-  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
-  - ℹ️ can use Blender to pull in alternate textures
-
-- ✅ context menu
-  - ❌ use `tunnel-rat`
-  - ✅ move into own component TestContextMenu
-  - ✅ works when right-click walls
-  - ✅ avoid navigating when right-click floor
-  - ✅ rethink mobile long-press
-
-- ✅ clarify pointer{down,up} i.e. 2d, 3d
-  - ✅ pointerdown, pointerup have boolean `is3d`
-  - ✅ pointerup-outside has `is3d` `false`
-  - ✅ infiniteGrid has onPointer{Down,Up}
-  - ✅ walls, doors has onPointer{Down,Up}
-  - ✅ api.view.lastDown
-    - ℹ️ r3f onPointerMissed only for pointerup, not pointerdown
-    - 3d onPointerDown sets
-    - 2d onPointerDown clears 3d stuff if 2d point doesn't match
-  - ✅ obstacles has onPointer{Down,Up}
-    - will decode actual obstacle hit later
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
@@ -1151,3 +1127,27 @@ React.useEffect(() => {
   - ✅ reduce to 236
   - can probably reduce vertices more by re-arranging UVs, but:
     triangle count (168) and bone count (13) are probably dominating factor
+
+- ✅ context menu
+  - ❌ use `tunnel-rat`
+  - ✅ move into own component TestContextMenu
+  - ✅ works when right-click walls
+  - ✅ avoid navigating when right-click floor
+  - ✅ rethink mobile long-press
+
+- ❌ can change sub-skin
+  - ℹ️ wait until we have a skin where we need to do this
+  - know uv body part ordering
+    - either via Blender or node-ordering?
+
+- ✅ clarify pointer{down,up} i.e. 2d, 3d
+  - ✅ pointerdown, pointerup have boolean `is3d`
+  - ✅ pointerup-outside has `is3d` `false`
+  - ✅ infiniteGrid has onPointer{Down,Up}
+  - ✅ walls, doors has onPointer{Down,Up}
+  - ✅ api.view.lastDown
+    - ℹ️ r3f onPointerMissed only for pointerup, not pointerdown
+    - 3d onPointerDown sets
+    - 2d onPointerDown clears 3d stuff if 2d point doesn't match
+  - ✅ obstacles has onPointer{Down,Up}
+    - will decode actual obstacle hit later
