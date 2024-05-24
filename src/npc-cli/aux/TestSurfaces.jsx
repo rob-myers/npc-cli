@@ -84,6 +84,7 @@ export default function TestSurfaces(props) {
       const wallsTouchingCeil = layout.walls.filter(x =>
         x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
       );
+      // drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(250, 50, 50, 1)', 'rgba(250, 50, 50, 1)', 0.06])
       drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(50, 50, 50, 1)', 'rgba(50, 50, 50, 1)', 0.06])
       // door tops
       // drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(50, 50, 50, 1)'])
@@ -165,7 +166,7 @@ export default function TestSurfaces(props) {
             transparent
             map={api.gmClass[gm.key].ceil[1]}
             // depthWrite={false} // fix z-fighting
-            alphaTest={0.5}
+            alphaTest={0.9} // 0.5 flickered on 301, 101 border
           />
         </mesh>
       </group>
