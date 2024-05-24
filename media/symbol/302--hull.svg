@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
         <defs>
-                <bx:grid x="0" y="0" width="60" height="60" />
+                <bx:grid x="0" y="0" width="60" height="60"/>
                 <pattern id="grid-0" patternUnits="userSpaceOnUse" width="60" height="60" patternTransform="matrix(1, 0, 0, 1, 0, 0)" bx:pinned="true">
-                        <rect width="60" height="60" style="fill: none; stroke-width: 0.1px; stroke: rgb(0, 0, 0);" />
+                        <rect width="60" height="60" style="fill: none; stroke-width: 0.1px; stroke: rgb(0, 0, 0);"/>
                 </pattern>
                 <pattern x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-0">
                         <title>symbol-rect-pattern</title>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60" />
+                                <bx:grid x="0" y="0" width="60" height="60"/>
                         </defs>
-                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5" />
-                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)" />
-                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)" />
-                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)" />
+                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
+                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
+                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
+                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
                 </pattern>
                 <symbol id="symbol-0" viewBox="0 0 120 120" bx:pinned="true">
                         <title>office--006--2x2</title>
@@ -25,7 +25,7 @@
                                 <title>office--006--2x2 doors=['e','w']</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60" />
+                                <bx:grid x="0" y="0" width="60" height="60"/>
                         </defs>
                 </symbol>
                 <symbol id="symbol-1" viewBox="0 0 240 120" bx:pinned="true">
@@ -46,7 +46,16 @@
                                 <title>shop--027--1.6x0.4</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60" />
+                                <bx:grid x="0" y="0" width="60" height="60"/>
+                        </defs>
+                </symbol>
+                <symbol id="symbol-4" viewBox="0 0 96 48">
+                        <title>shop--028--1.6x0.8</title>
+                        <rect width="96" height="48" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 48px 24px;" y="0">
+                                <title>shop--028--1.6x0.8</title>
+                        </rect>
+                        <defs>
+                                <bx:grid x="0" y="0" width="60" height="60"/>
                         </defs>
                 </symbol>
         </defs>
@@ -65,7 +74,10 @@
                         <title>empty-room--020--2x4 doors=['s']</title>
                 </use>
                 <use width="96" height="24" transform="matrix(-1, 0, 0, 1, 887.764770507813, 504.316528320313)" style="" xlink:href="#symbol-3">
-                        <title>shop--027--1.6x0.4</title>
+                        <title>shop--027--1.6x0.4 y=0.8</title>
+                </use>
+                <use width="96" height="48" transform="matrix(0, -1, 1, 0, 582, 456)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-4">
+                        <title>shop--028--1.6x0.8 y=0.8</title>
                 </use>
         </g>
         <path d="M -4 -4 L 4 -4 L 4 596 L 1196 596 L 1196 -4 L 1204 -4 L 1204 604 L -4 604 L -4 -4 Z" style="fill: rgb(255, 0, 0);">
