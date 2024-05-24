@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="307" height="127" x="-3.5" y="-3.5" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATMAAAB/CAQAAAApvO12AAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gEDhAuKXYP0IwAAAMVSURBVHja7d3dUqNAFEZRmMr7vzJzkbLyrzTSn/RhrYtRyyK26Z2GMDHM0zJBV8v876+HwBnMVjP6s5oRIDMCZEaAzAi4PH7p+cB788fvuMfee7zHrGYEXH5/E/XcPxLXrVbtW5yLzF6s3UHOK7bgyk7zB+0Jie6VzD5Ymnd+7Vuch8w2sma1kNlHa0Jamrc4J5l98JXM+h1h+xbnITMCZPZi+fD5nlucjfNmb7SnIq7vWc0IkBkBMiOg/LHZnueyXv9wYp9br39kVzazkU6VXsdaObaSmY2U2OOoq6ZWMLPXyPaYvPfp/v6W56evaoZWLrPbtI0xYV+jnO8+jjHyFmWfaY42VffjHXOn/51imaX++7pHCJVfr1Yss6vUdO3/c6qGVjIzjkZmBJTKrP+hc+rgvNqTgFKZ9ZQ+3qsVWsHMRj+MHn387xTMjOORGQEyI0BmBMiMAJkRIDMCyr3erLdap01TrGarVTxtmiKzzWS3np1mA2FtZTUjQGYEyIwAmREgMwJkRoDMCJAZATIjQGYEyIwAmREgMwJkRsDTC4Har7q2RZ93BzOq447qD1azY77M2ah6jmpDZlV+daPKcWxGwIbMjvlSZaM68qisZgQ0/snJHo+DZdr76MCojj6qy+sNJIy4M7ldWSl7jaUR76vnDO00CZBZs2OepDg2mTVKXUelFpkRILPVlg+f8zPvodFAXFtZzQiQGQEyI0BmBMiMAJkRIDMCZEaAzAiQGQEyI0BmBMiMAJkRIDMCZEaAzAiQGQEyI0BmBMiMAJkRIDMCZEaAzAiQGQEyI0BmBBTMbPS3uRt9/O8UzGxsFSMrmlmFqar1JlelMqszNXV+k6tSmd2mZ9T1bNRx/6RYZmOrGlnBzG7r2WiTdhtvtV1mwczujZRa5chKvsXx8hDXPB194h4fCsce61YlV7NloMk6Q2QlV7Or+6ukjbLrrBpZ4cymqcdlAnuOtLKSO83RVI+s+Go2TWeYwhFYzQiQGQEyI0BmBMyOkenPakaAzAiQGQEyo7tllhkB8/L1D3SwzNM0Tf8Bo6JiEv5bwKkAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjQtMDQtMTRUMTY6NDY6NDErMDA6MDBI0kf0AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI0LTA0LTE0VDE2OjQ2OjQxKzAwOjAwOY//SAAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNC0wNC0xNFQxNjo0Njo0MSswMDowMG6a3pcAAAAASUVORK5CYII=">
+                <title>counter--007--0.4x1</title>
+        </image>
+        <rect width="308" height="128.000001" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;" x="-4" y="-4">
+                <title>obstacle surface sink</title>
+        </rect>
+</svg>
