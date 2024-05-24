@@ -87,9 +87,9 @@ export default function TestSurfaces(props) {
       // drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(250, 50, 50, 1)', 'rgba(250, 50, 50, 1)', 0.06])
       drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(50, 50, 50, 1)', 'rgba(50, 50, 50, 1)', 0.06])
       // door tops
-      // drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(50, 50, 50, 1)'])
       ceilCt.strokeStyle = 'black';
       ceilCt.lineWidth = 0.03;
+      drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(50, 50, 50, 1)'])
       layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
       ceilCt.resetTransform();
       //#endregion
