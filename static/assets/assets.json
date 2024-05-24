@@ -4,7 +4,7 @@
     "102--hull": {"outputHash": 1420591994, "pngHash": 184103855},
     "103--hull": {"outputHash": -1995702532, "pngHash": -1937509879},
     "301--hull": {"outputHash": 1084187675, "pngHash": 787602800},
-    "302--hull": {"outputHash": 196361004, "pngHash": -1557128953},
+    "302--hull": {"outputHash": 59120951, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": -794330153,
       "pngHash": -299838577,
@@ -112,89 +112,89 @@
     "engineering--045--6x4": {"outputHash": 21392850, "pngHash": -1132388510},
     "engineering--047--4x7": {"outputHash": -388809063, "pngHash": 541808283},
     "extra--001--fresher--0.5x0.5": {
-      "outputHash": 1510292883,
+      "outputHash": -2065618796,
       "pngHash": 1247120224,
-      "obsHashes": [-1211126178]
+      "obsHashes": [-1457439265]
     },
     "extra--002--fresher--0.5x0.5": {
-      "outputHash": 396981641,
+      "outputHash": -1757698870,
       "pngHash": 482008010,
-      "obsHashes": [1680775905]
+      "obsHashes": [1434462818]
     },
     "extra--003--chair--0.25x0.25": {
-      "outputHash": -672702858,
+      "outputHash": 265987349,
       "pngHash": -1668511435,
-      "obsHashes": [21394214]
+      "obsHashes": [-224918873]
     },
     "extra--004--desk--0.5x1": {
-      "outputHash": -1362668,
+      "outputHash": 1093463765,
       "pngHash": -1144971495,
-      "obsHashes": [891360513]
+      "obsHashes": [-1283319584]
     },
     "extra--005--chair-0.25x0.25": {
-      "outputHash": 1006065609,
+      "outputHash": 1050461672,
       "pngHash": -372042423,
-      "obsHashes": [843528132]
+      "obsHashes": [-826985437]
     },
     "extra--006--desk--0.4x1": {
-      "outputHash": -1576196200,
+      "outputHash": -155405897,
       "pngHash": -244410489,
-      "obsHashes": [-779092030]
+      "obsHashes": [1341195169]
     },
     "extra--007--desk--0.4x0.66": {
-      "outputHash": -223037813,
+      "outputHash": 871788620,
       "pngHash": -25585608,
-      "obsHashes": [599854717]
+      "obsHashes": [-8222146]
     },
     "extra--008--desk--0.4x1.33": {
-      "outputHash": -68184774,
+      "outputHash": 1026641659,
       "pngHash": 702037169,
-      "obsHashes": [-433121954]
+      "obsHashes": [-1041198817]
     },
     "extra--009--table--4x4": {
-      "outputHash": -388309244,
+      "outputHash": -473118715,
       "pngHash": 1827472801,
-      "obsHashes": [852597441]
+      "obsHashes": [643899138]
     },
     "extra--010--machine--2x1": {
-      "outputHash": -1176365669,
+      "outputHash": -48911695,
       "pngHash": -1673441387,
-      "obsHashes": [-234677361]
+      "obsHashes": [-1602786395]
     },
     "extra--011--machine--1x3": {
-      "outputHash": -454285287,
+      "outputHash": -1208309576,
       "pngHash": 1878326814,
-      "obsHashes": [214471119]
+      "obsHashes": [1518864848]
     },
     "extra--012--battery--3x2": {
-      "outputHash": 1416172336,
+      "outputHash": -483744143,
       "pngHash": 639710287,
-      "obsHashes": [-1986005112]
+      "obsHashes": [-681611383]
     },
     "extra--013--privacy-screen--1.5x0.2": {
-      "outputHash": 262736252,
+      "outputHash": -1485446659,
       "pngHash": -1193937783,
-      "obsHashes": [308207861]
+      "obsHashes": [1417023060]
     },
     "extra--014--table--2x3": {
-      "outputHash": -1577787510,
+      "outputHash": -1881645045,
       "pngHash": -729764103,
-      "obsHashes": [-1311707650]
+      "obsHashes": [-1520405953]
     },
     "extra--015--table--3x0.5": {
-      "outputHash": 300932856,
+      "outputHash": -618845097,
       "pngHash": -1811554071,
-      "obsHashes": [406114668]
+      "obsHashes": [1710508397]
     },
     "extra--016--table--4x0.5": {
-      "outputHash": -1749973129,
+      "outputHash": -517841834,
       "pngHash": 2031632593,
-      "obsHashes": [-184290964]
+      "obsHashes": [1120102765]
     },
     "extra--017--table--2x0.5": {
-      "outputHash": -952636756,
+      "outputHash": 511001261,
       "pngHash": -1220359814,
-      "obsHashes": [442201531]
+      "obsHashes": [1746595260]
     },
     "fresher--002--0.4x0.6": {
       "outputHash": -1531468655,
@@ -339,6 +339,11 @@
       "pngHash": 118440221,
       "obsHashes": [602404845]
     },
+    "shop--033--0.6x1.6": {
+      "outputHash": -1095966794,
+      "pngHash": -1689615057,
+      "obsHashes": [-91813806]
+    },
     "stateroom--012--2x2": {"outputHash": 555484505, "pngHash": 285590873},
     "stateroom--014--2x2": {"outputHash": -164360094, "pngHash": 810806279},
     "stateroom--018--2x3": {"outputHash": -1759605333, "pngHash": -932858017},
@@ -347,19 +352,19 @@
     "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
     "stateroom--036--2x4": {"outputHash": -1834598581, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
-      "outputHash": -520575575,
+      "outputHash": 208196104,
       "pngHash": 1027833859,
-      "obsHashes": [2006434289]
+      "obsHashes": [2107346256]
     },
     "table--009--0.8x0.8": {
-      "outputHash": -1042986020,
+      "outputHash": 627145467,
       "pngHash": 1533034663,
-      "obsHashes": [-819584944]
+      "obsHashes": [-718672977]
     },
     "table--012--0.8x0.8": {
-      "outputHash": 1462194163,
+      "outputHash": 1605910941,
       "pngHash": 293366403,
-      "obsHashes": [2001767016]
+      "obsHashes": [-73137006]
     },
     "demo-map-1": {"outputHash": 1429562441},
     "small-map-1": {"outputHash": -1987240735}
@@ -672,9 +677,18 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "extra--010--machine--2x1 0": {
+      "shop--033--0.6x1.6 0": {
         "x": 1852,
         "y": 1545,
+        "width": 254,
+        "height": 98,
+        "symbolKey": "shop--033--0.6x1.6",
+        "obstacleId": 0,
+        "type": "obstacle"
+      },
+      "extra--010--machine--2x1 0": {
+        "x": 1852,
+        "y": 1645,
         "width": 250,
         "height": 100,
         "symbolKey": "extra--010--machine--2x1",
@@ -683,7 +697,7 @@
       },
       "shop--027--1.6x0.4 0": {
         "x": 1852,
-        "y": 1647,
+        "y": 1747,
         "width": 244,
         "height": 64,
         "symbolKey": "shop--027--1.6x0.4",
@@ -692,7 +706,7 @@
       },
       "shop--028--1.6x0.8 0": {
         "x": 1852,
-        "y": 1713,
+        "y": 1813,
         "width": 242,
         "height": 120,
         "symbolKey": "shop--028--1.6x0.8",
@@ -3543,6 +3557,13 @@
           "width": 1.3,
           "height": 0.7,
           "transform": [0.966, -0.259, 0.259, 0.966, 20.84, 9.2]
+        },
+        {
+          "symbolKey": "shop--033--0.6x1.6",
+          "meta": {"key": "shop--033--0.6x1.6", "y": 0.8},
+          "width": 2.5,
+          "height": 1,
+          "transform": [0.966, -0.259, 0.259, 0.966, 18.16, 9.86]
         }
       ],
       "removableDoors": [],
@@ -6717,7 +6738,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 80,
+            "symId": 81,
             "symKey": "extra--001--fresher--0.5x0.5",
             "obsId": 0
           }
@@ -6765,7 +6786,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 81,
+            "symId": 82,
             "symKey": "extra--002--fresher--0.5x0.5",
             "obsId": 0
           }
@@ -6822,7 +6843,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "symId": 82,
+            "symId": 83,
             "symKey": "extra--003--chair--0.25x0.25",
             "obsId": 0
           }
@@ -6870,7 +6891,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 83,
+            "symId": 84,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -6910,7 +6931,7 @@
           "meta": {
             "obstacle": true,
             "chair": true,
-            "symId": 84,
+            "symId": 85,
             "symKey": "extra--005--chair-0.25x0.25",
             "obsId": 0
           }
@@ -6960,7 +6981,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 85,
+            "symId": 86,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -6991,7 +7012,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 86,
+            "symId": 87,
             "symKey": "extra--007--desk--0.4x0.66",
             "obsId": 0
           }
@@ -7027,7 +7048,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 87,
+            "symId": 88,
             "symKey": "extra--008--desk--0.4x1.33",
             "obsId": 0
           }
@@ -7096,7 +7117,7 @@
             "obstacle": true,
             "table": true,
             "surface": true,
-            "symId": 88,
+            "symId": 89,
             "symKey": "extra--009--table--4x4",
             "obsId": 0
           }
@@ -7127,7 +7148,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 89,
+            "symId": 90,
             "symKey": "extra--010--machine--2x1",
             "obsId": 0
           }
@@ -7171,7 +7192,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
-            "symId": 90,
+            "symId": 91,
             "symKey": "extra--011--machine--1x3",
             "obsId": 0
           }
@@ -7229,7 +7250,7 @@
           "meta": {
             "obstacle": true,
             "battery": true,
-            "symId": 91,
+            "symId": 92,
             "symKey": "extra--012--battery--3x2",
             "obsId": 0
           }
@@ -7259,7 +7280,7 @@
             "obstacle": true,
             "privacy-screen": true,
             "y": 1,
-            "symId": 92,
+            "symId": 93,
             "symKey": "extra--013--privacy-screen--1.5x0.2",
             "obsId": 0
           }
@@ -7310,7 +7331,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 93,
+            "symId": 94,
             "symKey": "extra--014--table--2x3",
             "obsId": 0
           }
@@ -7351,7 +7372,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 94,
+            "symId": 95,
             "symKey": "extra--015--table--3x0.5",
             "obsId": 0
           }
@@ -7397,7 +7418,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 95,
+            "symId": 96,
             "symKey": "extra--016--table--4x0.5",
             "obsId": 0
           }
@@ -7426,7 +7447,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
-            "symId": 96,
+            "symId": 97,
             "symKey": "extra--017--table--2x0.5",
             "obsId": 0
           }
@@ -11699,6 +11720,57 @@
       "removableDoors": [],
       "addableWalls": []
     },
+    "shop--033--0.6x1.6": {
+      "key": "shop--033--0.6x1.6",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.46, 0.0915],
+              [0.46, 0.01],
+              [2.525, 0.01],
+              [2.525, 0.2344],
+              [2.4014, 0.2395],
+              [2.404, 0.7563],
+              [2.5202, 0.7576],
+              [2.525, 0.99],
+              [0.46, 0.99],
+              [0.46, 0.909],
+              [-0.015, 0.9115],
+              [-0.015, 0.76],
+              [0.46, 0.76],
+              [0.4588, 0.5813],
+              [-0.015, 0.5799],
+              [-0.015, 0.43],
+              [0.46, 0.43],
+              [0.46, 0.235],
+              [-0.015, 0.235],
+              [-0.015, 0.09]
+            ]
+          ],
+          "meta": {
+            "obstacle": true,
+            "symId": 70,
+            "symKey": "shop--033--0.6x1.6",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 2.5,
+      "height": 1,
+      "pngRect": {"x": -0.015, "y": 0.015, "width": 2.53, "height": 0.97},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
     "stateroom--012--2x2": {
       "key": "stateroom--012--2x2",
       "isHull": false,
@@ -12441,7 +12513,7 @@
             "table": true,
             "surface": true,
             "y": 0.65,
-            "symId": 77,
+            "symId": 78,
             "symKey": "table--004--1.2x2.4",
             "obsId": 0
           }
@@ -12558,7 +12630,7 @@
             "surface": true,
             "table": true,
             "y": 0.7,
-            "symId": 78,
+            "symId": 79,
             "symKey": "table--009--0.8x0.8",
             "obsId": 0
           }
@@ -12633,7 +12705,7 @@
             "surface": true,
             "table": true,
             "y": 0.7,
-            "symId": 79,
+            "symId": 80,
             "symKey": "table--012--0.8x0.8",
             "obsId": 0
           }
