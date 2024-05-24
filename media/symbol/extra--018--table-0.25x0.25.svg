@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 75 75" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="95" height="95" x="-10" y="-10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF8AAABfAgMAAADzIvNmAAAACVBMVEUAAAD///8AAABzxoNxAAAAAXRSTlMAQObYZgAAAUJJREFUSMfdlcGtwjAQRJGPKSX9LAdKSBVugjuXLzmp8mM85snxYhROiD16NPPWkr17eta03SueKM5dJWyqvbDVunVBtVwDFgi+Zc4HZnbeN1bOpaQWfbVHXUoWSaupmiwM2UJfQYZKSSAwmC1AZrWkLCBKAi9IUBJZSYiaRJYQNYm+ohB/Zh6kIoAUITwRQBLsHaQIqy/MsKHHLMCGHmmqbws2bWUhwDboaSBMNNX06wpWhKsncI3uIgPBzLvIa2HzhHMW1p8Wki8YQuf4ynt8JAxeySEhHn+iL7/BQDj8B4P3nQf/fDQZ/CEzEPx5NRx9AToTmfHaNwW9ZUOHjQCkme1BEJIS+6NNur3bOFOTxSLst5q7B5eCYHNiyAiyKmUpCLIUdmHTq6/iWdjnZKnUE3gVBiwYegsGqjcQxnlb7fk/Dq3718w77FMAAAAASUVORK5CYII=">
+                <title>extra--018--table-0.25x0.25</title>
+        </image>
+        <path d="M 60.92377 81.8609 L 25.50933 86.03844 L 2.24797 73.20906 L -11.67224 50.25565 L -10.9737 27.51635 L -4.0571 9.726 L 15.16284 -8.18544 L 28.00371 -10.86025 L 49.79263 -10.64473 L 71.63942 1.79205 L 81.37912 15.81706 L 86.80293 36.65087 L 81.22197 60.19159 L 60.92377 81.8609 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+                <title>obstacle surface</title>
+        </path>
+</svg>

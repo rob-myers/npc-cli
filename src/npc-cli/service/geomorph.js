@@ -157,6 +157,7 @@ class GeomorphService {
     "extra--015--table--3x0.5": true,
     "extra--016--table--4x0.5": true,
     "extra--017--table--2x0.5": true,
+    "extra--018--table-0.25x0.25": true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */
