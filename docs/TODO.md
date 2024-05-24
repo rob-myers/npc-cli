@@ -9,22 +9,7 @@
   - 🚧 302
   - 🚧 303
   - ℹ️ raising to wall height can cause flicker
-
-- ✅ office--061--3x4
-  - table obstacles -> 2 symbols
-
-- ✅ support obstacle tag `no-shadow`
-- ❌ support sub-symbol tag `no-shadow`
-- ✅ take union when drawing obstacle drop shadows
-
-- ✅ support alternate sub-symbol approach:
-  - label (title) of `use` remains the same
-  - all symbols refer to same pattern (hopefully not duped by Boxy)
-  - ✅ create actual `symbol` and `use` it
-  - ✅ parse new structure
-  - ✅ fix extra unsorted poly: ignore everthing inside a `<defs>`
-  - ✅ another test + cleanup
-- ✅ migrate 301 to new sub-symbol approach
+- 🚧 migrate sub-symbols to actual symbols
 
 - 🚧 fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles
@@ -43,23 +28,6 @@
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
   - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
   - 🚧 saw issue on remove obstacle, then add back in
-
-- ✅  TestCharacterDemo skins
-  - ✅ can change skin
-
-- integrate TestCharacter into TestWorld
-  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
-  - ℹ️ can use Blender to pull in alternate textures
-
-- ✅ understand number of verts in mesh i.e. 278 is too many
-  - ℹ️ 96 vertices in Blender:
-    > `96 = 8 + (8*2*4) + 6*4`
-    > i.e. head + (2 * arms + 2 * legs) + body
-  - extras come from UVs i.e. need to duplicate vertex if has different UV
-  - ✅ reduce to 241
-  - ✅ reduce to 236
-  - can probably reduce vertices more by re-arranging UVs, but:
-    triangle count (168) and bone count (13) are probably dominating factor
 
 - 🚧 can change sub-skin
   - know uv body part ordering
@@ -86,6 +54,10 @@
 - fix webp generation
   - on push generate webp and fail with message if git detects changed
   - ensure up-to-date before push, unless --no-verify
+
+- integrate TestCharacter into TestWorld
+  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+  - ℹ️ can use Blender to pull in alternate textures
 
 - ✅ context menu
   - ❌ use `tunnel-rat`
@@ -1167,3 +1139,32 @@ React.useEffect(() => {
     - ✅ only one instance of hook `useGLTF`
     - ✅ hook up to TestCharacterDemo
   - ✅ can click character and make it walk
+
+  - ✅ office--061--3x4
+  - table obstacles -> 2 symbols
+
+- ✅ support obstacle tag `no-shadow`
+- ❌ support sub-symbol tag `no-shadow`
+- ✅ take union when drawing obstacle drop shadows
+
+- ✅ support alternate sub-symbol approach:
+  - label (title) of `use` remains the same
+  - all symbols refer to same pattern (hopefully not duped by Boxy)
+  - ✅ create actual `symbol` and `use` it
+  - ✅ parse new structure
+  - ✅ fix extra unsorted poly: ignore everthing inside a `<defs>`
+  - ✅ another test + cleanup
+- ✅ migrate 301 to new sub-symbol approach
+
+- ✅  TestCharacterDemo skins
+  - ✅ can change skin
+
+- ✅ understand number of verts in mesh i.e. 278 is too many
+  - ℹ️ 96 vertices in Blender:
+    > `96 = 8 + (8*2*4) + 6*4`
+    > i.e. head + (2 * arms + 2 * legs) + body
+  - extras come from UVs i.e. need to duplicate vertex if has different UV
+  - ✅ reduce to 241
+  - ✅ reduce to 236
+  - can probably reduce vertices more by re-arranging UVs, but:
+    triangle count (168) and bone count (13) are probably dominating factor
