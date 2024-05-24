@@ -490,24 +490,23 @@ class GeomorphService {
     const [xPart, yPart] = transformOrigin.split(/\s+/);
 
     if (!xPart || !yPart) {
-      transformOrigin && error(`unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
+      transformOrigin && error(`${tagName}: transform-box/origin: "${transformBox}"/"${transformOrigin}": transform-origin must have an "x part" and a "y part"`);
       return { transformOrigin: null, transformBox };
     }
 
     if (transformBox) {
       if (transformBox === 'fill-box') {
-        if (tagName === 'rect') {
-          bounds = new Rect(Number(a.x), Number(a.y), Number(a.width), Number(a.height));
+        if (tagName === 'rect' || tagName === 'use') {
+          bounds = new Rect(Number(a.x || 0), Number(a.y || 0), Number(a.width || 0), Number(a.height || 0));
         } else if (tagName === 'path') {
           const pathPoly = geom.svgPathToPolygon(a.d);
           pathPoly && (bounds = pathPoly.rect) || error(`path.d parse failed: ${a.d}`);
         }
       } else {
-        error(`unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
+        error(`${tagName}: transform-box/origin: "${transformBox}"/"${transformOrigin}": only fill-box is supported`);
         return { transformOrigin: null, transformBox };
       }
     }
-
     const [x, y] = [xPart, yPart].map((rep, i) => {
       /** @type {RegExpMatchArray | null} */ let match = null;
       if ((match = rep.match(/^(-?\d+(?:.\d+)?)%$/))) {// e.g. -50.02%
@@ -528,7 +527,7 @@ class GeomorphService {
     if (Number.isFinite(x) && Number.isFinite(y)) {
       return { transformOrigin: Vect.from(/** @type {Geom.VectJson} */ ({ x, y })), transformBox };
     } else {
-      transformOrigin && error(`${tagName}: unsupported transform-box/origin: ${transformOrigin} ${transformBox}`);
+      transformOrigin && error(`${tagName}: transform-box/origin: "${transformBox}"/"${transformOrigin}": failed to parse transform-origin`);
       return { transformOrigin: null, transformBox };
     }
   }
@@ -758,6 +757,7 @@ class GeomorphService {
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
+    let defsStack = 0;
 
     let viewBoxRect = /** @type {Geom.Rect | null} */ (null);
     let pngRect = /** @type {Geom.Rect | null} */ (null);
@@ -775,14 +775,15 @@ class GeomorphService {
         // console.info(name, attributes);
 
         if (tag === "svg") {
-          // viewBox -> viewbox
+          // parser normalises 'viewBox' as 'viewbox'
           const [x, y, width, height] = attributes.viewbox.trim().split(/\s+/).map(Number);
           viewBoxRect = new Rect(x, y, width, height);
           viewBoxRect.scale(scale).precision(precision);
-        }
-        if (tag === "image") {
+        } else if (tag === "image") {
           pngRect = new Rect(Number(attributes.x || 0), Number(attributes.y || 0), Number(attributes.width || 0), Number(attributes.height || 0));
           pngRect.scale(scale).precision(precision);
+        } else if (tag === "defs") {
+          defsStack++;
         }
 
         tagStack.push({ tagName: tag, attributes });
@@ -790,8 +791,8 @@ class GeomorphService {
       ontext(contents) {
         const parent = tagStack.at(-2);
 
-        if (!parent || tagStack.at(-1)?.tagName !== "title" || parent.tagName === "pattern") {
-          return; // Only consider <title> outside <defs>
+        if (!parent || (tagStack.at(-1)?.tagName !== "title") || defsStack > 0) {
+          return; // Only consider <title>, ignoring <defs>
         }
         if (parent.tagName === "g") {
           folderStack.push(contents);
@@ -801,7 +802,7 @@ class GeomorphService {
         if (parent.tagName === "image") {
           return;
         }
-        if (folderStack.length >= 2 || (folderStack.length && folderStack[0] !== "symbols")) {
+        if (folderStack.length >= 2 || (folderStack[0] && folderStack[0] !== "symbols")) {
           return; // Only depth 0 and folder 'symbols' supported
         }
 
@@ -810,8 +811,8 @@ class GeomorphService {
         // symbol may have folder "symbols"
         if (folderStack[0] === "symbols") {
           const [subSymbolKey, ...symbolTags] = ownTags;
-          if (parent.tagName !== "rect") {
-            return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: ignored non-rect`);
+          if (parent.tagName !== "rect" && parent.tagName !== "use") {
+            return warn(`parseSymbol: symbols: ${parent.tagName} ${contents}: only <rect>, <use> allowed`);
           }
           if (subSymbolKey.startsWith("_")) {
             return warn(`parseSymbol: symbols: ignored ${contents} with underscore prefix`);
@@ -855,7 +856,7 @@ class GeomorphService {
         if (poly === null) {
           return;
         }
-        
+
         /** @type {const} */ ([
           ["hull-wall", hullWalls],
           ["wall", walls],
@@ -872,15 +873,17 @@ class GeomorphService {
         poly.meta = meta;
 
         if (meta.obstacle) {// Link to original symbol
-          meta.symId = toSymId[symbolKey];
+          meta.symId = toSymId[symbolKey]; // 🚧 remove
           meta.symKey = symbolKey; // Debug?
           meta.obsId = obstacles.length - 1;
         }
       },
-      onclosetag(name) {
+      onclosetag(tag) {
         tagStack.pop();
-        if (name === "g") {
+        if (tag === "g") {
           folderStack.pop();
+        } else if (tag === "defs") {
+          defsStack--;
         }
       },
     });
@@ -890,7 +893,7 @@ class GeomorphService {
     parser.end();
 
     if (!viewBoxRect) {
-      throw Error(`parseStarshipSymbol: ${symbolKey} must have viewBox (or viewbox)`);
+      throw Error(`${'parseSymbol'}: ${symbolKey} must have viewBox (or viewbox)`);
     }
 
     const key = symbolKey;

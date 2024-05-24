@@ -17,6 +17,15 @@
 - ❌ support sub-symbol tag `no-shadow`
 - ✅ take union when drawing obstacle drop shadows
 
+- ✅ support alternate sub-symbol approach:
+  - label (title) of `use` remains the same
+  - all symbols refer to same pattern (hopefully not duped by Boxy)
+  - ✅ create actual `symbol` and `use` it
+  - ✅ parse new structure
+  - ✅ fix extra unsorted poly: ignore everthing inside a `<defs>`
+  - ✅ another test + cleanup
+- 🚧 migrate 301 to new sub-symbol approach
+
 - 🚧 fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles
   - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
