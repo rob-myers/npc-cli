@@ -24,7 +24,7 @@
   - ✅ parse new structure
   - ✅ fix extra unsorted poly: ignore everthing inside a `<defs>`
   - ✅ another test + cleanup
-- 🚧 migrate 301 to new sub-symbol approach
+- ✅ migrate 301 to new sub-symbol approach
 
 - 🚧 fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles
