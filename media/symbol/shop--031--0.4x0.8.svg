@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 260 140" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="268" height="146" x="-4" y="-3" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACSCAQAAAAanjyfAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gFGBAcIKqxHaoAAALoSURBVHja7d3bbtswEEVRqsj//7L74Aa22mNFFwZxZ9Z6igEjiOONISnlsowxbgPWlmUIg2CRBcmvn/4CeE/CIBIGkTCIPtYP7UT7WlaPTAwiYRAJg0gYRB/XPwXz3TeCXx8FZj/vwcQgEgaRMIiEQSQMImEQCYNIGETCIBIG0a5L4sueJ/23/AxKYmIQCYPowN3VeiO39hJ5jYlBJAwiYRAJg0gYRMIgEgaRMIiEQSQMImEQ+U201R2TeveDzhLGyiOS7om0Xkq23vyl+b3X5hNjncbfKXT+I6jNw1h7RLCsPuoYx9Qw3mv4Xnk7b2MdR780Wu8xtt1WE+S9ov9+wtj0PCl6pfENe4yfH7sz38LnRaXTfsPE2KHj3BDGLrd4YqlMGLv1SkMYB3RKQxiH9ElDGAd1SUMYh/U4sArjhM80Ks8MYZxSPw1hEAnjpOozQxin1d6ECuOymjNDGBdUnhnCmKDizBDGJXVnhjCmqDczhHFR1ZkhDCJhTFJtMRHGZTUXE2EQCYNIGETCIBLGNLXOJcKYoOK5RBhEwiASBpEwJqi17bwTxjS1tqDCIBIGkTCIhEEkjMsqnkmEMU2tM4kweEEYF9VcSITBC8KYotoOQxgXVV1IhDFFvXkhjEvqzgthXPCZRcV5IQxeEMZJteeFME6qvLu4E8YJHf5trzAuqJuFME6ovru4E8ZBPbIQxkFdsvAvvA+ofxJ5JoydOpxEnllKdumWxbdMjGoj9/n1dMnCxPhSzyzsMTZ1jWKMyWFU+uatF8RKr2wfEyPoHsUYwhhjbG2Xe0YxRvMwts9PfaMYo3kYr/WOYgxh/CGEvwlDFJELXETCIBIGkTCIhEEkDCJhEAmDSBhEwiA6cEm82s9yssXEIBIG0a6lxP3HfkwMImEQCYNIGETCIBLGW7qNfWfB2c97WNbPdzDta31l28QgEgaRMIiEQbTYb5KYGETCIBIGkTCIluFyJ/9a7tdBpcGzZYzfd7pPP88kOeoAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjQtMDUtMjRUMTY6Mjg6MzIrMDA6MDAB+3VcAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI0LTA1LTI0VDE2OjI4OjMyKzAwOjAwcKbN4AAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNC0wNS0yNFQxNjoyODozMiswMDowMCez7D8AAAAASUVORK5CYII=">
+                <title>shop--031--0.4x0.8</title>
+        </image>
+        <rect width="270.000031" height="150" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;" y="-5.000002" x="-5">
+                <title>obstacle</title>
+        </rect>
+</svg>
