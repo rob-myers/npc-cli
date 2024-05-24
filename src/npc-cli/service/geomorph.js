@@ -126,6 +126,8 @@ class GeomorphService {
     "shop--028--1.6x0.8": true,
     "shop--031--0.4x0.8": true,
     "shop--033--0.6x1.6": true,
+    "shop--035--0.4x0.8": true,
+    "shop--037--0.4x0.8": true,
     "stateroom--012--2x2": true,
     "stateroom--014--2x2": true,
     "stateroom--018--2x3": true,
