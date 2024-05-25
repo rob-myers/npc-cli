@@ -29,9 +29,10 @@
   - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
   - 🚧 saw issue on remove obstacle, then add back in
 
-- 🚧 fix webp generation
-  - on push generate webp and fail with message if git detects changed
-  - ensure up-to-date before push, unless --no-verify
+- ✅ fix webp generation
+  - on push generate webp
+  - auto `git add` and `git commit` if no other staging files exist
+  - can skip via `git push --no-verify`
 
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed

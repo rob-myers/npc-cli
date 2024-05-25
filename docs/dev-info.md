@@ -1,6 +1,28 @@
 
 ## Bits and pieces
 
+### Git show changed/untracked filenames
+
+```sh
+# show files and status
+$ git diff --name-status
+M       package.json
+M       static/assets/2d/g-301--bridge.floor.png
+M       static/assets/2d/g-301--bridge.floor.png.webp
+
+# show files without status
+$ git diff --name-only
+package.json
+static/assets/2d/g-301--bridge.floor.png
+static/assets/2d/g-301--bridge.floor.png.webp
+
+# list untracked files
+$ git ls-files --others --exclude-standard
+src/scripts/ensure-webp.js
+static/assets/2d/g-301--bridge.floor copy.png
+static/assets/2d/g-301--bridge.floor copy.png.webp
+```
+
 ### Blender on MacBook
 
 - On Laptop, Settings -> Input -> Emulate numpad -> 1, 2, 3, ... to change camera

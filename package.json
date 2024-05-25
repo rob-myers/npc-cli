@@ -26,11 +26,12 @@
     "clean-assets": "rm static/assets/{assets.json,geomorphs.json} static/assets/2d/obstacles.png{,.webp}",
     "cwebp": "npm run ts-script src/scripts/cwebp",
     "cwebp-fast": "sucrase-node src/scripts/cwebp",
+    "ensure-webp": "sucrase-node src/scripts/ensure-webp",
     "get-pngs": "npm run ts-script src/scripts/get-pngs",
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
     "watch-assets": "npm run assets && nodemon --on-change-only --delay 300ms --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast -- --staleMs=2000'",
     "ws-server": "sucrase-node src/scripts/ws-server.js",
-    "pre-push": "true # . ~/.bash_profile && nvm use && npm run assets-fast -- --all && git diff --quiet HEAD"
+    "pre-push": "npm run ensure-webp"
   },
   "pre-push": [
     "pre-push"
