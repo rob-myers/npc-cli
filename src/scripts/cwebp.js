@@ -26,9 +26,9 @@ const repoRootDir = path.resolve(__dirname, "../..");
   }
 
   childProcess.execSync(`
-    echo "${
-      json.files.map(x => `${path.resolve(repoRootDir, x)}`).join('\n')
-    }" |
+    echo '${
+      json.files.map(x => `"${path.resolve(repoRootDir, x)}"`).join('\n')
+    }' |
       xargs -L 1 -I {} -n 1 -P 3 cwebp -q ${quality} -noasm ${'-quiet'} "{}" -o "{}".webp
   `);
 })();
