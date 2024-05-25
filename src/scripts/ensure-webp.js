@@ -25,6 +25,7 @@ const logPrefix = path.basename(__filename);
 
 (async function main() {
 
+  // 🚧 ignore files where webp exists and is older than png
   const assets2dPngPaths = fs.readdirSync(assets2dDir)
     .filter(x => x.endsWith('.png'))
     .map(x => path.resolve(assets2dDir, x))
@@ -67,7 +68,13 @@ const logPrefix = path.basename(__filename);
     }`);
 
     childProcess.execSync(`git commit -m 'update webp'`);
-    childProcess.execSync(`git push --no-verify`);
+
+    /**
+     * Must fail push because we cannot add an extra commit, nor
+     * can we `git push --no-verify` without breaking subsequent.
+     */
+    info('generated missing *.webp, please push again...');
+    process.exit(1);
 
   }
 
