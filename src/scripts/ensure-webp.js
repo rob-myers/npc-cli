@@ -67,7 +67,7 @@ const logPrefix = path.basename(__filename);
       modifiedWebps.concat(untrackedWebps).map(x => `'${x}'`).join(' ')
     }`);
 
-    childProcess.execSync(`git commit -m 'update webp'`);
+    childProcess.execSync(`git commit -m 'chore: update webp'`);
 
     /**
      * Must fail push because we cannot add an extra commit, nor

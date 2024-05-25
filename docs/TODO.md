@@ -33,8 +33,10 @@
   - on push generate webp
   - auto `git add` and `git commit` if no other staging files exist
   - can skip via `git push --no-verify`
+  - we'll ask user to push again
 
-- integrate TestCharacter into TestWorld
+
+- 🚧 integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
 
@@ -64,7 +66,8 @@
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 
-- 🚧 remove `. ~/.bash_profile` from pre-push hook
+- ✅ remove `. ~/.bash_profile` from pre-push hook
+- improve `yarn ensure-webp` by detecting webp older than png
 - 🚧 initially force complete assets recompute
 - permit holes in symbol walls?
   - currently supported
