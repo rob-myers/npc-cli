@@ -140,7 +140,8 @@ export default function TestSurfaces(props) {
         },
       });
 
-      e.stopPropagation();
+      // 🚧 temp turn off to permit navigation
+      // e.stopPropagation();
     },
     positionObstacles() {
       const { obsInst } = state;
