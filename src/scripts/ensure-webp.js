@@ -67,6 +67,8 @@ const logPrefix = path.basename(__filename);
     }`);
 
     childProcess.execSync(`git commit -m 'update webp'`);
+    childProcess.execSync(`git push --no-verify`);
+
   }
 
 })();
