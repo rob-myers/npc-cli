@@ -31,9 +31,6 @@ export const assetsEndpoint = process.env.NODE_ENV === 'development'
 
 export const imgExt = process.env.NODE_ENV === 'development' ? 'png' : 'png.webp';
 
-export const imgExtFallback = 'png';
-
-
 export const afterBreakpoint = "1201px";
 export const breakpoint = "1200px";
 

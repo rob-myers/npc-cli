@@ -4,7 +4,18 @@ import childProcess from "child_process";
 import stringify from 'json-stringify-pretty-compact';
 
 import { error, info, warn } from "../npc-cli/service/generic";
-import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilename, metaFromGeomorphFilename, metaFromRootFilename, metaFromSmallCraftFilename, metaFromSymbolFilename, rootFilenameRegex, smallCraftFilenameRegex, symbolsFilenameRegex } from "./service";
+import {
+  altSymbolsFilenameRegex,
+  geomorphsFilenameRegex,
+  metaFromAltSymbolFilename,
+  metaFromGeomorphFilename,
+  metaFromRootFilename,
+  metaFromSmallCraftFilename,
+  metaFromSymbolFilename,
+  rootFilenameRegex,
+  smallCraftFilenameRegex,
+  symbolsFilenameRegex
+} from "./service";
 
 /**
  * Rename & trim PNGs

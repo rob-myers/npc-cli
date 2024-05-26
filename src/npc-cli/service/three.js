@@ -1,7 +1,6 @@
 import React from "react";
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
-import { error } from "./generic";
 import { Rect, Vect } from "../geom";
 import { InfiniteGridMaterial } from "./glsl";
 
@@ -104,20 +103,6 @@ export const tmpBox1 = new THREE.Box3();
 
 export const textureLoader = new THREE.TextureLoader();
 // console.log('cache enabled', THREE.Cache.enabled); // false
-
-/**
- * @param {string} src 
- * @param {string} fallbackSrc 
- */
-export function texLoadAsyncFallback(src, fallbackSrc) {
-  return textureLoader
-    .loadAsync(src)
-    .catch(e => {
-      error(`texture not found: ${src}; falling back to ${fallbackSrc}`);
-      console.error(e);
-      return textureLoader.loadAsync(fallbackSrc);
-    });
-}
 
 const navPathColor = 0x00aa00;
 const navNodeColor = 0xaa0000;

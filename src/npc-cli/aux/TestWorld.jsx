@@ -5,13 +5,13 @@ import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt, imgExtFallback } from "src/const";
+import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, debug, isDevelopment, keys } from "../service/generic";
 import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
-import { decompToXZGeometry, texLoadAsyncFallback, tmpBufferGeom1, tmpVectThree1 } from "../service/three";
+import { decompToXZGeometry, textureLoader, tmpBufferGeom1, tmpVectThree1 } from "../service/three";
 import { getTileCacheMeshProcess } from "../service/recast-detour";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
@@ -215,19 +215,15 @@ export default function TestWorld(props) {
         return null;
       }
 
-      keys(state.gmClass).forEach((gmKey) => {
-        texLoadAsyncFallback(
-          `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${getAssetQueryParam()}`,
-          `${assetsEndpoint}/2d/${gmKey}.floor.${imgExtFallback}`,
-        ).then((tex) => {
-          state.floorImg[gmKey] = tex.source.data;
-          state.faces && state.events.next({ key: 'draw-floor-ceil', gmKey });
-        })
-      });
+      keys(state.gmClass).forEach((gmKey) => textureLoader.loadAsync(
+        `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${getAssetQueryParam()}`
+      ).then((tex) => {
+        state.floorImg[gmKey] = tex.source.data;
+        state.faces && state.events.next({ key: 'draw-floor-ceil', gmKey });
+      }));
 
-      texLoadAsyncFallback(
+      textureLoader.loadAsync(
         `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`,
-        `${assetsEndpoint}/2d/obstacles.${imgExtFallback}`,
       ).then((tex) => {
         state.obsTex = tex;
         update();
@@ -246,7 +242,7 @@ export default function TestWorld(props) {
     return () => removeCached(['world', props.worldKey]);
   }, []);
 
-  React.useEffect(() => {// restart worker onchange geomorphs.json
+  React.useEffect(() => {// (re)start worker on(change) geomorphs.json
     if (state.threeReady && state.hash) {
       state.worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
       state.worker.addEventListener("message", state.handleMessageFromWorker);
