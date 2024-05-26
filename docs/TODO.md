@@ -29,11 +29,11 @@
   - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
   - 🚧 saw issue on remove obstacle, then add back in
 
-- ✅ fix webp generation
-  - on push generate webp
-  - auto `git add` and `git commit` if no other staging files exist
-  - can skip via `git push --no-verify`
-  - we'll ask user to push again
+- 🚧 fix webp generation
+  - 🚧 on push generate webp and fail anything new detected
+  - assets.js script ensures webp
+  - assets.js script avoids recomputing webp
+  
 
 
 - 🚧 integrate TestCharacter into TestWorld
