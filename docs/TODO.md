@@ -3,40 +3,22 @@
 ## WIP
 
 - 🚧 more raised obstacles
+  - ℹ️ raising to wall height can cause flicker
   - ✅ 301
   - ✅ 101
   - ✅ 102
   - ✅ 302
   - 🚧 303
-  - ℹ️ raising to wall height can cause flicker
+
 - 🚧 migrate sub-symbols to actual symbols
 
-- 🚧 fix sprite-sheet HMR
-  - ℹ️ on add new symbol with obstacles
-  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
-  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
-  - 🚧 could be problem with smart-sprite-sheet-update
-  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
-  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
-  - ❌ try repro with single geomorph
-  - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
-  - 🤔 multiple websockets open in single browser tab?
-  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
-    - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
-    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
-  - ✅ saw issue on WARN about mismatched size
-    - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
-  - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
-  - 🚧 saw issue on remove obstacle, then add back in
-
 - 🚧 fix webp generation
-  - 🚧 on push generate webp and fail anything new detected
-  - assets.js script ensures webp
-  - assets.js script avoids recomputing webp
+  - ✅ on push generate webp and fail anything new detected
+  - ✅ assets.js script ensures webp
+  - ✅ assets.js script avoids recomputing webp
+  - 🚧 `yarn assets-fast` avoids over-computation (sans `--staleMs={ms}`)
   
-
-
-- 🚧 integrate TestCharacter into TestWorld
+- integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
 
@@ -66,18 +48,37 @@
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 
+- 🚧 fix sprite-sheet HMR
+  - ℹ️ on add new symbol with obstacles
+  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
+  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
+  - 🚧 could be problem with smart-sprite-sheet-update
+  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
+  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
+  - ❌ try repro with single geomorph
+  - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
+  - 🤔 multiple websockets open in single browser tab?
+  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
+    - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
+    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
+  - ✅ saw issue on WARN about mismatched size
+    - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
+  - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
+  - 🚧 saw issue on remove obstacle, then add back in
+
+
 - ✅ remove `. ~/.bash_profile` from pre-push hook
-- improve `yarn ensure-webp` by detecting webp older than png
-- 🚧 initially force complete assets recompute
+- ❌ improve `yarn ensure-webp` by detecting webp older than png
+- initially force complete assets recompute
 - permit holes in symbol walls?
   - currently supported
   - ✅ eliminated only examples (2)
-- images script avoids recomputing
+- ❌ images script avoids recomputing
 - mobile extra space at bottom again (?)
   - probably caused by new sticky header
-- create smaller-pngs.js and compare to https://tinypng.com/
-- scripts assets/images trigger different useQuery
-- Player view could be top-down with high walls
+- ❌ create smaller-pngs.js and compare to https://tinypng.com/
+- ❌ scripts assets/images trigger different useQuery
+- ❌ Player view could be top-down with high walls
   - try fixing door height with black wall above
 - optionally increase floor image resolution e.g. 2x
 - avoid recomputing npcs/obstacles in TestNpcs
@@ -159,35 +160,6 @@
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
 
-
-## Scratch Pad
-
-```jsx
-// Why does this seemingly block main thread?
-React.useEffect(() => {
-  // 🚧
-  import("recast-navigation").then(({ init }) =>
-    init().then(() => {
-      // compute vertices, indices
-      let offset = 0;
-      const vs = /** @type {number[]} */ ([]);
-      const is = /** @type {number[]} */ ([]);
-      state.gms.forEach(({ navPolys }) => {
-        const { vertices, indices } = polysToAttribs(navPolys);
-        vs.push(...vertices);
-        is.push(...indices.map((x) => x + offset)); // 🚧 needs flip under conditions
-        offset += vertices.length / 3;
-      });
-      is.reverse();
-
-      import("recast-navigation/generators").then(({ generateSoloNavMesh }) => {
-        const { navMesh, success } = generateSoloNavMesh(vs, is, {});
-        console.log({ navMesh, success });
-      });
-    })
-  );
-}, [geomorphs]);
-```
 
 ## Done
 

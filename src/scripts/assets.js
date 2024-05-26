@@ -3,7 +3,8 @@
  * ```sh
  * npm run assets
  * yarn assets
- * yarn assets-fast --all --staleMs=2000
+ * yarn assets-fast --all
+ * yarn assets-fast --staleMs=2000
  * ```
  *
  * Generates:
@@ -26,7 +27,6 @@ import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
 import { spriteSheetNonHullExtraScale, worldScale } from "../npc-cli/service/const";
-import { ansi } from "../npc-cli/sh/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
@@ -45,9 +45,6 @@ const imgOpts = {
   packedPadding: 2,
 };
 
-if (!Number.isFinite(Number(opts.staleMs)) && Number(opts.staleMs) > 0) {
-  throw Error('option --staleMs={number} must be positive numeric');
-}
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const mediaDir = path.resolve(__dirname, "../../media");
@@ -65,10 +62,31 @@ const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send
 const worldToSgu = 1 / worldScale;
 const dataUrlRegEx = /"data:image\/png(.*)"/;
 
+const runOpts = (() => {
+  const staleMs = Math.max(Number(opts.staleMs) || 0, 0);
+  return {
+    /**
+     * We efficiently update iff this is `false` i.e.
+     * - option `--all` not specified.
+     * - file `assets.json` exists.
+     * - `staleMs` is non-zero. 
+     */
+    all: Boolean(opts.all) || !fs.existsSync(assetsFilepath) || staleMs === 0,
+    /**
+     * For change-detection when watching via `assets.nodemon.json`.
+     *
+     * A file watched by `assets.nodemon.json` has "changed" iff
+     * the respective `lastModifiedMs` exceeds `Date.now() - staleMs`.
+     */
+    staleMs,
+  };
+})();
+
+
 (async function main() {
   
   const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null
+    runOpts.all ? null : JSON.parse(fs.readFileSync(assetsFilepath).toString())
   );
 
   const assetsJson = /** @type {Geomorph.AssetsJson} */ (
@@ -79,18 +97,20 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
 
   // Partial update only for `npm run assets -- --staleMs={ms}`
   // s.t. this file and geomorphsService have not changed in `ms`
-  const updateAllSymbols = Boolean(opts.all) || !prevAssets || !opts.staleMs || (
-    [assetsScriptFilepath, geomorphServicePath].some(x => fs.statSync(x).atimeMs > Date.now() - Number(opts.staleMs)
-  ));
+  const updateAllSymbols = runOpts.all || [
+    assetsScriptFilepath,
+    geomorphServicePath,
+  ].some(x => fs.statSync(x).mtimeMs > Date.now() - runOpts.staleMs);
 
   if (updateAllSymbols) {
     info(`updating all symbols`);
   } else {// Avoid re-computing
+    const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets);
     svgSymbolFilenames = svgSymbolFilenames.filter(filename => {
       const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
-      assetsJson.symbols[symbolKey] = prevAssets.symbols[symbolKey];
-      assetsJson.meta[symbolKey] = prevAssets.meta[symbolKey];
-      return fs.statSync(path.resolve(symbolsDir, filename)).atimeMs > Date.now() - 2000;
+      assetsJson.symbols[symbolKey] = prev.symbols[symbolKey];
+      assetsJson.meta[symbolKey] = prev.meta[symbolKey];
+      return fs.statSync(path.resolve(symbolsDir, filename)).mtimeMs > Date.now() - runOpts.staleMs;
     });
     info(`updating symbols: ${JSON.stringify(svgSymbolFilenames)}`);
   }
@@ -102,21 +122,24 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
   parseMaps(assetsJson);
   createSheetJson(assetsJson);
 
-  const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash);
+  const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
+    key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash
+  );
   info({ changedKeys: changedSymbolAndMapKeys });
 
   const assets = geomorphService.deserializeAssets(assetsJson);
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   
   /**
-   * Compute flat symbols i.e. recursively unfold "symbols" folder
+   * Compute flat symbols i.e. recursively unfold "symbols" folder.
+   * 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
    */
   const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
   // debug(util.inspect({ symbolsStratified }, false, 5))
   // Traverse stratified symbols from leaves to co-leaves,
-  // creating FlatSymbols via flattenSymbol and instantiateFlatSymbol
+  // creating `FlatSymbol`s via `flattenSymbol` and `instantiateFlatSymbol`
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
     geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
@@ -132,6 +155,7 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
 
   /**
    * Compute geomorphs.json
+   * 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
    */
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];
@@ -167,6 +191,7 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
    */
   await drawObstaclesSheet(assets, geomorphs, prevAssets);
 
+  // Dev uses PNG (not WEBP) to avoid HMR delay
   fetch(sendDevEventUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -175,9 +200,13 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
 
-  // Dev uses PNGs to avoid HMR delay
-  const pngPaths = geomorphService.gmKeys.map(getFloorPngPath).concat(obstaclesPngPath);
-  Boolean(opts.all) && await runYarnScript(
+  /** Convert a PNG if it (i) lacks a WEBP, or (ii) has an "older one". */
+  const pngPaths = geomorphService.gmKeys.map(getFloorPngPath).concat(obstaclesPngPath).filter(pngPath =>
+    fs.statSync(pngPath).mtimeMs
+    > (fs.statSync(`${pngPath}.webp`, { throwIfNoEntry: false })?.mtimeMs ?? 0)
+  );
+
+  pngPaths.length && await runYarnScript(
     'cwebp-fast',
     JSON.stringify({ files: pngPaths }),
     '--quality=50',
@@ -330,11 +359,9 @@ function createSheetJson(assets) {
 
   const bin = bins[0];
   
-  /**
-   * 🚧 try 4096 x 4096 and see if sprite-sheet edit/hmr issue persists
-  */
   /** @type {Geomorph.SpriteSheet} */
   const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
+  // ℹ️ can try forcing 4096 x 4096 to debug sprite-sheet hmr
   // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
   bin.rects.forEach(r => {
     const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
@@ -365,10 +392,11 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   const canvas = createCanvas(obstaclesWidth, obstaclesHeight);
   const ct = canvas.getContext('2d');
 
-  // 🚧 redraw all obstacles when opts.all
-  // 🚧 redraw all obstacles when --staleMs={ms} and this file changed
+  // 🚧 redraw all obstacles when:
+  // - runOpts.all (?)
+  // - runOpts.staleMs and this file changed (?)
   const prevPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
-  const {changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
+  const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
   
   info({ changedObstacles, removedObstacles });
 
