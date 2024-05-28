@@ -16,7 +16,9 @@
   - ✅ on push generate webp and fail anything new detected
   - ✅ assets.js script ensures webp
   - ✅ assets.js script avoids recomputing webp
-  - 🚧 `yarn assets-fast` avoids over-computation (sans `--staleMs={ms}`)
+  - ✅ `assets-fast` avoids over-computation (sans `--staleMs={ms}`)
+  - ✅ absorb `ensure-webp` into `assets-fast --prePush`
+  - ✅ fix VSCode UI push node version
   
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed

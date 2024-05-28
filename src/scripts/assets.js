@@ -5,6 +5,7 @@
  * yarn assets
  * yarn assets-fast --all
  * yarn assets-fast --staleMs=2000
+ * yarn assets-fast --prePush
  * ```
  *
  * Generates:
@@ -12,11 +13,13 @@
  * - geomorphs.json
  * - floor images (one per gmKey)
  * - obstacles sprite-sheet
+ * - webp
  */
 /// <reference path="./deps.d.ts"/>
 
 import fs from "fs";
 import path from "path";
+import childProcess from "child_process";
 import util from "util";
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
@@ -33,10 +36,11 @@ import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
 import { runYarnScript, saveCanvasAsFile } from "./service";
 
-const opts = getopts(process.argv, {
+const rawOpts = getopts(process.argv, {
   boolean: ['all'],
-  string: ['staleMs'],
+  string: ['prePush', 'staleMs'],
 });
+
 const imgOpts = {
   debugImage: true,
   // debugImage: false,
@@ -45,14 +49,34 @@ const imgOpts = {
   packedPadding: 2,
 };
 
-
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
+const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+
+const opts = {
+  /**
+   * Efficiently update assets iff `false` i.e.
+   * - option `--all` is false.
+   * - file `assets.json` exists.
+   */
+  all: Boolean(rawOpts.all) || !fs.existsSync(assetsFilepath),
+  /**
+   * When about to push:
+   * - ensure every webp.
+   * - fail if any asset not committed.
+   */
+  prePush: Boolean(rawOpts.prePush),
+  /**
+   * For change-detection while watching via `assets.nodemon.json`.
+   * A watched file has "changed" iff `lastModifiedMs > Date.now() - staleMs`.
+   */
+  staleMs: Math.max(Number(rawOpts.staleMs) || 0, 0),
+};
+
 const mediaDir = path.resolve(__dirname, "../../media");
 const mapsDir = path.resolve(mediaDir, "map");
 const symbolsDir = path.resolve(mediaDir, "symbol");
 const assets2dDir = path.resolve(staticAssetsDir, "2d");
 const graphDir = path.resolve(mediaDir, "graph");
-const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
 const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
@@ -61,32 +85,13 @@ const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
 const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const worldToSgu = 1 / worldScale;
 const dataUrlRegEx = /"data:image\/png(.*)"/;
-
-const runOpts = (() => {
-  const staleMs = Math.max(Number(opts.staleMs) || 0, 0);
-  return {
-    /**
-     * We efficiently update iff this is `false` i.e.
-     * - option `--all` not specified.
-     * - file `assets.json` exists.
-     * - `staleMs` is non-zero. 
-     */
-    all: Boolean(opts.all) || !fs.existsSync(assetsFilepath) || staleMs === 0,
-    /**
-     * For change-detection when watching via `assets.nodemon.json`.
-     *
-     * A file watched by `assets.nodemon.json` has "changed" iff
-     * the respective `lastModifiedMs` exceeds `Date.now() - staleMs`.
-     */
-    staleMs,
-  };
-})();
-
+const gitStaticAssetsRegex = new RegExp('^static/assets/');
+const emptyStringHash = hashText('');
 
 (async function main() {
   
   const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    runOpts.all ? null : JSON.parse(fs.readFileSync(assetsFilepath).toString())
+    opts.all ? null : JSON.parse(fs.readFileSync(assetsFilepath).toString())
   );
 
   const assetsJson = /** @type {Geomorph.AssetsJson} */ (
@@ -95,12 +100,11 @@ const runOpts = (() => {
   
   let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
-  // Partial update only for `npm run assets -- --staleMs={ms}`
-  // s.t. this file and geomorphsService have not changed in `ms`
-  const updateAllSymbols = runOpts.all || [
+  // While watching we should update everything when this script or geomorphService have "just changed".
+  const updateAllSymbols = opts.all || [
     assetsScriptFilepath,
     geomorphServicePath,
-  ].some(x => fs.statSync(x).mtimeMs > Date.now() - runOpts.staleMs);
+  ].some(x => fs.statSync(x).mtimeMs > Date.now() - opts.staleMs);
 
   if (updateAllSymbols) {
     info(`updating all symbols`);
@@ -110,7 +114,7 @@ const runOpts = (() => {
       const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
       assetsJson.symbols[symbolKey] = prev.symbols[symbolKey];
       assetsJson.meta[symbolKey] = prev.meta[symbolKey];
-      return fs.statSync(path.resolve(symbolsDir, filename)).mtimeMs > Date.now() - runOpts.staleMs;
+      return fs.statSync(path.resolve(symbolsDir, filename)).mtimeMs > Date.now() - opts.staleMs;
     });
     info(`updating symbols: ${JSON.stringify(svgSymbolFilenames)}`);
   }
@@ -191,7 +195,10 @@ const runOpts = (() => {
    */
   await drawObstaclesSheet(assets, geomorphs, prevAssets);
 
-  // Dev uses PNG (not WEBP) to avoid HMR delay
+  /**
+   * Tell the browser we're ready.
+   * In development we use PNG (not WEBP) to avoid HMR delay.
+   */
   fetch(sendDevEventUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -200,17 +207,41 @@ const runOpts = (() => {
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
 
-  /** Convert a PNG if it (i) lacks a WEBP, or (ii) has an "older one". */
-  const pngPaths = geomorphService.gmKeys.map(getFloorPngPath).concat(obstaclesPngPath).filter(pngPath =>
-    fs.statSync(pngPath).mtimeMs
-    > (fs.statSync(`${pngPath}.webp`, { throwIfNoEntry: false })?.mtimeMs ?? 0)
-  );
-
+  /**
+   * Convert PNGs to WEBP for production.
+   */
+  let pngPaths = geomorphService.gmKeys.map(getFloorPngPath).concat(obstaclesPngPath);
+  if (!opts.prePush) {
+    // Only convert PNG if (i) lacks a WEBP, or (ii) has an "older one"
+    pngPaths = pngPaths.filter(pngPath =>
+      fs.statSync(pngPath).mtimeMs
+      > (fs.statSync(`${pngPath}.webp`, { throwIfNoEntry: false })?.mtimeMs ?? 0)
+    );
+  }
   pngPaths.length && await runYarnScript(
     'cwebp-fast',
     JSON.stringify({ files: pngPaths }),
     '--quality=50',
   );
+
+  if (opts.prePush) {
+    /**
+     * Fail if any asset not committed.
+     */
+    const [modifiedPaths, untrackedPaths, stagedPaths] = [
+      `git diff --name-only`,
+      `git ls-files --others --exclude-standard`,
+      `git diff --name-only --cached`,
+    ].map(cmd =>
+      `${childProcess.execSync(cmd)}`.trim().split(/\n/)
+      .filter(x => x.match(gitStaticAssetsRegex))
+    );
+
+    if (modifiedPaths.concat(untrackedPaths, stagedPaths).length) {
+      error('Please commit WEBPs', { modifiedPaths, untrackedPaths, stagedPaths });
+      process.exit(1);
+    }
+  }
 
 })();
 
@@ -393,8 +424,8 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   const ct = canvas.getContext('2d');
 
   // 🚧 redraw all obstacles when:
-  // - runOpts.all (?)
-  // - runOpts.staleMs and this file changed (?)
+  // - opts.all (?)
+  // - opts.staleMs and this file changed (?)
   const prevPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
   const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
   
@@ -494,5 +525,3 @@ function extractObstacleDescriptor(meta) {
 function getFloorPngPath(gmKey) {
   return path.resolve(assets2dDir, `${gmKey}.floor.png`);
 }
-
-const emptyStringHash = hashText('');

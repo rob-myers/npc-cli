@@ -14,7 +14,24 @@ yarn develop
 
 ## Gotchas
 
-Configure Giscus using https://giscus.app/.
+### Fix VSCode UI Push
+
+This hook https://github.com/dflourusso/pre-push/blob/master/hook will use `.bashrc` (because I use bash),
+which should contain something like this:
+
+```sh
+# .bashrc
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+test -f .nvmrc && nvm use
+```
+
+### Configure Giscus
+
+See https://giscus.app/.
+
+## Shader Syntax Highlighting
 
 Use VSCode plugin ` WebGL GLSL Editor` for syntax highlighting (*.glsl + inline-strings).
 
