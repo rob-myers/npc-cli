@@ -716,11 +716,11 @@ class GeomorphService {
         if (parent.tagName !== "rect") {
           return void (
             parent?.tagName === "pattern" ||
-            warn(`parseMap: ${parent?.tagName} ${contents}: ignored non-rect in map`)
+            warn(`${'parseMap'}: ${mapKey}: ${parent?.tagName} ${contents}: ignored non-rect`)
           );
         }
         if (!geomorphService.isGmNumber(gmNumber)) {
-          return warn(`parseMap: "${contents}": expected valid gm number`);
+          return warn(`${'parseMap'}: ${mapKey}: "${contents}": expected geomorph number`);
         }
 
         const rect = geomorphService.extractRect(parent.attributes);
