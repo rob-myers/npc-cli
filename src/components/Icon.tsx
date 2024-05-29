@@ -9,6 +9,7 @@ export {
   faCode,
   faCircleQuestion,
   faCircleInfo,
+  faGrip,
   // faCirclePause,
   // faRefresh,
   // faExpand,
