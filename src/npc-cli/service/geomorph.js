@@ -203,10 +203,14 @@ class GeomorphService {
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
     const uncutWalls = symbol.walls;
-    // Cutting pointwise avoids errors (e.g. for 301), and can propagate meta
-    const cutWalls = uncutWalls.flatMap((x) =>
-      Poly.cutOut(symbol.doors, [x]).map((y) => Object.assign(y, { meta: x.meta }))
-    );
+    const emptyObject = {};
+    /**
+     * Cutting pointwise avoids errors (e.g. for 301). It also permits us
+     * to propagate wall `meta` whenever it has 'y' (base height) or 'h' (height).
+     */
+    const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
+      Object.assign(y, { meta: 'y' in x.meta || 'h' in x.meta ? x.meta : emptyObject } )
+    ));
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
@@ -223,6 +227,10 @@ class GeomorphService {
 
     const doors = symbol.doors.map(x => new Connector(x));
     const windows = symbol.windows.map(x => new Connector(x));
+
+    // Joining walls with empty meta reduces the rendering cost later
+    const joinedWalls = Poly.union(cutWalls.filter(x => x.meta === emptyObject)).map(x => Object.assign(x, { meta: emptyObject }));
+    const unjoinedWalls = cutWalls.filter(x => x.meta !== emptyObject);
 
     return {
       key: gmKey,
@@ -244,7 +252,8 @@ class GeomorphService {
         };
       }),
       rooms: rooms.map(x => x.precision(precision)),
-      walls: cutWalls.map(x => x.precision(precision)),
+      // walls: cutWalls.map(x => x.precision(precision)),
+      walls: joinedWalls.concat(unjoinedWalls).map(x => x.precision(precision)),
       windows,
       ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
     };
