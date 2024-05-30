@@ -152,7 +152,7 @@ export default function TestWallsAndDoors(props) {
     },
   }));
 
-  api.doors = state;
+  api.vert = state;
 
   React.useEffect(() => {
     state.buildLookups();

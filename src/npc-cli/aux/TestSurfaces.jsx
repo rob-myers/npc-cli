@@ -161,7 +161,7 @@ export default function TestSurfaces(props) {
     },
   }));
 
-  api.faces = state;
+  api.flat = state;
 
   React.useEffect(() => {
     state.addObstacleUvs();

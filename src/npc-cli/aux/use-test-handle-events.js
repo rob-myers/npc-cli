@@ -15,7 +15,7 @@ export default function useTestHandleEvents(api) {
           if (!api.floorImg[e.gmKey]) {// 🚧 eliminate
             return warn(`saw "${e.key}" before api.floorImg['${e.gmKey}']`);
           }
-          api.faces.drawFloorAndCeil(e.gmKey);
+          api.flat.drawFloorAndCeil(e.gmKey);
           break;
         case "long-pointerdown":
           if (e.distancePx <= (e.touch ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
@@ -57,7 +57,7 @@ export default function useTestHandleEvents(api) {
       }
 
       if (e.meta.floor === true) {
-        if (!api.npcs) {// 🚧 eliminate
+        if (!api.npc) {// 🚧 eliminate
           return warn(`saw "${e.key}" before api.npcs`);
         }
         api.walkTo(e.point);
@@ -65,7 +65,7 @@ export default function useTestHandleEvents(api) {
 
       if (e.meta.doors === true) {
         const instanceId = /** @type {number} */ (e.meta.instanceId);
-        api.doors.toggleDoor(instanceId);
+        api.vert.toggleDoor(instanceId);
       }
     },
   }));

@@ -52,9 +52,9 @@ export default function TestWorld(props) {
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // TestWorldCanvas
-    faces: /** @type {*} */ (null), // TestSurfaces
-    doors: /** @type {*} */ (null), // TestWallsAndDoors
-    npcs: /** @type {*} */ (null), // TestNpcs
+    flat: /** @type {*} */ (null), // TestSurfaces
+    vert: /** @type {*} */ (null), // TestWallsAndDoors
+    npc: /** @type {*} */ (null), // TestNpcs
     menu: /** @type {*} */ (null), // TestContextMenu
     debug: /** @type {*} */ (null), // TestDebug
 
@@ -130,8 +130,8 @@ export default function TestWorld(props) {
       state.timer.update();
       const deltaMs = state.timer.getDelta();
       state.crowd.update(deltaMs);
-      state.npcs.onTick();
-      state.doors.onTick();
+      state.npc.onTick();
+      state.vert.onTick();
       // info(state.r3f.gl.info.render);
     },
     setupCrowdAgents(positions, targets) {
@@ -154,7 +154,7 @@ export default function TestWorld(props) {
     },
     update,
     walkTo(dst) {
-      const agent = state.npcs.toAgent[state.npcs.selected];
+      const agent = state.npc.toAgent[state.npc.selected];
       const src = agent.position();
       const query = state.crowd.navMeshQuery;
       // Agent may follow different path
@@ -219,7 +219,7 @@ export default function TestWorld(props) {
         `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${getAssetQueryParam()}`
       ).then((tex) => {
         state.floorImg[gmKey] = tex.source.data;
-        state.faces && state.events.next({ key: 'draw-floor-ceil', gmKey });
+        state.flat && state.events.next({ key: 'draw-floor-ceil', gmKey });
       }));
 
       textureLoader.loadAsync(
@@ -258,11 +258,11 @@ export default function TestWorld(props) {
 
   React.useEffect(() => {// enable/disable animation
     state.timer.reset();
-    if (!state.disabled && !!state.npcs) {
+    if (!state.disabled && !!state.npc) {
       state.onTick();
     }
     return () => cancelAnimationFrame(state.reqAnimId);
-  }, [state.disabled, state.npcs]);
+  }, [state.disabled, state.npc]);
 
   return (
     <TestWorldContext.Provider value={state}>
@@ -309,9 +309,12 @@ export default function TestWorld(props) {
  * @property {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>} worker
  *
  * @property {import('./TestWorldCanvas').State} ui
- * @property {import('./TestSurfaces').State} faces
- * @property {import('./TestWallsAndDoors').State} doors
- * @property {import('./TestNpcs').State} npcs
+ * @property {import('./TestSurfaces').State} flat
+ * Flat static objects: floor, ceiling, and obstacles
+ * @property {import('./TestWallsAndDoors').State} vert
+ * Vertical objects: doors (dynamic) and walls (static)
+ * @property {import('./TestNpcs').State} npc
+ * Npcs (dynamic)
  * @property {import('./TestContextMenu').State} menu
  * @property {import('./TestDebug').State} debug
  *

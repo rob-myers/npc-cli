@@ -92,7 +92,7 @@ export default function TestNpcs(props) {
   }));
 
   state.toAgent = api.crowd.agents;
-  api.npcs = state;
+  api.npc = state;
 
   React.useEffect(() => {// 🚧 DEMO
     // create an obstacle (before query)
