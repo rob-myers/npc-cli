@@ -6,7 +6,7 @@
     "301--hull": {"outputHash": 1084187675, "pngHash": 787602800},
     "302--hull": {"outputHash": 1624368078, "pngHash": -1557128953},
     "303--hull": {
-      "outputHash": -1929783088,
+      "outputHash": 326807798,
       "pngHash": -299838577,
       "obsHashes": [-1954561532, -950489146]
     },
@@ -4019,7 +4019,9 @@
       "decor": [
         {
           "type": "Polygon",
-          "coordinates": [[[4.75, 9], [4.5, 9], [4.5, 8.75], [4.75, 8.75]]],
+          "coordinates": [
+            [[4.75, 8.875], [4.625, 8.875], [4.625, 8.75], [4.75, 8.75]]
+          ],
           "meta": {"decor": true, "go": true, "label": "corridor"}
         },
         {
@@ -4031,7 +4033,9 @@
         },
         {
           "type": "Polygon",
-          "coordinates": [[[16, 6.75], [15.75, 6.75], [15.75, 6.5], [16, 6.5]]],
+          "coordinates": [
+            [[16, 6.625], [15.875, 6.625], [15.875, 6.5], [16, 6.5]]
+          ],
           "meta": {"decor": true, "go": true, "label": "common-area"}
         }
       ],
@@ -4130,28 +4134,21 @@
           "meta": {"key": "stateroom--036--2x4"},
           "width": 3,
           "height": 6,
-          "transform": [1, 0, 0, -1, 9, 15]
+          "transform": [1, 0, 0, -1, 12, 15]
         },
         {
           "symbolKey": "stateroom--036--2x4",
           "meta": {"key": "stateroom--036--2x4"},
           "width": 3,
           "height": 6,
-          "transform": [1, 0, 0, -1, 12, 15]
+          "transform": [1, 0, 0, -1, 9, 15]
         },
         {
           "symbolKey": "stateroom--035--2x3",
           "meta": {"key": "stateroom--035--2x3"},
           "width": 3,
           "height": 4.5,
-          "transform": [-1, 0, 0, 1, 18, 0]
-        },
-        {
-          "symbolKey": "stateroom--035--2x3",
-          "meta": {"key": "stateroom--035--2x3"},
-          "width": 3,
-          "height": 4.5,
-          "transform": [1, 0, 0, 1, 12, 0]
+          "transform": [1, 0, 0, 1, 15, 0]
         },
         {
           "symbolKey": "stateroom--035--2x3",
@@ -4159,6 +4156,13 @@
           "width": 3,
           "height": 4.5,
           "transform": [1, 0, 0, 1, 9, 0]
+        },
+        {
+          "symbolKey": "stateroom--035--2x3",
+          "meta": {"key": "stateroom--035--2x3"},
+          "width": 3,
+          "height": 4.5,
+          "transform": [1, 0, 0, 1, 12, 0]
         },
         {
           "symbolKey": "stateroom--035--2x3",
