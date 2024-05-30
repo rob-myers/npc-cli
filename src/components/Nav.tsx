@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { breakpoint, nav, view } from "../const";
+import { afterBreakpoint, breakpoint, nav, view } from "../const";
 import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo, faChevronRight } from "./Icon";
@@ -155,9 +155,8 @@ const icon = {
 const toggleCss = css`
   position: absolute;
   z-index: 1;
-  /* top: calc(0.5 * (${view.barSize} - 1.5rem)); */
   top: 0.6rem;
-  right: calc(0.5 * (${view.barSize} - 1.5rem));
+  right: 1rem;
   width: 1.5rem;
   height: 1.5rem;
   transition: margin-top 300ms;
@@ -172,8 +171,11 @@ const toggleCss = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-
+  
   @media (max-width: ${breakpoint}) {
     filter: invert(1);
+  }
+  @media (min-width: ${afterBreakpoint}) {
+    transform: scale(0.9);
   }
 `;
