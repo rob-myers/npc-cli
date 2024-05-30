@@ -16,7 +16,6 @@ export default function Main(props: React.PropsWithChildren) {
       className={cx(mainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
     >
-
       <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
       </header>
@@ -37,7 +36,9 @@ const mainCss = css`
   @media (min-width: ${afterBreakpoint}) {
     width: 100%;
     margin: 0 auto;
-    padding: 0 32px;
+    > header, > main {
+      padding: 0 32px;
+    }
     white-space: nowrap;
     overflow-x: scroll;
   }

@@ -81,8 +81,7 @@ export default function ViewerControls({ api }: Props) {
       if (state.dragOffset !== null) {
         let percent = isSmallView()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
-          : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
-            (window.innerWidth - getNavWidth());
+          : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) / (window.innerWidth - getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);

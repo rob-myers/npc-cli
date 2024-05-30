@@ -18,24 +18,22 @@ import ViewerControls from "./ViewerControls";
 export default function Viewer() {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
 
-  const state = useStateRef(
-    (): State => ({
-      onChangeIntersect: debounce((intersects: boolean) => {
-        !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
-        update();
-      }, 1000),
-      onKeyDown(e) {
-        if (e.key === "Escape" && state.tabs.enabled) {
-          state.tabs.toggleEnabled();
-        }
-        if (e.key === "Enter" && !state.tabs.enabled) {
-          state.tabs.toggleEnabled();
-        }
-      },
-      rootEl: null as any,
-      tabs: {} as TabsState,
-    })
-  );
+  const state = useStateRef<State>(() => ({
+    onChangeIntersect: debounce((intersects: boolean) => {
+      !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
+      update();
+    }, 1000),
+    onKeyDown(e) {
+      if (e.key === "Escape" && state.tabs.enabled) {
+        state.tabs.toggleEnabled();
+      }
+      if (e.key === "Enter" && !state.tabs.enabled) {
+        state.tabs.toggleEnabled();
+      }
+    },
+    rootEl: null as any,
+    tabs: {} as TabsState,
+  }));
 
   useIntersection({
     elRef: () => state.rootEl,
