@@ -25,9 +25,14 @@
 
 - ✅ fix Viewer horizontal drag "initial jump" when Nav is open
 
-- integrate TestCharacter into TestWorld
+- 🚧 integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
+  - ✅ api.npc.npc exists
+  - 🚧 `<NPC>` exists and can show unanimated character
+  - api.npc.npc drives character render
+  - api.npc.npc drives agents
+  - characters are animated
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet

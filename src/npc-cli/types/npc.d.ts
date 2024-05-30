@@ -1,4 +1,38 @@
 declare namespace NPC {
+
+  // 🚧 WIP
+  type NpcClassKey = (
+    | 'scientist-1'
+    | 'soldier-1'
+    | 'suit-1'
+  );
+
+  interface NPC {
+    /** User specified e.g. `rob` */
+    key: string;
+    classKey: NPC.NpcClassKey;
+    /** When we (re)spawned */
+    epochMs: number;
+    /** Initial definition */
+    def: NPCDef;
+
+    /**
+     * Initially `false` until <NPC> sets `true`.
+     * May also set false for cached un-rendered.
+     */
+    spawned: boolean;
+  }
+
+  interface NPCDef {
+    /** User specified e.g. `rob` */
+    key: string;
+    classKey: NpcClassKey;
+    angleRad: number;
+    position: Geom.VectJson;
+    /** World units per second */
+    walkSpeed: number;
+  }
+
   type Event =
     | PointerUpOutsideEvent
     | PointerUpEvent

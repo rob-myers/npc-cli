@@ -15,6 +15,8 @@ export default function TestNpcs(props) {
   const api = React.useContext(TestWorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    npc: {},
+
     selected: 0,
     nextObstacleId: 0,
     toAgent: {},
@@ -160,6 +162,7 @@ export default function TestNpcs(props) {
 
 /**
  * @typedef State
+ * @property {{ [npcKey: string]: NPC.NPC }} npc
  * @property {number} selected Selected agent
  * @property {number} nextObstacleId
  * @property {Record<string, NPC.CrowdAgent>} toAgent
