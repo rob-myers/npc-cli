@@ -2,14 +2,6 @@
 
 ## WIP
 
-- ✅ more raised obstacles
-  - ℹ️ raising to wall height can cause flicker
-  - ✅ 301
-  - ✅ 101
-  - ✅ 102
-  - ✅ 302
-  - ✅ 303
-
 - 🚧 migrate sub-symbols to actual symbols
 
 - 🚧 fix webp generation
@@ -20,15 +12,6 @@
   - ✅ absorb `ensure-webp` into `assets-fast --prePush`
   - ✅ fix VSCode UI push node version
     - via `.bashrc`
-
-- ❌ minecraft model supports overlays
-  - prefer to avoid "doubling" 168 triangle count
-  - can directly mutate textures e.g. apply coat to body
-
-- 🚧 6+ minecraft skins, avoiding default skins
-  - [scientist-dabeyt](https://namemc.com/skin/7161dce64d6b12be)
-
-- ✅ fix Viewer horizontal drag "initial jump" when Nav is open
 
 - 🚧 integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
@@ -1146,3 +1129,26 @@
     - 2d onPointerDown clears 3d stuff if 2d point doesn't match
   - ✅ obstacles has onPointer{Down,Up}
     - will decode actual obstacle hit later
+
+- ✅ more raised obstacles
+  - ℹ️ raising to wall height can cause flicker
+  - ✅ 301
+  - ✅ 101
+  - ✅ 102
+  - ✅ 302
+  - ✅ 303
+
+- ❌ minecraft model supports overlays
+  - prefer to avoid "doubling" 168 triangle count
+  - can directly mutate textures e.g. apply coat to body
+
+- ✅ 6+ minecraft skins, avoiding default skins
+  - ✅ [scientist-dabeyt](https://namemc.com/skin/7161dce64d6b12be)
+    - maybe glasses via alternate head?
+  - ✅ [scientist-4w4ny4](https://namemc.com/skin/a01f93c820b84892)
+  - ✅ [soldier-_Markovka123_](https://namemc.com/skin/e0f2962a8ebf02b0)
+  - ✅ [robot-vaccino](https://www.planetminecraft.com/skin/vaccino/)
+  - ✅ [soldier-russia](https://namemc.com/skin/8597fe8d0b3248a0)
+  - ✅ [soldier-darkleonard2](https://namemc.com/skin/702ae8d8d9492ef8)
+
+- ✅ fix Viewer horizontal drag "initial jump" when Nav is open

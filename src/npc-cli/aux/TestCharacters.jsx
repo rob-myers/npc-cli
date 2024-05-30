@@ -18,7 +18,7 @@ const meta = {
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
 export const TestCharacters = React.forwardRef(function TestCharacters({
-  count = 5,
+  count = 6,
   onClick,
 }, ref) {
   const gltf = useGLTF(meta.url);
@@ -79,10 +79,12 @@ export const TestCharacters = React.forwardRef(function TestCharacters({
   // console.log(/** @type {THREE.SkinnedMesh} */ (state.models[0]?.graph.nodes["minecraft-character-mesh"]).geometry.attributes.position);
 
   React.useEffect(() => {
-    state.changeSkin(0, 'minecraft-alex-with-arms.png');
-    state.changeSkin(1, 'minecraft-steve.png');
-    state.changeSkin(2, 'vaccino-64x64.png');
-    state.changeSkin(3, 'minecraft-zuri.png');
+    state.changeSkin(0, 'scientist-dabeyt--with-arms.png');
+    state.changeSkin(1, 'scientist-4w4ny4--with-arms.png');
+    state.changeSkin(2, 'soldier-_Markovka123_.png');
+    state.changeSkin(3, 'robot-vaccino.png');
+    state.changeSkin(4, 'soldier-russia.png');
+    state.changeSkin(5, 'soldier-darkleonard2.png');
   }, [gltf.scene]);
 
 
@@ -124,6 +126,11 @@ useGLTF.preload(meta.url);
  * | 'minecraft-steve.png'
  * | 'minecraft-sunny.png'
  * | 'minecraft-zuri.png'
- * | 'vaccino-64x64.png'
+ * | 'scientist-dabeyt--with-arms.png'
+ * | 'scientist-4w4ny4--with-arms.png'
+ * | 'soldier-_Markovka123_.png'
+ * | 'soldier-russia.png'
+ * | 'soldier-darkleonard2.png'
+ * | 'robot-vaccino.png'
  * )} SkinKey
  */
