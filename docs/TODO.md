@@ -45,6 +45,9 @@
 
 - start writing first article
 
+- distinguish symbols:
+  - some extend beyond viewbox (e.g. stateroom),
+  - some do not (e.g. table)
 - ❌ static obstacles can specify color or shade
 - tag `hull-wall` -> `wall hull`
 - use decor cuboids under e.g. machines and desks

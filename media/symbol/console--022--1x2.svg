@@ -26,9 +26,9 @@
         <title>console--051--0.4x0.6 y=0.4</title>
       </rect>
     </symbol>
-    <symbol id="symbol-1" viewBox="0 0 154.2 600" bx:pinned="true">
+    <symbol id="symbol-1" viewBox="0 0 150 600" bx:pinned="true">
       <title>extra--019--table-0.5x2</title>
-      <rect width="150" height="600" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 77.1053px 300.012px;" x="2.1">
+      <rect width="150" height="600" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 77.1053px 300.012px;">
         <title>extra--019--table-0.5x2</title>
       </rect>
     </symbol>
@@ -36,12 +36,12 @@
   <image width="307" height="607" x="-3.5" y="-3.5" style="pointer-events: none;" xlink:href="data:image/png;base64,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MwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyI/B2/nE9ej38SqYZAZkRkBkBmT3LZewGMiPw55w8Hb2MH8Yk2+h/OpBe7SyN+9AAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDktMTJUMjA6NDE6MTArMDA6MDC3Lq1AAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA5LTEyVDIwOjQxOjEwKzAwOjAwxnMV/AAAAABJRU5ErkJggg==">
     <title>console--022--1x2</title>
   </image>
-  <g>
+  <g transform="matrix(1, 0, 0, 1, -2.099998235703, 9.2278e-8)">
     <title>symbols</title>
     <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 158.9936065673828, 224.9935760498047)" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6 y=0</title>
     </use>
-    <use width="154.1999969482422" height="600" transform="matrix(1, 0, 0, 1, -3.05956e-7, -9.1208e-8)" xlink:href="#symbol-1">
+    <use width="154.1999969482422" height="600" transform="matrix(1, 0, 0, 1, -3.059560071960732e-7, -9.120800115169914e-8)" xlink:href="#symbol-1">
       <title>extra--019--table-0.5x2 y=0.2</title>
     </use>
   </g>
