@@ -118,7 +118,7 @@
       <title>office--089--4x4</title>
     </use>
     <use width="60" height="120" transform="matrix(-1, 0, 0, 1, 240, 60.000003814697)" style="" xlink:href="#symbol-4">
-      <title>console--022--1x2</title>
+      <title>console--022--1x2 y=0.4</title>
     </use>
     <use width="15" height="15" transform="matrix(1, 0, 0, 1, 1079, 217.42294311523438)" xlink:href="#symbol-0">
       <title>extra--005--chair-0.25x0.25 y=0.3</title>

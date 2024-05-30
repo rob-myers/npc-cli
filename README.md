@@ -53,9 +53,9 @@ brew install imagemagick
 convert --version | grep ImageMagick >/dev/null && echo $?
 
 # autocrop an image using ImageMagick (overwriting it)
-srcPath=media/edited/extra--017--table--2x0.5.png &&
-dstPath=media/edited/extra--017--table--2x0.5.trim.png &&
-convert -fuzz 1% -trim "$srcPath" "$dstPath" && mv "$dstPath" "$srcPath"
+srcPath=media/edited/extra--019--table-0.5x2.png &&
+  dstPath=media/edited/extra--019--table-0.5x2.trim.png &&
+  convert -fuzz 1% -trim "$srcPath" "$dstPath" && mv "$dstPath" "$srcPath"
 
 # greyscale
 convert -colorspace Gray myImage.png  myImage.gray.png
