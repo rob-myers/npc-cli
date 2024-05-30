@@ -2,13 +2,13 @@
 
 ## WIP
 
-- 🚧 more raised obstacles
+- ✅ more raised obstacles
   - ℹ️ raising to wall height can cause flicker
   - ✅ 301
   - ✅ 101
   - ✅ 102
   - ✅ 302
-  - 🚧 303
+  - ✅ 303
 
 - 🚧 migrate sub-symbols to actual symbols
 
@@ -21,7 +21,12 @@
   - ✅ fix VSCode UI push node version
     - via `.bashrc`
 
-- 6+ minecraft skins, avoiding default skins
+- ❌ minecraft model supports overlays
+  - prefer to avoid "doubling" 168 triangle count
+  - can directly mutate textures e.g. apply coat to body
+
+- 🚧 6+ minecraft skins, avoiding default skins
+  - [scientist-dabeyt](https://namemc.com/skin/7161dce64d6b12be)
 
 - ✅ fix Viewer horizontal drag "initial jump" when Nav is open
 
