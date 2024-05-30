@@ -19,6 +19,8 @@ export default function Viewer() {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
 
   const state = useStateRef<State>(() => ({
+    rootEl: null as any,
+    tabs: {} as TabsState,
     onChangeIntersect: debounce((intersects: boolean) => {
       !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
       update();
@@ -31,8 +33,6 @@ export default function Viewer() {
         state.tabs.toggleEnabled();
       }
     },
-    rootEl: null as any,
-    tabs: {} as TabsState,
   }));
 
   useIntersection({

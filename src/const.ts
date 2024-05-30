@@ -39,7 +39,7 @@ export const discussionsUrl = "https://github.com/rob-myers/npc-cli/discussions"
 export const nav = /** @type {const} */ {
   collapsedRem: 4,
   collapsedWidth: "4rem",
-  expandedRem: 12,
+  expandedRem: 15,
   expandedWidth: "15rem",
   titleMarginTop: "0.5rem",
 };

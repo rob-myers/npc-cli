@@ -19,7 +19,12 @@
   - ✅ `assets-fast` avoids over-computation (sans `--staleMs={ms}`)
   - ✅ absorb `ensure-webp` into `assets-fast --prePush`
   - ✅ fix VSCode UI push node version
-  
+    - via `.bashrc`
+
+- 6+ minecraft skins, avoiding default skins
+
+- ✅ fix Viewer horizontal drag "initial jump" when Nav is open
+
 - integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
@@ -35,9 +40,6 @@
 
 - start writing first article
 
-- show toast while navmesh loading
-  - also show results e.g. number of tiles
-
 - ❌ static obstacles can specify color or shade
 - tag `hull-wall` -> `wall hull`
 - use decor cuboids under e.g. machines and desks
@@ -49,6 +51,8 @@
 - prevent agent going through door
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
+- show toast while navmesh loading
+  - also show results e.g. number of tiles
 
 - 🚧 fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles
@@ -67,7 +71,6 @@
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
   - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
   - 🚧 saw issue on remove obstacle, then add back in
-
 
 - ✅ remove `. ~/.bash_profile` from pre-push hook
 - ❌ improve `yarn ensure-webp` by detecting webp older than png
