@@ -3,6 +3,9 @@
 ## WIP
 
 - 🚧 migrate sub-symbols to actual symbols
+  - ✅ 301 ✅ 302 ✅ 303 🚧 101 🚧 102
+  - consoles
+  - extras
 
 - 🚧 fix webp generation
   - ✅ on push generate webp and fail anything new detected
