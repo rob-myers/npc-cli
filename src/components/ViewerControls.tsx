@@ -196,7 +196,7 @@ const buttonsCss = css`
 
     @media (min-width: ${afterBreakpoint}) {
       width: var(--view-bar-size);
-      height: var(--view-icon-size);
+      height: ${nav.menuItem};
     }
     @media (max-width: ${breakpoint}) {
       width: var(--view-icon-size);
@@ -214,6 +214,7 @@ const buttonsCss = css`
   button:last-child {
     @media (min-width: ${afterBreakpoint}) {
       height: ${view.barSize};
+      height: 4rem;
     }
     @media (max-width: ${breakpoint}) {
       transform: rotate(90deg);

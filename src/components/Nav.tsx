@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { nav, view } from "../const";
+import { breakpoint, nav, view } from "../const";
 import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo, faChevronRight } from "./Icon";
@@ -68,9 +68,9 @@ export default function Nav() {
 
 // See parent component for more CSS
 const navCss = css`
+  z-index: 8;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
-  z-index: 8;
 
   color: white;
   border-right: 1px solid #444 !important;
@@ -81,7 +81,7 @@ const navCss = css`
       background-color: transparent;
       text-decoration: underline;
     }
-    height: 3.5rem;
+    height: ${nav.menuItem};
   }
 
   .${menuClasses.subMenuContent} {
@@ -123,11 +123,11 @@ const navTitleCss = css`
   .${menuClasses.menuItemRoot}.title {
     opacity: 1;
     transition: opacity 500ms;
-    margin-top: ${nav.titleMarginTop};
+    /* margin-top: ${nav.titleMarginTop}; */
     margin-left: 12px;
 
     .${menuClasses.button} {
-      height: calc(1 * ${view.barSize});
+      height: ${view.barSize};
     }
 
     .${menuClasses.label} {
@@ -155,7 +155,8 @@ const icon = {
 const toggleCss = css`
   position: absolute;
   z-index: 1;
-  top: calc(0.5 * (${view.barSize} - 1.5rem));
+  /* top: calc(0.5 * (${view.barSize} - 1.5rem)); */
+  top: 0.6rem;
   right: calc(0.5 * (${view.barSize} - 1.5rem));
   width: 1.5rem;
   height: 1.5rem;
@@ -171,5 +172,8 @@ const toggleCss = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  filter: invert(1);
+
+  @media (max-width: ${breakpoint}) {
+    filter: invert(1);
+  }
 `;

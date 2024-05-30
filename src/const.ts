@@ -36,17 +36,19 @@ export const breakpoint = "1200px";
 
 export const discussionsUrl = "https://github.com/rob-myers/npc-cli/discussions";
 
-export const nav = /** @type {const} */ {
+export const nav = {
   collapsedRem: 4,
-  collapsedWidth: "4rem",
+  collapsedWidth: `${4}rem`,
   expandedRem: 15,
-  expandedWidth: "15rem",
-  titleMarginTop: "0.5rem",
-};
+  expandedWidth: `${15}rem`,
+  menuItemRem: 3.5,
+  menuItem: `${3.5}rem`,
+  titleMarginTop: `${0.5}rem`,
+} as const;
 
-export const view = /** @type {const} */ {
+export const view = {
   /** Small viewport: height; Large viewport: width */
   barSize: "4rem",
   /** Small viewport: width; Large viewport: height */
   iconSize: "3.5rem",
-};
+} as const;
