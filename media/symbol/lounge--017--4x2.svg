@@ -18,12 +18,16 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
-    <pattern id="pattern-11" patternTransform="matrix(1.999992132187, 0.000019696075, -0.000019696086, 1.999991893768, 599.98583984375, 599.989471435547)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-2" patternTransform="matrix(1.999992132187, 0.000019696079, -0.00001969609, 1.999991893768, 299.985870361328, 599.989532677617)" xlink:href="#pattern-0"/>
     <symbol id="symbol-0" viewBox="0 0 150 450">
       <title>couch-and-chairs--007--0.6x1.4</title>
       <rect width="150" height="450" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 75.0014px 225.074px;">
         <title>couch-and-chairs--007--0.6x1.4</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-1" viewBox="0 0 300 300" bx:pinned="true">
+      <title>table--009--0.8x0.8</title>
+      <rect width="300" height="300" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 150px 150px;">
+        <title>table--009--0.8x0.8</title>
       </rect>
     </symbol>
   </defs>
@@ -50,14 +54,14 @@
   </rect>
   <g>
     <title>symbols</title>
-    <rect width="300" height="300" style="stroke-width: 4px; fill: url('#pattern-11'); stroke: rgb(0, 0, 255); transform-box: fill-box; transform-origin: 50% 50%;" y="299.999969" x="600">
+    <use width="300" height="300" transform="matrix(1, 0, 0, 1, 300.000061035156, 300)" xlink:href="#symbol-1">
       <title>table--009--0.8x0.8</title>
-    </rect>
-    <rect width="300" height="300" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-2'); transform-origin: 450px 450px;" y="300" x="300.000031">
-      <title>table--009--0.8x0.8</title>
-    </rect>
+    </use>
     <use width="150" height="450" transform="matrix(1, 0, 0, 1, 44.31041717529297, 71.27685546875)" style="" xlink:href="#symbol-0">
       <title>couch-and-chairs--007--0.6x1.4 y=0.2</title>
+    </use>
+    <use width="300" height="300" transform="matrix(1, 0, 0, 1, 600, 300)" xlink:href="#symbol-1">
+      <title>table--009--0.8x0.8</title>
     </use>
   </g>
 </svg>

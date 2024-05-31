@@ -243,7 +243,7 @@
       "pngHash": -2036140918
     },
     "lounge--015--4x2": {"outputHash": -1477468156, "pngHash": 222627377},
-    "lounge--017--4x2": {"outputHash": 425733823, "pngHash": -236167751},
+    "lounge--017--4x2": {"outputHash": 1408546431, "pngHash": -236167751},
     "low-berth--003--1x1": {
       "outputHash": 1817143526,
       "pngHash": 177413432,
@@ -8827,13 +8827,6 @@
           "meta": {"key": "table--009--0.8x0.8"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [1, 0, 0, 1, 3, 1.5]
-        },
-        {
-          "symbolKey": "table--009--0.8x0.8",
-          "meta": {"key": "table--009--0.8x0.8"},
-          "width": 1.5,
-          "height": 1.5,
           "transform": [1, 0, 0, 1, 1.5, 1.5]
         },
         {
@@ -8842,6 +8835,13 @@
           "width": 0.75,
           "height": 2.25,
           "transform": [1, 0, 0, 1, 0.22, 0.36]
+        },
+        {
+          "symbolKey": "table--009--0.8x0.8",
+          "meta": {"key": "table--009--0.8x0.8"},
+          "width": 1.5,
+          "height": 1.5,
+          "transform": [1, 0, 0, 1, 3, 1.5]
         }
       ],
       "removableDoors": [],
