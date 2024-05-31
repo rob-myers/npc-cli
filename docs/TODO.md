@@ -38,6 +38,8 @@
 
 - start writing first article
 
+- get eslint working again e.g. for raw-loader.js
+
 - distinguish symbols:
   - some extend beyond viewbox (e.g. stateroom),
   - some do not (e.g. table)
