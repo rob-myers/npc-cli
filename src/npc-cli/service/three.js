@@ -168,3 +168,5 @@ export function buildGraph(object) {
   }
   return data;
 }
+
+export const yAxis = new THREE.Vector3(0, 1, 0);

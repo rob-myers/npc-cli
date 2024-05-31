@@ -1,11 +1,13 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Subject } from "rxjs";
+import { Subject, firstValueFrom } from "rxjs";
+import { filter } from "rxjs/operators";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
+import { Vect } from "../geom";
 import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, debug, isDevelopment, keys } from "../service/generic";
 import { getAssetQueryParam } from "../service/dom";
@@ -13,6 +15,7 @@ import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, textureLoader, tmpBufferGeom1, tmpVectThree1 } from "../service/three";
 import { getTileCacheMeshProcess } from "../service/recast-detour";
+import { npcService } from "../service/npc";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
@@ -57,6 +60,13 @@ export default function TestWorld(props) {
     npc: /** @type {*} */ (null), // TestNpcs
     menu: /** @type {*} */ (null), // TestContextMenu
     debug: /** @type {*} */ (null), // TestDebug
+    lib: {
+      filter,
+      firstValueFrom,
+      isVectJson: Vect.isVectJson,
+      vectFrom: Vect.from,
+      ...npcService,
+    },
 
     ensureGmClass(gmKey) {
       const layout = state.geomorphs.layout[gmKey];
@@ -317,6 +327,7 @@ export default function TestWorld(props) {
  * Npcs (dynamic)
  * @property {import('./TestContextMenu').State} menu
  * @property {import('./TestDebug').State} debug
+ * @property {StateUtil & import("../service/npc").NpcService} lib
  *
  * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
@@ -349,4 +360,18 @@ export default function TestWorld(props) {
  *  THREE.CanvasTexture,
  *  HTMLCanvasElement,
  * ]>} CanvasTexDef
+ */
+
+/**
+ * @typedef StateUtil Utility classes and `rxjs` functions
+ * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
+ * @property {typeof import('../geom').Vect['from']} vectFrom
+ * @property {typeof filter} filter
+ * //@property {typeof first} first
+ * @property {typeof firstValueFrom} firstValueFrom
+ * //@property {typeof map} map
+ * //@property {typeof merge} merge
+ * //@property {typeof precision} precision
+ * //@property {typeof removeFirst} removeFirst
+ * //@property {typeof take} take
  */

@@ -20,7 +20,9 @@
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
   - ✅ api.npc.npc exists
+  - ✅ implement `api.npc.spawn`
   - 🚧 `<NPC>` exists and can show unanimated character
+    - no hooks inside `<NPC>`
   - api.npc.npc drives character render
   - api.npc.npc drives agents
   - characters are animated

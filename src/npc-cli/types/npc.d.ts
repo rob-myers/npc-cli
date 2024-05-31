@@ -1,37 +1,33 @@
 declare namespace NPC {
 
-  // 🚧 WIP
-  type NpcClassKey = (
-    | 'scientist-1'
-    | 'soldier-1'
-    | 'suit-1'
-  );
+  /** Skin names. */
+  type NpcClassKey = keyof import('../service/npc').NpcService['fromNpcClassKey'];
 
-  interface NPC {
-    /** User specified e.g. `rob` */
-    key: string;
-    classKey: NPC.NpcClassKey;
-    /** When we (re)spawned */
-    epochMs: number;
-    /** Initial definition */
-    def: NPCDef;
-
-    /**
-     * Initially `false` until <NPC> sets `true`.
-     * May also set false for cached un-rendered.
-     */
-    spawned: boolean;
-  }
+  type NPC = import('../aux/create-npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */
     key: string;
     classKey: NpcClassKey;
-    angleRad: number;
+    /** Radians */
+    angle: number;
     position: Geom.VectJson;
+    /** World units per second */
+    runSpeed: number;
     /** World units per second */
     walkSpeed: number;
   }
+
+  interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
+    npcKey: string;
+    npcClassKey?: NPC.NpcClassKey;
+    point: Geom.VectJson;
+    meta?: Geom.Meta;
+    requireNav?: boolean;
+  }
+
+  // 🚧 WIP
+  type AnimKey = 'Idle' | 'Walk' | 'Run';
 
   type Event =
     | PointerUpOutsideEvent
@@ -40,10 +36,12 @@ declare namespace NPC {
     | LongPointerDownEvent
     // | PointerMoveEvent
     | { key: "disabled" }
+    | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey }
     | { key: "enabled" }
+    | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
     | { key: "spawned-npc"; npcKey: string }
+    | { key: 'stopped-walking'; npcKey: string; }
     | { key: "removed-npc"; npcKey: string }
-    | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey };
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {

@@ -28,3 +28,18 @@ export const obstacleOutset = 10 * worldScale;
 export const agentRadius = 10 * worldScale;
 
 export const wallHeight = 2;
+
+export const glbMeta = /** @type {const} */ ({
+  url: '/assets/3d/minecraft-anim.glb',
+  /** Scale factor we'll apply */
+  scale: 0.25,
+  /** Actual height in Blender */
+  height: 2,
+  /** Inferred by manually testing using root bone */
+  walkSpeed: 1.25,
+  /** Inferred by manually testing using root bone */
+  runSpeed: 2.5,
+});
+
+/** @type {NPC.NpcClassKey} */
+export const defaultNpcClassKey = 'scientist-dabeyt--with-arms.png';
