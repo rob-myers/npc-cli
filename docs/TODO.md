@@ -21,8 +21,10 @@
   - ℹ️ can use Blender to pull in alternate textures
   - ✅ api.npc.npc exists
   - ✅ implement `api.npc.spawn`
-  - 🚧 `<NPC>` exists and can show unanimated character
+  - ❌ `<NPC>` exists and can show unanimated character
     - no hooks inside `<NPC>`
+  - ✅ can connect terminal to world via `awaitWorld`
+  - 🚧 can spawn un-animated character via terminal
   - api.npc.npc drives character render
   - api.npc.npc drives agents
   - characters are animated

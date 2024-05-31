@@ -6,11 +6,10 @@ import { useGLTF } from "@react-three/drei";
 import { agentRadius, defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
 import { tmpMesh1 } from "../service/three";
-import { Npc } from "./create-npc";
+import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { MemoizedNpcComponent } from "./TestNpcComponent";
 
 /**
  * @param {Props} props
@@ -33,13 +32,14 @@ export default function TestNpcs(props) {
       const closest = api.crowd.navMeshQuery.getClosestPoint(tmpV3_1.set(p.x, 0, p.y));
       return closest.x === p.x && closest.z === p.y;
     },
-    npcRef(el) {
-      if (el == null) {
+    npcRef(root) {
+      if (root == null) {
         return;
       }
-      const npc = state.npc[el.name];
+      const npc = state.npc[root.name];
       if (npc?.spawned === false) {
-        npc.initialize();
+        npc.root = root;
+        npc.initialize(gltf);
         npc.startAnimation('Idle');
         npc.spawned = true;
         api.events.next({ key: 'spawned-npc', npcKey: npc.key });
@@ -189,6 +189,12 @@ export default function TestNpcs(props) {
     return () => void (obstacle && state.removeObstacle(obstacle.id));
   }, [api.crowd]); 
 
+  React.useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      Object.values(state.npc).forEach(hotModuleReloadNpc);
+    }
+  }, []);
+
   const update = useUpdate();
 
   return <>
@@ -223,13 +229,12 @@ export default function TestNpcs(props) {
       </mesh>
     ))}
   
-    {Object.values(state.npc).map(({ key, epochMs }) => (
-      <MemoizedNpcComponent
-        key={key}
-        ref={state.npcRef}
-        api={api}
-        npcKey={key}
-        epochMs={epochMs} // can override memo
+    {Object.values(state.npc).map((npc) => (
+      <primitive
+        name={npc.key}
+        ref={state.npcRef} // assume Group
+        object={npc.model}
+        scale={glbMeta.scale}
       />
     ))}
 
@@ -270,3 +275,5 @@ const tmpV3_unitX = new THREE.Vector3(1, 0, 0);
 const tmpV3_unitZ = new THREE.Vector3(0, 0, 1);
 const redColor = new THREE.Color("red");
 const greenColor = new THREE.Color("green");
+
+useGLTF.preload(glbMeta.url);

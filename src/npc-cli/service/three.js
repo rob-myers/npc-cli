@@ -155,7 +155,7 @@ export function InfiniteGrid(props) {
  * @param {THREE.Object3D} object 
  * @returns {import("@react-three/fiber").ObjectMap}
  */
-export function buildGraph(object) {
+export function buildObjectLookup(object) {
   /** @type {import("@react-three/fiber").ObjectMap} */
   const data = { nodes: {}, materials: {}};
   if (object) {

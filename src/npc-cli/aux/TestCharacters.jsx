@@ -4,7 +4,7 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 import { info, range } from "../service/generic";
-import { buildGraph, textureLoader } from "../service/three";
+import { buildObjectLookup, textureLoader } from "../service/three";
 import CharacterController from "./character-controller";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -73,7 +73,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters({
         opts: { initAnimKey: 'Idle', walkSpeed: meta.walkSpeed, runSpeed: meta.runSpeed, },
       });
 
-      return { model, controller, graph: buildGraph(model) };
+      return { model, controller, graph: buildObjectLookup(model) };
     });
   }, [gltf.scene]);
   // console.log(/** @type {THREE.SkinnedMesh} */ (state.models[0]?.graph.nodes["minecraft-character-mesh"]).geometry.attributes.position);
