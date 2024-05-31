@@ -18,21 +18,6 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
-    <pattern id="pattern-0-3" xlink:href="#pattern-2"/>
-    <pattern x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-2" patternTransform="matrix(1, 0, 0, 1, -839.999863028526, -1799.99997428013)">
-      <title>symbol-rect-pattern</title>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
-      <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
-      </defs>
-      <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
-      <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
-      <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
-      <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
-    </pattern>
     <symbol id="symbol-2" vioewbox="0 0 150 150" viewBox="0 0 150 150">
       <title>console--051--0.4x0.6</title>
       <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2-0'); transform-origin: 75.005px 75.0023px;" y="0" x="0">
@@ -41,6 +26,15 @@
     </symbol>
     <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-3"/>
     <pattern id="pattern-3" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0"/>
+    <symbol id="symbol-0" viewBox="0 0 600 900" bx:pinned="true">
+      <title>extra--014--table--2x3</title>
+      <rect width="600" height="900" style="filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); opacity: 0.25; fill: url('#pattern-0'); transform-origin: 300.001px 450.004px;">
+        <title>extra--014--table--2x3</title>
+      </rect>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </symbol>
   </defs>
   <image width="620" height="920" style="pointer-events: none;" x="-9" y="-7" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmwAAAOYAgMAAAAVj0cNAAAABGdBTUEAALGPC/xhBQAAAAd0SU1FB+UJGg8ELZIGK1cAAAAQY2FOdgAAAnkAAAOYAAAAAAAAAAAVQ85IAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAAAFiS0dEAmYLfGQAAAPjSURBVHja7d3NkeIwEAZQ+eAQyMch+ODmQAjOZ0LwAUe5h2VqDzv+KQajBt4XQNcrsFoUZbVKaSJnulJKUloMJe3HFlFKm9bWlVNaW5/YNqRdCmz3L1Q2NjY2NraXss3ZwsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxvY021fiuaCZbcHGxvbXNpRnho2NjY2NjS2tbfXSq66urV2/24mNjS2FbVwqcmVj+xDb91a68edAV9M2rtv6GrZ23XZlY/sc2zjP87Rsu+xtcmxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGzvalsM28varAU2NrZ7bVvvRVe0XbdsIxvbg22LRerbzktFptq2y1qZiY2NjY3toD1rLWxsbGx67wFnijdsVc87s72VrXl9W1fDVk57bHsqHTLbpNmydbvKsLGxHWrbCBvbI2devbKtVLS167Rhv21IOhf0lNzWJ7W1iW1NRHRJbSViKFltbfRpbf+6HBsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbG9sj0kaX1hYxZLU1EZHV1kZEl9R2iog+sW1IaotDbLGRzLZuf5VH2xo2Nrab7bJWZmJjY6tsayJiy7avjVSz9TVsLRsb2802Xrds45XtR9tG2NjY2PReNjY2tny/3xaLJNizxp9rXNnYHmybt2xzRdu0bjvXtM3ztGy7zDMbGxvblm0xbC9rsxbY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY/rfdzq4tvxdd97wz21vZmnXbnME2r9u6GrZyioiI81KRafdIrkNmm3w3uYUHrt9ZhI3tLWwrYWP7IFvz+8l0h9lum+pvplseZ3tE2NjY2NjY2J5tqxC2z7V9sd1luya2PTlsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGwvZcsZNjY2NjY2tl9nSG07sd2Rfv1Kqcq2Jq2tKyXv41bSfql9+QMPoqgkSrDAKwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wOS0yNlQxNTowNDozOSswMDowMNCG1uMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDktMjZUMTU6MDQ6MzkrMDA6MDCh225fAAAAAElFTkSuQmCC">
     <title>office--020--2x3</title>
@@ -65,9 +59,9 @@
   </rect>
   <g>
     <title>symbols</title>
-    <rect width="600" height="900" style="filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; fill: url('#pattern-0-3'); stroke: rgb(0, 0, 255); transform-origin: 300.001px 450.004px; opacity: 0.25;" x="-0.000122">
+    <use width="600" height="900" xlink:href="#symbol-0">
       <title>extra--014--table--2x3 y=0.8</title>
-    </rect>
+    </use>
     <use width="150.01280212402344" height="150.01280212402344" transform="matrix(2.10734e-7, 1.000000715256, -1.000000715256, 2.10734e-7, 299.986145019531, 162.173202514648)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
