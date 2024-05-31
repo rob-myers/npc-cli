@@ -242,11 +242,7 @@
       "pngHash": -2036140918
     },
     "lounge--015--4x2": {"outputHash": 1553832837, "pngHash": 222627377},
-    "lounge--017--4x2": {
-      "outputHash": 2059108931,
-      "pngHash": -236167751,
-      "obsHashes": [-1431995126]
-    },
+    "lounge--017--4x2": {"outputHash": 293410078, "pngHash": -236167751},
     "low-berth--003--1x1": {
       "outputHash": -1121463162,
       "pngHash": 177413432,
@@ -1033,15 +1029,6 @@
         "symbolKey": "extra--005--chair-0.25x0.25",
         "obstacleId": 0,
         "type": "chair"
-      },
-      "lounge--017--4x2 0": {
-        "x": 2067,
-        "y": 530,
-        "width": 47,
-        "height": 46,
-        "symbolKey": "lounge--017--4x2",
-        "obstacleId": 0,
-        "type": "table"
       }
     },
     "obstaclesHeight": 2242,
@@ -8773,32 +8760,7 @@
       "key": "lounge--017--4x2",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [0.4005, 1.7324],
-              [0.2337, 1.6647],
-              [0.1644, 1.5009],
-              [0.2337, 1.337],
-              [0.4005, 1.2693],
-              [0.5672, 1.337],
-              [0.6365, 1.5009],
-              [0.5672, 1.6647]
-            ]
-          ],
-          "meta": {
-            "obstacle": true,
-            "table": true,
-            "surface": true,
-            "y": 0.5,
-            "symId": 46,
-            "symKey": "lounge--017--4x2",
-            "obsId": 0
-          }
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -8851,20 +8813,6 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 6.1, "height": 3.1},
       "symbols": [
         {
-          "symbolKey": "console--051--0.4x0.6",
-          "meta": {"key": "console--051--0.4x0.6", "y": 0.3},
-          "width": 0.75,
-          "height": 0.75,
-          "transform": [-0.94, -0.342, 0.342, -0.94, 0.84, 1.39]
-        },
-        {
-          "symbolKey": "console--051--0.4x0.6",
-          "meta": {"key": "console--051--0.4x0.6", "y": 0.3},
-          "width": 0.75,
-          "height": 0.75,
-          "transform": [-0.94, 0.342, -0.342, -0.94, 1.08, 2.32]
-        },
-        {
           "symbolKey": "table--009--0.8x0.8",
           "meta": {"key": "table--009--0.8x0.8"},
           "width": 1.5,
@@ -8877,6 +8825,13 @@
           "width": 1.5,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 1.5, 1.5]
+        },
+        {
+          "symbolKey": "couch-and-chairs--007--0.6x1.4",
+          "meta": {"key": "couch-and-chairs--007--0.6x1.4", "y": 0.3},
+          "width": 0.75,
+          "height": 2.25,
+          "transform": [1, 0, 0, 1, 0.22, 0.36]
         }
       ],
       "removableDoors": [],
