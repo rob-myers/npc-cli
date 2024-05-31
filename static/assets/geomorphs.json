@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -1291945512 -119385858",
+  "hash": "610044716 -599944078 -119385858",
   "mapsHash": 610044716,
-  "layoutsHash": -1291945512,
+  "layoutsHash": -599944078,
   "sheetsHash": -119385858,
   "map": {
     "demo-map-1": {
@@ -10586,6 +10586,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -16606,7 +16607,7 @@
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -16623,6 +16624,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -16743,7 +16745,7 @@
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -16760,6 +16762,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -16880,7 +16883,7 @@
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -16897,6 +16900,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -17809,6 +17813,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -20878,6 +20883,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -23673,7 +23679,7 @@
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -23690,6 +23696,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -23810,7 +23817,7 @@
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -23827,6 +23834,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -23947,7 +23955,7 @@
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -23964,6 +23972,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0
@@ -24084,7 +24093,7 @@
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "obstacleId": 0,
-          "height": 0,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -24101,6 +24110,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "sink": true,
               "symId": 87,
               "symKey": "extra--001--fresher--0.5x0.5",
               "obsId": 0

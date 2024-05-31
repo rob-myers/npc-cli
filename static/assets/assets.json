@@ -118,9 +118,9 @@
     "engineering--045--6x4": {"outputHash": 21392850, "pngHash": -1132388510},
     "engineering--047--4x7": {"outputHash": -388809063, "pngHash": 541808283},
     "extra--001--fresher--0.5x0.5": {
-      "outputHash": -2046252390,
+      "outputHash": -694353253,
       "pngHash": 1247120224,
-      "obsHashes": [1359649509]
+      "obsHashes": [-662519258]
     },
     "extra--002--fresher--0.5x0.5": {
       "outputHash": -1800880048,
@@ -345,7 +345,7 @@
     "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 1368839861, "pngHash": 987326316},
     "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": -1647019831, "pngHash": 1301313076},
+    "stateroom--036--2x4": {"outputHash": 1062741444, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": -1589805043,
       "pngHash": 1027833859,
@@ -6650,6 +6650,7 @@
           ],
           "meta": {
             "obstacle": true,
+            "sink": true,
             "symId": 87,
             "symKey": "extra--001--fresher--0.5x0.5",
             "obsId": 0
@@ -12112,7 +12113,7 @@
         },
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
-          "meta": {"key": "extra--001--fresher--0.5x0.5"},
+          "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.6},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 2.02, 0]
