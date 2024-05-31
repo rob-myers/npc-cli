@@ -60,9 +60,9 @@
       "obsHashes": [-2128530459]
     },
     "console--018--1x1": {
-      "outputHash": 841087681,
+      "outputHash": 543792542,
       "pngHash": 1648795997,
-      "obsHashes": [-1328999523]
+      "obsHashes": [1774799022]
     },
     "console--019--2x2": {
       "outputHash": -1389061087,
@@ -769,6 +769,15 @@
         "obstacleId": 1,
         "type": "obstacle"
       },
+      "console--018--1x1 0": {
+        "x": 2,
+        "y": 2024,
+        "width": 155,
+        "height": 154,
+        "symbolKey": "console--018--1x1",
+        "obstacleId": 0,
+        "type": "table"
+      },
       "counter--007--0.4x1 0": {
         "x": 657,
         "y": 1950,
@@ -779,8 +788,8 @@
         "type": "surface"
       },
       "extra--004--desk--0.5x1 0": {
-        "x": 1993,
-        "y": 1838,
+        "x": 159,
+        "y": 2024,
         "width": 79,
         "height": 154,
         "symbolKey": "extra--004--desk--0.5x1",
@@ -788,8 +797,8 @@
         "type": "surface"
       },
       "extra--006--desk--0.4x1 0": {
-        "x": 2,
-        "y": 2024,
+        "x": 657,
+        "y": 2016,
         "width": 154,
         "height": 64,
         "symbolKey": "extra--006--desk--0.4x1",
@@ -797,8 +806,8 @@
         "type": "surface"
       },
       "console--031--1x1.2 0": {
-        "x": 1269,
-        "y": 1925,
+        "x": 240,
+        "y": 2024,
         "width": 128,
         "height": 153,
         "symbolKey": "console--031--1x1.2",
@@ -814,18 +823,9 @@
         "obstacleId": 0,
         "type": "surface"
       },
-      "console--018--1x1 0": {
-        "x": 2,
-        "y": 2090,
-        "width": 150,
-        "height": 150,
-        "symbolKey": "console--018--1x1",
-        "obstacleId": 0,
-        "type": "table"
-      },
       "cargo--010--2x4 3": {
-        "x": 154,
-        "y": 2090,
+        "x": 813,
+        "y": 2024,
         "width": 141,
         "height": 139,
         "symbolKey": "cargo--010--2x4",
@@ -870,7 +870,7 @@
       },
       "table--012--0.8x0.8 0": {
         "x": 1993,
-        "y": 1994,
+        "y": 1838,
         "width": 110,
         "height": 112,
         "symbolKey": "table--012--0.8x0.8",
@@ -887,8 +887,8 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 4": {
-        "x": 297,
-        "y": 2108,
+        "x": 1993,
+        "y": 1952,
         "width": 110,
         "height": 109,
         "symbolKey": "cargo--010--2x4",
@@ -896,8 +896,8 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 0": {
-        "x": 409,
-        "y": 2108,
+        "x": 956,
+        "y": 2063,
         "width": 78,
         "height": 105,
         "symbolKey": "cargo--010--2x4",
@@ -905,8 +905,8 @@
         "type": "obstacle"
       },
       "extra--007--desk--0.4x0.66 0": {
-        "x": 158,
-        "y": 2024,
+        "x": 1484,
+        "y": 1960,
         "width": 104,
         "height": 64,
         "symbolKey": "extra--007--desk--0.4x0.66",
@@ -914,8 +914,8 @@
         "type": "surface"
       },
       "table--009--0.8x0.8 0": {
-        "x": 1484,
-        "y": 1960,
+        "x": 370,
+        "y": 2082,
         "width": 92,
         "height": 92,
         "symbolKey": "table--009--0.8x0.8",
@@ -932,8 +932,8 @@
         "type": "obstacle"
       },
       "console--033--0.4x0.6 0": {
-        "x": 297,
-        "y": 2024,
+        "x": 464,
+        "y": 2082,
         "width": 67,
         "height": 81,
         "symbolKey": "console--033--0.4x0.6",
@@ -941,8 +941,8 @@
         "type": "chair"
       },
       "extra--002--fresher--0.5x0.5 0": {
-        "x": 366,
-        "y": 2024,
+        "x": 1775,
+        "y": 1719,
         "width": 57,
         "height": 79,
         "symbolKey": "extra--002--fresher--0.5x0.5",
@@ -950,8 +950,8 @@
         "type": "obstacle"
       },
       "console--051--0.4x0.6 0": {
-        "x": 813,
-        "y": 1998,
+        "x": 533,
+        "y": 2082,
         "width": 69,
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
@@ -977,8 +977,8 @@
         "type": "obstacle"
       },
       "couch-and-chairs--006--0.4x2 0": {
-        "x": 1321,
-        "y": 1027,
+        "x": 956,
+        "y": 2026,
         "width": 56,
         "height": 33,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -986,8 +986,8 @@
         "type": "surface"
       },
       "couch-and-chairs--006--0.4x2 1": {
-        "x": 1775,
-        "y": 1719,
+        "x": 1014,
+        "y": 2026,
         "width": 56,
         "height": 34,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -1013,8 +1013,8 @@
         "type": "obstacle"
       },
       "extra--018--table-0.25x0.25 0": {
-        "x": 682,
-        "y": 261,
+        "x": 604,
+        "y": 2017,
         "width": 49,
         "height": 48,
         "symbolKey": "extra--018--table-0.25x0.25",
@@ -1022,8 +1022,8 @@
         "type": "surface"
       },
       "extra--005--chair-0.25x0.25 0": {
-        "x": 733,
-        "y": 261,
+        "x": 604,
+        "y": 2067,
         "width": 48,
         "height": 47,
         "symbolKey": "extra--005--chair-0.25x0.25",
@@ -1031,7 +1031,7 @@
         "type": "chair"
       }
     },
-    "obstaclesHeight": 2242,
+    "obstaclesHeight": 2180,
     "obstaclesWidth": 2122
   },
   "symbols": {
@@ -5495,15 +5495,17 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [0, 0],
-              [1.5, 0],
-              [1.5, 0.345],
-              [1, 0.5],
-              [0.81, 0.6258],
-              [0.5835, 0.8559],
-              [0.4657, 1.0653],
-              [0.327, 1.5],
-              [0, 1.5]
+              [-0.025, -0.02],
+              [1.52, -0.02],
+              [1.515, 0.315],
+              [1.4582, 0.404],
+              [1.03, 0.52],
+              [0.84, 0.6458],
+              [0.6135, 0.8759],
+              [0.4957, 1.0853],
+              [0.387, 1.475],
+              [0.2943, 1.52],
+              [-0.025, 1.52]
             ]
           ],
           "meta": {
@@ -5531,7 +5533,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0.707, 0.707, 0.707, -0.707, 0.5, 1.05]
+          "transform": [0.707, 0.707, -0.707, 0.707, 1.03, 0.52]
         }
       ],
       "removableDoors": [],
