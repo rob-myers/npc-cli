@@ -91,7 +91,7 @@
       "obsHashes": [-1431368045, -1535547102, 1739328801]
     },
     "couch-and-chairs--007--0.6x1.4": {
-      "outputHash": -1747745323,
+      "outputHash": -1958545361,
       "pngHash": 1789419130
     },
     "counter--007--0.4x1": {
@@ -300,7 +300,7 @@
     "office--001--2x2": {"outputHash": -4947941, "pngHash": -2056159100},
     "office--004--2x2": {"outputHash": -1064631744, "pngHash": -945108248},
     "office--006--2x2": {"outputHash": -1598070647, "pngHash": 213915332},
-    "office--020--2x3": {"outputHash": 1700953575, "pngHash": 1677157900},
+    "office--020--2x3": {"outputHash": 1801865542, "pngHash": 1677157900},
     "office--023--2x3": {"outputHash": -476701925, "pngHash": 112007124},
     "office--026--2x3": {
       "outputHash": 1243058117,
@@ -350,7 +350,7 @@
       "pngHash": -765449158,
       "obsHashes": [-635242418]
     },
-    "stateroom--012--2x2": {"outputHash": 555484505, "pngHash": 285590873},
+    "stateroom--012--2x2": {"outputHash": -277394888, "pngHash": 285590873},
     "stateroom--014--2x2": {"outputHash": -164360094, "pngHash": 810806279},
     "stateroom--018--2x3": {"outputHash": -1759605333, "pngHash": -932858017},
     "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
@@ -5894,14 +5894,14 @@
       "symbols": [
         {
           "symbolKey": "console--051--0.4x0.6",
-          "meta": {"key": "console--051--0.4x0.6"},
+          "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [-0.94, -0.342, 0.342, -0.94, 0.59, 1.03]
+          "transform": [-0.94, -0.342, 0.342, -0.94, 0.6, 1.03]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
-          "meta": {"key": "console--051--0.4x0.6"},
+          "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
           "transform": [-0.94, 0.342, -0.342, -0.94, 0.86, 1.95]
@@ -10290,7 +10290,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, -1, -1, 0, 2.25, 3.71]
+          "transform": [0, -1, -1, 0, 2.25, 3.72]
         }
       ],
       "removableDoors": [],
@@ -11525,7 +11525,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [-0.707, 0.707, -0.707, -0.707, 1.07, 2.46]
+          "transform": [-0.707, 0.707, -0.707, -0.707, 1.09, 2.45]
         }
       ],
       "removableDoors": [],
