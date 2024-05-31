@@ -98,6 +98,9 @@ export default function TestWorld(props) {
         update(); // TestNpcs
       }
     },
+    isReady() {
+      return !!(state.geomorphs) && !!(state.crowd);
+    },
     loadTiledMesh(exportedNavMesh) {
       state.nav = /** @type {NPC.TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
 
@@ -248,8 +251,9 @@ export default function TestWorld(props) {
   });
 
   React.useMemo(() => {// expose world for terminal
-    setCached(['world', props.worldKey], state);
-    return () => removeCached(['world', props.worldKey]);
+    // worldKey must not collide
+    setCached([props.worldKey], state);
+    return () => removeCached([props.worldKey]);
   }, []);
 
   React.useEffect(() => {// (re)start worker on(change) geomorphs.json
@@ -339,6 +343,7 @@ export default function TestWorld(props) {
  *
  * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmClass
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
+ * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {(agentPositions: THREE.Vector3Like[], agentTargets: (THREE.Vector3Like | null)[]) => void} setupCrowdAgents
  * @property {() => void} update

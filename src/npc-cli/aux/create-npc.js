@@ -1,6 +1,8 @@
 import * as THREE from 'three';
+import { SkeletonUtils } from 'three-stdlib';
 import { info } from '../service/generic';
-import { yAxis } from '../service/three';
+import { buildObjectLookup, yAxis } from '../service/three';
+import CharacterController from './character-controller';
 
 export class Npc {
 
@@ -11,6 +13,9 @@ export class Npc {
   /** @type {number} When we (re)spawned */ epochMs;
   
   root = emptyGroup;
+  model = /** @type {THREE.Object3D} */ (emptyGroup);
+  subModel = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
+  controller = /** @type {CharacterController} */ ({});
 
   cancelCount = 0;
   /** Is walking or running? */
@@ -63,7 +68,30 @@ export class Npc {
   getAngle() {// Assume only rotated about y axis
     return this.root.rotation.y;
   }
-  initialize() {
+  /**
+   * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
+   */
+  initialize(gltf) {
+    this.model = SkeletonUtils.clone(gltf.scene);
+
+    const mixer = new THREE.AnimationMixer(this.model);
+    const animLookup = /** @type {Record<import("./character-controller").AnimKey, THREE.AnimationAction>} */ ({});
+    gltf.animations.forEach(a => {
+      // info('saw animation:', a.name);
+      if (a.name === 'Idle' || a.name === 'Walk' || a.name === 'Run') {
+        animLookup[a.name] = mixer.clipAction(a);
+      }
+    });
+
+    this.controller = new CharacterController({
+      model: /** @type {THREE.Group} */ (this.model),
+      mixer,
+      animationMap: animLookup,
+      opts: { initAnimKey: 'Idle', walkSpeed: this.def.walkSpeed, runSpeed: this.def.runSpeed, },
+    });
+
+    this.subModel = buildObjectLookup(this.model);
+    
     this.root.position.set(this.def.position.x, 0, this.def.position.y);
     this.root.setRotationFromAxisAngle(yAxis, this.def.angle);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
@@ -73,6 +101,17 @@ export class Npc {
     // 🚧
   }
   
+}
+
+/**
+ * Mutates provided @see npc
+ * @param {NPC.NPC} npc 
+ * @returns {NPC.NPC}
+ */
+export function hotModuleReloadNpc(npc) {
+  const { def, epochMs, controller, isMoving, model, paused, rejectWalk, root, spawned, subModel } = npc;
+  // return Object.assign(npc, new Npc(def, npc.api), { epochMs, controller, isMoving, model, paused, rejectWalk, root, spawned, subModel });
+  return Object.assign(new Npc(def, npc.api), { epochMs, controller, isMoving, model, paused, rejectWalk, root, spawned, subModel });
 }
 
 const emptyGroup = new THREE.Group();
