@@ -39,14 +39,14 @@
   </image>
   <g>
     <title>symbols</title>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.9396930933, -0.342020124197, 0.342020124197, -0.9396930933, -0.022895982489, 34.092727661133)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
-      <title>console--051--0.4x0.6 y=0.4</title>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.9396931529045105, -0.3420201241970062, 0.3420201241970062, -0.9396931529045105, -0.02289598248898983, 34.09272766113281)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+      <title>console--051--0.4x0.6 y=0.3</title>
     </use>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.939693212509, 0.34202054143, -0.34202054143, -0.939693212509, -0.037606403232, 269.961059570313)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
-      <title>console--051--0.4x0.6 y=0.4</title>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.9396932125091553, 0.34202054142951965, -0.34202054142951965, -0.9396932125091553, -0.03760640323162079, 269.9610595703125)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+      <title>console--051--0.4x0.6 y=0.3</title>
     </use>
     <use width="75" height="75" transform="matrix(1, 0, 0, 1, -2.5, 187.5)" xlink:href="#symbol-0">
-      <title>extra--018--table-0.25x0.25 y=-0.1</title>
+      <title>extra--018--table-0.25x0.25</title>
     </use>
   </g>
 </svg>

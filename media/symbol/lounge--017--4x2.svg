@@ -56,8 +56,8 @@
     <rect width="300" height="300" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-2'); transform-origin: 450px 450px;" y="300" x="300.000031">
       <title>table--009--0.8x0.8</title>
     </rect>
-    <use width="150" height="450" transform="matrix(1, 0, 0, 1, 44.310417175293, 71.27685546875)" style="" xlink:href="#symbol-0">
-      <title>couch-and-chairs--007--0.6x1.4 y=0.3</title>
+    <use width="150" height="450" transform="matrix(1, 0, 0, 1, 44.31041717529297, 71.27685546875)" style="" xlink:href="#symbol-0">
+      <title>couch-and-chairs--007--0.6x1.4 y=0.2</title>
     </use>
   </g>
 </svg>

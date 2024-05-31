@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 645373168 -119385858",
+  "hash": "610044716 764915942 -119385858",
   "mapsHash": 610044716,
-  "layoutsHash": 645373168,
+  "layoutsHash": 764915942,
   "sheetsHash": -119385858,
   "map": {
     "demo-map-1": {
@@ -2153,7 +2153,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2171,7 +2171,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2189,7 +2189,7 @@
         {
           "symbolKey": "extra--018--table-0.25x0.25",
           "obstacleId": 0,
-          "height": 0.19999999999999998,
+          "height": 0.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2320,7 +2320,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2338,7 +2338,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2356,7 +2356,7 @@
         {
           "symbolKey": "extra--018--table-0.25x0.25",
           "obstacleId": 0,
-          "height": 0.19999999999999998,
+          "height": 0.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2487,7 +2487,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2505,7 +2505,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -2523,7 +2523,7 @@
         {
           "symbolKey": "extra--018--table-0.25x0.25",
           "obstacleId": 0,
-          "height": 0.19999999999999998,
+          "height": 0.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -11368,7 +11368,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -11386,7 +11386,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -11404,7 +11404,7 @@
         {
           "symbolKey": "extra--018--table-0.25x0.25",
           "obstacleId": 0,
-          "height": 0.19999999999999998,
+          "height": 0.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -20703,7 +20703,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -20721,7 +20721,7 @@
         {
           "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.7,
+          "height": 0.5,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -20739,7 +20739,7 @@
         {
           "symbolKey": "extra--018--table-0.25x0.25",
           "obstacleId": 0,
-          "height": 0.19999999999999998,
+          "height": 0.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
