@@ -250,8 +250,7 @@ export default function TestWorld(props) {
     // throwOnError: true, // breaks on restart dev env
   });
 
-  React.useMemo(() => {// expose world for terminal
-    // worldKey must not collide
+  React.useEffect(() => {// expose world for terminal
     setCached([props.worldKey], state);
     return () => removeCached([props.worldKey]);
   }, []);

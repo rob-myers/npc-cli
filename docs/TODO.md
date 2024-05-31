@@ -24,6 +24,8 @@
   - ❌ `<NPC>` exists and can show unanimated character
     - no hooks inside `<NPC>`
   - ✅ can connect terminal to world via `awaitWorld`
+  - ℹ️ `api npc` takes non-trivial time to be non-null
+    - can test `awaitWorld` or `api isReady` first
   - 🚧 can spawn un-animated character via terminal
   - api.npc.npc drives character render
   - api.npc.npc drives agents
