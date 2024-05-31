@@ -69,7 +69,7 @@
       "pngHash": -752773709,
       "obsHashes": [507909580]
     },
-    "console--022--1x2": {"outputHash": 2062809955, "pngHash": 1893433691},
+    "console--022--1x2": {"outputHash": -494656185, "pngHash": 1893433691},
     "console--031--1x1.2": {
       "outputHash": -1239191138,
       "pngHash": -248095598,
@@ -86,9 +86,9 @@
       "obsHashes": [-1301201378]
     },
     "couch-and-chairs--006--0.4x2": {
-      "outputHash": -1912109320,
+      "outputHash": -228813616,
       "pngHash": 1327581609,
-      "obsHashes": [772668801, -612861966, -2054097695]
+      "obsHashes": [-1431368045, -1535547102, 1739328801]
     },
     "couch-and-chairs--007--0.6x1.4": {
       "outputHash": -1747745323,
@@ -971,24 +971,6 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "couch-and-chairs--006--0.4x2 0": {
-        "x": 1775,
-        "y": 1719,
-        "width": 62,
-        "height": 33,
-        "symbolKey": "couch-and-chairs--006--0.4x2",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "couch-and-chairs--006--0.4x2 1": {
-        "x": 1775,
-        "y": 1754,
-        "width": 62,
-        "height": 34,
-        "symbolKey": "couch-and-chairs--006--0.4x2",
-        "obstacleId": 1,
-        "type": "surface"
-      },
       "counter--010--0.4x0.4 0": {
         "x": 623,
         "y": 261,
@@ -997,6 +979,24 @@
         "symbolKey": "counter--010--0.4x0.4",
         "obstacleId": 0,
         "type": "obstacle"
+      },
+      "couch-and-chairs--006--0.4x2 0": {
+        "x": 1321,
+        "y": 1027,
+        "width": 56,
+        "height": 33,
+        "symbolKey": "couch-and-chairs--006--0.4x2",
+        "obstacleId": 0,
+        "type": "surface"
+      },
+      "couch-and-chairs--006--0.4x2 1": {
+        "x": 1775,
+        "y": 1719,
+        "width": 56,
+        "height": 34,
+        "symbolKey": "couch-and-chairs--006--0.4x2",
+        "obstacleId": 1,
+        "type": "surface"
       },
       "counter--009--0.4x0.4 0": {
         "x": 2067,
@@ -5621,9 +5621,9 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "meta": {"key": "extra--019--table-0.5x2", "y": 0.2},
-          "width": 0.77,
+          "width": 0.75,
           "height": 3,
-          "transform": [1, 0, 0, 1, 0, 0]
+          "transform": [0.973, 0, 0, 1, 0, 0]
         }
       ],
       "removableDoors": [],
@@ -5787,7 +5787,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.61, 0.075], [0.61, 0.4099], [-0.01, 0.4099], [-0.01, 0.075]]
+            [[0.653, 0.075], [0.653, 0.4099], [0.093, 0.4099], [0.093, 0.075]]
           ],
           "meta": {
             "obstacle": true,
@@ -5801,7 +5801,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.61, 2.6066], [0.61, 2.95], [-0.01, 2.95], [-0.01, 2.6066]]
+            [[0.653, 2.6066], [0.653, 2.95], [0.093, 2.95], [0.093, 2.6066]]
           ],
           "meta": {
             "obstacle": true,
@@ -5815,7 +5815,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.6437, 0.475], [0.6437, 2.55], [-0.04, 2.55], [-0.04, 0.475]]
+            [[0.7167, 0.475], [0.7167, 2.55], [0.033, 2.55], [0.033, 0.475]]
           ],
           "meta": {
             "obstacle": true,
@@ -5833,7 +5833,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.2245, 0.9], [0.2245, 0.95], [0.1745, 0.95], [0.1745, 0.9]]
+            [[0.2975, 0.9], [0.2975, 0.95], [0.2475, 0.95], [0.2475, 0.9]]
           ],
           "meta": {
             "decor": true,
@@ -5846,7 +5846,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.2245, 1.475], [0.2245, 1.525], [0.1745, 1.525], [0.1745, 1.475]]
+            [[0.2975, 1.475], [0.2975, 1.525], [0.2475, 1.525], [0.2475, 1.475]]
           ],
           "meta": {
             "decor": true,
@@ -5859,7 +5859,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[0.2245, 2.075], [0.2245, 2.125], [0.1745, 2.125], [0.1745, 2.075]]
+            [[0.2975, 2.075], [0.2975, 2.125], [0.2475, 2.125], [0.2475, 2.075]]
           ],
           "meta": {
             "decor": true,
@@ -5871,9 +5871,9 @@
         }
       ],
       "unsorted": [],
-      "width": 0.6,
+      "width": 0.75,
       "height": 3,
-      "pngRect": {"x": -0.0405, "y": 0.0703, "width": 0.685, "height": 2.875},
+      "pngRect": {"x": 0.0325, "y": 0.0703, "width": 0.685, "height": 2.875},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []
