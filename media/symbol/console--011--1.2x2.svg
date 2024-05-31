@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+    <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+      <title>symbol-rect-pattern</title>
+      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+      </g>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </pattern>
+    <pattern id="pattern-2" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0"/>
+    <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-2"/>
+    <symbol id="symbol-0" vioewbox="0 0 150 150" viewBox="0 0 150 150" bx:pinned="true">
+      <title>console--051--0.4x0.6</title>
+      <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2-0'); transform-origin: 75.005px 75.0023px;" y="0" x="0">
+        <title>console--051--0.4x0.6 y=0.4</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-1" viewBox="0 0 150 600" bx:pinned="true">
+      <title>extra--019--table-0.5x2</title>
+      <rect width="150" height="600" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 77.1053px 300.012px;">
+        <title>extra--019--table-0.5x2</title>
+      </rect>
+    </symbol>
+  </defs>
+  <image width="307" height="607" x="-3.5" y="-3.5" style="pointer-events: none;" xlink:href="data:image/png;base64,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MwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyIyAzAjIjIDMCMiMgMwIyI/B2/nE9ej38SqYZAZkRkBkBmT3LZewGMiPw55w8Hb2MH8Yk2+h/OpBe7SyN+9AAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjEtMDktMTJUMjA6NDE6MTArMDA6MDC3Lq1AAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIxLTA5LTEyVDIwOjQxOjEwKzAwOjAwxnMV/AAAAABJRU5ErkJggg==">
+    <title>console--022--1x2</title>
+  </image>
+  <g>
+    <title>symbols</title>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 158.9936065673828, 224.9935760498047)" xlink:href="#symbol-0">
+      <title>console--051--0.4x0.6 y=0</title>
+    </use>
+    <use width="150" height="600" transform="matrix(0.972762823105, 0, 0, 1, -5.3699e-8, 5.13e-8)" xlink:href="#symbol-1">
+      <title>extra--019--table-0.5x2 y=0.2</title>
+    </use>
+  </g>
+</svg>
