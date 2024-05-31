@@ -64,9 +64,9 @@
       </defs>
     </symbol>
     <symbol id="symbol-5" viewBox="0 0 60 60" bx:pinned="true">
-      <title>low-berth--003--1x1 y=0.7</title>
-      <rect width="60" height="60" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0-0'); transform-origin: 29.9948px 30.001px;" y="-0.000004">
-        <title>low-berth--003--1x1 y=0.7</title>
+      <title>low-berth--003--1x1</title>
+      <rect width="60" height="60" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0-0'); transform-origin: 29.9948px 30.001px;">
+        <title>low-berth--003--1x1</title>
       </rect>
       <defs>
         <bx:grid x="0" y="0" width="60" height="60"/>
@@ -82,9 +82,9 @@
       </defs>
     </symbol>
     <symbol id="symbol-7" viewBox="0 0 120 30">
-      <title>extra--017--table--2x0.5 y=0.8</title>
+      <title>extra--017--table--2x0.5</title>
       <rect width="120" height="30" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); vector-effect: non-scaling-stroke; stroke-width: 4px;">
-        <title>extra--017--table--2x0.5 y=0.8</title>
+        <title>extra--017--table--2x0.5</title>
       </rect>
       <defs>
         <bx:grid x="0" y="0" width="60" height="60"/>
@@ -117,10 +117,10 @@
     <use width="120" height="180" transform="matrix(1, 0, 0, 1, 480, 2.5079998078325616e-9)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="120" height="180" transform="matrix(1, 0, 0, 1, 240, -0.000005207662979955785)" xlink:href="#symbol-2">
+    <use width="120" height="180" transform="matrix(1, 0, 0, 1, 240, -0.000005207663434703136)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="96" height="240" transform="matrix(1, 0, 0, 1, -0.0000010000002248489182, 0)" xlink:href="#symbol-1">
+    <use width="96" height="240" transform="matrix(1, 0, 0, 1, -0.0000010000003385357559, 0)" xlink:href="#symbol-1">
       <title>medical-bed--006--1.6x3.6</title>
     </use>
     <use width="239.99949645996094" height="240.00010681152344" transform="matrix(0, -1, 1, 0, 960.00048828125, 362.10595703125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-6">
@@ -150,10 +150,10 @@
     <use width="15" height="15" transform="matrix(1, 0, 0, 1, 1180, 200.04234313964844)" xlink:href="#symbol-0">
       <title>extra--005--chair-0.25x0.25 y=0.3</title>
     </use>
-    <use width="60" height="60" transform="matrix(0, 1, -1, 0, 180, -4.740980159567698e-7)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-5">
+    <use width="60" height="60" transform="matrix(0, 1, -1, 0, 180, 0)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-5">
       <title>low-berth--003--1x1 y=0.7</title>
     </use>
-    <use width="120" height="30" style="transform-origin: 300px 75px;" transform="matrix(0, -1, 1, 0, 147.899993896484, -15)" xlink:href="#symbol-7">
+    <use width="120" height="30" style="transform-origin: 300px 75px;" transform="matrix(0, -1, 1, 0, 147.89999389648438, -15)" xlink:href="#symbol-7">
       <title>extra--017--table--2x0.5 y=0.8</title>
     </use>
   </g>

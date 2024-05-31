@@ -244,9 +244,9 @@
     "lounge--015--4x2": {"outputHash": 1553832837, "pngHash": 222627377},
     "lounge--017--4x2": {"outputHash": 293410078, "pngHash": -236167751},
     "low-berth--003--1x1": {
-      "outputHash": -1121463162,
+      "outputHash": -1558045817,
       "pngHash": 177413432,
-      "obsHashes": [-1127406139]
+      "obsHashes": [-774891758]
     },
     "machinery--155--1.8x3.6": {
       "outputHash": 350114992,
@@ -269,11 +269,7 @@
       "obsHashes": [-542530486]
     },
     "medical--007--3x2": {"outputHash": -1524356726, "pngHash": -74184864},
-    "medical--008--3x2": {
-      "outputHash": 1635101502,
-      "pngHash": -1263266565,
-      "obsHashes": [-247635750]
-    },
+    "medical--008--3x2": {"outputHash": -842719016, "pngHash": -1263266565},
     "medical-bed--005--0.6x1.2": {
       "outputHash": -1212950330,
       "pngHash": -172295595,
@@ -634,18 +630,9 @@
         "obstacleId": 0,
         "type": "surface"
       },
-      "medical--008--3x2 0": {
-        "x": 1889,
-        "y": 382,
-        "width": 176,
-        "height": 300,
-        "symbolKey": "medical--008--3x2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
       "office--026--2x3 0": {
-        "x": 1872,
-        "y": 684,
+        "x": 1705,
+        "y": 1656,
         "width": 106,
         "height": 300,
         "symbolKey": "office--026--2x3",
@@ -662,8 +649,8 @@
         "type": "obstacle"
       },
       "bridge--042--8x9 0": {
-        "x": 1814,
-        "y": 1375,
+        "x": 1858,
+        "y": 462,
         "width": 258,
         "height": 240,
         "symbolKey": "bridge--042--8x9",
@@ -671,8 +658,8 @@
         "type": "obstacle"
       },
       "shop--033--0.6x1.6 0": {
-        "x": 604,
-        "y": 1648,
+        "x": 1858,
+        "y": 704,
         "width": 254,
         "height": 98,
         "symbolKey": "shop--033--0.6x1.6",
@@ -680,8 +667,8 @@
         "type": "obstacle"
       },
       "extra--010--machine--2x1 0": {
-        "x": 1814,
-        "y": 1617,
+        "x": 1858,
+        "y": 804,
         "width": 250,
         "height": 100,
         "symbolKey": "extra--010--machine--2x1",
@@ -698,8 +685,8 @@
         "type": "obstacle"
       },
       "shop--028--1.6x0.8 0": {
-        "x": 1841,
-        "y": 1719,
+        "x": 604,
+        "y": 1648,
         "width": 242,
         "height": 117,
         "symbolKey": "shop--028--1.6x0.8",
@@ -708,7 +695,7 @@
       },
       "extra--013--privacy-screen--1.5x0.2 0": {
         "x": 657,
-        "y": 1748,
+        "y": 1767,
         "width": 225,
         "height": 30,
         "symbolKey": "extra--013--privacy-screen--1.5x0.2",
@@ -716,8 +703,8 @@
         "type": "obstacle"
       },
       "couch-and-chairs--006--0.4x2 2": {
-        "x": 1705,
-        "y": 1719,
+        "x": 657,
+        "y": 1799,
         "width": 68,
         "height": 207,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -725,8 +712,8 @@
         "type": "obstacle"
       },
       "extra--008--desk--0.4x1.33 0": {
-        "x": 657,
-        "y": 1780,
+        "x": 1812,
+        "y": 1375,
         "width": 204,
         "height": 64,
         "symbolKey": "extra--008--desk--0.4x1.33",
@@ -752,17 +739,17 @@
         "type": "obstacle"
       },
       "low-berth--003--1x1 0": {
-        "x": 1841,
-        "y": 1838,
-        "width": 150,
-        "height": 177,
+        "x": 727,
+        "y": 1799,
+        "width": 154,
+        "height": 179,
         "symbolKey": "low-berth--003--1x1",
         "obstacleId": 0,
         "type": "obstacle"
       },
       "cargo--010--2x4 1": {
-        "x": 657,
-        "y": 1846,
+        "x": 1841,
+        "y": 1441,
         "width": 164,
         "height": 102,
         "symbolKey": "cargo--010--2x4",
@@ -770,8 +757,8 @@
         "type": "obstacle"
       },
       "console--018--1x1 0": {
-        "x": 2,
-        "y": 2024,
+        "x": 1841,
+        "y": 1545,
         "width": 155,
         "height": 154,
         "symbolKey": "console--018--1x1",
@@ -779,8 +766,8 @@
         "type": "table"
       },
       "counter--007--0.4x1 0": {
-        "x": 657,
-        "y": 1950,
+        "x": 1889,
+        "y": 382,
         "width": 154,
         "height": 64,
         "symbolKey": "counter--007--0.4x1",
@@ -788,8 +775,8 @@
         "type": "surface"
       },
       "extra--004--desk--0.5x1 0": {
-        "x": 159,
-        "y": 2024,
+        "x": 2018,
+        "y": 1375,
         "width": 79,
         "height": 154,
         "symbolKey": "extra--004--desk--0.5x1",
@@ -797,8 +784,8 @@
         "type": "surface"
       },
       "extra--006--desk--0.4x1 0": {
-        "x": 657,
-        "y": 2016,
+        "x": 1872,
+        "y": 906,
         "width": 154,
         "height": 64,
         "symbolKey": "extra--006--desk--0.4x1",
@@ -806,8 +793,8 @@
         "type": "surface"
       },
       "console--031--1x1.2 0": {
-        "x": 240,
-        "y": 2024,
+        "x": 1813,
+        "y": 1701,
         "width": 128,
         "height": 153,
         "symbolKey": "console--031--1x1.2",
@@ -815,8 +802,8 @@
         "type": "surface"
       },
       "bed--003--1x1.6 0": {
-        "x": 823,
-        "y": 1846,
+        "x": 1321,
+        "y": 914,
         "width": 60,
         "height": 150,
         "symbolKey": "bed--003--1x1.6",
@@ -824,8 +811,8 @@
         "type": "surface"
       },
       "cargo--010--2x4 3": {
-        "x": 813,
-        "y": 2024,
+        "x": 1841,
+        "y": 1856,
         "width": 141,
         "height": 139,
         "symbolKey": "cargo--010--2x4",
@@ -833,8 +820,8 @@
         "type": "obstacle"
       },
       "shop--031--0.4x0.8 0": {
-        "x": 1980,
-        "y": 684,
+        "x": 1984,
+        "y": 1701,
         "width": 135,
         "height": 75,
         "symbolKey": "shop--031--0.4x0.8",
@@ -842,8 +829,8 @@
         "type": "obstacle"
       },
       "shop--035--0.4x0.8 0": {
-        "x": 1980,
-        "y": 761,
+        "x": 1943,
+        "y": 1778,
         "width": 135,
         "height": 75,
         "symbolKey": "shop--035--0.4x0.8",
@@ -851,8 +838,8 @@
         "type": "obstacle"
       },
       "shop--037--0.4x0.8 0": {
-        "x": 1980,
-        "y": 838,
+        "x": 1984,
+        "y": 1855,
         "width": 135,
         "height": 75,
         "symbolKey": "shop--037--0.4x0.8",
@@ -869,8 +856,8 @@
         "type": "table"
       },
       "table--012--0.8x0.8 0": {
-        "x": 1993,
-        "y": 1838,
+        "x": 2007,
+        "y": 1531,
         "width": 110,
         "height": 112,
         "symbolKey": "table--012--0.8x0.8",
@@ -878,8 +865,8 @@
         "type": "table"
       },
       "cargo--010--2x4 2": {
-        "x": 1321,
-        "y": 914,
+        "x": 2,
+        "y": 2024,
         "width": 90,
         "height": 111,
         "symbolKey": "cargo--010--2x4",
@@ -887,8 +874,8 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 4": {
-        "x": 1993,
-        "y": 1952,
+        "x": 94,
+        "y": 2024,
         "width": 110,
         "height": 109,
         "symbolKey": "cargo--010--2x4",
@@ -896,8 +883,8 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 0": {
-        "x": 956,
-        "y": 2063,
+        "x": 206,
+        "y": 2024,
         "width": 78,
         "height": 105,
         "symbolKey": "cargo--010--2x4",
@@ -914,8 +901,8 @@
         "type": "surface"
       },
       "table--009--0.8x0.8 0": {
-        "x": 370,
-        "y": 2082,
+        "x": 286,
+        "y": 2026,
         "width": 92,
         "height": 92,
         "symbolKey": "table--009--0.8x0.8",
@@ -923,8 +910,8 @@
         "type": "table"
       },
       "fresher--002--0.4x0.6 0": {
-        "x": 2067,
-        "y": 382,
+        "x": 380,
+        "y": 2026,
         "width": 53,
         "height": 90,
         "symbolKey": "fresher--002--0.4x0.6",
@@ -932,8 +919,8 @@
         "type": "obstacle"
       },
       "console--033--0.4x0.6 0": {
-        "x": 464,
-        "y": 2082,
+        "x": 2028,
+        "y": 906,
         "width": 67,
         "height": 81,
         "symbolKey": "console--033--0.4x0.6",
@@ -941,8 +928,8 @@
         "type": "chair"
       },
       "extra--002--fresher--0.5x0.5 0": {
-        "x": 1775,
-        "y": 1719,
+        "x": 435,
+        "y": 2026,
         "width": 57,
         "height": 79,
         "symbolKey": "extra--002--fresher--0.5x0.5",
@@ -950,8 +937,8 @@
         "type": "obstacle"
       },
       "console--051--0.4x0.6 0": {
-        "x": 533,
-        "y": 2082,
+        "x": 2045,
+        "y": 382,
         "width": 69,
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
@@ -959,8 +946,8 @@
         "type": "obstacle"
       },
       "extra--001--fresher--0.5x0.5 0": {
-        "x": 1705,
-        "y": 1656,
+        "x": 494,
+        "y": 2026,
         "width": 69,
         "height": 59,
         "symbolKey": "extra--001--fresher--0.5x0.5",
@@ -968,8 +955,8 @@
         "type": "obstacle"
       },
       "counter--010--0.4x0.4 0": {
-        "x": 623,
-        "y": 261,
+        "x": 494,
+        "y": 2087,
         "width": 57,
         "height": 48,
         "symbolKey": "counter--010--0.4x0.4",
@@ -977,8 +964,8 @@
         "type": "obstacle"
       },
       "couch-and-chairs--006--0.4x2 0": {
-        "x": 956,
-        "y": 2026,
+        "x": 1345,
+        "y": 418,
         "width": 56,
         "height": 33,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -986,8 +973,8 @@
         "type": "surface"
       },
       "couch-and-chairs--006--0.4x2 1": {
-        "x": 1014,
-        "y": 2026,
+        "x": 553,
+        "y": 2087,
         "width": 56,
         "height": 34,
         "symbolKey": "couch-and-chairs--006--0.4x2",
@@ -995,8 +982,8 @@
         "type": "surface"
       },
       "counter--009--0.4x0.4 0": {
-        "x": 2067,
-        "y": 474,
+        "x": 1998,
+        "y": 1645,
         "width": 52,
         "height": 54,
         "symbolKey": "counter--009--0.4x0.4",
@@ -1013,8 +1000,8 @@
         "type": "obstacle"
       },
       "extra--018--table-0.25x0.25 0": {
-        "x": 604,
-        "y": 2017,
+        "x": 623,
+        "y": 261,
         "width": 49,
         "height": 48,
         "symbolKey": "extra--018--table-0.25x0.25",
@@ -1022,8 +1009,8 @@
         "type": "surface"
       },
       "extra--005--chair-0.25x0.25 0": {
-        "x": 604,
-        "y": 2067,
+        "x": 674,
+        "y": 261,
         "width": 48,
         "height": 47,
         "symbolKey": "extra--005--chair-0.25x0.25",
@@ -1031,7 +1018,7 @@
         "type": "chair"
       }
     },
-    "obstaclesHeight": 2180,
+    "obstaclesHeight": 2137,
     "obstaclesWidth": 2122
   },
   "symbols": {
@@ -8848,15 +8835,17 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [-0.0026, 0],
-              [1.4908, 0],
-              [1.4998, 1.4998],
-              [1.0917, 1.4998],
-              [0.9612, 1.6865],
-              [0.7399, 1.765],
-              [0.4962, 1.6592],
-              [0.4117, 1.5],
-              [0.0065, 1.4998]
+              [-0.0226, -0.01],
+              [1.5107, -0.01],
+              [1.52, 1.5248],
+              [1.0919, 1.5248],
+              [0.9911, 1.6615],
+              [0.8645, 1.7459],
+              [0.75, 1.775],
+              [0.6106, 1.7338],
+              [0.4911, 1.6442],
+              [0.4068, 1.525],
+              [-0.0133, 1.5248]
             ]
           ],
           "meta": {
@@ -9199,19 +9188,7 @@
       "key": "medical--008--3x2",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [
-        {
-          "type": "Polygon",
-          "coordinates": [[[4.5, 0], [4.5, 3], [2.7404, 3], [2.7404, 0]]],
-          "meta": {
-            "obstacle": true,
-            "y": 0.5,
-            "symId": 55,
-            "symKey": "medical--008--3x2",
-            "obsId": 0
-          }
-        }
-      ],
+      "obstacles": [],
       "walls": [
         {
           "type": "Polygon",
@@ -9273,6 +9250,20 @@
           "width": 1.5,
           "height": 1.5,
           "transform": [1, 0, 0, -1, 0, 3]
+        },
+        {
+          "symbolKey": "low-berth--003--1x1",
+          "meta": {"key": "low-berth--003--1x1", "y": 0.7},
+          "width": 1.5,
+          "height": 1.5,
+          "transform": [0, 1, -1, 0, 4.55, 0]
+        },
+        {
+          "symbolKey": "low-berth--003--1x1",
+          "meta": {"key": "low-berth--003--1x1", "y": 0.7},
+          "width": 1.5,
+          "height": 1.5,
+          "transform": [0, 1, -1, 0, 4.55, 1.5]
         }
       ],
       "removableDoors": [
