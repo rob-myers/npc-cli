@@ -105,9 +105,9 @@
       "obsHashes": [1358832895]
     },
     "counter--010--0.4x0.4": {
-      "outputHash": -1491221445,
+      "outputHash": 1281964066,
       "pngHash": 768005647,
-      "obsHashes": [1323430965]
+      "obsHashes": [-113201513]
     },
     "empty-room--013--2x3": {"outputHash": 343783735, "pngHash": 1809716270},
     "empty-room--019--2x4": {"outputHash": 930728337, "pngHash": -192199909},
@@ -954,15 +954,6 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "counter--010--0.4x0.4 0": {
-        "x": 494,
-        "y": 2087,
-        "width": 57,
-        "height": 48,
-        "symbolKey": "counter--010--0.4x0.4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
       "couch-and-chairs--006--0.4x2 0": {
         "x": 1345,
         "y": 418,
@@ -973,7 +964,7 @@
         "type": "surface"
       },
       "couch-and-chairs--006--0.4x2 1": {
-        "x": 553,
+        "x": 494,
         "y": 2087,
         "width": 56,
         "height": 34,
@@ -996,6 +987,15 @@
         "width": 49,
         "height": 52,
         "symbolKey": "extra--003--chair--0.25x0.25",
+        "obstacleId": 0,
+        "type": "obstacle"
+      },
+      "counter--010--0.4x0.4 0": {
+        "x": 552,
+        "y": 2087,
+        "width": 51,
+        "height": 47,
+        "symbolKey": "counter--010--0.4x0.4",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -5973,14 +5973,15 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [0.0892, 0],
-              [0.6607, 0],
-              [0.65, 0.2875],
-              [0.6012, 0.3995],
-              [0.5168, 0.454],
-              [0.3743, 0.4842],
-              [0.1952, 0.4435],
-              [0.0892, 0.3038]
+              [0.1192, 0],
+              [0.625, 0],
+              [0.625, 0.2855],
+              [0.6032, 0.3627],
+              [0.5179, 0.4346],
+              [0.3744, 0.474],
+              [0.261, 0.4496],
+              [0.1678, 0.3801],
+              [0.1192, 0.3005]
             ]
           ],
           "meta": {
