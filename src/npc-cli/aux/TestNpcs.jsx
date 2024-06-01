@@ -83,6 +83,7 @@ export default function TestNpcs(props) {
       npc.flag.spawns++;
       api.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
+      return npc;
     },
 
     // 🚧 old below
@@ -175,9 +176,15 @@ export default function TestNpcs(props) {
     const filter = api.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
     polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
+    api.debug.selectNavPolys(polyRefs); // display via debug
 
-    // display via debug
-    api.debug.selectNavPolys(polyRefs);
+    // 🚧 ensure demo npcs
+    [
+      { npcKey: 'rob', point: { x: 1 * 1.5, y: 5 * 1.5 } },
+      { npcKey: 'kate', point: { x: 5 * 1.5, y: 7 * 1.5 } },
+    ].forEach(({ npcKey, point }) =>
+      !state.npc[npcKey] && state.spawn({ npcKey, point }).then(npc => npc.attachAgent())
+    );
 
     api.update(); // Trigger ticker
     return () => void (obstacle && state.removeObstacle(obstacle.id));
@@ -252,7 +259,7 @@ export default function TestNpcs(props) {
  * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
  * @property {() => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
- * @property {(e: NPC.SpawnOpts) => Promise<void>} spawn
+ * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {(agentId: number) => void} updateAgentColor
  * @property {() => void} updateTileCache
  */

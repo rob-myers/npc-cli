@@ -41,6 +41,7 @@ export class Npc {
   }
   /** @param {Record<string, any>} userData */
   attachAgent(userData = {}) {
+    userData.npcKey = this.key;
     this.agent ??= this.api.crowd.addAgent(this.group.position, {
       radius: glbMeta.radius,
       height: 1.5,
