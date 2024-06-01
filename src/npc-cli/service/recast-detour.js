@@ -4,6 +4,35 @@ import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
 /**
+ * @param {import("@recast-navigation/core").Crowd} crowd
+ * @returns {{ [agentKey: string]: { agentKey: string; position: THREE.Vector3Like; target: THREE.Vector3Like | null } }}
+ * Returns positions and targets of disposed crowd.
+ */
+export function disposeCrowd(crowd) {
+  const output = /** @type {ReturnType<typeof disposeCrowd>} */ ({});
+  crowd.getAgents().forEach((agent) => {
+    const agentKey = getAgentKey(agent);
+    output[agentKey] = { agentKey, position: agent.position(), target: getAgentTarget(agent) };
+    crowd.removeAgent(agent);
+  });
+  crowd.destroy();
+  return output;
+}
+
+/**
+ * @param {import("@recast-navigation/core").CrowdAgent} agent
+ * `agent.userData.key` with fallback `${agent.agentId}`.
+ */
+export function getAgentKey(agent) {
+  return /** @type {*} */ (agent.userData || emptyUserData).key ?? `${agent.agentIndex}`;
+}
+
+/** @param {import("@recast-navigation/core").CrowdAgent} agent  */
+export function getAgentTarget(agent) {
+  return agent.corners().length > 0 ? agent.nextTargetPath() : null;
+}
+
+/**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
  */
 export function getTileCacheMeshProcess() {
@@ -548,6 +577,8 @@ export function customGenerateTileCache(
   };
 
 }
+
+const emptyUserData = {};
 
 /**
  * @typedef {import("@recast-navigation/generators").TileCacheGeneratorConfig} TileCacheGeneratorConfig

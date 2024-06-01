@@ -26,6 +26,13 @@ declare namespace NPC {
     requireNav?: boolean;
   }
 
+  interface BasicAgentMeta {
+    /** `agent.userData.key` falling back to `${agent.agentId}` */
+    agentKey: string;
+    position: THREE.Vector3Like;
+    target: THREE.Vector3Like | null;
+  }
+
   // 🚧 WIP
   type AnimKey = 'Idle' | 'Walk' | 'Run';
 

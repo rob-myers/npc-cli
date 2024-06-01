@@ -14,7 +14,7 @@ import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, textureLoader, tmpBufferGeom1, tmpVectThree1 } from "../service/three";
-import { getTileCacheMeshProcess } from "../service/recast-detour";
+import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { TestWorldContext } from "./test-world-context";
 import useUpdate from "../hooks/use-update";
@@ -99,27 +99,18 @@ export default function TestWorld(props) {
       }
     },
     isReady() {
-      return !!(state.geomorphs) && !!(state.crowd);
+      return state.geomorphs !== null && state.crowd !== null;
     },
     loadTiledMesh(exportedNavMesh) {
       state.nav = /** @type {NPC.TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
 
-      // remember agent positions
-      const positions = /** @type {THREE.Vector3Like[]} */ ([]);
-      const targets = /** @type {(null | THREE.Vector3Like)[]} */ ([]);
-
-      if (state.crowd) {// cleanup
-        state.crowd.getAgents().forEach((agent) => {
-          positions.push(agent.position());
-          targets.push(agent.corners().length ? {
-            x: agent.raw.get_targetPos(0),
-            y: agent.raw.get_targetPos(1),
-            z: agent.raw.get_targetPos(2),
-          } : null);
-          state.crowd.removeAgent(agent);
-        });
-        state.crowd.destroy();
-      }
+      /** @type {{ [agentKey: string]: NPC.BasicAgentMeta }} */
+      const agentsMeta = state.crowd
+        ? disposeCrowd(state.crowd) // previous meta
+        : {
+          0: { agentKey: '0', position: { x: 1 * 1.5, y: 0, z: 5 * 1.5 }, target: null },
+          1: { agentKey: '1', position: { x: 5 * 1.5, y: 0, z: 7 * 1.5 }, target: null },
+        };
 
       state.crowd = new Crowd({
         maxAgents: 10,
@@ -129,14 +120,7 @@ export default function TestWorld(props) {
       state.crowd.timeStep = 1 / 60;
       // state.crowd.timeFactor
 
-      state.setupCrowdAgents(positions.length
-        ? positions
-        : [
-            { x: 1 * 1.5, y: 0, z: 5 * 1.5 },
-            { x: 5 * 1.5, y: 0, z: 7 * 1.5 },
-          ].map(x => state.crowd.navMeshQuery.getClosestPoint(x)),
-        targets,
-      );
+      state.setupCrowdAgents(agentsMeta);
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -147,9 +131,10 @@ export default function TestWorld(props) {
       state.vert.onTick();
       // info(state.r3f.gl.info.render);
     },
-    setupCrowdAgents(positions, targets) {
-      positions.map((p, i) => {
-        const agent = state.crowd.addAgent(p, {
+    setupCrowdAgents(agentsMeta) {
+      Object.values(agentsMeta).forEach(({ position, target }) => {
+        // 🚧
+        const agent = state.crowd.addAgent(position, {
           radius: agentRadius,
           height: 1.5,
           maxAcceleration: 4,
@@ -161,7 +146,6 @@ export default function TestWorld(props) {
           queryFilterType: 0,
           // obstacleAvoidanceType
         });
-        const target = targets[i];
         target && agent.goto(target);
       });
     },
@@ -344,7 +328,7 @@ export default function TestWorld(props) {
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {(agentPositions: THREE.Vector3Like[], agentTargets: (THREE.Vector3Like | null)[]) => void} setupCrowdAgents
+ * @property {(agentsMeta: { [agentKey: string]: NPC.BasicAgentMeta }) => void} setupCrowdAgents
  * @property {() => void} update
  * @property {() => void} onTick
  * @property {(dst: import('three').Vector3Like) => void} walkTo
