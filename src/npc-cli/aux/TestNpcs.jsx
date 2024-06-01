@@ -9,7 +9,6 @@ import { tmpMesh1 } from "../service/three";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -53,7 +52,7 @@ export default function TestNpcs(props) {
         npc.def = {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
-          classKey: npc.classKey,
+          classKey: e.npcClassKey ?? npc.def.classKey,
           position: e.point,
           runSpeed: e.runSpeed ?? glbMeta.runSpeed,
           walkSpeed: e.walkSpeed ?? glbMeta.walkSpeed,
@@ -185,8 +184,6 @@ export default function TestNpcs(props) {
       Object.values(state.npc).forEach(hotModuleReloadNpc);
     }
   }, []);
-
-  const update = useUpdate();
 
   return <>
   

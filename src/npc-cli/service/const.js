@@ -34,7 +34,8 @@ export const glbMeta = /** @type {const} */ ({
   /** Scale factor we'll apply to original model */
   scale: 0.25,
   /** Desired height after scaling (meters) */
-  height: 2,
+  height: 8 * 0.25,
+  radius: 0.8, // 🚧 justify
   /** Inferred by manually testing using root bone */
   walkSpeed: 5 * 0.25,
   /** Inferred by manually testing using root bone */

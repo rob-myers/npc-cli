@@ -3,13 +3,12 @@ import { SkeletonUtils } from 'three-stdlib';
 
 import { glbMeta } from '../service/const';
 import { info } from '../service/generic';
-import { buildObjectLookup, yAxis } from '../service/three';
+import { buildObjectLookup, tmpVectThree1, yAxis } from '../service/three';
 import CharacterController from './character-controller';
 
 export class Npc {
 
   /** @type {string} User specified e.g. `rob` */ key;
-  /** @type {NPC.NpcClassKey} */ classKey;
   /** @type {import('./TestWorld').State} World API */ api;
   /** @type {NPC.NPCDef} Initial definition */ def;
   /** @type {number} When we (re)spawned */ epochMs;
@@ -26,6 +25,8 @@ export class Npc {
     spawns: 0,
   };
 
+  /** @type {null | import("@recast-navigation/core").CrowdAgent} */
+  agent = null;
   rejectWalk = emptyReject;
 
   /**
@@ -34,24 +35,35 @@ export class Npc {
    */
   constructor(def, api) {
     this.key = def.key;
-    this.classKey = def.classKey;
     this.epochMs = Date.now();
     this.def = def;
     this.api = api;
   }
 
+  attachAgent() {
+    this.agent ??= this.api.crowd.addAgent(this.group.position, {
+      radius: glbMeta.radius,
+      height: 1.5,
+      maxAcceleration: 4,
+      maxSpeed: 2,
+      pathOptimizationRange: glbMeta.radius * 20, // 🚧 ?
+      // collisionQueryRange: 2.5,
+      collisionQueryRange: 0.7,
+      separationWeight: 1,
+      queryFilterType: 0,
+      // obstacleAvoidanceType
+    });
+  }
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
 
-    const cancelCount = ++this.flag.cancels;
-    this.paused = false;
-    // this.s.body.tint = 0xffffff;
-    // this.s.head.tint = 0xffffff;
     const api = this.api;
+    const cancelCount = ++this.flag.cancels;
+    this.flag.paused = false;
     
     this.rejectWalk(new Error(`${'cancel'}: cancelled walk`));
-
-    if (this.flag.move) {
+    
+    if (this.flag.move === true) {
       await api.lib.firstValueFrom(api.events.pipe(
         api.lib.filter(e => e.key === "stopped-walking" && e.npcKey === this.key)
       ));
@@ -67,6 +79,14 @@ export class Npc {
   }
   getAngle() {// Assume only rotated about y axis
     return this.group.rotation.y;
+  }
+  /** @param {Geom.VectJson} p  */
+  goto(p) {
+    if (this.agent !== null) {
+      this.agent.goto(tmpVectThree1.set(p.x, 0, p.y));
+    } else {// jump directly
+      this.group.position.set(p.x, 0, p.y);
+    }
   }
   /**
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
@@ -99,6 +119,12 @@ export class Npc {
     this.group.setRotationFromAxisAngle(yAxis, this.def.angle);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
+  removeAgent() {
+    if (this.agent !== null) {
+      this.api.crowd.removeAgent(this.agent.agentIndex);
+      this.agent = null;
+    }
+  }
   /** @param {NPC.AnimKey} animKey */
   startAnimation(animKey) {
     // 🚧
@@ -117,7 +143,6 @@ export class Npc {
       flag: this.flag,
     };
   }
-
 }
 
 /**

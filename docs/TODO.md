@@ -49,6 +49,8 @@
 
 - get eslint working again e.g. for raw-loader.js
 
+- try leaving one logged-in window open before go offline, see how long it works
+  > https://boxy-svg.com/questions/283/ability-to-use-while-offline
 - distinguish symbols:
   - some extend beyond viewbox (e.g. stateroom),
   - some do not (e.g. table)
