@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { dampLookAt } from "maath/easing";
 import { useGLTF } from "@react-three/drei";
 
-import { agentRadius, defaultNpcClassKey, glbMeta } from "../service/const";
+import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
 import { tmpMesh1 } from "../service/three";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
@@ -23,9 +23,7 @@ export default function TestNpcs(props) {
     npc: {},
     select: { curr: null, prev: null, many: [] },
 
-    selected: '0',
     nextObstacleId: 0,
-    toAgent: {},
     toObstacle: {},
     toAgentGroup: {},
 
@@ -143,7 +141,6 @@ export default function TestNpcs(props) {
     },
   }));
 
-  state.toAgent = /** @type {Record<string, NPC.CrowdAgent>} */ (api.crowd.agents);
   api.npc = state;
 
   React.useEffect(() => {// 🚧 DEMO
@@ -224,9 +221,7 @@ export default function TestNpcs(props) {
  * @property {THREE.Group} group
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {{ curr: null | string; prev: null | string; many: string[]; }} select
- * @property {string} selected Selected agent
  * @property {number} nextObstacleId
- * @property {Record<string, NPC.CrowdAgent>} toAgent
  * @property {Record<string, NPC.Obstacle>} toObstacle
  * @property {Record<string, THREE.Group>} toAgentGroup
  *
@@ -241,12 +236,9 @@ export default function TestNpcs(props) {
  * @property {() => void} updateTileCache
  */
 
-const agentHeight = 1.5;
 const tmpV3_1 = new THREE.Vector3();
 const tmpV3_2 = new THREE.Vector3();
 const tmpV3_unitX = new THREE.Vector3(1, 0, 0);
 const tmpV3_unitZ = new THREE.Vector3(0, 0, 1);
-const redColor = new THREE.Color("red");
-const greenColor = new THREE.Color("green");
 
 useGLTF.preload(glbMeta.url);
