@@ -32,9 +32,10 @@
     - tty command: `api npc.spawn '{ npcKey: "foo", point: {x:0, y:0} }'`
   - ✅ improve un-animated character spawn
   - ❌ api.npc.npc drives character render
-  - 🚧 api.npc.npc drives agents
-  - characters are animated
+  - ✅ api.npc.npc drives agents
+  - 🚧 characters are animated
   - try fix `Npc` class HMR
+  - fix jerky collisions
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet

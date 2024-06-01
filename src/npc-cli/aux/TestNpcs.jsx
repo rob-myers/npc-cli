@@ -29,6 +29,10 @@ export default function TestNpcs(props) {
     toObstacle: {},
     toAgentGroup: {},
 
+    getSelected() {
+      const npcKey = state.select.curr;
+      return npcKey === null ? null : (state.npc[npcKey] ?? null);
+    },
     isPointInNavmesh(p) {
       const closest = api.crowd.navMeshQuery.getClosestPoint(tmpV3_1.set(p.x, 0, p.y));
       return closest.x === p.x && closest.z === p.y;
@@ -65,6 +69,7 @@ export default function TestNpcs(props) {
         delete state.npc[e.npcKey];
         state.npc[e.npcKey] = npc;
       } else {
+        // Spawn
         const npcClassKey = e.npcClassKey ?? defaultNpcClassKey;
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
@@ -98,32 +103,22 @@ export default function TestNpcs(props) {
         return null;
       }
     },
-    agentRef(agent, group) {
-      if (group) {
-        state.toAgentGroup[agent.agentIndex] = group;
-        state.moveGroup(agent, group);
-        state.updateAgentColor(Number(agent.agentIndex));
-      } else {
-        delete state.toAgentGroup[agent.agentIndex];
-      }
-    },
     moveGroup(agent, mesh) {
       const position = agent.position();
-      mesh.position.set(position.x, position.y + agentHeight/2, position.z);
+      mesh.position.copy(position);
 
       const velocity = tmpV3_1.copy(agent.velocity());
       if (velocity.length() > 0.2) {
         dampLookAt(mesh, tmpV3_2.copy(mesh.position).add(velocity), 0.25, api.timer.getDelta());
       }
     },
-    onClickNpc(agent, e) {
-      info(`clicked npc: ${JSON.stringify(agent.userData)} (${agent.agentIndex})`);
-      state.selected = `${agent.agentIndex}`; // 🚧 remove
-      state.select.curr = agent.userData.npcKey ?? null;
+    onClickNpcs(e) {
+      // console.log(e);
+      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
+      const npc = state.npc[npcKey];
+      info(`clicked npc: ${npc.key}`);
+      state.select.curr = npc.key;
       // 🚧 indicate selected npc somehow
-      Object.keys(state.toAgentGroup).forEach((agentIdStr) =>
-        state.updateAgentColor(Number(agentIdStr))
-      );
       e.stopPropagation();
     },
     onTick() {
@@ -139,13 +134,6 @@ export default function TestNpcs(props) {
         delete state.toObstacle[obstacleId];
         api.nav.tileCache.removeObstacle(obstacle.o);
         state.updateTileCache();
-      }
-    },
-    updateAgentColor(agentId) {
-      // 🚧
-      const mesh = state.toAgentGroup[agentId].children[0];
-      if (mesh instanceof THREE.Mesh && mesh.material instanceof THREE.MeshBasicMaterial) {
-        mesh.material.color = state.selected === `${agentId}` ? greenColor : redColor
       }
     },
     updateTileCache() {// 🚧 spread out updates
@@ -178,12 +166,15 @@ export default function TestNpcs(props) {
     polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
     api.debug.selectNavPolys(polyRefs); // display via debug
 
-    // 🚧 ensure demo npcs
-    [
-      { npcKey: 'rob', point: { x: 1 * 1.5, y: 5 * 1.5 } },
+    
+    [// ensure npcs
       { npcKey: 'kate', point: { x: 5 * 1.5, y: 7 * 1.5 } },
+      { npcKey: 'rob', point: { x: 1 * 1.5, y: 5 * 1.5 } },
     ].forEach(({ npcKey, point }) =>
-      !state.npc[npcKey] && state.spawn({ npcKey, point }).then(npc => npc.attachAgent())
+      !state.npc[npcKey] && state.spawn({ npcKey, point }).then(npc => {
+        npc.attachAgent();
+        state.select.curr = npcKey; // select last
+      })
     );
 
     api.update(); // Trigger ticker
@@ -198,20 +189,6 @@ export default function TestNpcs(props) {
 
   return <>
   
-    {/* 🚧 remove */}
-    {Object.values(state.toAgent).map((agent) => (
-      <group
-        key={agent.agentIndex}
-        ref={group => state.agentRef(agent, group)}
-      >
-        <mesh onPointerUp={e => state.onClickNpc(agent, e)}>
-          <meshBasicMaterial />
-          <cylinderGeometry args={[agentRadius, agentRadius, agentHeight]} />
-          {/* <capsuleGeometry args={[agentRadius, agentHeight / 2]} /> */}
-        </mesh>
-        <arrowHelper args={[tmpV3_unitZ, undefined, 0.7, "blue", undefined, 0.1]} />
-      </group>
-    ))}
 
     {/* 🚧 memoize */}
     {Object.values(state.toObstacle).map((o) => (
@@ -231,6 +208,7 @@ export default function TestNpcs(props) {
     <group
       name="NPCs"
       ref={x => state.group = x ?? state.group}
+      onPointerUp={e => state.onClickNpcs(e)}
     />
 
   </>;
@@ -253,14 +231,13 @@ export default function TestNpcs(props) {
  * @property {Record<string, THREE.Group>} toAgentGroup
  *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
- * @property {(agent: NPC.CrowdAgent, group: THREE.Group | null) => void} agentRef
+ * @property {() => null | NPC.NPC} getSelected
  * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
  * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
- * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
  * @property {() => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
- * @property {(agentId: number) => void} updateAgentColor
  * @property {() => void} updateTileCache
  */
 

@@ -1053,7 +1053,7 @@ export function sortByXThenY(point1, point2) {
   return point1.x - point2.x;
 }
 
-const tmpVec1 = new Vect();
+export const tmpVec1 = new Vect();
 const tmpVec2 = new Vect();
 const tmpRect1 = new Rect();
 const tmpPoly1 = new Poly();

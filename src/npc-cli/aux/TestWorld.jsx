@@ -8,10 +8,11 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { agentRadius, demoNpcsMeta, worldScale } from "../service/const";
+import { agentRadius, worldScale } from "../service/const";
 import { assertNonNull, info, debug, isDevelopment, keys, warn } from "../service/generic";
 import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
+import { tmpVec1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, textureLoader, tmpBufferGeom1, tmpVectThree1 } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
@@ -104,8 +105,9 @@ export default function TestWorld(props) {
     loadTiledMesh(exportedNavMesh) {
       state.nav = /** @type {NPC.TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
 
-      /** @type {NPC.BasicAgentLookup} */
-      const agentsMeta = state.crowd ? disposeCrowd(state.crowd) : demoNpcsMeta;
+      const agentsMeta = state.crowd
+        ? disposeCrowd(state.crowd)
+        : {};
 
       state.crowd = new Crowd({
         maxAgents: 10,
@@ -115,7 +117,9 @@ export default function TestWorld(props) {
       state.crowd.timeStep = 1 / 60;
       // state.crowd.timeFactor
 
-      state.setupCrowdAgents(agentsMeta);
+      if (state.npc) {
+        state.restoreCrowdAgents(agentsMeta);
+      }
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -126,51 +130,27 @@ export default function TestWorld(props) {
       state.vert.onTick();
       // info(state.r3f.gl.info.render);
     },
-    setupCrowdAgents(agentsMeta) {
-      Object.values(agentsMeta).forEach(({ agentKey, position, target, userData }) => {
-        const npcKey = userData.npcKey;
-        // 🚧 do nothing when state.npc does not exist
-        // 🚧 move demoNpcsMeta into <Npcs>
-        if (typeof npcKey === 'string' && state.npc?.npc[npcKey]) {
-          const npc = state.npc.npc[npcKey];
-          npc.removeAgent();
-          npc.attachAgent(userData);
-        } else {
-          // 🚧 do nothing when associated npc does not exist
-          warn(`agent "${agentKey}" has no npcKey (${JSON.stringify(userData)})`)
-          const agent = state.crowd.addAgent(position, {
-            radius: agentRadius,
-            height: 1.5,
-            maxAcceleration: 4,
-            maxSpeed: 2,
-            pathOptimizationRange: agentRadius * 20,
-            // collisionQueryRange: 2.5,
-            collisionQueryRange: 0.7,
-            separationWeight: 1,
-            queryFilterType: 0,
-            userData,
-            // obstacleAvoidanceType
-          });
-          target && agent.goto(target);
+    restoreCrowdAgents(agentsMeta) {
+      // 🚧 restore without using `agentsMeta`
+      const npcs = Object.values(state.npc.npc);
+      Object.values(agentsMeta).forEach(({ agentIndex, position, target }) => {
+        const npc = npcs.find(x => x.agent?.agentIndex === agentIndex);
+        if (!npc) {
+          return warn(`agent "${agentIndex}" has no associated npc (${JSON.stringify({ position })})`)
+        }
+
+        npc.removeAgent();
+        npc.attachAgent();
+        npc.setPosition(position);
+        if (target !== null) {
+          npc.goto(target);
         }
       });
     },
     update,
     walkTo(dst) {
-      // 🚧 select npc not agent
-      // 🚧 invoke npc.walkTo
-      const agent = state.npc.toAgent[state.npc.selected];
-      const src = agent.position();
-      const query = state.crowd.navMeshQuery;
-      // Agent may follow different path
-      const path = query.computePath(src, dst, {
-        filter: state.crowd.getFilter(0),
-      });
-
-      if (path.length && tmpVectThree1.copy(dst).distanceTo(path[path.length - 1]) < 0.05) {
-        state.debug.setNavPath(path);
-        agent.goto(dst); // nearest point/polygon relative to crowd defaults
-      }
+      const npc = state.npc.getSelected();
+      npc?.walkTo(tmpVec1.set(dst.x, dst.z));
     },
   }));
 
@@ -336,7 +316,7 @@ export default function TestWorld(props) {
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {(agentsMeta: NPC.BasicAgentLookup) => void} setupCrowdAgents
+ * @property {(agentsMeta: NPC.BasicAgentLookup) => void} restoreCrowdAgents
  * @property {() => void} update
  * @property {() => void} onTick
  * @property {(dst: import('three').Vector3Like) => void} walkTo

@@ -27,11 +27,10 @@ declare namespace NPC {
   }
 
   interface BasicAgentMeta {
-    /** `agent.userData.key` falling back to `${agent.agentId}` */
-    agentKey: string;
+    agentIndex: number;
     position: THREE.Vector3Like;
     target: THREE.Vector3Like | null;
-    userData: Record<string, any>;
+    // userData: Record<string, any>; // Not working?
   }
 
   interface BasicAgentLookup {

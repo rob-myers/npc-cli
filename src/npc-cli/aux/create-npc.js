@@ -39,9 +39,7 @@ export class Npc {
     this.def = def;
     this.api = api;
   }
-  /** @param {Record<string, any>} userData */
-  attachAgent(userData = {}) {
-    userData.npcKey = this.key;
+  attachAgent() {
     this.agent ??= this.api.crowd.addAgent(this.group.position, {
       radius: glbMeta.radius,
       height: 1.5,
@@ -52,9 +50,14 @@ export class Npc {
       collisionQueryRange: 0.7,
       separationWeight: 1,
       queryFilterType: 0,
-      userData,
+      // userData, // 🚧 not working?
       // obstacleAvoidanceType
     });
+
+    // 🚧 rethink
+    this.api.npc.toAgentGroup[this.agent.agentIndex] = this.group;
+
+    return this.agent;
   }
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
@@ -87,11 +90,10 @@ export class Npc {
   }
   /** @param {Geom.VectJson} dst  */
   goto(dst) {
-    if (this.agent !== null) {
-      this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
-    } else {// jump directly
-      this.group.position.set(dst.x, 0, dst.y);
+    if (this.agent === null) {
+      return warn(`npc ${this.key} cannot goto ${JSON.stringify(dst)} (no agent)`);
     }
+    this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
   }
   /**
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
@@ -119,6 +121,9 @@ export class Npc {
     });
 
     this.map = buildObjectLookup(this.group);
+    // Mutate userData to decode pointer events
+    const skinnedMesh = this.map.nodes[glbMeta.skinnedMeshName];
+    skinnedMesh.userData.npcKey = this.key;
     
     this.group.position.set(this.def.position.x, 0, this.def.position.y);
     this.group.setRotationFromAxisAngle(yAxis, this.def.angle);
@@ -127,8 +132,13 @@ export class Npc {
   removeAgent() {
     if (this.agent !== null) {
       this.api.crowd.removeAgent(this.agent.agentIndex);
+      delete this.api.npc.toAgentGroup[this.agent.agentIndex]
       this.agent = null;
     }
+  }
+  /** @param {Geom.VectJson} dst  */
+  setPosition(dst) {
+    this.group.position.set(dst.x, 0, dst.y);
   }
   /** @param {NPC.AnimKey} animKey */
   startAnimation(animKey) {
@@ -140,6 +150,7 @@ export class Npc {
       return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
     }
 
+    // 🚧 move path creation into own function
     const api = this.api;
     const src = this.getPosition();
     const dst3 = tmpVectThree1.set(dst.x, 0, dst.y);
@@ -149,7 +160,10 @@ export class Npc {
       filter: api.crowd.getFilter(0),
     });
 
-    if (path.length > 0 && dst3.distanceTo(path[path.length - 1]) < 0.05) {
+    if (
+      path.length > 0
+      && dst3.distanceTo(path[path.length - 1]) < 0.05
+    ) {
       api.debug.setNavPath(path);
       this.agent.goto(dst3); // nearest point/polygon relative to crowd defaults
     }
