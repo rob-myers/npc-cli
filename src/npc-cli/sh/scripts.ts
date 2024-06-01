@@ -135,7 +135,7 @@ export const gameFunctions = [
   run '(ctxt) {
     const { api, args, home } = ctxt;
     const world = api.getCached(home.WORLD_KEY);
-    const handleProm = () => new Promise((resolve, reject) => api.addCleanup(
+    const getHandleProm = () => new Promise((resolve, reject) => api.addCleanup(
       () => reject("potential ongoing computation")
     ));
 

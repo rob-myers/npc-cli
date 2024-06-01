@@ -20,6 +20,7 @@ export default function TestNpcs(props) {
   const gltf = useGLTF(glbMeta.url);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    group: /** @type {*} */ (null),
     npc: {},
 
     selected: 0,
@@ -31,19 +32,6 @@ export default function TestNpcs(props) {
     isPointInNavmesh(p) {
       const closest = api.crowd.navMeshQuery.getClosestPoint(tmpV3_1.set(p.x, 0, p.y));
       return closest.x === p.x && closest.z === p.y;
-    },
-    npcRef(root) {
-      if (root == null) {
-        return;
-      }
-      const npc = state.npc[root.name];
-      if (npc?.spawned === false) {
-        npc.root = root;
-        npc.initialize(gltf);
-        npc.startAnimation('Idle');
-        npc.spawned = true;
-        api.events.next({ key: 'spawned-npc', npcKey: npc.key });
-      }
     },
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
@@ -61,7 +49,6 @@ export default function TestNpcs(props) {
 
         await spawned.cancel();
         spawned.epochMs = Date.now();
-        spawned.spawned = false;
 
         spawned.def = {
           key: e.npcKey,
@@ -77,10 +64,9 @@ export default function TestNpcs(props) {
         // Reorder keys
         delete state.npc[e.npcKey];
         state.npc[e.npcKey] = spawned;
-        // spawned.doMeta = e.meta?.do ? e.meta : null;
       } else {
         const npcClassKey = e.npcClassKey ?? defaultNpcClassKey;
-        state.npc[e.npcKey] = new Npc({
+        const npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
           angle: e.angle ?? 0,
           classKey: npcClassKey,
@@ -88,9 +74,14 @@ export default function TestNpcs(props) {
           runSpeed: e.runSpeed ?? glbMeta.runSpeed,
           walkSpeed: e.walkSpeed ?? glbMeta.walkSpeed,
         }, api);
-        // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
-      }
 
+        npc.initialize(gltf);
+        npc.startAnimation('Idle');
+        state.group.add(npc.group);
+        api.events.next({ key: 'spawned-npc', npcKey: npc.key });
+      }
+      
+      // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       update();
     },
 
@@ -229,14 +220,10 @@ export default function TestNpcs(props) {
       </mesh>
     ))}
   
-    {Object.values(state.npc).map((npc) => (
-      <primitive
-        name={npc.key}
-        ref={state.npcRef} // assume Group
-        object={npc.model}
-        scale={glbMeta.scale}
-      />
-    ))}
+    <group
+      name="NPCs"
+      ref={x => state.group = x ?? state.group}
+    />
 
   </>;
 }
@@ -248,6 +235,7 @@ export default function TestNpcs(props) {
 
 /**
  * @typedef State
+ * @property {THREE.Group} group
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {number} selected Selected agent
  * @property {number} nextObstacleId
@@ -260,7 +248,6 @@ export default function TestNpcs(props) {
  * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
  * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
  * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
- * @property {(el: null | THREE.Group) => void} npcRef
  * @property {() => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
  * @property {(e: NPC.SpawnOpts) => Promise<void>} spawn

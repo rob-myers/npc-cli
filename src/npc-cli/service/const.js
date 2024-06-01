@@ -31,14 +31,14 @@ export const wallHeight = 2;
 
 export const glbMeta = /** @type {const} */ ({
   url: '/assets/3d/minecraft-anim.glb',
-  /** Scale factor we'll apply */
+  /** Scale factor we'll apply to original model */
   scale: 0.25,
-  /** Actual height in Blender */
+  /** Desired height after scaling (meters) */
   height: 2,
   /** Inferred by manually testing using root bone */
-  walkSpeed: 1.25,
+  walkSpeed: 5 * 0.25,
   /** Inferred by manually testing using root bone */
-  runSpeed: 2.5,
+  runSpeed: 10 * 0.25,
 });
 
 /** @type {NPC.NpcClassKey} */

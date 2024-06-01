@@ -26,10 +26,15 @@
   - ✅ can connect terminal to world via `awaitWorld`
   - ℹ️ `api npc` takes non-trivial time to be non-null
     - can test `awaitWorld` or `api isReady` first
-  - 🚧 can spawn un-animated character via terminal
-  - api.npc.npc drives character render
-  - api.npc.npc drives agents
+  - ✅ can spawn un-animated character via terminal
+  - ✅ can see `npc` in terminal 
+  - ✅ attach npcs directly to `<group/>` via js
+    - tty command: `api npc.spawn '{ npcKey: "foo", point: {x:0, y:0} }'`
+  - ✅ improve un-animated character spawn
+  - ❌ api.npc.npc drives character render
+  - 🚧 api.npc.npc drives agents
   - characters are animated
+  - try fix `Npc` class HMR
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
