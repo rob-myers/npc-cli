@@ -114,7 +114,9 @@ declare namespace NPC {
     }[];
   }
 
-  type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
+  type CrowdAgent = import("@recast-navigation/core").CrowdAgent & {
+    get userData(): Record<string, any>;
+  };
 
   type Obstacle = {
     id: number;

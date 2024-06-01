@@ -21,8 +21,9 @@ export default function TestNpcs(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     group: /** @type {*} */ (null),
     npc: {},
+    select: { curr: null, prev: null, many: [] },
 
-    selected: 0,
+    selected: '0',
     nextObstacleId: 0,
     toAgent: {},
     toObstacle: {},
@@ -115,8 +116,10 @@ export default function TestNpcs(props) {
       }
     },
     onClickNpc(agent, e) {
-      info("clicked npc", agent.agentIndex);
-      state.selected = agent.agentIndex;
+      info(`clicked npc: ${JSON.stringify(agent.userData)} (${agent.agentIndex})`);
+      state.selected = `${agent.agentIndex}`; // 🚧 remove
+      state.select.curr = agent.userData.npcKey ?? null;
+      // 🚧 indicate selected npc somehow
       Object.keys(state.toAgentGroup).forEach((agentIdStr) =>
         state.updateAgentColor(Number(agentIdStr))
       );
@@ -126,7 +129,7 @@ export default function TestNpcs(props) {
       for (const agent of api.crowd.getAgents()) {
         const mesh = state.toAgentGroup[agent.agentIndex];
         // 🚧 avoid issue on level change
-        mesh !== undefined && state.moveGroup(agent, mesh);
+        mesh !== undefined && state.moveGroup(/** @type {NPC.CrowdAgent} */ (agent), mesh);
       }
     },
     removeObstacle(obstacleId) {
@@ -138,9 +141,10 @@ export default function TestNpcs(props) {
       }
     },
     updateAgentColor(agentId) {
+      // 🚧
       const mesh = state.toAgentGroup[agentId].children[0];
       if (mesh instanceof THREE.Mesh && mesh.material instanceof THREE.MeshBasicMaterial) {
-        mesh.material.color = state.selected === agentId ? greenColor : redColor
+        mesh.material.color = state.selected === `${agentId}` ? greenColor : redColor
       }
     },
     updateTileCache() {// 🚧 spread out updates
@@ -150,7 +154,7 @@ export default function TestNpcs(props) {
     },
   }));
 
-  state.toAgent = api.crowd.agents;
+  state.toAgent = /** @type {Record<string, NPC.CrowdAgent>} */ (api.crowd.agents);
   api.npc = state;
 
   React.useEffect(() => {// 🚧 DEMO
@@ -234,7 +238,8 @@ export default function TestNpcs(props) {
  * @typedef State
  * @property {THREE.Group} group
  * @property {{ [npcKey: string]: Npc }} npc
- * @property {number} selected Selected agent
+ * @property {{ curr: null | string; prev: null | string; many: string[]; }} select
+ * @property {string} selected Selected agent
  * @property {number} nextObstacleId
  * @property {Record<string, NPC.CrowdAgent>} toAgent
  * @property {Record<string, NPC.Obstacle>} toObstacle

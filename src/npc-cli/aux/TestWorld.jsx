@@ -129,12 +129,14 @@ export default function TestWorld(props) {
     setupCrowdAgents(agentsMeta) {
       Object.values(agentsMeta).forEach(({ agentKey, position, target, userData }) => {
         const npcKey = userData.npcKey;
+        // 🚧 do nothing when state.npc does not exist
+        // 🚧 move demoNpcsMeta into <Npcs>
         if (typeof npcKey === 'string' && state.npc?.npc[npcKey]) {
-          // 🚧 npc.attachAgent via agent.userData.npcKey
           const npc = state.npc.npc[npcKey];
           npc.removeAgent();
-          npc.attachAgent();
+          npc.attachAgent(userData);
         } else {
+          // 🚧 do nothing when associated npc does not exist
           warn(`agent "${agentKey}" has no npcKey (${JSON.stringify(userData)})`)
           const agent = state.crowd.addAgent(position, {
             radius: agentRadius,
@@ -146,6 +148,7 @@ export default function TestWorld(props) {
             collisionQueryRange: 0.7,
             separationWeight: 1,
             queryFilterType: 0,
+            userData,
             // obstacleAvoidanceType
           });
           target && agent.goto(target);
@@ -154,7 +157,8 @@ export default function TestWorld(props) {
     },
     update,
     walkTo(dst) {
-      // 🚧
+      // 🚧 select npc not agent
+      // 🚧 invoke npc.walkTo
       const agent = state.npc.toAgent[state.npc.selected];
       const src = agent.position();
       const query = state.crowd.navMeshQuery;

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 
 import { glbMeta } from '../service/const';
-import { info } from '../service/generic';
+import { info, warn } from '../service/generic';
 import { buildObjectLookup, tmpVectThree1, yAxis } from '../service/three';
 import CharacterController from './character-controller';
 
@@ -39,8 +39,8 @@ export class Npc {
     this.def = def;
     this.api = api;
   }
-
-  attachAgent() {
+  /** @param {Record<string, any>} userData */
+  attachAgent(userData = {}) {
     this.agent ??= this.api.crowd.addAgent(this.group.position, {
       radius: glbMeta.radius,
       height: 1.5,
@@ -51,6 +51,7 @@ export class Npc {
       collisionQueryRange: 0.7,
       separationWeight: 1,
       queryFilterType: 0,
+      userData,
       // obstacleAvoidanceType
     });
   }
@@ -80,12 +81,15 @@ export class Npc {
   getAngle() {// Assume only rotated about y axis
     return this.group.rotation.y;
   }
-  /** @param {Geom.VectJson} p  */
-  goto(p) {
+  getPosition() {
+    return this.group.position.clone();
+  }
+  /** @param {Geom.VectJson} dst  */
+  goto(dst) {
     if (this.agent !== null) {
-      this.agent.goto(tmpVectThree1.set(p.x, 0, p.y));
+      this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
     } else {// jump directly
-      this.group.position.set(p.x, 0, p.y);
+      this.group.position.set(dst.x, 0, dst.y);
     }
   }
   /**
@@ -128,6 +132,26 @@ export class Npc {
   /** @param {NPC.AnimKey} animKey */
   startAnimation(animKey) {
     // 🚧
+  }
+  /** @param {Geom.VectJson} dst  */
+  walkTo(dst) {
+    if (this.agent === null) {
+      return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
+    }
+
+    const api = this.api;
+    const src = this.getPosition();
+    const dst3 = tmpVectThree1.set(dst.x, 0, dst.y);
+    const query = api.crowd.navMeshQuery;
+    // Agent may follow different path
+    const path = query.computePath(src, dst3, {
+      filter: api.crowd.getFilter(0),
+    });
+
+    if (path.length > 0 && dst3.distanceTo(path[path.length - 1]) < 0.05) {
+      api.debug.setNavPath(path);
+      this.agent.goto(dst3); // nearest point/polygon relative to crowd defaults
+    }
   }
  
   toJSON() {
