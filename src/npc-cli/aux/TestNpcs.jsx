@@ -44,29 +44,29 @@ export default function TestNpcs(props) {
         throw Error(`invalid npcClassKey: ${JSON.stringify(e.npcClassKey)}`);
       }
       
-      if (state.npc[e.npcKey]) {// Respawn
-        const spawned = state.npc[e.npcKey];
+      let npc = state.npc[e.npcKey];
 
-        await spawned.cancel();
-        spawned.epochMs = Date.now();
+      if (npc) {// Respawn
+        await npc.cancel();
+        npc.epochMs = Date.now();
 
-        spawned.def = {
+        npc.def = {
           key: e.npcKey,
-          angle: e.angle ?? spawned.getAngle() ?? 0, // prev angle fallback
-          classKey: spawned.classKey,
+          angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
+          classKey: npc.classKey,
           position: e.point,
           runSpeed: e.runSpeed ?? glbMeta.runSpeed,
           walkSpeed: e.walkSpeed ?? glbMeta.walkSpeed,
         };
-        if (e.npcClassKey) {
-          spawned.changeClass(e.npcClassKey);
+        if (typeof e.npcClassKey === 'string') {
+          npc.changeClass(e.npcClassKey);
         }
         // Reorder keys
         delete state.npc[e.npcKey];
-        state.npc[e.npcKey] = spawned;
+        state.npc[e.npcKey] = npc;
       } else {
         const npcClassKey = e.npcClassKey ?? defaultNpcClassKey;
-        const npc = state.npc[e.npcKey] = new Npc({
+        npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
           angle: e.angle ?? 0,
           classKey: npcClassKey,
@@ -78,11 +78,11 @@ export default function TestNpcs(props) {
         npc.initialize(gltf);
         npc.startAnimation('Idle');
         state.group.add(npc.group);
-        api.events.next({ key: 'spawned-npc', npcKey: npc.key });
       }
       
+      npc.flag.spawns++;
+      api.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
-      update();
     },
 
     // 🚧 old below

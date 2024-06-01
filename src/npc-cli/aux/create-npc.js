@@ -18,9 +18,14 @@ export class Npc {
   map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
   ctrl = /** @type {CharacterController} */ ({});
 
-  cancelCount = 0;
-  /** Is this NPC walking or running? */
-  moving = false;
+  flag = {
+    cancels: 0,
+    /** Is this NPC walking or running? */
+    move: false,
+    paused: false,
+    spawns: 0,
+  };
+
   rejectWalk = emptyReject;
 
   /**
@@ -38,7 +43,7 @@ export class Npc {
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
 
-    const cancelCount = ++this.cancelCount;
+    const cancelCount = ++this.flag.cancels;
     this.paused = false;
     // this.s.body.tint = 0xffffff;
     // this.s.head.tint = 0xffffff;
@@ -46,12 +51,12 @@ export class Npc {
     
     this.rejectWalk(new Error(`${'cancel'}: cancelled walk`));
 
-    if (this.moving) {
+    if (this.flag.move) {
       await api.lib.firstValueFrom(api.events.pipe(
         api.lib.filter(e => e.key === "stopped-walking" && e.npcKey === this.key)
       ));
     }
-    if (cancelCount !== this.cancelCount) {
+    if (cancelCount !== this.flag.cancels) {
       throw Error(`${'cancel'}: cancel was cancelled`);
     }
     api.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
@@ -109,8 +114,7 @@ export class Npc {
       // group: this.group,
       // map: this.map,
       // ctrl: this.ctrl,
-      cancelCount: this.cancelCount,
-      isMoving: this.moving,
+      flag: this.flag,
     };
   }
 
@@ -122,9 +126,9 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, ctrl, moving, group: model, paused, rejectWalk, map } = npc;
-  // return Object.assign(npc, new Npc(def, npc.api), { epochMs, controller, moving, model, paused, rejectWalk, map });
-  return Object.assign(new Npc(def, npc.api), { epochMs, ctrl, moving, model, paused, rejectWalk, map });
+  const { def, epochMs, ctrl, group, flag, rejectWalk, map } = npc;
+  // return Object.assign(npc, new Npc(def, npc.api), { epochMs, ctrl, group, flag, rejectWalk, map });
+  return Object.assign(new Npc(def, npc.api), { epochMs, ctrl, group, flag, rejectWalk, map });
 }
 
 const emptyGroup = new THREE.Group();

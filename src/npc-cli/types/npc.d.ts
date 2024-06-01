@@ -39,7 +39,7 @@ declare namespace NPC {
     | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey }
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
-    | { key: "spawned-npc"; npcKey: string }
+    | { key: "spawned"; npcKey: string; }
     | { key: 'stopped-walking'; npcKey: string; }
     | { key: "removed-npc"; npcKey: string }
     // 🚧 ...
