@@ -49,6 +49,8 @@
 
 - get eslint working again e.g. for raw-loader.js
 
+- sometimes during development restarting stops working i.e. can see 3d floor,
+  but console logs `THREE.WebGLRenderer: Context Lost`
 - try leaving one logged-in window open before go offline, see how long it works
   > https://boxy-svg.com/questions/283/ability-to-use-while-offline
 - distinguish symbols:

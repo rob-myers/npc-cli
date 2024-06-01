@@ -8,8 +8,8 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { agentRadius, worldScale } from "../service/const";
-import { assertNonNull, info, debug, isDevelopment, keys } from "../service/generic";
+import { agentRadius, demoNpcsMeta, worldScale } from "../service/const";
+import { assertNonNull, info, debug, isDevelopment, keys, warn } from "../service/generic";
 import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
@@ -104,13 +104,8 @@ export default function TestWorld(props) {
     loadTiledMesh(exportedNavMesh) {
       state.nav = /** @type {NPC.TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
 
-      /** @type {{ [agentKey: string]: NPC.BasicAgentMeta }} */
-      const agentsMeta = state.crowd
-        ? disposeCrowd(state.crowd) // previous meta
-        : {
-          0: { agentKey: '0', position: { x: 1 * 1.5, y: 0, z: 5 * 1.5 }, target: null },
-          1: { agentKey: '1', position: { x: 5 * 1.5, y: 0, z: 7 * 1.5 }, target: null },
-        };
+      /** @type {NPC.BasicAgentLookup} */
+      const agentsMeta = state.crowd ? disposeCrowd(state.crowd) : demoNpcsMeta;
 
       state.crowd = new Crowd({
         maxAgents: 10,
@@ -132,25 +127,34 @@ export default function TestWorld(props) {
       // info(state.r3f.gl.info.render);
     },
     setupCrowdAgents(agentsMeta) {
-      Object.values(agentsMeta).forEach(({ position, target }) => {
-        // 🚧
-        const agent = state.crowd.addAgent(position, {
-          radius: agentRadius,
-          height: 1.5,
-          maxAcceleration: 4,
-          maxSpeed: 2,
-          pathOptimizationRange: agentRadius * 20,
-          // collisionQueryRange: 2.5,
-          collisionQueryRange: 0.7,
-          separationWeight: 1,
-          queryFilterType: 0,
-          // obstacleAvoidanceType
-        });
-        target && agent.goto(target);
+      Object.values(agentsMeta).forEach(({ agentKey, position, target, userData }) => {
+        const npcKey = userData.npcKey;
+        if (typeof npcKey === 'string' && state.npc?.npc[npcKey]) {
+          // 🚧 npc.attachAgent via agent.userData.npcKey
+          const npc = state.npc.npc[npcKey];
+          npc.removeAgent();
+          npc.attachAgent();
+        } else {
+          warn(`agent "${agentKey}" has no npcKey (${JSON.stringify(userData)})`)
+          const agent = state.crowd.addAgent(position, {
+            radius: agentRadius,
+            height: 1.5,
+            maxAcceleration: 4,
+            maxSpeed: 2,
+            pathOptimizationRange: agentRadius * 20,
+            // collisionQueryRange: 2.5,
+            collisionQueryRange: 0.7,
+            separationWeight: 1,
+            queryFilterType: 0,
+            // obstacleAvoidanceType
+          });
+          target && agent.goto(target);
+        }
       });
     },
     update,
     walkTo(dst) {
+      // 🚧
       const agent = state.npc.toAgent[state.npc.selected];
       const src = agent.position();
       const query = state.crowd.navMeshQuery;
@@ -328,7 +332,7 @@ export default function TestWorld(props) {
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {(agentsMeta: { [agentKey: string]: NPC.BasicAgentMeta }) => void} setupCrowdAgents
+ * @property {(agentsMeta: NPC.BasicAgentLookup) => void} setupCrowdAgents
  * @property {() => void} update
  * @property {() => void} onTick
  * @property {(dst: import('three').Vector3Like) => void} walkTo

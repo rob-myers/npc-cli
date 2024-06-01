@@ -5,14 +5,14 @@ import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCac
 
 /**
  * @param {import("@recast-navigation/core").Crowd} crowd
- * @returns {{ [agentKey: string]: { agentKey: string; position: THREE.Vector3Like; target: THREE.Vector3Like | null } }}
+ * @returns {{ [agentKey: string]: NPC.BasicAgentMeta }}
  * Returns positions and targets of disposed crowd.
  */
 export function disposeCrowd(crowd) {
   const output = /** @type {ReturnType<typeof disposeCrowd>} */ ({});
   crowd.getAgents().forEach((agent) => {
     const agentKey = getAgentKey(agent);
-    output[agentKey] = { agentKey, position: agent.position(), target: getAgentTarget(agent) };
+    output[agentKey] = { agentKey, position: agent.position(), target: getAgentTarget(agent), userData: agent.userData || emptyUserData };
     crowd.removeAgent(agent);
   });
   crowd.destroy();

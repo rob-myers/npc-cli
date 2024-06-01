@@ -44,3 +44,9 @@ export const glbMeta = /** @type {const} */ ({
 
 /** @type {NPC.NpcClassKey} */
 export const defaultNpcClassKey = 'scientist-dabeyt--with-arms.png';
+
+/** @type {NPC.BasicAgentLookup} */
+export const demoNpcsMeta = {
+  0: { agentKey: '0', position: { x: 1 * 1.5, y: 0, z: 5 * 1.5 }, target: null, userData: { npcKey: 'rob' } },
+  1: { agentKey: '1', position: { x: 5 * 1.5, y: 0, z: 7 * 1.5 }, target: null, userData: { npcKey: 'kate' } },
+};

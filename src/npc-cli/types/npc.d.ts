@@ -31,6 +31,11 @@ declare namespace NPC {
     agentKey: string;
     position: THREE.Vector3Like;
     target: THREE.Vector3Like | null;
+    userData: Record<string, any>;
+  }
+
+  interface BasicAgentLookup {
+    [agentKey: string]: NPC.BasicAgentMeta;
   }
 
   // 🚧 WIP
