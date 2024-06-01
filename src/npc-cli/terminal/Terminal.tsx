@@ -119,9 +119,9 @@ export default function Terminal(props: Props) {
         props.onKey?.(e.domEvent);
       });
       
-      xterm.loadAddon(state.fitAddon);
+      xterm.loadAddon(state.fitAddon = new FitAddon());
       xterm.open(state.container);
-      xterm.loadAddon(state.webglAddon);
+      xterm.loadAddon(state.webglAddon = new WebglAddon());
       // state.webglAddon.onContextLoss(e => {
       //   state.webglAddon.dispose(); // breaks HMR
       // });
@@ -204,16 +204,12 @@ export default function Terminal(props: Props) {
     }
   }, [props.disabled, state.ready]);
 
-  React.useEffect(
-    () => () => {
-      // Destroy session
-      useSession.api.removeSession(props.sessionKey);
-      state.ready = false;
-      state.session = state.xterm = {} as any;
-      state.cleanup();
-    },
-    []
-  );
+  React.useEffect(() => () => {// Destroy session
+    useSession.api.removeSession(props.sessionKey);
+    state.ready = false;
+    state.session = state.xterm = {} as any;
+    state.cleanup();
+  }, []);
 
   React.useEffect(() => {
     state.bounds = bounds;
