@@ -63,8 +63,7 @@ export default function Terminal(props: Props) {
     },
   }));
 
-  React.useEffect(() => {
-    // Create session
+  React.useEffect(() => {// Create session
     if (!props.disabled && !state.ready) {
       state.session = useSession.api.createSession(props.sessionKey, props.env);
 
@@ -119,13 +118,14 @@ export default function Terminal(props: Props) {
       const onKeyDisposable = xterm.onKey((e) => {
         props.onKey?.(e.domEvent);
       });
+      
       xterm.loadAddon(state.fitAddon);
+      xterm.open(state.container);
       xterm.loadAddon(state.webglAddon);
       // state.webglAddon.onContextLoss(e => {
-      //   state.webglAddon.dispose();
+      //   state.webglAddon.dispose(); // breaks HMR
       // });
-
-      xterm.open(state.container);
+      
       state.resize();
       xterm.textarea?.addEventListener("focus", state.onFocus);
 
@@ -141,8 +141,7 @@ export default function Terminal(props: Props) {
     }
   }, [props.disabled, state.ready]);
 
-  React.useEffect(() => {
-    // Handle session pause/resume
+  React.useEffect(() => {// Handle session pause/resume
     if (!state.ready) {
       return;
     }
