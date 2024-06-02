@@ -21,10 +21,11 @@ export const spriteSheetNonHullExtraScale = 2.5;
 /** Decimal place precision */
 export const precision = 4;
 
-export const wallOutset = 10 * worldScale;
+export const wallOutset = 12 * worldScale;
 
 export const obstacleOutset = 10 * worldScale;
 
+// 🚧 align to glb
 export const agentRadius = 10 * worldScale;
 
 export const wallHeight = 2;
@@ -33,7 +34,7 @@ export const glbMeta = /** @type {const} */ ({
   url: '/assets/3d/minecraft-anim.glb',
   skinnedMeshName: "minecraft-character-mesh",
   /** Scale factor we'll apply to original model */
-  scale: 1.7 / 8,
+  scale: 1.5 / 8,
   /** Height of original model (meters) */
   height: 8,
   /** Dimension [x, y, z] of original model (meters) */

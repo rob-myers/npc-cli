@@ -161,7 +161,7 @@ export class Npc {
         dampLookAt(this.group, position.add(velocity), 0.25, deltaMs);
       }
 
-      this.mixer.timeScale = Math.max(0.2, speed);
+      this.mixer.timeScale = Math.max(0.3, speed / this.def.walkSpeed);
     }
   }
   removeAgent() {

@@ -52,7 +52,7 @@ export function getTileCacheGeneratorConfig() {
   return {
     // tileSize: 7.6 / cs,
     // tileSize: 7.2 / cs,
-    tileSize: 8.1 / cs,
+    tileSize: 8.8 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
     ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
