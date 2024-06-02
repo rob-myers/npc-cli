@@ -39,9 +39,9 @@
   - ✅ characters are animated (Walk)
   - ✅ try fix `Npc` class HMR
   - ✅ fix jerky collisions
-  - 🚧 animation frame rate driven by agent speed
+  - ✅ animation frame rate driven by agent speed
+  - 🚧 fix final turn
   - fix initial turn
-  - fix final turn
   - can run on cmd/ctrl/shift click
 
 - 🚧 clarify whether world api inputs should be Vect or Vector3

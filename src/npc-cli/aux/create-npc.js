@@ -4,7 +4,7 @@ import { dampLookAt } from "maath/easing";
 
 import { glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, tmpVectThree1, tmpVectThree2, yAxis } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, yAxis } from '../service/three';
 import { npcService } from '../service/npc';
 
 export class Npc {
@@ -74,6 +74,22 @@ export class Npc {
   /** @param {NPC.NpcClassKey} npcClassKey */
   changeClass(npcClassKey) {
     this.def.classKey = npcClassKey;
+    this.changeSkin(npcClassKey); // 🚧 should be sync
+  }
+  /** @param {NPC.NpcClassKey} skinKey  */
+  async changeSkin(skinKey) {
+    const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.map.nodes[glbMeta.skinnedMeshName]);
+    const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
+    await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
+      // console.log(material.map, tex);
+      tex.flipY = false;
+      tex.wrapS = tex.wrapT = 1000;
+      tex.colorSpace = "srgb";
+      tex.minFilter = 1004;
+      tex.magFilter = 1003;
+      clonedMaterial.map = tex;
+      skinnedMesh.material = clonedMaterial;
+    });
   }
   getAngle() {// Assume only rotated about y axis
     return this.group.rotation.y;
@@ -108,6 +124,7 @@ export class Npc {
     // Mutate userData to decode pointer events
     const skinnedMesh = this.map.nodes[glbMeta.skinnedMeshName];
     skinnedMesh.userData.npcKey = this.key;
+    this.changeSkin('scientist-dabeyt--with-arms.png');
     
     this.group.position.set(this.def.position.x, 0, this.def.position.y);
     this.group.setRotationFromAxisAngle(yAxis, this.def.angle);
@@ -130,18 +147,21 @@ export class Npc {
       // 🚧 detect when stop walking
       if (
         this.s.target !== null &&
-        Math.abs(this.s.target.x - position.x) < 0.01
-        && Math.abs(this.s.target.y - position.z) < 0.01
+        Math.abs(this.s.target.x - position.x) < 0.1
+        && Math.abs(this.s.target.y - position.z) < 0.1
       ) {
         console.log('should stop');
         this.s.target = null;
+        this.mixer.timeScale = 1;
         this.startAnimation('Idle');
       }
 
-      if (velocity.length() > 0.1) {
+      const speed = velocity.length();
+      if (speed > 0.1) {
         dampLookAt(this.group, position.add(velocity), 0.25, deltaMs);
       }
 
+      this.mixer.timeScale = Math.max(0.2, speed);
     }
   }
   removeAgent() {
@@ -163,7 +183,7 @@ export class Npc {
     this.s.act = act;
   }
   /** @param {Geom.VectJson} dst  */
-  walkTo(dst, debugPath = true) {
+  walkTo(dst, debugPath = false) {
     if (this.agent === null) {
       return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
     }
@@ -214,8 +234,9 @@ const crowdAgentParams = {
   radius: npcService.defaults.radius / 4, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 4,
-  maxSpeed: 2,
-  pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 ?
+  // maxSpeed: 2,
+  maxSpeed: npcService.defaults.walkSpeed, // 🚧 can change to runSpeed
+  pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 clarify
   // collisionQueryRange: 2.5,
   collisionQueryRange: 0.7,
   separationWeight: 1,

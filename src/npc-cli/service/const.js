@@ -33,7 +33,7 @@ export const glbMeta = /** @type {const} */ ({
   url: '/assets/3d/minecraft-anim.glb',
   skinnedMeshName: "minecraft-character-mesh",
   /** Scale factor we'll apply to original model */
-  scale: 1.5 / 8,
+  scale: 1.7 / 8,
   /** Height of original model (meters) */
   height: 8,
   /** Dimension [x, y, z] of original model (meters) */
