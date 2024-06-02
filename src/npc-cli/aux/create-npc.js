@@ -94,13 +94,6 @@ export class Npc {
   getRadius() {
     return npcService.defaults.radius;
   }
-  /** @param {Geom.VectJson} dst  */
-  goto(dst) {
-    if (this.agent === null) {
-      return warn(`npc ${this.key} cannot goto ${JSON.stringify(dst)} (no agent)`);
-    }
-    this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
-  }
   /**
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
    */

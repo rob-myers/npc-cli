@@ -53,6 +53,7 @@
 
 - get eslint working again e.g. for raw-loader.js
 
+- clarify whether world api inputs should be Vect or Vector3
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort

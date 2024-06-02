@@ -28,8 +28,8 @@ declare namespace NPC {
 
   interface BasicAgentMeta {
     agentIndex: number;
-    position: THREE.Vector3Like;
-    target: THREE.Vector3Like | null;
+    position: import("three").Vector3Like;
+    target: import("three").Vector3Like | null;
     // userData: Record<string, any>; // Not working?
   }
 

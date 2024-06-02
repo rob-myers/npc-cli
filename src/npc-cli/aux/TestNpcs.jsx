@@ -174,9 +174,8 @@ export default function TestNpcs(props) {
   }, []);
 
   return <>
-  
 
-    {/* 🚧 memoize */}
+    {/* 🚧 <group name="obstacles"> */}
     {Object.values(state.toObstacle).map((o) => (
       <mesh
         key={o.id}
@@ -192,7 +191,7 @@ export default function TestNpcs(props) {
     ))}
   
     <group
-      name="NPCs"
+      name="npcs"
       ref={x => state.group = x ?? state.group}
       onPointerUp={e => state.onClickNpcs(e)}
     />
