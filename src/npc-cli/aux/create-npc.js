@@ -3,9 +3,8 @@ import { SkeletonUtils } from 'three-stdlib';
 
 import { glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, tmpVectThree1, yAxis } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, tmpVectThree1, yAxis } from '../service/three';
 import { npcService } from '../service/npc';
-import CharacterController from './character-controller';
 
 export class Npc {
 
@@ -16,13 +15,20 @@ export class Npc {
   
   group = emptyGroup;
   map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
-  ctrl = /** @type {CharacterController} */ ({});
+  animMap = /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({});
+  mixer = emptyAnimationMixer;
 
-  flag = {
+  /** State */
+  s = {
     cancels: 0,
+    /** @type {NPC.AnimKey} */
+    act: 'Idle',
+    /** Fade duration between animations */
+    fadeSecs: 0.2,
     /** Is this NPC walking or running? */
     move: false,
     paused: false,
+    run: false,
     spawns: 0,
   };
 
@@ -64,17 +70,17 @@ export class Npc {
     info(`${'cancel'}: cancelling ${this.key}`);
 
     const api = this.api;
-    const cancelCount = ++this.flag.cancels;
-    this.flag.paused = false;
+    const cancelCount = ++this.s.cancels;
+    this.s.paused = false;
     
     this.rejectWalk(new Error(`${'cancel'}: cancelled walk`));
     
-    if (this.flag.move === true) {
+    if (this.s.move === true) {
       await api.lib.firstValueFrom(api.events.pipe(
         api.lib.filter(e => e.key === "stopped-walking" && e.npcKey === this.key)
       ));
     }
-    if (cancelCount !== this.flag.cancels) {
+    if (cancelCount !== this.s.cancels) {
       throw Error(`${'cancel'}: cancel was cancelled`);
     }
     api.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
@@ -103,26 +109,20 @@ export class Npc {
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
    */
   initialize(gltf) {
-    this.group = /** @type {THREE.Group} */ (SkeletonUtils.clone(gltf.scene));
-
     const scale = glbMeta.scale;
+    this.group = /** @type {THREE.Group} */ (SkeletonUtils.clone(gltf.scene));
     this.group.scale.set(scale, scale, scale);
 
-    const mixer = new THREE.AnimationMixer(this.group);
-    const animLookup = /** @type {Record<import("./character-controller").AnimKey, THREE.AnimationAction>} */ ({});
-    gltf.animations.forEach(a => {
-      // info('saw animation:', a.name);
-      if (a.name === 'Idle' || a.name === 'Walk' || a.name === 'Run') {
-        animLookup[a.name] = mixer.clipAction(a);
-      }
-    });
+    this.mixer = new THREE.AnimationMixer(this.group);
 
-    this.ctrl = new CharacterController({
-      model: /** @type {THREE.Group} */ (this.group),
-      mixer,
-      animationMap: animLookup,
-      opts: { initAnimKey: 'Idle', walkSpeed: this.def.walkSpeed, runSpeed: this.def.runSpeed, },
-    });
+    this.animMap = gltf.animations.reduce((agg, a) => {
+      if (a.name === 'Idle' || a.name === 'Walk' || a.name === 'Run') {
+        agg[a.name] = this.mixer.clipAction(a);
+      } else {
+        warn(`ignored unexpected animation: ${a.name}`);
+      }
+      return agg;
+    }, /** @type {typeof this['animMap']} */ ({}));
 
     this.map = buildObjectLookup(this.group);
     // Mutate userData to decode pointer events
@@ -144,9 +144,15 @@ export class Npc {
   setPosition(dst) {
     this.group.position.set(dst.x, 0, dst.y);
   }
-  /** @param {NPC.AnimKey} animKey */
-  startAnimation(animKey) {
-    // 🚧
+  /** @param {NPC.AnimKey} act */
+  startAnimation(act) {
+    if (this.s.act !== act) {
+      const anim = this.animMap[this.s.act];
+      const next = this.animMap[act];
+      anim.fadeOut(this.s.fadeSecs);
+      next.reset().fadeIn(this.s.fadeSecs).play();
+      this.s.act = act;
+    }
   }
   /** @param {Geom.VectJson} dst  */
   walkTo(dst) {
@@ -183,7 +189,7 @@ export class Npc {
       // group: this.group,
       // map: this.map,
       // ctrl: this.ctrl,
-      flag: this.flag,
+      s: this.s,
     };
   }
 }
@@ -194,12 +200,10 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, ctrl, group, flag, rejectWalk, map } = npc;
-  // return Object.assign(npc, new Npc(def, npc.api), { epochMs, ctrl, group, flag, rejectWalk, map });
-  return Object.assign(new Npc(def, npc.api), { epochMs, ctrl, group, flag, rejectWalk, map });
+  const { def, epochMs, group, s, rejectWalk, map } = npc;
+  // return Object.assign(npc, new Npc(def, npc.api), { epochMs, group, s, rejectWalk, map });
+  return Object.assign(new Npc(def, npc.api), { epochMs, group, s, rejectWalk, map });
 }
-
-const emptyGroup = new THREE.Group();
 
 /** @param {any} error */
 function emptyReject(error) {}

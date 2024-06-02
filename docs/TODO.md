@@ -33,6 +33,7 @@
   - ✅ improve un-animated character spawn
   - ❌ api.npc.npc drives character render
   - ✅ api.npc.npc drives agents
+  - ✅ merge character controller into `Npc`
   - 🚧 characters are animated
   - try fix `Npc` class HMR
   - fix jerky collisions

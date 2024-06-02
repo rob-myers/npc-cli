@@ -170,3 +170,7 @@ export function buildObjectLookup(object) {
 }
 
 export const yAxis = new THREE.Vector3(0, 1, 0);
+
+export const emptyGroup = new THREE.Group();
+
+export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);

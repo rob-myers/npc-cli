@@ -84,7 +84,7 @@ export default function TestNpcs(props) {
         state.group.add(npc.group);
       }
       
-      npc.flag.spawns++;
+      npc.s.spawns++;
       api.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
