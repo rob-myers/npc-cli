@@ -133,8 +133,9 @@ export class Npc {
         Math.abs(this.s.target.x - position.x) < 0.01
         && Math.abs(this.s.target.y - position.z) < 0.01
       ) {
-        console.log('should stop walking');
+        console.log('should stop');
         this.s.target = null;
+        this.startAnimation('Idle');
       }
 
       if (velocity.length() > 0.1) {
@@ -174,9 +175,10 @@ export class Npc {
     }
 
     if (api.npc.isPointInNavmesh(dst)) {
-      this.s.target = { x: dst.x, y: dst.y };
       // nearest point/polygon relative to crowd defaults
       this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
+      this.s.target = { x: dst.x, y: dst.y };
+      this.startAnimation(this.s.run ? 'Run' : 'Walk');
     }
   }
  

@@ -35,11 +35,14 @@
   - ✅ api.npc.npc drives agents
   - ✅ merge character controller into `Npc`
   - ✅ characters are animated (Idle)
-  - 🚧 detect when stop walking
-  - 🚧 characters are animated (Walk)
-  - animation frame rate driven by agent speed
+  - ✅ detect when stop walking (1st attempt)
+  - ✅ characters are animated (Walk)
   - ✅ try fix `Npc` class HMR
-  - fix jerky collisions
+  - ✅ fix jerky collisions
+  - 🚧 animation frame rate driven by agent speed
+  - fix initial turn
+  - fix final turn
+  - can run on cmd/ctrl/shift click
 
 - 🚧 clarify whether world api inputs should be Vect or Vector3
 
