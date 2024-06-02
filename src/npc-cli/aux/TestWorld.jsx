@@ -148,10 +148,6 @@ export default function TestWorld(props) {
       });
     },
     update,
-    walkTo(dst) {
-      const npc = state.npc.getSelected();
-      npc?.walkTo(tmpVec1.set(dst.x, dst.z));
-    },
   }));
 
   state.disabled = !!props.disabled;
@@ -319,7 +315,6 @@ export default function TestWorld(props) {
  * @property {(agentsMeta: NPC.BasicAgentLookup) => void} restoreCrowdAgents
  * @property {() => void} update
  * @property {() => void} onTick
- * @property {(dst: import('three').Vector3Like) => void} walkTo
  */
 
 /**

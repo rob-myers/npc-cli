@@ -1,5 +1,6 @@
 import React from "react";
 import { warn, info } from "../service/generic";
+import { tmpVec1 } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -57,10 +58,8 @@ export default function useTestHandleEvents(api) {
       }
 
       if (e.meta.floor === true) {
-        if (!api.npc) {// 🚧 eliminate
-          return warn(`saw "${e.key}" before api.npcs`);
-        }
-        api.walkTo(e.point);
+        const npc = api.npc?.getSelected(); // api.npc may not exist
+        npc?.walkTo(tmpVec1.set(e.point.x, e.point.z));
       }
 
       if (e.meta.doors === true) {
