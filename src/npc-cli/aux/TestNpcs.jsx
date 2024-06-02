@@ -5,7 +5,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { tmpMesh1, tmpVectThree1 } from "../service/three";
+import { tmpMesh1, tmpVectThree1, tmpVectThree2 } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { TestWorldContext } from "./test-world-context";
@@ -29,7 +29,7 @@ export default function TestNpcs(props) {
 
     findPath(src, dst) {
       const src3 = tmpVectThree1.set(src.x, 0, src.y);
-      const dst3 = tmpVectThree1.set(dst.x, 0, dst.y);
+      const dst3 = tmpVectThree2.set(dst.x, 0, dst.y);
       const query = api.crowd.navMeshQuery;
       // 🔔 agent may follow different path
       const path = query.computePath(src3, dst3, {
@@ -43,7 +43,8 @@ export default function TestNpcs(props) {
     },
     isPointInNavmesh(p) {
       const closest = api.crowd.navMeshQuery.getClosestPoint(tmpVectThree1.set(p.x, 0, p.y));
-      return closest.x === p.x && closest.z === p.y;
+      // 🚧 slight differences, maybe need ground height?
+      return Math.abs(closest.x - p.x) < 0.01 && Math.abs(closest.z - p.y) < 0.01
     },
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
@@ -163,12 +164,12 @@ export default function TestNpcs(props) {
     api.debug.selectNavPolys(polyRefs); // display via debug
 
     
-    [// ensure npcs
+    [// DEMO ensure npcs
       { npcKey: 'kate', point: { x: 5 * 1.5, y: 7 * 1.5 } },
       { npcKey: 'rob', point: { x: 1 * 1.5, y: 5 * 1.5 } },
     ].forEach(({ npcKey, point }) =>
-      !state.npc[npcKey] && state.spawn({ npcKey, point }).then(npc => {
-        npc.attachAgent();
+      !state.npc[npcKey] && state.spawn({ npcKey, point }).then(_npc => {
+        state.npc[npcKey].attachAgent(); // can be stale via HMR
         state.select.curr = npcKey; // select last
       })
     );
@@ -179,7 +180,10 @@ export default function TestNpcs(props) {
 
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
-      Object.values(state.npc).forEach(hotModuleReloadNpc);
+      info('hot-reloading npcs');
+      Object.values(state.npc).forEach(npc =>
+        state.npc[npc.key] = hotModuleReloadNpc(npc)
+      );
     }
   }, []);
 

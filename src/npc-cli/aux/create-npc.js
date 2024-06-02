@@ -83,13 +83,14 @@ export class Npc {
   }
   /** @param {NPC.NpcClassKey} npcClassKey */
   changeClass(npcClassKey) {
-    this.classKey = npcClassKey;
+    this.def.classKey = npcClassKey;
   }
   getAngle() {// Assume only rotated about y axis
     return this.group.rotation.y;
   }
   getPosition() {
-    return this.group.position.clone();
+    const { x, z } = this.group.position;
+    return { x, y: z };
   }
   getRadius() {
     return npcService.defaults.radius;
@@ -133,9 +134,13 @@ export class Npc {
       const velocity = tmpVectThree2.copy(this.agent.velocity());
       
       this.group.position.copy(position);
-      if (velocity.length() > 0.2) {
+
+      if (velocity.length() > 0.1) {
         dampLookAt(this.group, position.add(velocity), 0.25, deltaMs);
       }
+
+      // 🚧 detect when stop walking
+      // console.log('get_targetState', this.agent.raw.get_targetState());
     }
   }
   removeAgent() {
@@ -177,27 +182,24 @@ export class Npc {
   toJSON() {
     return {
       key: this.key,
-      classKey: this.classKey,
       // api: this.api,
       def: this.def,
       epochMs: this.epochMs,
       // group: this.group,
       // map: this.map,
-      // ctrl: this.ctrl,
       s: this.s,
     };
   }
 }
 
 /**
- * Mutates provided @see npc
+ * Creates a new NPC loaded with previous one's data.
  * @param {NPC.NPC} npc 
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, group, s, rejectWalk, map } = npc;
-  // return Object.assign(npc, new Npc(def, npc.api), { epochMs, group, s, rejectWalk, map });
-  return Object.assign(new Npc(def, npc.api), { epochMs, group, s, rejectWalk, map });
+  const { def, epochMs, group, s, rejectWalk, map, animMap, mixer, agent } = npc;
+  return Object.assign(new Npc(def, npc.api), { epochMs, group, s, rejectWalk, map, animMap, mixer, agent });
 }
 
 /** @param {any} error */

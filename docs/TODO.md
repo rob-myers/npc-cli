@@ -35,10 +35,13 @@
   - ✅ api.npc.npc drives agents
   - ✅ merge character controller into `Npc`
   - ✅ characters are animated (Idle)
+  - 🚧 detect when stop walking
   - 🚧 characters are animated (Walk)
-  - 🚧 animation frame rate driven by agent speed
-  - try fix `Npc` class HMR
+  - animation frame rate driven by agent speed
+  - ✅ try fix `Npc` class HMR
   - fix jerky collisions
+
+- 🚧 clarify whether world api inputs should be Vect or Vector3
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
@@ -53,7 +56,6 @@
 
 - get eslint working again e.g. for raw-loader.js
 
-- clarify whether world api inputs should be Vect or Vector3
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
