@@ -157,27 +157,20 @@ export class Npc {
     this.s.act = act;
   }
   /** @param {Geom.VectJson} dst  */
-  walkTo(dst) {
+  walkTo(dst, debugPath = true) {
     if (this.agent === null) {
       return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
     }
-
-    // 🚧 move path creation into own function
     const api = this.api;
-    const src = this.getPosition();
-    const dst3 = tmpVectThree1.set(dst.x, 0, dst.y);
-    const query = api.crowd.navMeshQuery;
-    // Agent may follow different path
-    const path = query.computePath(src, dst3, {
-      filter: api.crowd.getFilter(0),
-    });
 
-    if (
-      path.length > 0
-      && dst3.distanceTo(path[path.length - 1]) < 0.05
-    ) {
-      api.debug.setNavPath(path);
-      this.agent.goto(dst3); // nearest point/polygon relative to crowd defaults
+    if (debugPath) {
+      const path = api.npc.findPath(this.getPosition(), dst);
+      api.debug.setNavPath(path ?? []);
+    }
+
+    if (api.npc.isPointInNavmesh(dst)) {
+      // nearest point/polygon relative to crowd defaults
+      this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
     }
   }
  

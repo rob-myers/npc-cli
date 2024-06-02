@@ -5,7 +5,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { tmpMesh1 } from "../service/three";
+import { tmpMesh1, tmpVectThree1 } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { TestWorldContext } from "./test-world-context";
@@ -27,12 +27,22 @@ export default function TestNpcs(props) {
     nextObstacleId: 0,
     toObstacle: {},
 
+    findPath(src, dst) {
+      const src3 = tmpVectThree1.set(src.x, 0, src.y);
+      const dst3 = tmpVectThree1.set(dst.x, 0, dst.y);
+      const query = api.crowd.navMeshQuery;
+      // 🔔 agent may follow different path
+      const path = query.computePath(src3, dst3, {
+        filter: api.crowd.getFilter(0),
+      });
+      return path.length === 0 ? null : path;
+    },
     getSelected() {
       const npcKey = state.select.curr;
       return npcKey === null ? null : (state.npc[npcKey] ?? null);
     },
     isPointInNavmesh(p) {
-      const closest = api.crowd.navMeshQuery.getClosestPoint(tmpV3_1.set(p.x, 0, p.y));
+      const closest = api.crowd.navMeshQuery.getClosestPoint(tmpVectThree1.set(p.x, 0, p.y));
       return closest.x === p.x && closest.z === p.y;
     },
     async spawn(e) {
@@ -213,6 +223,7 @@ export default function TestNpcs(props) {
  * @property {Record<string, NPC.Obstacle>} toObstacle
  *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
+ * @property {(src: Geom.VectJson, dst: Geom.VectJson) => null | THREE.Vector3Like[]} findPath
  * @property {() => null | NPC.NPC} getSelected
  * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
@@ -221,10 +232,5 @@ export default function TestNpcs(props) {
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {() => void} updateTileCache
  */
-
-const tmpV3_1 = new THREE.Vector3();
-const tmpV3_2 = new THREE.Vector3();
-const tmpV3_unitX = new THREE.Vector3(1, 0, 0);
-const tmpV3_unitZ = new THREE.Vector3(0, 0, 1);
 
 useGLTF.preload(glbMeta.url);
