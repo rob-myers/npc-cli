@@ -37,21 +37,21 @@ export default function TestNpcs(props) {
       });
       return path.length === 0 ? null : path;
     },
+    getClosestNavigable(p, maxDelta = 0.01) {
+      const { x, z } = api.crowd.navMeshQuery.getClosestPoint(tmpVectThree1.set(p.x, 0, p.y));
+      const isClose = Math.abs(x - p.x) < maxDelta && Math.abs(z - p.y) < maxDelta;
+      return isClose ? { x, y: z } : null;
+    },
     getSelected() {
       const npcKey = state.select.curr;
       return npcKey === null ? null : (state.npc[npcKey] ?? null);
-    },
-    isPointInNavmesh(p) {
-      const closest = api.crowd.navMeshQuery.getClosestPoint(tmpVectThree1.set(p.x, 0, p.y));
-      // 🚧 slight differences, maybe need ground height?
-      return Math.abs(closest.x - p.x) < 0.01 && Math.abs(closest.z - p.y) < 0.01
     },
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
         throw Error(`invalid npc key: ${JSON.stringify(e.npcKey)}`);
       } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.y === 'number')) {
         throw Error(`invalid point: ${JSON.stringify(e.point)}`);
-      } else if (e.requireNav && !state.isPointInNavmesh(e.point)) {
+      } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
       } else if (e.npcClassKey && !api.lib.isNpcClassKey(e.npcClassKey)) {
         throw Error(`invalid npcClassKey: ${JSON.stringify(e.npcClassKey)}`);
@@ -229,7 +229,7 @@ export default function TestNpcs(props) {
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
  * @property {(src: Geom.VectJson, dst: Geom.VectJson) => null | THREE.Vector3Like[]} findPath
  * @property {() => null | NPC.NPC} getSelected
- * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
+ * @property {(p: Geom.VectJson, maxDelta?: number) => null | } getClosestNavigable
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
  * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle

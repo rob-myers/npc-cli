@@ -194,10 +194,10 @@ export class Npc {
       api.debug.setNavPath(path ?? []);
     }
 
-    if (api.npc.isPointInNavmesh(dst)) {
-      // nearest point/polygon relative to crowd defaults
-      this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
-      this.s.target = { x: dst.x, y: dst.y };
+    const closest = api.npc.getClosestNavigable(dst, 0.15);
+    if (closest !== null) {
+      this.agent.goto(tmpVectThree1.set(closest.x, 0, closest.y));
+      this.s.target = closest;
       this.startAnimation(this.s.run ? 'Run' : 'Walk');
     }
   }
