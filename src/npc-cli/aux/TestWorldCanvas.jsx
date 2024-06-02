@@ -214,16 +214,18 @@ export default function TestWorldCanvas(props) {
         <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
       }
 
-      <PerspectiveCamera position={[0, 8, 0]} makeDefault />
+      <PerspectiveCamera
+        position={[0, 8, 0]}
+        makeDefault
+        fov={45}
+      />
 
       <MapControls
         ref={(x) => x && (state.controls = x)}
         makeDefault
         zoomToCursor
-        {...(isTouchDevice() && {
-          minAzimuthAngle: 0,
-          maxAzimuthAngle: 0,
-        })}
+        minAzimuthAngle={0}
+        maxAzimuthAngle={0}
       />
 
       <ambientLight intensity={1} />
