@@ -44,8 +44,8 @@ export default function Nav() {
       </button>
 
       <Menu>
-        <MenuItem className="title" tabIndex={-1} component="span">
-          <Link to="/">NPC CLI</Link>
+        <MenuItem className="title" component="span" tabIndex={-1}>
+          <Link to="/" tabIndex={-1}>NPC CLI</Link>
         </MenuItem>
         <SubMenu icon={icon.blog} label="Blog">
           <MenuItem component="span">
