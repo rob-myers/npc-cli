@@ -34,7 +34,9 @@
   - ❌ api.npc.npc drives character render
   - ✅ api.npc.npc drives agents
   - ✅ merge character controller into `Npc`
-  - 🚧 characters are animated
+  - ✅ characters are animated (Idle)
+  - 🚧 characters are animated (Walk)
+  - 🚧 animation frame rate driven by agent speed
   - try fix `Npc` class HMR
   - fix jerky collisions
 
@@ -51,6 +53,9 @@
 
 - get eslint working again e.g. for raw-loader.js
 
+- TTY windows ctrl-c conflict: abort vs copy selection
+  - take same approach as Windows itself
+  - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
 - sometimes during development restarting stops working i.e. can see 3d floor,
   but console logs `THREE.WebGLRenderer: Context Lost`
 - try leaving one logged-in window open before go offline, see how long it works

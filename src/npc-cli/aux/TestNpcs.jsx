@@ -26,7 +26,6 @@ export default function TestNpcs(props) {
 
     nextObstacleId: 0,
     toObstacle: {},
-    toAgentGroup: {},
 
     getSelected() {
       const npcKey = state.select.curr;
@@ -89,6 +88,20 @@ export default function TestNpcs(props) {
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
+    onClickNpcs(e) {
+      // console.log(e);
+      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
+      const npc = state.npc[npcKey];
+      info(`clicked npc: ${npc.key}`);
+      state.select.curr = npc.key;
+      // 🚧 indicate selected npc somehow
+      e.stopPropagation();
+    },
+    onTick(deltaMs) {
+      for (const npc of Object.values(state.npc)) {
+        npc.onTick(deltaMs);
+      }
+    },
 
     // 🚧 old below
     addBoxObstacle(position, extent, angle) {
@@ -100,31 +113,6 @@ export default function TestNpcs(props) {
       } else {
         warn(`failed to add obstacle at ${JSON.stringify(position)}`);
         return null;
-      }
-    },
-    moveGroup(agent, mesh) {
-      const position = agent.position();
-      mesh.position.copy(position);
-
-      const velocity = tmpV3_1.copy(agent.velocity());
-      if (velocity.length() > 0.2) {
-        dampLookAt(mesh, tmpV3_2.copy(mesh.position).add(velocity), 0.25, api.timer.getDelta());
-      }
-    },
-    onClickNpcs(e) {
-      // console.log(e);
-      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-      const npc = state.npc[npcKey];
-      info(`clicked npc: ${npc.key}`);
-      state.select.curr = npc.key;
-      // 🚧 indicate selected npc somehow
-      e.stopPropagation();
-    },
-    onTick() {
-      for (const agent of api.crowd.getAgents()) {
-        const mesh = state.toAgentGroup[agent.agentIndex];
-        // 🚧 avoid issue on level change
-        mesh !== undefined && state.moveGroup(/** @type {NPC.CrowdAgent} */ (agent), mesh);
       }
     },
     removeObstacle(obstacleId) {
@@ -224,14 +212,12 @@ export default function TestNpcs(props) {
  * @property {{ curr: null | string; prev: null | string; many: string[]; }} select
  * @property {number} nextObstacleId
  * @property {Record<string, NPC.Obstacle>} toObstacle
- * @property {Record<string, THREE.Group>} toAgentGroup
  *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
  * @property {() => null | NPC.NPC} getSelected
  * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
- * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
- * @property {() => void} onTick
+ * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {() => void} updateTileCache

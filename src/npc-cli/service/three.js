@@ -98,6 +98,7 @@ export const wireFrameMaterial = new THREE.MeshStandardMaterial({
 });
 
 export const tmpVectThree1 = new THREE.Vector3();
+export const tmpVectThree2 = new THREE.Vector3();
 export const tmpMesh1 = new THREE.Mesh();
 export const tmpBox1 = new THREE.Box3();
 

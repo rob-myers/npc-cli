@@ -126,7 +126,7 @@ export default function TestWorld(props) {
       state.timer.update();
       const deltaMs = state.timer.getDelta();
       state.crowd.update(deltaMs);
-      state.npc.onTick();
+      state.npc.onTick(deltaMs);
       state.vert.onTick();
       // info(state.r3f.gl.info.render);
     },

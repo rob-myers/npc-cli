@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
+import { dampLookAt } from "maath/easing";
 
 import { glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, tmpVectThree1, yAxis } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, tmpVectThree1, tmpVectThree2, yAxis } from '../service/three';
 import { npcService } from '../service/npc';
 
 export class Npc {
@@ -47,7 +48,7 @@ export class Npc {
     this.api = api;
   }
   attachAgent() {
-    this.agent ??= this.api.crowd.addAgent(this.group.position, {
+    return this.agent ??= this.api.crowd.addAgent(this.group.position, {
       radius: npcService.defaults.radius,
       height: 1.5,
       maxAcceleration: 4,
@@ -60,11 +61,6 @@ export class Npc {
       // userData, // 🚧 not working?
       // obstacleAvoidanceType
     });
-
-    // 🚧 rethink
-    this.api.npc.toAgentGroup[this.agent.agentIndex] = this.group;
-
-    return this.agent;
   }
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
@@ -133,10 +129,25 @@ export class Npc {
     this.group.setRotationFromAxisAngle(yAxis, this.def.angle);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
+  /** @param {number} deltaMs  */
+  onTick(deltaMs) {
+    this.mixer.update(deltaMs);
+
+    if (this.agent === null) {
+      // 🚧 can turn
+    } else {// Move and turn
+      const position = tmpVectThree1.copy(this.agent.position());
+      const velocity = tmpVectThree2.copy(this.agent.velocity());
+      
+      this.group.position.copy(position);
+      if (velocity.length() > 0.2) {
+        dampLookAt(this.group, position.add(velocity), 0.25, deltaMs);
+      }
+    }
+  }
   removeAgent() {
     if (this.agent !== null) {
       this.api.crowd.removeAgent(this.agent.agentIndex);
-      delete this.api.npc.toAgentGroup[this.agent.agentIndex]
       this.agent = null;
     }
   }
@@ -146,13 +157,11 @@ export class Npc {
   }
   /** @param {NPC.AnimKey} act */
   startAnimation(act) {
-    if (this.s.act !== act) {
-      const anim = this.animMap[this.s.act];
-      const next = this.animMap[act];
-      anim.fadeOut(this.s.fadeSecs);
-      next.reset().fadeIn(this.s.fadeSecs).play();
-      this.s.act = act;
-    }
+    const anim = this.animMap[this.s.act];
+    const next = this.animMap[act];
+    anim.fadeOut(this.s.fadeSecs);
+    next.reset().fadeIn(this.s.fadeSecs).play();
+    this.s.act = act;
   }
   /** @param {Geom.VectJson} dst  */
   walkTo(dst) {
