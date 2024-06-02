@@ -31,6 +31,8 @@ export class Npc {
     paused: false,
     run: false,
     spawns: 0,
+    /** @type {null | Geom.VectJson} */
+    target: null,
   };
 
   /** @type {null | import("@recast-navigation/core").CrowdAgent} */
@@ -48,19 +50,7 @@ export class Npc {
     this.api = api;
   }
   attachAgent() {
-    return this.agent ??= this.api.crowd.addAgent(this.group.position, {
-      radius: npcService.defaults.radius,
-      height: 1.5,
-      maxAcceleration: 4,
-      maxSpeed: 2,
-      pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 ?
-      // collisionQueryRange: 2.5,
-      collisionQueryRange: 0.7,
-      separationWeight: 1,
-      queryFilterType: 0,
-      // userData, // 🚧 not working?
-      // obstacleAvoidanceType
-    });
+    return this.agent ??= this.api.crowd.addAgent(this.group.position, crowdAgentParams);
   }
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
@@ -127,20 +117,30 @@ export class Npc {
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
 
+
     if (this.agent === null) {
-      // 🚧 can turn
-    } else {// Move and turn
+      // Support turning without an agent?
+    } else {
+      // Moving or stationary with agent
       const position = tmpVectThree1.copy(this.agent.position());
       const velocity = tmpVectThree2.copy(this.agent.velocity());
       
       this.group.position.copy(position);
 
+      // 🚧 detect when stop walking
+      if (
+        this.s.target !== null &&
+        Math.abs(this.s.target.x - position.x) < 0.01
+        && Math.abs(this.s.target.y - position.z) < 0.01
+      ) {
+        console.log('should stop walking');
+        this.s.target = null;
+      }
+
       if (velocity.length() > 0.1) {
         dampLookAt(this.group, position.add(velocity), 0.25, deltaMs);
       }
 
-      // 🚧 detect when stop walking
-      // console.log('get_targetState', this.agent.raw.get_targetState());
     }
   }
   removeAgent() {
@@ -174,6 +174,7 @@ export class Npc {
     }
 
     if (api.npc.isPointInNavmesh(dst)) {
+      this.s.target = { x: dst.x, y: dst.y };
       // nearest point/polygon relative to crowd defaults
       this.agent.goto(tmpVectThree1.set(dst.x, 0, dst.y));
     }
@@ -199,8 +200,24 @@ export class Npc {
  */
 export function hotModuleReloadNpc(npc) {
   const { def, epochMs, group, s, rejectWalk, map, animMap, mixer, agent } = npc;
+  agent && agent.updateParameters(crowdAgentParams);
   return Object.assign(new Npc(def, npc.api), { epochMs, group, s, rejectWalk, map, animMap, mixer, agent });
 }
 
 /** @param {any} error */
 function emptyReject(error) {}
+
+/** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
+const crowdAgentParams = {
+  radius: npcService.defaults.radius / 4, // 🔔 too large causes jerky collisions
+  height: 1.5,
+  maxAcceleration: 4,
+  maxSpeed: 2,
+  pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 ?
+  // collisionQueryRange: 2.5,
+  collisionQueryRange: 0.7,
+  separationWeight: 1,
+  queryFilterType: 0,
+  // userData, // 🚧 not working?
+  // obstacleAvoidanceType
+};
