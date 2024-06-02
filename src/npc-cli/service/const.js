@@ -31,16 +31,28 @@ export const wallHeight = 2;
 
 export const glbMeta = /** @type {const} */ ({
   url: '/assets/3d/minecraft-anim.glb',
-  /** Scale factor we'll apply to original model */
-  scale: 0.25,
-  /** Desired height after scaling (meters) */
-  height: 8 * 0.25,
-  radius: 0.8, // 🚧 justify
-  /** Inferred by manually testing using root bone */
-  walkSpeed: 5 * 0.25,
-  /** Inferred by manually testing using root bone */
-  runSpeed: 10 * 0.25,
   skinnedMeshName: "minecraft-character-mesh",
+  /** Scale factor we'll apply to original model */
+  scale: 1.5 / 8,
+  /** Height of original model (meters) */
+  height: 8,
+  /** Dimension [x, y, z] of original model (meters) */
+  dimensions: [4, 8, 2],
+  /**
+   * Collide radius of original model (meters)
+   * 🚧 larger for running legs?
+   */
+  radius: 4,
+  /**
+   * Walking speed of original model (meters per second).
+   * Inferred by manually testing using root bone.
+   */
+  walkSpeed: 5,
+  /**
+   * Running speed of original model (meters per second).
+   * Inferred by manually testing using root bone.
+   */
+  runSpeed: 10,
 });
 
 /** @type {NPC.NpcClassKey} */

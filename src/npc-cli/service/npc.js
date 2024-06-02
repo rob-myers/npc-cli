@@ -1,7 +1,15 @@
+import { glbMeta } from "./const";
+
 /**
  * Use object so can merge into `api.lib`.
  */
 export const npcService = {
+
+  defaults: {
+    radius: glbMeta.radius * glbMeta.scale,
+    runSpeed: glbMeta.runSpeed * glbMeta.scale,
+    walkSpeed: glbMeta.walkSpeed * glbMeta.scale,
+  },
 
   fromNpcClassKey: {
     'minecraft-alex-with-arms.png': true,

@@ -6,6 +6,7 @@ import { useGLTF } from "@react-three/drei";
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
 import { tmpMesh1 } from "../service/three";
+import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -57,8 +58,8 @@ export default function TestNpcs(props) {
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
           classKey: e.npcClassKey ?? npc.def.classKey,
           position: e.point,
-          runSpeed: e.runSpeed ?? glbMeta.runSpeed,
-          walkSpeed: e.walkSpeed ?? glbMeta.walkSpeed,
+          runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
+          walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
         };
         if (typeof e.npcClassKey === 'string') {
           npc.changeClass(e.npcClassKey);
@@ -74,8 +75,8 @@ export default function TestNpcs(props) {
           angle: e.angle ?? 0,
           classKey: npcClassKey,
           position: e.point,
-          runSpeed: e.runSpeed ?? glbMeta.runSpeed,
-          walkSpeed: e.walkSpeed ?? glbMeta.walkSpeed,
+          runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
+          walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
         }, api);
 
         npc.initialize(gltf);

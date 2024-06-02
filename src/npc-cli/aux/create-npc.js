@@ -4,6 +4,7 @@ import { SkeletonUtils } from 'three-stdlib';
 import { glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, tmpVectThree1, yAxis } from '../service/three';
+import { npcService } from '../service/npc';
 import CharacterController from './character-controller';
 
 export class Npc {
@@ -41,11 +42,11 @@ export class Npc {
   }
   attachAgent() {
     this.agent ??= this.api.crowd.addAgent(this.group.position, {
-      radius: glbMeta.radius,
+      radius: npcService.defaults.radius,
       height: 1.5,
       maxAcceleration: 4,
       maxSpeed: 2,
-      pathOptimizationRange: glbMeta.radius * 20, // 🚧 ?
+      pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 ?
       // collisionQueryRange: 2.5,
       collisionQueryRange: 0.7,
       separationWeight: 1,
@@ -87,6 +88,9 @@ export class Npc {
   }
   getPosition() {
     return this.group.position.clone();
+  }
+  getRadius() {
+    return npcService.defaults.radius;
   }
   /** @param {Geom.VectJson} dst  */
   goto(dst) {
