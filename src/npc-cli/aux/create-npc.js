@@ -29,6 +29,7 @@ export class Npc {
     /** Is this NPC walking or running? */
     move: false,
     paused: false,
+    rejectWalk: emptyReject,
     run: false,
     spawns: 0,
     /** @type {null | Geom.VectJson} */
@@ -37,7 +38,6 @@ export class Npc {
 
   /** @type {null | import("@recast-navigation/core").CrowdAgent} */
   agent = null;
-  rejectWalk = emptyReject;
 
   /**
    * @param {NPC.NPCDef} def
@@ -59,7 +59,7 @@ export class Npc {
     const cancelCount = ++this.s.cancels;
     this.s.paused = false;
     
-    this.rejectWalk(new Error(`${'cancel'}: cancelled walk`));
+    this.s.rejectWalk(new Error(`${'cancel'}: cancelled walk`));
     
     if (this.s.move === true) {
       await api.lib.firstValueFrom(api.events.pipe(
@@ -134,9 +134,8 @@ export class Npc {
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
 
-
     if (this.agent === null) {
-      // Support turning without an agent?
+      // Support move/turn without agent
     } else {
       // Moving or stationary with agent
       const position = tmpVectThree1.copy(this.agent.position());
@@ -221,9 +220,9 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, group, s, rejectWalk, map, animMap, mixer, agent } = npc;
+  const { def, epochMs, group, s, map, animMap, mixer, agent } = npc;
   agent && agent.updateParameters(crowdAgentParams);
-  return Object.assign(new Npc(def, npc.api), { epochMs, group, s, rejectWalk, map, animMap, mixer, agent });
+  return Object.assign(new Npc(def, npc.api), { epochMs, group, s, map, animMap, mixer, agent });
 }
 
 /** @param {any} error */
