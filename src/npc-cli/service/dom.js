@@ -61,6 +61,14 @@ export function getAssetQueryParam() {
 }
 
 /**
+ * Is Ctrl/Shift/Cmd down?
+ * @param {MouseEvent} e 
+ */
+export function isModifierKey(e) {
+  return e.shiftKey || e.ctrlKey || e.metaKey;
+}
+
+/**
  * Is Right Mouse Button (RMB) down?
  * @param {MouseEvent} e 
  */

@@ -2,6 +2,8 @@ import React from "react";
 import { warn, info } from "../service/generic";
 import { tmpVec1 } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
+import { npcService } from "../service/npc";
+import { crowdAgentParams } from "./create-npc";
 
 /**
  * @param {import('./TestWorld').State} api
@@ -58,8 +60,15 @@ export default function useTestHandleEvents(api) {
       }
 
       if (e.meta.floor === true) {
-        const npc = api.npc?.getSelected(); // api.npc may not exist
-        npc?.walkTo(tmpVec1.set(e.point.x, e.point.z));
+        const npc = api.npc?.getSelected(); // api.npc may not exist yet
+        if (npc) {
+          npc.s.run = e.modifierKey;
+          npc.agent?.setParameters({
+            ...crowdAgentParams,
+            maxSpeed: npc.s.run ? npcService.defaults.runSpeed : npcService.defaults.walkSpeed,
+          });
+          npc.walkTo(tmpVec1.set(e.point.x, e.point.z));
+        }
       }
 
       if (e.meta.doors === true) {

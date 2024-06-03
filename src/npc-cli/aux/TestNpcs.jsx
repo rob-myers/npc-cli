@@ -229,7 +229,7 @@ export default function TestNpcs(props) {
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
  * @property {(src: Geom.VectJson, dst: Geom.VectJson) => null | THREE.Vector3Like[]} findPath
  * @property {() => null | NPC.NPC} getSelected
- * @property {(p: Geom.VectJson, maxDelta?: number) => null | } getClosestNavigable
+ * @property {(p: Geom.VectJson, maxDelta?: number) => null | Geom.VectJson} getClosestNavigable
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
  * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle

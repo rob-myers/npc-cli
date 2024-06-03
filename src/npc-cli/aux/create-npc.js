@@ -4,8 +4,9 @@ import { dampLookAt } from "maath/easing";
 
 import { glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, yAxis } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3, yAxis } from '../service/three';
 import { npcService } from '../service/npc';
+import { tmpVec1 } from '../service/geom';
 
 export class Npc {
 
@@ -18,22 +19,36 @@ export class Npc {
   map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
   animMap = /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({});
   mixer = emptyAnimationMixer;
+  /**
+   * Fade out previous animation (seconds)
+   * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
+   */
+  fadeOut = {
+    Idle: { Idle: 0, Run: 0.2, Walk: 0.2 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.2 },
+    Walk: { Idle: 0.2, Run: 0.2, Walk: 0 },
+  };
+  /**
+   * Fade in next animation (seconds).
+   * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
+   */
+  fadeIn = {
+    Idle: { Idle: 0, Run: 0.1, Walk: 0.1 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.1 },
+    Walk: { Idle: 0.2, Run: 0.1, Walk: 0 },
+  };
 
   /** State */
   s = {
     cancels: 0,
-    /** @type {NPC.AnimKey} */
-    act: 'Idle',
-    /** Fade duration between animations */
-    fadeSecs: 0.2,
+    act: /** @type {NPC.AnimKey} */ ('Idle'),
     /** Is this NPC walking or running? */
     move: false,
     paused: false,
     rejectWalk: emptyReject,
     run: false,
     spawns: 0,
-    /** @type {null | Geom.VectJson} */
-    target: null,
+    target: /** @type {null | Geom.VectJson} */ (null),
   };
 
   /** @type {null | import("@recast-navigation/core").CrowdAgent} */
@@ -50,7 +65,10 @@ export class Npc {
     this.api = api;
   }
   attachAgent() {
-    return this.agent ??= this.api.crowd.addAgent(this.group.position, crowdAgentParams);
+    return this.agent ??= this.api.crowd.addAgent(this.group.position,{
+      ...crowdAgentParams,
+      maxSpeed: this.s.run ? npcService.defaults.runSpeed : npcService.defaults.walkSpeed
+    });
   }
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
@@ -143,7 +161,7 @@ export class Npc {
       
       this.group.position.copy(position);
 
-      // 🚧 detect when stop walking
+      // 🚧 WIP
       if (
         this.s.target !== null &&
         Math.abs(this.s.target.x - position.x) < 0.1
@@ -177,9 +195,14 @@ export class Npc {
   startAnimation(act) {
     const anim = this.animMap[this.s.act];
     const next = this.animMap[act];
-    anim.fadeOut(this.s.fadeSecs);
-    next.reset().fadeIn(this.s.fadeSecs).play();
+    // anim.fadeOut(0.2);
+    // next.reset().fadeIn(0.2).play();
+    anim.fadeOut(this.fadeOut[this.s.act][act]);
+    next.reset().fadeIn(this.fadeIn[this.s.act][act]).play();
     this.s.act = act;
+    // if (act === 'Walk' || act === 'Run') {
+    //   this.s.startMove = Date.now();
+    // }
   }
   /** @param {Geom.VectJson} dst  */
   walkTo(dst, debugPath = false) {
@@ -194,10 +217,21 @@ export class Npc {
     }
 
     const closest = api.npc.getClosestNavigable(dst, 0.15);
-    if (closest !== null) {
-      this.agent.goto(tmpVectThree1.set(closest.x, 0, closest.y));
-      this.s.target = closest;
-      this.startAnimation(this.s.run ? 'Run' : 'Walk');
+    if (closest === null) {
+      return;
+    }
+    // const position = this.getPosition();
+    // if (tmpVec1.copy(position).distanceTo(closest) < 0.25) {
+    //   return;
+    // }
+
+    // this.agent.raw.set_vel(0, 1);
+    // this.agent.raw.set_vel(2, 1);
+    this.agent.goto(tmpVectThree1.set(closest.x, 0, closest.y));
+    this.s.target = closest;
+    const nextAct = this.s.run ? 'Run' : 'Walk';
+    if (this.s.act !== nextAct) {
+      this.startAnimation(nextAct);
     }
   }
  
@@ -221,20 +255,23 @@ export class Npc {
  */
 export function hotModuleReloadNpc(npc) {
   const { def, epochMs, group, s, map, animMap, mixer, agent } = npc;
-  agent && agent.updateParameters(crowdAgentParams);
-  return Object.assign(new Npc(def, npc.api), { epochMs, group, s, map, animMap, mixer, agent });
+  agent && agent.updateParameters({
+    ...crowdAgentParams,
+    maxSpeed: agent.maxSpeed,
+  });
+  const nextNpc = new Npc(def, npc.api);
+  return Object.assign(nextNpc, { epochMs, group, s: Object.assign(nextNpc.s, s), map, animMap, mixer, agent });
 }
 
 /** @param {any} error */
 function emptyReject(error) {}
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
-const crowdAgentParams = {
+export const crowdAgentParams = {
   radius: npcService.defaults.radius / 4, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 4,
-  // maxSpeed: 2,
-  maxSpeed: npcService.defaults.walkSpeed, // 🚧 can change to runSpeed
+  // maxSpeed: 0, // Set elsewhere
   pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 clarify
   // collisionQueryRange: 2.5,
   collisionQueryRange: 0.7,

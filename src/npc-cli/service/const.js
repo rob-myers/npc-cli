@@ -25,9 +25,6 @@ export const wallOutset = 12 * worldScale;
 
 export const obstacleOutset = 10 * worldScale;
 
-// 🚧 align to glb
-export const agentRadius = 10 * worldScale;
-
 export const wallHeight = 2;
 
 export const glbMeta = /** @type {const} */ ({

@@ -8,7 +8,7 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { agentRadius, worldScale } from "../service/const";
+import { worldScale } from "../service/const";
 import { assertNonNull, info, debug, isDevelopment, keys, warn } from "../service/generic";
 import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
@@ -111,7 +111,7 @@ export default function TestWorld(props) {
 
       state.crowd = new Crowd({
         maxAgents: 10,
-        maxAgentRadius: agentRadius,
+        maxAgentRadius: npcService.defaults.radius,
         navMesh: state.nav.navMesh,
       });
       state.crowd.timeStep = 1 / 60;

@@ -80,6 +80,8 @@ declare namespace NPC {
     distancePx: number;
     /** Was previous pointerdown held down for long? */
     justLongDown: boolean;
+    /** Ctrl/Shift/Command was down */
+    modifierKey: boolean;
     /** Number of active pointers */
     pointers: number;
     /** Was the right mouse button being pressed?  */

@@ -5,7 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { Vect } from "../geom";
-import { isRMB, isTouchDevice } from "../service/dom.js";
+import { isModifierKey, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { InfiniteGrid } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
@@ -49,6 +49,7 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerdown",
         is3d: true,
+        modifierKey: isModifierKey(e.nativeEvent),
         distancePx: 0,
         justLongDown: false,
         pointers: state.getNumPointers(),
@@ -65,6 +66,7 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerup",
         is3d: true,
+        modifierKey: isModifierKey(e.nativeEvent),
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         pointers: state.getNumPointers(),
@@ -93,6 +95,7 @@ export default function TestWorldCanvas(props) {
           api.events.next({
             key: "long-pointerdown",
             is3d: false,
+            modifierKey: isModifierKey(e.nativeEvent),
             distancePx: state.getDownDistancePx(),
             justLongDown: false,
             pointers: state.getNumPointers(),
@@ -107,6 +110,7 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerdown",
         is3d: false,
+        modifierKey: isModifierKey(e.nativeEvent),
         distancePx: 0,
         justLongDown: false,
         pointers: state.getNumPointers(),
@@ -138,6 +142,7 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerup",
         is3d: false,
+        modifierKey: isModifierKey(e.nativeEvent),
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         pointers: state.getNumPointers(),
@@ -156,6 +161,7 @@ export default function TestWorldCanvas(props) {
       api.events.next({
         key: "pointerup-outside",
         is3d: false,
+        modifierKey: isModifierKey(e),
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         pointers: state.getNumPointers(),
@@ -224,8 +230,10 @@ export default function TestWorldCanvas(props) {
         ref={(x) => x && (state.controls = x)}
         makeDefault
         zoomToCursor
-        minAzimuthAngle={0}
-        maxAzimuthAngle={0}
+        {...isTouchDevice() && {
+          minAzimuthAngle: 0,
+          maxAzimuthAngle: 0,
+        }}
       />
 
       <ambientLight intensity={1} />

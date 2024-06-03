@@ -5,7 +5,7 @@ import { css } from "@emotion/css";
 import { Subject } from "rxjs";
 
 import { Vect } from "../geom";
-import { isTouchDevice } from "../service/dom";
+import { isModifierKey, isTouchDevice } from "../service/dom";
 import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -77,6 +77,7 @@ export default function TestCanvas(props) {
             state.events.next({
               key: "pointerup-outside",
               is3d: false,
+              modifierKey: isModifierKey(e),
               distancePx: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
               justLongDown: Date.now() - state.down.epochMs >= 300,
               pointers: 0,
