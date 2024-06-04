@@ -50,6 +50,7 @@ const mainCss = css`
       margin-top: 1rem;
       margin-left: 1rem;
       margin-right: 1rem;
+      min-width: calc(400px + 2 * 2rem);
     }
     > main {
       padding-top: 2rem;
@@ -58,9 +59,10 @@ const mainCss = css`
       padding-bottom: 4rem;
       margin-left: 1rem;
       margin-right: 1rem;
+      min-width: calc(400px + 2 * 2rem);
     }
     white-space: nowrap;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
 `;
 
