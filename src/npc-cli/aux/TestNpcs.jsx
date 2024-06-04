@@ -169,7 +169,9 @@ export default function TestNpcs(props) {
       { npcKey: 'rob', point: { x: 1 * 1.5, y: 5 * 1.5 } },
     ].forEach(({ npcKey, point }) =>
       !state.npc[npcKey] && state.spawn({ npcKey, point }).then(_npc => {
-        state.npc[npcKey].attachAgent(); // can be stale via HMR
+        const npc = state.npc[npcKey]; // can be stale via HMR
+        npc.attachAgent();
+        npc.walkTo(point); // so they'll "move out of way"
         state.select.curr = npcKey; // select last
       })
     );

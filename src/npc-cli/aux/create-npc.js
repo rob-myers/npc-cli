@@ -119,6 +119,9 @@ export class Npc {
   getRadius() {
     return npcService.defaults.radius;
   }
+  getMaxSpeed() {
+    return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
+  }
   /**
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
    */
@@ -167,18 +170,20 @@ export class Npc {
         Math.abs(this.s.target.x - position.x) < 0.1
         && Math.abs(this.s.target.y - position.z) < 0.1
       ) {
-        console.log('should stop');
         this.s.target = null;
         this.mixer.timeScale = 1;
         this.startAnimation('Idle');
+        // keep move target, so agent "moves out of the way"
+        // this.agent.resetMoveTarget();
+        this.agent.goto(position);
       }
 
       const speed = velocity.length();
-      if (speed > 0.1) {
+      if (speed > 0.2) {
         dampLookAt(this.group, position.add(velocity), 0.25, deltaMs);
       }
 
-      this.mixer.timeScale = Math.max(0.3, speed / this.def.walkSpeed);
+      this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
     }
   }
   removeAgent() {
@@ -268,7 +273,7 @@ function emptyReject(error) {}
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
-  radius: npcService.defaults.radius / 4, // 🔔 too large causes jerky collisions
+  radius: npcService.defaults.radius / 3, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 4,
   // maxSpeed: 0, // Set elsewhere

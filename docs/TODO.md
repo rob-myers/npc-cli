@@ -16,7 +16,7 @@
   - ✅ fix VSCode UI push node version
     - via `.bashrc`
 
-- 🚧 integrate TestCharacter into TestWorld
+- ✅ integrate TestCharacter into TestWorld
   - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
   - ℹ️ can use Blender to pull in alternate textures
   - ✅ api.npc.npc exists
@@ -41,8 +41,8 @@
   - ✅ fix jerky collisions
   - ✅ animation frame rate driven by agent speed
   - ✅ can run on cmd/ctrl/shift click
-  - fix final turn
-  - fix initial turn
+  - ✅ fix final turn
+  - ✅ fix initial turn
 
 - 🚧 clarify whether world api inputs should be Vect or Vector3
 
