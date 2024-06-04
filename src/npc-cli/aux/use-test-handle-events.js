@@ -1,8 +1,6 @@
 import React from "react";
 import { warn, info } from "../service/generic";
-import { tmpVec1 } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
-import { npcService } from "../service/npc";
 import { crowdAgentParams } from "./create-npc";
 
 /**
@@ -66,7 +64,7 @@ export default function useTestHandleEvents(api) {
           npc.agent?.setParameters({ ...crowdAgentParams,
             maxSpeed: npc.getMaxSpeed(),
           });
-          npc.walkTo(tmpVec1.set(e.point.x, e.point.z));
+          npc.walkTo(e.point);
         }
       }
 

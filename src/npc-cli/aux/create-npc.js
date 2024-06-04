@@ -6,7 +6,6 @@ import { glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3, yAxis } from '../service/three';
 import { npcService } from '../service/npc';
-import { tmpVec1 } from '../service/geom';
 
 export class Npc {
 
@@ -48,7 +47,7 @@ export class Npc {
     rejectWalk: emptyReject,
     run: false,
     spawns: 0,
-    target: /** @type {null | Geom.VectJson} */ (null),
+    target: /** @type {null | THREE.Vector3Like} */ (null),
   };
 
   /** @type {null | import("@recast-navigation/core").CrowdAgent} */
@@ -65,7 +64,7 @@ export class Npc {
     this.api = api;
   }
   attachAgent() {
-    return this.agent ??= this.api.crowd.addAgent(this.group.position,{
+    return this.agent ??= this.api.crowd.addAgent(this.group.position, {
       ...crowdAgentParams,
       maxSpeed: this.s.run ? npcService.defaults.runSpeed : npcService.defaults.walkSpeed
     });
@@ -113,8 +112,7 @@ export class Npc {
     return this.group.rotation.y;
   }
   getPosition() {
-    const { x, z } = this.group.position;
-    return { x, y: z };
+    return this.group.position;
   }
   getRadius() {
     return npcService.defaults.radius;
@@ -142,13 +140,12 @@ export class Npc {
     }, /** @type {typeof this['animMap']} */ ({}));
 
     this.map = buildObjectLookup(this.group);
+    
     // Mutate userData to decode pointer events
     const skinnedMesh = this.map.nodes[glbMeta.skinnedMeshName];
     skinnedMesh.userData.npcKey = this.key;
+
     this.changeSkin('scientist-dabeyt--with-arms.png');
-    
-    this.group.position.set(this.def.position.x, 0, this.def.position.y);
-    this.group.setRotationFromAxisAngle(yAxis, this.def.angle);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
   /** @param {number} deltaMs  */
@@ -167,8 +164,7 @@ export class Npc {
       // 🚧 WIP
       if (
         this.s.target !== null &&
-        Math.abs(this.s.target.x - position.x) < 0.1
-        && Math.abs(this.s.target.y - position.z) < 0.1
+        position.distanceTo(this.s.target) < 0.1
       ) {
         this.s.target = null;
         this.mixer.timeScale = 1;
@@ -192,9 +188,9 @@ export class Npc {
       this.agent = null;
     }
   }
-  /** @param {Geom.VectJson} dst  */
+  /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
-    this.group.position.set(dst.x, 0, dst.y);
+    this.group.position.copy(dst);
   }
   /** @param {NPC.AnimKey} act */
   startAnimation(act) {
@@ -209,8 +205,8 @@ export class Npc {
     //   this.s.startMove = Date.now();
     // }
   }
-  /** @param {Geom.VectJson} dst  */
-  walkTo(dst, debugPath = false) {
+  /** @param {THREE.Vector3Like} dst  */
+  walkTo(dst, debugPath = true) {
     if (this.agent === null) {
       return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
     }
@@ -232,8 +228,8 @@ export class Npc {
 
     // this.agent.raw.set_vel(0, 1);
     // this.agent.raw.set_vel(2, 1);
-    this.agent.goto(tmpVectThree1.set(closest.x, 0, closest.y));
-    this.s.target = closest;
+    this.agent.goto(closest);
+    this.s.target = {...closest}; // crucial
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
       this.startAnimation(nextAct);

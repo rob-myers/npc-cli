@@ -5,7 +5,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { tmpMesh1, tmpVectThree1, tmpVectThree2 } from "../service/three";
+import { tmpMesh1, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { TestWorldContext } from "./test-world-context";
@@ -27,20 +27,16 @@ export default function TestNpcs(props) {
     nextObstacleId: 0,
     toObstacle: {},
 
-    findPath(src, dst) {
-      const src3 = tmpVectThree1.set(src.x, 0, src.y);
-      const dst3 = tmpVectThree2.set(dst.x, 0, dst.y);
+    findPath(src, dst) {// 🔔 agent may follow different path
       const query = api.crowd.navMeshQuery;
-      // 🔔 agent may follow different path
-      const path = query.computePath(src3, dst3, {
+      const path = query.computePath(src, dst, {
         filter: api.crowd.getFilter(0),
       });
       return path.length === 0 ? null : path;
     },
     getClosestNavigable(p, maxDelta = 0.01) {
-      const { x, z } = api.crowd.navMeshQuery.getClosestPoint(tmpVectThree1.set(p.x, 0, p.y));
-      const isClose = Math.abs(x - p.x) < maxDelta && Math.abs(z - p.y) < maxDelta;
-      return isClose ? { x, y: z } : null;
+      const closest = tmpVectThree1.copy(api.crowd.navMeshQuery.getClosestPoint(p));
+      return closest.distanceTo(p) < maxDelta ? closest : null;
     },
     getSelected() {
       const npcKey = state.select.curr;
@@ -49,7 +45,7 @@ export default function TestNpcs(props) {
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
         throw Error(`invalid npc key: ${JSON.stringify(e.npcKey)}`);
-      } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.y === 'number')) {
+      } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.z === 'number')) {
         throw Error(`invalid point: ${JSON.stringify(e.point)}`);
       } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
@@ -94,6 +90,9 @@ export default function TestNpcs(props) {
         state.group.add(npc.group);
       }
       
+      npc.setPosition(e.point);
+      this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
+
       npc.s.spawns++;
       api.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
@@ -165,8 +164,8 @@ export default function TestNpcs(props) {
 
     
     [// DEMO ensure npcs
-      { npcKey: 'kate', point: { x: 5 * 1.5, y: 7 * 1.5 } },
-      { npcKey: 'rob', point: { x: 1 * 1.5, y: 5 * 1.5 } },
+      { npcKey: 'kate', point: { x: 5 * 1.5, y: 0, z: 7 * 1.5 } },
+      { npcKey: 'rob', point: { x: 1 * 1.5, y: 0, z: 5 * 1.5 } },
     ].forEach(({ npcKey, point }) =>
       !state.npc[npcKey] && state.spawn({ npcKey, point }).then(_npc => {
         const npc = state.npc[npcKey]; // can be stale via HMR
@@ -229,9 +228,9 @@ export default function TestNpcs(props) {
  * @property {Record<string, NPC.Obstacle>} toObstacle
  *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
- * @property {(src: Geom.VectJson, dst: Geom.VectJson) => null | THREE.Vector3Like[]} findPath
+ * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {() => null | NPC.NPC} getSelected
- * @property {(p: Geom.VectJson, maxDelta?: number) => null | Geom.VectJson} getClosestNavigable
+ * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
  * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle

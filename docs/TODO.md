@@ -7,44 +7,7 @@
   - consoles
   - extras
 
-- 🚧 fix webp generation
-  - ✅ on push generate webp and fail anything new detected
-  - ✅ assets.js script ensures webp
-  - ✅ assets.js script avoids recomputing webp
-  - ✅ `assets-fast` avoids over-computation (sans `--staleMs={ms}`)
-  - ✅ absorb `ensure-webp` into `assets-fast --prePush`
-  - ✅ fix VSCode UI push node version
-    - via `.bashrc`
-
-- ✅ integrate TestCharacter into TestWorld
-  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
-  - ℹ️ can use Blender to pull in alternate textures
-  - ✅ api.npc.npc exists
-  - ✅ implement `api.npc.spawn`
-  - ❌ `<NPC>` exists and can show unanimated character
-    - no hooks inside `<NPC>`
-  - ✅ can connect terminal to world via `awaitWorld`
-  - ℹ️ `api npc` takes non-trivial time to be non-null
-    - can test `awaitWorld` or `api isReady` first
-  - ✅ can spawn un-animated character via terminal
-  - ✅ can see `npc` in terminal 
-  - ✅ attach npcs directly to `<group/>` via js
-    - tty command: `api npc.spawn '{ npcKey: "foo", point: {x:0, y:0} }'`
-  - ✅ improve un-animated character spawn
-  - ❌ api.npc.npc drives character render
-  - ✅ api.npc.npc drives agents
-  - ✅ merge character controller into `Npc`
-  - ✅ characters are animated (Idle)
-  - ✅ detect when stop walking (1st attempt)
-  - ✅ characters are animated (Walk)
-  - ✅ try fix `Npc` class HMR
-  - ✅ fix jerky collisions
-  - ✅ animation frame rate driven by agent speed
-  - ✅ can run on cmd/ctrl/shift click
-  - ✅ fix final turn
-  - ✅ fix initial turn
-
-- 🚧 clarify whether world api inputs should be Vect or Vector3
+- ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
 
 - obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
@@ -1185,3 +1148,41 @@
   - ✅ [soldier-darkleonard2](https://namemc.com/skin/702ae8d8d9492ef8)
 
 - ✅ fix Viewer horizontal drag "initial jump" when Nav is open
+
+
+- ✅ fix webp generation
+  - ✅ on push generate webp and fail anything new detected
+  - ✅ assets.js script ensures webp
+  - ✅ assets.js script avoids recomputing webp
+  - ✅ `assets-fast` avoids over-computation (sans `--staleMs={ms}`)
+  - ✅ absorb `ensure-webp` into `assets-fast --prePush`
+  - ✅ fix VSCode UI push node version
+    - via `.bashrc`
+
+- ✅ integrate TestCharacter into TestWorld
+  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+  - ℹ️ can use Blender to pull in alternate textures
+  - ✅ api.npc.npc exists
+  - ✅ implement `api.npc.spawn`
+  - ❌ `<NPC>` exists and can show unanimated character
+    - no hooks inside `<NPC>`
+  - ✅ can connect terminal to world via `awaitWorld`
+  - ℹ️ `api npc` takes non-trivial time to be non-null
+    - can test `awaitWorld` or `api isReady` first
+  - ✅ can spawn un-animated character via terminal
+  - ✅ can see `npc` in terminal 
+  - ✅ attach npcs directly to `<group/>` via js
+    - tty command: `api npc.spawn '{ npcKey: "foo", point: {x:0, y:0} }'`
+  - ✅ improve un-animated character spawn
+  - ❌ api.npc.npc drives character render
+  - ✅ api.npc.npc drives agents
+  - ✅ merge character controller into `Npc`
+  - ✅ characters are animated (Idle)
+  - ✅ detect when stop walking (1st attempt)
+  - ✅ characters are animated (Walk)
+  - ✅ try fix `Npc` class HMR
+  - ✅ fix jerky collisions
+  - ✅ animation frame rate driven by agent speed
+  - ✅ can run on cmd/ctrl/shift click
+  - ✅ fix final turn
+  - ✅ fix initial turn

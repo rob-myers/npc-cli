@@ -11,7 +11,7 @@ declare namespace NPC {
     classKey: NpcClassKey;
     /** Radians */
     angle: number;
-    position: Geom.VectJson;
+    position: import("three").Vector3Like;
     /** World units per second */
     runSpeed: number;
     /** World units per second */
@@ -21,7 +21,7 @@ declare namespace NPC {
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
     npcClassKey?: NPC.NpcClassKey;
-    point: Geom.VectJson;
+    point: import("three").Vector3Like;
     meta?: Geom.Meta;
     requireNav?: boolean;
   }

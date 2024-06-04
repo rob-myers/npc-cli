@@ -141,9 +141,9 @@ export default function TestWorld(props) {
 
         npc.removeAgent();
         npc.attachAgent();
-        npc.setPosition(tmpVec1.set(position.x, position.z));
+        npc.setPosition(position);
         if (target !== null) {
-          npc.walkTo(tmpVec1.set(target.x, target.z));
+          npc.walkTo(target);
         }
       });
     },
