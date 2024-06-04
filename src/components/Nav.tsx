@@ -134,11 +134,13 @@ const navTitleCss = css`
   .${menuClasses.menuItemRoot}.title {
     opacity: 1;
     transition: opacity 500ms;
+    margin-left: 0.75rem;
 
+    /* display: flex; */
     /* margin-top: ${nav.titleMarginTop}; */
     /* margin-top: 0.75rem; */
-    margin-left: 0.75rem;
-    display: flex;
+
+    background-color: #222;
     
     .${menuClasses.button} {
       height: ${view.barSize};
@@ -152,7 +154,11 @@ const navTitleCss = css`
       font-weight: 200;
       font-size: 1.4rem;
       letter-spacing: 0.5rem;
-      filter: blur(1px);
+      /* filter: blur(1px); */
+      /* filter: brightness(0.7); */
+      a {
+        color: #ddd;
+      }
     }
 
   }
