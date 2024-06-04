@@ -33,18 +33,34 @@ export default function Main(props: React.PropsWithChildren) {
 }
 
 const mainCss = css`
-  @media (min-width: ${afterBreakpoint}) {
-    width: 100%;
-    margin: 0 auto;
-    > header, > main {
-      padding: 0 32px;
-    }
-    white-space: nowrap;
-    overflow-x: scroll;
+  > header, > main {
+    background-color: #fff;
   }
+
   @media (max-width: ${breakpoint}) {
     overflow: scroll;
     padding: 0 12px;
+  }
+  @media (min-width: ${afterBreakpoint}) {
+    width: 100%;
+    margin: 0 auto;
+    > header {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      margin-top: 1rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+    > main {
+      padding-top: 2rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+      padding-bottom: 4rem;
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+    white-space: nowrap;
+    overflow-x: scroll;
   }
 `;
 
@@ -64,8 +80,8 @@ const mainHeaderCss = css`
   letter-spacing: 1.5rem;
   
   @media (min-width: ${afterBreakpoint}) {
-    justify-content: left;
-    margin-bottom: 2.5rem;
+    justify-content: right;
+    margin-bottom: 0rem;
   }
   @media (max-width: ${breakpoint}) {
     justify-content: right;
