@@ -56,7 +56,7 @@ const mainCss = css`
       padding-top: 2rem;
       padding-left: 2rem;
       padding-right: 2rem;
-      padding-bottom: 4rem;
+      padding-bottom: 6rem;
       margin-left: 1rem;
       margin-right: 1rem;
       min-width: calc(400px + 2 * 2rem);

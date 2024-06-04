@@ -15,8 +15,15 @@ export default function Nav() {
     onClickSidebar(e: React.MouseEvent) {
       // console.log(e.target)
       const el = e.target as HTMLElement;
-      if (el.classList.contains(sidebarClasses.container)) {
-        state.toggleCollapsed(); // outside buttons
+      if (
+        // outside buttons
+        el.classList.contains(sidebarClasses.container)
+        || el.nodeName === "UL"
+        // near title
+        || (collapsed && el.closest(".title") !== null)
+        || (!collapsed && el.classList.contains("title"))
+      ) {
+        state.toggleCollapsed();
         return;
       }
       const anchorEl = el.querySelectorAll("a");
@@ -28,7 +35,9 @@ export default function Nav() {
     toggleCollapsed() {
       useSite.api.toggleNav();
     },
-  }));
+  }), {
+    deps: [collapsed],
+  });
 
   return (
     <Sidebar
@@ -40,7 +49,7 @@ export default function Nav() {
       onClick={state.onClickSidebar}
       width={nav.expandedWidth}
     >
-      <button onClick={state.toggleCollapsed} className={cx("toggle", toggleCss)}>
+      <button onClick={(e) => { state.toggleCollapsed(); e.stopPropagation() }} className={cx("toggle", toggleCss)}>
         <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={collapsed ? undefined : "horizontal"} />
       </button>
 
