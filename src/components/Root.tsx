@@ -132,6 +132,6 @@ const rootContentCss = css`
     flex-direction: column;
   }
   @media (min-width: ${afterBreakpoint}) {
-    background-color: #eee;
+    background-color: #ccc;
   }
 `;

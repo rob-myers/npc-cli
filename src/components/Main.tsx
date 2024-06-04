@@ -36,6 +36,9 @@ const mainCss = css`
   > header, > main {
     background-color: #fff;
   }
+  > main {
+    padding-top: 2rem;
+  }
 
   @media (max-width: ${breakpoint}) {
     overflow: scroll;
@@ -44,21 +47,18 @@ const mainCss = css`
   @media (min-width: ${afterBreakpoint}) {
     width: 100%;
     margin: 0 auto;
-    > header {
-      padding-left: 2rem;
-      padding-right: 2rem;
-      margin-top: 1rem;
+    > header, > main {
       margin-left: 1rem;
       margin-right: 1rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    > header {
+      margin-top: 0rem;
       min-width: calc(400px + 2 * 2rem);
     }
     > main {
-      padding-top: 2rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
       padding-bottom: 6rem;
-      margin-left: 1rem;
-      margin-right: 1rem;
       min-width: calc(400px + 2 * 2rem);
     }
     white-space: nowrap;
@@ -80,15 +80,6 @@ const mainHeaderCss = css`
   border-bottom: 1px solid rgba(200, 200, 200, 0.5);
   font-size: 1.2rem;
   letter-spacing: 1.5rem;
-  
-  @media (min-width: ${afterBreakpoint}) {
-    justify-content: right;
-    margin-bottom: 0rem;
-  }
-  @media (max-width: ${breakpoint}) {
-    justify-content: right;
-    margin-bottom: 2rem;
-  }
 `;
 
 const overlayCss = css`
