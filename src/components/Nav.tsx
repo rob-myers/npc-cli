@@ -13,6 +13,7 @@ export default function Nav() {
 
   const state = useStateRef(() => ({
     onClickSidebar(e: React.MouseEvent) {
+      // console.log(e.target)
       const el = e.target as HTMLElement;
       if (el.classList.contains(sidebarClasses.container)) {
         state.toggleCollapsed(); // outside buttons
@@ -75,6 +76,7 @@ const navCss = css`
   color: white;
   border-right: 1px solid #444 !important;
 
+  text-transform: lowercase; // 🔔
 
   a.${menuClasses.button}, span.${menuClasses.button} {
     &:hover {
@@ -123,21 +125,27 @@ const navTitleCss = css`
   .${menuClasses.menuItemRoot}.title {
     opacity: 1;
     transition: opacity 500ms;
-    /* margin-top: ${nav.titleMarginTop}; */
-    margin-left: 12px;
 
+    /* margin-top: ${nav.titleMarginTop}; */
+    /* margin-top: 0.75rem; */
+    margin-left: 0.75rem;
+    display: flex;
+    
     .${menuClasses.button} {
       height: ${view.barSize};
     }
-
+    
     .${menuClasses.label} {
       display: flex;
       align-items: center;
-
-      font-size: 1.5rem;
-      letter-spacing: 0.4rem;
-      filter: drop-shadow(3px 0 #336);
+      
+      text-transform: capitalize;
+      font-weight: 200;
+      font-size: 1.4rem;
+      letter-spacing: 0.5rem;
+      filter: blur(1px);
     }
+
   }
 
   &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
@@ -176,6 +184,6 @@ const toggleCss = css`
     filter: invert(1);
   }
   @media (min-width: ${afterBreakpoint}) {
-    transform: scale(0.9);
+    transform: scale(0.8);
   }
 `;
