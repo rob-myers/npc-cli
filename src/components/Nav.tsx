@@ -159,6 +159,9 @@ const navTitleCss = css`
       a {
         color: #ddd;
       }
+      @media (max-width: ${breakpoint}) {
+        font-size: 1.2rem;
+      }
     }
 
   }
