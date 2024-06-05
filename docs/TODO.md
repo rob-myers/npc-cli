@@ -9,7 +9,7 @@
 
 - ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
 
-- obstacle right-click/long-press shows clicked type e.g. `bed`
+- 🚧 obstacle right-click/long-press shows clicked type e.g. `bed`
   - clicked point -> unit XZ square -> sprite-sheet
   - clicked if respective pixel is non-transparent
 
