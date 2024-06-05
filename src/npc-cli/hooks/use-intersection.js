@@ -17,8 +17,8 @@ export default function useIntersection({
     const onVisibilityChange = () => trackVisible && document.visibilityState === 'hidden' && cb(false);
     document.addEventListener('visibilitychange', onVisibilityChange);
 
-    const onWindowBlur = () => trackVisible && cb(false);
-    window.addEventListener('blur', onWindowBlur);
+    // const onWindowBlur = () => trackVisible && cb(false);
+    // window.addEventListener('blur', onWindowBlur);
 
     if (!window.IntersectionObserver || !el) {
       return () => document.removeEventListener('visibilitychange', onVisibilityChange);
@@ -44,7 +44,7 @@ export default function useIntersection({
     observer.observe(el);
     return () => {
       document.removeEventListener('visibilitychange', onVisibilityChange);
-      window.removeEventListener('blur', onWindowBlur);
+      // window.removeEventListener('blur', onWindowBlur);
       observer.disconnect();
     };
 
