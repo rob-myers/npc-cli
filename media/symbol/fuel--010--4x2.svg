@@ -10,6 +10,18 @@
     <title>decor label=fuel</title>
   </rect>
   <rect y="-20" width="1238" height="639" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" x="-20">
-    <title>obstacle no-fill</title>
+    <title>obstacle</title>
+  </rect>
+  <rect x="-20.000002" y="-20.000002" width="1240" height="20.000002" style="stroke: rgb(0, 0, 0);">
+    <title>wall</title>
+  </rect>
+  <rect x="-20.000002" y="600" width="1240" height="20.000002" style="stroke: rgb(0, 0, 0);">
+    <title>wall</title>
+  </rect>
+  <rect x="-20.000002" y="-19.999985" width="19.999998" height="639.999985" style="stroke: rgb(0, 0, 0);">
+    <title>wall</title>
+  </rect>
+  <rect x="1197.999998" y="-20.6" width="19.999998" height="640" style="stroke: rgb(0, 0, 0);">
+    <title>wall</title>
   </rect>
 </svg>

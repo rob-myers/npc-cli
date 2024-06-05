@@ -11,7 +11,7 @@ import {
   isDataChunk,
   isProxy,
 } from "./io";
-import { safeStringify, testNever } from "../service/generic";
+import { safeStringify, testNever, warn } from "../service/generic";
 import useSession from "./session.store";
 
 /**
@@ -99,7 +99,12 @@ export class ttyXtermClass {
     this.sendSigKill();
     this.cleanups.forEach((cleanup) => cleanup());
     this.cleanups.length = 0;
-    this.xterm.dispose();
+    try {
+      this.xterm.dispose();
+    } catch (e) {
+      // xterm-addon-webgl throws `Cannot read properties of undefined (reading 'onRequestRedraw')`
+      warn(`xterm.dispose: ignoring error: "${(e as any || {}).message || e}"`);
+    }
   }
 
   initialise() {

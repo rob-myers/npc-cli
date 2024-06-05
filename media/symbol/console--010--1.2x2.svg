@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+                <symbol id="symbol-0" vioewbox="0 0 150 150" viewBox="0 0 150 150">
+                        <title>console--051--0.4x0.6</title>
+                        <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2-0'); transform-origin: 75.005px 75.0023px;" y="0" x="0">
+                                <title>console--051--0.4x0.6 y=0.4</title>
+                        </rect>
+                </symbol>
+                <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-2"/>
+                <pattern id="pattern-2" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0"/>
+                <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+                        <title>symbol-rect-pattern</title>
+                        <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+                                <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+                                <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+                                <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+                                <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+                        </g>
+                        <defs>
+                                <bx:grid x="0" y="0" width="300" height="300"/>
+                        </defs>
+                </pattern>
+        </defs>
+        <image width="367" height="607" y="-3.5" style="pointer-events: none;" xlink:href="data:image/png;base64,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">
+                <title>console--010--1.2x2</title>
+        </image>
+        <path d="M 476.200119 335.600041 L 409.839043 335.600041 L 388.250043 312.875041 L 347.500043 298.600041 L 308.400043 298.600041 L 272.728043 310.521041 L 242.600043 335.600041 L 112.000043 335.600041 L 81.872043 310.521041 L 46.200043 298.600041 L 7.100043 298.600041 L -33.649957 312.875041 L -55.238957 335.600041 L -123.799881 336.60245 L -123.799881 121.599998 L 476.200111 121.599998 L 476.200119 335.600041 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(0, -1, 1, 0, -68.698875427246, 70.89875793457)">
+                <title>obstacle y=0.8</title>
+        </path>
+        <g>
+                <title>symbols</title>
+                <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 224.993591308594, 373.993621826172)" xlink:href="#symbol-0">
+                        <title>console--051--0.4x0.6 y=0.4</title>
+                </use>
+                <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 224.993591308594, 73.993621826172)" xlink:href="#symbol-0">
+                        <title>console--051--0.4x0.6 y=0.4</title>
+                </use>
+        </g>
+</svg>

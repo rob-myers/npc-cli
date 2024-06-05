@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME } from "src/scripts/const";
+import { GEOMORPHS_JSON_FILENAME } from "src/const";
 import { alloc, error, info } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";

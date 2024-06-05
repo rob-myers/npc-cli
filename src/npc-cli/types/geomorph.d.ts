@@ -6,8 +6,16 @@ declare namespace Geomorph {
   > {
     symbols: Record<Geomorph.SymbolKey, Geomorph.SymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
+    sheet: SpriteSheet;
     /** `metaKey` is a `Geomorph.SymbolKey` or a mapKey e.g. `demo-map-1` */
-    meta: { [metaKey: string]: { outputHash: number } };
+    meta: { [metaKey: string]: {
+      /** Hash of parsed symbol */
+      outputHash: number;
+      /** Hash of `"data:image/png..."` (including quotes) */
+      pngHash?: number;
+      /** Hash of each obstacle polygon */
+      obsHashes?: number[];
+    } };
   }
 
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
@@ -16,7 +24,7 @@ declare namespace Geomorph {
   type Connector = import("../service/geomorph").Connector;
 
   interface ConnectorJson {
-    poly: Geomorph.WithMeta<Geom.GeoJsonPolygon>;
+    poly: Geom.GeoJsonPolygon;
     /**
      * `[id of room infront, id of room behind]`
      * where a room is *infront* if `normal` is pointing towards it.
@@ -48,10 +56,14 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
+    /** `${mapsHash} ${layoutsHash} ${sheetsHash}` */
+    hash: string;
     mapsHash: number;
     layoutsHash: number;
+    sheetsHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
+    sheet: SpriteSheet;
   }
 
   type Geomorphs = GeomorphsGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
@@ -88,18 +100,18 @@ declare namespace Geomorph {
      * Uncut hull walls: only present in hull symbols.
      * A hull symbol may have other walls, but they'll be in `walls`.
      */
-    hullWalls: Geomorph.WithMeta<P>[];
-    decor: Geomorph.WithMeta<P>[];
-    doors: Geomorph.WithMeta<P>[];
-    obstacles: Geomorph.WithMeta<P>[];
+    hullWalls: P[];
+    decor: P[];
+    doors: P[];
+    obstacles: P[];
     /** Union of uncut non-optional walls including hull walls. */
-    walls: Geomorph.WithMeta<P>[];
-    windows: Geomorph.WithMeta<P>[];
+    walls: P[];
+    windows: P[];
     /** 🚧 refine? */
-    unsorted: Geomorph.WithMeta<P>[];
+    unsorted: P[];
 
     /** Symbols can have sub symbols, e.g. hull symbols use them to layout a geomorph. */
-    symbols: Geomorph.WithMeta<{
+    symbols: {
       symbolKey: Geomorph.SymbolKey;
       /** Original width (Starship Symbols coordinates i.e. 60 ~ 1 grid) */
       width: number;
@@ -107,7 +119,8 @@ declare namespace Geomorph {
       height: number;
       /** Normalized affine transform */
       transform: Geom.SixTuple;
-    }>[];
+      meta: Geom.Meta;
+    }[];
 
     /** Doors tagged with `optional` can be removed */
     removableDoors: {
@@ -118,7 +131,7 @@ declare namespace Geomorph {
     }[];
 
     /** Walls tagged with `optional` can be added */
-    addableWalls: Geomorph.WithMeta<P>[];
+    addableWalls: P[];
   }
 
   type Symbol = SymbolGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
@@ -162,14 +175,14 @@ declare namespace Geomorph {
     key: GeomorphKey;
     pngRect: R;
 
-    /** 🚧 points, rects or circles */
     decor: Decor[];
-    hullPoly: P[];
-    rooms: WithMeta<P>[];
-    hullDoors: C[];
     doors: C[];
+    hullDoors: C[];
+    hullPoly: P[];
+    obstacles: LayoutObstacleGeneric<P>[];
+    rooms: P[];
+    walls: P[];
     windows: C[];
-    walls: WithMeta<P>[];
 
     navDecomp: Geom.TriangulationGeneric<V>;
     /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
@@ -184,13 +197,30 @@ declare namespace Geomorph {
     transform: Geom.SixTuple;
     mat4: import("three").Matrix4;
     // ...
-    wallSegs: [Geom.Vect, Geom.Vect][];
+    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
     doorSegs: [Geom.Vect, Geom.Vect][];
   }
 
-  type Meta<T extends {} = {}> = Record<string, any> & T;
+  /**
+   * - Given `origPoly` and `symbolKey` we can extract the respective part of the symbol's PNG.
+   * - Applying `transform` to `origPoly` yields the polygon in Geomorph space.
+   */
+  interface LayoutObstacleGeneric<
+    P extends Geom.GeoJsonPolygon | Geom.Poly,
+  > {
+    /** The `symbol` the obstacle originally comes from */
+    symbolKey: SymbolKey;
+    /** The index in `symbol.obstacles` this obstacle corresponds to */
+    obstacleId: number;
+    /** The height of this particular instance */
+    height: number;
+    /** `symbol.obstacles[symObsId]` -- could be inferred from `assets` */
+    origPoly: P;
+    /** Transform from original symbol coords into Geomorph coords */
+    transform: Geom.SixTuple;
+  }
 
-  type WithMeta<T extends {} = {}, U extends {} = {}> = T & { meta: Meta<U> };
+  type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
 
   //#region decor
 
@@ -216,7 +246,7 @@ declare namespace Geomorph {
 
   interface BaseDecor {
     key: string;
-    meta: Geomorph.Meta<Geomorph.GmRoomId>;
+    meta: Geom.Meta<Geomorph.GmRoomId>;
     /** Epoch ms when last updated (overwritten) */
     updatedAt?: number;
     /** For defining decor via CLI (more succinct) */
@@ -240,5 +270,24 @@ declare namespace Geomorph {
    * but in this way we avoid duplication.
    */
   type SymbolKey = import('../service/geomorph').SymbolKey;
+
+  interface SpriteSheet {
+    /**
+     * - key format `{symbolKey} ${obstacleId}`
+     * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
+     */
+    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, SymbolObstacle>;
+    obstaclesWidth: number;
+    obstaclesHeight: number;
+  }
+
+  interface SymbolObstacle extends SymbolObstacleContext, Geom.RectJson {};
+
+  interface SymbolObstacleContext {
+    symbolKey: Geomorph.SymbolKey;
+    obstacleId: number;
+    /** e.g. `chair` */
+    type: string;
+  }
 
 }

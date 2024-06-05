@@ -22,10 +22,12 @@ export class Poly {
   /**
    * @param {Vect[]} outline
    * @param {Vect[][]} holes
+   * @param {Geom.Meta} [meta]
    */
-  constructor(outline = [], holes = []) {
+  constructor(outline = [], holes = [], meta = {}) {
     /** @type {Vect[]} */ this.outline = outline;
     /** @type {Vect[][]} */ this.holes = holes;
+    /** @type {Geom.Meta} */ this.meta = meta;
   }
 
   get allPoints() {
@@ -101,12 +103,6 @@ export class Poly {
   /** @param {Geom.VectJson} delta */
   add(delta) {
     return this.translate(delta.x, delta.y);
-  }
-
-  /** @param {Record<string, string | undefined>} meta */
-  addMeta(meta) {
-    this.meta = Object.assign(this.meta || {}, meta);
-    return this;
   }
 
   /**
@@ -191,11 +187,16 @@ export class Poly {
 
   /**
    * @param {Geom.Mat} [mat]
+   * @param {Geom.Meta} [extraMeta]
+   * @param {number} [precision]
    */
-  cleanClone(mat, precision = 4) {
-    return mat
+  cleanClone(mat, extraMeta = undefined, precision = 4) {
+    const cloned = mat
       ? this.clone().applyMatrix(mat).fixOrientation().precision(precision)
-      : this.clone().fixOrientation();
+      : this.clone().fixOrientation()
+    ;
+    Object.assign(cloned.meta, extraMeta);
+    return cloned;
   }
 
   /**
@@ -218,7 +219,7 @@ export class Poly {
   clone() {
     const outline = this.outline.map((p) => p.clone());
     const holes = this.holes.map((hole) => hole.map((p) => p.clone()));
-    return new Poly(outline, holes);
+    return new Poly(outline, holes, { ...this.meta });
   }
 
   /**
@@ -305,7 +306,8 @@ export class Poly {
     }
     return new Poly(
       input.coordinates[0].map(([x, y]) => new Vect(x, y)),
-      input.coordinates.slice(1).map((hole) => hole.map(([x, y]) => new Vect(x, y)))
+      input.coordinates.slice(1).map((hole) => hole.map(([x, y]) => new Vect(x, y))),
+      {...input.meta},
     );
   }
 

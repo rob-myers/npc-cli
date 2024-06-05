@@ -45,7 +45,7 @@
   <rect x="335" y="288" width="230" height="24" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
     <title>door</title>
   </rect>
-  <rect y="590" width="590" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
+  <rect y="590" width="590" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="10">
     <title>wall</title>
   </rect>
   <rect y="290" width="300" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="300">
@@ -75,10 +75,10 @@
   <g>
     <title>symbols</title>
     <rect width="500" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: 187.504px 295.87px;" y="145.820999" x="-62.501675" transform="matrix(0, 1, -1, 0, -37.553344726562, -45.863319396973)">
-      <title>bed--003--1x1.6</title>
+      <title>bed--003--1x1.6 y=0.5</title>
     </rect>
     <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 449.05px 74.9992px;" y="0.001003" x="374.052094">
-      <title>extra--fresher--002--0.5x0.5</title>
+      <title>fresher--002--0.4x0.6 y=0.4</title>
     </rect>
   </g>
 </svg>

@@ -15,10 +15,9 @@
 
 /**
  * @typedef RunArg
- * @property {import('./cmd.service').CmdService['processApi']} api
- * 🚧 add back in
- * //@property {import('./cmd.service').CmdService['processApi'] & {
- *   getCached(key: '__WORLD_KEY_VALUE__'): import('../world/World').State;
+ * //@property {import('./cmd.service').CmdService['processApi']} api
+ * @property {import('./cmd.service').CmdService['processApi'] & {
+ *   getCached(key: '__WORLD_KEY_VALUE__'): import('../aux/TestWorld').State;
  * }} api
  * @property {string[]} args
  * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home
@@ -165,9 +164,21 @@ const utilFunctionsRunDefs = [
  *
  * @type {Record<string, (arg: RunArg) => void>[]}
  */
-const gameFunctionsRunDefs = [
-  // 🚧 add back in
-];
+const gameFunctionsRunDefs = [{
+  // 🚧 add functions back in
+  // 🚧 migrate to new HMR approach
+
+  /** Ping per second until query {WORLD_KEY} found */
+  awaitWorld: async function* ({ api, home: { WORLD_KEY } }) {
+    while (!api.getCached(WORLD_KEY)?.isReady()) {
+      api.info(`polling for ${api.ansi.White}${WORLD_KEY}`)
+      yield* api.sleep(1)
+    }
+    // api.getCached(WORLD_KEY).npc.connectSession(api.meta.sessionKey)
+    api.info(`found ${api.ansi.White}${WORLD_KEY}`)
+  },
+    
+}];
 
 //#endregion
 

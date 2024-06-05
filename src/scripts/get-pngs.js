@@ -4,7 +4,18 @@ import childProcess from "child_process";
 import stringify from 'json-stringify-pretty-compact';
 
 import { error, info, warn } from "../npc-cli/service/generic";
-import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilename, metaFromGeomorphFilename, metaFromRootFilename, metaFromSmallCraftFilename, metaFromSymbolFilename, rootFilenameRegex, smallCraftFilenameRegex, symbolsFilenameRegex } from "./service";
+import {
+  altSymbolsFilenameRegex,
+  geomorphsFilenameRegex,
+  metaFromAltSymbolFilename,
+  metaFromGeomorphFilename,
+  metaFromRootFilename,
+  metaFromSmallCraftFilename,
+  metaFromSymbolFilename,
+  rootFilenameRegex,
+  smallCraftFilenameRegex,
+  symbolsFilenameRegex
+} from "./service";
 
 /**
  * Rename & trim PNGs
@@ -29,6 +40,13 @@ import { altSymbolsFilenameRegex, geomorphsFilenameRegex, metaFromAltSymbolFilen
  * yarn get-pngs small-craft 'Small Craft' symbol-small-craft
  * yarn get-pngs symbol 'Symbols/Furniture, Consoles, & Equipment' symbol-furniture-consoles-equipment
  * yarn get-pngs symbol 'Symbols/Machinery' symbol-machinery
+ * yarn get-pngs symbol 'Symbols/Lab' symbol-lab
+ * yarn get-pngs symbol 'Symbols/Battery' symbol-battery
+ * yarn get-pngs symbol 'Symbols/Medical' symbol-medical
+ * yarn get-pngs symbol 'Symbols/Misc' symbol-misc
+ * yarn get-pngs symbol 'Symbols/Offices' symbol-offices
+ * yarn get-pngs symbol 'Symbols/Shop & Repair Area' symbol-shop-repair-area
+ * yarn get-pngs symbol Symbols/Fresher symbol-fresher
  * ```
  */
 const [,, inputType, srcFolder, dstFolder] = process.argv;

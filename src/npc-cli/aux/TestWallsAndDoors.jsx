@@ -2,16 +2,15 @@ import React from "react";
 import * as THREE from "three";
 import { damp } from "maath/easing"
 
-import { hashText, info } from "../service/generic";
+import { Mat, Vect } from "../geom";
+import { hashJson, info } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
+import * as glsl from "../service/glsl";
+import { quadGeometryXY } from "../service/three";
+import { geomorphService } from "../service/geomorph";
+import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import { quadGeometryXY } from "../service/three";
-import { Mat, Vect } from "../geom";
-import { geomorphService } from "../service/geomorph";
-
-import basicVertexShader from "!!raw-loader!../glsl/mesh-basic-simplified.v.glsl";
-import gradientFragmentShader from "!!raw-loader!../glsl/gradient.f.glsl";
 
 /**
  * @param {Props} props
@@ -25,7 +24,7 @@ export default function TestWallsAndDoors(props) {
 
     doorByPos: {},
     doorByInstId: [],
-    movingDoors: new Map,
+    movingDoors: new Map(),
 
     buildLookups() {
       let dId = 0;
@@ -56,32 +55,58 @@ export default function TestWallsAndDoors(props) {
       const { src, dir, ratio, segLength } = meta;
       const length = segLength * ratio;
       return geomorphService.embedXZMat4(
-        [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y], wallHeight, tmpMatFour1
+        [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y],
+        { yScale: wallHeight, mat4: tmpMatFour1 },
       );
     },
-    getWallMat(u, v, transform) {
+    getWallMat([u, v], transform, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
       [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
       const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
       const len = u.distanceTo(v);
-      return geomorphService.embedXZMat4([
-        len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y,
-      ], wallHeight, tmpMatFour1);
+      return geomorphService.embedXZMat4(
+        [len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y],
+        { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
+      );
     },
-    getNumDoors() {
-      return api.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
+    onPointerDown(e) {
+      const target = /** @type {keyof typeof meshName} */ (e.object.name);
+      api.events.next({
+        key: "pointerdown",
+        is3d: true,
+        modifierKey: isModifierKey(e.nativeEvent),
+        distancePx: 0,
+        justLongDown: false,
+        pointers: api.ui.getNumPointers(),
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
+        point: e.point,
+        meta: {
+          ...target === 'doors' && { doors: true, instanceId: e.instanceId },
+          ...target === 'walls' && { walls: true, instanceId: e.instanceId },
+        },
+      });
+      e.stopPropagation();
     },
-    getNumWalls() {
-      return api.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
-    },
-    handleClick(e) {
-      const target = /** @type {'walls' | 'doors'} */ (e.object.name);
-      if (target === 'doors') {
-        const instanceId = /** @type {number} */ (e.instanceId);
-        const meta = state.doorByInstId[instanceId];
-        meta.open = !meta.open;
-        state.movingDoors.set(meta.instanceId, meta);
-      }
+    onPointerUp(e) {
+      const target = /** @type {keyof typeof meshName} */ (e.object.name);
+      api.events.next({
+        key: "pointerup",
+        is3d: true,
+        modifierKey: isModifierKey(e.nativeEvent),
+        distancePx: api.ui.getDownDistancePx(),
+        justLongDown: api.ui.justLongDown,
+        pointers: api.ui.getNumPointers(),
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
+        point: e.point,
+        meta: {
+          ...target === 'doors' && { doors: true, instanceId: e.instanceId },
+          ...target === 'walls' && { walls: true, instanceId: e.instanceId },
+        },
+      });
       e.stopPropagation();
     },
     onTick() {
@@ -101,12 +126,22 @@ export default function TestWallsAndDoors(props) {
       }
       instanceMatrix.needsUpdate = true;
     },
+    toggleDoor(instanceId) {
+      const doorMeta = state.doorByInstId[instanceId];
+      doorMeta.open = !doorMeta.open;
+      state.movingDoors.set(doorMeta.instanceId, doorMeta);
+    },
     positionInstances() {
       const { wallsInst: ws, doorsInst: ds } = state;
 
       let wId = 0;
       api.gms.forEach(({ wallSegs, transform }) =>
-        wallSegs.forEach(([u, v]) => ws.setMatrixAt(wId++, state.getWallMat(u, v, transform)))
+        wallSegs.forEach(({ seg, meta }) => ws.setMatrixAt(wId++, state.getWallMat(
+          seg,
+          transform,
+          typeof meta.h === 'number' ? meta.h : undefined,
+          typeof meta.y === 'number' ? meta.y : undefined,
+        ))),
       );
       ws.instanceMatrix.needsUpdate = true;
       ws.computeBoundingSphere();
@@ -119,39 +154,42 @@ export default function TestWallsAndDoors(props) {
     },
   }));
 
-  api.doors = state;
+  api.vert = state;
 
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
-  }, [api.mapKey, api.mapsHash, api.layoutsHash]);
+  }, [api.hash, doorShaderHash]);
 
   return (
     <>
       <instancedMesh
-        name="walls"
-        key={`${api.mapsHash} ${api.layoutsHash}`}
+        name={meshName.walls}
+        key={`${api.hash} ${meshName.walls}`}
         ref={instances => instances && (state.wallsInst = instances)}
-        args={[quadGeometryXY, undefined, state.getNumWalls()]}
+        args={[quadGeometryXY, undefined, api.derived.wallCount]}
         frustumCulled={false}
-        onPointerUp={state.handleClick}
-      >
+        onPointerUp={state.onPointerUp}
+        onPointerDown={state.onPointerDown}
+        >
         <meshBasicMaterial side={THREE.DoubleSide} color="black" />
       </instancedMesh>
 
       <instancedMesh
-        name="doors"
-        key={`${api.mapsHash} ${api.layoutsHash} ${doorShaderHash}`}
+        name={meshName.doors}
+        key={`${api.hash} ${meshName.doors}`}
         ref={instances => instances && (state.doorsInst = instances)}
-        args={[quadGeometryXY, undefined, state.getNumDoors()]}
+        args={[quadGeometryXY, undefined, api.derived.doorCount]}
         frustumCulled={false}
-        onPointerUp={state.handleClick}
+        onPointerUp={state.onPointerUp}
+        onPointerDown={state.onPointerDown}
       >
         <shaderMaterial
+          key={doorShaderHash}
           side={THREE.DoubleSide}
-          vertexShader={basicVertexShader}
-          fragmentShader={gradientFragmentShader}
-          uniforms={uniforms}
+          vertexShader={glsl.meshBasic.simplifiedVert}
+          fragmentShader={glsl.basicGradientFrag}
+          // uniforms={uniforms}
         />
       </instancedMesh>
     </>
@@ -173,10 +211,15 @@ export default function TestWallsAndDoors(props) {
  *
  * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
- * @property {(u: Geom.Vect, v: Geom.Vect, transform: Geom.SixTuple, doorWidth?: number) => THREE.Matrix4} getWallMat
- * @property {() => number} getNumDoors
- * @property {() => number} getNumWalls
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} handleClick
+ * @property {(
+ *  seg: [Geom.Vect, Geom.Vect],
+ *  transform: Geom.SixTuple,
+ *  height?: number,
+ *  baseHeight?: number,
+ * ) => THREE.Matrix4} getWallMat
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * @property {(instanceId: number) => void} toggleDoor
  * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
@@ -188,15 +231,9 @@ const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
 const tmpMatFour2 = new THREE.Matrix4();
 
-const uniforms = {
-  diffuse: { value: new THREE.Vector3(1, 1, 0) },
-  opacity: { value: 1 },
-};
+const doorShaderHash = hashJson([glsl.meshBasic.simplifiedVert, glsl.basicGradientFrag]);
 
-const doorShaderHash = hashText(
-  JSON.stringify({
-    basicVertexShader,
-    gradientFragmentShader,
-    uniforms,
-  })
-);
+const meshName = /** @type {const} */ ({
+  doors: 'doors',
+  walls: 'walls',
+});

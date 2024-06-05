@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 150 450" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+    <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+      <title>symbol-rect-pattern</title>
+      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+      </g>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </pattern>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+    <symbol id="symbol-0" viewBox="0 0 75 75">
+      <title>extra--018--table-0.25x0.25</title>
+      <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); fill: url('#pattern-0');" y="-0.000003">
+        <title>extra--005--chair-0.25x0.25</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-2" vioewbox="0 0 150 150" viewBox="0 0 150 150">
+      <title>console--051--0.4x0.6</title>
+      <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2-0'); transform-origin: 75.005px 75.0023px;" y="0" x="0">
+        <title>console--051--0.4x0.6 y=0.4</title>
+      </rect>
+    </symbol>
+    <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-3"/>
+    <pattern id="pattern-3" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0"/>
+  </defs>
+  <image width="169" height="417" x="-9.5" y="16.5" style="pointer-events: none;" xlink:href="data:image/png;base64,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">
+    <title>couch-and-chairs--007--0.6x1.4</title>
+  </image>
+  <g>
+    <title>symbols</title>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.9396931529045105, -0.3420201241970062, 0.3420201241970062, -0.9396931529045105, -0.02289598248898983, 34.09272766113281)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+      <title>console--051--0.4x0.6 y=0.3</title>
+    </use>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.9396932125091553, 0.34202054142951965, -0.34202054142951965, -0.9396932125091553, -0.03760640323162079, 269.9610595703125)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+      <title>console--051--0.4x0.6 y=0.3</title>
+    </use>
+    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -2.5, 187.5)" xlink:href="#symbol-0">
+      <title>extra--018--table-0.25x0.25</title>
+    </use>
+  </g>
+</svg>

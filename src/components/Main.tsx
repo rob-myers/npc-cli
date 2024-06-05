@@ -16,7 +16,6 @@ export default function Main(props: React.PropsWithChildren) {
       className={cx(mainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
     >
-
       <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
       </header>
@@ -34,16 +33,36 @@ export default function Main(props: React.PropsWithChildren) {
 }
 
 const mainCss = css`
-  @media (min-width: ${afterBreakpoint}) {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 32px;
-    white-space: nowrap;
-    overflow-x: scroll;
+  > header, > main {
+    background-color: #fff;
   }
+  > main {
+    padding-top: 2rem;
+  }
+
   @media (max-width: ${breakpoint}) {
     overflow: scroll;
     padding: 0 12px;
+  }
+  @media (min-width: ${afterBreakpoint}) {
+    width: 100%;
+    margin: 0 auto;
+    > header, > main {
+      margin-left: 1rem;
+      margin-right: 1rem;
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    > header {
+      margin-top: 0rem;
+      min-width: calc(400px + 2 * 2rem);
+    }
+    > main {
+      padding-bottom: 6rem;
+      min-width: calc(400px + 2 * 2rem);
+    }
+    white-space: nowrap;
+    overflow-x: auto;
   }
 `;
 
@@ -61,15 +80,6 @@ const mainHeaderCss = css`
   border-bottom: 1px solid rgba(200, 200, 200, 0.5);
   font-size: 1.2rem;
   letter-spacing: 1.5rem;
-  
-  @media (min-width: ${afterBreakpoint}) {
-    justify-content: left;
-    margin-bottom: 2.5rem;
-  }
-  @media (max-width: ${breakpoint}) {
-    justify-content: right;
-    margin-bottom: 2rem;
-  }
 `;
 
 const overlayCss = css`

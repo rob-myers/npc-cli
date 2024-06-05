@@ -14,6 +14,7 @@ import {
   faExpandThin,
   faCirclePauseThin,
   faChevronRight,
+  faGrip,
 } from "./Icon";
 import useLongPress from "src/npc-cli/hooks/use-long-press";
 import useUpdate from "src/npc-cli/hooks/use-update";
@@ -80,8 +81,7 @@ export default function ViewerControls({ api }: Props) {
       if (state.dragOffset !== null) {
         let percent = isSmallView()
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
-          : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) /
-            (window.innerWidth - getNavWidth());
+          : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) / (window.innerWidth - getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
@@ -129,6 +129,9 @@ export default function ViewerControls({ api }: Props) {
 
   return (
     <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
+      <div className="draggable">
+        <FontAwesomeIcon icon={faGrip} size="1x" />
+      </div>
       <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
         <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
       </button>
@@ -177,6 +180,15 @@ const buttonsCss = css`
     height: ${view.barSize};
   }
 
+  .draggable {
+    flex: 1;
+    display: flex;
+    align-items: end;
+    padding: 12px 16px;
+    pointer-events: none;
+    color: #666;
+  }  
+
   button {
     display: flex;
     justify-content: center;
@@ -184,7 +196,7 @@ const buttonsCss = css`
 
     @media (min-width: ${afterBreakpoint}) {
       width: var(--view-bar-size);
-      height: var(--view-icon-size);
+      height: ${nav.menuItem};
     }
     @media (max-width: ${breakpoint}) {
       width: var(--view-icon-size);
@@ -202,33 +214,11 @@ const buttonsCss = css`
   button:last-child {
     @media (min-width: ${afterBreakpoint}) {
       height: ${view.barSize};
+      height: 4rem;
     }
     @media (max-width: ${breakpoint}) {
       transform: rotate(90deg);
       margin-right: 0.5rem;
     }
-  }
-`;
-
-const viewerToggleCss = css`
-  z-index: 6;
-  color: #000;
-
-  width: 1.5rem;
-  height: 1.5rem;
-
-  &.collapsed {
-    background-color: white;
-    color: black;
-  }
-
-  @media (min-width: ${afterBreakpoint}) {
-    margin: calc(0.5 * (${view.barSize} - 1.5rem)) 0;
-  }
-
-  @media (max-width: ${breakpoint}) {
-    transform: rotate(90deg);
-    margin-left: 1rem;
-    margin-right: 1.5rem;
   }
 `;

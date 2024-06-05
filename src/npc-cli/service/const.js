@@ -3,11 +3,11 @@ export const localStorageKey = {
   touchTtyOpen: "touch-tty-open",
 };
 
+export const longPressMs = 500;
+
 export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });
-
-export const FLOOR_IMAGES_QUERY_KEY = 'draw-floors';
 
 /**
  * Convert Starship Geomorph units (sgu) into world coordinates (meters).
@@ -15,13 +15,43 @@ export const FLOOR_IMAGES_QUERY_KEY = 'draw-floors';
  */
 export const worldScale = (1 / 60) * 1.5;
 
+/** Can be any value in `[1, 5]`. */
+export const spriteSheetNonHullExtraScale = 2.5;
+
 /** Decimal place precision */
 export const precision = 4;
 
-export const wallOutset = 10 * worldScale;
+export const wallOutset = 12 * worldScale;
 
 export const obstacleOutset = 10 * worldScale;
 
-export const agentRadius = 10 * worldScale;
-
 export const wallHeight = 2;
+
+export const glbMeta = /** @type {const} */ ({
+  url: '/assets/3d/minecraft-anim.glb',
+  skinnedMeshName: "minecraft-character-mesh",
+  /** Scale factor we'll apply to original model */
+  scale: 1.5 / 8,
+  /** Height of original model (meters) */
+  height: 8,
+  /** Dimension [x, y, z] of original model (meters) */
+  dimensions: [4, 8, 2],
+  /**
+   * Collide radius of original model (meters)
+   * 🚧 larger for running legs?
+   */
+  radius: 4,
+  /**
+   * Walking speed of original model (meters per second).
+   * Inferred by manually testing using root bone.
+   */
+  walkSpeed: 5,
+  /**
+   * Running speed of original model (meters per second).
+   * Inferred by manually testing using root bone.
+   */
+  runSpeed: 10,
+});
+
+/** @type {NPC.NpcClassKey} */
+export const defaultNpcClassKey = 'scientist-dabeyt--with-arms.png';

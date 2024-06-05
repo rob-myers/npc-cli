@@ -2,6 +2,7 @@ import { keys } from "../service/generic";
 import { BaseGraph } from "./base-graph";
 
 /**
+ * - Node id is respective `SymbolKey`.
  * @extends {BaseGraph<Graph.SymbolGraphNode, Graph.SymbolGraphEdgeOpts>}
  */
 export class SymbolGraphClass extends BaseGraph {

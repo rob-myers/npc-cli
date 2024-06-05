@@ -12,8 +12,8 @@
     "react three fiber"
   ],
   "scripts": {
-    "dev": "concurrently 'npm run ws-server' 'npm run develop' 'npm run watch-assets' 'npm run watch-images'",
-    "develop": "gatsby develop -p 8011",
+    "dev": "concurrently 'npm run develop' 'npm run watch-assets'",
+    "develop": "concurrently 'npm run ws-server' 'gatsby develop --port 8011 --host 0.0.0.0'",
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
@@ -23,17 +23,18 @@
     "ts-script": "ts-node -r tsconfig-paths/register -O '{ \"module\": \"commonjs\", \"isolatedModules\": false }'",
     "assets": "npm run ts-script src/scripts/assets -- --all",
     "assets-fast": "sucrase-node src/scripts/assets",
-    "clean-assets": "rm static/assets/assets.json static/assets/geomorphs.json",
-    "images": "npm run ts-script src/scripts/images",
-    "images-fast": "sucrase-node src/scripts/images",
+    "clean-assets": "rm static/assets/{assets.json,geomorphs.json} static/assets/2d/obstacles.png{,.webp}",
     "cwebp": "npm run ts-script src/scripts/cwebp",
     "cwebp-fast": "sucrase-node src/scripts/cwebp",
     "get-pngs": "npm run ts-script src/scripts/get-pngs",
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
-    "watch-assets": "npm run assets && nodemon --on-change-only --delay 1s --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast'",
-    "watch-images": "npm run images && nodemon --on-change-only --delay 1s --config src/scripts/images.nodemon.json --exec 'npm run images-fast' || echo '🔔 watch-images failed'",
-    "ws-server": "sucrase-node src/scripts/ws-server.js"
+    "watch-assets": "npm run assets && nodemon --on-change-only --delay 300ms --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast -- --staleMs=2000'",
+    "ws-server": "sucrase-node src/scripts/ws-server.js",
+    "pre-push": "npm run assets-fast -- --prePush"
   },
+  "pre-push": [
+    "pre-push"
+  ],
   "dependencies": {
     "@emotion/css": "^11.11.2",
     "@emotion/react": "^11.11.3",
@@ -45,7 +46,7 @@
     "@giscus/react": "^2.4.0",
     "@loadable/component": "^5.16.3",
     "@mdx-js/react": "^2.3.0",
-    "@react-three/drei": "^9.99.5",
+    "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.1",
     "@react-three/offscreen": "0.0.8",
     "@react-three/rapier": "^1.3.0",
@@ -70,6 +71,7 @@
     "json-stringify-pretty-compact": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
     "maath": "^0.10.7",
+    "maxrects-packer": "^2.7.3",
     "mvdan-sh": "^0.5.0",
     "poly2tri": "^1.5.0",
     "polygon-clipping": "^0.15.7",
@@ -79,6 +81,7 @@
     "react-dom": "^18.2.0",
     "react-pro-sidebar": "^1.1.0-alpha.2",
     "react-use-measure": "^2.1.1",
+    "rxjs": "^7.8.1",
     "safe-stable-stringify": "^2.3.1",
     "svg-path-parser": "^1.1.0",
     "tailwindcss": "^3.4.3",
@@ -86,7 +89,7 @@
     "uid": "^2.0.2",
     "xterm": "^5.3.0",
     "xterm-addon-fit": "^0.8.0",
-    "xterm-addon-webgl": "^0.17.0-beta.36",
+    "xterm-addon-webgl": "^0.16.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
@@ -112,6 +115,7 @@
     "gatsby-plugin-tsconfig-paths": "^1.0.6",
     "nodemon": "^3.1.0",
     "patch-package": "^8.0.0",
+    "pre-push": "^0.1.4",
     "sucrase": "^3.35.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"

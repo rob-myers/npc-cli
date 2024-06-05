@@ -6,9 +6,10 @@ import debounce from "debounce";
 import { view } from "../const";
 import { profileLookup } from "../npc-cli/sh/scripts";
 import { afterBreakpoint, breakpoint } from "../const";
+import { isSmallView } from "./layout";
+import useSite from "./site.store";
 import useIntersection from "../npc-cli/hooks/use-intersection";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
-import useSite from "./site.store";
 import useUpdate from "../npc-cli/hooks/use-update";
 
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
@@ -17,24 +18,22 @@ import ViewerControls from "./ViewerControls";
 export default function Viewer() {
   const site = useSite(({ browserLoaded, viewOpen }) => ({ browserLoaded, viewOpen }), shallow);
 
-  const state = useStateRef(
-    (): State => ({
-      onChangeIntersect: debounce((intersects: boolean) => {
-        !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
-        update();
-      }, 1000),
-      onKeyDown(e) {
-        if (e.key === "Escape" && state.tabs.enabled) {
-          state.tabs.toggleEnabled();
-        }
-        if (e.key === "Enter" && !state.tabs.enabled) {
-          state.tabs.toggleEnabled();
-        }
-      },
-      rootEl: null as any,
-      tabs: {} as TabsState,
-    })
-  );
+  const state = useStateRef<State>(() => ({
+    rootEl: null as any,
+    tabs: {} as TabsState,
+    onChangeIntersect: debounce((intersects: boolean) => {
+      !intersects && state.tabs.enabled && state.tabs.toggleEnabled();
+      update();
+    }, 1000),
+    onKeyDown(e) {
+      if (e.key === "Escape" && state.tabs.enabled) {
+        state.tabs.toggleEnabled();
+      }
+      if (e.key === "Enter" && !state.tabs.enabled) {
+        state.tabs.toggleEnabled();
+      }
+    },
+  }));
 
   useIntersection({
     elRef: () => state.rootEl,
@@ -57,34 +56,39 @@ export default function Viewer() {
         ref={(x) => x && (state.tabs = x)}
         id="viewer-tabs"
         browserLoaded={site.browserLoaded}
-        initEnabled={false}
         collapsed={!site.viewOpen}
+        initEnabled={false}
+        onToggled={update}
+        persistLayout
+        rootOrientationVertical={isSmallView()}
         tabs={[
           [
             {
               type: "component",
               class: "TestWorld",
               filepath: "test-world-1",
-              props: { mapKey: "demo-map-1" },
-              // props: { mapKey: "small-map-1" },
+              props: { worldKey: "test-world-1", mapKey: "demo-map-1" },
+              // props: { worldKey: "test-world-1", mapKey: "small-map-1" },
             },
             {
               type: "terminal",
               filepath: "tty-1",
-              env: { WORLD_KEY: "world-1", PROFILE: profileLookup.util_0() },
+              env: {
+                WORLD_KEY: "test-world-1",
+                // PROFILE: profileLookup.util_0(),
+                PROFILE: profileLookup.game_0(),
+              },
             },
             {
               type: "component",
-              class: "TestCharacter",
-              filepath: "test-character",
+              class: "TestCharacterDemo",
+              filepath: "test-character-demo",
               props: {},
             },
-            { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
+            // { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],
           [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
         ]}
-        persistLayout
-        onToggled={update}
       />
     </aside>
   );

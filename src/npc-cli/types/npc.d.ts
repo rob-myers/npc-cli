@@ -1,50 +1,104 @@
 declare namespace NPC {
+
+  /** Skin names. */
+  type NpcClassKey = keyof import('../service/npc').NpcService['fromNpcClassKey'];
+
+  type NPC = import('../aux/create-npc').Npc;
+
+  interface NPCDef {
+    /** User specified e.g. `rob` */
+    key: string;
+    classKey: NpcClassKey;
+    /** Radians */
+    angle: number;
+    position: import("three").Vector3Like;
+    /** World units per second */
+    runSpeed: number;
+    /** World units per second */
+    walkSpeed: number;
+  }
+
+  interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
+    npcKey: string;
+    npcClassKey?: NPC.NpcClassKey;
+    point: import("three").Vector3Like;
+    meta?: Geom.Meta;
+    requireNav?: boolean;
+  }
+
+  interface BasicAgentMeta {
+    agentIndex: number;
+    position: import("three").Vector3Like;
+    target: import("three").Vector3Like | null;
+    // userData: Record<string, any>; // Not working?
+  }
+
+  interface BasicAgentLookup {
+    [agentKey: string]: NPC.BasicAgentMeta;
+  }
+
+  // 🚧 WIP
+  type AnimKey = 'Idle' | 'Walk' | 'Run';
+
   type Event =
     | PointerUpOutsideEvent
     | PointerUpEvent
-    | PointerMoveEvent
+    | PointerDownEvent
+    | LongPointerDownEvent
+    // | PointerMoveEvent
     | { key: "disabled" }
+    | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey }
     | { key: "enabled" }
-    | { key: "spawned-npc"; npcKey: string }
-    | { key: "removed-npc"; npcKey: string };
-  // ...
+    | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
+    | { key: "spawned"; npcKey: string; }
+    | { key: 'stopped-walking'; npcKey: string; }
+    | { key: "removed-npc"; npcKey: string }
+    // 🚧 ...
 
-  interface PointerMoveEvent {
-    key: "pointermove";
-    /** Ordinate `y` */
-    height: number;
-    /** Properties of the thing we clicked. */
-    meta: Geomorph.Meta;
-    /** Coords `(x, z)` */
-    point: Geom.VectJson;
-    screenPoint: Geom.VectJson;
-  }
-
-  interface PointerUpEvent extends BasePointerUpEvent {
+  type PointerUpEvent = Pretty<BasePointerEvent & {
     key: "pointerup";
-    point: import("three").Vector3Like;
-    /** Properties of the thing we clicked. */
-    meta: Geomorph.Meta<{
-      /** `(x, z)` of target element centre if any */
-      targetCenter?: Geom.VectJson;
-    }>;
-  }
+  }>;
 
-  interface PointerUpOutsideEvent extends BasePointerUpEvent {
+  type PointerUpOutsideEvent = Pretty<BasePointerEvent & {
     key: "pointerup-outside";
+    is3d: false;
+  }>;
+
+  type PointerDownEvent = Pretty<BasePointerEvent & {
+    key: "pointerdown";
+  }>;
+  
+  type LongPointerDownEvent = BasePointerEvent & {
+    key: "long-pointerdown";
+    is3d: false; // could extend to 3d
   }
 
-  interface BasePointerUpEvent {
-    /** 🚧 */
+  type BasePointerEvent = {
+    /** For future use with CLI */
     clickId?: string;
-    /** Distance in XZ plane from pointerdown */
-    distance: number;
-    /** Was this a long press? */
-    longPress: boolean;
-    /** Was the right mouse button used?  */
+    /** Distance in screen pixels from previous pointerdown. */
+    distancePx: number;
+    /** Was previous pointerdown held down for long? */
+    justLongDown: boolean;
+    /** Ctrl/Shift/Command was down */
+    modifierKey: boolean;
+    /** Number of active pointers */
+    pointers: number;
+    /** Was the right mouse button being pressed?  */
     rmb: boolean;
+    /** Screen position of pointer */
     screenPoint: Geom.VectJson;
-  }
+    /** Touch device? */
+    touch: boolean;
+  } &  (
+    | { is3d: false; }
+    | {
+        is3d: true;
+        point: import("three").Vector3Like;
+        /** Properties of the thing we clicked. */
+        meta: Geom.Meta;
+      }
+  );
 
   type TiledCacheResult = Extract<
     import("@recast-navigation/core").NavMeshImporterResult,
@@ -61,7 +115,9 @@ declare namespace NPC {
     }[];
   }
 
-  type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
+  type CrowdAgent = import("@recast-navigation/core").CrowdAgent & {
+    get userData(): Record<string, any>;
+  };
 
   type Obstacle = {
     id: number;

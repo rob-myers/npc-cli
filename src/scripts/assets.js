@@ -1,107 +1,204 @@
-/// <reference path="./deps.d.ts"/>
-
 /**
- * Generates:
- * - assets.json
- * - geomorphs.json
- * 
  * Usage:
  * ```sh
  * npm run assets
  * yarn assets
- * yarn assets-fast
+ * yarn assets-fast --all
+ * yarn assets-fast --staleMs=2000
+ * yarn assets-fast --prePush
  * ```
+ *
+ * Generates:
+ * - assets.json
+ * - geomorphs.json
+ * - floor images (one per gmKey)
+ * - obstacles sprite-sheet
+ * - webp
  */
+/// <reference path="./deps.d.ts"/>
 
 import fs from "fs";
 import path from "path";
+import childProcess from "child_process";
 import util from "util";
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
+import { createCanvas, loadImage } from 'canvas';
+import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 
 // relative urls for sucrase-node
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME } from "./const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error } from "../npc-cli/service/generic";
+import { Poly } from "../npc-cli/geom";
+import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
+import { spriteSheetNonHullExtraScale, worldScale } from "../npc-cli/service/const";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
+import { drawPolygons } from "../npc-cli/service/dom";
+import { runYarnScript, saveCanvasAsFile } from "./service";
 
-const opts = getopts(process.argv, { boolean: ['all'] });
+const rawOpts = getopts(process.argv, {
+  boolean: ['all'],
+  string: ['prePush', 'staleMs'],
+});
+
+const imgOpts = {
+  debugImage: true,
+  // debugImage: false,
+  debugNavPoly: true,
+  debugNavTris: false,
+  packedPadding: 2,
+};
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
+const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+
+const opts = {
+  /**
+   * Efficiently update assets iff `false` i.e.
+   * - option `--all` is false.
+   * - file `assets.json` exists.
+   */
+  all: Boolean(rawOpts.all) || !fs.existsSync(assetsFilepath),
+  /**
+   * When about to push:
+   * - ensure every webp.
+   * - fail if any asset not committed.
+   */
+  prePush: Boolean(rawOpts.prePush),
+  /**
+   * For change-detection while watching via `assets.nodemon.json`.
+   * A watched file has "changed" iff `lastModifiedMs > Date.now() - staleMs`.
+   */
+  staleMs: Math.max(Number(rawOpts.staleMs) || 0, 0),
+};
+
 const mediaDir = path.resolve(__dirname, "../../media");
 const mapsDir = path.resolve(mediaDir, "map");
 const symbolsDir = path.resolve(mediaDir, "symbol");
-const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+const assets2dDir = path.resolve(staticAssetsDir, "2d");
+const graphDir = path.resolve(mediaDir, "graph");
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
 const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
-const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
+const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
+const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
+const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
+const worldToSgu = 1 / worldScale;
+const dataUrlRegEx = /"data:image\/png(.*)"/;
+const gitStaticAssetsRegex = new RegExp('^static/assets/');
+const emptyStringHash = hashText('');
 
-(function main() {
+(async function main() {
   
-  /** @type {Geomorph.AssetsJson} */
-  const assetsJson = { meta: {}, symbols: /** @type {*} */ ({}), maps: {} };
-
-  /** @type {Geomorph.AssetsJson | null} Previous `assetsJson` */
-  const prevAssets = fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null;
-  
-  // Source SVGs
-  let symbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
-
-  const updateAll = !!opts.all || !prevAssets || (
-    [assetsScriptFilepath, geomorphServicePath].some(x => fs.statSync(x).atimeMs > Date.now() - 2000)
+  const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
+    opts.all ? null : JSON.parse(fs.readFileSync(assetsFilepath).toString())
   );
 
-  if (updateAll) {
+  const assetsJson = /** @type {Geomorph.AssetsJson} */ (
+    { meta: {}, sheet: {}, symbols: /** @type {*} */ ({}), maps: {} }
+  );
+  
+  let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
+
+  // While watching we should update everything when this script or geomorphService have "just changed".
+  const updateAllSymbols = opts.all || [
+    assetsScriptFilepath,
+    geomorphServicePath,
+  ].some(x => fs.statSync(x).mtimeMs > Date.now() - opts.staleMs);
+
+  if (updateAllSymbols) {
     info(`updating all symbols`);
   } else {// Avoid re-computing
-    symbolFilenames = symbolFilenames.filter(filename => {
+    const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets);
+    svgSymbolFilenames = svgSymbolFilenames.filter(filename => {
       const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
-      assetsJson.symbols[symbolKey] = prevAssets.symbols[symbolKey];
-      assetsJson.meta[symbolKey] = prevAssets.meta[symbolKey];
-      return fs.statSync(path.resolve(symbolsDir, filename)).atimeMs > Date.now() - 2000;
+      assetsJson.symbols[symbolKey] = prev.symbols[symbolKey];
+      assetsJson.meta[symbolKey] = prev.meta[symbolKey];
+      return fs.statSync(path.resolve(symbolsDir, filename)).mtimeMs > Date.now() - opts.staleMs;
     });
-    info(`updating symbols: ${JSON.stringify(symbolFilenames)}`);
+    info(`updating symbols: ${JSON.stringify(svgSymbolFilenames)}`);
   }
 
-  // Compute assets.json
-  parseSymbols(assetsJson, symbolFilenames);
+  /**
+   * Compute assets.json, including sprite-sheet
+   */
+  parseSymbols(assetsJson, svgSymbolFilenames);
   parseMaps(assetsJson);
-  info({ changed: Object.keys(assetsJson.meta).filter(key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash) });
+  createSheetJson(assetsJson);
+
+  const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
+    key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash
+  );
+  info({ changedKeys: changedSymbolAndMapKeys });
+
   const assets = geomorphService.deserializeAssets(assetsJson);
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   
+  /**
+   * Compute flat symbols i.e. recursively unfold "symbols" folder.
+   * 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
+   */
+  const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
-  debug(util.inspect({ symbolsStratified }, false, 5))
-
+  // debug(util.inspect({ symbolsStratified }, false, 5))
   // Traverse stratified symbols from leaves to co-leaves,
-  // creating FlatSymbols via flattenSymbol and instantiateFlatSymbol
-  const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
+  // creating `FlatSymbol`s via `flattenSymbol` and `instantiateFlatSymbol`
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
     geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
   // debug("stateroom--036--2x4", util.inspect(flattened["stateroom--036--2x4"], false, 5));
+  // fs.writeFileSync(symbolGraphVizPath, symbolGraph.getGraphviz('symbolGraph'));
 
-  // Compute geomorphs.json
-  const newLayouts = geomorphService.gmKeys.map(gmKey => {
+  const changedGmKeys = geomorphService.gmKeys.filter(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];
-    const { pngRect, hullWalls } = assets.symbols[hullKey];
-    const flatSymbol = flattened[hullKey];
-    return geomorphService.createLayout(gmKey, flatSymbol, { pngRect, hullWalls });
+    const hullNode = assertNonNull(symbolGraph.getNodeById(hullKey));
+    return symbolGraph.getReachableNodes(hullNode).find(x => changedSymbolAndMapKeys.includes(x.id));
   });
+  info({ changedGmKeys });
 
-  const layout = keyedItemsToLookup(newLayouts);
+  /**
+   * Compute geomorphs.json
+   * 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
+   */
+  const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
+    const hullKey = geomorphService.toHullKey[gmKey];
+    const flatSymbol = flattened[hullKey];
+    return geomorphService.createLayout(gmKey, flatSymbol, assets);
+  }));
+
+  const mapsHash = hashJson(assetsJson.maps);
+  const layoutsHash = hashJson(layout);
+  const sheetsHash = hashJson(assetsJson.sheet);
+  const hash = `${mapsHash} ${layoutsHash} ${sheetsHash}`;
 
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
-    mapsHash: hashText(JSON.stringify(assetsJson.maps)),
-    layoutsHash: hashText(JSON.stringify(layout)),
+    hash,
+    mapsHash,
+    layoutsHash,
+    sheetsHash,
     map: assetsJson.maps,
     layout,
+    sheet: assetsJson.sheet,
   };
+
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
 
+  /**
+   * Draw geomorph floors
+   */
+  await drawFloorImages(geomorphs, changedGmKeys);
+  
+  /**
+   * Draw obstacles sprite-sheet
+   */
+  await drawObstaclesSheet(assets, geomorphs, prevAssets);
+
+  /**
+   * Tell the browser we're ready.
+   * In development we use PNG (not WEBP) to avoid HMR delay.
+   */
   fetch(sendDevEventUrl, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -109,6 +206,43 @@ const sendDevEventUrl = `http://localhost:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev
   }).catch((e) => {
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
+
+  /**
+   * Convert PNGs to WEBP for production.
+   */
+  let pngPaths = geomorphService.gmKeys.map(getFloorPngPath).concat(obstaclesPngPath);
+  if (!opts.prePush) {
+    // Only convert PNG if (i) lacks a WEBP, or (ii) has an "older one"
+    pngPaths = pngPaths.filter(pngPath =>
+      fs.statSync(pngPath).mtimeMs
+      > (fs.statSync(`${pngPath}.webp`, { throwIfNoEntry: false })?.mtimeMs ?? 0)
+    );
+  }
+  pngPaths.length && await runYarnScript(
+    'cwebp-fast',
+    JSON.stringify({ files: pngPaths }),
+    '--quality=50',
+  );
+
+  if (opts.prePush) {
+    /**
+     * Fail if any asset not committed.
+     */
+    const [modifiedPaths, untrackedPaths, stagedPaths] = [
+      `git diff --name-only`,
+      `git ls-files --others --exclude-standard`,
+      `git diff --name-only --cached`,
+    ].map(cmd =>
+      `${childProcess.execSync(cmd)}`.trim().split(/\n/)
+      .filter(x => x.match(gitStaticAssetsRegex))
+    );
+
+    if (modifiedPaths.concat(untrackedPaths, stagedPaths).length) {
+      error('Please commit WEBPs', { modifiedPaths, untrackedPaths, stagedPaths });
+      process.exit(1);
+    }
+  }
+
 })();
 
 /**
@@ -122,7 +256,7 @@ function parseMaps({ meta, maps }) {
     const contents = fs.readFileSync(filepath).toString();
     const mapKey = filename.slice(0, -".svg".length);
     maps[mapKey] = geomorphService.parseMap(mapKey, contents);
-    meta[mapKey] = { outputHash: hashText(JSON.stringify(maps[mapKey])) };
+    meta[mapKey] = { outputHash: hashText(stringify(maps[mapKey])) };
   }
 }
 
@@ -139,8 +273,12 @@ function parseSymbols({ symbols, meta }, symbolFilenames) {
     const parsed = geomorphService.parseSymbol(symbolKey, contents);
     const serialized = geomorphService.serializeSymbol(parsed);
     symbols[symbolKey] = serialized;
-    // console.log({ symbolKey }, typeof serialized)
-    meta[symbolKey] = { outputHash: hashText(JSON.stringify(serialized)) };
+    meta[symbolKey] = {
+      outputHash: hashJson(serialized),
+      // 🔔 emptyStringHash when data-url not found
+      pngHash: hashText(contents.match(dataUrlRegEx)?.[0] ?? ''),
+      obsHashes: parsed.obstacles.length ? parsed.obstacles.map(x => hashJson(x)) : undefined,
+    };
   }
 
   validateSubSymbolDimension(symbols);
@@ -164,4 +302,226 @@ function validateSubSymbolDimension(symbols) {
       }
     })
   });
+}
+
+/**
+ * @param {Geomorph.Geomorphs} geomorphs 
+ * @param {Geomorph.GeomorphKey[]} gmKeys 
+ */
+async function drawFloorImages(geomorphs, gmKeys) {
+  const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => gmKeys.includes(key));
+  const promises = /** @type {Promise<any>[]} */ ([]);
+
+  for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of changedLayouts) {
+    
+    const canvas = createCanvas(0, 0);
+    const ct = canvas.getContext('2d');
+    canvas.width = pngRect.width * worldToSgu;
+    canvas.height = pngRect.height * worldToSgu;
+    ct.transform(worldToSgu, 0, 0, worldToSgu, -worldToSgu * pngRect.x, -worldToSgu * pngRect.y);
+
+    // White floor
+    // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['white', null]);
+    if (imgOpts.debugNavPoly || imgOpts.debugNavTris) {
+      debugDrawNav(ct, navDecomp);
+    }
+
+    drawPolygons(ct, walls, ['black', null]);
+    // drawPolygons(ct, walls, ['black', 'black', 0.04]);
+    // ℹ️ technically we support walls with holes, but they may also arise e.g. via door inside wall
+    walls.forEach(wall => wall.holes.length && warn(`${gmKey}: saw wall with hole (${wall.outline.length} outer points)`));
+
+    if (imgOpts.debugImage) {
+      ct.globalAlpha = 0.2;
+      const debugImg = await loadImage(fs.readFileSync(path.resolve(staticAssetsDir, 'debug', `${gmKey}.png`)))
+      ct.drawImage(debugImg, 0, 0, debugImg.width, debugImg.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
+      ct.globalAlpha = 1;
+    }
+
+    // Doors
+    drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
+
+    promises.push(saveCanvasAsFile(canvas, getFloorPngPath(gmKey)));
+  }
+
+  await Promise.all(promises);
+}
+
+/**
+ * @param {Geomorph.AssetsJson} assets 
+ */
+function createSheetJson(assets) {
+
+  const rectsToPackLookup = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, import("maxrects-packer").Rectangle>} */ ({});
+
+  // Each symbol obstacle induces a packed rect
+  for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
+    /** World coords -> Starship Geomorph coords, modulo additonal scale in [1, 5] non-hull symbols. */
+    const worldToSguScaled = (1 / worldScale) * (isHull ? 1 : spriteSheetNonHullExtraScale);
+
+    for (const [obstacleId, poly] of obstacles.entries()) {
+      const rect = Poly.from(poly).rect.scale(worldToSguScaled).precision(0); // width, height integers
+      const [width, height] = [rect.width, rect.height]
+      
+      const r = new Rectangle(width, height);
+      /** @type {Geomorph.SymbolObstacleContext} */
+      const rectData = { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) };
+      r.data = rectData;
+      rectsToPackLookup[`${symbolKey} ${obstacleId}`] = r;
+      // info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
+    }
+  }
+
+  const packer = new MaxRectsPacker(4096, 4096, imgOpts.packedPadding, {
+    pot: false,
+    border: imgOpts.packedPadding,
+    // smart: false,
+  });
+  const rectsToPack = Object.values(rectsToPackLookup);
+  packer.addArray(rectsToPack);
+  const { bins } = packer;
+
+  if (bins.length !== 1) {// 🔔 support more than one sprite-sheet
+    // warn(`images: expected exactly one bin (${bins.length})`);
+    throw Error(`images: expected exactly one bin (${bins.length})`);
+  } else if (bins[0].rects.length !== rectsToPack.length) {
+    throw Error(`images: expected every image to be packed (${bins.length} of ${rectsToPack.length})`);
+  }
+
+  const bin = bins[0];
+  
+  /** @type {Geomorph.SpriteSheet} */
+  const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
+  // ℹ️ can try forcing 4096 x 4096 to debug sprite-sheet hmr
+  // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
+  bin.rects.forEach(r => {
+    const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
+    json.obstacle[`${symbolKey} ${obstacleId}`] = {
+      x: toPrecision(r.x),
+      y: toPrecision(r.y),
+      width: r.width,
+      height: r.height,
+      symbolKey,
+      obstacleId,
+      type,
+    }
+  });
+
+  assets.sheet = json;
+}
+
+/**
+ * @param {Geomorph.Assets} assets
+ * @param {Geomorph.Geomorphs} geomorphs
+ * @param {Geomorph.AssetsJson | null} prevAssets
+ * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
+ */
+async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
+  
+  const { obstaclesWidth, obstaclesHeight, obstacle } = geomorphs.sheet;
+  const obstacles = Object.values(obstacle);
+  const canvas = createCanvas(obstaclesWidth, obstaclesHeight);
+  const ct = canvas.getContext('2d');
+
+  // 🚧 redraw all obstacles when:
+  // - opts.all (?)
+  // - opts.staleMs and this file changed (?)
+  const prevPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
+  const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
+  
+  info({ changedObstacles, removedObstacles });
+
+  if (changedObstacles.size === 0 && removedObstacles.size === 0) {
+    return false;
+  }
+
+  for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(obstacle)) {
+    if (assets.meta[symbolKey].pngHash !== emptyStringHash) {
+      const symbol = assets.symbols[symbolKey];
+      const scale = (1 / worldScale) * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
+      
+      const srcPoly = symbol.obstacles[obstacleId].clone();
+      const srcRect = srcPoly.rect;
+      const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
+      const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
+
+      if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
+        // info(`${symbolKey} ${obstacleId} obstacle did not change`);
+        const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets).sheet.obstacle[`${symbolKey} ${obstacleId}`];
+        ct.drawImage(/** @type {import('canvas').Image} */ (prevPng),
+          prev.x, prev.y, prev.width, prev.height,
+          x, y, width, height,
+        );
+      } else {
+        info(`${symbolKey} ${obstacleId} redrawing...`);
+        const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
+        const matched = fs.readFileSync(symbolPath).toString().match(dataUrlRegEx);
+        const dataUrl = assertNonNull(matched)[0].slice(1, -1);
+        const image = await loadImage(dataUrl);
+        ct.save();
+        drawPolygons(ct, dstPngPoly, ['white', null], 'clip');
+        ct.drawImage(image, srcPngRect.x, srcPngRect.y, srcPngRect.width, srcPngRect.height, x, y, width, height);
+        ct.restore();
+      }
+
+    } else {
+      error(`${symbolKey}.svg: expected data:image/png inside SVG symbol`);
+    }
+  }
+
+  await saveCanvasAsFile(canvas, obstaclesPngPath);
+  return true;
+}
+
+/**
+ * Uses special hashes constructed in `assets.meta`.
+ * @param {Geomorph.SymbolObstacle[]} obstacles
+ * @param {Geomorph.Assets} assets
+ * @param {Geomorph.AssetsJson | null} prevAssets
+ * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
+ */
+function detectChangedObstacles(obstacles, assets, prevAssets) {
+  if (prevAssets) {
+    const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
+    const removed = new Set(Object.values(prevAssets.sheet.obstacle).map(geomorphService.symbolObstacleToKey));
+    const [currMeta, prevMeta] = [assets.meta, prevAssets.meta];
+    obstacles.forEach(({ symbolKey, obstacleId }) => {
+      const key = geomorphService.symbolObstacleToKey({ symbolKey, obstacleId });
+      removed.delete(key);
+      // optional-chaining in case symbol is new
+      (currMeta[symbolKey].pngHash !== prevMeta[symbolKey]?.pngHash
+        || currMeta[symbolKey].obsHashes?.[obstacleId] !== prevMeta[symbolKey].obsHashes?.[obstacleId]
+      ) && changed.add(key);
+    });
+    return { changed, removed };
+  } else {
+    return {
+      changed: new Set(obstacles.map(geomorphService.symbolObstacleToKey)),
+      removed: new Set(),
+    };
+  }
+}
+
+/**
+ * @param {import('canvas').CanvasRenderingContext2D} ct
+ * @param {Geomorph.Layout['navDecomp']} navDecomp
+ */
+function debugDrawNav(ct, navDecomp) {
+  const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
+  const navPoly = Poly.union(triangles);
+  imgOpts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(200, 200, 200, 0.4)', 'black', 0.01]);
+  imgOpts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
+}
+
+/** @param {Geom.Meta} meta */
+function extractObstacleDescriptor(meta) {
+  for (const tag of ['table', 'chair', 'bed', 'shower', 'surface']) {
+    if (meta[tag] === true) return tag;
+  }
+  return 'obstacle';
+}
+
+/** @param {Geomorph.GeomorphKey} gmKey */
+function getFloorPngPath(gmKey) {
+  return path.resolve(assets2dDir, `${gmKey}.floor.png`);
 }

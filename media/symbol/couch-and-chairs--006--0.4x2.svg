@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 150 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <image width="137" height="575" x="6.500001" y="14.064" style="" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIkAAAI/AgMAAAA+RhIbAAAACVBMVEUAAAD///8AAABzxoNxAAAAAXRSTlMAQObYZgAAAOVJREFUeNrt270NgzAYBFBqRsk+TsEITMES6VMGpoyVgjRYiPD3ibwr0WuQLOtk6aqcoZxXlbOBGcKaPhXSMgzDMAyz3sTtABv1n7psukoum5v+HOdu2dE0w5iiaZeZLpzJh3napPT53mQzHGkK2cX06WfTLzfNlHl8zfQhzCAxDMMwDMMwDMMwDPOfppytTNx/ZxiGYRiGYRiGYRjmGsb7BsMwDMMwDMMwDMMw55l23R5k/fbkyL3MWTuges4E3FLNm2qNuY/kGWIfZy9sLywh9sJxN8XR7haGYRiGuaqJ1gEO6s9vRaNZPlkFg6sAAAAASUVORK5CYII=">
+    <title>couch-and-chairs--006--0.4x2</title>
+  </image>
+  <rect x="49.492002" y="180.005005" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+    <title>decor do sit sofa orient=180</title>
+  </rect>
+  <rect x="49.492002" y="295" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+    <title>decor do sit sofa orient=180</title>
+  </rect>
+  <rect x="49.492002" y="415" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
+    <title>decor do sit sofa orient=180</title>
+  </rect>
+  <rect width="112" height="66.987984" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" y="15" x="18.597001">
+    <title>obstacle surface y=-0.1</title>
+  </rect>
+  <rect width="112.000008" height="68.671944" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" y="521.328064" x="18.597001">
+    <title>obstacle surface y=-0.1</title>
+  </rect>
+  <rect width="136.736633" height="415" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" y="95" x="6.597001">
+    <title>obstacle Rect</title>
+  </rect>
+</svg>

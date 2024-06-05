@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import React from "react";
 import { Sidebar, Menu, MenuItem, SubMenu, sidebarClasses, menuClasses } from "react-pro-sidebar";
 
-import { nav, view } from "../const";
+import { afterBreakpoint, breakpoint, nav, view } from "../const";
 import useSite from "./site.store";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import { FontAwesomeIcon, faRobot, faCode, faCircleQuestion, faCircleInfo, faChevronRight } from "./Icon";
@@ -13,9 +13,17 @@ export default function Nav() {
 
   const state = useStateRef(() => ({
     onClickSidebar(e: React.MouseEvent) {
+      // console.log(e.target)
       const el = e.target as HTMLElement;
-      if (el.classList.contains(sidebarClasses.container)) {
-        state.toggleCollapsed(); // outside buttons
+      if (
+        // outside buttons
+        el.classList.contains(sidebarClasses.container)
+        || el.nodeName === "UL"
+        // near title
+        || (collapsed && el.closest(".title") !== null)
+        || (!collapsed && el.classList.contains("title"))
+      ) {
+        state.toggleCollapsed();
         return;
       }
       const anchorEl = el.querySelectorAll("a");
@@ -27,7 +35,9 @@ export default function Nav() {
     toggleCollapsed() {
       useSite.api.toggleNav();
     },
-  }));
+  }), {
+    deps: [collapsed],
+  });
 
   return (
     <Sidebar
@@ -39,13 +49,13 @@ export default function Nav() {
       onClick={state.onClickSidebar}
       width={nav.expandedWidth}
     >
-      <button onClick={state.toggleCollapsed} className={cx("toggle", toggleCss)}>
+      <button onClick={(e) => { state.toggleCollapsed(); e.stopPropagation() }} className={cx("toggle", toggleCss)}>
         <FontAwesomeIcon icon={faChevronRight} size="1x" beat={false} flip={collapsed ? undefined : "horizontal"} />
       </button>
 
       <Menu>
-        <MenuItem className="title" tabIndex={-1} component="span">
-          <Link to="/">NPC CLI</Link>
+        <MenuItem className="title" component="span" tabIndex={-1}>
+          <Link to="/" tabIndex={-1}>NPC CLI</Link>
         </MenuItem>
         <SubMenu icon={icon.blog} label="Blog">
           <MenuItem component="span">
@@ -68,19 +78,21 @@ export default function Nav() {
 
 // See parent component for more CSS
 const navCss = css`
+  z-index: 8;
   -webkit-tap-highlight-color: transparent;
   cursor: pointer;
 
   color: white;
   border-right: 1px solid #444 !important;
 
+  text-transform: lowercase; // 🔔
 
   a.${menuClasses.button}, span.${menuClasses.button} {
     &:hover {
       background-color: transparent;
       text-decoration: underline;
     }
-    height: 3.5rem;
+    height: ${nav.menuItem};
   }
 
   .${menuClasses.subMenuContent} {
@@ -122,21 +134,36 @@ const navTitleCss = css`
   .${menuClasses.menuItemRoot}.title {
     opacity: 1;
     transition: opacity 500ms;
-    margin-top: ${nav.titleMarginTop};
-    margin-left: 12px;
+    margin-left: 0.75rem;
 
+    /* display: flex; */
+    /* margin-top: ${nav.titleMarginTop}; */
+    /* margin-top: 0.75rem; */
+
+    background-color: #222;
+    
     .${menuClasses.button} {
-      height: calc(1 * ${view.barSize});
+      height: ${view.barSize};
     }
-
+    
     .${menuClasses.label} {
       display: flex;
       align-items: center;
-
-      font-size: 1.5rem;
-      letter-spacing: 0.4rem;
-      filter: drop-shadow(3px 0 #336);
+      
+      text-transform: capitalize;
+      font-weight: 200;
+      font-size: 1.4rem;
+      letter-spacing: 0.5rem;
+      /* filter: blur(1px); */
+      /* filter: brightness(0.7); */
+      a {
+        color: #ddd;
+      }
+      @media (max-width: ${breakpoint}) {
+        font-size: 1.2rem;
+      }
     }
+
   }
 
   &.${sidebarClasses.collapsed} .${menuClasses.menuItemRoot}.title {
@@ -154,8 +181,8 @@ const icon = {
 const toggleCss = css`
   position: absolute;
   z-index: 1;
-  top: calc(0.5 * (${view.barSize} - 1.5rem));
-  right: calc(0.5 * (${view.barSize} - 1.5rem));
+  top: 0.6rem;
+  right: 1rem;
   width: 1.5rem;
   height: 1.5rem;
   transition: margin-top 300ms;
@@ -170,5 +197,11 @@ const toggleCss = css`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  filter: invert(1);
+  
+  @media (max-width: ${breakpoint}) {
+    filter: invert(1);
+  }
+  @media (min-width: ${afterBreakpoint}) {
+    transform: scale(0.8);
+  }
 `;

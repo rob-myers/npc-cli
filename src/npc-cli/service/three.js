@@ -1,5 +1,8 @@
+import React from "react";
 import * as THREE from "three";
+import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
+import { InfiniteGridMaterial } from "./glsl";
 
 /** Unit quad extending from origin to (1, 0, 1) */
 export const quadGeometryXZ = new THREE.BufferGeometry();
@@ -95,5 +98,81 @@ export const wireFrameMaterial = new THREE.MeshStandardMaterial({
 });
 
 export const tmpVectThree1 = new THREE.Vector3();
+export const tmpVectThree2 = new THREE.Vector3();
+export const tmpVectThree3 = new THREE.Vector3();
 export const tmpMesh1 = new THREE.Mesh();
 export const tmpBox1 = new THREE.Box3();
+
+export const textureLoader = new THREE.TextureLoader();
+// console.log('cache enabled', THREE.Cache.enabled); // false
+
+const navPathColor = 0x00aa00;
+const navNodeColor = 0xaa0000;
+export const navMeta = {
+  pathColor: navPathColor,
+  nodeColor: navNodeColor,
+  groundOffset: 0.01,
+  lineMaterial: new LineMaterial({
+    color: navPathColor,
+    linewidth: 0.005,
+    // vertexColors: true,
+  }),
+  nodeMaterial: new THREE.MeshBasicMaterial({ color: navNodeColor }),
+  nodeGeometry: new THREE.SphereGeometry(0.08),
+};
+
+/**
+ * https://github.com/Fyrestar/THREE.InfiniteGridHelper/blob/master/InfiniteGridHelper.js
+ * @param {InfiniteGridProps & import("@react-three/fiber").MeshProps} props
+ */
+export function InfiniteGrid(props) {
+  const { size1, size2, color, distance, ...meshProps } = props;
+  return (
+    <mesh {...meshProps} >
+      {/* saw jitter when only 1 subdivision and camera close (?) */}
+      <planeGeometry args={[1000, 1000, 2, 2]} />
+      <infiniteGridMaterial
+        key={InfiniteGridMaterial.key}
+        uSize1={size1 ?? 10}
+        uSize2={size2 ?? 10}
+        uColor={new THREE.Color(color ?? "black")}
+        uDistance={distance ?? 100}
+        side={THREE.DoubleSide}
+        transparent
+      />
+    </mesh>
+  );
+}
+
+/**
+ * @typedef InfiniteGridProps
+ * @property {number} [size1]
+ * @property {number} [size2]
+ * @property {THREE.Color | string | number} [color]
+ * @property {number} [distance]
+ */
+
+/**
+ * Collects nodes and materials from a THREE.Object3D.
+ * @param {THREE.Object3D} object 
+ * @returns {import("@react-three/fiber").ObjectMap}
+ */
+export function buildObjectLookup(object) {
+  /** @type {import("@react-three/fiber").ObjectMap} */
+  const data = { nodes: {}, materials: {}};
+  if (object) {
+    object.traverse(/** @param {THREE.Object3D & { material?: THREE.Material }} obj */ obj => {
+      if (obj.name) data.nodes[obj.name] = obj;
+      if (obj.material && !data.materials[obj.material.name]) {
+        data.materials[obj.material.name] = obj.material;
+      }
+    });
+  }
+  return data;
+}
+
+export const yAxis = new THREE.Vector3(0, 1, 0);
+
+export const emptyGroup = new THREE.Group();
+
+export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);

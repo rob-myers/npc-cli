@@ -72,6 +72,9 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       if (act.type === Actions.ADJUST_SPLIT) {
         state.focusRoot();
       }
+      if (act.type === Actions.SELECT_TAB) {
+        state.focusRoot();
+      }
       return act;
     },
     onModelChange: debounce(() => {
@@ -185,7 +188,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       </figure>
 
       <button
-        onClick={() => state.toggleEnabled()}
+        onPointerDown={() => state.toggleEnabled()}
         className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
       >
         <div>{props.browserLoaded ? "interact" : <Spinner size={24} />}</div>

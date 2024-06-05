@@ -1,10 +1,13 @@
 import React from "react";
 import * as THREE from "three";
 import { dampLookAt } from "maath/easing";
+import { useGLTF } from "@react-three/drei";
 
-import { agentRadius } from "../service/const";
+import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { tmpMesh1 } from "../service/three";
+import { tmpMesh1, tmpVectThree1, yAxis } from "../service/three";
+import { npcService } from "../service/npc";
+import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -14,13 +17,103 @@ import useStateRef from "../hooks/use-state-ref";
 export default function TestNpcs(props) {
   const api = React.useContext(TestWorldContext);
 
-  const state = useStateRef(/** @returns {State} */ () => ({
-    selected: 0,
-    nextObstacleId: 0,
-    toAgent: {},
-    toObstacle: {},
-    toAgentGroup: {},
+  const gltf = useGLTF(glbMeta.url);
 
+  const state = useStateRef(/** @returns {State} */ () => ({
+    group: /** @type {*} */ (null),
+    npc: {},
+    select: { curr: null, prev: null, many: [] },
+
+    nextObstacleId: 0,
+    toObstacle: {},
+
+    findPath(src, dst) {// 🔔 agent may follow different path
+      const query = api.crowd.navMeshQuery;
+      const path = query.computePath(src, dst, {
+        filter: api.crowd.getFilter(0),
+      });
+      return path.length === 0 ? null : path;
+    },
+    getClosestNavigable(p, maxDelta = 0.01) {
+      const closest = tmpVectThree1.copy(api.crowd.navMeshQuery.getClosestPoint(p));
+      return closest.distanceTo(p) < maxDelta ? closest : null;
+    },
+    getSelected() {
+      const npcKey = state.select.curr;
+      return npcKey === null ? null : (state.npc[npcKey] ?? null);
+    },
+    async spawn(e) {
+      if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
+        throw Error(`invalid npc key: ${JSON.stringify(e.npcKey)}`);
+      } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.z === 'number')) {
+        throw Error(`invalid point: ${JSON.stringify(e.point)}`);
+      } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
+        throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
+      } else if (e.npcClassKey && !api.lib.isNpcClassKey(e.npcClassKey)) {
+        throw Error(`invalid npcClassKey: ${JSON.stringify(e.npcClassKey)}`);
+      }
+      
+      let npc = state.npc[e.npcKey];
+
+      if (npc) {// Respawn
+        await npc.cancel();
+        npc.epochMs = Date.now();
+
+        npc.def = {
+          key: e.npcKey,
+          angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
+          classKey: e.npcClassKey ?? npc.def.classKey,
+          position: e.point,
+          runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
+          walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
+        };
+        if (typeof e.npcClassKey === 'string') {
+          npc.changeClass(e.npcClassKey);
+        }
+        // Reorder keys
+        delete state.npc[e.npcKey];
+        state.npc[e.npcKey] = npc;
+      } else {
+        // Spawn
+        const npcClassKey = e.npcClassKey ?? defaultNpcClassKey;
+        npc = state.npc[e.npcKey] = new Npc({
+          key: e.npcKey,
+          angle: e.angle ?? 0,
+          classKey: npcClassKey,
+          position: e.point,
+          runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
+          walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
+        }, api);
+
+        npc.initialize(gltf);
+        npc.startAnimation('Idle');
+        state.group.add(npc.group);
+      }
+      
+      npc.setPosition(e.point);
+      this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
+
+      npc.s.spawns++;
+      api.events.next({ key: 'spawned', npcKey: npc.key });
+      // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
+      return npc;
+    },
+    onClickNpcs(e) {
+      // console.log(e);
+      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
+      const npc = state.npc[npcKey];
+      info(`clicked npc: ${npc.key}`);
+      state.select.curr = npc.key;
+      // 🚧 indicate selected npc somehow
+      e.stopPropagation();
+    },
+    onTick(deltaMs) {
+      for (const npc of Object.values(state.npc)) {
+        npc.onTick(deltaMs);
+      }
+    },
+
+    // 🚧 old below
     addBoxObstacle(position, extent, angle) {
       const { obstacle } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
       state.updateTileCache();
@@ -32,41 +125,6 @@ export default function TestNpcs(props) {
         return null;
       }
     },
-
-    agentRef(agent, group) {
-      if (group) {
-        state.toAgentGroup[agent.agentIndex] = group;
-        state.moveGroup(agent, group);
-        state.updateAgentColor(Number(agent.agentIndex));
-      } else {
-        delete state.toAgentGroup[agent.agentIndex];
-      }
-    },
-    moveGroup(agent, mesh) {
-      const position = agent.position();
-      mesh.position.set(position.x, position.y + agentHeight/2, position.z);
-
-      const velocity = tmpV3_1.copy(agent.velocity());
-      if (velocity.length() > 0.2) {
-        dampLookAt(mesh, tmpV3_2.copy(mesh.position).add(velocity), 0.25, api.timer.getDelta());
-      }
-    },
-
-    onClickNpc(agent, e) {
-      info("clicked npc", agent.agentIndex);
-      state.selected = agent.agentIndex;
-      Object.keys(state.toAgentGroup).forEach((agentIdStr) =>
-        state.updateAgentColor(Number(agentIdStr))
-      );
-      e.stopPropagation();
-    },
-    onTick() {
-      for (const agent of api.crowd.getAgents()) {
-        const mesh = state.toAgentGroup[agent.agentIndex];
-        state.moveGroup(agent, mesh);
-      }
-    },
-
     removeObstacle(obstacleId) {
       const obstacle = state.toObstacle[obstacleId];
       if (obstacle) {
@@ -75,23 +133,14 @@ export default function TestNpcs(props) {
         state.updateTileCache();
       }
     },
-
-    updateAgentColor(agentId) {
-      const mesh = state.toAgentGroup[agentId].children[0];
-      if (mesh instanceof THREE.Mesh && mesh.material instanceof THREE.MeshBasicMaterial) {
-        mesh.material.color = state.selected === agentId ? greenColor : redColor
-      }
-    },
-    updateTileCache() {
-      // 🚧 spread out updates
+    updateTileCache() {// 🚧 spread out updates
       const { tileCache, navMesh } = api.nav;
       for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
       console.log(`updateTileCached: ${tileCache.update(navMesh).upToDate}`);
     },
   }));
 
-  state.toAgent = api.crowd.agents;
-  api.npcs = state;
+  api.npc = state;
 
   React.useEffect(() => {// 🚧 DEMO
     // create an obstacle (before query)
@@ -111,30 +160,37 @@ export default function TestNpcs(props) {
     const filter = api.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
     polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
+    api.debug.selectNavPolys(polyRefs); // display via debug
 
-    // display via debug
-    api.debug.selectNavPolys(polyRefs);
+    
+    [// DEMO ensure npcs
+      { npcKey: 'kate', point: { x: 5 * 1.5, y: 0, z: 7 * 1.5 } },
+      { npcKey: 'rob', point: { x: 1 * 1.5, y: 0, z: 5 * 1.5 } },
+    ].forEach(({ npcKey, point }) =>
+      !state.npc[npcKey] && state.spawn({ npcKey, point }).then(_npc => {
+        const npc = state.npc[npcKey]; // can be stale via HMR
+        npc.attachAgent();
+        npc.walkTo(point); // so they'll "move out of way"
+        state.select.curr = npcKey; // select last
+      })
+    );
 
     api.update(); // Trigger ticker
     return () => void (obstacle && state.removeObstacle(obstacle.id));
   }, [api.crowd]); 
 
-  return <>
-  
-    {Object.values(state.toAgent).map((agent) => (
-      <group
-        key={agent.agentIndex}
-        ref={group => state.agentRef(agent, group)}
-      >
-        <mesh onPointerUp={e => state.onClickNpc(agent, e)}>
-          <meshBasicMaterial />
-          <cylinderGeometry args={[agentRadius, agentRadius, agentHeight]} />
-          {/* <capsuleGeometry args={[agentRadius, agentHeight / 2]} /> */}
-        </mesh>
-        <arrowHelper args={[tmpV3_unitZ, undefined, 0.7, "blue", undefined, 0.1]} />
-      </group>
-    ))}
+  React.useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      info('hot-reloading npcs');
+      Object.values(state.npc).forEach(npc =>
+        state.npc[npc.key] = hotModuleReloadNpc(npc)
+      );
+    }
+  }, []);
 
+  return <>
+
+    {/* 🚧 <group name="obstacles"> */}
     {Object.values(state.toObstacle).map((o) => (
       <mesh
         key={o.id}
@@ -149,6 +205,12 @@ export default function TestNpcs(props) {
       </mesh>
     ))}
   
+    <group
+      name="npcs"
+      ref={x => state.group = x ?? state.group}
+      onPointerUp={e => state.onClickNpcs(e)}
+    />
+
   </>;
 }
 
@@ -159,25 +221,21 @@ export default function TestNpcs(props) {
 
 /**
  * @typedef State
- * @property {number} selected Selected agent
+ * @property {THREE.Group} group
+ * @property {{ [npcKey: string]: Npc }} npc
+ * @property {{ curr: null | string; prev: null | string; many: string[]; }} select
  * @property {number} nextObstacleId
- * @property {Record<string, NPC.CrowdAgent>} toAgent
  * @property {Record<string, NPC.Obstacle>} toObstacle
- * @property {Record<string, THREE.Group>} toAgentGroup
- * @property {(agent: NPC.CrowdAgent, e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpc
- * @property {() => void} onTick
+ *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
- * @property {(agent: NPC.CrowdAgent, group: THREE.Group | null) => void} agentRef
- * @property {(agent: NPC.CrowdAgent, group: THREE.Group) => void} moveGroup
+ * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
+ * @property {() => null | NPC.NPC} getSelected
+ * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
+ * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
- * @property {(agentId: number) => void} updateAgentColor
+ * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {() => void} updateTileCache
  */
 
-const agentHeight = 1.5;
-const tmpV3_1 = new THREE.Vector3();
-const tmpV3_2 = new THREE.Vector3();
-const tmpV3_unitX = new THREE.Vector3(1, 0, 0);
-const tmpV3_unitZ = new THREE.Vector3(0, 0, 1);
-const redColor = new THREE.Color("red");
-const greenColor = new THREE.Color("green");
+useGLTF.preload(glbMeta.url);

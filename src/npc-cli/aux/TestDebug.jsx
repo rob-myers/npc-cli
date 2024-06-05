@@ -1,12 +1,12 @@
 import React from "react";
 import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
+import { Line2, LineGeometry } from "three-stdlib";
 
-import { wireFrameMaterial } from "../service/three";
+import { navMeta, wireFrameMaterial } from "../service/three";
 import { TestWorldContext } from "./test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import NavPathHelper from "./NavPathHelper";
 
 /**
  * @param {Props} props 
@@ -16,10 +16,33 @@ export default function TestDebug(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
-    navPath: new NavPathHelper(),
+    navPath: /** @type {*} */ (null),
     ptrToTilePolyId: {},
     selectedNavPolys: new THREE.BufferGeometry(),
 
+    setNavPath(path) {
+      const group = state.navPath;
+      group.children.forEach((x) =>
+        x instanceof THREE.Mesh && x.geometry instanceof LineGeometry && x.geometry.dispose()
+      );
+      group.remove(...group.children);
+  
+      if (path.length) {
+        const linesGeometry = new LineGeometry();
+    
+        linesGeometry.setPositions(path.flatMap(({ x, y, z }) => [x, y + navMeta.groundOffset, z]));
+        showNavNodes && group.add(...path.map(() => new THREE.Mesh(navMeta.nodeGeometry, navMeta.nodeMaterial)));
+        group.add(new Line2(linesGeometry, navMeta.lineMaterial));
+    
+        showNavNodes && group.children.slice(0, -1).forEach((x, i) => {
+          x.visible = true;
+          x.position.copy(path[i]);
+          x.position.y += navMeta.groundOffset;
+        });
+      }
+
+      group.visible = true;
+    },
     selectNavPolys(polyRefs) {
       const { navMesh } = api.nav;
       const geom = new THREE.BufferGeometry();
@@ -83,9 +106,9 @@ export default function TestDebug(props) {
       visible={!!props.showNavMesh}
     />
 
-    <primitive
+    <group
       name="NavPathHelper"
-      object={state.navPath}
+      ref={x => x && (state.navPath = x)}
     />
 
     <mesh
@@ -120,9 +143,10 @@ export default function TestDebug(props) {
 /**
  * @typedef State
  * @property {NavMeshHelper} navMesh
- * @property {NavPathHelper} navPath
+ * @property {THREE.Group} navPath
  * @property {Record<number, [number, number]>} ptrToTilePolyId
  * @property {THREE.BufferGeometry} selectedNavPolys
+ * @property {(path: THREE.Vector3Like[]) => void} setNavPath
  * @property {(polyIds: number[]) => void} selectNavPolys
  */
 
@@ -141,3 +165,5 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   transparent: true,
   opacity: 0.5,
 });
+
+const showNavNodes = false;

@@ -1,8 +1,9 @@
 import express from "express";
 import expressWs from "express-ws";
 import bodyParser from "body-parser";
+import cors from "cors";
 
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "./const";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
 import { info, safeStringify, warn } from "../npc-cli/service/generic";
 
 const port = Number(DEV_EXPRESS_WEBSOCKET_PORT || 3000);
@@ -10,6 +11,12 @@ const port = Number(DEV_EXPRESS_WEBSOCKET_PORT || 3000);
 const { app } = expressWs(express());
 
 app.use(bodyParser.json());
+
+app.use(cors());
+
+app.use('/dev-assets', express.static('static/assets', {
+  setHeaders: (res) => res.setHeader('cache-control', 'no-cache'),
+}));
 
 app.ws("/echo", function (ws, req) {
   ws.on("message", function (msg) {

@@ -39,7 +39,7 @@
     <pattern id="pattern-16" patternTransform="matrix(1, 0, 0, 1, -839.999877929687, -1800)" xlink:href="#pattern-0"/>
     <pattern id="pattern-17" xlink:href="#pattern-0"/>
     <pattern id="pattern-0-5" patternTransform="matrix(1, 0, 0, 1, 90.000129629392, 29.999972814698)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-18" patternTransform="matrix(1, 0, 0, 1, 449.99991607666, 29.999973408968)" xlink:href="#pattern-0"/>
+    <pattern id="pattern-18" patternTransform="matrix(1, 0, 0, 1, 450.999908447266, 29.999973297119)" xlink:href="#pattern-0"/>
     <pattern id="pattern-19" patternTransform="matrix(1, 0, 0, 1, 690.000106811524, 30.000004223075)" xlink:href="#pattern-0"/>
     <pattern id="pattern-20" patternTransform="matrix(1, 0, 0, 1, 1049.998962402344, 30.000003827831)" xlink:href="#pattern-0"/>
     <pattern id="pattern-21" patternTransform="matrix(1, 0, 0, 1, 1050.000122070313, 1110)" xlink:href="#pattern-0"/>
@@ -126,40 +126,40 @@
       <title>lifeboat--small-craft--2x4</title>
     </rect>
     <rect y="-0.000031" width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); transform-origin: 120px 60px; fill: url('#pattern-0-5');" x="0.000122">
-      <title>fuel--010--4x2</title>
+      <title>fuel--010--4x2 y=0.9 wallsH=1</title>
     </rect>
-    <rect y="-0.000031" width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-18'); transform-origin: 480px 60px;" x="359.999908">
-      <title>fuel--010--4x2</title>
+    <rect y="-0.000031" width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-18'); transform-origin: 481px 60px;" x="360.999908">
+      <title>fuel--010--4x2 y=1.8</title>
     </rect>
     <rect width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-19'); transform-origin: 720px 60px;" x="600.000107">
-      <title>fuel--010--4x2</title>
+      <title>fuel--010--4x2 y=1.8</title>
     </rect>
     <rect width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-20'); transform-origin: 1080px 60px;" x="959.998962">
-      <title>fuel--010--4x2</title>
+      <title>fuel--010--4x2 y=1.8</title>
     </rect>
     <rect width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-21'); transform-origin: 1080px 1140px;" x="960" y="1080">
-      <title>fuel--010--4x2</title>
+      <title>fuel--010--4x2 y=1.8</title>
     </rect>
     <rect width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-22'); transform-origin: 480px 1140px;" x="360.000061" y="1080">
-      <title>fuel--010--4x2</title>
+      <title>fuel--010--4x2 y=1.8</title>
     </rect>
     <rect width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-23'); transform-origin: 720px 1140px;" x="600.000122" y="1079.999756">
-      <title>fuel--010--4x2</title>
+      <title>fuel--010--4x2 y=1.8</title>
     </rect>
     <rect width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-24'); transform-origin: 120px 1140px;" x="0.000122" y="1079.999756">
-      <title>fuel--010--4x2</title>
+      <title>fuel--010--4x2 y=1.8</title>
     </rect>
     <rect y="0.000015" width="120" height="239.999985" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0-6'); transform-origin: 60.0004px 120px;" x="0.000122" transform="matrix(0, -1, 1, 0, 59.999744415283, 59.999816894531)">
-      <title>machinery--158--1.8x3.6</title>
+      <title>machinery--158--1.8x3.6 y=1</title>
     </rect>
     <rect y="120.000015" width="120" height="239.999985" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-25'); transform-origin: 60px 240px;" transform="matrix(0, -1, 1, 0, 59.999984741211, 780)">
-      <title>machinery--156--2x4</title>
+      <title>machinery--156--2x4 y=1</title>
     </rect>
     <rect y="120.000015" width="120" height="239.999985" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-26'); transform-origin: 60px 240px;" transform="matrix(0, -1, 1, 0, 1020.000183105469, -60.000244140625)">
-      <title>machinery--155--1.8x3.6</title>
+      <title>machinery--155--1.8x3.6 y=1</title>
     </rect>
     <rect width="240.000015" height="120.000008" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-27'); transform-origin: 1080px 1020px;" x="959.999985" y="960">
-      <title>machinery--357--4x2</title>
+      <title>machinery--357--4x2 y=1</title>
     </rect>
   </g>
   <path d="M 4 1196 L 1196 1196 L 1196 4 L 4 4 L 4 1196 Z M 1204 -4 L 1204 1204 L -4 1204 L -4 -4 L 1204 -4 Z" style="fill: rgb(255, 0, 0);">

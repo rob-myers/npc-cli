@@ -1,6 +1,165 @@
 
 ## Bits and pieces
 
+### Git show changed/untracked filenames
+
+```sh
+# show files and status
+$ git diff --name-status
+M       package.json
+M       static/assets/2d/g-301--bridge.floor.png
+M       static/assets/2d/g-301--bridge.floor.png.webp
+
+# show files without status
+$ git diff --name-only
+package.json
+static/assets/2d/g-301--bridge.floor.png
+static/assets/2d/g-301--bridge.floor.png.webp
+
+# list untracked files
+$ git ls-files --others --exclude-standard
+src/scripts/ensure-webp.js
+static/assets/2d/g-301--bridge.floor copy.png
+static/assets/2d/g-301--bridge.floor copy.png.webp
+```
+
+### Blender on MacBook
+
+- On Laptop, Settings -> Input -> Emulate numpad -> 1, 2, 3, ... to change camera
+  - BUT then lose Verts/Edges/Faces switch in Edit Mode
+  - So maybe Emulate numpad off, and use Tilde overlay to switch view instead
+
+- Hold Ctrl-Tab to show available modes e.g. Object/Edit/Pose/Weight Paint Mode, 
+- `F3` to open search e.g. type 'fbx' to import FBX
+- `/` to focus
+- `Shift + S` -> `Cursor to Selection`
+- `.` set pivot point as cursor
+- Animation Action
+  - change: ensure armature selected 1st
+  - delete: shift-click "x"
+- `n` in Edit mode shows Transform tool
+- `Shift + F12` to switch between Timeline / ActionEditor
+- `Shift + Left` return to frame 1
+- `Shift + A` for "Add something menu"
+- `5` for orthographic mode (when Emulate numpad)
+- Backtick + "View  Selected" to centre selected item
+- Switch bone direction
+  - edit mode, select bone, Armature > Switch Direction
+- Rename bones in Properties > Bone (not Outliner)
+  - Else "vertex group" names get out-of-sync
+
+- Add texture
+  - Choose `Shading` workspace.
+  - Select mesh, then click "New" in Shader Editor.
+    - Shift+A, Image > Image Texture.
+    - Open, then choose image
+    - Connect "Color" to "Base Color"
+
+- Blender Lighter Theme
+  - Preferences > Themes > `White` (at top)
+- Lighter Texture
+  - Material Preview > Viewport shading > Set Strength `5`
+
+- Concerning Forward Kinematics vs Inverse Kinematics
+  - FK/IK switch requires a modified skeleton, maybe avoid for now i.e. FK suffices
+    - https://www.youtube.com/watch?v=xEnu_EsnzjI&ab_channel=richstubbsanimation
+  - Could also try Inverse Kinematic Constraint with weighting
+    - https://docs.blender.org/manual/en/latest/animation/constraints/tracking/ik_solver.html
+
+- Pixelated texture:
+  - Shading Editor > Image Texture > Interpolation > `Closest` not `Linear`
+
+- Edge loop select
+  - Option+Click
+- Change mesh without changing UV
+  - 3D Viewport > Options > Correct Face Attribute
+- If moving a vertex moves others
+  - Ensure "Proportional editing" is turned off via `o`
+- Edge loop cut
+  - `Cmd + R`
+- X-Ray for Armature might be:
+  - Armature > Properties > Data > Viewport Display > In Front
+- Extend Bone
+  - Select tip and E to extrude
+- Duplicate Bone
+  - Select tip and Shift-D
+- Automatically weight bone
+  - One part of mesh at a time
+  - Pose mode; (1) click body part, (2) shift-click bone; Ctrl-P > with automatic weights
+- Weight paint mode
+  - Object mode; (1) click armature, (2) shift-body body part(s); Weight paint mode now available 
+  - You paint the _vertices_ (not faces)
+- Show weights on mesh by selecting bone in Weight paint mode
+  - Weight Paint Mode > Ctrl+Shift+LMB to select a bone.
+- Reset bone rotation/position
+  - Option+R/G
+- Collapse/Expand Outliner
+  - Shift-click
+- Small-delta grab
+  - Shift+G+...
+- Insert Keyframe Menu
+  - K
+- Insert/Replace Single Keyframe
+  - RMB on numeric UI input e.g. "Location X"
+- Copy partial pose from left-to-right
+  - Select left bones, Cmd+C, Select right bones, Cmd+Shift+C
+- Switch between Dope Sheet and Graph Editor
+  - Ctrl+Tab
+- Graph Editor toggle channel visibility
+  - Shift+H, unhide via Option+H
+
+- Basic IK setup for "feet to stay in place when move root up/down"
+  - edit mode, ensure top of legs are parented to root
+  - pose mode, select target bone of IK, properties > bone constraints > IK > set chain length 2
+  - edit mode, move knees forwards a bit
+  - pose mode, can move root down and feet stay in place
+
+- Mirroring
+  - edit mode, 3d viewport, n to show "Item, Tool, View", Tool > "X-Axis Mirror"
+
+- Blender's rotation quaternions
+  - https://en.wikipedia.org/wiki/Euler%27s_rotation_theorem
+  - `angle = 2 arccos W`
+    - https://docs.blender.org/manual/en/latest/advanced/appendices/rotations.html
+
+- Avoid export IK bones (for three.js performance)
+  - must ALSO key effected bones e.g. {upper,lower}-leg bones, for each keyframe
+  - must uncheck `Properties > Bone > Deform` for IK bones
+  - export gltf options > Data > Armature > Export deformation bones only
+
+- Remove unused animation channels
+  - Dope Sheet > Channel > Clean channels
+  - But sometimes want to keep e.g. static legs out-turned by IK pole targets
+
+
+### The Animators Survival Kit (Richard Williams)
+
+> https://archive.org/details/TheAnimatorsSurvivalKitRichardWilliams/page/n181/mode/2up
+
+### unrar on Mac
+
+```sh
+export HOMEBREW_NO_AUTO_UPDATE=; # optional
+brew install --cask rar
+rar x Model.rar
+```
+
+### Find Local IP address on Mobile Hotspot
+
+```sh
+# Find local ip address for mobile development
+ifconfig | grep "inet " | grep -v 127.0.0.1
+```
+
+
+### Detect uncommitted files
+
+```sh
+# none -> 0
+# some -> 1
+git diff --quiet HEAD; echo $?
+```
+
 ### Export to OBJ in Browser
 
 ```js

@@ -2,40 +2,39 @@
 
 ## WIP
 
-- 🚧 switch back to TestCharacter
-  - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
-    - https://discourse.threejs.org/t/character-controller/46936
-    - https://character-controller-three.netlify.app/
-  - ✅ CharacterController does not depend on orbitControls
-  - ✅ can click to move
-    - ✅ on click ground set CharacterController target
-    - ✅ move to target
-    - ✅ turn to target
-  - remove keyboard controls
+- 🚧 migrate sub-symbols to actual symbols
+  - ✅ 301 ✅ 302 ✅ 303 🚧 101 🚧 102
+  - consoles
+  - extras
 
-- 🚧 Restart TestCharacter: animation, no physics
-  - ✅ clean away `@react-three/rapier`
-  - ✅ show custom character FBX
-  - ✅ scale character to desired height
-  - ✅ import FBX into Blender and export as GLTF
-    - ✅ install blender 4.1 (latest)
-  - 🚧 download two FBX animations from mixamo and somehow load into GLTF
-    - show a Mixamo animation (use Blender to combine animations)
-      - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+- ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
 
-- integrate TestCharacter into TestWorld
+- obstacle right-click/long-press shows clicked type e.g. `bed`
+  - clicked point -> unit XZ square -> sprite-sheet
+  - clicked if respective pixel is non-transparent
 
-- symbols induced raised images via spritesheet
-  - obstacle polys embed into rects (?)
-  - obstacle polys have `y={y}`
-  - InstancedMesh with raised XZ planes
-  - obstacle polys induce sprite-sheet with uv-map
-  - InstancedMesh uses uvs
-- ❌ show tables via raised "floor texture"
+- rethink sh/scripts.ts and sh/raw-loader.js
+  - maybe sh/functions.sh
+  - maybe sh/generators.js
+  - support HMR of both files
 
-- show toast while navmesh loading
-  - also show results e.g. number of tiles
+- start writing first article
 
+- get eslint working again e.g. for raw-loader.js
+
+- TTY windows ctrl-c conflict: abort vs copy selection
+  - take same approach as Windows itself
+  - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
+- sometimes during development restarting stops working i.e. can see 3d floor,
+  but console logs `THREE.WebGLRenderer: Context Lost`
+- try leaving one logged-in window open before go offline, see how long it works
+  > https://boxy-svg.com/questions/283/ability-to-use-while-offline
+- distinguish symbols:
+  - some extend beyond viewbox (e.g. stateroom),
+  - some do not (e.g. table)
+- ❌ static obstacles can specify color or shade
+- tag `hull-wall` -> `wall hull`
+- use decor cuboids under e.g. machines and desks
 - closed doors have filtered doorPolys
 - can make agent look at point
 - ✅ migrate roomGraph per geomorph
@@ -44,10 +43,39 @@
 - prevent agent going through door
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
+- show toast while navmesh loading
+  - also show results e.g. number of tiles
 
-- create smaller-pngs.js and compare to https://tinypng.com/
-- scripts assets/images trigger different useQuery
-- Player view could be top-down with high walls
+- 🚧 fix sprite-sheet HMR
+  - ℹ️ on add new symbol with obstacles
+  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
+  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
+  - 🚧 could be problem with smart-sprite-sheet-update
+  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
+  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
+  - ❌ try repro with single geomorph
+  - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
+  - 🤔 multiple websockets open in single browser tab?
+  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
+    - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
+    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
+  - ✅ saw issue on WARN about mismatched size
+    - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
+  - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
+  - 🚧 saw issue on remove obstacle, then add back in
+
+- ✅ remove `. ~/.bash_profile` from pre-push hook
+- ❌ improve `yarn ensure-webp` by detecting webp older than png
+- initially force complete assets recompute
+- permit holes in symbol walls?
+  - currently supported
+  - ✅ eliminated only examples (2)
+- ❌ images script avoids recomputing
+- mobile extra space at bottom again (?)
+  - probably caused by new sticky header
+- ❌ create smaller-pngs.js and compare to https://tinypng.com/
+- ❌ scripts assets/images trigger different useQuery
+- ❌ Player view could be top-down with high walls
   - try fixing door height with black wall above
 - optionally increase floor image resolution e.g. 2x
 - avoid recomputing npcs/obstacles in TestNpcs
@@ -69,7 +97,6 @@
 - simplify polygon JSON format e.g. flat arrays
 - start using cypress
 - saw slow resize on maximize desktop (but not mobile)
-- ❌ try unify parseMaps and parseSymbols
 - try fix sporadic missing updates
   - ✅ move maps to `media/map`
   - ✅ improve remount keys
@@ -77,24 +104,11 @@
 - ✅ integer accuracy when parsing maps
   - Boxy has rounding errors e.g. when reflect
   - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
-- ❌ migrate Triangle
-  - png -> webp script applied to assets/debug
-- ❌ learn about WebGl RenderTargets
-  - Towards "Pixi.js RenderTexture" functionality
-  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
-- ❌ try migrate R3FDemo to react-three-offscreen
 - sh `test {fn}` evaluates function with `map` args
-- ❌ improve MapControls zoomToCursor on mobile
-  - two fingers leftwards to rotate
-  - two fingers upwards to set polar
 - Terminal crashing during HMR
   - possibly fixed via `xterm-addon-webgl@beta`
   - ℹ️ haven't seen for a while
-- ❌ (hull) walls -> quads
-  - ℹ️ trying alternative i.e. "edges outside floor"
 - need to remove labels from hull symbol image?
-- ❌ try avoid alphaBlend geomorphs via alphaMap
-  - we only need depthWrite false
 - Firefox android allows unbounded scrolling on "interact"
   - debug locally using about:debugging#/runtime/this-firefox
 - 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
@@ -102,8 +116,6 @@
 - ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
   - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
   - ℹ️ seen in parseSymbol of hull symbol
-- ❌ react-three-fiber onPointerUp not updating when instance transformed
-  - ❌ possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
   - ℹ️ fixed by updating sphere bounds
 - in parallel, start going through https://github.com/recastnavigation/recastnavigation
   - to understand what recast outputs
@@ -115,12 +127,6 @@
 - if Viewer maximised and choose menu item, halve size of the Viewer
 
 - if only open Viewer a tiny amount then it should close itself
-
-- ❌ world editor in new repo
-  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
-- ❌ geomorph editor in new repo
-- 🤔 despite our "generic aim" (fabricating game masters),
-  some context will help e.g. The Last Redoubt
 
 - ✅ smaller collapsed nav on mobile
 - fix multi-touch flicker on drag
@@ -151,35 +157,6 @@
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
 
-
-## Scratch Pad
-
-```jsx
-// Why does this seemingly block main thread?
-React.useEffect(() => {
-  // 🚧
-  import("recast-navigation").then(({ init }) =>
-    init().then(() => {
-      // compute vertices, indices
-      let offset = 0;
-      const vs = /** @type {number[]} */ ([]);
-      const is = /** @type {number[]} */ ([]);
-      state.gms.forEach(({ navPolys }) => {
-        const { vertices, indices } = polysToAttribs(navPolys);
-        vs.push(...vertices);
-        is.push(...indices.map((x) => x + offset)); // 🚧 needs flip under conditions
-        offset += vertices.length / 3;
-      });
-      is.reverse();
-
-      import("recast-navigation/generators").then(({ generateSoloNavMesh }) => {
-        const { navMesh, success } = generateSoloNavMesh(vs, is, {});
-        console.log({ navMesh, success });
-      });
-    })
-  );
-}, [geomorphs]);
-```
 
 ## Done
 
@@ -772,8 +749,8 @@ React.useEffect(() => {
   - stateroom--036
   - stateroom--014--2x2 e.g. use bed--003--1x1.6
   - ✅ decompose desk--003--0.8x1 as two symbols
-  -   ✅ extra--chair--003--0.25x0.25
-  -   ✅ extra--desk--004--0.5x1
+  -   ✅ extra--003--chair--0.25x0.25
+  -   ✅ extra--004--desk--0.5x1
   - ✅ table--004--1.2x2.4
   - ✅ bridge--042--8x9
 - ✅ only one lookup needs to be extended when adding symbols
@@ -781,3 +758,431 @@ React.useEffect(() => {
 
 - ✅ PR for recast-navigation-js
   - https://github.com/isaac-mason/recast-navigation-js/pull/325
+
+- ✅ switch back to TestCharacter
+  - ✅ initially use model from https://github.com/abhicominin/Character-Controller-three.js
+    - https://discourse.threejs.org/t/character-controller/46936
+    - https://character-controller-three.netlify.app/
+  - ✅ CharacterController does not depend on orbitControls
+  - ✅ can click to move
+    - ✅ on click ground set CharacterController target
+    - ✅ move to target
+    - ✅ turn to target
+  - ✅ remove keyboard controls
+
+- ❌ try unify parseMaps and parseSymbols
+- ❌ migrate Triangle
+  - png -> webp script applied to assets/debug
+- ❌ learn about WebGl RenderTargets
+  - Towards "Pixi.js RenderTexture" functionality
+  - https://blog.maximeheckel.com/posts/beautiful-and-mind-bending-effects-with-webgl-render-targets/
+- ❌ try migrate R3FDemo to react-three-offscreen
+- ❌ improve MapControls zoomToCursor on mobile
+  - two fingers leftwards to rotate
+  - two fingers upwards to set polar
+- ❌ (hull) walls -> quads
+  - ℹ️ trying alternative i.e. "edges outside floor"
+- ❌ try avoid alphaBlend geomorphs via alphaMap
+  - we only need depthWrite false
+- ❌ react-three-fiber onPointerUp not updating when instance transformed
+  - ❌ possibly related closed issue:  https://github.com/pmndrs/react-three-fiber/issues/1937
+- ❌ world editor in new repo
+  - instead we use Boxy SVG to make `media/map/{mapKey}.svg`
+- ❌ geomorph editor in new repo
+- ❌ despite our "generic aim" (fabricating game masters),
+  some context will help e.g. The Last Redoubt
+  
+- ❌ show tables via raised "floor texture"
+
+- ✅ Restart TestCharacter: animation, no physics
+  - ✅ clean away `@react-three/rapier`
+  - ✅ show custom character FBX
+  - ✅ scale character to desired height
+  - ✅ import FBX into Blender and export as GLTF
+    - ✅ install blender 4.1 (latest)
+  - ✅ download three FBX animations from mixamo and somehow load into GLTF
+    - show a Mixamo animation (use Blender to combine animations)
+    - https://www.youtube.com/watch?v=y1er4qFQlCw&ab_channel=Valentin%27scodingbook
+
+- ✅ raised obstacles
+  - ✅ obstacle polys can `y={y}`
+  - ✅ sub-symbols can `dy={dy}` and it aggregates
+  - ✅ link layout obstacle to symbol obstacle
+  - ❌ given symbol obstacle poly, and transformed obstacle poly, infer the affine transform
+  - ✅ maintain transform in obstacle.meta
+  - ✅ layout.obstacles as { origPoly, transform }
+  - ✅ verify by drawing into floor canvas
+  - ✅ InstancedMesh with unit XZ plane
+    - ✅ show (possibly raised) rects
+  - ✅ obstacles induce sprite-sheet with uv-map
+    - ✅ create sprite-sheet json
+    - ✅ name -> { symbolKey, obstacleKey, type }
+    - ✅ one rect per (symbolKey, obstacleId)
+    - ✅ packed rects should be in Starship Geomorphs units
+    - ✅ create sprite-sheet png/webp
+      - ✅ draw images as filled squares
+      - ✅ extract PNG from SVG symbol
+      - ✅ packed rects scale x2.5 for non-hull symbols
+      - ✅ extract polygonal mask
+      - ✅ avoid drawing white poly underneath
+  - ✅ InstancedMesh uses uvs
+    - https://discourse.threejs.org/t/sprite-instancing-with-uv-mapping/17234/2
+    - https://stackoverflow.com/questions/48607931/per-instance-uv-texture-mapping-in-three-js-instancedbuffergeometry
+    - https://github.com/mrdoob/three.js/blob/bf267925f7a96f576f781416624d78876b1ec42f/src/renderers/shaders/ShaderChunk/map_fragment.glsl.js#L4
+    - ✅ single image applied to every instance
+    - ✅ assets script includes `spritesheet.json` in `geomorphs.json`
+    - ✅ images script mutates `geomorphs.json`
+    - ✅ compute uvs for every obstacle in world (untested)
+    - 🚧 try attach uvs in vertex shader
+      - ✅ get custom shader working in same way as meshStandardMaterial
+      - ✅ get `map` working in a custom shader (non-instanced mesh)
+        - https://stackoverflow.com/questions/59448702/map-image-as-texture-to-plane-in-a-custom-shader-in-three-js
+      - ✅ get `map` working in custom shader based on meshBasicMaterial (non-instanced mesh)
+      - ✅ get `map` working in custom shader based on meshBasicMaterial (instanced mesh)
+    - ✅ switch to manually specified custom shader with working map/instances
+    - ✅ get custom shader working which uses `uvOffsets`, `uvDimensions`
+
+- ✅ clean custom shader approach
+- ✅ clean custom shaders again
+- ✅ draw top of walls e.g. to obscure piercing obstacles
+  - ✅ remove over-approx from floor images
+  - ❌ could union walls, triangulate, use InstancedMesh triangles
+  - ✅ could use ceiling texture per gmKey
+    - could extend with labels
+    - could change to per gmId and hide rooms via ceilings (Player FOV)
+  - ✅ clean e.g. table seen in bridge
+- ✅ fix symbol height convention
+  - ✅ chair, sink, table have `obstacle y=0` for seat/surface
+  - ✅ symbols height set via tag e.g. `dy=0.5`
+- ✅ simplify symbol height convention
+  - only use `y`
+  - applies to all obstacles
+
+- ✅ HMR issues
+  - ✅ compute mapsHash, geomorphsHash, sheetsHash using `stringify(json)`
+    - i.e. same as file contents.
+  - ✅ avoid recomputing obstacles.png
+  - ✅ can `yarn images-fast --all`
+  - ✅ `yarn images-fast --staleMs=2000`
+  - ✅ obstacles sprite-sheet needs to update
+  - ✅ merge images.js into assets.js
+    - ✅ draw floors
+    - ✅ create spritesheet
+    - ✅ draw spritesheet
+    - ✅ avoid redrawing unchanged obstacle sprites
+    - ✅ changed symbol obstacle detected
+    - ✅ remove images.js
+  - not-found sprite i.e. small red rect
+  - ✅ obstacles sprite-sheet out of sync
+    - ℹ️ texture size needs to change!
+    - ✅ try force 4096 x 4096
+    - ✅ recreate texture with different size on-the-fly
+  - ✅ try serve images separately in development i.e. avoid gatsby /assets endpoints
+    - ✅ ws-server serves images
+    - ✅ remove delay from site.store
+    - ✅ `yarn develop` still works
+  - ✅ out-of-sync sprite-sheet persists
+    - ✅ might have fix i.e. state.geomorphs was stale
+  - ✅ geomorphs.hash
+  - ✅ clean assets query
+  - ✅ clean up hashes
+  - ✅ avoid recomputing png -> webp
+    - ✅ dev uses pngs
+    - ✅ pre-push hook runs `npm run assets-fast --all`
+    - ✅ images fallback from `webp` to `png`
+    - ✅ pre-push hook should not commit if generates new webp
+
+- ✅ fix sprite-sheet creation i.e. account for `<image>` offset properly
+  - seems fixed, not sure why
+
+- ✅ create Character demo with options Outline/Wireframe/CustomShaderWireframe
+  - CustomShaderWireframe doesn't work, so ask https://discourse.threejs.org
+  - get working shareable CodeSandbox link
+
+- ✅ fix floor texture HMR
+  - ✅ on edit TestGeomorphs
+  - ✅ on change map
+  - ✅ on change geomorph
+  - ✅ on change spritesheet
+
+- ✅ map switching not working?
+- ✅ reset still not working on mobile (not loading)
+  - works when leave and return to tab
+- ✅ no need for CanvasTexture for obstacles sprite-sheet
+- ✅ missing symbolKey in geomorphsService can break script i.e. have to `yarn clean-assets`
+
+- ✅ get a blender minecraft rig working in mixamo
+  - ℹ️ https://www.nari3d.com/boxscape
+  - ℹ️ https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?dl=0&e=1&file_subpath=%2FCycles_Minecraft_Rig+BSS+Edit+V6.5%2FAdvanced_Mob_Rig
+  - ✅ select armature; pose mode; select {l,r}-arm and g-x-{-1,+1} upload to mixamo
+  - triangle count
+    - https://poly.pizza/m/isC73B8SKq ~`2000`
+    - https://www.youtube.com/watch?v=8Ox6EUxYqzA ~`2200`
+    - https://ridz25.itch.io/low-poly-minecraft-like-character ~ `520`, ~`360` without gloves (?)
+      - ✅ can rig when add cubes: Groin, Neck, Left/Right Shoulder
+    - https://sketchfab.com/3d-models/ultra-low-poly-animated-character-mixamo-based-186f3f7ffc30449a9bfce39f647abc92 `324`
+      - ✅ auto-rigs from mesh
+
+- ❌ mixamo minecraft again
+  - https://ridz25.itch.io/low-poly-minecraft-like-character
+  - ℹ️ will make our own animations, but maybe use provided idle/walk/run
+    - focus on npc behaviour sort-of demands it?
+  - ❌ clean veryminecraftylookingman
+    - jpg skin -> png; delete gloves
+    - center edit mesh?
+  - ❌ Fixing transformed Body
+    - Problem: `Body` inside group has z transform `-4.06447 m`
+    - Seems we'd need to (a) undo this, (b) transform every frame (changing initial pose won't work)
+    - But maybe doesn't matter
+    - Btw mesh/bones align as follows: "Object mode; Click Armature, Shift-Click Body; Edit mode"
+  - ℹ️ Minecraft measurements
+    - 1 block means 1m³ means 16³ pixels
+      - **BUT** seems 1m ~ 16pixels does not apply to character models
+    - Player height: 1.8 blocks i.e. 1.8m
+      - https://gaming.stackexchange.com/questions/398125/what-is-the-scale-of-the-minecraft-skin-overlay
+    - Player heights:
+      - head ~ 8 pixels ~ 8/32 * 1.8 = 0.45m
+      - arms/legs ~ 12 pixels = 12/32 * 1.8 = 0.675m
+- ❌ create rig ourselves:
+  - https://www.youtube.com/watch?v=GB9phnNlzjQ&ab_channel=SharpWind
+  - https://www.youtube.com/watch?v=JlzzU_dxp3c&list=PLGKIkAXk1OeQWaDCO0sYdgT2nN_Qu46HO&index=3&ab_channel=TutsByKai
+- ❌ simplify high poly rig
+  - https://www.dropbox.com/s/mr1l5fb48rdwnwx/Cycles_Minecraft_Rig%20BSS%20Edit%20V6.5.zip?e=1&dl=0
+  - too complex; possibly incorrect dimensions
+- ❌ try UV mapping `base-mesh-246-tri`
+  - blender uv map tutorial
+    - https://www.youtube.com/watch?v=nLJK2ExMhxU&ab_channel=IronbarkGamesStudio
+
+- ✅ rename `extra--{foo}--{number}--*` as `extra--{number}--{foo}--*`
+- ✅ walls can have different base-height and height e.g. for privacy-screen
+  - ✅ can `wall y={baseHeight} h={height}`
+  - ✅ can `{symbolKey} wallsY={baseHeight} wallsH={height}`
+  - ✅ only draw ceiling if wall touches ceiling
+
+- ℹ️ minecraft copyright issues
+  - https://www.minecraft.net/en-us/usage-guidelines
+  > We are very relaxed about things you create for yourself. Pretty much anything goes there - so go for it and have fun, just remember the policies and don’t do anything illegal or infringing on others.
+  > ...
+  > This applies, for example, if you want to set up and run any non-commercial blogs, servers, community forums, fan sites, fan clubs, news groups, events, and gatherings.
+
+- ✅ go through minecraft rig tutorial after all
+  - ✅ 1/4 modelling https://www.youtube.com/watch?app=desktop&v=7EW8TnN2BfY&ab_channel=ZAMination
+    - don't subdivide until after uv-mapping
+  - ✅ 2/4 uv-mapping https://www.youtube.com/watch?v=iMU_xnfKCpE&ab_channel=TutsByKai
+    - found original uv map textures in Cycles_Minecraft_Rig BSS Edit V6.5
+      - https://www.nari3d.com/boxscape
+      - Cycles_Minecraft_Rig BSS Edit V6.5 > Textures > Mobs
+  - ✅ 3/4 https://www.youtube.com/watch?v=JlzzU_dxp3c&ab_channel=TutsByKai
+  - ❌ Shape keys for knee 90 degree leg bends
+    - i.e. "morph targets" in three.js, requiring manually animation
+  - ✅ slightly scale "back of knee" inwards to avoid z-fighting
+    - maybe our "view from above" will hide the issue
+  - ✅ IK bones for feet e.g. keep them still
+    - https://www.youtube.com/watch?v=OMwFPBoXiMw&t=101s&ab_channel=Nekomatata
+
+- ✅ adjust rig
+  - ✅ bone naming convention `*_L` and `*_R`
+  - ✅ work out how to do foot rigging i.e. heel roll
+    - https://youtu.be/OMwFPBoXiMw?si=qns-Wq4Q6L2MjDd5&t=164
+    - ❌ try pivot constraint on bones
+    - ❌ try move leg backwards
+    - ❌ try two foot bones: leg-base -> heel -> toe
+    - ✅ try one ik bone with weight-painting, with head at heel
+  - ❌ extra vertices above foot?
+  - ✅ decided against foot (and extra vertices)
+  - ✅ sharper knees
+
+- ✅ minecraft walk cycle (first attempt)
+  - https://www.youtube.com/watch?v=7EW8TnN2BfY&ab_channel=ZAMination
+  - use mirroring https://www.youtube.com/watch?v=dms6Xy5gueE&ab_channel=Zallusions
+  - our mesh is 2.5 larger than `Zamination_Rig_V4`
+  - timeline > keying > Location and Rotation
+  - ✅ control feet rotation via ik
+  - ✅ foot should pivot around heel
+    - to pivot around toe, set IK position first, set IK angle second 
+  - ✅ revert to foot in the middle
+  - ❌ maybe add vertices above foot
+  - ✅ merge feet position/rotation into same ik bone
+    - to pivot around toe/heel, set IK angle first, set IK position second
+  - ✅ 1st attempt at 1st frame
+  - ✅ rename bones to align with Blender naming convention
+  - ✅ Cmd-C, Cmd-Shift-V to mirror 1st to 12; dup 1st at 24
+  - ✅ continue from frame 12
+
+- ✅ adjust rig again
+  - ✅ remove dup vertices
+  - ❌ try remove knees/elbows
+  - ℹ️ can avoid bent elbow z-fighting per animation
+
+- ✅ minecraft walk cycle (2nd attempt)
+  - https://www.youtube.com/watch?v=e_COc0ZVHr0&ab_channel=MarkMasters
+  - https://youtu.be/nRtT7Gr6S2o?si=bN2xQQ7XdXcBGvqL&t=717
+  - do arms last to avoid hip adjustments causing conflicts
+  - head https://www.youtube.com/watch?v=nRtT7Gr6S2o&ab_channel=JoeyCarlino
+  - arms https://youtu.be/nRtT7Gr6S2o?si=TbFcm0wRxxHcs04O&t=1148
+  - graph editor https://youtu.be/nRtT7Gr6S2o?si=kyDo19TLbpWdkzC1&t=1236
+
+- ✅ copy minecraft-anim-test.2.blend -> minecraft-anim.blend
+- ✅ try gltf export
+  - ✅ scale: 8m (blender) -> 2m (three.js) i.e. 0.25
+  - ✅ textures: must use `Principled BSDF material`
+    - https://docs.blender.org/manual/en/latest/addons/import_export/scene_gltf2.html#usage
+
+- ✅ test gltf export does not need ik bones (feet, knees)
+  - ✅ avoid many `SkinnedMesh` by joining meshes in Blender
+  - ✅ must ALSO key {upper,lower}-leg bones for each keyframe
+  - ✅ must uncheck `Properties > Bone > Deform` for IK bones
+  - ✅ export gltf options > Data > Armature > Export deformation bones only
+- ✅ multiple animations in one file
+- ✅ minecraft idle animation
+
+- ✅ minecraft run-cycle
+  - ℹ️ body 0.3 down
+  - ℹ️ arms strategy
+    - rest-pose elbows initially pointing backwards
+    - bend elbow via upper/lower arms initially
+    - can rotate around local y afterwards
+  - ✅ apply every keyframe to lower/upper legs, since we'll remove ik
+  - https://www.youtube.com/watch?v=60Tn5ljVoDg&ab_channel=TheDuckCow
+  - https://youtu.be/60Tn5ljVoDg?si=sikCrT9fosYESD2l&t=109
+
+- ✅ fix TestCharacter foot-sliding
+  - ✅ add root bone with Deform unchecked
+  - ℹ️ must also mute (linear) root motion before export
+  - ✅ walk cycle root motion ~ 5m
+    - `.25 * 5 = 1.25m` after scaling i.e. speed `1.25m / s` (24 frames, 24 fps)
+  - ✅ run cycle root motion ~ 10m
+    - root motion `.25 * 10 = 2.5m` after scaling
+    - 20 frames -> 24 frames via scale `24 / 20 = 1.2`
+    - https://devtalk.blender.org/t/animating-in-blender-changing-the-frame-rate-should-have-the-option-to-preserve-animation-timing/21629/3
+
+
+- ✅ infinite-grid-helper -> @react-three/drei shaderMaterial
+- ❌ can color obstacle instances
+  - should alter image directly instead
+- ✅ change mapKey should request-nav-mesh but shouldn't restart worker
+
+- ✅ extend TestCharacterDemo to multiple characters
+  - ✅ try convert into jsx `npx gltfjsx minecraft-anim.glb`
+  - ✅ rename -> TestCharacterDemo, TestCharacterOld
+  - ✅ TestCharacters
+    - ✅ don't use transform glb i.e. no `--transform`
+    - ✅ support multiple instances via `SkeletonUtils.clone`
+      - https://discourse.threejs.org/t/multiple-instances-of-skinned-mesh-wont-show-react-three-fiber/47678/2
+    - ✅ only one instance of hook `useGLTF`
+    - ✅ hook up to TestCharacterDemo
+  - ✅ can click character and make it walk
+
+  - ✅ office--061--3x4
+  - table obstacles -> 2 symbols
+
+- ✅ support obstacle tag `no-shadow`
+- ❌ support sub-symbol tag `no-shadow`
+- ✅ take union when drawing obstacle drop shadows
+
+- ✅ support alternate sub-symbol approach:
+  - label (title) of `use` remains the same
+  - all symbols refer to same pattern (hopefully not duped by Boxy)
+  - ✅ create actual `symbol` and `use` it
+  - ✅ parse new structure
+  - ✅ fix extra unsorted poly: ignore everthing inside a `<defs>`
+  - ✅ another test + cleanup
+- ✅ migrate 301 to new sub-symbol approach
+
+- ✅  TestCharacterDemo skins
+  - ✅ can change skin
+
+- ✅ understand number of verts in mesh i.e. 278 is too many
+  - ℹ️ 96 vertices in Blender:
+    > `96 = 8 + (8*2*4) + 6*4`
+    > i.e. head + (2 * arms + 2 * legs) + body
+  - extras come from UVs i.e. need to duplicate vertex if has different UV
+  - ✅ reduce to 241
+  - ✅ reduce to 236
+  - can probably reduce vertices more by re-arranging UVs, but:
+    triangle count (168) and bone count (13) are probably dominating factor
+
+- ✅ context menu
+  - ❌ use `tunnel-rat`
+  - ✅ move into own component TestContextMenu
+  - ✅ works when right-click walls
+  - ✅ avoid navigating when right-click floor
+  - ✅ rethink mobile long-press
+
+- ❌ can change sub-skin
+  - ℹ️ wait until we have a skin where we need to do this
+  - know uv body part ordering
+    - either via Blender or node-ordering?
+
+- ✅ clarify pointer{down,up} i.e. 2d, 3d
+  - ✅ pointerdown, pointerup have boolean `is3d`
+  - ✅ pointerup-outside has `is3d` `false`
+  - ✅ infiniteGrid has onPointer{Down,Up}
+  - ✅ walls, doors has onPointer{Down,Up}
+  - ✅ api.view.lastDown
+    - ℹ️ r3f onPointerMissed only for pointerup, not pointerdown
+    - 3d onPointerDown sets
+    - 2d onPointerDown clears 3d stuff if 2d point doesn't match
+  - ✅ obstacles has onPointer{Down,Up}
+    - will decode actual obstacle hit later
+
+- ✅ more raised obstacles
+  - ℹ️ raising to wall height can cause flicker
+  - ✅ 301
+  - ✅ 101
+  - ✅ 102
+  - ✅ 302
+  - ✅ 303
+
+- ❌ minecraft model supports overlays
+  - prefer to avoid "doubling" 168 triangle count
+  - can directly mutate textures e.g. apply coat to body
+
+- ✅ 6+ minecraft skins, avoiding default skins
+  - ✅ [scientist-dabeyt](https://namemc.com/skin/7161dce64d6b12be)
+    - maybe glasses via alternate head?
+  - ✅ [scientist-4w4ny4](https://namemc.com/skin/a01f93c820b84892)
+  - ✅ [soldier-_Markovka123_](https://namemc.com/skin/e0f2962a8ebf02b0)
+  - ✅ [robot-vaccino](https://www.planetminecraft.com/skin/vaccino/)
+  - ✅ [soldier-russia](https://namemc.com/skin/8597fe8d0b3248a0)
+  - ✅ [soldier-darkleonard2](https://namemc.com/skin/702ae8d8d9492ef8)
+
+- ✅ fix Viewer horizontal drag "initial jump" when Nav is open
+
+
+- ✅ fix webp generation
+  - ✅ on push generate webp and fail anything new detected
+  - ✅ assets.js script ensures webp
+  - ✅ assets.js script avoids recomputing webp
+  - ✅ `assets-fast` avoids over-computation (sans `--staleMs={ms}`)
+  - ✅ absorb `ensure-webp` into `assets-fast --prePush`
+  - ✅ fix VSCode UI push node version
+    - via `.bashrc`
+
+- ✅ integrate TestCharacter into TestWorld
+  - ℹ️ can use `currAnim.timeScale` to slow down animation to reflect detour speed
+  - ℹ️ can use Blender to pull in alternate textures
+  - ✅ api.npc.npc exists
+  - ✅ implement `api.npc.spawn`
+  - ❌ `<NPC>` exists and can show unanimated character
+    - no hooks inside `<NPC>`
+  - ✅ can connect terminal to world via `awaitWorld`
+  - ℹ️ `api npc` takes non-trivial time to be non-null
+    - can test `awaitWorld` or `api isReady` first
+  - ✅ can spawn un-animated character via terminal
+  - ✅ can see `npc` in terminal 
+  - ✅ attach npcs directly to `<group/>` via js
+    - tty command: `api npc.spawn '{ npcKey: "foo", point: {x:0, y:0} }'`
+  - ✅ improve un-animated character spawn
+  - ❌ api.npc.npc drives character render
+  - ✅ api.npc.npc drives agents
+  - ✅ merge character controller into `Npc`
+  - ✅ characters are animated (Idle)
+  - ✅ detect when stop walking (1st attempt)
+  - ✅ characters are animated (Walk)
+  - ✅ try fix `Npc` class HMR
+  - ✅ fix jerky collisions
+  - ✅ animation frame rate driven by agent speed
+  - ✅ can run on cmd/ctrl/shift click
+  - ✅ fix final turn
+  - ✅ fix initial turn

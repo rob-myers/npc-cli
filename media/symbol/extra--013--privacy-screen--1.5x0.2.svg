@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 450 60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <image width="450" height="54" y="3" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAAA2AQMAAABuogu9AAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAAzFJREFUSMfV1jGu1DAUheGxUrwyOyDboEDKtuhsREHJElgKRhSULAEjCkqCKDDC+HLPb8BYlBSIIJnReeeznYlmPLfbftN1j/Eh46UhFI1b1niXZuXBLEb+aEm9Tq9p3KvGg1nO8qsS7EaR4CIoMpZkDNMxjcnrqMhYHkUFleDCZBn8aRi8tVHBlFFU0AgqpmCyDN6M1fqoYK5RVNAJGubCFEyWkd/wo3LgKe7IgzgiTTIgN+QdclROZER+Jf4sH99UyeeXZCwuu/zdN/lROT/IUzw+moJ3XeZplTkumbO4adHlXiVHJb5qFCUL8Qt5u2su+15dNvm7Kr9f8qMSH/dRlIySGbkh75A78kCekhn5qI+iAsUxxeQmdJmtybh3I38U91Tc+D+KfyXTIXk7XbabZA2S1yZZ7iTzXqi47P4/RU11FE3lK/taptVC12obb4JWPrNWphK6A4p/JX1L2sThsmorvj/JEiTzJpk8GxUPz0TxL+WIC0GSNGRHNmQdFWT+UTTJQHxHsCMP5ImMkqOyIUexa5HQfBG9OJNeRK12k0xBUotQ0YsjU/wv5fZLZmRCukHaT3khy5T1dke8e1D0l5g1hblJod+Cy8bkXnRJcciGrAQXsiCTpCE7siFHUXuamTOWPVk2OkvaquPf5x/FfPt9HwWZkQnJTXbJeU+jmP5C3v/tXcvj3rlVHoneXs28PAEVOQGXJzUf6fIwkUvx9s9kJ2jIiryQGZkkDTmLwOUzOz/c68eaz/8sTrl+T0j25atEsizFv5cnQUSaZEDeIXfkUZYi1/pNiqzIgszIJDmLuOV7fx4Q69HAGTKLMGQkMMmA3JA78kCeeSlyLafUPM6Wg4wTbxan5Nh149KNy3EEunHpxqXMLHItp/E8tpcDm5N9Fqd8S/AS+UTSdsl2StYoeVlai1zHpy7/vil+XeWf8fMkZnmZ/YutxR/SCAxpSJM0kzSk2VLk+uN3Gb6sP93uZGZxykpwIQsyI2+SHdmWoi7ii7gQZ3zyERMwm8wswogLcSZOeOWR+8EEmVmEEWfiRMz+O0+r4i98WYs/rshIOzR2UfHs6sjMkpaiX98BJ2LGEkC6gmEAAAAASUVORK5CYII=">
+    <title>extra--013--privacy-screen--1.5x0.2</title>
+  </image>
+  <rect width="450" height="60" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+    <title>obstacle privacy-screen y=1</title>
+  </rect>
+  <rect width="450" height="10" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" y="60">
+    <title>wall h=1</title>
+  </rect>
+  <rect width="450" height="10" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" y="-10">
+    <title>wall h=1</title>
+  </rect>
+</svg>

@@ -5,6 +5,7 @@ import { css } from "@emotion/css";
 import { Subject } from "rxjs";
 
 import { Vect } from "../geom";
+import { isModifierKey, isTouchDevice } from "../service/dom";
 import { TestCanvasContext } from "./test-canvas-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -38,7 +39,7 @@ export default function TestCanvas(props) {
         case "pointerup":
         case "pointerup-outside":
           // show/hide ContextMenu
-          if ((e.rmb || e.longPress) && e.distance <= 5) {
+          if ((e.rmb || e.justLongDown) && e.distancePx <= 5) {
             state.menuEl.style.transform = `translate(${e.screenPoint.x}px, ${e.screenPoint.y}px)`;
             state.menuEl.style.display = "block";
           } else {
@@ -75,10 +76,14 @@ export default function TestCanvas(props) {
           state.down &&
             state.events.next({
               key: "pointerup-outside",
-              distance: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
-              longPress: Date.now() - state.down.epochMs >= 300,
+              is3d: false,
+              modifierKey: isModifierKey(e),
+              distancePx: state.down.clientPos.distanceTo({ x: e.clientX, y: e.clientY }),
+              justLongDown: Date.now() - state.down.epochMs >= 300,
+              pointers: 0,
               rmb: e.button === 2,
               screenPoint: { x: e.offsetX, y: e.offsetY },
+              touch: isTouchDevice(),
             });
         }}
         onCreated={update} // show stats

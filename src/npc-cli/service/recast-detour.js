@@ -4,6 +4,27 @@ import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
 /**
+ * @param {import("@recast-navigation/core").Crowd} crowd
+ * @returns {{ [agentIndex: number]: NPC.BasicAgentMeta }}
+ * Returns positions and targets of disposed crowd.
+ */
+export function disposeCrowd(crowd) {
+  const output = /** @type {ReturnType<typeof disposeCrowd>} */ ({});
+  crowd.getAgents().forEach((agent) => {
+    const agentIndex = agent.agentIndex;
+    output[agentIndex] = { agentIndex, position: agent.position(), target: getAgentTarget(agent) };
+    crowd.removeAgent(agent);
+  });
+  crowd.destroy();
+  return output;
+}
+
+/** @param {import("@recast-navigation/core").CrowdAgent} agent  */
+export function getAgentTarget(agent) {
+  return agent.corners().length > 0 ? agent.nextTargetPath() : null;
+}
+
+/**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
  */
 export function getTileCacheMeshProcess() {
@@ -31,7 +52,7 @@ export function getTileCacheGeneratorConfig() {
   return {
     // tileSize: 7.6 / cs,
     // tileSize: 7.2 / cs,
-    tileSize: 7.5 / cs,
+    tileSize: 9 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
     ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
@@ -39,7 +60,7 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    // maxSimplificationError: 0.5,
+    // maxSimplificationError: 0.8,
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
@@ -548,6 +569,8 @@ export function customGenerateTileCache(
   };
 
 }
+
+const emptyUserData = {};
 
 /**
  * @typedef {import("@recast-navigation/generators").TileCacheGeneratorConfig} TileCacheGeneratorConfig

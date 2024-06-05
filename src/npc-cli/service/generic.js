@@ -40,7 +40,7 @@ export function assertDefined(value, valueName) {
  * @returns {T extends undefined | null ? never : T}
  */
 export function assertNonNull(value, ensureNull = true) {
-  if (ensureNull && value == null) {
+  if (ensureNull === true && value == null) {
     throw new Error(`Encountered unexpected null or undefined value`);
   }
   return /** @type {*} */ (value);
@@ -133,6 +133,18 @@ export function equals(x, y, depth = 0) {
   } else {
     return x === y;
   }
+}
+
+/**
+ * Returns a hash code from serializable object
+ * - 🔔 `prettyCompact` is useful when it corresponds to file contents
+ * @param  {any} json A serializable object
+ * @return {number} A 32bit integer
+ * @see http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+ * @see https://stackoverflow.com/a/8831937/2917822
+ */
+export function hashJson(json, pretty = true) {
+  return hashText((pretty ? prettyCompact : JSON.stringify)(json));
 }
 
 /**

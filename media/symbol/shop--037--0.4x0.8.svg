@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 260 140" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <image width="268" height="146" x="-4" y="-3" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQwAAACSCAQAAAAanjyfAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gFGBAcIKqxHaoAAAOPSURBVHja7d3NkppAGIZRsHL/t0wWKUsx7yj9g2Pb56wyizEUPn6Ng8K6Lcuybgvc2dZ1kwXBusiC4PLbG8BnEgaRMIiEQfRn/6Mj0Xmtu59MDCJhEAmDSBhEwiASBpEwiIRBJAwiYRAJg+hP+0O8srY/BA/OP6dlYhAJg+gNS8k/Tuj38a6F2cQgEgaRMIiEQSQMImEQCYNIGETCIBIG0Ul/EndG9Vz3+/eckw1dw5DDb7jt9Z6JdFtKVlm8xbMnv+dz0GVipM1xNvUs+z37uO/Xpc++bw7jccME8V63/b3u/tX6PDSGsc9CFL9pW3rG0RBG7ygco7Tvxcc46h+v+uBz/4bJrPgc989F/YutcmKc8xaJPu7nRu2SUhXGmVnMGlrvhXRrXFKKl5LVtBjEFt+xHFUYxn0Usvh89WkUhWFWjKc2jap3JbIYSV0aBWFcH1YWo6lJ43AYshjZae9KZDG66zN3dGYcCsMfq79BWRpFB5/mxTwOhGEZ+RYlM8OHgadyPI2XYZgXczIxJnN0ZrwIw7yYlYkxnWMv8kNhmBff6Plicqn/VUZ15IV+YGKYFzNyjDGxZyvCpe7XGNvrVcDEIHoZhiOMOZkYRMIgEsbUfn6DIYxJvTp2FAaRMIiEQSQMImFMqvETXHy3n9+bCINIGESHvz7AXJ6E4bzq9+rwhSPmJIyJPVsTCr7UzLdo/lKzo4x5uXDKtJ6/7C8tv8yIul5Rx8z4Nj6ow063i7OVXu2NT3b8sha+u0pUcWVgRlVyGZyi62NIY2SnXmReGuPreEWdlvte8BlKr6Z2eGJIY2TlF9krWEqkMaqaay9WXktcGuOoe64KDz6lMZb6WxsW/0lcGuPY3zS5TMW5EmmMoe2Ol403y1vF8ZHa745beQvv/X2Ae55PEVq7liXkqvq0+348eTo/xdoli+qJcf1vz5ob1Ni/PNuejYf7wdc82OO0kMdvaI9i/whNE+O2EfcP2rNbfvLz4t1nj3cI47oxeVPdCqe3Z8dz/fZypzCuG+Ug9GxnT4qrjmGkjRPKmc6cwp3DSJsujv7OX5h9fYBIGETCIBIGkTCIhEEkDCJhEAmDSBhEwiA6+VzJjTMmYzExiIRB9IalxGe3RmRiEAmDSBhEwiASBpEwiIRBJAwiYRAJg0gYRMIgEgaRMIiEQbT6uASJiUEkDCJhEAmD6LL5wgf/2dbLskiDvW1dlr8ZM39Hs779ywAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyNC0wNS0yNFQxNjoyODozMiswMDowMAH7dVwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjQtMDUtMjRUMTY6Mjg6MzIrMDA6MDBwps3gAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDI0LTA1LTI0VDE2OjI4OjMyKzAwOjAwJ7PsPwAAAABJRU5ErkJggg==">
+                <title>shop--037--0.4x0.8</title>
+        </image>
+        <rect width="270.000031" height="150" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;" y="-5.000002" x="-5">
+                <title>obstacle</title>
+        </rect>
+</svg>

@@ -26,10 +26,10 @@ const repoRootDir = path.resolve(__dirname, "../..");
   }
 
   childProcess.execSync(`
-    time echo "${
-      json.files.map(x => `${path.resolve(repoRootDir, x)}`).join('\n')
-    }" |
-      xargs -L 1 -I {} -n 1 -P 3 cwebp -q ${quality} -noasm "{}" -o "{}".webp
+    echo '${
+      json.files.map(x => `"${path.resolve(repoRootDir, x)}"`).join('\n')
+    }' |
+      xargs -L 1 -I {} -n 1 -P 3 cwebp -q ${quality} -noasm ${'-quiet'} "{}" -o "{}".webp
   `);
 })();
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 600 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <image width="620" height="1220" x="-10" y="-10" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmwAAATEAQMAAADsxMvfAAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAAeJJREFUeNrs08EJgDAQRFHBAizBUixNS00JOeYgxhbmkEMg7xfwYFlm23vUs2UdGVdC7sy4GnJXxrWQuzPuDbme9a3E9ZW4uV8xNzd4ZG0sV8dyZSz3hFx6Bw6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcH87dUwDIAxFUXRAABKQgjSQhhQkMDIQWgsdXtImPU/AWX7+xeFwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcO0rTfuzXDmz3JXl7iz3ZLl3Ju6biRv7FJ24I/tkezYBWzZQazafSzTuFXkcrkeVmexTAAAAAElFTkSuQmCC">
+    <title>empty-room--020--2x4</title>
+  </image>
+  <rect x="330" y="-15" width="230" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;">
+    <title>door optional n</title>
+  </rect>
+  <rect x="330" width="230" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;" y="1185">
+    <title>door optional s</title>
+  </rect>
+  <rect y="-10" width="620" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="-10">
+    <title>wall</title>
+  </rect>
+  <rect x="591" y="-10" width="20" height="1220" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
+    <title>wall optional e</title>
+  </rect>
+  <rect y="1190" width="620" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="-10">
+    <title>wall</title>
+  </rect>
+  <rect x="-10" y="-10" width="20" height="1220" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
+    <title>wall</title>
+  </rect>
+</svg>

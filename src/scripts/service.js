@@ -2,6 +2,7 @@ import fs from 'fs';
 import childProcess from 'child_process';
 import stream from 'stream/promises';
 import { assertDefined, info } from '../npc-cli/service/generic';
+import { ansi } from '../npc-cli/sh/const';
 
 /**
  * @param {string} info 
@@ -154,9 +155,9 @@ function normalizeStarshipChars(word) {
 export async function runYarnScript(scriptName, ...args) {
   await /** @type {Promise<void>} */ (new Promise((resolve, reject) => {
       const proc = childProcess.spawn('yarn', [scriptName, ...args]);
-      proc.stdout.on('data', (data) => info(scriptName, data.toString()));
+      proc.stdout.on('data', (data) => info(scriptName, `${ansi.DarkGrey}${data.toString()}${ansi.Reset}`));
       // stderr needn't contain error messages
-      proc.stderr.on('data', (data) => info(scriptName, data.toString()));
+      proc.stderr.on('data', (data) => info(scriptName, `\n${data.toString()}`));
       // proc.stdout.on('close', () => resolve());
       proc.on('error', (e) => reject(e));
       proc.on('exit', (errorCode) => {

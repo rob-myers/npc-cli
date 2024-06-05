@@ -57,7 +57,8 @@ export class Rect {
           [this.x + this.width, this.y + this.height],
           [this.x, this.y + this.height]
         ]
-      ]
+      ],
+      meta: {},
     };
   }
 

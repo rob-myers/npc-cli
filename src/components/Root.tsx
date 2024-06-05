@@ -14,7 +14,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import type { AllFrontMatter, FrontMatter } from "./site.store";
 import { queryClient } from "../npc-cli/service/query-client";
-import { breakpoint, view } from "../const";
+import { afterBreakpoint, breakpoint, view } from "../const";
 
 import Nav from "./Nav";
 import Viewer from "./Viewer";
@@ -127,8 +127,11 @@ const rootContentCss = css`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+  
   @media (max-width: ${breakpoint}) {
     flex-direction: column;
+  }
+  @media (min-width: ${afterBreakpoint}) {
+    background-color: #ccc;
   }
 `;
