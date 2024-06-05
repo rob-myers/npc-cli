@@ -47,6 +47,11 @@ export default function TestSurfaces(props) {
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
     },
+    decodeObstacleId(instanceId) {
+      let id = instanceId;
+      const gmId = api.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
+      return { gmId, obstId: id };
+    },
     drawFloorAndCeil(gmKey) {
       const img = api.floorImg[gmKey];
       const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
@@ -101,6 +106,11 @@ export default function TestSurfaces(props) {
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
 
+      // 🚧 ignore transparent pixels
+      const { gmId, obstId } = state.decodeObstacleId(instanceId);
+      const obstacle = api.gms[gmId].obstacles[obstId];
+      console.log({ obstacle });
+
       api.events.next({
         key: "pointerdown",
         is3d: true,
@@ -115,14 +125,17 @@ export default function TestSurfaces(props) {
         meta: {
           obstacles: true,
           instanceId,
-          // 🚧 infer actual obstacle, ignoring transparent pixels
         },
       });
       e.stopPropagation();
     },
     onPointerUp(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
-      // info(`instanceId: ${instanceId}`);
+
+      // 🚧 ignore transparent pixels
+      const { gmId, obstId } = state.decodeObstacleId(instanceId);
+      const obstacle = api.gms[gmId].obstacles[obstId];
+      console.log({ obstacle });
 
       api.events.next({
         key: "pointerup",
@@ -138,7 +151,6 @@ export default function TestSurfaces(props) {
         meta: {
           obstacles: true,
           instanceId,
-          // 🚧 infer actual obstacle, ignoring transparent pixels
         },
       });
 
@@ -223,7 +235,7 @@ export default function TestSurfaces(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
-      position={[0, 0.001, 0]} // 🚧 temp
+      position={[0, 0.001, 0]}
     >
       <obstacleShaderMaterial
         key={glsl.ObstacleShaderMaterial.key}
@@ -247,6 +259,7 @@ export default function TestSurfaces(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
+ * @property {(instanceId: number) => { gmId: number; obstId: number; }} decodeObstacleId
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
