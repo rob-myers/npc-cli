@@ -9,10 +9,19 @@
 
 - extend chair/table symbols with chair/table tag on obstacle
 
-- rethink sh/scripts.ts and sh/raw-loader.js
-  - maybe sh/functions.sh
-  - maybe sh/generators.js
+  - sh/functions.sh
+  - sh/generators.js
   - support HMR of both files
+
+- 🚧 sh/scripts.ts -> sh/functions.sh
+  - ℹ️ currently HMR restarts session, but we only want function defs to be overridden
+  - ✅ `<Terminal>` can receive new functions without restarting session
+    - via `<WrappedTerminal>`
+  - 🚧 spawn background process which `source`s (?)
+  - 🚧 store as /etc/functions.sh
+
+- 🚧 sh/raw-loader.js -> sh/generators.js
+  - on HMR overwrite function defs
 
 - start writing first article
 

@@ -211,7 +211,7 @@ export default function Terminal(props: Props) {
     state.cleanup();
   }, []);
 
-  React.useEffect(() => {
+  React.useEffect(() => {// Handle resize
     state.bounds = bounds;
     state.ready && state.resize();
   }, [bounds]);
@@ -229,7 +229,7 @@ export default function Terminal(props: Props) {
   );
 }
 
-interface Props {
+export interface Props {
   disabled?: boolean;
   /** Can initialize variables */
   env: Partial<Session["var"]>;
