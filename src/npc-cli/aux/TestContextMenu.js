@@ -63,7 +63,7 @@ const contextMenuCss = css`
   z-index: 0;
   height: 100px;
   max-width: 256px;
-  user-select: none;
+  /* user-select: none; */
 
   opacity: 0.8;
   font-size: 0.9rem;
