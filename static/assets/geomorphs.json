@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 -557372223 -119385858",
+  "hash": "610044716 128524124 -195150074",
   "mapsHash": 610044716,
-  "layoutsHash": -557372223,
-  "sheetsHash": -119385858,
+  "layoutsHash": 128524124,
+  "sheetsHash": -195150074,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -1806,6 +1806,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -1875,6 +1876,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -1944,6 +1946,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2013,6 +2016,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2161,6 +2165,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2179,6 +2184,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2328,6 +2334,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2346,6 +2353,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2495,6 +2503,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2513,6 +2522,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2592,6 +2602,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2610,6 +2621,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2656,6 +2668,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -2674,6 +2687,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3573,6 +3587,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3591,6 +3606,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3609,6 +3625,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3627,6 +3644,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3870,6 +3888,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3948,6 +3967,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3966,6 +3986,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -3984,6 +4005,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -4002,6 +4024,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -4020,6 +4043,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -4038,6 +4062,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -4056,6 +4081,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -4074,6 +4100,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -4092,6 +4119,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -8939,6 +8967,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -9005,6 +9034,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -9023,6 +9053,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -9073,6 +9104,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -9286,6 +9318,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -10637,6 +10670,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -10655,6 +10689,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -10673,6 +10708,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -10902,6 +10938,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -10920,6 +10957,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -10971,6 +11009,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -11184,6 +11223,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -11202,6 +11242,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16503,6 +16544,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16521,6 +16563,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16641,6 +16684,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16659,6 +16703,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16779,6 +16824,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16797,6 +16843,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16944,6 +16991,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -16989,6 +17037,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17047,6 +17096,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17065,6 +17115,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17226,6 +17277,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17244,6 +17296,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17262,6 +17315,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17280,6 +17334,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17861,6 +17916,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -17909,6 +17965,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -20521,6 +20578,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -20539,6 +20597,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -20616,6 +20675,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -20634,6 +20694,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23489,6 +23550,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23507,6 +23569,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23627,6 +23690,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23645,6 +23709,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23765,6 +23830,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23783,6 +23849,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23903,6 +23970,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -23921,6 +23989,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -24698,6 +24767,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -24716,6 +24786,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -24761,6 +24832,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -24779,6 +24851,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symId": 22,
               "symKey": "console--051--0.4x0.6",
               "obsId": 0
@@ -27911,7 +27984,7 @@
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
         "obstacleId": 0,
-        "type": "obstacle"
+        "type": "chair"
       },
       "extra--001--fresher--0.5x0.5 0": {
         "x": 2040,

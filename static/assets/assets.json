@@ -82,9 +82,9 @@
       "obsHashes": [715506913]
     },
     "console--051--0.4x0.6": {
-      "outputHash": -1131261978,
+      "outputHash": -2027378181,
       "pngHash": -874799556,
-      "obsHashes": [1185918397]
+      "obsHashes": [-1383330564]
     },
     "couch-and-chairs--006--0.4x2": {
       "outputHash": -1917439631,
@@ -931,7 +931,7 @@
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
         "obstacleId": 0,
-        "type": "obstacle"
+        "type": "chair"
       },
       "extra--001--fresher--0.5x0.5 0": {
         "x": 2040,
@@ -5743,6 +5743,7 @@
           ],
           "meta": {
             "obstacle": true,
+            "chair": true,
             "symId": 22,
             "symKey": "console--051--0.4x0.6",
             "obsId": 0
