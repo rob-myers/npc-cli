@@ -23,6 +23,7 @@
 - 🚧 sh/raw-loader.js -> sh/generators.js
   - on HMR overwrite function defs
 
+- ✅ fix `expr 42 | say`
 - start writing first article
 
 - ❌ get eslint working again e.g. for raw-loader.js

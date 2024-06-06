@@ -542,10 +542,7 @@ class cmdServiceClass {
           // Say lines from stdin
           let datum: string | VoiceCommand | null;
           while ((datum = await read(meta)) !== EOF) {
-            yield {
-              voice: opts.v,
-              ...(typeof datum === "string" ? { text: datum } : datum),
-            };
+            yield { voice: opts.v, text: `${datum}` };
           }
         } else {
           // Say operands
@@ -1044,7 +1041,7 @@ function prettySafe(x: any) {
 }
 
 /**
- * Read once from stdin. We convert `{ eof: true }` to `null` for
+ * Read once from stdin. We convert `{ eof: true }` to `EOF` for
  * easier assignment, but beware of other falsy values.
  */
 async function read(meta: Sh.BaseMeta, chunks = false) {
@@ -1092,14 +1089,6 @@ export async function* sleep(
   } while (Date.now() - startedAt < duration - 1);
   // If process continually re-sleeps, avoid many cleanups
   removeFirst(process.cleanups, cleanup);
-}
-
-/**
- * Can prefix with `throw` for static analysis.
- * The outer throw will never be thrown.
- */
-function throwError(message: string, exitCode = 1) {
-  throw new ShError(message, exitCode);
 }
 
 //#endregion
