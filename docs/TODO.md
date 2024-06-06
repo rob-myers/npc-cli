@@ -10,8 +10,8 @@
 - ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
 
 - 🚧 obstacle right-click/long-press shows clicked type e.g. `bed`
-  - clicked point -> unit XZ square -> sprite-sheet
-  - clicked if respective pixel is non-transparent
+  - ✅ clicked point -> unit XZ square -> sprite-sheet
+  - 🚧 clicked if respective pixel is non-transparent
 
 - rethink sh/scripts.ts and sh/raw-loader.js
   - maybe sh/functions.sh
@@ -20,7 +20,10 @@
 
 - start writing first article
 
-- get eslint working again e.g. for raw-loader.js
+- ❌ get eslint working again e.g. for raw-loader.js
+- 🚧 start a new repo based on next js
+  - ✅ https://github.com/rob-myers/npc-cli-next
+  - get mdx working
 
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself

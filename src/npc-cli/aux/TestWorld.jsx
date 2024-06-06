@@ -84,6 +84,9 @@ export default function TestWorld(props) {
           layout,
           debugNavPoly: tmpBufferGeom1,
         };
+        // align with XZ quad uv-map
+        gmClass.floor[1].flipY = false;
+        gmClass.ceil[1].flipY = false;
       }
       gmClass.layout = layout;
       // Fix normals for recast/detour... maybe due to earcut ordering?
@@ -207,6 +210,7 @@ export default function TestWorld(props) {
         `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`,
       ).then((tex) => {
         state.obsTex = tex;
+        tex.flipY = false; // align with XZ quad uv-map
         update();
       });
 

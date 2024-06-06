@@ -4,25 +4,23 @@ import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
 import { InfiniteGridMaterial } from "./glsl";
 
-/** Unit quad extending from origin to (1, 0, 1) */
+/** Unit quad extending from (0, 0, 0) to (1, 0, 1) */
 export const quadGeometryXZ = new THREE.BufferGeometry();
-// prettier-ignore
-const xzVertices = new Float32Array([0, 0, 0,  1, 0, 1,  1, 0, 0,  0, 0, 1]);
-const xzUvs = new Float32Array([0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0]);
-const xzIndices = [0, 1, 2, 0, 3, 1];
-const xzNormals = [0, 1, 0,  0, 1, 0,  0, 1, 0,  0, 1, 0]; // Needed for shadows
+const xzVertices = new Float32Array([0,0,0, 1,0,0, 1,0,1, 0,0,1]);
+const xzUvs = new Float32Array([0,0, 1,0, 1,1, 0,1]);
+const xzIndices = [2, 1, 0, 0, 3, 2];
+const xzNormals = [0,1,0, 0,1,0, 0,1,0, 0,1,0]; // For shadows
 quadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(xzVertices.slice(), 3));
 quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
-/** Unit quad extending from origin to (1, 1, 0) */
+/** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
 export const quadGeometryXY = new THREE.BufferGeometry();
-// prettier-ignore
-const xyVertices = new Float32Array([0, 0, 0,  0, 1, 0,  1, 1, 0,  1, 0, 0]);
-const xyUvs = new Float32Array([0, 0, 0, 1, 1, 1, 1, 0]);
+const xyVertices = new Float32Array([0,0,0, 0,1,0, 1,1,0, 1,0,0]);
+const xyUvs = new Float32Array([0,0, 0,1, 1,1, 1,0]);
 const xyIndices = [2, 1, 0, 0, 3, 2];
-const xyNormals = [0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1];
+const xyNormals = [0,0,1, 0,0,1, 0,0,1, 0,0,1];
 quadGeometryXY.setAttribute("position", new THREE.BufferAttribute(xyVertices.slice(), 3));
 quadGeometryXY.setAttribute("uv", new THREE.BufferAttribute(xyUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xyNormals.slice(), 3 ) );

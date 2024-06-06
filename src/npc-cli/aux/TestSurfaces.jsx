@@ -28,9 +28,9 @@ export default function TestSurfaces(props) {
       api.gms.forEach(({ obstacles }) =>
         obstacles.forEach(({ symbolKey, obstacleId }) => {
           const item = obstaclesSheet[`${symbolKey} ${obstacleId}`];
-          if (item) {
+          if (item) {// (x, y) is top left of sprite in spritesheet
             const { x, y, width, height } = item;
-            uvOffsets.push(x / obstaclesWidth,  1 - (y + height) / obstaclesHeight);
+            uvOffsets.push(x / obstaclesWidth,  y / obstaclesHeight);
             uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
           } else {
             warn(`${symbolKey} (${obstacleId}) not found in sprite-sheet`);
@@ -47,11 +47,39 @@ export default function TestSurfaces(props) {
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
     },
+    createObstacleMatrix4(gmTransform, { origPoly: { rect }, transform, height }) {
+      const [mat, mat4] = [tmpMat1, tmpMatFour1];
+      // transform unit (XZ) square into `rect`, then apply `transform` followed by `gmTransform`
+      mat.feedFromArray([rect.width, 0, 0, rect.height, rect.x, rect.y]);
+      mat.postMultiply(transform).postMultiply(gmTransform);
+      return geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: height });
+    },
     decodeObstacleId(instanceId) {
       let id = instanceId;
       const gmId = api.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
       return { gmId, obstId: id };
     },
+    detectClickObstacle(e) {
+      const instanceId = /** @type {number} */ (e.instanceId);
+      const { gmId, obstId } = state.decodeObstacleId(instanceId);
+      
+      const gm = api.gms[gmId];
+      const obstacle = gm.obstacles[obstId];
+      
+      // transform 3D point back to unit XZ quad
+      const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
+      const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
+      // transform unit quad point into spritesheet
+      const meta = api.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
+      const sheetX = meta.x + unitQuadPnt.x * meta.width;
+      const sheetY = meta.y + unitQuadPnt.z * meta.height;
+
+      console.log({ obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
+
+      // 🚧 test if pixel (sheetX, sheetY) transparent
+
+    },
+
     drawFloorAndCeil(gmKey) {
       const img = api.floorImg[gmKey];
       const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
@@ -107,9 +135,7 @@ export default function TestSurfaces(props) {
       const instanceId = /** @type {number} */ (e.instanceId);
 
       // 🚧 ignore transparent pixels
-      const { gmId, obstId } = state.decodeObstacleId(instanceId);
-      const obstacle = api.gms[gmId].obstacles[obstId];
-      console.log({ obstacle });
+      state.detectClickObstacle(e);
 
       api.events.next({
         key: "pointerdown",
@@ -133,9 +159,7 @@ export default function TestSurfaces(props) {
       const instanceId = /** @type {number} */ (e.instanceId);
 
       // 🚧 ignore transparent pixels
-      const { gmId, obstId } = state.decodeObstacleId(instanceId);
-      const obstacle = api.gms[gmId].obstacles[obstId];
-      console.log({ obstacle });
+      state.detectClickObstacle(e);
 
       api.events.next({
         key: "pointerup",
@@ -159,15 +183,11 @@ export default function TestSurfaces(props) {
     },
     positionObstacles() {
       const { obsInst } = state;
-      const [mat, mat4] = [tmpMat1, tmpMatFour1];
       let oId = 0;
       api.gms.forEach(({ obstacles, transform: gmTransform }) => {
-        obstacles.forEach(({ origPoly: { rect }, transform, height }) => {
-          // 1st transform unit XZ square to rect
-          // then apply `transform` followed by `gmTransform`
-          mat.feedFromArray([rect.width, 0, 0, rect.height, rect.x, rect.y]);
-          mat.postMultiply(transform).postMultiply(gmTransform);
-          obsInst.setMatrixAt(oId++, geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: height }));
+        obstacles.forEach((obstacle) => {
+          const mat4 = state.createObstacleMatrix4(gmTransform, obstacle);
+          obsInst.setMatrixAt(oId++, mat4);
         });
       });
       obsInst.instanceMatrix.needsUpdate = true;
@@ -259,7 +279,9 @@ export default function TestSurfaces(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
+ * @property {(gmTransform: Geom.SixTuple ,obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
  * @property {(instanceId: number) => { gmId: number; obstId: number; }} decodeObstacleId
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} detectClickObstacle
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
