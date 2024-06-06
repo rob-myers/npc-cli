@@ -57,30 +57,32 @@ export default function TestSurfaces(props) {
     decodeObstacleId(instanceId) {
       let id = instanceId;
       const gmId = api.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
-      return { gmId, obstId: id };
+      return { gmId, obstacleId: id };
     },
     detectClickObstacle(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
-      const { gmId, obstId } = state.decodeObstacleId(instanceId);
-      
+      const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
       const gm = api.gms[gmId];
-      const obstacle = gm.obstacles[obstId];
+      const obstacle = gm.obstacles[obstacleId];
       
       // transform 3D point back to unit XZ quad
       const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
       const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
       // transform unit quad point into spritesheet
       const meta = api.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
-      const sheetX = meta.x + unitQuadPnt.x * meta.width;
-      const sheetY = meta.y + unitQuadPnt.z * meta.height;
+      const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
+      const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
 
-      console.log({ obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
-
-      // 🚧 test if pixel (sheetX, sheetY) transparent
-
+      const canvas = /** @type {HTMLCanvasElement} */ (api.obsTex.image);
+      const ctxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+      const { data: rgba } = ctxt.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
+      // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
+      
+      // ignore clicks on fully transparent pixels
+      return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
 
-    drawFloorAndCeil(gmKey) {
+    drawFloorAndCeil(gmKey) {// 🚧 separate into two functions
       const img = api.floorImg[gmKey];
       const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
@@ -133,53 +135,61 @@ export default function TestSurfaces(props) {
     },
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
+      const result = state.detectClickObstacle(e);
 
-      // 🚧 ignore transparent pixels
-      state.detectClickObstacle(e);
-
-      api.events.next({
-        key: "pointerdown",
-        is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
-        distancePx: 0,
-        justLongDown: false,
-        pointers: api.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
-        meta: {
-          obstacles: true,
-          instanceId,
-        },
-      });
-      e.stopPropagation();
+      if (result !== null) {
+        const { gmId, obstacle } = result;
+        api.events.next({
+          key: "pointerdown",
+          is3d: true,
+          modifierKey: isModifierKey(e.nativeEvent),
+          distancePx: 0,
+          justLongDown: false,
+          pointers: api.ui.getNumPointers(),
+          rmb: isRMB(e.nativeEvent),
+          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          point: e.point,
+          meta: {
+            obstacles: true,
+            instanceId,
+            gmId,
+            obstacleId: obstacle.obstacleId,
+            height: obstacle.height,
+            ...obstacle.origPoly.meta,
+          },
+        });
+        e.stopPropagation();
+      }
     },
     onPointerUp(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
+      const result = state.detectClickObstacle(e);
 
-      // 🚧 ignore transparent pixels
-      state.detectClickObstacle(e);
-
-      api.events.next({
-        key: "pointerup",
-        is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
-        distancePx: api.ui.getDownDistancePx(),
-        justLongDown: api.ui.justLongDown,
-        pointers: api.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
-        meta: {
-          obstacles: true,
-          instanceId,
-        },
-      });
-
-      // 🚧 temp turn off to permit navigation
-      // e.stopPropagation();
+      if (result !== null) {
+        const { gmId, obstacleId, obstacle } = result;
+        api.events.next({
+          key: "pointerup",
+          is3d: true,
+          modifierKey: isModifierKey(e.nativeEvent),
+          distancePx: api.ui.getDownDistancePx(),
+          justLongDown: api.ui.justLongDown,
+          pointers: api.ui.getNumPointers(),
+          rmb: isRMB(e.nativeEvent),
+          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          point: e.point,
+          meta: {
+            obstacles: true,
+            instanceId,
+            gmId,
+            obstacleId,
+            height: obstacle.height,
+            ...obstacle.origPoly.meta,
+          },
+        });
+        e.stopPropagation();
+      }
     },
     positionObstacles() {
       const { obsInst } = state;
@@ -279,9 +289,12 @@ export default function TestSurfaces(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} obsInst
  * @property {() => void} addObstacleUvs
- * @property {(gmTransform: Geom.SixTuple ,obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
- * @property {(instanceId: number) => { gmId: number; obstId: number; }} decodeObstacleId
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} detectClickObstacle
+ * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
+ * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId
+ * Points to `api.gms[gmId].obstacles[obstacleId]`.
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
+ *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
+ * )} detectClickObstacle
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp

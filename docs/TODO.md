@@ -11,7 +11,12 @@
 
 - 🚧 obstacle right-click/long-press shows clicked type e.g. `bed`
   - ✅ clicked point -> unit XZ square -> sprite-sheet
-  - 🚧 clicked if respective pixel is non-transparent
+  - ✅ clicked if respective pixel is non-transparent
+  - ✅ meta enriched with respective obstacle's data
+  - 🚧 show data in ContextMenu
+
+- remove `symId`
+- extend chair/table symbols with chair/table tag on obstacle
 
 - rethink sh/scripts.ts and sh/raw-loader.js
   - maybe sh/functions.sh

@@ -895,7 +895,8 @@ class GeomorphService {
 
         if (meta.obstacle) {// Link to original symbol
           meta.symId = toSymId[symbolKey]; // 🚧 remove
-          meta.symKey = symbolKey; // Debug?
+          meta.symKey = symbolKey;
+          // local id inside SVG symbol
           meta.obsId = obstacles.length - 1;
         }
       },

@@ -9,7 +9,7 @@ import { crowdAgentParams } from "./create-npc";
 export default function useTestHandleEvents(api) {
   const state = useStateRef(/** @returns {State} */ () => ({
     handleEvents(e) {
-      // info('useTestHandleEvents', e);      
+      info('useTestHandleEvents', e);
 
       switch (e.key) {
         case "draw-floor-ceil":
