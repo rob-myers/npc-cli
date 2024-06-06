@@ -101,6 +101,7 @@ export const tmpVectThree3 = new THREE.Vector3();
 export const tmpMesh1 = new THREE.Mesh();
 export const tmpBox1 = new THREE.Box3();
 
+export const imageLoader = new THREE.ImageLoader();
 export const textureLoader = new THREE.TextureLoader();
 // console.log('cache enabled', THREE.Cache.enabled); // false
 

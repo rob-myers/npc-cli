@@ -14,7 +14,7 @@ import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { tmpVec1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
-import { decompToXZGeometry, textureLoader, tmpBufferGeom1, tmpVectThree1 } from "../service/three";
+import { decompToXZGeometry, imageLoader, textureLoader, tmpBufferGeom1 } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { TestWorldContext } from "./test-world-context";
@@ -206,11 +206,15 @@ export default function TestWorld(props) {
         state.flat && state.events.next({ key: 'draw-floor-ceil', gmKey });
       }));
 
-      textureLoader.loadAsync(
+      imageLoader.loadAsync(
         `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`,
-      ).then((tex) => {
-        state.obsTex = tex;
+      ).then((img) => {
+        const canvas = document.createElement('canvas');
+        [canvas.width, canvas.height] = [img.width, img.height];
+        /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
+        const tex = new THREE.CanvasTexture(canvas);
         tex.flipY = false; // align with XZ quad uv-map
+        state.obsTex = tex;
         update();
       });
 
@@ -306,9 +310,10 @@ export default function TestWorld(props) {
  *
  * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
- * @property {THREE.Texture} obsTex
+ * @property {THREE.Texture} obsTex CanvasTexture for pixel lookup
+ * @property {Geomorph.LayoutInstance[]} gms
+ * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
- * @property {Geomorph.LayoutInstance[]} gms Aligned to `map.gms`.
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
