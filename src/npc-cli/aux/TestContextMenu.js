@@ -1,8 +1,9 @@
 import React from "react";
 import { css } from "@emotion/css";
-import { clamp } from "three/src/math/MathUtils";
 
+import { geom } from '../service/geom';
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 import { TestWorldContext } from "./test-world-context";
 
 export default function TestContextMenu() {
@@ -14,21 +15,25 @@ export default function TestContextMenu() {
     isOpen: false,
     justOpen: false,
     hide() {
-      state.menuEl.style.visibility = "hidden";
       state.isOpen = false;
+      update();
     },
     show(at) {
       const menuDim = state.menuEl.getBoundingClientRect();
       const canvasDim = api.ui.canvas.getBoundingClientRect();
-      const x = clamp(at.x, 0, canvasDim.width - menuDim.width);
-      const y = clamp(at.y, 0, canvasDim.height - menuDim.height);
+      const x = geom.clamp(at.x, 0, canvasDim.width - menuDim.width);
+      const y = geom.clamp(at.y, 0, canvasDim.height - menuDim.height);
       state.menuEl.style.transform = `translate(${x}px, ${y}px)`;
-      state.menuEl.style.visibility = "visible";
       state.isOpen = true;
+      update();
     },
   }));
 
   api.menu = state;
+
+  const update = useUpdate();
+
+  const meta3d = api.ui.lastDown?.threeD?.meta;
 
   return (
     <div
@@ -36,13 +41,17 @@ export default function TestContextMenu() {
       className={contextMenuCss}
       onContextMenu={(e) => e.preventDefault()}
     >
-      <div>ContextMenu</div>
-      <select defaultValue={undefined} style={{ width: "100%" }}>
-        <option>demo select</option>
-        <option value="foo">foo</option>
-        <option value="bar">bar</option>
-        <option value="baz">baz</option>
-      </select>
+      {state.isOpen ? <div>
+        <select defaultValue={undefined} style={{ width: "100%" }}>
+          <option>demo select</option>
+          <option value="foo">foo</option>
+          <option value="bar">bar</option>
+          <option value="baz">baz</option>
+        </select>
+        {meta3d && Object.entries(meta3d).map(([k, v]) =>
+          <div>{v === true ? k : `${k}: ${v}`}</div>
+        )}
+      </div> : null}
     </div>
   );
 }
@@ -53,18 +62,19 @@ const contextMenuCss = css`
   top: 0;
   z-index: 0;
   height: 100px;
+  max-width: 256px;
   user-select: none;
 
-  visibility: hidden;
   opacity: 0.8;
-
   font-size: 0.9rem;
   color: white;
-  background-color: #222;
-  border-radius: 5px;
-  border: 2px solid #aaa;
-
-  padding: 8px;
+  
+  > div {
+    border: 2px solid #aaa;
+    border-radius: 5px;
+    padding: 8px;
+    background-color: #222;
+  }
 
   select {
     color: black;

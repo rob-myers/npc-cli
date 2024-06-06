@@ -7,15 +7,6 @@
   - consoles
   - extras
 
-- ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
-
-- 🚧 obstacle right-click/long-press shows clicked type e.g. `bed`
-  - ✅ clicked point -> unit XZ square -> sprite-sheet
-  - ✅ clicked if respective pixel is non-transparent
-  - ✅ meta enriched with respective obstacle's data
-  - 🚧 show data in ContextMenu
-
-- ✅ remove `symId`
 - extend chair/table symbols with chair/table tag on obstacle
 
 - rethink sh/scripts.ts and sh/raw-loader.js
@@ -33,8 +24,13 @@
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
-- sometimes during development restarting stops working i.e. can see 3d floor,
+- 🚧 sometimes during development restarting stops working i.e. can see 3d floor,
   but console logs `THREE.WebGLRenderer: Context Lost`
+  ```js
+  // seemed to start working after this:
+  c = document.createElement('canvas')
+  gl = c.getContext('webgl2')
+  ```
 - try leaving one logged-in window open before go offline, see how long it works
   > https://boxy-svg.com/questions/283/ability-to-use-while-offline
 - distinguish symbols:
@@ -1194,3 +1190,13 @@
   - ✅ can run on cmd/ctrl/shift click
   - ✅ fix final turn
   - ✅ fix initial turn
+
+- ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
+
+- ✅ obstacle right-click/long-press shows clicked type e.g. `bed`
+  - ✅ clicked point -> unit XZ square -> sprite-sheet
+  - ✅ clicked if respective pixel is non-transparent
+  - ✅ meta enriched with respective obstacle's data
+  - ✅ show data in ContextMenu
+
+- ✅ remove `symId`

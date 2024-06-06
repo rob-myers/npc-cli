@@ -19,7 +19,8 @@ export default function useTestHandleEvents(api) {
           api.flat.drawFloorAndCeil(e.gmKey);
           break;
         case "long-pointerdown":
-          if (e.distancePx <= (e.touch ? 10 : 5)) {// mobile/desktop show/hide ContextMenu
+          // mobile/desktop show/hide ContextMenu
+          if (e.distancePx <= (e.touch ? 10 : 5)) {
             api.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
             api.ui.controls.saveState();
