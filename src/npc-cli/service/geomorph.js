@@ -894,7 +894,6 @@ class GeomorphService {
         poly.meta = meta;
 
         if (meta.obstacle) {// Link to original symbol
-          meta.symId = toSymId[symbolKey]; // 🚧 remove
           meta.symKey = symbolKey;
           // local id inside SVG symbol
           meta.obsId = obstacles.length - 1;
@@ -1214,11 +1213,3 @@ const tmpMat2 = new Mat();
 /**
  * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey
  */
-
-const symbolKeys = keys(geomorphService.fromSymbolKey);
-const toSymId = symbolKeys.reduce((agg, key, id) =>
-  (agg[key] = id, agg), /** @type {Record<Geomorph.SymbolKey, number>} */ ({})
-);
-const fromSymId = symbolKeys.reduce((agg, key, id) =>
-  (agg[id] = key, agg), /** @type {Record<number, Geomorph.SymbolKey>} */ ({})
-);

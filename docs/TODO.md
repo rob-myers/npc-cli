@@ -15,7 +15,7 @@
   - ✅ meta enriched with respective obstacle's data
   - 🚧 show data in ContextMenu
 
-- remove `symId`
+- ✅ remove `symId`
 - extend chair/table symbols with chair/table tag on obstacle
 
 - rethink sh/scripts.ts and sh/raw-loader.js
