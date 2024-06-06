@@ -15,6 +15,8 @@ import {
   DEV_EXPRESS_WEBSOCKET_PORT,
   GEOMORPHS_JSON_FILENAME,
   DEV_ORIGIN,
+  defaultSiteTopLevelState,
+  siteTopLevelKey,
 } from "src/const";
 import { queryClient } from "src/npc-cli/service/query-client";
 
@@ -83,8 +85,10 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
 
       set(() => ({ browserLoaded: true }), undefined, "browser-load");
 
-      const topLevel: Pick<State, "navOpen" | "viewOpen"> =
-        safeJsonParse(tryLocalStorageGet("site-top-level") ?? "{}") ?? {};
+      const topLevel: typeof defaultSiteTopLevelState =
+        safeJsonParse(
+          tryLocalStorageGet(siteTopLevelKey) ?? JSON.stringify(defaultSiteTopLevelState)
+        ) ?? {};
       if (topLevel.viewOpen) {
         set(() => ({ viewOpen: topLevel.viewOpen }));
       }
@@ -128,7 +132,7 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
 
     onTerminate() {
       const { navOpen, viewOpen } = get();
-      tryLocalStorageSet("site-top-level", JSON.stringify({ navOpen, viewOpen }));
+      tryLocalStorageSet(siteTopLevelKey, JSON.stringify({ navOpen, viewOpen }));
     },
 
     setArticleKey(articleKey) {

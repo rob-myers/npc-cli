@@ -52,3 +52,10 @@ export const view = {
   /** Small viewport: width; Large viewport: height */
   iconSize: "3.5rem",
 } as const;
+
+export const siteTopLevelKey = "site-top-level";
+
+export const defaultSiteTopLevelState = {
+  viewOpen: true,
+  navOpen: false,
+}
