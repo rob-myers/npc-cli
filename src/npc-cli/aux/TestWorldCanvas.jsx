@@ -4,7 +4,7 @@ import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
-import { Vect } from "../geom";
+import { Rect, Vect } from "../geom";
 import { isModifierKey, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { InfiniteGrid } from "../service/three";
@@ -123,12 +123,17 @@ export default function TestWorldCanvas(props) {
       if (!state.down) {
         return;
       }
-      state.justLongDown = false;
+
       window.clearTimeout(state.down.longTimeoutId);
 
       state.down.pointerIds = state.down.pointerIds.filter(x => x !== e.pointerId);
       if (state.down.pointerIds.length === 0) {
         state.down = undefined;
+      }
+
+      const rect = Rect.fromJson(state.canvas.getBoundingClientRect());
+      if (!rect.contains({ x: e.clientX, y: e.clientY })) {
+        state.justLongDown = false; // on drag outside
       }
     },
     onPointerMove(e) {
@@ -152,6 +157,7 @@ export default function TestWorldCanvas(props) {
       });
 
       state.onPointerLeave(e);
+      state.justLongDown = false;
     },
     onPointerMissed(e) {
       if (!state.down) {

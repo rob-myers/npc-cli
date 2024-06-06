@@ -9,10 +9,6 @@
 
 - extend chair/table symbols with chair/table tag on obstacle
 
-  - sh/functions.sh
-  - sh/generators.js
-  - support HMR of both files
-
 - 🚧 sh/scripts.ts -> sh/functions.sh
   - ℹ️ currently HMR restarts session, but we only want function defs to be overridden
   - ✅ `<Terminal>` can receive new functions without restarting session
@@ -24,6 +20,8 @@
   - on HMR overwrite function defs
 
 - ✅ fix `expr 42 | say`
+- ✅ fix contextmenu hide on long press pointerup over contextmenu
+
 - start writing first article
 
 - ❌ get eslint working again e.g. for raw-loader.js
