@@ -49,7 +49,7 @@ export default function TestContextMenu() {
           <option value="baz">baz</option>
         </select>
         {meta3d && Object.entries(meta3d).map(([k, v]) =>
-          <div>{v === true ? k : `${k}: ${v}`}</div>
+          <div key={k}>{v === true ? k : `${k}: ${v}`}</div>
         )}
       </div> : null}
     </div>
