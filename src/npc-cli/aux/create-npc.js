@@ -172,25 +172,15 @@ export class Npc {
         return;
       }
 
-      if (
-        !this.s.finalApproach
-        // && this.agent.corners().length === 1
-        && position.distanceTo(this.s.target) < 0.3
-      ) {
-        // on final approach avoid "arrival behaviour"
-        // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1204
-        const direction = (new THREE.Vector3()).copy(this.s.target).sub(position).normalize();
-        this.agent.requestMoveVelocity(direction);
-        this.s.finalApproach = true;
-      }
-
       this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
+      const distance = position.distanceTo(this.s.target);
 
-      if (position.distanceTo(this.s.target) < 0.1) {// Reached target
+      if (distance < 0.15) {// Reached target
         this.s.target = null;
         // this.mixer.timeScale = 1;
         this.s.finalApproach = false;
         this.startAnimation('Idle');
+        this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() });
         // - keep target, so "moves out of the way"
         // - reset first for "Run" otherwise agent moves
         this.agent.resetMoveTarget();
@@ -198,6 +188,12 @@ export class Npc {
           this.agent?.requestMoveTarget(this.group.position);
           this.mixer.timeScale = 1;
         }, 300);
+      }
+
+      // undo the speed scale
+      // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
+      if (distance < 2 * agentRadius) {
+        this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() * (((2 * agentRadius) / distance)) });
       }
     }
   }
@@ -278,9 +274,11 @@ export function hotModuleReloadNpc(npc) {
 /** @param {any} error */
 function emptyReject(error) {}
 
+const agentRadius = npcService.defaults.radius / 3;
+
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
-  radius: npcService.defaults.radius / 3, // 🔔 too large causes jerky collisions
+  radius: agentRadius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 10, // Large enough for 'Run'
   // maxSpeed: 0, // Set elsewhere
