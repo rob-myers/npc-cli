@@ -6,12 +6,12 @@ export const utilFunctions = [
   {
     range: `{
   call '({ args }) =>
-    Array.from({ length: Function(\`return \${args.join(" ")}\`)() }).map((_, i) => i);
-  ' "$@"
+    Array.from({ length: Number(args[0]) }).map((_, i) => i);
+  ' "$1"
 }`,
 
     seq: `{
-  range "$@" | split
+  range "$1" | split
 }`,
 
     pretty: `{
