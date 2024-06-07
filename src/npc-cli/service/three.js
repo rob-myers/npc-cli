@@ -129,7 +129,7 @@ export function InfiniteGrid(props) {
   return (
     <mesh {...meshProps} >
       {/* saw jitter when only 1 subdivision and camera close (?) */}
-      <planeGeometry args={[1000, 1000, 2, 2]} />
+      <planeGeometry args={[1000, 1000, 4, 4]} />
       <infiniteGridMaterial
         key={InfiniteGridMaterial.key}
         uSize1={size1 ?? 10}

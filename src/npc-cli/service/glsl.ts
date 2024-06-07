@@ -338,7 +338,7 @@ export const InfiniteGridMaterial = shaderMaterial(
     gl_FragColor = vec4(uColor.rgb, mix(g2, g1, g1) * pow(d, 3.0));
     gl_FragColor.a = mix(0.5 * gl_FragColor.a, gl_FragColor.a, g2);
     
-    gl_FragColor.a *= 0.5; // 👈 more transparent
+    // gl_FragColor.a *= 0.5; // 👈 more transparent
 
     if ( gl_FragColor.a <= 0.0 ) discard;
   }

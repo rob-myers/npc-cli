@@ -249,7 +249,7 @@ export default function TestWorldCanvas(props) {
       <InfiniteGrid
         size1={1.5}
         size2={1.5}
-        color="#bbbbbb"
+        color="#000"
         rotation={[Math.PI / 2, 0, 0]}
         onPointerDown={state.onGridPointerDown}
         onPointerUp={state.onGridPointerUp}
