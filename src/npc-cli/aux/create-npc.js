@@ -25,7 +25,7 @@ export class Npc {
   fadeOut = {
     Idle: { Idle: 0, Run: 0.2, Walk: 0.2 },
     Run: { Idle: 0.3, Run: 0, Walk: 0.2 },
-    Walk: { Idle: 0.3, Run: 0.2, Walk: 0 },
+    Walk: { Idle: 0.25, Run: 0.2, Walk: 0 },
   };
   /**
    * Fade in next animation (seconds).
@@ -34,7 +34,7 @@ export class Npc {
   fadeIn = {
     Idle: { Idle: 0, Run: 0.1, Walk: 0.1 },
     Run: { Idle: 0.3, Run: 0, Walk: 0.1 },
-    Walk: { Idle: 0.15, Run: 0.1, Walk: 0 },
+    Walk: { Idle: 0.5, Run: 0.1, Walk: 0 },
   };
 
   /** State */
@@ -188,13 +188,16 @@ export class Npc {
 
       if (position.distanceTo(this.s.target) < 0.1) {// Reached target
         this.s.target = null;
-        this.mixer.timeScale = 1;
+        // this.mixer.timeScale = 1;
         this.s.finalApproach = false;
         this.startAnimation('Idle');
         // - keep target, so "moves out of the way"
         // - reset first for "Run" otherwise agent moves
         this.agent.resetMoveTarget();
-        setTimeout(() => this.agent?.requestMoveTarget(this.group.position), 300);
+        setTimeout(() => {
+          this.agent?.requestMoveTarget(this.group.position);
+          this.mixer.timeScale = 1;
+        }, 300);
       }
     }
   }
