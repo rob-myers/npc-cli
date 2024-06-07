@@ -172,10 +172,15 @@ export class Npc {
         return;
       }
 
-      if (!this.s.finalApproach && this.agent.corners().length === 1) {
-        // on final approach avoid "arrival behaviour",
+      if (
+        !this.s.finalApproach
+        // && this.agent.corners().length === 1
+        && position.distanceTo(this.s.target) < 0.3
+      ) {
+        // on final approach avoid "arrival behaviour"
         // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1204
-        this.api.crowd.raw.requestMoveVelocity(this.agent.agentIndex, velocity.clone().normalize().toArray());
+        const direction = (new THREE.Vector3()).copy(this.s.target).sub(position).normalize();
+        this.agent.requestMoveVelocity(direction);
         this.s.finalApproach = true;
       }
 
@@ -189,7 +194,7 @@ export class Npc {
         // - keep target, so "moves out of the way"
         // - reset first for "Run" otherwise agent moves
         this.agent.resetMoveTarget();
-        setTimeout(() => this.agent?.goto(this.group.position), 300);
+        setTimeout(() => this.agent?.requestMoveTarget(this.group.position), 300);
       }
     }
   }
@@ -231,7 +236,7 @@ export class Npc {
     //   return;
     // }
 
-    this.agent.goto(closest);
+    this.agent.requestMoveTarget(closest);
     this.s.target = {...closest}; // crucial
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {

@@ -29,14 +29,20 @@ export default function TestNpcs(props) {
 
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = api.crowd.navMeshQuery;
-      const path = query.computePath(src, dst, {
+      const { path, success } = query.computePath(src, dst, {
         filter: api.crowd.getFilter(0),
       });
-      return path.length === 0 ? null : path;
+      if (success === false) {
+        warn(`${'findPath'} failed: ${JSON.stringify({ src, dst })}`);
+      }
+      return success === false || path.length === 0 ? null : path;
     },
     getClosestNavigable(p, maxDelta = 0.01) {
-      const closest = tmpVectThree1.copy(api.crowd.navMeshQuery.getClosestPoint(p));
-      return closest.distanceTo(p) < maxDelta ? closest : null;
+      const { success, point: closest } = api.crowd.navMeshQuery.findClosestPoint(p);
+      if (success === false) {
+        warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
+      }
+      return success === true && tmpVectThree1.copy(closest).distanceTo(p) < maxDelta ? closest : null;
     },
     getSelected() {
       const npcKey = state.select.curr;

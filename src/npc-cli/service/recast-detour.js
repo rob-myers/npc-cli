@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, freeHeightfieldLayerSet, Arrays, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea } from "@recast-navigation/core";
+import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
 import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
@@ -21,7 +21,7 @@ export function disposeCrowd(crowd) {
 
 /** @param {import("@recast-navigation/core").CrowdAgent} agent  */
 export function getAgentTarget(agent) {
-  return agent.corners().length > 0 ? agent.nextTargetPath() : null;
+  return agent.corners().length > 0 ? agent.nextTargetInPath() : null;
 }
 
 /**
@@ -150,13 +150,13 @@ export function customGenerateTileCache(
 
   const verts = /** @type {number[]} */ (positions);
   const nVerts = indices.length;
-  const vertsArray = new Arrays.VertsArray();
-  vertsArray.copy(verts, verts.length);
+  const vertsArray = new VerticesArray();
+  vertsArray.copy(verts);
 
   const tris = /** @type {number[]} */ (indices);
   const nTris = indices.length / 3;
-  const trisArray = new Arrays.TrisArray();
-  trisArray.copy(tris, tris.length);
+  const trisArray = new TrianglesArray();
+  trisArray.copy(tris);
 
   const { bbMin, bbMax } = getBoundingBox(positions, indices);
 
@@ -319,7 +319,7 @@ export function customGenerateTileCache(
 
     // TODO: Make grow when returning too many items.
     const maxChunkIds = 512;
-    const chunkIdsArray = new Arrays.ChunkIdsArray();
+    const chunkIdsArray = new ChunkIdsArray();
     chunkIdsArray.resize(maxChunkIds);
 
     const nChunksOverlapping = chunkyTriMesh.getChunksOverlappingRect(
@@ -334,13 +334,13 @@ export function customGenerateTileCache(
     }
 
     for (let i = 0; i < nChunksOverlapping; ++i) {
-      const nodeId = chunkIdsArray.get_data(i);
+      const nodeId = chunkIdsArray.raw.get_data(i);
       const node = chunkyTriMesh.nodes(nodeId);
       const nNodeTris = node.n;
 
       const nodeTrisArray = chunkyTriMesh.getNodeTris(nodeId);
 
-      const triAreasArray = new Arrays.TriAreasArray();
+      const triAreasArray = new TriangleAreasArray();
       triAreasArray.resize(nNodeTris);
 
       // Find triangles which are walkable based on their slope and rasterize them.
@@ -367,7 +367,7 @@ export function customGenerateTileCache(
         tileConfig.walkableClimb
       );
 
-      triAreasArray.free();
+      triAreasArray.raw.free();
 
       if (!success) {
         return { n: 0 };
@@ -426,9 +426,9 @@ export function customGenerateTileCache(
     // 🚧 Create Detour data from Recast poly mesh
     for (const { areaId, areas } of options.areas ?? []) {
       for (const { hmin, hmax, verts } of areas) {
-        const vertsArray = new Raw.Module.FloatArray();
+        const vertsArray = new VerticesArray();
         const numVerts = verts.length;
-        vertsArray.copy(verts.flatMap(v => [v.x, v.y, v.z]), numVerts * 3);
+        vertsArray.copy(verts.flatMap(v => [v.x, v.y, v.z]));
         markConvexPolyArea(
           buildContext,
           vertsArray,
@@ -459,10 +459,10 @@ export function customGenerateTileCache(
       tileIntermediates.compactHeightfield = undefined;
     }
 
-    const tiles = /** @type {import("@recast-navigation/wasm").default.UnsignedCharArray[]} */ ([]);
+    const tiles = /** @type {import("@recast-navigation/core").UnsignedCharArray[]} */ ([]);
 
     for (let i = 0; i < heightfieldLayerSet.nlayers(); i++) {
-      const tile = new Arrays.TileCacheData();
+      const tile = new TileCacheData();
       const heightfieldLayer = heightfieldLayerSet.layers(i);
 
       // Store header

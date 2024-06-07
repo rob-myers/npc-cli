@@ -25,6 +25,7 @@
   - detect when only one corner left, change position, stop early
 - ✅ try improve stopping animation via `this.api.crowd.raw.requestMoveVelocity`
   - this avoids using the "overshoot hack"
+- ✅ migrate to `@recast-navigation/three@latest`
 
 - start writing first article
 

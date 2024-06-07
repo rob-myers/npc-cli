@@ -50,7 +50,7 @@
     "@react-three/fiber": "^8.16.1",
     "@react-three/offscreen": "0.0.8",
     "@react-three/rapier": "^1.3.0",
-    "@recast-navigation/three": "^0.21.0",
+    "@recast-navigation/three": "^0.30.0",
     "@tailwindcss/typography": "^0.5.12",
     "@tanstack/react-query": "^5.17.19",
     "braces": "^3.0.2",

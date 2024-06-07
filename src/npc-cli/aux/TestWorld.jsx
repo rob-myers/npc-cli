@@ -112,12 +112,10 @@ export default function TestWorld(props) {
         ? disposeCrowd(state.crowd)
         : {};
 
-      state.crowd = new Crowd({
+      state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
         maxAgentRadius: npcService.defaults.radius,
-        navMesh: state.nav.navMesh,
       });
-      state.crowd.timeStep = 1 / 60;
       // state.crowd.timeFactor
 
       if (state.npc) {
