@@ -23,7 +23,8 @@
 - ✅ fix contextmenu hide on long press pointerup over contextmenu
 - ✅ try improve stopping animation by overshoot/stop-early
   - detect when only one corner left, change position, stop early
-- 🚧 try improve stopping animation via `this.api.crowd.raw.requestMoveVelocity`
+- ✅ try improve stopping animation via `this.api.crowd.raw.requestMoveVelocity`
+  - this avoids using the "overshoot hack"
 
 - start writing first article
 

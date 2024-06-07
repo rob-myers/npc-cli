@@ -42,7 +42,7 @@ export class Npc {
     cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     /** Have we begun overshooting final approach? */
-    overshoot: false,
+    finalApproach: false,
     /** Is this NPC walking or running? */
     move: false,
     paused: false,
@@ -172,26 +172,22 @@ export class Npc {
         return;
       }
 
-      if (!this.s.overshoot && this.agent.corners().length === 1) {
-        // on final approach we overshoot to avoid recast-detour agent deceleration
-        const target = (new THREE.Vector3()).copy(this.s.target);
-        const delta = target.clone().sub(position).normalize().multiplyScalar(
-          this.s.act === 'Walk' ? 0.3 : 0.3
-        );
-        this.agent.goto(target.add(delta));
-        this.s.target = target;
-        this.s.overshoot = true;
+      if (!this.s.finalApproach && this.agent.corners().length === 1) {
+        // on final approach avoid "arrival behaviour",
+        // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1204
+        this.api.crowd.raw.requestMoveVelocity(this.agent.agentIndex, velocity.clone().normalize().toArray());
+        this.s.finalApproach = true;
       }
 
       this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
 
-      if (position.distanceTo(this.s.target) < 0.3) {// Reached target
+      if (position.distanceTo(this.s.target) < 0.1) {// Reached target
         this.s.target = null;
         this.mixer.timeScale = 1;
-        this.s.overshoot = false;
+        this.s.finalApproach = false;
         this.startAnimation('Idle');
-        // keep target, so "moves out of the way"
-        // reset first for "Run" otherwise agent moves
+        // - keep target, so "moves out of the way"
+        // - reset first for "Run" otherwise agent moves
         this.agent.resetMoveTarget();
         setTimeout(() => this.agent?.goto(this.group.position), 300);
       }
