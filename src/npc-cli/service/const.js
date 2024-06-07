@@ -27,9 +27,12 @@ export const obstacleOutset = 10 * worldScale;
 
 export const wallHeight = 2;
 
+/**
+ * Properties of exported GLB file.
+ */
 export const glbMeta = /** @type {const} */ ({
   url: '/assets/3d/minecraft-anim.glb',
-  skinnedMeshName: "minecraft-character-mesh",
+  skinnedMeshName: 'minecraft-character-mesh',
   /** Scale factor we'll apply to original model */
   scale: 1.5 / 8,
   /** Height of original model (meters) */
@@ -51,6 +54,9 @@ export const glbMeta = /** @type {const} */ ({
    * Inferred by manually testing using root bone.
    */
   runSpeed: 10,
+  // idleFrames: 48,
+  // runFrames: 24,
+  // walkFrames: 24,
 });
 
 /** @type {NPC.NpcClassKey} */

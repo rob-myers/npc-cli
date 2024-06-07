@@ -25,7 +25,7 @@ export class Npc {
   fadeOut = {
     Idle: { Idle: 0, Run: 0.2, Walk: 0.2 },
     Run: { Idle: 0.3, Run: 0, Walk: 0.2 },
-    Walk: { Idle: 0.2, Run: 0.2, Walk: 0 },
+    Walk: { Idle: 0.3, Run: 0.2, Walk: 0 },
   };
   /**
    * Fade in next animation (seconds).
@@ -34,13 +34,15 @@ export class Npc {
   fadeIn = {
     Idle: { Idle: 0, Run: 0.1, Walk: 0.1 },
     Run: { Idle: 0.3, Run: 0, Walk: 0.1 },
-    Walk: { Idle: 0.2, Run: 0.1, Walk: 0 },
+    Walk: { Idle: 0.15, Run: 0.1, Walk: 0 },
   };
 
   /** State */
   s = {
     cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
+    /** Have we begun overshooting final approach? */
+    overshoot: false,
     /** Is this NPC walking or running? */
     move: false,
     paused: false,
@@ -158,28 +160,41 @@ export class Npc {
       // Moving or stationary with agent
       const position = tmpVectThree1.copy(this.agent.position());
       const velocity = tmpVectThree2.copy(this.agent.velocity());
-      
+      const forward = tmpVectThree3.copy(position).add(velocity);
+
       this.group.position.copy(position);
-
-      // 🚧 WIP
-      if (
-        this.s.target !== null &&
-        position.distanceTo(this.s.target) < 0.1
-      ) {
-        this.s.target = null;
-        this.mixer.timeScale = 1;
-        this.startAnimation('Idle');
-        // keep move target, so agent "moves out of the way"
-        // this.agent.resetMoveTarget();
-        this.agent.goto(position);
-      }
-
       const speed = velocity.length();
       if (speed > 0.2) {
-        dampLookAt(this.group, position.add(velocity), 0.25, deltaMs);
+        dampLookAt(this.group, forward, 0.25, deltaMs);
+      }
+
+      if (this.s.act === 'Idle' || this.s.target === null) {
+        return;
+      }
+
+      if (!this.s.overshoot && this.agent.corners().length === 1) {
+        // on final approach we overshoot to avoid recast-detour agent deceleration
+        const target = (new THREE.Vector3()).copy(this.s.target);
+        const delta = target.clone().sub(position).normalize().multiplyScalar(
+          this.s.act === 'Walk' ? 0.3 : 0.3
+        );
+        this.agent.goto(target.add(delta));
+        this.s.target = target;
+        this.s.overshoot = true;
       }
 
       this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
+
+      if (position.distanceTo(this.s.target) < 0.3) {// Reached target
+        this.s.target = null;
+        this.mixer.timeScale = 1;
+        this.s.overshoot = false;
+        this.startAnimation('Idle');
+        // keep target, so "moves out of the way"
+        // reset first for "Run" otherwise agent moves
+        this.agent.resetMoveTarget();
+        setTimeout(() => this.agent?.goto(this.group.position), 300);
+      }
     }
   }
   removeAgent() {
@@ -196,14 +211,9 @@ export class Npc {
   startAnimation(act) {
     const anim = this.animMap[this.s.act];
     const next = this.animMap[act];
-    // anim.fadeOut(0.2);
-    // next.reset().fadeIn(0.2).play();
     anim.fadeOut(this.fadeOut[this.s.act][act]);
     next.reset().fadeIn(this.fadeIn[this.s.act][act]).play();
     this.s.act = act;
-    // if (act === 'Walk' || act === 'Run') {
-    //   this.s.startMove = Date.now();
-    // }
   }
   /** @param {THREE.Vector3Like} dst  */
   walkTo(dst, debugPath = true) {
@@ -211,23 +221,20 @@ export class Npc {
       return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
     }
     const api = this.api;
-
-    if (debugPath) {
-      const path = api.npc.findPath(this.getPosition(), dst);
-      api.debug.setNavPath(path ?? []);
-    }
-
     const closest = api.npc.getClosestNavigable(dst, 0.15);
+
     if (closest === null) {
       return;
+    }
+    if (debugPath) {
+      const path = api.npc.findPath(this.getPosition(), closest);
+      api.debug.setNavPath(path ?? []);
     }
     // const position = this.getPosition();
     // if (tmpVec1.copy(position).distanceTo(closest) < 0.25) {
     //   return;
     // }
 
-    // this.agent.raw.set_vel(0, 1);
-    // this.agent.raw.set_vel(2, 1);
     this.agent.goto(closest);
     this.s.target = {...closest}; // crucial
     const nextAct = this.s.run ? 'Run' : 'Walk';
@@ -271,7 +278,7 @@ function emptyReject(error) {}
 export const crowdAgentParams = {
   radius: npcService.defaults.radius / 3, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration: 4,
+  maxAcceleration: 10, // Large enough for 'Run'
   // maxSpeed: 0, // Set elsewhere
   pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 clarify
   // collisionQueryRange: 2.5,
