@@ -34,7 +34,7 @@ export class Npc {
   fadeIn = {
     Idle: { Idle: 0, Run: 0.1, Walk: 0.1 },
     Run: { Idle: 0.3, Run: 0, Walk: 0.1 },
-    Walk: { Idle: 0.5, Run: 0.1, Walk: 0 },
+    Walk: { Idle: 0.25, Run: 0.1, Walk: 0 },
   };
 
   /** State */
