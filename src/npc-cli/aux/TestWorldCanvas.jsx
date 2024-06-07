@@ -249,7 +249,7 @@ export default function TestWorldCanvas(props) {
       <InfiniteGrid
         size1={1.5}
         size2={1.5}
-        distance={30}
+        distance={infiniteGridDistance}
         color="#000"
         rotation={[Math.PI / 2, 0, 0]}
         onPointerDown={state.onGridPointerDown}
@@ -324,3 +324,5 @@ const statsCss = css`
  * @property {number} epochMs
  * @property {Geom.Vect} screenPoint
  */
+
+const infiniteGridDistance = isTouchDevice() ? 20 : 100;
