@@ -252,6 +252,7 @@ export default function TestWorldCanvas(props) {
         distance={infiniteGridDistance}
         color="#000"
         rotation={[Math.PI / 2, 0, 0]}
+        position={[0, 0.0001, 0]}
         onPointerDown={state.onGridPointerDown}
         onPointerUp={state.onGridPointerUp}
       />
