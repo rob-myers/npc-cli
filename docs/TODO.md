@@ -26,6 +26,9 @@
 - ✅ try improve stopping animation via `this.api.crowd.raw.requestMoveVelocity`
   - this avoids using the "overshoot hack"
 - ✅ migrate to `@recast-navigation/three@latest`
+- ❌ try fix "target too close to border" by returning to overshoot hack
+- 🚧 try fix foot step on finish walk
+  - try changing idle legs pose 
 
 - start writing first article
 
