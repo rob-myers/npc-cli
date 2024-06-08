@@ -41,8 +41,7 @@ export class Npc {
   s = {
     cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
-    /** Have we begun overshooting final approach? */
-    finalApproach: false,
+    finalTimeoutId: 0,
     /** Is this NPC walking or running? */
     move: false,
     paused: false,
@@ -177,14 +176,12 @@ export class Npc {
 
       if (distance < 0.15) {// Reached target
         this.s.target = null;
-        // this.mixer.timeScale = 1;
-        this.s.finalApproach = false;
         this.startAnimation('Idle');
         this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() });
         // - keep target, so "moves out of the way"
         // - reset first for "Run" otherwise agent moves
         this.agent.resetMoveTarget();
-        setTimeout(() => {
+        this.s.finalTimeoutId = window.setTimeout(() => {
           this.agent?.requestMoveTarget(this.group.position);
           this.mixer.timeScale = 1;
         }, 300);
@@ -193,7 +190,7 @@ export class Npc {
       // undo the speed scale
       // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
       if (distance < 2 * agentRadius) {
-        this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() * (((2 * agentRadius) / distance)) });
+        this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance) });
       }
     }
   }
@@ -230,10 +227,14 @@ export class Npc {
       const path = api.npc.findPath(this.getPosition(), closest);
       api.debug.setNavPath(path ?? []);
     }
-    // const position = this.getPosition();
-    // if (tmpVec1.copy(position).distanceTo(closest) < 0.25) {
-    //   return;
-    // }
+    const position = this.getPosition();
+    if (position.distanceTo(closest) < 0.25) {
+      return;
+    }
+
+    this.mixer.timeScale = 1;
+    this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() });
+    window.clearTimeout(this.s.finalTimeoutId);
 
     this.agent.requestMoveTarget(closest);
     this.s.target = {...closest}; // crucial
