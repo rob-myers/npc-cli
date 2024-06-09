@@ -182,7 +182,7 @@ export class Npc {
         const time = this.mixer.time % 1;
         // this.startAnimation('Idle');
         this.startAnimation(
-          time >= 0.75 ? 'IdleLeftLead' : time >= 0.5 ? 'Idle' : time >= 0.25 ? 'IdleRightLead' : 'Idle'
+          time >= 7/8 ? 'Idle' : time >= 5/8 ? 'IdleRightLead' : time >= 3/8 ? 'Idle' : 'IdleLeftLead'
         );
         // - keep target, so "moves out of the way"
         // - suppress final movement (e.g. Run) by 1st resetMoveTarget
