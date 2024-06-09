@@ -111,6 +111,7 @@ export interface Session {
   ttyShell: ttyShellClass;
   ttyLink: { [lineText: string]: TtyLinkCtxt[] };
 
+  etc: Record<string, any>;
   var: {
     [varName: string]: any;
     PWD: string;
@@ -262,6 +263,7 @@ const useStore = create<State>()(
                 ttyIo,
                 ttyShell,
                 ttyLink: {},
+                etc: {},
                 var: {
                   PWD: "home",
                   OLDPWD: "",
@@ -339,7 +341,7 @@ const useStore = create<State>()(
            * Can deep get /home/* and /etc/*
            * TODO support deep get of local vars?
            */
-          const root = { home: session.var, etc: scriptLookup };
+          const root = { home: session.var, etc: session.etc };
           const parts = computeNormalizedParts(varPath, api.getVar(meta, "PWD") as string);
           return Function(
             "__",

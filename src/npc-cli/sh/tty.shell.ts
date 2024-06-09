@@ -161,6 +161,14 @@ export class ttyShellClass implements Device {
     }
   }
 
+  async sourceEtcFile(filename: string) {
+    const session = useSession.api.getSession(this.sessionKey);
+    const src = session.etc[filename];
+    const term = parseService.parse(src);
+    this.provideContextToParsed(term);
+    return this.spawn(term);
+  }
+
   /**
    * Spawn a process, assigning:
    * - new pid

@@ -13,8 +13,9 @@
   - ℹ️ currently HMR restarts session, but we only want function defs to be overridden
   - ✅ `<Terminal>` can receive new functions without restarting session
     - via `<WrappedTerminal>`
-  - 🚧 spawn background process which `source`s (?)
-  - 🚧 store as /etc/functions.sh
+  - ✅ `source` code
+  - ✅ store as /etc/functions.sh
+  - 🚧 migrate sh/scripts.sh
 
 - 🚧 sh/raw-loader.js -> sh/generators.js
   - on HMR overwrite function defs
@@ -28,15 +29,17 @@
 - ✅ migrate to `@recast-navigation/three@latest`
 - ❌ try fix "target too close to border" by returning to overshoot hack
 - 🚧 try fix foot step on finish walk
-  - try changing idle legs pose 
+  - ✅ try changing idle legs pose 
+  - Idle, IdleLeftLead, IdleRightLead
+  - On stop, choose animation via approach
 
-- start writing first article
 
 - ❌ get eslint working again e.g. for raw-loader.js
 - 🚧 start a new repo based on next js
   - ✅ https://github.com/rob-myers/npc-cli-next
   - 🚧 get mdx working
 
+- start writing first article
 - can somehow ctrl-c `seq 100000000` (100 million)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
