@@ -134,8 +134,10 @@ export default function Terminal(props: Props) {
         xterm.dispose();
       };
 
-      state.session.ttyShell.initialise(state.xterm).then(() => {
+      props.onLoad?.(state.session);
+      state.session.ttyShell.initialise(state.xterm).then(async () => {
         state.ready = true;
+        props.onReady?.(state.session);
         update();
       });
     }
@@ -233,7 +235,9 @@ export interface Props {
   disabled?: boolean;
   /** Can initialize variables */
   env: Partial<Session["var"]>;
-  onKey?: (e: KeyboardEvent) => void;
+  onKey?(e: KeyboardEvent): void;
+  onLoad?(session: Session): void;
+  onReady?(session: Session): void;
   sessionKey: string;
 }
 
