@@ -157,7 +157,7 @@ export class Npc {
       // Support move/turn without agent
     } else {
       // Moving or stationary with agent
-      const position = tmpVectThree1.copy(this.agent.interpolatedPosition);
+      const position = tmpVectThree1.copy(this.agent.position());
       const velocity = tmpVectThree2.copy(this.agent.velocity());
       const speed = velocity.length();
       const forward = tmpVectThree3.copy(position).add(velocity);
