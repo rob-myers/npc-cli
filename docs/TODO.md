@@ -40,6 +40,12 @@
   - 🚧 get mdx working
 
 - start writing first article
+
+- ✅ on change `create-npc.js`, Idle NPCs should not lose their target `this.agent.raw.get_targetRef() === 0`
+  - ✅ try moving crowdAgentParams elsewhere
+  - ✅ HMR TestWorld should not reload navMesh
+  - ✅ TestWorld invokes requestMovePosition for Idle NPCs too
+
 - can somehow ctrl-c `seq 100000000` (100 million)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself

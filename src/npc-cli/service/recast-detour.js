@@ -12,7 +12,8 @@ export function disposeCrowd(crowd) {
   const output = /** @type {ReturnType<typeof disposeCrowd>} */ ({});
   crowd.getAgents().forEach((agent) => {
     const agentIndex = agent.agentIndex;
-    output[agentIndex] = { agentIndex, position: agent.position(), target: getAgentTarget(agent) };
+    // Assume e.g. `crowd.update(1 / 60, deltaMs)` (interpolatedPosition vs position())
+    output[agentIndex] = { agentIndex, position: agent.interpolatedPosition, target: getAgentTarget(agent) };
     crowd.removeAgent(agent);
   });
   crowd.destroy();

@@ -44,12 +44,13 @@ export default function TestWorld(props) {
     timer: new Timer(),
     worker: /** @type {*} */ (null),
 
-    derived: /** @type {*} */ ({}),
+    derived: { doorCount: 0, obstaclesCount: 0, wallCount: 0 },
     events: new Subject(),
     floorImg: /** @type {*} */ ({}),
     geomorphs: /** @type {*} */ (null),
     gmClass: /** @type {*} */ ({}),
     gms: [],
+    hmr: { hash: '', gmHash: '' },
     obsTex: new THREE.Texture(),
 
     nav: /** @type {*} */ (null),
@@ -126,7 +127,7 @@ export default function TestWorld(props) {
       state.reqAnimId = requestAnimationFrame(state.onTick);
       state.timer.update();
       const deltaMs = state.timer.getDelta();
-      state.crowd.update(deltaMs);
+      state.crowd.update(1 / 60, deltaMs);
       state.npc.onTick(deltaMs);
       state.vert.onTick();
       // info(state.r3f.gl.info.render);
@@ -141,10 +142,12 @@ export default function TestWorld(props) {
         }
 
         npc.removeAgent();
-        npc.attachAgent();
+        const agent = npc.attachAgent();
         npc.setPosition(position);
         if (target !== null) {
           npc.walkTo(target);
+        } else {// target means they'll move "out of the way"
+          agent.requestMoveTarget(position);
         }
       });
     },
@@ -229,16 +232,20 @@ export default function TestWorld(props) {
     return () => removeCached([props.worldKey]);
   }, []);
 
-  React.useEffect(() => {// (re)start worker on(change) geomorphs.json
-    if (state.threeReady && state.hash) {
+  React.useEffect(() => {// (re)start worker on(change) geomorphs.json (not HMR)
+    const hmr = state.crowd && state.geomorphs?.hash === state.hmr.gmHash;
+    state.hmr.gmHash = state.geomorphs?.hash ?? '';
+    if (state.threeReady && state.hash && !hmr) {
       state.worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
       state.worker.addEventListener("message", state.handleMessageFromWorker);
       return () => void state.worker.terminate();
     }
   }, [state.threeReady, state.geomorphs?.hash]);
 
-  React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
-    if (state.threeReady && state.hash) {
+  React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey (not HMR)
+    const hmr = state.crowd && state.hash === state.hmr.hash;
+    state.hmr.hash = state.hash;
+    if (state.threeReady && state.hash && !hmr) {
       state.worker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
     }
   }, [state.threeReady, state.hash]);
@@ -287,6 +294,8 @@ export default function TestWorld(props) {
  * @property {string} hash
  * @property {{ wallCount: number; doorCount: number; obstaclesCount: number; }} derived
  * Data derived from other sources
+ * @property {{ hash: string; gmHash: string; }} hmr
+ * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
