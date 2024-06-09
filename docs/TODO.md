@@ -30,8 +30,8 @@
 - ❌ try fix "target too close to border" by returning to overshoot hack
 - 🚧 try fix foot step on finish walk
   - ✅ try changing idle legs pose 
-  - Idle, IdleLeftLead, IdleRightLead
-  - On stop, choose animation via approach
+  - ✅ Idle, IdleLeftLead, IdleRightLead
+  - ✅ On stop, choose animation via approach
 
 
 - ❌ get eslint working again e.g. for raw-loader.js

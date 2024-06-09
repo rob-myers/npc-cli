@@ -23,18 +23,22 @@ export class Npc {
    * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
    */
   fadeOut = {
-    Idle: { Idle: 0, Run: 0.2, Walk: 0.2 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.2 },
-    Walk: { Idle: 0.25, Run: 0.2, Walk: 0 },
+    Idle: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    IdleLeftLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    IdleRightLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.2, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
+    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
   };
   /**
    * Fade in next animation (seconds).
    * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
    */
   fadeIn = {
-    Idle: { Idle: 0, Run: 0.1, Walk: 0.1 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.1 },
-    Walk: { Idle: 0.25, Run: 0.1, Walk: 0 },
+    Idle: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    IdleLeftLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
+    IdleRightLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.1, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
+    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
   };
 
   /** State */
@@ -51,7 +55,7 @@ export class Npc {
     target: /** @type {null | THREE.Vector3Like} */ (null),
   };
 
-  /** @type {null | import("@recast-navigation/core").CrowdAgent} */
+  /** @type {null | NPC.CrowdAgent} */
   agent = null;
 
   /**
@@ -132,7 +136,7 @@ export class Npc {
     this.mixer = new THREE.AnimationMixer(this.group);
 
     this.animMap = gltf.animations.reduce((agg, a) => {
-      if (a.name === 'Idle' || a.name === 'Walk' || a.name === 'Run') {
+      if (npcService.isAnimKey(a.name)) {
         agg[a.name] = this.mixer.clipAction(a);
       } else {
         warn(`ignored unexpected animation: ${a.name}`);
@@ -159,13 +163,13 @@ export class Npc {
       // Moving or stationary with agent
       const position = tmpVectThree1.copy(this.agent.interpolatedPosition);
       const velocity = tmpVectThree2.copy(this.agent.velocity());
-      const speed = velocity.length();
       const forward = tmpVectThree3.copy(position).add(velocity);
+      const speed = velocity.length();
 
       this.group.position.copy(position);
       speed > 0.2 && dampLookAt(this.group, forward, 0.25, deltaMs);
 
-      if (this.s.act === 'Idle' || this.s.target === null) {
+      if (this.s.target === null) {
         return;
       }
 
@@ -174,10 +178,14 @@ export class Npc {
 
       if (distance < 0.15) {// Reached target
         this.s.target = null;
-        this.startAnimation('Idle');
         this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() });
+        const time = this.mixer.time % 1;
+        // this.startAnimation('Idle');
+        this.startAnimation(
+          time >= 0.75 ? 'IdleLeftLead' : time >= 0.5 ? 'Idle' : time >= 0.25 ? 'IdleRightLead' : 'Idle'
+        );
         // - keep target, so "moves out of the way"
-        // - reset first for "Run" otherwise agent moves
+        // - suppress final movement (e.g. Run) by 1st resetMoveTarget
         this.agent.resetMoveTarget();
         this.s.finalTimeoutId = window.setTimeout(() => {
           this.agent?.requestMoveTarget(this.group.position);

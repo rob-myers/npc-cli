@@ -37,8 +37,7 @@ declare namespace NPC {
     [agentKey: string]: NPC.BasicAgentMeta;
   }
 
-  // 🚧 WIP
-  type AnimKey = 'Idle' | 'Walk' | 'Run';
+  type AnimKey = keyof import('../service/npc').NpcService['fromAnimKey'];
 
   type Event =
     | PointerUpOutsideEvent
@@ -115,9 +114,7 @@ declare namespace NPC {
     }[];
   }
 
-  type CrowdAgent = import("@recast-navigation/core").CrowdAgent & {
-    get userData(): Record<string, any>;
-  };
+  type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
   type Obstacle = {
     id: number;

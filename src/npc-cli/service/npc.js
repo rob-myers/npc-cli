@@ -29,13 +29,31 @@ export const npcService = {
     'robot-vaccino.png': true,
   },
 
+  // 🚧 fix types
+  // /** @type {Record<NPC.AnimKey, true>} */
+  fromAnimKey: {
+    Idle: true,
+    IdleLeftLead: true,
+    IdleRightLead: true,
+    Walk: true,
+    Run: true,
+  },
+
   /**
    * @param {string} input 
    * @returns {input is NPC.NpcClassKey}
    */
-  isNpcClassKey: (input) => {
+  isNpcClassKey(input) {
     return input in npcService.fromNpcClassKey;
   },
+  
+  /**
+   * @param {string} input 
+   * @returns {input is NPC.AnimKey}
+   */
+  isAnimKey(input) {
+    return input in npcService.fromAnimKey;
+  }
 
 };
 

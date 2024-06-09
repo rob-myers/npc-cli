@@ -54,9 +54,6 @@ export const glbMeta = /** @type {const} */ ({
    * Inferred by manually testing using root bone.
    */
   runSpeed: 10,
-  // idleFrames: 48,
-  // runFrames: 24,
-  // walkFrames: 24,
 });
 
 /** @type {NPC.NpcClassKey} */
