@@ -28,11 +28,11 @@
   - this avoids using the "overshoot hack"
 - ✅ migrate to `@recast-navigation/three@latest`
 - ❌ try fix "target too close to border" by returning to overshoot hack
-- 🚧 try fix foot step on finish walk
+- ✅ try fix foot step on finish walk
   - ✅ try changing idle legs pose 
   - ✅ Idle, IdleLeftLead, IdleRightLead
   - ✅ On stop, choose animation via approach
-
+- ✅ agent.teleport on reach target to suppress velocity
 
 - ❌ get eslint working again e.g. for raw-loader.js
 - 🚧 start a new repo based on next js

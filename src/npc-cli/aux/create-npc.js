@@ -45,7 +45,6 @@ export class Npc {
   s = {
     cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
-    finalTimeoutId: 0,
     /** Is this NPC walking or running? */
     move: false,
     paused: false,
@@ -180,20 +179,18 @@ export class Npc {
         this.s.target = null;
         this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
         const time = this.mixer.time % 1;
+
         // this.startAnimation('Idle');
-        this.startAnimation(
+        this.startAnimation(// 🚧 WIP
           time >= 7/8 ? 'Idle' : time >= 5/8 ? 'IdleRightLead' : time >= 3/8 ? 'Idle' : 'IdleLeftLead'
         );
-        // - keep target, so "moves out of the way"
-        // - suppress final movement (e.g. Run) by 1st resetMoveTarget
-        this.agent.resetMoveTarget();
-        this.s.finalTimeoutId = window.setTimeout(() => {
-          this.agent?.requestMoveTarget(this.group.position);
-          this.mixer.timeScale = 1;
-        }, 300);
+
+        // keep target, so "moves out of the way"
+        this.agent.teleport(position); // suppress final movement
+        this.agent.requestMoveTarget(position);
       }
 
-      // undo the speed scale
+      // undo speed scale
       // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
       if (distance < 2 * agentRadius) {
         this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance) });
@@ -240,7 +237,6 @@ export class Npc {
 
     this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
-    window.clearTimeout(this.s.finalTimeoutId);
 
     this.agent.requestMoveTarget(closest);
     this.s.target = {...closest}; // crucial
