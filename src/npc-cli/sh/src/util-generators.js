@@ -1,4 +1,3 @@
-
 /**
  * Evaluate and return a javascript expression
  * @param {RunArg} ctxt 
@@ -41,8 +40,8 @@ export async function* flatMap(ctxt) {
 
 /**
  * @typedef RunArg
- * @property {import('./cmd.service').CmdService['processApi'] & {
- *   getCached(key: '__WORLD_KEY_VALUE__'): import('../aux/TestWorld').State;
+ * @property {import('../cmd.service').CmdService['processApi'] & {
+ *   getCached(key: '__WORLD_KEY_VALUE__'): import('../../aux/TestWorld').State;
  * }} api
  * @property {string[]} args
  * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home

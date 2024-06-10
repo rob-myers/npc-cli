@@ -1,8 +1,3 @@
-
-# awaitWorld
-# api crowd
-
-cat foo
-ls /etc
-run '() { yield [1, 2, 3] }'
+awaitWorld
+api crowd
 echo "Hello, world!"

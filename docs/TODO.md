@@ -19,7 +19,8 @@
   - ✅ migrate a profile
 
 - 🚧 sh/raw-loader.js -> sh/{util,game}-generators.js
-  - on HMR overwrite function defs
+  - ✅ on HMR overwrite function defs
+  - 🚧 migrate remaining util generators
 
 - ❌ get eslint working again e.g. for raw-loader.js
 - 🚧 start a new repo based on next js

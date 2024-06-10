@@ -35,7 +35,7 @@ api() {
           const v = func(world, ctxt);
           yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
         } catch (e) {
-          api.info(\`\${e}\`);
+          api.info(`${e}`);
         }
       }
     }

@@ -3,7 +3,9 @@ import Terminal, { Props } from "./Terminal";
 
 import utilFunctionsSh from "!!raw-loader!../sh/src/util-functions.sh";
 import gameFunctionsSh from "!!raw-loader!../sh/src/game-functions.sh";
-import * as generatorsJs from '../sh/generators';
+
+import * as utilGeneratorsJs from '../sh/src/util-generators.js';
+import * as gameGeneratorsJs from '../sh/src/game-generators';
 
 import { error, keys } from "../service/generic";
 import useSession, { Session } from "../sh/session.store";
@@ -13,6 +15,12 @@ import useUpdate from "../hooks/use-update";
 const functionFiles = {
   'util-functions.sh': utilFunctionsSh,
   'game-functions.sh': gameFunctionsSh,
+  'util-generators.sh': Object.entries(utilGeneratorsJs).map(
+    ([key, fn]) => `${key}() ${wrapWithRun(fn)}`
+  ).join('\n\n'),
+  'game-generators.sh': Object.entries(gameGeneratorsJs).map(
+    ([key, fn]) => `${key}() ${wrapWithRun(fn)}`
+  ).join('\n\n'),
 };
 
 /**
@@ -46,21 +54,17 @@ export default function WrappedTerminal(props: Props) {
   const update = useUpdate();
 
   React.useEffect(() => {
-    if (!state.session) {
-      return;
-    }
-    console.log({ generatorsJs });
-    // 🚧 convert into /etc/{util,game}-generators.sh using `run`
-    // 🚧 permit single-quotes via escaping
-    // 🚧 run `source /etc/generators.sh &` onchange
-    
-  }, [state.session, generatorsJs]);
-
-  React.useEffect(() => {
     if (state.session && state.updates++) {// skip 1st
       state.sourceFuncs(state.session);
     }
-  }, [state.session, utilFunctionsSh, gameFunctionsSh]);
+  }, [state.session, utilFunctionsSh, gameFunctionsSh, utilGeneratorsJs, gameGeneratorsJs]);
 
   return <Terminal onReady={state.onReady} {...props} />;
+}
+
+function wrapWithRun(fn: (arg: utilGeneratorsJs.RunArg) => any) {
+  const fnText = `${fn}`;
+  return `{\n  run '${
+    fnText.slice(fnText.indexOf('('))
+  }\n' "$@"\n}`;
 }
