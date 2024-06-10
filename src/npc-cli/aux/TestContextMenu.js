@@ -40,18 +40,14 @@ export default function TestContextMenu() {
       ref={(x) => x && (state.menuEl = x)}
       className={contextMenuCss}
       onContextMenu={(e) => e.preventDefault()}
+      // 🔔 use 'visibility' to compute menuDim.height
+      style={{ visibility: state.isOpen ? 'visible' : 'hidden' }}
     >
-      {state.isOpen ? <div>
-        <select defaultValue={undefined} style={{ width: "100%" }}>
-          <option>demo select</option>
-          <option value="foo">foo</option>
-          <option value="bar">bar</option>
-          <option value="baz">baz</option>
-        </select>
+      <div>
         {meta3d && Object.entries(meta3d).map(([k, v]) =>
           <div key={k}>{v === true ? k : `${k}: ${v}`}</div>
         )}
-      </div> : null}
+      </div>
     </div>
   );
 }
@@ -61,7 +57,7 @@ const contextMenuCss = css`
   left: 0;
   top: 0;
   z-index: 0;
-  height: 100px;
+  /* height: 100px; */
   max-width: 256px;
   /* user-select: none; */
 
