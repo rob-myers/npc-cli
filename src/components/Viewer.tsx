@@ -4,14 +4,15 @@ import { shallow } from "zustand/shallow";
 import debounce from "debounce";
 
 import { view } from "../const";
-import { profileLookup } from "../npc-cli/sh/scripts";
 import { afterBreakpoint, breakpoint } from "../const";
 import { isSmallView } from "./layout";
 import useSite from "./site.store";
+
+import { profile } from "src/npc-cli/sh/src";
+
 import useIntersection from "../npc-cli/hooks/use-intersection";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useUpdate from "../npc-cli/hooks/use-update";
-
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
 
@@ -75,8 +76,7 @@ export default function Viewer() {
               filepath: "tty-1",
               env: {
                 WORLD_KEY: "test-world-1",
-                // PROFILE: profileLookup.util_0(),
-                PROFILE: profileLookup.game_0(),
+                PROFILE: profile.profile1Sh,
               },
             },
             {

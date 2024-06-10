@@ -9,30 +9,17 @@
 
 - extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 sh/scripts.ts -> sh/functions.sh
+- ✅ sh/scripts.ts -> sh/functions.sh
   - ℹ️ currently HMR restarts session, but we only want function defs to be overridden
   - ✅ `<Terminal>` can receive new functions without restarting session
     - via `<WrappedTerminal>`
   - ✅ `source` code
   - ✅ store as /etc/functions.sh
-  - 🚧 migrate sh/scripts.sh
+  - ✅ migrate scripts from sh/scripts.sh
+  - ✅ migrate a profile
 
-- 🚧 sh/raw-loader.js -> sh/generators.js
+- 🚧 sh/raw-loader.js -> sh/{util,game}-generators.js
   - on HMR overwrite function defs
-
-- ✅ fix `expr 42 | say`
-- ✅ fix contextmenu hide on long press pointerup over contextmenu
-- ✅ try improve stopping animation by overshoot/stop-early
-  - detect when only one corner left, change position, stop early
-- ✅ try improve stopping animation via `this.api.crowd.raw.requestMoveVelocity`
-  - this avoids using the "overshoot hack"
-- ✅ migrate to `@recast-navigation/three@latest`
-- ❌ try fix "target too close to border" by returning to overshoot hack
-- ✅ try fix foot step on finish walk
-  - ✅ try changing idle legs pose 
-  - ✅ Idle, IdleLeftLead, IdleRightLead
-  - ✅ On stop, choose animation via approach
-- ✅ agent.teleport on reach target to suppress velocity
 
 - ❌ get eslint working again e.g. for raw-loader.js
 - 🚧 start a new repo based on next js
@@ -40,11 +27,6 @@
   - 🚧 get mdx working
 
 - start writing first article
-
-- ✅ on change `create-npc.js`, Idle NPCs should not lose their target `this.agent.raw.get_targetRef() === 0`
-  - ✅ try moving crowdAgentParams elsewhere
-  - ✅ HMR TestWorld should not reload navMesh
-  - ✅ TestWorld invokes requestMovePosition for Idle NPCs too
 
 - can somehow ctrl-c `seq 100000000` (100 million)
 - TTY windows ctrl-c conflict: abort vs copy selection
@@ -1226,3 +1208,22 @@
   - ✅ show data in ContextMenu
 
 - ✅ remove `symId`
+
+- ✅ on change `create-npc.js`, Idle NPCs should not lose their target `this.agent.raw.get_targetRef() === 0`
+  - ✅ try moving crowdAgentParams elsewhere
+  - ✅ HMR TestWorld should not reload navMesh
+  - ✅ TestWorld invokes requestMovePosition for Idle NPCs too
+
+- ✅ fix `expr 42 | say`
+- ✅ fix contextmenu hide on long press pointerup over contextmenu
+- ✅ try improve stopping animation by overshoot/stop-early
+  - detect when only one corner left, change position, stop early
+- ✅ try improve stopping animation via `this.api.crowd.raw.requestMoveVelocity`
+  - this avoids using the "overshoot hack"
+- ✅ migrate to `@recast-navigation/three@latest`
+- ❌ try fix "target too close to border" by returning to overshoot hack
+- ✅ try fix foot step on finish walk
+  - ✅ try changing idle legs pose 
+  - ✅ Idle, IdleLeftLead, IdleRightLead
+  - ✅ On stop, choose animation via approach
+- ✅ agent.teleport on reach target to suppress velocity
