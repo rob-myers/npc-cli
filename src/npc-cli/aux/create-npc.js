@@ -178,7 +178,7 @@ export class Npc {
 
       if (distance < 0.15) {// Reached target
         this.s.target = null;
-        this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() });
+        this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
         const time = this.mixer.time % 1;
         // this.startAnimation('Idle');
         this.startAnimation(
@@ -196,7 +196,7 @@ export class Npc {
       // undo the speed scale
       // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
       if (distance < 2 * agentRadius) {
-        this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance) });
+        this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance) });
       }
     }
   }
@@ -239,7 +239,7 @@ export class Npc {
     }
 
     this.mixer.timeScale = 1;
-    this.agent.setParameters({ ...crowdAgentParams, maxSpeed: this.getMaxSpeed() });
+    this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     window.clearTimeout(this.s.finalTimeoutId);
 
     this.agent.requestMoveTarget(closest);

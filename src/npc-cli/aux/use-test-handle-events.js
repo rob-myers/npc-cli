@@ -62,9 +62,7 @@ export default function useTestHandleEvents(api) {
         const npc = api.npc?.getSelected(); // api.npc may not exist yet
         if (npc) {
           npc.s.run = e.modifierKey;
-          npc.agent?.setParameters({ ...crowdAgentParams,
-            maxSpeed: npc.getMaxSpeed(),
-          });
+          npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
           npc.walkTo(e.point);
         }
       }
