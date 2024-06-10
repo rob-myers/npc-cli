@@ -33,7 +33,6 @@ import {
 } from "./io";
 import { srcService } from "./parse";
 import { ttyShellClass } from "./tty.shell";
-import { scriptLookup } from "./scripts";
 
 export type State = {
   session: KeyedLookup<Session>;

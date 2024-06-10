@@ -9,23 +9,12 @@
 
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ sh/scripts.ts -> sh/functions.sh
-  - ℹ️ currently HMR restarts session, but we only want function defs to be overridden
-  - ✅ `<Terminal>` can receive new functions without restarting session
-    - via `<WrappedTerminal>`
-  - ✅ `source` code
-  - ✅ store as /etc/functions.sh
-  - ✅ migrate scripts from sh/scripts.sh
-  - ✅ migrate a profile
-
-- 🚧 sh/raw-loader.js -> sh/{util,game}-generators.js
-  - ✅ on HMR overwrite function defs
-  - 🚧 migrate remaining util generators
-
 - ❌ get eslint working again e.g. for raw-loader.js
 - 🚧 start a new repo based on next js
   - ✅ https://github.com/rob-myers/npc-cli-next
   - 🚧 get mdx working
+
+- setup nodemon via js, somehow providing changed filenames as arg to script
 
 - start writing first article
 
@@ -1228,3 +1217,16 @@
   - ✅ Idle, IdleLeftLead, IdleRightLead
   - ✅ On stop, choose animation via approach
 - ✅ agent.teleport on reach target to suppress velocity
+
+- ✅ sh/scripts.ts -> sh/functions.sh
+  - ℹ️ currently HMR restarts session, but we only want function defs to be overridden
+  - ✅ `<Terminal>` can receive new functions without restarting session
+    - via `<WrappedTerminal>`
+  - ✅ `source` code
+  - ✅ store as /etc/functions.sh
+  - ✅ migrate scripts from sh/scripts.sh
+  - ✅ migrate a profile
+
+- ✅ sh/raw-loader.js -> sh/{util,game}-generators.js
+  - ✅ on HMR overwrite function defs
+  - ✅ migrate remaining util generators
