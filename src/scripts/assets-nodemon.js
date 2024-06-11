@@ -1,6 +1,7 @@
 import nodemon from 'nodemon';
 import { runYarnScript } from './service';
 
+/** Is the script currently running? */
 let running = false;
 /** We pause to allow multiple changes to aggregate */
 const delayMs = 300;
@@ -36,9 +37,10 @@ async function onRestart(nodemonFiles) {
 
   await new Promise(resolve => setTimeout(resolve, delayMs));
   
+  const changedFiles = Array.from(changed.keys());
   await runYarnScript(
     'assets-fast',
-    JSON.stringify({ changedFiles: Array.from(changed.keys()) }),
+    JSON.stringify(changedFiles),
     '--staleMs=2000', // 🚧 remove? `changedFiles` should replace it
   );
 
