@@ -14,10 +14,10 @@
   - ✅ https://github.com/rob-myers/npc-cli-next
   - 🚧 get mdx working
 
-- 🚧 setup nodemon via js, somehow providing changed filenames as arg to script
+- ✅ setup nodemon via js, somehow providing changed filenames as arg to script
   - ✅ create script `assets-nodemon.js` and npm script `watch-assets-new`
-  - 🚧 assets.js should use `changedFiles` arg
-  - 🚧 migrate from npm script `watch-assets`
+  - ✅ assets.js should use `changedFiles` arg
+  - ✅ migrate from npm script `watch-assets`
 
 - start writing first article
 

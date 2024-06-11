@@ -4,7 +4,7 @@
  * npm run assets
  * yarn assets
  * yarn assets-fast --all
- * yarn assets-fast --staleMs=2000
+ * yarn assets-fast --changedFiles=['/path/to/file/a', '/path/to/file/b']
  * yarn assets-fast --prePush
  * ```
  *
@@ -36,12 +36,10 @@ import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
 import { runYarnScript, saveCanvasAsFile } from "./service";
 
-const [,, changedFiles] = process.argv;
-info({ changedFiles });
 
 const rawOpts = getopts(process.argv, {
   boolean: ['all'],
-  string: ['prePush', 'staleMs'],
+  string: ['prePush', 'changedFiles'],
 });
 
 const imgOpts = {
@@ -63,17 +61,18 @@ const opts = {
    */
   all: Boolean(rawOpts.all) || !fs.existsSync(assetsFilepath),
   /**
+   * @type {string[]}
+   */
+  changedFiles: rawOpts.changedFiles ? JSON.parse(rawOpts.changedFiles) : [],
+  /**
    * When about to push:
    * - ensure every webp.
    * - fail if any asset not committed.
    */
   prePush: Boolean(rawOpts.prePush),
-  /**
-   * For change-detection while watching via `assets.nodemon.json`.
-   * A watched file has "changed" iff `lastModifiedMs > Date.now() - staleMs`.
-   */
-  staleMs: Math.max(Number(rawOpts.staleMs) || 0, 0),
 };
+
+info({ opts });
 
 const mediaDir = path.resolve(__dirname, "../../media");
 const mapsDir = path.resolve(mediaDir, "map");
@@ -103,11 +102,11 @@ const emptyStringHash = hashText('');
   
   let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
-  // While watching we should update everything when this script or geomorphService have "just changed".
+  // While watching, update everything if this script or `geomorphService` just changed
   const updateAllSymbols = opts.all || [
     assetsScriptFilepath,
     geomorphServicePath,
-  ].some(x => fs.statSync(x).mtimeMs > Date.now() - opts.staleMs);
+  ].some(x => opts.changedFiles.includes(x));
 
   if (updateAllSymbols) {
     info(`updating all symbols`);
@@ -117,7 +116,7 @@ const emptyStringHash = hashText('');
       const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
       assetsJson.symbols[symbolKey] = prev.symbols[symbolKey];
       assetsJson.meta[symbolKey] = prev.meta[symbolKey];
-      return fs.statSync(path.resolve(symbolsDir, filename)).mtimeMs > Date.now() - opts.staleMs;
+      return opts.changedFiles.includes(path.resolve(symbolsDir, filename));
     });
     info(`updating symbols: ${JSON.stringify(svgSymbolFilenames)}`);
   }
@@ -241,7 +240,7 @@ const emptyStringHash = hashText('');
     );
 
     if (modifiedPaths.concat(untrackedPaths, stagedPaths).length) {
-      error('Please commit WEBPs', { modifiedPaths, untrackedPaths, stagedPaths });
+      error('Please commit static/assets/*', { modifiedPaths, untrackedPaths, stagedPaths });
       process.exit(1);
     }
   }
@@ -427,8 +426,8 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   const ct = canvas.getContext('2d');
 
   // 🚧 redraw all obstacles when:
-  // - opts.all (?)
-  // - opts.staleMs and this file changed (?)
+  // - opts.all ✅ (prevAssets necessarily `null`)
+  // - this file changed (?)
   const prevPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
   const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prevPng ? prevAssets : null);
   

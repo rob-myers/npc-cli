@@ -12,7 +12,7 @@
     "react three fiber"
   ],
   "scripts": {
-    "dev": "concurrently 'npm run develop' 'npm run watch-assets'",
+    "dev": "concurrently 'npm run develop' 'npm run assets' 'npm run watch-assets'",
     "develop": "concurrently 'npm run ws-server' 'gatsby develop --port 8011 --host 0.0.0.0'",
     "start": "gatsby develop",
     "build": "gatsby build",
@@ -28,10 +28,9 @@
     "cwebp-fast": "sucrase-node src/scripts/cwebp",
     "get-pngs": "npm run ts-script src/scripts/get-pngs",
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
-    "watch-assets": "npm run assets && nodemon --on-change-only --delay 300ms --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast -- --staleMs=2000'",
+    "watch-assets": "echo 'ℹ️  watching assets...' && sucrase-node src/scripts/assets-nodemon.js",
     "ws-server": "sucrase-node src/scripts/ws-server.js",
-    "pre-push": "npm run assets-fast -- --prePush",
-    "watch-assets-new": "npm run assets && echo 'ℹ️ watching assets...' && sucrase-node src/scripts/assets-nodemon.js"
+    "pre-push": "npm run assets-fast -- --prePush"
   },
   "pre-push": [
     "pre-push"
