@@ -155,9 +155,9 @@ function normalizeStarshipChars(word) {
 export async function runYarnScript(scriptName, ...args) {
   await /** @type {Promise<void>} */ (new Promise((resolve, reject) => {
       const proc = childProcess.spawn('yarn', [scriptName, ...args]);
-      proc.stdout.on('data', (data) => info(scriptName, `${ansi.DarkGrey}${data.toString()}${ansi.Reset}`));
+      proc.stdout.on('data', (data) => console.log(`[${ansi.Bold}${scriptName}${ansi.Reset}]`, `${data.toString().trimEnd()}${ansi.Reset}`));
       // stderr needn't contain error messages
-      proc.stderr.on('data', (data) => info(scriptName, `\n${data.toString()}`));
+      proc.stderr.on('data', (data) => console.log(`[${ansi.Bold}${scriptName}${ansi.Reset}]`, `${data.toString()}`));
       // proc.stdout.on('close', () => resolve());
       proc.on('error', (e) => reject(e));
       proc.on('exit', (errorCode) => {
