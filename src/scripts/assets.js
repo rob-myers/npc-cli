@@ -36,6 +36,9 @@ import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
 import { runYarnScript, saveCanvasAsFile } from "./service";
 
+const [,, changedFiles] = process.argv;
+info({ changedFiles });
+
 const rawOpts = getopts(process.argv, {
   boolean: ['all'],
   string: ['prePush', 'staleMs'],

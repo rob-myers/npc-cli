@@ -30,7 +30,8 @@
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
     "watch-assets": "npm run assets && nodemon --on-change-only --delay 300ms --config src/scripts/assets.nodemon.json --exec 'npm run assets-fast -- --staleMs=2000'",
     "ws-server": "sucrase-node src/scripts/ws-server.js",
-    "pre-push": "npm run assets-fast -- --prePush"
+    "pre-push": "npm run assets-fast -- --prePush",
+    "watch-assets-new": "npm run assets && echo 'ℹ️ watching assets...' && sucrase-node src/scripts/assets-nodemon.js"
   },
   "pre-push": [
     "pre-push"
@@ -102,6 +103,7 @@
     "@types/loadable__component": "^5.13.8",
     "@types/lodash.clonedeep": "^4.5.9",
     "@types/node": "^20.10.6",
+    "@types/nodemon": "^1.19.6",
     "@types/react": "^18.2.46",
     "@types/react-beforeunload": "^2.1.5",
     "@types/react-dom": "^18.2.18",
