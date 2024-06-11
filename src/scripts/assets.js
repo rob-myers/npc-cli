@@ -38,8 +38,8 @@ import { runYarnScript, saveCanvasAsFile } from "./service";
 
 
 const rawOpts = getopts(process.argv, {
-  boolean: ['all'],
-  string: ['prePush', 'changedFiles'],
+  boolean: ['all', 'prePush'],
+  string: ['changedFiles'],
 });
 
 const imgOpts = {
