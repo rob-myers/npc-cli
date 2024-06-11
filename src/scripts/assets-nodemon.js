@@ -9,10 +9,10 @@ const delayMs = 300;
 const changed = /** @type {Map<string, number>} */ (new Map());
 
 nodemon({
-  // delay: 300, // 🔔 cannot use: `files` is missing changed files
+  // delay: 300, // 🔔 doesn't track files within interval
   ext: 'svg',
   runOnChangeOnly: true,
-  script: 'src/scripts/noop.js', // 🔔 need to override behaviour 
+  script: 'src/scripts/noop.js', // 🔔 must override default behaviour 
   watch: [
     'src/scripts/assets.js',
     'src/npc-cli/service/geomorph.js',
@@ -22,11 +22,10 @@ nodemon({
 }).on('restart', onRestart).on('quit', onQuit);
 
 /**
- * @param {string[] | undefined} nodemonFiles 
+ * @param {string[]} [nodemonFiles] 
  */
-async function onRestart(nodemonFiles) {
-  // console.log({ nodemonFiles });
-  nodemonFiles?.forEach(file => changed.set(file, Date.now()));
+async function onRestart(nodemonFiles = []) {
+  nodemonFiles.forEach(file => changed.set(file, Date.now()));
   
   if (!running) {
     running = true;
@@ -42,7 +41,6 @@ async function onRestart(nodemonFiles) {
     'assets-fast',
     `--changedFiles=${JSON.stringify(changedFiles)}`,
   );
-
   changed.forEach((epochMs, file) =>
     epochMs <= startEpochMs && changed.delete(file)
   );
@@ -50,7 +48,7 @@ async function onRestart(nodemonFiles) {
   running = false;
 
   if (changed.size > 0) {
-    await onRestart([]);
+    await onRestart();
   }
 }
 
