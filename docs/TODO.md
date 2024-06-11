@@ -3,7 +3,7 @@
 ## WIP
 
 - 🚧 migrate sub-symbols to actual symbols
-  - ✅ 301 ✅ 302 ✅ 303 🚧 101 🚧 102
+  - ✅ 301 ✅ 302 ✅ 303 ✅ 101 🚧 102
   - consoles
   - extras
 
@@ -13,11 +13,6 @@
 - 🚧 start a new repo based on next js
   - ✅ https://github.com/rob-myers/npc-cli-next
   - 🚧 get mdx working
-
-- ✅ setup nodemon via js, somehow providing changed filenames as arg to script
-  - ✅ create script `assets-nodemon.js` and npm script `watch-assets-new`
-  - ✅ assets.js should use `changedFiles` arg
-  - ✅ migrate from npm script `watch-assets`
 
 - start writing first article
 
@@ -1233,3 +1228,7 @@
 - ✅ sh/raw-loader.js -> sh/{util,game}-generators.js
   - ✅ on HMR overwrite function defs
   - ✅ migrate remaining util generators
+  - ✅ setup nodemon via js, somehow providing changed filenames as arg to script
+  - ✅ create script `assets-nodemon.js` and npm script `watch-assets-new`
+  - ✅ assets.js should use `changedFiles` arg
+  - ✅ migrate from npm script `watch-assets`
