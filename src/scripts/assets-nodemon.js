@@ -26,8 +26,7 @@ nodemon({
  */
 async function onRestart(nodemonFiles) {
   // console.log({ nodemonFiles });
-  const startEpochMs = Date.now();
-  nodemonFiles?.forEach(file => changed.set(file, startEpochMs));
+  nodemonFiles?.forEach(file => changed.set(file, Date.now()));
   
   if (!running) {
     running = true;
@@ -37,11 +36,11 @@ async function onRestart(nodemonFiles) {
 
   await new Promise(resolve => setTimeout(resolve, delayMs));
   
+  const startEpochMs = Date.now();
   const changedFiles = Array.from(changed.keys());
   await runYarnScript(
     'assets-fast',
-    JSON.stringify(changedFiles),
-    '--staleMs=2000', // 🚧 remove? `changedFiles` should replace it
+    `--changedFiles=${JSON.stringify(changedFiles)}`,
   );
 
   changed.forEach((epochMs, file) =>
