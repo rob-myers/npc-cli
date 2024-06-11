@@ -5,7 +5,7 @@ let running = false;
 /** We pause to allow multiple changes to aggregate */
 const delayMs = 300;
 /** Absolute path to `Date.now()` */
-const changed = /** @type {{ [filename: string]: number }} */ ({});
+const changed = /** @type {Map<string, number>} */ (new Map());
 
 nodemon({
   // delay: 300, // 🔔 cannot use: `files` is missing changed files
@@ -26,7 +26,7 @@ nodemon({
 async function onRestart(nodemonFiles) {
   // console.log({ nodemonFiles });
   const startEpochMs = Date.now();
-  nodemonFiles?.forEach(file => changed[file] = startEpochMs);
+  nodemonFiles?.forEach(file => changed.set(file, startEpochMs));
   
   if (!running) {
     running = true;
@@ -38,12 +38,12 @@ async function onRestart(nodemonFiles) {
   
   await runYarnScript(
     'assets-fast',
-    JSON.stringify({ changedFiles: Object.keys(changed) }),
+    JSON.stringify({ changedFiles: Array.from(changed.keys()) }),
     '--staleMs=2000', // 🚧 remove? `changedFiles` should replace it
   );
 
-  Object.keys(changed).forEach(file =>
-    changed[file] <= startEpochMs && delete changed[file]
+  changed.forEach((epochMs, file) =>
+    epochMs <= startEpochMs && changed.delete(file)
   );
 
   running = false;
