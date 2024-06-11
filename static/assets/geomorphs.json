@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 411263447 -393981876",
+  "hash": "610044716 1669833502 -393981876",
   "mapsHash": 610044716,
-  "layoutsHash": 411263447,
+  "layoutsHash": 1669833502,
   "sheetsHash": -393981876,
   "map": {
     "demo-map-1": {
@@ -112,18 +112,45 @@
           "key": "g-101--multipurpose-9",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 16.9295,
-          "y": 25.0205
+          "y": 18.4795
         },
         {
           "type": "point",
           "key": "g-101--multipurpose-10",
           "meta": {"decor": true, "label": "cpu"},
           "x": 20.2245,
-          "y": 25.475
+          "y": 18.025
         },
         {
           "type": "point",
           "key": "g-101--multipurpose-11",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 270
+          },
+          "x": 17.995,
+          "y": 17.615
+        },
+        {
+          "type": "point",
+          "key": "g-101--multipurpose-12",
+          "meta": {"decor": true, "go": true, "label": "office"},
+          "x": 16.9295,
+          "y": 25.0205
+        },
+        {
+          "type": "point",
+          "key": "g-101--multipurpose-13",
+          "meta": {"decor": true, "label": "cpu"},
+          "x": 20.2245,
+          "y": 25.475
+        },
+        {
+          "type": "point",
+          "key": "g-101--multipurpose-14",
           "meta": {
             "decor": true,
             "do": true,
@@ -136,43 +163,16 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-12",
+          "key": "g-101--multipurpose-15",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 13.0705,
           "y": 18.4795
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-13",
-          "meta": {"decor": true, "label": "cpu"},
-          "x": 9.7755,
-          "y": 18.025
-        },
-        {
-          "type": "point",
-          "key": "g-101--multipurpose-14",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 270
-          },
-          "x": 12.005,
-          "y": 17.615
-        },
-        {
-          "type": "point",
-          "key": "g-101--multipurpose-15",
-          "meta": {"decor": true, "go": true, "label": "office"},
-          "x": 16.9295,
-          "y": 18.4795
-        },
-        {
-          "type": "point",
           "key": "g-101--multipurpose-16",
           "meta": {"decor": true, "label": "cpu"},
-          "x": 20.2245,
+          "x": 9.7755,
           "y": 18.025
         },
         {
@@ -185,7 +185,7 @@
             "chair": true,
             "orient": 270
           },
-          "x": 17.995,
+          "x": 12.005,
           "y": 17.615
         },
         {
@@ -434,16 +434,22 @@
         {
           "type": "point",
           "key": "g-101--multipurpose-39",
-          "meta": {"decor": true, "go": true, "label": "cpu"},
-          "x": 29.225,
-          "y": 10.525
+          "meta": {"decor": true, "go": true, "label": "office"},
+          "x": 27.9755,
+          "y": 10.475
         },
         {
           "type": "point",
           "key": "g-101--multipurpose-40",
-          "meta": {"decor": true, "go": true, "label": "office"},
-          "x": 27.225,
-          "y": 11.154
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 0
+          },
+          "x": 28.865,
+          "y": 10.125
         },
         {
           "type": "point",
@@ -453,37 +459,37 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 270
+            "orient": 180
           },
-          "x": 26.2375,
-          "y": 10.0075
+          "x": 26.605,
+          "y": 10.125
         },
         {
           "type": "point",
           "key": "g-101--multipurpose-42",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 270
-          },
-          "x": 27.7375,
-          "y": 10.0075
-        },
-        {
-          "type": "point",
-          "key": "g-101--multipurpose-43",
           "meta": {"decor": true, "go": true, "label": "cpu"},
           "x": 29.225,
           "y": 19.475
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-44",
+          "key": "g-101--multipurpose-43",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 27.225,
           "y": 18.846
+        },
+        {
+          "type": "point",
+          "key": "g-101--multipurpose-44",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 90
+          },
+          "x": 26.2375,
+          "y": 19.9925
         },
         {
           "type": "point",
@@ -495,39 +501,26 @@
             "chair": true,
             "orient": 90
           },
-          "x": 26.2375,
-          "y": 19.9925
-        },
-        {
-          "type": "point",
-          "key": "g-101--multipurpose-46",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 90
-          },
           "x": 27.7375,
           "y": 19.9925
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-47",
+          "key": "g-101--multipurpose-46",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
           "x": 15.466,
           "y": 4.2845
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-48",
+          "key": "g-101--multipurpose-47",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
           "x": 14.125,
           "y": 5.505
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-49",
+          "key": "g-101--multipurpose-48",
           "meta": {
             "decor": true,
             "do": true,
@@ -540,10 +533,23 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-50",
+          "key": "g-101--multipurpose-49",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
           "x": 10.825,
           "y": 8.025
+        },
+        {
+          "type": "point",
+          "key": "g-101--multipurpose-50",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "lie": true,
+            "bed": true,
+            "orient": 0
+          },
+          "x": 10.07,
+          "y": 6.7525
         },
         {
           "type": "point",
@@ -556,24 +562,11 @@
             "orient": 0
           },
           "x": 10.07,
-          "y": 6.7525
-        },
-        {
-          "type": "point",
-          "key": "g-101--multipurpose-52",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "lie": true,
-            "bed": true,
-            "orient": 0
-          },
-          "x": 10.07,
           "y": 9.7525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-53",
+          "key": "g-101--multipurpose-52",
           "meta": {
             "decor": true,
             "do": true,
@@ -586,14 +579,14 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-54",
+          "key": "g-101--multipurpose-53",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
           "x": 19.175,
           "y": 8.025
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-55",
+          "key": "g-101--multipurpose-54",
           "meta": {
             "decor": true,
             "do": true,
@@ -606,7 +599,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-56",
+          "key": "g-101--multipurpose-55",
           "meta": {
             "decor": true,
             "do": true,
@@ -619,7 +612,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-57",
+          "key": "g-101--multipurpose-56",
           "meta": {
             "decor": true,
             "do": true,
@@ -632,14 +625,14 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-58",
+          "key": "g-101--multipurpose-57",
           "meta": {"decor": true, "go": true, "label": "freaher"},
           "x": 23.116,
           "y": 11.0655
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-59",
+          "key": "g-101--multipurpose-58",
           "meta": {
             "decor": true,
             "do": true,
@@ -652,7 +645,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-60",
+          "key": "g-101--multipurpose-59",
           "meta": {
             "decor": true,
             "do": true,
@@ -665,7 +658,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-61",
+          "key": "g-101--multipurpose-60",
           "meta": {
             "decor": true,
             "do": true,
@@ -678,28 +671,28 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-62",
+          "key": "g-101--multipurpose-61",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
           "x": 21.625,
           "y": 12.375
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-63",
+          "key": "g-101--multipurpose-62",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
           "x": 21.625,
           "y": 13.125
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-64",
+          "key": "g-101--multipurpose-63",
           "meta": {"decor": true, "go": true, "label": "freaher"},
           "x": 23.116,
           "y": 18.9345
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-65",
+          "key": "g-101--multipurpose-64",
           "meta": {
             "decor": true,
             "do": true,
@@ -712,7 +705,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-66",
+          "key": "g-101--multipurpose-65",
           "meta": {
             "decor": true,
             "do": true,
@@ -725,7 +718,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-67",
+          "key": "g-101--multipurpose-66",
           "meta": {
             "decor": true,
             "do": true,
@@ -738,28 +731,28 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-68",
+          "key": "g-101--multipurpose-67",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
           "x": 21.625,
           "y": 17.625
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-69",
+          "key": "g-101--multipurpose-68",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
           "x": 21.625,
           "y": 16.875
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-70",
+          "key": "g-101--multipurpose-69",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 27.275,
           "y": 14.775
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-71",
+          "key": "g-101--multipurpose-70",
           "meta": {
             "decor": true,
             "do": true,
@@ -772,7 +765,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-72",
+          "key": "g-101--multipurpose-71",
           "meta": {
             "decor": true,
             "do": true,
@@ -785,7 +778,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-73",
+          "key": "g-101--multipurpose-72",
           "meta": {
             "decor": true,
             "do": true,
@@ -798,7 +791,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-74",
+          "key": "g-101--multipurpose-73",
           "meta": {
             "decor": true,
             "do": true,
@@ -811,14 +804,14 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-75",
+          "key": "g-101--multipurpose-74",
           "meta": {"decor": true, "go": true, "label": "medical"},
           "x": 7.9295,
           "y": 17.5705
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-76",
+          "key": "g-101--multipurpose-75",
           "meta": {
             "decor": true,
             "do": true,
@@ -831,7 +824,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-77",
+          "key": "g-101--multipurpose-76",
           "meta": {
             "decor": true,
             "do": true,
@@ -846,7 +839,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-78",
+          "key": "g-101--multipurpose-77",
           "meta": {
             "decor": true,
             "do": true,
@@ -861,14 +854,14 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-79",
+          "key": "g-101--multipurpose-78",
           "meta": {"decor": true, "go": true, "label": "medical"},
           "x": 7.9295,
           "y": 11.975
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-80",
+          "key": "g-101--multipurpose-79",
           "meta": {
             "decor": true,
             "do": true,
@@ -881,14 +874,14 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-81",
+          "key": "g-101--multipurpose-80",
           "meta": {"decor": true, "go": true, "label": "escape-pod"},
           "x": 1.5035,
           "y": 17.4555
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-82",
+          "key": "g-101--multipurpose-81",
           "meta": {
             "decor": true,
             "do": true,
@@ -901,7 +894,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-83",
+          "key": "g-101--multipurpose-82",
           "meta": {
             "decor": true,
             "do": true,
@@ -914,7 +907,7 @@
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-84",
+          "key": "g-101--multipurpose-83",
           "meta": {
             "decor": true,
             "do": true,
@@ -923,6 +916,19 @@
             "orient": 270
           },
           "x": 0.555,
+          "y": 14.165
+        },
+        {
+          "type": "point",
+          "key": "g-101--multipurpose-84",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 270
+          },
+          "x": 1.385,
           "y": 14.165
         },
         {
@@ -935,8 +941,8 @@
             "chair": true,
             "orient": 270
           },
-          "x": 1.385,
-          "y": 14.165
+          "x": 0.555,
+          "y": 15.065
         },
         {
           "type": "point",
@@ -948,7 +954,7 @@
             "chair": true,
             "orient": 270
           },
-          "x": 0.555,
+          "x": 1.385,
           "y": 15.065
         },
         {
@@ -961,8 +967,8 @@
             "chair": true,
             "orient": 270
           },
-          "x": 1.385,
-          "y": 15.065
+          "x": 0.555,
+          "y": 15.955
         },
         {
           "type": "point",
@@ -974,7 +980,7 @@
             "chair": true,
             "orient": 270
           },
-          "x": 0.555,
+          "x": 1.385,
           "y": 15.955
         },
         {
@@ -987,41 +993,35 @@
             "chair": true,
             "orient": 270
           },
-          "x": 1.385,
-          "y": 15.955
-        },
-        {
-          "type": "point",
-          "key": "g-101--multipurpose-90",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 270
-          },
           "x": 2.235,
           "y": 15.955
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-91",
+          "key": "g-101--multipurpose-90",
           "meta": {"decor": true, "label": "fuel"},
           "x": 3,
           "y": 0.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-92",
+          "key": "g-101--multipurpose-91",
           "meta": {"decor": true, "label": "fuel"},
           "x": 12.03,
           "y": 0.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-93",
+          "key": "g-101--multipurpose-92",
           "meta": {"decor": true, "label": "fuel"},
           "x": 18,
+          "y": 0.7
+        },
+        {
+          "type": "point",
+          "key": "g-101--multipurpose-93",
+          "meta": {"decor": true, "label": "fuel"},
+          "x": 27,
           "y": 0.7
         },
         {
@@ -1029,32 +1029,25 @@
           "key": "g-101--multipurpose-94",
           "meta": {"decor": true, "label": "fuel"},
           "x": 27,
-          "y": 0.7
-        },
-        {
-          "type": "point",
-          "key": "g-101--multipurpose-95",
-          "meta": {"decor": true, "label": "fuel"},
-          "x": 27,
           "y": 27.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-96",
+          "key": "g-101--multipurpose-95",
           "meta": {"decor": true, "label": "fuel"},
           "x": 12,
           "y": 27.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-97",
+          "key": "g-101--multipurpose-96",
           "meta": {"decor": true, "label": "fuel"},
           "x": 18,
           "y": 27.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-98",
+          "key": "g-101--multipurpose-97",
           "meta": {"decor": true, "label": "fuel"},
           "x": 3,
           "y": 27.7
@@ -1350,6 +1343,16 @@
           "poly": {
             "type": "Polygon",
             "coordinates": [
+              [[16.7, 19.425], [17.8, 19.425], [17.8, 19.575], [16.7, 19.575]]
+            ],
+            "meta": {"door": true}
+          },
+          "roomIds": [null, null]
+        },
+        {
+          "poly": {
+            "type": "Polygon",
+            "coordinates": [
               [[16.7, 23.925], [17.8, 23.925], [17.8, 24.075], [16.7, 24.075]]
             ],
             "meta": {"door": true}
@@ -1361,16 +1364,6 @@
             "type": "Polygon",
             "coordinates": [
               [[13.3, 19.575], [12.2, 19.575], [12.2, 19.425], [13.3, 19.425]]
-            ],
-            "meta": {"door": true}
-          },
-          "roomIds": [null, null]
-        },
-        {
-          "poly": {
-            "type": "Polygon",
-            "coordinates": [
-              [[16.7, 19.425], [17.8, 19.425], [17.8, 19.575], [16.7, 19.575]]
             ],
             "meta": {"door": true}
           },
@@ -1450,7 +1443,7 @@
           "poly": {
             "type": "Polygon",
             "coordinates": [
-              [[25.575, 11.8], [25.425, 11.8], [25.425, 10.7], [25.575, 10.7]]
+              [[28.3, 9.075], [27.2, 9.075], [27.2, 8.925], [28.3, 8.925]]
             ],
             "meta": {"door": true}
           },
@@ -1859,6 +1852,73 @@
               "obsId": 0
             }
           },
+          "transform": [0, 1, 1, 0, 19.5, 16.5]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
+          "height": 0.4,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
+            ],
+            "meta": {
+              "obstacle": true,
+              "chair": true,
+              "symKey": "console--051--0.4x0.6",
+              "obsId": 0
+            }
+          },
+          "transform": [0, 1, 1, 0, 17.62, 17.29]
+        },
+        {
+          "symbolKey": "extra--019--table-0.5x2",
+          "obstacleId": 0,
+          "height": 0.6000000000000001,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [0.77, 3.02],
+                [-0.02, 3.02],
+                [-0.02, -0.02],
+                [0.77, -0.02],
+                [0.77, 0.9894],
+                [0.7056, 1.1075],
+                [0.65, 1.25],
+                [0.625, 1.5],
+                [0.65, 1.75],
+                [0.7019, 1.8793],
+                [0.77, 2.0007]
+              ]
+            ],
+            "meta": {
+              "obstacle": true,
+              "surface": true,
+              "table": true,
+              "symKey": "extra--019--table-0.5x2",
+              "obsId": 0
+            }
+          },
+          "transform": [0, 0.973, 1, 0, 16.5, 16.5]
+        },
+        {
+          "symbolKey": "extra--010--machine--2x1",
+          "obstacleId": 0,
+          "height": 1.2,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [[2.75, 0.25], [2.75, 1.25], [0.25, 1.25], [0.25, 0.25]]
+            ],
+            "meta": {
+              "obstacle": true,
+              "machine": true,
+              "symKey": "extra--010--machine--2x1",
+              "obsId": 0
+            }
+          },
           "transform": [0, -1, 1, 0, 19.5, 27]
         },
         {
@@ -1976,73 +2036,6 @@
             }
           },
           "transform": [0, 0.973, -1, 0, 13.5, 16.5]
-        },
-        {
-          "symbolKey": "extra--010--machine--2x1",
-          "obstacleId": 0,
-          "height": 1.2,
-          "origPoly": {
-            "type": "Polygon",
-            "coordinates": [
-              [[2.75, 0.25], [2.75, 1.25], [0.25, 1.25], [0.25, 0.25]]
-            ],
-            "meta": {
-              "obstacle": true,
-              "machine": true,
-              "symKey": "extra--010--machine--2x1",
-              "obsId": 0
-            }
-          },
-          "transform": [0, 1, 1, 0, 19.5, 16.5]
-        },
-        {
-          "symbolKey": "console--051--0.4x0.6",
-          "obstacleId": 0,
-          "height": 0.4,
-          "origPoly": {
-            "type": "Polygon",
-            "coordinates": [
-              [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
-            ],
-            "meta": {
-              "obstacle": true,
-              "chair": true,
-              "symKey": "console--051--0.4x0.6",
-              "obsId": 0
-            }
-          },
-          "transform": [0, 1, 1, 0, 17.62, 17.29]
-        },
-        {
-          "symbolKey": "extra--019--table-0.5x2",
-          "obstacleId": 0,
-          "height": 0.6000000000000001,
-          "origPoly": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [0.77, 3.02],
-                [-0.02, 3.02],
-                [-0.02, -0.02],
-                [0.77, -0.02],
-                [0.77, 0.9894],
-                [0.7056, 1.1075],
-                [0.65, 1.25],
-                [0.625, 1.5],
-                [0.65, 1.75],
-                [0.7019, 1.8793],
-                [0.77, 2.0007]
-              ]
-            ],
-            "meta": {
-              "obstacle": true,
-              "surface": true,
-              "table": true,
-              "symKey": "extra--019--table-0.5x2",
-              "obsId": 0
-            }
-          },
-          "transform": [0, 0.973, 1, 0, 16.5, 16.5]
         },
         {
           "symbolKey": "bed--003--1x1.6",
@@ -2657,98 +2650,67 @@
           "transform": [0, -1, 1, 0, 18.75, 23.22]
         },
         {
-          "symbolKey": "extra--010--machine--2x1",
+          "symbolKey": "extra--014--table--2x3",
           "obstacleId": 0,
-          "height": 1,
+          "height": 0.8,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
-              [[2.75, 0.25], [2.75, 1.25], [0.25, 1.25], [0.25, 0.25]]
+              [
+                [3, 0.005],
+                [3, 0.7726],
+                [0.76, 0.7726],
+                [0.76, 3.7375],
+                [3, 3.7375],
+                [3, 4.5],
+                [0, 4.5],
+                [0, 0]
+              ]
             ],
             "meta": {
               "obstacle": true,
-              "machine": true,
-              "symKey": "extra--010--machine--2x1",
+              "surface": true,
+              "symKey": "extra--014--table--2x3",
               "obsId": 0
             }
           },
           "transform": [0, -1, -1, 0, 30, 12]
         },
         {
-          "symbolKey": "extra--003--chair--0.25x0.25",
+          "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.3,
+          "height": 0.4,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
-              [
-                [-0.055, 0.0185],
-                [-0.0123, -0.0451],
-                [0.0429, -0.07],
-                [0.2963, -0.07],
-                [0.3966, 0.0236],
-                [0.43, 0.1139],
-                [0.43, 0.2852],
-                [0.3474, 0.4013],
-                [0.2751, 0.445],
-                [0.0366, 0.445],
-                [-0.0198, 0.4152],
-                [-0.055, 0.3717]
-              ]
+              [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
             ],
             "meta": {
               "obstacle": true,
-              "symKey": "extra--003--chair--0.25x0.25",
+              "chair": true,
+              "symKey": "console--051--0.4x0.6",
               "obsId": 0
             }
           },
-          "transform": [0, 1, 1, 0, 26.05, 9.870000000000001]
+          "transform": [-1, 0, 0, 1, 29.19, 9.75]
         },
         {
-          "symbolKey": "extra--003--chair--0.25x0.25",
+          "symbolKey": "console--051--0.4x0.6",
           "obstacleId": 0,
-          "height": 0.3,
+          "height": 0.4,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
-              [
-                [-0.055, 0.0185],
-                [-0.0123, -0.0451],
-                [0.0429, -0.07],
-                [0.2963, -0.07],
-                [0.3966, 0.0236],
-                [0.43, 0.1139],
-                [0.43, 0.2852],
-                [0.3474, 0.4013],
-                [0.2751, 0.445],
-                [0.0366, 0.445],
-                [-0.0198, 0.4152],
-                [-0.055, 0.3717]
-              ]
+              [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
             ],
             "meta": {
               "obstacle": true,
-              "symKey": "extra--003--chair--0.25x0.25",
+              "chair": true,
+              "symKey": "console--051--0.4x0.6",
               "obsId": 0
             }
           },
-          "transform": [0, 1, 1, 0, 27.55, 9.870000000000001]
-        },
-        {
-          "symbolKey": "extra--017--table--2x0.5",
-          "obstacleId": 0,
-          "height": 0.8,
-          "origPoly": {
-            "type": "Polygon",
-            "coordinates": [[[3, 0.75], [0, 0.75], [0, 0], [3, 0]]],
-            "meta": {
-              "obstacle": true,
-              "surface": true,
-              "symKey": "extra--017--table--2x0.5",
-              "obsId": 0
-            }
-          },
-          "transform": [-1, 0, 0, 1, 28.5, 9]
+          "transform": [1, 0, 0, 1, 26.28, 9.75]
         },
         {
           "symbolKey": "extra--010--machine--2x1",
@@ -4606,8 +4568,8 @@
               [23.9, 3.1],
               [29.9, 3.1],
               [29.9, 8.95],
-              [25.5, 8.95],
-              [25.5, 8.96],
+              [25.45, 8.95],
+              [25.45, 8.96],
               [24, 8.96],
               [24, 8.95],
               [21.05, 8.95],
@@ -5563,8 +5525,16 @@
           "coordinates": [
             [
               [25.3125, 8.96],
-              [25.5, 8.96],
-              [25.5, 8.95],
+              [25.45, 8.96],
+              [25.45, 8.95],
+              [27.2, 8.95],
+              [27.2, 9.05],
+              [25.55, 9.05],
+              [25.55, 11.95],
+              [29.9, 11.95],
+              [29.9, 9.05],
+              [28.3, 9.05],
+              [28.3, 8.95],
               [29.9, 8.95],
               [29.9, 8.75],
               [30.1, 8.75],
@@ -5592,14 +5562,6 @@
               [25.55, 12.05],
               [25.55, 13.7045],
               [25.45, 13.7045],
-              [25.45, 11.8],
-              [25.55, 11.8],
-              [25.55, 11.95],
-              [29.9, 11.95],
-              [29.9, 9.05],
-              [25.55, 9.05],
-              [25.55, 10.7],
-              [25.45, 10.7],
               [25.45, 9.0475],
               [25.3125, 9.0475],
               [25.3125, 8.96]
@@ -5690,6 +5652,21 @@
             "type": "Polygon",
             "coordinates": [
               [
+                [17.235, 16.33],
+                [18.77, 16.33],
+                [18.77, 16.665],
+                [17.235, 16.665]
+              ]
+            ],
+            "meta": {"window": true}
+          },
+          "roomIds": [null, null]
+        },
+        {
+          "poly": {
+            "type": "Polygon",
+            "coordinates": [
+              [
                 [17.235, 26.835],
                 [18.77, 26.835],
                 [18.77, 27.17],
@@ -5709,21 +5686,6 @@
                 [11.23, 16.665],
                 [11.23, 16.33],
                 [12.765, 16.33]
-              ]
-            ],
-            "meta": {"window": true}
-          },
-          "roomIds": [null, null]
-        },
-        {
-          "poly": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [17.235, 16.33],
-                [18.77, 16.33],
-                [18.77, 16.665],
-                [17.235, 16.665]
               ]
             ],
             "meta": {"window": true}
@@ -6049,8 +6011,8 @@
           {"x": 26.4116, "y": 6.055},
           {"x": 29.6, "y": 6.055},
           {"x": 29.6, "y": 8.65},
-          {"x": 25.2, "y": 8.65},
-          {"x": 25.2, "y": 8.66},
+          {"x": 25.15, "y": 8.65},
+          {"x": 25.15, "y": 8.66},
           {"x": 25.0125, "y": 8.66},
           {"x": 25.0125, "y": 8.655},
           {"x": 24.4625, "y": 8.655},
@@ -6231,24 +6193,6 @@
           {"x": 22.8355, "y": 18.35},
           {"x": 22.8355, "y": 17.65},
           {"x": 21.87, "y": 17.65},
-          {"x": 25.85, "y": 10.3934},
-          {"x": 25.9313, "y": 10.4805},
-          {"x": 26.1191, "y": 10.55},
-          {"x": 26.4151, "y": 10.55},
-          {"x": 26.6385, "y": 10.3911},
-          {"x": 26.745, "y": 10.2148},
-          {"x": 26.745, "y": 10},
-          {"x": 27.23, "y": 10},
-          {"x": 27.23, "y": 10.2648},
-          {"x": 27.4313, "y": 10.4805},
-          {"x": 27.6191, "y": 10.55},
-          {"x": 27.9151, "y": 10.55},
-          {"x": 28.1385, "y": 10.3911},
-          {"x": 28.245, "y": 10.2148},
-          {"x": 28.245, "y": 10},
-          {"x": 28.5, "y": 10},
-          {"x": 28.5, "y": 11.65},
-          {"x": 25.85, "y": 11.65},
           {"x": 25.85, "y": 13},
           {"x": 26.07, "y": 13},
           {"x": 26.07, "y": 13.6175},
@@ -6287,6 +6231,18 @@
           {"x": 26.1191, "y": 19.45},
           {"x": 25.9313, "y": 19.5195},
           {"x": 25.85, "y": 19.6066},
+          {"x": 26.5125, "y": 9.35},
+          {"x": 28.9774, "y": 9.35},
+          {"x": 28.9774, "y": 9.5},
+          {"x": 28.2225, "y": 9.5},
+          {"x": 28.2225, "y": 10.75},
+          {"x": 28.9774, "y": 10.75},
+          {"x": 28.9774, "y": 10.99},
+          {"x": 26.5125, "y": 10.99},
+          {"x": 26.5125, "y": 10.75},
+          {"x": 27.2475, "y": 10.75},
+          {"x": 27.2475, "y": 9.5},
+          {"x": 26.5125, "y": 9.5},
           {"x": 0, "y": 6.55},
           {"x": 0.4, "y": 6.55},
           {"x": 0.4, "y": 6.95},
@@ -6387,6 +6343,10 @@
           {"x": 12.5, "y": 23.65},
           {"x": 13, "y": 23.65},
           {"x": 13, "y": 24.35},
+          {"x": 17.5, "y": 19.15},
+          {"x": 17.5, "y": 19.85},
+          {"x": 17, "y": 19.85},
+          {"x": 17, "y": 19.15},
           {"x": 17.5, "y": 23.65},
           {"x": 17.5, "y": 24.35},
           {"x": 17, "y": 24.35},
@@ -6395,10 +6355,6 @@
           {"x": 12.5, "y": 19.15},
           {"x": 13, "y": 19.15},
           {"x": 13, "y": 19.85},
-          {"x": 17.5, "y": 19.15},
-          {"x": 17.5, "y": 19.85},
-          {"x": 17, "y": 19.85},
-          {"x": 17, "y": 19.15},
           {"x": 13, "y": 10.15},
           {"x": 13, "y": 10.85},
           {"x": 12.5, "y": 10.85},
@@ -6427,10 +6383,10 @@
           {"x": 17.65, "y": 22},
           {"x": 17.65, "y": 21.5},
           {"x": 18.35, "y": 21.5},
-          {"x": 25.15, "y": 11},
-          {"x": 25.85, "y": 11},
-          {"x": 25.85, "y": 11.5},
-          {"x": 25.15, "y": 11.5},
+          {"x": 27.5, "y": 9.35},
+          {"x": 27.5, "y": 8.65},
+          {"x": 28, "y": 8.65},
+          {"x": 28, "y": 9.35},
           {"x": 25.15, "y": 18.5},
           {"x": 25.85, "y": 18.5},
           {"x": 25.85, "y": 19},
@@ -6927,157 +6883,151 @@
           [488, 490, 486],
           [488, 489, 490],
           [487, 488, 486],
-          [508, 514, 515],
-          [508, 509, 514],
-          [509, 510, 514],
-          [514, 510, 513],
-          [510, 511, 513],
-          [511, 512, 513],
-          [515, 507, 508],
-          [515, 501, 507],
+          [517, 515, 516],
+          [515, 517, 498],
+          [498, 500, 515],
+          [498, 499, 500],
           [515, 500, 501],
-          [515, 499, 500],
-          [515, 498, 499],
-          [507, 501, 502],
-          [506, 507, 502],
-          [502, 503, 506],
-          [503, 505, 506],
-          [503, 504, 505],
-          [535, 533, 534],
-          [533, 535, 516],
-          [516, 518, 533],
-          [516, 517, 518],
-          [533, 518, 519],
-          [532, 533, 519],
-          [527, 532, 519],
-          [532, 527, 528],
-          [531, 532, 528],
-          [531, 528, 530],
+          [514, 515, 501],
+          [509, 514, 501],
+          [514, 509, 510],
+          [513, 514, 510],
+          [513, 510, 512],
+          [510, 511, 512],
+          [501, 506, 509],
+          [501, 505, 506],
+          [501, 502, 505],
+          [505, 502, 503],
+          [505, 503, 504],
+          [509, 506, 507],
+          [509, 507, 508],
+          [535, 518, 534],
+          [534, 518, 533],
+          [532, 533, 518],
+          [532, 518, 526],
+          [531, 532, 526],
+          [527, 531, 526],
+          [530, 531, 527],
+          [528, 530, 527],
           [528, 529, 530],
-          [519, 524, 527],
-          [519, 523, 524],
+          [525, 526, 518],
+          [519, 525, 518],
+          [524, 525, 519],
+          [523, 524, 519],
           [519, 520, 523],
-          [523, 520, 521],
-          [523, 521, 522],
-          [527, 524, 525],
-          [527, 525, 526],
-          [553, 536, 552],
-          [552, 536, 551],
-          [550, 551, 536],
-          [550, 536, 544],
-          [549, 550, 544],
-          [545, 549, 544],
-          [548, 549, 545],
-          [546, 548, 545],
-          [546, 547, 548],
-          [543, 544, 536],
-          [537, 543, 536],
-          [542, 543, 537],
-          [541, 542, 537],
-          [537, 538, 541],
-          [538, 540, 541],
-          [538, 539, 540],
-          [554, 555, 556],
-          [556, 557, 554],
-          [558, 559, 560],
-          [560, 561, 558],
-          [562, 563, 564],
-          [564, 565, 562],
-          [566, 567, 568],
-          [568, 569, 566],
-          [570, 571, 572],
-          [572, 573, 570],
-          [574, 575, 576],
-          [576, 577, 574],
-          [578, 579, 580],
-          [580, 581, 578],
-          [582, 583, 584],
-          [584, 585, 582],
-          [586, 587, 588],
-          [588, 589, 586],
-          [590, 591, 592],
-          [592, 593, 590],
-          [594, 595, 596],
-          [596, 597, 594],
-          [598, 599, 600],
-          [600, 601, 598],
-          [602, 603, 604],
-          [604, 605, 602],
-          [606, 607, 608],
-          [608, 609, 606],
-          [610, 611, 612],
-          [612, 613, 610],
-          [614, 615, 616],
-          [616, 617, 614],
-          [618, 619, 620],
-          [620, 621, 618],
-          [622, 623, 624],
-          [624, 625, 622],
-          [626, 627, 628],
-          [628, 629, 626],
-          [630, 631, 632],
-          [632, 633, 630],
-          [634, 635, 636],
-          [636, 637, 634],
-          [638, 639, 640],
-          [640, 641, 638],
-          [642, 643, 644],
-          [644, 645, 642],
-          [646, 647, 648],
-          [648, 649, 646],
-          [650, 651, 652],
-          [652, 653, 650],
-          [654, 655, 656],
-          [656, 657, 654],
-          [658, 659, 660],
-          [660, 661, 658],
-          [662, 663, 664],
-          [664, 665, 662],
-          [666, 667, 668],
-          [668, 669, 666],
-          [670, 671, 672],
-          [672, 673, 670],
-          [674, 675, 676],
-          [676, 677, 674],
-          [678, 679, 680],
-          [680, 681, 678],
-          [682, 683, 684],
-          [684, 685, 682],
-          [686, 687, 688],
-          [688, 689, 686],
-          [690, 691, 692],
-          [692, 693, 690],
-          [694, 695, 696],
-          [696, 697, 694],
-          [698, 699, 700],
-          [700, 701, 698],
-          [702, 703, 704],
-          [704, 705, 702],
-          [706, 707, 708],
-          [708, 709, 706],
-          [710, 711, 712],
-          [712, 713, 710],
-          [714, 715, 716],
-          [716, 717, 714],
-          [718, 719, 720],
-          [720, 721, 718],
-          [722, 723, 724],
-          [724, 725, 722],
-          [726, 727, 728],
-          [728, 729, 726],
-          [730, 731, 732],
-          [732, 733, 730],
-          [734, 735, 736],
-          [736, 737, 734],
-          [738, 739, 740],
-          [740, 741, 738],
-          [742, 743, 744],
-          [744, 745, 742],
-          [746, 747, 748],
-          [748, 749, 746]
+          [520, 522, 523],
+          [520, 521, 522],
+          [542, 543, 540],
+          [540, 541, 542],
+          [543, 545, 540],
+          [543, 544, 545],
+          [545, 539, 540],
+          [545, 546, 539],
+          [536, 539, 546],
+          [537, 539, 536],
+          [539, 537, 538],
+          [546, 547, 536],
+          [548, 549, 550],
+          [550, 551, 548],
+          [552, 553, 554],
+          [554, 555, 552],
+          [556, 557, 558],
+          [558, 559, 556],
+          [560, 561, 562],
+          [562, 563, 560],
+          [564, 565, 566],
+          [566, 567, 564],
+          [568, 569, 570],
+          [570, 571, 568],
+          [572, 573, 574],
+          [574, 575, 572],
+          [576, 577, 578],
+          [578, 579, 576],
+          [580, 581, 582],
+          [582, 583, 580],
+          [584, 585, 586],
+          [586, 587, 584],
+          [588, 589, 590],
+          [590, 591, 588],
+          [592, 593, 594],
+          [594, 595, 592],
+          [596, 597, 598],
+          [598, 599, 596],
+          [600, 601, 602],
+          [602, 603, 600],
+          [604, 605, 606],
+          [606, 607, 604],
+          [608, 609, 610],
+          [610, 611, 608],
+          [612, 613, 614],
+          [614, 615, 612],
+          [616, 617, 618],
+          [618, 619, 616],
+          [620, 621, 622],
+          [622, 623, 620],
+          [624, 625, 626],
+          [626, 627, 624],
+          [628, 629, 630],
+          [630, 631, 628],
+          [632, 633, 634],
+          [634, 635, 632],
+          [636, 637, 638],
+          [638, 639, 636],
+          [640, 641, 642],
+          [642, 643, 640],
+          [644, 645, 646],
+          [646, 647, 644],
+          [648, 649, 650],
+          [650, 651, 648],
+          [652, 653, 654],
+          [654, 655, 652],
+          [656, 657, 658],
+          [658, 659, 656],
+          [660, 661, 662],
+          [662, 663, 660],
+          [664, 665, 666],
+          [666, 667, 664],
+          [668, 669, 670],
+          [670, 671, 668],
+          [672, 673, 674],
+          [674, 675, 672],
+          [676, 677, 678],
+          [678, 679, 676],
+          [680, 681, 682],
+          [682, 683, 680],
+          [684, 685, 686],
+          [686, 687, 684],
+          [688, 689, 690],
+          [690, 691, 688],
+          [692, 693, 694],
+          [694, 695, 692],
+          [696, 697, 698],
+          [698, 699, 696],
+          [700, 701, 702],
+          [702, 703, 700],
+          [704, 705, 706],
+          [706, 707, 704],
+          [708, 709, 710],
+          [710, 711, 708],
+          [712, 713, 714],
+          [714, 715, 712],
+          [716, 717, 718],
+          [718, 719, 716],
+          [720, 721, 722],
+          [722, 723, 720],
+          [724, 725, 726],
+          [726, 727, 724],
+          [728, 729, 730],
+          [730, 731, 728],
+          [732, 733, 734],
+          [734, 735, 732],
+          [736, 737, 738],
+          [738, 739, 736],
+          [740, 741, 742],
+          [742, 743, 740]
         ]
       },
-      "navDoorwaysOffset": 492
+      "navDoorwaysOffset": 486
     },
     "g-102--research-deck": {
       "key": "g-102--research-deck",

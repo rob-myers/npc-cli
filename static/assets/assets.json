@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": 1070343218, "pngHash": 568633107},
+    "101--hull": {"outputHash": 1217705400, "pngHash": 568633107},
     "102--hull": {"outputHash": 1420591994, "pngHash": 184103855},
     "103--hull": {"outputHash": -1995702532, "pngHash": -1937509879},
     "301--hull": {"outputHash": 1084187675, "pngHash": 787602800},
@@ -1343,6 +1343,13 @@
           "meta": {"key": "office--026--2x3"},
           "width": 3,
           "height": 4.5,
+          "transform": [0, 1, 1, 0, 16.5, 16.5]
+        },
+        {
+          "symbolKey": "office--026--2x3",
+          "meta": {"key": "office--026--2x3"},
+          "width": 3,
+          "height": 4.5,
           "transform": [0, -1, 1, 0, 16.5, 27]
         },
         {
@@ -1351,13 +1358,6 @@
           "width": 3,
           "height": 4.5,
           "transform": [0, 1, -1, 0, 13.5, 16.5]
-        },
-        {
-          "symbolKey": "office--026--2x3",
-          "meta": {"key": "office--026--2x3"},
-          "width": 3,
-          "height": 4.5,
-          "transform": [0, 1, 1, 0, 16.5, 16.5]
         },
         {
           "symbolKey": "stateroom--020--2x3",
@@ -1409,8 +1409,8 @@
           "transform": [-1, 0, 0, 1, 21, 19.5]
         },
         {
-          "symbolKey": "office--023--2x3",
-          "meta": {"key": "office--023--2x3"},
+          "symbolKey": "office--020--2x3",
+          "meta": {"key": "office--020--2x3"},
           "width": 3,
           "height": 4.5,
           "transform": [0, -1, -1, 0, 30, 12]
