@@ -222,7 +222,12 @@ declare namespace Graph {
     meta: Geom.Meta;
   }
 
-  type SymbolGraphJson = GraphJson<SymbolGraphNode, SymbolGraphEdgeOpts>;
+  type SymbolGraphJson = GraphJson<SymbolGraphNode, SymbolGraphEdgeOpts> & {
+    /** e.g. `"20,20"` */
+    size?: string;
+    /** e.g. `"LR"` */
+    rankdir?: string;
+  };
 
   //#endregion
 

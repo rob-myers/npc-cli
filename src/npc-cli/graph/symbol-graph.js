@@ -29,6 +29,8 @@ export class SymbolGraphClass extends BaseGraph {
    */
   json() {
     return {
+      size: "20,20",
+      rankdir: "LR",
       nodes: this.nodesArray.slice(),
       edges: this.edgesArray.map(({ src, dst, transform, meta }) => ({
         src: src.id,
