@@ -14,7 +14,7 @@ import { getAssetQueryParam } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { tmpVec1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
-import { decompToXZGeometry, imageLoader, textureLoader, tmpBufferGeom1 } from "../service/three";
+import { decompToXZGeometry, emptyCanvasTexture, imageLoader, textureLoader, tmpBufferGeom1 } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { TestWorldContext } from "./test-world-context";
@@ -51,7 +51,7 @@ export default function TestWorld(props) {
     gmClass: /** @type {*} */ ({}),
     gms: [],
     hmr: { hash: '', gmHash: '' },
-    obsTex: new THREE.Texture(),
+    obsTex: emptyCanvasTexture,
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
