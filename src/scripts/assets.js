@@ -34,7 +34,7 @@ import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, 
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
-import { runYarnScript, saveCanvasAsFile } from "./service";
+import { labelledSpawn, saveCanvasAsFile } from "./service";
 
 
 const rawOpts = getopts(process.argv, {
@@ -220,10 +220,8 @@ const emptyStringHash = hashText('');
       > (fs.statSync(`${pngPath}.webp`, { throwIfNoEntry: false })?.mtimeMs ?? 0)
     );
   }
-  pngPaths.length && await runYarnScript(
-    'cwebp-fast',
-    JSON.stringify({ files: pngPaths }),
-    '--quality=50',
+  pngPaths.length && await labelledSpawn('cwebp',
+    'yarn', 'cwebp-fast', JSON.stringify({ files: pngPaths }), '--quality=50',
   );
 
   if (opts.prePush) {

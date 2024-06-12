@@ -1,5 +1,5 @@
 import nodemon from 'nodemon';
-import { runYarnScript } from './service';
+import { labelledSpawn } from './service';
 
 /** Is the script currently running? */
 let running = false;
@@ -37,9 +37,8 @@ async function onRestart(nodemonFiles = []) {
   
   const startEpochMs = Date.now();
   const changedFiles = Array.from(changed.keys());
-  await runYarnScript(
-    'assets-fast',
-    `--changedFiles=${JSON.stringify(changedFiles)}`,
+  await labelledSpawn('assets',
+    'yarn', 'assets-fast', `--changedFiles=${JSON.stringify(changedFiles)}`,
   );
   changed.forEach((epochMs, file) =>
     epochMs <= startEpochMs && changed.delete(file)
