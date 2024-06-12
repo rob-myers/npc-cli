@@ -13,7 +13,7 @@ export default function Main(props: React.PropsWithChildren) {
 
   return (
     <section
-      className={cx(mainCss, "prose max-w-screen-lg prose-headings:font-light")}
+      className={cx(sectionMainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
     >
       <header className={mainHeaderCss} data-testid="main-title">
@@ -32,7 +32,7 @@ export default function Main(props: React.PropsWithChildren) {
   );
 }
 
-const mainCss = css`
+const sectionMainCss = css`
   > header, > main {
     background-color: #fff;
   }
@@ -47,6 +47,9 @@ const mainCss = css`
   @media (min-width: ${afterBreakpoint}) {
     width: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+
     > header, > main {
       margin-left: 1rem;
       margin-right: 1rem;
@@ -58,6 +61,7 @@ const mainCss = css`
       min-width: calc(400px + 2 * 2rem);
     }
     > main {
+      flex: 1;
       padding-bottom: 6rem;
       min-width: calc(400px + 2 * 2rem);
     }
