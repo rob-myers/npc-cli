@@ -285,9 +285,13 @@ class GeomorphService {
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     const navDoorways = doors.map((connector) => connector.computeDoorway());
+    /**
+     * Remove doorways from `navPolyWithDoors`, so we can add them back below (normalization).
+     * For hull doors, the connector doorway only contains half the doorway (to avoid overlap),
+     * so we must additionally remove the rest.
+     */
     const navPolySansDoorways = Poly.cutOut([
-      ...navDoorways, // Hull `navDoorways` only include half the door.
-      // We must remove the rest before constructing triangulation
+      ...navDoorways.map(x => x.precision(6)),
       ...doors.flatMap(x => x.meta.hull ? x.poly : []),
     ], navPolyWithDoors).map(x => x.cleanFinalReps());
 

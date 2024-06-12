@@ -178,109 +178,109 @@
         </image>
         <g>
                 <title>symbols</title>
-                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 390.00001162290573, 930.0000277161598)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
+                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 390, 930)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
                         <title>office--026--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, 1, 1, 0, 690.0000205636024, 630.0000187754631)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
+                <use width="120" height="180" transform="matrix(0, 1, 1, 0, 690, 630)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
                         <title>office--026--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, -1, 1, 0, 689.9999595284444, 930.0000277161598)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
+                <use width="120" height="180" transform="matrix(0, -1, 1, 0, 689.9999389648438, 930)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
                         <title>office--026--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, 1, -1, 0, 390.00001162290573, 629.999957740305)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
+                <use width="120" height="180" transform="matrix(0, 1, -1, 0, 390, 629.9999389648438)" style="transform-origin: 60px 90px;" xlink:href="#symbol-0">
                         <title>office--026--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, -1, 1, 0, 390.00001162290573, 390.00001162290573)" style="opacity: 0.8; transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-1">
+                <use width="120" height="180" transform="matrix(0, -1, 1, 0, 390, 390)" style="opacity: 0.8; transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-1">
                         <title>stateroom--020--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 690.0000205636024, 390.00001162290573)" style="opacity: 0.8; transform-origin: 60px 90px;" xlink:href="#symbol-1">
+                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 690, 390)" style="opacity: 0.8; transform-origin: 60px 90px;" xlink:href="#symbol-1">
                         <title>stateroom--020--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, 1, 1, 0, 390.00001162290573, 89.99999505281426)" style="opacity: 0.8; transform-origin: 60px 90px;" xlink:href="#symbol-1">
+                <use width="120" height="180" transform="matrix(0, 1, 1, 0, 390, 89.99999237060547)" style="opacity: 0.8; transform-origin: 60px 90px;" xlink:href="#symbol-1">
                         <title>stateroom--020--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, 1, -1, 0, 30.00011724233974, 329.9998572468712)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-2">
+                <use width="120" height="180" transform="matrix(0, 1, -1, 0, 30.0001163482666, 329.9998474121094)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-2">
                         <title>empty-room--013--2x3 walls=['e']</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 30.00000089406967, 690.0000205636024)" style="transform-origin: 60px 90px;" xlink:href="#symbol-2">
+                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 30, 690)" style="transform-origin: 60px 90px;" xlink:href="#symbol-2">
                         <title>empty-room--013--2x3 walls=[]</title>
                 </use>
-                <use width="120" height="180" transform="matrix(1, 0, 0, 1, 360.00001072883606, 780.0000232458115)" xlink:href="#symbol-3">
+                <use width="120" height="180" transform="matrix(1, 0, 0, 1, 360, 780)" xlink:href="#symbol-3">
                         <title>office--020--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(-1, 0, 0, 1, 840.0000250339508, 780.0000232458115)" style="" xlink:href="#symbol-3">
+                <use width="120" height="180" transform="matrix(-1, 0, 0, 1, 840, 780)" style="" xlink:href="#symbol-3">
                         <title>office--020--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 1050.0001533627546, 330.0001319050825)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-3">
+                <use width="120" height="180" transform="matrix(0, -1, -1, 0, 1050.0001220703125, 330.0001220703125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-3">
                         <title>office--020--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(0, 1, -1, 0, 1050.0001533627546, 689.9998984932863)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-4">
+                <use width="120" height="180" transform="matrix(0, 1, -1, 0, 1050.0001220703125, 689.9998779296875)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-4">
                         <title>office--023--2x3</title>
                 </use>
-                <use width="120" height="120" transform="matrix(0, 1, 1, 0, 540.0000160932541, 120.00000357627869)" style="transform-origin: 60px 60px;" xlink:href="#symbol-5">
+                <use width="120" height="120" transform="matrix(0, 1, 1, 0, 540, 120)" style="transform-origin: 60px 60px;" xlink:href="#symbol-5">
                         <title>fresher--020--2x2</title>
                 </use>
-                <use width="120" height="180" transform="matrix(1, 0, 0, 1, 359.999980211257, 240.00000715255737)" xlink:href="#symbol-6">
+                <use width="120" height="180" transform="matrix(1, 0, 0, 1, 359.9999694824219, 240)" xlink:href="#symbol-6">
                         <title>stateroom--018--2x3</title>
                 </use>
-                <use width="120" height="180" transform="matrix(-1, 0, 0, 1, 840.0000250339508, 239.99999189376786)" style="" xlink:href="#symbol-6">
+                <use width="120" height="180" transform="matrix(-1, 0, 0, 1, 840, 239.99998474121094)" style="" xlink:href="#symbol-6">
                         <title>stateroom--018--2x3</title>
                 </use>
-                <use width="180" height="120" transform="matrix(0, -1, 1, 0, 810.0000241398811, 389.9999811053267)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-7">
+                <use width="180" height="120" transform="matrix(0, -1, 1, 0, 810, 389.9999694824219)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-7">
                         <title>fresher--025--3x2</title>
                 </use>
-                <use width="180" height="120" transform="matrix(0, 1, 1, 0, 809.9999631047231, 690.0000205636024)" style="transform-origin: 90px 60px;" xlink:href="#symbol-7">
+                <use width="180" height="120" transform="matrix(0, 1, 1, 0, 809.9999389648438, 690)" style="transform-origin: 90px 60px;" xlink:href="#symbol-7">
                         <title>fresher--025--3x2</title>
                 </use>
-                <use width="180" height="240" transform="matrix(1, 0, 0, 1, 1019.9999693632108, 479.9999837875357)" xlink:href="#symbol-8">
+                <use width="180" height="240" transform="matrix(1, 0, 0, 1, 1019.9999389648438, 479.9999694824219)" xlink:href="#symbol-8">
                         <title>office--061--3x4</title>
                 </use>
-                <use width="180" height="120" transform="matrix(0, 1, -1, 0, 209.99999099969818, 689.9999595284444)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-9">
+                <use width="180" height="120" transform="matrix(0, 1, -1, 0, 209.99998474121094, 689.9999389648438)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-9">
                         <title>medical--007--3x2 doors=['w']</title>
                 </use>
-                <use width="180" height="240" transform="matrix(1, 0, 0, 1, -0.0000036429558980420327, 480.00001430511475)" xlink:href="#symbol-10">
+                <use width="180" height="240" transform="matrix(1, 0, 0, 1, -0.0000036429562442208407, 480)" xlink:href="#symbol-10">
                         <title>empty-room--039--3x4 doors=['e'] walls=[]</title>
                 </use>
-                <use width="180" height="120" transform="matrix(0, -1, -1, 0, 209.99999099969818, 390.00001162290573)" style="transform-origin: 90px 60px;" xlink:href="#symbol-11">
+                <use width="180" height="120" transform="matrix(0, -1, -1, 0, 209.99998474121094, 390)" style="transform-origin: 90px 60px;" xlink:href="#symbol-11">
                         <title>medical--008--3x2 doors=['w']</title>
                 </use>
-                <use width="120" height="240" transform="matrix(1, 0, 0, 1, 0.000003535774, 480.000014305115)" xlink:href="#symbol-12">
+                <use width="120" height="240" transform="matrix(1, 0, 0, 1, 0.00000353577433997998, 480)" xlink:href="#symbol-12">
                         <title>lifeboat--small-craft--2x4</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 0.000009032068, -0.000007538343)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 0.000009032069101522211, -0.00000753834410716081)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=0.9 wallsH=1</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 359.999980211257, -3.20809e-7)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 359.9999694824219, -3.2080902201414574e-7)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.8</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 600.000017881393, -1.5789e-8)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 600, -1.5789000329391456e-8)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.8</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 960.00002861023, 1.24195e-7)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 960, 1.24195011608208e-7)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.8</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 359.999949693678, 1079.999910116192)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 359.99993896484375, 1079.9998779296875)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.8</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 599.999956846235, 1079.999910116192)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 599.9999389648438, 1079.9998779296875)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.8</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 960.00002861023, 1079.999910116192)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 960, 1079.9998779296875)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.8</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 0.000001000253, 1080.000032186508)" xlink:href="#symbol-13">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 0.000001000253064376011, 1080)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.8</title>
                 </use>
-                <use width="120" height="240" transform="matrix(0, -1, 1, 0, 60.000005602837, 60.000001788139)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-14">
+                <use width="120" height="240" transform="matrix(0, -1, 1, 0, 60.000003814697266, 60)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-14">
                         <title>machinery--158--1.8x3.6 y=1</title>
                 </use>
-                <use width="120" height="240" transform="matrix(0, -1, 1, 0, 59.999994158745, 900.000087857248)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-15">
+                <use width="120" height="240" transform="matrix(0, -1, 1, 0, 59.99999237060547, 900.0000610351562)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-15">
                         <title>machinery--156--2x4 y=1</title>
                 </use>
-                <use width="120" height="240" transform="matrix(0, -1, 1, 0, 1020.000030398369, 60.000005602837)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-16">
+                <use width="120" height="240" transform="matrix(0, -1, 1, 0, 1020, 60.000003814697266)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-16">
                         <title>machinery--155--1.8x3.6 y=1</title>
                 </use>
-                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 960.00002861023, 960.00002861023)" xlink:href="#symbol-17">
+                <use width="240" height="120" transform="matrix(1, 0, 0, 1, 960, 960)" xlink:href="#symbol-17">
                         <title>machinery--357--4x2 y=1</title>
                 </use>
         </g>
@@ -305,52 +305,28 @@
         <rect x="900" y="230" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);">
                 <title>decor go label=corridor</title>
         </rect>
-        <rect x="-4" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="-4" y="249.999996" width="8" height="99.999998" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull w</title>
         </rect>
-        <rect x="-4" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="-4" y="850" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull w</title>
         </rect>
-        <rect x="-4" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull w</title>
-        </rect>
-        <rect x="-4" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull w</title>
-        </rect>
-        <rect x="1196" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="1196" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull e</title>
         </rect>
-        <rect x="1196" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="1196" y="850" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull e</title>
         </rect>
-        <rect x="1196" y="850" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull e</title>
-        </rect>
-        <rect x="1196" y="910" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull e</title>
-        </rect>
-        <rect x="250" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="250" y="-4" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull n</title>
         </rect>
-        <rect x="310" y="-4" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="850" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
                 <title>door hull n</title>
         </rect>
-        <rect x="850" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
-                <title>door hull n</title>
-        </rect>
-        <rect x="910" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
-                <title>door hull n</title>
-        </rect>
-        <rect x="250" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="250" y="1196" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull s</title>
         </rect>
-        <rect x="310" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull s</title>
-        </rect>
-        <rect x="850" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull s</title>
-        </rect>
-        <rect x="910" y="1196" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+        <rect x="850" y="1196" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull s</title>
         </rect>
         <rect x="186.5" y="356.8" width="46" height="6" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;">
