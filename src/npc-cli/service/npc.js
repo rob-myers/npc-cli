@@ -14,6 +14,7 @@ export const npcService = {
   fromNpcClassKey: {
     'minecraft-alex-with-arms.png': true,
     'minecraft-ari.png': true,
+    'minecraft-borders.128x128.png': true,
     'minecraft-efe-with-arms.png': true,
     'minecraft-kai.png': true,
     'minecraft-makena-with-arms.png': true,
