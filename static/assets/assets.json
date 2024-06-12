@@ -128,9 +128,9 @@
       "obsHashes": [997944906]
     },
     "extra--003--chair--0.25x0.25": {
-      "outputHash": -1110843570,
+      "outputHash": 131514213,
       "pngHash": -1668511435,
-      "obsHashes": [-814991436]
+      "obsHashes": [-1328450793]
     },
     "extra--004--desk--0.5x1": {
       "outputHash": -1005455217,
@@ -976,7 +976,7 @@
         "height": 52,
         "symbolKey": "extra--003--chair--0.25x0.25",
         "obstacleId": 0,
-        "type": "obstacle"
+        "type": "chair"
       },
       "counter--010--0.4x0.4 0": {
         "x": 604,
@@ -6724,6 +6724,7 @@
           ],
           "meta": {
             "obstacle": true,
+            "chair": true,
             "symKey": "extra--003--chair--0.25x0.25",
             "obsId": 0
           }

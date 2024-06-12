@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 1133477536 -393981876",
+  "hash": "610044716 -1448790119 -575843194",
   "mapsHash": 610044716,
-  "layoutsHash": 1133477536,
-  "sheetsHash": -393981876,
+  "layoutsHash": -1448790119,
+  "sheetsHash": -575843194,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -2107,6 +2107,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -2269,6 +2270,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -2431,6 +2433,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -2754,6 +2757,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -2784,6 +2788,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -2994,6 +2999,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -3134,6 +3140,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -3667,6 +3674,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -9871,6 +9879,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -9919,6 +9928,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -9967,6 +9977,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10015,6 +10026,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10063,6 +10075,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10111,6 +10124,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10159,6 +10173,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10835,6 +10850,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10865,6 +10881,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10895,6 +10912,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -10925,6 +10943,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -11057,6 +11076,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -11087,6 +11107,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -11117,6 +11138,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -11147,6 +11169,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -17038,6 +17061,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -17068,6 +17092,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -23800,6 +23825,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -23921,6 +23947,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -24042,6 +24069,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -24163,6 +24191,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "chair": true,
               "symKey": "extra--003--chair--0.25x0.25",
               "obsId": 0
             }
@@ -27592,7 +27621,7 @@
         "height": 52,
         "symbolKey": "extra--003--chair--0.25x0.25",
         "obstacleId": 0,
-        "type": "obstacle"
+        "type": "chair"
       },
       "counter--010--0.4x0.4 0": {
         "x": 604,
