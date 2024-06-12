@@ -27,6 +27,12 @@ export const obstacleOutset = 10 * worldScale;
 
 export const wallHeight = 2;
 
+/** Depth of doorway along line walking through hull door */
+export const hullDoorDepth = 8 * worldScale;
+
+/** Depth of doorway along line walking through hull door */
+export const doorDepth = (20 / 5) * worldScale;
+
 /**
  * Properties of exported GLB file.
  */

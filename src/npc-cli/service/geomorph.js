@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { worldScale, precision, wallOutset, obstacleOutset } from "./const";
+import { worldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -1181,8 +1181,7 @@ export class Connector {
   /** @returns {Geom.Poly} */
   computeDoorway() {
     const width = this.baseRect.width;
-    // 🚧 clarify hull-wall vs wall width
-    const height = (this.meta.hull ? 8 : 20/5) * worldScale;
+    const height = this.meta.hull ? hullDoorDepth : doorDepth;
     const hNormal = this.normal;
     const wNormal = tmpVect1.set(this.normal.y, -this.normal.x);
 
