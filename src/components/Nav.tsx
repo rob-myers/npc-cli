@@ -13,7 +13,7 @@ export default function Nav() {
 
   const state = useStateRef(() => ({
     onClickSidebar(e: React.MouseEvent) {
-      // console.log(e.target)
+      console.log(e.target)
       const el = e.target as HTMLElement;
       if (
         // outside buttons
@@ -137,6 +137,7 @@ const navTitleCss = css`
     margin-left: 0.75rem;
 
     .${menuClasses.button} {
+      pointer-events: none; // ignore clicks outside <a>
       height: ${view.barSize};
     }
     
@@ -144,6 +145,7 @@ const navTitleCss = css`
       text-transform: capitalize;
       letter-spacing: 0.5rem;
       a {
+        pointer-events: all;
         color: #ddd;
       }
       @media (max-width: ${breakpoint}) {
