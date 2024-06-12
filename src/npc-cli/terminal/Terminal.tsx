@@ -136,9 +136,9 @@ export default function Terminal(props: Props) {
 
       state.session.ttyShell.initialise(state.xterm).then(async () => {
         await props.onReady?.(state.session);
-        await state.session.ttyShell.runProfile();
         state.ready = true;
         update();
+        await state.session.ttyShell.runProfile();
       });
     }
   }, [props.disabled, state.ready]);
