@@ -1,3 +1,6 @@
+/**
+ * Also used by web worker.
+ */
 import React from "react";
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
@@ -175,5 +178,3 @@ export const yAxis = new THREE.Vector3(0, 1, 0);
 export const emptyGroup = new THREE.Group();
 
 export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
-
-export const emptyCanvasTexture = new THREE.CanvasTexture(document.createElement('canvas'));

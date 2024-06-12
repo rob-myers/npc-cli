@@ -263,8 +263,10 @@ export default function TestSurfaces(props) {
       ref={instances => instances && (state.obsInst = instances)}
       args={[quadGeometryXZ, undefined, api.derived.obstaclesCount]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
+      {...api.obsTex && {
+        onPointerUp: state.onPointerUp,
+        onPointerDown: state.onPointerDown,
+      }}
       position={[0, 0.001, 0]}
     >
       <obstacleShaderMaterial
