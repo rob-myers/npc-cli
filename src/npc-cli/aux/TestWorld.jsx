@@ -126,7 +126,8 @@ export default function TestWorld(props) {
       state.reqAnimId = requestAnimationFrame(state.onTick);
       state.timer.update();
       const deltaMs = state.timer.getDelta();
-      state.crowd.update(1 / 60, deltaMs);
+      // state.crowd.update(1 / 60, deltaMs);
+      state.crowd.update(deltaMs);
       state.npc.onTick(deltaMs);
       state.vert.onTick();
       // info(state.r3f.gl.info.render);

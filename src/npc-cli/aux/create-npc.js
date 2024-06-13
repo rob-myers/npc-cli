@@ -145,6 +145,7 @@ export class Npc {
     } else {
       // Moving or stationary with agent
       const position = tmpVectThree1.copy(this.agent.position());
+      // const position = tmpVectThree1.copy(this.agent.interpolatedPosition);
       const velocity = tmpVectThree2.copy(this.agent.velocity());
       const forward = tmpVectThree3.copy(position).add(velocity);
       const speed = velocity.length();
