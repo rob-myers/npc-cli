@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 import { dampLookAt } from "maath/easing";
 
-import { glbMeta } from '../service/const';
+import { defaultNpcClassKey, glbFadeIn, glbFadeOut, glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3, yAxis } from '../service/three';
 import { npcService } from '../service/npc';
@@ -18,28 +18,6 @@ export class Npc {
   map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
   animMap = /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({});
   mixer = emptyAnimationMixer;
-  /**
-   * Fade out previous animation (seconds)
-   * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
-   */
-  fadeOut = {
-    Idle: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleLeftLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleRightLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.2, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
-    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
-  };
-  /**
-   * Fade in next animation (seconds).
-   * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
-   */
-  fadeIn = {
-    Idle: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleLeftLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
-    IdleRightLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.1, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
-    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
-  };
 
   /** State */
   s = {
@@ -95,9 +73,12 @@ export class Npc {
   /** @param {NPC.NpcClassKey} npcClassKey */
   changeClass(npcClassKey) {
     this.def.classKey = npcClassKey;
-    this.changeSkin(npcClassKey); // 🚧 should be sync
+    this.changeSkin(npcClassKey);
   }
-  /** @param {NPC.NpcClassKey} skinKey  */
+  /**
+   * 🚧 remove async once skin sprite-sheet available
+   * @param {NPC.NpcClassKey} skinKey
+   */
   async changeSkin(skinKey) {
     const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.map.nodes[glbMeta.skinnedMeshName]);
     const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
@@ -105,7 +86,6 @@ export class Npc {
     // clonedMaterial.emissive = new THREE.Color('#222'); // lighten (add)
     // clonedMaterial.emissiveIntensity = 3;
     await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
-      // console.log(material.map, tex);
       tex.flipY = false;
       tex.wrapS = tex.wrapT = 1000;
       tex.colorSpace = "srgb";
@@ -152,7 +132,8 @@ export class Npc {
     const skinnedMesh = this.map.nodes[glbMeta.skinnedMeshName];
     skinnedMesh.userData.npcKey = this.key;
 
-    this.changeSkin('scientist-dabeyt--with-arms.png');
+    // this.changeSkin('scientist-dabeyt--with-arms.png');
+    this.changeSkin(this.def.classKey);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
   /** @param {number} deltaMs  */
@@ -214,8 +195,8 @@ export class Npc {
   startAnimation(act) {
     const anim = this.animMap[this.s.act];
     const next = this.animMap[act];
-    anim.fadeOut(this.fadeOut[this.s.act][act]);
-    next.reset().fadeIn(this.fadeIn[this.s.act][act]).play();
+    anim.fadeOut(glbFadeOut[this.s.act][act]);
+    next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
     this.s.act = act;
   }
   /** @param {THREE.Vector3Like} dst  */
@@ -252,11 +233,8 @@ export class Npc {
   toJSON() {
     return {
       key: this.key,
-      // api: this.api,
       def: this.def,
       epochMs: this.epochMs,
-      // group: this.group,
-      // map: this.map,
       s: this.s,
     };
   }
@@ -269,10 +247,8 @@ export class Npc {
  */
 export function hotModuleReloadNpc(npc) {
   const { def, epochMs, group, s, map, animMap, mixer, agent } = npc;
-  agent && agent.updateParameters({
-    ...crowdAgentParams,
-    maxSpeed: agent.maxSpeed,
-  });
+  agent?.updateParameters({ maxSpeed: agent.maxSpeed });
+  // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
   const nextNpc = new Npc(def, npc.api);
   return Object.assign(nextNpc, { epochMs, group, s: Object.assign(nextNpc.s, s), map, animMap, mixer, agent });
 }

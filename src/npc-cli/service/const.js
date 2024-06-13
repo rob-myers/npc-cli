@@ -64,3 +64,27 @@ export const glbMeta = /** @type {const} */ ({
 
 /** @type {NPC.NpcClassKey} */
 export const defaultNpcClassKey = 'scientist-dabeyt--with-arms.png';
+
+/**
+ * Fade out previous animation (seconds)
+ * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
+ */
+export const glbFadeOut = {
+    Idle: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    IdleLeftLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    IdleRightLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.2, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
+    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
+};
+
+/**
+ * Fade in next animation (seconds).
+ * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
+ */
+ export const glbFadeIn = {
+    Idle: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
+    IdleLeftLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
+    IdleRightLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.1, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
+    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
+};
