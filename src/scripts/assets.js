@@ -12,8 +12,10 @@
  * - assets.json
  * - geomorphs.json
  * - floor images (one per gmKey)
+ *   - 🚧 compute in browser instead?
  * - obstacles sprite-sheet
- * - webp
+ * - 🚧 decor sprite-sheet
+ * - webp from png
  */
 /// <reference path="./deps.d.ts"/>
 
@@ -36,7 +38,6 @@ import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
 import { labelledSpawn, saveCanvasAsFile } from "./service";
 
-
 const rawOpts = getopts(process.argv, {
   boolean: ['all', 'prePush'],
   string: ['changedFiles'],
@@ -52,18 +53,30 @@ const imgOpts = {
 
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+const assetsScriptFilepath = __filename;
+const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
+
+/** @type {string[]} */
+const changedFiles = rawOpts.changedFiles ? JSON.parse(rawOpts.changedFiles) : [];
 
 const opts = {
   /**
-   * Efficiently update assets iff `false` i.e.
-   * - option `--all` is false.
-   * - file `assets.json` exists.
+   * Try to update efficiently iff this is `false` i.e.
+   * - option `--all` is false
+   * - assets.json exists
+   * - neither this script nor geomorphs.js are in `changedFiles`
    */
-  all: Boolean(rawOpts.all) || !fs.existsSync(assetsFilepath),
+  all: (
+    Boolean(rawOpts.all)
+    || !fs.existsSync(assetsFilepath)
+    || changedFiles.includes(assetsScriptFilepath)
+    || changedFiles.includes(geomorphServicePath)
+  ),
   /**
-   * @type {string[]}
+   * When non-empty,
+   * files changed within {ms} @see assets-nodemon.js
    */
-  changedFiles: rawOpts.changedFiles ? JSON.parse(rawOpts.changedFiles) : [],
+  changedFiles,
   /**
    * When about to push:
    * - ensure every webp.
@@ -80,8 +93,6 @@ const symbolsDir = path.resolve(mediaDir, "symbol");
 const assets2dDir = path.resolve(staticAssetsDir, "2d");
 const graphDir = path.resolve(mediaDir, "graph");
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
-const assetsScriptFilepath = __filename;
-const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
 const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
 const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
 const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
@@ -102,13 +113,7 @@ const emptyStringHash = hashText('');
   
   let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
 
-  // While watching, update everything if this script or `geomorphService` just changed
-  const updateAllSymbols = opts.all || [
-    assetsScriptFilepath,
-    geomorphServicePath,
-  ].some(x => opts.changedFiles.includes(x));
-
-  if (updateAllSymbols) {
+  if (opts.all) {
     info(`updating all symbols`);
   } else {// Avoid re-computing
     const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets);
@@ -126,7 +131,8 @@ const emptyStringHash = hashText('');
    */
   parseSymbols(assetsJson, svgSymbolFilenames);
   parseMaps(assetsJson);
-  createSheetJson(assetsJson);
+  createObstaclesSheet(assetsJson);
+  // 🚧 createDecorSheetJson
 
   const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
     key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash
@@ -196,6 +202,9 @@ const emptyStringHash = hashText('');
    * Draw obstacles sprite-sheet
    */
   await drawObstaclesSheet(assets, geomorphs, prevAssets);
+  /**
+   * 🚧 Draw decor sprite-sheet
+   */
 
   /**
    * Tell the browser we're ready.
@@ -350,7 +359,7 @@ async function drawFloorImages(geomorphs, gmKeys) {
 /**
  * @param {Geomorph.AssetsJson} assets 
  */
-function createSheetJson(assets) {
+function createObstaclesSheet(assets) {
 
   const rectsToPackLookup = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, import("maxrects-packer").Rectangle>} */ ({});
 
@@ -407,7 +416,7 @@ function createSheetJson(assets) {
     }
   });
 
-  assets.sheet = json;
+  assets.sheet = { ...assets.sheet, ...json };
 }
 
 /**
