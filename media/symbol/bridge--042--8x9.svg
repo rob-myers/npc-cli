@@ -107,7 +107,7 @@
         <rect x="1187.525024" y="750.799988" width="24" height="230" style="stroke: rgb(0, 0, 0); stroke-width: 4px; fill-opacity: 0.5; fill: rgb(255, 255, 255);" transform="matrix(0, -1, 1, 0, 484.200012207031, 2101.524902343756)">
                 <title>door iris</title>
         </rect>
-        <path d="M 56 863 L 569 869 L 572 640 L 316 389 L 175.4 600 L 56 863 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
+        <path d="M 49.152699 869.450125 L 571 869 L 572 640 L 314.236542 380.678385 L 218.584066 501.742031 L 154.668658 600 L 95.557707 726.04896 L 49.152699 869.450125 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
                 <title>obstacle cpu y=1.5</title>
         </path>
         <path d="M 2354 869 L 2242.2 617.3 L 2088 388 L 1829 644 L 1831 870 L 2354 869 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
