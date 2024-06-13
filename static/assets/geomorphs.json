@@ -26232,6 +26232,7 @@
       }
     },
     "obstaclesHeight": 2331,
-    "obstaclesWidth": 2125
+    "obstaclesWidth": 2125,
+    "decor": {}
   }
 }
