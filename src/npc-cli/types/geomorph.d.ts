@@ -6,7 +6,7 @@ declare namespace Geomorph {
   > {
     symbols: Record<Geomorph.SymbolKey, Geomorph.SymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
-    sheet: SpriteSheet;
+    sheet: ObstaclesSheet;
     /** `metaKey` is a `Geomorph.SymbolKey` or a mapKey e.g. `demo-map-1` */
     meta: { [metaKey: string]: {
       /** Hash of parsed symbol */
@@ -271,23 +271,44 @@ declare namespace Geomorph {
    */
   type SymbolKey = import('../service/geomorph').SymbolKey;
 
-  interface SpriteSheet {
+  /**
+   * Sprite-sheet for obstacles.
+   * This is `assets.sheet`, which permits us to compare `prevAsset.sheet`
+   * so we can efficiently draw only what has changed.
+   */
+  interface ObstaclesSheet {
     /**
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
-    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, SymbolObstacle>;
+    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, ObstaclesSheetRect>;
     obstaclesWidth: number;
     obstaclesHeight: number;
   }
 
-  interface SymbolObstacle extends SymbolObstacleContext, Geom.RectJson {};
+  interface ObstaclesSheetRect extends ObstaclesSheetRectCtxt, Geom.RectJson {
+    // NOOP
+  }
 
-  interface SymbolObstacleContext {
+  interface ObstaclesSheetRectCtxt {
     symbolKey: Geomorph.SymbolKey;
     obstacleId: number;
     /** e.g. `chair` */
     type: string;
+  }
+
+  /**
+   * This is `geomorphs.sheet` i.e. all the sprite-sheet metadata.
+   */
+  interface SpriteSheet extends ObstaclesSheet {
+    decor: {
+      [decorKey: string]: DecorSheetRect
+    };
+  }
+
+  interface DecorSheetRect extends Geom.RectJson {
+    /** filename inside `media/decor` */
+    decorKey: string;
   }
 
 }

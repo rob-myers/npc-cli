@@ -92,6 +92,7 @@ const mapsDir = path.resolve(mediaDir, "map");
 const symbolsDir = path.resolve(mediaDir, "symbol");
 const assets2dDir = path.resolve(staticAssetsDir, "2d");
 const graphDir = path.resolve(mediaDir, "graph");
+const decorDir = path.resolve(mediaDir, "decor");
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
 const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
@@ -132,7 +133,7 @@ const emptyStringHash = hashText('');
   parseSymbols(assetsJson, svgSymbolFilenames);
   parseMaps(assetsJson);
   createObstaclesSheet(assetsJson);
-  // 🚧 createDecorSheetJson
+  // ℹ️ other sprite-sheets are generated/drawn later
 
   const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
     key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash
@@ -188,7 +189,7 @@ const emptyStringHash = hashText('');
     sheetsHash,
     map: assetsJson.maps,
     layout,
-    sheet: assetsJson.sheet,
+    sheet: { ...assetsJson.sheet, decor: {} },
   };
 
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
@@ -203,8 +204,9 @@ const emptyStringHash = hashText('');
    */
   await drawObstaclesSheet(assets, geomorphs, prevAssets);
   /**
-   * 🚧 Draw decor sprite-sheet
+   * 🚧 Create and draw decor sprite-sheet
    */
+  await createDrawDecorSheet(geomorphs);
 
   /**
    * Tell the browser we're ready.
@@ -357,11 +359,11 @@ async function drawFloorImages(geomorphs, gmKeys) {
 }
 
 /**
- * @param {Geomorph.AssetsJson} assets 
+ * @param {Geomorph.AssetsJson} assets
  */
 function createObstaclesSheet(assets) {
 
-  const rectsToPackLookup = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, import("maxrects-packer").Rectangle>} */ ({});
+  const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, Rectangle>} */ ({});
 
   // Each symbol obstacle induces a packed rect
   for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
@@ -373,10 +375,10 @@ function createObstaclesSheet(assets) {
       const [width, height] = [rect.width, rect.height]
       
       const r = new Rectangle(width, height);
-      /** @type {Geomorph.SymbolObstacleContext} */
+      /** @type {Geomorph.ObstaclesSheetRectCtxt} */
       const rectData = { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) };
       r.data = rectData;
-      rectsToPackLookup[`${symbolKey} ${obstacleId}`] = r;
+      obstacleKeyToRect[`${symbolKey} ${obstacleId}`] = r;
       // info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
     }
   }
@@ -386,7 +388,7 @@ function createObstaclesSheet(assets) {
     border: imgOpts.packedPadding,
     // smart: false,
   });
-  const rectsToPack = Object.values(rectsToPackLookup);
+  const rectsToPack = Object.values(obstacleKeyToRect);
   packer.addArray(rectsToPack);
   const { bins } = packer;
 
@@ -399,12 +401,12 @@ function createObstaclesSheet(assets) {
 
   const bin = bins[0];
   
-  /** @type {Geomorph.SpriteSheet} */
+  /** @type {Geomorph.ObstaclesSheet} */
   const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
   // ℹ️ can try forcing 4096 x 4096 to debug sprite-sheet hmr
   // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
   bin.rects.forEach(r => {
-    const { symbolKey, obstacleId, type } = /** @type {Geomorph.SymbolObstacleContext} */ (r.data);
+    const { symbolKey, obstacleId, type } = /** @type {Geomorph.ObstaclesSheetRectCtxt} */ (r.data);
     json.obstacle[`${symbolKey} ${obstacleId}`] = {
       x: toPrecision(r.x),
       y: toPrecision(r.y),
@@ -417,6 +419,26 @@ function createObstaclesSheet(assets) {
   });
 
   assets.sheet = { ...assets.sheet, ...json };
+}
+
+/**
+ * @param {Geomorph.Geomorphs} geomorphs
+ */
+async function createDrawDecorSheet(geomorphs) {
+
+  const baseNameToRect = /** @type {Record<string, Rectangle>} */ ({});
+  const pngFilenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".png"));
+
+  for (const pngFilename of pngFilenames) {
+    const tags = pngFilename.split('-').slice(0, -1); // ignore e.g. `001.png`
+    const meta = tags.reduce((agg, tag) => { agg[tag] = true; return agg; }, /** @type {Geom.Meta} */ ({}));
+    meta.key = pngFilename;
+
+    // 🚧
+    // const img = await loadImage(path.resolve(decorDir, pngFilename));
+  }
+
+
 }
 
 /**
@@ -484,7 +506,7 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
 
 /**
  * Uses special hashes constructed in `assets.meta`.
- * @param {Geomorph.SymbolObstacle[]} obstacles
+ * @param {Geomorph.ObstaclesSheetRect[]} obstacles
  * @param {Geomorph.Assets} assets
  * @param {Geomorph.AssetsJson | null} prevAssets
  * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
