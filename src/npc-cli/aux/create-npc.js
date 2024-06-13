@@ -101,6 +101,9 @@ export class Npc {
   async changeSkin(skinKey) {
     const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.map.nodes[glbMeta.skinnedMeshName]);
     const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
+    // clonedMaterial.color = new THREE.Color('#aaa'); // darken (multiply)
+    // clonedMaterial.emissive = new THREE.Color('#222'); // lighten (add)
+    // clonedMaterial.emissiveIntensity = 3;
     await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
       // console.log(material.map, tex);
       tex.flipY = false;
@@ -150,7 +153,6 @@ export class Npc {
     skinnedMesh.userData.npcKey = this.key;
 
     this.changeSkin('scientist-dabeyt--with-arms.png');
-    // this.changeSkin('minecraft-borders.128x128.png');
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
   /** @param {number} deltaMs  */

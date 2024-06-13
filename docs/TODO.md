@@ -10,6 +10,7 @@
 
 - ✅ assets-nodemon.js avoids invoking `yarn`
 - ✅ change hull doors back to original size
+- ❌ turn down gl.toneMappingExposure, try brightening skin texture directly
 
 - 🚧 create decor spritesheet
   - ℹ️ media/decor/* -> static/assets/decor.{png,webp}

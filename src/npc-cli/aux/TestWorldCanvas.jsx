@@ -213,7 +213,8 @@ export default function TestWorldCanvas(props) {
       className={canvasCss}
       frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
-      gl={{ toneMapping: 4, toneMappingExposure: 3, logarithmicDepthBuffer: true }}
+      // gl={{ toneMapping: 4, toneMappingExposure: 3, logarithmicDepthBuffer: true }}
+      gl={{ toneMapping: 3, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
       onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}
       onPointerMissed={state.onPointerMissed}
