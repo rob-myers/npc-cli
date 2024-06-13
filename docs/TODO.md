@@ -10,7 +10,10 @@
 
 - ✅ assets-nodemon.js avoids invoking `yarn`
 - ✅ change hull doors back to original size
+
 - ❌ turn down gl.toneMappingExposure, try brightening skin texture directly
+- ✅ try 50% thinner arms/legs
+- rebuild animation actions `IdleLeftLead`, `IdleRightLead` (somehow got lost)
 
 - 🚧 create decor spritesheet
   - ℹ️ media/decor/* -> static/assets/decor.{png,webp}

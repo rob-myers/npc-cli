@@ -183,10 +183,10 @@ export class Npc {
         this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
         const time = this.mixer.time % 1;
 
-        // this.startAnimation('Idle');
-        this.startAnimation(// 🚧 WIP
-          time >= 7/8 ? 'Idle' : time >= 5/8 ? 'IdleRightLead' : time >= 3/8 ? 'Idle' : 'IdleLeftLead'
-        );
+        this.startAnimation('Idle');
+        // this.startAnimation(// 🚧 WIP
+        //   time >= 7/8 ? 'Idle' : time >= 5/8 ? 'IdleRightLead' : time >= 3/8 ? 'Idle' : 'IdleLeftLead'
+        // );
 
         // keep target, so "moves out of the way"
         this.agent.teleport(position); // suppress final movement
