@@ -1,5 +1,6 @@
 import nodemon from 'nodemon';
 import { labelledSpawn } from './service';
+import { info } from '../npc-cli/service/generic';
 
 /** Is the script currently running? */
 let running = false;
@@ -21,6 +22,8 @@ nodemon({
   ],
 }).on('restart', onRestart).on('quit', onQuit);
 
+info('watching assets...');
+
 /**
  * @param {string[]} [nodemonFiles] 
  */
@@ -40,6 +43,8 @@ async function onRestart(nodemonFiles = []) {
   await labelledSpawn('assets',
     'sucrase-node', 'src/scripts/assets', `--changedFiles=${JSON.stringify(changedFiles)}`,
   );
+  const seconds = ((Date.now() - startEpochMs) / 1000).toFixed(1);
+  info(`took ${seconds}s`);
   changed.forEach((epochMs, file) =>
     epochMs <= startEpochMs && changed.delete(file)
   );

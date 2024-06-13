@@ -28,7 +28,7 @@
     "cwebp-fast": "sucrase-node src/scripts/cwebp",
     "get-pngs": "npm run ts-script src/scripts/get-pngs",
     "get-pngs-fast": "sucrase-node src/scripts/get-pngs",
-    "watch-assets": "echo 'ℹ️  watching assets...' && sucrase-node src/scripts/assets-nodemon.js",
+    "watch-assets": "sucrase-node src/scripts/assets-nodemon.js",
     "ws-server": "sucrase-node src/scripts/ws-server.js",
     "pre-push": "npm run assets-fast -- --prePush"
   },
