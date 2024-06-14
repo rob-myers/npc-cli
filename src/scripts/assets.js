@@ -116,7 +116,7 @@ const emptyStringHash = hashText('');
     maps: {},
   };
   
-  let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg"));
+  let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg")).sort();
 
   if (opts.all) {
     info(`updating all symbols`);
