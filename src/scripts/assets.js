@@ -95,6 +95,7 @@ const graphDir = path.resolve(mediaDir, "graph");
 const decorDir = path.resolve(mediaDir, "decor");
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
+const decorPngPath = path.resolve(assets2dDir, `decor.png`);
 const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
 const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const worldToSgu = 1 / worldScale;
@@ -193,7 +194,7 @@ const emptyStringHash = hashText('');
     sheetsHash,
     map: assetsJson.maps,
     layout,
-    sheet: { ...assetsJson.sheet, decor: {} },
+    sheet: assetsJson.sheet,
   };
 
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
@@ -208,9 +209,9 @@ const emptyStringHash = hashText('');
    */
   await drawObstaclesSheet(assets, geomorphs, prevAssets);
   /**
-   * 🚧 Draw decor sprite-sheet
+   * Draw decor sprite-sheet
    */
-  await drawDecorSheet(assets, geomorphs, prevAssets);
+  await drawDecorSheet(geomorphs, { assets, prevAssets, fileKeyToImage: decorImgLookup });
 
   /**
    * Tell the browser we're ready.
@@ -224,10 +225,12 @@ const emptyStringHash = hashText('');
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
 
-  /**
-   * Convert PNGs to WEBP for production.
-   */
-  let pngPaths = geomorphService.gmKeys.map(getFloorPngPath).concat(obstaclesPngPath);
+  /** Convert PNGs to WEBP for production. */
+  let pngPaths = [
+    ...geomorphService.gmKeys.map(getFloorPngPath), // 🚧 remove
+    obstaclesPngPath,
+    decorPngPath,
+  ];
   if (!opts.prePush) {
     // Only convert PNG if (i) lacks a WEBP, or (ii) has an "older one"
     pngPaths = pngPaths.filter(pngPath =>
@@ -461,8 +464,7 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   
   const { obstacle, obstacleDim } = geomorphs.sheet;
   const obstacles = Object.values(obstacle);
-  const canvas = createCanvas(obstacleDim.width, obstacleDim.height);
-  const ct = canvas.getContext('2d');
+  const ct = createCanvas(obstacleDim.width, obstacleDim.height).getContext('2d');
 
   // 🚧 redraw all obstacles when:
   // - opts.all ✅ (prevAssets necessarily `null`)
@@ -476,7 +478,7 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
     return false;
   }
 
-  for (const { x, y, width, height, symbolKey, obstacleId } of Object.values(obstacle)) {
+  for (const { x, y, width, height, symbolKey, obstacleId } of obstacles) {
     if (assets.meta[symbolKey].pngHash !== emptyStringHash) {
       const symbol = assets.symbols[symbolKey];
       const scale = (1 / worldScale) * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
@@ -510,18 +512,30 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
     }
   }
 
-  await saveCanvasAsFile(canvas, obstaclesPngPath);
+  await saveCanvasAsFile(ct.canvas, obstaclesPngPath);
   return true;
 }
 
 /**
- * @param {Geomorph.Assets} assets
  * @param {Geomorph.Geomorphs} geomorphs
- * @param {Geomorph.AssetsJson | null} prevAssets
+ * @param {object} context
+ * @param {Geomorph.Assets} context.assets
+ * @param {Geomorph.AssetsJson | null} context.prevAssets
+ * @param {Record<string, import('canvas').Image>} context.fileKeyToImage
  * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
  */
-async function drawDecorSheet(assets, geomorphs, prevAssets) {
-  // 🚧
+async function drawDecorSheet(geomorphs, { assets, prevAssets, fileKeyToImage }) {
+  const { decor, decorDim } = geomorphs.sheet;
+  const decors = Object.values(decor);
+  const ct = createCanvas(decorDim.width, decorDim.height).getContext('2d');
+  
+  for (const { x, y, width, height, fileKey } of decors) {
+    // 🚧 currently assume defined for every `fileKey`
+    const image = fileKeyToImage[fileKey];
+    ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
+  }
+
+  await saveCanvasAsFile(ct.canvas, decorPngPath);
   return true;
 }
 

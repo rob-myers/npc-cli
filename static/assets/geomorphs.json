@@ -26231,7 +26231,33 @@
         "type": "chair"
       }
     },
-    "decor": {},
+    "decor": {
+      "door-hull-002.png": {
+        "door": true,
+        "hull": true,
+        "fileKey": "door-hull-002.png",
+        "x": 2,
+        "y": 2,
+        "width": 500,
+        "height": 400
+      },
+      "door-001.png": {
+        "door": true,
+        "fileKey": "door-001.png",
+        "x": 2,
+        "y": 404,
+        "width": 220,
+        "height": 400
+      },
+      "wall-001.png": {
+        "wall": true,
+        "fileKey": "wall-001.png",
+        "x": 224,
+        "y": 404,
+        "width": 400,
+        "height": 400
+      }
+    },
     "obstacleDim": {"width": 2125, "height": 2331},
     "decorDim": {"width": 906, "height": 806}
   }
