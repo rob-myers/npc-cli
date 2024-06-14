@@ -111,7 +111,7 @@ const emptyStringHash = hashText('');
   /** @type {Geomorph.AssetsJson} */
   const assetsJson = {
     meta: {},
-    sheet: { obstacle: {}, decor: {}, obstaclesWidth: 0, obstaclesHeight: 0 },
+    sheet: { obstacle: {}, decor: {}, obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 } },
     symbols: /** @type {*} */ ({}),
     maps: {},
   };
@@ -210,7 +210,7 @@ const emptyStringHash = hashText('');
   /**
    * 🚧 Draw decor sprite-sheet
    */
-  // await drawDecorSheet(geomorphs);
+  await drawDecorSheet(assets, geomorphs, prevAssets);
 
   /**
    * Tell the browser we're ready.
@@ -388,8 +388,8 @@ function createObstaclesSheet(assets) {
 
   const bin = packRectangles(Object.values(obstacleKeyToRect), 'createObstaclesSheet');
   
-  /** @type {Pick<Geomorph.SpriteSheet, 'obstacle' | 'obstaclesWidth' | 'obstaclesHeight'>} */
-  const json = ({ obstacle: {}, obstaclesHeight: bin.height, obstaclesWidth: bin.width });
+  /** @type {Pick<Geomorph.SpriteSheet, 'obstacle' | 'obstacleDim'>} */
+  const json = ({ obstacle: {}, obstacleDim: { width: bin.width, height: bin.height } });
   // ℹ️ can try forcing 4096 x 4096 to debug sprite-sheet hmr
   // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
   bin.rects.forEach(r => {
@@ -434,8 +434,8 @@ async function createDecorSheet(assets) {
 
   const bin = packRectangles(Object.values(baseNameToRect), 'createDecorSheet');
 
-  /** @type {Pick<Geomorph.SpriteSheet, 'decor'>} */
-  const json = ({ decor: {} });
+  /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'decorDim'>} */
+  const json = ({ decor: {}, decorDim: { width: bin.width, height: bin.height } });
   bin.rects.forEach(r => {
     const meta = /** @type {Geomorph.DecorSheetRectCtxt} */ (r.data);
     json.decor[meta.fileKey] = {
@@ -459,9 +459,9 @@ async function createDecorSheet(assets) {
  */
 async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   
-  const { obstaclesWidth, obstaclesHeight, obstacle } = geomorphs.sheet;
+  const { obstacle, obstacleDim } = geomorphs.sheet;
   const obstacles = Object.values(obstacle);
-  const canvas = createCanvas(obstaclesWidth, obstaclesHeight);
+  const canvas = createCanvas(obstacleDim.width, obstacleDim.height);
   const ct = canvas.getContext('2d');
 
   // 🚧 redraw all obstacles when:
@@ -511,6 +511,17 @@ async function drawObstaclesSheet(assets, geomorphs, prevAssets) {
   }
 
   await saveCanvasAsFile(canvas, obstaclesPngPath);
+  return true;
+}
+
+/**
+ * @param {Geomorph.Assets} assets
+ * @param {Geomorph.Geomorphs} geomorphs
+ * @param {Geomorph.AssetsJson | null} prevAssets
+ * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
+ */
+async function drawDecorSheet(assets, geomorphs, prevAssets) {
+  // 🚧
   return true;
 }
 

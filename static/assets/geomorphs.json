@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 1056360686 -103226998",
+  "hash": "610044716 -69871922 -312656056",
   "mapsHash": 610044716,
-  "layoutsHash": 1056360686,
-  "sheetsHash": -103226998,
+  "layoutsHash": -69871922,
+  "sheetsHash": -312656056,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -26232,7 +26232,7 @@
       }
     },
     "decor": {},
-    "obstaclesWidth": 2125,
-    "obstaclesHeight": 2331
+    "obstacleDim": {"width": 2125, "height": 2331},
+    "decorDim": {"width": 906, "height": 806}
   }
 }

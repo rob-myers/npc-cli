@@ -21,7 +21,7 @@ export default function TestSurfaces(props) {
     obsInst: /** @type {*} */ (null),
 
     addObstacleUvs() {
-      const { obstacle: obstaclesSheet, obstaclesWidth, obstaclesHeight } = api.geomorphs.sheet;
+      const { obstacle: obstaclesSheet, obstacleDim: sheetDim } = api.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
@@ -30,8 +30,8 @@ export default function TestSurfaces(props) {
           const item = obstaclesSheet[`${symbolKey} ${obstacleId}`];
           if (item) {// (x, y) is top left of sprite in spritesheet
             const { x, y, width, height } = item;
-            uvOffsets.push(x / obstaclesWidth,  y / obstaclesHeight);
-            uvDimensions.push(width / obstaclesWidth, height / obstaclesHeight);
+            uvOffsets.push(x / sheetDim.width,  y / sheetDim.height);
+            uvDimensions.push(width / sheetDim.width, height / sheetDim.height);
           } else {
             warn(`${symbolKey} (${obstacleId}) not found in sprite-sheet`);
             uvOffsets.push(0,  0);

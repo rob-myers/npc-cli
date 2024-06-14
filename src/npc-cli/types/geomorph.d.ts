@@ -280,8 +280,8 @@ declare namespace Geomorph {
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
     obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
-    obstaclesWidth: number;
-    obstaclesHeight: number;
+    obstacleDim: { width: number; height: number; }
+    decorDim: { width: number; height: number; }
     decor: { [decorKey: string]: Geom.RectJson & DecorSheetRectCtxt };
   }
 

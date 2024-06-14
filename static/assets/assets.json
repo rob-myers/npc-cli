@@ -1033,8 +1033,8 @@
         "height": 400
       }
     },
-    "obstaclesWidth": 2125,
-    "obstaclesHeight": 2331
+    "obstacleDim": {"width": 2125, "height": 2331},
+    "decorDim": {"width": 906, "height": 806}
   },
   "symbols": {
     "101--hull": {
