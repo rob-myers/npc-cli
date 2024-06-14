@@ -228,9 +228,9 @@ export default function TestWorldCanvas(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 8, 0]}
+        position={[0, 16, 0]}
         makeDefault
-        fov={45}
+        fov={30}
       />
 
       <MapControls
