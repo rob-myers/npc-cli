@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 1056360686 938031812",
+  "hash": "610044716 1056360686 -103226998",
   "mapsHash": 610044716,
   "layoutsHash": 1056360686,
-  "sheetsHash": 938031812,
+  "sheetsHash": -103226998,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -26231,8 +26231,8 @@
         "type": "chair"
       }
     },
-    "obstaclesHeight": 2331,
+    "decor": {},
     "obstaclesWidth": 2125,
-    "decor": {}
+    "obstaclesHeight": 2331
   }
 }
