@@ -42,6 +42,7 @@ const sectionMainCss = css`
 
   @media (max-width: ${breakpoint}) {
     overflow: scroll;
+    max-width: unset !important;
     padding: 0 12px;
   }
   @media (min-width: ${afterBreakpoint}) {
