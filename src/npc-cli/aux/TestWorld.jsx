@@ -106,12 +106,10 @@ export default function TestWorld(props) {
       return state.geomorphs !== null && state.crowd !== null;
     },
     loadTiledMesh(exportedNavMesh) {
-      state.nav = /** @type {NPC.TiledCacheResult} */ (importNavMesh(exportedNavMesh, getTileCacheMeshProcess()));
-
-      const agentsMeta = state.crowd
-        ? disposeCrowd(state.crowd)
-        : {};
-
+      state.nav = /** @type {NPC.TiledCacheResult} */ (
+        importNavMesh(exportedNavMesh, getTileCacheMeshProcess())
+      );
+      state.crowd && disposeCrowd(state.crowd);
       state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
         maxAgentRadius: npcService.defaults.radius,
@@ -119,7 +117,7 @@ export default function TestWorld(props) {
       // state.crowd.timeFactor
 
       if (state.npc) {
-        state.restoreCrowdAgents(agentsMeta);
+        state.restoreCrowdAgents();
       }
     },
     onTick() {
@@ -132,22 +130,18 @@ export default function TestWorld(props) {
       state.vert.onTick();
       // info(state.r3f.gl.info.render);
     },
-    restoreCrowdAgents(agentsMeta) {
-      // 🚧 restore without using `agentsMeta`
-      const npcs = Object.values(state.npc.npc);
-      Object.values(agentsMeta).forEach(({ agentIndex, position, target }) => {
-        const npc = npcs.find(x => x.agent?.agentIndex === agentIndex);
-        if (!npc) {
-          return warn(`agent "${agentIndex}" has no associated npc (${JSON.stringify({ position })})`)
-        }
-
+    restoreCrowdAgents() {
+      Object.values(state.npc.npc).forEach((npc) => {
         npc.removeAgent();
         const agent = npc.attachAgent();
-        npc.setPosition(position);
-        if (target !== null) {
-          npc.walkTo(target);
-        } else {// target means they'll move "out of the way"
-          agent.requestMoveTarget(position);
+        
+        const closest = state.npc.getClosestNavigable(npc.getPosition());
+        if (closest === null) {// Agent outside nav keeps target but `Idle`s 
+          npc.startAnimation('Idle');
+        } else if (npc.s.target !== null) {
+          npc.walkTo(npc.s.target);
+        } else {// so they'll move "out of the way" of other npcs
+          agent.requestMoveTarget(npc.getPosition());
         }
       });
     },
@@ -328,7 +322,7 @@ export default function TestWorld(props) {
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {(agentsMeta: NPC.BasicAgentLookup) => void} restoreCrowdAgents
+ * @property {() => void} restoreCrowdAgents
  * @property {() => void} update
  * @property {() => void} onTick
  */

@@ -14,6 +14,10 @@
 - ❌ turn down gl.toneMappingExposure, try brightening skin texture directly
 - ✅ try 50% thinner arms/legs
 
+- ✅ clean TestWorld restoreCrowdAgents
+- 🚧 replace TestNpcs demo with profile
+- TestWorld -> World etc.
+- support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - shoulder mesh (extend from chest), or arms closer to chest?
 
@@ -35,11 +39,14 @@
   - walls have uvs all pointing to basic wall image
 
 - ❌ get eslint working again e.g. for raw-loader.js
-- 🚧 start a new repo based on next js
+- ✅ start a new repo based on next js
   - ✅ https://github.com/rob-myers/npc-cli-next
-  - 🚧 get mdx working
+  - ✅ get mdx working
 
 - start writing first article
+
+- next.js repo continued
+  - migrate Viewer
 
 - can somehow ctrl-c `seq 100000000` (100 million)
 - TTY windows ctrl-c conflict: abort vs copy selection

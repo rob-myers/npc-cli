@@ -26,16 +26,6 @@ declare namespace NPC {
     requireNav?: boolean;
   }
 
-  interface BasicAgentMeta {
-    agentIndex: number;
-    position: import("three").Vector3Like;
-    target: import("three").Vector3Like | null;
-    // userData: Record<string, any>; // Not working?
-  }
-
-  interface BasicAgentLookup {
-    [agentKey: string]: NPC.BasicAgentMeta;
-  }
 
   type AnimKey = keyof import('../service/npc').NpcService['fromAnimKey'];
 
