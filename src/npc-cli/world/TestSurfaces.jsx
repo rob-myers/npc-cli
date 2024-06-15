@@ -8,7 +8,7 @@ import { drawCircle, drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLi
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
-import { TestWorldContext } from "./test-world-context";
+import { TestWorldContext } from "../aux/test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 
 /**

@@ -8,9 +8,9 @@ import { Rect, Vect } from "../geom";
 import { isModifierKey, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { InfiniteGrid } from "../service/three";
-import { TestWorldContext } from "./test-world-context";
+import { TestWorldContext } from "../aux/test-world-context";
 import useStateRef from "../hooks/use-state-ref";
-import { Origin } from "./MiscThree";
+import { Origin } from "../aux/MiscThree";
 
 /**
  * @param {Props} props

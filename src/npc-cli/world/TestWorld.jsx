@@ -16,7 +16,7 @@ import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, imageLoader, textureLoader, tmpBufferGeom1 } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
-import { TestWorldContext } from "./test-world-context";
+import { TestWorldContext } from "../aux/test-world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import useTestHandleEvents from "./use-test-handle-events";

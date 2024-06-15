@@ -7,7 +7,7 @@ import { info, warn } from "../service/generic";
 import { tmpMesh1, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
-import { TestWorldContext } from "./test-world-context";
+import { TestWorldContext } from "../aux/test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 
 /**

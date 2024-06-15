@@ -9,7 +9,7 @@ import * as glsl from "../service/glsl";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
 import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
-import { TestWorldContext } from "./test-world-context";
+import { TestWorldContext } from "../aux/test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 
 /**

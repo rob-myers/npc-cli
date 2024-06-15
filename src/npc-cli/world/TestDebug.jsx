@@ -4,7 +4,7 @@ import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
 import { navMeta, wireFrameMaterial } from "../service/three";
-import { TestWorldContext } from "./test-world-context";
+import { TestWorldContext } from "../aux/test-world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
