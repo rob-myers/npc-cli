@@ -4,7 +4,7 @@
 export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
   while (!api.getCached(WORLD_KEY)?.isReady()) {
     api.info(`polling for ${api.ansi.White}${WORLD_KEY}`)
-    yield* api.sleep(1)
+    yield* api.sleep(0.5)
   }
   // api.getCached(WORLD_KEY).npc.connectSession(api.meta.sessionKey)
   api.info(`found ${api.ansi.White}${WORLD_KEY}`)
@@ -13,8 +13,7 @@ export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
 /**
  * @param {RunArg} ctxt
  */
-export async function* setupDemo1({ api: shApi, home: { WORLD_KEY } }) {
-    const api = shApi.getCached(WORLD_KEY);
+export async function* setupDemo1({ w: api }) {
 
     // create an obstacle (before query)
     const obstacle = api.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
@@ -47,5 +46,6 @@ export async function* setupDemo1({ api: shApi, home: { WORLD_KEY } }) {
 * }} api
 * @property {string[]} args
 * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home
+* @property {import('../../aux/TestWorld').State} w See CACHE_SHORTCUTS
 * @property {*} [datum] A shortcut for declaring a variable
 */
