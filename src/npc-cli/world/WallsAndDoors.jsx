@@ -9,14 +9,14 @@ import * as glsl from "../service/glsl";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
 import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
-import { TestWorldContext } from "../aux/test-world-context";
+import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
  * @param {Props} props
  */
-export default function TestWallsAndDoors(props) {
-  const api = React.useContext(TestWorldContext);
+export default function WallsAndDoors(props) {
+  const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     wallsInst: /** @type {*} */ (null),

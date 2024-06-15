@@ -67,7 +67,7 @@ export default function Viewer() {
           [
             {
               type: "component",
-              class: "TestWorld",
+              class: "World",
               filepath: "test-world-1",
               props: { worldKey: "test-world-1", mapKey: "demo-map-1" },
               // props: { worldKey: "test-world-1", mapKey: "small-map-1" },

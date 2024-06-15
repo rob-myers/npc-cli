@@ -8,14 +8,14 @@ import { drawCircle, drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLi
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
-import { TestWorldContext } from "../aux/test-world-context";
+import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
  * @param {Props} props
  */
-export default function TestSurfaces(props) {
-  const api = React.useContext(TestWorldContext);
+export default function Surfaces(props) {
+  const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     obsInst: /** @type {*} */ (null),

@@ -16,21 +16,21 @@ import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, imageLoader, textureLoader, tmpBufferGeom1 } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
-import { TestWorldContext } from "../aux/test-world-context";
+import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
-import useTestHandleEvents from "./use-test-handle-events";
-import TestWorldCanvas from "./TestWorldCanvas";
-import TestSurfaces from "./TestSurfaces";
-import TestWallsAndDoors from "./TestWallsAndDoors";
-import TestNpcs from "./TestNpcs";
-import TestDebug from "./TestDebug";
-import TestContextMenu from "./TestContextMenu";
+import useHandleEvents from "./use-handle-events";
+import WorldCanvas from "./WorldCanvas";
+import Surfaces from "./Surfaces";
+import WallsAndDoors from "./WallsAndDoors";
+import Npcs from "./Npcs";
+import Debug from "./Debug";
+import ContextMenu from "./ContextMenu";
 
 /**
  * @param {Props} props
  */
-export default function TestWorld(props) {
+export default function World(props) {
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
@@ -55,12 +55,12 @@ export default function TestWorld(props) {
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
 
-    ui: /** @type {*} */ (null), // TestWorldCanvas
-    flat: /** @type {*} */ (null), // TestSurfaces
-    vert: /** @type {*} */ (null), // TestWallsAndDoors
-    npc: /** @type {*} */ (null), // TestNpcs
-    menu: /** @type {*} */ (null), // TestContextMenu
-    debug: /** @type {*} */ (null), // TestDebug
+    ui: /** @type {*} */ (null), // WorldCanvas
+    flat: /** @type {*} */ (null), // Surfaces
+    vert: /** @type {*} */ (null), // WallsAndDoors
+    npc: /** @type {*} */ (null), // Npcs
+    menu: /** @type {*} */ (null), // ContextMenu
+    debug: /** @type {*} */ (null), // Debug
     lib: {
       filter,
       firstValueFrom,
@@ -150,7 +150,7 @@ export default function TestWorld(props) {
 
   state.disabled = !!props.disabled;
 
-  useTestHandleEvents(state);
+  useHandleEvents(state);
 
   useQuery({
     queryKey: [GEOMORPHS_JSON_FILENAME, props.worldKey, props.mapKey],
@@ -230,7 +230,7 @@ export default function TestWorld(props) {
     const hmr = state.crowd && state.geomorphs?.hash === state.hmr.gmHash;
     state.hmr.gmHash = state.geomorphs?.hash ?? '';
     if (state.threeReady && state.hash && !hmr) {
-      state.worker = new Worker(new URL("./test-recast.worker", import.meta.url), { type: "module" });
+      state.worker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
       state.worker.addEventListener("message", state.handleMessageFromWorker);
       return () => void state.worker.terminate();
     }
@@ -253,24 +253,24 @@ export default function TestWorld(props) {
   }, [state.disabled, state.npc]);
 
   return (
-    <TestWorldContext.Provider value={state}>
-      <TestWorldCanvas disabled={props.disabled} stats>
+    <WorldContext.Provider value={state}>
+      <WorldCanvas disabled={props.disabled} stats>
         {state.geomorphs && (
           <group>
-            <TestSurfaces />
+            <Surfaces />
             {state.crowd && <>
-              <TestNpcs/>
-              <TestDebug
+              <Npcs/>
+              <Debug
                 // showNavMesh
                 // showOrigNavPoly
               />
             </>}
-            <TestWallsAndDoors />
+            <WallsAndDoors />
           </group>
         )}
-      </TestWorldCanvas>
-      <TestContextMenu />
-    </TestWorldContext.Provider>
+      </WorldCanvas>
+      <ContextMenu />
+    </WorldContext.Provider>
   );
 }
 
@@ -298,15 +298,15 @@ export default function TestWorld(props) {
  * @property {Timer} timer
  * @property {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>} worker
  *
- * @property {import('./TestWorldCanvas').State} ui
- * @property {import('./TestSurfaces').State} flat
+ * @property {import('./WorldCanvas').State} ui
+ * @property {import('./Surfaces').State} flat
  * Flat static objects: floor, ceiling, and obstacles
- * @property {import('./TestWallsAndDoors').State} vert
+ * @property {import('./WallsAndDoors').State} vert
  * Vertical objects: doors (dynamic) and walls (static)
- * @property {import('./TestNpcs').State} npc
+ * @property {import('./Npcs').State} npc
  * Npcs (dynamic)
- * @property {import('./TestContextMenu').State} menu
- * @property {import('./TestDebug').State} debug
+ * @property {import('./ContextMenu').State} menu
+ * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/npc").NpcService} lib
  *
  * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg

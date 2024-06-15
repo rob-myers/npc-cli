@@ -7,14 +7,14 @@ import { info, warn } from "../service/generic";
 import { tmpMesh1, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
-import { TestWorldContext } from "../aux/test-world-context";
+import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
  * @param {Props} props
  */
-export default function TestNpcs(props) {
-  const api = React.useContext(TestWorldContext);
+export default function Npcs(props) {
+  const api = React.useContext(WorldContext);
 
   const gltf = useGLTF(glbMeta.url);
 

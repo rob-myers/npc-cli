@@ -4,15 +4,15 @@ import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
 import { navMeta, wireFrameMaterial } from "../service/three";
-import { TestWorldContext } from "../aux/test-world-context";
+import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props 
  */
-export default function TestDebug(props) {
-  const api = React.useContext(TestWorldContext);
+export default function Debug(props) {
+  const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),

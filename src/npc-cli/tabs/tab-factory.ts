@@ -81,10 +81,10 @@ const classToComponent = {
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
-  TestWorld: {
-    loadable: loadable(() => import("src/npc-cli/world/TestWorld")),
+  World: {
+    loadable: loadable(() => import("src/npc-cli/world/World")),
     get:
-      (module: typeof import("src/npc-cli/world/TestWorld")) =>
+      (module: typeof import("src/npc-cli/world/World")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },

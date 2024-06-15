@@ -4,18 +4,18 @@ import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
-import { Rect, Vect } from "../geom";
+import { Rect, Vect } from "../geom/index.js";
 import { isModifierKey, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { InfiniteGrid } from "../service/three";
-import { TestWorldContext } from "../aux/test-world-context";
-import useStateRef from "../hooks/use-state-ref";
-import { Origin } from "../aux/MiscThree";
+import { InfiniteGrid } from "../service/three.js";
+import { WorldContext } from "./world-context";
+import useStateRef from "../hooks/use-state-ref.js";
+import { Origin } from "../aux/MiscThree.jsx";
 
 /**
  * @param {Props} props
  */
-export default function TestWorldCanvas(props) {
+export default function WorldCanvas(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     canvas: /** @type {*} */ (null),
     controls: /** @type {*} */ (null),
@@ -199,7 +199,7 @@ export default function TestWorldCanvas(props) {
     },
   }));
 
-  const api = React.useContext(TestWorldContext);
+  const api = React.useContext(WorldContext);
   api.ui = state;
 
   React.useEffect(() => {

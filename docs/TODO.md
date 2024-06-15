@@ -8,7 +8,7 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 TestWorld -> World etc.
+- ✅ TestWorld -> World etc.
 - ✅ Put something else in game-functions.sh
 - ✅ Move `api` from game-functions.sh -> game-generators.js
 

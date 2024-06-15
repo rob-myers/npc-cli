@@ -1,12 +1,11 @@
 import React from "react";
 import { warn, info } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
-import { crowdAgentParams } from "./create-npc";
 
 /**
- * @param {import('./TestWorld').State} api
+ * @param {import('./World').State} api
  */
-export default function useTestHandleEvents(api) {
+export default function useHandleEvents(api) {
   const state = useStateRef(/** @returns {State} */ () => ({
     handleEvents(e) {
       // info('useTestHandleEvents', e);

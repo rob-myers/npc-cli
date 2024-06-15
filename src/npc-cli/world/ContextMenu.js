@@ -4,11 +4,11 @@ import { css } from "@emotion/css";
 import { geom } from '../service/geom';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { TestWorldContext } from "../aux/test-world-context";
+import { WorldContext } from "./world-context";
 
-export default function TestContextMenu() {
+export default function ContextMenu() {
 
-  const api = React.useContext(TestWorldContext);
+  const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     menuEl: /** @type {*} */ (null),

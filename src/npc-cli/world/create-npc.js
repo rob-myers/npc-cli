@@ -2,15 +2,15 @@ import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 import { dampLookAt } from "maath/easing";
 
-import { defaultNpcClassKey, glbFadeIn, glbFadeOut, glbMeta } from '../service/const';
+import { glbFadeIn, glbFadeOut, glbMeta } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3, yAxis } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
 import { npcService } from '../service/npc';
 
 export class Npc {
 
   /** @type {string} User specified e.g. `rob` */ key;
-  /** @type {import('./TestWorld').State} World API */ api;
+  /** @type {import('./World').State} World API */ api;
   /** @type {NPC.NPCDef} Initial definition */ def;
   /** @type {number} When we (re)spawned */ epochMs;
   
@@ -37,7 +37,7 @@ export class Npc {
 
   /**
    * @param {NPC.NPCDef} def
-   * @param {import('./TestWorld').State} api
+   * @param {import('./World').State} api
    */
   constructor(def, api) {
     this.key = def.key;
