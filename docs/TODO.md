@@ -8,26 +8,9 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ assets-nodemon.js avoids invoking `yarn`
-- ✅ change hull doors back to original size
-
-- ❌ turn down gl.toneMappingExposure, try brightening skin texture directly
-- ✅ try 50% thinner arms/legs
-
-- ✅ clean TestWorld restoreCrowdAgents
-- ✅ replace TestNpcs demo with profile
-  - henceforth will need TTY to start things up
-- ✅ `~/PROFILE` keeps in-sync with `sh/src/profile1.sh`
-  - can e.g. manually run `source PROFILE` after HMR update
-- ✅ faster `awaitWorld`
-  - now poll every 0.5s
-- ✅ issue re-running `api npc.spawn` e.g. position, should idle
-- ✅ `source PROFILE` issue finding process during `spawn`
-  - seems `pid` is `ppid` is `8` which terminated during previous `source PROFILE`
-  - was mutating leading process meta, because `source` did not recognise was being executed there
-- TestWorld -> World etc.
-- Put something else in game-functions.sh
-- Move `api` from game-functions.sh -> game-generators.js
+- 🚧 TestWorld -> World etc.
+- ✅ Put something else in game-functions.sh
+- ✅ Move `api` from game-functions.sh -> game-generators.js
 
 - start writing first article
 
@@ -1278,3 +1261,21 @@
   - ✅ create script `assets-nodemon.js` and npm script `watch-assets-new`
   - ✅ assets.js should use `changedFiles` arg
   - ✅ migrate from npm script `watch-assets`
+
+- ✅ assets-nodemon.js avoids invoking `yarn`
+- ✅ change hull doors back to original size
+
+- ❌ turn down gl.toneMappingExposure, try brightening skin texture directly
+- ✅ try 50% thinner arms/legs
+
+- ✅ clean TestWorld restoreCrowdAgents
+- ✅ replace TestNpcs demo with profile
+  - henceforth will need TTY to start things up
+- ✅ `~/PROFILE` keeps in-sync with `sh/src/profile1.sh`
+  - can e.g. manually run `source PROFILE` after HMR update
+- ✅ faster `awaitWorld`
+  - now poll every 0.5s
+- ✅ issue re-running `api npc.spawn` e.g. position, should idle
+- ✅ `source PROFILE` issue finding process during `spawn`
+  - seems `pid` is `ppid` is `8` which terminated during previous `source PROFILE`
+  - was mutating leading process meta, because `source` did not recognise was being executed there

@@ -1,4 +1,49 @@
 /**
+ * Usage:
+ * - `api`
+ * - `api 'x => x.crowd'` 
+ * - `api crowd`
+ * - `api vert.toggleDoor 15`
+ * - 🚧 `api "x => x.gmGraph.findRoomContaining($( click 1 ))"`
+ * - 🚧 `api gmGraph.findRoomContaining $( click 1 )`
+ * - 🚧 `click | api gmGraph.findRoomContaining`
+ *
+ * ℹ️ supports `ctrl-c` without cleaning ongoing computations
+ * @param {RunArg} ctxt
+ */
+export async function* api(ctxt) {
+  const { api, args, home } = ctxt;
+  const world = api.getCached(home.WORLD_KEY);
+  const getHandleProm = () => new Promise((resolve, reject) => api.addCleanup(
+    () => reject("potential ongoing computation")
+  ));
+
+  if (api.isTtyAt(0)) {
+    const func = api.generateSelector(
+      api.parseFnOrStr(args[0]),
+      args.slice(1).map(x => api.parseJsArg(x)),
+    );
+    const v = func(world, ctxt);
+    yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
+  } else {
+    /** @type {*} */ let datum;
+    !args.includes("-") && args.push("-");
+    while ((datum = await api.read()) !== api.eof) {
+      const func = api.generateSelector(
+        api.parseFnOrStr(args[0]),
+        args.slice(1).map(x => x === "-" ? datum : api.parseJsArg(x)),
+      );
+      try {
+        const v = func(world, ctxt);
+        yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
+      } catch (e) {
+        api.info(`${e}`);
+      }
+    }
+  }
+}
+
+/**
  * @param {RunArg} ctxt
  */
 export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
