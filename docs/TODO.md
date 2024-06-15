@@ -19,8 +19,12 @@
   - henceforth will need TTY to start things up
 - ✅ `~/PROFILE` keeps in-sync with `sh/src/profile1.sh`
   - can e.g. manually run `source PROFILE` after HMR update
-- 🚧 faster `awaitWorld` (?)
-- `source PROFILE` acts strangely (?)
+- ✅ faster `awaitWorld`
+  - now poll every 0.5s
+- ✅ issue re-running `api npc.spawn` e.g. position, should idle
+- ✅ `source PROFILE` issue finding process during `spawn`
+  - seems `pid` is `ppid` is `8` which terminated during previous `source PROFILE`
+  - was mutating leading process meta, because `source` did not recognise was being executed there
 - TestWorld -> World etc.
 - Put something else in game-functions.sh
 - Move `api` from game-functions.sh -> game-generators.js
@@ -57,6 +61,7 @@
 - next.js repo continued
   - migrate Viewer
 
+- TTY can get out of sync when edit cmd.service, tty.shell?
 - can somehow ctrl-c `seq 100000000` (100 million)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself

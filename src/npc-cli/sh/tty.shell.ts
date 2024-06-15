@@ -190,7 +190,7 @@ export class ttyShellClass implements Device {
       this.process.status = ProcessStatus.Running;
     } else {
       const { ppid, pgid } = meta;
-      const { positionals } = useSession.api.getProcess(meta);
+      const { positionals } = useSession.api.getProcess(meta); // parent
       const process = useSession.api.createProcess({
         ppid,
         pgid,
