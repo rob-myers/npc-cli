@@ -65,10 +65,16 @@ export default function WrappedTerminal(props: Props) {
     }
   }, [state.session, props.env.PROFILE]);
 
-  return <Terminal onReady={state.onReady} {...props} />;
+  return (
+    <Terminal
+      onReady={state.onReady}
+      onUnmount={() => { state.session = null }}
+      {...props}
+    />
+  );
 }
 
-function wrapWithRun(fn: (arg: utilGeneratorsJs.RunArg) => any) {
+function wrapWithRun(fn: (arg: gameGeneratorsJs.RunArg) => any) {
   const fnText = `${fn}`;
   return `{\n  run '${
     fnText.slice(fnText.indexOf('('))

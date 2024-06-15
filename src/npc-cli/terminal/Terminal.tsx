@@ -208,6 +208,7 @@ export default function Terminal(props: Props) {
 
   React.useEffect(() => () => {// Destroy session
     useSession.api.removeSession(props.sessionKey);
+    props.onUnmount?.();
     state.ready = false;
     state.session = state.xterm = {} as any;
     state.cleanup();
@@ -237,6 +238,7 @@ export interface Props {
   env: Partial<Session["var"]>;
   onKey?(e: KeyboardEvent): void;
   onReady?(session: Session): void | Promise<void>;
+  onUnmount?(): void;
   sessionKey: string;
 }
 
