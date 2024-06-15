@@ -16,6 +16,9 @@
 
 - ✅ clean TestWorld restoreCrowdAgents
 - 🚧 replace TestNpcs demo with profile
+  - henceforth will need TTY to start things up
+- ✅ `~/PROFILE` keeps in-sync with `sh/src/profile1.sh`
+  - can e.g. manually run `source PROFILE` after HMR update
 - TestWorld -> World etc.
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`

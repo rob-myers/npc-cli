@@ -1,3 +1,3 @@
 awaitWorld
-api crowd
-echo "Hello, world!"
+
+# 🚧 spawn some npc!

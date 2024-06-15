@@ -53,11 +53,17 @@ export default function WrappedTerminal(props: Props) {
 
   const update = useUpdate();
 
-  React.useEffect(() => {
+  React.useEffect(() => {// sync shell functions
     if (state.session && state.updates++) {// skip 1st
       state.sourceFuncs(state.session);
     }
   }, [state.session, utilFunctionsSh, gameFunctionsSh, utilGeneratorsJs, gameGeneratorsJs]);
+
+  React.useEffect(() => {// sync ~/PROFILE
+    if (state.session) {
+      state.session.var.PROFILE = props.env.PROFILE;
+    }
+  }, [state.session, props.env.PROFILE]);
 
   return <Terminal onReady={state.onReady} {...props} />;
 }
