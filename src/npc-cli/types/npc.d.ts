@@ -24,6 +24,8 @@ declare namespace NPC {
     point: import("three").Vector3Like;
     meta?: Geom.Meta;
     requireNav?: boolean;
+    /** Should NPC have agent? */
+    agent?: boolean;
   }
 
 

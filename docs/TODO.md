@@ -15,11 +15,18 @@
 - ✅ try 50% thinner arms/legs
 
 - ✅ clean TestWorld restoreCrowdAgents
-- 🚧 replace TestNpcs demo with profile
+- ✅ replace TestNpcs demo with profile
   - henceforth will need TTY to start things up
 - ✅ `~/PROFILE` keeps in-sync with `sh/src/profile1.sh`
   - can e.g. manually run `source PROFILE` after HMR update
+- 🚧 faster `awaitWorld` (?)
+- `source PROFILE` acts strangely (?)
 - TestWorld -> World etc.
+- Put something else in game-functions.sh
+- Move `api` from game-functions.sh -> game-generators.js
+
+- start writing first article
+
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - shoulder mesh (extend from chest), or arms closer to chest?
@@ -46,7 +53,6 @@
   - ✅ https://github.com/rob-myers/npc-cli-next
   - ✅ get mdx working
 
-- start writing first article
 
 - next.js repo continued
   - migrate Viewer

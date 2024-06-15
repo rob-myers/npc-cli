@@ -1,6 +1,5 @@
 import React from "react";
 import * as THREE from "three";
-import { dampLookAt } from "maath/easing";
 import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
@@ -99,6 +98,12 @@ export default function TestNpcs(props) {
       npc.setPosition(e.point);
       this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
 
+      if (e.agent && npc.agent === null) {
+        npc.attachAgent().requestMoveTarget(e.point); // so "moves out of the way"
+      } else if (e.agent === false) {
+        npc.removeAgent();
+      }
+
       npc.s.spawns++;
       api.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
@@ -147,43 +152,6 @@ export default function TestNpcs(props) {
   }));
 
   api.npc = state;
-
-  React.useEffect(() => {// 🚧 DEMO
-    // create an obstacle (before query)
-    const obstacle = state.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
-
-    // find and exclude a poly
-    const { polyRefs } =  api.crowd.navMeshQuery.queryPolygons(
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
-      // { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
-      // { x: (3 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
-      { x: (3 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
-      { x: 0.2, y: 0.1, z: 0.01 },
-    );
-    console.log({ polyRefs });
-    const filter = api.crowd.getFilter(0);
-    filter.excludeFlags = 2 ** 0; // all polys should already be set differently
-    polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
-    api.debug.selectNavPolys(polyRefs); // display via debug
-
-    
-    [// DEMO ensure npcs
-      { npcKey: 'kate', point: { x: 5 * 1.5, y: 0, z: 7 * 1.5 } },
-      { npcKey: 'rob', point: { x: 1 * 1.5, y: 0, z: 5 * 1.5 } },
-    ].forEach(({ npcKey, point }) =>
-      !state.npc[npcKey] && state.spawn({ npcKey, point }).then(_npc => {
-        const npc = state.npc[npcKey]; // can be stale via HMR
-        npc.attachAgent();
-        npc.walkTo(point); // so they'll "move out of way"
-        state.select.curr = npcKey; // select last
-      })
-    );
-
-    api.update(); // Trigger ticker
-    return () => void (obstacle && state.removeObstacle(obstacle.id));
-  }, [api.crowd]); 
 
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
