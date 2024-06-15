@@ -68,7 +68,7 @@ export default function TestNpcs(props) {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
           classKey: e.npcClassKey ?? npc.def.classKey,
-          position: e.point,
+          position: e.point, // 🚧 remove?
           runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
         };
@@ -95,13 +95,18 @@ export default function TestNpcs(props) {
         state.group.add(npc.group);
       }
       
-      npc.setPosition(e.point);
-      this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
-
-      if (e.agent && npc.agent === null) {
-        npc.attachAgent().requestMoveTarget(e.point); // so "moves out of the way"
-      } else if (e.agent === false) {
-        npc.removeAgent();
+      if (npc.agent !== null) {
+        if (e.agent === false) {
+          npc.removeAgent();
+        } else {
+          npc.agent.teleport(e.point);
+          npc.startAnimation('Idle');
+        }
+      } else {
+        npc.setPosition(e.point);
+        this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
+        // pin to current position, so "moves out of the way"
+        e.agent && npc.attachAgent().requestMoveTarget(e.point);
       }
 
       npc.s.spawns++;
