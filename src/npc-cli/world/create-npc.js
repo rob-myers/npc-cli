@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 import { dampLookAt } from "maath/easing";
 
-import { glbFadeIn, glbFadeOut, glbMeta } from '../service/const';
+import { glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
 import { npcService } from '../service/npc';
@@ -201,7 +201,7 @@ export class Npc {
     this.s.act = act;
   }
   /** @param {THREE.Vector3Like} dst  */
-  walkTo(dst, debugPath = true) {
+  walkTo(dst, debugPath = showLastNavPath) {
     if (this.agent === null) {
       return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
     }

@@ -116,7 +116,7 @@ export const navMeta = {
   groundOffset: 0.01,
   lineMaterial: new LineMaterial({
     color: navPathColor,
-    linewidth: 0.005,
+    linewidth: 0.001,
     // vertexColors: true,
   }),
   nodeMaterial: new THREE.MeshBasicMaterial({ color: navNodeColor }),

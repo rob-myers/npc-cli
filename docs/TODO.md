@@ -12,11 +12,11 @@
 - ✅ Put something else in game-functions.sh
 - ✅ Move `api` from game-functions.sh -> game-generators.js
 
-- start writing first article
+- 🚧 start writing first article
 
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
-- shoulder mesh (extend from chest), or arms closer to chest?
+- shoulder mesh (extend from chest) ✅, or arms closer to chest ❌
 
 - 🚧 create decor spritesheet
   - ℹ️ media/decor/* -> static/assets/decor.{png,webp}
@@ -44,6 +44,8 @@
 - next.js repo continued
   - migrate Viewer
 
+- split component WallsAndDoors
+- split component Surfaces
 - TTY can get out of sync when edit cmd.service, tty.shell?
 - can somehow ctrl-c `seq 100000000` (100 million)
 - TTY windows ctrl-c conflict: abort vs copy selection

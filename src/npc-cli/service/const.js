@@ -88,3 +88,5 @@ export const glbFadeOut = {
     Run: { Idle: 0.3, Run: 0, Walk: 0.1, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
     Walk: { Idle: 0.25, Run: 0.1, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
 };
+
+export const showLastNavPath = false;
