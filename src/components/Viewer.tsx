@@ -61,7 +61,8 @@ export default function Viewer() {
         initEnabled={false}
         onToggled={update}
         persistLayout
-        rootOrientationVertical={isSmallView()}
+        // rootOrientationVertical={isSmallView()}
+        rootOrientationVertical
         tabs={[
           [
             {
@@ -72,14 +73,6 @@ export default function Viewer() {
               // props: { worldKey: "test-world-1", mapKey: "small-map-1" },
             },
             {
-              type: "terminal",
-              filepath: "tty-1",
-              env: {
-                WORLD_KEY: "test-world-1",
-                PROFILE: profile.profile1Sh,
-              },
-            },
-            {
               type: "component",
               class: "TestCharacterDemo",
               filepath: "test-character-demo",
@@ -87,7 +80,17 @@ export default function Viewer() {
             },
             // { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
+          [
+            {
+              type: "terminal",
+              filepath: "tty-1",
+              env: {
+                WORLD_KEY: "test-world-1",
+                PROFILE: profile.profile1Sh,
+              },
+            },
+            { type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} },
+          ],
         ]}
       />
     </aside>
