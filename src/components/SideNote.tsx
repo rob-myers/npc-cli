@@ -71,7 +71,7 @@ const iconTriggerCss = css`
 
   width: ${rootWidthPx}px;
   padding: 0 4px;
-  margin: 0 2px 0 4px;
+  margin: 0 2px;
   
   border-radius: 10px;
   border: 1px solid #bbb;
