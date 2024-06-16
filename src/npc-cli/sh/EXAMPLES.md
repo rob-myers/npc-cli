@@ -2,6 +2,19 @@
 
 🚧 update/remove commands from prev npc-cli
 
+```sh
+# directly invoking native functions
+echo foo >bar
+bar
+# foo
+bar | keysAll
+# ["length","constructor","anchor","at","big","blink","bold","charAt","charCodeAt","codePointAt","concat","endsWith","fontcolor","fontsize","fixed","includes","indexOf","isWellFormed","italics","lastIndexOf","link","localeCompare","match","matchAll","normalize","padEnd","padStart","repeat","replace","replaceAll","search","slice","small","split","strike","sub","substr","substring","sup","startsWith","toString","toWellFormed","trim","trimStart","trimLeft","trimEnd","trimRight","toLocaleLowerCase","toLocaleUpperCase","toLowerCase","toUpperCase","valueOf","name","prototype","fromCharCode","fromCodePoint","raw","0","1","2"]
+bar/charAt'(0)'
+# f
+bar/toUpperCase'()'
+# FOO
+```
+
 ## Local variables
 
 ```sh

@@ -18,6 +18,13 @@ keys() {
   map Object.keys
 }
 
+# usage: `expr 42 | keysAll`
+keysAll() {
+  map 'x => Array.from(new Set(
+    [Object.getPrototypeOf(x), x.constructor, x].flatMap(Object.getOwnPropertyNames)
+  ))'
+}
+
 # usage: `expr location | pretty`
 pretty() {
   map '(x, { api }) => api.pretty(x)'
