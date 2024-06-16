@@ -33,11 +33,12 @@ export default function Main(props: React.PropsWithChildren) {
 }
 
 const sectionMainCss = css`
-  > header, > main {
+  > header {
     background-color: #fff;
     z-index: 1;
   }
   > main {
+    background-color: #fff;
     padding-top: 2rem;
   }
 
@@ -46,6 +47,7 @@ const sectionMainCss = css`
     max-width: unset !important;
     padding: 0 12px;
   }
+
   @media (min-width: ${afterBreakpoint}) {
     width: 100%;
     margin: 0 auto;
@@ -83,7 +85,6 @@ const mainHeaderCss = css`
   height: 4rem;
   
   color: #444;
-  background-color: #fff;
   border-bottom: 1px solid rgba(200, 200, 200, 0.5);
   font-size: 1.2rem;
   letter-spacing: 1.5rem;
