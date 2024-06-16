@@ -11,7 +11,8 @@
 - 🚧 start writing first article
   - ℹ️ manually associate `Nav` items with pages (wait until next.js)
   - ✅ strip down "frontmatter" to `key`, with lookup for rest
-  - start writing index.mdx
+  - ✅ migrate SideNote component
+  - 🚧 start writing index.mdx
 
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
