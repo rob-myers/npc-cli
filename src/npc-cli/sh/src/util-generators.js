@@ -1,4 +1,14 @@
 /**
+ * Execute a javascript function
+ * @param {RunArg} ctxt
+ */
+export async function* call(ctxt) {
+  const func = Function(`return ${ctxt.args[0]}`)();
+  ctxt.args = ctxt.args.slice(1);
+  yield await func(ctxt);
+}
+
+/**
  * Evaluate and return a javascript expression
  * @param {RunArg} ctxt 
  */
@@ -37,13 +47,23 @@ export async function* flatMap(ctxt) {
 }
 
 /**
- * Execute a javascript function
- * @param {RunArg} ctxt
+ * Usage: `log $foo bar`, `seq 10 | log`
+ * - initially logs args, then stdin.
+ * - `map console.log` would log 2nd arg too
+ * - logs chunks larger than 1000, so e.g. `seq 1000000 | log` works
+ * @param {RunArg} ctxt 
+ * @returns 
  */
-export async function* call(ctxt) {
-  const func = Function(`return ${ctxt.args[0]}`)();
-  ctxt.args = ctxt.args.slice(1);
-  yield await func(ctxt);
+export async function* log({ api, args, datum }) {
+  args.forEach(arg => console.log(arg))
+  if (api.isTtyAt(0)) return
+  while ((datum = await api.read(true)) !== api.eof) {
+    if (api.isDataChunk(datum) && datum.items.length <= 1000) {
+      datum.items.forEach(x => console.log(x));
+    } else {
+      console.log(datum);
+    }
+  }
 }
 
 /**
