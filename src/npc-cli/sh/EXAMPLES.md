@@ -1,5 +1,7 @@
 # Examples of commands
 
+🚧 update/remove commands from prev npc-cli
+
 ## Local variables
 
 ```sh

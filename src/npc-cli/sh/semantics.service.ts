@@ -42,16 +42,15 @@ class semanticsServiceClass {
   }
 
   private expandParameter(meta: Sh.BaseMeta, varName: string): string {
-    if (/^\d+$/.test(varName)) {
-      // Positional
+    if (/^\d+$/.test(varName)) {// Positional
       return useSession.api.getPositional(meta.pid, meta.sessionKey, Number(varName));
-    }
-    // Otherwise we're retrieving a variable
+    } // Otherwise we're retrieving a variable
     const varValue = useSession.api.getVar(meta, varName);
     if (varValue === undefined || typeof varValue === "string") {
       return varValue || "";
+    } else {
+      return safeStringify(varValue);
     }
-    return safeStringify(varValue);
   }
 
   private handleShError(node: Sh.ParsedSh, e: any, prefix?: string) {
@@ -75,7 +74,7 @@ class semanticsServiceClass {
   }
 
   handleTopLevelProcessError(e: ProcessError) {
-    if (useSession.api.getSession(e.sessionKey)) {
+    if (useSession.api.getSession(e.sessionKey) !== undefined) {
       cmdService.killProcesses(e.sessionKey, [e.pid], { group: true, SIGINT: true });
     } else {
       return console.error(`session not found: ${e.sessionKey}`);
@@ -109,8 +108,8 @@ class semanticsServiceClass {
     for (const word of Args) {
       const result = await this.lastExpanded(this.Expand(word));
       const single = word.Parts.length === 1 ? word.Parts[0] : null;
-      if (word.exitCode) {
-        throw new ShError("failed to expand word", word.exitCode);
+      if (word.exitCode! > 0) {
+        throw new ShError("failed to expand word", word.exitCode!);
       } else if (single?.type === "SglQuoted") {
         expanded.push(result.value);
       } else if (single?.type === "ParamExp" || single?.type === "CmdSubst") {
@@ -327,15 +326,16 @@ class semanticsServiceClass {
       const process = useSession.api.getProcess(node.meta);
       let stdoutFd = node.meta.fd[1];
       let device = useSession.api.resolve(1, node.meta);
-      if (!device) {
-        // Pipeline already failed
+      if (device === undefined) {// Pipeline already failed
         throw killError(node.meta);
       }
-      // Actually run the code
+
+      // 🔔 Actually run the code
       for await (const item of generator) {
         await preProcessWrite(process, device);
-        if (node.meta.fd[1] !== stdoutFd && (stdoutFd = node.meta.fd[1])) {
+        if (node.meta.fd[1] !== stdoutFd) {
           // e.g. `say` redirects stdout to /dev/voice
+          stdoutFd = node.meta.fd[1];
           device = useSession.api.resolve(1, node.meta);
         }
         await device.writeData(item);
@@ -414,7 +414,7 @@ class semanticsServiceClass {
             values.push(...vs.slice(1).map((x) => x.trim()));
           }
           lastTrailing = last(vs)!.endsWith(" ");
-        } else if (!values.length || lastTrailing) {
+        } else if (values.length === 0 || lastTrailing === true) {
           // Freely add
           values.push(brace ? value.split(" ") : value);
           lastTrailing = false;
@@ -425,7 +425,7 @@ class semanticsServiceClass {
               : (values.pop() as string[]).map((x) => `${x}${value}`)
           );
           lastTrailing = false;
-        } else if (brace) {
+        } else if (brace === true) {
           const prev = values.pop() as string;
           values.push(value.split(" ").map((x) => `${prev}${x}`));
           lastTrailing = false;
@@ -467,9 +467,7 @@ class semanticsServiceClass {
       }
       case "Lit": {
         const literals = literal(node);
-        /**
-         * HACK node.braceExp
-         */
+        // 🔔 HACK: pass `braceExp` to *Expand
         literals.length > 1 && Object.assign(node, { braceExp: true });
         yield expand(literals);
         break;
