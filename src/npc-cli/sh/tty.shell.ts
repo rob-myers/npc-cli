@@ -214,7 +214,7 @@ export class ttyShellClass implements Device {
 
     try {
       for await (const _ of semanticsService.File(term)) {
-        /** NOOP */
+        // Unreachable: yielded values already sent to devices (tty, fifo, null, var, voice)
       }
       term.meta.verbose &&
         console.warn(

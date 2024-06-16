@@ -8,10 +8,6 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ TestWorld -> World etc.
-- ✅ Put something else in game-functions.sh
-- ✅ Move `api` from game-functions.sh -> game-generators.js
-
 - 🚧 start writing first article
 
 - support camera move via terminal
@@ -40,14 +36,16 @@
   - ✅ https://github.com/rob-myers/npc-cli-next
   - ✅ get mdx working
 
-
 - next.js repo continued
   - migrate Viewer
 
 - split component WallsAndDoors
 - split component Surfaces
+- animation from directly above looks weird e.g. arms should bend more
 - TTY can get out of sync when edit cmd.service, tty.shell?
-- can somehow ctrl-c `seq 100000000` (100 million)
+- ✅ can somehow ctrl-c `seq 100000000` (100 million)
+  - same problem with `range 100000000`
+  - same problem with `Array.from({ length: 100000000 })` (underlying JavaScript)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
@@ -1281,3 +1279,7 @@
 - ✅ `source PROFILE` issue finding process during `spawn`
   - seems `pid` is `ppid` is `8` which terminated during previous `source PROFILE`
   - was mutating leading process meta, because `source` did not recognise was being executed there
+
+- ✅ TestWorld -> World etc.
+- ✅ Put something else in game-functions.sh
+- ✅ Move `api` from game-functions.sh -> game-generators.js
