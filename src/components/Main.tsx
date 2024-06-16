@@ -50,6 +50,7 @@ const sectionMainCss = css`
     margin: 0 auto;
     display: flex;
     flex-direction: column;
+    overflow-x: auto;
 
     > header, > main {
       margin-left: 1rem;
@@ -60,14 +61,14 @@ const sectionMainCss = css`
     > header {
       margin-top: 0rem;
       min-width: calc(400px + 2 * 2rem);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
     > main {
       flex: 1;
       padding-bottom: 6rem;
       min-width: calc(400px + 2 * 2rem);
     }
-    white-space: nowrap;
-    overflow-x: auto;
   }
 `;
 
