@@ -18,6 +18,7 @@ import useStateRef from "../hooks/use-state-ref";
 import type ActualTouchHelperUi from "./TouchHelperUi";
 import useUpdate from "../hooks/use-update";
 import { LinkProvider } from "./xterm-link-provider";
+import debounce from "debounce";
 
 export default function Terminal(props: Props) {
   const update = useUpdate();
@@ -40,7 +41,8 @@ export default function Terminal(props: Props) {
     webglAddon: new WebglAddon(),
     xterm: {} as ttyXtermClass,
 
-    cleanup: () => { },
+    cleanup: () => {},
+    fitDebounced: debounce(() => { state.fitAddon.fit(); }, 300),
     onFocus() {
       if (state.inputOnFocus) {
         state.xterm.setInput(state.inputOnFocus.input);
@@ -50,15 +52,17 @@ export default function Terminal(props: Props) {
     },
     async resize() {
       if (state.isTouchDevice) {
-        state.fitAddon.fit();
+        state.fitDebounced();
       } else {
+        // Hide input to prevent issues when screen gets too small
         const input = state.xterm.getInput();
         const cursor = state.xterm.getCursor();
         if (input && state.xterm.isPromptReady()) {
           state.xterm.clearInput();
           state.inputOnFocus = { input, cursor };
         }
-        setTimeout(() => state.fitAddon.fit());
+        // setTimeout(() => state.fitAddon.fit());
+        state.fitDebounced();
       }
     },
   }));
