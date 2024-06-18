@@ -192,6 +192,7 @@ const toggleCss = css`
   align-items: center;
   cursor: pointer;
   
+  filter: invert(1);
   transform: scale(0.8);
   filter: invert(1);
 `;
