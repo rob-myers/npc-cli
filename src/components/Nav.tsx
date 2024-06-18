@@ -193,4 +193,5 @@ const toggleCss = css`
   cursor: pointer;
   
   transform: scale(0.8);
+  filter: invert(1);
 `;
