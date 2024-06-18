@@ -327,4 +327,4 @@ const statsCss = css`
  * @property {Geom.Vect} screenPoint
  */
 
-const infiniteGridDistance = isTouchDevice() ? 20 : 100;
+const infiniteGridDistance = isTouchDevice() ? 40 : 100;
