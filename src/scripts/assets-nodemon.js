@@ -19,7 +19,9 @@ nodemon({
     'src/npc-cli/service/geomorph.js',
     'media/symbol/',
     'media/map/',
+    'media/decor/',
   ],
+  exitcrash: true,
 }).on('restart', onRestart).on('quit', onQuit);
 
 info('watching assets...');

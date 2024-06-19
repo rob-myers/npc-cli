@@ -12,7 +12,8 @@
   - ℹ️ manually associate `Nav` items with pages (wait until next.js)
   - ✅ strip down "frontmatter" to `key`, with lookup for rest
   - ✅ migrate SideNote component
-  - 🚧 start writing index.mdx
+  - ✅ start writing index.mdx
+  - 🚧 intro should begin with "npcs controlled by user"
 
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
@@ -34,6 +35,11 @@
     - skip other steps if only changedFiles are in media/decor
   - doors have uvs all pointing to basic door image
   - walls have uvs all pointing to basic wall image
+
+- ✅ `yarn watch-assets` should auto-restart when it crashes (like `nodemon` did)
+  - https://stackoverflow.com/a/697064/2917822
+
+- support shell syntax e.g. `until false; do echo foo; sleep 1; done`
 
 - ❌ get eslint working again e.g. for raw-loader.js
 - ✅ start a new repo based on next js
