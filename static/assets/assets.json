@@ -1023,18 +1023,10 @@
         "y": 404,
         "width": 220,
         "height": 400
-      },
-      "wall-001.png": {
-        "wall": true,
-        "fileKey": "wall-001.png",
-        "x": 224,
-        "y": 404,
-        "width": 400,
-        "height": 400
       }
     },
     "obstacleDim": {"width": 2125, "height": 2331},
-    "decorDim": {"width": 906, "height": 806}
+    "decorDim": {"width": 504, "height": 806}
   },
   "symbols": {
     "101--hull": {

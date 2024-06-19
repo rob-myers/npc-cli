@@ -282,7 +282,11 @@ declare namespace Geomorph {
     obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
     obstacleDim: { width: number; height: number; }
     decorDim: { width: number; height: number; }
-    decor: { [decorKey: string]: Geom.RectJson & DecorSheetRectCtxt };
+    decor: DecorSheet;
+  }
+
+  interface DecorSheet {
+    [decorKey: string]: Geom.RectJson & DecorSheetRectCtxt;
   }
 
   interface ObstacleSheetRectCtxt {

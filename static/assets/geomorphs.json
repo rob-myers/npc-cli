@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 1056360686 -312656056",
+  "hash": "610044716 1056360686 -1283654387",
   "mapsHash": 610044716,
   "layoutsHash": 1056360686,
-  "sheetsHash": -312656056,
+  "sheetsHash": -1283654387,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -26248,17 +26248,9 @@
         "y": 404,
         "width": 220,
         "height": 400
-      },
-      "wall-001.png": {
-        "wall": true,
-        "fileKey": "wall-001.png",
-        "x": 224,
-        "y": 404,
-        "width": 400,
-        "height": 400
       }
     },
     "obstacleDim": {"width": 2125, "height": 2331},
-    "decorDim": {"width": 906, "height": 806}
+    "decorDim": {"width": 504, "height": 806}
   }
 }
