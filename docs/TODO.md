@@ -33,7 +33,8 @@
   - ✅ `assets.js` generates sprite-sheet png/webp
   - ✅ `assets.js` sprite-sheet generation is `changedFiles` sensitive
     - skip other steps if only changedFiles are in media/decor
-  - 🚧 combine "create sheet and draw" into single function (decor/obstacle)
+  - ❌ combine "create sheet and draw" into single function (decor/obstacle)
+    - functions are quite complex, so keep them separate
   - doors have uvs all pointing to basic door image
   - walls have uvs all pointing to basic wall image
 

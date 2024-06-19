@@ -22,7 +22,6 @@
 import fs from "fs";
 import path from "path";
 import childProcess from "child_process";
-import util from "util";
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 import { createCanvas, loadImage } from 'canvas';
@@ -135,27 +134,28 @@ const emptyStringHash = hashText('');
     info(`updating symbols: ${JSON.stringify(svgSymbolFilenames)}`);
   }
 
-  //#region compute assets.json
+  //#region ℹ️ Compute assets.json and sprite-sheets
 
   parseSymbols(assetsJson, svgSymbolFilenames);
 
   parseMaps(assetsJson);
 
-  // 🚧 only two functions (instead of 4)
   createObstaclesSheetJson(assetsJson);
   const toDecorImg = await createDecorSheetJson(assetsJson, prevAssets, prevObstaclesPng);
   await drawObstaclesSheet(assetsJson, prevAssets, prevObstaclesPng);
   await drawDecorSheet(assetsJson, toDecorImg, prevAssets, prevDecorPng);
 
-  //#endregion
+  const assets = geomorphService.deserializeAssets(assetsJson);
+  fs.writeFileSync(assetsFilepath, stringify(assetsJson));
 
   const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
-    key =>  assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash
+    key => assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash
   );
   info({ changedKeys: changedSymbolAndMapKeys });
 
-  const assets = geomorphService.deserializeAssets(assetsJson);
-  fs.writeFileSync(assetsFilepath, stringify(assetsJson));
+  //#endregion
+
+  //#region ℹ️ Compute geomorphs.json
   
   /** Compute flat symbols i.e. recursively unfold "symbols" folder. */
   // 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
@@ -178,10 +178,7 @@ const emptyStringHash = hashText('');
   });
   info({ changedGmKeys });
 
-  /**
-   * Compute geomorphs.json
-   * 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
-   */
+  // 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];
     const flatSymbol = flattened[hullKey];
@@ -206,7 +203,10 @@ const emptyStringHash = hashText('');
 
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
 
+  //#endregion
+
   /** Draw geomorph floors */
+  // 🚧 debug only i.e. draw in browser instead
   await drawFloorImages(geomorphs, changedGmKeys);
 
   /**
@@ -221,7 +221,8 @@ const emptyStringHash = hashText('');
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
 
-  /** Convert PNGs to WEBP for production. */
+  //#region ℹ️ Convert PNGs to WEBP for production
+
   let pngPaths = [
     ...geomorphService.gmKeys.map(getFloorPngPath), // 🚧 remove
     obstaclesPngPath,
@@ -256,6 +257,8 @@ const emptyStringHash = hashText('');
       process.exit(1);
     }
   }
+
+  //#endregion
 
 })();
 
@@ -403,6 +406,7 @@ function createObstaclesSheetJson(assets) {
       type,
     }
   });
+
   assets.sheet = { ...assets.sheet, ...json };
 }
 
