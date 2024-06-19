@@ -18,7 +18,7 @@ export default function SideNote(props: React.PropsWithChildren<{
       onMouseEnter={e => open(e, props.width, timeoutId.current)}
       onMouseLeave={e => (timeoutId.current = close(e, 'icon'))}
     >
-      ?
+      ⋯
     </span>
     <span
       className={cx("side-note-bubble", speechBubbleCss)}
@@ -66,12 +66,12 @@ const rootWidthPx = 16;
 const arrowDeltaX = 4;
 
 const iconTriggerCss = css`
-  position: relative;
-  top: -2px;
+  /* position: relative; */
+  /* top: -2px; */
 
   width: ${rootWidthPx}px;
   padding: 0 4px;
-  margin: 0 2px;
+  /* margin: 0 2px; */
   
   border-radius: 10px;
   border: 1px solid #bbb;
