@@ -74,9 +74,9 @@ const iconTriggerCss = css`
   /* margin: 0 2px; */
   
   border-radius: 10px;
-  border: 1px solid #bbb;
-  background-color: #111;
-  color: white;
+  border: 1px solid #aaaaaa;
+  background-color: white;
+  color: black;
   font-size: 0.95rem;
   font-style: normal;
   cursor: pointer;
