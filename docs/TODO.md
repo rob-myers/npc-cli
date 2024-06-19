@@ -33,14 +33,14 @@
   - ✅ `assets.js` generates sprite-sheet png/webp
   - ✅ `assets.js` sprite-sheet generation is `changedFiles` sensitive
     - skip other steps if only changedFiles are in media/decor
-  - combine "create sheet and draw" into single function (decor/obstacle)
+  - 🚧 combine "create sheet and draw" into single function (decor/obstacle)
   - doors have uvs all pointing to basic door image
   - walls have uvs all pointing to basic wall image
 
 - ✅ `yarn watch-assets` should auto-restart when it crashes (like `nodemon` did)
   - https://stackoverflow.com/a/697064/2917822
 
-- support shell syntax e.g. `until false; do echo foo; sleep 1; done`
+- ✅ support shell syntax `until false; do echo foo; sleep 1; done`
 
 - ❌ get eslint working again e.g. for raw-loader.js
 - ✅ start a new repo based on next js

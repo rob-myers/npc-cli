@@ -652,20 +652,22 @@ class semanticsServiceClass {
   private async *WhileClause(node: Sh.WhileClause) {
     const { Cond, Do, Until } = node;
     const process = useSession.api.getProcess(node.meta);
-    let itStartMs = -1,
-      itLengthMs = 0;
+    let itStartMs = -1, itLengthMs = 0;
 
     while (true) {
       if (process.status === 2) {
         throw killError(node.meta);
       }
       // Force iteration to take at least 1 second
-      if ((itLengthMs = Date.now() - itStartMs) < 1000)
+      if ((itLengthMs = Date.now() - itStartMs) < 1000) {
         yield* sleep(node.meta, 1 - itLengthMs / 1000);
+      }
       itStartMs = Date.now();
 
       yield* this.stmts(node, Cond);
-      if (node.exitCode) break;
+      if (Until ? !node.exitCode : node.exitCode) {
+        break;
+      }
 
       yield* this.stmts(node, Do);
     }
