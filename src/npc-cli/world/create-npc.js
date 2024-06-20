@@ -140,18 +140,19 @@ export class Npc {
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
 
-    if (this.agent === null) {
-      // Support move/turn without agent
-    } else {
-      // Moving or stationary with agent
+    if (this.agent === null) {// No agent
+      // NOOP
+    } else {// Moving or stationary with agent
       const position = tmpVectThree1.copy(this.agent.position());
       // const position = tmpVectThree1.copy(this.agent.interpolatedPosition);
       const velocity = tmpVectThree2.copy(this.agent.velocity());
-      const forward = tmpVectThree3.copy(position).add(velocity);
       const speed = velocity.length();
-
+      
       this.group.position.copy(position);
-      speed > 0.2 && dampLookAt(this.group, forward, 0.25, deltaMs);
+      if (speed > 0.2) {
+        const forward = tmpVectThree3.copy(position).add(velocity);
+        dampLookAt(this.group, forward, 0.25, deltaMs);
+      } 
 
       if (this.s.target === null) {
         return;
@@ -159,6 +160,8 @@ export class Npc {
 
       this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
       const distance = position.distanceTo(this.s.target);
+      // 🚧 extend with agent.raw.*
+      // console.log(distance, speed);
 
       if (distance < 0.15) {// Reached target
         this.s.target = null;
@@ -173,11 +176,9 @@ export class Npc {
         // keep target, so "moves out of the way"
         this.agent.teleport(position); // suppress final movement
         this.agent.requestMoveTarget(position);
-      }
-
-      // undo speed scale
-      // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-      if (distance < 2 * agentRadius) {
+      } else if (distance < 2 * agentRadius) {
+        // undo speed scale
+        // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
         this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance) });
       }
     }

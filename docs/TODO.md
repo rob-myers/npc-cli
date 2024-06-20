@@ -15,6 +15,7 @@
   - ✅ start writing index.mdx
   - 🚧 intro should begin with "npcs controlled by user"
 
+- investigate slow down when npc walks towards/up-to edge
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - shoulder mesh (extend from chest) ✅, or arms closer to chest ❌
