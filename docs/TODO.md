@@ -15,7 +15,10 @@
   - ✅ start writing index.mdx
   - 🚧 intro should begin with "npcs controlled by user"
 
-- investigate slow down when npc walks towards/up-to edge
+- ✅ investigate slow down when npc walks towards/up-to edge
+  - `nvel` changes
+  - DT_CROWD_OBSTACLE_AVOIDANCE = 2
+  - ✅ change ag->params.updateFlags to not intersect DT_CROWD_OBSTACLE_AVOIDANCE
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - shoulder mesh (extend from chest) ✅, or arms closer to chest ❌
@@ -36,6 +39,7 @@
     - skip other steps if only changedFiles are in media/decor
   - ❌ combine "create sheet and draw" into single function (decor/obstacle)
     - functions are quite complex, so keep them separate
+  - avoid drawing sheets if nothing changed
   - doors have uvs all pointing to basic door image
   - walls have uvs all pointing to basic wall image
 

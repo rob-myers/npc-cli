@@ -160,15 +160,22 @@ export class Npc {
 
       this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
       const distance = position.distanceTo(this.s.target);
-      // 🚧 extend with agent.raw.*
-      // console.log(distance, speed);
+      // console.log({
+      //   speed,
+      //   distance,
+      //   dVel: this.agent.raw.dvel,
+      //   nVel: this.agent.raw.nvel,
+      // });
 
       if (distance < 0.15) {// Reached target
         this.s.target = null;
-        this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
-        const time = this.mixer.time % 1;
-
+        this.agent.updateParameters({
+          maxSpeed: this.getMaxSpeed(),
+          updateFlags: 7, // default
+        });
+        
         this.startAnimation('Idle');
+        // const time = this.mixer.time % 1;
         // this.startAnimation(// 🚧 WIP
         //   time >= 7/8 ? 'Idle' : time >= 5/8 ? 'IdleRightLead' : time >= 3/8 ? 'Idle' : 'IdleLeftLead'
         // );
@@ -176,10 +183,22 @@ export class Npc {
         // keep target, so "moves out of the way"
         this.agent.teleport(position); // suppress final movement
         this.agent.requestMoveTarget(position);
-      } else if (distance < 2 * agentRadius) {
+        return;
+      }
+      
+      if (distance < 2.5 * agentRadius && (this.agent.updateFlags & 2) > 0) {
+        // Turn off obstacle avoidance to avoid deceleration near nav border
+        this.agent.updateParameters({
+          updateFlags: this.agent.updateFlags & ~2,
+        });
+      }
+
+      if (distance < 2 * agentRadius) {
         // undo speed scale
         // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-        this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance) });
+        this.agent.updateParameters({
+          maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance),
+        });
       }
     }
   }
