@@ -6,9 +6,7 @@ import { css, cx } from '@emotion/css';
  *   root element, in which case direction is `left`
  * - Currently .dark-mode applies `filter: invert(1)`
  */
-export default function SideNote(props: React.PropsWithChildren<{
-  width?: number;
-}>) {
+export default function SideNote(props: React.PropsWithChildren<{ width?: number }>) {
   const timeoutId = React.useRef(0);
 
   return <>
@@ -39,17 +37,16 @@ function open(e: React.MouseEvent, width: number | undefined, timeoutId: number)
   const bubble = e.currentTarget.nextSibling as HTMLElement;
   bubble.classList.add('open');
   
-  // 🚧 consider favouring bubble on right
+  const root = document.querySelector(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
+  const rootRect = root.getBoundingClientRect();
   const rect = e.currentTarget.getBoundingClientRect();
-  const pixelsOnRight = document.documentElement.clientWidth - (rect.x + rect.width) - 40;
-  const pixelsOnLeft = rect.x;
-  const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight) - 32;
+  const pixelsOnRight = rootRect.right - rect.right;
+  const pixelsOnLeft = rect.x - rootRect.x;
   bubble.classList.remove('left', 'right', 'down');
   bubble.classList.add(pixelsOnRight < pixelsOnLeft ? 'left' : 'right');
   
-  if (maxWidthAvailable < (width??defaultInfoWidthPx)) {
-    width = maxWidthAvailable;
-  }
+  const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
+  width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
   width && bubble.style.setProperty('--info-width', `${width}px`);
 }
 
@@ -66,21 +63,17 @@ const rootWidthPx = 16;
 const arrowDeltaX = 4;
 
 const iconTriggerCss = css`
-  /* position: relative; */
-  /* top: -2px; */
-
   width: ${rootWidthPx}px;
-  padding: 0 4px;
-  /* margin: 0 2px; */
+  cursor: pointer;
+  white-space: nowrap;
   
+  padding: 0 4px;
   border-radius: 10px;
   border: 1px solid #aaaaaa;
   background-color: white;
   color: black;
   font-size: 0.95rem;
   font-style: normal;
-  cursor: pointer;
-  white-space: nowrap;
 `;
 
 const speechBubbleCss = css`
@@ -171,3 +164,5 @@ const speechBubbleCss = css`
     }
   }
 `;
+
+export const sideNoteRootDataAttribute = 'data-side-note-root';
