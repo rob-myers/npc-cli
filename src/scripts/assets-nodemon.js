@@ -10,8 +10,8 @@ const delayMs = 300;
 const changed = /** @type {Map<string, number>} */ (new Map());
 
 nodemon({
-  // delay: 300, // 🔔 doesn't track files within interval
-  ext: 'svg',
+  delay: 0.1,
+  ext: 'svg,png',
   runOnChangeOnly: true,
   script: 'src/scripts/noop.js', // 🔔 must override default behaviour 
   watch: [
