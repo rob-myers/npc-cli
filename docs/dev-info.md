@@ -1,6 +1,12 @@
 
 ## Bits and pieces
 
+### Convert to GIF
+
+```sh
+ffmpeg -i ~/Desktop/boxy-svg-slow-save.mov -filter_complex "[0:v] fps=10,scale=1600:-1" output.gif
+```
+
 ### Git show changed/untracked filenames
 
 ```sh
