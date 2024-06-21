@@ -31,7 +31,7 @@ export default function WallsAndDoors(props) {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
-      state.doorByInstId.forEach((meta, instanceId) => {
+      state.doorByInstId.forEach((meta, _instanceId) => {
         // 🚧 remove hard-coding
         const key = meta.door.meta.hull ? 'door-hull-002.png' : 'door-001.png'
         const { x, y, width, height } = decor[key];
@@ -145,8 +145,14 @@ export default function WallsAndDoors(props) {
         const dstRatio = meta.open ? 0.1 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
         const length = meta.ratio * meta.segLength;
+        // set e1 (x,,z)
         instanceMatrix.array[instanceId * 16 + 0] = meta.dir.x * length;
         instanceMatrix.array[instanceId * 16 + 2] = meta.dir.y * length;
+        // // translate
+        // // 🚧 hull doors need offset
+        // // 🚧 must slide "into wall", or fade, or texture compatible with "crumpling"
+        // instanceMatrix.array[instanceId * 16 + 12 + 0] = meta.src.x + meta.dir.x * ((1 - meta.ratio) * meta.segLength);
+        // instanceMatrix.array[instanceId * 16 + 12 + 2] = meta.src.y + meta.dir.y * ((1 - meta.ratio) * meta.segLength);
         if (meta.ratio === dstRatio) state.movingDoors.delete(instanceId);
       }
       instanceMatrix.needsUpdate = true;
@@ -214,7 +220,7 @@ export default function WallsAndDoors(props) {
           key={glsl.InstancedSpriteSheetMaterial.key}
           side={THREE.DoubleSide}
           map={api.decorTex}
-          // transparent
+          transparent
           // diffuse={new THREE.Vector3(1, 0, 1)}
         />
       </instancedMesh>

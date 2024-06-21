@@ -57,6 +57,14 @@
 - next.js repo continued
   - migrate Viewer
 
+- 🚧 improve doors
+  - 🚧 try slide door where possible
+  - crumple-compatible texture
+  - can fade door
+    > e.g. https://www.npmjs.com/package/three-instanced-uniforms-mesh
+  - lighter standard door
+  - better hull door
+  - fix uv squashing e.g. some doors slide, some fade
 - Should doors use hard-coding in decor spritesheet?
 - Boxy SVG can be slow to save
   - Both Web and App
