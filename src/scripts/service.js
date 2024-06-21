@@ -157,9 +157,17 @@ function normalizeStarshipChars(word) {
 export async function labelledSpawn(label, command, ...args) {
   await /** @type {Promise<void>} */ (new Promise((resolve, reject) => {
       const proc = childProcess.spawn(command, args);
-      proc.stdout.on('data', (data) => console.log(`[${ansi.Bold}${label}${ansi.Reset}]`, `${data.toString().trimEnd()}${ansi.Reset}`));
+      proc.stdout.on('data', (data) => /** @type {string} */ 
+        (data.toString()).trimEnd().split('\n').forEach(line =>
+          console.log(`[${ansi.Bold}${label}${ansi.Reset}]`, `${line}${ansi.Reset}`)
+        )
+      );
       // stderr needn't contain error messages
-      proc.stderr.on('data', (data) => console.log(`[${ansi.Bold}${label}${ansi.Reset}]`, `${data.toString()}`));
+      proc.stderr.on('data', (data) => /** @type {string} */ 
+        (data.toString()).trimEnd().split('\n').forEach(line =>
+          console.log(`[${ansi.Bold}${label}${ansi.Reset}]`, `${line}${ansi.Reset}`)
+        )
+      );
       // proc.stdout.on('close', () => resolve());
       proc.on('error', (e) => reject(e));
       proc.on('exit', (errorCode) => {
