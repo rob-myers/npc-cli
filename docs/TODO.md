@@ -39,7 +39,8 @@
     - skip other steps if only changedFiles are in media/decor
   - ❌ combine "create sheet and draw" into single function (decor/obstacle)
     - functions are quite complex, so keep them separate
-  - avoid drawing sheets if nothing changed
+  - ✅ avoid drawing sheets if nothing changed
+  - ✅ avoid parsing maps if nothing changed
   - doors have uvs all pointing to basic door image
   - walls have uvs all pointing to basic wall image
 

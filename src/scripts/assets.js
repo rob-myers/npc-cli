@@ -61,8 +61,8 @@ function computeOpts() {
   );
   return {
     /**
-     * Try to update efficiently iff this is `false` i.e.
-     * - option `--all` is false
+     * We'll update efficiently <=> this is `false` i.e.
+     * - no `--all`
      * - assets.json exists
      * - neither this script nor geomorphs.js are in `changedFiles`
      */
@@ -83,16 +83,17 @@ function computeOpts() {
 /** @returns {Promise<Prev>} */
 async function computePrev() {
   const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    !opts.all && fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null
+    !opts.all ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null
   );
   const obstaclesPng = fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
-  const decorPng = prevAssets && fs.existsSync(decorPngPath) ? await loadImage(decorPngPath) : null;
+  const decorPng = fs.existsSync(decorPngPath) ? await loadImage(decorPngPath) : null;
   return {
     assets: prevAssets,
     obstaclesPng,
     decorPng,
-    skipObstacles: Boolean(prevAssets && obstaclesPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(symbolsDir))),
-    skipDecor: Boolean(prevAssets && decorPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(decorDir))),
+    skipMaps: !opts.all && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(mapsDir)),
+    skipObstacles: !opts.all && !!obstaclesPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(symbolsDir)),
+    skipDecor: !opts.all && !!decorPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(decorDir)),
   };
 }
 
@@ -128,10 +129,6 @@ info({ opts });
     ? symbolBasenames
     : symbolBasenames.filter(x =>  opts.changedFiles.includes(path.resolve(symbolsDir, x)))
   ;
-  info(`updating ${symbolBasenamesToUpdate.length === symbolBasenames.length
-    ? `all symbols`
-    : `symbols: ${JSON.stringify(symbolBasenamesToUpdate)}`
-  }`);
 
   /** @type {Geomorph.AssetsJson} The next assets.json */
   const assetsJson = {
@@ -148,19 +145,45 @@ info({ opts });
       assetsJson.symbols[symbolKey] = symbols[symbolKey];
       assetsJson.meta[symbolKey] = meta[symbolKey];
     });
+    assetsJson.maps = prev.assets.maps;
+    assetsJson.sheet = prev.assets.sheet;
   }
 
   //#region ℹ️ Compute assets.json and sprite-sheets
 
-  parseSymbols(assetsJson, symbolBasenamesToUpdate);
+  if (symbolBasenamesToUpdate.length) {
+    info(`parsing ${symbolBasenamesToUpdate.length === symbolBasenames.length
+      ? `all symbols`
+      : `symbols: ${JSON.stringify(symbolBasenamesToUpdate)}`
+    }`);
+    parseSymbols(assetsJson, symbolBasenamesToUpdate);
+  } else {
+    info('skipping all symbols');
+  }
 
-  parseMaps(assetsJson);
+  if (!prev.skipMaps) {
+    info('parsing maps');
+    parseMaps(assetsJson);
+  } else {
+    info('skipping maps');
+  }
 
-  createObstaclesSheetJson(assetsJson);
-  const toDecorImg = await createDecorSheetJson(assetsJson, prev.assets, prev.obstaclesPng);
-  await drawObstaclesSheet(assetsJson, prev.assets, prev.obstaclesPng);
-  await drawDecorSheet(assetsJson, toDecorImg, prev.assets, prev.decorPng);
-  
+  if (!prev.skipObstacles) {
+    info('creating obstacles sprite-sheet');
+    createObstaclesSheetJson(assetsJson);
+    await drawObstaclesSheet(assetsJson, prev.assets, prev.obstaclesPng);
+  } else {
+    info('skipping obstacles sprite-sheet');
+  }
+
+  if (!prev.skipDecor) {
+    info('creating decor sprite-sheet');
+    const toDecorImg = await createDecorSheetJson(assetsJson, prev.assets, prev.obstaclesPng);
+    await drawDecorSheet(assetsJson, toDecorImg, prev.assets, prev.decorPng);
+  } else {
+    info('skipping decor sprite-sheet');
+  }
+
   const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
     key => assetsJson.meta[key].outputHash !== prev.assets?.meta[key]?.outputHash
   );
@@ -168,7 +191,6 @@ info({ opts });
 
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   //#endregion
-
 
   //#region ℹ️ Compute geomorphs.json
   
@@ -316,13 +338,13 @@ function parseSymbols({ symbols, meta }, symbolFilenames) {
     };
   }
 
-  validateSubSymbolDimension(symbols);
+  validateSubSymbolDimensions(symbols);
 }
 
 /**
  * @param {Geomorph.AssetsJson['symbols']} symbols 
  */
-function validateSubSymbolDimension(symbols) {
+function validateSubSymbolDimensions(symbols) {
   Object.values(symbols).forEach(({ key: parentKey, symbols: subSymbols }) => {
     subSymbols.forEach(({ symbolKey, width, height }) => {
       try {
@@ -425,7 +447,7 @@ function createObstaclesSheetJson(assets) {
     }
   });
 
-  assets.sheet = { ...assets.sheet, ...json };
+  assets.sheet = { ...assets.sheet, ...json }; // Overwrite initial/previous
 }
 
 /**
@@ -435,13 +457,6 @@ function createObstaclesSheetJson(assets) {
  * @returns {Promise<Record<string, import('canvas').Image>>}
  */
 async function createDecorSheetJson(assets, prevAssets, prevDecorPng) {
-
-  // 🚧 use prev.canSkipDecor earlier
-  if (prevAssets && prevDecorPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(decorDir))) {
-    assets.sheet.decor = prevAssets.sheet.decor;
-    assets.sheet.decorDim = prevAssets.sheet.decorDim;
-    return {};
-  }
 
   const pngBasenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".png")).sort();
   const changedBasenames = prevAssets && opts.detectChanges
@@ -480,9 +495,9 @@ async function createDecorSheetJson(assets, prevAssets, prevDecorPng) {
     json.decor[meta.fileKey] = { ...meta, x: toPrecision(r.x), y: toPrecision(r.y), width: r.width, height: r.height };
   });
 
-  assets.sheet = { ...assets.sheet, ...json };
+  assets.sheet = { ...assets.sheet, ...json }; // Overwrite initial/previous
 
-  return baseNameToImg; // can be partial
+  return baseNameToImg; // possibly partial
 }
 
 /**
@@ -661,6 +676,7 @@ function packRectangles(rectsToPack, errorPrefix) {
  * @property {Geomorph.AssetsJson | null} assets
  * @property {import('canvas').Image | null} obstaclesPng
  * @property {import('canvas').Image | null} decorPng
+ * @property {boolean} skipMaps
  * @property {boolean} skipObstacles
  * @property {boolean} skipDecor
  */
