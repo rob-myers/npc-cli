@@ -31,7 +31,7 @@ import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
 import { spriteSheetNonHullExtraScale, worldScale } from "../npc-cli/service/const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
@@ -50,14 +50,15 @@ const imgOpts = {
   packedPadding: 2,
 };
 
-const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
-const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
-const assetsScriptFilepath = __filename;
-const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
-
-const opts = (() => {
+function computeOpts() {
   /** @type {string[]} */
   const changedFiles = rawOpts.changedFiles ? JSON.parse(rawOpts.changedFiles) : [];
+  const all = (
+    Boolean(rawOpts.all)
+    || !fs.existsSync(assetsFilepath)
+    || changedFiles.includes(assetsScriptFilepath)
+    || changedFiles.includes(geomorphServicePath)
+  );
   return {
     /**
      * Try to update efficiently iff this is `false` i.e.
@@ -65,16 +66,11 @@ const opts = (() => {
      * - assets.json exists
      * - neither this script nor geomorphs.js are in `changedFiles`
      */
-    all: (
-      Boolean(rawOpts.all)
-      || !fs.existsSync(assetsFilepath)
-      || changedFiles.includes(assetsScriptFilepath)
-      || changedFiles.includes(geomorphServicePath)
-    ),
+    all,
     /** When non-empty, files changed (added/modified/deleted) within {ms} @see assets-nodemon.js */
     changedFiles,
-    /** Only use @see changedFiles when non-empty and --all unspecified  */
-    detectChanges: !rawOpts.all && changedFiles.length > 0,
+    /** Only use @see changedFiles when non-empty and !opts.all  */
+    detectChanges: !all && changedFiles.length > 0,
     /**
      * When about to push:
      * - ensure every webp.
@@ -82,10 +78,28 @@ const opts = (() => {
      */
     prePush: Boolean(rawOpts.prePush),
   };
-})();
+}
 
-info({ opts });
+/** @returns {Promise<Prev>} */
+async function computePrev() {
+  const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
+    !opts.all && fs.existsSync(assetsFilepath) ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null
+  );
+  const obstaclesPng = fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
+  const decorPng = prevAssets && fs.existsSync(decorPngPath) ? await loadImage(decorPngPath) : null;
+  return {
+    assets: prevAssets,
+    obstaclesPng,
+    decorPng,
+    skipObstacles: Boolean(prevAssets && obstaclesPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(symbolsDir))),
+    skipDecor: Boolean(prevAssets && decorPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(decorDir))),
+  };
+}
 
+const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
+const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
+const assetsScriptFilepath = __filename;
+const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
 const mediaDir = path.resolve(__dirname, "../../media");
 const mapsDir = path.resolve(mediaDir, "map");
 const symbolsDir = path.resolve(mediaDir, "symbol");
@@ -102,61 +116,65 @@ const dataUrlRegEx = /"data:image\/png(.*)"/;
 const gitStaticAssetsRegex = new RegExp('^static/assets/');
 const emptyStringHash = hashText('');
 
+const opts = computeOpts();
+info({ opts });
+
 (async function main() {
 
-  const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    opts.all ? null : JSON.parse(fs.readFileSync(assetsFilepath).toString())
-  );
+  const prev = await computePrev();
 
-  const prevObstaclesPng = prevAssets && fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
-  const prevDecorPng = prevAssets && fs.existsSync(decorPngPath) ? await loadImage(decorPngPath) : null;
+  const symbolBasenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg")).sort();
+  const symbolBasenamesToUpdate = opts.all
+    ? symbolBasenames
+    : symbolBasenames.filter(x =>  opts.changedFiles.includes(path.resolve(symbolsDir, x)))
+  ;
+  info(`updating ${symbolBasenamesToUpdate.length === symbolBasenames.length
+    ? `all symbols`
+    : `symbols: ${JSON.stringify(symbolBasenamesToUpdate)}`
+  }`);
 
-  /** @type {Geomorph.AssetsJson} */
+  /** @type {Geomorph.AssetsJson} The next assets.json */
   const assetsJson = {
     meta: {},
     sheet: { obstacle: {}, decor: {}, obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 } },
     symbols: /** @type {*} */ ({}),
     maps: {},
   };
-  
-  let svgSymbolFilenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg")).sort();
 
-  if (opts.all) {
-    info(`updating all symbols`);
-  } else {// Avoid re-computing
-    const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets);
-    svgSymbolFilenames = svgSymbolFilenames.filter(filename => {
+  if (prev.assets) {// use previous (may overwrite later)
+    const { symbols, meta } = prev.assets;
+    symbolBasenames.forEach(filename => {
       const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
-      assetsJson.symbols[symbolKey] = prev.symbols[symbolKey];
-      assetsJson.meta[symbolKey] = prev.meta[symbolKey];
-      return opts.changedFiles.includes(path.resolve(symbolsDir, filename));
+      assetsJson.symbols[symbolKey] = symbols[symbolKey];
+      assetsJson.meta[symbolKey] = meta[symbolKey];
     });
-    info(`updating symbols: ${JSON.stringify(svgSymbolFilenames)}`);
   }
 
   //#region ℹ️ Compute assets.json and sprite-sheets
 
-  parseSymbols(assetsJson, svgSymbolFilenames);
+  parseSymbols(assetsJson, symbolBasenamesToUpdate);
 
   parseMaps(assetsJson);
 
   createObstaclesSheetJson(assetsJson);
-  const toDecorImg = await createDecorSheetJson(assetsJson, prevAssets, prevObstaclesPng);
-  await drawObstaclesSheet(assetsJson, prevAssets, prevObstaclesPng);
-  await drawDecorSheet(assetsJson, toDecorImg, prevAssets, prevDecorPng);
-
-  const assets = geomorphService.deserializeAssets(assetsJson);
-  fs.writeFileSync(assetsFilepath, stringify(assetsJson));
-
+  const toDecorImg = await createDecorSheetJson(assetsJson, prev.assets, prev.obstaclesPng);
+  await drawObstaclesSheet(assetsJson, prev.assets, prev.obstaclesPng);
+  await drawDecorSheet(assetsJson, toDecorImg, prev.assets, prev.decorPng);
+  
   const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
-    key => assetsJson.meta[key].outputHash !== prevAssets?.meta[key]?.outputHash
+    key => assetsJson.meta[key].outputHash !== prev.assets?.meta[key]?.outputHash
   );
   info({ changedKeys: changedSymbolAndMapKeys });
 
+  fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   //#endregion
+
 
   //#region ℹ️ Compute geomorphs.json
   
+  /** @see assetsJson where e.g. rects and polys are `Rect`s and `Poly`s */
+  const assets = geomorphService.deserializeAssets(assetsJson);
+
   /** Compute flat symbols i.e. recursively unfold "symbols" folder. */
   // 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
   const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
@@ -221,7 +239,7 @@ const emptyStringHash = hashText('');
     warn(`POST ${sendDevEventUrl} failed: ${e.cause.code}`);
   });
 
-  //#region ℹ️ Convert PNGs to WEBP for production
+  //#region ℹ️ png -> webp for production
 
   let pngPaths = [
     ...geomorphService.gmKeys.map(getFloorPngPath), // 🚧 remove
@@ -418,6 +436,7 @@ function createObstaclesSheetJson(assets) {
  */
 async function createDecorSheetJson(assets, prevAssets, prevDecorPng) {
 
+  // 🚧 use prev.canSkipDecor earlier
   if (prevAssets && prevDecorPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(decorDir))) {
     assets.sheet.decor = prevAssets.sheet.decor;
     assets.sheet.decorDim = prevAssets.sheet.decorDim;
@@ -636,3 +655,12 @@ function packRectangles(rectsToPack, errorPrefix) {
 
   return bins[0];
 }
+
+/**
+ * @typedef Prev
+ * @property {Geomorph.AssetsJson | null} assets
+ * @property {import('canvas').Image | null} obstaclesPng
+ * @property {import('canvas').Image | null} decorPng
+ * @property {boolean} skipObstacles
+ * @property {boolean} skipDecor
+ */
