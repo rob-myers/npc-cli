@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { hashJson, info } from "../service/generic";
+import { hashJson } from "../service/generic";
 import { wallHeight, worldScale } from "../service/const";
 import * as glsl from "../service/glsl";
 import { quadGeometryXY } from "../service/three";
@@ -26,11 +26,31 @@ export default function WallsAndDoors(props) {
     doorByInstId: [],
     movingDoors: new Map(),
 
+    addDoorUvs() {
+      const { decor, decorDim } = api.geomorphs.sheet;
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
+  
+      state.doorByInstId.forEach((meta, instanceId) => {
+        // 🚧 remove hard-coding
+        const key = meta.door.meta.hull ? 'door-hull-002.png' : 'door-001.png'
+        const { x, y, width, height } = decor[key];
+        uvOffsets.push(x / decorDim.width, y / decorDim.height);
+        uvDimensions.push(width / decorDim.width, height / decorDim.height);
+      });
+
+      state.doorsInst.geometry.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      );
+      state.doorsInst.geometry.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
+    },
     buildLookups() {
       let dId = 0;
       const prevDoorByPos = state.doorByPos;
       state.doorByPos = {};
-      state.doorByInstId = {};
+      state.doorByInstId = [];
       api.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
         const { seg: [u, v] } = door;
         tmpMat1.feedFromArray(gm.transform);
@@ -52,10 +72,15 @@ export default function WallsAndDoors(props) {
       }));
     },
     getDoorMat(meta) {
-      const { src, dir, ratio, segLength } = meta;
+      const { src, dir, ratio, segLength, door } = meta;
       const length = segLength * ratio;
+
+      // Hull doors are offset from each other to avoid z-fighting
+      const offsetX = door.meta.hull ? door.baseRect.height/2 * door.normal.x : 0;
+      const offsetY = door.meta.hull ? door.baseRect.height/2 * door.normal.y : 0;
+
       return geomorphService.embedXZMat4(
-        [length * dir.x, length * dir.y, -dir.y, dir.x, src.x, src.y],
+        [length * dir.x, length * dir.y, -dir.y, dir.x, src.x + offsetX, src.y + offsetY],
         { yScale: wallHeight, mat4: tmpMatFour1 },
       );
     },
@@ -159,6 +184,7 @@ export default function WallsAndDoors(props) {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
+    state.addDoorUvs();
   }, [api.hash, doorShaderHash]);
 
   return (
@@ -184,12 +210,12 @@ export default function WallsAndDoors(props) {
         onPointerUp={state.onPointerUp}
         onPointerDown={state.onPointerDown}
       >
-        <shaderMaterial
-          key={doorShaderHash}
+        <instancedSpriteSheetMaterial
+          key={glsl.InstancedSpriteSheetMaterial.key}
           side={THREE.DoubleSide}
-          vertexShader={glsl.meshBasic.simplifiedVert}
-          fragmentShader={glsl.basicGradientFrag}
-          // uniforms={uniforms}
+          map={api.decorTex}
+          // transparent
+          // diffuse={new THREE.Vector3(1, 0, 1)}
         />
       </instancedMesh>
     </>
@@ -206,9 +232,10 @@ export default function WallsAndDoors(props) {
  * @property {THREE.InstancedMesh} wallsInst
  * @property {THREE.InstancedMesh} doorsInst
  * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
- * @property {{ [instanceId: number]: Geomorph.DoorMeta }} doorByInstId
+ * @property {Geomorph.DoorMeta[]} doorByInstId e.g. `doorByInstId[instanceId]`
  * @property {Map<number, Geomorph.DoorMeta>} movingDoors To be animated until they open/close.
  *
+ * @property {() => void} addDoorUvs
  * @property {() => void} buildLookups
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
  * @property {(

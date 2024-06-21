@@ -51,6 +51,7 @@ export default function World(props) {
     gms: [],
     hmr: { hash: '', gmHash: '' },
     obsTex: /** @type {*} */ (null),
+    decorTex: /** @type {*} */ (null),
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
@@ -201,17 +202,20 @@ export default function World(props) {
         state.flat && state.events.next({ key: 'draw-floor-ceil', gmKey });
       }));
 
-      imageLoader.loadAsync(
-        `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`,
-      ).then((img) => {
-        const canvas = document.createElement('canvas');
-        [canvas.width, canvas.height] = [img.width, img.height];
-        /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
-        const tex = new THREE.CanvasTexture(canvas);
-        tex.flipY = false; // align with XZ quad uv-map
-        state.obsTex = tex;
-        update();
-      });
+      /** @type {const} */ ([
+        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, key: 'obsTex' },
+        { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, key: 'decorTex' },
+      ]).forEach(({ src, key }) => {
+        imageLoader.loadAsync(src).then((img) => {
+          const canvas = document.createElement('canvas');
+          [canvas.width, canvas.height] = [img.width, img.height];
+          /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
+          const tex = new THREE.CanvasTexture(canvas);
+          tex.flipY = false; // align with XZ quad uv-map
+          state[key] = tex;
+          update();
+        });
+      })
 
       return null;
     },
@@ -312,6 +316,7 @@ export default function World(props) {
  * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
  * @property {THREE.CanvasTexture} obsTex CanvasTexture for pixel lookup
+ * @property {THREE.CanvasTexture} decorTex CanvasTexture for pixel lookup
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.

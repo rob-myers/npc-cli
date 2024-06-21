@@ -23,7 +23,7 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - shoulder mesh (extend from chest) ✅, or arms closer to chest ❌
 
-- 🚧 create decor spritesheet
+- ✅ create decor spritesheet
   - ℹ️ media/decor/* -> static/assets/decor.{png,webp}
   - ✅ basic door images
     - height `2m` (`80sgu`)
@@ -41,8 +41,8 @@
     - functions are quite complex, so keep them separate
   - ✅ avoid drawing sheets if nothing changed
   - ✅ avoid parsing maps if nothing changed
-  - doors have uvs all pointing to basic door image
-  - walls have uvs all pointing to basic wall image
+  - ✅ doors use uv map (hard-coded)
+  - ❌ walls have uvs all pointing to basic wall image
 
 - ✅ `yarn watch-assets` should auto-restart when it crashes (like `nodemon` did)
   - https://stackoverflow.com/a/697064/2917822
@@ -57,6 +57,10 @@
 - next.js repo continued
   - migrate Viewer
 
+- Should doors use hard-coding in decor spritesheet?
+- Boxy SVG can be slow to save
+  - Both Web and App
+  - https://boxy-svg.com/bugs/370/intermittent-slow-saving
 - split component WallsAndDoors
 - split component Surfaces
 - animation from directly above looks weird e.g. arms should bend more

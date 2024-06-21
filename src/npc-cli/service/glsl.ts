@@ -278,9 +278,9 @@ export const basicGradientFrag = /*glsl*/`
 
     #include <opaque_fragment>
 
-    // 🚧
     vec3 color = mix(colorA, colorB, vUv.y);
     gl_FragColor = vec4(color, 1.0);
+    // gl_FragColor = vec4(color, 0.5); // needs transparent on mesh
 
   }
 `;
@@ -345,29 +345,29 @@ export const InfiniteGridMaterial = shaderMaterial(
   `,
 );
 
-export const ObstacleShaderMaterial = shaderMaterial(
+export const InstancedSpriteSheetMaterial = shaderMaterial(
   {
     map: null,
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
-    opacity: 1,
+    opacity: 0.6,
     alphaTest: 0.5,
     // mapTransform: new THREE.Matrix3(),
   },
-  // meshBasic.instanceUvsVert,
   minimalInstanceUvsVert,
-  // meshBasic.Frag,
   minimalInstanceUvsFrag,
 );
 
 extend({
-  ObstacleShaderMaterial,
+  InstancedSpriteSheetMaterial,
   InfiniteGridMaterial,
 });
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      obstacleShaderMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial>;
+      instancedSpriteSheetMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
+        map: THREE.CanvasTexture;
+      };
       infiniteGridMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
         uSize1: number;
         uSize2: number;

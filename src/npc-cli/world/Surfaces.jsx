@@ -269,11 +269,10 @@ export default function Surfaces(props) {
       }}
       position={[0, 0.001, 0]}
     >
-      <obstacleShaderMaterial
-        key={glsl.ObstacleShaderMaterial.key}
+      <instancedSpriteSheetMaterial
+        key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        //@ts-expect-error
         map={api.obsTex}
         // diffuse={new THREE.Vector3(1, 0, 1)}
       />
