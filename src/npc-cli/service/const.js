@@ -90,3 +90,8 @@ export const glbFadeOut = {
 };
 
 export const showLastNavPath = false;
+
+/**
+ * Maximum `1 + 2 + 4 + 8 + 16`
+ */
+export const defaultAgentUpdateFlags = 1 + 2 + 4;

@@ -6,7 +6,8 @@ import { glbMeta } from "./const";
 export const npcService = {
 
   defaults: {
-    radius: glbMeta.radius * glbMeta.scale,
+    /** 🔔 division by 3 improves collisions */
+    radius: glbMeta.radius * glbMeta.scale / 3,
     runSpeed: glbMeta.runSpeed * glbMeta.scale,
     walkSpeed: glbMeta.walkSpeed * glbMeta.scale,
   },

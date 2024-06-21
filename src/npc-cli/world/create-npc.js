@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 import { dampLookAt } from "maath/easing";
 
-import { glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
+import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
 import { npcService } from '../service/npc';
@@ -34,6 +34,7 @@ export class Npc {
 
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
+  agentRadius = npcService.defaults.radius;
 
   /**
    * @param {NPC.NPCDef} def
@@ -171,7 +172,7 @@ export class Npc {
         this.s.target = null;
         this.agent.updateParameters({
           maxSpeed: this.getMaxSpeed(),
-          updateFlags: 7, // default
+          updateFlags: defaultAgentUpdateFlags,
         });
         
         this.startAnimation('Idle');
@@ -186,18 +187,18 @@ export class Npc {
         return;
       }
       
-      if (distance < 2.5 * agentRadius && (this.agent.updateFlags & 2) > 0) {
+      if (distance < 2.5 * this.agentRadius && (this.agent.updateFlags & 2) > 0) {
         // Turn off obstacle avoidance to avoid deceleration near nav border
         this.agent.updateParameters({
           updateFlags: this.agent.updateFlags & ~2,
         });
       }
 
-      if (distance < 2 * agentRadius) {
+      if (distance < 2 * this.agentRadius) {
         // undo speed scale
         // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
         this.agent.updateParameters({
-          maxSpeed: this.getMaxSpeed() * ((2 * agentRadius) / distance),
+          maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
         });
       }
     }
@@ -277,11 +278,9 @@ export function hotModuleReloadNpc(npc) {
 /** @param {any} error */
 function emptyReject(error) {}
 
-const agentRadius = npcService.defaults.radius / 3;
-
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
-  radius: agentRadius, // 🔔 too large causes jerky collisions
+  radius: npcService.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 10, // Large enough for 'Run'
   // maxSpeed: 0, // Set elsewhere
@@ -292,4 +291,5 @@ export const crowdAgentParams = {
   queryFilterType: 0,
   // userData, // 🚧 not working?
   // obstacleAvoidanceType
+  updateFlags: defaultAgentUpdateFlags,
 };

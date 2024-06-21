@@ -112,8 +112,7 @@ export default function World(props) {
       state.crowd && disposeCrowd(state.crowd);
       state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
-         // 🚧 same as create-npc
-        maxAgentRadius: npcService.defaults.radius / 3,
+        maxAgentRadius: npcService.defaults.radius,
       });
       // state.crowd.timeFactor
 
