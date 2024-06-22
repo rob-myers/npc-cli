@@ -117,9 +117,7 @@ export default function World(props) {
       });
       // state.crowd.timeFactor
 
-      if (state.npc) {
-        state.restoreCrowdAgents();
-      }
+      state.npc?.restore();
     },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
@@ -130,21 +128,6 @@ export default function World(props) {
       state.npc.onTick(deltaMs);
       state.vert.onTick();
       // info(state.r3f.gl.info.render);
-    },
-    restoreCrowdAgents() {
-      Object.values(state.npc.npc).forEach((npc) => {
-        npc.removeAgent();
-        const agent = npc.attachAgent();
-        
-        const closest = state.npc.getClosestNavigable(npc.getPosition());
-        if (closest === null) {// Agent outside nav keeps target but `Idle`s 
-          npc.startAnimation('Idle');
-        } else if (npc.s.target !== null) {
-          npc.walkTo(npc.s.target);
-        } else {// so they'll move "out of the way" of other npcs
-          agent.requestMoveTarget(npc.getPosition());
-        }
-      });
     },
     update,
   }));
@@ -327,7 +310,6 @@ export default function World(props) {
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {() => void} restoreCrowdAgents
  * @property {() => void} update
  * @property {() => void} onTick
  */

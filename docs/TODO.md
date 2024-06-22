@@ -8,12 +8,12 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 start writing first article
+- ✅ start writing first article
   - ℹ️ manually associate `Nav` items with pages (wait until next.js)
   - ✅ strip down "frontmatter" to `key`, with lookup for rest
   - ✅ migrate SideNote component
   - ✅ start writing index.mdx
-  - 🚧 intro should begin with "npcs controlled by user"
+  - ✅ intro should begin with "npcs controlled by user"
 
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
@@ -27,10 +27,18 @@
   - ✅ World gets updated
   - ✅ Doors texture should be right way up
 
-- obstacle disappearing on decor sheet HMR
+- ✅ obstacle disappearing on decor sheet HMR
+  - ✅ redo obstacles in `<Npcs>`
+  - ✅ ensure obstacles re-added when nav-mesh updates
+
+- 🚧 decor pipeline supports svg -> png conversion
+  - svg render will need to be supported by npm module `canvas`
+
+- 🚧 better looking doors
+
 
 - improve doors hard-coding in decor sprite-sheet
-- Boxy SVG can be slow to save
+- 🚧 Boxy SVG can be slow to save
   - Both Web and App
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
 - split component WallsAndDoors

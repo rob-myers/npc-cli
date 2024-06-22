@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { createDebugBox, tmpMesh1, tmpVectThree1, yAxis } from "../service/three";
+import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { WorldContext } from "./world-context";
@@ -129,6 +129,31 @@ export default function Npcs(props) {
         npc.onTick(deltaMs);
       }
     },
+    restore() {// onchange nav-mesh
+      // restore agents
+      Object.values(state.npc).forEach(npc => {
+        npc.removeAgent();
+        const agent = npc.attachAgent();
+        
+        const closest = state.getClosestNavigable(npc.getPosition());
+        if (closest === null) {// Agent outside nav keeps target but `Idle`s 
+          npc.startAnimation('Idle');
+        } else if (npc.s.target !== null) {
+          npc.walkTo(npc.s.target);
+        } else {// so they'll move "out of the way" of other npcs
+          agent.requestMoveTarget(npc.getPosition());
+        }
+      });
+
+      // restore obstacles (overwrite)
+      Object.values(state.obstacle).forEach(obstacle => {
+        if (obstacle.o.type === 'box') {
+          state.addBoxObstacle(obstacle.o.position, obstacle.o.extent, 0);
+        } else {
+          state.addCylinderObstacle(obstacle.o.position, obstacle.o.radius, obstacle.o.height);
+        }
+      });
+    },
 
     addBoxObstacle(position, extent, angle) {
       const { obstacle, success } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
@@ -139,7 +164,20 @@ export default function Npcs(props) {
         state.obsGroup.add(mesh);
         return state.obstacle[id] = { id, o: obstacle, mesh };
       } else {
-        warn(`failed to add obstacle at ${JSON.stringify(position)}`);
+        warn(`failed to add obstacle (box) at ${JSON.stringify(position)}`);
+        return null;
+      }
+    },
+    addCylinderObstacle(position, radius, height) {
+      const { obstacle, success } = api.nav.tileCache.addCylinderObstacle(position, radius, height);
+      state.updateTileCache();
+      if (success) {
+        const id = state.nextObstacleId++;
+        const mesh = createDebugCylinder(position, radius, height);
+        state.obsGroup.add(mesh);
+        return state.obstacle[id] = { id, o: obstacle, mesh };
+      } else {
+        warn(`failed to add obstacle (cylinder) at ${JSON.stringify(position)}`);
         return null;
       }
     },
@@ -203,10 +241,12 @@ export default function Npcs(props) {
  * @property {Record<string, NPC.Obstacle>} obstacle
  *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
+ * @property {(position: THREE.Vector3Like, radius: number, height: number) => NPC.Obstacle | null} addCylinderObstacle
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {() => null | NPC.NPC} getSelected
  * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
+ * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
