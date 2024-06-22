@@ -234,7 +234,7 @@ info({ opts });
   const mapsHash = hashJson(assetsJson.maps);
   const layoutsHash = hashJson(layout);
   const sheetsHash = hashJson(assetsJson.sheet);
-  const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.statSync(x).mtime));
+  const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
   const hash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
 
   /** @type {Geomorph.Geomorphs} */
