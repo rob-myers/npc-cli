@@ -57,6 +57,10 @@
 - next.js repo continued
   - migrate Viewer
 
+- 🚧 fix decor sheet HMR
+  - ✅ file decor.png gets updated
+  - World gets updated
+
 - 🚧 improve doors
   - 🚧 try slide door where possible
   - crumple-compatible texture

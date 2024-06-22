@@ -59,6 +59,9 @@ function computeOpts() {
     || changedFiles.includes(assetsScriptFilepath)
     || changedFiles.includes(geomorphServicePath)
   );
+  const changedDecorBaseNames = changedFiles.flatMap(x =>
+    x.startsWith(decorDir) ? path.basename(x) : []
+  );
   return {
     /**
      * We'll update efficiently <=> this is `false` i.e.
@@ -69,6 +72,8 @@ function computeOpts() {
     all,
     /** When non-empty, files changed (added/modified/deleted) within {ms} @see assets-nodemon.js */
     changedFiles,
+    /** Restriction of @see changedFiles to decor PNG baseNames */
+    changedDecorBaseNames,
     /** Only use @see changedFiles when non-empty and !opts.all  */
     detectChanges: !all && changedFiles.length > 0,
     /**
@@ -178,7 +183,7 @@ info({ opts });
 
   if (!prev.skipDecor) {
     info('creating decor sprite-sheet');
-    const toDecorImg = await createDecorSheetJson(assetsJson, prev.assets, prev.obstaclesPng);
+    const toDecorImg = await createDecorSheetJson(assetsJson, prev.assets);
     await drawDecorSheet(assetsJson, toDecorImg, prev.assets, prev.decorPng);
   } else {
     info('skipping decor sprite-sheet');
@@ -453,14 +458,13 @@ function createObstaclesSheetJson(assets) {
 /**
  * @param {Geomorph.AssetsJson} assets
  * @param {Geomorph.AssetsJson | null} prevAssets
- * @param {import('canvas').Image | null} prevDecorPng
  * @returns {Promise<Record<string, import('canvas').Image>>}
  */
-async function createDecorSheetJson(assets, prevAssets, prevDecorPng) {
+async function createDecorSheetJson(assets, prevAssets) {
 
   const pngBasenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".png")).sort();
   const changedBasenames = prevAssets && opts.detectChanges
-    ? pngBasenames.filter(x => opts.changedFiles.includes(x) || !(x in prevAssets.sheet.decor))
+    ? pngBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevAssets.sheet.decor))
     : pngBasenames;
 
   const baseNameToRect = /** @type {Record<string, Rectangle>} */ ({});
@@ -581,9 +585,9 @@ async function drawDecorSheet(assets, fileKeyToImage, prevAssets, prevDecorPng) 
   for (const { x, y, width, height, fileKey } of decors) {
     const image = fileKeyToImage[fileKey];
     if (image) {
+      info(`${fileKey} redrawing...`);
       ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
     } else {// assume image available in previous sprite-sheet
-      info(`${fileKey} redrawing...`);
       const prevRect = /** @type {Geomorph.DecorSheet} */ (prevDecor)[fileKey];
       ct.drawImage(/** @type {import('canvas').Image} */ (prevDecorPng),
         prevRect.x, prevRect.y, prevRect.width, prevRect.height,
