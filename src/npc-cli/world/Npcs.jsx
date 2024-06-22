@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { tmpMesh1, tmpVectThree1, yAxis } from "../service/three";
+import { createDebugBox, tmpMesh1, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { WorldContext } from "./world-context";
@@ -20,11 +20,12 @@ export default function Npcs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     group: /** @type {*} */ (null),
+    obsGroup: /** @type {*} */ (null),
     npc: {},
     select: { curr: null, prev: null, many: [] },
 
     nextObstacleId: 0,
-    toObstacle: {},
+    obstacle: {},
 
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = api.crowd.navMeshQuery;
@@ -129,26 +130,30 @@ export default function Npcs(props) {
       }
     },
 
-    // 🚧 old below
     addBoxObstacle(position, extent, angle) {
-      const { obstacle } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
+      const { obstacle, success } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
       state.updateTileCache();
-      const id = state.nextObstacleId++;
-      if (obstacle) {
-        return state.toObstacle[id] = { id, o: obstacle, mesh: tmpMesh1 };
+      if (success) {
+        const id = state.nextObstacleId++;
+        const mesh = createDebugBox(position, obstacle.extent); // 🚧 angle
+        state.obsGroup.add(mesh);
+        return state.obstacle[id] = { id, o: obstacle, mesh };
       } else {
         warn(`failed to add obstacle at ${JSON.stringify(position)}`);
         return null;
       }
     },
     removeObstacle(obstacleId) {
-      const obstacle = state.toObstacle[obstacleId];
+      const obstacle = state.obstacle[obstacleId];
       if (obstacle) {
-        delete state.toObstacle[obstacleId];
+        delete state.obstacle[obstacleId];
         api.nav.tileCache.removeObstacle(obstacle.o);
+        state.obsGroup.remove(obstacle.mesh);
         state.updateTileCache();
       }
     },
+
+    // 🚧 old below
     updateTileCache() {// 🚧 spread out updates
       const { tileCache, navMesh } = api.nav;
       for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
@@ -169,20 +174,10 @@ export default function Npcs(props) {
 
   return <>
 
-    {/* 🚧 <group name="obstacles"> */}
-    {Object.values(state.toObstacle).map((o) => (
-      <mesh
-        key={o.id}
-        ref={mesh => mesh && (o.mesh = mesh)}
-        position={[o.o.position.x, o.o.position.y, o.o.position.z]}
-      >
-        <meshBasicMaterial wireframe color="red" />
-        {o.o.type === 'box'
-          ? <boxGeometry args={[o.o.extent.x * 2, o.o.extent.y * 2, o.o.extent.z * 2]} />
-          : <cylinderGeometry args={[o.o.radius, o.o.radius, o.o.height]} />
-        }
-      </mesh>
-    ))}
+    <group
+      name="obstacles"
+      ref={x => state.obsGroup = x ?? state.obsGroup}
+    />
   
     <group
       name="npcs"
@@ -201,10 +196,11 @@ export default function Npcs(props) {
 /**
  * @typedef State
  * @property {THREE.Group} group
+ * @property {THREE.Group} obsGroup
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {{ curr: null | string; prev: null | string; many: string[]; }} select
  * @property {number} nextObstacleId
- * @property {Record<string, NPC.Obstacle>} toObstacle
+ * @property {Record<string, NPC.Obstacle>} obstacle
  *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath

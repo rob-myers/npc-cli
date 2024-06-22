@@ -93,9 +93,14 @@ function decompToXZAttribs(decomp) {
   return { vertices, indices, uvs };
 }
 
-export const wireFrameMaterial = new THREE.MeshStandardMaterial({
+export const greenWireFrameMat = new THREE.MeshStandardMaterial({
   wireframe: true,
   color: "green",
+});
+
+export const redWireFrameMat = new THREE.MeshStandardMaterial({
+  wireframe: true,
+  color: "red",
 });
 
 export const tmpVectThree1 = new THREE.Vector3();
@@ -171,6 +176,32 @@ export function buildObjectLookup(object) {
     });
   }
   return data;
+}
+
+const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
+const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
+
+/**
+ * @param {THREE.Vector3Like} position
+ * @param {THREE.Vector3Like} halfExtent
+ */
+export function createDebugBox(position, halfExtent) {
+  const mesh = new THREE.Mesh(boxGeometry, redWireFrameMat)
+  mesh.position.copy(position);
+  mesh.scale.set(halfExtent.x * 2, halfExtent.y * 2, halfExtent.z * 2);
+  return mesh;
+}
+
+/**
+ * @param {THREE.Vector3Like} position
+ * @param {number} radius
+ * @param {number} height
+ */
+export function createDebugCylinder(position, radius, height) {
+  const mesh = new THREE.Mesh(cylinderGeometry, redWireFrameMat)
+  mesh.position.copy(position);
+  mesh.scale.set(radius, height, radius);
+  return mesh;
 }
 
 export const yAxis = new THREE.Vector3(0, 1, 0);

@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { navMeta, wireFrameMaterial } from "../service/three";
+import { navMeta, greenWireFrameMat } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -91,7 +91,7 @@ export default function Debug(props) {
   React.useMemo(() => {
     state.navMesh = new NavMeshHelper({
       navMesh: api.nav.navMesh,
-      navMeshMaterial: wireFrameMaterial,
+      navMeshMaterial: greenWireFrameMat,
     });
   }, [api.nav.navMesh]);
 
