@@ -490,7 +490,8 @@ async function createDecorSheetJson(assets, prevAssets) {
       baseNameToRect[baseName] = rect;
       baseNameToImg[baseName] = img;
     } else {
-      const { x: _, y: __, ...meta } = /** @type {Geomorph.DecorSheet} */ (prevDecorSheet)[baseName];
+      // 🔔 keeping meta.{x,y,width,height} avoids nondeterminism in sheet.decor json
+      const meta = /** @type {Geomorph.DecorSheet} */ (prevDecorSheet)[baseName];
       const rect = new Rectangle(meta.width, meta.height);
       rect.data = { ...meta, fileKey: baseName };
       baseNameToRect[baseName] = rect;
@@ -503,7 +504,13 @@ async function createDecorSheetJson(assets, prevAssets) {
   const json = ({ decor: {}, decorDim: { width: bin.width, height: bin.height } });
   bin.rects.forEach(r => {
     const meta = /** @type {Geomorph.DecorSheetRectCtxt} */ (r.data);
-    json.decor[meta.fileKey] = { ...meta, x: toPrecision(r.x), y: toPrecision(r.y), width: r.width, height: r.height };
+    json.decor[meta.fileKey] = {
+      ...meta,
+      x: toPrecision(r.x),
+      y: toPrecision(r.y),
+      width: r.width,
+      height: r.height,
+    };
   });
 
   assets.sheet = { ...assets.sheet, ...json }; // Overwrite initial/previous

@@ -22,20 +22,14 @@
 - next.js repo continued
   - migrate Viewer
 
-- 🚧 fix decor sheet HMR
+- ✅ fix decor sheet HMR
   - ✅ file decor.png gets updated
   - ✅ World gets updated
-  - 🚧 Doors texture was upside down
+  - ✅ Doors texture should be right way up
 
-- 🚧 improve doors
-  - 🚧 try slide door where possible
-  - crumple-compatible texture
-  - can fade door
-    > e.g. https://www.npmjs.com/package/three-instanced-uniforms-mesh
-  - lighter standard door
-  - better hull door
-  - fix uv squashing e.g. some doors slide, some fade
-- Should doors use hard-coding in decor spritesheet?
+- obstacle disappearing on decor sheet HMR
+
+- improve doors hard-coding in decor sprite-sheet
 - Boxy SVG can be slow to save
   - Both Web and App
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving

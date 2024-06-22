@@ -203,16 +203,16 @@ export default function World(props) {
       }));
 
       /** @type {const} */ ([
-        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, key: 'obsTex' },
-        { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, key: 'decorTex' },
-      ]).forEach(({ src, key }) => {
+        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex' },
+        { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex' },
+      ]).forEach(({ src, texKey }) => {
         imageLoader.loadAsync(src).then((img) => {
           const canvas = document.createElement('canvas');
           [canvas.width, canvas.height] = [img.width, img.height];
           /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
           const tex = new THREE.CanvasTexture(canvas);
           tex.flipY = false; // align with XZ quad uv-map
-          state[key] = tex;
+          state[texKey] = tex;
           update();
         });
       })
