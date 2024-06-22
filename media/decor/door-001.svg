@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 220 400" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
+  <rect x="-0.000005" y="-0.000007" width="219.999994" height="399.99999" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);">
+    <title>back</title>
+  </rect>
+  <rect x="0.000203" y="0.000027" width="20" height="400" style="stroke-width: 2px;"/>
+  <rect x="200.000005" y="0.000027" width="20" height="400" style="stroke-width: 2px;"/>
+  <rect y="0.000027" width="220" height="20.000002" style="stroke-width: 2px;"/>
+</svg>
