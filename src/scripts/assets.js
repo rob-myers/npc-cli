@@ -152,6 +152,7 @@ info({ opts });
     });
     assetsJson.maps = prev.assets.maps;
     assetsJson.sheet = prev.assets.sheet;
+    // 🚧 assetsJson.meta[mapKey]
   }
 
   //#region ℹ️ Compute assets.json and sprite-sheets
@@ -233,7 +234,8 @@ info({ opts });
   const mapsHash = hashJson(assetsJson.maps);
   const layoutsHash = hashJson(layout);
   const sheetsHash = hashJson(assetsJson.sheet);
-  const hash = `${mapsHash} ${layoutsHash} ${sheetsHash}`;
+  const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.statSync(x).mtime));
+  const hash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
 
   /** @type {Geomorph.Geomorphs} */
   const geomorphs = {
@@ -241,6 +243,7 @@ info({ opts });
     mapsHash,
     layoutsHash,
     sheetsHash,
+    imagesHash,
     map: assetsJson.maps,
     layout,
     sheet: assetsJson.sheet,

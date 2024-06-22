@@ -15,51 +15,17 @@
   - ✅ start writing index.mdx
   - 🚧 intro should begin with "npcs controlled by user"
 
-- ✅ investigate slow down when npc walks towards/up-to edge
-  - `nvel` changes
-  - DT_CROWD_OBSTACLE_AVOIDANCE = 2
-  - ✅ change ag->params.updateFlags to not intersect DT_CROWD_OBSTACLE_AVOIDANCE
 - support camera move via terminal
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - shoulder mesh (extend from chest) ✅, or arms closer to chest ❌
-
-- ✅ create decor spritesheet
-  - ℹ️ media/decor/* -> static/assets/decor.{png,webp}
-  - ✅ basic door images
-    - height `2m` (`80sgu`)
-      - `x5` (png-scale-up) -> `400sgu` (can scale down for spritesheet)
-    - ✅ hull door width `100 * worldScale` i.e. `2.5m`
-      - `500 x 400 sgu` (width x height)
-    - ✅ non-hull door width `220/5 * worldScale` i.e. `1.1m`
-      - `220 x 400 sgu`
-  - ✅ basic wall image
-  - ✅ `assets.js` generates sprite-sheet json
-  - ✅ `assets.js` generates sprite-sheet png/webp
-  - ✅ `assets.js` sprite-sheet generation is `changedFiles` sensitive
-    - skip other steps if only changedFiles are in media/decor
-  - ❌ combine "create sheet and draw" into single function (decor/obstacle)
-    - functions are quite complex, so keep them separate
-  - ✅ avoid drawing sheets if nothing changed
-  - ✅ avoid parsing maps if nothing changed
-  - ✅ doors use uv map (hard-coded)
-  - ❌ walls have uvs all pointing to basic wall image
-
-- ✅ `yarn watch-assets` should auto-restart when it crashes (like `nodemon` did)
-  - https://stackoverflow.com/a/697064/2917822
-
-- ✅ support shell syntax `until false; do echo foo; sleep 1; done`
-
-- ❌ get eslint working again e.g. for raw-loader.js
-- ✅ start a new repo based on next js
-  - ✅ https://github.com/rob-myers/npc-cli-next
-  - ✅ get mdx working
 
 - next.js repo continued
   - migrate Viewer
 
 - 🚧 fix decor sheet HMR
   - ✅ file decor.png gets updated
-  - World gets updated
+  - ✅ World gets updated
+  - 🚧 Doors texture was upside down
 
 - 🚧 improve doors
   - 🚧 try slide door where possible
@@ -1317,3 +1283,40 @@
 - ✅ TestWorld -> World etc.
 - ✅ Put something else in game-functions.sh
 - ✅ Move `api` from game-functions.sh -> game-generators.js
+
+
+- ✅ create decor spritesheet
+  - ℹ️ media/decor/* -> static/assets/decor.{png,webp}
+  - ✅ basic door images
+    - height `2m` (`80sgu`)
+      - `x5` (png-scale-up) -> `400sgu` (can scale down for spritesheet)
+    - ✅ hull door width `100 * worldScale` i.e. `2.5m`
+      - `500 x 400 sgu` (width x height)
+    - ✅ non-hull door width `220/5 * worldScale` i.e. `1.1m`
+      - `220 x 400 sgu`
+  - ✅ basic wall image
+  - ✅ `assets.js` generates sprite-sheet json
+  - ✅ `assets.js` generates sprite-sheet png/webp
+  - ✅ `assets.js` sprite-sheet generation is `changedFiles` sensitive
+    - skip other steps if only changedFiles are in media/decor
+  - ❌ combine "create sheet and draw" into single function (decor/obstacle)
+    - functions are quite complex, so keep them separate
+  - ✅ avoid drawing sheets if nothing changed
+  - ✅ avoid parsing maps if nothing changed
+  - ✅ doors use uv map (hard-coded)
+  - ❌ walls have uvs all pointing to basic wall image
+
+- ✅ `yarn watch-assets` should auto-restart when it crashes (like `nodemon` did)
+  - https://stackoverflow.com/a/697064/2917822
+
+- ✅ support shell syntax `until false; do echo foo; sleep 1; done`
+
+- ❌ get eslint working again e.g. for raw-loader.js
+- ✅ start a new repo based on next js
+  - ✅ https://github.com/rob-myers/npc-cli-next
+  - ✅ get mdx working
+
+- ✅ investigate slow down when npc walks towards/up-to edge
+  - `nvel` changes
+  - DT_CROWD_OBSTACLE_AVOIDANCE = 2
+  - ✅ change ag->params.updateFlags to not intersect DT_CROWD_OBSTACLE_AVOIDANCE

@@ -56,11 +56,12 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
-    /** `${mapsHash} ${layoutsHash} ${sheetsHash}` */
+    /** `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}` */
     hash: string;
     mapsHash: number;
     layoutsHash: number;
     sheetsHash: number;
+    imagesHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
     sheet: SpriteSheet;
