@@ -129,11 +129,13 @@ info({ opts });
 
   const prev = await computePrev();
 
-  const symbolBasenames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg")).sort();
-  const symbolBasenamesToUpdate = opts.all
-    ? symbolBasenames
-    : symbolBasenames.filter(x =>  opts.changedFiles.includes(path.resolve(symbolsDir, x)))
+  const symbolBaseNames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg")).sort();
+  const symbolBaseNamesToUpdate = opts.all
+    ? symbolBaseNames
+    : symbolBaseNames.filter(x =>  opts.changedFiles.includes(path.resolve(symbolsDir, x)))
   ;
+
+  const mapBaseNames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg")).sort();
 
   /** @type {Geomorph.AssetsJson} The next assets.json */
   const assetsJson = {
@@ -145,31 +147,34 @@ info({ opts });
 
   if (prev.assets) {// use previous (may overwrite later)
     const { symbols, meta } = prev.assets;
-    symbolBasenames.forEach(filename => {
-      const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
+    symbolBaseNames.forEach(baseName => {
+      const symbolKey = /** @type {Geomorph.SymbolKey} */ (baseName.slice(0, -".svg".length));
       assetsJson.symbols[symbolKey] = symbols[symbolKey];
       assetsJson.meta[symbolKey] = meta[symbolKey];
     });
+    mapBaseNames.forEach(baseName => {
+      const mapKey = baseName.slice(0, -".svg".length);
+      assetsJson.meta[mapKey] = meta[mapKey];
+    });
     assetsJson.maps = prev.assets.maps;
     assetsJson.sheet = prev.assets.sheet;
-    // 🚧 assetsJson.meta[mapKey]
   }
 
   //#region ℹ️ Compute assets.json and sprite-sheets
 
-  if (symbolBasenamesToUpdate.length) {
-    info(`parsing ${symbolBasenamesToUpdate.length === symbolBasenames.length
+  if (symbolBaseNamesToUpdate.length) {
+    info(`parsing ${symbolBaseNamesToUpdate.length === symbolBaseNames.length
       ? `all symbols`
-      : `symbols: ${JSON.stringify(symbolBasenamesToUpdate)}`
+      : `symbols: ${JSON.stringify(symbolBaseNamesToUpdate)}`
     }`);
-    parseSymbols(assetsJson, symbolBasenamesToUpdate);
+    parseSymbols(assetsJson, symbolBaseNamesToUpdate);
   } else {
     info('skipping all symbols');
   }
 
   if (!prev.skipMaps) {
     info('parsing maps');
-    parseMaps(assetsJson);
+    parseMaps(assetsJson, mapBaseNames);
   } else {
     info('skipping maps');
   }
@@ -312,14 +317,13 @@ info({ opts });
 
 /**
  * @param {Geomorph.AssetsJson} output
+ * @param {string[]} mapBasenames
  */
-function parseMaps({ meta, maps }) {
-  const mapFilenames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg"));
-
-  for (const filename of mapFilenames) {
-    const filepath = path.resolve(mapsDir, filename);
-    const contents = fs.readFileSync(filepath).toString();
-    const mapKey = filename.slice(0, -".svg".length);
+function parseMaps({ meta, maps }, mapBasenames) {
+  for (const baseName of mapBasenames) {
+    const filePath = path.resolve(mapsDir, baseName);
+    const contents = fs.readFileSync(filePath).toString();
+    const mapKey = baseName.slice(0, -".svg".length);
     maps[mapKey] = geomorphService.parseMap(mapKey, contents);
     meta[mapKey] = { outputHash: hashText(stringify(maps[mapKey])) };
   }
@@ -327,13 +331,13 @@ function parseMaps({ meta, maps }) {
 
 /**
  * @param {Geomorph.AssetsJson} output
- * @param {string[]} symbolFilenames
+ * @param {string[]} symbolBasenames
  */
-function parseSymbols({ symbols, meta }, symbolFilenames) {
-  for (const filename of symbolFilenames) {
-    const filepath = path.resolve(symbolsDir, filename);
-    const contents = fs.readFileSync(filepath).toString();
-    const symbolKey = /** @type {Geomorph.SymbolKey} */ (filename.slice(0, -".svg".length));
+function parseSymbols({ symbols, meta }, symbolBasenames) {
+  for (const baseName of symbolBasenames) {
+    const filePath = path.resolve(symbolsDir, baseName);
+    const contents = fs.readFileSync(filePath).toString();
+    const symbolKey = /** @type {Geomorph.SymbolKey} */ (baseName.slice(0, -".svg".length));
 
     const parsed = geomorphService.parseSymbol(symbolKey, contents);
     const serialized = geomorphService.serializeSymbol(parsed);
