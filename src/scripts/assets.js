@@ -583,6 +583,7 @@ async function drawDecorSheet(assets, fileKeyToImage, prevAssets, prevDecorPng) 
     if (image) {
       ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
     } else {// assume image available in previous sprite-sheet
+      info(`${fileKey} redrawing...`);
       const prevRect = /** @type {Geomorph.DecorSheet} */ (prevDecor)[fileKey];
       ct.drawImage(/** @type {import('canvas').Image} */ (prevDecorPng),
         prevRect.x, prevRect.y, prevRect.width, prevRect.height,

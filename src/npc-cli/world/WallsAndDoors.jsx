@@ -3,8 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { hashJson } from "../service/generic";
-import { wallHeight, worldScale } from "../service/const";
+import { wallHeight } from "../service/const";
 import * as glsl from "../service/glsl";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
@@ -191,7 +190,7 @@ export default function WallsAndDoors(props) {
     state.buildLookups();
     state.positionInstances();
     state.addDoorUvs();
-  }, [api.hash, doorShaderHash]);
+  }, [api.hash]);
 
   return (
     <>
@@ -263,8 +262,6 @@ const tmpVec2 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
 const tmpMatFour2 = new THREE.Matrix4();
-
-const doorShaderHash = hashJson([glsl.meshBasic.simplifiedVert, glsl.basicGradientFrag]);
 
 const meshName = /** @type {const} */ ({
   doors: 'doors',
