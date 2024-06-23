@@ -375,11 +375,14 @@ function validateSubSymbolDimensions(symbols) {
 
 /**
  * @param {Geomorph.Geomorphs} geomorphs 
- * @param {Geomorph.GeomorphKey[]} gmKeys 
+ * @param {Geomorph.GeomorphKey[]} changedGmKeys 
  */
-async function drawFloorImages(geomorphs, gmKeys) {
-  const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => gmKeys.includes(key));
+async function drawFloorImages(geomorphs, changedGmKeys) {
+  const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => changedGmKeys.includes(key));
   const promises = /** @type {Promise<any>[]} */ ([]);
+
+  // 🚧 currently only triggered when gm changes
+  // 🚧 more this to the browser
 
   for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of changedLayouts) {
     
@@ -390,7 +393,7 @@ async function drawFloorImages(geomorphs, gmKeys) {
     ct.transform(worldToSgu, 0, 0, worldToSgu, -worldToSgu * pngRect.x, -worldToSgu * pngRect.y);
 
     // White floor
-    // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['white', null]);
+    drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#444', null]);
     if (imgOpts.debugNavPoly || imgOpts.debugNavTris) {
       debugDrawNav(ct, navDecomp);
     }

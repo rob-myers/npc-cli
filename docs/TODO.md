@@ -17,14 +17,14 @@
     - ✅ in browser after load texture
   - ✅ lighter ceiling + minor clean
   - 🚧 change floor shade
-    - temp fix
-    - move to browser
+    - ✅ temp fix
+    - 🚧 draw inside browser instead of assets.js
   - 🚧 inverted grid
   - draw grid on floor?
   - different ceiling shades e.g. bridge
   - prevent coinciding doors (flicker)
     - detect/discard during flatten symbols
-  - could fix "low fuel" via `y=1.01 wallsH=1`
+  - 🚧 could fix "low fuel" via `y=1.01 wallsH=1`
 
 - ensure separated hull doors
   - ensure normal points into gm
