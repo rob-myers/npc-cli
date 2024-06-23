@@ -381,8 +381,8 @@ async function drawFloorImages(geomorphs, changedGmKeys) {
   const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => changedGmKeys.includes(key));
   const promises = /** @type {Promise<any>[]} */ ([]);
 
-  // 🚧 currently only triggered when gm changes
-  // 🚧 more this to the browser
+  // 🔔 currently only triggered when gm changes
+  // 🚧 move this to the browser
 
   for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of changedLayouts) {
     
@@ -646,7 +646,7 @@ function detectChangedObstacles(obstacles, assets, prev) {
 function debugDrawNav(ct, navDecomp) {
   const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
   const navPoly = Poly.union(triangles);
-  imgOpts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(200, 200, 200, 0.4)', 'black', 0.01]);
+  imgOpts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(90, 90, 90, 0.4)', 'black', 0.01]);
   imgOpts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
 }
 
