@@ -30,13 +30,13 @@ export default function Ceiling(props) {
         x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
       );
       // drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(250, 50, 50, 1)', 'rgba(250, 50, 50, 1)', 0.06])
-      drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(180, 180, 180, 1)', 'rgba(180, 180, 180, 1)', 0.06])
+      drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(120, 120, 120, 1)', 'rgba(120, 120, 120, 1)', 0.06])
 
       // door tops
       ceilCt.strokeStyle = 'black';
       ceilCt.lineWidth = 0.03;
       drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(200, 200, 200, 1)'])
-      layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
+      // layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
       ceilCt.resetTransform();
 
       const { ceil: [, ceil] } = api.gmClass[gmKey];
