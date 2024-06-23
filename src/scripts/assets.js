@@ -182,15 +182,15 @@ info({ opts });
   if (!prev.skipObstacles) {
     info('creating obstacles sprite-sheet');
     createObstaclesSheetJson(assetsJson);
-    await drawObstaclesSheet(assetsJson, prev.assets, prev.obstaclesPng);
+    await drawObstaclesSheet(assetsJson, prev);
   } else {
     info('skipping obstacles sprite-sheet');
   }
 
   if (!prev.skipDecor) {
     info('creating decor sprite-sheet');
-    const toDecorImg = await createDecorSheetJson(assetsJson, prev.assets);
-    await drawDecorSheet(assetsJson, toDecorImg, prev.assets, prev.decorPng);
+    const toDecorImg = await createDecorSheetJson(assetsJson, prev);
+    await drawDecorSheet(assetsJson, toDecorImg, prev);
   } else {
     info('skipping decor sprite-sheet');
   }
@@ -464,19 +464,78 @@ function createObstaclesSheetJson(assets) {
 
 /**
  * @param {Geomorph.AssetsJson} assets
- * @param {Geomorph.AssetsJson | null} prevAssets
+ * @param {Prev} prev
+ * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
+ */
+async function drawObstaclesSheet(assets, prev) {
+  
+  const { obstacle, obstacleDim } = assets.sheet;
+  const obstacles = Object.values(obstacle);
+  const ct = createCanvas(obstacleDim.width, obstacleDim.height).getContext('2d');
+
+  // 🚧 redraw all obstacles when:
+  // - opts.all ✅ (prev.assets `null`)
+  // - this file changed (?)
+  const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prev);
+  info({ changedObstacles, removedObstacles });
+
+  if (changedObstacles.size === 0 && removedObstacles.size === 0) {
+    return false;
+  }
+
+  for (const { x, y, width, height, symbolKey, obstacleId } of obstacles) {
+    if (assets.meta[symbolKey].pngHash !== emptyStringHash) {
+      const symbol = assets.symbols[symbolKey];
+      const scale = (1 / worldScale) * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
+      
+      const srcPoly = Poly.from(symbol.obstacles[obstacleId]);
+      const srcRect = srcPoly.rect;
+      const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
+      const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
+
+      if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
+        // info(`${symbolKey} ${obstacleId} obstacle did not change`);
+        const prevObs = /** @type {Geomorph.AssetsJson} */ (prev.assets).sheet.obstacle[`${symbolKey} ${obstacleId}`];
+        ct.drawImage(/** @type {import('canvas').Image} */ (prev.obstaclesPng),
+          prevObs.x, prevObs.y, prevObs.width, prevObs.height,
+          x, y, width, height,
+        );
+      } else {
+        info(`${symbolKey} ${obstacleId} redrawing...`);
+        const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
+        const matched = fs.readFileSync(symbolPath).toString().match(dataUrlRegEx);
+        const dataUrl = assertNonNull(matched)[0].slice(1, -1);
+        const image = await loadImage(dataUrl);
+        ct.save();
+        drawPolygons(ct, dstPngPoly, ['white', null], 'clip');
+        ct.drawImage(image, srcPngRect.x, srcPngRect.y, srcPngRect.width, srcPngRect.height, x, y, width, height);
+        ct.restore();
+      }
+
+    } else {
+      error(`${symbolKey}.svg: expected data:image/png inside SVG symbol`);
+    }
+  }
+
+  await saveCanvasAsFile(ct.canvas, obstaclesPngPath);
+  return true;
+}
+
+/**
+ * @param {Geomorph.AssetsJson} assets
+ * @param {Prev} prev
  * @returns {Promise<Record<string, import('canvas').Image>>}
  */
-async function createDecorSheetJson(assets, prevAssets) {
+async function createDecorSheetJson(assets, prev) {
 
   const pngBasenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".png")).sort();
-  const changedBasenames = prevAssets && opts.detectChanges
-    ? pngBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevAssets.sheet.decor))
+  const prevDecorSheet = prev.assets?.sheet.decor;
+  const changedBasenames = prevDecorSheet && opts.detectChanges
+    ? pngBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
     : pngBasenames;
 
   const baseNameToRect = /** @type {Record<string, Rectangle>} */ ({});
   const baseNameToImg = /** @type {Record<string, import('canvas').Image>} */ ({});
-  const prevDecorSheet = prevAssets?.sheet.decor;
 
   for (const baseName of pngBasenames) {
     if (changedBasenames.includes(baseName)) {
@@ -520,81 +579,15 @@ async function createDecorSheetJson(assets, prevAssets) {
 
 /**
  * @param {Geomorph.AssetsJson} assets
- * @param {Geomorph.AssetsJson | null} prevAssets
- * @param {import('canvas').Image | null} prevObstaclesPng
- * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
- */
-async function drawObstaclesSheet(assets, prevAssets, prevObstaclesPng) {
-  
-  const { obstacle, obstacleDim } = assets.sheet;
-  const obstacles = Object.values(obstacle);
-  const ct = createCanvas(obstacleDim.width, obstacleDim.height).getContext('2d');
-
-  // 🚧 redraw all obstacles when:
-  // - opts.all ✅ (prevAssets necessarily `null`)
-  // - this file changed (?)
-  const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(
-    obstacles,
-    assets,
-    prevObstaclesPng ? prevAssets : null,
-  );
-  
-  info({ changedObstacles, removedObstacles });
-
-  if (changedObstacles.size === 0 && removedObstacles.size === 0) {
-    return false;
-  }
-
-  for (const { x, y, width, height, symbolKey, obstacleId } of obstacles) {
-    if (assets.meta[symbolKey].pngHash !== emptyStringHash) {
-      const symbol = assets.symbols[symbolKey];
-      const scale = (1 / worldScale) * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
-      
-      const srcPoly = Poly.from(symbol.obstacles[obstacleId]);
-      const srcRect = srcPoly.rect;
-      const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (worldScale * (symbol.isHull ? 1 : 0.2)));
-      const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
-
-      if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
-        // info(`${symbolKey} ${obstacleId} obstacle did not change`);
-        const prev = /** @type {Geomorph.AssetsJson} */ (prevAssets).sheet.obstacle[`${symbolKey} ${obstacleId}`];
-        ct.drawImage(/** @type {import('canvas').Image} */ (prevObstaclesPng),
-          prev.x, prev.y, prev.width, prev.height,
-          x, y, width, height,
-        );
-      } else {
-        info(`${symbolKey} ${obstacleId} redrawing...`);
-        const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
-        const matched = fs.readFileSync(symbolPath).toString().match(dataUrlRegEx);
-        const dataUrl = assertNonNull(matched)[0].slice(1, -1);
-        const image = await loadImage(dataUrl);
-        ct.save();
-        drawPolygons(ct, dstPngPoly, ['white', null], 'clip');
-        ct.drawImage(image, srcPngRect.x, srcPngRect.y, srcPngRect.width, srcPngRect.height, x, y, width, height);
-        ct.restore();
-      }
-
-    } else {
-      error(`${symbolKey}.svg: expected data:image/png inside SVG symbol`);
-    }
-  }
-
-  await saveCanvasAsFile(ct.canvas, obstaclesPngPath);
-  return true;
-}
-
-/**
- * @param {Geomorph.AssetsJson} assets
  * @param {Record<string, import('canvas').Image>} fileKeyToImage
- * @param {Geomorph.AssetsJson | null} prevAssets
- * @param {import('canvas').Image | null} prevDecorPng
+ * @param {Prev} prev
  * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
  */
-async function drawDecorSheet(assets, fileKeyToImage, prevAssets, prevDecorPng) {
+async function drawDecorSheet(assets, fileKeyToImage, prev) {
   const { decor, decorDim } = assets.sheet;
   const decors = Object.values(decor);
   const ct = createCanvas(decorDim.width, decorDim.height).getContext('2d');
-  const prevDecor = prevAssets?.sheet.decor;
+  const prevDecor = prev.assets?.sheet.decor;
   
   for (const { x, y, width, height, fileKey } of decors) {
     const image = fileKeyToImage[fileKey];
@@ -603,7 +596,7 @@ async function drawDecorSheet(assets, fileKeyToImage, prevAssets, prevDecorPng) 
       ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
     } else {// assume image available in previous sprite-sheet
       const prevRect = /** @type {Geomorph.DecorSheet} */ (prevDecor)[fileKey];
-      ct.drawImage(/** @type {import('canvas').Image} */ (prevDecorPng),
+      ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPng),
         prevRect.x, prevRect.y, prevRect.width, prevRect.height,
         x, y, width, height,
       );
@@ -618,14 +611,14 @@ async function drawDecorSheet(assets, fileKeyToImage, prevAssets, prevDecorPng) 
  * Uses special hashes constructed in `assets.meta`.
  * @param {Geomorph.SpriteSheet['obstacle'][*][]} obstacles
  * @param {Geomorph.AssetsJson} assets
- * @param {Geomorph.AssetsJson | null} prevAssets
+ * @param {Prev} prev
  * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
  */
-function detectChangedObstacles(obstacles, assets, prevAssets) {
-  if (prevAssets) {
+function detectChangedObstacles(obstacles, assets, prev) {
+  if (prev.assets && prev.obstaclesPng) {
     const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
-    const removed = new Set(Object.values(prevAssets.sheet.obstacle).map(geomorphService.symbolObstacleToKey));
-    const [currMeta, prevMeta] = [assets.meta, prevAssets.meta];
+    const removed = new Set(Object.values(prev.assets.sheet.obstacle).map(geomorphService.symbolObstacleToKey));
+    const [currMeta, prevMeta] = [assets.meta, prev.assets.meta];
     obstacles.forEach(({ symbolKey, obstacleId }) => {
       const key = geomorphService.symbolObstacleToKey({ symbolKey, obstacleId });
       removed.delete(key);
