@@ -326,9 +326,13 @@ export const InfiniteGridMaterial = shaderMaterial(
   }
 
   void main() {
-    float d = 1.0 - min(distance(
-      cameraPosition.${infiniteGridPlaneAxes},
-      worldPosition.${infiniteGridPlaneAxes}) / uDistance,
+
+    // 🚧 intersection of camera direction with xz plane instead of cameraPosition?
+    float d = 1.0 - min(
+      distance(
+        cameraPosition.${infiniteGridPlaneAxes},
+        worldPosition.${infiniteGridPlaneAxes}
+      ) / uDistance,
       1.0
     );
 
@@ -339,7 +343,6 @@ export const InfiniteGridMaterial = shaderMaterial(
     gl_FragColor.a = mix(0.5 * gl_FragColor.a, gl_FragColor.a, g2);
     
     // gl_FragColor.a *= 0.5; // 👈 more transparent
-
     if ( gl_FragColor.a <= 0.0 ) discard;
   }
   `,
