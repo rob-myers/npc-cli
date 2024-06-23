@@ -646,7 +646,7 @@ function detectChangedObstacles(obstacles, assets, prev) {
 function debugDrawNav(ct, navDecomp) {
   const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
   const navPoly = Poly.union(triangles);
-  imgOpts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(90, 90, 90, 0.4)', 'black', 0.01]);
+  imgOpts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(30, 30, 30, 0.4)', 'black', 0.01]);
   imgOpts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
 }
 
