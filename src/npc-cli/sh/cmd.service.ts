@@ -1024,8 +1024,9 @@ export function isTtyAt(meta: Sh.BaseMeta, fd: number) {
 export function parseFnOrStr(input: string) {
   try {
     const parsed = Function(`return ${input}`)();
-    // 🤔 avoid e.g. 'toString' -> window.toString
-    if (typeof parsed === "function" && !(input in window)) {
+    // 🤔 avoid 'toString' -> window.toString
+    // 🤔 permit 'String'  -> window.String
+    if (typeof parsed === "function" && !(input in window && parsed.length === 0)) {
       return parsed;
     }
     if (parsed instanceof RegExp) {
