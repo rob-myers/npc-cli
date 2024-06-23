@@ -31,7 +31,7 @@ export default function Floor(props) {
       const shadowPolys = Poly.union(layout.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(floorCt, shadowPolys, ['rgba(0, 0, 0, 0.4)', null]);
+      drawPolygons(floorCt, shadowPolys, ['rgba(0, 0, 0, 0.5)', null]);
 
       // 🚧 debug decor
       floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
