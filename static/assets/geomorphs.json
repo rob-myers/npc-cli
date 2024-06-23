@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 991954400 -1283654387 947967520",
+  "hash": "610044716 991954400 2029890642 -2084427266",
   "mapsHash": 610044716,
   "layoutsHash": 991954400,
-  "sheetsHash": -1283654387,
-  "imagesHash": 947967520,
+  "sheetsHash": 2029890642,
+  "imagesHash": -2084427266,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -26240,18 +26240,18 @@
         "x": 2,
         "y": 2,
         "width": 500,
-        "height": 400
+        "height": 600
       },
       "door-001.png": {
         "door": true,
         "fileKey": "door-001.png",
-        "x": 2,
-        "y": 404,
+        "x": 504,
+        "y": 2,
         "width": 220,
         "height": 400
       }
     },
     "obstacleDim": {"width": 2125, "height": 2331},
-    "decorDim": {"width": 504, "height": 806}
+    "decorDim": {"width": 726, "height": 604}
   }
 }
