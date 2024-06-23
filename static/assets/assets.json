@@ -1,7 +1,7 @@
 {
   "meta": {
     "101--hull": {"outputHash": 1075259897, "pngHash": 568633107},
-    "102--hull": {"outputHash": 1486046762, "pngHash": 184103855},
+    "102--hull": {"outputHash": 1519563464, "pngHash": 184103855},
     "103--hull": {"outputHash": -1079874484, "pngHash": -1937509879},
     "301--hull": {"outputHash": -1205454685, "pngHash": 787602800},
     "302--hull": {"outputHash": 1422419846, "pngHash": -1557128953},
@@ -1699,6 +1699,27 @@
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 30.3},
       "symbols": [
         {
+          "symbolKey": "machinery--158--1.8x3.6",
+          "meta": {"key": "machinery--158--1.8x3.6", "y": 1},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 0, 0]
+        },
+        {
+          "symbolKey": "empty-room--060--4x4",
+          "meta": {"key": "empty-room--060--4x4"},
+          "width": 6,
+          "height": 6,
+          "transform": [1, 0, 0, -1, 0, 6]
+        },
+        {
+          "symbolKey": "console--018--1x1",
+          "meta": {"key": "console--018--1x1"},
+          "width": 1.5,
+          "height": 1.5,
+          "transform": [-1, 0, 0, 1, 6, 0]
+        },
+        {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
@@ -1851,27 +1872,6 @@
           "width": 3,
           "height": 6,
           "transform": [-1, 0, 0, 1, 30, 0]
-        },
-        {
-          "symbolKey": "empty-room--060--4x4",
-          "meta": {"key": "empty-room--060--4x4"},
-          "width": 6,
-          "height": 6,
-          "transform": [1, 0, 0, -1, 0, 6]
-        },
-        {
-          "symbolKey": "console--018--1x1",
-          "meta": {"key": "console--018--1x1"},
-          "width": 1.5,
-          "height": 1.5,
-          "transform": [-1, 0, 0, 1, 6, 0]
-        },
-        {
-          "symbolKey": "machinery--158--1.8x3.6",
-          "meta": {"key": "machinery--158--1.8x3.6", "y": 1},
-          "width": 3,
-          "height": 6,
-          "transform": [1, 0, 0, 1, 0, 0]
         },
         {
           "symbolKey": "lounge--017--4x2",

@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 1056360686 -1283654387 947967520",
+  "hash": "610044716 991954400 -1283654387 947967520",
   "mapsHash": 610044716,
-  "layoutsHash": 1056360686,
+  "layoutsHash": 991954400,
   "sheetsHash": -1283654387,
   "imagesHash": 947967520,
   "map": {
@@ -6765,36 +6765,49 @@
           "y": 1.875
         },
         {
-          "type": "circle",
+          "type": "point",
           "key": "g-102--research-deck-7",
-          "meta": {"decor": true, "circle": true, "hatch": true},
-          "radius": 0.5515,
-          "center": {"x": 0.75, "y": 8.4485}
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 315
+          },
+          "x": 5.0053,
+          "y": 1.0149
         },
         {
           "type": "circle",
           "key": "g-102--research-deck-8",
           "meta": {"decor": true, "circle": true, "hatch": true},
           "radius": 0.5515,
-          "center": {"x": 29.25, "y": 21.5515}
+          "center": {"x": 0.75, "y": 8.4485}
         },
         {
           "type": "circle",
           "key": "g-102--research-deck-9",
           "meta": {"decor": true, "circle": true, "hatch": true},
           "radius": 0.5515,
+          "center": {"x": 29.25, "y": 21.5515}
+        },
+        {
+          "type": "circle",
+          "key": "g-102--research-deck-10",
+          "meta": {"decor": true, "circle": true, "hatch": true},
+          "radius": 0.5515,
           "center": {"x": 21.5515, "y": 0.75}
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-10",
+          "key": "g-102--research-deck-11",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
           "x": 11.4811,
           "y": 13.475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-11",
+          "key": "g-102--research-deck-12",
           "meta": {
             "decor": true,
             "do": true,
@@ -6807,7 +6820,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-12",
+          "key": "g-102--research-deck-13",
           "meta": {
             "decor": true,
             "do": true,
@@ -6820,14 +6833,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-13",
+          "key": "g-102--research-deck-14",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
           "x": 14.4811,
           "y": 13.475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-14",
+          "key": "g-102--research-deck-15",
           "meta": {
             "decor": true,
             "do": true,
@@ -6840,7 +6853,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-15",
+          "key": "g-102--research-deck-16",
           "meta": {
             "decor": true,
             "do": true,
@@ -6853,14 +6866,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-16",
+          "key": "g-102--research-deck-17",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 10.9383,
           "y": 10.5
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-17",
+          "key": "g-102--research-deck-18",
           "meta": {
             "decor": true,
             "do": true,
@@ -6873,14 +6886,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-18",
+          "key": "g-102--research-deck-19",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 13.9383,
           "y": 10.5
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-19",
+          "key": "g-102--research-deck-20",
           "meta": {
             "decor": true,
             "do": true,
@@ -6893,7 +6906,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-20",
+          "key": "g-102--research-deck-21",
           "meta": {
             "decor": true,
             "do": true,
@@ -6906,7 +6919,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-21",
+          "key": "g-102--research-deck-22",
           "meta": {
             "decor": true,
             "do": true,
@@ -6919,7 +6932,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-22",
+          "key": "g-102--research-deck-23",
           "meta": {
             "decor": true,
             "do": true,
@@ -6932,7 +6945,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-23",
+          "key": "g-102--research-deck-24",
           "meta": {
             "decor": true,
             "do": true,
@@ -6945,7 +6958,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-24",
+          "key": "g-102--research-deck-25",
           "meta": {
             "decor": true,
             "do": true,
@@ -6958,7 +6971,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-25",
+          "key": "g-102--research-deck-26",
           "meta": {
             "decor": true,
             "do": true,
@@ -6971,14 +6984,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-26",
+          "key": "g-102--research-deck-27",
           "meta": {"decor": true, "go": true, "label": "fresher"},
           "x": 26.9661,
           "y": 12.868
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-27",
+          "key": "g-102--research-deck-28",
           "meta": {
             "decor": true,
             "do": true,
@@ -6991,7 +7004,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-28",
+          "key": "g-102--research-deck-29",
           "meta": {
             "decor": true,
             "do": true,
@@ -7004,7 +7017,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-29",
+          "key": "g-102--research-deck-30",
           "meta": {
             "decor": true,
             "do": true,
@@ -7017,7 +7030,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-30",
+          "key": "g-102--research-deck-31",
           "meta": {
             "decor": true,
             "do": true,
@@ -7030,7 +7043,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-31",
+          "key": "g-102--research-deck-32",
           "meta": {
             "decor": true,
             "do": true,
@@ -7043,14 +7056,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-32",
+          "key": "g-102--research-deck-33",
           "meta": {"decor": true, "go": true, "label": "engineering"},
           "x": 17.948,
           "y": 25.4508
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-33",
+          "key": "g-102--research-deck-34",
           "meta": {
             "decor": true,
             "do": true,
@@ -7063,14 +7076,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-34",
+          "key": "g-102--research-deck-35",
           "meta": {"decor": true, "go": true, "label": "lab"},
           "x": 19.475,
           "y": 4.5235
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-35",
+          "key": "g-102--research-deck-36",
           "meta": {
             "decor": true,
             "do": true,
@@ -7083,7 +7096,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-36",
+          "key": "g-102--research-deck-37",
           "meta": {
             "decor": true,
             "do": true,
@@ -7096,7 +7109,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-37",
+          "key": "g-102--research-deck-38",
           "meta": {
             "decor": true,
             "do": true,
@@ -7109,7 +7122,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-38",
+          "key": "g-102--research-deck-39",
           "meta": {
             "decor": true,
             "do": true,
@@ -7122,14 +7135,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-39",
+          "key": "g-102--research-deck-40",
           "meta": {"decor": true, "go": true, "label": "lab"},
           "x": 10.525,
           "y": 4.5235
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-40",
+          "key": "g-102--research-deck-41",
           "meta": {
             "decor": true,
             "do": true,
@@ -7142,7 +7155,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-41",
+          "key": "g-102--research-deck-42",
           "meta": {
             "decor": true,
             "do": true,
@@ -7155,7 +7168,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-42",
+          "key": "g-102--research-deck-43",
           "meta": {
             "decor": true,
             "do": true,
@@ -7168,7 +7181,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-43",
+          "key": "g-102--research-deck-44",
           "meta": {
             "decor": true,
             "do": true,
@@ -7181,14 +7194,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-44",
+          "key": "g-102--research-deck-45",
           "meta": {"decor": true, "go": true, "label": "lab"},
           "x": 19.475,
           "y": 13.475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-45",
+          "key": "g-102--research-deck-46",
           "meta": {
             "decor": true,
             "do": true,
@@ -7201,7 +7214,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-46",
+          "key": "g-102--research-deck-47",
           "meta": {
             "decor": true,
             "do": true,
@@ -7214,14 +7227,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-47",
+          "key": "g-102--research-deck-48",
           "meta": {"decor": true, "label": "lab"},
           "x": 18.025,
           "y": 17.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-48",
+          "key": "g-102--research-deck-49",
           "meta": {
             "decor": true,
             "do": true,
@@ -7234,7 +7247,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-49",
+          "key": "g-102--research-deck-50",
           "meta": {
             "decor": true,
             "do": true,
@@ -7247,7 +7260,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-50",
+          "key": "g-102--research-deck-51",
           "meta": {
             "decor": true,
             "do": true,
@@ -7260,14 +7273,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-51",
+          "key": "g-102--research-deck-52",
           "meta": {"decor": true, "label": "lab"},
           "x": 26.975,
           "y": 17.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-52",
+          "key": "g-102--research-deck-53",
           "meta": {
             "decor": true,
             "do": true,
@@ -7280,7 +7293,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-53",
+          "key": "g-102--research-deck-54",
           "meta": {
             "decor": true,
             "do": true,
@@ -7293,7 +7306,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-54",
+          "key": "g-102--research-deck-55",
           "meta": {
             "decor": true,
             "do": true,
@@ -7306,23 +7319,10 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-55",
+          "key": "g-102--research-deck-56",
           "meta": {"decor": true, "go": true, "label": "office"},
           "x": 27.85,
           "y": 27.025
-        },
-        {
-          "type": "point",
-          "key": "g-102--research-deck-56",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 180
-          },
-          "x": 25.0075,
-          "y": 29.2675
         },
         {
           "type": "point",
@@ -7334,7 +7334,7 @@
             "chair": true,
             "orient": 180
           },
-          "x": 26.5075,
+          "x": 25.0075,
           "y": 29.2675
         },
         {
@@ -7347,7 +7347,7 @@
             "chair": true,
             "orient": 180
           },
-          "x": 28.0075,
+          "x": 26.5075,
           "y": 29.2675
         },
         {
@@ -7360,8 +7360,8 @@
             "chair": true,
             "orient": 180
           },
-          "x": 25.0075,
-          "y": 24.7675
+          "x": 28.0075,
+          "y": 29.2675
         },
         {
           "type": "point",
@@ -7373,7 +7373,7 @@
             "chair": true,
             "orient": 180
           },
-          "x": 26.5075,
+          "x": 25.0075,
           "y": 24.7675
         },
         {
@@ -7386,7 +7386,7 @@
             "chair": true,
             "orient": 180
           },
-          "x": 28.0075,
+          "x": 26.5075,
           "y": 24.7675
         },
         {
@@ -7399,12 +7399,25 @@
             "chair": true,
             "orient": 180
           },
-          "x": 29.5075,
+          "x": 28.0075,
           "y": 24.7675
         },
         {
           "type": "point",
           "key": "g-102--research-deck-63",
+          "meta": {
+            "decor": true,
+            "do": true,
+            "sit": true,
+            "chair": true,
+            "orient": 180
+          },
+          "x": 29.5075,
+          "y": 24.7675
+        },
+        {
+          "type": "point",
+          "key": "g-102--research-deck-64",
           "meta": {
             "decor": true,
             "do": true,
@@ -7417,7 +7430,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-64",
+          "key": "g-102--research-deck-65",
           "meta": {
             "decor": true,
             "do": true,
@@ -7430,7 +7443,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-65",
+          "key": "g-102--research-deck-66",
           "meta": {
             "decor": true,
             "do": true,
@@ -7443,7 +7456,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-66",
+          "key": "g-102--research-deck-67",
           "meta": {
             "decor": true,
             "do": true,
@@ -7456,14 +7469,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-67",
+          "key": "g-102--research-deck-68",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 0},
           "x": 29.325,
           "y": 29.2405
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-68",
+          "key": "g-102--research-deck-69",
           "meta": {
             "decor": true,
             "do": true,
@@ -7476,14 +7489,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-69",
+          "key": "g-102--research-deck-70",
           "meta": {"decor": true, "go": true, "label": "engineering"},
           "x": 5.95,
           "y": 12.05
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-70",
+          "key": "g-102--research-deck-71",
           "meta": {
             "decor": true,
             "do": true,
@@ -7496,7 +7509,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-71",
+          "key": "g-102--research-deck-72",
           "meta": {
             "decor": true,
             "do": true,
@@ -7509,7 +7522,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-72",
+          "key": "g-102--research-deck-73",
           "meta": {
             "decor": true,
             "do": true,
@@ -7522,14 +7535,14 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-73",
+          "key": "g-102--research-deck-74",
           "meta": {"decor": true, "label": "locker"},
           "x": 24.75,
           "y": 3.75
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-74",
+          "key": "g-102--research-deck-75",
           "meta": {
             "decor": true,
             "go": true,
@@ -7541,7 +7554,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-75",
+          "key": "g-102--research-deck-76",
           "meta": {
             "decor": true,
             "do": true,
@@ -7554,7 +7567,7 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-76",
+          "key": "g-102--research-deck-77",
           "meta": {
             "decor": true,
             "do": true,
@@ -7567,37 +7580,24 @@
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-77",
+          "key": "g-102--research-deck-78",
           "meta": {"decor": true, "go": true, "label": "locker"},
           "x": 22.5,
           "y": 4.5
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-78",
+          "key": "g-102--research-deck-79",
           "meta": {"decor": true, "go": true, "label": "locker"},
           "x": 25.5,
           "y": 0.75
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-79",
+          "key": "g-102--research-deck-80",
           "meta": {"decor": true, "label": "locker"},
           "x": 24.75,
           "y": 5.25
-        },
-        {
-          "type": "point",
-          "key": "g-102--research-deck-80",
-          "meta": {
-            "decor": true,
-            "do": true,
-            "sit": true,
-            "chair": true,
-            "orient": 315
-          },
-          "x": 5.0053,
-          "y": 1.0149
         },
         {
           "type": "point",
@@ -7830,6 +7830,21 @@
               ]
             ],
             "meta": {"door": true, "iris": true}
+          },
+          "roomIds": [null, null]
+        },
+        {
+          "poly": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [4.1661, 4.945],
+                [4.06, 4.8389],
+                [4.8378, 4.0611],
+                [4.9439, 4.1672]
+              ]
+            ],
+            "meta": {"door": true}
           },
           "roomIds": [null, null]
         },
@@ -8117,21 +8132,6 @@
             "meta": {"door": true}
           },
           "roomIds": [null, null]
-        },
-        {
-          "poly": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [4.1661, 4.945],
-                [4.06, 4.8389],
-                [4.8378, 4.0611],
-                [4.9439, 4.1672]
-              ]
-            ],
-            "meta": {"door": true}
-          },
-          "roomIds": [null, null]
         }
       ],
       "hullDoors": [
@@ -8233,6 +8233,91 @@
         }
       ],
       "obstacles": [
+        {
+          "symbolKey": "machinery--158--1.8x3.6",
+          "obstacleId": 0,
+          "height": 1,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [0.0977, 0.247],
+                [2.3831, 0.247],
+                [2.8912, 0.763],
+                [2.8912, 2.152],
+                [2.2912, 2.152],
+                [2.2912, 2.763],
+                [2.5732, 3.0517],
+                [2.5768, 3.5127],
+                [2.2879, 3.794],
+                [2.2902, 4.327],
+                [2.8912, 4.327],
+                [2.8912, 5.3295],
+                [2.3893, 5.3192],
+                [1.9729, 5.7447],
+                [1.3389, 5.753],
+                [0.8798, 5.3224],
+                [0.0977, 5.3125]
+              ]
+            ],
+            "meta": {
+              "obstacle": true,
+              "symKey": "machinery--158--1.8x3.6",
+              "obsId": 0
+            }
+          },
+          "transform": [1, 0, 0, 1, 0, 0]
+        },
+        {
+          "symbolKey": "console--018--1x1",
+          "obstacleId": 0,
+          "height": 0.8,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [-0.025, -0.02],
+                [1.52, -0.02],
+                [1.515, 0.315],
+                [1.4582, 0.404],
+                [1.03, 0.52],
+                [0.84, 0.6458],
+                [0.6135, 0.8759],
+                [0.4957, 1.0853],
+                [0.387, 1.475],
+                [0.2943, 1.52],
+                [-0.025, 1.52]
+              ]
+            ],
+            "meta": {
+              "obstacle": true,
+              "table": true,
+              "surface": true,
+              "y": 0.8,
+              "symKey": "console--018--1x1",
+              "obsId": 0
+            }
+          },
+          "transform": [-1, 0, 0, 1, 6, 0]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
+          "height": 0.4,
+          "origPoly": {
+            "type": "Polygon",
+            "coordinates": [
+              [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
+            ],
+            "meta": {
+              "obstacle": true,
+              "chair": true,
+              "symKey": "console--051--0.4x0.6",
+              "obsId": 0
+            }
+          },
+          "transform": [-0.707, 0.707, 0.707, 0.707, 4.97, 0.52]
+        },
         {
           "symbolKey": "bed--003--1x1.6",
           "obstacleId": 0,
@@ -10223,91 +10308,6 @@
             }
           },
           "transform": [0, 1, 1, 0, 5.619999999999999, 22.08]
-        },
-        {
-          "symbolKey": "console--018--1x1",
-          "obstacleId": 0,
-          "height": 0.8,
-          "origPoly": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [-0.025, -0.02],
-                [1.52, -0.02],
-                [1.515, 0.315],
-                [1.4582, 0.404],
-                [1.03, 0.52],
-                [0.84, 0.6458],
-                [0.6135, 0.8759],
-                [0.4957, 1.0853],
-                [0.387, 1.475],
-                [0.2943, 1.52],
-                [-0.025, 1.52]
-              ]
-            ],
-            "meta": {
-              "obstacle": true,
-              "table": true,
-              "surface": true,
-              "y": 0.8,
-              "symKey": "console--018--1x1",
-              "obsId": 0
-            }
-          },
-          "transform": [-1, 0, 0, 1, 6, 0]
-        },
-        {
-          "symbolKey": "console--051--0.4x0.6",
-          "obstacleId": 0,
-          "height": 0.4,
-          "origPoly": {
-            "type": "Polygon",
-            "coordinates": [
-              [[0.7175, 0], [0.7175, 0.75], [0.0325, 0.75], [0.0325, 0]]
-            ],
-            "meta": {
-              "obstacle": true,
-              "chair": true,
-              "symKey": "console--051--0.4x0.6",
-              "obsId": 0
-            }
-          },
-          "transform": [-0.707, 0.707, 0.707, 0.707, 4.97, 0.52]
-        },
-        {
-          "symbolKey": "machinery--158--1.8x3.6",
-          "obstacleId": 0,
-          "height": 1,
-          "origPoly": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [0.0977, 0.247],
-                [2.3831, 0.247],
-                [2.8912, 0.763],
-                [2.8912, 2.152],
-                [2.2912, 2.152],
-                [2.2912, 2.763],
-                [2.5732, 3.0517],
-                [2.5768, 3.5127],
-                [2.2879, 3.794],
-                [2.2902, 4.327],
-                [2.8912, 4.327],
-                [2.8912, 5.3295],
-                [2.3893, 5.3192],
-                [1.9729, 5.7447],
-                [1.3389, 5.753],
-                [0.8798, 5.3224],
-                [0.0977, 5.3125]
-              ]
-            ],
-            "meta": {
-              "obstacle": true,
-              "symKey": "machinery--158--1.8x3.6",
-              "obsId": 0
-            }
-          },
-          "transform": [1, 0, 0, 1, 0, 0]
         },
         {
           "symbolKey": "table--009--0.8x0.8",
@@ -12490,6 +12490,10 @@
           {"x": 25.98, "y": 5.6425},
           {"x": 26.53, "y": 5.6425},
           {"x": 26.53, "y": 6.3425},
+          {"x": 4.4312, "y": 4.0788},
+          {"x": 4.9262, "y": 4.5738},
+          {"x": 4.5727, "y": 4.9273},
+          {"x": 4.0777, "y": 4.4323},
           {"x": 10.975, "y": 12.35},
           {"x": 10.975, "y": 11.65},
           {"x": 11.525, "y": 11.65},
@@ -12589,11 +12593,7 @@
           {"x": 27.35, "y": 5.5},
           {"x": 26.65, "y": 5.5},
           {"x": 26.65, "y": 4.9},
-          {"x": 27.35, "y": 4.9},
-          {"x": 4.4312, "y": 4.0788},
-          {"x": 4.9262, "y": 4.5738},
-          {"x": 4.5727, "y": 4.9273},
-          {"x": 4.0777, "y": 4.4323}
+          {"x": 27.35, "y": 4.9}
         ],
         "tris": [
           [3, 1, 2],
