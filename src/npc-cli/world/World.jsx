@@ -22,6 +22,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useHandleEvents from "./use-handle-events";
 import WorldCanvas from "./WorldCanvas";
 import Floor from "./Floor";
+import Ceiling from "./Ceiling";
 import Obstacles from "./Obstacles";
 import WallsAndDoors from "./WallsAndDoors";
 import Npcs from "./Npcs";
@@ -59,6 +60,7 @@ export default function World(props) {
 
     ui: /** @type {*} */ (null), // WorldCanvas
     floor: /** @type {*} */ (null), // Floor
+    ceil: /** @type {*} */ (null), // Ceiling
     obs: /** @type {*} */ (null), // Obstacles
     vert: /** @type {*} */ (null), // WallsAndDoors
     npc: /** @type {*} */ (null), // Npcs
@@ -248,6 +250,7 @@ export default function World(props) {
         {state.geomorphs && (
           <group>
             <Floor />
+            <Ceiling />
             <Obstacles />
             {state.crowd && <>
               <Npcs/>
@@ -291,6 +294,7 @@ export default function World(props) {
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
+ * @property {import('./Ceiling').State} ceil
  * @property {import('./Obstacles').State} obs
  * Flat static objects: floor, ceiling, and obstacles
  * @property {import('./WallsAndDoors').State} vert

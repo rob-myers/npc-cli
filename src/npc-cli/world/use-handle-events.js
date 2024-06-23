@@ -15,7 +15,8 @@ export default function useHandleEvents(api) {
           if (!api.floorImg[e.gmKey]) {// 🚧 eliminate
             return warn(`saw "${e.key}" before api.floorImg['${e.gmKey}']`);
           }
-          api.floor.drawFloorAndCeil(e.gmKey);
+          api.floor.draw(e.gmKey);
+          api.ceil.draw(e.gmKey);
           break;
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu

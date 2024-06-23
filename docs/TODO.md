@@ -15,8 +15,9 @@
     - ❌ image magick `convert input.png -channel RGB -negate output.png`
     - ❌ in assets.js
     - ✅ in browser after load texture
-  - 🚧 lighter ceiling + minor clean
+  - ✅ lighter ceiling + minor clean
   - 🚧 change floor shade
+    - temp fix
     - move to browser
   - 🚧 inverted grid
   - draw grid on floor?
@@ -43,7 +44,7 @@
   - Both Web and App
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
 - split component WallsAndDoors
-- 🚧 split component Surfaces
+- ✅ split component Surfaces
   - Obstacles
   - Floor
   - Ceiling

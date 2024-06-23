@@ -2,8 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { info, warn } from "../service/generic";
-import { wallHeight, worldScale } from "../service/const";
+import { worldScale } from "../service/const";
 import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import { geomorphService } from "../service/geomorph";
@@ -13,16 +12,15 @@ import useStateRef from "../hooks/use-state-ref";
 /**
  * @param {Props} props
  */
-export default function Obstacles(props) {
+export default function Floor(props) {
   const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    drawFloorAndCeil(gmKey) {// 🚧 separate into two functions
+    draw(gmKey) {
       const img = api.floorImg[gmKey];
-      const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
+      const { floor: [floorCt, , { width, height }], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
 
-      //#region floor
       floorCt.clearRect(0, 0, width, height);
       floorCt.drawImage(img, 0, 0);
 
@@ -44,29 +42,9 @@ export default function Obstacles(props) {
       });
 
       floorCt.resetTransform();
-      //#endregion
-      
-      //#region ceiling
-      ceilCt.clearRect(0, 0, width, height);
-      ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      // wall tops (stroke gaps e.g. bridge desk)
-      // drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
-      const wallsTouchingCeil = layout.walls.filter(x =>
-        x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
-      );
-      // drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(250, 50, 50, 1)', 'rgba(250, 50, 50, 1)', 0.06])
-      drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(180, 180, 180, 1)', 'rgba(180, 180, 180, 1)', 0.06])
-      // door tops
-      ceilCt.strokeStyle = 'black';
-      ceilCt.lineWidth = 0.03;
-      drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(200, 200, 200, 1)'])
-      layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
-      ceilCt.resetTransform();
-      //#endregion
 
-      const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
+      const { floor: [, floor] } = api.gmClass[gmKey];
       floor.needsUpdate = true;
-      ceil.needsUpdate = true;
     },
   }));
 
@@ -74,9 +52,7 @@ export default function Obstacles(props) {
 
   React.useEffect(() => {
     // (a) ensure initial draw (b) redraw onchange this file
-    geomorphService.gmKeys.forEach(
-      gmKey => api.floorImg[gmKey] && state.drawFloorAndCeil(gmKey)
-    );
+    geomorphService.gmKeys.forEach(gmKey => api.floorImg[gmKey] && state.draw(gmKey));
   }, []);
 
   return <>
@@ -99,21 +75,6 @@ export default function Obstacles(props) {
             depthWrite={false} // fix z-fighting
           />
         </mesh>
-
-        <mesh
-          name={`ceil-gm-${gmId}`}
-          geometry={quadGeometryXZ}
-          scale={[gm.pngRect.width, 1, gm.pngRect.height]}
-          position={[gm.pngRect.x, wallHeight + 0.001, gm.pngRect.y]}
-        >
-          <meshBasicMaterial
-            side={THREE.FrontSide}
-            transparent
-            map={api.gmClass[gm.key].ceil[1]}
-            // depthWrite={false} // fix z-fighting
-            alphaTest={0.9} // 0.5 flickered on (301, 101) border
-          />
-        </mesh>
       </group>
     ))}
   </>
@@ -127,7 +88,7 @@ export default function Obstacles(props) {
 
 /**
  * @typedef State
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} draw
  */
 
 const tmpMat1 = new Mat();
