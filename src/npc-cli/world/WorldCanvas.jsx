@@ -204,7 +204,7 @@ export default function WorldCanvas(props) {
 
   React.useEffect(() => {
     // 🚧 do not trigger on HMR
-    state.controls?.setPolarAngle(Math.PI / 6); // Initialize view
+    state.controls?.setPolarAngle(Math.PI / 6);
   }, [state.controls]);
 
   return (
