@@ -251,7 +251,8 @@ export default function WorldCanvas(props) {
         size1={1.5}
         size2={1.5}
         distance={infiniteGridDistance}
-        color="#000"
+        // color="#000"
+        color="#fff"
         rotation={[Math.PI / 2, 0, 0]}
         position={[0, 0.0001, 0]}
         onPointerDown={state.onGridPointerDown}
@@ -309,6 +310,7 @@ const canvasCss = css`
   }
   canvas {
     background-color: rgba(255, 255, 255, 1);
+    background-color: rgba(0, 0, 0, 1);
     width: 100%;
     height: 100%;
   }
