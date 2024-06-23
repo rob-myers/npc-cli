@@ -10,13 +10,14 @@
 
 - 🚧 try dark mode e.g. for better doors
   - ✅ dark standard door
-  - 🚧 dark hull door
+  - ✅ dark hull door
   - ✅ can invert obstacles sprite-sheet
     - ❌ image magick `convert input.png -channel RGB -negate output.png`
     - ❌ in assets.js
     - ✅ in browser after load texture
-  - lighter ceiling
-  - change floor shade
+  - 🚧 lighter ceiling + minor clean
+  - 🚧 change floor shade
+    - move to browser
   - 🚧 inverted grid
   - draw grid on floor?
   - different ceiling shades e.g. bridge
@@ -42,7 +43,10 @@
   - Both Web and App
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
 - split component WallsAndDoors
-- split component Surfaces
+- 🚧 split component Surfaces
+  - Obstacles
+  - Floor
+  - Ceiling
 - animation from directly above looks weird e.g. arms should bend more
 - TTY can get out of sync when edit cmd.service, tty.shell?
 - ✅ can somehow ctrl-c `seq 100000000` (100 million)

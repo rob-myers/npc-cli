@@ -14,7 +14,7 @@ import useStateRef from "../hooks/use-state-ref";
 /**
  * @param {Props} props
  */
-export default function Surfaces(props) {
+export default function Obstacles(props) {
   const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
@@ -82,57 +82,6 @@ export default function Surfaces(props) {
       return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
 
-    drawFloorAndCeil(gmKey) {// 🚧 separate into two functions
-      const img = api.floorImg[gmKey];
-      const { floor: [floorCt, , { width, height }], ceil: [ceilCt], layout } = api.gmClass[gmKey];
-      const { pngRect } = layout;
-
-      //#region floor
-      floorCt.clearRect(0, 0, width, height);
-      floorCt.drawImage(img, 0, 0);
-
-      // obstacles drop shadows
-      const scale = 1 / worldScale;
-      floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      // avoid doubling shadows e.g. bunk bed, overlapping tables
-      const shadowPolys = Poly.union(layout.obstacles.flatMap(x =>
-        x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
-      ));
-      drawPolygons(floorCt, shadowPolys, ['rgba(0, 0, 0, 0.4)', null]);
-
-      // 🚧 debug decor
-      floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      layout.decor.forEach((decor) => {
-        if (decor.type === 'circle') {
-          drawCircle(floorCt, decor.center, decor.radius, [null, '#500', 0.04]);
-        }
-      });
-
-      floorCt.resetTransform();
-      //#endregion
-      
-      //#region ceiling
-      ceilCt.clearRect(0, 0, width, height);
-      ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      // wall tops (stroke gaps e.g. bridge desk)
-      // drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
-      const wallsTouchingCeil = layout.walls.filter(x =>
-        x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
-      );
-      // drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(250, 50, 50, 1)', 'rgba(250, 50, 50, 1)', 0.06])
-      drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(50, 50, 50, 1)', 'rgba(50, 50, 50, 1)', 0.06])
-      // door tops
-      ceilCt.strokeStyle = 'black';
-      ceilCt.lineWidth = 0.03;
-      drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(50, 50, 50, 1)'])
-      layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
-      ceilCt.resetTransform();
-      //#endregion
-
-      const { floor: [, floor], ceil: [, ceil] } = api.gmClass[gmKey];
-      floor.needsUpdate = true;
-      ceil.needsUpdate = true;
-    },
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
       const result = state.detectClickObstacle(e);
@@ -205,19 +154,12 @@ export default function Surfaces(props) {
     },
   }));
 
-  api.flat = state;
+  api.obs = state;
 
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
   }, [api.hash]);
-
-  React.useEffect(() => {
-    // (a) ensure initial draw (b) redraw onchange this file
-    geomorphService.gmKeys.forEach(
-      gmKey => api.floorImg[gmKey] && state.drawFloorAndCeil(gmKey)
-    );
-  }, []);
 
   return <>
     {api.gms.map((gm, gmId) => (
@@ -296,7 +238,6 @@ export default function Surfaces(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
  *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
  * )} detectClickObstacle
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloorAndCeil
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionObstacles

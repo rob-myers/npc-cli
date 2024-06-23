@@ -21,7 +21,8 @@ import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import useHandleEvents from "./use-handle-events";
 import WorldCanvas from "./WorldCanvas";
-import Surfaces from "./Surfaces";
+import Floor from "./Floor";
+import Obstacles from "./Obstacles";
 import WallsAndDoors from "./WallsAndDoors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
@@ -57,7 +58,8 @@ export default function World(props) {
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // WorldCanvas
-    flat: /** @type {*} */ (null), // Surfaces
+    floor: /** @type {*} */ (null), // Floor
+    obs: /** @type {*} */ (null), // Obstacles
     vert: /** @type {*} */ (null), // WallsAndDoors
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
@@ -182,7 +184,7 @@ export default function World(props) {
         `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${getAssetQueryParam()}`
       ).then((tex) => {
         state.floorImg[gmKey] = tex.source.data;
-        state.flat && state.events.next({ key: 'draw-floor-ceil', gmKey });
+        state.obs && state.events.next({ key: 'draw-floor-ceil', gmKey });
       }));
 
       /** @type {const} */ ([
@@ -245,7 +247,8 @@ export default function World(props) {
       <WorldCanvas disabled={props.disabled} stats>
         {state.geomorphs && (
           <group>
-            <Surfaces />
+            <Floor />
+            <Obstacles />
             {state.crowd && <>
               <Npcs/>
               <Debug
@@ -287,7 +290,8 @@ export default function World(props) {
  * @property {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>} worker
  *
  * @property {import('./WorldCanvas').State} ui
- * @property {import('./Surfaces').State} flat
+ * @property {import('./Floor').State} floor
+ * @property {import('./Obstacles').State} obs
  * Flat static objects: floor, ceiling, and obstacles
  * @property {import('./WallsAndDoors').State} vert
  * Vertical objects: doors (dynamic) and walls (static)
