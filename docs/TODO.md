@@ -8,35 +8,35 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ start writing first article
-  - ℹ️ manually associate `Nav` items with pages (wait until next.js)
-  - ✅ strip down "frontmatter" to `key`, with lookup for rest
-  - ✅ migrate SideNote component
-  - ✅ start writing index.mdx
-  - ✅ intro should begin with "npcs controlled by user"
+- 🚧 try dark mode e.g. for better doors
+  - ✅ dark standard door
+  - 🚧 dark hull door
+  - ✅ can invert obstacles sprite-sheet
+    - ❌ image magick `convert input.png -channel RGB -negate output.png`
+    - ❌ in assets.js
+    - ✅ in browser after load texture
+  - lighter ceiling
+  - change floor shade
+  - 🚧 inverted grid
+  - draw grid on floor?
+  - different ceiling shades e.g. bridge
+  - prevent coinciding doors (flicker)
+    - detect/discard during flatten symbols
+  - could fix "low fuel" via `y=1.01 wallsH=1`
 
-- support camera move via terminal
+- ensure separated hull doors
+  - ensure normal points into gm
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
-- shoulder mesh (extend from chest) ✅, or arms closer to chest ❌
+- ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
+
+- 🚧 decor pipeline supports svg -> png conversion
+  - svg render will need to be supported by npm module `canvas`
+  - maybe only media/decor/*.svg
 
 - next.js repo continued
   - migrate Viewer
 
-- ✅ fix decor sheet HMR
-  - ✅ file decor.png gets updated
-  - ✅ World gets updated
-  - ✅ Doors texture should be right way up
-
-- ✅ obstacle disappearing on decor sheet HMR
-  - ✅ redo obstacles in `<Npcs>`
-  - ✅ ensure obstacles re-added when nav-mesh updates
-
-- 🚧 decor pipeline supports svg -> png conversion
-  - svg render will need to be supported by npm module `canvas`
-
-- 🚧 better looking doors
-
-
+- support camera move via terminal
 - improve doors hard-coding in decor sprite-sheet
 - 🚧 Boxy SVG can be slow to save
   - Both Web and App
@@ -1322,3 +1322,19 @@
   - `nvel` changes
   - DT_CROWD_OBSTACLE_AVOIDANCE = 2
   - ✅ change ag->params.updateFlags to not intersect DT_CROWD_OBSTACLE_AVOIDANCE
+
+- ✅ start writing first article
+  - ℹ️ manually associate `Nav` items with pages (wait until next.js)
+  - ✅ strip down "frontmatter" to `key`, with lookup for rest
+  - ✅ migrate SideNote component
+  - ✅ start writing index.mdx
+  - ✅ intro should begin with "npcs controlled by user"
+
+- ✅ fix decor sheet HMR
+  - ✅ file decor.png gets updated
+  - ✅ World gets updated
+  - ✅ Doors texture should be right way up
+
+- ✅ obstacle disappearing on decor sheet HMR
+  - ✅ redo obstacles in `<Npcs>`
+  - ✅ ensure obstacles re-added when nav-mesh updates

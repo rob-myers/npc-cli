@@ -4,6 +4,30 @@
 
 import { isDevelopment } from './generic';
 
+/** Non-empty iff running in browser */
+export const tmpCanvasCtxts = typeof window !== 'undefined' ?
+  Array.from({ length: 2 }).map(_ => /** @type {CanvasRenderingContext2D} */ (
+    document.createElement('canvas').getContext('2d'))
+  ) : []
+;
+
+/**
+ * Draw opaque part of `image` in colour `fillColour`
+ * @param {HTMLImageElement | HTMLCanvasElement} image 
+ * @param {CanvasRenderingContext2D} ctxt
+ * @param {string} fillColor
+ */
+function createMonochromeMask(image, ctxt, fillColor) {
+	ctxt.canvas.width = image.width;
+	ctxt.canvas.height = image.height;
+	ctxt.globalCompositeOperation = 'source-over';
+	ctxt.drawImage(/** @type {*} */ (image), 0, 0);
+	ctxt.globalCompositeOperation = 'source-in';
+	ctxt.fillStyle = fillColor;
+	ctxt.fillRect(0, 0, image.width, image.height);
+	ctxt.globalCompositeOperation = 'source-over';
+}
+
 /**
  * @param {CanvasContext2DType} ct
  * @param {Geom.VectJson} center
@@ -58,6 +82,29 @@ export function fillRing(ct, ring, fill = true) {
 /** Override cache in development */
 export function getAssetQueryParam() {
   return isDevelopment() ? `?v=${Date.now()}` : '';
+}
+
+/**
+ * Invert `canvas`, overwriting it, while also preserving alpha=0.
+ * @param {HTMLCanvasElement} canvas 
+ * @param {CanvasRenderingContext2D} copyCtxt
+ * This will contain a copy of `canvas`.
+ * @param {CanvasRenderingContext2D} maskCtxt
+ * This will contain a monochrome mask (preserving alpha=0)
+ */
+export function invertCanvas(canvas, copyCtxt, maskCtxt) {
+  const dstCtxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+
+  copyCtxt.canvas.width = canvas.width;
+  copyCtxt.canvas.height = canvas.height;
+  copyCtxt.drawImage(canvas, 0, 0);
+  
+	createMonochromeMask(copyCtxt.canvas, maskCtxt, '#ffffff');
+
+	// Take difference to obtain inverted image
+	dstCtxt.globalCompositeOperation = 'difference';
+	dstCtxt.drawImage(maskCtxt.canvas, 0, 0);
+	dstCtxt.globalCompositeOperation = 'source-over';
 }
 
 /**

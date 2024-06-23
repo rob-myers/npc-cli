@@ -10,7 +10,7 @@ import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
 import { worldScale } from "../service/const";
 import { assertNonNull, info, debug, isDevelopment, keys, warn } from "../service/generic";
-import { getAssetQueryParam } from "../service/dom";
+import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, imageLoader, textureLoader, tmpBufferGeom1 } from "../service/three";
@@ -186,15 +186,16 @@ export default function World(props) {
       }));
 
       /** @type {const} */ ([
-        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex' },
-        { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex' },
-      ]).forEach(({ src, texKey }) => {
+        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: true, },
+        { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex', invert: false },
+      ]).forEach(({ src, texKey, invert }) => {
         imageLoader.loadAsync(src).then((img) => {
           const canvas = document.createElement('canvas');
           [canvas.width, canvas.height] = [img.width, img.height];
           /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
+          invert && invertCanvas(canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
           const tex = new THREE.CanvasTexture(canvas);
-          tex.flipY = false; // align with XZ quad uv-map
+          tex.flipY = false; // align with XZ/XY quad uv-map
           state[texKey] = tex;
           update();
         });
