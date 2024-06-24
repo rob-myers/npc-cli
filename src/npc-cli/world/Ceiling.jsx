@@ -17,30 +17,26 @@ export default function Ceiling(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     draw(gmKey) {
-      const { ceil: [ceilCt, , { width, height }], layout } = api.gmClass[gmKey];
+      const { ceil: [ceilCt, ceilTex, { width, height }], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
       const scale = 1 / worldScale;
 
       ceilCt.clearRect(0, 0, width, height);
       ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      
+      const color = 'rgba(60, 60, 60, 1)';
+
       // wall tops (stroke gaps e.g. bridge desk)
       // drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
       const wallsTouchingCeil = layout.walls.filter(x =>
         x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
       );
-      // drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(250, 50, 50, 1)', 'rgba(250, 50, 50, 1)', 0.06])
-      drawPolygons(ceilCt, wallsTouchingCeil, ['rgba(120, 120, 120, 1)', 'rgba(120, 120, 120, 1)', 0.06])
-
+      drawPolygons(ceilCt, wallsTouchingCeil, [color, color, 0.06])
       // door tops
-      ceilCt.strokeStyle = 'black';
       ceilCt.lineWidth = 0.03;
-      drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(120, 120, 120, 1)', 'rgba(120, 120, 120, 1)'])
-      // layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
-      ceilCt.resetTransform();
+      drawPolygons(ceilCt, layout.doors.map(x => x.poly), [color, color])
 
-      const { ceil: [, ceil] } = api.gmClass[gmKey];
-      ceil.needsUpdate = true;
+      ceilCt.resetTransform();
+      ceilTex.needsUpdate = true;
     },
   }));
 
