@@ -55,7 +55,7 @@
   <rect y="290" width="310" height="20" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="900">
     <title>wall</title>
   </rect>
-  <path d="M 479.468 1079.769 L 561.392 1083.265 L 600 1123.108 L 600 1200 L 0 1202.5 L 0 2.5 L 120.173 2.5 L 122.834 1033.73 L 152.225 1078.332 L 479.468 1079.769 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
+  <path d="M 479.468 1071.769 L 561.392 1075.265 L 605 1115.108 L 605 1195 L 10 1195 L 10 2.5 L 126.173 2.5 L 128.834 1033.73 L 158.225 1070.332 L 479.468 1071.769 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
     <title>obstacle surface y=0.6</title>
   </path>
   <g>
