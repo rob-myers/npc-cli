@@ -587,7 +587,7 @@ class GeomorphService {
       // aggregated and cloned
       walls: walls.concat(flats.flatMap(x => x.walls)),
       obstacles: obstacles.concat(flats.flatMap(x => x.obstacles)),
-      doors: doors.concat(flats.flatMap(x => x.doors)),
+      doors: this.removeCloseDoors(symbol.key, doors.concat(flats.flatMap(x => x.doors))),
       decor: decor.concat(flats.flatMap(x => x.decor)),
       unsorted: unsorted.concat(flats.flatMap(x => x.unsorted)),
       windows: windows.concat(flats.flatMap(x => x.windows)),
@@ -975,6 +975,25 @@ class GeomorphService {
       removableDoors,
       addableWalls,
     };
+  }
+
+  /**
+   * When doors are close (e.g. coincide) remove later door
+   * @param {string} logPrefix 
+   * @param {Geom.Poly[]} doors
+   */
+  removeCloseDoors(logPrefix, doors) {
+    const centers = doors.map(x => x.center);
+    const removeIds = /** @type {Set<number>} */ (new Set());
+    centers.forEach((center, i) => {
+      if (!removeIds.has(i))
+        for (let j = i + 1; j < centers.length; j++)
+          if (center.distanceToSquared(centers[j]) < 0.1 * 2) {
+            warn(`${logPrefix}: doors coincide: ${i}, ${j}`);
+            removeIds.add(j);
+          }
+    });
+    return doors.filter((_, i) => !removeIds.has(i));
   }
 
   /**
