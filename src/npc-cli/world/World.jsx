@@ -190,7 +190,7 @@ export default function World(props) {
       }));
 
       /** @type {const} */ ([
-        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: false, },
+        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: true, },
         { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex', invert: false },
       ]).forEach(({ src, texKey, invert }) => {
         imageLoader.loadAsync(src).then((img) => {

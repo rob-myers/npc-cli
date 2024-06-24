@@ -309,8 +309,8 @@ const canvasCss = css`
     justify-content: center;
   }
   canvas {
-    background-color: rgba(255, 255, 255, 1);
-    background-color: rgba(0, 0, 0, 1);
+    /* background-color: rgba(255, 255, 255, 1); */
+    background-color: rgba(20, 20, 20, 1);
     width: 100%;
     height: 100%;
   }
