@@ -1,10 +1,9 @@
 import React from "react";
 import * as THREE from "three";
 
-import { Mat, Poly } from "../geom";
+import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
-import { wallHeight, worldScale } from "../service/const";
-import { drawCircle, drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLine } from "../service/dom";
+import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
@@ -161,44 +160,7 @@ export default function Obstacles(props) {
     state.positionObstacles();
   }, [api.hash]);
 
-  return <>
-    {api.gms.map((gm, gmId) => (
-      <group
-        key={`${gm.key} ${gmId} ${gm.transform}`}
-        onUpdate={(group) => group.applyMatrix4(gm.mat4)}
-        // ref={(group) => group?.applyMatrix4(gm.mat4)}
-      >
-        <mesh
-          name={`floor-gm-${gmId}`}
-          geometry={quadGeometryXZ}
-          scale={[gm.pngRect.width, 1, gm.pngRect.height]}
-          position={[gm.pngRect.x, 0, gm.pngRect.y]}
-        >
-          <meshBasicMaterial
-            side={THREE.FrontSide}
-            transparent
-            map={api.gmClass[gm.key].floor[1]}
-            depthWrite={false} // fix z-fighting
-          />
-        </mesh>
-
-        <mesh
-          name={`ceil-gm-${gmId}`}
-          geometry={quadGeometryXZ}
-          scale={[gm.pngRect.width, 1, gm.pngRect.height]}
-          position={[gm.pngRect.x, wallHeight + 0.001, gm.pngRect.y]}
-        >
-          <meshBasicMaterial
-            side={THREE.FrontSide}
-            transparent
-            map={api.gmClass[gm.key].ceil[1]}
-            // depthWrite={false} // fix z-fighting
-            alphaTest={0.9} // 0.5 flickered on (301, 101) border
-          />
-        </mesh>
-      </group>
-    ))}
-
+  return (
     <instancedMesh
       name="static-obstacles"
       key={`${api.hash} static-obstacles`}
@@ -219,7 +181,7 @@ export default function Obstacles(props) {
         // diffuse={new THREE.Vector3(1, 0, 1)}
       />
     </instancedMesh>
-  </>
+  );
   
 }
 
