@@ -35,7 +35,7 @@ export default function Ceiling(props) {
       // door tops
       ceilCt.strokeStyle = 'black';
       ceilCt.lineWidth = 0.03;
-      drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(200, 200, 200, 1)'])
+      drawPolygons(ceilCt, layout.doors.map(x => x.poly), ['rgba(120, 120, 120, 1)', 'rgba(120, 120, 120, 1)'])
       // layout.doors.forEach(x => strokeLine(ceilCt, x.seg[0], x.seg[1]))
       ceilCt.resetTransform();
 
