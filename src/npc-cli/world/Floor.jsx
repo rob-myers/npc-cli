@@ -29,7 +29,7 @@ export default function Floor(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Floor
-      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#444', null]);
+      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#333', null]);
 
       // Nav-mesh
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
