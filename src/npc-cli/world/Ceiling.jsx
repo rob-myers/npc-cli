@@ -17,7 +17,8 @@ export default function Ceiling(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGmKey(gmKey) {
-      const { ceil: [ceilCt, ceilTex, { width, height }], layout } = api.gmClass[gmKey];
+      const [ceilCt, ceilTex, { width, height }] = api.gmClass[gmKey].ceil;
+      const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
       const { pngRect } = layout;
 
       ceilCt.clearRect(0, 0, width, height);

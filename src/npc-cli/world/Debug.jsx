@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { navMeta, greenWireFrameMat } from "../service/three";
+import { navMeta, greenWireFrameMat, decompToXZGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -17,9 +17,17 @@ export default function Debug(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
-    ptrToTilePolyId: {},
+    navPoly: /** @type {*} */ ({}),
     selectedNavPolys: new THREE.BufferGeometry(),
 
+    ensureNavPoly(gmKey) {
+      if (!state.navPoly[gmKey]) {
+        const layout = /** @type {Geomorph.Layout} */ (api.gms.find(x => x.key === gmKey));
+        // Fix normals for recast/detour... maybe due to earcut ordering?
+        state.navPoly[gmKey] = decompToXZGeometry(layout.navDecomp, { reverse: true });
+        update();
+      }
+    },
     setNavPath(path) {
       const group = state.navPath;
       group.children.forEach((x) =>
@@ -120,11 +128,11 @@ export default function Debug(props) {
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
         onUpdate={(group) => group.applyMatrix4(gm.mat4)}
-        // ref={(group) => group?.applyMatrix4(gm.mat4)}
+        ref={(group) => group && state.ensureNavPoly(gm.key)}
       >
         <mesh
           name="origNavPoly"
-          args={[api.gmClass[gm.key].debugNavPoly, origNavPolyMaterial]}
+          args={[state.navPoly[gm.key], origNavPolyMaterial]}
           position={[0, 0.001, 0]}
           visible={props.showOrigNavPoly}
         />
@@ -144,8 +152,9 @@ export default function Debug(props) {
  * @typedef State
  * @property {NavMeshHelper} navMesh
  * @property {THREE.Group} navPath
- * @property {Record<number, [number, number]>} ptrToTilePolyId
+ * @property {Record<Geomorph.GeomorphKey, THREE.BufferGeometry>} navPoly
  * @property {THREE.BufferGeometry} selectedNavPolys
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
  * @property {(polyIds: number[]) => void} selectNavPolys
  */

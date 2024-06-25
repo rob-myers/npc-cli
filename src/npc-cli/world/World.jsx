@@ -48,7 +48,7 @@ export default function World(props) {
     derived: { doorCount: 0, obstaclesCount: 0, wallCount: 0 },
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
-    gmClass: /** @type {*} */ ({}),
+    gmClass: /** @type {*} */ ({}), // 🚧 move into Floor, Ceiling?
     gms: [],
     hmr: { hash: '', gmHash: '' },
     obsTex: /** @type {*} */ (null),
@@ -63,7 +63,7 @@ export default function World(props) {
     obs: /** @type {*} */ (null), // Obstacles
     vert: /** @type {State['vert']} */ ({
       onTick() {},
-      toggleDoor(instanceId) {},
+      toggleDoor(_instanceId) {},
     }), // WallsAndDoors
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
@@ -88,16 +88,11 @@ export default function World(props) {
         gmClass = state.gmClass[gmKey] = {
           ceil: [assertNonNull(ceilEl.getContext("2d")), new THREE.CanvasTexture(ceilEl), ceilEl],
           floor: [assertNonNull(floorEl.getContext("2d")), new THREE.CanvasTexture(floorEl), floorEl],
-          layout,
-          debugNavPoly: tmpBufferGeom1,
         };
         // align with XZ quad uv-map
         gmClass.floor[1].flipY = false;
         gmClass.ceil[1].flipY = false;
       }
-      gmClass.layout = layout;
-      // Fix normals for recast/detour... maybe due to earcut ordering?
-      gmClass.debugNavPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
       return gmClass;
     },
     async handleMessageFromWorker(e) {
@@ -106,7 +101,7 @@ export default function World(props) {
       if (msg.type === "nav-mesh-response") {
         await initRecastNav();
         state.loadTiledMesh(msg.exportedNavMesh);
-        update(); // TestNpcs
+        update(); // <Npcs>
       }
     },
     isReady() {
@@ -163,8 +158,11 @@ export default function World(props) {
       if (mapChanged) {
         state.mapKey = props.mapKey;
         const map = state.geomorphs.map[state.mapKey];
-        state.gms = map.gms.map(({ gmKey, transform }, gmId) =>
-          geomorphService.computeLayoutInstance(state.ensureGmClass(gmKey).layout, gmId, transform)
+
+        map.gms.forEach(({ gmKey }) => state.ensureGmClass(gmKey));
+
+        state.gms = map.gms.map(({ gmKey, transform }, gmId) => 
+          geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
         );
         state.derived.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
         state.derived.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
@@ -323,8 +321,6 @@ export default function World(props) {
  * @typedef GmData
  * @property {CanvasTexDef} ceil
  * @property {Pretty<CanvasTexDef>} floor
- * @property {Geomorph.Layout} layout
- * @property {THREE.BufferGeometry} debugNavPoly
  */
 
 /**

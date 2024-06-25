@@ -17,8 +17,8 @@ export default function Floor(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     drawGmKey(gmKey) {
-      const { floor, layout } = api.gmClass[gmKey];
-      const [ct, tex, { width, height }] = floor;
+      const [ct, tex, { width, height }] = api.gmClass[gmKey].floor;
+      const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
       const { pngRect, hullPoly, navDecomp, walls, doors } = layout;
 
       ct.clearRect(0, 0, width, height);

@@ -20,13 +20,16 @@
   - ✅ remove unused code from World/assets
   - ✅ x2 resolution floor
   - ✅ fix `World` break on comment out WallsAndDoors
-  - api.gmClass -> api.floor, api.ceiling
-  - 🚧 inverted grid
-  - draw grid on floor?
+  - 🚧 api.gmClass -> api.{floor,ceiling}
+    - ✅ move `debugNavPoly` into Debug and compute lazily
+    - ✅ remove `layout`
+    - merge into api.floor
+    - merge into api.ceiling
+  - draw grid on floor
   - different ceiling shades e.g. bridge
   - prevent coinciding doors (flicker)
     - detect/discard during flatten symbols
-  - 🚧 could fix "low fuel" via `y=1.01 wallsH=1`
+  - ✅ fix "low fuel" via `y=1.01 wallsH=1`
 
 - ensure separated hull doors
   - ensure normal points into gm
