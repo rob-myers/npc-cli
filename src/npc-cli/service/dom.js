@@ -61,8 +61,13 @@ export function drawPolygons(ct, polys, [fillStyle, strokeStyle, lineWidth] = []
     for (const hole of poly.holes) {
       fillRing(ct, hole, false);
     }
-    fillStyle !== null && clip === false ? ct.fill() : ct.clip();
-    strokeStyle !== null && ct.stroke();
+    if (strokeStyle !== null) {
+      ct.closePath();
+      ct.stroke();
+    }
+    if (fillStyle !== null) {
+      clip === false ? ct.fill() : ct.clip();
+    }
   }
 }
 
