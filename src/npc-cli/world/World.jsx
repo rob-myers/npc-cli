@@ -47,7 +47,6 @@ export default function World(props) {
 
     derived: { doorCount: 0, obstaclesCount: 0, wallCount: 0 },
     events: new Subject(),
-    floorImg: /** @type {*} */ ({}),
     geomorphs: /** @type {*} */ (null),
     gmClass: /** @type {*} */ ({}),
     gms: [],
@@ -74,7 +73,7 @@ export default function World(props) {
       ...npcService,
     },
 
-    ensureGmClass(gmKey) {
+    ensureGmClass(gmKey) {// 🚧 rethink e.g. ≥ 4 gmKeys per tex
       const layout = state.geomorphs.layout[gmKey];
       let gmClass = state.gmClass[gmKey];
       if (!gmClass) {
@@ -182,13 +181,6 @@ export default function World(props) {
         return null;
       }
 
-      keys(state.gmClass).forEach((gmKey) => textureLoader.loadAsync(
-        `${assetsEndpoint}/2d/${gmKey}.floor.${imgExt}${getAssetQueryParam()}`
-      ).then((tex) => {
-        state.floorImg[gmKey] = tex.source.data;
-        state.obs && state.events.next({ key: 'draw-floor-ceil', gmKey });
-      }));
-
       /** @type {const} */ ([
         { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: true, },
         { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex', invert: false },
@@ -249,9 +241,11 @@ export default function World(props) {
       <WorldCanvas disabled={props.disabled} stats>
         {state.geomorphs && (
           <group>
+            {/* 🚧 fix break when comment out then refresh */}
             <Floor />
             <Ceiling />
             <Obstacles />
+            <WallsAndDoors />
             {state.crowd && <>
               <Npcs/>
               <Debug
@@ -259,7 +253,6 @@ export default function World(props) {
                 // showOrigNavPoly
               />
             </>}
-            <WallsAndDoors />
           </group>
         )}
       </WorldCanvas>
@@ -305,7 +298,6 @@ export default function World(props) {
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/npc").NpcService} lib
  *
- * @property {Record<Geomorph.GeomorphKey, HTMLImageElement>} floorImg
  * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
  * @property {THREE.CanvasTexture} obsTex CanvasTexture for pixel lookup
  * @property {THREE.CanvasTexture} decorTex CanvasTexture for pixel lookup

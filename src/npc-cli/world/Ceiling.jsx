@@ -3,9 +3,9 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { wallHeight, worldScale } from "../service/const";
+import { keys } from "../service/generic";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
-import { geomorphService } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -16,14 +16,14 @@ export default function Ceiling(props) {
   const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    draw(gmKey) {
+    drawGmKey(gmKey) {
       const { ceil: [ceilCt, ceilTex, { width, height }], layout } = api.gmClass[gmKey];
       const { pngRect } = layout;
       const scale = 1 / worldScale;
 
       ceilCt.clearRect(0, 0, width, height);
       ceilCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      const color = 'rgba(60, 60, 60, 1)';
+      const color = 'rgba(80, 80, 80, 1)';
 
       // wall tops (stroke gaps e.g. bridge desk)
       // drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
@@ -42,9 +42,8 @@ export default function Ceiling(props) {
 
   api.ceil = state;
 
-  React.useEffect(() => {
-    // (a) ensure initial draw (b) redraw onchange this file
-    geomorphService.gmKeys.forEach(gmKey => api.floorImg[gmKey] && state.draw(gmKey));
+  React.useEffect(() => {// ensure initial + redraw on HMR
+    keys(api.gmClass).forEach(gmKey => state.drawGmKey(gmKey));
   }, []);
 
   return <>
@@ -81,7 +80,7 @@ export default function Ceiling(props) {
 
 /**
  * @typedef State
- * @property {(gmKey: Geomorph.GeomorphKey) => void} draw
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
 
 const tmpMat1 = new Mat();

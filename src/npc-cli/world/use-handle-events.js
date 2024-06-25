@@ -1,5 +1,4 @@
 import React from "react";
-import { warn, info } from "../service/generic";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -11,13 +10,6 @@ export default function useHandleEvents(api) {
       // info('useTestHandleEvents', e);
 
       switch (e.key) {
-        case "draw-floor-ceil":
-          if (!api.floorImg[e.gmKey]) {// 🚧 eliminate
-            return warn(`saw "${e.key}" before api.floorImg['${e.gmKey}']`);
-          }
-          api.floor.draw(e.gmKey);
-          api.ceil.draw(e.gmKey);
-          break;
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu
           if (e.distancePx <= (e.touch ? 10 : 5)) {

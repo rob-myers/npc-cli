@@ -11,8 +11,6 @@
  * Generates:
  * - assets.json
  * - geomorphs.json
- * - floor images (one per gmKey)
- *   - 🚧 compute in browser instead?
  * - obstacles sprite-sheet
  * - decor sprite-sheet
  * - webp from png
@@ -258,10 +256,6 @@ info({ opts });
 
   //#endregion
 
-  /** Draw geomorph floors */
-  // 🚧 debug only i.e. draw in browser instead
-  await drawFloorImages(geomorphs, changedGmKeys);
-
   /**
    * Tell the browser we're ready.
    * In development we use PNG (not WEBP) to avoid HMR delay.
@@ -277,7 +271,6 @@ info({ opts });
   //#region ℹ️ png -> webp for production
 
   let pngPaths = [
-    ...geomorphService.gmKeys.map(getFloorPngPath), // 🚧 remove
     obstaclesPngPath,
     decorPngPath,
   ];
@@ -371,52 +364,6 @@ function validateSubSymbolDimensions(symbols) {
       }
     })
   });
-}
-
-/**
- * @param {Geomorph.Geomorphs} geomorphs 
- * @param {Geomorph.GeomorphKey[]} changedGmKeys 
- */
-async function drawFloorImages(geomorphs, changedGmKeys) {
-  const changedLayouts = Object.values(geomorphs.layout).filter(({ key }) => changedGmKeys.includes(key));
-  const promises = /** @type {Promise<any>[]} */ ([]);
-
-  // 🔔 currently only triggered when gm changes
-  // 🚧 move this to the browser
-
-  for (const { key: gmKey, pngRect, doors, walls, navDecomp, hullPoly } of changedLayouts) {
-    
-    const canvas = createCanvas(0, 0);
-    const ct = canvas.getContext('2d');
-    canvas.width = pngRect.width * worldToSgu;
-    canvas.height = pngRect.height * worldToSgu;
-    ct.transform(worldToSgu, 0, 0, worldToSgu, -worldToSgu * pngRect.x, -worldToSgu * pngRect.y);
-
-    // White floor
-    drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#444', null]);
-    if (imgOpts.debugNavPoly || imgOpts.debugNavTris) {
-      debugDrawNav(ct, navDecomp);
-    }
-
-    drawPolygons(ct, walls, ['black', null]);
-    // drawPolygons(ct, walls, ['black', 'black', 0.04]);
-    // ℹ️ technically we support walls with holes, but they may also arise e.g. via door inside wall
-    walls.forEach(wall => wall.holes.length && warn(`${gmKey}: saw wall with hole (${wall.outline.length} outer points)`));
-
-    if (imgOpts.debugImage) {
-      ct.globalAlpha = 0.2;
-      const debugImg = await loadImage(fs.readFileSync(path.resolve(staticAssetsDir, 'debug', `${gmKey}.png`)))
-      ct.drawImage(debugImg, 0, 0, debugImg.width, debugImg.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
-      ct.globalAlpha = 1;
-    }
-
-    // Doors
-    drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
-
-    promises.push(saveCanvasAsFile(canvas, getFloorPngPath(gmKey)));
-  }
-
-  await Promise.all(promises);
 }
 
 /**
@@ -639,28 +586,12 @@ function detectChangedObstacles(obstacles, assets, prev) {
   }
 }
 
-/**
- * @param {import('canvas').CanvasRenderingContext2D} ct
- * @param {Geomorph.Layout['navDecomp']} navDecomp
- */
-function debugDrawNav(ct, navDecomp) {
-  const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
-  const navPoly = Poly.union(triangles);
-  imgOpts.debugNavPoly && drawPolygons(ct, navPoly, ['rgba(30, 30, 30, 0.4)', 'black', 0.01]);
-  imgOpts.debugNavTris && drawPolygons(ct, triangles, [null, 'rgba(0, 0, 0, 0.3)', 0.02]);
-}
-
 /** @param {Geom.Meta} meta */
 function extractObstacleDescriptor(meta) {
   for (const tag of ['table', 'chair', 'bed', 'shower', 'surface']) {
     if (meta[tag] === true) return tag;
   }
   return 'obstacle';
-}
-
-/** @param {Geomorph.GeomorphKey} gmKey */
-function getFloorPngPath(gmKey) {
-  return path.resolve(assets2dDir, `${gmKey}.floor.png`);
 }
 
 /**

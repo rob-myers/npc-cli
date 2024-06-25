@@ -38,7 +38,6 @@ declare namespace NPC {
     | LongPointerDownEvent
     // | PointerMoveEvent
     | { key: "disabled" }
-    | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey }
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
     | { key: "spawned"; npcKey: string; }

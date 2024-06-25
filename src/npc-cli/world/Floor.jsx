@@ -3,9 +3,9 @@ import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
 import { worldScale } from "../service/const";
+import { keys } from "../service/generic";
 import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
-import { quadGeometryXZ } from "../service/three";
-import { geomorphService } from "../service/geomorph";
+import { imageLoader, quadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -16,43 +16,66 @@ export default function Floor(props) {
   const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    draw(gmKey) {
-      const img = api.floorImg[gmKey];
-      const { floor: [floorCt, , { width, height }], layout } = api.gmClass[gmKey];
-      const { pngRect } = layout;
+    drawGmKey(gmKey) {
+      const { floor, layout } = api.gmClass[gmKey];
+      const [ct, tex, { width, height }] = floor;
+      const { pngRect, hullPoly, navDecomp, walls, doors } = layout;
 
-      floorCt.clearRect(0, 0, width, height);
-      floorCt.drawImage(img, 0, 0);
+      ct.clearRect(0, 0, width, height);
+      ct.fillStyle = 'red';
+      ct.strokeStyle = 'green';
 
-      // obstacles drop shadows
-      const scale = 1 / worldScale;
-      floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
-      // avoid doubling shadows e.g. bunk bed, overlapping tables
+      const worldToSgu = 1 / worldScale;
+      ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+
+      // Floor
+      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#555', null]);
+
+      // Nav-mesh
+      const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
+      const navPoly = Poly.union(triangles);
+      drawPolygons(ct, navPoly, ['rgba(30, 30, 30, 0.4)', 'black', 0.01]);
+      // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
+
+      // Walls
+      drawPolygons(ct, walls, ['black', null]);
+      // Doors
+      drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
+
+      // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
       const shadowPolys = Poly.union(layout.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(floorCt, shadowPolys, ['rgba(0, 0, 0, 0.5)', null]);
+      drawPolygons(ct, shadowPolys, ['rgba(0, 0, 0, 0.5)', null]);
 
-      // 🚧 debug decor
-      floorCt.setTransform(scale, 0, 0, scale, -pngRect.x * scale, -pngRect.y * scale);
+      // 🧪 debug decor
+      ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
       layout.decor.forEach((decor) => {
         if (decor.type === 'circle') {
-          drawCircle(floorCt, decor.center, decor.radius, [null, '#500', 0.04]);
+          drawCircle(ct, decor.center, decor.radius, [null, '#500', 0.04]);
         }
       });
 
-      floorCt.resetTransform();
+      // 🧪 debug original geomorph image
+      // imageLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((img) => {
+      //   ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+      //   ct.globalAlpha = 0.2;
+      //   ct.drawImage(img, 0, 0, img.width, img.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
+      //   ct.globalAlpha = 1;
+      //   ct.resetTransform();
+      //   tex.needsUpdate = true;
+      // });
 
-      const { floor: [, floor] } = api.gmClass[gmKey];
-      floor.needsUpdate = true;
+      ct.resetTransform();
+      tex.needsUpdate = true;
     },
   }));
 
+
   api.floor = state;
 
-  React.useEffect(() => {
-    // (a) ensure initial draw (b) redraw onchange this file
-    geomorphService.gmKeys.forEach(gmKey => api.floorImg[gmKey] && state.draw(gmKey));
+  React.useEffect(() => {// ensure initial + redraw on HMR
+    keys(api.gmClass).forEach(gmKey => state.drawGmKey(gmKey));
   }, []);
 
   return <>
@@ -88,7 +111,7 @@ export default function Floor(props) {
 
 /**
  * @typedef State
- * @property {(gmKey: Geomorph.GeomorphKey) => void} draw
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
 
 const tmpMat1 = new Mat();

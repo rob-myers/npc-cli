@@ -16,9 +16,11 @@
     - ❌ in assets.js
     - ✅ in browser after load texture
   - ✅ lighter ceiling + minor clean
-  - 🚧 change floor shade
-    - ✅ temp fix
-    - 🚧 draw inside browser instead of assets.js
+  - ✅ draw gm floors inside browser instead of assets.js
+  - ✅ remove unused code from World/assets
+  - x2 resolution floor
+  - fix `World` break on comment out Floor/Ceiling/Obstacles
+  - api.gmClass -> api.floor, api.ceiling
   - 🚧 inverted grid
   - draw grid on floor?
   - different ceiling shades e.g. bridge
