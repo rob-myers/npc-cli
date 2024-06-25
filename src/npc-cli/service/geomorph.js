@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { worldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -716,7 +716,7 @@ class GeomorphService {
   parseMap(mapKey, svgContents) {
     const gms = /** @type {Geomorph.MapDef['gms']} */ ([]);
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
-    const scale = worldScale * 1; // map scaled like hull symbols
+    const scale = sguToWorldScale * 1; // map scaled like hull symbols
 
     const parser = new htmlparser2.Parser({
       onopentag(name, attributes) {
@@ -779,7 +779,7 @@ class GeomorphService {
     // info("parseStarshipSymbol", symbolKey, "...");
     const isHull = this.isHullKey(symbolKey);
     /** Non-hull symbol are scaled up by 5 inside SVGs */
-    const scale = worldScale * (isHull ? 1 : 1 / 5);
+    const scale = sguToWorldScale * (isHull ? 1 : 1 / 5);
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);

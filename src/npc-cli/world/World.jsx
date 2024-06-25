@@ -8,7 +8,7 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { worldScale } from "../service/const";
+import { gmFloorExtraScale, sguToWorldScale } from "../service/const";
 import { assertNonNull, info, debug, isDevelopment, keys, warn } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
@@ -79,9 +79,9 @@ export default function World(props) {
       if (!gmClass) {
         const floorEl = document.createElement("canvas");
         const ceilEl = document.createElement("canvas");
-        // Standard non-edge geomorph approx. 1200 * 1200 (extends beyond edges)
-        ceilEl.width = floorEl.width = layout.pngRect.width / worldScale;
-        ceilEl.height = floorEl.height = layout.pngRect.height / worldScale;
+        // Scale up canvas for higher resolution
+        ceilEl.width = floorEl.width = (layout.pngRect.width / sguToWorldScale) * gmFloorExtraScale;
+        ceilEl.height = floorEl.height = (layout.pngRect.height / sguToWorldScale) * gmFloorExtraScale;
         gmClass = state.gmClass[gmKey] = {
           ceil: [assertNonNull(ceilEl.getContext("2d")), new THREE.CanvasTexture(ceilEl), ceilEl],
           floor: [assertNonNull(floorEl.getContext("2d")), new THREE.CanvasTexture(floorEl), floorEl],

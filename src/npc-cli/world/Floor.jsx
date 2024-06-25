@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { worldScale } from "../service/const";
+import { gmFloorExtraScale, sguToWorldScale } from "../service/const";
 import { keys } from "../service/generic";
 import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
 import { imageLoader, quadGeometryXZ } from "../service/three";
@@ -25,8 +25,8 @@ export default function Floor(props) {
       ct.fillStyle = 'red';
       ct.strokeStyle = 'green';
 
-      const worldToSgu = 1 / worldScale;
-      ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+      const worldToCanvas = (1 / sguToWorldScale) * gmFloorExtraScale;
+      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Floor
       drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#555', null]);
@@ -49,7 +49,7 @@ export default function Floor(props) {
       drawPolygons(ct, shadowPolys, ['rgba(0, 0, 0, 0.5)', null]);
 
       // 🧪 debug decor
-      ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+      // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
       layout.decor.forEach((decor) => {
         if (decor.type === 'circle') {
           drawCircle(ct, decor.center, decor.radius, [null, '#500', 0.04]);

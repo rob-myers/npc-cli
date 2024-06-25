@@ -13,7 +13,10 @@ export const zIndex = /** @type {const} */ ({
  * Convert Starship Geomorph units (sgu) into world coordinates (meters).
  * e.g. 1 tile is 60 sgu, which becomes 1.5 meters
  */
-export const worldScale = (1 / 60) * 1.5;
+export const sguToWorldScale = (1 / 60) * 1.5;
+
+/** Higher resolution floors */
+export const gmFloorExtraScale = 2;
 
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetNonHullExtraScale = 2.5;
@@ -21,17 +24,17 @@ export const spriteSheetNonHullExtraScale = 2.5;
 /** Decimal place precision */
 export const precision = 4;
 
-export const wallOutset = 12 * worldScale;
+export const wallOutset = 12 * sguToWorldScale;
 
-export const obstacleOutset = 10 * worldScale;
+export const obstacleOutset = 10 * sguToWorldScale;
 
 export const wallHeight = 2;
 
 /** Depth of doorway along line walking through hull door */
-export const hullDoorDepth = 8 * worldScale;
+export const hullDoorDepth = 8 * sguToWorldScale;
 
 /** Depth of doorway along line walking through door */
-export const doorDepth = (20 / 5) * worldScale;
+export const doorDepth = (20 / 5) * sguToWorldScale;
 
 /**
  * Properties of exported GLB file.

@@ -18,7 +18,7 @@
   - ✅ lighter ceiling + minor clean
   - ✅ draw gm floors inside browser instead of assets.js
   - ✅ remove unused code from World/assets
-  - x2 resolution floor
+  - ✅ x2 resolution floor
   - fix `World` break on comment out Floor/Ceiling/Obstacles
   - api.gmClass -> api.floor, api.ceiling
   - 🚧 inverted grid
