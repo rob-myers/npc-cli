@@ -34,7 +34,7 @@ export default function Floor(props) {
       // Nav-mesh
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
-      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', 'white', 0.025]);
+      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#999', 0.025]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
       // Walls
