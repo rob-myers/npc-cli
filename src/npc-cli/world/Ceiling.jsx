@@ -24,9 +24,9 @@ export default function Ceiling(props) {
       const worldToCanvas = (1 / sguToWorldScale) * gmFloorExtraScale;
       ceilCt.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
-      const color = 'rgba(80, 80, 80, 1)';
-      // wall tops (stroke gaps e.g. bridge desk)
-      // drawPolygons(ceilCt, layout.walls, ['rgba(50, 50, 50, 1)', null])
+      const color = 'rgba(255, 255, 255, 1)';
+      
+      // wall tops
       const wallsTouchingCeil = layout.walls.filter(x =>
         x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
       );
