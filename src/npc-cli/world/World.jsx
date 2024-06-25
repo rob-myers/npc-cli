@@ -61,7 +61,10 @@ export default function World(props) {
     floor: /** @type {*} */ (null), // Floor
     ceil: /** @type {*} */ (null), // Ceiling
     obs: /** @type {*} */ (null), // Obstacles
-    vert: /** @type {*} */ (null), // WallsAndDoors
+    vert: /** @type {State['vert']} */ ({
+      onTick() {},
+      toggleDoor(instanceId) {},
+    }), // WallsAndDoors
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
@@ -241,11 +244,12 @@ export default function World(props) {
       <WorldCanvas disabled={props.disabled} stats>
         {state.geomorphs && (
           <group>
-            {/* 🚧 fix break when comment out then refresh */}
-            <Floor />
-            <Ceiling />
-            <Obstacles />
-            <WallsAndDoors />
+            <group>
+              <Floor />
+              <Ceiling />
+              <Obstacles />
+              <WallsAndDoors />
+            </group>
             {state.crowd && <>
               <Npcs/>
               <Debug
