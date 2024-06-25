@@ -983,13 +983,13 @@ class GeomorphService {
    * @param {Geom.Poly[]} doors
    */
   removeCloseDoors(logPrefix, doors) {
-    const centers = doors.map(x => x.center);
+    const centers = doors.map(d => d.center);
     const removeIds = /** @type {Set<number>} */ (new Set());
     centers.forEach((center, i) => {
       if (!removeIds.has(i))
         for (let j = i + 1; j < centers.length; j++)
-          if (center.distanceToSquared(centers[j]) < 0.1 * 2) {
-            warn(`${logPrefix}: doors coincide: ${i}, ${j}`);
+          if (Math.abs(center.x - centers[j].x) < 0.1 && Math.abs(center.y - centers[j].y) < 0.1) {
+            debug(`${logPrefix}: removed door coinciding with ${i} (${j})`);
             removeIds.add(j);
           }
     });
