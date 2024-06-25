@@ -94,6 +94,10 @@ const speechBubbleCss = css`
   {
     visibility: visible;
   }
+  &:not(.open) .info {
+    right: 0; // prevent overflow scroll
+  }
+
   .info {
     visibility: hidden;
     white-space: normal;
