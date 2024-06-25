@@ -29,12 +29,12 @@ export default function Floor(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Floor
-      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#555', null]);
+      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#444', null]);
 
       // Nav-mesh
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
-      drawPolygons(ct, navPoly, ['rgba(30, 30, 30, 0.4)', 'black', 0.01]);
+      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', 'white', 0.025]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
       // Walls
@@ -46,7 +46,7 @@ export default function Floor(props) {
       const shadowPolys = Poly.union(layout.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(ct, shadowPolys, ['rgba(0, 0, 0, 0.5)', null]);
+      drawPolygons(ct, shadowPolys, ['rgba(0, 0, 0, 0.25)', null]);
 
       // 🧪 debug decor
       // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);

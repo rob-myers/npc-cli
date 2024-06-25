@@ -1,7 +1,6 @@
 import React from "react";
 import * as THREE from "three";
 
-import { Mat } from "../geom";
 import { wallHeight, sguToWorldScale, gmFloorExtraScale } from "../service/const";
 import { keys } from "../service/generic";
 import { drawPolygons, strokeLine } from "../service/dom";
@@ -83,5 +82,3 @@ export default function Ceiling(props) {
  * @typedef State
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
-
-const tmpMat1 = new Mat();
