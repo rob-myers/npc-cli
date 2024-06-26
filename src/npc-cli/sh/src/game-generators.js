@@ -1,17 +1,17 @@
 /**
  * Usage:
- * - `api`
- * - `api 'x => x.crowd'` 
- * - `api crowd`
- * - `api vert.toggleDoor 15`
- * - 🚧 `api "x => x.gmGraph.findRoomContaining($( click 1 ))"`
- * - 🚧 `api gmGraph.findRoomContaining $( click 1 )`
- * - 🚧 `click | api gmGraph.findRoomContaining`
+ * - `world`
+ * - `world 'x => x.crowd'` 
+ * - `world crowd`
+ * - `world vert.toggleDoor 15`
+ * - 🚧 `world "x => x.gmGraph.findRoomContaining($( click 1 ))"`
+ * - 🚧 `world gmGraph.findRoomContaining $( click 1 )`
+ * - 🚧 `click | world gmGraph.findRoomContaining`
  *
  * ℹ️ supports `ctrl-c` without cleaning ongoing computations
  * @param {RunArg} ctxt
  */
-export async function* api(ctxt) {
+export async function* world(ctxt) {
   const { api, args, home } = ctxt;
   const world = api.getCached(home.WORLD_KEY);
   const getHandleProm = () => new Promise((resolve, reject) => api.addCleanup(
