@@ -20,11 +20,12 @@
   - ✅ remove unused code from World/assets
   - ✅ x2 resolution floor
   - ✅ fix `World` break on comment out WallsAndDoors
-  - 🚧 api.gmClass -> api.{floor,ceiling}
+  - ✅ api.gmClass -> api.{floor,ceiling}
     - ✅ move `debugNavPoly` into Debug and compute lazily
     - ✅ remove `layout`
-    - merge into api.floor
-    - merge into api.ceiling
+    - ✅ merge into api.floor
+    - ✅ merge into api.ceiling
+  - move api.debug.navMesh -> api.derived.navMesh
   - draw grid on floor
   - different ceiling shades e.g. bridge
   - prevent coinciding doors (flicker)

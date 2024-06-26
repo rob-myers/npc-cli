@@ -17,9 +17,10 @@ export default function Floor(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     gridPattern: createGridPattern(1.5 * worldToCanvas),
+    tex: api.floor.tex, // Pass in textures
 
     drawGmKey(gmKey) {
-      const [ct, tex, { width, height }] = api.gmClass[gmKey].floor;
+      const [ct, tex, { width, height }] = state.tex[gmKey];
       const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
       const { pngRect, hullPoly, navDecomp, walls, doors } = layout;
 
@@ -82,7 +83,7 @@ export default function Floor(props) {
   api.floor = state;
 
   React.useEffect(() => {// ensure initial + redraw on HMR
-    keys(api.gmClass).forEach(gmKey => state.drawGmKey(gmKey));
+    keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
   }, []);
 
   return <>
@@ -101,7 +102,7 @@ export default function Floor(props) {
           <meshBasicMaterial
             side={THREE.FrontSide}
             transparent
-            map={api.gmClass[gm.key].floor[1]}
+            map={state.tex[gm.key][1]}
             depthWrite={false} // fix z-fighting
           />
         </mesh>
@@ -119,6 +120,7 @@ export default function Floor(props) {
 /**
  * @typedef State
  * @property {CanvasPattern} gridPattern
+ * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
 

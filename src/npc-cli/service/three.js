@@ -182,6 +182,24 @@ const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
 const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
 /**
+ * @param {number} width 
+ * @param {number} height 
+ */
+export function createCanvasTexDef(width, height) {
+  const el = document.createElement('canvas');
+  el.width = width;
+  el.height = height;
+  /** @type {CanvasTexDef} */
+  const def = [
+    /** @type {CanvasRenderingContext2D} */(el.getContext('2d')),
+    new THREE.CanvasTexture(el),
+    el,
+  ];
+  def[1].flipY = false; // align with XZ quad uv-map
+  return def;
+}
+
+/**
  * @param {THREE.Vector3Like} position
  * @param {THREE.Vector3Like} halfExtent
  */
@@ -209,3 +227,7 @@ export const yAxis = new THREE.Vector3(0, 1, 0);
 export const emptyGroup = new THREE.Group();
 
 export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
+
+/**
+ * @typedef {Pretty<[CanvasRenderingContext2D, THREE.CanvasTexture, HTMLCanvasElement]>} CanvasTexDef
+ */

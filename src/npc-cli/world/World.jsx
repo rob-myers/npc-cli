@@ -8,12 +8,12 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { gmFloorExtraScale, sguToWorldScale } from "../service/const";
-import { assertNonNull, info, debug, isDevelopment, keys, warn, removeFirst, toPrecision } from "../service/generic";
+import { gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
-import { decompToXZGeometry, imageLoader, textureLoader, tmpBufferGeom1 } from "../service/three";
+import { createCanvasTexDef, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { WorldContext } from "./world-context";
@@ -48,7 +48,6 @@ export default function World(props) {
     derived: { doorCount: 0, obstaclesCount: 0, wallCount: 0 },
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
-    gmClass: /** @type {*} */ ({}), // 🚧 move into Floor, Ceiling?
     gms: [],
     hmr: { hash: '', gmHash: '' },
     obsTex: /** @type {*} */ (null),
@@ -58,8 +57,8 @@ export default function World(props) {
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // WorldCanvas
-    floor: /** @type {*} */ (null), // Floor
-    ceil: /** @type {*} */ (null), // Ceiling
+    floor: /** @type {State['floor']} */ ({ tex: {} }),
+    ceil: /** @type {State['ceil']} */ ({ tex: {} }),
     obs: /** @type {*} */ (null), // Obstacles
     vert: /** @type {State['vert']} */ ({
       onTick() {},
@@ -78,25 +77,6 @@ export default function World(props) {
       ...npcService,
     },
 
-    ensureGmClass(gmKey) {// 🚧 rethink e.g. ≥ 4 gmKeys per tex
-      const layout = state.geomorphs.layout[gmKey];
-      let gmClass = state.gmClass[gmKey];
-      if (!gmClass) {
-        const floorEl = document.createElement("canvas");
-        const ceilEl = document.createElement("canvas");
-        // Scale up canvas for higher resolution
-        ceilEl.width = floorEl.width = (layout.pngRect.width / sguToWorldScale) * gmFloorExtraScale;
-        ceilEl.height = floorEl.height = (layout.pngRect.height / sguToWorldScale) * gmFloorExtraScale;
-        gmClass = state.gmClass[gmKey] = {
-          ceil: [assertNonNull(ceilEl.getContext("2d")), new THREE.CanvasTexture(ceilEl), ceilEl],
-          floor: [assertNonNull(floorEl.getContext("2d")), new THREE.CanvasTexture(floorEl), floorEl],
-        };
-        // align with XZ quad uv-map
-        gmClass.floor[1].flipY = false;
-        gmClass.ceil[1].flipY = false;
-      }
-      return gmClass;
-    },
     async handleMessageFromWorker(e) {
       const msg = e.data;
       info("main thread received message", msg);
@@ -161,7 +141,19 @@ export default function World(props) {
         state.mapKey = props.mapKey;
         const map = state.geomorphs.map[state.mapKey];
 
-        map.gms.forEach(({ gmKey }) => state.ensureGmClass(gmKey));
+        // map.gms.forEach(({ gmKey }) => state.ensureGmClass(gmKey));
+        // on change map may see new gmKeys
+        map.gms.forEach(({ gmKey }) => {
+          if (!state.floor.tex[gmKey]) {
+            const layout = state.geomorphs.layout[gmKey];
+            /** @type {const} */ (['floor', 'ceil']).forEach(apiKey => {
+              state[apiKey].tex[gmKey] = createCanvasTexDef(
+                layout.pngRect.width * worldToSguScale * gmFloorExtraScale,
+                layout.pngRect.height * worldToSguScale * gmFloorExtraScale,
+              );
+            })
+          }
+        });
 
         state.gms = map.gms.map(({ gmKey, transform }, gmId) => 
           geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
@@ -302,7 +294,6 @@ export default function World(props) {
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/npc").NpcService} lib
  *
- * @property {Record<Geomorph.GeomorphKey, GmData>} gmClass
  * @property {THREE.CanvasTexture} obsTex CanvasTexture for pixel lookup
  * @property {THREE.CanvasTexture} decorTex CanvasTexture for pixel lookup
  * @property {Geomorph.LayoutInstance[]} gms
@@ -311,26 +302,11 @@ export default function World(props) {
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
- * @property {(gmKey: Geomorph.GeomorphKey) => GmData} ensureGmClass
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} update
  * @property {() => void} onTick
- */
-
-/**
- * @typedef GmData
- * @property {CanvasTexDef} ceil
- * @property {Pretty<CanvasTexDef>} floor
- */
-
-/**
- * @typedef {Pretty<[
- *  CanvasRenderingContext2D,
- *  THREE.CanvasTexture,
- *  HTMLCanvasElement,
- * ]>} CanvasTexDef
  */
 
 /**

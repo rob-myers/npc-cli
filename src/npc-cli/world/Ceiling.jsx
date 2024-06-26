@@ -15,8 +15,10 @@ export default function Ceiling(props) {
   const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    tex: api.ceil.tex, // Pass in textures
+
     drawGmKey(gmKey) {
-      const [ceilCt, ceilTex, { width, height }] = api.gmClass[gmKey].ceil;
+      const [ceilCt, ceilTex, { width, height }] = state.tex[gmKey];
       const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
       const { pngRect } = layout;
 
@@ -43,7 +45,7 @@ export default function Ceiling(props) {
   api.ceil = state;
 
   React.useEffect(() => {// ensure initial + redraw on HMR
-    keys(api.gmClass).forEach(gmKey => state.drawGmKey(gmKey));
+    keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
   }, []);
 
   return <>
@@ -62,7 +64,7 @@ export default function Ceiling(props) {
           <meshBasicMaterial
             side={THREE.FrontSide}
             transparent
-            map={api.gmClass[gm.key].ceil[1]}
+            map={state.tex[gm.key][1]}
             // depthWrite={false} // fix z-fighting
             alphaTest={0.9} // 0.5 flickered on (301, 101) border
           />
@@ -80,5 +82,6 @@ export default function Ceiling(props) {
 
 /**
  * @typedef State
+ * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
