@@ -238,9 +238,10 @@ export default function WorldCanvas(props) {
         ref={(x) => x && (state.controls = x)}
         makeDefault
         zoomToCursor
+
         {...isTouchDevice() && {
-          minAzimuthAngle: 0,
-          maxAzimuthAngle: 0,
+          minAzimuthAngle: Math.PI / 6,
+          maxAzimuthAngle: Math.PI / 6,
         }}
       />
 
