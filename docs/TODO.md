@@ -31,6 +31,10 @@
     - detect/discard during flatten symbols
   - ✅ fix "low fuel" via `y=1.01 wallsH=1`
 
+- ✅ implement `click`
+- test `click`
+- NPC click to move -> script
+
 - ensure separated hull doors
   - ensure normal points into gm
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`

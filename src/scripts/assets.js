@@ -28,7 +28,7 @@ import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
-import { spriteSheetNonHullExtraScale, sguToWorldScale } from "../npc-cli/service/const";
+import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale } from "../npc-cli/service/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
@@ -115,7 +115,6 @@ const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
 const decorPngPath = path.resolve(assets2dDir, `decor.png`);
 const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
 const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
-const worldToSgu = 1 / sguToWorldScale;
 const dataUrlRegEx = /"data:image\/png(.*)"/;
 const gitStaticAssetsRegex = new RegExp('^static/assets/');
 const emptyStringHash = hashText('');
@@ -375,7 +374,7 @@ function createObstaclesSheetJson(assets) {
   const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, Rectangle>} */ ({});
   for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
     /** World coords -> Starship Geomorph coords, modulo additonal scale in [1, 5] non-hull symbols. */
-    const worldToSguScaled = (1 / sguToWorldScale) * (isHull ? 1 : spriteSheetNonHullExtraScale);
+    const worldToSguScaled = worldToSguScale * (isHull ? 1 : spriteSheetNonHullExtraScale);
 
     for (const [obstacleId, poly] of obstacles.entries()) {
       const rect = Poly.from(poly).rect.scale(worldToSguScaled).precision(0); // width, height integers
@@ -436,7 +435,7 @@ async function drawObstaclesSheet(assets, prev) {
   for (const { x, y, width, height, symbolKey, obstacleId } of obstacles) {
     if (assets.meta[symbolKey].pngHash !== emptyStringHash) {
       const symbol = assets.symbols[symbolKey];
-      const scale = (1 / sguToWorldScale) * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
+      const scale = worldToSguScale * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
       
       const srcPoly = Poly.from(symbol.obstacles[obstacleId]);
       const srcRect = srcPoly.rect;

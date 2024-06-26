@@ -14,6 +14,11 @@ export const zIndex = /** @type {const} */ ({
  * e.g. 1 tile is 60 sgu, which becomes 1.5 meters
  */
 export const sguToWorldScale = (1 / 60) * 1.5;
+/**
+ * Convert world coordinates (meters) into Starship Geomorph units (sgu).
+ * e.g. 1 tile is 1.5 meters, which becomes 60 sgu
+ */
+export const worldToSguScale = 1 / sguToWorldScale;
 
 /** Higher resolution floors */
 export const gmFloorExtraScale = 2;

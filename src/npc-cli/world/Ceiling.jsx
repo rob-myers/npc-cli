@@ -1,7 +1,7 @@
 import React from "react";
 import * as THREE from "three";
 
-import { wallHeight, sguToWorldScale, gmFloorExtraScale } from "../service/const";
+import { wallHeight, gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
 import { drawPolygons, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
@@ -21,7 +21,7 @@ export default function Ceiling(props) {
       const { pngRect } = layout;
 
       ceilCt.clearRect(0, 0, width, height);
-      const worldToCanvas = (1 / sguToWorldScale) * gmFloorExtraScale;
+      const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ceilCt.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
       const color = 'rgba(255, 255, 255, 1)';

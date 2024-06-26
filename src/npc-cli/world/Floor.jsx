@@ -2,9 +2,9 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { gmFloorExtraScale, sguToWorldScale } from "../service/const";
+import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
-import { drawCircle, drawPolygons, strokeLine } from "../service/dom";
+import { createGridPattern, drawCircle, drawPolygons, strokeLine, tmpCanvasCtxts } from "../service/dom";
 import { imageLoader, quadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -16,6 +16,8 @@ export default function Floor(props) {
   const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    gridPattern: createGridPattern(1.5 * worldToCanvas),
+
     drawGmKey(gmKey) {
       const [ct, tex, { width, height }] = api.gmClass[gmKey].floor;
       const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
@@ -25,7 +27,6 @@ export default function Floor(props) {
       ct.fillStyle = 'red';
       ct.strokeStyle = 'green';
 
-      const worldToCanvas = (1 / sguToWorldScale) * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Floor
@@ -36,6 +37,12 @@ export default function Floor(props) {
       const navPoly = Poly.union(triangles);
       drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#999', 0.025]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
+
+      // draw grid
+      ct.setTransform(1, 0, 0, 1, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      ct.fillStyle = state.gridPattern;
+      ct.fillRect(0, 0, width, height);
+      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Walls
       drawPolygons(ct, walls, ['black', null]);
@@ -111,7 +118,9 @@ export default function Floor(props) {
 
 /**
  * @typedef State
+ * @property {CanvasPattern} gridPattern
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
 
 const tmpMat1 = new Mat();
+const worldToCanvas = worldToSguScale * gmFloorExtraScale;
