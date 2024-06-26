@@ -1,4 +1,43 @@
 /**
+ * @param {RunArg} ctxt
+ */
+export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
+  while (!api.getCached(WORLD_KEY)?.isReady()) {
+    api.info(`polling for ${api.ansi.White}${WORLD_KEY}`)
+    yield* api.sleep(0.5)
+  }
+  // api.getCached(WORLD_KEY).npc.connectSession(api.meta.sessionKey)
+  api.info(`found ${api.ansi.White}${WORLD_KEY}`)
+}
+
+/**
+ * @param {RunArg} ctxt
+ */
+export async function* setupDemo1({ w: api }) {
+
+    // create an obstacle (before query)
+    const obstacle = api.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
+
+    // find and exclude a poly
+    const { polyRefs } =  api.crowd.navMeshQuery.queryPolygons(
+      // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
+      // { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
+      // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
+      // { x: (1 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
+      // { x: (3 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
+      { x: (3 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
+      { x: 0.2, y: 0.1, z: 0.01 },
+    );
+    console.log({ polyRefs });
+    const filter = api.crowd.getFilter(0);
+    filter.excludeFlags = 2 ** 0; // all polys should already be set differently
+    polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
+    api.debug.selectNavPolys(polyRefs); // display via debug
+    
+    api.update(); // Show obstacle
+}
+
+/**
  * Usage:
  * - `world`
  * - `world 'x => x.crowd'` 
@@ -42,47 +81,6 @@ export async function* world(ctxt) {
     }
   }
 }
-
-/**
- * @param {RunArg} ctxt
- */
-export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
-  while (!api.getCached(WORLD_KEY)?.isReady()) {
-    api.info(`polling for ${api.ansi.White}${WORLD_KEY}`)
-    yield* api.sleep(0.5)
-  }
-  // api.getCached(WORLD_KEY).npc.connectSession(api.meta.sessionKey)
-  api.info(`found ${api.ansi.White}${WORLD_KEY}`)
-}
-
-/**
- * @param {RunArg} ctxt
- */
-export async function* setupDemo1({ w: api }) {
-
-    // create an obstacle (before query)
-    const obstacle = api.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
-
-    // find and exclude a poly
-    const { polyRefs } =  api.crowd.navMeshQuery.queryPolygons(
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
-      // { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
-      // { x: (3 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
-      { x: (3 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
-      { x: 0.2, y: 0.1, z: 0.01 },
-    );
-    console.log({ polyRefs });
-    const filter = api.crowd.getFilter(0);
-    filter.excludeFlags = 2 ** 0; // all polys should already be set differently
-    polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
-    api.debug.selectNavPolys(polyRefs); // display via debug
-    
-    api.update(); // Show obstacle
-}
-
-
 
 /**
  * @typedef RunArg
