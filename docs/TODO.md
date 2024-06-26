@@ -25,19 +25,19 @@
     - ✅ remove `layout`
     - ✅ merge into api.floor
     - ✅ merge into api.ceiling
-  - move api.debug.navMesh -> api.derived.navMesh
-  - draw grid on floor
-  - different ceiling shades e.g. bridge
-  - prevent coinciding doors (flicker)
-    - detect/discard during flatten symbols
+  - ✅ draw grid on floor
   - ✅ fix "low fuel" via `y=1.01 wallsH=1`
+  - ✅ move api.debug.navPoly -> api.derived.navPoly
+  - 🚧 different ceiling shades e.g. bridge
+    - can specify polygon outlines in SVG symbol
+  - prevent coinciding doors (flicker)
+    - ✅ non-hull: detect/discard during flatten symbols
+    - hull: ensure separated by ensuring normals point towards gm
 
 - ✅ implement `click`
 - test `click`
 - NPC click to move -> script
 
-- ensure separated hull doors
-  - ensure normal points into gm
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
@@ -48,11 +48,12 @@
 - next.js repo continued
   - migrate Viewer
 
+- 🚧 Boxy SVG can be slow to save
+  - https://boxy-svg.com/bugs/370/intermittent-slow-saving
+  - 🚧 try replicate again in Chrome vs Incognito Chrome
+
 - support camera move via terminal
 - improve doors hard-coding in decor sprite-sheet
-- 🚧 Boxy SVG can be slow to save
-  - Both Web and App
-  - https://boxy-svg.com/bugs/370/intermittent-slow-saving
 - split component WallsAndDoors
 - ✅ split component Surfaces
   - Obstacles

@@ -17,14 +17,13 @@ export default function Debug(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
-    navPoly: /** @type {*} */ ({}),
     selectedNavPolys: new THREE.BufferGeometry(),
 
     ensureNavPoly(gmKey) {
-      if (!state.navPoly[gmKey]) {
+      if (!api.derived.navPoly[gmKey]) {
         const layout = /** @type {Geomorph.Layout} */ (api.gms.find(x => x.key === gmKey));
         // Fix normals for recast/detour... maybe due to earcut ordering?
-        state.navPoly[gmKey] = decompToXZGeometry(layout.navDecomp, { reverse: true });
+        api.derived.navPoly[gmKey] = decompToXZGeometry(layout.navDecomp, { reverse: true });
         update();
       }
     },
@@ -132,7 +131,7 @@ export default function Debug(props) {
       >
         <mesh
           name="origNavPoly"
-          args={[state.navPoly[gm.key], origNavPolyMaterial]}
+          args={[api.derived.navPoly[gm.key], origNavPolyMaterial]}
           position={[0, 0.001, 0]}
           visible={props.showOrigNavPoly}
         />
@@ -152,7 +151,6 @@ export default function Debug(props) {
  * @typedef State
  * @property {NavMeshHelper} navMesh
  * @property {THREE.Group} navPath
- * @property {Record<Geomorph.GeomorphKey, THREE.BufferGeometry>} navPoly
  * @property {THREE.BufferGeometry} selectedNavPolys
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath

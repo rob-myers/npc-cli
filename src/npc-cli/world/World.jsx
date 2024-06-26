@@ -45,7 +45,10 @@ export default function World(props) {
     timer: new Timer(),
     worker: /** @type {*} */ (null),
 
-    derived: { doorCount: 0, obstaclesCount: 0, wallCount: 0 },
+    derived: {
+      doorCount: 0, obstaclesCount: 0, wallCount: 0,
+      navPoly: /** @type {*} */ ({}),
+    },
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
     gms: [],
@@ -269,7 +272,7 @@ export default function World(props) {
  * @property {boolean} disabled
  * @property {string} mapKey
  * @property {string} hash
- * @property {{ wallCount: number; doorCount: number; obstaclesCount: number; }} derived
+ * @property {Derived} derived
  * Data derived from other sources
  * @property {{ hash: string; gmHash: string; }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
@@ -322,4 +325,12 @@ export default function World(props) {
  * //@property {typeof map} map
  * //@property {typeof merge} merge
  * //@property {typeof take} take
+ */
+
+/**
+ * @typedef Derived
+ * @property {number} wallCount
+ * @property {number} doorCount
+ * @property {number} obstaclesCount
+ * @property {Record<Geomorph.GeomorphKey, THREE.BufferGeometry>} navPoly
  */
