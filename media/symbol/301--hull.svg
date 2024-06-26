@@ -64,13 +64,13 @@
         </image>
         <g style="">
                 <title>symbols</title>
-                <use width="120" height="120" transform="matrix(1, 0, 0, -1, 0.000002635654482219252, 479.9999694824219)" style="" xlink:href="#symbol-1">
+                <use width="120" height="120" transform="matrix(1, 0, 0, -1, 0.0000026356547095929272, 479.9999694824219)" style="" xlink:href="#symbol-1">
                         <title>stateroom--014--2x2</title>
                 </use>
                 <use width="120" height="120" transform="matrix(1, 0, 0, -1.0000003576278687, 120, 480.0000305175781)" style="" xlink:href="#symbol-1">
                         <title>stateroom--014--2x2</title>
                 </use>
-                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.0000015664776356061338, 0.000003506096163619077)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.0000015664778629798093, 0.000003506096163619077)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
                         <title>stateroom--036--2x4</title>
                 </use>
                 <use width="120" height="240" transform="matrix(-1, 0, 0, 1, 1080, 1.1300499380695328e-7)" style="transform-origin: 60px 120px;" xlink:href="#symbol-0">
@@ -143,11 +143,11 @@
         <rect x="173.365" y="-300" width="6" height="46" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;" transform="matrix(0, 1, -1, 0, 653.7572631835938, 64.1352310180664)">
                 <title>door iris</title>
         </rect>
-        <path d="M 299 121 L 359 121 L 359 61 L 423 129.1 L 413 143.3 L 402 158.3 L 389 177.9 L 378 199.6 L 370 217.6 L 362 240 L 299 240.6 L 299 121 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(255, 0, 0); visibility: hidden;" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
-                <title>poly fillColor=#fff strokeColor=#000 strokeWidth=4</title>
+        <path d="M 309 131 L 369 131 L 369 86.2428 L 410.13 130.0077 L 404.87846 137.46488 L 393.66647 152.77268 L 380.3441 172.85868 L 380.23869 173.06665 L 380.18588 173.17082 L 380.15938 173.22311 L 380.07945 173.38082 L 368.85936 195.54445 L 360.58263 214.2367 L 354.92893 230.067 L 309.00003 230.5044 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(0, 0, 255);" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
+                <title>poly fillColor=#000 strokeColor=#777 strokeWidth=4</title>
         </path>
-        <path d="M 903 119 L 843 119 L 843 59 L 779 127.1 L 789 141.3 L 800 156.3 L 813 175.9 L 824 197.6 L 832 215.6 L 840 238 L 843 238 L 903 238.6 L 903 119 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(255, 0, 0); transform-origin: 841px 148.8px;">
-                <title>poly fillColor=#fff strokeColor=#000 strokeWidth=4</title>
+        <path d="M 893 228.49953 L 847.05686 228.04035 L 841.13693 211.53595 L 832.91948 193.07861 L 821.65568 170.85817 L 821.46214 170.56645 L 821.39761 170.46918 L 821.33241 170.37091 L 808.06405 150.38638 L 797.12078 135.46378 L 791.86998 128.00768 L 832.99998 84.24278 L 832.99998 128.99998 L 892.99998 128.99998 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; transform-origin: 841px 148.8px; fill: rgb(0, 0, 255);">
+                <title>poly fillColor=#000 strokeColor=#777 strokeWidth=4</title>
         </path>
         <path d="M 299 121 L 359 121 L 359 61 L 423 129.1 L 413 143.3 L 402 158.3 L 389 177.9 L 378 199.6 L 370 217.6 L 362 242 L 299 242 L 299 121 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(255, 0, 0);" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
                 <title>wall no-fill</title>

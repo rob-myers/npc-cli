@@ -29,7 +29,8 @@
   - ✅ fix "low fuel" via `y=1.01 wallsH=1`
   - ✅ move api.debug.navPoly -> api.derived.navPoly
   - 🚧 different ceiling shades e.g. bridge
-    - can specify polygon outlines in SVG symbol
+    - ✅ can specify polygon outlines in SVG symbol
+    - 🚧 draw polyDecals in ceiling
   - prevent coinciding doors (flicker)
     - ✅ non-hull: detect/discard during flatten symbols
     - hull: ensure separated by ensuring normals point towards gm
@@ -52,6 +53,9 @@
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
 
+- ✅ ContextMenu should work with ceiling
+  - approach similar to obstacles
+- clean pointer-events i.e. avoid code duplication
 - support camera move via terminal
 - improve doors hard-coding in decor sprite-sheet
 - split component WallsAndDoors

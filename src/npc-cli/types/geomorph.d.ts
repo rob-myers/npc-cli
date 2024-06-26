@@ -105,6 +105,7 @@ declare namespace Geomorph {
     decor: P[];
     doors: P[];
     obstacles: P[];
+    polyDecals: P[];
     /** Union of uncut non-optional walls including hull walls. */
     walls: P[];
     windows: P[];
@@ -181,6 +182,7 @@ declare namespace Geomorph {
     hullDoors: C[];
     hullPoly: P[];
     obstacles: LayoutObstacleGeneric<P>[];
+    polyDecals: P[];
     rooms: P[];
     walls: P[];
     windows: C[];

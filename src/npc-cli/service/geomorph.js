@@ -253,6 +253,7 @@ class GeomorphService {
           transform: o.meta.transform ?? [1, 0, 0, 1, 0, 0],
         };
       }),
+      polyDecals: symbol.polyDecals,
       rooms: rooms.map(x => x.precision(precision)),
       // walls: cutWalls.map(x => x.precision(precision)),
       walls: joinedWalls.concat(unjoinedWalls).map(x => x.precision(precision)),
@@ -364,6 +365,7 @@ class GeomorphService {
         origPoly: Poly.from(x.origPoly),
         transform: x.transform,
       })),
+      polyDecals: json.polyDecals.map(Poly.from),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       windows: json.windows.map(Connector.from),
@@ -387,6 +389,7 @@ class GeomorphService {
       doors: json.doors.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       windows: json.windows.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       decor: json.decor.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
+      polyDecals: json.polyDecals.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       unsorted: json.unsorted.map((x) => Object.assign(Poly.from(x), { meta: x.meta })),
       width: json.width,
       height: json.height,
@@ -570,7 +573,7 @@ class GeomorphService {
     const {
       key, isHull,
       addableWalls, removableDoors,
-      walls, obstacles, doors, windows, decor, unsorted,
+      walls, obstacles, doors, windows, decor, unsorted, polyDecals,
       symbols,
     } = symbol;
 
@@ -589,6 +592,7 @@ class GeomorphService {
       obstacles: obstacles.concat(flats.flatMap(x => x.obstacles)),
       doors: this.removeCloseDoors(symbol.key, doors.concat(flats.flatMap(x => x.doors))),
       decor: decor.concat(flats.flatMap(x => x.decor)),
+      polyDecals: polyDecals.concat(flats.flatMap(x => x.unsorted)),
       unsorted: unsorted.concat(flats.flatMap(x => x.unsorted)),
       windows: windows.concat(flats.flatMap(x => x.windows)),
     };
@@ -666,6 +670,7 @@ class GeomorphService {
         // aggregate transform
         ...{ transform: tmpMat2.feedFromArray(transform).preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
       })),
+      polyDecals: sym.polyDecals.map((x) => x.cleanClone(tmpMat1)),
       walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1, extraWallMeta)),
       windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
       unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
@@ -788,13 +793,14 @@ class GeomorphService {
     let viewBoxRect = /** @type {Geom.Rect | null} */ (null);
     let pngRect = /** @type {Geom.Rect | null} */ (null);
     const symbols = /** @type {Geomorph.Symbol['symbols']} */ ([]);
+    const decor = /** @type {Geom.Poly[]} */ ([]);
+    const doors = /** @type {Geom.Poly[]} */ ([]);
     const hullWalls = /** @type {Geom.Poly[]} */ ([]);
     const obstacles = /** @type {Geom.Poly[]} */ ([]);
-    const doors = /** @type {Geom.Poly[]} */ ([]);
+    const polyDecals = /** @type {Geom.Poly[]} */ ([]);
     const unsorted = /** @type {Geom.Poly[]} */ ([]);
     const walls = /** @type {Geom.Poly[]} */ ([]);
     const windows = /** @type {Geom.Poly[]} */ ([]);
-    const decor = /** @type {Geom.Poly[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -890,6 +896,7 @@ class GeomorphService {
           ["door", doors],
           ["window", windows],
           ["decor", decor],
+          ["poly", polyDecals],
           [null, unsorted],
         ]).some(([tag, polys]) =>
           (tag === null || ownTags.includes(tag)) && polys.push(poly)
@@ -949,6 +956,7 @@ class GeomorphService {
       symbols,
       decor,
       unsorted,
+      polyDecals,
 
       ...postParse,
     };
@@ -1033,6 +1041,7 @@ class GeomorphService {
         origPoly: x.origPoly.geoJson,
         transform: x.transform,
       })),
+      polyDecals: layout.polyDecals.map((x) => x.geoJson),
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),
       windows: layout.windows.map((x) => x.json),
@@ -1057,6 +1066,7 @@ class GeomorphService {
       doors: parsed.doors.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       windows: parsed.windows.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       decor: parsed.decor.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
+      polyDecals: parsed.polyDecals.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       unsorted: parsed.unsorted.map((x) => Object.assign(x.geoJson, { meta: x.meta })),
       width: parsed.width,
       height: parsed.height,
