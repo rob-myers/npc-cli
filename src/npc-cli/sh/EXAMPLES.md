@@ -333,7 +333,7 @@ world "x => x.gmGraph.findRoomContaining($( click 1 ))"
 world gmGraph.findRoomContaining $( click 1 ) true
 world gmGraph.getRoomsVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )"
 world panZoom.distanceTo $( npc rob getPosition )
-call 'x => x.w' # see CACHE_SHORTCUTS
+call 'x => x.world' # see CACHE_SHORTCUTS
 
 click | filter meta.door | world doors.onRawDoorClick &
 world fov.setRoom 0 2

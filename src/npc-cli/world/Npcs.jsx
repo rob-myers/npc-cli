@@ -48,6 +48,10 @@ export default function Npcs(props) {
       const npcKey = state.select.curr;
       return npcKey === null ? null : (state.npc[npcKey] ?? null);
     },
+    isPointInNavmesh(p) {
+      const { success } = api.crowd.navMeshQuery.findClosestPoint(p);
+      return success;
+    },
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
         throw Error(`invalid npc key: ${JSON.stringify(e.npcKey)}`);
@@ -245,6 +249,7 @@ export default function Npcs(props) {
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {() => null | NPC.NPC} getSelected
  * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
+ * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick

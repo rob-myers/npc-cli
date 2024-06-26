@@ -9,7 +9,7 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
 import { gmFloorExtraScale, sguToWorldScale } from "../service/const";
-import { assertNonNull, info, debug, isDevelopment, keys, warn } from "../service/generic";
+import { assertNonNull, info, debug, isDevelopment, keys, warn, removeFirst, toPrecision } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
@@ -72,6 +72,8 @@ export default function World(props) {
       filter,
       firstValueFrom,
       isVectJson: Vect.isVectJson,
+      precision: toPrecision,
+      removeFirst,
       vectFrom: Vect.from,
       ...npcService,
     },
@@ -333,14 +335,15 @@ export default function World(props) {
 
 /**
  * @typedef StateUtil Utility classes and `rxjs` functions
- * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
- * @property {typeof import('../geom').Vect['from']} vectFrom
  * @property {typeof filter} filter
- * //@property {typeof first} first
  * @property {typeof firstValueFrom} firstValueFrom
+ * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
+ * @property {typeof removeFirst} removeFirst
+ * @property {typeof toPrecision} precision
+ * @property {typeof import('../geom').Vect['from']} vectFrom
+ * 
+ * //@property {typeof first} first
  * //@property {typeof map} map
  * //@property {typeof merge} merge
- * //@property {typeof precision} precision
- * //@property {typeof removeFirst} removeFirst
  * //@property {typeof take} take
  */

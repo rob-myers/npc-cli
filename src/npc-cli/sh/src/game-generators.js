@@ -13,13 +13,61 @@ export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
 /**
  * @param {RunArg} ctxt
  */
-export async function* setupDemo1({ w: api }) {
+export async function* click({ api, args, world }) {
+  let numClicks = Number(args[0] || Number.MAX_SAFE_INTEGER);
+  if (!Number.isFinite(numClicks)) {
+    throw new Error("format: \`click [{numberOfClicks}]\`")
+  }
+
+  const clickId = args[0] ? api.getUid() : undefined;
+  if (clickId) {
+    api.addCleanup(() => world.lib.removeFirst(world.ui.clickIds, clickId));
+  }
+
+  /** @type {import('rxjs').Subscription} */
+  let eventsSub;
+  api.addCleanup(() => eventsSub?.unsubscribe());
+
+  while (numClicks-- > 0) {
+    clickId && world.ui.clickIds.push(clickId);
+    
+    const e = await /** @type {Promise<NPC.PointerUp3DEvent>} */ (new Promise((resolve, reject) => {
+      eventsSub = world.events.subscribe({ next(e) {
+        if (e.key !== "pointerup" || e.is3d === false || e.distancePx > 5 || !api.isRunning()) {
+          return;
+        } else if (e.clickId && !clickId) {
+          return; // `click {n}` overrides `click`
+        } else if (e.clickId && clickId !== e.clickId) {
+          return; // later `click {n}` overrides earlier `click {n}`
+        }
+        resolve(e); // Must resolve before tear-down induced by unsubscribe 
+        eventsSub.unsubscribe();
+      }});
+      eventsSub.add(() => reject(api.getKillError()));
+    }));
+
+    yield {
+      x: world.lib.precision(e.point.x),
+      y: world.lib.precision(e.point.y),
+      z: world.lib.precision(e.point.z),
+      meta: { ...e.meta,
+        // ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null }, // 🚧
+        navigable: world.npc.isPointInNavmesh(e.point),
+      },
+    };
+  }
+}
+
+/**
+ * @param {RunArg} ctxt
+ */
+export async function* setupDemo1({ world }) {
 
     // create an obstacle (before query)
-    const obstacle = api.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
+    const obstacle = world.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
 
     // find and exclude a poly
-    const { polyRefs } =  api.crowd.navMeshQuery.queryPolygons(
+    const { polyRefs } =  world.crowd.navMeshQuery.queryPolygons(
       // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
       // { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
       // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
@@ -29,12 +77,12 @@ export async function* setupDemo1({ w: api }) {
       { x: 0.2, y: 0.1, z: 0.01 },
     );
     console.log({ polyRefs });
-    const filter = api.crowd.getFilter(0);
+    const filter = world.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
-    polyRefs.forEach(polyRef => api.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
-    api.debug.selectNavPolys(polyRefs); // display via debug
+    polyRefs.forEach(polyRef => world.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
+    world.debug.selectNavPolys(polyRefs); // display via debug
     
-    api.update(); // Show obstacle
+    world.update(); // Show obstacle
 }
 
 /**
@@ -89,6 +137,6 @@ export async function* world(ctxt) {
 * }} api
 * @property {string[]} args
 * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home
-* @property {import('../../world/World').State} w See CACHE_SHORTCUTS
+* @property {import('../../world/World').State} world See CACHE_SHORTCUTS
 * @property {*} [datum] A shortcut for declaring a variable
 */

@@ -18,6 +18,7 @@ import { Origin } from "../aux/MiscThree.jsx";
 export default function WorldCanvas(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     canvas: /** @type {*} */ (null),
+    clickIds: [],
     controls: /** @type {*} */ (null),
     down: undefined,
     justLongDown: false,
@@ -276,6 +277,9 @@ export default function WorldCanvas(props) {
 /**
  * @typedef State
  * @property {HTMLCanvasElement} canvas
+ * @property {string[]} clickIds
+ * - Pending click identifiers, provided by shell.
+ * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('three-stdlib').MapControls} controls
  * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down

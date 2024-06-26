@@ -49,6 +49,8 @@ declare namespace NPC {
     key: "pointerup";
   }>;
 
+  type PointerUp3DEvent = PointerUpEvent & { is3d: true };
+
   type PointerUpOutsideEvent = Pretty<BasePointerEvent & {
     key: "pointerup-outside";
     is3d: false;
