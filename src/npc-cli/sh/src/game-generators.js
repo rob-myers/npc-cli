@@ -3,11 +3,11 @@
  */
 export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
   while (!api.getCached(WORLD_KEY)?.isReady()) {
-    api.info(`polling for ${api.ansi.White}${WORLD_KEY}`)
-    yield* api.sleep(0.5)
+    api.info(`polling for ${api.ansi.White}${WORLD_KEY}`);
+    yield* api.sleep(0.5);
   }
   // api.getCached(WORLD_KEY).npc.connectSession(api.meta.sessionKey)
-  api.info(`found ${api.ansi.White}${WORLD_KEY}`)
+  api.info(`found ${api.ansi.White}${WORLD_KEY}`);
 }
 
 /**
@@ -16,7 +16,7 @@ export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
 export async function* click({ api, args, world }) {
   let numClicks = Number(args[0] || Number.MAX_SAFE_INTEGER);
   if (!Number.isFinite(numClicks)) {
-    throw new Error("format: \`click [{numberOfClicks}]\`")
+    throw new Error("format: \`click [{numberOfClicks}]\`");
   }
 
   const clickId = args[0] ? api.getUid() : undefined;
@@ -87,20 +87,21 @@ export async function* setupDemo1({ world }) {
 
 /**
  * Usage:
- * - `world`
- * - `world 'x => x.crowd'` 
- * - `world crowd`
- * - `world vert.toggleDoor 15`
+ * ```sh
+ * world
+ * world 'x => x.crowd'`
+ * world crowd
+ * world vert.toggleDoor 15
+ * ```
  * - 🚧 `world "x => x.gmGraph.findRoomContaining($( click 1 ))"`
  * - 🚧 `world gmGraph.findRoomContaining $( click 1 )`
  * - 🚧 `click | world gmGraph.findRoomContaining`
  *
- * ℹ️ supports `ctrl-c` without cleaning ongoing computations
+ * ℹ️ can always `ctrl-c`, even without cleaning up ongoing computations
  * @param {RunArg} ctxt
  */
 export async function* world(ctxt) {
-  const { api, args, home } = ctxt;
-  const world = api.getCached(home.WORLD_KEY);
+  const { api, args, world } = ctxt;
   const getHandleProm = () => new Promise((resolve, reject) => api.addCleanup(
     () => reject("potential ongoing computation")
   ));
@@ -137,6 +138,6 @@ export async function* world(ctxt) {
 * }} api
 * @property {string[]} args
 * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home
-* @property {import('../../world/World').State} world See CACHE_SHORTCUTS
+* @property {import('../../world/World').State} world See `CACHE_SHORTCUTS`
 * @property {*} [datum] A shortcut for declaring a variable
 */
