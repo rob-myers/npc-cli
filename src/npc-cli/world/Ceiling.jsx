@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { wallHeight, gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
-import { drawPolygons, strokeLine } from "../service/dom";
+import { drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -17,14 +17,37 @@ export default function Ceiling(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     tex: api.ceil.tex, // Pass in textures
 
+    detectClick(e) {
+      const gmId = Number(e.object.name.slice('ceil-gm-'.length));
+      const gm = api.gms[gmId];
+      
+      // 3d point -> local world coords (ignoring y)
+      const mat4 = gm.mat4.clone().invert();
+      const localWorldPnt = e.point.clone().applyMatrix4(mat4);
+      // local world coords -> canvas coords
+      const worldToCanvas = worldToSguScale * gmFloorExtraScale;
+      const canvasX = (localWorldPnt.x - gm.pngRect.x) * worldToCanvas;
+      const canvasY = (localWorldPnt.z - gm.pngRect.y) * worldToCanvas;
+
+      const ctxt = state.tex[gm.key][0];
+      const { data: rgba } = ctxt.getImageData(canvasX, canvasY, 1, 1, { colorSpace: 'srgb' });
+      // console.log(Array.from(rgba), { gmId, point3d: e.point, localWorldPnt, canvasX, canvasY });
+      
+      // ignore clicks on fully transparent pixels
+      return rgba[3] === 0 ? null : { gmId };
+    },
+
     drawGmKey(gmKey) {
-      const [ceilCt, ceilTex, { width, height }] = state.tex[gmKey];
+      const [ct, tex, { width, height }] = state.tex[gmKey];
       const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
       const { pngRect } = layout;
 
-      ceilCt.clearRect(0, 0, width, height);
+      ct.clearRect(0, 0, width, height);
+      // ct.fillStyle = 'rgba(255, 0, 0, 0.2)';
+      // ct.fillRect(0, 0, width, height);
+
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
-      ceilCt.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
+      ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
       const color = 'rgba(255, 255, 255, 1)';
       
@@ -32,13 +55,63 @@ export default function Ceiling(props) {
       const wallsTouchingCeil = layout.walls.filter(x =>
         x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
       );
-      drawPolygons(ceilCt, wallsTouchingCeil, [color, color, 0.06])
+      drawPolygons(ct, wallsTouchingCeil, [color, color, 0.06])
       // door tops
-      ceilCt.lineWidth = 0.03;
-      drawPolygons(ceilCt, layout.doors.map(x => x.poly), [color, color])
+      ct.lineWidth = 0.03;
+      drawPolygons(ct, layout.doors.map(x => x.poly), [color, color])
 
-      ceilCt.resetTransform();
-      ceilTex.needsUpdate = true;
+      ct.resetTransform();
+      tex.needsUpdate = true;
+    },
+    onPointerDown(e) {
+      const result = state.detectClick(e);
+
+      if (result !== null) {
+        const { gmId } = result;
+        api.events.next({
+          key: "pointerdown",
+          is3d: true,
+          modifierKey: isModifierKey(e.nativeEvent),
+          distancePx: api.ui.getDownDistancePx(),
+          justLongDown: api.ui.justLongDown,
+          pointers: api.ui.getNumPointers(),
+          rmb: isRMB(e.nativeEvent),
+          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          point: e.point,
+          meta: {
+            ceiling: true,
+            gmId,
+            height: wallHeight,
+          },
+        });
+        e.stopPropagation();
+      }
+    },
+    onPointerUp(e) {
+      const result = state.detectClick(e);
+
+      if (result !== null) {
+        const { gmId } = result;
+        api.events.next({
+          key: "pointerup",
+          is3d: true,
+          modifierKey: isModifierKey(e.nativeEvent),
+          distancePx: api.ui.getDownDistancePx(),
+          justLongDown: api.ui.justLongDown,
+          pointers: api.ui.getNumPointers(),
+          rmb: isRMB(e.nativeEvent),
+          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          point: e.point,
+          meta: {
+            ceiling: true,
+            gmId,
+            height: wallHeight,
+          },
+        });
+        e.stopPropagation();
+      }
     },
   }));
 
@@ -59,7 +132,9 @@ export default function Ceiling(props) {
           name={`ceil-gm-${gmId}`}
           geometry={quadGeometryXZ}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
-          position={[gm.pngRect.x, wallHeight + 0.001, gm.pngRect.y]}
+          position={[gm.pngRect.x, wallHeight, gm.pngRect.y]}
+          onPointerDown={state.onPointerDown}
+          onPointerUp={state.onPointerUp}
         >
           <meshBasicMaterial
             side={THREE.FrontSide}
@@ -83,5 +158,8 @@ export default function Ceiling(props) {
 /**
  * @typedef State
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  */

@@ -58,7 +58,7 @@ export default function Obstacles(props) {
       const gmId = api.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
       return { gmId, obstacleId: id };
     },
-    detectClickObstacle(e) {
+    detectClick(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
       const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
       const gm = api.gms[gmId];
@@ -83,7 +83,7 @@ export default function Obstacles(props) {
 
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
-      const result = state.detectClickObstacle(e);
+      const result = state.detectClick(e);
 
       if (result !== null) {
         const { gmId, obstacle } = result;
@@ -112,7 +112,7 @@ export default function Obstacles(props) {
     },
     onPointerUp(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
-      const result = state.detectClickObstacle(e);
+      const result = state.detectClick(e);
 
       if (result !== null) {
         const { gmId, obstacleId, obstacle } = result;
@@ -199,7 +199,7 @@ export default function Obstacles(props) {
  * Points to `api.gms[gmId].obstacles[obstacleId]`.
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
  *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
- * )} detectClickObstacle
+ * )} detectClick
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionObstacles
