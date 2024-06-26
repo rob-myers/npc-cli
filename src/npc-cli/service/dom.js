@@ -12,12 +12,12 @@ export const tmpCanvasCtxts = typeof window !== 'undefined' ?
 ;
 
 /** @param {number} dim */
-export function createGridPattern(dim) {
+export function createGridPattern(dim, color = 'rgba(255, 255, 255, 0.1)') {
   const [tmpCtxt] = tmpCanvasCtxts;
   tmpCtxt.canvas.width = tmpCtxt.canvas.height = dim;
   tmpCtxt.resetTransform();
   tmpCtxt.clearRect(0, 0, dim, dim);
-  tmpCtxt.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+  tmpCtxt.strokeStyle = color;
   tmpCtxt.lineWidth = 2;
   tmpCtxt.strokeRect(0, 0, dim, dim);
   tmpCtxt.resetTransform();
