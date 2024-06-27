@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <bx:grid x="0" y="0" width="60" height="60"/>
+    <bx:grid x="0" y="0" width="60" height="60" />
     <pattern x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-0" bx:pinned="true">
       <title>symbol-rect-pattern</title>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5" />
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
-      <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
-      <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
-      <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
-      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
-      <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
+      <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);" />
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5" />
+      <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);" />
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)" />
+      <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)" />
+      <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)" />
+      <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)" />
     </pattern>
     <symbol id="symbol-0" viewBox="0 0 120 180" bx:pinned="true">
       <title>office--026--2x3</title>
@@ -22,7 +22,7 @@
         <title>office--026--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-1" viewBox="0 0 120 180" bx:pinned="true">
@@ -31,7 +31,7 @@
         <title>stateroom--020--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-2" viewBox="0 0 120 180" bx:pinned="true">
@@ -40,7 +40,7 @@
         <title>empty-room--013--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-3" viewBox="0 0 120 180" bx:pinned="true">
@@ -49,7 +49,7 @@
         <title>office--020--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-4" viewBox="0 0 120 180" bx:pinned="true">
@@ -58,7 +58,7 @@
         <title>office--023--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-5" viewBox="0 0 120 120" bx:pinned="true">
@@ -67,7 +67,7 @@
         <title>fresher--020--2x2</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-6" viewBox="0 0 120 180" bx:pinned="true">
@@ -76,7 +76,7 @@
         <title>stateroom--018--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-7" viewBox="0 0 180 120">
@@ -85,7 +85,7 @@
         <title>fresher--025--3x2</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-8" viewBox="0 0 180 240">
@@ -94,7 +94,7 @@
         <title>office--061--3x4</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-9" viewBox="0 0 180 120">
@@ -103,7 +103,7 @@
         <title>medical--007--3x2</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-10" viewBox="0 0 180 240">
@@ -112,7 +112,7 @@
         <title>empty-room--039--3x4</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-11" viewBox="0 0 180 120">
@@ -121,7 +121,7 @@
         <title>medical--008--3x2</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-12" viewBox="0 0 120 240" bx:pinned="true">
@@ -130,7 +130,7 @@
         <title>lifeboat--small-craft--2x4</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-13" viewBox="0 0 240 120" bx:pinned="true">
@@ -145,7 +145,7 @@
         <title>machinery--158--1.8x3.6</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-15" viewBox="0 0 120 240">
@@ -154,7 +154,7 @@
         <title>machinery--156--2x4</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-16" viewBox="0 0 120 240">
@@ -163,7 +163,7 @@
         <title>machinery--155--1.8x3.6</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-17" viewBox="0 0 240 120">
@@ -285,7 +285,7 @@
     </use>
   </g>
   <path d="M 4 1196 L 1196 1196 L 1196 4 L 4 4 L 4 1196 Z M 1204 -4 L 1204 1204 L -4 1204 L -4 -4 L 1204 -4 Z" style="fill: rgb(255, 0, 0);">
-    <title>hull-wall hull--20x20</title>
+    <title>wall hull hull--20x20</title>
   </path>
   <rect x="290" y="230" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);">
     <title>decor go label=corridor</title>

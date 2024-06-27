@@ -59,7 +59,7 @@ export default function useHandleEvents(api) {
         }
       }
 
-      if (e.meta.doors === true) {
+      if (e.meta.door === true) {
         const instanceId = /** @type {number} */ (e.meta.instanceId);
         api.vert.toggleDoor(instanceId);
       }

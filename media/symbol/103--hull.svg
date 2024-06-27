@@ -4,7 +4,7 @@
                 <title>103--hull</title>
         </image>
         <path d="M 4 1196 L 1196 1196 L 1196 4 L 4 4 L 4 1196 Z M 1204 -4 L 1204 1204 L -4 1204 L -4 -4 L 1204 -4 Z" style="fill: rgb(255, 0, 0);">
-                <title>hull-wall hull--20x20</title>
+                <title>wall hull hull--20x20</title>
         </path>
         <rect x="-4" y="249.999996" width="8" height="99.999998" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull w</title>

@@ -144,25 +144,25 @@
                 </use>
         </g>
         <path d="M -4 -4 L 4 -4 L 4 596 L 1196 596 L 1196 -4 L 1204 -4 L 1204 604 L -4 604 L -4 -4 Z" style="fill: rgb(255, 0, 0);">
-                <title>hull-wall sans-n--20x10</title>
+                <title>wall hull sans-n--20x10</title>
         </path>
         <rect y="-4" width="128" height="8" style="fill: rgb(255, 0, 0);" x="1076">
-                <title>hull-wall</title>
+                <title>wall hull</title>
         </rect>
         <rect x="240" y="409.9" width="180" height="14.1" style="fill-opacity: 0.4; fill: rgb(255, 0, 0);">
-                <title>hull-wall window</title>
+                <title>wall hull window</title>
         </rect>
         <path d="M 1079.9 304.3 L 600.6 423.8 L 548.4 423.8 L 548.4 424 L 418 424 L 420 409.9 L 427 415.9 L 479.4 416 L 598.7 416 L 1076 297 L 1076 0 L 1084 0 L 1084 300 L 1079.9 304.3 Z" style="fill: rgb(255, 0, 0);">
-                <title>hull-wall</title>
+                <title>wall hull</title>
         </path>
         <path d="M 122.709 238.323 L 238.797 410.431 L 243.949 414.314 L 243.99 421.885 L 236.862 421.868 L 116.077 242.796 L 116.119 235.169 L 119.973 234.981 L 122.709 238.323 Z" style="fill: rgb(255, 0, 0); transform-origin: 180.013px 328.555px;">
-                <title>hull-wall</title>
+                <title>wall hull</title>
         </path>
         <rect x="107.1" y="120.8" width="12.9" height="115.6" style="fill-opacity: 0.4; fill: rgb(255, 0, 0);">
-                <title>hull-wall window</title>
+                <title>wall hull window</title>
         </rect>
         <path d="M 64 -4 L 124 56 L 124 122 L 116 122 L 116 60 L 60 4 L 3 4 L 3 -4 L 64 -4 Z" style="fill: rgb(255, 0, 0);">
-                <title>hull-wall</title>
+                <title>wall hull</title>
         </path>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="1179.1" y="28.6">
                 <title>decor go label=locker</title>
@@ -249,7 +249,7 @@
                 <title>poly fillColor=#fff strokeColor=#000 strokeWidth=4</title>
         </path>
         <path d="M 60.6 240 L 60 480 L 120 540 L 240 540 L 240 420 L 120 240 L 60 240 L 60.6 240 Z" style="stroke: rgb(0, 0, 0); stroke-width: 4px; fill: rgb(255, 0, 0); opacity: 0.5;">
-                <title>hull-wall machine no-fill</title>
+                <title>wall hull machine no-fill</title>
         </path>
         <rect x="1077.5" y="542" width="5" height="54" style="opacity: 0.25;">
                 <title>wall</title>

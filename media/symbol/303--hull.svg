@@ -158,16 +158,16 @@
     </use>
   </g>
   <path d="M -4 -4 L 4 -4 L 4 596 L 1196 596 L 1196 -4 L 1204 -4 L 1204 604 L -4 604 L -4 -4 Z" style="fill: rgb(255, 0, 0);">
-    <title>hull-wall sans-n--20x10</title>
+    <title>wall hull sans-n--20x10</title>
   </path>
   <rect y="-4" width="1208" height="8" style="fill: rgb(255, 0, 0);" x="-4">
-    <title>hull-wall</title>
+    <title>wall hull</title>
   </rect>
   <rect x="868.5" y="-6" width="62.2" height="14.1" style="fill-opacity: 0.4; fill: rgb(255, 0, 0);">
-    <title>hull-wall window</title>
+    <title>wall hull window</title>
   </rect>
   <rect x="88.5" y="-6" width="62.2" height="14.1" style="fill-opacity: 0.4; fill: rgb(255, 0, 0);">
-    <title>hull-wall window</title>
+    <title>wall hull window</title>
   </rect>
   <path d="M 1197 241 L 1187.30721 241 L 1159.66167 242.6163 L 1131.03315 247.26843 L 1107.21731 253.18798 L 1085.74603 259.57502 L 1078.66546 242.19574 L 1079.69722 241.86795 L 1104.09857 234.12005 L 1139.87501 226.30785 L 1175.95527 221.76214 L 1197.00001 221.38177 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 0, 255); fill-opacity: 0.5;">
     <title>obstacle table y=0.7</title>

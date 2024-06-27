@@ -205,13 +205,19 @@ class GeomorphService {
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
     const uncutWalls = symbol.walls;
-    const emptyObject = {};
+    const plainWallMeta = { wall: true };
+    const hullWallMeta = { wall: true, hull: true };
     /**
-     * Cutting pointwise avoids errors (e.g. for 301). It also permits us
-     * to propagate wall `meta` whenever it has 'y' (base height) or 'h' (height).
+     * Cutting pointwise avoids errors (e.g. for 301).
+     * It also permits us to propagate wall `meta` whenever:
+     * - it has 'y' (base height) or 'h' (height)
+     * - it has 'hull' (hull wall)
      */
     const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
-      Object.assign(y, { meta: 'y' in x.meta || 'h' in x.meta ? x.meta : emptyObject } )
+      Object.assign(y, { meta: 'y' in x.meta || 'h' in x.meta
+        ? x.meta
+        : x.meta.hull === true ? hullWallMeta : plainWallMeta
+      })
     ));
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
@@ -230,9 +236,11 @@ class GeomorphService {
     const doors = symbol.doors.map(x => new Connector(x));
     const windows = symbol.windows.map(x => new Connector(x));
 
-    // Joining walls with empty meta reduces the rendering cost later
-    const joinedWalls = Poly.union(cutWalls.filter(x => x.meta === emptyObject)).map(x => Object.assign(x, { meta: emptyObject }));
-    const unjoinedWalls = cutWalls.filter(x => x.meta !== emptyObject);
+    // Joining walls with `{plain,hull}WallMeta` reduces the rendering cost later
+    // 🔔 could save more by joining hull/non-hull but want to distinguish them
+    const joinedWalls = Poly.union(cutWalls.filter(x => x.meta === plainWallMeta)).map(x => Object.assign(x, { meta: plainWallMeta }));
+    const joinedHullWalls = Poly.union(cutWalls.filter(x => x.meta === hullWallMeta)).map(x => Object.assign(x, { meta: hullWallMeta }));
+    const unjoinedWalls = cutWalls.filter(x => x.meta !== plainWallMeta && x.meta !== hullWallMeta);
 
     return {
       key: gmKey,
@@ -255,8 +263,7 @@ class GeomorphService {
       }),
       polyDecals: symbol.polyDecals,
       rooms: rooms.map(x => x.precision(precision)),
-      // walls: cutWalls.map(x => x.precision(precision)),
-      walls: joinedWalls.concat(unjoinedWalls).map(x => x.precision(precision)),
+      walls: [...joinedHullWalls, ...joinedWalls, ...unjoinedWalls].map(x => x.precision(precision)),
       windows,
       ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
     };
@@ -889,21 +896,25 @@ class GeomorphService {
           return;
         }
 
-        /** @type {const} */ ([
-          ["hull-wall", hullWalls],
-          ["wall", walls],
-          ["obstacle", obstacles],
-          ["door", doors],
-          ["window", windows],
-          ["decor", decor],
-          ["poly", polyDecals],
-          [null, unsorted],
-        ]).some(([tag, polys]) =>
-          (tag === null || ownTags.includes(tag)) && polys.push(poly)
-        );
-
         const meta = geomorphService.tagsToMeta(ownTags, {});
         poly.meta = meta;
+
+        // Sort polygon
+        if (meta.wall === true) {
+          (meta.hull === true ? hullWalls : walls).push(poly);
+        } else if (meta.obstacle === true) {
+          obstacles.push(poly);
+        } else if (meta.door === true) {
+          doors.push(poly);
+        } else if (meta.window === true) {
+          windows.push(poly);
+        } else if (meta.decor === true) {
+          decor.push(poly);
+        } else if (meta.poly === true) {
+          polyDecals.push(poly);
+        } else {
+          unsorted.push(poly);
+        }
 
         if (meta.obstacle) {// Link to original symbol
           meta.symKey = symbolKey;

@@ -70,6 +70,18 @@ export default function WallsAndDoors(props) {
         dId++;
       }));
     },
+    decodeWallInstanceId(instanceId) {// 🚧 better approach e.g. cache
+      let wallSegId = instanceId, wallId = -1;
+      const gmId = api.gms.findIndex(gm => {
+        wallId = gm.walls.findIndex(wall => {
+          const numWallSegs = wall.outline.length + wall.holes.reduce((sum, hole) => sum + hole.length, 0);
+          return (wallSegId < numWallSegs) || (wallSegId -= numWallSegs, false);
+        });
+        return wallId !== -1;
+      });
+      const wall = api.gms[gmId].walls[wallId];
+      return { gmId, ...wall.meta, instanceId };
+    },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength, door } = meta;
       const length = segLength * ratio;
@@ -107,8 +119,8 @@ export default function WallsAndDoors(props) {
         touch: isTouchDevice(),
         point: e.point,
         meta: {
-          ...target === 'doors' && { doors: true, instanceId: e.instanceId },
-          ...target === 'walls' && { walls: true, instanceId: e.instanceId },
+          ...target === 'doors' && { door: true, instanceId: e.instanceId },
+          ...target === 'walls' && state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
         },
       });
       e.stopPropagation();
@@ -127,8 +139,8 @@ export default function WallsAndDoors(props) {
         touch: isTouchDevice(),
         point: e.point,
         meta: {
-          ...target === 'doors' && { doors: true, instanceId: e.instanceId },
-          ...target === 'walls' && { walls: true, instanceId: e.instanceId },
+          ...target === 'doors' && { door: true, instanceId: e.instanceId },
+          ...target === 'walls' && state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
         },
       });
       e.stopPropagation();
@@ -242,6 +254,7 @@ export default function WallsAndDoors(props) {
  *
  * @property {() => void} addDoorUvs
  * @property {() => void} buildLookups
+ * @property {(instanceId: number) => Geom.Meta} decodeWallInstanceId
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
  * @property {(
  *  seg: [Geom.Vect, Geom.Vect],

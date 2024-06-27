@@ -31,6 +31,8 @@
   - 🚧 different ceiling shades e.g. bridge
     - ✅ can specify polygon outlines in SVG symbol
     - 🚧 draw polyDecals in ceiling
+  - ceiling flicker issues
+    - can solve via fill = stroke
   - prevent coinciding doors (flicker)
     - ✅ non-hull: detect/discard during flatten symbols
     - hull: ensure separated by ensuring normals point towards gm
@@ -53,6 +55,9 @@
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
 
+- ✅ `hull-wall` tag -> `wall hull`
+- ✅ hull walls have `meta.hull` `true`
+  - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
 - ✅ ContextMenu should work with ceiling
   - approach similar to obstacles
 - clean pointer-events i.e. avoid code duplication
