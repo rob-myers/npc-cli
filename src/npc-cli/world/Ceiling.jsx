@@ -1,6 +1,7 @@
 import React from "react";
 import * as THREE from "three";
 
+import { Poly } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
 import { drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLine } from "../service/dom";
@@ -36,31 +37,29 @@ export default function Ceiling(props) {
       // ignore clicks on fully transparent pixels
       return rgba[3] === 0 ? null : { gmId };
     },
-
     drawGmKey(gmKey) {
       const [ct, tex, { width, height }] = state.tex[gmKey];
       const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
       const { pngRect } = layout;
 
+      ct.resetTransform();
       ct.clearRect(0, 0, width, height);
-      // ct.fillStyle = 'rgba(255, 0, 0, 0.2)';
-      // ct.fillRect(0, 0, width, height);
 
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
-      const color = 'rgba(255, 255, 255, 1)';
-      
-      // wall tops
-      const wallsTouchingCeil = layout.walls.filter(x =>
-        x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)
+      // wall/door tops
+      const strokeColor = 'rgba(255, 255, 255, 1)';
+      const fillColor = 'rgba(0, 0, 0, 1)';
+      const hullWalls = layout.walls.filter(x => x.meta.hull);
+      const nonHullWalls = layout.walls.filter(x =>
+        !x.meta.hull && // touches ceiling:
+        (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight))
       );
-      drawPolygons(ct, wallsTouchingCeil, [color, color, 0.06])
-      // door tops
-      ct.lineWidth = 0.03;
-      drawPolygons(ct, layout.doors.map(x => x.poly), [color, color])
-
-      ct.resetTransform();
+      drawPolygons(ct, nonHullWalls, [fillColor, strokeColor, 0.06]);
+      drawPolygons(ct, layout.doors.map(x => x.poly), [fillColor, strokeColor, 0.03]);
+      drawPolygons(ct, hullWalls, [strokeColor, strokeColor, 0.06]);
+      
       tex.needsUpdate = true;
     },
     onPointerDown(e) {
@@ -118,6 +117,7 @@ export default function Ceiling(props) {
   api.ceil = state;
 
   React.useEffect(() => {// ensure initial + redraw on HMR
+    // 🚧 handle removal from api.gms (dynamic nav-mesh)
     keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
   }, []);
 

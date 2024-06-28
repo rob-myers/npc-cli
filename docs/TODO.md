@@ -28,11 +28,12 @@
   - ✅ draw grid on floor
   - ✅ fix "low fuel" via `y=1.01 wallsH=1`
   - ✅ move api.debug.navPoly -> api.derived.navPoly
+  - ✅ ceiling flicker issues
+    - can solve via fill = stroke
+    - ✅ draw hull walls differently
   - 🚧 different ceiling shades e.g. bridge
     - ✅ can specify polygon outlines in SVG symbol
     - 🚧 draw polyDecals in ceiling
-  - ceiling flicker issues
-    - can solve via fill = stroke
   - prevent coinciding doors (flicker)
     - ✅ non-hull: detect/discard during flatten symbols
     - hull: ensure separated by ensuring normals point towards gm
