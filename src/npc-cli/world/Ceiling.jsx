@@ -39,7 +39,7 @@ export default function Ceiling(props) {
     },
     drawGmKey(gmKey) {
       const [ct, tex, { width, height }] = state.tex[gmKey];
-      const layout = /** @type {Geomorph.Layout} */ (api.gms.find(({ key }) => key === gmKey));
+      const layout = api.geomorphs.layout[gmKey];
       const { pngRect } = layout;
 
       ct.resetTransform();

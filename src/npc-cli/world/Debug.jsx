@@ -21,7 +21,7 @@ export default function Debug(props) {
 
     ensureNavPoly(gmKey) {
       if (!api.derived.navPoly[gmKey]) {
-        const layout = /** @type {Geomorph.Layout} */ (api.gms.find(x => x.key === gmKey));
+        const layout = api.geomorphs.layout[gmKey];
         // Fix normals for recast/detour... maybe due to earcut ordering?
         api.derived.navPoly[gmKey] = decompToXZGeometry(layout.navDecomp, { reverse: true });
         update();
