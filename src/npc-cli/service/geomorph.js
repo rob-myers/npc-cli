@@ -282,8 +282,6 @@ class GeomorphService {
       gmId,
       transform,
       mat4: geomorphService.embedXZMat4(transform),
-      doorSegs: layout.doors.map(({ seg }) => seg),
-      wallSegs: layout.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta }))),
     };
   }
 

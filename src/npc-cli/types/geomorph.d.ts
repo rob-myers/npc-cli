@@ -195,13 +195,13 @@ declare namespace Geomorph {
   type Layout = LayoutGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
   type LayoutJson = LayoutGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson, ConnectorJson>;
 
+  /**
+   * Created in the browser, based on @see {Layout}
+   */
   interface LayoutInstance extends Layout {
     gmId: number;
     transform: Geom.SixTuple;
     mat4: import("three").Matrix4;
-    // ...
-    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
-    doorSegs: [Geom.Vect, Geom.Vect][];
   }
 
   /**

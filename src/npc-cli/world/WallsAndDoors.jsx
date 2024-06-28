@@ -178,13 +178,14 @@ export default function WallsAndDoors(props) {
       const { wallsInst: ws, doorsInst: ds } = state;
 
       let wId = 0;
-      api.gms.forEach(({ wallSegs, transform }) =>
-        wallSegs.forEach(({ seg, meta }) => ws.setMatrixAt(wId++, state.getWallMat(
-          seg,
-          transform,
-          typeof meta.h === 'number' ? meta.h : undefined,
-          typeof meta.y === 'number' ? meta.y : undefined,
-        ))),
+      api.gms.forEach(({ key: gmKey, transform }) =>
+        api.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) =>
+          ws.setMatrixAt(wId++, state.getWallMat(
+            seg,
+            transform,
+            typeof meta.h === 'number' ? meta.h : undefined,
+            typeof meta.y === 'number' ? meta.y : undefined,
+          ))),
       );
       ws.instanceMatrix.needsUpdate = true;
       ws.computeBoundingSphere();

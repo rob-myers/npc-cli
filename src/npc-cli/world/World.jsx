@@ -47,9 +47,7 @@ export default function World(props) {
 
     gmsData: {
       doorCount: 0, obstaclesCount: 0, wallCount: 0, wallPolySegCounts: [],
-      ...mapValues(geomorphService.toGmNum, (_, gmKey) => ({
-        gmKey, navPoly: undefined, wallPolyCount: 0, wallPolySegCounts: [],
-      })),
+      ...mapValues(geomorphService.toGmNum, (_, gmKey) => ({ ...emptyGmData, gmKey })),
     },
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
@@ -82,6 +80,30 @@ export default function World(props) {
       ...npcService,
     },
 
+    computeGmsData() {
+      const gmsData = state.gmsData;
+      
+      // gmsData[gmKey] is only written once
+      state.gms.filter(({ key: gmKey }) => gmsData[gmKey].wallPolyCount === 0).forEach(
+        ({ key: gmKey, walls, doors }) => {
+          const gmData = gmsData[gmKey];
+          gmData.doorSegs = doors.map(({ seg }) => seg);
+          gmData.wallSegs = walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
+          gmData.wallPolyCount = walls.length;
+          gmData.wallPolySegCounts = walls.map(({ outline, holes }) =>
+            outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
+          );
+        }
+      );
+
+      gmsData.doorCount = state.gms.reduce((sum, { key }) => sum + gmsData[key].doorSegs.length, 0);
+      gmsData.wallCount = state.gms.reduce((sum, { key }) => sum + gmsData[key].wallSegs.length, 0);
+      gmsData.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
+
+      gmsData.wallPolySegCounts = state.gms.map(({ key: gmKey }) =>
+        state.gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
+      );
+    },
     async handleMessageFromWorker(e) {
       const msg = e.data;
       info("main thread received message", msg);
@@ -164,23 +186,7 @@ export default function World(props) {
           geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
         );
 
-        state.gmsData.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
-        state.gmsData.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
-        state.gmsData.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
-
-        state.gms.filter(({ key: gmKey }) => state.gmsData[gmKey].wallPolyCount === 0)
-          .forEach(({ key: gmKey, walls }) => {
-            const item = state.gmsData[gmKey];
-            item.wallPolyCount = walls.length;
-            item.wallPolySegCounts = walls.map(({ outline, holes }) =>
-              outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
-            );
-          })
-        ;
-
-        state.gmsData.wallPolySegCounts = state.gms.map(({ key: gmKey }) =>
-          state.gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
-        );
+        state.computeGmsData();
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
@@ -323,6 +329,7 @@ export default function World(props) {
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
+ * @property {() => void} computeGmsData
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
@@ -360,7 +367,15 @@ export default function World(props) {
  * We do not store in `api.gms` to avoid duplication.
  * @typedef GmData
  * @property {Geomorph.GeomorphKey} gmKey
+ * @property {[Geom.Vect, Geom.Vect][]} doorSegs
+ * @property {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[]} wallSegs
  * @property {number} wallPolyCount Number of wall polygons in geomorph, where each wall can have many line segments
  * @property {number[]} wallPolySegCounts Per wall, number of line segments
  * @property {THREE.BufferGeometry} [navPoly]
  */
+
+/** @type {GmData} */
+const emptyGmData = {
+  gmKey: 'g-101--multipurpose',
+  doorSegs: [], wallSegs: [], navPoly: undefined, wallPolyCount: 0, wallPolySegCounts: [],
+};
