@@ -49,7 +49,7 @@ export default function Ceiling(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
       // wall/door tops
-      const strokeColor = 'rgba(100, 100, 100, 1)';
+      const strokeColor = 'rgba(150, 150, 150, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
       const nonHullWalls = layout.walls.filter(x =>
