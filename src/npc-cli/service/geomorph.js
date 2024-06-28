@@ -270,6 +270,7 @@ class GeomorphService {
   }
 
   /**
+   * 🔔 computed in browser only (main thread and worker)
    * @param {Geomorph.Layout} layout
    * @param {number} gmId
    * @param {Geom.SixTuple} transform

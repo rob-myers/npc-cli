@@ -210,7 +210,7 @@ export default function WallsAndDoors(props) {
         name={meshName.walls}
         key={`${api.hash} ${meshName.walls}`}
         ref={instances => instances && (state.wallsInst = instances)}
-        args={[quadGeometryXY, undefined, api.derived.wallCount]}
+        args={[quadGeometryXY, undefined, api.gmsData.wallCount]}
         frustumCulled={false}
         onPointerUp={state.onPointerUp}
         onPointerDown={state.onPointerDown}
@@ -222,7 +222,7 @@ export default function WallsAndDoors(props) {
         name={meshName.doors}
         key={`${api.hash} ${meshName.doors}`}
         ref={instances => instances && (state.doorsInst = instances)}
-        args={[quadGeometryXY, undefined, api.derived.doorCount]}
+        args={[quadGeometryXY, undefined, api.gmsData.doorCount]}
         frustumCulled={false}
         onPointerUp={state.onPointerUp}
         onPointerDown={state.onPointerDown}

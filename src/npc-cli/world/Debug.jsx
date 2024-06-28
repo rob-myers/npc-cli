@@ -20,10 +20,10 @@ export default function Debug(props) {
     selectedNavPolys: new THREE.BufferGeometry(),
 
     ensureNavPoly(gmKey) {
-      if (!api.derived.navPoly[gmKey]) {
+      if (!api.gmsData[gmKey].navPoly) {
         const layout = api.geomorphs.layout[gmKey];
-        // Fix normals for recast/detour... maybe due to earcut ordering?
-        api.derived.navPoly[gmKey] = decompToXZGeometry(layout.navDecomp, { reverse: true });
+        // Fix normals for recast/detour -- triangulation ordering?
+        api.gmsData[gmKey].navPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
         update();
       }
     },
@@ -131,7 +131,7 @@ export default function Debug(props) {
       >
         <mesh
           name="origNavPoly"
-          args={[api.derived.navPoly[gm.key], origNavPolyMaterial]}
+          args={[api.gmsData[gm.key].navPoly, origNavPolyMaterial]}
           position={[0, 0.001, 0]}
           visible={props.showOrigNavPoly}
         />

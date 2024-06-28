@@ -165,7 +165,7 @@ export default function Obstacles(props) {
       name="static-obstacles"
       key={`${api.hash} static-obstacles`}
       ref={instances => instances && (state.obsInst = instances)}
-      args={[quadGeometryXZ, undefined, api.derived.obstaclesCount]}
+      args={[quadGeometryXZ, undefined, api.gmsData.obstaclesCount]}
       frustumCulled={false}
       {...api.obsTex && {
         onPointerUp: state.onPointerUp,

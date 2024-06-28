@@ -9,7 +9,7 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision } from "../service/generic";
+import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, mapValues } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
@@ -45,9 +45,11 @@ export default function World(props) {
     timer: new Timer(),
     worker: /** @type {*} */ (null),
 
-    derived: {
+    gmsData: {
       doorCount: 0, obstaclesCount: 0, wallCount: 0,
-      navPoly: /** @type {*} */ ({}),
+      ...mapValues(geomorphService.toGmNum, (_, gmKey) => ({
+        gmKey, navPoly: undefined, wallPolyCount: 0, wallPolySegCounts: [],
+      })),
     },
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
@@ -142,11 +144,11 @@ export default function World(props) {
 
       if (mapChanged) {
         state.mapKey = props.mapKey;
-        const map = state.geomorphs.map[state.mapKey];
+        const mapDef = state.geomorphs.map[state.mapKey];
 
         // map.gms.forEach(({ gmKey }) => state.ensureGmClass(gmKey));
         // on change map may see new gmKeys
-        map.gms.forEach(({ gmKey }) => {
+        mapDef.gms.forEach(({ gmKey }) => {
           if (!state.floor.tex[gmKey]) {
             const layout = state.geomorphs.layout[gmKey];
             /** @type {const} */ (['floor', 'ceil']).forEach(apiKey => {
@@ -158,12 +160,23 @@ export default function World(props) {
           }
         });
 
-        state.gms = map.gms.map(({ gmKey, transform }, gmId) => 
+        state.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
           geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
         );
-        state.derived.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
-        state.derived.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
-        state.derived.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
+
+        state.gmsData.doorCount = state.gms.reduce((sum, { doorSegs }) => sum + doorSegs.length, 0);
+        state.gmsData.wallCount = state.gms.reduce((sum, { wallSegs }) => sum + wallSegs.length, 0);
+        state.gmsData.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
+
+        state.gms.filter(({ key: gmKey }) => state.gmsData[gmKey].wallPolyCount === 0)
+          .forEach(({ key: gmKey, walls }) => {
+            const item = state.gmsData[gmKey];
+            item.wallPolyCount = walls.length;
+            item.wallPolySegCounts = walls.map(({ outline, holes }) =>
+              outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
+            );
+          })
+        ;
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
@@ -272,8 +285,9 @@ export default function World(props) {
  * @property {boolean} disabled
  * @property {string} mapKey
  * @property {string} hash
- * @property {Derived} derived
- * Data derived from other sources
+ * @property {GmsDataRoot & Record<Geomorph.GeomorphKey, GmData>} gmsData
+ * Data determined by `api.gms` or a `Geomorph.GeomorphKey`.
+ * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
  * @property {{ hash: string; gmHash: string; }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
@@ -328,9 +342,20 @@ export default function World(props) {
  */
 
 /**
- * @typedef Derived
- * @property {number} wallCount
- * @property {number} doorCount
- * @property {number} obstaclesCount
- * @property {Record<Geomorph.GeomorphKey, THREE.BufferGeometry>} navPoly
+ * Data determined by `api.gms`.
+ * It can change on dynamic navMesh change.
+ * @typedef GmsDataRoot
+ * @property {number} wallCount Total number of walls, where each wall is a single quad
+ * @property {number} doorCount Total number of doors, each being a single quad (🔔 may change)
+ * @property {number} obstaclesCount Total number of obstacles, each being a single quad
+ */
+
+/**
+ * Data determined by a `Geomorph.GeomorphKey`.
+ * We do not store in `api.gms` to avoid duplication.
+ * @typedef GmData
+ * @property {Geomorph.GeomorphKey} gmKey
+ * @property {number} wallPolyCount Number of wall polygons, where each wall can have many line segments
+ * @property {number[]} wallPolySegCounts Number of line segments in each wall polygon
+ * @property {THREE.BufferGeometry} [navPoly]
  */
