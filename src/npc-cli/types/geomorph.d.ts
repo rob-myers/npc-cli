@@ -223,6 +223,37 @@ declare namespace Geomorph {
 
   type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
 
+  /**
+   * Data determined by `api.gms`.
+   * It can change on dynamic navMesh change.
+   */
+  interface GmsDataRoot {
+    /** Total number of walls, where each wall is a single quad:  */
+    wallCount: number;
+    /** Total number of doors, each being a single quad (🔔 may change):  */
+    doorCount: number;
+    /** Total number of obstacles, each being a single quad:  */
+    obstaclesCount: number;
+    /** Per gmId, total number of wall line segments:  */
+    wallPolySegCounts: number[];
+  }
+  
+  /**
+   * Data determined by a `Geomorph.GeomorphKey`.
+   * We do not store in `api.gms` to avoid duplication.
+   */
+  interface GmData {
+    gmKey: Geomorph.GeomorphKey;
+    doorSegs: [Geom.Vect, Geom.Vect][];
+    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
+    /** Number of wall polygons in geomorph, where each wall can have many line segments */
+    wallPolyCount: number;
+    /** Per wall, number of line segments */
+    wallPolySegCounts: number[];
+    /** Debug only */
+    navPoly?: THREE.BufferGeometry;
+  }
+
   //#region decor
 
   /** Serializable */

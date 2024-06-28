@@ -295,7 +295,7 @@ export default function World(props) {
  * @property {boolean} disabled
  * @property {string} mapKey
  * @property {string} hash
- * @property {GmsDataRoot & Record<Geomorph.GeomorphKey, GmData>} gmsData
+ * @property {Geomorph.GmsDataRoot & Record<Geomorph.GeomorphKey, Geomorph.GmData>} gmsData
  * Data determined by `api.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
  * @property {{ hash: string; gmHash: string; }} hmr
@@ -352,29 +352,7 @@ export default function World(props) {
  * //@property {typeof take} take
  */
 
-/**
- * Data determined by `api.gms`.
- * It can change on dynamic navMesh change.
- * @typedef GmsDataRoot
- * @property {number} wallCount Total number of walls, where each wall is a single quad
- * @property {number} doorCount Total number of doors, each being a single quad (🔔 may change)
- * @property {number} obstaclesCount Total number of obstacles, each being a single quad
- * @property {number[]} wallPolySegCounts Per gmId, total number of wall line segments
- */
-
-/**
- * Data determined by a `Geomorph.GeomorphKey`.
- * We do not store in `api.gms` to avoid duplication.
- * @typedef GmData
- * @property {Geomorph.GeomorphKey} gmKey
- * @property {[Geom.Vect, Geom.Vect][]} doorSegs
- * @property {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[]} wallSegs
- * @property {number} wallPolyCount Number of wall polygons in geomorph, where each wall can have many line segments
- * @property {number[]} wallPolySegCounts Per wall, number of line segments
- * @property {THREE.BufferGeometry} [navPoly]
- */
-
-/** @type {GmData} */
+/** @type {Geomorph.GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose',
   doorSegs: [], wallSegs: [], navPoly: undefined, wallPolyCount: 0, wallPolySegCounts: [],
