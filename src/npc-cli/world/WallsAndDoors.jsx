@@ -70,17 +70,18 @@ export default function WallsAndDoors(props) {
         dId++;
       }));
     },
-    decodeWallInstanceId(instanceId) {// 🚧 better approach e.g. cache
-      let wallSegId = instanceId, wallId = -1;
-      const gmId = api.gms.findIndex(gm => {
-        wallId = gm.walls.findIndex(wall => {
-          const numWallSegs = wall.outline.length + wall.holes.reduce((sum, hole) => sum + hole.length, 0);
-          return (wallSegId < numWallSegs) || (wallSegId -= numWallSegs, false);
-        });
-        return wallId !== -1;
-      });
-      const wall = api.gms[gmId].walls[wallId];
-      return { gmId, ...wall.meta, instanceId };
+    decodeWallInstanceId(instanceId) {
+      let foundWallSegId = instanceId;
+      const foundGmId = api.gmsData.wallPolySegCounts.findIndex(
+        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
+      );
+      const gm = api.gms[foundGmId];
+      const foundWallId = api.gmsData[gm.key].wallPolySegCounts.findIndex(
+        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
+      );
+      const wall = gm.walls[foundWallId];
+      // console.log({ foundGmId, foundWallId })
+      return { gmId: foundGmId, ...wall.meta, instanceId };
     },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength, door } = meta;

@@ -46,7 +46,7 @@ export default function World(props) {
     worker: /** @type {*} */ (null),
 
     gmsData: {
-      doorCount: 0, obstaclesCount: 0, wallCount: 0,
+      doorCount: 0, obstaclesCount: 0, wallCount: 0, wallPolySegCounts: [],
       ...mapValues(geomorphService.toGmNum, (_, gmKey) => ({
         gmKey, navPoly: undefined, wallPolyCount: 0, wallPolySegCounts: [],
       })),
@@ -177,6 +177,10 @@ export default function World(props) {
             );
           })
         ;
+
+        state.gmsData.wallPolySegCounts = state.gms.map(({ key: gmKey }) =>
+          state.gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
+        );
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
@@ -348,6 +352,7 @@ export default function World(props) {
  * @property {number} wallCount Total number of walls, where each wall is a single quad
  * @property {number} doorCount Total number of doors, each being a single quad (🔔 may change)
  * @property {number} obstaclesCount Total number of obstacles, each being a single quad
+ * @property {number[]} wallPolySegCounts Per gmId, total number of wall line segments
  */
 
 /**
@@ -355,7 +360,7 @@ export default function World(props) {
  * We do not store in `api.gms` to avoid duplication.
  * @typedef GmData
  * @property {Geomorph.GeomorphKey} gmKey
- * @property {number} wallPolyCount Number of wall polygons, where each wall can have many line segments
- * @property {number[]} wallPolySegCounts Number of line segments in each wall polygon
+ * @property {number} wallPolyCount Number of wall polygons in geomorph, where each wall can have many line segments
+ * @property {number[]} wallPolySegCounts Per wall, number of line segments
  * @property {THREE.BufferGeometry} [navPoly]
  */
