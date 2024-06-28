@@ -1,39 +1,39 @@
 {
   "meta": {
-    "101--hull": {"outputHash": -1886751108, "pngHash": 568633107},
-    "102--hull": {"outputHash": 172818152, "pngHash": 184103855},
-    "103--hull": {"outputHash": 1970993172, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -394368863, "pngHash": 787602800},
-    "302--hull": {"outputHash": -1100956006, "pngHash": -1557128953},
+    "101--hull": {"outputHash": 45442960, "pngHash": 568633107},
+    "102--hull": {"outputHash": 76689748, "pngHash": 184103855},
+    "103--hull": {"outputHash": 179418752, "pngHash": -1937509879},
+    "301--hull": {"outputHash": -110652137, "pngHash": 787602800},
+    "302--hull": {"outputHash": 1887974662, "pngHash": -1557128953},
     "303--hull": {
-      "outputHash": -145860033,
+      "outputHash": 1958280243,
       "pngHash": -299838577,
       "obsHashes": [435244590]
     },
     "bed--003--1x1.6": {
-      "outputHash": 1951869050,
+      "outputHash": -2001357850,
       "pngHash": -1845623984,
       "obsHashes": [989651926]
     },
-    "bed--004--0.8x1.4": {"outputHash": -47241966, "pngHash": 1609319516},
+    "bed--004--0.8x1.4": {"outputHash": -787864450, "pngHash": 1609319516},
     "bed--005--0.6x1.2": {
-      "outputHash": 1949631788,
+      "outputHash": 1590022720,
       "pngHash": -1220380793,
       "obsHashes": [895128349]
     },
     "bridge--042--8x9": {
-      "outputHash": -2037978192,
+      "outputHash": -1580352484,
       "pngHash": 628461375,
       "obsHashes": [-1257084114, 2018744846, 1321151666, -1175340879]
     },
-    "cargo--002--2x2": {"outputHash": -2098044296, "pngHash": 1491321256},
+    "cargo--002--2x2": {"outputHash": 29938404, "pngHash": 1491321256},
     "cargo--003--2x4": {
-      "outputHash": 1101645142,
+      "outputHash": -1138868030,
       "pngHash": -1889744861,
       "obsHashes": [-1222003751]
     },
     "cargo--010--2x4": {
-      "outputHash": -1208297033,
+      "outputHash": -635500125,
       "pngHash": 1452584011,
       "obsHashes": [
         980890569,
@@ -45,319 +45,319 @@
       ]
     },
     "console--005--1.2x4": {
-      "outputHash": 417152587,
+      "outputHash": 401526071,
       "pngHash": 1538262982,
       "obsHashes": [-1286788918]
     },
     "console--006--1.2x3": {
-      "outputHash": -601058218,
+      "outputHash": 1126536514,
       "pngHash": 1069654050,
       "obsHashes": [1021279768]
     },
     "console--010--1.2x2": {
-      "outputHash": 421588797,
+      "outputHash": -1750546519,
       "pngHash": -116087239,
       "obsHashes": [1347712025]
     },
-    "console--011--1.2x2": {"outputHash": 192429903, "pngHash": 1893433691},
+    "console--011--1.2x2": {"outputHash": -1797236381, "pngHash": 1893433691},
     "console--018--1x1": {
-      "outputHash": 1654265963,
+      "outputHash": 307785599,
       "pngHash": 1648795997,
       "obsHashes": [550873257]
     },
     "console--019--2x2": {
-      "outputHash": -785874169,
+      "outputHash": -1112584421,
       "pngHash": -752773709,
       "obsHashes": [1188073384]
     },
-    "console--022--1x2": {"outputHash": -1400688333, "pngHash": 1893433691},
+    "console--022--1x2": {"outputHash": -494656185, "pngHash": 1893433691},
     "console--031--1x1.2": {
-      "outputHash": -1169874752,
+      "outputHash": 1865432492,
       "pngHash": -248095598,
       "obsHashes": [954136659]
     },
     "console--033--0.4x0.6": {
-      "outputHash": 1411387007,
+      "outputHash": 1558401259,
       "pngHash": -1765557674,
       "obsHashes": [-446494730]
     },
     "console--051--0.4x0.6": {
-      "outputHash": -776882563,
+      "outputHash": -435041647,
       "pngHash": -874799556,
       "obsHashes": [-1250375694]
     },
     "couch-and-chairs--006--0.4x2": {
-      "outputHash": 689606360,
+      "outputHash": -911926292,
       "pngHash": 1327581609,
       "obsHashes": [-1830334337, -456036686, -122718859]
     },
     "couch-and-chairs--007--0.6x1.4": {
-      "outputHash": -814244110,
+      "outputHash": -1705796730,
       "pngHash": 1789419130
     },
     "counter--007--0.4x1": {
-      "outputHash": 2106674682,
+      "outputHash": -1979441818,
       "pngHash": 1958304886,
       "obsHashes": [-532072178]
     },
     "counter--009--0.4x0.4": {
-      "outputHash": 1266179335,
+      "outputHash": 829942003,
       "pngHash": 1463076709,
       "obsHashes": [937252768]
     },
     "counter--010--0.4x0.4": {
-      "outputHash": 287672058,
+      "outputHash": -258404722,
       "pngHash": 768005647,
       "obsHashes": [1067031813]
     },
-    "empty-room--013--2x3": {"outputHash": 981733923, "pngHash": 1809716270},
-    "empty-room--019--2x4": {"outputHash": -1179363675, "pngHash": -192199909},
-    "empty-room--020--2x4": {"outputHash": 1048884247, "pngHash": 485549422},
-    "empty-room--039--3x4": {"outputHash": -214514083, "pngHash": 1412287547},
-    "empty-room--060--4x4": {"outputHash": -1266282995, "pngHash": -1687214872},
-    "engineering--045--6x4": {"outputHash": 1016510694, "pngHash": -1132388510},
-    "engineering--047--4x7": {"outputHash": -1250891131, "pngHash": 541808283},
+    "empty-room--013--2x3": {"outputHash": 343783735, "pngHash": 1809716270},
+    "empty-room--019--2x4": {"outputHash": 930728337, "pngHash": -192199909},
+    "empty-room--020--2x4": {"outputHash": -1357419133, "pngHash": 485549422},
+    "empty-room--039--3x4": {"outputHash": 314268617, "pngHash": 1412287547},
+    "empty-room--060--4x4": {"outputHash": 1087452409, "pngHash": -1687214872},
+    "engineering--045--6x4": {"outputHash": 21392850, "pngHash": -1132388510},
+    "engineering--047--4x7": {"outputHash": -388809063, "pngHash": 541808283},
     "extra--001--fresher--0.5x0.5": {
-      "outputHash": 211549092,
+      "outputHash": -227921352,
       "pngHash": 1247120224,
       "obsHashes": [-1912350195]
     },
     "extra--002--fresher--0.5x0.5": {
-      "outputHash": -1974566696,
+      "outputHash": 1130671556,
       "pngHash": 482008010,
       "obsHashes": [997944906]
     },
     "extra--003--chair--0.25x0.25": {
-      "outputHash": -1801928367,
+      "outputHash": 131514213,
       "pngHash": -1668511435,
       "obsHashes": [-1328450793]
     },
     "extra--004--desk--0.5x1": {
-      "outputHash": -14372869,
+      "outputHash": -1005455217,
       "pngHash": -1144971495,
       "obsHashes": [-680591218]
     },
     "extra--005--chair-0.25x0.25": {
-      "outputHash": -1092320397,
+      "outputHash": -200992929,
       "pngHash": -372042423,
       "obsHashes": [623506074]
     },
     "extra--006--desk--0.4x1": {
-      "outputHash": -745364807,
+      "outputHash": -1032190043,
       "pngHash": -244410489,
       "obsHashes": [-307875343]
     },
     "extra--007--desk--0.4x0.66": {
-      "outputHash": -1322955335,
+      "outputHash": 1179591333,
       "pngHash": -25585608,
       "obsHashes": [586608109]
     },
     "extra--008--desk--0.4x1.33": {
-      "outputHash": 1892446539,
+      "outputHash": 849572663,
       "pngHash": 702037169,
       "obsHashes": [-525411635]
     },
     "extra--009--table--4x4": {
-      "outputHash": -546402282,
+      "outputHash": -1615964798,
       "pngHash": 1827472801,
       "obsHashes": [-1522654343]
     },
     "extra--010--machine--2x1": {
-      "outputHash": 413070436,
+      "outputHash": -1065553584,
       "pngHash": -1673441387,
       "obsHashes": [-1550712232]
     },
     "extra--011--machine--1x3": {
-      "outputHash": -60561162,
+      "outputHash": -976299382,
       "pngHash": 1878326814,
       "obsHashes": [-1269709526]
     },
     "extra--012--battery--3x2": {
-      "outputHash": -1145587806,
+      "outputHash": -470438258,
       "pngHash": 639710287,
       "obsHashes": [185250426]
     },
     "extra--013--privacy-screen--1.5x0.2": {
-      "outputHash": 1805272065,
+      "outputHash": 1546709141,
       "pngHash": -1193937783,
       "obsHashes": [-1053405312]
     },
     "extra--014--table--2x3": {
-      "outputHash": -1816714530,
+      "outputHash": 711923786,
       "pngHash": -729764103,
       "obsHashes": [-903204252]
     },
     "extra--015--table--3x0.5": {
-      "outputHash": 1813609625,
+      "outputHash": -1002963283,
       "pngHash": -1811554071,
       "obsHashes": [1182638987]
     },
     "extra--016--table--4x0.5": {
-      "outputHash": 1051469713,
+      "outputHash": -443607387,
       "pngHash": 2031632593,
       "obsHashes": [1877335400]
     },
     "extra--017--table--2x0.5": {
-      "outputHash": 1888072941,
+      "outputHash": 1909551577,
       "pngHash": -1220359814,
       "obsHashes": [-1683279556]
     },
     "extra--018--table-0.25x0.25": {
-      "outputHash": -1013152894,
+      "outputHash": 261911790,
       "pngHash": -372042423,
       "obsHashes": [1759776519]
     },
     "extra--019--table-0.5x2": {
-      "outputHash": -76938947,
+      "outputHash": 1579732689,
       "pngHash": 314817569,
       "obsHashes": [1508393284]
     },
     "fresher--002--0.4x0.6": {
-      "outputHash": 621589944,
+      "outputHash": 149539020,
       "pngHash": -1792259774,
       "obsHashes": [1124240817]
     },
-    "fresher--015--1x2": {"outputHash": 2045523792, "pngHash": -243127075},
-    "fresher--020--2x2": {"outputHash": 2041879191, "pngHash": 1107295627},
-    "fresher--025--3x2": {"outputHash": 537994420, "pngHash": -1324814803},
-    "fresher--036--4x2": {"outputHash": -883729174, "pngHash": 633687707},
+    "fresher--015--1x2": {"outputHash": 15485796, "pngHash": -243127075},
+    "fresher--020--2x2": {"outputHash": 1286748459, "pngHash": 1107295627},
+    "fresher--025--3x2": {"outputHash": 1465272992, "pngHash": -1324814803},
+    "fresher--036--4x2": {"outputHash": -1158095618, "pngHash": 633687707},
     "fuel--010--4x2": {
-      "outputHash": 577969477,
+      "outputHash": -847931687,
       "pngHash": 858873613,
       "obsHashes": [-1049167637]
     },
-    "iris-valves--005--1x1": {"outputHash": -1710778771, "pngHash": 1810420148},
+    "iris-valves--005--1x1": {"outputHash": -1502830503, "pngHash": 1810420148},
     "lab--012--4x3": {
-      "outputHash": 333062049,
+      "outputHash": -547864051,
       "pngHash": -261688393,
       "obsHashes": [1604803389]
     },
-    "lab--018--4x4": {"outputHash": -1001623064, "pngHash": -113261385},
+    "lab--018--4x4": {"outputHash": -1324000044, "pngHash": -113261385},
     "lab--023--4x4": {
-      "outputHash": -1166101828,
+      "outputHash": 369004968,
       "pngHash": -1594118441,
       "obsHashes": [1641095410]
     },
     "lifeboat--small-craft--2x4": {
-      "outputHash": 1210268463,
+      "outputHash": 737229891,
       "pngHash": -2036140918
     },
-    "lounge--015--4x2": {"outputHash": -1397861008, "pngHash": 222627377},
-    "lounge--017--4x2": {"outputHash": -920001389, "pngHash": -236167751},
+    "lounge--015--4x2": {"outputHash": -1477468156, "pngHash": 222627377},
+    "lounge--017--4x2": {"outputHash": 1408546431, "pngHash": -236167751},
     "low-berth--003--1x1": {
-      "outputHash": 1767522038,
+      "outputHash": -1230758686,
       "pngHash": 177413432,
       "obsHashes": [899900587]
     },
     "machinery--155--1.8x3.6": {
-      "outputHash": 1674315703,
+      "outputHash": -877358005,
       "pngHash": -2012657603,
       "obsHashes": [1069118259]
     },
     "machinery--156--2x4": {
-      "outputHash": 457849903,
+      "outputHash": 999412803,
       "pngHash": -1501888534,
       "obsHashes": [57392611]
     },
     "machinery--158--1.8x3.6": {
-      "outputHash": -1878366020,
+      "outputHash": 1687317800,
       "pngHash": -542298279,
       "obsHashes": [2088829173]
     },
     "machinery--357--4x2": {
-      "outputHash": -925319327,
+      "outputHash": 1224270669,
       "pngHash": -763382708,
       "obsHashes": [-2014374468]
     },
-    "medical--007--3x2": {"outputHash": -1980234122, "pngHash": -74184864},
-    "medical--008--3x2": {"outputHash": 2145891908, "pngHash": -1263266565},
+    "medical--007--3x2": {"outputHash": -1524356726, "pngHash": -74184864},
+    "medical--008--3x2": {"outputHash": -842719016, "pngHash": -1263266565},
     "medical-bed--005--0.6x1.2": {
-      "outputHash": 354374047,
+      "outputHash": 18930571,
       "pngHash": -172295595,
       "obsHashes": [1688686898]
     },
     "medical-bed--006--1.6x3.6": {
-      "outputHash": -135974862,
+      "outputHash": 1212434630,
       "pngHash": -839723950
     },
     "misc-stellar-cartography--020--10x10": {
-      "outputHash": -641446647,
+      "outputHash": 1966630557,
       "pngHash": -1181495790,
       "obsHashes": [1616514661, 338030151, 883758416]
     },
     "misc-stellar-cartography--023--4x4": {
-      "outputHash": 804636637,
+      "outputHash": 1036121673,
       "pngHash": 1510139639,
       "obsHashes": [-289701266]
     },
-    "office--001--2x2": {"outputHash": 1835747591, "pngHash": -2056159100},
-    "office--004--2x2": {"outputHash": -657602218, "pngHash": -945108248},
-    "office--006--2x2": {"outputHash": 929615901, "pngHash": 213915332},
-    "office--020--2x3": {"outputHash": -56266446, "pngHash": 1677157900},
-    "office--023--2x3": {"outputHash": 1881922479, "pngHash": 112007124},
-    "office--026--2x3": {"outputHash": -1493827717, "pngHash": -1111441141},
-    "office--061--3x4": {"outputHash": -1501837378, "pngHash": 1103253101},
-    "office--074--4x4": {"outputHash": -1340472114, "pngHash": 194408083},
+    "office--001--2x2": {"outputHash": -4947941, "pngHash": -2056159100},
+    "office--004--2x2": {"outputHash": -1286860734, "pngHash": -945108248},
+    "office--006--2x2": {"outputHash": -1598070647, "pngHash": 213915332},
+    "office--020--2x3": {"outputHash": 1801865542, "pngHash": 1677157900},
+    "office--023--2x3": {"outputHash": -476701925, "pngHash": 112007124},
+    "office--026--2x3": {"outputHash": -684811505, "pngHash": -1111441141},
+    "office--061--3x4": {"outputHash": -266355886, "pngHash": 1103253101},
+    "office--074--4x4": {"outputHash": -1796410054, "pngHash": 194408083},
     "office--089--4x4": {
-      "outputHash": -1497092347,
+      "outputHash": 921723801,
       "pngHash": -1241808431,
       "obsHashes": [1490685047]
     },
-    "ships-locker--003--1x1": {"outputHash": -1127407794, "pngHash": 780413933},
-    "ships-locker--007--2x1": {"outputHash": -968011265, "pngHash": 1054035955},
+    "ships-locker--003--1x1": {"outputHash": 1430100666, "pngHash": 780413933},
+    "ships-locker--007--2x1": {"outputHash": 216555499, "pngHash": 1054035955},
     "ships-locker--020--2x2": {
-      "outputHash": 1017647843,
+      "outputHash": -1488224049,
       "pngHash": -1355686256
     },
     "shop--027--1.6x0.4": {
-      "outputHash": 394919145,
+      "outputHash": 2100808957,
       "pngHash": -1803328706,
       "obsHashes": [-1147982546]
     },
     "shop--028--1.6x0.8": {
-      "outputHash": -1425014725,
+      "outputHash": 568292815,
       "pngHash": 705406547,
       "obsHashes": [-224627602]
     },
     "shop--031--0.4x0.8": {
-      "outputHash": 1423228651,
+      "outputHash": -498627585,
       "pngHash": 118440221,
       "obsHashes": [1376598614]
     },
     "shop--033--0.6x1.6": {
-      "outputHash": -1271490927,
+      "outputHash": -100319579,
       "pngHash": -1689615057,
       "obsHashes": [-1765650457]
     },
     "shop--035--0.4x0.8": {
-      "outputHash": 1878019827,
+      "outputHash": 913666055,
       "pngHash": -1395436823,
       "obsHashes": [1500677842]
     },
     "shop--037--0.4x0.8": {
-      "outputHash": 2105415415,
+      "outputHash": 1619812875,
       "pngHash": -765449158,
       "obsHashes": [1562717456]
     },
-    "stateroom--012--2x2": {"outputHash": 1762578724, "pngHash": 285590873},
-    "stateroom--014--2x2": {"outputHash": -307485322, "pngHash": 810806279},
-    "stateroom--018--2x3": {"outputHash": -1266123841, "pngHash": -932858017},
-    "stateroom--019--2x3": {"outputHash": -826962651, "pngHash": 464993285},
-    "stateroom--020--2x3": {"outputHash": -982149303, "pngHash": 987326316},
-    "stateroom--035--2x3": {"outputHash": -1763910347, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": 1789992664, "pngHash": 1301313076},
+    "stateroom--012--2x2": {"outputHash": -277394888, "pngHash": 285590873},
+    "stateroom--014--2x2": {"outputHash": -164360094, "pngHash": 810806279},
+    "stateroom--018--2x3": {"outputHash": -1759605333, "pngHash": -932858017},
+    "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
+    "stateroom--020--2x3": {"outputHash": 1368839861, "pngHash": 987326316},
+    "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
+    "stateroom--036--2x4": {"outputHash": 1062741444, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
-      "outputHash": 81643273,
+      "outputHash": -1264699275,
       "pngHash": 1027833859,
       "obsHashes": [1737062881]
     },
     "table--009--0.8x0.8": {
-      "outputHash": -855279466,
+      "outputHash": 1859167106,
       "pngHash": 1533034663,
       "obsHashes": [-1295640843]
     },
     "table--012--0.8x0.8": {
-      "outputHash": -1417564757,
+      "outputHash": -1129656681,
       "pngHash": 293366403,
       "obsHashes": [-502406732]
     },
@@ -1289,7 +1289,6 @@
           "meta": {"decor": true, "go": true, "label": "corridor"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 30,
       "height": 30,
@@ -1694,7 +1693,6 @@
           "meta": {"decor": true, "go": true, "label": "corridor"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 30,
       "height": 30,
@@ -1970,7 +1968,6 @@
       ],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 30,
       "height": 30,
@@ -2396,7 +2393,7 @@
           "meta": {"decor": true, "go": true, "label": "study"}
         }
       ],
-      "polyDecals": [
+      "unsorted": [
         {
           "type": "Polygon",
           "coordinates": [
@@ -2451,9 +2448,7 @@
             "strokeColor": "#777",
             "strokeWidth": 4
           }
-        }
-      ],
-      "unsorted": [
+        },
         {
           "type": "Polygon",
           "coordinates": [
@@ -3129,7 +3124,7 @@
           "meta": {"decor": true, "go": true, "label": "corridor"}
         }
       ],
-      "polyDecals": [
+      "unsorted": [
         {
           "type": "Polygon",
           "coordinates": [
@@ -3151,7 +3146,6 @@
           }
         }
       ],
-      "unsorted": [],
       "width": 30,
       "height": 15,
       "pngRect": {"x": -0.15, "y": -1.525, "width": 30.3, "height": 16.675},
@@ -3724,7 +3718,7 @@
           "meta": {"decor": true, "go": true, "label": "common-area"}
         }
       ],
-      "polyDecals": [
+      "unsorted": [
         {
           "type": "Polygon",
           "coordinates": [
@@ -3770,7 +3764,6 @@
           }
         }
       ],
-      "unsorted": [],
       "width": 30,
       "height": 15,
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 15.325},
@@ -3947,7 +3940,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2.5,
       "height": 1.5,
@@ -3973,7 +3965,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2.25,
       "height": 1.125,
@@ -4028,7 +4019,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.875,
       "height": 1.125,
@@ -4629,7 +4619,6 @@
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 12,
       "height": 13.5,
@@ -4752,7 +4741,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -4788,7 +4776,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -5007,7 +4994,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -5060,7 +5046,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 6,
@@ -5139,7 +5124,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 4.5,
@@ -5209,7 +5193,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 3,
@@ -5242,7 +5225,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 3,
@@ -5302,7 +5284,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
@@ -5349,7 +5330,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -5375,7 +5355,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 3,
@@ -5432,7 +5411,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
@@ -5496,7 +5474,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 0.75,
@@ -5541,7 +5518,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 0.75,
@@ -5638,7 +5614,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 3,
@@ -5656,7 +5631,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 2.25,
@@ -5710,7 +5684,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 0.6,
@@ -5749,7 +5722,6 @@
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 0.75,
@@ -5797,7 +5769,6 @@
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 0.75,
@@ -5841,7 +5812,6 @@
       ],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -5918,7 +5888,6 @@
       ],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -5973,7 +5942,6 @@
       ],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -6074,7 +6042,6 @@
       ],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 4.5,
       "height": 6,
@@ -6198,7 +6165,6 @@
       ],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 6,
@@ -6274,7 +6240,6 @@
           "meta": {"decor": true, "go": true, "label": "engineering"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 9,
       "height": 6,
@@ -6372,7 +6337,6 @@
           "meta": {"decor": true, "go": true, "label": "engineering"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 10.5,
@@ -6449,7 +6413,6 @@
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 0.75,
@@ -6503,7 +6466,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 0.75,
@@ -6566,7 +6528,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.375,
       "height": 0.375,
@@ -6597,7 +6558,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 1.5,
@@ -6656,7 +6616,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.375,
       "height": 0.375,
@@ -6687,7 +6646,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 0.6,
@@ -6718,7 +6676,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1,
       "height": 0.6,
@@ -6754,7 +6711,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2,
       "height": 0.6,
@@ -6821,7 +6777,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 6,
@@ -6852,7 +6807,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 1.5,
@@ -6896,7 +6850,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 4.5,
@@ -6954,7 +6907,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 4.5,
       "height": 3,
@@ -6995,7 +6947,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2.25,
       "height": 0.3,
@@ -7035,7 +6986,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -7076,7 +7026,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 4.5,
       "height": 0.75,
@@ -7122,7 +7071,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 0.75,
@@ -7151,7 +7099,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 0.75,
@@ -7196,7 +7143,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.375,
       "height": 0.375,
@@ -7240,7 +7186,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 3,
@@ -7288,7 +7233,6 @@
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 0.75,
       "height": 0.75,
@@ -7366,7 +7310,6 @@
           "meta": {"decor": true, "go": true, "label": "fresher"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 3,
@@ -7459,7 +7402,6 @@
           "meta": {"decor": true, "meta": true, "label": "bathroom"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -7559,7 +7501,6 @@
           "meta": {"decor": true, "go": true, "label": "freaher"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 4.5,
       "height": 3,
@@ -7778,7 +7719,6 @@
           "meta": {"decor": true, "go": true, "label": "fresher"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 3,
@@ -7898,7 +7838,6 @@
           "meta": {"decor": true, "label": "fuel"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 3,
@@ -7924,7 +7863,6 @@
           "meta": {"decor": true, "circle": true, "hatch": true}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
@@ -8029,7 +7967,6 @@
           "meta": {"decor": true, "go": true, "label": "lab"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 4.5,
@@ -8132,7 +8069,6 @@
           "meta": {"decor": true, "go": true, "label": "lab"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 6,
@@ -8272,7 +8208,6 @@
           "meta": {"decor": true, "label": "lab"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 6,
@@ -8384,7 +8319,7 @@
           "meta": {"decor": true, "go": true, "label": "escape-pod"}
         }
       ],
-      "polyDecals": [
+      "unsorted": [
         {
           "type": "Polygon",
           "coordinates": [
@@ -8406,7 +8341,6 @@
           }
         }
       ],
-      "unsorted": [],
       "width": 3,
       "height": 6,
       "pngRect": {"x": -0.1, "y": -0.1, "width": 3.2, "height": 6.19},
@@ -8508,7 +8442,6 @@
           "meta": {"decor": true, "go": true, "label": "lounge"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 3,
@@ -8604,7 +8537,6 @@
           "meta": {"decor": true, "go": true, "label": "lounge"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 3,
@@ -8668,7 +8600,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
@@ -8716,7 +8647,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -8775,7 +8705,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -8823,7 +8752,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -8854,7 +8782,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 3,
@@ -8923,7 +8850,6 @@
           "meta": {"decor": true, "go": true, "label": "medical"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 4.5,
       "height": 3,
@@ -9049,7 +8975,6 @@
           "meta": {"decor": true, "go": true, "label": "medical"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 4.5,
       "height": 3,
@@ -9157,7 +9082,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.9,
       "height": 1,
@@ -9181,7 +9105,6 @@
           "meta": {"decor": true, "label": "medical"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2.4,
       "height": 6,
@@ -9476,7 +9399,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [
         {
           "type": "Polygon",
@@ -9611,7 +9533,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 6,
@@ -9690,7 +9611,6 @@
           "meta": {"decor": true, "go": true, "label": "office"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -9797,7 +9717,6 @@
           "meta": {"decor": true, "go": true, "label": "office"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -9917,7 +9836,6 @@
           "meta": {"decor": true, "go": true, "label": "office"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -10027,7 +9945,6 @@
           "meta": {"decor": true, "go": true, "label": "office"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -10113,7 +10030,6 @@
           "meta": {"decor": true, "go": true, "label": "office"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -10228,7 +10144,6 @@
           "meta": {"decor": true, "label": "cpu"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -10315,7 +10230,6 @@
           "meta": {"decor": true, "go": true, "label": "office"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 4.5,
       "height": 6,
@@ -10447,7 +10361,6 @@
           "meta": {"decor": true, "go": true, "label": "office"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 6,
@@ -10777,7 +10690,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 6,
       "height": 6,
@@ -10862,7 +10774,6 @@
           "meta": {"decor": true, "label": "locker"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
@@ -10930,7 +10841,6 @@
           "meta": {"decor": true, "go": true, "label": "locker"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 1.5,
@@ -10994,7 +10904,6 @@
           "meta": {"decor": true, "go": true, "label": "locker"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -11020,7 +10929,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2.4,
       "height": 0.6,
@@ -11075,7 +10983,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2.4,
       "height": 1.2,
@@ -11101,7 +11008,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.3,
       "height": 0.7,
@@ -11148,7 +11054,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 2.5,
       "height": 1,
@@ -11174,7 +11079,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.3,
       "height": 0.7,
@@ -11200,7 +11104,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.3,
       "height": 0.7,
@@ -11259,7 +11162,6 @@
           "meta": {"decor": true, "go": true, "label": "stateroom"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -11362,7 +11264,6 @@
           "meta": {"decor": true, "button": true, "shower": true}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 3,
@@ -11434,7 +11335,6 @@
           "meta": {"decor": true, "go": true, "label": "stateroom"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -11522,7 +11422,6 @@
           "meta": {"decor": true, "go": true, "label": "stateroom"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -11615,7 +11514,6 @@
           "meta": {"decor": true, "go": true, "label": "stateroom"}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -11751,7 +11649,6 @@
           }
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 4.5,
@@ -11873,7 +11770,6 @@
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
         }
       ],
-      "polyDecals": [],
       "unsorted": [],
       "width": 3,
       "height": 6,
@@ -11967,7 +11863,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 3,
@@ -12085,7 +11980,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
@@ -12160,7 +12054,6 @@
       "doors": [],
       "windows": [],
       "decor": [],
-      "polyDecals": [],
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
