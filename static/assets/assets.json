@@ -50,9 +50,9 @@
       "obsHashes": [-1286788918]
     },
     "console--006--1.2x3": {
-      "outputHash": 1126536514,
+      "outputHash": 542639172,
       "pngHash": 1069654050,
-      "obsHashes": [1021279768]
+      "obsHashes": [-466544082]
     },
     "console--010--1.2x2": {
       "outputHash": -1750546519,
@@ -116,7 +116,7 @@
     "empty-room--039--3x4": {"outputHash": 314268617, "pngHash": 1412287547},
     "empty-room--060--4x4": {"outputHash": 1087452409, "pngHash": -1687214872},
     "engineering--045--6x4": {"outputHash": 21392850, "pngHash": -1132388510},
-    "engineering--047--4x7": {"outputHash": -388809063, "pngHash": 541808283},
+    "engineering--047--4x7": {"outputHash": 1180640948, "pngHash": 541808283},
     "extra--001--fresher--0.5x0.5": {
       "outputHash": -227921352,
       "pngHash": 1247120224,
@@ -5119,7 +5119,7 @@
             "obstacle": true,
             "table": true,
             "surface": true,
-            "y": 0.65,
+            "y": 0.3,
             "symKey": "console--006--1.2x3",
             "obsId": 0
           }
@@ -5136,24 +5136,24 @@
       "symbols": [
         {
           "symbolKey": "console--051--0.4x0.6",
-          "meta": {"key": "console--051--0.4x0.6", "y": 0.35},
-          "width": 0.75,
-          "height": 0.75,
-          "transform": [1, 0, 0, 1, 1.1, 3.38]
-        },
-        {
-          "symbolKey": "console--051--0.4x0.6",
-          "meta": {"key": "console--051--0.4x0.6", "y": 0.35},
-          "width": 0.75,
-          "height": 0.75,
-          "transform": [1, 0, 0, 1, 1.1, 1.87]
-        },
-        {
-          "symbolKey": "console--051--0.4x0.6",
-          "meta": {"key": "console--051--0.4x0.6", "y": 0.35},
+          "meta": {"key": "console--051--0.4x0.6"},
           "width": 0.75,
           "height": 0.75,
           "transform": [1, 0, 0, 1, 1.1, 0.38]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 1.1, 1.88]
+        },
+        {
+          "symbolKey": "console--051--0.4x0.6",
+          "meta": {"key": "console--051--0.4x0.6"},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 1.1, 3.38]
         }
       ],
       "removableDoors": [],
@@ -6349,7 +6349,7 @@
       "symbols": [
         {
           "symbolKey": "console--006--1.2x3",
-          "meta": {"key": "console--006--1.2x3"},
+          "meta": {"key": "console--006--1.2x3", "y": 0.35},
           "width": 1.5,
           "height": 4.5,
           "transform": [-1, 0, 0, 1, 6, 1.5]
