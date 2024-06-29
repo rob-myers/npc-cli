@@ -22,7 +22,7 @@
       "obsHashes": [895128349]
     },
     "bridge--042--8x9": {
-      "outputHash": -1580352484,
+      "outputHash": 2099792990,
       "pngHash": 628461375,
       "obsHashes": [-1257084114, 2018744846, 1321151666, -1175340879]
     },
@@ -4641,7 +4641,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, -1, 0, 5.62, 1.55]
+          "transform": [0, 1, -1, 0, 5.63, 1.55]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
@@ -4655,7 +4655,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, -1, 0, 8.62, 1.55]
+          "transform": [0, 1, -1, 0, 8.63, 1.55]
         },
         {
           "symbolKey": "extra--003--chair--0.25x0.25",
