@@ -31,9 +31,10 @@
   - ✅ ceiling flicker issues
     - can solve via fill = stroke
     - ✅ draw hull walls differently
+  - ✅ try thicker ceiling tops via inset (avoid stroke going outside)
   - 🚧 different ceiling shades e.g. bridge
     - ✅ can specify polygon outlines in SVG symbol
-    - 🚧 api.gmsData[gmKey].polyDecals
+    - ✅ api.gmsData[gmKey].polyDecals
     - 🚧 draw polyDecals in ceiling
   - prevent coinciding doors (flicker)
     - ✅ non-hull: detect/discard during flatten symbols

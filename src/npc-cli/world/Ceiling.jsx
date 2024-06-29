@@ -52,12 +52,9 @@ export default function Ceiling(props) {
       const strokeColor = 'rgba(150, 150, 150, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      const nonHullWalls = layout.walls.filter(x =>
-        !x.meta.hull && // touches ceiling:
-        (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight))
-      );
-      drawPolygons(ct, nonHullWalls, [fillColor, strokeColor, 0.06]);
-      drawPolygons(ct, layout.doors.map(x => x.poly), [fillColor, strokeColor, 0.03]);
+      const { nonHullCeilTops } = api.gmsData[gmKey];
+      drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.08]);
+      drawPolygons(ct, layout.doors.map(x => x.poly), [fillColor, strokeColor, 0.04]);
       drawPolygons(ct, hullWalls, [strokeColor, strokeColor, 0.06]);
       
       tex.needsUpdate = true;
