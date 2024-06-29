@@ -18,12 +18,6 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
-    <pattern id="pattern-7" patternTransform="matrix(1, 0, 0, 1, 0.014160169289, 0.000122070313)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-8" xlink:href="#pattern-0"/>
-    <pattern id="pattern-9" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, -44.08429718465, -508.832519525516)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-10" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, 44.0760307312, 808.831359858667)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-11" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, 44.075901031494, 808.831359867616)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-12" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, 44.075996389976, 808.83151244516)" xlink:href="#pattern-0"/>
     <symbol id="symbol-0" vioewbox="0 0 150 150" viewBox="0 0 150 150">
       <title>console--051--0.4x0.6</title>
       <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 75.005px 75.0023px;" y="0" x="0">
@@ -40,6 +34,40 @@
       <title>extra--004--desk--0.5x1</title>
       <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 225.002px 1649.99px;">
         <title>extra--004--desk--0.5x1</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-3" viewBox="0 0 300 600" bx:pinned="true">
+      <title>table--004--1.2x2.4</title>
+      <rect width="300" height="600" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 1050.08px 1881.49px;">
+        <title>table--004--1.2x2.4</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-4" viewBox="0 0 375 225" bx:pinned="true">
+      <title>bed--005--0.6x1.2</title>
+      <rect width="375" height="225" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: 2028.57px 1637.44px;" y="1524.950928" x="1841.06897" transform="matrix(1, 0, 0, 1, -1841.0689697265625, -1524.9509277343752)">
+        <title>bed--005--0.6x1.2</title>
+      </rect>
+    </symbol>
+    <pattern id="pattern-1" xlink:href="#pattern-0"/>
+    <symbol id="symbol-5" viewBox="0 0 150.0118 150.0118">
+      <title>extra--001--fresher--0.5x0.5</title>
+      <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 75.0042px 75.0041px;" y="0.005554" x="0.005524">
+        <title>extra--001--fresher--0.5x0.5 y=0.7</title>
+      </rect>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </symbol>
+    <symbol id="symbol-6" viewBox="0 0 150 150">
+      <title>extra--002--fresher--0.5x0.5</title>
+      <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 75.0047px 74.9983px;">
+        <title>extra--002--fresher--0.5x0.5</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-7" viewBox="0 0 150 150" bx:pinned="true">
+      <title>counter--009--0.4x0.4</title>
+      <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 119.085px 733.831px;">
+        <title>counter--009--0.4x0.4</title>
       </rect>
     </symbol>
   </defs>
@@ -222,23 +250,23 @@
     <use width="150" height="300" transform="matrix(0, 1, -1, 0, 165, 1574.999267578125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
     </use>
-    <rect width="300" height="600" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-7'); transform-origin: 1050.08px 1881.49px;" y="1581.49292" x="900" transform="matrix(0, 1, -1, 0, 149.94873046875, -16.854248046875)">
-      <title>table--004--1.2x2.4</title>
-    </rect>
-    <rect width="375" height="225" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-8'); transform-origin: 2028.57px 1637.44px;" y="1524.950928" x="1841.06897">
+    <use width="300" height="600" transform="matrix(0, 1, -1, 0, 1050, 1564.555786132813)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-3">
+      <title>table--004--1.2x2.4 y=0.3</title>
+    </use>
+    <use width="375" height="225" transform="matrix(1, 0, 0, 1, 1841.068969726563, 1524.950927734375)" xlink:href="#symbol-4">
       <title>bed--005--0.6x1.2 y=0.3</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-9'); transform-origin: 30.9254px -583.833px;" y="-658.832338" x="-44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 1889.081985686491, 2008.832571707468)">
+    </use>
+    <use width="150.0117950439453" height="150.0117950439453" transform="matrix(1, 0, 0, -0.994919359684, 1844.996337890625, 1349.611328125)" style="transform-origin: 75.0059px 75.0059px;" xlink:href="#symbol-5">
       <title>extra--001--fresher--0.5x0.5 y=0.7</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-10'); transform-origin: 119.085px 733.831px;" y="658.832338" x="44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 1981.923253218414, 691.169126238719)">
+    </use>
+    <use width="150" height="150" style="transform-origin: 75px 75px;" transform="matrix(1, 0, 0, -1, 2025, 1350)" xlink:href="#symbol-6">
       <title>extra--002--fresher--0.5x0.5 y=0.4</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-11'); transform-origin: 119.085px 733.831px;" y="658.832338" x="44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 2161.923253218413, 691.169126238719)">
+    </use>
+    <use width="150" height="150" style="transform-origin: 75px 75px;" transform="matrix(1, 0, 0, -1, 2205, 1350)" xlink:href="#symbol-6">
       <title>extra--002--fresher--0.5x0.5 y=0.4</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-12'); transform-origin: 119.085px 733.831px;" y="658.832338" x="44.080277" transform="matrix(1, -0.000073310599, -0.000073310599, -1, 1081.166051061028, 1591.168393830267)">
+    </use>
+    <use width="150" height="150" transform="matrix(1, 0, 0, -1, 1125, 2400)" style="" xlink:href="#symbol-7">
       <title>counter--009--0.4x0.4 y=0.6+0.1</title>
-    </rect>
+    </use>
   </g>
 </svg>

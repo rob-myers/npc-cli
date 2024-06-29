@@ -22,7 +22,7 @@
       "obsHashes": [895128349]
     },
     "bridge--042--8x9": {
-      "outputHash": 2099792990,
+      "outputHash": 2082843344,
       "pngHash": 628461375,
       "obsHashes": [-1257084114, 2018744846, 1321151666, -1175340879]
     },
@@ -347,9 +347,9 @@
     "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
     "stateroom--036--2x4": {"outputHash": 1062741444, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
-      "outputHash": -1264699275,
+      "outputHash": 1638178530,
       "pngHash": 1027833859,
-      "obsHashes": [1737062881]
+      "obsHashes": [942184542]
     },
     "table--009--0.8x0.8": {
       "outputHash": 1859167106,
@@ -4680,7 +4680,7 @@
         },
         {
           "symbolKey": "table--004--1.2x2.4",
-          "meta": {"key": "table--004--1.2x2.4"},
+          "meta": {"key": "table--004--1.2x2.4", "y": 0.3},
           "width": 1.5,
           "height": 3,
           "transform": [0, 1, -1, 0, 7.5, 8.57]
@@ -4690,14 +4690,14 @@
           "meta": {"key": "bed--005--0.6x1.2", "y": 0.3},
           "width": 1.875,
           "height": 1.125,
-          "transform": [1, 0, 0, 1, 9.21, 7.63]
+          "transform": [1, 0, 0, 1, 9.21, 7.62]
         },
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.7},
           "width": 0.75,
           "height": 0.75,
-          "transform": [1, 0, 0, -1, 9.23, 7.5]
+          "transform": [1, 0, 0, -0.995, 9.22, 7.5]
         },
         {
           "symbolKey": "extra--002--fresher--0.5x0.5",
@@ -11858,7 +11858,7 @@
             "obstacle": true,
             "table": true,
             "surface": true,
-            "y": 0.65,
+            "y": 0.35,
             "symKey": "table--004--1.2x2.4",
             "obsId": 0
           }
@@ -11875,70 +11875,70 @@
       "symbols": [
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 0.42]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 1.02]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 1.62]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [-1, 0, 0, 1, 1.57, 2.22]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 0.42]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 1.02]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 1.62]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [1, 0, 0, 1, -0.06, 2.22]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, 1, -1, 0, 0.94, -0.25]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
-          "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
           "transform": [0, -1, -1, 0, 0.94, 3.27]

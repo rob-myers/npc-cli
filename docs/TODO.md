@@ -4,6 +4,7 @@
 
 - 🚧 migrate sub-symbols to actual symbols
   - ✅ 301 ✅ 302 ✅ 303 ✅ 101 🚧 102
+  - ✅ bridge 🚧 lifeboat
   - consoles
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
