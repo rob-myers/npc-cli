@@ -25,7 +25,8 @@ import WorldCanvas from "./WorldCanvas";
 import Floor from "./Floor";
 import Ceiling from "./Ceiling";
 import Obstacles from "./Obstacles";
-import WallsAndDoors from "./WallsAndDoors";
+import Walls from "./Walls";
+import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
 import ContextMenu from "./ContextMenu";
@@ -64,10 +65,11 @@ export default function World(props) {
     floor: /** @type {State['floor']} */ ({ tex: {} }),
     ceil: /** @type {State['ceil']} */ ({ tex: {} }),
     obs: /** @type {*} */ (null), // Obstacles
-    vert: /** @type {State['vert']} */ ({
+    wall: /** @type {*} */ (null),
+    door: /** @type {State['door']} */ ({
       onTick() {},
       toggleDoor(_instanceId) {},
-    }), // WallsAndDoors
+    }),
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
@@ -141,7 +143,7 @@ export default function World(props) {
       // state.crowd.update(1 / 60, deltaMs);
       state.crowd.update(deltaMs);
       state.npc.onTick(deltaMs);
-      state.vert.onTick();
+      state.door.onTick();
       // info(state.r3f.gl.info.render);
     },
     update,
@@ -273,7 +275,8 @@ export default function World(props) {
               <Floor />
               <Ceiling />
               <Obstacles />
-              <WallsAndDoors />
+              <Walls />
+              <Doors />
             </group>
             {state.crowd && <>
               <Npcs/>
@@ -319,9 +322,8 @@ export default function World(props) {
  * @property {import('./Floor').State} floor
  * @property {import('./Ceiling').State} ceil
  * @property {import('./Obstacles').State} obs
- * Flat static objects: floor, ceiling, and obstacles
- * @property {import('./WallsAndDoors').State} vert
- * Vertical objects: doors (dynamic) and walls (static)
+ * @property {import('./Walls').State} wall
+ * @property {import('./Doors').State} door
  * @property {import('./Npcs').State} npc
  * Npcs (dynamic)
  * @property {import('./ContextMenu').State} menu

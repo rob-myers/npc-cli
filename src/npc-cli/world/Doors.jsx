@@ -14,11 +14,10 @@ import useStateRef from "../hooks/use-state-ref";
 /**
  * @param {Props} props
  */
-export default function WallsAndDoors(props) {
+export default function Doors(props) {
   const api = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    wallsInst: /** @type {*} */ (null),
     doorsInst: /** @type {*} */ (null),
 
     doorByPos: {},
@@ -70,19 +69,6 @@ export default function WallsAndDoors(props) {
         dId++;
       }));
     },
-    decodeWallInstanceId(instanceId) {
-      let foundWallSegId = instanceId;
-      const foundGmId = api.gmsData.wallPolySegCounts.findIndex(
-        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
-      );
-      const gm = api.gms[foundGmId];
-      const foundWallId = api.gmsData[gm.key].wallPolySegCounts.findIndex(
-        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
-      );
-      const wall = gm.walls[foundWallId];
-      // console.log({ foundGmId, foundWallId })
-      return { gmId: foundGmId, ...wall.meta, instanceId };
-    },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength, door } = meta;
       const length = segLength * ratio;
@@ -96,18 +82,7 @@ export default function WallsAndDoors(props) {
         { yScale: wallHeight, mat4: tmpMatFour1 },
       );
     },
-    getWallMat([u, v], transform, height, baseHeight) {
-      tmpMat1.feedFromArray(transform);
-      [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
-      const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-      const len = u.distanceTo(v);
-      return geomorphService.embedXZMat4(
-        [len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y],
-        { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
-      );
-    },
     onPointerDown(e) {
-      const target = /** @type {keyof typeof meshName} */ (e.object.name);
       api.events.next({
         key: "pointerdown",
         is3d: true,
@@ -119,15 +94,11 @@ export default function WallsAndDoors(props) {
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
         point: e.point,
-        meta: {
-          ...target === 'doors' && { door: true, instanceId: e.instanceId },
-          ...target === 'walls' && state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
-        },
+        meta: { door: true, instanceId: e.instanceId },
       });
       e.stopPropagation();
     },
     onPointerUp(e) {
-      const target = /** @type {keyof typeof meshName} */ (e.object.name);
       api.events.next({
         key: "pointerup",
         is3d: true,
@@ -139,10 +110,7 @@ export default function WallsAndDoors(props) {
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
         point: e.point,
-        meta: {
-          ...target === 'doors' && { door: true, instanceId: e.instanceId },
-          ...target === 'walls' && state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
-        },
+        meta: { door: true, instanceId: e.instanceId },
       });
       e.stopPropagation();
     },
@@ -175,21 +143,7 @@ export default function WallsAndDoors(props) {
       state.movingDoors.set(doorMeta.instanceId, doorMeta);
     },
     positionInstances() {
-      const { wallsInst: ws, doorsInst: ds } = state;
-
-      let wId = 0;
-      api.gms.forEach(({ key: gmKey, transform }) =>
-        api.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) =>
-          ws.setMatrixAt(wId++, state.getWallMat(
-            seg,
-            transform,
-            typeof meta.h === 'number' ? meta.h : undefined,
-            typeof meta.y === 'number' ? meta.y : undefined,
-          ))),
-      );
-      ws.instanceMatrix.needsUpdate = true;
-      ws.computeBoundingSphere();
-
+      const { doorsInst: ds } = state;
       Object.values(state.doorByPos).forEach(meta =>
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta))
       );
@@ -198,7 +152,7 @@ export default function WallsAndDoors(props) {
     },
   }));
 
-  api.vert = state;
+  api.door = state;
 
   React.useEffect(() => {
     state.buildLookups();
@@ -207,37 +161,23 @@ export default function WallsAndDoors(props) {
   }, [api.hash]);
 
   return (
-    <>
-      <instancedMesh
-        name={meshName.walls}
-        key={`${api.hash} ${meshName.walls}`}
-        ref={instances => instances && (state.wallsInst = instances)}
-        args={[quadGeometryXY, undefined, api.gmsData.wallCount]}
-        frustumCulled={false}
-        onPointerUp={state.onPointerUp}
-        onPointerDown={state.onPointerDown}
-        >
-        <meshBasicMaterial side={THREE.DoubleSide} color="black" />
-      </instancedMesh>
-
-      <instancedMesh
-        name={meshName.doors}
-        key={`${api.hash} ${meshName.doors}`}
-        ref={instances => instances && (state.doorsInst = instances)}
-        args={[quadGeometryXY, undefined, api.gmsData.doorCount]}
-        frustumCulled={false}
-        onPointerUp={state.onPointerUp}
-        onPointerDown={state.onPointerDown}
-      >
-        <instancedSpriteSheetMaterial
-          key={glsl.InstancedSpriteSheetMaterial.key}
-          side={THREE.DoubleSide}
-          map={api.decorTex}
-          transparent
-          // diffuse={new THREE.Vector3(1, 0, 1)}
-        />
-      </instancedMesh>
-    </>
+    <instancedMesh
+      name="doors"
+      key={api.hash}
+      ref={instances => instances && (state.doorsInst = instances)}
+      args={[quadGeometryXY, undefined, api.gmsData.doorCount]}
+      frustumCulled={false}
+      onPointerUp={state.onPointerUp}
+      onPointerDown={state.onPointerDown}
+    >
+      <instancedSpriteSheetMaterial
+        key={glsl.InstancedSpriteSheetMaterial.key}
+        side={THREE.DoubleSide}
+        map={api.decorTex}
+        transparent
+        // diffuse={new THREE.Vector3(1, 0, 1)}
+      />
+    </instancedMesh>
   );
 }
 
@@ -248,7 +188,6 @@ export default function WallsAndDoors(props) {
 
 /**
  * @typedef State
- * @property {THREE.InstancedMesh} wallsInst
  * @property {THREE.InstancedMesh} doorsInst
  * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
  * @property {Geomorph.DoorMeta[]} doorByInstId e.g. `doorByInstId[instanceId]`
@@ -256,14 +195,7 @@ export default function WallsAndDoors(props) {
  *
  * @property {() => void} addDoorUvs
  * @property {() => void} buildLookups
- * @property {(instanceId: number) => Geom.Meta} decodeWallInstanceId
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
- * @property {(
- *  seg: [Geom.Vect, Geom.Vect],
- *  transform: Geom.SixTuple,
- *  height?: number,
- *  baseHeight?: number,
- * ) => THREE.Matrix4} getWallMat
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(instanceId: number) => void} toggleDoor
@@ -271,14 +203,8 @@ export default function WallsAndDoors(props) {
  * @property {() => void} positionInstances
  */
 
-const textureLoader = new THREE.TextureLoader();
 const tmpVec1 = new Vect();
 const tmpVec2 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
-const tmpMatFour2 = new THREE.Matrix4();
 
-const meshName = /** @type {const} */ ({
-  doors: 'doors',
-  walls: 'walls',
-});

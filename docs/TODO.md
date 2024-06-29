@@ -39,6 +39,7 @@
     - ✅ draw polyDecals in ceiling (fixing HMR)
   - 🚧 prevent coinciding doors (flicker)
     - ✅ non-hull: detect/discard during flatten symbols
+    - ✅ separate WallsAndDoors
     - 🚧 hull: ensure separated by ensuring normals point towards gm
 
 - ✅ implement `click`
