@@ -369,7 +369,7 @@ class geomServiceClass {
     );
     return {
       seg: [src, src.clone().addScaled(widthNormal, baseRect.width)],
-      normal: heightNormal.clone(),
+      normal: heightNormal.clone().precision(6),
     };
   }
 
