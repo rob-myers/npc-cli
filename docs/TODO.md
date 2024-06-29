@@ -9,7 +9,7 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 try dark mode e.g. for better doors
+- ✅ try dark mode e.g. for better doors
   - ✅ dark standard door
   - ✅ dark hull door
   - ✅ can invert obstacles sprite-sheet
@@ -37,10 +37,13 @@
     - ✅ can specify polygon outlines in SVG symbol
     - ✅ api.gmsData[gmKey].polyDecals
     - ✅ draw polyDecals in ceiling (fixing HMR)
-  - 🚧 prevent coinciding doors (flicker)
-    - ✅ non-hull: detect/discard during flatten symbols
-    - ✅ separate WallsAndDoors
-    - 🚧 hull: ensure separated by ensuring normals point towards gm
+
+- 🚧 prevent coinciding doors (flicker)
+  - ✅ non-hull: detect/discard during flatten symbols
+  - ✅ separate WallsAndDoors
+  - 🚧 understand why doors open in the way they do (local)
+  - 🚧 understand why doors open in the way they do (transformed)
+  - 🚧 understand minimal case of two doors coinciding (two geomorph map)
 
 - ✅ implement `click`
 - test `click`
