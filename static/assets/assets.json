@@ -347,7 +347,7 @@
     "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
     "stateroom--036--2x4": {"outputHash": 1062741444, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
-      "outputHash": 1638178530,
+      "outputHash": 2105116103,
       "pngHash": 1027833859,
       "obsHashes": [942184542]
     },
@@ -11878,70 +11878,70 @@
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 1.57, 0.42]
+          "transform": [1, 0, 0, 1, 1.19, 0.41]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 1.57, 1.02]
+          "transform": [1, 0, 0, 1, 1.19, 1.01]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 1.57, 1.62]
+          "transform": [1, 0, 0, 1, 1.19, 1.61]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 1.57, 2.22]
+          "transform": [1, 0, 0, 1, 1.19, 2.21]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, 1, -0.06, 0.42]
+          "transform": [-1, 0, 0, 1, 0.32, 0.41]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, 1, -0.06, 1.02]
+          "transform": [-1, 0, 0, 1, 0.32, 1.01]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, 1, -0.06, 1.62]
+          "transform": [-1, 0, 0, 1, 0.32, 1.61]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, 1, -0.06, 2.22]
+          "transform": [-1, 0, 0, 1, 0.32, 2.21]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [0, 1, -1, 0, 0.94, -0.25]
+          "transform": [0, -1, -1, 0, 0.94, 0.11]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [0, -1, -1, 0, 0.94, 3.27]
+          "transform": [0, 1, -1, 0, 0.94, 2.89]
         }
       ],
       "removableDoors": [],
