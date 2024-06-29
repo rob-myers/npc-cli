@@ -264,6 +264,7 @@ class GeomorphService {
       rooms: rooms.map(x => x.precision(precision)),
       walls: [...joinedHullWalls, ...joinedWalls, ...unjoinedWalls].map(x => x.precision(precision)),
       windows,
+      unsorted: symbol.unsorted.map(x => x.precision(precision)),
       ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
     };
   }
@@ -373,6 +374,7 @@ class GeomorphService {
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       windows: json.windows.map(Connector.from),
+      unsorted: json.unsorted.map(Poly.from),
 
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
       navDoorwaysOffset: json.navDoorwaysOffset,
@@ -1044,6 +1046,7 @@ class GeomorphService {
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),
       windows: layout.windows.map((x) => x.json),
+      unsorted: layout.unsorted.map((x) => x.geoJson),
 
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
       navDoorwaysOffset: layout.navDoorwaysOffset,

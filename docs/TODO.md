@@ -33,6 +33,7 @@
     - ✅ draw hull walls differently
   - 🚧 different ceiling shades e.g. bridge
     - ✅ can specify polygon outlines in SVG symbol
+    - 🚧 api.gmsData[gmKey].polyDecals
     - 🚧 draw polyDecals in ceiling
   - prevent coinciding doors (flicker)
     - ✅ non-hull: detect/discard during flatten symbols

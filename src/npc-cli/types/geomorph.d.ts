@@ -108,7 +108,6 @@ declare namespace Geomorph {
     /** Union of uncut non-optional walls including hull walls. */
     walls: P[];
     windows: P[];
-    /** 🚧 refine? */
     unsorted: P[];
 
     /** Symbols can have sub symbols, e.g. hull symbols use them to layout a geomorph. */
@@ -184,6 +183,7 @@ declare namespace Geomorph {
     rooms: P[];
     walls: P[];
     windows: C[];
+    unsorted: P[];
 
     navDecomp: Geom.TriangulationGeneric<V>;
     /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
@@ -245,13 +245,14 @@ declare namespace Geomorph {
   interface GmData {
     gmKey: Geomorph.GeomorphKey;
     doorSegs: [Geom.Vect, Geom.Vect][];
+    /** Debug only */
+    navPoly?: THREE.BufferGeometry;
+    polyDecals: Geom.Poly[];
     wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
     /** Number of wall polygons in geomorph, where each wall can have many line segments */
     wallPolyCount: number;
     /** Per wall, number of line segments */
     wallPolySegCounts: number[];
-    /** Debug only */
-    navPoly?: THREE.BufferGeometry;
   }
 
   //#region decor

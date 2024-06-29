@@ -85,9 +85,10 @@ export default function World(props) {
       
       // gmsData[gmKey] is only written once
       state.gms.filter(({ key: gmKey }) => gmsData[gmKey].wallPolyCount === 0).forEach(
-        ({ key: gmKey, walls, doors }) => {
+        ({ key: gmKey, walls, doors, unsorted }) => {
           const gmData = gmsData[gmKey];
           gmData.doorSegs = doors.map(({ seg }) => seg);
+          gmData.polyDecals = unsorted.filter(x => x.meta.poly === true);
           gmData.wallSegs = walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
           gmData.wallPolyCount = walls.length;
           gmData.wallPolySegCounts = walls.map(({ outline, holes }) =>
@@ -355,5 +356,8 @@ export default function World(props) {
 /** @type {Geomorph.GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose',
-  doorSegs: [], wallSegs: [], navPoly: undefined, wallPolyCount: 0, wallPolySegCounts: [],
+  doorSegs: [], wallSegs: [],
+  navPoly: undefined,
+  polyDecals: [],
+  wallPolyCount: 0, wallPolySegCounts: [],
 };
