@@ -45,7 +45,7 @@
       ]
     },
     "console--005--1.2x4": {
-      "outputHash": 401526071,
+      "outputHash": 35496913,
       "pngHash": 1538262982,
       "obsHashes": [-1286788918]
     },
@@ -5061,28 +5061,28 @@
           "meta": {"key": "console--051--0.4x0.6"},
           "width": 0.75,
           "height": 0.75,
-          "transform": [-1, 0, 0, 1, 1.85, 4.87]
+          "transform": [1, 0, 0, 1, 1.1, 0.37]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6"},
           "width": 0.75,
           "height": 0.75,
-          "transform": [-1, 0, 0, 1, 1.85, 3.38]
+          "transform": [1, 0, 0, 1, 1.1, 1.87]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6"},
           "width": 0.75,
           "height": 0.75,
-          "transform": [-1, 0, 0, 1, 1.85, 1.87]
+          "transform": [1, 0, 0, 1, 1.1, 3.37]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6"},
           "width": 0.75,
           "height": 0.75,
-          "transform": [-1, 0, 0, 1, 1.85, 0.38]
+          "transform": [1, 0, 0, 1, 1.1, 4.87]
         }
       ],
       "removableDoors": [],
