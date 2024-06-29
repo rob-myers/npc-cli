@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Poly } from "../geom";
-import { wallHeight, gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { keys } from "../service/generic";
 import { drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
@@ -48,15 +48,25 @@ export default function Ceiling(props) {
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
+      const { nonHullCeilTops, polyDecals } = api.gmsData[gmKey];
+      
       // wall/door tops
       const strokeColor = 'rgba(150, 150, 150, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      const { nonHullCeilTops } = api.gmsData[gmKey];
       drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.08]);
       drawPolygons(ct, layout.doors.map(x => x.poly), [fillColor, strokeColor, 0.04]);
       drawPolygons(ct, hullWalls, [strokeColor, strokeColor, 0.06]);
       
+      // decals
+      polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
+        const strokeWidth = typeof x.meta.strokeWidth === 'number'
+          ? x.meta.strokeWidth * sguToWorldScale
+          : 0.08;
+        drawPolygons(ct, x, [x.meta.fill || 'red', x.meta.stroke || 'white', strokeWidth]);
+        // drawPolygons(ct, x, ['red', 'white', 0.08]);
+      });
+
       tex.needsUpdate = true;
     },
     onPointerDown(e) {
@@ -116,7 +126,7 @@ export default function Ceiling(props) {
   React.useEffect(() => {// ensure initial + redraw on HMR
     // 🚧 handle removal from api.gms (dynamic nav-mesh)
     keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
-  }, []);
+  }, [api.hash]);
 
   return <>
     {api.gms.map((gm, gmId) => (
@@ -146,6 +156,8 @@ export default function Ceiling(props) {
   </>
   
 }
+
+0;
 
 /**
  * @typedef Props

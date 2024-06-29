@@ -117,10 +117,10 @@
     <use width="120" height="180" transform="matrix(1, 0, 0, 1, 480, 2.5079998078325616e-9)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="120" height="180" transform="matrix(1, 0, 0, 1, 240, -0.000005207665253692539)" xlink:href="#symbol-2">
+    <use width="120" height="180" transform="matrix(1, 0, 0, 1, 240, -0.00000520766570843989)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="96" height="240" transform="matrix(1, 0, 0, 1, -0.0000010000005659094313, 0)" xlink:href="#symbol-1">
+    <use width="96" height="240" transform="matrix(1, 0, 0, 1, -0.000001000000679596269, 0)" xlink:href="#symbol-1">
       <title>medical-bed--006--1.6x3.6</title>
     </use>
     <use width="239.99949645996094" height="240.00010681152344" transform="matrix(0, -1, 1, 0, 960.00048828125, 362.10595703125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-6">
@@ -235,11 +235,11 @@
   <path d="M 840 359 L 840 569.106 L 846.031 546.734 L 863.183 479 L 878 444 L 895.884 411.902 L 914 385 L 934 361 L 934 360 L 840 360 L 840 359 Z" style="fill: rgb(255, 0, 0); transform-origin: 887px 464.053px;">
     <title>wall no-fill</title>
   </path>
-  <path d="M 355 365 L 355 530.43706 L 341.57025 477.40242 L 326.49912 441.80211 L 326.42026 441.66058 L 326.39383 441.61315 L 326.3673 441.56556 L 308.26328 409.10917 L 290.00463 381.99532 L 275.84189 365.00002 Z" style="stroke: rgb(0, 0, 0); opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>poly ceil fill=#fff stroke=#000 strokeWidth=4</title>
+  <path d="M 349 371 L 349 482.30073 L 347.27415 475.48531 L 331.89802 439.16455 L 331.81915 439.02304 L 331.66132 438.73979 L 331.63458 438.69181 L 331.60654 438.64149 L 313.24002 405.75776 L 294.81016 378.38969 L 288.65211 371.00003 Z" style="stroke: rgb(0, 0, 0); opacity: 0.5; fill: rgb(0, 0, 255);">
+    <title>poly ceil fill=#000000 stroke=#aaaaaa strokeWidth=4</title>
   </path>
-  <path d="M 909.88102 382.16512 L 909.8521 382.20806 L 891.5162 409.46839 L 873.5008 441.80219 L 858.4297 477.40244 L 844.99995 530.43708 L 844.99995 365.00002 L 924.15808 365.00002 L 909.99509 381.9956 Z" style="stroke: rgb(0, 0, 0); transform-origin: 887px 464.553px; opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>poly ceil fill=#fff stroke=#000 strokeWidth=4</title>
+  <path d="M 904.90365 378.81463 L 904.87264 378.86068 L 886.27484 406.54808 L 868.10176 439.16484 L 852.72574 475.48539 L 850.99989 482.30081 L 850.99989 371.00008 L 911.34778 371.00008 L 905.18877 378.39089 Z" style="stroke: rgb(0, 0, 0); transform-origin: 887px 464.553px; opacity: 0.5; fill: rgb(0, 0, 255);">
+    <title>poly ceil fill=#000000 stroke=#aaaaaa strokeWidth=4</title>
   </path>
   <rect x="88.5" y="-6" width="62.2" height="14.1" style="fill: rgb(0, 255, 255); fill-opacity: 0.5;">
     <title>window hull</title>

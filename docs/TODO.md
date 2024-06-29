@@ -33,13 +33,13 @@
     - can solve via fill = stroke
     - ✅ draw hull walls differently
   - ✅ try thicker ceiling tops via inset (avoid stroke going outside)
-  - 🚧 different ceiling shades e.g. bridge
+  - ✅ different ceiling shades e.g. bridge
     - ✅ can specify polygon outlines in SVG symbol
     - ✅ api.gmsData[gmKey].polyDecals
-    - 🚧 draw polyDecals in ceiling
-  - prevent coinciding doors (flicker)
+    - ✅ draw polyDecals in ceiling (fixing HMR)
+  - 🚧 prevent coinciding doors (flicker)
     - ✅ non-hull: detect/discard during flatten symbols
-    - hull: ensure separated by ensuring normals point towards gm
+    - 🚧 hull: ensure separated by ensuring normals point towards gm
 
 - ✅ implement `click`
 - test `click`

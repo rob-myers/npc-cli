@@ -84,7 +84,7 @@ export default function Floor(props) {
 
   React.useEffect(() => {// ensure initial + redraw on HMR
     keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
-  }, []);
+  }, [api.hash]);
 
   return <>
     {api.gms.map((gm, gmId) => (

@@ -164,11 +164,11 @@
   <path d="M 2088 315 L 2061 343 L 2093 376 L 2197 503 L 2288 652 L 2350 802 L 2380 902 L 2420 902 L 2356 711 L 2288 576 L 2221 468 L 2122 350 L 2088 315 Z" style="fill-opacity: 0.5; fill: rgb(255, 0, 0); transform-origin: 2240.5px 608.5px;">
     <title>wall dark</title>
   </path>
-  <path d="M 2383 1203 L 2420 1203 L 2419 2719 L 1201 2721 L 1200 2721 L -7 2719 L -8 1213 L 20 1213 L 43 1432 L 95 1610 L 179 1795 L 217.978 1857.034 L 300 1965.127 L 371.676 2042.501 L 472.002 2127.081 L 587.788 2213.318 L 654.081 2247.01 L 772.275 2302.363 L 874.371 2339.221 L 1108.261 2380.86 L 1213 2383.18 L 1371.268 2369.674 L 1500 2343.135 L 1671.37 2283.24 L 1811.529 2210.905 L 1859.628 2180.558 L 1952.146 2109.768 L 2034.153 2038.859 L 2109.358 1955.591 L 2171.915 1871.415 L 2223 1795 L 2307 1610 L 2359 1432 L 2383 1203 Z" style="fill-opacity: 0.5;">
-    <title>wall dark</title>
-  </path>
   <path d="M 1200.938 2685 L 1200.01481 2685 L 18.95932 2683.07694 L 18.1845 1475.38748 L 61.15922 1622.56826 L 147.71977 1813.14111 L 310.64332 2039.01906 L 571.39307 2248.21249 L 897.64533 2386.14117 L 1201 2423.24612 L 1504.35467 2386.14117 L 1830.60693 2248.21249 L 2091.35668 2039.01906 L 2254.28018 1813.14111 L 2340.84086 1622.56787 L 2383.81545 1475.41687 L 2383.04063 2683.07691 Z" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
     <title>wall no-fill</title>
+  </path>
+  <path d="M 2367.03432 2627.08528 L 1200.95736 2629 L 44.96568 2627.0858 L 44.27152 1621.79228 L 46.12331 1628.13111 L 133.10273 1819.69288 L 134.0711 1821.23429 L 134.14392 1821.35023 L 134.79181 1822.38144 L 134.82531 1822.43476 L 134.86544 1822.49868 L 135.00658 1822.7232 L 176.58156 1888.5035 L 261.85263 2000.46503 L 335.70658 2080.19016 L 337.25842 2081.4987 L 337.30905 2081.54142 L 337.97455 2082.10257 L 338.1727 2082.26951 L 440.94105 2168.78496 L 560.2812 2257.66895 L 560.50911 2257.78475 L 564.23687 2259.67895 L 632.06465 2294.1192 L 754.61783 2351.27333 L 860.88787 2389.63829 L 1103.09787 2432.75825 L 1214.64003 2435.22905 L 1378.75491 2421.22385 L 1513.88967 2393.36509 L 1691.97437 2331.12334 L 1695.1549 2329.48183 L 1695.24668 2329.43446 L 1839.35324 2254.83491 L 1891.24332 2221.84363 L 1986.158 2149.10268 L 2069.14451 2077.34678 L 2069.56453 2076.98364 L 2069.98466 2076.62039 L 2070.49828 2076.17632 L 2070.59168 2076.09556 L 2070.63305 2076.04976 L 2070.71589 2075.95804 L 2070.75721 2075.91228 L 2071.17067 2075.45449 L 2071.58415 2074.99674 L 2071.70814 2074.85947 L 2071.79139 2074.7673 L 2071.99831 2074.53821 L 2072.57753 2073.89693 L 2072.70728 2073.75328 L 2072.77909 2073.6737 L 2151.10413 1986.5959 L 2215.14507 1900.31491 L 2268.59139 1820.36755 L 2355.87675 1628.13123 L 2367.74623 1587.501 L 2367.03432 2627.08528 Z" style="fill-opacity: 0.5;">
+    <title>poly ceil fill=#444444 stroke=#ffffff strokeWidth=2</title>
   </path>
   <rect y="741.1" width="300" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="1505">
     <title>wall</title>
@@ -229,34 +229,34 @@
   </rect>
   <g style="">
     <title>symbols</title>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 674.992309570313, 309.987609863281)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 674.9923095703125, 309.98760986328125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 974.992309570313, 309.987640380859)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 974.9923095703125, 309.9876403808594)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 1274.992309570313, 309.987640380859)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 1274.9923095703125, 309.9876403808594)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 1574.992553710938, 309.987579345703)" style="transform-origin: 75.0064px 75.0065px;" xlink:href="#symbol-0">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(0, 1, -1, 0, 1574.9925537109375, 309.9875793457031)" style="transform-origin: 75.0064px 75.0065px;" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
     <use width="75" height="75" transform="matrix(0, -1, 1, 0, 202.5, 1555)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.4</title>
     </use>
-    <use width="75" height="75" transform="matrix(0.258819013834, 0.965926229954, -0.965926229954, 0.258819013834, 270.847259521484, 1822.433715820313)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(0.25881901383399963, 0.9659262299537659, -0.9659262299537659, 0.25881901383399963, 270.8472595214844, 1822.4337158203125)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.4</title>
     </use>
     <use width="150" height="300" transform="matrix(0, 1, -1, 0, 165, 1574.999267578125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
     </use>
-    <use width="300" height="600" transform="matrix(0, 1, -1, 0, 1050, 1564.555786132813)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-3">
+    <use width="300" height="600" transform="matrix(0, 1, -1, 0, 1050, 1564.5557861328125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-3">
       <title>table--004--1.2x2.4 y=0.3</title>
     </use>
-    <use width="375" height="225" transform="matrix(1, 0, 0, 1, 1841.068969726563, 1524.950927734375)" xlink:href="#symbol-4">
+    <use width="375" height="225" transform="matrix(1, 0, 0, 1, 1841.0689697265625, 1524.950927734375)" xlink:href="#symbol-4">
       <title>bed--005--0.6x1.2 y=0.3</title>
     </use>
-    <use width="150.0117950439453" height="150.0117950439453" transform="matrix(1, 0, 0, -0.994919359684, 1844.996337890625, 1349.611328125)" style="transform-origin: 75.0059px 75.0059px;" xlink:href="#symbol-5">
+    <use width="150.0117950439453" height="150.0117950439453" transform="matrix(1, 0, 0, -0.9949193596839905, 1844.996337890625, 1349.611328125)" style="transform-origin: 75.0059px 75.0059px;" xlink:href="#symbol-5">
       <title>extra--001--fresher--0.5x0.5 y=0.7</title>
     </use>
     <use width="150" height="150" style="transform-origin: 75px 75px;" transform="matrix(1, 0, 0, -1, 2025, 1350)" xlink:href="#symbol-6">
