@@ -4,7 +4,7 @@
     "102--hull": {"outputHash": 76689748, "pngHash": 184103855},
     "103--hull": {"outputHash": 179418752, "pngHash": -1937509879},
     "301--hull": {"outputHash": -2007094609, "pngHash": 787602800},
-    "302--hull": {"outputHash": -1579293418, "pngHash": -1557128953},
+    "302--hull": {"outputHash": 1783063856, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": 848567993,
       "pngHash": -299838577,
@@ -239,7 +239,7 @@
       "obsHashes": [1641095410]
     },
     "lifeboat--small-craft--2x4": {
-      "outputHash": 370800273,
+      "outputHash": 1843434665,
       "pngHash": -2036140918
     },
     "lounge--015--4x2": {"outputHash": -1477468156, "pngHash": 222627377},
@@ -3142,8 +3142,8 @@
           "meta": {
             "poly": true,
             "ceil": true,
-            "fill": "#222",
-            "stroke": "#fff",
+            "fill": "#222222",
+            "stroke": "#ffffff",
             "strokeWidth": 4
           }
         }
@@ -8377,8 +8377,8 @@
           "meta": {
             "poly": true,
             "floor": true,
-            "fill": "#fff",
-            "stroke": "#000",
+            "fill": "#ffffff",
+            "stroke": "#000000",
             "strokeWidth": 4
           }
         }

@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 -657960986 324846528 -1634513317",
+  "hash": "610044716 -2017700876 324846528 101469826",
   "mapsHash": 610044716,
-  "layoutsHash": -657960986,
+  "layoutsHash": -2017700876,
   "sheetsHash": 324846528,
-  "imagesHash": -1634513317,
+  "imagesHash": 101469826,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -5556,8 +5556,8 @@
           "meta": {
             "poly": true,
             "floor": true,
-            "fill": "#fff",
-            "stroke": "#000",
+            "fill": "#ffffff",
+            "stroke": "#000000",
             "strokeWidth": 4
           }
         }
@@ -20491,8 +20491,8 @@
           "meta": {
             "poly": true,
             "ceil": true,
-            "fill": "#222",
-            "stroke": "#fff",
+            "fill": "#222222",
+            "stroke": "#ffffff",
             "strokeWidth": 4
           }
         }
