@@ -8,10 +8,11 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { gmFloorExtraScale, wallHeight, worldToSguScale } from "../service/const";
 import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, mapValues } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
+import { geom } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { createCanvasTexDef, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
@@ -80,22 +81,25 @@ export default function World(props) {
       ...npcService,
     },
 
-    computeGmsData() {
-      const gmsData = state.gmsData;
-      
-      // gmsData[gmKey] is only written once
-      state.gms.filter(({ key: gmKey }) => gmsData[gmKey].wallPolyCount === 0).forEach(
-        ({ key: gmKey, walls, doors, unsorted }) => {
-          const gmData = gmsData[gmKey];
-          gmData.doorSegs = doors.map(({ seg }) => seg);
-          gmData.polyDecals = unsorted.filter(x => x.meta.poly === true);
-          gmData.wallSegs = walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
-          gmData.wallPolyCount = walls.length;
-          gmData.wallPolySegCounts = walls.map(({ outline, holes }) =>
-            outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
-          );
-        }
+    computeGmData({ key: gmKey, walls, doors, unsorted }) {// recomputed onchange geomorphs.json (dev only)
+      const gmData = state.gmsData[gmKey];
+
+      gmData.doorSegs = doors.map(({ seg }) => seg);
+      gmData.polyDecals = unsorted.filter(x => x.meta.poly === true);
+      gmData.wallSegs = walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
+      gmData.wallPolyCount = walls.length;
+      gmData.wallPolySegCounts = walls.map(({ outline, holes }) =>
+        outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
       );
+      const nonHullWallsTouchCeil = walls.filter(x => !x.meta.hull &&
+        (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
+      );
+      // inset so stroke does not jut out
+      gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.04));
+      gmData.unseen = false;
+    },
+    computeGmsData() {// recomputed when api.gms changes e.g. map changes
+      const gmsData = state.gmsData;
 
       gmsData.doorCount = state.gms.reduce((sum, { key }) => sum + gmsData[key].doorSegs.length, 0);
       gmsData.wallCount = state.gms.reduce((sum, { key }) => sum + gmsData[key].wallSegs.length, 0);
@@ -169,7 +173,6 @@ export default function World(props) {
         state.mapKey = props.mapKey;
         const mapDef = state.geomorphs.map[state.mapKey];
 
-        // map.gms.forEach(({ gmKey }) => state.ensureGmClass(gmKey));
         // on change map may see new gmKeys
         mapDef.gms.forEach(({ gmKey }) => {
           if (!state.floor.tex[gmKey]) {
@@ -187,6 +190,9 @@ export default function World(props) {
           geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
         );
 
+        // recompute gm-dependent data onchange geomorphs.json, or not seen yet
+        state.gms.forEach(gm => (dataChanged || state.gmsData[gm.key].unseen) && state.computeGmData(gm));
+        // always recompute gms-dependent data
         state.computeGmsData();
       }
 
@@ -330,7 +336,10 @@ export default function World(props) {
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
+ * @property {(gm: Geomorph.LayoutInstance) => void} computeGmData
+ * Data dependent on underlying `Geomorph.Layout`
  * @property {() => void} computeGmsData
+ * Data dependent on `api.gms: Geomorph.LayoutInstance[]`
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
@@ -356,8 +365,7 @@ export default function World(props) {
 /** @type {Geomorph.GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose',
-  doorSegs: [], wallSegs: [],
-  navPoly: undefined,
-  polyDecals: [],
-  wallPolyCount: 0, wallPolySegCounts: [],
+  doorSegs: [], navPoly: undefined, nonHullCeilTops: [], polyDecals: [],
+  unseen: true,
+  wallPolyCount: 0, wallPolySegCounts: [], wallSegs: [],
 };

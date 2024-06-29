@@ -247,7 +247,11 @@ declare namespace Geomorph {
     doorSegs: [Geom.Vect, Geom.Vect][];
     /** Debug only */
     navPoly?: THREE.BufferGeometry;
+    /** These wall polygons are inset, so stroke does not jut out */
+    nonHullCeilTops: Geom.Poly[];
     polyDecals: Geom.Poly[];
+    /** Has this geomorph never occurred in any map so far? */
+    unseen: boolean;
     wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
     /** Number of wall polygons in geomorph, where each wall can have many line segments */
     wallPolyCount: number;
