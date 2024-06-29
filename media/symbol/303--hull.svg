@@ -236,10 +236,10 @@
     <title>wall no-fill</title>
   </path>
   <path d="M 349 371 L 349 482.30073 L 347.27415 475.48531 L 331.89802 439.16455 L 331.81915 439.02304 L 331.66132 438.73979 L 331.63458 438.69181 L 331.60654 438.64149 L 313.24002 405.75776 L 294.81016 378.38969 L 288.65211 371.00003 Z" style="stroke: rgb(0, 0, 0); opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>poly ceil fill=#000000 stroke=#aaaaaa strokeWidth=4</title>
+    <title>poly ceil fill=#000000 stroke=#999999 strokeWidth=2</title>
   </path>
   <path d="M 904.90365 378.81463 L 904.87264 378.86068 L 886.27484 406.54808 L 868.10176 439.16484 L 852.72574 475.48539 L 850.99989 482.30081 L 850.99989 371.00008 L 911.34778 371.00008 L 905.18877 378.39089 Z" style="stroke: rgb(0, 0, 0); transform-origin: 887px 464.553px; opacity: 0.5; fill: rgb(0, 0, 255);">
-    <title>poly ceil fill=#000000 stroke=#aaaaaa strokeWidth=4</title>
+    <title>poly ceil fill=#000000 stroke=#999999 strokeWidth=2</title>
   </path>
   <rect x="88.5" y="-6" width="62.2" height="14.1" style="fill: rgb(0, 255, 255); fill-opacity: 0.5;">
     <title>window hull</title>
