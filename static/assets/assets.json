@@ -239,7 +239,7 @@
       "obsHashes": [1641095410]
     },
     "lifeboat--small-craft--2x4": {
-      "outputHash": 335373189,
+      "outputHash": 370800273,
       "pngHash": -2036140918
     },
     "lounge--015--4x2": {"outputHash": -1477468156, "pngHash": 222627377},
@@ -8362,7 +8362,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, 1, 0, 1.69, 0.79]
+          "transform": [0, 1, 1, 0, 1.7, 0.79]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
@@ -8376,7 +8376,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, 1, 0, 1.01, 1.84]
+          "transform": [0, 1, 1, 0, 1.02, 1.84]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
@@ -8390,28 +8390,28 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, 1, 0, 1.01, 2.74]
+          "transform": [0, 1, 1, 0, 1.02, 2.74]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, 1, 0, 0.18, 3.63]
+          "transform": [0, 1, 1, 0, 0.18, 3.64]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, 1, 0, 1.01, 3.63]
+          "transform": [0, 1, 1, 0, 1.02, 3.64]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, 1, 1, 0, 1.86, 3.63]
+          "transform": [0, 1, 1, 0, 1.86, 3.64]
         }
       ],
       "removableDoors": [],
