@@ -4,6 +4,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
+import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
@@ -20,12 +21,11 @@ export default function Npcs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     group: /** @type {*} */ (null),
-    obsGroup: /** @type {*} */ (null),
-    npc: {},
-    select: { curr: null, prev: null, many: [] },
-
     nextObstacleId: 0,
+    npc: {},
     obstacle: {},
+    obsGroup: /** @type {*} */ (null),
+    select: { curr: null, prev: null, many: [] },
 
     addBoxObstacle(position, extent, angle) {
       const { obstacle, success } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
@@ -78,13 +78,26 @@ export default function Npcs(props) {
       const { success } = api.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
       return success;
     },
-    onClickNpcs(e) {
-      // console.log(e);
+    onNpcPointerUp(e) {
       const npcKey = /** @type {string} */ (e.object.userData.npcKey);
       const npc = state.npc[npcKey];
-      info(`clicked npc: ${npc.key}`);
-      state.select.curr = npc.key;
+
       // 🚧 indicate selected npc somehow
+      state.select.curr = npc.key;
+
+      api.events.next({
+        key: "pointerup",
+        is3d: true,
+        modifierKey: isModifierKey(e.nativeEvent),
+        distancePx: api.ui.getDownDistancePx(),
+        justLongDown: api.ui.justLongDown,
+        pointers: api.ui.getNumPointers(),
+        rmb: isRMB(e.nativeEvent),
+        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
+        touch: isTouchDevice(),
+        point: e.point,
+        meta: { npc: true, npcKey },
+      });
       e.stopPropagation();
     },
     onTick(deltaMs) {
@@ -216,14 +229,14 @@ export default function Npcs(props) {
   return <>
 
     <group
-      name="obstacles"
+      name="nav-obstacles"
       ref={x => state.obsGroup = x ?? state.obsGroup}
     />
   
     <group
       name="npcs"
       ref={x => state.group = x ?? state.group}
-      onPointerUp={e => state.onClickNpcs(e)}
+      onPointerUp={e => state.onNpcPointerUp(e)}
     />
 
   </>;
@@ -249,7 +262,7 @@ export default function Npcs(props) {
  * @property {() => null | NPC.NPC} getSelected
  * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
  * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEventInit>) => void} onClickNpcs
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
