@@ -38,12 +38,17 @@
     - ✅ api.gmsData[gmKey].polyDecals
     - ✅ draw polyDecals in ceiling (fixing HMR)
 
-- 🚧 prevent coinciding doors (flicker)
+- ✅ prevent coinciding doors (flicker)
   - ✅ non-hull: detect/discard during flatten symbols
   - ✅ separate WallsAndDoors
-  - 🚧 understand why doors open in the way they do (local)
-  - 🚧 understand why doors open in the way they do (transformed)
-  - 🚧 understand minimal case of two doors coinciding (two geomorph map)
+  - ✅ understand why doors open in the way they do (local)
+    - hull normals face outwards
+    - e/w open up, n/s open right
+  - ✅ understand why doors open in the way they do (transformed)
+    - hull normal still face outwards
+    - aligned hull doors can open in different directions
+  - ✅ ensure two doors do not coincide
+  - ✅ use gmDoorKey format `g{gmId}d{doorId}`
 
 - ✅ implement `click`
 - test `click`
@@ -63,6 +68,11 @@
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
 
+- fuel symbol can use single rect for wall
+- machinery less white
+  - they have large white borders
+  - try instance color
+- thicker door ceiling tops
 - ✅ `hull-wall` tag -> `wall hull`
 - ✅ hull walls have `meta.hull` `true`
   - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`

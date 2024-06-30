@@ -19,8 +19,7 @@ export default function Doors(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     doorsInst: /** @type {*} */ (null),
-
-    doorByPos: {},
+    doorByKey: {},
     doorByInstId: [],
     movingDoors: new Map(),
 
@@ -46,36 +45,47 @@ export default function Doors(props) {
     },
     buildLookups() {
       let dId = 0;
-      const prevDoorByPos = state.doorByPos;
-      state.doorByPos = {};
+      const prevDoorByKey = state.doorByKey;
+      state.doorByKey = {};
       state.doorByInstId = [];
       api.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
-        const { seg: [u, v] } = door;
+        const { seg: [u, v], normal } = door;
         tmpMat1.feedFromArray(gm.transform);
         tmpMat1.transformPoint(tmpVec1.copy(u));
         tmpMat1.transformPoint(tmpVec2.copy(v));
         const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-        const key = /** @type {const} */ (`${tmpVec1.x},${tmpVec1.y}`);
-        const prev = prevDoorByPos[key];
-        state.doorByPos[key] = state.doorByInstId[dId] = {
-          gmId, doorId, door, srcSegKey: key,
+        
+        const gmDoorKey = /** @type {const} */ (`g${gmId}d${doorId}`);
+        const prev = prevDoorByKey[gmDoorKey];
+        state.doorByKey[gmDoorKey] = state.doorByInstId[dId] = {
+          key: gmDoorKey,
+          gmId, doorId, door,
           instanceId: dId,
           open : prev?.open ?? false,
           ratio: prev?.ratio ?? 1, // closed ~ ratio 1 i.e. maximal door length
           src: tmpVec1.json,
-          dir: { x : Math.cos(radians), y: Math.sin(radians) },
+          dir: { x : Math.cos(radians), y: Math.sin(radians) }, // 🚧 provide in Connector
+          normal: tmpMat1.transformSansTranslate(normal.clone()),
           segLength: u.distanceTo(v),
         };
         dId++;
       }));
     },
+    decodeDoorInstanceId(instanceId) {
+      let doorId = instanceId;
+      const gmId = api.gms.findIndex((gm) => (
+        doorId < gm.doors.length ? true : (doorId -= gm.doors.length, false)
+      ));
+      const { meta } = api.gms[gmId].doors[doorId];
+      return { gmId, doorId, ...meta, instanceId};
+    },
     getDoorMat(meta) {
-      const { src, dir, ratio, segLength, door } = meta;
+      const { src, dir, ratio, segLength, door, normal } = meta;
       const length = segLength * ratio;
 
-      // Hull doors are offset from each other to avoid z-fighting
-      const offsetX = door.meta.hull ? door.baseRect.height/2 * door.normal.x : 0;
-      const offsetY = door.meta.hull ? door.baseRect.height/2 * door.normal.y : 0;
+      // Hull doors are moved inside (`normal` points outside)
+      const offsetX = door.meta.hull ? door.baseRect.height/2 * -normal.x : 0;
+      const offsetY = door.meta.hull ? door.baseRect.height/2 * -normal.y : 0;
 
       return geomorphService.embedXZMat4(
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x + offsetX, src.y + offsetY],
@@ -94,7 +104,7 @@ export default function Doors(props) {
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
         point: e.point,
-        meta: { door: true, instanceId: e.instanceId },
+        meta: state.decodeDoorInstanceId(/** @type {number} */ (e.instanceId)),
       });
       e.stopPropagation();
     },
@@ -110,7 +120,7 @@ export default function Doors(props) {
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
         point: e.point,
-        meta: { door: true, instanceId: e.instanceId },
+        meta: state.decodeDoorInstanceId(/** @type {number} */ (e.instanceId)),
       });
       e.stopPropagation();
     },
@@ -128,9 +138,8 @@ export default function Doors(props) {
         // set e1 (x,,z)
         instanceMatrix.array[instanceId * 16 + 0] = meta.dir.x * length;
         instanceMatrix.array[instanceId * 16 + 2] = meta.dir.y * length;
-        // // translate
-        // // 🚧 hull doors need offset
-        // // 🚧 must slide "into wall", or fade, or texture compatible with "crumpling"
+        // translate
+        // 🚧 must slide "into wall", or fade, or texture compatible with "crumpling"
         // instanceMatrix.array[instanceId * 16 + 12 + 0] = meta.src.x + meta.dir.x * ((1 - meta.ratio) * meta.segLength);
         // instanceMatrix.array[instanceId * 16 + 12 + 2] = meta.src.y + meta.dir.y * ((1 - meta.ratio) * meta.segLength);
         if (meta.ratio === dstRatio) state.movingDoors.delete(instanceId);
@@ -144,7 +153,7 @@ export default function Doors(props) {
     },
     positionInstances() {
       const { doorsInst: ds } = state;
-      Object.values(state.doorByPos).forEach(meta =>
+      Object.values(state.doorByKey).forEach(meta =>
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta))
       );
       ds.instanceMatrix.needsUpdate = true;
@@ -189,12 +198,14 @@ export default function Doors(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} doorsInst
- * @property {{ [segSrcKey in `${number},${number}`]: Geomorph.DoorMeta }} doorByPos
+ * @property {{ [gmDoorId in `g${number}d${number}`]: Geomorph.DoorMeta }} doorByKey
+ * gmDoorKey format `g${gmId}d${doorId}`
  * @property {Geomorph.DoorMeta[]} doorByInstId e.g. `doorByInstId[instanceId]`
  * @property {Map<number, Geomorph.DoorMeta>} movingDoors To be animated until they open/close.
- *
- * @property {() => void} addDoorUvs
- * @property {() => void} buildLookups
+*
+* @property {() => void} addDoorUvs
+* @property {() => void} buildLookups
+ * @property {(instanceId: number) => Geom.Meta} decodeDoorInstanceId
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp

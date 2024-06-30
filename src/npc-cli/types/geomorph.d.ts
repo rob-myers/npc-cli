@@ -34,10 +34,10 @@ declare namespace Geomorph {
   }
 
   interface DoorMeta extends Geomorph.GmDoorId {
+    /** gmDoorKey format i.e. `g{gmId}d{doorId}` */
+    key: `g${number}d${number}`;
     door: Geomorph.Connector;
     instanceId: number;
-    /** `${door.seg.x},${door.seg.y}` */
-    srcSegKey: `${number},${number}`;
     /** Is the door open? */
     open: boolean;
     /** Between `0.1` (open) and `1` (closed) */
@@ -46,6 +46,7 @@ declare namespace Geomorph {
     src: Geom.VectJson;
     /** Direction of transformed door segment */
     dir: Geom.VectJson;
+    normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
   }

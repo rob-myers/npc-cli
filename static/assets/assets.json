@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": 45442960, "pngHash": 568633107},
+    "101--hull": {"outputHash": 1114848746, "pngHash": 568633107},
     "102--hull": {"outputHash": 76689748, "pngHash": 184103855},
     "103--hull": {"outputHash": 179418752, "pngHash": -1937509879},
     "301--hull": {"outputHash": -2007094609, "pngHash": 787602800},
@@ -222,7 +222,7 @@
     "fresher--025--3x2": {"outputHash": 1465272992, "pngHash": -1324814803},
     "fresher--036--4x2": {"outputHash": -1158095618, "pngHash": 633687707},
     "fuel--010--4x2": {
-      "outputHash": -847931687,
+      "outputHash": -2006535441,
       "pngHash": 858873613,
       "obsHashes": [-1049167637]
     },
@@ -1464,49 +1464,49 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 9, 0]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 15, 0]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 24, 0]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 9, 27]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 15, 27]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
-          "transform": [1, 0, 0, 1, 24, 27]
+          "transform": [1, 0, 0, 1, 24.03, 27]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.8},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 0, 27]
@@ -7848,23 +7848,44 @@
       "walls": [
         {
           "type": "Polygon",
-          "coordinates": [[[6.1, -0.1], [6.1, 0], [-0.1, 0], [-0.1, -0.1]]],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[6.1, 3], [6.1, 3.1], [-0.1, 3.1], [-0.1, 3]]],
-          "meta": {"wall": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [[[0, -0.1], [0, 3.1], [-0.1, 3.1], [-0.1, -0.1]]],
+          "coordinates": [
+            [
+              [6.0925, -0.0975],
+              [6.0925, 0.0025],
+              [-0.095, 0.0025],
+              [-0.095, -0.0975]
+            ]
+          ],
           "meta": {"wall": true}
         },
         {
           "type": "Polygon",
           "coordinates": [
-            [[6.09, -0.103], [6.09, 3.097], [5.99, 3.097], [5.99, -0.103]]
+            [[6.0925, 2.995], [6.0925, 3.095], [-0.095, 3.095], [-0.095, 2.995]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [0.0025, -0.0975],
+              [0.0025, 3.095],
+              [-0.0975, 3.095],
+              [-0.0975, -0.0975]
+            ]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [6.0925, -0.0975],
+              [6.0925, 3.095],
+              [5.9925, 3.095],
+              [5.9925, -0.0975]
+            ]
           ],
           "meta": {"wall": true}
         }
@@ -7883,7 +7904,7 @@
       "unsorted": [],
       "width": 6,
       "height": 3,
-      "pngRect": {"x": -0.095, "y": -0.098, "width": 6.19, "height": 3.195},
+      "pngRect": {"x": -0.095, "y": -0.0975, "width": 6.19, "height": 3.195},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []

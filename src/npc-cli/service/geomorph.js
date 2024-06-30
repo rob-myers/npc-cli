@@ -1165,7 +1165,6 @@ export class Connector {
         || this.meta.w && this.normal.x > 0
       ) {
         this.normal.scale(-1);
-        this.seg = [this.seg[1], this.seg[0]];
       }
     }
 
