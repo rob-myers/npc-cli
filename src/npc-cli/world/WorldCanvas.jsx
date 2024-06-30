@@ -41,13 +41,13 @@ export default function WorldCanvas(props) {
     },
     onCreated(rootState) {
       state.rootState = rootState;
-      api.threeReady = true;
-      api.r3f = rootState;
-      api.update(); // e.g. show stats
+      w.threeReady = true;
+      w.r3f = rootState;
+      w.update(); // e.g. show stats
     },
     onGridPointerDown(e) {
       // state.downPoint = e.point.clone();
-      api.events.next({
+      w.events.next({
         key: "pointerdown",
         is3d: true,
         keys: getModifierKeys(e.nativeEvent),
@@ -64,7 +64,7 @@ export default function WorldCanvas(props) {
       });
     },
     onGridPointerUp(e) {
-      api.events.next({
+      w.events.next({
         key: "pointerup",
         is3d: true,
         keys: getModifierKeys(e.nativeEvent),
@@ -93,7 +93,7 @@ export default function WorldCanvas(props) {
         epochMs: Date.now(),
         longTimeoutId: state.down || cameraKey ? 0 : window.setTimeout(() => {
           state.justLongDown = true;
-          api.events.next({
+          w.events.next({
             key: "long-pointerdown",
             is3d: false,
             keys: getModifierKeys(e.nativeEvent),
@@ -108,7 +108,7 @@ export default function WorldCanvas(props) {
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
       };
 
-      api.events.next({
+      w.events.next({
         key: "pointerdown",
         is3d: false,
         keys: getModifierKeys(e.nativeEvent),
@@ -145,7 +145,7 @@ export default function WorldCanvas(props) {
         return;
       }
       
-      api.events.next({
+      w.events.next({
         key: "pointerup",
         is3d: false,
         keys: getModifierKeys(e.nativeEvent),
@@ -165,7 +165,7 @@ export default function WorldCanvas(props) {
         return;
       }
 
-      api.events.next({
+      w.events.next({
         key: "pointerup-outside",
         is3d: false,
         keys: getModifierKeys(e),
@@ -178,9 +178,9 @@ export default function WorldCanvas(props) {
       });
     },
     onWheel(e) {
-      if (api.menu.isOpen === true) {
-        api.menu.hide();
-        api.menu.justOpen = false;
+      if (w.menu.isOpen === true) {
+        w.menu.hide();
+        w.menu.justOpen = false;
       }
     },
     setLastDown(e) {
@@ -200,8 +200,8 @@ export default function WorldCanvas(props) {
     },
   }));
 
-  const api = React.useContext(WorldContext);
-  api.ui = state;
+  const w = React.useContext(WorldContext);
+  w.ui = state;
 
   React.useEffect(() => {
     // 🚧 do not trigger on HMR

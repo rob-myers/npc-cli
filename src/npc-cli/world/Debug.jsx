@@ -12,7 +12,7 @@ import useUpdate from "../hooks/use-update";
  * @param {Props} props 
  */
 export default function Debug(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
@@ -20,10 +20,10 @@ export default function Debug(props) {
     selectedNavPolys: new THREE.BufferGeometry(),
 
     ensureNavPoly(gmKey) {
-      if (!api.gmsData[gmKey].navPoly) {
-        const layout = api.geomorphs.layout[gmKey];
+      if (!w.gmsData[gmKey].navPoly) {
+        const layout = w.geomorphs.layout[gmKey];
         // Fix normals for recast/detour -- triangulation ordering?
-        api.gmsData[gmKey].navPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
+        w.gmsData[gmKey].navPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
         update();
       }
     },
@@ -51,7 +51,7 @@ export default function Debug(props) {
       group.visible = true;
     },
     selectNavPolys(polyRefs) {
-      const { navMesh } = api.nav;
+      const { navMesh } = w.nav;
       const geom = new THREE.BufferGeometry();
       const positions = /** @type {number[]} */ ([]);
       const indices = /** @type {number[][]} */ [];
@@ -93,14 +93,14 @@ export default function Debug(props) {
     },
   }));
 
-  api.debug = state;
+  w.debug = state;
 
   React.useMemo(() => {
     state.navMesh = new NavMeshHelper({
-      navMesh: api.nav.navMesh,
+      navMesh: w.nav.navMesh,
       navMeshMaterial: greenWireFrameMat,
     });
-  }, [api.nav.navMesh]);
+  }, [w.nav.navMesh]);
 
   const update = useUpdate();
 
@@ -123,7 +123,7 @@ export default function Debug(props) {
       args={[state.selectedNavPolys, selectedNavPolysMaterial]}
     />
 
-    {props.showOrigNavPoly && api.gms.map((gm, gmId) => (
+    {props.showOrigNavPoly && w.gms.map((gm, gmId) => (
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
         onUpdate={(group) => group.applyMatrix4(gm.mat4)}
@@ -131,7 +131,7 @@ export default function Debug(props) {
       >
         <mesh
           name="origNavPoly"
-          args={[api.gmsData[gm.key].navPoly, origNavPolyMaterial]}
+          args={[w.gmsData[gm.key].navPoly, origNavPolyMaterial]}
           position={[0, 0.001, 0]}
           visible={props.showOrigNavPoly}
         />

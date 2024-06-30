@@ -15,7 +15,7 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Doors(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     doorsInst: /** @type {*} */ (null),
@@ -24,7 +24,7 @@ export default function Doors(props) {
     movingDoors: new Map(),
 
     addDoorUvs() {
-      const { decor, decorDim } = api.geomorphs.sheet;
+      const { decor, decorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
@@ -48,7 +48,7 @@ export default function Doors(props) {
       const prevDoorByKey = state.doorByKey;
       state.doorByKey = {};
       state.doorByInstId = [];
-      api.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
+      w.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
         const { seg: [u, v], normal } = door;
         tmpMat1.feedFromArray(gm.transform);
         tmpMat1.transformPoint(tmpVec1.copy(u));
@@ -73,10 +73,10 @@ export default function Doors(props) {
     },
     decodeDoorInstanceId(instanceId) {
       let doorId = instanceId;
-      const gmId = api.gms.findIndex((gm) => (
+      const gmId = w.gms.findIndex((gm) => (
         doorId < gm.doors.length ? true : (doorId -= gm.doors.length, false)
       ));
-      const { meta } = api.gms[gmId].doors[doorId];
+      const { meta } = w.gms[gmId].doors[doorId];
       return { gmId, doorId, ...meta, instanceId};
     },
     getDoorMat(meta) {
@@ -93,13 +93,13 @@ export default function Doors(props) {
       );
     },
     onPointerDown(e) {
-      api.events.next({
+      w.events.next({
         key: "pointerdown",
         is3d: true,
         keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
         justLongDown: false,
-        pointers: api.ui.getNumPointers(),
+        pointers: w.ui.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
@@ -109,13 +109,13 @@ export default function Doors(props) {
       e.stopPropagation();
     },
     onPointerUp(e) {
-      api.events.next({
+      w.events.next({
         key: "pointerup",
         is3d: true,
         keys: getModifierKeys(e.nativeEvent),
-        distancePx: api.ui.getDownDistancePx(),
-        justLongDown: api.ui.justLongDown,
-        pointers: api.ui.getNumPointers(),
+        distancePx: w.ui.getDownDistancePx(),
+        justLongDown: w.ui.justLongDown,
+        pointers: w.ui.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
@@ -128,7 +128,7 @@ export default function Doors(props) {
       if (state.movingDoors.size === 0) {
         return;
       }
-      const deltaMs = api.timer.getDelta();
+      const deltaMs = w.timer.getDelta();
       const { instanceMatrix } = state.doorsInst;
 
       for (const [instanceId, meta] of state.movingDoors.entries()) {
@@ -161,20 +161,20 @@ export default function Doors(props) {
     },
   }));
 
-  api.door = state;
+  w.door = state;
 
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
     state.addDoorUvs();
-  }, [api.hash]);
+  }, [w.hash]);
 
   return (
     <instancedMesh
       name="doors"
-      key={api.hash}
+      key={w.hash}
       ref={instances => instances && (state.doorsInst = instances)}
-      args={[quadGeometryXY, undefined, api.gmsData.doorCount]}
+      args={[quadGeometryXY, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
@@ -182,7 +182,7 @@ export default function Doors(props) {
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
-        map={api.decorTex}
+        map={w.decorTex}
         transparent
         // diffuse={new THREE.Vector3(1, 0, 1)}
       />

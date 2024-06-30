@@ -8,7 +8,7 @@ import { WorldContext } from "./world-context";
 
 export default function ContextMenu() {
 
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     menuEl: /** @type {*} */ (null),
@@ -20,7 +20,7 @@ export default function ContextMenu() {
     },
     show(at) {
       const menuDim = state.menuEl.getBoundingClientRect();
-      const canvasDim = api.ui.canvas.getBoundingClientRect();
+      const canvasDim = w.ui.canvas.getBoundingClientRect();
       const x = geom.clamp(at.x, 0, canvasDim.width - menuDim.width);
       const y = geom.clamp(at.y, 0, canvasDim.height - menuDim.height);
       state.menuEl.style.transform = `translate(${x}px, ${y}px)`;
@@ -29,11 +29,11 @@ export default function ContextMenu() {
     },
   }));
 
-  api.menu = state;
+  w.menu = state;
 
   const update = useUpdate();
 
-  const meta3d = api.ui.lastDown?.threeD?.meta;
+  const meta3d = w.ui.lastDown?.threeD?.meta;
 
   return (
     <div

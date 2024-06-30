@@ -124,7 +124,7 @@ history | filter 'x => /nav/.test(x)'
 ## NPC
 
 ```sh
-world decor.decor.door-g0r0-0
+w decor.decor.door-g0r0-0
 npc decor | map 0
 
 npc cfg '{ colliders: true }'
@@ -142,7 +142,7 @@ npc decor '{ key: "foo", type: "circle", center: '$( click 1 )', radius: 60 }'
 npc rm-decor foo
 
 nav $( click 2 ) >navPath # then click twice
-world debug.addNavPath foo ${navPath} && world debug.render
+w debug.addNavPath foo ${navPath} && w debug.render
 ```
 
 ```sh
@@ -240,7 +240,7 @@ click |
   map 'point => ({ npcKey: `bot_${Date.now()}`, point  })' |
   spawn --class=zhodani
 # then we can remove them
-npc rm $( world npcs.npc | keys | split | filter /bot_/ )
+npc rm $( w npcs.npc | keys | split | filter /bot_/ )
 
 npc get | split | map 'x => x.key'
 # or
@@ -326,17 +326,17 @@ npc light $( click 1 ) 1
 ```
 
 ```sh
-world
-world 'x => x.fov'
-world fov
-world "x => x.gmGraph.findRoomContaining($( click 1 ))"
-world gmGraph.findRoomContaining $( click 1 ) true
-world gmGraph.getRoomsVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )"
-world panZoom.distanceTo $( npc rob getPosition )
-call 'x => x.world' # see CACHE_SHORTCUTS
+w
+w 'x => x.fov'
+w fov
+w "x => x.gmGraph.findRoomContaining($( click 1 ))"
+w gmGraph.findRoomContaining $( click 1 ) true
+w gmGraph.getRoomsVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )"
+w panZoom.distanceTo $( npc rob getPosition )
+call 'x => x.w' # see CACHE_SHORTCUTS
 
-click | filter meta.door | world doors.onRawDoorClick &
-world fov.setRoom 0 2
+click | filter meta.door | w doors.onRawDoorClick &
+w fov.setRoom 0 2
 
 gm 0 'x => x.roomGraph'
 gm 0 hullDoors | map length
@@ -344,25 +344,25 @@ gm 0 hullDoors | split | map meta
 ```
 
 ```sh
-world 'x => x.npcs.getRandomRoom(
+w 'x => x.npcs.getRandomRoom(
   (meta, gmId) => gmId === 1, // in geomorph 1
   (meta) => !meta.hull && !meta.leaf, // not a hull/leaf room
 )'
 # {"gmId":1,"roomId":14}
-world 'x => x.npcs.getRandomRoomNavpoint(1, 14)'
+w 'x => x.npcs.getRandomRoomNavpoint(1, 14)'
 # {"x":674.04,"y":784.8199999999999}
 nav rob $_ | walk --open rob
 # off we go...
 
 nav rob $(
-  world 'x => x.npcs.getRandomRoomNavpoint(4, 5)'
+  w 'x => x.npcs.getRandomRoomNavpoint(4, 5)'
 ) | walk --open rob
 ```
 
 ```sh
 # slice a navPath
 nav rob $( click 1 ) > navPath
-world '(x, { home }) => x.npcs.service.sliceNavPath(home.navPath, 4, -1)' >navPath2
+w '(x, { home }) => x.npcs.service.sliceNavPath(home.navPath, 4, -1)' >navPath2
 ```
 
 ```sh
@@ -386,8 +386,8 @@ done
 
 ```sh
 # lock doorId 8 of gmId 0
-world 'x => x.doors.toggleLock(0, 8)'
-world doors.toggleLock 0 8
+w 'x => x.doors.toggleLock(0, 8)'
+w doors.toggleLock 0 8
 # give key to npc "rob"
 npc rob 'x => x.has.key[0][8] = true'
 
@@ -421,14 +421,14 @@ say --v="Google UK English Female" {1..5}Hello
 
 ```sh
 spawn --zhodani foo $( click 1 )
-world gmRoomGraph.getVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )"
-world gmRoomGraph.getVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )" false
-world gmRoomGraph.getVantages "$( click 1 | map meta )" "$( click 1 | map meta )"
+w gmRoomGraph.getVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )"
+w gmRoomGraph.getVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )" false
+w gmRoomGraph.getVantages "$( click 1 | map meta )" "$( click 1 | map meta )"
 
 # get a gmRoomId
 click 1 | map meta
 
-world npcs.canSee "$( click 1 )" "$( click 1 )"
+w npcs.canSee "$( click 1 )" "$( click 1 )"
 api npcs.canSee $( npc rob getPosition ) $( npc foo getPosition )
 ```
 
@@ -443,7 +443,7 @@ done
 # follow rob when out of sight
 while true; do
   test $(
-    world npcs.canSee $( npc rob getPosition ) $( npc foo getPosition )
+    w npcs.canSee $( npc rob getPosition ) $( npc foo getPosition )
   ) || (
     nav foo rob | walk --open foo
   )
@@ -499,14 +499,14 @@ click | walk --open rob
 ```
 
 ```sh
-world decor.byRoom.0 | map length
-world decor.byRoom.0.1.points | split
+w decor.byRoom.0 | map length
+w decor.byRoom.0.1.points | split
 
 api decor.byRoom.0.2.points | split | map key
 npc rm-decor $( foo/key )
 
 click 1 >fixed
-click | world npcs.canSee $fixed -
+click | w npcs.canSee $fixed -
 ```
 
 ```sh

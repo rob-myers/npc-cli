@@ -15,7 +15,7 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Npcs(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const gltf = useGLTF(glbMeta.url);
 
@@ -28,7 +28,7 @@ export default function Npcs(props) {
     select: { curr: null, prev: null, many: [] },
 
     addBoxObstacle(position, extent, angle) {
-      const { obstacle, success } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
+      const { obstacle, success } = w.nav.tileCache.addBoxObstacle(position, extent, angle);
       state.updateTileCache();
       if (success) {
         const id = state.nextObstacleId++;
@@ -41,7 +41,7 @@ export default function Npcs(props) {
       }
     },
     addCylinderObstacle(position, radius, height) {
-      const { obstacle, success } = api.nav.tileCache.addCylinderObstacle(position, radius, height);
+      const { obstacle, success } = w.nav.tileCache.addCylinderObstacle(position, radius, height);
       state.updateTileCache();
       if (success) {
         const id = state.nextObstacleId++;
@@ -54,9 +54,9 @@ export default function Npcs(props) {
       }
     },
     findPath(src, dst) {// 🔔 agent may follow different path
-      const query = api.crowd.navMeshQuery;
+      const query = w.crowd.navMeshQuery;
       const { path, success } = query.computePath(src, dst, {
-        filter: api.crowd.getFilter(0),
+        filter: w.crowd.getFilter(0),
       });
       if (success === false) {
         warn(`${'findPath'} failed: ${JSON.stringify({ src, dst })}`);
@@ -64,7 +64,7 @@ export default function Npcs(props) {
       return success === false || path.length === 0 ? null : path;
     },
     getClosestNavigable(p, maxDelta = 0.01) {
-      const { success, point: closest } = api.crowd.navMeshQuery.findClosestPoint(p);
+      const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p);
       if (success === false) {
         warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
       }
@@ -75,18 +75,18 @@ export default function Npcs(props) {
       return npcKey === null ? null : (state.npc[npcKey] ?? null);
     },
     isPointInNavmesh(p) {
-      const { success } = api.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
+      const { success } = w.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
       return success;
     },
     onNpcPointerUp(e) {
       const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-      api.events.next({
+      w.events.next({
         key: "pointerup",
         is3d: true,
         keys: getModifierKeys(e.nativeEvent),
-        distancePx: api.ui.getDownDistancePx(),
-        justLongDown: api.ui.justLongDown,
-        pointers: api.ui.getNumPointers(),
+        distancePx: w.ui.getDownDistancePx(),
+        justLongDown: w.ui.justLongDown,
+        pointers: w.ui.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
@@ -104,7 +104,7 @@ export default function Npcs(props) {
       const obstacle = state.obstacle[obstacleId];
       if (obstacle) {
         delete state.obstacle[obstacleId];
-        api.nav.tileCache.removeObstacle(obstacle.o);
+        w.nav.tileCache.removeObstacle(obstacle.o);
         state.obsGroup.remove(obstacle.mesh);
         state.updateTileCache();
       }
@@ -141,7 +141,7 @@ export default function Npcs(props) {
         throw Error(`invalid point: ${JSON.stringify(e.point)}`);
       } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
-      } else if (e.npcClassKey && !api.lib.isNpcClassKey(e.npcClassKey)) {
+      } else if (e.npcClassKey && !w.lib.isNpcClassKey(e.npcClassKey)) {
         throw Error(`invalid npcClassKey: ${JSON.stringify(e.npcClassKey)}`);
       }
       
@@ -175,7 +175,7 @@ export default function Npcs(props) {
           position: e.point,
           runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
-        }, api);
+        }, w);
 
         npc.initialize(gltf);
         npc.startAnimation('Idle');
@@ -197,20 +197,20 @@ export default function Npcs(props) {
       }
 
       npc.s.spawns++;
-      api.events.next({ key: 'spawned', npcKey: npc.key });
+      w.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
 
     // 🚧 old below
     updateTileCache() {// 🚧 spread out updates
-      const { tileCache, navMesh } = api.nav;
+      const { tileCache, navMesh } = w.nav;
       for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
       console.log(`updateTileCached: ${tileCache.update(navMesh).upToDate}`);
     },
   }));
 
-  api.npc = state;
+  w.npc = state;
 
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'development') {

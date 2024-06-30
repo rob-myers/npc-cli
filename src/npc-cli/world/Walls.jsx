@@ -13,18 +13,18 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Walls(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     wallsInst: /** @type {*} */ (null),
 
     decodeWallInstanceId(instanceId) {
       let foundWallSegId = instanceId;
-      const foundGmId = api.gmsData.wallPolySegCounts.findIndex(
+      const foundGmId = w.gmsData.wallPolySegCounts.findIndex(
         segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
       );
-      const gm = api.gms[foundGmId];
-      const foundWallId = api.gmsData[gm.key].wallPolySegCounts.findIndex(
+      const gm = w.gms[foundGmId];
+      const foundWallId = w.gmsData[gm.key].wallPolySegCounts.findIndex(
         segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
       );
       const wall = gm.walls[foundWallId];
@@ -42,13 +42,13 @@ export default function Walls(props) {
       );
     },
     onPointerDown(e) {
-      api.events.next({
+      w.events.next({
         key: "pointerdown",
         is3d: true,
         keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
         justLongDown: false,
-        pointers: api.ui.getNumPointers(),
+        pointers: w.ui.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
@@ -58,13 +58,13 @@ export default function Walls(props) {
       e.stopPropagation();
     },
     onPointerUp(e) {
-      api.events.next({
+      w.events.next({
         key: "pointerup",
         is3d: true,
         keys: getModifierKeys(e.nativeEvent),
-        distancePx: api.ui.getDownDistancePx(),
-        justLongDown: api.ui.justLongDown,
-        pointers: api.ui.getNumPointers(),
+        distancePx: w.ui.getDownDistancePx(),
+        justLongDown: w.ui.justLongDown,
+        pointers: w.ui.getNumPointers(),
         rmb: isRMB(e.nativeEvent),
         screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
         touch: isTouchDevice(),
@@ -76,8 +76,8 @@ export default function Walls(props) {
     positionInstances() {
       const { wallsInst: ws } = state;
       let wId = 0;
-      api.gms.forEach(({ key: gmKey, transform }) =>
-        api.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) =>
+      w.gms.forEach(({ key: gmKey, transform }) =>
+        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) =>
           ws.setMatrixAt(wId++, state.getWallMat(
             seg,
             transform,
@@ -90,18 +90,18 @@ export default function Walls(props) {
     },
   }));
 
-  api.wall = state;
+  w.wall = state;
 
   React.useEffect(() => {
     state.positionInstances();
-  }, [api.hash]);
+  }, [w.hash]);
 
   return (
     <instancedMesh
       name="walls"
-      key={api.hash}
+      key={w.hash}
       ref={instances => instances && (state.wallsInst = instances)}
-      args={[quadGeometryXY, undefined, api.gmsData.wallCount]}
+      args={[quadGeometryXY, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}

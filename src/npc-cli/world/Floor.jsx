@@ -13,15 +13,15 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Floor(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     gridPattern: createGridPattern(1.5 * worldToCanvas),
-    tex: api.floor.tex, // Pass in textures
+    tex: w.floor.tex, // Pass in textures
 
     drawGmKey(gmKey) {
       const [ct, tex, { width, height }] = state.tex[gmKey];
-      const layout = api.geomorphs.layout[gmKey];
+      const layout = w.geomorphs.layout[gmKey];
       const { pngRect, hullPoly, navDecomp, walls, doors } = layout;
 
       ct.clearRect(0, 0, width, height);
@@ -79,15 +79,14 @@ export default function Floor(props) {
     },
   }));
 
-
-  api.floor = state;
+  w.floor = state;
 
   React.useEffect(() => {// ensure initial + redraw on HMR
     keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
-  }, [api.hash]);
+  }, [w.hash]);
 
   return <>
-    {api.gms.map((gm, gmId) => (
+    {w.gms.map((gm, gmId) => (
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
         onUpdate={(group) => group.applyMatrix4(gm.mat4)}

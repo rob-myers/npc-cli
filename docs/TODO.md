@@ -30,6 +30,7 @@
 - consider naming: shell `api` vs world-level `api`
 - currently single quotes are breaking game-generators
 
+- `w` command by itself should not throw
 - syntax highlighting in the shell
   - https://github.com/wooorm/emphasize
   - for `declare -f foo`
