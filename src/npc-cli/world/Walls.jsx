@@ -31,7 +31,6 @@ export default function Walls(props) {
       // console.log({ foundGmId, foundWallId })
       return { gmId: foundGmId, ...wall.meta, instanceId };
     },
-
     getWallMat([u, v], transform, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
       [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));

@@ -49,7 +49,7 @@ export default function Npcs(props) {
       return npcKey === null ? null : (state.npc[npcKey] ?? null);
     },
     isPointInNavmesh(p) {
-      const { success } = api.crowd.navMeshQuery.findClosestPoint(p);
+      const { success } = api.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
       return success;
     },
     async spawn(e) {

@@ -10,8 +10,10 @@
 - extend chair/table symbols with chair/table tag on obstacle
 
 - ✅ implement `click`
-- test `click`
-- NPC click to move -> script
+- 🚧 test `click`
+  - ✅ fix false positive
+- "NPC click to move" should be a script
+- start new branch `use-decor`
 
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
