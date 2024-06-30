@@ -29,8 +29,12 @@
   }'
   ```
 - ✅ add background processes to profile
-- 🚧 can detect/ignore rmb in `click`
+
+- ✅ can detect/ignore rmb in `click`
+  - ❌ forward `rmb` from event
+  - ✅ `click --left` (only left, default) `click --right` (only right)
 - 🚧 click sees modifier key(s) so `walkTest` can run
+- 🚧 clean pointer-events i.e. avoid code duplication
 
 - start new branch `use-decor`
 
@@ -68,7 +72,6 @@
   - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
 - ✅ ContextMenu should work with ceiling
   - approach similar to obstacles
-- clean pointer-events i.e. avoid code duplication
 - support camera move via terminal
 - improve doors hard-coding in decor sprite-sheet
 - split component WallsAndDoors

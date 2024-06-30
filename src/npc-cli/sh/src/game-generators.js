@@ -11,15 +11,29 @@ export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
 }
 
 /**
+ * ```sh
+ * click
+ * click 1
+ * click --right
+ * click --any
+ * ```
  * @param {RunArg} ctxt
  */
 export async function* click({ api, args, world }) {
-  let numClicks = Number(args[0] || Number.MAX_SAFE_INTEGER);
+  const { opts, operands } = api.getOpts(args, {
+    boolean: ["left", "right", "any"],
+    // --left (left only) --right (right only) --any (either)
+  });
+  if (!opts["left"] && !opts["right"] && !opts["any"]) {
+    opts.left = true; // default to left clicks only
+  }
+
+  let numClicks = Number(operands[0] || Number.MAX_SAFE_INTEGER);
   if (!Number.isFinite(numClicks)) {
     throw new Error("format: \`click [{numberOfClicks}]\`");
   }
 
-  const clickId = args[0] ? api.getUid() : undefined;
+  const clickId = operands[0] ? api.getUid() : undefined;
   if (clickId) {
     api.addCleanup(() => world.lib.removeFirst(world.ui.clickIds, clickId));
   }
@@ -46,13 +60,20 @@ export async function* click({ api, args, world }) {
       eventsSub.add(() => reject(api.getKillError()));
     }));
 
+    if (
+      (opts.left === true && e.rmb === true)
+      || (opts.right === true && e.rmb === false)
+    ) {
+      continue;
+    }
+
     /** @type {NPC.ClickMeta} */
     const output = {
       x: world.lib.precision(e.point.x),
       y: world.lib.precision(e.point.y),
       z: world.lib.precision(e.point.z),
       meta: { ...e.meta,
-        // ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null }, // 🚧
+        // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
         navigable: world.npc.isPointInNavmesh(e.point),
       },
     };
