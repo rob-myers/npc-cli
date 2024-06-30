@@ -7,7 +7,7 @@ import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { Rect, Vect } from "../geom/index.js";
 import { isModifierKey, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { InfiniteGrid } from "../service/three.js";
+import { quadGeometryXZ } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
 import { Origin } from "../aux/MiscThree.jsx";
@@ -225,6 +225,8 @@ export default function WorldCanvas(props) {
       onPointerLeave={state.onPointerLeave}
       onWheel={state.onWheel}
     >
+      {props.children}
+
       {props.stats && state.rootEl &&
         <Stats showPanel={0} className={statsCss} parent={{ current: state.rootEl }} />
       }
@@ -250,19 +252,17 @@ export default function WorldCanvas(props) {
 
       <Origin />
 
-      <InfiniteGrid
-        size1={1.5}
-        size2={1.5}
-        distance={infiniteGridDistance}
-        color="#000"
-        // color="#fff"
-        rotation={[Math.PI / 2, 0, 0]}
-        position={[0, 0.0001, 0]}
+      <group
+        name="floor"
+        scale={[2000, 1, 2000]}
         onPointerDown={state.onGridPointerDown}
         onPointerUp={state.onGridPointerUp}
-      />
+        visible={false}
+      >
+        <mesh args={[quadGeometryXZ]} position={[-0.5, 0, -0.5]} />
+      </group>
 
-      {props.children}
+
     </Canvas>
   );
 }
@@ -315,8 +315,8 @@ const canvasCss = css`
     justify-content: center;
   }
   canvas {
-    background-color: rgba(255, 255, 255, 1);
-    /* background-color: rgba(20, 20, 20, 1); */
+    /* background-color: rgba(255, 255, 255, 1); */
+    background-color: rgba(20, 20, 20, 1);
     width: 100%;
     height: 100%;
   }
@@ -334,5 +334,3 @@ const statsCss = css`
  * @property {number} epochMs
  * @property {Geom.Vect} screenPoint
  */
-
-const infiniteGridDistance = isTouchDevice() ? 40 : 100;

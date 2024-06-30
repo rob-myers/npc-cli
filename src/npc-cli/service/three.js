@@ -5,7 +5,6 @@ import React from "react";
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
-import { InfiniteGridMaterial } from "./glsl";
 
 /** Unit quad extending from (0, 0, 0) to (1, 0, 1) */
 export const quadGeometryXZ = new THREE.BufferGeometry();
@@ -127,37 +126,6 @@ export const navMeta = {
   nodeMaterial: new THREE.MeshBasicMaterial({ color: navNodeColor }),
   nodeGeometry: new THREE.SphereGeometry(0.08),
 };
-
-/**
- * https://github.com/Fyrestar/THREE.InfiniteGridHelper/blob/master/InfiniteGridHelper.js
- * @param {InfiniteGridProps & import("@react-three/fiber").MeshProps} props
- */
-export function InfiniteGrid(props) {
-  const { size1, size2, color, distance, ...meshProps } = props;
-  return (
-    <mesh {...meshProps} >
-      {/* saw jitter when only 1 subdivision and camera close (?) */}
-      <planeGeometry args={[1000, 1000, 4, 4]} />
-      <infiniteGridMaterial
-        key={InfiniteGridMaterial.key}
-        uSize1={size1 ?? 10}
-        uSize2={size2 ?? 10}
-        uColor={new THREE.Color(color ?? "black")}
-        uDistance={distance ?? 100}
-        side={THREE.DoubleSide}
-        transparent
-      />
-    </mesh>
-  );
-}
-
-/**
- * @typedef InfiniteGridProps
- * @property {number} [size1]
- * @property {number} [size2]
- * @property {THREE.Color | string | number} [color]
- * @property {number} [distance]
- */
 
 /**
  * Collects nodes and materials from a THREE.Object3D.
