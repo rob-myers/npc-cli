@@ -21,8 +21,9 @@ export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
  */
 export async function* click({ api, args, world }) {
   const { opts, operands } = api.getOpts(args, {
-    boolean: ["left", "right", "any"],
+    boolean: ["left", "right", "any", "long"],
     // --left (left only) --right (right only) --any (either)
+    // --long (long-press only)
   });
   if (!opts["left"] && !opts["right"] && !opts["any"]) {
     opts.left = true; // default to left clicks only
@@ -63,6 +64,7 @@ export async function* click({ api, args, world }) {
     if (
       (opts.left === true && e.rmb === true)
       || (opts.right === true && e.rmb === false)
+      || (opts.long !== e.justLongDown)
     ) {
       continue;
     }
@@ -73,10 +75,9 @@ export async function* click({ api, args, world }) {
       y: world.lib.precision(e.point.y),
       z: world.lib.precision(e.point.z),
       ...e.keys && { keys: e.keys },
-      // ...e.modifierKey && { modifierKey: true },
       meta: { ...e.meta,
-        // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
         navigable: world.npc.isPointInNavmesh(e.point),
+        // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
     };
 
