@@ -10,26 +10,26 @@
 - extend chair/table symbols with chair/table tag on obstacle
 
 - ✅ start new branch `use-decor`
+- ✅ currently, async generator -> `run`, but what about async function -> `map`?
+- ✅ consider naming: shell `api` vs world-level `api`
+  - now using `w` for both World api and command
+
 - 🚧 clean pointer-events i.e. avoid code duplication
 
-- rebuild animation actions `IdleLeftLead`, `IdleRightLead`
-- ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
-
-- 🚧 decor pipeline supports svg -> png conversion
+- 🚧 decor pipeline based on *.svg
+  - media/decor/*.svg
   - svg render will need to be supported by npm module `canvas`
-  - maybe only media/decor/*.svg
 
 - next.js repo continued
   - migrate Viewer
 
+- rebuild animation actions `IdleLeftLead`, `IdleRightLead`
+- ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
+
+- currently single quotes are breaking game-generators
 - 🚧 Boxy SVG can be slow to save
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
-
-- currently, async generator -> `run`, but what about async function -> `map`?
-- consider naming: shell `api` vs world-level `api`
-- currently single quotes are breaking game-generators
-
 - `w` command by itself should not throw
 - syntax highlighting in the shell
   - https://github.com/wooorm/emphasize
@@ -40,6 +40,12 @@
 - machinery less white
   - they have large white borders
   - try instance color
+
+- prevent NPCs going through closed doors
+  - i.e. color nav query
+- use rapier physics 3d in web worker
+  - i.e. static triggers
+
 - ✅ fuel symbol can use single rect for wall
 - ✅ thicker door ceiling tops
 - ✅ `hull-wall` tag -> `wall hull`
@@ -49,26 +55,22 @@
   - approach similar to obstacles
 - support camera move via terminal
 - improve doors hard-coding in decor sprite-sheet
-- split component WallsAndDoors
+- 🚧 sometimes during development restarting stops working,
+  i.e. can see 3d floor but console logs `THREE.WebGLRenderer: Context Lost`
+  - try saving memory in web-worker, following recast-navigation-js
+- ✅ split component WallsAndDoors
 - ✅ split component Surfaces
   - Obstacles
   - Floor
   - Ceiling
-- animation from directly above looks weird e.g. arms should bend more
-- TTY can get out of sync when edit cmd.service, tty.shell?
+- ✅ animation from directly above looks weird e.g. arms should bend more
+- ❌ TTY can get out of sync when edit cmd.service, tty.shell?
 - ✅ can somehow ctrl-c `seq 100000000` (100 million)
   - same problem with `range 100000000`
   - same problem with `Array.from({ length: 100000000 })` (underlying JavaScript)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
-- 🚧 sometimes during development restarting stops working i.e. can see 3d floor,
-  but console logs `THREE.WebGLRenderer: Context Lost`
-  ```js
-  // seemed to start working after this:
-  c = document.createElement('canvas')
-  gl = c.getContext('webgl2')
-  ```
 - try leaving one logged-in window open before go offline, see how long it works
   > https://boxy-svg.com/questions/283/ability-to-use-while-offline
 - distinguish symbols:
@@ -163,8 +165,8 @@
   - to understand what recast outputs
   - to understand what detour inputs
 
-- only show ContextMenu on right click on desktop
-- show ContextMenu on double tap instead of long tap
+- ❌ only show ContextMenu on right click on desktop
+- ❌ show ContextMenu on double tap instead of long tap
 
 - if Viewer maximised and choose menu item, halve size of the Viewer
 
