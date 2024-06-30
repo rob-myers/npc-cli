@@ -1,8 +1,8 @@
 awaitWorld
 
 # open door on click
-click | filter meta.door | map '({meta},{world}) => {
-  world.door.toggleDoor(meta.instanceId)
+click | filter meta.door | map '({meta},{w}) => {
+  w.door.toggleDoor(meta.instanceId)
 }' &
 
 # write selectedNpcKey on click npc
