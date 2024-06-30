@@ -270,7 +270,7 @@
       "obsHashes": [-2014374468]
     },
     "medical--007--3x2": {"outputHash": -1524356726, "pngHash": -74184864},
-    "medical--008--3x2": {"outputHash": -842719016, "pngHash": -1263266565},
+    "medical--008--3x2": {"outputHash": 1608796794, "pngHash": -1263266565},
     "medical-bed--005--0.6x1.2": {
       "outputHash": 18930571,
       "pngHash": -172295595,
@@ -9024,14 +9024,14 @@
           "meta": {"key": "low-berth--003--1x1", "y": 0.7},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, 1, -1, 0, 4.55, 0]
+          "transform": [0, 1, -1, 0, 4.5, 0]
         },
         {
           "symbolKey": "low-berth--003--1x1",
           "meta": {"key": "low-berth--003--1x1", "y": 0.7},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, 1, -1, 0, 4.55, 1.5]
+          "transform": [0, 1, -1, 0, 4.5, 1.5]
         }
       ],
       "removableDoors": [
