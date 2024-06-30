@@ -28,17 +28,17 @@
   </image>
   <g>
     <title>symbols</title>
-    <use width="300" height="600" transform="matrix(0, -1, 1, 0, 150, 149.999816894531)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+    <use width="300" height="600" transform="matrix(0, -1, 1, 0, 150, 149.99981689453125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
       <title>console--022--1x2 y=0.4</title>
     </use>
   </g>
   <rect width="10" height="10" style="fill: rgb(216, 216, 216); fill-opacity: 0.5;" x="295" y="82.657997">
     <title>decor go label=office</title>
   </rect>
-  <rect x="585" y="50" width="30" height="200" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+  <rect x="585" y="34.999999" width="30" height="229.999995" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
     <title>door optional e</title>
   </rect>
-  <rect x="-15" y="50" width="30" height="200" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+  <rect x="-15" y="35" width="30" height="230" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
     <title>door optional w</title>
   </rect>
   <rect width="20" height="620" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="590" y="-10">

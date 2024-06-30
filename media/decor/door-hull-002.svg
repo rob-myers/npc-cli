@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 600" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+    <filter id="filter-3" color-interpolation-filters="sRGB" x="-50%" y="-50%" width="200%" height="200%" bx:preset="inner-shadow 1 0 0 4 0.68 rgba(0,0,0,0.7)">
+      <feOffset dx="0" dy="0"/>
+      <feGaussianBlur stdDeviation="4"/>
+      <feComposite operator="out" in="SourceGraphic"/>
+      <feComponentTransfer result="choke">
+        <feFuncA type="linear" slope="1.36"/>
+      </feComponentTransfer>
+      <feFlood flood-color="rgba(0,0,0,0.7)" result="color"/>
+      <feComposite operator="in" in="color" in2="choke" result="shadow"/>
+      <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <path d="M 500.000039 -0.000003 L 500.000039 599.999994 L 0.000016 599.999994 L 0.000016 -0.000003 L 500.000039 -0.000003 Z" style="stroke: rgb(0, 0, 0); filter: none; fill: rgb(255, 255, 255);">
+    <title>back</title>
+  </path>
+  <path d="M 474.999998 25.000001 L 474.999998 600.000047 L 25.000001 600.000047 L 25.000001 25.000001 L 474.999998 25.000001 Z" style="stroke: rgb(0, 0, 0); filter: url('#filter-3');">
+    <title>back</title>
+  </path>
+</svg>

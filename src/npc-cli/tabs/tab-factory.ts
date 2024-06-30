@@ -2,7 +2,7 @@ import React from "react";
 import loadable from "@loadable/component";
 import { IJsonModel, Model, TabNode } from "flexlayout-react";
 
-import type ActualTerminal from "../terminal/Terminal";
+import type ActualTerminal from "../terminal/WrappedTerminal";
 import {
   deepClone,
   tryLocalStorageGet,
@@ -81,10 +81,10 @@ const classToComponent = {
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
-  TestWorld: {
-    loadable: loadable(() => import("src/npc-cli/aux/TestWorld")),
+  World: {
+    loadable: loadable(() => import("src/npc-cli/world/World")),
     get:
-      (module: typeof import("src/npc-cli/aux/TestWorld")) =>
+      (module: typeof import("src/npc-cli/world/World")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
@@ -131,7 +131,7 @@ function FallbackComponentFactory(componentKey: string) {
     );
 }
 
-export const Terminal = loadable(() => import("../terminal/Terminal"), {
+export const Terminal = loadable(() => import("../terminal/WrappedTerminal"), {
   ssr: false,
 }) as typeof ActualTerminal;
 

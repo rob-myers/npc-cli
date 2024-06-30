@@ -1,10 +1,4 @@
-import {
-  graphql,
-  PageProps,
-  useStaticQuery,
-  type WrapPageElementBrowserArgs,
-  type WrapPageElementNodeArgs,
-} from "gatsby";
+import type { PageProps } from "gatsby";
 import React from "react";
 import { css } from "@emotion/css";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -12,9 +6,9 @@ import { useBeforeunload } from "react-beforeunload";
 import { menuClasses, sidebarClasses } from "react-pro-sidebar";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import type { AllFrontMatter, FrontMatter } from "./site.store";
+import { afterBreakpoint, allArticlesMeta, breakpoint, view } from "../const";
+import type { FrontMatter } from "./site.store";
 import { queryClient } from "../npc-cli/service/query-client";
-import { afterBreakpoint, breakpoint, view } from "../const";
 
 import Nav from "./Nav";
 import Viewer from "./Viewer";
@@ -24,32 +18,10 @@ import useSite from "./site.store";
 import useOnResize from "src/npc-cli/hooks/use-on-resize";
 
 export default function Root(props: Props) {
-  const frontMatter = props.pageContext?.frontmatter as FrontMatter | undefined;
-  const allFrontMatter = useStaticQuery(graphql`
-    query {
-      allMdx {
-        edges {
-          node {
-            frontmatter {
-              key
-              date
-              giscusTerm
-              info
-              label
-              path
-              tags
-            }
-          }
-        }
-      }
-    }
-  `) as AllFrontMatter;
+  const articleKey = (props.pageContext?.frontmatter as FrontMatter | undefined)?.key;
+  const articleMeta = articleKey ? allArticlesMeta[articleKey] : null;
 
-  React.useMemo(() => {
-    // clearAllBodyScrollLocks();
-    useSite.api.setArticleKey(frontMatter?.key);
-    useSite.api.initiate(allFrontMatter);
-  }, [frontMatter]);
+  React.useMemo(() => useSite.api.setArticleKey(articleKey), [articleKey]);
 
   // Update matchMedia computations
   useOnResize();
@@ -67,7 +39,7 @@ export default function Root(props: Props) {
             <article>{props.element}</article>
             <Comments
               id="comments"
-              term={frontMatter?.giscusTerm || frontMatter?.path || "fallback-discussion"}
+              term={articleMeta?.giscusTerm || articleMeta?.path || "fallback-discussion"}
             />
           </Main>
           <Viewer />

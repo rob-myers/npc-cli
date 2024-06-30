@@ -83,6 +83,7 @@ export default function ViewerControls({ api }: Props) {
           ? (100 * (window.innerHeight - (e.clientY + state.dragOffset))) / window.innerHeight
           : (100 * (window.innerWidth - (e.clientX + state.dragOffset))) / (window.innerWidth - getNavWidth());
         percent = Math.max(0, Math.min(100, percent));
+        // percent = Math.ceil(10 * percent) / 10;
         api.rootEl.style.setProperty("--viewer-min", `${percent}%`);
         // console.log(percent);
       }

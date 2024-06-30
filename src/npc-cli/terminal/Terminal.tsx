@@ -18,6 +18,7 @@ import useStateRef from "../hooks/use-state-ref";
 import type ActualTouchHelperUi from "./TouchHelperUi";
 import useUpdate from "../hooks/use-update";
 import { LinkProvider } from "./xterm-link-provider";
+import debounce from "debounce";
 
 export default function Terminal(props: Props) {
   const update = useUpdate();
@@ -40,7 +41,8 @@ export default function Terminal(props: Props) {
     webglAddon: new WebglAddon(),
     xterm: {} as ttyXtermClass,
 
-    cleanup: () => { },
+    cleanup: () => {},
+    fitDebounced: debounce(() => { state.fitAddon.fit(); }, 300),
     onFocus() {
       if (state.inputOnFocus) {
         state.xterm.setInput(state.inputOnFocus.input);
@@ -50,15 +52,17 @@ export default function Terminal(props: Props) {
     },
     async resize() {
       if (state.isTouchDevice) {
-        state.fitAddon.fit();
+        state.fitDebounced();
       } else {
+        // Hide input to prevent issues when screen gets too small
         const input = state.xterm.getInput();
         const cursor = state.xterm.getCursor();
         if (input && state.xterm.isPromptReady()) {
           state.xterm.clearInput();
           state.inputOnFocus = { input, cursor };
         }
-        setTimeout(() => state.fitAddon.fit());
+        // setTimeout(() => state.fitAddon.fit());
+        state.fitDebounced();
       }
     },
   }));
@@ -122,9 +126,9 @@ export default function Terminal(props: Props) {
       xterm.loadAddon(state.fitAddon = new FitAddon());
       xterm.open(state.container);
       xterm.loadAddon(state.webglAddon = new WebglAddon());
-      // state.webglAddon.onContextLoss(e => {
-      //   state.webglAddon.dispose(); // breaks HMR
-      // });
+      state.webglAddon.onContextLoss(e => {
+        state.webglAddon.dispose(); // breaks HMR
+      });
       
       state.resize();
       xterm.textarea?.addEventListener("focus", state.onFocus);
@@ -134,9 +138,11 @@ export default function Terminal(props: Props) {
         xterm.dispose();
       };
 
-      state.session.ttyShell.initialise(state.xterm).then(() => {
+      state.session.ttyShell.initialise(state.xterm).then(async () => {
+        await props.onReady?.(state.session);
         state.ready = true;
         update();
+        await state.session.ttyShell.runProfile();
       });
     }
   }, [props.disabled, state.ready]);
@@ -206,12 +212,13 @@ export default function Terminal(props: Props) {
 
   React.useEffect(() => () => {// Destroy session
     useSession.api.removeSession(props.sessionKey);
+    props.onUnmount?.();
     state.ready = false;
     state.session = state.xterm = {} as any;
     state.cleanup();
   }, []);
 
-  React.useEffect(() => {
+  React.useEffect(() => {// Handle resize
     state.bounds = bounds;
     state.ready && state.resize();
   }, [bounds]);
@@ -229,11 +236,13 @@ export default function Terminal(props: Props) {
   );
 }
 
-interface Props {
+export interface Props {
   disabled?: boolean;
   /** Can initialize variables */
   env: Partial<Session["var"]>;
-  onKey?: (e: KeyboardEvent) => void;
+  onKey?(e: KeyboardEvent): void;
+  onReady?(session: Session): void | Promise<void>;
+  onUnmount?(): void;
   sessionKey: string;
 }
 

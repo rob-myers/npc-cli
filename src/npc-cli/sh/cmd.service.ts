@@ -44,7 +44,6 @@ import useSession, { ProcessMeta, ProcessStatus, Session } from "./session.store
 import { cloneParsed, getOpts, parseService } from "./parse";
 import { ttyShellClass } from "./tty.shell";
 
-import { scriptLookup } from "./scripts";
 import { getCached } from "../service/query-client";
 import { observableToAsyncIterable } from "../service/observable-to-async-iterable";
 
@@ -542,10 +541,7 @@ class cmdServiceClass {
           // Say lines from stdin
           let datum: string | VoiceCommand | null;
           while ((datum = await read(meta)) !== EOF) {
-            yield {
-              voice: opts.v,
-              ...(typeof datum === "string" ? { text: datum } : datum),
-            };
+            yield { voice: opts.v, text: `${datum}` };
           }
         } else {
           // Say operands
@@ -594,10 +590,10 @@ class cmdServiceClass {
           const parsed = parseService.parse(script, true);
           // We mutate `meta` because it may occur many times deeply in tree
           // Also, pid will be overwritten in `ttyShell.spawn`
-          Object.assign(parsed.meta, { ...meta, fd: { ...meta.fd }, stack: meta.stack.slice() });
+          Object.assign(parsed.meta, { ...meta, ppid: meta.pid, fd: { ...meta.fd }, stack: meta.stack.slice() });
           const { ttyShell } = useSession.api.getSession(meta.sessionKey);
           // We spawn a new process (unlike bash `source`), but we don't localize PWD
-          await ttyShell.spawn(parsed, { posPositionals: args.slice(1) });
+          await ttyShell.spawn(parsed, { leading: meta.pid === 0, posPositionals: args.slice(1) });
         }
         break;
       }
@@ -914,9 +910,9 @@ class cmdServiceClass {
     return new Proxy(
       {
         home: session.var,
+        etc: session.etc,
         // cache: queryCache,
         // dev: useSession.getState().device,
-        etc: scriptLookup,
       },
       {
         get: (target, key) => {
@@ -1028,8 +1024,9 @@ export function isTtyAt(meta: Sh.BaseMeta, fd: number) {
 export function parseFnOrStr(input: string) {
   try {
     const parsed = Function(`return ${input}`)();
-    // 🤔 avoid e.g. 'toString' -> window.toString
-    if (typeof parsed === "function" && !(input in window)) {
+    // 🤔 avoid 'toString' -> window.toString
+    // 🤔 permit 'String'  -> window.String
+    if (typeof parsed === "function" && !(input in window && parsed.length === 0)) {
       return parsed;
     }
     if (parsed instanceof RegExp) {
@@ -1044,7 +1041,7 @@ function prettySafe(x: any) {
 }
 
 /**
- * Read once from stdin. We convert `{ eof: true }` to `null` for
+ * Read once from stdin. We convert `{ eof: true }` to `EOF` for
  * easier assignment, but beware of other falsy values.
  */
 async function read(meta: Sh.BaseMeta, chunks = false) {
@@ -1092,14 +1089,6 @@ export async function* sleep(
   } while (Date.now() - startedAt < duration - 1);
   // If process continually re-sleeps, avoid many cleanups
   removeFirst(process.cleanups, cleanup);
-}
-
-/**
- * Can prefix with `throw` for static analysis.
- * The outer throw will never be thrown.
- */
-function throwError(message: string, exitCode = 1) {
-  throw new ShError(message, exitCode);
 }
 
 //#endregion

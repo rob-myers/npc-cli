@@ -34,10 +34,10 @@ declare namespace Geomorph {
   }
 
   interface DoorMeta extends Geomorph.GmDoorId {
+    /** gmDoorKey format i.e. `g{gmId}d{doorId}` */
+    key: `g${number}d${number}`;
     door: Geomorph.Connector;
     instanceId: number;
-    /** `${door.seg.x},${door.seg.y}` */
-    srcSegKey: `${number},${number}`;
     /** Is the door open? */
     open: boolean;
     /** Between `0.1` (open) and `1` (closed) */
@@ -46,6 +46,7 @@ declare namespace Geomorph {
     src: Geom.VectJson;
     /** Direction of transformed door segment */
     dir: Geom.VectJson;
+    normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
   }
@@ -56,11 +57,12 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
-    /** `${mapsHash} ${layoutsHash} ${sheetsHash}` */
+    /** `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}` */
     hash: string;
     mapsHash: number;
     layoutsHash: number;
     sheetsHash: number;
+    imagesHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
     sheet: SpriteSheet;
@@ -107,7 +109,6 @@ declare namespace Geomorph {
     /** Union of uncut non-optional walls including hull walls. */
     walls: P[];
     windows: P[];
-    /** 🚧 refine? */
     unsorted: P[];
 
     /** Symbols can have sub symbols, e.g. hull symbols use them to layout a geomorph. */
@@ -183,6 +184,7 @@ declare namespace Geomorph {
     rooms: P[];
     walls: P[];
     windows: C[];
+    unsorted: P[];
 
     navDecomp: Geom.TriangulationGeneric<V>;
     /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
@@ -192,13 +194,13 @@ declare namespace Geomorph {
   type Layout = LayoutGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
   type LayoutJson = LayoutGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson, ConnectorJson>;
 
+  /**
+   * Created in the browser, based on @see {Layout}
+   */
   interface LayoutInstance extends Layout {
     gmId: number;
     transform: Geom.SixTuple;
     mat4: import("three").Matrix4;
-    // ...
-    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
-    doorSegs: [Geom.Vect, Geom.Vect][];
   }
 
   /**
@@ -221,6 +223,44 @@ declare namespace Geomorph {
   }
 
   type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
+
+  /**
+   * Data determined by `api.gms`.
+   * It can change on dynamic navMesh change.
+   */
+  interface GmsDataRoot {
+    /** Total number of walls, where each wall is a single quad:  */
+    wallCount: number;
+    /** Total number of doors, each being a single quad (🔔 may change):  */
+    doorCount: number;
+    /** Total number of obstacles, each being a single quad:  */
+    obstaclesCount: number;
+    /** Per gmId, total number of wall line segments:  */
+    wallPolySegCounts: number[];
+  }
+  
+  /**
+   * Data determined by a `Geomorph.GeomorphKey`.
+   * We do not store in `api.gms` to avoid duplication.
+   */
+  interface GmData {
+    gmKey: Geomorph.GeomorphKey;
+    doorSegs: [Geom.Vect, Geom.Vect][];
+    /** Debug only */
+    navPoly?: THREE.BufferGeometry;
+    /** These wall polygons are inset, so stroke does not jut out */
+    nonHullCeilTops: Geom.Poly[];
+    /** These door polygons are inset, so stroke does not jut out */
+    doorCeilTops: Geom.Poly[];
+    polyDecals: Geom.Poly[];
+    /** Has this geomorph never occurred in any map so far? */
+    unseen: boolean;
+    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
+    /** Number of wall polygons in geomorph, where each wall can have many line segments */
+    wallPolyCount: number;
+    /** Per wall, number of line segments */
+    wallPolySegCounts: number[];
+  }
 
   //#region decor
 
@@ -271,23 +311,31 @@ declare namespace Geomorph {
    */
   type SymbolKey = import('../service/geomorph').SymbolKey;
 
+  /**
+   * All sprite-sheet metadata.
+   */
   interface SpriteSheet {
     /**
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
-    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, SymbolObstacle>;
-    obstaclesWidth: number;
-    obstaclesHeight: number;
+    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
+    obstacleDim: { width: number; height: number; }
+    decorDim: { width: number; height: number; }
+    decor: DecorSheet;
   }
 
-  interface SymbolObstacle extends SymbolObstacleContext, Geom.RectJson {};
+  interface DecorSheet {
+    [decorKey: string]: Geom.RectJson & DecorSheetRectCtxt;
+  }
 
-  interface SymbolObstacleContext {
+  interface ObstacleSheetRectCtxt {
     symbolKey: Geomorph.SymbolKey;
     obstacleId: number;
     /** e.g. `chair` */
     type: string;
   }
+
+  type DecorSheetRectCtxt = Geom.Meta<{ fileKey: string }>;
 
 }

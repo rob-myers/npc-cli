@@ -33,7 +33,7 @@ See https://giscus.app/.
 
 ## Shader Syntax Highlighting
 
-Use VSCode plugin ` WebGL GLSL Editor` for syntax highlighting (*.glsl + inline-strings).
+Use VSCode plugin `glsl-literal` for syntax highlighting (*.glsl + inline-strings).
 
 ## Optional Dependencies
 

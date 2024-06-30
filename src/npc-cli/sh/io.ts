@@ -114,15 +114,15 @@ export interface ReadResult {
 }
 
 export async function preProcessWrite(process: ProcessMeta, device: Device) {
-  if (process.status === ProcessStatus.Killed || device.finishedReading(true)) {
+  if (process.status === ProcessStatus.Killed || device.finishedReading(true) === true) {
     throw killError(process);
   } else if (process.status === ProcessStatus.Suspended) {
-    let cleanup = () => {};
+    let cleanup: () => any;
     await new Promise<void>((resolve, reject) => {
       process.onResumes.push(resolve);
       process.cleanups.push((cleanup = () => reject(killError(process))));
     });
-    removeFirst(process.cleanups, cleanup);
+    removeFirst(process.cleanups, cleanup!);
   }
 }
 

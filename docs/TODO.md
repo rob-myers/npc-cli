@@ -3,30 +3,94 @@
 ## WIP
 
 - 🚧 migrate sub-symbols to actual symbols
-  - ✅ 301 ✅ 302 ✅ 303 🚧 101 🚧 102
+  - ✅ 301 ✅ 302 ✅ 303 ✅ 101 🚧 102
+  - ✅ bridge ✅ lifeboat
   - consoles
   - extras
+- extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
+- ✅ implement `click`
+- ✅ test `click`
+  - ✅ fix false positive
+- ✅ "NPC click to select" should be a script
+  - ✅ `click` detects npc clicks
+  ```sh
+  click | filter meta.npcKey |
+    map '({meta},{home}) => { home.selectedNpcKey = meta.npcKey }'
+  ```
+- ✅ "NPC click to move" should be a script
+  ```sh
+  click | filter meta.navigable | walkTest
+  ```
+- ✅ "door click to open" should be a script
+  ```sh
+  click | filter meta.door | map '({meta},{world}) => {
+    world.door.toggleDoor(meta.instanceId)
+  }'
+  ```
+- ✅ add background processes to profile
+- 🚧 can detect/ignore rmb in `click`
+- 🚧 click sees modifier key(s) so `walkTest` can run
 
-- obstacle right-click/long-press shows clicked type e.g. `bed`
-  - clicked point -> unit XZ square -> sprite-sheet
-  - clicked if respective pixel is non-transparent
+- start new branch `use-decor`
 
-- rethink sh/scripts.ts and sh/raw-loader.js
-  - maybe sh/functions.sh
-  - maybe sh/generators.js
-  - support HMR of both files
+- rebuild animation actions `IdleLeftLead`, `IdleRightLead`
+- ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
-- start writing first article
+- 🚧 decor pipeline supports svg -> png conversion
+  - svg render will need to be supported by npm module `canvas`
+  - maybe only media/decor/*.svg
 
-- get eslint working again e.g. for raw-loader.js
+- next.js repo continued
+  - migrate Viewer
 
+- 🚧 Boxy SVG can be slow to save
+  - https://boxy-svg.com/bugs/370/intermittent-slow-saving
+  - 🚧 try replicate again in Chrome vs Incognito Chrome
+
+- currently, async generator -> `run`, but what about async function -> `map`?
+- consider naming: shell `api` vs world-level `api`
+- currently single quotes are breaking game-generators
+
+- syntax highlighting in the shell
+  - https://github.com/wooorm/emphasize
+  - for `declare -f foo`
+  - for `PROFILE` via "hash-bang prefix"
+  - for `/etc/game-generators.sh` via "hash-bang prefix"
+- ignore certain tags e.g. `s`, `obsId`, `obstacleId`
+- machinery less white
+  - they have large white borders
+  - try instance color
+- ✅ fuel symbol can use single rect for wall
+- ✅ thicker door ceiling tops
+- ✅ `hull-wall` tag -> `wall hull`
+- ✅ hull walls have `meta.hull` `true`
+  - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
+- ✅ ContextMenu should work with ceiling
+  - approach similar to obstacles
+- clean pointer-events i.e. avoid code duplication
+- support camera move via terminal
+- improve doors hard-coding in decor sprite-sheet
+- split component WallsAndDoors
+- ✅ split component Surfaces
+  - Obstacles
+  - Floor
+  - Ceiling
+- animation from directly above looks weird e.g. arms should bend more
+- TTY can get out of sync when edit cmd.service, tty.shell?
+- ✅ can somehow ctrl-c `seq 100000000` (100 million)
+  - same problem with `range 100000000`
+  - same problem with `Array.from({ length: 100000000 })` (underlying JavaScript)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
-- sometimes during development restarting stops working i.e. can see 3d floor,
+- 🚧 sometimes during development restarting stops working i.e. can see 3d floor,
   but console logs `THREE.WebGLRenderer: Context Lost`
+  ```js
+  // seemed to start working after this:
+  c = document.createElement('canvas')
+  gl = c.getContext('webgl2')
+  ```
 - try leaving one logged-in window open before go offline, see how long it works
   > https://boxy-svg.com/questions/283/ability-to-use-while-offline
 - distinguish symbols:
@@ -1186,3 +1250,166 @@
   - ✅ can run on cmd/ctrl/shift click
   - ✅ fix final turn
   - ✅ fix initial turn
+
+- ✅ world api inputs should be Vector3Like (3d) not VectJson (2d) 
+
+- ✅ obstacle right-click/long-press shows clicked type e.g. `bed`
+  - ✅ clicked point -> unit XZ square -> sprite-sheet
+  - ✅ clicked if respective pixel is non-transparent
+  - ✅ meta enriched with respective obstacle's data
+  - ✅ show data in ContextMenu
+
+- ✅ remove `symId`
+
+- ✅ on change `create-npc.js`, Idle NPCs should not lose their target `this.agent.raw.get_targetRef() === 0`
+  - ✅ try moving crowdAgentParams elsewhere
+  - ✅ HMR TestWorld should not reload navMesh
+  - ✅ TestWorld invokes requestMovePosition for Idle NPCs too
+
+- ✅ fix `expr 42 | say`
+- ✅ fix contextmenu hide on long press pointerup over contextmenu
+- ✅ try improve stopping animation by overshoot/stop-early
+  - detect when only one corner left, change position, stop early
+- ✅ try improve stopping animation via `this.api.crowd.raw.requestMoveVelocity`
+  - this avoids using the "overshoot hack"
+- ✅ migrate to `@recast-navigation/three@latest`
+- ❌ try fix "target too close to border" by returning to overshoot hack
+- ✅ try fix foot step on finish walk
+  - ✅ try changing idle legs pose 
+  - ✅ Idle, IdleLeftLead, IdleRightLead
+  - ✅ On stop, choose animation via approach
+- ✅ agent.teleport on reach target to suppress velocity
+
+- ✅ sh/scripts.ts -> sh/functions.sh
+  - ℹ️ currently HMR restarts session, but we only want function defs to be overridden
+  - ✅ `<Terminal>` can receive new functions without restarting session
+    - via `<WrappedTerminal>`
+  - ✅ `source` code
+  - ✅ store as /etc/functions.sh
+  - ✅ migrate scripts from sh/scripts.sh
+  - ✅ migrate a profile
+
+- ✅ sh/raw-loader.js -> sh/{util,game}-generators.js
+  - ✅ on HMR overwrite function defs
+  - ✅ migrate remaining util generators
+  - ✅ setup nodemon via js, somehow providing changed filenames as arg to script
+  - ✅ create script `assets-nodemon.js` and npm script `watch-assets-new`
+  - ✅ assets.js should use `changedFiles` arg
+  - ✅ migrate from npm script `watch-assets`
+
+- ✅ assets-nodemon.js avoids invoking `yarn`
+- ✅ change hull doors back to original size
+
+- ❌ turn down gl.toneMappingExposure, try brightening skin texture directly
+- ✅ try 50% thinner arms/legs
+
+- ✅ clean TestWorld restoreCrowdAgents
+- ✅ replace TestNpcs demo with profile
+  - henceforth will need TTY to start things up
+- ✅ `~/PROFILE` keeps in-sync with `sh/src/profile1.sh`
+  - can e.g. manually run `source PROFILE` after HMR update
+- ✅ faster `awaitWorld`
+  - now poll every 0.5s
+- ✅ issue re-running `api npc.spawn` e.g. position, should idle
+- ✅ `source PROFILE` issue finding process during `spawn`
+  - seems `pid` is `ppid` is `8` which terminated during previous `source PROFILE`
+  - was mutating leading process meta, because `source` did not recognise was being executed there
+
+- ✅ TestWorld -> World etc.
+- ✅ Put something else in game-functions.sh
+- ✅ Move `api` from game-functions.sh -> game-generators.js
+
+
+- ✅ create decor spritesheet
+  - ℹ️ media/decor/* -> static/assets/decor.{png,webp}
+  - ✅ basic door images
+    - height `2m` (`80sgu`)
+      - `x5` (png-scale-up) -> `400sgu` (can scale down for spritesheet)
+    - ✅ hull door width `100 * worldScale` i.e. `2.5m`
+      - `500 x 400 sgu` (width x height)
+    - ✅ non-hull door width `220/5 * worldScale` i.e. `1.1m`
+      - `220 x 400 sgu`
+  - ✅ basic wall image
+  - ✅ `assets.js` generates sprite-sheet json
+  - ✅ `assets.js` generates sprite-sheet png/webp
+  - ✅ `assets.js` sprite-sheet generation is `changedFiles` sensitive
+    - skip other steps if only changedFiles are in media/decor
+  - ❌ combine "create sheet and draw" into single function (decor/obstacle)
+    - functions are quite complex, so keep them separate
+  - ✅ avoid drawing sheets if nothing changed
+  - ✅ avoid parsing maps if nothing changed
+  - ✅ doors use uv map (hard-coded)
+  - ❌ walls have uvs all pointing to basic wall image
+
+- ✅ `yarn watch-assets` should auto-restart when it crashes (like `nodemon` did)
+  - https://stackoverflow.com/a/697064/2917822
+
+- ✅ support shell syntax `until false; do echo foo; sleep 1; done`
+
+- ❌ get eslint working again e.g. for raw-loader.js
+- ✅ start a new repo based on next js
+  - ✅ https://github.com/rob-myers/npc-cli-next
+  - ✅ get mdx working
+
+- ✅ investigate slow down when npc walks towards/up-to edge
+  - `nvel` changes
+  - DT_CROWD_OBSTACLE_AVOIDANCE = 2
+  - ✅ change ag->params.updateFlags to not intersect DT_CROWD_OBSTACLE_AVOIDANCE
+
+- ✅ start writing first article
+  - ℹ️ manually associate `Nav` items with pages (wait until next.js)
+  - ✅ strip down "frontmatter" to `key`, with lookup for rest
+  - ✅ migrate SideNote component
+  - ✅ start writing index.mdx
+  - ✅ intro should begin with "npcs controlled by user"
+
+- ✅ fix decor sheet HMR
+  - ✅ file decor.png gets updated
+  - ✅ World gets updated
+  - ✅ Doors texture should be right way up
+
+- ✅ obstacle disappearing on decor sheet HMR
+  - ✅ redo obstacles in `<Npcs>`
+  - ✅ ensure obstacles re-added when nav-mesh updates
+
+
+- ✅ try dark mode e.g. for better doors
+  - ✅ dark standard door
+  - ✅ dark hull door
+  - ✅ can invert obstacles sprite-sheet
+    - ❌ image magick `convert input.png -channel RGB -negate output.png`
+    - ❌ in assets.js
+    - ✅ in browser after load texture
+  - ✅ lighter ceiling + minor clean
+  - ✅ draw gm floors inside browser instead of assets.js
+  - ✅ remove unused code from World/assets
+  - ✅ x2 resolution floor
+  - ✅ fix `World` break on comment out WallsAndDoors
+  - ✅ api.gmClass -> api.{floor,ceiling}
+    - ✅ move `debugNavPoly` into Debug and compute lazily
+    - ✅ remove `layout`
+    - ✅ merge into api.floor
+    - ✅ merge into api.ceiling
+  - ✅ draw grid on floor
+  - ✅ fix "low fuel" via `y=1.01 wallsH=1`
+  - ✅ move api.debug.navPoly -> api.derived.navPoly
+  - ✅ ceiling flicker issues
+    - can solve via fill = stroke
+    - ✅ draw hull walls differently
+  - ✅ try thicker ceiling tops via inset (avoid stroke going outside)
+  - ✅ different ceiling shades e.g. bridge
+    - ✅ can specify polygon outlines in SVG symbol
+    - ✅ api.gmsData[gmKey].polyDecals
+    - ✅ draw polyDecals in ceiling (fixing HMR)
+
+- ✅ prevent coinciding doors (flicker)
+  - ✅ non-hull: detect/discard during flatten symbols
+  - ✅ separate WallsAndDoors
+  - ✅ understand why doors open in the way they do (local)
+    - hull normals face outwards
+    - e/w open up, n/s open right
+  - ✅ understand why doors open in the way they do (transformed)
+    - hull normal still face outwards
+    - aligned hull doors can open in different directions
+  - ✅ ensure two doors do not coincide
+  - ✅ use gmDoorKey format `g{gmId}d{doorId}`

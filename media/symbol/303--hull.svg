@@ -117,10 +117,10 @@
     <use width="120" height="180" transform="matrix(1, 0, 0, 1, 480, 2.5079998078325616e-9)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="120" height="180" transform="matrix(1, 0, 0, 1, 240, -0.000005207663434703136)" xlink:href="#symbol-2">
+    <use width="120" height="180" transform="matrix(1, 0, 0, 1, 240, -0.00000520766570843989)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="96" height="240" transform="matrix(1, 0, 0, 1, -0.0000010000003385357559, 0)" xlink:href="#symbol-1">
+    <use width="96" height="240" transform="matrix(1, 0, 0, 1, -0.000001000000679596269, 0)" xlink:href="#symbol-1">
       <title>medical-bed--006--1.6x3.6</title>
     </use>
     <use width="239.99949645996094" height="240.00010681152344" transform="matrix(0, -1, 1, 0, 960.00048828125, 362.10595703125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-6">
@@ -158,16 +158,16 @@
     </use>
   </g>
   <path d="M -4 -4 L 4 -4 L 4 596 L 1196 596 L 1196 -4 L 1204 -4 L 1204 604 L -4 604 L -4 -4 Z" style="fill: rgb(255, 0, 0);">
-    <title>hull-wall sans-n--20x10</title>
+    <title>wall hull sans-n--20x10</title>
   </path>
   <rect y="-4" width="1208" height="8" style="fill: rgb(255, 0, 0);" x="-4">
-    <title>hull-wall</title>
+    <title>wall hull</title>
   </rect>
   <rect x="868.5" y="-6" width="62.2" height="14.1" style="fill-opacity: 0.4; fill: rgb(255, 0, 0);">
-    <title>hull-wall window</title>
+    <title>wall hull window</title>
   </rect>
   <rect x="88.5" y="-6" width="62.2" height="14.1" style="fill-opacity: 0.4; fill: rgb(255, 0, 0);">
-    <title>hull-wall window</title>
+    <title>wall hull window</title>
   </rect>
   <path d="M 1197 241 L 1187.30721 241 L 1159.66167 242.6163 L 1131.03315 247.26843 L 1107.21731 253.18798 L 1085.74603 259.57502 L 1078.66546 242.19574 L 1079.69722 241.86795 L 1104.09857 234.12005 L 1139.87501 226.30785 L 1175.95527 221.76214 L 1197.00001 221.38177 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 0, 255); fill-opacity: 0.5;">
     <title>obstacle table y=0.7</title>
@@ -181,28 +181,16 @@
   <rect x="120" y="150" width="5" height="5" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 790, 140)">
     <title>decor go label='common-area'</title>
   </rect>
-  <rect x="-4" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+  <rect x="-4" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull w</title>
   </rect>
-  <rect x="-4" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull w</title>
-  </rect>
-  <rect x="1196" y="250" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+  <rect x="1196" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull e</title>
   </rect>
-  <rect x="1196" y="310" width="8" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull e</title>
-  </rect>
-  <rect x="250" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+  <rect x="250" y="596" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull s</title>
   </rect>
-  <rect x="310" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull s</title>
-  </rect>
-  <rect x="850" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull s</title>
-  </rect>
-  <rect x="910" y="596" width="40" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+  <rect x="850" y="596" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull s</title>
   </rect>
   <rect x="127.5" y="238" width="44" height="6" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
@@ -229,12 +217,6 @@
   <rect x="897" y="309" width="6" height="44" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door</title>
   </rect>
-  <path d="M 360 360 L 360 569.106 L 353.969 546.734 L 336.817 479 L 322 444 L 304.116 411.902 L 286 385 L 266 361 L 266 360 L 360 360 Z" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>poly fillColor=#fff strokeColor=#000 strokeWidth=4</title>
-  </path>
-  <path d="M 840 360 L 840 569.106 L 846.031 546.734 L 863.183 479 L 878 444 L 895.884 411.902 L 914 385 L 934 361 L 934 360 L 840 360 Z" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); transform-origin: 887px 464.553px;">
-    <title>poly fillColor=#fff strokeColor=#000 strokeWidth=4</title>
-  </path>
   <rect x="248.964" y="247.203" width="61.982" height="3.628" style="fill: rgb(255, 0, 0);" transform="matrix(0, 1, -1, 0, 549.267517, 50.385498)">
     <title>wall</title>
   </rect>
@@ -252,6 +234,12 @@
   </path>
   <path d="M 840 359 L 840 569.106 L 846.031 546.734 L 863.183 479 L 878 444 L 895.884 411.902 L 914 385 L 934 361 L 934 360 L 840 360 L 840 359 Z" style="fill: rgb(255, 0, 0); transform-origin: 887px 464.053px;">
     <title>wall no-fill</title>
+  </path>
+  <path d="M 349 371 L 349 482.30073 L 347.27415 475.48531 L 331.89802 439.16455 L 331.81915 439.02304 L 331.66132 438.73979 L 331.63458 438.69181 L 331.60654 438.64149 L 313.24002 405.75776 L 294.81016 378.38969 L 288.65211 371.00003 Z" style="stroke: rgb(0, 0, 0); opacity: 0.5; fill: rgb(0, 0, 255);">
+    <title>poly ceil fill=#000000 stroke=#999999 strokeWidth=2</title>
+  </path>
+  <path d="M 904.90365 378.81463 L 904.87264 378.86068 L 886.27484 406.54808 L 868.10176 439.16484 L 852.72574 475.48539 L 850.99989 482.30081 L 850.99989 371.00008 L 911.34778 371.00008 L 905.18877 378.39089 Z" style="stroke: rgb(0, 0, 0); transform-origin: 887px 464.553px; opacity: 0.5; fill: rgb(0, 0, 255);">
+    <title>poly ceil fill=#000000 stroke=#999999 strokeWidth=2</title>
   </path>
   <rect x="88.5" y="-6" width="62.2" height="14.1" style="fill: rgb(0, 255, 255); fill-opacity: 0.5;">
     <title>window hull</title>

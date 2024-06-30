@@ -3,7 +3,7 @@ declare namespace NPC {
   /** Skin names. */
   type NpcClassKey = keyof import('../service/npc').NpcService['fromNpcClassKey'];
 
-  type NPC = import('../aux/create-npc').Npc;
+  type NPC = import('../world/create-npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */
@@ -24,21 +24,12 @@ declare namespace NPC {
     point: import("three").Vector3Like;
     meta?: Geom.Meta;
     requireNav?: boolean;
+    /** Should NPC have agent? */
+    agent?: boolean;
   }
 
-  interface BasicAgentMeta {
-    agentIndex: number;
-    position: import("three").Vector3Like;
-    target: import("three").Vector3Like | null;
-    // userData: Record<string, any>; // Not working?
-  }
 
-  interface BasicAgentLookup {
-    [agentKey: string]: NPC.BasicAgentMeta;
-  }
-
-  // 🚧 WIP
-  type AnimKey = 'Idle' | 'Walk' | 'Run';
+  type AnimKey = keyof import('../service/npc').NpcService['fromAnimKey'];
 
   type Event =
     | PointerUpOutsideEvent
@@ -47,7 +38,6 @@ declare namespace NPC {
     | LongPointerDownEvent
     // | PointerMoveEvent
     | { key: "disabled" }
-    | { key: "draw-floor-ceil"; gmKey: Geomorph.GeomorphKey }
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
     | { key: "spawned"; npcKey: string; }
@@ -58,6 +48,8 @@ declare namespace NPC {
   type PointerUpEvent = Pretty<BasePointerEvent & {
     key: "pointerup";
   }>;
+
+  type PointerUp3DEvent = PointerUpEvent & { is3d: true };
 
   type PointerUpOutsideEvent = Pretty<BasePointerEvent & {
     key: "pointerup-outside";
@@ -100,6 +92,10 @@ declare namespace NPC {
       }
   );
 
+  type ClickMeta = import('three').Vector3Like & {
+    meta: Geom.Meta;
+  };
+
   type TiledCacheResult = Extract<
     import("@recast-navigation/core").NavMeshImporterResult,
     { tileCache?: any }
@@ -115,9 +111,7 @@ declare namespace NPC {
     }[];
   }
 
-  type CrowdAgent = import("@recast-navigation/core").CrowdAgent & {
-    get userData(): Record<string, any>;
-  };
+  type CrowdAgent = import("@recast-navigation/core").CrowdAgent;
 
   type Obstacle = {
     id: number;

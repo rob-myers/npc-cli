@@ -8,19 +8,21 @@ import {
   tryLocalStorageSet,
   info,
   isDevelopment,
-  pause,
 } from "src/npc-cli/service/generic";
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
 import {
   DEV_EXPRESS_WEBSOCKET_PORT,
   GEOMORPHS_JSON_FILENAME,
   DEV_ORIGIN,
+  defaultSiteTopLevelState,
+  siteTopLevelKey,
+  allArticlesMeta,
 } from "src/const";
 import { queryClient } from "src/npc-cli/service/query-client";
 
 const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devtools((set, get) => ({
   articleKey: null,
-  articlesMeta: {},
+  articlesMeta: allArticlesMeta,
   browserLoaded: false,
   discussMeta: {},
   mainOverlay: false,
@@ -28,17 +30,6 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
   viewOpen: false,
 
   api: {
-    initiate({ allMdx: { edges } }) {
-      const articlesMeta = {} as State["articlesMeta"];
-      for (const {
-        node: { frontmatter: fm },
-      } of edges) {
-        if (fm && fm.key) {
-          articlesMeta[fm.key] = { ...fm, tags: [...(fm.tags || [])] };
-        }
-      }
-      set({ articlesMeta }, undefined, "initiate");
-    },
 
     initiateBrowser() {
       const cleanUps = [] as (() => void)[];
@@ -83,8 +74,10 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
 
       set(() => ({ browserLoaded: true }), undefined, "browser-load");
 
-      const topLevel: Pick<State, "navOpen" | "viewOpen"> =
-        safeJsonParse(tryLocalStorageGet("site-top-level") ?? "{}") ?? {};
+      const topLevel: typeof defaultSiteTopLevelState =
+        safeJsonParse(
+          tryLocalStorageGet(siteTopLevelKey) ?? JSON.stringify(defaultSiteTopLevelState)
+        ) ?? {};
       if (topLevel.viewOpen) {
         set(() => ({ viewOpen: topLevel.viewOpen }));
       }
@@ -128,7 +121,7 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
 
     onTerminate() {
       const { navOpen, viewOpen } = get();
-      tryLocalStorageSet("site-top-level", JSON.stringify({ navOpen, viewOpen }));
+      tryLocalStorageSet(siteTopLevelKey, JSON.stringify({ navOpen, viewOpen }));
     },
 
     setArticleKey(articleKey) {
@@ -162,7 +155,7 @@ export type State = {
   /** Key of currently viewed article */
   articleKey: null | string;
   /** Frontmatter of every article */
-  articlesMeta: { [articleKey: string]: FrontMatter };
+  articlesMeta: typeof allArticlesMeta;
   browserLoaded: boolean;
   discussMeta: { [articleKey: string]: GiscusDiscussionMeta };
 
@@ -172,7 +165,6 @@ export type State = {
 
   api: {
     // clickToClipboard(e: React.MouseEvent): Promise<void>;
-    initiate(allFm: AllFrontMatter): void;
     initiateBrowser(): () => void;
     isViewClosed(): boolean;
     /**
@@ -188,32 +180,24 @@ export type State = {
   };
 };
 
-export interface FrontMatter {
-  key: string;
+export type ArticleKey = (
+  | 'index'
+  | 'intro'
+);
+
+export interface ArticleMeta {
+  key: ArticleKey;
   date: string;
-  icon: string;
   giscusTerm?: string;
   info: string;
   label: string;
-  navGroup: null | number;
-  next: null | string;
   path: string;
-  prev: null | string;
   tags: string[];
 }
 
-export interface AllFrontMatter {
-  allMdx: {
-    edges: {
-      node: {
-        /** Values are technically possibly null */
-        frontmatter: FrontMatter;
-      };
-    }[];
-  };
-  allFile: {
-    iconFilenames: { node: { relativePath: string } }[];
-  };
+/** 🔔 In next repo we won't use frontmatter */
+export interface FrontMatter {
+  key: ArticleKey;
 }
 
 interface GiscusDiscussionMeta {

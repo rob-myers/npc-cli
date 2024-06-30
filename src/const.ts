@@ -1,3 +1,5 @@
+import type { ArticleKey, ArticleMeta } from "./components/site.store";
+
 /** See `npm run develop` */
 export const DEV_GATSBY_PORT = 8011;
 
@@ -52,3 +54,32 @@ export const view = {
   /** Small viewport: width; Large viewport: height */
   iconSize: "3.5rem",
 } as const;
+
+export const siteTopLevelKey = "site-top-level";
+
+export const defaultSiteTopLevelState = {
+  viewOpen: true,
+  navOpen: false,
+}
+
+export const allArticlesMeta: Record<ArticleKey, ArticleMeta> = {
+  index: {
+    key: 'index',
+    date: '2024-06-30',
+    info: 'Home page',
+    giscusTerm: '/home',
+    label: 'home',
+    path: '/',
+    tags: ['cli', 'web dev', 'behaviour', 'video games'],
+    
+  },
+  intro: {
+    key: 'intro',
+    date: '2024-02-18',
+    info: 'Introduction',
+    giscusTerm: '/intro',
+    label: 'intro',
+    path: '/intro',
+    tags: ['cli', 'web dev', 'behaviour', 'video games'],
+  },
+};

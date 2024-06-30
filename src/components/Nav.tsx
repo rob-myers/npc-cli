@@ -13,7 +13,7 @@ export default function Nav() {
 
   const state = useStateRef(() => ({
     onClickSidebar(e: React.MouseEvent) {
-      // console.log(e.target)
+      console.log(e.target)
       const el = e.target as HTMLElement;
       if (
         // outside buttons
@@ -136,31 +136,25 @@ const navTitleCss = css`
     transition: opacity 500ms;
     margin-left: 0.75rem;
 
-    /* display: flex; */
-    /* margin-top: ${nav.titleMarginTop}; */
-    /* margin-top: 0.75rem; */
-
-    background-color: #222;
-    
     .${menuClasses.button} {
+      pointer-events: none; // ignore clicks outside <a>
       height: ${view.barSize};
     }
     
     .${menuClasses.label} {
-      display: flex;
-      align-items: center;
-      
       text-transform: capitalize;
-      font-weight: 200;
-      font-size: 1.4rem;
       letter-spacing: 0.5rem;
-      /* filter: blur(1px); */
-      /* filter: brightness(0.7); */
       a {
+        pointer-events: all;
         color: #ddd;
       }
       @media (max-width: ${breakpoint}) {
-        font-size: 1.2rem;
+        font-weight: 500;
+        font-size: 1.1rem;
+      }
+      @media (min-width: ${afterBreakpoint}) {
+        font-weight: 200;
+        font-size: 1.3rem;
       }
     }
 
@@ -198,10 +192,6 @@ const toggleCss = css`
   align-items: center;
   cursor: pointer;
   
-  @media (max-width: ${breakpoint}) {
-    filter: invert(1);
-  }
-  @media (min-width: ${afterBreakpoint}) {
-    transform: scale(0.8);
-  }
+  transform: scale(0.8);
+  filter: invert(1);
 `;

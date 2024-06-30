@@ -1,5 +1,20 @@
 # Examples of commands
 
+🚧 update/remove commands from prev npc-cli
+
+```sh
+# directly invoking native functions
+echo foo >bar
+bar
+# foo
+bar | keysAll
+# ["length","constructor","anchor","at","big","blink","bold","charAt","charCodeAt","codePointAt","concat","endsWith","fontcolor","fontsize","fixed","includes","indexOf","isWellFormed","italics","lastIndexOf","link","localeCompare","match","matchAll","normalize","padEnd","padStart","repeat","replace","replaceAll","search","slice","small","split","strike","sub","substr","substring","sup","startsWith","toString","toWellFormed","trim","trimStart","trimLeft","trimEnd","trimRight","toLocaleLowerCase","toLocaleUpperCase","toLowerCase","toUpperCase","valueOf","name","prototype","fromCharCode","fromCodePoint","raw","0","1","2"]
+bar/charAt'(0)'
+# f
+bar/toUpperCase'()'
+# FOO
+```
+
 ## Local variables
 
 ```sh
@@ -318,7 +333,7 @@ world "x => x.gmGraph.findRoomContaining($( click 1 ))"
 world gmGraph.findRoomContaining $( click 1 ) true
 world gmGraph.getRoomsVantages "$( npc rob gmRoomId )" "$( npc foo gmRoomId )"
 world panZoom.distanceTo $( npc rob getPosition )
-call 'x => x.w' # see CACHE_SHORTCUTS
+call 'x => x.world' # see CACHE_SHORTCUTS
 
 click | filter meta.door | world doors.onRawDoorClick &
 world fov.setRoom 0 2

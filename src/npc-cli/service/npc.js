@@ -6,7 +6,8 @@ import { glbMeta } from "./const";
 export const npcService = {
 
   defaults: {
-    radius: glbMeta.radius * glbMeta.scale,
+    /** 🔔 division by 3 improves collisions */
+    radius: glbMeta.radius * glbMeta.scale / 3,
     runSpeed: glbMeta.runSpeed * glbMeta.scale,
     walkSpeed: glbMeta.walkSpeed * glbMeta.scale,
   },
@@ -14,6 +15,7 @@ export const npcService = {
   fromNpcClassKey: {
     'minecraft-alex-with-arms.png': true,
     'minecraft-ari.png': true,
+    'minecraft-borders.128x128.png': true,
     'minecraft-efe-with-arms.png': true,
     'minecraft-kai.png': true,
     'minecraft-makena-with-arms.png': true,
@@ -29,13 +31,31 @@ export const npcService = {
     'robot-vaccino.png': true,
   },
 
+  // 🚧 fix types
+  // /** @type {Record<NPC.AnimKey, true>} */
+  fromAnimKey: {
+    Idle: true,
+    IdleLeftLead: true,
+    IdleRightLead: true,
+    Walk: true,
+    Run: true,
+  },
+
   /**
    * @param {string} input 
    * @returns {input is NPC.NpcClassKey}
    */
-  isNpcClassKey: (input) => {
+  isNpcClassKey(input) {
     return input in npcService.fromNpcClassKey;
   },
+  
+  /**
+   * @param {string} input 
+   * @returns {input is NPC.AnimKey}
+   */
+  isAnimKey(input) {
+    return input in npcService.fromAnimKey;
+  }
 
 };
 

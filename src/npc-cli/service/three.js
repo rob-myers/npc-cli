@@ -1,28 +1,28 @@
+/**
+ * Also used by web worker.
+ */
 import React from "react";
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
-import { InfiniteGridMaterial } from "./glsl";
 
-/** Unit quad extending from origin to (1, 0, 1) */
+/** Unit quad extending from (0, 0, 0) to (1, 0, 1) */
 export const quadGeometryXZ = new THREE.BufferGeometry();
-// prettier-ignore
-const xzVertices = new Float32Array([0, 0, 0,  1, 0, 1,  1, 0, 0,  0, 0, 1]);
-const xzUvs = new Float32Array([0.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0]);
-const xzIndices = [0, 1, 2, 0, 3, 1];
-const xzNormals = [0, 1, 0,  0, 1, 0,  0, 1, 0,  0, 1, 0]; // Needed for shadows
+const xzVertices = new Float32Array([0,0,0, 1,0,0, 1,0,1, 0,0,1]);
+const xzUvs = new Float32Array([0,0, 1,0, 1,1, 0,1]);
+const xzIndices = [2, 1, 0, 0, 3, 2];
+const xzNormals = [0,1,0, 0,1,0, 0,1,0, 0,1,0]; // For shadows
 quadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(xzVertices.slice(), 3));
 quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
-/** Unit quad extending from origin to (1, 1, 0) */
+/** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
 export const quadGeometryXY = new THREE.BufferGeometry();
-// prettier-ignore
-const xyVertices = new Float32Array([0, 0, 0,  0, 1, 0,  1, 1, 0,  1, 0, 0]);
-const xyUvs = new Float32Array([0, 0, 0, 1, 1, 1, 1, 0]);
+const xyVertices = new Float32Array([0,0,0, 0,1,0, 1,1,0, 1,0,0]);
+const xyUvs = new Float32Array([0,1, 0,0, 1,0, 1,1]); // flipY false, Origin at topLeft of image
 const xyIndices = [2, 1, 0, 0, 3, 2];
-const xyNormals = [0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1];
+const xyNormals = [0,0,1, 0,0,1, 0,0,1, 0,0,1];
 quadGeometryXY.setAttribute("position", new THREE.BufferAttribute(xyVertices.slice(), 3));
 quadGeometryXY.setAttribute("uv", new THREE.BufferAttribute(xyUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xyNormals.slice(), 3 ) );
@@ -92,9 +92,14 @@ function decompToXZAttribs(decomp) {
   return { vertices, indices, uvs };
 }
 
-export const wireFrameMaterial = new THREE.MeshStandardMaterial({
+export const greenWireFrameMat = new THREE.MeshStandardMaterial({
   wireframe: true,
   color: "green",
+});
+
+export const redWireFrameMat = new THREE.MeshStandardMaterial({
+  wireframe: true,
+  color: "red",
 });
 
 export const tmpVectThree1 = new THREE.Vector3();
@@ -103,6 +108,7 @@ export const tmpVectThree3 = new THREE.Vector3();
 export const tmpMesh1 = new THREE.Mesh();
 export const tmpBox1 = new THREE.Box3();
 
+export const imageLoader = new THREE.ImageLoader();
 export const textureLoader = new THREE.TextureLoader();
 // console.log('cache enabled', THREE.Cache.enabled); // false
 
@@ -114,43 +120,12 @@ export const navMeta = {
   groundOffset: 0.01,
   lineMaterial: new LineMaterial({
     color: navPathColor,
-    linewidth: 0.005,
+    linewidth: 0.001,
     // vertexColors: true,
   }),
   nodeMaterial: new THREE.MeshBasicMaterial({ color: navNodeColor }),
   nodeGeometry: new THREE.SphereGeometry(0.08),
 };
-
-/**
- * https://github.com/Fyrestar/THREE.InfiniteGridHelper/blob/master/InfiniteGridHelper.js
- * @param {InfiniteGridProps & import("@react-three/fiber").MeshProps} props
- */
-export function InfiniteGrid(props) {
-  const { size1, size2, color, distance, ...meshProps } = props;
-  return (
-    <mesh {...meshProps} >
-      {/* saw jitter when only 1 subdivision and camera close (?) */}
-      <planeGeometry args={[1000, 1000, 2, 2]} />
-      <infiniteGridMaterial
-        key={InfiniteGridMaterial.key}
-        uSize1={size1 ?? 10}
-        uSize2={size2 ?? 10}
-        uColor={new THREE.Color(color ?? "black")}
-        uDistance={distance ?? 100}
-        side={THREE.DoubleSide}
-        transparent
-      />
-    </mesh>
-  );
-}
-
-/**
- * @typedef InfiniteGridProps
- * @property {number} [size1]
- * @property {number} [size2]
- * @property {THREE.Color | string | number} [color]
- * @property {number} [distance]
- */
 
 /**
  * Collects nodes and materials from a THREE.Object3D.
@@ -171,8 +146,56 @@ export function buildObjectLookup(object) {
   return data;
 }
 
+const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
+const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
+
+/**
+ * @param {number} width 
+ * @param {number} height 
+ */
+export function createCanvasTexDef(width, height) {
+  const el = document.createElement('canvas');
+  el.width = width;
+  el.height = height;
+  /** @type {CanvasTexDef} */
+  const def = [
+    /** @type {CanvasRenderingContext2D} */(el.getContext('2d')),
+    new THREE.CanvasTexture(el),
+    el,
+  ];
+  def[1].flipY = false; // align with XZ quad uv-map
+  return def;
+}
+
+/**
+ * @param {THREE.Vector3Like} position
+ * @param {THREE.Vector3Like} halfExtent
+ */
+export function createDebugBox(position, halfExtent) {
+  const mesh = new THREE.Mesh(boxGeometry, redWireFrameMat)
+  mesh.position.copy(position);
+  mesh.scale.set(halfExtent.x * 2, halfExtent.y * 2, halfExtent.z * 2);
+  return mesh;
+}
+
+/**
+ * @param {THREE.Vector3Like} position
+ * @param {number} radius
+ * @param {number} height
+ */
+export function createDebugCylinder(position, radius, height) {
+  const mesh = new THREE.Mesh(cylinderGeometry, redWireFrameMat)
+  mesh.position.copy(position);
+  mesh.scale.set(radius, height, radius);
+  return mesh;
+}
+
 export const yAxis = new THREE.Vector3(0, 1, 0);
 
 export const emptyGroup = new THREE.Group();
 
 export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
+
+/**
+ * @typedef {Pretty<[CanvasRenderingContext2D, THREE.CanvasTexture, HTMLCanvasElement]>} CanvasTexDef
+ */

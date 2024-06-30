@@ -58,7 +58,7 @@ export class ttyShellClass implements Device {
     this.process = useSession.api.getSession(this.sessionKey).process[0];
 
     // useSession.api.writeMsg(this.sessionKey, `${ansiColor.White}Connected to session ${ansiColor.Blue}${this.sessionKey}${ansiColor.Reset}`, 'info');
-    await this.runProfile();
+    // await this.runProfile();
   }
 
   private onMessage(msg: MessageFromXterm) {
@@ -140,7 +140,7 @@ export class ttyShellClass implements Device {
    * We run the profile by pasting it into the terminal.
    * This explicit approach can be avoided via `source`.
    */
-  private async runProfile() {
+  async runProfile() {
     const profile =
       useSession.api.getVar({ pid: 0, sessionKey: this.sessionKey } as Sh.BaseMeta, "PROFILE") ||
       "";
@@ -159,6 +159,14 @@ export class ttyShellClass implements Device {
     } finally {
       ttyShell.xterm.historyEnabled = true;
     }
+  }
+
+  async sourceEtcFile(filename: string) {
+    const session = useSession.api.getSession(this.sessionKey);
+    const src = session.etc[filename];
+    const term = parseService.parse(src);
+    this.provideContextToParsed(term);
+    return this.spawn(term);
   }
 
   /**
@@ -182,7 +190,7 @@ export class ttyShellClass implements Device {
       this.process.status = ProcessStatus.Running;
     } else {
       const { ppid, pgid } = meta;
-      const { positionals } = useSession.api.getProcess(meta);
+      const { positionals } = useSession.api.getProcess(meta); // parent
       const process = useSession.api.createProcess({
         ppid,
         pgid,
@@ -206,7 +214,7 @@ export class ttyShellClass implements Device {
 
     try {
       for await (const _ of semanticsService.File(term)) {
-        /** NOOP */
+        // Unreachable: yielded values already sent to devices (tty, fifo, null, var, voice)
       }
       term.meta.verbose &&
         console.warn(

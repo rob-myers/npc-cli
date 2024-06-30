@@ -278,102 +278,35 @@ export const basicGradientFrag = /*glsl*/`
 
     #include <opaque_fragment>
 
-    // 🚧
     vec3 color = mix(colorA, colorB, vUv.y);
     gl_FragColor = vec4(color, 1.0);
+    // gl_FragColor = vec4(color, 0.5); // needs transparent on mesh
 
   }
 `;
 
-const infiniteGridAxes = "xyz";
-/** e.g. `xy` */
-const infiniteGridPlaneAxes = infiniteGridAxes.slice(0, 2);
-
-/**
- * https://github.com/Fyrestar/THREE.InfiniteGridHelper/blob/master/InfiniteGridHelper.js
- */
-export const InfiniteGridMaterial = shaderMaterial(
-  {
-    uSize1: 10,
-    uSize2: 10,
-    uColor: new THREE.Color("black"),
-    uDistance: 100,
-  },
-  /* glsl */`
-  varying vec3 worldPosition;
-  uniform float uDistance;
-  
-  void main() {
-    vec3 pos = position.${infiniteGridAxes} * uDistance;
-    pos.${infiniteGridPlaneAxes} += cameraPosition.${infiniteGridPlaneAxes};
-    worldPosition = pos;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-  }
-  `,
-  /* glsl */`
-  varying vec3 worldPosition;
-        
-  uniform float uSize1;
-  uniform float uSize2;
-  uniform vec3 uColor;
-  uniform float uDistance;
-
-  float getGrid(float size) {
-    vec2 r = worldPosition.${infiniteGridPlaneAxes} / size;
-    vec2 grid = abs(fract(r - 0.5) - 0.5) / fwidth(r);
-    float line = min(grid.x, grid.y);
-    return 1.0 - min(line, 1.0);
-  }
-
-  void main() {
-    float d = 1.0 - min(distance(
-      cameraPosition.${infiniteGridPlaneAxes},
-      worldPosition.${infiniteGridPlaneAxes}) / uDistance,
-      1.0
-    );
-
-    float g1 = getGrid(uSize1);
-    float g2 = getGrid(uSize2);
-    
-    gl_FragColor = vec4(uColor.rgb, mix(g2, g1, g1) * pow(d, 3.0));
-    gl_FragColor.a = mix(0.5 * gl_FragColor.a, gl_FragColor.a, g2);
-    
-    gl_FragColor.a *= 0.5; // 👈 more transparent
-
-    if ( gl_FragColor.a <= 0.0 ) discard;
-  }
-  `,
-);
-
-export const ObstacleShaderMaterial = shaderMaterial(
+export const InstancedSpriteSheetMaterial = shaderMaterial(
   {
     map: null,
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
-    opacity: 1,
+    opacity: 0.6,
     alphaTest: 0.5,
     // mapTransform: new THREE.Matrix3(),
   },
-  // meshBasic.instanceUvsVert,
   minimalInstanceUvsVert,
-  // meshBasic.Frag,
   minimalInstanceUvsFrag,
 );
 
 extend({
-  ObstacleShaderMaterial,
-  InfiniteGridMaterial,
+  InstancedSpriteSheetMaterial,
 });
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
-      obstacleShaderMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial>;
-      infiniteGridMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
-        uSize1: number;
-        uSize2: number;
-        uColor: THREE.Color;
-        uDistance: number;
-      }
+      instancedSpriteSheetMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
+        map: THREE.CanvasTexture;
+      };
     }
   }
 }

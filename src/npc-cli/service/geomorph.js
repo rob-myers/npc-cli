@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { worldScale, precision, wallOutset, obstacleOutset } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -205,13 +205,19 @@ class GeomorphService {
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
     const uncutWalls = symbol.walls;
-    const emptyObject = {};
+    const plainWallMeta = { wall: true };
+    const hullWallMeta = { wall: true, hull: true };
     /**
-     * Cutting pointwise avoids errors (e.g. for 301). It also permits us
-     * to propagate wall `meta` whenever it has 'y' (base height) or 'h' (height).
+     * Cutting pointwise avoids errors (e.g. for 301).
+     * It also permits us to propagate wall `meta` whenever:
+     * - it has 'y' (base height) or 'h' (height)
+     * - it has 'hull' (hull wall)
      */
     const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
-      Object.assign(y, { meta: 'y' in x.meta || 'h' in x.meta ? x.meta : emptyObject } )
+      Object.assign(y, { meta: 'y' in x.meta || 'h' in x.meta
+        ? x.meta
+        : x.meta.hull === true ? hullWallMeta : plainWallMeta
+      })
     ));
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
@@ -230,9 +236,11 @@ class GeomorphService {
     const doors = symbol.doors.map(x => new Connector(x));
     const windows = symbol.windows.map(x => new Connector(x));
 
-    // Joining walls with empty meta reduces the rendering cost later
-    const joinedWalls = Poly.union(cutWalls.filter(x => x.meta === emptyObject)).map(x => Object.assign(x, { meta: emptyObject }));
-    const unjoinedWalls = cutWalls.filter(x => x.meta !== emptyObject);
+    // Joining walls with `{plain,hull}WallMeta` reduces the rendering cost later
+    // 🔔 could save more by joining hull/non-hull but want to distinguish them
+    const joinedWalls = Poly.union(cutWalls.filter(x => x.meta === plainWallMeta)).map(x => Object.assign(x, { meta: plainWallMeta }));
+    const joinedHullWalls = Poly.union(cutWalls.filter(x => x.meta === hullWallMeta)).map(x => Object.assign(x, { meta: hullWallMeta }));
+    const unjoinedWalls = cutWalls.filter(x => x.meta !== plainWallMeta && x.meta !== hullWallMeta);
 
     return {
       key: gmKey,
@@ -254,14 +262,15 @@ class GeomorphService {
         };
       }),
       rooms: rooms.map(x => x.precision(precision)),
-      // walls: cutWalls.map(x => x.precision(precision)),
-      walls: joinedWalls.concat(unjoinedWalls).map(x => x.precision(precision)),
+      walls: [...joinedHullWalls, ...joinedWalls, ...unjoinedWalls].map(x => x.precision(precision)),
       windows,
+      unsorted: symbol.unsorted.map(x => x.precision(precision)),
       ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
     };
   }
 
   /**
+   * 🔔 computed in browser only (main thread and worker)
    * @param {Geomorph.Layout} layout
    * @param {number} gmId
    * @param {Geom.SixTuple} transform
@@ -273,8 +282,6 @@ class GeomorphService {
       gmId,
       transform,
       mat4: geomorphService.embedXZMat4(transform),
-      doorSegs: layout.doors.map(({ seg }) => seg),
-      wallSegs: layout.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta }))),
     };
   }
 
@@ -285,9 +292,13 @@ class GeomorphService {
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     const navDoorways = doors.map((connector) => connector.computeDoorway());
+    /**
+     * Remove doorways from `navPolyWithDoors`, so we can add them back below (normalization).
+     * For hull doors, the connector doorway only contains half the doorway (to avoid overlap),
+     * so we must additionally remove the rest.
+     */
     const navPolySansDoorways = Poly.cutOut([
-      ...navDoorways, // Hull `navDoorways` only include half the door.
-      // We must remove the rest before constructing triangulation
+      ...navDoorways.map(x => x.precision(6)),
       ...doors.flatMap(x => x.meta.hull ? x.poly : []),
     ], navPolyWithDoors).map(x => x.cleanFinalReps());
 
@@ -326,12 +337,13 @@ class GeomorphService {
    * @param {Geomorph.GeomorphsJson} geomorphsJson
    * @return {Geomorph.Geomorphs}
    */
-  deserializeGeomorphs({ hash, mapsHash, layoutsHash, sheetsHash, map, layout, sheet }) {
+  deserializeGeomorphs({ hash, mapsHash, layoutsHash, sheetsHash, imagesHash, map, layout, sheet }) {
     return {
       hash,
       mapsHash,
       layoutsHash,
       sheetsHash,
+      imagesHash,
       map,
       layout: mapValues(layout, (x) => this.deserializeLayout(x)),
       sheet,
@@ -362,6 +374,7 @@ class GeomorphService {
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       windows: json.windows.map(Connector.from),
+      unsorted: json.unsorted.map(Poly.from),
 
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
       navDoorwaysOffset: json.navDoorwaysOffset,
@@ -582,7 +595,7 @@ class GeomorphService {
       // aggregated and cloned
       walls: walls.concat(flats.flatMap(x => x.walls)),
       obstacles: obstacles.concat(flats.flatMap(x => x.obstacles)),
-      doors: doors.concat(flats.flatMap(x => x.doors)),
+      doors: this.removeCloseDoors(symbol.key, doors.concat(flats.flatMap(x => x.doors))),
       decor: decor.concat(flats.flatMap(x => x.decor)),
       unsorted: unsorted.concat(flats.flatMap(x => x.unsorted)),
       windows: windows.concat(flats.flatMap(x => x.windows)),
@@ -711,7 +724,7 @@ class GeomorphService {
   parseMap(mapKey, svgContents) {
     const gms = /** @type {Geomorph.MapDef['gms']} */ ([]);
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
-    const scale = worldScale * 1; // map scaled like hull symbols
+    const scale = sguToWorldScale * 1; // map scaled like hull symbols
 
     const parser = new htmlparser2.Parser({
       onopentag(name, attributes) {
@@ -774,7 +787,7 @@ class GeomorphService {
     // info("parseStarshipSymbol", symbolKey, "...");
     const isHull = this.isHullKey(symbolKey);
     /** Non-hull symbol are scaled up by 5 inside SVGs */
-    const scale = worldScale * (isHull ? 1 : 1 / 5);
+    const scale = sguToWorldScale * (isHull ? 1 : 1 / 5);
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
@@ -783,13 +796,13 @@ class GeomorphService {
     let viewBoxRect = /** @type {Geom.Rect | null} */ (null);
     let pngRect = /** @type {Geom.Rect | null} */ (null);
     const symbols = /** @type {Geomorph.Symbol['symbols']} */ ([]);
+    const decor = /** @type {Geom.Poly[]} */ ([]);
+    const doors = /** @type {Geom.Poly[]} */ ([]);
     const hullWalls = /** @type {Geom.Poly[]} */ ([]);
     const obstacles = /** @type {Geom.Poly[]} */ ([]);
-    const doors = /** @type {Geom.Poly[]} */ ([]);
     const unsorted = /** @type {Geom.Poly[]} */ ([]);
     const walls = /** @type {Geom.Poly[]} */ ([]);
     const windows = /** @type {Geom.Poly[]} */ ([]);
-    const decor = /** @type {Geom.Poly[]} */ ([]);
 
     const parser = new htmlparser2.Parser({
       onopentag(tag, attributes) {
@@ -878,24 +891,27 @@ class GeomorphService {
           return;
         }
 
-        /** @type {const} */ ([
-          ["hull-wall", hullWalls],
-          ["wall", walls],
-          ["obstacle", obstacles],
-          ["door", doors],
-          ["window", windows],
-          ["decor", decor],
-          [null, unsorted],
-        ]).some(([tag, polys]) =>
-          (tag === null || ownTags.includes(tag)) && polys.push(poly)
-        );
-
         const meta = geomorphService.tagsToMeta(ownTags, {});
         poly.meta = meta;
 
+        // Sort polygon
+        if (meta.wall === true) {
+          (meta.hull === true ? hullWalls : walls).push(poly);
+        } else if (meta.obstacle === true) {
+          obstacles.push(poly);
+        } else if (meta.door === true) {
+          doors.push(poly);
+        } else if (meta.window === true) {
+          windows.push(poly);
+        } else if (meta.decor === true) {
+          decor.push(poly);
+        } else {
+          unsorted.push(poly);
+        }
+
         if (meta.obstacle) {// Link to original symbol
-          meta.symId = toSymId[symbolKey]; // 🚧 remove
-          meta.symKey = symbolKey; // Debug?
+          meta.symKey = symbolKey;
+          // local id inside SVG symbol
           meta.obsId = obstacles.length - 1;
         }
       },
@@ -944,7 +960,6 @@ class GeomorphService {
       symbols,
       decor,
       unsorted,
-
       ...postParse,
     };
   }
@@ -973,15 +988,35 @@ class GeomorphService {
   }
 
   /**
+   * When doors are close (e.g. coincide) remove later door
+   * @param {string} logPrefix 
+   * @param {Geom.Poly[]} doors
+   */
+  removeCloseDoors(logPrefix, doors) {
+    const centers = doors.map(d => d.center);
+    const removeIds = /** @type {Set<number>} */ (new Set());
+    centers.forEach((center, i) => {
+      if (!removeIds.has(i))
+        for (let j = i + 1; j < centers.length; j++)
+          if (Math.abs(center.x - centers[j].x) < 0.1 && Math.abs(center.y - centers[j].y) < 0.1) {
+            debug(`${logPrefix}: removed door coinciding with ${i} (${j})`);
+            removeIds.add(j);
+          }
+    });
+    return doors.filter((_, i) => !removeIds.has(i));
+  }
+
+  /**
    * @param {Geomorph.Geomorphs} geomorphs
    * @returns {Geomorph.GeomorphsJson}
    */
-  serializeGeomorphs({ hash, mapsHash, layoutsHash, sheetsHash, map, layout, sheet }) {
+  serializeGeomorphs({ hash, mapsHash, layoutsHash, sheetsHash, imagesHash, map, layout, sheet }) {
     return {
       hash,
       mapsHash,
       layoutsHash,
       sheetsHash,
+      imagesHash,
       map,
       layout: mapValues(layout, (x) => geomorphService.serializeLayout(x)),
       sheet,
@@ -1011,6 +1046,7 @@ class GeomorphService {
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),
       windows: layout.windows.map((x) => x.json),
+      unsorted: layout.unsorted.map((x) => x.geoJson),
 
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
       navDoorwaysOffset: layout.navDoorwaysOffset,
@@ -1042,7 +1078,7 @@ class GeomorphService {
     };
   }
 
-  /** @param {Pick<Geomorph.SymbolObstacle, 'symbolKey' | 'obstacleId'>} arg0 */
+  /** @param {Pick<Geomorph.ObstacleSheetRectCtxt, 'symbolKey' | 'obstacleId'>} arg0 */
   symbolObstacleToKey({ symbolKey, obstacleId }) {
     return /** @type {const} */ (`${symbolKey} ${obstacleId}`);
   }
@@ -1129,7 +1165,6 @@ export class Connector {
         || this.meta.w && this.normal.x > 0
       ) {
         this.normal.scale(-1);
-        this.seg = [this.seg[1], this.seg[0]];
       }
     }
 
@@ -1181,8 +1216,7 @@ export class Connector {
   /** @returns {Geom.Poly} */
   computeDoorway() {
     const width = this.baseRect.width;
-    // 🚧 clarify hull-wall vs wall width
-    const height = (this.meta.hull ? 8 : 20/5) * worldScale;
+    const height = this.meta.hull ? hullDoorDepth : doorDepth;
     const hNormal = this.normal;
     const wNormal = tmpVect1.set(this.normal.y, -this.normal.x);
 
@@ -1213,11 +1247,3 @@ const tmpMat2 = new Mat();
 /**
  * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey
  */
-
-const symbolKeys = keys(geomorphService.fromSymbolKey);
-const toSymId = symbolKeys.reduce((agg, key, id) =>
-  (agg[key] = id, agg), /** @type {Record<Geomorph.SymbolKey, number>} */ ({})
-);
-const fromSymId = symbolKeys.reduce((agg, key, id) =>
-  (agg[id] = key, agg), /** @type {Record<number, Geomorph.SymbolKey>} */ ({})
-);

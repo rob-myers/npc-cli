@@ -63,13 +63,13 @@
   </rect>
   <g>
     <title>symbols</title>
-    <use width="300" height="300" transform="matrix(1, 0, 0, -1, -0.000003152261, 600)" style="" xlink:href="#symbol-0">
+    <use width="300" height="300" transform="matrix(1, 0, 0, -1, -0.000003152261342620477, 600)" style="" xlink:href="#symbol-0">
       <title>console--018--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 610.000061035156, -0.000022556984)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-5">
+    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 600.000061035156, -0.000022556995)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-5">
       <title>low-berth--003--1x1 y=0.7</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 610.000061035156, 300)" style="transform-origin: 150px 150px;" xlink:href="#symbol-5">
+    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 600.000061035156, 300)" style="transform-origin: 150px 150px;" xlink:href="#symbol-5">
       <title>low-berth--003--1x1 y=0.7</title>
     </use>
   </g>

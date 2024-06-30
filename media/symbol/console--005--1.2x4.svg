@@ -2,7 +2,6 @@
 <svg viewBox="0 0 300 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
     <bx:grid x="0" y="0" width="300" height="300"/>
-    <pattern id="pattern-0-0" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, -44.084991481923, -508.833984338502)" xlink:href="#pattern-0"/>
     <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
@@ -19,9 +18,12 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
-    <pattern id="pattern-1" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, 44.07556534205, 808.830741882184)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-2" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, -44.085018162433, -508.833984373881)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-3" patternTransform="matrix(1.000001072884, 0.000009848053, -0.000009848053, 1.000001072884, 44.075538639728, 808.830688476422)" xlink:href="#pattern-0"/>
+    <symbol id="symbol-0" vioewbox="0 0 150 150" viewBox="0 0 150 150">
+      <title>console--051--0.4x0.6</title>
+      <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); transform-origin: 75.005px 75.0023px;" y="0" x="0">
+        <title>console--051--0.4x0.6</title>
+      </rect>
+    </symbol>
   </defs>
   <image width="367" height="1207" x="-4" y="-3.49998" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAW8AAAS3AgMAAABUBxNiAAAACVBMVEUAAAD///8AAABzxoNxAAAAAXRSTlMAQObYZgAABKRJREFUeNrs2zFuAjEUBFCLMkfJfdaFj+BT+BL0biI5c8pA9ZGAwC4MeJKxhESBXmF/pF3/PwmbVrprzYg349Pi38vqVYwbN27cuHHjxo0bN27cuHHjxo0bN27c+DPwKouDiGcg0fDCxCsGDwc6Dc9AI+Cx5TS8YvDw2PJPXF+Br93yd+Mt8JXnScMrBg8HOhNvNDwDKfCrB7MNLxiieEVn4o2Hg4VHsVzHc1RjX4+P3/HyAF5W4GM93nl4RePh4OKJhufAdwAu4vvj5/At8PWV+PF0vHDxzsPrKX55PYI3Hg4ungLf19fjy0Y8ypyP50v21wY8yjzw8x8csUnxxsOrLA4kVXzw8CyMdx5ehPEmildhPInioOLD+IvxzMW78b+EFy7ejBs3Pi1euXgybvwf4Kp/f+PGjc/8CK37ZmH8Mi777q97JbJgqF6g6d4r6t7l6t6f6/YsMrpsE2qINv6E+6G6PegDLjtUQMQzhih+1/DMrHg7xYVGrahDYoWLj1v4pCOFGWDg54V+CycMoAY+2ehsRb8fn2pcOXNxMKa4o1zehy+BTxYo0M1ZsOIncaK38RkjPxUjacas8p34fNE2Tijv/ER31+0+YxAyA00zfHrcdNHAbwaSZsh6gWz2XDfvb9y4cePGjRs3bty4cePGjRs3bty4cePGjRs3bty4cePGjRv/Ye8OigAGgSAI+reCSmzsQBvoX1Ipwt3A4XA4HA6Hw+FwOLyIa59pn02Mn2ifaZ9tDOVpn2mfbYwqa59pn20scNA+0z7bWGujfaZ9trHsS/tM+2xjBWJ3M6T22WO7W7v7crs7ik8X767Lru4/L++ch2ufweFw7TM4vPEQdd8tcPgfePXjH659NnJqUcazR3/aZ4+dn3f/WWifaZ+t/Cbu4t0bC9pn2mcrl8S0z7TPVq7Oap9pn60MFHTnLLTPtM9WRtu0z7TPZgZ+tc+0z+BwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4be9O7ZtGAiiIOrY/Reg0GW6BUGJ/iwfC3gZCeIOuwOHw4/j2mfaZxPjJ9pn2mcbQ3naZ9pnG6PK2mfaZxsLHLTPtM821tpon2mfbSz70j7TPttYgdjdDKl9dmx3a3dfbndHsfbZLVz7DD4Sbij3LODw+7j2GRy+/BJ1vy1w+DPw6s8/XPts5NSijGeP/sp49Yhb+0z7bOTiL3wf2r2D1j7TPtvBtc+0z7TPtM+0z7TPDs9ZaJ99pX32p32mfTYxwql9pn02M3venfeHw+FwOBwOh8PhcDgcDofD4XA4HA6Hw+FwOBwOh8PhcDgcDofD4fAirn2mfTYxfqJ9pn2mfaZ9FsO1z7TPVtpnL+0z7TPtM+0z7bP8JjHts2O7/rLLG7XPtM9GVtpqn2mfPQDXPoOPhBvKPQs4/D6ufQaHL79E3W8LHP4MvPrzD9c+Gzm1KOPZo78yXj3i1j7TPhu5+Avfh3bvoLXPtM92cO0z7TPtM+0z7TPts8NzFtpn2mcro23aZ9pnMwO/2mfaZ3A4HA6Hw+FwOBwOh8PhcDgcfh//5IF/Af8ZwH8/sV/v2f+iTz5Ypf2YnwAAAABJRU5ErkJggg==">
     <title>console--005--1.2x4</title>
@@ -31,17 +33,17 @@
   </path>
   <g>
     <title>symbols</title>
-    <rect width="150.000748" height="150.000763" style="fill: url('#pattern-0-0'); stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; transform-origin: 30.9214px -583.832px;" y="-658.832338" x="-44.080277" transform="matrix(-1, 0.000073310599, 0.000073310599, 1, 264.084049079116, 1633.837838158219)">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 219.999816894531, 74.99893951416)" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: 119.082px 733.833px;" y="658.832338" x="44.080277" transform="matrix(-1, 0.000073310599, 0.000073310599, 1, 175.923548691532, 16.173164402427)">
+    </use>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 219.999816894531, 374.998931884766)" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: 30.9214px -583.832px;" y="-658.832338" x="-44.080277" transform="matrix(-1, 0.000073310599, 0.000073310599, 1, 264.084060523208, 1033.837838157799)">
+    </use>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 219.999816894531, 674.998901367188)" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 119.082px 733.833px;" y="658.832338" x="44.080277" transform="matrix(-1, 0.000073310599, 0.000073310599, 1, 175.923548687058, -583.826841319619)">
+    </use>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 219.999816894531, 974.998901367188)" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6</title>
-    </rect>
+    </use>
   </g>
 </svg>

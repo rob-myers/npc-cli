@@ -4,14 +4,15 @@ import { shallow } from "zustand/shallow";
 import debounce from "debounce";
 
 import { view } from "../const";
-import { profileLookup } from "../npc-cli/sh/scripts";
 import { afterBreakpoint, breakpoint } from "../const";
 import { isSmallView } from "./layout";
 import useSite from "./site.store";
+
+import { profile } from "src/npc-cli/sh/src";
+
 import useIntersection from "../npc-cli/hooks/use-intersection";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
 import useUpdate from "../npc-cli/hooks/use-update";
-
 import { Tabs, State as TabsState } from "../npc-cli/tabs/Tabs";
 import ViewerControls from "./ViewerControls";
 
@@ -60,24 +61,16 @@ export default function Viewer() {
         initEnabled={false}
         onToggled={update}
         persistLayout
-        rootOrientationVertical={isSmallView()}
+        // rootOrientationVertical={isSmallView()}
+        rootOrientationVertical
         tabs={[
           [
             {
               type: "component",
-              class: "TestWorld",
+              class: "World",
               filepath: "test-world-1",
               props: { worldKey: "test-world-1", mapKey: "demo-map-1" },
               // props: { worldKey: "test-world-1", mapKey: "small-map-1" },
-            },
-            {
-              type: "terminal",
-              filepath: "tty-1",
-              env: {
-                WORLD_KEY: "test-world-1",
-                // PROFILE: profileLookup.util_0(),
-                PROFILE: profileLookup.game_0(),
-              },
             },
             {
               type: "component",
@@ -87,7 +80,17 @@ export default function Viewer() {
             },
             // { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],
-          [{ type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} }],
+          [
+            {
+              type: "terminal",
+              filepath: "tty-1",
+              env: {
+                WORLD_KEY: "test-world-1",
+                PROFILE: profile.profile1Sh,
+              },
+            },
+            { type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} },
+          ],
         ]}
       />
     </aside>

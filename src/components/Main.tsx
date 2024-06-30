@@ -5,6 +5,7 @@ import { shallow } from "zustand/shallow";
 import { afterBreakpoint, breakpoint } from "../const";
 import useSite from "./site.store";
 import { isSmallView } from "./layout";
+import { sideNoteRootDataAttribute } from "./SideNote";
 
 export default function Main(props: React.PropsWithChildren) {
   const site = useSite(({ navOpen, mainOverlay }) => ({ navOpen, mainOverlay }), shallow);
@@ -13,8 +14,9 @@ export default function Main(props: React.PropsWithChildren) {
 
   return (
     <section
-      className={cx(mainCss, "prose max-w-screen-lg prose-headings:font-light")}
+      className={cx(sectionMainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
+      {...{ [sideNoteRootDataAttribute]: true }}
     >
       <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
@@ -32,21 +34,29 @@ export default function Main(props: React.PropsWithChildren) {
   );
 }
 
-const mainCss = css`
-  > header, > main {
+const sectionMainCss = css`
+  > header {
     background-color: #fff;
+    z-index: 1;
   }
   > main {
+    background-color: #fff;
     padding-top: 2rem;
   }
 
   @media (max-width: ${breakpoint}) {
     overflow: scroll;
+    max-width: unset !important;
     padding: 0 12px;
   }
+
   @media (min-width: ${afterBreakpoint}) {
     width: 100%;
     margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+
     > header, > main {
       margin-left: 1rem;
       margin-right: 1rem;
@@ -56,13 +66,14 @@ const mainCss = css`
     > header {
       margin-top: 0rem;
       min-width: calc(400px + 2 * 2rem);
+      padding-top: 1rem;
+      padding-bottom: 1rem;
     }
     > main {
+      flex: 1;
       padding-bottom: 6rem;
       min-width: calc(400px + 2 * 2rem);
     }
-    white-space: nowrap;
-    overflow-x: auto;
   }
 `;
 
@@ -76,7 +87,6 @@ const mainHeaderCss = css`
   height: 4rem;
   
   color: #444;
-  background-color: #fff;
   border-bottom: 1px solid rgba(200, 200, 200, 0.5);
   font-size: 1.2rem;
   letter-spacing: 1.5rem;
@@ -85,7 +95,7 @@ const mainHeaderCss = css`
 const overlayCss = css`
   -webkit-tap-highlight-color: transparent;
   position: absolute;
-  /* z-index: 1; */
+  z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
   top: 0;
