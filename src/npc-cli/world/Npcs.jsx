@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultNpcClassKey, glbMeta } from "../service/const";
+import { defaultSkinKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
 import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
@@ -141,8 +141,8 @@ export default function Npcs(props) {
         throw Error(`invalid point: ${JSON.stringify(e.point)}`);
       } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
-      } else if (e.npcClassKey && !w.lib.isNpcClassKey(e.npcClassKey)) {
-        throw Error(`invalid npcClassKey: ${JSON.stringify(e.npcClassKey)}`);
+      } else if (e.skinKey && !w.lib.isSkinKey(e.skinKey)) {
+        throw Error(`invalid skinKey: ${JSON.stringify(e.skinKey)}`);
       }
       
       let npc = state.npc[e.npcKey];
@@ -154,24 +154,23 @@ export default function Npcs(props) {
         npc.def = {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
-          classKey: e.npcClassKey ?? npc.def.classKey,
+          skinKey: e.skinKey ?? npc.def.skinKey,
           position: e.point, // 🚧 remove?
           runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
         };
-        if (typeof e.npcClassKey === 'string') {
-          npc.changeClass(e.npcClassKey);
+        if (typeof e.skinKey === 'string') {
+          npc.changeSkin(e.skinKey);
         }
         // Reorder keys
         delete state.npc[e.npcKey];
         state.npc[e.npcKey] = npc;
       } else {
         // Spawn
-        const npcClassKey = e.npcClassKey ?? defaultNpcClassKey;
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
           angle: e.angle ?? 0,
-          classKey: npcClassKey,
+          skinKey: e.skinKey ?? defaultSkinKey,
           position: e.point,
           runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,

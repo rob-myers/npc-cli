@@ -12,7 +12,8 @@ export const npcService = {
     walkSpeed: glbMeta.walkSpeed * glbMeta.scale,
   },
 
-  fromNpcClassKey: {
+  /** static/assets/3d/minecraft-skins/* */
+  fromSkinKey: {
     'minecraft-alex-with-arms.png': true,
     'minecraft-ari.png': true,
     'minecraft-borders.128x128.png': true,
@@ -43,10 +44,10 @@ export const npcService = {
 
   /**
    * @param {string} input 
-   * @returns {input is NPC.NpcClassKey}
+   * @returns {input is NPC.SkinKey}
    */
-  isNpcClassKey(input) {
-    return input in npcService.fromNpcClassKey;
+  isSkinKey(input) {
+    return input in npcService.fromSkinKey;
   },
   
   /**

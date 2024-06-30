@@ -1,14 +1,14 @@
 declare namespace NPC {
 
   /** Skin names. */
-  type NpcClassKey = keyof import('../service/npc').NpcService['fromNpcClassKey'];
+  type SkinKey = keyof import('../service/npc').NpcService['fromSkinKey'];
 
   type NPC = import('../world/create-npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */
     key: string;
-    classKey: NpcClassKey;
+    skinKey: SkinKey;
     /** Radians */
     angle: number;
     position: import("three").Vector3Like;
@@ -20,7 +20,7 @@ declare namespace NPC {
 
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
-    npcClassKey?: NPC.NpcClassKey;
+    skinKey?: NPC.SkinKey;
     point: import("three").Vector3Like;
     meta?: Geom.Meta;
     requireNav?: boolean;

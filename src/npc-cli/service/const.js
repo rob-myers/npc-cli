@@ -70,8 +70,8 @@ export const glbMeta = /** @type {const} */ ({
   runSpeed: 10,
 });
 
-/** @type {NPC.NpcClassKey} */
-export const defaultNpcClassKey = 'scientist-dabeyt--with-arms.png';
+/** @type {NPC.SkinKey} */
+export const defaultSkinKey = 'scientist-dabeyt--with-arms.png';
 
 /**
  * Fade out previous animation (seconds)

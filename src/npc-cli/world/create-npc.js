@@ -71,16 +71,12 @@ export class Npc {
     }
     api.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
-  /** @param {NPC.NpcClassKey} npcClassKey */
-  changeClass(npcClassKey) {
-    this.def.classKey = npcClassKey;
-    this.changeSkin(npcClassKey);
-  }
   /**
    * 🚧 remove async once skin sprite-sheet available
-   * @param {NPC.NpcClassKey} skinKey
+   * @param {NPC.SkinKey} skinKey
    */
   async changeSkin(skinKey) {
+    this.def.skinKey = skinKey;
     const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.map.nodes[glbMeta.skinnedMeshName]);
     const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
     // clonedMaterial.color = new THREE.Color('#aaa'); // darken (multiply)
@@ -134,7 +130,7 @@ export class Npc {
     skinnedMesh.userData.npcKey = this.key;
 
     // this.changeSkin('scientist-dabeyt--with-arms.png');
-    this.changeSkin(this.def.classKey);
+    this.changeSkin(this.def.skinKey);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
   /** @param {number} deltaMs  */
