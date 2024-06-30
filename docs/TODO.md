@@ -52,6 +52,11 @@
 - consider naming: shell `api` vs world-level `api`
 - currently single quotes are breaking game-generators
 
+- syntax highlighting in the shell
+  - https://github.com/wooorm/emphasize
+  - for `declare -f foo`
+  - for `PROFILE` via "hash-bang prefix"
+  - for `/etc/game-generators.sh` via "hash-bang prefix"
 - ignore certain tags e.g. `s`, `obsId`, `obstacleId`
 - machinery less white
   - they have large white borders
