@@ -9,47 +9,6 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ try dark mode e.g. for better doors
-  - ✅ dark standard door
-  - ✅ dark hull door
-  - ✅ can invert obstacles sprite-sheet
-    - ❌ image magick `convert input.png -channel RGB -negate output.png`
-    - ❌ in assets.js
-    - ✅ in browser after load texture
-  - ✅ lighter ceiling + minor clean
-  - ✅ draw gm floors inside browser instead of assets.js
-  - ✅ remove unused code from World/assets
-  - ✅ x2 resolution floor
-  - ✅ fix `World` break on comment out WallsAndDoors
-  - ✅ api.gmClass -> api.{floor,ceiling}
-    - ✅ move `debugNavPoly` into Debug and compute lazily
-    - ✅ remove `layout`
-    - ✅ merge into api.floor
-    - ✅ merge into api.ceiling
-  - ✅ draw grid on floor
-  - ✅ fix "low fuel" via `y=1.01 wallsH=1`
-  - ✅ move api.debug.navPoly -> api.derived.navPoly
-  - ✅ ceiling flicker issues
-    - can solve via fill = stroke
-    - ✅ draw hull walls differently
-  - ✅ try thicker ceiling tops via inset (avoid stroke going outside)
-  - ✅ different ceiling shades e.g. bridge
-    - ✅ can specify polygon outlines in SVG symbol
-    - ✅ api.gmsData[gmKey].polyDecals
-    - ✅ draw polyDecals in ceiling (fixing HMR)
-
-- ✅ prevent coinciding doors (flicker)
-  - ✅ non-hull: detect/discard during flatten symbols
-  - ✅ separate WallsAndDoors
-  - ✅ understand why doors open in the way they do (local)
-    - hull normals face outwards
-    - e/w open up, n/s open right
-  - ✅ understand why doors open in the way they do (transformed)
-    - hull normal still face outwards
-    - aligned hull doors can open in different directions
-  - ✅ ensure two doors do not coincide
-  - ✅ use gmDoorKey format `g{gmId}d{doorId}`
-
 - ✅ implement `click`
 - test `click`
 - NPC click to move -> script
@@ -68,11 +27,11 @@
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
 
-- fuel symbol can use single rect for wall
+- ✅ fuel symbol can use single rect for wall
 - machinery less white
   - they have large white borders
   - try instance color
-- thicker door ceiling tops
+- ✅ thicker door ceiling tops
 - ✅ `hull-wall` tag -> `wall hull`
 - ✅ hull walls have `meta.hull` `true`
   - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
@@ -1381,3 +1340,45 @@
 - ✅ obstacle disappearing on decor sheet HMR
   - ✅ redo obstacles in `<Npcs>`
   - ✅ ensure obstacles re-added when nav-mesh updates
+
+
+- ✅ try dark mode e.g. for better doors
+  - ✅ dark standard door
+  - ✅ dark hull door
+  - ✅ can invert obstacles sprite-sheet
+    - ❌ image magick `convert input.png -channel RGB -negate output.png`
+    - ❌ in assets.js
+    - ✅ in browser after load texture
+  - ✅ lighter ceiling + minor clean
+  - ✅ draw gm floors inside browser instead of assets.js
+  - ✅ remove unused code from World/assets
+  - ✅ x2 resolution floor
+  - ✅ fix `World` break on comment out WallsAndDoors
+  - ✅ api.gmClass -> api.{floor,ceiling}
+    - ✅ move `debugNavPoly` into Debug and compute lazily
+    - ✅ remove `layout`
+    - ✅ merge into api.floor
+    - ✅ merge into api.ceiling
+  - ✅ draw grid on floor
+  - ✅ fix "low fuel" via `y=1.01 wallsH=1`
+  - ✅ move api.debug.navPoly -> api.derived.navPoly
+  - ✅ ceiling flicker issues
+    - can solve via fill = stroke
+    - ✅ draw hull walls differently
+  - ✅ try thicker ceiling tops via inset (avoid stroke going outside)
+  - ✅ different ceiling shades e.g. bridge
+    - ✅ can specify polygon outlines in SVG symbol
+    - ✅ api.gmsData[gmKey].polyDecals
+    - ✅ draw polyDecals in ceiling (fixing HMR)
+
+- ✅ prevent coinciding doors (flicker)
+  - ✅ non-hull: detect/discard during flatten symbols
+  - ✅ separate WallsAndDoors
+  - ✅ understand why doors open in the way they do (local)
+    - hull normals face outwards
+    - e/w open up, n/s open right
+  - ✅ understand why doors open in the way they do (transformed)
+    - hull normal still face outwards
+    - aligned hull doors can open in different directions
+  - ✅ ensure two doors do not coincide
+  - ✅ use gmDoorKey format `g{gmId}d{doorId}`

@@ -250,6 +250,8 @@ declare namespace Geomorph {
     navPoly?: THREE.BufferGeometry;
     /** These wall polygons are inset, so stroke does not jut out */
     nonHullCeilTops: Geom.Poly[];
+    /** These door polygons are inset, so stroke does not jut out */
+    doorCeilTops: Geom.Poly[];
     polyDecals: Geom.Poly[];
     /** Has this geomorph never occurred in any map so far? */
     unseen: boolean;

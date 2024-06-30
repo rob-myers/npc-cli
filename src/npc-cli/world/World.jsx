@@ -83,6 +83,8 @@ export default function World(props) {
       ...npcService,
     },
 
+    // 🚧 fix HMR on edit computeGmData or computeGmsData,
+    // e.g. recompute state.gmsData and redraw
     computeGmData({ key: gmKey, walls, doors, unsorted }) {// recomputed onchange geomorphs.json (dev only)
       const gmData = state.gmsData[gmKey];
 
@@ -98,6 +100,7 @@ export default function World(props) {
       );
       // inset so stroke does not jut out
       gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.04));
+      gmData.doorCeilTops = doors.flatMap(x => geom.createInset(x.poly, 0.04));
       gmData.unseen = false;
     },
     computeGmsData() {// recomputed when api.gms changes e.g. map changes
@@ -367,7 +370,7 @@ export default function World(props) {
 /** @type {Geomorph.GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose',
-  doorSegs: [], navPoly: undefined, nonHullCeilTops: [], polyDecals: [],
+  doorSegs: [], doorCeilTops: [], navPoly: undefined, nonHullCeilTops: [], polyDecals: [],
   unseen: true,
   wallPolyCount: 0, wallPolySegCounts: [], wallSegs: [],
 };

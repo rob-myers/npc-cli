@@ -48,14 +48,14 @@ export default function Ceiling(props) {
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
-      const { nonHullCeilTops, polyDecals } = api.gmsData[gmKey];
+      const { nonHullCeilTops, doorCeilTops, polyDecals } = api.gmsData[gmKey];
       
       // wall/door tops
       const strokeColor = 'rgba(150, 150, 150, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
       drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.08]);
-      drawPolygons(ct, layout.doors.map(x => x.poly), [fillColor, strokeColor, 0.04]);
+      drawPolygons(ct, doorCeilTops, [fillColor, strokeColor, 0.06]);
       drawPolygons(ct, hullWalls, [strokeColor, strokeColor, 0.06]);
       
       // decals
