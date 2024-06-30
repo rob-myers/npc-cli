@@ -10,9 +10,28 @@
 - extend chair/table symbols with chair/table tag on obstacle
 
 - ✅ implement `click`
-- 🚧 test `click`
+- ✅ test `click`
   - ✅ fix false positive
-- "NPC click to move" should be a script
+- ✅ "NPC click to select" should be a script
+  - ✅ `click` detects npc clicks
+  ```sh
+  click | filter meta.npcKey |
+    map '({meta},{home}) => { home.selectedNpcKey = meta.npcKey }'
+  ```
+- ✅ "NPC click to move" should be a script
+  ```sh
+  click | filter meta.navigable | walkTest
+  ```
+- ✅ "door click to open" should be a script
+  ```sh
+  click | filter meta.door | map '({meta},{world}) => {
+    world.door.toggleDoor(meta.instanceId)
+  }'
+  ```
+- ✅ add background processes to profile
+- 🚧 can detect/ignore rmb in `click`
+- 🚧 click sees modifier key(s) so `walkTest` can run
+
 - start new branch `use-decor`
 
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
@@ -29,10 +48,15 @@
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
 
-- ✅ fuel symbol can use single rect for wall
+- currently, async generator -> `run`, but what about async function -> `map`?
+- consider naming: shell `api` vs world-level `api`
+- currently single quotes are breaking game-generators
+
+- ignore certain tags e.g. `s`, `obsId`, `obstacleId`
 - machinery less white
   - they have large white borders
   - try instance color
+- ✅ fuel symbol can use single rect for wall
 - ✅ thicker door ceiling tops
 - ✅ `hull-wall` tag -> `wall hull`
 - ✅ hull walls have `meta.hull` `true`

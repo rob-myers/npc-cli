@@ -49,20 +49,6 @@ export default function useHandleEvents(api) {
       if (e.distancePx > (e.touch === true ? 5 : 1)) {
         return;
       }
-
-      if (e.meta.floor === true) {
-        const npc = api.npc?.getSelected(); // api.npc may not exist yet
-        if (npc) {
-          npc.s.run = e.modifierKey;
-          npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
-          npc.walkTo(e.point);
-        }
-      }
-
-      if (e.meta.door === true) {
-        const instanceId = /** @type {number} */ (e.meta.instanceId);
-        api.door.toggleDoor(instanceId);
-      }
     },
   }));
 

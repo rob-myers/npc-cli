@@ -19,7 +19,11 @@ const functionFiles = {
     ([key, fn]) => `${key}() ${wrapWithRun(fn)}`
   ).join('\n\n'),
   'game-generators.sh': Object.entries(gameGeneratorsJs).map(
-    ([key, fn]) => `${key}() ${wrapWithRun(fn)}`
+    ([key, fn]) => `${key}() ${
+      fn.constructor.name === 'AsyncGeneratorFunction'
+        ? wrapWithRun(fn as AsyncGeneratorFunction)
+        : wrapWithMap(fn) // assume 'AsyncFunction' or 'Function'
+    }`
   ).join('\n\n'),
 };
 
@@ -79,4 +83,9 @@ function wrapWithRun(fn: (arg: gameGeneratorsJs.RunArg) => any) {
   return `{\n  run '${
     fnText.slice(fnText.indexOf('('))
   }\n' "$@"\n}`;
+}
+
+function wrapWithMap(fn: (input: any, arg: gameGeneratorsJs.RunArg) => any) {
+  const fnText = `${fn}`;
+  return `{\n  map '${fnText}'\n}`;
 }

@@ -92,6 +92,10 @@ declare namespace NPC {
       }
   );
 
+  type ClickMeta = import('three').Vector3Like & {
+    meta: Geom.Meta;
+  };
+
   type TiledCacheResult = Extract<
     import("@recast-navigation/core").NavMeshImporterResult,
     { tileCache?: any }

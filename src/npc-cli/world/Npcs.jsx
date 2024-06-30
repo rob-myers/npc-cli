@@ -80,11 +80,6 @@ export default function Npcs(props) {
     },
     onNpcPointerUp(e) {
       const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-      const npc = state.npc[npcKey];
-
-      // 🚧 indicate selected npc somehow
-      state.select.curr = npc.key;
-
       api.events.next({
         key: "pointerup",
         is3d: true,
@@ -252,14 +247,14 @@ export default function Npcs(props) {
  * @property {THREE.Group} group
  * @property {THREE.Group} obsGroup
  * @property {{ [npcKey: string]: Npc }} npc
- * @property {{ curr: null | string; prev: null | string; many: string[]; }} select
+ * @property {{ curr: null | string; prev: null | string; many: string[]; }} select 🚧 move to script
  * @property {number} nextObstacleId
  * @property {Record<string, NPC.Obstacle>} obstacle
  *
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
  * @property {(position: THREE.Vector3Like, radius: number, height: number) => NPC.Obstacle | null} addCylinderObstacle
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
- * @property {() => null | NPC.NPC} getSelected
+ * @property {() => null | NPC.NPC} getSelected // 🚧 remove
  * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
  * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp

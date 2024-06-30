@@ -46,7 +46,8 @@ export async function* click({ api, args, world }) {
       eventsSub.add(() => reject(api.getKillError()));
     }));
 
-    yield {
+    /** @type {NPC.ClickMeta} */
+    const output = {
       x: world.lib.precision(e.point.x),
       y: world.lib.precision(e.point.y),
       z: world.lib.precision(e.point.z),
@@ -55,6 +56,8 @@ export async function* click({ api, args, world }) {
         navigable: world.npc.isPointInNavmesh(e.point),
       },
     };
+
+    yield output;
   }
 }
 
@@ -83,6 +86,21 @@ export async function* setupDemo1({ world }) {
     world.debug.selectNavPolys(polyRefs); // display via debug
     
     world.update(); // Show obstacle
+}
+
+/**
+ * 🔔 non-generators are interpreted as `map '{myFunction}'`
+ * @param {NPC.ClickMeta} input
+ * @param {RunArg} ctxt
+ */
+export async function walkTest(input, { world, home })  {
+  const { selectedNpcKey } = home;
+  const npc = world.npc.npc[selectedNpcKey];
+  if (npc) {
+    // npc.s.run = e.modifierKey; // 🚧 include in meta?
+    // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
+    npc.walkTo(input);
+  }
 }
 
 /**
