@@ -1,15 +1,11 @@
 awaitWorld
 
 # open door on click
-click | filter meta.door | map '({meta},{w}) => {
-  w.door.toggleDoor(meta.instanceId)
-}' &
+click | map '({meta}, {w}) =>
+  void (meta.door && w.door.toggleDoor(meta.instanceId))' &
 
 # write selectedNpcKey on click npc
-click | filter meta.npcKey |
-  map '({meta},{home}) => {
-    home.selectedNpcKey = meta.npcKey
-  }' &
+click | map meta.npcKey >selectedNpcKey &
 
 # click navmesh to move selectedNpcKey
 # see `declare -f walkTest`

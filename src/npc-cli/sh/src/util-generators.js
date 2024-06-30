@@ -37,8 +37,8 @@ export async function* filter(ctxt) {
  * @param {RunArg} ctxt
  */
 export async function* flatMap(ctxt) {
-  let { api, args, datum } = ctxt,
-    result; // eslint-disable-next-line no-new-func
+  let { api, args } = ctxt;
+  let datum, result;
   const func = Function(`return ${args[0]}`)();
   while ((datum = await api.read(true)) !== api.eof)
     if (api.isDataChunk(datum)) yield api.dataChunk(datum.items.flatMap((x) => func(x, ctxt)));
