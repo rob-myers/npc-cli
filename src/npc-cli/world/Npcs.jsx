@@ -27,6 +27,32 @@ export default function Npcs(props) {
     nextObstacleId: 0,
     obstacle: {},
 
+    addBoxObstacle(position, extent, angle) {
+      const { obstacle, success } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
+      state.updateTileCache();
+      if (success) {
+        const id = state.nextObstacleId++;
+        const mesh = createDebugBox(position, obstacle.extent); // 🚧 angle
+        state.obsGroup.add(mesh);
+        return state.obstacle[id] = { id, o: obstacle, mesh };
+      } else {
+        warn(`failed to add obstacle (box) at ${JSON.stringify(position)}`);
+        return null;
+      }
+    },
+    addCylinderObstacle(position, radius, height) {
+      const { obstacle, success } = api.nav.tileCache.addCylinderObstacle(position, radius, height);
+      state.updateTileCache();
+      if (success) {
+        const id = state.nextObstacleId++;
+        const mesh = createDebugCylinder(position, radius, height);
+        state.obsGroup.add(mesh);
+        return state.obstacle[id] = { id, o: obstacle, mesh };
+      } else {
+        warn(`failed to add obstacle (cylinder) at ${JSON.stringify(position)}`);
+        return null;
+      }
+    },
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = api.crowd.navMeshQuery;
       const { path, success } = query.computePath(src, dst, {
@@ -51,6 +77,54 @@ export default function Npcs(props) {
     isPointInNavmesh(p) {
       const { success } = api.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
       return success;
+    },
+    onClickNpcs(e) {
+      // console.log(e);
+      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
+      const npc = state.npc[npcKey];
+      info(`clicked npc: ${npc.key}`);
+      state.select.curr = npc.key;
+      // 🚧 indicate selected npc somehow
+      e.stopPropagation();
+    },
+    onTick(deltaMs) {
+      for (const npc of Object.values(state.npc)) {
+        npc.onTick(deltaMs);
+      }
+    },
+    removeObstacle(obstacleId) {
+      const obstacle = state.obstacle[obstacleId];
+      if (obstacle) {
+        delete state.obstacle[obstacleId];
+        api.nav.tileCache.removeObstacle(obstacle.o);
+        state.obsGroup.remove(obstacle.mesh);
+        state.updateTileCache();
+      }
+    },
+    restore() {// onchange nav-mesh
+      // restore agents
+      Object.values(state.npc).forEach(npc => {
+        npc.removeAgent();
+        const agent = npc.attachAgent();
+        
+        const closest = state.getClosestNavigable(npc.getPosition());
+        if (closest === null) {// Agent outside nav keeps target but `Idle`s 
+          npc.startAnimation('Idle');
+        } else if (npc.s.target !== null) {
+          npc.walkTo(npc.s.target);
+        } else {// so they'll move "out of the way" of other npcs
+          agent.requestMoveTarget(npc.getPosition());
+        }
+      });
+
+      // restore obstacles (overwrite)
+      Object.values(state.obstacle).forEach(obstacle => {
+        if (obstacle.o.type === 'box') {
+          state.addBoxObstacle(obstacle.o.position, obstacle.o.extent, 0);
+        } else {
+          state.addCylinderObstacle(obstacle.o.position, obstacle.o.radius, obstacle.o.height);
+        }
+      });
     },
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
@@ -118,81 +192,6 @@ export default function Npcs(props) {
       api.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
-    },
-    onClickNpcs(e) {
-      // console.log(e);
-      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-      const npc = state.npc[npcKey];
-      info(`clicked npc: ${npc.key}`);
-      state.select.curr = npc.key;
-      // 🚧 indicate selected npc somehow
-      e.stopPropagation();
-    },
-    onTick(deltaMs) {
-      for (const npc of Object.values(state.npc)) {
-        npc.onTick(deltaMs);
-      }
-    },
-    restore() {// onchange nav-mesh
-      // restore agents
-      Object.values(state.npc).forEach(npc => {
-        npc.removeAgent();
-        const agent = npc.attachAgent();
-        
-        const closest = state.getClosestNavigable(npc.getPosition());
-        if (closest === null) {// Agent outside nav keeps target but `Idle`s 
-          npc.startAnimation('Idle');
-        } else if (npc.s.target !== null) {
-          npc.walkTo(npc.s.target);
-        } else {// so they'll move "out of the way" of other npcs
-          agent.requestMoveTarget(npc.getPosition());
-        }
-      });
-
-      // restore obstacles (overwrite)
-      Object.values(state.obstacle).forEach(obstacle => {
-        if (obstacle.o.type === 'box') {
-          state.addBoxObstacle(obstacle.o.position, obstacle.o.extent, 0);
-        } else {
-          state.addCylinderObstacle(obstacle.o.position, obstacle.o.radius, obstacle.o.height);
-        }
-      });
-    },
-
-    addBoxObstacle(position, extent, angle) {
-      const { obstacle, success } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
-      state.updateTileCache();
-      if (success) {
-        const id = state.nextObstacleId++;
-        const mesh = createDebugBox(position, obstacle.extent); // 🚧 angle
-        state.obsGroup.add(mesh);
-        return state.obstacle[id] = { id, o: obstacle, mesh };
-      } else {
-        warn(`failed to add obstacle (box) at ${JSON.stringify(position)}`);
-        return null;
-      }
-    },
-    addCylinderObstacle(position, radius, height) {
-      const { obstacle, success } = api.nav.tileCache.addCylinderObstacle(position, radius, height);
-      state.updateTileCache();
-      if (success) {
-        const id = state.nextObstacleId++;
-        const mesh = createDebugCylinder(position, radius, height);
-        state.obsGroup.add(mesh);
-        return state.obstacle[id] = { id, o: obstacle, mesh };
-      } else {
-        warn(`failed to add obstacle (cylinder) at ${JSON.stringify(position)}`);
-        return null;
-      }
-    },
-    removeObstacle(obstacleId) {
-      const obstacle = state.obstacle[obstacleId];
-      if (obstacle) {
-        delete state.obstacle[obstacleId];
-        api.nav.tileCache.removeObstacle(obstacle.o);
-        state.obsGroup.remove(obstacle.mesh);
-        state.updateTileCache();
-      }
     },
 
     // 🚧 old below
