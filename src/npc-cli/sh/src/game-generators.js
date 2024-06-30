@@ -120,8 +120,8 @@ export async function walkTest(input, { world, home })  {
   const { selectedNpcKey } = home;
   const npc = world.npc.npc[selectedNpcKey];
   if (npc) {
-    // npc.s.run = e.modifierKey; // 🚧 include in meta?
     // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
+    npc.s.run = input.keys?.includes("shift") ?? false;
     npc.walkTo(input);
   }
 }

@@ -33,7 +33,7 @@
 - ✅ can detect/ignore rmb in `click`
   - ❌ forward `rmb` from event
   - ✅ `click --left` (only left, default) `click --right` (only right)
-- 🚧 click sees modifier key(s) so `walkTest` can run
+- ✅ click sees modifier key(s) so `walkTest` can run
 
 - 🚧 clean pointer-events i.e. avoid code duplication
 
