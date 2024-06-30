@@ -12,16 +12,7 @@
   <rect y="-20" width="1238" height="639" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);" x="-20">
     <title>obstacle</title>
   </rect>
-  <rect x="-19.000004" width="1237.500043" height="20.000002" style="stroke: rgb(0, 0, 0);" y="-19.5">
-    <title>wall</title>
-  </rect>
-  <rect x="-19.000004" y="599" width="1237.500043" height="20.000002" style="stroke: rgb(0, 0, 0);">
-    <title>wall</title>
-  </rect>
-  <rect x="-19.5" width="19.999998" height="638.499939" style="stroke: rgb(0, 0, 0);" y="-19.499996">
-    <title>wall</title>
-  </rect>
-  <rect x="1198.5" y="-19.499996" width="19.999998" height="638.499939" style="stroke: rgb(0, 0, 0);">
+  <rect x="-19.000004" width="1237.5" height="638.499994" style="stroke: rgb(0, 0, 0); opacity: 0.5; fill: rgb(255, 0, 0);" y="-19.500007">
     <title>wall</title>
   </rect>
 </svg>
