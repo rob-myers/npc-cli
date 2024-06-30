@@ -134,6 +134,25 @@ export function isModifierKey(e) {
 }
 
 /**
+ * Get array of modifier keys that are currently pressed.
+ * @param {MouseEvent} e 
+ */
+export function getModifierKeys(e) {
+  const keysDown = /** @type {( 'ctrl' | 'meta' | 'shift' )[]} */ ([]);
+  if (e.ctrlKey === true) {
+    keysDown.push('ctrl')
+  }
+  if (e.metaKey === true) {
+    keysDown.push('meta')
+  }
+  if (e.shiftKey === true) {
+    keysDown.push('shift')
+  }
+  return keysDown.length === 0 ? undefined : keysDown;
+}
+
+
+/**
  * Is Right Mouse Button (RMB) down?
  * @param {MouseEvent} e 
  */

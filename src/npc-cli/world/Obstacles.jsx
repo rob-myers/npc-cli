@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
-import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
+import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
@@ -90,7 +90,7 @@ export default function Obstacles(props) {
         api.events.next({
           key: "pointerdown",
           is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
+          keys: getModifierKeys(e.nativeEvent),
           distancePx: 0,
           justLongDown: false,
           pointers: api.ui.getNumPointers(),
@@ -118,7 +118,7 @@ export default function Obstacles(props) {
         api.events.next({
           key: "pointerup",
           is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
+          keys: getModifierKeys(e.nativeEvent),
           distancePx: api.ui.getDownDistancePx(),
           justLongDown: api.ui.justLongDown,
           pointers: api.ui.getNumPointers(),

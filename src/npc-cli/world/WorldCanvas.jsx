@@ -5,7 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { Rect, Vect } from "../geom/index.js";
-import { isModifierKey, isRMB, isTouchDevice } from "../service/dom.js";
+import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { quadGeometryXZ } from "../service/three.js";
 import { WorldContext } from "./world-context";
@@ -50,7 +50,7 @@ export default function WorldCanvas(props) {
       api.events.next({
         key: "pointerdown",
         is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
+        keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
         justLongDown: false,
         pointers: state.getNumPointers(),
@@ -67,7 +67,7 @@ export default function WorldCanvas(props) {
       api.events.next({
         key: "pointerup",
         is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
+        keys: getModifierKeys(e.nativeEvent),
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         pointers: state.getNumPointers(),
@@ -96,7 +96,7 @@ export default function WorldCanvas(props) {
           api.events.next({
             key: "long-pointerdown",
             is3d: false,
-            modifierKey: isModifierKey(e.nativeEvent),
+            keys: getModifierKeys(e.nativeEvent),
             distancePx: state.getDownDistancePx(),
             justLongDown: false,
             pointers: state.getNumPointers(),
@@ -111,7 +111,7 @@ export default function WorldCanvas(props) {
       api.events.next({
         key: "pointerdown",
         is3d: false,
-        modifierKey: isModifierKey(e.nativeEvent),
+        keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
         justLongDown: false,
         pointers: state.getNumPointers(),
@@ -148,7 +148,7 @@ export default function WorldCanvas(props) {
       api.events.next({
         key: "pointerup",
         is3d: false,
-        modifierKey: isModifierKey(e.nativeEvent),
+        keys: getModifierKeys(e.nativeEvent),
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         pointers: state.getNumPointers(),
@@ -168,7 +168,7 @@ export default function WorldCanvas(props) {
       api.events.next({
         key: "pointerup-outside",
         is3d: false,
-        modifierKey: isModifierKey(e),
+        keys: getModifierKeys(e),
         distancePx: state.getDownDistancePx(),
         justLongDown: state.justLongDown,
         pointers: state.getNumPointers(),

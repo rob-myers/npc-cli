@@ -5,7 +5,7 @@ import { Mat, Vect } from "../geom";
 import { wallHeight } from "../service/const";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
-import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
+import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -45,7 +45,7 @@ export default function Walls(props) {
       api.events.next({
         key: "pointerdown",
         is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
+        keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
         justLongDown: false,
         pointers: api.ui.getNumPointers(),
@@ -61,7 +61,7 @@ export default function Walls(props) {
       api.events.next({
         key: "pointerup",
         is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
+        keys: getModifierKeys(e.nativeEvent),
         distancePx: api.ui.getDownDistancePx(),
         justLongDown: api.ui.justLongDown,
         pointers: api.ui.getNumPointers(),

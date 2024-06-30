@@ -73,7 +73,7 @@ declare namespace NPC {
     /** Was previous pointerdown held down for long? */
     justLongDown: boolean;
     /** Ctrl/Shift/Command was down */
-    modifierKey: boolean;
+    keys?: ('ctrl' | 'shift' | 'meta')[];
     /** Number of active pointers */
     pointers: number;
     /** Was the right mouse button being pressed?  */
@@ -92,7 +92,7 @@ declare namespace NPC {
       }
   );
 
-  type ClickMeta = import('three').Vector3Like & {
+  type ClickMeta = import('three').Vector3Like & Pick<BasePointerEvent, 'keys'> & {
     meta: Geom.Meta;
   };
 

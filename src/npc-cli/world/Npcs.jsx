@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultNpcClassKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
+import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
@@ -83,7 +83,7 @@ export default function Npcs(props) {
       api.events.next({
         key: "pointerup",
         is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
+        keys: getModifierKeys(e.nativeEvent),
         distancePx: api.ui.getDownDistancePx(),
         justLongDown: api.ui.justLongDown,
         pointers: api.ui.getNumPointers(),

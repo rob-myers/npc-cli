@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Poly } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { keys } from "../service/generic";
-import { drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLine } from "../service/dom";
+import { drawPolygons, getModifierKeys, isRMB, isTouchDevice, strokeLine } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -77,7 +77,7 @@ export default function Ceiling(props) {
         api.events.next({
           key: "pointerdown",
           is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
+          keys: getModifierKeys(e.nativeEvent),
           distancePx: api.ui.getDownDistancePx(),
           justLongDown: api.ui.justLongDown,
           pointers: api.ui.getNumPointers(),
@@ -102,7 +102,6 @@ export default function Ceiling(props) {
         api.events.next({
           key: "pointerup",
           is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
           distancePx: api.ui.getDownDistancePx(),
           justLongDown: api.ui.justLongDown,
           pointers: api.ui.getNumPointers(),
