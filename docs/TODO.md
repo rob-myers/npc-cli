@@ -9,35 +9,8 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ implement `click`
-- ✅ test `click`
-  - ✅ fix false positive
-- ✅ "NPC click to select" should be a script
-  - ✅ `click` detects npc clicks
-  ```sh
-  click | filter meta.npcKey |
-    map '({meta},{home}) => { home.selectedNpcKey = meta.npcKey }'
-  ```
-- ✅ "NPC click to move" should be a script
-  ```sh
-  click | filter meta.navigable | walkTest
-  ```
-- ✅ "door click to open" should be a script
-  ```sh
-  click | filter meta.door | map '({meta},{world}) => {
-    world.door.toggleDoor(meta.instanceId)
-  }'
-  ```
-- ✅ add background processes to profile
-
-- ✅ can detect/ignore rmb in `click`
-  - ❌ forward `rmb` from event
-  - ✅ `click --left` (only left, default) `click --right` (only right)
-- ✅ click sees modifier key(s) so `walkTest` can run
-
+- ✅ start new branch `use-decor`
 - 🚧 clean pointer-events i.e. avoid code duplication
-
-- start new branch `use-decor`
 
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
@@ -1417,3 +1390,29 @@
     - aligned hull doors can open in different directions
   - ✅ ensure two doors do not coincide
   - ✅ use gmDoorKey format `g{gmId}d{doorId}`
+
+- ✅ implement `click`
+- ✅ test `click`
+  - ✅ fix false positive
+- ✅ "NPC click to select" should be a script
+  - ✅ `click` detects npc clicks
+  ```sh
+  click | filter meta.npcKey |
+    map '({meta},{home}) => { home.selectedNpcKey = meta.npcKey }'
+  ```
+- ✅ "NPC click to move" should be a script
+  ```sh
+  click | filter meta.navigable | walkTest
+  ```
+- ✅ "door click to open" should be a script
+  ```sh
+  click | filter meta.door | map '({meta},{world}) => {
+    world.door.toggleDoor(meta.instanceId)
+  }'
+  ```
+- ✅ add background processes to profile
+
+- ✅ can detect/ignore rmb in `click`
+  - ❌ forward `rmb` from event
+  - ✅ `click --left` (only left, default) `click --right` (only right)
+- ✅ click sees modifier key(s) so `walkTest` can run
