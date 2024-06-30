@@ -72,7 +72,7 @@ export async function* click({ api, args, world }) {
       x: world.lib.precision(e.point.x),
       y: world.lib.precision(e.point.y),
       z: world.lib.precision(e.point.z),
-      
+      ...e.keys && { keys: e.keys },
       // ...e.modifierKey && { modifierKey: true },
       meta: { ...e.meta,
         // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
