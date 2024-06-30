@@ -99,12 +99,11 @@ export default function Obstacles(props) {
           touch: isTouchDevice(),
           point: e.point,
           meta: {
-            obstacles: true,
-            instanceId,
             gmId,
             obstacleId: obstacle.obstacleId,
             height: obstacle.height,
             ...obstacle.origPoly.meta,
+            instanceId,
           },
         });
         e.stopPropagation();
@@ -128,12 +127,11 @@ export default function Obstacles(props) {
           touch: isTouchDevice(),
           point: e.point,
           meta: {
-            obstacles: true,
-            instanceId,
             gmId,
             obstacleId,
             height: obstacle.height,
             ...obstacle.origPoly.meta,
+            instanceId,
           },
         });
         e.stopPropagation();
