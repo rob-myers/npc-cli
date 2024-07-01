@@ -25,11 +25,14 @@ export function onCreateWebpackConfig(opts: CreateWebpackConfigArgs) {
 
   opts.actions.setWebpackConfig(cfg);
 
-  opts.actions.setBabelOptions({
-    options: {
-      ignore: ["./src/npc-cli/sh/src"],
-    },
-  });
+  // opts.actions.setBabelOptions({
+  //   options: {
+  //     compact: true,
+  //     plugins: ["@babel/plugin-transform-async-generator-functions"],
+  //     presets: ["babel-preset-gatsby"],
+  //     ignore: ["./src/npc-cli/sh/src"],
+  //   },
+  // });
 }
 
 export function onCreateDevServer(args: CreateDevServerArgs) {
