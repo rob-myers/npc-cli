@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 -485737401 -1043571270 -69909253",
+  "hash": "610044716 -485737401 1196800518 -69909253",
   "mapsHash": 610044716,
   "layoutsHash": -485737401,
-  "sheetsHash": -1043571270,
+  "sheetsHash": 1196800518,
   "imagesHash": -69909253,
   "map": {
     "demo-map-1": {
@@ -26835,18 +26835,18 @@
       }
     },
     "decor": {
-      "door-hull-002.svg": {
+      "door--hull--002": {
         "door": true,
         "hull": true,
-        "fileKey": "door-hull-002.svg",
+        "decorKey": "door--hull--002",
         "x": 2,
         "y": 2,
         "width": 250,
         "height": 300
       },
-      "door-001.svg": {
+      "door--001": {
         "door": true,
-        "fileKey": "door-001.svg",
+        "decorKey": "door--001",
         "x": 254,
         "y": 2,
         "width": 110,

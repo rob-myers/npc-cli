@@ -29,7 +29,7 @@ export default function Doors(props) {
   
       state.doorByInstId.forEach((meta, _instanceId) => {
         // 🚧 remove hard-coding
-        const key = meta.door.meta.hull ? 'door-hull-002.svg' : 'door-001.svg'
+        const key = meta.door.meta.hull ? 'door--hull--002' : 'door--001';
         const { x, y, width, height } = decor[key];
         uvOffsets.push(x / decorDim.width, y / decorDim.height);
         uvDimensions.push(width / decorDim.width, height / decorDim.height);

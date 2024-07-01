@@ -28,7 +28,6 @@ declare namespace NPC {
     agent?: boolean;
   }
 
-
   type AnimKey = keyof import('../service/npc').NpcService['fromAnimKey'];
 
   type Event =

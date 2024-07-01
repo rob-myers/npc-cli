@@ -20,7 +20,7 @@
   - ℹ️ svg render will need to be supported by npm module `canvas`
   - ✅ create sprite-sheet using media/decor/*.svg
   - ✅ verify hmr works
-  - 🚧 key `foo.png` -> `foo`, and use separators `--`
+  - ✅ key `foo.png` -> `foo`, and use separators `--`
   - 🚧 try threshold promises for many svg -> contents -> image
 
 - next.js repo continued

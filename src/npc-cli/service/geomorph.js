@@ -52,6 +52,7 @@ class GeomorphService {
     return keys(this.toGmNum);
   }
 
+  /** Aligned to media/symbol/{key}.svg */
   fromSymbolKey = {// 🚧 must extend when adding new symbols
 
     "101--hull": true,
@@ -162,6 +163,12 @@ class GeomorphService {
     "extra--017--table--2x0.5": true,
     "extra--018--table-0.25x0.25": true,
     "extra--019--table-0.5x2": true,
+  };
+
+  /** Aligned to media/decor/{key}.svg */
+  fromDecorKey = {
+    'door--001': true,
+    'door--hull--002': true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */
@@ -678,6 +685,14 @@ class GeomorphService {
       windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
       unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
     };
+  }
+
+  /**
+   * @param {string} input
+   * @returns {input is Geomorph.DecorKey}
+   */
+  isDecorKey(input) {
+    return input in this.fromDecorKey;
   }
 
   /**
@@ -1246,4 +1261,8 @@ const tmpMat2 = new Mat();
 
 /**
  * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey
+ */
+
+/**
+ * @typedef {keyof GeomorphService['fromDecorKey']} DecorKey
  */

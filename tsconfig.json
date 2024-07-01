@@ -99,5 +99,5 @@
     "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
     "noErrorTruncation": true
   },
-  "include": ["./src/**/*", "./gatsby-browser.js", "./gatsby-config.ts", "./gatsby-node.ts", "./gatsby-ssr.js", "./plugins/**/*", "src/npc-cli/sh/src/*"]
+  "include": ["./src/**/*", "./gatsby-browser.js", "./gatsby-config.ts", "./gatsby-node.ts", "./gatsby-ssr.js", "./plugins/**/*"]
 }

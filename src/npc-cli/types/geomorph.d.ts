@@ -292,7 +292,11 @@ declare namespace Geomorph {
     /** For defining decor via CLI (more succinct) */
     tags?: string[];
   }
-  
+
+  type DecorSheetRectCtxt = Geom.Meta<{ decorKey: Geomorph.DecorKey }>;
+
+  type DecorKey = import('../service/geomorph.js').DecorKey;
+
   //#endregion
 
   type GeomorphKey =
@@ -322,11 +326,7 @@ declare namespace Geomorph {
     obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
     obstacleDim: { width: number; height: number; }
     decorDim: { width: number; height: number; }
-    decor: DecorSheet;
-  }
-
-  interface DecorSheet {
-    [decorKey: string]: Geom.RectJson & DecorSheetRectCtxt;
+    decor: Record<Geomorph.DecorKey, Geom.RectJson & DecorSheetRectCtxt>;
   }
 
   interface ObstacleSheetRectCtxt {
@@ -336,6 +336,5 @@ declare namespace Geomorph {
     type: string;
   }
 
-  type DecorSheetRectCtxt = Geom.Meta<{ fileKey: string }>;
 
 }
