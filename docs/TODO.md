@@ -14,7 +14,7 @@
 - ✅ consider naming: shell `api` vs world-level `api`
   - now using `w` for both World api and command
 
-- 🚧 clean pointer-events i.e. avoid code duplication
+- ✅ clean pointer-events i.e. avoid code duplication
 
 - 🚧 decor pipeline based on *.svg
   - media/decor/*.svg
@@ -46,6 +46,30 @@
 - use rapier physics 3d in web worker
   - i.e. static triggers
 
+- somehow reconfigure `TerserPlugin` to exclude `npc-cli/sh/src/*`
+  - already tried using extension `.min.js`
+  ```js
+  /**
+   * https://github.com/gatsbyjs/gatsby/blob/519e88db154d1fc3c9a91c8ad2e139c61491fb02/packages/gatsby/src/utils/webpack.config.js#L770
+   * https://github.com/gatsbyjs/gatsby/blob/519e88db154d1fc3c9a91c8ad2e139c61491fb02/packages/gatsby/src/utils/webpack-utils.ts#L686
+   */
+  const terserOptions: TerserOptions = {
+    keep_classnames: true,
+    keep_fnames: true,
+  };
+  opts.plugins.minifyJs({
+    terserOptions,
+    exclude: , // 👈
+  });
+
+  const webpackCfg = opts.getConfig() as Configuration;
+  const minimizer = webpackCfg.optimization?.minimizer;
+  if (Array.isArray(minimizer) && minimizer[0] instanceof TerserPlugin) {
+    console.log('🔔 detected TerserPlugin');
+    // 🚧 create new TerserPlugin, excluding certain files
+  }
+  console.log({ minimizer: webpackCfg.optimization?.minimizer })
+  ```
 - ✅ fuel symbol can use single rect for wall
 - ✅ thicker door ceiling tops
 - ✅ `hull-wall` tag -> `wall hull`

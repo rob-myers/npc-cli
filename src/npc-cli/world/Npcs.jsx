@@ -78,21 +78,24 @@ export default function Npcs(props) {
       const { success } = w.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
       return success;
     },
+    onNpcPointerDown(e) {
+      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
+      w.events.next(w.ui.getNpcPointerEvent({
+        key: "pointerdown",
+        event: e,
+        is3d: true,
+        meta: { npc: true, npcKey },
+      }));
+      e.stopPropagation();
+    },
     onNpcPointerUp(e) {
       const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-      w.events.next({
+      w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerup",
+        event: e,
         is3d: true,
-        keys: getModifierKeys(e.nativeEvent),
-        distancePx: w.ui.getDownDistancePx(),
-        justLongDown: w.ui.justLongDown,
-        pointers: w.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
         meta: { npc: true, npcKey },
-      });
+      }));
       e.stopPropagation();
     },
     onTick(deltaMs) {
@@ -230,7 +233,8 @@ export default function Npcs(props) {
     <group
       name="npcs"
       ref={x => state.group = x ?? state.group}
-      onPointerUp={e => state.onNpcPointerUp(e)}
+      onPointerDown={state.onNpcPointerDown}
+      onPointerUp={state.onNpcPointerUp}
     />
 
   </>;
@@ -256,6 +260,7 @@ export default function Npcs(props) {
  * @property {() => null | NPC.NPC} getSelected // 🚧 remove
  * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
  * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick

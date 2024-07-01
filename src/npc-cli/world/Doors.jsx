@@ -93,35 +93,23 @@ export default function Doors(props) {
       );
     },
     onPointerDown(e) {
-      w.events.next({
+      w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerdown",
-        is3d: true,
-        keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
+        event: e,
+        is3d: true,
         justLongDown: false,
-        pointers: w.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
         meta: state.decodeDoorInstanceId(/** @type {number} */ (e.instanceId)),
-      });
+      }));
       e.stopPropagation();
     },
     onPointerUp(e) {
-      w.events.next({
+      w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerup",
+        event: e,
         is3d: true,
-        keys: getModifierKeys(e.nativeEvent),
-        distancePx: w.ui.getDownDistancePx(),
-        justLongDown: w.ui.justLongDown,
-        pointers: w.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
         meta: state.decodeDoorInstanceId(/** @type {number} */ (e.instanceId)),
-      });
+      }));
       e.stopPropagation();
     },
     onTick() {

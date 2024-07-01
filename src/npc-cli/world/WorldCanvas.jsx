@@ -36,6 +36,46 @@ export default function WorldCanvas(props) {
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
     },
+    getNpcPointerEvent({
+      key,
+      distancePx = state.getDownDistancePx(),
+      event,
+      is3d,
+      justLongDown = state.justLongDown,
+      meta,
+    }) {
+      if (key === 'pointerup' || key === 'pointerdown') {
+        return {
+          key,
+          ...is3d && 'point' in event // ThreeEvent<PointerEvent>
+            ? { is3d: true, point: event.point }
+            : { is3d: false },
+          distancePx,
+          justLongDown,
+          pointers: state.getNumPointers(),
+          rmb: isRMB(event.nativeEvent),
+          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          meta,
+        };
+      }
+      if (key === 'long-pointerdown' || key === 'pointerup-outside') {
+        return {
+          key,
+          is3d: false,
+          distancePx,
+          justLongDown,
+          pointers: state.getNumPointers(),
+          rmb: isRMB(event.nativeEvent),
+          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          meta,
+        };
+      }
+      throw Error(`${'getNpcPointerEvent'}: key "${key}" should be in ${
+        JSON.stringify(['pointerup', 'pointerdown', 'long-pointerdown', 'pointerup-outside'])
+      }`);
+    },
     getNumPointers() {
       return state.down?.pointerIds.length ?? 0;
     },
@@ -47,38 +87,22 @@ export default function WorldCanvas(props) {
     },
     onGridPointerDown(e) {
       // state.downPoint = e.point.clone();
-      w.events.next({
+      w.events.next(state.getNpcPointerEvent({
         key: "pointerdown",
-        is3d: true,
-        keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
+        event: e,
+        is3d: true,
         justLongDown: false,
-        pointers: state.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
-        meta: {
-          floor: true,
-        },
-      });
+        meta: { floor: true },
+      }));
     },
     onGridPointerUp(e) {
-      w.events.next({
+      w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
+        event: e,
         is3d: true,
-        keys: getModifierKeys(e.nativeEvent),
-        distancePx: state.getDownDistancePx(),
-        justLongDown: state.justLongDown,
-        pointers: state.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
-        meta: {
-          floor: true,
-        },
-      });
+        meta: { floor: true },
+      }));
     },
     onPointerDown(e) {
       const sp = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -93,32 +117,25 @@ export default function WorldCanvas(props) {
         epochMs: Date.now(),
         longTimeoutId: state.down || cameraKey ? 0 : window.setTimeout(() => {
           state.justLongDown = true;
-          w.events.next({
+          w.events.next(state.getNpcPointerEvent({
             key: "long-pointerdown",
+            event: e,
             is3d: false,
-            keys: getModifierKeys(e.nativeEvent),
-            distancePx: state.getDownDistancePx(),
             justLongDown: false,
-            pointers: state.getNumPointers(),
-            rmb: false, // could track
-            screenPoint: sp,
-            touch: isTouchDevice(),
-          });
+            meta: {},
+          }));
         }, longPressMs),
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
       };
 
-      w.events.next({
+      w.events.next(state.getNpcPointerEvent({
         key: "pointerdown",
-        is3d: false,
-        keys: getModifierKeys(e.nativeEvent),
         distancePx: 0,
+        event: e,
+        is3d: false,
         justLongDown: false,
-        pointers: state.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: sp,
-        touch: isTouchDevice(),
-      });
+        meta: {},
+      }));
     },
     onPointerLeave(e) {
       if (!state.down) {
@@ -145,17 +162,12 @@ export default function WorldCanvas(props) {
         return;
       }
       
-      w.events.next({
+      w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
+        event: e,
         is3d: false,
-        keys: getModifierKeys(e.nativeEvent),
-        distancePx: state.getDownDistancePx(),
-        justLongDown: state.justLongDown,
-        pointers: state.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-      });
+        meta: {},
+      }));
 
       state.onPointerLeave(e);
       state.justLongDown = false;
@@ -293,6 +305,7 @@ export default function WorldCanvas(props) {
  * @property {import('@react-three/fiber').RootState} rootState
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
+ * @property {(def: PointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getNpcPointerEvent
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
@@ -333,4 +346,14 @@ const statsCss = css`
  * @typedef BaseDown
  * @property {number} epochMs
  * @property {Geom.Vect} screenPoint
+ */
+
+/**
+ * @typedef PointerEventDef
+ * @property {'pointerup' | 'pointerdown' | 'long-pointerdown' | 'pointerup-outside'} key
+ * @property {number} [distancePx]
+ * @property {import('@react-three/fiber').ThreeEvent<PointerEvent> | React.PointerEvent} event
+ * @property {boolean} is3d
+ * @property {boolean} [justLongDown]
+ * @property {Geom.Meta} meta
  */

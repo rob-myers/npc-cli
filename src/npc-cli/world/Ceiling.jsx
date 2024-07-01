@@ -74,23 +74,16 @@ export default function Ceiling(props) {
 
       if (result !== null) {
         const { gmId } = result;
-        w.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerdown",
+          event: e,
           is3d: true,
-          keys: getModifierKeys(e.nativeEvent),
-          distancePx: w.ui.getDownDistancePx(),
-          justLongDown: w.ui.justLongDown,
-          pointers: w.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             ceiling: true,
             gmId,
             height: wallHeight,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },
@@ -99,22 +92,16 @@ export default function Ceiling(props) {
 
       if (result !== null) {
         const { gmId } = result;
-        w.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerup",
+          event: e,
           is3d: true,
-          distancePx: w.ui.getDownDistancePx(),
-          justLongDown: w.ui.justLongDown,
-          pointers: w.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             ceiling: true,
             gmId,
             height: wallHeight,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },

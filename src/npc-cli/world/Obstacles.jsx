@@ -87,17 +87,12 @@ export default function Obstacles(props) {
 
       if (result !== null) {
         const { gmId, obstacle } = result;
-        w.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerdown",
-          is3d: true,
-          keys: getModifierKeys(e.nativeEvent),
           distancePx: 0,
+          event: e,
+          is3d: true,
           justLongDown: false,
-          pointers: w.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             gmId,
             obstacleId: obstacle.obstacleId,
@@ -105,7 +100,7 @@ export default function Obstacles(props) {
             ...obstacle.origPoly.meta,
             instanceId,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },
@@ -115,17 +110,10 @@ export default function Obstacles(props) {
 
       if (result !== null) {
         const { gmId, obstacleId, obstacle } = result;
-        w.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerup",
+          event: e,
           is3d: true,
-          keys: getModifierKeys(e.nativeEvent),
-          distancePx: w.ui.getDownDistancePx(),
-          justLongDown: w.ui.justLongDown,
-          pointers: w.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             gmId,
             obstacleId,
@@ -133,7 +121,7 @@ export default function Obstacles(props) {
             ...obstacle.origPoly.meta,
             instanceId,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },
