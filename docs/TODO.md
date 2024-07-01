@@ -90,11 +90,11 @@
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
-- 🚧 fix sprite-sheet HMR
+- ✅ fix sprite-sheet HMR
   - ℹ️ on add new symbol with obstacles
   - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
   - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
-  - 🚧 could be problem with smart-sprite-sheet-update
+  - ✅ could be problem with smart-sprite-sheet-update
   - ❌ could relate to adding symbol key to geomorph.js before we're ready?
   - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
   - ❌ try repro with single geomorph
@@ -105,8 +105,9 @@
     - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
   - ✅ saw issue on WARN about mismatched size
     - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
-  - 🚧 saw out-of-sync, possibly Boxy SVG failed to save
-  - 🚧 saw issue on remove obstacle, then add back in
+  - ✅ saw out-of-sync, possibly Boxy SVG failed to save
+  - ✅ saw issue on remove obstacle, then add back in
+  - haven't seen any issues for a while, so closing
 
 - ✅ remove `. ~/.bash_profile` from pre-push hook
 - ❌ improve `yarn ensure-webp` by detecting webp older than png
