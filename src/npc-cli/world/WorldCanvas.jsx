@@ -52,6 +52,7 @@ export default function WorldCanvas(props) {
             : { is3d: false },
           distancePx,
           justLongDown,
+          keys: getModifierKeys(event.nativeEvent),
           pointers: state.getNumPointers(),
           rmb: isRMB(event.nativeEvent),
           screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
@@ -65,6 +66,7 @@ export default function WorldCanvas(props) {
           is3d: false,
           distancePx,
           justLongDown,
+          keys: getModifierKeys(event.nativeEvent),
           pointers: state.getNumPointers(),
           rmb: isRMB(event.nativeEvent),
           screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
@@ -177,17 +179,12 @@ export default function WorldCanvas(props) {
         return;
       }
 
-      w.events.next({
+      w.events.next(state.getNpcPointerEvent({
         key: "pointerup-outside",
+        event: /** @type {React.MouseEvent} */ ({ nativeEvent: e }),
         is3d: false,
-        keys: getModifierKeys(e),
-        distancePx: state.getDownDistancePx(),
-        justLongDown: state.justLongDown,
-        pointers: state.getNumPointers(),
-        rmb: isRMB(e),
-        screenPoint: { x: e.offsetX, y: e.offsetY },
-        touch: isTouchDevice(),
-      });
+        meta: {},
+      }));
     },
     onWheel(e) {
       if (w.menu.isOpen === true) {
@@ -352,7 +349,7 @@ const statsCss = css`
  * @typedef PointerEventDef
  * @property {'pointerup' | 'pointerdown' | 'long-pointerdown' | 'pointerup-outside'} key
  * @property {number} [distancePx]
- * @property {import('@react-three/fiber').ThreeEvent<PointerEvent> | React.PointerEvent} event
+ * @property {import('@react-three/fiber').ThreeEvent<PointerEvent> | React.PointerEvent | React.MouseEvent} event
  * @property {boolean} is3d
  * @property {boolean} [justLongDown]
  * @property {Geom.Meta} meta
