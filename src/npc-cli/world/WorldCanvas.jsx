@@ -246,7 +246,7 @@ export default function WorldCanvas(props) {
       <PerspectiveCamera
         position={[0, 16, 0]}
         makeDefault
-        fov={30}
+        fov={40}
       />
 
       <MapControls
