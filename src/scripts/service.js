@@ -181,6 +181,18 @@ export async function labelledSpawn(label, command, ...args) {
 }
 
 /**
+ * Read file as string, or `null` on error.
+ * @param {string} filePath 
+ */
+export async function tryReadString(filePath) {
+  try {
+    return (await fs.promises.readFile(filePath)).toString();
+  } catch (e) {// assume doesn't exist
+    return null;
+  }
+}
+
+/**
  * @param {import('canvas').Canvas} canvas 
  * @param {string} outputPath 
  */

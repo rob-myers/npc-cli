@@ -11,8 +11,8 @@
  * Generates:
  * - assets.json
  * - geomorphs.json
- * - obstacles sprite-sheet
- * - decor sprite-sheet
+ * - obstacles sprite-sheet (using media/symbols/*.svg)
+ * - decor sprite-sheet (using media/decor/*.svg)
  * - webp from png
  */
 /// <reference path="./deps.d.ts"/>
@@ -33,7 +33,7 @@ import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, 
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
-import { labelledSpawn, saveCanvasAsFile } from "./service";
+import { labelledSpawn, saveCanvasAsFile, tryReadString } from "./service";
 
 const rawOpts = getopts(process.argv, {
   boolean: ['all', 'prePush'],
@@ -68,7 +68,7 @@ function computeOpts() {
      * - neither this script nor geomorphs.js are in `changedFiles`
      */
     all,
-    /** When non-empty, files changed (added/modified/deleted) within {ms} @see assets-nodemon.js */
+    /** When non-empty, files changed (added/modified/deleted) within {ms}, see `assets-nodemon.js` */
     changedFiles,
     /** Restriction of @see changedFiles to decor PNG baseNames */
     changedDecorBaseNames,
@@ -85,11 +85,14 @@ function computeOpts() {
 
 /** @returns {Promise<Prev>} */
 async function computePrev() {
+  const [prevAssetsStr, obstaclesPng, decorPng] = await Promise.all([
+    !opts.all ? tryReadString(assetsFilepath) : null,
+    loadImage(obstaclesPngPath),
+    loadImage(decorPngPath),
+  ]);
   const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    !opts.all ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null
+    prevAssetsStr === null ? null : JSON.parse(prevAssetsStr)
   );
-  const obstaclesPng = fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
-  const decorPng = fs.existsSync(decorPngPath) ? await loadImage(decorPngPath) : null;
   return {
     assets: prevAssets,
     obstaclesPng,
