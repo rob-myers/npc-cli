@@ -7,7 +7,6 @@ import { wallHeight } from "../service/const";
 import * as glsl from "../service/glsl";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
-import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -30,7 +29,7 @@ export default function Doors(props) {
   
       state.doorByInstId.forEach((meta, _instanceId) => {
         // 🚧 remove hard-coding
-        const key = meta.door.meta.hull ? 'door-hull-002.png' : 'door-001.png'
+        const key = meta.door.meta.hull ? 'door-hull-002.svg' : 'door-001.svg'
         const { x, y, width, height } = decor[key];
         uvOffsets.push(x / decorDim.width, y / decorDim.height);
         uvDimensions.push(width / decorDim.width, height / decorDim.height);

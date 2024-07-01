@@ -1007,26 +1007,26 @@
       }
     },
     "decor": {
-      "door-hull-002.png": {
+      "door-hull-002.svg": {
         "door": true,
         "hull": true,
-        "fileKey": "door-hull-002.png",
+        "fileKey": "door-hull-002.svg",
         "x": 2,
         "y": 2,
-        "width": 500,
-        "height": 600
+        "width": 250,
+        "height": 300
       },
-      "door-001.png": {
+      "door-001.svg": {
         "door": true,
-        "fileKey": "door-001.png",
-        "x": 504,
+        "fileKey": "door-001.svg",
+        "x": 254,
         "y": 2,
-        "width": 220,
-        "height": 400
+        "width": 110,
+        "height": 200
       }
     },
     "obstacleDim": {"width": 2151, "height": 2154},
-    "decorDim": {"width": 726, "height": 604}
+    "decorDim": {"width": 366, "height": 304}
   },
   "symbols": {
     "101--hull": {

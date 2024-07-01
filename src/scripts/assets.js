@@ -70,7 +70,7 @@ function computeOpts() {
     all,
     /** When non-empty, files changed (added/modified/deleted) within {ms}, see `assets-nodemon.js` */
     changedFiles,
-    /** Restriction of @see changedFiles to decor PNG baseNames */
+    /** Restriction of @see changedFiles to decor SVG baseNames */
     changedDecorBaseNames,
     /** Only use @see changedFiles when non-empty and !opts.all  */
     detectChanges: !all && changedFiles.length > 0,
@@ -91,7 +91,7 @@ async function computePrev() {
     loadImage(decorPngPath),
   ]);
   const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    prevAssetsStr === null ? null : JSON.parse(prevAssetsStr)
+    JSON.parse(prevAssetsStr ?? 'null')
   );
   return {
     assets: prevAssets,
@@ -129,13 +129,15 @@ info({ opts });
 
   const prev = await computePrev();
 
-  const symbolBaseNames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg")).sort();
+  const [symbolBaseNames, mapBaseNames] = await Promise.all([
+    fs.promises.readdir(symbolsDir).then(xs => xs.filter((x) => x.endsWith(".svg")).sort()),
+    fs.promises.readdir(mapsDir).then(xs => xs.filter((x) => x.endsWith(".svg")).sort()),
+  ]);
+
   const symbolBaseNamesToUpdate = opts.all
     ? symbolBaseNames
     : symbolBaseNames.filter(x =>  opts.changedFiles.includes(path.resolve(symbolsDir, x)))
   ;
-
-  const mapBaseNames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg")).sort();
 
   /** @type {Geomorph.AssetsJson} The next assets.json */
   const assetsJson = {
@@ -377,10 +379,10 @@ function createObstaclesSheetJson(assets) {
   const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, Rectangle>} */ ({});
   for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
     /** World coords -> Starship Geomorph coords, modulo additonal scale in [1, 5] non-hull symbols. */
-    const worldToSguScaled = worldToSguScale * (isHull ? 1 : spriteSheetNonHullExtraScale);
+    const scale = worldToSguScale * (isHull ? 1 : spriteSheetNonHullExtraScale);
 
     for (const [obstacleId, poly] of obstacles.entries()) {
-      const rect = Poly.from(poly).rect.scale(worldToSguScaled).precision(0); // width, height integers
+      const rect = Poly.from(poly).rect.scale(scale).precision(0); // width, height integers
       const [width, height] = [rect.width, rect.height]
       
       const r = new Rectangle(width, height);
@@ -417,7 +419,6 @@ function createObstaclesSheetJson(assets) {
 /**
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
- * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
  */
 async function drawObstaclesSheet(assets, prev) {
   
@@ -425,14 +426,11 @@ async function drawObstaclesSheet(assets, prev) {
   const obstacles = Object.values(obstacle);
   const ct = createCanvas(obstacleDim.width, obstacleDim.height).getContext('2d');
 
-  // 🚧 redraw all obstacles when:
-  // - opts.all ✅ (prev.assets `null`)
-  // - this file changed (?)
   const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prev);
   info({ changedObstacles, removedObstacles });
 
   if (changedObstacles.size === 0 && removedObstacles.size === 0) {
-    return false;
+    return;
   }
 
   for (const { x, y, width, height, symbolKey, obstacleId } of obstacles) {
@@ -470,31 +468,38 @@ async function drawObstaclesSheet(assets, prev) {
   }
 
   await saveCanvasAsFile(ct.canvas, obstaclesPngPath);
-  return true;
 }
 
 /**
+ * 🚧 try threshold promises
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
  * @returns {Promise<Record<string, import('canvas').Image>>}
  */
 async function createDecorSheetJson(assets, prev) {
 
-  const pngBasenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".png")).sort();
+  const svgBasenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".svg")).sort();
   const prevDecorSheet = prev.assets?.sheet.decor;
-  const changedBasenames = prevDecorSheet && opts.detectChanges
-    ? pngBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
-    : pngBasenames;
+  const changedSvgBasenames = !!prevDecorSheet && opts.detectChanges
+    ? svgBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
+    : svgBasenames;
 
   const baseNameToRect = /** @type {Record<string, Rectangle>} */ ({});
   const baseNameToImg = /** @type {Record<string, import('canvas').Image>} */ ({});
+  /**
+   * Decor is drawn in units `sgu * 5` (same approach as non-hull symbols).
+   * We further adjust how higher-res we want it via @see spriteSheetNonHullExtraScale.
+   */
+  const scale = (1 / 5) * spriteSheetNonHullExtraScale;
 
-  for (const baseName of pngBasenames) {
-    if (changedBasenames.includes(baseName)) {
-      const tags = baseName.split('-').slice(0, -1); // ignore e.g. `001.png`
+  for (const baseName of svgBasenames) {
+    if (changedSvgBasenames.includes(baseName)) {
+      const tags = baseName.split('-').slice(0, -1); // ignore e.g. `001.svg`
       const meta = tags.reduce((agg, tag) => { agg[tag] = true; return agg; }, /** @type {Geom.Meta} */ ({}));
-      const img = await loadImage(path.resolve(decorDir, baseName));
-      const rect = new Rectangle(img.width, img.height);
+      // svg contents -> data url
+      const svgDataUrl = `data:image/svg+xml;utf8,${await tryReadString(path.resolve(decorDir, baseName))}`;
+      const img = await loadImage(svgDataUrl);
+      const rect = new Rectangle(toPrecision(img.width * scale, 0), toPrecision(img.height * scale, 0));
       /** @type {Geomorph.DecorSheetRectCtxt} */
       const rectData = { ...meta, fileKey: baseName };
       rect.data = rectData;
@@ -533,7 +538,6 @@ async function createDecorSheetJson(assets, prev) {
  * @param {Geomorph.AssetsJson} assets
  * @param {Record<string, import('canvas').Image>} fileKeyToImage
  * @param {Prev} prev
- * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
  */
 async function drawDecorSheet(assets, fileKeyToImage, prev) {
   const { decor, decorDim } = assets.sheet;
@@ -556,7 +560,6 @@ async function drawDecorSheet(assets, fileKeyToImage, prev) {
   }
 
   await saveCanvasAsFile(ct.canvas, decorPngPath);
-  return true;
 }
 
 /**

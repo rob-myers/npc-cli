@@ -17,8 +17,11 @@
 - ✅ clean pointer-events i.e. avoid code duplication
 
 - 🚧 decor pipeline based on *.svg
-  - media/decor/*.svg
-  - svg render will need to be supported by npm module `canvas`
+  - ℹ️ svg render will need to be supported by npm module `canvas`
+  - ✅ create sprite-sheet using media/decor/*.svg
+  - ✅ verify hmr works
+  - 🚧 key `foo.png` -> `foo`, and use separators `--`
+  - 🚧 try threshold promises for many svg -> contents -> image
 
 - next.js repo continued
   - migrate Viewer
@@ -46,7 +49,7 @@
 - use rapier physics 3d in web worker
   - i.e. static triggers
 
-- somehow reconfigure `TerserPlugin` to exclude `npc-cli/sh/src/*`
+- gatsby: somehow reconfigure `TerserPlugin` to exclude `npc-cli/sh/src/*`
   - already tried using extension `.min.js`
   ```js
   /**
@@ -70,6 +73,10 @@
   }
   console.log({ minimizer: webpackCfg.optimization?.minimizer })
   ```
+- 🚧 🔥 sometimes during development restarting stops working,
+  - can see 3d floor but console logs `THREE.WebGLRenderer: Context Lost`
+  - observed that worker was not running
+  - 🚧 try saving memory in web-worker, following recast-navigation-js
 - ✅ fuel symbol can use single rect for wall
 - ✅ thicker door ceiling tops
 - ✅ `hull-wall` tag -> `wall hull`
@@ -79,9 +86,6 @@
   - approach similar to obstacles
 - support camera move via terminal
 - improve doors hard-coding in decor sprite-sheet
-- 🚧 sometimes during development restarting stops working,
-  i.e. can see 3d floor but console logs `THREE.WebGLRenderer: Context Lost`
-  - try saving memory in web-worker, following recast-navigation-js
 - ✅ split component WallsAndDoors
 - ✅ split component Surfaces
   - Obstacles
