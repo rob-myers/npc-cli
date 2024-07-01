@@ -24,6 +24,10 @@ export function onCreateWebpackConfig(opts: CreateWebpackConfigArgs) {
   };
 
   opts.actions.setWebpackConfig(cfg);
+
+  opts.actions.setBabelOptions({
+    ignore: ["./src/npc-cli/sh/src"],
+  });
 }
 
 export function onCreateDevServer(args: CreateDevServerArgs) {
