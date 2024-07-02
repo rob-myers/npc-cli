@@ -11,10 +11,19 @@
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
-  - 🚧 can specify decor cuboid in symbols
-  - 🚧 can see decor cuboids in World
-  - 🚧 can specify decor quad in symbols
-  - 🚧 can see decor quads in World
+  - 🚧 can specify decor `cuboid` in symbols
+  - can see decor cuboids in World
+  - decor cuboids can effect nav-mesh
+  - clarify identifiers
+    - decorKey -> decorImgKey (?)
+    - decorKey corresponds to instance key
+  - redo decor types
+    - can have decorImgKey (in XZ plane)
+      - e.g. for cuboid table-top or screen front
+    - `rect` -> `quad`
+    - `point` should be 3d
+  - can specify decor quads in symbols
+  - can see decor quads in World
 
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌

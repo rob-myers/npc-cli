@@ -186,6 +186,30 @@ class GeomorphService {
     if (meta.rect) {
       const { angle, baseRect } = geom.polyToAngledRect(poly);
       return { type: 'rect', key: decorKey, ...baseRect.precision(precision).json, meta, angle };
+    } else if (meta.cuboid) {
+      poly = poly.clone();
+      const defaultDecorCuboidHeight = 0.5; // 🚧
+      const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
+      const y3d = typeof meta.y === 'number' ? meta.y : 0;
+      const center2d = poly.center;
+      const center = { x: center2d.x, y: y3d + height3d / 2, z: center2d.y };
+      
+      tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
+      
+      if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
+        const aabb = poly.rect;
+        const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
+        return { type: 'cuboid', key: decorKey, meta, angle: 0, center, extent };
+      }
+      
+      // Angle of first edge
+      const angle = Math.atan2(tmpVect1.y, tmpVect1.x);
+      // Rotate points back around `center2d` so axis-aligned
+      poly.applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
+      
+      const aabb = poly.rect;
+      const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
+      return { type: 'cuboid', key: decorKey, meta, angle, center, extent };
     } else if (meta.circle) {
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
       const center = poly.center.precision(precision);

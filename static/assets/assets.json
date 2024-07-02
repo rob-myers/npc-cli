@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": 1114848746, "pngHash": 568633107},
     "102--hull": {"outputHash": 76689748, "pngHash": 184103855},
     "103--hull": {"outputHash": 179418752, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -2007094609, "pngHash": 787602800},
+    "301--hull": {"outputHash": -2115931405, "pngHash": 787602800},
     "302--hull": {"outputHash": 1783063856, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": 848567993,
@@ -2373,24 +2373,29 @@
         {
           "type": "Polygon",
           "coordinates": [[[7, 4.85], [7, 5.1], [6.75, 5.1], [6.75, 4.85]]],
-          "meta": {"decor": true, "go": true, "label": "study"}
+          "meta": {"decor": true, "label": "study"}
         },
         {
           "type": "Polygon",
           "coordinates": [[[6.25, 7.75], [6, 7.75], [6, 7.5], [6.25, 7.5]]],
-          "meta": {"decor": true, "go": true, "label": "corridor"}
+          "meta": {"decor": true, "label": "corridor"}
         },
         {
           "type": "Polygon",
           "coordinates": [[[24, 7.5], [24, 7.75], [23.75, 7.75], [23.75, 7.5]]],
-          "meta": {"decor": true, "go": true, "label": "corridor"}
+          "meta": {"decor": true, "label": "corridor"}
         },
         {
           "type": "Polygon",
           "coordinates": [
             [[23.525, 4.85], [23.525, 5.1], [23.275, 5.1], [23.275, 4.85]]
           ],
-          "meta": {"decor": true, "go": true, "label": "study"}
+          "meta": {"decor": true, "label": "study"}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[5.625, 6], [5.625, 6.5], [4.875, 6.5], [4.875, 6]]],
+          "meta": {"decor": true, "cuboid": true, "table": true, "h": 0.5}
         }
       ],
       "unsorted": [

@@ -267,20 +267,33 @@ declare namespace Geomorph {
   /** Serializable */
   type Decor = (
     | DecorCircle
+    | DecorCuboid
     | DecorPoint
     | DecorRect
   );
 
-  interface DecorPoint extends BaseDecor, Geom.VectJson {
-    type: 'point';
-  }
-
   interface DecorCircle extends BaseDecor, Geom.Circle {
     type: 'circle';
+  }
+
+  /**
+   * Vertices `center.xyz ± extent.xyz` rotated about `center` by `angle`.
+   */
+  interface DecorCuboid extends BaseDecor {
+    type: 'cuboid';
+    center: import('three').Vector3Like;
+    extent: import('three').Vector3Like;
+    /** Radians */
+    angle: number;
+  }
+
+  interface DecorPoint extends BaseDecor, Geom.VectJson {
+    type: 'point';
   }
   
   interface DecorRect extends BaseDecor, Geom.RectJson {
     type: 'rect';
+    /** Radians */
     angle?: number;
   }
 
