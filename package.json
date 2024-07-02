@@ -74,6 +74,7 @@
     "maath": "^0.10.7",
     "maxrects-packer": "^2.7.3",
     "mvdan-sh": "^0.5.0",
+    "p-queue-compat": "^1.0.225",
     "poly2tri": "^1.5.0",
     "polygon-clipping": "^0.15.7",
     "postcss": "^8.4.38",
