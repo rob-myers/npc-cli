@@ -24,11 +24,12 @@ import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 import { createCanvas, loadImage } from 'canvas';
 import { MaxRectsPacker, Rectangle } from "maxrects-packer";
+import PQueue from "p-queue-compat";
 
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
-import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale } from "../npc-cli/service/const";
+import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale, spriteSheetDecorExtraScale } from "../npc-cli/service/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
@@ -473,47 +474,56 @@ async function drawObstaclesSheet(assets, prev) {
 }
 
 /**
- * 🚧 try threshold promises
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
  * @returns {Promise<Record<string, import('canvas').Image>>}
  */
 async function createDecorSheetJson(assets, prev) {
+  /** `media/decor/{baseName}` for SVGs corresponding to decorKeys */
+  const svgBasenames = fs.readdirSync(decorDir).filter((baseName) => {
+    if (!baseName.endsWith(".svg")) return false;
+    const decorKey = baseName.slice(0, -'.svg'.length);
+    if (geomorphService.isDecorKey(decorKey)) return true;
+    warn(`${'createDecorSheetJson'}: ignored file (unknown decorKey "${decorKey}")`);
+  }).sort();
 
-  const svgBasenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".svg")).sort();
   const prevDecorSheet = prev.assets?.sheet.decor;
   const changedSvgBasenames = !!prevDecorSheet && opts.detectChanges
     ? svgBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
-    : svgBasenames;
+    : svgBasenames
+  ;
 
   const decorKeyToRect = /** @type {Record<Geomorph.DecorKey, Rectangle>} */ ({});
   /** @type {Partial<Record<Geomorph.DecorKey, import('canvas').Image>>} */
   const decorKeyToImg = {};
+
+  // Compute changed images in parallel
+  const promQueue = new PQueue({ concurrency: 5 });
+  await Promise.all(changedSvgBasenames.map(baseName => promQueue.add(async () => {
+    const decorKey = /** @type {Geomorph.DecorKey} */ (baseName.slice(0, -'.svg'.length));
+    // svg contents -> data url
+    const svgDataUrl = `data:image/svg+xml;utf8,${await tryReadString(path.resolve(decorDir, baseName))}`;
+    decorKeyToImg[decorKey] = await loadImage(svgDataUrl);
+  })));
+
   /**
    * Decor is drawn in units `sgu * 5` (same approach as non-hull symbols).
-   * We further adjust how higher-res we want it via @see spriteSheetNonHullExtraScale
+   * We further adjust how high-res we want it.
    */
-  const scale = (1 / 5) * spriteSheetNonHullExtraScale;
+  const scale = (1 / 5) * spriteSheetDecorExtraScale;
 
   for (const baseName of svgBasenames) {
-    const decorKey = baseName.slice(0, -'.svg'.length);
-    if (!geomorphService.isDecorKey(decorKey)) {
-      warn(`${'createDecorSheetJson'}: ignored file (unknown decorKey "${decorKey}")`);
-      continue;
-    }
+    const decorKey = /** @type {Geomorph.DecorKey} */ (baseName.slice(0, -'.svg'.length));
+    const img = decorKeyToImg[decorKey];
 
-    if (changedSvgBasenames.includes(baseName)) {
+    if (img) {// changedSvgBasenames.includes(baseName)
       const tags = baseName.split('--').slice(0, -1); // ignore e.g. `001.svg`
       const meta = tags.reduce((agg, tag) => { agg[tag] = true; return agg; }, /** @type {Geom.Meta} */ ({}));
-      // svg contents -> data url
-      const svgDataUrl = `data:image/svg+xml;utf8,${await tryReadString(path.resolve(decorDir, baseName))}`;
-      const img = await loadImage(svgDataUrl);
       const rect = new Rectangle(toPrecision(img.width * scale, 0), toPrecision(img.height * scale, 0));
       /** @type {Geomorph.DecorSheetRectCtxt} */
       const rectData = { ...meta, decorKey };
       rect.data = rectData;
       decorKeyToRect[decorKey] = rect;
-      decorKeyToImg[decorKey] = img;
     } else {
       // 🔔 keeping meta.{x,y,width,height} avoids nondeterminism in sheet.decor json
       const meta = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecorSheet)[decorKey];

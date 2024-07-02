@@ -16,15 +16,12 @@
 
 - ✅ clean pointer-events i.e. avoid code duplication
 
-- 🚧 decor pipeline based on *.svg
+- ✅ decor pipeline based on *.svg
   - ℹ️ svg render will need to be supported by npm module `canvas`
   - ✅ create sprite-sheet using media/decor/*.svg
   - ✅ verify hmr works
   - ✅ key `foo.png` -> `foo`, and use separators `--`
-  - 🚧 try threshold promises for many svg -> contents -> image
-
-- next.js repo continued
-  - migrate Viewer
+  - ✅ try threshold promises for many svg -> contents -> image
 
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
@@ -33,6 +30,7 @@
 - 🚧 Boxy SVG can be slow to save
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
+  - 🚧 try turn off "FileVault" on Mac OS
 - `w` command by itself should not throw
 - syntax highlighting in the shell
   - https://github.com/wooorm/emphasize
@@ -48,6 +46,9 @@
   - i.e. color nav query
 - use rapier physics 3d in web worker
   - i.e. static triggers
+
+- next.js repo continued
+  - migrate Viewer
 
 - gatsby: somehow reconfigure `TerserPlugin` to exclude `npc-cli/sh/src/*`
   - already tried using extension `.min.js`

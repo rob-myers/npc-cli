@@ -26,6 +26,9 @@ export const gmFloorExtraScale = 2;
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetNonHullExtraScale = 2.5;
 
+/** Can be any value in `[1, 5]`. */
+export const spriteSheetDecorExtraScale = 2.5;
+
 /** Decimal place precision */
 export const precision = 4;
 
