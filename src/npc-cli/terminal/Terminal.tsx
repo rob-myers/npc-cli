@@ -124,11 +124,11 @@ export default function Terminal(props: Props) {
       });
       
       xterm.loadAddon(state.fitAddon = new FitAddon());
-      xterm.open(state.container);
       xterm.loadAddon(state.webglAddon = new WebglAddon());
       state.webglAddon.onContextLoss(e => {
         state.webglAddon.dispose(); // breaks HMR
       });
+      xterm.open(state.container);
       
       state.resize();
       xterm.textarea?.addEventListener("focus", state.onFocus);
