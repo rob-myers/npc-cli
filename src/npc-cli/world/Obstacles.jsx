@@ -149,7 +149,7 @@ export default function Obstacles(props) {
   return (
     <instancedMesh
       name="static-obstacles"
-      key={`${w.hash} static-obstacles`}
+      key={w.hash}
       ref={instances => instances && (state.obsInst = instances)}
       args={[quadGeometryXZ, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
@@ -182,7 +182,7 @@ export default function Obstacles(props) {
  * @property {() => void} addObstacleUvs
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
  * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId
- * Points to `api.gms[gmId].obstacles[obstacleId]`.
+ * Points to `w.gms[gmId].obstacles[obstacleId]`.
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
  *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
  * )} detectClick

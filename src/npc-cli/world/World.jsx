@@ -24,6 +24,7 @@ import useHandleEvents from "./use-handle-events";
 import WorldCanvas from "./WorldCanvas";
 import Floor from "./Floor";
 import Ceiling from "./Ceiling";
+import Decor from "./Decor";
 import Obstacles from "./Obstacles";
 import Walls from "./Walls";
 import Doors from "./Doors";
@@ -64,6 +65,7 @@ export default function World(props) {
     ui: /** @type {*} */ (null), // WorldCanvas
     floor: /** @type {State['floor']} */ ({ tex: {} }),
     ceil: /** @type {State['ceil']} */ ({ tex: {} }),
+    decor: /** @type {*} */ (null), // Decor
     obs: /** @type {*} */ (null), // Obstacles
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
@@ -103,7 +105,7 @@ export default function World(props) {
       gmData.doorCeilTops = doors.flatMap(x => geom.createInset(x.poly, 0.04));
       gmData.unseen = false;
     },
-    computeGmsData() {// recomputed when api.gms changes e.g. map changes
+    computeGmsData() {// recomputed when `w.gms` changes e.g. map changes
       const gmsData = state.gmsData;
 
       gmsData.doorCount = state.gms.reduce((sum, { key }) => sum + gmsData[key].doorSegs.length, 0);
@@ -276,10 +278,11 @@ export default function World(props) {
           <group>
             <group>
               <Floor />
-              <Ceiling />
-              <Obstacles />
               <Walls />
               <Doors />
+              <Decor />
+              <Obstacles />
+              <Ceiling />
             </group>
             {state.crowd && <>
               <Npcs/>
@@ -309,7 +312,7 @@ export default function World(props) {
  * @property {string} mapKey
  * @property {string} hash
  * @property {Geomorph.GmsDataRoot & Record<Geomorph.GeomorphKey, Geomorph.GmData>} gmsData
- * Data determined by `api.gms` or a `Geomorph.GeomorphKey`.
+ * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
  * @property {{ hash: string; gmHash: string; }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
@@ -324,6 +327,7 @@ export default function World(props) {
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
  * @property {import('./Ceiling').State} ceil
+ * @property {import('./Decor').State} decor
  * @property {import('./Obstacles').State} obs
  * @property {import('./Walls').State} wall
  * @property {import('./Doors').State} door
@@ -344,7 +348,7 @@ export default function World(props) {
  * @property {(gm: Geomorph.LayoutInstance) => void} computeGmData
  * Data dependent on underlying `Geomorph.Layout`
  * @property {() => void} computeGmsData
- * Data dependent on `api.gms: Geomorph.LayoutInstance[]`
+ * Data dependent on `w.gms: Geomorph.LayoutInstance[]`
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh

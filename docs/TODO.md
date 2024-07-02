@@ -9,19 +9,12 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ start new branch `use-decor`
-- ✅ currently, async generator -> `run`, but what about async function -> `map`?
-- ✅ consider naming: shell `api` vs world-level `api`
-  - now using `w` for both World api and command
-
-- ✅ clean pointer-events i.e. avoid code duplication
-
-- ✅ decor pipeline based on *.svg
-  - ℹ️ svg render will need to be supported by npm module `canvas`
-  - ✅ create sprite-sheet using media/decor/*.svg
-  - ✅ verify hmr works
-  - ✅ key `foo.png` -> `foo`, and use separators `--`
-  - ✅ try threshold promises for many svg -> contents -> image
+- 🚧 Decor component
+  - ✅ `<Decor>` exists
+  - 🚧 can specify decor cuboid in symbols
+  - 🚧 can see decor cuboids in World
+  - 🚧 can specify decor quad in symbols
+  - 🚧 can see decor quads in World
 
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
@@ -1449,3 +1442,17 @@
   - ❌ forward `rmb` from event
   - ✅ `click --left` (only left, default) `click --right` (only right)
 - ✅ click sees modifier key(s) so `walkTest` can run
+
+- ✅ start new branch `use-decor`
+- ✅ currently, async generator -> `run`, but what about async function -> `map`?
+- ✅ consider naming: shell `api` vs world-level `api`
+  - now using `w` for both World api and command
+
+- ✅ clean pointer-events i.e. avoid code duplication
+
+- ✅ decor pipeline based on *.svg
+  - ℹ️ svg render will need to be supported by npm module `canvas`
+  - ✅ create sprite-sheet using media/decor/*.svg
+  - ✅ verify hmr works
+  - ✅ key `foo.png` -> `foo`, and use separators `--`
+  - ✅ try threshold promises for many svg -> contents -> image

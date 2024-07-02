@@ -1,7 +1,6 @@
 /**
  * Also used by web worker.
  */
-import React from "react";
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
@@ -146,7 +145,7 @@ export function buildObjectLookup(object) {
   return data;
 }
 
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
+export const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
 const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
 /**
