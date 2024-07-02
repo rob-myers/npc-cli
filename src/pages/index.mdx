@@ -21,33 +21,47 @@ This website has two objectives:
 1. Build real-time control systems for NPCs <SideNote>_NPC_ stands for "Non-Player Character" i.e. a video game character not controlled by the Player.</SideNote>.
 2. Enable one human to be indistinguishable from many Players.
 
-Video games simulate _identity_ (character controls, collision detection, [skins](https://namemc.com/minecraft-skins/random)) and _sensation_ (sight and sounds).
+Video games simulate _sensation_ (sight and sounds) and _identity_ (character controls, collision detection, [skins](https://namemc.com/minecraft-skins/random)).
 You temporarily _become_ something, whose sensory input and possible actions reflect your virtual position and state.
 But it's not much fun without other beings, either humans or more commonly Non-Player Characters (NPCs).
 {/* To understand our objectives, more background is needed. */}
 {/* Intelligent machines have long had a place in our hearts and minds. */}
 
-Lately there's been a Brouhaha concerning AI. 
 Amazingly, Chat Bots can now hold flexible and meaningful conversations <SideNote>Putting aside their hallucinations and somewhat memoryless nature.</SideNote>.
 But before reaching towards Artificial General Intelligence,
 consider the current state of NPCs.
-Nowadays, the word _NPC_ is used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
+The word _NPC_ is now used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
 Popular films depict them as conversationally [rigid and predictable](https://en.wikipedia.org/wiki/Jumanji:_Welcome_to_the_Jungle),
 usually with a single linear conversation.
 In our search for intelligent machines, we should remember that Turing's test was a _party game_.
-Almost 75 years later we have a multi-billion dollar video game industry <SideNote>~350 billion dollars revenue (2022).</SideNote>,
-and a distinct lack of flexible and/or believable NPCs.
+Almost 75 years later we have a multi-billion dollar <SideNote>An estimated 350 billion dollars revenue in 2022.</SideNote> video game industry,
+but a distinct lack of flexible or believable NPCs.
 
-{/* Not fault of Game dev because they work in Game industry. Leads us to objectives */}
-{/* Despite avoiding difficult sensor/effector engineering problems, */}
+How can we work towards a solution?
+How can we strive towards the NPCs Turing hoped for?
+Our first step is to recognise the problem is _too hard_.
+At least, it's too hard to solve within the confines of game development cycles.
 
-🚧 WIP
+But why?
 
-But have we seen really significant improvements in NPC behaviour over the last 20 years?
+> Because video games must behave soundly over all user journeys,
+> so the [state space explosion problem](https://en.wikipedia.org/wiki/Combinatorial_explosion) severely limits the number of states.
+
+Then let's make the problem a bit easier.
+Instead of setting an incredibly intricate clockwork world in motion,
+let's react to the Player,
+let's guide the Player,
+let's experiment with the Player.
+Then there are (at least) two human participants: the Player and the [_Game Master_](https://en.wikipedia.org/wiki/Gamemaster) (GM).
+This motivates our objectives above i.e. the GM needs real-time control systems to drive the NPCs.
+Then Turing's test shifts from _machine indistinguishable from human_ to _human indistinguishable from many Players_.
+
+
+{/* But have we seen really significant improvements in NPC behaviour over the last 20 years?
 Games like _Fallout_ (1997), _Quake_ (1996), _GTA_ (1997) and _Thief 2_ (2000) still shine like the jewels they are.
 Recent masterpieces like _The Last of Us Part II_ (2020) feel like finely-crafted refinements of old ideas.
 If we cannot produce believable character behaviour in the domain of entertainment,
-why should we expect it within the additional constraints of "real life"?
+why should we expect it within the additional constraints of "real life"? */}
 
 {/* Finally as a way for us to understand our own behaviour */}
 
@@ -59,4 +73,4 @@ Here are some icons:
 - <FontAwesomeIcon icon={faCoffee} size="1x" />
 - <FontAwesomeIcon icon={faLungs} size="1x" /> */}
 
-export { Head } from '../components/Head'
+export { Head } from '../components/Head';
