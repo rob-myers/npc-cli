@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 1993379568 1196800518 -69909253",
+  "hash": "610044716 762281890 1196800518 -69909253",
   "mapsHash": 610044716,
-  "layoutsHash": 1993379568,
+  "layoutsHash": 762281890,
   "sheetsHash": 1196800518,
   "imagesHash": -69909253,
   "map": {
@@ -41,63 +41,76 @@
       "decor": [
         {
           "type": "point",
-          "key": "g-101--multipurpose-0",
+          "key": "g-101--multipurpose 0",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 7.25, "y": 5.75, "width": 0.25, "height": 0.25},
           "x": 7.375,
           "y": 5.875
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-1",
+          "key": "g-101--multipurpose 1",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 6, "y": 14.75, "width": 0.25, "height": 0.25},
           "x": 6.125,
           "y": 14.875
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-2",
+          "key": "g-101--multipurpose 2",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 23.75, "y": 14.75, "width": 0.25, "height": 0.25},
           "x": 23.875,
           "y": 14.875
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-3",
+          "key": "g-101--multipurpose 3",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 22.5, "y": 24, "width": 0.25, "height": 0.25},
           "x": 22.625,
           "y": 24.125
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-4",
+          "key": "g-101--multipurpose 4",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 7.25, "y": 24, "width": 0.25, "height": 0.25},
           "x": 7.375,
           "y": 24.125
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-5",
+          "key": "g-101--multipurpose 5",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 22.5, "y": 5.75, "width": 0.25, "height": 0.25},
           "x": 22.625,
           "y": 5.875
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-6",
+          "key": "g-101--multipurpose 6",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {
+            "x": 13.0455,
+            "y": 24.9955,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 13.0705,
           "y": 25.0205
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-7",
+          "key": "g-101--multipurpose 7",
           "meta": {"decor": true, "label": "cpu"},
+          "bounds2d": {"x": 9.7505, "y": 25.45, "width": 0.05, "height": 0.05},
           "x": 9.7755,
           "y": 25.475
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-8",
+          "key": "g-101--multipurpose 8",
           "meta": {
             "decor": true,
             "do": true,
@@ -105,26 +118,39 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 11.98,
+            "y": 25.8596,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 12.005,
           "y": 25.885
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-9",
+          "key": "g-101--multipurpose 9",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {
+            "x": 16.9045,
+            "y": 18.4545,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 16.9295,
           "y": 18.4795
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-10",
+          "key": "g-101--multipurpose 10",
           "meta": {"decor": true, "label": "cpu"},
+          "bounds2d": {"x": 20.1995, "y": 18, "width": 0.05, "height": 0.05},
           "x": 20.2245,
           "y": 18.025
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-11",
+          "key": "g-101--multipurpose 11",
           "meta": {
             "decor": true,
             "do": true,
@@ -132,26 +158,39 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 17.97,
+            "y": 17.5896,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 17.995,
           "y": 17.615
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-12",
+          "key": "g-101--multipurpose 12",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {
+            "x": 16.9045,
+            "y": 24.9955,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 16.9295,
           "y": 25.0205
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-13",
+          "key": "g-101--multipurpose 13",
           "meta": {"decor": true, "label": "cpu"},
+          "bounds2d": {"x": 20.1995, "y": 25.45, "width": 0.05, "height": 0.05},
           "x": 20.2245,
           "y": 25.475
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-14",
+          "key": "g-101--multipurpose 14",
           "meta": {
             "decor": true,
             "do": true,
@@ -159,26 +198,39 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 17.97,
+            "y": 25.8596,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 17.995,
           "y": 25.885
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-15",
+          "key": "g-101--multipurpose 15",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {
+            "x": 13.0455,
+            "y": 18.4545,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 13.0705,
           "y": 18.4795
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-16",
+          "key": "g-101--multipurpose 16",
           "meta": {"decor": true, "label": "cpu"},
+          "bounds2d": {"x": 9.7505, "y": 18, "width": 0.05, "height": 0.05},
           "x": 9.7755,
           "y": 18.025
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-17",
+          "key": "g-101--multipurpose 17",
           "meta": {
             "decor": true,
             "do": true,
@@ -186,19 +238,31 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 11.98,
+            "y": 17.5896,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 12.005,
           "y": 17.615
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-18",
+          "key": "g-101--multipurpose 18",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {
+            "x": 12.3865,
+            "y": 11.4215,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 12.4115,
           "y": 11.4465
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-19",
+          "key": "g-101--multipurpose 19",
           "meta": {
             "decor": true,
             "do": true,
@@ -206,12 +270,18 @@
             "bed": true,
             "orient": 360
           },
+          "bounds2d": {
+            "x": 10.045,
+            "y": 12.7275,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 10.07,
           "y": 12.7525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-20",
+          "key": "g-101--multipurpose 20",
           "meta": {
             "decor": true,
             "do": true,
@@ -219,12 +289,18 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 12.7375,
+            "y": 12.4571,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 12.7625,
           "y": 12.4825
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-21",
+          "key": "g-101--multipurpose 21",
           "meta": {
             "decor": true,
             "do": true,
@@ -232,12 +308,18 @@
             "chair": true,
             "orient": 70
           },
+          "bounds2d": {
+            "x": 9.7242,
+            "y": 11.0603,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 9.7564,
           "y": 11.0927
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-22",
+          "key": "g-101--multipurpose 22",
           "meta": {
             "decor": true,
             "do": true,
@@ -245,19 +327,31 @@
             "chair": true,
             "orient": 110
           },
+          "bounds2d": {
+            "x": 10.8665,
+            "y": 11.0638,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 10.8986,
           "y": 11.0962
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-23",
+          "key": "g-101--multipurpose 23",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {
+            "x": 17.5635,
+            "y": 11.4215,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 17.5885,
           "y": 11.4465
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-24",
+          "key": "g-101--multipurpose 24",
           "meta": {
             "decor": true,
             "do": true,
@@ -265,12 +359,18 @@
             "bed": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 19.905,
+            "y": 12.7275,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 19.93,
           "y": 12.7525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-25",
+          "key": "g-101--multipurpose 25",
           "meta": {
             "decor": true,
             "do": true,
@@ -278,12 +378,18 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 17.2125,
+            "y": 12.4571,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 17.2375,
           "y": 12.4825
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-26",
+          "key": "g-101--multipurpose 26",
           "meta": {
             "decor": true,
             "do": true,
@@ -291,12 +397,18 @@
             "chair": true,
             "orient": 110
           },
+          "bounds2d": {
+            "x": 20.2115,
+            "y": 11.0603,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 20.2436,
           "y": 11.0928
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-27",
+          "key": "g-101--multipurpose 27",
           "meta": {
             "decor": true,
             "do": true,
@@ -304,19 +416,31 @@
             "chair": true,
             "orient": 70
           },
+          "bounds2d": {
+            "x": 19.0692,
+            "y": 11.0638,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 19.1014,
           "y": 11.0962
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-28",
+          "key": "g-101--multipurpose 28",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {
+            "x": 12.3865,
+            "y": 5.0285,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 12.4115,
           "y": 5.0535
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-29",
+          "key": "g-101--multipurpose 29",
           "meta": {
             "decor": true,
             "do": true,
@@ -324,12 +448,13 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 10.045, "y": 3.7225, "width": 0.05, "height": 0.05},
           "x": 10.07,
           "y": 3.7475
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-30",
+          "key": "g-101--multipurpose 30",
           "meta": {
             "decor": true,
             "do": true,
@@ -337,12 +462,18 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 12.7375,
+            "y": 3.9921,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 12.7625,
           "y": 4.0175
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-31",
+          "key": "g-101--multipurpose 31",
           "meta": {
             "decor": true,
             "do": true,
@@ -350,12 +481,18 @@
             "chair": true,
             "orient": 290
           },
+          "bounds2d": {
+            "x": 9.7242,
+            "y": 5.3748,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 9.7563,
           "y": 5.4073
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-32",
+          "key": "g-101--multipurpose 32",
           "meta": {
             "decor": true,
             "do": true,
@@ -363,19 +500,26 @@
             "chair": true,
             "orient": 250
           },
+          "bounds2d": {
+            "x": 10.8665,
+            "y": 5.3713,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 10.8986,
           "y": 5.4038
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-33",
+          "key": "g-101--multipurpose 33",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 10.5, "y": 21.4995, "width": 0.05, "height": 0.05},
           "x": 10.525,
           "y": 21.5245
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-34",
+          "key": "g-101--multipurpose 34",
           "meta": {
             "decor": true,
             "do": true,
@@ -383,12 +527,18 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 10.85,
+            "y": 20.6096,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 10.875,
           "y": 20.635
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-35",
+          "key": "g-101--multipurpose 35",
           "meta": {
             "decor": true,
             "do": true,
@@ -396,19 +546,26 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 10.85,
+            "y": 22.8696,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 10.875,
           "y": 22.895
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-36",
+          "key": "g-101--multipurpose 36",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 19.45, "y": 21.4995, "width": 0.05, "height": 0.05},
           "x": 19.475,
           "y": 21.5245
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-37",
+          "key": "g-101--multipurpose 37",
           "meta": {
             "decor": true,
             "do": true,
@@ -416,12 +573,18 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 19.1,
+            "y": 20.6096,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 19.125,
           "y": 20.635
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-38",
+          "key": "g-101--multipurpose 38",
           "meta": {
             "decor": true,
             "do": true,
@@ -429,72 +592,99 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 19.1,
+            "y": 22.8696,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 19.125,
           "y": 22.895
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-39",
+          "key": "g-101--multipurpose 39",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 27.9505, "y": 10.45, "width": 0.05, "height": 0.05},
           "x": 27.9755,
           "y": 10.475
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-40",
+          "key": "g-101--multipurpose 40",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 28.8396,
+            "y": 10.1,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 28.865,
           "y": 10.125
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-41",
+          "key": "g-101--multipurpose 41",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 26.5796,
+            "y": 10.1,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 26.605,
           "y": 10.125
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-42",
+          "key": "g-101--multipurpose 42",
           "meta": {"decor": true, "go": true, "label": "cpu"},
+          "bounds2d": {"x": 29.2, "y": 19.45, "width": 0.05, "height": 0.05},
           "x": 29.225,
           "y": 19.475
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-43",
+          "key": "g-101--multipurpose 43",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 27.2, "y": 18.821, "width": 0.05, "height": 0.05},
           "x": 27.225,
           "y": 18.846
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-44",
+          "key": "g-101--multipurpose 44",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 26.2125,
+            "y": 19.9671,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 26.2375,
           "y": 19.9925
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-45",
+          "key": "g-101--multipurpose 45",
           "meta": {
             "decor": true,
             "do": true,
@@ -502,46 +692,61 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 27.7125,
+            "y": 19.9671,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 27.7375,
           "y": 19.9925
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-46",
+          "key": "g-101--multipurpose 46",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 15.441, "y": 4.2595, "width": 0.05, "height": 0.05},
           "x": 15.466,
           "y": 4.2845
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-47",
+          "key": "g-101--multipurpose 47",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {"x": 14.1, "y": 5.4796, "width": 0.05, "height": 0.0508},
           "x": 14.125,
           "y": 5.505
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-48",
+          "key": "g-101--multipurpose 48",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 13.95,
+            "y": 4.4796,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 13.975,
           "y": 4.505
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-49",
+          "key": "g-101--multipurpose 49",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 10.8, "y": 8, "width": 0.05, "height": 0.05},
           "x": 10.825,
           "y": 8.025
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-50",
+          "key": "g-101--multipurpose 50",
           "meta": {
             "decor": true,
             "do": true,
@@ -549,12 +754,13 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 10.045, "y": 6.7275, "width": 0.05, "height": 0.05},
           "x": 10.07,
           "y": 6.7525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-51",
+          "key": "g-101--multipurpose 51",
           "meta": {
             "decor": true,
             "do": true,
@@ -562,32 +768,40 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 10.045, "y": 9.7275, "width": 0.05, "height": 0.05},
           "x": 10.07,
           "y": 9.7525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-52",
+          "key": "g-101--multipurpose 52",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 9.9921,
+            "y": 8.2275,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 10.0175,
           "y": 8.2525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-53",
+          "key": "g-101--multipurpose 53",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 19.15, "y": 8, "width": 0.05, "height": 0.05},
           "x": 19.175,
           "y": 8.025
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-54",
+          "key": "g-101--multipurpose 54",
           "meta": {
             "decor": true,
             "do": true,
@@ -595,12 +809,13 @@
             "bed": true,
             "orient": 180
           },
+          "bounds2d": {"x": 19.905, "y": 6.7275, "width": 0.05, "height": 0.05},
           "x": 19.93,
           "y": 6.7525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-55",
+          "key": "g-101--multipurpose 55",
           "meta": {
             "decor": true,
             "do": true,
@@ -608,12 +823,13 @@
             "bed": true,
             "orient": 180
           },
+          "bounds2d": {"x": 19.905, "y": 9.7275, "width": 0.05, "height": 0.05},
           "x": 19.93,
           "y": 9.7525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-56",
+          "key": "g-101--multipurpose 56",
           "meta": {
             "decor": true,
             "do": true,
@@ -621,45 +837,69 @@
             "chair": true,
             "orient": 0
           },
+          "bounds2d": {
+            "x": 19.9571,
+            "y": 8.2275,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 19.9825,
           "y": 8.2525
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-57",
+          "key": "g-101--multipurpose 57",
           "meta": {"decor": true, "go": true, "label": "freaher"},
+          "bounds2d": {
+            "x": 23.091,
+            "y": 11.0405,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 23.116,
           "y": 11.0655
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-58",
+          "key": "g-101--multipurpose 58",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 360
+          },
+          "bounds2d": {
+            "x": 21.45,
+            "y": 11.4796,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 21.475,
           "y": 11.505
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-59",
+          "key": "g-101--multipurpose 59",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 360
+          },
+          "bounds2d": {
+            "x": 21.45,
+            "y": 10.4796,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 21.475,
           "y": 10.505
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-60",
+          "key": "g-101--multipurpose 60",
           "meta": {
             "decor": true,
             "do": true,
@@ -667,59 +907,95 @@
             "toilet": true,
             "orient": 360
           },
+          "bounds2d": {
+            "x": 21.45,
+            "y": 9.4796,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 21.475,
           "y": 9.505
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-61",
+          "key": "g-101--multipurpose 61",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {
+            "x": 21.6,
+            "y": 12.3496,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 21.625,
           "y": 12.375
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-62",
+          "key": "g-101--multipurpose 62",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {
+            "x": 21.6,
+            "y": 13.0996,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 21.625,
           "y": 13.125
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-63",
+          "key": "g-101--multipurpose 63",
           "meta": {"decor": true, "go": true, "label": "freaher"},
+          "bounds2d": {
+            "x": 23.091,
+            "y": 18.9095,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 23.116,
           "y": 18.9345
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-64",
+          "key": "g-101--multipurpose 64",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 21.45,
+            "y": 18.4696,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 21.475,
           "y": 18.495
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-65",
+          "key": "g-101--multipurpose 65",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 21.45,
+            "y": 19.4696,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 21.475,
           "y": 19.495
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-66",
+          "key": "g-101--multipurpose 66",
           "meta": {
             "decor": true,
             "do": true,
@@ -727,33 +1003,52 @@
             "toilet": true,
             "orient": 0
           },
+          "bounds2d": {
+            "x": 21.45,
+            "y": 20.4696,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 21.475,
           "y": 20.495
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-67",
+          "key": "g-101--multipurpose 67",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {
+            "x": 21.6,
+            "y": 17.5996,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 21.625,
           "y": 17.625
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-68",
+          "key": "g-101--multipurpose 68",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {
+            "x": 21.6,
+            "y": 16.8496,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 21.625,
           "y": 16.875
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-69",
+          "key": "g-101--multipurpose 69",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 27.25, "y": 14.75, "width": 0.05, "height": 0.05},
           "x": 27.275,
           "y": 14.775
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-70",
+          "key": "g-101--multipurpose 70",
           "meta": {
             "decor": true,
             "do": true,
@@ -761,12 +1056,18 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 26.67,
+            "y": 12.9496,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 26.695,
           "y": 12.975
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-71",
+          "key": "g-101--multipurpose 71",
           "meta": {
             "decor": true,
             "do": true,
@@ -774,25 +1075,37 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 26.67,
+            "y": 16.9996,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 26.695,
           "y": 17.025
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-72",
+          "key": "g-101--multipurpose 72",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 28.9996,
+            "y": 16.1,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 29.025,
           "y": 16.125
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-73",
+          "key": "g-101--multipurpose 73",
           "meta": {
             "decor": true,
             "do": true,
@@ -800,19 +1113,31 @@
             "chair": true,
             "orient": 0
           },
+          "bounds2d": {
+            "x": 28.9996,
+            "y": 13.85,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 29.025,
           "y": 13.875
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-74",
+          "key": "g-101--multipurpose 74",
           "meta": {"decor": true, "go": true, "label": "medical"},
+          "bounds2d": {
+            "x": 7.9045,
+            "y": 17.5455,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 7.9295,
           "y": 17.5705
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-75",
+          "key": "g-101--multipurpose 75",
           "meta": {
             "decor": true,
             "do": true,
@@ -820,12 +1145,18 @@
             "chair": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 6.9821,
+            "y": 17.2075,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 7.0075,
           "y": 17.2325
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-76",
+          "key": "g-101--multipurpose 76",
           "meta": {
             "decor": true,
             "do": true,
@@ -835,12 +1166,13 @@
             "orient": 360,
             "obscured": true
           },
+          "bounds2d": {"x": 6.71, "y": 18.68, "width": 0.05, "height": 0.05},
           "x": 6.735,
           "y": 18.705
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-77",
+          "key": "g-101--multipurpose 77",
           "meta": {
             "decor": true,
             "do": true,
@@ -850,19 +1182,21 @@
             "orient": 360,
             "obscured": true
           },
+          "bounds2d": {"x": 6.71, "y": 20.19, "width": 0.05, "height": 0.05},
           "x": 6.735,
           "y": 20.215
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-78",
+          "key": "g-101--multipurpose 78",
           "meta": {"decor": true, "go": true, "label": "medical"},
+          "bounds2d": {"x": 7.9045, "y": 11.95, "width": 0.05, "height": 0.05},
           "x": 7.9295,
           "y": 11.975
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-79",
+          "key": "g-101--multipurpose 79",
           "meta": {
             "decor": true,
             "do": true,
@@ -870,19 +1204,31 @@
             "chair": true,
             "orient": 135
           },
+          "bounds2d": {
+            "x": 6.9793,
+            "y": 12.4697,
+            "width": 0.0712,
+            "height": 0.0713
+          },
           "x": 7.0149,
           "y": 12.5053
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-80",
+          "key": "g-101--multipurpose 80",
           "meta": {"decor": true, "go": true, "label": "escape-pod"},
+          "bounds2d": {
+            "x": 1.4785,
+            "y": 17.4305,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 1.5035,
           "y": 17.4555
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-81",
+          "key": "g-101--multipurpose 81",
           "meta": {
             "decor": true,
             "do": true,
@@ -890,90 +1236,127 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {"x": 0.9, "y": 13.0896, "width": 0.05, "height": 0.0508},
           "x": 0.925,
           "y": 13.115
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-82",
+          "key": "g-101--multipurpose 82",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 2.05,
+            "y": 13.0896,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 2.075,
           "y": 13.115
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-83",
+          "key": "g-101--multipurpose 83",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 0.53,
+            "y": 14.1396,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 0.555,
           "y": 14.165
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-84",
+          "key": "g-101--multipurpose 84",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 1.37,
+            "y": 14.1396,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 1.395,
           "y": 14.165
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-85",
+          "key": "g-101--multipurpose 85",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 0.53,
+            "y": 15.0396,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 0.555,
           "y": 15.065
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-86",
+          "key": "g-101--multipurpose 86",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 1.37,
+            "y": 15.0396,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 1.395,
           "y": 15.065
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-87",
+          "key": "g-101--multipurpose 87",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 0.53,
+            "y": 15.9396,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 0.555,
           "y": 15.965
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-88",
+          "key": "g-101--multipurpose 88",
           "meta": {
             "decor": true,
             "do": true,
@@ -981,75 +1364,95 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 1.37,
+            "y": 15.9396,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 1.395,
           "y": 15.965
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-89",
+          "key": "g-101--multipurpose 89",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 2.21,
+            "y": 15.9396,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 2.235,
           "y": 15.965
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-90",
+          "key": "g-101--multipurpose 90",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 2.95, "y": 0.65, "width": 0.1, "height": 0.1},
           "x": 3,
           "y": 0.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-91",
+          "key": "g-101--multipurpose 91",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 11.95, "y": 0.65, "width": 0.1, "height": 0.1},
           "x": 12,
           "y": 0.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-92",
+          "key": "g-101--multipurpose 92",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 17.95, "y": 0.65, "width": 0.1, "height": 0.1},
           "x": 18,
           "y": 0.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-93",
+          "key": "g-101--multipurpose 93",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 26.95, "y": 0.65, "width": 0.1, "height": 0.1},
           "x": 27,
           "y": 0.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-94",
+          "key": "g-101--multipurpose 94",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 11.95, "y": 27.65, "width": 0.1, "height": 0.1},
           "x": 12,
           "y": 27.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-95",
+          "key": "g-101--multipurpose 95",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 17.95, "y": 27.65, "width": 0.1, "height": 0.1},
           "x": 18,
           "y": 27.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-96",
+          "key": "g-101--multipurpose 96",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 26.98, "y": 27.65, "width": 0.1, "height": 0.1},
           "x": 27.03,
           "y": 27.7
         },
         {
           "type": "point",
-          "key": "g-101--multipurpose-97",
+          "key": "g-101--multipurpose 97",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 2.95, "y": 27.65, "width": 0.1, "height": 0.1},
           "x": 3,
           "y": 27.7
         }
@@ -6631,115 +7034,143 @@
       "decor": [
         {
           "type": "point",
-          "key": "g-102--research-deck-0",
+          "key": "g-102--research-deck 0",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 5.75, "y": 5.75, "width": 0.25, "height": 0.25},
           "x": 5.875,
           "y": 5.875
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-1",
+          "key": "g-102--research-deck 1",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 14.75, "y": 7.25, "width": 0.25, "height": 0.25},
           "x": 14.875,
           "y": 7.375
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-2",
+          "key": "g-102--research-deck 2",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 22.25, "y": 16.25, "width": 0.25, "height": 0.25},
           "x": 22.375,
           "y": 16.375
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-3",
+          "key": "g-102--research-deck 3",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 1.5, "y": 28.25, "width": 0.25, "height": 0.25},
           "x": 1.625,
           "y": 28.375
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-4",
+          "key": "g-102--research-deck 4",
           "meta": {"decor": true, "go": true, "label": "engineering"},
+          "bounds2d": {"x": 4.4123, "y": 2.7206, "width": 0.25, "height": 0.25},
           "x": 4.5373,
           "y": 2.8456
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-5",
+          "key": "g-102--research-deck 5",
           "meta": {
             "decor": true,
             "go": true,
             "label": "'research",
             "launch'": true
           },
+          "bounds2d": {"x": 28.5, "y": 3, "width": 0.25, "height": 0.25},
           "x": 28.625,
           "y": 3.125
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-6",
+          "key": "g-102--research-deck 6",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 22.5, "y": 1.75, "width": 0.25, "height": 0.25},
           "x": 22.625,
           "y": 1.875
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-7",
+          "key": "g-102--research-deck 7",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 315
+          },
+          "bounds2d": {
+            "x": 4.9697,
+            "y": 0.9793,
+            "width": 0.0713,
+            "height": 0.0712
           },
           "x": 5.0053,
           "y": 1.0149
         },
         {
           "type": "circle",
-          "key": "g-102--research-deck-8",
+          "key": "g-102--research-deck 8",
           "meta": {"decor": true, "circle": true, "hatch": true},
+          "bounds2d": {
+            "x": 0.2998,
+            "y": 7.897,
+            "width": 0.9004,
+            "height": 1.103
+          },
           "radius": 0.5515,
           "center": {"x": 0.75, "y": 8.4485}
         },
         {
           "type": "circle",
-          "key": "g-102--research-deck-9",
+          "key": "g-102--research-deck 9",
           "meta": {"decor": true, "circle": true, "hatch": true},
+          "bounds2d": {"x": 28.7998, "y": 21, "width": 0.9004, "height": 1.103},
           "radius": 0.5515,
           "center": {"x": 29.25, "y": 21.5515}
         },
         {
           "type": "circle",
-          "key": "g-102--research-deck-10",
+          "key": "g-102--research-deck 10",
           "meta": {"decor": true, "circle": true, "hatch": true},
+          "bounds2d": {"x": 21, "y": 0.2998, "width": 1.103, "height": 0.9004},
           "radius": 0.5515,
           "center": {"x": 21.5515, "y": 0.75}
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-11",
+          "key": "g-102--research-deck 11",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 11.4561, "y": 13.45, "width": 0.05, "height": 0.05},
           "x": 11.4811,
           "y": 13.475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-12",
+          "key": "g-102--research-deck 12",
           "meta": {
             "decor": true,
             "do": true,
             "lie": true,
             "bed": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 12.7225,
+            "y": 13.905,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 12.7475,
           "y": 13.93
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-13",
+          "key": "g-102--research-deck 13",
           "meta": {
             "decor": true,
             "do": true,
@@ -6747,19 +7178,26 @@
             "chair": true,
             "orient": 315
           },
+          "bounds2d": {
+            "x": 11.0497,
+            "y": 14.3693,
+            "width": 0.0713,
+            "height": 0.0712
+          },
           "x": 11.0854,
           "y": 14.4049
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-14",
+          "key": "g-102--research-deck 14",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 14.4561, "y": 13.45, "width": 0.05, "height": 0.05},
           "x": 14.4811,
           "y": 13.475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-15",
+          "key": "g-102--research-deck 15",
           "meta": {
             "decor": true,
             "do": true,
@@ -6767,52 +7205,82 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 15.7225,
+            "y": 13.905,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 15.7475,
           "y": 13.93
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-16",
+          "key": "g-102--research-deck 16",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 315
+          },
+          "bounds2d": {
+            "x": 14.0497,
+            "y": 14.3693,
+            "width": 0.0713,
+            "height": 0.0712
           },
           "x": 14.0854,
           "y": 14.4049
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-17",
+          "key": "g-102--research-deck 17",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {
+            "x": 10.9133,
+            "y": 10.475,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 10.9383,
           "y": 10.5
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-18",
+          "key": "g-102--research-deck 18",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 360
+          },
+          "bounds2d": {
+            "x": 12.3596,
+            "y": 10.48,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 12.385,
           "y": 10.505
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-19",
+          "key": "g-102--research-deck 19",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {
+            "x": 13.9133,
+            "y": 10.475,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 13.9383,
           "y": 10.5
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-20",
+          "key": "g-102--research-deck 20",
           "meta": {
             "decor": true,
             "do": true,
@@ -6820,77 +7288,113 @@
             "chair": true,
             "orient": 360
           },
+          "bounds2d": {
+            "x": 15.3596,
+            "y": 10.48,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 15.385,
           "y": 10.505
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-21",
+          "key": "g-102--research-deck 21",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 26.475,
+            "y": 14.4216,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 26.5,
           "y": 14.4466
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-22",
+          "key": "g-102--research-deck 22",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 27.475,
+            "y": 14.4216,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 27.5,
           "y": 14.4466
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-23",
+          "key": "g-102--research-deck 23",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 28.475,
+            "y": 14.4216,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 28.5,
           "y": 14.4466
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-24",
+          "key": "g-102--research-deck 24",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 29.475,
+            "y": 14.4216,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 29.5,
           "y": 14.4466
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-25",
+          "key": "g-102--research-deck 25",
           "meta": {
             "decor": true,
             "do": true,
             "stand": true,
             "sink": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 25.475,
+            "y": 14.2216,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 25.5,
           "y": 14.2466
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-26",
+          "key": "g-102--research-deck 26",
           "meta": {
             "decor": true,
             "do": true,
@@ -6898,71 +7402,107 @@
             "sink": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 24.475,
+            "y": 14.2216,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 24.5,
           "y": 14.2466
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-27",
+          "key": "g-102--research-deck 27",
           "meta": {"decor": true, "go": true, "label": "fresher"},
+          "bounds2d": {
+            "x": 26.9411,
+            "y": 12.843,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 26.9661,
           "y": 12.868
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-28",
+          "key": "g-102--research-deck 28",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 26.4796,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 26.505,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-29",
+          "key": "g-102--research-deck 29",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 27.4796,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 27.505,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-30",
+          "key": "g-102--research-deck 30",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 28.4796,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 28.505,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-31",
+          "key": "g-102--research-deck 31",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 29.4796,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 29.505,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-32",
+          "key": "g-102--research-deck 32",
           "meta": {
             "decor": true,
             "do": true,
@@ -6970,111 +7510,151 @@
             "chair": true,
             "orient": 315
           },
+          "bounds2d": {"x": 19.475, "y": 22.475, "width": 0.05, "height": 0.05},
           "x": 19.5,
           "y": 22.5
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-33",
+          "key": "g-102--research-deck 33",
           "meta": {"decor": true, "go": true, "label": "engineering"},
+          "bounds2d": {"x": 17.898, "y": 25.4008, "width": 0.1, "height": 0.1},
           "x": 17.948,
           "y": 25.4508
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-34",
+          "key": "g-102--research-deck 34",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 315
+          },
+          "bounds2d": {
+            "x": 19.4395,
+            "y": 22.479,
+            "width": 0.0712,
+            "height": 0.0713
           },
           "x": 19.4751,
           "y": 22.5146
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-35",
+          "key": "g-102--research-deck 35",
           "meta": {"decor": true, "go": true, "label": "lab"},
+          "bounds2d": {"x": 19.45, "y": 4.4985, "width": 0.05, "height": 0.05},
           "x": 19.475,
           "y": 4.5235
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-36",
+          "key": "g-102--research-deck 36",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 225
+          },
+          "bounds2d": {
+            "x": 19.019,
+            "y": 3.5693,
+            "width": 0.0713,
+            "height": 0.0712
           },
           "x": 19.0547,
           "y": 3.6049
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-37",
+          "key": "g-102--research-deck 37",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 315
+          },
+          "bounds2d": {
+            "x": 16.9497,
+            "y": 3.5493,
+            "width": 0.0713,
+            "height": 0.0712
           },
           "x": 16.9854,
           "y": 3.5849
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-38",
+          "key": "g-102--research-deck 38",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 45
+          },
+          "bounds2d": {
+            "x": 16.9195,
+            "y": 1.4697,
+            "width": 0.0712,
+            "height": 0.0713
           },
           "x": 16.9551,
           "y": 1.5053
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-39",
+          "key": "g-102--research-deck 39",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 135
+          },
+          "bounds2d": {
+            "x": 18.999,
+            "y": 1.4895,
+            "width": 0.0713,
+            "height": 0.0712
           },
           "x": 19.0346,
           "y": 1.5251
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-40",
+          "key": "g-102--research-deck 40",
           "meta": {"decor": true, "go": true, "label": "lab"},
+          "bounds2d": {"x": 10.5, "y": 4.4985, "width": 0.05, "height": 0.05},
           "x": 10.525,
           "y": 4.5235
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-41",
+          "key": "g-102--research-deck 41",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 315
+          },
+          "bounds2d": {
+            "x": 10.9097,
+            "y": 3.5693,
+            "width": 0.0713,
+            "height": 0.0712
           },
           "x": 10.9454,
           "y": 3.6049
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-42",
+          "key": "g-102--research-deck 42",
           "meta": {
             "decor": true,
             "do": true,
@@ -7082,12 +7662,18 @@
             "chair": true,
             "orient": 225
           },
+          "bounds2d": {
+            "x": 12.979,
+            "y": 3.5493,
+            "width": 0.0713,
+            "height": 0.0712
+          },
           "x": 13.0147,
           "y": 3.5849
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-43",
+          "key": "g-102--research-deck 43",
           "meta": {
             "decor": true,
             "do": true,
@@ -7095,12 +7681,18 @@
             "chair": true,
             "orient": 135
           },
+          "bounds2d": {
+            "x": 13.0093,
+            "y": 1.4697,
+            "width": 0.0712,
+            "height": 0.0713
+          },
           "x": 13.0449,
           "y": 1.5054
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-44",
+          "key": "g-102--research-deck 44",
           "meta": {
             "decor": true,
             "do": true,
@@ -7108,32 +7700,45 @@
             "chair": true,
             "orient": 45
           },
+          "bounds2d": {
+            "x": 10.9297,
+            "y": 1.4895,
+            "width": 0.0713,
+            "height": 0.0712
+          },
           "x": 10.9654,
           "y": 1.5251
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-45",
+          "key": "g-102--research-deck 45",
           "meta": {"decor": true, "go": true, "label": "lab"},
+          "bounds2d": {"x": 19.45, "y": 13.45, "width": 0.05, "height": 0.05},
           "x": 19.475,
           "y": 13.475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-46",
+          "key": "g-102--research-deck 46",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 20.0225,
+            "y": 12.7271,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 20.0475,
           "y": 12.7525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-47",
+          "key": "g-102--research-deck 47",
           "meta": {
             "decor": true,
             "do": true,
@@ -7141,91 +7746,129 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 18.7225,
+            "y": 14.0271,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 18.7475,
           "y": 14.0525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-48",
+          "key": "g-102--research-deck 48",
           "meta": {"decor": true, "label": "lab"},
+          "bounds2d": {"x": 18, "y": 17.5, "width": 0.05, "height": 0.05},
           "x": 18.025,
           "y": 17.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-49",
+          "key": "g-102--research-deck 49",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 19.9175,
+            "y": 15.9221,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 19.9425,
           "y": 15.9475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-50",
+          "key": "g-102--research-deck 50",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 16.9175,
+            "y": 15.9221,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 16.9425,
           "y": 15.9475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-51",
+          "key": "g-102--research-deck 51",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 15.9175,
+            "y": 17.3021,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 15.9425,
           "y": 17.3275
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-52",
+          "key": "g-102--research-deck 52",
           "meta": {"decor": true, "label": "lab"},
+          "bounds2d": {"x": 26.95, "y": 17.5, "width": 0.05, "height": 0.05},
           "x": 26.975,
           "y": 17.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-53",
+          "key": "g-102--research-deck 53",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 25.0325,
+            "y": 15.9221,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 25.0575,
           "y": 15.9475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-54",
+          "key": "g-102--research-deck 54",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 28.0325,
+            "y": 15.9221,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 28.0575,
           "y": 15.9475
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-55",
+          "key": "g-102--research-deck 55",
           "meta": {
             "decor": true,
             "do": true,
@@ -7233,45 +7876,64 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 29.0325,
+            "y": 17.3021,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 29.0575,
           "y": 17.3275
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-56",
+          "key": "g-102--research-deck 56",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 27.825, "y": 27, "width": 0.05, "height": 0.05},
           "x": 27.85,
           "y": 27.025
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-57",
+          "key": "g-102--research-deck 57",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 24.9821,
+            "y": 29.2425,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 25.0075,
           "y": 29.2675
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-58",
+          "key": "g-102--research-deck 58",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 26.4821,
+            "y": 29.2425,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 26.5075,
           "y": 29.2675
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-59",
+          "key": "g-102--research-deck 59",
           "meta": {
             "decor": true,
             "do": true,
@@ -7279,38 +7941,56 @@
             "chair": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 27.9821,
+            "y": 29.2425,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 28.0075,
           "y": 29.2675
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-60",
+          "key": "g-102--research-deck 60",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 24.9821,
+            "y": 24.7425,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 25.0075,
           "y": 24.7675
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-61",
+          "key": "g-102--research-deck 61",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 26.4821,
+            "y": 24.7425,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 26.5075,
           "y": 24.7675
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-62",
+          "key": "g-102--research-deck 62",
           "meta": {
             "decor": true,
             "do": true,
@@ -7318,25 +7998,37 @@
             "chair": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 27.9821,
+            "y": 24.7425,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 28.0075,
           "y": 24.7675
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-63",
+          "key": "g-102--research-deck 63",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 29.4821,
+            "y": 24.7425,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 29.5075,
           "y": 24.7675
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-64",
+          "key": "g-102--research-deck 64",
           "meta": {
             "decor": true,
             "do": true,
@@ -7344,12 +8036,18 @@
             "chair": true,
             "orient": 225
           },
+          "bounds2d": {
+            "x": 25.7692,
+            "y": 26.5144,
+            "width": 0.0713,
+            "height": 0.0712
+          },
           "x": 25.8049,
           "y": 26.55
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-65",
+          "key": "g-102--research-deck 65",
           "meta": {
             "decor": true,
             "do": true,
@@ -7357,12 +8055,18 @@
             "chair": true,
             "orient": 315
           },
+          "bounds2d": {
+            "x": 26.6644,
+            "y": 26.5092,
+            "width": 0.0712,
+            "height": 0.0713
+          },
           "x": 26.7,
           "y": 26.5449
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-66",
+          "key": "g-102--research-deck 66",
           "meta": {
             "decor": true,
             "do": true,
@@ -7370,12 +8074,18 @@
             "chair": true,
             "orient": 45
           },
+          "bounds2d": {
+            "x": 26.6695,
+            "y": 27.4144,
+            "width": 0.0713,
+            "height": 0.0712
+          },
           "x": 26.7051,
           "y": 27.45
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-67",
+          "key": "g-102--research-deck 67",
           "meta": {
             "decor": true,
             "do": true,
@@ -7383,19 +8093,31 @@
             "chair": true,
             "orient": 135
           },
+          "bounds2d": {
+            "x": 25.7644,
+            "y": 27.4095,
+            "width": 0.0712,
+            "height": 0.0713
+          },
           "x": 25.8,
           "y": 27.4451
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-68",
+          "key": "g-102--research-deck 68",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 0},
+          "bounds2d": {
+            "x": 29.3,
+            "y": 29.2152,
+            "width": 0.05,
+            "height": 0.0507
+          },
           "x": 29.325,
           "y": 29.2405
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-69",
+          "key": "g-102--research-deck 69",
           "meta": {
             "decor": true,
             "do": true,
@@ -7403,45 +8125,64 @@
             "toilet": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 29.5,
+            "y": 27.7296,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 29.525,
           "y": 27.755
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-70",
+          "key": "g-102--research-deck 70",
           "meta": {"decor": true, "go": true, "label": "engineering"},
+          "bounds2d": {"x": 5.9, "y": 12, "width": 0.1, "height": 0.1},
           "x": 5.95,
           "y": 12.05
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-71",
+          "key": "g-102--research-deck 71",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 8.22,
+            "y": 13.5496,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 8.245,
           "y": 13.575
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-72",
+          "key": "g-102--research-deck 72",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 6.72,
+            "y": 13.5496,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 6.745,
           "y": 13.575
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-73",
+          "key": "g-102--research-deck 73",
           "meta": {
             "decor": true,
             "do": true,
@@ -7449,31 +8190,39 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 5.22,
+            "y": 13.5496,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 5.245,
           "y": 13.575
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-74",
+          "key": "g-102--research-deck 74",
           "meta": {"decor": true, "label": "locker"},
+          "bounds2d": {"x": 24.725, "y": 3.725, "width": 0.05, "height": 0.05},
           "x": 24.75,
           "y": 3.75
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-75",
+          "key": "g-102--research-deck 75",
           "meta": {
             "decor": true,
             "go": true,
             "label": "stellar",
             "cartography": true
           },
+          "bounds2d": {"x": 9.45, "y": 20.5, "width": 0.05, "height": 0.05},
           "x": 9.475,
           "y": 20.525
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-76",
+          "key": "g-102--research-deck 76",
           "meta": {
             "decor": true,
             "do": true,
@@ -7481,12 +8230,13 @@
             "chair": true,
             "orient": 0
           },
+          "bounds2d": {"x": 7.5896, "y": 24, "width": 0.0508, "height": 0.05},
           "x": 7.615,
           "y": 24.025
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-77",
+          "key": "g-102--research-deck 77",
           "meta": {
             "decor": true,
             "do": true,
@@ -7494,40 +8244,50 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 5.97,
+            "y": 22.3796,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 5.995,
           "y": 22.405
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-78",
+          "key": "g-102--research-deck 78",
           "meta": {"decor": true, "go": true, "label": "locker"},
+          "bounds2d": {"x": 22.375, "y": 4.375, "width": 0.25, "height": 0.25},
           "x": 22.5,
           "y": 4.5
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-79",
+          "key": "g-102--research-deck 79",
           "meta": {"decor": true, "go": true, "label": "locker"},
+          "bounds2d": {"x": 25.475, "y": 0.725, "width": 0.05, "height": 0.05},
           "x": 25.5,
           "y": 0.75
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-80",
+          "key": "g-102--research-deck 80",
           "meta": {"decor": true, "label": "locker"},
+          "bounds2d": {"x": 24.725, "y": 5.225, "width": 0.05, "height": 0.05},
           "x": 24.75,
           "y": 5.25
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-81",
+          "key": "g-102--research-deck 81",
           "meta": {"decor": true, "go": true, "label": "lounge"},
+          "bounds2d": {"x": 26.995, "y": 10, "width": 0.05, "height": 0.05},
           "x": 27.02,
           "y": 10.025
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-82",
+          "key": "g-102--research-deck 82",
           "meta": {
             "decor": true,
             "do": true,
@@ -7535,12 +8295,18 @@
             "chair": true,
             "orient": 225
           },
+          "bounds2d": {
+            "x": 26.569,
+            "y": 11.5641,
+            "width": 0.0713,
+            "height": 0.0713
+          },
           "x": 26.6046,
           "y": 11.5998
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-83",
+          "key": "g-102--research-deck 83",
           "meta": {
             "decor": true,
             "do": true,
@@ -7548,12 +8314,18 @@
             "chair": true,
             "orient": 315
           },
+          "bounds2d": {
+            "x": 25.8397,
+            "y": 11.5641,
+            "width": 0.0713,
+            "height": 0.0713
+          },
           "x": 25.8753,
           "y": 11.5998
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-84",
+          "key": "g-102--research-deck 84",
           "meta": {
             "decor": true,
             "do": true,
@@ -7561,12 +8333,18 @@
             "chair": true,
             "orient": 45
           },
+          "bounds2d": {
+            "x": 25.8397,
+            "y": 10.8346,
+            "width": 0.0713,
+            "height": 0.0713
+          },
           "x": 25.8753,
           "y": 10.8702
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-85",
+          "key": "g-102--research-deck 85",
           "meta": {
             "decor": true,
             "do": true,
@@ -7574,12 +8352,18 @@
             "chair": true,
             "orient": 135
           },
+          "bounds2d": {
+            "x": 26.569,
+            "y": 10.8346,
+            "width": 0.0713,
+            "height": 0.0713
+          },
           "x": 26.6046,
           "y": 10.8702
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-86",
+          "key": "g-102--research-deck 86",
           "meta": {
             "decor": true,
             "do": true,
@@ -7587,12 +8371,18 @@
             "chair": true,
             "orient": 20
           },
+          "bounds2d": {
+            "x": 24.6103,
+            "y": 9.8942,
+            "width": 0.0649,
+            "height": 0.0643
+          },
           "x": 24.6428,
           "y": 9.9263
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-87",
+          "key": "g-102--research-deck 87",
           "meta": {
             "decor": true,
             "do": true,
@@ -7600,12 +8390,18 @@
             "chair": true,
             "orient": 340
           },
+          "bounds2d": {
+            "x": 24.6138,
+            "y": 11.0365,
+            "width": 0.0649,
+            "height": 0.0643
+          },
           "x": 24.6463,
           "y": 11.0687
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-88",
+          "key": "g-102--research-deck 88",
           "meta": {
             "decor": true,
             "do": true,
@@ -7613,12 +8409,18 @@
             "chair": true,
             "orient": 225
           },
+          "bounds2d": {
+            "x": 28.069,
+            "y": 11.5641,
+            "width": 0.0713,
+            "height": 0.0713
+          },
           "x": 28.1046,
           "y": 11.5998
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-89",
+          "key": "g-102--research-deck 89",
           "meta": {
             "decor": true,
             "do": true,
@@ -7626,12 +8428,18 @@
             "chair": true,
             "orient": 315
           },
+          "bounds2d": {
+            "x": 27.3397,
+            "y": 11.5641,
+            "width": 0.0713,
+            "height": 0.0713
+          },
           "x": 27.3753,
           "y": 11.5998
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-90",
+          "key": "g-102--research-deck 90",
           "meta": {
             "decor": true,
             "do": true,
@@ -7639,18 +8447,30 @@
             "chair": true,
             "orient": 45
           },
+          "bounds2d": {
+            "x": 27.3397,
+            "y": 10.8346,
+            "width": 0.0713,
+            "height": 0.0713
+          },
           "x": 27.3753,
           "y": 10.8702
         },
         {
           "type": "point",
-          "key": "g-102--research-deck-91",
+          "key": "g-102--research-deck 91",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 135
+          },
+          "bounds2d": {
+            "x": 28.069,
+            "y": 10.8346,
+            "width": 0.0713,
+            "height": 0.0713
           },
           "x": 28.1046,
           "y": 10.8702
@@ -13743,67 +14563,75 @@
       "decor": [
         {
           "type": "point",
-          "key": "g-301--bridge-0",
+          "key": "g-301--bridge 0",
           "meta": {"decor": true, "label": "study"},
+          "bounds2d": {"x": 6.75, "y": 4.85, "width": 0.25, "height": 0.25},
           "x": 6.875,
           "y": 4.975
         },
         {
           "type": "point",
-          "key": "g-301--bridge-1",
+          "key": "g-301--bridge 1",
           "meta": {"decor": true, "label": "corridor"},
+          "bounds2d": {"x": 6, "y": 7.5, "width": 0.25, "height": 0.25},
           "x": 6.125,
           "y": 7.625
         },
         {
           "type": "point",
-          "key": "g-301--bridge-2",
+          "key": "g-301--bridge 2",
           "meta": {"decor": true, "label": "corridor"},
+          "bounds2d": {"x": 23.75, "y": 7.5, "width": 0.25, "height": 0.25},
           "x": 23.875,
           "y": 7.625
         },
         {
           "type": "point",
-          "key": "g-301--bridge-3",
+          "key": "g-301--bridge 3",
           "meta": {"decor": true, "label": "study"},
+          "bounds2d": {"x": 23.275, "y": 4.85, "width": 0.25, "height": 0.25},
           "x": 23.4,
           "y": 4.975
         },
         {
           "type": "cuboid",
-          "key": "g-301--bridge-4",
+          "key": "g-301--bridge 4",
           "meta": {"decor": true, "cuboid": true, "table": true, "h": 0.5},
+          "bounds2d": {"x": 4.875, "y": 6, "width": 0.75, "height": 0.5},
           "angle": 0,
           "center": {"x": 5.25, "y": 0.25, "z": 6.25},
           "extent": {"x": 0.375, "y": 0.25, "z": 0.25}
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-5",
+          "key": "g-301--bridge 5",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 1.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "x": 1.55,
           "y": 10.5,
           "width": 1.45,
           "height": 1.45,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": 0
         },
         {
           "type": "point",
-          "key": "g-301--bridge-6",
+          "key": "g-301--bridge 6",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 1.8, "y": 9.845, "width": 0.025, "height": 0.025},
           "x": 1.8125,
           "y": 9.8575
         },
         {
           "type": "point",
-          "key": "g-301--bridge-7",
+          "key": "g-301--bridge 7",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {"x": 2.725, "y": 11.225, "width": 0.05, "height": 0.05},
           "x": 2.75,
           "y": 11.25
         },
         {
           "type": "point",
-          "key": "g-301--bridge-8",
+          "key": "g-301--bridge 8",
           "meta": {
             "decor": true,
             "do": true,
@@ -13811,43 +14639,53 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {"x": 0.7225, "y": 10.905, "width": 0.05, "height": 0.05},
           "x": 0.7475,
           "y": 10.93
         },
         {
           "type": "point",
-          "key": "g-301--bridge-9",
+          "key": "g-301--bridge 9",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 2.2196,
+            "y": 11.34,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 2.245,
           "y": 11.365
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-10",
+          "key": "g-301--bridge 10",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 4.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "x": 4.55,
           "y": 10.5,
           "width": 1.45,
           "height": 1.45,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": 0
         },
         {
           "type": "point",
-          "key": "g-301--bridge-11",
+          "key": "g-301--bridge 11",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 4.8, "y": 9.845, "width": 0.025, "height": 0.025},
           "x": 4.8125,
           "y": 9.8575
         },
         {
           "type": "point",
-          "key": "g-301--bridge-12",
+          "key": "g-301--bridge 12",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {"x": 5.725, "y": 11.225, "width": 0.05, "height": 0.05},
           "x": 5.75,
           "y": 11.25
         },
         {
           "type": "point",
-          "key": "g-301--bridge-13",
+          "key": "g-301--bridge 13",
           "meta": {
             "decor": true,
             "do": true,
@@ -13855,57 +14693,69 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {"x": 3.7225, "y": 10.905, "width": 0.05, "height": 0.05},
           "x": 3.7475,
           "y": 10.93
         },
         {
           "type": "point",
-          "key": "g-301--bridge-14",
+          "key": "g-301--bridge 14",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 5.2196,
+            "y": 11.34,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 5.245,
           "y": 11.365
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-15",
+          "key": "g-301--bridge 15",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 0, "y": 0, "width": 0.9, "height": 1.5},
           "x": 0.9,
           "y": 0,
           "width": 1.5,
           "height": 0.9,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": 1.5707963267948966
         },
         {
           "type": "point",
-          "key": "g-301--bridge-16",
+          "key": "g-301--bridge 16",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 1.7, "y": 4.5, "width": 0.05, "height": 0.05},
           "x": 1.725,
           "y": 4.525
         },
         {
           "type": "point",
-          "key": "g-301--bridge-17",
+          "key": "g-301--bridge 17",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 0.714, "y": 0.724, "width": 0.05, "height": 0.05},
           "x": 0.739,
           "y": 0.749
         },
         {
           "type": "point",
-          "key": "g-301--bridge-18",
+          "key": "g-301--bridge 18",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {"x": 0.4241, "y": 0.225, "width": 0.05, "height": 0.05},
           "x": 0.4491,
           "y": 0.25
         },
         {
           "type": "point",
-          "key": "g-301--bridge-19",
+          "key": "g-301--bridge 19",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
+          "bounds2d": {"x": 0.4241, "y": 0.725, "width": 0.05, "height": 0.05},
           "x": 0.4491,
           "y": 0.75
         },
         {
           "type": "point",
-          "key": "g-301--bridge-20",
+          "key": "g-301--bridge 20",
           "meta": {
             "decor": true,
             "do": true,
@@ -13913,12 +14763,18 @@
             "chair": true,
             "orient": 30
           },
+          "bounds2d": {
+            "x": 0.6116,
+            "y": 4.4484,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 0.6461,
           "y": 4.4828
         },
         {
           "type": "point",
-          "key": "g-301--bridge-21",
+          "key": "g-301--bridge 21",
           "meta": {
             "decor": true,
             "do": true,
@@ -13926,19 +14782,26 @@
             "chair": true,
             "orient": 330
           },
+          "bounds2d": {
+            "x": 0.6266,
+            "y": 5.4434,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 0.6611,
           "y": 5.4777
         },
         {
           "type": "point",
-          "key": "g-301--bridge-22",
+          "key": "g-301--bridge 22",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
+          "bounds2d": {"x": 2.3841, "y": 0.65, "width": 0.0507, "height": 0.05},
           "x": 2.4095,
           "y": 0.675
         },
         {
           "type": "point",
-          "key": "g-301--bridge-23",
+          "key": "g-301--bridge 23",
           "meta": {
             "decor": true,
             "do": true,
@@ -13946,12 +14809,13 @@
             "toilet": true,
             "orient": 90
           },
+          "bounds2d": {"x": 1.4796, "y": 0.45, "width": 0.0508, "height": 0.05},
           "x": 1.505,
           "y": 0.475
         },
         {
           "type": "point",
-          "key": "g-301--bridge-24",
+          "key": "g-301--bridge 24",
           "meta": {
             "decor": true,
             "do": true,
@@ -13959,12 +14823,13 @@
             "bed": true,
             "orient": 90
           },
+          "bounds2d": {"x": 0.7875, "y": 2.215, "width": 0.05, "height": 0.05},
           "x": 0.8125,
           "y": 2.24
         },
         {
           "type": "point",
-          "key": "g-301--bridge-25",
+          "key": "g-301--bridge 25",
           "meta": {
             "decor": true,
             "do": true,
@@ -13972,50 +14837,56 @@
             "bed": true,
             "orient": 90
           },
+          "bounds2d": {"x": 0.7875, "y": 2.215, "width": 0.05, "height": 0.05},
           "x": 0.8125,
           "y": 2.24
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-26",
+          "key": "g-301--bridge 26",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 29.1, "y": 0, "width": 0.9, "height": 1.5},
           "x": 30,
           "y": 0,
           "width": 1.5,
           "height": 0.9,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": 1.5707963267948966
         },
         {
           "type": "point",
-          "key": "g-301--bridge-27",
+          "key": "g-301--bridge 27",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 28.25, "y": 4.5, "width": 0.05, "height": 0.05},
           "x": 28.275,
           "y": 4.525
         },
         {
           "type": "point",
-          "key": "g-301--bridge-28",
+          "key": "g-301--bridge 28",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 29.236, "y": 0.724, "width": 0.05, "height": 0.05},
           "x": 29.261,
           "y": 0.749
         },
         {
           "type": "point",
-          "key": "g-301--bridge-29",
+          "key": "g-301--bridge 29",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {"x": 29.5259, "y": 0.225, "width": 0.05, "height": 0.05},
           "x": 29.5509,
           "y": 0.25
         },
         {
           "type": "point",
-          "key": "g-301--bridge-30",
+          "key": "g-301--bridge 30",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
+          "bounds2d": {"x": 29.5259, "y": 0.725, "width": 0.05, "height": 0.05},
           "x": 29.5509,
           "y": 0.75
         },
         {
           "type": "point",
-          "key": "g-301--bridge-31",
+          "key": "g-301--bridge 31",
           "meta": {
             "decor": true,
             "do": true,
@@ -14023,12 +14894,18 @@
             "chair": true,
             "orient": 150
           },
+          "bounds2d": {
+            "x": 29.3195,
+            "y": 4.4484,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 29.354,
           "y": 4.4827
         },
         {
           "type": "point",
-          "key": "g-301--bridge-32",
+          "key": "g-301--bridge 32",
           "meta": {
             "decor": true,
             "do": true,
@@ -14036,19 +14913,31 @@
             "chair": true,
             "orient": 210
           },
+          "bounds2d": {
+            "x": 29.3045,
+            "y": 5.4434,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 29.339,
           "y": 5.4777
         },
         {
           "type": "point",
-          "key": "g-301--bridge-33",
+          "key": "g-301--bridge 33",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270},
+          "bounds2d": {
+            "x": 27.5652,
+            "y": 0.65,
+            "width": 0.0507,
+            "height": 0.05
+          },
           "x": 27.5906,
           "y": 0.675
         },
         {
           "type": "point",
-          "key": "g-301--bridge-34",
+          "key": "g-301--bridge 34",
           "meta": {
             "decor": true,
             "do": true,
@@ -14056,12 +14945,18 @@
             "toilet": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 28.4696,
+            "y": 0.45,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 28.495,
           "y": 0.475
         },
         {
           "type": "point",
-          "key": "g-301--bridge-35",
+          "key": "g-301--bridge 35",
           "meta": {
             "decor": true,
             "do": true,
@@ -14069,12 +14964,13 @@
             "bed": true,
             "orient": 90
           },
+          "bounds2d": {"x": 29.1625, "y": 2.215, "width": 0.05, "height": 0.05},
           "x": 29.1875,
           "y": 2.24
         },
         {
           "type": "point",
-          "key": "g-301--bridge-36",
+          "key": "g-301--bridge 36",
           "meta": {
             "decor": true,
             "do": true,
@@ -14082,50 +14978,56 @@
             "bed": true,
             "orient": 90
           },
+          "bounds2d": {"x": 29.1625, "y": 2.215, "width": 0.05, "height": 0.05},
           "x": 29.1875,
           "y": 2.24
         },
         {
           "type": "rect",
-          "key": "g-301--bridge-37",
+          "key": "g-301--bridge 37",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 0, "y": 14.1, "width": 1.5, "height": 0.9},
           "x": 0,
           "y": 14.1,
           "width": 1.5,
           "height": 0.9,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": 0
         },
         {
           "type": "point",
-          "key": "g-301--bridge-38",
+          "key": "g-301--bridge 38",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 4.5, "y": 13.25, "width": 0.05, "height": 0.05},
           "x": 4.525,
           "y": 13.275
         },
         {
           "type": "point",
-          "key": "g-301--bridge-39",
+          "key": "g-301--bridge 39",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 0.724, "y": 14.236, "width": 0.05, "height": 0.05},
           "x": 0.749,
           "y": 14.261
         },
         {
           "type": "point",
-          "key": "g-301--bridge-40",
+          "key": "g-301--bridge 40",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {"x": 0.225, "y": 14.5259, "width": 0.05, "height": 0.05},
           "x": 0.25,
           "y": 14.5509
         },
         {
           "type": "point",
-          "key": "g-301--bridge-41",
+          "key": "g-301--bridge 41",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {"x": 0.725, "y": 14.5259, "width": 0.05, "height": 0.05},
           "x": 0.75,
           "y": 14.5509
         },
         {
           "type": "point",
-          "key": "g-301--bridge-42",
+          "key": "g-301--bridge 42",
           "meta": {
             "decor": true,
             "do": true,
@@ -14133,12 +15035,18 @@
             "chair": true,
             "orient": 300
           },
+          "bounds2d": {
+            "x": 4.4484,
+            "y": 14.3195,
+            "width": 0.0687,
+            "height": 0.0689
+          },
           "x": 4.4828,
           "y": 14.354
         },
         {
           "type": "point",
-          "key": "g-301--bridge-43",
+          "key": "g-301--bridge 43",
           "meta": {
             "decor": true,
             "do": true,
@@ -14146,19 +15054,31 @@
             "chair": true,
             "orient": 240
           },
+          "bounds2d": {
+            "x": 5.4434,
+            "y": 14.3045,
+            "width": 0.0687,
+            "height": 0.0689
+          },
           "x": 5.4777,
           "y": 14.339
         },
         {
           "type": "point",
-          "key": "g-301--bridge-44",
+          "key": "g-301--bridge 44",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {
+            "x": 0.65,
+            "y": 12.5652,
+            "width": 0.05,
+            "height": 0.0507
+          },
           "x": 0.675,
           "y": 12.5906
         },
         {
           "type": "point",
-          "key": "g-301--bridge-45",
+          "key": "g-301--bridge 45",
           "meta": {
             "decor": true,
             "do": true,
@@ -14166,12 +15086,18 @@
             "toilet": true,
             "orient": 360
           },
+          "bounds2d": {
+            "x": 0.45,
+            "y": 13.4696,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 0.475,
           "y": 13.495
         },
         {
           "type": "point",
-          "key": "g-301--bridge-46",
+          "key": "g-301--bridge 46",
           "meta": {
             "decor": true,
             "do": true,
@@ -14179,12 +15105,13 @@
             "bed": true,
             "orient": 360
           },
+          "bounds2d": {"x": 2.215, "y": 14.1625, "width": 0.05, "height": 0.05},
           "x": 2.24,
           "y": 14.1875
         },
         {
           "type": "point",
-          "key": "g-301--bridge-47",
+          "key": "g-301--bridge 47",
           "meta": {
             "decor": true,
             "do": true,
@@ -14192,19 +15119,21 @@
             "bed": true,
             "orient": 360
           },
+          "bounds2d": {"x": 2.215, "y": 14.1625, "width": 0.05, "height": 0.05},
           "x": 2.24,
           "y": 14.1875
         },
         {
           "type": "point",
-          "key": "g-301--bridge-48",
+          "key": "g-301--bridge 48",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 5.2, "y": 3.65, "width": 0.1, "height": 0.1},
           "x": 5.25,
           "y": 3.7
         },
         {
           "type": "point",
-          "key": "g-301--bridge-49",
+          "key": "g-301--bridge 49",
           "meta": {
             "decor": true,
             "do": true,
@@ -14212,19 +15141,26 @@
             "chair": true,
             "orient": 315
           },
+          "bounds2d": {
+            "x": 4.4497,
+            "y": 4.4893,
+            "width": 0.0713,
+            "height": 0.0712
+          },
           "x": 4.4853,
           "y": 4.5249
         },
         {
           "type": "point",
-          "key": "g-301--bridge-50",
+          "key": "g-301--bridge 50",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 24.7, "y": 3.65, "width": 0.1, "height": 0.1},
           "x": 24.75,
           "y": 3.7
         },
         {
           "type": "point",
-          "key": "g-301--bridge-51",
+          "key": "g-301--bridge 51",
           "meta": {
             "decor": true,
             "do": true,
@@ -14232,24 +15168,31 @@
             "chair": true,
             "orient": 225
           },
+          "bounds2d": {
+            "x": 25.479,
+            "y": 4.4893,
+            "width": 0.0713,
+            "height": 0.0712
+          },
           "x": 25.5146,
           "y": 4.5249
         },
         {
           "type": "point",
-          "key": "g-301--bridge-52",
+          "key": "g-301--bridge 52",
           "meta": {
             "decor": true,
             "go": true,
             "label": "stellar",
             "cartography": true
           },
+          "bounds2d": {"x": 27.38, "y": 10.2, "width": 0.05, "height": 0.05},
           "x": 27.405,
           "y": 10.225
         },
         {
           "type": "point",
-          "key": "g-301--bridge-53",
+          "key": "g-301--bridge 53",
           "meta": {
             "decor": true,
             "do": true,
@@ -14257,12 +15200,18 @@
             "chair": true,
             "orient": 105
           },
+          "bounds2d": {
+            "x": 26.7012,
+            "y": 12.9579,
+            "width": 0.0615,
+            "height": 0.062
+          },
           "x": 26.7319,
           "y": 12.9889
         },
         {
           "type": "point",
-          "key": "g-301--bridge-54",
+          "key": "g-301--bridge 54",
           "meta": {
             "decor": true,
             "do": true,
@@ -14270,149 +15219,187 @@
             "chair": true,
             "orient": 345
           },
+          "bounds2d": {
+            "x": 27.9522,
+            "y": 11.6957,
+            "width": 0.062,
+            "height": 0.0615
+          },
           "x": 27.9832,
           "y": 11.7264
         },
         {
           "type": "point",
-          "key": "g-301--bridge-55",
+          "key": "g-301--bridge 55",
           "meta": {"decor": true, "label": "bridge"},
+          "bounds2d": {"x": 14.95, "y": 4.45, "width": 0.1, "height": 0.1},
           "x": 15,
           "y": 4.5
         },
         {
           "type": "point",
-          "key": "g-301--bridge-56",
+          "key": "g-301--bridge 56",
           "meta": {"decor": true, "label": "locker"},
+          "bounds2d": {"x": 12.7, "y": 5.575, "width": 0.1, "height": 0.1},
           "x": 12.75,
           "y": 5.625
         },
         {
           "type": "point",
-          "key": "g-301--bridge-57",
+          "key": "g-301--bridge 57",
           "meta": {"decor": true, "label": "locker"},
+          "bounds2d": {"x": 17.225, "y": 5.625, "width": 0.1, "height": 0.1},
           "x": 17.275,
           "y": 5.675
         },
         {
           "type": "point",
-          "key": "g-301--bridge-58",
+          "key": "g-301--bridge 58",
           "meta": {"decor": true, "label": "locker"},
+          "bounds2d": {"x": 10.465, "y": 8.245, "width": 0.1, "height": 0.1},
           "x": 10.515,
           "y": 8.295
         },
         {
           "type": "point",
-          "key": "g-301--bridge-59",
+          "key": "g-301--bridge 59",
           "meta": {"decor": true, "label": "briefing"},
+          "bounds2d": {"x": 14.95, "y": 10.775, "width": 0.1, "height": 0.1},
           "x": 15,
           "y": 10.825
         },
         {
           "type": "point",
-          "key": "g-301--bridge-60",
+          "key": "g-301--bridge 60",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 11.01, "y": 13.1, "width": 0.1, "height": 0.1},
           "x": 11.06,
           "y": 13.15
         },
         {
           "type": "point",
-          "key": "g-301--bridge-61",
+          "key": "g-301--bridge 61",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 19, "y": 13.1, "width": 0.1, "height": 0.1},
           "x": 19.05,
           "y": 13.15
         },
         {
           "type": "point",
-          "key": "g-301--bridge-62",
+          "key": "g-301--bridge 62",
           "meta": {"decor": true, "label": "cpu"},
+          "bounds2d": {"x": 10.5, "y": 4.8, "width": 0.1, "height": 0.1},
           "x": 10.55,
           "y": 4.85
         },
         {
           "type": "point",
-          "key": "g-301--bridge-63",
+          "key": "g-301--bridge 63",
           "meta": {"decor": true, "label": "cpu"},
+          "bounds2d": {"x": 19.35, "y": 4.75, "width": 0.1, "height": 0.1},
           "x": 19.4,
           "y": 4.8
         },
         {
           "type": "point",
-          "key": "g-301--bridge-64",
+          "key": "g-301--bridge 64",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 18.86, "y": 11.095, "width": 0.1, "height": 0.1},
           "x": 18.91,
           "y": 11.145
         },
         {
           "type": "point",
-          "key": "g-301--bridge-65",
+          "key": "g-301--bridge 65",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 11.015, "y": 10.995, "width": 0.1, "height": 0.1},
           "x": 11.065,
           "y": 11.045
         },
         {
           "type": "point",
-          "key": "g-301--bridge-66",
+          "key": "g-301--bridge 66",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 14.9143, "y": 7.2675, "width": 0.1, "height": 0.1},
           "x": 14.9643,
           "y": 7.3175
         },
         {
           "type": "point",
-          "key": "g-301--bridge-67",
+          "key": "g-301--bridge 67",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {"x": 19.475, "y": 7.8093, "width": 0.05, "height": 0.05},
           "x": 19.5,
           "y": 7.8343
         },
         {
           "type": "point",
-          "key": "g-301--bridge-68",
+          "key": "g-301--bridge 68",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {"x": 20.375, "y": 7.8093, "width": 0.05, "height": 0.05},
           "x": 20.4,
           "y": 7.8343
         },
         {
           "type": "point",
-          "key": "g-301--bridge-69",
+          "key": "g-301--bridge 69",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 12.73,
+            "y": 3.3496,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 12.755,
           "y": 3.375
         },
         {
           "type": "point",
-          "key": "g-301--bridge-70",
+          "key": "g-301--bridge 70",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 14.23,
+            "y": 3.3496,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 14.255,
           "y": 3.375
         },
         {
           "type": "point",
-          "key": "g-301--bridge-71",
+          "key": "g-301--bridge 71",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 15.73,
+            "y": 3.3496,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 15.755,
           "y": 3.375
         },
         {
           "type": "point",
-          "key": "g-301--bridge-72",
+          "key": "g-301--bridge 72",
           "meta": {
             "decor": true,
             "do": true,
@@ -14420,12 +15407,18 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 17.23,
+            "y": 3.3496,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 17.255,
           "y": 3.375
         },
         {
           "type": "point",
-          "key": "g-301--bridge-73",
+          "key": "g-301--bridge 73",
           "meta": {
             "decor": true,
             "do": true,
@@ -14433,12 +15426,18 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 10.1725,
+            "y": 9.4871,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 10.1975,
           "y": 9.5125
         },
         {
           "type": "point",
-          "key": "g-301--bridge-74",
+          "key": "g-301--bridge 74",
           "meta": {
             "decor": true,
             "do": true,
@@ -14446,51 +15445,75 @@
             "chair": true,
             "orient": 255
           },
+          "bounds2d": {
+            "x": 10.4938,
+            "y": 10.7204,
+            "width": 0.0614,
+            "height": 0.062
+          },
           "x": 10.5245,
           "y": 10.7514
         },
         {
           "type": "point",
-          "key": "g-301--bridge-75",
+          "key": "g-301--bridge 75",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 15.8775,
+            "y": 11.4221,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 15.9025,
           "y": 11.4475
         },
         {
           "type": "point",
-          "key": "g-301--bridge-76",
+          "key": "g-301--bridge 76",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 15.2775,
+            "y": 11.4221,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 15.3025,
           "y": 11.4475
         },
         {
           "type": "point",
-          "key": "g-301--bridge-77",
+          "key": "g-301--bridge 77",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 90
+          },
+          "bounds2d": {
+            "x": 14.6775,
+            "y": 11.4221,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 14.7025,
           "y": 11.4475
         },
         {
           "type": "point",
-          "key": "g-301--bridge-78",
+          "key": "g-301--bridge 78",
           "meta": {
             "decor": true,
             "do": true,
@@ -14498,51 +15521,75 @@
             "chair": true,
             "orient": 90
           },
+          "bounds2d": {
+            "x": 14.0775,
+            "y": 11.4221,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 14.1025,
           "y": 11.4475
         },
         {
           "type": "point",
-          "key": "g-301--bridge-79",
+          "key": "g-301--bridge 79",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 15.8775,
+            "y": 10.1771,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 15.9025,
           "y": 10.2025
         },
         {
           "type": "point",
-          "key": "g-301--bridge-80",
+          "key": "g-301--bridge 80",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 15.2775,
+            "y": 10.1771,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 15.3025,
           "y": 10.2025
         },
         {
           "type": "point",
-          "key": "g-301--bridge-81",
+          "key": "g-301--bridge 81",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 14.6775,
+            "y": 10.1771,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 14.7025,
           "y": 10.2025
         },
         {
           "type": "point",
-          "key": "g-301--bridge-82",
+          "key": "g-301--bridge 82",
           "meta": {
             "decor": true,
             "do": true,
@@ -14550,12 +15597,18 @@
             "chair": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 14.0775,
+            "y": 10.1771,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 14.1025,
           "y": 10.2025
         },
         {
           "type": "point",
-          "key": "g-301--bridge-83",
+          "key": "g-301--bridge 83",
           "meta": {
             "decor": true,
             "do": true,
@@ -14563,12 +15616,18 @@
             "chair": true,
             "orient": 360
           },
+          "bounds2d": {
+            "x": 16.5521,
+            "y": 10.7975,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 16.5775,
           "y": 10.8225
         },
         {
           "type": "point",
-          "key": "g-301--bridge-84",
+          "key": "g-301--bridge 84",
           "meta": {
             "decor": true,
             "do": true,
@@ -14576,12 +15635,18 @@
             "chair": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 13.3971,
+            "y": 10.7975,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 13.4225,
           "y": 10.8225
         },
         {
           "type": "point",
-          "key": "g-301--bridge-85",
+          "key": "g-301--bridge 85",
           "meta": {
             "decor": true,
             "do": true,
@@ -14589,19 +15654,26 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 18.625, "y": 9.6575, "width": 0.05, "height": 0.05},
           "x": 18.65,
           "y": 9.6825
         },
         {
           "type": "point",
-          "key": "g-301--bridge-86",
+          "key": "g-301--bridge 86",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 18.5841,
+            "y": 8.3035,
+            "width": 0.0507,
+            "height": 0.0498
+          },
           "x": 18.6094,
           "y": 8.3284
         },
         {
           "type": "point",
-          "key": "g-301--bridge-87",
+          "key": "g-301--bridge 87",
           "meta": {
             "decor": true,
             "do": true,
@@ -14609,12 +15681,13 @@
             "toilet": true,
             "orient": 270
           },
+          "bounds2d": {"x": 19.4796, "y": 8.5, "width": 0.0508, "height": 0.05},
           "x": 19.505,
           "y": 8.525
         },
         {
           "type": "point",
-          "key": "g-301--bridge-88",
+          "key": "g-301--bridge 88",
           "meta": {
             "decor": true,
             "do": true,
@@ -14622,19 +15695,26 @@
             "toilet": true,
             "orient": 270
           },
+          "bounds2d": {"x": 20.3796, "y": 8.5, "width": 0.0508, "height": 0.05},
           "x": 20.405,
           "y": 8.525
         },
         {
           "type": "point",
-          "key": "g-301--bridge-89",
+          "key": "g-301--bridge 89",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 14.9796,
+            "y": 12.85,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 15.005,
           "y": 12.875
         },
         {
           "type": "point",
-          "key": "g-301--bridge-90",
+          "key": "g-301--bridge 90",
           "meta": {
             "decor": true,
             "do": true,
@@ -14642,18 +15722,25 @@
             "chair": true,
             "orient": 0
           },
+          "bounds2d": {"x": 7.4896, "y": 2.22, "width": 0.0508, "height": 0.05},
           "x": 7.515,
           "y": 2.245
         },
         {
           "type": "point",
-          "key": "g-301--bridge-91",
+          "key": "g-301--bridge 91",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 22.4596,
+            "y": 2.22,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 22.485,
           "y": 2.245
@@ -18735,42 +19822,47 @@
       "decor": [
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-0",
+          "key": "g-302--xboat-repair-bay 0",
           "meta": {"decor": true, "go": true, "label": "locker"},
+          "bounds2d": {"x": 29.4775, "y": 0.715, "width": 0.25, "height": 0.25},
           "x": 29.6025,
           "y": 0.84
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-1",
+          "key": "g-302--xboat-repair-bay 1",
           "meta": {"decor": true, "go": true, "label": "locker"},
+          "bounds2d": {"x": 29.4775, "y": 2.215, "width": 0.25, "height": 0.25},
           "x": 29.6025,
           "y": 2.34
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-2",
+          "key": "g-302--xboat-repair-bay 2",
           "meta": {"decor": true, "go": true, "label": "locker"},
+          "bounds2d": {"x": 29.4775, "y": 3.715, "width": 0.25, "height": 0.25},
           "x": 29.6025,
           "y": 3.84
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-3",
+          "key": "g-302--xboat-repair-bay 3",
           "meta": {"decor": true, "go": true, "label": "locker"},
+          "bounds2d": {"x": 29.4775, "y": 5.215, "width": 0.25, "height": 0.25},
           "x": 29.6025,
           "y": 5.34
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-4",
+          "key": "g-302--xboat-repair-bay 4",
           "meta": {"decor": true, "go": true, "label": "eva"},
+          "bounds2d": {"x": 28.2275, "y": 3.965, "width": 0.25, "height": 0.25},
           "x": 28.3525,
           "y": 4.09
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-5",
+          "key": "g-302--xboat-repair-bay 5",
           "meta": {
             "decor": true,
             "go": true,
@@ -18778,61 +19870,74 @@
             "or": true,
             "cargo'": true
           },
+          "bounds2d": {"x": 24.4375, "y": 11.8, "width": 0.25, "height": 0.25},
           "x": 24.5625,
           "y": 11.925
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-6",
+          "key": "g-302--xboat-repair-bay 6",
           "meta": {"decor": true, "label": "fuel"},
+          "bounds2d": {"x": 3.95, "y": 11.45, "width": 0.25, "height": 0.25},
           "x": 4.075,
           "y": 11.575
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-7",
+          "key": "g-302--xboat-repair-bay 7",
           "meta": {"decor": true, "go": true, "label": "airlock"},
+          "bounds2d": {"x": 12.5, "y": 11.75, "width": 0.25, "height": 0.25},
           "x": 12.625,
           "y": 11.875
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-8",
+          "key": "g-302--xboat-repair-bay 8",
           "meta": {"decor": true, "go": true, "label": "'repair", "bay'": true},
+          "bounds2d": {"x": 18.2, "y": 11.8, "width": 0.25, "height": 0.25},
           "x": 18.325,
           "y": 11.925
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-9",
+          "key": "g-302--xboat-repair-bay 9",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 28.2275, "y": 8.965, "width": 0.25, "height": 0.25},
           "x": 28.3525,
           "y": 9.09
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-10",
+          "key": "g-302--xboat-repair-bay 10",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {
+            "x": 17.9775,
+            "y": 13.965,
+            "width": 0.25,
+            "height": 0.25
+          },
           "x": 18.1025,
           "y": 14.09
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-11",
+          "key": "g-302--xboat-repair-bay 11",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 1.2275, "y": 13.215, "width": 0.25, "height": 0.25},
           "x": 1.3525,
           "y": 13.34
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-12",
+          "key": "g-302--xboat-repair-bay 12",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {"x": 0.95, "y": 4.375, "width": 0.05, "height": 0.05},
           "x": 0.975,
           "y": 4.4
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-13",
+          "key": "g-302--xboat-repair-bay 13",
           "meta": {
             "decor": true,
             "do": true,
@@ -18840,12 +19945,13 @@
             "chair": true,
             "orient": 360
           },
+          "bounds2d": {"x": 1.5296, "y": 3.73, "width": 0.0508, "height": 0.05},
           "x": 1.555,
           "y": 3.755
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-14",
+          "key": "g-302--xboat-repair-bay 14",
           "meta": {
             "decor": true,
             "do": true,
@@ -18853,19 +19959,21 @@
             "chair": true,
             "orient": 360
           },
+          "bounds2d": {"x": 1.5296, "y": 5.23, "width": 0.0508, "height": 0.05},
           "x": 1.555,
           "y": 5.255
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-15",
+          "key": "g-302--xboat-repair-bay 15",
           "meta": {"decor": true, "go": true, "label": "lounge"},
+          "bounds2d": {"x": 7.575, "y": 12.075, "width": 0.05, "height": 0.05},
           "x": 7.6,
           "y": 12.1
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-16",
+          "key": "g-302--xboat-repair-bay 16",
           "meta": {
             "decor": true,
             "do": true,
@@ -18873,12 +19981,13 @@
             "sofa": true,
             "orient": 90
           },
+          "bounds2d": {"x": 6.91, "y": 11.1825, "width": 0.05, "height": 0.05},
           "x": 6.935,
           "y": 11.2075
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-17",
+          "key": "g-302--xboat-repair-bay 17",
           "meta": {
             "decor": true,
             "do": true,
@@ -18886,12 +19995,13 @@
             "sofa": true,
             "orient": 90
           },
+          "bounds2d": {"x": 7.485, "y": 11.1825, "width": 0.05, "height": 0.05},
           "x": 7.51,
           "y": 11.2075
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-18",
+          "key": "g-302--xboat-repair-bay 18",
           "meta": {
             "decor": true,
             "do": true,
@@ -18899,12 +20009,13 @@
             "sofa": true,
             "orient": 90
           },
+          "bounds2d": {"x": 8.085, "y": 11.1825, "width": 0.05, "height": 0.05},
           "x": 8.11,
           "y": 11.2075
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-19",
+          "key": "g-302--xboat-repair-bay 19",
           "meta": {
             "decor": true,
             "do": true,
@@ -18912,12 +20023,18 @@
             "chair": true,
             "orient": 250
           },
+          "bounds2d": {
+            "x": 8.0215,
+            "y": 12.8448,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 8.0537,
           "y": 12.8773
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-20",
+          "key": "g-302--xboat-repair-bay 20",
           "meta": {
             "decor": true,
             "do": true,
@@ -18925,32 +20042,45 @@
             "chair": true,
             "orient": 290
           },
+          "bounds2d": {
+            "x": 6.8792,
+            "y": 12.8413,
+            "width": 0.0643,
+            "height": 0.0649
+          },
           "x": 6.9113,
           "y": 12.8737
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-21",
+          "key": "g-302--xboat-repair-bay 21",
           "meta": {"decor": true, "go": true, "label": "fresher"},
+          "bounds2d": {"x": 10.926, "y": 13.158, "width": 0.05, "height": 0.05},
           "x": 10.951,
           "y": 13.183
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-22",
+          "key": "g-302--xboat-repair-bay 22",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 11.51,
+            "y": 11.9596,
+            "width": 0.05,
+            "height": 0.0508
           },
           "x": 11.535,
           "y": 11.985
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-23",
+          "key": "g-302--xboat-repair-bay 23",
           "meta": {
             "decor": true,
             "do": true,
@@ -18958,13 +20088,25 @@
             "toilet": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 11.51,
+            "y": 10.9596,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 11.535,
           "y": 10.985
         },
         {
           "type": "point",
-          "key": "g-302--xboat-repair-bay-24",
+          "key": "g-302--xboat-repair-bay 24",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 360},
+          "bounds2d": {
+            "x": 11.3135,
+            "y": 12.8941,
+            "width": 0.0497,
+            "height": 0.0507
+          },
           "x": 11.3384,
           "y": 12.9195
         }
@@ -20888,79 +22030,108 @@
       "decor": [
         {
           "type": "point",
-          "key": "g-303--passenger-deck-0",
+          "key": "g-303--passenger-deck 0",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {"x": 4.625, "y": 8.75, "width": 0.125, "height": 0.125},
           "x": 4.6875,
           "y": 8.8125
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-1",
+          "key": "g-303--passenger-deck 1",
           "meta": {"decor": true, "go": true, "label": "corridor"},
+          "bounds2d": {
+            "x": 24.125,
+            "y": 10.25,
+            "width": 0.125,
+            "height": 0.125
+          },
           "x": 24.1875,
           "y": 10.3125
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-2",
+          "key": "g-303--passenger-deck 2",
           "meta": {"decor": true, "go": true, "label": "common-area"},
+          "bounds2d": {"x": 15.875, "y": 6.5, "width": 0.125, "height": 0.125},
           "x": 15.9375,
           "y": 6.5625
         },
         {
           "type": "rect",
-          "key": "g-303--passenger-deck-3",
+          "key": "g-303--passenger-deck 3",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 20.1, "y": 13.5, "width": 0.9, "height": 1.5},
           "x": 20.1,
           "y": 15,
           "width": 1.5,
           "height": 0.9,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": -1.5707963267948966
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-4",
+          "key": "g-303--passenger-deck 4",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 19.25, "y": 10.45, "width": 0.05, "height": 0.05},
           "x": 19.275,
           "y": 10.475
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-5",
+          "key": "g-303--passenger-deck 5",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 20.236, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 20.261,
           "y": 14.251
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-6",
+          "key": "g-303--passenger-deck 6",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {
+            "x": 20.5259,
+            "y": 14.725,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 20.5509,
           "y": 14.75
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-7",
+          "key": "g-303--passenger-deck 7",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 20.5259,
+            "y": 14.225,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 20.5509,
           "y": 14.25
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-8",
+          "key": "g-303--passenger-deck 8",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 210
+          },
+          "bounds2d": {
+            "x": 20.3195,
+            "y": 10.4829,
+            "width": 0.0689,
+            "height": 0.0687
           },
           "x": 20.354,
           "y": 10.5173
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-9",
+          "key": "g-303--passenger-deck 9",
           "meta": {
             "decor": true,
             "do": true,
@@ -20968,19 +22139,31 @@
             "chair": true,
             "orient": 150
           },
+          "bounds2d": {
+            "x": 20.3045,
+            "y": 9.4879,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 20.339,
           "y": 9.5222
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-10",
+          "key": "g-303--passenger-deck 10",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 18.5652,
+            "y": 14.3,
+            "width": 0.0507,
+            "height": 0.05
+          },
           "x": 18.5906,
           "y": 14.325
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-11",
+          "key": "g-303--passenger-deck 11",
           "meta": {
             "decor": true,
             "do": true,
@@ -20988,12 +22171,18 @@
             "toilet": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 19.4696,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 19.495,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-12",
+          "key": "g-303--passenger-deck 12",
           "meta": {
             "decor": true,
             "do": true,
@@ -21001,63 +22190,90 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 20.1625,
+            "y": 12.735,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 20.1875,
           "y": 12.76
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-13",
+          "key": "g-303--passenger-deck 13",
           "meta": {
             "decor": true,
             "do": true,
             "lie": true,
             "bed": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 20.1625,
+            "y": 12.735,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 20.1875,
           "y": 12.76
         },
         {
           "type": "rect",
-          "key": "g-303--passenger-deck-14",
+          "key": "g-303--passenger-deck 14",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 17.1, "y": 13.5, "width": 0.9, "height": 1.5},
           "x": 17.1,
           "y": 15,
           "width": 1.5,
           "height": 0.9,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": -1.5707963267948966
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-15",
+          "key": "g-303--passenger-deck 15",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 16.25, "y": 10.45, "width": 0.05, "height": 0.05},
           "x": 16.275,
           "y": 10.475
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-16",
+          "key": "g-303--passenger-deck 16",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 17.236, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 17.261,
           "y": 14.251
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-17",
+          "key": "g-303--passenger-deck 17",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {
+            "x": 17.5259,
+            "y": 14.725,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 17.5509,
           "y": 14.75
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-18",
+          "key": "g-303--passenger-deck 18",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 17.5259,
+            "y": 14.225,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 17.5509,
           "y": 14.25
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-19",
+          "key": "g-303--passenger-deck 19",
           "meta": {
             "decor": true,
             "do": true,
@@ -21065,12 +22281,18 @@
             "chair": true,
             "orient": 210
           },
+          "bounds2d": {
+            "x": 17.3195,
+            "y": 10.4829,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 17.354,
           "y": 10.5173
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-20",
+          "key": "g-303--passenger-deck 20",
           "meta": {
             "decor": true,
             "do": true,
@@ -21078,32 +22300,50 @@
             "chair": true,
             "orient": 150
           },
+          "bounds2d": {
+            "x": 17.3045,
+            "y": 9.4879,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 17.339,
           "y": 9.5222
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-21",
+          "key": "g-303--passenger-deck 21",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 15.5652,
+            "y": 14.3,
+            "width": 0.0507,
+            "height": 0.05
+          },
           "x": 15.5906,
           "y": 14.325
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-22",
+          "key": "g-303--passenger-deck 22",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 16.4696,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 16.495,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-23",
+          "key": "g-303--passenger-deck 23",
           "meta": {
             "decor": true,
             "do": true,
@@ -21111,76 +22351,109 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 17.1625,
+            "y": 12.735,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 17.1875,
           "y": 12.76
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-24",
+          "key": "g-303--passenger-deck 24",
           "meta": {
             "decor": true,
             "do": true,
             "lie": true,
             "bed": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 17.1625,
+            "y": 12.735,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 17.1875,
           "y": 12.76
         },
         {
           "type": "rect",
-          "key": "g-303--passenger-deck-25",
+          "key": "g-303--passenger-deck 25",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 12, "y": 13.5, "width": 0.9, "height": 1.5},
           "x": 12,
           "y": 15,
           "width": 1.5,
           "height": 0.9,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": -1.5707963267948966
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-26",
+          "key": "g-303--passenger-deck 26",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 13.7, "y": 10.45, "width": 0.05, "height": 0.05},
           "x": 13.725,
           "y": 10.475
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-27",
+          "key": "g-303--passenger-deck 27",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 12.714, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 12.739,
           "y": 14.251
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-28",
+          "key": "g-303--passenger-deck 28",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {
+            "x": 12.4241,
+            "y": 14.725,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 12.4491,
           "y": 14.75
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-29",
+          "key": "g-303--passenger-deck 29",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 12.4241,
+            "y": 14.225,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 12.4491,
           "y": 14.25
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-30",
+          "key": "g-303--passenger-deck 30",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 330
+          },
+          "bounds2d": {
+            "x": 12.6116,
+            "y": 10.4829,
+            "width": 0.0689,
+            "height": 0.0687
           },
           "x": 12.646,
           "y": 10.5173
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-31",
+          "key": "g-303--passenger-deck 31",
           "meta": {
             "decor": true,
             "do": true,
@@ -21188,19 +22461,31 @@
             "chair": true,
             "orient": 30
           },
+          "bounds2d": {
+            "x": 12.6266,
+            "y": 9.4879,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 12.661,
           "y": 9.5222
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-32",
+          "key": "g-303--passenger-deck 32",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 14.3841,
+            "y": 14.3,
+            "width": 0.0507,
+            "height": 0.05
+          },
           "x": 14.4094,
           "y": 14.325
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-33",
+          "key": "g-303--passenger-deck 33",
           "meta": {
             "decor": true,
             "do": true,
@@ -21208,12 +22493,18 @@
             "toilet": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 13.4796,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 13.505,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-34",
+          "key": "g-303--passenger-deck 34",
           "meta": {
             "decor": true,
             "do": true,
@@ -21221,63 +22512,80 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {
+            "x": 12.7875,
+            "y": 12.735,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 12.8125,
           "y": 12.76
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-35",
+          "key": "g-303--passenger-deck 35",
           "meta": {
             "decor": true,
             "do": true,
             "lie": true,
             "bed": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 12.7875,
+            "y": 12.735,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 12.8125,
           "y": 12.76
         },
         {
           "type": "rect",
-          "key": "g-303--passenger-deck-36",
+          "key": "g-303--passenger-deck 36",
+          "meta": {"decor": true, "rect": true, "shower": true},
+          "bounds2d": {"x": 9, "y": 13.5, "width": 0.9, "height": 1.5},
           "x": 9,
           "y": 15,
           "width": 1.5,
           "height": 0.9,
-          "meta": {"decor": true, "rect": true, "shower": true},
           "angle": -1.5707963267948966
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-37",
+          "key": "g-303--passenger-deck 37",
           "meta": {"decor": true, "meta": true, "label": "stateroom"},
+          "bounds2d": {"x": 10.7, "y": 10.45, "width": 0.05, "height": 0.05},
           "x": 10.725,
           "y": 10.475
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-38",
+          "key": "g-303--passenger-deck 38",
           "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "bounds2d": {"x": 9.714, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 9.739,
           "y": 14.251
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-39",
+          "key": "g-303--passenger-deck 39",
           "meta": {"decor": true, "button": true, "shower": true},
+          "bounds2d": {"x": 9.4241, "y": 14.725, "width": 0.05, "height": 0.05},
           "x": 9.4491,
           "y": 14.75
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-40",
+          "key": "g-303--passenger-deck 40",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {"x": 9.4241, "y": 14.225, "width": 0.05, "height": 0.05},
           "x": 9.4491,
           "y": 14.25
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-41",
+          "key": "g-303--passenger-deck 41",
           "meta": {
             "decor": true,
             "do": true,
@@ -21285,12 +22593,18 @@
             "chair": true,
             "orient": 330
           },
+          "bounds2d": {
+            "x": 9.6116,
+            "y": 10.4829,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 9.646,
           "y": 10.5173
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-42",
+          "key": "g-303--passenger-deck 42",
           "meta": {
             "decor": true,
             "do": true,
@@ -21298,32 +22612,50 @@
             "chair": true,
             "orient": 30
           },
+          "bounds2d": {
+            "x": 9.6266,
+            "y": 9.4879,
+            "width": 0.0689,
+            "height": 0.0687
+          },
           "x": 9.661,
           "y": 9.5222
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-43",
+          "key": "g-303--passenger-deck 43",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 90},
+          "bounds2d": {
+            "x": 11.3841,
+            "y": 14.3,
+            "width": 0.0507,
+            "height": 0.05
+          },
           "x": 11.4094,
           "y": 14.325
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-44",
+          "key": "g-303--passenger-deck 44",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "toilet": true,
             "orient": 270
+          },
+          "bounds2d": {
+            "x": 10.4796,
+            "y": 14.5,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 10.505,
           "y": 14.525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-45",
+          "key": "g-303--passenger-deck 45",
           "meta": {
             "decor": true,
             "do": true,
@@ -21331,12 +22663,13 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {"x": 9.7875, "y": 12.735, "width": 0.05, "height": 0.05},
           "x": 9.8125,
           "y": 12.76
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-46",
+          "key": "g-303--passenger-deck 46",
           "meta": {
             "decor": true,
             "do": true,
@@ -21344,19 +22677,21 @@
             "bed": true,
             "orient": 270
           },
+          "bounds2d": {"x": 9.7875, "y": 12.735, "width": 0.05, "height": 0.05},
           "x": 9.8125,
           "y": 12.76
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-47",
+          "key": "g-303--passenger-deck 47",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 16.865, "y": 2.264, "width": 0.1, "height": 0.1},
           "x": 16.915,
           "y": 2.314
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-48",
+          "key": "g-303--passenger-deck 48",
           "meta": {
             "decor": true,
             "do": true,
@@ -21364,12 +22699,13 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 16.049, "y": 0.7206, "width": 0.05, "height": 0.05},
           "x": 16.074,
           "y": 0.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-49",
+          "key": "g-303--passenger-deck 49",
           "meta": {
             "decor": true,
             "do": true,
@@ -21377,12 +22713,13 @@
             "toilet": true,
             "orient": 0
           },
+          "bounds2d": {"x": 15.599, "y": 3.7206, "width": 0.05, "height": 0.05},
           "x": 15.624,
           "y": 3.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-50",
+          "key": "g-303--passenger-deck 50",
           "meta": {
             "decor": true,
             "do": true,
@@ -21390,39 +22727,53 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 16.045, "y": 0.7275, "width": 0.05, "height": 0.05},
           "x": 16.07,
           "y": 0.7525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-51",
+          "key": "g-303--passenger-deck 51",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {
+            "x": 15.61,
+            "y": 3.7296,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 15.635,
           "y": 3.755
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-52",
+          "key": "g-303--passenger-deck 52",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 15.7921,
+            "y": 2.2175,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 15.8175,
           "y": 2.2425
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-53",
+          "key": "g-303--passenger-deck 53",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 10.865, "y": 2.264, "width": 0.1, "height": 0.1},
           "x": 10.915,
           "y": 2.314
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-54",
+          "key": "g-303--passenger-deck 54",
           "meta": {
             "decor": true,
             "do": true,
@@ -21430,12 +22781,13 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 10.049, "y": 0.7206, "width": 0.05, "height": 0.05},
           "x": 10.074,
           "y": 0.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-55",
+          "key": "g-303--passenger-deck 55",
           "meta": {
             "decor": true,
             "do": true,
@@ -21443,12 +22795,13 @@
             "toilet": true,
             "orient": 0
           },
+          "bounds2d": {"x": 9.599, "y": 3.7206, "width": 0.05, "height": 0.05},
           "x": 9.624,
           "y": 3.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-56",
+          "key": "g-303--passenger-deck 56",
           "meta": {
             "decor": true,
             "do": true,
@@ -21456,39 +22809,48 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 10.045, "y": 0.7275, "width": 0.05, "height": 0.05},
           "x": 10.07,
           "y": 0.7525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-57",
+          "key": "g-303--passenger-deck 57",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {"x": 9.61, "y": 3.7296, "width": 0.05, "height": 0.0508},
           "x": 9.635,
           "y": 3.755
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-58",
+          "key": "g-303--passenger-deck 58",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 9.7921,
+            "y": 2.2175,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 9.8175,
           "y": 2.2425
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-59",
+          "key": "g-303--passenger-deck 59",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 13.865, "y": 2.264, "width": 0.1, "height": 0.1},
           "x": 13.915,
           "y": 2.314
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-60",
+          "key": "g-303--passenger-deck 60",
           "meta": {
             "decor": true,
             "do": true,
@@ -21496,12 +22858,13 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 13.049, "y": 0.7206, "width": 0.05, "height": 0.05},
           "x": 13.074,
           "y": 0.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-61",
+          "key": "g-303--passenger-deck 61",
           "meta": {
             "decor": true,
             "do": true,
@@ -21509,12 +22872,13 @@
             "toilet": true,
             "orient": 0
           },
+          "bounds2d": {"x": 12.599, "y": 3.7206, "width": 0.05, "height": 0.05},
           "x": 12.624,
           "y": 3.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-62",
+          "key": "g-303--passenger-deck 62",
           "meta": {
             "decor": true,
             "do": true,
@@ -21522,39 +22886,53 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 13.045, "y": 0.7275, "width": 0.05, "height": 0.05},
           "x": 13.07,
           "y": 0.7525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-63",
+          "key": "g-303--passenger-deck 63",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {
+            "x": 12.61,
+            "y": 3.7296,
+            "width": 0.05,
+            "height": 0.0508
+          },
           "x": 12.635,
           "y": 3.755
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-64",
+          "key": "g-303--passenger-deck 64",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 180
+          },
+          "bounds2d": {
+            "x": 12.7921,
+            "y": 2.2175,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 12.8175,
           "y": 2.2425
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-65",
+          "key": "g-303--passenger-deck 65",
           "meta": {"decor": true, "go": true, "label": "stateroom"},
+          "bounds2d": {"x": 7.865, "y": 2.264, "width": 0.1, "height": 0.1},
           "x": 7.915,
           "y": 2.314
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-66",
+          "key": "g-303--passenger-deck 66",
           "meta": {
             "decor": true,
             "do": true,
@@ -21562,12 +22940,13 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 7.049, "y": 0.7206, "width": 0.05, "height": 0.05},
           "x": 7.074,
           "y": 0.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-67",
+          "key": "g-303--passenger-deck 67",
           "meta": {
             "decor": true,
             "do": true,
@@ -21575,12 +22954,13 @@
             "toilet": true,
             "orient": 0
           },
+          "bounds2d": {"x": 6.599, "y": 3.7206, "width": 0.05, "height": 0.05},
           "x": 6.624,
           "y": 3.7456
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-68",
+          "key": "g-303--passenger-deck 68",
           "meta": {
             "decor": true,
             "do": true,
@@ -21588,19 +22968,21 @@
             "bed": true,
             "orient": 0
           },
+          "bounds2d": {"x": 7.045, "y": 0.7275, "width": 0.05, "height": 0.05},
           "x": 7.07,
           "y": 0.7525
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-69",
+          "key": "g-303--passenger-deck 69",
           "meta": {"decor": true, "do": true, "stand": true, "orient": 180},
+          "bounds2d": {"x": 6.61, "y": 3.7296, "width": 0.05, "height": 0.0508},
           "x": 6.635,
           "y": 3.755
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-70",
+          "key": "g-303--passenger-deck 70",
           "meta": {
             "decor": true,
             "do": true,
@@ -21608,19 +22990,26 @@
             "chair": true,
             "orient": 180
           },
+          "bounds2d": {
+            "x": 6.7921,
+            "y": 2.2175,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 6.8175,
           "y": 2.2425
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-71",
+          "key": "g-303--passenger-deck 71",
           "meta": {"decor": true, "label": "medical"},
+          "bounds2d": {"x": 1.8, "y": 3.8, "width": 0.05, "height": 0.05},
           "x": 1.825,
           "y": 3.825
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-72",
+          "key": "g-303--passenger-deck 72",
           "meta": {
             "decor": true,
             "do": true,
@@ -21630,12 +23019,13 @@
             "orient": 0,
             "obscured": true
           },
+          "bounds2d": {"x": 0.67, "y": 0.73, "width": 0.05, "height": 0.05},
           "x": 0.695,
           "y": 0.755
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-73",
+          "key": "g-303--passenger-deck 73",
           "meta": {
             "decor": true,
             "do": true,
@@ -21645,12 +23035,13 @@
             "orient": 0,
             "obscured": true
           },
+          "bounds2d": {"x": 0.67, "y": 2.95, "width": 0.05, "height": 0.05},
           "x": 0.695,
           "y": 2.975
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-74",
+          "key": "g-303--passenger-deck 74",
           "meta": {
             "decor": true,
             "do": true,
@@ -21660,45 +23051,64 @@
             "orient": 0,
             "obscured": true
           },
+          "bounds2d": {"x": 0.67, "y": 5.18, "width": 0.05, "height": 0.05},
           "x": 0.695,
           "y": 5.205
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-75",
+          "key": "g-303--passenger-deck 75",
           "meta": {"decor": true, "go": true, "label": "office"},
+          "bounds2d": {
+            "x": 28.342,
+            "y": 11.9125,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 28.367,
           "y": 11.9375
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-76",
+          "key": "g-303--passenger-deck 76",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 45
+          },
+          "bounds2d": {
+            "x": 28.4114,
+            "y": 13.4532,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 28.4364,
           "y": 13.4782
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-77",
+          "key": "g-303--passenger-deck 77",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 215
+          },
+          "bounds2d": {
+            "x": 25.963,
+            "y": 12.1625,
+            "width": 0.05,
+            "height": 0.05
           },
           "x": 25.988,
           "y": 12.1875
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-78",
+          "key": "g-303--passenger-deck 78",
           "meta": {
             "decor": true,
             "do": true,
@@ -21706,12 +23116,18 @@
             "chair": true,
             "orient": 235
           },
+          "bounds2d": {
+            "x": 27.113,
+            "y": 10.9625,
+            "width": 0.05,
+            "height": 0.05
+          },
           "x": 27.138,
           "y": 10.9875
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-79",
+          "key": "g-303--passenger-deck 79",
           "meta": {
             "decor": true,
             "do": true,
@@ -21719,12 +23135,18 @@
             "chair": true,
             "orient": 215
           },
+          "bounds2d": {
+            "x": 25.9458,
+            "y": 12.1586,
+            "width": 0.0703,
+            "height": 0.0701
+          },
           "x": 25.9809,
           "y": 12.1937
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-80",
+          "key": "g-303--passenger-deck 80",
           "meta": {
             "decor": true,
             "do": true,
@@ -21732,12 +23154,18 @@
             "chair": true,
             "orient": 235
           },
+          "bounds2d": {
+            "x": 27.1244,
+            "y": 10.9663,
+            "width": 0.0701,
+            "height": 0.0703
+          },
           "x": 27.1594,
           "y": 11.0014
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-81",
+          "key": "g-303--passenger-deck 81",
           "meta": {
             "decor": true,
             "do": true,
@@ -21745,12 +23173,18 @@
             "chair": true,
             "orient": 45
           },
+          "bounds2d": {
+            "x": 28.4395,
+            "y": 13.4997,
+            "width": 0.0712,
+            "height": 0.0713
+          },
           "x": 28.4751,
           "y": 13.5354
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-82",
+          "key": "g-303--passenger-deck 82",
           "meta": {
             "decor": true,
             "do": true,
@@ -21758,77 +23192,108 @@
             "chair": true,
             "orient": 0
           },
+          "bounds2d": {"x": 4.8596, "y": 2.97, "width": 0.0508, "height": 0.05},
           "x": 4.885,
           "y": 2.995
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-83",
+          "key": "g-303--passenger-deck 83",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 27.1421,
+            "y": 5.6025,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 27.1675,
           "y": 5.6275
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-84",
+          "key": "g-303--passenger-deck 84",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 10.4021,
+            "y": 6.5025,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 10.4275,
           "y": 6.5275
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-85",
+          "key": "g-303--passenger-deck 85",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 10.4021,
+            "y": 7.5025,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 10.4275,
           "y": 7.5275
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-86",
+          "key": "g-303--passenger-deck 86",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 10.4121,
+            "y": 8.5025,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 10.4375,
           "y": 8.5275
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-87",
+          "key": "g-303--passenger-deck 87",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 27.9521,
+            "y": 5.3625,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 27.9775,
           "y": 5.3875
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-88",
+          "key": "g-303--passenger-deck 88",
           "meta": {
             "decor": true,
             "do": true,
@@ -21836,18 +23301,30 @@
             "chair": true,
             "orient": 0
           },
+          "bounds2d": {
+            "x": 28.8021,
+            "y": 5.2425,
+            "width": 0.0508,
+            "height": 0.05
+          },
           "x": 28.8275,
           "y": 5.2675
         },
         {
           "type": "point",
-          "key": "g-303--passenger-deck-89",
+          "key": "g-303--passenger-deck 89",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 0
+          },
+          "bounds2d": {
+            "x": 29.6621,
+            "y": 5.1625,
+            "width": 0.0508,
+            "height": 0.05
           },
           "x": 29.6875,
           "y": 5.1875

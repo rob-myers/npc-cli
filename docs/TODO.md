@@ -9,17 +9,22 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
+- 🚧 migrate `gmGraph.findRoomContaining`
+  - begin migrating `gmGraph`
+  - migrate gm grid
+  - migrate `api.geomorphs.hit` to `w.floor.hitCanvas` for fast room/door point-inclusion-test
+
 - 🚧 Decor component
   - ✅ `<Decor>` exists
   - ✅ clarify identifiers
     - decorKey points into decor sprite-sheet
     - decorId (number) identifies instance
     - can remove prev via "grouping by gmId" etc.
-    - decorId not same as instanceId (instancedmesh)
+    - decorId not same as instanceId (from instanced mesh)
+  - ✅ migrate decor grid
   - 🚧 can specify decor `cuboid` in symbols
   - 🚧 can see decor cuboids in World
     - `gms[gmId].decor` induces initial decor
-  - ✅ migrate decor grid
   - decor cuboids can effect nav-mesh
   - redo decor types
     - can have decorImgKey (in XZ plane)
@@ -56,6 +61,7 @@
 - next.js repo continued
   - migrate Viewer
 
+- verifyDecor inside CLI (previously did inside Decor)
 - gatsby: somehow reconfigure `TerserPlugin` to exclude `npc-cli/sh/src/*`
   - already tried using extension `.min.js`
   ```js
