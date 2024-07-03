@@ -187,7 +187,6 @@ class GeomorphService {
       const { angle, baseRect } = geom.polyToAngledRect(poly);
       return { type: 'rect', key: decorKey, ...baseRect.precision(precision).json, meta, angle };
     } else if (meta.cuboid) {
-      poly = poly.clone();
       const defaultDecorCuboidHeight = 0.5; // 🚧
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
       const y3d = typeof meta.y === 'number' ? meta.y : 0;
@@ -205,7 +204,7 @@ class GeomorphService {
       // Angle of first edge
       const angle = Math.atan2(tmpVect1.y, tmpVect1.x);
       // Rotate points back around `center2d` so axis-aligned
-      poly.applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
+      poly = poly.clone().applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
       
       const aabb = poly.rect;
       const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
