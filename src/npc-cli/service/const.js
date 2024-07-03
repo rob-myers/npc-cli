@@ -106,3 +106,6 @@ export const showLastNavPath = false;
  * Maximum `1 + 2 + 4 + 8 + 16`
  */
 export const defaultAgentUpdateFlags = 1 + 2 + 4;
+
+/** In meters (equivalently 2 grid squares, or 120sgu) */
+export const decorGridSize = 1.5 * 2;

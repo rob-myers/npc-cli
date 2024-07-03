@@ -177,15 +177,20 @@ class GeomorphService {
   }
 
   /**
-   * @param {string} decorKey
+   * @param {`${Geomorph.GeomorphKey} ${number}`} symDecorKey
+   * Identifier of decor w.r.t parent SVG symbol
    * @param {Geom.Poly} poly
    * @returns {Geomorph.Decor}
    */
-  decorFromPoly(decorKey, poly) {
+  decorFromPoly(symDecorKey, poly) {
     const { meta } = poly;
+    const polyRect = poly.rect.precision(precision);
+    // `key` will be overridden on instantiation
+    const base = { key: symDecorKey, meta, bounds2d: polyRect.json, };
+
     if (meta.rect) {
       const { angle, baseRect } = geom.polyToAngledRect(poly);
-      return { type: 'rect', key: decorKey, ...baseRect.precision(precision).json, meta, angle };
+      return { type: 'rect', ...base, ...baseRect.precision(precision).json, angle,  };
     } else if (meta.cuboid) {
       const defaultDecorCuboidHeight = 0.5; // 🚧
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
@@ -196,9 +201,9 @@ class GeomorphService {
       tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
       
       if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
-        const aabb = poly.rect;
+        const aabb = polyRect;
         const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-        return { type: 'cuboid', key: decorKey, meta, angle: 0, center, extent };
+        return { type: 'cuboid', ...base, angle: 0, center, extent };
       }
       
       // Angle of first edge
@@ -208,15 +213,15 @@ class GeomorphService {
       
       const aabb = poly.rect;
       const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-      return { type: 'cuboid', key: decorKey, meta, angle, center, extent };
+      return { type: 'cuboid', ...base, angle, center, extent };
     } else if (meta.circle) {
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
       const center = poly.center.precision(precision);
       const radius = Math.max(baseRect.width, baseRect.height) / 2;
-      return { type: 'circle', key: decorKey, meta, radius, center };
+      return { type: 'circle', ...base, radius, center };
     } else {
       const center = poly.center.precision(precision);
-      return { type: 'point', key: decorKey, meta, x: center.x, y: center.y };
+      return { type: 'point', ...base, x: center.x, y: center.y };
     }
   }
 
@@ -274,7 +279,7 @@ class GeomorphService {
 
     return {
       key: gmKey,
-      decor: symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey}-${i}`, d)),
+      decor: symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey} ${i}`, d)),
       pngRect: pngRect.clone(),
       doors,
       hullPoly,

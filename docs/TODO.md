@@ -11,12 +11,16 @@
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
+  - ✅ clarify identifiers
+    - decorKey points into decor sprite-sheet
+    - decorId (number) identifies instance
+    - can remove prev via "grouping by gmId" etc.
+    - decorId not same as instanceId (instancedmesh)
   - 🚧 can specify decor `cuboid` in symbols
-  - can see decor cuboids in World
+  - 🚧 can see decor cuboids in World
+    - `gms[gmId].decor` induces initial decor
+  - ✅ migrate decor grid
   - decor cuboids can effect nav-mesh
-  - clarify identifiers
-    - decorKey -> decorImgKey (?)
-    - decorKey corresponds to instance key
   - redo decor types
     - can have decorImgKey (in XZ plane)
       - e.g. for cuboid table-top or screen front

@@ -300,6 +300,8 @@ declare namespace Geomorph {
   interface BaseDecor {
     key: string;
     meta: Geom.Meta<Geomorph.GmRoomId>;
+    /** 2D bounds inside XZ plane */
+    bounds2d: Geom.RectJson;
     /** Epoch ms when last updated (overwritten) */
     updatedAt?: number;
     /** For defining decor via CLI (more succinct) */
@@ -309,6 +311,25 @@ declare namespace Geomorph {
   type DecorSheetRectCtxt = Geom.Meta<{ decorKey: Geomorph.DecorKey }>;
 
   type DecorKey = import('../service/geomorph.js').DecorKey;
+
+  /** 🚧 clarify */
+  type DecorCollidable = NPC.DecorCircle | NPC.DecorRect;
+
+  type DecorGrid = Record<number, Record<number, {
+    points: Set<Geomorph.DecorPoint>;
+    colliders: Set<Geomorph.DecorCollidable>; // 🚧
+  }>>;
+
+  interface RoomDecor {
+    /** Decor which came from room's parent geomorph symbol */
+    symbol: NPC.DecorDef[];
+    /** Everything in room */
+    decor: Record<string, NPC.DecorDef>;
+    /** All colliders in room */
+    colliders: NPC.DecorCollidable[];
+    /** All points in room */
+    points: NPC.DecorPoint[];
+  }
 
   //#endregion
 

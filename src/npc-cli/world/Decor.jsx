@@ -15,6 +15,10 @@ export default function Decor(props) {
     decorQuadCount: 0,
     quadInst: /** @type {*} */ (null),
 
+    byGrid: [],
+    byRoom: w.gms.map(_ => []),
+    decor: {},
+
     onPointerDown(e) {
       // 🚧
     },
@@ -67,7 +71,14 @@ export default function Decor(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} quadInst
+ * @property {Geomorph.DecorGrid} byGrid
+ * PoCollidable decors in global grid where `byGrid[x][y]` covers the square:
+ * (x * decorGridSize, y * decorGridSize, decorGridSize, decorGridSize)
+ * @property {Geomorph.RoomDecor[][]} byRoom
+ * Decor organised by `byRoom[gmId][roomId]`.
+ * Decor can span several rooms.
  * @property {THREE.InstancedMesh} cuboidInst
+ * @property {Record<number, Geomorph.Decor>} decor
  * @property {number} decorCuboidCount Total number of decor cuboids
  * @property {number} decorQuadCount Total number of decor quads
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
