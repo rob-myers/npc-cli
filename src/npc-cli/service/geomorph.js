@@ -271,9 +271,9 @@ class GeomorphService {
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
       ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
-    ], hullOutline).filter(({ rect }) => 
-      // Ignore nav-mesh if AABB ≤ 1m², or intersects `ignoreNavPoints`
-      rect.area > 1 && !ignoreNavPoints.some(p => rect.contains(p))
+    ], hullOutline).filter((poly) => 
+      // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`
+      poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))
     ).map((x) => x.cleanFinalReps().precision(precision));
 
     // 🔔 connector.roomIds will be computed in browser
