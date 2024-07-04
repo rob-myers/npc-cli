@@ -79,7 +79,7 @@ export class BaseGraph {
       }
     }
     // can't connect a non-existent node
-    console.error("Can't connect nodes:", src, dst, "given", opts, "in", this);
+    console.error("Can't connect nodes:", { src, dst, context: { ...opts, graph: this } });
     //
     return { isNew: false, edge: null };
   }
