@@ -1244,8 +1244,6 @@ export class Connector {
      * `[id of room infront, id of room behind]`
      * - a room is *infront* if `normal` is pointing towards it.
      * - hull doors have exactly one non-null entry.
-     * 
-     * These values will be computed in the browser.
      * @type {[null | number, null | number]}
      */
     this.roomIds = [null, null];
@@ -1264,9 +1262,9 @@ export class Connector {
 
   /** @param {Geomorph.ConnectorJson} json */
   static from(json) {
-    return new Connector(Object.assign(Poly.from(json.poly), { meta: json.poly.meta }), {
-      roomIds: json.roomIds,
-    });
+    const connector = new Connector(Object.assign(Poly.from(json.poly), { meta: json.poly.meta }));
+    connector.roomIds = json.roomIds;
+    return connector;
   }
 
 
