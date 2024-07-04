@@ -173,8 +173,7 @@ export default function World(props) {
         // always recompute gms-dependent data
         state.gmsData.computeGmsData(state.gms);
 
-        // 🚧 needs fixing i.e. throws errors
-        // state.gmGraph = GmGraphClass.fromGms(state.gms);
+        state.gmGraph = GmGraphClass.fromGms(state.gms, { permitErrors: true });
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;

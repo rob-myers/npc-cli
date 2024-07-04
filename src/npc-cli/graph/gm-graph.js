@@ -82,7 +82,7 @@ export class GmGraphClass extends BaseGraph {
    * @returns {null | Geom.Direction}
    */
   static computeHullDoorDirection(hullDoor, hullDoorId, transform, gmKey) {
-    const { hullDir } = hullDoor.meta;
+    const { edge: hullDir } = hullDoor.meta;
     if (isDirectionChar(hullDir)) {
       const direction = /** @type {Geom.Direction} */ (directionChars.indexOf(hullDir));
       const ime1 = { x: transform[0], y: transform[1] };
@@ -387,9 +387,10 @@ export class GmGraphClass extends BaseGraph {
 
   /**
    * @param {Geomorph.LayoutInstance[]} gms 
-   * @param {boolean} [permitErrors] used to keep GeomorphEdit stable
+   * @param {object} [options]
+   * @param {boolean} [options.permitErrors]
    */
-  static fromGms(gms, permitErrors = false) {
+  static fromGms(gms, { permitErrors } = { permitErrors: false }) {
     const graph = new GmGraphClass(gms);
     /** Index into nodesArray */
     let index = 0;

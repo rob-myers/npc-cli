@@ -200,28 +200,28 @@
                 <title>decor go label=corridor</title>
         </rect>
         <rect x="-4" y="249.999996" width="8" height="99.999998" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull w</title>
+                <title>door hull edge=w</title>
         </rect>
         <rect x="-4" y="850" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull w</title>
+                <title>door hull edge=w</title>
         </rect>
         <rect x="1196" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull e</title>
+                <title>door hull edge=e</title>
         </rect>
         <rect x="1196" y="850" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull e</title>
+                <title>door hull edge=e</title>
         </rect>
         <rect x="250" y="-4" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull n</title>
+                <title>door hull edge=n</title>
         </rect>
         <rect x="850" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
-                <title>door hull n</title>
+                <title>door hull edge=n</title>
         </rect>
         <rect x="250" y="1196" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull s</title>
+                <title>door hull edge=s</title>
         </rect>
         <rect x="850" y="1196" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull s</title>
+                <title>door hull edge=s</title>
         </rect>
         <rect x="1027.2" y="236.7" width="46" height="6" style="stroke: rgb(0, 0, 0); fill: rgb(68, 68, 68);">
                 <title>door iris</title>

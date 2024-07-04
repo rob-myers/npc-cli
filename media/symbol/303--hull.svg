@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <bx:grid x="0" y="0" width="60" height="60"/>
+    <bx:grid x="0" y="0" width="60" height="60" />
     <pattern x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
-        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
-        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
-        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
-        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937" />
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);" />
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937" />
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);" />
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)" />
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)" />
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)" />
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)" />
       </g>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300"/>
+        <bx:grid x="0" y="0" width="300" height="300" />
       </defs>
     </pattern>
-    <pattern id="pattern-0-1" patternTransform="matrix(1, 0, 0, 1, 1199.999755859375, 599.999572753906)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, 239.999755859375, 60.000820159912)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-13" patternTransform="matrix(0.10000000149, 9.848e-7, -9.848e-7, 0.10000000149, -0.00329589867, 15)" xlink:href="#pattern-0"/>
+    <pattern id="pattern-0-1" patternTransform="matrix(1, 0, 0, 1, 1199.999755859375, 599.999572753906)" xlink:href="#pattern-0" />
+    <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, 239.999755859375, 60.000820159912)" xlink:href="#pattern-0" />
+    <pattern id="pattern-13" patternTransform="matrix(0.10000000149, 9.848e-7, -9.848e-7, 0.10000000149, -0.00329589867, 15)" xlink:href="#pattern-0" />
     <symbol id="symbol-0" viewBox="0 0 15 15" bx:pinned="true">
       <title>extra--005--chair-0.25x0.25</title>
       <rect width="15" height="15" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); fill: url('#pattern-13');" transform="matrix(1, 0, 0, 1, 0, 3.552713678800501e-15)">
@@ -33,7 +33,7 @@
         <title>medical-bed--006--1.6x3.6</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-2" viewBox="0 0 120 180" bx:pinned="true">
@@ -42,7 +42,7 @@
         <title>stateroom--035--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="60" y="60" width="100" height="100"/>
+        <bx:grid x="60" y="60" width="100" height="100" />
       </defs>
     </symbol>
     <symbol id="symbol-3" viewBox="0 0 120 240" bx:pinned="true">
@@ -51,7 +51,7 @@
         <title>stateroom--036--2x4</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-4" viewBox="0 0 60 120" bx:pinned="true">
@@ -60,7 +60,7 @@
         <title>console--022--1x2</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-5" viewBox="0 0 60 60" bx:pinned="true">
@@ -69,7 +69,7 @@
         <title>low-berth--003--1x1</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-6" viewBox="0 0 239.9995 240.0001" bx:pinned="true">
@@ -78,7 +78,7 @@
         <title>office--089--4x4</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
     <symbol id="symbol-7" viewBox="0 0 120 30">
@@ -87,7 +87,7 @@
         <title>extra--017--table--2x0.5</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="60" height="60"/>
+        <bx:grid x="0" y="0" width="60" height="60" />
       </defs>
     </symbol>
   </defs>
@@ -182,16 +182,16 @@
     <title>decor go label='common-area'</title>
   </rect>
   <rect x="-4" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull w</title>
+    <title>door hull edge=w</title>
   </rect>
   <rect x="1196" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull e</title>
+    <title>door hull edge=e</title>
   </rect>
   <rect x="250" y="596" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull s</title>
+    <title>door hull edge=s</title>
   </rect>
   <rect x="850" y="596" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull s</title>
+    <title>door hull edge=s</title>
   </rect>
   <rect x="127.5" y="238" width="44" height="6" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door</title>

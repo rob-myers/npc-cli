@@ -17,9 +17,9 @@
   - ✅ service/create-gms-data.js
   - ✅ fix roomGraph errors
     - compute `roomIds` for connectors (doors and windows)
-  - 🚧 gmGraph.findRoomContaining supports includeDoors
   - 🚧 create gmGraph
     - fix gmGraph errors
+  - 🚧 gmGraph.findRoomContaining supports includeDoors
   - 🚧 migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
     - for fast room/door point-inclusion-test
   - fewer navRects e.g. only 2 in the case of 102 ?
