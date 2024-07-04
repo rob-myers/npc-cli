@@ -8,13 +8,13 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { RoomGraphClass } from "../graph/room-graph";
 import { gmFloorExtraScale, wallHeight, worldToSguScale } from "../service/const";
 import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, mapValues } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geom } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
+import createGmsData from "../service/create-gms-data";
 import { createCanvasTexDef, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
@@ -50,10 +50,7 @@ export default function World(props) {
     timer: new Timer(),
     worker: /** @type {*} */ (null),
 
-    gmsData: {
-      doorCount: 0, obstaclesCount: 0, wallCount: 0, wallPolySegCounts: [],
-      ...mapValues(geomorphService.toGmNum, (_, gmKey) => ({ ...emptyGmData, gmKey })),
-    },
+    gmsData: createGmsData(),
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
     gms: [],
@@ -325,7 +322,7 @@ export default function World(props) {
  * @property {boolean} disabled
  * @property {string} mapKey
  * @property {string} hash
- * @property {Geomorph.GmsDataRoot & Record<Geomorph.GeomorphKey, Geomorph.GmData>} gmsData
+ * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
  * @property {{ hash: string; gmHash: string; }} hmr
@@ -385,14 +382,3 @@ export default function World(props) {
  * //@property {typeof merge} merge
  * //@property {typeof take} take
  */
-
-/** @type {Geomorph.GmData} */
-const emptyGmData = {
-  gmKey: 'g-101--multipurpose',
-  doorSegs: [], doorCeilTops: [],
-  hitCtxt: /** @type {*} */ (null),
-  navPoly: undefined, nonHullCeilTops: [], polyDecals: [],
-  roomGraph: new RoomGraphClass(),
-  unseen: true,
-  wallPolyCount: 0, wallPolySegCounts: [], wallSegs: [],
-};

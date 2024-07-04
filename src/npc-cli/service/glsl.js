@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { extend, Object3DNode } from "@react-three/fiber";
+import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 
 
@@ -297,16 +297,7 @@ export const InstancedSpriteSheetMaterial = shaderMaterial(
   minimalInstanceUvsFrag,
 );
 
+// See glsl.d.ts
 extend({
   InstancedSpriteSheetMaterial,
 });
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      instancedSpriteSheetMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
-        map: THREE.CanvasTexture;
-      };
-    }
-  }
-}

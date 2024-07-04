@@ -236,6 +236,8 @@ declare namespace Geomorph {
 
   type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
 
+  type GmsData = Geomorph.GmsDataRoot & Record<Geomorph.GeomorphKey, Geomorph.GmData>;
+
   /**
    * Data determined by `w.gms`.
    * It can change on dynamic navMesh change.
