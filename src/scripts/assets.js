@@ -234,7 +234,6 @@ info({ opts });
   });
   info({ changedGmKeys });
 
-  // 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];
     const flatSymbol = flattened[hullKey];
@@ -476,7 +475,7 @@ async function drawObstaclesSheet(assets, prev) {
 /**
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
- * @returns {Promise<Record<string, import('canvas').Image>>}
+ * @returns {Promise<{ [key in Geomorph.DecorKey]?: import('canvas').Image }>}
  */
 async function createDecorSheetJson(assets, prev) {
   /** `media/decor/{baseName}` for SVGs corresponding to decorKeys */
@@ -494,8 +493,7 @@ async function createDecorSheetJson(assets, prev) {
   ;
 
   const decorKeyToRect = /** @type {Record<Geomorph.DecorKey, Rectangle>} */ ({});
-  /** @type {Partial<Record<Geomorph.DecorKey, import('canvas').Image>>} */
-  const decorKeyToImg = {};
+  const decorKeyToImg = /** @type {{ [key in Geomorph.DecorKey]?: import('canvas').Image }} */ ({});
 
   // Compute changed images in parallel
   const promQueue = new PQueue({ concurrency: 5 });

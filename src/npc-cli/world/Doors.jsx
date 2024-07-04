@@ -18,8 +18,9 @@ export default function Doors(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     doorsInst: /** @type {*} */ (null),
-    doorByKey: {},
-    doorByInstId: [],
+    byInstId: [],
+    byKey: {},
+    byGmId: {},
     movingDoors: new Map(),
 
     addDoorUvs() {
@@ -27,7 +28,7 @@ export default function Doors(props) {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
-      state.doorByInstId.forEach((meta, _instanceId) => {
+      state.byInstId.forEach((meta, _instanceId) => {
         // 🚧 remove hard-coding
         const key = meta.door.meta.hull ? 'door--hull--002' : 'door--001';
         const { x, y, width, height } = decor[key];
@@ -43,32 +44,35 @@ export default function Doors(props) {
       );
     },
     buildLookups() {
-      let dId = 0;
-      const prevDoorByKey = state.doorByKey;
-      state.doorByKey = {};
-      state.doorByInstId = [];
-      w.gms.forEach((gm, gmId) => gm.doors.forEach((door, doorId) => {
-        const { seg: [u, v], normal } = door;
-        tmpMat1.feedFromArray(gm.transform);
-        tmpMat1.transformPoint(tmpVec1.copy(u));
-        tmpMat1.transformPoint(tmpVec2.copy(v));
-        const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-        
-        const gmDoorKey = /** @type {const} */ (`g${gmId}d${doorId}`);
-        const prev = prevDoorByKey[gmDoorKey];
-        state.doorByKey[gmDoorKey] = state.doorByInstId[dId] = {
-          key: gmDoorKey,
-          gmId, doorId, door,
-          instanceId: dId,
-          open : prev?.open ?? false,
-          ratio: prev?.ratio ?? 1, // closed ~ ratio 1 i.e. maximal door length
-          src: tmpVec1.json,
-          dir: { x : Math.cos(radians), y: Math.sin(radians) }, // 🚧 provide in Connector
-          normal: tmpMat1.transformSansTranslate(normal.clone()),
-          segLength: u.distanceTo(v),
-        };
-        dId++;
-      }));
+      let instId = 0;
+      const prevDoorByKey = state.byKey;
+      state.byKey = {};
+      state.byInstId = [];
+      w.gms.forEach((gm, gmId) => {
+        const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorMeta[]} */ ([]);
+        gm.doors.forEach((door, doorId) => {
+          const { seg: [u, v], normal } = door;
+          tmpMat1.feedFromArray(gm.transform);
+          tmpMat1.transformPoint(tmpVec1.copy(u));
+          tmpMat1.transformPoint(tmpVec2.copy(v));
+          const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
+          
+          const gmDoorKey = /** @type {const} */ (`g${gmId}d${doorId}`);
+          const prev = prevDoorByKey[gmDoorKey];
+          state.byKey[gmDoorKey] = state.byInstId[instId] = byGmId[doorId] = {
+            key: gmDoorKey,
+            gmId, doorId, door,
+            instanceId: instId,
+            open : prev?.open ?? false,
+            ratio: prev?.ratio ?? 1, // closed ~ ratio 1 i.e. maximal door length
+            src: tmpVec1.json,
+            dir: { x : Math.cos(radians), y: Math.sin(radians) }, // 🚧 provide in Connector
+            normal: tmpMat1.transformSansTranslate(normal.clone()),
+            segLength: u.distanceTo(v),
+          };
+          instId++;
+        })
+      });
     },
     decodeDoorInstanceId(instanceId) {
       let doorId = instanceId;
@@ -90,6 +94,12 @@ export default function Doors(props) {
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x + offsetX, src.y + offsetY],
         { yScale: wallHeight, mat4: tmpMatFour1 },
       );
+    },
+    getOpenIds(gmId) {
+      return state.byGmId[gmId].flatMap((item, doorId) => item.open ? doorId : []);
+    },
+    isOpen(gmId, doorId) {
+      return this.byGmId[gmId][doorId].open;
     },
     onPointerDown(e) {
       w.events.next(w.ui.getNpcPointerEvent({
@@ -134,13 +144,13 @@ export default function Doors(props) {
       instanceMatrix.needsUpdate = true;
     },
     toggleDoor(instanceId) {
-      const doorMeta = state.doorByInstId[instanceId];
+      const doorMeta = state.byInstId[instanceId];
       doorMeta.open = !doorMeta.open;
       state.movingDoors.set(doorMeta.instanceId, doorMeta);
     },
     positionInstances() {
       const { doorsInst: ds } = state;
-      Object.values(state.doorByKey).forEach(meta =>
+      Object.values(state.byKey).forEach(meta =>
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta))
       );
       ds.instanceMatrix.needsUpdate = true;
@@ -185,15 +195,18 @@ export default function Doors(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} doorsInst
- * @property {{ [gmDoorId in `g${number}d${number}`]: Geomorph.DoorMeta }} doorByKey
+ * @property {{ [gmId in number]: Geomorph.DoorMeta[] }} byGmId
+ * @property {Geomorph.DoorMeta[]} byInstId e.g. `doorByInstId[instanceId]`
+ * @property {{ [gmDoorId in `g${number}d${number}`]: Geomorph.DoorMeta }} byKey
  * gmDoorKey format `g${gmId}d${doorId}`
- * @property {Geomorph.DoorMeta[]} doorByInstId e.g. `doorByInstId[instanceId]`
  * @property {Map<number, Geomorph.DoorMeta>} movingDoors To be animated until they open/close.
 *
 * @property {() => void} addDoorUvs
 * @property {() => void} buildLookups
  * @property {(instanceId: number) => Geom.Meta} decodeDoorInstanceId
  * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
+ * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
+ * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(instanceId: number) => void} toggleDoor

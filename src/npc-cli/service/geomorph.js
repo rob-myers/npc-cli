@@ -53,7 +53,7 @@ class GeomorphService {
   }
 
   /** Aligned to media/symbol/{key}.svg */
-  fromSymbolKey = {// 🚧 must extend when adding new symbols
+  fromSymbolKey = {// 🔔 must extend when adding new symbols
 
     "101--hull": true,
     "102--hull": true,
@@ -166,7 +166,7 @@ class GeomorphService {
   };
 
   /** Aligned to media/decor/{key}.svg */
-  fromDecorKey = {
+  fromDecorKey = {// 🔔 must extend when adding new decor
     'door--001': true,
     'door--hull--002': true,
   };
@@ -183,7 +183,8 @@ class GeomorphService {
    * @returns {Geomorph.Decor}
    */
   decorFromPoly(symDecorKey, poly) {
-    const { meta } = poly;
+    // `gmId`, `roomId` will be provided on instantiation
+    const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
     const polyRect = poly.rect.precision(precision);
     // `key` will be overridden on instantiation
     const base = { key: symDecorKey, meta, bounds2d: polyRect.json, };
@@ -226,6 +227,7 @@ class GeomorphService {
   }
 
   /**
+   * 🔔 computed in assets script
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol Flat hull symbol
    * @param {Geomorph.Assets} assets
@@ -268,6 +270,7 @@ class GeomorphService {
       ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
     ], hullOutline).map((x) => x.cleanFinalReps().precision(precision));
 
+    // 🔔 connector.roomIds will be computed in browser
     const doors = symbol.doors.map(x => new Connector(x));
     const windows = symbol.windows.map(x => new Connector(x));
 
@@ -312,18 +315,27 @@ class GeomorphService {
    * @returns {Geomorph.LayoutInstance}
    */
   computeLayoutInstance(layout, gmId, transform) {
+    const matrix = new Mat(transform);
     return {
       ...layout,
       gmId,
       transform,
+      matrix,
+      // 🔔 currently only support "full geomorph" or "edge geomorph"
+      gridRect: (new Rect(0, 0, 1200, layout.pngRect.height > 1000 ? 1200 : 600)).applyMatrix(matrix),
+      inverseMatrix: matrix.getInverseMatrix(),
       mat4: geomorphService.embedXZMat4(transform),
+
+      isHullDoor(doorId) {
+        return doorId < this.hullDoors.length;
+      },
     };
   }
 
   /**
    * @param {Geom.Poly[]} navPolyWithDoors 
    * @param {Connector[]} doors 
-   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navDoorwaysOffset'>}
+   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navDoorwaysOffset' | 'navRects'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     const navDoorways = doors.map((connector) => connector.computeDoorway());
@@ -349,9 +361,17 @@ class GeomorphService {
       navDecomp.vs.push(...doorway.outline);
       navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
     });
+
+    const navRects = navPolyWithDoors.map(x => x.rect.precision(precision));
+    navRects.sort(// Smaller rects 1st, else larger overrides (e.g. 102)
+      (a, b) => a.area < b.area ? -1 : 1
+    );
+    doors.forEach(door => door.navRectId = navRects.findIndex(r => r.contains(door.center)));
+
     return {
       navDecomp,
       navDoorwaysOffset,
+      navRects,
     };
   }
 
@@ -413,6 +433,7 @@ class GeomorphService {
 
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
       navDoorwaysOffset: json.navDoorwaysOffset,
+      navRects: json.navRects.map(Rect.fromJson),
     };
   }
 
@@ -1093,6 +1114,7 @@ class GeomorphService {
 
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
       navDoorwaysOffset: layout.navDoorwaysOffset,
+      navRects: layout.navRects,
     };
   }
 
@@ -1227,6 +1249,9 @@ export class Connector {
      * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
      */
     this.roomIds = options?.roomIds || [null, null];
+
+    /** @type {number} overridden later */
+    this.navRectId = -1;
   }
 
   /** @returns {Geomorph.ConnectorJson} */

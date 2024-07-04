@@ -10,9 +10,17 @@
 - extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 migrate `gmGraph.findRoomContaining`
-  - begin migrating `gmGraph`
-  - migrate gm grid
-  - migrate `api.geomorphs.hit` to `w.floor.hitCanvas` for fast room/door point-inclusion-test
+  - ✅ begin migrating `gmGraph`
+  - ✅ migrate gm grid
+  - ✅ precompute navRects and connector.navRectId
+    - connectors have `navRectId` i.e. index into "original navpoly" (pre recast/detour)
+  - 🚧 fix roomGraph errors
+    - compute `roomIds` for connectors
+  - 🚧 create gmGraph
+    - fix gmGraph errors
+  - 🚧 migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
+    - for fast room/door point-inclusion-test
+  - fewer navRects e.g. only 2 in the case of 102 ?
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists

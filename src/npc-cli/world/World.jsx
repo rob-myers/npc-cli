@@ -8,6 +8,7 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
+import { RoomGraphClass } from "../graph/room-graph";
 import { gmFloorExtraScale, wallHeight, worldToSguScale } from "../service/const";
 import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, mapValues } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
@@ -31,6 +32,7 @@ import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
 import ContextMenu from "./ContextMenu";
+import { GmGraphClass } from "../graph/gm-graph";
 
 /**
  * @param {Props} props
@@ -55,6 +57,7 @@ export default function World(props) {
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
     gms: [],
+    gmGraph: new GmGraphClass([]),
     hmr: { hash: '', gmHash: '' },
     obsTex: /** @type {*} */ (null),
     decorTex: /** @type {*} */ (null),
@@ -87,22 +90,32 @@ export default function World(props) {
 
     // 🚧 fix HMR on edit computeGmData or computeGmsData,
     // e.g. recompute state.gmsData and redraw
-    computeGmData({ key: gmKey, walls, doors, unsorted }) {// recomputed onchange geomorphs.json (dev only)
-      const gmData = state.gmsData[gmKey];
+    computeGmData(gm) {// recomputed onchange geomorphs.json (dev only)
+      const gmData = state.gmsData[gm.key];
 
-      gmData.doorSegs = doors.map(({ seg }) => seg);
-      gmData.polyDecals = unsorted.filter(x => x.meta.poly === true);
-      gmData.wallSegs = walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
-      gmData.wallPolyCount = walls.length;
-      gmData.wallPolySegCounts = walls.map(({ outline, holes }) =>
+      gmData.doorSegs = gm.doors.map(({ seg }) => seg);
+      gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
+      gmData.wallSegs = gm.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
+      gmData.wallPolyCount = gm.walls.length;
+      gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
         outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
       );
-      const nonHullWallsTouchCeil = walls.filter(x => !x.meta.hull &&
+      const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
       );
       // inset so stroke does not jut out
       gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.04));
-      gmData.doorCeilTops = doors.flatMap(x => geom.createInset(x.poly, 0.04));
+      gmData.doorCeilTops = gm.doors.flatMap(x => geom.createInset(x.poly, 0.04));
+
+      gmData.hitCtxt ??= /** @type {CanvasRenderingContext2D} */ (
+        document.createElement('canvas').getContext('2d')
+      );
+      gmData.hitCtxt.canvas.width = gm.pngRect.width;
+      gmData.hitCtxt.canvas.height = gm.pngRect.height;
+      
+      // 🚧 compute connector.roomIds first
+      // gmData.roomGraph = RoomGraphClass.from(RoomGraphClass.json(gm.rooms, gm.doors, gm.windows));
+
       gmData.unseen = false;
     },
     computeGmsData() {// recomputed when `w.gms` changes e.g. map changes
@@ -181,16 +194,14 @@ export default function World(props) {
         const mapDef = state.geomorphs.map[state.mapKey];
 
         // on change map may see new gmKeys
-        mapDef.gms.forEach(({ gmKey }) => {
-          if (!state.floor.tex[gmKey]) {
-            const layout = state.geomorphs.layout[gmKey];
-            /** @type {const} */ (['floor', 'ceil']).forEach(apiKey => {
-              state[apiKey].tex[gmKey] = createCanvasTexDef(
-                layout.pngRect.width * worldToSguScale * gmFloorExtraScale,
-                layout.pngRect.height * worldToSguScale * gmFloorExtraScale,
-              );
-            })
-          }
+        mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
+          const { pngRect } = state.geomorphs.layout[gmKey];
+          /** @type {const} */ (['floor', 'ceil']).forEach(apiKey => {
+            state[apiKey].tex[gmKey] = createCanvasTexDef(
+              pngRect.width * worldToSguScale * gmFloorExtraScale,
+              pngRect.height * worldToSguScale * gmFloorExtraScale,
+            );
+          });
         });
 
         state.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
@@ -201,6 +212,9 @@ export default function World(props) {
         state.gms.forEach(gm => (dataChanged || state.gmsData[gm.key].unseen) && state.computeGmData(gm));
         // always recompute gms-dependent data
         state.computeGmsData();
+
+        // 🚧 needs fixing i.e. throws errors
+        // state.gmGraph = GmGraphClass.fromGms(state.gms);
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
@@ -342,6 +356,7 @@ export default function World(props) {
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
+ * @property {GmGraphClass} gmGraph
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
@@ -374,7 +389,10 @@ export default function World(props) {
 /** @type {Geomorph.GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose',
-  doorSegs: [], doorCeilTops: [], navPoly: undefined, nonHullCeilTops: [], polyDecals: [],
+  doorSegs: [], doorCeilTops: [],
+  hitCtxt: /** @type {*} */ (null),
+  navPoly: undefined, nonHullCeilTops: [], polyDecals: [],
+  roomGraph: new RoomGraphClass(),
   unseen: true,
   wallPolyCount: 0, wallPolySegCounts: [], wallSegs: [],
 };

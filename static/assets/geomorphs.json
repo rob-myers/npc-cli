@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 762281890 1196800518 -69909253",
+  "hash": "610044716 1652542042 1196800518 -69909253",
   "mapsHash": 610044716,
-  "layoutsHash": 762281890,
+  "layoutsHash": 1652542042,
   "sheetsHash": 1196800518,
   "imagesHash": -69909253,
   "map": {
@@ -7026,7 +7026,13 @@
           [698, 699, 696]
         ]
       },
-      "navDoorwaysOffset": 474
+      "navDoorwaysOffset": 474,
+      "navRects": [
+        {"x": 3.8342, "y": 3.395, "width": 0.2428, "height": 0.0666},
+        {"x": 2.402, "y": 3.395, "width": 0.3245, "height": 0.0638},
+        {"x": 0.9523, "y": 12.4279, "width": 1.105, "height": 0.1446},
+        {"x": -0.1, "y": -0.1, "width": 30.2, "height": 30.2}
+      ]
     },
     "g-102--research-deck": {
       "key": "g-102--research-deck",
@@ -14151,7 +14157,25 @@
           [875, 876, 873]
         ]
       },
-      "navDoorwaysOffset": 671
+      "navDoorwaysOffset": 671,
+      "navRects": [
+        {"x": 11.7241, "y": 14.6266, "width": 0.0234, "height": 0.0234},
+        {"x": 14.7241, "y": 14.6266, "width": 0.0234, "height": 0.0234},
+        {"x": 12.7691, "y": 0.8904, "width": 0.0591, "height": 0.0371},
+        {"x": 17.1718, "y": 0.8904, "width": 0.0591, "height": 0.0371},
+        {"x": 26.9637, "y": 11.2026, "width": 0.0587, "height": 0.0648},
+        {"x": 11.1017, "y": 0.8973, "width": 0.1622, "height": 0.0765},
+        {"x": 18.7361, "y": 0.8973, "width": 0.1622, "height": 0.0765},
+        {"x": 0.4, "y": 5.5663, "width": 0.4636, "height": 0.0837},
+        {"x": 2.4154, "y": 5.5714, "width": 0.5094, "height": 0.0786},
+        {"x": 24.8767, "y": 11.4842, "width": 0.4557, "height": 0.1658},
+        {"x": 15.35, "y": 23.7289, "width": 0.2525, "height": 0.519},
+        {"x": 15.35, "y": 22.2522, "width": 0.2456, "height": 0.5637},
+        {"x": -0.1, "y": 21.351, "width": 8.75, "height": 8.749},
+        {"x": 2.114, "y": 17.205, "width": 10.7394, "height": 10.63},
+        {"x": 0.4, "y": 15.35, "width": 14.25, "height": 14.25},
+        {"x": -0.1, "y": -0.1, "width": 30.2, "height": 30.2}
+      ]
     },
     "g-103--cargo-bay": {
       "key": "g-103--cargo-bay",
@@ -14555,7 +14579,8 @@
           [50, 51, 48]
         ]
       },
-      "navDoorwaysOffset": 18
+      "navDoorwaysOffset": 18,
+      "navRects": [{"x": -0.1, "y": -0.1, "width": 30.2, "height": 30.2}]
     },
     "g-301--bridge": {
       "key": "g-301--bridge",
@@ -19814,7 +19839,8 @@
           [502, 503, 500]
         ]
       },
-      "navDoorwaysOffset": 338
+      "navDoorwaysOffset": 338,
+      "navRects": [{"x": -0.1, "y": 0.4, "width": 30.2, "height": 14.7}]
     },
     "g-302--xboat-repair-bay": {
       "key": "g-302--xboat-repair-bay",
@@ -22022,7 +22048,11 @@
           [259, 260, 257]
         ]
       },
-      "navDoorwaysOffset": 167
+      "navDoorwaysOffset": 167,
+      "navRects": [
+        {"x": 16.1045, "y": 10.5561, "width": 0.4179, "height": 0.4211},
+        {"x": -0.1, "y": 0.4, "width": 30.2, "height": 14.7}
+      ]
     },
     "g-303--passenger-deck": {
       "key": "g-303--passenger-deck",
@@ -27674,7 +27704,15 @@
           [630, 631, 628]
         ]
       },
-      "navDoorwaysOffset": 456
+      "navDoorwaysOffset": 456,
+      "navRects": [
+        {"x": 4.0675, "y": 0.4, "width": 0.0441, "height": 0.0589},
+        {"x": 0.4, "y": 3.5938, "width": 0.2028, "height": 0.1062},
+        {"x": 0.4, "y": 1.3738, "width": 0.2219, "height": 0.1162},
+        {"x": 3.4964, "y": 6.375, "width": 0.6572, "height": 0.3013},
+        {"x": 2.65, "y": 6.075, "width": 0.8329, "height": 0.2938},
+        {"x": -0.1, "y": 0.4, "width": 30.2, "height": 14.7}
+      ]
     }
   },
   "sheet": {

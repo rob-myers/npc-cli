@@ -109,3 +109,14 @@ export const defaultAgentUpdateFlags = 1 + 2 + 4;
 
 /** In meters (equivalently 2 grid squares, or 120sgu) */
 export const decorGridSize = 1.5 * 2;
+
+/**
+ * - Each value is an integer in [0, 255].
+ * - Fix alpha as `1` otherwise get pre-multiplied values.
+ */
+export const hitTestRed = /** @type {const} */ ({
+  /** rgba encoding `(255, 0, doorId, 1)` */
+  door: 255,
+  /** rgba encoding `(0, roomId, 255, 1)` */
+  room: 0,
+});

@@ -81,6 +81,11 @@ declare namespace Geomorph {
     doorId: number;
   }
 
+  interface GmRoomId {
+    gmId: number;
+    roomId: number;
+  }
+
   interface SymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,
@@ -189,6 +194,8 @@ declare namespace Geomorph {
     navDecomp: Geom.TriangulationGeneric<V>;
     /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
     navDoorwaysOffset: number;
+    /** AABBs of `navPolyWithDoors` i.e. original nav-poly */
+    navRects: R[];
   }
 
   type Layout = LayoutGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
@@ -200,7 +207,12 @@ declare namespace Geomorph {
   interface LayoutInstance extends Layout {
     gmId: number;
     transform: Geom.SixTuple;
+    matrix: Geom.Mat;
+    gridRect: Geom.Rect;
+    inverseMatrix: Geom.Mat;
     mat4: import("three").Matrix4;
+
+    isHullDoor(doorId: number): boolean;
   }
 
   /**
@@ -246,6 +258,7 @@ declare namespace Geomorph {
   interface GmData {
     gmKey: Geomorph.GeomorphKey;
     doorSegs: [Geom.Vect, Geom.Vect][];
+    hitCtxt: CanvasRenderingContext2D;
     /** Debug only */
     navPoly?: THREE.BufferGeometry;
     /** These wall polygons are inset, so stroke does not jut out */
@@ -253,6 +266,7 @@ declare namespace Geomorph {
     /** These door polygons are inset, so stroke does not jut out */
     doorCeilTops: Geom.Poly[];
     polyDecals: Geom.Poly[];
+    roomGraph: import('../graph/room-graph').RoomGraphClass;
     /** Has this geomorph never occurred in any map so far? */
     unseen: boolean;
     wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
