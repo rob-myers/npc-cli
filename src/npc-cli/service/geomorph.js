@@ -282,6 +282,7 @@ class GeomorphService {
 
     return {
       key: gmKey,
+      num: this.toGmNum[gmKey],
       decor: symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey} ${i}`, d)),
       pngRect: pngRect.clone(),
       doors,
@@ -413,6 +414,7 @@ class GeomorphService {
     const doors = json.doors.map(Connector.from);
     return {
       key: json.key,
+      num: json.num,
       pngRect: Rect.fromJson(json.pngRect),
 
       decor: json.decor,
@@ -1094,6 +1096,7 @@ class GeomorphService {
   serializeLayout(layout) {
     return {
       key: layout.key,
+      num: layout.num,
       pngRect: layout.pngRect,
 
       decor: layout.decor,
@@ -1256,6 +1259,7 @@ export class Connector {
   get json() {
     return {
       poly: Object.assign(this.poly.geoJson, { meta: this.meta }),
+      navRectId: this.navRectId,
       roomIds: [this.roomIds[0], this.roomIds[1]],
     };
   }
@@ -1263,10 +1267,10 @@ export class Connector {
   /** @param {Geomorph.ConnectorJson} json */
   static from(json) {
     const connector = new Connector(Object.assign(Poly.from(json.poly), { meta: json.poly.meta }));
+    connector.navRectId = json.navRectId;
     connector.roomIds = json.roomIds;
     return connector;
   }
-
 
   /** @returns {Geom.Poly} */
   computeDoorway() {

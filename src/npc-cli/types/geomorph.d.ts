@@ -25,6 +25,8 @@ declare namespace Geomorph {
 
   interface ConnectorJson {
     poly: Geom.GeoJsonPolygon;
+    /** Points into @see Geomorph.Layout.navRects */
+    navRectId: number;
     /**
      * `[id of room infront, id of room behind]`
      * where a room is *infront* if `normal` is pointing towards it.
@@ -179,6 +181,7 @@ declare namespace Geomorph {
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
     key: GeomorphKey;
+    num: GeomorphNumber;
     pngRect: R;
 
     decor: Decor[];

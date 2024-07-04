@@ -241,7 +241,7 @@ export class GmGraphClass extends BaseGraph {
     }
 
     const gm = this.gms[gmId];
-    const doorNodeId = getGmDoorNodeId(gm.key, gm.transform, hullDoorId);
+    const doorNodeId = getGmDoorNodeId(gm.num, gm.transform, hullDoorId);
     const doorNode = this.getNodeById(doorNodeId);
     if (!doorNode) {
       console.error(`${GmGraphClass.name}: failed to find hull door node: ${doorNodeId}`);
@@ -350,7 +350,7 @@ export class GmGraphClass extends BaseGraph {
    */
   getDoorNodeById(gmId, hullDoorId) {
     const gm = this.gms[gmId];
-    const nodeId = getGmDoorNodeId(gm.key, gm.transform, hullDoorId);
+    const nodeId = getGmDoorNodeId(gm.num, gm.transform, hullDoorId);
     return /** @type {Graph.GmGraphNodeDoor} */ (this.getNodeById(nodeId));
   }
 
@@ -409,7 +409,7 @@ export class GmGraphClass extends BaseGraph {
           type: 'gm',
           gmKey: gm.key,
           gmId,
-          id: getGmNodeId(gm.key, gm.transform, navRectId),
+          id: getGmNodeId(gm.num, gm.transform, navRectId),
           transform: gm.transform,
 
           navRectId,
@@ -424,7 +424,7 @@ export class GmGraphClass extends BaseGraph {
         }))
       ),
 
-      ...gms.flatMap(({ key: gmKey, hullDoors, matrix, transform, pngRect, doors }, gmId) =>
+      ...gms.flatMap(({ key: gmKey, num: gmNum, hullDoors, matrix, transform, pngRect, doors }, gmId) =>
         hullDoors.map(/** @returns {Graph.GmGraphNodeDoor} */ (hullDoor, hullDoorId) => {
           const alongNormal = hullDoor.center.clone().addScaled(hullDoor.normal, 20);
           const gmInFront = pngRect.contains(alongNormal);
@@ -433,7 +433,7 @@ export class GmGraphClass extends BaseGraph {
             type: 'door',
             gmKey,
             gmId,
-            id: getGmDoorNodeId(gmKey, transform, hullDoorId),
+            id: getGmDoorNodeId(gmNum, transform, hullDoorId),
             doorId: doors.indexOf(hullDoor),
             hullDoorId,
             transform,
@@ -482,10 +482,10 @@ export class GmGraphClass extends BaseGraph {
 
     // The gm node (gmId, navGroupId) is connected to its door nodes (hull doors it has)
     /** @type {Graph.GmGraphEdgeOpts[]} */
-    const localEdges = gms.flatMap(({ key: gmKey, hullDoors, transform }) => {
+    const localEdges = gms.flatMap(({ key: gmKey, num: gmNum, hullDoors, transform }) => {
       return hullDoors.map(({ navRectId }, hullDoorId) => ({
-        src: getGmNodeId(gmKey, transform, navRectId),
-        dst: getGmDoorNodeId(gmKey, transform, hullDoorId),
+        src: getGmNodeId(gmNum, transform, navRectId),
+        dst: getGmDoorNodeId(gmNum, transform, hullDoorId),
       }));
     });
     
@@ -506,7 +506,7 @@ export class GmGraphClass extends BaseGraph {
       const [srcMatrix, dstMatrix] = [new Mat, new Mat];
 
       return srcGm.hullDoors.flatMap((srcDoor, hullDoorId) => {
-        const srcDoorNodeId = getGmDoorNodeId(srcGm.key, srcGm.transform, hullDoorId);
+        const srcDoorNodeId = getGmDoorNodeId(srcGm.num, srcGm.transform, hullDoorId);
         srcMatrix.setMatrixValue(srcGm.transform);
         srcRect.copy(srcDoor.poly.rect.applyMatrix(srcMatrix));
 
@@ -518,7 +518,7 @@ export class GmGraphClass extends BaseGraph {
           const [dstGm, dstDoor] = matching;
           const dstHullDoorId = dstGm.hullDoors.indexOf(dstDoor);
           // console.info('hull door to hull door:', srcItem, hullDoorId, '==>', dstItem, dstHullDoorId)
-          const dstDoorNodeId = getGmDoorNodeId(dstGm.key, dstGm.transform, dstHullDoorId);
+          const dstDoorNodeId = getGmDoorNodeId(dstGm.num, dstGm.transform, dstHullDoorId);
           // NOTE door nodes with global edges are not sealed
           graph.getDoorNode(srcDoorNodeId).sealed = false;
           return { src: srcDoorNodeId, dst: dstDoorNodeId };
@@ -552,21 +552,21 @@ export class GmGraphClass extends BaseGraph {
 }
 
 /**
- * @param {Geomorph.GeomorphKey} gmKey 
+ * @param {Geomorph.GeomorphNumber} gmNumber 
  * @param {[number, number, number, number, number, number]} transform 
  * @param {number} navRectId
  */
-function getGmNodeId(gmKey, transform, navRectId) {
-  return `gm-${gmKey}-[${transform}]--${navRectId}`;
+function getGmNodeId(gmNumber, transform, navRectId) {
+  return `gm-${gmNumber}-[${transform}]--${navRectId}`;
 }
 
 /**
- * @param {Geomorph.GeomorphKey} gmKey 
+ * @param {Geomorph.GeomorphNumber} gmNumber 
  * @param {[number, number, number, number, number, number]} transform 
  * @param {number} hullDoorId 
  */
-function getGmDoorNodeId(gmKey, transform, hullDoorId) {
-  return `door-${gmKey}-[${transform}]-${hullDoorId}`;
+function getGmDoorNodeId(gmNumber, transform, hullDoorId) {
+  return `door-${gmNumber}-[${transform}]--${hullDoorId}`;
 }
 
 const gmIdGridDim = 600;

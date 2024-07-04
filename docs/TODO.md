@@ -17,12 +17,13 @@
   - ✅ service/create-gms-data.js
   - ✅ fix roomGraph errors
     - compute `roomIds` for connectors (doors and windows)
-  - 🚧 create gmGraph
-    - fix gmGraph errors
-  - 🚧 gmGraph.findRoomContaining supports includeDoors
-  - 🚧 migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
+  - ✅ create gmGraph: fix gmGraph errors
+    - ✅ hull doors have e.g. `edge=n`
+    - ✅ hull doors have navRectId > -1
+  - ✅ migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
     - for fast room/door point-inclusion-test
-  - fewer navRects e.g. only 2 in the case of 102 ?
+  - 🚧 fewer navRects e.g. only 2 in the case of 102 ?
+  - gmGraph.findRoomContaining supports includeDoors
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists

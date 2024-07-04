@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -623065896 1196800518 -69909253",
+  "hash": "610044716 -1266435286 1196800518 -69909253",
   "mapsHash": 610044716,
-  "layoutsHash": -623065896,
+  "layoutsHash": -1266435286,
   "sheetsHash": 1196800518,
   "imagesHash": -69909253,
   "map": {
@@ -37,6 +37,7 @@
   "layout": {
     "g-101--multipurpose": {
       "key": "g-101--multipurpose",
+      "num": 101,
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 30.3},
       "decor": [
         {
@@ -1466,6 +1467,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1476,6 +1478,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1486,6 +1489,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1496,6 +1500,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1506,6 +1511,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1516,6 +1522,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1526,6 +1533,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1536,6 +1544,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1546,6 +1555,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1561,6 +1571,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1576,6 +1587,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1591,6 +1603,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1606,6 +1619,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1621,6 +1635,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1636,6 +1651,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1651,6 +1667,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1661,6 +1678,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1671,6 +1689,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1681,6 +1700,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1691,6 +1711,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1701,6 +1722,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1711,6 +1733,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1721,6 +1744,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1731,6 +1755,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1741,6 +1766,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1751,6 +1777,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1761,6 +1788,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1771,6 +1799,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1781,6 +1810,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1791,6 +1821,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1801,6 +1832,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1811,6 +1843,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1821,6 +1854,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1831,6 +1865,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1846,6 +1881,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1861,6 +1897,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1871,6 +1908,7 @@
             ],
             "meta": {"door": true, "optional": true, "w": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1881,6 +1919,7 @@
             ],
             "meta": {"door": true, "optional": true, "double": true, "e": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1891,6 +1930,7 @@
             ],
             "meta": {"door": true, "optional": true, "double": true, "e": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1901,6 +1941,7 @@
             ],
             "meta": {"door": true, "optional": true, "w": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1911,6 +1952,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         }
       ],
@@ -1923,6 +1965,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1933,6 +1976,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1943,6 +1987,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1953,6 +1998,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1963,6 +2009,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1973,6 +2020,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1983,6 +2031,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         },
         {
@@ -1993,6 +2042,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 3,
           "roomIds": [null, null]
         }
       ],
@@ -5694,6 +5744,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -5709,6 +5760,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -5724,6 +5776,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -5739,6 +5792,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         }
       ],
@@ -7036,6 +7090,7 @@
     },
     "g-102--research-deck": {
       "key": "g-102--research-deck",
+      "num": 102,
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 30.3},
       "decor": [
         {
@@ -8491,6 +8546,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8501,6 +8557,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 12,
           "roomIds": [null, null]
         },
         {
@@ -8511,6 +8568,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8521,6 +8579,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8531,6 +8590,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8541,6 +8601,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8551,6 +8612,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 12,
           "roomIds": [null, null]
         },
         {
@@ -8561,6 +8623,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8576,6 +8639,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8591,6 +8655,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8606,6 +8671,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8621,6 +8687,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8636,6 +8703,7 @@
             ],
             "meta": {"door": true, "optional": true, "e": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8651,6 +8719,7 @@
             ],
             "meta": {"door": true, "optional": true, "e": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8661,6 +8730,7 @@
             ],
             "meta": {"door": true, "optional": true, "w": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8671,6 +8741,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8681,6 +8752,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8691,6 +8763,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8701,6 +8774,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8711,6 +8785,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8726,6 +8801,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8741,6 +8817,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8751,6 +8828,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8761,6 +8839,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8771,6 +8850,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8781,6 +8861,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8791,6 +8872,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8806,6 +8888,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 12,
           "roomIds": [null, null]
         },
         {
@@ -8816,6 +8899,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8826,6 +8910,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8836,6 +8921,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8846,6 +8932,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8856,6 +8943,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         }
       ],
@@ -8868,6 +8956,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8878,6 +8967,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 12,
           "roomIds": [null, null]
         },
         {
@@ -8888,6 +8978,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8898,6 +8989,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8908,6 +9000,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8918,6 +9011,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         },
         {
@@ -8928,6 +9022,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 12,
           "roomIds": [null, null]
         },
         {
@@ -8938,6 +9033,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 15,
           "roomIds": [null, null]
         }
       ],
@@ -12477,6 +12573,7 @@
             ],
             "meta": {"window": true, "frosted": true, "_one-way-reverse": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -12492,6 +12589,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -12507,6 +12605,7 @@
             ],
             "meta": {"window": true, "frosted": true, "_one-way-reverse": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -12522,6 +12621,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         }
       ],
@@ -14179,6 +14279,7 @@
     },
     "g-103--cargo-bay": {
       "key": "g-103--cargo-bay",
+      "num": 103,
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 30.3},
       "decor": [],
       "doors": [
@@ -14190,6 +14291,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14200,6 +14302,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14210,6 +14313,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14220,6 +14324,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14230,6 +14335,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14240,6 +14346,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14250,6 +14357,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14260,6 +14368,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         }
       ],
@@ -14272,6 +14381,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14282,6 +14392,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14292,6 +14403,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14302,6 +14414,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14312,6 +14425,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14322,6 +14436,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "n"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14332,6 +14447,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -14342,6 +14458,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         }
       ],
@@ -14584,6 +14701,7 @@
     },
     "g-301--bridge": {
       "key": "g-301--bridge",
+      "num": 301,
       "pngRect": {"x": -0.15, "y": -0.55, "width": 30.3, "height": 15.7},
       "decor": [
         {
@@ -15780,6 +15898,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15790,6 +15909,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15800,6 +15920,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15810,6 +15931,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15825,6 +15947,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15840,6 +15963,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15850,6 +15974,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15860,6 +15985,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15870,6 +15996,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15880,6 +16007,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15890,6 +16018,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15900,6 +16029,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15910,6 +16040,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15920,6 +16051,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15930,6 +16062,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15940,6 +16073,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15950,6 +16084,7 @@
             ],
             "meta": {"door": true, "optional": true, "s": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15960,6 +16095,7 @@
             ],
             "meta": {"door": true, "optional": true, "s": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15975,6 +16111,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -15990,6 +16127,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16005,6 +16143,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16020,6 +16159,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16030,6 +16170,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16045,6 +16186,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16060,6 +16202,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16075,6 +16218,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16090,6 +16234,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16100,6 +16245,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16110,6 +16256,7 @@
             ],
             "meta": {"door": true, "iris": true}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         }
       ],
@@ -16122,6 +16269,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16132,6 +16280,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16142,6 +16291,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         },
         {
@@ -16152,6 +16302,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 0,
           "roomIds": [null, null]
         }
       ],
@@ -18753,6 +18904,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -18763,6 +18915,7 @@
             ],
             "meta": {"window": true, "frosted": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         }
       ],
@@ -19844,6 +19997,7 @@
     },
     "g-302--xboat-repair-bay": {
       "key": "g-302--xboat-repair-bay",
+      "num": 302,
       "pngRect": {"x": -0.15, "y": -1.525, "width": 30.3, "height": 16.675},
       "decor": [
         {
@@ -20146,6 +20300,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20156,6 +20311,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20166,6 +20322,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20176,6 +20333,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20186,6 +20344,7 @@
             ],
             "meta": {"door": true, "iris": true, "sealed": true, "hull": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20196,6 +20355,7 @@
             ],
             "meta": {"door": true, "sealed": true, "hull": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20206,6 +20366,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20221,6 +20382,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20236,6 +20398,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20251,6 +20414,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20266,6 +20430,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20281,6 +20446,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20291,6 +20457,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20306,6 +20473,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20321,6 +20489,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20331,6 +20500,7 @@
             ],
             "meta": {"door": true, "optional": true, "e": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20341,6 +20511,7 @@
             ],
             "meta": {"door": true, "optional": true, "w": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20356,6 +20527,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20366,6 +20538,7 @@
             ],
             "meta": {"door": true, "optional": true, "s": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         }
       ],
@@ -20378,6 +20551,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20388,6 +20562,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20398,6 +20573,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20408,6 +20584,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20418,6 +20595,7 @@
             ],
             "meta": {"door": true, "iris": true, "sealed": true, "hull": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         },
         {
@@ -20428,6 +20606,7 @@
             ],
             "meta": {"door": true, "sealed": true, "hull": true}
           },
+          "navRectId": 1,
           "roomIds": [null, null]
         }
       ],
@@ -21541,6 +21720,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -21551,6 +21731,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         }
       ],
@@ -22056,6 +22237,7 @@
     },
     "g-303--passenger-deck": {
       "key": "g-303--passenger-deck",
+      "num": 303,
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 15.325},
       "decor": [
         {
@@ -23369,6 +23551,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23379,6 +23562,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23389,6 +23573,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23399,6 +23584,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23409,6 +23595,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23424,6 +23611,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23439,6 +23627,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23449,6 +23638,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23464,6 +23654,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23479,6 +23670,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23489,6 +23681,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23504,6 +23697,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23514,6 +23708,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23524,6 +23719,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23534,6 +23730,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23544,6 +23741,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23554,6 +23752,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23564,6 +23763,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23574,6 +23774,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23584,6 +23785,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23594,6 +23796,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23609,6 +23812,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23619,6 +23823,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23634,6 +23839,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23644,6 +23850,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23659,6 +23866,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23669,6 +23877,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23679,6 +23888,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23694,6 +23904,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23709,6 +23920,7 @@
             ],
             "meta": {"door": true}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         }
       ],
@@ -23721,6 +23933,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "w"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23731,6 +23944,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "e"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23741,6 +23955,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         },
         {
@@ -23751,6 +23966,7 @@
             ],
             "meta": {"door": true, "hull": true, "edge": "s"}
           },
+          "navRectId": 5,
           "roomIds": [null, null]
         }
       ],
@@ -26378,6 +26594,7 @@
             ],
             "meta": {"window": true, "hull": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -26393,6 +26610,7 @@
             ],
             "meta": {"window": true, "hull": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -26408,6 +26626,7 @@
             ],
             "meta": {"window": true, "hull": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -26423,6 +26642,7 @@
             ],
             "meta": {"window": true, "hull": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -26438,6 +26658,7 @@
             ],
             "meta": {"window": true, "hull": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -26453,6 +26674,7 @@
             ],
             "meta": {"window": true, "hull": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -26475,6 +26697,7 @@
             ],
             "meta": {"window": true, "one-way": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         },
         {
@@ -26497,6 +26720,7 @@
             ],
             "meta": {"window": true}
           },
+          "navRectId": -1,
           "roomIds": [null, null]
         }
       ],
