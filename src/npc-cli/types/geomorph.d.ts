@@ -81,8 +81,12 @@ declare namespace Geomorph {
   >;
 
   interface GmDoorId {
+    /** `g{gmId}d${doorId}` */
+    key: `g${number}d${number}`;
     gmId: number;
     doorId: number;
+    /** Non-isolated hull doors have an associated door */
+    other?: { gmId: number; doorId: number };
   }
 
   interface GmRoomId {
@@ -217,6 +221,7 @@ declare namespace Geomorph {
     inverseMatrix: Geom.Mat;
     mat4: import("three").Matrix4;
 
+    getOtherRoomId(doorId: number, roomId: number): number;
     isHullDoor(doorId: number): boolean;
   }
 

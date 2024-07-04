@@ -59,8 +59,7 @@ export class GmGraphClass extends BaseGraph {
   constructor(gms) {
     super();
     this.gms = gms;
-    this.gmData = gms.reduce((agg, gm) => ({ ...agg, [gm.key]: gm }), {});
-    this.entry = new Map;
+    this.entry = new Map();
 
     this.gmNodeByGmId = gms.reduce((agg, _, gmId) => ({ ...agg, [gmId]: [] }), {});
     this.doorNodeByGmId = gms.reduce((agg, _, gmId) => ({ ...agg, [gmId]: [] }), {});

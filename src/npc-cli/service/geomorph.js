@@ -333,6 +333,11 @@ class GeomorphService {
       inverseMatrix: matrix.getInverseMatrix(),
       mat4: geomorphService.embedXZMat4(transform),
 
+      getOtherRoomId(doorId, roomId) {
+        // We support case where roomIds are equal e.g. 303
+        const { roomIds } = this.doors[doorId];
+        return roomIds.find((x, i) => typeof x === 'number' && roomIds[1 - i] === roomId) ?? -1;
+      },
       isHullDoor(doorId) {
         return doorId < this.hullDoors.length;
       },
@@ -671,7 +676,15 @@ class GeomorphService {
    * @param {number} doorId
    */
   getGmDoorKey(gmId, doorId) {
-    return `g${gmId}-d${doorId}`;
+    return /** @type {const} */ (`g${gmId}d${doorId}`);
+  }
+
+  /**
+   * @param {number} gmId
+   * @param {number} roomId
+   */
+  getGmRoomKey(gmId, roomId) {
+    return `g${gmId}r${roomId}`;
   }
 
   /**

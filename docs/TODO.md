@@ -25,8 +25,10 @@
   - ✅ fewer navRects: only 2 in the case of 102, otherwise only 1
     - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 (4) ✅ 103 ✅
     - ✅ implement `decor ignore-nav`
+  - ✅ migrate gm-room-graph
   - gmGraph.findRoomContaining supports includeDoors
   - avoid connector re-computation i.e. extend serialization (?)
+  - create gm-room-graph
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
