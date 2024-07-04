@@ -22,7 +22,9 @@
     - ✅ hull doors have navRectId > -1
   - ✅ migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
     - for fast room/door point-inclusion-test
-  - 🚧 fewer navRects e.g. only 2 in the case of 102 ?
+  - ✅ fewer navRects: only 2 in the case of 102, otherwise only 1
+    - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 (4) ✅ 103 ✅
+    - ✅ implement `decor ignore-nav`
   - gmGraph.findRoomContaining supports includeDoors
   - avoid connector re-computation i.e. extend serialization (?)
 

@@ -281,7 +281,7 @@
       "pngHash": -839723950
     },
     "misc-stellar-cartography--020--10x10": {
-      "outputHash": 1966630557,
+      "outputHash": -248379301,
       "pngHash": -1181495790,
       "obsHashes": [1616514661, 338030151, 883758416]
     },
@@ -9451,20 +9451,19 @@
             "label": "stellar",
             "cartography": true
           }
-        }
-      ],
-      "unsorted": [
+        },
         {
           "type": "Polygon",
           "coordinates": [[[6.15, 4], [6.15, 4.15], [6, 4.15], [6, 4]]],
-          "meta": {"ignore-nav": true}
+          "meta": {"decor": true, "ignore-nav": true}
         },
         {
           "type": "Polygon",
           "coordinates": [[[6.15, 0.75], [6.15, 0.9], [6, 0.9], [6, 0.75]]],
-          "meta": {"ignore-nav": true}
+          "meta": {"decor": true, "ignore-nav": true}
         }
       ],
+      "unsorted": [],
       "width": 15,
       "height": 15,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 15.1, "height": 15.1},

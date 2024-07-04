@@ -265,10 +265,16 @@ class GeomorphService {
       room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
     ));
 
+    const decor = symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey} ${i}`, d));
+
+    const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
       ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
-    ], hullOutline).map((x) => x.cleanFinalReps().precision(precision));
+    ], hullOutline).filter(({ rect }) => 
+      // Ignore nav-mesh if AABB ≤ 1m², or intersects `ignoreNavPoints`
+      rect.area > 1 && !ignoreNavPoints.some(p => rect.contains(p))
+    ).map((x) => x.cleanFinalReps().precision(precision));
 
     // 🔔 connector.roomIds will be computed in browser
     const doors = symbol.doors.map(x => new Connector(x));
@@ -283,7 +289,7 @@ class GeomorphService {
     return {
       key: gmKey,
       num: this.toGmNum[gmKey],
-      decor: symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey} ${i}`, d)),
+      decor,
       pngRect: pngRect.clone(),
       doors,
       hullPoly,
