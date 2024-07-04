@@ -24,6 +24,7 @@
     - for fast room/door point-inclusion-test
   - 🚧 fewer navRects e.g. only 2 in the case of 102 ?
   - gmGraph.findRoomContaining supports includeDoors
+  - avoid connector re-computation i.e. extend serialization (?)
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists

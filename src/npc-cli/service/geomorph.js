@@ -1222,11 +1222,12 @@ export class Connector {
     this.normal = normal;
 
     if (this.meta.hull) {
+      const edge = /** @type {Geomorph.HullDoorMeta} */ (this.meta).edge;
       if (// hull door normals should point outwards
-        this.meta.n && this.normal.y > 0
-        || this.meta.e && this.normal.x < 0
-        || this.meta.s && this.normal.y < 0
-        || this.meta.w && this.normal.x > 0
+        edge === 'n' && this.normal.y > 0
+        || edge === 'e' && this.normal.x < 0
+        || edge === 's' && this.normal.y < 0
+        || edge === 'w' && this.normal.x > 0
       ) {
         this.normal.scale(-1);
       }

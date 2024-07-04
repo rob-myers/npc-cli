@@ -126,7 +126,7 @@ declare namespace Graph {
      */
     gmInFront: boolean;
     /** Direction it faces in world coords */
-    direction: null | Geom.Direction;
+    direction: null | Geom.DirectionString;
     /**
      * Does this node connect to another door i.e.
      * establish a connection between two geomorphs?

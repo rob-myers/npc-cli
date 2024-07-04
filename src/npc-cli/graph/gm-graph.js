@@ -73,16 +73,15 @@ export class GmGraphClass extends BaseGraph {
   }
 
   /**
-   * 🚧 verify
    * Assume `transform` is non-singular and [±1, ±1, ±1, ±1, x, y]
    * @param {Geomorph.Connector} hullDoor
    * @param {number} hullDoorId
    * @param {[number, number, number, number, number, number]} transform
    * @param {Geomorph.GeomorphKey} gmKey
-   * @returns {null | Geom.Direction}
+   * @returns {null | Geom.DirectionString}
    */
   static computeHullDoorDirection(hullDoor, hullDoorId, transform, gmKey) {
-    const { edge: hullDir } = hullDoor.meta;
+    const { edge: hullDir } = /** @type {Geomorph.HullDoorMeta} */ (hullDoor.meta);
     if (isDirectionChar(hullDir)) {
       const direction = /** @type {Geom.Direction} */ (directionChars.indexOf(hullDir));
       const ime1 = { x: transform[0], y: transform[1] };
@@ -90,24 +89,24 @@ export class GmGraphClass extends BaseGraph {
       
       if (ime1.x === 1) {// (1, 0)
         if (ime2.y === 1) // (1, 0, 0, 1)
-          return direction;
+          return hullDir;
         if (ime2.y === -1) // (1, 0, 0, -1)
-          return geom.getFlippedDirection(direction, 'x');
+          return directionChars[geom.getFlippedDirection(direction, 'x')];
       } else if (ime1.y === 1) {// (0, 1)
         if (ime2.x === 1) // (0, 1, 1, 0)
-          return geom.getFlippedDirection(geom.getDeltaDirection(direction, 2), 'y'); 
+          return directionChars[geom.getFlippedDirection(geom.getDeltaDirection(direction, 2), 'y')]; 
         if (ime2.x === -1) // (0, 1, -1, 0)
-          return geom.getDeltaDirection(direction, 1);
+          return directionChars[geom.getDeltaDirection(direction, 1)];
       } else if (ime1.x === -1) {// (-1, 0)
         if (ime2.y === 1) // (-1, 0, 0, 1)
-          return geom.getFlippedDirection(direction, 'y');
+          return directionChars[geom.getFlippedDirection(direction, 'y')];
         if (ime2.y === -1) // (-1, 0, 0, -1)
-          return geom.getDeltaDirection(direction, 2);
+          return directionChars[geom.getDeltaDirection(direction, 2)];
       } else if (ime1.y === -1) {// (0, -1)
         if (ime2.x === 1) // (0, -1, 1, 0)
-          return geom.getDeltaDirection(direction, 3);
+          return directionChars[geom.getDeltaDirection(direction, 3)];
         if (ime2.x === -1) // (0, -1, -1, 0)
-          return geom.getFlippedDirection(geom.getDeltaDirection(direction, 3), 'y');
+          return directionChars[geom.getFlippedDirection(geom.getDeltaDirection(direction, 3), 'y')];
       }
       error(`${gmKey}: hull door ${hullDoorId}: ${hullDir}: failed to parse transform "${transform}"`);
     } else if (!hullDoor.meta.sealed) {
@@ -264,7 +263,7 @@ export class GmGraphClass extends BaseGraph {
   /**
    * Get door nodes connecting `gms[gmId]` on side `sideDir`.
    * @param {number} gmId 
-   * @param {Geom.Direction} sideDir 
+   * @param {Geom.DirectionString} sideDir 
    */
   getConnectedDoorsBySide(gmId, sideDir) {
     return this.doorNodeByGmId[gmId].filter(x => !x.sealed && x.direction === sideDir);
@@ -438,7 +437,7 @@ export class GmGraphClass extends BaseGraph {
             hullDoorId,
             transform,
             gmInFront,
-            direction,
+            direction, // 🚧 verify values
             sealed: true, // Overwritten below
 
             ...createBaseAstar({

@@ -35,7 +35,9 @@ declare namespace Geomorph {
     roomIds: [null | number, null | number];
   }
 
-  interface DoorMeta extends Geomorph.GmDoorId {
+  type HullDoorMeta = Geom.Meta<{ edge: Geom.DirectionString }>;
+
+  interface DoorState extends Geomorph.GmDoorId {
     /** gmDoorKey format i.e. `g{gmId}d{doorId}` */
     key: `g${number}d${number}`;
     door: Geomorph.Connector;

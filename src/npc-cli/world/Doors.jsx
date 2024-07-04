@@ -49,7 +49,7 @@ export default function Doors(props) {
       state.byKey = {};
       state.byInstId = [];
       w.gms.forEach((gm, gmId) => {
-        const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorMeta[]} */ ([]);
+        const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorState[]} */ ([]);
         gm.doors.forEach((door, doorId) => {
           const { seg: [u, v], normal } = door;
           tmpMat1.feedFromArray(gm.transform);
@@ -195,16 +195,16 @@ export default function Doors(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} doorsInst
- * @property {{ [gmId in number]: Geomorph.DoorMeta[] }} byGmId
- * @property {Geomorph.DoorMeta[]} byInstId e.g. `doorByInstId[instanceId]`
- * @property {{ [gmDoorId in `g${number}d${number}`]: Geomorph.DoorMeta }} byKey
+ * @property {{ [gmId in number]: Geomorph.DoorState[] }} byGmId
+ * @property {Geomorph.DoorState[]} byInstId e.g. `doorByInstId[instanceId]`
+ * @property {{ [gmDoorId in `g${number}d${number}`]: Geomorph.DoorState }} byKey
  * gmDoorKey format `g${gmId}d${doorId}`
- * @property {Map<number, Geomorph.DoorMeta>} movingDoors To be animated until they open/close.
+ * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
 *
 * @property {() => void} addDoorUvs
 * @property {() => void} buildLookups
  * @property {(instanceId: number) => Geom.Meta} decodeDoorInstanceId
- * @property {(meta: Geomorph.DoorMeta) => THREE.Matrix4} getDoorMat
+ * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
