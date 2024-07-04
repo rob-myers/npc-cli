@@ -2,9 +2,9 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { gmFloorExtraScale, hitTestRed, worldToSguScale } from "../service/const";
+import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
-import { createGridPattern, drawCircle, drawPolygons, strokeLine, tmpCanvasCtxts } from "../service/dom";
+import { createGridPattern, drawCircle, drawPolygons } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -77,28 +77,12 @@ export default function Floor(props) {
       ct.resetTransform();
       tex.needsUpdate = true;
     },
-    drawHitCanvas(gmKey) {
-      const gm = w.geomorphs.layout[gmKey];
-      const { hitCtxt: ct } = w.gmsData[gmKey];
-
-      ct.resetTransform();
-      ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
-
-      ct.setTransform(worldToSguScale, 0, 0, worldToSguScale, -gm.pngRect.x * worldToSguScale, -gm.pngRect.y * worldToSguScale);
-      gm.rooms.forEach((room, roomId) => {
-        drawPolygons(ct, room, [`rgb(${hitTestRed.room}, ${roomId}, 255)`, null])
-      });
-      // 🚧 doors
-    },
   }));
 
   w.floor = state;
 
   React.useEffect(() => {// initial + redraw on HMR
-    keys(state.tex).forEach(gmKey => {
-      state.drawFloor(gmKey);
-      state.drawHitCanvas(gmKey);
-    });
+    keys(state.tex).forEach(gmKey => state.drawFloor(gmKey));
   }, [w.hash]);
 
   return <>
@@ -137,7 +121,6 @@ export default function Floor(props) {
  * @property {CanvasPattern} gridPattern
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloor
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawHitCanvas
  */
 
 const tmpMat1 = new Mat();

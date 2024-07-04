@@ -8,11 +8,10 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
-import { gmFloorExtraScale, wallHeight, worldToSguScale } from "../service/const";
-import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, mapValues } from "../service/generic";
+import { gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
-import { geom } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { createCanvasTexDef, imageLoader } from "../service/three";
@@ -164,10 +163,13 @@ export default function World(props) {
           geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
         );
 
-        // recompute gm-dependent data onchange geomorphs.json, or not seen yet
-        state.gms.forEach(gm => (dataChanged || state.gmsData[gm.key].unseen) &&
-          state.gmsData.computeGmData(gm)
-        );
+        // recompute onchange geomorphs.json, or not seen yet
+        for (const gm of state.gms) {
+          if (dataChanged || state.gmsData[gm.key].unseen) {
+            state.gmsData.computeGmData(gm);
+            await pause(); // breathing space
+          }
+        }
         // always recompute gms-dependent data
         state.gmsData.computeGmsData(state.gms);
 

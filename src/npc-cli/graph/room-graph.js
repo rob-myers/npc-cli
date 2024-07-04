@@ -10,9 +10,11 @@ import { error } from "../service/generic";
  */
 export class RoomGraphClass extends BaseGraph {
 
-  /** @param {Graph.RoomGraphJson} json  */  
-  static from(json) {
-    return (new RoomGraphClass).plainFrom(json);
+  /** @param {Geomorph.Layout} gm  */  
+  static from(gm, errorPrefix= '') {
+    return (new RoomGraphClass).plainFrom(
+      RoomGraphClass.json(gm, errorPrefix)
+    );
   }
 
   /**
@@ -112,12 +114,12 @@ export class RoomGraphClass extends BaseGraph {
   }
 
   /**
-  * @param {Geom.Poly[]} rooms 
-  * @param {Geomorph.Layout['doors']} doors 
-  * @param {Geomorph.Layout['windows']} windows 
+  * @param {Geomorph.Layout} gm 
+  * @param {string} [errorPrefix]
   * @returns {Graph.RoomGraphJson}
   */
-  static json(rooms, doors, windows) {
+  static json(gm, errorPrefix = '') {
+    const { rooms, doors, windows } = gm;
     /**
      * For each door, respective ascending adjacent room ids.
      * Each array will be aligned with the respective door node's successors.
@@ -150,7 +152,7 @@ export class RoomGraphClass extends BaseGraph {
             { dst: `room-${roomId}`, src: `door-${doorId}` },
           ]);
         } else {
-          error(`door ${doorId}: unexpected adjacent rooms: ${JSON.stringify(roomIds)}`)
+          error(`${errorPrefix}door ${doorId}: unexpected adjacent rooms: ${JSON.stringify(roomIds)}`)
           return [];
         }
       }),
@@ -162,7 +164,7 @@ export class RoomGraphClass extends BaseGraph {
             { dst: `room-${roomId}`, src: `window-${windowIndex}` },
           ]);
         } else {
-          error(`window ${windowIndex}: unexpected adjacent rooms: ${JSON.stringify(roomIds)}`)
+          error(`${errorPrefix}window ${windowIndex}: unexpected adjacent rooms: ${JSON.stringify(roomIds)}`)
           return [];
         }
       }),

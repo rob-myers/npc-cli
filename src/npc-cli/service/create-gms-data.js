@@ -1,8 +1,9 @@
-import { wallHeight } from "./const";
+import { hitTestRed, wallHeight, worldToSguScale } from "./const";
 import { mapValues } from "./generic";
-import { geom } from "./geom";
+import { geom, tmpVec1 } from "./geom";
 import { geomorphService } from "./geomorph";
 import { RoomGraphClass } from "../graph/room-graph";
+import { drawPolygons } from "./dom";
 
 // 🚧 fix HMR on edit e.g. recompute and redraw
 export default function createGmsData() {
@@ -36,18 +37,28 @@ export default function createGmsData() {
       gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.04));
       gmData.doorCeilTops = gm.doors.flatMap(x => geom.createInset(x.poly, 0.04));
 
+      // canvas for quick "point -> roomId", "point -> doorId" computation
       gmData.hitCtxt ??= /** @type {CanvasRenderingContext2D} */ (
         document.createElement('canvas').getContext('2d')
       );
-      gmData.hitCtxt.canvas.width = gm.pngRect.width;
-      gmData.hitCtxt.canvas.height = gm.pngRect.height;
-      
-      // 🚧 compute connector.roomIds first
-      // gmData.roomGraph = RoomGraphClass.from(RoomGraphClass.json(gm.rooms, gm.doors, gm.windows));
+      const bounds = gm.pngRect.clone().scale(worldToSguScale);
+      gmData.hitCtxt.canvas.width = bounds.width;
+      gmData.hitCtxt.canvas.height = bounds.height;
+      gmsData.drawHitCanvas(gm);
+
+      // compute `connector.roomIds` before `roomGraph`
+      const connectors = gm.doors.concat(gm.windows);
+      connectors.forEach((connector, connectorId) => {
+        const [inFrontRoomId, behindRoomId] = connector.entries.map(localPoint =>
+          gmsData.findRoomIdContaining(gm.key, tmpVec1.copy(localPoint).scale(worldToSguScale)
+        ));
+        connector.roomIds = [inFrontRoomId, behindRoomId];
+        // console.log(gm.key, connector.meta.door ? 'door' : 'window', connectorId, inFrontRoomId, behindRoomId);
+      });
+      gmData.roomGraph = RoomGraphClass.from(gm, `${gm.key}: `);
 
       gmData.unseen = false;
     },
-
     /**
      * Recomputed when `w.gms` changes e.g. map changes
      * @param {Geomorph.LayoutInstance[]} gms
@@ -60,6 +71,36 @@ export default function createGmsData() {
       gmsData.wallPolySegCounts = gms.map(({ key: gmKey }) =>
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
+    },
+    /**
+     * @param {Geomorph.Layout} gm 
+     */
+    drawHitCanvas(gm) {
+      const ct = gmsData[gm.key].hitCtxt;
+
+      ct.resetTransform();
+      ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
+
+      ct.setTransform(worldToSguScale, 0, 0, worldToSguScale, -gm.pngRect.x * worldToSguScale, -gm.pngRect.y * worldToSguScale);
+      gm.rooms.forEach((room, roomId) => {
+        drawPolygons(ct, room, [`rgb(${hitTestRed.room}, ${roomId}, 255)`, null])
+      });
+      // 🚧 doors
+    },
+    /**
+     * Test pixel in hit canvas
+     * @param {Geomorph.GeomorphKey} gmKey 
+     * @param {Geom.Vect} localPoint 
+     */
+    findRoomIdContaining(gmKey, localPoint) {
+      const ct = gmsData[gmKey].hitCtxt;
+      const { data: rgba } = ct.getImageData(localPoint.x, localPoint.y, 1, 1, { colorSpace: 'srgb' });
+      // console.log(localPoint.x, localPoint.y, Array.from(rgba))
+      if (rgba[0] === hitTestRed.room) {// (0, roomId, 255, 1)
+        return rgba[1];
+      } else {
+        return null;
+      }
     },
   };
   return gmsData;

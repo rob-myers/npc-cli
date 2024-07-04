@@ -1189,12 +1189,8 @@ export class Connector {
   /**
    * @param {Geom.Poly} poly
    * usually a rotated rectangle, but could be a curved window, in which case we'll view it as its AABB
-   * @param {Object} [options]
-   * @param {[null | number, null | number]} [options.roomIds]
-   * @param {Geom.Meta} [options.meta]
-   * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
    */
-  constructor(poly, options) {
+  constructor(poly) {
     // 🔔 orientation MUST be clockwise w.r.t y-downwards
     poly.fixOrientationConvex();
 
@@ -1203,7 +1199,7 @@ export class Connector {
     /** @type {Geom.Vect} */
     this.center = poly.center;
     /** @type {Geom.Meta} */
-    this.meta = poly.meta || options?.meta || {};
+    this.meta = poly.meta || {};
 
     const { angle, baseRect } = geom.polyToAngledRect(poly);
 
@@ -1245,10 +1241,14 @@ export class Connector {
     this.entries = [inFront, behind];
 
     /**
+     * `[id of room infront, id of room behind]`
+     * - a room is *infront* if `normal` is pointing towards it.
+     * - hull doors have exactly one non-null entry.
+     * 
+     * These values will be computed in the browser.
      * @type {[null | number, null | number]}
-     * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
      */
-    this.roomIds = options?.roomIds || [null, null];
+    this.roomIds = [null, null];
 
     /** @type {number} overridden later */
     this.navRectId = -1;
@@ -1269,17 +1269,6 @@ export class Connector {
     });
   }
 
-  /** @param {Geom.Poly[]} rooms */
-  computeRoomIds(rooms) {
-    const [infront, behind] = this.entries;
-    this.roomIds = rooms.reduce((agg, room, roomId) => {
-      // Support doors connecting a room to itself e.g.
-      // galley-and-mess-halls--006--4x2
-      if (room.contains(infront)) agg[0] = roomId;
-      if (room.contains(behind)) agg[1] = roomId;
-      return agg;
-    }, /** @type {[null | number, null | number]} */ ([null, null]));
-  }
 
   /** @returns {Geom.Poly} */
   computeDoorway() {

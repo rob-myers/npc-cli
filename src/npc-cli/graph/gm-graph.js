@@ -190,19 +190,14 @@ export class GmGraphClass extends BaseGraph {
    * but sometimes either adjacent room will do.
    * @returns {null | Geomorph.GmRoomId}
    */
-  findRoomContaining(point, includeDoors = false) {
+  findRoomContaining(point, includeDoors = false) {// 🚧
     const [gmId] = this.findGeomorphIdContaining(point);
     if (typeof gmId === 'number') {
       const gm = this.gms[gmId];
       const localPoint = gm.inverseMatrix.transformPoint(Vect.from(point));
-
-      // test pixel in w.gmsData[gm.key].hitCtxt
       // 🚧 support `includeDoors`
-      const ct = this.w.gmsData[gm.key].hitCtxt;
-      const { data: rgba } = ct.getImageData(localPoint.x, localPoint.y, 1, 1, { colorSpace: 'srgb' });
-      if (rgba[0] === 0) {// (0, roomId, 255, 1)
-        return { gmId, roomId: rgba[1]};
-      }
+      const roomId = this.w.gmsData.findRoomIdContaining(gm.key, localPoint);
+      return roomId === null ? null : { gmId, roomId };
     }
     return null;
   }

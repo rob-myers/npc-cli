@@ -15,8 +15,9 @@
   - ✅ precompute navRects and connector.navRectId
     - connectors have `navRectId` i.e. index into "original navpoly" (pre recast/detour)
   - ✅ service/create-gms-data.js
-  - 🚧 fix roomGraph errors
-    - compute `roomIds` for connectors
+  - ✅ fix roomGraph errors
+    - compute `roomIds` for connectors (doors and windows)
+  - 🚧 gmGraph.findRoomContaining supports includeDoors
   - 🚧 create gmGraph
     - fix gmGraph errors
   - 🚧 migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
