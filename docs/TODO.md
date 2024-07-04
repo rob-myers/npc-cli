@@ -14,6 +14,7 @@
   - ✅ migrate gm grid
   - ✅ precompute navRects and connector.navRectId
     - connectors have `navRectId` i.e. index into "original navpoly" (pre recast/detour)
+  - ✅ service/create-gms-data.js
   - 🚧 fix roomGraph errors
     - compute `roomIds` for connectors
   - 🚧 create gmGraph

@@ -236,48 +236,6 @@ declare namespace Geomorph {
 
   type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
 
-  type GmsData = Geomorph.GmsDataRoot & Record<Geomorph.GeomorphKey, Geomorph.GmData>;
-
-  /**
-   * Data determined by `w.gms`.
-   * It can change on dynamic navMesh change.
-   */
-  interface GmsDataRoot {
-    /** Total number of doors, each being a single quad (🔔 may change):  */
-    doorCount: number;
-    /** Total number of obstacles, each being a single quad:  */
-    obstaclesCount: number;
-    /** Total number of walls, where each wall is a single quad:  */
-    wallCount: number;
-    /** Per gmId, total number of wall line segments:  */
-    wallPolySegCounts: number[];
-  }
-  
-  /**
-   * Data determined by a `Geomorph.GeomorphKey`.
-   * We do not store in `w.gms` to avoid duplication.
-   */
-  interface GmData {
-    gmKey: Geomorph.GeomorphKey;
-    doorSegs: [Geom.Vect, Geom.Vect][];
-    hitCtxt: CanvasRenderingContext2D;
-    /** Debug only */
-    navPoly?: THREE.BufferGeometry;
-    /** These wall polygons are inset, so stroke does not jut out */
-    nonHullCeilTops: Geom.Poly[];
-    /** These door polygons are inset, so stroke does not jut out */
-    doorCeilTops: Geom.Poly[];
-    polyDecals: Geom.Poly[];
-    roomGraph: import('../graph/room-graph').RoomGraphClass;
-    /** Has this geomorph never occurred in any map so far? */
-    unseen: boolean;
-    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
-    /** Number of wall polygons in geomorph, where each wall can have many line segments */
-    wallPolyCount: number;
-    /** Per wall, number of line segments */
-    wallPolySegCounts: number[];
-  }
-
   //#region decor
 
   /** Serializable */
@@ -386,5 +344,6 @@ declare namespace Geomorph {
     type: string;
   }
 
+  type GmsData = import('../service/create-gms-data').GmsData;
 
 }

@@ -85,47 +85,6 @@ export default function World(props) {
       ...npcService,
     },
 
-    // 🚧 fix HMR on edit computeGmData or computeGmsData,
-    // e.g. recompute state.gmsData and redraw
-    computeGmData(gm) {// recomputed onchange geomorphs.json (dev only)
-      const gmData = state.gmsData[gm.key];
-
-      gmData.doorSegs = gm.doors.map(({ seg }) => seg);
-      gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
-      gmData.wallSegs = gm.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
-      gmData.wallPolyCount = gm.walls.length;
-      gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
-        outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
-      );
-      const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
-        (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
-      );
-      // inset so stroke does not jut out
-      gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.04));
-      gmData.doorCeilTops = gm.doors.flatMap(x => geom.createInset(x.poly, 0.04));
-
-      gmData.hitCtxt ??= /** @type {CanvasRenderingContext2D} */ (
-        document.createElement('canvas').getContext('2d')
-      );
-      gmData.hitCtxt.canvas.width = gm.pngRect.width;
-      gmData.hitCtxt.canvas.height = gm.pngRect.height;
-      
-      // 🚧 compute connector.roomIds first
-      // gmData.roomGraph = RoomGraphClass.from(RoomGraphClass.json(gm.rooms, gm.doors, gm.windows));
-
-      gmData.unseen = false;
-    },
-    computeGmsData() {// recomputed when `w.gms` changes e.g. map changes
-      const gmsData = state.gmsData;
-
-      gmsData.doorCount = state.gms.reduce((sum, { key }) => sum + gmsData[key].doorSegs.length, 0);
-      gmsData.wallCount = state.gms.reduce((sum, { key }) => sum + gmsData[key].wallSegs.length, 0);
-      gmsData.obstaclesCount = state.gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
-
-      gmsData.wallPolySegCounts = state.gms.map(({ key: gmKey }) =>
-        state.gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
-      );
-    },
     async handleMessageFromWorker(e) {
       const msg = e.data;
       info("main thread received message", msg);
@@ -206,9 +165,11 @@ export default function World(props) {
         );
 
         // recompute gm-dependent data onchange geomorphs.json, or not seen yet
-        state.gms.forEach(gm => (dataChanged || state.gmsData[gm.key].unseen) && state.computeGmData(gm));
+        state.gms.forEach(gm => (dataChanged || state.gmsData[gm.key].unseen) &&
+          state.gmsData.computeGmData(gm)
+        );
         // always recompute gms-dependent data
-        state.computeGmsData();
+        state.gmsData.computeGmsData(state.gms);
 
         // 🚧 needs fixing i.e. throws errors
         // state.gmGraph = GmGraphClass.fromGms(state.gms);
@@ -357,10 +318,6 @@ export default function World(props) {
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
- * @property {(gm: Geomorph.LayoutInstance) => void} computeGmData
- * Data dependent on underlying `Geomorph.Layout`
- * @property {() => void} computeGmsData
- * Data dependent on `w.gms: Geomorph.LayoutInstance[]`
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
