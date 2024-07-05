@@ -121,7 +121,7 @@ export class GmGraphClass extends BaseGraph {
    * @param {Geom.VectJson} point
    * @returns {[gmId: number | null, gmNodeId: number | null]} respective 'gm' node is `nodesArray[gmNodeId]`
    */
-  findGeomorphIdContaining(point) {
+  findGmIdContaining(point) {
     const gmId = this.gmIdGrid[`${Math.floor(point.x / gmIdGridDim)}-${Math.floor(point.y / gmIdGridDim)}`];
     if (typeof gmId === 'number') {
       const gmNodeId = this.gmNodeByGmId[gmId].find(node => node.rect.contains(point))?.index;
@@ -137,8 +137,8 @@ export class GmGraphClass extends BaseGraph {
    * @param {Geom.VectJson} dst 
    */
   findPath(src, dst) {
-    const [srcGmId, srcGmNodeId] = this.findGeomorphIdContaining(src);
-    const [dstGmId, dstGmNodeId] = this.findGeomorphIdContaining(dst);
+    const [srcGmId, srcGmNodeId] = this.findGmIdContaining(src);
+    const [dstGmId, dstGmNodeId] = this.findGmIdContaining(dst);
     if (srcGmNodeId === null || dstGmNodeId === null) {
       return null;
     }
@@ -190,7 +190,7 @@ export class GmGraphClass extends BaseGraph {
    * @returns {null | Geomorph.GmRoomId}
    */
   findRoomContaining(point, includeDoors = false) {
-    const [gmId] = this.findGeomorphIdContaining(point);
+    const [gmId] = this.findGmIdContaining(point);
     if (typeof gmId === 'number') {
       const gm = this.gms[gmId];
       const localPoint = gm.inverseMatrix.transformPoint(Vect.from(point));
@@ -412,7 +412,7 @@ export class GmGraphClass extends BaseGraph {
           transform: gm.transform,
 
           navRectId,
-          rect: navRect.applyMatrix(gm.matrix),
+          rect: navRect.clone().applyMatrix(gm.matrix),
 
           ...createBaseAstar({
             // could change this when starting/ending at a specific geomorph
