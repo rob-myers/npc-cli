@@ -27,12 +27,16 @@
     - ✅ implement `decor ignore-nav`
   - ✅ gmGraph.findRoomContaining supports includeDoors
     - draw doors in hitTest canvas, behind rooms 
-  - 🚧 verify `gmGraph.findRoomContaining` works
+  - ✅ verify `gmGraph.findRoomContaining` works
+    - `w gmGraph.findRoomContaining $( click 1 )`
     - `w gmGraph.findRoomContaining $( click 1 ) true`
-    - 🚧 fix gmId e.g. gm grid should be in meters
-    - 🚧 fix roomId
-  - avoid connector re-computation i.e. extend serialization (?)
-  - create gm-room-graph
+    - ✅ fix gmId e.g. gm grid should be in meters
+    - ✅ fix hitTest lookup
+    - ✅ click is 3d, but `gmGraph.findRoomContaining` expects 2d
+      - detect `z` and auto project to `(x, z)`
+  - 🚧 create gm-room-graph, with breathing space
+
+- fix HMR for gms-data
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
@@ -57,6 +61,7 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
+- avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
 - 🚧 Boxy SVG can be slow to save
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving

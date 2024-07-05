@@ -2,7 +2,7 @@ import { Mat, Rect, Vect } from "../geom";
 import { BaseGraph, createBaseAstar } from "./base-graph";
 import { sguToWorldScale } from "../service/const";
 import { assertNonNull, removeDups } from "../service/generic";
-import { geom, directionChars, isDirectionChar } from "../service/geom";
+import { geom, directionChars, isDirectionChar, tmpVec1 } from "../service/geom";
 import { error, warn } from "../service/generic";
 import { AStar } from "../pathfinding/AStar";
 
@@ -190,6 +190,9 @@ export class GmGraphClass extends BaseGraph {
    * @returns {null | Geomorph.GmRoomId}
    */
   findRoomContaining(point, includeDoors = false) {
+    // 🚧 abstract into `point = handle3DInput(point)`
+    if ('z' in point) point = tmpVec1.set(point.x, /** @type {number} */ (point.z));
+
     const [gmId] = this.findGeomorphIdContaining(point);
     if (typeof gmId === 'number') {
       const gm = this.gms[gmId];

@@ -52,8 +52,8 @@ export default function createGmsData() {
       const connectors = gm.doors.concat(gm.windows);
       connectors.forEach((connector, connectorId) => {
         const [inFrontRoomId, behindRoomId] = connector.entries.map(localPoint =>
-          gmsData.findRoomIdContaining(gm.key, tmpVec1.copy(localPoint).scale(worldToSguScale)
-        ));
+          gmsData.findRoomIdContaining(gm.key, tmpVec1.copy(localPoint))
+        );
         connector.roomIds = [inFrontRoomId, behindRoomId];
         // console.log(gm.key, connector.meta.door ? 'door' : 'window', connectorId, inFrontRoomId, behindRoomId);
       });
@@ -95,17 +95,22 @@ export default function createGmsData() {
     /**
      * Test pixel in hit canvas.
      * @param {Geomorph.GeomorphKey} gmKey 
-     * @param {Geom.Vect} localPoint 
+     * @param {Geom.Vect} localPoint local geomorph coords (meters)
      */
     findRoomIdContaining(gmKey, localPoint, includeDoors = false) {
       const ct = gmsData[gmKey].hitCtxt;
-      const { data: rgba } = ct.getImageData(localPoint.x, localPoint.y, 1, 1, { colorSpace: 'srgb' });
-      // console.log(localPoint.x, localPoint.y, Array.from(rgba))
+      const gm = gmsData.layout[gmKey]
+      const { data: rgba } = ct.getImageData(// transform to canvas coords
+        (localPoint.x - gm.pngRect.x) * worldToSguScale,
+        (localPoint.y - gm.pngRect.y) * worldToSguScale,
+        1, 1, { colorSpace: 'srgb' },
+      );
+      // console.log({ gmKey, localPoint, rgba: Array.from(rgba) });
       if (rgba[0] === hitTestRed.room) {// (0, roomId, 255, 1)
         return rgba[1];
       } else if (includeDoors === true && rgba[0] === hitTestRed.door) {// (255, 0, doorId, 1)
-        const { doors } = gmsData.layout[gmKey]; // choose 1st roomId
-        return doors[rgba[2]].roomIds.find(x => typeof x === 'number') ?? null;
+        // choose 1st roomId
+        return gm.doors[rgba[2]].roomIds.find(x => typeof x === 'number') ?? null;
       } else {
         return null;
       }
