@@ -8,6 +8,8 @@ import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/
 
 import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
+import { GmGraphClass } from "../graph/gm-graph";
+import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
@@ -31,7 +33,6 @@ import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
 import ContextMenu from "./ContextMenu";
-import { GmGraphClass } from "../graph/gm-graph";
 
 /**
  * @param {Props} props
@@ -54,6 +55,7 @@ export default function World(props) {
     geomorphs: /** @type {*} */ (null),
     gms: [],
     gmGraph: new GmGraphClass([]),
+    gmRoomGraph: new GmRoomGraphClass(),
     hmr: { hash: '', gmHash: '' },
     obsTex: /** @type {*} */ (null),
     decorTex: /** @type {*} */ (null),
@@ -174,11 +176,16 @@ export default function World(props) {
           }
         }
 
+        await pause();
         state.gmsData.computeGmsData(state.gms);
         //#endregion
 
+        await pause();
         state.gmGraph = GmGraphClass.fromGms(state.gms, { permitErrors: true });
         state.gmGraph.w = state;
+        
+        await pause();
+        state.gmRoomGraph = GmRoomGraphClass.fromGmGraph(state.gmGraph);
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
@@ -321,6 +328,7 @@ export default function World(props) {
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
  * @property {GmGraphClass} gmGraph
+ * @property {GmRoomGraphClass} gmRoomGraph
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *

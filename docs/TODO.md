@@ -9,34 +9,7 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 migrate `gmGraph.findRoomContaining`
-  - ✅ begin migrating `gmGraph`
-  - ✅ migrate gm grid
-  - ✅ precompute navRects and connector.navRectId
-    - connectors have `navRectId` i.e. index into "original navpoly" (pre recast/detour)
-  - ✅ service/create-gms-data.js
-  - ✅ fix roomGraph errors
-    - compute `roomIds` for connectors (doors and windows)
-  - ✅ create gmGraph: fix gmGraph errors
-    - ✅ hull doors have e.g. `edge=n`
-    - ✅ hull doors have navRectId > -1
-  - ✅ migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
-    - for fast room/door point-inclusion-test
-  - ✅ fewer navRects: only 2 in the case of 102, otherwise only 1
-    - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 (4) ✅ 103 ✅
-    - ✅ implement `decor ignore-nav`
-  - ✅ gmGraph.findRoomContaining supports includeDoors
-    - draw doors in hitTest canvas, behind rooms 
-  - ✅ verify `gmGraph.findRoomContaining` works
-    - `w gmGraph.findRoomContaining $( click 1 )`
-    - `w gmGraph.findRoomContaining $( click 1 ) true`
-    - ✅ fix gmId e.g. gm grid should be in meters
-    - ✅ fix hitTest lookup
-    - ✅ click is 3d, but `gmGraph.findRoomContaining` expects 2d
-      - detect `z` and auto project to `(x, z)`
-  - 🚧 create gm-room-graph, with breathing space
-
-- fix HMR for gms-data
+- 🚧 fix HMR for gms-data
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
@@ -61,6 +34,8 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
+- possible issue with `useStateRef`
+  - verify new keys are always being added
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
 - 🚧 Boxy SVG can be slow to save
@@ -1500,3 +1475,30 @@
   - ✅ verify hmr works
   - ✅ key `foo.png` -> `foo`, and use separators `--`
   - ✅ try threshold promises for many svg -> contents -> image
+
+- ✅ migrate `gmGraph.findRoomContaining`
+  - ✅ begin migrating `gmGraph`
+  - ✅ migrate gm grid
+  - ✅ precompute navRects and connector.navRectId
+    - connectors have `navRectId` i.e. index into "original navpoly" (pre recast/detour)
+  - ✅ service/create-gms-data.js
+  - ✅ fix roomGraph errors
+    - compute `roomIds` for connectors (doors and windows)
+  - ✅ create gmGraph: fix gmGraph errors
+    - ✅ hull doors have e.g. `edge=n`
+    - ✅ hull doors have navRectId > -1
+  - ✅ migrate `api.geomorphs.hit` to `w.gmsData[gmKey].hitCtxt`
+    - for fast room/door point-inclusion-test
+  - ✅ fewer navRects: only 2 in the case of 102, otherwise only 1
+    - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 (4) ✅ 103 ✅
+    - ✅ implement `decor ignore-nav`
+  - ✅ gmGraph.findRoomContaining supports includeDoors
+    - draw doors in hitTest canvas, behind rooms 
+  - ✅ verify `gmGraph.findRoomContaining` works
+    - `w gmGraph.findRoomContaining $( click 1 )`
+    - `w gmGraph.findRoomContaining $( click 1 ) true`
+    - ✅ fix gmId e.g. gm grid should be in meters
+    - ✅ fix hitTest lookup
+    - ✅ click is 3d, but `gmGraph.findRoomContaining` expects 2d
+      - detect `z` and auto project to `(x, z)`
+  - ✅ create gm-room-graph, with breathing space
