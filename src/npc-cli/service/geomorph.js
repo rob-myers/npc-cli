@@ -329,7 +329,7 @@ class GeomorphService {
       transform,
       matrix,
       // 🔔 currently only support "full geomorph" or "edge geomorph"
-      gridRect: (new Rect(0, 0, 1200, layout.pngRect.height > 1000 ? 1200 : 600)).applyMatrix(matrix),
+      gridRect: (new Rect(0, 0, 1200, layout.pngRect.height > 1000 ? 1200 : 600)).scale(sguToWorldScale).applyMatrix(matrix),
       inverseMatrix: matrix.getInverseMatrix(),
       mat4: geomorphService.embedXZMat4(transform),
 

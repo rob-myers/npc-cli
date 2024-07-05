@@ -163,17 +163,22 @@ export default function World(props) {
           geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
         );
 
-        // recompute onchange geomorphs.json, or not seen yet
+        //#region gms-data
+        state.gmsData.layout = state.geomorphs.layout;
+
         for (const gm of state.gms) {
+          // recompute onchange geomorphs.json, or not seen yet
           if (dataChanged || state.gmsData[gm.key].unseen) {
             state.gmsData.computeGmData(gm);
             await pause(); // breathing space
           }
         }
-        // always recompute gms-dependent data
+
         state.gmsData.computeGmsData(state.gms);
+        //#endregion
 
         state.gmGraph = GmGraphClass.fromGms(state.gms, { permitErrors: true });
+        state.gmGraph.w = state;
       }
 
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;

@@ -1,5 +1,6 @@
 import { Mat, Rect, Vect } from "../geom";
 import { BaseGraph, createBaseAstar } from "./base-graph";
+import { sguToWorldScale } from "../service/const";
 import { assertNonNull, removeDups } from "../service/generic";
 import { geom, directionChars, isDirectionChar } from "../service/geom";
 import { error, warn } from "../service/generic";
@@ -188,16 +189,16 @@ export class GmGraphClass extends BaseGraph {
    * but sometimes either adjacent room will do.
    * @returns {null | Geomorph.GmRoomId}
    */
-  findRoomContaining(point, includeDoors = false) {// 🚧
+  findRoomContaining(point, includeDoors = false) {
     const [gmId] = this.findGeomorphIdContaining(point);
     if (typeof gmId === 'number') {
       const gm = this.gms[gmId];
       const localPoint = gm.inverseMatrix.transformPoint(Vect.from(point));
-      // 🚧 support `includeDoors`
-      const roomId = this.w.gmsData.findRoomIdContaining(gm.key, localPoint);
+      const roomId = this.w.gmsData.findRoomIdContaining(gm.key, localPoint, includeDoors);
       return roomId === null ? null : { gmId, roomId };
+    } else {
+      return null;
     }
-    return null;
   }
 
   /**
@@ -567,4 +568,4 @@ function getGmDoorNodeId(gmNumber, transform, hullDoorId) {
   return `door-${gmNumber}-[${transform}]--${hullDoorId}`;
 }
 
-const gmIdGridDim = 600;
+const gmIdGridDim = 600 * sguToWorldScale;

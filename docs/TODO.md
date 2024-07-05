@@ -25,8 +25,12 @@
   - ✅ fewer navRects: only 2 in the case of 102, otherwise only 1
     - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 (4) ✅ 103 ✅
     - ✅ implement `decor ignore-nav`
-  - ✅ migrate gm-room-graph
-  - gmGraph.findRoomContaining supports includeDoors
+  - ✅ gmGraph.findRoomContaining supports includeDoors
+    - draw doors in hitTest canvas, behind rooms 
+  - 🚧 verify `gmGraph.findRoomContaining` works
+    - `w gmGraph.findRoomContaining $( click 1 ) true`
+    - 🚧 fix gmId e.g. gm grid should be in meters
+    - 🚧 fix roomId
   - avoid connector re-computation i.e. extend serialization (?)
   - create gm-room-graph
 

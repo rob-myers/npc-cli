@@ -19,6 +19,8 @@ export default function createGmsData() {
     /** Per gmId, total number of wall line segments:  */
     wallPolySegCounts: /** @type {number[]} */ ([]),
 
+    layout: /** @type {Record<Geomorph.GeomorphKey, Geomorph.Layout>} */ ({}),
+
     /** @param {Geomorph.Layout} gm */
     computeGmData(gm) {// recomputed onchange geomorphs.json (dev only)
       const gmData = gmsData[gm.key];
@@ -82,22 +84,28 @@ export default function createGmsData() {
       ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
 
       ct.setTransform(worldToSguScale, 0, 0, worldToSguScale, -gm.pngRect.x * worldToSguScale, -gm.pngRect.y * worldToSguScale);
+      // draw doors first to remove their extension into rooms
+      gm.doors.forEach((door, doorId) => {
+        drawPolygons(ct, door.poly, [`rgb(${hitTestRed.door}, 0, ${doorId})`, null])
+      });
       gm.rooms.forEach((room, roomId) => {
         drawPolygons(ct, room, [`rgb(${hitTestRed.room}, ${roomId}, 255)`, null])
       });
-      // 🚧 doors
     },
     /**
-     * Test pixel in hit canvas
+     * Test pixel in hit canvas.
      * @param {Geomorph.GeomorphKey} gmKey 
      * @param {Geom.Vect} localPoint 
      */
-    findRoomIdContaining(gmKey, localPoint) {
+    findRoomIdContaining(gmKey, localPoint, includeDoors = false) {
       const ct = gmsData[gmKey].hitCtxt;
       const { data: rgba } = ct.getImageData(localPoint.x, localPoint.y, 1, 1, { colorSpace: 'srgb' });
       // console.log(localPoint.x, localPoint.y, Array.from(rgba))
       if (rgba[0] === hitTestRed.room) {// (0, roomId, 255, 1)
         return rgba[1];
+      } else if (includeDoors === true && rgba[0] === hitTestRed.door) {// (255, 0, doorId, 1)
+        const { doors } = gmsData.layout[gmKey]; // choose 1st roomId
+        return doors[rgba[2]].roomIds.find(x => typeof x === 'number') ?? null;
       } else {
         return null;
       }
