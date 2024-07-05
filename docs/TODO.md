@@ -9,7 +9,9 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 fix HMR for gms-data
+- ✅ fix HMR for gms-data
+  - ℹ️ a bit wasteful e.g. recomputing `w.gmsData` on HMR,
+    i.e. could check whether `createGmsData` function has changed.
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists

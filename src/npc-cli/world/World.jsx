@@ -164,22 +164,26 @@ export default function World(props) {
         state.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
           geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
         );
-
-        //#region gms-data
+      }
+      
+      const hmr = !!state.crowd && state.geomorphs?.hash === state.hmr.gmHash;
+      
+      if (mapChanged || hmr) {
+        // recreate gmsData on HMR, in case edited function
+        hmr && (state.gmsData = createGmsData());
         state.gmsData.layout = state.geomorphs.layout;
-
+  
         for (const gm of state.gms) {
           // recompute onchange geomorphs.json, or not seen yet
           if (dataChanged || state.gmsData[gm.key].unseen) {
-            state.gmsData.computeGmData(gm);
             await pause(); // breathing space
+            state.gmsData.computeGmData(gm);
           }
         }
-
+  
         await pause();
         state.gmsData.computeGmsData(state.gms);
-        //#endregion
-
+  
         await pause();
         state.gmGraph = GmGraphClass.fromGms(state.gms, { permitErrors: true });
         state.gmGraph.w = state;
@@ -194,6 +198,7 @@ export default function World(props) {
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
         mapChanged,
+        hmr,
         hash: state.hash,
       });
 

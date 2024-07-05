@@ -5,7 +5,6 @@ import { geomorphService } from "./geomorph";
 import { RoomGraphClass } from "../graph/room-graph";
 import { drawPolygons } from "./dom";
 
-// 🚧 fix HMR on edit e.g. recompute and redraw
 export default function createGmsData() {
   const gmsData = {
     ...mapValues(geomorphService.toGmNum, (_, gmKey) => ({ ...emptyGmData, gmKey })),

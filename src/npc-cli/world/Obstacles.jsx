@@ -144,7 +144,7 @@ export default function Obstacles(props) {
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [w.hash]);
+  }, [w.hash, w.gmsData.obstaclesCount]);
 
   return (
     <instancedMesh

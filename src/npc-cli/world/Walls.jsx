@@ -5,7 +5,6 @@ import { Mat, Vect } from "../geom";
 import { wallHeight } from "../service/const";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
-import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -82,7 +81,7 @@ export default function Walls(props) {
 
   React.useEffect(() => {
     state.positionInstances();
-  }, [w.hash]);
+  }, [w.hash, w.gmsData.wallCount]);
 
   return (
     <instancedMesh
