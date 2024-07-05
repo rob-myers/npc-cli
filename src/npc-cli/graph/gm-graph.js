@@ -2,14 +2,14 @@ import { Mat, Rect, Vect } from "../geom";
 import { BaseGraph, createBaseAstar } from "./base-graph";
 import { sguToWorldScale } from "../service/const";
 import { assertNonNull, removeDups } from "../service/generic";
-import { geom, directionChars, isDirectionChar, tmpVec1 } from "../service/geom";
+import { geom, directionChars, isDirectionChar } from "../service/geom";
 import { error, warn } from "../service/generic";
 import { AStar } from "../pathfinding/AStar";
 
 /**
- * The "Geomorph Graph":
- * - whose nodes are geomorphs or hull doors
- *   - 🔔 technically, there is a node for each disjoint navmesh of a geomorph
+ * The _Geomorph Graph_,
+ * - where each hull door yields a node
+ * - where each navigation mesh in a geomorph yields a node (often one-per-geomorph)
  * - where a geomorph is connected to a hull door iff the geomorph has that hull door
  * - where a hull door is connected to another hull door iff they have been identified
  * @extends {BaseGraph<Graph.GmGraphNode, Graph.GmGraphEdgeOpts>}
@@ -190,9 +190,6 @@ export class GmGraphClass extends BaseGraph {
    * @returns {null | Geomorph.GmRoomId}
    */
   findRoomContaining(point, includeDoors = false) {
-    // 🚧 abstract into `point = handle3DInput(point)`
-    if ('z' in point) point = tmpVec1.set(point.x, /** @type {number} */ (point.z));
-
     const [gmId] = this.findGeomorphIdContaining(point);
     if (typeof gmId === 'number') {
       const gm = this.gms[gmId];

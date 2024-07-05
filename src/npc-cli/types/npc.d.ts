@@ -91,8 +91,10 @@ declare namespace NPC {
       }
   );
 
-  type ClickMeta = import('three').Vector3Like & Pick<BasePointerEvent, 'keys'> & {
+  type ClickMeta = Geom.VectJson & Pick<BasePointerEvent, 'keys'> & {
     meta: Geom.Meta;
+    /** Original 3D point */
+    v3: import('three').Vector3Like;
   };
 
   type TiledCacheResult = Extract<
