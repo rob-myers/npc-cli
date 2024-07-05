@@ -323,13 +323,14 @@ class GeomorphService {
    */
   computeLayoutInstance(layout, gmId, transform) {
     const matrix = new Mat(transform);
+    // 🔔 currently only support "edge geomorph" or "full geomorph"
+    const sguGridRect = new Rect(0, 0, 1200, this.isEdgeGm(layout.num) ? 600 : 1200);
     return {
       ...layout,
       gmId,
       transform,
       matrix,
-      // 🔔 currently only support "full geomorph" or "edge geomorph"
-      gridRect: (new Rect(0, 0, 1200, layout.pngRect.height > 1000 ? 1200 : 600)).scale(sguToWorldScale).applyMatrix(matrix),
+      gridRect: sguGridRect.scale(sguToWorldScale).applyMatrix(matrix),
       inverseMatrix: matrix.getInverseMatrix(),
       mat4: geomorphService.embedXZMat4(transform),
 
