@@ -181,7 +181,7 @@ export default function Doors(props) {
         side={THREE.DoubleSide}
         map={w.decorTex}
         transparent
-        // diffuse={new THREE.Vector3(1, 0, 1)}
+        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
       />
     </instancedMesh>
   );

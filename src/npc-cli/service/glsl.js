@@ -38,12 +38,13 @@ export const minimalInstanceUvsFrag = /*glsl*/`
 
   varying vec2 vUv;
   uniform sampler2D map;
+  uniform vec3 diffuse;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = texture2D( map, vUv );
+    gl_FragColor = texture2D(map, vUv) * vec4(diffuse, 1);
 
     // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
     if(gl_FragColor.a < 0.5)

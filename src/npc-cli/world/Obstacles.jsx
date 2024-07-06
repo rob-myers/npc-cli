@@ -157,14 +157,14 @@ export default function Obstacles(props) {
         onPointerUp: state.onPointerUp,
         onPointerDown: state.onPointerDown,
       }}
-      position={[0, 0.001, 0]}
+      position={[0, 0.001, 0]} // 🚧
     >
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
         transparent
         map={w.obsTex}
-        // diffuse={new THREE.Vector3(1, 0, 1)}
+        diffuse={new THREE.Vector3(0.5, 0.5, 0.5)}
       />
     </instancedMesh>
   );
