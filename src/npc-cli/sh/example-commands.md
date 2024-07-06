@@ -15,6 +15,10 @@ bar/toUpperCase'()'
 # FOO
 ```
 
+```sh
+expr 'new Set([1, 2, 3])' | map Array.from
+```
+
 ## Local variables
 
 ```sh

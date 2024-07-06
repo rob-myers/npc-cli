@@ -4,7 +4,6 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultSkinKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";

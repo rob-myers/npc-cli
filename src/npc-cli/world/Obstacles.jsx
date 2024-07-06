@@ -3,7 +3,6 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
-import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";

@@ -1,10 +1,9 @@
 import React from "react";
 import * as THREE from "three";
 
-import { Poly } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { keys } from "../service/generic";
-import { drawPolygons, getModifierKeys, isRMB, isTouchDevice, strokeLine } from "../service/dom";
+import { drawPolygons } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
