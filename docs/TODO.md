@@ -48,7 +48,7 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
-- fix `click 1` i.e. `click | ...` should not fire
+- ✅ fix `click 1` i.e. `click | ...` should not fire
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators

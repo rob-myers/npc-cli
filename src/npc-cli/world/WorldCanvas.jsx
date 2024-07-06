@@ -58,6 +58,7 @@ export default function WorldCanvas(props) {
           screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
           touch: isTouchDevice(),
           meta,
+          ...key === 'pointerup' && { clickId: state.clickIds.pop() },
         };
       }
       if (key === 'long-pointerdown' || key === 'pointerup-outside') {
