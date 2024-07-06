@@ -163,7 +163,7 @@ export default function Obstacles(props) {
         side={THREE.DoubleSide}
         transparent
         map={w.obsTex}
-        diffuse={new THREE.Vector3(0.5, 0.5, 0.5)}
+        diffuse={new THREE.Vector3(0.5, 0.5, 0.7)}
       />
     </instancedMesh>
   );
