@@ -9,21 +9,9 @@
   - extras
 - extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ fix HMR for gms-data
-  - ℹ️ a bit wasteful e.g. recomputing `w.gmsData` on HMR,
-    i.e. could check whether `createGmsData` function has changed.
-
-- ✅ synchronise data changes
-  - ℹ️ i.e. geomorphs, mapKey, gms, gmsData, gmGraph, gmRoomGraph
-  - ✅ verify HMR still working
-    - ✅ map change
-    - ✅ symbol change
-    - ✅ gmsData change
-      - needed to `await import('create-gms-data')` to get it working
-
-- 🚧 obstacles have `meta.roomId`
+- ✅ obstacles have `meta.roomId`
   - ✅ gm.obstacles[i].center
-- 🚧 initial decor has `meta.roomId`
+- ✅ initial decor has `meta.roomId`
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
@@ -48,6 +36,8 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
+- ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
+  - `map` recognises such cases does NOT pass `ctxt` inside `map` as 2nd argument
 - ✅ fix `click 1` i.e. `click | ...` should not fire
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
@@ -1516,3 +1506,16 @@
     - ✅ click is 3d, but `gmGraph.findRoomContaining` expects 2d
       - detect `z` and auto project to `(x, z)`
   - ✅ create gm-room-graph, with breathing space
+
+
+- ✅ fix HMR for gms-data
+  - ℹ️ a bit wasteful e.g. recomputing `w.gmsData` on HMR,
+    i.e. could check whether `createGmsData` function has changed.
+
+- ✅ synchronise data changes
+  - ℹ️ i.e. geomorphs, mapKey, gms, gmsData, gmGraph, gmRoomGraph
+  - ✅ verify HMR still working
+    - ✅ map change
+    - ✅ symbol change
+    - ✅ gmsData change
+      - needed to `await import('create-gms-data')` to get it working

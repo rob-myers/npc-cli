@@ -307,6 +307,7 @@ class GeomorphService {
           height: typeof o.meta.y === 'number' ? o.meta.y : 0,
           transform,
           center: tmpMat1.transformPoint(origPoly.center).precision(2),
+          meta: origPoly.meta,
         };
       }),
       rooms: rooms.map(x => x.precision(precision)),
@@ -431,19 +432,23 @@ class GeomorphService {
       key: json.key,
       num: json.num,
       pngRect: Rect.fromJson(json.pngRect),
-
+      
       decor: json.decor,
       doors,
       hullPoly: json.hullPoly.map(x => Poly.from(x)),
       hullDoors: doors.filter(x => x.meta.hull),
-      obstacles: json.obstacles.map(x => ({
-        symbolKey: x.symbolKey,
-        obstacleId: x.obstacleId,
-        height: x.height,
-        origPoly: Poly.from(x.origPoly),
-        transform: x.transform,
-        center: Vect.from(x.center),
-      })),
+      obstacles: json.obstacles.map(x => {
+        const origPoly = Poly.from(x.origPoly);
+        return {
+          symbolKey: x.symbolKey,
+          obstacleId: x.obstacleId,
+          height: x.height,
+          origPoly,
+          transform: x.transform,
+          center: Vect.from(x.center),
+          meta: origPoly.meta, // shortcut to origPoly.meta
+        };
+      }),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       windows: json.windows.map(Connector.from),
@@ -1134,6 +1139,7 @@ class GeomorphService {
         origPoly: x.origPoly.geoJson,
         transform: x.transform,
         center: x.center,
+        meta: x.origPoly.meta,
       })),
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),

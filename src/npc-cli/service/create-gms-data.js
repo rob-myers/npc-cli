@@ -3,7 +3,7 @@ import { hitTestRed, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause } from "./generic";
 import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
-import { geomorphService } from "./geomorph";
+import { Connector, geomorphService } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 
@@ -38,7 +38,7 @@ export default function createGmsData(geomorphs, { prevGmData }) {
      * @param {Geomorph.Layout} gm
      * This is the "incoming" value.
      */
-    computeGmData(gm) {
+    async computeGmData(gm) {
       const gmData = gmsData[gm.key];
 
       gmData.doorSegs = gm.doors.map(({ seg }) => seg);
@@ -63,22 +63,25 @@ export default function createGmsData(geomorphs, { prevGmData }) {
       gmData.hitCtxt.canvas.width = bounds.width;
       gmData.hitCtxt.canvas.height = bounds.height;
       gmsData.drawHitCanvas(gm);
-
+      
       // compute `connector.roomIds` before `roomGraph`
-      const connectors = gm.doors.concat(gm.windows);
-      connectors.forEach((connector, connectorId) => {
-        const [inFrontRoomId, behindRoomId] = connector.entries.map(localPoint =>
-          gmsData.findRoomIdContaining(gm.key, tmpVec1.copy(localPoint))
-        );
-        connector.roomIds = [inFrontRoomId, behindRoomId];
-        // console.log(gm.key, connector.meta.door ? 'door' : 'window', connectorId, inFrontRoomId, behindRoomId);
-      });
+      await pause();
+      for (const connector of gm.doors) {
+        gmsData.ensureConnectorRoomIds(connector, gm);
+      }
+      for (const connector of gm.windows) {
+        gmsData.ensureConnectorRoomIds(connector, gm);
+      }
       gmData.roomGraph = RoomGraphClass.from(gm, `${gm.key}: `);
 
-      // 🚧 extend obstacles with roomIds
-      // 🚧 extend decor with roomIds
-      // gm.obstacles.forEach(({ origPoly: { meta, center } }) => {
-      // });
+      await pause();
+      for (const obstacle of gm.obstacles) {
+        gmsData.ensureMetaRoomId(gm.key, obstacle.center, obstacle.meta);
+      }
+
+      for (const decor of gm.decor) {
+        gmsData.ensureMetaRoomId(gm.key, decor.bounds2d, decor.meta);
+      }
       
       gmData.unseen = false;
     },
@@ -130,13 +133,33 @@ export default function createGmsData(geomorphs, { prevGmData }) {
       });
     },
     /**
-     * Test pixel in hit canvas.
-     * @param {Geomorph.GeomorphKey} gmKey 
-     * @param {Geom.Vect} localPoint local geomorph coords (meters)
+     * @param {Connector} connector
+     * @param {Geomorph.Layout} gm 
      */
-    findRoomIdContaining(gmKey, localPoint, includeDoors = false) {
-      const ct = gmsData[gmKey].hitCtxt;
-      const gm = geomorphs.layout[gmKey]; // 🚧 shortcut
+    ensureConnectorRoomIds(connector, gm) {
+      if (connector.roomIds.length === 2) {
+        return; // already attached
+      }
+      connector.roomIds = /** @type {[number | null, number | null]} */ (connector.entries.map(
+        localPoint => gmsData.findRoomIdContaining(gm.key, tmpVec1.copy(localPoint))
+      ));
+    },
+    /**
+     * @param {Geomorph.GeomorphKey} gmKey 
+     * @param {Geom.VectJson} localPoint 
+     * @param {Geom.Meta} meta 
+     */
+    ensureMetaRoomId(gmKey, localPoint, meta) {
+      meta.roomId ??= (gmsData.findRoomIdContaining(gmKey, localPoint) ?? -1);
+    },
+    /**
+     * Test pixel in hit canvas.
+     * @param {Geomorph.GeomorphKey | Geomorph.Layout} keyOrGm
+     * @param {Geom.VectJson} localPoint local geomorph coords (meters)
+     */
+    findRoomIdContaining(keyOrGm, localPoint, includeDoors = false) {
+      const gm = typeof keyOrGm === 'string' ? geomorphs.layout[keyOrGm] : keyOrGm
+      const ct = gmsData[gm.key].hitCtxt;
       const { data: rgba } = ct.getImageData(// transform to canvas coords
         (localPoint.x - gm.pngRect.x) * worldToSguScale,
         (localPoint.y - gm.pngRect.y) * worldToSguScale,

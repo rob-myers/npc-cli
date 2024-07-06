@@ -245,9 +245,12 @@ declare namespace Geomorph {
     transform: Geom.SixTuple;
     /** `origPoly.center` transformed by `transform` */
     center: V;
+    /** Shortcut to `origPoly.meta` */
+    meta: Geom.Meta;
   }
 
   type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly, Geom.Vect>;
+  type LayoutObstacleJson = LayoutObstacleGeneric<Geom.GeoJsonPolygon, Geom.VectJson>;
 
   //#region decor
 

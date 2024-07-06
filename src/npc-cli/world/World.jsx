@@ -197,7 +197,7 @@ export default function World(props) {
         for (const gmKey of nextGmKeys) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
-            next.gmsData.computeGmData(next.geomorphs.layout[gmKey]);
+            await next.gmsData.computeGmData(next.geomorphs.layout[gmKey]);
           }
         };
         
