@@ -298,12 +298,15 @@ class GeomorphService {
         const obstacleId = /** @type {number} */ (o.meta.obsId);
         const symbolKey = /** @type {Geomorph.SymbolKey} */ (o.meta.symKey);
         const origPoly = assets.symbols[symbolKey].obstacles[o.meta.obsId];
+        const transform = /** @type {Geom.SixTuple} */ (o.meta.transform ?? [1, 0, 0, 1, 0, 0]);
+        tmpMat1.feedFromArray(transform);
         return {
           symbolKey,
           obstacleId,
           origPoly,
           height: typeof o.meta.y === 'number' ? o.meta.y : 0,
-          transform: o.meta.transform ?? [1, 0, 0, 1, 0, 0],
+          transform,
+          center: tmpMat1.transformPoint(origPoly.center).precision(2),
         };
       }),
       rooms: rooms.map(x => x.precision(precision)),
@@ -439,6 +442,7 @@ class GeomorphService {
         height: x.height,
         origPoly: Poly.from(x.origPoly),
         transform: x.transform,
+        center: Vect.from(x.center),
       })),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
@@ -1129,6 +1133,7 @@ class GeomorphService {
         height: x.height,
         origPoly: x.origPoly.geoJson,
         transform: x.transform,
+        center: x.center,
       })),
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),

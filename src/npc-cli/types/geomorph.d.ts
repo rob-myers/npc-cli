@@ -194,7 +194,7 @@ declare namespace Geomorph {
     doors: C[];
     hullDoors: C[];
     hullPoly: P[];
-    obstacles: LayoutObstacleGeneric<P>[];
+    obstacles: LayoutObstacleGeneric<P, V>[];
     rooms: P[];
     walls: P[];
     windows: C[];
@@ -231,6 +231,7 @@ declare namespace Geomorph {
    */
   interface LayoutObstacleGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
+    V extends Geom.VectJson | Geom.Vect,
   > {
     /** The `symbol` the obstacle originally comes from */
     symbolKey: SymbolKey;
@@ -238,13 +239,15 @@ declare namespace Geomorph {
     obstacleId: number;
     /** The height of this particular instance */
     height: number;
-    /** `symbol.obstacles[symObsId]` -- could be inferred from `assets` */
+    /** `symbol.obstacles[obstacleId]` -- could be inferred from `assets` */
     origPoly: P;
-    /** Transform from original symbol coords into Geomorph coords */
+    /** Transform from original symbol into Geomorph (meters) */
     transform: Geom.SixTuple;
+    /** `origPoly.center` transformed by `transform` */
+    center: V;
   }
 
-  type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
+  type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly, Geom.Vect>;
 
   //#region decor
 

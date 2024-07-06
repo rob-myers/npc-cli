@@ -58,6 +58,11 @@ export default function createGmsData() {
       });
       gmData.roomGraph = RoomGraphClass.from(gm, `${gm.key}: `);
 
+      // 🚧 extend obstacles with roomIds
+      // 🚧 extend decor with roomIds
+      // gm.obstacles.forEach(({ origPoly: { meta, center } }) => {
+      // });
+      
       gmData.unseen = false;
     },
     /**

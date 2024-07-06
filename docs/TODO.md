@@ -13,6 +13,10 @@
   - ℹ️ a bit wasteful e.g. recomputing `w.gmsData` on HMR,
     i.e. could check whether `createGmsData` function has changed.
 
+- 🚧 obstacles have `meta.roomId`
+  - ✅ gm.obstacles[i].center
+- 🚧 initial decor has `meta.roomId`
+
 - 🚧 Decor component
   - ✅ `<Decor>` exists
   - ✅ clarify identifiers
@@ -36,8 +40,7 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
-- possible issue with `useStateRef`
-  - verify new keys are always being added
+- verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
 - 🚧 Boxy SVG can be slow to save

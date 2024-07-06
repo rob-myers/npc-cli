@@ -20,7 +20,7 @@ export default function Decor(props) {
     decor: {},
 
     addDecor(ds) {
-      // 🚧 need gmGraph.findRoomContaining
+      // ✅ need gmGraph.findRoomContaining
 
       // const grouped = ds.reduce((agg, d) => {
       //   const { gmId, roomId } = ensureDecorMetaGmRoomId(d, api.gmGraph);
