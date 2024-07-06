@@ -1,14 +1,24 @@
+import * as THREE from 'three';
 import { hitTestRed, wallHeight, worldToSguScale } from "./const";
-import { mapValues } from "./generic";
+import { mapValues, pause } from "./generic";
+import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
 import { geomorphService } from "./geomorph";
+import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
-import { drawPolygons } from "./dom";
 
-export default function createGmsData() {
+/**
+ * @param {Geomorph.Geomorphs} geomorphs
+ * @param {object} opts
+ * @param {Record<Geomorph.GeomorphKey, GmData>} [opts.prevGmData]
+ * Previous lookup to avoid recomputation
+*/
+export default function createGmsData(geomorphs, { prevGmData }) {
   const gmsData = {
-    ...mapValues(geomorphService.toGmNum, (_, gmKey) => ({ ...emptyGmData, gmKey })),
-  
+    ...mapValues(geomorphService.toGmNum,
+      (_, gmKey) => prevGmData?.[gmKey] ?? ({ ...emptyGmData, gmKey })
+    ),
+    
     /** Total number of doors, each being a single quad (🔔 may change):  */
     doorCount: 0,
     /** Total number of obstacles, each being a single quad:  */
@@ -17,11 +27,18 @@ export default function createGmsData() {
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
     wallPolySegCounts: /** @type {number[]} */ ([]),
-
-    layout: /** @type {Record<Geomorph.GeomorphKey, Geomorph.Layout>} */ ({}),
-
-    /** @param {Geomorph.Layout} gm */
-    computeGmData(gm) {// recomputed onchange geomorphs.json (dev only)
+    
+    /** Deserialization of `geomorph.json` */
+    geomorphs,
+    
+    /**
+     * Recomputed (dev only),
+     * - onchange geomorphs.json
+     * - on edit create-gms-data
+     * @param {Geomorph.Layout} gm
+     * This is the "incoming" value.
+     */
+    computeGmData(gm) {
       const gmData = gmsData[gm.key];
 
       gmData.doorSegs = gm.doors.map(({ seg }) => seg);
@@ -69,7 +86,7 @@ export default function createGmsData() {
      * Recomputed when `w.gms` changes e.g. map changes
      * @param {Geomorph.LayoutInstance[]} gms
      */
-    computeGmsData(gms) {
+    computeRoot(gms) {
       gmsData.doorCount = gms.reduce((sum, { key }) => sum + gmsData[key].doorSegs.length, 0);
       gmsData.wallCount = gms.reduce((sum, { key }) => sum + gmsData[key].wallSegs.length, 0);
       gmsData.obstaclesCount = gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
@@ -77,6 +94,22 @@ export default function createGmsData() {
       gmsData.wallPolySegCounts = gms.map(({ key: gmKey }) =>
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
+    },
+    dispose() {
+      delete /** @type {*} */ (gmsData).w;
+      for (const gmKey of geomorphService.gmKeys) {
+        Object.values(gmsData[gmKey]).forEach(v => {
+          if (Array.isArray(v)) {
+            v.length = 0;
+          } else if (v instanceof CanvasRenderingContext2D) {
+            v.canvas.width = v.canvas.height = 0;
+          } else if (v instanceof THREE.BufferGeometry) {
+            v.dispose();
+          } else if (v instanceof BaseGraph) {
+            v.dispose();
+          }
+        });
+      }
     },
     /**
      * @param {Geomorph.Layout} gm 
@@ -103,7 +136,7 @@ export default function createGmsData() {
      */
     findRoomIdContaining(gmKey, localPoint, includeDoors = false) {
       const ct = gmsData[gmKey].hitCtxt;
-      const gm = gmsData.layout[gmKey]
+      const gm = geomorphs.layout[gmKey]; // 🚧 shortcut
       const { data: rgba } = ct.getImageData(// transform to canvas coords
         (localPoint.x - gm.pngRect.x) * worldToSguScale,
         (localPoint.y - gm.pngRect.y) * worldToSguScale,
@@ -126,7 +159,8 @@ export default function createGmsData() {
 /** @type {GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose', // overridden
-  doorSegs: [], doorCeilTops: [],
+  doorSegs: [],
+  doorCeilTops: [],
   hitCtxt: /** @type {*} */ (null),
   navPoly: undefined,
   nonHullCeilTops: [],

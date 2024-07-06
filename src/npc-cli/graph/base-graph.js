@@ -127,6 +127,16 @@ export class BaseGraph {
     return false;
   }
   
+  dispose() {
+    this.nodes.clear();
+    this.succ.clear();
+    this.pred.clear();
+    this.nodesArray.length = 0;
+    this.edgesArray.length = 0;
+    this.idToNode.clear();
+    this.idToEdge.clear();
+  }
+  
   /**
    * Get co-reachable nodes in breadth-first manner.
    * @param {Node} node

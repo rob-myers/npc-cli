@@ -13,6 +13,14 @@
   - ℹ️ a bit wasteful e.g. recomputing `w.gmsData` on HMR,
     i.e. could check whether `createGmsData` function has changed.
 
+- ✅ synchronise data changes
+  - ℹ️ i.e. geomorphs, mapKey, gms, gmsData, gmGraph, gmRoomGraph
+  - ✅ verify HMR still working
+    - ✅ map change
+    - ✅ symbol change
+    - ✅ gmsData change
+      - needed to `await import('create-gms-data')` to get it working
+
 - 🚧 obstacles have `meta.roomId`
   - ✅ gm.obstacles[i].center
 - 🚧 initial decor has `meta.roomId`
@@ -40,6 +48,7 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
+- fix `click 1` i.e. `click | ...` should not fire
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators

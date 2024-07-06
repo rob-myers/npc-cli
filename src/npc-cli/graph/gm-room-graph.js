@@ -22,9 +22,10 @@ export class GmRoomGraphClass extends BaseGraph {
 
   /**
    * @param {Graph.GmGraph} gmGraph
+   * @param {import("../service/create-gms-data").GmsData} gmsData
    * @returns {Graph.GmRoomGraph}
    */
-  static fromGmGraph(gmGraph) {
+  static fromGmGraph(gmGraph, gmsData) {
     const graph = new GmRoomGraphClass();
 
     /** @type {Graph.GmRoomGraphNode[]} */
@@ -43,7 +44,6 @@ export class GmRoomGraphClass extends BaseGraph {
     }, /** @type {typeof graph.gmNodeOffset} */ ([0]));
 
     graph.registerNodes(nodes);
-    const { gmsData } = gmGraph.w;
 
     // Edges: for fixed gmId
     // Edges: bridging two gmIds (via hull doors)

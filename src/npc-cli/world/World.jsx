@@ -50,13 +50,13 @@ export default function World(props) {
     timer: new Timer(),
     worker: /** @type {*} */ (null),
 
-    gmsData: createGmsData(),
+    gmsData: /** @type {*} */ (null),
     events: new Subject(),
     geomorphs: /** @type {*} */ (null),
     gms: [],
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
-    hmr: { hash: '', gmHash: '' },
+    hmr: { hash: '', gmHash: '', createGmsData },
     obsTex: /** @type {*} */ (null),
     decorTex: /** @type {*} */ (null),
 
@@ -139,20 +139,33 @@ export default function World(props) {
         ).then((x) => x.json())
       );
 
+      /**
+       * Used to apply changes synchronously.
+       * @type {Pick<State, 'geomorphs' | 'mapKey' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph'>}
+       */
+      const next = {
+        geomorphs: prevGeomorphs,
+        mapKey: props.mapKey,
+        gms: state.gms,
+        gmsData: state.gmsData,
+        gmGraph: state.gmGraph,
+        gmRoomGraph: state.gmRoomGraph,
+      };
+
       const dataChanged = !prevGeomorphs || state.geomorphs.hash !== geomorphsJson.hash;
       const mapChanged = dataChanged || state.mapKey !== props.mapKey;
 
       if (dataChanged) {
-        state.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
+        next.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
       }
 
       if (mapChanged) {
-        state.mapKey = props.mapKey;
-        const mapDef = state.geomorphs.map[state.mapKey];
+        next.mapKey = props.mapKey;
+        const mapDef = next.geomorphs.map[state.mapKey];
 
         // on change map may see new gmKeys
         mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
-          const { pngRect } = state.geomorphs.layout[gmKey];
+          const { pngRect } = next.geomorphs.layout[gmKey];
           /** @type {const} */ (['floor', 'ceil']).forEach(apiKey => {
             state[apiKey].tex[gmKey] = createCanvasTexDef(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
@@ -161,57 +174,66 @@ export default function World(props) {
           });
         });
 
-        state.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
-          geomorphService.computeLayoutInstance(state.geomorphs.layout[gmKey], gmId, transform)
+        next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
+          geomorphService.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
         );
       }
       
-      const hmr = !!state.crowd && state.geomorphs?.hash === state.hmr.gmHash;
-      
-      if (mapChanged || hmr) {
-        // recreate gmsData on HMR, in case edited function
-        hmr && (state.gmsData = createGmsData());
-        state.gmsData.layout = state.geomorphs.layout;
-  
-        for (const gm of state.gms) {
-          // recompute onchange geomorphs.json, or not seen yet
-          if (dataChanged || state.gmsData[gm.key].unseen) {
+      // detect if the function `createGmsData` has changed
+      const createGmsData = await import('../service/create-gms-data').then(x => x.default);
+      const changedGmsData = state.hmr.createGmsData !== createGmsData;
+      state.hmr.createGmsData = createGmsData;
+
+      if (mapChanged || changedGmsData) {
+
+        next.gmsData = createGmsData(
+          next.geomorphs, // reuse gmData lookup, unless:
+          // (a) geomorphs.json changed, or (b) create-gms-data edited
+          { prevGmData: dataChanged || changedGmsData ? undefined : state.gmsData },
+        );
+
+        // ensure gmData per layout in map
+        const nextGmKeys = Array.from(new Set(next.gms.map(({ key }) => key)));
+        for (const gmKey of nextGmKeys) {
+          if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
-            state.gmsData.computeGmData(gm);
+            next.gmsData.computeGmData(next.geomorphs.layout[gmKey]);
           }
-        }
-  
-        await pause();
-        state.gmsData.computeGmsData(state.gms);
-  
-        await pause();
-        state.gmGraph = GmGraphClass.fromGms(state.gms, { permitErrors: true });
-        state.gmGraph.w = state;
+        };
         
         await pause();
-        state.gmRoomGraph = GmRoomGraphClass.fromGmGraph(state.gmGraph);
+        next.gmsData.computeRoot(next.gms);
+        
+        await pause();
+        next.gmGraph = GmGraphClass.fromGms(next.gms, { permitErrors: true });
+        next.gmGraph.w = state;
+        
+        await pause();
+        next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
       }
 
+      if (dataChanged || changedGmsData) {
+        state.gmsData?.dispose(); // cleanup
+      }
+      // apply changes synchronously
+      Object.assign(state, next);
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
 
       debug({
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
         mapChanged,
-        hmr,
+        changedGmsData,
         hash: state.hash,
       });
 
-      if (!dataChanged) {
-        return null;
-      }
-
-      /** @type {const} */ ([
-        { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: true, },
-        { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex', invert: false },
-      ]).forEach(({ src, texKey, invert }) => {
-        imageLoader.loadAsync(src).then((img) => {
-          const canvas = document.createElement('canvas');
+      if (dataChanged) {
+        /** @type {const} */ ([
+          { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: true, },
+          { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex', invert: false },
+        ]).forEach(({ src, texKey, invert }) => imageLoader.loadAsync(src).then((img) => {
+          const prevCanvas = /** @type {HTMLCanvasElement | undefined} */ (state[texKey]?.image);
+          const canvas = prevCanvas ?? document.createElement('canvas');
           [canvas.width, canvas.height] = [img.width, img.height];
           /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
           invert && invertCanvas(canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
@@ -219,8 +241,10 @@ export default function World(props) {
           tex.flipY = false; // align with XZ/XY quad uv-map
           state[texKey] = tex;
           update();
-        });
-      })
+        }));
+      } else {
+        update(); // 🚧 Needed?
+      }
 
       return null;
     },
@@ -304,7 +328,7 @@ export default function World(props) {
  * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
- * @property {{ hash: string; gmHash: string; }} hmr
+ * @property {{ hash: string; gmHash: string; createGmsData: typeof createGmsData }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
@@ -358,3 +382,5 @@ export default function World(props) {
  * //@property {typeof merge} merge
  * //@property {typeof take} take
  */
+
+1;
