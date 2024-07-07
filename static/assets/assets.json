@@ -1010,7 +1010,7 @@
       "door--hull--002": {
         "door": true,
         "hull": true,
-        "decorKey": "door--hull--002",
+        "decorImgKey": "door--hull--002",
         "x": 2,
         "y": 2,
         "width": 250,
@@ -1018,7 +1018,7 @@
       },
       "door--001": {
         "door": true,
-        "decorKey": "door--001",
+        "decorImgKey": "door--001",
         "x": 254,
         "y": 2,
         "width": 110,

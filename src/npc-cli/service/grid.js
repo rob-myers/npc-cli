@@ -60,8 +60,8 @@ export function queryDecorGridIntersect(rect, grid) {
   for (let i = min.x; i <= max.x; i++)
     for (let j = min.y; j <= max.y; j++) {
       tile = grid[i]?.[j];
-      tile.colliders.forEach(x => rect.intersects(getDecorRect(x)) && (colliders[x.id] = x));
-      tile.points.forEach(x => rect.intersects(getDecorRect(x)) && (points[x.id] = x));
+      tile.colliders.forEach(x => rect.intersects(getDecorRect(x)) && (colliders[x.key] = x));
+      tile.points.forEach(x => rect.intersects(getDecorRect(x)) && (points[x.key] = x));
     }
   return { colliders, points };
 }

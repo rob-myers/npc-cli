@@ -32,7 +32,7 @@ export default function Decor(props) {
         ).add.push(d);
         
         // geomorph decor has with "auto-ids", but user may also add with specific key
-        const prev = state.decor[d.id];
+        const prev = state.decor[d.key];
         if (prev) {// Add pre-existing decor to removal group
           d.updatedAt = Date.now();
           const { gmId, roomId } = prev.meta;

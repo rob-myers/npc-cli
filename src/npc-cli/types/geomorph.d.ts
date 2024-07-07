@@ -292,9 +292,8 @@ declare namespace Geomorph {
   interface BaseDecor {
     /**
      * Either auto-assigned e.g. decor from geomorphs, or specified by user.
-     * Called `id` to distinguish from `decorKey` i.e. pointers into decor sprite-sheet.
      */
-    id: string;
+    key: string;
     meta: Geom.Meta<Geomorph.GmRoomId>;
     /** 2D bounds inside XZ plane */
     bounds2d: Geom.RectJson;
@@ -304,9 +303,9 @@ declare namespace Geomorph {
     tags?: string[];
   }
 
-  type DecorSheetRectCtxt = Geom.Meta<{ decorKey: Geomorph.DecorKey }>;
+  type DecorSheetRectCtxt = Geom.Meta<{ decorImgKey: Geomorph.DecorImgKey }>;
 
-  type DecorKey = import('../service/geomorph.js').DecorKey;
+  type DecorImgKey = import('../service/geomorph.js').DecorImgKey;
 
   /** 🚧 clarify */
   type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
@@ -356,7 +355,7 @@ declare namespace Geomorph {
     obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
     obstacleDim: { width: number; height: number; }
     decorDim: { width: number; height: number; }
-    decor: Record<Geomorph.DecorKey, Geom.RectJson & DecorSheetRectCtxt>;
+    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
   }
 
   interface ObstacleSheetRectCtxt {

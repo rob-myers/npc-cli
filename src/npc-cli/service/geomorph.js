@@ -166,7 +166,7 @@ class GeomorphService {
   };
 
   /** Aligned to media/decor/{key}.svg */
-  fromDecorKey = {// 🔔 must extend when adding new decor
+  fromDecorImgKey = {// 🔔 must extend when adding new decor
     'door--001': true,
     'door--hull--002': true,
   };
@@ -177,17 +177,17 @@ class GeomorphService {
   }
 
   /**
-   * @param {`${Geomorph.GeomorphKey} ${number}`} symDecorKey
+   * @param {string} decorKey
    * Identifier of decor w.r.t parent SVG symbol
    * @param {Geom.Poly} poly
    * @returns {Geomorph.Decor}
    */
-  decorFromPoly(symDecorKey, poly) {
+  decorFromPoly(decorKey, poly) {
     // `gmId`, `roomId` will be provided on instantiation
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
     const polyRect = poly.rect.precision(precision);
-    // `id` (string) will be overridden on instantiation
-    const base = { id: symDecorKey, meta, bounds2d: polyRect.json, };
+    // `key` will be overridden on instantiation
+    const base = { key: decorKey, meta, bounds2d: polyRect.json, };
 
     if (meta.rect || meta.poly) {
       return { type: 'poly', ...base, points: poly.outline.map(x => x.json), center: poly.center.json };
@@ -265,7 +265,7 @@ class GeomorphService {
       room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
     ));
 
-    const decor = symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey} ${i}`, d));
+    const decor = symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey}_${i}`, d));
 
     const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const navPolyWithDoors = Poly.cutOut([
@@ -771,10 +771,10 @@ class GeomorphService {
 
   /**
    * @param {string} input
-   * @returns {input is Geomorph.DecorKey}
+   * @returns {input is Geomorph.DecorImgKey}
    */
-  isDecorKey(input) {
-    return input in this.fromDecorKey;
+  isDecorImgKey(input) {
+    return input in this.fromDecorImgKey;
   }
 
   /**
@@ -1342,5 +1342,5 @@ const tmpMat2 = new Mat();
  */
 
 /**
- * @typedef {keyof GeomorphService['fromDecorKey']} DecorKey
+ * @typedef {keyof GeomorphService['fromDecorImgKey']} DecorImgKey
  */

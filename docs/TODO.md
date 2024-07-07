@@ -18,6 +18,8 @@
   - avoid angled rects for decor (only for Connector)
 - ✅ decor.key -> decor.id (string)
   - avoid confusion with `decorKey`
+- ✅ decorKey -> decorImgKey
+- ✅ decor.id -> decor.key
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
@@ -48,6 +50,7 @@
 - ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
   - `map` recognises such cases does NOT pass `ctxt` inside `map` as 2nd argument
 - ✅ fix `click 1` i.e. `click | ...` should not fire
+- ✅ verify HMR which propagates from geomorphs.json -> gmsData
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
