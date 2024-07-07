@@ -12,6 +12,12 @@
 - ✅ obstacles have `meta.roomId`
   - ✅ gm.obstacles[i].center
 - ✅ initial decor has `meta.roomId`
+  - ✅ gm.decor[i].meta
+
+- ✅ decor `rect` -> decor `poly`
+  - avoid angled rects for decor (only for Connector)
+- ✅ decor.key -> decor.id (string)
+  - avoid confusion with `decorKey`
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
@@ -23,7 +29,7 @@
   - ✅ migrate decor grid
   - 🚧 can specify decor `cuboid` in symbols
   - 🚧 can see decor cuboids in World
-    - `gms[gmId].decor` induces initial decor
+    - 🚧 `gms[gmId].decor` induces initial decor
   - decor cuboids can effect nav-mesh
   - redo decor types
     - can have decorImgKey (in XZ plane)
@@ -36,6 +42,9 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
+- `SideNote` should wait a bit before showing
+- tty should not render `NaN` as `null`
+- `say` reading from tty should not terminate early when send a command before utterance finished
 - ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
   - `map` recognises such cases does NOT pass `ctxt` inside `map` as 2nd argument
 - ✅ fix `click 1` i.e. `click | ...` should not fire

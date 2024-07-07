@@ -259,7 +259,7 @@ declare namespace Geomorph {
     | DecorCircle
     | DecorCuboid
     | DecorPoint
-    | DecorRect
+    | DecorPoly
   );
 
   interface DecorCircle extends BaseDecor, Geom.Circle {
@@ -281,14 +281,20 @@ declare namespace Geomorph {
     type: 'point';
   }
   
-  interface DecorRect extends BaseDecor, Geom.RectJson {
-    type: 'rect';
-    /** Radians */
-    angle?: number;
+  /** Simple polygon sans holes. */
+  interface DecorPoly extends BaseDecor {
+    type: 'poly';
+    points: Geom.VectJson[];
+    /** Center of `new Poly(points)` */
+    center: Geom.VectJson;
   }
 
   interface BaseDecor {
-    key: string;
+    /**
+     * Either auto-assigned e.g. decor from geomorphs, or specified by user.
+     * Called `id` to distinguish from `decorKey` i.e. pointers into decor sprite-sheet.
+     */
+    id: string;
     meta: Geom.Meta<Geomorph.GmRoomId>;
     /** 2D bounds inside XZ plane */
     bounds2d: Geom.RectJson;
@@ -303,7 +309,7 @@ declare namespace Geomorph {
   type DecorKey = import('../service/geomorph.js').DecorKey;
 
   /** 🚧 clarify */
-  type DecorCollidable = NPC.DecorCircle | NPC.DecorRect;
+  type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
 
   type DecorGrid = Record<number, Record<number, {
     points: Set<Geomorph.DecorPoint>;
@@ -312,13 +318,13 @@ declare namespace Geomorph {
 
   interface RoomDecor {
     /** Decor which came from room's parent geomorph symbol */
-    symbol: NPC.DecorDef[];
+    symbol: Geomorph.Decor[];
     /** Everything in room */
-    decor: Record<string, NPC.DecorDef>;
+    decor: Record<string, Geomorph.Decor>;
     /** All colliders in room */
-    colliders: NPC.DecorCollidable[];
+    colliders: Geomorph.DecorCollidable[];
     /** All points in room */
-    points: NPC.DecorPoint[];
+    points: Geomorph.DecorPoint[];
   }
 
   //#endregion

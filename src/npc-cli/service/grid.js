@@ -52,16 +52,16 @@ export function isDecorPoint(decor) {
  * @param {Geomorph.DecorGrid} grid
  */
 export function queryDecorGridIntersect(rect, grid) {
-  const colliders = /** @type {{ [decorKey: string]: Geomorph.Decor }} */ ({});
-  const points = /** @type {{ [decorKey: string]: Geomorph.Decor }} */ ({});
+  const colliders = /** @type {{ [decorId: string]: Geomorph.Decor }} */ ({});
+  const points = /** @type {{ [decorId: string]: Geomorph.Decor }} */ ({});
   const min = coordToDecorGrid(rect.x, rect.y);
   const max = coordToDecorGrid(rect.x + rect.width, rect.y + rect.height);
   /** @type {Geomorph.DecorGrid[*][*]} */ let tile;
   for (let i = min.x; i <= max.x; i++)
     for (let j = min.y; j <= max.y; j++) {
       tile = grid[i]?.[j];
-      tile.colliders.forEach(x => rect.intersects(getDecorRect(x)) && (colliders[x.key] = x));
-      tile.points.forEach(x => rect.intersects(getDecorRect(x)) && (points[x.key] = x));
+      tile.colliders.forEach(x => rect.intersects(getDecorRect(x)) && (colliders[x.id] = x));
+      tile.points.forEach(x => rect.intersects(getDecorRect(x)) && (points[x.id] = x));
     }
   return { colliders, points };
 }

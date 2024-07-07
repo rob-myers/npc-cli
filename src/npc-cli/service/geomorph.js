@@ -186,12 +186,11 @@ class GeomorphService {
     // `gmId`, `roomId` will be provided on instantiation
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
     const polyRect = poly.rect.precision(precision);
-    // `key` will be overridden on instantiation
-    const base = { key: symDecorKey, meta, bounds2d: polyRect.json, };
+    // `id` (string) will be overridden on instantiation
+    const base = { id: symDecorKey, meta, bounds2d: polyRect.json, };
 
-    if (meta.rect) {
-      const { angle, baseRect } = geom.polyToAngledRect(poly);
-      return { type: 'rect', ...base, ...baseRect.precision(precision).json, angle,  };
+    if (meta.rect || meta.poly) {
+      return { type: 'poly', ...base, points: poly.outline.map(x => x.json), center: poly.center.json };
     } else if (meta.cuboid) {
       const defaultDecorCuboidHeight = 0.5; // 🚧
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
@@ -221,6 +220,7 @@ class GeomorphService {
       const radius = Math.max(baseRect.width, baseRect.height) / 2;
       return { type: 'circle', ...base, radius, center };
     } else {
+      // 🔔 fallback to decor point
       const center = poly.center.precision(precision);
       return { type: 'point', ...base, x: center.x, y: center.y };
     }
@@ -684,6 +684,7 @@ class GeomorphService {
   /**
    * @param {number} gmId
    * @param {number} doorId
+   * @returns {`g${number}d${number}`}
    */
   getGmDoorKey(gmId, doorId) {
     return /** @type {const} */ (`g${gmId}d${doorId}`);
@@ -692,6 +693,7 @@ class GeomorphService {
   /**
    * @param {number} gmId
    * @param {number} roomId
+   * @returns {`g${number}r${number}`}
    */
   getGmRoomKey(gmId, roomId) {
     return `g${gmId}r${roomId}`;
