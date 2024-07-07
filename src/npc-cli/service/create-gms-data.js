@@ -8,12 +8,11 @@ import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 
 /**
- * @param {Geomorph.Geomorphs} geomorphs
  * @param {object} opts
  * @param {Record<Geomorph.GeomorphKey, GmData>} [opts.prevGmData]
  * Previous lookup to avoid recomputation
 */
-export default function createGmsData(geomorphs, { prevGmData }) {
+export default function createGmsData({ prevGmData }) {
   const gmsData = {
     ...mapValues(geomorphService.toGmNum,
       (_, gmKey) => prevGmData?.[gmKey] ?? ({ ...emptyGmData, gmKey })
@@ -27,9 +26,6 @@ export default function createGmsData(geomorphs, { prevGmData }) {
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
     wallPolySegCounts: /** @type {number[]} */ ([]),
-    
-    /** Deserialization of `geomorph.json` */
-    geomorphs,
     
     /**
      * Recomputed (dev only),
@@ -76,11 +72,11 @@ export default function createGmsData(geomorphs, { prevGmData }) {
 
       await pause();
       for (const obstacle of gm.obstacles) {
-        gmsData.ensureMetaRoomId(gm.key, obstacle.center, obstacle.meta);
+        obstacle.meta.roomId ??= (gmsData.findRoomIdContaining(gm, obstacle.center) ?? -1);
       }
 
       for (const decor of gm.decor) {
-        gmsData.ensureMetaRoomId(gm.key, decor.bounds2d, decor.meta);
+        decor.meta.roomId ??= (gmsData.findRoomIdContaining(gm, decor.bounds2d) ?? -1);
       }
       
       gmData.unseen = false;
@@ -99,7 +95,6 @@ export default function createGmsData(geomorphs, { prevGmData }) {
       );
     },
     dispose() {
-      delete /** @type {*} */ (gmsData).w;
       for (const gmKey of geomorphService.gmKeys) {
         Object.values(gmsData[gmKey]).forEach(v => {
           if (Array.isArray(v)) {
@@ -141,24 +136,14 @@ export default function createGmsData(geomorphs, { prevGmData }) {
         return; // already attached
       }
       connector.roomIds = /** @type {[number | null, number | null]} */ (connector.entries.map(
-        localPoint => gmsData.findRoomIdContaining(gm.key, tmpVec1.copy(localPoint))
+        localPoint => gmsData.findRoomIdContaining(gm, tmpVec1.copy(localPoint))
       ));
     },
     /**
-     * @param {Geomorph.GeomorphKey} gmKey 
-     * @param {Geom.VectJson} localPoint 
-     * @param {Geom.Meta} meta 
-     */
-    ensureMetaRoomId(gmKey, localPoint, meta) {
-      meta.roomId ??= (gmsData.findRoomIdContaining(gmKey, localPoint) ?? -1);
-    },
-    /**
-     * Test pixel in hit canvas.
-     * @param {Geomorph.GeomorphKey | Geomorph.Layout} keyOrGm
+     * @param {Geomorph.Layout} gm
      * @param {Geom.VectJson} localPoint local geomorph coords (meters)
      */
-    findRoomIdContaining(keyOrGm, localPoint, includeDoors = false) {
-      const gm = typeof keyOrGm === 'string' ? geomorphs.layout[keyOrGm] : keyOrGm
+    findRoomIdContaining(gm, localPoint, includeDoors = false) {
       const ct = gmsData[gm.key].hitCtxt;
       const { data: rgba } = ct.getImageData(// transform to canvas coords
         (localPoint.x - gm.pngRect.x) * worldToSguScale,

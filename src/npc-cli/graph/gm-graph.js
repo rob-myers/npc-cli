@@ -194,7 +194,7 @@ export class GmGraphClass extends BaseGraph {
     if (typeof gmId === 'number') {
       const gm = this.gms[gmId];
       const localPoint = gm.inverseMatrix.transformPoint(Vect.from(point));
-      const roomId = this.w.gmsData.findRoomIdContaining(gm.key, localPoint, includeDoors);
+      const roomId = this.w.gmsData.findRoomIdContaining(gm, localPoint, includeDoors);
       return roomId === null ? null : { gmId, roomId };
     } else {
       return null;

@@ -181,27 +181,25 @@ export default function World(props) {
       
       // detect if the function `createGmsData` has changed
       const createGmsData = await import('../service/create-gms-data').then(x => x.default);
-      const changedGmsData = state.hmr.createGmsData !== createGmsData;
+      const gmsDataChanged = state.hmr.createGmsData !== createGmsData;
       state.hmr.createGmsData = createGmsData;
 
-      if (mapChanged || changedGmsData) {
+      if (mapChanged || gmsDataChanged) {
 
         next.gmsData = createGmsData(
-          next.geomorphs, // reuse gmData lookup, unless:
-          // (a) geomorphs.json changed, or (b) create-gms-data edited
-          { prevGmData: dataChanged || changedGmsData ? undefined : state.gmsData },
+          // reuse gmData lookup, unless:
+          // (a) geomorphs.json changed, or (b) create-gms-data changed
+          { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
         );
 
         // ensure gmData per layout in map
-        const nextGmKeys = Array.from(new Set(next.gms.map(({ key }) => key)));
-        for (const gmKey of nextGmKeys) {
+        for (const gmKey of new Set(next.gms.map(({ key }) => key))) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
             await next.gmsData.computeGmData(next.geomorphs.layout[gmKey]);
           }
         };
         
-        await pause();
         next.gmsData.computeRoot(next.gms);
         
         await pause();
@@ -212,18 +210,18 @@ export default function World(props) {
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
       }
 
-      if (dataChanged || changedGmsData) {
-        state.gmsData?.dispose(); // cleanup
-      }
       // apply changes synchronously
+      if (dataChanged || gmsDataChanged) {
+        state.gmsData?.dispose();
+      }
       Object.assign(state, next);
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
-
+      
       debug({
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
         mapChanged,
-        changedGmsData,
+        gmsDataChanged,
         hash: state.hash,
       });
 
@@ -243,7 +241,7 @@ export default function World(props) {
           update();
         }));
       } else {
-        update(); // 🚧 Needed?
+        update(); // Needed?
       }
 
       return null;
