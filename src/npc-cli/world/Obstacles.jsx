@@ -79,7 +79,6 @@ export default function Obstacles(props) {
       // ignore clicks on fully transparent pixels
       return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
-
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
       const result = state.detectClick(e);
@@ -192,4 +191,3 @@ export default function Obstacles(props) {
 
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
-const emptyTex = new THREE.Texture();

@@ -75,11 +75,11 @@ export default function createGmsData({ prevGmData }) {
       }
       gmData.roomGraph = RoomGraphClass.from(gm, `${gm.key}: `);
 
+      // attach meta.roomId to obstacles and decor
       await pause();
       for (const obstacle of gm.obstacles) {
         obstacle.meta.roomId ??= (gmsData.findRoomIdContaining(gm, obstacle.center) ?? -1);
       }
-
       for (const decor of gm.decor) {
         decor.meta.roomId ??= (gmsData.findRoomIdContaining(gm, decor.bounds2d) ?? -1);
       }

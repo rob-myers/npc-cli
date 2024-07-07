@@ -1058,4 +1058,4 @@ export const tmpVec1 = new Vect();
 export const tmpVec2 = new Vect();
 export const tmpRect1 = new Rect();
 const tmpPoly1 = new Poly();
-const tmpMat1 = new Mat();
+export const tmpMat1 = new Mat();
