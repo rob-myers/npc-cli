@@ -8,32 +8,21 @@
   - consoles
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
-- decor point bounds determined by original rect/poly
+- 🚧 decor point bounds determined by original rect/poly
   - e.g. they should generally be bigger
-
-- ✅ obstacles have `meta.roomId`
-  - ✅ gm.obstacles[i].center
-- ✅ initial decor has `meta.roomId`
-  - ✅ gm.decor[i].meta
-
-- ✅ decor `rect` -> decor `poly`
-  - avoid angled rects for decor (only for Connector)
-- ✅ decor.key -> decor.id (string)
-  - avoid confusion with `decorKey`
-- ✅ decorKey -> decorImgKey
-- ✅ decor.id -> decor.key
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
   - ✅ clarify identifiers
-    - decorKey points into decor sprite-sheet
-    - decorId (number) identifies instance
+    - decorImgKey points into decor sprite-sheet
+    - decorKey (string) identifies instance
     - can remove prev via "grouping by gmId" etc.
-    - decorId not same as instanceId (from instanced mesh)
+    - decorKey not same as numeric instanceId (from instanced mesh)
   - ✅ migrate decor grid
   - 🚧 can specify decor `cuboid` in symbols
   - 🚧 can see decor cuboids in World
     - 🚧 `gms[gmId].decor` induces initial decor
+    - can add/remove cuboid to instancedmesh
   - decor cuboids can effect nav-mesh
   - redo decor types
     - can have decorImgKey (in XZ plane)
@@ -1533,3 +1522,15 @@
     - ✅ symbol change
     - ✅ gmsData change
       - needed to `await import('create-gms-data')` to get it working
+
+- ✅ obstacles have `meta.roomId`
+  - ✅ gm.obstacles[i].center
+- ✅ initial decor has `meta.roomId`
+  - ✅ gm.decor[i].meta
+
+- ✅ decor `rect` -> decor `poly`
+  - avoid angled rects for decor (only for Connector)
+- ✅ decor.key -> decor.id (string)
+  - avoid confusion with `decorKey`
+- ✅ decorKey -> decorImgKey
+- ✅ decor.id -> decor.key

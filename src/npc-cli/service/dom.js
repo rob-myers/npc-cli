@@ -85,6 +85,28 @@ export function drawPolygons(ct, polys, [fillStyle, strokeStyle, lineWidth] = []
 }
 
 /**
+ * Draw a simple polygon sans holes.
+ * @param {CanvasContext2DType} ct
+ * @param {Geom.VectJson[]} outline
+ * @param {[fillStyle?: string | null, strokeStyle?: string | null, lineWidth?: number | null]} [style]
+ * @param {false | 'clip'} [clip]
+ */
+export function drawSimplePoly(ct, outline, [fillStyle, strokeStyle, lineWidth] = [], clip = false) {
+  ct.fillStyle = fillStyle || ct.fillStyle;
+  ct.strokeStyle = strokeStyle || ct.strokeStyle;
+  ct.lineWidth = lineWidth || ct.lineWidth;
+  ct.beginPath();
+  fillRing(ct, outline, false);
+  if (strokeStyle !== null) {
+    ct.closePath();
+    ct.stroke();
+  }
+  if (fillStyle !== null) {
+    clip === false ? ct.fill() : ct.clip();
+  }
+}
+
+/**
  * @param {CanvasContext2DType} ct
  * @param  {Geom.VectJson[]} ring
  */

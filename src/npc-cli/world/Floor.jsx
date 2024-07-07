@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Mat, Poly } from "../geom";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
-import { createGridPattern, drawCircle, drawPolygons } from "../service/dom";
+import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { quadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -61,6 +61,8 @@ export default function Floor(props) {
       gm.decor.forEach((decor) => {
         if (decor.type === 'circle') {
           drawCircle(ct, decor.center, decor.radius, [null, '#500', 0.04]);
+        } else if (decor.type === 'poly') {
+          drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
         }
       });
 
