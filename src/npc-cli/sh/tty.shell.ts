@@ -24,7 +24,7 @@ export class ttyShellClass implements Device {
 
   private oneTimeReaders = [] as {
     resolve: (msg: any) => void;
-    reject: () => void;
+    reject: (e: any) => void;
   }[];
 
   constructor(
@@ -88,7 +88,9 @@ export class ttyShellClass implements Device {
       }
       case "send-kill-sig": {
         this.buffer.length = 0;
-        this.oneTimeReaders.forEach(({ reject }) => reject());
+        this.oneTimeReaders.forEach(({ reject }) => reject(
+          new ProcessError(SigEnum.SIGKILL, 0, this.sessionKey)
+        ));
         this.oneTimeReaders.length = 0;
         if (this.process.status !== ProcessStatus.Running) {
           this.prompt("$");
