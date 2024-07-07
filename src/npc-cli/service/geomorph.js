@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -14,7 +14,7 @@ import {
   keys,
   toPrecision,
 } from "./generic";
-import { geom } from "./geom";
+import { geom, tmpRect1 } from "./geom";
 
 class GeomorphService {
   /** @type {Record<Geomorph.GeomorphNumber, Geomorph.GeomorphKey>} */
@@ -351,13 +351,14 @@ class GeomorphService {
   decorFromPoly(decorKey, poly) {
     // `gmId`, `roomId` will be provided on instantiation
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
-    const polyRect = poly.rect.precision(precision);
     // `key` will be overridden on instantiation
-    const base = { key: decorKey, meta, bounds2d: polyRect.json, };
-
+    const base = { key: decorKey, meta };
+    
     if (meta.rect || meta.poly) {
-      return { type: 'poly', ...base, points: poly.outline.map(x => x.json), center: poly.center.json };
+      const polyRect = poly.rect.precision(precision);
+      return { type: 'poly', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
     } else if (meta.cuboid) {
+      const polyRect = poly.rect.precision(precision);
       const defaultDecorCuboidHeight = 0.5; // 🚧
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
       const y3d = typeof meta.y === 'number' ? meta.y : 0;
@@ -369,7 +370,7 @@ class GeomorphService {
       if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
         const aabb = polyRect;
         const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-        return { type: 'cuboid', ...base, angle: 0, center, extent };
+        return { type: 'cuboid', ...base, bounds2d: polyRect.json, angle: 0, center, extent };
       }
       
       // Angle of first edge
@@ -379,16 +380,18 @@ class GeomorphService {
       
       const aabb = poly.rect;
       const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-      return { type: 'cuboid', ...base, angle, center, extent };
+      return { type: 'cuboid', ...base, bounds2d: polyRect.json, angle, center, extent };
     } else if (meta.circle) {
+      const polyRect = poly.rect.precision(precision);
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
       const center = poly.center.precision(precision);
       const radius = Math.max(baseRect.width, baseRect.height) / 2;
-      return { type: 'circle', ...base, radius, center };
-    } else {
-      // 🔔 fallback to decor point
+      return { type: 'circle', ...base, bounds2d: polyRect.json, radius, center };
+    } else {// 🔔 fallback to decor point
       const center = poly.center.precision(precision);
-      return { type: 'point', ...base, x: center.x, y: center.y };
+      const radius = decorIconRadius + 2;
+      const bounds2d = tmpRect1.set(center.x - radius, center.y - radius, 2 * radius, 2 * radius).precision(precision).json;
+      return { type: 'point', ...base, bounds2d, x: center.x, y: center.y };
     }
   }
 

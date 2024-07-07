@@ -8,8 +8,7 @@
   - consoles
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
-- 🚧 decor point bounds determined by original rect/poly
-  - e.g. they should generally be bigger
+- ❌ decor point bounds determined by original rect/poly
 
 - 🚧 Decor component
   - ✅ `<Decor>` exists
@@ -19,6 +18,8 @@
     - can remove prev via "grouping by gmId" etc.
     - decorKey not same as numeric instanceId (from instanced mesh)
   - ✅ migrate decor grid
+  - ✅ decor points have fixed dimension bounds2d
+    - maybe should depend on whether they have an associated icon i.e. decorKey
   - 🚧 can specify decor `cuboid` in symbols
   - 🚧 can see decor cuboids in World
     - 🚧 `gms[gmId].decor` induces initial decor
