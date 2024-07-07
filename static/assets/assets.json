@@ -218,7 +218,7 @@
       "obsHashes": [1124240817]
     },
     "fresher--015--1x2": {"outputHash": 15485796, "pngHash": -243127075},
-    "fresher--020--2x2": {"outputHash": 1286748459, "pngHash": 1107295627},
+    "fresher--020--2x2": {"outputHash": -1225801542, "pngHash": 1107295627},
     "fresher--025--3x2": {"outputHash": 1465272992, "pngHash": -1324814803},
     "fresher--036--4x2": {"outputHash": -1158095618, "pngHash": 633687707},
     "fuel--010--4x2": {
@@ -345,7 +345,7 @@
     "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 1368839861, "pngHash": 987326316},
     "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": 1062741444, "pngHash": 1301313076},
+    "stateroom--036--2x4": {"outputHash": 981886311, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": 2105116103,
       "pngHash": 1027833859,
@@ -7463,7 +7463,7 @@
           "coordinates": [
             [[1.3095, 1.941], [1.3095, 1.991], [1.2595, 1.991], [1.2595, 1.941]]
           ],
-          "meta": {"decor": true, "meta": true, "label": "bathroom"}
+          "meta": {"decor": true, "meta": true, "label": "fresher"}
         }
       ],
       "unsorted": [],
@@ -11806,7 +11806,7 @@
           "coordinates": [
             [[0.764, 0.724], [0.764, 0.774], [0.714, 0.774], [0.714, 0.724]]
           ],
-          "meta": {"decor": true, "meta": true, "label": "bathroom"}
+          "meta": {"decor": true, "meta": true, "label": "fresher"}
         },
         {
           "type": "Polygon",

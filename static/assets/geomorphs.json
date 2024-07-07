@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 556642986 316091196 -69909253",
+  "hash": "610044716 1519427352 316091196 -69909253",
   "mapsHash": 610044716,
-  "layoutsHash": 556642986,
+  "layoutsHash": 1519427352,
   "sheetsHash": 316091196,
   "imagesHash": -69909253,
   "map": {
@@ -705,7 +705,7 @@
         {
           "type": "point",
           "key": "g-101--multipurpose_46",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 15.441, "y": 4.2595, "width": 0.05, "height": 0.05},
           "x": 15.466,
           "y": 4.2845
@@ -5565,7 +5565,7 @@
               [13.55, 3.095]
             ]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
@@ -15917,7 +15917,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_17",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 0.714, "y": 0.724, "width": 0.05, "height": 0.05},
           "x": 0.739,
           "y": 0.749
@@ -16050,7 +16050,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_28",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 29.236, "y": 0.724, "width": 0.05, "height": 0.05},
           "x": 29.261,
           "y": 0.749
@@ -16193,7 +16193,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_39",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 0.724, "y": 14.236, "width": 0.05, "height": 0.05},
           "x": 0.749,
           "y": 14.261
@@ -19362,7 +19362,7 @@
           "coordinates": [
             [[0.1, 0.1], [2.95, 0.1], [2.95, 1.45], [0.1, 1.45], [0.1, 0.1]]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
@@ -19417,7 +19417,7 @@
               [0.1, 12.05]
             ]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
@@ -19807,7 +19807,7 @@
               [27.05, 0.1]
             ]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
@@ -23836,7 +23836,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_5",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 20.236, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 20.261,
           "y": 14.251
@@ -23999,7 +23999,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_16",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 17.236, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 17.261,
           "y": 14.251
@@ -24162,7 +24162,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_27",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 12.714, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 12.739,
           "y": 14.251
@@ -24325,7 +24325,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_38",
-          "meta": {"decor": true, "meta": true, "label": "bathroom"},
+          "meta": {"decor": true, "meta": true, "label": "fresher"},
           "bounds2d": {"x": 9.714, "y": 14.226, "width": 0.05, "height": 0.05},
           "x": 9.739,
           "y": 14.251
@@ -27804,7 +27804,7 @@
               [9.05, 13.55]
             ]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
@@ -27860,7 +27860,7 @@
               [12.05, 13.55]
             ]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
@@ -27916,7 +27916,7 @@
               [15.05, 13.55]
             ]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
@@ -27942,7 +27942,7 @@
               [18.05, 13.55]
             ]
           ],
-          "meta": {"decor": true, "label": "bathroom"}
+          "meta": {"decor": true, "label": "fresher"}
         },
         {
           "type": "Polygon",
