@@ -41,8 +41,10 @@ export default function World(props) {
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    key: props.worldKey,
     disabled: !!props.disabled,
-    hash: '',
+    hash: /** @type {*} */ (''),
+    decorHash: /** @type {*} */ (''),
     mapKey: props.mapKey,
     threeReady: false,
     r3f: /** @type {*} */ (null),
@@ -129,7 +131,7 @@ export default function World(props) {
   useHandleEvents(state);
 
   useQuery({
-    queryKey: [GEOMORPHS_JSON_FILENAME, props.worldKey, props.mapKey],
+    queryKey: ['world', props.worldKey, props.mapKey],
     queryFn: async () => {
 
       const prevGeomorphs = state.geomorphs;
@@ -216,7 +218,8 @@ export default function World(props) {
       }
       Object.assign(state, next);
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
-      
+      state.decorHash = `${state.mapKey} ${state.geomorphs.layoutsHash} ${state.geomorphs.mapsHash}`;
+
       debug({
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
@@ -320,9 +323,13 @@ export default function World(props) {
 
 /**
  * @typedef State
+ * @property {string} key This is `props.worldKey` and never changes
  * @property {boolean} disabled
  * @property {string} mapKey
- * @property {string} hash
+ * @property {`${string} ${string}`} hash
+ * `${mapKey} ${geomorphs.hash}` 
+ * @property {`${string} ${number} ${number}`} decorHash
+ * `${mapKey} ${geomorphs.layoutsHash} ${geomorphs.mapsHash}` 
  * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.

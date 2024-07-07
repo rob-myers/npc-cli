@@ -20,10 +20,10 @@
   - ✅ migrate decor grid
   - ✅ decor points have fixed dimension bounds2d
     - maybe should depend on whether they have an associated icon i.e. decorKey
-  - 🚧 can specify decor `cuboid` in symbols
+  - ✅ can specify decor `cuboid` in symbols
   - 🚧 can see decor cuboids in World
     - 🚧 `gms[gmId].decor` induces initial decor
-    - can add/remove cuboid to instancedmesh
+    - 🚧 can add/remove cuboid to instancedmesh
   - decor cuboids can effect nav-mesh
   - redo decor types
     - can have decorImgKey (in XZ plane)
