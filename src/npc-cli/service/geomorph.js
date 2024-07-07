@@ -177,56 +177,6 @@ class GeomorphService {
   }
 
   /**
-   * @param {string} decorKey
-   * Identifier of decor w.r.t parent SVG symbol
-   * @param {Geom.Poly} poly
-   * @returns {Geomorph.Decor}
-   */
-  decorFromPoly(decorKey, poly) {
-    // `gmId`, `roomId` will be provided on instantiation
-    const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
-    const polyRect = poly.rect.precision(precision);
-    // `key` will be overridden on instantiation
-    const base = { key: decorKey, meta, bounds2d: polyRect.json, };
-
-    if (meta.rect || meta.poly) {
-      return { type: 'poly', ...base, points: poly.outline.map(x => x.json), center: poly.center.json };
-    } else if (meta.cuboid) {
-      const defaultDecorCuboidHeight = 0.5; // 🚧
-      const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
-      const y3d = typeof meta.y === 'number' ? meta.y : 0;
-      const center2d = poly.center;
-      const center = { x: center2d.x, y: y3d + height3d / 2, z: center2d.y };
-      
-      tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
-      
-      if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
-        const aabb = polyRect;
-        const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-        return { type: 'cuboid', ...base, angle: 0, center, extent };
-      }
-      
-      // Angle of first edge
-      const angle = Math.atan2(tmpVect1.y, tmpVect1.x);
-      // Rotate points back around `center2d` so axis-aligned
-      poly = poly.clone().applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
-      
-      const aabb = poly.rect;
-      const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-      return { type: 'cuboid', ...base, angle, center, extent };
-    } else if (meta.circle) {
-      const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
-      const center = poly.center.precision(precision);
-      const radius = Math.max(baseRect.width, baseRect.height) / 2;
-      return { type: 'circle', ...base, radius, center };
-    } else {
-      // 🔔 fallback to decor point
-      const center = poly.center.precision(precision);
-      return { type: 'point', ...base, x: center.x, y: center.y };
-    }
-  }
-
-  /**
    * 🔔 computed in assets script
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol Flat hull symbol
@@ -390,6 +340,56 @@ class GeomorphService {
       navDoorwaysOffset,
       navRects,
     };
+  }
+
+  /**
+   * @param {string} decorKey
+   * Identifier of decor w.r.t parent SVG symbol
+   * @param {Geom.Poly} poly
+   * @returns {Geomorph.Decor}
+   */
+  decorFromPoly(decorKey, poly) {
+    // `gmId`, `roomId` will be provided on instantiation
+    const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
+    const polyRect = poly.rect.precision(precision);
+    // `key` will be overridden on instantiation
+    const base = { key: decorKey, meta, bounds2d: polyRect.json, };
+
+    if (meta.rect || meta.poly) {
+      return { type: 'poly', ...base, points: poly.outline.map(x => x.json), center: poly.center.json };
+    } else if (meta.cuboid) {
+      const defaultDecorCuboidHeight = 0.5; // 🚧
+      const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
+      const y3d = typeof meta.y === 'number' ? meta.y : 0;
+      const center2d = poly.center;
+      const center = { x: center2d.x, y: y3d + height3d / 2, z: center2d.y };
+      
+      tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
+      
+      if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
+        const aabb = polyRect;
+        const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
+        return { type: 'cuboid', ...base, angle: 0, center, extent };
+      }
+      
+      // Angle of first edge
+      const angle = Math.atan2(tmpVect1.y, tmpVect1.x);
+      // Rotate points back around `center2d` so axis-aligned
+      poly = poly.clone().applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
+      
+      const aabb = poly.rect;
+      const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
+      return { type: 'cuboid', ...base, angle, center, extent };
+    } else if (meta.circle) {
+      const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
+      const center = poly.center.precision(precision);
+      const radius = Math.max(baseRect.width, baseRect.height) / 2;
+      return { type: 'circle', ...base, radius, center };
+    } else {
+      // 🔔 fallback to decor point
+      const center = poly.center.precision(precision);
+      return { type: 'point', ...base, x: center.x, y: center.y };
+    }
   }
 
   /**
@@ -775,6 +775,21 @@ class GeomorphService {
    */
   isDecorImgKey(input) {
     return input in this.fromDecorImgKey;
+  }
+
+  /**
+   * @param {Geomorph.Decor} d
+   * @returns {d is Geomorph.DecorCollidable}
+   */
+  isDecorCollidable(d) {
+    return d.type === 'circle' || d.type === 'poly';
+  }
+  /**
+   * @param {Geomorph.Decor} d
+   * @returns {d is Geomorph.DecorPoint}
+   */
+  isDecorPoint(d) {
+    return d.type === 'point';
   }
 
   /**

@@ -7,7 +7,9 @@
   - ✅ bridge ✅ lifeboat
   - consoles
   - extras
-- extend chair/table symbols with chair/table tag on obstacle
+- 🚧 extend chair/table symbols with chair/table tag on obstacle
+- decor point bounds determined by original rect/poly
+  - e.g. they should generally be bigger
 
 - ✅ obstacles have `meta.roomId`
   - ✅ gm.obstacles[i].center
