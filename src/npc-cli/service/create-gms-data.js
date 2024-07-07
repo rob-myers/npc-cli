@@ -61,12 +61,17 @@ export default function createGmsData({ prevGmData }) {
       gmsData.drawHitCanvas(gm);
       
       // compute `connector.roomIds` before `roomGraph`
-      await pause();
+      // 🔔 technically can avoid recompute when only gmsDataChanged
+      await pause(); 
       for (const connector of gm.doors) {
-        gmsData.ensureConnectorRoomIds(connector, gm);
+        connector.roomIds = /** @type {[number | null, number | null]} */ (connector.entries.map(
+          localPoint => gmsData.findRoomIdContaining(gm, localPoint)
+        ));
       }
       for (const connector of gm.windows) {
-        gmsData.ensureConnectorRoomIds(connector, gm);
+        connector.roomIds = /** @type {[number | null, number | null]} */ (connector.entries.map(
+          localPoint => gmsData.findRoomIdContaining(gm, localPoint)
+        ));
       }
       gmData.roomGraph = RoomGraphClass.from(gm, `${gm.key}: `);
 
@@ -126,18 +131,6 @@ export default function createGmsData({ prevGmData }) {
       gm.rooms.forEach((room, roomId) => {
         drawPolygons(ct, room, [`rgb(${hitTestRed.room}, ${roomId}, 255)`, null])
       });
-    },
-    /**
-     * @param {Connector} connector
-     * @param {Geomorph.Layout} gm 
-     */
-    ensureConnectorRoomIds(connector, gm) {
-      if (connector.roomIds.length === 2) {
-        return; // already attached
-      }
-      connector.roomIds = /** @type {[number | null, number | null]} */ (connector.entries.map(
-        localPoint => gmsData.findRoomIdContaining(gm, tmpVec1.copy(localPoint))
-      ));
     },
     /**
      * @param {Geomorph.Layout} gm
