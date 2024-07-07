@@ -1,4 +1,5 @@
 import { decorGridSize } from "./const";
+import { testNever } from "./generic";
 import { tmpVec1 } from "./geom";
 
 /**
@@ -17,9 +18,8 @@ export function addToDecorGrid(item, grid) {
       ((grid[i] ??= [])[j] ??= {
         points: new Set,
         colliders: new Set,
-      })[
-        isDecorPoint(item) ? 'points' : 'colliders'
-      ].add(/** @type {*} */ (item));
+        cuboids: new Set,
+      })[decorToGridLabel(item)].add(/** @type {*} */ (item));
 }
 
 /**
@@ -31,18 +31,28 @@ export function coordToDecorGrid(x, y) {
 }
 
 /**
+ * @param {Geomorph.Decor} d 
+ * @returns {keyof Geomorph.DecorGrid[0][0]}
+ */
+function decorToGridLabel(d) {
+  switch (d.type) {
+    case 'circle':
+    case 'poly':
+      return 'colliders';
+    case 'cuboid':
+      return 'cuboids';
+    case 'point':
+      return 'points';
+    default:
+      throw testNever(d);
+  }
+}
+
+/**
  * @param {Geomorph.Decor} decor 
  */
 export function getDecorRect(decor) {
   return decor.bounds2d;
-}
-
-/**
- * @param {Geomorph.Decor} decor
- * @return {decor is Geomorph.DecorPoint}
- */
-export function isDecorPoint(decor) {
-  return decor.type === 'point';
 }
 
 /**
@@ -140,7 +150,5 @@ export function removeFromDecorGrid(d, grid) {
   const max = /** @type {Geom.VectJson} */ (d.meta.gridMax);
   for (let i = min.x; i <= max.x; i++)
     for (let j = min.y; j <= max.y; j++)
-      grid[i][j]?.[
-        isDecorPoint(d) ? 'points' : 'colliders'
-      ].delete(/** @type {*} */ (d))
+      grid[i][j]?.[decorToGridLabel(d)].delete(/** @type {*} */ (d));
 }

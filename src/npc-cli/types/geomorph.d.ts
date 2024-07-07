@@ -313,7 +313,8 @@ declare namespace Geomorph {
 
   type DecorGrid = Record<number, Record<number, {
     points: Set<Geomorph.DecorPoint>;
-    colliders: Set<Geomorph.DecorCollidable>; // 🚧
+    colliders: Set<Geomorph.DecorCollidable>;
+    cuboids: Set<Geomorph.DecorCuboid>;
   }>>;
 
   interface RoomDecor {

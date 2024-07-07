@@ -59,8 +59,9 @@ export default function Decor(props) {
       }
       
       for (const d of ds) {
-        if (d.key in state.decor) continue;
-
+        if (d.key in state.decor) {
+          continue;
+        }
         addToDecorGrid(d, state.byGrid);
 
         state.decor[d.key] = d;
@@ -137,7 +138,6 @@ export default function Decor(props) {
             throw testNever(def);
         }
       });
-      console.log(gmId, ds);
       state.addDecor(ds);
     },
     onPointerDown(e) {
@@ -166,13 +166,13 @@ export default function Decor(props) {
       if (!ds.length) {
         return;
       }
-      // 🚧 must remove from InstancedMesh too 
 
       // update data structures
       const atRoom = state.byRoom[gmId][roomId];
       for (const d of ds) {
-        if (!(d.key in state.decor)) continue;
-
+        if (!(d.key in state.decor)) {
+          continue;
+        }
         delete state.decor[d.key];
         delete atRoom.decor[d.key];
         // 🔔 not every non-cuboid has associated quad?
