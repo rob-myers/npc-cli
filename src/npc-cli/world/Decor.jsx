@@ -245,6 +245,7 @@ export default function Decor(props) {
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
+        diffuse={[0.45, 0.45, 0.55]}
       />
     </instancedMesh>
 

@@ -300,6 +300,8 @@ export const meshDiffuseTest = {
 
   #include <common>
   
+  varying vec3 vMvPosition;
+
   //region #include <normal_pars_vertex>
 	varying vec3 vNormal;
   //#endregion
@@ -346,41 +348,35 @@ export const meshDiffuseTest = {
       // this is in lieu of a per-instance normal-matrix
       // shear transforms in the instance matrix are not supported
       mat3 im = mat3( instanceMatrix );
-      transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
+      // transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
       transformedNormal = im * transformedNormal;
     #endif
 
+    // 🚧 what does this do exactly?
     transformedNormal = normalMatrix * transformedNormal;
     //#endregion
-    
+
     //#region #include <normal_vertex>
-    vNormal = normalize( transformedNormal );
+    vNormal = normalize(transformedNormal);
     //#endregion
+
+    vMvPosition = mvPosition.xyz;
   }
   `,
 
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-
-  #include <common>
-
-  //#region #include <normal_pars_vertex>
+  varying vec3 vMvPosition;
 	varying vec3 vNormal;
-  //#endregion
 
-  // #include <lights_pars_begin>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
     
-    //#include <normal_fragment_begin>
-    // vec3 normal = normalize( vNormal );
-    vec3 normal = vNormal;
-
-    // 🚧
-    // gl_FragColor = vec4(diffuse, 1);
-    gl_FragColor = vec4(diffuse * normal, 1);
+    vec3 lightDir = normalize(cameraPosition - vMvPosition);
+    float dotProduct = max(dot(vNormal, lightDir), 0.0);
+    gl_FragColor = vec4(diffuse * (0.25 + 0.75 * dotProduct), 1);
 
     #include <logdepthbuf_fragment>
   }
