@@ -288,21 +288,46 @@ export const meshDiffuseTest = {
   Vert: /*glsl*/`
 
   #include <common>
-  #include <logdepthbuf_pars_vertex>
-
-  varying vec2 vUv;
+  
+  //#region #include <logdepthbuf_pars_vertex>
+  #ifdef USE_LOGDEPTHBUF
+    varying float vFragDepth;
+    varying float vIsPerspective;
+  #endif
+  //#endregion
 
   void main() {
 
-    vUv = uv;
+    //#region #include <beginnormal_vertex>
+    vec3 objectNormal = vec3( normal );
+        #ifdef USE_TANGENT
+        vec3 objectTangent = vec3( tangent.xyz );
+      #endif
+    //#endregion
 
-    #include <uv_vertex>
-    #include <color_vertex>
+    //#region #include <begin_vertex>
+    vec3 transformed = vec3( position );
+    //#endregion
 
-    #include <begin_vertex>
-    #include <project_vertex>
-    #include <logdepthbuf_vertex>
-    // normals ...
+    //#region #include <project_vertex>
+    vec4 mvPosition = vec4( transformed, 1.0 );
+
+    #ifdef USE_INSTANCING
+      mvPosition = instanceMatrix * mvPosition;
+    #endif
+
+    mvPosition = modelViewMatrix * mvPosition;
+    gl_Position = projectionMatrix * mvPosition;
+    //#endregion
+
+    //#region #include <logdepthbuf_vertex>
+    #ifdef USE_LOGDEPTHBUF
+      vFragDepth = 1.0 + gl_Position.w;
+      vIsPerspective = float( isPerspectiveMatrix( projectionMatrix ) );
+    #endif
+    //#endregion
+
+    #include <defaultnormal_vertex>
   }
   `,
 
@@ -311,9 +336,16 @@ export const meshDiffuseTest = {
   uniform vec3 diffuse;
 
   #include <common>
+  #include <lights_pars_begin>
+  #include <normal_pars_fragment>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
+    // 🚧 get these working
+    // https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
+    // #include <normal_fragment_begin>
+    // #include <normal_fragment_maps>
+
     gl_FragColor = vec4(diffuse, 1);
 
     #include <logdepthbuf_fragment>

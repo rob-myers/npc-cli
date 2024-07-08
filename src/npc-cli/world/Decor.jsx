@@ -240,7 +240,9 @@ export default function Decor(props) {
       onPointerDown={state.onPointerDown}
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <meshDiffuseTestMaterial />
+      <meshDiffuseTestMaterial
+        key={glsl.MeshDiffuseTestMaterial.key}
+      />
     </instancedMesh>
 
     <instancedMesh
