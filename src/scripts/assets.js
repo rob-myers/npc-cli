@@ -30,7 +30,7 @@ import PQueue from "p-queue-compat";
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
 import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale, spriteSheetDecorExtraScale } from "../npc-cli/service/const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, } from "../npc-cli/service/generic";
 import { geomorphService } from "../npc-cli/service/geomorph";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
@@ -239,14 +239,15 @@ info({ opts });
     const flatSymbol = flattened[hullKey];
     return geomorphService.createLayout(gmKey, flatSymbol, assets);
   }));
+  const layoutJson = mapValues(layout, geomorphService.serializeLayout);
 
   const mapsHash = hashJson(assetsJson.maps);
-  const layoutsHash = hashJson(layout);
+  const layoutsHash = hashJson(layoutJson);
   const sheetsHash = hashJson(assetsJson.sheet);
   const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
   const hash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
 
-  /** @type {Geomorph.Geomorphs} */
+  /** @type {Geomorph.GeomorphsJson} */
   const geomorphs = {
     hash,
     mapsHash,
@@ -254,11 +255,11 @@ info({ opts });
     sheetsHash,
     imagesHash,
     map: assetsJson.maps,
-    layout,
+    layout: layoutJson,
     sheet: assetsJson.sheet,
   };
 
-  fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
+  fs.writeFileSync(geomorphsFilepath, stringify(geomorphs));
 
   //#endregion
 
