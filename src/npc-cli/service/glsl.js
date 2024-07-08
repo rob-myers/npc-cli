@@ -376,7 +376,7 @@ export const meshDiffuseTest = {
     
     vec3 lightDir = normalize(cameraPosition - vMvPosition);
     float dotProduct = max(dot(vNormal, lightDir), 0.0);
-    gl_FragColor = vec4(diffuse * (0.25 + 0.75 * dotProduct), 1);
+    gl_FragColor = vec4(diffuse * (0.25 + 0.5 * dotProduct), 1);
 
     #include <logdepthbuf_fragment>
   }
