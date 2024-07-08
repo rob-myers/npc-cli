@@ -92,8 +92,10 @@ function decompToXZAttribs(decomp) {
 }
 
 export const greenWireFrameMat = new THREE.MeshStandardMaterial({
-  wireframe: true,
+  // wireframe: true,
   color: "green",
+  transparent: true,
+  opacity: 0.5,
 });
 
 export const redWireFrameMat = new THREE.MeshStandardMaterial({

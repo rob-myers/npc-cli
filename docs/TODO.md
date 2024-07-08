@@ -42,6 +42,9 @@
   - can specify decor quads in symbols
   - can see decor quads in World
 
+- request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
+- darken obstacle machinery via instancedmesh colours
+
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
