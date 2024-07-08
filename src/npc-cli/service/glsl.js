@@ -283,12 +283,27 @@ export const basicGradientFrag = /*glsl*/`
   }
 `;
 
+/**
+ * Assume these are NOT defined:
+ * - FLAT_SHADED
+ * - DOUBLE_SIDED, FLIP_SIDED
+ * - USE_TANGENT, USE_NORMALMAP_TANGENTSPACE, USE_CLEARCOAT_NORMALMAP
+ * - USE_ANISOTROPY
+ *
+ * We're using this as a guide:
+ * - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
+ * 
+ */
 export const meshDiffuseTest = {
 
   Vert: /*glsl*/`
 
   #include <common>
   
+  //region #include <normal_pars_vertex>
+	varying vec3 vNormal;
+  //#endregion
+
   //#region #include <logdepthbuf_pars_vertex>
   #ifdef USE_LOGDEPTHBUF
     varying float vFragDepth;
@@ -300,9 +315,6 @@ export const meshDiffuseTest = {
 
     //#region #include <beginnormal_vertex>
     vec3 objectNormal = vec3( normal );
-        #ifdef USE_TANGENT
-        vec3 objectTangent = vec3( tangent.xyz );
-      #endif
     //#endregion
 
     //#region #include <begin_vertex>
@@ -327,7 +339,23 @@ export const meshDiffuseTest = {
     #endif
     //#endregion
 
-    #include <defaultnormal_vertex>
+    //#region #include <defaultnormal_vertex>
+    vec3 transformedNormal = objectNormal;
+
+    #ifdef USE_INSTANCING
+      // this is in lieu of a per-instance normal-matrix
+      // shear transforms in the instance matrix are not supported
+      mat3 im = mat3( instanceMatrix );
+      transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
+      transformedNormal = im * transformedNormal;
+    #endif
+
+    transformedNormal = normalMatrix * transformedNormal;
+    //#endregion
+    
+    //#region #include <normal_vertex>
+    vNormal = normalize( transformedNormal );
+    //#endregion
   }
   `,
 
@@ -336,17 +364,23 @@ export const meshDiffuseTest = {
   uniform vec3 diffuse;
 
   #include <common>
-  #include <lights_pars_begin>
-  #include <normal_pars_fragment>
+
+  //#region #include <normal_pars_vertex>
+	varying vec3 vNormal;
+  //#endregion
+
+  // #include <lights_pars_begin>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    // 🚧 get these working
-    // https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
-    // #include <normal_fragment_begin>
-    // #include <normal_fragment_maps>
+    
+    //#include <normal_fragment_begin>
+    // vec3 normal = normalize( vNormal );
+    vec3 normal = vNormal;
 
-    gl_FragColor = vec4(diffuse, 1);
+    // 🚧
+    // gl_FragColor = vec4(diffuse, 1);
+    gl_FragColor = vec4(diffuse * normal, 1);
 
     #include <logdepthbuf_fragment>
   }

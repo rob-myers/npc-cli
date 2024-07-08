@@ -28,8 +28,10 @@
       - `w decor.removeDecor g0dec4`
   - 🚧 cuboid shader with vertex-normal lighting?
     - https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderChunk
-    - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderChunk/defaultnormal_vertex.glsl.js
     - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
+    - ✅ try `diffuse * normal`
+    - ...
+  - 🚧 fix decor cuboids in transformed geomorphs
   - 🚧 fix decor quads
   - decor cuboids can effect nav-mesh
   - redo decor types
