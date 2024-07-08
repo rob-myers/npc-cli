@@ -31,7 +31,7 @@
     - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
     - ✅ try `diffuse * normal`
     - ...
-  - 🚧 fix decor cuboids in transformed geomorphs
+  - ✅ fix decor cuboids in transformed geomorphs
   - 🚧 fix decor quads
   - decor cuboids can effect nav-mesh
   - redo decor types

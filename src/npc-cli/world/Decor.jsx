@@ -123,9 +123,11 @@ export default function Decor(props) {
               center: gm.matrix.transformPoint({ ...def.center }),
             };
           case "cuboid":
+            const center = gm.matrix.transformPoint({ x: def.center.x, y: def.center.z });
+            const extent = gm.matrix.transformSansTranslate({ x: def.extent.x, y: def.extent.z });
             return { ...def, ...base,
-              center: gm.matrix.transformPoint({ ...def.center }),
-              extent: gm.matrix.transformSansTranslate({ ...def.extent }),
+              center: { x: center.x, y: def.center.y, z: center.y },
+              extent: { x: extent.x, y: def.extent.y, z: extent.y },
             };
           case "point":
             return gm.matrix.transformPoint({ ...def, ...base });
@@ -242,6 +244,7 @@ export default function Decor(props) {
       {/* <meshBasicMaterial color="red" /> */}
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
+        side={THREE.DoubleSide} // fix flipped gm
       />
     </instancedMesh>
 
