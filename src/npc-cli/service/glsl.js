@@ -17,10 +17,6 @@ export const minimalInstanceUvsVert = /*glsl*/`
     // vUv = uv;
     vUv = (uv * uvDimensions) + uvOffsets;
     vec4 modelViewPosition = vec4(position, 1.0);
-    
-    // #ifdef USE_BATCHING
-    //   modelViewPosition = batchingMatrix * modelViewPosition;
-    // #endif
 
     #ifdef USE_INSTANCING
       modelViewPosition = instanceMatrix * modelViewPosition;
@@ -47,8 +43,9 @@ export const minimalInstanceUvsFrag = /*glsl*/`
     gl_FragColor = texture2D(map, vUv) * vec4(diffuse, 1);
 
     // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
-    if(gl_FragColor.a < 0.5)
+    if(gl_FragColor.a < 0.5) {
       discard;
+    }
 
     #include <logdepthbuf_fragment>
   }
@@ -286,6 +283,44 @@ export const basicGradientFrag = /*glsl*/`
   }
 `;
 
+export const meshDiffuseTest = {
+
+  Vert: /*glsl*/`
+
+  #include <common>
+  #include <logdepthbuf_pars_vertex>
+
+  varying vec2 vUv;
+
+  void main() {
+
+    vUv = uv;
+
+    #include <uv_vertex>
+    #include <color_vertex>
+
+    #include <begin_vertex>
+    #include <project_vertex>
+    #include <logdepthbuf_vertex>
+    // normals ...
+  }
+  `,
+
+  Frag: /*glsl*/`
+
+  uniform vec3 diffuse;
+
+  #include <common>
+  #include <logdepthbuf_pars_fragment>
+
+  void main() {
+    gl_FragColor = vec4(diffuse, 1);
+
+    #include <logdepthbuf_fragment>
+  }
+  `,
+};
+
 export const InstancedSpriteSheetMaterial = shaderMaterial(
   {
     map: null,
@@ -298,7 +333,16 @@ export const InstancedSpriteSheetMaterial = shaderMaterial(
   minimalInstanceUvsFrag,
 );
 
+export const MeshDiffuseTestMaterial = shaderMaterial(
+  {
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
+  },
+  meshDiffuseTest.Vert,
+  meshDiffuseTest.Frag,
+);
+
 // See glsl.d.ts
 extend({
   InstancedSpriteSheetMaterial,
+  MeshDiffuseTestMaterial,
 });

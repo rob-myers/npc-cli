@@ -239,9 +239,8 @@ export default function Decor(props) {
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
     >
-      <meshBasicMaterial
-        color="red" // 🚧
-      />
+      {/* <meshBasicMaterial color="red" /> */}
+      <meshDiffuseTestMaterial />
     </instancedMesh>
 
     <instancedMesh

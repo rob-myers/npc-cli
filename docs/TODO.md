@@ -26,6 +26,8 @@
     - ✅ can add cuboid to instancedmesh
     - ✅ can remove cuboid from instancedmesh
       - `w decor.removeDecor g0dec4`
+  - 🚧 cuboid shader with vertex-normal lighting?
+  - 🚧 fix decor quads
   - decor cuboids can effect nav-mesh
   - redo decor types
     - can have decorImgKey (in XZ plane)
