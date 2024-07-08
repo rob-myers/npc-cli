@@ -211,13 +211,12 @@ export default function Decor(props) {
   useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
-      // initialize decor, triggering useEffect below
+      // initialize decor
       for (const [gmId, gm] of w.gms.entries()) {
         await pause();
         state.instantiateGmDecor(gmId, gm);
       }
-
-      return w.decorHash; // triggers update?
+      return w.decorHash; // trigger useEffect
     },
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -245,7 +244,7 @@ export default function Decor(props) {
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
-        diffuse={[0.45, 0.45, 0.45]}
+        diffuse={[0.35, 0.25, 0.25]}
       />
     </instancedMesh>
 
