@@ -50,7 +50,7 @@ export default function Ceiling(props) {
       const { nonHullCeilTops, doorCeilTops, polyDecals } = w.gmsData[gmKey];
       
       // wall/door tops
-      const strokeColor = 'rgba(120, 120, 120, 1)';
+      const strokeColor = 'rgba(60, 60, 60, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
       drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.08]);
