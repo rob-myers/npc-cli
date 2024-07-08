@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { testNever } from "../service/generic";
+import { pause, testNever } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
@@ -10,6 +10,7 @@ import { boxGeometry, quadGeometryXZ, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /** @param {Props} props */
 export default function Decor(props) {
@@ -22,7 +23,7 @@ export default function Decor(props) {
     quadInst: /** @type {*} */ (null),
 
     byGrid: [],
-    byRoom: w.gms.map(_ => []),
+    byRoom: [],
     decor: {},
     nextDecorCid: 0,
 
@@ -53,11 +54,8 @@ export default function Decor(props) {
       // 🚧
     },
     addRoomDecor(gmId, roomId, ds) {
-      // 🔔 We assume the provided decor does not currently exist
-      if (ds.length === 0) {
-        return;
-      }
-      
+      const atRoom = state.byRoom[gmId][roomId];
+
       for (const d of ds) {
         if (d.key in state.decor) {
           continue;
@@ -65,7 +63,6 @@ export default function Decor(props) {
         addToDecorGrid(d, state.byGrid);
 
         state.decor[d.key] = d;
-        const atRoom = state.byRoom[gmId][roomId];
         atRoom.decor[d.key] = d;
 
         if (geomorphService.isDecorPoint(d)) {
@@ -78,12 +75,12 @@ export default function Decor(props) {
         d.type === 'cuboid' ? state.cuboidCount++ : state.quadCount++;
       }
 
-      w.events.next({ key: 'decors-added', decors: ds });
+      ds.length && w.events.next({ key: 'decors-added', decors: ds });
     },
-    createCuboidMatrix4(d) {// 🚧
+    createCuboidMatrix4(cuboidDecor) {
       const [mat, mat4] = [tmpMat1, tmpMatFour1];
-      mat.feedFromArray([d.extent.x * 2, 0, 0, d.extent.z * 2, d.center.x, d.center.z]);
-      return geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: d.center.y, yScale: d.extent.y * 2 });
+      mat.feedFromArray([cuboidDecor.extent.x * 2, 0, 0, cuboidDecor.extent.z * 2, cuboidDecor.center.x, cuboidDecor.center.z]);
+      return geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: cuboidDecor.center.y, yScale: cuboidDecor.extent.y * 2 });
     },
     ensureGmRoomId(decor) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
@@ -110,6 +107,9 @@ export default function Decor(props) {
       }
     },
     instantiateGmDecor(gmId, gm) {
+      // 🔔 update on dynamic nav-mesh
+      state.byRoom[gmId] ??= gm.rooms.map(_ => ({ decor: {}, points: [], colliders: [] }));
+      
       /** @type {Geomorph.Decor[]} */
       const ds = gm.decor.map((def, localDecorId) => {
         const base = {
@@ -125,7 +125,7 @@ export default function Decor(props) {
           case "cuboid":
             return { ...def, ...base,
               center: gm.matrix.transformPoint({ ...def.center }),
-              extent: gm.matrix.transformSansTranslate({ ...def.center }),
+              extent: gm.matrix.transformSansTranslate({ ...def.extent }),
             };
           case "point":
             return gm.matrix.transformPoint({ ...def, ...base });
@@ -146,7 +146,7 @@ export default function Decor(props) {
     onPointerUp(e) {
       // 🚧
     },
-    positionDecor() {
+    positionDecor() { 
       // decor cuboids
       const { cuboidInst } = state;
       let cuboidId = 0;
@@ -162,13 +162,27 @@ export default function Decor(props) {
       cuboidInst.instanceMatrix.needsUpdate = true;
       cuboidInst.computeBoundingSphere();
     },
-    removeRoomDecor(gmId, roomId, ds) {
-      if (!ds.length) {
-        return;
+    removeDecor(...decorKeys) {
+      const ds = decorKeys.map(x => state.decor[x]).filter(Boolean);
+
+      const grouped = ds.reduce((agg, d) => {
+        const { gmId, roomId } = d.meta;
+        (agg[geomorphService.getGmRoomKey(gmId, roomId)] ??= { gmId, roomId, ds: [] }).ds.push(d);
+        return agg;
+      }, /** @type {Record<`g${number}r${number}`, Geomorph.GmRoomId & { ds: Geomorph.Decor[] }>} */ ({}));
+
+      for (const { gmId, roomId, ds } of Object.values(grouped)) {
+        state.removeRoomDecor(gmId, roomId, ds)
       }
 
-      // update data structures
+      update();
+    },
+    removeRoomDecor(gmId, roomId, ds) {
+      if (ds.length === 0) {
+        return;
+      }
       const atRoom = state.byRoom[gmId][roomId];
+
       for (const d of ds) {
         if (!(d.key in state.decor)) {
           continue;
@@ -195,14 +209,11 @@ export default function Decor(props) {
   useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
-      // 🚧 initialize decor
-      // 🚧 render should trigger useEffect below
-      // for (const [gmId, gm] of state.gms.entries()) {
-      //   await pause();
-      //   console.log('prev', gmId);
-      //   state.decor.instantiateGmDecor(gmId, gm);
-      //   console.log('post', gmId);
-      // }
+      // initialize decor, triggering useEffect below
+      for (const [gmId, gm] of w.gms.entries()) {
+        await pause();
+        state.instantiateGmDecor(gmId, gm);
+      }
 
       return w.decorHash; // triggers update?
     },
@@ -215,6 +226,8 @@ export default function Decor(props) {
     state.addQuadUvs();
     state.positionDecor();
   }, [w.hash, state.cuboidCount, state.quadCount]);
+
+  const update = useUpdate();
 
   return <>
     <instancedMesh
@@ -235,7 +248,9 @@ export default function Decor(props) {
       name="decor-quads"
       key={`${w.hash} ${state.quadCount} quads`}
       ref={instances => instances && (state.quadInst = instances)}
-      args={[quadGeometryXZ, undefined, state.quadCount]}
+      // 🚧
+      // args={[quadGeometryXZ, undefined, state.quadCount]}
+      args={[quadGeometryXZ, undefined, 0]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
@@ -279,5 +294,6 @@ export default function Decor(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionDecor
+ * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeRoomDecor
  */

@@ -21,9 +21,11 @@
   - ✅ decor points have fixed dimension bounds2d
     - maybe should depend on whether they have an associated icon i.e. decorKey
   - ✅ can specify decor `cuboid` in symbols
-  - 🚧 can see decor cuboids in World
-    - 🚧 `gms[gmId].decor` induces initial decor
-    - 🚧 can add/remove cuboid to instancedmesh
+  - ✅ can see decor cuboids in World
+    - ✅ `gms[gmId].decor` induces initial decor
+    - ✅ can add cuboid to instancedmesh
+    - ✅ can remove cuboid from instancedmesh
+      - `w decor.removeDecor g0dec4`
   - decor cuboids can effect nav-mesh
   - redo decor types
     - can have decorImgKey (in XZ plane)

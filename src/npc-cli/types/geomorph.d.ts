@@ -318,8 +318,8 @@ declare namespace Geomorph {
   }>>;
 
   interface RoomDecor {
-    /** Decor which came from room's parent geomorph symbol */
-    symbol: Geomorph.Decor[];
+    // /** Decor which came from room's parent geomorph symbol */
+    // symbol: Geomorph.Decor[];
     /** Everything in room */
     decor: Record<string, Geomorph.Decor>;
     /** All colliders in room */
