@@ -222,6 +222,11 @@ export class ttyXtermClass {
     return this.cursor;
   }
 
+  /** Get final line in buffer, sans ansi codes */
+  getFinalLine() {
+    return this.active.getLine(this.active.viewportY + this.active.cursorY - 1)?.translateToString(true);
+  }
+
   getInput() {
     return this.input;
   }

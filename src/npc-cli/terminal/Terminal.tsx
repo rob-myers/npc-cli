@@ -152,10 +152,12 @@ export default function Terminal(props: Props) {
       return;
     }
 
-    if (props.disabled) {
-      // Pause
+    if (props.disabled) {// Pause
       state.hasEverDisabled = true;
       state.focusedBeforePause = document.activeElement === state.xterm.xterm.textarea;
+
+      /** Is final `resumedLine`? */
+      const prevLineResumed = state.xterm.getFinalLine() === stripAnsi(resumedLine);
 
       if (state.xterm.isPromptReady()) {
         state.cursorBeforePause = state.xterm.getCursor();
@@ -164,11 +166,8 @@ export default function Terminal(props: Props) {
         state.cursorBeforePause = undefined;
       }
 
-      useSession.api.writeMsgCleanly(
-        props.sessionKey,
-        formatMessage(`${ansi.White}paused`, "info"),
-        { prompt: false }
-      );
+      prevLineResumed && state.xterm.xterm.write(`\x1b[F\x1b[2K`); // overwrite `resumedLine`
+      useSession.api.writeMsgCleanly(props.sessionKey, pausedLine, { prompt: false });
 
       // Pause running processes
       Object.values(state.session.process ?? {})
@@ -180,20 +179,14 @@ export default function Terminal(props: Props) {
         });
     }
 
-    if (!props.disabled && state.hasEverDisabled) {
-      // Resume
+    if (!props.disabled && state.hasEverDisabled) {// Resume
       state.focusedBeforePause && state.xterm.xterm.focus();
 
       // overwrite "paused" with "resumed"
-      const extraNewlines = Math.max(
-        1,
+      const extraNewlines = Math.max(1,
         state.xterm.numLines() + (state.xterm.active.cursorY + 1) - state.xterm.rows
       );
-      state.xterm.xterm.write(
-        `\x1b[F\x1b[2K${formatMessage(`${ansi.White}resumed`, "info")}\r${"\r\n".repeat(
-          extraNewlines
-        )}`
-      );
+      state.xterm.xterm.write(`\x1b[F\x1b[2K${resumedLine}\r${"\r\n".repeat(extraNewlines)}`);
       state.xterm.showPendingInputImmediately();
 
       // Resume processes we suspended
@@ -280,3 +273,6 @@ const TouchHelperUi = loadable(() => import("./TouchHelperUi"), {
 function stopKeysPropagating(e: React.KeyboardEvent) {
   e.stopPropagation();
 }
+
+const pausedLine = formatMessage(`${ansi.White}paused`, "info");
+const resumedLine = formatMessage(`${ansi.White}resumed`, "info");
