@@ -300,10 +300,8 @@ export const meshDiffuseTest = {
 
   #include <common>
   
-  varying vec3 vMvPosition;
+  varying float dotProduct;
 
-  //region #include <normal_pars_vertex>
-	varying vec3 vNormal;
   //#endregion
 
   //#region #include <logdepthbuf_pars_vertex>
@@ -356,26 +354,19 @@ export const meshDiffuseTest = {
     transformedNormal = normalMatrix * transformedNormal;
     //#endregion
 
-    //#region #include <normal_vertex>
-    vNormal = normalize(transformedNormal);
-    //#endregion
-
-    vMvPosition = mvPosition.xyz;
+    vec3 lightDir = normalize(cameraPosition - mvPosition.xyz);
+    dotProduct = max(dot(normalize(transformedNormal), lightDir), 0.0);
   }
   `,
 
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-  varying vec3 vMvPosition;
-	varying vec3 vNormal;
+	varying float dotProduct;
 
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    
-    vec3 lightDir = normalize(cameraPosition - vMvPosition);
-    float dotProduct = max(dot(vNormal, lightDir), 0.0);
     gl_FragColor = vec4(diffuse * (0.25 + 0.5 * dotProduct), 1);
 
     #include <logdepthbuf_fragment>
