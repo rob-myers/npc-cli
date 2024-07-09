@@ -14,7 +14,7 @@
       <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
     </filter>
   </defs>
-  <path d="M 500.000039 -0.000003 L 500.000039 599.999994 L 0.000016 599.999994 L 0.000016 -0.000003 L 500.000039 -0.000003 Z" style="stroke: rgb(0, 0, 0); filter: none; fill: rgb(255, 255, 255);">
+  <path d="M 500.000039 -0.000003 L 500.000039 599.999994 L 0.000016 599.999994 L 0.000016 -0.000003 L 500.000039 -0.000003 Z" style="stroke: rgb(0, 0, 0); filter: none; fill: rgb(170, 170, 170);">
     <title>back</title>
   </path>
   <path d="M 474.999998 25.000001 L 474.999998 600.000047 L 25.000001 600.000047 L 25.000001 25.000001 L 474.999998 25.000001 Z" style="stroke: rgb(0, 0, 0); filter: url('#filter-3');">
