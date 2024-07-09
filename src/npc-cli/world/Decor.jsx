@@ -17,15 +17,13 @@ export default function Decor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    cuboidInst: /** @type {*} */ (null),
-    cuboidCount: 0,
-    quadCount: 0,
-    quadInst: /** @type {*} */ (null),
-
+    byKey: {},
     byGrid: [],
     byRoom: [],
-    decor: {},
-    nextDecorCid: 0,
+    cuboids: [],
+    cuboidInst: /** @type {*} */ (null),
+    quads: [],
+    quadInst: /** @type {*} */ (null),
 
     addDecor(ds) {
       const grouped = ds.reduce((agg, d) => {
@@ -34,7 +32,7 @@ export default function Decor(props) {
           ??= { gmId, roomId, add: [], remove: [] }
         ).add.push(d);
         
-        const prev = state.decor[d.key];
+        const prev = state.byKey[d.key];
         if (prev) {// Add pre-existing decor to removal group
           d.updatedAt = Date.now();
           const { gmId, roomId } = prev.meta;
@@ -44,43 +42,77 @@ export default function Decor(props) {
       }, /** @type {Record<`g${number}r${number}`, Geomorph.GmRoomId & { [x in 'add' | 'remove']: Geomorph.Decor[] }>} */ ({}));
 
       for (const { gmId, roomId, remove } of Object.values(grouped)) {
-        state.removeRoomDecor(gmId, roomId, remove);
+        state.removeDecorFromRoom(gmId, roomId, remove);
       }
       for (const { gmId, roomId, add } of Object.values(grouped)) {
-        state.addRoomDecor(gmId, roomId, add);
+        state.addDecorToRoom(gmId, roomId, add);
       }
+
+      state.cuboids = Object.values(state.byKey).filter(d => d.type === 'cuboid');
+      state.quads = Object.values(state.byKey).filter(d => d.meta.decorImgKey); // 🚧 d.decorImgKey
+      update();
     },
-    addQuadUvs() {
-      // 🚧
-    },
-    addRoomDecor(gmId, roomId, ds) {
+    addDecorToRoom(gmId, roomId, ds) {
       const atRoom = state.byRoom[gmId][roomId];
 
       for (const d of ds) {
-        if (d.key in state.decor) {
+        if (d.key in state.byKey) {
           continue;
         }
         addToDecorGrid(d, state.byGrid);
 
-        state.decor[d.key] = d;
+        state.byKey[d.key] = d;
         atRoom.decor[d.key] = d;
 
         if (geomorphService.isDecorPoint(d)) {
           atRoom.points.push(d);
         } else if (geomorphService.isDecorCollidable(d)) {
           atRoom.colliders.push(d);
-        } // else 'cuboid'
+        }
 
-        // 🔔 not every non-cuboid has associated quad?
-        d.type === 'cuboid' ? state.cuboidCount++ : state.quadCount++;
       }
 
       ds.length && w.events.next({ key: 'decors-added', decors: ds });
     },
+    addQuadUvs() {
+      // 🚧
+    },
     createCuboidMatrix4(cuboidDecor) {
-      const [mat, mat4] = [tmpMat1, tmpMatFour1];
-      mat.feedFromArray([cuboidDecor.extent.x * 2, 0, 0, cuboidDecor.extent.z * 2, cuboidDecor.center.x, cuboidDecor.center.z]);
-      return geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: cuboidDecor.center.y, yScale: cuboidDecor.extent.y * 2 });
+      tmpMat1.feedFromArray([
+        cuboidDecor.extent.x * 2, 0, 0, cuboidDecor.extent.z * 2,
+        cuboidDecor.center.x, cuboidDecor.center.z,
+      ]);
+      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+        mat4: tmpMatFour1,
+        yHeight: cuboidDecor.center.y,
+        yScale: cuboidDecor.extent.y * 2,
+      });
+    },
+    detectClick(e) {
+      // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
+      const instanceId = /** @type {number} */ (e.instanceId);
+      const byInstId = e.object.name === 'decor-cuboids' ? state.cuboids : state.quads;
+      return byInstId[instanceId];
+      
+      // const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
+      // const gm = w.gms[gmId];
+      // const obstacle = gm.obstacles[obstacleId];
+      
+      // // transform 3D point back to unit XZ quad
+      // const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
+      // const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
+      // // transform unit quad point into spritesheet
+      // const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
+      // const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
+      // const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
+
+      // const canvas = /** @type {HTMLCanvasElement} */ (w.obsTex.image);
+      // const ctxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+      // const { data: rgba } = ctxt.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
+      // // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
+      
+      // // ignore clicks on fully transparent pixels
+      // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
     ensureGmRoomId(decor) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
@@ -140,32 +172,64 @@ export default function Decor(props) {
             throw testNever(def);
         }
       });
+
       state.addDecor(ds);
     },
     onPointerDown(e) {
-      // 🚧
+      const instanceId = /** @type {number} */ (e.instanceId);
+      const decor = state.detectClick(e);
+
+      if (decor !== null) {
+        w.events.next(w.ui.getNpcPointerEvent({
+          key: "pointerdown",
+          distancePx: 0,
+          event: e,
+          is3d: true,
+          justLongDown: false,
+          meta: {
+            decor: true,
+            ...decor.meta,
+            instanceId,
+          },
+        }));
+        e.stopPropagation();
+      }
     },
     onPointerUp(e) {
-      // 🚧
+      const instanceId = /** @type {number} */ (e.instanceId);
+      const decor = state.detectClick(e);
+
+      if (decor !== null) {
+        w.events.next(w.ui.getNpcPointerEvent({
+          key: "pointerup",
+          event: e,
+          is3d: true,
+          meta: {
+            decor: true,
+            ...decor.meta,
+            instanceId,
+          },
+        }));
+        e.stopPropagation();
+      }
     },
-    positionDecor() { 
+    positionInstances() { 
       // decor cuboids
       const { cuboidInst } = state;
-      let cuboidId = 0;
       
-      for (const d of Object.values(state.decor)) {
+      for (const [instId, d] of state.cuboids.entries()) {
         if (d.type === 'cuboid') {
           const mat4 = state.createCuboidMatrix4(d);
-          cuboidInst.setMatrixAt(cuboidId++, mat4);
+          cuboidInst.setMatrixAt(instId, mat4);
         }
-        // 🚧 decor quads
       }
+      // 🚧 decor quads
 
       cuboidInst.instanceMatrix.needsUpdate = true;
       cuboidInst.computeBoundingSphere();
     },
     removeDecor(...decorKeys) {
-      const ds = decorKeys.map(x => state.decor[x]).filter(Boolean);
+      const ds = decorKeys.map(x => state.byKey[x]).filter(Boolean);
 
       const grouped = ds.reduce((agg, d) => {
         const { gmId, roomId } = d.meta;
@@ -174,25 +238,26 @@ export default function Decor(props) {
       }, /** @type {Record<`g${number}r${number}`, Geomorph.GmRoomId & { ds: Geomorph.Decor[] }>} */ ({}));
 
       for (const { gmId, roomId, ds } of Object.values(grouped)) {
-        state.removeRoomDecor(gmId, roomId, ds)
+        state.removeDecorFromRoom(gmId, roomId, ds)
       }
 
+      state.cuboids = Object.values(state.byKey).filter(d => d.type === 'cuboid');
+      state.quads = Object.values(state.byKey).filter(d => d.meta.decorImgKey); // 🚧 d.decorImgKey
       update();
     },
-    removeRoomDecor(gmId, roomId, ds) {
+    removeDecorFromRoom(gmId, roomId, ds) {
       if (ds.length === 0) {
         return;
       }
       const atRoom = state.byRoom[gmId][roomId];
 
       for (const d of ds) {
-        if (!(d.key in state.decor)) {
+        if (!(d.key in state.byKey)) {
           continue;
         }
-        delete state.decor[d.key];
+        delete state.byKey[d.key];
         delete atRoom.decor[d.key];
         // 🔔 not every non-cuboid has associated quad?
-        d.type === 'cuboid' ? state.cuboidCount-- : state.quadCount--;
       }
 
       const points = ds.filter(geomorphService.isDecorPoint);
@@ -210,8 +275,7 @@ export default function Decor(props) {
 
   useQuery({
     queryKey: ['decor', w.key, w.decorHash],
-    async queryFn() {
-      // initialize decor
+    async queryFn() {// initialize decor
       for (const [gmId, gm] of w.gms.entries()) {
         await pause();
         state.instantiateGmDecor(gmId, gm);
@@ -225,17 +289,17 @@ export default function Decor(props) {
 
   React.useEffect(() => {
     state.addQuadUvs();
-    state.positionDecor();
-  }, [w.hash, state.cuboidCount, state.quadCount]);
+    state.positionInstances();
+  }, [w.hash, state.cuboids.length, state.quads.length]);
 
   const update = useUpdate();
 
   return <>
     <instancedMesh
       name="decor-cuboids"
-      key={`${w.hash} ${state.cuboidCount} cuboids`}
+      key={`${w.hash} ${state.cuboids.length} cuboids`}
       ref={instances => instances && (state.cuboidInst = instances)}
-      args={[boxGeometry, undefined, state.cuboidCount]}
+      args={[boxGeometry, undefined, state.cuboids.length]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
@@ -250,10 +314,10 @@ export default function Decor(props) {
 
     <instancedMesh
       name="decor-quads"
-      key={`${w.hash} ${state.quadCount} quads`}
+      key={`${w.hash} ${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
       // 🚧
-      // args={[quadGeometryXZ, undefined, state.quadCount]}
+      // args={[quadGeometryXZ, undefined, state.byQuadId.length]}
       args={[quadGeometryXZ, undefined, 0]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
@@ -276,28 +340,28 @@ export default function Decor(props) {
 
 /**
  * @typedef State
+ * @property {Geomorph.Decor[]} cuboids
  * @property {Geomorph.DecorGrid} byGrid
  * PoCollidable decors in global grid where `byGrid[x][y]` covers the square:
  * (x * decorGridSize, y * decorGridSize, decorGridSize, decorGridSize)
+ * @property {Record<string, Geomorph.Decor>} byKey
  * @property {Geomorph.RoomDecor[][]} byRoom
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
+ * @property {Geomorph.Decor[]} quads This is `Object.values(state.byKey)`
  * @property {THREE.InstancedMesh} cuboidInst
- * @property {Record<string, Geomorph.Decor>} decor
- * @property {number} cuboidCount Total number of decor cuboids
- * @property {number} quadCount Total number of decor quads
  * @property {THREE.InstancedMesh} quadInst
- * @property {number} nextDecorCid
  *
  * @property {(ds: Geomorph.Decor[]) => void} addDecor
  * @property {() => void} addQuadUvs
- * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addRoomDecor
+ * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateGmDecor
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
- * @property {() => void} positionDecor
+ * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
- * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeRoomDecor
+ * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
  */

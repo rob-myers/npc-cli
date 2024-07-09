@@ -32,9 +32,13 @@
     - ✅ try `diffuse * normal`
     - ✅ get "view aligned normals lightest" working
   - ✅ fix decor cuboids in transformed geomorphs
+  - ✅ `decor.cuboids`, `decor.quads`
+    - ❌ with managed holes, so don't have to recreate
+    - ✅ with onPointer{Down,Up}
+  - 🚧 fix decor cuboid roomId
   - 🚧 fix decor quads
   - decor cuboids can effect nav-mesh
-  - redo decor types
+  - reconsider decor types
     - can have decorImgKey (in XZ plane)
       - e.g. for cuboid table-top or screen front
     - `rect` -> `quad`
