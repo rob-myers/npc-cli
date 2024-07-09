@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { pause, testNever } from "../service/generic";
+import { pause, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
@@ -26,8 +26,16 @@ export default function Decor(props) {
     quadInst: /** @type {*} */ (null),
 
     addDecor(ds) {
-      const grouped = ds.reduce((agg, d) => {
-        const { gmId, roomId } = state.ensureGmRoomId(d);
+
+      const addable = ds.reduce((agg, d) => {
+        if (state.ensureGmRoomId(d) !== null) agg.push(d);
+        else warn(`decor "${d.key}" wasn't added: not in any room`, d);
+        return agg;
+      }, /** @type {Geomorph.Decor[]} */ ([]));
+
+      const grouped = addable.reduce((agg, d) => {
+        const { gmId, roomId } = d.meta;
+        
         (agg[geomorphService.getGmRoomKey(gmId, roomId)]
           ??= { gmId, roomId, add: [], remove: [] }
         ).add.push(d);
@@ -121,7 +129,8 @@ export default function Decor(props) {
         if (gmRoomId) {
           Object.assign(decor.meta, gmRoomId);
         } else {
-          throw new Error(`decor origin must reside in some room: ${JSON.stringify(decor)}`);
+          return null;
+          // throw new Error(`decor origin must reside in some room: ${JSON.stringify(decor)}`);
         }
       }
       return decor.meta;
@@ -356,7 +365,7 @@ export default function Decor(props) {
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
- * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId} ensureGmRoomId
+ * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateGmDecor
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown

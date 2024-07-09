@@ -35,7 +35,7 @@
   - ✅ `decor.cuboids`, `decor.quads`
     - ❌ with managed holes, so don't have to recreate
     - ✅ with onPointer{Down,Up}
-  - 🚧 fix decor cuboid roomId
+  - ✅ fix decor cuboid roomId
   - 🚧 fix decor quads
   - decor cuboids can effect nav-mesh
   - reconsider decor types
@@ -45,6 +45,7 @@
     - `point` should be 3d
   - can specify decor quads in symbols
   - can see decor quads in World
+  - fix geomorph decor warns e.g. not fuel label not in any room
 
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - darken obstacle machinery via instancedmesh colours

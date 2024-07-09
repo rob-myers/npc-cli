@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { hitTestRed, wallHeight, worldToSguScale } from "./const";
-import { mapValues, pause } from "./generic";
+import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
 import { Connector, geomorphService } from "./geomorph";
@@ -81,7 +81,8 @@ export default function createGmsData({ prevGmData }) {
         obstacle.meta.roomId ??= (gmsData.findRoomIdContaining(gm, obstacle.center) ?? -1);
       }
       for (const decor of gm.decor) {
-        decor.meta.roomId ??= (gmsData.findRoomIdContaining(gm, decor.bounds2d) ?? -1);
+        tmpVec1.set(decor.bounds2d.x + decor.bounds2d.width/2, decor.bounds2d.y + decor.bounds2d.height/2);
+        decor.meta.roomId ??= (gmsData.findRoomIdContaining(gm, tmpVec1) ?? -1);
       }
       
       gmData.unseen = false;
@@ -143,15 +144,18 @@ export default function createGmsData({ prevGmData }) {
         (localPoint.y - gm.pngRect.y) * worldToSguScale,
         1, 1, { colorSpace: 'srgb' },
       );
-      // console.log({ gmKey, localPoint, rgba: Array.from(rgba) });
-      if (rgba[0] === hitTestRed.room) {// (0, roomId, 255, 1)
-        return rgba[1];
-      } else if (includeDoors === true && rgba[0] === hitTestRed.door) {// (255, 0, doorId, 1)
-        // choose 1st roomId
-        return gm.doors[rgba[2]].roomIds.find(x => typeof x === 'number') ?? null;
-      } else {
+      // console.log({ gmKey: gm.key, localPoint, rgba: Array.from(rgba) });
+      if (rgba[3] === 0) {// ignore transparent
         return null;
       }
+      if (rgba[0] === hitTestRed.room) {// (0, roomId, 255, 1)
+        return rgba[1];
+      }
+      if (includeDoors === true && rgba[0] === hitTestRed.door) {
+        // (255, 0, doorId, 1) -- we choose 1st roomId
+        return gm.doors[rgba[2]].roomIds.find(x => typeof x === 'number') ?? null;
+      }
+      return null;
     },
   };
   return gmsData;
