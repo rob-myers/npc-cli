@@ -222,9 +222,9 @@ export class ttyXtermClass {
     return this.cursor;
   }
 
-  /** Get final line in buffer, sans ansi codes */
+  /** Get final line in buffer, sans ansi codes and "right space" */
   getFinalLine() {
-    return this.active.getLine(this.active.viewportY + this.active.cursorY - 1)?.translateToString(true);
+    return this.active.getLine(this.active.viewportY + this.active.cursorY - this.numLines())?.translateToString(true);
   }
 
   getInput() {
@@ -495,6 +495,13 @@ export class ttyXtermClass {
   }
 
   /**
+   * Count the number of lines in the current input, including prompt.
+   */
+  numLines() {
+    return 1 + this.offsetToColRow(this.actualLine(this.input), this.input.length + 2).row;
+  }
+
+  /**
    * Convert 0-based `cursor` in `input` to
    * a relative 0-based row/col location.
    */
@@ -622,13 +629,6 @@ export class ttyXtermClass {
         }
       }
     }
-  }
-
-  /**
-   * Count the number of lines in the current input, including prompt.
-   */
-  numLines() {
-    return 1 + this.offsetToColRow(this.actualLine(this.input), this.input.length + 2).row;
   }
 
   async pasteLines(lines: string[], fromProfile = false) {

@@ -53,6 +53,7 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
+- tty resize while multiline input is broken again
 - `SideNote` should wait a bit before showing
 - tty should not render `NaN` as `null`
 - `say` reading from tty should not terminate early when send a command before utterance finished

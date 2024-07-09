@@ -29,7 +29,7 @@ export default function Terminal(props: Props) {
   const state = useStateRef(() => ({
     bounds,
     container: {} as HTMLDivElement,
-    cursorBeforePause: undefined as number | undefined,
+    inputBeforePause: undefined as string | undefined,
     fitAddon: new FitAddon(),
     focusedBeforePause: false,
     hasEverDisabled: false,
@@ -156,18 +156,14 @@ export default function Terminal(props: Props) {
       state.hasEverDisabled = true;
       state.focusedBeforePause = document.activeElement === state.xterm.xterm.textarea;
 
-      /** Is final `resumedLine`? */
-      const prevLineResumed = state.xterm.getFinalLine() === stripAnsi(resumedLine);
-
       if (state.xterm.isPromptReady()) {
-        state.cursorBeforePause = state.xterm.getCursor();
-        state.xterm.showPendingInputImmediately(); // Moves cursor to end
-      } else {
-        state.cursorBeforePause = undefined;
+        state.inputBeforePause = state.xterm.getInput();
+        state.xterm.clearInput();
       }
 
-      prevLineResumed && state.xterm.xterm.write(`\x1b[F\x1b[2K`); // overwrite `resumedLine`
-      useSession.api.writeMsgCleanly(props.sessionKey, pausedLine, { prompt: false });
+      useSession.api.writeMsgCleanly(
+        props.sessionKey, formatMessage(`${ansi.White}paused`, "info"), { prompt: false },
+      );
 
       // Pause running processes
       Object.values(state.session.process ?? {})
@@ -181,13 +177,15 @@ export default function Terminal(props: Props) {
 
     if (!props.disabled && state.hasEverDisabled) {// Resume
       state.focusedBeforePause && state.xterm.xterm.focus();
-
-      // overwrite "paused" with "resumed"
-      const extraNewlines = Math.max(1,
-        state.xterm.numLines() + (state.xterm.active.cursorY + 1) - state.xterm.rows
-      );
-      state.xterm.xterm.write(`\x1b[F\x1b[2K${resumedLine}\r${"\r\n".repeat(extraNewlines)}`);
-      state.xterm.showPendingInputImmediately();
+      
+      // Overwrite `pausedLine` with input
+      state.xterm.xterm.write(`\x1b[F\x1b[2K`);
+      if (state.inputBeforePause) {
+        state.xterm.setInput(state.inputBeforePause);
+        state.inputBeforePause = undefined;
+      } else {
+        state.xterm.showPendingInputImmediately();
+      }
 
       // Resume processes we suspended
       const processes = Object.values(state.session?.process ?? {});
@@ -274,5 +272,3 @@ function stopKeysPropagating(e: React.KeyboardEvent) {
   e.stopPropagation();
 }
 
-const pausedLine = formatMessage(`${ansi.White}paused`, "info");
-const resumedLine = formatMessage(`${ansi.White}resumed`, "info");
