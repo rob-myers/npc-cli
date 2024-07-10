@@ -36,6 +36,9 @@
     - ❌ with managed holes, so don't have to recreate
     - ✅ with onPointer{Down,Up}
   - ✅ fix decor cuboid roomId
+  - ✅ gmRoomId has `grKey` e.g. `g4r3`
+  - ✅ simplify decorGrid i.e. `lookup[x][y]: Set<Decor>`
+  - ✅ speed up decor initialization
   - 🚧 fix decor quads
   - decor cuboids can effect nav-mesh
   - reconsider decor types

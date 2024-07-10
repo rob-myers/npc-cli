@@ -92,7 +92,12 @@ declare namespace Geomorph {
   interface GmRoomId {
     gmId: number;
     roomId: number;
+    /** `gmRoomKey` */
+    grKey: Geomorph.GmRoomKey;
   }
+
+  /** `g${gmId}r${roomId}` */
+  type GmRoomKey = `g${number}r${number}`;
 
   interface SymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
@@ -291,17 +296,20 @@ declare namespace Geomorph {
   }
 
   interface BaseDecor {
-    /**
-     * Either auto-assigned e.g. decor from geomorphs, or specified by user.
-     */
+    /** Either auto-assigned e.g. decor from geomorphs, or specified by user. */
     key: string;
     meta: Geom.Meta<Geomorph.GmRoomId>;
     /** 2D bounds inside XZ plane */
     bounds2d: Geom.RectJson;
     /** Epoch ms when last updated (overwritten) */
     updatedAt?: number;
-    /** For defining decor via CLI (more succinct) */
-    tags?: string[];
+    /**
+     * Indicates decor that comes from a geomorph layout,
+     * i.e. decor that is initially instantiated.
+     */
+    src?: Geomorph.GeomorphKey;
+    // /** For defining decor via CLI (more succinct) */
+    // tags?: string[];
   }
 
   type DecorSheetRectCtxt = Geom.Meta<{ decorImgKey: Geomorph.DecorImgKey }>;
@@ -311,22 +319,11 @@ declare namespace Geomorph {
   /** 🚧 clarify */
   type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
 
-  type DecorGrid = Record<number, Record<number, {
-    points: Set<Geomorph.DecorPoint>;
-    colliders: Set<Geomorph.DecorCollidable>;
-    cuboids: Set<Geomorph.DecorCuboid>;
-  }>>;
+  /** `byGrid[x][y]` */
+  type DecorGrid = Set<Geomorph.Decor>[][];
 
-  interface RoomDecor {
-    // /** Decor which came from room's parent geomorph symbol */
-    // symbol: Geomorph.Decor[];
-    /** Everything in room */
-    decor: Record<string, Geomorph.Decor>;
-    /** All colliders in room */
-    colliders: Geomorph.DecorCollidable[];
-    /** All points in room */
-    points: Geomorph.DecorPoint[];
-  }
+  /** Previously we sorted its groups e.g. "points" */
+  type RoomDecor = Set<Geomorph.Decor>;
 
   //#endregion
 

@@ -19,6 +19,12 @@ bar/toUpperCase'()'
 expr 'new Set([1, 2, 3])' | map Array.from
 ```
 
+```sh
+w decor.byKey | map Object.values | split | take 1
+w decor.byKey | map 'x => Object.values(x)[0]' | pretty
+w decor.byKey | map Object.values | map length
+```
+
 ## Local variables
 
 ```sh
