@@ -28,11 +28,9 @@ export default function Decor(props) {
 
     addDecor(ds, removeExisting = true) {
 
-      const addable = ds.reduce((agg, d) => {
-        if (state.ensureGmRoomId(d) !== null) agg.push(d);
-        else warn(`decor "${d.key}" cannot be added: not in any room`, d);
-        return agg;
-      }, /** @type {Geomorph.Decor[]} */ ([]));
+      const addable = ds.filter((d) => state.ensureGmRoomId(d) !== null ||
+        void warn(`decor "${d.key}" cannot be added: not in any room`, d)
+      );
 
       const grouped = addable.reduce((agg, d) => {
         (agg[d.meta.grKey] ??= { meta: d.meta, add: [], remove: [] }).add.push(d);
@@ -151,7 +149,10 @@ export default function Decor(props) {
       const ds = gm.decor.flatMap((def, localId) => {
         const key = state.getGmDecorKey(def, gmId);
         if (state.rmKeys.has(key)) {
-          return []; // Don't instantiate if key explicitly removed
+          return []; // Don't instantiate if explicitly removed
+        } else if (!(def.meta.roomId >= 0)) {
+          warn(`decor "${def.key}" cannot be instantiated: not in any room`, def);
+          return [];
         }
         const base = {
           key,
