@@ -24,6 +24,7 @@ export default function Decor(props) {
     cuboidInst: /** @type {*} */ (null),
     quads: [],
     quadInst: /** @type {*} */ (null),
+    rmKeys: new Set(),
 
     addDecor(ds, removeExisting = true) {
 
@@ -67,6 +68,7 @@ export default function Decor(props) {
         addToDecorGrid(d, state.byGrid);
         state.byKey[d.key] = d;
         atRoom.add(d);
+        state.rmKeys.delete(d.key);
       }
 
       ds.length && w.events.next({ key: 'decors-added', decors: ds });
@@ -138,19 +140,21 @@ export default function Decor(props) {
           throw testNever(decor);
       }
     },
-    instantiateDecorKey(d) {
+    getGmDecorKey(d, gmId) {
       // 🔔 assume distinct geomorph decor have distinct "min point of 3D AABB"
-      return `g${d.meta.gmId}r${d.meta.roomId}[${d.bounds2d.x},${d.type === 'cuboid' ? d.center.y : 0},${d.bounds2d.y}]`;
+      return `g${gmId}r${d.meta.roomId}[${d.bounds2d.x},${d.type === 'cuboid' ? d.center.y : 0},${d.bounds2d.y}]`;
     },
     initializeGmDecor(gmId, gm) {
-      // 🔔 needs update on dynamic nav-mesh
-      state.byRoom[gmId] ??= gm.rooms.map(_ => new Set());
+      state.byRoom[gmId] ??= gm.rooms.map(_ => new Set()); // 🔔 needs update on dynamic nav
       
-      /** @type {Geomorph.Decor[]} */
-      const ds = gm.decor.map((def, localId) => {
-        def.meta.gmId = gmId;
+      /** @type {Geomorph.Decor[]} */ ([]);
+      const ds = gm.decor.flatMap((def, localId) => {
+        const key = state.getGmDecorKey(def, gmId);
+        if (state.rmKeys.has(key)) {
+          return []; // Don't instantiate if key explicitly removed
+        }
         const base = {
-          key: state.instantiateDecorKey(def),
+          key,
           meta: { ...def.meta, gmId, localId },
           bounds2d: tmpRect1.copy(def.bounds2d).applyMatrix(gm.matrix).json,
           src: gm.key,
@@ -179,7 +183,7 @@ export default function Decor(props) {
         }
       });
 
-      state.addDecor(ds, false); // We already removed existing
+      state.addDecor(ds, false); // Already removed existing
     },
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
@@ -251,10 +255,6 @@ export default function Decor(props) {
       update();
     },
     removeDecorFromRoom(gmId, roomId, ds) {
-      if (ds.length === 0) {
-        return;
-      }
-
       const atRoom = state.byRoom[gmId][roomId];
 
       for (const d of ds) {
@@ -263,11 +263,12 @@ export default function Decor(props) {
         }
         delete state.byKey[d.key];
         atRoom.delete(d);
+        state.rmKeys.add(d.key);
       }
 
       ds.forEach(d => removeFromDecorGrid(d, state.byGrid));
 
-      w.events.next({ key: 'decors-removed', decors: ds });
+      ds.length && w.events.next({ key: 'decors-removed', decors: ds });
     },
     removeInstantiatedDecor() {
       for (const d of Object.values(state.byKey)) {
@@ -328,7 +329,7 @@ export default function Decor(props) {
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
-        diffuse={[0.35, 0.25, 0.25]}
+        diffuse={[0.25, 0.25, 0.25]}
       />
     </instancedMesh>
 
@@ -370,6 +371,8 @@ export default function Decor(props) {
  * @property {Geomorph.Decor[]} quads This is `Object.values(state.byKey)`
  * @property {THREE.InstancedMesh} cuboidInst
  * @property {THREE.InstancedMesh} quadInst
+ * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
+ * e.g. so can avoid re-instantiating geomorph decor
  *
  * @property {(ds: Geomorph.Decor[], removeExisting?: boolean) => void} addDecor
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor
@@ -379,7 +382,7 @@ export default function Decor(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
- * @property {(d: Geomorph.Decor) => `g${number}r${number}[${number},${number},${number}]`} instantiateDecorKey
+ * @property {(d: Geomorph.Decor, gmId: number) => `g${number}r${number}[${number},${number},${number}]`} getGmDecorKey
  * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} initializeGmDecor
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
