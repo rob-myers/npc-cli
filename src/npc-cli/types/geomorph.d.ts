@@ -92,7 +92,12 @@ declare namespace Geomorph {
   interface GmRoomId {
     gmId: number;
     roomId: number;
+    /** `gmRoomKey` */
+    grKey: Geomorph.GmRoomKey;
   }
+
+  /** `g${gmId}r${roomId}` */
+  type GmRoomKey = `g${number}r${number}`;
 
   interface SymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
@@ -311,11 +316,7 @@ declare namespace Geomorph {
   /** 🚧 clarify */
   type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
 
-  type DecorGrid = Record<number, Record<number, {
-    points: Set<Geomorph.DecorPoint>;
-    colliders: Set<Geomorph.DecorCollidable>;
-    cuboids: Set<Geomorph.DecorCuboid>;
-  }>>;
+  type DecorGrid = Record<number, Record<number, Set<Geomorph.Decor>>>;
 
   interface RoomDecor {
     // /** Decor which came from room's parent geomorph symbol */

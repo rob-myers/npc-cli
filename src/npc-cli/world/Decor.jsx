@@ -29,31 +29,29 @@ export default function Decor(props) {
 
       const addable = ds.reduce((agg, d) => {
         if (state.ensureGmRoomId(d) !== null) agg.push(d);
-        else warn(`decor "${d.key}" wasn't added: not in any room`, d);
+        else warn(`decor "${d.key}" cannot be added: not in any room`, d);
         return agg;
       }, /** @type {Geomorph.Decor[]} */ ([]));
 
       const grouped = addable.reduce((agg, d) => {
-        const { gmId, roomId } = d.meta;
-        
-        (agg[geomorphService.getGmRoomKey(gmId, roomId)]
-          ??= { gmId, roomId, add: [], remove: [] }
-        ).add.push(d);
+        (agg[d.meta.grKey] ??= { meta: d.meta, add: [], remove: [] }).add.push(d);
         
         const prev = state.byKey[d.key];
-        if (prev) {// Add pre-existing decor to removal group
+        if (prev !== undefined) {// Add pre-existing decor to removal group
           d.updatedAt = Date.now();
-          const { gmId, roomId } = prev.meta;
-          (agg[geomorphService.getGmRoomKey(gmId, roomId)] ??= { gmId, roomId, add: [], remove: [] }).remove.push(prev);
+          (agg[prev.meta.grKey] ??= { meta: prev.meta, add: [], remove: [] }).remove.push(prev);
         }
-        return agg;
-      }, /** @type {Record<`g${number}r${number}`, Geomorph.GmRoomId & { [x in 'add' | 'remove']: Geomorph.Decor[] }>} */ ({}));
 
-      for (const { gmId, roomId, remove } of Object.values(grouped)) {
-        state.removeDecorFromRoom(gmId, roomId, remove);
+        return agg;
+      }, /** @type {Record<`g${number}r${number}`, { meta: Geom.Meta<Geomorph.GmRoomId> } & { [x in 'add' | 'remove']: Geomorph.Decor[] }>} */ ({}));
+
+      // 🚧 remove "all in one go"
+      // e.g. by tracking touched grid items
+      for (const { meta, remove } of Object.values(grouped)) {
+        state.removeDecorFromRoom(meta.gmId, meta.roomId, remove);
       }
-      for (const { gmId, roomId, add } of Object.values(grouped)) {
-        state.addDecorToRoom(gmId, roomId, add);
+      for (const { meta, add } of Object.values(grouped)) {
+        state.addDecorToRoom(meta.gmId, meta.roomId, add);
       }
 
       state.cuboids = Object.values(state.byKey).filter(d => d.type === 'cuboid');
@@ -127,13 +125,15 @@ export default function Decor(props) {
         const decorOrigin = state.getDecorOrigin(decor);
         const gmRoomId = w.gmGraph.findRoomContaining(decorOrigin);
         if (gmRoomId) {
-          Object.assign(decor.meta, gmRoomId);
+          return Object.assign(decor.meta, gmRoomId);
         } else {
-          return null;
           // throw new Error(`decor origin must reside in some room: ${JSON.stringify(decor)}`);
+          return null;
         }
+      } else {
+        decor.meta.grKey ??= geomorphService.getGmRoomKey(decor.meta.gmId, decor.meta.roomId);
+        return decor.meta;
       }
-      return decor.meta;
     },
     getDecorOrigin(decor) {
       switch (decor.type) {
@@ -241,13 +241,12 @@ export default function Decor(props) {
       const ds = decorKeys.map(x => state.byKey[x]).filter(Boolean);
 
       const grouped = ds.reduce((agg, d) => {
-        const { gmId, roomId } = d.meta;
-        (agg[geomorphService.getGmRoomKey(gmId, roomId)] ??= { gmId, roomId, ds: [] }).ds.push(d);
+        (agg[d.meta.grKey] ??= { meta: d.meta, ds: [] }).ds.push(d);
         return agg;
-      }, /** @type {Record<`g${number}r${number}`, Geomorph.GmRoomId & { ds: Geomorph.Decor[] }>} */ ({}));
+      }, /** @type {Record<`g${number}r${number}`, { meta: Geom.Meta<Geomorph.GmRoomId> } & { ds: Geomorph.Decor[] }>} */ ({}));
 
-      for (const { gmId, roomId, ds } of Object.values(grouped)) {
-        state.removeDecorFromRoom(gmId, roomId, ds)
+      for (const { meta, ds } of Object.values(grouped)) {
+        state.removeDecorFromRoom(meta.gmId, meta.roomId, ds)
       }
 
       state.cuboids = Object.values(state.byKey).filter(d => d.type === 'cuboid');

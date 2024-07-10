@@ -144,6 +144,7 @@ declare namespace Graph {
   interface GmAdjRoomCtxt {
     adjGmId: number;
     adjRoomId: number;
+    adjGmRoomKey: Geomorph.GmRoomKey;
     adjHullId: number;
     adjDoorId: number;
   }

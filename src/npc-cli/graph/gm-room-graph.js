@@ -49,21 +49,20 @@ export class GmRoomGraphClass extends BaseGraph {
     // Edges: bridging two gmIds (via hull doors)
     gmGraph.gms.forEach((gm, gmId) => {
       gm.rooms.forEach((_, roomId) => {
-        /** @type {Geomorph.GmRoomId} */ let gmRoomId;
         const { roomGraph } = gmsData[gm.key];
 
         const succ = roomGraph.getAdjacentDoors(roomId).reduce(
           (agg, { doorId }) => {
             if (gm.isHullDoor(doorId)) {
               const ctxt = gmGraph.getAdjacentRoomCtxt(gmId, doorId);
-              if (ctxt) {
-                (agg[JSON.stringify(gmRoomId = { gmId: ctxt.adjGmId, roomId: ctxt.adjRoomId })] ??= [[], []])[0].push(
+              if (ctxt !== null) {
+                (agg[ctxt.adjGmRoomKey] ??= [[], []])[0].push(
                   { key: geomorphService.getGmDoorKey(gmId, doorId), gmId, doorId, other: { gmId: ctxt.adjGmId, doorId: ctxt.adjDoorId } }
                 );
               } // ctxt `null` for unconnected hull doors
             } else {
               const otherRoomId = /** @type {number} */ (gm.getOtherRoomId(doorId, roomId));
-              (agg[JSON.stringify(gmRoomId = { gmId, roomId: otherRoomId })] ??= [[], []])[0].push(
+              (agg[geomorphService.getGmRoomKey(gmId, otherRoomId)] ??= [[], []])[0].push(
                 { key: geomorphService.getGmDoorKey(gmId, doorId), gmId, doorId },
               );
             }
@@ -75,13 +74,13 @@ export class GmRoomGraphClass extends BaseGraph {
         roomGraph.getAdjacentWindows(roomId).forEach(({ windowId }) => {
           const otherRoomId = gm.windows[windowId].roomIds.find(x => x !== roomId);
           typeof otherRoomId === 'number' && (
-            succ[JSON.stringify(gmRoomId = { gmId, roomId: otherRoomId })] ??= [[], []]
+            succ[geomorphService.getGmRoomKey(gmId, otherRoomId)] ??= [[], []]
           )[1].push({ gmId, windowId });
         });
 
         const srcKey = geomorphService.getGmRoomKey(gmId, roomId);
         for (const [gmRoomStr, [gmDoorIds, gmWindowIds]] of Object.entries(succ)) {
-          const gmRoomId = /** @type {Geomorph.GmRoomId} */ (JSON.parse(gmRoomStr));
+          const [gmId, roomId] = gmRoomStr.slice(1).split('r').map(Number);
           /**
            * Technically this graph is not symmetric: it is a directed graph but not an undirected graph.
            * In particular, if `src !== dst` are either side of a hull door (two identified doors),
@@ -92,7 +91,7 @@ export class GmRoomGraphClass extends BaseGraph {
            */
           graph.connect({
             src: srcKey,
-            dst: geomorphService.getGmRoomKey(gmRoomId.gmId, gmRoomId.roomId),
+            dst: geomorphService.getGmRoomKey(gmId, roomId),
             doors: gmDoorIds,
             windows: gmWindowIds,
           })
