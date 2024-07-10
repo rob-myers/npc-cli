@@ -56,6 +56,11 @@
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 
+- consider alternatives to current custom minecraft character
+  - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
+  - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
+  - probably won't use but can compare for ideas e.g. better textures, modelling
+
 - tty resize while multiline input is broken again
 - `SideNote` should wait a bit before showing
 - tty should not render `NaN` as `null`
