@@ -1,8 +1,8 @@
 {
-  "hash": "610044716 1081455912 316091196 -648433664",
+  "hash": "610044716 1081455912 -1184608791 -648433664",
   "mapsHash": 610044716,
   "layoutsHash": 1081455912,
-  "sheetsHash": 316091196,
+  "sheetsHash": -1184608791,
   "imagesHash": -648433664,
   "map": {
     "demo-map-1": {
@@ -30080,10 +30080,10 @@
       }
     },
     "decor": {
-      "door--hull--002": {
+      "door--002--hull": {
         "door": true,
-        "hull": true,
-        "decorImgKey": "door--hull--002",
+        "002": true,
+        "decorImgKey": "door--002--hull",
         "x": 2,
         "y": 2,
         "width": 250,

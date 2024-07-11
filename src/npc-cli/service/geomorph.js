@@ -168,7 +168,7 @@ class GeomorphService {
   /** Aligned to media/decor/{key}.svg */
   fromDecorImgKey = {// 🔔 must extend when adding new decor
     'door--001': true,
-    'door--hull--002': true,
+    'door--002--hull': true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */
