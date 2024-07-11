@@ -104,7 +104,7 @@ export default function Decor(props) {
     createQuadMatrix4(d) {
       if (d.type === 'point') {// move to center and scale
         tmpMat1.feedFromArray([
-          decorIconRadius * 2, 0, 0, decorIconRadius * 2, d.x, d.y
+          decorIconRadius * 2, 0, 0, decorIconRadius * 2, d.x - decorIconRadius, d.y - decorIconRadius
         ]);
         return geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
@@ -275,6 +275,8 @@ export default function Decor(props) {
 
       cuboidInst.instanceMatrix.needsUpdate = true;
       cuboidInst.computeBoundingSphere();
+      quadInst.instanceMatrix.needsUpdate = true;
+      quadInst.computeBoundingSphere();
     },
     removeDecor(...decorKeys) {
       const ds = decorKeys.map(x => state.byKey[x]).filter(Boolean);
