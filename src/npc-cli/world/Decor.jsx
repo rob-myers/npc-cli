@@ -108,7 +108,7 @@ export default function Decor(props) {
         ]);
         return geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
-          yHeight: d.meta.h ?? 2, // 🚧 default point height
+          yHeight: d.meta.y ?? 2, // 🚧 default point height
         });
       } else {// 🚧 assume rotated rect
         const [p, q, r, s] = d.points;
@@ -117,7 +117,7 @@ export default function Decor(props) {
         ]);
         return geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
-          yHeight: d.meta.h ?? 2, // 🚧 default poly height
+          yHeight: d.meta.y ?? 2, // 🚧 default poly height
         });
       }
     },

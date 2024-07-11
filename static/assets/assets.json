@@ -213,7 +213,7 @@
       "obsHashes": [1508393284]
     },
     "fresher--002--0.4x0.6": {
-      "outputHash": 149539020,
+      "outputHash": -560021402,
       "pngHash": -1792259774,
       "obsHashes": [1124240817]
     },
@@ -340,7 +340,7 @@
       "obsHashes": [1562717456]
     },
     "stateroom--012--2x2": {"outputHash": -277394888, "pngHash": 285590873},
-    "stateroom--014--2x2": {"outputHash": -164360094, "pngHash": 810806279},
+    "stateroom--014--2x2": {"outputHash": 269169902, "pngHash": 810806279},
     "stateroom--018--2x3": {"outputHash": -1759605333, "pngHash": -932858017},
     "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 1368839861, "pngHash": 987326316},
@@ -7303,7 +7303,13 @@
           "coordinates": [
             [[0.4004, 0.61], [0.4004, 0.66], [0.3496, 0.66], [0.3496, 0.61]]
           ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+          "meta": {
+            "decor": true,
+            "do": true,
+            "stand": true,
+            "orient": 270,
+            "y": 0.1
+          }
         }
       ],
       "unsorted": [],
@@ -11323,7 +11329,7 @@
           "coordinates": [
             [[2.775, 0.725], [2.775, 0.775], [2.725, 0.775], [2.725, 0.725]]
           ],
-          "meta": {"decor": true, "button": true, "shower": true}
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1}
         }
       ],
       "unsorted": [],

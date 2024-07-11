@@ -56,6 +56,7 @@
   - decor cuboids can effect nav-mesh
   - fix geomorph decor warns e.g. not fuel label not in any room
   - remove temp "all decor points shown with info icon"
+  - fix HMR on change decor
 
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - darken obstacle machinery via instancedmesh colours

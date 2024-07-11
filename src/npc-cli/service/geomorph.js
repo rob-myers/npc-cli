@@ -759,7 +759,7 @@ class GeomorphService {
       isHull: sym.isHull,
       addableWalls: [],
       removableDoors: [],
-      decor: sym.decor.map((x) => x.cleanClone(tmpMat1, this.transformMeta(x.meta, tmpMat1))),
+      decor: sym.decor.map((x) => x.cleanClone(tmpMat1, this.transformDecorMeta(x.meta, tmpMat1, meta.y))),
       doors: doors.map((x) => x.cleanClone(tmpMat1)),
       obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1, {
         // aggregate height
@@ -1222,15 +1222,18 @@ class GeomorphService {
   /**
    * @param {Geom.Meta} meta 
    * @param {Geom.Mat} mat
+   * @param {number} [y] Height off ground
    * @returns {Geom.Meta}
    */
-  transformMeta(meta, mat) {
+  transformDecorMeta(meta, mat, y) {
     if (typeof meta.orient === 'number') {
       const newDegrees = (180 / Math.PI) * mat.transformAngle(meta.orient * (Math.PI / 180));
       const newOrient =  Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees);
       return {
         ...meta,
         orient: newOrient,
+        // aggregate height
+        ...typeof y === 'number' && { y: y + (Number(meta.y) || 0) },
       };
     } else {
       return meta; 
