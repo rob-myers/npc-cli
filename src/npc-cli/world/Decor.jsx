@@ -7,7 +7,7 @@ import { pause, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, quadGeometryXZ, tmpMatFour1 } from "../service/three";
+import { boxGeometry, quadGeometryXZ2, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -326,7 +326,9 @@ export default function Decor(props) {
         d => d.type === 'cuboid'
       );
       state.quads = Object.values(state.byKey).filter(
-        d => d.type === 'point' // 🚧 WIP
+        // 🚧 WIP
+        /** @returns {d is Geomorph.DecorPoint} */
+        d => d.type === 'point'
       );
       update();
     },
@@ -382,8 +384,7 @@ export default function Decor(props) {
       name="decor-quads"
       key={`${w.hash} ${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
-      args={[quadGeometryXZ, undefined, state.quads.length]}
-      // args={[quadGeometryXZ, undefined, 0]}
+      args={[quadGeometryXZ2, undefined, state.quads.length]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
@@ -394,7 +395,7 @@ export default function Decor(props) {
         side={THREE.DoubleSide}
         map={w.decorTex}
         transparent
-        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+        // diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
       />
     </instancedMesh>
   </>;

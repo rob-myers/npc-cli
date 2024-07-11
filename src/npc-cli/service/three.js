@@ -16,6 +16,8 @@ quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
+export const quadGeometryXZ2 = quadGeometryXZ.clone();
+
 /** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
 export const quadGeometryXY = new THREE.BufferGeometry();
 const xyVertices = new Float32Array([0,0,0, 0,1,0, 1,1,0, 1,0,0]);
