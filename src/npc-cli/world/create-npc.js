@@ -276,7 +276,7 @@ export function hotModuleReloadNpc(npc) {
   const { def, epochMs, group, s, map, animMap, mixer, agent } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
   
-  npc.changeSkin('robot-vaccino.png');  // 🔔 Skin debug
+  // npc.changeSkin('robot-vaccino.png');  // 🔔 Skin debug
 
   const nextNpc = new Npc(def, npc.api);
   return Object.assign(nextNpc, { epochMs, group, s: Object.assign(nextNpc.s, s), map, animMap, mixer, agent });

@@ -2,6 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
+import { decorIconRadius } from "../service/const";
 import { pause, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
@@ -52,9 +53,7 @@ export default function Decor(props) {
         state.addDecorToRoom(meta.gmId, meta.roomId, add)
       );
 
-      state.cuboids = Object.values(state.byKey).filter(d => d.type === 'cuboid');
-      state.quads = Object.values(state.byKey).filter(d => d.meta.decorImgKey); // 🚧 d.decorImgKey
-      update();
+      state.updateInstanceLists();
     },
     addDecorToRoom(gmId, roomId, ds) {
       const atRoom = state.byRoom[gmId][roomId];
@@ -84,6 +83,26 @@ export default function Decor(props) {
         yHeight: cuboidDecor.center.y,
         yScale: cuboidDecor.extent.y * 2,
       });
+    },
+    createQuadMatrix4(d) {
+      if (d.type === 'point') {// move to center and scale
+        tmpMat1.feedFromArray([
+          decorIconRadius * 2, 0, 0, decorIconRadius * 2, d.x, d.y
+        ]);
+        return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+          mat4: tmpMatFour1,
+          yHeight: d.meta.h ?? 2, // 🚧 default point height
+        });
+      } else {// 🚧 assume rotated rect
+        const [p, q, r, s] = d.points;
+        tmpMat1.feedFromArray([
+          q.x - p.x, q.y - p.y, s.x - p.x, s.y - p.y, p.x, p.y,
+        ]);
+        return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+          mat4: tmpMatFour1,
+          yHeight: d.meta.h ?? 2, // 🚧 default poly height
+        });
+      }
     },
     detectClick(e) {
       // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
@@ -225,16 +244,17 @@ export default function Decor(props) {
       }
     },
     positionInstances() { 
-      // decor cuboids
-      const { cuboidInst } = state;
+      const { cuboidInst, quadInst } = state;
       
       for (const [instId, d] of state.cuboids.entries()) {
-        if (d.type === 'cuboid') {
-          const mat4 = state.createCuboidMatrix4(d);
-          cuboidInst.setMatrixAt(instId, mat4);
-        }
+        const mat4 = state.createCuboidMatrix4(d);
+        cuboidInst.setMatrixAt(instId, mat4);
       }
-      // 🚧 decor quads
+      
+      for (const [instId, d] of state.quads.entries()) {
+        const mat4 = state.createQuadMatrix4(d);
+        quadInst.setMatrixAt(instId, mat4);
+      }
 
       cuboidInst.instanceMatrix.needsUpdate = true;
       cuboidInst.computeBoundingSphere();
@@ -251,9 +271,7 @@ export default function Decor(props) {
         state.removeDecorFromRoom(meta.gmId, meta.roomId, ds)
       }
 
-      state.cuboids = Object.values(state.byKey).filter(d => d.type === 'cuboid');
-      state.quads = Object.values(state.byKey).filter(d => d.meta.decorImgKey); // 🚧 d.decorImgKey
-      update();
+      state.updateInstanceLists();
     },
     removeDecorFromRoom(gmId, roomId, ds) {
       const atRoom = state.byRoom[gmId][roomId];
@@ -285,6 +303,16 @@ export default function Decor(props) {
           decorSet.forEach(d => d.src !== undefined && decorSet.delete(d));
         }
       }
+    },
+    updateInstanceLists() {
+      state.cuboids = Object.values(state.byKey).filter(
+        /** @returns {d is Geomorph.DecorCuboid} */
+        d => d.type === 'cuboid'
+      );
+      state.quads = Object.values(state.byKey).filter(
+        d => d.type === 'point' // 🚧 WIP
+      );
+      update();
     },
   }));
 
@@ -338,19 +366,19 @@ export default function Decor(props) {
       name="decor-quads"
       key={`${w.hash} ${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
-      // 🚧
-      // args={[quadGeometryXZ, undefined, state.byQuadId.length]}
-      args={[quadGeometryXZ, undefined, 0]}
+      args={[quadGeometryXZ, undefined, state.quads.length]}
+      // args={[quadGeometryXZ, undefined, 0]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
     >
-      <instancedSpriteSheetMaterial
+      <meshBasicMaterial color="red" />
+      {/* <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
         map={w.decorTex}
         transparent
-      />
+      /> */}
     </instancedMesh>
   </>;
 }
@@ -362,14 +390,14 @@ export default function Decor(props) {
 
 /**
  * @typedef State
- * @property {Geomorph.Decor[]} cuboids
+ * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {Geomorph.DecorGrid} byGrid
  * PoCollidable decors in global grid where `byGrid[x][y]` covers the square:
  * (x * decorGridSize, y * decorGridSize, decorGridSize, decorGridSize)
  * @property {Record<string, Geomorph.Decor>} byKey
  * @property {Geomorph.RoomDecor[][]} byRoom
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
- * @property {Geomorph.Decor[]} quads This is `Object.values(state.byKey)`
+ * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads This is `Object.values(state.byKey)`
  * @property {THREE.InstancedMesh} cuboidInst
  * @property {THREE.InstancedMesh} quadInst
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
@@ -380,6 +408,7 @@ export default function Decor(props) {
  * @property {() => void} addQuadUvs
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
+ * @property {(d: Geomorph.DecorPoint | Geomorph.DecorPoly) => THREE.Matrix4} createQuadMatrix4
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
@@ -391,4 +420,5 @@ export default function Decor(props) {
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
  * @property {() => void} removeInstantiatedDecor
+ * @property {() => void} updateInstanceLists
  */

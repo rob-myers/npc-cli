@@ -47,9 +47,10 @@
     - ✅ `point` can have meta.img in `DecorImgKey`
     - ✅ `poly` can have meta.img in `DecorImgKey` 
       - when rotated rect 4-gon
-    - rotated rect 4-gon -> affine transform
-  - decor points induce quads
+  - ✅ decor points induce quads
     - temp set them all as info icon
+  - better decor point heights
+  - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`
   - decor poly induces quads
   - decor cuboids can effect nav-mesh
