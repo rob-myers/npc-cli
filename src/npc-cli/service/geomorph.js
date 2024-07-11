@@ -169,6 +169,7 @@ class GeomorphService {
   fromDecorImgKey = {// 🔔 must extend when adding new decor
     'door--001': true,
     'door--002--hull': true,
+    'icon--001--info': true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */

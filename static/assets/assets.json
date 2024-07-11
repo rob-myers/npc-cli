@@ -1023,6 +1023,15 @@
         "y": 2,
         "width": 110,
         "height": 200
+      },
+      "icon--001--info": {
+        "icon": true,
+        "001": true,
+        "decorImgKey": "icon--001--info",
+        "x": 254,
+        "y": 204,
+        "width": 50,
+        "height": 50
       }
     },
     "obstacleDim": {"width": 2151, "height": 2154},

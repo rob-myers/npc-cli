@@ -39,15 +39,20 @@
   - ✅ gmRoomId has `grKey` e.g. `g4r3`
   - ✅ simplify decorGrid i.e. `lookup[x][y]: Set<Decor>`
   - ✅ speed up decor initialization
-  - 🚧 fix decor quads
+  - ❌ smaller decor e.g. x1 instead of x5?
+    - no, need the detail and don't want to "scale svg" in case uses bitmaps
+  - ✅ reconsider decor types
+    - ✅ add info icon to decor sprite-sheet
+      - 100x100
+    - ✅ `point` can have meta.img in `DecorImgKey`
+    - ✅ `poly` can have meta.img in `DecorImgKey` 
+      - when rotated rect 4-gon
+    - rotated rect 4-gon -> affine transform
+  - decor points induce quads
+    - temp set them all as info icon
+  - some symbol decor poly (rotated rect) has `img={decorImgKey}`
+  - decor poly induces quads
   - decor cuboids can effect nav-mesh
-  - reconsider decor types
-    - can have decorImgKey (in XZ plane)
-      - e.g. for cuboid table-top or screen front
-    - `rect` -> `quad`
-    - `point` should be 3d
-  - can specify decor quads in symbols
-  - can see decor quads in World
   - fix geomorph decor warns e.g. not fuel label not in any room
 
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
