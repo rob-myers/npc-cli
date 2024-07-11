@@ -19,13 +19,13 @@ export default function Obstacles(props) {
     obsInst: /** @type {*} */ (null),
 
     addObstacleUvs() {
-      const { obstacle: obstaclesSheet, obstacleDim: sheetDim } = w.geomorphs.sheet;
+      const { obstacle: sheet, obstacleDim: sheetDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
       w.gms.forEach(({ obstacles }) =>
         obstacles.forEach(({ symbolKey, obstacleId }) => {
-          const item = obstaclesSheet[`${symbolKey} ${obstacleId}`];
+          const item = sheet[`${symbolKey} ${obstacleId}`];
           if (item) {// (x, y) is top left of sprite in spritesheet
             const { x, y, width, height } = item;
             uvOffsets.push(x / sheetDim.width,  y / sheetDim.height);

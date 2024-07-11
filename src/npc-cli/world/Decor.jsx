@@ -71,7 +71,23 @@ export default function Decor(props) {
       ds.length && w.events.next({ key: 'decors-added', decors: ds });
     },
     addQuadUvs() {
-      // 🚧
+      const { decor: sheet, decorDim: sheetDim } = w.geomorphs.sheet;
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
+      
+      const item = sheet['icon--001--info']; // 🚧 remove hard-coding
+      for (const d of state.quads) {
+        const { x, y, width, height } = item;
+        uvOffsets.push(x / sheetDim.width,  y / sheetDim.height);
+        uvDimensions.push(width / sheetDim.width, height / sheetDim.height);
+      }
+
+      state.quadInst.geometry.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      );
+      state.quadInst.geometry.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
     },
     createCuboidMatrix4(cuboidDecor) {
       tmpMat1.feedFromArray([
@@ -372,13 +388,14 @@ export default function Decor(props) {
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
     >
-      <meshBasicMaterial color="red" />
-      {/* <instancedSpriteSheetMaterial
+      {/* <meshBasicMaterial color="red" /> */}
+      <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
         map={w.decorTex}
         transparent
-      /> */}
+        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+      />
     </instancedMesh>
   </>;
 }
