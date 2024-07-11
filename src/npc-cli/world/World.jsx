@@ -387,5 +387,3 @@ export default function World(props) {
  * //@property {typeof merge} merge
  * //@property {typeof take} take
  */
-
-1;

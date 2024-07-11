@@ -4,8 +4,8 @@ import Terminal, { Props } from "./Terminal";
 import utilFunctionsSh from "!!raw-loader!../sh/src/util-functions.sh";
 import gameFunctionsSh from "!!raw-loader!../sh/src/game-functions.sh";
 
-import * as utilGeneratorsJs from '../sh/src/util-generators.min.js';
-import * as gameGeneratorsJs from '../sh/src/game-generators.min.js';
+import * as utilGeneratorsJs from '../sh/src/util-generators';
+import * as gameGeneratorsJs from '../sh/src/game-generators';
 
 import { error, keys } from "../service/generic";
 import useSession, { Session } from "../sh/session.store";
