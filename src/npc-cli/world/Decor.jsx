@@ -7,7 +7,7 @@ import { pause, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, quadGeometryXZ2, tmpMatFour1 } from "../service/three";
+import { boxGeometry, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -24,6 +24,7 @@ export default function Decor(props) {
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
     quads: [],
+    quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
     rmKeys: new Set(),
 
@@ -384,7 +385,7 @@ export default function Decor(props) {
       name="decor-quads"
       key={`${w.hash} ${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
-      args={[quadGeometryXZ2, undefined, state.quads.length]}
+      args={[state.quadGeom, undefined, state.quads.length]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
@@ -417,9 +418,10 @@ export default function Decor(props) {
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
  * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads This is `Object.values(state.byKey)`
  * @property {THREE.InstancedMesh} cuboidInst
+ * @property {THREE.BufferGeometry} quadGeom
  * @property {THREE.InstancedMesh} quadInst
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
- * e.g. so can avoid re-instantiating geomorph decor
+ * but yet added back in. This is useful e.g. so can avoid re-instantiating geomorph decor
  *
  * @property {(ds: Geomorph.Decor[], removeExisting?: boolean) => void} addDecor
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor

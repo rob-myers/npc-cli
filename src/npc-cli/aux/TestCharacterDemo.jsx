@@ -1,8 +1,8 @@
 import React from "react";
 import * as THREE from "three";
 import { MapControls, PerspectiveCamera } from "@react-three/drei";
-import { quadGeometryXZ } from "../service/three";
 
+import { getQuadGeometryXZ } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 import TestCanvas from "./TestCanvas";
 // import { TestCharacterOld } from "./TestCharacterOld";
@@ -47,7 +47,7 @@ export function TestCharacterDemo(props) {
           name="ground"
           scale={[groundScale, 1, groundScale]}
           position={[-groundScale / 2, 0, -groundScale / 2]}
-          geometry={quadGeometryXZ}
+          geometry={getQuadGeometryXZ('vanilla-xz')}
           receiveShadow
           onClick={e => {
             if (Date.now() - state.downAt >= 300) return;

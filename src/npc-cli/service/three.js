@@ -6,7 +6,7 @@ import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
 
 /** Unit quad extending from (0, 0, 0) to (1, 0, 1) */
-export const quadGeometryXZ = new THREE.BufferGeometry();
+const quadGeometryXZ = new THREE.BufferGeometry();
 const xzVertices = new Float32Array([0,0,0, 1,0,0, 1,0,1, 0,0,1]);
 const xzUvs = new Float32Array([0,0, 1,0, 1,1, 0,1]);
 const xzIndices = [2, 1, 0, 0, 3, 2];
@@ -16,7 +16,18 @@ quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
-export const quadGeometryXZ2 = quadGeometryXZ.clone();
+/** Cache to avoid re-creation on HMR */
+const quadLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
+
+/**
+ * Clone to avoid overwriting attributes used by custom shaders
+ * @param {string} key
+ */
+export function getQuadGeometryXZ(key) {
+  return quadLookup[key] ??= quadGeometryXZ.clone();
+}
+
+// 🚧 repeat above for XY quad
 
 /** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
 export const quadGeometryXY = new THREE.BufferGeometry();

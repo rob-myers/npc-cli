@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
-import { quadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
 import { WorldContext } from "./world-context";
@@ -16,7 +16,8 @@ export default function Obstacles(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    obsInst: /** @type {*} */ (null),
+    inst: /** @type {*} */ (null),
+    quadGeom: getQuadGeometryXZ(`${w.key}-obs-xz`),
 
     addObstacleUvs() {
       const { obstacle: sheet, obstacleDim: sheetDim } = w.geomorphs.sheet;
@@ -38,10 +39,10 @@ export default function Obstacles(props) {
         })
       );
 
-      state.obsInst.geometry.setAttribute('uvOffsets',
+      state.inst.geometry.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
       );
-      state.obsInst.geometry.setAttribute('uvDimensions',
+      state.inst.geometry.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
     },
@@ -124,7 +125,7 @@ export default function Obstacles(props) {
       }
     },
     positionObstacles() {
-      const { obsInst } = state;
+      const { inst: obsInst } = state;
       let oId = 0;
       w.gms.forEach(({ obstacles, transform: gmTransform }) => {
         obstacles.forEach((obstacle) => {
@@ -148,8 +149,8 @@ export default function Obstacles(props) {
     <instancedMesh
       name="static-obstacles"
       key={w.hash}
-      ref={instances => instances && (state.obsInst = instances)}
-      args={[quadGeometryXZ, undefined, w.gmsData.obstaclesCount]}
+      ref={instances => instances && (state.inst = instances)}
+      args={[state.quadGeom, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
       {...w.obsTex && {
         onPointerUp: state.onPointerUp,
@@ -176,7 +177,8 @@ export default function Obstacles(props) {
 
 /**
  * @typedef State
- * @property {THREE.InstancedMesh} obsInst
+ * @property {THREE.InstancedMesh} inst
+ * @property {THREE.BufferGeometry} quadGeom
  * @property {() => void} addObstacleUvs
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
  * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId

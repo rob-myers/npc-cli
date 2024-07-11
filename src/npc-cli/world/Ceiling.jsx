@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { keys } from "../service/generic";
 import { drawPolygons } from "../service/dom";
-import { quadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -122,7 +122,7 @@ export default function Ceiling(props) {
       >
         <mesh
           name={`ceil-gm-${gmId}`}
-          geometry={quadGeometryXZ}
+          geometry={getQuadGeometryXZ('vanilla-xz')}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
           position={[gm.pngRect.x, wallHeight, gm.pngRect.y]}
           onPointerDown={state.onPointerDown}

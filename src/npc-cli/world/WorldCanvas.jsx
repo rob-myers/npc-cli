@@ -7,7 +7,7 @@ import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { quadGeometryXZ } from "../service/three.js";
+import { getQuadGeometryXZ } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
 import { Origin } from "../aux/MiscThree.jsx";
@@ -269,7 +269,7 @@ export default function WorldCanvas(props) {
         onPointerUp={state.onGridPointerUp}
         visible={false}
       >
-        <mesh args={[quadGeometryXZ]} position={[-0.5, 0, -0.5]} />
+        <mesh args={[getQuadGeometryXZ('vanilla-xz')]} position={[-0.5, 0, -0.5]} />
       </group>
 
 

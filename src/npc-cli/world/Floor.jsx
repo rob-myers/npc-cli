@@ -5,7 +5,7 @@ import { Mat, Poly } from "../geom";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
 import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
-import { quadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -96,7 +96,7 @@ export default function Floor(props) {
       >
         <mesh
           name={`floor-gm-${gmId}`}
-          geometry={quadGeometryXZ}
+          geometry={getQuadGeometryXZ('vanilla-xz')}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
           position={[gm.pngRect.x, 0, gm.pngRect.y]}
         >
