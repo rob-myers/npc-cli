@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 450 225" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <defs>
-    <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, 19.999998092651, 23.750003814697)" xlink:href="#pattern-0"/>
-    <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
-      <title>symbol-rect-pattern</title>
-      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.016038894653, -24.99998664856)">
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
-        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
-        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
-        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
-        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
-      </g>
-    </pattern>
-    <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, 19.999998092651, 23.750003814697)" xlink:href="#pattern-0"/>
-  </defs>
-  <image width="422" height="262" x="14" y="-13.249996" xlink:href="data:image/png;base64,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">
-    <title>bed--004--0.8x1.4</title>
-  </image>
-  <g>
-    <title>symbols</title>
-    <rect x="37.5" width="375" height="225" style="fill-opacity: 0.5; fill: url('#pattern-0-0'); stroke: rgb(0, 0, 255);">
-      <title>bed--005--0.6x1.2</title>
-    </rect>
-    <rect x="37.5" width="375" height="225" style="fill-opacity: 0.5; fill: url('#pattern-1'); stroke: rgb(0, 0, 255);">
-      <title>bed--005--0.6x1.2 y=0.8</title>
-    </rect>
-  </g>
+<svg viewBox="0 0 450 225" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+                        <title>symbol-rect-pattern</title>
+                        <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.016038894653, -24.99998664856)">
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+                                <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+                                <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+                                <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+                                <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+                        </g>
+                </pattern>
+                <symbol id="symbol-0" viewBox="0 0 375 225" bx:pinned="true">
+                        <title>bed--005--0.6x1.2</title>
+                        <rect x="37.5" width="375" height="225" style="fill-opacity: 0.5; stroke: rgb(0, 0, 255); fill: url('#pattern-0');" transform="matrix(1, 0, 0, 1, -37.5, 0)">
+                                <title>bed--005--0.6x1.2</title>
+                        </rect>
+                        <defs>
+                                <bx:grid x="0" y="0" width="300" height="300"/>
+                        </defs>
+                </symbol>
+        </defs>
+        <image width="422" height="262" x="14" y="-13.249996" xlink:href="data:image/png;base64,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">
+                <title>bed--004--0.8x1.4</title>
+        </image>
+        <g>
+                <title>symbols</title>
+                <use width="375" height="225" transform="matrix(1, 0, 0, 1, 37.5, 9.58155e-7)" xlink:href="#symbol-0">
+                        <title>bed--005--0.6x1.2</title>
+                </use>
+                <use width="375" height="225" transform="matrix(1, 0, 0, 1, 37.5, 0.000001)" xlink:href="#symbol-0">
+                        <title>bed--005--0.6x1.2 y=0.8</title>
+                </use>
+        </g>
 </svg>
