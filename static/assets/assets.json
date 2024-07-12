@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": 776201258, "pngHash": 568633107},
     "102--hull": {"outputHash": -1176230636, "pngHash": 184103855},
     "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -1342803277, "pngHash": 787602800},
+    "301--hull": {"outputHash": 296456550, "pngHash": 787602800},
     "302--hull": {"outputHash": 1367993840, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": -984713991,
@@ -2404,7 +2404,13 @@
         {
           "type": "Polygon",
           "coordinates": [[[5.625, 6], [5.625, 6.5], [4.875, 6.5], [4.875, 6]]],
-          "meta": {"decor": true, "cuboid": true, "table": true, "h": 0.5}
+          "meta": {
+            "decor": true,
+            "cuboid": true,
+            "table": true,
+            "h": 0.5,
+            "y": 0
+          }
         }
       ],
       "unsorted": [

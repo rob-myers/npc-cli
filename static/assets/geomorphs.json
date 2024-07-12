@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -595795848 -639924815 1969390740",
+  "hash": "610044716 572644391 -639924815 1969390740",
   "mapsHash": 610044716,
-  "layoutsHash": -595795848,
+  "layoutsHash": 572644391,
   "sheetsHash": -639924815,
   "imagesHash": 1969390740,
   "map": {
@@ -15650,7 +15650,13 @@
         {
           "type": "cuboid",
           "key": "g-301--bridge_4",
-          "meta": {"decor": true, "cuboid": true, "table": true, "h": 0.5},
+          "meta": {
+            "decor": true,
+            "cuboid": true,
+            "table": true,
+            "h": 0.5,
+            "y": 0
+          },
           "bounds2d": {"x": 4.875, "y": 6, "width": 0.75, "height": 0.5},
           "angle": 0,
           "center": {"x": 5.25, "y": 0.25, "z": 6.25},

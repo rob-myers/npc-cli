@@ -12,7 +12,7 @@ import {
 // 🔔 avoid unnecessary HMR: do not reference view-related consts
 import {
   DEV_EXPRESS_WEBSOCKET_PORT,
-  GEOMORPHS_JSON_FILENAME,
+  WORLD_QUERY_FIRST_KEY,
   DEV_ORIGIN,
   defaultSiteTopLevelState,
   siteTopLevelKey,
@@ -96,7 +96,7 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
 
         queryClient.refetchQueries({
           predicate({ queryKey: [queryKey] }) {
-            return GEOMORPHS_JSON_FILENAME === queryKey;
+            return WORLD_QUERY_FIRST_KEY === queryKey;
           },
         });
       };

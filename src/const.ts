@@ -31,6 +31,8 @@ export const assetsEndpoint = process.env.NODE_ENV === 'development'
   : '/assets'
 ;
 
+export const WORLD_QUERY_FIRST_KEY = 'world';
+
 export const imgExt = process.env.NODE_ENV === 'development' ? 'png' : 'png.webp';
 
 export const afterBreakpoint = "1201px";

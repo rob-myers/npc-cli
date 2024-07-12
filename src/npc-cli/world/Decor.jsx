@@ -166,7 +166,7 @@ export default function Decor(props) {
       // 🚧 use d.meta.y
       return `g${gmId}r${d.meta.roomId}[${d.bounds2d.x},${d.type === 'cuboid' ? d.center.y : 0},${d.bounds2d.y}]`;
     },
-    initializeGmDecor(gmId, gm) {
+    instantiateGmDecor(gmId, gm) {
       state.byRoom[gmId] ??= gm.rooms.map(_ => new Set()); // 🔔 needs update on dynamic nav
       
       /** @type {Geomorph.Decor[]} */ ([]);
@@ -193,7 +193,7 @@ export default function Decor(props) {
             const center = gm.matrix.transformPoint({ x: def.center.x, y: def.center.z });
             const extent = gm.matrix.transformSansTranslate({ x: def.extent.x, y: def.extent.z });
             return { ...def, ...base,
-              center: { x: center.x, y: def.center.y, z: center.y },
+              center: { x: center.x, y: def.center.y + (def.meta.y ?? 0), z: center.y },
               extent: { x: extent.x, y: def.extent.y, z: extent.y },
             };
           case "point":
@@ -312,13 +312,12 @@ export default function Decor(props) {
         }
       }
     },
-    updateInstanceLists() {
+    updateInstanceLists() {// 🚧 WIP
       state.cuboids = Object.values(state.byKey).filter(
         /** @returns {d is Geomorph.DecorCuboid} */
         d => d.type === 'cuboid'
       );
-      state.quads = Object.values(state.byKey).filter(
-        // 🚧 WIP
+      state.quads = Object.values(state.byKey).filter(// 🚧 WIP
         /** @returns {d is Geomorph.DecorPoint} */
         d => d.type === 'point'
       );
@@ -328,9 +327,9 @@ export default function Decor(props) {
 
   w.decor = state;
 
-  useQuery({
+  const { status: queryStatus } = useQuery({// instantiate geomorph decor
     queryKey: ['decor', w.key, w.decorHash],
-    async queryFn() {// initialize decor
+    async queryFn() {
       if (Object.values(state.byKey).length) { 
         await pause();
         state.removeInstantiatedDecor();
@@ -338,9 +337,11 @@ export default function Decor(props) {
 
       for (const [gmId, gm] of w.gms.entries()) {
         await pause();
-        state.initializeGmDecor(gmId, gm);
+        state.instantiateGmDecor(gmId, gm);
       }
-      return w.decorHash; // trigger useEffect
+
+      update();
+      return null;
     },
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -348,16 +349,18 @@ export default function Decor(props) {
   });
 
   React.useEffect(() => {
-    state.addQuadUvs();
-    state.positionInstances();
-  }, [w.hash, state.cuboids.length, state.quads.length]);
+    if (queryStatus === 'success') {
+      state.addQuadUvs();
+      state.positionInstances();
+    }
+  }, [queryStatus, state.cuboids.length, state.quads.length]);
 
   const update = useUpdate();
 
   return <>
     <instancedMesh
       name="decor-cuboids"
-      key={`${w.hash} ${state.cuboids.length} cuboids`}
+      key={`${state.cuboids.length} cuboids`}
       ref={instances => instances && (state.cuboidInst = instances)}
       args={[boxGeometry, undefined, state.cuboids.length]}
       frustumCulled={false}
@@ -368,13 +371,13 @@ export default function Decor(props) {
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
-        diffuse={[0.25, 0.25, 0.25]}
+        diffuse={[0.35, 0.25, 0.25]}
       />
     </instancedMesh>
 
     <instancedMesh
       name="decor-quads"
-      key={`${w.hash} ${state.quads.length} quads`}
+      key={`${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
       args={[state.quadGeom, undefined, state.quads.length]}
       frustumCulled={false}
@@ -424,7 +427,7 @@ export default function Decor(props) {
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {(d: Geomorph.Decor, gmId: number) => `g${number}r${number}[${number},${number},${number}]`} getGmDecorKey
- * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} initializeGmDecor
+ * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateGmDecor
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances

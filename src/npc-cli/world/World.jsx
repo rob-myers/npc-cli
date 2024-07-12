@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME, assetsEndpoint, imgExt } from "src/const";
+import { GEOMORPHS_JSON_FILENAME, WORLD_QUERY_FIRST_KEY, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
@@ -131,7 +131,7 @@ export default function World(props) {
   useHandleEvents(state);
 
   useQuery({
-    queryKey: ['world', props.worldKey, props.mapKey],
+    queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
     queryFn: async () => {
 
       const prevGeomorphs = state.geomorphs;

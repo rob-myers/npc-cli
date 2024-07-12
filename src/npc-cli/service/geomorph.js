@@ -362,9 +362,10 @@ class GeomorphService {
       const polyRect = poly.rect.precision(precision);
       const defaultDecorCuboidHeight = 0.5; // 🚧
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
-      const y3d = typeof meta.y === 'number' ? meta.y : 0;
+      // 🔔 we apply decor.meta.y on instantiate decor into World
+      // const y3d = typeof meta.y === 'number' ? meta.y : 0;
       const center2d = poly.center;
-      const center = { x: center2d.x, y: y3d + height3d / 2, z: center2d.y };
+      const center = { x: center2d.x, y: height3d / 2, z: center2d.y };
       
       tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
       
