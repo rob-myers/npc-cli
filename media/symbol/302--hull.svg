@@ -44,6 +44,12 @@
                                 <bx:grid x="0" y="0" width="60" height="60"/>
                         </defs>
                 </symbol>
+                <symbol id="symbol-10" viewBox="0 0 120 60" bx:pinned="true">
+                        <title>ships-locker--007--2x1</title>
+                        <rect width="120" height="60" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 60px 30px;">
+                                <title>ships-locker--007--2x1</title>
+                        </rect>
+                </symbol>
                 <symbol id="symbol-2" viewBox="0 0 120 240" bx:pinned="true">
                         <title>empty-room--020--2x4</title>
                         <rect width="120" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 60px 119.999px;">
@@ -138,6 +144,9 @@
                 </use>
                 <use width="96" height="24" transform="matrix(-1, 0, 0, 1, 887.7647705078125, 504.3165283203125)" style="" xlink:href="#symbol-3">
                         <title>shop--027--1.6x0.4 y=0.8</title>
+                </use>
+                <use width="120" height="60" transform="matrix(0, -1, 1, 0, 510, 450)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-10">
+                        <title>ships-locker--011--2x1</title>
                 </use>
                 <use width="96" height="48" transform="matrix(0, -1, 1, 0, 582, 456)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-4">
                         <title>shop--028--1.6x0.8 y=0.8</title>

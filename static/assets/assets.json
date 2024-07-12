@@ -4,7 +4,7 @@
     "102--hull": {"outputHash": -1176230636, "pngHash": 184103855},
     "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
     "301--hull": {"outputHash": 296456550, "pngHash": 787602800},
-    "302--hull": {"outputHash": 1523461425, "pngHash": -1557128953},
+    "302--hull": {"outputHash": -366136039, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": -984713991,
       "pngHash": -299838577,
@@ -3211,6 +3211,13 @@
           "width": 2.4,
           "height": 0.6,
           "transform": [-1, 0, 0, 1, 22.19, 12.61]
+        },
+        {
+          "symbolKey": "ships-locker--011--2x1",
+          "meta": {"key": "ships-locker--011--2x1"},
+          "width": 3,
+          "height": 1.5,
+          "transform": [0, -1, 1, 0, 13.5, 13.5]
         },
         {
           "symbolKey": "shop--028--1.6x0.8",
