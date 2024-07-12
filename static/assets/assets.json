@@ -4,7 +4,7 @@
     "102--hull": {"outputHash": -1176230636, "pngHash": 184103855},
     "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
     "301--hull": {"outputHash": 296456550, "pngHash": 787602800},
-    "302--hull": {"outputHash": 1367993840, "pngHash": -1557128953},
+    "302--hull": {"outputHash": 1523461425, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": -984713991,
       "pngHash": -299838577,
@@ -110,6 +110,7 @@
       "pngHash": 768005647,
       "obsHashes": [1067031813]
     },
+    "empty-room--006--2x2": {"outputHash": -2083400304, "pngHash": -1560824403},
     "empty-room--013--2x3": {"outputHash": 343783735, "pngHash": 1809716270},
     "empty-room--019--2x4": {"outputHash": 930728337, "pngHash": -192199909},
     "empty-room--020--2x4": {"outputHash": -1357419133, "pngHash": 485549422},
@@ -305,6 +306,10 @@
     },
     "ships-locker--003--1x1": {"outputHash": 1430100666, "pngHash": 780413933},
     "ships-locker--007--2x1": {"outputHash": 216555499, "pngHash": 1054035955},
+    "ships-locker--011--2x1": {
+      "outputHash": -386585967,
+      "pngHash": -1452399662
+    },
     "ships-locker--020--2x2": {
       "outputHash": -1488224049,
       "pngHash": -1355686256
@@ -3187,6 +3192,13 @@
           "transform": [-1, 0, 0, -1, 12, 13.5]
         },
         {
+          "symbolKey": "empty-room--006--2x2",
+          "meta": {"key": "empty-room--006--2x2", "doors": ["e"]},
+          "width": 3,
+          "height": 3,
+          "transform": [0, 1, -1, 0, 15, 10.5]
+        },
+        {
           "symbolKey": "empty-room--020--2x4",
           "meta": {"key": "empty-room--020--2x4", "doors": ["s"]},
           "width": 3,
@@ -5856,6 +5868,96 @@
       "pngRect": {"x": 0.1225, "y": 0, "width": 0.505, "height": 0.465},
       "symbols": [],
       "removableDoors": [],
+      "addableWalls": []
+    },
+    "empty-room--006--2x2": {
+      "key": "empty-room--006--2x2",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [],
+      "walls": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.05, -0.05], [0.05, 3.05], [-0.05, 3.05], [-0.05, -0.05]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[3.05, -0.05], [3.05, 3.05], [2.95, 3.05], [2.95, -0.05]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[2.95, -0.05], [2.95, 0.05], [0, 0.05], [0, -0.05]]],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[2.95, 2.95], [2.95, 3.05], [0, 3.05], [0, 2.95]]],
+          "meta": {"wall": true}
+        }
+      ],
+      "doors": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[3.075, 1.65], [3.075, 2.8], [2.925, 2.8], [2.925, 1.65]]
+          ],
+          "meta": {"door": true, "optional": true, "e": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.075, 1.65], [0.075, 2.8], [-0.075, 2.8], [-0.075, 1.65]]
+          ],
+          "meta": {"door": true, "optional": true, "w": true}
+        }
+      ],
+      "windows": [],
+      "decor": [],
+      "unsorted": [],
+      "width": 3,
+      "height": 3,
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 3.1},
+      "symbols": [],
+      "removableDoors": [
+        {
+          "doorId": 0,
+          "wall": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [2.95, 1.65],
+                [3.05, 1.65],
+                [3.05, 2.8],
+                [2.95, 2.8],
+                [2.95, 1.65]
+              ]
+            ],
+            "meta": {}
+          }
+        },
+        {
+          "doorId": 1,
+          "wall": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [-0.05, 1.65],
+                [0.05, 1.65],
+                [0.05, 2.8],
+                [-0.05, 2.8],
+                [-0.05, 1.65]
+              ]
+            ],
+            "meta": {}
+          }
+        }
+      ],
       "addableWalls": []
     },
     "empty-room--013--2x3": {
@@ -10931,6 +11033,66 @@
       "width": 3,
       "height": 1.5,
       "pngRect": {"x": -0.05, "y": -0.05, "width": 3.1, "height": 1.6},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "ships-locker--011--2x1": {
+      "key": "ships-locker--011--2x1",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [],
+      "walls": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[0.05, -0.05], [0.05, 1.5], [-0.05, 1.5], [-0.05, -0.05]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[3.05, -0.05], [3.05, 1.5], [2.95, 1.5], [2.95, -0.05]]
+          ],
+          "meta": {"wall": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[2.95, -0.05], [2.95, 0.05], [0, 0.05], [0, -0.05]]],
+          "meta": {"wall": true}
+        }
+      ],
+      "doors": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.25, -0.075], [1.25, 0.075], [0.25, 0.075], [0.25, -0.075]]
+          ],
+          "meta": {"door": true}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[2.75, -0.075], [2.75, 0.075], [1.75, 0.075], [1.75, -0.075]]
+          ],
+          "meta": {"door": true}
+        }
+      ],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.625, 0.6], [1.625, 0.85], [1.375, 0.85], [1.375, 0.6]]
+          ],
+          "meta": {"decor": true, "go": true, "label": "locker"}
+        }
+      ],
+      "unsorted": [],
+      "width": 3,
+      "height": 1.5,
+      "pngRect": {"x": -0.05, "y": -0.1, "width": 3.1, "height": 1.67},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []

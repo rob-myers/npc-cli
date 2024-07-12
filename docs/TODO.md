@@ -72,6 +72,7 @@
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
+- duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
 - `SideNote` should wait a bit before showing
 - tty should not render `NaN` as `null`
