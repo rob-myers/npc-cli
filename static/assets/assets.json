@@ -82,7 +82,7 @@
       "obsHashes": [-446494730]
     },
     "console--051--0.4x0.6": {
-      "outputHash": -435041647,
+      "outputHash": 991719585,
       "pngHash": -874799556,
       "obsHashes": [-1250375694]
     },
@@ -118,17 +118,17 @@
     "engineering--045--6x4": {"outputHash": 21392850, "pngHash": -1132388510},
     "engineering--047--4x7": {"outputHash": 1180640948, "pngHash": 541808283},
     "extra--001--fresher--0.5x0.5": {
-      "outputHash": -227921352,
+      "outputHash": -1255327464,
       "pngHash": 1247120224,
       "obsHashes": [-1912350195]
     },
     "extra--002--fresher--0.5x0.5": {
-      "outputHash": 1130671556,
+      "outputHash": 862389174,
       "pngHash": 482008010,
       "obsHashes": [997944906]
     },
     "extra--003--chair--0.25x0.25": {
-      "outputHash": 131514213,
+      "outputHash": -1295506451,
       "pngHash": -1668511435,
       "obsHashes": [-1328450793]
     },
@@ -138,7 +138,7 @@
       "obsHashes": [-680591218]
     },
     "extra--005--chair-0.25x0.25": {
-      "outputHash": -200992929,
+      "outputHash": -1707841811,
       "pngHash": -372042423,
       "obsHashes": [623506074]
     },
@@ -286,9 +286,9 @@
       "obsHashes": [1616514661, 338030151, 883758416]
     },
     "misc-stellar-cartography--023--4x4": {
-      "outputHash": 1036121673,
+      "outputHash": -864214799,
       "pngHash": 1510139639,
-      "obsHashes": [-289701266]
+      "obsHashes": [194424169]
     },
     "office--001--2x2": {"outputHash": -4947941, "pngHash": -2056159100},
     "office--004--2x2": {"outputHash": -1286860734, "pngHash": -945108248},
@@ -345,7 +345,7 @@
     "stateroom--019--2x3": {"outputHash": -506459335, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 1368839861, "pngHash": 987326316},
     "stateroom--035--2x3": {"outputHash": -1563594079, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": 981886311, "pngHash": 1301313076},
+    "stateroom--036--2x4": {"outputHash": -1760978341, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": 2105116103,
       "pngHash": 1027833859,
@@ -5594,7 +5594,8 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 180,
+            "y": 0.01
           }
         }
       ],
@@ -6490,7 +6491,13 @@
           "coordinates": [
             [[0.4148, 0.65], [0.4148, 0.7], [0.3641, 0.7], [0.3641, 0.65]]
           ],
-          "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+          "meta": {
+            "decor": true,
+            "do": true,
+            "stand": true,
+            "orient": 270,
+            "y": 0.01
+          }
         }
       ],
       "unsorted": [],
@@ -6542,7 +6549,8 @@
             "do": true,
             "sit": true,
             "toilet": true,
-            "orient": 90
+            "orient": 90,
+            "y": 0.01
           }
         }
       ],
@@ -6604,7 +6612,8 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 180,
+            "y": 0.01
           }
         }
       ],
@@ -6692,7 +6701,8 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 0
+            "orient": 0,
+            "y": 0.01
           }
         }
       ],
@@ -9517,18 +9527,18 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [2.7841, 1.4995],
-              [2.1012, 1.778],
-              [1.6437, 2.361],
-              [1.5013, 3.051],
-              [1.644, 3.6647],
-              [2.1506, 4.2289],
-              [2.7846, 4.4985],
-              [3.4941, 4.4298],
-              [4.1189, 4.0216],
-              [4.4115, 3.5209],
-              [4.5017, 2.8079],
-              [4.446, 2.6053],
+              [2.7841, 1.5445],
+              [2.1212, 1.818],
+              [1.6587, 2.386],
+              [1.5263, 3.051],
+              [1.679, 3.6497],
+              [2.1656, 4.2089],
+              [2.7846, 4.4585],
+              [3.4941, 4.3898],
+              [4.1189, 3.9666],
+              [4.3865, 3.5009],
+              [4.4517, 2.8079],
+              [4.426, 2.6003],
               [5.748, 1.3171],
               [5.9977, 1.5743],
               [6, 6.0003],
@@ -9536,7 +9546,7 @@
               [0.0001, 0],
               [4.5022, -0.0007],
               [4.6827, 0.2687],
-              [3.3771, 1.563]
+              [3.3771, 1.583]
             ]
           ],
           "meta": {
@@ -9604,7 +9614,8 @@
             "decor": true,
             "go": true,
             "label": "stellar",
-            "cartography": true
+            "cartography": true,
+            "y": 0.71
           }
         }
       ],
@@ -11835,7 +11846,7 @@
           "coordinates": [
             [[0.4741, 0.225], [0.4741, 0.275], [0.4241, 0.275], [0.4241, 0.225]]
           ],
-          "meta": {"decor": true, "button": true, "shower": true}
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1}
         },
         {
           "type": "Polygon",

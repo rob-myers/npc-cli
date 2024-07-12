@@ -355,6 +355,7 @@ class GeomorphService {
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
     // `key` will be overridden on instantiation
     const base = { key: decorKey, meta };
+    meta.y = toPrecision(Number(meta.y) || 0);
     
     if (meta.rect || meta.poly) {
       const polyRect = poly.rect.precision(precision);
@@ -1221,6 +1222,7 @@ class GeomorphService {
   }
 
   /**
+   * For nested symbols i.e. before decor becomes `Geomorph.Decor`
    * @param {Geom.Meta} meta 
    * @param {Geom.Mat} mat
    * @param {number} [y] Height off the ground

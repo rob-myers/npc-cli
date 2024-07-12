@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 -1614973911 -639924815 1969390740",
+  "hash": "610044716 -1425853058 -639924815 -50327818",
   "mapsHash": 610044716,
-  "layoutsHash": -1614973911,
+  "layoutsHash": -1425853058,
   "sheetsHash": -639924815,
-  "imagesHash": 1969390740,
+  "imagesHash": -50327818,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -43,7 +43,7 @@
         {
           "type": "point",
           "key": "g-101--multipurpose_0",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 5.25, "y": 3.75, "width": 4.25, "height": 4.25},
           "x": 7.375,
           "y": 5.875
@@ -51,7 +51,7 @@
         {
           "type": "point",
           "key": "g-101--multipurpose_1",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 4, "y": 12.75, "width": 4.25, "height": 4.25},
           "x": 6.125,
           "y": 14.875
@@ -59,7 +59,7 @@
         {
           "type": "point",
           "key": "g-101--multipurpose_2",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 21.75, "y": 12.75, "width": 4.25, "height": 4.25},
           "x": 23.875,
           "y": 14.875
@@ -67,7 +67,7 @@
         {
           "type": "point",
           "key": "g-101--multipurpose_3",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.5, "y": 22, "width": 4.25, "height": 4.25},
           "x": 22.625,
           "y": 24.125
@@ -75,7 +75,7 @@
         {
           "type": "point",
           "key": "g-101--multipurpose_4",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 5.25, "y": 22, "width": 4.25, "height": 4.25},
           "x": 7.375,
           "y": 24.125
@@ -83,7 +83,7 @@
         {
           "type": "point",
           "key": "g-101--multipurpose_5",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.5, "y": 3.75, "width": 4.25, "height": 4.25},
           "x": 22.625,
           "y": 5.875
@@ -118,7 +118,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 9.88, "y": 23.76, "width": 4.25, "height": 4.25},
           "x": 12.005,
@@ -154,7 +154,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 15.87, "y": 15.49, "width": 4.25, "height": 4.25},
           "x": 17.995,
@@ -190,7 +190,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 15.87, "y": 23.76, "width": 4.25, "height": 4.25},
           "x": 17.995,
@@ -226,7 +226,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 9.88, "y": 15.49, "width": 4.25, "height": 4.25},
           "x": 12.005,
@@ -269,7 +269,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 10.6375,
@@ -289,7 +289,7 @@
             "sit": true,
             "chair": true,
             "orient": 70,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 7.6314, "y": 8.9677, "width": 4.25, "height": 4.25},
           "x": 9.7564,
@@ -304,7 +304,7 @@
             "sit": true,
             "chair": true,
             "orient": 110,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 8.7736, "y": 8.9712, "width": 4.25, "height": 4.25},
           "x": 10.8986,
@@ -352,7 +352,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 15.1125,
@@ -372,7 +372,7 @@
             "sit": true,
             "chair": true,
             "orient": 110,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 18.1186,
@@ -392,7 +392,7 @@
             "sit": true,
             "chair": true,
             "orient": 70,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 16.9764,
@@ -440,7 +440,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 10.6375,
@@ -460,7 +460,7 @@
             "sit": true,
             "chair": true,
             "orient": 290,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 7.6313, "y": 3.2823, "width": 4.25, "height": 4.25},
           "x": 9.7563,
@@ -475,7 +475,7 @@
             "sit": true,
             "chair": true,
             "orient": 250,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 8.7736, "y": 3.2788, "width": 4.25, "height": 4.25},
           "x": 10.8986,
@@ -498,7 +498,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 8.75, "y": 18.51, "width": 4.25, "height": 4.25},
           "x": 10.875,
@@ -513,7 +513,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 8.75, "y": 20.77, "width": 4.25, "height": 4.25},
           "x": 10.875,
@@ -536,7 +536,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 17, "y": 18.51, "width": 4.25, "height": 4.25},
           "x": 19.125,
@@ -551,7 +551,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 17, "y": 20.77, "width": 4.25, "height": 4.25},
           "x": 19.125,
@@ -574,7 +574,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 26.74, "y": 8, "width": 4.25, "height": 4.25},
           "x": 28.865,
@@ -589,7 +589,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 24.48, "y": 8, "width": 4.25, "height": 4.25},
           "x": 26.605,
@@ -620,7 +620,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 24.1125,
@@ -640,7 +640,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.6125,
@@ -682,7 +682,7 @@
             "sit": true,
             "toilet": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 11.85, "y": 2.38, "width": 4.25, "height": 4.25},
           "x": 13.975,
@@ -735,7 +735,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {"x": 7.8925, "y": 6.1275, "width": 4.25, "height": 4.25},
           "x": 10.0175,
@@ -788,7 +788,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 17.8575,
@@ -816,7 +816,7 @@
             "sit": true,
             "toilet": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 19.35, "y": 9.38, "width": 4.25, "height": 4.25},
           "x": 21.475,
@@ -831,7 +831,7 @@
             "sit": true,
             "toilet": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 19.35, "y": 8.38, "width": 4.25, "height": 4.25},
           "x": 21.475,
@@ -846,7 +846,7 @@
             "sit": true,
             "toilet": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 19.35, "y": 7.38, "width": 4.25, "height": 4.25},
           "x": 21.475,
@@ -902,7 +902,7 @@
             "sit": true,
             "toilet": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 19.35, "y": 16.37, "width": 4.25, "height": 4.25},
           "x": 21.475,
@@ -917,7 +917,7 @@
             "sit": true,
             "toilet": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 19.35, "y": 17.37, "width": 4.25, "height": 4.25},
           "x": 21.475,
@@ -932,7 +932,7 @@
             "sit": true,
             "toilet": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 19.35, "y": 18.37, "width": 4.25, "height": 4.25},
           "x": 21.475,
@@ -983,7 +983,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 24.57, "y": 10.85, "width": 4.25, "height": 4.25},
           "x": 26.695,
@@ -998,7 +998,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 24.57, "y": 14.9, "width": 4.25, "height": 4.25},
           "x": 26.695,
@@ -1013,7 +1013,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 26.9, "y": 14, "width": 4.25, "height": 4.25},
           "x": 29.025,
@@ -1028,7 +1028,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 26.9, "y": 11.75, "width": 4.25, "height": 4.25},
           "x": 29.025,
@@ -1056,7 +1056,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 4.8825,
@@ -1118,7 +1118,7 @@
             "sit": true,
             "chair": true,
             "orient": 135,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 4.8899,
@@ -1151,7 +1151,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -1.2, "y": 10.99, "width": 4.25, "height": 4.25},
           "x": 0.925,
@@ -1166,7 +1166,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -0.05, "y": 10.99, "width": 4.25, "height": 4.25},
           "x": 2.075,
@@ -1181,7 +1181,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -1.57, "y": 12.04, "width": 4.25, "height": 4.25},
           "x": 0.555,
@@ -1196,7 +1196,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -0.73, "y": 12.04, "width": 4.25, "height": 4.25},
           "x": 1.395,
@@ -1211,7 +1211,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -1.57, "y": 12.94, "width": 4.25, "height": 4.25},
           "x": 0.555,
@@ -1226,7 +1226,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -0.73, "y": 12.94, "width": 4.25, "height": 4.25},
           "x": 1.395,
@@ -1241,7 +1241,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -1.57, "y": 13.84, "width": 4.25, "height": 4.25},
           "x": 0.555,
@@ -1256,7 +1256,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -0.73, "y": 13.84, "width": 4.25, "height": 4.25},
           "x": 1.395,
@@ -1271,7 +1271,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 0.11, "y": 13.84, "width": 4.25, "height": 4.25},
           "x": 2.235,
@@ -7640,7 +7640,7 @@
         {
           "type": "point",
           "key": "g-102--research-deck_0",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 3.75, "y": 3.75, "width": 4.25, "height": 4.25},
           "x": 5.875,
           "y": 5.875
@@ -7648,7 +7648,7 @@
         {
           "type": "point",
           "key": "g-102--research-deck_1",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 12.75, "y": 5.25, "width": 4.25, "height": 4.25},
           "x": 14.875,
           "y": 7.375
@@ -7656,7 +7656,7 @@
         {
           "type": "point",
           "key": "g-102--research-deck_2",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.25, "y": 14.25, "width": 4.25, "height": 4.25},
           "x": 22.375,
           "y": 16.375
@@ -7664,7 +7664,7 @@
         {
           "type": "point",
           "key": "g-102--research-deck_3",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": -0.5, "y": 26.25, "width": 4.25, "height": 4.25},
           "x": 1.625,
           "y": 28.375
@@ -7672,7 +7672,7 @@
         {
           "type": "point",
           "key": "g-102--research-deck_4",
-          "meta": {"decor": true, "go": true, "label": "engineering"},
+          "meta": {"decor": true, "go": true, "label": "engineering", "y": 0},
           "bounds2d": {"x": 2.4123, "y": 0.7206, "width": 4.25, "height": 4.25},
           "x": 4.5373,
           "y": 2.8456
@@ -7684,7 +7684,8 @@
             "decor": true,
             "go": true,
             "label": "'research",
-            "launch'": true
+            "launch'": true,
+            "y": 0
           },
           "bounds2d": {"x": 26.5, "y": 1, "width": 4.25, "height": 4.25},
           "x": 28.625,
@@ -7693,7 +7694,7 @@
         {
           "type": "point",
           "key": "g-102--research-deck_6",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.5, "y": -0.25, "width": 4.25, "height": 4.25},
           "x": 22.625,
           "y": 1.875
@@ -7707,7 +7708,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 2.8803,
@@ -7784,7 +7785,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 8.9604,
@@ -7832,7 +7833,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 11.9604,
@@ -7860,7 +7861,7 @@
             "sit": true,
             "chair": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 10.26, "y": 8.38, "width": 4.25, "height": 4.25},
           "x": 12.385,
@@ -7883,7 +7884,7 @@
             "sit": true,
             "chair": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 13.26, "y": 8.38, "width": 4.25, "height": 4.25},
           "x": 15.385,
@@ -8031,7 +8032,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 24.38, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 26.505,
@@ -8046,7 +8047,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 25.38, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 27.505,
@@ -8061,7 +8062,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 26.38, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 28.505,
@@ -8076,7 +8077,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 27.38, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 29.505,
@@ -8119,7 +8120,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 17.3501,
@@ -8318,7 +8319,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 17.9225,
@@ -8338,7 +8339,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 16.6225,
@@ -8366,7 +8367,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 17.8175,
@@ -8386,7 +8387,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 14.8175,
@@ -8406,7 +8407,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 13.8175,
@@ -8434,7 +8435,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 22.9325,
@@ -8454,7 +8455,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.9325,
@@ -8474,7 +8475,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 26.9325,
@@ -8502,7 +8503,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 22.8825,
@@ -8522,7 +8523,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 24.3825,
@@ -8542,7 +8543,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.8825,
@@ -8562,7 +8563,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 22.8825,
@@ -8582,7 +8583,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 24.3825,
@@ -8602,7 +8603,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.8825,
@@ -8622,7 +8623,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 27.3825,
@@ -8642,7 +8643,7 @@
             "sit": true,
             "chair": true,
             "orient": 225,
-            "y": 0.35
+            "y": 0.36
           },
           "bounds2d": {
             "x": 23.6799,
@@ -8662,7 +8663,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.35
+            "y": 0.36
           },
           "bounds2d": {
             "x": 24.575,
@@ -8682,7 +8683,7 @@
             "sit": true,
             "chair": true,
             "orient": 45,
-            "y": 0.35
+            "y": 0.36
           },
           "bounds2d": {
             "x": 24.5801,
@@ -8702,7 +8703,7 @@
             "sit": true,
             "chair": true,
             "orient": 135,
-            "y": 0.35
+            "y": 0.36
           },
           "bounds2d": {
             "x": 23.675,
@@ -8721,7 +8722,7 @@
             "do": true,
             "stand": true,
             "orient": 0,
-            "y": 0.7
+            "y": 0.71
           },
           "bounds2d": {"x": 27.2, "y": 27.1155, "width": 4.25, "height": 4.25},
           "x": 29.325,
@@ -8736,7 +8737,7 @@
             "sit": true,
             "toilet": true,
             "orient": 180,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 27.4, "y": 25.63, "width": 4.25, "height": 4.25},
           "x": 29.525,
@@ -8759,7 +8760,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.35
+            "y": 0.36
           },
           "bounds2d": {"x": 6.12, "y": 11.45, "width": 4.25, "height": 4.25},
           "x": 8.245,
@@ -8774,7 +8775,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.35
+            "y": 0.36
           },
           "bounds2d": {"x": 4.62, "y": 11.45, "width": 4.25, "height": 4.25},
           "x": 6.745,
@@ -8789,7 +8790,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.35
+            "y": 0.36
           },
           "bounds2d": {"x": 3.12, "y": 11.45, "width": 4.25, "height": 4.25},
           "x": 5.245,
@@ -8842,7 +8843,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 5.49, "y": 21.9, "width": 4.25, "height": 4.25},
           "x": 7.615,
@@ -8857,7 +8858,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 3.87, "y": 20.28, "width": 4.25, "height": 4.25},
           "x": 5.995,
@@ -8904,7 +8905,7 @@
             "sit": true,
             "chair": true,
             "orient": 225,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 24.4796,
@@ -8924,7 +8925,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 23.7503,
@@ -8944,7 +8945,7 @@
             "sit": true,
             "chair": true,
             "orient": 45,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 23.7503,
@@ -8964,7 +8965,7 @@
             "sit": true,
             "chair": true,
             "orient": 135,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 24.4796,
@@ -8984,7 +8985,7 @@
             "sit": true,
             "chair": true,
             "orient": 20,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 22.5178,
@@ -9004,7 +9005,7 @@
             "sit": true,
             "chair": true,
             "orient": 340,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 22.5213,
@@ -9024,7 +9025,7 @@
             "sit": true,
             "chair": true,
             "orient": 225,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.9796,
@@ -9044,7 +9045,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.2503,
@@ -9064,7 +9065,7 @@
             "sit": true,
             "chair": true,
             "orient": 45,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.2503,
@@ -9084,7 +9085,7 @@
             "sit": true,
             "chair": true,
             "orient": 135,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.9796,
@@ -15626,7 +15627,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_0",
-          "meta": {"decor": true, "label": "study"},
+          "meta": {"decor": true, "label": "study", "y": 0},
           "bounds2d": {"x": 4.75, "y": 2.85, "width": 4.25, "height": 4.25},
           "x": 6.875,
           "y": 4.975
@@ -15634,7 +15635,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_1",
-          "meta": {"decor": true, "label": "corridor"},
+          "meta": {"decor": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 4, "y": 5.5, "width": 4.25, "height": 4.25},
           "x": 6.125,
           "y": 7.625
@@ -15642,7 +15643,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_2",
-          "meta": {"decor": true, "label": "corridor"},
+          "meta": {"decor": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 21.75, "y": 5.5, "width": 4.25, "height": 4.25},
           "x": 23.875,
           "y": 7.625
@@ -15650,7 +15651,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_3",
-          "meta": {"decor": true, "label": "study"},
+          "meta": {"decor": true, "label": "study", "y": 0},
           "bounds2d": {"x": 21.275, "y": 2.85, "width": 4.25, "height": 4.25},
           "x": 23.4,
           "y": 4.975
@@ -15823,7 +15824,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_18",
-          "meta": {"decor": true, "button": true, "shower": true, "y": 0},
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": -1.6759,
             "y": -1.875,
@@ -15861,7 +15862,7 @@
             "sit": true,
             "chair": true,
             "orient": 30,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": -1.4789,
@@ -15881,7 +15882,7 @@
             "sit": true,
             "chair": true,
             "orient": 330,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": -1.4639,
@@ -15900,7 +15901,7 @@
             "do": true,
             "stand": true,
             "orient": 270,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {"x": 0.2845, "y": -1.45, "width": 4.25, "height": 4.25},
           "x": 2.4095,
@@ -15915,7 +15916,7 @@
             "sit": true,
             "toilet": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -0.62, "y": -1.65, "width": 4.25, "height": 4.25},
           "x": 1.505,
@@ -15945,7 +15946,7 @@
             "lie": true,
             "bed": true,
             "orient": 90,
-            "y": 1.4100000000000001
+            "y": 1.41
           },
           "bounds2d": {"x": -1.3125, "y": 0.115, "width": 4.25, "height": 4.25},
           "x": 0.8125,
@@ -15983,7 +15984,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_29",
-          "meta": {"decor": true, "button": true, "shower": true, "y": 0},
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 27.4259,
             "y": -1.875,
@@ -16021,7 +16022,7 @@
             "sit": true,
             "chair": true,
             "orient": 150,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 27.229, "y": 2.3577, "width": 4.25, "height": 4.25},
           "x": 29.354,
@@ -16036,7 +16037,7 @@
             "sit": true,
             "chair": true,
             "orient": 210,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 27.214, "y": 3.3527, "width": 4.25, "height": 4.25},
           "x": 29.339,
@@ -16050,7 +16051,7 @@
             "do": true,
             "stand": true,
             "orient": 270,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {"x": 25.4656, "y": -1.45, "width": 4.25, "height": 4.25},
           "x": 27.5906,
@@ -16065,7 +16066,7 @@
             "sit": true,
             "toilet": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 26.37, "y": -1.65, "width": 4.25, "height": 4.25},
           "x": 28.495,
@@ -16095,7 +16096,7 @@
             "lie": true,
             "bed": true,
             "orient": 90,
-            "y": 1.4100000000000001
+            "y": 1.41
           },
           "bounds2d": {"x": 27.0625, "y": 0.115, "width": 4.25, "height": 4.25},
           "x": 29.1875,
@@ -16133,7 +16134,7 @@
         {
           "type": "point",
           "key": "g-301--bridge_40",
-          "meta": {"decor": true, "button": true, "shower": true, "y": 0},
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": -1.875,
             "y": 12.4259,
@@ -16171,7 +16172,7 @@
             "sit": true,
             "chair": true,
             "orient": 300,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 2.3578, "y": 12.229, "width": 4.25, "height": 4.25},
           "x": 4.4828,
@@ -16186,7 +16187,7 @@
             "sit": true,
             "chair": true,
             "orient": 240,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 3.3527, "y": 12.214, "width": 4.25, "height": 4.25},
           "x": 5.4777,
@@ -16200,7 +16201,7 @@
             "do": true,
             "stand": true,
             "orient": 180,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {"x": -1.45, "y": 10.4656, "width": 4.25, "height": 4.25},
           "x": 0.675,
@@ -16215,7 +16216,7 @@
             "sit": true,
             "toilet": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -1.65, "y": 11.37, "width": 4.25, "height": 4.25},
           "x": 0.475,
@@ -16245,7 +16246,7 @@
             "lie": true,
             "bed": true,
             "orient": 360,
-            "y": 1.4100000000000001
+            "y": 1.41
           },
           "bounds2d": {"x": 0.115, "y": 12.0625, "width": 4.25, "height": 4.25},
           "x": 2.24,
@@ -16268,7 +16269,7 @@
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 2.3603, "y": 2.3999, "width": 4.25, "height": 4.25},
           "x": 4.4853,
@@ -16291,7 +16292,7 @@
             "sit": true,
             "chair": true,
             "orient": 225,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 23.3896,
@@ -16310,7 +16311,7 @@
             "go": true,
             "label": "stellar",
             "cartography": true,
-            "y": 0
+            "y": 0.71
           },
           "bounds2d": {"x": 25.28, "y": 8.1, "width": 4.25, "height": 4.25},
           "x": 27.405,
@@ -16325,7 +16326,7 @@
             "sit": true,
             "chair": true,
             "orient": 105,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 24.6069,
@@ -16345,7 +16346,7 @@
             "sit": true,
             "chair": true,
             "orient": 345,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 25.8582,
@@ -16494,7 +16495,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 10.63, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 12.755,
@@ -16509,7 +16510,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 12.13, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 14.255,
@@ -16524,7 +16525,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 13.63, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 15.755,
@@ -16539,7 +16540,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 15.13, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 17.255,
@@ -16554,7 +16555,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 8.0725, "y": 7.3875, "width": 4.25, "height": 4.25},
           "x": 10.1975,
@@ -16569,7 +16570,7 @@
             "sit": true,
             "chair": true,
             "orient": 255,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 8.3995, "y": 8.6264, "width": 4.25, "height": 4.25},
           "x": 10.5245,
@@ -16584,7 +16585,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 13.7775,
@@ -16604,7 +16605,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 13.1775,
@@ -16624,7 +16625,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 12.5775,
@@ -16644,7 +16645,7 @@
             "sit": true,
             "chair": true,
             "orient": 90,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 11.9775,
@@ -16664,7 +16665,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 13.7775,
@@ -16684,7 +16685,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 13.1775,
@@ -16704,7 +16705,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 12.5775,
@@ -16724,7 +16725,7 @@
             "sit": true,
             "chair": true,
             "orient": 270,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 11.9775,
@@ -16744,7 +16745,7 @@
             "sit": true,
             "chair": true,
             "orient": 360,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 14.4525,
@@ -16764,7 +16765,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 11.2975,
@@ -16798,7 +16799,7 @@
             "do": true,
             "stand": true,
             "orient": 90,
-            "y": 0.7
+            "y": 0.71
           },
           "bounds2d": {
             "x": 16.4844,
@@ -16818,7 +16819,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 17.38, "y": 6.4, "width": 4.25, "height": 4.25},
           "x": 19.505,
@@ -16833,7 +16834,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 18.28, "y": 6.4, "width": 4.25, "height": 4.25},
           "x": 20.405,
@@ -16862,7 +16863,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 5.39, "y": 0.12, "width": 4.25, "height": 4.25},
           "x": 7.515,
@@ -16877,7 +16878,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 20.36, "y": 0.12, "width": 4.25, "height": 4.25},
           "x": 22.485,
@@ -18170,18 +18171,18 @@
             "type": "Polygon",
             "coordinates": [
               [
-                [2.7841, 1.4995],
-                [2.1012, 1.778],
-                [1.6437, 2.361],
-                [1.5013, 3.051],
-                [1.644, 3.6647],
-                [2.1506, 4.2289],
-                [2.7846, 4.4985],
-                [3.4941, 4.4298],
-                [4.1189, 4.0216],
-                [4.4115, 3.5209],
-                [4.5017, 2.8079],
-                [4.446, 2.6053],
+                [2.7841, 1.5445],
+                [2.1212, 1.818],
+                [1.6587, 2.386],
+                [1.5263, 3.051],
+                [1.679, 3.6497],
+                [2.1656, 4.2089],
+                [2.7846, 4.4585],
+                [3.4941, 4.3898],
+                [4.1189, 3.9666],
+                [4.3865, 3.5009],
+                [4.4517, 2.8079],
+                [4.426, 2.6003],
                 [5.748, 1.3171],
                 [5.9977, 1.5743],
                 [6, 6.0003],
@@ -18189,7 +18190,7 @@
                 [0.0001, 0],
                 [4.5022, -0.0007],
                 [4.6827, 0.2687],
-                [3.3771, 1.563]
+                [3.3771, 1.583]
               ]
             ],
             "meta": {
@@ -18200,7 +18201,7 @@
             }
           },
           "transform": [-1, 0, 0, 1, 30, 9],
-          "center": {"x": 26.71, "y": 11.76},
+          "center": {"x": 26.7, "y": 11.76},
           "meta": {
             "obstacle": true,
             "y": 0.7,
@@ -20819,30 +20820,30 @@
           {"x": 23.65, "y": 2.65},
           {"x": 23.65, "y": 5.6625},
           {"x": 22.875, "y": 5.6625},
-          {"x": 24.6397, "y": 10.349},
+          {"x": 24.6417, "y": 10.3469},
           {"x": 24.849, "y": 10.1396},
           {"x": 24.8518, "y": 10.1425},
           {"x": 25.1347, "y": 9.8596},
           {"x": 24.8104, "y": 9.5354},
           {"x": 25.1318, "y": 9.8567},
-          {"x": 25.3426, "y": 9.6458},
-          {"x": 26.5313, "y": 10.8242},
-          {"x": 27.1799, "y": 10.7548},
-          {"x": 27.743, "y": 10.9845},
-          {"x": 27.8462, "y": 11.116},
+          {"x": 25.3411, "y": 9.6473},
+          {"x": 26.5257, "y": 10.8398},
+          {"x": 27.1742, "y": 10.7977},
+          {"x": 27.7249, "y": 11.025},
+          {"x": 27.8075, "y": 11.1264},
           {"x": 27.2007, "y": 11.2891},
           {"x": 27.5244, "y": 12.4965},
-          {"x": 28.1793, "y": 12.321},
-          {"x": 28.1271, "y": 12.5455},
-          {"x": 27.7005, "y": 13.0206},
-          {"x": 27.3281, "y": 13.1789},
+          {"x": 28.1445, "y": 12.3303},
+          {"x": 28.0934, "y": 12.5304},
+          {"x": 27.6852, "y": 12.9995},
+          {"x": 27.3387, "y": 13.1392},
           {"x": 27.502, "y": 12.5302},
           {"x": 26.2946, "y": 12.2064},
-          {"x": 26.1151, "y": 12.8759},
-          {"x": 26.0672, "y": 12.8446},
-          {"x": 25.8301, "y": 12.4389},
-          {"x": 25.7526, "y": 11.826},
-          {"x": 25.8338, "y": 11.5305},
+          {"x": 26.1271, "y": 12.8312},
+          {"x": 26.0691, "y": 12.792},
+          {"x": 25.8573, "y": 12.4234},
+          {"x": 25.7998, "y": 11.8116},
+          {"x": 25.8374, "y": 11.5076},
           {"x": 25.0207, "y": 5.65},
           {"x": 25.0244, "y": 4.9184},
           {"x": 25.527, "y": 5.421},
@@ -21283,28 +21284,28 @@
           [334, 330, 333],
           [330, 331, 333],
           [331, 332, 333],
-          [337, 339, 360],
-          [337, 338, 339],
+          [360, 337, 339],
           [339, 340, 360],
           [360, 340, 344],
-          [348, 360, 344],
-          [348, 355, 360],
+          [355, 360, 344],
+          [359, 360, 355],
+          [358, 359, 355],
+          [357, 358, 355],
+          [356, 357, 355],
+          [355, 344, 348],
           [355, 348, 349],
           [354, 355, 349],
           [354, 349, 352],
           [353, 354, 352],
           [352, 349, 351],
           [351, 349, 350],
-          [359, 360, 355],
-          [358, 359, 355],
-          [357, 358, 355],
-          [356, 357, 355],
           [344, 345, 348],
           [348, 345, 346],
           [348, 346, 347],
           [340, 343, 344],
           [340, 342, 343],
           [341, 342, 340],
+          [337, 338, 339],
           [361, 363, 367],
           [361, 362, 363],
           [363, 364, 367],
@@ -21397,7 +21398,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_0",
-          "meta": {"decor": true, "go": true, "label": "locker"},
+          "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {
             "x": 27.4775,
             "y": -1.285,
@@ -21410,7 +21411,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_1",
-          "meta": {"decor": true, "go": true, "label": "locker"},
+          "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 27.4775, "y": 0.215, "width": 4.25, "height": 4.25},
           "x": 29.6025,
           "y": 2.34
@@ -21418,7 +21419,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_2",
-          "meta": {"decor": true, "go": true, "label": "locker"},
+          "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 27.4775, "y": 1.715, "width": 4.25, "height": 4.25},
           "x": 29.6025,
           "y": 3.84
@@ -21426,7 +21427,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_3",
-          "meta": {"decor": true, "go": true, "label": "locker"},
+          "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 27.4775, "y": 3.215, "width": 4.25, "height": 4.25},
           "x": 29.6025,
           "y": 5.34
@@ -21434,7 +21435,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_4",
-          "meta": {"decor": true, "go": true, "label": "eva"},
+          "meta": {"decor": true, "go": true, "label": "eva", "y": 0},
           "bounds2d": {"x": 26.2275, "y": 1.965, "width": 4.25, "height": 4.25},
           "x": 28.3525,
           "y": 4.09
@@ -21447,7 +21448,8 @@
             "go": true,
             "label": "'parts",
             "or": true,
-            "cargo'": true
+            "cargo'": true,
+            "y": 0
           },
           "bounds2d": {"x": 22.4375, "y": 9.8, "width": 4.25, "height": 4.25},
           "x": 24.5625,
@@ -21456,7 +21458,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_6",
-          "meta": {"decor": true, "label": "fuel"},
+          "meta": {"decor": true, "label": "fuel", "y": 0},
           "bounds2d": {"x": 1.95, "y": 9.45, "width": 4.25, "height": 4.25},
           "x": 4.075,
           "y": 11.575
@@ -21464,7 +21466,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_7",
-          "meta": {"decor": true, "go": true, "label": "airlock"},
+          "meta": {"decor": true, "go": true, "label": "airlock", "y": 0},
           "bounds2d": {"x": 10.5, "y": 9.75, "width": 4.25, "height": 4.25},
           "x": 12.625,
           "y": 11.875
@@ -21472,7 +21474,13 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_8",
-          "meta": {"decor": true, "go": true, "label": "'repair", "bay'": true},
+          "meta": {
+            "decor": true,
+            "go": true,
+            "label": "'repair",
+            "bay'": true,
+            "y": 0
+          },
           "bounds2d": {"x": 16.2, "y": 9.8, "width": 4.25, "height": 4.25},
           "x": 18.325,
           "y": 11.925
@@ -21480,7 +21488,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_9",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 26.2275, "y": 6.965, "width": 4.25, "height": 4.25},
           "x": 28.3525,
           "y": 9.09
@@ -21488,7 +21496,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_10",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {
             "x": 15.9775,
             "y": 11.965,
@@ -21501,7 +21509,7 @@
         {
           "type": "point",
           "key": "g-302--xboat-repair-bay_11",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {
             "x": -0.7725,
             "y": 11.215,
@@ -21528,7 +21536,7 @@
             "sit": true,
             "chair": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -0.57, "y": 1.63, "width": 4.25, "height": 4.25},
           "x": 1.555,
@@ -21543,7 +21551,7 @@
             "sit": true,
             "chair": true,
             "orient": 360,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": -0.57, "y": 3.13, "width": 4.25, "height": 4.25},
           "x": 1.555,
@@ -21611,7 +21619,7 @@
             "sit": true,
             "chair": true,
             "orient": 250,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 5.9287,
@@ -21631,7 +21639,7 @@
             "sit": true,
             "chair": true,
             "orient": 290,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 4.7863,
@@ -21659,7 +21667,7 @@
             "sit": true,
             "toilet": true,
             "orient": 180,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 9.41, "y": 9.86, "width": 4.25, "height": 4.25},
           "x": 11.535,
@@ -21674,7 +21682,7 @@
             "sit": true,
             "toilet": true,
             "orient": 180,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 9.41, "y": 8.86, "width": 4.25, "height": 4.25},
           "x": 11.535,
@@ -21688,7 +21696,7 @@
             "do": true,
             "stand": true,
             "orient": 360,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {
             "x": 9.2134,
@@ -23750,7 +23758,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_0",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 2.5625, "y": 6.6875, "width": 4.25, "height": 4.25},
           "x": 4.6875,
           "y": 8.8125
@@ -23758,7 +23766,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_1",
-          "meta": {"decor": true, "go": true, "label": "corridor"},
+          "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {
             "x": 22.0625,
             "y": 8.1875,
@@ -23771,7 +23779,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_2",
-          "meta": {"decor": true, "go": true, "label": "common-area"},
+          "meta": {"decor": true, "go": true, "label": "common-area", "y": 0},
           "bounds2d": {
             "x": 13.8125,
             "y": 4.4375,
@@ -23813,7 +23821,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_6",
-          "meta": {"decor": true, "button": true, "shower": true, "y": 0},
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 18.4259,
             "y": 12.625,
@@ -23851,7 +23859,7 @@
             "sit": true,
             "chair": true,
             "orient": 210,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 18.229, "y": 8.3923, "width": 4.25, "height": 4.25},
           "x": 20.354,
@@ -23866,7 +23874,7 @@
             "sit": true,
             "chair": true,
             "orient": 150,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 18.214, "y": 7.3972, "width": 4.25, "height": 4.25},
           "x": 20.339,
@@ -23880,7 +23888,7 @@
             "do": true,
             "stand": true,
             "orient": 90,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {"x": 16.4656, "y": 12.2, "width": 4.25, "height": 4.25},
           "x": 18.5906,
@@ -23895,7 +23903,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 17.37, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 19.495,
@@ -23930,7 +23938,7 @@
             "lie": true,
             "bed": true,
             "orient": 270,
-            "y": 1.4100000000000001
+            "y": 1.41
           },
           "bounds2d": {
             "x": 18.0625,
@@ -23973,7 +23981,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_17",
-          "meta": {"decor": true, "button": true, "shower": true, "y": 0},
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 15.4259,
             "y": 12.625,
@@ -24011,7 +24019,7 @@
             "sit": true,
             "chair": true,
             "orient": 210,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 15.229, "y": 8.3923, "width": 4.25, "height": 4.25},
           "x": 17.354,
@@ -24026,7 +24034,7 @@
             "sit": true,
             "chair": true,
             "orient": 150,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 15.214, "y": 7.3972, "width": 4.25, "height": 4.25},
           "x": 17.339,
@@ -24040,7 +24048,7 @@
             "do": true,
             "stand": true,
             "orient": 90,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {"x": 13.4656, "y": 12.2, "width": 4.25, "height": 4.25},
           "x": 15.5906,
@@ -24055,7 +24063,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 14.37, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 16.495,
@@ -24090,7 +24098,7 @@
             "lie": true,
             "bed": true,
             "orient": 270,
-            "y": 1.4100000000000001
+            "y": 1.41
           },
           "bounds2d": {
             "x": 15.0625,
@@ -24133,7 +24141,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_28",
-          "meta": {"decor": true, "button": true, "shower": true, "y": 0},
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 10.3241,
             "y": 12.625,
@@ -24171,7 +24179,7 @@
             "sit": true,
             "chair": true,
             "orient": 330,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 10.521, "y": 8.3923, "width": 4.25, "height": 4.25},
           "x": 12.646,
@@ -24186,7 +24194,7 @@
             "sit": true,
             "chair": true,
             "orient": 30,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 10.536, "y": 7.3972, "width": 4.25, "height": 4.25},
           "x": 12.661,
@@ -24200,7 +24208,7 @@
             "do": true,
             "stand": true,
             "orient": 90,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {"x": 12.2844, "y": 12.2, "width": 4.25, "height": 4.25},
           "x": 14.4094,
@@ -24215,7 +24223,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 11.38, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 13.505,
@@ -24250,7 +24258,7 @@
             "lie": true,
             "bed": true,
             "orient": 270,
-            "y": 1.4100000000000001
+            "y": 1.41
           },
           "bounds2d": {
             "x": 10.6875,
@@ -24293,7 +24301,7 @@
         {
           "type": "point",
           "key": "g-303--passenger-deck_39",
-          "meta": {"decor": true, "button": true, "shower": true, "y": 0},
+          "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {"x": 7.3241, "y": 12.625, "width": 4.25, "height": 4.25},
           "x": 9.4491,
           "y": 14.75
@@ -24321,7 +24329,7 @@
             "sit": true,
             "chair": true,
             "orient": 330,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 7.521, "y": 8.3923, "width": 4.25, "height": 4.25},
           "x": 9.646,
@@ -24336,7 +24344,7 @@
             "sit": true,
             "chair": true,
             "orient": 30,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 7.536, "y": 7.3972, "width": 4.25, "height": 4.25},
           "x": 9.661,
@@ -24350,7 +24358,7 @@
             "do": true,
             "stand": true,
             "orient": 90,
-            "y": 0.6
+            "y": 0.61
           },
           "bounds2d": {"x": 9.2844, "y": 12.2, "width": 4.25, "height": 4.25},
           "x": 11.4094,
@@ -24365,7 +24373,7 @@
             "sit": true,
             "toilet": true,
             "orient": 270,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 8.38, "y": 12.4, "width": 4.25, "height": 4.25},
           "x": 10.505,
@@ -24395,7 +24403,7 @@
             "lie": true,
             "bed": true,
             "orient": 270,
-            "y": 1.4100000000000001
+            "y": 1.41
           },
           "bounds2d": {"x": 7.6875, "y": 10.635, "width": 4.25, "height": 4.25},
           "x": 9.8125,
@@ -24487,7 +24495,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 13.6925,
@@ -24574,7 +24582,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {"x": 7.6925, "y": 0.1175, "width": 4.25, "height": 4.25},
           "x": 9.8175,
@@ -24666,7 +24674,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 10.6925,
@@ -24753,7 +24761,7 @@
             "sit": true,
             "chair": true,
             "orient": 180,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {"x": 4.6925, "y": 0.1175, "width": 4.25, "height": 4.25},
           "x": 6.8175,
@@ -24890,7 +24898,7 @@
             "sit": true,
             "chair": true,
             "orient": 215,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 23.8559,
@@ -24910,7 +24918,7 @@
             "sit": true,
             "chair": true,
             "orient": 235,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 25.0344,
@@ -24930,7 +24938,7 @@
             "sit": true,
             "chair": true,
             "orient": 45,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {
             "x": 26.3501,
@@ -24950,7 +24958,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.4
+            "y": 0.41
           },
           "bounds2d": {"x": 2.76, "y": 0.87, "width": 4.25, "height": 4.25},
           "x": 4.885,
@@ -24965,7 +24973,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.0425,
@@ -24985,7 +24993,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {"x": 8.3025, "y": 4.4025, "width": 4.25, "height": 4.25},
           "x": 10.4275,
@@ -25000,7 +25008,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {"x": 8.3025, "y": 5.4025, "width": 4.25, "height": 4.25},
           "x": 10.4275,
@@ -25015,7 +25023,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {"x": 8.3125, "y": 6.4025, "width": 4.25, "height": 4.25},
           "x": 10.4375,
@@ -25030,7 +25038,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 25.8525,
@@ -25050,7 +25058,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 26.7025,
@@ -25070,7 +25078,7 @@
             "sit": true,
             "chair": true,
             "orient": 0,
-            "y": 0.3
+            "y": 0.31
           },
           "bounds2d": {
             "x": 27.5625,
