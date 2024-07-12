@@ -344,6 +344,7 @@ class GeomorphService {
   }
 
   /**
+   * We only invoke this for layouts, not nested symbols.
    * @param {string} decorKey
    * Identifier of decor w.r.t parent SVG symbol
    * @param {Geom.Poly} poly
@@ -362,10 +363,9 @@ class GeomorphService {
       const polyRect = poly.rect.precision(precision);
       const defaultDecorCuboidHeight = 0.5; // 🚧
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
-      // 🔔 we apply decor.meta.y on instantiate decor into World
-      // const y3d = typeof meta.y === 'number' ? meta.y : 0;
+      const y3d = typeof meta.y === 'number' ? meta.y : 0; // meta.y has been aggregated
       const center2d = poly.center;
-      const center = { x: center2d.x, y: height3d / 2, z: center2d.y };
+      const center = { x: center2d.x, y: y3d + (height3d / 2), z: center2d.y };
       
       tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
       
@@ -1223,22 +1223,18 @@ class GeomorphService {
   /**
    * @param {Geom.Meta} meta 
    * @param {Geom.Mat} mat
-   * @param {number} [y] Height off ground
+   * @param {number} [y] Height off the ground
    * @returns {Geom.Meta}
    */
   transformDecorMeta(meta, mat, y) {
-    if (typeof meta.orient === 'number') {
-      const newDegrees = (180 / Math.PI) * mat.transformAngle(meta.orient * (Math.PI / 180));
-      const newOrient =  Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees);
-      return {
-        ...meta,
-        orient: newOrient,
-        // aggregate height
-        ...typeof y === 'number' && { y: y + (Number(meta.y) || 0) },
-      };
-    } else {
-      return meta; 
-    }
+    return {
+      ...meta,
+      // aggregate height
+      // ...typeof y === 'number' && { y: y + (Number(meta.y) || 0) },
+      y: (Number(y) || 0) + (Number(meta.y) || 0),
+      // transform orient
+      ...typeof meta.orient === 'number' && { orient: mat.transformDegrees(meta.orient) },
+    };
   }
 }
 

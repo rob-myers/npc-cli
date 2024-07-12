@@ -109,7 +109,7 @@ export default function Decor(props) {
         ]);
         return geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
-          yHeight: d.meta.y ?? 2, // 🚧 default point height
+          yHeight: d.meta.y || 0.01, // 🚧 default point height > 0
         });
       } else {// 🚧 assume rotated rect
         const [p, q, r, s] = d.points;
@@ -161,10 +161,8 @@ export default function Decor(props) {
     getDecorOrigin(decor) {
       return decor.type === 'point' ? decor : decor.center;
     },
-    getGmDecorKey(d, gmId) {
-      // geomorph decor should be determined by min(3D AABB)
-      // 🚧 use d.meta.y
-      return `g${gmId}r${d.meta.roomId}[${d.bounds2d.x},${d.type === 'cuboid' ? d.center.y : 0},${d.bounds2d.y}]`;
+    getGmDecorKey(d, gmId) {// 🔔 geomorph decor should be determined by min(3D AABB)
+      return `g${gmId}r${d.meta.roomId}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`;
     },
     instantiateGmDecor(gmId, gm) {
       state.byRoom[gmId] ??= gm.rooms.map(_ => new Set()); // 🔔 needs update on dynamic nav
@@ -193,7 +191,7 @@ export default function Decor(props) {
             const center = gm.matrix.transformPoint({ x: def.center.x, y: def.center.z });
             const extent = gm.matrix.transformSansTranslate({ x: def.extent.x, y: def.extent.z });
             return { ...def, ...base,
-              center: { x: center.x, y: def.center.y + (def.meta.y ?? 0), z: center.y },
+              center: { x: center.x, y: def.center.y, z: center.y },
               extent: { x: extent.x, y: def.extent.y, z: extent.y },
             };
           case "point":
@@ -327,9 +325,10 @@ export default function Decor(props) {
 
   w.decor = state;
 
-  const { status: queryStatus } = useQuery({// instantiate geomorph decor
+  // 🚧 recompute on hmr?
+  const { status: queryStatus } = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
-    async queryFn() {
+    async queryFn() {// instantiate geomorph decor
       if (Object.values(state.byKey).length) { 
         await pause();
         state.removeInstantiatedDecor();

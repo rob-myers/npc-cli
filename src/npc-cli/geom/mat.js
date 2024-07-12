@@ -180,13 +180,23 @@ export class Mat {
 
   /**
    * Compute action of `this` on unit direction vector with angle
-   * @see {radians} , then convert the latter back into an angle.
+   * @see {radians} , then convert the latter back into an angle in [-π,π].
    * @param {number} radians
    */
   transformAngle(radians) {
     const unit = { x: Math.cos(radians), y: Math.sin(radians) };
     this.transformSansTranslate(unit);
     return Math.atan2(unit.y, unit.x);
+  }
+
+  /**
+   * Compute action of `this` on unit direction vector with angle
+   * @see {degrees} , then convert the latter back into an angle in [0, 360].
+   * @param {number} degrees
+   */
+  transformDegrees(degrees) {
+    const newDegrees = (180 / Math.PI) * this.transformAngle(degrees * (Math.PI / 180));
+    return  Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees);
   }
 
   /**
