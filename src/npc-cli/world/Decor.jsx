@@ -151,31 +151,18 @@ export default function Decor(props) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
         const decorOrigin = state.getDecorOrigin(decor);
         const gmRoomId = w.gmGraph.findRoomContaining(decorOrigin);
-        if (gmRoomId) {
-          return Object.assign(decor.meta, gmRoomId);
-        } else {
-          // throw new Error(`decor origin must reside in some room: ${JSON.stringify(decor)}`);
-          return null;
-        }
+        return gmRoomId === null ? null : Object.assign(decor.meta, gmRoomId);
       } else {
         decor.meta.grKey ??= geomorphService.getGmRoomKey(decor.meta.gmId, decor.meta.roomId);
         return decor.meta;
       }
     },
     getDecorOrigin(decor) {
-      switch (decor.type) {
-        case 'circle':
-        case 'cuboid':
-        case 'poly':
-          return decor.center;
-        case 'point':
-          return decor;
-        default:
-          throw testNever(decor);
-      }
+      return decor.type === 'point' ? decor : decor.center;
     },
     getGmDecorKey(d, gmId) {
-      // 🔔 assume distinct geomorph decor have distinct "min point of 3D AABB"
+      // geomorph decor should be determined by min(3D AABB)
+      // 🚧 use d.meta.y
       return `g${gmId}r${d.meta.roomId}[${d.bounds2d.x},${d.type === 'cuboid' ? d.center.y : 0},${d.bounds2d.y}]`;
     },
     initializeGmDecor(gmId, gm) {

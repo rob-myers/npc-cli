@@ -57,6 +57,7 @@
   - fix geomorph decor warns e.g. not fuel label not in any room
   - remove temp "all decor points shown with info icon"
   - fix HMR on change decor
+  - cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
 
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - darken obstacle machinery via instancedmesh colours
