@@ -54,7 +54,10 @@ export default function Decor(props) {
         state.addDecorToRoom(meta.gmId, meta.roomId, add)
       );
 
-      state.updateInstanceLists();
+      if (addable.length) {
+        state.updateInstanceLists();
+        w.events.next({ key: 'decors-added', decors: ds });
+      }
     },
     addDecorToRoom(gmId, roomId, ds) {
       const atRoom = state.byRoom[gmId][roomId];
@@ -68,8 +71,6 @@ export default function Decor(props) {
         atRoom.add(d);
         state.rmKeys.delete(d.key);
       }
-
-      ds.length && w.events.next({ key: 'decors-added', decors: ds });
     },
     addQuadUvs() {
       const { decor: sheet, decorDim: sheetDim } = w.geomorphs.sheet;
@@ -277,7 +278,10 @@ export default function Decor(props) {
         state.removeDecorFromRoom(meta.gmId, meta.roomId, ds)
       }
 
-      state.updateInstanceLists();
+      if (ds.length) {
+        state.updateInstanceLists();
+        w.events.next({ key: 'decors-removed', decors: ds });
+      }
     },
     removeDecorFromRoom(gmId, roomId, ds) {
       const atRoom = state.byRoom[gmId][roomId];
@@ -292,8 +296,6 @@ export default function Decor(props) {
       }
 
       ds.forEach(d => removeFromDecorGrid(d, state.byGrid));
-
-      ds.length && w.events.next({ key: 'decors-removed', decors: ds });
     },
     removeInstantiatedDecor() {
       for (const d of Object.values(state.byKey)) {
