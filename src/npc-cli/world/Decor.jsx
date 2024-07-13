@@ -2,8 +2,8 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { decorIconRadius } from "../service/const";
-import { pause, testNever, warn } from "../service/generic";
+import { decorGridSize, decorIconRadius } from "../service/const";
+import { hashJson, mapValues, pause, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
@@ -23,6 +23,7 @@ export default function Decor(props) {
     byRoom: [],
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
+    hash : /** @type {State['hash']} */ ({ mapHash: 0 }),
     quads: [],
     quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
@@ -90,6 +91,15 @@ export default function Decor(props) {
       state.quadInst.geometry.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
+    },
+    computeNextHash() {
+      const { layout } = w.geomorphs;
+      return {
+        mapHash: hashJson(w.geomorphs.map[w.mapKey]),
+        ...mapValues(geomorphService.toGmNum, (_, gmKey) => 
+          hashJson(layout[gmKey].decor)
+        ),
+      };
     },
     createCuboidMatrix4(cuboidDecor) {
       if (cuboidDecor.angle !== 0) {
@@ -319,6 +329,24 @@ export default function Decor(props) {
         }
       }
     },
+    rmInstantiatedDecor(gmId) {
+      const byRoomId = state.byRoom[gmId];
+      for (const decorSet of byRoomId) {
+        decorSet.forEach(d => d.src !== undefined &&
+          decorSet.delete(d) && delete state.byKey[d.key]
+        );
+      }
+      // clear gmId's part of the decor grid
+      const { gridRect } = w.gms[gmId];
+      const { x, right, y, bottom } = tmpRect1.copy(gridRect).scale(1 / decorGridSize).integerOrds();
+      // console.log({ x, right, y, bottom })
+
+      for (let i = x; i < right; i++) {
+        const inner = state.byGrid[i];
+        if (inner === undefined) continue;
+        for (let j = y; j < bottom; j++) inner[j]?.clear();
+      }
+    },
     updateInstanceLists() {// 🚧 WIP
       state.cuboids = Object.values(state.byKey).filter(
         /** @returns {d is Geomorph.DecorCuboid} */
@@ -334,20 +362,30 @@ export default function Decor(props) {
 
   w.decor = state;
 
-  // 🚧 recompute on hmr?
+  // instantiate geomorph decor
+  // 🚧 recompute on hmr
   const { status: queryStatus } = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
-    async queryFn() {// instantiate geomorph decor
-      if (Object.values(state.byKey).length) { 
-        await pause();
-        state.removeInstantiatedDecor();
-      }
+    async queryFn() {
+      const prev = state.hash;
+      const next = state.computeNextHash();
+      /** mapKey changed or current map def changed  */
+      const redoAll = prev.mapHash !== next.mapHash;
 
       for (const [gmId, gm] of w.gms.entries()) {
+        if (!redoAll && prev[gm.key] === next[gm.key]) {
+          continue;
+        }
+        if (state.byRoom[gmId] !== undefined) {
+          await pause();
+          state.rmInstantiatedDecor(gmId);
+        }
+        
         await pause();
         state.instantiateDecor(gmId, gm);
       }
 
+      state.hash = next;
       update();
       return null;
     },
@@ -420,6 +458,8 @@ export default function Decor(props) {
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
  * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads This is `Object.values(state.byKey)`
  * @property {THREE.InstancedMesh} cuboidInst
+ * @property {{ mapHash: number; } & Record<Geomorph.GeomorphKey, number>} hash
+ * If any decor changed in a geomorph, re-instantiate all
  * @property {THREE.BufferGeometry} quadGeom
  * @property {THREE.InstancedMesh} quadInst
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
@@ -429,6 +469,7 @@ export default function Decor(props) {
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor
  * @property {() => void} addQuadUvs
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
+ * @property {() => State['hash']} computeNextHash
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorPoly) => THREE.Matrix4} createQuadMatrix4
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
@@ -441,5 +482,6 @@ export default function Decor(props) {
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
  * @property {() => void} removeInstantiatedDecor
+ * @property {(gmId: number) => void} rmInstantiatedDecor
  * @property {() => void} updateInstanceLists
  */

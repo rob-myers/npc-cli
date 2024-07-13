@@ -55,8 +55,10 @@
   - ✅ cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
   - ✅ `gm.decor[i]` has keys like instantiated
   - ✅ fix cuboid instantiation when angle non-zero
-  - 🚧 track `gm.decor` hashes and detect new/changed/removed
-  - 🚧 efficient decor re-instantiation
+  - ✅ track instantiated decor new/changed/removed
+    - track per-geomorph only (not per decor)
+  - ✅ efficient decor re-instantiation
+    - e.g. if map stays same and decor too, won't redo
   - 🚧 better decor point heights
   - 🚧 remove temp "all decor points shown with info icon"
   - rotated rect 4-gon -> affine transform

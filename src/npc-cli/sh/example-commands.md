@@ -23,6 +23,9 @@ expr 'new Set([1, 2, 3])' | map Array.from
 w decor.byKey | map Object.values | split | take 1
 w decor.byKey | map 'x => Object.values(x)[0]' | pretty
 w decor.byKey | map Object.values | map length
+
+w decor.rmInstantiatedDecor 1
+w decor.updateInstanceLists
 ```
 
 ## Local variables
