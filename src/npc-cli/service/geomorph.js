@@ -218,7 +218,7 @@ class GeomorphService {
       room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
     ));
 
-    const decor = symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey}_${i}`, d));
+    const decor = symbol.decor.map((d, i) => this.decorFromPoly(d));
 
     const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const navPolyWithDoors = Poly.cutOut([
@@ -346,22 +346,22 @@ class GeomorphService {
   }
 
   /**
-   * We only invoke this for layouts, not nested symbols.
-   * @param {string} decorKey
-   * Identifier of decor w.r.t parent SVG symbol
+   * We only invoke this for non-instantiated layouts,
+   * not for e.g. nested symbols, or layout instances.
    * @param {Geom.Poly} poly
    * @returns {Geomorph.Decor}
    */
-  decorFromPoly(decorKey, poly) {
-    // `gmId`, `roomId` will be provided on instantiation
+  decorFromPoly(poly) {
+    /** @type {Geomorph.Decor} */ let out;
+    // gmId, roomId provided on instantiation
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
-    // `key` will be overridden on instantiation
-    const base = { key: decorKey, meta };
     meta.y = toPrecision(Number(meta.y) || 0);
+    
+    const base = { key: '', meta }; // key derived from decor below
     
     if (meta.rect || meta.poly) {
       const polyRect = poly.rect.precision(precision);
-      return { type: 'poly', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
+      out = { type: 'poly', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
     } else if (meta.cuboid) {
       const polyRect = poly.rect.precision(precision);
       const defaultDecorCuboidHeight = 0.5; // 🚧
@@ -375,7 +375,7 @@ class GeomorphService {
       if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
         const aabb = polyRect;
         const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-        return { type: 'cuboid', ...base, bounds2d: polyRect.json, angle: 0, center, extent };
+        out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle: 0, center, extent };
       }
       
       // Angle of first edge
@@ -385,19 +385,22 @@ class GeomorphService {
       
       const aabb = poly.rect;
       const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
-      return { type: 'cuboid', ...base, bounds2d: polyRect.json, angle, center, extent };
+      out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle, center, extent };
     } else if (meta.circle) {
       const polyRect = poly.rect.precision(precision);
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
       const center = poly.center.precision(precision);
       const radius = Math.max(baseRect.width, baseRect.height) / 2;
-      return { type: 'circle', ...base, bounds2d: polyRect.json, radius, center };
+      out = { type: 'circle', ...base, bounds2d: polyRect.json, radius, center };
     } else {// 🔔 fallback to decor point
       const center = poly.center.precision(precision);
       const radius = decorIconRadius + 2;
       const bounds2d = tmpRect1.set(center.x - radius, center.y - radius, 2 * radius, 2 * radius).precision(precision).json;
-      return { type: 'point', ...base, bounds2d, x: center.x, y: center.y };
+      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y };
     }
+
+    out.key = this.getDerivedDecorKey(out); // overridden on instantiation
+    return out;
   }
 
   /**
@@ -687,6 +690,14 @@ class GeomorphService {
       unsorted: unsorted.concat(flats.flatMap(x => x.unsorted)),
       windows: windows.concat(flats.flatMap(x => x.windows)),
     };
+  }
+
+  /**
+   * 🔔 instantiated decor should be determined by min(3D AABB)
+   * @param {Geomorph.Decor} d 
+   */
+  getDerivedDecorKey(d) {// 🚧 hard to lookup keys containing decimal point "."
+    return `${d.type}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`;
   }
 
   /**

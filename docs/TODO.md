@@ -53,7 +53,8 @@
     - world query was broken (wrong initial key)
     - also, now trigger Decor useEffect using query.status === 'success'
   - ✅ cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
-  - 🚧 `gm.decor[i]` has keys like instantiated
+  - ✅ `gm.decor[i]` has keys like instantiated
+  - ✅ fix cuboid instantiation when angle non-zero
   - 🚧 track `gm.decor` hashes and detect new/changed/removed
   - 🚧 efficient decor re-instantiation
   - 🚧 better decor point heights

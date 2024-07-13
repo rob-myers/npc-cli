@@ -25,6 +25,17 @@ export class Mat {
     return this.a * this.d - this.b * this.c;
   }
 
+  /** @param {Geom.SixTuple} _ */
+  feedFromArray([a, b, c, d, e, f]) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
+    this.e = e;
+    this.f = f;
+    return this;
+  }
+
   /**
    * Get an inverse matrix of current matrix. The method returns a new
    * matrix with values you need to use to get to an identity matrix.
@@ -227,14 +238,13 @@ export class Mat {
     return v;
   }
 
-  /** @param {Geom.SixTuple} _ */
-  feedFromArray([a, b, c, d, e, f]) {
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.e = e;
-    this.f = f;
+  /**
+   * @param {number} offsetX 
+   * @param {number} offsetY 
+   */
+  translate(offsetX, offsetY) {
+    this.e += offsetX;
+    this.f += offsetY;
     return this;
   }
 }
