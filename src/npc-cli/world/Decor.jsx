@@ -328,7 +328,9 @@ export default function Decor(props) {
       for (let i = x; i < right; i++) {
         const inner = state.byGrid[i];
         if (inner === undefined) continue;
-        for (let j = y; j < bottom; j++) inner[j]?.clear();
+        for (let j = y; j < bottom; j++) {
+          inner[j]?.forEach(d => d.src !== undefined && inner[j].delete(d));
+        }
       }
     },
     updateInstanceLists() {// 🚧 WIP
