@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -418896185 -639924815 728262193",
+  "hash": "610044716 1453153124 -639924815 728262193",
   "mapsHash": 610044716,
-  "layoutsHash": -418896185,
+  "layoutsHash": 1453153124,
   "sheetsHash": -639924815,
   "imagesHash": 728262193,
   "map": {
@@ -42,7 +42,7 @@
       "decor": [
         {
           "type": "point",
-          "key": "point[5.25,0,3.75]",
+          "key": "point[5_25,0,3_75]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 5.25, "y": 3.75, "width": 4.25, "height": 4.25},
           "x": 7.375,
@@ -50,7 +50,7 @@
         },
         {
           "type": "point",
-          "key": "point[4,0,12.75]",
+          "key": "point[4,0,12_75]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 4, "y": 12.75, "width": 4.25, "height": 4.25},
           "x": 6.125,
@@ -58,7 +58,7 @@
         },
         {
           "type": "point",
-          "key": "point[21.75,0,12.75]",
+          "key": "point[21_75,0,12_75]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 21.75, "y": 12.75, "width": 4.25, "height": 4.25},
           "x": 23.875,
@@ -66,7 +66,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.5,0,22]",
+          "key": "point[20_5,0,22]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.5, "y": 22, "width": 4.25, "height": 4.25},
           "x": 22.625,
@@ -74,7 +74,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.25,0,22]",
+          "key": "point[5_25,0,22]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 5.25, "y": 22, "width": 4.25, "height": 4.25},
           "x": 7.375,
@@ -82,7 +82,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.5,0,3.75]",
+          "key": "point[20_5,0,3_75]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.5, "y": 3.75, "width": 4.25, "height": 4.25},
           "x": 22.625,
@@ -90,7 +90,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.9455,0,22.8955]",
+          "key": "point[10_9455,0,22_8955]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {
             "x": 10.9455,
@@ -103,7 +103,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.6505,0,23.35]",
+          "key": "point[7_6505,0,23_35]",
           "meta": {"decor": true, "label": "cpu", "y": 0},
           "bounds2d": {"x": 7.6505, "y": 23.35, "width": 4.25, "height": 4.25},
           "x": 9.7755,
@@ -111,7 +111,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.88,0.41,23.76]",
+          "key": "point[9_88,0_41,23_76]",
           "meta": {
             "decor": true,
             "do": true,
@@ -126,7 +126,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.8045,0,16.3545]",
+          "key": "point[14_8045,0,16_3545]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {
             "x": 14.8045,
@@ -139,7 +139,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.0995,0,15.9]",
+          "key": "point[18_0995,0,15_9]",
           "meta": {"decor": true, "label": "cpu", "y": 0},
           "bounds2d": {"x": 18.0995, "y": 15.9, "width": 4.25, "height": 4.25},
           "x": 20.2245,
@@ -147,7 +147,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.87,0.41,15.49]",
+          "key": "point[15_87,0_41,15_49]",
           "meta": {
             "decor": true,
             "do": true,
@@ -162,7 +162,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.8045,0,22.8955]",
+          "key": "point[14_8045,0,22_8955]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {
             "x": 14.8045,
@@ -175,7 +175,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.0995,0,23.35]",
+          "key": "point[18_0995,0,23_35]",
           "meta": {"decor": true, "label": "cpu", "y": 0},
           "bounds2d": {"x": 18.0995, "y": 23.35, "width": 4.25, "height": 4.25},
           "x": 20.2245,
@@ -183,7 +183,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.87,0.41,23.76]",
+          "key": "point[15_87,0_41,23_76]",
           "meta": {
             "decor": true,
             "do": true,
@@ -198,7 +198,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.9455,0,16.3545]",
+          "key": "point[10_9455,0,16_3545]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {
             "x": 10.9455,
@@ -211,7 +211,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.6505,0,15.9]",
+          "key": "point[7_6505,0,15_9]",
           "meta": {"decor": true, "label": "cpu", "y": 0},
           "bounds2d": {"x": 7.6505, "y": 15.9, "width": 4.25, "height": 4.25},
           "x": 9.7755,
@@ -219,7 +219,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.88,0.41,15.49]",
+          "key": "point[9_88,0_41,15_49]",
           "meta": {
             "decor": true,
             "do": true,
@@ -234,7 +234,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.2865,0,9.3215]",
+          "key": "point[10_2865,0,9_3215]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {
             "x": 10.2865,
@@ -247,7 +247,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.945,0.51,10.6275]",
+          "key": "point[7_945,0_51,10_6275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -262,7 +262,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.6375,0.31,10.3575]",
+          "key": "point[10_6375,0_31,10_3575]",
           "meta": {
             "decor": true,
             "do": true,
@@ -282,7 +282,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.6314,0.51,8.9677]",
+          "key": "point[7_6314,0_51,8_9677]",
           "meta": {
             "decor": true,
             "do": true,
@@ -297,7 +297,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.7736,0.51,8.9712]",
+          "key": "point[8_7736,0_51,8_9712]",
           "meta": {
             "decor": true,
             "do": true,
@@ -312,7 +312,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.4635,0,9.3215]",
+          "key": "point[15_4635,0,9_3215]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {
             "x": 15.4635,
@@ -325,7 +325,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.805,0.51,10.6275]",
+          "key": "point[17_805,0_51,10_6275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -345,7 +345,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.1125,0.31,10.3575]",
+          "key": "point[15_1125,0_31,10_3575]",
           "meta": {
             "decor": true,
             "do": true,
@@ -365,7 +365,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.1186,0.51,8.9678]",
+          "key": "point[18_1186,0_51,8_9678]",
           "meta": {
             "decor": true,
             "do": true,
@@ -385,7 +385,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.9764,0.51,8.9712]",
+          "key": "point[16_9764,0_51,8_9712]",
           "meta": {
             "decor": true,
             "do": true,
@@ -405,7 +405,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.2865,0,2.9285]",
+          "key": "point[10_2865,0,2_9285]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {
             "x": 10.2865,
@@ -418,7 +418,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.945,0.51,1.6225]",
+          "key": "point[7_945,0_51,1_6225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -433,7 +433,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.6375,0.31,1.8925]",
+          "key": "point[10_6375,0_31,1_8925]",
           "meta": {
             "decor": true,
             "do": true,
@@ -453,7 +453,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.6313,0.51,3.2823]",
+          "key": "point[7_6313,0_51,3_2823]",
           "meta": {
             "decor": true,
             "do": true,
@@ -468,7 +468,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.7736,0.51,3.2788]",
+          "key": "point[8_7736,0_51,3_2788]",
           "meta": {
             "decor": true,
             "do": true,
@@ -483,7 +483,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.4,0,19.3995]",
+          "key": "point[8_4,0,19_3995]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 8.4, "y": 19.3995, "width": 4.25, "height": 4.25},
           "x": 10.525,
@@ -491,7 +491,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.75,0.41,18.51]",
+          "key": "point[8_75,0_41,18_51]",
           "meta": {
             "decor": true,
             "do": true,
@@ -506,7 +506,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.75,0.41,20.77]",
+          "key": "point[8_75,0_41,20_77]",
           "meta": {
             "decor": true,
             "do": true,
@@ -521,7 +521,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.35,0,19.3995]",
+          "key": "point[17_35,0,19_3995]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 17.35, "y": 19.3995, "width": 4.25, "height": 4.25},
           "x": 19.475,
@@ -529,7 +529,7 @@
         },
         {
           "type": "point",
-          "key": "point[17,0.41,18.51]",
+          "key": "point[17,0_41,18_51]",
           "meta": {
             "decor": true,
             "do": true,
@@ -544,7 +544,7 @@
         },
         {
           "type": "point",
-          "key": "point[17,0.41,20.77]",
+          "key": "point[17,0_41,20_77]",
           "meta": {
             "decor": true,
             "do": true,
@@ -559,7 +559,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.8505,0,8.35]",
+          "key": "point[25_8505,0,8_35]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 25.8505, "y": 8.35, "width": 4.25, "height": 4.25},
           "x": 27.9755,
@@ -567,7 +567,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.74,0.41,8]",
+          "key": "point[26_74,0_41,8]",
           "meta": {
             "decor": true,
             "do": true,
@@ -582,7 +582,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.48,0.41,8]",
+          "key": "point[24_48,0_41,8]",
           "meta": {
             "decor": true,
             "do": true,
@@ -597,7 +597,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.1,0,17.35]",
+          "key": "point[27_1,0,17_35]",
           "meta": {"decor": true, "go": true, "label": "cpu", "y": 0},
           "bounds2d": {"x": 27.1, "y": 17.35, "width": 4.25, "height": 4.25},
           "x": 29.225,
@@ -605,7 +605,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.1,0,16.721]",
+          "key": "point[25_1,0,16_721]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 25.1, "y": 16.721, "width": 4.25, "height": 4.25},
           "x": 27.225,
@@ -613,7 +613,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.1125,0.31,17.8675]",
+          "key": "point[24_1125,0_31,17_8675]",
           "meta": {
             "decor": true,
             "do": true,
@@ -633,7 +633,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.6125,0.31,17.8675]",
+          "key": "point[25_6125,0_31,17_8675]",
           "meta": {
             "decor": true,
             "do": true,
@@ -653,7 +653,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.341,0,2.1595]",
+          "key": "point[13_341,0,2_1595]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": 13.341, "y": 2.1595, "width": 4.25, "height": 4.25},
           "x": 15.466,
@@ -661,7 +661,7 @@
         },
         {
           "type": "point",
-          "key": "point[12,0.65,3.38]",
+          "key": "point[12,0_65,3_38]",
           "meta": {
             "decor": true,
             "do": true,
@@ -675,7 +675,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.85,0.41,2.38]",
+          "key": "point[11_85,0_41,2_38]",
           "meta": {
             "decor": true,
             "do": true,
@@ -690,7 +690,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.7,0,5.9]",
+          "key": "point[8_7,0,5_9]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 8.7, "y": 5.9, "width": 4.25, "height": 4.25},
           "x": 10.825,
@@ -698,7 +698,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.945,0.51,4.6275]",
+          "key": "point[7_945,0_51,4_6275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -713,7 +713,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.945,0.51,7.6275]",
+          "key": "point[7_945,0_51,7_6275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -728,7 +728,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.8925,0.31,6.1275]",
+          "key": "point[7_8925,0_31,6_1275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -743,7 +743,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.05,0,5.9]",
+          "key": "point[17_05,0,5_9]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 17.05, "y": 5.9, "width": 4.25, "height": 4.25},
           "x": 19.175,
@@ -751,7 +751,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.805,0.51,4.6275]",
+          "key": "point[17_805,0_51,4_6275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -766,7 +766,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.805,0.51,7.6275]",
+          "key": "point[17_805,0_51,7_6275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -781,7 +781,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.8575,0.31,6.1275]",
+          "key": "point[17_8575,0_31,6_1275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -801,7 +801,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.991,0,8.9405]",
+          "key": "point[20_991,0,8_9405]",
           "meta": {"decor": true, "go": true, "label": "freaher", "y": 0},
           "bounds2d": {"x": 20.991, "y": 8.9405, "width": 4.25, "height": 4.25},
           "x": 23.116,
@@ -809,7 +809,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.35,0.41,9.38]",
+          "key": "point[19_35,0_41,9_38]",
           "meta": {
             "decor": true,
             "do": true,
@@ -824,7 +824,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.35,0.41,8.38]",
+          "key": "point[19_35,0_41,8_38]",
           "meta": {
             "decor": true,
             "do": true,
@@ -839,7 +839,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.35,0.41,7.38]",
+          "key": "point[19_35,0_41,7_38]",
           "meta": {
             "decor": true,
             "do": true,
@@ -854,7 +854,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.5,0.65,10.25]",
+          "key": "point[19_5,0_65,10_25]",
           "meta": {
             "decor": true,
             "do": true,
@@ -868,7 +868,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.5,0.65,11]",
+          "key": "point[19_5,0_65,11]",
           "meta": {
             "decor": true,
             "do": true,
@@ -882,7 +882,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.991,0,16.8095]",
+          "key": "point[20_991,0,16_8095]",
           "meta": {"decor": true, "go": true, "label": "freaher", "y": 0},
           "bounds2d": {
             "x": 20.991,
@@ -895,7 +895,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.35,0.41,16.37]",
+          "key": "point[19_35,0_41,16_37]",
           "meta": {
             "decor": true,
             "do": true,
@@ -910,7 +910,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.35,0.41,17.37]",
+          "key": "point[19_35,0_41,17_37]",
           "meta": {
             "decor": true,
             "do": true,
@@ -925,7 +925,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.35,0.41,18.37]",
+          "key": "point[19_35,0_41,18_37]",
           "meta": {
             "decor": true,
             "do": true,
@@ -940,7 +940,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.5,0.65,15.5]",
+          "key": "point[19_5,0_65,15_5]",
           "meta": {
             "decor": true,
             "do": true,
@@ -954,7 +954,7 @@
         },
         {
           "type": "point",
-          "key": "point[19.5,0.65,14.75]",
+          "key": "point[19_5,0_65,14_75]",
           "meta": {
             "decor": true,
             "do": true,
@@ -968,7 +968,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.15,0,12.65]",
+          "key": "point[25_15,0,12_65]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 25.15, "y": 12.65, "width": 4.25, "height": 4.25},
           "x": 27.275,
@@ -976,7 +976,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.57,0.41,10.85]",
+          "key": "point[24_57,0_41,10_85]",
           "meta": {
             "decor": true,
             "do": true,
@@ -991,7 +991,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.57,0.41,14.9]",
+          "key": "point[24_57,0_41,14_9]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1006,7 +1006,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.9,0.41,14]",
+          "key": "point[26_9,0_41,14]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1021,7 +1021,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.9,0.41,11.75]",
+          "key": "point[26_9,0_41,11_75]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1036,7 +1036,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.8045,0,15.4455]",
+          "key": "point[5_8045,0,15_4455]",
           "meta": {"decor": true, "go": true, "label": "medical", "y": 0},
           "bounds2d": {
             "x": 5.8045,
@@ -1049,7 +1049,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.8825,0.31,15.1075]",
+          "key": "point[4_8825,0_31,15_1075]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1069,7 +1069,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.61,0.5,16.58]",
+          "key": "point[4_61,0_5,16_58]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1086,7 +1086,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.61,0.5,18.09]",
+          "key": "point[4_61,0_5,18_09]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1103,7 +1103,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.8045,0,9.85]",
+          "key": "point[5_8045,0,9_85]",
           "meta": {"decor": true, "go": true, "label": "medical", "y": 0},
           "bounds2d": {"x": 5.8045, "y": 9.85, "width": 4.25, "height": 4.25},
           "x": 7.9295,
@@ -1111,7 +1111,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.8899,0.41,10.3803]",
+          "key": "point[4_8899,0_41,10_3803]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1131,7 +1131,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.6215,0,15.3305]",
+          "key": "point[-0_6215,0,15_3305]",
           "meta": {"decor": true, "go": true, "label": "escape-pod", "y": 0},
           "bounds2d": {
             "x": -0.6215,
@@ -1144,7 +1144,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.2,0.41,10.99]",
+          "key": "point[-1_2,0_41,10_99]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1159,7 +1159,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.05,0.41,10.99]",
+          "key": "point[-0_05,0_41,10_99]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1174,7 +1174,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.57,0.41,12.04]",
+          "key": "point[-1_57,0_41,12_04]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1189,7 +1189,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.73,0.41,12.04]",
+          "key": "point[-0_73,0_41,12_04]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1204,7 +1204,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.57,0.41,12.94]",
+          "key": "point[-1_57,0_41,12_94]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1219,7 +1219,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.73,0.41,12.94]",
+          "key": "point[-0_73,0_41,12_94]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1234,7 +1234,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.57,0.41,13.84]",
+          "key": "point[-1_57,0_41,13_84]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1249,7 +1249,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.73,0.41,13.84]",
+          "key": "point[-0_73,0_41,13_84]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1264,7 +1264,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.11,0.41,13.84]",
+          "key": "point[0_11,0_41,13_84]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1279,7 +1279,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.875,1.01,-1.425]",
+          "key": "point[0_875,1_01,-1_425]",
           "meta": {"decor": true, "label": "fuel", "y": 1.01},
           "bounds2d": {"x": 0.875, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 3,
@@ -1287,7 +1287,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.875,2,-1.425]",
+          "key": "point[9_875,2,-1_425]",
           "meta": {"decor": true, "label": "fuel", "y": 2},
           "bounds2d": {"x": 9.875, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 12,
@@ -1295,7 +1295,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.875,2,-1.425]",
+          "key": "point[15_875,2,-1_425]",
           "meta": {"decor": true, "label": "fuel", "y": 2},
           "bounds2d": {"x": 15.875, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 18,
@@ -1303,7 +1303,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.875,2,-1.425]",
+          "key": "point[24_875,2,-1_425]",
           "meta": {"decor": true, "label": "fuel", "y": 2},
           "bounds2d": {"x": 24.875, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 27,
@@ -1311,7 +1311,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.875,2,25.575]",
+          "key": "point[9_875,2,25_575]",
           "meta": {"decor": true, "label": "fuel", "y": 2},
           "bounds2d": {"x": 9.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 12,
@@ -1319,7 +1319,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.875,2,25.575]",
+          "key": "point[15_875,2,25_575]",
           "meta": {"decor": true, "label": "fuel", "y": 2},
           "bounds2d": {"x": 15.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 18,
@@ -1327,7 +1327,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.905,2,25.575]",
+          "key": "point[24_905,2,25_575]",
           "meta": {"decor": true, "label": "fuel", "y": 2},
           "bounds2d": {"x": 24.905, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 27.03,
@@ -1335,7 +1335,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.875,2,25.575]",
+          "key": "point[0_875,2,25_575]",
           "meta": {"decor": true, "label": "fuel", "y": 2},
           "bounds2d": {"x": 0.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 3,
@@ -7639,7 +7639,7 @@
       "decor": [
         {
           "type": "point",
-          "key": "point[3.75,0,3.75]",
+          "key": "point[3_75,0,3_75]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 3.75, "y": 3.75, "width": 4.25, "height": 4.25},
           "x": 5.875,
@@ -7647,7 +7647,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.75,0,5.25]",
+          "key": "point[12_75,0,5_25]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 12.75, "y": 5.25, "width": 4.25, "height": 4.25},
           "x": 14.875,
@@ -7655,7 +7655,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.25,0,14.25]",
+          "key": "point[20_25,0,14_25]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.25, "y": 14.25, "width": 4.25, "height": 4.25},
           "x": 22.375,
@@ -7663,7 +7663,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.5,0,26.25]",
+          "key": "point[-0_5,0,26_25]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": -0.5, "y": 26.25, "width": 4.25, "height": 4.25},
           "x": 1.625,
@@ -7671,7 +7671,7 @@
         },
         {
           "type": "point",
-          "key": "point[2.4123,0,0.7206]",
+          "key": "point[2_4123,0,0_7206]",
           "meta": {"decor": true, "go": true, "label": "engineering", "y": 0},
           "bounds2d": {"x": 2.4123, "y": 0.7206, "width": 4.25, "height": 4.25},
           "x": 4.5373,
@@ -7679,7 +7679,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.5,0,1]",
+          "key": "point[26_5,0,1]",
           "meta": {
             "decor": true,
             "go": true,
@@ -7693,7 +7693,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.5,0,-0.25]",
+          "key": "point[20_5,0,-0_25]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 20.5, "y": -0.25, "width": 4.25, "height": 4.25},
           "x": 22.625,
@@ -7701,7 +7701,7 @@
         },
         {
           "type": "point",
-          "key": "point[2.8803,0.41,-1.1101]",
+          "key": "point[2_8803,0_41,-1_1101]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7721,7 +7721,7 @@
         },
         {
           "type": "circle",
-          "key": "circle[0.2998,0,7.897]",
+          "key": "circle[0_2998,0,7_897]",
           "meta": {"decor": true, "circle": true, "hatch": true, "y": 0},
           "bounds2d": {
             "x": 0.2998,
@@ -7734,7 +7734,7 @@
         },
         {
           "type": "circle",
-          "key": "circle[28.7998,0,21]",
+          "key": "circle[28_7998,0,21]",
           "meta": {"decor": true, "circle": true, "hatch": true, "y": 0},
           "bounds2d": {"x": 28.7998, "y": 21, "width": 0.9004, "height": 1.103},
           "radius": 0.5515,
@@ -7742,7 +7742,7 @@
         },
         {
           "type": "circle",
-          "key": "circle[21,0,0.2998]",
+          "key": "circle[21,0,0_2998]",
           "meta": {"decor": true, "circle": true, "hatch": true, "y": 0},
           "bounds2d": {"x": 21, "y": 0.2998, "width": 1.103, "height": 0.9004},
           "radius": 0.5515,
@@ -7750,7 +7750,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.3561,0,11.35]",
+          "key": "point[9_3561,0,11_35]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 9.3561, "y": 11.35, "width": 4.25, "height": 4.25},
           "x": 11.4811,
@@ -7758,7 +7758,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.6225,0.51,11.805]",
+          "key": "point[10_6225,0_51,11_805]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7778,7 +7778,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.9604,0.41,12.2799]",
+          "key": "point[8_9604,0_41,12_2799]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7798,7 +7798,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.3561,0,11.35]",
+          "key": "point[12_3561,0,11_35]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 12.3561, "y": 11.35, "width": 4.25, "height": 4.25},
           "x": 14.4811,
@@ -7806,7 +7806,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.6225,0.51,11.805]",
+          "key": "point[13_6225,0_51,11_805]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7826,7 +7826,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.9604,0.41,12.2799]",
+          "key": "point[11_9604,0_41,12_2799]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7846,7 +7846,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.8133,0,8.375]",
+          "key": "point[8_8133,0,8_375]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 8.8133, "y": 8.375, "width": 4.25, "height": 4.25},
           "x": 10.9383,
@@ -7854,7 +7854,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.26,0.41,8.38]",
+          "key": "point[10_26,0_41,8_38]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7869,7 +7869,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.8133,0,8.375]",
+          "key": "point[11_8133,0,8_375]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 11.8133, "y": 8.375, "width": 4.25, "height": 4.25},
           "x": 13.9383,
@@ -7877,7 +7877,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.26,0.41,8.38]",
+          "key": "point[13_26,0_41,8_38]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7892,7 +7892,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.375,0,12.3216]",
+          "key": "point[24_375,0,12_3216]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7912,7 +7912,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.375,0,12.3216]",
+          "key": "point[25_375,0,12_3216]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7932,7 +7932,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.375,0,12.3216]",
+          "key": "point[26_375,0,12_3216]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7952,7 +7952,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.375,0,12.3216]",
+          "key": "point[27_375,0,12_3216]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7972,7 +7972,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.375,0,12.1216]",
+          "key": "point[23_375,0,12_1216]",
           "meta": {
             "decor": true,
             "do": true,
@@ -7992,7 +7992,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.375,0,12.1216]",
+          "key": "point[22_375,0,12_1216]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8012,7 +8012,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.8411,0,10.743]",
+          "key": "point[24_8411,0,10_743]",
           "meta": {"decor": true, "go": true, "label": "fresher", "y": 0},
           "bounds2d": {
             "x": 24.8411,
@@ -8025,7 +8025,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.38,0.41,12.4]",
+          "key": "point[24_38,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8040,7 +8040,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.38,0.41,12.4]",
+          "key": "point[25_38,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8055,7 +8055,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.38,0.41,12.4]",
+          "key": "point[26_38,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8070,7 +8070,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.38,0.41,12.4]",
+          "key": "point[27_38,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8085,7 +8085,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.375,0,20.375]",
+          "key": "point[17_375,0,20_375]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8100,7 +8100,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.823,0,23.3258]",
+          "key": "point[15_823,0,23_3258]",
           "meta": {"decor": true, "go": true, "label": "engineering", "y": 0},
           "bounds2d": {
             "x": 15.823,
@@ -8113,7 +8113,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.3501,0.41,20.3896]",
+          "key": "point[17_3501,0_41,20_3896]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8133,7 +8133,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.35,0,2.3985]",
+          "key": "point[17_35,0,2_3985]",
           "meta": {"decor": true, "go": true, "label": "lab", "y": 0},
           "bounds2d": {"x": 17.35, "y": 2.3985, "width": 4.25, "height": 4.25},
           "x": 19.475,
@@ -8141,7 +8141,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.9297,0.5,1.4799]",
+          "key": "point[16_9297,0_5,1_4799]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8161,7 +8161,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.8604,0.5,1.4599]",
+          "key": "point[14_8604,0_5,1_4599]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8181,7 +8181,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.8301,0.5,-0.6197]",
+          "key": "point[14_8301,0_5,-0_6197]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8201,7 +8201,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.9096,0.5,-0.5999]",
+          "key": "point[16_9096,0_5,-0_5999]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8221,7 +8221,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.4,0,2.3985]",
+          "key": "point[8_4,0,2_3985]",
           "meta": {"decor": true, "go": true, "label": "lab", "y": 0},
           "bounds2d": {"x": 8.4, "y": 2.3985, "width": 4.25, "height": 4.25},
           "x": 10.525,
@@ -8229,7 +8229,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.8204,0.5,1.4799]",
+          "key": "point[8_8204,0_5,1_4799]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8244,7 +8244,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.8897,0.5,1.4599]",
+          "key": "point[10_8897,0_5,1_4599]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8264,7 +8264,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.9199,0.5,-0.6196]",
+          "key": "point[10_9199,0_5,-0_6196]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8284,7 +8284,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.8404,0.5,-0.5999]",
+          "key": "point[8_8404,0_5,-0_5999]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8304,7 +8304,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.35,0,11.35]",
+          "key": "point[17_35,0,11_35]",
           "meta": {"decor": true, "go": true, "label": "lab", "y": 0},
           "bounds2d": {"x": 17.35, "y": 11.35, "width": 4.25, "height": 4.25},
           "x": 19.475,
@@ -8312,7 +8312,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.9225,0.31,10.6275]",
+          "key": "point[17_9225,0_31,10_6275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8332,7 +8332,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.6225,0.31,11.9275]",
+          "key": "point[16_6225,0_31,11_9275]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8352,7 +8352,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.9,0,15.4]",
+          "key": "point[15_9,0,15_4]",
           "meta": {"decor": true, "label": "lab", "y": 0},
           "bounds2d": {"x": 15.9, "y": 15.4, "width": 4.25, "height": 4.25},
           "x": 18.025,
@@ -8360,7 +8360,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.8175,0.31,13.8225]",
+          "key": "point[17_8175,0_31,13_8225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8380,7 +8380,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.8175,0.31,13.8225]",
+          "key": "point[14_8175,0_31,13_8225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8400,7 +8400,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.8175,0.31,15.2025]",
+          "key": "point[13_8175,0_31,15_2025]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8420,7 +8420,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.85,0,15.4]",
+          "key": "point[24_85,0,15_4]",
           "meta": {"decor": true, "label": "lab", "y": 0},
           "bounds2d": {"x": 24.85, "y": 15.4, "width": 4.25, "height": 4.25},
           "x": 26.975,
@@ -8428,7 +8428,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.9325,0.31,13.8225]",
+          "key": "point[22_9325,0_31,13_8225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8448,7 +8448,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.9325,0.31,13.8225]",
+          "key": "point[25_9325,0_31,13_8225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8468,7 +8468,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.9325,0.31,15.2025]",
+          "key": "point[26_9325,0_31,15_2025]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8488,7 +8488,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.725,0,24.9]",
+          "key": "point[25_725,0,24_9]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 25.725, "y": 24.9, "width": 4.25, "height": 4.25},
           "x": 27.85,
@@ -8496,7 +8496,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.8825,0.31,27.1425]",
+          "key": "point[22_8825,0_31,27_1425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8516,7 +8516,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.3825,0.31,27.1425]",
+          "key": "point[24_3825,0_31,27_1425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8536,7 +8536,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.8825,0.31,27.1425]",
+          "key": "point[25_8825,0_31,27_1425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8556,7 +8556,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.8825,0.31,22.6425]",
+          "key": "point[22_8825,0_31,22_6425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8576,7 +8576,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.3825,0.31,22.6425]",
+          "key": "point[24_3825,0_31,22_6425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8596,7 +8596,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.8825,0.31,22.6425]",
+          "key": "point[25_8825,0_31,22_6425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8616,7 +8616,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.3825,0.31,22.6425]",
+          "key": "point[27_3825,0_31,22_6425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8636,7 +8636,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.6799,0.36,24.425]",
+          "key": "point[23_6799,0_36,24_425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8656,7 +8656,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.575,0.36,24.4199]",
+          "key": "point[24_575,0_36,24_4199]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8676,7 +8676,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.5801,0.36,25.325]",
+          "key": "point[24_5801,0_36,25_325]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8696,7 +8696,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.675,0.36,25.3201]",
+          "key": "point[23_675,0_36,25_3201]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8716,7 +8716,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.2,0.71,27.1155]",
+          "key": "point[27_2,0_71,27_1155]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8730,7 +8730,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.4,0.51,25.63]",
+          "key": "point[27_4,0_51,25_63]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8745,7 +8745,7 @@
         },
         {
           "type": "point",
-          "key": "point[3.825,0,9.925]",
+          "key": "point[3_825,0,9_925]",
           "meta": {"decor": true, "go": true, "label": "engineering", "y": 0},
           "bounds2d": {"x": 3.825, "y": 9.925, "width": 4.25, "height": 4.25},
           "x": 5.95,
@@ -8753,7 +8753,7 @@
         },
         {
           "type": "point",
-          "key": "point[6.12,0.36,11.45]",
+          "key": "point[6_12,0_36,11_45]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8768,7 +8768,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.62,0.36,11.45]",
+          "key": "point[4_62,0_36,11_45]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8783,7 +8783,7 @@
         },
         {
           "type": "point",
-          "key": "point[3.12,0.36,11.45]",
+          "key": "point[3_12,0_36,11_45]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8798,7 +8798,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.625,0,1.625]",
+          "key": "point[22_625,0,1_625]",
           "meta": {"decor": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 22.625, "y": 1.625, "width": 4.25, "height": 4.25},
           "x": 24.75,
@@ -8806,7 +8806,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.35,0,18.4]",
+          "key": "point[7_35,0,18_4]",
           "meta": {
             "decor": true,
             "go": true,
@@ -8820,7 +8820,7 @@
         },
         {
           "type": "point",
-          "key": "point[6.8,0,16.95]",
+          "key": "point[6_8,0,16_95]",
           "meta": {"decor": true, "ignore-nav": true, "y": 0},
           "bounds2d": {"x": 6.8, "y": 16.95, "width": 4.25, "height": 4.25},
           "x": 8.925,
@@ -8828,7 +8828,7 @@
         },
         {
           "type": "point",
-          "key": "point[6.8,0,13.7]",
+          "key": "point[6_8,0,13_7]",
           "meta": {"decor": true, "ignore-nav": true, "y": 0},
           "bounds2d": {"x": 6.8, "y": 13.7, "width": 4.25, "height": 4.25},
           "x": 8.925,
@@ -8836,7 +8836,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.49,0.41,21.9]",
+          "key": "point[5_49,0_41,21_9]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8851,7 +8851,7 @@
         },
         {
           "type": "point",
-          "key": "point[3.87,0.41,20.28]",
+          "key": "point[3_87,0_41,20_28]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8866,7 +8866,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.375,0,2.375]",
+          "key": "point[20_375,0,2_375]",
           "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 20.375, "y": 2.375, "width": 4.25, "height": 4.25},
           "x": 22.5,
@@ -8874,7 +8874,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.375,0,-1.375]",
+          "key": "point[23_375,0,-1_375]",
           "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 23.375, "y": -1.375, "width": 4.25, "height": 4.25},
           "x": 25.5,
@@ -8882,7 +8882,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.625,0,3.125]",
+          "key": "point[22_625,0,3_125]",
           "meta": {"decor": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 22.625, "y": 3.125, "width": 4.25, "height": 4.25},
           "x": 24.75,
@@ -8890,7 +8890,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.895,0,7.9]",
+          "key": "point[24_895,0,7_9]",
           "meta": {"decor": true, "go": true, "label": "lounge", "y": 0},
           "bounds2d": {"x": 24.895, "y": 7.9, "width": 4.25, "height": 4.25},
           "x": 27.02,
@@ -8898,7 +8898,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.4796,0.31,9.4748]",
+          "key": "point[24_4796,0_31,9_4748]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8918,7 +8918,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.7503,0.31,9.4748]",
+          "key": "point[23_7503,0_31,9_4748]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8938,7 +8938,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.7503,0.31,8.7452]",
+          "key": "point[23_7503,0_31,8_7452]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8958,7 +8958,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.4796,0.31,8.7452]",
+          "key": "point[24_4796,0_31,8_7452]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8978,7 +8978,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.5178,0.51,7.8013]",
+          "key": "point[22_5178,0_51,7_8013]",
           "meta": {
             "decor": true,
             "do": true,
@@ -8998,7 +8998,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.5213,0.51,8.9437]",
+          "key": "point[22_5213,0_51,8_9437]",
           "meta": {
             "decor": true,
             "do": true,
@@ -9018,7 +9018,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.9796,0.31,9.4748]",
+          "key": "point[25_9796,0_31,9_4748]",
           "meta": {
             "decor": true,
             "do": true,
@@ -9038,7 +9038,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.2503,0.31,9.4748]",
+          "key": "point[25_2503,0_31,9_4748]",
           "meta": {
             "decor": true,
             "do": true,
@@ -9058,7 +9058,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.2503,0.31,8.7452]",
+          "key": "point[25_2503,0_31,8_7452]",
           "meta": {
             "decor": true,
             "do": true,
@@ -9078,7 +9078,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.9796,0.31,8.7452]",
+          "key": "point[25_9796,0_31,8_7452]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15626,7 +15626,7 @@
       "decor": [
         {
           "type": "point",
-          "key": "point[4.75,0,2.85]",
+          "key": "point[4_75,0,2_85]",
           "meta": {"decor": true, "label": "study", "y": 0},
           "bounds2d": {"x": 4.75, "y": 2.85, "width": 4.25, "height": 4.25},
           "x": 6.875,
@@ -15634,7 +15634,7 @@
         },
         {
           "type": "point",
-          "key": "point[4,0,5.5]",
+          "key": "point[4,0,5_5]",
           "meta": {"decor": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 4, "y": 5.5, "width": 4.25, "height": 4.25},
           "x": 6.125,
@@ -15642,7 +15642,7 @@
         },
         {
           "type": "point",
-          "key": "point[21.75,0,5.5]",
+          "key": "point[21_75,0,5_5]",
           "meta": {"decor": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 21.75, "y": 5.5, "width": 4.25, "height": 4.25},
           "x": 23.875,
@@ -15650,7 +15650,7 @@
         },
         {
           "type": "point",
-          "key": "point[21.275,0,2.85]",
+          "key": "point[21_275,0,2_85]",
           "meta": {"decor": true, "label": "study", "y": 0},
           "bounds2d": {"x": 21.275, "y": 2.85, "width": 4.25, "height": 4.25},
           "x": 23.4,
@@ -15658,7 +15658,7 @@
         },
         {
           "type": "cuboid",
-          "key": "cuboid[4.875,0,6]",
+          "key": "cuboid[4_875,0,6]",
           "meta": {
             "decor": true,
             "cuboid": true,
@@ -15673,7 +15673,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[1.55,0,10.5]",
+          "key": "poly[1_55,0,10_5]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 1.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "points": [
@@ -15686,7 +15686,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.3125,0,7.7325]",
+          "key": "point[-0_3125,0,7_7325]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {
             "x": -0.3125,
@@ -15699,7 +15699,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.625,1,9.125]",
+          "key": "point[0_625,1,9_125]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {"x": 0.625, "y": 9.125, "width": 4.25, "height": 4.25},
           "x": 2.75,
@@ -15707,7 +15707,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.3775,0.51,8.805]",
+          "key": "point[-1_3775,0_51,8_805]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15722,7 +15722,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.12,0.5,9.24]",
+          "key": "point[0_12,0_5,9_24]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15736,7 +15736,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[4.55,0,10.5]",
+          "key": "poly[4_55,0,10_5]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 4.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "points": [
@@ -15749,7 +15749,7 @@
         },
         {
           "type": "point",
-          "key": "point[2.6875,0,7.7325]",
+          "key": "point[2_6875,0,7_7325]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 2.6875, "y": 7.7325, "width": 4.25, "height": 4.25},
           "x": 4.8125,
@@ -15757,7 +15757,7 @@
         },
         {
           "type": "point",
-          "key": "point[3.625,1,9.125]",
+          "key": "point[3_625,1,9_125]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {"x": 3.625, "y": 9.125, "width": 4.25, "height": 4.25},
           "x": 5.75,
@@ -15765,7 +15765,7 @@
         },
         {
           "type": "point",
-          "key": "point[1.6225,0.51,8.805]",
+          "key": "point[1_6225,0_51,8_805]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15780,7 +15780,7 @@
         },
         {
           "type": "point",
-          "key": "point[3.12,0.5,9.24]",
+          "key": "point[3_12,0_5,9_24]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15807,7 +15807,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.4,0,2.4]",
+          "key": "point[-0_4,0,2_4]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": -0.4, "y": 2.4, "width": 4.25, "height": 4.25},
           "x": 1.725,
@@ -15815,7 +15815,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.386,0,-1.376]",
+          "key": "point[-1_386,0,-1_376]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": -1.386, "y": -1.376, "width": 4.25, "height": 4.25},
           "x": 0.739,
@@ -15823,7 +15823,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.6759,1,-1.875]",
+          "key": "point[-1_6759,1,-1_875]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": -1.6759,
@@ -15836,7 +15836,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.6759,0,-1.375]",
+          "key": "point[-1_6759,0,-1_375]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15855,7 +15855,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.4789,0.41,2.3578]",
+          "key": "point[-1_4789,0_41,2_3578]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15875,7 +15875,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.4639,0.41,3.3527]",
+          "key": "point[-1_4639,0_41,3_3527]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15895,7 +15895,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.2845,0.61,-1.45]",
+          "key": "point[0_2845,0_61,-1_45]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15909,7 +15909,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.62,0.41,-1.65]",
+          "key": "point[-0_62,0_41,-1_65]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15924,7 +15924,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.3125,0.61,0.115]",
+          "key": "point[-1_3125,0_61,0_115]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15939,7 +15939,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.3125,1.41,0.115]",
+          "key": "point[-1_3125,1_41,0_115]",
           "meta": {
             "decor": true,
             "do": true,
@@ -15954,7 +15954,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[29.1,0,0]",
+          "key": "poly[29_1,0,0]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 29.1, "y": 0, "width": 0.9, "height": 1.5},
           "points": [
@@ -15967,7 +15967,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.15,0,2.4]",
+          "key": "point[26_15,0,2_4]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 26.15, "y": 2.4, "width": 4.25, "height": 4.25},
           "x": 28.275,
@@ -15975,7 +15975,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.136,0,-1.376]",
+          "key": "point[27_136,0,-1_376]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": 27.136, "y": -1.376, "width": 4.25, "height": 4.25},
           "x": 29.261,
@@ -15983,7 +15983,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.4259,1,-1.875]",
+          "key": "point[27_4259,1,-1_875]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 27.4259,
@@ -15996,7 +15996,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.4259,0,-1.375]",
+          "key": "point[27_4259,0,-1_375]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16015,7 +16015,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.229,0.41,2.3577]",
+          "key": "point[27_229,0_41,2_3577]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16030,7 +16030,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.214,0.41,3.3527]",
+          "key": "point[27_214,0_41,3_3527]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16045,7 +16045,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.4656,0.61,-1.45]",
+          "key": "point[25_4656,0_61,-1_45]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16059,7 +16059,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.37,0.41,-1.65]",
+          "key": "point[26_37,0_41,-1_65]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16074,7 +16074,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.0625,0.61,0.115]",
+          "key": "point[27_0625,0_61,0_115]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16089,7 +16089,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.0625,1.41,0.115]",
+          "key": "point[27_0625,1_41,0_115]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16104,7 +16104,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[0,0,14.1]",
+          "key": "poly[0,0,14_1]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 0, "y": 14.1, "width": 1.5, "height": 0.9},
           "points": [
@@ -16117,7 +16117,7 @@
         },
         {
           "type": "point",
-          "key": "point[2.4,0,11.15]",
+          "key": "point[2_4,0,11_15]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 2.4, "y": 11.15, "width": 4.25, "height": 4.25},
           "x": 4.525,
@@ -16125,7 +16125,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.376,0,12.136]",
+          "key": "point[-1_376,0,12_136]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": -1.376, "y": 12.136, "width": 4.25, "height": 4.25},
           "x": 0.749,
@@ -16133,7 +16133,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.875,1,12.4259]",
+          "key": "point[-1_875,1,12_4259]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": -1.875,
@@ -16146,7 +16146,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.375,0,12.4259]",
+          "key": "point[-1_375,0,12_4259]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16165,7 +16165,7 @@
         },
         {
           "type": "point",
-          "key": "point[2.3578,0.41,12.229]",
+          "key": "point[2_3578,0_41,12_229]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16180,7 +16180,7 @@
         },
         {
           "type": "point",
-          "key": "point[3.3527,0.41,12.214]",
+          "key": "point[3_3527,0_41,12_214]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16195,7 +16195,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.45,0.61,10.4656]",
+          "key": "point[-1_45,0_61,10_4656]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16209,7 +16209,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.65,0.41,11.37]",
+          "key": "point[-1_65,0_41,11_37]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16224,7 +16224,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.115,0.61,12.0625]",
+          "key": "point[0_115,0_61,12_0625]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16239,7 +16239,7 @@
         },
         {
           "type": "point",
-          "key": "point[0.115,1.41,12.0625]",
+          "key": "point[0_115,1_41,12_0625]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16254,7 +16254,7 @@
         },
         {
           "type": "point",
-          "key": "point[3.125,0,1.575]",
+          "key": "point[3_125,0,1_575]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 3.125, "y": 1.575, "width": 4.25, "height": 4.25},
           "x": 5.25,
@@ -16262,7 +16262,7 @@
         },
         {
           "type": "point",
-          "key": "point[2.3603,0.41,2.3999]",
+          "key": "point[2_3603,0_41,2_3999]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16277,7 +16277,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.625,0,1.575]",
+          "key": "point[22_625,0,1_575]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 22.625, "y": 1.575, "width": 4.25, "height": 4.25},
           "x": 24.75,
@@ -16285,7 +16285,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.3896,0.41,2.3999]",
+          "key": "point[23_3896,0_41,2_3999]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16305,7 +16305,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.28,0.71,8.1]",
+          "key": "point[25_28,0_71,8_1]",
           "meta": {
             "decor": true,
             "go": true,
@@ -16319,7 +16319,7 @@
         },
         {
           "type": "point",
-          "key": "point[24.6069,0.41,10.8639]",
+          "key": "point[24_6069,0_41,10_8639]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16339,7 +16339,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.8582,0.41,9.6014]",
+          "key": "point[25_8582,0_41,9_6014]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16359,7 +16359,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.875,0,2.375]",
+          "key": "point[12_875,0,2_375]",
           "meta": {"decor": true, "label": "bridge", "y": 0},
           "bounds2d": {"x": 12.875, "y": 2.375, "width": 4.25, "height": 4.25},
           "x": 15,
@@ -16367,7 +16367,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.625,0,3.5]",
+          "key": "point[10_625,0,3_5]",
           "meta": {"decor": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 10.625, "y": 3.5, "width": 4.25, "height": 4.25},
           "x": 12.75,
@@ -16375,7 +16375,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.15,0,3.55]",
+          "key": "point[15_15,0,3_55]",
           "meta": {"decor": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 15.15, "y": 3.55, "width": 4.25, "height": 4.25},
           "x": 17.275,
@@ -16383,7 +16383,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.39,0,6.17]",
+          "key": "point[8_39,0,6_17]",
           "meta": {"decor": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 8.39, "y": 6.17, "width": 4.25, "height": 4.25},
           "x": 10.515,
@@ -16391,7 +16391,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.875,0,8.7]",
+          "key": "point[12_875,0,8_7]",
           "meta": {"decor": true, "label": "briefing", "y": 0},
           "bounds2d": {"x": 12.875, "y": 8.7, "width": 4.25, "height": 4.25},
           "x": 15,
@@ -16399,7 +16399,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.935,0,11.025]",
+          "key": "point[8_935,0,11_025]",
           "meta": {"decor": true, "label": "fuel", "y": 0},
           "bounds2d": {"x": 8.935, "y": 11.025, "width": 4.25, "height": 4.25},
           "x": 11.06,
@@ -16407,7 +16407,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.925,0,11.025]",
+          "key": "point[16_925,0,11_025]",
           "meta": {"decor": true, "label": "fuel", "y": 0},
           "bounds2d": {"x": 16.925, "y": 11.025, "width": 4.25, "height": 4.25},
           "x": 19.05,
@@ -16415,7 +16415,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.425,0,2.725]",
+          "key": "point[8_425,0,2_725]",
           "meta": {"decor": true, "label": "cpu", "y": 0},
           "bounds2d": {"x": 8.425, "y": 2.725, "width": 4.25, "height": 4.25},
           "x": 10.55,
@@ -16423,7 +16423,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.275,0,2.675]",
+          "key": "point[17_275,0,2_675]",
           "meta": {"decor": true, "label": "cpu", "y": 0},
           "bounds2d": {"x": 17.275, "y": 2.675, "width": 4.25, "height": 4.25},
           "x": 19.4,
@@ -16431,7 +16431,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.785,0,9.02]",
+          "key": "point[16_785,0,9_02]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 16.785, "y": 9.02, "width": 4.25, "height": 4.25},
           "x": 18.91,
@@ -16439,7 +16439,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.94,0,8.92]",
+          "key": "point[8_94,0,8_92]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 8.94, "y": 8.92, "width": 4.25, "height": 4.25},
           "x": 11.065,
@@ -16447,7 +16447,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.8393,0,5.1925]",
+          "key": "point[12_8393,0,5_1925]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {
             "x": 12.8393,
@@ -16460,7 +16460,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.375,0,5.7093]",
+          "key": "point[17_375,0,5_7093]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16474,7 +16474,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.275,0,5.7093]",
+          "key": "point[18_275,0,5_7093]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16488,7 +16488,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.63,0.41,1.25]",
+          "key": "point[10_63,0_41,1_25]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16503,7 +16503,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.13,0.41,1.25]",
+          "key": "point[12_13,0_41,1_25]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16518,7 +16518,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.63,0.41,1.25]",
+          "key": "point[13_63,0_41,1_25]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16533,7 +16533,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.13,0.41,1.25]",
+          "key": "point[15_13,0_41,1_25]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16548,7 +16548,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.0725,0.41,7.3875]",
+          "key": "point[8_0725,0_41,7_3875]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16563,7 +16563,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.3995,0.41,8.6264]",
+          "key": "point[8_3995,0_41,8_6264]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16578,7 +16578,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.7775,0.31,9.3225]",
+          "key": "point[13_7775,0_31,9_3225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16598,7 +16598,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.1775,0.31,9.3225]",
+          "key": "point[13_1775,0_31,9_3225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16618,7 +16618,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.5775,0.31,9.3225]",
+          "key": "point[12_5775,0_31,9_3225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16638,7 +16638,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.9775,0.31,9.3225]",
+          "key": "point[11_9775,0_31,9_3225]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16658,7 +16658,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.7775,0.31,8.0775]",
+          "key": "point[13_7775,0_31,8_0775]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16678,7 +16678,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.1775,0.31,8.0775]",
+          "key": "point[13_1775,0_31,8_0775]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16698,7 +16698,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.5775,0.31,8.0775]",
+          "key": "point[12_5775,0_31,8_0775]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16718,7 +16718,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.9775,0.31,8.0775]",
+          "key": "point[11_9775,0_31,8_0775]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16738,7 +16738,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.4525,0.31,8.6975]",
+          "key": "point[14_4525,0_31,8_6975]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16758,7 +16758,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.2975,0.31,8.6975]",
+          "key": "point[11_2975,0_31,8_6975]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16778,7 +16778,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.525,0.31,7.5575]",
+          "key": "point[16_525,0_31,7_5575]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16793,7 +16793,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.4844,0.71,6.2034]",
+          "key": "point[16_4844,0_71,6_2034]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16812,7 +16812,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.38,0.41,6.4]",
+          "key": "point[17_38,0_41,6_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16827,7 +16827,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.28,0.41,6.4]",
+          "key": "point[18_28,0_41,6_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16842,7 +16842,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.88,0.7,10.75]",
+          "key": "point[12_88,0_7,10_75]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16856,7 +16856,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.39,0.41,0.12]",
+          "key": "point[5_39,0_41,0_12]",
           "meta": {
             "decor": true,
             "do": true,
@@ -16871,7 +16871,7 @@
         },
         {
           "type": "point",
-          "key": "point[20.36,0.41,0.12]",
+          "key": "point[20_36,0_41,0_12]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21397,7 +21397,7 @@
       "decor": [
         {
           "type": "point",
-          "key": "point[27.4775,0,-1.285]",
+          "key": "point[27_4775,0,-1_285]",
           "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {
             "x": 27.4775,
@@ -21410,7 +21410,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.4775,0,0.215]",
+          "key": "point[27_4775,0,0_215]",
           "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 27.4775, "y": 0.215, "width": 4.25, "height": 4.25},
           "x": 29.6025,
@@ -21418,7 +21418,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.4775,0,1.715]",
+          "key": "point[27_4775,0,1_715]",
           "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 27.4775, "y": 1.715, "width": 4.25, "height": 4.25},
           "x": 29.6025,
@@ -21426,7 +21426,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.4775,0,3.215]",
+          "key": "point[27_4775,0,3_215]",
           "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 27.4775, "y": 3.215, "width": 4.25, "height": 4.25},
           "x": 29.6025,
@@ -21434,7 +21434,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.2275,0,1.965]",
+          "key": "point[26_2275,0,1_965]",
           "meta": {"decor": true, "go": true, "label": "eva", "y": 0},
           "bounds2d": {"x": 26.2275, "y": 1.965, "width": 4.25, "height": 4.25},
           "x": 28.3525,
@@ -21442,7 +21442,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.4375,0,9.8]",
+          "key": "point[22_4375,0,9_8]",
           "meta": {
             "decor": true,
             "go": true,
@@ -21457,7 +21457,7 @@
         },
         {
           "type": "point",
-          "key": "point[1.95,0,9.45]",
+          "key": "point[1_95,0,9_45]",
           "meta": {"decor": true, "label": "fuel", "y": 0},
           "bounds2d": {"x": 1.95, "y": 9.45, "width": 4.25, "height": 4.25},
           "x": 4.075,
@@ -21465,7 +21465,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.5,0,9.75]",
+          "key": "point[10_5,0,9_75]",
           "meta": {"decor": true, "go": true, "label": "airlock", "y": 0},
           "bounds2d": {"x": 10.5, "y": 9.75, "width": 4.25, "height": 4.25},
           "x": 12.625,
@@ -21473,7 +21473,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.2,0,9.8]",
+          "key": "point[16_2,0,9_8]",
           "meta": {
             "decor": true,
             "go": true,
@@ -21487,7 +21487,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.2275,0,6.965]",
+          "key": "point[26_2275,0,6_965]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 26.2275, "y": 6.965, "width": 4.25, "height": 4.25},
           "x": 28.3525,
@@ -21495,7 +21495,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.9775,0,11.965]",
+          "key": "point[15_9775,0,11_965]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {
             "x": 15.9775,
@@ -21508,7 +21508,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.7725,0,11.215]",
+          "key": "point[-0_7725,0,11_215]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {
             "x": -0.7725,
@@ -21521,7 +21521,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.15,0,2.275]",
+          "key": "point[-1_15,0,2_275]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": -1.15, "y": 2.275, "width": 4.25, "height": 4.25},
           "x": 0.975,
@@ -21529,7 +21529,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.57,0.41,1.63]",
+          "key": "point[-0_57,0_41,1_63]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21544,7 +21544,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.57,0.41,3.13]",
+          "key": "point[-0_57,0_41,3_13]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21559,7 +21559,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.475,0,9.975]",
+          "key": "point[5_475,0,9_975]",
           "meta": {"decor": true, "go": true, "label": "lounge", "y": 0},
           "bounds2d": {"x": 5.475, "y": 9.975, "width": 4.25, "height": 4.25},
           "x": 7.6,
@@ -21567,7 +21567,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.81,0.3,9.0825]",
+          "key": "point[4_81,0_3,9_0825]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21582,7 +21582,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.385,0.3,9.0825]",
+          "key": "point[5_385,0_3,9_0825]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21597,7 +21597,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.985,0.3,9.0825]",
+          "key": "point[5_985,0_3,9_0825]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21612,7 +21612,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.9287,0.51,10.7523]",
+          "key": "point[5_9287,0_51,10_7523]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21632,7 +21632,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.7863,0.51,10.7487]",
+          "key": "point[4_7863,0_51,10_7487]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21652,7 +21652,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.826,0,11.058]",
+          "key": "point[8_826,0,11_058]",
           "meta": {"decor": true, "go": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": 8.826, "y": 11.058, "width": 4.25, "height": 4.25},
           "x": 10.951,
@@ -21660,7 +21660,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.41,0.41,9.86]",
+          "key": "point[9_41,0_41,9_86]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21675,7 +21675,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.41,0.41,8.86]",
+          "key": "point[9_41,0_41,8_86]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21690,7 +21690,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.2134,0.61,10.7945]",
+          "key": "point[9_2134,0_61,10_7945]",
           "meta": {
             "decor": true,
             "do": true,
@@ -21709,7 +21709,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.1,0,9.875]",
+          "key": "point[12_1,0,9_875]",
           "meta": {"decor": true, "go": true, "label": "locker", "y": 0},
           "bounds2d": {"x": 12.1, "y": 9.875, "width": 4.25, "height": 4.25},
           "x": 14.225,
@@ -23873,7 +23873,7 @@
       "decor": [
         {
           "type": "point",
-          "key": "point[2.5625,0,6.6875]",
+          "key": "point[2_5625,0,6_6875]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {"x": 2.5625, "y": 6.6875, "width": 4.25, "height": 4.25},
           "x": 4.6875,
@@ -23881,7 +23881,7 @@
         },
         {
           "type": "point",
-          "key": "point[22.0625,0,8.1875]",
+          "key": "point[22_0625,0,8_1875]",
           "meta": {"decor": true, "go": true, "label": "corridor", "y": 0},
           "bounds2d": {
             "x": 22.0625,
@@ -23894,7 +23894,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.8125,0,4.4375]",
+          "key": "point[13_8125,0,4_4375]",
           "meta": {"decor": true, "go": true, "label": "common-area", "y": 0},
           "bounds2d": {
             "x": 13.8125,
@@ -23907,7 +23907,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[20.1,0,13.5]",
+          "key": "poly[20_1,0,13_5]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 20.1, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
@@ -23920,7 +23920,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.15,0,8.35]",
+          "key": "point[17_15,0,8_35]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 17.15, "y": 8.35, "width": 4.25, "height": 4.25},
           "x": 19.275,
@@ -23928,7 +23928,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.136,0,12.126]",
+          "key": "point[18_136,0,12_126]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": 18.136, "y": 12.126, "width": 4.25, "height": 4.25},
           "x": 20.261,
@@ -23936,7 +23936,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.4259,1,12.625]",
+          "key": "point[18_4259,1,12_625]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 18.4259,
@@ -23949,7 +23949,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.4259,0,12.125]",
+          "key": "point[18_4259,0,12_125]",
           "meta": {
             "decor": true,
             "do": true,
@@ -23968,7 +23968,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.229,0.41,8.3923]",
+          "key": "point[18_229,0_41,8_3923]",
           "meta": {
             "decor": true,
             "do": true,
@@ -23983,7 +23983,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.214,0.41,7.3972]",
+          "key": "point[18_214,0_41,7_3972]",
           "meta": {
             "decor": true,
             "do": true,
@@ -23998,7 +23998,7 @@
         },
         {
           "type": "point",
-          "key": "point[16.4656,0.61,12.2]",
+          "key": "point[16_4656,0_61,12_2]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24012,7 +24012,7 @@
         },
         {
           "type": "point",
-          "key": "point[17.37,0.41,12.4]",
+          "key": "point[17_37,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24027,7 +24027,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.0625,0.61,10.635]",
+          "key": "point[18_0625,0_61,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24047,7 +24047,7 @@
         },
         {
           "type": "point",
-          "key": "point[18.0625,1.41,10.635]",
+          "key": "point[18_0625,1_41,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24067,7 +24067,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[17.1,0,13.5]",
+          "key": "poly[17_1,0,13_5]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 17.1, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
@@ -24080,7 +24080,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.15,0,8.35]",
+          "key": "point[14_15,0,8_35]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 14.15, "y": 8.35, "width": 4.25, "height": 4.25},
           "x": 16.275,
@@ -24088,7 +24088,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.136,0,12.126]",
+          "key": "point[15_136,0,12_126]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": 15.136, "y": 12.126, "width": 4.25, "height": 4.25},
           "x": 17.261,
@@ -24096,7 +24096,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.4259,1,12.625]",
+          "key": "point[15_4259,1,12_625]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 15.4259,
@@ -24109,7 +24109,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.4259,0,12.125]",
+          "key": "point[15_4259,0,12_125]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24128,7 +24128,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.229,0.41,8.3923]",
+          "key": "point[15_229,0_41,8_3923]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24143,7 +24143,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.214,0.41,7.3972]",
+          "key": "point[15_214,0_41,7_3972]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24158,7 +24158,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.4656,0.61,12.2]",
+          "key": "point[13_4656,0_61,12_2]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24172,7 +24172,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.37,0.41,12.4]",
+          "key": "point[14_37,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24187,7 +24187,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.0625,0.61,10.635]",
+          "key": "point[15_0625,0_61,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24207,7 +24207,7 @@
         },
         {
           "type": "point",
-          "key": "point[15.0625,1.41,10.635]",
+          "key": "point[15_0625,1_41,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24227,7 +24227,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[12,0,13.5]",
+          "key": "poly[12,0,13_5]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 12, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
@@ -24240,7 +24240,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.6,0,8.35]",
+          "key": "point[11_6,0,8_35]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 11.6, "y": 8.35, "width": 4.25, "height": 4.25},
           "x": 13.725,
@@ -24248,7 +24248,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.614,0,12.126]",
+          "key": "point[10_614,0,12_126]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": 10.614, "y": 12.126, "width": 4.25, "height": 4.25},
           "x": 12.739,
@@ -24256,7 +24256,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.3241,1,12.625]",
+          "key": "point[10_3241,1,12_625]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {
             "x": 10.3241,
@@ -24269,7 +24269,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.3241,0,12.125]",
+          "key": "point[10_3241,0,12_125]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24288,7 +24288,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.521,0.41,8.3923]",
+          "key": "point[10_521,0_41,8_3923]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24303,7 +24303,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.536,0.41,7.3972]",
+          "key": "point[10_536,0_41,7_3972]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24318,7 +24318,7 @@
         },
         {
           "type": "point",
-          "key": "point[12.2844,0.61,12.2]",
+          "key": "point[12_2844,0_61,12_2]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24332,7 +24332,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.38,0.41,12.4]",
+          "key": "point[11_38,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24347,7 +24347,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.6875,0.61,10.635]",
+          "key": "point[10_6875,0_61,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24367,7 +24367,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.6875,1.41,10.635]",
+          "key": "point[10_6875,1_41,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24387,7 +24387,7 @@
         },
         {
           "type": "poly",
-          "key": "poly[9,0,13.5]",
+          "key": "poly[9,0,13_5]",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0},
           "bounds2d": {"x": 9, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
@@ -24400,7 +24400,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.6,0,8.35]",
+          "key": "point[8_6,0,8_35]",
           "meta": {"decor": true, "meta": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 8.6, "y": 8.35, "width": 4.25, "height": 4.25},
           "x": 10.725,
@@ -24408,7 +24408,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.614,0,12.126]",
+          "key": "point[7_614,0,12_126]",
           "meta": {"decor": true, "meta": true, "label": "fresher", "y": 0},
           "bounds2d": {"x": 7.614, "y": 12.126, "width": 4.25, "height": 4.25},
           "x": 9.739,
@@ -24416,7 +24416,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.3241,1,12.625]",
+          "key": "point[7_3241,1,12_625]",
           "meta": {"decor": true, "button": true, "shower": true, "y": 1},
           "bounds2d": {"x": 7.3241, "y": 12.625, "width": 4.25, "height": 4.25},
           "x": 9.4491,
@@ -24424,7 +24424,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.3241,0,12.125]",
+          "key": "point[7_3241,0,12_125]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24438,7 +24438,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.521,0.41,8.3923]",
+          "key": "point[7_521,0_41,8_3923]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24453,7 +24453,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.536,0.41,7.3972]",
+          "key": "point[7_536,0_41,7_3972]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24468,7 +24468,7 @@
         },
         {
           "type": "point",
-          "key": "point[9.2844,0.61,12.2]",
+          "key": "point[9_2844,0_61,12_2]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24482,7 +24482,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.38,0.41,12.4]",
+          "key": "point[8_38,0_41,12_4]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24497,7 +24497,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.6875,0.61,10.635]",
+          "key": "point[7_6875,0_61,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24512,7 +24512,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.6875,1.41,10.635]",
+          "key": "point[7_6875,1_41,10_635]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24527,7 +24527,7 @@
         },
         {
           "type": "point",
-          "key": "point[14.79,0,0.189]",
+          "key": "point[14_79,0,0_189]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 14.79, "y": 0.189, "width": 4.25, "height": 4.25},
           "x": 16.915,
@@ -24535,7 +24535,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.949,0,-1.3794]",
+          "key": "point[13_949,0,-1_3794]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24555,7 +24555,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.499,0,1.6206]",
+          "key": "point[13_499,0,1_6206]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24570,7 +24570,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.945,0.51,-1.3725]",
+          "key": "point[13_945,0_51,-1_3725]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24590,7 +24590,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.51,0.5,1.63]",
+          "key": "point[13_51,0_5,1_63]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24604,7 +24604,7 @@
         },
         {
           "type": "point",
-          "key": "point[13.6925,0.31,0.1175]",
+          "key": "point[13_6925,0_31,0_1175]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24624,7 +24624,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.79,0,0.189]",
+          "key": "point[8_79,0,0_189]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 8.79, "y": 0.189, "width": 4.25, "height": 4.25},
           "x": 10.915,
@@ -24632,7 +24632,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.949,0,-1.3794]",
+          "key": "point[7_949,0,-1_3794]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24647,7 +24647,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.499,0,1.6206]",
+          "key": "point[7_499,0,1_6206]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24662,7 +24662,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.945,0.51,-1.3725]",
+          "key": "point[7_945,0_51,-1_3725]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24677,7 +24677,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.51,0.5,1.63]",
+          "key": "point[7_51,0_5,1_63]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24691,7 +24691,7 @@
         },
         {
           "type": "point",
-          "key": "point[7.6925,0.31,0.1175]",
+          "key": "point[7_6925,0_31,0_1175]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24706,7 +24706,7 @@
         },
         {
           "type": "point",
-          "key": "point[11.79,0,0.189]",
+          "key": "point[11_79,0,0_189]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 11.79, "y": 0.189, "width": 4.25, "height": 4.25},
           "x": 13.915,
@@ -24714,7 +24714,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.949,0,-1.3794]",
+          "key": "point[10_949,0,-1_3794]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24734,7 +24734,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.499,0,1.6206]",
+          "key": "point[10_499,0,1_6206]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24749,7 +24749,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.945,0.51,-1.3725]",
+          "key": "point[10_945,0_51,-1_3725]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24769,7 +24769,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.51,0.5,1.63]",
+          "key": "point[10_51,0_5,1_63]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24783,7 +24783,7 @@
         },
         {
           "type": "point",
-          "key": "point[10.6925,0.31,0.1175]",
+          "key": "point[10_6925,0_31,0_1175]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24803,7 +24803,7 @@
         },
         {
           "type": "point",
-          "key": "point[5.79,0,0.189]",
+          "key": "point[5_79,0,0_189]",
           "meta": {"decor": true, "go": true, "label": "stateroom", "y": 0},
           "bounds2d": {"x": 5.79, "y": 0.189, "width": 4.25, "height": 4.25},
           "x": 7.915,
@@ -24811,7 +24811,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.949,0,-1.3794]",
+          "key": "point[4_949,0,-1_3794]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24826,7 +24826,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.499,0,1.6206]",
+          "key": "point[4_499,0,1_6206]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24841,7 +24841,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.945,0.51,-1.3725]",
+          "key": "point[4_945,0_51,-1_3725]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24856,7 +24856,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.51,0.5,1.63]",
+          "key": "point[4_51,0_5,1_63]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24870,7 +24870,7 @@
         },
         {
           "type": "point",
-          "key": "point[4.6925,0.31,0.1175]",
+          "key": "point[4_6925,0_31,0_1175]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24885,7 +24885,7 @@
         },
         {
           "type": "point",
-          "key": "point[-0.3,0,1.7]",
+          "key": "point[-0_3,0,1_7]",
           "meta": {"decor": true, "label": "medical", "y": 0},
           "bounds2d": {"x": -0.3, "y": 1.7, "width": 4.25, "height": 4.25},
           "x": 1.825,
@@ -24893,7 +24893,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.43,0.5,-1.37]",
+          "key": "point[-1_43,0_5,-1_37]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24910,7 +24910,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.43,0.5,0.85]",
+          "key": "point[-1_43,0_5,0_85]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24927,7 +24927,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1.43,0.5,3.08]",
+          "key": "point[-1_43,0_5,3_08]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24944,7 +24944,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.242,0,9.8125]",
+          "key": "point[26_242,0,9_8125]",
           "meta": {"decor": true, "go": true, "label": "office", "y": 0},
           "bounds2d": {"x": 26.242, "y": 9.8125, "width": 4.25, "height": 4.25},
           "x": 28.367,
@@ -24952,7 +24952,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.3114,0,11.3532]",
+          "key": "point[26_3114,0,11_3532]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24972,7 +24972,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.863,0,10.0625]",
+          "key": "point[23_863,0,10_0625]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24992,7 +24992,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.013,0,8.8625]",
+          "key": "point[25_013,0,8_8625]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25007,7 +25007,7 @@
         },
         {
           "type": "point",
-          "key": "point[23.8559,0.41,10.0687]",
+          "key": "point[23_8559,0_41,10_0687]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25027,7 +25027,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.0344,0.41,8.8764]",
+          "key": "point[25_0344,0_41,8_8764]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25047,7 +25047,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.3501,0.41,11.4104]",
+          "key": "point[26_3501,0_41,11_4104]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25067,7 +25067,7 @@
         },
         {
           "type": "point",
-          "key": "point[2.76,0.41,0.87]",
+          "key": "point[2_76,0_41,0_87]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25082,7 +25082,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.0425,0.31,3.5025]",
+          "key": "point[25_0425,0_31,3_5025]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25102,7 +25102,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.3025,0.31,4.4025]",
+          "key": "point[8_3025,0_31,4_4025]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25117,7 +25117,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.3025,0.31,5.4025]",
+          "key": "point[8_3025,0_31,5_4025]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25132,7 +25132,7 @@
         },
         {
           "type": "point",
-          "key": "point[8.3125,0.31,6.4025]",
+          "key": "point[8_3125,0_31,6_4025]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25147,7 +25147,7 @@
         },
         {
           "type": "point",
-          "key": "point[25.8525,0.31,3.2625]",
+          "key": "point[25_8525,0_31,3_2625]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25167,7 +25167,7 @@
         },
         {
           "type": "point",
-          "key": "point[26.7025,0.31,3.1425]",
+          "key": "point[26_7025,0_31,3_1425]",
           "meta": {
             "decor": true,
             "do": true,
@@ -25187,7 +25187,7 @@
         },
         {
           "type": "point",
-          "key": "point[27.5625,0.31,3.0625]",
+          "key": "point[27_5625,0_31,3_0625]",
           "meta": {
             "decor": true,
             "do": true,

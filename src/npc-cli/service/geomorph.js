@@ -693,11 +693,12 @@ class GeomorphService {
   }
 
   /**
-   * 🔔 instantiated decor should be determined by min(3D AABB)
+   * - 🔔 instantiated decor should be determined by min(3D AABB)
+   * - we replace decimal points with `_` so can e.g. `w decor.byKey.point[29_5225,0,33_785]`
    * @param {Geomorph.Decor} d 
    */
-  getDerivedDecorKey(d) {// 🚧 hard to lookup keys containing decimal point "."
-    return `${d.type}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`;
+  getDerivedDecorKey(d) {
+    return `${d.type}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`.replace(/[.]/g, '_');
   }
 
   /**
