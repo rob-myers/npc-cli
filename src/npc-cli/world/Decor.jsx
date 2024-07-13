@@ -314,21 +314,6 @@ export default function Decor(props) {
 
       ds.forEach(d => removeFromDecorGrid(d, state.byGrid));
     },
-    removeInstantiatedDecor() {
-      for (const d of Object.values(state.byKey)) {
-        d.src !== undefined && delete state.byKey[d.key];
-      }
-      for (const byRoomId of state.byRoom) {
-        for (const decorSet of byRoomId) {
-          decorSet.forEach(d => d.src !== undefined && decorSet.delete(d));
-        }
-      }
-      for (const byY of state.byGrid) {
-        for (const decorSet of byY) {
-          decorSet.forEach(d => d.src !== undefined && decorSet.delete(d));
-        }
-      }
-    },
     rmInstantiatedDecor(gmId) {
       const byRoomId = state.byRoom[gmId];
       for (const decorSet of byRoomId) {
@@ -340,7 +325,6 @@ export default function Decor(props) {
       const { gridRect } = w.gms[gmId];
       const { x, right, y, bottom } = tmpRect1.copy(gridRect).scale(1 / decorGridSize).integerOrds();
       // console.log({ x, right, y, bottom })
-
       for (let i = x; i < right; i++) {
         const inner = state.byGrid[i];
         if (inner === undefined) continue;
@@ -369,7 +353,7 @@ export default function Decor(props) {
     async queryFn() {
       const prev = state.hash;
       const next = state.computeNextHash();
-      /** mapKey changed or current map def changed  */
+      /** current map changed */
       const redoAll = prev.mapHash !== next.mapHash;
 
       for (const [gmId, gm] of w.gms.entries()) {
@@ -481,7 +465,6 @@ export default function Decor(props) {
  * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
- * @property {() => void} removeInstantiatedDecor
  * @property {(gmId: number) => void} rmInstantiatedDecor
  * @property {() => void} updateInstanceLists
  */
