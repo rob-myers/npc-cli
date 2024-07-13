@@ -255,8 +255,7 @@ export class ttyShellClass implements Device {
     this.input = this.inputs.pop() || null;
     if (!this.input) return;
 
-    try {
-      // Catch errors from `this.spawn`
+    try {// Catch errors from `this.spawn`
 
       this.buffer.push(this.input.line);
       const result = parseService.tryParseBuffer(this.buffer.slice());

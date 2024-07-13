@@ -53,6 +53,9 @@
     - world query was broken (wrong initial key)
     - also, now trigger Decor useEffect using query.status === 'success'
   - ✅ cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
+  - 🚧 `gm.decor[i]` has keys like instantiated
+  - 🚧 track `gm.decor` hashes and detect new/changed/removed
+  - 🚧 efficient decor re-instantiation
   - 🚧 better decor point heights
   - 🚧 remove temp "all decor points shown with info icon"
   - rotated rect 4-gon -> affine transform
@@ -63,7 +66,7 @@
   - saw decor disappear when editing symbols
 
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
-- darken obstacle machinery via instancedmesh colours
+- darken obstacle machinery via InstancedMesh colours
 
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
@@ -75,6 +78,11 @@
 
 - duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
+- tty pause/resume loses should remember cursor position
+- ✅ tty: `echo \'` should echo `'` (currently `\'`)
+  - related to allowing single-quotes inside js (replace `'` -> `'\''`)
+  - tryParseBuffer receives `["echo \\'"]` (which seems correct)
+  - ✅ try interpreting Lit differently
 - `SideNote` should wait a bit before showing
 - tty should not render `NaN` as `null`
 - `say` reading from tty should not terminate early when send a command before utterance finished
