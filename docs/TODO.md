@@ -60,6 +60,7 @@
   - decor poly induces quads
   - decor cuboids can effect nav-mesh
   - fix geomorph decor warns e.g. not fuel label not in any room
+  - saw decor disappear when editing symbols
 
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - darken obstacle machinery via instancedmesh colours
