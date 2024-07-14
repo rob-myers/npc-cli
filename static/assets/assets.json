@@ -17,7 +17,7 @@
     },
     "bed--004--0.8x1.4": {"outputHash": -787864450, "pngHash": 1609319516},
     "bed--005--0.6x1.2": {
-      "outputHash": 1417935920,
+      "outputHash": -1727239455,
       "pngHash": -1220380793,
       "obsHashes": [895128349]
     },
@@ -4062,6 +4062,19 @@
             "bed": true,
             "orient": 0,
             "y": 0.01
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.875, 0.0625], [1.875, 1.0625], [0, 1.0625], [0, 0.0625]]
+          ],
+          "meta": {
+            "decor": true,
+            "cuboid": true,
+            "table": true,
+            "h": 0.2,
+            "y": -0.2
           }
         }
       ],

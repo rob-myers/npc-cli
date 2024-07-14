@@ -346,8 +346,8 @@ class GeomorphService {
   }
 
   /**
-   * We only invoke this for non-instantiated layouts,
-   * not for e.g. nested symbols, or layout instances.
+   * - Script only.
+   * - Only invoked for layouts, not nested symbols.
    * @param {Geom.Poly} poly
    * @returns {Geomorph.Decor}
    */
@@ -368,13 +368,12 @@ class GeomorphService {
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
       const y3d = typeof meta.y === 'number' ? meta.y : 0; // meta.y has been aggregated
       const center2d = poly.center;
-      const center = { x: center2d.x, y: y3d + (height3d / 2), z: center2d.y };
+      const center = geom.toPrecisionV3({ x: center2d.x, y: y3d + (height3d / 2), z: center2d.y });
       
       tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
       
       if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
-        const aabb = polyRect;
-        const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
+        const extent = geom.toPrecisionV3({ x: polyRect.width / 2, y: height3d / 2, z: polyRect.height / 2 });
         out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle: 0, center, extent };
       }
       
@@ -384,7 +383,7 @@ class GeomorphService {
       poly = poly.clone().applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
       
       const aabb = poly.rect;
-      const extent = { x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 };
+      const extent = geom.toPrecisionV3({ x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 });
       out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle, center, extent };
     } else if (meta.circle) {
       const polyRect = poly.rect.precision(precision);

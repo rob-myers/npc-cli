@@ -72,14 +72,17 @@
   - ❌ wrap world in proxy, guarding by readiness
     - any invocation first await readiness
     - ℹ️ instead, expose API to permit higher-level approach
-  - 🚧 better decor point heights
+  - ✅ better decor point heights
   - 🚧 remove temp "all decor points shown with info icon"
+    - only show do points
+    - debug.showLabels draws into ceiling textures
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`
   - decor poly induces quads
   - decor cuboids can effect nav-mesh
   - fix geomorph decor warns e.g. not fuel label not in any room
   - saw decor disappear when editing symbols
+  - can choose colour of decor cuboids
 
 - ✅ world provides "resolve when ready" api
 - careful that world query doesn't "run twice at once"

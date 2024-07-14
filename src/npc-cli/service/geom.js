@@ -1,4 +1,5 @@
 import { parseSVG, makeAbsolute } from "svg-path-parser";
+import { toPrecision } from "./generic";
 import { Mat, Poly, Rect, Vect } from "../geom";
 
 class geomServiceClass {
@@ -1004,6 +1005,17 @@ class geomServiceClass {
       polys[0].outline,
       polys.slice(1).map((poly) => poly.outline)
     );
+  }
+
+  /**
+   * @param {{ x: number; y: number; z: number; }} input
+   * @param {number} [dp] decimal places
+   */
+  toPrecisionV3(input, dp) {
+    input.x = toPrecision(input.x, dp);
+    input.y = toPrecision(input.y, dp);
+    input.z = toPrecision(input.z, dp);
+    return input;
   }
 
   /**
