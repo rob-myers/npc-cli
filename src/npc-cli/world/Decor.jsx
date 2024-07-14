@@ -395,7 +395,6 @@ export default function Decor(props) {
       }
 
       state.hash = next;
-      props.onQuerySuccess();
       update();
       return null;
     },
@@ -412,6 +411,7 @@ export default function Decor(props) {
     if (state.queryStatus === 'success') {
       state.addQuadUvs();
       state.positionInstances();
+      props.onQuerySuccess();
     }
   }, [state.queryStatus, state.cuboids.length, state.quads.length]);
 
