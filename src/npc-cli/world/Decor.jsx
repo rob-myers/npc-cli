@@ -27,6 +27,7 @@ export default function Decor(props) {
     quads: [],
     quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
+    queryStatus: 'pending',
     rmKeys: new Set(),
 
     addDecor(ds, removeExisting = true) {
@@ -334,10 +335,8 @@ export default function Decor(props) {
       for (const ds of byRoomId) {
         ds.forEach(d => d.src !== undefined && ds.delete(d) && delete state.byKey[d.key]);
       }
-      // clear gmId's part of the decor grid
-      const { gridRect } = w.gms[gmId];
+      const { gridRect } = w.gms[gmId]; // clear gmId's part of the decor grid
       const { x, right, y, bottom } = tmpRect1.copy(gridRect).scale(1 / decorGridSize).integerOrds();
-      // console.log({ x, right, y, bottom })
       for (let i = x; i < right; i++) {
         const inner = state.byGrid[i];
         if (inner === undefined) continue;
@@ -361,8 +360,8 @@ export default function Decor(props) {
 
   w.decor = state;
 
-  // instantiate geomorph decor
-  const { status: queryStatus } = useQuery({
+  
+  state.queryStatus = useQuery({// instantiate geomorph decor
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
 
@@ -396,6 +395,7 @@ export default function Decor(props) {
       }
 
       state.hash = next;
+      props.onQuerySuccess();
       update();
       return null;
     },
@@ -406,14 +406,14 @@ export default function Decor(props) {
     staleTime: Infinity,
     gcTime: 0,
     // throwOnError: true,
-  });
+  }).status;
 
   React.useEffect(() => {
-    if (queryStatus === 'success') {
+    if (state.queryStatus === 'success') {
       state.addQuadUvs();
       state.positionInstances();
     }
-  }, [queryStatus, state.cuboids.length, state.quads.length]);
+  }, [state.queryStatus, state.cuboids.length, state.quads.length]);
 
   const update = useUpdate();
 
@@ -459,6 +459,7 @@ export default function Decor(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
+ * @property {() => void} onQuerySuccess
  */
 
 /**
@@ -477,6 +478,7 @@ export default function Decor(props) {
  * Record previous map so can remove stale decor
  * @property {THREE.BufferGeometry} quadGeom
  * @property {THREE.InstancedMesh} quadInst
+ * @property {import("@tanstack/react-query").QueryStatus} queryStatus
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
  * but yet added back in. This is useful e.g. so can avoid re-instantiating geomorph decor
  *

@@ -90,10 +90,8 @@ export default function World(props) {
     },
 
     async awaitReady() {
-      if (state.crowd === null) {
-        return new Promise(resolve =>
-          state.readyResolvers.push(resolve)
-        );
+      if (!state.isReady()) {
+        return new Promise(resolve => state.readyResolvers.push(resolve));
       }
     },
     async handleMessageFromWorker(e) {
@@ -102,10 +100,12 @@ export default function World(props) {
       if (msg.type === "nav-mesh-response") {
         await initRecastNav();
         state.loadTiledMesh(msg.exportedNavMesh);
-        update(); // <Npcs>
-        await pause();
-        state.setReady();
+        update(); // w.npc
+        // state.setReady();
       }
+    },
+    isReady() {
+      return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
     loadTiledMesh(exportedNavMesh) {
       state.nav = /** @type {NPC.TiledCacheResult} */ (
@@ -307,11 +307,11 @@ export default function World(props) {
               <Floor />
               <Walls />
               <Doors />
-              <Decor />
               <Obstacles />
               <Ceiling />
             </group>
             {state.crowd && <>
+              <Decor onQuerySuccess={state.setReady} />
               <Npcs/>
               <Debug
                 // showNavMesh
@@ -380,6 +380,7 @@ export default function World(props) {
  * @property {Crowd} crowd
  *
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
+ * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} update
  * @property {() => void} onTick

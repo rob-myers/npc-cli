@@ -66,13 +66,14 @@
   - ✅ prefer to apply root changes first
   - ✅ ensure decor of removed geomorphs is also removed
     - currently works when gmId ≤ next max gmId
-  - 🚧 world is not ready until decor ready
-  - world can become "unready" onchange e.g. map, hmr
+  - ✅ world is not ready until decor ready
+  - ✅ world can become "unready" onchange e.g. map, hmr
+    - i.e. `w.isReady()` false when `w.decor.queryStatus` not success
   - ❌ wrap world in proxy, guarding by readiness
     - any invocation first await readiness
     - ℹ️ instead, expose API to permit higher-level approach
-  - better decor point heights
-  - remove temp "all decor points shown with info icon"
+  - 🚧 better decor point heights
+  - 🚧 remove temp "all decor points shown with info icon"
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`
   - decor poly induces quads
