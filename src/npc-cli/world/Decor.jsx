@@ -94,8 +94,9 @@ export default function Decor(props) {
     },
     computeNextHash() {
       const { layout } = w.geomorphs;
+      const map = w.geomorphs.map[w.mapKey];
       return {
-        mapHash: hashJson(w.geomorphs.map[w.mapKey]),
+        mapHash: hashJson(map),
         ...mapValues(geomorphService.toGmNum, (_, gmKey) => 
           hashJson(layout[gmKey].decor)
         ),
@@ -178,8 +179,6 @@ export default function Decor(props) {
       return decor.type === 'point' ? decor : decor.center;
     },
     instantiateDecor(gmId, gm) {
-      state.byRoom[gmId] ??= gm.rooms.map(_ => new Set()); // 🔔 needs update on dynamic nav
-      
       /** @type {Geomorph.Decor[]} */ ([]);
       const ds = gm.decor.map((def, localId) => {
         /** @type {Geomorph.Decor} */ let out;
@@ -314,7 +313,23 @@ export default function Decor(props) {
 
       ds.forEach(d => removeFromDecorGrid(d, state.byGrid));
     },
-    removeInstantiatedDecor(gmId) {
+    removeAllInstantiated() {
+      for (const d of Object.values(state.byKey)) {
+        d.src !== undefined && delete state.byKey[d.key];
+      }
+      for (const byRoomId of state.byRoom) {
+        for (const decorSet of byRoomId) {
+          decorSet.forEach(d => d.src !== undefined && decorSet.delete(d));
+        }
+      }
+      for (const byY of state.byGrid) {
+        for (const decorSet of byY ?? []) {
+          // array can contain `undefined` (untouched by decor)
+          decorSet?.forEach(d => d.src !== undefined && decorSet.delete(d));
+        }
+      }
+    },
+    removeInstantiated(gmId) {
       const byRoomId = state.byRoom[gmId];
       for (const ds of byRoomId) {
         ds.forEach(d => d.src !== undefined && ds.delete(d) && delete state.byKey[d.key]);
@@ -347,33 +362,50 @@ export default function Decor(props) {
   w.decor = state;
 
   // instantiate geomorph decor
-  // 🚧 ensure removed geomorphs decor is removed
-  // ❌ merge this query into root
   const { status: queryStatus } = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
+
       const prev = state.hash;
       const next = state.computeNextHash();
-      const redoAll = prev.mapHash !== next.mapHash;
+      const mapChanged = prev.mapHash !== next.mapHash;
 
-      for (const [gmId, gm] of w.gms.entries()) {
-        if (!redoAll && prev[gm.key] === next[gm.key]) {
-          continue;
-        }
-        if (state.byRoom[gmId] !== undefined) {
-          state.removeInstantiatedDecor(gmId);
-        }
-        state.instantiateDecor(gmId, gm);
+      if (mapChanged) {
+        // Re-instantiate all cleanly
+        state.removeAllInstantiated();
+        w.gms.forEach((gm, gmId) => {
+          state.byRoom[gmId] ??= gm.rooms.map(_ => new Set());
+          gm.rooms.forEach((_, roomId) => state.byRoom[gmId][roomId] ??= new Set());
+        });
         await pause();
+
+        for (const [gmId, gm] of w.gms.entries()) {
+          state.instantiateDecor(gmId, gm);
+          await pause();
+        }
+      } else {
+        // Only re-instantiate changed geomorphs
+        for (const [gmId, gm] of w.gms.entries()) {
+          if (prev[gm.key] === next[gm.key]) {
+            continue;
+          }
+          state.removeInstantiated(gmId);
+          state.instantiateDecor(gmId, gm);
+          await pause();
+        }
       }
 
       state.hash = next;
       update();
       return null;
     },
+    refetchOnMount: false,
+    refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    retry: false, // fix dup invokes
     staleTime: Infinity,
     gcTime: 0,
+    // throwOnError: true,
   });
 
   React.useEffect(() => {
@@ -441,7 +473,8 @@ export default function Decor(props) {
  * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads This is `Object.values(state.byKey)`
  * @property {THREE.InstancedMesh} cuboidInst
  * @property {{ mapHash: number; } & Record<Geomorph.GeomorphKey, number>} hash
- * If any decor changed in a geomorph, re-instantiate all
+ * If any decor changed in a geomorph re-instantiate all.
+ * Record previous map so can remove stale decor
  * @property {THREE.BufferGeometry} quadGeom
  * @property {THREE.InstancedMesh} quadInst
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
@@ -463,6 +496,7 @@ export default function Decor(props) {
  * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
- * @property {(gmId: number) => void} removeInstantiatedDecor
+ * @property {() => void} removeAllInstantiated
+ * @property {(gmId: number) => void} removeInstantiated
  * @property {() => void} updateInstanceLists
  */

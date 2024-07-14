@@ -59,14 +59,30 @@
     - track per-geomorph only (not per decor)
   - ✅ efficient decor re-instantiation
     - e.g. if map stays same and decor too, won't redo
-  - 🚧 better decor point heights
-  - 🚧 remove temp "all decor points shown with info icon"
+  - ❌ try absorb Decor query into root query (avoid partial)
+    - ℹ️ even if we merge into root query, have to mutate
+      `w.decor` over time because `decorGrid` is too large,
+      so cannot "apply changes synchronously"
+  - ✅ prefer to apply root changes first
+  - ✅ ensure decor of removed geomorphs is also removed
+    - currently works when gmId ≤ next max gmId
+  - 🚧 world is not ready until decor ready
+  - world can become "unready" onchange e.g. map, hmr
+  - ❌ wrap world in proxy, guarding by readiness
+    - any invocation first await readiness
+    - ℹ️ instead, expose API to permit higher-level approach
+  - better decor point heights
+  - remove temp "all decor points shown with info icon"
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`
   - decor poly induces quads
   - decor cuboids can effect nav-mesh
   - fix geomorph decor warns e.g. not fuel label not in any room
   - saw decor disappear when editing symbols
+
+- 🚧 world provides "resolve when ready" api
+- careful that world query doesn't "run twice at once"
+  - e.g. by focusing window whilst ongoing?
 
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - darken obstacle machinery via InstancedMesh colours
