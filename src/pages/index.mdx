@@ -11,6 +11,7 @@ import {
 } from 'src/components/Icon';
 
 import SideNote from 'src/components/SideNote';
+import Card from 'src/components/Card';
 
 # Home
 
@@ -27,23 +28,34 @@ But it's not much fun without other beings, either humans or more commonly Non-P
 {/* To understand our objectives, more background is needed. */}
 {/* Intelligent machines have long had a place in our hearts and minds. */}
 
-Amazingly, Chat Bots can now hold flexible and meaningful conversations <SideNote>Putting aside their hallucinations and somewhat memoryless nature.</SideNote>.
+Amazingly and unexpectedly, Chat Bots can now hold flexible and meaningful conversations <SideNote>Putting aside their hallucinations and somewhat memoryless nature.</SideNote>.
 But before reaching towards Artificial General Intelligence,
-consider the current state of NPCs.
+we should consider the current state of NPCs.
 The word _NPC_ is now used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
 Popular films depict them as conversationally rigid and predictable,
 usually with a single linear conversation <SideNote>The Jumanji reboot [1](https://en.wikipedia.org/wiki/Jumanji:_Welcome_to_the_Jungle) and [2](https://en.wikipedia.org/wiki/Jumanji:_The_Next_Level).</SideNote>.
 In our search for intelligent machines, we should remember that Turing's test was a _party game_.
-Almost 75 years later we have a multi-billion dollar video game industry (actually hundreds of billions),
-but a distinct lack of flexible or believable NPCs.
+Almost 75 years later we have a multi-billion dollar video game industry (hundreds of billions),
+and a distinct lack of flexible or believable NPCs.
+This problem is our underlying motivation.
 
-How can we work towards a solution?
+<Card> 
+**Background Problem**. [_Turing test for video games_]
+
+Develop Non-Player Characters which are indistinguishable from Players.
+<SideNote width={400}>This is relative to the video game's UI e.g. multiple choice dialog.</SideNote>
+</Card>
+
+🚧 WIP
+
+The above problem is extremely difficult.
+It's not even clear where to begin.
+It's too hard to solve within the confines of video game development cycles:
+{/* How can we work towards a solution?
 How can we strive towards the NPCs Turing hoped for?
-We believe the problem is _too hard_.
-At least, it's too hard to solve within the confines of video game development cycles.
-Why?
+The problem described above is way _too hard_. */}
 
-> Because video games must behave soundly over all user journeys,
+> because video games must behave soundly over all user journeys,
 > so the [state space explosion problem](https://en.wikipedia.org/wiki/Combinatorial_explosion) severely limits the number of states.
 
 In other words, rich environments have a huge number of possibilities which cannot be anticipated by developers.
@@ -53,8 +65,6 @@ we're not trying to create some finished product which we can sell.
 We're not trying to set an intricate clockwork world in motion.
 Instead, ...
 
-
-🚧 WIP
 
 {/* Instead of setting an intricate clockwork world in motion,
 let's react to the Player,
