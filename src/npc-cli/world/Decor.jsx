@@ -347,14 +347,13 @@ export default function Decor(props) {
   w.decor = state;
 
   // instantiate geomorph decor
-  // 🚧 handle removed geomorphs?
+  // 🚧 ensure removed geomorphs decor is removed
   // ❌ merge this query into root
   const { status: queryStatus } = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
       const prev = state.hash;
       const next = state.computeNextHash();
-      /** current map changed */
       const redoAll = prev.mapHash !== next.mapHash;
 
       for (const [gmId, gm] of w.gms.entries()) {
@@ -362,12 +361,10 @@ export default function Decor(props) {
           continue;
         }
         if (state.byRoom[gmId] !== undefined) {
-          await pause();
           state.removeInstantiatedDecor(gmId);
         }
-        
-        await pause();
         state.instantiateDecor(gmId, gm);
+        await pause();
       }
 
       state.hash = next;
