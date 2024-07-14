@@ -84,10 +84,12 @@ export default function Viewer() {
             {
               type: "terminal",
               filepath: "tty-1",
-              env: {
-                WORLD_KEY: "test-world-1",
-                PROFILE: profile.profile1Sh,
-              },
+              env: { WORLD_KEY: "test-world-1", PROFILE: profile.profile1Sh },
+            },
+            {
+              type: "terminal",
+              filepath: "tty-2",
+              env: { WORLD_KEY: "test-world-1", PROFILE: profile.profileAwaitWorldSh },
             },
             { type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} },
           ],
