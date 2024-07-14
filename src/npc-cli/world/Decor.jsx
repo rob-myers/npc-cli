@@ -314,12 +314,10 @@ export default function Decor(props) {
 
       ds.forEach(d => removeFromDecorGrid(d, state.byGrid));
     },
-    rmInstantiatedDecor(gmId) {
+    removeInstantiatedDecor(gmId) {
       const byRoomId = state.byRoom[gmId];
-      for (const decorSet of byRoomId) {
-        decorSet.forEach(d => d.src !== undefined &&
-          decorSet.delete(d) && delete state.byKey[d.key]
-        );
+      for (const ds of byRoomId) {
+        ds.forEach(d => d.src !== undefined && ds.delete(d) && delete state.byKey[d.key]);
       }
       // clear gmId's part of the decor grid
       const { gridRect } = w.gms[gmId];
@@ -349,7 +347,8 @@ export default function Decor(props) {
   w.decor = state;
 
   // instantiate geomorph decor
-  // 🚧 recompute on hmr
+  // 🚧 handle removed geomorphs?
+  // ❌ merge this query into root
   const { status: queryStatus } = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
@@ -364,7 +363,7 @@ export default function Decor(props) {
         }
         if (state.byRoom[gmId] !== undefined) {
           await pause();
-          state.rmInstantiatedDecor(gmId);
+          state.removeInstantiatedDecor(gmId);
         }
         
         await pause();
@@ -467,6 +466,6 @@ export default function Decor(props) {
  * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
- * @property {(gmId: number) => void} rmInstantiatedDecor
+ * @property {(gmId: number) => void} removeInstantiatedDecor
  * @property {() => void} updateInstanceLists
  */

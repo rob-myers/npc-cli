@@ -143,6 +143,7 @@ export default function World(props) {
 
       /**
        * Used to apply changes synchronously.
+       * These values can be overridden below.
        * @type {Pick<State, 'geomorphs' | 'mapKey' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph'>}
        */
       const next = {
