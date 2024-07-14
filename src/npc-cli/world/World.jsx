@@ -46,9 +46,10 @@ export default function World(props) {
     hash: /** @type {*} */ (''),
     decorHash: /** @type {*} */ (''),
     mapKey: props.mapKey,
-    threeReady: false,
     r3f: /** @type {*} */ (null),
+    readyResolvers: [],
     reqAnimId: 0,
+    threeReady: false,
     timer: new Timer(),
     worker: /** @type {*} */ (null),
 
@@ -88,6 +89,13 @@ export default function World(props) {
       ...npcService,
     },
 
+    async awaitReady() {
+      if (state.crowd === null) {
+        return new Promise(resolve =>
+          state.readyResolvers.push(resolve)
+        );
+      }
+    },
     async handleMessageFromWorker(e) {
       const msg = e.data;
       info("main thread received message", msg);
@@ -95,10 +103,9 @@ export default function World(props) {
         await initRecastNav();
         state.loadTiledMesh(msg.exportedNavMesh);
         update(); // <Npcs>
+        await pause();
+        state.setReady();
       }
-    },
-    isReady() {
-      return state.geomorphs !== null && state.crowd !== null;
     },
     loadTiledMesh(exportedNavMesh) {
       state.nav = /** @type {NPC.TiledCacheResult} */ (
@@ -109,7 +116,6 @@ export default function World(props) {
         maxAgents: 10,
         maxAgentRadius: npcService.defaults.radius,
       });
-      // state.crowd.timeFactor
 
       state.npc?.restore();
     },
@@ -122,6 +128,11 @@ export default function World(props) {
       state.npc.onTick(deltaMs);
       state.door.onTick();
       // info(state.r3f.gl.info.render);
+    },
+    setReady() {
+      while (state.readyResolvers.length > 0) {
+        /** @type {() => void} */ (state.readyResolvers.pop())();
+      }
     },
     update,
   }));
@@ -339,6 +350,7 @@ export default function World(props) {
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
+ * @property {(() => void)[]} readyResolvers
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
@@ -368,10 +380,11 @@ export default function World(props) {
  * @property {Crowd} crowd
  *
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
- * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} update
  * @property {() => void} onTick
+ * @property {() => Promise<void>} awaitReady
+ * @property {() => void} setReady
  */
 
 /**

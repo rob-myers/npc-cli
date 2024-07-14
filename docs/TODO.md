@@ -80,7 +80,7 @@
   - fix geomorph decor warns e.g. not fuel label not in any room
   - saw decor disappear when editing symbols
 
-- 🚧 world provides "resolve when ready" api
+- ✅ world provides "resolve when ready" api
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
 

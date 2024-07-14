@@ -39,9 +39,7 @@ export class GmGraphClass extends BaseGraph {
   entry;
 
   /** World component API */
-  w = /** @type {Pick<import('../world/World').State, 'door' | 'gmsData' | 'isReady'>}} */ ({
-    isReady() { return false; },
-  });
+  w = /** @type {import('../world/World').State}} */ ({});
 
   /**
    * Cache for @see {getAdjacentRoomCtxt}

@@ -1,14 +1,19 @@
 /**
  * @param {RunArg} ctxt
  */
-export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
-  let checks = 0;
-  while (!api.getCached(WORLD_KEY)?.isReady()) {
-    ++checks % 2 && api.info(`polling ${api.ansi.White}${WORLD_KEY}`);
+export async function* awaitWorld({ api, home: { WORLD_KEY }, w }) {
+
+  api.info(`polling ${api.ansi.White}${WORLD_KEY}`)
+  while (!(w = api.getCached(WORLD_KEY))) {
     yield* api.sleep(0.5);
   }
-  // api.getCached(WORLD_KEY).npc.connectSession(api.meta.sessionKey)
-  api.info(`found ${api.ansi.White}${WORLD_KEY}`);
+
+  api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`);
+  await Promise.race([
+    w.awaitReady(),
+    new Promise((_, reject) => api.addCleanup(reject)),
+  ]);
+  // w.npc.connectSession(api.meta.sessionKey)
 }
 
 /**
