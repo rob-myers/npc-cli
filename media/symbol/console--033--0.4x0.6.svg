@@ -10,6 +10,6 @@
     <title>obstacle chair</title>
   </path>
   <rect x="59.925926" y="70" width="10.14815" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-    <title>decor do sit chair orient=180</title>
+    <title>decor do sit chair orient=180 y=0.01</title>
   </rect>
 </svg>

@@ -77,7 +77,7 @@
       "obsHashes": [954136659]
     },
     "console--033--0.4x0.6": {
-      "outputHash": 1558401259,
+      "outputHash": 1566405699,
       "pngHash": -1765557674,
       "obsHashes": [-446494730]
     },
@@ -273,7 +273,7 @@
     "medical--007--3x2": {"outputHash": -1524356726, "pngHash": -74184864},
     "medical--008--3x2": {"outputHash": 1608796794, "pngHash": -1263266565},
     "medical-bed--005--0.6x1.2": {
-      "outputHash": 18930571,
+      "outputHash": -724207531,
       "pngHash": -172295595,
       "obsHashes": [1688686898]
     },
@@ -5569,7 +5569,8 @@
             "do": true,
             "sit": true,
             "chair": true,
-            "orient": 180
+            "orient": 180,
+            "y": 0.01
           }
         }
       ],
@@ -9273,7 +9274,8 @@
             "pod": true,
             "medical": true,
             "orient": 0,
-            "obscured": true
+            "obscured": true,
+            "y": 0.01
           }
         }
       ],

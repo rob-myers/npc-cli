@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 1453153124 -639924815 728262193",
+  "hash": "610044716 1367700352 -639924815 728262193",
   "mapsHash": 610044716,
-  "layoutsHash": 1453153124,
+  "layoutsHash": 1367700352,
   "sheetsHash": -639924815,
   "imagesHash": 728262193,
   "map": {
@@ -1069,7 +1069,7 @@
         },
         {
           "type": "point",
-          "key": "point[4_61,0_5,16_58]",
+          "key": "point[4_61,0_51,16_58]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1078,7 +1078,7 @@
             "medical": true,
             "orient": 360,
             "obscured": true,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 4.61, "y": 16.58, "width": 4.25, "height": 4.25},
           "x": 6.735,
@@ -1086,7 +1086,7 @@
         },
         {
           "type": "point",
-          "key": "point[4_61,0_5,18_09]",
+          "key": "point[4_61,0_51,18_09]",
           "meta": {
             "decor": true,
             "do": true,
@@ -1095,7 +1095,7 @@
             "medical": true,
             "orient": 360,
             "obscured": true,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 4.61, "y": 18.09, "width": 4.25, "height": 4.25},
           "x": 6.735,
@@ -8141,14 +8141,14 @@
         },
         {
           "type": "point",
-          "key": "point[16_9297,0_5,1_4799]",
+          "key": "point[16_9297,0_51,1_4799]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 225,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 16.9297,
@@ -8161,14 +8161,14 @@
         },
         {
           "type": "point",
-          "key": "point[14_8604,0_5,1_4599]",
+          "key": "point[14_8604,0_51,1_4599]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 14.8604,
@@ -8181,14 +8181,14 @@
         },
         {
           "type": "point",
-          "key": "point[14_8301,0_5,-0_6197]",
+          "key": "point[14_8301,0_51,-0_6197]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 45,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 14.8301,
@@ -8201,14 +8201,14 @@
         },
         {
           "type": "point",
-          "key": "point[16_9096,0_5,-0_5999]",
+          "key": "point[16_9096,0_51,-0_5999]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 135,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 16.9096,
@@ -8229,14 +8229,14 @@
         },
         {
           "type": "point",
-          "key": "point[8_8204,0_5,1_4799]",
+          "key": "point[8_8204,0_51,1_4799]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 315,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": 8.8204, "y": 1.4799, "width": 4.25, "height": 4.25},
           "x": 10.9454,
@@ -8244,14 +8244,14 @@
         },
         {
           "type": "point",
-          "key": "point[10_8897,0_5,1_4599]",
+          "key": "point[10_8897,0_51,1_4599]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 225,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 10.8897,
@@ -8264,14 +8264,14 @@
         },
         {
           "type": "point",
-          "key": "point[10_9199,0_5,-0_6196]",
+          "key": "point[10_9199,0_51,-0_6196]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 135,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 10.9199,
@@ -8284,14 +8284,14 @@
         },
         {
           "type": "point",
-          "key": "point[8_8404,0_5,-0_5999]",
+          "key": "point[8_8404,0_51,-0_5999]",
           "meta": {
             "decor": true,
             "do": true,
             "sit": true,
             "chair": true,
             "orient": 45,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {
             "x": 8.8404,
@@ -24893,7 +24893,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1_43,0_5,-1_37]",
+          "key": "point[-1_43,0_51,-1_37]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24902,7 +24902,7 @@
             "medical": true,
             "orient": 0,
             "obscured": true,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": -1.43, "y": -1.37, "width": 4.25, "height": 4.25},
           "x": 0.695,
@@ -24910,7 +24910,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1_43,0_5,0_85]",
+          "key": "point[-1_43,0_51,0_85]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24919,7 +24919,7 @@
             "medical": true,
             "orient": 0,
             "obscured": true,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": -1.43, "y": 0.85, "width": 4.25, "height": 4.25},
           "x": 0.695,
@@ -24927,7 +24927,7 @@
         },
         {
           "type": "point",
-          "key": "point[-1_43,0_5,3_08]",
+          "key": "point[-1_43,0_51,3_08]",
           "meta": {
             "decor": true,
             "do": true,
@@ -24936,7 +24936,7 @@
             "medical": true,
             "orient": 0,
             "obscured": true,
-            "y": 0.5
+            "y": 0.51
           },
           "bounds2d": {"x": -1.43, "y": 3.08, "width": 4.25, "height": 4.25},
           "x": 0.695,
