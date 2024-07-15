@@ -42,6 +42,7 @@ declare namespace NPC {
     | { key: "spawned"; npcKey: string }
     | { key: 'stopped-walking'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
+    | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
     // 🚧 ...

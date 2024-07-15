@@ -2,9 +2,9 @@ import React from "react";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
- * @param {import('./World').State} api
+ * @param {import('./World').State} w
  */
-export default function useHandleEvents(api) {
+export default function useHandleEvents(w) {
   const state = useStateRef(/** @returns {State} */ () => ({
     handleEvents(e) {
       // info('useTestHandleEvents', e);
@@ -13,33 +13,36 @@ export default function useHandleEvents(api) {
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu
           if (e.distancePx <= (e.touch ? 10 : 5)) {
-            api.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
+            w.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
-            api.ui.controls.saveState();
-            api.ui.controls.reset();
+            w.ui.controls.saveState();
+            w.ui.controls.reset();
           } else {
-            api.menu.hide();
+            w.menu.hide();
           }
           break;
         case "pointerdown":
-          api.ui.setLastDown(e);
-          api.menu.hide();
+          w.ui.setLastDown(e);
+          w.menu.hide();
           break;
         case "pointerup":
-          e.is3d && !api.menu.justOpen && state.onPointerUp3d(e);
+          e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
           !e.touch && state.onPointerUpMenuDesktop(e);
-          api.menu.justOpen = api.menu.isOpen;
+          w.menu.justOpen = w.menu.isOpen;
           break;
         case "pointerup-outside":
           !e.touch && state.onPointerUpMenuDesktop(e);
+          break;
+        case "decor-instantiated":
+          w.setReady();
           break;
       }
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        api.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
+        w.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
       } else if (!e.justLongDown) {
-        api.menu.hide();
+        w.menu.hide();
       }
     },
     onPointerUp3d(e) {
@@ -53,7 +56,7 @@ export default function useHandleEvents(api) {
   }));
 
   React.useEffect(() => {
-    const sub = api.events.subscribe(state.handleEvents);
+    const sub = w.events.subscribe(state.handleEvents);
     return () => {
       sub.unsubscribe();
     };

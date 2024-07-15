@@ -311,8 +311,8 @@ export default function World(props) {
               <Ceiling />
             </group>
             {state.crowd && <>
-              <Decor onQuerySuccess={state.setReady} />
-              <Npcs/>
+              <Decor />
+              <Npcs />
               <Debug
                 // showNavMesh
                 // showOrigNavPoly

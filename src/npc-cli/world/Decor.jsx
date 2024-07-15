@@ -411,7 +411,7 @@ export default function Decor(props) {
     if (state.queryStatus === 'success') {
       state.addQuadUvs();
       state.positionInstances();
-      props.onQuerySuccess();
+      w.events.next({ key: 'decor-instantiated' });
     }
   }, [state.queryStatus, state.cuboids.length, state.quads.length]);
 
@@ -459,7 +459,6 @@ export default function Decor(props) {
 /**
  * @typedef Props
  * @property {boolean} [disabled]
- * @property {() => void} onQuerySuccess
  */
 
 /**

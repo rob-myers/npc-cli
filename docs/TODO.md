@@ -73,10 +73,10 @@
     - any invocation first await readiness
     - ℹ️ instead, expose API to permit higher-level approach
   - ✅ better decor point heights
+  - ✅ move `w.setReady` into useHandleEvents
   - 🚧 remove temp "all decor points shown with info icon"
-    - only show do points
-    - debug.showLabels draws into ceiling textures
-  - move `w.setReady` into useHandleEvents
+    - 🚧 only show do points
+    - 🚧 debug.showLabels draws into ceiling textures
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`
   - decor poly induces quads
