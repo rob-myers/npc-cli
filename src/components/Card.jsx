@@ -18,6 +18,7 @@ const rootCss = css`
   padding: 16px 48px 32px 48px;
   background-color: #eee;
   border-left: 4px solid #ddd;
+  /* border-bottom: 24px solid #ddd; */
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   
   @media(max-width:${breakpoint}) {
