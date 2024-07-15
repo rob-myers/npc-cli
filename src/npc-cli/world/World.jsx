@@ -68,7 +68,7 @@ export default function World(props) {
 
     ui: /** @type {*} */ (null), // WorldCanvas
     floor: /** @type {State['floor']} */ ({ tex: {} }),
-    ceil: /** @type {State['ceil']} */ ({ tex: {} }),
+    ceil: /** @type {State['ceil']} */ ({ tex: {}, labelTex: {} }),
     decor: /** @type {*} */ (null), // Decor
     obs: /** @type {*} */ (null), // Obstacles
     wall: /** @type {*} */ (null),
@@ -134,7 +134,10 @@ export default function World(props) {
         /** @type {() => void} */ (state.readyResolvers.pop())();
       }
     },
-    update,
+    update(mutator) {
+      mutator?.(state);
+      update();
+    },
   }));
 
   state.disabled = !!props.disabled;
@@ -180,12 +183,18 @@ export default function World(props) {
         // on change map may see new gmKeys
         mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
           const { pngRect } = next.geomorphs.layout[gmKey];
-          /** @type {const} */ (['floor', 'ceil']).forEach(apiKey => {
-            state[apiKey].tex[gmKey] = createCanvasTexDef(
-              pngRect.width * worldToSguScale * gmFloorExtraScale,
-              pngRect.height * worldToSguScale * gmFloorExtraScale,
-            );
-          });
+          state.floor.tex[gmKey] = createCanvasTexDef(
+            pngRect.width * worldToSguScale * gmFloorExtraScale,
+            pngRect.height * worldToSguScale * gmFloorExtraScale,
+          );
+          state.ceil.tex[gmKey] = createCanvasTexDef(
+            pngRect.width * worldToSguScale * gmFloorExtraScale,
+            pngRect.height * worldToSguScale * gmFloorExtraScale,
+          );
+          state.ceil.labelTex[gmKey] = createCanvasTexDef(
+            pngRect.width * worldToSguScale * gmFloorExtraScale,
+            pngRect.height * worldToSguScale * gmFloorExtraScale,
+          );
         });
 
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
@@ -382,7 +391,7 @@ export default function World(props) {
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {() => void} update
+ * @property {(mutator?: (w: State) => void) => void} update
  * @property {() => void} onTick
  * @property {() => Promise<void>} awaitReady
  * @property {() => void} setReady

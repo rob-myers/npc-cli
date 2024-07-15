@@ -16,6 +16,8 @@ export default function Ceiling(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     tex: w.ceil.tex, // Pass in textures
+    labelTex: w.ceil.labelTex,
+    showLabels: false,
 
     detectClick(e) {
       const gmId = Number(e.object.name.slice('ceil-gm-'.length));
@@ -143,8 +145,6 @@ export default function Ceiling(props) {
   
 }
 
-0;
-
 /**
  * @typedef Props
  * @property {boolean} [disabled]
@@ -153,8 +153,10 @@ export default function Ceiling(props) {
 /**
  * @typedef State
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
+ * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} labelTex
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * @property {boolean} showLabels
  */
