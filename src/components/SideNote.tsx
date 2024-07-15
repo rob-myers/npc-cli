@@ -23,11 +23,12 @@ export default function SideNote(props: React.PropsWithChildren<{ width?: number
       onMouseEnter={e => {
         const bubble = e.currentTarget.nextSibling as HTMLElement;
         const rect = e.currentTarget.getBoundingClientRect();
-        setTimeout(() => open({ bubble, rect, width: props.width, timeoutId: timeoutId.current }), hoverShowMs);
+        timeoutId.current = window.setTimeout(() => open({ bubble, rect, width: props.width, timeoutId: timeoutId.current }), hoverShowMs);
       }}
-      onMouseLeave={e => (
-        timeoutId.current = close(e, 'icon')
-      )}
+      onMouseLeave={e => {
+        window.clearTimeout(timeoutId.current); // clear hover timeout
+        timeoutId.current = close(e, 'icon');
+      }}
     >
       ⋯
     </span>
@@ -45,7 +46,7 @@ export default function SideNote(props: React.PropsWithChildren<{ width?: number
 }
 
 function open({ bubble, rect, width, timeoutId }: { bubble: HTMLElement; rect: DOMRect; width: number | undefined, timeoutId: number; }) {
-  window.clearTimeout(timeoutId);
+  window.clearTimeout(timeoutId); // clear close timeout
 
   bubble.classList.add('open');
   
