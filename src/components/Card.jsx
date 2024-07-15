@@ -14,7 +14,7 @@ export default function Card(props) {
 }
 
 const rootCss = css`
-  padding: 20px 64px;
+  padding: 20px 48px;
   background-color: #eee;
   border-left: 4px solid #ddd;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
