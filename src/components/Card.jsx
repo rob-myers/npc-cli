@@ -14,12 +14,13 @@ export default function Card(props) {
 }
 
 const rootCss = css`
-  padding: 32px 64px;
+  padding: 20px 64px;
   background-color: #eee;
-  border-top: 4px solid #ddd;
+  border-left: 4px solid #ddd;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   
   @media(max-width:${breakpoint}) {
-    padding: 32px;
+    padding: 20px 32px;
   }
 `;
 
