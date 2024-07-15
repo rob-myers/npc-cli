@@ -12,9 +12,22 @@ export default function SideNote(props: React.PropsWithChildren<{ width?: number
   return <>
     <span
       className={cx("side-note", iconTriggerCss)}
-      onClick={e => open(e, props.width, timeoutId.current)}
-      onMouseEnter={e => open(e, props.width, timeoutId.current)}
-      onMouseLeave={e => (timeoutId.current = close(e, 'icon'))}
+      onClick={e => 
+        open({
+          bubble: e.currentTarget.nextSibling as HTMLElement,
+          rect: e.currentTarget.getBoundingClientRect(),
+          width: props.width,
+          timeoutId: timeoutId.current,
+        })
+      }
+      onMouseEnter={e => {
+        const bubble = e.currentTarget.nextSibling as HTMLElement;
+        const rect = e.currentTarget.getBoundingClientRect();
+        setTimeout(() => open({ bubble, rect, width: props.width, timeoutId: timeoutId.current }), hoverShowMs);
+      }}
+      onMouseLeave={e => (
+        timeoutId.current = close(e, 'icon')
+      )}
     >
       ⋯
     </span>
@@ -31,15 +44,13 @@ export default function SideNote(props: React.PropsWithChildren<{ width?: number
   </>;
 }
 
-function open(e: React.MouseEvent, width: number | undefined, timeoutId: number) {
+function open({ bubble, rect, width, timeoutId }: { bubble: HTMLElement; rect: DOMRect; width: number | undefined, timeoutId: number; }) {
   window.clearTimeout(timeoutId);
 
-  const bubble = e.currentTarget.nextSibling as HTMLElement;
   bubble.classList.add('open');
   
   const root = document.querySelector(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
   const rootRect = root.getBoundingClientRect();
-  const rect = e.currentTarget.getBoundingClientRect();
   const pixelsOnRight = rootRect.right - rect.right;
   const pixelsOnLeft = rect.x - rootRect.x;
   bubble.classList.remove('left', 'right', 'down');
@@ -170,3 +181,5 @@ const speechBubbleCss = css`
 `;
 
 export const sideNoteRootDataAttribute = 'data-side-note-root';
+
+const hoverShowMs = 500;

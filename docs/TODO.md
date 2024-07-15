@@ -76,6 +76,7 @@
   - 🚧 remove temp "all decor points shown with info icon"
     - only show do points
     - debug.showLabels draws into ceiling textures
+  - move `w.setReady` into useHandleEvents
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`
   - decor poly induces quads
@@ -106,7 +107,7 @@
   - related to allowing single-quotes inside js (replace `'` -> `'\''`)
   - tryParseBuffer receives `["echo \\'"]` (which seems correct)
   - ✅ try interpreting Lit differently
-- `SideNote` should wait a bit before showing
+- ✅ `SideNote` should wait a bit before showing
 - tty should not render `NaN` as `null`
 - `say` reading from tty should not terminate early when send a command before utterance finished
 - ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
