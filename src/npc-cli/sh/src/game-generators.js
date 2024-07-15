@@ -3,12 +3,11 @@
  */
 export async function* awaitWorld({ api, home: { WORLD_KEY }, w }) {
 
-  api.info(`polling ${api.ansi.White}${WORLD_KEY}`)
+  api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`)
   while (!(w = api.getCached(WORLD_KEY))) {
     yield* api.sleep(0.5);
   }
 
-  api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`);
   await Promise.race([
     w.awaitReady(),
     new Promise((_, reject) => api.addCleanup(reject)),
