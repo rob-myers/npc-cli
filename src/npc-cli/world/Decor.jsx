@@ -7,7 +7,7 @@ import { hashJson, mapValues, pause, testNever, warn } from "../service/generic"
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
+import { boxGeometry, createCanvasTexDef, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -24,11 +24,16 @@ export default function Decor(props) {
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
     hash : /** @type {State['hash']} */ ({ mapHash: 0 }),
+    labels: [],
+    labelGeom: getQuadGeometryXZ(`${w.key}-label-xz`),
+    labelInst: /** @type {*} */ (null),
+    labelTex: createCanvasTexDef(2048, 2048),
     quads: [],
     quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
     queryStatus: 'pending',
     rmKeys: new Set(),
+    showLabels: false,
 
     addDecor(ds, removeExisting = true) {
 
@@ -165,6 +170,9 @@ export default function Decor(props) {
       
       // // ignore clicks on fully transparent pixels
       // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
+    },
+    drawLabels() {
+      // 🚧 use hash to avoid recreate sprite-sheet
     },
     ensureGmRoomId(decor) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
@@ -409,9 +417,10 @@ export default function Decor(props) {
 
   React.useEffect(() => {
     if (state.queryStatus === 'success') {
+      w.events.next({ key: 'decor-instantiated' });
       state.addQuadUvs();
       state.positionInstances();
-      w.events.next({ key: 'decor-instantiated' });
+      state.drawLabels();
     }
   }, [state.queryStatus, state.cuboids.length, state.quads.length]);
 
@@ -453,6 +462,27 @@ export default function Decor(props) {
         // diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
       />
     </instancedMesh>
+
+    {state.showLabels && (
+      <instancedMesh
+        name="decor-labels"
+        key={`${state.labels.length} labels`}
+        ref={instances => instances && (state.labelInst = instances)}
+        args={[state.labelGeom, undefined, state.labels.length]}
+        frustumCulled={false}
+        onPointerUp={state.onPointerUp}
+        onPointerDown={state.onPointerDown}
+      >
+        {/* <meshBasicMaterial color="red" /> */}
+        <instancedSpriteSheetMaterial
+          key={glsl.InstancedSpriteSheetMaterial.key}
+          side={THREE.DoubleSide}
+          map={state.labelTex}
+          transparent
+          // diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+        />
+      </instancedMesh>
+    )}
   </>;
 }
 
@@ -463,23 +493,29 @@ export default function Decor(props) {
 
 /**
  * @typedef State
- * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {Geomorph.DecorGrid} byGrid
  * PoCollidable decors in global grid where `byGrid[x][y]` covers the square:
  * (x * decorGridSize, y * decorGridSize, decorGridSize, decorGridSize)
  * @property {Record<string, Geomorph.Decor>} byKey
  * @property {Geomorph.RoomDecor[][]} byRoom
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
- * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads This is `Object.values(state.byKey)`
+ * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
  * @property {{ mapHash: number; } & Record<Geomorph.GeomorphKey, number>} hash
  * If any decor changed in a geomorph re-instantiate all.
  * Record previous map so can remove stale decor
+ * @property {Geomorph.DecorPoint[]} labels
+ * @property {THREE.BufferGeometry} labelGeom
+ * @property {THREE.InstancedMesh} labelInst
+ * @property {import("../service/three").CanvasTexDef} labelTex
+ * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads
+ * This is `Object.values(state.byKey)`
  * @property {THREE.BufferGeometry} quadGeom
  * @property {THREE.InstancedMesh} quadInst
  * @property {import("@tanstack/react-query").QueryStatus} queryStatus
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
  * but yet added back in. This is useful e.g. so can avoid re-instantiating geomorph decor
+ * @property {boolean} showLabels
  *
  * @property {(ds: Geomorph.Decor[], removeExisting?: boolean) => void} addDecor
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor
@@ -489,6 +525,7 @@ export default function Decor(props) {
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorPoly) => THREE.Matrix4} createQuadMatrix4
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
+ * @property {() => void} drawLabels
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateDecor
