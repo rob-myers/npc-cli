@@ -150,7 +150,9 @@ export default function Decor(props) {
     createLabelMatrix4(d) {
       const { width, height } = state.labelSheet[d.meta.label];
       tmpMat1.feedFromArray([
-        width * sguToWorldScale, 0, 0, height * sguToWorldScale, d.x, d.y
+        width * sguToWorldScale, 0, 0, height * sguToWorldScale,
+        d.x - (width * sguToWorldScale) / 2,
+        d.y - (height * sguToWorldScale) / 2,
       ]);
       return geomorphService.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
@@ -183,23 +185,25 @@ export default function Decor(props) {
       // // ignore clicks on fully transparent pixels
       // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
-    setupLabels() {
+    setupLabels() {// 🚧 clean
+      
       // Create spritesheet json
-      // 🚧 use hash to avoid recreate sprite-sheet
-
       const labelKeys = Array.from(
         state.labels.reduce((set, x) => (set.add(x.meta.label), set),
         /** @type {Set<string>} */ (new Set())),
       ).sort();
-
+      // 🚧 use hash to avoid recreate sprite-sheet
       const hash = hashJson(labelKeys);
+
       const [measurer] = state.labelTex;
       measurer.font = `${decorLabelHeightSgu}px 'Courier new'`;
       
       /** @type {import("../service/rects-packer").PrePackedRect<{ labelKey: string }>[]} */
-      const rects = labelKeys.map(label => (
-        { width: measurer.measureText(label).width, height: decorLabelHeightSgu, data: { labelKey: label } }
-      ));
+      const rects = labelKeys.map(label => ({
+        width: measurer.measureText(label).width,
+        height: decorLabelHeightSgu,
+        data: { labelKey: label },
+      }));
       const bin = packRectangles(rects, { errorPrefix: 'decor drawLabels', packedPadding: 2 });
 
       state.labelSheet = bin.rects.reduce((agg, r) => {
@@ -207,9 +211,41 @@ export default function Decor(props) {
         return agg;
       }, /** @type {State['labelSheet']} */ ({}));
       
-      // 🚧 Draw sprite-sheet
+      // Draw sprite-sheet
+      const { width: sheetWidth, height: sheetHeight } = bin;
+      const [ct, , canvas] = state.labelTex;
+      canvas.width = sheetWidth;
+      canvas.height = sheetHeight;
+      state.labelTex[1].dispose();
+      state.labelTex[1] = new THREE.CanvasTexture(canvas);
+      state.labelTex[1].flipY = false;
+      ct.clearRect(0, 0, sheetWidth, sheetHeight);
+      ct.strokeStyle = 'white';
+      ct.fillStyle = 'white';
+      ct.font = `${decorLabelHeightSgu}px 'Courier new'`;
+      ct.textBaseline = 'top';
+      bin.rects.forEach(rect => {
+        ct.fillText(rect.data.labelKey, rect.x, rect.y);
+        ct.strokeText(rect.data.labelKey, rect.x, rect.y);
+      });
+      state.labelTex[1].needsUpdate = true;
+
+      // Define UVs
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
       
-      // 🚧 Define UVs
+      for (const d of state.labels) {
+        const { x, y, width, height } = state.labelSheet[d.meta.label];
+        uvOffsets.push(x / sheetWidth, y / sheetHeight);
+        uvDimensions.push(width / sheetWidth, height / sheetHeight);
+      }
+
+      state.labelInst.geometry.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      );
+      state.labelInst.geometry.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
     },
     ensureGmRoomId(decor) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
@@ -472,7 +508,7 @@ export default function Decor(props) {
       state.addQuadUvs();
       state.positionInstances();
     }
-  }, [state.queryStatus, state.cuboids.length, state.quads.length]);
+  }, [state.queryStatus, state.cuboids.length, state.quads.length, state.labels.length]);
 
   const update = useUpdate();
 
@@ -520,17 +556,15 @@ export default function Decor(props) {
         ref={instances => instances && (state.labelInst = instances)}
         args={[state.labelGeom, undefined, state.labels.length]}
         frustumCulled={false}
-        onPointerUp={state.onPointerUp}
-        onPointerDown={state.onPointerDown}
       >
-        <meshBasicMaterial color="red" />
-        {/* <instancedSpriteSheetMaterial
+        {/* <meshBasicMaterial color="red" /> */}
+        <instancedSpriteSheetMaterial
           key={glsl.InstancedSpriteSheetMaterial.key}
           side={THREE.DoubleSide}
-          map={state.labelTex}
+          map={state.labelTex[1]}
           transparent
-          // diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
-        /> */}
+          diffuse={new THREE.Vector3(1, 1, 1)}
+        />
       </instancedMesh>
     )}
   </>;
