@@ -75,7 +75,8 @@
   - ✅ better decor point heights
   - ✅ move `w.setReady` into useHandleEvents
   - 🚧 remove temp "all decor points shown with info icon"
-    - 🚧 ceil.showLabels draws into ceiling textures
+    - ✅ can see labels (InstancedMesh) using decor.labelTex
+    - 🚧 high-res + fix spaces + clean labels
     - 🚧 only show do points
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`

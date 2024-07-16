@@ -112,6 +112,8 @@ export const decorGridSize = 1.5 * 2;
 
 export const decorIconRadius = 5 * sguToWorldScale;
 
+export const decorLabelHeightSgu = 8;
+
 /**
  * - Each value is an integer in [0, 255].
  * - Fix alpha as `1` otherwise get pre-multiplied values.

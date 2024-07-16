@@ -68,7 +68,7 @@ export default function World(props) {
 
     ui: /** @type {*} */ (null), // WorldCanvas
     floor: /** @type {State['floor']} */ ({ tex: {} }),
-    ceil: /** @type {State['ceil']} */ ({ tex: {}, labelTex: {} }),
+    ceil: /** @type {State['ceil']} */ ({ tex: {} }),
     decor: /** @type {*} */ (null), // Decor
     obs: /** @type {*} */ (null), // Obstacles
     wall: /** @type {*} */ (null),
@@ -183,18 +183,12 @@ export default function World(props) {
         // on change map may see new gmKeys
         mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
           const { pngRect } = next.geomorphs.layout[gmKey];
-          state.floor.tex[gmKey] = createCanvasTexDef(
-            pngRect.width * worldToSguScale * gmFloorExtraScale,
-            pngRect.height * worldToSguScale * gmFloorExtraScale,
-          );
-          state.ceil.tex[gmKey] = createCanvasTexDef(
-            pngRect.width * worldToSguScale * gmFloorExtraScale,
-            pngRect.height * worldToSguScale * gmFloorExtraScale,
-          );
-          state.ceil.labelTex[gmKey] = createCanvasTexDef(
-            pngRect.width * worldToSguScale * gmFloorExtraScale,
-            pngRect.height * worldToSguScale * gmFloorExtraScale,
-          );
+          for (const lookup of [state.floor.tex, state.ceil.tex]) {
+            lookup[gmKey] = createCanvasTexDef(
+              pngRect.width * worldToSguScale * gmFloorExtraScale,
+              pngRect.height * worldToSguScale * gmFloorExtraScale,
+            );
+          }
         });
 
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 

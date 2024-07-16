@@ -11,7 +11,7 @@
  * Generates:
  * - assets.json
  * - geomorphs.json
- * - obstacles sprite-sheet (using media/symbols/*.svg)
+ * - obstacles sprite-sheet (using media/symbol/*.svg)
  * - decor sprite-sheet (using media/decor/*.svg)
  * - webp from png
  */
@@ -23,7 +23,6 @@ import childProcess from "child_process";
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 import { createCanvas, loadImage } from 'canvas';
-import { MaxRectsPacker, Rectangle } from "maxrects-packer";
 import PQueue from "p-queue-compat";
 
 // relative urls for sucrase-node
@@ -31,9 +30,10 @@ import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
 import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale, spriteSheetDecorExtraScale } from "../npc-cli/service/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, } from "../npc-cli/service/generic";
-import { geomorphService } from "../npc-cli/service/geomorph";
-import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { drawPolygons } from "../npc-cli/service/dom";
+import { geomorphService } from "../npc-cli/service/geomorph";
+import packRectangles from "../npc-cli/service/rects-packer";
+import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
 import { labelledSpawn, saveCanvasAsFile, tryLoadImage, tryReadString } from "./service";
 
 const rawOpts = getopts(process.argv, {
@@ -379,7 +379,7 @@ function validateSubSymbolDimensions(symbols) {
 function createObstaclesSheetJson(assets) {
 
   // Each one of a symbol's obstacles induces a respective packed rect
-  const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, Rectangle>} */ ({});
+  const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, { width: number; height: Number; data: Geomorph.ObstacleSheetRectCtxt }>} */ ({});
   for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
     /** World coords -> Starship Geomorph coords, modulo additonal scale in [1, 5] non-hull symbols. */
     const scale = worldToSguScale * (isHull ? 1 : spriteSheetNonHullExtraScale);
@@ -387,17 +387,14 @@ function createObstaclesSheetJson(assets) {
     for (const [obstacleId, poly] of obstacles.entries()) {
       const rect = Poly.from(poly).rect.scale(scale).precision(0); // width, height integers
       const [width, height] = [rect.width, rect.height]
-      
-      const r = new Rectangle(width, height);
-      /** @type {Geomorph.ObstacleSheetRectCtxt} */
-      const rectData = { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) };
-      r.data = rectData;
-      obstacleKeyToRect[`${symbolKey} ${obstacleId}`] = r;
+      obstacleKeyToRect[`${symbolKey} ${obstacleId}`] = {
+        width, height, data: { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) },
+      };
       // info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
     }
   }
 
-  const bin = packRectangles(Object.values(obstacleKeyToRect), 'createObstaclesSheetJson');
+  const bin = packRectangles(Object.values(obstacleKeyToRect), { errorPrefix: 'createObstaclesSheetJson', packedPadding: imgOpts.packedPadding });
   
   /** @type {Pick<Geomorph.SpriteSheet, 'obstacle' | 'obstacleDim'>} */
   const json = ({ obstacle: {}, obstacleDim: { width: bin.width, height: bin.height } });
@@ -493,7 +490,7 @@ async function createDecorSheetJson(assets, prev) {
     : svgBasenames
   ;
 
-  const imgKeyToRect = /** @type {Record<Geomorph.DecorImgKey, Rectangle>} */ ({});
+  const imgKeyToRect = /** @type {Record<Geomorph.DecorImgKey, { width: number; height: Number; data: Geomorph.DecorSheetRectCtxt }>} */ ({});
   const imgKeyToImg = /** @type {{ [key in Geomorph.DecorImgKey]?: import('canvas').Image }} */ ({});
 
   // Compute changed images in parallel
@@ -518,21 +515,19 @@ async function createDecorSheetJson(assets, prev) {
     if (img) {// changedSvgBasenames.includes(baseName)
       const tags = baseName.split('--').slice(0, -1); // ignore e.g. `001.svg`
       const meta = tags.reduce((agg, tag) => { agg[tag] = true; return agg; }, /** @type {Geom.Meta} */ ({}));
-      const rect = new Rectangle(toPrecision(img.width * scale, 0), toPrecision(img.height * scale, 0));
-      /** @type {Geomorph.DecorSheetRectCtxt} */
-      const rectData = { ...meta, decorImgKey: decorImgKey };
-      rect.data = rectData;
-      imgKeyToRect[decorImgKey] = rect;
+      imgKeyToRect[decorImgKey] = {
+        width: toPrecision(img.width * scale, 0),
+        height: toPrecision(img.height * scale, 0),
+        data: { ...meta, decorImgKey: decorImgKey },
+      };
     } else {
       // 🔔 keeping meta.{x,y,width,height} avoids nondeterminism in sheet.decor json
       const meta = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecorSheet)[decorImgKey];
-      const rect = new Rectangle(meta.width, meta.height);
-      rect.data = { ...meta, fileKey: baseName };
-      imgKeyToRect[decorImgKey] = rect;
+      imgKeyToRect[decorImgKey] = { width: meta.width, height: meta.height, data: { ...meta, fileKey: baseName } };
     }
   }
 
-  const bin = packRectangles(Object.values(imgKeyToRect), 'createDecorSheetJson');
+  const bin = packRectangles(Object.values(imgKeyToRect), { errorPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
 
   /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'decorDim'>} */
   const json = ({ decor: /** @type {*} */ ({}), decorDim: { width: bin.width, height: bin.height } });
@@ -616,29 +611,6 @@ function extractObstacleDescriptor(meta) {
     if (meta[tag] === true) return tag;
   }
   return 'obstacle';
-}
-
-/**
- * @param {Rectangle[]} rectsToPack
- * @param {string} errorPrefix
- */
-function packRectangles(rectsToPack, errorPrefix) {
-  const packer = new MaxRectsPacker(4096, 4096, imgOpts.packedPadding, {
-    pot: false,
-    border: imgOpts.packedPadding,
-    // smart: false,
-  });
-  packer.addArray(rectsToPack);
-  const { bins } = packer;
-
-  if (bins.length !== 1) {// 🔔 support more than one sprite-sheet
-    // warn(`images: expected exactly one bin (${bins.length})`);
-    throw Error(`${errorPrefix}: expected exactly one bin (${bins.length})`);
-  } else if (bins[0].rects.length !== rectsToPack.length) {
-    throw Error(`${errorPrefix}: expected every image to be packed (${bins.length} of ${rectsToPack.length})`);
-  }
-
-  return bins[0];
 }
 
 /**
