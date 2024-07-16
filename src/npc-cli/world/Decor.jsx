@@ -2,12 +2,13 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { decorGridSize, decorIconRadius } from "../service/const";
+import { decorGridSize, decorIconRadius, decorLabelHeightSgu, sguToWorldScale, wallHeight } from "../service/const";
 import { hashJson, mapValues, pause, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
 import { boxGeometry, createCanvasTexDef, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
+import packRectangles from "../service/rects-packer";
 import * as glsl from "../service/glsl";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -27,13 +28,14 @@ export default function Decor(props) {
     labels: [],
     labelGeom: getQuadGeometryXZ(`${w.key}-label-xz`),
     labelInst: /** @type {*} */ (null),
+    labelSheet: {},
     labelTex: createCanvasTexDef(2048, 2048),
     quads: [],
     quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
     queryStatus: 'pending',
     rmKeys: new Set(),
-    showLabels: false,
+    showLabels: true, // 🚧 false by default
 
     addDecor(ds, removeExisting = true) {
 
@@ -145,6 +147,16 @@ export default function Decor(props) {
         });
       }
     },
+    createLabelMatrix4(d) {
+      const { width, height } = state.labelSheet[d.meta.label];
+      tmpMat1.feedFromArray([
+        width * sguToWorldScale, 0, 0, height * sguToWorldScale, d.x, d.y
+      ]);
+      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+        mat4: tmpMatFour1,
+        yHeight: wallHeight + 0.1,
+      });
+    },
     detectClick(e) {
       // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
       const instanceId = /** @type {number} */ (e.instanceId);
@@ -171,8 +183,33 @@ export default function Decor(props) {
       // // ignore clicks on fully transparent pixels
       // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
-    drawLabels() {
+    setupLabels() {
+      // Create spritesheet json
       // 🚧 use hash to avoid recreate sprite-sheet
+
+      const labelKeys = Array.from(
+        state.labels.reduce((set, x) => (set.add(x.meta.label), set),
+        /** @type {Set<string>} */ (new Set())),
+      ).sort();
+
+      const hash = hashJson(labelKeys);
+      const [measurer] = state.labelTex;
+      measurer.font = `${decorLabelHeightSgu}px 'Courier new'`;
+      
+      /** @type {import("../service/rects-packer").PrePackedRect<{ labelKey: string }>[]} */
+      const rects = labelKeys.map(label => (
+        { width: measurer.measureText(label).width, height: decorLabelHeightSgu, data: { labelKey: label } }
+      ));
+      const bin = packRectangles(rects, { errorPrefix: 'decor drawLabels', packedPadding: 2 });
+
+      state.labelSheet = bin.rects.reduce((agg, r) => {
+        agg[r.data.labelKey] = { x: r.x, y: r.y, width: r.width, height: r.height };
+        return agg;
+      }, /** @type {State['labelSheet']} */ ({}));
+      
+      // 🚧 Draw sprite-sheet
+      
+      // 🚧 Define UVs
     },
     ensureGmRoomId(decor) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
@@ -274,7 +311,7 @@ export default function Decor(props) {
       }
     },
     positionInstances() { 
-      const { cuboidInst, quadInst } = state;
+      const { cuboidInst, quadInst, labelInst } = state;
       
       for (const [instId, d] of state.cuboids.entries()) {
         const mat4 = state.createCuboidMatrix4(d);
@@ -286,10 +323,17 @@ export default function Decor(props) {
         quadInst.setMatrixAt(instId, mat4);
       }
 
+      for (const [instId, d] of state.labels.entries()) {
+        const mat4 = state.createLabelMatrix4(d);
+        labelInst.setMatrixAt(instId, mat4);
+      }
+      
       cuboidInst.instanceMatrix.needsUpdate = true;
       cuboidInst.computeBoundingSphere();
       quadInst.instanceMatrix.needsUpdate = true;
       quadInst.computeBoundingSphere();
+      labelInst.instanceMatrix.needsUpdate = true;
+      labelInst.computeBoundingSphere();
     },
     removeDecor(...decorKeys) {
       const ds = decorKeys.map(x => state.byKey[x]).filter(Boolean);
@@ -353,15 +397,21 @@ export default function Decor(props) {
         }
       }
     },
-    updateInstanceLists() {// 🚧 WIP
+    updateInstanceLists() {
       state.cuboids = Object.values(state.byKey).filter(
         /** @returns {d is Geomorph.DecorCuboid} */
         d => d.type === 'cuboid'
       );
-      state.quads = Object.values(state.byKey).filter(// 🚧 WIP
-        /** @returns {d is Geomorph.DecorPoint} */
-        d => d.type === 'point'
-      );
+
+      const decorPoints = Object.values(state.byKey).filter(
+        /** @returns {d is Geomorph.DecorPoint} */ d => d.type === 'point'
+      ); 
+
+      // 🚧 only "do points" and ...
+      state.quads = decorPoints;
+
+      state.labels = decorPoints.filter(x => typeof x.meta.label === 'string');
+
       update();
     },
   }));
@@ -418,9 +468,9 @@ export default function Decor(props) {
   React.useEffect(() => {
     if (state.queryStatus === 'success') {
       w.events.next({ key: 'decor-instantiated' });
+      state.setupLabels();
       state.addQuadUvs();
       state.positionInstances();
-      state.drawLabels();
     }
   }, [state.queryStatus, state.cuboids.length, state.quads.length]);
 
@@ -473,14 +523,14 @@ export default function Decor(props) {
         onPointerUp={state.onPointerUp}
         onPointerDown={state.onPointerDown}
       >
-        {/* <meshBasicMaterial color="red" /> */}
-        <instancedSpriteSheetMaterial
+        <meshBasicMaterial color="red" />
+        {/* <instancedSpriteSheetMaterial
           key={glsl.InstancedSpriteSheetMaterial.key}
           side={THREE.DoubleSide}
           map={state.labelTex}
           transparent
           // diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
-        />
+        /> */}
       </instancedMesh>
     )}
   </>;
@@ -507,6 +557,7 @@ export default function Decor(props) {
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.BufferGeometry} labelGeom
  * @property {THREE.InstancedMesh} labelInst
+ * @property {{ [labelKey: string]: Geom.RectJson }} labelSheet
  * @property {import("../service/three").CanvasTexDef} labelTex
  * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads
  * This is `Object.values(state.byKey)`
@@ -524,8 +575,9 @@ export default function Decor(props) {
  * @property {() => State['hash']} computeNextHash
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorPoly) => THREE.Matrix4} createQuadMatrix4
+ * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
- * @property {() => void} drawLabels
+ * @property {() => void} setupLabels
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateDecor
