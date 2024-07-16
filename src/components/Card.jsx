@@ -3,7 +3,6 @@ import React from 'react';
 
 import { breakpoint } from 'src/const';
 
-
 /** @param {Props} props */
 export default function Card(props) {
   return (
@@ -15,15 +14,16 @@ export default function Card(props) {
 
 const rootCss = css`
   margin: 32px 0;
-  padding: 16px 48px 32px 48px;
-  background-color: #eee;
-  border-left: 4px solid #ddd;
-  /* border-bottom: 24px solid #ddd; */
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  padding: 8px 48px 8px 48px;
+  border-left: 4px solid #dde;
+  font-style: italic;
   
-  @media(max-width:${breakpoint}) {
-    margin: 16px 0 24px;
-    padding: 8px 32px 20px 32px;
+  p > strong:first-of-type {
+    font-style: normal;
+  }
+
+  @media(max-width: ${breakpoint}) {
+    padding: 8px 32px;
   }
 `;
 
