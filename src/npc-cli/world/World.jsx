@@ -10,13 +10,14 @@ import { GEOMORPHS_JSON_FILENAME, WORLD_QUERY_FIRST_KEY, assetsEndpoint, imgExt 
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
-import { gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
+import { decorLabelHeightSgu, gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, hashJson, removeDups } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { createCanvasTexDef, imageLoader } from "../service/three";
+import { createCanvasTexDef, getQuadGeometryXZ, imageLoader } from "../service/three";
+import packRectangles from "../service/rects-packer";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { WorldContext } from "./world-context";
@@ -88,11 +89,76 @@ export default function World(props) {
       vectFrom: Vect.from,
       ...npcService,
     },
+    labels: {
+      hash: 0,
+      quad: getQuadGeometryXZ(`${props.worldKey}-labels-xz`),
+      sheet: {},
+      tex: new THREE.CanvasTexture(document.createElement('canvas')),
+    },
 
     async awaitReady() {
       if (!state.isReady()) {
         return new Promise(resolve => state.readyResolvers.push(resolve));
       }
+    },
+    ensureLabelSheet(labelDecors) {
+      // Avoid needless recompute
+      const labels = removeDups(Array.from(labelDecors.map(x => /** @type {string} */ (x.meta.label)))).sort();
+      const hash = hashJson(labels);
+      if (hash === state.labels.hash) {
+        return;
+      }
+      state.labels.hash = hash;
+      
+      // Create sprite-sheet
+      const canvas = /** @type {HTMLCanvasElement} */ (state.labels.tex.image);
+      const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+      ct.font = `${decorLabelHeightSgu}px 'Courier new'`;
+      /** @type {import("../service/rects-packer").PrePackedRect<{ label: string }>[]} */
+      const rects = labels.map(label => ({
+        width: ct.measureText(label).width,
+        height: decorLabelHeightSgu,
+        data: { label },
+      }));
+      const bin = packRectangles(rects, { errorPrefix: 'w.ensureLabelSheet', packedPadding: 2 });
+      state.labels.sheet = bin.rects.reduce((agg, r) => {
+        agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
+        return agg;
+      }, /** @type {LabelsMeta['sheet']} */ ({}));
+      
+      // Draw sprite-sheet
+      if (canvas.width !== bin.width || canvas.height !== bin.height) {
+        state.labels.tex.dispose();
+        [canvas.width, canvas.height] = [bin.width, bin.height];
+        state.labels.tex = new THREE.CanvasTexture(canvas);
+        state.labels.tex.flipY = false;
+      }
+      ct.clearRect(0, 0, bin.width, bin.height);
+      ct.strokeStyle = ct.fillStyle = 'white';
+      ct.font = `${decorLabelHeightSgu}px 'Courier new'`;
+      ct.textBaseline = 'top';
+      bin.rects.forEach(rect => {
+        ct.fillText(rect.data.label, rect.x, rect.y);
+        ct.strokeText(rect.data.label, rect.x, rect.y);
+      });
+      state.labels.tex.needsUpdate = true;
+
+      // Compute UVs
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
+      
+      for (const d of labelDecors) {
+        const { x, y, width, height } = state.labels.sheet[d.meta.label];
+        uvOffsets.push(x / bin.width, y / bin.height);
+        uvDimensions.push(width / bin.width, height / bin.height);
+      }
+
+      state.labels.quad.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      );
+      state.labels.quad.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
     },
     async handleMessageFromWorker(e) {
       const msg = e.data;
@@ -227,10 +293,10 @@ export default function World(props) {
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
       }
 
-      // apply changes synchronously
       if (dataChanged || gmsDataChanged) {
         state.gmsData?.dispose();
       }
+      // apply changes synchronously
       Object.assign(state, next);
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
       state.decorHash = `${state.mapKey} ${state.geomorphs.layoutsHash} ${state.geomorphs.mapsHash}`;
@@ -241,7 +307,7 @@ export default function World(props) {
         mapChanged,
         gmsDataChanged,
         hash: state.hash,
-      });
+      });      
 
       if (dataChanged) {
         /** @type {const} */ ([
@@ -352,6 +418,7 @@ export default function World(props) {
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
+ * @property {LabelsMeta} labels
  * @property {boolean} threeReady
  * @property {(() => void)[]} readyResolvers
  * @property {number} reqAnimId
@@ -372,8 +439,8 @@ export default function World(props) {
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/npc").NpcService} lib
  *
- * @property {THREE.CanvasTexture} obsTex CanvasTexture for pixel lookup
- * @property {THREE.CanvasTexture} decorTex CanvasTexture for pixel lookup
+ * @property {THREE.CanvasTexture} obsTex
+ * @property {THREE.CanvasTexture} decorTex
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
@@ -382,13 +449,14 @@ export default function World(props) {
  * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
+ * @property {() => Promise<void>} awaitReady
+ * @property {(labels: Geomorph.DecorPoint[]) => void} ensureLabelSheet
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
- * @property {(mutator?: (w: State) => void) => void} update
  * @property {() => void} onTick
- * @property {() => Promise<void>} awaitReady
  * @property {() => void} setReady
+ * @property {(mutator?: (w: State) => void) => void} update
  */
 
 /**
@@ -404,4 +472,12 @@ export default function World(props) {
  * //@property {typeof map} map
  * //@property {typeof merge} merge
  * //@property {typeof take} take
+ */
+
+/**
+ * @typedef LabelsMeta
+ * @property {number} hash
+ * @property {THREE.BufferGeometry} quad
+ * @property {{ [label: string]: Geom.RectJson }} sheet
+ * @property {THREE.CanvasTexture} tex
  */
