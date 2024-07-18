@@ -74,7 +74,7 @@
     - ℹ️ instead, expose API to permit higher-level approach
   - ✅ better decor point heights
   - ✅ move `w.setReady` into useHandleEvents
-  - 🚧 remove temp "all decor points shown with info icon"
+  - ✅ remove temp "all decor points shown with info icon"
     - ✅ can see labels (InstancedMesh) using decor.labelTex
     - ✅ permit spaces in labels via `label='foo bar'`
     - ✅ move labels from `gm.decors` into `gm.labels`
@@ -82,8 +82,8 @@
     - ✅ ensure label UVs are updated
     - ✅ move w.labels -> w.decor.label
     - ✅ high-res labels
-    - 🚧 only show/compute labels when needed
-    - 🚧 only show do points
+    - ✅ hide labels by default, show via `w update 'w => w.decor.showLabels = true'`
+    - ✅ only show do/button points
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`
   - decor poly induces quads

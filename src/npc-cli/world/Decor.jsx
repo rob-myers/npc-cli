@@ -38,7 +38,7 @@ export default function Decor(props) {
     quadInst: /** @type {*} */ (null),
     queryStatus: 'pending',
     rmKeys: new Set(),
-    showLabels: true, // 🚧 false by default
+    showLabels: false,
 
     addDecor(ds, removeExisting = true) {
       const addable = ds.filter((d) => state.ensureGmRoomId(d) !== null ||
@@ -123,7 +123,7 @@ export default function Decor(props) {
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
     },
-    computeNextHash() {
+    computeHash() {
       const { layout } = w.geomorphs;
       const map = w.geomorphs.map[w.mapKey];
       return {
@@ -369,7 +369,7 @@ export default function Decor(props) {
         const mat4 = state.createLabelMatrix4(d);
         labelInst.setMatrixAt(instId, mat4);
       }
-      
+    
       cuboidInst.instanceMatrix.needsUpdate = true;
       cuboidInst.computeBoundingSphere();
       quadInst.instanceMatrix.needsUpdate = true;
@@ -446,9 +446,10 @@ export default function Decor(props) {
         geomorphService.isDecorCuboid
       );
 
-      // 🚧 only "do points", and...
+      // 🔔 currently only support decor points "do" and "button"
       state.quads = Object.values(state.byKey).filter(
-        geomorphService.isDecorPoint
+        /** @returns {x is Geomorph.DecorPoint} */
+        x => x.type === 'point' && (x.meta.do === true || x.meta.button === true)
       );
     },
   }));
@@ -460,11 +461,10 @@ export default function Decor(props) {
     async queryFn() {
 
       const prev = state.hash;
-      const next = state.computeNextHash();
+      const next = state.computeHash();
       const mapChanged = prev.mapHash !== next.mapHash;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
-      // 🚧 only when needed
       state.ensureLabelSheet();
       state.addLabelUvs();
 
@@ -506,15 +506,15 @@ export default function Decor(props) {
     // throwOnError: true,
   }).status;
 
+  const labels = state.showLabels ? state.labels : [];
+
   React.useEffect(() => {
     if (state.queryStatus === 'success') {
       w.events.next({ key: 'decor-instantiated' });
-      // 🚧
-      // w.ensureLabelSheet(state.labels); // 🚧 only when needed
       state.addQuadUvs();
       state.positionInstances();
     }
-  }, [state.queryStatus, state.cuboids.length, state.quads.length]);
+  }, [state.queryStatus, state.cuboids.length, state.quads.length, labels.length]);
 
   const update = useUpdate();
 
@@ -555,24 +555,22 @@ export default function Decor(props) {
       />
     </instancedMesh>
 
-    {state.showLabels && (
-      <instancedMesh
-        name="decor-labels"
-        key={`${state.labels.length} labels`}
-        ref={instances => instances && (state.labelInst = instances)}
-        args={[state.label.quad, undefined, state.labels.length]}
-        frustumCulled={false}
-      >
-        {/* <meshBasicMaterial color="red" /> */}
-        <instancedSpriteSheetMaterial
-          key={glsl.InstancedSpriteSheetMaterial.key}
-          side={THREE.DoubleSide}
-          map={state.label.tex}
-          transparent
-          diffuse={new THREE.Vector3(1, 1, 1)}
-        />
-      </instancedMesh>
-    )}
+    <instancedMesh
+      name="decor-labels"
+      key={`${labels.length} labels`}
+      ref={instances => instances && (state.labelInst = instances)}
+      args={[state.label.quad, undefined, labels.length]}
+      frustumCulled={false}
+    >
+      {/* <meshBasicMaterial color="red" /> */}
+      <instancedSpriteSheetMaterial
+        key={glsl.InstancedSpriteSheetMaterial.key}
+        side={THREE.DoubleSide}
+        map={state.label.tex}
+        transparent
+        diffuse={new THREE.Vector3(1, 1, 1)}
+      />
+    </instancedMesh>
   </>;
 }
 
@@ -611,7 +609,7 @@ export default function Decor(props) {
  * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
- * @property {() => State['hash']} computeNextHash
+ * @property {() => State['hash']} computeHash
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorPoly) => THREE.Matrix4} createQuadMatrix4
  * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4
