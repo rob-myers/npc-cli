@@ -109,9 +109,8 @@ export default function Decor(props) {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
       
-      // 🚧 remove hard-coding
-      const item = sheet['icon--001--info'];
       for (const d of state.quads) {
+        const item = geomorphService.isDecorImgKey(d.meta.img) ? sheet[d.meta.img] : sheet['icon--001--info'];
         const { x, y, width, height } = item;
         uvOffsets.push(x / dim.width,  y / dim.height);
         uvDimensions.push(width / dim.width, height / dim.height);
@@ -472,10 +471,13 @@ export default function Decor(props) {
         geomorphService.isDecorCuboid
       );
 
-      // 🔔 currently only support decor points "do" and "button"
       state.quads = Object.values(state.byKey).filter(
-        /** @returns {x is Geomorph.DecorPoint} */
-        x => x.type === 'point' && (x.meta.do === true || x.meta.button === true)
+        /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorPoly} */
+        x => x.type === 'point' && (
+          x.meta.do === true || x.meta.button === true
+        ) || x.type === 'poly' && (
+          typeof x.meta.img === 'string'
+        )
       );
     },
   }));
@@ -577,7 +579,7 @@ export default function Decor(props) {
         side={THREE.DoubleSide}
         map={w.decorTex}
         transparent
-        // diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+        // diffuse={new THREE.Vector3(1, 1, 1)}
       />
     </instancedMesh>
 

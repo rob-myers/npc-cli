@@ -33,8 +33,8 @@
         <path d="M 302.09091 152.37373 L 155.28146 302.02718 L 153.76671 604.97373 L -5.00834 604.97373 L -5.00833 -5.02627 L 604.99168 -5.02627 L 604.99169 152.37373 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
                 <title>obstacle y=0.6</title>
         </path>
-        <rect width="96.984816" height="74.470456" style="fill-opacity: 0.5; fill: rgb(255, 255, 255); stroke: rgb(255, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="837.904719" y="401.172512" transform="matrix(0.70710682869, 0.70710682869, -0.70710682869, 0.70710682869, -715.926022228994, -278.015216643478)">
-                <title>decor quad img=icon--002--doc y=0.61</title>
+        <rect width="95.71897" height="71.604932" style="fill-opacity: 0.5; fill: rgb(255, 255, 255); stroke: rgb(255, 0, 0); transform-box: fill-box; transform-origin: 50% 50%;" x="826.968378" y="385.735896" transform="matrix(0.70710682869, 0.70710682869, -0.70710682869, 0.70710682869, -736.123466084147, -229.935469797885)">
+                <title>decor poly img=icon--002--doc y=0.61</title>
         </rect>
         <g>
                 <title>symbols</title>
@@ -42,4 +42,7 @@
                         <title>console--051--0.4x0.6 y=0.4</title>
                 </use>
         </g>
+        <rect width="95.718978" height="71.60494" style="fill-opacity: 0.5; fill: rgb(255, 255, 255); stroke: rgb(255, 0, 0); transform-origin: 874.828px 421.538px;" x="826.968439" y="385.735927" transform="matrix(0.70710682869, 0.70710682869, -0.70710682869, 0.70710682869, -672.85101260359, -291.073212976189)">
+                <title>decor poly img=icon--002--doc y=0.61</title>
+        </rect>
 </svg>
