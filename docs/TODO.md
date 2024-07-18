@@ -84,9 +84,8 @@
     - ✅ high-res labels
     - ✅ hide labels by default, show via `w update 'w => w.decor.showLabels = true'`
     - ✅ only show do/button points
-  - 🚧 rotate decor points according to `orient`
-    - may have to fix `orient`
-  - document on desk decor poly
+  - ✅ rotate decor points according to `orient`
+  - 🚧 document on desk decor poly
     - rotated rect 4-gon -> affine transform
     - image chosen via `img={decorImgKey}`
   - decor point induces quads

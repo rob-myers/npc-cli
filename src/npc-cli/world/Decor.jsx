@@ -134,21 +134,25 @@ export default function Decor(props) {
         ),
       };
     },
-    createCuboidMatrix4(cuboidDecor) {
-      if (cuboidDecor.angle !== 0) {
-        tmpMat1.feedFromArray([cuboidDecor.extent.x * 2, 0, 0, cuboidDecor.extent.z * 2, 0, 0])
-          .postMultiply([Math.cos(cuboidDecor.angle), Math.sin(cuboidDecor.angle), -Math.sin(cuboidDecor.angle), Math.cos(cuboidDecor.angle), 0, 0,])
-          .translate(cuboidDecor.center.x, cuboidDecor.center.z);
-      } else {
-        tmpMat1.feedFromArray([
-          cuboidDecor.extent.x * 2, 0, 0, cuboidDecor.extent.z * 2,
-          cuboidDecor.center.x, cuboidDecor.center.z,
-        ]);
-      }
+    createCuboidMatrix4(d) {
+      tmpMat1.feedFromArray(d.angle !== 0
+        ? [
+            d.extent.x * 2 * Math.cos(d.angle),
+            d.extent.x * 2 * Math.sin(d.angle),
+            d.extent.z * 2 * -Math.sin(d.angle),
+            d.extent.z * 2 * Math.cos(d.angle),
+            d.center.x,
+            d.center.z,
+          ]
+        : [
+            d.extent.x * 2, 0, 0, d.extent.z * 2,
+            d.center.x, d.center.z,
+          ]
+      );
       return geomorphService.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
-        yHeight: cuboidDecor.center.y,
-        yScale: cuboidDecor.extent.y * 2,
+        yHeight: d.center.y,
+        yScale: d.extent.y * 2,
       });
     },
     createLabelMatrix4(d) {
@@ -165,10 +169,31 @@ export default function Decor(props) {
       });
     },
     createQuadMatrix4(d) {
-      if (d.type === 'point') {// move to center and scale
-        tmpMat1.feedFromArray([
-          decorIconRadius * 2, 0, 0, decorIconRadius * 2, d.x - decorIconRadius, d.y - decorIconRadius
-        ]);
+      if (d.type === 'point') {
+        // move to center, scale, possibly rotate if meta.orient
+        const radians = typeof d.meta.orient === 'number'
+          // +90 so "bottom to top" of text in sprite-sheet "faces" direction
+          ? (d.meta.orient + 90) * (Math.PI / 180)
+          : 0
+        ;
+
+        if (radians !== 0) {
+          tmpMat1.feedFromArray([1, 0, 0, 1, -0.5, -0.5])
+            .postMultiply([
+              decorIconRadius * 2 * Math.cos(radians),
+              decorIconRadius * 2 * Math.sin(radians),
+              decorIconRadius * 2 * -Math.sin(radians),
+              decorIconRadius * 2 * Math.cos(radians),
+              d.x,
+              d.y,
+            ]);
+        } else {
+          tmpMat1.feedFromArray([
+            decorIconRadius * 2, 0, 0, decorIconRadius * 2,
+            d.x - decorIconRadius, d.y - decorIconRadius,
+          ]);
+        }
+
         return geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
           yHeight: d.meta.y || 0.01, // 🚧 default point height > 0
