@@ -10,14 +10,13 @@ import { GEOMORPHS_JSON_FILENAME, WORLD_QUERY_FIRST_KEY, assetsEndpoint, imgExt 
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
-import { decorLabelHeightSgu, gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, hashJson, removeDups } from "../service/generic";
 import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { createCanvasTexDef, getQuadGeometryXZ, imageLoader } from "../service/three";
-import packRectangles from "../service/rects-packer";
+import { createCanvasTexDef, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { WorldContext } from "./world-context";
@@ -89,59 +88,11 @@ export default function World(props) {
       vectFrom: Vect.from,
       ...npcService,
     },
-    labels: {
-      hash: 0,
-      quad: getQuadGeometryXZ(`${props.worldKey}-labels-xz`),
-      sheet: {},
-      tex: new THREE.CanvasTexture(document.createElement('canvas')),
-    },
 
     async awaitReady() {
       if (!state.isReady()) {
         return new Promise(resolve => state.readyResolvers.push(resolve));
       }
-    },
-    ensureLabelSheet(labelDecors) {
-      // Avoid needless recompute
-      const labels = removeDups(Array.from(labelDecors.map(x => /** @type {string} */ (x.meta.label)))).sort();
-      const hash = hashJson(labels);
-      if (hash === state.labels.hash) {
-        return;
-      }
-      state.labels.hash = hash;
-      
-      // Create sprite-sheet
-      const canvas = /** @type {HTMLCanvasElement} */ (state.labels.tex.image);
-      const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-      ct.font = `${decorLabelHeightSgu}px 'Courier new'`;
-      /** @type {import("../service/rects-packer").PrePackedRect<{ label: string }>[]} */
-      const rects = labels.map(label => ({
-        width: ct.measureText(label).width,
-        height: decorLabelHeightSgu,
-        data: { label },
-      }));
-      const bin = packRectangles(rects, { logPrefix: 'w.ensureLabelSheet', packedPadding: 2 });
-      state.labels.sheet = bin.rects.reduce((agg, r) => {
-        agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
-        return agg;
-      }, /** @type {LabelsMeta['sheet']} */ ({}));
-      
-      // Draw sprite-sheet
-      if (canvas.width !== bin.width || canvas.height !== bin.height) {
-        state.labels.tex.dispose();
-        [canvas.width, canvas.height] = [bin.width, bin.height];
-        state.labels.tex = new THREE.CanvasTexture(canvas);
-        state.labels.tex.flipY = false;
-      }
-      ct.clearRect(0, 0, bin.width, bin.height);
-      ct.strokeStyle = ct.fillStyle = 'white';
-      ct.font = `${decorLabelHeightSgu}px 'Courier new'`;
-      ct.textBaseline = 'top';
-      bin.rects.forEach(rect => {
-        ct.fillText(rect.data.label, rect.x, rect.y);
-        ct.strokeText(rect.data.label, rect.x, rect.y);
-      });
-      state.labels.tex.needsUpdate = true;
     },
     async handleMessageFromWorker(e) {
       const msg = e.data;
@@ -401,7 +352,6 @@ export default function World(props) {
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
- * @property {LabelsMeta} labels
  * @property {boolean} threeReady
  * @property {(() => void)[]} readyResolvers
  * @property {number} reqAnimId
@@ -433,7 +383,6 @@ export default function World(props) {
  * @property {Crowd} crowd
  *
  * @property {() => Promise<void>} awaitReady
- * @property {(labels: Geomorph.DecorPoint[]) => void} ensureLabelSheet
  * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
@@ -455,12 +404,4 @@ export default function World(props) {
  * //@property {typeof map} map
  * //@property {typeof merge} merge
  * //@property {typeof take} take
- */
-
-/**
- * @typedef LabelsMeta
- * @property {number} hash
- * @property {THREE.BufferGeometry} quad
- * @property {{ [label: string]: Geom.RectJson }} sheet
- * @property {THREE.CanvasTexture} tex
  */

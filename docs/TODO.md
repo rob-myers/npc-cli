@@ -80,7 +80,7 @@
     - ✅ move labels from `gm.decors` into `gm.labels`
       - they won't be added to e.g. `w.decor.byKey`
     - ✅ ensure label UVs are updated
-    - 🚧 move w.labels -> w.decor.labelMeta
+    - ✅ move w.labels -> w.decor.label
     - 🚧 high-res labels
     - 🚧 only show/compute labels when needed
     - 🚧 only show do points
