@@ -81,7 +81,7 @@
       - they won't be added to e.g. `w.decor.byKey`
     - ✅ ensure label UVs are updated
     - ✅ move w.labels -> w.decor.label
-    - 🚧 high-res labels
+    - ✅ high-res labels
     - 🚧 only show/compute labels when needed
     - 🚧 only show do points
   - rotated rect 4-gon -> affine transform

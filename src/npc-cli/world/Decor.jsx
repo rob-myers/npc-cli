@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { decorGridSize, decorIconRadius, decorLabelHeightSgu, sguToWorldScale, wallHeight } from "../service/const";
+import { decorGridSize, decorIconRadius, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
 import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
@@ -172,10 +172,11 @@ export default function Decor(props) {
     },
     createLabelMatrix4(d) {
       const { width, height } = state.label.sheet[d.meta.label];
+      const scale = sguToWorldScale * (1 / spriteSheetLabelExtraScale);
       tmpMat1.feedFromArray([
-        width * sguToWorldScale, 0, 0, height * sguToWorldScale,
-        d.x - (width * sguToWorldScale) / 2,
-        d.y - (height * sguToWorldScale) / 2,
+        width * scale, 0, 0, height * scale,
+        d.x - (width * scale) / 2,
+        d.y - (height * scale) / 2,
       ]);
       return geomorphService.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
@@ -230,11 +231,13 @@ export default function Decor(props) {
       // Create sprite-sheet
       const canvas = /** @type {HTMLCanvasElement} */ (state.label.tex.image);
       const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-      ct.font = `${decorLabelHeightSgu}px 'Courier new'`;
+      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
+
+      ct.font = `${fontHeight}px 'Courier new'`;
       /** @type {import("../service/rects-packer").PrePackedRect<{ label: string }>[]} */
       const rects = labels.map(label => ({
         width: ct.measureText(label).width,
-        height: decorLabelHeightSgu,
+        height: fontHeight,
         data: { label },
       }));
       const bin = packRectangles(rects, { logPrefix: 'w.ensureLabelSheet', packedPadding: 2 });
@@ -252,7 +255,7 @@ export default function Decor(props) {
       }
       ct.clearRect(0, 0, bin.width, bin.height);
       ct.strokeStyle = ct.fillStyle = 'white';
-      ct.font = `${decorLabelHeightSgu}px 'Courier new'`;
+      ct.font = `${fontHeight}px 'Courier new'`;
       ct.textBaseline = 'top';
       bin.rects.forEach(rect => {
         ct.fillText(rect.data.label, rect.x, rect.y);
@@ -303,7 +306,7 @@ export default function Decor(props) {
       instance.key = geomorphService.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
-    instantiateGeomorph(gmId, gm) {
+    instantiateGmDecor(gmId, gm) {
       state.addDecor(gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
         // Don't re-instantiate explicitly removed
         .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
@@ -475,7 +478,7 @@ export default function Decor(props) {
         await pause();
 
         for (const [gmId, gm] of w.gms.entries()) {
-          state.instantiateGeomorph(gmId, gm);
+          state.instantiateGmDecor(gmId, gm);
           await pause();
         }
       } else {
@@ -485,7 +488,7 @@ export default function Decor(props) {
             continue;
           }
           state.removeInstantiated(gmId);
-          state.instantiateGeomorph(gmId, gm);
+          state.instantiateGmDecor(gmId, gm);
           await pause();
         }
       }
@@ -617,7 +620,7 @@ export default function Decor(props) {
  * @property {() => void} ensureLabelSheet
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
- * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateGeomorph
+ * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateGmDecor
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances

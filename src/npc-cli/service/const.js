@@ -29,6 +29,11 @@ export const spriteSheetNonHullExtraScale = 2.5;
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetDecorExtraScale = 2.5;
 
+export const gmLabelHeightSgu = 12;
+
+/** Higher resolution labels */
+export const spriteSheetLabelExtraScale = 5;
+
 /** Decimal place precision */
 export const precision = 4;
 
@@ -111,8 +116,6 @@ export const defaultAgentUpdateFlags = 1 + 2 + 4;
 export const decorGridSize = 1.5 * 2;
 
 export const decorIconRadius = 5 * sguToWorldScale;
-
-export const decorLabelHeightSgu = 8;
 
 /**
  * - Each value is an integer in [0, 255].
