@@ -84,12 +84,19 @@
     - ✅ high-res labels
     - ✅ hide labels by default, show via `w update 'w => w.decor.showLabels = true'`
     - ✅ only show do/button points
-  - rotated rect 4-gon -> affine transform
-  - some symbol decor poly (rotated rect) has `img={decorImgKey}`
+  - 🚧 rotate decor points according to `orient`
+    - may have to fix `orient`
+  - document on desk decor poly
+    - rotated rect 4-gon -> affine transform
+    - image chosen via `img={decorImgKey}`
+  - decor point induces quads
+    - with fallback image `icon--001--info`
   - decor poly induces quads
+    - with fallback image ...
   - decor cuboids can effect nav-mesh
   - fix geomorph decor warns e.g. not fuel label not in any room
-  - saw decor disappear when editing symbols
+  - ✅ saw decor disappear when editing symbols
+    - hopefully fixed by prevent query re-compute i.e. `retry: false`
   - can choose colour of decor cuboids
 
 - ✅ world provides "resolve when ready" api

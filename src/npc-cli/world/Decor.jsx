@@ -104,23 +104,24 @@ export default function Decor(props) {
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
     },
-    addQuadUvs() {
-      const { decor: sheet, decorDim: sheetDim } = w.geomorphs.sheet;
+    addQuadUvs() {// 🚧
+      const { decor: sheet, decorDim: dim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
       
-      const item = sheet['icon--001--info']; // 🚧 remove hard-coding
+      // 🚧 remove hard-coding
+      const item = sheet['icon--001--info'];
       for (const d of state.quads) {
         const { x, y, width, height } = item;
-        uvOffsets.push(x / sheetDim.width,  y / sheetDim.height);
-        uvDimensions.push(width / sheetDim.width, height / sheetDim.height);
+        uvOffsets.push(x / dim.width,  y / dim.height);
+        uvDimensions.push(width / dim.width, height / dim.height);
       }
 
       state.quadInst.geometry.setAttribute('uvOffsets',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+        new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
       state.quadInst.geometry.setAttribute('uvDimensions',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+        new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
     },
     computeHash() {
@@ -150,6 +151,19 @@ export default function Decor(props) {
         yScale: cuboidDecor.extent.y * 2,
       });
     },
+    createLabelMatrix4(d) {
+      const { width, height } = state.label.sheet[d.meta.label];
+      const scale = sguToWorldScale * (1 / spriteSheetLabelExtraScale);
+      tmpMat1.feedFromArray([
+        width * scale, 0, 0, height * scale,
+        d.x - (width * scale) / 2,
+        d.y - (height * scale) / 2,
+      ]);
+      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+        mat4: tmpMatFour1,
+        yHeight: wallHeight + 0.1,
+      });
+    },
     createQuadMatrix4(d) {
       if (d.type === 'point') {// move to center and scale
         tmpMat1.feedFromArray([
@@ -169,19 +183,6 @@ export default function Decor(props) {
           yHeight: d.meta.y ?? 2, // 🚧 default poly height
         });
       }
-    },
-    createLabelMatrix4(d) {
-      const { width, height } = state.label.sheet[d.meta.label];
-      const scale = sguToWorldScale * (1 / spriteSheetLabelExtraScale);
-      tmpMat1.feedFromArray([
-        width * scale, 0, 0, height * scale,
-        d.x - (width * scale) / 2,
-        d.y - (height * scale) / 2,
-      ]);
-      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
-        mat4: tmpMatFour1,
-        yHeight: wallHeight + 0.1,
-      });
     },
     detectClick(e) {
       // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
