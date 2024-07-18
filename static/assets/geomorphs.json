@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 1828702646 -639924815 728262193",
+  "hash": "610044716 -1911175722 -1816468892 316962303",
   "mapsHash": 610044716,
-  "layoutsHash": 1828702646,
-  "sheetsHash": -639924815,
-  "imagesHash": 728262193,
+  "layoutsHash": -1911175722,
+  "sheetsHash": -1816468892,
+  "imagesHash": 316962303,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -8240,6 +8240,25 @@
         },
         {
           "type": "point",
+          "key": "point[18_073,0_61,19_7274]",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "img": "icon--002--doc",
+            "y": 0.61,
+            "localId": 36
+          },
+          "bounds2d": {
+            "x": 18.073,
+            "y": 19.7274,
+            "width": 4.25,
+            "height": 4.25
+          },
+          "x": 20.198,
+          "y": 21.8524
+        },
+        {
+          "type": "point",
           "key": "point[17_3501,0_41,20_3896]",
           "meta": {
             "decor": true,
@@ -8248,7 +8267,7 @@
             "chair": true,
             "orient": 315,
             "y": 0.41,
-            "localId": 36
+            "localId": 37
           },
           "bounds2d": {
             "x": 17.3501,
@@ -8269,7 +8288,7 @@
             "chair": true,
             "orient": 225,
             "y": 0.51,
-            "localId": 38
+            "localId": 39
           },
           "bounds2d": {
             "x": 16.9297,
@@ -8290,7 +8309,7 @@
             "chair": true,
             "orient": 315,
             "y": 0.51,
-            "localId": 39
+            "localId": 40
           },
           "bounds2d": {
             "x": 14.8604,
@@ -8311,7 +8330,7 @@
             "chair": true,
             "orient": 45,
             "y": 0.51,
-            "localId": 40
+            "localId": 41
           },
           "bounds2d": {
             "x": 14.8301,
@@ -8332,7 +8351,7 @@
             "chair": true,
             "orient": 135,
             "y": 0.51,
-            "localId": 41
+            "localId": 42
           },
           "bounds2d": {
             "x": 16.9096,
@@ -8353,7 +8372,7 @@
             "chair": true,
             "orient": 315,
             "y": 0.51,
-            "localId": 43
+            "localId": 44
           },
           "bounds2d": {"x": 8.8204, "y": 1.4799, "width": 4.25, "height": 4.25},
           "x": 10.9454,
@@ -8369,7 +8388,7 @@
             "chair": true,
             "orient": 225,
             "y": 0.51,
-            "localId": 44
+            "localId": 45
           },
           "bounds2d": {
             "x": 10.8897,
@@ -8390,7 +8409,7 @@
             "chair": true,
             "orient": 135,
             "y": 0.51,
-            "localId": 45
+            "localId": 46
           },
           "bounds2d": {
             "x": 10.9199,
@@ -8411,7 +8430,7 @@
             "chair": true,
             "orient": 45,
             "y": 0.51,
-            "localId": 46
+            "localId": 47
           },
           "bounds2d": {
             "x": 8.8404,
@@ -8432,7 +8451,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.31,
-            "localId": 48
+            "localId": 49
           },
           "bounds2d": {
             "x": 17.9225,
@@ -8453,7 +8472,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.31,
-            "localId": 49
+            "localId": 50
           },
           "bounds2d": {
             "x": 16.6225,
@@ -8474,7 +8493,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 51
+            "localId": 52
           },
           "bounds2d": {
             "x": 17.8175,
@@ -8495,7 +8514,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 52
+            "localId": 53
           },
           "bounds2d": {
             "x": 14.8175,
@@ -8516,7 +8535,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 53
+            "localId": 54
           },
           "bounds2d": {
             "x": 13.8175,
@@ -8537,7 +8556,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 55
+            "localId": 56
           },
           "bounds2d": {
             "x": 22.9325,
@@ -8558,7 +8577,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 56
+            "localId": 57
           },
           "bounds2d": {
             "x": 25.9325,
@@ -8579,7 +8598,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 57
+            "localId": 58
           },
           "bounds2d": {
             "x": 26.9325,
@@ -8600,7 +8619,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 59
+            "localId": 60
           },
           "bounds2d": {
             "x": 22.8825,
@@ -8621,7 +8640,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 60
+            "localId": 61
           },
           "bounds2d": {
             "x": 24.3825,
@@ -8642,7 +8661,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 61
+            "localId": 62
           },
           "bounds2d": {
             "x": 25.8825,
@@ -8663,7 +8682,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 62
+            "localId": 63
           },
           "bounds2d": {
             "x": 22.8825,
@@ -8684,7 +8703,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 63
+            "localId": 64
           },
           "bounds2d": {
             "x": 24.3825,
@@ -8705,7 +8724,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 64
+            "localId": 65
           },
           "bounds2d": {
             "x": 25.8825,
@@ -8726,7 +8745,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 65
+            "localId": 66
           },
           "bounds2d": {
             "x": 27.3825,
@@ -8747,7 +8766,7 @@
             "chair": true,
             "orient": 225,
             "y": 0.36,
-            "localId": 66
+            "localId": 67
           },
           "bounds2d": {
             "x": 23.6799,
@@ -8768,7 +8787,7 @@
             "chair": true,
             "orient": 315,
             "y": 0.36,
-            "localId": 67
+            "localId": 68
           },
           "bounds2d": {
             "x": 24.575,
@@ -8789,7 +8808,7 @@
             "chair": true,
             "orient": 45,
             "y": 0.36,
-            "localId": 68
+            "localId": 69
           },
           "bounds2d": {
             "x": 24.5801,
@@ -8810,7 +8829,7 @@
             "chair": true,
             "orient": 135,
             "y": 0.36,
-            "localId": 69
+            "localId": 70
           },
           "bounds2d": {
             "x": 23.675,
@@ -8830,7 +8849,7 @@
             "stand": true,
             "orient": 0,
             "y": 0.71,
-            "localId": 70
+            "localId": 71
           },
           "bounds2d": {"x": 27.2, "y": 27.1155, "width": 4.25, "height": 4.25},
           "x": 29.325,
@@ -8846,7 +8865,7 @@
             "toilet": true,
             "orient": 180,
             "y": 0.51,
-            "localId": 71
+            "localId": 72
           },
           "bounds2d": {"x": 27.4, "y": 25.63, "width": 4.25, "height": 4.25},
           "x": 29.525,
@@ -8862,7 +8881,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.36,
-            "localId": 73
+            "localId": 74
           },
           "bounds2d": {"x": 6.12, "y": 11.45, "width": 4.25, "height": 4.25},
           "x": 8.245,
@@ -8878,7 +8897,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.36,
-            "localId": 74
+            "localId": 75
           },
           "bounds2d": {"x": 4.62, "y": 11.45, "width": 4.25, "height": 4.25},
           "x": 6.745,
@@ -8894,7 +8913,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.36,
-            "localId": 75
+            "localId": 76
           },
           "bounds2d": {"x": 3.12, "y": 11.45, "width": 4.25, "height": 4.25},
           "x": 5.245,
@@ -8903,7 +8922,7 @@
         {
           "type": "point",
           "key": "point[6_8,0,16_95]",
-          "meta": {"decor": true, "ignore-nav": true, "y": 0, "localId": 78},
+          "meta": {"decor": true, "ignore-nav": true, "y": 0, "localId": 79},
           "bounds2d": {"x": 6.8, "y": 16.95, "width": 4.25, "height": 4.25},
           "x": 8.925,
           "y": 19.075
@@ -8911,7 +8930,7 @@
         {
           "type": "point",
           "key": "point[6_8,0,13_7]",
-          "meta": {"decor": true, "ignore-nav": true, "y": 0, "localId": 79},
+          "meta": {"decor": true, "ignore-nav": true, "y": 0, "localId": 80},
           "bounds2d": {"x": 6.8, "y": 13.7, "width": 4.25, "height": 4.25},
           "x": 8.925,
           "y": 15.825
@@ -8926,7 +8945,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.41,
-            "localId": 80
+            "localId": 81
           },
           "bounds2d": {"x": 5.49, "y": 21.9, "width": 4.25, "height": 4.25},
           "x": 7.615,
@@ -8942,7 +8961,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.41,
-            "localId": 81
+            "localId": 82
           },
           "bounds2d": {"x": 3.87, "y": 20.28, "width": 4.25, "height": 4.25},
           "x": 5.995,
@@ -8958,7 +8977,7 @@
             "chair": true,
             "orient": 225,
             "y": 0.31,
-            "localId": 86
+            "localId": 87
           },
           "bounds2d": {
             "x": 24.4796,
@@ -8979,7 +8998,7 @@
             "chair": true,
             "orient": 315,
             "y": 0.31,
-            "localId": 87
+            "localId": 88
           },
           "bounds2d": {
             "x": 23.7503,
@@ -9000,7 +9019,7 @@
             "chair": true,
             "orient": 45,
             "y": 0.31,
-            "localId": 88
+            "localId": 89
           },
           "bounds2d": {
             "x": 23.7503,
@@ -9021,7 +9040,7 @@
             "chair": true,
             "orient": 135,
             "y": 0.31,
-            "localId": 89
+            "localId": 90
           },
           "bounds2d": {
             "x": 24.4796,
@@ -9042,7 +9061,7 @@
             "chair": true,
             "orient": 20,
             "y": 0.51,
-            "localId": 90
+            "localId": 91
           },
           "bounds2d": {
             "x": 22.5178,
@@ -9063,7 +9082,7 @@
             "chair": true,
             "orient": 340,
             "y": 0.51,
-            "localId": 91
+            "localId": 92
           },
           "bounds2d": {
             "x": 22.5213,
@@ -9084,7 +9103,7 @@
             "chair": true,
             "orient": 225,
             "y": 0.31,
-            "localId": 92
+            "localId": 93
           },
           "bounds2d": {
             "x": 25.9796,
@@ -9105,7 +9124,7 @@
             "chair": true,
             "orient": 315,
             "y": 0.31,
-            "localId": 93
+            "localId": 94
           },
           "bounds2d": {
             "x": 25.2503,
@@ -9126,7 +9145,7 @@
             "chair": true,
             "orient": 45,
             "y": 0.31,
-            "localId": 94
+            "localId": 95
           },
           "bounds2d": {
             "x": 25.2503,
@@ -9147,7 +9166,7 @@
             "chair": true,
             "orient": 135,
             "y": 0.31,
-            "localId": 95
+            "localId": 96
           },
           "bounds2d": {
             "x": 25.9796,
@@ -9803,7 +9822,7 @@
         {
           "type": "point",
           "key": "point[17_35,0,2_3985]",
-          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 37},
+          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 38},
           "bounds2d": {"x": 17.35, "y": 2.3985, "width": 4.25, "height": 4.25},
           "x": 19.475,
           "y": 4.5235
@@ -9811,7 +9830,7 @@
         {
           "type": "point",
           "key": "point[8_4,0,2_3985]",
-          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 42},
+          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 43},
           "bounds2d": {"x": 8.4, "y": 2.3985, "width": 4.25, "height": 4.25},
           "x": 10.525,
           "y": 4.5235
@@ -9819,7 +9838,7 @@
         {
           "type": "point",
           "key": "point[17_35,0,11_35]",
-          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 47},
+          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 48},
           "bounds2d": {"x": 17.35, "y": 11.35, "width": 4.25, "height": 4.25},
           "x": 19.475,
           "y": 13.475
@@ -9827,7 +9846,7 @@
         {
           "type": "point",
           "key": "point[15_9,0,15_4]",
-          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 50},
+          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 51},
           "bounds2d": {"x": 15.9, "y": 15.4, "width": 4.25, "height": 4.25},
           "x": 18.025,
           "y": 17.525
@@ -9835,7 +9854,7 @@
         {
           "type": "point",
           "key": "point[24_85,0,15_4]",
-          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 54},
+          "meta": {"decor": true, "label": "lab", "y": 0, "localId": 55},
           "bounds2d": {"x": 24.85, "y": 15.4, "width": 4.25, "height": 4.25},
           "x": 26.975,
           "y": 17.525
@@ -9843,7 +9862,7 @@
         {
           "type": "point",
           "key": "point[25_725,0,24_9]",
-          "meta": {"decor": true, "label": "office", "y": 0, "localId": 58},
+          "meta": {"decor": true, "label": "office", "y": 0, "localId": 59},
           "bounds2d": {"x": 25.725, "y": 24.9, "width": 4.25, "height": 4.25},
           "x": 27.85,
           "y": 27.025
@@ -9855,7 +9874,7 @@
             "decor": true,
             "label": "engineering",
             "y": 0,
-            "localId": 72
+            "localId": 73
           },
           "bounds2d": {"x": 3.825, "y": 9.925, "width": 4.25, "height": 4.25},
           "x": 5.95,
@@ -9864,7 +9883,7 @@
         {
           "type": "point",
           "key": "point[22_625,0,1_625]",
-          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 76},
+          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 77},
           "bounds2d": {"x": 22.625, "y": 1.625, "width": 4.25, "height": 4.25},
           "x": 24.75,
           "y": 3.75
@@ -9876,7 +9895,7 @@
             "decor": true,
             "label": "stellar cartography",
             "y": 0,
-            "localId": 77
+            "localId": 78
           },
           "bounds2d": {"x": 7.35, "y": 18.4, "width": 4.25, "height": 4.25},
           "x": 9.475,
@@ -9885,7 +9904,7 @@
         {
           "type": "point",
           "key": "point[20_375,0,2_375]",
-          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 82},
+          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 83},
           "bounds2d": {"x": 20.375, "y": 2.375, "width": 4.25, "height": 4.25},
           "x": 22.5,
           "y": 4.5
@@ -9893,7 +9912,7 @@
         {
           "type": "point",
           "key": "point[23_375,0,-1_375]",
-          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 83},
+          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 84},
           "bounds2d": {"x": 23.375, "y": -1.375, "width": 4.25, "height": 4.25},
           "x": 25.5,
           "y": 0.75
@@ -9901,7 +9920,7 @@
         {
           "type": "point",
           "key": "point[22_625,0,3_125]",
-          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 84},
+          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 85},
           "bounds2d": {"x": 22.625, "y": 3.125, "width": 4.25, "height": 4.25},
           "x": 24.75,
           "y": 5.25
@@ -9909,7 +9928,7 @@
         {
           "type": "point",
           "key": "point[24_895,0,7_9]",
-          "meta": {"decor": true, "label": "lounge", "y": 0, "localId": 85},
+          "meta": {"decor": true, "label": "lounge", "y": 0, "localId": 86},
           "bounds2d": {"x": 24.895, "y": 7.9, "width": 4.25, "height": 4.25},
           "x": 27.02,
           "y": 10.025
@@ -16670,6 +16689,20 @@
         },
         {
           "type": "point",
+          "key": "point[3_0226,0_61,1_677]",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "img": "icon--002--doc",
+            "y": 0.61,
+            "localId": 57
+          },
+          "bounds2d": {"x": 3.0226, "y": 1.677, "width": 4.25, "height": 4.25},
+          "x": 5.1476,
+          "y": 3.802
+        },
+        {
+          "type": "point",
           "key": "point[2_3603,0_41,2_3999]",
           "meta": {
             "decor": true,
@@ -16678,11 +16711,25 @@
             "chair": true,
             "orient": 315,
             "y": 0.41,
-            "localId": 57
+            "localId": 58
           },
           "bounds2d": {"x": 2.3603, "y": 2.3999, "width": 4.25, "height": 4.25},
           "x": 4.4853,
           "y": 4.5249
+        },
+        {
+          "type": "point",
+          "key": "point[22_7274,0_61,1_677]",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "img": "icon--002--doc",
+            "y": 0.61,
+            "localId": 60
+          },
+          "bounds2d": {"x": 22.7274, "y": 1.677, "width": 4.25, "height": 4.25},
+          "x": 24.8524,
+          "y": 3.802
         },
         {
           "type": "point",
@@ -16694,7 +16741,7 @@
             "chair": true,
             "orient": 225,
             "y": 0.41,
-            "localId": 59
+            "localId": 61
           },
           "bounds2d": {
             "x": 23.3896,
@@ -16715,7 +16762,7 @@
             "chair": true,
             "orient": 105,
             "y": 0.41,
-            "localId": 61
+            "localId": 63
           },
           "bounds2d": {
             "x": 24.6069,
@@ -16736,7 +16783,7 @@
             "chair": true,
             "orient": 345,
             "y": 0.41,
-            "localId": 62
+            "localId": 64
           },
           "bounds2d": {
             "x": 25.8582,
@@ -16756,7 +16803,7 @@
             "stand": true,
             "orient": 90,
             "y": 0,
-            "localId": 75
+            "localId": 77
           },
           "bounds2d": {"x": 17.375, "y": 5.7093, "width": 4.25, "height": 4.25},
           "x": 19.5,
@@ -16771,7 +16818,7 @@
             "stand": true,
             "orient": 90,
             "y": 0,
-            "localId": 76
+            "localId": 78
           },
           "bounds2d": {"x": 18.275, "y": 5.7093, "width": 4.25, "height": 4.25},
           "x": 20.4,
@@ -16787,7 +16834,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.41,
-            "localId": 77
+            "localId": 79
           },
           "bounds2d": {"x": 10.63, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 12.755,
@@ -16803,7 +16850,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.41,
-            "localId": 78
+            "localId": 80
           },
           "bounds2d": {"x": 12.13, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 14.255,
@@ -16819,7 +16866,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.41,
-            "localId": 79
+            "localId": 81
           },
           "bounds2d": {"x": 13.63, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 15.755,
@@ -16835,7 +16882,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.41,
-            "localId": 80
+            "localId": 82
           },
           "bounds2d": {"x": 15.13, "y": 1.25, "width": 4.25, "height": 4.25},
           "x": 17.255,
@@ -16851,7 +16898,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.41,
-            "localId": 81
+            "localId": 83
           },
           "bounds2d": {"x": 8.0725, "y": 7.3875, "width": 4.25, "height": 4.25},
           "x": 10.1975,
@@ -16867,7 +16914,7 @@
             "chair": true,
             "orient": 255,
             "y": 0.41,
-            "localId": 82
+            "localId": 84
           },
           "bounds2d": {"x": 8.3995, "y": 8.6264, "width": 4.25, "height": 4.25},
           "x": 10.5245,
@@ -16883,7 +16930,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 83
+            "localId": 85
           },
           "bounds2d": {
             "x": 13.7775,
@@ -16904,7 +16951,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 84
+            "localId": 86
           },
           "bounds2d": {
             "x": 13.1775,
@@ -16925,7 +16972,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 85
+            "localId": 87
           },
           "bounds2d": {
             "x": 12.5775,
@@ -16946,7 +16993,7 @@
             "chair": true,
             "orient": 90,
             "y": 0.31,
-            "localId": 86
+            "localId": 88
           },
           "bounds2d": {
             "x": 11.9775,
@@ -16967,7 +17014,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.31,
-            "localId": 87
+            "localId": 89
           },
           "bounds2d": {
             "x": 13.7775,
@@ -16988,7 +17035,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.31,
-            "localId": 88
+            "localId": 90
           },
           "bounds2d": {
             "x": 13.1775,
@@ -17009,7 +17056,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.31,
-            "localId": 89
+            "localId": 91
           },
           "bounds2d": {
             "x": 12.5775,
@@ -17030,7 +17077,7 @@
             "chair": true,
             "orient": 270,
             "y": 0.31,
-            "localId": 90
+            "localId": 92
           },
           "bounds2d": {
             "x": 11.9775,
@@ -17051,7 +17098,7 @@
             "chair": true,
             "orient": 360,
             "y": 0.31,
-            "localId": 91
+            "localId": 93
           },
           "bounds2d": {
             "x": 14.4525,
@@ -17072,7 +17119,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.31,
-            "localId": 92
+            "localId": 94
           },
           "bounds2d": {
             "x": 11.2975,
@@ -17093,7 +17140,7 @@
             "bed": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 93
+            "localId": 95
           },
           "bounds2d": {"x": 16.525, "y": 7.5575, "width": 4.25, "height": 4.25},
           "x": 18.65,
@@ -17108,7 +17155,7 @@
             "table": true,
             "h": 0.2,
             "y": 0.1,
-            "localId": 94
+            "localId": 96
           },
           "bounds2d": {"x": 18.21, "y": 9.1825, "width": 1.875, "height": 1},
           "angle": 1.5707963267948966,
@@ -17124,7 +17171,7 @@
             "stand": true,
             "orient": 90,
             "y": 0.71,
-            "localId": 95
+            "localId": 97
           },
           "bounds2d": {
             "x": 16.4844,
@@ -17145,7 +17192,7 @@
             "toilet": true,
             "orient": 270,
             "y": 0.41,
-            "localId": 96
+            "localId": 98
           },
           "bounds2d": {"x": 17.38, "y": 6.4, "width": 4.25, "height": 4.25},
           "x": 19.505,
@@ -17161,7 +17208,7 @@
             "toilet": true,
             "orient": 270,
             "y": 0.41,
-            "localId": 97
+            "localId": 99
           },
           "bounds2d": {"x": 18.28, "y": 6.4, "width": 4.25, "height": 4.25},
           "x": 20.405,
@@ -17176,7 +17223,7 @@
             "stand": true,
             "orient": 90,
             "y": 0.7,
-            "localId": 98
+            "localId": 100
           },
           "bounds2d": {"x": 12.88, "y": 10.75, "width": 4.25, "height": 4.25},
           "x": 15.005,
@@ -17192,7 +17239,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.41,
-            "localId": 99
+            "localId": 101
           },
           "bounds2d": {"x": 5.39, "y": 0.12, "width": 4.25, "height": 4.25},
           "x": 7.515,
@@ -17208,7 +17255,7 @@
             "chair": true,
             "orient": 180,
             "y": 0.41,
-            "localId": 100
+            "localId": 102
           },
           "bounds2d": {"x": 20.36, "y": 0.12, "width": 4.25, "height": 4.25},
           "x": 22.485,
@@ -17862,7 +17909,7 @@
         {
           "type": "point",
           "key": "point[22_625,0,1_575]",
-          "meta": {"decor": true, "label": "office", "y": 0, "localId": 58},
+          "meta": {"decor": true, "label": "office", "y": 0, "localId": 59},
           "bounds2d": {"x": 22.625, "y": 1.575, "width": 4.25, "height": 4.25},
           "x": 24.75,
           "y": 3.7
@@ -17874,7 +17921,7 @@
             "decor": true,
             "label": "stellar cartography",
             "y": 0.71,
-            "localId": 60
+            "localId": 62
           },
           "bounds2d": {"x": 25.28, "y": 8.1, "width": 4.25, "height": 4.25},
           "x": 27.405,
@@ -17883,7 +17930,7 @@
         {
           "type": "point",
           "key": "point[12_875,0,2_375]",
-          "meta": {"decor": true, "label": "bridge", "y": 0, "localId": 63},
+          "meta": {"decor": true, "label": "bridge", "y": 0, "localId": 65},
           "bounds2d": {"x": 12.875, "y": 2.375, "width": 4.25, "height": 4.25},
           "x": 15,
           "y": 4.5
@@ -17891,7 +17938,7 @@
         {
           "type": "point",
           "key": "point[10_625,0,3_5]",
-          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 64},
+          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 66},
           "bounds2d": {"x": 10.625, "y": 3.5, "width": 4.25, "height": 4.25},
           "x": 12.75,
           "y": 5.625
@@ -17899,7 +17946,7 @@
         {
           "type": "point",
           "key": "point[15_15,0,3_55]",
-          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 65},
+          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 67},
           "bounds2d": {"x": 15.15, "y": 3.55, "width": 4.25, "height": 4.25},
           "x": 17.275,
           "y": 5.675
@@ -17907,7 +17954,7 @@
         {
           "type": "point",
           "key": "point[8_39,0,6_17]",
-          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 66},
+          "meta": {"decor": true, "label": "locker", "y": 0, "localId": 68},
           "bounds2d": {"x": 8.39, "y": 6.17, "width": 4.25, "height": 4.25},
           "x": 10.515,
           "y": 8.295
@@ -17915,7 +17962,7 @@
         {
           "type": "point",
           "key": "point[12_875,0,8_7]",
-          "meta": {"decor": true, "label": "briefing", "y": 0, "localId": 67},
+          "meta": {"decor": true, "label": "briefing", "y": 0, "localId": 69},
           "bounds2d": {"x": 12.875, "y": 8.7, "width": 4.25, "height": 4.25},
           "x": 15,
           "y": 10.825
@@ -17923,7 +17970,7 @@
         {
           "type": "point",
           "key": "point[8_935,0,11_025]",
-          "meta": {"decor": true, "label": "fuel", "y": 0, "localId": 68},
+          "meta": {"decor": true, "label": "fuel", "y": 0, "localId": 70},
           "bounds2d": {"x": 8.935, "y": 11.025, "width": 4.25, "height": 4.25},
           "x": 11.06,
           "y": 13.15
@@ -17931,7 +17978,7 @@
         {
           "type": "point",
           "key": "point[16_925,0,11_025]",
-          "meta": {"decor": true, "label": "fuel", "y": 0, "localId": 69},
+          "meta": {"decor": true, "label": "fuel", "y": 0, "localId": 71},
           "bounds2d": {"x": 16.925, "y": 11.025, "width": 4.25, "height": 4.25},
           "x": 19.05,
           "y": 13.15
@@ -17939,7 +17986,7 @@
         {
           "type": "point",
           "key": "point[8_425,0,2_725]",
-          "meta": {"decor": true, "label": "cpu", "y": 0, "localId": 70},
+          "meta": {"decor": true, "label": "cpu", "y": 0, "localId": 72},
           "bounds2d": {"x": 8.425, "y": 2.725, "width": 4.25, "height": 4.25},
           "x": 10.55,
           "y": 4.85
@@ -17947,7 +17994,7 @@
         {
           "type": "point",
           "key": "point[17_275,0,2_675]",
-          "meta": {"decor": true, "label": "cpu", "y": 0, "localId": 71},
+          "meta": {"decor": true, "label": "cpu", "y": 0, "localId": 73},
           "bounds2d": {"x": 17.275, "y": 2.675, "width": 4.25, "height": 4.25},
           "x": 19.4,
           "y": 4.8
@@ -17955,7 +18002,7 @@
         {
           "type": "point",
           "key": "point[16_785,0,9_02]",
-          "meta": {"decor": true, "label": "stateroom", "y": 0, "localId": 72},
+          "meta": {"decor": true, "label": "stateroom", "y": 0, "localId": 74},
           "bounds2d": {"x": 16.785, "y": 9.02, "width": 4.25, "height": 4.25},
           "x": 18.91,
           "y": 11.145
@@ -17963,7 +18010,7 @@
         {
           "type": "point",
           "key": "point[8_94,0,8_92]",
-          "meta": {"decor": true, "label": "office", "y": 0, "localId": 73},
+          "meta": {"decor": true, "label": "office", "y": 0, "localId": 75},
           "bounds2d": {"x": 8.94, "y": 8.92, "width": 4.25, "height": 4.25},
           "x": 11.065,
           "y": 11.045
@@ -17971,7 +18018,7 @@
         {
           "type": "point",
           "key": "point[12_8393,0,5_1925]",
-          "meta": {"decor": true, "label": "corridor", "y": 0, "localId": 74},
+          "meta": {"decor": true, "label": "corridor", "y": 0, "localId": 76},
           "bounds2d": {
             "x": 12.8393,
             "y": 5.1925,
@@ -25812,6 +25859,25 @@
         },
         {
           "type": "point",
+          "key": "point[27_073,0_61,12_0726]",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "img": "icon--002--doc",
+            "y": 0.61,
+            "localId": 93
+          },
+          "bounds2d": {
+            "x": 27.073,
+            "y": 12.0726,
+            "width": 4.25,
+            "height": 4.25
+          },
+          "x": 29.198,
+          "y": 14.1976
+        },
+        {
+          "type": "point",
           "key": "point[26_3501,0_41,11_4104]",
           "meta": {
             "decor": true,
@@ -25820,7 +25886,7 @@
             "chair": true,
             "orient": 45,
             "y": 0.41,
-            "localId": 93
+            "localId": 94
           },
           "bounds2d": {
             "x": 26.3501,
@@ -25841,7 +25907,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.41,
-            "localId": 94
+            "localId": 95
           },
           "bounds2d": {"x": 2.76, "y": 0.87, "width": 4.25, "height": 4.25},
           "x": 4.885,
@@ -25857,7 +25923,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 95
+            "localId": 96
           },
           "bounds2d": {
             "x": 25.0425,
@@ -25878,7 +25944,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 96
+            "localId": 97
           },
           "bounds2d": {"x": 8.3025, "y": 4.4025, "width": 4.25, "height": 4.25},
           "x": 10.4275,
@@ -25894,7 +25960,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 97
+            "localId": 98
           },
           "bounds2d": {"x": 8.3025, "y": 5.4025, "width": 4.25, "height": 4.25},
           "x": 10.4275,
@@ -25910,7 +25976,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 98
+            "localId": 99
           },
           "bounds2d": {"x": 8.3125, "y": 6.4025, "width": 4.25, "height": 4.25},
           "x": 10.4375,
@@ -25926,7 +25992,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 99
+            "localId": 100
           },
           "bounds2d": {
             "x": 25.8525,
@@ -25947,7 +26013,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 100
+            "localId": 101
           },
           "bounds2d": {
             "x": 26.7025,
@@ -25968,7 +26034,7 @@
             "chair": true,
             "orient": 0,
             "y": 0.31,
-            "localId": 101
+            "localId": 102
           },
           "bounds2d": {
             "x": 27.5625,
@@ -31605,11 +31671,20 @@
         "width": 110,
         "height": 200
       },
+      "icon--002--doc": {
+        "icon": true,
+        "002": true,
+        "decorImgKey": "icon--002--doc",
+        "x": 254,
+        "y": 204,
+        "width": 42,
+        "height": 60
+      },
       "icon--001--info": {
         "icon": true,
         "001": true,
         "decorImgKey": "icon--001--info",
-        "x": 254,
+        "x": 298,
         "y": 204,
         "width": 50,
         "height": 50

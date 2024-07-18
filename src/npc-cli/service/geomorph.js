@@ -172,6 +172,7 @@ class GeomorphService {
     'door--001': true,
     'door--002--hull': true,
     'icon--001--info': true,
+    'icon--002--doc': true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */

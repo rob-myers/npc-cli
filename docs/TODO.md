@@ -86,8 +86,9 @@
     - ✅ only show do/button points
   - ✅ rotate decor points according to `orient`
   - 🚧 document on desk decor poly
-    - rotated rect 4-gon -> affine transform
-    - image chosen via `img={decorImgKey}`
+    - ✅ document sprite (`icon--002--doc`)
+    - ✅ add a `decor quad` with `img=icon--002--doc`
+    - 🚧 rotated rect 4-gon -> affine transform
   - decor point induces quads
     - with fallback image `icon--001--info`
   - decor poly induces quads
