@@ -1,12 +1,12 @@
 {
   "meta": {
     "101--hull": {"outputHash": 776201258, "pngHash": 568633107},
-    "102--hull": {"outputHash": -1176230636, "pngHash": 184103855},
+    "102--hull": {"outputHash": -1920707878, "pngHash": 184103855},
     "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
     "301--hull": {"outputHash": 296456550, "pngHash": 787602800},
-    "302--hull": {"outputHash": -366136039, "pngHash": -1557128953},
+    "302--hull": {"outputHash": 2061028667, "pngHash": -1557128953},
     "303--hull": {
-      "outputHash": -984713991,
+      "outputHash": 195869798,
       "pngHash": -299838577,
       "obsHashes": [435244590]
     },
@@ -240,7 +240,7 @@
       "obsHashes": [1641095410]
     },
     "lifeboat--small-craft--2x4": {
-      "outputHash": 1843434665,
+      "outputHash": 987468438,
       "pngHash": -2036140918
     },
     "lounge--015--4x2": {"outputHash": -1477468156, "pngHash": 222627377},
@@ -282,12 +282,12 @@
       "pngHash": -839723950
     },
     "misc-stellar-cartography--020--10x10": {
-      "outputHash": -248379301,
+      "outputHash": 1653501669,
       "pngHash": -1181495790,
       "obsHashes": [1616514661, 338030151, 883758416]
     },
     "misc-stellar-cartography--023--4x4": {
-      "outputHash": -864214799,
+      "outputHash": -1485135197,
       "pngHash": 1510139639,
       "obsHashes": [194424169]
     },
@@ -1694,12 +1694,7 @@
         {
           "type": "Polygon",
           "coordinates": [[[28.75, 3.25], [28.5, 3.25], [28.5, 3], [28.75, 3]]],
-          "meta": {
-            "decor": true,
-            "go": true,
-            "label": "'research",
-            "launch'": true
-          }
+          "meta": {"decor": true, "go": true, "label": "research launch"}
         },
         {
           "type": "Polygon",
@@ -3085,13 +3080,7 @@
               [24.4375, 11.8]
             ]
           ],
-          "meta": {
-            "decor": true,
-            "go": true,
-            "label": "'parts",
-            "or": true,
-            "cargo'": true
-          }
+          "meta": {"decor": true, "go": true, "label": "parts or cargo"}
         },
         {
           "type": "Polygon",
@@ -3112,7 +3101,7 @@
           "coordinates": [
             [[18.45, 11.8], [18.45, 12.05], [18.2, 12.05], [18.2, 11.8]]
           ],
-          "meta": {"decor": true, "go": true, "label": "'repair", "bay'": true}
+          "meta": {"decor": true, "go": true, "label": "repair bay"}
         },
         {
           "type": "Polygon",
@@ -3756,7 +3745,7 @@
           "coordinates": [
             [[16, 6.625], [15.875, 6.625], [15.875, 6.5], [16, 6.5]]
           ],
-          "meta": {"decor": true, "go": true, "label": "common-area"}
+          "meta": {"decor": true, "go": true, "label": "common area"}
         }
       ],
       "unsorted": [
@@ -8525,7 +8514,7 @@
               [1.4785, 5.4305]
             ]
           ],
-          "meta": {"decor": true, "go": true, "label": "escape-pod"}
+          "meta": {"decor": true, "go": true, "label": "escape pod"}
         }
       ],
       "unsorted": [
@@ -9601,12 +9590,7 @@
         {
           "type": "Polygon",
           "coordinates": [[[5.55, 5.5], [5.55, 5.55], [5.5, 5.55], [5.5, 5.5]]],
-          "meta": {
-            "decor": true,
-            "go": true,
-            "label": "stellar",
-            "cartography": true
-          }
+          "meta": {"decor": true, "go": true, "label": "stellar cartography"}
         },
         {
           "type": "Polygon",
@@ -9737,8 +9721,7 @@
           "meta": {
             "decor": true,
             "go": true,
-            "label": "stellar",
-            "cartography": true,
+            "label": "stellar cartography",
             "y": 0.71
           }
         }

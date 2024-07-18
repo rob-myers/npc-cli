@@ -971,7 +971,8 @@ class GeomorphService {
           return; // Only depth 0 and folder 'symbols' supported
         }
 
-        const ownTags = contents.split(" ");
+        // const ownTags = contents.split(" ");
+        const ownTags = [...contents.matchAll(splitTagRegex)].map(x => x[0]);
 
         // symbol may have folder "symbols"
         if (folderStack[0] === "symbols") {
@@ -1365,6 +1366,11 @@ export class Connector {
   }
 }
 
+/**
+ * e.g. `foo bar=baz qux='1 2 3'` yields
+ * > `foo`, `bar=baz`, `qux='1 2 3'`
+ */
+const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
 const tmpVect1 = new Vect();
 const tmpVect2 = new Vect();
 const tmpPoly1 = new Poly();

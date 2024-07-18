@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
         <defs>
-                <pattern id="pattern-5" patternTransform="matrix(1, 0, 0, 1, -1679.999908447262, -2759.999975706479)" xlink:href="#pattern-4" />
+                <pattern id="pattern-5" patternTransform="matrix(1, 0, 0, 1, -1679.999908447262, -2759.999975706479)" xlink:href="#pattern-4"/>
                 <pattern x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-4" patternTransform="matrix(1, 0, 0, 1, -839.999863028526, -1799.99997428013)">
                         <title>symbol-rect-pattern</title>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60" />
+                                <bx:grid x="0" y="0" width="60" height="60"/>
                         </defs>
-                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5" />
-                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)" />
-                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)" />
-                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)" />
+                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
+                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
+                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
+                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
                 </pattern>
-                <bx:grid x="0" y="0" width="60" height="60" />
-                <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, -1679.999816894299, -2759.999954223633)" xlink:href="#pattern-4" />
-                <pattern id="pattern-2" patternTransform="matrix(1, 0, 0, 1, -839.999885559082, -1799.999999998603)" xlink:href="#pattern-4" />
-                <pattern id="pattern-3" patternTransform="matrix(1, 0, 0, 1, -839.999877929688, -1800)" xlink:href="#pattern-4" />
-                <pattern id="pattern-4-0" patternTransform="matrix(1, 0, 0, 1, 1050, -569.999975409362)" xlink:href="#pattern-4" />
-                <pattern id="pattern-4-1" patternTransform="matrix(1, 0, 0, 1, -749.996026801713, -150.000106811523)" xlink:href="#pattern-4" />
-                <pattern id="pattern-6" patternTransform="matrix(1, 0, 0, 1, 450, -150.000106811523)" xlink:href="#pattern-4" />
-                <pattern id="pattern-4-2" patternTransform="matrix(1, 0, 0, 1, 750.000671386719, 419.999420166016)" xlink:href="#pattern-4" />
-                <pattern id="pattern-7" patternTransform="matrix(1, 0, 0, 1, 689.996032714224, 690.000329565372)" xlink:href="#pattern-4" />
-                <pattern id="pattern-8" patternTransform="matrix(1, 0, 0, 1, -509.996063156985, -509.999847412109)" xlink:href="#pattern-4" />
-                <pattern id="pattern-4-3" patternTransform="matrix(1, 0, 0, 0.946189820766, -749.982849121094, -1048.399536132812)" xlink:href="#pattern-4" />
-                <pattern id="pattern-9" patternTransform="matrix(1, 0, 0, 1, -1109.996213529757, 1050.00048828125)" xlink:href="#pattern-4" />
-                <pattern id="pattern-4-4" patternTransform="matrix(1, 0, 0, 1, 90.007614135742, 540.002975463867)" xlink:href="#pattern-4" />
-                <pattern id="pattern-4-5" patternTransform="matrix(1, 0, 0, 1, -329.982143392823, 869.992431640625)" xlink:href="#pattern-4" />
-                <pattern id="pattern-10" patternTransform="matrix(1, 0, 0, 1, -420.002838134766, -2160.0029296875)" xlink:href="#pattern-4" />
-                <pattern id="pattern-4-6" patternTransform="matrix(1, 0, 0, 1, 268.754272460938, -1474.915375979929)" xlink:href="#pattern-4" />
-                <pattern id="pattern-11" patternTransform="matrix(0.399998426437, 0.000003939209, -0.000003939211, 0.399998396635, 959.997063040624, 179.997855008079)" xlink:href="#pattern-0" />
+                <bx:grid x="0" y="0" width="60" height="60"/>
+                <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, -1679.999816894299, -2759.999954223633)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-2" patternTransform="matrix(1, 0, 0, 1, -839.999885559082, -1799.999999998603)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-3" patternTransform="matrix(1, 0, 0, 1, -839.999877929688, -1800)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-0" patternTransform="matrix(1, 0, 0, 1, 1050, -569.999975409362)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-1" patternTransform="matrix(1, 0, 0, 1, -749.996026801713, -150.000106811523)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-6" patternTransform="matrix(1, 0, 0, 1, 450, -150.000106811523)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-2" patternTransform="matrix(1, 0, 0, 1, 750.000671386719, 419.999420166016)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-7" patternTransform="matrix(1, 0, 0, 1, 689.996032714224, 690.000329565372)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-8" patternTransform="matrix(1, 0, 0, 1, -509.996063156985, -509.999847412109)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-3" patternTransform="matrix(1, 0, 0, 0.946189820766, -749.982849121094, -1048.399536132812)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-9" patternTransform="matrix(1, 0, 0, 1, -1109.996213529757, 1050.00048828125)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-4" patternTransform="matrix(1, 0, 0, 1, 90.007614135742, 540.002975463867)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-5" patternTransform="matrix(1, 0, 0, 1, -329.982143392823, 869.992431640625)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-10" patternTransform="matrix(1, 0, 0, 1, -420.002838134766, -2160.0029296875)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-4-6" patternTransform="matrix(1, 0, 0, 1, 268.754272460938, -1474.915375979929)" xlink:href="#pattern-4"/>
+                <pattern id="pattern-11" patternTransform="matrix(0.399998426437, 0.000003939209, -0.000003939211, 0.399998396635, 959.997063040624, 179.997855008079)" xlink:href="#pattern-0"/>
                 <pattern x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
                         <title>symbol-rect-pattern</title>
                         <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
-                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937" />
-                                <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);" />
-                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937" />
-                                <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);" />
-                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)" />
-                                <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)" />
-                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)" />
-                                <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)" />
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+                                <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+                                <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+                                <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+                                <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+                                <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
                         </g>
                         <defs>
-                                <bx:grid x="0" y="0" width="300" height="300" />
+                                <bx:grid x="0" y="0" width="300" height="300"/>
                         </defs>
                 </pattern>
-                <pattern id="pattern-12" patternTransform="matrix(0.399998426437, 0.00000393921, -0.000003939212, 0.399998396635, 959.997066497803, 179.997879025992)" xlink:href="#pattern-0" />
-                <pattern id="pattern-13" patternTransform="matrix(1, 0, 0, 1, -2909.999755859374, -1740.000762939453)" xlink:href="#pattern-14" />
+                <pattern id="pattern-12" patternTransform="matrix(0.399998426437, 0.00000393921, -0.000003939212, 0.399998396635, 959.997066497803, 179.997879025992)" xlink:href="#pattern-0"/>
+                <pattern id="pattern-13" patternTransform="matrix(1, 0, 0, 1, -2909.999755859374, -1740.000762939453)" xlink:href="#pattern-14"/>
                 <pattern x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-14" patternTransform="matrix(1, 0, 0, 1, -839.999863028526, -1799.99997428013)">
                         <title>symbol-rect-pattern</title>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60" />
+                                <bx:grid x="0" y="0" width="60" height="60"/>
                         </defs>
-                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5" />
-                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)" />
-                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)" />
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)" />
-                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)" />
+                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
+                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
+                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
+                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
                 </pattern>
-                <pattern id="pattern-16" patternTransform="matrix(0.399998426437, 0.000003939213, -0.000003939215, 0.399998396635, -0.00284454065, 359.99792695572)" xlink:href="#pattern-0" />
-                <pattern id="pattern-19" patternTransform="matrix(0.399998426437, 0.000003939247, -0.000003939249, 0.399998396635, 1139.999829932003, 899.999095537034)" xlink:href="#pattern-0" />
-                <pattern id="pattern-20" patternTransform="matrix(0.399998426437, 0.00000393925, -0.000003939252, 0.399998396635, -899.999847412109, -0.004760742187)" xlink:href="#pattern-0" />
-                <pattern id="pattern-21" patternTransform="matrix(1, 0, 0, 1, 1050, 390)" xlink:href="#pattern-4" />
+                <pattern id="pattern-16" patternTransform="matrix(0.399998426437, 0.000003939213, -0.000003939215, 0.399998396635, -0.00284454065, 359.99792695572)" xlink:href="#pattern-0"/>
+                <pattern id="pattern-19" patternTransform="matrix(0.399998426437, 0.000003939247, -0.000003939249, 0.399998396635, 1139.999829932003, 899.999095537034)" xlink:href="#pattern-0"/>
+                <pattern id="pattern-20" patternTransform="matrix(0.399998426437, 0.00000393925, -0.000003939252, 0.399998396635, -899.999847412109, -0.004760742187)" xlink:href="#pattern-0"/>
+                <pattern id="pattern-21" patternTransform="matrix(1, 0, 0, 1, 1050, 390)" xlink:href="#pattern-4"/>
                 <symbol id="symbol-1" viewBox="0 0 120 240" bx:pinned="true">
                         <title>machinery--158--1.8x3.6</title>
                         <rect width="120" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 60px 120px;">
                                 <title>machinery--158--1.8x3.6</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60" />
+                                <bx:grid x="0" y="0" width="60" height="60"/>
                         </defs>
                 </symbol>
                 <symbol id="symbol-0" viewBox="0 0 240 240" bx:pinned="true">
@@ -96,13 +96,13 @@
         </image>
         <g>
                 <title>symbols</title>
-                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.000004358405, -5.26407e-7)" xlink:href="#symbol-1">
+                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.0000043584054765233304, -5.264070068733417e-7)" xlink:href="#symbol-1">
                         <title>machinery--158--1.8x3.6 y=1</title>
                 </use>
-                <use width="240" height="240" transform="matrix(1, 0, 0, -1, 8.594e-7, 240.000015258789)" style="opacity: 0.5;" xlink:href="#symbol-0">
+                <use width="240" height="240" transform="matrix(1, 0, 0, -1, 8.594000178163697e-7, 240.00001525878906)" style="opacity: 0.5;" xlink:href="#symbol-0">
                         <title>empty-room--060--4x4</title>
                 </use>
-                <use width="60" height="60" transform="matrix(-1, 0, 0, 1, 240, -0.000003000001)" style="" xlink:href="#symbol-2">
+                <use width="60" height="60" transform="matrix(-1, 0, 0, 1, 240, -0.000003000001242980943)" style="" xlink:href="#symbol-2">
                         <title>console--018--1x1</title>
                 </use>
                 <rect width="60" height="60" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-16'); transform-origin: 29.9972px 329.998px;" y="300" transform="matrix(0, 1, -1, 0, -0.000114440918, 0.000053405762)">
