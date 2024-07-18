@@ -394,7 +394,7 @@ function createObstaclesSheetJson(assets) {
     }
   }
 
-  const bin = packRectangles(Object.values(obstacleKeyToRect), { errorPrefix: 'createObstaclesSheetJson', packedPadding: imgOpts.packedPadding });
+  const bin = packRectangles(Object.values(obstacleKeyToRect), { logPrefix: 'createObstaclesSheetJson', packedPadding: imgOpts.packedPadding });
   
   /** @type {Pick<Geomorph.SpriteSheet, 'obstacle' | 'obstacleDim'>} */
   const json = ({ obstacle: {}, obstacleDim: { width: bin.width, height: bin.height } });
@@ -527,7 +527,7 @@ async function createDecorSheetJson(assets, prev) {
     }
   }
 
-  const bin = packRectangles(Object.values(imgKeyToRect), { errorPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
+  const bin = packRectangles(Object.values(imgKeyToRect), { logPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
 
   /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'decorDim'>} */
   const json = ({ decor: /** @type {*} */ ({}), decorDim: { width: bin.width, height: bin.height } });

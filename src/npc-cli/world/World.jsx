@@ -120,7 +120,7 @@ export default function World(props) {
         height: decorLabelHeightSgu,
         data: { label },
       }));
-      const bin = packRectangles(rects, { errorPrefix: 'w.ensureLabelSheet', packedPadding: 2 });
+      const bin = packRectangles(rects, { logPrefix: 'w.ensureLabelSheet', packedPadding: 2 });
       state.labels.sheet = bin.rects.reduce((agg, r) => {
         agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
         return agg;
