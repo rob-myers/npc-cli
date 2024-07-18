@@ -14,7 +14,7 @@ export default function Card(props) {
 
 const rootCss = css`
   margin: 32px 0;
-  padding: 8px 48px 8px 48px;
+  padding: 0px 48px;
   border-left: 4px solid #dde;
   font-style: italic;
   
@@ -23,7 +23,7 @@ const rootCss = css`
   }
 
   @media(max-width: ${breakpoint}) {
-    padding: 8px 32px;
+    padding: 0px 32px;
   }
 `;
 
