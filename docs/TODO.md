@@ -77,9 +77,11 @@
   - 🚧 remove temp "all decor points shown with info icon"
     - ✅ can see labels (InstancedMesh) using decor.labelTex
     - ✅ permit spaces in labels via `label='foo bar'`
-    - 🚧 move labels from `gm.decors` into `gm.labels`
+    - ✅ move labels from `gm.decors` into `gm.labels`
       - they won't be added to e.g. `w.decor.byKey`
+    - 🚧 ensure label UVs are updated
     - 🚧 high-res labels
+    - 🚧 only show/compute labels when needed
     - 🚧 only show do points
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`

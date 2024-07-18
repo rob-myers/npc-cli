@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { decorGridSize, decorIconRadius, decorLabelHeightSgu, sguToWorldScale, wallHeight } from "../service/const";
+import { decorGridSize, decorIconRadius, sguToWorldScale, wallHeight } from "../service/const";
 import { hashJson, mapValues, pause, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
@@ -34,10 +34,12 @@ export default function Decor(props) {
     showLabels: true, // 🚧 false by default
 
     addDecor(ds, removeExisting = true) {
-
       const addable = ds.filter((d) => state.ensureGmRoomId(d) !== null ||
         void warn(`decor "${d.key}" cannot be added: not in any room`, d)
       );
+      if (addable.length === 0) {
+        return;
+      }
 
       const grouped = addable.reduce((agg, d) => {
         (agg[d.meta.grKey] ??= { meta: d.meta, add: [], remove: [] }).add.push(d);
@@ -59,10 +61,9 @@ export default function Decor(props) {
         state.addDecorToRoom(meta.gmId, meta.roomId, add)
       );
 
-      if (addable.length) {
-        state.updateInstanceLists();
-        w.events.next({ key: 'decors-added', decors: ds });
-      }
+      state.updateDecorLists();
+      w.events.next({ key: 'decors-added', decors: ds });
+      update();
     },
     addDecorToRoom(gmId, roomId, ds) {
       const atRoom = state.byRoom[gmId][roomId];
@@ -235,21 +236,12 @@ export default function Decor(props) {
       return /** @type {typeof d} */ (instance);
     },
     instantiateGeomorph(gmId, gm) {
-
-      /** @type {Geomorph.Decor[]} */ ([]);
-      const ds = gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
+      state.addDecor(gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
         // Don't re-instantiate explicitly removed
         .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
           warn(`decor "${d.key}" cannot be instantiated: not in any room`, d)
         )
-      );
-
-      state.addDecor(ds, false);
-
-      // 🚧 ensure roomIds in gm.labels
-      // 🚧 set state.labels
-      // 🚧 move object w.labels to state.label
-
+      ), false);
     },
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
@@ -316,6 +308,9 @@ export default function Decor(props) {
     },
     removeDecor(...decorKeys) {
       const ds = decorKeys.map(x => state.byKey[x]).filter(Boolean);
+      if (ds.length === 0) {
+        return;
+      }
 
       const grouped = ds.reduce((agg, d) => {
         (agg[d.meta.grKey] ??= { meta: d.meta, ds: [] }).ds.push(d);
@@ -326,10 +321,9 @@ export default function Decor(props) {
         state.removeDecorFromRoom(meta.gmId, meta.roomId, ds)
       }
 
-      if (ds.length) {
-        state.updateInstanceLists();
-        w.events.next({ key: 'decors-removed', decors: ds });
-      }
+      state.updateDecorLists();
+      w.events.next({ key: 'decors-removed', decors: ds });
+      update();
     },
     removeDecorFromRoom(gmId, roomId, ds) {
       const atRoom = state.byRoom[gmId][roomId];
@@ -376,22 +370,15 @@ export default function Decor(props) {
         }
       }
     },
-    updateInstanceLists() {
+    updateDecorLists() {
       state.cuboids = Object.values(state.byKey).filter(
-        /** @returns {d is Geomorph.DecorCuboid} */
-        d => d.type === 'cuboid'
+        geomorphService.isDecorCuboid
       );
 
-      const decorPoints = Object.values(state.byKey).filter(
-        /** @returns {d is Geomorph.DecorPoint} */ d => d.type === 'point'
-      ); 
-
-      // 🚧 only "do points" and ...
-      state.quads = decorPoints;
-
-      state.labels = decorPoints.filter(x => typeof x.meta.label === 'string');
-
-      update();
+      // 🚧 only "do points", and...
+      state.quads = Object.values(state.byKey).filter(
+        geomorphService.isDecorPoint
+      );
     },
   }));
 
@@ -404,6 +391,8 @@ export default function Decor(props) {
       const prev = state.hash;
       const next = state.computeNextHash();
       const mapChanged = prev.mapHash !== next.mapHash;
+
+      state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
 
       if (mapChanged) {
         // Re-instantiate all cleanly
@@ -447,7 +436,7 @@ export default function Decor(props) {
     if (state.queryStatus === 'success') {
       w.events.next({ key: 'decor-instantiated' });
       // 🚧
-      // w.ensureLabelSheet(state.labels); // 🚧 only when needed
+      w.ensureLabelSheet(state.labels); // 🚧 only when needed
       state.addQuadUvs();
       state.positionInstances();
     }
@@ -562,5 +551,5 @@ export default function Decor(props) {
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
  * @property {() => void} removeAllInstantiated
  * @property {(gmId: number) => void} removeInstantiated
- * @property {() => void} updateInstanceLists
+ * @property {() => void} updateDecorLists
  */
