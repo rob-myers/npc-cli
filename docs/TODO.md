@@ -79,7 +79,8 @@
     - ✅ permit spaces in labels via `label='foo bar'`
     - ✅ move labels from `gm.decors` into `gm.labels`
       - they won't be added to e.g. `w.decor.byKey`
-    - 🚧 ensure label UVs are updated
+    - ✅ ensure label UVs are updated
+    - 🚧 move w.labels -> w.decor.labelMeta
     - 🚧 high-res labels
     - 🚧 only show/compute labels when needed
     - 🚧 only show do points
@@ -106,6 +107,7 @@
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
+- support recursive stringified Set
 - duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
 - tty pause/resume loses should remember cursor position

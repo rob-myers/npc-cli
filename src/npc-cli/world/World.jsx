@@ -142,23 +142,6 @@ export default function World(props) {
         ct.strokeText(rect.data.label, rect.x, rect.y);
       });
       state.labels.tex.needsUpdate = true;
-
-      // Compute UVs
-      const uvOffsets = /** @type {number[]} */ ([]);
-      const uvDimensions = /** @type {number[]} */ ([]);
-      
-      for (const d of labelDecors) {
-        const { x, y, width, height } = state.labels.sheet[d.meta.label];
-        uvOffsets.push(x / bin.width, y / bin.height);
-        uvDimensions.push(width / bin.width, height / bin.height);
-      }
-
-      state.labels.quad.setAttribute('uvOffsets',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
-      );
-      state.labels.quad.setAttribute('uvDimensions',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
-      );
     },
     async handleMessageFromWorker(e) {
       const msg = e.data;

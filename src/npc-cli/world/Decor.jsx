@@ -78,6 +78,24 @@ export default function Decor(props) {
         state.rmKeys.delete(d.key);
       }
     },
+    addLabelUvs() {
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
+      const { width: sheetWidth, height: sheetHeight } = /** @type {HTMLCanvasElement} */ (w.labels.tex.image);
+
+      for (const d of state.labels) {
+        const { x, y, width, height } = w.labels.sheet[d.meta.label];
+        uvOffsets.push(x / sheetWidth, y / sheetHeight);
+        uvDimensions.push(width / sheetWidth, height / sheetHeight);
+      }
+
+      w.labels.quad.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      );
+      w.labels.quad.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
+    },
     addQuadUvs() {
       const { decor: sheet, decorDim: sheetDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
@@ -393,6 +411,9 @@ export default function Decor(props) {
       const mapChanged = prev.mapHash !== next.mapHash;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
+      // 🚧 only when needed
+      w.ensureLabelSheet(state.labels);
+      state.addLabelUvs();
 
       if (mapChanged) {
         // Re-instantiate all cleanly
@@ -436,11 +457,11 @@ export default function Decor(props) {
     if (state.queryStatus === 'success') {
       w.events.next({ key: 'decor-instantiated' });
       // 🚧
-      w.ensureLabelSheet(state.labels); // 🚧 only when needed
+      // w.ensureLabelSheet(state.labels); // 🚧 only when needed
       state.addQuadUvs();
       state.positionInstances();
     }
-  }, [state.queryStatus, state.cuboids.length, state.quads.length, state.labels.length]);
+  }, [state.queryStatus, state.cuboids.length, state.quads.length]);
 
   const update = useUpdate();
 
@@ -533,6 +554,7 @@ export default function Decor(props) {
  *
  * @property {(ds: Geomorph.Decor[], removeExisting?: boolean) => void} addDecor
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor
+ * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {() => State['hash']} computeNextHash
