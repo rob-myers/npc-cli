@@ -76,7 +76,10 @@
   - ✅ move `w.setReady` into useHandleEvents
   - 🚧 remove temp "all decor points shown with info icon"
     - ✅ can see labels (InstancedMesh) using decor.labelTex
-    - 🚧 high-res + ✅ fix spaces + 🚧 clean labels
+    - ✅ permit spaces in labels via `label='foo bar'`
+    - 🚧 move labels from `gm.decors` into `gm.labels`
+      - they won't be added to e.g. `w.decor.byKey`
+    - 🚧 high-res labels
     - 🚧 only show do points
   - rotated rect 4-gon -> affine transform
   - some symbol decor poly (rotated rect) has `img={decorImgKey}`

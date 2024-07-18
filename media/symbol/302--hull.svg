@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
         <defs>
-                <bx:grid x="0" y="0" width="60" height="60"/>
+                <bx:grid x="0" y="0" width="60" height="60" />
                 <pattern id="grid-0" patternUnits="userSpaceOnUse" width="60" height="60" patternTransform="matrix(1, 0, 0, 1, 0, 0)" bx:pinned="true">
-                        <rect width="60" height="60" style="fill: none; stroke-width: 0.1px; stroke: rgb(0, 0, 0);"/>
+                        <rect width="60" height="60" style="fill: none; stroke-width: 0.1px; stroke: rgb(0, 0, 0);" />
                 </pattern>
                 <pattern x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-0">
                         <title>symbol-rect-pattern</title>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5" />
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
-                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
-                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
-                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
-                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
+                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5" />
+                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)" />
+                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)" />
+                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)" />
                 </pattern>
-                <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, -22.000001907349, -9.999998092651)" xlink:href="#pattern-0"/>
+                <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, -22.000001907349, -9.999998092651)" xlink:href="#pattern-0" />
                 <symbol id="symbol-0" viewBox="0 0 120 120" bx:pinned="true">
                         <title>office--006--2x2</title>
                         <rect y="0" width="120" height="120" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 60px 60px;">
                                 <title>office--006--2x2 doors=['e','w']</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
                 <symbol id="symbol-1" viewBox="0 0 240 120" bx:pinned="true">
@@ -41,7 +41,7 @@
                                 <title>stateroom--014--2x2</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
                 <symbol id="symbol-10" viewBox="0 0 120 60" bx:pinned="true">
@@ -62,7 +62,7 @@
                                 <title>shop--027--1.6x0.4</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
                 <symbol id="symbol-4" viewBox="0 0 96 48">
@@ -71,7 +71,7 @@
                                 <title>shop--028--1.6x0.8</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
                 <symbol id="symbol-5" viewBox="0 0 52 28">
@@ -80,7 +80,7 @@
                                 <title>shop--031--0.4x0.8</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
                 <symbol id="symbol-6" viewBox="0 0 100 40">
@@ -89,7 +89,7 @@
                                 <title>shop--033--0.6x1.6</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
                 <symbol id="symbol-7" viewBox="0 0 52 28">
@@ -98,22 +98,22 @@
                                 <title>shop--035--0.4x0.8</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
                 <pattern x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse" viewBox="0 0 60 60" id="pattern-1">
                         <title>symbol-rect-pattern</title>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5"/>
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="-2" x="0.5" />
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
-                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);"/>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5"/>
-                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);"/>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)"/>
-                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)"/>
-                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
-                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
+                        <path d="M 30.5 -5 L 40.5 0 L 30.5 5 L 30.5 -5 Z" style="stroke: rgb(0, 0, 0);" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="58" x="0.5" />
+                        <path d="M 30.5 55 L 40.5 60 L 30.5 65 L 30.5 55 Z" style="stroke: rgb(0, 0, 0);" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, -13.999996185303, 41.000003814697)" />
+                        <path d="M -4.500002 29.999996 L 5.499998 24.999996 L -4.500002 19.999996 L -4.500002 29.999996 Z" style="stroke: rgb(0, 0, 0); transform-origin: 0.499998px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000001277528, 0.000002294418)" />
+                        <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)" />
+                        <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)" />
                 </pattern>
                 <symbol id="symbol-8" viewBox="0 0 52 28">
                         <title>shop--037--0.4x0.8</title>
@@ -121,7 +121,7 @@
                                 <title>shop--035--0.4x0.8</title>
                         </rect>
                         <defs>
-                                <bx:grid x="0" y="0" width="60" height="60"/>
+                                <bx:grid x="0" y="0" width="60" height="60" />
                         </defs>
                 </symbol>
         </defs>
@@ -186,40 +186,40 @@
                 <title>wall hull</title>
         </path>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="1179.1" y="28.6">
-                <title>decor go label=locker</title>
+                <title>decor label=locker</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="1179.1" y="88.6">
-                <title>decor go label=locker</title>
+                <title>decor label=locker</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="1179.1" y="148.6">
-                <title>decor go label=locker</title>
+                <title>decor label=locker</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="1179.1" y="208.6">
-                <title>decor go label=locker</title>
+                <title>decor label=locker</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="1129.1" y="158.6">
-                <title>decor go label=eva</title>
+                <title>decor label=eva</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="977.5" y="472">
-                <title>decor go label='parts or cargo'</title>
+                <title>decor label='parts or cargo'</title>
         </rect>
         <rect style="fill-opacity: 0.5; fill: rgb(0, 255, 0);" x="158" y="458" height="10" width="10">
                 <title>decor label=fuel</title>
         </rect>
         <rect style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="500" y="470" height="10" width="10">
-                <title>decor go label=airlock</title>
+                <title>decor label=airlock</title>
         </rect>
         <rect style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="728" y="472" height="10" width="10">
-                <title>decor go label='repair bay'</title>
+                <title>decor label='repair bay'</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="1129.1" y="358.6">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="719.1" y="558.6">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="49.1" y="528.6">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect x="-4" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull edge=w</title>

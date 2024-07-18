@@ -218,7 +218,12 @@ class GeomorphService {
       room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
     ));
 
-    const decor = symbol.decor.map((d, i) => this.decorFromPoly(d));
+    const decor = /** @type {Geomorph.Decor[]} */ ([]);
+    const labels = /** @type {Geomorph.DecorPoint[]} */ ([]);
+    symbol.decor.forEach((d, localId) => {
+      d.meta.localId = localId;
+      (d.meta.label ? labels : decor).push(this.decorFromPoly(d));
+    });
 
     const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const navPolyWithDoors = Poly.cutOut([
@@ -242,11 +247,12 @@ class GeomorphService {
     return {
       key: gmKey,
       num: this.toGmNum[gmKey],
-      decor,
       pngRect: pngRect.clone(),
+      decor,
       doors,
       hullPoly,
       hullDoors: doors.filter(x => x.meta.hull),
+      labels,
       obstacles: symbol.obstacles.map(/** @returns {Geomorph.LayoutObstacle} */ o => {
         const obstacleId = /** @type {number} */ (o.meta.obsId);
         const symbolKey = /** @type {Geomorph.SymbolKey} */ (o.meta.symKey);
@@ -447,6 +453,7 @@ class GeomorphService {
       doors,
       hullPoly: json.hullPoly.map(x => Poly.from(x)),
       hullDoors: doors.filter(x => x.meta.hull),
+      labels: json.labels,
       obstacles: json.obstacles.map(x => {
         const origPoly = Poly.from(x.origPoly);
         return {
@@ -1169,6 +1176,7 @@ class GeomorphService {
       doors: layout.doors.map(x => x.json),
       hullDoors: layout.hullDoors.map((x) => x.json),
       hullPoly: layout.hullPoly.map(x => x.geoJson),
+      labels: layout.labels,
       obstacles: layout.obstacles.map(x => ({
         symbolKey: x.symbolKey,
         obstacleId: x.obstacleId,

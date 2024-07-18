@@ -194,53 +194,62 @@ export default function Decor(props) {
     getDecorOrigin(decor) {
       return decor.type === 'point' ? decor : decor.center;
     },
-    instantiateDecor(gmId, gm) {
-      /** @type {Geomorph.Decor[]} */ ([]);
-      const ds = gm.decor.map((def, localId) => {
-        /** @type {Geomorph.Decor} */ let out;
-        const base = {
-          key: '', // must compute after apply transform
-          meta: { ...def.meta, gmId, localId },
-          bounds2d: tmpRect1.copy(def.bounds2d).applyMatrix(gm.matrix).json,
-          src: gm.key,
-        };
+    instantiateDecor(d, gmId, gm) {
+      /** @type {Geomorph.Decor} */
+      let instance;
+      /** @type {Geomorph.BaseDecor} */
+      const base = {
+        key: '', // must compute after apply transform
+        meta: { ...d.meta, gmId },
+        bounds2d: tmpRect1.copy(d.bounds2d).applyMatrix(gm.matrix).json,
+        src: gm.key,
+      };
 
-        switch (def.type) {
-          case 'circle':
-            out = { ...def, ...base,
-              center: gm.matrix.transformPoint({ ...def.center }),
-            };
-            break;
-          case "cuboid":
-            const center = gm.matrix.transformPoint({ x: def.center.x, y: def.center.z });
-            const extent = gm.matrix.transformSansTranslate({ x: def.extent.x, y: def.extent.z });
-            out = { ...def, ...base,
-              center: { x: center.x, y: def.center.y, z: center.y },
-              extent: { x: extent.x, y: def.extent.y, z: extent.y },
-            };
-            break;
-          case "point":
-            out = gm.matrix.transformPoint({ ...def, ...base });
-            break;
-          case "poly":
-            out = { ...def, ...base,
-              center: gm.matrix.transformPoint({ ...def.center }),
-              points: def.points.map(p => gm.matrix.transformPoint({ ...p })),
-            };
-            break;
-          default:
-            throw testNever(def);
-        }
-        out.key = geomorphService.getDerivedDecorKey(out);
-        return out;
-      }).filter(d =>
+      switch (d.type) {
+        case 'circle':
+          instance = { ...d, ...base,
+            center: gm.matrix.transformPoint({ ...d.center }),
+          };
+          break;
+        case "cuboid":
+          const center = gm.matrix.transformPoint({ x: d.center.x, y: d.center.z });
+          const extent = gm.matrix.transformSansTranslate({ x: d.extent.x, y: d.extent.z });
+          instance = { ...d, ...base,
+            center: { x: center.x, y: d.center.y, z: center.y },
+            extent: { x: extent.x, y: d.extent.y, z: extent.y },
+          };
+          break;
+        case "point":
+          instance = gm.matrix.transformPoint(/** @type {Geomorph.DecorPoint} */ ({ ...d, ...base }));
+          break;
+        case "poly":
+          instance = { ...d, ...base,
+            center: gm.matrix.transformPoint({ ...d.center }),
+            points: d.points.map(p => gm.matrix.transformPoint({ ...p })),
+          };
+          break;
+        default:
+          throw testNever(d);
+      }
+      instance.key = geomorphService.getDerivedDecorKey(instance);
+      return /** @type {typeof d} */ (instance);
+    },
+    instantiateGeomorph(gmId, gm) {
+
+      /** @type {Geomorph.Decor[]} */ ([]);
+      const ds = gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
         // Don't re-instantiate explicitly removed
-        !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
+        .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
           warn(`decor "${d.key}" cannot be instantiated: not in any room`, d)
         )
       );
 
-      state.addDecor(ds, false); // Already removed existing
+      state.addDecor(ds, false);
+
+      // 🚧 ensure roomIds in gm.labels
+      // 🚧 set state.labels
+      // 🚧 move object w.labels to state.label
+
     },
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
@@ -406,7 +415,7 @@ export default function Decor(props) {
         await pause();
 
         for (const [gmId, gm] of w.gms.entries()) {
-          state.instantiateDecor(gmId, gm);
+          state.instantiateGeomorph(gmId, gm);
           await pause();
         }
       } else {
@@ -416,7 +425,7 @@ export default function Decor(props) {
             continue;
           }
           state.removeInstantiated(gmId);
-          state.instantiateDecor(gmId, gm);
+          state.instantiateGeomorph(gmId, gm);
           await pause();
         }
       }
@@ -437,7 +446,8 @@ export default function Decor(props) {
   React.useEffect(() => {
     if (state.queryStatus === 'success') {
       w.events.next({ key: 'decor-instantiated' });
-      w.ensureLabelSheet(state.labels); // 🚧 only when needed
+      // 🚧
+      // w.ensureLabelSheet(state.labels); // 🚧 only when needed
       state.addQuadUvs();
       state.positionInstances();
     }
@@ -543,7 +553,8 @@ export default function Decor(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
- * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateDecor
+ * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
+ * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateGeomorph
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances

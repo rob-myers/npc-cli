@@ -199,6 +199,7 @@ declare namespace Geomorph {
     doors: C[];
     hullDoors: C[];
     hullPoly: P[];
+    labels: DecorPoint[];
     obstacles: LayoutObstacleGeneric<P, V>[];
     rooms: P[];
     walls: P[];
