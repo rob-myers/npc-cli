@@ -147,7 +147,7 @@ export default function World(props) {
   useQuery({
     queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
     queryFn: async () => {
-
+      // console.log('🔔 query debug', [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey])
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = /** @type {Geomorph.GeomorphsJson} */ (
         await fetch(

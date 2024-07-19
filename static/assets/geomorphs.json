@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 1574923431 -1816468892 743417541",
+  "hash": "610044716 1424571584 -504259192 -712046517",
   "mapsHash": 610044716,
-  "layoutsHash": 1574923431,
-  "sheetsHash": -1816468892,
-  "imagesHash": 743417541,
+  "layoutsHash": 1424571584,
+  "sheetsHash": -504259192,
+  "imagesHash": -712046517,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -8170,6 +8170,24 @@
           },
           "transform": [0.2475, 0.2475, -0.3394, 0.3394, 20.4228, 21.7583],
           "center": {"x": 20.376849999999997, "y": 22.05175}
+        },
+        {
+          "type": "quad",
+          "key": "quad[20_5464,0_61,22_5982]",
+          "meta": {
+            "decor": true,
+            "img": "icon--004--key-card",
+            "y": 0.61,
+            "quad": true
+          },
+          "bounds2d": {
+            "x": 20.5464,
+            "y": 22.5982,
+            "width": 0.2749,
+            "height": 0.3968
+          },
+          "transform": [0, 0.3968, -0.2749, 0, 20.8213, 22.5982],
+          "center": {"x": 20.68385, "y": 22.796599999999998}
         },
         {
           "type": "point",
@@ -16486,6 +16504,24 @@
           "center": {"x": 4.94825, "y": 3.62315}
         },
         {
+          "type": "quad",
+          "key": "quad[4_005,0_61,3_1787]",
+          "meta": {
+            "decor": true,
+            "img": "icon--004--key-card",
+            "y": 0.61,
+            "quad": true
+          },
+          "bounds2d": {
+            "x": 4.005,
+            "y": 3.1787,
+            "width": 0.3968,
+            "height": 0.2749
+          },
+          "transform": [-0.3968, 0, 0, 0.2749, 4.4018, 3.1787],
+          "center": {"x": 4.203399999999999, "y": 3.3161499999999995}
+        },
+        {
           "type": "point",
           "key": "point[2_3603,0_41,2_3999]",
           "meta": {
@@ -16542,6 +16578,24 @@
           },
           "transform": [0.2475, -0.2475, 0.3394, 0.3394, 24.7583, 3.5772],
           "center": {"x": 25.05175, "y": 3.6231499999999994}
+        },
+        {
+          "type": "quad",
+          "key": "quad[25_5982,0_61,3_1787]",
+          "meta": {
+            "decor": true,
+            "img": "icon--004--key-card",
+            "y": 0.61,
+            "quad": true
+          },
+          "bounds2d": {
+            "x": 25.5982,
+            "y": 3.1787,
+            "width": 0.3968,
+            "height": 0.2749
+          },
+          "transform": [0.3968, 0, 0, 0.2749, 25.5982, 3.1787],
+          "center": {"x": 25.796599999999998, "y": 3.3161499999999995}
         },
         {
           "type": "point",
@@ -25493,6 +25547,24 @@
           "center": {"x": 29.376849999999997, "y": 13.998249999999999}
         },
         {
+          "type": "quad",
+          "key": "quad[29_5464,0_61,13_055]",
+          "meta": {
+            "decor": true,
+            "img": "icon--004--key-card",
+            "y": 0.61,
+            "quad": true
+          },
+          "bounds2d": {
+            "x": 29.5464,
+            "y": 13.055,
+            "width": 0.2749,
+            "height": 0.3968
+          },
+          "transform": [0, -0.3968, -0.2749, 0, 29.8213, 13.4518],
+          "center": {"x": 29.68385, "y": 13.253400000000001}
+        },
+        {
           "type": "point",
           "key": "point[26_3501,0_41,11_4104]",
           "meta": {
@@ -31219,37 +31291,55 @@
         "decorImgKey": "door--002--hull",
         "x": 2,
         "y": 2,
-        "width": 250,
-        "height": 300
+        "width": 300,
+        "height": 360
       },
       "door--001": {
         "door": true,
         "decorImgKey": "door--001",
-        "x": 254,
+        "x": 304,
         "y": 2,
-        "width": 110,
-        "height": 200
+        "width": 132,
+        "height": 240
+      },
+      "icon--003--warn": {
+        "icon": true,
+        "003": true,
+        "decorImgKey": "icon--003--warn",
+        "x": 304,
+        "y": 244,
+        "width": 84,
+        "height": 75
       },
       "icon--002--doc": {
         "icon": true,
         "002": true,
         "decorImgKey": "icon--002--doc",
-        "x": 254,
-        "y": 204,
-        "width": 42,
-        "height": 60
+        "x": 2,
+        "y": 364,
+        "width": 50,
+        "height": 72
+      },
+      "icon--004--key-card": {
+        "icon": true,
+        "004": true,
+        "decorImgKey": "icon--004--key-card",
+        "x": 54,
+        "y": 364,
+        "width": 72,
+        "height": 48
       },
       "icon--001--info": {
         "icon": true,
         "001": true,
         "decorImgKey": "icon--001--info",
-        "x": 298,
-        "y": 204,
-        "width": 50,
-        "height": 50
+        "x": 128,
+        "y": 364,
+        "width": 60,
+        "height": 60
       }
     },
     "obstacleDim": {"width": 2151, "height": 2154},
-    "decorDim": {"width": 366, "height": 304}
+    "decorDim": {"width": 438, "height": 438}
   }
 }

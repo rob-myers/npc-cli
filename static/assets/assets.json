@@ -66,7 +66,7 @@
       "obsHashes": [550873257]
     },
     "console--019--2x2": {
-      "outputHash": 1502113719,
+      "outputHash": 856151387,
       "pngHash": -752773709,
       "obsHashes": [1188073384]
     },
@@ -1015,38 +1015,56 @@
         "decorImgKey": "door--002--hull",
         "x": 2,
         "y": 2,
-        "width": 250,
-        "height": 300
+        "width": 300,
+        "height": 360
       },
       "door--001": {
         "door": true,
         "decorImgKey": "door--001",
-        "x": 254,
+        "x": 304,
         "y": 2,
-        "width": 110,
-        "height": 200
+        "width": 132,
+        "height": 240
+      },
+      "icon--003--warn": {
+        "icon": true,
+        "003": true,
+        "decorImgKey": "icon--003--warn",
+        "x": 304,
+        "y": 244,
+        "width": 84,
+        "height": 75
       },
       "icon--002--doc": {
         "icon": true,
         "002": true,
         "decorImgKey": "icon--002--doc",
-        "x": 254,
-        "y": 204,
-        "width": 42,
-        "height": 60
+        "x": 2,
+        "y": 364,
+        "width": 50,
+        "height": 72
+      },
+      "icon--004--key-card": {
+        "icon": true,
+        "004": true,
+        "decorImgKey": "icon--004--key-card",
+        "x": 54,
+        "y": 364,
+        "width": 72,
+        "height": 48
       },
       "icon--001--info": {
         "icon": true,
         "001": true,
         "decorImgKey": "icon--001--info",
-        "x": 298,
-        "y": 204,
-        "width": 50,
-        "height": 50
+        "x": 128,
+        "y": 364,
+        "width": 60,
+        "height": 60
       }
     },
     "obstacleDim": {"width": 2151, "height": 2154},
-    "decorDim": {"width": 366, "height": 304}
+    "decorDim": {"width": 438, "height": 438}
   },
   "symbols": {
     "101--hull": {
@@ -5471,6 +5489,24 @@
             "y": 0.61,
             "quad": true,
             "transform": [0.2475, -0.2475, 0.3394, 0.3394, 0.7583, 0.5772]
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [1.995, 0.1787],
+              [1.995, 0.4536],
+              [1.5982, 0.4536],
+              [1.5982, 0.1787]
+            ]
+          ],
+          "meta": {
+            "decor": true,
+            "img": "icon--004--key-card",
+            "y": 0.61,
+            "quad": true,
+            "transform": [0.3968, 0, 0, 0.2749, 1.5982, 0.1787]
           }
         }
       ],

@@ -27,7 +27,7 @@ export const gmFloorExtraScale = 2;
 export const spriteSheetNonHullExtraScale = 2.5;
 
 /** Can be any value in `[1, 5]`. */
-export const spriteSheetDecorExtraScale = 2.5;
+export const spriteSheetDecorExtraScale = 3;
 
 export const gmLabelHeightSgu = 12;
 

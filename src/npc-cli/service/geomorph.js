@@ -173,6 +173,8 @@ class GeomorphService {
     'door--002--hull': true,
     'icon--001--info': true,
     'icon--002--doc': true,
+    'icon--003--warn': true,
+    'icon--004--key-card': true,
   };
 
   /** @type {Geomorph.SymbolKey[]} */

@@ -70,4 +70,7 @@
                         <title>console--051--0.4x0.6 y=0.4</title>
                 </use>
         </g>
+        <use width="1" height="1" transform="matrix(79.369232177734, 0, 0, 54.970664978027, 358.825714111328, 62.727893829346)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
+                <title>decor img=icon--004--key-card y=0.61</title>
+        </use>
 </svg>

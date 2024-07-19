@@ -110,7 +110,10 @@ export default function Decor(props) {
       const uvDimensions = /** @type {number[]} */ ([]);
       
       for (const d of state.quads) {
-        const item = geomorphService.isDecorImgKey(d.meta.img) ? sheet[d.meta.img] : sheet['icon--001--info'];
+        const item = geomorphService.isDecorImgKey(d.meta.img)
+          ? sheet[d.meta.img] // fallback differs for 'point' vs 'quad'
+          : d.type === 'point' ? sheet['icon--001--info'] : sheet['icon--003--warn'];
+        ;
         const { x, y, width, height } = item;
         uvOffsets.push(x / dim.width,  y / dim.height);
         uvDimensions.push(width / dim.width, height / dim.height);
@@ -489,11 +492,10 @@ export default function Decor(props) {
   w.decor = state;
   
   // instantiate geomorph decor
-  // 🚧 run on hmr
   state.queryStatus = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
-
+      // console.log('🔔 query debug', ['decor', w.key, w.decorHash]);
       const prev = state.hash;
       const next = state.computeHash();
       const mapChanged = prev.mapHash !== next.mapHash;
@@ -528,14 +530,16 @@ export default function Decor(props) {
       }
 
       state.hash = next;
+      w.events.next({ key: 'decor-instantiated' });
       update();
       return null;
     },
-    refetchOnMount: false,
-    refetchOnReconnect: false,
+    // refetchOnMount: false,
+    // refetchOnReconnect: false,
+    // staleTime: Infinity,
+    // 👆 all above stopped hmr
     refetchOnWindowFocus: false,
     retry: false, // fix dup invokes
-    staleTime: Infinity,
     gcTime: 0,
     // throwOnError: true,
   }).status;
@@ -544,7 +548,6 @@ export default function Decor(props) {
 
   React.useEffect(() => {
     if (state.queryStatus === 'success') {
-      w.events.next({ key: 'decor-instantiated' });
       state.addQuadUvs();
       state.positionInstances();
     }
@@ -585,7 +588,7 @@ export default function Decor(props) {
         side={THREE.DoubleSide}
         map={w.decorTex}
         transparent
-        // diffuse={new THREE.Vector3(1, 1, 1)}
+        diffuse={new THREE.Vector3(1, 1, 1)}
       />
     </instancedMesh>
 

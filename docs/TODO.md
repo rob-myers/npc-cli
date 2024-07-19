@@ -94,12 +94,12 @@
       - use "decor quad symbol" with axes pattern and dim 10x10
   - ✅ decor point induces quads
     - with fallback image `icon--001--info`
-  - 🚧 decor poly induces quads
-    - with _failed_ fallback image ...
-  - decor cuboids can effect nav-mesh
-  - fix geomorph decor warns e.g. not fuel label not in any room
+  - ✅ decor quad has fallback image
+  - ✅ fix hmr on extend decor sprite-sheet
   - ✅ saw decor disappear when editing symbols
     - hopefully fixed by prevent query re-compute i.e. `retry: false`
+  - decor cuboids can effect nav-mesh
+  - fix geomorph decor warns e.g. not fuel label not in any room
   - can choose colour of decor cuboids
   - can choose colour of decor quads
 
@@ -123,6 +123,9 @@
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
+ 
+- decor sprite bounds issue on edit decor
+  - e.g. resize extant decor sprite
 - support recursive stringified Set
 - duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
