@@ -314,8 +314,8 @@ export default function Decor(props) {
           break;
         }
         case "point": {
-          // +90 so "bottom to top" of text in sprite-sheet "faces" direction
-          const orient = gm.matrix.transformDegrees(d.orient) + 90;
+          // +90 after transform so bottom-to-top sprite-sheet text "faces" direction
+          const orient = (gm.matrix.transformDegrees(d.orient) + 90) % 360;
           instance = gm.matrix.transformPoint(/** @type {Geomorph.DecorPoint} */ ({ ...d, ...base, orient }));
           instance.meta.orient = orient; // update `meta` too
           break;

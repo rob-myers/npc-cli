@@ -129,6 +129,8 @@
 - decor sprite bounds issue on edit decor
   - e.g. resize extant decor sprite
 - support recursive stringified Set
+- running `source PROFILE` twice breaks e.g. toggle door
+  - maybe detect/warn "duplicate process def"
 - duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
 - tty pause/resume loses should remember cursor position
