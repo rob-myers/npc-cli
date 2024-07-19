@@ -16,11 +16,6 @@ const rootCss = css`
   margin: 32px 0;
   padding: 0px 48px;
   border-left: 4px solid #dde;
-  font-style: italic;
-  
-  p > strong:first-of-type {
-    font-style: normal;
-  }
 
   @media(max-width: ${breakpoint}) {
     padding: 0px 32px;
