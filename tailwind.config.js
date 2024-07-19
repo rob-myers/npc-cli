@@ -5,7 +5,17 @@ module.exports = {
     "./src/components/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            blockquote: {
+              quotes: "none"
+            }
+          },
+        }
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 }
