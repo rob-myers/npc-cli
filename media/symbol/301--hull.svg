@@ -70,7 +70,7 @@
                 <use width="120" height="120" transform="matrix(1, 0, 0, -1.0000003576278687, 120, 480.0000305175781)" style="" xlink:href="#symbol-1">
                         <title>stateroom--014--2x2</title>
                 </use>
-                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.0000015664786587876733, 0.000003506096163619077)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.000001566478772474511, 0.000003506096163619077)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
                         <title>stateroom--036--2x4</title>
                 </use>
                 <use width="120" height="240" transform="matrix(-1, 0, 0, 1, 1080, 1.1300499380695328e-7)" style="transform-origin: 60px 120px;" xlink:href="#symbol-0">
@@ -126,7 +126,7 @@
                 <title>decor label=study</title>
         </rect>
         <rect width="30" height="20" style="paint-order: fill; stroke: rgb(255, 0, 0); opacity: 0.5;" y="240" x="195">
-                <title>decor cuboid table h=0.5 y=0</title>
+                <title>decor cuboid table nav h=0.5 y=0</title>
         </rect>
         <rect x="-4" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull edge=w</title>

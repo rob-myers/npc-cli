@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": 1183490474, "pngHash": 568633107},
     "102--hull": {"outputHash": 603397466, "pngHash": 184103855},
     "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
-    "301--hull": {"outputHash": 296456550, "pngHash": 787602800},
+    "301--hull": {"outputHash": -959575971, "pngHash": 787602800},
     "302--hull": {"outputHash": -1818473413, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": 949530086,
@@ -2432,6 +2432,7 @@
             "decor": true,
             "cuboid": true,
             "table": true,
+            "nav": true,
             "h": 0.5,
             "y": 0
           }
