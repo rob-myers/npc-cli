@@ -172,13 +172,8 @@ export default function Decor(props) {
     },
     createQuadMatrix4(d) {
       if (d.type === 'point') {
-        // move to center, scale, possibly rotate if meta.orient
-        const radians = typeof d.meta.orient === 'number'
-          // +90 so "bottom to top" of text in sprite-sheet "faces" direction
-          ? (d.meta.orient + 90) * (Math.PI / 180)
-          : 0
-        ;
-
+        // move to center, scale, possibly rotate
+        const radians = d.orient * (Math.PI / 180);
         if (radians !== 0) {
           tmpMat1.feedFromArray([1, 0, 0, 1, -0.5, -0.5])
             .postMultiply([
@@ -309,7 +304,7 @@ export default function Decor(props) {
             center: gm.matrix.transformPoint({ ...d.center }),
           };
           break;
-        case "cuboid":
+        case "cuboid": {
           const center = gm.matrix.transformPoint({ x: d.center.x, y: d.center.z });
           const extent = gm.matrix.transformSansTranslate({ x: d.extent.x, y: d.extent.z });
           instance = { ...d, ...base,
@@ -317,9 +312,14 @@ export default function Decor(props) {
             extent: { x: extent.x, y: d.extent.y, z: extent.y },
           };
           break;
-        case "point":
-          instance = gm.matrix.transformPoint(/** @type {Geomorph.DecorPoint} */ ({ ...d, ...base }));
+        }
+        case "point": {
+          // +90 so "bottom to top" of text in sprite-sheet "faces" direction
+          const orient = gm.matrix.transformDegrees(d.orient) + 90;
+          instance = gm.matrix.transformPoint(/** @type {Geomorph.DecorPoint} */ ({ ...d, ...base, orient }));
+          instance.meta.orient = orient; // update `meta` too
           break;
+        }
         case "poly":
           instance = { ...d, ...base,
             center: gm.matrix.transformPoint({ ...d.center }),
@@ -492,6 +492,7 @@ export default function Decor(props) {
   w.decor = state;
   
   // instantiate geomorph decor
+  // 🚧 force recompute on hmr: invalidate hash (?)
   state.queryStatus = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {

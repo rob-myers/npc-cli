@@ -408,7 +408,9 @@ class GeomorphService {
       const center = poly.center.precision(precision);
       const radius = decorIconRadius + 2;
       const bounds2d = tmpRect1.set(center.x - radius, center.y - radius, 2 * radius, 2 * radius).precision(precision).json;
-      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y };
+      // +90 so "bottom to top" of text in sprite-sheet "faces" direction
+      const orient = typeof meta.orient === 'number' ? meta.orient : 0;
+      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
     }
 
     out.key = this.getDerivedDecorKey(out); // overridden on instantiation
@@ -1290,7 +1292,7 @@ class GeomorphService {
     return {
       ...meta,
       // aggregate `y` i.e. height off ground
-      y: (Number(y) || 0) + (Number(meta.y) || 0),
+      y: (Number(y) || 0) + (Number(meta.y) || 0.01),
       // transform `orient` i.e. orientation in degrees
       ...typeof meta.orient === 'number' && { orient: mat.transformDegrees(meta.orient) },
       // transform `transform` i.e. affine transform from unit quad (0,0)...(1,1) to rect
