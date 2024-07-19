@@ -72,6 +72,9 @@ async function handleMessages(e) {
           mapKey,
           exportedNavMesh: exportNavMesh(navMesh, tileCache),
         });
+
+        tileCache.destroy();
+        navMesh.destroy();
       } else {
         error(`Failed to compute navMesh: ${'error' in result ? result.error : 'unknown error'}`);
       }
