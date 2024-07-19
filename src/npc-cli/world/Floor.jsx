@@ -61,7 +61,7 @@ export default function Floor(props) {
       gm.decor.forEach((decor) => {
         if (decor.type === 'circle') {
           drawCircle(ct, decor.center, decor.radius, [null, '#500', 0.04]);
-        } else if (decor.type === 'poly' && decor.meta.img === undefined) {
+        } else if (decor.type === 'poly') {
           drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
         }
       });

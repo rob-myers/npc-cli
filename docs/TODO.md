@@ -90,10 +90,12 @@
     - ✅ add a `decor poly` with `img=icon--002--doc`
     - ✅ w.quads includes `decor poly`s
     - ✅ rotated rect 4-gon -> affine transform
+      - need to know orientation of image
+      - use "decor quad symbol" with axes pattern and dim 10x10
   - ✅ decor point induces quads
     - with fallback image `icon--001--info`
   - 🚧 decor poly induces quads
-    - with fallback image ...
+    - with _failed_ fallback image ...
   - decor cuboids can effect nav-mesh
   - fix geomorph decor warns e.g. not fuel label not in any room
   - ✅ saw decor disappear when editing symbols
@@ -102,6 +104,11 @@
   - can choose colour of decor quads
 
 - ✅ world provides "resolve when ready" api
+- ✅ DecorQuad (not DecorPoly) derived from decor `<use>`
+  - ✅ infer transform from 10x10 symbol (pre-scale by 10)
+  - ✅ symbol instances apply to transform
+  - ✅ use transform to position InstancedMesh instance
+  - ✅ handle transform-origin
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
 

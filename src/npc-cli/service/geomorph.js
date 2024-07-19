@@ -221,10 +221,9 @@ class GeomorphService {
 
     const decor = /** @type {Geomorph.Decor[]} */ ([]);
     const labels = /** @type {Geomorph.DecorPoint[]} */ ([]);
-    symbol.decor.forEach((d, localId) => {
-      d.meta.localId = localId;
-      (d.meta.label ? labels : decor).push(this.decorFromPoly(d));
-    });
+    symbol.decor.forEach((d) => (
+      typeof d.meta.label === 'string' ? labels : decor).push(this.decorFromPoly(d))
+    );
 
     const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const navPolyWithDoors = Poly.cutOut([
@@ -366,9 +365,14 @@ class GeomorphService {
     
     const base = { key: '', meta }; // key derived from decor below
     
-    if (meta.rect || meta.poly) {
+    if (meta.poly) {
       const polyRect = poly.rect.precision(precision);
       out = { type: 'poly', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
+    } else if (meta.quad) {
+      const polyRect = poly.rect.precision(precision);
+      const { transform } = poly.meta;
+      delete poly.meta.transform;
+      out = { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.json };
     } else if (meta.cuboid) {
       const polyRect = poly.rect.precision(precision);
       const defaultDecorCuboidHeight = 0.5; // 🚧
@@ -524,14 +528,34 @@ class GeomorphService {
   }
 
   /**
+   * Extract a polygon with meta from an SVG symbol tag i.e.
+   * - <rect> e.g. possibly rotated wall
+   * - <path> e.g. complex obstacle
+   * - <use><title>decor ...</use> i.e. instance of decor-unit-quad
+   * - <image> i.e. background image in symbol
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
-   * @param {number} [scale]
+   * @param {Geom.Meta} meta
+   * @param {number} scale
    * @returns {Geom.Poly | null}
    */
-  extractGeom(tagMeta, scale) {
+  extractGeom(tagMeta, meta, scale) {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
+
+    if (tagName === "use" && meta.decor === true) {
+      // support transform-origin (Boxy adds e.g. when rotating)
+      const trOrigin = geomorphService.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
+      tmpMat1.setMatrixValue(tagMeta.attributes.transform)
+        .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
+        .postMultiply([scale, 0, 0, scale, trOrigin.x * scale, trOrigin.y * scale])
+        .precision(precision)
+      ;
+      poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
+      poly.meta = Object.assign(meta, { quad: true, transform: tmpMat1.toArray() });
+      // console.log('🔔 saw decor quad', poly.meta, trOrigin);
+      return poly.precision(precision).cleanFinalReps().fixOrientation();
+    }
 
     if (tagName === "rect" || tagName === "image") {
       poly = Poly.fromRect(new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0)));
@@ -546,7 +570,7 @@ class GeomorphService {
       return null;
     }
 
-    // DOMMatrix not available server-side
+    // 🔔 DOMMatrix not available server-side
     const { transformOrigin } = geomorphService.extractTransformData(tagMeta);
     if (a.transform && transformOrigin) {
       poly.translate(-transformOrigin.x, -transformOrigin.y)
@@ -557,6 +581,7 @@ class GeomorphService {
     }
 
     typeof scale === "number" && poly.scale(scale);
+    poly.meta = meta;
 
     return poly.precision(precision).cleanFinalReps().fixOrientation();
   }
@@ -615,10 +640,10 @@ class GeomorphService {
     const style = geomorphService.extractStyles(a.style ?? "");
     const transformOrigin = (style['transform-origin'] || '').trim();
     const transformBox = style['transform-box'] || null;
+    const [xPart, yPart] = transformOrigin.split(/\s+/);
     
     /** For `transform-box: fill-box` */
     let bounds = /** @type {Rect | undefined} */ (undefined);
-    const [xPart, yPart] = transformOrigin.split(/\s+/);
 
     if (!xPart || !yPart) {
       transformOrigin && error(`${tagName}: transform-box/origin: "${transformBox}"/"${transformOrigin}": transform-origin must have an "x part" and a "y part"`);
@@ -638,6 +663,7 @@ class GeomorphService {
         return { transformOrigin: null, transformBox };
       }
     }
+
     const [x, y] = [xPart, yPart].map((rep, i) => {
       /** @type {RegExpMatchArray | null} */ let match = null;
       if ((match = rep.match(/^(-?\d+(?:.\d+)?)%$/))) {// e.g. -50.02%
@@ -1034,14 +1060,12 @@ class GeomorphService {
           return;
         }
 
-        const poly = geomorphService.extractGeom({ ...parent, title: contents }, scale);
+        const meta = geomorphService.tagsToMeta(ownTags, {});
+        const poly = geomorphService.extractGeom({ ...parent, title: contents }, meta, scale);
         
         if (poly === null) {
           return;
         }
-
-        const meta = geomorphService.tagsToMeta(ownTags, {});
-        poly.meta = meta;
 
         // Sort polygon
         if (meta.wall === true) {
@@ -1263,11 +1287,14 @@ class GeomorphService {
   transformDecorMeta(meta, mat, y) {
     return {
       ...meta,
-      // aggregate height
-      // ...typeof y === 'number' && { y: y + (Number(meta.y) || 0) },
+      // aggregate `y` i.e. height off ground
       y: (Number(y) || 0) + (Number(meta.y) || 0),
-      // transform orient
+      // transform `orient` i.e. orientation in degrees
       ...typeof meta.orient === 'number' && { orient: mat.transformDegrees(meta.orient) },
+      // transform `transform` i.e. affine transform from unit quad (0,0)...(1,1) to rect
+      ...Array.isArray(meta.transform) && {
+        transform: tmpMat2.setMatrixValue(tmpMat1).preMultiply(/** @type {Geom.SixTuple} */ (meta.transform)).toArray(),
+      },
     };
   }
 }

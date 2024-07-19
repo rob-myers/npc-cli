@@ -265,6 +265,7 @@ declare namespace Geomorph {
     | DecorCircle
     | DecorCuboid
     | DecorPoint
+    | DecorQuad
     | DecorPoly
   );
 
@@ -289,6 +290,12 @@ declare namespace Geomorph {
   }
   
   /** Simple polygon sans holes. */
+  interface DecorQuad extends BaseDecor {
+    type: 'quad';
+    transform: Geom.SixTuple;
+    center: Geom.VectJson;
+  }
+
   interface DecorPoly extends BaseDecor {
     type: 'poly';
     points: Geom.VectJson[];

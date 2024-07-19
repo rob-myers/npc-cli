@@ -104,7 +104,7 @@ export default function Decor(props) {
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
     },
-    addQuadUvs() {// 🚧
+    addQuadUvs() {
       const { decor: sheet, decorDim: dim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
@@ -195,16 +195,14 @@ export default function Decor(props) {
 
         return geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
-          yHeight: d.meta.y || 0.01, // 🚧 default point height > 0
+          yHeight: d.meta.y,
         });
-      } else {// 🚧 assume rotated rect
-        const [p, q, r, s] = d.points;
-        tmpMat1.feedFromArray([
-          q.x - p.x, q.y - p.y, s.x - p.x, s.y - p.y, p.x, p.y,
-        ]);
+      
+      } else {// d.type === 'quad'
+        tmpMat1.feedFromArray(d.transform);
         return geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
-          yHeight: d.meta.y ?? 2, // 🚧 default poly height
+          yHeight: d.meta.y,
         });
       }
     },
@@ -323,6 +321,12 @@ export default function Decor(props) {
           instance = { ...d, ...base,
             center: gm.matrix.transformPoint({ ...d.center }),
             points: d.points.map(p => gm.matrix.transformPoint({ ...p })),
+          };
+          break;
+        case "quad":
+          instance = { ...d, ...base,
+            center: gm.matrix.transformPoint({ ...d.center }),
+            transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
           };
           break;
         default:
@@ -472,11 +476,11 @@ export default function Decor(props) {
       );
 
       state.quads = Object.values(state.byKey).filter(
-        /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorPoly} */
+        /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorQuad} */
         x => x.type === 'point' && (
           x.meta.do === true || x.meta.button === true
-        ) || x.type === 'poly' && (
-          typeof x.meta.img === 'string'
+        ) || x.type === 'quad' && (
+          typeof x.meta.img === 'string' // 🚧 warn if n'exist pas?
         )
       );
     },
@@ -484,7 +488,9 @@ export default function Decor(props) {
 
   w.decor = state;
   
-  state.queryStatus = useQuery({// instantiate geomorph decor
+  // instantiate geomorph decor
+  // 🚧 run on hmr
+  state.queryStatus = useQuery({
     queryKey: ['decor', w.key, w.decorHash],
     async queryFn() {
 
@@ -623,7 +629,7 @@ export default function Decor(props) {
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
  * @property {LabelsMeta} label
- * @property {(Geomorph.DecorPoint | Geomorph.DecorPoly)[]} quads
+ * @property {(Geomorph.DecorPoint | Geomorph.DecorQuad)[]} quads
  * This is `Object.values(state.byKey)`
  * @property {THREE.BufferGeometry} quadGeom
  * @property {THREE.InstancedMesh} quadInst
@@ -639,7 +645,7 @@ export default function Decor(props) {
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {() => State['hash']} computeHash
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
- * @property {(d: Geomorph.DecorPoint | Geomorph.DecorPoly) => THREE.Matrix4} createQuadMatrix4
+ * @property {(d: Geomorph.DecorPoint | Geomorph.DecorQuad) => THREE.Matrix4} createQuadMatrix4
  * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
