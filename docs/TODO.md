@@ -101,9 +101,10 @@
   - ✅ fix decor point orient again (in transformed geomorph)
     - d.meta.orient -> d.orient for DecorPoint
   - ✅ decor cuboids can effect nav-mesh via tag `nav`
-  - 🚧 fix geomorph decor warns e.g. not fuel label not in any room
-  - can choose colour of decor cuboids
-  - can choose colour of decor quads
+  - ✅ fix geomorph decor warns e.g. not fuel label not in any room
+    - these were all labels, so fixed by moving them out of `w.decor.byKey`
+  - 🚧 can choose colour of decor cuboids
+  - 🚧 can choose colour of decor quads
 
 - ✅ world provides "resolve when ready" api
 - ✅ DecorQuad (not DecorPoly) derived from decor `<use>`
