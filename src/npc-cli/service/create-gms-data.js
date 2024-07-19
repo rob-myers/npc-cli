@@ -53,7 +53,7 @@ export default function createGmsData({ prevGmData }) {
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
       gmData.hitCtxt ??= /** @type {CanvasRenderingContext2D} */ (
-        document.createElement('canvas').getContext('2d')
+        document.createElement('canvas').getContext('2d', { willReadFrequently: true })
       );
       const bounds = gm.pngRect.clone().scale(worldToSguScale);
       gmData.hitCtxt.canvas.width = bounds.width;

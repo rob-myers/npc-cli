@@ -187,6 +187,7 @@ export default function World(props) {
             lookup[gmKey] = createCanvasTexDef(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
               pngRect.height * worldToSguScale * gmFloorExtraScale,
+              { willReadFrequently: true },
             );
           }
         });

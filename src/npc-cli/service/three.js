@@ -167,14 +167,19 @@ const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 /**
  * @param {number} width 
  * @param {number} height 
+ * @param {object} [opts]
+ * @param {boolean} [opts.willReadFrequently]
  */
-export function createCanvasTexDef(width, height) {
+export function createCanvasTexDef(width, height, opts) {
   const el = document.createElement('canvas');
   el.width = width;
   el.height = height;
   /** @type {CanvasTexDef} */
   const def = [
-    /** @type {CanvasRenderingContext2D} */(el.getContext('2d')),
+    /** @type {CanvasRenderingContext2D} */(el.getContext(
+      '2d',
+      { willReadFrequently: opts?.willReadFrequently },
+    )),
     new THREE.CanvasTexture(el),
     el,
   ];
