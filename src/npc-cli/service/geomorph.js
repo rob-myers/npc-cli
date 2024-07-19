@@ -231,6 +231,9 @@ class GeomorphService {
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
       ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
+      ...decor.flatMap(d => d.type === 'cuboid' && d.meta.nav === true
+        ? geom.centredRectToPoly({ x: d.extent.x + obstacleOutset, y: d.extent.z + obstacleOutset }, { x: d.center.x, y: d.center.z }, d.angle)
+        : []),
     ], hullOutline).filter((poly) => 
       // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`
       poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))

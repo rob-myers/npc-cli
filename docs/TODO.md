@@ -100,8 +100,8 @@
     - hopefully fixed by prevent query re-compute i.e. `retry: false`
   - ✅ fix decor point orient again (in transformed geomorph)
     - d.meta.orient -> d.orient for DecorPoint
-  - decor cuboids can effect nav-mesh
-  - fix geomorph decor warns e.g. not fuel label not in any room
+  - ✅ decor cuboids can effect nav-mesh via tag `nav`
+  - 🚧 fix geomorph decor warns e.g. not fuel label not in any room
   - can choose colour of decor cuboids
   - can choose colour of decor quads
 

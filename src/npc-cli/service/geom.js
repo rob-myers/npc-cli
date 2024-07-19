@@ -4,6 +4,7 @@ import { Mat, Poly, Rect, Vect } from "../geom";
 
 class geomServiceClass {
   /**
+   * Angled rects are rotated about `(rect.x, rect.y)`
    * @param {Geom.AngledRect<Geom.Rect>} input
    * @returns {Geom.Poly}
    */
@@ -13,6 +14,21 @@ class geomServiceClass {
     poly.applyMatrix(new Mat().setRotation(input.angle));
     poly.translate(input.baseRect.x, input.baseRect.y);
     return poly;
+  }
+
+  /**
+   * @param {Geom.VectJson} extent Half extents
+   * @param {Geom.VectJson} center
+   * @param {number} angle
+   * @returns {Geom.Poly}
+   */
+  centredRectToPoly(extent, center, angle) {
+    return new Poly([
+      new Vect(center.x + -(extent.x), center.y + -(extent.y)),
+      new Vect(center.x + +(extent.x), center.y + -(extent.y)),
+      new Vect(center.x + +(extent.x), center.y + +(extent.y)),
+      new Vect(center.x + -(extent.x), center.y + +(extent.y)),
+    ]).applyMatrix(tmpMat1.setRotationAbout(angle, center));
   }
 
   /**
