@@ -12,115 +12,7 @@
   - resize-* 301 ✅ 302 🚧 303 🚧 101 🚧 102 🚧 103
 - ❌ decor point bounds determined by original rect/poly
 
-- 🚧 Decor component
-  - ✅ `<Decor>` exists
-  - ✅ clarify identifiers
-    - decorImgKey points into decor sprite-sheet
-    - decorKey (string) identifies instance
-    - can remove prev via "grouping by gmId" etc.
-    - decorKey not same as numeric instanceId (from instanced mesh)
-  - ✅ migrate decor grid
-  - ✅ decor points have fixed dimension bounds2d
-    - maybe should depend on whether they have an associated icon i.e. decorKey
-  - ✅ can specify decor `cuboid` in symbols
-  - ✅ can see decor cuboids in World
-    - ✅ `gms[gmId].decor` induces initial decor
-    - ✅ can add cuboid to instancedmesh
-    - ✅ can remove cuboid from instancedmesh
-      - `w decor.removeDecor g0dec4`
-  - ✅ cuboid shader with vertex-normal lighting?
-    - https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderChunk
-    - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
-    - ✅ try `diffuse * normal`
-    - ✅ get "view aligned normals lightest" working
-  - ✅ fix decor cuboids in transformed geomorphs
-  - ✅ `decor.cuboids`, `decor.quads`
-    - ❌ with managed holes, so don't have to recreate
-    - ✅ with onPointer{Down,Up}
-  - ✅ fix decor cuboid roomId
-  - ✅ gmRoomId has `grKey` e.g. `g4r3`
-  - ✅ simplify decorGrid i.e. `lookup[x][y]: Set<Decor>`
-  - ✅ speed up decor initialization
-  - ❌ smaller decor e.g. x1 instead of x5?
-    - no, need the detail and don't want to "scale svg" in case uses bitmaps
-  - ✅ reconsider decor types
-    - ✅ add info icon to decor sprite-sheet
-      - 100x100
-    - ✅ `point` can have meta.img in `DecorImgKey`
-    - ✅ `poly` can have meta.img in `DecorImgKey` 
-      - when rotated rect 4-gon
-  - ✅ decor points induce quads
-  - ✅ all decor points _temp_ show decor info icon
-  - ✅ fix HMR on change decor
-    - world query was broken (wrong initial key)
-    - also, now trigger Decor useEffect using query.status === 'success'
-  - ✅ cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
-  - ✅ `gm.decor[i]` has keys like instantiated
-  - ✅ fix cuboid instantiation when angle non-zero
-  - ✅ track instantiated decor new/changed/removed
-    - track per-geomorph only (not per decor)
-  - ✅ efficient decor re-instantiation
-    - e.g. if map stays same and decor too, won't redo
-  - ❌ try absorb Decor query into root query (avoid partial)
-    - ℹ️ even if we merge into root query, have to mutate
-      `w.decor` over time because `decorGrid` is too large,
-      so cannot "apply changes synchronously"
-  - ✅ prefer to apply root changes first
-  - ✅ ensure decor of removed geomorphs is also removed
-    - currently works when gmId ≤ next max gmId
-  - ✅ world is not ready until decor ready
-  - ✅ world can become "unready" onchange e.g. map, hmr
-    - i.e. `w.isReady()` false when `w.decor.queryStatus` not success
-  - ❌ wrap world in proxy, guarding by readiness
-    - any invocation first await readiness
-    - ℹ️ instead, expose API to permit higher-level approach
-  - ✅ better decor point heights
-  - ✅ move `w.setReady` into useHandleEvents
-  - ✅ remove temp "all decor points shown with info icon"
-    - ✅ can see labels (InstancedMesh) using decor.labelTex
-    - ✅ permit spaces in labels via `label='foo bar'`
-    - ✅ move labels from `gm.decors` into `gm.labels`
-      - they won't be added to e.g. `w.decor.byKey`
-    - ✅ ensure label UVs are updated
-    - ✅ move w.labels -> w.decor.label
-    - ✅ high-res labels
-    - ✅ hide labels by default, show via `w update 'w => w.decor.showLabels = true'`
-    - ✅ only show do/button points
-  - ✅ rotate decor points according to `orient`
-  - ✅ document on desk decor poly
-    - ✅ document sprite (`icon--002--doc`)
-    - ✅ add a `decor poly` with `img=icon--002--doc`
-    - ✅ w.quads includes `decor poly`s
-    - ✅ rotated rect 4-gon -> affine transform
-      - need to know orientation of image
-      - use "decor quad symbol" with axes pattern and dim 10x10
-  - ✅ decor point induces quads
-    - with fallback image `icon--001--info`
-  - ✅ decor quad has fallback image
-  - ✅ fix hmr on extend decor sprite-sheet
-  - ✅ saw decor disappear when editing symbols
-    - hopefully fixed by prevent query re-compute i.e. `retry: false`
-  - ✅ fix decor point orient again (in transformed geomorph)
-    - d.meta.orient -> d.orient for DecorPoint
-  - ✅ decor cuboids can effect nav-mesh via tag `nav`
-  - ✅ fix geomorph decor warns e.g. not fuel label not in any room
-    - these were all labels, so fixed by moving them out of `w.decor.byKey`
-  - ✅ can choose colour of decor cuboids
-    - ✅ use InstancedMesh color attribute and forward to custom shader
-    - ✅ forward `meta.color` to cuboid
-  - ✅ can choose colour of decor quads
-    - ✅ use InstancedMesh color attribute and forward to custom shader
-    - ✅ forward `meta.color` to quad
-  - 🚧 change decorImgKey convention e.g. `icon--002--doc` -> `icon--doc`
-
-- ✅ world provides "resolve when ready" api
-- ✅ DecorQuad (not DecorPoly) derived from decor `<use>`
-  - ✅ infer transform from 1x1 symbol
-  - ✅ symbol instances apply to transform
-  - ✅ use transform to position InstancedMesh instance
-  - ✅ handle transform-origin
-
-- start new branch `use-physics`
+- 🚧 start new branch `use-physics`
   - web worker with rapier
 
 - consider alternatives to current custom minecraft character
@@ -1645,3 +1537,112 @@
   - avoid confusion with `decorKey`
 - ✅ decorKey -> decorImgKey
 - ✅ decor.id -> decor.key
+
+
+- ✅ Decor component
+  - ✅ `<Decor>` exists
+  - ✅ clarify identifiers
+    - decorImgKey points into decor sprite-sheet
+    - decorKey (string) identifies instance
+    - can remove prev via "grouping by gmId" etc.
+    - decorKey not same as numeric instanceId (from instanced mesh)
+  - ✅ migrate decor grid
+  - ✅ decor points have fixed dimension bounds2d
+    - maybe should depend on whether they have an associated icon i.e. decorKey
+  - ✅ can specify decor `cuboid` in symbols
+  - ✅ can see decor cuboids in World
+    - ✅ `gms[gmId].decor` induces initial decor
+    - ✅ can add cuboid to instancedmesh
+    - ✅ can remove cuboid from instancedmesh
+      - `w decor.removeDecor g0dec4`
+  - ✅ cuboid shader with vertex-normal lighting?
+    - https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderChunk
+    - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
+    - ✅ try `diffuse * normal`
+    - ✅ get "view aligned normals lightest" working
+  - ✅ fix decor cuboids in transformed geomorphs
+  - ✅ `decor.cuboids`, `decor.quads`
+    - ❌ with managed holes, so don't have to recreate
+    - ✅ with onPointer{Down,Up}
+  - ✅ fix decor cuboid roomId
+  - ✅ gmRoomId has `grKey` e.g. `g4r3`
+  - ✅ simplify decorGrid i.e. `lookup[x][y]: Set<Decor>`
+  - ✅ speed up decor initialization
+  - ❌ smaller decor e.g. x1 instead of x5?
+    - no, need the detail and don't want to "scale svg" in case uses bitmaps
+  - ✅ reconsider decor types
+    - ✅ add info icon to decor sprite-sheet
+      - 100x100
+    - ✅ `point` can have meta.img in `DecorImgKey`
+    - ✅ `poly` can have meta.img in `DecorImgKey` 
+      - when rotated rect 4-gon
+  - ✅ decor points induce quads
+  - ✅ all decor points _temp_ show decor info icon
+  - ✅ fix HMR on change decor
+    - world query was broken (wrong initial key)
+    - also, now trigger Decor useEffect using query.status === 'success'
+  - ✅ cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
+  - ✅ `gm.decor[i]` has keys like instantiated
+  - ✅ fix cuboid instantiation when angle non-zero
+  - ✅ track instantiated decor new/changed/removed
+    - track per-geomorph only (not per decor)
+  - ✅ efficient decor re-instantiation
+    - e.g. if map stays same and decor too, won't redo
+  - ❌ try absorb Decor query into root query (avoid partial)
+    - ℹ️ even if we merge into root query, have to mutate
+      `w.decor` over time because `decorGrid` is too large,
+      so cannot "apply changes synchronously"
+  - ✅ prefer to apply root changes first
+  - ✅ ensure decor of removed geomorphs is also removed
+    - currently works when gmId ≤ next max gmId
+  - ✅ world is not ready until decor ready
+  - ✅ world can become "unready" onchange e.g. map, hmr
+    - i.e. `w.isReady()` false when `w.decor.queryStatus` not success
+  - ❌ wrap world in proxy, guarding by readiness
+    - any invocation first await readiness
+    - ℹ️ instead, expose API to permit higher-level approach
+  - ✅ better decor point heights
+  - ✅ move `w.setReady` into useHandleEvents
+  - ✅ remove temp "all decor points shown with info icon"
+    - ✅ can see labels (InstancedMesh) using decor.labelTex
+    - ✅ permit spaces in labels via `label='foo bar'`
+    - ✅ move labels from `gm.decors` into `gm.labels`
+      - they won't be added to e.g. `w.decor.byKey`
+    - ✅ ensure label UVs are updated
+    - ✅ move w.labels -> w.decor.label
+    - ✅ high-res labels
+    - ✅ hide labels by default, show via `w update 'w => w.decor.showLabels = true'`
+    - ✅ only show do/button points
+  - ✅ rotate decor points according to `orient`
+  - ✅ document on desk decor poly
+    - ✅ document sprite (`icon--002--doc`)
+    - ✅ add a `decor poly` with `img=icon--002--doc`
+    - ✅ w.quads includes `decor poly`s
+    - ✅ rotated rect 4-gon -> affine transform
+      - need to know orientation of image
+      - use "decor quad symbol" with axes pattern and dim 10x10
+  - ✅ decor point induces quads
+    - with fallback image `icon--001--info`
+  - ✅ decor quad has fallback image
+  - ✅ fix hmr on extend decor sprite-sheet
+  - ✅ saw decor disappear when editing symbols
+    - hopefully fixed by prevent query re-compute i.e. `retry: false`
+  - ✅ fix decor point orient again (in transformed geomorph)
+    - d.meta.orient -> d.orient for DecorPoint
+  - ✅ decor cuboids can effect nav-mesh via tag `nav`
+  - ✅ fix geomorph decor warns e.g. not fuel label not in any room
+    - these were all labels, so fixed by moving them out of `w.decor.byKey`
+  - ✅ can choose colour of decor cuboids
+    - ✅ use InstancedMesh color attribute and forward to custom shader
+    - ✅ forward `meta.color` to cuboid
+  - ✅ can choose colour of decor quads
+    - ✅ use InstancedMesh color attribute and forward to custom shader
+    - ✅ forward `meta.color` to quad
+  - ✅ change decorImgKey convention e.g. `icon--002--doc` -> `icon--doc`
+
+- ✅ world provides "resolve when ready" api
+- ✅ DecorQuad (not DecorPoly) derived from decor `<use>`
+  - ✅ infer transform from 1x1 symbol
+  - ✅ symbol instances apply to transform
+  - ✅ use transform to position InstancedMesh instance
+  - ✅ handle transform-origin
