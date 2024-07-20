@@ -8,6 +8,8 @@
   - consoles
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
+- 🚧 hull symbols should have same scale as non-hull symbols
+  - resize-* 301 ✅ 302 🚧 303 🚧 101 🚧 102 🚧 103
 - ❌ decor point bounds determined by original rect/poly
 
 - 🚧 Decor component
@@ -105,28 +107,27 @@
     - these were all labels, so fixed by moving them out of `w.decor.byKey`
   - 🚧 can choose colour of decor cuboids
   - 🚧 can choose colour of decor quads
+  - change decorImgKey convention e.g. `icon--002--doc` -> `icon--doc`
 
 - ✅ world provides "resolve when ready" api
 - ✅ DecorQuad (not DecorPoly) derived from decor `<use>`
-  - ✅ infer transform from 10x10 symbol (pre-scale by 10)
+  - ✅ infer transform from 1x1 symbol
   - ✅ symbol instances apply to transform
   - ✅ use transform to position InstancedMesh instance
   - ✅ handle transform-origin
-- careful that world query doesn't "run twice at once"
-  - e.g. by focusing window whilst ongoing?
 
-- request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
-- darken obstacle machinery via InstancedMesh colours
-
-- rebuild animation actions `IdleLeftLead`, `IdleRightLead`
-- ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
+- start new branch `use-physics`
+  - web worker with rapier
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
- 
+- request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
+- can choose colour of obstacle instances
+- rebuild animation actions `IdleLeftLead`, `IdleRightLead`
+- ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 - decor sprite bounds issue on edit decor
   - e.g. resize extant decor sprite
 - support recursive stringified Set
@@ -135,6 +136,8 @@
 - duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
 - tty pause/resume loses should remember cursor position
+- careful that world query doesn't "run twice at once"
+  - e.g. by focusing window whilst ongoing?
 - ✅ tty: `echo \'` should echo `'` (currently `\'`)
   - related to allowing single-quotes inside js (replace `'` -> `'\''`)
   - tryParseBuffer receives `["echo \\'"]` (which seems correct)
