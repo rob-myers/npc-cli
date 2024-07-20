@@ -6,14 +6,15 @@ import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME, WORLD_QUERY_FIRST_KEY, assetsEndpoint, imgExt } from "src/const";
+import { WORLD_QUERY_FIRST_KEY } from "src/const"; // 🚧 -> npc-cli/service/const
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, hashJson, removeDups } from "../service/generic";
-import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
+import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
+import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
+import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl } from "../service/fetch-assets";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { createCanvasTexDef, imageLoader } from "../service/three";
@@ -155,11 +156,7 @@ export default function World(props) {
     queryFn: async () => {
       // console.log('🔔 query debug', [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey])
       const prevGeomorphs = state.geomorphs;
-      const geomorphsJson = /** @type {Geomorph.GeomorphsJson} */ (
-        await fetch(
-          `${assetsEndpoint}/${GEOMORPHS_JSON_FILENAME}${getAssetQueryParam()}`
-        ).then((x) => x.json())
-      );
+      const geomorphsJson = await fetchGeomorphsJson();
 
       /**
        * Used to apply changes synchronously.
@@ -252,8 +249,8 @@ export default function World(props) {
 
       if (dataChanged) {
         /** @type {const} */ ([
-          { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: true, },
-          { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex', invert: false },
+          { src: getObstaclesSheetUrl(), texKey: 'obsTex', invert: true, },
+          { src: getDecorSheetUrl(), texKey: 'decorTex', invert: false },
         ]).forEach(({ src, texKey, invert }) => imageLoader.loadAsync(src).then((img) => {
           const prevCanvas = /** @type {HTMLCanvasElement | undefined} */ (state[texKey]?.image);
           const canvas = prevCanvas ?? document.createElement('canvas');
@@ -304,9 +301,7 @@ export default function World(props) {
     state.hmr.hash = state.hash;
     if (state.threeReady && state.hash && !hmr) {
       state.navWorker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
-      state.physicsWorker.postMessage({ type: "setup-rapier-world", items: [
-        // 🚧
-      ]});
+      state.physicsWorker.postMessage({ type: "setup-rapier-world", mapKey: state.mapKey });
     }
   }, [state.threeReady, state.hash]);
 

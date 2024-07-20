@@ -1,11 +1,11 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME } from "src/const";
 import { alloc, error, info } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
+import { fetchGeomorphsJson } from "../service/fetch-assets";
 
 info("nav worker started", import.meta.url);
 
@@ -22,7 +22,7 @@ async function handleMessages(e) {
 
   switch (msg.type) {
     case "request-nav-mesh":
-      const geomorphs = await ensureGeomorphs();
+      const geomorphs = geomorphService.deserializeGeomorphs(await fetchGeomorphsJson());
 
       const { mapKey } = msg;
       const map = geomorphs.map[mapKey ?? "demo-map-1"];
@@ -86,14 +86,3 @@ async function handleMessages(e) {
       break;
   }
 }
-
-async function ensureGeomorphs() {
-  return (cache.geomorphs ??= geomorphService.deserializeGeomorphs(
-    await fetch(`/assets/${GEOMORPHS_JSON_FILENAME}`).then((x) => x.json())
-  ));
-}
-
-/** @type {{ geomorphs: Geomorph.Geomorphs }} */
-const cache = {
-  geomorphs: /** @type {*} */ (null),
-};

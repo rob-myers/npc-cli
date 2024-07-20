@@ -22,7 +22,7 @@ declare namespace WW {
   //#region physics worker
   interface SetupRapierWorld {
     type: 'setup-rapier-world';
-    items: any[]; // 🚧 door circles
+    mapKey: string;
   }
 
   interface ClearRapierWorld {
