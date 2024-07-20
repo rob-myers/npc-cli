@@ -9,7 +9,8 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 - 🚧 hull symbols should have same scale as non-hull symbols
-  - resize-* 301 ✅ 302 🚧 303 🚧 101 🚧 102 🚧 103
+  - resize-* 301 ✅ 302 ✅ 303 🚧 101 🚧 102 🚧 103
+  - careful about duplicating patterns i.e. only use `pattern-0`
 - ❌ decor point bounds determined by original rect/poly
 
 - 🚧 start new branch `use-physics`
@@ -65,6 +66,14 @@
 - next.js repo continued
   - migrate Viewer
 
+- 🚧 more decor images
+  - computer
+  - speaker
+  - communicator
+  - fabricator
+- place decor points on many tables
+- more tables in 301
+- more tables in 101
 - verifyDecor inside CLI (previously did inside Decor)
 - gatsby: somehow reconfigure `TerserPlugin` to exclude `npc-cli/sh/src/*`
   - already tried using extension `.min.js`
@@ -176,15 +185,7 @@
   - ✅ Viewer initially partially occluded
   - seems fixed on iPhone 13
 
-- more decor images
-  - `computer-2`
-  - `speaker-1`
-  - `communicator-1`
-  - `fabricator-1`
-- place decor points on many tables
-- more tables in 301
-- more tables in 101
-- World WebGL rendering pauses on pause Tabs
+- ✅ World WebGL rendering pauses on pause Tabs
 
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
