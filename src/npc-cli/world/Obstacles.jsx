@@ -3,8 +3,7 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
-import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
-import { quadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
 import { WorldContext } from "./world-context";
@@ -14,19 +13,20 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Obstacles(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    obsInst: /** @type {*} */ (null),
+    inst: /** @type {*} */ (null),
+    quadGeom: getQuadGeometryXZ(`${w.key}-obs-xz`),
 
     addObstacleUvs() {
-      const { obstacle: obstaclesSheet, obstacleDim: sheetDim } = api.geomorphs.sheet;
+      const { obstacle: sheet, obstacleDim: sheetDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
-      api.gms.forEach(({ obstacles }) =>
+      w.gms.forEach(({ obstacles }) =>
         obstacles.forEach(({ symbolKey, obstacleId }) => {
-          const item = obstaclesSheet[`${symbolKey} ${obstacleId}`];
+          const item = sheet[`${symbolKey} ${obstacleId}`];
           if (item) {// (x, y) is top left of sprite in spritesheet
             const { x, y, width, height } = item;
             uvOffsets.push(x / sheetDim.width,  y / sheetDim.height);
@@ -39,10 +39,10 @@ export default function Obstacles(props) {
         })
       );
 
-      state.obsInst.geometry.setAttribute('uvOffsets',
+      state.inst.geometry.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
       );
-      state.obsInst.geometry.setAttribute('uvDimensions',
+      state.inst.geometry.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
     },
@@ -55,24 +55,24 @@ export default function Obstacles(props) {
     },
     decodeObstacleId(instanceId) {
       let id = instanceId;
-      const gmId = api.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
+      const gmId = w.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
       return { gmId, obstacleId: id };
     },
     detectClick(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
       const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
-      const gm = api.gms[gmId];
+      const gm = w.gms[gmId];
       const obstacle = gm.obstacles[obstacleId];
       
       // transform 3D point back to unit XZ quad
       const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
       const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
       // transform unit quad point into spritesheet
-      const meta = api.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
+      const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
       const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
       const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
 
-      const canvas = /** @type {HTMLCanvasElement} */ (api.obsTex.image);
+      const canvas = /** @type {HTMLCanvasElement} */ (w.obsTex.image);
       const ctxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
       const { data: rgba } = ctxt.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
       // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
@@ -80,24 +80,18 @@ export default function Obstacles(props) {
       // ignore clicks on fully transparent pixels
       return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
-
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
       const result = state.detectClick(e);
 
       if (result !== null) {
         const { gmId, obstacle } = result;
-        api.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerdown",
-          is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
           distancePx: 0,
+          event: e,
+          is3d: true,
           justLongDown: false,
-          pointers: api.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             gmId,
             obstacleId: obstacle.obstacleId,
@@ -105,7 +99,7 @@ export default function Obstacles(props) {
             ...obstacle.origPoly.meta,
             instanceId,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },
@@ -115,17 +109,10 @@ export default function Obstacles(props) {
 
       if (result !== null) {
         const { gmId, obstacleId, obstacle } = result;
-        api.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerup",
+          event: e,
           is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
-          distancePx: api.ui.getDownDistancePx(),
-          justLongDown: api.ui.justLongDown,
-          pointers: api.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             gmId,
             obstacleId,
@@ -133,14 +120,14 @@ export default function Obstacles(props) {
             ...obstacle.origPoly.meta,
             instanceId,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },
     positionObstacles() {
-      const { obsInst } = state;
+      const { inst: obsInst } = state;
       let oId = 0;
-      api.gms.forEach(({ obstacles, transform: gmTransform }) => {
+      w.gms.forEach(({ obstacles, transform: gmTransform }) => {
         obstacles.forEach((obstacle) => {
           const mat4 = state.createObstacleMatrix4(gmTransform, obstacle);
           obsInst.setMatrixAt(oId++, mat4);
@@ -151,32 +138,32 @@ export default function Obstacles(props) {
     },
   }));
 
-  api.obs = state;
+  w.obs = state;
 
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [api.hash]);
+  }, [w.hash, w.gmsData.obstaclesCount]);
 
   return (
     <instancedMesh
       name="static-obstacles"
-      key={`${api.hash} static-obstacles`}
-      ref={instances => instances && (state.obsInst = instances)}
-      args={[quadGeometryXZ, undefined, api.gmsData.obstaclesCount]}
+      key={w.hash}
+      ref={instances => instances && (state.inst = instances)}
+      args={[state.quadGeom, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
-      {...api.obsTex && {
+      {...w.obsTex && {
         onPointerUp: state.onPointerUp,
         onPointerDown: state.onPointerDown,
       }}
-      position={[0, 0.001, 0]}
+      position={[0, 0.001, 0]} // 🚧
     >
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        map={api.obsTex}
-        // diffuse={new THREE.Vector3(1, 0, 1)}
+        map={w.obsTex}
+        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
       />
     </instancedMesh>
   );
@@ -190,11 +177,12 @@ export default function Obstacles(props) {
 
 /**
  * @typedef State
- * @property {THREE.InstancedMesh} obsInst
+ * @property {THREE.InstancedMesh} inst
+ * @property {THREE.BufferGeometry} quadGeom
  * @property {() => void} addObstacleUvs
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
  * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId
- * Points to `api.gms[gmId].obstacles[obstacleId]`.
+ * Points to `w.gms[gmId].obstacles[obstacleId]`.
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
  *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
  * )} detectClick
@@ -205,4 +193,3 @@ export default function Obstacles(props) {
 
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
-const emptyTex = new THREE.Texture();

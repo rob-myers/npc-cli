@@ -99,9 +99,9 @@ declare namespace Graph {
     /** Transform of parent geomorph */
     transform: [number, number, number, number, number, number];
 
-    /** Points to `gm.navPoly[navGroupId]` */
-    navGroupId: number;
-    /** `gm.navPoly[navGroupId].rect` in world coords */
+    /** Points to `gm.navRects[navRectId]` */
+    navRectId: number;
+    /** `gm.navRects[navRectId].rect` in world coords */
     rect: Geom.Rect;
   }
 
@@ -126,7 +126,7 @@ declare namespace Graph {
      */
     gmInFront: boolean;
     /** Direction it faces in world coords */
-    direction: null | Geom.Direction;
+    direction: null | Geom.DirectionString;
     /**
      * Does this node connect to another door i.e.
      * establish a connection between two geomorphs?
@@ -138,13 +138,13 @@ declare namespace Graph {
 
   type GmGraphEdgeOpts = BaseEdgeOpts;
 
-  // 🚧
-  type GmGraph = import("./gm-graph").gmGraphClass;
+  type GmGraph = import("./gm-graph").GmGraphClass;
 
   /** Given a hull door, the respective ids in adjacent geomorph */
   interface GmAdjRoomCtxt {
     adjGmId: number;
     adjRoomId: number;
+    adjGmRoomKey: Geomorph.GmRoomKey;
     adjHullId: number;
     adjDoorId: number;
   }

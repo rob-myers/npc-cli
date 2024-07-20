@@ -29,7 +29,7 @@ export default function Terminal(props: Props) {
   const state = useStateRef(() => ({
     bounds,
     container: {} as HTMLDivElement,
-    cursorBeforePause: undefined as number | undefined,
+    inputBeforePause: undefined as string | undefined,
     fitAddon: new FitAddon(),
     focusedBeforePause: false,
     hasEverDisabled: false,
@@ -124,11 +124,11 @@ export default function Terminal(props: Props) {
       });
       
       xterm.loadAddon(state.fitAddon = new FitAddon());
-      xterm.open(state.container);
       xterm.loadAddon(state.webglAddon = new WebglAddon());
       state.webglAddon.onContextLoss(e => {
         state.webglAddon.dispose(); // breaks HMR
       });
+      xterm.open(state.container);
       
       state.resize();
       xterm.textarea?.addEventListener("focus", state.onFocus);
@@ -152,22 +152,17 @@ export default function Terminal(props: Props) {
       return;
     }
 
-    if (props.disabled) {
-      // Pause
+    if (props.disabled) {// Pause
       state.hasEverDisabled = true;
       state.focusedBeforePause = document.activeElement === state.xterm.xterm.textarea;
 
       if (state.xterm.isPromptReady()) {
-        state.cursorBeforePause = state.xterm.getCursor();
-        state.xterm.showPendingInputImmediately(); // Moves cursor to end
-      } else {
-        state.cursorBeforePause = undefined;
+        state.inputBeforePause = state.xterm.getInput();
+        state.xterm.clearInput();
       }
 
       useSession.api.writeMsgCleanly(
-        props.sessionKey,
-        formatMessage(`${ansi.White}paused`, "info"),
-        { prompt: false }
+        props.sessionKey, formatMessage(`${ansi.White}paused`, "info"), { prompt: false },
       );
 
       // Pause running processes
@@ -180,21 +175,17 @@ export default function Terminal(props: Props) {
         });
     }
 
-    if (!props.disabled && state.hasEverDisabled) {
-      // Resume
+    if (!props.disabled && state.hasEverDisabled) {// Resume
       state.focusedBeforePause && state.xterm.xterm.focus();
-
-      // overwrite "paused" with "resumed"
-      const extraNewlines = Math.max(
-        1,
-        state.xterm.numLines() + (state.xterm.active.cursorY + 1) - state.xterm.rows
-      );
-      state.xterm.xterm.write(
-        `\x1b[F\x1b[2K${formatMessage(`${ansi.White}resumed`, "info")}\r${"\r\n".repeat(
-          extraNewlines
-        )}`
-      );
-      state.xterm.showPendingInputImmediately();
+      
+      // Overwrite `pausedLine` with input
+      state.xterm.xterm.write(`\x1b[F\x1b[2K`);
+      if (state.inputBeforePause) {
+        state.xterm.setInput(state.inputBeforePause);
+        state.inputBeforePause = undefined;
+      } else {
+        state.xterm.showPendingInputImmediately();
+      }
 
       // Resume processes we suspended
       const processes = Object.values(state.session?.process ?? {});
@@ -280,3 +271,4 @@ const TouchHelperUi = loadable(() => import("./TouchHelperUi"), {
 function stopKeysPropagating(e: React.KeyboardEvent) {
   e.stopPropagation();
 }
+

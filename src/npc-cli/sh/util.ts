@@ -85,20 +85,21 @@ export function literal({ Value, parent }: Sh.Lit): string[] {
    * Remove at most one '\\\n'; can arise interactively in quotes,
    * see https://github.com/mvdan/sh/issues/321.
    */
-  const value = Value.replace(/\\\n/, "");
+  let value = Value.replace(/\\\n/, "");
 
   if (parent.type === "DblQuoted") {
-    // Double quotes: escape only ", \, $, `, no brace-expansion.
+    // Double quotes: interpret ", \, $, `, no brace-expansion.
     return [value.replace(/\\(["\\$`])/g, "$1")];
   } else if (parent.type === "TestClause") {
-    // [[ ... ]]: Escape everything, no brace-expansion.
+    // [[ ... ]]: interpret everything, no brace-expansion.
     return [value.replace(/\\(.|$)/g, "$1")];
   } else if (parent.type === "Redirect") {
-    // Redirection (e.g. here-doc): escape everything, no brace-expansion.
+    // Redirection (e.g. here-doc): interpret everything, no brace-expansion.
     return [value.replace(/\\(.|$)/g, "$1")];
   }
-  // Otherwise escape everything and apply brace-expansion.
+  // Otherwise interpret ', ", \, $, ` and apply brace-expansion.
   // We escape square brackets for npm module `braces`.
+  value = value.replace(/\\(['"\\$`])/g, "$1")
   return braces(value.replace(/\[/g, "\\[").replace(/\]/g, "\\]"), bracesOpts);
 }
 

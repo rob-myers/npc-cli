@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
         <defs>
-                <bx:grid x="0" y="0" width="300" height="300"/>
+                <bx:grid x="0" y="0" width="300" height="300" />
         </defs>
         <image width="620" height="620" x="-10" y="-10" style="pointer-events: none;" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmwAAAJsAgMAAAA9+xe2AAAABGdBTUEAALGPC/xhBQAAAAd0SU1FB+YKAQ4oEy2474UAAAEgelRYdFJhdyBwcm9maWxlIHR5cGUgeG1wAAAokXVSS3LFIAzbc4oegcjGJsdJH7DrTJc9fmWSvqR5LZ78bCNLIunr4zO9xRJIkodX2bxa82zNiqstyPFtD+suUZMG2GJqw2BFtj3/7B4AcjphmHyPLaVqKxlZxYZzI7IYuuR5QXrekCNIAQQ32QpUk9pt/l4MDtWVkWXjzOFzoTub0OcIx5BF1giMJFnABHhvOwif4ithSdsrWgyI8snlzkjVSnIxYWKd0la60MnwaKAv4Gw6EQxpxC+ga3hNF1EBZH/Jmpz6aTff6Z81Cj72hLRlmjheqT8F/AzYNJxZrRyyDwXS6dQjnaj/N969wbi6s5uTru5cj/ZsjsNVi9rMvvx1UUnfSS2bFr/rBq4AAAABb3JOVAHPoneaAAAAEGNhTnYAAAJsAAACegAAAAAAAAAOoNE01QAAAAlQTFRFAAAAAAAA////g93P0gAAAAF0Uk5TAEDm2GYAAAABYktHRAJmC3xkAAAB7klEQVR42u3WwQ1CIRAEUDhQwu+HEv4B+m9FxQY8jHET3xQweYElS2tjB3O3UMap2tGkbKeqZ20zQ+unamRtd+pKX1VX1rYytutUVbbtXfExvKvY2Nj+zrbYfrlP/84269pC4/YV28zbWrWwsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsX1gqxk2NjY2Nja2gO0qS1ulbaOs7S5t62Vts5UduPX8mveyx/YA77C2BvjE/bAAAABQZVhJZk1NACoAAAAIAAIBEgADAAAAAQABAACHaQAEAAAAAQAAACYAAAAAAAOgAQADAAAAAQABAACgAgAEAAAAAQAAAmygAwAEAAAAAQAAAnoAAAAATLpcqgAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0xMC0wMVQxNDo0MDoxMiswMDowMF+Z7HAAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMTAtMDFUMTQ6NDA6MTIrMDA6MDAuxFTMAAAAKHRFWHRkYXRlOnRpbWVzdGFtcAAyMDIyLTEwLTAxVDE0OjQwOjE4KzAwOjAw3aEqXQAAABF0RVh0ZXhpZjpDb2xvclNwYWNlADEPmwJJAAAAEnRFWHRleGlmOkV4aWZPZmZzZXQAMzituL4jAAAAGHRFWHRleGlmOlBpeGVsWERpbWVuc2lvbgA2MjBxSzRqAAAAGHRFWHRleGlmOlBpeGVsWURpbWVuc2lvbgA2MzTyMiBEAAAAEnRFWHR0aWZmOk9yaWVudGF0aW9uADG3q/w7AAAAAElFTkSuQmCC">
                 <title>ships-locker--007--2x1</title>
         </image>
         <rect width="50" height="50" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(186, 218, 85);" x="275" y="275">
-                <title>decor go label=locker</title>
+                <title>decor label=locker</title>
         </rect>
         <rect x="350" width="200" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;" y="-15">
                 <title>door</title>

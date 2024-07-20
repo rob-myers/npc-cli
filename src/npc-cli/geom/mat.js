@@ -25,6 +25,17 @@ export class Mat {
     return this.a * this.d - this.b * this.c;
   }
 
+  /** @param {Geom.SixTuple} _ */
+  feedFromArray([a, b, c, d, e, f]) {
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
+    this.e = e;
+    this.f = f;
+    return this;
+  }
+
   /**
    * Get an inverse matrix of current matrix. The method returns a new
    * matrix with values you need to use to get to an identity matrix.
@@ -180,13 +191,23 @@ export class Mat {
 
   /**
    * Compute action of `this` on unit direction vector with angle
-   * @see {radians} , then convert the latter back into an angle.
+   * @see {radians} , then convert the latter back into an angle in [-π,π].
    * @param {number} radians
    */
   transformAngle(radians) {
     const unit = { x: Math.cos(radians), y: Math.sin(radians) };
     this.transformSansTranslate(unit);
     return Math.atan2(unit.y, unit.x);
+  }
+
+  /**
+   * Compute action of `this` on unit direction vector with angle
+   * @see {degrees} , then convert the latter back into an angle in [0, 360].
+   * @param {number} degrees
+   */
+  transformDegrees(degrees) {
+    const newDegrees = (180 / Math.PI) * this.transformAngle(degrees * (Math.PI / 180));
+    return  Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees);
   }
 
   /**
@@ -217,14 +238,13 @@ export class Mat {
     return v;
   }
 
-  /** @param {Geom.SixTuple} _ */
-  feedFromArray([a, b, c, d, e, f]) {
-    this.a = a;
-    this.b = b;
-    this.c = c;
-    this.d = d;
-    this.e = e;
-    this.f = f;
+  /**
+   * @param {number} offsetX 
+   * @param {number} offsetY 
+   */
+  translate(offsetX, offsetY) {
+    this.e += offsetX;
+    this.f += offsetY;
     return this;
   }
 }

@@ -1,8 +1,10 @@
 import { parseSVG, makeAbsolute } from "svg-path-parser";
+import { toPrecision } from "./generic";
 import { Mat, Poly, Rect, Vect } from "../geom";
 
 class geomServiceClass {
   /**
+   * Angled rects are rotated about `(rect.x, rect.y)`
    * @param {Geom.AngledRect<Geom.Rect>} input
    * @returns {Geom.Poly}
    */
@@ -12,6 +14,21 @@ class geomServiceClass {
     poly.applyMatrix(new Mat().setRotation(input.angle));
     poly.translate(input.baseRect.x, input.baseRect.y);
     return poly;
+  }
+
+  /**
+   * @param {Geom.VectJson} extent Half extents
+   * @param {Geom.VectJson} center
+   * @param {number} angle
+   * @returns {Geom.Poly}
+   */
+  centredRectToPoly(extent, center, angle) {
+    return new Poly([
+      new Vect(center.x + -(extent.x), center.y + -(extent.y)),
+      new Vect(center.x + +(extent.x), center.y + -(extent.y)),
+      new Vect(center.x + +(extent.x), center.y + +(extent.y)),
+      new Vect(center.x + -(extent.x), center.y + +(extent.y)),
+    ]).applyMatrix(tmpMat1.setRotationAbout(angle, center));
   }
 
   /**
@@ -824,8 +841,9 @@ class geomServiceClass {
   }
 
   /**
-   * Convert a polygonal rectangle back into a `Rect` and `angle`.
-   * We ensure the width is greater than or equal to the height.
+   * Convert a polygonal rectangle back into a `Rect` and `angle`,
+   * where rectangle needs to be rotated about its top-left point.
+   * - We ensure the width is greater than or equal to the height.
    * @param {Geom.Poly} poly
    * @returns {Geom.AngledRect<Geom.Rect>}
    */
@@ -1006,6 +1024,17 @@ class geomServiceClass {
   }
 
   /**
+   * @param {{ x: number; y: number; z: number; }} input
+   * @param {number} [dp] decimal places
+   */
+  toPrecisionV3(input, dp) {
+    input.x = toPrecision(input.x, dp);
+    input.y = toPrecision(input.y, dp);
+    input.z = toPrecision(input.z, dp);
+    return input;
+  }
+
+  /**
    * @param {Geom.Triangulation} decomp
    * @returns {Geom.Poly[]}
    */
@@ -1054,7 +1083,7 @@ export function sortByXThenY(point1, point2) {
 }
 
 export const tmpVec1 = new Vect();
-const tmpVec2 = new Vect();
-const tmpRect1 = new Rect();
+export const tmpVec2 = new Vect();
+export const tmpRect1 = new Rect();
 const tmpPoly1 = new Poly();
-const tmpMat1 = new Mat();
+export const tmpMat1 = new Mat();

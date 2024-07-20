@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -14,7 +14,7 @@ import {
   keys,
   toPrecision,
 } from "./generic";
-import { geom } from "./geom";
+import { geom, tmpRect1 } from "./geom";
 
 class GeomorphService {
   /** @type {Record<Geomorph.GeomorphNumber, Geomorph.GeomorphKey>} */
@@ -52,7 +52,8 @@ class GeomorphService {
     return keys(this.toGmNum);
   }
 
-  fromSymbolKey = {// 🚧 must extend when adding new symbols
+  /** Aligned to media/symbol/{key}.svg */
+  fromSymbolKey = {// 🔔 must extend when adding new symbols
 
     "101--hull": true,
     "102--hull": true,
@@ -83,6 +84,7 @@ class GeomorphService {
     "counter--007--0.4x1": true,
     "counter--009--0.4x0.4": true,
     "counter--010--0.4x0.4": true,
+    "empty-room--006--2x2": true,
     "empty-room--013--2x3": true,
     "empty-room--019--2x4": true,
     "empty-room--020--2x4": true,
@@ -125,6 +127,7 @@ class GeomorphService {
     "office--089--4x4": true,
     "ships-locker--003--1x1": true,
     "ships-locker--007--2x1": true,
+    "ships-locker--011--2x1": true,
     "ships-locker--020--2x2": true,
     "shop--027--1.6x0.4": true,
     "shop--028--1.6x0.8": true,
@@ -164,33 +167,23 @@ class GeomorphService {
     "extra--019--table-0.5x2": true,
   };
 
+  /** Aligned to media/decor/{key}.svg */
+  fromDecorImgKey = {// 🔔 must extend when adding new decor
+    'door--standard': true,
+    'door--hull': true,
+    'icon--info': true,
+    'icon--doc': true,
+    'icon--warn': true,
+    'icon--key-card': true,
+  };
+
   /** @type {Geomorph.SymbolKey[]} */
   get hullKeys() {
     return keys(this.fromSymbolKey).filter(this.isHullKey);
   }
 
   /**
-   * @param {string} decorKey
-   * @param {Geom.Poly} poly
-   * @returns {Geomorph.Decor}
-   */
-  decorFromPoly(decorKey, poly) {
-    const { meta } = poly;
-    if (meta.rect) {
-      const { angle, baseRect } = geom.polyToAngledRect(poly);
-      return { type: 'rect', key: decorKey, ...baseRect.precision(precision).json, meta, angle };
-    } else if (meta.circle) {
-      const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
-      const center = poly.center.precision(precision);
-      const radius = Math.max(baseRect.width, baseRect.height) / 2;
-      return { type: 'circle', key: decorKey, meta, radius, center };
-    } else {
-      const center = poly.center.precision(precision);
-      return { type: 'point', key: decorKey, meta, x: center.x, y: center.y };
-    }
-  }
-
-  /**
+   * 🔔 computed in assets script
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol Flat hull symbol
    * @param {Geomorph.Assets} assets
@@ -228,11 +221,25 @@ class GeomorphService {
       room.meta = {}, metaDecor.find((x) => room.contains(x.outline[0]))?.meta, { meta: undefined }
     ));
 
+    const decor = /** @type {Geomorph.Decor[]} */ ([]);
+    const labels = /** @type {Geomorph.DecorPoint[]} */ ([]);
+    symbol.decor.forEach((d) => (
+      typeof d.meta.label === 'string' ? labels : decor).push(this.decorFromPoly(d))
+    );
+
+    const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
       ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
-    ], hullOutline).map((x) => x.cleanFinalReps().precision(precision));
+      ...decor.flatMap(d => d.type === 'cuboid' && d.meta.nav === true
+        ? geom.centredRectToPoly({ x: d.extent.x + obstacleOutset, y: d.extent.z + obstacleOutset }, { x: d.center.x, y: d.center.z }, d.angle)
+        : []),
+    ], hullOutline).filter((poly) => 
+      // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`
+      poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))
+    ).map((x) => x.cleanFinalReps().precision(precision));
 
+    // 🔔 connector.roomIds will be computed in browser
     const doors = symbol.doors.map(x => new Connector(x));
     const windows = symbol.windows.map(x => new Connector(x));
 
@@ -244,21 +251,27 @@ class GeomorphService {
 
     return {
       key: gmKey,
-      decor: symbol.decor.map((d, i) => this.decorFromPoly(`${gmKey}-${i}`, d)),
+      num: this.toGmNum[gmKey],
       pngRect: pngRect.clone(),
+      decor,
       doors,
       hullPoly,
       hullDoors: doors.filter(x => x.meta.hull),
+      labels,
       obstacles: symbol.obstacles.map(/** @returns {Geomorph.LayoutObstacle} */ o => {
         const obstacleId = /** @type {number} */ (o.meta.obsId);
         const symbolKey = /** @type {Geomorph.SymbolKey} */ (o.meta.symKey);
         const origPoly = assets.symbols[symbolKey].obstacles[o.meta.obsId];
+        const transform = /** @type {Geom.SixTuple} */ (o.meta.transform ?? [1, 0, 0, 1, 0, 0]);
+        tmpMat1.feedFromArray(transform);
         return {
           symbolKey,
           obstacleId,
           origPoly,
           height: typeof o.meta.y === 'number' ? o.meta.y : 0,
-          transform: o.meta.transform ?? [1, 0, 0, 1, 0, 0],
+          transform,
+          center: tmpMat1.transformPoint(origPoly.center).precision(2),
+          meta: origPoly.meta,
         };
       }),
       rooms: rooms.map(x => x.precision(precision)),
@@ -277,18 +290,33 @@ class GeomorphService {
    * @returns {Geomorph.LayoutInstance}
    */
   computeLayoutInstance(layout, gmId, transform) {
+    const matrix = new Mat(transform);
+    // 🔔 currently only support "edge geomorph" or "full geomorph"
+    const sguGridRect = new Rect(0, 0, 1200, this.isEdgeGm(layout.num) ? 600 : 1200);
     return {
       ...layout,
       gmId,
       transform,
+      matrix,
+      gridRect: sguGridRect.scale(sguToWorldScale).applyMatrix(matrix),
+      inverseMatrix: matrix.getInverseMatrix(),
       mat4: geomorphService.embedXZMat4(transform),
+
+      getOtherRoomId(doorId, roomId) {
+        // We support case where roomIds are equal e.g. 303
+        const { roomIds } = this.doors[doorId];
+        return roomIds.find((x, i) => typeof x === 'number' && roomIds[1 - i] === roomId) ?? -1;
+      },
+      isHullDoor(doorId) {
+        return doorId < this.hullDoors.length;
+      },
     };
   }
 
   /**
    * @param {Geom.Poly[]} navPolyWithDoors 
    * @param {Connector[]} doors 
-   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navDoorwaysOffset'>}
+   * @returns {Pick<Geomorph.Layout, 'navDecomp' | 'navDoorwaysOffset' | 'navRects'>}
    */
   decomposeLayoutNav(navPolyWithDoors, doors) {
     const navDoorways = doors.map((connector) => connector.computeDoorway());
@@ -314,10 +342,82 @@ class GeomorphService {
       navDecomp.vs.push(...doorway.outline);
       navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
     });
+
+    const navRects = navPolyWithDoors.map(x => x.rect.precision(precision));
+    navRects.sort(// Smaller rects 1st, else larger overrides (e.g. 102)
+      (a, b) => a.area < b.area ? -1 : 1
+    );
+    doors.forEach(door => door.navRectId = navRects.findIndex(r => r.contains(door.center)));
+
     return {
       navDecomp,
       navDoorwaysOffset,
+      navRects,
     };
+  }
+
+  /**
+   * - Script only.
+   * - Only invoked for layouts, not nested symbols.
+   * @param {Geom.Poly} poly
+   * @returns {Geomorph.Decor}
+   */
+  decorFromPoly(poly) {
+    /** @type {Geomorph.Decor} */ let out;
+    // gmId, roomId provided on instantiation
+    const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
+    meta.y = toPrecision(Number(meta.y) || 0);
+    
+    const base = { key: '', meta }; // key derived from decor below
+    
+    if (meta.poly) {
+      const polyRect = poly.rect.precision(precision);
+      out = { type: 'poly', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
+    } else if (meta.quad) {
+      const polyRect = poly.rect.precision(precision);
+      const { transform } = poly.meta;
+      delete poly.meta.transform;
+      out = { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.json };
+    } else if (meta.cuboid) {
+      const polyRect = poly.rect.precision(precision);
+      const defaultDecorCuboidHeight = 0.5; // 🚧
+      const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
+      const y3d = typeof meta.y === 'number' ? meta.y : 0; // meta.y has been aggregated
+      const center2d = poly.center;
+      const center = geom.toPrecisionV3({ x: center2d.x, y: y3d + (height3d / 2), z: center2d.y });
+      
+      tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
+      
+      if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
+        const extent = geom.toPrecisionV3({ x: polyRect.width / 2, y: height3d / 2, z: polyRect.height / 2 });
+        out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle: 0, center, extent };
+      }
+      
+      // Angle of first edge
+      const angle = Math.atan2(tmpVect1.y, tmpVect1.x);
+      // Rotate points back around `center2d` so axis-aligned
+      poly = poly.clone().applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
+      
+      const aabb = poly.rect;
+      const extent = geom.toPrecisionV3({ x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 });
+      out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle, center, extent };
+    } else if (meta.circle) {
+      const polyRect = poly.rect.precision(precision);
+      const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
+      const center = poly.center.precision(precision);
+      const radius = Math.max(baseRect.width, baseRect.height) / 2;
+      out = { type: 'circle', ...base, bounds2d: polyRect.json, radius, center };
+    } else {// 🔔 fallback to decor point
+      const center = poly.center.precision(precision);
+      const radius = decorIconRadius + 2;
+      const bounds2d = tmpRect1.set(center.x - radius, center.y - radius, 2 * radius, 2 * radius).precision(precision).json;
+      // +90 so "bottom to top" of text in sprite-sheet "faces" direction
+      const orient = typeof meta.orient === 'number' ? meta.orient : 0;
+      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
+    }
+
+    out.key = this.getDerivedDecorKey(out); // overridden on instantiation
+    return out;
   }
 
   /**
@@ -358,19 +458,26 @@ class GeomorphService {
     const doors = json.doors.map(Connector.from);
     return {
       key: json.key,
+      num: json.num,
       pngRect: Rect.fromJson(json.pngRect),
-
+      
       decor: json.decor,
       doors,
       hullPoly: json.hullPoly.map(x => Poly.from(x)),
       hullDoors: doors.filter(x => x.meta.hull),
-      obstacles: json.obstacles.map(x => ({
-        symbolKey: x.symbolKey,
-        obstacleId: x.obstacleId,
-        height: x.height,
-        origPoly: Poly.from(x.origPoly),
-        transform: x.transform,
-      })),
+      labels: json.labels,
+      obstacles: json.obstacles.map(x => {
+        const origPoly = Poly.from(x.origPoly);
+        return {
+          symbolKey: x.symbolKey,
+          obstacleId: x.obstacleId,
+          height: x.height,
+          origPoly,
+          transform: x.transform,
+          center: Vect.from(x.center),
+          meta: origPoly.meta, // shortcut to origPoly.meta
+        };
+      }),
       rooms: json.rooms.map(Poly.from),
       walls: json.walls.map(Poly.from),
       windows: json.windows.map(Connector.from),
@@ -378,6 +485,7 @@ class GeomorphService {
 
       navDecomp: { vs: json.navDecomp.vs.map(Vect.from), tris: json.navDecomp.tris },
       navDoorwaysOffset: json.navDoorwaysOffset,
+      navRects: json.navRects.map(Rect.fromJson),
     };
   }
 
@@ -427,14 +535,34 @@ class GeomorphService {
   }
 
   /**
+   * Extract a polygon with meta from an SVG symbol tag i.e.
+   * - <rect> e.g. possibly rotated wall
+   * - <path> e.g. complex obstacle
+   * - <use><title>decor ...</use> i.e. instance of decor-unit-quad
+   * - <image> i.e. background image in symbol
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
-   * @param {number} [scale]
+   * @param {Geom.Meta} meta
+   * @param {number} scale
    * @returns {Geom.Poly | null}
    */
-  extractGeom(tagMeta, scale) {
+  extractGeom(tagMeta, meta, scale) {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
+
+    if (tagName === "use" && meta.decor === true) {
+      // support transform-origin (Boxy adds e.g. when rotating)
+      const trOrigin = geomorphService.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
+      tmpMat1.setMatrixValue(tagMeta.attributes.transform)
+        .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
+        .postMultiply([scale, 0, 0, scale, trOrigin.x * scale, trOrigin.y * scale])
+        .precision(precision)
+      ;
+      poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
+      poly.meta = Object.assign(meta, { quad: true, transform: tmpMat1.toArray() });
+      // console.log('🔔 saw decor quad', poly.meta, trOrigin);
+      return poly.precision(precision).cleanFinalReps().fixOrientation();
+    }
 
     if (tagName === "rect" || tagName === "image") {
       poly = Poly.fromRect(new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0)));
@@ -449,7 +577,7 @@ class GeomorphService {
       return null;
     }
 
-    // DOMMatrix not available server-side
+    // 🔔 DOMMatrix not available server-side
     const { transformOrigin } = geomorphService.extractTransformData(tagMeta);
     if (a.transform && transformOrigin) {
       poly.translate(-transformOrigin.x, -transformOrigin.y)
@@ -460,6 +588,7 @@ class GeomorphService {
     }
 
     typeof scale === "number" && poly.scale(scale);
+    poly.meta = meta;
 
     return poly.precision(precision).cleanFinalReps().fixOrientation();
   }
@@ -518,10 +647,10 @@ class GeomorphService {
     const style = geomorphService.extractStyles(a.style ?? "");
     const transformOrigin = (style['transform-origin'] || '').trim();
     const transformBox = style['transform-box'] || null;
+    const [xPart, yPart] = transformOrigin.split(/\s+/);
     
     /** For `transform-box: fill-box` */
     let bounds = /** @type {Rect | undefined} */ (undefined);
-    const [xPart, yPart] = transformOrigin.split(/\s+/);
 
     if (!xPart || !yPart) {
       transformOrigin && error(`${tagName}: transform-box/origin: "${transformBox}"/"${transformOrigin}": transform-origin must have an "x part" and a "y part"`);
@@ -541,6 +670,7 @@ class GeomorphService {
         return { transformOrigin: null, transformBox };
       }
     }
+
     const [x, y] = [xPart, yPart].map((rep, i) => {
       /** @type {RegExpMatchArray | null} */ let match = null;
       if ((match = rep.match(/^(-?\d+(?:.\d+)?)%$/))) {// e.g. -50.02%
@@ -603,11 +733,30 @@ class GeomorphService {
   }
 
   /**
+   * - 🔔 instantiated decor should be determined by min(3D AABB)
+   * - we replace decimal points with `_` so can e.g. `w decor.byKey.point[29_5225,0,33_785]`
+   * @param {Geomorph.Decor} d 
+   */
+  getDerivedDecorKey(d) {
+    return `${d.type}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`.replace(/[.]/g, '_');
+  }
+
+  /**
    * @param {number} gmId
    * @param {number} doorId
+   * @returns {`g${number}d${number}`}
    */
   getGmDoorKey(gmId, doorId) {
-    return `g${gmId}-d${doorId}`;
+    return /** @type {const} */ (`g${gmId}d${doorId}`);
+  }
+
+  /**
+   * @param {number} gmId
+   * @param {number} roomId
+   * @returns {`g${number}r${number}`}
+   */
+  getGmRoomKey(gmId, roomId) {
+    return `g${gmId}r${roomId}`;
   }
 
   /**
@@ -666,7 +815,7 @@ class GeomorphService {
       isHull: sym.isHull,
       addableWalls: [],
       removableDoors: [],
-      decor: sym.decor.map((x) => x.cleanClone(tmpMat1, this.transformMeta(x.meta, tmpMat1))),
+      decor: sym.decor.map((x) => x.cleanClone(tmpMat1, this.transformDecorMeta(x.meta, tmpMat1, meta.y))),
       doors: doors.map((x) => x.cleanClone(tmpMat1)),
       obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1, {
         // aggregate height
@@ -678,6 +827,38 @@ class GeomorphService {
       windows: sym.windows.map((x) => x.cleanClone(tmpMat1)),
       unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
     };
+  }
+
+  /**
+   * @param {string} input
+   * @returns {input is Geomorph.DecorImgKey}
+   */
+  isDecorImgKey(input) {
+    return input in this.fromDecorImgKey;
+  }
+
+  /**
+   * @param {Geomorph.Decor} d
+   * @returns {d is Geomorph.DecorCollidable}
+   */
+  isDecorCollidable(d) {
+    return d.type === 'circle' || d.type === 'poly';
+  }
+
+  /**
+   * @param {Geomorph.Decor} d
+   * @returns {d is Geomorph.DecorCuboid}
+   */
+  isDecorCuboid(d) {
+    return d.type === 'cuboid';
+  }
+
+  /**
+   * @param {Geomorph.Decor} d
+   * @returns {d is Geomorph.DecorPoint}
+   */
+  isDecorPoint(d) {
+    return d.type === 'point';
   }
 
   /**
@@ -840,7 +1021,8 @@ class GeomorphService {
           return; // Only depth 0 and folder 'symbols' supported
         }
 
-        const ownTags = contents.split(" ");
+        // const ownTags = contents.split(" ");
+        const ownTags = [...contents.matchAll(splitTagRegex)].map(x => x[0]);
 
         // symbol may have folder "symbols"
         if (folderStack[0] === "symbols") {
@@ -885,14 +1067,12 @@ class GeomorphService {
           return;
         }
 
-        const poly = geomorphService.extractGeom({ ...parent, title: contents }, scale);
+        const meta = geomorphService.tagsToMeta(ownTags, {});
+        const poly = geomorphService.extractGeom({ ...parent, title: contents }, meta, scale);
         
         if (poly === null) {
           return;
         }
-
-        const meta = geomorphService.tagsToMeta(ownTags, {});
-        poly.meta = meta;
 
         // Sort polygon
         if (meta.wall === true) {
@@ -1030,18 +1210,22 @@ class GeomorphService {
   serializeLayout(layout) {
     return {
       key: layout.key,
+      num: layout.num,
       pngRect: layout.pngRect,
 
       decor: layout.decor,
       doors: layout.doors.map(x => x.json),
       hullDoors: layout.hullDoors.map((x) => x.json),
       hullPoly: layout.hullPoly.map(x => x.geoJson),
+      labels: layout.labels,
       obstacles: layout.obstacles.map(x => ({
         symbolKey: x.symbolKey,
         obstacleId: x.obstacleId,
         height: x.height,
         origPoly: x.origPoly.geoJson,
         transform: x.transform,
+        center: x.center,
+        meta: x.origPoly.meta,
       })),
       rooms: layout.rooms.map((x) => x.geoJson),
       walls: layout.walls.map((x) => x.geoJson),
@@ -1050,6 +1234,7 @@ class GeomorphService {
 
       navDecomp: { vs: layout.navDecomp.vs, tris: layout.navDecomp.tris },
       navDoorwaysOffset: layout.navDoorwaysOffset,
+      navRects: layout.navRects,
     };
   }
 
@@ -1100,21 +1285,24 @@ class GeomorphService {
   }
 
   /**
+   * For nested symbols i.e. before decor becomes `Geomorph.Decor`
    * @param {Geom.Meta} meta 
    * @param {Geom.Mat} mat
+   * @param {number} [y] Height off the ground
    * @returns {Geom.Meta}
    */
-  transformMeta(meta, mat) {
-    if (typeof meta.orient === 'number') {
-      const newDegrees = (180 / Math.PI) * mat.transformAngle(meta.orient * (Math.PI / 180));
-      const newOrient =  Math.round(newDegrees < 0 ? 360 + newDegrees : newDegrees);
-      return {
-        ...meta,
-        orient: newOrient,
-      };
-    } else {
-      return meta; 
-    }
+  transformDecorMeta(meta, mat, y) {
+    return {
+      ...meta,
+      // aggregate `y` i.e. height off ground
+      y: (Number(y) || 0) + (Number(meta.y) || 0.01),
+      // transform `orient` i.e. orientation in degrees
+      ...typeof meta.orient === 'number' && { orient: mat.transformDegrees(meta.orient) },
+      // transform `transform` i.e. affine transform from unit quad (0,0)...(1,1) to rect
+      ...Array.isArray(meta.transform) && {
+        transform: tmpMat2.setMatrixValue(tmpMat1).preMultiply(/** @type {Geom.SixTuple} */ (meta.transform)).toArray(),
+      },
+    };
   }
 }
 
@@ -1124,12 +1312,8 @@ export class Connector {
   /**
    * @param {Geom.Poly} poly
    * usually a rotated rectangle, but could be a curved window, in which case we'll view it as its AABB
-   * @param {Object} [options]
-   * @param {[null | number, null | number]} [options.roomIds]
-   * @param {Geom.Meta} [options.meta]
-   * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
    */
-  constructor(poly, options) {
+  constructor(poly) {
     // 🔔 orientation MUST be clockwise w.r.t y-downwards
     poly.fixOrientationConvex();
 
@@ -1138,7 +1322,7 @@ export class Connector {
     /** @type {Geom.Vect} */
     this.center = poly.center;
     /** @type {Geom.Meta} */
-    this.meta = poly.meta || options?.meta || {};
+    this.meta = poly.meta || {};
 
     const { angle, baseRect } = geom.polyToAngledRect(poly);
 
@@ -1158,11 +1342,12 @@ export class Connector {
     this.normal = normal;
 
     if (this.meta.hull) {
+      const edge = /** @type {Geomorph.HullDoorMeta} */ (this.meta).edge;
       if (// hull door normals should point outwards
-        this.meta.n && this.normal.y > 0
-        || this.meta.e && this.normal.x < 0
-        || this.meta.s && this.normal.y < 0
-        || this.meta.w && this.normal.x > 0
+        edge === 'n' && this.normal.y > 0
+        || edge === 'e' && this.normal.x < 0
+        || edge === 's' && this.normal.y < 0
+        || edge === 'w' && this.normal.x > 0
       ) {
         this.normal.scale(-1);
       }
@@ -1180,37 +1365,32 @@ export class Connector {
     this.entries = [inFront, behind];
 
     /**
+     * `[id of room infront, id of room behind]`
+     * - a room is *infront* if `normal` is pointing towards it.
+     * - hull doors have exactly one non-null entry.
      * @type {[null | number, null | number]}
-     * `[id of room infront, id of room behind]` where a room is *infront* if `normal` is pointing towards it. Hull doors have exactly one non-null entry.
      */
-    this.roomIds = options?.roomIds || [null, null];
+    this.roomIds = [null, null];
+
+    /** @type {number} overridden later */
+    this.navRectId = -1;
   }
 
   /** @returns {Geomorph.ConnectorJson} */
   get json() {
     return {
       poly: Object.assign(this.poly.geoJson, { meta: this.meta }),
+      navRectId: this.navRectId,
       roomIds: [this.roomIds[0], this.roomIds[1]],
     };
   }
 
   /** @param {Geomorph.ConnectorJson} json */
   static from(json) {
-    return new Connector(Object.assign(Poly.from(json.poly), { meta: json.poly.meta }), {
-      roomIds: json.roomIds,
-    });
-  }
-
-  /** @param {Geom.Poly[]} rooms */
-  computeRoomIds(rooms) {
-    const [infront, behind] = this.entries;
-    this.roomIds = rooms.reduce((agg, room, roomId) => {
-      // Support doors connecting a room to itself e.g.
-      // galley-and-mess-halls--006--4x2
-      if (room.contains(infront)) agg[0] = roomId;
-      if (room.contains(behind)) agg[1] = roomId;
-      return agg;
-    }, /** @type {[null | number, null | number]} */ ([null, null]));
+    const connector = new Connector(Object.assign(Poly.from(json.poly), { meta: json.poly.meta }));
+    connector.navRectId = json.navRectId;
+    connector.roomIds = json.roomIds;
+    return connector;
   }
 
   /** @returns {Geom.Poly} */
@@ -1238,6 +1418,11 @@ export class Connector {
   }
 }
 
+/**
+ * e.g. `foo bar=baz qux='1 2 3'` yields
+ * > `foo`, `bar=baz`, `qux='1 2 3'`
+ */
+const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
 const tmpVect1 = new Vect();
 const tmpVect2 = new Vect();
 const tmpPoly1 = new Poly();
@@ -1246,4 +1431,8 @@ const tmpMat2 = new Mat();
 
 /**
  * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey
+ */
+
+/**
+ * @typedef {keyof GeomorphService['fromDecorImgKey']} DecorImgKey
  */

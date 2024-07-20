@@ -1,6 +1,14 @@
 
 ## Bits and pieces
 
+### Patch npm modules
+
+```sh
+# Can patch npm modules with `patch-package`
+npx patch-package some-package
+git add patches/some-package+$version.patch
+```
+
 ### Convert to GIF
 
 ```sh

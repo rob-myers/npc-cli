@@ -1,12 +1,14 @@
 import * as THREE from "three";
-import { extend, Object3DNode } from "@react-three/fiber";
+import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 
 
 export const minimalInstanceUvsVert = /*glsl*/`
 
+  // <color_pars_vertex>
+  varying vec3 vColor;
+  
   varying vec2 vUv;
-
   attribute vec2 uvDimensions;
   attribute vec2 uvOffsets;
 
@@ -17,17 +19,17 @@ export const minimalInstanceUvsVert = /*glsl*/`
     // vUv = uv;
     vUv = (uv * uvDimensions) + uvOffsets;
     vec4 modelViewPosition = vec4(position, 1.0);
-    
-    // #ifdef USE_BATCHING
-    //   modelViewPosition = batchingMatrix * modelViewPosition;
-    // #endif
 
-    #ifdef USE_INSTANCING
-      modelViewPosition = instanceMatrix * modelViewPosition;
-    #endif
+    // USE_INSTANCING
+    modelViewPosition = instanceMatrix * modelViewPosition;
     
     modelViewPosition = modelViewMatrix * modelViewPosition;
     gl_Position = projectionMatrix * modelViewPosition;
+
+    vColor = vec3(1.0);
+    #ifdef USE_INSTANCING_COLOR
+      vColor.xyz *= instanceColor.xyz;
+    #endif
 
     #include <logdepthbuf_vertex>
   }
@@ -36,18 +38,23 @@ export const minimalInstanceUvsVert = /*glsl*/`
 
 export const minimalInstanceUvsFrag = /*glsl*/`
 
-  varying vec2 vUv;
+  // <color_pars_fragment>
+  varying vec3 vColor;
   uniform sampler2D map;
+
+  varying vec2 vUv;
+  uniform vec3 diffuse;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = texture2D( map, vUv );
+    gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, 1);
 
     // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
-    if(gl_FragColor.a < 0.5)
+    if(gl_FragColor.a < 0.5) {
       discard;
+    }
 
     #include <logdepthbuf_fragment>
   }
@@ -285,6 +292,98 @@ export const basicGradientFrag = /*glsl*/`
   }
 `;
 
+/**
+ * Assume these are NOT defined:
+ * - FLAT_SHADED
+ * - DOUBLE_SIDED, FLIP_SIDED
+ * - USE_TANGENT, USE_NORMALMAP_TANGENTSPACE, USE_CLEARCOAT_NORMALMAP
+ * - USE_ANISOTROPY
+ *
+ * We're using this as a guide:
+ * - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
+ * 
+ */
+export const meshDiffuseTest = {// Supports instancing
+
+  Vert: /*glsl*/`
+
+  // <color_pars_vertex>
+  varying vec3 vColor;
+  #include <common>
+
+  varying float dotProduct;
+
+  // <logdepthbuf_pars_vertex>
+  #ifdef USE_LOGDEPTHBUF
+    varying float vFragDepth;
+    varying float vIsPerspective;
+  #endif
+
+  void main() {
+
+    // <beginnormal_vertex>
+    vec3 objectNormal = vec3( normal );
+
+    // <begin_vertex>
+    vec3 transformed = vec3( position );
+
+    // <project_vertex>
+    vec4 mvPosition = vec4( transformed, 1.0 );
+
+    #ifdef USE_INSTANCING
+      mvPosition = instanceMatrix * mvPosition;
+    #endif
+
+    mvPosition = modelViewMatrix * mvPosition;
+    gl_Position = projectionMatrix * mvPosition;
+    //#endregion
+
+    // <logdepthbuf_vertex>
+    #ifdef USE_LOGDEPTHBUF
+      vFragDepth = 1.0 + gl_Position.w;
+      vIsPerspective = float( isPerspectiveMatrix( projectionMatrix ) );
+    #endif
+
+    // <defaultnormal_vertex>
+    vec3 transformedNormal = objectNormal;
+    #ifdef USE_INSTANCING
+      // this is in lieu of a per-instance normal-matrix
+      // shear transforms in the instance matrix are not supported
+      mat3 im = mat3( instanceMatrix );
+      // transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
+      transformedNormal = im * transformedNormal;
+    #endif
+    // 🚧 what does this do exactly?
+    transformedNormal = normalMatrix * transformedNormal;
+
+    vColor = vec3(1.0);
+    #ifdef USE_INSTANCING_COLOR
+      vColor.xyz *= instanceColor.xyz;
+    #endif
+
+    vec3 lightDir = normalize(cameraPosition - mvPosition.xyz);
+    dotProduct = max(dot(normalize(transformedNormal), lightDir), 0.0);
+  }
+  `,
+
+  Frag: /*glsl*/`
+
+  // <color_pars_vertex>
+  varying vec3 vColor;
+
+  uniform vec3 diffuse;
+	varying float dotProduct;
+
+  #include <logdepthbuf_pars_fragment>
+
+  void main() {
+    gl_FragColor = vec4(vColor * diffuse * (0.25 + 0.5 * dotProduct), 1);
+
+    #include <logdepthbuf_fragment>
+  }
+  `,
+};
+
 export const InstancedSpriteSheetMaterial = shaderMaterial(
   {
     map: null,
@@ -297,16 +396,16 @@ export const InstancedSpriteSheetMaterial = shaderMaterial(
   minimalInstanceUvsFrag,
 );
 
+export const MeshDiffuseTestMaterial = shaderMaterial(
+  {
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
+  },
+  meshDiffuseTest.Vert,
+  meshDiffuseTest.Frag,
+);
+
+// See glsl.d.ts
 extend({
   InstancedSpriteSheetMaterial,
+  MeshDiffuseTestMaterial,
 });
-
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      instancedSpriteSheetMaterial: Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
-        map: THREE.CanvasTexture;
-      };
-    }
-  }
-}

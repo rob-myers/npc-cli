@@ -96,13 +96,13 @@
         </image>
         <g>
                 <title>symbols</title>
-                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.000004358405, -5.26407e-7)" xlink:href="#symbol-1">
+                <use width="120" height="240" transform="matrix(1, 0, 0, 1, -0.0000043584054765233304, -5.264070068733417e-7)" xlink:href="#symbol-1">
                         <title>machinery--158--1.8x3.6 y=1</title>
                 </use>
-                <use width="240" height="240" transform="matrix(1, 0, 0, -1, 8.594e-7, 240.000015258789)" style="opacity: 0.5;" xlink:href="#symbol-0">
+                <use width="240" height="240" transform="matrix(1, 0, 0, -1, 8.594000178163697e-7, 240.00001525878906)" style="opacity: 0.5;" xlink:href="#symbol-0">
                         <title>empty-room--060--4x4</title>
                 </use>
-                <use width="60" height="60" transform="matrix(-1, 0, 0, 1, 240, -0.000003000001)" style="" xlink:href="#symbol-2">
+                <use width="60" height="60" transform="matrix(-1, 0, 0, 1, 240, -0.000003000001242980943)" style="" xlink:href="#symbol-2">
                         <title>console--018--1x1</title>
                 </use>
                 <rect width="60" height="60" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-16'); transform-origin: 29.9972px 329.998px;" y="300" transform="matrix(0, 1, -1, 0, -0.000114440918, 0.000053405762)">
@@ -179,49 +179,49 @@
                 <title>wall hull hull--20x20</title>
         </path>
         <rect x="240" y="300" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 540, -10)">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect x="240" y="300" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 900, 50)">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect x="240" y="300" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 1200, 410)">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect x="240" y="300" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 370, 890)">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect x="176.493" y="108.825" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(255, 255, 0);">
-                <title>decor go label=engineering</title>
+                <title>decor label=engineering</title>
         </rect>
         <rect x="240" y="300" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 1450, -120)">
-                <title>decor go label='research launch'</title>
+                <title>decor label='research launch'</title>
         </rect>
         <rect x="240" y="300" width="10" height="10" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 1210, -170)">
-                <title>decor go label=corridor</title>
+                <title>decor label=corridor</title>
         </rect>
         <rect x="-4" y="249.999996" width="8" height="99.999998" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull w</title>
+                <title>door hull edge=w</title>
         </rect>
         <rect x="-4" y="850" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull w</title>
+                <title>door hull edge=w</title>
         </rect>
         <rect x="1196" y="250" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull e</title>
+                <title>door hull edge=e</title>
         </rect>
         <rect x="1196" y="850" width="8" height="100" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull e</title>
+                <title>door hull edge=e</title>
         </rect>
         <rect x="250" y="-4" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull n</title>
+                <title>door hull edge=n</title>
         </rect>
         <rect x="850" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" y="-4">
-                <title>door hull n</title>
+                <title>door hull edge=n</title>
         </rect>
         <rect x="250" y="1196" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull s</title>
+                <title>door hull edge=s</title>
         </rect>
         <rect x="850" y="1196" width="100" height="8" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-                <title>door hull s</title>
+                <title>door hull edge=s</title>
         </rect>
         <rect x="1027.2" y="236.7" width="46" height="6" style="stroke: rgb(0, 0, 0); fill: rgb(68, 68, 68);">
                 <title>door iris</title>

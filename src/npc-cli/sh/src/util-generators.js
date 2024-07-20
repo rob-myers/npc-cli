@@ -37,8 +37,8 @@ export async function* filter(ctxt) {
  * @param {RunArg} ctxt
  */
 export async function* flatMap(ctxt) {
-  let { api, args, datum } = ctxt,
-    result; // eslint-disable-next-line no-new-func
+  let { api, args } = ctxt;
+  let datum, result;
   const func = Function(`return ${args[0]}`)();
   while ((datum = await api.read(true)) !== api.eof)
     if (api.isDataChunk(datum)) yield api.dataChunk(datum.items.flatMap((x) => func(x, ctxt)));
@@ -72,14 +72,15 @@ export async function* log({ api, args, datum }) {
  */
 export async function* map(ctxt) {
   let { api, args, datum } = ctxt;
-  const func = api.generateSelector(
-    api.parseFnOrStr(args[0]),
-    args.slice(1).map((x) => api.parseJsArg(x))
-  );
+  const baseSelector = api.parseFnOrStr(args[0]);
+  const func = api.generateSelector(baseSelector, args.slice(1).map(api.parseJsArg));
+  // fix e.g. `expr "new Set([1, 2, 3])" | map Array.from`
+  const nativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
+
   while ((datum = await api.read(true)) !== api.eof)
     yield api.isDataChunk(datum)
-      ? api.dataChunk(datum.items.map((x) => func(x, ctxt)))
-      : func(datum, ctxt);
+      ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt)))
+      : func(datum, ...nativeCode ? [] : [ctxt]);
 }
 
 /**
@@ -164,10 +165,8 @@ export async function* take({ api, args, datum }) {
 
 /**
  * @typedef RunArg
- * @property {import('../cmd.service').CmdService['processApi'] & {
- *   getCached(key: '__WORLD_KEY_VALUE__'): import('../../world/World').State;
- * }} api
+ * @property {import('../cmd.service').CmdService['processApi']} api
  * @property {string[]} args
- * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home
+ * @property {{ [key: string]: any }} home
  * @property {*} [datum] A shortcut for declaring a variable
  */

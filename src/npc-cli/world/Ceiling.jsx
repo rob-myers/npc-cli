@@ -1,11 +1,10 @@
 import React from "react";
 import * as THREE from "three";
 
-import { Poly } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { keys } from "../service/generic";
-import { drawPolygons, isModifierKey, isRMB, isTouchDevice, strokeLine } from "../service/dom";
-import { quadGeometryXZ } from "../service/three";
+import { drawPolygons } from "../service/dom";
+import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -13,14 +12,14 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Ceiling(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    tex: api.ceil.tex, // Pass in textures
+    tex: w.ceil.tex, // Pass in textures
 
     detectClick(e) {
       const gmId = Number(e.object.name.slice('ceil-gm-'.length));
-      const gm = api.gms[gmId];
+      const gm = w.gms[gmId];
       
       // 3d point -> local world coords (ignoring y)
       const mat4 = gm.mat4.clone().invert();
@@ -39,7 +38,7 @@ export default function Ceiling(props) {
     },
     drawGmKey(gmKey) {
       const [ct, tex, { width, height }] = state.tex[gmKey];
-      const layout = api.geomorphs.layout[gmKey];
+      const layout = w.geomorphs.layout[gmKey];
       const { pngRect } = layout;
 
       ct.resetTransform();
@@ -48,15 +47,16 @@ export default function Ceiling(props) {
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
-      const { nonHullCeilTops, doorCeilTops, polyDecals } = api.gmsData[gmKey];
+      const { nonHullCeilTops, doorCeilTops, polyDecals } = w.gmsData[gmKey];
       
       // wall/door tops
-      const strokeColor = 'rgba(150, 150, 150, 1)';
+      const strokeColor = 'rgba(120, 120, 120, 1)';
+      const hullStrokeColor = 'rgba(200, 200, 200, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
       drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.08]);
       drawPolygons(ct, doorCeilTops, [fillColor, strokeColor, 0.06]);
-      drawPolygons(ct, hullWalls, [strokeColor, strokeColor, 0.06]);
+      drawPolygons(ct, hullWalls, [hullStrokeColor, hullStrokeColor, 0.06]);
       
       // decals
       polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
@@ -74,23 +74,16 @@ export default function Ceiling(props) {
 
       if (result !== null) {
         const { gmId } = result;
-        api.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerdown",
+          event: e,
           is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
-          distancePx: api.ui.getDownDistancePx(),
-          justLongDown: api.ui.justLongDown,
-          pointers: api.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             ceiling: true,
             gmId,
             height: wallHeight,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },
@@ -99,37 +92,30 @@ export default function Ceiling(props) {
 
       if (result !== null) {
         const { gmId } = result;
-        api.events.next({
+        w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerup",
+          event: e,
           is3d: true,
-          modifierKey: isModifierKey(e.nativeEvent),
-          distancePx: api.ui.getDownDistancePx(),
-          justLongDown: api.ui.justLongDown,
-          pointers: api.ui.getNumPointers(),
-          rmb: isRMB(e.nativeEvent),
-          screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-          touch: isTouchDevice(),
-          point: e.point,
           meta: {
             ceiling: true,
             gmId,
             height: wallHeight,
           },
-        });
+        }));
         e.stopPropagation();
       }
     },
   }));
 
-  api.ceil = state;
+  w.ceil = state;
 
   React.useEffect(() => {// ensure initial + redraw on HMR
-    // 🚧 handle removal from api.gms (dynamic nav-mesh)
+    // 🔔 handle removal from api.gms (dynamic nav-mesh)
     keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
-  }, [api.hash]);
+  }, [w.hash]);
 
   return <>
-    {api.gms.map((gm, gmId) => (
+    {w.gms.map((gm, gmId) => (
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
         onUpdate={(group) => group.applyMatrix4(gm.mat4)}
@@ -137,7 +123,7 @@ export default function Ceiling(props) {
       >
         <mesh
           name={`ceil-gm-${gmId}`}
-          geometry={quadGeometryXZ}
+          geometry={getQuadGeometryXZ('vanilla-xz')}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
           position={[gm.pngRect.x, wallHeight, gm.pngRect.y]}
           onPointerDown={state.onPointerDown}
@@ -156,8 +142,6 @@ export default function Ceiling(props) {
   </>
   
 }
-
-0;
 
 /**
  * @typedef Props

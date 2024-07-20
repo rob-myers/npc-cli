@@ -4,8 +4,8 @@ import * as THREE from "three";
 import { Mat, Poly } from "../geom";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
-import { createGridPattern, drawCircle, drawPolygons, strokeLine, tmpCanvasCtxts } from "../service/dom";
-import { imageLoader, quadGeometryXZ } from "../service/three";
+import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
+import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -13,16 +13,16 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Floor(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     gridPattern: createGridPattern(1.5 * worldToCanvas),
-    tex: api.floor.tex, // Pass in textures
+    tex: w.floor.tex, // Pass in textures
 
-    drawGmKey(gmKey) {
+    drawFloor(gmKey) {
       const [ct, tex, { width, height }] = state.tex[gmKey];
-      const layout = api.geomorphs.layout[gmKey];
-      const { pngRect, hullPoly, navDecomp, walls, doors } = layout;
+      const gm = w.geomorphs.layout[gmKey];
+      const { pngRect, hullPoly, navDecomp, walls } = gm;
 
       ct.clearRect(0, 0, width, height);
       ct.fillStyle = 'red';
@@ -36,7 +36,7 @@ export default function Floor(props) {
       // Nav-mesh
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
-      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#999', 0.025]);
+      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#777', 0.025]);
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
       // draw grid
@@ -51,16 +51,18 @@ export default function Floor(props) {
       // drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
-      const shadowPolys = Poly.union(layout.obstacles.flatMap(x =>
+      const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
       drawPolygons(ct, shadowPolys, ['rgba(0, 0, 0, 0.25)', null]);
 
       // 🧪 debug decor
       // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
-      layout.decor.forEach((decor) => {
+      gm.decor.forEach((decor) => {
         if (decor.type === 'circle') {
           drawCircle(ct, decor.center, decor.radius, [null, '#500', 0.04]);
+        } else if (decor.type === 'poly') {
+          drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
         }
       });
 
@@ -79,15 +81,14 @@ export default function Floor(props) {
     },
   }));
 
+  w.floor = state;
 
-  api.floor = state;
-
-  React.useEffect(() => {// ensure initial + redraw on HMR
-    keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
-  }, [api.hash]);
+  React.useEffect(() => {// initial + redraw on HMR
+    keys(state.tex).forEach(gmKey => state.drawFloor(gmKey));
+  }, [w.hash]);
 
   return <>
-    {api.gms.map((gm, gmId) => (
+    {w.gms.map((gm, gmId) => (
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
         onUpdate={(group) => group.applyMatrix4(gm.mat4)}
@@ -95,7 +96,7 @@ export default function Floor(props) {
       >
         <mesh
           name={`floor-gm-${gmId}`}
-          geometry={quadGeometryXZ}
+          geometry={getQuadGeometryXZ('vanilla-xz')}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
           position={[gm.pngRect.x, 0, gm.pngRect.y]}
         >
@@ -121,7 +122,7 @@ export default function Floor(props) {
  * @typedef State
  * @property {CanvasPattern} gridPattern
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloor
  */
 
 const tmpMat1 = new Mat();

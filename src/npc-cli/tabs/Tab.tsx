@@ -38,7 +38,7 @@ export function Tab({ def, api, state: tabState }: TabProps) {
         sessionKey={def.filepath}
         env={{
           ...def.env,
-          CACHE_SHORTCUTS: { world: "WORLD_KEY" },
+          CACHE_SHORTCUTS: { w: "WORLD_KEY" },
         }}
         onKey={(e) => {
           if (e.key === "Escape" && api.enabled) {

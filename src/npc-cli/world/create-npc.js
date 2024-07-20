@@ -6,6 +6,7 @@ import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPat
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
 import { npcService } from '../service/npc';
+// import * as glsl from '../service/glsl';
 
 export class Npc {
 
@@ -71,21 +72,23 @@ export class Npc {
     }
     api.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
-  /** @param {NPC.NpcClassKey} npcClassKey */
-  changeClass(npcClassKey) {
-    this.def.classKey = npcClassKey;
-    this.changeSkin(npcClassKey);
-  }
   /**
    * 🚧 remove async once skin sprite-sheet available
-   * @param {NPC.NpcClassKey} skinKey
+   * @param {NPC.SkinKey} skinKey
    */
   async changeSkin(skinKey) {
+    this.def.skinKey = skinKey;
     const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.map.nodes[glbMeta.skinnedMeshName]);
     const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
-    // clonedMaterial.color = new THREE.Color('#aaa'); // darken (multiply)
-    // clonedMaterial.emissive = new THREE.Color('#222'); // lighten (add)
-    // clonedMaterial.emissiveIntensity = 3;
+    // const clonedMaterial = new THREE.MeshBasicMaterial();
+    // 🚧 convert MeshBasicMaterial to ShaderMaterial
+    // const clonedMaterial = new THREE.ShaderMaterial({
+    //   vertexShader: THREE.ShaderLib.basic.vertexShader,
+    //   fragmentShader: THREE.ShaderLib.basic.fragmentShader,
+    //   uniforms: THREE.UniformsUtils.clone(THREE.ShaderLib.basic.uniforms),
+    //   defines: { USE_SKINNING: '', USE_MAP: '',  USE_UVS: '' },
+    // });
+
     await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
       tex.flipY = false;
       tex.wrapS = tex.wrapT = 1000;
@@ -93,6 +96,8 @@ export class Npc {
       tex.minFilter = 1004;
       tex.magFilter = 1003;
       clonedMaterial.map = tex;
+      // clonedMaterial.uniforms.map.value = tex;
+      // clonedMaterial.uniformsNeedUpdate = true;
       skinnedMesh.material = clonedMaterial;
     });
   }
@@ -134,7 +139,7 @@ export class Npc {
     skinnedMesh.userData.npcKey = this.key;
 
     // this.changeSkin('scientist-dabeyt--with-arms.png');
-    this.changeSkin(this.def.classKey);
+    this.changeSkin(this.def.skinKey);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
   /** @param {number} deltaMs  */
@@ -270,7 +275,9 @@ export class Npc {
 export function hotModuleReloadNpc(npc) {
   const { def, epochMs, group, s, map, animMap, mixer, agent } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
-  // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
+  
+  // npc.changeSkin('robot-vaccino.png');  // 🔔 Skin debug
+
   const nextNpc = new Npc(def, npc.api);
   return Object.assign(nextNpc, { epochMs, group, s: Object.assign(nextNpc.s, s), map, animMap, mixer, agent });
 }

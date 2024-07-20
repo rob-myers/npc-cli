@@ -25,6 +25,8 @@ declare namespace Geomorph {
 
   interface ConnectorJson {
     poly: Geom.GeoJsonPolygon;
+    /** Points into @see Geomorph.Layout.navRects */
+    navRectId: number;
     /**
      * `[id of room infront, id of room behind]`
      * where a room is *infront* if `normal` is pointing towards it.
@@ -33,7 +35,9 @@ declare namespace Geomorph {
     roomIds: [null | number, null | number];
   }
 
-  interface DoorMeta extends Geomorph.GmDoorId {
+  type HullDoorMeta = Geom.Meta<{ edge: Geom.DirectionString }>;
+
+  interface DoorState extends Geomorph.GmDoorId {
     /** gmDoorKey format i.e. `g{gmId}d{doorId}` */
     key: `g${number}d${number}`;
     door: Geomorph.Connector;
@@ -77,9 +81,23 @@ declare namespace Geomorph {
   >;
 
   interface GmDoorId {
+    /** `g{gmId}d${doorId}` */
+    key: `g${number}d${number}`;
     gmId: number;
     doorId: number;
+    /** Non-isolated hull doors have an associated door */
+    other?: { gmId: number; doorId: number };
   }
+
+  interface GmRoomId {
+    gmId: number;
+    roomId: number;
+    /** `gmRoomKey` */
+    grKey: Geomorph.GmRoomKey;
+  }
+
+  /** `g${gmId}r${roomId}` */
+  type GmRoomKey = `g${number}r${number}`;
 
   interface SymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
@@ -174,13 +192,15 @@ declare namespace Geomorph {
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
     key: GeomorphKey;
+    num: GeomorphNumber;
     pngRect: R;
 
     decor: Decor[];
     doors: C[];
     hullDoors: C[];
     hullPoly: P[];
-    obstacles: LayoutObstacleGeneric<P>[];
+    labels: DecorPoint[];
+    obstacles: LayoutObstacleGeneric<P, V>[];
     rooms: P[];
     walls: P[];
     windows: C[];
@@ -189,6 +209,8 @@ declare namespace Geomorph {
     navDecomp: Geom.TriangulationGeneric<V>;
     /** Index of triangle in `navDecomp.tris` where doorway triangles will begin */
     navDoorwaysOffset: number;
+    /** AABBs of `navPolyWithDoors` i.e. original nav-poly */
+    navRects: R[];
   }
 
   type Layout = LayoutGeneric<Geom.Poly, Geom.Vect, Geom.Rect, Connector>;
@@ -200,7 +222,13 @@ declare namespace Geomorph {
   interface LayoutInstance extends Layout {
     gmId: number;
     transform: Geom.SixTuple;
+    matrix: Geom.Mat;
+    gridRect: Geom.Rect;
+    inverseMatrix: Geom.Mat;
     mat4: import("three").Matrix4;
+
+    getOtherRoomId(doorId: number, roomId: number): number;
+    isHullDoor(doorId: number): boolean;
   }
 
   /**
@@ -209,6 +237,7 @@ declare namespace Geomorph {
    */
   interface LayoutObstacleGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
+    V extends Geom.VectJson | Geom.Vect,
   > {
     /** The `symbol` the obstacle originally comes from */
     symbolKey: SymbolKey;
@@ -216,83 +245,96 @@ declare namespace Geomorph {
     obstacleId: number;
     /** The height of this particular instance */
     height: number;
-    /** `symbol.obstacles[symObsId]` -- could be inferred from `assets` */
+    /** `symbol.obstacles[obstacleId]` -- could be inferred from `assets` */
     origPoly: P;
-    /** Transform from original symbol coords into Geomorph coords */
+    /** Transform from original symbol into Geomorph (meters) */
     transform: Geom.SixTuple;
+    /** `origPoly.center` transformed by `transform` */
+    center: V;
+    /** Shortcut to `origPoly.meta` */
+    meta: Geom.Meta;
   }
 
-  type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly>;
-
-  /**
-   * Data determined by `api.gms`.
-   * It can change on dynamic navMesh change.
-   */
-  interface GmsDataRoot {
-    /** Total number of walls, where each wall is a single quad:  */
-    wallCount: number;
-    /** Total number of doors, each being a single quad (🔔 may change):  */
-    doorCount: number;
-    /** Total number of obstacles, each being a single quad:  */
-    obstaclesCount: number;
-    /** Per gmId, total number of wall line segments:  */
-    wallPolySegCounts: number[];
-  }
-  
-  /**
-   * Data determined by a `Geomorph.GeomorphKey`.
-   * We do not store in `api.gms` to avoid duplication.
-   */
-  interface GmData {
-    gmKey: Geomorph.GeomorphKey;
-    doorSegs: [Geom.Vect, Geom.Vect][];
-    /** Debug only */
-    navPoly?: THREE.BufferGeometry;
-    /** These wall polygons are inset, so stroke does not jut out */
-    nonHullCeilTops: Geom.Poly[];
-    /** These door polygons are inset, so stroke does not jut out */
-    doorCeilTops: Geom.Poly[];
-    polyDecals: Geom.Poly[];
-    /** Has this geomorph never occurred in any map so far? */
-    unseen: boolean;
-    wallSegs: { seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[];
-    /** Number of wall polygons in geomorph, where each wall can have many line segments */
-    wallPolyCount: number;
-    /** Per wall, number of line segments */
-    wallPolySegCounts: number[];
-  }
+  type LayoutObstacle = LayoutObstacleGeneric<Geom.Poly, Geom.Vect>;
+  type LayoutObstacleJson = LayoutObstacleGeneric<Geom.GeoJsonPolygon, Geom.VectJson>;
 
   //#region decor
 
   /** Serializable */
   type Decor = (
     | DecorCircle
+    | DecorCuboid
     | DecorPoint
-    | DecorRect
+    | DecorQuad
+    | DecorPoly
   );
-
-  interface DecorPoint extends BaseDecor, Geom.VectJson {
-    type: 'point';
-  }
 
   interface DecorCircle extends BaseDecor, Geom.Circle {
     type: 'circle';
   }
+
+  /**
+   * Vertices `center.xyz ± extent.xyz` rotated about `center` by `angle`.
+   */
+  interface DecorCuboid extends BaseDecor {
+    type: 'cuboid';
+    center: import('three').Vector3Like;
+    /** Half-extents */
+    extent: import('three').Vector3Like;
+    /** Radians */
+    angle: number;
+  }
+
+  interface DecorPoint extends BaseDecor, Geom.VectJson {
+    type: 'point';
+    /** Orientation in degrees, like `meta.orient` */
+    orient: number;
+  }
   
-  interface DecorRect extends BaseDecor, Geom.RectJson {
-    type: 'rect';
-    angle?: number;
+  /** Simple polygon sans holes. */
+  interface DecorQuad extends BaseDecor {
+    type: 'quad';
+    transform: Geom.SixTuple;
+    center: Geom.VectJson;
+  }
+
+  interface DecorPoly extends BaseDecor {
+    type: 'poly';
+    points: Geom.VectJson[];
+    /** Center of `new Poly(points)` */
+    center: Geom.VectJson;
   }
 
   interface BaseDecor {
+    /** Either auto-assigned e.g. decor from geomorphs, or specified by user. */
     key: string;
     meta: Geom.Meta<Geomorph.GmRoomId>;
+    /** 2D bounds inside XZ plane */
+    bounds2d: Geom.RectJson;
     /** Epoch ms when last updated (overwritten) */
     updatedAt?: number;
-    /** For defining decor via CLI (more succinct) */
-    tags?: string[];
+    /**
+     * Indicates decor that comes from a geomorph layout,
+     * i.e. decor that is initially instantiated.
+     */
+    src?: Geomorph.GeomorphKey;
+    // /** For defining decor via CLI (more succinct) */
+    // tags?: string[];
   }
-  
+
+  type DecorSheetRectCtxt = Geom.Meta<{ decorImgKey: Geomorph.DecorImgKey }>;
+
+  type DecorImgKey = import('../service/geomorph.js').DecorImgKey;
+
+  /** 🚧 clarify */
+  type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
+
+  /** `byGrid[x][y]` */
+  type DecorGrid = Set<Geomorph.Decor>[][];
+
+  /** Previously we sorted its groups e.g. "points" */
+  type RoomDecor = Set<Geomorph.Decor>;
+
   //#endregion
 
   type GeomorphKey =
@@ -322,11 +364,7 @@ declare namespace Geomorph {
     obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
     obstacleDim: { width: number; height: number; }
     decorDim: { width: number; height: number; }
-    decor: DecorSheet;
-  }
-
-  interface DecorSheet {
-    [decorKey: string]: Geom.RectJson & DecorSheetRectCtxt;
+    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
   }
 
   interface ObstacleSheetRectCtxt {
@@ -336,6 +374,6 @@ declare namespace Geomorph {
     type: string;
   }
 
-  type DecorSheetRectCtxt = Geom.Meta<{ fileKey: string }>;
+  type GmsData = import('../service/create-gms-data').GmsData;
 
 }

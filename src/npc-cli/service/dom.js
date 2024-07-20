@@ -85,6 +85,28 @@ export function drawPolygons(ct, polys, [fillStyle, strokeStyle, lineWidth] = []
 }
 
 /**
+ * Draw a simple polygon sans holes.
+ * @param {CanvasContext2DType} ct
+ * @param {Geom.VectJson[]} outline
+ * @param {[fillStyle?: string | null, strokeStyle?: string | null, lineWidth?: number | null]} [style]
+ * @param {false | 'clip'} [clip]
+ */
+export function drawSimplePoly(ct, outline, [fillStyle, strokeStyle, lineWidth] = [], clip = false) {
+  ct.fillStyle = fillStyle || ct.fillStyle;
+  ct.strokeStyle = strokeStyle || ct.strokeStyle;
+  ct.lineWidth = lineWidth || ct.lineWidth;
+  ct.beginPath();
+  fillRing(ct, outline, false);
+  if (strokeStyle !== null) {
+    ct.closePath();
+    ct.stroke();
+  }
+  if (fillStyle !== null) {
+    clip === false ? ct.fill() : ct.clip();
+  }
+}
+
+/**
  * @param {CanvasContext2DType} ct
  * @param  {Geom.VectJson[]} ring
  */
@@ -132,6 +154,25 @@ export function invertCanvas(canvas, copyCtxt, maskCtxt) {
 export function isModifierKey(e) {
   return e.shiftKey || e.ctrlKey || e.metaKey;
 }
+
+/**
+ * Get array of modifier keys that are currently pressed.
+ * @param {MouseEvent} e 
+ */
+export function getModifierKeys(e) {
+  const keysDown = /** @type {( 'ctrl' | 'meta' | 'shift' )[]} */ ([]);
+  if (e.ctrlKey === true) {
+    keysDown.push('ctrl')
+  }
+  if (e.metaKey === true) {
+    keysDown.push('meta')
+  }
+  if (e.shiftKey === true) {
+    keysDown.push('shift')
+  }
+  return keysDown.length === 0 ? undefined : keysDown;
+}
+
 
 /**
  * Is Right Mouse Button (RMB) down?

@@ -413,10 +413,16 @@ export function safeJsonParse(input) {
   }
 }
 
-/** @param {any} input */
+/**
+ * @param {*} input 
+ * @returns {string}
+ */
 export function safeStringify(input) {
   if (typeof input === "function") {
     return zealousTrim(`${input}`);
+  }
+  if (input instanceof Set) {// Set({size}) [...]
+    return `Set(${input.size}) ${safeStringify(Array.from(input))}`;
   }
   return (
     tryJsonStringify(input) ||

@@ -1,14 +1,14 @@
 declare namespace NPC {
 
   /** Skin names. */
-  type NpcClassKey = keyof import('../service/npc').NpcService['fromNpcClassKey'];
+  type SkinKey = keyof import('../service/npc').NpcService['fromSkinKey'];
 
   type NPC = import('../world/create-npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */
     key: string;
-    classKey: NpcClassKey;
+    skinKey: SkinKey;
     /** Radians */
     angle: number;
     position: import("three").Vector3Like;
@@ -20,14 +20,13 @@ declare namespace NPC {
 
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
-    npcClassKey?: NPC.NpcClassKey;
+    skinKey?: NPC.SkinKey;
     point: import("three").Vector3Like;
     meta?: Geom.Meta;
     requireNav?: boolean;
     /** Should NPC have agent? */
     agent?: boolean;
   }
-
 
   type AnimKey = keyof import('../service/npc').NpcService['fromAnimKey'];
 
@@ -40,9 +39,12 @@ declare namespace NPC {
     | { key: "disabled" }
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
-    | { key: "spawned"; npcKey: string; }
-    | { key: 'stopped-walking'; npcKey: string; }
+    | { key: "spawned"; npcKey: string }
+    | { key: 'stopped-walking'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
+    | { key: "decor-instantiated" }
+    | { key: "decors-removed"; decors: Geomorph.Decor[] }
+    | { key: "decors-added"; decors: Geomorph.Decor[] }
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {
@@ -73,7 +75,7 @@ declare namespace NPC {
     /** Was previous pointerdown held down for long? */
     justLongDown: boolean;
     /** Ctrl/Shift/Command was down */
-    modifierKey: boolean;
+    keys?: ('ctrl' | 'shift' | 'meta')[];
     /** Number of active pointers */
     pointers: number;
     /** Was the right mouse button being pressed?  */
@@ -92,8 +94,10 @@ declare namespace NPC {
       }
   );
 
-  type ClickMeta = import('three').Vector3Like & {
+  type ClickMeta = Geom.VectJson & Pick<BasePointerEvent, 'keys'> & {
     meta: Geom.Meta;
+    /** Original 3D point */
+    v3: import('three').Vector3Like;
   };
 
   type TiledCacheResult = Extract<

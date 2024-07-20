@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 100 100" style="filter: none;" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+                <filter id="outline-filter-0" color-interpolation-filters="sRGB" x="-50%" y="-50%" width="200%" height="200%" bx:preset="outline 1 2 #999">
+                        <feMorphology in="SourceAlpha" result="dilated" operator="dilate" radius="2"/>
+                        <feFlood flood-color="#999" result="flood"/>
+                        <feComposite in="flood" in2="dilated" operator="in" result="outline"/>
+                        <feMerge>
+                                <feMergeNode in="outline"/>
+                                <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                </filter>
+        </defs>
+        <g style="filter: none;">
+                <ellipse style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); stroke-width: 4px;" cx="50" cy="50" rx="48" ry="48">
+                        <title>circle</title>
+                </ellipse>
+                <text style="font-family: 'Courier New'; font-size: 96px; white-space: pre; filter: url('#outline-filter-0');" x="21.195181" y="75.539321"><title>letter-i</title>i</text>
+        </g>
+</svg>

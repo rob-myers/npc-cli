@@ -11,8 +11,8 @@
  * Generates:
  * - assets.json
  * - geomorphs.json
- * - obstacles sprite-sheet
- * - decor sprite-sheet
+ * - obstacles sprite-sheet (using media/symbol/*.svg)
+ * - decor sprite-sheet (using media/decor/*.svg)
  * - webp from png
  */
 /// <reference path="./deps.d.ts"/>
@@ -23,17 +23,18 @@ import childProcess from "child_process";
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 import { createCanvas, loadImage } from 'canvas';
-import { MaxRectsPacker, Rectangle } from "maxrects-packer";
+import PQueue from "p-queue-compat";
 
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
 import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
-import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale } from "../npc-cli/service/const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, } from "../npc-cli/service/generic";
-import { geomorphService } from "../npc-cli/service/geomorph";
-import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
+import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale, spriteSheetDecorExtraScale } from "../npc-cli/service/const";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, } from "../npc-cli/service/generic";
 import { drawPolygons } from "../npc-cli/service/dom";
-import { labelledSpawn, saveCanvasAsFile } from "./service";
+import { geomorphService } from "../npc-cli/service/geomorph";
+import packRectangles from "../npc-cli/service/rects-packer";
+import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
+import { labelledSpawn, saveCanvasAsFile, tryLoadImage, tryReadString } from "./service";
 
 const rawOpts = getopts(process.argv, {
   boolean: ['all', 'prePush'],
@@ -68,9 +69,9 @@ function computeOpts() {
      * - neither this script nor geomorphs.js are in `changedFiles`
      */
     all,
-    /** When non-empty, files changed (added/modified/deleted) within {ms} @see assets-nodemon.js */
+    /** When non-empty, files changed (added/modified/deleted) within {ms}, see `assets-nodemon.js` */
     changedFiles,
-    /** Restriction of @see changedFiles to decor PNG baseNames */
+    /** Restriction of @see changedFiles to decor SVG baseNames */
     changedDecorBaseNames,
     /** Only use @see changedFiles when non-empty and !opts.all  */
     detectChanges: !all && changedFiles.length > 0,
@@ -85,11 +86,14 @@ function computeOpts() {
 
 /** @returns {Promise<Prev>} */
 async function computePrev() {
+  const [prevAssetsStr, obstaclesPng, decorPng] = await Promise.all([
+    !opts.all ? tryReadString(assetsFilepath) : null,
+    tryLoadImage(obstaclesPngPath),
+    tryLoadImage(decorPngPath),
+  ]);
   const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    !opts.all ? JSON.parse(fs.readFileSync(assetsFilepath).toString()) : null
+    JSON.parse(prevAssetsStr ?? 'null')
   );
-  const obstaclesPng = fs.existsSync(obstaclesPngPath) ? await loadImage(obstaclesPngPath) : null;
-  const decorPng = fs.existsSync(decorPngPath) ? await loadImage(decorPngPath) : null;
   return {
     assets: prevAssets,
     obstaclesPng,
@@ -126,20 +130,24 @@ info({ opts });
 
   const prev = await computePrev();
 
-  const symbolBaseNames = fs.readdirSync(symbolsDir).filter((x) => x.endsWith(".svg")).sort();
+  const [symbolBaseNames, mapBaseNames] = await Promise.all([
+    fs.promises.readdir(symbolsDir).then(xs => xs.filter((x) => x.endsWith(".svg")).sort()),
+    fs.promises.readdir(mapsDir).then(xs => xs.filter((x) => x.endsWith(".svg")).sort()),
+  ]);
+
   const symbolBaseNamesToUpdate = opts.all
     ? symbolBaseNames
     : symbolBaseNames.filter(x =>  opts.changedFiles.includes(path.resolve(symbolsDir, x)))
   ;
 
-  const mapBaseNames = fs.readdirSync(mapsDir).filter((x) => x.endsWith(".svg")).sort();
-
   /** @type {Geomorph.AssetsJson} The next assets.json */
   const assetsJson = {
     meta: {},
-    sheet: { obstacle: {}, decor: {}, obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 } },
-    symbols: /** @type {*} */ ({}),
-    maps: {},
+    sheet: {
+      obstacle: {}, decor: /** @type {*} */ ({}),
+      obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 },
+    },
+    symbols: /** @type {*} */ ({}), maps: {},
   };
 
   if (prev.assets) {// use previous (may overwrite later)
@@ -226,20 +234,20 @@ info({ opts });
   });
   info({ changedGmKeys });
 
-  // 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
     const hullKey = geomorphService.toHullKey[gmKey];
     const flatSymbol = flattened[hullKey];
     return geomorphService.createLayout(gmKey, flatSymbol, assets);
   }));
+  const layoutJson = mapValues(layout, geomorphService.serializeLayout);
 
   const mapsHash = hashJson(assetsJson.maps);
-  const layoutsHash = hashJson(layout);
+  const layoutsHash = hashJson(layoutJson);
   const sheetsHash = hashJson(assetsJson.sheet);
   const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
   const hash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
 
-  /** @type {Geomorph.Geomorphs} */
+  /** @type {Geomorph.GeomorphsJson} */
   const geomorphs = {
     hash,
     mapsHash,
@@ -247,11 +255,11 @@ info({ opts });
     sheetsHash,
     imagesHash,
     map: assetsJson.maps,
-    layout,
+    layout: layoutJson,
     sheet: assetsJson.sheet,
   };
 
-  fs.writeFileSync(geomorphsFilepath, stringify(geomorphService.serializeGeomorphs(geomorphs)));
+  fs.writeFileSync(geomorphsFilepath, stringify(geomorphs));
 
   //#endregion
 
@@ -371,25 +379,22 @@ function validateSubSymbolDimensions(symbols) {
 function createObstaclesSheetJson(assets) {
 
   // Each one of a symbol's obstacles induces a respective packed rect
-  const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, Rectangle>} */ ({});
+  const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, { width: number; height: Number; data: Geomorph.ObstacleSheetRectCtxt }>} */ ({});
   for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
     /** World coords -> Starship Geomorph coords, modulo additonal scale in [1, 5] non-hull symbols. */
-    const worldToSguScaled = worldToSguScale * (isHull ? 1 : spriteSheetNonHullExtraScale);
+    const scale = worldToSguScale * (isHull ? 1 : spriteSheetNonHullExtraScale);
 
     for (const [obstacleId, poly] of obstacles.entries()) {
-      const rect = Poly.from(poly).rect.scale(worldToSguScaled).precision(0); // width, height integers
+      const rect = Poly.from(poly).rect.scale(scale).precision(0); // width, height integers
       const [width, height] = [rect.width, rect.height]
-      
-      const r = new Rectangle(width, height);
-      /** @type {Geomorph.ObstacleSheetRectCtxt} */
-      const rectData = { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) };
-      r.data = rectData;
-      obstacleKeyToRect[`${symbolKey} ${obstacleId}`] = r;
+      obstacleKeyToRect[`${symbolKey} ${obstacleId}`] = {
+        width, height, data: { symbolKey, obstacleId, type: extractObstacleDescriptor(poly.meta) },
+      };
       // info(`images will pack ${ansi.BrightYellow}${JSON.stringify({ ...rectData, width, height })}${ansi.Reset}`);
     }
   }
 
-  const bin = packRectangles(Object.values(obstacleKeyToRect), 'createObstaclesSheetJson');
+  const bin = packRectangles(Object.values(obstacleKeyToRect), { logPrefix: 'createObstaclesSheetJson', packedPadding: imgOpts.packedPadding });
   
   /** @type {Pick<Geomorph.SpriteSheet, 'obstacle' | 'obstacleDim'>} */
   const json = ({ obstacle: {}, obstacleDim: { width: bin.width, height: bin.height } });
@@ -414,7 +419,6 @@ function createObstaclesSheetJson(assets) {
 /**
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
- * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
  */
 async function drawObstaclesSheet(assets, prev) {
   
@@ -422,14 +426,11 @@ async function drawObstaclesSheet(assets, prev) {
   const obstacles = Object.values(obstacle);
   const ct = createCanvas(obstacleDim.width, obstacleDim.height).getContext('2d');
 
-  // 🚧 redraw all obstacles when:
-  // - opts.all ✅ (prev.assets `null`)
-  // - this file changed (?)
   const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prev);
   info({ changedObstacles, removedObstacles });
 
   if (changedObstacles.size === 0 && removedObstacles.size === 0) {
-    return false;
+    return;
   }
 
   for (const { x, y, width, height, symbolKey, obstacleId } of obstacles) {
@@ -467,52 +468,73 @@ async function drawObstaclesSheet(assets, prev) {
   }
 
   await saveCanvasAsFile(ct.canvas, obstaclesPngPath);
-  return true;
 }
 
 /**
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
- * @returns {Promise<Record<string, import('canvas').Image>>}
+ * @returns {Promise<{ [key in Geomorph.DecorImgKey]?: import('canvas').Image }>}
  */
 async function createDecorSheetJson(assets, prev) {
+  /** `media/decor/{baseName}` for SVGs corresponding to decorImgKeys */
+  const svgBasenames = fs.readdirSync(decorDir).filter((baseName) => {
+    if (!baseName.endsWith(".svg")) return false;
+    const decorImgKey = baseName.slice(0, -'.svg'.length);
+    if (geomorphService.isDecorImgKey(decorImgKey)) return true;
+    warn(`${'createDecorSheetJson'}: ignored file (unknown decorImgKey "${decorImgKey}")`);
+  }).sort();
 
-  const pngBasenames = fs.readdirSync(decorDir).filter((x) => x.endsWith(".png")).sort();
   const prevDecorSheet = prev.assets?.sheet.decor;
-  const changedBasenames = prevDecorSheet && opts.detectChanges
-    ? pngBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
-    : pngBasenames;
+  const changedSvgBasenames = !!prevDecorSheet && opts.detectChanges
+    ? svgBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
+    : svgBasenames
+  ;
 
-  const baseNameToRect = /** @type {Record<string, Rectangle>} */ ({});
-  const baseNameToImg = /** @type {Record<string, import('canvas').Image>} */ ({});
+  const imgKeyToRect = /** @type {Record<Geomorph.DecorImgKey, { width: number; height: Number; data: Geomorph.DecorSheetRectCtxt }>} */ ({});
+  const imgKeyToImg = /** @type {{ [key in Geomorph.DecorImgKey]?: import('canvas').Image }} */ ({});
 
-  for (const baseName of pngBasenames) {
-    if (changedBasenames.includes(baseName)) {
-      const tags = baseName.split('-').slice(0, -1); // ignore e.g. `001.png`
+  // Compute changed images in parallel
+  const promQueue = new PQueue({ concurrency: 5 });
+  await Promise.all(changedSvgBasenames.map(baseName => promQueue.add(async () => {
+    const decorImgKey = /** @type {Geomorph.DecorImgKey} */ (baseName.slice(0, -'.svg'.length));
+    // svg contents -> data url
+    const svgDataUrl = `data:image/svg+xml;utf8,${await tryReadString(path.resolve(decorDir, baseName))}`;
+    imgKeyToImg[decorImgKey] = await loadImage(svgDataUrl);
+  })));
+
+  /**
+   * Decor is drawn in units `sgu * 5` (same approach as non-hull symbols).
+   * We further adjust how high-res we want it.
+   */
+  const scale = (1 / 5) * spriteSheetDecorExtraScale;
+
+  for (const baseName of svgBasenames) {
+    const decorImgKey = /** @type {Geomorph.DecorImgKey} */ (baseName.slice(0, -'.svg'.length));
+    const img = imgKeyToImg[decorImgKey];
+
+    if (img) {// changedSvgBasenames.includes(baseName)
+      const tags = baseName.split('--').slice(0, -1); // ignore e.g. `001.svg`
       const meta = tags.reduce((agg, tag) => { agg[tag] = true; return agg; }, /** @type {Geom.Meta} */ ({}));
-      const img = await loadImage(path.resolve(decorDir, baseName));
-      const rect = new Rectangle(img.width, img.height);
-      /** @type {Geomorph.DecorSheetRectCtxt} */
-      const rectData = { ...meta, fileKey: baseName };
-      rect.data = rectData;
-      baseNameToRect[baseName] = rect;
-      baseNameToImg[baseName] = img;
+      imgKeyToRect[decorImgKey] = {
+        width: toPrecision(img.width * scale, 0),
+        height: toPrecision(img.height * scale, 0),
+        data: { ...meta, decorImgKey: decorImgKey },
+      };
     } else {
       // 🔔 keeping meta.{x,y,width,height} avoids nondeterminism in sheet.decor json
-      const meta = /** @type {Geomorph.DecorSheet} */ (prevDecorSheet)[baseName];
-      const rect = new Rectangle(meta.width, meta.height);
-      rect.data = { ...meta, fileKey: baseName };
-      baseNameToRect[baseName] = rect;
+      const meta = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecorSheet)[decorImgKey];
+      imgKeyToRect[decorImgKey] = { width: meta.width, height: meta.height, data: { ...meta, fileKey: baseName } };
     }
   }
 
-  const bin = packRectangles(Object.values(baseNameToRect), 'createDecorSheetJson');
+  const bin = packRectangles(Object.values(imgKeyToRect), { logPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
 
   /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'decorDim'>} */
-  const json = ({ decor: {}, decorDim: { width: bin.width, height: bin.height } });
+  const json = ({ decor: /** @type {*} */ ({}), decorDim: { width: bin.width, height: bin.height } });
   bin.rects.forEach(r => {
     const meta = /** @type {Geomorph.DecorSheetRectCtxt} */ (r.data);
-    json.decor[meta.fileKey] = {
+
+    json.decor[meta.decorImgKey] = {
       ...meta,
       x: toPrecision(r.x),
       y: toPrecision(r.y),
@@ -523,28 +545,27 @@ async function createDecorSheetJson(assets, prev) {
 
   assets.sheet = { ...assets.sheet, ...json }; // Overwrite initial/previous
 
-  return baseNameToImg; // possibly partial
+  return imgKeyToImg; // possibly partial
 }
 
 /**
  * @param {Geomorph.AssetsJson} assets
- * @param {Record<string, import('canvas').Image>} fileKeyToImage
+ * @param {Partial<Record<Geomorph.DecorImgKey, import('canvas').Image>>} decorImgKeyToImage
  * @param {Prev} prev
- * @returns {Promise<boolean>} Return true iff changed i.e. had to (re)draw
  */
-async function drawDecorSheet(assets, fileKeyToImage, prev) {
+async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
   const { decor, decorDim } = assets.sheet;
   const decors = Object.values(decor);
   const ct = createCanvas(decorDim.width, decorDim.height).getContext('2d');
   const prevDecor = prev.assets?.sheet.decor;
   
-  for (const { x, y, width, height, fileKey } of decors) {
-    const image = fileKeyToImage[fileKey];
+  for (const { x, y, width, height, decorImgKey } of decors) {
+    const image = decorImgKeyToImage[decorImgKey];
     if (image) {
-      info(`${fileKey} redrawing...`);
+      info(`${decorImgKey} redrawing...`);
       ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
     } else {// assume image available in previous sprite-sheet
-      const prevRect = /** @type {Geomorph.DecorSheet} */ (prevDecor)[fileKey];
+      const prevRect = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecor)[decorImgKey];
       ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPng),
         prevRect.x, prevRect.y, prevRect.width, prevRect.height,
         x, y, width, height,
@@ -553,7 +574,6 @@ async function drawDecorSheet(assets, fileKeyToImage, prev) {
   }
 
   await saveCanvasAsFile(ct.canvas, decorPngPath);
-  return true;
 }
 
 /**
@@ -591,29 +611,6 @@ function extractObstacleDescriptor(meta) {
     if (meta[tag] === true) return tag;
   }
   return 'obstacle';
-}
-
-/**
- * @param {Rectangle[]} rectsToPack
- * @param {string} errorPrefix
- */
-function packRectangles(rectsToPack, errorPrefix) {
-  const packer = new MaxRectsPacker(4096, 4096, imgOpts.packedPadding, {
-    pot: false,
-    border: imgOpts.packedPadding,
-    // smart: false,
-  });
-  packer.addArray(rectsToPack);
-  const { bins } = packer;
-
-  if (bins.length !== 1) {// 🔔 support more than one sprite-sheet
-    // warn(`images: expected exactly one bin (${bins.length})`);
-    throw Error(`${errorPrefix}: expected exactly one bin (${bins.length})`);
-  } else if (bins[0].rects.length !== rectsToPack.length) {
-    throw Error(`${errorPrefix}: expected every image to be packed (${bins.length} of ${rectsToPack.length})`);
-  }
-
-  return bins[0];
 }
 
 /**

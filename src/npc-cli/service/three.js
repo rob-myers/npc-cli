@@ -1,13 +1,12 @@
 /**
  * Also used by web worker.
  */
-import React from "react";
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
 
 /** Unit quad extending from (0, 0, 0) to (1, 0, 1) */
-export const quadGeometryXZ = new THREE.BufferGeometry();
+const quadGeometryXZ = new THREE.BufferGeometry();
 const xzVertices = new Float32Array([0,0,0, 1,0,0, 1,0,1, 0,0,1]);
 const xzUvs = new Float32Array([0,0, 1,0, 1,1, 0,1]);
 const xzIndices = [2, 1, 0, 0, 3, 2];
@@ -16,6 +15,28 @@ quadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(xzVertices.sli
 quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
+
+/** Cache to avoid re-creation on HMR */
+const quadLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
+
+const colorLookup = /** @type {Record<string, THREE.Color>} */ ({});
+
+/**
+ * Clone to avoid overwriting attributes used by custom shaders
+ * @param {string} key
+ */
+export function getQuadGeometryXZ(key) {
+  return quadLookup[key] ??= quadGeometryXZ.clone();
+}
+
+/**
+ * @param {string} colorRep 
+ */
+export function getColor(colorRep) {
+  return colorLookup[colorRep] ??= new THREE.Color(colorRep);
+}
+
+// 🚧 repeat above for XY quad
 
 /** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
 export const quadGeometryXY = new THREE.BufferGeometry();
@@ -93,8 +114,10 @@ function decompToXZAttribs(decomp) {
 }
 
 export const greenWireFrameMat = new THREE.MeshStandardMaterial({
-  wireframe: true,
+  // wireframe: true,
   color: "green",
+  transparent: true,
+  opacity: 0.5,
 });
 
 export const redWireFrameMat = new THREE.MeshStandardMaterial({
@@ -105,6 +128,7 @@ export const redWireFrameMat = new THREE.MeshStandardMaterial({
 export const tmpVectThree1 = new THREE.Vector3();
 export const tmpVectThree2 = new THREE.Vector3();
 export const tmpVectThree3 = new THREE.Vector3();
+export const tmpMatFour1 = new THREE.Matrix4();
 export const tmpMesh1 = new THREE.Mesh();
 export const tmpBox1 = new THREE.Box3();
 
@@ -146,20 +170,25 @@ export function buildObjectLookup(object) {
   return data;
 }
 
-const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
+export const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
 const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
 /**
  * @param {number} width 
  * @param {number} height 
+ * @param {object} [opts]
+ * @param {boolean} [opts.willReadFrequently]
  */
-export function createCanvasTexDef(width, height) {
+export function createCanvasTexDef(width, height, opts) {
   const el = document.createElement('canvas');
   el.width = width;
   el.height = height;
   /** @type {CanvasTexDef} */
   const def = [
-    /** @type {CanvasRenderingContext2D} */(el.getContext('2d')),
+    /** @type {CanvasRenderingContext2D} */(el.getContext(
+      '2d',
+      { willReadFrequently: opts?.willReadFrequently },
+    )),
     new THREE.CanvasTexture(el),
     el,
   ];

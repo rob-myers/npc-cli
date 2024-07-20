@@ -2,9 +2,8 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultNpcClassKey, glbMeta } from "../service/const";
+import { defaultSkinKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
-import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
 import { npcService } from "../service/npc";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
@@ -15,7 +14,7 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Npcs(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const gltf = useGLTF(glbMeta.url);
 
@@ -28,7 +27,7 @@ export default function Npcs(props) {
     select: { curr: null, prev: null, many: [] },
 
     addBoxObstacle(position, extent, angle) {
-      const { obstacle, success } = api.nav.tileCache.addBoxObstacle(position, extent, angle);
+      const { obstacle, success } = w.nav.tileCache.addBoxObstacle(position, extent, angle);
       state.updateTileCache();
       if (success) {
         const id = state.nextObstacleId++;
@@ -41,7 +40,7 @@ export default function Npcs(props) {
       }
     },
     addCylinderObstacle(position, radius, height) {
-      const { obstacle, success } = api.nav.tileCache.addCylinderObstacle(position, radius, height);
+      const { obstacle, success } = w.nav.tileCache.addCylinderObstacle(position, radius, height);
       state.updateTileCache();
       if (success) {
         const id = state.nextObstacleId++;
@@ -54,9 +53,9 @@ export default function Npcs(props) {
       }
     },
     findPath(src, dst) {// 🔔 agent may follow different path
-      const query = api.crowd.navMeshQuery;
+      const query = w.crowd.navMeshQuery;
       const { path, success } = query.computePath(src, dst, {
-        filter: api.crowd.getFilter(0),
+        filter: w.crowd.getFilter(0),
       });
       if (success === false) {
         warn(`${'findPath'} failed: ${JSON.stringify({ src, dst })}`);
@@ -64,7 +63,7 @@ export default function Npcs(props) {
       return success === false || path.length === 0 ? null : path;
     },
     getClosestNavigable(p, maxDelta = 0.01) {
-      const { success, point: closest } = api.crowd.navMeshQuery.findClosestPoint(p);
+      const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p);
       if (success === false) {
         warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
       }
@@ -75,24 +74,27 @@ export default function Npcs(props) {
       return npcKey === null ? null : (state.npc[npcKey] ?? null);
     },
     isPointInNavmesh(p) {
-      const { success } = api.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
+      const { success } = w.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
       return success;
+    },
+    onNpcPointerDown(e) {
+      const npcKey = /** @type {string} */ (e.object.userData.npcKey);
+      w.events.next(w.ui.getNpcPointerEvent({
+        key: "pointerdown",
+        event: e,
+        is3d: true,
+        meta: { npc: true, npcKey },
+      }));
+      e.stopPropagation();
     },
     onNpcPointerUp(e) {
       const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-      api.events.next({
+      w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerup",
+        event: e,
         is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
-        distancePx: api.ui.getDownDistancePx(),
-        justLongDown: api.ui.justLongDown,
-        pointers: api.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
         meta: { npc: true, npcKey },
-      });
+      }));
       e.stopPropagation();
     },
     onTick(deltaMs) {
@@ -104,7 +106,7 @@ export default function Npcs(props) {
       const obstacle = state.obstacle[obstacleId];
       if (obstacle) {
         delete state.obstacle[obstacleId];
-        api.nav.tileCache.removeObstacle(obstacle.o);
+        w.nav.tileCache.removeObstacle(obstacle.o);
         state.obsGroup.remove(obstacle.mesh);
         state.updateTileCache();
       }
@@ -141,8 +143,8 @@ export default function Npcs(props) {
         throw Error(`invalid point: ${JSON.stringify(e.point)}`);
       } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
-      } else if (e.npcClassKey && !api.lib.isNpcClassKey(e.npcClassKey)) {
-        throw Error(`invalid npcClassKey: ${JSON.stringify(e.npcClassKey)}`);
+      } else if (e.skinKey && !w.lib.isSkinKey(e.skinKey)) {
+        throw Error(`invalid skinKey: ${JSON.stringify(e.skinKey)}`);
       }
       
       let npc = state.npc[e.npcKey];
@@ -154,28 +156,27 @@ export default function Npcs(props) {
         npc.def = {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
-          classKey: e.npcClassKey ?? npc.def.classKey,
+          skinKey: e.skinKey ?? npc.def.skinKey,
           position: e.point, // 🚧 remove?
           runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
         };
-        if (typeof e.npcClassKey === 'string') {
-          npc.changeClass(e.npcClassKey);
+        if (typeof e.skinKey === 'string') {
+          npc.changeSkin(e.skinKey);
         }
         // Reorder keys
         delete state.npc[e.npcKey];
         state.npc[e.npcKey] = npc;
       } else {
         // Spawn
-        const npcClassKey = e.npcClassKey ?? defaultNpcClassKey;
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
           angle: e.angle ?? 0,
-          classKey: npcClassKey,
+          skinKey: e.skinKey ?? defaultSkinKey,
           position: e.point,
           runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
-        }, api);
+        }, w);
 
         npc.initialize(gltf);
         npc.startAnimation('Idle');
@@ -197,20 +198,20 @@ export default function Npcs(props) {
       }
 
       npc.s.spawns++;
-      api.events.next({ key: 'spawned', npcKey: npc.key });
+      w.events.next({ key: 'spawned', npcKey: npc.key });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
 
     // 🚧 old below
     updateTileCache() {// 🚧 spread out updates
-      const { tileCache, navMesh } = api.nav;
+      const { tileCache, navMesh } = w.nav;
       for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
       console.log(`updateTileCached: ${tileCache.update(navMesh).upToDate}`);
     },
   }));
 
-  api.npc = state;
+  w.npc = state;
 
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
@@ -231,7 +232,8 @@ export default function Npcs(props) {
     <group
       name="npcs"
       ref={x => state.group = x ?? state.group}
-      onPointerUp={e => state.onNpcPointerUp(e)}
+      onPointerDown={state.onNpcPointerDown}
+      onPointerUp={state.onNpcPointerUp}
     />
 
   </>;
@@ -257,6 +259,7 @@ export default function Npcs(props) {
  * @property {() => null | NPC.NPC} getSelected // 🚧 remove
  * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
  * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
+ * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick

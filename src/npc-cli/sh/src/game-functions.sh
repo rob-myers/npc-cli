@@ -66,8 +66,8 @@ gm() {
 # pausableNpcs() {
 #   click |
 #     filter '({ meta }) => meta.npc && !meta.longClick' |
-#     map '(p, { world }) => {
-#       const npc = world.npcs.getNpc(p.meta.npcKey)
+#     map '(p, { w }) => {
+#       const npc = w.npcs.getNpc(p.meta.npcKey)
 #       npc.forcePaused ? npc.resume() : npc.pause()
 #   }'
 # }

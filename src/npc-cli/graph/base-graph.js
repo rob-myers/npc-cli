@@ -79,7 +79,7 @@ export class BaseGraph {
       }
     }
     // can't connect a non-existent node
-    console.error("Can't connect nodes:", src, dst, "given", opts, "in", this);
+    console.error("Can't connect nodes:", { src, dst, context: { ...opts, graph: this } });
     //
     return { isNew: false, edge: null };
   }
@@ -125,6 +125,16 @@ export class BaseGraph {
       console.error(`Cannot remove edge ('${srcid}' -> '${dstid}') from`, src, "to", dst);
     }
     return false;
+  }
+  
+  dispose() {
+    this.nodes.clear();
+    this.succ.clear();
+    this.pred.clear();
+    this.nodesArray.length = 0;
+    this.edgesArray.length = 0;
+    this.idToNode.clear();
+    this.idToEdge.clear();
   }
   
   /**

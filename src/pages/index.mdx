@@ -11,43 +11,83 @@ import {
 } from 'src/components/Icon';
 
 import SideNote from 'src/components/SideNote';
+import Card from 'src/components/Card';
 
 # Home
 
 ## Intent
 
-This website has two objectives:
+This site is driven by a difficult problem. 
 
-1. Build real-time control systems for NPCs <SideNote>_NPC_ stands for "Non-Player Character" i.e. a video game character not controlled by the Player.</SideNote>.
-2. Enable one human to be indistinguishable from many Players.
+<Card> 
+**Underlying Problem**
 
-Video games simulate _identity_ (character controls, collision detection, [skins](https://namemc.com/minecraft-skins/random)) and _sensation_ (sight and sounds).
+For some video game with a sufficiently rich environment,
+fabricate Non-Player Characters <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by a Player.</SideNote>
+indistinguishable from Players.
+<SideNote width={400}>This is Turing's test relative to the particulars of the video game e.g. multiple-choice dialog.</SideNote>
+</Card>
+
+In particular, we're talking about video games.
+They simulate _sensation_ (sight and sounds) and _identity_ (character controls, collision detection, [skins](https://namemc.com/minecraft-skins/random)).
 You temporarily _become_ something, whose sensory input and possible actions reflect your virtual position and state.
 But it's not much fun without other beings, either humans or more commonly Non-Player Characters (NPCs).
-{/* To understand our objectives, more background is needed. */}
-{/* Intelligent machines have long had a place in our hearts and minds. */}
+{/* To better understand our objectives let us place them in the context of an underlying problem. */}
+{/* Although we won't try to solve it directly, we will work towards an intermediate problem. */}
 
-Lately there's been a Brouhaha concerning AI. 
-Amazingly, Chat Bots can now hold flexible and meaningful conversations <SideNote>Putting aside their hallucinations and somewhat memoryless nature.</SideNote>.
+Amazingly and unexpectedly, Chat Bots can now hold flexible and meaningful conversations <SideNote>Putting aside their hallucinations and somewhat memoryless nature.</SideNote>.
 But before reaching towards Artificial General Intelligence,
-consider the current state of NPCs.
-Nowadays, the word _NPC_ is used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
-Popular films depict them as conversationally [rigid and predictable](https://en.wikipedia.org/wiki/Jumanji:_Welcome_to_the_Jungle),
-usually with a single linear conversation.
+consider the current state of Non-Player Characters. 
+The word _NPC_ is now used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
+Popular films depict them as conversationally rigid and predictable,
+usually with a single linear conversation <SideNote>The Jumanji reboot [1](https://en.wikipedia.org/wiki/Jumanji:_Welcome_to_the_Jungle) and [2](https://en.wikipedia.org/wiki/Jumanji:_The_Next_Level).</SideNote>.
 In our search for intelligent machines, we should remember that Turing's test was a _party game_.
-Almost 75 years later we have a multi-billion dollar video game industry <SideNote>~350 billion dollars revenue (2022).</SideNote>,
-and a distinct lack of flexible and/or believable NPCs.
-
-{/* Not fault of Game dev because they work in Game industry. Leads us to objectives */}
-{/* Despite avoiding difficult sensor/effector engineering problems, */}
+Almost 75 years later we have a multi-billion dollar video game industry,
+and a distinct lack of flexible or believable NPCs.
 
 🚧 WIP
 
-But have we seen really significant improvements in NPC behaviour over the last 20 years?
+> Why?
+>
+> Because video games must behave soundly over all user journeys,
+> so the [state space explosion problem](https://en.wikipedia.org/wiki/Combinatorial_explosion) severely limits the number of states.
+
+In other words, rich environments have a huge number of possibilities which cannot be anticipated by developers.
+A balance is needed between steering the Player along a narrative,
+and allowing the Player to make free choices.
+Instead of tackling this problem head on, we'll work towards an intermediate solution.
+Then this website has two objectives.
+
+<Card>
+**Objectives**
+
+1. Build real-time control systems for NPCs.
+2. Enable one human to act indistinguishably from many Players.
+</Card>
+
+
+
+🚧 WIP
+
+{/* For starters we won't work inside a video game development cycle i.e.
+we're not trying to create some finished product which we can sell.
+We're not trying to set an intricate clockwork world in motion.
+Instead, ... */}
+
+{/* Instead of setting an intricate clockwork world in motion,
+let's react to the Player,
+let's guide the Player,
+let's experiment with the Player.
+Then there are (at least) two human participants: the Player and the [_Game Master_](https://en.wikipedia.org/wiki/Gamemaster) (GM).
+This motivates our objectives above i.e. the GM needs real-time control systems to drive the NPCs.
+Then Turing's test shifts from _machine indistinguishable from human_ to _human indistinguishable from many Players_. */}
+
+
+{/* But have we seen really significant improvements in NPC behaviour over the last 20 years?
 Games like _Fallout_ (1997), _Quake_ (1996), _GTA_ (1997) and _Thief 2_ (2000) still shine like the jewels they are.
 Recent masterpieces like _The Last of Us Part II_ (2020) feel like finely-crafted refinements of old ideas.
 If we cannot produce believable character behaviour in the domain of entertainment,
-why should we expect it within the additional constraints of "real life"?
+why should we expect it within the additional constraints of "real life"? */}
 
 {/* Finally as a way for us to understand our own behaviour */}
 
@@ -59,4 +99,4 @@ Here are some icons:
 - <FontAwesomeIcon icon={faCoffee} size="1x" />
 - <FontAwesomeIcon icon={faLungs} size="1x" /> */}
 
-export { Head } from '../components/Head'
+export { Head } from '../components/Head';

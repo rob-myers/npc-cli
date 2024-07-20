@@ -1,6 +1,9 @@
 import fs from 'fs';
 import childProcess from 'child_process';
 import stream from 'stream/promises';
+import { loadImage } from 'canvas';
+
+// relative imports for sucrase-node
 import { assertDefined, info } from '../npc-cli/service/generic';
 import { ansi } from '../npc-cli/sh/const';
 
@@ -178,6 +181,30 @@ export async function labelledSpawn(label, command, ...args) {
         }
       });
   }));
+}
+
+/**
+ * Read image server-side, or `null` on error.
+ * @param {string} filePath 
+ */
+export async function tryLoadImage(filePath) {
+  try {
+    return await loadImage(filePath);
+  } catch (e) {// assume doesn't exist
+    return null;
+  }
+}
+
+/**
+ * Read file as string, or `null` on error.
+ * @param {string} filePath 
+ */
+export async function tryReadString(filePath) {
+  try {
+    return (await fs.promises.readFile(filePath)).toString();
+  } catch (e) {// assume doesn't exist
+    return null;
+  }
 }
 
 /**

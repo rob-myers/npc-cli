@@ -5,7 +5,6 @@ import { Mat, Vect } from "../geom";
 import { wallHeight } from "../service/const";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
-import { isModifierKey, isRMB, isTouchDevice } from "../service/dom";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -13,18 +12,18 @@ import useStateRef from "../hooks/use-state-ref";
  * @param {Props} props
  */
 export default function Walls(props) {
-  const api = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     wallsInst: /** @type {*} */ (null),
 
     decodeWallInstanceId(instanceId) {
       let foundWallSegId = instanceId;
-      const foundGmId = api.gmsData.wallPolySegCounts.findIndex(
+      const foundGmId = w.gmsData.wallPolySegCounts.findIndex(
         segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
       );
-      const gm = api.gms[foundGmId];
-      const foundWallId = api.gmsData[gm.key].wallPolySegCounts.findIndex(
+      const gm = w.gms[foundGmId];
+      const foundWallId = w.gmsData[gm.key].wallPolySegCounts.findIndex(
         segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
       );
       const wall = gm.walls[foundWallId];
@@ -42,42 +41,30 @@ export default function Walls(props) {
       );
     },
     onPointerDown(e) {
-      api.events.next({
+      w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerdown",
-        is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
         distancePx: 0,
+        event: e,
+        is3d: true,
         justLongDown: false,
-        pointers: api.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
         meta: state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
-      });
+      }));
       e.stopPropagation();
     },
     onPointerUp(e) {
-      api.events.next({
+      w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerup",
+        event: e,
         is3d: true,
-        modifierKey: isModifierKey(e.nativeEvent),
-        distancePx: api.ui.getDownDistancePx(),
-        justLongDown: api.ui.justLongDown,
-        pointers: api.ui.getNumPointers(),
-        rmb: isRMB(e.nativeEvent),
-        screenPoint: { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY },
-        touch: isTouchDevice(),
-        point: e.point,
         meta: state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
-      });
+      }));
       e.stopPropagation();
     },
     positionInstances() {
       const { wallsInst: ws } = state;
       let wId = 0;
-      api.gms.forEach(({ key: gmKey, transform }) =>
-        api.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) =>
+      w.gms.forEach(({ key: gmKey, transform }) =>
+        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) =>
           ws.setMatrixAt(wId++, state.getWallMat(
             seg,
             transform,
@@ -90,18 +77,18 @@ export default function Walls(props) {
     },
   }));
 
-  api.wall = state;
+  w.wall = state;
 
   React.useEffect(() => {
     state.positionInstances();
-  }, [api.hash]);
+  }, [w.hash, w.gmsData.wallCount]);
 
   return (
     <instancedMesh
       name="walls"
-      key={api.hash}
+      key={w.hash}
       ref={instances => instances && (state.wallsInst = instances)}
-      args={[quadGeometryXY, undefined, api.gmsData.wallCount]}
+      args={[quadGeometryXY, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}

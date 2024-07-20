@@ -1,27 +1,47 @@
 /**
  * @param {RunArg} ctxt
  */
-export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
-  while (!api.getCached(WORLD_KEY)?.isReady()) {
-    api.info(`polling for ${api.ansi.White}${WORLD_KEY}`);
+export async function* awaitWorld({ api, home: { WORLD_KEY }, w }) {
+
+  api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`)
+  while (!(w = api.getCached(WORLD_KEY))) {
     yield* api.sleep(0.5);
   }
-  // api.getCached(WORLD_KEY).npc.connectSession(api.meta.sessionKey)
-  api.info(`found ${api.ansi.White}${WORLD_KEY}`);
+
+  await Promise.race([
+    w.awaitReady(),
+    new Promise((_, reject) => api.addCleanup(reject)),
+  ]);
+  // w.npc.connectSession(api.meta.sessionKey)
 }
 
 /**
+ * ```sh
+ * click
+ * click 1
+ * click --right
+ * click --any
+ * ```
  * @param {RunArg} ctxt
  */
-export async function* click({ api, args, world }) {
-  let numClicks = Number(args[0] || Number.MAX_SAFE_INTEGER);
+export async function* click({ api, args, w }) {
+  const { opts, operands } = api.getOpts(args, {
+    boolean: ["left", "right", "any", "long"],
+    // --left (left only) --right (right only) --any (either)
+    // --long (long-press only)
+  });
+  if (!opts["left"] && !opts["right"] && !opts["any"]) {
+    opts.left = true; // default to left clicks only
+  }
+
+  let numClicks = Number(operands[0] || Number.MAX_SAFE_INTEGER);
   if (!Number.isFinite(numClicks)) {
     throw new Error("format: \`click [{numberOfClicks}]\`");
   }
 
-  const clickId = args[0] ? api.getUid() : undefined;
+  const clickId = operands[0] ? api.getUid() : undefined;
   if (clickId) {
-    api.addCleanup(() => world.lib.removeFirst(world.ui.clickIds, clickId));
+    api.addCleanup(() => w.lib.removeFirst(w.ui.clickIds, clickId));
   }
 
   /** @type {import('rxjs').Subscription} */
@@ -29,10 +49,10 @@ export async function* click({ api, args, world }) {
   api.addCleanup(() => eventsSub?.unsubscribe());
 
   while (numClicks-- > 0) {
-    clickId && world.ui.clickIds.push(clickId);
+    clickId && w.ui.clickIds.push(clickId);
     
     const e = await /** @type {Promise<NPC.PointerUp3DEvent>} */ (new Promise((resolve, reject) => {
-      eventsSub = world.events.subscribe({ next(e) {
+      eventsSub = w.events.subscribe({ next(e) {
         if (e.key !== "pointerup" || e.is3d === false || e.distancePx > 5 || !api.isRunning()) {
           return;
         } else if (e.clickId && !clickId) {
@@ -46,15 +66,30 @@ export async function* click({ api, args, world }) {
       eventsSub.add(() => reject(api.getKillError()));
     }));
 
+    if (
+      (opts.left === true && e.rmb === true)
+      || (opts.right === true && e.rmb === false)
+      || (opts.long !== e.justLongDown)
+    ) {
+      continue;
+    }
+
+    const v3 = {
+      x: w.lib.precision(e.point.x),
+      y: w.lib.precision(e.point.y),
+      z: w.lib.precision(e.point.z),
+    };
+
     /** @type {NPC.ClickMeta} */
     const output = {
-      x: world.lib.precision(e.point.x),
-      y: world.lib.precision(e.point.y),
-      z: world.lib.precision(e.point.z),
+      x: v3.x,
+      y: v3.z, // project to XZ plane
+      ...e.keys && { keys: e.keys },
       meta: { ...e.meta,
-        // ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null }, // 🚧
-        navigable: world.npc.isPointInNavmesh(e.point),
+        navigable: w.npc.isPointInNavmesh(e.point),
+        // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
+      v3,
     };
 
     yield output;
@@ -64,13 +99,13 @@ export async function* click({ api, args, world }) {
 /**
  * @param {RunArg} ctxt
  */
-export async function* setupDemo1({ world }) {
+export async function* setupDemo1({ w }) {
 
     // create an obstacle (before query)
-    const obstacle = world.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
+    const obstacle = w.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
 
     // find and exclude a poly
-    const { polyRefs } =  world.crowd.navMeshQuery.queryPolygons(
+    const { polyRefs } =  w.crowd.navMeshQuery.queryPolygons(
       // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
       // { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
       // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
@@ -80,12 +115,12 @@ export async function* setupDemo1({ world }) {
       { x: 0.2, y: 0.1, z: 0.01 },
     );
     console.log({ polyRefs });
-    const filter = world.crowd.getFilter(0);
+    const filter = w.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
-    polyRefs.forEach(polyRef => world.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
-    world.debug.selectNavPolys(polyRefs); // display via debug
+    polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
+    w.debug.selectNavPolys(polyRefs); // display via debug
     
-    world.update(); // Show obstacle
+    w.update(); // Show obstacle
 }
 
 /**
@@ -93,33 +128,33 @@ export async function* setupDemo1({ world }) {
  * @param {NPC.ClickMeta} input
  * @param {RunArg} ctxt
  */
-export async function walkTest(input, { world, home })  {
+export async function walkTest(input, { w, home })  {
   const { selectedNpcKey } = home;
-  const npc = world.npc.npc[selectedNpcKey];
+  const npc = w.npc.npc[selectedNpcKey];
   if (npc) {
-    // npc.s.run = e.modifierKey; // 🚧 include in meta?
     // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
-    npc.walkTo(input);
+    npc.s.run = input.keys?.includes("shift") ?? false;
+    npc.walkTo(input.v3);
   }
 }
 
 /**
  * Usage:
  * ```sh
- * world
- * world 'x => x.crowd'`
- * world crowd
- * world vert.toggleDoor 15
+ * w
+ * w 'x => x.crowd'`
+ * w crowd
+ * w vert.toggleDoor 15
  * ```
- * - 🚧 `world "x => x.gmGraph.findRoomContaining($( click 1 ))"`
- * - 🚧 `world gmGraph.findRoomContaining $( click 1 )`
- * - 🚧 `click | world gmGraph.findRoomContaining`
+ * - 🚧 `w "x => x.gmGraph.findRoomContaining($( click 1 ))"`
+ * - 🚧 `w gmGraph.findRoomContaining $( click 1 )`
+ * - 🚧 `click | w gmGraph.findRoomContaining`
  *
  * ℹ️ can always `ctrl-c`, even without cleaning up ongoing computations
  * @param {RunArg} ctxt
  */
-export async function* world(ctxt) {
-  const { api, args, world } = ctxt;
+export async function* w(ctxt) {
+  const { api, args, w } = ctxt;
   const getHandleProm = () => new Promise((resolve, reject) => api.addCleanup(
     () => reject("potential ongoing computation")
   ));
@@ -129,7 +164,7 @@ export async function* world(ctxt) {
       api.parseFnOrStr(args[0]),
       args.slice(1).map(x => api.parseJsArg(x)),
     );
-    const v = func(world, ctxt);
+    const v = func(w, ctxt);
     yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
   } else {
     /** @type {*} */ let datum;
@@ -140,7 +175,7 @@ export async function* world(ctxt) {
         args.slice(1).map(x => x === "-" ? datum : api.parseJsArg(x)),
       );
       try {
-        const v = func(world, ctxt);
+        const v = func(w, ctxt);
         yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
       } catch (e) {
         api.info(`${e}`);
@@ -156,6 +191,6 @@ export async function* world(ctxt) {
 * }} api
 * @property {string[]} args
 * @property {{ [key: string]: any; WORLD_KEY: '__WORLD_KEY_VALUE__' }} home
-* @property {import('../../world/World').State} world See `CACHE_SHORTCUTS`
+* @property {import('../../world/World').State} w See `CACHE_SHORTCUTS`
 * @property {*} [datum] A shortcut for declaring a variable
 */
