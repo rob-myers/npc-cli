@@ -387,14 +387,18 @@ export default function Decor(props) {
     positionInstances() { 
       const { cuboidInst, quadInst, labelInst } = state;
       
+      const defaultCuboidColor = new THREE.Color('#ddd');
       for (const [instId, d] of state.cuboids.entries()) {
         const mat4 = state.createCuboidMatrix4(d);
         cuboidInst.setMatrixAt(instId, mat4);
+        cuboidInst.setColorAt(instId, defaultCuboidColor);
       }
       
+      const defaultQuadColor = new THREE.Color('white');
       for (const [instId, d] of state.quads.entries()) {
         const mat4 = state.createQuadMatrix4(d);
         quadInst.setMatrixAt(instId, mat4);
+        quadInst.setColorAt(instId, defaultQuadColor);
       }
 
       for (const [instId, d] of state.labels.entries()) {
@@ -403,8 +407,14 @@ export default function Decor(props) {
       }
     
       cuboidInst.instanceMatrix.needsUpdate = true;
+      if (cuboidInst.instanceColor !== null) {
+        cuboidInst.instanceColor.needsUpdate = true;
+      }
       cuboidInst.computeBoundingSphere();
       quadInst.instanceMatrix.needsUpdate = true;
+      if (quadInst.instanceColor !== null) {
+        quadInst.instanceColor.needsUpdate = true;
+      }
       quadInst.computeBoundingSphere();
       labelInst.instanceMatrix.needsUpdate = true;
       labelInst.computeBoundingSphere();
@@ -557,7 +567,7 @@ export default function Decor(props) {
   const update = useUpdate();
 
   return <>
-    <instancedMesh
+    <instancedMesh // cuboids
       name="decor-cuboids"
       key={`${state.cuboids.length} cuboids`}
       ref={instances => instances && (state.cuboidInst = instances)}
@@ -570,11 +580,11 @@ export default function Decor(props) {
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
-        diffuse={[0.35, 0.25, 0.25]}
+        diffuse={[1, 1, 1]}
       />
     </instancedMesh>
 
-    <instancedMesh
+    <instancedMesh //quad
       name="decor-quads"
       key={`${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
@@ -593,7 +603,7 @@ export default function Decor(props) {
       />
     </instancedMesh>
 
-    <instancedMesh
+    <instancedMesh // labels
       name="decor-labels"
       key={`${labels.length} labels`}
       ref={instances => instances && (state.labelInst = instances)}

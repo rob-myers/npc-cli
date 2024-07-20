@@ -106,7 +106,11 @@
   - ✅ fix geomorph decor warns e.g. not fuel label not in any room
     - these were all labels, so fixed by moving them out of `w.decor.byKey`
   - 🚧 can choose colour of decor cuboids
+    - ✅ use InstancedMesh color attribute and forward to custom shader
+    - 🚧 forward `meta.color` to cuboid
   - 🚧 can choose colour of decor quads
+    - ✅ use InstancedMesh color attribute and forward to custom shader
+    - 🚧 forward `meta.color` to quad
   - change decorImgKey convention e.g. `icon--002--doc` -> `icon--doc`
 
 - ✅ world provides "resolve when ready" api

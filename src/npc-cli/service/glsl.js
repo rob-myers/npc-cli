@@ -5,8 +5,10 @@ import { shaderMaterial } from "@react-three/drei";
 
 export const minimalInstanceUvsVert = /*glsl*/`
 
+  // <color_pars_vertex>
+  varying vec3 vColor;
+  
   varying vec2 vUv;
-
   attribute vec2 uvDimensions;
   attribute vec2 uvOffsets;
 
@@ -18,12 +20,16 @@ export const minimalInstanceUvsVert = /*glsl*/`
     vUv = (uv * uvDimensions) + uvOffsets;
     vec4 modelViewPosition = vec4(position, 1.0);
 
-    #ifdef USE_INSTANCING
-      modelViewPosition = instanceMatrix * modelViewPosition;
-    #endif
+    // USE_INSTANCING
+    modelViewPosition = instanceMatrix * modelViewPosition;
     
     modelViewPosition = modelViewMatrix * modelViewPosition;
     gl_Position = projectionMatrix * modelViewPosition;
+
+    vColor = vec3(1.0);
+    #ifdef USE_INSTANCING_COLOR
+      vColor.xyz *= instanceColor.xyz;
+    #endif
 
     #include <logdepthbuf_vertex>
   }
@@ -32,15 +38,18 @@ export const minimalInstanceUvsVert = /*glsl*/`
 
 export const minimalInstanceUvsFrag = /*glsl*/`
 
-  varying vec2 vUv;
+  // <color_pars_fragment>
+  varying vec3 vColor;
   uniform sampler2D map;
+
+  varying vec2 vUv;
   uniform vec3 diffuse;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = texture2D(map, vUv) * vec4(diffuse, 1);
+    gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, 1);
 
     // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
     if(gl_FragColor.a < 0.5) {
@@ -294,34 +303,31 @@ export const basicGradientFrag = /*glsl*/`
  * - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
  * 
  */
-export const meshDiffuseTest = {
+export const meshDiffuseTest = {// Supports instancing
 
   Vert: /*glsl*/`
 
+  // <color_pars_vertex>
+  varying vec3 vColor;
   #include <common>
-  
+
   varying float dotProduct;
 
-  //#endregion
-
-  //#region #include <logdepthbuf_pars_vertex>
+  // <logdepthbuf_pars_vertex>
   #ifdef USE_LOGDEPTHBUF
     varying float vFragDepth;
     varying float vIsPerspective;
   #endif
-  //#endregion
 
   void main() {
 
-    //#region #include <beginnormal_vertex>
+    // <beginnormal_vertex>
     vec3 objectNormal = vec3( normal );
-    //#endregion
 
-    //#region #include <begin_vertex>
+    // <begin_vertex>
     vec3 transformed = vec3( position );
-    //#endregion
 
-    //#region #include <project_vertex>
+    // <project_vertex>
     vec4 mvPosition = vec4( transformed, 1.0 );
 
     #ifdef USE_INSTANCING
@@ -332,16 +338,14 @@ export const meshDiffuseTest = {
     gl_Position = projectionMatrix * mvPosition;
     //#endregion
 
-    //#region #include <logdepthbuf_vertex>
+    // <logdepthbuf_vertex>
     #ifdef USE_LOGDEPTHBUF
       vFragDepth = 1.0 + gl_Position.w;
       vIsPerspective = float( isPerspectiveMatrix( projectionMatrix ) );
     #endif
-    //#endregion
 
-    //#region #include <defaultnormal_vertex>
+    // <defaultnormal_vertex>
     vec3 transformedNormal = objectNormal;
-
     #ifdef USE_INSTANCING
       // this is in lieu of a per-instance normal-matrix
       // shear transforms in the instance matrix are not supported
@@ -349,10 +353,13 @@ export const meshDiffuseTest = {
       // transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
       transformedNormal = im * transformedNormal;
     #endif
-
     // 🚧 what does this do exactly?
     transformedNormal = normalMatrix * transformedNormal;
-    //#endregion
+
+    vColor = vec3(1.0);
+    #ifdef USE_INSTANCING_COLOR
+      vColor.xyz *= instanceColor.xyz;
+    #endif
 
     vec3 lightDir = normalize(cameraPosition - mvPosition.xyz);
     dotProduct = max(dot(normalize(transformedNormal), lightDir), 0.0);
@@ -361,13 +368,16 @@ export const meshDiffuseTest = {
 
   Frag: /*glsl*/`
 
+  // <color_pars_vertex>
+  varying vec3 vColor;
+
   uniform vec3 diffuse;
 	varying float dotProduct;
 
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = vec4(diffuse * (0.25 + 0.5 * dotProduct), 1);
+    gl_FragColor = vec4(vColor * diffuse * (0.25 + 0.5 * dotProduct), 1);
 
     #include <logdepthbuf_fragment>
   }
