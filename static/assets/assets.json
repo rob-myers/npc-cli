@@ -66,7 +66,7 @@
       "obsHashes": [550873257]
     },
     "console--019--2x2": {
-      "outputHash": -831120794,
+      "outputHash": -1258362068,
       "pngHash": -752773709,
       "obsHashes": [1188073384]
     },
@@ -1009,54 +1009,49 @@
       }
     },
     "decor": {
-      "door--002--hull": {
+      "door--hull": {
         "door": true,
-        "002": true,
-        "decorImgKey": "door--002--hull",
+        "decorImgKey": "door--hull",
         "x": 2,
         "y": 2,
         "width": 300,
         "height": 360
       },
-      "door--001": {
+      "door--standard": {
         "door": true,
-        "decorImgKey": "door--001",
+        "decorImgKey": "door--standard",
         "x": 304,
         "y": 2,
         "width": 132,
         "height": 240
       },
-      "icon--003--warn": {
+      "icon--warn": {
         "icon": true,
-        "003": true,
-        "decorImgKey": "icon--003--warn",
+        "decorImgKey": "icon--warn",
         "x": 304,
         "y": 244,
         "width": 84,
         "height": 75
       },
-      "icon--002--doc": {
+      "icon--doc": {
         "icon": true,
-        "002": true,
-        "decorImgKey": "icon--002--doc",
+        "decorImgKey": "icon--doc",
         "x": 2,
         "y": 364,
         "width": 50,
         "height": 72
       },
-      "icon--004--key-card": {
+      "icon--key-card": {
         "icon": true,
-        "004": true,
-        "decorImgKey": "icon--004--key-card",
+        "decorImgKey": "icon--key-card",
         "x": 54,
         "y": 364,
         "width": 72,
         "height": 48
       },
-      "icon--001--info": {
+      "icon--info": {
         "icon": true,
-        "001": true,
-        "decorImgKey": "icon--001--info",
+        "decorImgKey": "icon--info",
         "x": 128,
         "y": 364,
         "width": 60,
@@ -5469,7 +5464,7 @@
           ],
           "meta": {
             "decor": true,
-            "img": "icon--002--doc",
+            "img": "icon--doc",
             "y": 0.61,
             "quad": true,
             "transform": [0.2475, -0.2475, 0.3394, 0.3394, 0.3663, 0.954]
@@ -5487,7 +5482,7 @@
           ],
           "meta": {
             "decor": true,
-            "img": "icon--002--doc",
+            "img": "icon--doc",
             "y": 0.61,
             "quad": true,
             "transform": [0.2475, -0.2475, 0.3394, 0.3394, 0.7583, 0.5772]
@@ -5505,7 +5500,7 @@
           ],
           "meta": {
             "decor": true,
-            "img": "icon--004--key-card",
+            "img": "icon--key-card",
             "y": 0.61,
             "color": "#dd5",
             "quad": true,

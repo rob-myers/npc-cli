@@ -117,6 +117,11 @@ export const decorGridSize = 1.5 * 2;
 
 export const decorIconRadius = 5 * sguToWorldScale;
 
+/** @type {Geomorph.DecorImgKey} */
+export const decorPointFallbackImgKey = 'icon--info';
+/** @type {Geomorph.DecorImgKey} */
+export const decorQuadFallbackImgKey = 'icon--warn';
+
 /**
  * - Each value is an integer in [0, 255].
  * - Fix alpha as `1` otherwise get pre-multiplied values.

@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { decorGridSize, decorIconRadius, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
+import { decorGridSize, decorIconRadius, decorPointFallbackImgKey, decorQuadFallbackImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
 import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
@@ -112,7 +112,7 @@ export default function Decor(props) {
       for (const d of state.quads) {
         const item = geomorphService.isDecorImgKey(d.meta.img)
           ? sheet[d.meta.img] // fallback differs for 'point' vs 'quad'
-          : d.type === 'point' ? sheet['icon--001--info'] : sheet['icon--003--warn'];
+          : d.type === 'point' ? sheet[decorPointFallbackImgKey] : sheet[decorQuadFallbackImgKey];
         ;
         const { x, y, width, height } = item;
         uvOffsets.push(x / dim.width,  y / dim.height);
