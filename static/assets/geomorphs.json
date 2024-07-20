@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 -1604752421 -1003119600 -712046517",
+  "hash": "610044716 861689495 -1003119600 1878007602",
   "mapsHash": 610044716,
-  "layoutsHash": -1604752421,
+  "layoutsHash": 861689495,
   "sheetsHash": -1003119600,
-  "imagesHash": -712046517,
+  "imagesHash": 1878007602,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -8284,7 +8284,7 @@
             "decor": true,
             "img": "icon--key-card",
             "y": 0.61,
-            "color": "#dd5",
+            "color": "#fff",
             "quad": true
           },
           "bounds2d": {
@@ -16712,7 +16712,7 @@
             "decor": true,
             "img": "icon--key-card",
             "y": 0.61,
-            "color": "#dd5",
+            "color": "#fff",
             "quad": true
           },
           "bounds2d": {
@@ -16780,7 +16780,7 @@
             "decor": true,
             "img": "icon--key-card",
             "y": 0.61,
-            "color": "#dd5",
+            "color": "#fff",
             "quad": true
           },
           "bounds2d": {
@@ -25912,7 +25912,7 @@
             "decor": true,
             "img": "icon--key-card",
             "y": 0.61,
-            "color": "#dd5",
+            "color": "#fff",
             "quad": true
           },
           "bounds2d": {

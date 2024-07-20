@@ -66,7 +66,7 @@
       "obsHashes": [550873257]
     },
     "console--019--2x2": {
-      "outputHash": -1258362068,
+      "outputHash": -442638053,
       "pngHash": -752773709,
       "obsHashes": [1188073384]
     },
@@ -5502,7 +5502,7 @@
             "decor": true,
             "img": "icon--key-card",
             "y": 0.61,
-            "color": "#dd5",
+            "color": "#fff",
             "quad": true,
             "transform": [0.3968, 0, 0, 0.2749, 1.5982, 0.1787]
           }
