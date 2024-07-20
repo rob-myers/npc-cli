@@ -38,17 +38,7 @@
 - tty pause/resume loses should remember cursor position
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
-- ✅ tty: `echo \'` should echo `'` (currently `\'`)
-  - related to allowing single-quotes inside js (replace `'` -> `'\''`)
-  - tryParseBuffer receives `["echo \\'"]` (which seems correct)
-  - ✅ try interpreting Lit differently
-- ✅ `SideNote` should wait a bit before showing
-- tty should not render `NaN` as `null`
-- `say` reading from tty should not terminate early when send a command before utterance finished
-- ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
-  - `map` recognises such cases does NOT pass `ctxt` inside `map` as 2nd argument
-- ✅ fix `click 1` i.e. `click | ...` should not fire
-- ✅ verify HMR which propagates from geomorphs.json -> gmsData
+
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
@@ -69,7 +59,7 @@
 
 - prevent NPCs going through closed doors
   - i.e. color nav query
-- use rapier physics 3d in web worker
+- 🤔 use rapier physics 3d in web worker
   - i.e. static triggers
 
 - next.js repo continued
@@ -104,25 +94,6 @@
   - can see 3d floor but console logs `THREE.WebGLRenderer: Context Lost`
   - observed that worker was not running
   - 🚧 try saving memory in web-worker, following recast-navigation-js
-- ✅ fuel symbol can use single rect for wall
-- ✅ thicker door ceiling tops
-- ✅ `hull-wall` tag -> `wall hull`
-- ✅ hull walls have `meta.hull` `true`
-  - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
-- ✅ ContextMenu should work with ceiling
-  - approach similar to obstacles
-- support camera move via terminal
-- improve doors hard-coding in decor sprite-sheet
-- ✅ split component WallsAndDoors
-- ✅ split component Surfaces
-  - Obstacles
-  - Floor
-  - Ceiling
-- ✅ animation from directly above looks weird e.g. arms should bend more
-- ❌ TTY can get out of sync when edit cmd.service, tty.shell?
-- ✅ can somehow ctrl-c `seq 100000000` (100 million)
-  - same problem with `range 100000000`
-  - same problem with `Array.from({ length: 100000000 })` (underlying JavaScript)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
@@ -136,35 +107,12 @@
 - use decor cuboids under e.g. machines and desks
 - closed doors have filtered doorPolys
 - can make agent look at point
-- ✅ migrate roomGraph per geomorph
-- migrate gmRoomGraph
-- migrate fast gmRoomId lookup via image pixels
 - prevent agent going through door
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
-- ✅ fix sprite-sheet HMR
-  - ℹ️ on add new symbol with obstacles
-  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
-  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
-  - ✅ could be problem with smart-sprite-sheet-update
-  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
-  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
-  - ❌ try repro with single geomorph
-  - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
-  - 🤔 multiple websockets open in single browser tab?
-  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
-    - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
-    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
-  - ✅ saw issue on WARN about mismatched size
-    - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
-  - ✅ saw out-of-sync, possibly Boxy SVG failed to save
-  - ✅ saw issue on remove obstacle, then add back in
-  - haven't seen any issues for a while, so closing
-
-- ✅ remove `. ~/.bash_profile` from pre-push hook
 - ❌ improve `yarn ensure-webp` by detecting webp older than png
 - initially force complete assets recompute
 - permit holes in symbol walls?
@@ -181,14 +129,6 @@
 - avoid recomputing npcs/obstacles in TestNpcs
 - fix open/close non-aligning hull doors
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
-- ✅ type worker.postMessage in main thread and worker
-  - ✅ main thread
-  - ✅ worker
-- ✅ get web worker HMR "working"
-  - ❌ https://github.com/webpack/webpack/issues/14722
-  - ℹ️ gatsby does not support "webpack multi-compiler"
-  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
-- ✅ changing props.mapKey should change map
 - can directly change a single door's material e.g. make wireframe
   - https://www.npmjs.com/package/three-instanced-uniforms-mesh
   - https://codesandbox.io/p/sandbox/instanceduniformsmesh-r3f-lss90?file=%2Fsrc%2Findex.js
@@ -201,9 +141,6 @@
   - ✅ move maps to `media/map`
   - ✅ improve remount keys
   - still seeing occasional issues?
-- ✅ integer accuracy when parsing maps
-  - Boxy has rounding errors e.g. when reflect
-  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
 - sh `test {fn}` evaluates function with `map` args
 - Terminal crashing during HMR
   - possibly fixed via `xterm-addon-webgl@beta`
@@ -213,10 +150,7 @@
   - debug locally using about:debugging#/runtime/this-firefox
 - 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
   - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
-- ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
-  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
-  - ℹ️ seen in parseSymbol of hull symbol
-  - ℹ️ fixed by updating sphere bounds
+
 - in parallel, start going through https://github.com/recastnavigation/recastnavigation
   - to understand what recast outputs
   - to understand what detour inputs
@@ -228,13 +162,11 @@
 
 - if only open Viewer a tiny amount then it should close itself
 
-- ✅ smaller collapsed nav on mobile
 - fix multi-touch flicker on drag
   - setup local dev on phone to debug this
 - can add Tabs via links in blog posts
   - without remounting other tabs!
 - open Viewer should enable Tabs initially
-- ✅ can press Escape/Enter to pause/unpause
 - how does shell function versioning work in sh/scripts.ts?
 - fix vertical tab drag on mobile
   - need repro
@@ -1650,3 +1582,81 @@
   - ✅ symbol instances apply to transform
   - ✅ use transform to position InstancedMesh instance
   - ✅ handle transform-origin
+
+
+- ✅ fix sprite-sheet HMR
+  - ℹ️ on add new symbol with obstacles
+  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
+  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
+  - ✅ could be problem with smart-sprite-sheet-update
+  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
+  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
+  - ❌ try repro with single geomorph
+  - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
+  - 🤔 multiple websockets open in single browser tab?
+  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
+    - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
+    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
+  - ✅ saw issue on WARN about mismatched size
+    - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
+  - ✅ saw out-of-sync, possibly Boxy SVG failed to save
+  - ✅ saw issue on remove obstacle, then add back in
+  - haven't seen any issues for a while, so closing
+
+- ✅ remove `. ~/.bash_profile` from pre-push hook
+
+- ✅ tty: `echo \'` should echo `'` (currently `\'`)
+  - related to allowing single-quotes inside js (replace `'` -> `'\''`)
+  - tryParseBuffer receives `["echo \\'"]` (which seems correct)
+  - ✅ try interpreting Lit differently
+- ✅ `SideNote` should wait a bit before showing
+- tty should not render `NaN` as `null`
+- `say` reading from tty should not terminate early when send a command before utterance finished
+- ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
+  - `map` recognises such cases does NOT pass `ctxt` inside `map` as 2nd argument
+- ✅ fix `click 1` i.e. `click | ...` should not fire
+- ✅ verify HMR which propagates from geomorphs.json -> gmsData
+
+
+- ✅ fuel symbol can use single rect for wall
+- ✅ thicker door ceiling tops
+- ✅ `hull-wall` tag -> `wall hull`
+- ✅ hull walls have `meta.hull` `true`
+  - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
+- ✅ ContextMenu should work with ceiling
+  - approach similar to obstacles
+- support camera move via terminal
+- improve doors hard-coding in decor sprite-sheet
+- ✅ split component WallsAndDoors
+- ✅ split component Surfaces
+  - Obstacles
+  - Floor
+  - Ceiling
+- ✅ animation from directly above looks weird e.g. arms should bend more
+- ❌ TTY can get out of sync when edit cmd.service, tty.shell?
+- ✅ can somehow ctrl-c `seq 100000000` (100 million)
+  - same problem with `range 100000000`
+  - same problem with `Array.from({ length: 100000000 })` (underlying JavaScript)
+
+- ✅ migrate roomGraph per geomorph
+- ✅ migrate gmRoomGraph
+- ✅ migrate fast gmRoomId lookup via image pixels
+
+- ✅ type worker.postMessage in main thread and worker
+  - ✅ main thread
+  - ✅ worker
+- ✅ get web worker HMR "working"
+  - ❌ https://github.com/webpack/webpack/issues/14722
+  - ℹ️ gatsby does not support "webpack multi-compiler"
+  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
+- ✅ changing props.mapKey should change map
+
+- ✅ integer accuracy when parsing maps
+  - Boxy has rounding errors e.g. when reflect
+  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
+- ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
+  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
+  - ℹ️ seen in parseSymbol of hull symbol
+  - ℹ️ fixed by updating sphere bounds
+- ✅ smaller collapsed nav on mobile
+- ✅ can press Escape/Enter to pause/unpause
