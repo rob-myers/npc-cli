@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": 1183490474, "pngHash": 568633107},
     "102--hull": {"outputHash": 603397466, "pngHash": 184103855},
     "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -959575971, "pngHash": 787602800},
+    "301--hull": {"outputHash": -91998157, "pngHash": 787602800},
     "302--hull": {"outputHash": -1818473413, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": 949530086,
@@ -66,7 +66,7 @@
       "obsHashes": [550873257]
     },
     "console--019--2x2": {
-      "outputHash": 856151387,
+      "outputHash": -831120794,
       "pngHash": -752773709,
       "obsHashes": [1188073384]
     },
@@ -2434,7 +2434,8 @@
             "table": true,
             "nav": true,
             "h": 0.5,
-            "y": 0
+            "y": 0,
+            "color": "#daa"
           }
         }
       ],
@@ -5506,6 +5507,7 @@
             "decor": true,
             "img": "icon--004--key-card",
             "y": 0.61,
+            "color": "#dd5",
             "quad": true,
             "transform": [0.3968, 0, 0, 0.2749, 1.5982, 0.1787]
           }

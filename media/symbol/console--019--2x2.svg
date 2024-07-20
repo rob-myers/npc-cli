@@ -65,7 +65,7 @@
     <title>decor img=icon--002--doc y=0.61</title>
   </use>
   <use width="1" height="1" transform="matrix(79.36923217773438, 0, 0, 54.970664978027344, 358.8257141113281, 62.7278938293457)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
-    <title>decor img=icon--004--key-card y=0.61</title>
+    <title>decor img=icon--004--key-card y=0.61 color=#dd5</title>
   </use>
   <g>
     <title>symbols</title>

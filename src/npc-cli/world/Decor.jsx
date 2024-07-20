@@ -7,7 +7,7 @@ import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../serv
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
+import { boxGeometry, getColor, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import packRectangles from "../service/rects-packer";
 import { WorldContext } from "./world-context";
@@ -387,18 +387,18 @@ export default function Decor(props) {
     positionInstances() { 
       const { cuboidInst, quadInst, labelInst } = state;
       
-      const defaultCuboidColor = new THREE.Color('#ddd');
+      const defaultCuboidColor = '#ddd';
       for (const [instId, d] of state.cuboids.entries()) {
         const mat4 = state.createCuboidMatrix4(d);
         cuboidInst.setMatrixAt(instId, mat4);
-        cuboidInst.setColorAt(instId, defaultCuboidColor);
+        cuboidInst.setColorAt(instId, getColor(d.meta.color ?? defaultCuboidColor));
       }
       
-      const defaultQuadColor = new THREE.Color('white');
+      const defaultQuadColor = 'white';
       for (const [instId, d] of state.quads.entries()) {
         const mat4 = state.createQuadMatrix4(d);
         quadInst.setMatrixAt(instId, mat4);
-        quadInst.setColorAt(instId, defaultQuadColor);
+        quadInst.setColorAt(instId, getColor(d.meta.color ?? defaultQuadColor));
       }
 
       for (const [instId, d] of state.labels.entries()) {

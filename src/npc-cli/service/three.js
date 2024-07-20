@@ -19,12 +19,21 @@ quadGeometryXZ.setIndex(xzIndices.slice());
 /** Cache to avoid re-creation on HMR */
 const quadLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
 
+const colorLookup = /** @type {Record<string, THREE.Color>} */ ({});
+
 /**
  * Clone to avoid overwriting attributes used by custom shaders
  * @param {string} key
  */
 export function getQuadGeometryXZ(key) {
   return quadLookup[key] ??= quadGeometryXZ.clone();
+}
+
+/**
+ * @param {string} colorRep 
+ */
+export function getColor(colorRep) {
+  return colorLookup[colorRep] ??= new THREE.Color(colorRep);
 }
 
 // 🚧 repeat above for XY quad
