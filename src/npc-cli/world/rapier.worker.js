@@ -3,6 +3,8 @@
  */
 import RAPIER from '@dimforge/rapier3d-compat'
 import { error, info } from "../service/generic";
+import { fetchGeomorphsJson } from '../service/fetch-assets';
+import { geomorphService } from '../service/geomorph';
 
 info("physics worker started", import.meta.url);
 
@@ -35,12 +37,6 @@ async function handleMessages(e) {
     case "add-npcs":
       // 🚧
       break;
-    case "clear-rapier-world":
-      if (world) {
-        world.forEachCollider(collider => world.removeCollider(collider, false));
-        world.forEachRigidBody(rigidBody => world.removeRigidBody(rigidBody));
-      }
-      break;
     case "remove-npcs":
       // 🚧
       break;
@@ -48,12 +44,7 @@ async function handleMessages(e) {
       // 🚧 drives world.tick
       break;
     case "setup-rapier-world": {
-      if (!world) {
-        await RAPIER.init();
-        world = new RAPIER.World({ x: 0, y: 0, z: 0 });
-        world.timestep = timeStepMs / 1000;
-        eventQueue = new RAPIER.EventQueue(true);
-      }
+      await setupWorld(msg.mapKey);
       selfTyped.postMessage({ type: 'world-is-setup' });
       break;
     }
@@ -124,5 +115,26 @@ function stepWorld() {
     collisionStartArray.buffer,
     contactStartArray.buffer,
   ]);
+
+}
+
+/**
+ * @param {string} mapKey 
+ */
+async function setupWorld(mapKey) {
+  if (!world) {
+    await RAPIER.init();
+    world = new RAPIER.World({ x: 0, y: 0, z: 0 });
+    world.timestep = timeStepMs / 1000;
+    eventQueue = new RAPIER.EventQueue(true);
+  } else {
+    world.forEachCollider(collider => world.removeCollider(collider, false));
+    world.forEachRigidBody(rigidBody => world.removeRigidBody(rigidBody));
+  }
+
+  const geomorphs = geomorphService.deserializeGeomorphs(await fetchGeomorphsJson());
+  const mapDef = geomorphs.map[mapKey];
+  // 🚧 construct door collider defs
+  // console.log({ mapDef });
 
 }

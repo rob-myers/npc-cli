@@ -17,6 +17,7 @@
   - ✅ web worker with rapier
   - ✅ rapier has `stepWorld` function (untested)
   - 🚧 rapier world has static colliders
+    - request geomorphs.json and construct in worker
   - 🚧 rapier world has kinematic rigid bodies
   - rapier world is stepped per-npcs-position update
   - rapier triggers worker message on npc collide

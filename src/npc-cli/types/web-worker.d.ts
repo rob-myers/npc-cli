@@ -25,10 +25,6 @@ declare namespace WW {
     mapKey: string;
   }
 
-  interface ClearRapierWorld {
-    type: 'clear-rapier-world';
-  }
-
   interface AddNpcs {
     type: 'add-npcs';
     npcKeys: string[];
@@ -62,7 +58,6 @@ declare namespace WW {
     | SetupRapierWorld
     | AddNpcs
     | RemoveNpcs
-    | ClearRapierWorld
   );
 
   type MessageFromPhysicsWorker = (
