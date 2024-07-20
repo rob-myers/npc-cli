@@ -1,10 +1,10 @@
 declare namespace WW {
+  
+  //#region nav worker
   interface RequestNavMesh {
     type: "request-nav-mesh";
     mapKey: string;
   }
-
-  type MessageToWorker = RequestNavMesh;
 
   interface NavMeshResponse {
     type: "nav-mesh-response";
@@ -12,7 +12,61 @@ declare namespace WW {
     exportedNavMesh: Uint8Array;
   }
 
-  type MessageFromWorker = NavMeshResponse;
+  type MessageToNavWorker = RequestNavMesh;
+
+  type MessageFromNavWorker = NavMeshResponse;
+
+  //#endregion
+
+
+  //#region physics worker
+  interface SetupRapierWorld {
+    type: 'setup-rapier-world';
+    items: any[]; // 🚧 door circles
+  }
+
+  interface ClearRapierWorld {
+    type: 'clear-rapier-world';
+  }
+
+  interface AddNpcs {
+    type: 'add-npcs';
+    npcKeys: string[];
+  }
+  interface RemoveNpcs {
+    type: 'remove-npcs';
+    npcKeys: string[];
+  }
+
+  interface SendNpcPositions {
+    type: 'send-npc-positions';
+    positions: { npcKey: string; position: Geom.VectJson }[];
+  }
+
+  interface WorldSetupResponse {
+    type: 'world-is-setup';
+  }
+
+  interface NpcCollisionResponse {
+    type: 'npc-collision';
+    npcKey: string;
+    type: any; // 🚧
+  }
+
+  type MessageToPhysicsWorker = (
+    | SendNpcPositions
+    | SetupRapierWorld
+    | AddNpcs
+    | RemoveNpcs
+    | ClearRapierWorld
+  );
+
+  type MessageFromPhysicsWorker = (
+    | WorldSetupResponse
+    | NpcCollisionResponse
+  );
+
+  //#endregion
 
   /**
    * https://github.com/microsoft/TypeScript/issues/48396

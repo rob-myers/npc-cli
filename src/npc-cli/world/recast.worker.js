@@ -7,15 +7,15 @@ import { geomorphService } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
 
-info("web worker started", import.meta.url);
+info("nav worker started", import.meta.url);
 
-const selfTyped = /** @type {WW.WorkerGeneric<WW.MessageFromWorker, WW.MessageToWorker>} */ (
+const selfTyped = /** @type {WW.WorkerGeneric<WW.MessageFromNavWorker, WW.MessageToNavWorker>} */ (
   /** @type {*} */ (self)
 );
 
 selfTyped.addEventListener("message", handleMessages);
 
-/** @param {MessageEvent<WW.MessageToWorker>} e */
+/** @param {MessageEvent<WW.MessageToNavWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
   info("worker received message", msg);
@@ -82,7 +82,7 @@ async function handleMessages(e) {
       meshes.forEach((mesh) => mesh.geometry.dispose());
       break;
     default:
-      info("unhandled message", msg);
+      info("nav worker: unhandled:", msg);
       break;
   }
 }

@@ -51,7 +51,9 @@ export default function World(props) {
     reqAnimId: 0,
     threeReady: false,
     timer: new Timer(),
-    worker: /** @type {*} */ (null),
+
+    navWorker: /** @type {*} */ (null),
+    physicsWorker: /** @type {*} */ (null),
 
     gmsData: /** @type {*} */ (null),
     events: new Subject(),
@@ -94,15 +96,19 @@ export default function World(props) {
         return new Promise(resolve => state.readyResolvers.push(resolve));
       }
     },
-    async handleMessageFromWorker(e) {
+    async handleNavWorkerMessage(e) {
       const msg = e.data;
-      info("main thread received message", msg);
+      info("main thread received from nav worker", msg);
       if (msg.type === "nav-mesh-response") {
         await initRecastNav();
         state.loadTiledMesh(msg.exportedNavMesh);
         update(); // w.npc
         // state.setReady();
       }
+    },
+    async handlePhysicsWorkerMessage(e) {
+      const msg = e.data;
+      info("main thread received from physics worker", msg);
     },
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -280,9 +286,16 @@ export default function World(props) {
     const hmr = state.crowd && state.geomorphs?.hash === state.hmr.gmHash;
     state.hmr.gmHash = state.geomorphs?.hash ?? '';
     if (state.threeReady && state.hash && !hmr) {
-      state.worker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
-      state.worker.addEventListener("message", state.handleMessageFromWorker);
-      return () => void state.worker.terminate();
+      state.navWorker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
+      state.navWorker.addEventListener("message", state.handleNavWorkerMessage);
+      
+      state.physicsWorker = new Worker(new URL("./rapier.worker", import.meta.url), { type: "module" });
+      state.physicsWorker.addEventListener("message", state.handlePhysicsWorkerMessage);
+
+      return () => {
+        state.navWorker.terminate();
+        state.physicsWorker.terminate();
+      };
     }
   }, [state.threeReady, state.geomorphs?.hash]);
 
@@ -290,7 +303,10 @@ export default function World(props) {
     const hmr = state.crowd && state.hash === state.hmr.hash;
     state.hmr.hash = state.hash;
     if (state.threeReady && state.hash && !hmr) {
-      state.worker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
+      state.navWorker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
+      state.physicsWorker.postMessage({ type: "setup-rapier-world", items: [
+        // 🚧
+      ]});
     }
   }, [state.threeReady, state.hash]);
 
@@ -358,7 +374,8 @@ export default function World(props) {
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
- * @property {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>} worker
+ * @property {WW.WorkerGeneric<WW.MessageToNavWorker, WW.MessageFromNavWorker>} navWorker
+ * @property {WW.WorkerGeneric<WW.MessageToPhysicsWorker, WW.MessageFromPhysicsWorker>} physicsWorker
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
@@ -384,7 +401,8 @@ export default function World(props) {
  * @property {Crowd} crowd
  *
  * @property {() => Promise<void>} awaitReady
- * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
+ * @property {(e: MessageEvent<WW.MessageFromNavWorker>) => Promise<void>} handleNavWorkerMessage
+ * @property {(e: MessageEvent<WW.MessageFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
