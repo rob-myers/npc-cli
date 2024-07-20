@@ -15,9 +15,10 @@
 
 - 🚧 start new branch `use-physics`
   - ✅ web worker with rapier
-  - rapier world has static colliders
-  - rapier world has kinematic rigid bodies
-  - rapier world is stepped per npcs position update
+  - ✅ rapier has `stepWorld` function (untested)
+  - 🚧 rapier world has static colliders
+  - 🚧 rapier world has kinematic rigid bodies
+  - rapier world is stepped per-npcs-position update
   - rapier triggers worker message on npc collide
 
 - consider alternatives to current custom minecraft character

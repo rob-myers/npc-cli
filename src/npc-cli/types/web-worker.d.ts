@@ -48,9 +48,13 @@ declare namespace WW {
   }
 
   interface NpcCollisionResponse {
-    type: 'npc-collision';
-    npcKey: string;
-    type: any; // 🚧
+    type: 'npc-collisions';
+    /** Format `[bodyId1, bodyId2, x, y, z, x', y', z', ...]` (repeated 8s) */
+    contactStart: Float32Array;
+    /** Format `[bodyId1, bodyId2, bodyId1', bodyId2', ...]` (repeated 4s) */
+    collisionStart: Uint16Array;
+    /** Format `[bodyId1, bodyId2, bodyId1', bodyId2', ...]` (repeated 4s) */
+    collisionEnd: Uint16Array;
   }
 
   type MessageToPhysicsWorker = (
