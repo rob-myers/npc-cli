@@ -19,9 +19,9 @@
   - ✅ rapier world has static colliders
     - request geomorphs.json and construct in worker
   - ✅ convert numeric ids into strings i.e. npcKey and gmDoorKey
-  - 🚧 rapier world has kinematic rigid bodies
+  - ✅ rapier world has kinematic rigid bodies
     - ✅ spawn induces kinematic rigid body
-    - 🚧 remove npc removes kinematic rigid body
+    - ✅ remove npc removes kinematic rigid body
   - rapier world is stepped per-npcs-position update
   - rapier triggers worker message on npc collide
   - could represent many doors as one rigid body e.g. per gm?

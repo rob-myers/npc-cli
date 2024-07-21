@@ -46,7 +46,7 @@ export default function useHandleEvents(w) {
       switch (e.key) {
         case "spawned": {
           const npc = w.npc.npc[e.npcKey];
-          if (npc.s.spawns === 1) {
+          if (npc.s.spawns === 1) {// 1st spawn
             const { x, y, z } = npc.getPosition();
             w.physicsWorker.postMessage({
               type: 'add-npcs',
@@ -55,7 +55,12 @@ export default function useHandleEvents(w) {
           }
           break;
         }
-        // 🚧 removed-npc
+        case "removed-npc":
+          w.physicsWorker.postMessage({
+            type: 'remove-npcs',
+            npcKeys: [e.npcKey],
+          });
+          break;
       }
     },
     onPointerUpMenuDesktop(e) {

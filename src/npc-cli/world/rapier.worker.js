@@ -3,7 +3,7 @@
  */
 import RAPIER, { ColliderDesc } from '@dimforge/rapier3d-compat'
 import { glbMeta, wallHeight } from '../service/const';
-import { error, info } from "../service/generic";
+import { error, info, warn } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
 
@@ -43,6 +43,10 @@ async function handleMessages(e) {
   switch (msg.type) {
     case "add-npcs":
       for (const npc of msg.npcs) {
+        if (npcKeys.has(npc.npcKey) === true) {
+          warn(`physics worker: ${msg.type}: cannot re-add body (${npc.npcKey})`)
+          continue;
+        }
         npcKeys.add(npc.npcKey);
         const body = createRigidBody({
           type: RAPIER.RigidBodyType.KinematicPositionBased,
