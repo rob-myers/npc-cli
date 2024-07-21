@@ -16,12 +16,13 @@
 - 🚧 start new branch `use-physics`
   - ✅ web worker with rapier
   - ✅ rapier has `stepWorld` function (untested)
-  - 🚧 rapier world has static colliders
+  - ✅ rapier world has static colliders
     - request geomorphs.json and construct in worker
   - 🚧 rapier world has kinematic rigid bodies
   - rapier world is stepped per-npcs-position update
   - rapier triggers worker message on npc collide
   - convert numeric ids into strings i.e. npcKey and gmDoorKey
+  - can we represent many doors as one rigid body e.g. per gm?
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description

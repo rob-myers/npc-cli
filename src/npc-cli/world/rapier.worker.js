@@ -2,10 +2,10 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc } from '@dimforge/rapier3d-compat'
+import { glbMeta, wallHeight } from '../service/const';
 import { error, info } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
-import { glbMeta } from '../service/const';
 
 info("physics worker started", import.meta.url);
 
@@ -18,15 +18,16 @@ const timeStepMs = 1000 / fps;
 const agentHalfHeight = (glbMeta.height * glbMeta.scale) * 0.5;
 const agentRadius = glbMeta.radius * glbMeta.scale;
 
+/** @type {Set<string>} A subset of body keys */
+const npcKeys = new Set();
+
 const bodies = /** @type {RAPIER.RigidBody[]} */ ([]);
-/** @type {Map<number, number>} */
-const handlemap = new Map()
-/** @type {Map<number, boolean>} */
-const reportContact = new Map();
-/** @type {Map<number, RAPIER.Collider>} */
-const collidermap = new Map();
-/** @type {Map<number, RAPIER.RigidBody>} */
-const bodymap = new Map();
+/** @type {Map<number, string>} */
+const bodyHandleToKey = new Map();
+/** @type {Map<string, RAPIER.Collider>} */
+const bodyKeyToCollider = new Map();
+/** @type {Map<string, RAPIER.RigidBody>} */
+const bodyKeyToBody = new Map();
 
 /** @type {RAPIER.World} */
 let world;
@@ -43,10 +44,12 @@ async function handleMessages(e) {
   switch (msg.type) {
     case "add-npcs":
       // 🚧
+      msg.npcKeys.forEach(npcKey => npcKeys.add(npcKey));
       break;
     case "remove-npcs":
       // 🚧 no need to remove when not moving (can set asleep)
-      break;
+      msg.npcKeys.forEach(npcKey => npcKeys.delete(npcKey));
+    break;
     case "send-npc-positions":
       // 🚧 drives world.tick
       break;
@@ -66,34 +69,24 @@ function stepWorld() {
   
   world.step(eventQueue);
 
-  const collisionStart = /** @type {number[]} */ ([]);
-  const collisionEnd = /** @type {number[]} */ ([]);
-  // const contactStart = /** @type {number[]} */ ([]);
+  const collisionStart = /** @type {WW.NpcCollisionResponse['collisionStart']} */ ([]);
+  const collisionEnd = /** @type {WW.NpcCollisionResponse['collisionEnd']} */ ([]);
 
   eventQueue.drainCollisionEvents((handle1, handle2, started) => {
-    const npcId1 = /** @type {number} */ (handlemap.get(handle1));
-    const npcId2 = /** @type {number} */ (handlemap.get(handle2));
-    if (started === true) {
-      collisionStart.push(npcId1, npcId2)
-    } else {
-      collisionEnd.push(npcId1, npcId2)
-    }
+    const bodyKey1 = /** @type {string} */ (bodyHandleToKey.get(handle1));
+    const bodyKey2 = /** @type {string} */ (bodyHandleToKey.get(handle2));
+    (started === true ? collisionStart : collisionEnd).push(
+      npcKeys.has(bodyKey1) === true
+        ? { npcKey: bodyKey1, otherKey: bodyKey2 }
+        : { npcKey: bodyKey2, otherKey: bodyKey1 }
+    );
   });
-
-  // const contactStartArray = new Float32Array(contactStart);
-  const collisionStartArray = new Uint16Array(collisionStart);
-  const collisionEndArray = new Uint16Array(collisionEnd);
 
   selfTyped.postMessage({
     type: 'npc-collisions',
-    // contactStart: contactStartArray,
-    collisionStart: collisionStartArray,
-    collisionEnd: collisionEndArray,
-  }, [
-    collisionStartArray.buffer,
-    collisionEndArray.buffer,
-    // contactStartArray.buffer,
-  ]);
+    collisionStart,
+    collisionEnd,
+  });
 }
 
 /**
@@ -110,9 +103,8 @@ async function setupWorld(mapKey) {
     world.forEachCollider(collider => world.removeCollider(collider, false));
     world.forEachRigidBody(rigidBody => world.removeRigidBody(rigidBody));
     bodies.length = 0;
-    bodymap.clear();
-    collidermap.clear();
-    reportContact.clear();
+    bodyKeyToBody.clear();
+    bodyKeyToCollider.clear();
     world.bodies.free();
     world.colliders.free();
   }
@@ -122,23 +114,42 @@ async function setupWorld(mapKey) {
   const gms = mapDef.gms.map(({ gmKey, transform }, gmId) =>
     geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
-  const doorCenters = gms.map(gm => // indexed by [gmId][doorId]
+
+  const gmDoorCenters = gms.map(gm => // indexed by [gmId][doorId]
     gm.doors.map(({ center }) => gm.matrix.transformPoint(center.clone()))
   );
-  // 🚧 construct door colliders
-    
+
+  // construct door bodies/colliders
+  const gmDoorBodies = gmDoorCenters.map((centers, gmId) =>
+    centers.map((center, doorId) => 
+      createRigidBody({
+        bodyKey: geomorphService.getGmDoorKey(gmId, doorId),
+        type: RAPIER.RigidBodyType.Fixed,
+        radius: 1.5, // meters
+        halfHeight: wallHeight,
+        position: { x: center.x, y: wallHeight/2, z: center.y },
+      })
+    )
+  );
 
 }
 
 /**
- * @param {number} bodyUid Corresponds to an npc or a door sensor
+ * @param {object} opts
+ * @param {string} opts.bodyKey e.g. npcKey or gmDoorId
+ * @param {RAPIER.RigidBodyType.Fixed | RAPIER.RigidBodyType.KinematicPositionBased} opts.type
+ * @param {number} opts.halfHeight
+ * @param {number} opts.radius
+ * @param {import('three').Vector3Like} opts.position
  */
-function createRigidBody(bodyUid) {
-  const bodyDescription = new RAPIER.RigidBodyDesc(
-    RAPIER.RigidBodyType.KinematicPositionBased
-  ).setCanSleep(true).setCcdEnabled(false);
+function createRigidBody({ bodyKey, type, halfHeight, radius, position }) {
 
-  const colliderDescription = ColliderDesc.cylinder(agentHalfHeight, agentRadius)
+  const bodyDescription = new RAPIER.RigidBodyDesc(type)
+    .setCanSleep(type === RAPIER.RigidBodyType.KinematicPositionBased)
+    .setCcdEnabled(false)
+  ;
+
+  const colliderDescription = ColliderDesc.cylinder(halfHeight, radius)
     .setDensity(0)
     .setFriction(0)
     .setFrictionCombineRule(RAPIER.CoefficientCombineRule.Max)
@@ -152,12 +163,13 @@ function createRigidBody(bodyUid) {
   const collider = world.createCollider(colliderDescription, rigidBody);
 
   collider.setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);
-  reportContact.set(bodyUid, true);
 
-  rigidBody.userData = bodyUid;
-  bodymap.set(bodyUid, rigidBody);
-  collidermap.set(bodyUid, collider);
-  handlemap.set(rigidBody.handle, bodyUid);
+  rigidBody.userData = { npc: npcKeys.has(bodyKey), bodyKey };
+  bodyKeyToBody.set(bodyKey, rigidBody);
+  bodyKeyToCollider.set(bodyKey, collider);
+  bodyHandleToKey.set(rigidBody.handle, bodyKey);
+
+  rigidBody.setTranslation(position, false);
 
   return rigidBody;
 }

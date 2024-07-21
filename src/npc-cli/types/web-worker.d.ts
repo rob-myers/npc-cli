@@ -43,15 +43,11 @@ declare namespace WW {
     type: 'world-is-setup';
   }
 
-  /** In each pair of bodyIds, one should represent an npc, the other e.g. a door sensor */
+  /** Each collision pair of bodyKeys should involve one npc, and one non-npc e.g. a door sensor */
   interface NpcCollisionResponse {
     type: 'npc-collisions';
-    /** Format `[bodyId1, bodyId2, bodyId1', bodyId2', ...]` (repeated 4s) */
-    collisionStart: Uint16Array;
-    /** Format `[bodyId1, bodyId2, bodyId1', bodyId2', ...]` (repeated 4s) */
-    collisionEnd: Uint16Array;
-    /** Format `[bodyId1, bodyId2, x, y, z, x', y', z', ...]` (repeated 8s) */
-    // contactStart: Float32Array;
+    collisionStart: { npcKey: string; otherKey: string }[];
+    collisionEnd: { npcKey: string; otherKey: string }[];
   }
 
   type MsgToPhysicsWorker = (
