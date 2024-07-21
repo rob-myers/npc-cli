@@ -9,6 +9,10 @@ export default function useHandleEvents(w) {
     handleEvents(e) {
       // info('useTestHandleEvents', e);
 
+      if ('npcKey' in e) {
+        return state.handleNpcEvents(e);
+      }
+
       switch (e.key) {
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu
@@ -36,6 +40,22 @@ export default function useHandleEvents(w) {
         case "decor-instantiated":
           w.setReady();
           break;
+      }
+    },
+    handleNpcEvents(e) {
+      switch (e.key) {
+        case "spawned": {
+          const npc = w.npc.npc[e.npcKey];
+          if (npc.s.spawns === 1) {
+            const { x, y, z } = npc.getPosition();
+            w.physicsWorker.postMessage({
+              type: 'add-npcs',
+              npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
+            });
+          }
+          break;
+        }
+        // 🚧 removed-npc
       }
     },
     onPointerUpMenuDesktop(e) {
@@ -66,6 +86,7 @@ export default function useHandleEvents(w) {
 /**
  * @typedef State
  * @property {(e: NPC.Event) => void} handleEvents
+ * @property {(e: Extract<NPC.Event, { npcKey: string }>) => void} handleNpcEvents
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  */

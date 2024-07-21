@@ -15,13 +15,12 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToP
 
 const fps = 60;
 const timeStepMs = 1000 / fps;
-const agentHalfHeight = (glbMeta.height * glbMeta.scale) * 0.5;
+const agentHeight = glbMeta.height * glbMeta.scale;
 const agentRadius = glbMeta.radius * glbMeta.scale;
 
 /** @type {Set<string>} A subset of body keys */
 const npcKeys = new Set();
 
-const bodies = /** @type {RAPIER.RigidBody[]} */ ([]);
 /** @type {Map<number, string>} */
 const bodyHandleToKey = new Map();
 /** @type {Map<string, RAPIER.Collider>} */
@@ -43,12 +42,29 @@ async function handleMessages(e) {
 
   switch (msg.type) {
     case "add-npcs":
-      // 🚧
-      msg.npcKeys.forEach(npcKey => npcKeys.add(npcKey));
+      for (const npc of msg.npcs) {
+        npcKeys.add(npc.npcKey);
+        const body = createRigidBody({
+          type: RAPIER.RigidBodyType.KinematicPositionBased,
+          halfHeight: agentHeight / 2,
+          radius: agentRadius,
+          position: { x: npc.position.x, y: agentHeight / 2, z: npc.position.z },
+          userData: { npc: true, bodyKey: npc.npcKey },
+        });
+      }
       break;
     case "remove-npcs":
-      // 🚧 no need to remove when not moving (can set asleep)
-      msg.npcKeys.forEach(npcKey => npcKeys.delete(npcKey));
+      // 🔔 no need to remove when not moving (can set asleep)
+      for (const npcKey of msg.npcKeys) {
+        npcKeys.delete(npcKey);
+        const body = bodyKeyToBody.get(npcKey);
+        if (body !== undefined) {
+          bodyHandleToKey.delete(body.handle);
+          bodyKeyToBody.delete(npcKey);
+          bodyKeyToCollider.delete(npcKey);
+          world.removeRigidBody(body);
+        }
+      }
     break;
     case "send-npc-positions":
       // 🚧 drives world.tick
@@ -100,11 +116,11 @@ async function setupWorld(mapKey) {
     world.timestep = timeStepMs / 1000;
     eventQueue = new RAPIER.EventQueue(true);
   } else {
-    world.forEachCollider(collider => world.removeCollider(collider, false));
     world.forEachRigidBody(rigidBody => world.removeRigidBody(rigidBody));
-    bodies.length = 0;
+    world.forEachCollider(collider => world.removeCollider(collider, false));
     bodyKeyToBody.clear();
     bodyKeyToCollider.clear();
+    bodyHandleToKey.clear();
     world.bodies.free();
     world.colliders.free();
   }
@@ -123,11 +139,11 @@ async function setupWorld(mapKey) {
   const gmDoorBodies = gmDoorCenters.map((centers, gmId) =>
     centers.map((center, doorId) => 
       createRigidBody({
-        bodyKey: geomorphService.getGmDoorKey(gmId, doorId),
         type: RAPIER.RigidBodyType.Fixed,
         radius: 1.5, // meters
         halfHeight: wallHeight,
         position: { x: center.x, y: wallHeight/2, z: center.y },
+        userData: { npc: false, bodyKey: geomorphService.getGmDoorKey(gmId, doorId) },
       })
     )
   );
@@ -135,14 +151,16 @@ async function setupWorld(mapKey) {
 }
 
 /**
+ * Create cylindrical static or kinematic-position sensor.
+ * @template {{ bodyKey: string }} UserData
  * @param {object} opts
- * @param {string} opts.bodyKey e.g. npcKey or gmDoorId
  * @param {RAPIER.RigidBodyType.Fixed | RAPIER.RigidBodyType.KinematicPositionBased} opts.type
  * @param {number} opts.halfHeight
  * @param {number} opts.radius
  * @param {import('three').Vector3Like} opts.position
+ * @param {UserData} opts.userData
  */
-function createRigidBody({ bodyKey, type, halfHeight, radius, position }) {
+function createRigidBody({ type, halfHeight, radius, position, userData }) {
 
   const bodyDescription = new RAPIER.RigidBodyDesc(type)
     .setCanSleep(type === RAPIER.RigidBodyType.KinematicPositionBased)
@@ -164,12 +182,13 @@ function createRigidBody({ bodyKey, type, halfHeight, radius, position }) {
 
   collider.setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);
 
-  rigidBody.userData = { npc: npcKeys.has(bodyKey), bodyKey };
-  bodyKeyToBody.set(bodyKey, rigidBody);
-  bodyKeyToCollider.set(bodyKey, collider);
-  bodyHandleToKey.set(rigidBody.handle, bodyKey);
+  rigidBody.userData = userData;
+
+  bodyKeyToBody.set(userData.bodyKey, rigidBody);
+  bodyKeyToCollider.set(userData.bodyKey, collider);
+  bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
   rigidBody.setTranslation(position, false);
 
-  return rigidBody;
+  return /** @type {RAPIER.RigidBody & { userData: UserData }} */ (rigidBody);
 }

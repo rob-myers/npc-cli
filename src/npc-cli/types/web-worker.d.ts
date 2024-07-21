@@ -27,7 +27,7 @@ declare namespace WW {
 
   interface AddNpcs {
     type: 'add-npcs';
-    npcKeys: string[];
+    npcs: { npcKey: string; position: import('three').Vector3Like }[];
   }
   interface RemoveNpcs {
     type: 'remove-npcs';

@@ -18,11 +18,14 @@
   - ✅ rapier has `stepWorld` function (untested)
   - ✅ rapier world has static colliders
     - request geomorphs.json and construct in worker
+  - ✅ convert numeric ids into strings i.e. npcKey and gmDoorKey
   - 🚧 rapier world has kinematic rigid bodies
+    - ✅ spawn induces kinematic rigid body
+    - 🚧 remove npc removes kinematic rigid body
   - rapier world is stepped per-npcs-position update
   - rapier triggers worker message on npc collide
-  - convert numeric ids into strings i.e. npcKey and gmDoorKey
-  - can we represent many doors as one rigid body e.g. per gm?
+  - could represent many doors as one rigid body e.g. per gm?
+  - set npcs asleep when they stop moving
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
