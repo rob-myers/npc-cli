@@ -3,8 +3,8 @@ import expressWs from "express-ws";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-import { DEV_EXPRESS_WEBSOCKET_PORT } from "../const";
 import { info, safeStringify, warn } from "../npc-cli/service/generic";
+import { DEV_EXPRESS_WEBSOCKET_PORT } from "../npc-cli/service/fetch-assets";
 
 const port = Number(DEV_EXPRESS_WEBSOCKET_PORT || 3000);
 

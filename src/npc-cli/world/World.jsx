@@ -6,7 +6,6 @@ import * as THREE from "three";
 import { Timer } from "three-stdlib";
 import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
 
-import { WORLD_QUERY_FIRST_KEY } from "src/const"; // 🚧 -> npc-cli/service/const
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
@@ -14,7 +13,7 @@ import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
 import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
-import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl } from "../service/fetch-assets";
+import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { createCanvasTexDef, imageLoader } from "../service/three";
