@@ -86,7 +86,7 @@ export async function* click({ api, args, w }) {
       y: v3.z, // project to XZ plane
       ...e.keys && { keys: e.keys },
       meta: { ...e.meta,
-        navigable: w.npc.isPointInNavmesh(e.point),
+        ...w.npc.isPointInNavmesh(e.point) && { navigable: true },
         // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
       v3,
