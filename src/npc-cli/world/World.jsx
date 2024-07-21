@@ -34,6 +34,7 @@ import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
 import ContextMenu from "./ContextMenu";
+import WorldWorkers from "./WorldWorker";
 
 /**
  * @param {Props} props
@@ -62,7 +63,7 @@ export default function World(props) {
     gms: [],
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
-    hmr: { hash: '', gmHash: '', createGmsData },
+    hmr: { createGmsData },
     obsTex: /** @type {*} */ (null),
     decorTex: /** @type {*} */ (null),
 
@@ -279,32 +280,6 @@ export default function World(props) {
     return () => removeCached([props.worldKey]);
   }, []);
 
-  React.useEffect(() => {// (re)start worker on(change) geomorphs.json (not HMR)
-    const hmr = state.crowd && state.geomorphs?.hash === state.hmr.gmHash;
-    state.hmr.gmHash = state.geomorphs?.hash ?? '';
-    if (state.threeReady && state.hash && !hmr) {
-      state.navWorker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
-      state.navWorker.addEventListener("message", state.handleNavWorkerMessage);
-      
-      state.physicsWorker = new Worker(new URL("./rapier.worker", import.meta.url), { type: "module" });
-      state.physicsWorker.addEventListener("message", state.handlePhysicsWorkerMessage);
-
-      return () => {
-        state.navWorker.terminate();
-        state.physicsWorker.terminate();
-      };
-    }
-  }, [state.threeReady, state.geomorphs?.hash]);
-
-  React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey (not HMR)
-    const hmr = state.crowd && state.hash === state.hmr.hash;
-    state.hmr.hash = state.hash;
-    if (state.threeReady && state.hash && !hmr) {
-      state.navWorker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
-      state.physicsWorker.postMessage({ type: "setup-rapier-world", mapKey: state.mapKey });
-    }
-  }, [state.threeReady, state.hash]);
-
   React.useEffect(() => {// enable/disable animation
     state.timer.reset();
     if (!state.disabled && !!state.npc) {
@@ -337,6 +312,7 @@ export default function World(props) {
         )}
       </WorldCanvas>
       <ContextMenu />
+      <WorldWorkers />
     </WorldContext.Provider>
   );
 }
@@ -360,7 +336,7 @@ export default function World(props) {
  * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
- * @property {{ hash: string; gmHash: string; createGmsData: typeof createGmsData }} hmr
+ * @property {{ createGmsData: typeof createGmsData }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
@@ -369,8 +345,8 @@ export default function World(props) {
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
- * @property {WW.WorkerGeneric<WW.MessageToNavWorker, WW.MessageFromNavWorker>} navWorker
- * @property {WW.WorkerGeneric<WW.MessageToPhysicsWorker, WW.MessageFromPhysicsWorker>} physicsWorker
+ * @property {WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>} navWorker
+ * @property {WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>} physicsWorker
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
@@ -396,8 +372,8 @@ export default function World(props) {
  * @property {Crowd} crowd
  *
  * @property {() => Promise<void>} awaitReady
- * @property {(e: MessageEvent<WW.MessageFromNavWorker>) => Promise<void>} handleNavWorkerMessage
- * @property {(e: MessageEvent<WW.MessageFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
+ * @property {(e: MessageEvent<WW.MsgFromNavWorker>) => Promise<void>} handleNavWorkerMessage
+ * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick

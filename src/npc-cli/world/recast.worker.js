@@ -9,13 +9,13 @@ import { fetchGeomorphsJson } from "../service/fetch-assets";
 
 info("nav worker started", import.meta.url);
 
-const selfTyped = /** @type {WW.WorkerGeneric<WW.MessageFromNavWorker, WW.MessageToNavWorker>} */ (
+const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */ (
   /** @type {*} */ (self)
 );
 
 selfTyped.addEventListener("message", handleMessages);
 
-/** @param {MessageEvent<WW.MessageToNavWorker>} e */
+/** @param {MessageEvent<WW.MsgToNavWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
   info("worker received message", msg);

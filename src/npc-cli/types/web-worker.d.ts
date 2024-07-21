@@ -12,9 +12,9 @@ declare namespace WW {
     exportedNavMesh: Uint8Array;
   }
 
-  type MessageToNavWorker = RequestNavMesh;
+  type MsgToNavWorker = RequestNavMesh;
 
-  type MessageFromNavWorker = NavMeshResponse;
+  type MsgFromNavWorker = NavMeshResponse;
 
   //#endregion
 
@@ -43,24 +43,25 @@ declare namespace WW {
     type: 'world-is-setup';
   }
 
+  /** In each pair of bodyIds, one should represent an npc, the other e.g. a door sensor */
   interface NpcCollisionResponse {
     type: 'npc-collisions';
-    /** Format `[bodyId1, bodyId2, x, y, z, x', y', z', ...]` (repeated 8s) */
-    contactStart: Float32Array;
     /** Format `[bodyId1, bodyId2, bodyId1', bodyId2', ...]` (repeated 4s) */
     collisionStart: Uint16Array;
     /** Format `[bodyId1, bodyId2, bodyId1', bodyId2', ...]` (repeated 4s) */
     collisionEnd: Uint16Array;
+    /** Format `[bodyId1, bodyId2, x, y, z, x', y', z', ...]` (repeated 8s) */
+    // contactStart: Float32Array;
   }
 
-  type MessageToPhysicsWorker = (
+  type MsgToPhysicsWorker = (
     | SendNpcPositions
     | SetupRapierWorld
     | AddNpcs
     | RemoveNpcs
   );
 
-  type MessageFromPhysicsWorker = (
+  type MsgFromPhysicsWorker = (
     | WorldSetupResponse
     | NpcCollisionResponse
   );

@@ -21,12 +21,14 @@
   - 🚧 rapier world has kinematic rigid bodies
   - rapier world is stepped per-npcs-position update
   - rapier triggers worker message on npc collide
+  - convert numeric ids into strings i.e. npcKey and gmDoorKey
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
+- can color obstacles
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
