@@ -7,37 +7,37 @@ import { isDevelopment } from '../service/generic';
  */
 export default function WorldWorkers() {
 
-  const state = React.useContext(WorldContext);
+  const w = React.useContext(WorldContext);
 
   React.useEffect(() => {// (re)start worker on(change) geomorphs.json
-    if (state.threeReady && state.hash) {
-      state.navWorker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
-      state.navWorker.addEventListener("message", state.handleNavWorkerMessage);
+    if (w.threeReady && w.hash) {
+      w.navWorker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
+      w.navWorker.addEventListener("message", w.handleNavWorkerMessage);
       
-      state.physicsWorker = new Worker(new URL("./rapier.worker", import.meta.url), { type: "module" });
-      state.physicsWorker.addEventListener("message", state.handlePhysicsWorkerMessage);
+      w.physicsWorker = new Worker(new URL("./rapier.worker", import.meta.url), { type: "module" });
+      w.physicsWorker.addEventListener("message", w.handlePhysicsWorkerMessage);
 
       return () => {
-        state.navWorker.terminate();
-        state.physicsWorker.terminate();
+        w.navWorker.terminate();
+        w.physicsWorker.terminate();
       };
     }
-  }, [state.threeReady, state.geomorphs?.hash]);
+  }, [w.threeReady, w.geomorphs?.hash]);
 
   React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
-    if (state.threeReady && state.hash) {
-      state.navWorker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
-      state.physicsWorker.postMessage({
+    if (w.threeReady && w.hash) {
+      w.navWorker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
+
+      w.physicsWorker.postMessage({
         type: "setup-rapier-world",
-        mapKey: state.mapKey,
-        // on hmr we must provide existing npcs
-        npcs: Object.values(state.npc?.npc ?? {}).map((npc) => ({
+        mapKey: w.mapKey, // on hmr we must provide existing npcs
+        npcs: Object.values(w.npc?.npc ?? {}).map((npc) => ({
           npcKey: npc.key,
           position: npc.getPosition(),
         })),
       });
     }
-  }, [state.threeReady, state.hash]);
+  }, [w.threeReady, w.hash]);
 
   return null;
 }
