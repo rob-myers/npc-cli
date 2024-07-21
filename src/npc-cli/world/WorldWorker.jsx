@@ -1,5 +1,6 @@
 import React from 'react';
 import { WorldContext } from './world-context';
+import { isDevelopment } from '../service/generic';
 
 /**
  * This component avoids reloading the nav-mesh e.g. on edit World.jsx
@@ -26,9 +27,23 @@ export default function WorldWorkers() {
   React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
     if (state.threeReady && state.hash) {
       state.navWorker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
-      state.physicsWorker.postMessage({ type: "setup-rapier-world", mapKey: state.mapKey });
+      state.physicsWorker.postMessage({
+        type: "setup-rapier-world",
+        mapKey: state.mapKey,
+        // on hmr we must provide existing npcs
+        npcs: Object.values(state.npc?.npc ?? {}).map((npc) => ({
+          npcKey: npc.key,
+          position: npc.getPosition(),
+        })),
+      });
     }
   }, [state.threeReady, state.hash]);
 
   return null;
+}
+
+if (isDevelopment()) {
+  // propagate hmr to this file onchange worker files
+  import('./rapier.worker');
+  import('./recast.worker');
 }

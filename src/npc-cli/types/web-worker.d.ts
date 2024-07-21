@@ -19,15 +19,21 @@ declare namespace WW {
   //#endregion
 
 
+  interface NpcDef {
+    npcKey: string;
+    position: import('three').Vector3Like;
+  }
+
   //#region physics worker
   interface SetupRapierWorld {
     type: 'setup-rapier-world';
     mapKey: string;
+    npcs: NpcDef[];
   }
 
   interface AddNpcs {
     type: 'add-npcs';
-    npcs: { npcKey: string; position: import('three').Vector3Like }[];
+    npcs: NpcDef[];
   }
   interface RemoveNpcs {
     type: 'remove-npcs';

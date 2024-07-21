@@ -7,13 +7,10 @@ import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
 
-info("nav worker started", import.meta.url);
-
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */ (
   /** @type {*} */ (self)
 );
 
-selfTyped.addEventListener("message", handleMessages);
 
 /** @param {MessageEvent<WW.MsgToNavWorker>} e */
 async function handleMessages(e) {
@@ -85,4 +82,9 @@ async function handleMessages(e) {
       info("nav worker: unhandled:", msg);
       break;
   }
+}
+
+if (typeof window === 'undefined') {
+  info("nav worker started", import.meta.url);
+  selfTyped.addEventListener("message", handleMessages);
 }

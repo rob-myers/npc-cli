@@ -1,13 +1,11 @@
 /**
  * Based on: https://github.com/michealparks/sword
  */
-import RAPIER, { ColliderDesc } from '@dimforge/rapier3d-compat'
+import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
 import { glbMeta, wallHeight } from '../service/const';
 import { error, info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
-
-info("physics worker started", import.meta.url);
 
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToPhysicsWorker>} */ (
   /** @type {*} */ (self)
@@ -33,12 +31,15 @@ let world;
 /** @type {RAPIER.EventQueue} */
 let eventQueue;
 
-selfTyped.addEventListener("message", handleMessages);
-
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
-  msg.type !== 'send-npc-positions' && info("worker received message", msg);
+  if (world === undefined) {
+    return; // For hmr of this file
+  }
+  if (msg.type !== 'send-npc-positions') {// 🔔 Debug
+    info("worker received message", msg);
+  }
 
   switch (msg.type) {
     case "add-npcs":
@@ -80,7 +81,7 @@ async function handleMessages(e) {
       stepWorld();
       break;
     case "setup-rapier-world": {
-      await setupWorld(msg.mapKey);
+      await setupWorld(msg.mapKey, msg.npcs);
       selfTyped.postMessage({ type: 'world-is-setup' });
       break;
     }
@@ -119,8 +120,9 @@ function stepWorld() {
 
 /**
  * @param {string} mapKey 
+ * @param {WW.NpcDef[]} npcs
  */
-async function setupWorld(mapKey) {
+async function setupWorld(mapKey, npcs) {
 
   if (!world) {
     await RAPIER.init();
@@ -159,6 +161,16 @@ async function setupWorld(mapKey) {
       })
     )
   );
+
+  for (const { npcKey, position } of npcs) {
+    createRigidBody({
+      type: RigidBodyType.KinematicPositionBased,
+      halfHeight: agentHeight / 2,
+      radius: agentRadius,
+      position,
+      userData: { npc: true, bodyKey: npcKey },
+    });
+  }
 
   stepWorld();
 }
@@ -217,4 +229,9 @@ function debugWorld() {
       enabled: x.isEnabled(),
     }))
   );
+}
+
+if (typeof window === 'undefined') {
+  info("physics worker started", import.meta.url);
+  selfTyped.addEventListener("message", handleMessages);
 }
