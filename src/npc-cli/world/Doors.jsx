@@ -179,7 +179,7 @@ export default function Doors(props) {
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
-        map={w.decorTex}
+        map={w.decorTex.tex}
         transparent
         diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
       />

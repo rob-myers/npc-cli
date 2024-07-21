@@ -16,7 +16,7 @@ import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { createCanvasTexDef as createCanvasTuple, imageLoader } from "../service/three";
+import { createCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { WorldContext } from "./world-context";
@@ -63,8 +63,8 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: { createGmsData },
-    obsTex: createCanvasTuple(0, 0, { willReadFrequently: true }),
-    decorTex: createCanvasTuple(0, 0, { willReadFrequently: true }),
+    obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
+    decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
@@ -187,7 +187,7 @@ export default function World(props) {
         mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
           const { pngRect } = next.geomorphs.layout[gmKey];
           for (const lookup of [state.floor.tex, state.ceil.tex]) {
-            lookup[gmKey] = createCanvasTuple(
+            lookup[gmKey] = createCanvasTexMeta(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
               pngRect.height * worldToSguScale * gmFloorExtraScale,
               { willReadFrequently: true },
@@ -248,21 +248,20 @@ export default function World(props) {
       });      
 
       if (dataChanged) {
-        for (const { src, texTuple, invert } of [
-          { src: getObstaclesSheetUrl(), texTuple: state.obsTex, invert: true, },
-          { src: getDecorSheetUrl(), texTuple: state.decorTex, invert: false },
+        for (const { src, tm, invert } of [
+          { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
+          { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
         ]) {
           const img = await imageLoader.loadAsync(src);
-          let [ct, tex, canvas] = texTuple;
-          if (canvas.width !== img.width || canvas.height !== img.height) {// update texTuple
-            [canvas.width, canvas.height] = [img.width, img.height];
-            tex.dispose();
-            texTuple[1] = tex = new THREE.CanvasTexture(canvas);
-            tex.flipY = false; // align with XZ/XY quad uv-map
-            texTuple[0] = ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d', { willReadFrequently: true }));
+          if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
+            [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
+            tm.tex.dispose();
+            tm.tex = new THREE.CanvasTexture(tm.canvas);
+            tm.tex.flipY = false; // align with XZ/XY quad uv-map
+            tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           }
-          ct.drawImage(img, 0, 0);
-          invert && invertCanvas(canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
+          tm.ct.drawImage(img, 0, 0);
+          invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
           update();
         }
       } else {
@@ -363,8 +362,8 @@ export default function World(props) {
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/npc").NpcService} lib
  *
- * @property {import("../service/three").CanvasTexTuple} obsTex
- * @property {import("../service/three").CanvasTexTuple} decorTex
+ * @property {import("../service/three").CanvasTexMeta} obsTex
+ * @property {import("../service/three").CanvasTexMeta} decorTex
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.

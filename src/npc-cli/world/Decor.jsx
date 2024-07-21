@@ -597,7 +597,7 @@ export default function Decor(props) {
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
-        map={w.decorTex[1]}
+        map={w.decorTex.tex}
         transparent
         diffuse={new THREE.Vector3(1, 1, 1)}
       />

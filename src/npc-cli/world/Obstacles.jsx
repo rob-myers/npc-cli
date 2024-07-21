@@ -72,8 +72,8 @@ export default function Obstacles(props) {
       const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
       const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
 
-      const [ctxt] = w.obsTex;
-      const { data: rgba } = ctxt.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
+      const { ct } = w.obsTex;
+      const { data: rgba } = ct.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
       // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
       
       // ignore clicks on fully transparent pixels
@@ -161,7 +161,7 @@ export default function Obstacles(props) {
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        map={w.obsTex[1]}
+        map={w.obsTex.tex}
         diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
       />
     </instancedMesh>
