@@ -36,7 +36,7 @@ declare namespace WW {
 
   interface SendNpcPositions {
     type: 'send-npc-positions';
-    positions: { npcKey: string; position: Geom.VectJson }[];
+    positions: { npcKey: string; position: import('three').Vector3Like }[];
   }
 
   interface WorldSetupResponse {

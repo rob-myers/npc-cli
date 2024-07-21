@@ -22,10 +22,12 @@
   - ✅ rapier world has kinematic rigid bodies
     - ✅ spawn induces kinematic rigid body
     - ✅ remove npc removes kinematic rigid body
-  - rapier world is stepped per-npcs-position update
-  - rapier triggers worker message on npc collide
+  - ✅ rapier world is stepped per-npcs-position update
+    - don't bother trying to send "succinct array" (yet)
+  - ✅ rapier triggers worker message on npc collide
   - could represent many doors as one rigid body e.g. per gm?
   - set npcs asleep when they stop moving
+  - clean
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description

@@ -105,9 +105,15 @@ export default function Npcs(props) {
       e.stopPropagation();
     },
     onTick(deltaMs) {
-      for (const npc of Object.values(state.npc)) {
+      const npcs = Object.values(state.npc);
+      for (const npc of npcs) {
         npc.onTick(deltaMs);
       }
+      // 🚧 send-npc-positions
+      w.physicsWorker.postMessage({
+        type: 'send-npc-positions',
+        positions: npcs.map(npc => ({ npcKey: npc.key, position: npc.getPosition() })),
+      });
     },
     removeObstacle(obstacleId) {
       const obstacle = state.obstacle[obstacleId];

@@ -3,7 +3,7 @@
  */
 import RAPIER, { ColliderDesc } from '@dimforge/rapier3d-compat'
 import { glbMeta, wallHeight } from '../service/const';
-import { error, info, warn } from "../service/generic";
+import { error, info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
 
@@ -38,7 +38,7 @@ selfTyped.addEventListener("message", handleMessages);
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
-  info("worker received message", msg);
+  msg.type !== 'send-npc-positions' && info("worker received message", msg);
 
   switch (msg.type) {
     case "add-npcs":
@@ -71,7 +71,13 @@ async function handleMessages(e) {
       }
     break;
     case "send-npc-positions":
-      // 🚧 drives world.tick
+      // set kinematic body positions
+      for (const { npcKey, position } of msg.positions) {
+        /** @type {RAPIER.RigidBody} */ (bodyKeyToBody.get(npcKey))
+          .setTranslation({ x: position.x, y: agentHeight/2, z: position.z }, true)
+        ;
+      }
+      stepWorld();
       break;
     case "setup-rapier-world": {
       await setupWorld(msg.mapKey);
@@ -84,15 +90,15 @@ async function handleMessages(e) {
   }
 }
 
-function stepWorld() {
-  // 🚧 move kinematic bodies
-  
+function stepWorld() {  
   world.step(eventQueue);
 
   const collisionStart = /** @type {WW.NpcCollisionResponse['collisionStart']} */ ([]);
   const collisionEnd = /** @type {WW.NpcCollisionResponse['collisionEnd']} */ ([]);
-
+  let collided = false;
+  
   eventQueue.drainCollisionEvents((handle1, handle2, started) => {
+    collided = true;
     const bodyKey1 = /** @type {string} */ (bodyHandleToKey.get(handle1));
     const bodyKey2 = /** @type {string} */ (bodyHandleToKey.get(handle2));
     (started === true ? collisionStart : collisionEnd).push(
@@ -102,11 +108,13 @@ function stepWorld() {
     );
   });
 
-  selfTyped.postMessage({
-    type: 'npc-collisions',
-    collisionStart,
-    collisionEnd,
-  });
+  if (/** @type {boolean} */ (collided) === true) {
+    selfTyped.postMessage({
+      type: 'npc-collisions',
+      collisionStart,
+      collisionEnd,
+    });
+  }
 }
 
 /**
@@ -145,13 +153,14 @@ async function setupWorld(mapKey) {
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         radius: 1.5, // meters
-        halfHeight: wallHeight,
+        halfHeight: wallHeight / 2,
         position: { x: center.x, y: wallHeight/2, z: center.y },
         userData: { npc: false, bodyKey: geomorphService.getGmDoorKey(gmId, doorId) },
       })
     )
   );
 
+  stepWorld();
 }
 
 /**
@@ -167,7 +176,7 @@ async function setupWorld(mapKey) {
 function createRigidBody({ type, halfHeight, radius, position, userData }) {
 
   const bodyDescription = new RAPIER.RigidBodyDesc(type)
-    .setCanSleep(type === RAPIER.RigidBodyType.KinematicPositionBased)
+    .setCanSleep(true)
     .setCcdEnabled(false)
   ;
 
@@ -178,13 +187,16 @@ function createRigidBody({ type, halfHeight, radius, position, userData }) {
     .setRestitution(0)
     .setRestitutionCombineRule(RAPIER.CoefficientCombineRule.Max)
     .setSensor(true)
-    // .setCollisionGroups(mask)
+    // .setCollisionGroups(1) // 👈 breaks things
+    .setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS)
+    .setActiveCollisionTypes(RAPIER.ActiveCollisionTypes.DEFAULT | RAPIER.ActiveCollisionTypes.KINEMATIC_FIXED)
   ;
 
   const rigidBody = world.createRigidBody(bodyDescription);
   const collider = world.createCollider(colliderDescription, rigidBody);
 
   collider.setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);
+  collider.setActiveCollisionTypes(RAPIER.ActiveCollisionTypes.DEFAULT | RAPIER.ActiveCollisionTypes.KINEMATIC_FIXED);
 
   rigidBody.userData = userData;
 
@@ -192,7 +204,17 @@ function createRigidBody({ type, halfHeight, radius, position, userData }) {
   bodyKeyToCollider.set(userData.bodyKey, collider);
   bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
-  rigidBody.setTranslation(position, false);
+  rigidBody.setTranslation(position, true);
 
   return /** @type {RAPIER.RigidBody & { userData: UserData }} */ (rigidBody);
+}
+
+function debugWorld() {
+  debug('world',
+    world.bodies.getAll().map((x) => ({
+      userData: x.userData,
+      position: {...x.translation()},
+      enabled: x.isEnabled(),
+    }))
+  );
 }
