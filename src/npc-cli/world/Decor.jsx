@@ -204,7 +204,7 @@ export default function Decor(props) {
         });
       }
     },
-    detectClick(e) {
+    detectClick(e) {// 🚧
       // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
       const instanceId = /** @type {number} */ (e.instanceId);
       const byInstId = e.object.name === 'decor-cuboids' ? state.cuboids : state.quads;
@@ -597,7 +597,7 @@ export default function Decor(props) {
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
-        map={w.decorTex}
+        map={w.decorTex[1]}
         transparent
         diffuse={new THREE.Vector3(1, 1, 1)}
       />

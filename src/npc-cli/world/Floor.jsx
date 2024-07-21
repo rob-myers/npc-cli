@@ -121,7 +121,7 @@ export default function Floor(props) {
 /**
  * @typedef State
  * @property {CanvasPattern} gridPattern
- * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
+ * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexTuple>} tex
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloor
  */
 

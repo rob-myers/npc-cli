@@ -16,7 +16,7 @@ import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { createCanvasTexDef, imageLoader } from "../service/three";
+import { createCanvasTexDef as createCanvasTuple, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { npcService } from "../service/npc";
 import { WorldContext } from "./world-context";
@@ -63,8 +63,8 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: { createGmsData },
-    obsTex: /** @type {*} */ (null),
-    decorTex: /** @type {*} */ (null),
+    obsTex: createCanvasTuple(0, 0, { willReadFrequently: true }),
+    decorTex: createCanvasTuple(0, 0, { willReadFrequently: true }),
 
     nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
@@ -187,7 +187,7 @@ export default function World(props) {
         mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
           const { pngRect } = next.geomorphs.layout[gmKey];
           for (const lookup of [state.floor.tex, state.ceil.tex]) {
-            lookup[gmKey] = createCanvasTexDef(
+            lookup[gmKey] = createCanvasTuple(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
               pngRect.height * worldToSguScale * gmFloorExtraScale,
               { willReadFrequently: true },
@@ -248,22 +248,25 @@ export default function World(props) {
       });      
 
       if (dataChanged) {
-        /** @type {const} */ ([
-          { src: getObstaclesSheetUrl(), texKey: 'obsTex', invert: true, },
-          { src: getDecorSheetUrl(), texKey: 'decorTex', invert: false },
-        ]).forEach(({ src, texKey, invert }) => imageLoader.loadAsync(src).then((img) => {
-          const prevCanvas = /** @type {HTMLCanvasElement | undefined} */ (state[texKey]?.image);
-          const canvas = prevCanvas ?? document.createElement('canvas');
-          [canvas.width, canvas.height] = [img.width, img.height];
-          /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
+        for (const { src, texTuple, invert } of [
+          { src: getObstaclesSheetUrl(), texTuple: state.obsTex, invert: true, },
+          { src: getDecorSheetUrl(), texTuple: state.decorTex, invert: false },
+        ]) {
+          const img = await imageLoader.loadAsync(src);
+          let [ct, tex, canvas] = texTuple;
+          if (canvas.width !== img.width || canvas.height !== img.height) {// update texTuple
+            [canvas.width, canvas.height] = [img.width, img.height];
+            tex.dispose();
+            texTuple[1] = tex = new THREE.CanvasTexture(canvas);
+            tex.flipY = false; // align with XZ/XY quad uv-map
+            texTuple[0] = ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d', { willReadFrequently: true }));
+          }
+          ct.drawImage(img, 0, 0);
           invert && invertCanvas(canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
-          const tex = new THREE.CanvasTexture(canvas);
-          tex.flipY = false; // align with XZ/XY quad uv-map
-          state[texKey] = tex;
           update();
-        }));
+        }
       } else {
-        update(); // Needed?
+        update();
       }
 
       return null;
@@ -360,8 +363,8 @@ export default function World(props) {
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/npc").NpcService} lib
  *
- * @property {THREE.CanvasTexture} obsTex
- * @property {THREE.CanvasTexture} decorTex
+ * @property {import("../service/three").CanvasTexTuple} obsTex
+ * @property {import("../service/three").CanvasTexTuple} decorTex
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.

@@ -183,7 +183,7 @@ export function createCanvasTexDef(width, height, opts) {
   const el = document.createElement('canvas');
   el.width = width;
   el.height = height;
-  /** @type {CanvasTexDef} */
+  /** @type {CanvasTexTuple} */
   const def = [
     /** @type {CanvasRenderingContext2D} */(el.getContext(
       '2d',
@@ -226,5 +226,5 @@ export const emptyGroup = new THREE.Group();
 export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
 
 /**
- * @typedef {Pretty<[CanvasRenderingContext2D, THREE.CanvasTexture, HTMLCanvasElement]>} CanvasTexDef
+ * @typedef {Pretty<[CanvasRenderingContext2D, THREE.CanvasTexture, HTMLCanvasElement]>} CanvasTexTuple
  */
