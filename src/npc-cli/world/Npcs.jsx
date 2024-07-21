@@ -69,9 +69,16 @@ export default function Npcs(props) {
       }
       return success === true && tmpVectThree1.copy(closest).distanceTo(p) < maxDelta ? closest : null;
     },
-    getSelected() {
-      const npcKey = state.select.curr;
-      return npcKey === null ? null : (state.npc[npcKey] ?? null);
+    getNpc(npcKey, processApi) {
+      const npc = processApi === undefined
+        ? state.npc[npcKey]
+        : undefined // 🚧 state.connectNpcToProcess(processApi, npcKey);
+      ;
+      if (npc === undefined) {
+        throw Error(`npc "${npcKey}" does not exist`);
+      } else {
+        return npc;
+      }
     },
     isPointInNavmesh(p) {
       const { success } = w.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
@@ -121,7 +128,7 @@ export default function Npcs(props) {
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
           npc.startAnimation('Idle');
         } else if (npc.s.target !== null) {
-          npc.walkTo(npc.s.target);
+          npc.moveTo(npc.s.target);
         } else {// so they'll move "out of the way" of other npcs
           agent.requestMoveTarget(npc.getPosition());
         }
@@ -135,6 +142,17 @@ export default function Npcs(props) {
           state.addCylinderObstacle(obstacle.o.position, obstacle.o.radius, obstacle.o.height);
         }
       });
+    },
+    removeNpc(npcKey) {
+      const npc = state.getNpc(npcKey); // throw if n'exist pas
+      // npc.setGmRoomId(null);
+      delete state.npc[npcKey];
+      npc.removeAgent();
+      state.group.remove(npc.group);
+      // if (state.playerKey === npcKey) {
+      //   state.npcAct({ action: 'set-player', npcKey: undefined });
+      // }
+      w.events.next({ key: 'removed-npc', npcKey });
     },
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
@@ -256,7 +274,9 @@ export default function Npcs(props) {
  * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
  * @property {(position: THREE.Vector3Like, radius: number, height: number) => NPC.Obstacle | null} addCylinderObstacle
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
- * @property {() => null | NPC.NPC} getSelected // 🚧 remove
+ * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
+ * Throws if does not exist
+ * 🚧 any -> ProcessApi (?)
  * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
  * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerDown
@@ -264,6 +284,7 @@ export default function Npcs(props) {
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
  * @property {(obstacleId: number) => void} removeObstacle
+ * @property {(npcKey: string) => void} removeNpc
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {() => void} updateTileCache
  */

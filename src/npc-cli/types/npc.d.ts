@@ -40,7 +40,7 @@ declare namespace NPC {
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
     | { key: "spawned"; npcKey: string }
-    | { key: 'stopped-walking'; npcKey: string }
+    | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }

@@ -232,8 +232,8 @@ multiSpawn
 ```
 
 ```sh
-npc events | filter 'x => x.key === "stopped-walking"'
-npc events | filter /stopped-walking/
+npc events | filter 'x => x.key === "stopped-moving"'
+npc events | filter /stopped-moving/
 
 npc events | filter 'x => x.key === "way-point" && x.meta.key === "exit-room"'
 
