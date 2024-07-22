@@ -11,14 +11,14 @@ export default function WorldWorkers() {
 
   React.useEffect(() => {// (re)start worker on(change) geomorphs.json
     if (w.threeReady && w.hash) {
-      w.navWorker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
-      w.navWorker.addEventListener("message", w.handleNavWorkerMessage);
+      w.nav.worker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
+      w.nav.worker.addEventListener("message", w.handleNavWorkerMessage);
       
       w.physics.worker = new Worker(new URL("./physics.worker", import.meta.url), { type: "module" });
       w.physics.worker.addEventListener("message", w.handlePhysicsWorkerMessage);
 
       return () => {
-        w.navWorker.terminate();
+        w.nav.worker.terminate();
         w.physics.worker.terminate();
       };
     }
@@ -26,7 +26,7 @@ export default function WorldWorkers() {
 
   React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
     if (w.threeReady && w.hash) {
-      w.navWorker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
+      w.nav.worker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
 
       w.physics.worker.postMessage({
         type: "setup-physics-world",

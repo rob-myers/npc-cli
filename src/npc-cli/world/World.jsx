@@ -53,7 +53,7 @@ export default function World(props) {
     threeReady: false,
     timer: new Timer(),
 
-    navWorker: /** @type {*} */ (null),
+    nav: /** @type {*} */ ({}),
     physics: { worker: /** @type {*} */ (null), keyToNum: {}, numToKey: {} },
 
     gmsData: /** @type {*} */ (null),
@@ -66,7 +66,6 @@ export default function World(props) {
     obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
     decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
 
-    nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // WorldCanvas
@@ -115,15 +114,17 @@ export default function World(props) {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
     loadTiledMesh(exportedNavMesh) {
-      state.nav = /** @type {NPC.TiledCacheResult} */ (
+      const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
         importNavMesh(exportedNavMesh, getTileCacheMeshProcess())
       );
-      state.crowd && disposeCrowd(state.crowd);
+      if (state.crowd) {
+        disposeCrowd(state.crowd, state.nav.navMesh);
+      }
+      Object.assign(state.nav, tiledCacheResult);
       state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
         maxAgentRadius: npcService.defaults.radius,
       });
-
       state.npc?.restore();
     },
     onTick() {
@@ -346,7 +347,8 @@ export default function World(props) {
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
- * @property {WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>} navWorker
+ *
+ * @property {NavMeta} nav
  * @property {PhysicsMeta} physics
  *
  * @property {import('./WorldCanvas').State} ui
@@ -369,7 +371,6 @@ export default function World(props) {
  * Only populated for geomorph keys seen in some map.
  * @property {GmGraphClass} gmGraph
  * @property {GmRoomGraphClass} gmRoomGraph
- * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
  * @property {() => Promise<void>} awaitReady
@@ -397,6 +398,11 @@ export default function World(props) {
  * //@property {typeof take} take
  */
 
+/**
+ * @typedef {NPC.TiledCacheResult & {
+ *    worker: WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>
+ * }} NavMeta
+ */
 /**
  * @typedef PhysicsMeta
  * @property {WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>} worker
