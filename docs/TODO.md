@@ -49,6 +49,8 @@
 - tty pause/resume loses should remember cursor position
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
+- `Tabs` css should not reference src/const
+  - try refactor `faderOverlayCss` e.g. merge into `<figure>`
 
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
