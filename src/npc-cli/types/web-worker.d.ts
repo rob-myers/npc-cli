@@ -18,15 +18,14 @@ declare namespace WW {
 
   //#endregion
 
-
   interface NpcDef {
     npcKey: string;
     position: import('three').Vector3Like;
   }
 
   //#region physics worker
-  interface SetupRapierWorld {
-    type: 'setup-rapier-world';
+  interface SetupPhysicsWorld {
+    type: 'setup-physics-world';
     mapKey: string;
     npcs: NpcDef[];
   }
@@ -58,7 +57,7 @@ declare namespace WW {
 
   type MsgToPhysicsWorker = (
     | SendNpcPositions
-    | SetupRapierWorld
+    | SetupPhysicsWorld
     | AddNpcs
     | RemoveNpcs
   );

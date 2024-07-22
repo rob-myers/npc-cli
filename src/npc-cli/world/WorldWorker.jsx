@@ -14,12 +14,12 @@ export default function WorldWorkers() {
       w.navWorker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
       w.navWorker.addEventListener("message", w.handleNavWorkerMessage);
       
-      w.physicsWorker = new Worker(new URL("./rapier.worker", import.meta.url), { type: "module" });
-      w.physicsWorker.addEventListener("message", w.handlePhysicsWorkerMessage);
+      w.physics.worker = new Worker(new URL("./rapier.worker", import.meta.url), { type: "module" });
+      w.physics.worker.addEventListener("message", w.handlePhysicsWorkerMessage);
 
       return () => {
         w.navWorker.terminate();
-        w.physicsWorker.terminate();
+        w.physics.worker.terminate();
       };
     }
   }, [w.threeReady, w.geomorphs?.hash]);
@@ -28,8 +28,8 @@ export default function WorldWorkers() {
     if (w.threeReady && w.hash) {
       w.navWorker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
 
-      w.physicsWorker.postMessage({
-        type: "setup-rapier-world",
+      w.physics.worker.postMessage({
+        type: "setup-physics-world",
         mapKey: w.mapKey, // on hmr we must provide existing npcs
         npcs: Object.values(w.npc?.npc ?? {}).map((npc) => ({
           npcKey: npc.key,

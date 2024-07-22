@@ -34,11 +34,12 @@ let eventQueue;
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
-  if (world === undefined) {
+
+  if (world === undefined && msg.type !== 'setup-physics-world') {
     return; // For hmr of this file
   }
-  if (msg.type !== 'send-npc-positions') {// 🔔 Debug
-    info("worker received message", msg);
+  if (msg.type !== 'send-npc-positions') {
+    info("worker received message", msg); // 🔔 Debug
   }
 
   switch (msg.type) {
@@ -80,7 +81,7 @@ async function handleMessages(e) {
       }
       stepWorld();
       break;
-    case "setup-rapier-world": {
+    case "setup-physics-world": {
       await setupWorld(msg.mapKey, msg.npcs);
       selfTyped.postMessage({ type: 'world-is-setup' });
       break;

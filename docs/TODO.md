@@ -25,7 +25,11 @@
   - ✅ rapier world is stepped per-npcs-position update
     - don't bother trying to send "succinct array" (yet)
   - ✅ rapier triggers worker message on npc collide
-  - could represent many doors as one rigid body e.g. per gm?
+  - ❌ could represent many doors as one rigid body e.g. per gm?
+    - no need to try this
+  - 🚧 main thread sends/receives numerical array
+    - 🚧 method for assigning numerical ids to bodyKey/Meta
+    - 🚧 worker lookup restored on hmr
   - set npcs asleep when they stop moving
   - clean
 

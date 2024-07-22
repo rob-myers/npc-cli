@@ -109,8 +109,7 @@ export default function Npcs(props) {
       for (const npc of npcs) {
         npc.onTick(deltaMs);
       }
-      // 🚧 send-npc-positions
-      w.physicsWorker.postMessage({
+      w.physics.worker.postMessage({
         type: 'send-npc-positions',
         positions: npcs.map(npc => ({ npcKey: npc.key, position: npc.getPosition() })),
       });

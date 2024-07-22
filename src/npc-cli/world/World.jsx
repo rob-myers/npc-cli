@@ -54,7 +54,7 @@ export default function World(props) {
     timer: new Timer(),
 
     navWorker: /** @type {*} */ (null),
-    physicsWorker: /** @type {*} */ (null),
+    physics: { worker: /** @type {*} */ (null), keyToNum: {}, numToKey: {} },
 
     gmsData: /** @type {*} */ (null),
     events: new Subject(),
@@ -347,7 +347,7 @@ export default function World(props) {
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
  * @property {WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>} navWorker
- * @property {WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>} physicsWorker
+ * @property {PhysicsMeta} physics
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
@@ -395,4 +395,11 @@ export default function World(props) {
  * //@property {typeof map} map
  * //@property {typeof merge} merge
  * //@property {typeof take} take
+ */
+
+/**
+ * @typedef PhysicsMeta
+ * @property {WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>} worker
+ * @property {{ [bodyKey: string]: number }} keyToNum
+ * @property {{ [bodyUid: number]: string }} numToKey
  */
