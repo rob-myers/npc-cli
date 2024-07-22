@@ -11,10 +11,10 @@ export default function WorldWorkers() {
 
   React.useEffect(() => {// (re)start worker on(change) geomorphs.json
     if (w.threeReady && w.hash) {
-      w.navWorker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
+      w.navWorker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
       w.navWorker.addEventListener("message", w.handleNavWorkerMessage);
       
-      w.physics.worker = new Worker(new URL("./rapier.worker", import.meta.url), { type: "module" });
+      w.physics.worker = new Worker(new URL("./physics.worker", import.meta.url), { type: "module" });
       w.physics.worker.addEventListener("message", w.handlePhysicsWorkerMessage);
 
       return () => {
@@ -44,6 +44,6 @@ export default function WorldWorkers() {
 
 if (isDevelopment()) {
   // propagate hmr to this file onchange worker files
-  import('./rapier.worker');
-  import('./recast.worker');
+  import('./physics.worker');
+  import('./nav.worker');
 }
