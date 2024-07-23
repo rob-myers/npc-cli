@@ -30,6 +30,10 @@ declare namespace WW {
     npcs: NpcDef[];
   }
 
+  /**
+   * Currently array always has length 1.
+   * 🚧 Support bulk spawn
+   */
   interface AddNpcs {
     type: 'add-npcs';
     npcs: NpcDef[];
@@ -41,7 +45,8 @@ declare namespace WW {
 
   interface SendNpcPositions {
     type: 'send-npc-positions';
-    positions: { npcKey: string; position: import('three').Vector3Like }[];
+    /** [npcBodyUid, positionX, positionY, positionZ, ...] (repeated 4s) */
+    positions: Float32Array;
   }
 
   interface WorldSetupResponse {

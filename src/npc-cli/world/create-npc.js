@@ -6,6 +6,7 @@ import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPat
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
 import { npcService } from '../service/npc';
+import { addBodyKeyUidRelation } from '../service/rapier';
 // import * as glsl from '../service/glsl';
 
 export class Npc {
@@ -14,6 +15,7 @@ export class Npc {
   /** @type {import('./World').State} World API */ w;
   /** @type {NPC.NPCDef} Initial definition */ def;
   /** @type {number} When we (re)spawned */ epochMs;
+  /** @type {number} Physics body identifier i.e. `hashText(key)` */ bodyUid;
   
   group = emptyGroup;
   map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
@@ -46,6 +48,7 @@ export class Npc {
     this.epochMs = Date.now();
     this.def = def;
     this.w = w;
+    this.bodyUid = addBodyKeyUidRelation(def.key, w.physics)
   }
   attachAgent() {
     return this.agent ??= this.w.crowd.addAgent(this.group.position, {
@@ -158,7 +161,7 @@ export class Npc {
       dampLookAt(this.group, forward, 0.25, deltaMs);
     } 
 
-    if (this.s.target === null) {
+    if (this.s.target === null) {// same as `this.s.moving`?
       return;
     }
 

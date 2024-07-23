@@ -1,7 +1,7 @@
 import { glbMeta } from "./const";
 
 /**
- * Use object so can merge into `api.lib`.
+ * Use object so can merge into `w.lib`.
  */
 export const npcService = {
 

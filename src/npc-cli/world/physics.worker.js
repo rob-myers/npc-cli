@@ -6,6 +6,7 @@ import { glbMeta, wallHeight } from '../service/const';
 import { error, info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
+import { addBodyKeyUidRelation } from '../service/rapier';
 
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToPhysicsWorker>} */ (
   /** @type {*} */ (self)
@@ -32,6 +33,11 @@ const state = {
   world: /** @type {*} */ (undefined),
   /** @type {RAPIER.EventQueue} */
   eventQueue: /** @type {*} */ (undefined),
+
+  /** @type {import('./World').State['physics']['keyToNum']} */
+  keyToNum: {},
+  /** @type {import('./World').State['physics']['numToKey']} */
+  numToKey: {},
 };
 
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
@@ -52,6 +58,7 @@ async function handleMessages(e) {
           warn(`physics worker: ${msg.type}: cannot re-add body (${npc.npcKey})`)
           continue;
         }
+        addBodyKeyUidRelation(npc.npcKey, state);
         state.npcKeys.add(npc.npcKey);
         const body = createRigidBody({
           type: RAPIER.RigidBodyType.KinematicPositionBased,
@@ -75,15 +82,26 @@ async function handleMessages(e) {
         }
       }
     break;
-    case "send-npc-positions":
+    case "send-npc-positions": {
       // set kinematic body positions
-      for (const { npcKey, position } of msg.positions) {
-        /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcKey))
-          .setTranslation({ x: position.x, y: config.agentHeight/2, z: position.z }, true)
-        ;
+      let npcKey = '';
+      let position = /** @type {{ x: number; y: number; z: number;  }} */ ({});
+      for (const [index, value] of msg.positions.entries()) {
+        switch (index % 4) {
+          case 0: npcKey = state.numToKey[value]; break;
+          case 1: position.x = value; break;
+          case 2: position.y = config.agentHeight/2; break; // overwrite y
+          case 3:
+            position.z = value;
+            /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcKey))
+              .setTranslation(position, true)
+            ;
+            break;
+        }
       }
       stepWorld();
       break;
+    }
     case "setup-physics-world": {
       await setupWorld(msg.mapKey, msg.npcs);
       selfTyped.postMessage({ type: 'world-is-setup' });

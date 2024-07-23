@@ -106,13 +106,18 @@ export default function Npcs(props) {
     },
     onTick(deltaMs) {
       const npcs = Object.values(state.npc);
+      const npcPositions = /** @type {number[]} */ ([]);
+
       for (const npc of npcs) {
         npc.onTick(deltaMs);
+        if (npc.s.moving === true) {
+          const { x, y, z } = npc.group.position;
+          npcPositions.push(npc.bodyUid, x, y, z);
+        }
       }
-      w.physics.worker.postMessage({
-        type: 'send-npc-positions',
-        positions: npcs.map(npc => ({ npcKey: npc.key, position: npc.getPosition() })),
-      });
+
+      const positions = new Float32Array(npcPositions);
+      w.physics.worker.postMessage({ type: 'send-npc-positions', positions }, [positions.buffer]);
     },
     removeObstacle(obstacleId) {
       const obstacle = state.obstacle[obstacleId];
