@@ -42,7 +42,7 @@
                                 <title>stateroom--035--2x3</title>
                         </rect>
                         <defs>
-                                <bx:grid x="60" y="60" width="100" height="100"/>
+                                <bx:grid x="0" y="0" width="300" height="300"/>
                         </defs>
                 </symbol>
                 <symbol id="symbol-3" viewBox="0 0 600 1200" bx:pinned="true">
