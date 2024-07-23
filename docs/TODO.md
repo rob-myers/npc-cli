@@ -41,6 +41,7 @@
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
+- change camera fov based on camera height and/or visible-world
 - can color obstacles
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
