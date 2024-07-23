@@ -85,6 +85,6 @@ async function handleMessages(e) {
 }
 
 if (typeof window === 'undefined') {
-  info("nav worker started", import.meta.url);
+  info("🤖 nav worker started", import.meta.url);
   selfTyped.addEventListener("message", handleMessages);
 }

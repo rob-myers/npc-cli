@@ -1,6 +1,13 @@
 
 ## Bits and pieces
 
+### Chrome DevTool filtering
+
+```js
+// filter annoying gatsby dev logs
+-/Please make sure it has an appropriate `as` value and it is preloaded intentionally/
+```
+
 ### Patch npm modules
 
 ```sh

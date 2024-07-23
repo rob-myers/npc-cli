@@ -28,7 +28,8 @@
   - ❌ could represent many doors as one rigid body e.g. per gm?
     - no need to try this
   - 🚧 main thread sends/receives numerical array(s)
-    - 🚧 do not detect agent vs agent collisions
+    - ✅ do not detect agent vs agent collisions
+      - seems already aren't being detected
     - 🚧 method for assigning numerical ids to bodyKey/Meta
     - 🚧 worker lookup restored on hmr
     - send array of npc uids which should go to sleep

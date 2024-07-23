@@ -11,31 +11,34 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToP
   /** @type {*} */ (self)
 );
 
-const fps = 60;
-const timeStepMs = 1000 / fps;
-const agentHeight = glbMeta.height * glbMeta.scale;
-const agentRadius = glbMeta.radius * glbMeta.scale;
+const config = {
+  fps: 60,
+  agentHeight: glbMeta.height * glbMeta.scale,
+  agentRadius: glbMeta.radius * glbMeta.scale,
+};
 
-/** @type {Set<string>} A subset of body keys */
-const npcKeys = new Set();
-
-/** @type {Map<number, string>} */
-const bodyHandleToKey = new Map();
-/** @type {Map<string, RAPIER.Collider>} */
-const bodyKeyToCollider = new Map();
-/** @type {Map<string, RAPIER.RigidBody>} */
-const bodyKeyToBody = new Map();
-
-/** @type {RAPIER.World} */
-let world;
-/** @type {RAPIER.EventQueue} */
-let eventQueue;
+const state = {
+  /** @type {Set<string>} A subset of body keys */
+  npcKeys: new Set(),
+  
+  /** @type {Map<number, string>} */
+  bodyHandleToKey: new Map(),
+  /** @type {Map<string, RAPIER.Collider>} */
+  bodyKeyToCollider: new Map(),
+  /** @type {Map<string, RAPIER.RigidBody>} */
+  bodyKeyToBody: new Map(),
+  
+  /** @type {RAPIER.World} */
+  world: /** @type {*} */ (undefined),
+  /** @type {RAPIER.EventQueue} */
+  eventQueue: /** @type {*} */ (undefined),
+};
 
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
 
-  if (world === undefined && msg.type !== 'setup-physics-world') {
+  if (state.world === undefined && msg.type !== 'setup-physics-world') {
     return; // For hmr of this file
   }
   if (msg.type !== 'send-npc-positions') {
@@ -45,16 +48,16 @@ async function handleMessages(e) {
   switch (msg.type) {
     case "add-npcs":
       for (const npc of msg.npcs) {
-        if (npcKeys.has(npc.npcKey) === true) {
+        if (state.npcKeys.has(npc.npcKey) === true) {
           warn(`physics worker: ${msg.type}: cannot re-add body (${npc.npcKey})`)
           continue;
         }
-        npcKeys.add(npc.npcKey);
+        state.npcKeys.add(npc.npcKey);
         const body = createRigidBody({
           type: RAPIER.RigidBodyType.KinematicPositionBased,
-          halfHeight: agentHeight / 2,
-          radius: agentRadius,
-          position: { x: npc.position.x, y: agentHeight / 2, z: npc.position.z },
+          halfHeight: config.agentHeight / 2,
+          radius: config.agentRadius,
+          position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
           userData: { npc: true, bodyKey: npc.npcKey },
         });
       }
@@ -62,21 +65,21 @@ async function handleMessages(e) {
     case "remove-npcs":
       // 🔔 no need to remove when not moving (can set asleep)
       for (const npcKey of msg.npcKeys) {
-        npcKeys.delete(npcKey);
-        const body = bodyKeyToBody.get(npcKey);
+        state.npcKeys.delete(npcKey);
+        const body = state.bodyKeyToBody.get(npcKey);
         if (body !== undefined) {
-          bodyHandleToKey.delete(body.handle);
-          bodyKeyToBody.delete(npcKey);
-          bodyKeyToCollider.delete(npcKey);
-          world.removeRigidBody(body);
+          state.bodyHandleToKey.delete(body.handle);
+          state.bodyKeyToBody.delete(npcKey);
+          state.bodyKeyToCollider.delete(npcKey);
+          state.world.removeRigidBody(body);
         }
       }
     break;
     case "send-npc-positions":
       // set kinematic body positions
       for (const { npcKey, position } of msg.positions) {
-        /** @type {RAPIER.RigidBody} */ (bodyKeyToBody.get(npcKey))
-          .setTranslation({ x: position.x, y: agentHeight/2, z: position.z }, true)
+        /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcKey))
+          .setTranslation({ x: position.x, y: config.agentHeight/2, z: position.z }, true)
         ;
       }
       stepWorld();
@@ -93,18 +96,18 @@ async function handleMessages(e) {
 }
 
 function stepWorld() {  
-  world.step(eventQueue);
+  state.world.step(state.eventQueue);
 
   const collisionStart = /** @type {WW.NpcCollisionResponse['collisionStart']} */ ([]);
   const collisionEnd = /** @type {WW.NpcCollisionResponse['collisionEnd']} */ ([]);
   let collided = false;
   
-  eventQueue.drainCollisionEvents((handle1, handle2, started) => {
+  state.eventQueue.drainCollisionEvents((handle1, handle2, started) => {
     collided = true;
-    const bodyKey1 = /** @type {string} */ (bodyHandleToKey.get(handle1));
-    const bodyKey2 = /** @type {string} */ (bodyHandleToKey.get(handle2));
+    const bodyKey1 = /** @type {string} */ (state.bodyHandleToKey.get(handle1));
+    const bodyKey2 = /** @type {string} */ (state.bodyHandleToKey.get(handle2));
     (started === true ? collisionStart : collisionEnd).push(
-      npcKeys.has(bodyKey1) === true
+      state.npcKeys.has(bodyKey1) === true
         ? { npcKey: bodyKey1, otherKey: bodyKey2 }
         : { npcKey: bodyKey2, otherKey: bodyKey1 }
     );
@@ -125,19 +128,19 @@ function stepWorld() {
  */
 async function setupWorld(mapKey, npcs) {
 
-  if (!world) {
+  if (!state.world) {
     await RAPIER.init();
-    world = new RAPIER.World({ x: 0, y: 0, z: 0 });
-    world.timestep = timeStepMs / 1000;
-    eventQueue = new RAPIER.EventQueue(true);
+    state.world = new RAPIER.World({ x: 0, y: 0, z: 0 });
+    state.world.timestep = 1 / config.fps; // in seconds
+    state.eventQueue = new RAPIER.EventQueue(true);
   } else {
-    world.forEachRigidBody(rigidBody => world.removeRigidBody(rigidBody));
-    world.forEachCollider(collider => world.removeCollider(collider, false));
-    bodyKeyToBody.clear();
-    bodyKeyToCollider.clear();
-    bodyHandleToKey.clear();
-    world.bodies.free();
-    world.colliders.free();
+    state.world.forEachRigidBody(rigidBody => state.world.removeRigidBody(rigidBody));
+    state.world.forEachCollider(collider => state.world.removeCollider(collider, false));
+    state.bodyKeyToBody.clear();
+    state.bodyKeyToCollider.clear();
+    state.bodyHandleToKey.clear();
+    state.world.bodies.free();
+    state.world.colliders.free();
   }
 
   const geomorphs = geomorphService.deserializeGeomorphs(await fetchGeomorphsJson());
@@ -166,8 +169,8 @@ async function setupWorld(mapKey, npcs) {
   for (const { npcKey, position } of npcs) {
     createRigidBody({
       type: RigidBodyType.KinematicPositionBased,
-      halfHeight: agentHeight / 2,
-      radius: agentRadius,
+      halfHeight: config.agentHeight / 2,
+      radius: config.agentRadius,
       position,
       userData: { npc: true, bodyKey: npcKey },
     });
@@ -205,17 +208,17 @@ function createRigidBody({ type, halfHeight, radius, position, userData }) {
     .setActiveCollisionTypes(RAPIER.ActiveCollisionTypes.DEFAULT | RAPIER.ActiveCollisionTypes.KINEMATIC_FIXED)
   ;
 
-  const rigidBody = world.createRigidBody(bodyDescription);
-  const collider = world.createCollider(colliderDescription, rigidBody);
+  const rigidBody = state.world.createRigidBody(bodyDescription);
+  const collider = state.world.createCollider(colliderDescription, rigidBody);
 
   collider.setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS);
   collider.setActiveCollisionTypes(RAPIER.ActiveCollisionTypes.DEFAULT | RAPIER.ActiveCollisionTypes.KINEMATIC_FIXED);
 
   rigidBody.userData = userData;
 
-  bodyKeyToBody.set(userData.bodyKey, rigidBody);
-  bodyKeyToCollider.set(userData.bodyKey, collider);
-  bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
+  state.bodyKeyToBody.set(userData.bodyKey, rigidBody);
+  state.bodyKeyToCollider.set(userData.bodyKey, collider);
+  state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
   rigidBody.setTranslation(position, true);
 
@@ -224,7 +227,7 @@ function createRigidBody({ type, halfHeight, radius, position, userData }) {
 
 function debugWorld() {
   debug('world',
-    world.bodies.getAll().map((x) => ({
+    state.world.bodies.getAll().map((x) => ({
       userData: x.userData,
       position: {...x.translation()},
       enabled: x.isEnabled(),
@@ -233,6 +236,6 @@ function debugWorld() {
 }
 
 if (typeof window === 'undefined') {
-  info("physics worker started", import.meta.url);
+  info("🤖 physics worker started", import.meta.url);
   selfTyped.addEventListener("message", handleMessages);
 }
