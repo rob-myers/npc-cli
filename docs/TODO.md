@@ -9,7 +9,7 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 - 🚧 hull symbols should have same scale as non-hull symbols
-  - resize-* 301 ✅ 302 ✅ 303 🚧 101 🚧 102 🚧 103
+  - resize-* 301 ✅ 302 ✅ 303 ✅ 101 🚧 102 🚧 103 🚧
   - careful about duplicating patterns i.e. only use `pattern-0`
 - ❌ decor point bounds determined by original rect/poly
 
@@ -27,9 +27,11 @@
   - ✅ rapier triggers worker message on npc collide
   - ❌ could represent many doors as one rigid body e.g. per gm?
     - no need to try this
-  - 🚧 main thread sends/receives numerical array
+  - 🚧 main thread sends/receives numerical array(s)
+    - 🚧 do not detect agent vs agent collisions
     - 🚧 method for assigning numerical ids to bodyKey/Meta
     - 🚧 worker lookup restored on hmr
+    - send array of npc uids which should go to sleep
   - set npcs asleep when they stop moving
   - clean
 
