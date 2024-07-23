@@ -58,14 +58,17 @@ async function handleMessages(e) {
           warn(`physics worker: ${msg.type}: cannot re-add body (${npc.npcKey})`)
           continue;
         }
-        addBodyKeyUidRelation(npc.npcKey, state);
         state.npcKeys.add(npc.npcKey);
         const body = createRigidBody({
           type: RAPIER.RigidBodyType.KinematicPositionBased,
           halfHeight: config.agentHeight / 2,
           radius: config.agentRadius,
           position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
-          userData: { npc: true, bodyKey: npc.npcKey },
+          userData: {
+            npc: true,
+            bodyKey: npc.npcKey,
+            bodyUid: addBodyKeyUidRelation(npc.npcKey, state),
+          },
         });
       }
       break;
@@ -173,39 +176,48 @@ async function setupWorld(mapKey, npcs) {
 
   // construct door bodies/colliders
   const gmDoorBodies = gmDoorCenters.map((centers, gmId) =>
-    centers.map((center, doorId) => 
-      createRigidBody({
+    centers.map((center, doorId) => {
+      const bodyKey = geomorphService.getGmDoorKey(gmId, doorId);
+      return createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         radius: 1.5, // meters
         halfHeight: wallHeight / 2,
         position: { x: center.x, y: wallHeight/2, z: center.y },
-        userData: { npc: false, bodyKey: geomorphService.getGmDoorKey(gmId, doorId) },
+        userData: {
+          npc: false,
+          bodyKey,
+          bodyUid: addBodyKeyUidRelation(bodyKey, state),
+        },
       })
-    )
+    })
   );
 
+  // on worker hmr we need to restore npcs
   for (const { npcKey, position } of npcs) {
     createRigidBody({
       type: RigidBodyType.KinematicPositionBased,
       halfHeight: config.agentHeight / 2,
       radius: config.agentRadius,
       position,
-      userData: { npc: true, bodyKey: npcKey },
+      userData: {
+        npc: true,
+        bodyKey: npcKey,
+        bodyUid: addBodyKeyUidRelation(npcKey, state),
+      },
     });
   }
 
-  stepWorld();
+  stepWorld(); // fires initial collisions
 }
 
 /**
  * Create cylindrical static or kinematic-position sensor.
- * @template {{ bodyKey: string }} UserData
  * @param {object} opts
  * @param {RAPIER.RigidBodyType.Fixed | RAPIER.RigidBodyType.KinematicPositionBased} opts.type
  * @param {number} opts.halfHeight
  * @param {number} opts.radius
  * @param {import('three').Vector3Like} opts.position
- * @param {UserData} opts.userData
+ * @param {BodyUserData} opts.userData
  */
 function createRigidBody({ type, halfHeight, radius, position, userData }) {
 
@@ -240,7 +252,7 @@ function createRigidBody({ type, halfHeight, radius, position, userData }) {
 
   rigidBody.setTranslation(position, true);
 
-  return /** @type {RAPIER.RigidBody & { userData: UserData }} */ (rigidBody);
+  return /** @type {RAPIER.RigidBody & { userData: BodyUserData }} */ (rigidBody);
 }
 
 function debugWorld() {
@@ -257,3 +269,10 @@ if (typeof window === 'undefined') {
   info("🤖 physics worker started", import.meta.url);
   selfTyped.addEventListener("message", handleMessages);
 }
+
+/**
+ * @typedef BodyUserData
+ * @property {string} bodyKey
+ * @property {number} bodyUid This is the numeric hash of `bodyKey`
+ * @property {boolean} npc
+ */

@@ -33,7 +33,7 @@ import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
 import ContextMenu from "./ContextMenu";
-import WorldWorkers from "./WorldWorker";
+import WorldWorkers from "./WorldWorkers";
 
 /**
  * @param {Props} props
