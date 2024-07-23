@@ -182,10 +182,10 @@ export default function World(props) {
 
       if (mapChanged) {
         next.mapKey = props.mapKey;
-        const mapDef = next.geomorphs.map[state.mapKey];
+        const mapDef = next.geomorphs.map[next.mapKey];
 
-        // on change map may see new gmKeys
-        mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
+        // onchange map may see new gmKeys
+        for(const { gmKey } of mapDef.gms.filter(x => !state.floor.tex[x.gmKey])) {
           const { pngRect } = next.geomorphs.layout[gmKey];
           for (const lookup of [state.floor.tex, state.ceil.tex]) {
             lookup[gmKey] = createCanvasTexMeta(
@@ -194,7 +194,7 @@ export default function World(props) {
               { willReadFrequently: true },
             );
           }
-        });
+        }
 
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
           geomorphService.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
@@ -207,7 +207,6 @@ export default function World(props) {
       state.hmr.createGmsData = createGmsData;
 
       if (mapChanged || gmsDataChanged) {
-
         next.gmsData = createGmsData(
           // reuse gmData lookup, unless:
           // (a) geomorphs.json changed, or (b) create-gms-data changed
