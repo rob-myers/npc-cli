@@ -681,8 +681,8 @@ class GeomorphService {
             (Number(match[1]) / 100) * (i === 0 ? bounds.width : bounds.height)
           );
         }
-      } else if ((match = rep.match(/^(-?\d+(?:.\d+)?)(?:px)$/))) {// e.g. 48.44px
-        return Number(match[1]);
+      } else if (rep.endsWith('px')) {// e.g. 48.44px or -4e-06px
+        return parseFloat(rep);
       } else {
         return null;
       }
