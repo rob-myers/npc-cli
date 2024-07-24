@@ -9,11 +9,14 @@ export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });
 
+/** Size of starship geomorphs grid side in meters */
+export const geomorphGridMeters = 1.5;
+
 /**
  * Convert Starship Geomorph units (sgu) into world coordinates (meters).
  * e.g. 1 tile is 60 sgu, which becomes 1.5 meters
  */
-export const sguToWorldScale = (1 / 60) * 1.5;
+export const sguToWorldScale = (1 / 60) * geomorphGridMeters;
 /**
  * Convert world coordinates (meters) into Starship Geomorph units (sgu).
  * e.g. 1 tile is 1.5 meters, which becomes 60 sgu
@@ -112,8 +115,8 @@ export const showLastNavPath = false;
  */
 export const defaultAgentUpdateFlags = 1 + 2 + 4;
 
-/** In meters (equivalently 2 grid squares, or 120sgu) */
-export const decorGridSize = 1.5 * 2;
+/** In meters, or equivalently 2 grid squares */
+export const decorGridSize = geomorphGridMeters * 2;
 
 export const decorIconRadius = 5 * sguToWorldScale;
 

@@ -38,6 +38,7 @@ declare namespace WW {
     type: 'add-npcs';
     npcs: NpcDef[];
   }
+
   interface RemoveNpcs {
     type: 'remove-npcs';
     npcKeys: string[];

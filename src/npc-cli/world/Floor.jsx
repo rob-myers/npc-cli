@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { geomorphGridMeters, gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
 import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { getQuadGeometryXZ } from "../service/three";
@@ -16,7 +16,7 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    gridPattern: createGridPattern(1.5 * worldToCanvas),
+    gridPattern: createGridPattern(geomorphGridMeters * worldToCanvas),
     tex: w.floor.tex, // Pass in textures
 
     drawFloor(gmKey) {

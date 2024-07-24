@@ -2,7 +2,7 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { glbMeta, wallHeight } from '../service/const';
+import { geomorphGridMeters, glbMeta, wallHeight } from '../service/const';
 import { error, info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
@@ -89,6 +89,7 @@ async function handleMessages(e) {
       // set kinematic body positions
       let npcKey = '';
       let position = /** @type {{ x: number; y: number; z: number;  }} */ ({});
+      // decode: [npcBodyUid, positionX, positionY, positionZ, ...]
       for (const [index, value] of msg.positions.entries()) {
         switch (index % 4) {
           case 0: npcKey = state.numToKey[value]; break;
@@ -170,17 +171,16 @@ async function setupWorld(mapKey, npcs) {
     geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
-  const gmDoorCenters = gms.map(gm => // indexed by [gmId][doorId]
-    gm.doors.map(({ center }) => gm.matrix.transformPoint(center.clone()))
-  );
-
-  // construct door bodies/colliders
-  const gmDoorBodies = gmDoorCenters.map((centers, gmId) =>
-    centers.map((center, doorId) => {
+  // door sensors
+  const gmDoorBodies = gms.map((gm, gmId) => 
+    gm.doors.map((door, doorId) => {
+      const center = gm.matrix.transformPoint(door.center.clone());
       const bodyKey = geomorphService.getGmDoorKey(gmId, doorId);
       return createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
-        radius: 1.5, // meters
+        // hull door sensor ~ 2x2 grid
+        // non-hull door sensor ~ 1x1 grid
+        radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
         halfHeight: wallHeight / 2,
         position: { x: center.x, y: wallHeight/2, z: center.y },
         userData: {
