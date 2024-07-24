@@ -9,8 +9,9 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 - 🚧 hull symbols should have same scale as non-hull symbols
-  - resize-* 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅ 103 🚧
-  - careful about duplicating patterns i.e. only use `pattern-0`
+  - ✅ resize-* 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅ 103 ✅
+  - ✅ careful about duplicating patterns i.e. only use `pattern-0`
+  - 🚧 replace files, whilst changing scaling i.e. always 1/5
 - ❌ decor point bounds determined by original rect/poly
 
 - ✅ start new branch `use-physics`
