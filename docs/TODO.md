@@ -33,7 +33,6 @@
     - ✅ method for assigning numerical ids to bodyKey/Meta
     - ✅ worker lookup restored on hmr
     - 🚧 send array of npc uids which should go to sleep
-  - set npcs asleep when they stop moving
   - clean
 
 - consider alternatives to current custom minecraft character
