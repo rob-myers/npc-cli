@@ -12,6 +12,12 @@ export const zIndex = /** @type {const} */ ({
 /** Size of starship geomorphs grid side in meters */
 export const geomorphGridMeters = 1.5;
 
+/** SVG symbols are drawn 5 times larger */
+export const sguSymbolScaleUp = 5;
+
+/** SVG symbols are drawn 5 times larger */
+export const sguSymbolScaleDown = 1 / sguSymbolScaleUp;
+
 /**
  * Convert Starship Geomorph units (sgu) into world coordinates (meters).
  * e.g. 1 tile is 60 sgu, which becomes 1.5 meters
@@ -27,7 +33,7 @@ export const worldToSguScale = 1 / sguToWorldScale;
 export const gmFloorExtraScale = 2;
 
 /** Can be any value in `[1, 5]`. */
-export const spriteSheetNonHullExtraScale = 2.5;
+export const spriteSheetSymbolExtraScale = 2.5;
 
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetDecorExtraScale = 3;
@@ -47,10 +53,10 @@ export const obstacleOutset = 10 * sguToWorldScale;
 export const wallHeight = 2;
 
 /** Depth of doorway along line walking through hull door */
-export const hullDoorDepth = 8 * sguToWorldScale;
+export const hullDoorDepth = 8 * sguToWorldScale * sguSymbolScaleDown;
 
 /** Depth of doorway along line walking through door */
-export const doorDepth = (20 / 5) * sguToWorldScale;
+export const doorDepth = 20 * sguToWorldScale * sguSymbolScaleDown;
 
 /**
  * Properties of exported GLB file.

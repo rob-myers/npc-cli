@@ -1,6 +1,33 @@
 
 ## Bits and pieces
 
+### SVG transformation
+
+An example of advanced SVG manipulation without writing e.g. a Node.js script with a DOM parser.
+
+```js
+/**
+ * $0 is a particular <g> containing symbols <use>
+ * (could be manually duplicated via Chrome DevTools context menu)
+ * @type {SVGGElement}
+ */
+symGrp = $0
+
+function matToPrecision(mat) {
+    let { a, b, c, d, e, f } = mat;
+    [a, b, c, d, e, f] = [a, b, c, d, e, f].map(x => Number(x.toPrecision(6)))
+    Object.assign(mat, { a, b, c, d, e, f });
+    return mat;
+}
+
+Array.from(symGrp.children).filter(n => n.tagName === 'use').forEach(n => {
+    n.setAttribute("width", Number(n.getAttribute("width")) * 5);
+    n.setAttribute("height", Number(n.getAttribute("height")) * 5);
+    n.setAttribute("transform", matToPrecision(new DOMMatrix(n.getAttribute("transform")).scale(1 / 5)).toString());
+});
+
+```
+
 ### Chrome DevTool filtering
 
 ```js

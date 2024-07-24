@@ -8,10 +8,15 @@
   - consoles
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
-- 🚧 hull symbols should have same scale as non-hull symbols
+- ✅ hull symbols should have same scale as non-hull symbols
   - ✅ resize-* 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅ 103 ✅
   - ✅ careful about duplicating patterns i.e. only use `pattern-0`
-  - 🚧 replace files, whilst changing scaling i.e. always 1/5
+  - ✅ replace files, whilst changing scaling i.e. always 1/5
+  - ✅ issue with e.g. `<use width height transform="matrix(5, 0, 0, 5, x, y)">`
+    - we used browser script (see `dev-info`) plus correctly manually
+  - ✅ understand issue with obstacle sprite-sheet
+    - 🔔🔔🔔 hull symbol image is scaled-up (unlike other symbols)
+    - could add a scaled image, but might add to load time
 - ❌ decor point bounds determined by original rect/poly
 
 - ✅ start new branch `use-physics`
