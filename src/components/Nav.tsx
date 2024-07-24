@@ -13,7 +13,7 @@ export default function Nav() {
 
   const state = useStateRef(() => ({
     onClickSidebar(e: React.MouseEvent) {
-      console.log(e.target)
+      // console.log(e.target)
       const el = e.target as HTMLElement;
       if (
         // outside buttons
