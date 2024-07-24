@@ -18,26 +18,18 @@ const config = {
   agentRadius: glbMeta.radius * glbMeta.scale,
 };
 
+/** @type {State} */
 const state = {
-  /** @type {Set<string>} A subset of body keys */
-  npcKeys: new Set(),
-  
-  /** @type {Map<number, string>} */
-  bodyHandleToKey: new Map(),
-  /** @type {Map<string, RAPIER.Collider>} */
-  bodyKeyToCollider: new Map(),
-  /** @type {Map<string, RAPIER.RigidBody>} */
-  bodyKeyToBody: new Map(),
-  
-  /** @type {RAPIER.World} */
   world: /** @type {*} */ (undefined),
-  /** @type {RAPIER.EventQueue} */
   eventQueue: /** @type {*} */ (undefined),
 
-  /** @type {import('./World').State['physics']['keyToNum']} */
-  keyToNum: {},
-  /** @type {import('./World').State['physics']['numToKey']} */
-  numToKey: {},
+  npcKeys: new Set(),
+  awakeNpcKeys: new Set(),
+  bodyHandleToKey: new Map(),
+  bodyKeyToCollider: new Map(),
+  bodyKeyToBody: new Map(),
+  bodyKeyToUid: {},
+  bodyUidToKey: {},
 };
 
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
@@ -92,13 +84,13 @@ async function handleMessages(e) {
       // decode: [npcBodyUid, positionX, positionY, positionZ, ...]
       for (const [index, value] of msg.positions.entries()) {
         switch (index % 4) {
-          case 0: npcKey = state.numToKey[value]; break;
+          case 0: npcKey = state.bodyUidToKey[value]; break;
           case 1: position.x = value; break;
           case 2: position.y = config.agentHeight/2; break; // overwrite y
           case 3:
             position.z = value;
             /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcKey))
-              .setTranslation(position, true)
+              .setTranslation(position, true) // awaken on move
             ;
             break;
         }
@@ -275,4 +267,19 @@ if (typeof window === 'undefined') {
  * @property {string} bodyKey
  * @property {number} bodyUid This is the numeric hash of `bodyKey`
  * @property {boolean} npc
+ */
+
+/**
+ * @typedef {BaseState & import('../service/rapier').PhysicsBijection} State
+ */
+
+/**
+ * @typedef BaseState
+ * @property {Set<string>} npcKeys A subset of body keys
+ * @property {Set<string>} awakeNpcKeys keys whose body is awake
+ * @property {Map<number, string>} bodyHandleToKey
+ * @property {Map<string, RAPIER.Collider>} bodyKeyToCollider
+ * @property {Map<string, RAPIER.RigidBody>} bodyKeyToBody
+ * @property {RAPIER.World} world
+ * @property {RAPIER.EventQueue} eventQueue
  */

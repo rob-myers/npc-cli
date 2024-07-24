@@ -54,7 +54,7 @@ export default function World(props) {
     timer: new Timer(),
 
     nav: /** @type {*} */ ({}),
-    physics: { worker: /** @type {*} */ (null), keyToNum: {}, numToKey: {} },
+    physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {} },
 
     gmsData: /** @type {*} */ (null),
     events: new Subject(),
@@ -347,8 +347,8 @@ export default function World(props) {
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
  *
- * @property {NavMeta} nav
- * @property {PhysicsMeta} physics
+ * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
+ * @property {{ worker: WW.PhysicsWorker } & import("../service/rapier").PhysicsBijection} physics
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
@@ -395,16 +395,4 @@ export default function World(props) {
  * //@property {typeof map} map
  * //@property {typeof merge} merge
  * //@property {typeof take} take
- */
-
-/**
- * @typedef {NPC.TiledCacheResult & {
- *    worker: WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>
- * }} NavMeta
- */
-/**
- * @typedef PhysicsMeta
- * @property {WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>} worker
- * @property {{ [bodyKey: string]: number }} keyToNum
- * @property {{ [bodyUid: number]: string }} numToKey
  */

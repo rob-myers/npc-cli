@@ -1,6 +1,9 @@
 declare namespace WW {
   
   //#region nav worker
+
+  type NavWorker = WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>;
+
   interface RequestNavMesh {
     type: "request-nav-mesh";
     mapKey: string;
@@ -24,6 +27,9 @@ declare namespace WW {
   }
 
   //#region physics worker
+
+  type PhysicsWorker = WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>;
+
   interface SetupPhysicsWorld {
     type: 'setup-physics-world';
     mapKey: string;

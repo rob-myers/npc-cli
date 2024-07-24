@@ -6,12 +6,18 @@ import { hashText } from "./generic";
  * 
  * We also record the correspondence in two dictionaries.
  * @param {string} bodyKey e.g. an npcKey or a gmDoorKey
- * @param {{ keyToNum: Record<string, number>; numToKey: Record<number, string>;  }} lookups 
+ * @param {PhysicsBijection} lookups 
  * @returns {number}
  */
 export function addBodyKeyUidRelation(bodyKey, lookups) {
   const bodyUid = hashText(bodyKey);
-  lookups.keyToNum[bodyKey] = bodyUid;
-  lookups.numToKey[bodyUid] = bodyKey;
+  lookups.bodyKeyToUid[bodyKey] = bodyUid;
+  lookups.bodyUidToKey[bodyUid] = bodyKey;
   return bodyUid;
 }
+
+/**
+ * @typedef PhysicsBijection
+ * @property {{ [bodyKey: string]: number }} bodyKeyToUid
+ * @property {{ [bodyUid: number]: string }} bodyUidToKey
+ */
