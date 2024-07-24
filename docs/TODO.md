@@ -13,7 +13,7 @@
   - careful about duplicating patterns i.e. only use `pattern-0`
 - ❌ decor point bounds determined by original rect/poly
 
-- 🚧 start new branch `use-physics`
+- ✅ start new branch `use-physics`
   - ✅ web worker with rapier
   - ✅ rapier has `stepWorld` function (untested)
   - ✅ rapier world has static colliders
@@ -27,13 +27,18 @@
   - ✅ rapier triggers worker message on npc collide
   - ❌ could represent many doors as one rigid body e.g. per gm?
     - no need to try this
-  - 🚧 main thread sends numerical array(s)
+  - ✅ main thread sends numerical array(s)
     - ✅ do not detect agent vs agent collisions
       - seems already aren't being detected
     - ✅ method for assigning numerical ids to bodyKey/Meta
     - ✅ worker lookup restored on hmr
-    - 🚧 send array of npc uids which should go to sleep
-  - clean
+    - ❌ send array of npc uids which should go to sleep
+      - rely on rapier to auto set bodies asleep
+      - https://rapier.rs/docs/user_guides/bevy_plugin/rigid_bodies/#sleeping
+  - ✅ clean
+
+- 🚧 doors open automatically when npc nearby
+  - doors can be open/closed, locked/unlocked, manual/auto
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description

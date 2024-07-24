@@ -23,13 +23,12 @@ const state = {
   world: /** @type {*} */ (undefined),
   eventQueue: /** @type {*} */ (undefined),
 
-  npcKeys: new Set(),
-  awakeNpcKeys: new Set(),
   bodyHandleToKey: new Map(),
-  bodyKeyToCollider: new Map(),
   bodyKeyToBody: new Map(),
+  bodyKeyToCollider: new Map(),
   bodyKeyToUid: {},
   bodyUidToKey: {},
+  npcKeys: new Set(),
 };
 
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
@@ -37,7 +36,7 @@ async function handleMessages(e) {
   const msg = e.data;
 
   if (state.world === undefined && msg.type !== 'setup-physics-world') {
-    return; // For hmr of this file
+    return; // Fixes HMR of this file
   }
   if (msg.type !== 'send-npc-positions') {
     info("worker received message", msg); // 🔔 Debug
@@ -276,7 +275,6 @@ if (typeof window === 'undefined') {
 /**
  * @typedef BaseState
  * @property {Set<string>} npcKeys A subset of body keys
- * @property {Set<string>} awakeNpcKeys keys whose body is awake
  * @property {Map<number, string>} bodyHandleToKey
  * @property {Map<string, RAPIER.Collider>} bodyKeyToCollider
  * @property {Map<string, RAPIER.RigidBody>} bodyKeyToBody

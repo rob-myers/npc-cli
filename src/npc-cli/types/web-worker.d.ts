@@ -4,6 +4,14 @@ declare namespace WW {
 
   type NavWorker = WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>;
 
+  type MsgToNavWorker = (
+    | RequestNavMesh
+  );
+
+  type MsgFromNavWorker = (
+    | NavMeshResponse
+  );
+
   interface RequestNavMesh {
     type: "request-nav-mesh";
     mapKey: string;
@@ -14,10 +22,6 @@ declare namespace WW {
     mapKey: string;
     exportedNavMesh: Uint8Array;
   }
-
-  type MsgToNavWorker = RequestNavMesh;
-
-  type MsgFromNavWorker = NavMeshResponse;
 
   //#endregion
 
@@ -30,6 +34,18 @@ declare namespace WW {
 
   type PhysicsWorker = WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>;
 
+  type MsgToPhysicsWorker = (
+    | SendNpcPositions
+    | SetupPhysicsWorld
+    | AddNPCs
+    | RemoveNPCs
+  );
+
+  type MsgFromPhysicsWorker = (
+    | WorldSetupResponse
+    | NpcCollisionResponse
+  );
+
   interface SetupPhysicsWorld {
     type: 'setup-physics-world';
     mapKey: string;
@@ -40,12 +56,12 @@ declare namespace WW {
    * Currently array always has length 1.
    * 🚧 Support bulk spawn
    */
-  interface AddNpcs {
+  interface AddNPCs {
     type: 'add-npcs';
     npcs: NpcDef[];
   }
 
-  interface RemoveNpcs {
+  interface RemoveNPCs {
     type: 'remove-npcs';
     npcKeys: string[];
   }
@@ -66,18 +82,6 @@ declare namespace WW {
     collisionStart: { npcKey: string; otherKey: string }[];
     collisionEnd: { npcKey: string; otherKey: string }[];
   }
-
-  type MsgToPhysicsWorker = (
-    | SendNpcPositions
-    | SetupPhysicsWorld
-    | AddNpcs
-    | RemoveNpcs
-  );
-
-  type MsgFromPhysicsWorker = (
-    | WorldSetupResponse
-    | NpcCollisionResponse
-  );
 
   //#endregion
 
