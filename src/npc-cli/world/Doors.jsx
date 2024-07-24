@@ -302,9 +302,9 @@ export default function Doors(props) {
  * @property {Geomorph.DoorState[]} byInstId e.g. `byInstId[instanceId]`
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
-*
-* @property {() => void} addDoorUvs
-* @property {() => void} buildLookups
+ *
+ * @property {() => void} addDoorUvs
+ * @property {() => void} buildLookups
  * @property {(item: Geomorph.DoorState) => void} cancelClose
  * @property {(instanceId: number) => Geom.Meta} decodeDoorInstanceId
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
@@ -319,7 +319,7 @@ export default function Doors(props) {
  * @property {(gmId: number, doorId: number, opts?: ToggleDoorOpts) => boolean} toggleById
  * @property {(instanceId: number, opts?: ToggleDoorOpts) => boolean} toggleByInstance
  * @property {(gmDoorKey: Geomorph.GmDoorKey, opts?: ToggleDoorOpts) => boolean} toggleByKey
-* @property {(gmId: number, doorId: number) => void} tryCloseDoor
+ * @property {(gmId: number, doorId: number) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {() => void} onTick
  * @property {() => void} positionInstances
