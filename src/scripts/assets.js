@@ -452,7 +452,7 @@ async function drawObstaclesSheet(assets, prev) {
           x, y, width, height,
         );
       } else {
-        info(`${symbolKey} ${obstacleId} ${JSON.stringify({x, y, width, height})} redrawing...`);
+        info(`${symbolKey} ${obstacleId} redrawing...`);
         const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
         const matched = fs.readFileSync(symbolPath).toString().match(dataUrlRegEx);
         /**

@@ -76,7 +76,7 @@ export default function World(props) {
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
       onTick() {},
-      toggleDoor(_instanceId) {},
+      toggleByInstance(_instanceId) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
@@ -109,6 +109,18 @@ export default function World(props) {
     async handlePhysicsWorkerMessage(e) {
       const msg = e.data;
       info("main thread received from physics worker", msg);
+      if (msg.type === "npc-collisions") {
+        // 🔔 assume otherKey is a gmDoorKey
+        const { byKey } = state.door;
+        msg.collisionEnd.forEach(({ npcKey, otherKey }) =>
+          delete byKey[/** @type {Geomorph.GmDoorKey} */ (otherKey)].nearbyNpcKeys[npcKey],
+        );
+        msg.collisionStart.forEach(({ npcKey, otherKey }) => {
+          const gmDoorKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
+          byKey[gmDoorKey].nearbyNpcKeys[npcKey] = true;
+          state.door.toggleByKey(gmDoorKey, { open: true });
+        });
+      }
     },
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';

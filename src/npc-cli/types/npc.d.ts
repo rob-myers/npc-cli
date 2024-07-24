@@ -45,6 +45,8 @@ declare namespace NPC {
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
+    | { key: "opened-door"; gmId: number; doorId: number; npcKey?: string }
+    | { key: "closed-door"; gmId: number; doorId: number; npcKey?: string }
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {

@@ -8,43 +8,14 @@
   - consoles
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
-- ✅ hull symbols should have same scale as non-hull symbols
-  - ✅ resize-* 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅ 103 ✅
-  - ✅ careful about duplicating patterns i.e. only use `pattern-0`
-  - ✅ replace files, whilst changing scaling i.e. always 1/5
-  - ✅ issue with e.g. `<use width height transform="matrix(5, 0, 0, 5, x, y)">`
-    - we used browser script (see `dev-info`) plus correctly manually
-  - ✅ understand issue with obstacle sprite-sheet
-    - 🔔🔔🔔 hull symbol image is scaled-up (unlike other symbols)
-    - could add a scaled image, but might add to load time
-- ❌ decor point bounds determined by original rect/poly
-
-- ✅ start new branch `use-physics`
-  - ✅ web worker with rapier
-  - ✅ rapier has `stepWorld` function (untested)
-  - ✅ rapier world has static colliders
-    - request geomorphs.json and construct in worker
-  - ✅ convert numeric ids into strings i.e. npcKey and gmDoorKey
-  - ✅ rapier world has kinematic rigid bodies
-    - ✅ spawn induces kinematic rigid body
-    - ✅ remove npc removes kinematic rigid body
-  - ✅ rapier world is stepped per-npcs-position update
-    - don't bother trying to send "succinct array" (yet)
-  - ✅ rapier triggers worker message on npc collide
-  - ❌ could represent many doors as one rigid body e.g. per gm?
-    - no need to try this
-  - ✅ main thread sends numerical array(s)
-    - ✅ do not detect agent vs agent collisions
-      - seems already aren't being detected
-    - ✅ method for assigning numerical ids to bodyKey/Meta
-    - ✅ worker lookup restored on hmr
-    - ❌ send array of npc uids which should go to sleep
-      - rely on rapier to auto set bodies asleep
-      - https://rapier.rs/docs/user_guides/bevy_plugin/rigid_bodies/#sleeping
-  - ✅ clean
 
 - 🚧 doors open automatically when npc nearby
-  - doors can be open/closed, locked/unlocked, manual/auto
+  - ✅ doors can be open/closed, locked/unlocked, manual/auto
+  - ✅ doors can be sealed
+  - ✅ track door -> nearby npcs
+  - track npc -> door sensors e.g. for clean-up
+  - support manual/auto
+  - clean
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
@@ -1691,3 +1662,38 @@
   - ℹ️ fixed by updating sphere bounds
 - ✅ smaller collapsed nav on mobile
 - ✅ can press Escape/Enter to pause/unpause
+
+- ✅ hull symbols should have same scale as non-hull symbols
+  - ✅ resize-* 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅ 103 ✅
+  - ✅ careful about duplicating patterns i.e. only use `pattern-0`
+  - ✅ replace files, whilst changing scaling i.e. always 1/5
+  - ✅ issue with e.g. `<use width height transform="matrix(5, 0, 0, 5, x, y)">`
+    - we used browser script (see `dev-info`) plus correctly manually
+  - ✅ understand issue with obstacle sprite-sheet
+    - 🔔🔔🔔 hull symbol image is scaled-up (unlike other symbols)
+    - could add a scaled image, but might add to load time
+- ❌ decor point bounds determined by original rect/poly
+
+- ✅ start new branch `use-physics`
+  - ✅ web worker with rapier
+  - ✅ rapier has `stepWorld` function (untested)
+  - ✅ rapier world has static colliders
+    - request geomorphs.json and construct in worker
+  - ✅ convert numeric ids into strings i.e. npcKey and gmDoorKey
+  - ✅ rapier world has kinematic rigid bodies
+    - ✅ spawn induces kinematic rigid body
+    - ✅ remove npc removes kinematic rigid body
+  - ✅ rapier world is stepped per-npcs-position update
+    - don't bother trying to send "succinct array" (yet)
+  - ✅ rapier triggers worker message on npc collide
+  - ❌ could represent many doors as one rigid body e.g. per gm?
+    - no need to try this
+  - ✅ main thread sends numerical array(s)
+    - ✅ do not detect agent vs agent collisions
+      - seems already aren't being detected
+    - ✅ method for assigning numerical ids to bodyKey/Meta
+    - ✅ worker lookup restored on hmr
+    - ❌ send array of npc uids which should go to sleep
+      - rely on rapier to auto set bodies asleep
+      - https://rapier.rs/docs/user_guides/bevy_plugin/rigid_bodies/#sleeping
+  - ✅ clean

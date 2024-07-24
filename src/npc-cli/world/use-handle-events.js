@@ -60,6 +60,7 @@ export default function useHandleEvents(w) {
             type: 'remove-npcs',
             npcKeys: [e.npcKey],
           });
+          // 🚧 remove from door sensors
           break;
       }
     },
@@ -91,7 +92,7 @@ export default function useHandleEvents(w) {
 /**
  * @typedef State
  * @property {(e: NPC.Event) => void} handleEvents
- * @property {(e: Extract<NPC.Event, { npcKey: string }>) => void} handleNpcEvents
+ * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  */

@@ -28,6 +28,7 @@ const state = {
   bodyKeyToCollider: new Map(),
   bodyKeyToUid: {},
   bodyUidToKey: {},
+
   npcKeys: new Set(),
 };
 
@@ -119,6 +120,7 @@ function stepWorld() {
     collided = true;
     const bodyKey1 = /** @type {string} */ (state.bodyHandleToKey.get(handle1));
     const bodyKey2 = /** @type {string} */ (state.bodyHandleToKey.get(handle2));
+    // 🔔 currently only have npcs and door sensors
     (started === true ? collisionStart : collisionEnd).push(
       state.npcKeys.has(bodyKey1) === true
         ? { npcKey: bodyKey1, otherKey: bodyKey2 }
@@ -274,10 +276,10 @@ if (typeof window === 'undefined') {
 
 /**
  * @typedef BaseState
- * @property {Set<string>} npcKeys A subset of body keys
+ * @property {RAPIER.World} world
+ * @property {RAPIER.EventQueue} eventQueue
  * @property {Map<number, string>} bodyHandleToKey
  * @property {Map<string, RAPIER.Collider>} bodyKeyToCollider
  * @property {Map<string, RAPIER.RigidBody>} bodyKeyToBody
- * @property {RAPIER.World} world
- * @property {RAPIER.EventQueue} eventQueue
+ * @property {Set<string>} npcKeys A subset of body keys
  */

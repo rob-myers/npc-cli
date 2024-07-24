@@ -42,8 +42,19 @@ declare namespace Geomorph {
     key: `g${number}d${number}`;
     door: Geomorph.Connector;
     instanceId: number;
+
+    /** Is the door automatic? */
+    auto: boolean;
     /** Is the door open? */
     open: boolean;
+    /** Is the door locked? */
+    locked: boolean;
+
+    /** Is the door sealed? */
+    sealed: boolean;
+    /** Is this a hull door? */
+    hull: boolean;
+
     /** Between `0.1` (open) and `1` (closed) */
     ratio: number;
     /** Source of transformed door segment */
@@ -53,6 +64,13 @@ declare namespace Geomorph {
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
+
+    closeTimeoutId?: number;
+
+    /** NPCs which are nearby this door */
+    nearbyNpcKeys: Record<string, true>;
+    /** NPCs which can unlock this door */
+    unlockNpcKeys: Record<string, true>;
   }
 
   interface GeomorphsGeneric<
@@ -98,6 +116,9 @@ declare namespace Geomorph {
 
   /** `g${gmId}r${roomId}` */
   type GmRoomKey = `g${number}r${number}`;
+
+  /** `g${gmId}d${doorId}` */
+  type GmDoorKey = `g${number}d${number}`;
 
   interface SymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,

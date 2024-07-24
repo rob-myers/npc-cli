@@ -141,3 +141,5 @@ export const hitTestRed = /** @type {const} */ ({
   /** rgba encoding `(0, roomId, 255, 1)` */
   room: 0,
 });
+
+export const defaultDoorCloseMs = 12000;
