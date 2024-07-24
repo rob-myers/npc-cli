@@ -16,7 +16,7 @@
                         <rect width="30" height="4" style="stroke: rgb(0, 0, 0); transform-origin: 14.5px 4px; fill: rgb(0, 255, 0);" y="2" x="-0.5" transform="matrix(0, -1, -1, 0, 46, 41.000003814697)"/>
                         <path d="M 55.500004 30.000005 L 65.500004 25.000005 L 55.500004 20.000005 L 55.500004 30.000005 Z" style="stroke: rgb(0, 0, 0); transform-origin: 60.5px 25px; fill: rgb(0, 255, 0);" transform="matrix(0, -1, 1, 0, -0.000003274283, 2.97662e-7)"/>
                 </pattern>
-                <bx:grid x="0" y="0" width="60" height="60"/>
+                <bx:grid x="0" y="0" width="300" height="300"/>
                 <pattern id="pattern-1" patternTransform="matrix(5, 0, 0, 5, -8399.999023436569, -13799.999999999998)" xlink:href="#pattern-4"/>
                 <pattern id="pattern-2" patternTransform="matrix(5, 0, 0, 5, -4199.99951171875, -9000)" xlink:href="#pattern-4"/>
                 <pattern id="pattern-3" patternTransform="matrix(5, 0, 0, 5, -4199.99951171875, -9000)" xlink:href="#pattern-4"/>
@@ -102,13 +102,13 @@
         </image>
         <g>
                 <title>symbols</title>
-                <use width="120" height="240" transform="matrix(5, 0, 0, 5, -0.000021792041, -0.000002632035)" xlink:href="#symbol-1">
+                <use width="120" height="240" transform="matrix(5, 0, 0, 5, -0.000021792044208268635, -0.0000026320351480535464)" xlink:href="#symbol-1">
                         <title>machinery--158--1.8x3.6 y=1</title>
                 </use>
-                <use width="240" height="240" transform="matrix(5, 0, 0, -5, 0.000004297001, 1200.000122070313)" style="opacity: 0.5;" xlink:href="#symbol-0">
+                <use width="240" height="240" transform="matrix(5, 0, 0, -5, 0.000004297001396480482, 1200.0001220703125)" style="opacity: 0.5;" xlink:href="#symbol-0">
                         <title>empty-room--060--4x4</title>
                 </use>
-                <use width="60" height="60" transform="matrix(-5, 0, 0, 5, 1200, -0.00001500002)" style="" xlink:href="#symbol-2">
+                <use width="60" height="60" transform="matrix(-5, 0, 0, 5, 1200, -0.00001500002144894097)" style="" xlink:href="#symbol-2">
                         <title>console--018--1x1</title>
                 </use>
                 <rect width="300" height="300" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-16'); transform-origin: 149.986px 1649.99px;" y="1500" transform="matrix(0, 1, -1, 0, -0.000640869141, 0.000274658203)">
