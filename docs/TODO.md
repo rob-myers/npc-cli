@@ -13,6 +13,7 @@
   - ✅ doors can be open/closed, locked/unlocked, manual/auto
   - ✅ doors can be sealed
   - ✅ track door -> nearby npcs
+  - don't close door when npcs still nearby
   - track npc -> door sensors e.g. for clean-up
   - support manual/auto
   - clean
@@ -61,7 +62,7 @@
 
 - prevent NPCs going through closed doors
   - i.e. color nav query
-- 🤔 use rapier physics 3d in web worker
+- ✅ use rapier physics 3d in web worker
   - i.e. static triggers
 
 - next.js repo continued
