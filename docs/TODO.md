@@ -13,8 +13,11 @@
   - ✅ doors can be open/closed, locked/unlocked, manual/auto
   - ✅ doors can be sealed
   - ✅ track door -> nearby npcs
+  - 🚧 track npc -> door sensors e.g. for clean-up
+  - ❌ toggle other hull door automatically
+    - can open them individually
+    - sensors already work
   - don't close door when npcs still nearby
-  - track npc -> door sensors e.g. for clean-up
   - support manual/auto
   - clean
 

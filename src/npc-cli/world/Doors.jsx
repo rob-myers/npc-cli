@@ -18,11 +18,12 @@ export default function Doors(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    doorsInst: /** @type {*} */ (null),
     byInstId: [],
     byKey: {},
     byGmId: {},
+    doorsInst: /** @type {*} */ (null),
     movingDoors: new Map(),
+    npcToDoorKeys: {},
 
     addDoorUvs() {
       const { decor, decorDim } = w.geomorphs.sheet;
@@ -183,28 +184,10 @@ export default function Doors(props) {
       const npcKeys = Object.keys(state.byGmId[gmId][doorId].nearbyNpcKeys);
       return !npcKeys.some(npcKey => state.npcNearDoor(npcKey, gmId, doorId));
     },
-    signalDoorChange(door, npcKey) {
-      const key = door.open ? 'opened-door' : 'closed-door';
-      w.events.next({
-        key, gmId: door.gmId, doorId: door.doorId, npcKey,
-      });
-      // // cancel other hull door too
-      // const adjHull = door.hull === true
-      //   ? w.gmGraph.getAdjacentRoomCtxt(door.gmId, door.doorId)
-      //   : null
-      // ;
-      // if (adjHull !== null) {
-      //   w.events.next({
-      //     key, gmId: adjHull.adjGmId, doorId: adjHull.adjDoorId, npcKey,
-      //   });
-      // }
-    },
-    // 🚧 support door.auto false/true
     toggle(door, opts = {}) {
       if (door.sealed === true) {
         return false;
       }
-      
       if (typeof opts.npcKey === 'string' && !state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
         return door.open;
       }
@@ -223,17 +206,21 @@ export default function Doors(props) {
         if (opts.close) {
           return false;
         }
-        // Ignore locks if `npcKey` unspecified
         if (door.locked && opts.npcKey && !door.unlockNpcKeys[opts.npcKey]) {
-          return false; // cannot open door if locked
+          // Ignore locks if opts.npcKey unspecified
+          return false; // Cannot open door if locked
         }
       }
 
       // Actually open/close door
       door.open = !door.open;
       state.movingDoors.set(door.instanceId, door);
-      state.signalDoorChange(door, opts.npcKey);
-      if (door.open) {
+      w.events.next({
+        key: door.open ? 'opened-door' : 'closed-door',
+        gmId: door.gmId, doorId: door.doorId, npcKey: opts.npcKey,
+      });
+
+      if (door.auto === true && door.open === true) { 
         state.tryCloseDoor(door.gmId, door.doorId);
       }
 
@@ -311,10 +298,10 @@ export default function Doors(props) {
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
+ * @property {{ [npcKey: string]: { [gmDoorKey: string]: true } }} npcToDoorKeys
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(gmId: number, doorId: number) => boolean} safeToCloseDoor
- * @property {(door: Geomorph.DoorState, npcKey?: string) => void} signalDoorChange
  * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggle
  * @property {(gmId: number, doorId: number, opts?: ToggleDoorOpts) => boolean} toggleById
  * @property {(instanceId: number, opts?: ToggleDoorOpts) => boolean} toggleByInstance
