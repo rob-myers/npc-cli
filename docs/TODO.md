@@ -41,12 +41,12 @@
   - ✅ persist session on reset/unload
   - ✅ do not persist variable on run command (only on unload)
 
-- 🚧 service/npc -> service/helper
+- ✅ service/npc -> service/helper
   - ℹ️ available runtime as w.lib.*
   - ℹ️ used by assets script
-  - 🚧 move key defs into helper
+  - ✅ move key defs into helper
     - avoids totally rebuilding geomorphs.json
-    - helper file should trigger watch script
+  - ✅ helper file should trigger watch script
 
 - can pipe `w.events` into shell
   - e.g. `w` command supports subjects

@@ -132,7 +132,7 @@ export default function Decor(props) {
       const map = w.geomorphs.map[w.mapKey];
       return {
         mapHash: hashJson(map),
-        ...mapValues(geomorphService.toGmNum, (_, gmKey) => 
+        ...mapValues(w.lib.toGmNum, (_, gmKey) => 
           hashJson(layout[gmKey].decor)
         ),
       };

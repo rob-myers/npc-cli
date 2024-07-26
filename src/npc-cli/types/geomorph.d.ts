@@ -344,7 +344,7 @@ declare namespace Geomorph {
 
   type DecorSheetRectCtxt = Geom.Meta<{ decorImgKey: Geomorph.DecorImgKey }>;
 
-  type DecorImgKey = import('../service/geomorph.js').DecorImgKey;
+  type DecorImgKey = import('../service/const.js').DecorImgKey;
 
   /** 🚧 clarify */
   type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
@@ -368,10 +368,9 @@ declare namespace Geomorph {
   type GeomorphNumber = 101 | 102 | 103 | 301 | 302 | 303;
 
   /**
-   * 🔔 Depends on geomorph service,
-   * but in this way we avoid duplication.
+   * 🔔 Depends on service/const, but avoids duplication.
    */
-  type SymbolKey = import('../service/geomorph').SymbolKey;
+  type SymbolKey = import('../service/const').SymbolKey;
 
   /**
    * All sprite-sheet metadata.

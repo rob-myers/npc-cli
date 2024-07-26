@@ -34,6 +34,7 @@ import { geomorphService } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT, DEV_ORIGIN, ASSETS_JSON_FILENAME, GEOMORPHS_JSON_FILENAME } from "../npc-cli/service/fetch-assets";
 import packRectangles from "../npc-cli/service/rects-packer";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
+import { helper } from "../npc-cli/service/helper";
 import { labelledSpawn, saveCanvasAsFile, tryLoadImage, tryReadString } from "./service";
 
 const rawOpts = getopts(process.argv, {
@@ -228,14 +229,14 @@ info({ opts });
   // fs.writeFileSync(symbolGraphVizPath, symbolGraph.getGraphviz('symbolGraph'));
 
   const changedGmKeys = geomorphService.gmKeys.filter(gmKey => {
-    const hullKey = geomorphService.toHullKey[gmKey];
+    const hullKey = helper.toHullKey[gmKey];
     const hullNode = assertNonNull(symbolGraph.getNodeById(hullKey));
     return symbolGraph.getReachableNodes(hullNode).find(x => changedSymbolAndMapKeys.includes(x.id));
   });
   info({ changedGmKeys });
 
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
-    const hullKey = geomorphService.toHullKey[gmKey];
+    const hullKey = helper.toHullKey[gmKey];
     const flatSymbol = flattened[hullKey];
     return geomorphService.createLayout(gmKey, flatSymbol, assets);
   }));

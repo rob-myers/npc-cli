@@ -1,4 +1,4 @@
-import { glbMeta } from "./const";
+import { fromDecorImgKey, fromSymbolKey, glbMeta } from "./const";
 
 /**
  * - Use object so can merge into `w.lib`.
@@ -6,13 +6,12 @@ import { glbMeta } from "./const";
  * - Used in server script assets.js.
  */
 export const helper = {
-  
-  defaults: {
-    /** 🔔 division by 3 improves collisions */
-    radius: glbMeta.radius * glbMeta.scale / 3,
-    runSpeed: glbMeta.runSpeed * glbMeta.scale,
-    walkSpeed: glbMeta.walkSpeed * glbMeta.scale,
-  },
+
+  /** Aligned to media/symbol/{key}.svg */
+  fromSymbolKey,
+
+  /** Aligned to media/decor/{key}.svg */
+  fromDecorImgKey,
 
   /** static/assets/3d/minecraft-skins/* */
   fromSkinKey: {
@@ -32,6 +31,43 @@ export const helper = {
     'soldier-russia.png': true,
     'soldier-darkleonard2.png': true,
     'robot-vaccino.png': true,
+  },
+
+  /** @type {Record<Geomorph.GeomorphNumber, Geomorph.GeomorphKey>} */
+  toGmKey: {
+    101: "g-101--multipurpose",
+    102: "g-102--research-deck",
+    103: "g-103--cargo-bay",
+    301: "g-301--bridge",
+    302: "g-302--xboat-repair-bay",
+    303: "g-303--passenger-deck",
+  },
+
+  /** @type {Record<Geomorph.GeomorphKey, Geomorph.GeomorphNumber>} */
+  toGmNum: {
+    "g-101--multipurpose": 101,
+    "g-102--research-deck": 102,
+    "g-103--cargo-bay": 103,
+    "g-301--bridge": 301,
+    "g-302--xboat-repair-bay": 302,
+    "g-303--passenger-deck": 303,
+  },
+
+  /** @type {Record<Geomorph.GeomorphKey, Geomorph.SymbolKey>} */
+  toHullKey: {
+    "g-101--multipurpose": "101--hull",
+    "g-102--research-deck": "102--hull",
+    "g-103--cargo-bay": "103--hull",
+    "g-301--bridge": "301--hull",
+    "g-302--xboat-repair-bay": "302--hull",
+    "g-303--passenger-deck": "303--hull",
+  },
+  
+  defaults: {
+    /** 🔔 division by 3 improves collisions */
+    radius: glbMeta.radius * glbMeta.scale / 3,
+    runSpeed: glbMeta.runSpeed * glbMeta.scale,
+    walkSpeed: glbMeta.walkSpeed * glbMeta.scale,
   },
 
   // 🚧 fix types

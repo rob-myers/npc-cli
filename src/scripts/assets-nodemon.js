@@ -17,6 +17,7 @@ nodemon({
   watch: [
     'src/scripts/assets.js',
     'src/npc-cli/service/geomorph.js',
+    'src/npc-cli/service/const.js',
     'media/symbol/',
     'media/map/',
     'media/decor/',
