@@ -25,8 +25,25 @@
     - we'll add physical switches for all doors, usable for manual
   - ✅ move worker handlers into WorldWorker
     - want handler edit to restart workers
+  - ✅ clean
 
-  - clean
+- service/npc -> service/helper
+  - available runtime as w.lib.*
+  - but also useful in assets script
+
+- can pipe `w.events` into shell
+  - e.g. `w` command supports subjects
+
+- tty: support recursive stringify of `Set` and `Map` in
+
+- new branch `refine-doors`
+  - every door has 2 switches (inner, outer)
+  - doors can slide in specific direction
+    - sometimes not possible e.g. toilet
+  - doors have small wall above them
+    - locked indicator could go in center
+  - navQuery blocks non-auto doors
+  - support non-door sensor i.e. decor circle/poly
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description

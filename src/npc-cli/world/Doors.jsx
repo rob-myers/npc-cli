@@ -59,13 +59,14 @@ export default function Doors(props) {
           tmpMat1.transformPoint(tmpVec2.copy(v));
           const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
           
-          const gmDoorKey = /** @type {const} */ (`g${gmId}d${doorId}`);
-          const prev = prevDoorByKey[gmDoorKey];
+          /** @type {Geomorph.GmDoorKey} */
+          const gdKey = `g${gmId}d${doorId}`;
+          const prev = prevDoorByKey[gdKey];
           const hull = gm.isHullDoor(doorId);
-          state.byKey[gmDoorKey] = state.byInstId[instId] = byGmId[doorId] = {
-            key: gmDoorKey,
-            gmId, doorId, door,
+          state.byKey[gdKey] = state.byInstId[instId] = byGmId[doorId] = {
+            gdKey, gmId, doorId,
             instanceId: instId,
+            door,
 
             auto: true, // 🚧
             locked: false, // 🚧

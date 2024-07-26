@@ -1,8 +1,8 @@
 import React from 'react';
 import { init as initRecastNav } from "@recast-navigation/core";
 
-import { WorldContext } from './world-context';
 import { info, isDevelopment } from '../service/generic';
+import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 
 /**
@@ -28,19 +28,15 @@ export default function WorldWorkers() {
       const msg = e.data;
       info("main thread received from physics worker", msg);
       if (msg.type === "npc-collisions") {
-        // 🚧 support otherKey not a gmDoorKey e.g. decor circle
-        const { byKey, npcToKeys } = w.door;
         msg.collisionEnd.forEach(({ npcKey, otherKey }) => {
-          const gmDoorKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
-          byKey[gmDoorKey].nearbyNpcKeys.delete(npcKey);
-          npcToKeys[npcKey]?.delete(gmDoorKey);
+          // 🚧 support otherKey not a GmDoorKey e.g. decor circle
+          const gdKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
+          w.events.next({ key: 'exited-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(gdKey) });
         });
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
-          const gmDoorKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
-          const door = byKey[gmDoorKey];
-          door.nearbyNpcKeys.add(npcKey);
-          door.auto === true && w.door.toggleByKey(gmDoorKey, { open: true });
-          (npcToKeys[npcKey] ??= new Set).add(gmDoorKey);
+          // 🚧 support otherKey not a GmDoorKey e.g. decor circle
+          const gdKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
+          w.events.next({ key: 'entered-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(gdKey) });
         });
       }
     },
@@ -67,7 +63,8 @@ export default function WorldWorkers() {
 
       w.physics.worker.postMessage({
         type: "setup-physics-world",
-        mapKey: w.mapKey, // on hmr we must provide existing npcs
+        mapKey: w.mapKey,
+        // On HMR must provide existing npcs:
         npcs: Object.values(w.npc?.npc ?? {}).map((npc) => ({
           npcKey: npc.key,
           position: npc.getPosition(),
@@ -79,8 +76,7 @@ export default function WorldWorkers() {
   return null;
 }
 
-if (isDevelopment()) {
-  // propagate hmr to this file onchange worker files
+if (isDevelopment()) {// propagate HMR to this file onchange worker files
   import('./physics.worker');
   import('./nav.worker');
 }

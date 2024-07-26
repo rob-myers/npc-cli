@@ -39,7 +39,7 @@ declare namespace Geomorph {
 
   interface DoorState extends Geomorph.GmDoorId {
     /** gmDoorKey format i.e. `g{gmId}d{doorId}` */
-    key: `g${number}d${number}`;
+    gdKey: `g${number}d${number}`;
     door: Geomorph.Connector;
     instanceId: number;
 
@@ -99,19 +99,18 @@ declare namespace Geomorph {
   >;
 
   interface GmDoorId {
-    /** `g{gmId}d${doorId}` */
-    key: `g${number}d${number}`;
+    /** gmDoorKey `g{gmId}d${doorId}` */
+    gdKey: GmDoorKey;
     gmId: number;
     doorId: number;
-    /** Non-isolated hull doors have an associated door */
-    other?: { gmId: number; doorId: number };
+    // other?: { gmId: number; doorId: number };
   }
 
   interface GmRoomId {
+    /** gmRoomKey `g{gmId}r${roomId}` */
+    grKey: Geomorph.GmRoomKey;
     gmId: number;
     roomId: number;
-    /** `gmRoomKey` */
-    grKey: Geomorph.GmRoomKey;
   }
 
   /** `g${gmId}r${roomId}` */

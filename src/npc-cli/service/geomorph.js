@@ -743,15 +743,6 @@ class GeomorphService {
 
   /**
    * @param {number} gmId
-   * @param {number} doorId
-   * @returns {`g${number}d${number}`}
-   */
-  getGmDoorKey(gmId, doorId) {
-    return /** @type {const} */ (`g${gmId}d${doorId}`);
-  }
-
-  /**
-   * @param {number} gmId
    * @param {number} roomId
    * @returns {`g${number}r${number}`}
    */
