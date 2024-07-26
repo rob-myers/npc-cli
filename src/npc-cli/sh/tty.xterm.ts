@@ -11,7 +11,7 @@ import {
   isDataChunk,
   isProxy,
 } from "./io";
-import { safeStringify, testNever, warn } from "../service/generic";
+import { jsStringify, testNever, warn } from "../service/generic";
 import useSession from "./session.store";
 
 /**
@@ -546,7 +546,7 @@ export class ttyXtermClass {
       return this.queueCommands([
         {
           key: "line",
-          line: `${ansi.BrightYellow}${safeStringify({ ...msg }).slice(-this.maxStringifyLength)}${
+          line: `${ansi.BrightYellow}${jsStringify({ ...msg }).slice(-this.maxStringifyLength)}${
             ansi.Reset
           }`,
         },
@@ -616,7 +616,7 @@ export class ttyXtermClass {
           // Pretend we outputted them all
           items.slice(-2 * scrollback).forEach((x) => this.onMessage(x));
         } else {
-          const stringified = safeStringify(msg);
+          const stringified = jsStringify(msg);
           this.queueCommands([
             {
               key: "line",

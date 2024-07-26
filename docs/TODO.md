@@ -27,14 +27,24 @@
     - want handler edit to restart workers
   - ✅ clean
 
+- ✅ tty: support recursive stringify of `Set` and `Map`
+  - ✅ in tty.xterm output
+  - ✅ `declare -x`
+  - ✅ in shell expansion
+  - ✅ separated shell function `pretty` into `pretty` and `json`
+    - `pretty` is essentially `javascriptStringify` with indent 2
+    - `json` is essentially `prettyCompact` and projects to JSON
+      - e.g. does not support `Set`
+
+- shell session: support restore Set and Map
+  - i.e. try serialize via `jsStringify` then evaluate?
+
 - service/npc -> service/helper
   - available runtime as w.lib.*
   - but also useful in assets script
 
 - can pipe `w.events` into shell
   - e.g. `w` command supports subjects
-
-- tty: support recursive stringify of `Set` and `Map` in
 
 - new branch `refine-doors`
   - every door has 2 switches (inner, outer)

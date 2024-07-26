@@ -30,6 +30,11 @@ pretty() {
   map '(x, { api }) => api.pretty(x)'
 }
 
+# usage: `expr location | json`
+json() {
+  map '(x, { api }) => api.json(x)'
+}
+
 # usage: `range 10`
 range() {
   call '({ args }) =>

@@ -3,7 +3,7 @@ import expressWs from "express-ws";
 import bodyParser from "body-parser";
 import cors from "cors";
 
-import { info, safeStringify, warn } from "../npc-cli/service/generic";
+import { info, jsStringify, warn } from "../npc-cli/service/generic";
 import { DEV_EXPRESS_WEBSOCKET_PORT } from "../npc-cli/service/fetch-assets";
 
 const port = Number(DEV_EXPRESS_WEBSOCKET_PORT || 3000);
@@ -38,11 +38,11 @@ app.ws("/dev-events", function (ws, req) {
 app.post("/send-dev-event", function (req, res, next) {
   devEventsWs.forEach((client) => {
     if (req.body?.key === 'update-browser') {
-      info(`/send-dev-event: ${safeStringify(req.body)}`);
+      info(`/send-dev-event: ${jsStringify(req.body)}`);
       /** @see connectDevEventsWebsocket */
       client.send(JSON.stringify(req.body));
     } else {
-      warn(`/send-dev-event: unrecognised event: ${safeStringify(req.body)}`);
+      warn(`/send-dev-event: unrecognised event: ${jsStringify(req.body)}`);
     }
   });
   res.json();
