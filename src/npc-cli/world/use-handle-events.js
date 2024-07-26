@@ -60,7 +60,7 @@ export default function useHandleEvents(w) {
             type: 'remove-npcs',
             npcKeys: [e.npcKey],
           });
-          // 🚧 remove from door sensors
+          w.door.removeFromSensors(e.key);
           break;
       }
     },

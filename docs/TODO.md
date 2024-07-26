@@ -13,12 +13,19 @@
   - ✅ doors can be open/closed, locked/unlocked, manual/auto
   - ✅ doors can be sealed
   - ✅ track door -> nearby npcs
-  - 🚧 track npc -> door sensors e.g. for clean-up
+  - ✅ track npc -> door sensors e.g. for clean-up
   - ❌ toggle other hull door automatically
     - can open them individually
     - sensors already work
-  - don't close door when npcs still nearby
-  - support manual/auto
+  - ✅ don't auto close door when npcs still within sensor range
+  - ✅ clarify auto doors
+    - ✅ do not auto-close when not auto
+    - ✅ do not auto-open when not auto
+  - ❌ manual doors are "blocked" inside nav query
+    - we'll add physical switches for all doors, usable for manual
+  - 🚧 move worker handlers into WorldWorker
+    - want handler edit to restart workers
+
   - clean
 
 - consider alternatives to current custom minecraft character

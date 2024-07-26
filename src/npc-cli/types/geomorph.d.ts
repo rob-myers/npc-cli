@@ -68,9 +68,9 @@ declare namespace Geomorph {
     closeTimeoutId?: number;
 
     /** NPCs which are nearby this door */
-    nearbyNpcKeys: Record<string, true>;
+    nearbyNpcKeys: Set<string>;
     /** NPCs which can unlock this door */
-    unlockNpcKeys: Record<string, true>;
+    unlockNpcKeys: Set<string>;
   }
 
   interface GeomorphsGeneric<

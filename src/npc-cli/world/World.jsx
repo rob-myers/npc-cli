@@ -106,19 +106,24 @@ export default function World(props) {
         // state.setReady();
       }
     },
+    // 🚧 move into WorldWorker
     async handlePhysicsWorkerMessage(e) {
       const msg = e.data;
       info("main thread received from physics worker", msg);
       if (msg.type === "npc-collisions") {
-        // 🔔 assume otherKey is a gmDoorKey
-        const { byKey } = state.door;
-        msg.collisionEnd.forEach(({ npcKey, otherKey }) =>
-          delete byKey[/** @type {Geomorph.GmDoorKey} */ (otherKey)].nearbyNpcKeys[npcKey],
-        );
+        // 🚧 support otherKey not a gmDoorKey e.g. decor circle
+        const { byKey, npcToKeys } = state.door;
+        msg.collisionEnd.forEach(({ npcKey, otherKey }) => {
+          const gmDoorKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
+          byKey[gmDoorKey].nearbyNpcKeys.delete(npcKey);
+          npcToKeys[npcKey]?.delete(gmDoorKey);
+        });
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
           const gmDoorKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
-          byKey[gmDoorKey].nearbyNpcKeys[npcKey] = true;
-          state.door.toggleByKey(gmDoorKey, { open: true });
+          const door = byKey[gmDoorKey];
+          door.nearbyNpcKeys.add(npcKey);
+          door.auto === true && state.door.toggleByKey(gmDoorKey, { open: true });
+          (npcToKeys[npcKey] ??= new Set).add(gmDoorKey);
         });
       }
     },
