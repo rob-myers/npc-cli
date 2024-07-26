@@ -1,7 +1,7 @@
 declare namespace NPC {
 
   /** Skin names. */
-  type SkinKey = keyof import('../service/npc').NpcService['fromSkinKey'];
+  type SkinKey = keyof import('../service/helper').Helper['fromSkinKey'];
 
   type NPC = import('../world/create-npc').Npc;
 
@@ -28,7 +28,7 @@ declare namespace NPC {
     agent?: boolean;
   }
 
-  type AnimKey = keyof import('../service/npc').NpcService['fromAnimKey'];
+  type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
   type Event =
     | PointerUpOutsideEvent

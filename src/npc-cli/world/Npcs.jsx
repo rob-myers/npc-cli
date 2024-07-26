@@ -5,7 +5,7 @@ import { useGLTF } from "@react-three/drei";
 import { defaultSkinKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
-import { npcService } from "../service/npc";
+import { helper } from "../service/helper";
 import { Npc, hotModuleReloadNpc } from "./create-npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -186,8 +186,8 @@ export default function Npcs(props) {
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
           skinKey: e.skinKey ?? npc.def.skinKey,
           position: e.point, // 🚧 remove?
-          runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
-          walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
+          runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
+          walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         };
         if (typeof e.skinKey === 'string') {
           npc.changeSkin(e.skinKey);
@@ -202,8 +202,8 @@ export default function Npcs(props) {
           angle: e.angle ?? 0,
           skinKey: e.skinKey ?? defaultSkinKey,
           position: e.point,
-          runSpeed: e.runSpeed ?? npcService.defaults.runSpeed,
-          walkSpeed: e.walkSpeed ?? npcService.defaults.walkSpeed,
+          runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
+          walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
 
         npc.initialize(gltf);

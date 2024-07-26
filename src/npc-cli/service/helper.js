@@ -1,10 +1,11 @@
 import { glbMeta } from "./const";
 
 /**
- * 🚧 rename as e.g. runtimeService
- * Use object so can merge into `w.lib`.
+ * - Use object so can merge into `w.lib`.
+ * - Used in web workers.
+ * - Used in server script assets.js.
  */
-export const npcService = {
+export const helper = {
   
   defaults: {
     /** 🔔 division by 3 improves collisions */
@@ -55,7 +56,7 @@ export const npcService = {
       const [, gStr, dStr] = input[0].split(/[gd]/);
       return { gdKey: input[0], gmId: Number(gStr), doorId: Number(dStr) };
     } else {
-      return { gdKey: npcService.getGmDoorKey(input[0], input[1]), gmId: input[0], doorId: input[1] };
+      return { gdKey: helper.getGmDoorKey(input[0], input[1]), gmId: input[0], doorId: input[1] };
     }
   },
 
@@ -69,11 +70,20 @@ export const npcService = {
   },
 
   /**
+   * @param {number} gmId
+   * @param {number} roomId
+   * @returns {Geomorph.GmRoomKey}
+   */
+  getGmRoomKey(gmId, roomId) {
+    return `g${gmId}r${roomId}`;
+  },
+
+  /**
    * @param {string} input 
    * @returns {input is NPC.SkinKey}
    */
   isSkinKey(input) {
-    return input in npcService.fromSkinKey;
+    return input in helper.fromSkinKey;
   },
   
   /**
@@ -81,11 +91,11 @@ export const npcService = {
    * @returns {input is NPC.AnimKey}
    */
   isAnimKey(input) {
-    return input in npcService.fromAnimKey;
+    return input in helper.fromAnimKey;
   }
 
 };
 
 /**
- * @typedef {typeof npcService} NpcService
+ * @typedef {typeof helper} Helper
  */

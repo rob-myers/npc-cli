@@ -742,32 +742,6 @@ class GeomorphService {
   }
 
   /**
-   * @param {number} gmId
-   * @param {number} roomId
-   * @returns {`g${number}r${number}`}
-   */
-  getGmRoomKey(gmId, roomId) {
-    return `g${gmId}r${roomId}`;
-  }
-
-  /**
-   * @param {Geomorph.GeomorphKey} gmKey
-   * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
-   */
-  gmKeyToKeys(gmKey) {
-    const gmNumber = this.toGmNum[gmKey];
-    return { gmKey, gmNumber, hullKey: `${gmNumber}--hull` };
-  }
-
-  /**
-   * @param {Geomorph.GeomorphNumber} gmNumber
-   * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
-   */
-  gmNumToKeys(gmNumber) {
-    return { gmKey: this.toGmKey[gmNumber], gmNumber, hullKey: `${gmNumber}--hull` };
-  }
-
-  /**
    * When instantiating flat symbols:
    * - we can transform them
    * - we can remove doors tagged with `optional`

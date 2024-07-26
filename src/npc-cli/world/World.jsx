@@ -18,7 +18,7 @@ import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { createCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
-import { npcService } from "../service/npc";
+import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
@@ -88,7 +88,7 @@ export default function World(props) {
       precision: toPrecision,
       removeFirst,
       vectFrom: Vect.from,
-      ...npcService,
+      ...helper,
     },
 
     async awaitReady() {
@@ -109,7 +109,7 @@ export default function World(props) {
       Object.assign(state.nav, tiledCacheResult);
       state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
-        maxAgentRadius: npcService.defaults.radius,
+        maxAgentRadius: helper.defaults.radius,
       });
       state.npc?.restore();
     },
@@ -347,7 +347,7 @@ export default function World(props) {
  * Npcs (dynamic)
  * @property {import('./ContextMenu').State} menu
  * @property {import('./Debug').State} debug
- * @property {StateUtil & import("../service/npc").NpcService} lib
+ * @property {StateUtil & import("../service/helper").Helper} lib
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex
  * @property {import("../service/three").CanvasTexMeta} decorTex

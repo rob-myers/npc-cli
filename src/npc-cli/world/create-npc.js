@@ -5,7 +5,7 @@ import { dampLookAt } from "maath/easing";
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
-import { npcService } from '../service/npc';
+import { helper } from '../service/helper';
 import { addBodyKeyUidRelation } from '../service/rapier';
 // import * as glsl from '../service/glsl';
 
@@ -37,7 +37,7 @@ export class Npc {
 
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
-  agentRadius = npcService.defaults.radius;
+  agentRadius = helper.defaults.radius;
 
   /**
    * @param {NPC.NPCDef} def
@@ -53,7 +53,7 @@ export class Npc {
   attachAgent() {
     return this.agent ??= this.w.crowd.addAgent(this.group.position, {
       ...crowdAgentParams,
-      maxSpeed: this.s.run ? npcService.defaults.runSpeed : npcService.defaults.walkSpeed
+      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed
     });
   }
   async cancel() {
@@ -109,7 +109,7 @@ export class Npc {
     return this.group.position;
   }
   getRadius() {
-    return npcService.defaults.radius;
+    return helper.defaults.radius;
   }
   getMaxSpeed() {
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
@@ -125,7 +125,7 @@ export class Npc {
     this.mixer = new THREE.AnimationMixer(this.group);
 
     this.animMap = gltf.animations.reduce((agg, a) => {
-      if (npcService.isAnimKey(a.name)) {
+      if (helper.isAnimKey(a.name)) {
         agg[a.name] = this.mixer.clipAction(a);
       } else {
         warn(`ignored unexpected animation: ${a.name}`);
@@ -314,11 +314,11 @@ function emptyReject(error) {}
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
-  radius: npcService.defaults.radius, // 🔔 too large causes jerky collisions
+  radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 10, // Large enough for 'Run'
   // maxSpeed: 0, // Set elsewhere
-  pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 clarify
+  pathOptimizationRange: helper.defaults.radius * 20, // 🚧 clarify
   // collisionQueryRange: 2.5,
   collisionQueryRange: 0.7,
   separationWeight: 1,

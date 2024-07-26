@@ -10,6 +10,7 @@ import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
 import { boxGeometry, getColor, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import packRectangles from "../service/rects-packer";
+import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -236,7 +237,7 @@ export default function Decor(props) {
         const gmRoomId = w.gmGraph.findRoomContaining(decorOrigin);
         return gmRoomId === null ? null : Object.assign(decor.meta, gmRoomId);
       } else {
-        decor.meta.grKey ??= geomorphService.getGmRoomKey(decor.meta.gmId, decor.meta.roomId);
+        decor.meta.grKey ??= helper.getGmRoomKey(decor.meta.gmId, decor.meta.roomId);
         return decor.meta;
       }
     },

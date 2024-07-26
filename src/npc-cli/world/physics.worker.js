@@ -7,7 +7,7 @@ import { error, info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
 import { addBodyKeyUidRelation } from '../service/rapier';
-import { npcService } from '../service/npc';
+import { helper } from '../service/helper';
 
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToPhysicsWorker>} */ (
   /** @type {*} */ (self)
@@ -169,7 +169,7 @@ async function setupWorld(mapKey, npcs) {
   const gmDoorBodies = gms.map((gm, gmId) => 
     gm.doors.map((door, doorId) => {
       const center = gm.matrix.transformPoint(door.center.clone());
-      const bodyKey = npcService.getGmDoorKey(gmId, doorId);
+      const bodyKey = helper.getGmDoorKey(gmId, doorId);
       return createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         // hull door sensor ~ 2x2 grid
