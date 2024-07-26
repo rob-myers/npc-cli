@@ -70,7 +70,8 @@ export type State = {
       linkStartIndex: number;
       lineNumber: number;
     }) => void;
-    persist: (sessionKey: string) => void;
+    persistHistory: (sessionKey: string) => void;
+    persistHome: (sessionKey: string) => void;
     rehydrate: (sessionKey: string) => Rehydrated;
     removeDevice: (deviceKey: string) => void;
     removeProcess: (pid: number, sessionKey: string) => void;
@@ -382,16 +383,19 @@ const useStore = create<State>()(
           }
         },
 
-        persist(sessionKey) {
-          // 🚧 persist on unload page
-          const { ttyShell, var: varLookup } = api.getSession(sessionKey);
+        persistHistory(sessionKey) {
+          const { ttyShell } = api.getSession(sessionKey);
 
           tryLocalStorageSet(
             `history@session-${sessionKey}`,
             JSON.stringify(ttyShell.getHistory())
           );
+        },
 
-          const { PWD, OLDPWD, CACHE_SHORTCUTS, ...persistedVarLookup } = varLookup;
+        persistHome(sessionKey) {
+          const {
+            PWD, OLDPWD, CACHE_SHORTCUTS, ...persistedVarLookup
+          } = api.getSession(sessionKey).var;
 
           tryLocalStorageSet(
             `var@session-${sessionKey}`,
@@ -426,6 +430,7 @@ const useStore = create<State>()(
 
           return { history: storedHistory, var: storedVar };
         },
+
         removeDevice(deviceKey) {
           delete get().device[deviceKey];
         },

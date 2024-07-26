@@ -247,7 +247,7 @@ export class ttyShellClass implements Device {
     if (prev !== srcLine) {
       this.history.push(srcLine);
       while (this.history.length > this.maxLines) this.history.shift();
-      useSession.api.persist(this.sessionKey);
+      useSession.api.persistHistory(this.sessionKey);
     }
   }
 

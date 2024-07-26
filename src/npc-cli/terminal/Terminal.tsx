@@ -202,6 +202,8 @@ export default function Terminal(props: Props) {
   }, [props.disabled, state.ready]);
 
   React.useEffect(() => () => {// Destroy session
+    useSession.api.persistHistory(props.sessionKey);
+    useSession.api.persistHome(props.sessionKey);
     useSession.api.removeSession(props.sessionKey);
     props.onUnmount?.();
     state.ready = false;
