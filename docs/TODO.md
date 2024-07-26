@@ -36,8 +36,10 @@
     - `json` is essentially `prettyCompact` and projects to JSON
       - e.g. does not support `Set`
 
-- shell session: support restore Set and Map
-  - i.e. try serialize via `jsStringify` then evaluate?
+- 🚧 shell session: support restore Set and Map
+  - ✅ serialize via `jsStringify` then re-evaluate
+  - 🚧 persist session on reset/unload
+  - 🚧 do not persist variable on run command (only on unload)
 
 - service/npc -> service/helper
   - available runtime as w.lib.*
