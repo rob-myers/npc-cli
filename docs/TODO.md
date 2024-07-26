@@ -23,7 +23,7 @@
     - ✅ do not auto-open when not auto
   - ❌ manual doors are "blocked" inside nav query
     - we'll add physical switches for all doors, usable for manual
-  - 🚧 move worker handlers into WorldWorker
+  - ✅ move worker handlers into WorldWorker
     - want handler edit to restart workers
 
   - clean

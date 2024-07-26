@@ -4,13 +4,13 @@ import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
+import { importNavMesh, Crowd } from "@recast-navigation/core";
 
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
+import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
 import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
@@ -94,37 +94,6 @@ export default function World(props) {
     async awaitReady() {
       if (!state.isReady()) {
         return new Promise(resolve => state.readyResolvers.push(resolve));
-      }
-    },
-    async handleNavWorkerMessage(e) {
-      const msg = e.data;
-      info("main thread received from nav worker", msg);
-      if (msg.type === "nav-mesh-response") {
-        await initRecastNav();
-        state.loadTiledMesh(msg.exportedNavMesh);
-        update(); // w.npc
-        // state.setReady();
-      }
-    },
-    // 🚧 move into WorldWorker
-    async handlePhysicsWorkerMessage(e) {
-      const msg = e.data;
-      info("main thread received from physics worker", msg);
-      if (msg.type === "npc-collisions") {
-        // 🚧 support otherKey not a gmDoorKey e.g. decor circle
-        const { byKey, npcToKeys } = state.door;
-        msg.collisionEnd.forEach(({ npcKey, otherKey }) => {
-          const gmDoorKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
-          byKey[gmDoorKey].nearbyNpcKeys.delete(npcKey);
-          npcToKeys[npcKey]?.delete(gmDoorKey);
-        });
-        msg.collisionStart.forEach(({ npcKey, otherKey }) => {
-          const gmDoorKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
-          const door = byKey[gmDoorKey];
-          door.nearbyNpcKeys.add(npcKey);
-          door.auto === true && state.door.toggleByKey(gmDoorKey, { open: true });
-          (npcToKeys[npcKey] ??= new Set).add(gmDoorKey);
-        });
       }
     },
     isReady() {
@@ -390,8 +359,6 @@ export default function World(props) {
  * @property {Crowd} crowd
  *
  * @property {() => Promise<void>} awaitReady
- * @property {(e: MessageEvent<WW.MsgFromNavWorker>) => Promise<void>} handleNavWorkerMessage
- * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
