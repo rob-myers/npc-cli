@@ -5,8 +5,9 @@ import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCac
 
 /**
  * @param {import("@recast-navigation/core").Crowd} crowd
+ * @param {import("@recast-navigation/core").NavMesh} navMesh
  */
-export function disposeCrowd(crowd) {
+export function disposeCrowd(crowd, navMesh) {
   crowd.getAgents().forEach((agent) => crowd.removeAgent(agent));
   crowd.destroy();
 }

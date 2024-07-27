@@ -61,30 +61,30 @@ function getTabIdentifier(meta: TabDef) {
 
 const classToComponent = {
   TestCharacterDemo: {
-    loadable: loadable(() => import("src/npc-cli/aux/TestCharacterDemo")),
+    loadable: loadable(() => import("../aux/TestCharacterDemo")),
     get:
-      (module: typeof import("src/npc-cli/aux/TestCharacterDemo")) =>
+      (module: typeof import("../aux/TestCharacterDemo")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
   HelloWorld: {
-    loadable: loadable(() => import("src/npc-cli/aux/HelloWorld")),
+    loadable: loadable(() => import("../aux/HelloWorld")),
     get:
-      (module: typeof import("src/npc-cli/aux/HelloWorld")) =>
+      (module: typeof import("../aux/HelloWorld")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
   TestWorker: {
-    loadable: loadable(() => import("src/npc-cli/aux/TestWorker")),
+    loadable: loadable(() => import("../aux/TestWorker")),
     get:
-      (module: typeof import("src/npc-cli/aux/TestWorker")) =>
+      (module: typeof import("../aux/TestWorker")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },
   World: {
-    loadable: loadable(() => import("src/npc-cli/world/World")),
+    loadable: loadable(() => import("../world/World")),
     get:
-      (module: typeof import("src/npc-cli/world/World")) =>
+      (module: typeof import("../world/World")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },

@@ -119,11 +119,6 @@ export function fillRing(ct, ring, fill = true) {
   }
 }
 
-/** Override cache in development */
-export function getAssetQueryParam() {
-  return isDevelopment() ? `?v=${Date.now()}` : '';
-}
-
 /**
  * Invert `canvas`, overwriting it, while also preserving alpha=0.
  * @param {HTMLCanvasElement} canvas 

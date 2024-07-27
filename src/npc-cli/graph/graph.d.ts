@@ -128,8 +128,8 @@ declare namespace Graph {
     /** Direction it faces in world coords */
     direction: null | Geom.DirectionString;
     /**
-     * Does this node connect to another door i.e.
-     * establish a connection between two geomorphs?
+     * Is this door node not connected to another door i.e.
+     * not connected to another geomorph?
      */
     sealed: boolean;
   }

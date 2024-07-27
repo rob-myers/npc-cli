@@ -7,12 +7,12 @@ import {
   deepGet,
   keysDeep,
   pause,
-  pretty,
   removeFirst,
-  safeStringify,
   generateSelector,
   testNever,
   truncateOneLine,
+  jsStringify,
+  safeJsonCompact,
 } from "../service/generic";
 import { parseJsArg, parseJsonArg } from "../service/generic";
 import {
@@ -197,7 +197,7 @@ class cmdServiceClass {
             if (prefixes && !prefixes.some((x) => key.startsWith(x))) continue;
             yield `${ansi.Blue}${key}${ansi.Reset}=${
               typeof value === "string" ? ansi.White : ansi.BrightYellow
-            }${safeStringify(value).slice(-xterm.maxStringifyLength)}${ansi.Reset}`;
+            }${jsStringify(value).slice(-xterm.maxStringifyLength)}${ansi.Reset}`;
           }
         }
         if (showFuncs) {
@@ -860,8 +860,14 @@ class cmdServiceClass {
       }
     },
 
+    /** Pretty print JS values */
     pretty(x: any) {
-      return prettySafe(isProxy(x) ? { ...x } : x);
+      return jsStringify(isProxy(x) ? { ...x } : x, true);
+    },
+
+    /** Create succinct JSON projections of JS values */
+    json(x: any) {
+      return safeJsonCompact(x);
     },
 
     /** Read once from stdin. */
@@ -1034,10 +1040,6 @@ export function parseFnOrStr(input: string) {
     }
   } catch {}
   return input;
-}
-
-function prettySafe(x: any) {
-  return pretty(JSON.parse(safeStringify(x)));
 }
 
 /**

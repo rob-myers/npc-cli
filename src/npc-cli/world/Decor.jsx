@@ -10,6 +10,7 @@ import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
 import { boxGeometry, getColor, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import packRectangles from "../service/rects-packer";
+import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -131,7 +132,7 @@ export default function Decor(props) {
       const map = w.geomorphs.map[w.mapKey];
       return {
         mapHash: hashJson(map),
-        ...mapValues(geomorphService.toGmNum, (_, gmKey) => 
+        ...mapValues(w.lib.toGmNum, (_, gmKey) => 
           hashJson(layout[gmKey].decor)
         ),
       };
@@ -204,7 +205,7 @@ export default function Decor(props) {
         });
       }
     },
-    detectClick(e) {
+    detectClick(e) {// 🚧
       // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
       const instanceId = /** @type {number} */ (e.instanceId);
       const byInstId = e.object.name === 'decor-cuboids' ? state.cuboids : state.quads;
@@ -236,7 +237,7 @@ export default function Decor(props) {
         const gmRoomId = w.gmGraph.findRoomContaining(decorOrigin);
         return gmRoomId === null ? null : Object.assign(decor.meta, gmRoomId);
       } else {
-        decor.meta.grKey ??= geomorphService.getGmRoomKey(decor.meta.gmId, decor.meta.roomId);
+        decor.meta.grKey ??= helper.getGmRoomKey(decor.meta.gmId, decor.meta.roomId);
         return decor.meta;
       }
     },
@@ -597,7 +598,7 @@ export default function Decor(props) {
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
-        map={w.decorTex}
+        map={w.decorTex.tex}
         transparent
         diffuse={new THREE.Vector3(1, 1, 1)}
       />

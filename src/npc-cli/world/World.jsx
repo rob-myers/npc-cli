@@ -4,21 +4,21 @@ import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importNavMesh, init as initRecastNav, Crowd } from "@recast-navigation/core";
+import { importNavMesh, Crowd } from "@recast-navigation/core";
 
-import { GEOMORPHS_JSON_FILENAME, WORLD_QUERY_FIRST_KEY, assetsEndpoint, imgExt } from "src/const";
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { info, debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, hashJson, removeDups } from "../service/generic";
-import { getAssetQueryParam, invertCanvas, tmpCanvasCtxts } from "../service/dom";
+import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
+import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
+import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorphService } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { createCanvasTexDef, imageLoader } from "../service/three";
+import { createCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
-import { npcService } from "../service/npc";
+import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
@@ -33,6 +33,7 @@ import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
 import ContextMenu from "./ContextMenu";
+import WorldWorkers from "./WorldWorkers";
 
 /**
  * @param {Props} props
@@ -51,7 +52,9 @@ export default function World(props) {
     reqAnimId: 0,
     threeReady: false,
     timer: new Timer(),
-    worker: /** @type {*} */ (null),
+
+    nav: /** @type {*} */ ({}),
+    physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {} },
 
     gmsData: /** @type {*} */ (null),
     events: new Subject(),
@@ -59,11 +62,10 @@ export default function World(props) {
     gms: [],
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
-    hmr: { hash: '', gmHash: '', createGmsData },
-    obsTex: /** @type {*} */ (null),
-    decorTex: /** @type {*} */ (null),
+    hmr: { createGmsData },
+    obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
+    decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
 
-    nav: /** @type {*} */ (null),
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // WorldCanvas
@@ -74,7 +76,7 @@ export default function World(props) {
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
       onTick() {},
-      toggleDoor(_instanceId) {},
+      toggleByInstance(_instanceId) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
@@ -86,7 +88,7 @@ export default function World(props) {
       precision: toPrecision,
       removeFirst,
       vectFrom: Vect.from,
-      ...npcService,
+      ...helper,
     },
 
     async awaitReady() {
@@ -94,29 +96,21 @@ export default function World(props) {
         return new Promise(resolve => state.readyResolvers.push(resolve));
       }
     },
-    async handleMessageFromWorker(e) {
-      const msg = e.data;
-      info("main thread received message", msg);
-      if (msg.type === "nav-mesh-response") {
-        await initRecastNav();
-        state.loadTiledMesh(msg.exportedNavMesh);
-        update(); // w.npc
-        // state.setReady();
-      }
-    },
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
     loadTiledMesh(exportedNavMesh) {
-      state.nav = /** @type {NPC.TiledCacheResult} */ (
+      const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
         importNavMesh(exportedNavMesh, getTileCacheMeshProcess())
       );
-      state.crowd && disposeCrowd(state.crowd);
+      if (state.crowd) {
+        disposeCrowd(state.crowd, state.nav.navMesh);
+      }
+      Object.assign(state.nav, tiledCacheResult);
       state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
-        maxAgentRadius: npcService.defaults.radius,
+        maxAgentRadius: helper.defaults.radius,
       });
-
       state.npc?.restore();
     },
     onTick() {
@@ -149,11 +143,7 @@ export default function World(props) {
     queryFn: async () => {
       // console.log('🔔 query debug', [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey])
       const prevGeomorphs = state.geomorphs;
-      const geomorphsJson = /** @type {Geomorph.GeomorphsJson} */ (
-        await fetch(
-          `${assetsEndpoint}/${GEOMORPHS_JSON_FILENAME}${getAssetQueryParam()}`
-        ).then((x) => x.json())
-      );
+      const geomorphsJson = await fetchGeomorphsJson();
 
       /**
        * Used to apply changes synchronously.
@@ -178,19 +168,19 @@ export default function World(props) {
 
       if (mapChanged) {
         next.mapKey = props.mapKey;
-        const mapDef = next.geomorphs.map[state.mapKey];
+        const mapDef = next.geomorphs.map[next.mapKey];
 
-        // on change map may see new gmKeys
-        mapDef.gms.filter(x => !state.floor.tex[x.gmKey]).forEach(({ gmKey }) => {
+        // onchange map may see new gmKeys
+        for(const { gmKey } of mapDef.gms.filter(x => !state.floor.tex[x.gmKey])) {
           const { pngRect } = next.geomorphs.layout[gmKey];
           for (const lookup of [state.floor.tex, state.ceil.tex]) {
-            lookup[gmKey] = createCanvasTexDef(
+            lookup[gmKey] = createCanvasTexMeta(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
               pngRect.height * worldToSguScale * gmFloorExtraScale,
               { willReadFrequently: true },
             );
           }
-        });
+        }
 
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
           geomorphService.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
@@ -203,7 +193,6 @@ export default function World(props) {
       state.hmr.createGmsData = createGmsData;
 
       if (mapChanged || gmsDataChanged) {
-
         next.gmsData = createGmsData(
           // reuse gmData lookup, unless:
           // (a) geomorphs.json changed, or (b) create-gms-data changed
@@ -245,22 +234,24 @@ export default function World(props) {
       });      
 
       if (dataChanged) {
-        /** @type {const} */ ([
-          { src: `${assetsEndpoint}/2d/obstacles.${imgExt}${getAssetQueryParam()}`, texKey: 'obsTex', invert: true, },
-          { src: `${assetsEndpoint}/2d/decor.${imgExt}${getAssetQueryParam()}`, texKey: 'decorTex', invert: false },
-        ]).forEach(({ src, texKey, invert }) => imageLoader.loadAsync(src).then((img) => {
-          const prevCanvas = /** @type {HTMLCanvasElement | undefined} */ (state[texKey]?.image);
-          const canvas = prevCanvas ?? document.createElement('canvas');
-          [canvas.width, canvas.height] = [img.width, img.height];
-          /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d')).drawImage(img, 0, 0);
-          invert && invertCanvas(canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
-          const tex = new THREE.CanvasTexture(canvas);
-          tex.flipY = false; // align with XZ/XY quad uv-map
-          state[texKey] = tex;
+        for (const { src, tm, invert } of [
+          { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
+          { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
+        ]) {
+          const img = await imageLoader.loadAsync(src);
+          if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
+            [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
+            tm.tex.dispose();
+            tm.tex = new THREE.CanvasTexture(tm.canvas);
+            tm.tex.flipY = false; // align with XZ/XY quad uv-map
+            tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
+          }
+          tm.ct.drawImage(img, 0, 0);
+          invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
           update();
-        }));
+        }
       } else {
-        update(); // Needed?
+        update();
       }
 
       return null;
@@ -275,24 +266,6 @@ export default function World(props) {
     setCached([props.worldKey], state);
     return () => removeCached([props.worldKey]);
   }, []);
-
-  React.useEffect(() => {// (re)start worker on(change) geomorphs.json (not HMR)
-    const hmr = state.crowd && state.geomorphs?.hash === state.hmr.gmHash;
-    state.hmr.gmHash = state.geomorphs?.hash ?? '';
-    if (state.threeReady && state.hash && !hmr) {
-      state.worker = new Worker(new URL("./recast.worker", import.meta.url), { type: "module" });
-      state.worker.addEventListener("message", state.handleMessageFromWorker);
-      return () => void state.worker.terminate();
-    }
-  }, [state.threeReady, state.geomorphs?.hash]);
-
-  React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey (not HMR)
-    const hmr = state.crowd && state.hash === state.hmr.hash;
-    state.hmr.hash = state.hash;
-    if (state.threeReady && state.hash && !hmr) {
-      state.worker.postMessage({ type: "request-nav-mesh", mapKey: state.mapKey });
-    }
-  }, [state.threeReady, state.hash]);
 
   React.useEffect(() => {// enable/disable animation
     state.timer.reset();
@@ -326,6 +299,7 @@ export default function World(props) {
         )}
       </WorldCanvas>
       <ContextMenu />
+      <WorldWorkers />
     </WorldContext.Provider>
   );
 }
@@ -349,7 +323,7 @@ export default function World(props) {
  * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
- * @property {{ hash: string; gmHash: string; createGmsData: typeof createGmsData }} hmr
+ * @property {{ createGmsData: typeof createGmsData }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
@@ -358,7 +332,9 @@ export default function World(props) {
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
- * @property {WW.WorkerGeneric<WW.MessageToWorker, WW.MessageFromWorker>} worker
+ *
+ * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
+ * @property {{ worker: WW.PhysicsWorker } & import("../service/rapier").PhysicsBijection} physics
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
@@ -371,20 +347,18 @@ export default function World(props) {
  * Npcs (dynamic)
  * @property {import('./ContextMenu').State} menu
  * @property {import('./Debug').State} debug
- * @property {StateUtil & import("../service/npc").NpcService} lib
+ * @property {StateUtil & import("../service/helper").Helper} lib
  *
- * @property {THREE.CanvasTexture} obsTex
- * @property {THREE.CanvasTexture} decorTex
+ * @property {import("../service/three").CanvasTexMeta} obsTex
+ * @property {import("../service/three").CanvasTexMeta} decorTex
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
  * @property {GmGraphClass} gmGraph
  * @property {GmRoomGraphClass} gmRoomGraph
- * @property {NPC.TiledCacheResult} nav
  * @property {Crowd} crowd
  *
  * @property {() => Promise<void>} awaitReady
- * @property {(e: MessageEvent<WW.NavMeshResponse>) => Promise<void>} handleMessageFromWorker
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick

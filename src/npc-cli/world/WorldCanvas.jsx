@@ -216,7 +216,7 @@ export default function WorldCanvas(props) {
   React.useEffect(() => {
     // 🚧 do not trigger on HMR
     state.controls?.setPolarAngle(Math.PI / 6);
-    state.controls?.setAzimuthalAngle(Math.PI / 6);
+    state.controls?.setAzimuthalAngle(touchFixedAzimuth);
   }, [state.controls]);
 
   return (
@@ -252,8 +252,8 @@ export default function WorldCanvas(props) {
         zoomToCursor
 
         {...isTouchDevice() && {
-          minAzimuthAngle: Math.PI / 6,
-          maxAzimuthAngle: Math.PI / 6,
+          minAzimuthAngle: touchFixedAzimuth,
+          maxAzimuthAngle: touchFixedAzimuth,
         }}
       />
 
@@ -354,3 +354,5 @@ const statsCss = css`
  * @property {boolean} [justLongDown]
  * @property {Geom.Meta} meta
  */
+
+const touchFixedAzimuth = Math.PI / 6;

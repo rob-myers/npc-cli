@@ -29,20 +29,20 @@ export default function Ceiling(props) {
       const canvasX = (localWorldPnt.x - gm.pngRect.x) * worldToCanvas;
       const canvasY = (localWorldPnt.z - gm.pngRect.y) * worldToCanvas;
 
-      const ctxt = state.tex[gm.key][0];
-      const { data: rgba } = ctxt.getImageData(canvasX, canvasY, 1, 1, { colorSpace: 'srgb' });
+      const { ct } = state.tex[gm.key];
+      const { data: rgba } = ct.getImageData(canvasX, canvasY, 1, 1, { colorSpace: 'srgb' });
       // console.log(Array.from(rgba), { gmId, point3d: e.point, localWorldPnt, canvasX, canvasY });
       
       // ignore clicks on fully transparent pixels
       return rgba[3] === 0 ? null : { gmId };
     },
     drawGmKey(gmKey) {
-      const [ct, tex, { width, height }] = state.tex[gmKey];
+      const { ct, tex, canvas} = state.tex[gmKey];
       const layout = w.geomorphs.layout[gmKey];
       const { pngRect } = layout;
 
       ct.resetTransform();
-      ct.clearRect(0, 0, width, height);
+      ct.clearRect(0, 0, canvas.width, canvas.height);
 
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
@@ -50,8 +50,8 @@ export default function Ceiling(props) {
       const { nonHullCeilTops, doorCeilTops, polyDecals } = w.gmsData[gmKey];
       
       // wall/door tops
-      const strokeColor = 'rgba(120, 120, 120, 1)';
-      const hullStrokeColor = 'rgba(200, 200, 200, 1)';
+      const strokeColor = 'rgba(80, 80, 80, 1)';
+      const hullStrokeColor = 'rgba(100, 100, 100, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
       drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.08]);
@@ -132,7 +132,7 @@ export default function Ceiling(props) {
           <meshBasicMaterial
             side={THREE.FrontSide}
             transparent
-            map={state.tex[gm.key][1]}
+            map={state.tex[gm.key].tex}
             // depthWrite={false} // fix z-fighting
             alphaTest={0.9} // 0.5 flickered on (301, 101) border
           />
@@ -150,7 +150,7 @@ export default function Ceiling(props) {
 
 /**
  * @typedef State
- * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
+ * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown

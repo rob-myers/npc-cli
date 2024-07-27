@@ -28,6 +28,17 @@ w decor.rmInstantiatedDecor 1
 w decor.updateInstanceLists
 ```
 
+```sh
+# inspecting a function
+w door | map 'x => x.npcNearDoor' | pretty
+
+# log a "chunk"
+seq 100000 | log
+
+events
+events | map key
+```
+
 ## Local variables
 
 ```sh
@@ -232,8 +243,8 @@ multiSpawn
 ```
 
 ```sh
-npc events | filter 'x => x.key === "stopped-walking"'
-npc events | filter /stopped-walking/
+npc events | filter 'x => x.key === "stopped-moving"'
+npc events | filter /stopped-moving/
 
 npc events | filter 'x => x.key === "way-point" && x.meta.key === "exit-room"'
 

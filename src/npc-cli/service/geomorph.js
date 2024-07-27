@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -15,171 +15,18 @@ import {
   toPrecision,
 } from "./generic";
 import { geom, tmpRect1 } from "./geom";
+import { helper } from "./helper";
 
 class GeomorphService {
-  /** @type {Record<Geomorph.GeomorphNumber, Geomorph.GeomorphKey>} */
-  toGmKey = {
-    101: "g-101--multipurpose",
-    102: "g-102--research-deck",
-    103: "g-103--cargo-bay",
-    301: "g-301--bridge",
-    302: "g-302--xboat-repair-bay",
-    303: "g-303--passenger-deck",
-  };
-
-  /** @type {Record<Geomorph.GeomorphKey, Geomorph.GeomorphNumber>} */
-  toGmNum = {
-    "g-101--multipurpose": 101,
-    "g-102--research-deck": 102,
-    "g-103--cargo-bay": 103,
-    "g-301--bridge": 301,
-    "g-302--xboat-repair-bay": 302,
-    "g-303--passenger-deck": 303,
-  };
-
-  /** @type {Record<Geomorph.GeomorphKey, Geomorph.SymbolKey>} */
-  toHullKey = {
-    "g-101--multipurpose": "101--hull",
-    "g-102--research-deck": "102--hull",
-    "g-103--cargo-bay": "103--hull",
-    "g-301--bridge": "301--hull",
-    "g-302--xboat-repair-bay": "302--hull",
-    "g-303--passenger-deck": "303--hull",
-  };
 
   /** @type {Geomorph.GeomorphKey[]} */
   get gmKeys() {
-    return keys(this.toGmNum);
+    return keys(helper.toGmNum);
   }
-
-  /** Aligned to media/symbol/{key}.svg */
-  fromSymbolKey = {// 🔔 must extend when adding new symbols
-
-    "101--hull": true,
-    "102--hull": true,
-    "103--hull": true,
-    "301--hull": true,
-    "302--hull": true,
-    "303--hull": true,
-
-    "bed--003--1x1.6": true,
-    "bed--004--0.8x1.4": true,
-    "bed--005--0.6x1.2": true,
-    "bridge--042--8x9": true,
-    "cargo--002--2x2": true,
-    "cargo--010--2x4": true,
-    "cargo--003--2x4.svg": true,
-    "console--005--1.2x4": true,
-    "console--006--1.2x3": true,
-    "console--010--1.2x2": true,
-    "console--011--1.2x2": true,
-    "console--018--1x1": true, 
-    "console--019--2x2": true, 
-    "console--022--1x2": true,
-    "console--031--1x1.2": true,
-    "console--033--0.4x0.6": true,
-    "console--051--0.4x0.6": true,
-    "couch-and-chairs--006--0.4x2": true,
-    "couch-and-chairs--007--0.6x1.4": true,
-    "counter--007--0.4x1": true,
-    "counter--009--0.4x0.4": true,
-    "counter--010--0.4x0.4": true,
-    "empty-room--006--2x2": true,
-    "empty-room--013--2x3": true,
-    "empty-room--019--2x4": true,
-    "empty-room--020--2x4": true,
-    "empty-room--039--3x4": true,
-    "empty-room--060--4x4": true,
-    "engineering--045--6x4": true,
-    "engineering--047--4x7": true,
-    "fresher--002--0.4x0.6": true,
-    "fresher--015--1x2": true,
-    "fresher--020--2x2": true,
-    "fresher--025--3x2": true,
-    "fresher--036--4x2": true,
-    "fuel--010--4x2": true,
-    "iris-valves--005--1x1": true,
-    "lab--012--4x3": true,
-    "lab--018--4x4": true,
-    "lab--023--4x4": true,
-    "lifeboat--small-craft--2x4": true,
-    "lounge--015--4x2": true,
-    "lounge--017--4x2": true,
-    "low-berth--003--1x1": true,
-    "machinery--155--1.8x3.6": true,
-    "machinery--156--2x4": true,
-    "machinery--158--1.8x3.6": true,
-    "machinery--357--4x2": true,
-    "medical-bed--005--0.6x1.2": true,
-    "medical-bed--006--1.6x3.6": true,
-    "medical--007--3x2": true,
-    "medical--008--3x2": true,
-    "misc-stellar-cartography--020--10x10": true,
-    "misc-stellar-cartography--023--4x4": true,
-    "office--001--2x2": true,
-    "office--004--2x2": true,
-    "office--006--2x2": true,
-    "office--026--2x3": true,
-    "office--020--2x3": true,
-    "office--023--2x3": true,
-    "office--061--3x4": true,
-    "office--074--4x4": true,
-    "office--089--4x4": true,
-    "ships-locker--003--1x1": true,
-    "ships-locker--007--2x1": true,
-    "ships-locker--011--2x1": true,
-    "ships-locker--020--2x2": true,
-    "shop--027--1.6x0.4": true,
-    "shop--028--1.6x0.8": true,
-    "shop--031--0.4x0.8": true,
-    "shop--033--0.6x1.6": true,
-    "shop--035--0.4x0.8": true,
-    "shop--037--0.4x0.8": true,
-    "stateroom--012--2x2": true,
-    "stateroom--014--2x2": true,
-    "stateroom--018--2x3": true,
-    "stateroom--019--2x3": true,
-    "stateroom--020--2x3": true,
-    "stateroom--035--2x3": true,
-    "stateroom--036--2x4": true,
-    "table--004--1.2x2.4": true,
-    "table--009--0.8x0.8": true,
-    "table--012--0.8x0.8": true,
-
-    "extra--001--fresher--0.5x0.5": true,
-    "extra--002--fresher--0.5x0.5": true,
-    "extra--003--chair--0.25x0.25": true,
-    "extra--004--desk--0.5x1": true,
-    "extra--005--chair-0.25x0.25": true,
-    "extra--006--desk--0.4x1": true,
-    "extra--007--desk--0.4x0.66": true,
-    "extra--008--desk--0.4x1.33": true,
-    "extra--009--table--4x4": true,
-    "extra--010--machine--2x1": true,
-    "extra--011--machine--1x3": true,
-    "extra--012--battery--3x2": true,
-    "extra--013--privacy-screen--1.5x0.2": true,
-    "extra--014--table--2x3": true,
-    "extra--015--table--3x0.5": true,
-    "extra--016--table--4x0.5": true,
-    "extra--017--table--2x0.5": true,
-    "extra--018--table-0.25x0.25": true,
-    "extra--019--table-0.5x2": true,
-  };
-
-  /** Aligned to media/decor/{key}.svg */
-  fromDecorImgKey = {// 🔔 must extend when adding new decor
-    'door--standard': true,
-    'door--hull': true,
-    'icon--info': true,
-    'icon--doc': true,
-    'icon--warn': true,
-    'icon--key-card': true,
-  };
 
   /** @type {Geomorph.SymbolKey[]} */
   get hullKeys() {
-    return keys(this.fromSymbolKey).filter(this.isHullKey);
+    return keys(helper.fromSymbolKey).filter(this.isHullKey);
   }
 
   /**
@@ -193,7 +40,7 @@ class GeomorphService {
   createLayout(gmKey, symbol, assets) {
     debug(`createLayout ${gmKey}`);
 
-    const { pngRect, hullWalls } = assets.symbols[geomorphService.toHullKey[gmKey]];
+    const { pngRect, hullWalls } = assets.symbols[helper.toHullKey[gmKey]];
     const hullPoly = Poly.union(hullWalls);
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
@@ -251,7 +98,7 @@ class GeomorphService {
 
     return {
       key: gmKey,
-      num: this.toGmNum[gmKey],
+      num: helper.toGmNum[gmKey],
       pngRect: pngRect.clone(),
       decor,
       doors,
@@ -681,8 +528,8 @@ class GeomorphService {
             (Number(match[1]) / 100) * (i === 0 ? bounds.width : bounds.height)
           );
         }
-      } else if ((match = rep.match(/^(-?\d+(?:.\d+)?)(?:px)$/))) {// e.g. 48.44px
-        return Number(match[1]);
+      } else if (rep.endsWith('px')) {// e.g. 48.44px or -4e-06px
+        return parseFloat(rep);
       } else {
         return null;
       }
@@ -739,41 +586,6 @@ class GeomorphService {
    */
   getDerivedDecorKey(d) {
     return `${d.type}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`.replace(/[.]/g, '_');
-  }
-
-  /**
-   * @param {number} gmId
-   * @param {number} doorId
-   * @returns {`g${number}d${number}`}
-   */
-  getGmDoorKey(gmId, doorId) {
-    return /** @type {const} */ (`g${gmId}d${doorId}`);
-  }
-
-  /**
-   * @param {number} gmId
-   * @param {number} roomId
-   * @returns {`g${number}r${number}`}
-   */
-  getGmRoomKey(gmId, roomId) {
-    return `g${gmId}r${roomId}`;
-  }
-
-  /**
-   * @param {Geomorph.GeomorphKey} gmKey
-   * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
-   */
-  gmKeyToKeys(gmKey) {
-    const gmNumber = this.toGmNum[gmKey];
-    return { gmKey, gmNumber, hullKey: `${gmNumber}--hull` };
-  }
-
-  /**
-   * @param {Geomorph.GeomorphNumber} gmNumber
-   * @returns {{ gmKey: Geomorph.GeomorphKey; gmNumber: Geomorph.GeomorphNumber; hullKey: Geomorph.SymbolKey }}
-   */
-  gmNumToKeys(gmNumber) {
-    return { gmKey: this.toGmKey[gmNumber], gmNumber, hullKey: `${gmNumber}--hull` };
   }
 
   /**
@@ -834,7 +646,7 @@ class GeomorphService {
    * @returns {input is Geomorph.DecorImgKey}
    */
   isDecorImgKey(input) {
-    return input in this.fromDecorImgKey;
+    return input in helper.fromDecorImgKey;
   }
 
   /**
@@ -865,7 +677,7 @@ class GeomorphService {
    * @param {Geomorph.GeomorphKey | Geomorph.GeomorphNumber} input
    */
   isEdgeGm(input) {
-    input = typeof input === "string" ? this.toGmNum[input] : input;
+    input = typeof input === "string" ? helper.toGmNum[input] : input;
     return 301 <= input && input < 500;
   }
 
@@ -874,7 +686,7 @@ class GeomorphService {
    * @returns {input is Geomorph.GeomorphNumber}
    */
   isGmNumber(input) {
-    return input in this.toGmKey;
+    return input in helper.toGmKey;
     // return (
     //   (101 <= input && input < 300) || // standard
     //   (301 <= input && input < 500) || // edge
@@ -894,7 +706,7 @@ class GeomorphService {
    * @returns {input is Geomorph.SymbolKey}
    */
   isSymbolKey(input) {
-    return input in this.fromSymbolKey;
+    return input in helper.fromSymbolKey;
   }
 
   /**
@@ -941,7 +753,7 @@ class GeomorphService {
           );
           reduced[4] = toPrecision(reduced[4] * scale, precision);
           reduced[5] = toPrecision(reduced[5] * scale, precision);
-          gms.push({ gmKey: geomorphService.toGmKey[gmNumber], transform: reduced });
+          gms.push({ gmKey: helper.toGmKey[gmNumber], transform: reduced });
         }
       },
       onclosetag() {
@@ -967,8 +779,7 @@ class GeomorphService {
   parseSymbol(symbolKey, svgContents) {
     // info("parseStarshipSymbol", symbolKey, "...");
     const isHull = this.isHullKey(symbolKey);
-    /** Non-hull symbol are scaled up by 5 inside SVGs */
-    const scale = sguToWorldScale * (isHull ? 1 : 1 / 5);
+    const scale = sguToWorldScale * sguSymbolScaleDown;
 
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
@@ -1428,11 +1239,3 @@ const tmpVect2 = new Vect();
 const tmpPoly1 = new Poly();
 const tmpMat1 = new Mat();
 const tmpMat2 = new Mat();
-
-/**
- * @typedef {keyof GeomorphService['fromSymbolKey']} SymbolKey
- */
-
-/**
- * @typedef {keyof GeomorphService['fromDecorImgKey']} DecorImgKey
- */

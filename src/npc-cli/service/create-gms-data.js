@@ -6,6 +6,7 @@ import { geom, tmpVec1 } from "./geom";
 import { Connector, geomorphService } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
+import { helper } from './helper';
 
 /**
  * @param {object} opts
@@ -14,7 +15,7 @@ import { RoomGraphClass } from "../graph/room-graph";
 */
 export default function createGmsData({ prevGmData }) {
   const gmsData = {
-    ...mapValues(geomorphService.toGmNum,
+    ...mapValues(helper.toGmNum,
       (_, gmKey) => prevGmData?.[gmKey] ?? ({ ...emptyGmData, gmKey })
     ),
     

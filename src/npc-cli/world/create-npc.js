@@ -5,15 +5,17 @@ import { dampLookAt } from "maath/easing";
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
-import { npcService } from '../service/npc';
+import { helper } from '../service/helper';
+import { addBodyKeyUidRelation } from '../service/rapier';
 // import * as glsl from '../service/glsl';
 
 export class Npc {
 
   /** @type {string} User specified e.g. `rob` */ key;
-  /** @type {import('./World').State} World API */ api;
+  /** @type {import('./World').State} World API */ w;
   /** @type {NPC.NPCDef} Initial definition */ def;
   /** @type {number} When we (re)spawned */ epochMs;
+  /** @type {number} Physics body identifier i.e. `hashText(key)` */ bodyUid;
   
   group = emptyGroup;
   map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
@@ -25,9 +27,9 @@ export class Npc {
     cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     /** Is this NPC walking or running? */
-    move: false,
+    moving: false,
     paused: false,
-    rejectWalk: emptyReject,
+    rejectMove: emptyReject,
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3Like} */ (null),
@@ -35,42 +37,41 @@ export class Npc {
 
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
-  agentRadius = npcService.defaults.radius;
+  agentRadius = helper.defaults.radius;
 
   /**
    * @param {NPC.NPCDef} def
-   * @param {import('./World').State} api
+   * @param {import('./World').State} w
    */
-  constructor(def, api) {
+  constructor(def, w) {
     this.key = def.key;
     this.epochMs = Date.now();
     this.def = def;
-    this.api = api;
+    this.w = w;
+    this.bodyUid = addBodyKeyUidRelation(def.key, w.physics)
   }
   attachAgent() {
-    return this.agent ??= this.api.crowd.addAgent(this.group.position, {
+    return this.agent ??= this.w.crowd.addAgent(this.group.position, {
       ...crowdAgentParams,
-      maxSpeed: this.s.run ? npcService.defaults.runSpeed : npcService.defaults.walkSpeed
+      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed
     });
   }
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
 
-    const api = this.api;
     const cancelCount = ++this.s.cancels;
     this.s.paused = false;
-    
-    this.s.rejectWalk(new Error(`${'cancel'}: cancelled walk`));
-    
-    if (this.s.move === true) {
-      await api.lib.firstValueFrom(api.events.pipe(
-        api.lib.filter(e => e.key === "stopped-walking" && e.npcKey === this.key)
-      ));
-    }
+
+    await Promise.all([
+      this.waitUntilStopped(),
+      this.s.rejectMove(`${'cancel'}: cancelled move`),
+    ]);
+
     if (cancelCount !== this.s.cancels) {
       throw Error(`${'cancel'}: cancel was cancelled`);
     }
-    api.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
+
+    this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
   /**
    * 🚧 remove async once skin sprite-sheet available
@@ -108,7 +109,7 @@ export class Npc {
     return this.group.position;
   }
   getRadius() {
-    return npcService.defaults.radius;
+    return helper.defaults.radius;
   }
   getMaxSpeed() {
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
@@ -124,7 +125,7 @@ export class Npc {
     this.mixer = new THREE.AnimationMixer(this.group);
 
     this.animMap = gltf.animations.reduce((agg, a) => {
-      if (npcService.isAnimKey(a.name)) {
+      if (helper.isAnimKey(a.name)) {
         agg[a.name] = this.mixer.clipAction(a);
       } else {
         warn(`ignored unexpected animation: ${a.name}`);
@@ -145,72 +146,50 @@ export class Npc {
   /** @param {number} deltaMs  */
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
+    if (this.agent === null) {
+      return;
+    }
 
-    if (this.agent === null) {// No agent
-      // NOOP
-    } else {// Moving or stationary with agent
-      const position = tmpVectThree1.copy(this.agent.position());
-      // const position = tmpVectThree1.copy(this.agent.interpolatedPosition);
-      const velocity = tmpVectThree2.copy(this.agent.velocity());
-      const speed = velocity.length();
-      
-      this.group.position.copy(position);
-      if (speed > 0.2) {
-        const forward = tmpVectThree3.copy(position).add(velocity);
-        dampLookAt(this.group, forward, 0.25, deltaMs);
-      } 
+    // Moving or stationary (with agent)
+    const position = tmpVectThree1.copy(this.agent.position());
+    const velocity = tmpVectThree2.copy(this.agent.velocity());
+    const speed = velocity.length();
+    
+    this.group.position.copy(position);
+    if (speed > 0.2) {
+      const forward = tmpVectThree3.copy(position).add(velocity);
+      dampLookAt(this.group, forward, 0.25, deltaMs);
+    } 
 
-      if (this.s.target === null) {
-        return;
-      }
+    if (this.s.target === null) {// same as `this.s.moving`?
+      return;
+    }
 
-      this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
-      const distance = position.distanceTo(this.s.target);
-      // console.log({
-      //   speed,
-      //   distance,
-      //   dVel: this.agent.raw.dvel,
-      //   nVel: this.agent.raw.nvel,
-      // });
+    this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
+    const distance = position.distanceTo(this.s.target);
+    // console.log({ speed, distance, dVel: this.agent.raw.dvel, nVel: this.agent.raw.nvel });
 
-      if (distance < 0.15) {// Reached target
-        this.s.target = null;
-        this.agent.updateParameters({
-          maxSpeed: this.getMaxSpeed(),
-          updateFlags: defaultAgentUpdateFlags,
-        });
-        
-        this.startAnimation('Idle');
-        // const time = this.mixer.time % 1;
-        // this.startAnimation(// 🚧 WIP
-        //   time >= 7/8 ? 'Idle' : time >= 5/8 ? 'IdleRightLead' : time >= 3/8 ? 'Idle' : 'IdleLeftLead'
-        // );
+    if (distance < 0.15) {// Reached target
+      return this.stopMoving();
+    }
+    
+    if (distance < 2.5 * this.agentRadius && (this.agent.updateFlags & 2) !== 0) {
+      // Turn off obstacle avoidance to avoid deceleration near nav border
+      this.agent.updateParameters({
+        updateFlags: this.agent.updateFlags & ~2,
+      });
+    }
 
-        // keep target, so "moves out of the way"
-        this.agent.teleport(position); // suppress final movement
-        this.agent.requestMoveTarget(position);
-        return;
-      }
-      
-      if (distance < 2.5 * this.agentRadius && (this.agent.updateFlags & 2) > 0) {
-        // Turn off obstacle avoidance to avoid deceleration near nav border
-        this.agent.updateParameters({
-          updateFlags: this.agent.updateFlags & ~2,
-        });
-      }
-
-      if (distance < 2 * this.agentRadius) {
-        // undo speed scale
-        // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-        this.agent.updateParameters({
-          maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
-        });
-      }
+    if (distance < 2 * this.agentRadius) {// undo speed scale
+      // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
+      this.agent.updateParameters({
+        maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
+      });
     }
   }
   removeAgent() {
     if (this.agent !== null) {
-      this.api.crowd.removeAgent(this.agent.agentIndex);
+      this.w.crowd.removeAgent(this.agent.agentIndex);
       this.agent = null;
     }
   }
@@ -226,37 +205,67 @@ export class Npc {
     next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
     this.s.act = act;
   }
-  /** @param {THREE.Vector3Like} dst  */
-  walkTo(dst, debugPath = showLastNavPath) {
-    if (this.agent === null) {
-      return warn(`npc ${this.key} cannot walkTo ${JSON.stringify(dst)} (no agent)`);
+  stopMoving() {
+    if (this.agent == null) {
+      return;
     }
-    const api = this.api;
-    const closest = api.npc.getClosestNavigable(dst, 0.15);
 
+    const position = this.agent.position();
+    this.s.target = null;
+    this.agent.updateParameters({
+      maxSpeed: this.getMaxSpeed(),
+      updateFlags: defaultAgentUpdateFlags,
+    });
+    
+    this.startAnimation('Idle');
+    // suppress final movement
+    this.agent.teleport(position);
+    // keep target, so moves out of the way of other npcs
+    this.agent.requestMoveTarget(position);
+
+    this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
+  }
+  /** @param {THREE.Vector3Like} dst  */
+  async moveTo(dst, debugPath = showLastNavPath) {
+    // await this.cancel(); // 🚧 move to process proxy
+    if (this.agent === null) {
+      return warn(`walkTo: npc ${this.key} has no agent (${JSON.stringify({dst})})`);
+    }
+
+    const closest = this.w.npc.getClosestNavigable(dst, 0.15);
     if (closest === null) {
       return;
     }
     if (debugPath) {
-      const path = api.npc.findPath(this.getPosition(), closest);
-      api.debug.setNavPath(path ?? []);
+      const path = this.w.npc.findPath(this.getPosition(), closest);
+      this.w.debug.setNavPath(path ?? []);
     }
     const position = this.getPosition();
     if (position.distanceTo(closest) < 0.25) {
       return;
     }
 
+    this.s.moving = true;
     this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
-
     this.agent.requestMoveTarget(closest);
     this.s.target = {...closest}; // crucial
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
       this.startAnimation(nextAct);
     }
+    
+    try {
+      await new Promise((resolve, reject) => {
+        this.s.rejectMove = reject; // permit cancel
+        this.waitUntilStopped().then(resolve).catch(resolve);
+      });
+    } catch (e) {
+      this.stopMoving();
+    } finally {
+      this.s.moving = false;
+    }
   }
- 
   toJSON() {
     return {
       key: this.key,
@@ -264,6 +273,24 @@ export class Npc {
       epochMs: this.epochMs,
       s: this.s,
     };
+  }
+  async waitUntilStopped() {
+    if (this.s.moving === false) {
+      return;
+    }
+    await new Promise((resolve, reject) => {
+      const sub = this.w.events.pipe(
+        this.w.lib.filter(e => 'npcKey' in e && e.npcKey === this.key)
+      ).subscribe(e => {
+        if (e.key === 'stopped-moving') {
+          sub.unsubscribe();
+          resolve(null);
+        } else if (e.key === 'removed-npc') {
+          sub.unsubscribe();
+          reject(`${'waitUntilStopped'}: npc was removed`)
+        }
+      });
+    });
   }
 }
 
@@ -278,7 +305,7 @@ export function hotModuleReloadNpc(npc) {
   
   // npc.changeSkin('robot-vaccino.png');  // 🔔 Skin debug
 
-  const nextNpc = new Npc(def, npc.api);
+  const nextNpc = new Npc(def, npc.w);
   return Object.assign(nextNpc, { epochMs, group, s: Object.assign(nextNpc.s, s), map, animMap, mixer, agent });
 }
 
@@ -287,11 +314,11 @@ function emptyReject(error) {}
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
-  radius: npcService.defaults.radius, // 🔔 too large causes jerky collisions
+  radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 10, // Large enough for 'Run'
   // maxSpeed: 0, // Set elsewhere
-  pathOptimizationRange: npcService.defaults.radius * 20, // 🚧 clarify
+  pathOptimizationRange: helper.defaults.radius * 20, // 🚧 clarify
   // collisionQueryRange: 2.5,
   collisionQueryRange: 0.7,
   separationWeight: 1,

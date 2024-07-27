@@ -86,7 +86,7 @@ export async function* click({ api, args, w }) {
       y: v3.z, // project to XZ plane
       ...e.keys && { keys: e.keys },
       meta: { ...e.meta,
-        navigable: w.npc.isPointInNavmesh(e.point),
+        ...w.npc.isPointInNavmesh(e.point) && { navigable: true },
         // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
       v3,
@@ -94,6 +94,22 @@ export async function* click({ api, args, w }) {
 
     yield output;
   }
+}
+
+
+/**
+ * @param {RunArg} ctxt
+ */
+export async function* events({ api, w }) {
+  const asyncIterable = api.observableToAsyncIterable(w.events);
+  // could not catch asyncIterable.throw?.(api.getKillError())
+  api.addCleanup(() => asyncIterable.return?.());
+  for await (const event of asyncIterable) {
+    // if (api.isRunning()) yield event;
+    yield event;
+  }
+  // get here via ctrl-c or `kill`
+  throw api.getKillError();
 }
 
 /**
@@ -134,7 +150,7 @@ export async function walkTest(input, { w, home })  {
   if (npc) {
     // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
     npc.s.run = input.keys?.includes("shift") ?? false;
-    npc.walkTo(input.v3);
+    npc.moveTo(input.v3);
   }
 }
 

@@ -178,22 +178,19 @@ const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
  * @param {number} height 
  * @param {object} [opts]
  * @param {boolean} [opts.willReadFrequently]
+ * @returns {CanvasTexMeta}
  */
-export function createCanvasTexDef(width, height, opts) {
-  const el = document.createElement('canvas');
-  el.width = width;
-  el.height = height;
-  /** @type {CanvasTexDef} */
-  const def = [
-    /** @type {CanvasRenderingContext2D} */(el.getContext(
-      '2d',
-      { willReadFrequently: opts?.willReadFrequently },
-    )),
-    new THREE.CanvasTexture(el),
-    el,
-  ];
-  def[1].flipY = false; // align with XZ quad uv-map
-  return def;
+export function createCanvasTexMeta(width, height, opts) {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.flipY = false; // align with XZ quad uv-map
+  const ct = /** @type {CanvasRenderingContext2D} */(canvas.getContext(
+    '2d',
+    { willReadFrequently: opts?.willReadFrequently },
+  ));
+  return { canvas, tex, ct };
 }
 
 /**
@@ -226,5 +223,8 @@ export const emptyGroup = new THREE.Group();
 export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
 
 /**
- * @typedef {Pretty<[CanvasRenderingContext2D, THREE.CanvasTexture, HTMLCanvasElement]>} CanvasTexDef
+ * @typedef CanvasTexMeta
+ * @property {CanvasRenderingContext2D} ct
+ * @property {THREE.CanvasTexture} tex
+ * @property {HTMLCanvasElement} canvas
  */

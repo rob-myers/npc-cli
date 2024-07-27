@@ -8,128 +8,73 @@
   - consoles
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
-- 🚧 hull symbols should have same scale as non-hull symbols
-  - resize-* 301 ✅ 302 🚧 303 🚧 101 🚧 102 🚧 103
-- ❌ decor point bounds determined by original rect/poly
 
-- 🚧 Decor component
-  - ✅ `<Decor>` exists
-  - ✅ clarify identifiers
-    - decorImgKey points into decor sprite-sheet
-    - decorKey (string) identifies instance
-    - can remove prev via "grouping by gmId" etc.
-    - decorKey not same as numeric instanceId (from instanced mesh)
-  - ✅ migrate decor grid
-  - ✅ decor points have fixed dimension bounds2d
-    - maybe should depend on whether they have an associated icon i.e. decorKey
-  - ✅ can specify decor `cuboid` in symbols
-  - ✅ can see decor cuboids in World
-    - ✅ `gms[gmId].decor` induces initial decor
-    - ✅ can add cuboid to instancedmesh
-    - ✅ can remove cuboid from instancedmesh
-      - `w decor.removeDecor g0dec4`
-  - ✅ cuboid shader with vertex-normal lighting?
-    - https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderChunk
-    - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
-    - ✅ try `diffuse * normal`
-    - ✅ get "view aligned normals lightest" working
-  - ✅ fix decor cuboids in transformed geomorphs
-  - ✅ `decor.cuboids`, `decor.quads`
-    - ❌ with managed holes, so don't have to recreate
-    - ✅ with onPointer{Down,Up}
-  - ✅ fix decor cuboid roomId
-  - ✅ gmRoomId has `grKey` e.g. `g4r3`
-  - ✅ simplify decorGrid i.e. `lookup[x][y]: Set<Decor>`
-  - ✅ speed up decor initialization
-  - ❌ smaller decor e.g. x1 instead of x5?
-    - no, need the detail and don't want to "scale svg" in case uses bitmaps
-  - ✅ reconsider decor types
-    - ✅ add info icon to decor sprite-sheet
-      - 100x100
-    - ✅ `point` can have meta.img in `DecorImgKey`
-    - ✅ `poly` can have meta.img in `DecorImgKey` 
-      - when rotated rect 4-gon
-  - ✅ decor points induce quads
-  - ✅ all decor points _temp_ show decor info icon
-  - ✅ fix HMR on change decor
-    - world query was broken (wrong initial key)
-    - also, now trigger Decor useEffect using query.status === 'success'
-  - ✅ cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
-  - ✅ `gm.decor[i]` has keys like instantiated
-  - ✅ fix cuboid instantiation when angle non-zero
-  - ✅ track instantiated decor new/changed/removed
-    - track per-geomorph only (not per decor)
-  - ✅ efficient decor re-instantiation
-    - e.g. if map stays same and decor too, won't redo
-  - ❌ try absorb Decor query into root query (avoid partial)
-    - ℹ️ even if we merge into root query, have to mutate
-      `w.decor` over time because `decorGrid` is too large,
-      so cannot "apply changes synchronously"
-  - ✅ prefer to apply root changes first
-  - ✅ ensure decor of removed geomorphs is also removed
-    - currently works when gmId ≤ next max gmId
-  - ✅ world is not ready until decor ready
-  - ✅ world can become "unready" onchange e.g. map, hmr
-    - i.e. `w.isReady()` false when `w.decor.queryStatus` not success
-  - ❌ wrap world in proxy, guarding by readiness
-    - any invocation first await readiness
-    - ℹ️ instead, expose API to permit higher-level approach
-  - ✅ better decor point heights
-  - ✅ move `w.setReady` into useHandleEvents
-  - ✅ remove temp "all decor points shown with info icon"
-    - ✅ can see labels (InstancedMesh) using decor.labelTex
-    - ✅ permit spaces in labels via `label='foo bar'`
-    - ✅ move labels from `gm.decors` into `gm.labels`
-      - they won't be added to e.g. `w.decor.byKey`
-    - ✅ ensure label UVs are updated
-    - ✅ move w.labels -> w.decor.label
-    - ✅ high-res labels
-    - ✅ hide labels by default, show via `w update 'w => w.decor.showLabels = true'`
-    - ✅ only show do/button points
-  - ✅ rotate decor points according to `orient`
-  - ✅ document on desk decor poly
-    - ✅ document sprite (`icon--002--doc`)
-    - ✅ add a `decor poly` with `img=icon--002--doc`
-    - ✅ w.quads includes `decor poly`s
-    - ✅ rotated rect 4-gon -> affine transform
-      - need to know orientation of image
-      - use "decor quad symbol" with axes pattern and dim 10x10
-  - ✅ decor point induces quads
-    - with fallback image `icon--001--info`
-  - ✅ decor quad has fallback image
-  - ✅ fix hmr on extend decor sprite-sheet
-  - ✅ saw decor disappear when editing symbols
-    - hopefully fixed by prevent query re-compute i.e. `retry: false`
-  - ✅ fix decor point orient again (in transformed geomorph)
-    - d.meta.orient -> d.orient for DecorPoint
-  - ✅ decor cuboids can effect nav-mesh via tag `nav`
-  - ✅ fix geomorph decor warns e.g. not fuel label not in any room
-    - these were all labels, so fixed by moving them out of `w.decor.byKey`
-  - ✅ can choose colour of decor cuboids
-    - ✅ use InstancedMesh color attribute and forward to custom shader
-    - ✅ forward `meta.color` to cuboid
-  - ✅ can choose colour of decor quads
-    - ✅ use InstancedMesh color attribute and forward to custom shader
-    - ✅ forward `meta.color` to quad
-  - 🚧 change decorImgKey convention e.g. `icon--002--doc` -> `icon--doc`
+- 🚧 doors open automatically when npc nearby
+  - ✅ doors can be open/closed, locked/unlocked, manual/auto
+  - ✅ doors can be sealed
+  - ✅ track door -> nearby npcs
+  - ✅ track npc -> door sensors e.g. for clean-up
+  - ❌ toggle other hull door automatically
+    - can open them individually
+    - sensors already work
+  - ✅ don't auto close door when npcs still within sensor range
+  - ✅ clarify auto doors
+    - ✅ do not auto-close when not auto
+    - ✅ do not auto-open when not auto
+  - ❌ manual doors are "blocked" inside nav query
+    - we'll add physical switches for all doors, usable for manual
+  - ✅ move worker handlers into WorldWorker
+    - want handler edit to restart workers
+  - ✅ clean
 
-- ✅ world provides "resolve when ready" api
-- ✅ DecorQuad (not DecorPoly) derived from decor `<use>`
-  - ✅ infer transform from 1x1 symbol
-  - ✅ symbol instances apply to transform
-  - ✅ use transform to position InstancedMesh instance
-  - ✅ handle transform-origin
+- ✅ tty: support recursive stringify of `Set` and `Map`
+  - ✅ in tty.xterm output
+  - ✅ `declare -x`
+  - ✅ in shell expansion
+  - ✅ separated shell function `pretty` into `pretty` and `json`
+    - `pretty` is essentially `javascriptStringify` with indent 2
+    - `json` is essentially `prettyCompact` and projects to JSON
+      - e.g. does not support `Set`
 
-- start new branch `use-physics`
-  - web worker with rapier
+- ✅ shell session: support restore Set and Map
+  - ✅ serialize via `jsStringify` then re-evaluate
+  - ✅ persist session on reset/unload
+  - ✅ do not persist variable on run command (only on unload)
+
+- ✅ service/npc -> service/helper
+  - ℹ️ available runtime as w.lib.*
+  - ℹ️ used by assets script
+  - ✅ move key defs into helper
+    - avoids totally rebuilding geomorphs.json
+  - ✅ helper file should trigger watch script
+
+- ✅ can pipe `w.events` into shell
+  - ✅ define `events` in game-generators.js
+  - ✅ better error messages on mvdan parse error
+
+- 🚧 new branch `refine-doors`
+  - every door has 2 switches (inner, outer)
+  - doors can slide in specific direction
+    - sometimes not possible e.g. toilet
+  - doors have small wall above them
+    - locked indicator could go in center
+  - navQuery blocks non-auto doors
+  - support non-door sensor i.e. decor circle/poly
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
+- maybe "move" constants into geomorphs.json
+  - to avoid HMR versus geomorphs.json "alternate routes"
+- workers should only hot reload when directly edited or geomorphs.json changes
+  - workers should get constants from geomorphs.json
+  - otherwise might restart early, retrieving old geomorphs.json
+- can color obstacles
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
+- permit single quotes inside e.g. game-generators
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 - decor sprite bounds issue on edit decor
@@ -142,17 +87,10 @@
 - tty pause/resume loses should remember cursor position
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
-- ✅ tty: `echo \'` should echo `'` (currently `\'`)
-  - related to allowing single-quotes inside js (replace `'` -> `'\''`)
-  - tryParseBuffer receives `["echo \\'"]` (which seems correct)
-  - ✅ try interpreting Lit differently
-- ✅ `SideNote` should wait a bit before showing
-- tty should not render `NaN` as `null`
-- `say` reading from tty should not terminate early when send a command before utterance finished
-- ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
-  - `map` recognises such cases does NOT pass `ctxt` inside `map` as 2nd argument
-- ✅ fix `click 1` i.e. `click | ...` should not fire
-- ✅ verify HMR which propagates from geomorphs.json -> gmsData
+- `Tabs` css should not reference src/const
+  - try refactor `faderOverlayCss` e.g. merge into `<figure>`
+- change camera fov based on camera height and/or visible-world
+
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
@@ -173,12 +111,20 @@
 
 - prevent NPCs going through closed doors
   - i.e. color nav query
-- use rapier physics 3d in web worker
+- ✅ use rapier physics 3d in web worker
   - i.e. static triggers
 
 - next.js repo continued
   - migrate Viewer
 
+- 🚧 more decor images
+  - computer
+  - speaker
+  - communicator
+  - fabricator
+- place decor points on many tables
+- more tables in 301
+- more tables in 101
 - verifyDecor inside CLI (previously did inside Decor)
 - gatsby: somehow reconfigure `TerserPlugin` to exclude `npc-cli/sh/src/*`
   - already tried using extension `.min.js`
@@ -208,25 +154,6 @@
   - can see 3d floor but console logs `THREE.WebGLRenderer: Context Lost`
   - observed that worker was not running
   - 🚧 try saving memory in web-worker, following recast-navigation-js
-- ✅ fuel symbol can use single rect for wall
-- ✅ thicker door ceiling tops
-- ✅ `hull-wall` tag -> `wall hull`
-- ✅ hull walls have `meta.hull` `true`
-  - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
-- ✅ ContextMenu should work with ceiling
-  - approach similar to obstacles
-- support camera move via terminal
-- improve doors hard-coding in decor sprite-sheet
-- ✅ split component WallsAndDoors
-- ✅ split component Surfaces
-  - Obstacles
-  - Floor
-  - Ceiling
-- ✅ animation from directly above looks weird e.g. arms should bend more
-- ❌ TTY can get out of sync when edit cmd.service, tty.shell?
-- ✅ can somehow ctrl-c `seq 100000000` (100 million)
-  - same problem with `range 100000000`
-  - same problem with `Array.from({ length: 100000000 })` (underlying JavaScript)
 - TTY windows ctrl-c conflict: abort vs copy selection
   - take same approach as Windows itself
   - in Windows, when `this.xterm.hasSelection()`, ctrl-c should copy, not abort
@@ -240,35 +167,12 @@
 - use decor cuboids under e.g. machines and desks
 - closed doors have filtered doorPolys
 - can make agent look at point
-- ✅ migrate roomGraph per geomorph
-- migrate gmRoomGraph
-- migrate fast gmRoomId lookup via image pixels
 - prevent agent going through door
   - e.g. when avoiding another agent, could use obstacle
   - e.g. use gmRoomGraph to avoid going thru closed door
 - show toast while navmesh loading
   - also show results e.g. number of tiles
 
-- ✅ fix sprite-sheet HMR
-  - ℹ️ on add new symbol with obstacles
-  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
-  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
-  - ✅ could be problem with smart-sprite-sheet-update
-  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
-  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
-  - ❌ try repro with single geomorph
-  - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
-  - 🤔 multiple websockets open in single browser tab?
-  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
-    - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
-    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
-  - ✅ saw issue on WARN about mismatched size
-    - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
-  - ✅ saw out-of-sync, possibly Boxy SVG failed to save
-  - ✅ saw issue on remove obstacle, then add back in
-  - haven't seen any issues for a while, so closing
-
-- ✅ remove `. ~/.bash_profile` from pre-push hook
 - ❌ improve `yarn ensure-webp` by detecting webp older than png
 - initially force complete assets recompute
 - permit holes in symbol walls?
@@ -285,14 +189,6 @@
 - avoid recomputing npcs/obstacles in TestNpcs
 - fix open/close non-aligning hull doors
 - ℹ️ boxy svg: when undo move-then-duplicate, need to undo both!
-- ✅ type worker.postMessage in main thread and worker
-  - ✅ main thread
-  - ✅ worker
-- ✅ get web worker HMR "working"
-  - ❌ https://github.com/webpack/webpack/issues/14722
-  - ℹ️ gatsby does not support "webpack multi-compiler"
-  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
-- ✅ changing props.mapKey should change map
 - can directly change a single door's material e.g. make wireframe
   - https://www.npmjs.com/package/three-instanced-uniforms-mesh
   - https://codesandbox.io/p/sandbox/instanceduniformsmesh-r3f-lss90?file=%2Fsrc%2Findex.js
@@ -305,9 +201,6 @@
   - ✅ move maps to `media/map`
   - ✅ improve remount keys
   - still seeing occasional issues?
-- ✅ integer accuracy when parsing maps
-  - Boxy has rounding errors e.g. when reflect
-  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
 - sh `test {fn}` evaluates function with `map` args
 - Terminal crashing during HMR
   - possibly fixed via `xterm-addon-webgl@beta`
@@ -317,10 +210,7 @@
   - debug locally using about:debugging#/runtime/this-firefox
 - 🚧 Boxy SVG: can we avoid creating new `<pattern>` when copy/dup then transform?
   - https://boxy-svg.com/ideas/371/transform-tool-preserve-pattern-geometry-option
-- ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
-  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
-  - ℹ️ seen in parseSymbol of hull symbol
-  - ℹ️ fixed by updating sphere bounds
+
 - in parallel, start going through https://github.com/recastnavigation/recastnavigation
   - to understand what recast outputs
   - to understand what detour inputs
@@ -332,13 +222,11 @@
 
 - if only open Viewer a tiny amount then it should close itself
 
-- ✅ smaller collapsed nav on mobile
 - fix multi-touch flicker on drag
   - setup local dev on phone to debug this
 - can add Tabs via links in blog posts
   - without remounting other tabs!
 - open Viewer should enable Tabs initially
-- ✅ can press Escape/Enter to pause/unpause
 - how does shell function versioning work in sh/scripts.ts?
 - fix vertical tab drag on mobile
   - need repro
@@ -348,15 +236,7 @@
   - ✅ Viewer initially partially occluded
   - seems fixed on iPhone 13
 
-- more decor images
-  - `computer-2`
-  - `speaker-1`
-  - `communicator-1`
-  - `fabricator-1`
-- place decor points on many tables
-- more tables in 301
-- more tables in 101
-- World WebGL rendering pauses on pause Tabs
+- ✅ World WebGL rendering pauses on pause Tabs
 
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
@@ -1645,3 +1525,225 @@
   - avoid confusion with `decorKey`
 - ✅ decorKey -> decorImgKey
 - ✅ decor.id -> decor.key
+
+
+- ✅ Decor component
+  - ✅ `<Decor>` exists
+  - ✅ clarify identifiers
+    - decorImgKey points into decor sprite-sheet
+    - decorKey (string) identifies instance
+    - can remove prev via "grouping by gmId" etc.
+    - decorKey not same as numeric instanceId (from instanced mesh)
+  - ✅ migrate decor grid
+  - ✅ decor points have fixed dimension bounds2d
+    - maybe should depend on whether they have an associated icon i.e. decorKey
+  - ✅ can specify decor `cuboid` in symbols
+  - ✅ can see decor cuboids in World
+    - ✅ `gms[gmId].decor` induces initial decor
+    - ✅ can add cuboid to instancedmesh
+    - ✅ can remove cuboid from instancedmesh
+      - `w decor.removeDecor g0dec4`
+  - ✅ cuboid shader with vertex-normal lighting?
+    - https://github.com/mrdoob/three.js/tree/master/src/renderers/shaders/ShaderChunk
+    - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
+    - ✅ try `diffuse * normal`
+    - ✅ get "view aligned normals lightest" working
+  - ✅ fix decor cuboids in transformed geomorphs
+  - ✅ `decor.cuboids`, `decor.quads`
+    - ❌ with managed holes, so don't have to recreate
+    - ✅ with onPointer{Down,Up}
+  - ✅ fix decor cuboid roomId
+  - ✅ gmRoomId has `grKey` e.g. `g4r3`
+  - ✅ simplify decorGrid i.e. `lookup[x][y]: Set<Decor>`
+  - ✅ speed up decor initialization
+  - ❌ smaller decor e.g. x1 instead of x5?
+    - no, need the detail and don't want to "scale svg" in case uses bitmaps
+  - ✅ reconsider decor types
+    - ✅ add info icon to decor sprite-sheet
+      - 100x100
+    - ✅ `point` can have meta.img in `DecorImgKey`
+    - ✅ `poly` can have meta.img in `DecorImgKey` 
+      - when rotated rect 4-gon
+  - ✅ decor points induce quads
+  - ✅ all decor points _temp_ show decor info icon
+  - ✅ fix HMR on change decor
+    - world query was broken (wrong initial key)
+    - also, now trigger Decor useEffect using query.status === 'success'
+  - ✅ cuboid decor changes height with symbols e.g. d.center.y equals d.meta.y
+  - ✅ `gm.decor[i]` has keys like instantiated
+  - ✅ fix cuboid instantiation when angle non-zero
+  - ✅ track instantiated decor new/changed/removed
+    - track per-geomorph only (not per decor)
+  - ✅ efficient decor re-instantiation
+    - e.g. if map stays same and decor too, won't redo
+  - ❌ try absorb Decor query into root query (avoid partial)
+    - ℹ️ even if we merge into root query, have to mutate
+      `w.decor` over time because `decorGrid` is too large,
+      so cannot "apply changes synchronously"
+  - ✅ prefer to apply root changes first
+  - ✅ ensure decor of removed geomorphs is also removed
+    - currently works when gmId ≤ next max gmId
+  - ✅ world is not ready until decor ready
+  - ✅ world can become "unready" onchange e.g. map, hmr
+    - i.e. `w.isReady()` false when `w.decor.queryStatus` not success
+  - ❌ wrap world in proxy, guarding by readiness
+    - any invocation first await readiness
+    - ℹ️ instead, expose API to permit higher-level approach
+  - ✅ better decor point heights
+  - ✅ move `w.setReady` into useHandleEvents
+  - ✅ remove temp "all decor points shown with info icon"
+    - ✅ can see labels (InstancedMesh) using decor.labelTex
+    - ✅ permit spaces in labels via `label='foo bar'`
+    - ✅ move labels from `gm.decors` into `gm.labels`
+      - they won't be added to e.g. `w.decor.byKey`
+    - ✅ ensure label UVs are updated
+    - ✅ move w.labels -> w.decor.label
+    - ✅ high-res labels
+    - ✅ hide labels by default, show via `w update 'w => w.decor.showLabels = true'`
+    - ✅ only show do/button points
+  - ✅ rotate decor points according to `orient`
+  - ✅ document on desk decor poly
+    - ✅ document sprite (`icon--002--doc`)
+    - ✅ add a `decor poly` with `img=icon--002--doc`
+    - ✅ w.quads includes `decor poly`s
+    - ✅ rotated rect 4-gon -> affine transform
+      - need to know orientation of image
+      - use "decor quad symbol" with axes pattern and dim 10x10
+  - ✅ decor point induces quads
+    - with fallback image `icon--001--info`
+  - ✅ decor quad has fallback image
+  - ✅ fix hmr on extend decor sprite-sheet
+  - ✅ saw decor disappear when editing symbols
+    - hopefully fixed by prevent query re-compute i.e. `retry: false`
+  - ✅ fix decor point orient again (in transformed geomorph)
+    - d.meta.orient -> d.orient for DecorPoint
+  - ✅ decor cuboids can effect nav-mesh via tag `nav`
+  - ✅ fix geomorph decor warns e.g. not fuel label not in any room
+    - these were all labels, so fixed by moving them out of `w.decor.byKey`
+  - ✅ can choose colour of decor cuboids
+    - ✅ use InstancedMesh color attribute and forward to custom shader
+    - ✅ forward `meta.color` to cuboid
+  - ✅ can choose colour of decor quads
+    - ✅ use InstancedMesh color attribute and forward to custom shader
+    - ✅ forward `meta.color` to quad
+  - ✅ change decorImgKey convention e.g. `icon--002--doc` -> `icon--doc`
+
+- ✅ world provides "resolve when ready" api
+- ✅ DecorQuad (not DecorPoly) derived from decor `<use>`
+  - ✅ infer transform from 1x1 symbol
+  - ✅ symbol instances apply to transform
+  - ✅ use transform to position InstancedMesh instance
+  - ✅ handle transform-origin
+
+
+- ✅ fix sprite-sheet HMR
+  - ℹ️ on add new symbol with obstacles
+  - ℹ️ could fix with `yarn clean-assets && yarn assets-fast --all` + refresh
+  - ℹ️ definitely data e.g.`geomorphs.json` or sprite-sheet, not program
+  - ✅ could be problem with smart-sprite-sheet-update
+  - ❌ could relate to adding symbol key to geomorph.js before we're ready?
+  - ✅ visualise symbols graph i.e. media/graph/symbols-graph.dot
+  - ❌ try repro with single geomorph
+  - try fixing sprite-sheet size at 4096 x 4096 and see if re-occurs
+  - 🤔 multiple websockets open in single browser tab?
+  - ✅ saw issue onchange extant symbol i.e. remove some obstacles, add one symbol
+    - ℹ️ this seems wrong 👉 `changedObstacles: Set(0)`
+    - ✅ add `removedObstacles` and redraw sprite-sheet if non-empty
+  - ✅ saw issue on WARN about mismatched size
+    - `WARN medical-bed--006--1.6x3.6: extra--013--privacy-screen--1.5x0.2: unexpected symbol dimension`
+  - ✅ saw out-of-sync, possibly Boxy SVG failed to save
+  - ✅ saw issue on remove obstacle, then add back in
+  - haven't seen any issues for a while, so closing
+
+- ✅ remove `. ~/.bash_profile` from pre-push hook
+
+- ✅ tty: `echo \'` should echo `'` (currently `\'`)
+  - related to allowing single-quotes inside js (replace `'` -> `'\''`)
+  - tryParseBuffer receives `["echo \\'"]` (which seems correct)
+  - ✅ try interpreting Lit differently
+- ✅ `SideNote` should wait a bit before showing
+- tty should not render `NaN` as `null`
+- `say` reading from tty should not terminate early when send a command before utterance finished
+- ✅ `foo | map Array.from` failed because `Array.from` takes optional 2nd arg `mapFunc`
+  - `map` recognises such cases does NOT pass `ctxt` inside `map` as 2nd argument
+- ✅ fix `click 1` i.e. `click | ...` should not fire
+- ✅ verify HMR which propagates from geomorphs.json -> gmsData
+
+
+- ✅ fuel symbol can use single rect for wall
+- ✅ thicker door ceiling tops
+- ✅ `hull-wall` tag -> `wall hull`
+- ✅ hull walls have `meta.hull` `true`
+  - 🔔 cannot union with non-hull walls, api.derived.wallCount increased: `2625` to `2813`
+- ✅ ContextMenu should work with ceiling
+  - approach similar to obstacles
+- support camera move via terminal
+- improve doors hard-coding in decor sprite-sheet
+- ✅ split component WallsAndDoors
+- ✅ split component Surfaces
+  - Obstacles
+  - Floor
+  - Ceiling
+- ✅ animation from directly above looks weird e.g. arms should bend more
+- ❌ TTY can get out of sync when edit cmd.service, tty.shell?
+- ✅ can somehow ctrl-c `seq 100000000` (100 million)
+  - same problem with `range 100000000`
+  - same problem with `Array.from({ length: 100000000 })` (underlying JavaScript)
+
+- ✅ migrate roomGraph per geomorph
+- ✅ migrate gmRoomGraph
+- ✅ migrate fast gmRoomId lookup via image pixels
+
+- ✅ type worker.postMessage in main thread and worker
+  - ✅ main thread
+  - ✅ worker
+- ✅ get web worker HMR "working"
+  - ❌ https://github.com/webpack/webpack/issues/14722
+  - ℹ️ gatsby does not support "webpack multi-compiler"
+  - ✅ `useEffect` with worker.terminate suffices -- don't need react fast-refresh in worker
+- ✅ changing props.mapKey should change map
+
+- ✅ integer accuracy when parsing maps
+  - Boxy has rounding errors e.g. when reflect
+  - ℹ️ seems fixed after setting Boxy accuracy as maximum (attr + transform)
+- ✅ fix case where `transform-box` is ~~`content-box`~~ or `fill-box`
+  - https://boxy-svg.com/ideas/409/reset-transform-origin-points-svgz-export-option
+  - ℹ️ seen in parseSymbol of hull symbol
+  - ℹ️ fixed by updating sphere bounds
+- ✅ smaller collapsed nav on mobile
+- ✅ can press Escape/Enter to pause/unpause
+
+- ✅ hull symbols should have same scale as non-hull symbols
+  - ✅ resize-* 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅ 103 ✅
+  - ✅ careful about duplicating patterns i.e. only use `pattern-0`
+  - ✅ replace files, whilst changing scaling i.e. always 1/5
+  - ✅ issue with e.g. `<use width height transform="matrix(5, 0, 0, 5, x, y)">`
+    - we used browser script (see `dev-info`) plus correctly manually
+  - ✅ understand issue with obstacle sprite-sheet
+    - 🔔🔔🔔 hull symbol image is scaled-up (unlike other symbols)
+    - could add a scaled image, but might add to load time
+- ❌ decor point bounds determined by original rect/poly
+
+- ✅ start new branch `use-physics`
+  - ✅ web worker with rapier
+  - ✅ rapier has `stepWorld` function (untested)
+  - ✅ rapier world has static colliders
+    - request geomorphs.json and construct in worker
+  - ✅ convert numeric ids into strings i.e. npcKey and gmDoorKey
+  - ✅ rapier world has kinematic rigid bodies
+    - ✅ spawn induces kinematic rigid body
+    - ✅ remove npc removes kinematic rigid body
+  - ✅ rapier world is stepped per-npcs-position update
+    - don't bother trying to send "succinct array" (yet)
+  - ✅ rapier triggers worker message on npc collide
+  - ❌ could represent many doors as one rigid body e.g. per gm?
+    - no need to try this
+  - ✅ main thread sends numerical array(s)
+    - ✅ do not detect agent vs agent collisions
+      - seems already aren't being detected
+    - ✅ method for assigning numerical ids to bodyKey/Meta
+    - ✅ worker lookup restored on hmr
+    - ❌ send array of npc uids which should go to sleep
+      - rely on rapier to auto set bodies asleep
+      - https://rapier.rs/docs/user_guides/bevy_plugin/rigid_bodies/#sleeping
+  - ✅ clean

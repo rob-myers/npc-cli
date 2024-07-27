@@ -2,6 +2,13 @@ import { type StateCreator, create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { focusManager } from "@tanstack/react-query";
 
+// 🔔 avoid unnecessary HMR: do not reference view-related consts
+import {
+  defaultSiteTopLevelState,
+  siteTopLevelKey,
+  allArticlesMeta,
+} from "src/const";
+
 import {
   safeJsonParse,
   tryLocalStorageGet,
@@ -9,16 +16,7 @@ import {
   info,
   isDevelopment,
 } from "src/npc-cli/service/generic";
-// 🔔 avoid unnecessary HMR: do not reference view-related consts
-import {
-  DEV_EXPRESS_WEBSOCKET_PORT,
-  WORLD_QUERY_FIRST_KEY,
-  DEV_ORIGIN,
-  defaultSiteTopLevelState,
-  siteTopLevelKey,
-  allArticlesMeta,
-} from "src/const";
-import { queryClient } from "src/npc-cli/service/query-client";
+import { connectDevEventsWebsocket } from "src/npc-cli/service/fetch-assets";
 
 const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devtools((set, get) => ({
   articleKey: null,
@@ -35,7 +33,7 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
       const cleanUps = [] as (() => void)[];
 
       if (isDevelopment()) {
-        get().api.connectDevEventsWebsocket();
+        connectDevEventsWebsocket();
 
         /**
          * In development refetch on refocus can automate changes.
@@ -86,33 +84,6 @@ const initializer: StateCreator<State, [], [["zustand/devtools", never]]> = devt
       }
 
       return () => cleanUps.forEach((cleanup) => cleanup());
-    },
-
-    connectDevEventsWebsocket() {
-      const url = `ws://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-events`;
-      const wsClient = new WebSocket(url);
-      wsClient.onmessage = async (e) => {
-        info(`received websocket message:`, { url, data: e.data });
-
-        queryClient.refetchQueries({
-          predicate({ queryKey: [queryKey] }) {
-            return WORLD_QUERY_FIRST_KEY === queryKey;
-          },
-        });
-      };
-
-      wsClient.onopen = (e) => {
-        info(`${url} connected`);
-        wsAttempts = 0;
-      };
-      wsClient.onclose = (e) => {
-        info(`${url} closed: reconnecting...`);
-        if (++wsAttempts <= 5) {
-          setTimeout(() => get().api.connectDevEventsWebsocket(), (2 ** wsAttempts) * 300);
-        } else {
-          info(`${url} closed: gave up reconnecting`);
-        }
-      };
     },
 
     isViewClosed() {
@@ -167,11 +138,6 @@ export type State = {
     // clickToClipboard(e: React.MouseEvent): Promise<void>;
     initiateBrowser(): () => void;
     isViewClosed(): boolean;
-    /**
-     * Dev-only event handling:
-     * - trigger component refresh on file change
-     */
-    connectDevEventsWebsocket(): void;
     onTerminate(): void;
     setArticleKey(articleKey?: string): void;
     toggleNav(next?: boolean): void;
@@ -214,8 +180,6 @@ interface GiscusDiscussionMeta {
   /** e.g. `"https://github.com/rob-myers/the-last-redoubt/discussions/5"` */
   url: string;
 }
-
-let wsAttempts = 0;
 
 const useSite = Object.assign(useStore, { api: useStore.getState().api });
 export default useSite;

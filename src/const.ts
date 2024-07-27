@@ -1,40 +1,5 @@
 import type { ArticleKey, ArticleMeta } from "./components/site.store";
 
-/** See `npm run develop` */
-export const DEV_GATSBY_PORT = 8011;
-
-/** See `npm run ws-server` */
-export const DEV_EXPRESS_WEBSOCKET_PORT = 8012;
-
-/**
- * - Parsed JSON stored at `static/assets/${ASSETS_META_JSON_FILENAME}`
- * - Also a react-query `queryKey`.
- */
-export const ASSETS_JSON_FILENAME = "assets.json";
-
-export const GEOMORPHS_JSON_FILENAME = "geomorphs.json";
-
-export const DEV_ORIGIN = 'localhost';
-/**
- * For local mobile debugging, e.g. via:
- * `ifconfig | grep "inet " | grep -v 127.0.0.1`
- */
-// export const DEV_ORIGIN = '192.168.16.66';
-
-/**
- * Gatsby serves `static/assets/*` in development as `/assets/*`.
- * However, it can be slow to update.
- * In development we serve assets directly to overcome this.
- */
-export const assetsEndpoint = process.env.NODE_ENV === 'development'
-  ? `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/dev-assets`
-  : '/assets'
-;
-
-export const WORLD_QUERY_FIRST_KEY = 'world';
-
-export const imgExt = process.env.NODE_ENV === 'development' ? 'png' : 'png.webp';
-
 export const afterBreakpoint = "1201px";
 export const breakpoint = "1200px";
 

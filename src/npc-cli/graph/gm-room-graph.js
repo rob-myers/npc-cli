@@ -1,5 +1,5 @@
 import { BaseGraph } from "./base-graph";
-import { geomorphService } from "../service/geomorph";
+import { helper } from "../service/helper";
 
 /**
  * @extends {BaseGraph<Graph.GmRoomGraphNode, Graph.GmRoomGraphEdgeOpts>}
@@ -31,7 +31,7 @@ export class GmRoomGraphClass extends BaseGraph {
     /** @type {Graph.GmRoomGraphNode[]} */
     const nodes = gmGraph.gms.flatMap((gm, gmId) =>
       gm.rooms.map((_, roomId) => ({
-        id: geomorphService.getGmRoomKey(gmId, roomId),
+        id: helper.getGmRoomKey(gmId, roomId),
         gmId,
         roomId,
       }))
@@ -44,6 +44,7 @@ export class GmRoomGraphClass extends BaseGraph {
     }, /** @type {typeof graph.gmNodeOffset} */ ([0]));
 
     graph.registerNodes(nodes);
+    const { lib } = gmGraph.w;
 
     // Edges: for fixed gmId
     // Edges: bridging two gmIds (via hull doors)
@@ -57,13 +58,16 @@ export class GmRoomGraphClass extends BaseGraph {
               const ctxt = gmGraph.getAdjacentRoomCtxt(gmId, doorId);
               if (ctxt !== null) {
                 (agg[ctxt.adjGmRoomKey] ??= [[], []])[0].push(
-                  { key: geomorphService.getGmDoorKey(gmId, doorId), gmId, doorId, other: { gmId: ctxt.adjGmId, doorId: ctxt.adjDoorId } }
+                  // { gdKey: geomorphService.getGmDoorKey(gmId, doorId), gmId, doorId, other: { gmId: ctxt.adjGmId, doorId: ctxt.adjDoorId } }
+                  // { gdKey: geomorphService.getGmDoorKey(gmId, doorId), gmId, doorId }
+                  lib.getGmDoorId(gmId, doorId),
                 );
               } // ctxt `null` for unconnected hull doors
             } else {
               const otherRoomId = /** @type {number} */ (gm.getOtherRoomId(doorId, roomId));
-              (agg[geomorphService.getGmRoomKey(gmId, otherRoomId)] ??= [[], []])[0].push(
-                { key: geomorphService.getGmDoorKey(gmId, doorId), gmId, doorId },
+              (agg[helper.getGmRoomKey(gmId, otherRoomId)] ??= [[], []])[0].push(
+                // { gdKey: geomorphService.getGmDoorKey(gmId, doorId), gmId, doorId },
+                lib.getGmDoorId(gmId, doorId),
               );
             }
             return agg;
@@ -74,11 +78,11 @@ export class GmRoomGraphClass extends BaseGraph {
         roomGraph.getAdjacentWindows(roomId).forEach(({ windowId }) => {
           const otherRoomId = gm.windows[windowId].roomIds.find(x => x !== roomId);
           typeof otherRoomId === 'number' && (
-            succ[geomorphService.getGmRoomKey(gmId, otherRoomId)] ??= [[], []]
+            succ[helper.getGmRoomKey(gmId, otherRoomId)] ??= [[], []]
           )[1].push({ gmId, windowId });
         });
 
-        const srcKey = geomorphService.getGmRoomKey(gmId, roomId);
+        const srcKey = helper.getGmRoomKey(gmId, roomId);
         for (const [gmRoomStr, [gmDoorIds, gmWindowIds]] of Object.entries(succ)) {
           const [gmId, roomId] = gmRoomStr.slice(1).split('r').map(Number);
           /**
@@ -91,7 +95,7 @@ export class GmRoomGraphClass extends BaseGraph {
            */
           graph.connect({
             src: srcKey,
-            dst: geomorphService.getGmRoomKey(gmId, roomId),
+            dst: helper.getGmRoomKey(gmId, roomId),
             doors: gmDoorIds,
             windows: gmWindowIds,
           })

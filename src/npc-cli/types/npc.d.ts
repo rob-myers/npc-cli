@@ -1,7 +1,7 @@
 declare namespace NPC {
 
   /** Skin names. */
-  type SkinKey = keyof import('../service/npc').NpcService['fromSkinKey'];
+  type SkinKey = keyof import('../service/helper').Helper['fromSkinKey'];
 
   type NPC = import('../world/create-npc').Npc;
 
@@ -28,7 +28,7 @@ declare namespace NPC {
     agent?: boolean;
   }
 
-  type AnimKey = keyof import('../service/npc').NpcService['fromAnimKey'];
+  type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
   type Event =
     | PointerUpOutsideEvent
@@ -40,11 +40,16 @@ declare namespace NPC {
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
     | { key: "spawned"; npcKey: string }
-    | { key: 'stopped-walking'; npcKey: string }
+    | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
+    | { key: "opened-door"; gmId: number; doorId: number; npcKey?: string }
+    | { key: "closed-door"; gmId: number; doorId: number; npcKey?: string }
+    | { key: "entered-sensor" | "exited-sensor"; npcKey: string } & (
+      | { type: 'door' } & Geomorph.GmDoorId
+    )
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {

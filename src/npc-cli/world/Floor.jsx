@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
-import { gmFloorExtraScale, worldToSguScale } from "../service/const";
+import { geomorphGridMeters, gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys } from "../service/generic";
 import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { getQuadGeometryXZ } from "../service/three";
@@ -16,15 +16,15 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    gridPattern: createGridPattern(1.5 * worldToCanvas),
+    gridPattern: createGridPattern(geomorphGridMeters * worldToCanvas),
     tex: w.floor.tex, // Pass in textures
 
     drawFloor(gmKey) {
-      const [ct, tex, { width, height }] = state.tex[gmKey];
+      const { ct, tex, canvas } = state.tex[gmKey];
       const gm = w.geomorphs.layout[gmKey];
       const { pngRect, hullPoly, navDecomp, walls } = gm;
 
-      ct.clearRect(0, 0, width, height);
+      ct.clearRect(0, 0, canvas.width, canvas.height);
       ct.fillStyle = 'red';
       ct.strokeStyle = 'green';
 
@@ -42,7 +42,7 @@ export default function Floor(props) {
       // draw grid
       ct.setTransform(1, 0, 0, 1, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       ct.fillStyle = state.gridPattern;
-      ct.fillRect(0, 0, width, height);
+      ct.fillRect(0, 0, canvas.width, canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Walls
@@ -103,7 +103,7 @@ export default function Floor(props) {
           <meshBasicMaterial
             side={THREE.FrontSide}
             transparent
-            map={state.tex[gm.key][1]}
+            map={state.tex[gm.key].tex}
             depthWrite={false} // fix z-fighting
           />
         </mesh>
@@ -121,7 +121,7 @@ export default function Floor(props) {
 /**
  * @typedef State
  * @property {CanvasPattern} gridPattern
- * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexDef>} tex
+ * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloor
  */
 

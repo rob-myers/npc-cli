@@ -1,5 +1,6 @@
 import prettyCompact from "json-stringify-pretty-compact";
 import safeStableStringify from "safe-stable-stringify";
+import { stringify as javascriptStringify } from 'javascript-stringify';
 
 /**
  * @template {{ key: string }} LookupItem
@@ -9,6 +10,14 @@ import safeStableStringify from "safe-stable-stringify";
  */
 export function addToLookup(newItem, lookup) {
   return { ...lookup, [newItem.key]: newItem };
+}
+
+/**
+ * @param {number} n
+ * @returns {null[]} Usage `alloc(10).forEach((_, i) => { ... })`
+ */
+export function alloc(n) {
+  return Array(n).fill(null);
 }
 
 /**
@@ -196,21 +205,6 @@ export function last(items) {
 }
 
 /**
- * Remove the _first_ occurrence of `elem` from _`array`_,
- * **mutating** the latter if the former exists.
- * @template T
- * @param {T[]} array
- * @param {T} elem
- */
-export function removeFirst(array, elem) {
-  const firstIndex = array.indexOf(elem);
-  if (firstIndex !== -1) {
-    array.splice(firstIndex, 1);
-  }
-  return array;
-}
-
-/**
  * Clone serializable data `input`, e.g. not regexes.
  * @template T
  * @param {T} input
@@ -306,6 +300,21 @@ export function isDevelopment() {
 }
 
 /**
+ * Outputs JS expressions.
+ * @param {*} input 
+ * @returns {string}
+ */
+export function jsStringify(input, pretty = false) {
+  return javascriptStringify(input, function (value, indent, stringify) {
+    // use double-quotes instead of single-quotes
+    if (typeof value === "string") {
+      return '"' + value.replace(/"/g, '\\"') + '"';
+    }
+    return stringify(value);
+  }, pretty === true ? 2 : undefined) ?? '';
+}
+
+/**
  * @template SrcValue
  * @template DstValue
  * @template {string | number} Key
@@ -353,35 +362,9 @@ export function pause(ms = 0) {
   return new Promise((r) => setTimeout(() => r(), ms));
 }
 
-/**
- * @param {number} number
- * @param {number} [decimalPlaces] default 2
- */
-export function toPrecision(number, decimalPlaces = 2) {
-  return Number(number.toFixed(decimalPlaces));
-}
-
-/**
- * Pretty-print JSON.
- * @param {any} input
- * @returns {string}
- */
-export function pretty(input) {
-  // return JSON.stringify(input, null, '\t');
-  return prettyCompact(input);
-}
-
 /** @param {number} n */
 export function range(n) {
   return [...Array(n)].map((_, i) => i);
-}
-
-/**
- * @param {number} n
- * @returns {null[]} Usage `alloc(10).forEach((_, i) => { ... })`
- */
-export function alloc(n) {
-  return Array(n).fill(null);
 }
 
 /**
@@ -390,6 +373,21 @@ export function alloc(n) {
  */
 export function removeDups(items) {
   return Array.from(new Set(items));
+}
+
+/**
+ * Remove the _first_ occurrence of `elem` from _`array`_,
+ * **mutating** the latter if the former exists.
+ * @template T
+ * @param {T[]} array
+ * @param {T} elem
+ */
+export function removeFirst(array, elem) {
+  const firstIndex = array.indexOf(elem);
+  if (firstIndex !== -1) {
+    array.splice(firstIndex, 1);
+  }
+  return array;
 }
 
 /**
@@ -403,6 +401,13 @@ export function removeFromLookup(itemKey, lookup) {
   return rest;
 }
 
+/**
+ * @param {*} input 
+ */
+export function safeJsonCompact(input) {
+  return prettyCompact(JSON.parse(safeStableStringify(input) ?? ''));
+}
+
 /** @param {string} input */
 export function safeJsonParse(input) {
   try {
@@ -414,31 +419,6 @@ export function safeJsonParse(input) {
 }
 
 /**
- * @param {*} input 
- * @returns {string}
- */
-export function safeStringify(input) {
-  if (typeof input === "function") {
-    return zealousTrim(`${input}`);
-  }
-  if (input instanceof Set) {// Set({size}) [...]
-    return `Set(${input.size}) ${safeStringify(Array.from(input))}`;
-  }
-  return (
-    tryJsonStringify(input) ||
-    safeStableStringify(input, (_k, v) => {
-      if (v instanceof HTMLElement || v instanceof Animation) return `'[${v.constructor.name}]'`;
-      if (typeof v === "function") return zealousTrim(`${v}`);
-      // if (v instanceof EventEmitter) {
-      //   // Fix pixi.js
-      //   return `'[${v.constructor?.name ?? "EventEmitter"}]'`;
-      // }
-      return v;
-    })
-  );
-}
-
-/**
  * Usage `default: throw testNever(x)`.
  * @param {never} x
  * @param {{ override?: string; suffix?: string }} [opts]
@@ -447,8 +427,16 @@ export function safeStringify(input) {
 export function testNever(x, opts) {
   return (
     opts?.override ??
-    `testNever: ${pretty(x)} not implemented${opts?.suffix ? ` (${opts.suffix})` : ""}`
+    `testNever: ${jsStringify(x)} not implemented${opts?.suffix ? ` (${opts.suffix})` : ""}`
   );
+}
+
+/**
+ * @param {number} number
+ * @param {number} [decimalPlaces] default 2
+ */
+export function toPrecision(number, decimalPlaces = 2) {
+  return Number(number.toFixed(decimalPlaces));
 }
 
 /**
@@ -464,14 +452,8 @@ export function truncateOneLine(text, maxLength = 50) {
 /** @param {any} input */
 function tryJsonStringify(input) {
   try {
-    let ownKeys = /** @type {string[]} */ ([]);
-    return JSON.stringify(input, (_k, v) => {
-      if (typeof v === "function") {
-        return `[Function]${(ownKeys = Object.keys(v)).length ? ` ...{${ownKeys}} ` : ""}`;
-      }
-      return v;
-    });
-  } catch {}
+    return JSON.stringify(input);
+  } catch { /** NOOP */ }
 }
 
 /**

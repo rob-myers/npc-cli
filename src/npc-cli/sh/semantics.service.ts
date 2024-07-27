@@ -1,7 +1,7 @@
 import { uid } from "uid";
 
 import type * as Sh from "./parse";
-import { last, pause, safeStringify } from "../service/generic";
+import { jsStringify, last, pause } from "../service/generic";
 import { parseJsArg } from "../service/generic";
 import useSession, { ProcessStatus } from "./session.store";
 import {
@@ -49,7 +49,7 @@ class semanticsServiceClass {
     if (varValue === undefined || typeof varValue === "string") {
       return varValue || "";
     } else {
-      return safeStringify(varValue);
+      return jsStringify(varValue);
     }
   }
 
@@ -489,7 +489,7 @@ class semanticsServiceClass {
           yield expand(
             device
               .readAll()
-              .map((x: any) => (typeof x === "string" ? x : safeStringify(x)))
+              .map((x: any) => (typeof x === "string" ? x : jsStringify(x)))
               .join("\n")
               .replace(/\n*$/, "")
           );
@@ -557,7 +557,7 @@ class semanticsServiceClass {
     if (Repl) {
       // ${_/foo/bar/baz}
       const origParam = reconstructReplParamExp(Repl);
-      yield expand(safeStringify(cmdService.get(node, [origParam])[0]));
+      yield expand(jsStringify(cmdService.get(node, [origParam])[0]));
     } else if (Excl || Length || Slice) {
       throw new ShError(`ParamExp: ${Param.Value}: unsupported operation`, 2);
     } else if (Exp) {

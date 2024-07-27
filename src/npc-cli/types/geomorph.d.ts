@@ -39,11 +39,22 @@ declare namespace Geomorph {
 
   interface DoorState extends Geomorph.GmDoorId {
     /** gmDoorKey format i.e. `g{gmId}d{doorId}` */
-    key: `g${number}d${number}`;
+    gdKey: `g${number}d${number}`;
     door: Geomorph.Connector;
     instanceId: number;
+
+    /** Is the door automatic? */
+    auto: boolean;
     /** Is the door open? */
     open: boolean;
+    /** Is the door locked? */
+    locked: boolean;
+
+    /** Is the door sealed? */
+    sealed: boolean;
+    /** Is this a hull door? */
+    hull: boolean;
+
     /** Between `0.1` (open) and `1` (closed) */
     ratio: number;
     /** Source of transformed door segment */
@@ -53,6 +64,13 @@ declare namespace Geomorph {
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
+
+    closeTimeoutId?: number;
+
+    /** NPCs which are nearby this door */
+    nearbyNpcKeys: Set<string>;
+    /** NPCs which can unlock this door */
+    unlockNpcKeys: Set<string>;
   }
 
   interface GeomorphsGeneric<
@@ -81,23 +99,25 @@ declare namespace Geomorph {
   >;
 
   interface GmDoorId {
-    /** `g{gmId}d${doorId}` */
-    key: `g${number}d${number}`;
+    /** gmDoorKey `g{gmId}d${doorId}` */
+    gdKey: GmDoorKey;
     gmId: number;
     doorId: number;
-    /** Non-isolated hull doors have an associated door */
-    other?: { gmId: number; doorId: number };
+    // other?: { gmId: number; doorId: number };
   }
 
   interface GmRoomId {
+    /** gmRoomKey `g{gmId}r${roomId}` */
+    grKey: Geomorph.GmRoomKey;
     gmId: number;
     roomId: number;
-    /** `gmRoomKey` */
-    grKey: Geomorph.GmRoomKey;
   }
 
   /** `g${gmId}r${roomId}` */
   type GmRoomKey = `g${number}r${number}`;
+
+  /** `g${gmId}d${doorId}` */
+  type GmDoorKey = `g${number}d${number}`;
 
   interface SymbolGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
@@ -324,7 +344,7 @@ declare namespace Geomorph {
 
   type DecorSheetRectCtxt = Geom.Meta<{ decorImgKey: Geomorph.DecorImgKey }>;
 
-  type DecorImgKey = import('../service/geomorph.js').DecorImgKey;
+  type DecorImgKey = import('../service/const.js').DecorImgKey;
 
   /** 🚧 clarify */
   type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
@@ -348,10 +368,9 @@ declare namespace Geomorph {
   type GeomorphNumber = 101 | 102 | 103 | 301 | 302 | 303;
 
   /**
-   * 🔔 Depends on geomorph service,
-   * but in this way we avoid duplication.
+   * 🔔 Depends on service/const, but avoids duplication.
    */
-  type SymbolKey = import('../service/geomorph').SymbolKey;
+  type SymbolKey = import('../service/const').SymbolKey;
 
   /**
    * All sprite-sheet metadata.

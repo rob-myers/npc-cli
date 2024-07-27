@@ -27,13 +27,14 @@ import PQueue from "p-queue-compat";
 
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
-import { ASSETS_JSON_FILENAME, DEV_EXPRESS_WEBSOCKET_PORT, GEOMORPHS_JSON_FILENAME, DEV_ORIGIN } from "../const";
-import { spriteSheetNonHullExtraScale, sguToWorldScale, worldToSguScale, spriteSheetDecorExtraScale } from "../npc-cli/service/const";
+import { spriteSheetSymbolExtraScale, worldToSguScale, spriteSheetDecorExtraScale, sguSymbolScaleDown, sguSymbolScaleUp } from "../npc-cli/service/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, } from "../npc-cli/service/generic";
 import { drawPolygons } from "../npc-cli/service/dom";
 import { geomorphService } from "../npc-cli/service/geomorph";
+import { DEV_EXPRESS_WEBSOCKET_PORT, DEV_ORIGIN, ASSETS_JSON_FILENAME, GEOMORPHS_JSON_FILENAME } from "../npc-cli/service/fetch-assets";
 import packRectangles from "../npc-cli/service/rects-packer";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
+import { helper } from "../npc-cli/service/helper";
 import { labelledSpawn, saveCanvasAsFile, tryLoadImage, tryReadString } from "./service";
 
 const rawOpts = getopts(process.argv, {
@@ -228,14 +229,14 @@ info({ opts });
   // fs.writeFileSync(symbolGraphVizPath, symbolGraph.getGraphviz('symbolGraph'));
 
   const changedGmKeys = geomorphService.gmKeys.filter(gmKey => {
-    const hullKey = geomorphService.toHullKey[gmKey];
+    const hullKey = helper.toHullKey[gmKey];
     const hullNode = assertNonNull(symbolGraph.getNodeById(hullKey));
     return symbolGraph.getReachableNodes(hullNode).find(x => changedSymbolAndMapKeys.includes(x.id));
   });
   info({ changedGmKeys });
 
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
-    const hullKey = geomorphService.toHullKey[gmKey];
+    const hullKey = helper.toHullKey[gmKey];
     const flatSymbol = flattened[hullKey];
     return geomorphService.createLayout(gmKey, flatSymbol, assets);
   }));
@@ -381,8 +382,8 @@ function createObstaclesSheetJson(assets) {
   // Each one of a symbol's obstacles induces a respective packed rect
   const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, { width: number; height: Number; data: Geomorph.ObstacleSheetRectCtxt }>} */ ({});
   for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
-    /** World coords -> Starship Geomorph coords, modulo additonal scale in [1, 5] non-hull symbols. */
-    const scale = worldToSguScale * (isHull ? 1 : spriteSheetNonHullExtraScale);
+    /** World coords -> Starship Geomorph coords, modulo additional scale in [1, 5] */
+    const scale = worldToSguScale * spriteSheetSymbolExtraScale;
 
     for (const [obstacleId, poly] of obstacles.entries()) {
       const rect = Poly.from(poly).rect.scale(scale).precision(0); // width, height integers
@@ -436,11 +437,12 @@ async function drawObstaclesSheet(assets, prev) {
   for (const { x, y, width, height, symbolKey, obstacleId } of obstacles) {
     if (assets.meta[symbolKey].pngHash !== emptyStringHash) {
       const symbol = assets.symbols[symbolKey];
-      const scale = worldToSguScale * (symbol.isHull ? 1 : spriteSheetNonHullExtraScale);
+      const scale = worldToSguScale * spriteSheetSymbolExtraScale;
       
       const srcPoly = Poly.from(symbol.obstacles[obstacleId]);
       const srcRect = srcPoly.rect;
-      const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(1 / (sguToWorldScale * (symbol.isHull ? 1 : 0.2)));
+      // 🔔 must use smaller src rect for hull symbols, because <img> is smaller
+      const srcPngRect = srcPoly.rect.delta(-symbol.pngRect.x, -symbol.pngRect.y).scale(worldToSguScale * (symbol.isHull ? 1 : sguSymbolScaleUp));
       const dstPngPoly = srcPoly.clone().translate(-srcRect.x, -srcRect.y).scale(scale).translate(x, y);
 
       if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
@@ -454,6 +456,10 @@ async function drawObstaclesSheet(assets, prev) {
         info(`${symbolKey} ${obstacleId} redrawing...`);
         const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
         const matched = fs.readFileSync(symbolPath).toString().match(dataUrlRegEx);
+        /**
+         * 🔔 <img> of hull symbols are currently 1/5 size of symbol.
+         * 🔔 Consider larger image, or avoid using as source for obstacles.
+         */
         const dataUrl = assertNonNull(matched)[0].slice(1, -1);
         const image = await loadImage(dataUrl);
         ct.save();
@@ -503,10 +509,10 @@ async function createDecorSheetJson(assets, prev) {
   })));
 
   /**
-   * Decor is drawn in units `sgu * 5` (same approach as non-hull symbols).
+   * Decor is drawn in units `sgu * 5` i.e. same approach as SVG symbols.
    * We further adjust how high-res we want it.
    */
-  const scale = (1 / 5) * spriteSheetDecorExtraScale;
+  const scale = sguSymbolScaleDown * spriteSheetDecorExtraScale;
 
   for (const baseName of svgBasenames) {
     const decorImgKey = /** @type {Geomorph.DecorImgKey} */ (baseName.slice(0, -'.svg'.length));

@@ -5,6 +5,7 @@ import { assertNonNull, removeDups } from "../service/generic";
 import { geom, directionChars, isDirectionChar } from "../service/geom";
 import { error, warn } from "../service/generic";
 import { geomorphService } from "../service/geomorph";
+import { helper } from "../service/helper";
 import { AStar } from "../pathfinding/AStar";
 
 /**
@@ -194,7 +195,7 @@ export class GmGraphClass extends BaseGraph {
       const gm = this.gms[gmId];
       const localPoint = gm.inverseMatrix.transformPoint(Vect.from(point));
       const roomId = this.w.gmsData.findRoomIdContaining(gm, localPoint, includeDoors);
-      return roomId === null ? null : { gmId, roomId, grKey: geomorphService.getGmRoomKey(gmId, roomId) };
+      return roomId === null ? null : { gmId, roomId, grKey: helper.getGmRoomKey(gmId, roomId) };
     } else {
       return null;
     }
@@ -219,9 +220,9 @@ export class GmGraphClass extends BaseGraph {
   getAdjacentGmRoom(gmId, roomId, doorId, isHullDoor = this.gms[gmId].isHullDoor(doorId)) {
     if (isHullDoor) {
       const ctxt = this.getAdjacentRoomCtxt(gmId, doorId);
-      return ctxt === null ? null : { gmId: ctxt.adjGmId, roomId: ctxt.adjRoomId, grKey: geomorphService.getGmRoomKey(gmId, roomId) };
+      return ctxt === null ? null : { gmId: ctxt.adjGmId, roomId: ctxt.adjRoomId, grKey: helper.getGmRoomKey(gmId, roomId) };
     } else {
-      return { gmId, roomId, grKey: geomorphService.getGmRoomKey(gmId, roomId) };
+      return { gmId, roomId, grKey: helper.getGmRoomKey(gmId, roomId) };
     }
   }
 
@@ -255,7 +256,7 @@ export class GmGraphClass extends BaseGraph {
     const { gmId: adjGmId, hullDoorId: dstHullDoorId, doorId: adjDoorId } = otherDoorNode;
     const { roomIds } = this.gms[adjGmId].hullDoors[dstHullDoorId];
     const adjRoomId = /** @type {number} */ (roomIds.find(x => typeof x === 'number'));
-    const adjGmRoomKey = geomorphService.getGmRoomKey(adjGmId, adjRoomId);
+    const adjGmRoomKey = helper.getGmRoomKey(adjGmId, adjRoomId);
 
     return this.adjRoomCtxt[cacheKey] = { adjGmId, adjRoomId, adjHullId: dstHullDoorId, adjDoorId, adjGmRoomKey };
   }
@@ -284,7 +285,7 @@ export class GmGraphClass extends BaseGraph {
         door.roomIds.forEach(roomId =>
           // For hull doors, assume adj{GmId,DoorId} occurs elsewhere
           (roomId !== null) && !seen[roomId] && gmRoomIds.push({
-            gmId, roomId, grKey: geomorphService.getGmRoomKey(gmId, roomId),
+            gmId, roomId, grKey: helper.getGmRoomKey(gmId, roomId),
           }) && (seen[roomId] = true)
         )
       });

@@ -1,10 +1,21 @@
 declare namespace WW {
+  
+  //#region nav worker
+
+  type NavWorker = WW.WorkerGeneric<WW.MsgToNavWorker, WW.MsgFromNavWorker>;
+
+  type MsgToNavWorker = (
+    | RequestNavMesh
+  );
+
+  type MsgFromNavWorker = (
+    | NavMeshResponse
+  );
+
   interface RequestNavMesh {
     type: "request-nav-mesh";
     mapKey: string;
   }
-
-  type MessageToWorker = RequestNavMesh;
 
   interface NavMeshResponse {
     type: "nav-mesh-response";
@@ -12,7 +23,67 @@ declare namespace WW {
     exportedNavMesh: Uint8Array;
   }
 
-  type MessageFromWorker = NavMeshResponse;
+  //#endregion
+
+  interface NpcDef {
+    npcKey: string;
+    position: import('three').Vector3Like;
+  }
+
+  //#region physics worker
+
+  type PhysicsWorker = WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>;
+
+  type MsgToPhysicsWorker = (
+    | SendNpcPositions
+    | SetupPhysicsWorld
+    | AddNPCs
+    | RemoveNPCs
+  );
+
+  type MsgFromPhysicsWorker = (
+    | WorldSetupResponse
+    | NpcCollisionResponse
+  );
+
+  interface SetupPhysicsWorld {
+    type: 'setup-physics-world';
+    mapKey: string;
+    npcs: NpcDef[];
+  }
+
+  /**
+   * Currently array always has length 1.
+   * 🚧 Support bulk spawn
+   */
+  interface AddNPCs {
+    type: 'add-npcs';
+    npcs: NpcDef[];
+  }
+
+  interface RemoveNPCs {
+    type: 'remove-npcs';
+    npcKeys: string[];
+  }
+
+  interface SendNpcPositions {
+    type: 'send-npc-positions';
+    /** [npcBodyUid, positionX, positionY, positionZ, ...] (repeated 4s) */
+    positions: Float32Array;
+  }
+
+  interface WorldSetupResponse {
+    type: 'world-is-setup';
+  }
+
+  /** Each collision pair of bodyKeys should involve one npc, and one non-npc e.g. a door sensor */
+  interface NpcCollisionResponse {
+    type: 'npc-collisions';
+    collisionStart: { npcKey: string; otherKey: string }[];
+    collisionEnd: { npcKey: string; otherKey: string }[];
+  }
+
+  //#endregion
 
   /**
    * https://github.com/microsoft/TypeScript/issues/48396
