@@ -43,9 +43,16 @@ export default function WrappedTerminal(props: Props) {
     async sourceFuncs(session: Session) {
       Object.assign(session.etc, functionFiles);
       await Promise.all(keys(functionFiles).map(filename =>
-        session.ttyShell.sourceEtcFile(filename).catch(e =>
-          state.writeError(session.key, `/etc/${filename}: failed to run`, e)
-        )
+        session.ttyShell.sourceEtcFile(filename).catch(e => {
+          if (typeof e?.$type === 'string') {// mvdan.cc/sh/v3/syntax.ParseError
+            const fileContents = functionFiles[filename];
+            const [line, column] = [e.Pos.Line(), e.Pos.Col()];
+            const errorMsg = `${e.Error()}:\n${fileContents.split('\n')[line - 1]}` ;
+            state.writeError(session.key, `/etc/${filename}: ${e.$type}`, errorMsg);
+          } else {
+            state.writeError(session.key, `/etc/${filename}: failed to run`, e)
+          }
+        })
       ));
     },
     writeError(sessionKey: string, message: string, origError: any) {

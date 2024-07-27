@@ -48,10 +48,11 @@
     - avoids totally rebuilding geomorphs.json
   - ✅ helper file should trigger watch script
 
-- can pipe `w.events` into shell
-  - e.g. `w` command supports subjects
+- ✅ can pipe `w.events` into shell
+  - ✅ define `events` in game-generators.js
+  - ✅ better error messages on mvdan parse error
 
-- new branch `refine-doors`
+- 🚧 new branch `refine-doors`
   - every door has 2 switches (inner, outer)
   - doors can slide in specific direction
     - sometimes not possible e.g. toilet
@@ -65,10 +66,15 @@
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
 
-- change camera fov based on camera height and/or visible-world
+- maybe "move" constants into geomorphs.json
+  - to avoid HMR versus geomorphs.json "alternate routes"
+- workers should only hot reload when directly edited or geomorphs.json changes
+  - workers should get constants from geomorphs.json
+  - otherwise might restart early, retrieving old geomorphs.json
 - can color obstacles
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
+- permit single quotes inside e.g. game-generators
 - rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 - decor sprite bounds issue on edit decor
@@ -83,6 +89,7 @@
   - e.g. by focusing window whilst ongoing?
 - `Tabs` css should not reference src/const
   - try refactor `faderOverlayCss` e.g. merge into `<figure>`
+- change camera fov based on camera height and/or visible-world
 
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization

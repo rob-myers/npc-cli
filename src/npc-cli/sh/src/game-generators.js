@@ -96,6 +96,22 @@ export async function* click({ api, args, w }) {
   }
 }
 
+
+/**
+ * @param {RunArg} ctxt
+ */
+export async function* events({ api, w }) {
+  const asyncIterable = api.observableToAsyncIterable(w.events);
+  // could not catch asyncIterable.throw?.(api.getKillError())
+  api.addCleanup(() => asyncIterable.return?.());
+  for await (const event of asyncIterable) {
+    // if (api.isRunning()) yield event;
+    yield event;
+  }
+  // get here via ctrl-c or `kill`
+  throw api.getKillError();
+}
+
 /**
  * @param {RunArg} ctxt
  */

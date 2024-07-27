@@ -34,6 +34,9 @@ w door | map 'x => x.npcNearDoor' | pretty
 
 # log a "chunk"
 seq 100000 | log
+
+events
+events | map key
 ```
 
 ## Local variables
