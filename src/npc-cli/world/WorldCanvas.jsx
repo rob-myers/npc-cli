@@ -216,7 +216,7 @@ export default function WorldCanvas(props) {
   React.useEffect(() => {
     // 🚧 do not trigger on HMR
     state.controls?.setPolarAngle(Math.PI / 6);
-    // state.controls?.setAzimuthalAngle(Math.PI / 6);
+    state.controls?.setAzimuthalAngle(touchFixedAzimuth);
   }, [state.controls]);
 
   return (
@@ -355,4 +355,4 @@ const statsCss = css`
  * @property {Geom.Meta} meta
  */
 
-const touchFixedAzimuth = 0 * (2 * Math.PI);
+const touchFixedAzimuth = Math.PI / 6;
