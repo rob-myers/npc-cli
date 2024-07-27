@@ -53,6 +53,7 @@
   - ✅ better error messages on mvdan parse error
 
 - 🚧 new branch `refine-doors`
+  - ✅ start branch
   - every door has 2 switches (inner, outer)
   - doors can slide in specific direction
     - sometimes not possible e.g. toilet
