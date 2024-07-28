@@ -16,7 +16,6 @@ export default function Ceiling(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     tex: w.ceil.tex, // Pass in textures
-
     detectClick(e) {
       const gmId = Number(e.object.name.slice('ceil-gm-'.length));
       const gm = w.gms[gmId];
@@ -112,7 +111,7 @@ export default function Ceiling(props) {
   React.useEffect(() => {// ensure initial + redraw on HMR
     // 🔔 handle removal from api.gms (dynamic nav-mesh)
     keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
-  }, [w.hash]);
+  }, [w.hash, w.hmr.createGmsData]);
 
   return <>
     {w.gms.map((gm, gmId) => (
