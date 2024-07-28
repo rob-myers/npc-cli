@@ -10,6 +10,7 @@ import {
   tryLocalStorageSet,
   KeyedLookup,
   jsStringify,
+  warn,
 } from "../service/generic";
 import {
   computeNormalizedParts,
@@ -446,11 +447,11 @@ const useStore = create<State>()(
             const { process, ttyShell } = session;
             session.verbose = false;
             ttyShell.dispose();
-            Object.values(process).forEach((x) => killProcess(x));
+            Object.values(process).reverse().forEach((x) => killProcess(x));
             delete get().device[ttyShell.key];
             set(({ session }) => ({ session: removeFromLookup(sessionKey, session) }));
           } else {
-            console.log(`removeSession: ${sessionKey}: cannot remove non-existent session`);
+            warn(`removeSession: ${sessionKey}: cannot remove non-existent session`);
           }
         },
 

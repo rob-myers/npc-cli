@@ -55,12 +55,20 @@
 - 🚧 new branch `refine-doors`
   - ✅ start branch
   - every door has 2 switches (inner, outer)
+  - door switches are associated by ordering
+    - so must be removed when "parent door" is
   - doors can slide in specific direction
     - sometimes not possible e.g. toilet
   - doors have small wall above them
     - locked indicator could go in center
   - navQuery blocks non-auto doors
   - support non-door sensor i.e. decor circle/poly
+
+- ✅ fix restart while `events | map key`
+  - ℹ️ pipe child terminated late, triggering pid 0 cleanups, cancelling next awaitWorld
+  - ℹ️ due to pipe semantics i.e. 30ms delay "to permit child cleanup setup"
+  - ℹ️ need some delay (setTimeout `0`) e.g. for `take 3 | true` to terminate immediately
+  - seems to be fixed, but somewhat hacky
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description

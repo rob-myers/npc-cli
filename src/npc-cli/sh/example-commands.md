@@ -37,6 +37,13 @@ seq 100000 | log
 
 events
 events | map key
+
+call '() => { throw Error("bad") }'
+
+{
+  call '() => { throw "❌" }' | true
+  true | { sleep 1; echo 🔔; }
+}
 ```
 
 ## Local variables
@@ -105,7 +112,7 @@ run '({ api }) { throw api.getKillError(); }' | take 1
 # terminates because last pipe-child killed
 # exit code 130
 take 1 | run '({ api }) { throw api.getKillError(); }'
-# fix ctrl-c i.e. should kill whole while loop
+# ctrl-c should kill whole while loop
 while true; do click 1 >clicked; clicked/meta/nav; done
 ```
 

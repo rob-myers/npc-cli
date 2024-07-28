@@ -91,11 +91,6 @@ export default function World(props) {
       ...helper,
     },
 
-    async awaitReady() {
-      if (!state.isReady()) {
-        return new Promise(resolve => state.readyResolvers.push(resolve));
-      }
-    },
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
@@ -122,6 +117,13 @@ export default function World(props) {
       state.npc.onTick(deltaMs);
       state.door.onTick();
       // info(state.r3f.gl.info.render);
+    },
+    async resolveOnReady() {
+      if (state.isReady()) {
+        return;
+      } else {
+        return new Promise(resolve => state.readyResolvers.push(resolve));
+      }
     },
     setReady() {
       while (state.readyResolvers.length > 0) {
@@ -358,7 +360,7 @@ export default function World(props) {
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
  *
- * @property {() => Promise<void>} awaitReady
+ * @property {() => Promise<void>} resolveOnReady
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick

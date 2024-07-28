@@ -183,21 +183,19 @@ class semanticsServiceClass {
           const clones = stmts.map((x) => wrapInFile(cloneParsed(x), { ppid, pgid }));
           fifos.forEach((fifo, i) => (clones[i + 1].meta.fd[0] = clones[i].meta.fd[1] = fifo.key));
 
-          let errors = [] as any[],
-            exitCode = undefined as undefined | number;
+          let errors = [] as any[];
+          let exitCode = undefined as undefined | number;
+          const cleanupSetupMs = 0; // 🔔 30ms caused restart issue while `events | map key`
 
           await Promise.allSettled(
             clones
-              .slice()
-              .reverse()
               .map(
-                (file, j) =>
+                (file, i) =>
                   new Promise<void>(async (resolve, reject) => {
-                    const i = clones.length - 1 - j;
                     try {
                       await ttyShell.spawn(file, {
-                        localVar: true, // cleanup for e.g. `take 3 | true`
-                        cleanups:
+                        localVar: true,
+                        cleanups: // cleanup for e.g. `take 3 | true`
                           i === 0 && isTtyAt(file.meta, 0)
                             ? [() => ttyShell.finishedReading()]
                             : [],
@@ -215,14 +213,15 @@ class semanticsServiceClass {
                       } else if (errors.length !== 1) {
                         return; // No error, or already handled
                       }
-                      // Kill other pipe-children (delay permits cleanup setup)
-                      setTimeout(killPipeChildren, 30);
+                      // 🔔 Kill other pipe-children (delay permits cleanup setup)
+                      setTimeout(killPipeChildren, cleanupSetupMs);
                     }
                   })
               )
           );
-          // Avoid killing pipe children of next pipeline when ppid 0
-          await pause(30);
+          // 🔔 Avoid above `killPipeChildren` killing children of next pipeline
+          // e.g. call '() => { throw "❌" }' | true; true | { sleep 1; echo 🔔; }
+          await pause(cleanupSetupMs);
 
           if (
             exitCode === undefined ||
