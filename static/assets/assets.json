@@ -347,7 +347,7 @@
     "stateroom--019--2x3": {"outputHash": 725374905, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 142736693, "pngHash": 987326316},
     "stateroom--035--2x3": {"outputHash": -2011762655, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": -821663677, "pngHash": 1301313076},
+    "stateroom--036--2x4": {"outputHash": 1525670668, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": 2105116103,
       "pngHash": 1027833859,
@@ -1056,6 +1056,13 @@
         "y": 364,
         "width": 60,
         "height": 60
+      },
+      "white": {
+        "decorImgKey": "white",
+        "x": 390,
+        "y": 244,
+        "width": 38,
+        "height": 38
       }
     },
     "obstacleDim": {"width": 2151, "height": 2154},
@@ -12093,6 +12100,30 @@
             [[0.4741, 0.725], [0.4741, 0.775], [0.4241, 0.775], [0.4241, 0.725]]
           ],
           "meta": {"decor": true, "do": true, "stand": true, "orient": 270}
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[1.65, 1.5], [1.65, 1.65], [1.5, 1.65], [1.5, 1.5]]],
+          "meta": {
+            "decor": true,
+            "img": "white",
+            "y": 1,
+            "tilt": true,
+            "quad": true,
+            "transform": [0.15, 0, 0, 0.15, 1.5, 1.5]
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [[[1.65, 1.35], [1.65, 1.5], [1.5, 1.5], [1.5, 1.35]]],
+          "meta": {
+            "decor": true,
+            "img": "white",
+            "y": 1,
+            "tilt": true,
+            "quad": true,
+            "transform": [0.15, 0, 0, 0.15, 1.5, 1.35]
+          }
         }
       ],
       "unsorted": [],

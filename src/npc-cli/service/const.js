@@ -156,6 +156,7 @@ export const fromDecorImgKey = {// 🔔 must extend when adding new decor
   'icon--doc': true,
   'icon--warn': true,
   'icon--key-card': true,
+  'white': true,
 };
 
 /**
