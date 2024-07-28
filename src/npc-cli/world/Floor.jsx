@@ -16,7 +16,10 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    gridPattern: createGridPattern(geomorphGridMeters * worldToCanvas),
+    gridPattern: createGridPattern(
+      geomorphGridMeters * worldToCanvas,
+      'rgba(255, 255, 255, 0.075)',
+    ),
     tex: w.floor.tex, // Pass in textures
 
     drawFloor(gmKey) {

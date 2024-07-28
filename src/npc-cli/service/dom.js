@@ -11,8 +11,11 @@ export const tmpCanvasCtxts = typeof window !== 'undefined' ?
   ) : []
 ;
 
-/** @param {number} dim */
-export function createGridPattern(dim, color = 'rgba(255, 255, 255, 0.1)') {
+/**
+ * @param {number} dim
+ * @param {string} color
+ */
+export function createGridPattern(dim, color) {
   const [tmpCtxt] = tmpCanvasCtxts;
   tmpCtxt.canvas.width = tmpCtxt.canvas.height = dim;
   tmpCtxt.resetTransform();
