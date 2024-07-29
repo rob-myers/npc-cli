@@ -346,10 +346,7 @@ export const meshDiffuseTest = {// Supports instancing
     // <defaultnormal_vertex>
     vec3 transformedNormal = objectNormal;
     #ifdef USE_INSTANCING
-      // this is in lieu of a per-instance normal-matrix
-      // shear transforms in the instance matrix are not supported
       mat3 im = mat3( instanceMatrix );
-      // transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
       transformedNormal = im * transformedNormal;
     #endif
     // normalMatrix is mat3 of worldMatrix (?)
@@ -360,7 +357,9 @@ export const meshDiffuseTest = {// Supports instancing
       vColor.xyz *= instanceColor.xyz;
     #endif
 
-    vec3 lightDir = normalize(mvPosition.xyz - cameraPosition);
+    vec4 mvCameraPosition = modelViewMatrix * vec4(cameraPosition, 1.0);
+    // vec3 lightDir = normalize(mvPosition.xyz - cameraPosition);
+    vec3 lightDir = normalize(mvPosition.xyz - mvCameraPosition.xyz);
     dotProduct = -min(dot(normalize(transformedNormal), lightDir), 0.0);
   }
   `,

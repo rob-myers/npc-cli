@@ -25,6 +25,7 @@
     - didn't fix problem though
   - ℹ️ no, normals are fine
     - issue also happens when we simply translate stateroom 036
+  - 🚧 possibly fixed via mvCameraPosition
 
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet
