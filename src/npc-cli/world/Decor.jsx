@@ -7,7 +7,7 @@ import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../serv
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorphService } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, getColor, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
+import { boxGeometry, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import packRectangles from "../service/rects-packer";
 import { helper } from "../service/helper";
@@ -198,22 +198,19 @@ export default function Decor(props) {
         });
       
       } else {// d.type === 'quad'
+
         tmpMat1.feedFromArray(d.transform);
         const mat4 = geomorphService.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
           yHeight: d.meta.y,
         });
 
-        // 🚧 more efficient computation of `m`
         if (d.meta.tilt === true) {
-          // 🔔 need to remove scale from transform
-          const m = new THREE.Matrix4().makeRotationAxis(
-            new THREE.Vector3(tmpMat1.a / d.bounds2d.width, 0, tmpMat1.b / d.bounds2d.height),
-            Math.PI / 2,
-          );
-          m.multiply(new THREE.Matrix4().makeTranslation(-d.center.x, -d.meta.y, -d.center.y));
-          m.premultiply(new THREE.Matrix4().makeTranslation(d.center.x, d.meta.y, d.center.y));
-          mat4.premultiply(m); // 🔔 i.e. post-rotate
+          // 🔔 remove scale to get local x unit vector
+          const vecLen = Math.sqrt(tmpMat1.a ** 2 + tmpMat1.b ** 2);
+          const rotMat = getRotAxisMatrix(tmpMat1.a / vecLen, 0, tmpMat1.b / vecLen, 90);
+          setRotMatrixAboutPoint(rotMat, d.center.x, d.meta.y, d.center.y);
+          mat4.premultiply(rotMat); // 🔔 premultiply means post-rotate
         }
 
         return mat4;
@@ -699,9 +696,3 @@ export default function Decor(props) {
  * @property {{ [label: string]: Geom.RectJson }} sheet
  * @property {THREE.CanvasTexture} tex
  */
-
-/**
- * Transform unit XZ quad i.e. (0, 0, 0) ... (0, 0, 1)
- * into unit XY quad i.e. (0, 0, 0) ... (0, 1, 0)
- */
-const unitXZtoXYQuad = new THREE.Matrix4().makeRotationX(-Math.PI/2);

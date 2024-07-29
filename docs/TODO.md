@@ -9,61 +9,10 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 doors open automatically when npc nearby
-  - ✅ doors can be open/closed, locked/unlocked, manual/auto
-  - ✅ doors can be sealed
-  - ✅ track door -> nearby npcs
-  - ✅ track npc -> door sensors e.g. for clean-up
-  - ❌ toggle other hull door automatically
-    - can open them individually
-    - sensors already work
-  - ✅ don't auto close door when npcs still within sensor range
-  - ✅ clarify auto doors
-    - ✅ do not auto-close when not auto
-    - ✅ do not auto-open when not auto
-  - ❌ manual doors are "blocked" inside nav query
-    - we'll add physical switches for all doors, usable for manual
-  - ✅ move worker handlers into WorldWorker
-    - want handler edit to restart workers
-  - ✅ clean
-
-- ✅ tty: support recursive stringify of `Set` and `Map`
-  - ✅ in tty.xterm output
-  - ✅ `declare -x`
-  - ✅ in shell expansion
-  - ✅ separated shell function `pretty` into `pretty` and `json`
-    - `pretty` is essentially `javascriptStringify` with indent 2
-    - `json` is essentially `prettyCompact` and projects to JSON
-      - e.g. does not support `Set`
-
-- ✅ shell session: support restore Set and Map
-  - ✅ serialize via `jsStringify` then re-evaluate
-  - ✅ persist session on reset/unload
-  - ✅ do not persist variable on run command (only on unload)
-
-- ✅ service/npc -> service/helper
-  - ℹ️ available runtime as w.lib.*
-  - ℹ️ used by assets script
-  - ✅ move key defs into helper
-    - avoids totally rebuilding geomorphs.json
-  - ✅ helper file should trigger watch script
-
-- ✅ can pipe `w.events` into shell
-  - ✅ define `events` in game-generators.js
-  - ✅ better error messages on mvdan parse error
-
-- ✅ fix restart while `events | map key`
-  - ℹ️ pipe child terminated late, triggering pid 0 cleanups, cancelling next awaitWorld
-  - ℹ️ due to pipe semantics i.e. 30ms delay "to permit child cleanup setup"
-  - ℹ️ need some delay (setTimeout `0`) e.g. for `take 3 | true` to terminate immediately
-  - seems to be fixed, but somewhat hacky
-
-- ✅ start new branch `refine-doors`
-
 - 🚧 every door has 2 switches (inner, outer)
   - ✅ some symbol has two switches
   - ✅ can rotate decor quad so in XY plane via `tilt`
-  - 🚧 efficient computation of "post-rotation-matrix"
+  - ✅ efficient computation of "post-rotation-matrix"
     - e.g. via caching
   - door switches are associated via ordering
     - so must be removed when "parent door" is
@@ -1761,3 +1710,54 @@
       - rely on rapier to auto set bodies asleep
       - https://rapier.rs/docs/user_guides/bevy_plugin/rigid_bodies/#sleeping
   - ✅ clean
+
+- ✅ doors open automatically when npc nearby
+  - ✅ doors can be open/closed, locked/unlocked, manual/auto
+  - ✅ doors can be sealed
+  - ✅ track door -> nearby npcs
+  - ✅ track npc -> door sensors e.g. for clean-up
+  - ❌ toggle other hull door automatically
+    - can open them individually
+    - sensors already work
+  - ✅ don't auto close door when npcs still within sensor range
+  - ✅ clarify auto doors
+    - ✅ do not auto-close when not auto
+    - ✅ do not auto-open when not auto
+  - ❌ manual doors are "blocked" inside nav query
+    - we'll add physical switches for all doors, usable for manual
+  - ✅ move worker handlers into WorldWorker
+    - want handler edit to restart workers
+  - ✅ clean
+
+- ✅ tty: support recursive stringify of `Set` and `Map`
+  - ✅ in tty.xterm output
+  - ✅ `declare -x`
+  - ✅ in shell expansion
+  - ✅ separated shell function `pretty` into `pretty` and `json`
+    - `pretty` is essentially `javascriptStringify` with indent 2
+    - `json` is essentially `prettyCompact` and projects to JSON
+      - e.g. does not support `Set`
+
+- ✅ shell session: support restore Set and Map
+  - ✅ serialize via `jsStringify` then re-evaluate
+  - ✅ persist session on reset/unload
+  - ✅ do not persist variable on run command (only on unload)
+
+- ✅ service/npc -> service/helper
+  - ℹ️ available runtime as w.lib.*
+  - ℹ️ used by assets script
+  - ✅ move key defs into helper
+    - avoids totally rebuilding geomorphs.json
+  - ✅ helper file should trigger watch script
+
+- ✅ can pipe `w.events` into shell
+  - ✅ define `events` in game-generators.js
+  - ✅ better error messages on mvdan parse error
+
+- ✅ fix restart while `events | map key`
+  - ℹ️ pipe child terminated late, triggering pid 0 cleanups, cancelling next awaitWorld
+  - ℹ️ due to pipe semantics i.e. 30ms delay "to permit child cleanup setup"
+  - ℹ️ need some delay (setTimeout `0`) e.g. for `take 3 | true` to terminate immediately
+  - seems to be fixed, but somewhat hacky
+
+- ✅ start new branch `refine-doors`
