@@ -78,8 +78,12 @@ class GeomorphService {
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
       ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
-      ...decor.flatMap(d => d.type === 'cuboid' && d.meta.nav === true
-        ? geom.centredRectToPoly({ x: d.extent.x + obstacleOutset, y: d.extent.z + obstacleOutset }, { x: d.center.x, y: d.center.z }, d.angle)
+      // 🔔 decor cuboid can effect nav-mesh
+      ...decor.flatMap(d =>
+        d.type === 'cuboid' && d.meta.nav === true
+        // ? geom.centredRectToPoly({ x: d.extent.x + obstacleOutset, y: d.extent.z + obstacleOutset }, { x: d.center.x, y: d.center.z }, d.angle)
+        // 🚧 simplify i.e. outset by scale/translate transform 
+        ? geom.createOutset(Poly.fromRect({ x: 0, y: 0, width: 1, height: 1 }).applyMatrix(tmpMat1.feedFromArray(d.transform)).fixOrientationConvex(), obstacleOutset)
         : []),
     ], hullOutline).filter((poly) => 
       // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`
@@ -226,28 +230,17 @@ class GeomorphService {
       delete poly.meta.transform;
       out = { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.json };
     } else if (meta.cuboid === true) {
+      // decor cuboids follow "decor quad approach"
       const polyRect = poly.rect.precision(precision);
-      const defaultDecorCuboidHeight = 0.5; // 🚧
-      const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
-      const y3d = typeof meta.y === 'number' ? meta.y : 0; // meta.y has been aggregated
+      const { transform } = poly.meta;
+      delete poly.meta.transform;
+
       const center2d = poly.center;
+      const y3d = typeof meta.y === 'number' ? meta.y : 0;
+      const height3d = typeof meta.h === 'number' ? meta.h : 0.5; // 🚧 remove hard-coding
       const center = geom.toPrecisionV3({ x: center2d.x, y: y3d + (height3d / 2), z: center2d.y });
-      
-      tmpVect1.copy(poly.outline[1]).sub(poly.outline[0]);
-      
-      if (tmpVect1.x === 0 || tmpVect1.y === 0) {// already axis-aligned
-        const extent = geom.toPrecisionV3({ x: polyRect.width / 2, y: height3d / 2, z: polyRect.height / 2 });
-        out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle: 0, center, extent };
-      }
-      
-      // Angle of first edge
-      const angle = Math.atan2(tmpVect1.y, tmpVect1.x);
-      // Rotate points back around `center2d` so axis-aligned
-      poly = poly.clone().applyMatrix(tmpMat1.setRotationAbout(-angle, center2d));
-      
-      const aabb = poly.rect;
-      const extent = geom.toPrecisionV3({ x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 });
-      out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle, center, extent };
+
+      out = { type: 'cuboid', ...base, bounds2d: polyRect.json, transform, center };
     } else if (meta.circle == true) {
       const polyRect = poly.rect.precision(precision);
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
@@ -406,15 +399,19 @@ class GeomorphService {
       ;
       poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
       poly.meta = Object.assign(meta, {
-        // 🔔 <use> with meta.decor means decor quad
-        quad: true,
-        transform: tmpMat1.toArray(),
-        // 🔔 meta.switch means door switch i.e. localDoorId
-        ...typeof meta.switch === 'number' && {
-          y: doorSwitchHeight,
-          tilt: true, // 90° so in XY plane
-          img: doorSwitchDecorImgKey,
-        }
+        // 🔔 <use> + meta.decor ==> cuboid/quad with quad fallback
+        ...meta.cuboid === true && {
+          transform: tmpMat1.toArray(),
+        } || {
+          quad: true,
+          transform: tmpMat1.toArray(),
+          // 🔔 meta.switch means door switch
+          ...typeof meta.switch === 'number' && {
+            y: doorSwitchHeight,
+            tilt: true, // 90° so in XY plane
+            img: doorSwitchDecorImgKey,
+          }
+        },
       });
       return poly.precision(precision).cleanFinalReps().fixOrientation();
     }

@@ -138,25 +138,12 @@ export default function Decor(props) {
       };
     },
     createCuboidMatrix4(d) {
-      tmpMat1.feedFromArray(d.angle !== 0
-        ? [
-            d.extent.x * 2 * Math.cos(d.angle),
-            d.extent.x * 2 * Math.sin(d.angle),
-            d.extent.z * 2 * -Math.sin(d.angle),
-            d.extent.z * 2 * Math.cos(d.angle),
-            d.center.x,
-            d.center.z,
-          ]
-        : [
-            d.extent.x * 2, 0, 0, d.extent.z * 2,
-            d.center.x, d.center.z,
-          ]
-      );
+      tmpMat1.feedFromArray(d.transform);
       return geomorphService.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
-        yHeight: d.center.y,
-        yScale: d.extent.y * 2,
-      });
+        yHeight: d.meta.y + (d.meta.h / 2),
+        yScale: d.meta.h, // scaling centred unit cuboid
+      }).multiply(centreUnitQuad);
     },
     createLabelMatrix4(d) {
       const { width, height } = state.label.sheet[d.meta.label];
@@ -318,10 +305,9 @@ export default function Decor(props) {
           break;
         case "cuboid": {
           const center = gm.matrix.transformPoint({ x: d.center.x, y: d.center.z });
-          const extent = gm.matrix.transformSansTranslate({ x: d.extent.x, y: d.extent.z });
           instance = { ...d, ...base,
             center: { x: center.x, y: d.center.y, z: center.y },
-            extent: { x: extent.x, y: d.extent.y, z: extent.y },
+            transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
           };
           break;
         }
@@ -588,7 +574,7 @@ export default function Decor(props) {
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
     >
-      {/* <meshBasicMaterial color="red" /> */}
+      {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
@@ -696,3 +682,5 @@ export default function Decor(props) {
  * @property {{ [label: string]: Geom.RectJson }} sheet
  * @property {THREE.CanvasTexture} tex
  */
+
+const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));

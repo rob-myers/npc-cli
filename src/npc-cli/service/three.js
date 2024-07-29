@@ -13,7 +13,7 @@ const xzIndices = [2, 1, 0, 0, 3, 2];
 const xzNormals = [0,1,0, 0,1,0, 0,1,0, 0,1,0]; // For shadows
 quadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(xzVertices.slice(), 3));
 quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
-quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
+quadGeometryXZ.setAttribute("normal", new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
 /** Cache to avoid re-creation on HMR */

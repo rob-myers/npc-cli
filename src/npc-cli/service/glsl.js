@@ -336,7 +336,6 @@ export const meshDiffuseTest = {// Supports instancing
 
     mvPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * mvPosition;
-    //#endregion
 
     // <logdepthbuf_vertex>
     #ifdef USE_LOGDEPTHBUF
@@ -353,7 +352,7 @@ export const meshDiffuseTest = {// Supports instancing
       // transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
       transformedNormal = im * transformedNormal;
     #endif
-    // 🚧 what does this do exactly?
+    // normalMatrix is mat3 of worldMatrix (?)
     transformedNormal = normalMatrix * transformedNormal;
 
     vColor = vec3(1.0);
@@ -361,8 +360,8 @@ export const meshDiffuseTest = {// Supports instancing
       vColor.xyz *= instanceColor.xyz;
     #endif
 
-    vec3 lightDir = normalize(cameraPosition - mvPosition.xyz);
-    dotProduct = max(dot(normalize(transformedNormal), lightDir), 0.0);
+    vec3 lightDir = normalize(mvPosition.xyz - cameraPosition);
+    dotProduct = -min(dot(normalize(transformedNormal), lightDir), 0.0);
   }
   `,
 

@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": -70307566, "pngHash": 568633107},
     "102--hull": {"outputHash": 603397466, "pngHash": 184103855},
     "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
-    "301--hull": {"outputHash": 1772934009, "pngHash": 787602800},
+    "301--hull": {"outputHash": -1614406879, "pngHash": 787602800},
     "302--hull": {"outputHash": -1844799416, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": -2042527046,
@@ -17,7 +17,7 @@
     },
     "bed--004--0.8x1.4": {"outputHash": -787864450, "pngHash": 1609319516},
     "bed--005--0.6x1.2": {
-      "outputHash": -1727239455,
+      "outputHash": -753970752,
       "pngHash": -1220380793,
       "obsHashes": [895128349]
     },
@@ -2438,7 +2438,7 @@
             "nav": true,
             "h": 0.5,
             "y": 0,
-            "color": "#a88"
+            "transform": [0.75, 0, 0, 0.5, 4.875, 6]
           }
         }
       ],
@@ -4090,9 +4090,9 @@
           "meta": {
             "decor": true,
             "cuboid": true,
-            "table": true,
             "h": 0.2,
-            "y": -0.2
+            "y": -0.2,
+            "transform": [1.875, 0, 0, 1, 0, 0.0625]
           }
         }
       ],

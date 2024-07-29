@@ -299,10 +299,7 @@ declare namespace Geomorph {
   interface DecorCuboid extends BaseDecor {
     type: 'cuboid';
     center: import('three').Vector3Like;
-    /** Half-extents */
-    extent: import('three').Vector3Like;
-    /** Radians */
-    angle: number;
+    transform: Geom.SixTuple;
   }
 
   interface DecorPoint extends BaseDecor, Geom.VectJson {

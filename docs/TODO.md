@@ -19,7 +19,13 @@
     - ✅ `inner` optional; `y=1 tilt img=icon--square` implied
     - 🚧 `switch` localDoorId -> doorId on instantiation
     - remove switches when "parent door" is removed
-       
+
+- 🚧 decor cuboid shader: flipped cuboid has wrong normal/colour
+  - ✅ use decor-quad symbol instead (neater)
+    - didn't fix problem though
+  - ℹ️ no, normals are fine
+    - issue also happens when we simply translate stateroom 036
+
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet
 - doors have small wall above them
