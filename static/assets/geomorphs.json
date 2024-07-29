@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 -603642753 -2083411140 -342773965",
+  "hash": "610044716 -219004987 32223381 -1897929183",
   "mapsHash": 610044716,
-  "layoutsHash": -603642753,
-  "sheetsHash": -2083411140,
-  "imagesHash": -342773965,
+  "layoutsHash": -219004987,
+  "sheetsHash": 32223381,
+  "imagesHash": -1897929183,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -16294,7 +16294,8 @@
           "key": "quad[1_5,1,1_5]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -16308,7 +16309,8 @@
           "key": "quad[1_5,1,1_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -16504,7 +16506,8 @@
           "key": "quad[28_35,1,1_5]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -16518,7 +16521,8 @@
           "key": "quad[28_35,1,1_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -16704,7 +16708,8 @@
           "key": "quad[1_5,1,13_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -16718,7 +16723,8 @@
           "key": "quad[1_35,1,13_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -24887,7 +24893,8 @@
           "key": "quad[19_35,1,13_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -24901,7 +24908,8 @@
           "key": "quad[19_35,1,13_5]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -25097,7 +25105,8 @@
           "key": "quad[16_35,1,13_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -25111,7 +25120,8 @@
           "key": "quad[16_35,1,13_5]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -25307,7 +25317,8 @@
           "key": "quad[13_5,1,13_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -25321,7 +25332,8 @@
           "key": "quad[13_5,1,13_5]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -25507,7 +25519,8 @@
           "key": "quad[10_5,1,13_35]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -25521,7 +25534,8 @@
           "key": "quad[10_5,1,13_5]",
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true
@@ -32083,8 +32097,9 @@
         "width": 60,
         "height": 60
       },
-      "white": {
-        "decorImgKey": "white",
+      "icon--square": {
+        "icon": true,
+        "decorImgKey": "icon--square",
         "x": 390,
         "y": 244,
         "width": 38,

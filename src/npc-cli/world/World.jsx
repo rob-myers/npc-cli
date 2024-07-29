@@ -63,6 +63,7 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: { createGmsData },
+    // 🚧 avoid recreating texture on HMR
     obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
     decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
 
@@ -193,6 +194,8 @@ export default function World(props) {
       const createGmsData = await import('../service/create-gms-data').then(x => x.default);
       const gmsDataChanged = state.hmr.createGmsData !== createGmsData;
       state.hmr.createGmsData = createGmsData;
+      /** decor or obstacle sprite-sheet image has changed? */
+      const imgChanged = prevGeomorphs?.imagesHash !== next.geomorphs.imagesHash;
 
       if (mapChanged || gmsDataChanged) {
         next.gmsData = createGmsData(
@@ -226,16 +229,17 @@ export default function World(props) {
       Object.assign(state, next);
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
       state.decorHash = `${state.mapKey} ${state.geomorphs.layoutsHash} ${state.geomorphs.mapsHash}`;
-
+      
       debug({
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
         mapChanged,
         gmsDataChanged,
+        imgChanged,
         hash: state.hash,
-      });      
+      });
 
-      if (dataChanged) {
+      if (dataChanged || imgChanged) {
         for (const { src, tm, invert } of [
           { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
           { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
@@ -246,10 +250,11 @@ export default function World(props) {
             tm.tex.dispose();
             tm.tex = new THREE.CanvasTexture(tm.canvas);
             tm.tex.flipY = false; // align with XZ/XY quad uv-map
-            tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           }
+          tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           tm.ct.drawImage(img, 0, 0);
           invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
+          tm.tex.needsUpdate = true;
           update();
         }
       } else {

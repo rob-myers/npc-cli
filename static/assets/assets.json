@@ -347,7 +347,7 @@
     "stateroom--019--2x3": {"outputHash": 725374905, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 142736693, "pngHash": 987326316},
     "stateroom--035--2x3": {"outputHash": -2011762655, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": 1525670668, "pngHash": 1301313076},
+    "stateroom--036--2x4": {"outputHash": 772512526, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": 2105116103,
       "pngHash": 1027833859,
@@ -1057,8 +1057,9 @@
         "width": 60,
         "height": 60
       },
-      "white": {
-        "decorImgKey": "white",
+      "icon--square": {
+        "icon": true,
+        "decorImgKey": "icon--square",
         "x": 390,
         "y": 244,
         "width": 38,
@@ -12106,7 +12107,8 @@
           "coordinates": [[[1.65, 1.5], [1.65, 1.65], [1.5, 1.65], [1.5, 1.5]]],
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true,
@@ -12118,7 +12120,8 @@
           "coordinates": [[[1.65, 1.35], [1.65, 1.5], [1.5, 1.5], [1.5, 1.35]]],
           "meta": {
             "decor": true,
-            "img": "white",
+            "switch": true,
+            "img": "icon--square",
             "y": 1,
             "tilt": true,
             "quad": true,
