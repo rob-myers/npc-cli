@@ -144,6 +144,12 @@ export const hitTestRed = /** @type {const} */ ({
 
 export const defaultDoorCloseMs = 12000;
 
+/** Meters */
+export const doorSwitchHeight = 1;
+
+/** @type {Geomorph.DecorImgKey} */
+export const doorSwitchDecorImgKey = 'icon--square';
+
 /**
  * @typedef {keyof fromDecorImgKey} DecorImgKey
  */

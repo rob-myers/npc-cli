@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -217,15 +217,15 @@ class GeomorphService {
     
     const base = { key: '', meta }; // key derived from decor below
     
-    if (meta.poly) {
+    if (meta.poly === true) {
       const polyRect = poly.rect.precision(precision);
       out = { type: 'poly', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
-    } else if (meta.quad) {
+    } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
       delete poly.meta.transform;
       out = { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.json };
-    } else if (meta.cuboid) {
+    } else if (meta.cuboid === true) {
       const polyRect = poly.rect.precision(precision);
       const defaultDecorCuboidHeight = 0.5; // 🚧
       const height3d = typeof meta.h === 'number' ? meta.h : defaultDecorCuboidHeight;
@@ -248,7 +248,7 @@ class GeomorphService {
       const aabb = poly.rect;
       const extent = geom.toPrecisionV3({ x: aabb.width / 2, y: height3d / 2, z: aabb.height / 2 });
       out = { type: 'cuboid', ...base, bounds2d: polyRect.json, angle, center, extent };
-    } else if (meta.circle) {
+    } else if (meta.circle == true) {
       const polyRect = poly.rect.precision(precision);
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
       const center = poly.center.precision(precision);
@@ -398,7 +398,6 @@ class GeomorphService {
     let poly = /** @type {Geom.Poly | null} */ (null);
 
     if (tagName === "use" && meta.decor === true) {
-      // support transform-origin (Boxy adds e.g. when rotating)
       const trOrigin = geomorphService.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
       tmpMat1.setMatrixValue(tagMeta.attributes.transform)
         .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
@@ -406,8 +405,17 @@ class GeomorphService {
         .precision(precision)
       ;
       poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
-      poly.meta = Object.assign(meta, { quad: true, transform: tmpMat1.toArray() });
-      // console.log('🔔 saw decor quad', poly.meta, trOrigin);
+      poly.meta = Object.assign(meta, {
+        // 🔔 <use> with meta.decor means decor quad
+        quad: true,
+        transform: tmpMat1.toArray(),
+        // 🔔 meta.switch means door switch i.e. localDoorId
+        ...typeof meta.switch === 'number' && {
+          y: doorSwitchHeight,
+          tilt: true, // 90° so in XY plane
+          img: doorSwitchDecorImgKey,
+        }
+      });
       return poly.precision(precision).cleanFinalReps().fixOrientation();
     }
 
@@ -612,6 +620,8 @@ class GeomorphService {
     });
 
     const doors = sym.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId));
+
+    // 🚧 remove switches from `sym.decor` corresponding to removed doors
 
     const wallsToAdd = /** @type {Geom.Poly[]} */ ([]).concat(
       doorsToRemove.map((x) => x.wall),
@@ -879,6 +889,7 @@ class GeomorphService {
         }
 
         const meta = geomorphService.tagsToMeta(ownTags, {});
+        // 🚧 move meta enrichment from extractGeom into own function
         const poly = geomorphService.extractGeom({ ...parent, title: contents }, meta, scale);
         
         if (poly === null) {

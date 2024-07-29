@@ -14,8 +14,11 @@
   - ✅ can rotate decor quad so in XY plane via `tilt`
   - ✅ efficient computation of "post-rotation-matrix"
     - e.g. via caching
-  - door switches are associated via ordering
-    - so must be removed when "parent door" is
+  - 🚧 door switches format: `decor switch={symbolDoorId} inner`
+    - ℹ️ decor quad because using decor quad symbol
+    - ✅ `inner` optional; `y=1 tilt img=icon--square` implied
+    - 🚧 `switch` localDoorId -> doorId on instantiation
+    - remove switches when "parent door" is removed
        
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet

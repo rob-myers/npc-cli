@@ -199,7 +199,7 @@
                 <use width="600" height="900" transform="matrix(0, 1, 1, 0, 1830, 570)" style="opacity: 0.8; transform-origin: 60px 90px;" xlink:href="#symbol-1">
                         <title>stateroom--020--2x3</title>
                 </use>
-                <use width="600" height="900" transform="matrix(0, 1, -1, 0, 150.000015258789, 1650)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-2">
+                <use width="600" height="900" transform="matrix(0, 1, -1, 0, 150.00001525878906, 1650)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-2">
                         <title>empty-room--013--2x3 walls=['e']</title>
                 </use>
                 <use width="600" height="900" transform="matrix(0, -1, -1, 0, 750, 4050)" style="transform-origin: 60px 90px;" xlink:href="#symbol-2">
@@ -238,7 +238,7 @@
                 <use width="900" height="600" transform="matrix(0, 1, -1, 0, 1050, 3450)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-9">
                         <title>medical--007--3x2 doors=['w']</title>
                 </use>
-                <use width="900" height="1200" transform="matrix(1, 0, 0, 1, 0.000041961702663684264, 2400)" xlink:href="#symbol-10">
+                <use width="900" height="1200" transform="matrix(1, 0, 0, 1, 0.00004196170630166307, 2400)" xlink:href="#symbol-10">
                         <title>empty-room--039--3x4 doors=['e'] walls=[]</title>
                 </use>
                 <use width="900" height="600" transform="matrix(0, -1, -1, 0, 1650, 2550)" style="transform-origin: 90px 60px;" xlink:href="#symbol-11">
@@ -250,13 +250,13 @@
                 <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 0.00010681200365070254, 0)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.01 wallsH=1</title>
                 </use>
-                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.000036239704058971256)" xlink:href="#symbol-13">
+                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.00003623970769695006)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=2</title>
                 </use>
-                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3000, 0.000038147005398059264)" xlink:href="#symbol-13">
+                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3000, 0.00003814700903603807)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=2</title>
                 </use>
-                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4800, 0.000038147005398059264)" xlink:href="#symbol-13">
+                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4800, 0.00003814700903603807)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=2</title>
                 </use>
                 <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 5400)" xlink:href="#symbol-13">
@@ -305,6 +305,24 @@
         <rect x="4500" y="1150" width="50" height="50" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);">
                 <title>decor label=corridor</title>
         </rect>
+        <rect x="891.5" y="1790.5" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
+        <rect x="890" y="4192" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
+        <rect x="4790" y="4192" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
+        <rect x="4790" y="1792" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
+        <rect x="2692" y="2692" width="617" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
+        <rect x="2692" y="3292" width="617" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
+                <title>wall</title>
+        </rect>
         <rect x="-20" y="1250" width="40" height="500" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull edge=w</title>
         </rect>
@@ -329,16 +347,16 @@
         <rect x="4250" y="5980" width="500" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
                 <title>door hull edge=s</title>
         </rect>
-        <rect x="932.5" y="1784" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;">
+        <rect x="931.5" y="1784" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);">
                 <title>door iris</title>
         </rect>
-        <rect x="932.5" y="4185" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;">
+        <rect x="932.5" y="4185" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);">
                 <title>door iris</title>
         </rect>
-        <rect x="4832.5" y="4185.5" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;">
+        <rect x="4832.5" y="4185.5" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);">
                 <title>door iris</title>
         </rect>
-        <rect x="4832.5" y="1786" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;">
+        <rect x="4832.5" y="1786" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);">
                 <title>door iris</title>
         </rect>
         <rect x="866.664978" y="1270" width="30" height="230" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;" transform="matrix(0, 1, -1, 0, 4242.4638671875, 1818.335083007813)">
@@ -352,23 +370,5 @@
         </rect>
         <rect x="866.664978" y="1270" width="30" height="230" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;" transform="matrix(0, 1, -1, 0, 4522.4638671875, 2418.335205078125)">
                 <title>door</title>
-        </rect>
-        <rect x="891.5" y="1790.5" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
-                <title>wall</title>
-        </rect>
-        <rect x="890" y="4192" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
-                <title>wall</title>
-        </rect>
-        <rect x="4790" y="4192" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
-                <title>wall</title>
-        </rect>
-        <rect x="4790" y="1792" width="319.5" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
-                <title>wall</title>
-        </rect>
-        <rect x="2692" y="2692" width="617" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
-                <title>wall</title>
-        </rect>
-        <rect x="2692" y="3292" width="617" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
-                <title>wall</title>
         </rect>
 </svg>

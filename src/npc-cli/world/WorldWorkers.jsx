@@ -71,7 +71,7 @@ export default function WorldWorkers() {
         })),
       });
     }
-  }, [w.threeReady, w.hash]);
+  }, [w.threeReady, w.hash]); // 🚧 avoid rebuild when only image changes
 
   return null;
 }
