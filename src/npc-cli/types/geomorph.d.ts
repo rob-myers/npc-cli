@@ -286,7 +286,7 @@ declare namespace Geomorph {
     | DecorCuboid
     | DecorPoint
     | DecorQuad
-    | DecorPoly
+    | DecorRect
   );
 
   interface DecorCircle extends BaseDecor, Geom.Circle {
@@ -315,8 +315,8 @@ declare namespace Geomorph {
     center: Geom.VectJson;
   }
 
-  interface DecorPoly extends BaseDecor {
-    type: 'poly';
+  interface DecorRect extends BaseDecor {
+    type: 'rect';
     points: Geom.VectJson[];
     /** Center of `new Poly(points)` */
     center: Geom.VectJson;
@@ -344,7 +344,7 @@ declare namespace Geomorph {
   type DecorImgKey = import('../service/const.js').DecorImgKey;
 
   /** 🚧 clarify */
-  type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
+  type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorRect;
 
   /** `byGrid[x][y]` */
   type DecorGrid = Set<Geomorph.Decor>[][];

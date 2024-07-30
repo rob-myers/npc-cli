@@ -219,9 +219,12 @@ class GeomorphService {
     
     const base = { key: '', meta }; // key derived from decor below
     
-    if (meta.poly === true) {
+    if (meta.rect === true) {
       const polyRect = poly.rect.precision(precision);
-      out = { type: 'poly', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
+      if (poly.outline.length !== 4) {
+        warn(`${'decorFromPoly'}: decor rect expected 4 points (saw ${poly.outline.length})`, poly.meta);
+      }
+      out = { type: 'rect', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
@@ -673,7 +676,7 @@ class GeomorphService {
    * @returns {d is Geomorph.DecorCollidable}
    */
   isDecorCollidable(d) {
-    return d.type === 'circle' || d.type === 'poly';
+    return d.type === 'circle' || d.type === 'rect';
   }
 
   /**

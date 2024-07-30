@@ -318,7 +318,7 @@ export default function Decor(props) {
           instance.meta.orient = orient; // update `meta` too
           break;
         }
-        case "poly":
+        case "rect":
           instance = { ...d, ...base,
             center: gm.matrix.transformPoint({ ...d.center }),
             points: d.points.map(p => gm.matrix.transformPoint({ ...p })),

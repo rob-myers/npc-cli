@@ -342,12 +342,12 @@
       "obsHashes": [1562717456]
     },
     "stateroom--012--2x2": {"outputHash": 1784865976, "pngHash": 285590873},
-    "stateroom--014--2x2": {"outputHash": 54975190, "pngHash": 810806279},
+    "stateroom--014--2x2": {"outputHash": 269169902, "pngHash": 810806279},
     "stateroom--018--2x3": {"outputHash": -1090494037, "pngHash": -932858017},
     "stateroom--019--2x3": {"outputHash": 725374905, "pngHash": 464993285},
     "stateroom--020--2x3": {"outputHash": 142736693, "pngHash": 987326316},
     "stateroom--035--2x3": {"outputHash": 126217237, "pngHash": -866865591},
-    "stateroom--036--2x4": {"outputHash": -1064575540, "pngHash": 1301313076},
+    "stateroom--036--2x4": {"outputHash": -1120769564, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": 2105116103,
       "pngHash": 1027833859,
@@ -11505,7 +11505,7 @@
         {
           "type": "Polygon",
           "coordinates": [[[3, 0.05], [3, 1.5], [1.55, 1.5], [1.55, 0.05]]],
-          "meta": {"decor": true, "poly": true, "shower": true}
+          "meta": {"decor": true, "rect": true, "shower": true}
         },
         {
           "type": "Polygon",
@@ -11973,7 +11973,7 @@
         {
           "type": "Polygon",
           "coordinates": [[[0.9, 0], [0.9, 1.5], [0, 1.5], [0, 0]]],
-          "meta": {"decor": true, "poly": true, "shower": true}
+          "meta": {"decor": true, "rect": true, "shower": true}
         },
         {
           "type": "Polygon",

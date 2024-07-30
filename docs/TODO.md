@@ -26,9 +26,13 @@
     - ✅ replace `orient={degrees}` in one symbol
     - ✅ replace `orient={degrees}` for all
   - ✅ simplify cuboid nav outset
-  - 🚧 decor poly -> decor rect
-  - decor circle uses symbol
-  - decor rect uses symbol
+  - ✅ decor poly -> decor rect
+  - 🚧 decor circle can use circle
+  - ❌ decor rect uses symbol
+
+- return to next.js project
+  - ensure up to date
+  - work on migrating Viewer
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave

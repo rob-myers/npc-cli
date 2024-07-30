@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -387036830 32223381 -1098311663",
+  "hash": "610044716 -1240092342 32223381 -1098311663",
   "mapsHash": 610044716,
-  "layoutsHash": -387036830,
+  "layoutsHash": -1240092342,
   "sheetsHash": 32223381,
   "imagesHash": -1098311663,
   "map": {
@@ -16059,9 +16059,9 @@
           "center": {"x": 5.25, "y": 0.25, "z": 6.25}
         },
         {
-          "type": "poly",
-          "key": "poly[4_55,0_01,10_5]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[4_55,0_01,10_5]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 4.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "points": [
             {"x": 4.55, "y": 11.95},
@@ -16123,9 +16123,9 @@
           "orient": -90
         },
         {
-          "type": "poly",
-          "key": "poly[1_55,0_01,10_5]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[1_55,0_01,10_5]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 1.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "points": [
             {"x": 1.55, "y": 11.95},
@@ -16187,9 +16187,9 @@
           "orient": -90
         },
         {
-          "type": "poly",
-          "key": "poly[0,0_01,0]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[0,0_01,0]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 0, "y": 0, "width": 0.9, "height": 1.5},
           "points": [
             {"x": 0.9, "y": 0},
@@ -16414,9 +16414,9 @@
           "orient": 90
         },
         {
-          "type": "poly",
-          "key": "poly[29_1,0_01,0]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[29_1,0_01,0]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 29.1, "y": 0, "width": 0.9, "height": 1.5},
           "points": [
             {"x": 30, "y": 0},
@@ -16641,9 +16641,9 @@
           "orient": 90
         },
         {
-          "type": "poly",
-          "key": "poly[0,0_01,14_1]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[0,0_01,14_1]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 0, "y": 14.1, "width": 1.5, "height": 0.9},
           "points": [
             {"x": 0, "y": 14.1},
@@ -24876,9 +24876,9 @@
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 15.325},
       "decor": [
         {
-          "type": "poly",
-          "key": "poly[20_1,0_01,13_5]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[20_1,0_01,13_5]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 20.1, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
             {"x": 20.1, "y": 15},
@@ -25113,9 +25113,9 @@
           "orient": -90
         },
         {
-          "type": "poly",
-          "key": "poly[17_1,0_01,13_5]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[17_1,0_01,13_5]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 17.1, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
             {"x": 17.1, "y": 15},
@@ -25350,9 +25350,9 @@
           "orient": -90
         },
         {
-          "type": "poly",
-          "key": "poly[12,0_01,13_5]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[12,0_01,13_5]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 12, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
             {"x": 12, "y": 15},
@@ -25587,9 +25587,9 @@
           "orient": -90
         },
         {
-          "type": "poly",
-          "key": "poly[9,0_01,13_5]",
-          "meta": {"decor": true, "poly": true, "shower": true, "y": 0.01},
+          "type": "rect",
+          "key": "rect[9,0_01,13_5]",
+          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
           "bounds2d": {"x": 9, "y": 13.5, "width": 0.9, "height": 1.5},
           "points": [
             {"x": 9, "y": 15},
