@@ -20,12 +20,23 @@
     - 🚧 `switch` localDoorId -> doorId on instantiation
     - remove switches when "parent door" is removed
 
-- 🚧 decor cuboid shader: flipped cuboid has wrong normal/colour
+- ✅ decor cuboid shader: flipped cuboid has wrong normal/colour
   - ✅ use decor-quad symbol instead (neater)
     - didn't fix problem though
   - ℹ️ no, normals are fine
     - issue also happens when we simply translate stateroom 036
-  - 🚧 possibly fixed via mvCameraPosition
+  - ✅ possibly fixed via mvCameraPosition
+
+- ✅ clean extractGeom into `extractDecorPoly` and `extractPoly`
+- clean Decor
+  - decor point uses symbol (infer direction)
+  - decor poly -> decor rect
+  - decor circle uses symbol
+  - decor rect uses symbol
+
+- fire event when npc enters/exits a room
+  - sensor in each doorway, triggered on leave
+  - e.g. `g1d3 inside` vs `g1d3 nearby`
 
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet

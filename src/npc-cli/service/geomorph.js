@@ -375,46 +375,55 @@ class GeomorphService {
   }
 
   /**
-   * Extract a polygon with meta from an SVG symbol tag i.e.
-   * - <rect> e.g. possibly rotated wall
-   * - <path> e.g. complex obstacle
-   * - <use><title>decor ...</use> i.e. instance of decor-unit-quad
-   * - <image> i.e. background image in symbol
+   * Given decor symbol instance <use>, extract polygon with meta
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {Geom.Meta} meta
    * @param {number} scale
    * @returns {Geom.Poly | null}
    */
-  extractGeom(tagMeta, meta, scale) {
+  extractDecorPoly(tagMeta, meta, scale) {
+    const trOrigin = geomorphService.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
+    tmpMat1.setMatrixValue(tagMeta.attributes.transform)
+      .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
+      .postMultiply([scale, 0, 0, scale, trOrigin.x * scale, trOrigin.y * scale])
+      .precision(precision)
+    ;
+    const poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
+
+    // 🚧 currently only quad/cuboid with quad fallback
+    poly.meta = Object.assign(meta, {
+      ...meta.cuboid === true && {
+        transform: tmpMat1.toArray(),
+      } || {
+        quad: true,
+        transform: tmpMat1.toArray(),
+        // 🔔 meta.switch means door switch
+        ...typeof meta.switch === 'number' && {
+          y: doorSwitchHeight,
+          tilt: true, // 90° so in XY plane
+          img: doorSwitchDecorImgKey,
+        }
+      },
+    });
+
+    return poly.precision(precision).cleanFinalReps().fixOrientation();
+  }
+
+  /**
+   * Extract polygon with meta from <rect>, <path> or <image>
+   * - <image> i.e. background image in symbol
+   * - <rect> e.g. possibly rotated wall
+   * - <path> e.g. complex obstacle
+   * @private
+   * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
+   * @param {Geom.Meta} meta
+   * @param {number} scale
+   * @returns {Geom.Poly | null}
+   */
+  extractPoly(tagMeta, meta, scale) {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
-
-    if (tagName === "use" && meta.decor === true) {
-      const trOrigin = geomorphService.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
-      tmpMat1.setMatrixValue(tagMeta.attributes.transform)
-        .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
-        .postMultiply([scale, 0, 0, scale, trOrigin.x * scale, trOrigin.y * scale])
-        .precision(precision)
-      ;
-      poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
-      poly.meta = Object.assign(meta, {
-        // 🔔 <use> + meta.decor ==> cuboid/quad with quad fallback
-        ...meta.cuboid === true && {
-          transform: tmpMat1.toArray(),
-        } || {
-          quad: true,
-          transform: tmpMat1.toArray(),
-          // 🔔 meta.switch means door switch
-          ...typeof meta.switch === 'number' && {
-            y: doorSwitchHeight,
-            tilt: true, // 90° so in XY plane
-            img: doorSwitchDecorImgKey,
-          }
-        },
-      });
-      return poly.precision(precision).cleanFinalReps().fixOrientation();
-    }
 
     if (tagName === "rect" || tagName === "image") {
       poly = Poly.fromRect(new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0)));
@@ -439,7 +448,7 @@ class GeomorphService {
       poly.applyMatrix(new Mat(a.transform));
     }
 
-    typeof scale === "number" && poly.scale(scale);
+    poly.scale(scale);
     poly.meta = meta;
 
     return poly.precision(precision).cleanFinalReps().fixOrientation();
@@ -886,8 +895,11 @@ class GeomorphService {
         }
 
         const meta = geomorphService.tagsToMeta(ownTags, {});
-        // 🚧 move meta enrichment from extractGeom into own function
-        const poly = geomorphService.extractGeom({ ...parent, title: contents }, meta, scale);
+
+        const poly = parent.tagName === "use" && meta.decor === true
+          ? geomorphService.extractDecorPoly({ ...parent, title: contents }, meta, scale)
+          : geomorphService.extractPoly({ ...parent, title: contents }, meta, scale)
+        ;
         
         if (poly === null) {
           return;
