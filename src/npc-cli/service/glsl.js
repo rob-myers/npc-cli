@@ -358,7 +358,6 @@ export const meshDiffuseTest = {// Supports instancing
     #endif
 
     vec4 mvCameraPosition = modelViewMatrix * vec4(cameraPosition, 1.0);
-    // vec3 lightDir = normalize(mvPosition.xyz - cameraPosition);
     vec3 lightDir = normalize(mvPosition.xyz - mvCameraPosition.xyz);
     dotProduct = -min(dot(normalize(transformedNormal), lightDir), 0.0);
   }
@@ -375,7 +374,7 @@ export const meshDiffuseTest = {// Supports instancing
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.6 * dotProduct), 1);
+    gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
 
     #include <logdepthbuf_fragment>
   }
