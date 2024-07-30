@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -1240092342 32223381 -1098311663",
+  "hash": "610044716 1186457584 32223381 -1098311663",
   "mapsHash": 610044716,
-  "layoutsHash": -1240092342,
+  "layoutsHash": 1186457584,
   "sheetsHash": 32223381,
   "imagesHash": -1098311663,
   "map": {
@@ -1152,6 +1152,48 @@
           "x": 2.235,
           "y": 15.965,
           "orient": -90
+        },
+        {
+          "type": "circle",
+          "key": "circle[0_2998,0_01,7_897]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {
+            "x": 0.2998,
+            "y": 7.897,
+            "width": 0.9004,
+            "height": 1.103
+          },
+          "radius": 0.5515,
+          "center": {"x": 0.75, "y": 8.4485}
+        },
+        {
+          "type": "circle",
+          "key": "circle[28_7998,0_01,21]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {"x": 28.7998, "y": 21, "width": 0.9004, "height": 1.103},
+          "radius": 0.5515,
+          "center": {"x": 29.25, "y": 21.5515}
+        },
+        {
+          "type": "circle",
+          "key": "circle[7_897,0_01,28_7998]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {
+            "x": 7.897,
+            "y": 28.7998,
+            "width": 1.103,
+            "height": 0.9004
+          },
+          "radius": 0.5515,
+          "center": {"x": 8.4485, "y": 29.25}
+        },
+        {
+          "type": "circle",
+          "key": "circle[21,0_01,0_2998]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {"x": 21, "y": 0.2998, "width": 1.103, "height": 0.9004},
+          "radius": 0.5515,
+          "center": {"x": 21.5515, "y": 0.75}
         }
       ],
       "doors": [
@@ -17530,6 +17572,53 @@
           "x": 22.485,
           "y": 2.245,
           "orient": 180
+        },
+        {
+          "type": "circle",
+          "key": "circle[0_2998,0_01,7_897]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {
+            "x": 0.2998,
+            "y": 7.897,
+            "width": 0.9004,
+            "height": 1.103
+          },
+          "radius": 0.5515,
+          "center": {"x": 0.75, "y": 8.4485}
+        },
+        {
+          "type": "circle",
+          "key": "circle[7_897,0_01,13_7998]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {
+            "x": 7.897,
+            "y": 13.7998,
+            "width": 1.103,
+            "height": 0.9004
+          },
+          "radius": 0.5515,
+          "center": {"x": 8.4485, "y": 14.25}
+        },
+        {
+          "type": "circle",
+          "key": "circle[22_897,0_01,13_7998]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {
+            "x": 22.897,
+            "y": 13.7998,
+            "width": 1.103,
+            "height": 0.9004
+          },
+          "radius": 0.5515,
+          "center": {"x": 23.4485, "y": 14.25}
+        },
+        {
+          "type": "circle",
+          "key": "circle[28_7998,0_01,6]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {"x": 28.7998, "y": 6, "width": 0.9004, "height": 1.103},
+          "radius": 0.5515,
+          "center": {"x": 29.25, "y": 6.5515}
         }
       ],
       "doors": [
@@ -22533,6 +22622,14 @@
           "x": 11.3384,
           "y": 12.9175,
           "orient": 0
+        },
+        {
+          "type": "circle",
+          "key": "circle[28_7998,0_01,6]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {"x": 28.7998, "y": 6, "width": 0.9004, "height": 1.103},
+          "radius": 0.5515,
+          "center": {"x": 29.25, "y": 6.5515}
         }
       ],
       "doors": [
@@ -26388,6 +26485,27 @@
           "x": 29.6875,
           "y": 5.1875,
           "orient": 0
+        },
+        {
+          "type": "circle",
+          "key": "circle[7_897,0_01,13_7998]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {
+            "x": 7.897,
+            "y": 13.7998,
+            "width": 1.103,
+            "height": 0.9004
+          },
+          "radius": 0.5515,
+          "center": {"x": 8.4485, "y": 14.25}
+        },
+        {
+          "type": "circle",
+          "key": "circle[28_7998,0_01,6]",
+          "meta": {"decor": true, "circle": true, "hatch": true, "y": 0.01},
+          "bounds2d": {"x": 28.7998, "y": 6, "width": 0.9004, "height": 1.103},
+          "radius": 0.5515,
+          "center": {"x": 29.25, "y": 6.5515}
         }
       ],
       "doors": [

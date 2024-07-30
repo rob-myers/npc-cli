@@ -28,6 +28,7 @@
   - ✅ simplify cuboid nav outset
   - ✅ decor poly -> decor rect
   - 🚧 decor circle can use circle
+    - ✅ add missing iris valves
   - ❌ decor rect uses symbol
 
 - return to next.js project
