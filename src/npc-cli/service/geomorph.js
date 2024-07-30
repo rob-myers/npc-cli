@@ -251,14 +251,10 @@ class GeomorphService {
       const center = poly.center.precision(precision);
       const radius = decorIconRadius + 2;
       const bounds2d = tmpRect1.set(center.x - radius, center.y - radius, 2 * radius, 2 * radius).precision(precision).json;
+      // direction determines orient (degrees), where (1, 0) understood as 0 degrees
       const direction = /** @type {Geom.VectJson} */ (meta.direction) || { x: 0, y: 0 };
-      delete meta.direction;
-      // 🚧 orient completely derived from `direction`
-      // (1, 0) understood as 0 degrees
-      const orient = typeof meta.orient === 'number'
-        ? meta.orient
-        : (180 / Math.PI) * Math.atan2(direction.y, direction.x);
-      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient, direction };
+      const orient = (180 / Math.PI) * Math.atan2(direction.y, direction.x);
+      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
     }
 
     out.key = this.getDerivedDecorKey(out); // overridden on instantiation

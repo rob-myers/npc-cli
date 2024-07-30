@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <bx:grid x="0" y="0" width="300" height="300" />
+    <bx:grid x="0" y="0" width="300" height="300"/>
     <symbol id="symbol-2" vioewbox="0 0 150 150" viewBox="0 0 150 150">
       <title>console--051--0.4x0.6</title>
       <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2-0'); transform-origin: 75.005px 75.0023px;" y="0" x="0">
         <title>console--051--0.4x0.6 y=0.4</title>
       </rect>
     </symbol>
-    <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-3" />
-    <pattern id="pattern-3" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0" />
+    <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-3"/>
+    <pattern id="pattern-3" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0"/>
     <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937" />
-        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937" />
-        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)" />
-        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)" />
-        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)" />
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
       </g>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300" />
+        <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
     <symbol id="symbol-0" viewBox="0 0 600 600">
@@ -32,7 +32,7 @@
         <title>console--019--2x2</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300" />
+        <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </symbol>
   </defs>
@@ -41,13 +41,13 @@
   </image>
   <g>
     <title>symbols</title>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.573576569557, 0.819153010845, -0.819153010845, -0.573576569557, 490.247436523438, 328.457214355469)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.5735765695571899, 0.8191530108451843, -0.8191530108451843, -0.5735765695571899, 490.2474365234375, 328.45721435546875)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.819153010845, 0.573577165604, -0.573577165604, -0.819153010845, 725.529968261719, 562.704528808594)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(-0.8191530108451843, 0.5735771656036377, -0.5735771656036377, -0.8191530108451843, 725.5299682617188, 562.7045288085938)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
-    <use width="600" height="600" transform="matrix(1, 0, 0, -1, 3.5354e-7, 1199.999877929688)" style="" xlink:href="#symbol-0">
+    <use width="600" height="600" transform="matrix(1, 0, 0, -1, 3.5354000260667817e-7, 1199.9998779296875)" style="" xlink:href="#symbol-0">
       <title>console--019--2x2</title>
     </use>
   </g>
@@ -69,15 +69,6 @@
   <path d="M 561.306 81.297 L 633.287 120.499 L 709.881 168.349 L 821.4 251.1 L 959.6 389 L 1045.336 511.249 L 1123.5 640.1 L 1071.8 669.8 L 898.4 419.4 L 733.3 259.2 L 535.2 142.2 L 561.306 81.297 Z" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0); fill-opacity: 0.5;">
     <title>window one-way</title>
   </path>
-  <rect x="309.363" y="882.288" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-    <title>decor do sit chair orient=135</title>
-  </rect>
-  <rect x="567.5" y="392.6" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-    <title>decor do sit chair orient=305</title>
-  </rect>
-  <rect x="807.5" y="622.6" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-    <title>decor do sit chair orient=325</title>
-  </rect>
   <path d="M 419.110515 219.575014 L 398.363043 195.078613 L 390.896 167.126989 L 399.532818 133.941178 L 433.345878 45.936061 L 547.552701 94.272538 L 558.053135 74.029441 L 637.804415 115.357287 L 761.180361 193.944517 L 881.977214 299.999829 L 966.772405 389.297225 L 1052.347471 505.352664 L 1129.822995 640.131262 L 1109.792147 656.52957 L 1154.131888 760.815618 L 1023.880706 809.861673 L 976.879894 772.112712 L 864.389 573.662989 L 757.4 448.799989 L 672.298 368.988989 L 541.46 279.646989 L 419.110515 219.575014 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(1, 0.000001, -0.000001, 1, 1.2024e-7, 0.000119411997)">
     <title>obstacle surface y=1</title>
   </path>

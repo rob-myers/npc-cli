@@ -21,10 +21,10 @@
     - remove switches when "parent door" is removed
 
 - 🚧 clean Decor
-  - 🚧 can specify decor point via symbol (infer direction)
+  - ✅ can specify decor point via symbol (infer direction)
     - ✅ pattern: single arrow
     - ✅ replace `orient={degrees}` in one symbol
-    - 🚧 replace `orient={degrees}` for all
+    - ✅ replace `orient={degrees}` for all
   - simplify cuboid nav outset
   - decor poly -> decor rect
   - decor circle uses symbol
