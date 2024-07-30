@@ -304,8 +304,10 @@ declare namespace Geomorph {
 
   interface DecorPoint extends BaseDecor, Geom.VectJson {
     type: 'point';
-    /** Orientation in degrees, like `meta.orient` */
+    /** Orientation in degrees */
     orient: number;
+    /** Unit vector */
+    direction: Geom.VectJson;
   }
   
   /** Simple polygon sans holes. */

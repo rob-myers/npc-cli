@@ -628,7 +628,7 @@ export default function Decor(props) {
 /**
  * @typedef State
  * @property {Geomorph.DecorGrid} byGrid
- * PoCollidable decors in global grid where `byGrid[x][y]` covers the square:
+ * Decor in global grid where `byGrid[x][y]` covers the square:
  * (x * decorGridSize, y * decorGridSize, decorGridSize, decorGridSize)
  * @property {Record<string, Geomorph.Decor>} byKey
  * @property {Geomorph.RoomDecor[][]} byRoom

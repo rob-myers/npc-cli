@@ -251,9 +251,14 @@ class GeomorphService {
       const center = poly.center.precision(precision);
       const radius = decorIconRadius + 2;
       const bounds2d = tmpRect1.set(center.x - radius, center.y - radius, 2 * radius, 2 * radius).precision(precision).json;
-      // +90 so "bottom to top" of text in sprite-sheet "faces" direction
-      const orient = typeof meta.orient === 'number' ? meta.orient : 0;
-      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
+      const direction = /** @type {Geom.VectJson} */ (meta.direction) || { x: 0, y: 0 };
+      delete meta.direction;
+      // 🚧 orient completely derived from `direction`
+      // (1, 0) understood as 0 degrees
+      const orient = typeof meta.orient === 'number'
+        ? meta.orient
+        : (180 / Math.PI) * Math.atan2(direction.y, direction.x);
+      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient, direction };
     }
 
     out.key = this.getDerivedDecorKey(out); // overridden on instantiation
@@ -391,11 +396,11 @@ class GeomorphService {
     ;
     const poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
 
-    // 🚧 currently only quad/cuboid with quad fallback
+    // 🚧 currently only support cuboid/point/quad, with point fallback
     poly.meta = Object.assign(meta, {
       ...meta.cuboid === true && {
         transform: tmpMat1.toArray(),
-      } || {
+      } || meta.quad === true && {
         quad: true,
         transform: tmpMat1.toArray(),
         // 🔔 meta.switch means door switch
@@ -404,6 +409,9 @@ class GeomorphService {
           tilt: true, // 90° so in XY plane
           img: doorSwitchDecorImgKey,
         }
+      } || {
+        point: true,
+        direction: tmpVect1.set(tmpMat1.a, tmpMat1.b).normalize().json,
       },
     });
 
@@ -1127,11 +1135,15 @@ class GeomorphService {
       ...meta,
       // aggregate `y` i.e. height off ground
       y: (Number(y) || 0) + (Number(meta.y) || 0.01),
-      // transform `orient` i.e. orientation in degrees
+      // 🚧 remove: transform `orient` i.e. orientation in degrees
       ...typeof meta.orient === 'number' && { orient: mat.transformDegrees(meta.orient) },
       // transform `transform` i.e. affine transform from unit quad (0,0)...(1,1) to rect
       ...Array.isArray(meta.transform) && {
         transform: tmpMat2.setMatrixValue(tmpMat1).preMultiply(/** @type {Geom.SixTuple} */ (meta.transform)).toArray(),
+      },
+      // transform `direction` i.e. unit vector
+      ...meta.direction != undefined && {
+        direction: mat.transformSansTranslate({...meta.direction}),
       },
     };
   }

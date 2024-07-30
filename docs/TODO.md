@@ -20,16 +20,12 @@
     - 🚧 `switch` localDoorId -> doorId on instantiation
     - remove switches when "parent door" is removed
 
-- ✅ decor cuboid shader: flipped cuboid has wrong normal/colour
-  - ✅ use decor-quad symbol instead (neater)
-    - didn't fix problem though
-  - ℹ️ no, normals are fine
-    - issue also happens when we simply translate stateroom 036
-  - ✅ possibly fixed via mvCameraPosition
-
-- ✅ clean extractGeom into `extractDecorPoly` and `extractPoly`
-- clean Decor
-  - decor point uses symbol (infer direction)
+- 🚧 clean Decor
+  - 🚧 can specify decor point via symbol (infer direction)
+    - ✅ pattern: single arrow
+    - ✅ replace `orient={degrees}` in one symbol
+    - 🚧 replace `orient={degrees}` for all
+  - simplify cuboid nav outset
   - decor poly -> decor rect
   - decor circle uses symbol
   - decor rect uses symbol
@@ -1782,3 +1778,12 @@
   - seems to be fixed, but somewhat hacky
 
 - ✅ start new branch `refine-doors`
+
+- ✅ decor cuboid shader: flipped cuboid has wrong normal/colour
+  - ✅ use decor-quad symbol instead (neater)
+    - didn't fix problem though
+  - ℹ️ no, normals are fine
+    - issue also happens when we simply translate stateroom 036
+  - ✅ possibly fixed via mvCameraPosition
+
+- ✅ clean extractGeom into `extractDecorPoly` and `extractPoly`
