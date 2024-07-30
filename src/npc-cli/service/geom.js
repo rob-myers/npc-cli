@@ -17,6 +17,23 @@ class geomServiceClass {
   }
 
   /**
+   * Given an affine transform designed to act on unit quad `(0, 0)...(1, 1)`,
+   * apply it with an additional `outset`.
+   * @param {Geom.Mat} mat 
+   * @param {number} outset
+   * @returns {Geom.Poly}
+   */
+  applyUnitQuadTransformWithOutset(mat, outset) {
+    const width = tempVect1.set(mat.a, mat.b).length;
+    const height = tempVect1.set(mat.c, mat.d).length;
+    const sx = (width + 2 * outset) / width;
+    const sy = (height + 2 * outset) / height;
+    const ox = (2 * outset) / (width + 2 * outset);
+    const oy = (2 * outset) / (height + 2 * outset);
+    return Poly.fromRect({ x: -ox, y: -oy, width: sx, height: sy }).applyMatrix(mat);
+  }
+
+  /**
    * @param {Geom.VectJson} extent Half extents
    * @param {Geom.VectJson} center
    * @param {number} angle

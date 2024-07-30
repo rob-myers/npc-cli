@@ -25,8 +25,8 @@
     - ✅ pattern: single arrow
     - ✅ replace `orient={degrees}` in one symbol
     - ✅ replace `orient={degrees}` for all
-  - simplify cuboid nav outset
-  - decor poly -> decor rect
+  - ✅ simplify cuboid nav outset
+  - 🚧 decor poly -> decor rect
   - decor circle uses symbol
   - decor rect uses symbol
 

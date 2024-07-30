@@ -78,13 +78,11 @@ class GeomorphService {
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
       ...symbol.obstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
-      // 🔔 decor cuboid can effect nav-mesh
-      ...decor.flatMap(d =>
+      ...decor.flatMap(d => // 🔔 decor cuboid can effect nav-mesh
         d.type === 'cuboid' && d.meta.nav === true
-        // ? geom.centredRectToPoly({ x: d.extent.x + obstacleOutset, y: d.extent.z + obstacleOutset }, { x: d.center.x, y: d.center.z }, d.angle)
-        // 🚧 simplify i.e. outset by scale/translate transform 
-        ? geom.createOutset(Poly.fromRect({ x: 0, y: 0, width: 1, height: 1 }).applyMatrix(tmpMat1.feedFromArray(d.transform)).fixOrientationConvex(), obstacleOutset)
-        : []),
+          ? geom.applyUnitQuadTransformWithOutset(tmpMat1.feedFromArray(d.transform), obstacleOutset)
+          : []
+      ),
     ], hullOutline).filter((poly) => 
       // Ignore nav-mesh if AABB ≤ 1m², or poly intersects `ignoreNavPoints`
       poly.rect.area > 1 && !ignoreNavPoints.some(p => poly.contains(p))
@@ -376,7 +374,8 @@ class GeomorphService {
   }
 
   /**
-   * Given decor symbol instance <use>, extract polygon with meta
+   * Given decor symbol instance <use>, extract polygon with meta.
+   * Support: cuboid, point, quad.
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {Geom.Meta} meta
