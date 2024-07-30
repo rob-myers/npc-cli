@@ -185,7 +185,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "bridge--042--8x9": true,
   "cargo--002--2x2": true,
   "cargo--010--2x4": true,
-  "cargo--003--2x4.svg": true,
+  "cargo--003--2x4": true,
   "console--005--1.2x4": true,
   "console--006--1.2x3": true,
   "console--010--1.2x2": true,

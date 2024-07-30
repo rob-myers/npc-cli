@@ -63,7 +63,7 @@ export default function Floor(props) {
       // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
       gm.decor.forEach((decor) => {
         if (decor.type === 'circle') {
-          drawCircle(ct, decor.center, decor.radius, [null, '#f00', 0.04]);
+          drawCircle(ct, decor.center, decor.radius, [null, '#009', 0.04]);
         } else if (decor.type === 'rect') {
           drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
         }

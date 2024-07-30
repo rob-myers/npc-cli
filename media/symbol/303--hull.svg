@@ -114,7 +114,7 @@
     <use width="600" height="1200" transform="matrix(1, 0, 0, -1, 1800, 3000)" style="" xlink:href="#symbol-3">
       <title>stateroom--036--2x4</title>
     </use>
-    <use width="600" height="900" transform="matrix(1, 0, 0, 1, 3000, -0.0000010978402542605181)" xlink:href="#symbol-2">
+    <use width="600" height="900" transform="matrix(1, 0, 0, 1, 3000, -0.0000010978403679473558)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
     <use width="600" height="900" transform="matrix(1, 0, 0, 1, 1800, 0)" xlink:href="#symbol-2">
@@ -123,10 +123,10 @@
     <use width="600" height="900" transform="matrix(1, 0, 0, 1, 2400, 1.2539999261207413e-8)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="600" height="900" transform="matrix(1, 0, 0, 1, 1200, -0.0000260384040302597)" xlink:href="#symbol-2">
+    <use width="600" height="900" transform="matrix(1, 0, 0, 1, 1200, -0.000026038405849249102)" xlink:href="#symbol-2">
       <title>stateroom--035--2x3</title>
     </use>
-    <use width="480" height="1200" transform="matrix(1, 0, 0, 1, -0.000005000011697120499, 0)" xlink:href="#symbol-1">
+    <use width="480" height="1200" transform="matrix(1, 0, 0, 1, -0.00000500001215186785, 0)" xlink:href="#symbol-1">
       <title>medical-bed--006--1.6x3.6</title>
     </use>
     <use width="1199.9974822998047" height="1200.0005340576172" transform="matrix(0, -1, 1, 0, 4800, 1799.997314453125)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-6">
@@ -162,10 +162,10 @@
     <use width="600" height="150" style="transform-origin: 300px 75px;" transform="matrix(0, -1, 1, 0, 1649.475830078125, 1425)" xlink:href="#symbol-7">
       <title>extra--017--table--2x0.5 y=0.8</title>
     </use>
-    <use width="300" height="300" transform="matrix(1, 0, 0, 1, 1500, 2699.997314453125)" style="transform-origin: 150px 150px;" xlink:href="#symbol-8">
+    <use width="300" height="300" transform="matrix(-1, 0, 0, 1, 1500, 2699.997314453125)" style="transform-origin: 150px 150px;" xlink:href="#symbol-8">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, -1, 1, 0, 5700, 1200)" style="transform-origin: 150px 150px;" xlink:href="#symbol-8">
+    <use width="300" height="300" transform="matrix(0, 1, 1, 0, 5700, 1199.999877929688)" style="transform-origin: 150px 150px;" xlink:href="#symbol-8">
       <title>iris-valves--005--1x1</title>
     </use>
   </g>

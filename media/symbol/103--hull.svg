@@ -4,7 +4,7 @@
     <bx:grid x="0" y="0" width="300" height="300"/>
     <symbol id="symbol-3" viewBox="0 0 600 1200">
       <title>cargo--003--2x4</title>
-      <rect width="600" height="1200" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 300px 600px;">
+      <rect width="600" height="1200" style="fill: url('#pattern-0'); transform-origin: 300px 600px; vector-effect: non-scaling-stroke; stroke: rgb(0, 0, 255); stroke-width: 4px;">
         <title>cargo--003--2x4</title>
       </rect>
       <defs>
@@ -60,16 +60,28 @@
   </rect>
   <g>
     <title>symbols</title>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 1799.999877929688, -0.000034000004)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 300, 1800)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 2400, -0.000034328157)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 900, 1800)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3000, -0.000034189965)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 1500, 1800)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3600, -0.000034000008)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 2100, 1800)" xlink:href="#symbol-3">
+      <title>cargo--003--2x4</title>
+    </use>
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 300.000030517578, 3000.000244140625)" xlink:href="#symbol-3">
+      <title>cargo--003--2x4</title>
+    </use>
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 900, 3000.000244140625)" xlink:href="#symbol-3">
+      <title>cargo--003--2x4</title>
+    </use>
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 1500, 3000.000244140625)" xlink:href="#symbol-3">
+      <title>cargo--003--2x4</title>
+    </use>
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 2100, 3000.000244140625)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
     <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3300, 1800)" xlink:href="#symbol-3">
@@ -84,40 +96,28 @@
     <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 5100, 1800)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3300.000244140625, 2999.999755859375)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3300.000244140625, 3000.000244140625)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3900.000244140625, 2999.999755859375)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3900.000244140625, 3000.000244140625)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 4500, 2999.999755859375)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 4500, 3000.000244140625)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 5100, 2999.999755859375)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 5100, 3000.000244140625)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 299.999969482422, 1800.000122070313)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 1800, -0.00000249303)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 900, 1800.000122070313)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 2400, -0.00000249303)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 1500, 1800.000122070313)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 2999.999755859375, -0.00000249303)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 2100, 1800.000122070313)" xlink:href="#symbol-3">
-      <title>cargo--003--2x4</title>
-    </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 300.000213623047, 3000)" xlink:href="#symbol-3">
-      <title>cargo--003--2x4</title>
-    </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 900.000244140625, 3000)" xlink:href="#symbol-3">
-      <title>cargo--003--2x4</title>
-    </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 1500, 3000)" xlink:href="#symbol-3">
-      <title>cargo--003--2x4</title>
-    </use>
-    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 2100, 3000)" xlink:href="#symbol-3">
+    <use width="600" height="1200" transform="matrix(1, 0, 0, 1, 3599.999755859375, -0.00000249303)" xlink:href="#symbol-3">
       <title>cargo--003--2x4</title>
     </use>
   </g>

@@ -114,13 +114,13 @@
     <use width="300" height="300" transform="matrix(-1, 0, 0, 1, 1200, 0)" style="" xlink:href="#symbol-2">
       <title>console--018--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, 1, -1, 0, -0.024624498561, 1499.9951171875)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-3">
+    <use width="300" height="300" transform="matrix(0, -1, -1, 0, -4.69226e-7, 1500.000732421875)" style="transform-origin: 150px 150px;" xlink:href="#symbol-3">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, -1, 1, 0, 5700, 4200)" style="transform-origin: 150px 150px;" xlink:href="#symbol-3">
+    <use width="300" height="300" transform="matrix(0, 1, 1, 0, 5700, 4199.99951171875)" style="transform-origin: 150px 150px;" xlink:href="#symbol-3">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(-1, 0, 0, -1, 4200, 0)" style="transform-origin: 150px 150px;" xlink:href="#symbol-3">
+    <use width="300" height="300" transform="matrix(1, 0, 0, -1, 4200, 0)" style="transform-origin: 150px 150px;" xlink:href="#symbol-3">
       <title>iris-valves--005--1x1</title>
     </use>
     <rect y="-2400" width="600" height="599.999939" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-5'); transform-origin: -1799.99px -2100px;" x="-2100" transform="matrix(0, -1, -1, 0, 4200.000244140629, 4799.999755859371)">

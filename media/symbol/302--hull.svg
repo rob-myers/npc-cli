@@ -146,7 +146,7 @@
   </image>
   <g xmlns="http://www.w3.org/2000/svg">
     <title>symbols</title>
-    <use width="600" height="600" transform="matrix(0, 1, -1, 0, -0.000007373769676632946, 600)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+    <use width="600" height="600" transform="matrix(0, 1, -1, 0, -0.000007373770131380297, 600)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
       <title>office--006--2x2 doors=['e','w']</title>
     </use>
     <use width="1200" height="600" transform="matrix(-1, 0, 0, -1, 1200, 2100)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-1">
@@ -179,7 +179,7 @@
     <use width="260" height="140" transform="matrix(0.9659262299537659, -0.25881901383399963, 0.25881901383399963, 0.9659262299537659, 3347.312255859375, 2056.504150390625)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-8">
       <title>shop--037--0.4x0.8 y=0.8</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, -1, -1, 0, 5699.99951171875, 1200)" style="transform-origin: 150px 150px;" xlink:href="#symbol-11">
+    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 5699.99951171875, 1199.999877929688)" style="transform-origin: 150px 150px;" xlink:href="#symbol-11">
       <title>iris-valves--005--1x1</title>
     </use>
   </g>

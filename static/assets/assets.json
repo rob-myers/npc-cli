@@ -1,12 +1,12 @@
 {
   "meta": {
-    "101--hull": {"outputHash": 1367744344, "pngHash": 568633107},
-    "102--hull": {"outputHash": 603397466, "pngHash": 184103855},
-    "103--hull": {"outputHash": -1070929728, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -2113728621, "pngHash": 787602800},
-    "302--hull": {"outputHash": -276765875, "pngHash": -1557128953},
+    "101--hull": {"outputHash": 727924338, "pngHash": 568633107},
+    "102--hull": {"outputHash": -1985978910, "pngHash": 184103855},
+    "103--hull": {"outputHash": 1936437117, "pngHash": -1937509879},
+    "301--hull": {"outputHash": 448894446, "pngHash": 787602800},
+    "302--hull": {"outputHash": 315705008, "pngHash": -1557128953},
     "303--hull": {
-      "outputHash": -525447331,
+      "outputHash": -1369199830,
       "pngHash": -299838577,
       "obsHashes": [435244590]
     },
@@ -227,7 +227,11 @@
       "pngHash": 858873613,
       "obsHashes": [-1049167637]
     },
-    "iris-valves--005--1x1": {"outputHash": -1502830503, "pngHash": 1810420148},
+    "iris-valves--005--1x1": {
+      "outputHash": 1570199203,
+      "pngHash": 1810420148,
+      "obsHashes": [-2082156787]
+    },
     "lab--012--4x3": {
       "outputHash": 1675567117,
       "pngHash": -261688393,
@@ -872,9 +876,18 @@
         "obstacleId": 4,
         "type": "obstacle"
       },
-      "cargo--010--2x4 0": {
+      "iris-valves--005--1x1 0": {
         "x": 1686,
         "y": 1839,
+        "width": 110,
+        "height": 110,
+        "symbolKey": "iris-valves--005--1x1",
+        "obstacleId": 0,
+        "type": "obstacle"
+      },
+      "cargo--010--2x4 0": {
+        "x": 1725,
+        "y": 1951,
         "width": 78,
         "height": 105,
         "symbolKey": "cargo--010--2x4",
@@ -891,8 +904,8 @@
         "type": "surface"
       },
       "table--009--0.8x0.8 0": {
-        "x": 1202,
-        "y": 1572,
+        "x": 1725,
+        "y": 2058,
         "width": 92,
         "height": 92,
         "symbolKey": "table--009--0.8x0.8",
@@ -918,8 +931,8 @@
         "type": "chair"
       },
       "extra--002--fresher--0.5x0.5 0": {
-        "x": 2076,
-        "y": 1069,
+        "x": 1202,
+        "y": 1572,
         "width": 57,
         "height": 79,
         "symbolKey": "extra--002--fresher--0.5x0.5",
@@ -928,7 +941,7 @@
       },
       "console--051--0.4x0.6 0": {
         "x": 2076,
-        "y": 1150,
+        "y": 1069,
         "width": 69,
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
@@ -937,7 +950,7 @@
       },
       "extra--001--fresher--0.5x0.5 0": {
         "x": 2076,
-        "y": 1227,
+        "y": 1146,
         "width": 69,
         "height": 59,
         "symbolKey": "extra--001--fresher--0.5x0.5",
@@ -1585,28 +1598,28 @@
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, 1, -1, 0, 1.5, 7.5]
+          "transform": [0, -1, -1, 0, 1.5, 9]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, -1, -1, 0, 30, 22.5]
+          "transform": [0, 1, -1, 0, 30, 21]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [1, 0, 0, -1, 7.5, 30]
+          "transform": [-1, 0, 0, -1, 9, 30]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [-1, 0, 0, -1, 22.5, 1.5]
+          "transform": [1, 0, 0, -1, 21, 1.5]
         }
       ],
       "removableDoors": [],
@@ -1788,21 +1801,21 @@
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, 1, -1, 0, 1.5, 7.5]
+          "transform": [0, -1, -1, 0, 1.5, 9]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, -1, 1, 0, 28.5, 22.5]
+          "transform": [0, 1, 1, 0, 28.5, 21]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [-1, 0, 0, -1, 22.5, 1.5]
+          "transform": [1, 0, 0, -1, 21, 1.5]
         },
         {
           "symbolKey": "stateroom--012--2x2",
@@ -2036,7 +2049,148 @@
       "width": 30,
       "height": 30,
       "pngRect": {"x": -0.15, "y": -0.15, "width": 30.3, "height": 30.3},
-      "symbols": [],
+      "symbols": [
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 1.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 4.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 7.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 10.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 1.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 4.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 7.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 10.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 16.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 19.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 22.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 25.5, 9]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 16.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 19.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 22.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 25.5, 15]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 9, 0]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 12, 0]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 15, 0]
+        },
+        {
+          "symbolKey": "cargo--003--2x4",
+          "meta": {"key": "cargo--003--2x4"},
+          "width": 3,
+          "height": 6,
+          "transform": [1, 0, 0, 1, 18, 0]
+        }
+      ],
       "removableDoors": [],
       "addableWalls": []
     },
@@ -2648,28 +2802,28 @@
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, 1, -1, 0, 1.5, 7.5]
+          "transform": [0, -1, -1, 0, 1.5, 9]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [1, 0, 0, 1, 7.5, 13.5]
+          "transform": [-1, 0, 0, 1, 9, 13.5]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [1, 0, 0, 1, 22.5, 13.5]
+          "transform": [-1, 0, 0, 1, 24, 13.5]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, -1, -1, 0, 30, 7.5]
+          "transform": [0, 1, -1, 0, 30, 6]
         }
       ],
       "removableDoors": [],
@@ -3334,7 +3488,7 @@
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, -1, -1, 0, 30, 7.5]
+          "transform": [0, 1, -1, 0, 30, 6]
         }
       ],
       "removableDoors": [],
@@ -4040,14 +4194,14 @@
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [1, 0, 0, 1, 7.5, 13.5]
+          "transform": [-1, 0, 0, 1, 9, 13.5]
         },
         {
           "symbolKey": "iris-valves--005--1x1",
           "meta": {"key": "iris-valves--005--1x1"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, -1, 1, 0, 28.5, 7.5]
+          "transform": [0, 1, 1, 0, 28.5, 6]
         }
       ],
       "removableDoors": [],
@@ -8178,7 +8332,21 @@
       "key": "iris-valves--005--1x1",
       "isHull": false,
       "hullWalls": [],
-      "obstacles": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.105, 0.2002], [1.105, 1.3002], [0.002, 1.2998], [0.002, 0.1998]]
+          ],
+          "meta": {
+            "obstacle": true,
+            "no-shadow": true,
+            "permit-nav": true,
+            "symKey": "iris-valves--005--1x1",
+            "obsId": 0
+          }
+        }
+      ],
       "walls": [],
       "doors": [],
       "windows": [],
@@ -8186,7 +8354,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[1.5, 0.3002], [1.5, 1.2002], [0.397, 1.1998], [0.397, 0.2998]]
+            [[1.105, 0.3002], [1.105, 1.2002], [0.002, 1.1998], [0.002, 0.2998]]
           ],
           "meta": {"decor": true, "circle": true, "hatch": true}
         }
@@ -8194,7 +8362,7 @@
       "unsorted": [],
       "width": 1.5,
       "height": 1.5,
-      "pngRect": {"x": 0.395, "y": 0.2, "width": 1.105, "height": 1.1},
+      "pngRect": {"x": 0, "y": 0.2, "width": 1.105, "height": 1.1},
       "symbols": [],
       "removableDoors": [],
       "addableWalls": []

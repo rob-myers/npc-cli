@@ -272,13 +272,13 @@
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 0.00010681200365070254, 0)" xlink:href="#symbol-13">
       <title>fuel--010--4x2 y=1.01 wallsH=1</title>
     </use>
-    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.00003623971133492887)" xlink:href="#symbol-13">
+    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.00003623971497290768)" xlink:href="#symbol-13">
       <title>fuel--010--4x2 y=2</title>
     </use>
-    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3000, 0.00003814701267401688)" xlink:href="#symbol-13">
+    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3000, 0.00003814701994997449)" xlink:href="#symbol-13">
       <title>fuel--010--4x2 y=2</title>
     </use>
-    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4800, 0.00003814701267401688)" xlink:href="#symbol-13">
+    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4800, 0.00003814701994997449)" xlink:href="#symbol-13">
       <title>fuel--010--4x2 y=2</title>
     </use>
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 5400)" xlink:href="#symbol-13">
@@ -305,16 +305,16 @@
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4800, 4800)" xlink:href="#symbol-17">
       <title>machinery--357--4x2 y=1</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 0.000203071264, 1500)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
+    <use width="300" height="300" transform="matrix(0, -1, -1, 0, 0.000203071264, 1500)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, -1, -1, 0, 5699.99951171875, 4200)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
+    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 5699.99951171875, 4200)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(1, 0, 0, -1, 1499.999877929688, 5700)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
+    <use width="300" height="300" transform="matrix(-1, 0, 0, -1, 1500.000122070313, 5700)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(-1, 0, 0, -1, 4200, 0.000073829229)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
+    <use width="300" height="300" transform="matrix(1, 0, 0, -1, 4200, 0.000073829229)" style="transform-origin: 150px 150px;" xlink:href="#symbol-18">
       <title>iris-valves--005--1x1</title>
     </use>
   </g>

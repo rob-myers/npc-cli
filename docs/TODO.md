@@ -2,6 +2,9 @@
 
 ## WIP
 
+- Boxy rounding errors issue
+  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
+
 - 🚧 migrate sub-symbols to actual symbols
   - ✅ 301 ✅ 302 ✅ 303 ✅ 101 🚧 102
   - ✅ bridge ✅ lifeboat
@@ -29,6 +32,7 @@
   - ✅ decor poly -> decor rect
   - 🚧 decor circle can use circle
     - ✅ add missing iris valves
+    - 🚧 iris value uses `<circle>`
   - ❌ decor rect uses symbol
 
 - return to next.js project

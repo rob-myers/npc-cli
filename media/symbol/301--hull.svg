@@ -156,16 +156,16 @@
     <use width="300" height="300" transform="matrix(1, 0, 0, 1, 4200, 300)" style="transform-origin: -840px -60px;" xlink:href="#symbol-5">
       <title>console--031--1x1.2</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 0, 1500)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
+    <use width="300" height="300" transform="matrix(0, -1, -1, 0, 0, 1500)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(1, 0, 0, 1, 1500, 2700)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
+    <use width="300" height="300" transform="matrix(-1, 0, 0, 1, 1500, 2700)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(1, 0, 0, 1, 4500, 2699.999755859375)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
+    <use width="300" height="300" transform="matrix(-1, 0, 0, 1, 4500, 2699.999755859375)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="300" height="300" transform="matrix(0, -1, -1, 0, 5700, 1199.999877929688)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
+    <use width="300" height="300" transform="matrix(0, 1, -1, 0, 5700, 1200.000122070313)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
       <title>iris-valves--005--1x1</title>
     </use>
   </g>
