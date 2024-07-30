@@ -375,7 +375,7 @@ export const meshDiffuseTest = {// Supports instancing
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = vec4(vColor * diffuse * (0.25 + 0.5 * dotProduct), 1);
+    gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.6 * dotProduct), 1);
 
     #include <logdepthbuf_fragment>
   }
