@@ -419,10 +419,11 @@ class GeomorphService {
   }
 
   /**
-   * Extract polygon with meta from <rect>, <path> or <image>
-   * - <image> i.e. background image in symbol
+   * Extract polygon with meta from <rect>, <path>, <circle> or <image>
    * - <rect> e.g. possibly rotated wall
    * - <path> e.g. complex obstacle
+   * - <circle> i.e. decor circle
+   * - <image> i.e. background image in symbol
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {Geom.Meta} meta
@@ -433,16 +434,20 @@ class GeomorphService {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
 
-    if (tagName === "rect" || tagName === "image") {
+    if (tagName === 'rect' || tagName === 'image') {
       poly = Poly.fromRect(new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0)));
-    } else if (tagName === "path") {
+    } else if (tagName === 'path') {
       poly = geom.svgPathToPolygon(a.d);
       if (!poly) {
-        warn(`extractGeom: path must be single connected polygon with ≥ 0 holes`, a);
+        warn(`${'extractPoly'}: path must be single connected polygon with ≥ 0 holes`, a);
         return null;
       }
+    } else if (tagName === 'circle') {
+      const r = Number(a.r ?? 0);
+      poly = Poly.fromRect(new Rect(Number(a.cx ?? 0) - r, Number(a.cy ?? 0) - r, 2 * r, 2 * r));
+      meta.circle = true;
     } else {
-      warn(`extractGeom: ${tagName}: unexpected tagName`, a);
+      warn(`${'extractPoly'}: ${tagName}: unexpected tagName`, a);
       return null;
     }
 
