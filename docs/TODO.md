@@ -23,7 +23,7 @@
     - 🚧 `switch` localDoorId -> doorId on instantiation
     - remove switches when "parent door" is removed
 
-- 🚧 clean Decor
+- ✅ clean Decor
   - ✅ can specify decor point via symbol (infer direction)
     - ✅ pattern: single arrow
     - ✅ replace `orient={degrees}` in one symbol
@@ -35,7 +35,7 @@
     - ✅ iris value uses `<circle>`
   - ❌ decor rect uses symbol
 
-- return to next.js project
+- 🚧 return to next.js project
   - ensure up to date
   - work on migrating Viewer
 
