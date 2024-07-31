@@ -24,6 +24,8 @@
       - ✅ remove switches when "parent door" is identified
       - ✅ for identified doors, assume both switches are `inner`
       - ✅ remove switches when "parent door" is removed
+  - 🚧 add to hull doors, 101 🚧 102 103 301 🚧 302 303
+  - 🚧 add to room symbol doors
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave

@@ -421,16 +421,16 @@
         <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 4224.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-19">
                 <title>decor quad switch=3 inner</title>
         </use>
-        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2930.333251953125, 3098.81689453125)" style="transform-origin: 59.6667px -98.8167px;" xlink:href="#symbol-19">
+        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2400.333251953125, 3098.81689453125)" style="transform-origin: 59.6667px -98.8167px;" xlink:href="#symbol-19">
                 <title>decor quad switch=4 inner</title>
         </use>
-        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 3030.333251953125, 3098.81689453125)" style="transform-origin: -40.3333px -98.8167px;" xlink:href="#symbol-19">
+        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2500.333251953125, 3098.81689453125)" style="transform-origin: -40.3333px -98.8167px;" xlink:href="#symbol-19">
                 <title>decor quad switch=5 inner</title>
         </use>
-        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2930.335693359375, 2900.181396484375)" style="transform-origin: 59.6667px 99.8167px;" xlink:href="#symbol-19">
+        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2400.335693359375, 2900.181396484375)" style="transform-origin: 59.6667px 99.8167px;" xlink:href="#symbol-19">
                 <title>decor quad switch=6 inner</title>
         </use>
-        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 3030.335693359375, 2900.181396484375)" style="transform-origin: -40.3333px 99.8167px;" xlink:href="#symbol-19">
+        <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2500.335693359375, 2900.181396484375)" style="transform-origin: -40.3333px 99.8167px;" xlink:href="#symbol-19">
                 <title>decor quad switch=7 inner</title>
         </use>
         <rect x="931.5" y="1784" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);">
