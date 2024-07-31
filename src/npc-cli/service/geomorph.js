@@ -256,7 +256,8 @@ class GeomorphService {
       const bounds2d = tmpRect1.set(center.x - radius, center.y - radius, 2 * radius, 2 * radius).precision(precision).json;
       // direction determines orient (degrees), where (1, 0) understood as 0 degrees
       const direction = /** @type {Geom.VectJson} */ (meta.direction) || { x: 0, y: 0 };
-      const orient = (180 / Math.PI) * Math.atan2(direction.y, direction.x);
+      delete meta.direction;
+      const orient = toPrecision((180 / Math.PI) * Math.atan2(direction.y, direction.x));
       out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
     }
 
@@ -1173,8 +1174,6 @@ class GeomorphService {
       ...meta,
       // aggregate `y` i.e. height off ground
       y: (Number(y) || 0) + (Number(meta.y) || 0.01),
-      // 🚧 remove: transform `orient` i.e. orientation in degrees
-      ...typeof meta.orient === 'number' && { orient: mat.transformDegrees(meta.orient) },
       // transform `transform` i.e. affine transform from unit quad (0,0)...(1,1) to rect
       ...Array.isArray(meta.transform) && {
         transform: tmpMat2.setMatrixValue(tmpMat1).preMultiply(/** @type {Geom.SixTuple} */ (meta.transform)).toArray(),
