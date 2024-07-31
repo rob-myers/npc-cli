@@ -17,27 +17,13 @@
   - ✅ can rotate decor quad so in XY plane via `tilt`
   - ✅ efficient computation of "post-rotation-matrix"
     - e.g. via caching
-  - 🚧 door switches format: `decor switch={symbolDoorId} inner`
+  - ✅ door switches format: `decor switch={symbolDoorId} inner`
     - ℹ️ decor quad because using decor quad symbol
     - ✅ `inner` optional; `y=1 tilt img=icon--square` implied
-    - 🚧 `switch` localDoorId -> doorId on instantiation
-    - remove switches when "parent door" is removed
-
-- ✅ clean Decor
-  - ✅ can specify decor point via symbol (infer direction)
-    - ✅ pattern: single arrow
-    - ✅ replace `orient={degrees}` in one symbol
-    - ✅ replace `orient={degrees}` for all
-  - ✅ simplify cuboid nav outset
-  - ✅ decor poly -> decor rect
-  - ✅ decor circle can use `<circle>`
-    - ✅ add missing iris valves
-    - ✅ iris value uses `<circle>`
-  - ❌ decor rect uses symbol
-
-- 🚧 return to next.js project
-  - ensure up to date
-  - work on migrating Viewer
+    - ✅ `switch` localDoorId -> doorId on instantiation
+      - ✅ remove switches when "parent door" is identified
+      - ✅ for identified doors, assume both switches are `inner`
+      - ✅ remove switches when "parent door" is removed
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
@@ -54,6 +40,10 @@
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
   - probably won't use but can compare for ideas e.g. better textures, modelling
+
+- return to next.js project
+  - ensure up to date
+  - work on migrating Viewer
 
 - maybe "move" constants into geomorphs.json
   - to avoid HMR versus geomorphs.json "alternate routes"
@@ -1796,3 +1786,15 @@
   - ✅ possibly fixed via mvCameraPosition
 
 - ✅ clean extractGeom into `extractDecorPoly` and `extractPoly`
+
+- ✅ clean Decor
+  - ✅ can specify decor point via symbol (infer direction)
+    - ✅ pattern: single arrow
+    - ✅ replace `orient={degrees}` in one symbol
+    - ✅ replace `orient={degrees}` for all
+  - ✅ simplify cuboid nav outset
+  - ✅ decor poly -> decor rect
+  - ✅ decor circle can use `<circle>`
+    - ✅ add missing iris valves
+    - ✅ iris value uses `<circle>`
+  - ❌ decor rect uses symbol

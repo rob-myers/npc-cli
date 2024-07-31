@@ -582,13 +582,15 @@ class GeomorphService {
     const {
       key, isHull,
       addableWalls, removableDoors,
-      walls, obstacles, doors, windows, decor, unsorted,
+      walls, obstacles, windows, unsorted,
       symbols,
     } = symbol;
 
     const flats = symbols.map(({ symbolKey, meta, transform }) =>
       this.instantiateFlatSymbol(flattened[symbolKey], meta, transform)
     );
+
+    const { flatDoors, flatDecor } = this.computeFlattenedDoors(symbol.key, symbol, flats);
 
     flattened[key] = {
       key,
@@ -599,8 +601,8 @@ class GeomorphService {
       // aggregated and cloned
       walls: walls.concat(flats.flatMap(x => x.walls)),
       obstacles: obstacles.concat(flats.flatMap(x => x.obstacles)),
-      doors: this.removeCloseDoors(symbol.key, doors.concat(flats.flatMap(x => x.doors))),
-      decor: decor.concat(flats.flatMap(x => x.decor)),
+      doors: flatDoors,
+      decor: flatDecor,
       unsorted: unsorted.concat(flats.flatMap(x => x.unsorted)),
       windows: windows.concat(flats.flatMap(x => x.windows)),
     };
@@ -622,25 +624,28 @@ class GeomorphService {
    * - we can remove walls tagged with `optional`
    * - we can modify every wall's baseHeight and height
    * @param {Geomorph.FlatSymbol} sym
-   * @param {Geom.Meta} meta
+   * @param {Geom.Meta<{ doors?: string[]; walls?: string[] }>} meta
+   * `meta.{doors,walls}` e.g. `['e']`, `['s']`
    * @param {Geom.SixTuple} transform
    * @returns {Geomorph.FlatSymbol}
    */
   instantiateFlatSymbol(sym, meta, transform) {
-    /** e.g. `['e']`, `['s']`  */
-    const doorTags = /** @type {string[] | undefined} */ (meta.doors);
-    /** e.g. `['e']`, `['s']`  */
-    const wallTags = /** @type {string[] | undefined} */ (meta.walls);
+    const doorTags = meta.doors;
+    const wallTags = meta.walls;
     tmpMat1.feedFromArray(transform);
 
     const doorsToRemove = sym.removableDoors.filter(({ doorId }) => {
       const { meta } = sym.doors[doorId];
       return !doorTags ? false : !doorTags.some((tag) => meta[tag] === true);
     });
+    const rmDoorIds = new Set(doorsToRemove.map(x => x.doorId));
 
-    const doors = sym.doors.filter((_, doorId) => !doorsToRemove.some((x) => x.doorId === doorId));
-
-    // 🚧 remove switches from `sym.decor` corresponding to removed doors
+    const doors = sym.doors.filter((_, doorId) => !rmDoorIds.has(doorId));
+    const decor = sym.decor
+      .map(x => x.cleanClone(tmpMat1, this.transformDecorMeta(x.meta, tmpMat1, meta.y)))
+      // remove switches corresponding to removed doors
+      .filter(x => typeof x.meta.switch === 'number' ? !rmDoorIds.has(x.meta.switch) : true)
+    ;
 
     const wallsToAdd = /** @type {Geom.Poly[]} */ ([]).concat(
       doorsToRemove.map((x) => x.wall),
@@ -656,7 +661,7 @@ class GeomorphService {
       isHull: sym.isHull,
       addableWalls: [],
       removableDoors: [],
-      decor: sym.decor.map((x) => x.cleanClone(tmpMat1, this.transformDecorMeta(x.meta, tmpMat1, meta.y))),
+      decor,
       doors: doors.map((x) => x.cleanClone(tmpMat1)),
       obstacles: sym.obstacles.map((x) => x.cleanClone(tmpMat1, {
         // aggregate height
@@ -1012,22 +1017,50 @@ class GeomorphService {
   }
 
   /**
-   * When doors are close (e.g. coincide) remove later door
+   * Compute flattened doors and decor:
+   * - ensure decor `switch={doorId}` points to correct `doorId`
+   * - when doors are close (e.g. coincide) remove later door
+   * - ensure resp. switches removed, set other two as "inner"
+   * 
    * @param {string} logPrefix 
-   * @param {Geom.Poly[]} doors
+   * @param {Geomorph.Symbol} symbol
+   * @param {Geomorph.FlatSymbol[]} flats
    */
-  removeCloseDoors(logPrefix, doors) {
-    const centers = doors.map(d => d.center);
-    const removeIds = /** @type {Set<number>} */ (new Set());
+  computeFlattenedDoors(logPrefix, symbol, flats) {
+
+    // ensure decor.meta.switch points to correct doorId
+    let doorIdOffset = symbol.doors.length;
+    const flatDoors = symbol.doors.concat(flats.flatMap(flat => {
+      flat.decor.forEach(d => typeof d.meta.switch === 'number' && (d.meta.switch += doorIdOffset));
+      doorIdOffset += flat.doors.length;
+      return flat.doors;
+    }));
+
+    // detect coinciding doors e.g. from 102
+    const centers = flatDoors.map(d => d.center);
+    const [rmDoorIds, keptDoorIds] = /** @type {Set<number>[]} */ ([new Set(), new Set()]);
     centers.forEach((center, i) => {
-      if (!removeIds.has(i))
-        for (let j = i + 1; j < centers.length; j++)
-          if (Math.abs(center.x - centers[j].x) < 0.1 && Math.abs(center.y - centers[j].y) < 0.1) {
-            debug(`${logPrefix}: removed door coinciding with ${i} (${j})`);
-            removeIds.add(j);
-          }
+      if (rmDoorIds.has(i)) return;
+      for (let j = i + 1; j < centers.length; j++)
+        if (Math.abs(center.x - centers[j].x) < 0.1 && Math.abs(center.y - centers[j].y) < 0.1) {
+          debug(`${logPrefix}: removed door coinciding with ${i} (${j})`);
+          keptDoorIds.add(i), rmDoorIds.add(j);
+        }
     });
-    return doors.filter((_, i) => !removeIds.has(i));
+
+    const flatDecor = symbol.decor.concat(flats.flatMap(x => x.decor));
+
+    return {
+      flatDoors: flatDoors.filter((_, i) => !rmDoorIds.has(i)),
+      flatDecor: flatDecor.filter((d) => {
+        if (typeof d.meta.switch === 'number') {
+          // ensure resp. switches removed, set other two as "inner"
+          if (rmDoorIds.has(d.meta.switch)) return false;
+          if (keptDoorIds.has(d.meta.switch)) d.meta.inner = true; // 🔔 convention
+        }
+        return true;
+      })
+    };
   }
 
   /**
