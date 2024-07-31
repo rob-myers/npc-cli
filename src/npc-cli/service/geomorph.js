@@ -41,7 +41,7 @@ class GeomorphService {
     debug(`createLayout ${gmKey}`);
 
     const { pngRect, hullWalls } = assets.symbols[helper.toHullKey[gmKey]];
-    const hullPoly = Poly.union(hullWalls);
+    const hullPoly = Poly.union(hullWalls).map(x => x.precision(precision));
     const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
 
     const uncutWalls = symbol.walls;
@@ -226,12 +226,12 @@ class GeomorphService {
       if (poly.outline.length !== 4) {
         warn(`${'decorFromPoly'}: decor rect expected 4 points (saw ${poly.outline.length})`, poly.meta);
       }
-      out = { type: 'rect', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.json };
+      out = { type: 'rect', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json };
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
       delete poly.meta.transform;
-      out = { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.json };
+      out = { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json };
     } else if (meta.cuboid === true) {
       // decor cuboids follow "decor quad approach"
       const polyRect = poly.rect.precision(precision);
