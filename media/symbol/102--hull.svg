@@ -20,11 +20,10 @@
     <pattern id="pattern-4-2" patternTransform="matrix(5, 0, 0, 5, 3750.00341796875, 2099.9970703125)" xlink:href="#pattern-4"/>
     <pattern id="pattern-4-3" patternTransform="matrix(5, 0, 0, 4.730948925018, -3749.914306640625, -5241.997558593751)" xlink:href="#pattern-4"/>
     <pattern id="pattern-4-4" patternTransform="matrix(5, 0, 0, 5, 450.038024902343, 2700.014892578125)" xlink:href="#pattern-4"/>
-    <pattern id="pattern-4-5" patternTransform="matrix(5, 0, 0, 5, -1649.90625, 4349.9619140625)" xlink:href="#pattern-4"/>
     <pattern id="pattern-10" patternTransform="matrix(5, 0, 0, 5, -2100.014190673828, -10800.0146484375)" xlink:href="#pattern-4"/>
     <pattern id="pattern-4-6" patternTransform="matrix(5, 0, 0, 5, 1343.771362304688, -7374.577117919922)" xlink:href="#pattern-4"/>
     <pattern id="pattern-11" patternTransform="matrix(1.999992132187, 0.000019696054, -0.000019696061, 1.999991893768, 4799.9853515625, 899.9892578125)" xlink:href="#pattern-0"/>
-    <pattern x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+    <pattern x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
         <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
@@ -155,6 +154,15 @@
       <title>office--074--4x4</title>
       <rect width="1200" height="1200" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); transform-origin: 599.99px 600px; fill: url('#pattern-0');">
         <title>office--074--4x4</title>
+      </rect>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </symbol>
+    <symbol id="symbol-9" viewBox="0 0 3000 3000" bx:pinned="true">
+      <title>misc-stellar-cartography--020--10x10</title>
+      <rect width="3000" height="3000" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 1500px 1500px;">
+        <title>misc-stellar-cartography--020--10x10</title>
       </rect>
       <defs>
         <bx:grid x="0" y="0" width="300" height="300"/>
@@ -328,9 +336,9 @@
     <rect width="300" height="300" style="stroke-width: 4px; fill: url('#pattern-11'); stroke: rgb(0, 0, 255); transform-origin: 4949.98px 749.99px;" y="599.999817" x="4800" transform="matrix(0, 1, -1, 0, 0.000244140625, -0.000244140625)">
       <title>ships-locker--003--1x1</title>
     </rect>
-    <rect width="2999.69751" height="3000.075439" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-4-5'); transform-origin: -1499.91px 4500.33px;" x="-2999.759033" y="2999.924316" transform="matrix(-1, 0, 0, 1, 2999.827392578125, 0)">
+    <use width="3000" height="3000" transform="matrix(-1, 0, 0, 1, 3000, 3000)" style="" xlink:href="#symbol-9">
       <title>misc-stellar-cartography--020--10x10</title>
-    </rect>
+    </use>
     <rect y="599.984894" width="600" height="599.999924" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-10'); transform-origin: 4500px 899.985px;" x="4199.985352">
       <title>ships-locker--020--2x2</title>
     </rect>
