@@ -580,11 +580,14 @@ class cmdServiceClass {
         break;
       }
       case "source": {
+        if (args[0] === undefined) {
+          return;
+        }
         const script = this.get(node, [args[0]])[0];
         if (script === undefined) {
           useSession.api.writeMsg(meta.sessionKey, `source: "${args[0]}" not found`, "error");
         } else if (typeof script !== "string") {
-          useSession.api.writeMsg(meta.sessionKey, `source: "${args[0]}" is not a string`, "error");
+          useSession.api.writeMsg(meta.sessionKey, `source: "${args[0]}" does not resolve as a string`, "error");
         } else {
           // We cache scripts
           const parsed = parseService.parse(script, true);
