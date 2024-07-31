@@ -215,7 +215,7 @@ export default function WorldCanvas(props) {
 
   React.useEffect(() => {
     // 🚧 do not trigger on HMR
-    state.controls?.setPolarAngle(Math.PI / 6);
+    state.controls?.setPolarAngle(Math.PI / 4);
     state.controls?.setAzimuthalAngle(touchFixedAzimuth);
   }, [state.controls]);
 
@@ -244,6 +244,7 @@ export default function WorldCanvas(props) {
         position={[0, 16, 0]}
         makeDefault
         fov={15}
+        zoom={0.5}
       />
 
       <MapControls
