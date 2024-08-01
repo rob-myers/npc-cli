@@ -134,6 +134,53 @@ class GeomorphService {
   }
 
   /**
+   * Compute flattened doors and decor:
+   * - ensure decor `switch={doorId}` points to correct `doorId`
+   * - when doors are close (e.g. coincide) remove later door
+   * - ensure resp. switches removed, set other two as "inner"
+   * 
+   * @param {string} logPrefix 
+   * @param {Geomorph.Symbol} symbol
+   * @param {Geomorph.FlatSymbol[]} flats
+   */
+  computeFlattenedDoors(logPrefix, symbol, flats) {
+
+    // ensure decor.meta.switch points to correct doorId
+    let doorIdOffset = symbol.doors.length;
+    const flatDoors = symbol.doors.concat(flats.flatMap(flat => {
+      flat.decor.forEach(d => typeof d.meta.switch === 'number' && (d.meta.switch += doorIdOffset));
+      doorIdOffset += flat.doors.length;
+      return flat.doors;
+    }));
+
+    // detect coinciding doors e.g. from 102
+    const centers = flatDoors.map(d => d.center);
+    const [rmDoorIds, keptDoorIds] = /** @type {Set<number>[]} */ ([new Set(), new Set()]);
+    centers.forEach((center, i) => {
+      if (rmDoorIds.has(i)) return;
+      for (let j = i + 1; j < centers.length; j++)
+        if (Math.abs(center.x - centers[j].x) < 0.1 && Math.abs(center.y - centers[j].y) < 0.1) {
+          debug(`${logPrefix}: removed door coinciding with ${i} (${j})`);
+          keptDoorIds.add(i), rmDoorIds.add(j);
+        }
+    });
+
+    const flatDecor = symbol.decor.concat(flats.flatMap(x => x.decor));
+
+    return {
+      flatDoors: flatDoors.filter((_, i) => !rmDoorIds.has(i)),
+      flatDecor: flatDecor.filter((d) => {
+        if (typeof d.meta.switch === 'number') {
+          // ensure resp. switches removed, set other two as "inner"
+          if (rmDoorIds.has(d.meta.switch)) return false;
+          if (keptDoorIds.has(d.meta.switch)) d.meta.inner = true; // 🔔 convention
+        }
+        return true;
+      })
+    };
+  }
+
+  /**
    * 🔔 computed in browser only (main thread and worker)
    * @param {Geomorph.Layout} layout
    * @param {number} gmId
@@ -214,24 +261,22 @@ class GeomorphService {
    * @returns {Geomorph.Decor}
    */
   decorFromPoly(poly) {
-    /** @type {Geomorph.Decor} */ let out;
-    // gmId, roomId provided on instantiation
+    // 🔔 key, gmId, roomId provided on instantiation
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
     meta.y = toPrecision(Number(meta.y) || 0);
-    
-    const base = { key: '', meta }; // key derived from decor below
+    const base = { key: '', meta };
     
     if (meta.rect === true) {
       const polyRect = poly.rect.precision(precision);
       if (poly.outline.length !== 4) {
         warn(`${'decorFromPoly'}: decor rect expected 4 points (saw ${poly.outline.length})`, poly.meta);
       }
-      out = { type: 'rect', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json };
+      return { type: 'rect', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json };
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
       delete poly.meta.transform;
-      out = { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json };
+      return { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json };
     } else if (meta.cuboid === true) {
       // decor cuboids follow "decor quad approach"
       const polyRect = poly.rect.precision(precision);
@@ -243,13 +288,13 @@ class GeomorphService {
       const height3d = typeof meta.h === 'number' ? meta.h : 0.5; // 🚧 remove hard-coding
       const center = geom.toPrecisionV3({ x: center2d.x, y: y3d + (height3d / 2), z: center2d.y });
 
-      out = { type: 'cuboid', ...base, bounds2d: polyRect.json, transform, center };
+      return { type: 'cuboid', ...base, bounds2d: polyRect.json, transform, center };
     } else if (meta.circle == true) {
       const polyRect = poly.rect.precision(precision);
       const baseRect = geom.polyToAngledRect(poly).baseRect.precision(precision);
       const center = poly.center.precision(precision);
       const radius = Math.max(baseRect.width, baseRect.height) / 2;
-      out = { type: 'circle', ...base, bounds2d: polyRect.json, radius, center };
+      return { type: 'circle', ...base, bounds2d: polyRect.json, radius, center };
     } else {// 🔔 fallback to decor point
       const center = poly.center.precision(precision);
       const radius = decorIconRadius + 2;
@@ -258,11 +303,8 @@ class GeomorphService {
       const direction = /** @type {Geom.VectJson} */ (meta.direction) || { x: 0, y: 0 };
       delete meta.direction;
       const orient = toPrecision((180 / Math.PI) * Math.atan2(direction.y, direction.x));
-      out = { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
+      return { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
     }
-
-    out.key = this.getDerivedDecorKey(out); // overridden on instantiation
-    return out;
   }
 
   /**
@@ -611,7 +653,7 @@ class GeomorphService {
 
   /**
    * - 🔔 instantiated decor should be determined by min(3D AABB)
-   * - we replace decimal points with `_` so can e.g. `w decor.byKey.point[29_5225,0,33_785]`
+   * - replace decimal points by `_` so can `w decor.byKey.point[29_5225,0,33_785]`
    * @param {Geomorph.Decor} d 
    */
   getDerivedDecorKey(d) {
@@ -1014,53 +1056,6 @@ class GeomorphService {
       walls: uncutWalls,
       removableDoors,
       addableWalls,
-    };
-  }
-
-  /**
-   * Compute flattened doors and decor:
-   * - ensure decor `switch={doorId}` points to correct `doorId`
-   * - when doors are close (e.g. coincide) remove later door
-   * - ensure resp. switches removed, set other two as "inner"
-   * 
-   * @param {string} logPrefix 
-   * @param {Geomorph.Symbol} symbol
-   * @param {Geomorph.FlatSymbol[]} flats
-   */
-  computeFlattenedDoors(logPrefix, symbol, flats) {
-
-    // ensure decor.meta.switch points to correct doorId
-    let doorIdOffset = symbol.doors.length;
-    const flatDoors = symbol.doors.concat(flats.flatMap(flat => {
-      flat.decor.forEach(d => typeof d.meta.switch === 'number' && (d.meta.switch += doorIdOffset));
-      doorIdOffset += flat.doors.length;
-      return flat.doors;
-    }));
-
-    // detect coinciding doors e.g. from 102
-    const centers = flatDoors.map(d => d.center);
-    const [rmDoorIds, keptDoorIds] = /** @type {Set<number>[]} */ ([new Set(), new Set()]);
-    centers.forEach((center, i) => {
-      if (rmDoorIds.has(i)) return;
-      for (let j = i + 1; j < centers.length; j++)
-        if (Math.abs(center.x - centers[j].x) < 0.1 && Math.abs(center.y - centers[j].y) < 0.1) {
-          debug(`${logPrefix}: removed door coinciding with ${i} (${j})`);
-          keptDoorIds.add(i), rmDoorIds.add(j);
-        }
-    });
-
-    const flatDecor = symbol.decor.concat(flats.flatMap(x => x.decor));
-
-    return {
-      flatDoors: flatDoors.filter((_, i) => !rmDoorIds.has(i)),
-      flatDecor: flatDecor.filter((d) => {
-        if (typeof d.meta.switch === 'number') {
-          // ensure resp. switches removed, set other two as "inner"
-          if (rmDoorIds.has(d.meta.switch)) return false;
-          if (keptDoorIds.has(d.meta.switch)) d.meta.inner = true; // 🔔 convention
-        }
-        return true;
-      })
     };
   }
 
