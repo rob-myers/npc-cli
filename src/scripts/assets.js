@@ -138,7 +138,7 @@ info({ opts });
 
   const symbolBaseNamesToUpdate = opts.all
     ? symbolBaseNames
-    : symbolBaseNames.filter(x =>  opts.changedFiles.includes(path.resolve(symbolsDir, x)))
+    : symbolBaseNames.filter(x => opts.changedFiles.includes(path.resolve(symbolsDir, x)))
   ;
 
   /** @type {Geomorph.AssetsJson} The next assets.json */
