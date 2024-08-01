@@ -26,7 +26,7 @@
       - ✅ remove switches when "parent door" is removed
   - ✅ add to hull doors
   - 🚧 add to other hull symbol doors
-    - 101 ✅ 102 301 302 bridge
+    - 101 ✅ 102 ✅ 301 302 bridge
   - 🚧 add to room symbol doors
 
 - fire event when npc enters/exits a room
