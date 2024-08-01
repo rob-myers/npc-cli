@@ -25,6 +25,8 @@
       - ✅ for identified doors, assume both switches are `inner`
       - ✅ remove switches when "parent door" is removed
   - ✅ add to hull doors
+  - 🚧 add to other hull symbol doors
+    - 101 ✅ 102 301 302 bridge
   - 🚧 add to room symbol doors
 
 - fire event when npc enters/exits a room
@@ -37,6 +39,8 @@
   - locked indicator could go in center
 - navQuery blocks non-auto doors
 - support non-door sensor i.e. decor circle/poly
+- mobile has difficulty pressing switches
+  - try provide "echo circle" for touch devices
 
 - consider alternatives to current custom minecraft character
   - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
