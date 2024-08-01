@@ -256,6 +256,7 @@ export default function WorldCanvas(props) {
           minAzimuthAngle: touchFixedAzimuth,
           maxAzimuthAngle: touchFixedAzimuth,
         }}
+        panSpeed={2}
       />
 
       <ambientLight intensity={1} />
