@@ -25,18 +25,18 @@
       - ✅ for identified doors, assume both switches are `inner`
       - ✅ remove switches when "parent door" is removed
   - ✅ add to hull doors
-  - 🚧 add to other hull symbol doors
-    - 101 ✅ 102 ✅ 301 ✅ 302 ✅ bridge
+  - ✅ add to other hull symbol doors
+    - 101 ✅ 102 ✅ 301 ✅ 302 ✅ bridge ✅
   - 🚧 add to room symbol doors
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
   - e.g. `g1d3 inside` vs `g1d3 nearby`
 
-- doors can slide in specific direction
-  - sometimes not possible e.g. toilet
 - doors have small wall above them
   - locked indicator could go in center
+- doors can slide in specific direction
+  - sometimes not possible e.g. toilet
 - navQuery blocks non-auto doors
 - support non-door sensor i.e. decor circle/poly
 - mobile has difficulty pressing switches
@@ -51,6 +51,12 @@
   - ensure up to date
   - work on migrating Viewer
 
+- towards faster raycast against instancedmesh
+  - https://github.com/gkjohnson/three-mesh-bvh
+  - https://github.com/pmndrs/drei/blob/master/src/core/Bvh.tsx
+  - Walls has `useBvhRaycast` which constructs static geom and hijacks raycast
+  - Doors has `useBvhRaycast` which constructs geom (doors closed) and hijacks raycast
+    - will need "door open ratios"
 - maybe "move" constants into geomorphs.json
   - to avoid HMR versus geomorphs.json "alternate routes"
 - workers should only hot reload when directly edited or geomorphs.json changes
@@ -83,7 +89,7 @@
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
   - 🚧 try turn off "FileVault" on Mac OS
-- `w` command by itself should not throw
+- ✅ `w` command by itself should not throw
 - syntax highlighting in the shell
   - https://github.com/wooorm/emphasize
   - for `declare -f foo`
