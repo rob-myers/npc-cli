@@ -1,40 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <bx:grid x="0" y="0" width="300" height="300" />
+    <bx:grid x="0" y="0" width="300" height="300"/>
     <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937" />
-        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937" />
-        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)" />
-        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)" />
-        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)" />
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
       </g>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300" />
+        <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
-    <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, 3.7237e-8, 2.5741e-8)" xlink:href="#pattern-0" />
+    <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, 3.7237e-8, 2.5741e-8)" xlink:href="#pattern-0"/>
     <symbol id="symbol-1" viewBox="0 0 600 150">
       <title>extra--017--table--2x0.5</title>
       <rect width="600" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0-0'); transform-origin: 68.7053px 300.012px;">
         <title>extra--017--table--2x0.5</title>
       </rect>
     </symbol>
-    <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, 0.000012355142, -0.000006415236)" xlink:href="#pattern-0" />
+    <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, 0.000012355142, -0.000006415236)" xlink:href="#pattern-0"/>
     <symbol id="symbol-0" viewBox="0 0 600 150" bx:pinned="true">
       <title>extra--017--table--2x0.5 y=0.8</title>
       <rect width="600" height="150" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 299.971px 75.0011px; vector-effect: non-scaling-stroke;">
         <title>extra--017--table--2x0.5 y=0.8</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300" />
+        <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </symbol>
+    <symbol id="symbol-9" viewBox="0 0 1 1">
+      <title>decor-unit-quad</title>
+      <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
+        <title>fill</title>
+      </rect>
+      <rect width="1" height="1" style="fill: url('#pattern-3');">
+        <title>pattern</title>
+      </rect>
+    </symbol>
+    <pattern x="0" y="0" width="0.5" height="0.5" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-3">
+      <title>decor-quad-pattern</title>
+      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+      </g>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </pattern>
   </defs>
   <image width="620" height="920" x="-10" y="-10" xlink:href="data:image/png;base64,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">
     <title>office--023--2x3</title>
@@ -60,9 +85,6 @@
   <rect x="164.2" y="550" width="10" height="10" style="fill: rgb(216, 216, 216);">
     <title>decor label=office</title>
   </rect>
-  <rect x="40" y="885" width="220" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;">
-    <title>door</title>
-  </rect>
   <rect x="590" y="-10" width="20" height="910" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;">
     <title>wall</title>
   </rect>
@@ -72,7 +94,16 @@
   <rect y="-10" width="20" height="910" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;" x="-10">
     <title>wall</title>
   </rect>
-  <rect y="890" width="600" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);">
+  <rect y="890" width="609.99999" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="-10">
     <title>wall</title>
   </rect>
+  <rect x="40" y="885" width="220" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;">
+    <title>door</title>
+  </rect>
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 294.5, 887)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch=0 inner</title>
+  </use>
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 294.5, 912)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch=0</title>
+  </use>
 </svg>
