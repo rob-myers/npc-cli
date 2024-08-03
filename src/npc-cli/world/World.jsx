@@ -245,12 +245,13 @@ export default function World(props) {
           { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
         ]) {
           const img = await imageLoader.loadAsync(src);
-          if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
+          // 🔔 commenting below due to issue editing obstacle outlines
+          // if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
             [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
             tm.tex.dispose();
             tm.tex = new THREE.CanvasTexture(tm.canvas);
             tm.tex.flipY = false; // align with XZ/XY quad uv-map
-          }
+          // }
           tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           tm.ct.drawImage(img, 0, 0);
           invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);

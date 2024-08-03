@@ -56,6 +56,8 @@
   - ensure up to date
   - work on migrating Viewer
 
+- 🚧 hmr issue editing obstacle outline
+  - seems fixed by always re-generating obstacle texture, irrespective of size change
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh
   - https://github.com/pmndrs/drei/blob/master/src/core/Bvh.tsx
