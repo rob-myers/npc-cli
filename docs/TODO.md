@@ -27,7 +27,12 @@
   - ✅ add to hull doors
   - ✅ add to other hull symbol doors
     - 101 ✅ 102 ✅ 301 ✅ 302 ✅ bridge ✅
+  - ✅ on remove doors and resp switches, adjust other switches
+    - ✅ when doors coincide
+    - ✅ when doors are manually removed
+    - ✅ fix issue in 302
   - 🚧 add to room symbol doors
+    - cargo---010 ✅ empty-room 006 🚧 020 🚧 039 🚧 
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
