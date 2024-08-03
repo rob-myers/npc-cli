@@ -4,7 +4,7 @@
     "102--hull": {"outputHash": -467197403, "pngHash": 184103855},
     "103--hull": {"outputHash": 1221905667, "pngHash": -1937509879},
     "301--hull": {"outputHash": -872012830, "pngHash": 787602800},
-    "302--hull": {"outputHash": -1915967694, "pngHash": -1557128953},
+    "302--hull": {"outputHash": -1908174944, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": -783678604,
       "pngHash": -299838577,
@@ -218,7 +218,7 @@
       "pngHash": -1792259774,
       "obsHashes": [1124240817]
     },
-    "fresher--015--1x2": {"outputHash": -1870396828, "pngHash": -243127075},
+    "fresher--015--1x2": {"outputHash": -1690953498, "pngHash": -1481245979},
     "fresher--020--2x2": {"outputHash": -1225801542, "pngHash": 1107295627},
     "fresher--025--3x2": {"outputHash": -337348914, "pngHash": -1324814803},
     "fresher--036--4x2": {"outputHash": -658460006, "pngHash": 633687707},
@@ -4430,7 +4430,7 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[13.375, 10.4], [13.375, 10.6], [12.125, 10.6], [12.125, 10.4]]
+            [[13.35, 10.4], [13.35, 10.6], [12.15, 10.6], [12.15, 10.4]]
           ],
           "meta": {"door": true, "iris": true, "sealed": true, "hull": true}
         },
@@ -4792,6 +4792,22 @@
             "switch": 3,
             "inner": true,
             "transform": [-0.15, 0, 0, -0.15, 23.85, 14.9725],
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          }
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[12.15, 10.78], [12, 10.78], [12, 10.63], [12.15, 10.63]]
+          ],
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 4,
+            "inner": true,
+            "transform": [0, 0.15, -0.15, 0, 12.15, 10.63],
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -9409,7 +9425,7 @@
       "unsorted": [],
       "width": 1.5,
       "height": 3,
-      "pngRect": {"x": -0.045, "y": -0.055, "width": 1.67, "height": 3.1},
+      "pngRect": {"x": -0.05, "y": -0.05, "width": 1.6, "height": 3.1},
       "symbols": [
         {
           "symbolKey": "extra--002--fresher--0.5x0.5",
