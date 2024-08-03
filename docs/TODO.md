@@ -36,8 +36,12 @@
     - engineering--047 ✅ fresher--036 ✅ medical 007 ✅ 008 ✅
     - office 001 🚧 004 🚧 006 🚧 ...
     - empty-room ✅
-    - fresher 🚧
+    - fresher ✅
     - lab 🚧
+    - lifeboat 🚧 medical 🚧 cartography 🚧
+    - office 🚧
+    - ships-locker 🚧
+    - stateroom 🚧
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
