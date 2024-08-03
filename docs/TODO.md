@@ -32,7 +32,7 @@
     - ✅ when doors are manually removed
     - ✅ fix issue in 302
   - 🚧 add to room symbol doors
-    - cargo---010 ✅ empty-room 006 🚧 020 🚧 039 🚧 
+    - cargo---010 ✅ empty-room 006 ✅ 020 ✅ 039 ✅
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
