@@ -2,8 +2,6 @@
  * @typedef {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | import('canvas').CanvasRenderingContext2D} CanvasContext2DType
  */
 
-import { isDevelopment } from './generic';
-
 /** Non-empty iff running in browser */
 export const tmpCanvasCtxts = typeof window !== 'undefined' ?
   Array.from({ length: 2 }).map(_ => /** @type {CanvasRenderingContext2D} */ (
