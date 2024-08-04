@@ -84,6 +84,7 @@ declare namespace Geomorph {
     mapsHash: number;
     layoutsHash: number;
     sheetsHash: number;
+    /** Sprite-sheets hash */
     imagesHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;

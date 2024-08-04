@@ -92,6 +92,11 @@ export default function World(props) {
       ...helper,
     },
 
+    async hasGmsDataChanged() {
+      const createGmsData = await import('../service/create-gms-data').then(x => x.default);
+      const hasChanged = state.hmr.createGmsData !== createGmsData;
+      return state.hmr.createGmsData = createGmsData, hasChanged;
+    },
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
@@ -163,12 +168,11 @@ export default function World(props) {
       };
 
       const dataChanged = !prevGeomorphs || state.geomorphs.hash !== geomorphsJson.hash;
-      const mapChanged = dataChanged || state.mapKey !== props.mapKey;
-
       if (dataChanged) {
         next.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
       }
-
+      
+      const mapChanged = dataChanged || state.mapKey !== props.mapKey;
       if (mapChanged) {
         next.mapKey = props.mapKey;
         const mapDef = next.geomorphs.map[next.mapKey];
@@ -190,16 +194,11 @@ export default function World(props) {
         );
       }
       
-      // detect if the function `createGmsData` has changed
-      const createGmsData = await import('../service/create-gms-data').then(x => x.default);
-      const gmsDataChanged = state.hmr.createGmsData !== createGmsData;
-      state.hmr.createGmsData = createGmsData;
-      /** decor or obstacle sprite-sheet image has changed? */
-      const imgChanged = prevGeomorphs?.imagesHash !== next.geomorphs.imagesHash;
+      const gmsDataChanged = await state.hasGmsDataChanged();
+      const spritesChanged = prevGeomorphs?.imagesHash !== next.geomorphs.imagesHash;
 
       if (mapChanged || gmsDataChanged) {
-        next.gmsData = createGmsData(
-          // reuse gmData lookup, unless:
+        next.gmsData = createGmsData(// reuse gmData lookup, unless:
           // (a) geomorphs.json changed, or (b) create-gms-data changed
           { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
         );
@@ -222,10 +221,10 @@ export default function World(props) {
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
       }
 
+      // apply changes synchronously
       if (dataChanged || gmsDataChanged) {
         state.gmsData?.dispose();
       }
-      // apply changes synchronously
       Object.assign(state, next);
       state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
       state.decorHash = `${state.mapKey} ${state.geomorphs.layoutsHash} ${state.geomorphs.mapsHash}`;
@@ -235,11 +234,11 @@ export default function World(props) {
         dataChanged,
         mapChanged,
         gmsDataChanged,
-        imgChanged,
+        imgChanged: spritesChanged,
         hash: state.hash,
       });
 
-      if (dataChanged || imgChanged) {
+      if (dataChanged || spritesChanged) {
         for (const { src, tm, invert } of [
           { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
           { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
@@ -366,10 +365,12 @@ export default function World(props) {
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
  *
- * @property {() => Promise<void>} resolveOnReady
+ * @property {() => Promise<boolean>} hasGmsDataChanged
+ * Has function `createGmsData` changed?
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
+ * @property {() => Promise<void>} resolveOnReady
  * @property {() => void} setReady
  * @property {(mutator?: (w: State) => void) => void} update
  */
