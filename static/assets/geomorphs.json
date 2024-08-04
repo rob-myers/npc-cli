@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -1709188181 -1880971960 348608405",
+  "hash": "610044716 -1083948493 -1880971960 348608405",
   "mapsHash": 610044716,
-  "layoutsHash": -1709188181,
+  "layoutsHash": -1083948493,
   "sheetsHash": -1880971960,
   "imagesHash": 348608405,
   "map": {
@@ -11455,6 +11455,37 @@
           "orient": 90
         },
         {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 28,
+            "inner": true,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 25.3625, "y": 4.3, "width": 0.15, "height": 0.15},
+          "transform": [0, -0.15, 0.15, 0, 25.3625, 4.45],
+          "center": {"x": 25.438, "y": 4.375}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 28,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 25.4875, "y": 4.3, "width": 0.15, "height": 0.15},
+          "transform": [0, -0.15, 0.15, 0, 25.4875, 4.45],
+          "center": {"x": 25.563, "y": 4.375}
+        },
+        {
           "type": "point",
           "key": "",
           "meta": {"decor": true, "ignore-nav": true, "y": 0.01},
@@ -11613,6 +11644,99 @@
           "x": 5.995,
           "y": 22.405,
           "orient": -90
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 30,
+            "inner": true,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 22.5, "y": 2.9875, "width": 0.15, "height": 0.15},
+          "transform": [-0.15, 0, 0, -0.15, 22.65, 3.1375],
+          "center": {"x": 22.575, "y": 3.063}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 30,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 22.5, "y": 2.8625, "width": 0.15, "height": 0.15},
+          "transform": [-0.15, 0, 0, -0.15, 22.65, 3.0125],
+          "center": {"x": 22.575, "y": 2.938}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 31,
+            "inner": true,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 25.35, "y": 1.36, "width": 0.15, "height": 0.15},
+          "transform": [-0.15, 0, 0, 0.15, 25.5, 1.3599999999999999],
+          "center": {"x": 25.425, "y": 1.435}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 31,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 25.35, "y": 1.485, "width": 0.15, "height": 0.15},
+          "transform": [-0.15, 0, 0, 0.15, 25.5, 1.485],
+          "center": {"x": 25.425, "y": 1.56}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 32,
+            "inner": true,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 25.3625, "y": 5.8, "width": 0.15, "height": 0.15},
+          "transform": [0, -0.15, 0.15, 0, 25.3625, 5.95],
+          "center": {"x": 25.438, "y": 5.875}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 32,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 25.4875, "y": 5.8, "width": 0.15, "height": 0.15},
+          "transform": [0, -0.15, 0.15, 0, 25.4875, 5.95],
+          "center": {"x": 25.563, "y": 5.875}
         },
         {
           "type": "quad",
@@ -28143,6 +28267,68 @@
           "bounds2d": {"x": 28.345, "y": 5.98, "width": 0.15, "height": 0.15},
           "transform": [0.15, 0, 0, -0.15, 28.345, 6.13],
           "center": {"x": 28.42, "y": 6.055}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 20,
+            "inner": true,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 13.4875, "y": 12.1, "width": 0.15, "height": 0.15},
+          "transform": [0, 0.15, -0.15, 0, 13.6375, 12.1],
+          "center": {"x": 13.563, "y": 12.175}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 20,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 13.3625, "y": 12.1, "width": 0.15, "height": 0.15},
+          "transform": [0, 0.15, -0.15, 0, 13.5125, 12.1],
+          "center": {"x": 13.438, "y": 12.175}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 21,
+            "inner": true,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 13.4875, "y": 11.75, "width": 0.15, "height": 0.15},
+          "transform": [0, 0.15, -0.15, 0, 13.6375, 11.75],
+          "center": {"x": 13.563, "y": 11.825}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 21,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 13.3625, "y": 11.75, "width": 0.15, "height": 0.15},
+          "transform": [0, 0.15, -0.15, 0, 13.5125, 11.75],
+          "center": {"x": 13.438, "y": 11.825}
         },
         {
           "type": "circle",
