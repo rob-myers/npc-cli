@@ -122,6 +122,8 @@ export async function* split({ api, args, datum }) {
     } else if (typeof datum === "string") {
       // yield* datum.split(arg)
       yield api.dataChunk(datum.split(arg));
+    } else if (datum instanceof Set) {
+      yield api.dataChunk(Array.from(datum));
     }
 }
 
