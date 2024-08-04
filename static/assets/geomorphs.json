@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 1147979397 -1880971960 348608405",
+  "hash": "610044716 1769172464 -1880971960 847656923",
   "mapsHash": 610044716,
-  "layoutsHash": 1147979397,
+  "layoutsHash": 1769172464,
   "sheetsHash": -1880971960,
-  "imagesHash": 348608405,
+  "imagesHash": 847656923,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -2194,7 +2194,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 35,
+            "switch": 37,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -2210,7 +2210,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 35,
+            "switch": 37,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -2225,7 +2225,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 36,
+            "switch": 38,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -2241,7 +2241,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 36,
+            "switch": 38,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -10424,7 +10424,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 12,
+            "switch": 13,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -10439,7 +10439,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 12,
+            "switch": 13,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -10496,6 +10496,37 @@
           "x": 25.5,
           "y": 14.25,
           "orient": 90
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 14,
+            "inner": true,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 23.99, "y": 13.35, "width": 0.15, "height": 0.15},
+          "transform": [0, -0.15, -0.15, 0, 24.14, 13.5],
+          "center": {"x": 24.065, "y": 13.425}
+        },
+        {
+          "type": "quad",
+          "key": "",
+          "meta": {
+            "decor": true,
+            "quad": true,
+            "switch": 14,
+            "y": 1,
+            "tilt": true,
+            "img": "icon--square"
+          },
+          "bounds2d": {"x": 23.86, "y": 13.35, "width": 0.15, "height": 0.15},
+          "transform": [0, -0.15, -0.15, 0, 24.01, 13.5],
+          "center": {"x": 23.935, "y": 13.425}
         },
         {
           "type": "point",
@@ -10567,7 +10598,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 11,
+            "switch": 15,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -10588,7 +10619,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 11,
+            "switch": 15,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -10677,7 +10708,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 12,
+            "switch": 16,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -10692,7 +10723,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 12,
+            "switch": 16,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -10792,7 +10823,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 13,
+            "switch": 17,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -10807,7 +10838,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 13,
+            "switch": 17,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -10902,7 +10933,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 14,
+            "switch": 18,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -10918,7 +10949,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 14,
+            "switch": 18,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -10933,7 +10964,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 15,
+            "switch": 19,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -10949,7 +10980,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 15,
+            "switch": 19,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11006,7 +11037,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 16,
+            "switch": 20,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11021,7 +11052,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 16,
+            "switch": 20,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11100,7 +11131,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 17,
+            "switch": 21,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11115,7 +11146,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 17,
+            "switch": 21,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11194,7 +11225,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 18,
+            "switch": 22,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11215,7 +11246,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 18,
+            "switch": 22,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11235,7 +11266,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 18,
+            "switch": 22,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11256,7 +11287,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 18,
+            "switch": 22,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11538,7 +11569,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 20,
+            "switch": 24,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11554,7 +11585,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 20,
+            "switch": 24,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11569,7 +11600,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 21,
+            "switch": 25,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11585,7 +11616,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 21,
+            "switch": 25,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11648,7 +11679,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 22,
+            "switch": 26,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11664,7 +11695,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 22,
+            "switch": 26,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11697,7 +11728,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 23,
+            "switch": 27,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11725,7 +11756,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 23,
+            "switch": 27,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11752,7 +11783,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 23,
+            "switch": 27,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11780,7 +11811,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 23,
+            "switch": 27,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11839,7 +11870,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 24,
+            "switch": 28,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11855,7 +11886,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 24,
+            "switch": 28,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11870,7 +11901,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 25,
+            "switch": 29,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11886,7 +11917,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 25,
+            "switch": 29,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11901,7 +11932,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 26,
+            "switch": 30,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11917,7 +11948,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 26,
+            "switch": 30,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11932,7 +11963,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 27,
+            "switch": 31,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11948,7 +11979,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 27,
+            "switch": 31,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -11963,7 +11994,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 28,
+            "switch": 32,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11979,7 +12010,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 28,
+            "switch": 32,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -21529,7 +21560,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 15,
+            "switch": 16,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -21545,7 +21576,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 15,
+            "switch": 16,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -21609,7 +21640,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 16,
+            "switch": 17,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -21625,7 +21656,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 16,
+            "switch": 17,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -28173,7 +28204,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 15,
+            "switch": 16,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -28189,7 +28220,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 15,
+            "switch": 16,
             "y": 1,
             "tilt": true,
             "img": "icon--square"
@@ -28440,7 +28471,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 18,
+            "switch": 19,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -28456,7 +28487,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 18,
+            "switch": 19,
             "y": 1,
             "tilt": true,
             "img": "icon--square"

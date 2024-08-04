@@ -167,13 +167,15 @@ class GeomorphService {
 
     const flatDecor = symbol.decor.concat(flats.flatMap(x => x.decor));
     let switchIdOffset = 0; // adjust switches on remove door
+    const seenRmDoorId = /** @type {Set<number>} */ (new Set());
 
     return {
       flatDoors: flatDoors.filter((_, i) => !rmDoorIds.has(i)),
       flatDecor: flatDecor.filter((d) => {
         if (typeof d.meta.switch === 'number') {
           if (rmDoorIds.has(d.meta.switch)) {// remove resp. switch
-            return switchIdOffset--, false;
+            !seenRmDoorId.has(d.meta.switch) && (switchIdOffset--, seenRmDoorId.add(d.meta.switch));
+            return false;
           }
           if (keptDoorIds.has(d.meta.switch)) {
             d.meta.inner = true; // set kept switches inner
@@ -688,13 +690,17 @@ class GeomorphService {
     });
     const rmDoorIds = new Set(doorsToRemove.map(x => x.doorId));
     let switchIdOffset = 0;
+    const seenRmDoorId = /** @type {Set<number>} */ (new Set());
 
     const doors = sym.doors.filter((_, doorId) => !rmDoorIds.has(doorId));
     const decor = sym.decor
       .map(x => x.cleanClone(tmpMat1, this.transformDecorMeta(x.meta, tmpMat1, meta.y)))
       .filter(d => { // remove resp switches of removed doors, offsetting subsequent
         if (typeof d.meta.switch === 'number') {
-          if (rmDoorIds.has(d.meta.switch)) return switchIdOffset--, false;
+          if (rmDoorIds.has(d.meta.switch)) {
+            !seenRmDoorId.has(d.meta.switch) && (switchIdOffset--, seenRmDoorId.add(d.meta.switch));
+            return false;
+          }
           d.meta.switch += switchIdOffset;
         }
         return true;

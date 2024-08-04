@@ -43,6 +43,7 @@
     - ships-locker ✅
     - stateroom ✅
   - ✅ add missing door switches in hull symbols
+  - ✅ fix fresher-036 switches
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
