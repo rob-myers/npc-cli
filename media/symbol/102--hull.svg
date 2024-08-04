@@ -231,10 +231,10 @@
     <use width="300" height="300" transform="matrix(1, 0, 0, -1, 4200, 0)" style="transform-origin: 150px 150px;" xlink:href="#symbol-3">
       <title>iris-valves--005--1x1</title>
     </use>
-    <use width="600" height="600" transform="matrix(1, 0, 0, 1, 2100, 2400)" xlink:href="#symbol-4">
+    <use width="600" height="600" transform="matrix(0, -1, -1, 0, 2100, 2400.000244140625)" style="transform-origin: 300px 300px;" xlink:href="#symbol-4">
       <title>stateroom--012--2x2</title>
     </use>
-    <use width="600" height="600" transform="matrix(1, 0, 0, 1, 2700, 2400)" xlink:href="#symbol-4">
+    <use width="600" height="600" transform="matrix(0, -1, -1, 0, 2700, 2400.000244140625)" style="transform-origin: 300px 300px;" xlink:href="#symbol-4">
       <title>stateroom--012--2x2</title>
     </use>
     <use width="600" height="600" transform="matrix(0, -1, 1, 0, 2700, 1800)" style="transform-origin: 300px 300px;" xlink:href="#symbol-5">
