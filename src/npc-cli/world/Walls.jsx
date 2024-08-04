@@ -47,7 +47,10 @@ export default function Walls(props) {
         event: e,
         is3d: true,
         justLongDown: false,
-        meta: state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+        meta: {
+          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
+        },
       }));
       e.stopPropagation();
     },
@@ -56,7 +59,10 @@ export default function Walls(props) {
         key: "pointerup",
         event: e,
         is3d: true,
-        meta: state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+        meta: {
+          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
+        },
       }));
       e.stopPropagation();
     },
@@ -94,6 +100,7 @@ export default function Walls(props) {
       onPointerDown={state.onPointerDown}
       >
       <meshBasicMaterial side={THREE.DoubleSide} color="black" />
+      {/* <meshBasicMaterial side={THREE.DoubleSide} color="red" wireframe /> */}
     </instancedMesh>
   );
 }

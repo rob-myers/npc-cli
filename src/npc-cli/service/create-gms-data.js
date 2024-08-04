@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { hitTestRed, wallHeight, worldToSguScale } from "./const";
+import { gmHitTestExtraScale, hitTestRed, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
@@ -56,7 +56,7 @@ export default function createGmsData({ prevGmData }) {
       gmData.hitCtxt ??= /** @type {CanvasRenderingContext2D} */ (
         document.createElement('canvas').getContext('2d', { willReadFrequently: true })
       );
-      const bounds = gm.pngRect.clone().scale(worldToSguScale);
+      const bounds = gm.pngRect.clone().scale(worldToSguScale * gmHitTestExtraScale);
       gmData.hitCtxt.canvas.width = bounds.width;
       gmData.hitCtxt.canvas.height = bounds.height;
       gmsData.drawHitCanvas(gm);
@@ -125,14 +125,16 @@ export default function createGmsData({ prevGmData }) {
       ct.resetTransform();
       ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
 
-      ct.setTransform(worldToSguScale, 0, 0, worldToSguScale, -gm.pngRect.x * worldToSguScale, -gm.pngRect.y * worldToSguScale);
+      const scale = worldToSguScale * gmHitTestExtraScale;
+      ct.setTransform(scale, 0, 0, scale, -gm.pngRect.x * scale, -gm.pngRect.y * scale);
       // draw doors first to remove their extension into rooms
-      gm.doors.forEach((door, doorId) => {
+      gm.doors.forEach((door, doorId) =>
         drawPolygons(ct, door.poly, [`rgb(${hitTestRed.door}, 0, ${doorId})`, null])
-      });
-      gm.rooms.forEach((room, roomId) => {
-        drawPolygons(ct, room, [`rgb(${hitTestRed.room}, ${roomId}, 255)`, null])
-      });
+      );
+      ct.lineWidth = 0.025; // 🔔 larger rooms so walls lie inside
+      gm.rooms.forEach((room, roomId) =>
+        drawPolygons(ct, room, [`rgb(${hitTestRed.room}, ${roomId}, 255)`, `rgb(${hitTestRed.room}, ${roomId}, 255)`])
+      );
     },
     /**
      * @param {Geomorph.Layout} gm
@@ -140,9 +142,10 @@ export default function createGmsData({ prevGmData }) {
      */
     findRoomIdContaining(gm, localPoint, includeDoors = false) {
       const ct = gmsData[gm.key].hitCtxt;
+      const scale = worldToSguScale * gmHitTestExtraScale;
       const { data: rgba } = ct.getImageData(// transform to canvas coords
-        (localPoint.x - gm.pngRect.x) * worldToSguScale,
-        (localPoint.y - gm.pngRect.y) * worldToSguScale,
+        (localPoint.x - gm.pngRect.x) * scale,
+        (localPoint.y - gm.pngRect.y) * scale,
         1, 1, { colorSpace: 'srgb' },
       );
       // console.log({ gmKey: gm.key, localPoint, rgba: Array.from(rgba) });

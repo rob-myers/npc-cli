@@ -205,6 +205,10 @@ declare namespace Geomorph {
     gms: { gmKey: GeomorphKey; transform: Geom.SixTuple; }[];
   }
 
+  /**
+   * `rooms` + `doors` + `walls` form a disjoint union covering the `hullPoly`.
+   * 🚧 what about `windows`?
+   */
   interface LayoutGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,

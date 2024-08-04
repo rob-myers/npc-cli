@@ -12,7 +12,7 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 every door has 2 switches (inner, outer)
+- ✅ every door has 2 switches (inner, outer)
   - ✅ some symbol has two switches
   - ✅ can rotate decor quad so in XY plane via `tilt`
   - ✅ efficient computation of "post-rotation-matrix"
@@ -45,11 +45,13 @@
   - ✅ add missing door switches in hull symbols
   - ✅ fix fresher-036 switches
 
-- fire event when npc enters/exits a room
-  - sensor in each doorway, triggered on leave
-  - e.g. `g1d3 inside` vs `g1d3 nearby`
 
-- doors have small wall above them
+- 🚧 doors have small wall above them
+  - ✅ wall meta should have roomId
+    - increase resolution of hitTest canvas
+  - 🚧 try extending `Walls` with two quads per door
+    - i.e. two degenerate "one-segment-walls"
+  - pre-existing issue with gaps around top of doors
   - locked indicator could go in center
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet
@@ -58,10 +60,13 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- consider alternatives to current custom minecraft character
-  - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
-  - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
-  - probably won't use but can compare for ideas e.g. better textures, modelling
+- fire event when npc enters/exits a room
+  - sensor in each doorway, triggered on leave
+  - e.g. `g1d3 inside` vs `g1d3 nearby`
+
+- create "hyper casual" characters, rather then pseudo minecraft character
+  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
+  - based on these models e.g. 3 bones: body > head, shadow
 
 - return to next.js project
   - ensure up to date

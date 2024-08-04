@@ -44,6 +44,8 @@ call '() => { throw Error("bad") }'
   call '() => { throw "❌" }' | true
   true | { sleep 1; echo 🔔; }
 }
+
+w gmsData.g-102--research-deck.hitCtxt.canvas.toDataURL | log
 ```
 
 ## Local variables

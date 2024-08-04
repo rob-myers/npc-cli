@@ -38,6 +38,9 @@ export const spriteSheetSymbolExtraScale = 2.5;
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetDecorExtraScale = 3;
 
+/** Smaller e.g. `1.5` breaks "wall in room" e.g. 102 lab */
+export const gmHitTestExtraScale = 2;
+
 export const gmLabelHeightSgu = 12;
 
 /** Higher resolution labels */
