@@ -89,22 +89,29 @@ export default function WorldCanvas(props) {
       w.update(); // e.g. show stats
     },
     onGridPointerDown(e) {
-      // state.downPoint = e.point.clone();
+      const { x, z: y } = e.point;
       w.events.next(state.getNpcPointerEvent({
         key: "pointerdown",
         distancePx: 0,
         event: e,
         is3d: true,
         justLongDown: false,
-        meta: { floor: true },
+        meta: {
+          floor: true,
+          ...w.gmGraph.findRoomContaining({ x, y }, true),
+        },
       }));
     },
     onGridPointerUp(e) {
+      const { x, z: y } = e.point;
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
         event: e,
         is3d: true,
-        meta: { floor: true },
+        meta: {
+          floor: true,
+          ...w.gmGraph.findRoomContaining({ x, y }, true),
+        },
       }));
     },
     onPointerDown(e) {
