@@ -12,46 +12,14 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ every door has 2 switches (inner, outer)
-  - ✅ some symbol has two switches
-  - ✅ can rotate decor quad so in XY plane via `tilt`
-  - ✅ efficient computation of "post-rotation-matrix"
-    - e.g. via caching
-  - ✅ door switches format: `decor switch={symbolDoorId} inner`
-    - ℹ️ decor quad because using decor quad symbol
-    - ✅ `inner` optional; `y=1 tilt img=icon--square` implied
-    - ✅ `switch` localDoorId -> doorId on instantiation
-      - ✅ remove switches when "parent door" is identified
-      - ✅ for identified doors, assume both switches are `inner`
-      - ✅ remove switches when "parent door" is removed
-  - ✅ add to hull doors
-  - ✅ add to other hull symbol doors
-    - 101 ✅ 102 ✅ 301 ✅ 302 ✅ bridge ✅
-  - ✅ on remove doors and resp switches, adjust other switches
-    - ✅ when doors coincide
-    - ✅ when doors are manually removed
-    - ✅ fix issue in 302
-  - ✅ add to room symbol doors
-    - cargo---010 ✅ empty-room 006 ✅ 020 ✅ 039 ✅
-    - engineering--047 ✅ fresher--036 ✅ medical 007 ✅ 008 ✅
-    - office 001 ✅ 004 ✅ 006 ✅ ...
-    - empty-room ✅
-    - fresher ✅
-    - lab ✅
-    - lifeboat ✅ medical ✅ cartography ✅
-    - office up to 026 ✅ after 026 ✅
-    - ships-locker ✅
-    - stateroom ✅
-  - ✅ add missing door switches in hull symbols
-  - ✅ fix fresher-036 switches
-
+- pre-existing issue with gaps around top of doors
+- fix nav-mesh on edge of 303
 
 - 🚧 doors have small wall above them
   - ✅ wall meta should have roomId
     - increase resolution of hitTest canvas
   - 🚧 try extending `Walls` with two quads per door
     - i.e. two degenerate "one-segment-walls"
-  - pre-existing issue with gaps around top of doors
   - locked indicator could go in center
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet
@@ -1833,3 +1801,36 @@
     - ✅ add missing iris valves
     - ✅ iris value uses `<circle>`
   - ❌ decor rect uses symbol
+
+- ✅ every door has 2 switches (inner, outer)
+  - ✅ some symbol has two switches
+  - ✅ can rotate decor quad so in XY plane via `tilt`
+  - ✅ efficient computation of "post-rotation-matrix"
+    - e.g. via caching
+  - ✅ door switches format: `decor switch={symbolDoorId} inner`
+    - ℹ️ decor quad because using decor quad symbol
+    - ✅ `inner` optional; `y=1 tilt img=icon--square` implied
+    - ✅ `switch` localDoorId -> doorId on instantiation
+      - ✅ remove switches when "parent door" is identified
+      - ✅ for identified doors, assume both switches are `inner`
+      - ✅ remove switches when "parent door" is removed
+  - ✅ add to hull doors
+  - ✅ add to other hull symbol doors
+    - 101 ✅ 102 ✅ 301 ✅ 302 ✅ bridge ✅
+  - ✅ on remove doors and resp switches, adjust other switches
+    - ✅ when doors coincide
+    - ✅ when doors are manually removed
+    - ✅ fix issue in 302
+  - ✅ add to room symbol doors
+    - cargo---010 ✅ empty-room 006 ✅ 020 ✅ 039 ✅
+    - engineering--047 ✅ fresher--036 ✅ medical 007 ✅ 008 ✅
+    - office 001 ✅ 004 ✅ 006 ✅ ...
+    - empty-room ✅
+    - fresher ✅
+    - lab ✅
+    - lifeboat ✅ medical ✅ cartography ✅
+    - office up to 026 ✅ after 026 ✅
+    - ships-locker ✅
+    - stateroom ✅
+  - ✅ add missing door switches in hull symbols
+  - ✅ fix fresher-036 switches
