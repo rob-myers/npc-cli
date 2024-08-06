@@ -62,7 +62,7 @@ export default function World(props) {
     gms: [],
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
-    hmr: { createGmsData },
+    hmr: /** @type {*} */ ({}),
     // 🚧 avoid recreating texture on HMR
     obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
     decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
@@ -92,11 +92,6 @@ export default function World(props) {
       ...helper,
     },
 
-    async hasGmsDataChanged() {
-      const createGmsData = await import('../service/create-gms-data').then(x => x.default);
-      const hasChanged = state.hmr.createGmsData !== createGmsData;
-      return state.hmr.createGmsData = createGmsData, hasChanged;
-    },
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
@@ -132,9 +127,12 @@ export default function World(props) {
       }
     },
     setReady() {
-      while (state.readyResolvers.length > 0) {
+      while (state.readyResolvers.length > 0)
         /** @type {() => void} */ (state.readyResolvers.pop())();
-      }
+    },
+    trackCreateGmsData(nextCreateGmsData) {
+      const hasChanged = state.hmr.createGmsData !== nextCreateGmsData;
+      return state.hmr.createGmsData = nextCreateGmsData, hasChanged;
     },
     update(mutator) {
       mutator?.(state);
@@ -194,11 +192,12 @@ export default function World(props) {
         );
       }
       
-      const gmsDataChanged = await state.hasGmsDataChanged();
+      const nextCreateGmsData = await import('../service/create-gms-data').then(x => x.default);
+      const gmsDataChanged = state.trackCreateGmsData(nextCreateGmsData);
       const spritesChanged = prevGeomorphs?.imagesHash !== next.geomorphs.imagesHash;
 
       if (mapChanged || gmsDataChanged) {
-        next.gmsData = createGmsData(// reuse gmData lookup, unless:
+        next.gmsData = nextCreateGmsData(// reuse gmData lookup, unless:
           // (a) geomorphs.json changed, or (b) create-gms-data changed
           { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
         );
@@ -365,13 +364,13 @@ export default function World(props) {
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
  *
- * @property {() => Promise<boolean>} hasGmsDataChanged
- * Has function `createGmsData` changed?
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
  * @property {() => Promise<void>} resolveOnReady
  * @property {() => void} setReady
+ * @property {(next: typeof createGmsData) => boolean} trackCreateGmsData
+ * Has function `createGmsData` changed?
  * @property {(mutator?: (w: State) => void) => void} update
  */
 
