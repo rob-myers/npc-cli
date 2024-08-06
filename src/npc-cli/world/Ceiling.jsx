@@ -53,8 +53,8 @@ export default function Ceiling(props) {
       const hullStrokeColor = 'rgba(100, 100, 100, 1)';
       const fillColor = 'rgba(0, 0, 0, 1)';
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.08]);
-      drawPolygons(ct, doorCeilTops, [fillColor, strokeColor, 0.06]);
+      drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.04]);
+      drawPolygons(ct, doorCeilTops, [fillColor, strokeColor, 0.04]);
       drawPolygons(ct, hullWalls, [hullStrokeColor, hullStrokeColor, 0.06]);
       
       // decals

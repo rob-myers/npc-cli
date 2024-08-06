@@ -56,7 +56,7 @@ export const obstacleOutset = 10 * sguToWorldScale;
 export const wallHeight = 2;
 
 /** Depth of doorway along line walking through hull door */
-export const hullDoorDepth = 8 * sguToWorldScale * sguSymbolScaleDown;
+export const hullDoorDepth = 40 * sguToWorldScale * sguSymbolScaleDown;
 
 /** Depth of doorway along line walking through door */
 export const doorDepth = 20 * sguToWorldScale * sguSymbolScaleDown;

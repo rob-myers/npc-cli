@@ -1285,7 +1285,11 @@ export class Connector {
     return connector;
   }
 
-  /** @returns {Geom.Poly} */
+  /**
+   * Doorways are the navigable entries/exits of a door.
+   * They are not as wide as door, but much deeper.
+   * @returns {Geom.Poly}
+   */
   computeDoorway() {
     const width = this.baseRect.width;
     const height = this.meta.hull ? hullDoorDepth : doorDepth;
@@ -1301,12 +1305,30 @@ export class Connector {
       const topRight = botRight.clone().addScaled(hNormal, (wallOutset + height/2));
       return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
     } else {
-      const topLeft = this.seg[0].clone().addScaled(wNormal, wallOutset).addScaled(hNormal, -height/2 - wallOutset);
+      const  topLeft = this.seg[0].clone().addScaled(wNormal, wallOutset).addScaled(hNormal, -height/2 - wallOutset);
       const botLeft = topLeft.clone().addScaled(hNormal, wallOutset + height + wallOutset);
       const botRight = botLeft.clone().addScaled(wNormal, width - 2 * wallOutset);
       const topRight = botRight.clone().addScaled(hNormal, -wallOutset - height - wallOutset);
       return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
     }
+  }
+
+  /**
+   * The thin polygon is the connector polygon with its depth restricted,
+   * so it doesn't jut out from its surrounding walls.
+   * @returns {Geom.Poly}
+   */
+  computeThinPoly() {
+    const width = this.baseRect.width;
+    const height = this.meta.hull ? hullDoorDepth : doorDepth;
+    const hNormal = this.normal;
+    const wNormal = tmpVect1.set(this.normal.y, -this.normal.x);
+
+    const topLeft = this.seg[0].clone().addScaled(hNormal, -height/2);
+    const botLeft = topLeft.clone().addScaled(hNormal, height);
+    const botRight = botLeft.clone().addScaled(wNormal, width);
+    const topRight = botRight.clone().addScaled(hNormal, -height);
+    return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
   }
 }
 

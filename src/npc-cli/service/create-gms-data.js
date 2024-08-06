@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { gmHitTestExtraScale, hitTestRed, wallHeight, worldToSguScale } from "./const";
+import { doorDepth, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
@@ -40,7 +40,18 @@ export default function createGmsData({ prevGmData }) {
 
       gmData.doorSegs = gm.doors.map(({ seg }) => seg);
       gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
-      gmData.wallSegs = gm.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta })));
+      gmData.wallSegs = [
+        ...gm.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta }))),
+        // 2 extra segs per door i.e. "wall joiners" parallel to door.seg
+        ...gm.doors.flatMap(({ seg: [u, v], normal, meta }) => {
+          const depth = meta.hull === true ? hullDoorDepth : doorDepth;
+          meta = { ...meta, y: 1.8, h: 0.2 }; // 🚧 hard-coding
+          return [
+            { seg: /** @type {[Geom.Vect, Geom.Vect]} */ ([u, v].map(p => p.clone().addScaled(normal,  0.5 * depth))), meta },
+            { seg: /** @type {[Geom.Vect, Geom.Vect]} */ ([u, v].map(p => p.clone().addScaled(normal, -0.5 * depth))), meta },
+          ];
+        }),
+      ];
       gmData.wallPolyCount = gm.walls.length;
       gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
         outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
@@ -49,8 +60,8 @@ export default function createGmsData({ prevGmData }) {
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
       );
       // inset so stroke does not jut out
-      gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.04));
-      gmData.doorCeilTops = gm.doors.flatMap(x => geom.createInset(x.poly, 0.04));
+      gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.0));
+      gmData.doorCeilTops = gm.doors.map(door => door.computeThinPoly());
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
       gmData.hitCtxt ??= /** @type {CanvasRenderingContext2D} */ (

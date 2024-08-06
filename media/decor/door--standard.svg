@@ -15,12 +15,9 @@
     </filter>
   </defs>
   <path d="M 219.99999 -0.000003 L 219.99999 399.9999 L 0.000001 399.9999 L 0.000001 -0.000003 L 219.99999 -0.000003 Z" style="stroke: rgb(0, 0, 0); filter: none; fill: rgb(170, 170, 170);">
-    <title>back</title>
+    <title>bg</title>
   </path>
-  <path d="M 208.888879 9.884629 L 208.888879 399.999871 L 11.111112 399.999871 L 11.111112 9.884629 L 208.888879 9.884629 Z" style="stroke: rgb(0, 0, 0); filter: url('#filter-3');">
-    <title>back</title>
-  </path>
-  <path d="M 179.51923 43.226103 L 179.51923 356.773876 L 40.480775 356.773876 L 40.480775 43.226103 L 179.51923 43.226103 Z" style="filter: none; fill: none; stroke-width: 4px; stroke: rgb(136, 136, 136);">
-    <title>back</title>
+  <path d="M 209.999988 30.000002 L 209.999988 400.000028 L 10 400.000028 L 10 30.000002 L 209.999988 30.000002 Z" style="stroke: rgb(0, 0, 0); filter: url('#filter-3');">
+    <title>inner</title>
   </path>
 </svg>

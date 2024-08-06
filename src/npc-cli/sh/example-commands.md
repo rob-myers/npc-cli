@@ -46,13 +46,16 @@ call '() => { throw Error("bad") }'
 }
 
 w gmsData.g-102--research-deck.hitCtxt.canvas.toDataURL | log
+
+# log events with timestamp
+events | flatMap 'x => [new Date().toGMTString(), x]'
 ```
 
 ## Local variables
 
 ```sh
-( local y=42; echo $y )
-( local y='{ foo: 42 }'; y/foo )
+( local y; y=42; echo $y )
+( local y; y='{ foo: 42 }'; y/foo )
 ```
 
 ## if then elif else

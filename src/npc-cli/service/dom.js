@@ -77,9 +77,8 @@ export function drawPolygons(ct, polys, [fillStyle, strokeStyle, lineWidth] = []
     }
     if (fillStyle !== null) {
       clip === false ? ct.fill() : ct.clip();
-    } else {
-      ct.closePath();
     }
+    ct.closePath();
     if (strokeStyle !== null) {
       ct.stroke();
     }

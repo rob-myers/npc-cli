@@ -18,8 +18,9 @@
 - 🚧 doors have small wall above them
   - ✅ wall meta should have roomId
     - increase resolution of hitTest canvas
-  - 🚧 try extending `Walls` with two quads per door
+  - ✅ try extending `Walls` with two quads per door
     - i.e. two degenerate "one-segment-walls"
+  - clean
   - locked indicator could go in center
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet

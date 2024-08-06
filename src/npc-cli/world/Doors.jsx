@@ -114,7 +114,7 @@ export default function Doors(props) {
 
       return geomorphService.embedXZMat4(
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x + offsetX, src.y + offsetY],
-        { yScale: wallHeight, mat4: tmpMatFour1 },
+        { yScale: wallHeight - 0.2, mat4: tmpMatFour1 }, // 🚧 hard-coding
       );
     },
     getOpenIds(gmId) {
