@@ -385,14 +385,14 @@ export default function Decor(props) {
     positionInstances() { 
       const { cuboidInst, quadInst, labelInst } = state;
       
-      const defaultCuboidColor = '#ddd';
+      const defaultCuboidColor = '#ddd'; // 🚧 move to const
       for (const [instId, d] of state.cuboids.entries()) {
         const mat4 = state.createCuboidMatrix4(d);
         cuboidInst.setMatrixAt(instId, mat4);
         cuboidInst.setColorAt(instId, getColor(d.meta.color ?? defaultCuboidColor));
       }
       
-      const defaultQuadColor = 'white';
+      const defaultQuadColor = 'white'; // 🚧 move to const
       for (const [instId, d] of state.quads.entries()) {
         const mat4 = state.createQuadMatrix4(d);
         quadInst.setMatrixAt(instId, mat4);

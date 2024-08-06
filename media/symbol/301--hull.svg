@@ -197,7 +197,7 @@
     <title>decor label=study</title>
   </rect>
   <use width="1" height="1" transform="matrix(150, 0, 0, 100, 1049.5, 1249.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor cuboid table nav h=0.5 y=0 color=#a99</title>
+    <title>decor cuboid table nav h=0.5 y=0 color=#777</title>
   </use>
   <path d="M 1545 655 L 1845 655 L 1845 431.214 L 2050.65 650.0385 L 2024.3923 687.3244 L 1968.33235 763.8634 L 1901.7205 864.2934 L 1901.19345 865.33325 L 1900.9294 865.8541 L 1900.7969 866.11555 L 1900.39725 866.9041 L 1844.2968 977.72225 L 1802.91315 1071.1835 L 1774.64465 1150.335 L 1545.00015 1152.522 L 1545 655 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(0, 0, 255);">
     <title>poly ceil fill=#222222 stroke=#777777 strokeWidth=4</title>

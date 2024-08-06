@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
-import { getQuadGeometryXZ } from "../service/three";
+import { getColor, getQuadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
 import { geomorphService } from "../service/geomorph";
 import { WorldContext } from "./world-context";
@@ -126,13 +126,20 @@ export default function Obstacles(props) {
     positionObstacles() {
       const { inst: obsInst } = state;
       let oId = 0;
+      const defaultObstacleColor = '#fff'; // 🚧 move to const
       w.gms.forEach(({ obstacles, transform: gmTransform }) => {
-        obstacles.forEach((obstacle) => {
-          const mat4 = state.createObstacleMatrix4(gmTransform, obstacle);
-          obsInst.setMatrixAt(oId++, mat4);
+        obstacles.forEach(o => {
+          const mat4 = state.createObstacleMatrix4(gmTransform, o);
+          obsInst.setColorAt(oId, getColor(o.meta.color ?? defaultObstacleColor));
+          obsInst.setMatrixAt(oId, mat4);
+          oId++;
         });
       });
+
       obsInst.instanceMatrix.needsUpdate = true;
+      if (obsInst.instanceColor !== null) {
+        obsInst.instanceColor.needsUpdate = true;
+      }
       obsInst.computeBoundingSphere();
     },
   }));

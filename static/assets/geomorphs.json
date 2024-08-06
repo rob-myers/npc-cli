@@ -1,9 +1,9 @@
 {
-  "hash": "610044716 -183164454 -1920579226 652981726",
+  "hash": "610044716 1502680077 -1920579226 615878483",
   "mapsHash": 610044716,
-  "layoutsHash": -183164454,
+  "layoutsHash": 1502680077,
   "sheetsHash": -1920579226,
-  "imagesHash": 652981726,
+  "imagesHash": 615878483,
   "map": {
     "demo-map-1": {
       "key": "demo-map-1",
@@ -6375,11 +6375,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 0, 0],
           "center": {"x": 3, "y": 1.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "fuel--010--4x2",
@@ -6390,11 +6400,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 9, 0],
           "center": {"x": 12, "y": 1.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "fuel--010--4x2",
@@ -6405,11 +6425,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 15, 0],
           "center": {"x": 18, "y": 1.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "fuel--010--4x2",
@@ -6420,11 +6450,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 24, 0],
           "center": {"x": 27, "y": 1.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "fuel--010--4x2",
@@ -6435,11 +6475,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 9, 27],
           "center": {"x": 12, "y": 28.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "fuel--010--4x2",
@@ -6450,11 +6500,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 15, 27],
           "center": {"x": 18, "y": 28.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "fuel--010--4x2",
@@ -6465,11 +6525,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 24.03, 27],
           "center": {"x": 27.03, "y": 28.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "fuel--010--4x2",
@@ -6480,11 +6550,21 @@
             "coordinates": [
               [[6.09, -0.1], [6.09, 3.095], [-0.1, 3.095], [-0.1, -0.1]]
             ],
-            "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+            "meta": {
+              "obstacle": true,
+              "color": "#ddd",
+              "symKey": "fuel--010--4x2",
+              "obsId": 0
+            }
           },
           "transform": [1, 0, 0, 1, 0, 27],
           "center": {"x": 3, "y": 28.5},
-          "meta": {"obstacle": true, "symKey": "fuel--010--4x2", "obsId": 0}
+          "meta": {
+            "obstacle": true,
+            "color": "#ddd",
+            "symKey": "fuel--010--4x2",
+            "obsId": 0
+          }
         },
         {
           "symbolKey": "machinery--158--1.8x3.6",
@@ -6515,6 +6595,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "color": "#ddd",
               "symKey": "machinery--158--1.8x3.6",
               "obsId": 0
             }
@@ -6523,6 +6604,7 @@
           "center": {"x": 3.54, "y": 3.94},
           "meta": {
             "obstacle": true,
+            "color": "#ddd",
             "symKey": "machinery--158--1.8x3.6",
             "obsId": 0
           }
@@ -6567,6 +6649,7 @@
             "meta": {
               "obstacle": true,
               "machine": true,
+              "color": "#ddd",
               "symKey": "machinery--156--2x4",
               "obsId": 0
             }
@@ -6576,6 +6659,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
+            "color": "#ddd",
             "symKey": "machinery--156--2x4",
             "obsId": 0
           }
@@ -6588,35 +6672,37 @@
             "type": "Polygon",
             "coordinates": [
               [
-                [0.295, 0.275],
-                [0.8904, 0.275],
-                [0.891, 0.4438],
-                [1.791, 0.4664],
-                [1.8077, 1.2916],
-                [2.1743, 1.2961],
-                [2.1834, 0.275],
-                [2.7983, 0.275],
-                [2.7983, 5.2755],
-                [2.3565, 5.7552],
-                [0.195, 5.755],
-                [0.195, 2.6608],
-                [1.0432, 2.6582],
-                [1.0466, 2.1132],
-                [0.6023, 2.1073],
-                [0.5975, 1.6184],
-                [0.295, 1.6105]
+                [0.3, 0.275],
+                [0.8954, 0.275],
+                [0.896, 0.4438],
+                [1.796, 0.4664],
+                [1.8127, 1.2916],
+                [2.1793, 1.2961],
+                [2.1884, 0.275],
+                [2.8033, 0.275],
+                [2.8033, 5.2755],
+                [2.3615, 5.7552],
+                [0.2, 5.755],
+                [0.2, 2.6608],
+                [1.0482, 2.6582],
+                [1.0516, 2.1132],
+                [0.6073, 2.1073],
+                [0.6025, 1.6184],
+                [0.3, 1.6105]
               ]
             ],
             "meta": {
               "obstacle": true,
+              "color": "#ddd",
               "symKey": "machinery--155--1.8x3.6",
               "obsId": 0
             }
           },
           "transform": [0, -1, 1, 0, 24, 6],
-          "center": {"x": 26.01, "y": 4.71},
+          "center": {"x": 26.01, "y": 4.7},
           "meta": {
             "obstacle": true,
+            "color": "#ddd",
             "symKey": "machinery--155--1.8x3.6",
             "obsId": 0
           }
@@ -8448,20 +8534,20 @@
           {"x": 23.605, "y": 0.4},
           {"x": 23.605, "y": 3.395},
           {"x": 24.275, "y": 3.395},
-          {"x": 24.275, "y": 3.8166},
-          {"x": 25.2961, "y": 3.8257},
-          {"x": 25.2916, "y": 4.1923},
-          {"x": 24.4664, "y": 4.209},
-          {"x": 24.4438, "y": 5.109},
-          {"x": 24.275, "y": 5.1096},
-          {"x": 24.275, "y": 5.705},
-          {"x": 25.6105, "y": 5.705},
-          {"x": 25.6184, "y": 5.4025},
-          {"x": 26.1073, "y": 5.3977},
-          {"x": 26.1132, "y": 4.9534},
-          {"x": 26.6582, "y": 4.9568},
-          {"x": 26.6608, "y": 5.805},
-          {"x": 29.6, "y": 5.805},
+          {"x": 24.275, "y": 3.8116},
+          {"x": 25.2961, "y": 3.8207},
+          {"x": 25.2916, "y": 4.1873},
+          {"x": 24.4664, "y": 4.204},
+          {"x": 24.4438, "y": 5.104},
+          {"x": 24.275, "y": 5.1046},
+          {"x": 24.275, "y": 5.7},
+          {"x": 25.6105, "y": 5.7},
+          {"x": 25.6184, "y": 5.3975},
+          {"x": 26.1073, "y": 5.3927},
+          {"x": 26.1132, "y": 4.9484},
+          {"x": 26.6582, "y": 4.9518},
+          {"x": 26.6608, "y": 5.8},
+          {"x": 29.6, "y": 5.8},
           {"x": 29.6, "y": 6.6},
           {"x": 29.9, "y": 6.6},
           {"x": 29.9, "y": 8.4},
@@ -12967,6 +13053,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "color": "#ddd",
               "symKey": "machinery--158--1.8x3.6",
               "obsId": 0
             }
@@ -12975,6 +13062,7 @@
           "center": {"x": 2.06, "y": 3.54},
           "meta": {
             "obstacle": true,
+            "color": "#ddd",
             "symKey": "machinery--158--1.8x3.6",
             "obsId": 0
           }
@@ -15385,6 +15473,7 @@
             "meta": {
               "obstacle": true,
               "machine": true,
+              "color": "#ddd",
               "symKey": "machinery--156--2x4",
               "obsId": 0
             }
@@ -15394,6 +15483,7 @@
           "meta": {
             "obstacle": true,
             "machine": true,
+            "color": "#ddd",
             "symKey": "machinery--156--2x4",
             "obsId": 0
           }
@@ -20392,7 +20482,7 @@
             "nav": true,
             "h": 0.5,
             "y": 0,
-            "color": "#a99"
+            "color": "#777"
           },
           "bounds2d": {"x": 4.875, "y": 6, "width": 0.75, "height": 0.5},
           "transform": [0.75, 0, 0, 0.5, 4.875, 6],
@@ -30334,7 +30424,7 @@
             "poly": true,
             "ceil": true,
             "fill": "#222222",
-            "stroke": "#ffffff",
+            "stroke": "#999999",
             "strokeWidth": 4
           }
         }
