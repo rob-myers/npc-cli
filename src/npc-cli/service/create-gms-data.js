@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { doorDepth, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
+import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
@@ -42,15 +42,7 @@ export default function createGmsData({ prevGmData }) {
       gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
       gmData.wallSegs = [
         ...gm.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta }))),
-        // 2 extra segs per door i.e. "wall joiners" parallel to door.seg
-        ...gm.doors.flatMap(({ seg: [u, v], normal, meta }) => {
-          const depth = meta.hull === true ? hullDoorDepth : doorDepth;
-          meta = { ...meta, y: 1.8, h: 0.2 }; // 🚧 hard-coding
-          return [
-            { seg: /** @type {[Geom.Vect, Geom.Vect]} */ ([u, v].map(p => p.clone().addScaled(normal,  0.5 * depth))), meta },
-            { seg: /** @type {[Geom.Vect, Geom.Vect]} */ ([u, v].map(p => p.clone().addScaled(normal, -0.5 * depth))), meta },
-          ];
-        }),
+        ...gm.doors.flatMap(connector => this.getLintelSegs(connector)),
       ];
       gmData.wallPolyCount = gm.walls.length;
       gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
@@ -59,8 +51,7 @@ export default function createGmsData({ prevGmData }) {
       const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
       );
-      // inset so stroke does not jut out
-      gmData.nonHullCeilTops = nonHullWallsTouchCeil.flatMap(x => geom.createInset(x, 0.0));
+      gmData.nonHullCeilTops = nonHullWallsTouchCeil;
       gmData.doorCeilTops = gm.doors.map(door => door.computeThinPoly());
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
@@ -171,6 +162,21 @@ export default function createGmsData({ prevGmData }) {
         return gm.doors[rgba[2]].roomIds.find(x => typeof x === 'number') ?? null;
       }
       return null;
+    },
+    /**
+     * Two wall segments representing lintels i.e. wall above each door
+     * @param {Geomorph.Connector} connector 
+     * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta }[]}
+     */
+    getLintelSegs({ seg: [u, v], normal, meta }) {
+      const depth = meta.hull === true ? hullDoorDepth : doorDepth;
+      meta = { ...meta, y: doorHeight, h: wallHeight - doorHeight };
+      return [1, -1].map(sign => ({
+        seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
+          [u, v].map(p => p.clone().addScaled(normal, sign * 0.5 * depth))
+        ),
+        meta,
+      }));
     },
   };
   return gmsData;

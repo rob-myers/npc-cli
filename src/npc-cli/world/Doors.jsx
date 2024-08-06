@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { defaultDoorCloseMs, wallHeight } from "../service/const";
+import { defaultDoorCloseMs, doorHeight, wallHeight } from "../service/const";
 import * as glsl from "../service/glsl";
 import { quadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
@@ -114,7 +114,7 @@ export default function Doors(props) {
 
       return geomorphService.embedXZMat4(
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x + offsetX, src.y + offsetY],
-        { yScale: wallHeight - 0.2, mat4: tmpMatFour1 }, // 🚧 hard-coding
+        { yScale: doorHeight, mat4: tmpMatFour1 },
       );
     },
     getOpenIds(gmId) {

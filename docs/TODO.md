@@ -20,8 +20,8 @@
     - increase resolution of hitTest canvas
   - ✅ try extending `Walls` with two quads per door
     - i.e. two degenerate "one-segment-walls"
-  - clean
-  - locked indicator could go in center
+  - ✅ clean
+  - 🚧 locked indicator could go in center
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet
 - navQuery blocks non-auto doors
