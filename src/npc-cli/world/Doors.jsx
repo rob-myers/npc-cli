@@ -3,9 +3,9 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { defaultDoorCloseMs, doorHeight, wallHeight } from "../service/const";
+import { defaultDoorCloseMs, doorDepth, doorHeight, hullDoorDepth } from "../service/const";
 import * as glsl from "../service/glsl";
-import { getQuadGeometryXY } from "../service/three";
+import { boxGeometry, getQuadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
 import { geom } from "../service/geom";
 import { WorldContext } from "./world-context";
@@ -22,6 +22,7 @@ export default function Doors(props) {
     byKey: {},
     byGmId: {},
     doorsInst: /** @type {*} */ (null),
+    lockLightsInst: /** @type {*} */ (null),
     movingDoors: new Map(),
     npcToKeys: {},
 
@@ -74,8 +75,9 @@ export default function Doors(props) {
             sealed: hull ? w.gmGraph.getDoorNodeById(gmId, doorId).sealed : false,
             hull,
 
-            ratio: prev?.ratio ?? 1, // closed ~ ratio 1 i.e. maximal door length
+            ratio: prev?.ratio ?? 1, // 1 means closed
             src: tmpVec1.json,
+            dst: tmpVec2.json,
             dir: { x : Math.cos(radians), y: Math.sin(radians) }, // 🚧 provide in Connector
             normal: tmpMat1.transformSansTranslate(normal.clone()),
             segLength: u.distanceTo(v),
@@ -115,6 +117,15 @@ export default function Doors(props) {
       return geomorphService.embedXZMat4(
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x + offsetX, src.y + offsetY],
         { yScale: doorHeight, mat4: tmpMatFour1 },
+      );
+    },
+    getLockLightMat(meta) {
+      const center = tmpVec1.copy(meta.src).add(meta.dst).scale(1/2);
+      const sx = 0.4;
+      const sz = (meta.hull ? hullDoorDepth : doorDepth) + 0.025 * 2;
+      return geomorphService.embedXZMat4(
+        [sx * meta.dir.x, sx * meta.dir.y, sz * meta.normal.x, sz * meta.normal.y, center.x, center.y],
+        { yScale: 0.1 / 2, yHeight: doorHeight + 0.1, mat4: tmpMatFour1 },
       );
     },
     getOpenIds(gmId) {
@@ -173,12 +184,15 @@ export default function Doors(props) {
       instanceMatrix.needsUpdate = true;
     },
     positionInstances() {
-      const { doorsInst: ds } = state;
-      Object.values(state.byKey).forEach(meta =>
-        ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta))
-      );
+      const { doorsInst: ds, lockLightsInst: ls } = state;
+      for (const meta of Object.values(state.byKey)) {
+        ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta));
+        ls.setMatrixAt(meta.instanceId, state.getLockLightMat(meta));
+      }
       ds.instanceMatrix.needsUpdate = true;
+      ls.instanceMatrix.needsUpdate = true;
       ds.computeBoundingSphere();
+      ls.computeBoundingSphere();
     },
     removeFromSensors(npcKey) {
       for (const gmDoorKey of state.npcToKeys[npcKey] ?? []) {
@@ -262,10 +276,10 @@ export default function Doors(props) {
     state.addDoorUvs();
   }, [w.hash, w.gmsData.doorCount]);
 
-  return (
+  return <>
     <instancedMesh
       name="doors"
-      key={w.hash}
+      key={`${w.hash} doors`}
       ref={instances => instances && (state.doorsInst = instances)}
       args={[getQuadGeometryXY('doors-xy'), undefined, w.gmsData.doorCount]}
       frustumCulled={false}
@@ -280,7 +294,21 @@ export default function Doors(props) {
         diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
       />
     </instancedMesh>
-  );
+
+    <instancedMesh
+      name="lock-lights"
+      key={`${w.hash} lock-lights`}
+      ref={instances => instances && (state.lockLightsInst = instances)}
+      args={[boxGeometry, undefined, w.gmsData.doorCount]}
+      frustumCulled={false}
+    >
+      <meshDiffuseTestMaterial
+        key={glsl.MeshDiffuseTestMaterial.key}
+        side={THREE.DoubleSide} // fix flipped gm
+        diffuse={[.8, 1, .8]}
+      />
+    </instancedMesh>
+  </>;
 }
 
 /**
@@ -290,10 +318,11 @@ export default function Doors(props) {
 
 /**
  * @typedef State
- * @property {THREE.InstancedMesh} doorsInst
  * @property {{ [gmId in number]: Geomorph.DoorState[] }} byGmId
  * @property {Geomorph.DoorState[]} byInstId e.g. `byInstId[instanceId]`
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
+ * @property {THREE.InstancedMesh} doorsInst
+ * @property {THREE.InstancedMesh} lockLightsInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
  *
  * @property {() => void} addDoorUvs
@@ -301,6 +330,7 @@ export default function Doors(props) {
  * @property {(item: Geomorph.DoorState) => void} cancelClose
  * @property {(instanceId: number) => Geom.Meta} decodeDoorInstanceId
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
+ * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockLightMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor

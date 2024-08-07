@@ -1319,14 +1319,11 @@ export class Connector {
    * @returns {Geom.Poly}
    */
   computeThinPoly() {
-    const width = this.baseRect.width;
     const height = this.meta.hull ? hullDoorDepth : doorDepth;
     const hNormal = this.normal;
-    const wNormal = tmpVect1.set(this.normal.y, -this.normal.x);
-
     const topLeft = this.seg[0].clone().addScaled(hNormal, -height/2);
     const botLeft = topLeft.clone().addScaled(hNormal, height);
-    const botRight = botLeft.clone().addScaled(wNormal, width);
+    const botRight = this.seg[1].clone().addScaled(hNormal, height/2);
     const topRight = botRight.clone().addScaled(hNormal, -height);
     return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
   }

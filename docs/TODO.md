@@ -22,7 +22,8 @@
     - i.e. two degenerate "one-segment-walls"
   - ✅ clean
   - 🚧 locked indicator could go in center
-    - render them inside `Doors`
+    - ✅ render them inside `Doors`
+    - green unlocked, red locked, ...
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet
 - navQuery blocks non-auto doors

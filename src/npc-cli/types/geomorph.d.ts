@@ -57,8 +57,10 @@ declare namespace Geomorph {
 
     /** Between `0.1` (open) and `1` (closed) */
     ratio: number;
-    /** Source of transformed door segment */
+    /** Src of transformed door segment */
     src: Geom.VectJson;
+    /** Dst of transformed door segment */
+    dst: Geom.VectJson;
     /** Direction of transformed door segment */
     dir: Geom.VectJson;
     normal: Geom.VectJson;
