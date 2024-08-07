@@ -22,6 +22,7 @@
     - i.e. two degenerate "one-segment-walls"
   - ✅ clean
   - 🚧 locked indicator could go in center
+    - render them inside `Doors`
 - doors can slide in specific direction
   - sometimes not possible e.g. toilet
 - navQuery blocks non-auto doors
@@ -41,6 +42,11 @@
   - ensure up to date
   - work on migrating Viewer
 
+- geometry attributes are a possible memory leak
+  - could update geometry attributes rather than create new attributes
+    - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
+    - i.e. preset large bounds, and use geometry.setDrawRange
+  - could use underlying gl api to remove attributes
 - 🚧 hmr issue editing obstacle outline
   - seems fixed by always re-generating obstacle texture, irrespective of size change
 - towards faster raycast against instancedmesh
@@ -54,7 +60,7 @@
 - workers should only hot reload when directly edited or geomorphs.json changes
   - workers should get constants from geomorphs.json
   - otherwise might restart early, retrieving old geomorphs.json
-- can color obstacles
+- ✅ can color obstacles
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
 - permit single quotes inside e.g. game-generators

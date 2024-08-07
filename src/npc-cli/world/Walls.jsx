@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { Mat, Vect } from "../geom";
 import { wallHeight } from "../service/const";
-import { quadGeometryXY } from "../service/three";
+import { getQuadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -94,7 +94,7 @@ export default function Walls(props) {
       name="walls"
       key={w.hash}
       ref={instances => instances && (state.wallsInst = instances)}
-      args={[quadGeometryXY, undefined, w.gmsData.wallCount]}
+      args={[getQuadGeometryXY('walls-xy'), undefined, w.gmsData.wallCount]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}

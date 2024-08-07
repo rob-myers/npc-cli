@@ -5,7 +5,7 @@ import { damp } from "maath/easing"
 import { Mat, Vect } from "../geom";
 import { defaultDoorCloseMs, doorHeight, wallHeight } from "../service/const";
 import * as glsl from "../service/glsl";
-import { quadGeometryXY } from "../service/three";
+import { getQuadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
 import { geom } from "../service/geom";
 import { WorldContext } from "./world-context";
@@ -267,7 +267,7 @@ export default function Doors(props) {
       name="doors"
       key={w.hash}
       ref={instances => instances && (state.doorsInst = instances)}
-      args={[quadGeometryXY, undefined, w.gmsData.doorCount]}
+      args={[getQuadGeometryXY('doors-xy'), undefined, w.gmsData.doorCount]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}

@@ -17,7 +17,7 @@ quadGeometryXZ.setAttribute("normal", new THREE.Float32BufferAttribute( xzNormal
 quadGeometryXZ.setIndex(xzIndices.slice());
 
 /** Cache to avoid re-creation on HMR */
-const quadLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
+const quadXZLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
 
 const colorLookup = /** @type {Record<string, THREE.Color>} */ ({});
 
@@ -28,7 +28,7 @@ const rotMatLookup = /** @type {Record<string, THREE.Matrix4>} */ ({});
  * @param {string} key
  */
 export function getQuadGeometryXZ(key) {
-  return quadLookup[key] ??= quadGeometryXZ.clone();
+  return quadXZLookup[key] ??= quadGeometryXZ.clone();
 }
 
 /**
@@ -74,7 +74,7 @@ export function setRotMatrixAboutPoint(mat, cx, cy, cz) {
 
 // 🚧 cache XY quad geometries too
 /** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
-export const quadGeometryXY = new THREE.BufferGeometry();
+const quadGeometryXY = new THREE.BufferGeometry();
 const xyVertices = new Float32Array([0,0,0, 0,1,0, 1,1,0, 1,0,0]);
 const xyUvs = new Float32Array([0,1, 0,0, 1,0, 1,1]); // flipY false, Origin at topLeft of image
 const xyIndices = [2, 1, 0, 0, 3, 2];
@@ -83,6 +83,17 @@ quadGeometryXY.setAttribute("position", new THREE.BufferAttribute(xyVertices.sli
 quadGeometryXY.setAttribute("uv", new THREE.BufferAttribute(xyUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xyNormals.slice(), 3 ) );
 quadGeometryXY.setIndex(xyIndices.slice());
+
+/** Cache to avoid re-creation on HMR */
+const quadXYLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
+
+/**
+ * Clone to avoid overwriting attributes used by custom shaders
+ * @param {string} key
+ */
+export function getQuadGeometryXY(key) {
+  return quadXYLookup[key] ??= quadGeometryXY.clone();
+}
 
 export const tmpBufferGeom1 = new THREE.BufferGeometry();
 
