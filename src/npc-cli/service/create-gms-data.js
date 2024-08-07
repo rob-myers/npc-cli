@@ -46,7 +46,9 @@ export default function createGmsData({ prevGmData }) {
       ];
       gmData.wallPolyCount = gm.walls.length;
       gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
-        outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
+        outline.length // main walls
+        + holes.reduce((sum, hole) => sum + hole.length, 0) // inner walls
+        + 2 * gm.doors.length // lintels
       );
       const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
