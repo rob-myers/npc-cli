@@ -50,7 +50,7 @@ export default function useHandleEvents(w) {
           (w.door.npcToKeys[e.npcKey] ??= new Set).add(e.gdKey);
           
           if (door.auto === true) {
-            w.door.toggleByKey(e.gdKey, { open: true });
+            w.door.toggleKey(e.gdKey, { open: true });
           }
           break;
         }

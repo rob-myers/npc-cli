@@ -23,9 +23,10 @@
   - ✅ clean
   - 🚧 locked indicator could go in center
     - ✅ render them inside `Doors`
-    - green unlocked, red locked, ...
+    - ✅ green unlocked, red locked
+    - 🚧 setup initially locked/unlocked doors
 - doors can slide in specific direction
-  - sometimes not possible e.g. toilet
+  - try scaling door and changing uv map
 - navQuery blocks non-auto doors
 - support non-door sensor i.e. decor circle/poly
 - mobile has difficulty pressing switches

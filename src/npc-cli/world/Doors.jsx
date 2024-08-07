@@ -3,9 +3,9 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { defaultDoorCloseMs, doorDepth, doorHeight, hullDoorDepth } from "../service/const";
+import { defaultDoorCloseMs, doorDepth, doorHeight, doorLockedColor, hullDoorDepth } from "../service/const";
 import * as glsl from "../service/glsl";
-import { boxGeometry, getQuadGeometryXY } from "../service/three";
+import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
 import { geom } from "../service/geom";
 import { WorldContext } from "./world-context";
@@ -98,7 +98,7 @@ export default function Doors(props) {
       //   state.cancelClose(state.byGmId[adjHull.adjGmId][adjHull.adjDoorId]);
       // }
     },
-    decodeDoorInstanceId(instanceId) {
+    decodeDoorInstance(instanceId) {
       let doorId = instanceId;
       const gmId = w.gms.findIndex((gm) => (
         doorId < gm.doors.length ? true : (doorId -= gm.doors.length, false)
@@ -148,7 +148,7 @@ export default function Doors(props) {
         event: e,
         is3d: true,
         justLongDown: false,
-        meta: state.decodeDoorInstanceId(/** @type {number} */ (e.instanceId)),
+        meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
       }));
       e.stopPropagation();
     },
@@ -157,7 +157,7 @@ export default function Doors(props) {
         key: "pointerup",
         event: e,
         is3d: true,
-        meta: state.decodeDoorInstanceId(/** @type {number} */ (e.instanceId)),
+        meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
       }));
       e.stopPropagation();
     },
@@ -188,9 +188,13 @@ export default function Doors(props) {
       for (const meta of Object.values(state.byKey)) {
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta));
         ls.setMatrixAt(meta.instanceId, state.getLockLightMat(meta));
+        ls.setColorAt(meta.instanceId, getColor(meta.locked ? doorLockedColor : doorLockedColor));
       }
       ds.instanceMatrix.needsUpdate = true;
       ls.instanceMatrix.needsUpdate = true;
+      if (ls.instanceColor !== null) {
+        ls.instanceColor.needsUpdate = true;
+      }
       ds.computeBoundingSphere();
       ls.computeBoundingSphere();
     },
@@ -246,13 +250,13 @@ export default function Doors(props) {
 
       return door.open;
     },
-    toggleById(gmId, doorId, opts) {
+    toggleId(gmId, doorId, opts) {
       return state.toggle(state.byGmId[gmId][doorId], opts);
     },
-    toggleByInstance(instanceId, opts) {
+    toggleInstance(instanceId, opts) {
       return state.toggle(state.byInstId[instanceId], opts);
     },
-    toggleByKey(gmDoorKey, opts) {
+    toggleKey(gmDoorKey, opts) {
       return state.toggle(state.byKey[gmDoorKey], opts);
     },
     tryCloseDoor(gmId, doorId) {
@@ -305,7 +309,7 @@ export default function Doors(props) {
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
-        diffuse={[.8, 1, .8]}
+        diffuse={[1, 1, 1]}
       />
     </instancedMesh>
   </>;
@@ -328,7 +332,7 @@ export default function Doors(props) {
  * @property {() => void} addDoorUvs
  * @property {() => void} buildLookups
  * @property {(item: Geomorph.DoorState) => void} cancelClose
- * @property {(instanceId: number) => Geom.Meta} decodeDoorInstanceId
+ * @property {(instanceId: number) => Geom.Meta} decodeDoorInstance
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockLightMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
@@ -340,9 +344,9 @@ export default function Doors(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggle
- * @property {(gmId: number, doorId: number, opts?: ToggleDoorOpts) => boolean} toggleById
- * @property {(instanceId: number, opts?: ToggleDoorOpts) => boolean} toggleByInstance
- * @property {(gmDoorKey: Geomorph.GmDoorKey, opts?: ToggleDoorOpts) => boolean} toggleByKey
+ * @property {(gmId: number, doorId: number, opts?: ToggleDoorOpts) => boolean} toggleId
+ * @property {(instanceId: number, opts?: ToggleDoorOpts) => boolean} toggleInstance
+ * @property {(gmDoorKey: Geomorph.GmDoorKey, opts?: ToggleDoorOpts) => boolean} toggleKey
  * @property {(gmId: number, doorId: number) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {() => void} onTick

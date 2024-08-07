@@ -63,6 +63,10 @@ export const hullDoorDepth = 40 * sguToWorldScale * sguSymbolScaleDown;
 /** Depth of doorway along line walking through door */
 export const doorDepth = 20 * sguToWorldScale * sguSymbolScaleDown;
 
+export const doorLockedColor = 'rgb(255, 200, 200)';
+
+export const doorUnlockedColor = 'rgb(200, 255, 200)';
+
 /**
  * Properties of exported GLB file.
  */
