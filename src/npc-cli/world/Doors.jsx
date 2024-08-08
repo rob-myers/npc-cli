@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { defaultDoorCloseMs, doorDepth, doorHeight, doorLockedColor, hullDoorDepth } from "../service/const";
+import { defaultDoorCloseMs, doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth } from "../service/const";
 import * as glsl from "../service/glsl";
 import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
@@ -70,7 +70,7 @@ export default function Doors(props) {
             door,
 
             auto: true, // 🚧
-            locked: false, // 🚧
+            locked: door.meta.locked === true, // 🚧 remember previous
             open : prev?.open ?? false,
             sealed: hull ? w.gmGraph.getDoorNodeById(gmId, doorId).sealed : false,
             hull,
@@ -188,7 +188,7 @@ export default function Doors(props) {
       for (const meta of Object.values(state.byKey)) {
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta));
         ls.setMatrixAt(meta.instanceId, state.getLockLightMat(meta));
-        ls.setColorAt(meta.instanceId, getColor(meta.locked ? doorLockedColor : doorLockedColor));
+        ls.setColorAt(meta.instanceId, getColor(meta.locked ? doorLockedColor : doorUnlockedColor));
       }
       ds.instanceMatrix.needsUpdate = true;
       ls.instanceMatrix.needsUpdate = true;
