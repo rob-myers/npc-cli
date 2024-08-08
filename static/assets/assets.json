@@ -233,13 +233,13 @@
       "obsHashes": [-2082156787]
     },
     "lab--012--4x3": {
-      "outputHash": -240122919,
+      "outputHash": -1140543211,
       "pngHash": -261688393,
       "obsHashes": [-1053519075]
     },
     "lab--018--4x4": {"outputHash": 473613343, "pngHash": -113261385},
     "lab--023--4x4": {
-      "outputHash": -407432837,
+      "outputHash": 2052922649,
       "pngHash": -1594118441,
       "obsHashes": [1641095410]
     },
@@ -11477,14 +11477,14 @@
           "coordinates": [
             [[6.075, 1.7], [6.075, 2.8], [5.925, 2.8], [5.925, 1.7]]
           ],
-          "meta": {"door": true}
+          "meta": {"door": true, "locked": true}
         },
         {
           "type": "Polygon",
           "coordinates": [
             [[6.075, 3.2], [6.075, 4.3], [5.925, 4.3], [5.925, 3.2]]
           ],
-          "meta": {"door": true}
+          "meta": {"door": true, "locked": true}
         }
       ],
       "windows": [],
@@ -11818,7 +11818,7 @@
               [1.6919, -0.075]
             ]
           ],
-          "meta": {"door": true}
+          "meta": {"door": true, "locked": true}
         }
       ],
       "windows": [],

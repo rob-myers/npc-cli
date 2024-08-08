@@ -90,7 +90,7 @@
     <title>obstacle surface y=0.6</title>
   </path>
   <rect x="338.388" y="-15" width="220" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 584.5, -11.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0</title>

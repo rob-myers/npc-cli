@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 -2140282473 -1920579226 647396119",
+  "hash": "610044716 -1804392041 -1920579226 647396119",
   "mapsHash": 610044716,
-  "layoutsHash": -2140282473,
+  "layoutsHash": -1804392041,
   "sheetsHash": -1920579226,
   "imagesHash": 647396119,
   "map": {
@@ -12500,7 +12500,7 @@
             "coordinates": [
               [[18.2, 8.925], [19.3, 8.925], [19.3, 9.075], [18.2, 9.075]]
             ],
-            "meta": {"door": true}
+            "meta": {"door": true, "locked": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -12511,7 +12511,7 @@
             "coordinates": [
               [[19.7, 8.925], [20.8, 8.925], [20.8, 9.075], [19.7, 9.075]]
             ],
-            "meta": {"door": true}
+            "meta": {"door": true, "locked": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -12527,7 +12527,7 @@
                 [21.075, 16.6919]
               ]
             ],
-            "meta": {"door": true}
+            "meta": {"door": true, "locked": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -12543,7 +12543,7 @@
                 [23.925, 17.7919]
               ]
             ],
-            "meta": {"door": true}
+            "meta": {"door": true, "locked": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
