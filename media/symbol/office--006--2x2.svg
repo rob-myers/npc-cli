@@ -78,7 +78,7 @@
     <title>wall window</title>
   </rect>
   <rect x="585" y="380" width="30" height="160" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door optional e</title>
+    <title>door optional e locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, -30, 30, 0, 587, 339.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0 inner</title>
@@ -87,7 +87,7 @@
     <title>decor quad switch=0</title>
   </use>
   <rect x="185" y="585" width="230" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door optional s</title>
+    <title>door optional s locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 449.5, 587.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=1 inner</title>
@@ -96,7 +96,7 @@
     <title>decor quad switch=1</title>
   </use>
   <rect y="380" width="30" height="160" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;" x="-15">
-    <title>door optional w</title>
+    <title>door optional w locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, -30, 30, 0, 12, 339.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=2 inner</title>

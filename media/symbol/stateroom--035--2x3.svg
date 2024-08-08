@@ -58,7 +58,7 @@
   </image>
   <g>
     <title>symbols</title>
-    <use width="500" height="300" transform="matrix(1, 0, 0, 1, -0.000006272146, 0.0000074738)" style="transform-origin: 250px 150px;" xlink:href="#symbol-0">
+    <use width="500" height="300" transform="matrix(1, 0, 0, 1, -0.000006272146947594592, 0.000007473800451407442)" style="transform-origin: 250px 150px;" xlink:href="#symbol-0">
       <title>bed--003--1x1.6 y=0.5</title>
     </use>
     <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 74.9978px 754.248px;" y="679.250427" transform="matrix(0, -1, 1, 0, -0.000167846679, -4.244918823242)">
@@ -96,21 +96,21 @@
     <title>wall</title>
   </rect>
   <rect x="330.000043" y="888" width="220.00003" height="24" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;">
-    <title>door</title>
+    <title>door  locked</title>
   </rect>
-  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 574.5, 888.664184570313)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 574.5, 888.6641845703125)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0 inner</title>
   </use>
-  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 574.5, 910.664184570313)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 574.5, 910.6641845703125)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0</title>
   </use>
   <rect x="300" y="288.25" width="230" height="24" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;" transform="matrix(0, 1, -1, 0, 599.25, 329.404357910156)">
     <title>door</title>
   </rect>
-  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 288.483367919922, 874.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 288.4833679199219, 874.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=1 inner</title>
   </use>
-  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 310.483367919922, 874.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(0, 30, -30, 0, 310.4833679199219, 874.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=1</title>
   </use>
 </svg>
