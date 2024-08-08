@@ -63,7 +63,7 @@
   </image>
   <g>
     <title>symbols</title>
-    <use width="500" height="300" transform="matrix(0, 1, -1, 0, -100.000015258789, 99.999984741211)" style="transform-origin: 250px 150px;" xlink:href="#symbol-1">
+    <use width="500" height="300" transform="matrix(0, 1, -1, 0, -100.00001525878906, 99.99998474121094)" style="transform-origin: 250px 150px;" xlink:href="#symbol-1">
       <title>bed--003--1x1.6 y=0.5</title>
     </use>
     <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 212.087px -751.575px;" y="-789.069885" x="174.580627" transform="matrix(1, 0, 0, -1, 0, 1503.150024414063)">
@@ -92,7 +92,7 @@
     <title>wall</title>
   </rect>
   <rect x="585" y="640" width="30" height="220" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 588.5, 624.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0 inner</title>

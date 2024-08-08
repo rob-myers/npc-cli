@@ -94,7 +94,7 @@
     <title>wall</title>
   </rect>
   <rect x="40" y="660" width="220" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(0, 1, -1, 0, -150, 75)">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, -30, 30, 0, 12, 299.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0 inner</title>
@@ -103,7 +103,7 @@
     <title>decor quad switch=0</title>
   </use>
   <rect x="40" y="660" width="220" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;" transform="matrix(0, 1, -1, 0, 675, 300.900024414063)">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, -30, 30, 0, 12, 899.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=1 inner</title>

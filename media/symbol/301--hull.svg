@@ -254,7 +254,7 @@
     <title>decor quad switch=3 inner</title>
   </use>
   <rect x="866.575012" y="1214.782715" width="30" height="220.000031" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;" transform="matrix(0, 1, -1, 0, 2674.782714843755, 318.424987792961)">
-    <title>door iris</title>
+    <title>door iris auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(30, 0, 0, 30, 1224.5, 1214.5)" style="transform-origin: 0.499998px 0.499998px;" xlink:href="#symbol-6">
     <title>decor quad switch=4 inner</title>
@@ -263,7 +263,7 @@
     <title>decor quad switch=4 inner</title>
   </use>
   <rect x="866.825012" y="-1434.782837" width="30" height="220.000031" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;" transform="matrix(0, 1, -1, 0, 3325.217285156237, 320.676147460936)">
-    <title>door iris</title>
+    <title>door iris auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(30, 0, 0, 30, 4774.5, 1214.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
     <title>decor quad switch=5 inner</title>

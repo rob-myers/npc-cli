@@ -295,7 +295,7 @@
     <title>decor quad switch=0</title>
   </use>
   <rect x="1788" y="1835" width="24" height="230" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 1812, 1814.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=1 inner</title>
@@ -313,7 +313,7 @@
     <title>decor quad switch=2</title>
   </use>
   <rect x="588" y="1240" width="24" height="220.000031" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, -30, 30, 0, 587, 1476.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=3 inner</title>
@@ -322,13 +322,13 @@
     <title>decor quad switch=3</title>
   </use>
   <rect x="426.007996" y="870.700012" width="24" height="230" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;" transform="matrix(0, -1, 1, 0, -235.700012207031, 1189.008056640625)">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 884.5, 740.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=4</title>
   </use>
   <rect x="425.993011" y="870.700012" width="24" height="230" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;" transform="matrix(0, -1, 1, 0, 664.299987792969, 1188.993041992188)">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 1514.5, 740.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=5</title>
@@ -342,8 +342,8 @@
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 884.5, 1490.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=6</title>
   </use>
-  <rect x="2387.516113" y="940" width="25.205999" height="220.000031" style="stroke: rgb(0, 0, 0); stroke-width: 4px; fill-opacity: 0.5; fill: rgb(255, 255, 255);">
-    <title>door iris</title>
+  <rect x="2387.516113" y="940" width="25.205999" height="220.000031" style="stroke: rgb(0, 0, 0); stroke-width: 4px; fill: rgb(255, 255, 255);">
+    <title>door iris auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 2388.5, 1176.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=7 inner</title>
@@ -352,7 +352,7 @@
     <title>decor quad switch=7</title>
   </use>
   <rect y="940" width="24" height="220.000031" style="stroke: rgb(0, 0, 0); stroke-width: 4px; fill: rgb(255, 255, 255);" x="-12">
-    <title>door iris</title>
+    <title>door iris auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 10.5, 1176.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=8 inner</title>

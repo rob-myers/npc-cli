@@ -81,7 +81,7 @@
     <title>wall optional w</title>
   </rect>
   <rect x="31.035999" y="2649.166992" width="30" height="220" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;" transform="matrix(0, 1, -1, 0, 3809.1669921875, 1153.963989257813)">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(30, 0, 0, 22.5, 1174.5, 1188.4931640625)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-19">
     <title>decor quad switch=0 inner</title>

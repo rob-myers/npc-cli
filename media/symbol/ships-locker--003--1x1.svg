@@ -47,9 +47,9 @@
     <title>wall</title>
   </rect>
   <rect x="50" width="200" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;" y="-15">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
-  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 274.5, 12.000000953674)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 274.5, 12.000000953674316)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0 inner</title>
   </use>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 274.5, -13)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">

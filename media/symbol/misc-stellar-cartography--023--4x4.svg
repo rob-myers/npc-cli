@@ -74,18 +74,18 @@
     <title>decor label='stellar cartography' y=0.71</title>
   </rect>
   <rect x="474.367156" y="33.753009" width="24.000008" height="200.000064" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;" transform="matrix(0.707106781187, -0.707106781187, 0.707106781187, 0.707106781187, 612.355102539058, 400.049835205078)">
-    <title>door</title>
+    <title>door locked</title>
   </rect>
-  <use width="1" height="1" transform="matrix(21.213203430176, 21.213203430176, -21.213203430176, 21.213203430176, 1127.656494140625, 245.987747192383)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(21.21320343017578, 21.21320343017578, -21.21320343017578, 21.21320343017578, 1127.656494140625, 245.9877471923828)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0 inner</title>
   </use>
-  <use width="1" height="1" transform="matrix(21.213203430176, 21.213203430176, -21.213203430176, 21.213203430176, 1146.041381835938, 227.602920532227)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(21.21320343017578, 21.21320343017578, -21.21320343017578, 21.21320343017578, 1146.0413818359375, 227.60292053222656)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0</title>
   </use>
-  <use width="1" height="1" transform="matrix(21.213203430176, 21.213203430176, -21.213203430176, 21.213203430176, 952.955017089844, 69.608291625977)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(21.21320343017578, 21.21320343017578, -21.21320343017578, 21.21320343017578, 952.9550170898438, 69.60829162597656)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0 inner</title>
   </use>
-  <use width="1" height="1" transform="matrix(21.213203430176, 21.213203430176, -21.213203430176, 21.213203430176, 971.339904785156, 51.223461151123)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+  <use width="1" height="1" transform="matrix(21.21320343017578, 21.21320343017578, -21.21320343017578, 21.21320343017578, 971.3399047851562, 51.22346115112305)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
     <title>decor quad switch=0</title>
   </use>
 </svg>

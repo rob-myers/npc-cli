@@ -24,13 +24,15 @@
   - 🚧 locked indicator could go in center
     - ✅ render them inside `Doors`
     - ✅ green unlocked, red locked
-    - 🚧 setup initially locked/unlocked doors
-- doors can slide in specific direction
-  - try scaling door and changing uv map
+    - 🚧 setup initially locked doors
+    - preserve locked flag via "door lookup by center"
+- doors are specified as `auto`
 - navQuery blocks non-auto doors
 - support non-door sensor i.e. decor circle/poly
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
+- doors can slide in specific direction
+  - try scaling door and changing uv map
 
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
