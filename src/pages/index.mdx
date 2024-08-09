@@ -18,23 +18,26 @@ import ScrollTo from 'src/components/ScrollTo';
 
 ## Intent
 
-This site is driven by a difficult problem. 
+This website is about one particularly difficult problem. 
 
 <Card id="underlying-problem"> 
 **Underlying Problem**
 
 For some video game with a sufficiently rich environment,
-create Non-Player Characters <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by a Player.</SideNote>
-collectively indistinguishable from Players.
+create automated Non-Player Characters <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by a Player.</SideNote>
+collectively indistinguishable from human controlled characters.
 </Card>
 
-It's worth clarifying this.
+We need to clarify what we mean.
+
 What is a video game?
-A simulation of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
-A _Player_ is a human experiencing this simulation,
-while a Non-Player character (_NPC_) is a simulated being not controlled by a Player.
-Our underlying problem asks for NPCs which Players cannot distinguish from other Players, relative to the game environment.
+Answer: a simulation of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
+A _Player_ is a human experiencing this simulation, and also their respective simulated avatar.
+A Non-Player character (_NPC_) is a simulated being not controlled by a Player.
+There may be one or more Players, and they are the observers of the NPCs.
+The underlying problem requires each NPC to behave like its being controlled by a human playing a particular role.
 Individuals needn't be particularly intelligent (e.g. multiple choice dialogue), but they must collectively interact just like humans would.
+
 {/* To better understand our objectives let us place them in the context of an underlying problem. */}
 {/* Although we won't try to solve it directly, we will work towards an intermediate problem. */}
 
@@ -51,7 +54,8 @@ and a distinct lack of believable NPCs.
 
 Then let's do something about it.
 
-We'll approach the <ScrollTo id="underlying-problem">underlying problem</ScrollTo> like a sneak thief.
+First of all,
+we're going to approach the <ScrollTo id="underlying-problem">underlying problem</ScrollTo> like a sneak thief.
 A head-on approach is way too hard.
 The video game industry has many talented developers, and there's no reason to believe we can do any better.
 To make progress we're going to move the goal posts.
@@ -63,12 +67,12 @@ Then we have two objectives:
 **Objectives**
 
 1. Build real-time control systems for NPCs.
-2. Enable one human (the _Game Master_) to act indistinguishably from many human Players.
+2. Enable one human (the _Game Master_) to act indistinguishably from many humans.
 </Card>
 
 The first amounts to building a system, whereas the second is a desired property.
 Importantly we've already created the foundations of this system.
-We'll explain in our next blog.
+We'll explain in our next blog entry.
 
 {/* Why aren't we interested in the robots we have already invited into our homes i.e. NPCs? */}
 {/* Take a step back. We're not ready yet. Lots of islands of ... */}
