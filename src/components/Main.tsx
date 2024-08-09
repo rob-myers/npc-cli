@@ -1,3 +1,4 @@
+import { useScrollRestoration } from "gatsby";
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
@@ -12,11 +13,14 @@ export default function Main(props: React.PropsWithChildren) {
 
   const overlayOpen = site.mainOverlay || (site.navOpen && isSmallView());
 
+  const scrollRestoration = useScrollRestoration('main-component')
+
   return (
     <section
       className={cx(sectionMainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
       {...{ [sideNoteRootDataAttribute]: true }}
+      {...scrollRestoration as any}
     >
       <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
