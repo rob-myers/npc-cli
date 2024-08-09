@@ -19,7 +19,7 @@ import Card from 'src/components/Card';
 
 This site is driven by a difficult problem. 
 
-<Card> 
+<Card id="underlying-problem"> 
 **Underlying Problem**
 
 For some video game with a sufficiently rich environment,
@@ -27,45 +27,47 @@ create Non-Player Characters <SideNote>A "Non-Player Character" (NPC) is a video
 collectively indistinguishable from human Players.
 </Card>
 
-Video games simulate _sensation_ (sight and sounds) and _identity_ (character controls, collision detection, [skins](https://namemc.com/minecraft-skins/random)).
+What is a video game?
+A simulation of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
 You temporarily _become_ something, whose sensory input and possible actions reflect your virtual position and state.
-But things soon get stale without other beings, either humans or more commonly Non-Player Characters (NPCs).
-The underlying problem asks for NPCs indistinguishable from humans, relative to the game environment.
+But becoming is a shared experience, either with humans or more commonly Non-Player Characters (NPCs)
+controlled by the video game itself.
+Our underlying problem asks for NPCs indistinguishable from humans, relative to the game environment.
 Individuals needn't be particularly intelligent (e.g. multiple choice dialogue), but they must collectively interact just like humans would.
 {/* To better understand our objectives let us place them in the context of an underlying problem. */}
 {/* Although we won't try to solve it directly, we will work towards an intermediate problem. */}
 
-Recently, machines with human behaviour took a big step forwards.
-Chat Bots can now hold flexible and meaningful conversations <SideNote>Putting aside their hallucinations and somewhat memoryless nature.</SideNote>.
+Recently, machines approximating human behaviour took a step forwards.
+Chat Bots can now simulate flexible and meaningful conversations <SideNote>Putting aside their so-called _hallucinations_ and somewhat memoryless nature.</SideNote>.
 But before we reach towards Artificial General Intelligence,
 consider Non-Player Characters. 
-These days the word _NPC_ is used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
+Nowadays the word _NPC_ is used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
 Popular films depict them as conversationally rigid,
 usually with a single linear conversation <SideNote>The Jumanji reboot [1](https://en.wikipedia.org/wiki/Jumanji:_Welcome_to_the_Jungle) and [2](https://en.wikipedia.org/wiki/Jumanji:_The_Next_Level).</SideNote>.
 In our search for intelligent machines, we should remember that Turing's test was a _party game_.
 Almost 75 years later we have a multi-billion dollar video game industry,
 and a distinct lack of believable NPCs.
 
-Then let's do something about it.
+Let's do something about it.
 
-We won't tackle the underlying problem directly. 
-It's just too hard.
+We're going to tackle our [underlying problem](#underlying-problem) like a sneak thief.
+Approaching it head on is just too hard.
 The video game industry has many talented developers, and there's no reason to believe we can do any better.
 To make progress we're going to move the goal posts.
 We still want NPCs to collectively behave like humans.
-However, we're going to assume _another_ human controls them.<SideNote>The NPCs will not be controlled by the Player, but by another human i.e. the _Game Master_.</SideNote>
-Then this website has two objectives:
+However, we're going to assume _another_ human controls them i.e. the _Game Master_.
+Then we have two objectives:
 
 <Card>
 **Objectives**
 
 1. Build real-time control systems for NPCs.
-2. Enable one human to act indistinguishably from many Players.
+2. Enable one human (the _Game Master_) to act indistinguishably from many human Players.
 </Card>
 
-The first amounts to a system, whereas the second is a desired property of the system.
+The first amounts to a system, whereas the second is a desired property.
 Importantly we've already created the foundations of this system.
-We'll explain this in our next blog, together with how we intend to achieve our two objectives.
+We'll explain this in our next blog, along with how we intend to achieve our two objectives.
 
 {/* Why aren't we interested in the robots we have already invited into our homes i.e. NPCs? */}
 {/* Take a step back. We're not ready yet. Lots of islands of ... */}
