@@ -18,31 +18,32 @@ import ScrollTo from 'src/components/ScrollTo';
 
 ## Intent
 
-This website is about one particularly difficult problem. 
+This website is concerned with a particularly difficult problem. 
 
 <Card id="underlying-problem"> 
 **Underlying Problem**
 
 For some video game with a sufficiently rich environment,
-create automated Non-Player Characters <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by the Player.</SideNote>
-collectively indistinguishable from human controlled characters.
+automate Non-Player Characters <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by the Player.</SideNote>
+such that they are indistinguishable from human controlled characters.
 </Card>
 
 We need to clarify what we mean.
 
-What is a video game?
-Answer: a simulation of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
-The _Player_ is a human experiencing this simulation, and also their respective simulated avatar.
-A Non-Player character (_NPC_) is a simulated being not controlled by the Player.
-The Player observes and interacts with the NPCs.
-The underlying problem requires each algorithmically controlled NPC to behave like its being controlled by a human playing a particular role.
+So what is a video game?
+Technically we can describe them as simulations of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
+The _Player_ is both (a) the human experiencing this simulation, (b) their respective simulated character.
+Then a Non-Player character (_NPC_) is a simulated being not controlled by the Player.
+The Player observes the NPCs and interacts with them.
+We're interested in improving the quality of these interactions.
+In particular, the underlying problem requires each algorithmically controlled NPC to behave like its being controlled by a human playing a particular role.
 Individuals needn't be particularly intelligent (e.g. multiple choice dialogue), but they must collectively interact just like humans would.
 
 {/* To better understand our objectives let us place them in the context of an underlying problem. */}
 {/* Although we won't try to solve it directly, we will work towards an intermediate problem. */}
 
 Recently, simulations of human behaviour took a step forwards.
-Chat Bots can now converse in a flexible and meaningful manner <SideNote>Putting aside their so-called _hallucinations_ and somewhat memoryless nature.</SideNote>.
+Chat Bots can now converse in an apparently flexible and meaningful manner <SideNote>Putting aside their so-called _hallucinations_ and somewhat memoryless nature.</SideNote>.
 But before we reach towards Artificial General Intelligence,
 consider Non-Player Characters. 
 Nowadays the word _NPC_ is used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
@@ -52,10 +53,9 @@ In our search for intelligent machines, we should remember that Turing's test wa
 Almost 75 years later we have a multi-billion dollar video game industry,
 and a distinct lack of believable NPCs.
 
-Then let's do something about it.
+So let's do something about it.
 
-To begin with,
-we're not going to attack the <ScrollTo id="underlying-problem">underlying problem</ScrollTo> directly.
+We're not going to attack the <ScrollTo id="underlying-problem">underlying problem</ScrollTo> directly.
 A head-on approach is way too hard.
 The video game industry has many talented developers, and there's no reason to believe we can do any better.
 To make progress we're going to move the goal posts.
@@ -70,8 +70,9 @@ Then we have two objectives:
 2. Enable one human (the _Game Master_) to act indistinguishably from many humans.
 </Card>
 
-The first amounts to building a system, whereas the second is a desired property.
-Importantly we've already created the foundations of this system,
+The first objective amounts to building a system.
+The second objective is a property this system must satisfy.
+Importantly we've already created the system's foundations,
 as we'll explain in our next blog entry.
 
 {/* Why aren't we interested in the robots we have already invited into our homes i.e. NPCs? */}
