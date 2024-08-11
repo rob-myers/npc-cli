@@ -205,9 +205,9 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
 });
 
 export interface Props extends TabsDef {
-  rootOrientationVertical?: boolean;
-  collapsed: boolean;
   browserLoaded: boolean;
+  collapsed: boolean;
+  rootOrientationVertical?: boolean;
   onToggled?(next: boolean): void;
 }
 

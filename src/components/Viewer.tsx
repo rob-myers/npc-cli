@@ -1,14 +1,14 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
 import debounce from "debounce";
 
 import { view } from "../const";
 import { afterBreakpoint, breakpoint } from "../const";
-import { isSmallView } from "./layout";
 import useSite from "./site.store";
 
 import { profile } from "src/npc-cli/sh/src";
+import { isTouchDevice } from "src/npc-cli/service/dom";
 
 import useIntersection from "../npc-cli/hooks/use-intersection";
 import useStateRef from "../npc-cli/hooks/use-state-ref";
@@ -54,16 +54,18 @@ export default function Viewer() {
     >
       <ViewerControls api={state} />
       <Tabs
-        ref={(x) => x && (state.tabs = x)}
+        ref={x => state.tabs = x ?? state.tabs}
         id="viewer-tabs"
         browserLoaded={site.browserLoaded}
         collapsed={!site.viewOpen}
         initEnabled={false}
         onToggled={update}
         persistLayout
-        // rootOrientationVertical={isSmallView()}
         rootOrientationVertical
-        tabs={[
+        tabs={((tabsetDefs: ComponentProps<typeof Tabs>['tabs']) =>
+          // Only one tabset on mobile
+          isTouchDevice() ? [tabsetDefs.flatMap(x => x)] : tabsetDefs
+        )([
           [
             {
               type: "component",
@@ -72,12 +74,12 @@ export default function Viewer() {
               props: { worldKey: "test-world-1", mapKey: "demo-map-1" },
               // props: { worldKey: "test-world-1", mapKey: "small-map-1" },
             },
-            {
-              type: "component",
-              class: "TestCharacterDemo",
-              filepath: "test-character-demo",
-              props: {},
-            },
+            // {
+            //   type: "component",
+            //   class: "TestCharacterDemo",
+            //   filepath: "test-character-demo",
+            //   props: {},
+            // },
             // { type: "component", class: "TestWorker", filepath: "r3-worker-demo", props: {} },
           ],
           [
@@ -93,7 +95,7 @@ export default function Viewer() {
             },
             { type: "component", class: "HelloWorld", filepath: "hello-world-1", props: {} },
           ],
-        ]}
+        ])}
       />
     </aside>
   );

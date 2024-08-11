@@ -11,6 +11,7 @@ import {
 } from "../service/generic";
 import { Props as TabsProps, State as TabsApi } from "./Tabs";
 import { TabMemo } from "./Tab";
+import { isTouchDevice } from "../service/dom";
 
 export function factory(node: TabNode, api: TabsApi, forceUpdate: boolean) {
   const state = api.tabsState[node.getId()];
@@ -197,9 +198,9 @@ function computeJsonModel(tabsDefs: TabDef[][], rootOrientationVertical?: boolea
       tabEnableRename: false,
       rootOrientationVertical,
       tabEnableClose: false,
-      // Use `visibility: hidden` instead of `display: none`,
-      // so we can e.g. getBoundingClientRect() for npc getPosition.
-      enableUseVisibility: true,
+      tabSetEnableDivide: !isTouchDevice(),
+      // Use `visibility: hidden` instead of `display: none` e.g. for getBoundingClientRect()
+      // enableUseVisibility: true,
       splitterExtra: 12,
       splitterSize: 2,
     },

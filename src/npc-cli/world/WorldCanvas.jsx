@@ -255,7 +255,7 @@ export default function WorldCanvas(props) {
       />
 
       <MapControls
-        ref={(x) => x && (state.controls = x)}
+        ref={x => state.controls = x ?? state.controls}
         makeDefault
         zoomToCursor
 
