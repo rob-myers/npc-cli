@@ -20,8 +20,9 @@ export default function Doors(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     byKey: {},
     byGmId: {},
+    byPos: {},
     doorsInst: /** @type {*} */ (null),
-    lockLightsInst: /** @type {*} */ (null),
+    lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
     npcToKeys: {},
 
@@ -47,36 +48,41 @@ export default function Doors(props) {
     },
     buildLookups() {
       let instId = 0;
-      const prevDoorByKey = state.byKey;
+      const prevDoorByPos = state.byPos;
       state.byKey = {};
+      state.byPos = {};
       w.gms.forEach((gm, gmId) => {
         const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorState[]} */ ([]);
         gm.doors.forEach((door, doorId) => {
-          const { seg: [u, v], normal } = door;
+          const { seg: [u, v], normal, center } = door;
           tmpMat1.feedFromArray(gm.transform);
           tmpMat1.transformPoint(tmpVec1.copy(u));
           tmpMat1.transformPoint(tmpVec2.copy(v));
           const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
           
-          /** @type {Geomorph.GmDoorKey} */
-          const gdKey = `g${gmId}d${doorId}`;
-          const prev = prevDoorByKey[gdKey];
+          const gdKey = /** @type {const} */ (`g${gmId}d${doorId}`);
+          const posKey = /** @type {const} */ (`${center.x},${center.y}`);
+
+          const prev = prevDoorByPos[posKey];
           const hull = gm.isHullDoor(doorId);
-          state.byKey[gdKey] = byGmId[doorId] = {
+
+          state.byKey[gdKey] = state.byPos[posKey] = byGmId[doorId] = {
             gdKey, gmId, doorId,
             instanceId: instId,
             door,
 
-            auto: true, // 🚧
-            locked: door.meta.locked === true, // 🚧 remember previous
+            auto: prev?.auto ?? (door.meta.auto === true),
+            locked: prev?.locked ?? (door.meta.locked === true),
             open : prev?.open ?? false,
-            sealed: hull ? w.gmGraph.getDoorNodeById(gmId, doorId).sealed : false,
+            sealed: hull === true
+              ? w.gmGraph.getDoorNodeById(gmId, doorId).sealed
+              : door.meta.sealed === true,
             hull,
 
             ratio: prev?.ratio ?? 1, // 1 means closed
             src: tmpVec1.json,
             dst: tmpVec2.json,
-            dir: { x : Math.cos(radians), y: Math.sin(radians) }, // 🚧 provide in Connector
+            dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(normal.clone()),
             segLength: u.distanceTo(v),
 
@@ -117,7 +123,7 @@ export default function Doors(props) {
         { yScale: doorHeight, mat4: tmpMatFour1 },
       );
     },
-    getLockLightMat(meta) {
+    getLockSigMat(meta) {
       const center = tmpVec1.copy(meta.src).add(meta.dst).scale(1/2);
       const sx = 0.4;
       const sz = (meta.hull ? hullDoorDepth : doorDepth) + 0.025 * 2;
@@ -182,10 +188,10 @@ export default function Doors(props) {
       instanceMatrix.needsUpdate = true;
     },
     positionInstances() {
-      const { doorsInst: ds, lockLightsInst: ls } = state;
+      const { doorsInst: ds, lockSigInst: ls } = state;
       for (const meta of Object.values(state.byKey)) {
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta));
-        ls.setMatrixAt(meta.instanceId, state.getLockLightMat(meta));
+        ls.setMatrixAt(meta.instanceId, state.getLockSigMat(meta));
         ls.setColorAt(meta.instanceId, getColor(meta.locked ? doorLockedColor : doorUnlockedColor));
       }
       ds.instanceMatrix.needsUpdate = true;
@@ -248,11 +254,14 @@ export default function Doors(props) {
 
       return door.open;
     },
-    toggleId(gmId, doorId, opts) {
-      return state.toggle(state.byGmId[gmId][doorId], opts);
-    },
-    toggleKey(gmDoorKey, opts) {
-      return state.toggle(state.byKey[gmDoorKey], opts);
+    toggleBy(opts) {
+      if ('gdKey' in opts) {
+        return state.toggle(state.byKey[opts.gdKey], opts);
+      }
+      if ('gmId' in opts) {
+        return state.toggle(state.byGmId[opts.gmId][opts.doorId], opts);
+      }
+      throw Error(`${'toggleBy(opts)'} expected "opts.gdKey" or "opts.{gmId,doorId}"`)
     },
     tryCloseDoor(gmId, doorId) {
       const door = state.byGmId[gmId][doorId];
@@ -297,7 +306,7 @@ export default function Doors(props) {
     <instancedMesh
       name="lock-lights"
       key={`${w.hash} lock-lights`}
-      ref={instances => instances && (state.lockLightsInst = instances)}
+      ref={instances => instances && (state.lockSigInst = instances)}
       args={[boxGeometry, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
     >
@@ -319,8 +328,9 @@ export default function Doors(props) {
  * @typedef State
  * @property {{ [gmId in number]: Geomorph.DoorState[] }} byGmId
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
+ * @property {{ [center in `${number},${number}`]: Geomorph.DoorState }} byPos
  * @property {THREE.InstancedMesh} doorsInst
- * @property {THREE.InstancedMesh} lockLightsInst
+ * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
  *
  * @property {() => void} addDoorUvs
@@ -328,7 +338,7 @@ export default function Doors(props) {
  * @property {(item: Geomorph.DoorState) => void} cancelClose
  * @property {(instanceId: number) => Geom.Meta} decodeDoorInstance
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
- * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockLightMat
+ * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
@@ -338,8 +348,7 @@ export default function Doors(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggle
- * @property {(gmId: number, doorId: number, opts?: ToggleDoorOpts) => boolean} toggleId
- * @property {(gmDoorKey: Geomorph.GmDoorKey, opts?: ToggleDoorOpts) => boolean} toggleKey
+ * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleDoorOpts) => boolean} toggleBy
  * @property {(gmId: number, doorId: number) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {() => void} onTick

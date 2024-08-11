@@ -26,7 +26,7 @@
     - ✅ green unlocked, red locked
     - 🚧 setup initially locked doors
       - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
-    - preserve locked flag via "door lookup by center"
+    - ✅ preserve locked flag via "door lookup by center"
 - doors are specified as `auto`
 - navQuery blocks non-auto doors
 - support non-door sensor i.e. decor circle/poly
