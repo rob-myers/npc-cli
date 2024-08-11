@@ -41,7 +41,7 @@ export default function Main(props: React.PropsWithChildren) {
 const sectionMainCss = css`
   > header {
     background-color: #fff;
-    z-index: 1;
+    z-index: 4;
   }
   > main {
     background-color: #fff;
