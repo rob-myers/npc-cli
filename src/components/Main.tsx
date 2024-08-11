@@ -99,7 +99,7 @@ const mainHeaderCss = css`
 const overlayCss = css`
   -webkit-tap-highlight-color: transparent;
   position: absolute;
-  z-index: 1;
+  z-index: 4;
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
   top: 0;
