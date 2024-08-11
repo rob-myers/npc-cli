@@ -4,7 +4,7 @@ import { dampLookAt } from "maath/easing";
 
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, tmpVectThree2, tmpVectThree3 } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation } from '../service/rapier';
 // import * as glsl from '../service/glsl';
@@ -163,22 +163,22 @@ export class Npc {
    * @param {import('@recast-navigation/core').CrowdAgent} agent
    */
   onTickAgent(deltaMs, agent) {
-    const position = tmpVectThree1.copy(agent.position());
-    const velocity = tmpVectThree2.copy(agent.velocity());
-    const speed = velocity.length();
+    const pos = agent.position();
+    const vel = agent.velocity();
+    const speed = Math.sqrt(vel.x ** 2 + vel.z ** 2);
     
-    this.group.position.copy(position);
+    this.group.position.copy(pos);
 
     if (speed > 0.2) {
-      this.s.lookAt = this.lastLookAt.copy(position).add(velocity);
+      this.s.lookAt = this.lastLookAt.copy(pos).add(vel);
     } 
 
-    if (this.s.target === null) {// same as `this.s.moving`?
+    if (this.s.target === null) {
       return;
     }
 
     this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
-    const distance = position.distanceTo(this.s.target);
+    const distance = this.s.target.distanceTo(pos);
     // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
 
     if (distance < 0.15) {// Reached target
