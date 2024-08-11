@@ -41,6 +41,7 @@ export class Npc {
 
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
+  lastCorner = new THREE.Vector3();
 
   /**
    * @param {NPC.NPCDef} def
@@ -177,6 +178,12 @@ export class Npc {
       return;
     }
 
+    const nextCorner = agent.nextTargetInPath();
+    if (this.lastCorner.equals(nextCorner) === false) {
+      this.lastCorner.copy(nextCorner);
+      this.w.events.next({ key: 'way-point', npcKey: this.key, x: nextCorner.x, y: nextCorner.z });
+    }
+
     this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
     const distance = this.s.target.distanceTo(pos);
     // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
@@ -187,9 +194,8 @@ export class Npc {
     
     if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
       // Turn off obstacle avoidance to avoid deceleration near nav border
-      agent.updateParameters({
-        updateFlags: agent.updateFlags & ~2,
-      });
+      // 🤔 might not need for hyper casual
+      agent.updateParameters({ updateFlags: agent.updateFlags & ~2 });
     }
 
     if (distance < 2 * this.agentRadius) {// undo speed scale
@@ -313,13 +319,22 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, group, s, map, animMap, mixer, agent } = npc;
+  const { def, epochMs, group, s, map, animMap, mixer, agent, lastLookAt, lastTarget, lastCorner } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
-  
-  // npc.changeSkin('robot-vaccino.png');  // 🔔 Skin debug
-
+  // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
   const nextNpc = new Npc(def, npc.w);
-  return Object.assign(nextNpc, { epochMs, group, s: Object.assign(nextNpc.s, s), map, animMap, mixer, agent });
+  return Object.assign(nextNpc, /** @type {Partial<Npc>} */ ({
+    epochMs,
+    group,
+    s: Object.assign(nextNpc.s, s),
+    map,
+    animMap,
+    mixer,
+    agent,
+    lastLookAt,
+    lastTarget,
+    lastCorner,
+  }));
 }
 
 /** @param {any} error */
