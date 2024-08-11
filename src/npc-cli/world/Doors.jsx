@@ -72,7 +72,8 @@ export default function Doors(props) {
             instanceId: instId,
             door,
 
-            auto: prev?.auto ?? (door.meta.auto === true),
+            // auto: prev?.auto ?? (door.meta.auto === true),
+            auto: true,
             locked: prev?.locked ?? (door.meta.locked === true),
             open : prev?.open ?? false,
             sealed: hull === true

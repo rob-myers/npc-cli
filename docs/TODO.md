@@ -27,7 +27,8 @@
     - 🚧 setup initially locked doors
       - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
     - ✅ preserve locked flag via "door lookup by center"
-- doors are specified as `auto`
+- 🚧 doors are specified as `auto`
+  - temporarily set all doors `auto` as we work on this
 - navQuery blocks non-auto doors
 - support non-door sensor i.e. decor circle/poly
 - mobile has difficulty pressing switches
