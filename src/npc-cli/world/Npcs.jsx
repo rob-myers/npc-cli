@@ -6,7 +6,7 @@ import { defaultSkinKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
 import { helper } from "../service/helper";
-import { Npc, hotModuleReloadNpc } from "./create-npc";
+import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 

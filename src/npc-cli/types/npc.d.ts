@@ -3,7 +3,7 @@ declare namespace NPC {
   /** Skin names. */
   type SkinKey = keyof import('../service/helper').Helper['fromSkinKey'];
 
-  type NPC = import('../world/create-npc').Npc;
+  type NPC = import('../world/npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */

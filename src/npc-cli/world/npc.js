@@ -26,18 +26,21 @@ export class Npc {
   s = {
     cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
-    /** Is this NPC walking or running? */
+    lookAt: /** @type {null | THREE.Vector3} */ (null),
     moving: false,
     paused: false,
     rejectMove: emptyReject,
     run: false,
     spawns: 0,
-    target: /** @type {null | THREE.Vector3Like} */ (null),
+    target: /** @type {null | THREE.Vector3} */ (null),
   };
 
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
   agentRadius = helper.defaults.radius;
+
+  lastLookAt = new THREE.Vector3();
+  lastTarget = new THREE.Vector3();
 
   /**
    * @param {NPC.NPCDef} def
@@ -146,19 +149,28 @@ export class Npc {
   /** @param {number} deltaMs  */
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
-    if (this.agent === null) {
-      return;
+
+    if (this.agent !== null) {
+      this.onTickAgent(deltaMs, this.agent);
     }
 
-    // Moving or stationary (with agent)
-    const position = tmpVectThree1.copy(this.agent.position());
-    const velocity = tmpVectThree2.copy(this.agent.velocity());
+    if (this.s.lookAt !== null) {
+      dampLookAt(this.group, this.s.lookAt, 0.25, deltaMs);
+    }
+  }
+  /**
+   * @param {number} deltaMs
+   * @param {import('@recast-navigation/core').CrowdAgent} agent
+   */
+  onTickAgent(deltaMs, agent) {
+    const position = tmpVectThree1.copy(agent.position());
+    const velocity = tmpVectThree2.copy(agent.velocity());
     const speed = velocity.length();
     
     this.group.position.copy(position);
+
     if (speed > 0.2) {
-      const forward = tmpVectThree3.copy(position).add(velocity);
-      dampLookAt(this.group, forward, 0.25, deltaMs);
+      this.s.lookAt = this.lastLookAt.copy(position).add(velocity);
     } 
 
     if (this.s.target === null) {// same as `this.s.moving`?
@@ -167,22 +179,22 @@ export class Npc {
 
     this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
     const distance = position.distanceTo(this.s.target);
-    // console.log({ speed, distance, dVel: this.agent.raw.dvel, nVel: this.agent.raw.nvel });
+    // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
 
     if (distance < 0.15) {// Reached target
       return this.stopMoving();
     }
     
-    if (distance < 2.5 * this.agentRadius && (this.agent.updateFlags & 2) !== 0) {
+    if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
       // Turn off obstacle avoidance to avoid deceleration near nav border
-      this.agent.updateParameters({
-        updateFlags: this.agent.updateFlags & ~2,
+      agent.updateParameters({
+        updateFlags: agent.updateFlags & ~2,
       });
     }
 
     if (distance < 2 * this.agentRadius) {// undo speed scale
       // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-      this.agent.updateParameters({
+      agent.updateParameters({
         maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
       });
     }
@@ -212,6 +224,7 @@ export class Npc {
 
     const position = this.agent.position();
     this.s.target = null;
+    this.s.lookAt = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
@@ -249,7 +262,7 @@ export class Npc {
     this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     this.agent.requestMoveTarget(closest);
-    this.s.target = {...closest}; // crucial
+    this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
       this.startAnimation(nextAct);
