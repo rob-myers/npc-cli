@@ -18,7 +18,6 @@ export default function Doors(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    byInstId: [],
     byKey: {},
     byGmId: {},
     doorsInst: /** @type {*} */ (null),
@@ -31,13 +30,13 @@ export default function Doors(props) {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
-      state.byInstId.forEach((meta, _instanceId) => {
+      for (const meta of Object.values(state.byKey)) {
         /** @type {Geomorph.DecorImgKey} */
         const key = meta.door.meta.hull ? 'door--hull' : 'door--standard';
         const { x, y, width, height } = decor[key];
         uvOffsets.push(x / decorDim.width, y / decorDim.height);
         uvDimensions.push(width / decorDim.width, height / decorDim.height);
-      });
+      }
 
       state.doorsInst.geometry.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
@@ -50,7 +49,6 @@ export default function Doors(props) {
       let instId = 0;
       const prevDoorByKey = state.byKey;
       state.byKey = {};
-      state.byInstId = [];
       w.gms.forEach((gm, gmId) => {
         const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorState[]} */ ([]);
         gm.doors.forEach((door, doorId) => {
@@ -64,7 +62,7 @@ export default function Doors(props) {
           const gdKey = `g${gmId}d${doorId}`;
           const prev = prevDoorByKey[gdKey];
           const hull = gm.isHullDoor(doorId);
-          state.byKey[gdKey] = state.byInstId[instId] = byGmId[doorId] = {
+          state.byKey[gdKey] = byGmId[doorId] = {
             gdKey, gmId, doorId,
             instanceId: instId,
             door,
@@ -104,7 +102,7 @@ export default function Doors(props) {
         doorId < gm.doors.length ? true : (doorId -= gm.doors.length, false)
       ));
       const { meta } = w.gms[gmId].doors[doorId];
-      return { gmId, doorId, ...meta, instanceId};
+      return { ...w.lib.getGmDoorId(gmId, doorId), ...meta, instanceId };
     },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength, door, normal } = meta;
@@ -253,9 +251,6 @@ export default function Doors(props) {
     toggleId(gmId, doorId, opts) {
       return state.toggle(state.byGmId[gmId][doorId], opts);
     },
-    toggleInstance(instanceId, opts) {
-      return state.toggle(state.byInstId[instanceId], opts);
-    },
     toggleKey(gmDoorKey, opts) {
       return state.toggle(state.byKey[gmDoorKey], opts);
     },
@@ -323,7 +318,6 @@ export default function Doors(props) {
 /**
  * @typedef State
  * @property {{ [gmId in number]: Geomorph.DoorState[] }} byGmId
- * @property {Geomorph.DoorState[]} byInstId e.g. `byInstId[instanceId]`
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
  * @property {THREE.InstancedMesh} doorsInst
  * @property {THREE.InstancedMesh} lockLightsInst
@@ -345,7 +339,6 @@ export default function Doors(props) {
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggle
  * @property {(gmId: number, doorId: number, opts?: ToggleDoorOpts) => boolean} toggleId
- * @property {(instanceId: number, opts?: ToggleDoorOpts) => boolean} toggleInstance
  * @property {(gmDoorKey: Geomorph.GmDoorKey, opts?: ToggleDoorOpts) => boolean} toggleKey
  * @property {(gmId: number, doorId: number) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.

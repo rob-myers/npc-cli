@@ -77,7 +77,7 @@ export default function World(props) {
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
       onTick() {},
-      toggleInstance(_instanceId) {},
+      toggleKey(_gdKey) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
