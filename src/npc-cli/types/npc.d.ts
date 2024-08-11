@@ -48,6 +48,8 @@ declare namespace NPC {
     | { key: "decors-added"; decors: Geomorph.Decor[] }
     | { key: "opened-door"; gmId: number; doorId: number; npcKey?: string }
     | { key: "closed-door"; gmId: number; doorId: number; npcKey?: string }
+    | { key: "locked-door"; gmId: number; doorId: number; npcKey?: string }
+    | { key: "unlocked-door"; gmId: number; doorId: number; npcKey?: string }
     | { key: "entered-sensor" | "exited-sensor"; npcKey: string } & (
       | { type: 'door' } & Geomorph.GmDoorId
     )

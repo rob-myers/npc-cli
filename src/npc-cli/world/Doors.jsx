@@ -24,7 +24,8 @@ export default function Doors(props) {
     doorsInst: /** @type {*} */ (null),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
-    npcToKeys: {},
+    npcToAccess: {},
+    npcToNearby: {},
 
     addDoorUvs() {
       const { decor, decorDim } = w.geomorphs.sheet;
@@ -92,6 +93,11 @@ export default function Doors(props) {
           instId++;
         })
       });
+    },
+    canAccess(npcKey, gdKey) {
+      return Array.from(
+        state.npcToAccess[npcKey] ?? []
+      ).some(prefix => gdKey.startsWith(prefix));
     },
     cancelClose(door) {
       window.clearTimeout(door.closeTimeoutId);
@@ -203,16 +209,16 @@ export default function Doors(props) {
       ls.computeBoundingSphere();
     },
     removeFromSensors(npcKey) {
-      for (const gmDoorKey of state.npcToKeys[npcKey] ?? []) {
+      for (const gmDoorKey of state.npcToNearby[npcKey] ?? []) {
         const door = state.byKey[gmDoorKey];
         door.nearbyNpcKeys.delete(npcKey);
         if (door.auto === true && door.nearbyNpcKeys.size === 0) {
           state.tryCloseDoor(door.gmId, door.doorId);
         }
       }
-      state.npcToKeys[npcKey]?.clear();
+      state.npcToNearby[npcKey]?.clear();
     },
-    toggle(door, opts = {}) {
+    toggleDoorRaw(door, opts = {}) {
       if (door.sealed === true) {
         return false;
       }
@@ -254,20 +260,61 @@ export default function Doors(props) {
 
       return door.open;
     },
-    toggleBy(opts) {
+    toggle(opts) {
       if ('gdKey' in opts) {
-        return state.toggle(state.byKey[opts.gdKey], opts);
+        return state.toggleDoorRaw(state.byKey[opts.gdKey], opts);
       }
       if ('gmId' in opts) {
-        return state.toggle(state.byGmId[opts.gmId][opts.doorId], opts);
+        return state.toggleDoorRaw(state.byGmId[opts.gmId][opts.doorId], opts);
       }
       throw Error(`${'toggleBy(opts)'} expected "opts.gdKey" or "opts.{gmId,doorId}"`)
+    },
+    toggleLockRaw(door, { npcKey, lock, unlock } = {}) {
+      if (door.sealed === true) {
+        return false;
+      }
+
+      if (npcKey !== undefined) {
+        if (state.npcNearDoor(npcKey, door.gmId, door.doorId) === false) {
+          return door.locked; // Too far
+        }
+        if (state.canAccess(npcKey, door.gdKey) === false) {
+          return door.locked; // No access
+        }
+      }
+
+      if (door.locked === true) {
+        if (lock === true) return true; // Already locked
+      } else {
+        if (unlock === true) return false; // Already unlocked
+      }
+
+      // Actually lock/unlock door
+      door.locked = !door.locked;
+      state.lockSigInst.setColorAt(door.instanceId, getColor(door.locked ? doorLockedColor : doorUnlockedColor));
+      /** @type {THREE.InstancedBufferAttribute} */ (state.lockSigInst.instanceColor).needsUpdate = true;
+
+      w.events.next({
+        key: door.open ? 'locked-door' : 'unlocked-door',
+        gmId: door.gmId, doorId: door.doorId, npcKey,
+      });
+
+      return door.locked;
+    },
+    toggleLock(opts) {
+      if ('gdKey' in opts) {
+        return state.toggleLockRaw(state.byKey[opts.gdKey], opts);
+      }
+      if ('gmId' in opts) {
+        return state.toggleLockRaw(state.byGmId[opts.gmId][opts.doorId], opts);
+      }
+      throw Error(`${'toggleLockBy(opts)'} expected "opts.gdKey" or "opts.{gmId,doorId}"`)
     },
     tryCloseDoor(gmId, doorId) {
       const door = state.byGmId[gmId][doorId];
       door.closeTimeoutId = window.setTimeout(() => {
         if (door.open === true) {
-          state.toggle(door);
+          state.toggleDoorRaw(door);
           state.tryCloseDoor(gmId, doorId); // recheck in {ms}
         } else {
           delete door.closeTimeoutId;
@@ -335,6 +382,7 @@ export default function Doors(props) {
  *
  * @property {() => void} addDoorUvs
  * @property {() => void} buildLookups
+ * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} canAccess
  * @property {(item: Geomorph.DoorState) => void} cancelClose
  * @property {(instanceId: number) => Geom.Meta} decodeDoorInstance
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
@@ -342,13 +390,17 @@ export default function Doors(props) {
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
- * @property {{ [npcKey: string]: Set<Geomorph.GmDoorKey> }} npcToKeys
+ * @property {{ [npcKey: string]: Set<string> }} npcToAccess
+ * Prefixes of accessible `Geomorph.GmDoorKey`s
+ * @property {{ [npcKey: string]: Set<Geomorph.GmDoorKey> }} npcToNearby
  * `npcToKeys[npcKey]` provides `gmDoorKey`s the npc is within sensor range of
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(npcKey: string) => void} removeFromSensors
- * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggle
- * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleDoorOpts) => boolean} toggleBy
+ * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggleDoorRaw
+ * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleLockOpts) => boolean} toggleLock
+ * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleDoorOpts) => boolean} toggle
+ * @property {(door: Geomorph.DoorState, opts?: ToggleLockOpts) => boolean} toggleLockRaw
  * @property {(gmId: number, doorId: number) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {() => void} onTick
@@ -365,4 +417,11 @@ const tmpMatFour1 = new THREE.Matrix4();
  * @property {boolean} [close] should we close the door?
  * @property {string} [npcKey] initiated via npc?
  * @property {boolean} [open] should we open the door?
+ */
+
+/**
+ * @typedef ToggleLockOpts
+ * @property {boolean} [lock] should we lock the door?
+ * @property {string} [npcKey] initiated via npc?
+ * @property {boolean} [unlock] should we unlock the door?
  */

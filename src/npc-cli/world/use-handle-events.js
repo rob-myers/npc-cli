@@ -47,17 +47,17 @@ export default function useHandleEvents(w) {
         case "entered-sensor": {
           const door = w.door.byKey[e.gdKey];
           door.nearbyNpcKeys.add(e.npcKey);
-          (w.door.npcToKeys[e.npcKey] ??= new Set).add(e.gdKey);
+          (w.door.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
           
           if (door.auto === true) {
-            w.door.toggleKey(e.gdKey, { open: true });
+            w.door.toggle({ gdKey: e.gdKey, open: true });
           }
           break;
         }
         case "exited-sensor": {
           const door = w.door.byKey[e.gdKey];
           door.nearbyNpcKeys.delete(e.npcKey);
-          w.door.npcToKeys[e.npcKey]?.delete(e.gdKey);
+          w.door.npcToNearby[e.npcKey]?.delete(e.gdKey);
           break;
         }
         case "spawned": {
