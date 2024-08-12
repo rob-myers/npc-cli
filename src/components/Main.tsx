@@ -13,14 +13,14 @@ export default function Main(props: React.PropsWithChildren) {
 
   const overlayOpen = site.mainOverlay || (site.navOpen && isSmallView());
 
-  const scrollRestoration = useScrollRestoration('main-component')
+  const scrollRestoration = useScrollRestore('main-component')
 
   return (
     <section
       className={cx(sectionMainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
       {...{ [sideNoteRootDataAttribute]: true }}
-      {...scrollRestoration as any}
+      {...scrollRestoration}
     >
       <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
@@ -116,3 +116,14 @@ const overlayCss = css`
     opacity: 1;
   }
 `;
+
+export function useScrollRestore(key: string) {
+  if (typeof window !== 'undefined') {
+    return useScrollRestoration(key) as {
+      ref: React.MutableRefObject<HTMLElement | null>;
+      onScroll(): void;
+    };
+  } else {
+    return null;
+  }
+}
