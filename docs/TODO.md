@@ -12,8 +12,17 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- pre-existing issue with gaps around top of doors
-- fix nav-mesh on edge of 303
+- ✅ pre-existing issue with gaps around top of doors
+- ✅ fix nav-mesh on edge of 303
+  - ✅ fixed computeDoorway
+  - ✅ cleaner approach?
+- 🚧 LOD: when zoomed out a lot try making ceiling tops more solid
+
+- investigate GPU object picking via 2 render targets written to by 1 fragment shader
+  - based on PR where render targets first added to three.js
+    > https://github.com/mrdoob/three.js/pull/16390
+  - can provide vertex indices via attribute, hence instanceId too
+    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
 
 - 🚧 doors have small wall above them
   - ✅ wall meta should have roomId

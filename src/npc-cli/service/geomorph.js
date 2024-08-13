@@ -1287,30 +1287,44 @@ export class Connector {
 
   /**
    * Doorways are the navigable entries/exits of a door.
-   * They are not as wide as door, but much deeper.
+   * - They are not as wide as the door by `2 * wallOutset`.
+   * - They are deeper then the door by
+   *   (a) `wallOutset` for hull doors.
+   *   (b) `2 * wallOutset` for non-hull doors.
    * @returns {Geom.Poly}
    */
   computeDoorway() {
-    const width = this.baseRect.width;
-    const height = this.meta.hull ? hullDoorDepth : doorDepth;
-    const hNormal = this.normal;
-    const wNormal = tmpVect1.set(this.normal.y, -this.normal.x);
+    const doorHalfDepth = 0.5 * (this.meta.hull ? hullDoorDepth : doorDepth);
+    const inwardsExtrude = wallOutset;
+    /**
+     * For hull doors, normals point outwards from geomorphs,
+     * and we exclude "outer part" of doorway to fix doorway normalization.
+     */
+    const outwardsExtrude = this.meta.hull === true ? 0 : wallOutset;
 
-    if (this.meta.hull) {
-      // hull doorways only contain half of door,
-      // to avoid overlapping adjacent hull door
-      const topLeft = this.seg[0].clone().addScaled(wNormal, wallOutset);
-      const botLeft = topLeft.clone().addScaled(hNormal, -(height/2 + wallOutset));
-      const botRight = botLeft.clone().addScaled(wNormal, width - 2 * wallOutset);
-      const topRight = botRight.clone().addScaled(hNormal, (wallOutset + height/2));
-      return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
-    } else {
-      const  topLeft = this.seg[0].clone().addScaled(wNormal, wallOutset).addScaled(hNormal, -height/2 - wallOutset);
-      const botLeft = topLeft.clone().addScaled(hNormal, wallOutset + height + wallOutset);
-      const botRight = botLeft.clone().addScaled(wNormal, width - 2 * wallOutset);
-      const topRight = botRight.clone().addScaled(hNormal, -wallOutset - height - wallOutset);
-      return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
-    }
+    const normal = this.normal;
+    const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);
+    const length = delta.length;
+    const offset = (length/2 - wallOutset) / length;
+
+    return new Poly([
+      new Vect(
+        this.center.x + delta.x * offset + normal.x * (doorHalfDepth + outwardsExtrude),
+        this.center.y + delta.y * offset + normal.y * (doorHalfDepth + outwardsExtrude),
+      ),
+      new Vect(
+        this.center.x - delta.x * offset + normal.x * (doorHalfDepth + outwardsExtrude),
+        this.center.y - delta.y * offset + normal.y * (doorHalfDepth + outwardsExtrude),
+      ),
+      new Vect(
+        this.center.x - delta.x * offset - normal.x * (doorHalfDepth + inwardsExtrude),
+        this.center.y - delta.y * offset - normal.y * (doorHalfDepth + inwardsExtrude),
+      ),
+      new Vect(
+        this.center.x + delta.x * offset - normal.x * (doorHalfDepth + inwardsExtrude),
+        this.center.y + delta.y * offset - normal.y * (doorHalfDepth + inwardsExtrude),
+      ),
+    ]).fixOrientationConvex();
   }
 
   /**
