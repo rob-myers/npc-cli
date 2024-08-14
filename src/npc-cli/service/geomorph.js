@@ -1235,8 +1235,8 @@ export class Connector {
     /** @type {Geom.Vect} */
     this.normal = normal;
 
+    // 🔔 hull door normals should point outwards
     if (this.meta.hull === true) {
-      // 🔔 hull door normals should point outwards
       const edge = /** @type {Geomorph.HullDoorMeta} */ (this.meta).edge;
       if (
         edge === 'n' && this.normal.y > 0
@@ -1246,7 +1246,17 @@ export class Connector {
       ) {
         this.normal.scale(-1);
       }
-      // 🔔 every hull door is auto
+    }
+
+    /**
+     * 🔔 every unsealed hull door is auto
+     * 🔔 unsealed non-hull locked doors default to auto
+     */
+    if (
+      this.meta.sealed !== true && (
+      this.meta.hull === true
+      || (this.meta.manual !== true && this.meta.locked === true)
+    )) {
       this.meta.auto = true;
     }
 

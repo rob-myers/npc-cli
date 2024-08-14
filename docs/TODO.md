@@ -26,8 +26,11 @@
     - ✅ preserve locked flag via "door lookup by center"
 - 🚧 doors are specified as `auto`
   - 🚧 temporarily set all doors `auto` as we work on this
-  - ✅ hull doors implicitly `auto`
-  - 101 ✅ 102 ✅ 103 ✅ 301 🚧 302 🚧 303 🚧
+  - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
+  - ✅ unsealed hull doors implicitly `auto`
+  - ✅ unsealed non-hull locked doors default to auto
+    - we're setting "public" unlocked doors as auto
+    - but e.g. unlocked fresher door inside locked room is not auto
 - 🚧 can use navQuery which blocks
   - manual doors which are closed (includes locked-closed)
   - auto doors which are locked
@@ -70,6 +73,7 @@
 
 - 🚧 hmr issue editing obstacle outline
   - seems fixed by always re-generating obstacle texture, irrespective of size change
+- hmr issue with Connector class
 - svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh

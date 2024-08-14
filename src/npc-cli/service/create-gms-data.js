@@ -3,7 +3,7 @@ import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, 
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
-import { Connector, geomorphService } from "./geomorph";
+import { geomorphService } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';

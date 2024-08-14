@@ -1,7 +1,7 @@
 {
-  "hash": "610044716 1209658293 -1066413830 -1267809538",
+  "hash": "610044716 1695603342 -1066413830 -1267809538",
   "mapsHash": 610044716,
-  "layoutsHash": 1209658293,
+  "layoutsHash": 1695603342,
   "sheetsHash": -1066413830,
   "imagesHash": -1267809538,
   "map": {
@@ -2714,7 +2714,7 @@
             "coordinates": [
               [[13.3, 24.075], [12.2, 24.075], [12.2, 23.925], [13.3, 23.925]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2725,7 +2725,7 @@
             "coordinates": [
               [[16.7, 19.425], [17.8, 19.425], [17.8, 19.575], [16.7, 19.575]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2736,7 +2736,7 @@
             "coordinates": [
               [[16.7, 23.925], [17.8, 23.925], [17.8, 24.075], [16.7, 24.075]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2747,7 +2747,7 @@
             "coordinates": [
               [[13.3, 19.575], [12.2, 19.575], [12.2, 19.425], [13.3, 19.425]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2758,7 +2758,7 @@
             "coordinates": [
               [[12.2, 10.425], [13.3, 10.425], [13.3, 10.575], [12.2, 10.575]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2769,7 +2769,7 @@
             "coordinates": [
               [[17.8, 10.575], [16.7, 10.575], [16.7, 10.425], [17.8, 10.425]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2780,7 +2780,7 @@
             "coordinates": [
               [[12.2, 5.925], [13.3, 5.925], [13.3, 6.075], [12.2, 6.075]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2813,7 +2813,7 @@
             "coordinates": [
               [[12.075, 21.2], [12.075, 22.3], [11.925, 22.3], [11.925, 21.2]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2824,7 +2824,7 @@
             "coordinates": [
               [[18.075, 21.2], [18.075, 22.3], [17.925, 22.3], [17.925, 21.2]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2835,7 +2835,7 @@
             "coordinates": [
               [[28.3, 9.075], [27.2, 9.075], [27.2, 8.925], [28.3, 8.925]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2846,7 +2846,7 @@
             "coordinates": [
               [[25.575, 19.3], [25.425, 19.3], [25.425, 18.2], [25.575, 18.2]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2868,7 +2868,7 @@
             "coordinates": [
               [[12.075, 7.65], [12.075, 8.85], [11.925, 8.85], [11.925, 7.65]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2879,7 +2879,7 @@
             "coordinates": [
               [[18.075, 7.65], [18.075, 8.85], [17.925, 8.85], [17.925, 7.65]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2912,7 +2912,7 @@
             "coordinates": [
               [[25.575, 16.3], [25.425, 16.3], [25.425, 15.2], [25.575, 15.2]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2928,7 +2928,7 @@
                 [25.575, 13.7045]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -2983,7 +2983,7 @@
             "coordinates": [
               [[3.075, 13.7], [3.075, 14.8], [2.925, 14.8], [2.925, 13.7]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -12380,7 +12380,7 @@
             "coordinates": [
               [[11.8, 12.075], [10.7, 12.075], [10.7, 11.925], [11.8, 11.925]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12391,7 +12391,7 @@
             "coordinates": [
               [[14.8, 12.075], [13.7, 12.075], [13.7, 11.925], [14.8, 11.925]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12407,7 +12407,13 @@
                 [13.675, 9.075]
               ]
             ],
-            "meta": {"door": true, "optional": true, "e": true, "locked": true}
+            "meta": {
+              "door": true,
+              "optional": true,
+              "e": true,
+              "locked": true,
+              "auto": true
+            }
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12423,7 +12429,13 @@
                 [10.675, 9.075]
               ]
             ],
-            "meta": {"door": true, "optional": true, "e": true, "locked": true}
+            "meta": {
+              "door": true,
+              "optional": true,
+              "e": true,
+              "locked": true,
+              "auto": true
+            }
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12445,7 +12457,7 @@
             "coordinates": [
               [[21.075, 24.2], [21.075, 25.3], [20.925, 25.3], [20.925, 24.2]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12456,7 +12468,7 @@
             "coordinates": [
               [[16.5, 6.075], [16.5, 5.925], [17.6, 5.925], [17.6, 6.075]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12467,7 +12479,7 @@
             "coordinates": [
               [[12.4, 6.075], [12.4, 5.925], [13.5, 5.925], [13.5, 6.075]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12478,7 +12490,7 @@
             "coordinates": [
               [[18.2, 8.925], [19.3, 8.925], [19.3, 9.075], [18.2, 9.075]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12489,7 +12501,7 @@
             "coordinates": [
               [[19.7, 8.925], [20.8, 8.925], [20.8, 9.075], [19.7, 9.075]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12505,7 +12517,7 @@
                 [21.075, 16.6919]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12521,7 +12533,7 @@
                 [23.925, 17.7919]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12532,7 +12544,7 @@
             "coordinates": [
               [[23.925, 25.7], [24.075, 25.7], [24.075, 26.8], [23.925, 26.8]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12554,7 +12566,7 @@
             "coordinates": [
               [[10.3, 9.075], [9.2, 9.075], [9.2, 8.925], [10.3, 8.925]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12576,7 +12588,7 @@
             "coordinates": [
               [[25.575, 4.25], [25.425, 4.25], [25.425, 3.25], [25.575, 3.25]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12592,7 +12604,7 @@
                 [2.9106, 26.1168]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -12603,7 +12615,7 @@
             "coordinates": [
               [[23.75, 2.925], [23.75, 3.075], [22.75, 3.075], [22.75, 2.925]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12614,7 +12626,7 @@
             "coordinates": [
               [[24.25, 1.575], [24.25, 1.425], [25.25, 1.425], [25.25, 1.575]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -12625,7 +12637,7 @@
             "coordinates": [
               [[25.575, 5.75], [25.425, 5.75], [25.425, 4.75], [25.575, 4.75]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 1,
           "roomIds": [null, null]
@@ -22804,7 +22816,7 @@
             "coordinates": [
               [[4.7, 9.06], [4.7, 8.94], [5.8, 8.94], [5.8, 9.06]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22826,7 +22838,7 @@
             "coordinates": [
               [[1.7, 9.06], [1.7, 8.94], [2.8, 8.94], [2.8, 9.06]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22859,7 +22871,7 @@
             "coordinates": [
               [[2.8, 5.94], [2.8, 6.06], [1.65, 6.06], [1.65, 5.94]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22881,7 +22893,7 @@
             "coordinates": [
               [[28.35, 5.94], [28.35, 6.06], [27.2, 6.06], [27.2, 5.94]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22903,7 +22915,7 @@
             "coordinates": [
               [[5.94, 12.2], [6.06, 12.2], [6.06, 13.35], [5.94, 13.35]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22914,7 +22926,13 @@
             "coordinates": [
               [[4.35, 5.94], [4.35, 6.06], [3.2, 6.06], [3.2, 5.94]]
             ],
-            "meta": {"door": true, "optional": true, "s": true, "locked": true}
+            "meta": {
+              "door": true,
+              "optional": true,
+              "s": true,
+              "locked": true,
+              "auto": true
+            }
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22925,7 +22943,13 @@
             "coordinates": [
               [[26.8, 5.94], [26.8, 6.06], [25.65, 6.06], [25.65, 5.94]]
             ],
-            "meta": {"door": true, "optional": true, "s": true, "locked": true}
+            "meta": {
+              "door": true,
+              "optional": true,
+              "s": true,
+              "locked": true,
+              "auto": true
+            }
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22941,7 +22965,7 @@
                 [25.0569, 9.3576]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -22973,7 +22997,7 @@
                 [17.94, 10.675]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -23000,7 +23024,7 @@
             "coordinates": [
               [[12.06, 7.7], [12.06, 8.8], [11.94, 8.8], [11.94, 7.7]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -23016,7 +23040,7 @@
                 [12.175, 5.315]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -23032,7 +23056,7 @@
                 [16.675, 5.315]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28803,13 +28827,7 @@
             "coordinates": [
               [[13.35, 10.4], [13.35, 10.6], [12.15, 10.6], [12.15, 10.4]]
             ],
-            "meta": {
-              "door": true,
-              "iris": true,
-              "sealed": true,
-              "hull": true,
-              "auto": true
-            }
+            "meta": {"door": true, "iris": true, "sealed": true, "hull": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28820,7 +28838,7 @@
             "coordinates": [
               [[27.1, 0.298], [27.1, 2.698], [26.9, 2.698], [26.9, 0.298]]
             ],
-            "meta": {"door": true, "sealed": true, "hull": true, "auto": true}
+            "meta": {"door": true, "sealed": true, "hull": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28831,7 +28849,7 @@
             "coordinates": [
               [[19.3, 13.425], [19.3, 13.55], [18.2, 13.55], [18.2, 13.425]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28847,7 +28865,7 @@
                 [22.5625, 10.7]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28863,7 +28881,7 @@
                 [26.9375, 9.15]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28879,7 +28897,7 @@
                 [26.9375, 10.65]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28895,7 +28913,7 @@
                 [26.9375, 13.7]
               ]
             ],
-            "meta": {"door": true}
+            "meta": {"door": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28911,7 +28929,7 @@
                 [29.325, 4.675]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28927,7 +28945,7 @@
                 [29.325, 3.175]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28943,7 +28961,7 @@
                 [29.325, 1.675]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28954,7 +28972,7 @@
             "coordinates": [
               [[29.325, 1.3], [29.175, 1.3], [29.175, 0.2], [29.325, 0.2]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28965,7 +28983,13 @@
             "coordinates": [
               [[1.1, 6.075], [0.3, 6.075], [0.3, 5.925], [1.1, 5.925]]
             ],
-            "meta": {"door": true, "optional": true, "e": true, "locked": true}
+            "meta": {
+              "door": true,
+              "optional": true,
+              "e": true,
+              "locked": true,
+              "auto": true
+            }
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -28976,7 +29000,13 @@
             "coordinates": [
               [[1.1, 3.075], [0.3, 3.075], [0.3, 2.925], [1.1, 2.925]]
             ],
-            "meta": {"door": true, "optional": true, "w": true, "locked": true}
+            "meta": {
+              "door": true,
+              "optional": true,
+              "w": true,
+              "locked": true,
+              "auto": true
+            }
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -29030,7 +29060,7 @@
                 [13.425, 13.25]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -29046,7 +29076,7 @@
                 [13.425, 11.75]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -29101,13 +29131,7 @@
             "coordinates": [
               [[13.35, 10.4], [13.35, 10.6], [12.15, 10.6], [12.15, 10.4]]
             ],
-            "meta": {
-              "door": true,
-              "iris": true,
-              "sealed": true,
-              "hull": true,
-              "auto": true
-            }
+            "meta": {"door": true, "iris": true, "sealed": true, "hull": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -29118,7 +29142,7 @@
             "coordinates": [
               [[27.1, 0.298], [27.1, 2.698], [26.9, 2.698], [26.9, 0.298]]
             ],
-            "meta": {"door": true, "sealed": true, "hull": true, "auto": true}
+            "meta": {"door": true, "sealed": true, "hull": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33434,7 +33458,7 @@
             "coordinates": [
               [[4.2875, 5.95], [4.2875, 6.1], [3.1875, 6.1], [3.1875, 5.95]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33450,7 +33474,7 @@
                 [0.1964, 9.1125]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33466,7 +33490,7 @@
                 [5.7375, 13.6764]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33477,7 +33501,7 @@
             "coordinates": [
               [[5.7875, 5.95], [5.7875, 6.1], [4.6875, 6.1], [4.6875, 5.95]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33493,7 +33517,7 @@
                 [6.0875, 4.7139]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33509,7 +33533,7 @@
                 [7.575, 7.7125]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33520,7 +33544,7 @@
             "coordinates": [
               [[24.0725, 4.7], [24.0725, 5.8], [23.9225, 5.8], [23.9225, 4.7]]
             ],
-            "meta": {"door": true}
+            "meta": {"door": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33536,7 +33560,7 @@
                 [22.425, 7.725]
               ]
             ],
-            "meta": {"door": true}
+            "meta": {"door": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33558,7 +33582,7 @@
             "coordinates": [
               [[18.2, 9.06], [18.2, 8.94], [19.35, 8.94], [19.35, 9.06]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33580,7 +33604,7 @@
             "coordinates": [
               [[15.2, 9.06], [15.2, 8.94], [16.35, 8.94], [16.35, 9.06]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33602,7 +33626,7 @@
             "coordinates": [
               [[13.65, 9.06], [13.65, 8.94], [14.8, 8.94], [14.8, 9.06]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33624,7 +33648,7 @@
             "coordinates": [
               [[10.65, 9.06], [10.65, 8.94], [11.8, 8.94], [11.8, 9.06]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33635,7 +33659,7 @@
             "coordinates": [
               [[17.75, 4.44], [17.75, 4.56], [16.65, 4.56], [16.65, 4.44]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33662,7 +33686,7 @@
             "coordinates": [
               [[11.75, 4.44], [11.75, 4.56], [10.65, 4.56], [10.65, 4.44]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33689,7 +33713,7 @@
             "coordinates": [
               [[14.75, 4.44], [14.75, 4.56], [13.65, 4.56], [13.65, 4.44]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33716,7 +33740,7 @@
             "coordinates": [
               [[8.75, 4.44], [8.75, 4.56], [7.65, 4.56], [7.65, 4.44]]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33743,7 +33767,7 @@
                 [28.713, 9.1875]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]
@@ -33759,7 +33783,7 @@
                 [24.013, 14.6625]
               ]
             ],
-            "meta": {"door": true, "locked": true}
+            "meta": {"door": true, "locked": true, "auto": true}
           },
           "navRectId": 0,
           "roomIds": [null, null]

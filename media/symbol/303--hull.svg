@@ -2,7 +2,7 @@
 <svg viewBox="0 0 6000 3000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
     <bx:grid x="0" y="0" width="300" height="300"/>
-    <pattern x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+    <pattern x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
         <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
@@ -18,12 +18,9 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
-    <pattern id="pattern-0-1" patternTransform="matrix(1, 0, 0, 1, 1199.999755859375, 599.999572753906)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-0-0" patternTransform="matrix(1, 0, 0, 1, 239.999755859375, 60.000820159912)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-13" patternTransform="matrix(0.10000000149, 9.848e-7, -9.848e-7, 0.10000000149, -0.00329589867, 15)" xlink:href="#pattern-0"/>
     <symbol id="symbol-0" viewBox="0 0 15 15" bx:pinned="true">
       <title>extra--005--chair-0.25x0.25</title>
-      <rect width="15" height="15" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); fill: url('#pattern-13');" transform="matrix(1, 0, 0, 1, 0, 3.552713678800501e-15)">
+      <rect width="15" height="15" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); fill: url('#pattern-0');" transform="matrix(1, 0, 0, 1, 0, 0)">
         <title>extra--005--chair-0.25x0.25</title>
       </rect>
     </symbol>
@@ -47,7 +44,7 @@
     </symbol>
     <symbol id="symbol-3" viewBox="0 0 120 240" bx:pinned="true">
       <title>stateroom--036--2x4</title>
-      <rect y="0.000015" width="119.999992" height="239.999985" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 60px 120px;" x="0.000004">
+      <rect width="120" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 60px 120px;">
         <title>stateroom--036--2x4</title>
       </rect>
       <defs>
@@ -65,7 +62,7 @@
     </symbol>
     <symbol id="symbol-5" viewBox="0 0 60 60" bx:pinned="true">
       <title>low-berth--003--1x1</title>
-      <rect width="60" height="60" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0-0'); transform-origin: 29.9948px 30.001px;">
+      <rect width="60" height="60" style="stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 29.9948px 30.001px;">
         <title>low-berth--003--1x1</title>
       </rect>
       <defs>
@@ -74,7 +71,7 @@
     </symbol>
     <symbol id="symbol-6" viewBox="0 0 239.9995 240.0001" bx:pinned="true">
       <title>office--089--4x4</title>
-      <rect y="0.000061" width="240" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0-1'); transform-origin: 120px 120px;" x="-0.000244">
+      <rect y="0.000061" width="240" height="240" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 120px 120px;" x="-0.000244">
         <title>office--089--4x4</title>
       </rect>
       <defs>
@@ -330,7 +327,7 @@
     <title>decor quad switch=7</title>
   </use>
   <rect x="937.5" y="885" width="220" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 2102.5, 5.281029701233)">
-    <title>door locked</title>
+    <title>door auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(-1.3526900488614046e-7, 30, -30, -1.3526900488614046e-7, 1192.5, 914.5316772460938)" style="transform-origin: 0.5px 0.500001px;" xlink:href="#symbol-40">
     <title>decor quad switch=8 inner</title>
@@ -339,7 +336,7 @@
     <title>decor quad switch=8</title>
   </use>
   <rect x="937.5" y="885" width="220" height="30" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);" transform="matrix(0, 1, -1, 0, 2400, 605)">
-    <title>door locked</title>
+    <title>door auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(-1.3526900488614046e-7, 30, -30, -1.3526900488614046e-7, 1491, 1784.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-40">
     <title>decor quad switch=9</title>
@@ -348,7 +345,7 @@
     <title>decor quad switch=9</title>
   </use>
   <rect x="4784.500122" y="940" width="30" height="220" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door</title>
+    <title>door auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(-1.3526900488614046e-7, 30, -30, -1.3526900488614046e-7, 4786.5, 1184.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-40">
     <title>decor quad switch=10</title>
@@ -357,7 +354,7 @@
     <title>decor quad switch=10</title>
   </use>
   <rect x="4485" y="1545" width="30" height="220" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door</title>
+    <title>door auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(-1.3526900488614046e-7, 30, -30, -1.3526900488614046e-7, 4488, 1784.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-40">
     <title>decor quad switch=11</title>

@@ -171,7 +171,7 @@
   </image>
   <g xmlns="http://www.w3.org/2000/svg">
     <title>symbols</title>
-    <use width="600" height="600" transform="matrix(0, 1, -1, 0, -0.000007373774224106455, 600)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
+    <use width="600" height="600" transform="matrix(0, 1, -1, 0, -0.000007373774678853806, 600)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
       <title>office--006--2x2 doors=['e','w']</title>
     </use>
     <use width="1200" height="600" transform="matrix(-1, 0, 0, -1, 1200, 2100)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-1">
@@ -301,33 +301,33 @@
   <rect x="-20" y="1260" width="40" height="480" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=w</title>
   </rect>
-  <rect x="5980" y="1260" width="40" height="480" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull edge=e</title>
-  </rect>
-  <rect x="1260" y="2980" width="480" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull edge=s</title>
-  </rect>
-  <rect x="4260" y="2980" width="480" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
-    <title>door hull edge=s</title>
-  </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1244.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-40">
     <title>decor quad switch=0 inner</title>
   </use>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1754.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-40">
     <title>decor quad switch=0 inner</title>
   </use>
+  <rect x="5980" y="1260" width="40" height="480" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+    <title>door hull edge=e</title>
+  </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1244.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-40">
     <title>decor quad switch=1 inner</title>
   </use>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1754.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-40">
     <title>decor quad switch=1 inner</title>
   </use>
+  <rect x="1260" y="2980" width="480" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+    <title>door hull edge=s</title>
+  </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 3020.332275390625, -99.81787109375)" style="transform-origin: -40.3333px 99.8167px;" xlink:href="#symbol-40">
     <title>decor quad switch=2 inner</title>
   </use>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2510.332275390625, -99.81781768798828)" style="transform-origin: -40.3333px 99.8167px;" xlink:href="#symbol-40">
     <title>decor quad switch=2 inner</title>
   </use>
+  <rect x="4260" y="2980" width="480" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
+    <title>door hull edge=s</title>
+  </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2410.335693359375, -99.81787109375)" style="transform-origin: 59.6667px 99.8167px;" xlink:href="#symbol-40">
     <title>decor quad switch=3 inner</title>
   </use>
@@ -386,7 +386,7 @@
     <title>decor quad switch=9</title>
   </use>
   <rect x="5387.5" y="2740" width="25" height="220" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); transform-origin: -20px 51.111px;">
-    <title>door</title>
+    <title>door auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, -30, 30, 0, 8306.333984375, 850.182373046875)" style="transform-origin: 59.6667px 99.8167px;" xlink:href="#symbol-40">
     <title>decor quad switch=10</title>
