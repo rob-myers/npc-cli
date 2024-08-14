@@ -27,7 +27,7 @@
 - 🚧 doors are specified as `auto`
   - 🚧 temporarily set all doors `auto` as we work on this
   - ✅ hull doors implicitly `auto`
-  - 101 ✅ 102 ✅ 103 🚧 301 🚧 302 🚧 303 🚧
+  - 101 ✅ 102 ✅ 103 ✅ 301 🚧 302 🚧 303 🚧
 - 🚧 can use navQuery which blocks
   - manual doors which are closed (includes locked-closed)
   - auto doors which are locked
