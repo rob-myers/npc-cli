@@ -37,7 +37,7 @@ export default function Ceiling(props) {
       // ignore clicks on fully transparent pixels
       return rgba[3] === 0 ? null : { gmId };
     },
-    async drawAll() {
+    async draw() {
       for (const gmKey of keys(state.tex)) {
         state.drawGmKey(gmKey);
         await pause();
@@ -132,7 +132,7 @@ export default function Ceiling(props) {
   React.useEffect(() => {
     // ensure initial + redraw on HMR
     // 🚧 handle removal from w.gms (dynamic nav-mesh)
-    state.drawAll();
+    state.draw();
   }, [w.hash, w.hmr.createGmsData]);
 
   return <>
@@ -174,7 +174,7 @@ export default function Ceiling(props) {
  * @property {boolean} thickerTops
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
- * @property {() => Promise<void>} drawAll
+ * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp

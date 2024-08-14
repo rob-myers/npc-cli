@@ -16,7 +16,7 @@ export default function useHandleEvents(w) {
       switch (e.key) {
         case "changed-zoom":
           w.ceil.thickerTops = e.level === 'far';
-          w.ceil.drawAll();
+          w.ceil.draw();
           break;
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu

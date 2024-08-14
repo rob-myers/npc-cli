@@ -22,7 +22,7 @@ export default function Floor(props) {
     ),
     tex: w.floor.tex, // Pass in textures
 
-    async drawAll() {
+    async draw() {
       for (const gmKey of keys(state.tex)) {
         state.drawGmKey(gmKey);
         await pause();
@@ -94,7 +94,7 @@ export default function Floor(props) {
   w.floor = state;
 
   React.useEffect(() => {// initial + redraw on HMR
-    state.drawAll();
+    state.draw();
   }, [w.hash]);
 
   return <>
@@ -132,7 +132,7 @@ export default function Floor(props) {
  * @typedef State
  * @property {CanvasPattern} gridPattern
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
- * @property {() => Promise<void>} drawAll
+ * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
 
