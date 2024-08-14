@@ -16,11 +16,12 @@
 - ✅ fix nav-mesh on edge of 303
   - ✅ fixed computeDoorway
   - ✅ cleaner approach?
-- 🚧 LOD: when zoomed out a lot try making ceiling tops more solid
+- ✅ LOD: when zoomed out a lot try making ceiling tops more solid
   - ✅ when far: fill but no stroke
   - ✅ when far: improve "large monochrome areas" e.g. lifeboat
     - tag svg symbols with `broad`
-  - 🚧 clean + fix HMR
+  - ✅ clean + fix HMR
+    - seems MapControls onChange prop already supports hmr
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js

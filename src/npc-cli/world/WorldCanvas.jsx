@@ -84,7 +84,6 @@ export default function WorldCanvas(props) {
       return state.down?.pointerIds.length ?? 0;
     },
     onChangeControls(e) {
-      // 🚧 support HMR e.g. via add/remove event listener?
       const zoomState = state.controls.getDistance() > 30 ? 'far' : 'near';
       zoomState !== state.zoomState && w.events.next({ key: 'changed-zoom', level: zoomState });
       state.zoomState = zoomState;
@@ -228,8 +227,10 @@ export default function WorldCanvas(props) {
   w.ui = state;
 
   React.useEffect(() => {
-    state.controls?.setPolarAngle(Math.PI / 4);
-    state.controls?.setAzimuthalAngle(touchFixedAzimuth);
+    if (state.controls) {
+      state.controls.setPolarAngle(Math.PI / 4);
+      state.controls.setAzimuthalAngle(touchFixedAzimuth);
+    }
   }, [state.controls]);
 
   return (
