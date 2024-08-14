@@ -180,8 +180,11 @@ export class Npc {
 
     const nextCorner = agent.nextTargetInPath();
     if (this.lastCorner.equals(nextCorner) === false) {
+      this.w.events.next({ key: 'way-point', npcKey: this.key,
+        x: this.lastCorner.x, y: this.lastCorner.z,
+        next: { x: nextCorner.x, y: nextCorner.z },
+      });
       this.lastCorner.copy(nextCorner);
-      this.w.events.next({ key: 'way-point', npcKey: this.key, x: nextCorner.x, y: nextCorner.z });
     }
 
     this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
@@ -189,7 +192,12 @@ export class Npc {
     // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
 
     if (distance < 0.15) {// Reached target
-      return this.stopMoving();
+      this.stopMoving();
+      this.w.events.next({ key: 'way-point', npcKey: this.key,
+        x: this.lastCorner.x, y: this.lastCorner.z,
+        next: null,
+      });
+      return;
     }
     
     if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {

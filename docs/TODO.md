@@ -12,23 +12,6 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ pre-existing issue with gaps around top of doors
-- ✅ fix nav-mesh on edge of 303
-  - ✅ fixed computeDoorway
-  - ✅ cleaner approach?
-- ✅ LOD: when zoomed out a lot try making ceiling tops more solid
-  - ✅ when far: fill but no stroke
-  - ✅ when far: improve "large monochrome areas" e.g. lifeboat
-    - tag svg symbols with `broad`
-  - ✅ clean + fix HMR
-    - seems MapControls onChange prop already supports hmr
-
-- investigate GPU object picking via 2 render targets written to by 1 fragment shader
-  - based on PR where render targets first added to three.js
-    > https://github.com/mrdoob/three.js/pull/16390
-  - can provide vertex indices via attribute, hence instanceId too
-    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
-
 - 🚧 doors have small wall above them
   - ✅ wall meta should have roomId
     - increase resolution of hitTest canvas
@@ -50,9 +33,18 @@
 - doors can slide in specific direction
   - try scaling door and changing uv map
 
+- ✅ fix npc `way-point` event
+  - ✅ event extends { ...current, next }
+  - ✅ fires at final waypoint
 - fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
   - e.g. `g1d3 inside` vs `g1d3 nearby`
+
+- investigate GPU object picking via 2 render targets written to by 1 fragment shader
+  - based on PR where render targets first added to three.js
+    > https://github.com/mrdoob/three.js/pull/16390
+  - can provide vertex indices via attribute, hence instanceId too
+    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
@@ -1865,3 +1857,15 @@
     - stateroom ✅
   - ✅ add missing door switches in hull symbols
   - ✅ fix fresher-036 switches
+
+  - ✅ pre-existing issue with gaps around top of doors
+- ✅ fix nav-mesh on edge of 303
+  - ✅ fixed computeDoorway
+  - ✅ cleaner approach?
+- ✅ LOD: when zoomed out a lot try making ceiling tops more solid
+  - ✅ when far: fill but no stroke
+  - ✅ when far: improve "large monochrome areas" e.g. lifeboat
+    - tag svg symbols with `broad`
+  - ✅ clean + fix HMR
+    - seems MapControls onChange prop already supports hmr
+  
