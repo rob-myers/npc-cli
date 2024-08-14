@@ -71,7 +71,7 @@
     <title>wall</title>
   </rect>
   <path d="M 300 -7.5 L 1190 -7.5 L 1190 300 L 436.748 301.686 L 365.829 274.678 L 326.625 219.66 L 315.855 160.466 L 300 -7.5 Z" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0); fill-opacity: 0.5;">
-    <title>wall machine no-fill</title>
+    <title>wall machine no-fill broad</title>
   </path>
   <path d="M 785 823.099 L 785 905 L -5 905 L -5 -2.4585 L 304.8603 -5.04065 L 307.03155 72.2103 L 284.9147 108.53935 L 251.12315 124.7209 L 160.4806 128.74685 L 138.72849 143.6311 L 125.88484 170.36185 L 128.32454 745.34915 L 177.34062 777.31812 L 177.33954 777.39042 L 742.23684 774.99046 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
     <title>obstacle table surface y=0.6</title>

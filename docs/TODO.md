@@ -17,6 +17,10 @@
   - ✅ fixed computeDoorway
   - ✅ cleaner approach?
 - 🚧 LOD: when zoomed out a lot try making ceiling tops more solid
+  - ✅ when far: fill but no stroke
+  - ✅ when far: improve "large monochrome areas" e.g. lifeboat
+    - tag svg symbols with `broad`
+  - 🚧 clean + fix HMR
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js
@@ -57,11 +61,15 @@
   - ensure up to date
   - work on migrating Viewer
 
-- geometry attributes are a possible memory leak
-  - could update geometry attributes rather than create new attributes
-    - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
-    - i.e. preset large bounds, and use geometry.setDrawRange
-  - could use underlying gl api to remove attributes
+- 🚧 memory leaks
+  - ℹ️ use incognito to avoid extensions memory leak
+    > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
+  - 🚧 interact, then take memory snapshot of both workers
+  - geometry attributes are a possible memory leak
+    - could update geometry attributes rather than create new attributes
+      - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
+      - i.e. preset large bounds, and use geometry.setDrawRange
+    - could use underlying gl api to remove attributes
 - 🚧 hmr issue editing obstacle outline
   - seems fixed by always re-generating obstacle texture, irrespective of size change
 - towards faster raycast against instancedmesh

@@ -50,6 +50,7 @@ declare namespace NPC {
     | { key: "closed-door"; gmId: number; doorId: number; npcKey?: string }
     | { key: "locked-door"; gmId: number; doorId: number; npcKey?: string }
     | { key: "unlocked-door"; gmId: number; doorId: number; npcKey?: string }
+    | { key: "changed-zoom"; level: 'near' | 'far' }
     | { key: "entered-sensor" | "exited-sensor"; npcKey: string } & (
       | { type: 'door' } & Geomorph.GmDoorId
     )

@@ -53,8 +53,11 @@ export default function createGmsData({ prevGmData }) {
       const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
       );
-      gmData.nonHullCeilTops = nonHullWallsTouchCeil;
-      gmData.doorCeilTops = gm.doors.map(door => door.computeThinPoly());
+      gmData.tops = {
+        broad: gm.walls.filter(x => x.meta.broad === true),
+        door: gm.doors.map(door => door.computeThinPoly()),
+        nonHull: nonHullWallsTouchCeil,
+      };
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
       gmData.hitCtxt ??= /** @type {CanvasRenderingContext2D} */ (
@@ -188,12 +191,11 @@ export default function createGmsData({ prevGmData }) {
 const emptyGmData = {
   gmKey: 'g-101--multipurpose', // overridden
   doorSegs: [],
-  doorCeilTops: [],
   hitCtxt: /** @type {*} */ (null),
   navPoly: undefined,
-  nonHullCeilTops: [],
   polyDecals: [],
   roomGraph: new RoomGraphClass(),
+  tops: { broad: [], door: [], nonHull: [] },
   unseen: true,
   wallPolyCount: 0,
   wallPolySegCounts: [],
@@ -214,8 +216,7 @@ const emptyGmData = {
  * @property {[Geom.Vect, Geom.Vect][]} doorSegs
  * @property {CanvasRenderingContext2D} hitCtxt
  * @property {import('three').BufferGeometry} [navPoly] Debug only
- * @property {Geom.Poly[]} nonHullCeilTops These wall polygons are inset, so stroke does not jut out
- * @property {Geom.Poly[]} doorCeilTops These door polygons are inset, so stroke does not jut out
+ * @property {{ broad: Geom.Poly[]; door: Geom.Poly[]; nonHull: Geom.Poly[] }} tops
  * @property {Geom.Poly[]} polyDecals
  * @property {import('../graph/room-graph').RoomGraphClass} roomGraph
  * @property {boolean} unseen Has this geomorph never occurred in any map so far?

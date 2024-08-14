@@ -231,10 +231,10 @@
     <title>wall</title>
   </path>
   <path d="M 1800 1795 L 1800 2845.53 L 1769.845 2733.67 L 1684.085 2395 L 1610 2220 L 1520.58 2059.51 L 1430 1925 L 1330 1805 L 1330 1800 L 1800 1800 L 1800 1795 Z" style="fill: rgb(255, 0, 0);">
-    <title>wall no-fill</title>
+    <title>wall no-fill broad</title>
   </path>
   <path d="M 4200 1795 L 4200 2845.53 L 4230.155 2733.67 L 4315.915 2395 L 4390 2220 L 4479.42 2059.51 L 4570 1925 L 4670 1805 L 4670 1800 L 4200 1800 L 4200 1795 Z" style="fill: rgb(255, 0, 0); transform-origin: 4435px 2320.26px;">
-    <title>wall no-fill</title>
+    <title>wall no-fill broad</title>
   </path>
   <path d="M 1745 1855 L 1745 2411.50365 L 1736.37075 2377.42655 L 1659.4901 2195.82275 L 1659.09575 2195.1152 L 1658.3066 2193.69895 L 1658.1729 2193.45905 L 1658.0327 2193.20745 L 1566.2001 2028.7888 L 1474.0508 1891.94845 L 1443.26055 1855.00015 L 1745 1855 Z" style="stroke: rgb(0, 0, 0); opacity: 0.5; fill: rgb(0, 0, 255);">
     <title>poly ceil fill=#000000 stroke=#999999 strokeWidth=2</title>

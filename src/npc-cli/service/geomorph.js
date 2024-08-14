@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -50,14 +50,16 @@ class GeomorphService {
     /**
      * Cutting pointwise avoids errors (e.g. for 301).
      * It also permits us to propagate wall `meta` whenever:
-     * - it has 'y' (base height) or 'h' (height)
+     * - it has a special key e.g. `h` (height)
      * - it has 'hull' (hull wall)
      */
     const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
-      Object.assign(y, { meta: 'y' in x.meta || 'h' in x.meta
-        ? x.meta
-        : x.meta.hull === true ? hullWallMeta : plainWallMeta
-      })
+      Object.assign(y, {
+        meta: specialWallMetaKeys.some(key => key in x.meta)
+          ? x.meta
+          : x.meta.hull === true ? hullWallMeta : plainWallMeta
+        }
+      )
     ));
     const rooms = Poly.union(uncutWalls).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
@@ -1339,7 +1341,7 @@ export class Connector {
     const botLeft = topLeft.clone().addScaled(hNormal, height);
     const botRight = this.seg[1].clone().addScaled(hNormal, height/2);
     const topRight = botRight.clone().addScaled(hNormal, -height);
-    return new Poly([topLeft, botLeft, botRight, topRight]).fixOrientation();
+    return new Poly([topLeft, botLeft, botRight, topRight], undefined, this.meta).fixOrientation();
   }
 }
 

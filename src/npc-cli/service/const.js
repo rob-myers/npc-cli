@@ -53,6 +53,18 @@ export const wallOutset = 12 * sguToWorldScale;
 
 export const obstacleOutset = 10 * sguToWorldScale;
 
+/**
+ * Walls with any of these tags will not be merged with adjacent walls
+ * - `y` (numeric) Height of base off the floor
+ * - `h` (numeric) Height of wall
+ * - `broad` (true) Not thin e.g. back of lifeboat
+ */
+export const specialWallMetaKeys = /** @type {const} */ ([
+  'y',
+  'h',
+  'broad',
+]);
+
 export const wallHeight = 2;
 
 export const doorHeight = 1.8;

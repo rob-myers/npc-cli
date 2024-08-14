@@ -206,10 +206,10 @@
     <title>poly ceil fill=#222222 stroke=#777777 strokeWidth=4</title>
   </path>
   <path d="M 1495 605 L 1795 605 L 1795 305 L 2115 645.5 L 2065 716.5 L 2010 791.5 L 1945 889.5 L 1890 998 L 1850 1088 L 1810 1210 L 1495 1210 L 1495 605 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(255, 0, 0);">
-    <title>wall no-fill</title>
+    <title>wall no-fill broad</title>
   </path>
   <path d="M 4505 605 L 4205 605 L 4205 305 L 3885 645.5 L 3935 716.5 L 3990 791.5 L 4055 889.5 L 4110 998 L 4150 1088 L 4190 1200 L 4205 1200 L 4505 1203 L 4505 605 Z" style="stroke: rgb(0, 0, 0); stroke-width: 3px; stroke-linecap: round; stroke-linejoin: round; fill-opacity: 0.5; fill: rgb(255, 0, 0); transform-origin: 4195px 754px;">
-    <title>wall no-fill</title>
+    <title>wall no-fill broad</title>
   </path>
   <rect x="4492" y="1192.5" width="308" height="17.5" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);">
     <title>wall</title>

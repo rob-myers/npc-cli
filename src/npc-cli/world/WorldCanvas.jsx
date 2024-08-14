@@ -26,6 +26,7 @@ export default function WorldCanvas(props) {
     lastScreenPoint: new Vect(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
+    zoomState: 'near',
 
     canvasRef(canvasEl) {
       if (canvasEl && !state.canvas) {
@@ -81,6 +82,12 @@ export default function WorldCanvas(props) {
     },
     getNumPointers() {
       return state.down?.pointerIds.length ?? 0;
+    },
+    onChangeControls(e) {
+      // 🚧 support HMR e.g. via add/remove event listener?
+      const zoomState = state.controls.getDistance() > 30 ? 'far' : 'near';
+      zoomState !== state.zoomState && w.events.next({ key: 'changed-zoom', level: zoomState });
+      state.zoomState = zoomState;
     },
     onCreated(rootState) {
       state.rootState = rootState;
@@ -221,7 +228,6 @@ export default function WorldCanvas(props) {
   w.ui = state;
 
   React.useEffect(() => {
-    // 🚧 do not trigger on HMR
     state.controls?.setPolarAngle(Math.PI / 4);
     state.controls?.setAzimuthalAngle(touchFixedAzimuth);
   }, [state.controls]);
@@ -258,6 +264,7 @@ export default function WorldCanvas(props) {
         ref={x => state.controls = x ?? state.controls}
         makeDefault
         zoomToCursor
+        onChange={state.onChangeControls}
 
         {...isTouchDevice() && {
           minAzimuthAngle: touchFixedAzimuth,
@@ -309,9 +316,12 @@ export default function WorldCanvas(props) {
  * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
+ * @property {'near' | 'far'} zoomState
+ *
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
  * @property {(def: PointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getNpcPointerEvent
+ * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp

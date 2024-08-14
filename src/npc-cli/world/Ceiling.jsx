@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
-import { keys } from "../service/generic";
+import { keys, pause } from "../service/generic";
 import { drawPolygons } from "../service/dom";
 import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
@@ -15,7 +15,9 @@ export default function Ceiling(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    thickerTops: false,
     tex: w.ceil.tex, // Pass in textures
+
     detectClick(e) {
       const gmId = Number(e.object.name.slice('ceil-gm-'.length));
       const gm = w.gms[gmId];
@@ -35,6 +37,12 @@ export default function Ceiling(props) {
       // ignore clicks on fully transparent pixels
       return rgba[3] === 0 ? null : { gmId };
     },
+    async drawAll() {
+      for (const gmKey of keys(state.tex)) {
+        state.drawGmKey(gmKey);
+        await pause();
+      }
+    },
     drawGmKey(gmKey) {
       const { ct, tex, canvas} = state.tex[gmKey];
       const layout = w.geomorphs.layout[gmKey];
@@ -46,16 +54,29 @@ export default function Ceiling(props) {
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       
-      const { nonHullCeilTops, doorCeilTops, polyDecals } = w.gmsData[gmKey];
+      const { tops, polyDecals } = w.gmsData[gmKey];
       
       // wall/door tops
-      const strokeColor = 'rgba(80, 80, 80, 1)';
-      const hullStrokeColor = 'rgba(80, 80, 80, 1)';
-      const fillColor = 'rgba(0, 0, 0, 1)';
+      const black = 'rgb(0, 0, 0)';
+      const grey90 = 'rgb(90, 90, 90)';
+      const grey60 = 'rgb(60, 60, 60)';
+      const grey100 = 'rgb(100, 100, 100)';
+      const thinLineWidth = 0.04;
+      const thickLineWidth = 0.08;
+
+      if (state.thickerTops) {
+        drawPolygons(ct, tops.nonHull, [grey100, null]);
+        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
+        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [grey60, null]);
+        drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
+      } else {
+        drawPolygons(ct, tops.nonHull, [black, grey90, thinLineWidth]);
+        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [black, grey90, thinLineWidth]);
+        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [grey60, null]);
+      }
+
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, nonHullCeilTops, [fillColor, strokeColor, 0.04]);
-      drawPolygons(ct, doorCeilTops, [fillColor, strokeColor, 0.04]);
-      drawPolygons(ct, hullWalls, [hullStrokeColor, hullStrokeColor, 0.06]);
+      drawPolygons(ct, hullWalls, [grey60, null]);
       
       // decals
       polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
@@ -108,9 +129,10 @@ export default function Ceiling(props) {
 
   w.ceil = state;
 
-  React.useEffect(() => {// ensure initial + redraw on HMR
-    // 🔔 handle removal from api.gms (dynamic nav-mesh)
-    keys(state.tex).forEach(gmKey => state.drawGmKey(gmKey));
+  React.useEffect(() => {
+    // ensure initial + redraw on HMR
+    // 🚧 handle removal from w.gms (dynamic nav-mesh)
+    state.drawAll();
   }, [w.hash, w.hmr.createGmsData]);
 
   return <>
@@ -149,8 +171,10 @@ export default function Ceiling(props) {
 
 /**
  * @typedef State
+ * @property {boolean} thickerTops
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
+ * @property {() => Promise<void>} drawAll
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
