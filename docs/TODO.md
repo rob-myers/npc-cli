@@ -12,26 +12,28 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 doors have small wall above them
+- ✅ doors have small wall above them
   - ✅ wall meta should have roomId
     - increase resolution of hitTest canvas
   - ✅ try extending `Walls` with two quads per door
     - i.e. two degenerate "one-segment-walls"
   - ✅ clean
-  - 🚧 locked indicator could go in center
+  - ✅ locked indicator could go in center
     - ✅ render them inside `Doors`
     - ✅ green unlocked, red locked
-    - 🚧 setup initially locked doors
+    - ✅ setup initially locked doors
       - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
     - ✅ preserve locked flag via "door lookup by center"
 - 🚧 doors are specified as `auto`
-  - temporarily set all doors `auto` as we work on this
-- navQuery blocks non-auto doors
+  - 🚧 temporarily set all doors `auto` as we work on this
+  - ✅ hull doors implicitly `auto`
+  - 101 ✅ 102 ✅ 103 🚧 301 🚧 302 🚧 303 🚧
+- 🚧 can use navQuery which blocks
+  - manual doors which are closed (includes locked-closed)
+  - auto doors which are locked
 - support non-door sensor i.e. decor circle/poly
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
-- doors can slide in specific direction
-  - try scaling door and changing uv map
 
 - ✅ fix npc `way-point` event
   - ✅ event extends { ...current, next }
@@ -57,20 +59,27 @@
 - 🚧 memory leaks
   - ℹ️ use incognito to avoid extensions memory leak
     > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
+  - ℹ️ https://superuser.com/questions/1817473/what-accounts-for-the-discrepancy-between-the-memory-use-shown-when-hovering-on
+  - ℹ️ can also use three.js stats UI which has a memory indicator
   - 🚧 interact, then take memory snapshot of both workers
   - geometry attributes are a possible memory leak
     - could update geometry attributes rather than create new attributes
       - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
       - i.e. preset large bounds, and use geometry.setDrawRange
     - could use underlying gl api to remove attributes
+
 - 🚧 hmr issue editing obstacle outline
   - seems fixed by always re-generating obstacle texture, irrespective of size change
+- svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh
   - https://github.com/pmndrs/drei/blob/master/src/core/Bvh.tsx
   - Walls has `useBvhRaycast` which constructs static geom and hijacks raycast
   - Doors has `useBvhRaycast` which constructs geom (doors closed) and hijacks raycast
     - will need "door open ratios"
+  - 🤔 maybe use object-picking + canonical point instead
+- doors can slide in specific direction
+  - try scaling door and changing uv map
 - maybe "move" constants into geomorphs.json
   - to avoid HMR versus geomorphs.json "alternate routes"
 - workers should only hot reload when directly edited or geomorphs.json changes

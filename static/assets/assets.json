@@ -1,7 +1,7 @@
 {
   "meta": {
-    "101--hull": {"outputHash": 1929298286, "pngHash": 568633107},
-    "102--hull": {"outputHash": 1116497361, "pngHash": 184103855},
+    "101--hull": {"outputHash": 1118485414, "pngHash": 568633107},
+    "102--hull": {"outputHash": 1057984362, "pngHash": 184103855},
     "103--hull": {"outputHash": 1221905667, "pngHash": -1937509879},
     "301--hull": {"outputHash": -1843567132, "pngHash": 787602800},
     "302--hull": {"outputHash": -1974833400, "pngHash": -1557128953},
@@ -1216,28 +1216,28 @@
         {
           "type": "Polygon",
           "coordinates": [[[5.8, 8.92], [5.8, 9.07], [4.7, 9.07], [4.7, 8.92]]],
-          "meta": {"door": true, "iris": true}
+          "meta": {"door": true, "iris": true, "auto": true}
         },
         {
           "type": "Polygon",
           "coordinates": [
             [[5.8, 20.925], [5.8, 21.075], [4.7, 21.075], [4.7, 20.925]]
           ],
-          "meta": {"door": true, "iris": true}
+          "meta": {"door": true, "iris": true, "auto": true}
         },
         {
           "type": "Polygon",
           "coordinates": [
             [[25.3, 20.9275], [25.3, 21.0775], [24.2, 21.0775], [24.2, 20.9275]]
           ],
-          "meta": {"door": true, "iris": true}
+          "meta": {"door": true, "iris": true, "auto": true}
         },
         {
           "type": "Polygon",
           "coordinates": [
             [[25.3, 8.93], [25.3, 9.08], [24.2, 9.08], [24.2, 8.93]]
           ],
-          "meta": {"door": true, "iris": true}
+          "meta": {"door": true, "iris": true, "auto": true}
         },
         {
           "type": "Polygon",
@@ -1249,7 +1249,7 @@
               [13.725, 13.425]
             ]
           ],
-          "meta": {"door": true}
+          "meta": {"door": true, "auto": true}
         },
         {
           "type": "Polygon",
@@ -1261,7 +1261,7 @@
               [15.125, 13.425]
             ]
           ],
-          "meta": {"door": true}
+          "meta": {"door": true, "auto": true}
         },
         {
           "type": "Polygon",
@@ -1273,7 +1273,7 @@
               [13.725, 16.425]
             ]
           ],
-          "meta": {"door": true}
+          "meta": {"door": true, "auto": true}
         },
         {
           "type": "Polygon",
@@ -1285,7 +1285,7 @@
               [15.125, 16.425]
             ]
           ],
-          "meta": {"door": true}
+          "meta": {"door": true, "auto": true}
         }
       ],
       "windows": [],
@@ -2242,7 +2242,7 @@
           "coordinates": [
             [[26.8, 5.9175], [26.8, 6.0675], [25.7, 6.0675], [25.7, 5.9175]]
           ],
-          "meta": {"door": true, "iris": true}
+          "meta": {"door": true, "iris": true, "auto": true}
         }
       ],
       "windows": [],

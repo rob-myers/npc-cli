@@ -1235,9 +1235,10 @@ export class Connector {
     /** @type {Geom.Vect} */
     this.normal = normal;
 
-    if (this.meta.hull) {
+    if (this.meta.hull === true) {
+      // 🔔 hull door normals should point outwards
       const edge = /** @type {Geomorph.HullDoorMeta} */ (this.meta).edge;
-      if (// hull door normals should point outwards
+      if (
         edge === 'n' && this.normal.y > 0
         || edge === 'e' && this.normal.x < 0
         || edge === 's' && this.normal.y < 0
@@ -1245,6 +1246,8 @@ export class Connector {
       ) {
         this.normal.scale(-1);
       }
+      // 🔔 every hull door is auto
+      this.meta.auto = true;
     }
 
     // 🚧 offset needed?
@@ -1351,7 +1354,5 @@ export class Connector {
  */
 const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
 const tmpVect1 = new Vect();
-const tmpVect2 = new Vect();
-const tmpPoly1 = new Poly();
 const tmpMat1 = new Mat();
 const tmpMat2 = new Mat();
