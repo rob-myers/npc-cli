@@ -66,7 +66,7 @@
       "obsHashes": [550873257]
     },
     "console--019--2x2": {
-      "outputHash": 337780046,
+      "outputHash": 537841381,
       "pngHash": -752773709,
       "obsHashes": [1188073384]
     },
@@ -8120,10 +8120,10 @@
           ],
           "meta": {
             "decor": true,
+            "quad": true,
             "img": "icon--doc",
             "y": 0.61,
-            "point": true,
-            "direction": {"x": 0.7071067811865476, "y": -0.7071067811865476}
+            "transform": [0.2475, -0.2475, 0.3394, 0.3394, 0.3663, 0.954]
           }
         },
         {
@@ -8138,10 +8138,10 @@
           ],
           "meta": {
             "decor": true,
+            "quad": true,
             "img": "icon--doc",
             "y": 0.61,
-            "point": true,
-            "direction": {"x": 0.7071067811865476, "y": -0.7071067811865476}
+            "transform": [0.2475, -0.2475, 0.3394, 0.3394, 0.7583, 0.5772]
           }
         },
         {
@@ -8156,11 +8156,11 @@
           ],
           "meta": {
             "decor": true,
+            "quad": true,
             "img": "icon--key-card",
             "y": 0.61,
             "color": "#fff",
-            "point": true,
-            "direction": {"x": 0.9999999999999999, "y": 0}
+            "transform": [0.3968, 0, 0, 0.2749, 1.5982, 0.1787]
           }
         }
       ],

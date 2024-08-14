@@ -59,13 +59,13 @@
     <title>obstacle y=0.6</title>
   </path>
   <use width="1" height="1" transform="matrix(49.497474670410156, -49.497474670410156, 67.88224792480469, 67.88224792480469, 131.44882202148438, 199.49082946777344)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
-    <title>decor img=icon--doc y=0.61</title>
+    <title>decor quad img=icon--doc y=0.61</title>
   </use>
   <use width="1" height="1" transform="matrix(49.497474670410156, -49.497474670410156, 67.88224792480469, 67.88224792480469, 209.84280395507812, 124.1253890991211)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
-    <title>decor img=icon--doc y=0.61</title>
+    <title>decor quad img=icon--doc y=0.61</title>
   </use>
   <use width="1" height="1" transform="matrix(79.36923217773438, 0, 0, 54.970664978027344, 358.8257141113281, 62.7278938293457)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
-    <title>decor img=icon--key-card y=0.61 color=#fff</title>
+    <title>decor quad img=icon--key-card y=0.61 color=#fff</title>
   </use>
   <g>
     <title>symbols</title>
