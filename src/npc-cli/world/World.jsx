@@ -92,6 +92,8 @@ export default function World(props) {
       ...helper,
     },
 
+    s: /** @type {*} */ (null),
+
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
@@ -354,6 +356,9 @@ export default function World(props) {
  * @property {import('./ContextMenu').State} menu
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
+ *
+ * @property {import("./use-handle-events").State} s
+ * Shared state e.g. npc and doors
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex
  * @property {import("../service/three").CanvasTexMeta} decorTex

@@ -24,6 +24,7 @@
     - ✅ setup initially locked doors
       - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
     - ✅ preserve locked flag via "door lookup by center"
+
 - 🚧 doors are specified as `auto`
   - ✅ temporarily set all doors `auto` 
   - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
@@ -31,7 +32,10 @@
   - ✅ unsealed non-hull locked doors default to auto
     - we're setting "public" unlocked doors as auto
     - but e.g. unlocked fresher door inside locked room is not auto
-  - 🚧 implement/default-to "force-open" navigation while we implement navQuery
+  - 🚧 implement "force-open" navigation while we implement navQuery
+    - ✅ move door/npc logic outside Doors
+    - 🚧 move toggleDoor/toggleLock into w.s (shared)
+    - distinct from having a key
 - 🚧 can use navQuery which blocks
   - manual doors which are closed (includes locked-closed)
   - auto doors which are locked

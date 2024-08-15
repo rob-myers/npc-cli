@@ -24,8 +24,6 @@ export default function Doors(props) {
     doorsInst: /** @type {*} */ (null),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
-    npcToAccess: {},
-    npcToNearby: {},
 
     addDoorUvs() {
       const { decor, decorDim } = w.geomorphs.sheet;
@@ -87,9 +85,6 @@ export default function Doors(props) {
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(normal.clone()),
             segLength: u.distanceTo(v),
-
-            nearbyNpcKeys: new Set(),
-            unlockNpcKeys: new Set(),
           };
           instId++;
         })
@@ -97,7 +92,7 @@ export default function Doors(props) {
     },
     canAccess(npcKey, gdKey) {
       return Array.from(
-        state.npcToAccess[npcKey] ?? []
+        w.s.npcToAccess[npcKey] ?? []
       ).some(prefix => gdKey.startsWith(prefix));
     },
     cancelClose(door) {
@@ -209,16 +204,6 @@ export default function Doors(props) {
       ds.computeBoundingSphere();
       ls.computeBoundingSphere();
     },
-    removeFromSensors(npcKey) {
-      for (const gmDoorKey of state.npcToNearby[npcKey] ?? []) {
-        const door = state.byKey[gmDoorKey];
-        door.nearbyNpcKeys.delete(npcKey);
-        if (door.auto === true && door.nearbyNpcKeys.size === 0) {
-          state.tryCloseDoor(door.gmId, door.doorId);
-        }
-      }
-      state.npcToNearby[npcKey]?.clear();
-    },
     toggleDoorRaw(door, opts = {}) {
       if (door.sealed === true) {
         return false;
@@ -234,14 +219,14 @@ export default function Doors(props) {
           state.tryCloseDoor(door.gmId, door.doorId); // Reset door close
           return true;
         }
-        if (door.nearbyNpcKeys.size > 0) {
+        if (w.s.doorToNearby[door.gdKey].size > 0) {
           return true;
         }
       } else {// was closed
         if (opts.close === true) {
           return false;
         }
-        if (door.locked === true && opts.npcKey && !door.unlockNpcKeys.has(opts.npcKey)) {
+        if (door.locked === true && opts.npcKey && !w.door.canAccess(opts.npcKey, door.gdKey)) {
           // Ignore locks if opts.npcKey unspecified
           return false; // Cannot open door if locked
         }
@@ -391,13 +376,8 @@ export default function Doors(props) {
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
- * @property {{ [npcKey: string]: Set<string> }} npcToAccess
- * Prefixes of accessible `Geomorph.GmDoorKey`s
- * @property {{ [npcKey: string]: Set<Geomorph.GmDoorKey> }} npcToNearby
- * `npcToKeys[npcKey]` provides `gmDoorKey`s the npc is within sensor range of
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
- * @property {(npcKey: string) => void} removeFromSensors
  * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggleDoorRaw
  * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleLockOpts) => boolean} toggleLock
  * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleDoorOpts) => boolean} toggle
