@@ -346,8 +346,7 @@ const tmpMatFour1 = new THREE.Matrix4();
  * @property {boolean} [clear] is the doorway clear?
  * @property {boolean} [close] should we close the door?
  * @property {Geom.Meta} [eventMeta] extra meta for events
- * //@property {string} [npcKey] initiated via npc?
- * @property {boolean} [open] should we open the door?
+ * @property {boolean} [open] should we open or unlock the door?
  */
 
 /**
@@ -356,6 +355,5 @@ const tmpMatFour1 = new THREE.Matrix4();
  * e.g. `w.s.canAccess(npcKey, gdKey)`
  * @property {boolean} [lock] should we lock the door?
  * @property {Geom.Meta} [eventMeta] extra meta for events
- * //@property {string} [npcKey] initiated via npc?
  * @property {boolean} [unlock] should we unlock the door?
  */
