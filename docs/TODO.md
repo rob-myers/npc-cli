@@ -37,7 +37,7 @@
     - ✅ move toggleDoor/toggleLock into w.s (shared)
     - ✅ w.s.toggle{Door,Lock} -> w.s.toggle
     - ℹ️ force-opening is distinct from having a key
-  - w.s.toggle only supports opts.gdKey not opts.{gmId,doorId}
+  - 🚧 w.s.toggle only supports opts.gdKey not opts.{gmId,doorId}
   - ✅ fix lock indicator for hull doors
 - 🚧 can use navQuery which blocks
   - manual doors which are closed (includes locked-closed)
