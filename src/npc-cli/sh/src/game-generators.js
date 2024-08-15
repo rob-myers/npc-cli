@@ -160,7 +160,7 @@ export async function walkTest(input, { w, home })  {
  * w
  * w 'x => x.crowd'`
  * w crowd
- * w vert.toggleDoor 15
+ * w s.toggleDoor '{gdKey:"g0d0"}'
  * ```
  * - 🚧 `w "x => x.gmGraph.findRoomContaining($( click 1 ))"`
  * - 🚧 `w gmGraph.findRoomContaining $( click 1 )`

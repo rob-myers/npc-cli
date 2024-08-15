@@ -3,11 +3,10 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { defaultDoorCloseMs, doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth } from "../service/const";
+import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth } from "../service/const";
 import * as glsl from "../service/glsl";
 import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorphService } from "../service/geomorph";
-import { geom } from "../service/geom";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -90,11 +89,6 @@ export default function Doors(props) {
         })
       });
     },
-    canAccess(npcKey, gdKey) {
-      return Array.from(
-        w.s.npcToAccess[npcKey] ?? []
-      ).some(prefix => gdKey.startsWith(prefix));
-    },
     cancelClose(door) {
       window.clearTimeout(door.closeTimeoutId);
       delete door.closeTimeoutId;
@@ -139,13 +133,6 @@ export default function Doors(props) {
     },
     isOpen(gmId, doorId) {
       return this.byGmId[gmId][doorId].open;
-    },
-    npcNearDoor(npcKey, gmId, doorId, ) {
-      const npc = w.npc.getNpc(npcKey);
-      const position = npc.getPosition();
-      const gm = w.gms[gmId];
-      const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
-      return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
     },
     onPointerDown(e) {
       w.events.next(w.ui.getNpcPointerEvent({
@@ -208,26 +195,23 @@ export default function Doors(props) {
       if (door.sealed === true) {
         return false;
       }
-      if (typeof opts.npcKey === 'string' && !state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
-        return door.open;
-      }
       
       state.cancelClose(door); // Cancel any pending close
 
       if (door.open === true) {// was open
         if (opts.open) {
-          state.tryCloseDoor(door.gmId, door.doorId); // Reset door close
+          w.events.next({ key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta }); // Reset door close
           return true;
         }
-        if (w.s.doorToNearby[door.gdKey].size > 0) {
+        if (opts.clear !== true) {
           return true;
         }
       } else {// was closed
         if (opts.close === true) {
           return false;
         }
-        if (door.locked === true && opts.npcKey && !w.door.canAccess(opts.npcKey, door.gdKey)) {
-          // Ignore locks if opts.npcKey unspecified
+        // Ignore locks if `opts.access` unspecified
+        if (door.locked === true && opts.access === false) {
           return false; // Cannot open door if locked
         }
       }
@@ -235,44 +219,31 @@ export default function Doors(props) {
       // Actually open/close door
       door.open = !door.open;
       state.movingDoors.set(door.instanceId, door);
-      w.events.next({
-        key: door.open ? 'opened-door' : 'closed-door',
-        gmId: door.gmId, doorId: door.doorId, npcKey: opts.npcKey,
+      w.events.next(door.open ? {
+        key: 'opened-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+      } : {
+        key: 'closed-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
       });
 
       if (door.auto === true && door.open === true) { 
-        state.tryCloseDoor(door.gmId, door.doorId);
+        w.events.next({ key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta }); // Reset door close
       }
 
       return door.open;
     },
-    toggle(opts) {
-      if ('gdKey' in opts) {
-        return state.toggleDoorRaw(state.byKey[opts.gdKey], opts);
-      }
-      if ('gmId' in opts) {
-        return state.toggleDoorRaw(state.byGmId[opts.gmId][opts.doorId], opts);
-      }
-      throw Error(`${'toggleBy(opts)'} expected "opts.gdKey" or "opts.{gmId,doorId}"`)
-    },
-    toggleLockRaw(door, { npcKey, lock, unlock } = {}) {
+    toggleLockRaw(door, opts = {}) {
       if (door.sealed === true) {
         return false;
       }
 
-      if (npcKey !== undefined) {
-        if (state.npcNearDoor(npcKey, door.gmId, door.doorId) === false) {
-          return door.locked; // Too far
-        }
-        if (state.canAccess(npcKey, door.gdKey) === false) {
-          return door.locked; // No access
-        }
+      if (opts.access === false) {
+        return door.locked; // No access
       }
 
       if (door.locked === true) {
-        if (lock === true) return true; // Already locked
+        if (opts.lock === true) return true; // Already locked
       } else {
-        if (unlock === true) return false; // Already unlocked
+        if (opts.unlock === true) return false; // Already unlocked
       }
 
       // Actually lock/unlock door
@@ -280,32 +251,13 @@ export default function Doors(props) {
       state.lockSigInst.setColorAt(door.instanceId, getColor(door.locked ? doorLockedColor : doorUnlockedColor));
       /** @type {THREE.InstancedBufferAttribute} */ (state.lockSigInst.instanceColor).needsUpdate = true;
 
-      w.events.next({
-        key: door.open ? 'locked-door' : 'unlocked-door',
-        gmId: door.gmId, doorId: door.doorId, npcKey,
+      w.events.next(door.locked ? {
+        key: 'locked-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+      } : {
+        key: 'unlocked-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
       });
 
       return door.locked;
-    },
-    toggleLock(opts) {
-      if ('gdKey' in opts) {
-        return state.toggleLockRaw(state.byKey[opts.gdKey], opts);
-      }
-      if ('gmId' in opts) {
-        return state.toggleLockRaw(state.byGmId[opts.gmId][opts.doorId], opts);
-      }
-      throw Error(`${'toggleLockBy(opts)'} expected "opts.gdKey" or "opts.{gmId,doorId}"`)
-    },
-    tryCloseDoor(gmId, doorId) {
-      const door = state.byGmId[gmId][doorId];
-      door.closeTimeoutId = window.setTimeout(() => {
-        if (door.open === true) {
-          state.toggleDoorRaw(door);
-          state.tryCloseDoor(gmId, doorId); // recheck in {ms}
-        } else {
-          delete door.closeTimeoutId;
-        }
-      }, defaultDoorCloseMs);
     },
   }));
 
@@ -368,22 +320,16 @@ export default function Doors(props) {
  *
  * @property {() => void} addDoorUvs
  * @property {() => void} buildLookups
- * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} canAccess
  * @property {(item: Geomorph.DoorState) => void} cancelClose
  * @property {(instanceId: number) => Geom.Meta} decodeDoorInstance
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
- * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggleDoorRaw
- * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleLockOpts) => boolean} toggleLock
- * @property {(opts: ({gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }) & ToggleDoorOpts) => boolean} toggle
  * @property {(door: Geomorph.DoorState, opts?: ToggleLockOpts) => boolean} toggleLockRaw
- * @property {(gmId: number, doorId: number) => void} tryCloseDoor
- * Try close door every `N` seconds, starting in `N` seconds.
  * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
@@ -395,14 +341,21 @@ const tmpMatFour1 = new THREE.Matrix4();
 
 /**
  * @typedef ToggleDoorOpts
+ * @property {boolean} [access] does provided npc have access?
+ * e.g. `w.s.canAccess(npcKey, gdKey)`
+ * @property {boolean} [clear] is the doorway clear?
  * @property {boolean} [close] should we close the door?
- * @property {string} [npcKey] initiated via npc?
+ * @property {Geom.Meta} [eventMeta] extra meta for events
+ * //@property {string} [npcKey] initiated via npc?
  * @property {boolean} [open] should we open the door?
  */
 
 /**
  * @typedef ToggleLockOpts
+ * @property {boolean} [access] does provided npc have access?
+ * e.g. `w.s.canAccess(npcKey, gdKey)`
  * @property {boolean} [lock] should we lock the door?
- * @property {string} [npcKey] initiated via npc?
+ * @property {Geom.Meta} [eventMeta] extra meta for events
+ * //@property {string} [npcKey] initiated via npc?
  * @property {boolean} [unlock] should we unlock the door?
  */

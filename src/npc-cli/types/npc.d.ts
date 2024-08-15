@@ -46,10 +46,11 @@ declare namespace NPC {
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
-    | { key: "opened-door"; gmId: number; doorId: number; npcKey?: string }
-    | { key: "closed-door"; gmId: number; doorId: number; npcKey?: string }
-    | { key: "locked-door"; gmId: number; doorId: number; npcKey?: string }
-    | { key: "unlocked-door"; gmId: number; doorId: number; npcKey?: string }
+    | { key: "try-close-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "opened-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "closed-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "changed-zoom"; level: 'near' | 'far' }
     | { key: "entered-sensor" | "exited-sensor"; npcKey: string } & (
       | { type: 'door' } & Geomorph.GmDoorId

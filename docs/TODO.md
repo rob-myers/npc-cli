@@ -34,7 +34,8 @@
     - but e.g. unlocked fresher door inside locked room is not auto
   - 🚧 implement "force-open" navigation while we implement navQuery
     - ✅ move door/npc logic outside Doors
-    - 🚧 move toggleDoor/toggleLock into w.s (shared)
+    - ✅ move toggleDoor/toggleLock into w.s (shared)
+    - 🚧 w.s.toggle{Door,Lock} -> w.s.toggle
     - distinct from having a key
 - 🚧 can use navQuery which blocks
   - manual doors which are closed (includes locked-closed)

@@ -1,15 +1,23 @@
 import React from "react";
+import { defaultDoorCloseMs } from "../service/const";
+import { geom } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
  * @param {import('./World').State} w
  */
 export default function useHandleEvents(w) {
+
   const state = useStateRef(/** @returns {State} */ () => ({
     doorToNearby: {},
     npcToAccess: {},
     npcToNearby: {},
 
+    canAccess(npcKey, gdKey) {
+      return Array.from(
+        state.npcToAccess[npcKey] ?? []
+      ).some(prefix => gdKey.startsWith(prefix));
+    },
     handleEvents(e) {
       // info('useTestHandleEvents', e);
 
@@ -48,6 +56,9 @@ export default function useHandleEvents(w) {
         case "decor-instantiated":
           w.setReady();
           break;
+        case "try-close-door":
+          state.tryCloseDoor(e.gmId, e.doorId, e.meta);
+          break;
       }
     },
     handleNpcEvents(e) {
@@ -57,10 +68,10 @@ export default function useHandleEvents(w) {
           (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
           (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
           
-          // 🚧 can force open
-          if (door.auto === true) {
-          // if (true) {
-            w.door.toggle({ gdKey: e.gdKey, open: true });
+          // 🚧 can force non-auto doors open
+          // if (door.auto === true && !door.locked) {
+          if (true) {
+            w.s.toggleDoor({ gdKey: e.gdKey, open: true, eventMeta: { npcKey: e.npcKey } });
           }
           break;
         }
@@ -90,6 +101,13 @@ export default function useHandleEvents(w) {
           break;
       }
     },
+    npcNearDoor(npcKey, gmId, doorId, ) {
+      const npc = w.npc.getNpc(npcKey);
+      const position = npc.getPosition();
+      const gm = w.gms[gmId];
+      const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
+      return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
+    },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
         w.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
@@ -109,11 +127,54 @@ export default function useHandleEvents(w) {
       for (const gdKey of state.npcToNearby[npcKey] ?? []) {
         const door = w.door.byKey[gdKey];
         state.doorToNearby[gdKey].delete(npcKey);
-        if (door.auto === true && state.doorToNearby[gdKey].size === 0) {
-          w.door.tryCloseDoor(door.gmId, door.doorId);
+        if (door.auto === true && !(state.doorToNearby[gdKey]?.size > 0)) {
+          state.tryCloseDoor(door.gmId, door.doorId);
         }
       }
       state.npcToNearby[npcKey]?.clear();
+    },
+    toggleDoor(opts) {
+      /** @type {Geomorph.DoorState} */ let door;
+      if ('gdKey' in opts) {
+        door = w.door.byKey[opts.gdKey];
+      } else if ('gmId' in opts) {
+        door = w.door.byGmId[opts.gmId][opts.doorId];
+      } else {
+        throw Error(`${'toggleDoor(opts)'} expects "opts.gdKey" or "opts.{gmId,doorId}"`)
+      }
+
+      if (typeof opts.npcKey === 'string' && !state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
+        return door.open; // not close enough
+      }
+      opts.clear = !(state.doorToNearby[door.gdKey]?.size > 0);
+
+      return w.door.toggleDoorRaw(door, opts);
+    },
+    toggleLock(opts) {
+      /** @type {Geomorph.DoorState} */ let door;
+      if ('gdKey' in opts) {
+        door = w.door.byKey[opts.gdKey];
+      } else if ('gmId' in opts) {
+        door = w.door.byGmId[opts.gmId][opts.doorId];
+      } else {
+        throw Error(`${'toggleLock(opts)'} expected "opts.gdKey" or "opts.{gmId,doorId}"`)
+      }
+
+      if (typeof opts.npcKey === 'string' && !state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
+        return door.locked; // Too far
+      }
+      return w.door.toggleLockRaw(door, opts);
+    },
+    tryCloseDoor(gmId, doorId, eventMeta) {
+      const door = w.door.byGmId[gmId][doorId];
+      door.closeTimeoutId ??= window.setTimeout(() => {
+        if (door.open === true) {
+          w.door.toggleDoorRaw(door, { clear: !(state.doorToNearby[door.gdKey]?.size > 0), eventMeta });
+          state.tryCloseDoor(gmId, doorId); // recheck in {ms}
+        } else {
+          delete door.closeTimeoutId;
+        }
+      }, defaultDoorCloseMs);
     },
   }));
   
@@ -136,9 +197,21 @@ export default function useHandleEvents(w) {
  * @property {{ [npcKey: string]: Set<Geomorph.GmDoorKey> }} npcToNearby
  * Relates `npcKey` to nearby `Geomorph.GmDoorKey`s
  *
+ * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} canAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
+ * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  * @property {(npcKey: string) => void} removeFromSensors
+ * @property {(opts: BaseToggle & import('./Doors').ToggleLockOpts) => boolean} toggleLock
+ * @property {(opts: BaseToggle & import('./Doors').ToggleDoorOpts) => boolean} toggleDoor
+ * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
+ * Try close door every `N` seconds, starting in `N` seconds.
+ */
+
+/**
+ * @typedef {{ npcKey?: string } & (
+ *   {gmId: number, doorId: number} | { gdKey: Geomorph.GmDoorKey }
+ * )} BaseToggle
  */
