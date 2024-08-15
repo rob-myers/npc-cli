@@ -13,13 +13,8 @@ export default function useHandleEvents(w) {
     npcToAccess: {},
     npcToNearby: {},
 
-    canAccess(npcKey, gdKey) {
-      return Array.from(
-        state.npcToAccess[npcKey] ?? []
-      ).some(prefix => gdKey.startsWith(prefix));
-    },
     handleEvents(e) {
-      // info('useTestHandleEvents', e);
+      // info('useHandleEvents', e);
 
       if ('npcKey' in e) {
         return state.handleNpcEvents(e);
@@ -71,7 +66,7 @@ export default function useHandleEvents(w) {
           // 🚧 can force non-auto doors open
           // if (door.auto === true && !door.locked) {
           if (true) {
-            w.s.toggleDoor({ gdKey: e.gdKey, open: true, eventMeta: { npcKey: e.npcKey } });
+            w.s.toggleDoor({ gdKey: e.gdKey, open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
           }
           break;
         }
@@ -100,6 +95,11 @@ export default function useHandleEvents(w) {
           state.removeFromSensors(e.key);
           break;
       }
+    },
+    npcCanAccess(npcKey, gdKey) {
+      return Array.from(
+        state.npcToAccess[npcKey] ?? []
+      ).some(prefix => gdKey.startsWith(prefix));
     },
     npcNearDoor(npcKey, gmId, doorId, ) {
       const npc = w.npc.getNpc(npcKey);
@@ -134,35 +134,43 @@ export default function useHandleEvents(w) {
       state.npcToNearby[npcKey]?.clear();
     },
     toggleDoor(opts) {
-      /** @type {Geomorph.DoorState} */ let door;
-      if ('gdKey' in opts) {
-        door = w.door.byKey[opts.gdKey];
-      } else if ('gmId' in opts) {
-        door = w.door.byGmId[opts.gmId][opts.doorId];
-      } else {
-        throw Error(`${'toggleDoor(opts)'} expects "opts.gdKey" or "opts.{gmId,doorId}"`)
+      const door = 'gdKey' in opts
+        ? w.door.byKey[opts.gdKey]
+        : 'gmId' in opts ? w.door.byGmId[opts.gmId][opts.doorId] : null
+      ;
+
+      if (door == null) {
+        throw Error(`${'toggleDoor'}: door not found: ${JSON.stringify({opts})}`)
       }
 
-      if (typeof opts.npcKey === 'string' && !state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
-        return door.open; // not close enough
+      if (typeof opts.npcKey === 'string') {
+        if (!state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
+          return door.open; // not close enough
+        }
+        opts.access ??= state.npcCanAccess(opts.npcKey, door.gdKey);
       }
+
       opts.clear = !(state.doorToNearby[door.gdKey]?.size > 0);
 
       return w.door.toggleDoorRaw(door, opts);
     },
     toggleLock(opts) {
-      /** @type {Geomorph.DoorState} */ let door;
-      if ('gdKey' in opts) {
-        door = w.door.byKey[opts.gdKey];
-      } else if ('gmId' in opts) {
-        door = w.door.byGmId[opts.gmId][opts.doorId];
-      } else {
-        throw Error(`${'toggleLock(opts)'} expected "opts.gdKey" or "opts.{gmId,doorId}"`)
+      const door = 'gdKey' in opts
+        ? w.door.byKey[opts.gdKey]
+        : 'gmId' in opts ? w.door.byGmId[opts.gmId][opts.doorId] : null
+      ;
+
+      if (door == null) {
+        throw Error(`${'toggleLock'}: door not found: ${JSON.stringify({opts})}`)
       }
 
-      if (typeof opts.npcKey === 'string' && !state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
-        return door.locked; // Too far
+      if (typeof opts.npcKey === 'string') {
+        if (!state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
+          return door.locked; // Too far
+        }
+        opts.access ??= state.npcCanAccess(opts.npcKey, door.gdKey);
       }
+
       return w.door.toggleLockRaw(door, opts);
     },
     tryCloseDoor(gmId, doorId, eventMeta) {
@@ -197,7 +205,7 @@ export default function useHandleEvents(w) {
  * @property {{ [npcKey: string]: Set<Geomorph.GmDoorKey> }} npcToNearby
  * Relates `npcKey` to nearby `Geomorph.GmDoorKey`s
  *
- * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} canAccess
+ * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
