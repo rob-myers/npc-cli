@@ -51,7 +51,7 @@ w gmsData.g-102--research-deck.hitCtxt.canvas.toDataURL | log
 events | flatMap 'x => [new Date().toGMTString(), x]'
 
 # unlock/lock specific door
-w s.toggleLock '{ gdKey: "g0d16" }'
+w s.toggle '{ type: "lock", gdKey: "g0d16" }'
 ```
 
 ## Local variables

@@ -120,9 +120,12 @@ export default function Doors(props) {
       );
     },
     getLockSigMat(meta) {
-      const center = tmpVec1.copy(meta.src).add(meta.dst).scale(1/2);
       const sx = 0.4;
-      const sz = (meta.hull ? hullDoorDepth : doorDepth) + 0.025 * 2;
+      const sz = meta.hull === true ? hullDoorDepth/4 : doorDepth + 0.025 * 2;
+      const center = tmpVec1.copy(meta.src).add(meta.dst).scale(0.5);
+      if (meta.hull === true) {
+        center.addScaled(meta.normal, -hullDoorDepth/2);
+      }
       return geomorphService.embedXZMat4(
         [sx * meta.dir.x, sx * meta.dir.y, sz * meta.normal.x, sz * meta.normal.y, center.x, center.y],
         { yScale: 0.1 / 2, yHeight: doorHeight + 0.1, mat4: tmpMatFour1 },
