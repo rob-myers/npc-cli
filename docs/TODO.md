@@ -25,6 +25,8 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
+- ✅ physics body keys `npc {npcKey}`, `nearby {gdKey}`
+- 🚧 physics body keys `inside {gdKey}`
 - 🚧 fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
   - e.g. `g1d3 inside` vs `g1d3 nearby`

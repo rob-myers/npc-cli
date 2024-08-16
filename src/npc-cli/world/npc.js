@@ -6,7 +6,7 @@ import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPat
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader } from '../service/three';
 import { helper } from '../service/helper';
-import { addBodyKeyUidRelation } from '../service/rapier';
+import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 // import * as glsl from '../service/glsl';
 
 export class Npc {
@@ -56,7 +56,7 @@ export class Npc {
     this.epochMs = Date.now();
     this.def = def;
     this.w = w;
-    this.bodyUid = addBodyKeyUidRelation(def.key, w.physics)
+    this.bodyUid = addBodyKeyUidRelation(npcToBodyKey(def.key), w.physics)
   }
   attachAgent() {
     return this.agent ??= this.w.crowd.addAgent(this.group.position, {

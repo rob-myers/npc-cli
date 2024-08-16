@@ -1,7 +1,7 @@
 import React from 'react';
 import { init as initRecastNav } from "@recast-navigation/core";
 
-import { info, isDevelopment } from '../service/generic';
+import { info, isDevelopment, warn } from '../service/generic';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 
@@ -27,18 +27,30 @@ export default function WorldWorkers() {
     async handlePhysicsWorkerMessage(e) {
       const msg = e.data;
       info("main thread received from physics worker", msg);
+
       if (msg.type === "npc-collisions") {
         msg.collisionEnd.forEach(({ npcKey, otherKey }) => {
-          // 🚧 support otherKey not a GmDoorKey e.g. decor circle
-          const gdKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
-          w.events.next({ key: 'exited-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(gdKey) });
+          const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
+          if (type === 'npc') {
+            return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
+          }
+          // 🚧 handle inside/nearby
+          w.events.next({ key: 'exited-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(subKey) });
         });
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
-          // 🚧 support otherKey not a GmDoorKey e.g. decor circle
-          const gdKey = /** @type {Geomorph.GmDoorKey} */ (otherKey);
-          w.events.next({ key: 'entered-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(gdKey) });
+          const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
+          if (type === 'npc') {
+            return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
+          }
+          // 🚧 handle inside/nearby
+          w.events.next({ key: 'entered-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(subKey) });
         });
       }
+    },
+    parsePhysicsBodyKey(bodyKey) {
+      return /** @type {*} */ (
+        bodyKey.split(' ')
+      );
     },
   }));
 
@@ -85,4 +97,8 @@ if (isDevelopment()) {// propagate HMR to this file onchange worker files
  * @typedef State
  * @property {(e: MessageEvent<WW.MsgFromNavWorker>) => Promise<void>} handleNavWorkerMessage
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
+ * @property {(key: WW.PhysicsBodyKey) => (
+ *   | ['npc', string]
+ *   | ['nearby' | 'inside', Geomorph.GmDoorKey]
+ * )} parsePhysicsBodyKey
  */

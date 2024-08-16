@@ -116,7 +116,8 @@ export default function Npcs(props) {
         }
       }
 
-      const positions = new Float32Array(npcPositions);
+      // 🔔 Float32Array caused issues i.e. decode failed
+      const positions = new Float64Array(npcPositions);
       w.physics.worker.postMessage({ type: 'send-npc-positions', positions }, [positions.buffer]);
     },
     removeObstacle(obstacleId) {
