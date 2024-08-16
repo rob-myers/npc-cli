@@ -12,52 +12,20 @@
   - extras
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ doors have small wall above them
-  - ✅ wall meta should have roomId
-    - increase resolution of hitTest canvas
-  - ✅ try extending `Walls` with two quads per door
-    - i.e. two degenerate "one-segment-walls"
-  - ✅ clean
-  - ✅ locked indicator could go in center
-    - ✅ render them inside `Doors`
-    - ✅ green unlocked, red locked
-    - ✅ setup initially locked doors
-      - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
-    - ✅ preserve locked flag via "door lookup by center"
-
-- ✅ doors are specified as `auto`
-  - ✅ temporarily set all doors `auto` 
-  - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
-  - ✅ unsealed hull doors implicitly `auto`
-  - ✅ unsealed non-hull locked doors default to auto
-    - we're setting "public" unlocked doors as auto
-    - but e.g. unlocked fresher door inside locked room is not auto
-  - ✅ implement "force-open" navigation while we implement navQuery
-    - ✅ move door/npc logic outside Doors
-    - ✅ move toggleDoor/toggleLock into w.s (shared)
-    - ✅ w.s.toggle{Door,Lock} -> w.s.toggle
-    - ℹ️ force-opening is distinct from having a key
-    - ❌ toggle door opts.force
-      - can already set opts.access undefined
-    - ✅ npc.strategy 'default' or 'forced'
-    - ✅ temp npc.strategy default to 'forced'
-  - ✅ fix lock indicator for hull doors
-  - ✅ w.s -> w.es
-  - ✅ simplify w.es.toggle e.g. expects gdKey
-  - ✅ w.es.toggle -> w.es.toggleDoor, w.es.toggleLock
-
-- 🚧 can use navQuery which blocks
-  - manual doors which are closed (includes locked-closed)
-  - auto doors which are locked
+- 🚧 npc move strategy dictates different navQuery
+  - `anywhere`: no restriction (except sealed)
+  - `same-room`: can only nav inside current room
+    - 🚧 npcs track current room
+    - reject nav outside current room
+  - `via-open`:
+    - block non-auto closed doors (including locked)
+    - block locked auto doors
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- ✅ fix npc `way-point` event
-  - ✅ event extends { ...current, next }
-  - ✅ fires at final waypoint
-- fire event when npc enters/exits a room
+- 🚧 fire event when npc enters/exits a room
   - sensor in each doorway, triggered on leave
   - e.g. `g1d3 inside` vs `g1d3 nearby`
 
@@ -1898,3 +1866,39 @@
   - ✅ clean + fix HMR
     - seems MapControls onChange prop already supports hmr
   
+- ✅ fix npc `way-point` event
+  - ✅ event extends { ...current, next }
+  - ✅ fires at final waypoint
+  - ✅ doors have small wall above them
+  - ✅ wall meta should have roomId
+    - increase resolution of hitTest canvas
+  - ✅ try extending `Walls` with two quads per door
+    - i.e. two degenerate "one-segment-walls"
+  - ✅ clean
+  - ✅ locked indicator could go in center
+    - ✅ render them inside `Doors`
+    - ✅ green unlocked, red locked
+    - ✅ setup initially locked doors
+      - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
+    - ✅ preserve locked flag via "door lookup by center"
+
+- ✅ doors are specified as `auto`
+  - ✅ temporarily set all doors `auto` 
+  - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
+  - ✅ unsealed hull doors implicitly `auto`
+  - ✅ unsealed non-hull locked doors default to auto
+    - we're setting "public" unlocked doors as auto
+    - but e.g. unlocked fresher door inside locked room is not auto
+  - ✅ implement "force-open" navigation while we implement navQuery
+    - ✅ move door/npc logic outside Doors
+    - ✅ move toggleDoor/toggleLock into w.s (shared)
+    - ✅ w.s.toggle{Door,Lock} -> w.s.toggle
+    - ℹ️ force-opening is distinct from having a key
+    - ❌ toggle door opts.force
+      - can already set opts.access undefined
+    - ✅ npc.strategy 'default' or 'forced'
+    - ✅ temp npc.strategy default to 'forced'
+  - ✅ fix lock indicator for hull doors
+  - ✅ w.s -> w.es
+  - ✅ simplify w.es.toggle e.g. expects gdKey
+  - ✅ w.es.toggle -> w.es.toggleDoor, w.es.toggleLock
