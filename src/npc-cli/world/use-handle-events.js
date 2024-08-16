@@ -66,7 +66,7 @@ export default function useHandleEvents(w) {
           // 🚧 can force non-auto doors open
           // if (door.auto === true && !door.locked) {
           if (true) {
-            w.s.toggle({ type: 'door', gdKey: e.gdKey, open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+            state.toggle(e.gdKey, { type: 'door', open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
           }
           break;
         }
@@ -133,15 +133,8 @@ export default function useHandleEvents(w) {
       }
       state.npcToNearby[npcKey]?.clear();
     },
-    toggle(opts) {
-      const door = 'gdKey' in opts
-        ? w.door.byKey[opts.gdKey]
-        : 'gmId' in opts ? w.door.byGmId[opts.gmId][opts.doorId] : null
-      ;
-
-      if (door == null) {
-        throw Error(`${'toggle'}: door not found: ${JSON.stringify({opts})}`)
-      }
+    toggle(gdKey, opts) {
+      const door = w.door.byKey[gdKey];
 
       if (typeof opts.npcKey === 'string') {
         if (!state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
@@ -170,7 +163,7 @@ export default function useHandleEvents(w) {
     },
   }));
   
-  w.s = state; // s for 'shared'
+  w.es = state; // s for 'shared'
 
   React.useEffect(() => {
     const sub = w.events.subscribe(state.handleEvents);
@@ -196,16 +189,10 @@ export default function useHandleEvents(w) {
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  * @property {(npcKey: string) => void} removeFromSensors
- * @property {(opts:
- *   | { type: 'lock'} & BaseToggle & import('./Doors').ToggleLockOpts
- *   | { type: 'door' } & BaseToggle & import('./Doors').ToggleDoorOpts
+ * @property {(gdKey: Geomorph.GmDoorKey, opts:
+ *   | { type: 'lock'; npcKey?: string } & import('./Doors').ToggleLockOpts
+ *   | { type: 'door'; npcKey?: string } & import('./Doors').ToggleDoorOpts
  * ) => boolean} toggle
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
- */
-
-/**
- * @typedef {{ npcKey?: string } & (
- *   { gmId: number; doorId: number } | { gdKey: Geomorph.GmDoorKey }
- * )} BaseToggle
  */

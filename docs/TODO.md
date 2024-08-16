@@ -37,9 +37,10 @@
     - ✅ move toggleDoor/toggleLock into w.s (shared)
     - ✅ w.s.toggle{Door,Lock} -> w.s.toggle
     - ℹ️ force-opening is distinct from having a key
-  - 🚧 simplify w.s.toggle e.g. expects gdKey
-  - 🚧 w.s.toggle -> w.s.toggleDoor, w.s.toggleLock
   - ✅ fix lock indicator for hull doors
+  - ✅ w.s -> w.es
+  - ✅ simplify w.es.toggle e.g. expects gdKey
+  - 🚧 w.es.toggle -> w.es.toggleDoor, w.es.toggleLock
 - 🚧 can use navQuery which blocks
   - manual doors which are closed (includes locked-closed)
   - auto doors which are locked

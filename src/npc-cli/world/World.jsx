@@ -91,7 +91,7 @@ export default function World(props) {
       ...helper,
     },
 
-    s: /** @type {*} */ (null),
+    es: /** @type {*} */ (null), // useHandleEvents
 
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -356,8 +356,8 @@ export default function World(props) {
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
  *
- * @property {import("./use-handle-events").State} s
- * Shared state e.g. npc and doors
+ * @property {import("./use-handle-events").State} es
+ * Events state i.e. useHandleEvents state
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex
  * @property {import("../service/three").CanvasTexMeta} decorTex
