@@ -27,11 +27,14 @@ export class Npc {
     cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     lookAt: /** @type {null | THREE.Vector3} */ (null),
+    /** Is this npc moving? */
     moving: false,
     paused: false,
     rejectMove: emptyReject,
     run: false,
     spawns: 0,
+    // strategy: /** @type {NPC.MoveStrategy} */ ('default'),
+    strategy: /** @type {NPC.MoveStrategy} */ ('forced'),
     target: /** @type {null | THREE.Vector3} */ (null),
   };
 

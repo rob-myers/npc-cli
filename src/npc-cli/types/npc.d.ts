@@ -28,6 +28,8 @@ declare namespace NPC {
     agent?: boolean;
   }
 
+  type MoveStrategy = 'default' | 'forced';
+
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
   type Event =

@@ -60,12 +60,11 @@ export default function useHandleEvents(w) {
       switch (e.key) {
         case "entered-sensor": {
           const door = w.door.byKey[e.gdKey];
+          const npc = w.npc.getNpc(e.npcKey);
           (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
           (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
-          
-          // 🚧 can force non-auto doors open
-          // if (door.auto === true && !door.locked) {
-          if (true) {
+
+          if (npc.s.strategy === 'forced' || (door.auto === true && !door.locked)) {
             state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
           }
           break;
