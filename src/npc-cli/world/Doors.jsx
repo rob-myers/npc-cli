@@ -202,8 +202,10 @@ export default function Doors(props) {
       state.cancelClose(door); // Cancel any pending close
 
       if (door.open === true) {// was open
-        if (opts.open) {
-          w.events.next({ key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta }); // Reset door close
+        if (opts.open === true) {
+          door.auto === true && w.events.next({
+            key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+          });
           return true;
         }
         if (opts.clear !== true) {
@@ -229,7 +231,9 @@ export default function Doors(props) {
       });
 
       if (door.auto === true && door.open === true) { 
-        w.events.next({ key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta }); // Reset door close
+        w.events.next({
+          key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        });
       }
 
       return door.open;
@@ -331,8 +335,8 @@ export default function Doors(props) {
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
- * @property {(door: Geomorph.DoorState, opts?: ToggleDoorOpts) => boolean} toggleDoorRaw
- * @property {(door: Geomorph.DoorState, opts?: ToggleLockOpts) => boolean} toggleLockRaw
+ * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
+ * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleLockOpts) => boolean} toggleLockRaw
  * @property {() => void} onTick
  * @property {() => void} positionInstances
  */
@@ -341,22 +345,3 @@ const tmpVec1 = new Vect();
 const tmpVec2 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMatFour1 = new THREE.Matrix4();
-
-/**
- * @typedef ToggleDoorOpts
- * @property {boolean} [access] does provided npc have access?
- * e.g. `w.s.canAccess(npcKey, gdKey)`
- * @property {boolean} [clear] is the doorway clear?
- * @property {boolean} [close] should we close the door?
- * @property {Geom.Meta} [eventMeta] extra meta for events
- * @property {boolean} [open] should we open or unlock the door?
- */
-
-/**
- * @typedef ToggleLockOpts
- * @property {boolean} [access] does provided npc have access?
- * e.g. `w.s.canAccess(npcKey, gdKey)`
- * @property {boolean} [lock] should we lock the door?
- * @property {Geom.Meta} [eventMeta] extra meta for events
- * @property {boolean} [unlock] should we unlock the door?
- */

@@ -37,7 +37,9 @@
     - ✅ move toggleDoor/toggleLock into w.s (shared)
     - ✅ w.s.toggle{Door,Lock} -> w.s.toggle
     - ℹ️ force-opening is distinct from having a key
-    - 🚧 toggle door opts.force
+    - ❌ toggle door opts.force
+      - can already set opts.access undefined
+    - 🚧 npc.moveStrategy 'default' or 'force'
   - ✅ fix lock indicator for hull doors
   - ✅ w.s -> w.es
   - ✅ simplify w.es.toggle e.g. expects gdKey

@@ -160,7 +160,8 @@ export default function useHandleEvents(w) {
     },
     tryCloseDoor(gmId, doorId, eventMeta) {
       const door = w.door.byGmId[gmId][doorId];
-      door.closeTimeoutId ??= window.setTimeout(() => {
+      w.door.cancelClose(door); // re-open resets timer:
+      door.closeTimeoutId = window.setTimeout(() => {
         if (door.open === true) {
           w.door.toggleDoorRaw(door, { clear: !(state.doorToNearby[door.gdKey]?.size > 0), eventMeta });
           state.tryCloseDoor(gmId, doorId); // recheck in {ms}
@@ -197,8 +198,8 @@ export default function useHandleEvents(w) {
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  * @property {(npcKey: string) => void} removeFromSensors
- * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & import('./Doors').ToggleDoorOpts) => boolean} toggleDoor
- * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & import('./Doors').ToggleLockOpts) => boolean} toggleLock
+ * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
+ * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleLockOpts) => boolean} toggleLock
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  */

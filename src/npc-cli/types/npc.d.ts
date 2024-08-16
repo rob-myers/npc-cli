@@ -46,7 +46,11 @@ declare namespace NPC {
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
-    | { key: "try-close-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | {
+      /** Try close door after countdown, and keep trying thereafter */
+      key: "try-close-door";
+      gmId: number; doorId: number; meta?: Geom.Meta
+    }
     | { key: "opened-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "closed-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }

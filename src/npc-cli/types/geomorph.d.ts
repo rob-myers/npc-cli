@@ -70,6 +70,32 @@ declare namespace Geomorph {
     closeTimeoutId?: number;
   }
 
+  interface ToggleDoorOpts extends BaseDoorToggle {
+    /** Is the doorway clear? */
+    clear?: boolean;
+    /** Should we close the door? */
+    close?: boolean;
+    /** Should we open door? */
+    open?: boolean;
+  }
+  
+  interface ToggleLockOpts extends BaseDoorToggle {
+    /** Should we lock the door? */
+    lock?: boolean;
+    /** Should we unlock the door? */
+    unlock?: boolean;
+  }
+
+  interface BaseDoorToggle {
+    /**
+     * Does the instigator exist (boolean) and have access (true)?
+     * See also `w.es.canAccess(npcKey, gdKey)`.
+     */
+    access?: boolean;
+    /** Extra meta for door events */
+    eventMeta?: Geom.Meta;
+  }
+
   interface GeomorphsGeneric<
     T extends Geom.GeoJsonPolygon | Geom.Poly,
     P extends Geom.VectJson | Geom.Vect,
