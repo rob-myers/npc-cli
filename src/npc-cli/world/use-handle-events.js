@@ -1,5 +1,6 @@
 import React from "react";
 import { defaultDoorCloseMs } from "../service/const";
+import { warn } from "../service/generic";
 import { geom } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -12,6 +13,7 @@ export default function useHandleEvents(w) {
     doorToNearby: {},
     npcToAccess: {},
     npcToNearby: {},
+    npcToRoom: {},
 
     handleEvents(e) {
       // info('useHandleEvents', e);
@@ -61,29 +63,56 @@ export default function useHandleEvents(w) {
         case "entered-sensor": {
           const door = w.door.byKey[e.gdKey];
           const npc = w.npc.getNpc(e.npcKey);
-          (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
-          (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
 
-          if (npc.s.permitNav === 'anywhere' || (door.auto === true && !door.locked)) {
-            state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+          if (e.type === 'nearby') {
+            (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
+            (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
+            if (npc.s.permitNav === 'anywhere' || (door.auto === true && !door.locked)) {
+              state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+            }
+          } else if (e.type === 'inside') {
+            // NOOP
           }
+
           break;
         }
         case "exited-sensor": {
           const door = w.door.byKey[e.gdKey];
-          state.npcToNearby[e.npcKey]?.delete(e.gdKey);
-          state.doorToNearby[e.gdKey]?.delete(e.npcKey);
+
+          if (e.type === 'nearby') {
+            state.npcToNearby[e.npcKey]?.delete(e.gdKey);
+            state.doorToNearby[e.gdKey]?.delete(e.npcKey);
+          } else if (e.type === 'inside') {
+            // npc entered room
+            const prev = state.npcToRoom[e.npcKey];
+            if (door.gmId !== prev.gmId) {
+              return; // hull doors have 2 sensors, so can ignore one
+            }
+            
+            const next = w.gmGraph.getOtherGmRoomId(door, prev.roomId);
+            if (next === null) {
+              return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
+            }
+            if (prev.grKey === next.grKey) {
+              return; // stayed inside room
+            }
+            setTimeout(() => {
+              state.npcToRoom[e.npcKey] = next
+              w.events.next({ key: 'entered-room', npcKey: e.npcKey, ...next, prev  });
+            });
+          }
           break;
         }
         case "spawned": {
           const npc = w.npc.npc[e.npcKey];
+          const { x, y, z } = npc.getPosition();
           if (npc.s.spawns === 1) {// 1st spawn
-            const { x, y, z } = npc.getPosition();
             w.physics.worker.postMessage({
               type: 'add-npcs',
               npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
             });
           }
+          state.npcToRoom[npc.key] = {...e.gmRoomId};
           break;
         }
         case "removed-npc":
@@ -92,6 +121,7 @@ export default function useHandleEvents(w) {
             npcKeys: [e.npcKey],
           });
           state.removeFromSensors(e.key);
+          delete state.npcToRoom[e.npcKey];
           break;
       }
     },
@@ -188,7 +218,9 @@ export default function useHandleEvents(w) {
  * @property {{ [npcKey: string]: Set<string> }} npcToAccess
  * Relates `npcKey` to prefixes of accessible `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Set<Geomorph.GmDoorKey> }} npcToNearby
- * Relates `npcKey` to nearby `Geomorph.GmDoorKey`s
+ * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
+ * @property {{ [npcKey: string]: Geomorph.GmRoomId }} npcToRoom
+ * Relates `npcKey` to current room
  *
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents

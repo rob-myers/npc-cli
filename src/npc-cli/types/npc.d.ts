@@ -50,10 +50,11 @@ declare namespace NPC {
     | { key: "disabled" }
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
-    | { key: "spawned"; npcKey: string }
+    | { key: "spawned"; npcKey: string; gmRoomId: Geomorph.GmRoomId }
     | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "way-point"; npcKey: string; next: Geom.VectJson | null } & Geom.VectJson
+    | { key: "entered-room"; npcKey: string; prev: Geomorph.GmRoomId } & Geomorph.GmRoomId
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
@@ -68,7 +69,7 @@ declare namespace NPC {
     | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "changed-zoom"; level: 'near' | 'far' }
     | { key: "entered-sensor" | "exited-sensor"; npcKey: string } & (
-      | { type: 'door' } & Geomorph.GmDoorId
+      | { type: 'nearby' | 'inside' } & Geomorph.GmDoorId
     )
     // 🚧 ...
 

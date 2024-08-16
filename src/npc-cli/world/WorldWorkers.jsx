@@ -35,7 +35,7 @@ export default function WorldWorkers() {
             return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
           }
           // 🚧 handle inside/nearby
-          w.events.next({ key: 'exited-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(subKey) });
+          w.events.next({ key: 'exited-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
         });
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
           const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
@@ -43,7 +43,7 @@ export default function WorldWorkers() {
             return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
           }
           // 🚧 handle inside/nearby
-          w.events.next({ key: 'entered-sensor', npcKey, type: 'door', ...w.lib.getGmDoorId(subKey) });
+          w.events.next({ key: 'entered-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
         });
       }
     },

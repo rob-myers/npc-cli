@@ -16,7 +16,8 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToP
 const config = {
   fps: 60,
   agentHeight: glbMeta.height * glbMeta.scale,
-  agentRadius: glbMeta.radius * glbMeta.scale * (2/3),
+  // agentRadius: glbMeta.radius * glbMeta.scale * 0.5,
+  agentRadius: 0.25,
 };
 
 /** @type {State} */
@@ -167,11 +168,14 @@ async function setupWorld(mapKey, npcs) {
   );
 
   // door sensors: nearby ✅ inside 🚧 
-  const gmDoorBodies = gms.map((gm, gmId) => 
-    gm.doors.map((door, doorId) => {
-      const center = gm.matrix.transformPoint(door.center.clone());
-      const bodyKey = /** @type {const} */ (`nearby ${helper.getGmDoorKey(gmId, doorId)}`);
-      return createRigidBody({
+  const gmDoorBodies = gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
+    const center = gm.matrix.transformPoint(door.center.clone());
+    const gdKey = helper.getGmDoorKey(gmId, doorId);
+    const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
+    const insideKey = /** @type {const} */ (`inside ${gdKey}`);
+
+    return [
+      createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         // hull door sensor ~ 2x2 grid
         // non-hull door sensor ~ 1x1 grid
@@ -183,12 +187,26 @@ async function setupWorld(mapKey, npcs) {
         position: { x: center.x, y: wallHeight/2, z: center.y },
         userData: {
           npc: false,
-          bodyKey,
-          bodyUid: addBodyKeyUidRelation(bodyKey, state),
+          bodyKey: nearbyKey,
+          bodyUid: addBodyKeyUidRelation(nearbyKey, state),
         },
-      })
-    })
-  );
+      }),
+      createRigidBody({
+        type: RAPIER.RigidBodyType.Fixed,
+        geomDef: {
+          type: 'cuboid',
+          halfDim: [door.baseRect.width/2, wallHeight / 2, door.baseRect.height/2],
+        },
+        position: { x: center.x, y: wallHeight/2, z: center.y },
+        angle: door.angle,
+        userData: {
+          npc: false,
+          bodyKey: insideKey,
+          bodyUid: addBodyKeyUidRelation(insideKey, state),
+        },
+      }),
+    ]
+  }));
 
   // on worker hmr we need to restore npcs
   for (const { npcKey, position } of npcs) {
@@ -220,9 +238,10 @@ async function setupWorld(mapKey, npcs) {
  * @param {RAPIER.RigidBodyType.Fixed | RAPIER.RigidBodyType.KinematicPositionBased} opts.type
  * @param {WW.PhysicsBodyGeom} opts.geomDef
  * @param {import('three').Vector3Like} opts.position
+ * @param {number} [opts.angle] radians in XZ plane
  * @param {BodyUserData} opts.userData
  */
-function createRigidBody({ type, geomDef, position, userData }) {
+function createRigidBody({ type, geomDef, position, angle, userData }) {
 
   const bodyDescription = new RAPIER.RigidBodyDesc(type)
     .setCanSleep(true)
@@ -256,6 +275,9 @@ function createRigidBody({ type, geomDef, position, userData }) {
   state.bodyKeyToCollider.set(userData.bodyKey, collider);
   state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
+  if (typeof angle === 'number') {
+    rigidBody.setRotation(new RAPIER.Quaternion(0, -angle, 0, 1), false);
+  }
   rigidBody.setTranslation(position, true);
 
   return /** @type {RAPIER.RigidBody & { userData: BodyUserData }} */ (rigidBody);

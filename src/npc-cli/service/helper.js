@@ -115,6 +115,22 @@ export const helper = {
   },
 
   /**
+   * Usage:
+   * - `getGmRoomId(grKey)`
+   * - `getGmRoomId(gmId, roomId)`
+   * @param {[Geomorph.GmRoomKey] | [number, number]} input
+   * @returns {Geomorph.GmRoomId}
+   */
+  getGmRoomId(...input) {
+    if (typeof input[0] === 'string') {
+      const [, gStr, rStr] = input[0].split(/[gr]/);
+      return { grKey: input[0], gmId: Number(gStr), roomId: Number(rStr) };
+    } else {
+      return { grKey: helper.getGmRoomKey(input[0], input[1]), gmId: input[0], roomId: input[1] };
+    }
+  },
+
+  /**
    * @param {string} input 
    * @returns {input is NPC.SkinKey}
    */

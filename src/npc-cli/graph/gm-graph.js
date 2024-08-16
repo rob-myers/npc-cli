@@ -4,7 +4,6 @@ import { sguToWorldScale } from "../service/const";
 import { assertNonNull, removeDups } from "../service/generic";
 import { geom, directionChars, isDirectionChar } from "../service/geom";
 import { error, warn } from "../service/generic";
-import { geomorphService } from "../service/geomorph";
 import { helper } from "../service/helper";
 import { AStar } from "../pathfinding/AStar";
 
@@ -210,21 +209,6 @@ export class GmGraphClass extends BaseGraph {
     ) ?? null;
   }
 
-  /**
-   * @param {number} gmId 
-   * @param {number} roomId 
-   * @param {number} doorId 
-   * @param {boolean} [isHullDoor]
-   * @returns {Geomorph.GmRoomId | null}
-   */
-  getAdjacentGmRoom(gmId, roomId, doorId, isHullDoor = this.gms[gmId].isHullDoor(doorId)) {
-    if (isHullDoor) {
-      const ctxt = this.getAdjacentRoomCtxt(gmId, doorId);
-      return ctxt === null ? null : { gmId: ctxt.adjGmId, roomId: ctxt.adjRoomId, grKey: helper.getGmRoomKey(gmId, roomId) };
-    } else {
-      return { gmId, roomId, grKey: helper.getGmRoomKey(gmId, roomId) };
-    }
-  }
 
   /**
    * 🚧 simplify?
@@ -291,6 +275,22 @@ export class GmGraphClass extends BaseGraph {
       });
     });
     return gmRoomIds;
+  }
+
+  /**
+   * By assumption `gmId` is `door.gmId`.
+   * @param {Geomorph.DoorState } door 
+   * @param {number} roomId 
+   * @returns {Geomorph.GmRoomId | null}
+   */
+  getOtherGmRoomId(door, roomId) {
+    if (door.hull === false) {
+      const otherRoomId = door.door.roomIds.find(x => x !== roomId) ?? null;
+      return otherRoomId === null ? null : this.w.lib.getGmRoomId(door.gmId, otherRoomId);
+    } else {
+      const adj = this.getAdjacentRoomCtxt(door.gmId, door.doorId);
+      return adj === null ? null : this.w.lib.getGmRoomId(adj.adjGmId, adj.adjRoomId);
+    }
   }
 
   /**

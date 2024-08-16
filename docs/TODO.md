@@ -26,10 +26,14 @@
   - try provide "echo circle" for touch devices
 
 - ✅ physics body keys `npc {npcKey}`, `nearby {gdKey}`
-- 🚧 physics body keys `inside {gdKey}`
+- ✅ physics body keys `inside {gdKey}`
 - 🚧 fire event when npc enters/exits a room
-  - sensor in each doorway, triggered on leave
-  - e.g. `g1d3 inside` vs `g1d3 nearby`
+  - ✅ sensor in each doorway, triggered on leave
+    e.g. `inside g1d3` vs `nearby g1d3`
+  - ✅ update npcToRoom
+  - 🚧 entered-room, exited-room, entered-doorway, exited-doorway
+  - on reload physics.worker, clear w.es.{npc,door}ToNearby
+  - on reload nav.worker, recompute w.es.npcToRoom
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js

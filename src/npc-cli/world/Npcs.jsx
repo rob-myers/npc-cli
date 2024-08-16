@@ -176,6 +176,11 @@ export default function Npcs(props) {
         throw Error(`invalid skinKey: ${JSON.stringify(e.skinKey)}`);
       }
       
+      const gmRoomId = w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }, true);
+      if (gmRoomId === null) {
+        throw Error(`must be in some room: ${JSON.stringify(e.point)}`);
+      }
+
       let npc = state.npc[e.npcKey];
 
       if (npc) {// Respawn
@@ -227,7 +232,7 @@ export default function Npcs(props) {
       }
 
       npc.s.spawns++;
-      w.events.next({ key: 'spawned', npcKey: npc.key });
+      w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
