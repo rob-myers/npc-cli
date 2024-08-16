@@ -28,7 +28,16 @@ declare namespace NPC {
     agent?: boolean;
   }
 
-  type MoveStrategy = 'default' | 'forced';
+  /**
+   * - `same-room` means in same room only
+   * - `via-open` (default) means anywhere via unlocked-auto or locked-open doors
+   * - `anywhere` means anywhere (except sealed)
+   */
+  type PermitNav = (
+    | 'same-room'
+    | 'via-open'
+    | 'anywhere'
+  );
 
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 

@@ -64,7 +64,7 @@ export default function useHandleEvents(w) {
           (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
           (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
 
-          if (npc.s.strategy === 'forced' || (door.auto === true && !door.locked)) {
+          if (npc.s.permitNav === 'anywhere' || (door.auto === true && !door.locked)) {
             state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
           }
           break;

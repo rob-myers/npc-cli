@@ -30,11 +30,12 @@ export class Npc {
     /** Is this npc moving? */
     moving: false,
     paused: false,
+    /** @type {NPC.PermitNav} */
+    // permitNav: 'via-open',
+    permitNav: 'anywhere',
     rejectMove: emptyReject,
     run: false,
     spawns: 0,
-    // strategy: /** @type {NPC.MoveStrategy} */ ('default'),
-    strategy: /** @type {NPC.MoveStrategy} */ ('forced'),
     target: /** @type {null | THREE.Vector3} */ (null),
   };
 
