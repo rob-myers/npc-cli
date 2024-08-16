@@ -113,6 +113,11 @@ export class Npc {
   getAngle() {// Assume only rotated about y axis
     return this.group.rotation.y;
   }
+  /** @returns {Geom.VectJson} */
+  getPoint() {
+    const { x, z: y } = this.group.position;
+    return { x, y };
+  }
   getPosition() {
     return this.group.position;
   }

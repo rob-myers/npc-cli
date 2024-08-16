@@ -31,6 +31,7 @@
   - ✅ sensor in each doorway, triggered on leave
     e.g. `inside g1d3` vs `nearby g1d3`
   - ✅ update npcToRoom
+  - 🚧 fix entered-room bug(s)
   - 🚧 entered-room, exited-room, entered-doorway, exited-doorway
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - on reload nav.worker, recompute w.es.npcToRoom
