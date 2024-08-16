@@ -2,7 +2,7 @@ awaitWorld
 
 # open door on click
 click | map '({meta}, {w}) => {
-  meta.door && w.es.toggle(meta.gdKey, { type: "door" })
+  meta.door && w.es.toggleDoor(meta.gdKey)
 }' &
 
 # write selectedNpcKey on click npc

@@ -66,7 +66,7 @@ export default function useHandleEvents(w) {
           // 🚧 can force non-auto doors open
           // if (door.auto === true && !door.locked) {
           if (true) {
-            state.toggle(e.gdKey, { type: 'door', open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+            state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
           }
           break;
         }
@@ -101,7 +101,7 @@ export default function useHandleEvents(w) {
         state.npcToAccess[npcKey] ?? []
       ).some(prefix => gdKey.startsWith(prefix));
     },
-    npcNearDoor(npcKey, gmId, doorId, ) {
+    npcNearDoor(npcKey, gmId, doorId) {
       const npc = w.npc.getNpc(npcKey);
       const position = npc.getPosition();
       const gm = w.gms[gmId];
@@ -133,22 +133,30 @@ export default function useHandleEvents(w) {
       }
       state.npcToNearby[npcKey]?.clear();
     },
-    toggle(gdKey, opts) {
+    toggleDoor(gdKey, opts = {}) {
       const door = w.door.byKey[gdKey];
 
       if (typeof opts.npcKey === 'string') {
         if (!state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
-          return opts.type === 'door' ? door.open : door.locked; // not close enough
+          return door.open; // not close enough
         }
         opts.access ??= state.npcCanAccess(opts.npcKey, door.gdKey);
       }
 
-      if (opts.type === 'door') {
-        opts.clear = !(state.doorToNearby[door.gdKey]?.size > 0);
-        return w.door.toggleDoorRaw(door, opts);
-      } else {
-        return w.door.toggleLockRaw(door, opts);
+      opts.clear = !(state.doorToNearby[door.gdKey]?.size > 0);
+      return w.door.toggleDoorRaw(door, opts);
+    },
+    toggleLock(gdKey, opts = {}) {
+      const door = w.door.byKey[gdKey];
+
+      if (typeof opts.npcKey === 'string') {
+        if (!state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
+          return door.locked; // not close enough
+        }
+        opts.access ??= state.npcCanAccess(opts.npcKey, door.gdKey);
       }
+
+      return w.door.toggleLockRaw(door, opts);
     },
     tryCloseDoor(gmId, doorId, eventMeta) {
       const door = w.door.byGmId[gmId][doorId];
@@ -185,14 +193,12 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
- * @property {(npcKey: string, gmId: number, doorId: number) => boolean} npcNearDoor
+ * @property {(npcKey: string, gdKey: number, doorId: number) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  * @property {(npcKey: string) => void} removeFromSensors
- * @property {(gdKey: Geomorph.GmDoorKey, opts:
- *   | { type: 'lock'; npcKey?: string } & import('./Doors').ToggleLockOpts
- *   | { type: 'door'; npcKey?: string } & import('./Doors').ToggleDoorOpts
- * ) => boolean} toggle
+ * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & import('./Doors').ToggleDoorOpts) => boolean} toggleDoor
+ * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & import('./Doors').ToggleLockOpts) => boolean} toggleLock
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  */
