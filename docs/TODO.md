@@ -33,7 +33,6 @@
     - ℹ️ seen "npc position" not in room when running through hull door
     - possibly exasperated by collider near g0d0?
   - 🚧 enter-room, exit-room, enter-doorway, exit-doorway
-  - fix hull door late trigger (?)
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - on reload nav.worker, recompute w.es.npcToRoom
   - `nav-changed` event for code we want to work during level-editing
@@ -64,10 +63,13 @@
       - i.e. preset large bounds, and use geometry.setDrawRange
     - could use underlying gl api to remove attributes
 
-- hmr: support gm-graph (?)
+- ✅ hmr: support gm-graph
+  - can ignore gm-room-graph because shouldn't really change,
+    i.e. any "related" methods should inside gm-graph instead
 - 🚧 hmr issue editing obstacle outline
   - seems fixed by always re-generating obstacle texture, irrespective of size change
 - hmr issue with Connector class
+- hull door enter-room triggers late?
 - svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh

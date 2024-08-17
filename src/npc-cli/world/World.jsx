@@ -10,7 +10,7 @@ import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
+import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
 import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
@@ -131,9 +131,9 @@ export default function World(props) {
       while (state.readyResolvers.length > 0)
         /** @type {() => void} */ (state.readyResolvers.pop())();
     },
-    trackCreateGmsData(nextCreateGmsData) {
-      const hasChanged = state.hmr.createGmsData !== nextCreateGmsData;
-      return state.hmr.createGmsData = nextCreateGmsData, hasChanged;
+    trackHmr(nextHmr) {
+      const output = mapValues(state.hmr, (prev, key) => prev !== nextHmr[key])
+      return state.hmr = nextHmr, output;
     },
     update(mutator) {
       mutator?.(state);
@@ -194,7 +194,10 @@ export default function World(props) {
       }
       
       const nextCreateGmsData = await import('../service/create-gms-data').then(x => x.default);
-      const gmsDataChanged = state.trackCreateGmsData(nextCreateGmsData);
+      const NextGmGraphClass = await import('../graph/gm-graph').then(x => x.GmGraphClass);
+      const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged} = state.trackHmr(
+        { createGmsData: nextCreateGmsData, GmGraphClass: NextGmGraphClass },
+      );
       const spritesChanged = prevGeomorphs?.imagesHash !== next.geomorphs.imagesHash;
 
       if (mapChanged || gmsDataChanged) {
@@ -212,9 +215,11 @@ export default function World(props) {
         };
         
         next.gmsData.computeRoot(next.gms);
-        
+      }
+      
+      if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
-        next.gmGraph = GmGraphClass.fromGms(next.gms, { permitErrors: true });
+        next.gmGraph = NextGmGraphClass.fromGms(next.gms, { permitErrors: true });
         next.gmGraph.w = state;
         
         await pause();
@@ -234,6 +239,7 @@ export default function World(props) {
         dataChanged,
         mapChanged,
         gmsDataChanged,
+        gmGraphChanged,
         imgChanged: spritesChanged,
         hash: state.hash,
       });
@@ -330,7 +336,7 @@ export default function World(props) {
  * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
- * @property {{ createGmsData: typeof createGmsData }} hmr
+ * @property {{ createGmsData: typeof createGmsData; GmGraphClass: typeof GmGraphClass }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
@@ -373,7 +379,7 @@ export default function World(props) {
  * @property {() => void} onTick
  * @property {() => Promise<void>} resolveOnReady
  * @property {() => void} setReady
- * @property {(next: typeof createGmsData) => boolean} trackCreateGmsData
+ * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?
  * @property {(mutator?: (w: State) => void) => void} update
  */
