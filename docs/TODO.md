@@ -34,6 +34,7 @@
     - possibly exasperated by collider near g0d0?
   - enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
   - 🚧 on reload nav.worker, recompute w.es.npcToRoom
+    - ✅ support w.hash[gmKey] and clean hashing
     - 🚧 track changed gmKeys
   - 🚧 on reload physics.worker, clear w.es.{npc,door}ToNearby
   - 🚧 `nav-changed` event for code supporting level-editing

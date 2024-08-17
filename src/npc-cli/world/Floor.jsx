@@ -95,7 +95,7 @@ export default function Floor(props) {
 
   React.useEffect(() => {// initial + redraw on HMR
     state.draw();
-  }, [w.hash]);
+  }, [w.mapKey, w.hash.full]);
 
   return <>
     {w.gms.map((gm, gmId) => (

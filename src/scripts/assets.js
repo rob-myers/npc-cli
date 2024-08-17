@@ -235,6 +235,7 @@ info({ opts });
   });
   info({ changedGmKeys });
 
+  /** @type {Record<Geomorph.GeomorphKey, Geomorph.Layout>} */
   const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
     const hullKey = helper.toHullKey[gmKey];
     const flatSymbol = flattened[hullKey];
@@ -246,15 +247,22 @@ info({ opts });
   const layoutsHash = hashJson(layoutJson);
   const sheetsHash = hashJson(assetsJson.sheet);
   const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
-  const hash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
+  const fullHash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
+
+  const gmKeyToHash = mapValues(layout, value => hashJson(value));
 
   /** @type {Geomorph.GeomorphsJson} */
   const geomorphs = {
-    hash,
-    mapsHash,
-    layoutsHash,
-    sheetsHash,
-    imagesHash,
+    hash: {
+      ...gmKeyToHash,
+      full: fullHash,
+      maps: mapsHash,
+      layouts: layoutsHash,
+      sheets: sheetsHash,
+      images: imagesHash,
+      decor: `${layoutsHash} ${mapsHash}`,
+    },
+
     map: assetsJson.maps,
     layout: layoutJson,
     sheet: assetsJson.sheet,

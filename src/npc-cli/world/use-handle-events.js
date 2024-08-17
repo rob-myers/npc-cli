@@ -55,7 +55,7 @@ export default function useHandleEvents(w) {
           break;
         case "pre-request-nav":
           // 🚧 only recompute for "changed gmKeys"
-          for(const [index, npc] of Object.values(w.npc.npc).entries()) {
+          for(const [index, npc] of Object.values(w.npc?.npc ?? {}).entries()) {
             const grId = w.gmGraph.findRoomContaining(npc.getPoint(), true);
             if (grId !== null) {
               state.npcToRoom[npc.key] = grId;

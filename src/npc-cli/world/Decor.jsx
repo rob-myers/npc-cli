@@ -502,7 +502,7 @@ export default function Decor(props) {
   // instantiate geomorph decor
   // 🚧 force recompute on hmr: invalidate hash (?)
   state.queryStatus = useQuery({
-    queryKey: ['decor', w.key, w.decorHash],
+    queryKey: ['decor', w.key, w.mapKey, w.hash.decor],
     async queryFn() {
       // console.log('🔔 query debug', ['decor', w.key, w.decorHash]);
       const prev = state.hash;

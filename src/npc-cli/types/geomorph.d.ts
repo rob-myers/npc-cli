@@ -21,6 +21,18 @@ declare namespace Geomorph {
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
 
+  interface GeomorphsHash extends Record<Geomorph.GeomorphKey, number> {
+    /** `${maps} ${layouts} ${sheets} ${images}` */
+    full: string;
+    maps: number;
+    layouts: number;
+    sheets: number;
+    /** Hash of the sprite-sheet images */
+    images: number;
+    /** `${layouts} ${maps}` */
+    decor: `${number} ${number}`;
+  }
+
   type Connector = import("../service/geomorph").Connector;
 
   interface ConnectorJson {
@@ -102,13 +114,7 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
-    /** `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}` */
-    hash: string;
-    mapsHash: number;
-    layoutsHash: number;
-    sheetsHash: number;
-    /** Sprite-sheets hash */
-    imagesHash: number;
+    hash: GeomorphsHash;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
     sheet: SpriteSheet;

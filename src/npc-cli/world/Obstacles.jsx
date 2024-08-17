@@ -149,12 +149,12 @@ export default function Obstacles(props) {
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [w.hash, w.gmsData.obstaclesCount]);
+  }, [w.mapKey, w.hash.full, w.gmsData.obstaclesCount]);
 
   return (
     <instancedMesh
       name="static-obstacles"
-      key={w.hash}
+      key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.inst = instances)}
       args={[state.quadGeom, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}

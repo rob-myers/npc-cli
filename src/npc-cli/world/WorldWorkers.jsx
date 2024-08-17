@@ -55,7 +55,7 @@ export default function WorldWorkers() {
   }));
 
   React.useEffect(() => {// (re)start worker on(change) geomorphs.json
-    if (w.threeReady && w.hash) {
+    if (w.threeReady && w.hash.full) {
       w.nav.worker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
       w.nav.worker.addEventListener("message", state.handleNavWorkerMessage);
       
@@ -67,10 +67,10 @@ export default function WorldWorkers() {
         w.physics.worker.terminate();
       };
     }
-  }, [w.threeReady, w.geomorphs?.hash]);
+  }, [w.threeReady, w.geomorphs?.hash.full]);
 
   React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
-    if (w.threeReady && w.hash) {
+    if (w.threeReady && w.hash.full) {
       // 🚧 gmKey hashes
       w.events.next({ key: 'pre-request-nav' });
       w.nav.worker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
@@ -86,7 +86,7 @@ export default function WorldWorkers() {
         })),
       });
     }
-  }, [w.threeReady, w.hash]); // 🚧 avoid rebuild when only image changes
+  }, [w.threeReady, w.mapKey, w.hash.full]); // 🚧 avoid rebuild when only image changes
 
   return null;
 }

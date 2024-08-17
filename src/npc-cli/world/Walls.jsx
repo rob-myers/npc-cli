@@ -87,12 +87,12 @@ export default function Walls(props) {
 
   React.useEffect(() => {
     state.positionInstances();
-  }, [w.hash, w.gmsData.wallCount]);
+  }, [w.mapKey, w.hash.full, w.gmsData.wallCount]);
 
   return (
     <instancedMesh
       name="walls"
-      key={w.hash}
+      key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.wallsInst = instances)}
       args={[getQuadGeometryXY('walls-xy'), undefined, w.gmsData.wallCount]}
       frustumCulled={false}

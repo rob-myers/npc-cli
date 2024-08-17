@@ -274,7 +274,7 @@ export default function Doors(props) {
     state.buildLookups();
     state.positionInstances();
     state.addDoorUvs();
-  }, [w.hash, w.gmsData.doorCount]);
+  }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
 
   return <>
     <instancedMesh

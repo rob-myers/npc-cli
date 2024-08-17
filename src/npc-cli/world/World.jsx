@@ -44,8 +44,9 @@ export default function World(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     key: props.worldKey,
     disabled: !!props.disabled,
-    hash: /** @type {*} */ (''),
-    decorHash: /** @type {*} */ (''),
+    hash: /** @type {State['hash']} */ ({
+      full: /** @type {*} */ (''),
+    }),
     mapKey: props.mapKey,
     r3f: /** @type {*} */ (null),
     readyResolvers: [],
@@ -154,19 +155,21 @@ export default function World(props) {
 
       /**
        * Used to apply changes synchronously.
-       * These values can be overridden below.
-       * @type {Pick<State, 'geomorphs' | 'mapKey' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph'>}
+       * @type {Pick<State, 'geomorphs' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph' | 'hash' | 'mapKey'>}
        */
       const next = {
+        // prev values (can be overridden below)
         geomorphs: prevGeomorphs,
-        mapKey: props.mapKey,
         gms: state.gms,
         gmsData: state.gmsData,
         gmGraph: state.gmGraph,
         gmRoomGraph: state.gmRoomGraph,
+        // next values:
+        hash: geomorphsJson.hash, 
+        mapKey: props.mapKey,
       };
 
-      const dataChanged = !prevGeomorphs || state.geomorphs.hash !== geomorphsJson.hash;
+      const dataChanged = !prevGeomorphs || state.hash.full !== next.hash.full;
       if (dataChanged) {
         next.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
       }
@@ -198,7 +201,7 @@ export default function World(props) {
       const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged} = state.trackHmr(
         { createGmsData: nextCreateGmsData, GmGraphClass: NextGmGraphClass },
       );
-      const spritesChanged = prevGeomorphs?.imagesHash !== next.geomorphs.imagesHash;
+      const spritesChanged = state.hash.images !== next.hash.images;
 
       if (mapChanged || gmsDataChanged) {
         next.gmsData = nextCreateGmsData(// reuse gmData lookup, unless:
@@ -227,13 +230,10 @@ export default function World(props) {
       }
 
       // apply changes synchronously
-      if (dataChanged || gmsDataChanged) {
+      if (state.gmsData !== next.gmsData) {
         state.gmsData?.dispose();
       }
       Object.assign(state, next);
-      state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
-      state.decorHash = `${state.mapKey} ${state.geomorphs.layoutsHash} ${state.geomorphs.mapsHash}`;
-      
       debug({
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
@@ -329,10 +329,7 @@ export default function World(props) {
  * @property {string} key This is `props.worldKey` and never changes
  * @property {boolean} disabled
  * @property {string} mapKey
- * @property {`${string} ${string}`} hash
- * `${mapKey} ${geomorphs.hash}` 
- * @property {`${string} ${number} ${number}`} decorHash
- * `${mapKey} ${geomorphs.layoutsHash} ${geomorphs.mapsHash}` 
+ * @property {Geomorph.GeomorphsHash} hash
  * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.

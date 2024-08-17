@@ -133,7 +133,7 @@ export default function Ceiling(props) {
     // ensure initial + redraw on HMR
     // 🚧 handle removal from w.gms (dynamic nav-mesh)
     state.draw();
-  }, [w.hash, w.hmr.createGmsData]);
+  }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);
 
   return <>
     {w.gms.map((gm, gmId) => (
