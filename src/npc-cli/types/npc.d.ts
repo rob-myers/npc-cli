@@ -73,6 +73,8 @@ declare namespace NPC {
     | { key: "changed-zoom"; level: 'near' | 'far' }
     | { key: "enter-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
     | { key: "exit-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { key: "pre-request-nav" }
+    | { key: "pre-setup-physics" }
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {

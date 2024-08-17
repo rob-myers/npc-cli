@@ -1,6 +1,6 @@
 import React from "react";
 import { defaultDoorCloseMs } from "../service/const";
-import { warn } from "../service/generic";
+import { pause, warn } from "../service/generic";
 import { geom } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -15,7 +15,7 @@ export default function useHandleEvents(w) {
     npcToNearby: {},
     npcToRoom: {},
 
-    handleEvents(e) {
+    async handleEvents(e) {
       // info('useHandleEvents', e);
 
       if ('npcKey' in e) {
@@ -52,6 +52,21 @@ export default function useHandleEvents(w) {
           break;
         case "decor-instantiated":
           w.setReady();
+          break;
+        case "pre-request-nav":
+          // 🚧 only recompute for "changed gmKeys"
+          for(const [index, npc] of Object.values(w.npc.npc).entries()) {
+            const grId = w.gmGraph.findRoomContaining(npc.getPoint(), true);
+            if (grId !== null) {
+              state.npcToRoom[npc.key] = grId;
+            } else {// 🚧 move to legal position?
+              warn(`${npc.key}: no longer inside any room`);
+            }
+            index % 5 === 0 && await pause(); // avoid
+          }
+          break;
+        case "pre-setup-physics":
+          // 🚧
           break;
         case "try-close-door":
           state.tryCloseDoor(e.gmId, e.doorId, e.meta);
