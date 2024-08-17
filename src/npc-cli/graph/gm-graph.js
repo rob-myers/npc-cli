@@ -44,21 +44,21 @@ export class GmGraphClass extends BaseGraph {
   /**
    * Cache for @see {getAdjacentRoomCtxt}
    * 🤔 could precompute?
-   * @type {Record<`${number}-${number}`, Graph.GmAdjRoomCtxt | null>}
+   * @type {Map<`${number}-${number}`, Graph.GmAdjRoomCtxt | null>}
    */
-  adjRoomCtxt = {};
+  adjRoomCtxt = new Map();
 
   /**
    * Given world coordinates `(x, y)` then parent `gmId` is:
    * `gmIdGrid[`${Math.floor(x / 600)}-${Math.floor(y / 600)}`]`
-   * @type {{ [key in `${number}-${number}`]?: number }}
+   * @type {Map<`${number}-${number}`, number>}
    */
-  gmIdGrid = {};
+  gmIdGrid = new Map();
 
   /** @param {Geomorph.LayoutInstance[]} gms  */
   constructor(gms) {
     super();
-    this.gms = gms;
+    this.gms = gms.slice();
     this.entry = new Map();
 
     this.gmNodeByGmId = gms.reduce((agg, _, gmId) => ({ ...agg, [gmId]: [] }), {});
@@ -67,7 +67,7 @@ export class GmGraphClass extends BaseGraph {
     this.gms.forEach(({ gridRect: { x: gx, y: gy, right, bottom } }, gmId) => {
       for (let x = Math.floor(gx / gmIdGridDim); x < Math.floor(right / gmIdGridDim); x++)
         for (let y = Math.floor(gy / gmIdGridDim); y < Math.floor(bottom / gmIdGridDim); y++)
-          this.gmIdGrid[`${x}-${y}`] = gmId;
+          this.gmIdGrid.set(`${x}-${y}`, gmId);
     });
   }
 
@@ -114,6 +114,15 @@ export class GmGraphClass extends BaseGraph {
     return null;
   }
 
+  dispose() {
+    super.dispose();
+    this.gms.length = 0;
+    this.entry.clear();
+    this.w = /** @type {*} */ ({});
+    this.adjRoomCtxt.clear();
+    this.gmIdGrid.clear();
+  }
+
   /**
    * 🚧 split this into two different functions?
    * A geomorph can have multiple 'gm' nodes: one per disjoint navmesh.
@@ -121,7 +130,7 @@ export class GmGraphClass extends BaseGraph {
    * @returns {[gmId: number | null, gmNodeId: number | null]} respective 'gm' node is `nodesArray[gmNodeId]`
    */
   findGmIdContaining(point) {
-    const gmId = this.gmIdGrid[`${Math.floor(point.x / gmIdGridDim)}-${Math.floor(point.y / gmIdGridDim)}`];
+    const gmId = this.gmIdGrid.get(`${Math.floor(point.x / gmIdGridDim)}-${Math.floor(point.y / gmIdGridDim)}`);
     if (typeof gmId === 'number') {
       const gmNodeId = this.gmNodeByGmId[gmId].find(node => node.rect.contains(point))?.index;
       return [gmId, gmNodeId ?? null];
@@ -211,7 +220,6 @@ export class GmGraphClass extends BaseGraph {
 
 
   /**
-   * 🚧 simplify?
    * Cached because static and e.g. called many times on toggle hull door.
    * @param {number} gmId 
    * @param {number} hullDoorId 
@@ -219,8 +227,9 @@ export class GmGraphClass extends BaseGraph {
    */
   getAdjacentRoomCtxt(gmId, hullDoorId) {
     const cacheKey = /** @type {const} */ (`${gmId}-${hullDoorId}`);
-    if (this.adjRoomCtxt[cacheKey]) {
-      return this.adjRoomCtxt[cacheKey];
+    let cached = this.adjRoomCtxt.get(cacheKey);
+    if (cached != null) {
+      return cached;
     }
 
     const gm = this.gms[gmId];
@@ -228,12 +237,12 @@ export class GmGraphClass extends BaseGraph {
     const doorNode = this.getNodeById(doorNodeId);
     if (!doorNode) {
       console.error(`${GmGraphClass.name}: failed to find hull door node: ${doorNodeId}`);
-      return this.adjRoomCtxt[cacheKey] = null;
+      return this.adjRoomCtxt.set(cacheKey, null), null;
     }
     const otherDoorNode = /** @type {undefined | Graph.GmGraphNodeDoor} */ (this.getSuccs(doorNode).find(x => x.type === 'door'));
     if (!otherDoorNode) {
       // console.info(`${gmGraphClass.name}: hull door ${doorNodeId} on boundary`);
-      return this.adjRoomCtxt[cacheKey] = null;
+      return this.adjRoomCtxt.set(cacheKey, null), null;
     }
     // `door` is a hull door and connected to another
     // console.log({otherDoorNode});
@@ -242,7 +251,8 @@ export class GmGraphClass extends BaseGraph {
     const adjRoomId = /** @type {number} */ (roomIds.find(x => typeof x === 'number'));
     const adjGmRoomKey = helper.getGmRoomKey(adjGmId, adjRoomId);
 
-    return this.adjRoomCtxt[cacheKey] = { adjGmId, adjRoomId, adjHullId: dstHullDoorId, adjDoorId, adjGmRoomKey };
+    cached = { adjGmId, adjRoomId, adjHullId: dstHullDoorId, adjDoorId, adjGmRoomKey }
+    return this.adjRoomCtxt.set(cacheKey, cached), cached;
   }
 
   /**

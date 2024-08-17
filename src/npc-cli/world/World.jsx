@@ -222,10 +222,12 @@ export default function World(props) {
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
+        state.gmGraph.dispose();
         next.gmGraph = NextGmGraphClass.fromGms(next.gms, { permitErrors: true });
         next.gmGraph.w = state;
         
         await pause();
+        state.gmRoomGraph.dispose();
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
       }
 

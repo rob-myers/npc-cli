@@ -39,8 +39,6 @@
   - 🚧 on reload physics.worker, clear w.es.{npc,door}ToNearby
   - 🚧 `nav-changed` event for code supporting level-editing
 
-- 🚧 refactor hashes
-
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
   - based on these models e.g. 3 bones: body > head, shadow
