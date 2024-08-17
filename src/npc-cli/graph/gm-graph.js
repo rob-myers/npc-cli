@@ -278,8 +278,10 @@ export class GmGraphClass extends BaseGraph {
   }
 
   /**
-   * By assumption `gmId` is `door.gmId`.
-   * @param {Geomorph.DoorState } door 
+   * Get GmRoomId on other side of door,
+   * assuming `roomId` in `door.door.roomIds`.
+   * 🤔 could cache
+   * @param {Geomorph.DoorState} door 
    * @param {number} roomId 
    * @returns {Geomorph.GmRoomId | null}
    */
@@ -385,6 +387,28 @@ export class GmGraphClass extends BaseGraph {
       return true;
     }
     return doorNode.sealed;
+  }
+
+  /**
+   * Is `point` on other side of door to `roomId`?
+   * We assume `roomId` is in `door.door.roomIds`.
+   * 🤔 could cache
+   * @param {Geomorph.DoorState} door 
+   * @param {number} roomId 
+   * @param {Geom.VectJson} point
+   * @returns {boolean}
+   */
+  isOnOtherSide(door, roomId, point) {
+    const dp = (
+        (point.x - door.src.x) * door.normal.x
+      + (point.y - door.src.y) * door.normal.y
+    );
+    if (door.hull === false) {// normal points towards roomIds[0]
+      const index = door.door.roomIds.indexOf(roomId); // 0 or 1
+      return dp * (index === 0 ? 1 : -1) < 0;
+    } else {// hull door normals always point outwards
+      return dp > 0;
+    }
   }
 
   /**

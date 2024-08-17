@@ -2,7 +2,7 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { geomorphGridMeters, glbMeta, wallHeight } from '../service/const';
+import { geomorphGridMeters, glbMeta, wallHeight, wallOutset } from '../service/const';
 import { info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorphService } from '../service/geomorph';
@@ -195,7 +195,7 @@ async function setupWorld(mapKey, npcs) {
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
           type: 'cuboid',
-          halfDim: [door.baseRect.width/2, wallHeight / 2, door.baseRect.height/2],
+          halfDim: [(door.baseRect.width - 2 * wallOutset)/2, wallHeight / 2, door.baseRect.height/2],
         },
         position: { x: center.x, y: wallHeight/2, z: center.y },
         angle: door.angle,

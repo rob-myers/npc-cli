@@ -120,21 +120,24 @@ export default function useHandleEvents(w) {
       if (e.type === 'nearby') {
         state.npcToNearby[e.npcKey]?.delete(e.gdKey);
         state.doorToNearby[e.gdKey]?.delete(e.npcKey);
-      } else if (e.type === 'inside') {
-        // npc entered room
+        return;
+      }
+      
+      if (e.type === 'inside') {// npc entered room
         const prev = state.npcToRoom[e.npcKey];
 
         if (door.gmId !== prev.gmId) {
           return; // hull doors have 2 sensors, so can ignore one
         }
+
+        const onOtherSide = w.gmGraph.isOnOtherSide(door, prev.roomId, npc.getPoint());
+        if (onOtherSide === false) {
+          return; // stayed in same room
+        }
         
-        // 🚧 fails e.g. when running thru hull door
-        const next = w.gmGraph.findRoomContaining(npc.getPoint());
+        const next = w.gmGraph.getOtherGmRoomId(door, prev.roomId);
         if (next === null) {
           return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
-        }
-        if (prev.grKey === next.grKey) {
-          return; // stayed inside room
         }
         setTimeout(() => {
           state.npcToRoom[e.npcKey] = next;
