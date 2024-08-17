@@ -7,12 +7,12 @@ export const DEV_GATSBY_PORT = 8011;
 /** See `npm run ws-server` */
 export const DEV_EXPRESS_WEBSOCKET_PORT = 8012;
 
-export const DEV_ORIGIN = 'localhost';
 /**
  * 🔔🔔🔔
- * For local mobile debugging, e.g. via:
+ * Change for local mobile debugging, e.g. via:
  * `ifconfig | grep "inet " | grep -v 127.0.0.1`
- */
+*/
+export const DEV_ORIGIN = 'localhost';
 // export const DEV_ORIGIN = '192.168.16.66';
 // export const DEV_ORIGIN = '192.168.59.66';
 
