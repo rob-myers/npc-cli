@@ -31,8 +31,8 @@ export class Npc {
     moving: false,
     paused: false,
     /** @type {NPC.PermitNav} */
-    // permitNav: 'via-open',
-    permitNav: 'anywhere',
+    // permitNav: 'accessible',
+    permitNav: 'anywhere', // temp
     rejectMove: emptyReject,
     run: false,
     spawns: 0,

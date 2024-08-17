@@ -6,18 +6,16 @@
   - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
 
 - 🚧 migrate sub-symbols to actual symbols
-  - ✅ 301 ✅ 302 ✅ 303 ✅ 101 🚧 102
-  - ✅ bridge ✅ lifeboat
-  - consoles
-  - extras
+  - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
+  - bridge ✅ lifeboat ✅
+  - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 npc move strategy dictates different navQuery
   - `anywhere`: no restriction (except sealed)
-  - `same-room`: can only nav inside current room
-    - 🚧 npcs track current room
-    - reject nav outside current room
-  - `via-open`:
+  - `adjacent`: can only nav to adjacent rooms
+    - 🚧 track npc current room
+  - `accessible`:
     - block non-auto closed doors (including locked)
     - block locked auto doors
 - support non-door sensor i.e. decor circle/poly
@@ -32,19 +30,20 @@
     e.g. `inside g1d3` vs `nearby g1d3`
   - ✅ update npcToRoom
   - 🚧 fix entered-room bug(s)
-  - 🚧 entered-room, exited-room, entered-doorway, exited-doorway
+  - 🚧 enter-room, exit-room, enter-doorway, exit-doorway
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - on reload nav.worker, recompute w.es.npcToRoom
+  - `nav-changed` event for code we want to work during level-editing
+
+- create "hyper casual" characters, rather then pseudo minecraft character
+  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
+  - based on these models e.g. 3 bones: body > head, shadow
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js
     > https://github.com/mrdoob/three.js/pull/16390
   - can provide vertex indices via attribute, hence instanceId too
     > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
-
-- create "hyper casual" characters, rather then pseudo minecraft character
-  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
-  - based on these models e.g. 3 bones: body > head, shadow
 
 - return to next.js project
   - ensure up to date

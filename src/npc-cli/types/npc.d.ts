@@ -29,14 +29,14 @@ declare namespace NPC {
   }
 
   /**
-   * - `same-room` means in same room only
-   * - `via-open` (default) means anywhere via unlocked-auto or locked-open doors
-   * - `anywhere` means anywhere (except sealed)
+   * - `anywhere` means anywhere except sealed
+   * - `accessible` (default) means anywhere via unlocked-auto or locked-open doors
+   * - `adjacent` for adjacent accessible rooms only
    */
   type PermitNav = (
-    | 'same-room'
-    | 'via-open'
     | 'anywhere'
+    | 'accessible'
+    | 'adjacent'
   );
 
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
