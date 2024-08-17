@@ -76,35 +76,9 @@ export default function useHandleEvents(w) {
 
           break;
         }
-        case "exited-sensor": {
-          const door = w.door.byKey[e.gdKey];
-          const npc = w.npc.getNpc(e.npcKey);
-
-          if (e.type === 'nearby') {
-            state.npcToNearby[e.npcKey]?.delete(e.gdKey);
-            state.doorToNearby[e.gdKey]?.delete(e.npcKey);
-          } else if (e.type === 'inside') {
-            // npc entered room
-            const prev = state.npcToRoom[e.npcKey];
-
-            if (door.gmId !== prev.gmId) {
-              return; // hull doors have 2 sensors, so can ignore one
-            }
-            
-            const next = w.gmGraph.findRoomContaining(npc.getPoint());
-            if (next === null) {
-              return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
-            }
-            if (prev.grKey === next.grKey) {
-              return; // stayed inside room
-            }
-            setTimeout(() => {
-              state.npcToRoom[e.npcKey] = next;
-              w.events.next({ key: 'entered-room', npcKey: e.npcKey, ...next, prev  });
-            });
-          }
+        case "exited-sensor":
+          state.onExitSensor(e);
           break;
-        }
         case "spawned": {
           const npc = w.npc.npc[e.npcKey];
           const { x, y, z } = npc.getPosition();
@@ -138,6 +112,35 @@ export default function useHandleEvents(w) {
       const gm = w.gms[gmId];
       const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
       return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
+    },
+    onExitSensor(e) {
+      const door = w.door.byKey[e.gdKey];
+      const npc = w.npc.getNpc(e.npcKey);
+
+      if (e.type === 'nearby') {
+        state.npcToNearby[e.npcKey]?.delete(e.gdKey);
+        state.doorToNearby[e.gdKey]?.delete(e.npcKey);
+      } else if (e.type === 'inside') {
+        // npc entered room
+        const prev = state.npcToRoom[e.npcKey];
+
+        if (door.gmId !== prev.gmId) {
+          return; // hull doors have 2 sensors, so can ignore one
+        }
+        
+        // 🚧 fails e.g. when running thru hull door
+        const next = w.gmGraph.findRoomContaining(npc.getPoint());
+        if (next === null) {
+          return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
+        }
+        if (prev.grKey === next.grKey) {
+          return; // stayed inside room
+        }
+        setTimeout(() => {
+          state.npcToRoom[e.npcKey] = next;
+          w.events.next({ key: 'entered-room', npcKey: e.npcKey, ...next, prev  });
+        });
+      }
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
@@ -227,6 +230,7 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
+ * @property {(e: Extract<NPC.Event, { key: 'exited-sensor' }>) => void} onExitSensor
  * @property {(npcKey: string, gdKey: number, doorId: number) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d

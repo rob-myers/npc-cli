@@ -29,7 +29,9 @@
   - ✅ sensor in each doorway, triggered on leave
     e.g. `inside g1d3` vs `nearby g1d3`
   - ✅ update npcToRoom
-  - 🚧 fix entered-room bug(s)
+  - 🚧 fix entered-room
+    - seen "npc position" not in room when running through hull door
+    - possibly exasperated by collider near g0d0?
   - 🚧 enter-room, exit-room, enter-doorway, exit-doorway
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - on reload nav.worker, recompute w.es.npcToRoom

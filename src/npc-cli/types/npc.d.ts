@@ -68,9 +68,8 @@ declare namespace NPC {
     | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "changed-zoom"; level: 'near' | 'far' }
-    | { key: "entered-sensor" | "exited-sensor"; npcKey: string } & (
-      | { type: 'nearby' | 'inside' } & Geomorph.GmDoorId
-    )
+    | { key: "entered-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { key: "exited-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {

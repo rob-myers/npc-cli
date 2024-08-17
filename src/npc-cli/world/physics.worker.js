@@ -167,7 +167,7 @@ async function setupWorld(mapKey, npcs) {
     geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
-  // door sensors: nearby ✅ inside 🚧 
+  // door sensors: nearby ✅ inside ✅
   const gmDoorBodies = gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
     const center = gm.matrix.transformPoint(door.center.clone());
     const gdKey = helper.getGmDoorKey(gmId, doorId);
@@ -175,10 +175,10 @@ async function setupWorld(mapKey, npcs) {
     const insideKey = /** @type {const} */ (`inside ${gdKey}`);
 
     return [
+      // hull door sensor ~ 2x2 grid
+      // non-hull door sensor ~ 1x1 grid
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
-        // hull door sensor ~ 2x2 grid
-        // non-hull door sensor ~ 1x1 grid
         geomDef: {
           type: 'cylinder',
           radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,

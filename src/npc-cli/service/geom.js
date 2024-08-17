@@ -858,9 +858,9 @@ class geomServiceClass {
   }
 
   /**
-   * Convert a polygonal rectangle back into a `Rect` and `angle`,
-   * where rectangle needs to be rotated about its top-left point.
-   * - We ensure the width is greater than or equal to the height.
+   * Convert a polygonal rectangle back into a `Rect` and `angle` s.t.
+   * - rectangle needs to be rotated about its top-left point.
+   * - rectangle width is greater than or equal to its height.
    * @param {Geom.Poly} poly
    * @returns {Geom.AngledRect<Geom.Rect>}
    */
