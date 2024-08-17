@@ -54,7 +54,10 @@ declare namespace NPC {
     | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "way-point"; npcKey: string; next: Geom.VectJson | null } & Geom.VectJson
-    | { key: "entered-room"; npcKey: string; prev: Geomorph.GmRoomId } & Geomorph.GmRoomId
+    | { key: "enter-doorway"; npcKey: string } & Geomorph.GmDoorId
+    | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
+    | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId
+    | { key: "exit-room"; npcKey: string } & Geomorph.GmRoomId
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
@@ -68,8 +71,8 @@ declare namespace NPC {
     | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "changed-zoom"; level: 'near' | 'far' }
-    | { key: "entered-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
-    | { key: "exited-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { key: "enter-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { key: "exit-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {

@@ -34,16 +34,16 @@ export default function WorldWorkers() {
           if (type === 'npc') {
             return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
           }
-          // 🚧 handle inside/nearby
-          w.events.next({ key: 'exited-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
+          // handle inside/nearby
+          w.events.next({ key: 'exit-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
         });
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
           const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
           if (type === 'npc') {
             return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
           }
-          // 🚧 handle inside/nearby
-          w.events.next({ key: 'entered-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
+          // handle inside/nearby
+          w.events.next({ key: 'enter-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
         });
       }
     },

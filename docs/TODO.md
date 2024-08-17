@@ -32,10 +32,10 @@
   - ✅ fix entered-room triggering
     - ℹ️ seen "npc position" not in room when running through hull door
     - possibly exasperated by collider near g0d0?
-  - 🚧 enter-room, exit-room, enter-doorway, exit-doorway
+  - enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - on reload nav.worker, recompute w.es.npcToRoom
-  - `nav-changed` event for code we want to work during level-editing
+  - `nav-changed` event for code supporting level-editing
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599

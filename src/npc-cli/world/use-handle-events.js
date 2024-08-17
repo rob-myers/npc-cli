@@ -60,23 +60,10 @@ export default function useHandleEvents(w) {
     },
     handleNpcEvents(e) {
       switch (e.key) {
-        case "entered-sensor": {
-          const door = w.door.byKey[e.gdKey];
-          const npc = w.npc.getNpc(e.npcKey);
-
-          if (e.type === 'nearby') {
-            (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
-            (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
-            if (npc.s.permitNav === 'anywhere' || (door.auto === true && !door.locked)) {
-              state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
-            }
-          } else if (e.type === 'inside') {
-            // NOOP
-          }
-
+        case "enter-sensor": 
+          state.onEnterSensor(e);
           break;
-        }
-        case "exited-sensor":
+        case "exit-sensor":
           state.onExitSensor(e);
           break;
         case "spawned": {
@@ -113,6 +100,20 @@ export default function useHandleEvents(w) {
       const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
       return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
     },
+    onEnterSensor(e) {
+      const door = w.door.byKey[e.gdKey];
+      const npc = w.npc.getNpc(e.npcKey);
+
+      if (e.type === 'nearby') {
+        (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
+        (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
+        if (npc.s.permitNav === 'anywhere' || (door.auto === true && !door.locked)) {
+          state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+        }
+      } else if (e.type === 'inside') {
+        w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: door.gmId, doorId: door.doorId, gdKey: door.gdKey });
+      }
+    },
     onExitSensor(e) {
       const door = w.door.byKey[e.gdKey];
       const npc = w.npc.getNpc(e.npcKey);
@@ -130,6 +131,8 @@ export default function useHandleEvents(w) {
           return; // hull doors have 2 sensors, so can ignore one
         }
 
+        w.events.next({ key: 'exit-doorway', npcKey: e.npcKey, gmId: door.gmId, doorId: door.doorId, gdKey: door.gdKey });
+
         const onOtherSide = w.gmGraph.isOnOtherSide(door, prev.roomId, npc.getPoint());
         if (onOtherSide === false) {
           return; // stayed in same room
@@ -141,7 +144,8 @@ export default function useHandleEvents(w) {
         }
         setTimeout(() => {
           state.npcToRoom[e.npcKey] = next;
-          w.events.next({ key: 'entered-room', npcKey: e.npcKey, ...next, prev  });
+          w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...prev });
+          w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...next });
         });
       }
     },
@@ -233,7 +237,8 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
- * @property {(e: Extract<NPC.Event, { key: 'exited-sensor' }>) => void} onExitSensor
+ * @property {(e: Extract<NPC.Event, { key: 'enter-sensor' }>) => void} onEnterSensor
+ * @property {(e: Extract<NPC.Event, { key: 'exit-sensor' }>) => void} onExitSensor
  * @property {(npcKey: string, gdKey: number, doorId: number) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
