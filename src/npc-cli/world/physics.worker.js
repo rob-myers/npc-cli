@@ -157,8 +157,8 @@ async function setupWorld(mapKey, npcs) {
     state.bodyKeyToBody.clear();
     state.bodyKeyToCollider.clear();
     state.bodyHandleToKey.clear();
-    state.world.bodies.free();
-    state.world.colliders.free();
+    // state.world.bodies.free();
+    // state.world.colliders.free();
   }
 
   const geomorphs = geomorphService.deserializeGeomorphs(await fetchGeomorphsJson());
