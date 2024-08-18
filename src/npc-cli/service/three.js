@@ -72,7 +72,6 @@ export function setRotMatrixAboutPoint(mat, cx, cy, cz) {
   return mat;
 }
 
-// 🚧 cache XY quad geometries too
 /** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
 const quadGeometryXY = new THREE.BufferGeometry();
 const xyVertices = new Float32Array([0,0,0, 0,1,0, 1,1,0, 1,0,0]);

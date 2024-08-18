@@ -100,7 +100,7 @@ export default function Walls(props) {
       onPointerDown={state.onPointerDown}
       >
       <meshBasicMaterial side={THREE.DoubleSide} color="black" />
-      {/* <meshBasicMaterial side={THREE.DoubleSide} color="red" wireframe /> */}
+      {/* <meshBasicMaterial side={THREE.DoubleSide} color="#f00" wireframe /> */}
     </instancedMesh>
   );
 }
