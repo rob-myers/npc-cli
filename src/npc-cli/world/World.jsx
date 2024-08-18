@@ -82,6 +82,7 @@ export default function World(props) {
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
+    // 🚧 support hmr e.g. via state.hmr
     lib: {
       filter,
       firstValueFrom,
@@ -196,9 +197,11 @@ export default function World(props) {
         );
       }
       
+      // HMR causes this query to run while `module.hot.active` is false,
+      // causing "[HMR] unexpected require from disposed module", but it works 🤷‍♂️
       const nextCreateGmsData = await import('../service/create-gms-data').then(x => x.default);
       const NextGmGraphClass = await import('../graph/gm-graph').then(x => x.GmGraphClass);
-      const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged} = state.trackHmr(
+      const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged } = state.trackHmr(
         { createGmsData: nextCreateGmsData, GmGraphClass: NextGmGraphClass },
       );
       const spritesChanged = state.hash.images !== next.hash.images;
@@ -222,18 +225,20 @@ export default function World(props) {
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
-        state.gmGraph.dispose();
         next.gmGraph = NextGmGraphClass.fromGms(next.gms, { permitErrors: true });
         next.gmGraph.w = state;
         
         await pause();
-        state.gmRoomGraph.dispose();
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
       }
 
       // apply changes synchronously
       if (state.gmsData !== next.gmsData) {
         state.gmsData?.dispose();
+      }
+      if (state.gmGraph !== next.gmGraph) {
+        state.gmGraph.dispose();
+        state.gmRoomGraph.dispose();
       }
       Object.assign(state, next);
       debug({
