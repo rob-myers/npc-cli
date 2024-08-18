@@ -147,10 +147,12 @@ export default function World(props) {
 
   useHandleEvents(state);
 
-  useQuery({
+  const rootQuery = useQuery({
     queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
     queryFn: async () => {
-      // console.log('🔔 query debug', [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey])
+      if (module.hot?.active === false) {
+        return null; // Fix "[HMR] unexpected require from disposed module"
+      }
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
 
@@ -197,8 +199,6 @@ export default function World(props) {
         );
       }
       
-      // HMR causes this query to run while `module.hot.active` is false,
-      // causing "[HMR] unexpected require from disposed module", but it works 🤷‍♂️
       const nextCreateGmsData = await import('../service/create-gms-data').then(x => x.default);
       const NextGmGraphClass = await import('../graph/gm-graph').then(x => x.GmGraphClass);
       const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged } = state.trackHmr(
@@ -207,12 +207,12 @@ export default function World(props) {
       const spritesChanged = state.hash.images !== next.hash.images;
 
       if (mapChanged || gmsDataChanged) {
-        next.gmsData = nextCreateGmsData(// reuse gmData lookup, unless:
-          // (a) geomorphs.json changed, or (b) create-gms-data changed
+        next.gmsData = nextCreateGmsData(
+          // reuse gmKey -> GmData lookup unless geomorphs.json or createGmsData changed
           { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
         );
 
-        // ensure gmData per layout in map
+        // ensure GmData per gmKey in map
         for (const gmKey of new Set(next.gms.map(({ key }) => key))) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
@@ -282,8 +282,9 @@ export default function World(props) {
     // throwOnError: true, // breaks on restart dev env
   });
 
-  React.useEffect(() => {// expose world for terminal
+  React.useEffect(() => {// provide world for tty + hmr query
     setCached([props.worldKey], state);
+    state.geomorphs && rootQuery.refetch();
     return () => removeCached([props.worldKey]);
   }, []);
 
