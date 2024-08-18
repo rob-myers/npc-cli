@@ -218,7 +218,6 @@ export class GmGraphClass extends BaseGraph {
     ) ?? null;
   }
 
-
   /**
    * Cached because static and e.g. called many times on toggle hull door.
    * @param {number} gmId 
