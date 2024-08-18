@@ -47,13 +47,15 @@
   - ✅ support w.hash[gmKey] and clean up
   - ✅ w.hash[gmKey].{full,nav,decor}
   - ✅ avoid recompute hash.images
-  - 🚧 can replace hash.images by hash.sheets
+  - ✅ can remove hash.images
     - sheets now contains imagesHash
   - 🚧 move hash computations to browser
   - 🚧 w.prevHash + replace w.decor.computeHash
     - only set w.prevHash when something changed
     - could use nav hash to avoid clearing npcToRoom
 
+- obstacles.png slightly different onchange
+  - no visible difference, probably due to "quick approach"
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599

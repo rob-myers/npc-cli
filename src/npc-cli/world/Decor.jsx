@@ -501,6 +501,7 @@ export default function Decor(props) {
   
   // instantiate geomorph decor
   const query = useQuery({
+    // 🚧 should depend on sheetsHash?
     queryKey: ['decor', w.key, w.mapKey, w.hash.decor],
     async queryFn() {
       if (module.hot?.active === false) {

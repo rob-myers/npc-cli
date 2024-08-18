@@ -26,13 +26,12 @@ declare namespace Geomorph {
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
 
   type GeomorphsHash = PerGeomorphHash & {
-    /** `${maps} ${layouts} ${sheets} ${images}` */
-    full: string;
+    /** `${maps} ${layouts} ${sheets}` */
+    full: `${number} ${number} ${number}`;
     maps: number;
     layouts: number;
+    /** Depends on rect lookup _and_ images */
     sheets: number;
-    /** Hash of the sprite-sheet images */
-    images: number;
     /** `${layouts} ${maps}` */
     decor: `${number} ${number}`;
   }

@@ -202,7 +202,6 @@ export default function World(props) {
       const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged } = state.trackHmr(
         { createGmsData, GmGraphClass },
       );
-      const spritesChanged = state.hash.images !== next.hash.images;
 
       if (mapChanged || gmsDataChanged) {
         next.gmsData = createGmsData(
@@ -246,11 +245,10 @@ export default function World(props) {
         mapChanged,
         gmsDataChanged,
         gmGraphChanged,
-        imgChanged: spritesChanged,
         hash: state.hash,
       });
 
-      if (dataChanged || spritesChanged) {
+      if (dataChanged) {// 🤔 separate hash.sheets from hash.full?
         for (const { src, tm, invert } of [
           { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
           { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
