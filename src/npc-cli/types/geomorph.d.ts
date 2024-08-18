@@ -114,7 +114,7 @@ declare namespace Geomorph {
   interface BaseDoorToggle {
     /**
      * Does the instigator exist (boolean) and have access (true)?
-     * See also `w.es.canAccess(npcKey, gdKey)`.
+     * See also `w.e.canAccess(npcKey, gdKey)`.
      */
     access?: boolean;
     /** Extra meta for door events */

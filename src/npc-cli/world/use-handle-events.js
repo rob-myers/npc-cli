@@ -228,7 +228,7 @@ export default function useHandleEvents(w) {
     },
   }));
   
-  w.es = state; // s for 'shared'
+  w.e = state; // s for 'shared'
 
   React.useEffect(() => {
     const sub = w.events.subscribe(state.handleEvents);

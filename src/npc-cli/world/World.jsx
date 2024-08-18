@@ -93,7 +93,7 @@ export default function World(props) {
       ...helper,
     },
 
-    es: /** @type {*} */ (null), // useHandleEvents
+    e: /** @type {*} */ (null), // useHandleEvents
 
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -364,7 +364,7 @@ export default function World(props) {
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
  *
- * @property {import("./use-handle-events").State} es
+ * @property {import("./use-handle-events").State} e
  * Events state i.e. useHandleEvents state
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex
