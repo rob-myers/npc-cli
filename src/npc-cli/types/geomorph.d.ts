@@ -21,7 +21,7 @@ declare namespace Geomorph {
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
 
-  interface GeomorphsHash extends Record<Geomorph.GeomorphKey, number> {
+  type GeomorphsHash = PerGeomorphHash & {
     /** `${maps} ${layouts} ${sheets} ${images}` */
     full: string;
     maps: number;
@@ -32,6 +32,12 @@ declare namespace Geomorph {
     /** `${layouts} ${maps}` */
     decor: `${number} ${number}`;
   }
+
+  type PerGeomorphHash = Record<Geomorph.GeomorphKey, {
+    full: number;
+    decor: number;
+    nav: number;
+  }>;
 
   type Connector = import("../service/geomorph").Connector;
 

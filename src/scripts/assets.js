@@ -249,12 +249,17 @@ info({ opts });
   const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
   const fullHash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
 
-  const gmKeyToHash = mapValues(layoutJson, value => hashJson(value));
+  /** @type {Geomorph.PerGeomorphHash} */
+  const perGmHash = mapValues(layoutJson, value => ({
+    full: hashJson(value),
+    decor: hashJson(value.decor),
+    nav: hashJson(value.navDecomp),
+  }));
 
   /** @type {Geomorph.GeomorphsJson} */
   const geomorphs = {
     hash: {
-      ...gmKeyToHash,
+      ...perGmHash,
       full: fullHash,
       maps: mapsHash,
       layouts: layoutsHash,
