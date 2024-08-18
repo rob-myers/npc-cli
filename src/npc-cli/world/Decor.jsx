@@ -25,7 +25,7 @@ export default function Decor(props) {
     byRoom: [],
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
-    hash : /** @type {Geomorph.GeomorphsHash} */ ({}),
+    seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
@@ -497,7 +497,7 @@ export default function Decor(props) {
       if (module.hot?.active === false) {
         return false; // Avoid query from disposed module
       }
-      const prev = state.hash;
+      const prev = state.seenHash;
       const next = w.hash;
       const mapChanged = prev.map !== next.map;
 
@@ -530,7 +530,7 @@ export default function Decor(props) {
         }
       }
 
-      state.hash = next;
+      state.seenHash = next;
       w.events.next({ key: 'decor-instantiated' });
       update();
       return true;
@@ -630,9 +630,7 @@ export default function Decor(props) {
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
- * @property {Geomorph.GeomorphsHash} hash
- * If any decor changed in a geomorph re-instantiate all.
- * Record previous map so can remove stale decor
+ * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
  * @property {LabelsMeta} label
