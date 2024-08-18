@@ -28,12 +28,16 @@ declare namespace Geomorph {
   type GeomorphsHash = PerGeomorphHash & {
     /** `${maps} ${layouts} ${sheets}` */
     full: `${number} ${number} ${number}`;
+
+    /** Hash of all maps */
     maps: number;
     layouts: number;
     /** Depends on rect lookup _and_ images */
     sheets: number;
     /** `${layouts} ${maps}` */
     decor: `${number} ${number}`;
+    /** Hash of current map */
+    map: number;
   }
 
   type PerGeomorphHash = Record<Geomorph.GeomorphKey, {

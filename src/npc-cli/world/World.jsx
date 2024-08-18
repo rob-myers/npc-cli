@@ -161,14 +161,14 @@ export default function World(props) {
        * @type {Pick<State, 'geomorphs' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph' | 'hash' | 'mapKey'>}
        */
       const next = {
-        // prev values (can be overridden below)
+        // prev values: (may overwrite below)
         geomorphs: prevGeomorphs,
         gms: state.gms,
         gmsData: state.gmsData,
         gmGraph: state.gmGraph,
         gmRoomGraph: state.gmRoomGraph,
         // next values:
-        hash: geomorphService.computeHash(geomorphsJson),
+        hash: geomorphService.computeHash(geomorphsJson, props.mapKey),
         mapKey: props.mapKey,
       };
 

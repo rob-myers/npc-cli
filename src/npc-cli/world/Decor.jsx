@@ -25,7 +25,7 @@ export default function Decor(props) {
     byRoom: [],
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
-    hash : /** @type {State['hash']} */ ({ mapHash: 0 }),
+    hash : /** @type {Geomorph.GeomorphsHash} */ ({}),
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
@@ -126,16 +126,6 @@ export default function Decor(props) {
       state.quadInst.geometry.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
-    },
-    computeHash() {
-      const { layout } = w.geomorphs;
-      const map = w.geomorphs.map[w.mapKey];
-      return {
-        mapHash: hashJson(map),
-        ...mapValues(w.lib.toGmNum, (_, gmKey) => 
-          hashJson(layout[gmKey].decor)
-        ),
-      };
     },
     createCuboidMatrix4(d) {
       tmpMat1.feedFromArray(d.transform);
@@ -508,8 +498,8 @@ export default function Decor(props) {
         return false; // Avoid query from disposed module
       }
       const prev = state.hash;
-      const next = state.computeHash();
-      const mapChanged = prev.mapHash !== next.mapHash;
+      const next = w.hash;
+      const mapChanged = prev.map !== next.map;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
       state.ensureLabelSheet();
@@ -640,7 +630,7 @@ export default function Decor(props) {
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
- * @property {{ mapHash: number; } & Record<Geomorph.GeomorphKey, number>} hash
+ * @property {Geomorph.GeomorphsHash} hash
  * If any decor changed in a geomorph re-instantiate all.
  * Record previous map so can remove stale decor
  * @property {Geomorph.DecorPoint[]} labels
@@ -660,7 +650,6 @@ export default function Decor(props) {
  * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
- * @property {() => State['hash']} computeHash
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorQuad) => THREE.Matrix4} createQuadMatrix4
  * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4

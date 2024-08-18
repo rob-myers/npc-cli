@@ -191,11 +191,13 @@ class GeomorphService {
   }
 
   /**
-   * 🔔 computed in browser only
-   * @param {Geomorph.GeomorphsJson} geomorphs 
+   * 🔔 computed in browser only,
+   * where current mapKey is available
+   * @param {Geomorph.GeomorphsJson} geomorphs
+   * @param {string} mapKey
    * @returns {Geomorph.GeomorphsHash}
    */
-  computeHash(geomorphs) {
+  computeHash(geomorphs, mapKey) {
     const mapsHash = hashJson(geomorphs.map);
     const layoutsHash = hashJson(geomorphs.layout);
     const sheetsHash = hashJson(geomorphs.sheet);
@@ -212,6 +214,7 @@ class GeomorphService {
       layouts: layoutsHash,
       sheets: sheetsHash,
       decor: `${layoutsHash} ${mapsHash}`,
+      map: hashJson(geomorphs.map[mapKey]),
     };
   }
 
