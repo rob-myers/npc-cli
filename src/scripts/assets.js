@@ -249,7 +249,7 @@ info({ opts });
   const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
   const fullHash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
 
-  const gmKeyToHash = mapValues(layout, value => hashJson(value));
+  const gmKeyToHash = mapValues(layoutJson, value => hashJson(value));
 
   /** @type {Geomorph.GeomorphsJson} */
   const geomorphs = {
