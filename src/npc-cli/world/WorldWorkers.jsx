@@ -71,7 +71,7 @@ export default function WorldWorkers() {
 
   React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
     if (w.threeReady && w.hash.full) {
-      // 🚧 gmKey hashes
+      // 🚧 send gmKeys whose navPoly has not changed
       w.events.next({ key: 'pre-request-nav' });
       w.nav.worker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
 

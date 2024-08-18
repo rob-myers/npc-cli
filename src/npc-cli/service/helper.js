@@ -1,6 +1,7 @@
 import { fromDecorImgKey, fromSymbolKey, glbMeta } from "./const";
 
 /**
+ * 🚧 try singleton instance instead, including other methods
  * - Use object so can merge into `w.lib`.
  * - Used in web workers.
  * - Used in server script assets.js.

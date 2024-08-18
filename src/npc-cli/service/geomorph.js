@@ -13,6 +13,7 @@ import {
   mapValues,
   keys,
   toPrecision,
+  hashJson,
 } from "./generic";
 import { geom, tmpRect1 } from "./geom";
 import { helper } from "./helper";
@@ -190,6 +191,31 @@ class GeomorphService {
   }
 
   /**
+   * 🔔 computed in browser only
+   * @param {Geomorph.GeomorphsJson} geomorphs 
+   * @returns {Geomorph.GeomorphsHash}
+   */
+  computeHash(geomorphs) {
+    const mapsHash = hashJson(geomorphs.map);
+    const layoutsHash = hashJson(geomorphs.layout);
+    const sheetsHash = hashJson(geomorphs.sheet);
+    /** @type {Geomorph.PerGeomorphHash} */
+    const perGmHash = mapValues(geomorphs.layout, value => ({
+      full: hashJson(value),
+      decor: hashJson(value.decor),
+      nav: hashJson(value.navDecomp),
+    }));
+    return {
+      ...perGmHash,
+      full: `${mapsHash} ${layoutsHash} ${sheetsHash}`,
+      maps: mapsHash,
+      layouts: layoutsHash,
+      sheets: sheetsHash,
+      decor: `${layoutsHash} ${mapsHash}`,
+    };
+  }
+
+  /**
    * 🔔 computed in browser only (main thread and worker)
    * @param {Geomorph.Layout} layout
    * @param {number} gmId
@@ -333,9 +359,8 @@ class GeomorphService {
    * @param {Geomorph.GeomorphsJson} geomorphsJson
    * @return {Geomorph.Geomorphs}
    */
-  deserializeGeomorphs({ hash, map, layout, sheet }) {
+  deserializeGeomorphs({ map, layout, sheet }) {
     return {
-      hash,
       map,
       layout: mapValues(layout, (x) => this.deserializeLayout(x)),
       sheet,
@@ -1078,9 +1103,8 @@ class GeomorphService {
    * @param {Geomorph.Geomorphs} geomorphs
    * @returns {Geomorph.GeomorphsJson}
    */
-  serializeGeomorphs({ hash, map, layout, sheet }) {
+  serializeGeomorphs({ map, layout, sheet }) {
     return {
-      hash,
       map,
       layout: mapValues(layout, (x) => geomorphService.serializeLayout(x)),
       sheet,

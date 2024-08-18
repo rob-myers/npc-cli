@@ -229,12 +229,14 @@ info({ opts });
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
   // debug(util.inspect({ symbolsStratified }, false, 5))
+
   // Traverse stratified symbols from leaves to co-leaves,
   // creating `FlatSymbol`s via `flattenSymbol` and `instantiateFlatSymbol`
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
     geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
   // debug("stateroom--036--2x4", util.inspect(flattened["stateroom--036--2x4"], false, 5));
+
   // fs.writeFileSync(symbolGraphVizPath, symbolGraph.getGraphviz('symbolGraph'));
 
   const changedGmKeys = geomorphService.gmKeys.filter(gmKey => {
@@ -252,28 +254,9 @@ info({ opts });
   }));
   const layoutJson = mapValues(layout, geomorphService.serializeLayout);
 
-  const mapsHash = hashJson(assetsJson.maps);
-  const layoutsHash = hashJson(layoutJson);
-  const sheetsHash = hashJson(assetsJson.sheet);
-
-  /** @type {Geomorph.PerGeomorphHash} */
-  const perGmHash = mapValues(layoutJson, value => ({
-    full: hashJson(value),
-    decor: hashJson(value.decor),
-    nav: hashJson(value.navDecomp),
-  }));
 
   /** @type {Geomorph.GeomorphsJson} */
   const geomorphs = {
-    hash: {
-      ...perGmHash,
-      full: `${mapsHash} ${layoutsHash} ${sheetsHash}`,
-      maps: mapsHash,
-      layouts: layoutsHash,
-      sheets: sheetsHash,
-      decor: `${layoutsHash} ${mapsHash}`,
-    },
-
     map: assetsJson.maps,
     layout: layoutJson,
     sheet: assetsJson.sheet,

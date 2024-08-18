@@ -49,10 +49,11 @@
   - ✅ avoid recompute hash.images
   - ✅ can remove hash.images
     - sheets now contains imagesHash
-  - 🚧 move hash computations to browser
-  - 🚧 w.prevHash + replace w.decor.computeHash
-    - only set w.prevHash when something changed
-    - could use nav hash to avoid clearing npcToRoom
+  - ✅ move hash computations to browser
+  - 🚧 replace w.decor.computeHash
+    - w.decor.hash points to last seen w.hash
+  - use gmKey nav hash to avoid clearing npcToRoom
+    - WorldWorkers has state.hash so can compare
 
 - obstacles.png slightly different onchange
   - no visible difference, probably due to "quick approach"

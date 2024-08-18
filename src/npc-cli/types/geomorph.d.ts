@@ -123,7 +123,6 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
-    hash: GeomorphsHash;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
     sheet: SpriteSheet;

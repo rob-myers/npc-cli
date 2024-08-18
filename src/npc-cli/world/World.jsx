@@ -168,7 +168,7 @@ export default function World(props) {
         gmGraph: state.gmGraph,
         gmRoomGraph: state.gmRoomGraph,
         // next values:
-        hash: geomorphsJson.hash, 
+        hash: geomorphService.computeHash(geomorphsJson),
         mapKey: props.mapKey,
       };
 
