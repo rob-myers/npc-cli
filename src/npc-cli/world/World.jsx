@@ -151,7 +151,7 @@ export default function World(props) {
     queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
     queryFn: async () => {
       if (module.hot?.active === false) {
-        return null; // Fix "[HMR] unexpected require from disposed module"
+        return null; // Avoid query from disposed module
       }
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
