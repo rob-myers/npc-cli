@@ -199,15 +199,13 @@ export default function World(props) {
         );
       }
       
-      const nextCreateGmsData = await import('../service/create-gms-data').then(x => x.default);
-      const NextGmGraphClass = await import('../graph/gm-graph').then(x => x.GmGraphClass);
       const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged } = state.trackHmr(
-        { createGmsData: nextCreateGmsData, GmGraphClass: NextGmGraphClass },
+        { createGmsData, GmGraphClass },
       );
       const spritesChanged = state.hash.images !== next.hash.images;
 
       if (mapChanged || gmsDataChanged) {
-        next.gmsData = nextCreateGmsData(
+        next.gmsData = createGmsData(
           // reuse gmKey -> GmData lookup unless geomorphs.json or createGmsData changed
           { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
         );
@@ -225,7 +223,7 @@ export default function World(props) {
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
-        next.gmGraph = NextGmGraphClass.fromGms(next.gms, { permitErrors: true });
+        next.gmGraph = GmGraphClass.fromGms(next.gms, { permitErrors: true });
         next.gmGraph.w = state;
         
         await pause();
