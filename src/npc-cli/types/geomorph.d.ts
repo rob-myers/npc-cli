@@ -7,7 +7,11 @@ declare namespace Geomorph {
     symbols: Record<Geomorph.SymbolKey, Geomorph.SymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
     sheet: SpriteSheet;
-    /** `metaKey` is a `Geomorph.SymbolKey` or a mapKey e.g. `demo-map-1` */
+    /**
+     * `metaKey` is either
+     * - a `Geomorph.SymbolKey`
+     * - a mapKey e.g. `demo-map-1`
+     */
     meta: { [metaKey: string]: {
       /** Hash of parsed symbol */
       outputHash: number;
@@ -421,6 +425,7 @@ declare namespace Geomorph {
     obstacleDim: { width: number; height: number; }
     decorDim: { width: number; height: number; }
     decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
+    imagesHash: number;
   }
 
   interface ObstacleSheetRectCtxt {

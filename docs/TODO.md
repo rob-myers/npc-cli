@@ -45,7 +45,11 @@
 
 - 🚧 hash refactor
   - ✅ support w.hash[gmKey] and clean up
-  - 🚧 w.hash[gmKey].{full,nav,decor}
+  - ✅ w.hash[gmKey].{full,nav,decor}
+  - ✅ avoid recompute hash.images
+  - 🚧 can replace hash.images by hash.sheets
+    - sheets now contains imagesHash
+  - 🚧 move hash computations to browser
   - 🚧 w.prevHash + replace w.decor.computeHash
     - only set w.prevHash when something changed
     - could use nav hash to avoid clearing npcToRoom

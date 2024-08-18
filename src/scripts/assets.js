@@ -147,6 +147,7 @@ info({ opts });
     sheet: {
       obstacle: {}, decor: /** @type {*} */ ({}),
       obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 },
+      imagesHash: 0,
     },
     symbols: /** @type {*} */ ({}), maps: {},
   };
@@ -206,6 +207,14 @@ info({ opts });
   );
   info({ changedKeys: changedSymbolAndMapKeys });
 
+  // store hash of sprite-sheet images
+  assetsJson.sheet.imagesHash =
+    prev.skipObstacles && prev.skipDecor && assetsJson.sheet.imagesHash
+      ? assetsJson.sheet.imagesHash
+      : hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString())
+    )
+  ;
+
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
   //#endregion
 
@@ -246,7 +255,8 @@ info({ opts });
   const mapsHash = hashJson(assetsJson.maps);
   const layoutsHash = hashJson(layoutJson);
   const sheetsHash = hashJson(assetsJson.sheet);
-  const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
+  // const imagesHash = hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString()));
+  const imagesHash = assetsJson.sheet.imagesHash;
   const fullHash = `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}`;
 
   /** @type {Geomorph.PerGeomorphHash} */
