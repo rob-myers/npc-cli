@@ -108,6 +108,7 @@ export default function createGmsData({ prevGmData }) {
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
     },
+    /** Dispose `GmData` lookup. */
     dispose() {
       for (const gmKey of geomorphService.gmKeys) {
         Object.values(gmsData[gmKey]).forEach(v => {

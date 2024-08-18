@@ -147,11 +147,11 @@ export default function World(props) {
 
   useHandleEvents(state);
 
-  const rootQuery = useQuery({
+  const query = useQuery({
     queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
     queryFn: async () => {
       if (module.hot?.active === false) {
-        return null; // Avoid query from disposed module
+        return false; // Avoid query from disposed module
       }
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
@@ -231,12 +231,13 @@ export default function World(props) {
       }
 
       // apply changes synchronously
-      if (state.gmsData !== next.gmsData) {
-        state.gmsData?.dispose();
-      }
       if (state.gmGraph !== next.gmGraph) {
         state.gmGraph.dispose();
         state.gmRoomGraph.dispose();
+      }
+      if (dataChanged || gmsDataChanged) {
+        // only when GmData lookup has been rebuilt
+        state.gmsData?.dispose();
       }
       Object.assign(state, next);
       debug({
@@ -272,7 +273,7 @@ export default function World(props) {
         update();
       }
 
-      return null;
+      return true;
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
@@ -282,7 +283,7 @@ export default function World(props) {
 
   React.useEffect(() => {// provide world for tty + hmr query
     setCached([props.worldKey], state);
-    state.geomorphs && rootQuery.refetch();
+    query.data === false && query.refetch();
     return () => removeCached([props.worldKey]);
   }, []);
 

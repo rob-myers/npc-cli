@@ -500,11 +500,12 @@ export default function Decor(props) {
   w.decor = state;
   
   // instantiate geomorph decor
-  // 🚧 force recompute on hmr: invalidate hash (?)
-  state.queryStatus = useQuery({
+  const query = useQuery({
     queryKey: ['decor', w.key, w.mapKey, w.hash.decor],
     async queryFn() {
-      // console.log('🔔 query debug', ['decor', w.key, w.decorHash]);
+      if (module.hot?.active === false) {
+        return false; // Avoid query from disposed module
+      }
       const prev = state.hash;
       const next = state.computeHash();
       const mapChanged = prev.mapHash !== next.mapHash;
@@ -541,7 +542,7 @@ export default function Decor(props) {
       state.hash = next;
       w.events.next({ key: 'decor-instantiated' });
       update();
-      return null;
+      return true;
     },
     // refetchOnMount: false,
     // refetchOnReconnect: false,
@@ -551,16 +552,19 @@ export default function Decor(props) {
     retry: false, // fix dup invokes
     gcTime: 0,
     // throwOnError: true,
-  }).status;
+  });
 
+  state.queryStatus = query.status;
   const labels = state.showLabels ? state.labels : [];
 
   React.useEffect(() => {
-    if (state.queryStatus === 'success') {
+    if (query.data === true) {
       state.addQuadUvs();
       state.positionInstances();
+    } else if (query.data === false) {
+      query.refetch(); // hmr
     }
-  }, [state.queryStatus, state.cuboids.length, state.quads.length, labels.length]);
+  }, [query.data, state.cuboids.length, state.quads.length, labels.length]);
 
   const update = useUpdate();
 

@@ -23,6 +23,11 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
+- ✅ BUG onchange mapKey in Viewer
+  - ℹ️ w.gmsData was being disposed before it could be used
+  - ✅ physics.worker cannot read `world`
+  - ✅ Walls/Doors not visible
+
 - ✅ physics body keys `npc {npcKey}`, `nearby {gdKey}`
 - ✅ physics body keys `inside {gdKey}`
 - 🚧 fire event when npc enters/exits a room
@@ -34,10 +39,17 @@
     - possibly exasperated by collider near g0d0?
   - enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
   - 🚧 on reload nav.worker, recompute w.es.npcToRoom
-    - ✅ support w.hash[gmKey] and clean hashing
-    - 🚧 track changed gmKeys
+    - 🚧 idea: clear lookup, and lazily compute e.g. `w.es.getNpcRoom('rob')`
   - 🚧 on reload physics.worker, clear w.es.{npc,door}ToNearby
   - 🚧 `nav-changed` event for code supporting level-editing
+
+- 🚧 hash refactor
+  - ✅ support w.hash[gmKey] and clean up
+  - 🚧 w.hash[gmKey].{full,nav,decor}
+  - 🚧 w.prevHash + replace w.decor.computeHash
+    - only set w.prevHash when something changed
+    - could use nav hash to avoid clearing npcToRoom
+
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
