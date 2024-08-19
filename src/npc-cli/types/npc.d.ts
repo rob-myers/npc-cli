@@ -73,7 +73,17 @@ declare namespace NPC {
     | { key: "changed-zoom"; level: 'near' | 'far' }
     | { key: "enter-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
     | { key: "exit-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
-    | { key: "pre-request-nav" }
+    | {
+        key: "pre-request-nav";
+        /**
+         * `changedGmIds[gmId]` is `true` iff either:
+         * - `map.gms[gmId]` has different `gmKey` or `transform`
+         * - geomorph `map.gms[gmId].gmKey` has different navPoly
+         * 
+         * The latter is true whenever a room polygon changes.
+         */
+        changedGmIds: boolean[];
+      }
     | { key: "pre-setup-physics" }
     // 🚧 ...
 

@@ -207,6 +207,7 @@ class GeomorphService {
       decor: hashJson(value.decor),
       nav: hashJson(value.navDecomp),
     }));
+
     return {
       ...perGmHash,
       full: `${mapsHash} ${layoutsHash} ${sheetsHash}`,
@@ -215,6 +216,7 @@ class GeomorphService {
       sheets: sheetsHash,
       decor: `${layoutsHash} ${mapsHash}`,
       map: hashJson(geomorphs.map[mapKey]),
+      gmHashes: geomorphs.map[mapKey].gms.map((x) => hashJson(x)),
     };
   }
 

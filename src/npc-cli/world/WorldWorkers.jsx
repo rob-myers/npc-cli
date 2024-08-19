@@ -15,6 +15,7 @@ export default function WorldWorkers() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    seenHash: /** @type {*} */ ({}),
     async handleNavWorkerMessage(e) {
       const msg = e.data;
       info("main thread received from nav worker", msg);
@@ -71,20 +72,28 @@ export default function WorldWorkers() {
 
   React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
     if (w.threeReady && w.hash.full) {
-      // 🚧 send gmKeys whose navPoly has not changed
-      w.events.next({ key: 'pre-request-nav' });
+
+      const prev = state.seenHash;
+      const next = w.hash;
+      const changedGmIds = w.gms.map(({ key }, gmId) =>
+        next[key].nav !== prev[key]?.nav // geomorph changed
+        || next.gmHashes[gmId] !== prev.gmHashes[gmId] // geomorph instance changed
+      );
+      
+      w.events.next({ key: 'pre-request-nav', changedGmIds });
       w.nav.worker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
 
       w.events.next({ key: 'pre-setup-physics' });
       w.physics.worker.postMessage({
         type: "setup-physics-world",
-        mapKey: w.mapKey,
-        // On HMR must provide existing npcs:
+        mapKey: w.mapKey, // On HMR must provide existing npcs:
         npcs: Object.values(w.npc?.npc ?? {}).map((npc) => ({
           npcKey: npc.key,
           position: npc.getPosition(),
         })),
       });
+
+      state.seenHash = next;
     }
   }, [w.threeReady, w.mapKey, w.hash.full]); // 🚧 avoid rebuild when only image changes
 
@@ -98,6 +107,7 @@ if (isDevelopment()) {// propagate HMR to this file onchange worker files
 
 /**
  * @typedef State
+ * @property {Geomorph.GeomorphsHash} seenHash
  * @property {(e: MessageEvent<WW.MsgFromNavWorker>) => Promise<void>} handleNavWorkerMessage
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
  * @property {(key: WW.PhysicsBodyKey) => (

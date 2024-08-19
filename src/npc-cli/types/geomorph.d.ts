@@ -31,6 +31,7 @@ declare namespace Geomorph {
 
     /** Hash of all maps */
     maps: number;
+    /** Hash of all layouts */
     layouts: number;
     /** Depends on rect lookup _and_ images */
     sheets: number;
@@ -38,6 +39,9 @@ declare namespace Geomorph {
     decor: `${number} ${number}`;
     /** Hash of current map */
     map: number;
+
+    /** `gmHashes[gmId]` is hash of `map.gms[gmId]` */
+    gmHashes: number[];
   }
 
   type PerGeomorphHash = Record<Geomorph.GeomorphKey, {

@@ -38,10 +38,12 @@
     - ℹ️ seen "npc position" not in room when running through hull door
     - possibly exasperated by collider near g0d0?
   - enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
+  - roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
   - 🚧 on reload nav.worker, recompute w.es.npcToRoom
-    - 🚧 idea: clear lookup, and lazily compute e.g. `w.es.getNpcRoom('rob')`
-  - 🚧 on reload physics.worker, clear w.es.{npc,door}ToNearby
-  - 🚧 `nav-changed` event for code supporting level-editing
+    - ❌ clear lookup, except for unchanged gmKeys
+      - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
+  - on reload physics.worker, clear w.es.{npc,door}ToNearby
+  - `nav-changed` event for code supporting level-editing
 
 - 🚧 hash refactor
   - ✅ support w.hash[gmKey] and clean up
@@ -53,10 +55,8 @@
   - ✅ remove w.decor.computeHash
     - w.decor.hash points to last seen w.hash
   - 🚧 use gmKey nav hash to avoid clearing npcToRoom
-    - WorldWorkers has state.hash so can compare
-
-- obstacles.png slightly different onchange
-  - no visible difference, probably due to "quick approach"
+    - ✅ WorldWorkers has state.hash so can compare
+    - ✅ send changed gmKeys
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
@@ -126,6 +126,8 @@
   - try refactor `faderOverlayCss` e.g. merge into `<figure>`
 - change camera fov based on camera height and/or visible-world
 
+- BUG obstacles.png slightly different onchange
+  - no visible difference, probably due to "quick approach"
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
