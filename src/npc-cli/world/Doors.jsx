@@ -6,7 +6,7 @@ import { Mat, Vect } from "../geom";
 import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth } from "../service/const";
 import * as glsl from "../service/glsl";
 import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -114,7 +114,7 @@ export default function Doors(props) {
       const offsetX = door.meta.hull ? door.baseRect.height/2 * -normal.x : 0;
       const offsetY = door.meta.hull ? door.baseRect.height/2 * -normal.y : 0;
 
-      return geomorphService.embedXZMat4(
+      return geomorph.embedXZMat4(
         [length * dir.x, length * dir.y, -dir.y, dir.x, src.x + offsetX, src.y + offsetY],
         { yScale: doorHeight, mat4: tmpMatFour1 },
       );
@@ -126,7 +126,7 @@ export default function Doors(props) {
       if (meta.hull === true) {
         center.addScaled(meta.normal, -hullDoorDepth/2);
       }
-      return geomorphService.embedXZMat4(
+      return geomorph.embedXZMat4(
         [sx * meta.dir.x, sx * meta.dir.y, sz * meta.normal.x, sz * meta.normal.y, center.x, center.y],
         { yScale: 0.1 / 2, yHeight: doorHeight + 0.1, mat4: tmpMatFour1 },
       );

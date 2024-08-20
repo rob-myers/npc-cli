@@ -132,7 +132,7 @@ class GeomorphService {
       walls: [...joinedHullWalls, ...joinedWalls, ...unjoinedWalls].map(x => x.precision(precision)),
       windows,
       unsorted: symbol.unsorted.map(x => x.precision(precision)),
-      ...geomorphService.decomposeLayoutNav(navPolyWithDoors, doors),
+      ...geomorph.decomposeLayoutNav(navPolyWithDoors, doors),
     };
   }
 
@@ -238,7 +238,7 @@ class GeomorphService {
       matrix,
       gridRect: sguGridRect.scale(sguToWorldScale).applyMatrix(matrix),
       inverseMatrix: matrix.getInverseMatrix(),
-      mat4: geomorphService.embedXZMat4(transform),
+      mat4: geomorph.embedXZMat4(transform),
 
       getOtherRoomId(doorId, roomId) {
         // We support case where roomIds are equal e.g. 303
@@ -466,7 +466,7 @@ class GeomorphService {
    * @returns {Geom.Poly | null}
    */
   extractDecorPoly(tagMeta, meta, scale) {
-    const trOrigin = geomorphService.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
+    const trOrigin = geomorph.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
     tmpMat1.setMatrixValue(tagMeta.attributes.transform)
       .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
       .postMultiply([scale, 0, 0, scale, trOrigin.x * scale, trOrigin.y * scale])
@@ -530,7 +530,7 @@ class GeomorphService {
     }
 
     // 🔔 DOMMatrix not available server-side
-    const { transformOrigin } = geomorphService.extractTransformData(tagMeta);
+    const { transformOrigin } = geomorph.extractTransformData(tagMeta);
     if (a.transform && transformOrigin) {
       poly.translate(-transformOrigin.x, -transformOrigin.y)
         .applyMatrix(new Mat(a.transform))
@@ -596,7 +596,7 @@ class GeomorphService {
    * @param {Record<string, string>} opts.attributes
    */
   extractTransformData({ tagName, attributes: a }) {
-    const style = geomorphService.extractStyles(a.style ?? "");
+    const style = geomorph.extractStyles(a.style ?? "");
     const transformOrigin = (style['transform-origin'] || '').trim();
     const transformBox = style['transform-box'] || null;
     const [xPart, yPart] = transformOrigin.split(/\s+/);
@@ -858,14 +858,14 @@ class GeomorphService {
             warn(`${'parseMap'}: ${mapKey}: ${parent?.tagName} ${contents}: ignored non-rect`)
           );
         }
-        if (!geomorphService.isGmNumber(gmNumber)) {
+        if (!geomorph.isGmNumber(gmNumber)) {
           return warn(`${'parseMap'}: ${mapKey}: "${contents}": expected geomorph number`);
         }
 
-        const rect = geomorphService.extractRect(parent.attributes);
+        const rect = geomorph.extractRect(parent.attributes);
         // 🔔 Rounded because map transforms must preserve axis-aligned rects
-        const transform = geomorphService.extractSixTuple(parent.attributes.transform);
-        const { transformOrigin } = geomorphService.extractTransformData(parent);
+        const transform = geomorph.extractSixTuple(parent.attributes.transform);
+        const { transformOrigin } = geomorph.extractTransformData(parent);
 
         if (transform) {
           const reduced = geom.reduceAffineTransform(
@@ -966,13 +966,13 @@ class GeomorphService {
           if (subSymbolKey.startsWith("_")) {
             return warn(`parseSymbol: symbols: ignored ${contents} with underscore prefix`);
           }
-          if (!geomorphService.isSymbolKey(subSymbolKey)) {
+          if (!geomorph.isSymbolKey(subSymbolKey)) {
             throw Error(`parseSymbol: symbols: ${contents}: must start with a symbol key`);
           }
 
-          const rect = geomorphService.extractRect(parent.attributes);
-          const transform = geomorphService.extractSixTuple(parent.attributes.transform);
-          const { transformOrigin } = geomorphService.extractTransformData(parent);
+          const rect = geomorph.extractRect(parent.attributes);
+          const transform = geomorph.extractSixTuple(parent.attributes.transform);
+          const { transformOrigin } = geomorph.extractTransformData(parent);
 
           if (transform) {
             const reduced = geom.reduceAffineTransform(
@@ -990,7 +990,7 @@ class GeomorphService {
 
             symbols.push({
               symbolKey: subSymbolKey,
-              meta: geomorphService.tagsToMeta(symbolTags, { key: subSymbolKey }),
+              meta: geomorph.tagsToMeta(symbolTags, { key: subSymbolKey }),
               width,
               height,
               transform: reduced,
@@ -1000,11 +1000,11 @@ class GeomorphService {
           return;
         }
 
-        const meta = geomorphService.tagsToMeta(ownTags, {});
+        const meta = geomorph.tagsToMeta(ownTags, {});
 
         const poly = parent.tagName === "use" && meta.decor === true
-          ? geomorphService.extractDecorPoly({ ...parent, title: contents }, meta, scale)
-          : geomorphService.extractPoly({ ...parent, title: contents }, meta, scale)
+          ? geomorph.extractDecorPoly({ ...parent, title: contents }, meta, scale)
+          : geomorph.extractPoly({ ...parent, title: contents }, meta, scale)
         ;
         
         if (poly === null) {
@@ -1111,7 +1111,7 @@ class GeomorphService {
   serializeGeomorphs({ map, layout, sheet }) {
     return {
       map,
-      layout: mapValues(layout, (x) => geomorphService.serializeLayout(x)),
+      layout: mapValues(layout, (x) => geomorph.serializeLayout(x)),
       sheet,
     };
   }
@@ -1221,7 +1221,7 @@ class GeomorphService {
   }
 }
 
-export const geomorphService = new GeomorphService();
+export const geomorph = new GeomorphService();
 
 export class Connector {
   /**

@@ -14,7 +14,7 @@ import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapV
 import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { createCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
@@ -168,13 +168,13 @@ export default function World(props) {
         gmGraph: state.gmGraph,
         gmRoomGraph: state.gmRoomGraph,
         // next values:
-        hash: geomorphService.computeHash(geomorphsJson, props.mapKey),
+        hash: geomorph.computeHash(geomorphsJson, props.mapKey),
         mapKey: props.mapKey,
       };
 
       const dataChanged = !prevGeomorphs || state.hash.full !== next.hash.full;
       if (dataChanged) {
-        next.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
+        next.geomorphs = geomorph.deserializeGeomorphs(geomorphsJson);
       }
       
       const mapChanged = dataChanged || state.mapKey !== props.mapKey;
@@ -195,7 +195,7 @@ export default function World(props) {
         }
 
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
-          geomorphService.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
+          geomorph.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
         );
       }
       

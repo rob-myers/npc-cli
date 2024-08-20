@@ -30,7 +30,7 @@ import { Poly } from "../npc-cli/geom";
 import { spriteSheetSymbolExtraScale, worldToSguScale, spriteSheetDecorExtraScale, sguSymbolScaleDown, sguSymbolScaleUp } from "../npc-cli/service/const";
 import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, } from "../npc-cli/service/generic";
 import { drawPolygons } from "../npc-cli/service/dom";
-import { geomorphService } from "../npc-cli/service/geomorph";
+import { geomorph } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT, DEV_ORIGIN, ASSETS_JSON_FILENAME, GEOMORPHS_JSON_FILENAME } from "../npc-cli/service/fetch-assets";
 import packRectangles from "../npc-cli/service/rects-packer";
 import { SymbolGraphClass } from "../npc-cli/graph/symbol-graph";
@@ -221,7 +221,7 @@ info({ opts });
   //#region ℹ️ Compute geomorphs.json
   
   /** @see assetsJson where e.g. rects and polys are `Rect`s and `Poly`s */
-  const assets = geomorphService.deserializeAssets(assetsJson);
+  const assets = geomorph.deserializeAssets(assetsJson);
 
   /** Compute flat symbols i.e. recursively unfold "symbols" folder. */
   // 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
@@ -233,13 +233,13 @@ info({ opts });
   // Traverse stratified symbols from leaves to co-leaves,
   // creating `FlatSymbol`s via `flattenSymbol` and `instantiateFlatSymbol`
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
-    geomorphService.flattenSymbol(assets.symbols[symbolKey], flattened)
+    geomorph.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
   // debug("stateroom--036--2x4", util.inspect(flattened["stateroom--036--2x4"], false, 5));
 
   // fs.writeFileSync(symbolGraphVizPath, symbolGraph.getGraphviz('symbolGraph'));
 
-  const changedGmKeys = geomorphService.gmKeys.filter(gmKey => {
+  const changedGmKeys = geomorph.gmKeys.filter(gmKey => {
     const hullKey = helper.toHullKey[gmKey];
     const hullNode = assertNonNull(symbolGraph.getNodeById(hullKey));
     return symbolGraph.getReachableNodes(hullNode).find(x => changedSymbolAndMapKeys.includes(x.id));
@@ -247,12 +247,12 @@ info({ opts });
   info({ changedGmKeys });
 
   /** @type {Record<Geomorph.GeomorphKey, Geomorph.Layout>} */
-  const layout = keyedItemsToLookup(geomorphService.gmKeys.map(gmKey => {
+  const layout = keyedItemsToLookup(geomorph.gmKeys.map(gmKey => {
     const hullKey = helper.toHullKey[gmKey];
     const flatSymbol = flattened[hullKey];
-    return geomorphService.createLayout(gmKey, flatSymbol, assets);
+    return geomorph.createLayout(gmKey, flatSymbol, assets);
   }));
-  const layoutJson = mapValues(layout, geomorphService.serializeLayout);
+  const layoutJson = mapValues(layout, geomorph.serializeLayout);
 
 
   /** @type {Geomorph.GeomorphsJson} */
@@ -327,7 +327,7 @@ function parseMaps({ meta, maps }, mapBasenames) {
     const filePath = path.resolve(mapsDir, baseName);
     const contents = fs.readFileSync(filePath).toString();
     const mapKey = baseName.slice(0, -".svg".length);
-    maps[mapKey] = geomorphService.parseMap(mapKey, contents);
+    maps[mapKey] = geomorph.parseMap(mapKey, contents);
     meta[mapKey] = { outputHash: hashText(stringify(maps[mapKey])) };
   }
 }
@@ -342,8 +342,8 @@ function parseSymbols({ symbols, meta }, symbolBasenames) {
     const contents = fs.readFileSync(filePath).toString();
     const symbolKey = /** @type {Geomorph.SymbolKey} */ (baseName.slice(0, -".svg".length));
 
-    const parsed = geomorphService.parseSymbol(symbolKey, contents);
-    const serialized = geomorphService.serializeSymbol(parsed);
+    const parsed = geomorph.parseSymbol(symbolKey, contents);
+    const serialized = geomorph.serializeSymbol(parsed);
     symbols[symbolKey] = serialized;
     meta[symbolKey] = {
       outputHash: hashJson(serialized),
@@ -488,7 +488,7 @@ async function createDecorSheetJson(assets, prev) {
   const svgBasenames = fs.readdirSync(decorDir).filter((baseName) => {
     if (!baseName.endsWith(".svg")) return false;
     const decorImgKey = baseName.slice(0, -'.svg'.length);
-    if (geomorphService.isDecorImgKey(decorImgKey)) return true;
+    if (geomorph.isDecorImgKey(decorImgKey)) return true;
     warn(`${'createDecorSheetJson'}: ignored file (unknown decorImgKey "${decorImgKey}")`);
   }).sort();
 
@@ -594,10 +594,10 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
 function detectChangedObstacles(obstacles, assets, prev) {
   if (prev.assets && prev.obstaclesPng) {
     const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
-    const removed = new Set(Object.values(prev.assets.sheet.obstacle).map(geomorphService.symbolObstacleToKey));
+    const removed = new Set(Object.values(prev.assets.sheet.obstacle).map(geomorph.symbolObstacleToKey));
     const [currMeta, prevMeta] = [assets.meta, prev.assets.meta];
     obstacles.forEach(({ symbolKey, obstacleId }) => {
-      const key = geomorphService.symbolObstacleToKey({ symbolKey, obstacleId });
+      const key = geomorph.symbolObstacleToKey({ symbolKey, obstacleId });
       removed.delete(key);
       // optional-chaining in case symbol is new
       (currMeta[symbolKey].pngHash !== prevMeta[symbolKey]?.pngHash
@@ -607,7 +607,7 @@ function detectChangedObstacles(obstacles, assets, prev) {
     return { changed, removed };
   } else {
     return {
-      changed: new Set(obstacles.map(geomorphService.symbolObstacleToKey)),
+      changed: new Set(obstacles.map(geomorph.symbolObstacleToKey)),
       removed: new Set(),
     };
   }

@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Mat, Vect } from "../geom";
 import { wallHeight } from "../service/const";
 import { getQuadGeometryXY } from "../service/three";
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -35,7 +35,7 @@ export default function Walls(props) {
       [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
       const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
       const len = u.distanceTo(v);
-      return geomorphService.embedXZMat4(
+      return geomorph.embedXZMat4(
         [len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y],
         { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
       );

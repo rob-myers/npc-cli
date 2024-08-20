@@ -5,7 +5,7 @@ import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
 import { geomorphGridMeters, glbMeta, wallHeight, wallOutset } from '../service/const';
 import { info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
-import { geomorphService } from '../service/geomorph';
+import { geomorph } from '../service/geomorph';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 import { helper } from '../service/helper';
 
@@ -161,10 +161,10 @@ async function setupWorld(mapKey, npcs) {
     // state.world.colliders.free();
   }
 
-  const geomorphs = geomorphService.deserializeGeomorphs(await fetchGeomorphsJson());
+  const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
   const mapDef = geomorphs.map[mapKey];
   const gms = mapDef.gms.map(({ gmKey, transform }, gmId) =>
-    geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
+    geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
   // door sensors: nearby ✅ inside ✅

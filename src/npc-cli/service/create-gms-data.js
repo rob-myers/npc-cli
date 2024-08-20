@@ -3,7 +3,7 @@ import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, 
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { geom, tmpVec1 } from "./geom";
-import { geomorphService } from "./geomorph";
+import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
@@ -110,7 +110,7 @@ export default function createGmsData({ prevGmData }) {
     },
     /** Dispose `GmData` lookup. */
     dispose() {
-      for (const gmKey of geomorphService.gmKeys) {
+      for (const gmKey of geomorph.gmKeys) {
         Object.values(gmsData[gmKey]).forEach(v => {
           if (Array.isArray(v)) {
             v.length = 0;

@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { decorGridSize, decorIconRadius, decorPointFallbackImgKey, decorQuadFallbackImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
 import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
 import { boxGeometry, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
@@ -111,7 +111,7 @@ export default function Decor(props) {
       const uvDimensions = /** @type {number[]} */ ([]);
       
       for (const d of state.quads) {
-        const item = geomorphService.isDecorImgKey(d.meta.img)
+        const item = geomorph.isDecorImgKey(d.meta.img)
           ? sheet[d.meta.img] // fallback differs for 'point' vs 'quad'
           : d.type === 'point' ? sheet[decorPointFallbackImgKey] : sheet[decorQuadFallbackImgKey];
         ;
@@ -129,7 +129,7 @@ export default function Decor(props) {
     },
     createCuboidMatrix4(d) {
       tmpMat1.feedFromArray(d.transform);
-      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+      return geomorph.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
         yHeight: d.meta.y + (d.meta.h / 2),
         yScale: d.meta.h, // scaling centred unit cuboid
@@ -143,7 +143,7 @@ export default function Decor(props) {
         d.x - (width * scale) / 2,
         d.y - (height * scale) / 2,
       ]);
-      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+      return geomorph.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
         yHeight: wallHeight + 0.1,
       });
@@ -169,7 +169,7 @@ export default function Decor(props) {
           ]);
         }
 
-        return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+        return geomorph.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
           yHeight: d.meta.y,
         });
@@ -177,7 +177,7 @@ export default function Decor(props) {
       } else {// d.type === 'quad'
 
         tmpMat1.feedFromArray(d.transform);
-        const mat4 = geomorphService.embedXZMat4(tmpMat1.toArray(), {
+        const mat4 = geomorph.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
           yHeight: d.meta.y,
         });
@@ -323,7 +323,7 @@ export default function Decor(props) {
         default:
           throw testNever(d);
       }
-      instance.key = geomorphService.getDerivedDecorKey(instance);
+      instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
     instantiateGmDecor(gmId, gm) {
@@ -473,7 +473,7 @@ export default function Decor(props) {
     },
     updateDecorLists() {
       state.cuboids = Object.values(state.byKey).filter(
-        geomorphService.isDecorCuboid
+        geomorph.isDecorCuboid
       );
 
       state.quads = Object.values(state.byKey).filter(

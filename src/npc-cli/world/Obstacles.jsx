@@ -5,7 +5,7 @@ import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
 import { getColor, getQuadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -51,7 +51,7 @@ export default function Obstacles(props) {
       // transform unit (XZ) square into `rect`, then apply `transform` followed by `gmTransform`
       mat.feedFromArray([rect.width, 0, 0, rect.height, rect.x, rect.y]);
       mat.postMultiply(transform).postMultiply(gmTransform);
-      return geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: height });
+      return geomorph.embedXZMat4(mat.toArray(), { mat4, yHeight: height });
     },
     decodeObstacleId(instanceId) {
       let id = instanceId;
