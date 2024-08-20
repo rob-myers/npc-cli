@@ -19,17 +19,20 @@
     - block non-auto closed doors (including locked)
     - block locked auto doors
 - support non-door sensor i.e. decor circle/poly
+- svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
 - support click switch to open door, instead of click door
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- ✅ BUG onchange mapKey in Viewer
-  - ℹ️ w.gmsData was being disposed before it could be used
-  - ✅ physics.worker cannot read `world`
-  - ✅ Walls/Doors not visible
+- 🚧 optionally permit camera movement while World paused 
+  - ✅ pause/play toggle in viewer controls
+  - ✅ remove fader from Tabs
+  - ✅ add fader to World
+  - ✅ can initially enable via click anywhere
+  - 🚧 World by default fades and click anywhere to unpause
+  - World has camera icon
+  - ...
 
-- ✅ physics body keys `npc {npcKey}`, `nearby {gdKey}`
-- ✅ physics body keys `inside {gdKey}`
 - 🚧 fire event when npc enters/exits a room
   - ✅ sensor in each doorway, triggered on leave
     e.g. `inside g1d3` vs `nearby g1d3`
@@ -37,26 +40,13 @@
   - ✅ fix entered-room triggering
     - ℹ️ seen "npc position" not in room when running through hull door
     - possibly exasperated by collider near g0d0?
-  - enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
+  - ✅ enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
   - roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
   - 🚧 on reload nav.worker, recompute w.es.npcToRoom
     - ❌ clear lookup, except for unchanged gmKeys
-      - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
+    - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - `nav-changed` event for code supporting level-editing
-
-- 🚧 hash refactor
-  - ✅ support w.hash[gmKey] and clean up
-  - ✅ w.hash[gmKey].{full,nav,decor}
-  - ✅ avoid recompute hash.images
-  - ✅ can remove hash.images
-    - sheets now contains imagesHash
-  - ✅ move hash computations to browser
-  - ✅ remove w.decor.computeHash
-    - w.decor.hash points to last seen w.hash
-  - 🚧 use gmKey nav hash to avoid clearing npcToRoom
-    - ✅ WorldWorkers has state.hash so can compare
-    - ✅ send changed gmKeys
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
@@ -91,7 +81,6 @@
   - seems fixed by always re-generating obstacle texture, irrespective of size change
 - hmr issue with Connector class
 - hull door enter-room triggers late?
-- svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh
   - https://github.com/pmndrs/drei/blob/master/src/core/Bvh.tsx
@@ -1937,3 +1926,25 @@
   - ✅ w.s -> w.es
   - ✅ simplify w.es.toggle e.g. expects gdKey
   - ✅ w.es.toggle -> w.es.toggleDoor, w.es.toggleLock
+
+- ✅ physics body keys `npc {npcKey}`, `nearby {gdKey}`
+- ✅ physics body keys `inside {gdKey}`
+
+- ✅ BUG onchange mapKey in Viewer
+  - ℹ️ w.gmsData was being disposed before it could be used
+  - ✅ physics.worker cannot read `world`
+  - ✅ Walls/Doors not visible
+
+- ✅ hash refactor
+  - ✅ support w.hash[gmKey] and clean up
+  - ✅ w.hash[gmKey].{full,nav,decor}
+  - ✅ avoid recompute hash.images
+  - ✅ can remove hash.images
+    - sheets now contains imagesHash
+  - ✅ move hash computations to browser
+  - ✅ remove w.decor.computeHash
+    - w.decor.hash points to last seen w.hash
+  - ✅ use gmKey nav hash to avoid clearing npcToRoom
+    - ✅ WorldWorkers has state.hash so can compare
+    - ✅ send changed gmKeys
+  - ℹ️ maybe can improve via murmur, but wait for timings via notifications

@@ -188,18 +188,18 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       </figure>
 
       <button
-        onPointerDown={() => state.toggleEnabled()}
-        className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
+        className={cx(interactButtonCss, {
+          collapsed: props.collapsed,
+          enabled: state.enabled,
+          'ever-enabled': state.everEnabled,
+        })}
+        {...!state.everEnabled && { onPointerDown: () => state.toggleEnabled(true) }}
       >
-        <div>{props.browserLoaded ? "interact" : <Spinner size={24} />}</div>
+        <div onPointerDown={() => state.toggleEnabled()}>
+          {props.browserLoaded ? "interact" : <Spinner size={24} />}
+        </div>
       </button>
 
-      <div
-        className={cx(faderOverlayCss, {
-          clear: state.overlayColor === "clear",
-          faded: state.overlayColor === "faded",
-        })}
-      />
     </>
   );
 });
@@ -306,9 +306,12 @@ const tabsCss = css`
   }
 `;
 
-const interactOverlayCss = css`
+const interactButtonCss = css`
   position: absolute;
   z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   @media (min-width: ${afterBreakpoint}) {
     left: var(--view-bar-size);
@@ -318,21 +321,18 @@ const interactOverlayCss = css`
   }
   @media (max-width: ${breakpoint}) {
     left: 0;
-    top: var(--view-bar-size);
+    top: calc(var(--view-bar-size) + 32px + 4px);
     width: 100%;
-    height: calc(100% - var(--view-bar-size));
+    height: calc(100% - 2 * var(--view-bar-size));
   }
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, 0);
-  cursor: pointer;
   user-select: none;
+  &.ever-enabled {
+    cursor: auto;
+    pointer-events: none;
+  }
 
   &.enabled {
-    pointer-events: none;
     opacity: 0;
   }
   &.collapsed {
@@ -340,43 +340,11 @@ const interactOverlayCss = css`
   }
 
   > div {
-    font-size: 1.2rem;
     letter-spacing: 2px;
+    pointer-events: all;
+    
+    cursor: pointer;
+    font-size: 1rem;
     color: white;
-    filter: drop-shadow(0 2px #006);
-  }
-`;
-
-const faderOverlayCss = css`
-  position: absolute;
-  z-index: 4;
-  background: rgba(1, 1, 1, 1);
-
-  @media (min-width: ${afterBreakpoint}) {
-    left: var(--view-bar-size);
-    top: 0;
-    width: calc(100% + (-1 * var(--view-bar-size)));
-    height: 100%;
-  }
-  @media (max-width: ${breakpoint}) {
-    left: 0;
-    top: var(--view-bar-size);
-    width: 100%;
-    height: calc(100% + (-1 * var(--view-bar-size)));
-  }
-
-  opacity: 1;
-  transition: opacity 1s ease-in;
-  &.clear {
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-  }
-  &.faded {
-    opacity: 0.6;
-    transition: opacity 0.5s ease-in;
-  }
-
-  &:not(.faded) {
-    pointer-events: none;
   }
 `;

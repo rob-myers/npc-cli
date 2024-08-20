@@ -1,4 +1,5 @@
 import React from "react";
+import { css, cx } from "@emotion/css";
 import { useQuery } from "@tanstack/react-query";
 import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -316,6 +317,7 @@ export default function World(props) {
           </group>
         )}
       </WorldCanvas>
+      <div className={cx(faderOverlayCss, state.disabled ? 'faded' : 'clear')} />
       <ContextMenu />
       <WorldWorkers />
     </WorldContext.Provider>
@@ -400,3 +402,29 @@ export default function World(props) {
  * //@property {typeof merge} merge
  * //@property {typeof take} take
  */
+
+const faderOverlayCss = css`
+  position: absolute;
+  z-index: 4;
+
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  
+  background: rgba(1, 1, 1, 1);
+  opacity: 1;
+  transition: opacity 1s ease-in;
+  &.clear {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+  }
+  &.faded {
+    opacity: 0.6;
+    transition: opacity 0.5s ease-in;
+  }
+
+  &:not(.faded) {
+    pointer-events: none;
+  }
+`;
