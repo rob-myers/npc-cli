@@ -1,6 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { css, cx } from "@emotion/css";
+import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
@@ -233,7 +233,7 @@ export default function WorldCanvas(props) {
     }
   }, [state.controls]);
 
-  return <>
+  return (
     <Canvas
       ref={state.canvasRef}
       className={canvasCss}
@@ -290,8 +290,7 @@ export default function WorldCanvas(props) {
 
 
     </Canvas>
-    <div className={cx(faderOverlayCss, w.disabled ? 'faded' : 'clear')} />
-  </>;
+  );
 }
 
 /**
@@ -359,33 +358,6 @@ const statsCss = css`
   left: unset !important;
   right: 0px;
 `;
-
-const faderOverlayCss = css`
-  position: absolute;
-  z-index: 4;
-
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  
-  background: rgba(1, 1, 1, 1);
-  opacity: 1;
-  transition: opacity 1s ease-in;
-  &.clear {
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-  }
-  &.faded {
-    opacity: 0.6;
-    transition: opacity 0.5s ease-in;
-  }
-
-  &:not(.faded) {
-    pointer-events: none;
-  }
-`;
-
 
 /**
  * @typedef BaseDown

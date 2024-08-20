@@ -25,6 +25,9 @@ export function Tab({ def, api, state: tabState }: TabProps) {
       (state.component &&
         React.createElement(state.component as React.FunctionComponent<any>, {
           disabled: tabState.disabled,
+          setTabsEnabled(next: boolean) {
+            api.toggleEnabled(next);
+          },
           ...def.props,
         })) ||
       null

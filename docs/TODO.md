@@ -29,8 +29,9 @@
   - ✅ remove fader from Tabs
   - ✅ add fader to World
   - ✅ can initially enable via click anywhere
-  - 🚧 World by default fades and click anywhere to unpause
-  - World has camera icon
+  - ✅ on disable World fades by default; click anywhere to unpause
+  - 🚧 World has camera icon
+    - can move camera when clicked
   - ...
 
 - 🚧 fire event when npc enters/exits a room

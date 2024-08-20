@@ -112,7 +112,7 @@ type TabMetaPropsDistributed<K extends ComponentClassKey> = K extends infer A
 
 type TabMetaPropsGeneric<K extends ComponentClassKey> = {
   class: K;
-  props: ComponentClassKeyToProps[K];
+  props: Omit<ComponentClassKeyToProps[K], 'setTabsEnabled'>;
 };
 
 type ComponentClassKeyToProps = {
@@ -120,7 +120,15 @@ type ComponentClassKeyToProps = {
 };
 
 export interface BaseComponentProps {
+  /**
+   * Is this Tab disabled?
+   * Either (a) every tab is disabled, or (b) every tab is enabled.
+   */
   disabled?: boolean;
+  /**
+   * For example, can set all tabs enabled onclick a single tab.
+   */
+  setTabsEnabled(next: boolean): void;
 }
 
 function FallbackComponentFactory(componentKey: string) {
