@@ -70,4 +70,5 @@ export {
   // faRefresh,
   // faExpand,
   // faPause,
+  faCirclePlay,
 } from "@fortawesome/free-solid-svg-icons";

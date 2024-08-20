@@ -15,6 +15,7 @@ import {
   faCirclePauseThin,
   faChevronRight,
   faGrip,
+  faCirclePlay,
 } from "./Icon";
 import useLongPress from "src/npc-cli/hooks/use-long-press";
 import useUpdate from "src/npc-cli/hooks/use-update";
@@ -37,7 +38,7 @@ export default function ViewerControls({ api }: Props) {
       update();
     },
     onPause() {
-      api.tabs.toggleEnabled(false);
+      api.tabs.toggleEnabled();
       update();
     },
     onMaximize() {
@@ -133,8 +134,8 @@ export default function ViewerControls({ api }: Props) {
       <div className="draggable">
         <FontAwesomeIcon icon={faGrip} size="1x" />
       </div>
-      <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
-        <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
+      <button title={api.tabs.enabled ? "pause tabs" : "enable tabs"} onClick={state.onPause}>
+        <FontAwesomeIcon icon={api.tabs.enabled ? faCirclePauseThin : faCirclePlay} size="1x" />
       </button>
       <button title="reset tabs" {...resetHandlers}>
         <FontAwesomeIcon icon={faRefreshThin} size="1x" />
