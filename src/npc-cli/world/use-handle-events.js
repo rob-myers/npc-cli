@@ -45,7 +45,7 @@ export default function useHandleEvents(w) {
         case "pointerup":
           e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
           !e.touch && state.onPointerUpMenuDesktop(e);
-          w.menu.justOpen = w.menu.isOpen;
+          w.menu.justOpen = w.menu.ctOpen;
           break;
         case "pointerup-outside":
           !e.touch && state.onPointerUpMenuDesktop(e);

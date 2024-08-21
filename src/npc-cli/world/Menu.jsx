@@ -1,10 +1,14 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
+import { isTouchDevice } from "../service/dom";
 import { geom } from '../service/geom';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
+
 
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
@@ -15,10 +19,12 @@ export default function Menu(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     menuEl: /** @type {*} */ (null),
-    isOpen: false,
+    ctOpen: false,
     justOpen: false,
+    pausedCamera: false,
+
     hide() {
-      state.isOpen = false;
+      state.ctOpen = false;
       update();
     },
     show(at) {
@@ -27,7 +33,12 @@ export default function Menu(props) {
       const x = geom.clamp(at.x, 0, canvasDim.width - menuDim.width);
       const y = geom.clamp(at.y, 0, canvasDim.height - menuDim.height);
       state.menuEl.style.transform = `translate(${x}px, ${y}px)`;
-      state.isOpen = true;
+      state.ctOpen = true;
+      update();
+    },
+    togglePausedCamera() {
+      state.pausedCamera = !state.pausedCamera;
+      // 🚧
       update();
     },
   }));
@@ -45,7 +56,7 @@ export default function Menu(props) {
       className={contextMenuCss}
       onContextMenu={(e) => e.preventDefault()}
       // 🔔 use 'visibility' to compute menuDim.height
-      style={{ visibility: state.isOpen ? 'visible' : 'hidden' }}
+      style={{ visibility: state.ctOpen ? 'visible' : 'hidden' }}
     >
       <div>
         {meta3d && Object.entries(meta3d).map(([k, v]) =>
@@ -56,8 +67,19 @@ export default function Menu(props) {
 
     <div // Fade overlay
       className={cx(faderOverlayCss, w.disabled ? 'faded' : 'clear')}
-      onPointerDown={() => props.setTabsEnabled(true)} // 🔔 shortcut
+      {...{// 🔔 shortcut to enable all tabs
+        [isTouchDevice() ? 'onPointerDown' : 'onPointerUp']: () => props.setTabsEnabled(true)
+      }}
     />
+
+    <div className={pausedControlsCss}>
+      <button
+        className={cx('camera', { disabled: !state.pausedCamera })}
+        onClick={state.togglePausedCamera}
+      >
+        <FontAwesomeIcon icon={faCamera} size="1x" />
+      </button>
+    </div>
   </>;
 }
 
@@ -88,15 +110,6 @@ const contextMenuCss = css`
   }
 `;
 
-/**
- * @typedef State
- * @property {boolean} isOpen
- * @property {boolean} justOpen
- * @property {HTMLDivElement} menuEl
- * @property {() => void} hide
- * @property {(at: Geom.VectJson) => void} show
- */
-
 const faderOverlayCss = css`
   position: absolute;
   z-index: 4;
@@ -116,10 +129,52 @@ const faderOverlayCss = css`
   }
   &.faded {
     cursor: pointer;
-    opacity: 0.6;
+    opacity: 0.5;
     transition: opacity 0.5s ease-in;
   }
 
   &:not(.faded) {
   }
 `;
+
+const pausedControlsCss = css`
+  position: absolute;
+  right: 0;
+  top: 64px;
+  z-index: 4;
+
+  .camera {
+    color: white;
+    padding: 8px 12px 8px 12px;
+    background-color: #222;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-width: 1px 0 1px 1px;
+    border-color: #444;
+    font-size: 0.8rem;
+
+    svg {
+      filter: drop-shadow(2px 2px #900);
+    }
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .disabled {
+    filter: brightness(0.5);
+  }
+`;
+
+/**
+ * @typedef State
+ * @property {boolean} ctOpen Is the context menu open?
+ * @property {boolean} justOpen Was the context menu just opened?
+ * @property {boolean} pausedCamera Is the camera usable whilst paused?
+ * @property {HTMLDivElement} menuEl
+ *
+ * @property {() => void} hide
+ * @property {(at: Geom.VectJson) => void} show
+ * @property {() => void} togglePausedCamera
+ */

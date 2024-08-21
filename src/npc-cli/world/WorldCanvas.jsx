@@ -201,7 +201,7 @@ export default function WorldCanvas(props) {
       }));
     },
     onWheel(e) {
-      if (w.menu.isOpen === true) {
+      if (w.menu.ctOpen === true) {
         w.menu.hide();
         w.menu.justOpen = false;
       }

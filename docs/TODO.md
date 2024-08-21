@@ -25,6 +25,8 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
+- ✅ import icons directly into Menu
+  - rather than using `components/icon`
 - tty: avoid deleting paused line if user has typed something
 
 - 🚧 optionally permit camera movement while World paused 
@@ -33,8 +35,8 @@
   - ✅ add fader to World
   - ✅ can initially enable via click anywhere
   - ✅ on disable World fades by default; click anywhere to unpause
-  - 🚧 World has camera icon
-    - can move camera when clicked
+  - ✅ World has camera icon
+  - 🚧 can move camera when clicked
   - ...
 
 - 🚧 fire event when npc enters/exits a room
