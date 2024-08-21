@@ -187,18 +187,16 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         )}
       </figure>
 
-      <button
-        className={cx(interactButtonCss, {
-          collapsed: props.collapsed,
-          enabled: state.enabled,
-          'ever-enabled': state.everEnabled,
-        })}
-        {...!state.everEnabled && { onPointerDown: () => state.toggleEnabled(true) }}
-      >
-        <div onPointerDown={() => state.toggleEnabled()}>
-          {props.browserLoaded ? "interact" : <Spinner size={24} />}
-        </div>
-      </button>
+      {!state.everEnabled && (
+        <button
+          className={cx(interactButtonCss, { collapsed: props.collapsed })}
+          onPointerDown={() => state.toggleEnabled(true)}
+        >
+          <div>
+            {props.browserLoaded ? "interact" : <Spinner size={24} />}
+          </div>
+        </button>
+      )}
 
     </>
   );
@@ -308,7 +306,6 @@ const tabsCss = css`
 
 const interactButtonCss = css`
   position: absolute;
-  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -327,14 +324,6 @@ const interactButtonCss = css`
   }
 
   user-select: none;
-  &.ever-enabled {
-    cursor: auto;
-    pointer-events: none;
-  }
-
-  &.enabled {
-    opacity: 0;
-  }
   &.collapsed {
     display: none;
   }
