@@ -1,5 +1,5 @@
 import React from "react";
-import { css, cx } from "@emotion/css";
+import { cx } from "@emotion/css";
 import { useQuery } from "@tanstack/react-query";
 import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -33,11 +33,11 @@ import Walls from "./Walls";
 import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
-import ContextMenu from "./ContextMenu";
+import Menu from "./Menu";
 import WorldWorkers from "./WorldWorkers";
 
 /**
- * @param {Props & import("../tabs/tab-factory").BaseComponentProps} props
+ * @param {Props} props
  */
 export default function World(props) {
   const update = useUpdate();
@@ -317,20 +317,17 @@ export default function World(props) {
           </group>
         )}
       </WorldCanvas>
-      <div
-        className={cx(faderOverlayCss, state.disabled ? 'faded' : 'clear')}
-        onPointerDown={() => props.setTabsEnabled(true)} // 🔔 shortcut
-      />
-      <ContextMenu />
+      <Menu setTabsEnabled={props.setTabsEnabled} />
       <WorldWorkers />
     </WorldContext.Provider>
   );
 }
 
 /**
- * @typedef Props
- * @property {keyof import('static/assets/geomorphs.json')['map']} mapKey
- * @property {string} worldKey
+ * @typedef {import("../tabs/tab-factory").BaseComponentProps & {
+ *   mapKey: keyof import('static/assets/geomorphs.json')['map'];
+ *   worldKey: string;   
+ * }} Props
  */
 
 /**
@@ -364,7 +361,7 @@ export default function World(props) {
  * @property {import('./Doors').State} door
  * @property {import('./Npcs').State} npc
  * Npcs (dynamic)
- * @property {import('./ContextMenu').State} menu
+ * @property {import('./Menu').State} menu
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
  *
@@ -404,31 +401,3 @@ export default function World(props) {
  * //@property {typeof merge} merge
  * //@property {typeof take} take
  */
-
-
-const faderOverlayCss = css`
-  position: absolute;
-  z-index: 4;
-
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  
-  background: rgba(1, 1, 1, 1);
-  opacity: 1;
-  transition: opacity 1s ease-in;
-  &.clear {
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-  }
-  &.faded {
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.5s ease-in;
-  }
-
-  &:not(.faded) {
-  }
-`;

@@ -1,12 +1,15 @@
 import React from "react";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 
 import { geom } from '../service/geom';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
 
-export default function ContextMenu() {
+/**
+ * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
+ */
+export default function Menu(props) {
 
   const w = React.useContext(WorldContext);
 
@@ -35,8 +38,9 @@ export default function ContextMenu() {
 
   const meta3d = w.ui.lastDown?.threeD?.meta;
 
-  return (
-    <div
+  return <>
+
+    <div // ContextMenu
       ref={(x) => x && (state.menuEl = x)}
       className={contextMenuCss}
       onContextMenu={(e) => e.preventDefault()}
@@ -49,7 +53,12 @@ export default function ContextMenu() {
         )}
       </div>
     </div>
-  );
+
+    <div // Fade overlay
+      className={cx(faderOverlayCss, w.disabled ? 'faded' : 'clear')}
+      onPointerDown={() => props.setTabsEnabled(true)} // 🔔 shortcut
+    />
+  </>;
 }
 
 const contextMenuCss = css`
@@ -87,3 +96,30 @@ const contextMenuCss = css`
  * @property {() => void} hide
  * @property {(at: Geom.VectJson) => void} show
  */
+
+const faderOverlayCss = css`
+  position: absolute;
+  z-index: 4;
+
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  
+  background: rgba(1, 1, 1, 1);
+  opacity: 1;
+  transition: opacity 1s ease-in;
+  &.clear {
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+  }
+  &.faded {
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.5s ease-in;
+  }
+
+  &:not(.faded) {
+  }
+`;
