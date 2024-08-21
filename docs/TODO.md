@@ -26,8 +26,8 @@
   - try provide "echo circle" for touch devices
 
 - ✅ import icons directly into Menu
-  - rather than using `components/icon`
-- tty: avoid deleting paused line if user has typed something
+  - rather than using `components/Icon`
+- ✅ tty: avoid deleting paused line if user has typed something
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls

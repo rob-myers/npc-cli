@@ -38,6 +38,7 @@ export default function Terminal(props: Props) {
     pausedPids: {} as Record<number, true>,
     ready: false,
     session: {} as Session,
+    typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
     webglAddon: new WebglAddon(),
     xterm: {} as ttyXtermClass,
 
@@ -63,6 +64,15 @@ export default function Terminal(props: Props) {
         }
         // setTimeout(() => state.fitAddon.fit());
         state.fitDebounced();
+      }
+    },
+    restoreInput() {
+      if (state.inputBeforePause) {
+        state.xterm.clearInput();
+        state.xterm.setInput(state.inputBeforePause);
+        state.inputBeforePause = undefined;
+      } else {
+        state.xterm.showPendingInputImmediately();
       }
     },
   }));
@@ -173,19 +183,23 @@ export default function Terminal(props: Props) {
           p.status = ProcessStatus.Suspended;
           state.pausedPids[p.key] = true;
         });
+      
+      // Can use terminal whilst "paused" (previously running processes suspended)
+      state.typedWhilstPaused.value = false;
+      state.typedWhilstPaused.onDataSub = state.xterm.xterm.onData(() => {
+        state.typedWhilstPaused.value = true;
+        state.restoreInput();
+      });
     }
 
     if (!props.disabled && state.hasEverDisabled) {// Resume
       state.focusedBeforePause && state.xterm.xterm.focus();
+
+      // Remove `pausedLine` unless used terminal whilst paused
+      !state.typedWhilstPaused.value && state.xterm.xterm.write(`\x1b[F\x1b[2K`);
+      state.typedWhilstPaused.onDataSub.dispose();
       
-      // Overwrite `pausedLine` with input
-      state.xterm.xterm.write(`\x1b[F\x1b[2K`);
-      if (state.inputBeforePause) {
-        state.xterm.setInput(state.inputBeforePause);
-        state.inputBeforePause = undefined;
-      } else {
-        state.xterm.showPendingInputImmediately();
-      }
+      state.restoreInput();
 
       // Resume processes we suspended
       const processes = Object.values(state.session?.process ?? {});
