@@ -172,7 +172,7 @@ export default function Terminal(props: Props) {
       }
 
       useSession.api.writeMsgCleanly(
-        props.sessionKey, formatMessage(`${ansi.White}paused`, "info"), { prompt: false },
+        props.sessionKey, formatMessage(pausedLine, "info"), { prompt: false },
       );
 
       // Pause running processes
@@ -196,8 +196,14 @@ export default function Terminal(props: Props) {
       state.focusedBeforePause && state.xterm.xterm.focus();
 
       // Remove `pausedLine` unless used terminal whilst paused
-      !state.typedWhilstPaused.value && state.xterm.xterm.write(`\x1b[F\x1b[2K`);
       state.typedWhilstPaused.onDataSub.dispose();
+      if (state.typedWhilstPaused.value === false) {
+        state.xterm.xterm.write(`\x1b[F\x1b[2K`);
+      } else {
+        useSession.api.writeMsgCleanly(
+          props.sessionKey, formatMessage(resumedLine, "info"),
+        );
+      }
       
       state.restoreInput();
 
@@ -288,3 +294,7 @@ function stopKeysPropagating(e: React.KeyboardEvent) {
   e.stopPropagation();
 }
 
+const pausedLine = `${ansi.White}paused processes`;
+
+/** Only used when we type whilst paused */
+const resumedLine = `${ansi.White}resumed processes`;
