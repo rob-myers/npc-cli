@@ -131,15 +131,10 @@ export default function ViewerControls({ api }: Props) {
 
   return (
     <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
-      <div className="left-group">
+      <div className="left-or-bottom-group">
         <div className="drag-indicator">
           <FontAwesomeIcon icon={faGrip} size="1x" />
         </div>
-        {api.tabs.everEnabled && !api.tabs.enabled && (
-          <div className="paused-indicator">
-            paused
-          </div>
-        )}
       </div>
       <button title={api.tabs.enabled ? "pause tabs" : "enable tabs"} onClick={state.onPause}>
         <FontAwesomeIcon icon={api.tabs.enabled ? faCirclePauseThin : faCirclePlay} size="1x" />
@@ -189,26 +184,18 @@ const buttonsCss = css`
     height: ${view.barSize};
   }
 
-  .left-group {
+  .left-or-bottom-group {
     flex: 1;
     display: flex;
-    align-items: center;
-    gap: 16px;
+    align-items: end;
     padding: 12px 16px;
     pointer-events: none;
 
     .drag-indicator {
       color: #666;
     }
-    
-    .paused-indicator {
-      font-size: 0.9rem;
-      color: #000;
-      background-color: #fff;
-      border-radius: 4px;
-      padding: 2px 8px;
-    }
   }
+
 
   button {
     display: flex;
