@@ -11297,7 +11297,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 22,
+            "switch": 23,
             "inner": true,
             "y": 1,
             "tilt": true,
@@ -11318,7 +11318,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 22,
+            "switch": 23,
             "y": 1,
             "tilt": true,
             "img": "icon--square"

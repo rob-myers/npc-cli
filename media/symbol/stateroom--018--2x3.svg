@@ -89,15 +89,15 @@
     <title>door locked</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 588.5, 614.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
-    <title>decor quad switch=0 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 610.5, 614.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
-    <title>decor quad switch=0</title>
+    <title>decor quad switch</title>
   </use>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 588.5, 284.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
-    <title>decor quad switch=0 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 610.5, 284.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
-    <title>decor quad switch=0</title>
+    <title>decor quad switch</title>
   </use>
 </svg>

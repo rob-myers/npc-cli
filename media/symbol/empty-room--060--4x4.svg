@@ -44,9 +44,9 @@
     <title>door</title>
   </rect>
   <use width="1" height="1" transform="matrix(21.213203430176, 21.213203430176, -21.213203430176, 21.213203430176, 983.029724121094, 401.213958740234)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
-    <title>decor quad switch=0 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(21.213203430176, 21.213203430176, -21.213203430176, 21.213203430176, 1001.41455078125, 382.829132080078)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
-    <title>decor quad switch=0</title>
+    <title>decor quad switch</title>
   </use>
 </svg>

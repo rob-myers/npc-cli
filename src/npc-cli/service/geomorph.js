@@ -462,10 +462,10 @@ class GeomorphService {
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {Geom.Meta} meta
-   * @param {number} scale
    * @returns {Geom.Poly | null}
    */
-  extractDecorPoly(tagMeta, meta, scale) {
+  extractDecorPoly(tagMeta, meta) {
+    const scale = sguToWorldScale * sguSymbolScaleDown;
     const trOrigin = geomorph.extractTransformData(tagMeta).transformOrigin ?? { x: 0, y: 0 };
     tmpMat1.setMatrixValue(tagMeta.attributes.transform)
       .preMultiply([1, 0, 0, 1, -trOrigin.x, -trOrigin.y])
@@ -474,7 +474,7 @@ class GeomorphService {
     ;
     const poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
 
-    // 🚧 currently only support cuboid/point/quad, with point fallback
+    // 🔔 currently only support cuboid/point/quad, with point fallback
     poly.meta = Object.assign(meta, {
       ...meta.cuboid === true && {
         transform: tmpMat1.toArray(),
@@ -505,10 +505,10 @@ class GeomorphService {
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {Geom.Meta} meta
-   * @param {number} scale
    * @returns {Geom.Poly | null}
    */
-  extractPoly(tagMeta, meta, scale) {
+  extractPoly(tagMeta, meta) {
+    const scale = sguToWorldScale * sguSymbolScaleDown;
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
 
@@ -1001,10 +1001,14 @@ class GeomorphService {
         }
 
         const meta = geomorph.tagsToMeta(ownTags, {});
+        // 🔔 "switch" points to last doorId seen
+        if (meta.switch === true) {
+          meta.switch = doors.length - 1;
+        }
 
         const poly = parent.tagName === "use" && meta.decor === true
-          ? geomorph.extractDecorPoly({ ...parent, title: contents }, meta, scale)
-          : geomorph.extractPoly({ ...parent, title: contents }, meta, scale)
+          ? geomorph.extractDecorPoly({ ...parent, title: contents }, meta)
+          : geomorph.extractPoly({ ...parent, title: contents }, meta)
         ;
         
         if (poly === null) {

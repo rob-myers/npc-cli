@@ -18,8 +18,9 @@
   - `accessible`:
     - block non-auto closed doors (including locked)
     - block locked auto doors
+- ✅ svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
+  - we convert `meta.switch` into a number during parse
 - support non-door sensor i.e. decor circle/poly
-- svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
 - support click switch to open door, instead of click door
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices

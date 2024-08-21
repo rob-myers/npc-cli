@@ -302,7 +302,7 @@
     "office--023--2x3": {"outputHash": 1783909383, "pngHash": 112007124},
     "office--026--2x3": {"outputHash": -710546195, "pngHash": -1111441141},
     "office--061--3x4": {"outputHash": -108153392, "pngHash": 1103253101},
-    "office--074--4x4": {"outputHash": 217679318, "pngHash": 194408083},
+    "office--074--4x4": {"outputHash": -534684170, "pngHash": 194408083},
     "office--089--4x4": {
       "outputHash": 1723099069,
       "pngHash": -1241808431,
@@ -14769,7 +14769,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 0,
+            "switch": 1,
             "inner": true,
             "transform": [0, -0.15, 0.15, 0, 1.3625, 4.575],
             "y": 1,
@@ -14785,7 +14785,7 @@
           "meta": {
             "decor": true,
             "quad": true,
-            "switch": 0,
+            "switch": 1,
             "transform": [0, -0.15, 0.15, 0, 1.4875, 4.575],
             "y": 1,
             "tilt": true,

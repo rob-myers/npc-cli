@@ -221,55 +221,55 @@
     <title>door hull edge=w</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1244.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor quad switch=0 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 20, 1754.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor quad switch=0 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <rect x="5980" y="1260" width="40" height="480" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=e</title>
   </rect>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1244.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor quad switch=1 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(0, 30, -30, 0, 5979, 1754.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor quad switch=1 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <rect x="1260" y="2980" width="480" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=s</title>
   </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 3020.332275390625, -99.81787109375)" style="transform-origin: -40.3333px 99.8167px;" xlink:href="#symbol-6">
-    <title>decor quad switch=2 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2510.332275390625, -99.81781768798828)" style="transform-origin: -40.3333px 99.8167px;" xlink:href="#symbol-6">
-    <title>decor quad switch=2 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <rect x="4260" y="2980" width="480" height="40" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=s</title>
   </rect>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2410.335693359375, -99.81787109375)" style="transform-origin: 59.6667px 99.8167px;" xlink:href="#symbol-6">
-    <title>decor quad switch=3 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(-30, 0, 0, -30, 2920.335693359375, -99.81781768798828)" style="transform-origin: 59.6667px 99.8167px;" xlink:href="#symbol-6">
-    <title>decor quad switch=3 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <rect x="866.575012" y="1214.782715" width="30" height="220.000031" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;" transform="matrix(0, 1, -1, 0, 2674.782714843755, 318.424987792961)">
     <title>door iris auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(30, 0, 0, 30, 1224.5, 1214.5)" style="transform-origin: 0.499998px 0.499998px;" xlink:href="#symbol-6">
-    <title>decor quad switch=4 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(30, 0, 0, 30, 1225.465576171875, 1184.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor quad switch=4 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <rect x="866.825012" y="-1434.782837" width="30" height="220.000031" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9;" transform="matrix(0, 1, -1, 0, 3325.217285156237, 320.676147460936)">
     <title>door iris auto</title>
   </rect>
   <use width="1" height="1" transform="matrix(30, 0, 0, 30, 4774.5, 1214.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor quad switch=5 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <use width="1" height="1" transform="matrix(30, 0, 0, 30, 4775.46533203125, 1184.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-6">
-    <title>decor quad switch=5 inner</title>
+    <title>decor quad switch inner</title>
   </use>
   <path d="M 424 117 L 455 91 L 493 69 L 534 54 L 578 47 L 621 46 L 664 54 L 706 69 L 744 91 L 775 117 L 779 122 L 772 129 L 767 125 L 737 100 L 701 80 L 661 65 L 620 57 L 578 57 L 537 65 L 498 80 L 462 101 L 433 125 L 428 130 L 419 122 L 424 117 Z" style="stroke: rgb(0, 0, 0); fill-opacity: 0.31; visibility: hidden;" transform="matrix(1, 0, 0, 1, 0, 7.105427357601002e-15)">
     <title>_window</title>
