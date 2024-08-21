@@ -24,8 +24,7 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- permit Ctrl-C of paused terminal
-  - i.e. don't delete "paused line" on resume
+- tty: avoid deleting paused line if user has typed something
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
