@@ -37,7 +37,6 @@
   - ✅ on disable World fades by default; click anywhere to unpause
   - ✅ World has camera icon
   - 🚧 can move camera when clicked
-  - ...
 
 - 🚧 fire event when npc enters/exits a room
   - ✅ sensor in each doorway, triggered on leave

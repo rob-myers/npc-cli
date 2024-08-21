@@ -33,11 +33,7 @@ export default function ViewerControls({ api }: Props) {
       api.tabs.reset();
       update();
     },
-    onEnable() {
-      api.tabs.toggleEnabled(true);
-      update();
-    },
-    onPause() {
+    toggleEnabled() {
       api.tabs.toggleEnabled();
       update();
     },
@@ -136,7 +132,10 @@ export default function ViewerControls({ api }: Props) {
           <FontAwesomeIcon icon={faGrip} size="1x" />
         </div>
       </div>
-      <button title={api.tabs.enabled ? "pause tabs" : "enable tabs"} onClick={state.onPause}>
+      <button
+        title={api.tabs.enabled ? "pause tabs" : "enable tabs"}
+        onClick={state.toggleEnabled}
+      >
         <FontAwesomeIcon icon={api.tabs.enabled ? faCirclePauseThin : faCirclePlay} size="1x" />
       </button>
       <button title="reset tabs" {...resetHandlers}>
