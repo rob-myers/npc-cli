@@ -33,8 +33,14 @@
 
 - ✅ tty: better disabled mount
   - we show message: "initially disabled"
-- 🚧 tty: should be able to pause profile via Tabs disable
+- 🚧 tty while disabled can ctrl-c sourced ✅ profile 🚧 via Tabs disable
+  - tried sourced by adding `sleep 10` inside game-functions.sh
+  - ✅ can pause/resume even when initially disabled
+  - ✅ fix pause then resume while initially sourcing
+  - ✅ cannot ctrl-c while initially paused
+    - ℹ️ on hmr when paused (after resume) get blank tty, but works if resume tabs
 - 🚧 tty: should be able to Ctrl-C while tty paused
+- review Terminal i.e. try to refactor so clearer
 
 - ✅ import icons directly into Menu
   - rather than using `components/Icon`

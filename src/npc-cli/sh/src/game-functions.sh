@@ -8,6 +8,9 @@ gm() {
     map "$selector" "$@"
 }
 
+# 🔔 initial ctrl-c test
+# echo sleeping... && sleep 10 && echo done
+
 # OLD BELOW 👇
 # some possibly salvagable
 

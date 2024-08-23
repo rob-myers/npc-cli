@@ -56,7 +56,9 @@ export default function WrappedTerminal(props: Props) {
       ));
     },
     writeError(sessionKey: string, message: string, origError: any) {
-      useSession.api.writeMsgCleanly(sessionKey, `${message} (see console)`, { level: 'error' });
+      try {// session may no longer exist
+        useSession.api.writeMsgCleanly(sessionKey, `${message} (see console)`, { level: 'error' });
+      } catch {};
       error(message);
       console.error(origError);
     },

@@ -39,8 +39,7 @@ export default function Terminal(props: Props) {
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
-    /** `pending` happens when initially disabled */
-    status: 'initial' as 'initial' | 'pending' | 'ready',
+    status: 'init' as 'init' | 'made-session' | 'running-profile' | 'ready',
     session: {} as Session,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
     webglAddon: new WebglAddon(),
@@ -81,99 +80,9 @@ export default function Terminal(props: Props) {
     },
   }));
 
-  React.useEffect(() => {// Create session
-    if (state.status === 'initial') {
-      state.session = useSession.api.createSession(props.sessionKey, props.env);
-
-      const xterm = new XTermTerminal({
-        allowProposedApi: true, // Needed for WebLinksAddon
-        fontSize: 16,
-        cursorBlink: true,
-        // rendererType: "canvas",
-        // mobile: can select single word via long press
-        rightClickSelectsWord: true,
-        theme: {
-          background: "black",
-          foreground: "#41FF00",
-        },
-        convertEol: false,
-        scrollback: scrollback,
-        rows: 50,
-      });
-      xterm.registerLinkProvider(
-        new LinkProvider(xterm, /(\[ [^\]]+ \])/gi, async function callback(
-          _event,
-          linkText,
-          { lineText, linkStartIndex, lineNumber }
-        ) {
-          // console.log('clicked link', {
-          //   sessionKey: props.sessionKey,
-          //   linkText,
-          //   lineText,
-          //   linkStartIndex,
-          //   lineNumber,
-          // });
-          useSession.api.onTtyLink({
-            sessionKey: props.sessionKey,
-            lineText: stripAnsi(lineText),
-            // Omit square brackets and spacing:
-            linkText: stripAnsi(linkText).slice(2, -2),
-            linkStartIndex,
-            lineNumber,
-          });
-        })
-      );
-
-      state.xterm = new ttyXtermClass(xterm, {
-        key: state.session.key,
-        io: state.session.ttyIo,
-        rememberLastValue(msg) {
-          state.session.var._ = msg;
-        },
-      });
-      state.xterm.initialise();
-
-      const onKeyDisposable = xterm.onKey((e) => {
-        props.onKey?.(e.domEvent);
-      });
-      
-      xterm.loadAddon(state.fitAddon = new FitAddon());
-      xterm.loadAddon(state.webglAddon = new WebglAddon());
-      state.webglAddon.onContextLoss(() => {
-        state.webglAddon.dispose(); // 🚧 WIP
-      });
-      xterm.open(state.container);
-      
-      state.resize();
-      xterm.textarea?.addEventListener("focus", state.onFocus);
-
-      state.cleanup = () => {
-        onKeyDisposable.dispose();
-        xterm.dispose();
-      };
-
-      state.status = 'pending';
-      update();
-      return;
-    }
-
-    if (state.status === 'pending') {
-      if (props.disabled) {
-        state.xterm.xterm.writeln(formatMessage(`initially disabled`, 'info'));
-        return;
-      }
-
-      state.session.ttyShell.initialise(state.xterm).then(async () => {
-        await props.onReady?.(state.session);
-        state.status = 'ready';
-        update();
-        await state.session.ttyShell.runProfile();
-      });
-    }
-  }, [props.disabled, state.status]);
-
+  // 🔔 before "create session" avoids dup initial `pausedLine`
   React.useEffect(() => {// Handle session pause/resume
-    if (state.status !== 'ready') {
+    if (state.status === 'init') {
       return;
     }
 
@@ -207,7 +116,8 @@ export default function Terminal(props: Props) {
       });
     }
 
-    if (!props.disabled && state.everDisabled) {// Resume
+    // if (!props.disabled && state.everDisabled) {// Resume
+    if (!props.disabled) {// Resume
       state.focusedBeforePause && state.xterm.xterm.focus();
 
       // Remove `pausedLine` unless used terminal whilst paused
@@ -234,6 +144,99 @@ export default function Terminal(props: Props) {
           delete state.pausedPids[p.key];
         });
     }
+  }, [props.disabled, state.status !== 'init']);
+
+  React.useEffect(() => {// Create session
+    if (state.status === 'init') {
+      state.session = useSession.api.createSession(props.sessionKey, props.env);
+
+      const xterm = new XTermTerminal({
+        allowProposedApi: true, // Needed for WebLinksAddon
+        fontSize: 16,
+        cursorBlink: true,
+        // rendererType: "canvas",
+        // mobile: can select single word via long press
+        rightClickSelectsWord: true,
+        theme: {
+          background: "black",
+          foreground: "#41FF00",
+        },
+        convertEol: false,
+        scrollback: scrollback,
+        rows: 50,
+      });
+
+      xterm.registerLinkProvider(
+        new LinkProvider(xterm, /(\[ [^\]]+ \])/gi, async function callback(
+          _event,
+          linkText,
+          { lineText, linkStartIndex, lineNumber }
+        ) {
+          // console.log('clicked link', {
+          //   sessionKey: props.sessionKey,
+          //   linkText,
+          //   lineText,
+          //   linkStartIndex,
+          //   lineNumber,
+          // });
+          useSession.api.onTtyLink({
+            sessionKey: props.sessionKey,
+            lineText: stripAnsi(lineText),
+            // Omit square brackets and spacing:
+            linkText: stripAnsi(linkText).slice(2, -2),
+            linkStartIndex,
+            lineNumber,
+          });
+        })
+      );
+
+      state.xterm = new ttyXtermClass(xterm, {
+        key: state.session.key,
+        io: state.session.ttyIo,
+        rememberLastValue(msg) {
+          state.session.var._ = msg;
+        },
+      });
+      // state.xterm.initialise();
+
+      const onKeyDisposable = xterm.onKey((e) => {
+        props.onKey?.(e.domEvent);
+      });
+      
+      xterm.loadAddon(state.fitAddon = new FitAddon());
+      xterm.loadAddon(state.webglAddon = new WebglAddon());
+      state.webglAddon.onContextLoss(() => {
+        state.webglAddon.dispose(); // 🚧 WIP
+      });
+      xterm.open(state.container);
+      
+      state.resize();
+      xterm.textarea?.addEventListener("focus", state.onFocus);
+
+      state.cleanup = () => {
+        onKeyDisposable.dispose();
+        xterm.dispose();
+      };
+
+      state.session.ttyShell.xterm = state.xterm;
+      state.status = 'made-session';
+      update();
+      return;
+    }
+
+    if (state.status === 'made-session' && !props.disabled) {
+      state.xterm.initialise();
+      state.session.ttyShell.initialise(state.xterm).then(async () => {
+        await props.onReady?.(state.session);
+        state.status = 'ready';
+        update();
+        // 🚧 can ctrl-c while paused
+        await state.session.ttyShell.runProfile();
+      });
+
+      state.status = 'running-profile';
+    }
+
   }, [props.disabled, state.status]);
 
   React.useEffect(() => () => {// Destroy session
@@ -243,14 +246,14 @@ export default function Terminal(props: Props) {
       useSession.api.removeSession(props.sessionKey);
     }
     props.onUnmount?.();
-    state.status = 'initial';
+    state.status = 'init';
     state.session = state.xterm = {} as any;
     state.cleanup();
   }, []);
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;
-    state.status !== 'initial' && state.resize();
+    state.status !== 'init' && state.resize();
   }, [bounds]);
 
   return (
@@ -317,3 +320,5 @@ const pausedLine = `${ansi.White}paused processes`;
 
 /** Only used when we type whilst paused */
 const resumedLine = `${ansi.White}resumed processes`;
+
+1;
