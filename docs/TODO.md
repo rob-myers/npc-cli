@@ -31,9 +31,10 @@
   - ✅ while disabled, switching to an as-yet-unseen tab should mount it
     - believe this was already working
 
-- tty: better disabled mount
-- tty: should be able to pause profile via Tabs disable
-- tty: should be able to Ctrl-C while tty paused
+- ✅ tty: better disabled mount
+  - we show message: "initially disabled"
+- 🚧 tty: should be able to pause profile via Tabs disable
+- 🚧 tty: should be able to Ctrl-C while tty paused
 
 - ✅ import icons directly into Menu
   - rather than using `components/Icon`

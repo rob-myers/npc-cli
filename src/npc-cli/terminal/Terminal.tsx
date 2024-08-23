@@ -4,7 +4,10 @@ import { Terminal as XTermTerminal } from "xterm";
 import loadable from "@loadable/component";
 import useMeasure from "react-use-measure";
 import { FitAddon } from "xterm-addon-fit";
-import { WebglAddon } from "xterm-addon-webgl";
+
+// 🔔 debugging "Cannot read properties of undefined" onRequestRedraw
+// import { WebglAddon } from "xterm-addon-webgl";
+import { WebglAddon } from "@xterm/addon-webgl";
 
 import { ttyXtermClass } from "../sh/tty.xterm";
 import { ansi } from "../sh/const";
@@ -36,7 +39,8 @@ export default function Terminal(props: Props) {
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
-    ready: false,
+    /** `pending` happens when initially disabled */
+    status: 'initial' as 'initial' | 'pending' | 'ready',
     session: {} as Session,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
     webglAddon: new WebglAddon(),
@@ -78,7 +82,7 @@ export default function Terminal(props: Props) {
   }));
 
   React.useEffect(() => {// Create session
-    if (!props.disabled && !state.ready) {
+    if (state.status === 'initial') {
       state.session = useSession.api.createSession(props.sessionKey, props.env);
 
       const xterm = new XTermTerminal({
@@ -135,8 +139,8 @@ export default function Terminal(props: Props) {
       
       xterm.loadAddon(state.fitAddon = new FitAddon());
       xterm.loadAddon(state.webglAddon = new WebglAddon());
-      state.webglAddon.onContextLoss(e => {
-        state.webglAddon.dispose(); // breaks HMR
+      state.webglAddon.onContextLoss(() => {
+        state.webglAddon.dispose(); // 🚧 WIP
       });
       xterm.open(state.container);
       
@@ -148,17 +152,28 @@ export default function Terminal(props: Props) {
         xterm.dispose();
       };
 
+      state.status = 'pending';
+      update();
+      return;
+    }
+
+    if (state.status === 'pending') {
+      if (props.disabled) {
+        state.xterm.xterm.writeln(formatMessage(`initially disabled`, 'info'));
+        return;
+      }
+
       state.session.ttyShell.initialise(state.xterm).then(async () => {
         await props.onReady?.(state.session);
-        state.ready = true;
+        state.status = 'ready';
         update();
         await state.session.ttyShell.runProfile();
       });
     }
-  }, [props.disabled, state.ready]);
+  }, [props.disabled, state.status]);
 
   React.useEffect(() => {// Handle session pause/resume
-    if (!state.ready) {
+    if (state.status !== 'ready') {
       return;
     }
 
@@ -219,25 +234,23 @@ export default function Terminal(props: Props) {
           delete state.pausedPids[p.key];
         });
     }
-  }, [props.disabled, state.ready]);
+  }, [props.disabled, state.status]);
 
   React.useEffect(() => () => {// Destroy session
-    if (!state.session.key) {
-      return; // Was always disabled
+    if (state.status === 'ready') {
+      useSession.api.persistHistory(props.sessionKey);
+      useSession.api.persistHome(props.sessionKey);
+      useSession.api.removeSession(props.sessionKey);
     }
-
-    useSession.api.persistHistory(props.sessionKey);
-    useSession.api.persistHome(props.sessionKey);
-    useSession.api.removeSession(props.sessionKey);
     props.onUnmount?.();
-    state.ready = false;
+    state.status = 'initial';
     state.session = state.xterm = {} as any;
     state.cleanup();
   }, []);
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;
-    state.ready && state.resize();
+    state.status !== 'initial' && state.resize();
   }, [bounds]);
 
   return (
@@ -248,7 +261,9 @@ export default function Terminal(props: Props) {
         onKeyDown={stopKeysPropagating}
       />
 
-      {state.ready && <TouchHelperUi session={state.session} disabled={props.disabled} />}
+      {state.status === 'ready' && (
+        <TouchHelperUi session={state.session} disabled={props.disabled} />
+      )}
     </div>
   );
 }

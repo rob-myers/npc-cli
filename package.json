@@ -55,6 +55,7 @@
     "@recast-navigation/three": "^0.30.0",
     "@tailwindcss/typography": "^0.5.12",
     "@tanstack/react-query": "^5.17.19",
+    "@xterm/addon-webgl": "^0.18.0",
     "braces": "^3.0.2",
     "canvas": "^2.11.2",
     "cli-columns": "^4.0.0",
