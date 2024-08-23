@@ -320,5 +320,3 @@ const pausedLine = `${ansi.White}paused processes`;
 
 /** Only used when we type whilst paused */
 const resumedLine = `${ansi.White}resumed processes`;
-
-1;

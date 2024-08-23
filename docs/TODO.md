@@ -33,7 +33,7 @@
 
 - ✅ tty: better disabled mount
   - we show message: "initially disabled"
-- 🚧 tty while disabled can ctrl-c sourced ✅ profile 🚧 via Tabs disable
+- 🚧 tty while disabled can ctrl-c sourced ✅ profile 🚧
   - tried sourced by adding `sleep 10` inside game-functions.sh
   - ✅ can pause/resume even when initially disabled
   - ✅ fix pause then resume while initially sourcing
