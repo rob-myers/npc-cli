@@ -25,11 +25,10 @@ import useUpdate from "../hooks/use-update";
 import Spinner from "./Spinner";
 
 export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
-  const state = useStateRef<State>(() => ({
+  const state = useStateRef((): State => ({
     enabled: false,
     everEnabled: false,
     hash: "",
-    overlayColor: "black",
     prevFocused: null,
     resetCount: 0,
     rootEl: null as any,
@@ -89,14 +88,16 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       update();
     },
     toggleEnabled(next) {
-      next ??= !state.enabled;
+      const prev = state.enabled;
+      // toggle if `next` undefined, else set
+      next ??= !prev;
+
+      if (prev === next) {
+        return;
+      }
+
       state.everEnabled ||= next;
       state.enabled = next;
-      if (state.everEnabled) {
-        state.overlayColor = next ? "clear" : "faded";
-      } else {
-        state.overlayColor = "black";
-      }
 
       if (next) {
         const prevFocused = state.prevFocused;
@@ -108,11 +109,17 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         state.rootEl.focus();
       }
 
-      const { tabsState } = state;
-      Object.keys(tabsState).forEach((key) => (tabsState[key].disabled = !next as boolean));
+      // Toggle all tabs
+      state.toggleTabsDisabled(next);
       update();
 
       props.onToggled?.(next);
+    },
+    toggleTabsDisabled(next) {
+      const { tabsState } = state;
+      for (const key of Object.keys(tabsState)) {
+        tabsState[key].disabled = !next 
+      }
     },
   }));
 
@@ -132,29 +139,27 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
 
       node.setEventListener("visibility", async ({ visible }) => {
         const [key, tabDef] = [node.getId(), (node as TabNode).getConfig() as TabDef];
+        // console.log('visibility', key, visible);
         state.tabsState[key] ??= {
           key,
           type: tabDef.type,
-          disabled: false,
+          disabled: !state.enabled,
           everUncovered: false,
           justCovered: false,
         };
 
-        if (!visible) {
-          if (tabDef.type === "component") {
-            // we don't disable hidden terminals
-            state.tabsState[key].disabled = true;
-            setTimeout(update);
-          }
-        } else {
-          if (!state.enabled) {
-            return; // Fix HMR
-          }
-
-          state.tabsState[key].disabled = false;
+        if (visible) {
+          state.tabsState[key].disabled = !state.enabled;
           const maxNode = state.model.getMaximizedTabset()?.getSelectedNode();
           state.tabsState[key].everUncovered ||= maxNode ? node === maxNode : true;
           setTimeout(update); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
+        }
+        
+        if (!visible && tabDef.type === "component") {
+          // - invisible tabs of type "component" get disabled in background
+          // - tabs of type "terminal" stay enabled in background
+          state.tabsState[key].disabled = true;
+          setTimeout(update);
         }
       });
     });
@@ -206,6 +211,7 @@ export interface Props extends TabsDef {
   browserLoaded: boolean;
   collapsed: boolean;
   rootOrientationVertical?: boolean;
+  /** Invoked onchange state.enabled */
   onToggled?(next: boolean): void;
 }
 
@@ -213,8 +219,6 @@ export interface State {
   enabled: boolean;
   everEnabled: boolean;
   hash: string;
-  /** Initially `black` afterwards `faded` or `clear` */
-  overlayColor: "black" | "faded" | "clear";
   prevFocused: null | HTMLElement;
   resetCount: number;
   rootEl: HTMLElement;
@@ -227,6 +231,7 @@ export interface State {
   onModelChange(): void;
   reset(): void;
   toggleEnabled(next?: boolean): void;
+  toggleTabsDisabled(next: boolean): void;
 }
 
 export interface TabState {
@@ -235,13 +240,11 @@ export interface TabState {
   type: TabDef["type"];
   disabled: boolean;
   /**
-   * `false` iff some other tab has always been maximised.
-   *
-   * According to flexlayout-react, a selected tab is visible when obscured by a maximised tab.
-   * We prevent rendering in such cases
+   * `true` iff this tab's contents has ever been visible,
+   * in which case we should have mounted the respective component.
    */
   everUncovered: boolean;
-  /** True iff was just covered by a maximised tab */
+  /** `true` iff was just covered by a maximised tab */
   justCovered: boolean;
 }
 

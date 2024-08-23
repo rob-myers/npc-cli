@@ -25,6 +25,16 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
+- ✅ change way tabs are disabled/enabled
+  - ✅ initially disabled tty shouldn't run profile
+  - ✅ initially disabled World should be greyed out
+  - ✅ while disabled, switching to an as-yet-unseen tab should mount it
+    - believe this was already working
+
+- tty: better disabled mount
+- tty: should be able to pause profile via Tabs disable
+- tty: should be able to Ctrl-C while tty paused
+
 - ✅ import icons directly into Menu
   - rather than using `components/Icon`
 - ✅ tty: avoid deleting paused line if user has typed something

@@ -32,7 +32,7 @@ export default function Terminal(props: Props) {
     inputBeforePause: undefined as string | undefined,
     fitAddon: new FitAddon(),
     focusedBeforePause: false,
-    hasEverDisabled: false,
+    everDisabled: false,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
@@ -163,7 +163,7 @@ export default function Terminal(props: Props) {
     }
 
     if (props.disabled) {// Pause
-      state.hasEverDisabled = true;
+      state.everDisabled = true;
       state.focusedBeforePause = document.activeElement === state.xterm.xterm.textarea;
 
       if (state.xterm.isPromptReady()) {
@@ -192,7 +192,7 @@ export default function Terminal(props: Props) {
       });
     }
 
-    if (!props.disabled && state.hasEverDisabled) {// Resume
+    if (!props.disabled && state.everDisabled) {// Resume
       state.focusedBeforePause && state.xterm.xterm.focus();
 
       // Remove `pausedLine` unless used terminal whilst paused
@@ -222,6 +222,10 @@ export default function Terminal(props: Props) {
   }, [props.disabled, state.ready]);
 
   React.useEffect(() => () => {// Destroy session
+    if (!state.session.key) {
+      return; // Was always disabled
+    }
+
     useSession.api.persistHistory(props.sessionKey);
     useSession.api.persistHome(props.sessionKey);
     useSession.api.removeSession(props.sessionKey);
