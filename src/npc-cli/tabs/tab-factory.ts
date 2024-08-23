@@ -207,6 +207,7 @@ function computeJsonModel(tabsDefs: TabDef[][], rootOrientationVertical?: boolea
       rootOrientationVertical,
       tabEnableClose: false,
       tabSetEnableDivide: !isTouchDevice(),
+      enableEdgeDock: !isTouchDevice(),
       // Use `visibility: hidden` instead of `display: none`,
       // otherwise <World> does not progress
       enableUseVisibility: true,
