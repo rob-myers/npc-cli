@@ -21,30 +21,20 @@ export default function Terminal2(props: Props) {
   const state = useStateRef(() => ({
     /**
      * Have we initiated the profile?
-     * We'll prevent HMR from re-running this.
+     * Don't want to re-run on hmr.
      */
     booted: false,
     bounds,
-    container: null as any as HTMLDivElement,
     fitDebounced: debounce(() => { state.ts.fitAddon.fit(); }, 300),
     focusedBeforePause: false,
     inputBeforePause: undefined as string | undefined,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
-    /** Is session and xterm ready? */
-    ready: false,
     ts: {} as TerminalSessionState,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
-    containerRef(el: null | HTMLDivElement) {
-      if (el && !state.container) {
-        state.container = el;
-        update();
-      }
-    },
     onCreateSession() {
-      state.ready = true;
       state.booted = false;
       update();
     },
@@ -102,7 +92,7 @@ export default function Terminal2(props: Props) {
   }));
 
   React.useEffect(() => {// Pause/resume
-    if (props.disabled && state.ready) {
+    if (props.disabled && state.ts.session) {
       const { xterm } = state.ts;
       state.focusedBeforePause = document.activeElement === xterm.xterm.textarea;
 
@@ -152,7 +142,7 @@ export default function Terminal2(props: Props) {
   }, [props.disabled, state.ts.session])
 
   React.useEffect(() => {// Bind external events
-    if (state.ready) {
+    if (state.ts.session) {
       state.resize();
       const { xterm } = state.ts.xterm;
       const onKeyDispose = xterm.onKey((e) => props.onKey?.(e.domEvent));
@@ -167,11 +157,11 @@ export default function Terminal2(props: Props) {
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;
-    state.ready && state.resize();
+    state.ts.session && state.resize();
   }, [bounds]);
 
   React.useEffect(() => {// Boot profile
-    if (state.ready && !props.disabled && !state.booted) {
+    if (state.ts.session && !props.disabled && !state.booted) {
       state.booted = true;
 
       const { xterm, session } = state.ts;
@@ -187,29 +177,19 @@ export default function Terminal2(props: Props) {
 
   const update = useUpdate();
 
-  return <>
-
-    <TerminalSession
-      ref={ts => ts && (state.ts = ts)}
-      sessionKey={props.sessionKey}
-      env={props.env}
-      container={state.container}
-      onCreateSession={state.onCreateSession}
-    />
-
+  return (
     <div className={rootCss} ref={rootRef}>
-      <div
-        ref={state.containerRef}
-        className="xterm-container scrollable"
-        onKeyDown={stopKeysPropagating}
+      <TerminalSession
+        ref={ts => ts && (state.ts = ts)}
+        sessionKey={props.sessionKey}
+        env={props.env}
+        onCreateSession={state.onCreateSession}
       />
-
-      {state.ready && (
+      {state.ts.session && (
         <TouchHelperUi session={state.ts.session} disabled={props.disabled} />
       )}
     </div>
-
-  </>;
+  );
 }
 
 export interface Props {
@@ -246,10 +226,6 @@ const rootCss = css`
     }
   }
 `;
-
-function stopKeysPropagating(e: React.KeyboardEvent) {
-  e.stopPropagation();
-}
 
 const initiallyPausedLine = `${ansi.White}initially paused...`;
 const pausedLine = `${ansi.White}paused processes`;

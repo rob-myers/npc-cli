@@ -8,28 +8,31 @@ import { WebglAddon } from "@xterm/addon-webgl";
 import { stripAnsi } from '../sh/util';
 import { scrollback } from '../sh/io';
 import { ttyXtermClass } from '../sh/tty.xterm';
+import { LinkProvider } from './xterm-link-provider';
 import useSession, { type Session } from "../sh/session.store";
 import useStateRef from '../hooks/use-state-ref';
-import { LinkProvider } from './xterm-link-provider';
+import useUpdate from '../hooks/use-update';
 
-/**
- * We use a null-rendering-component to isolate HMR,
- * i.e. we'd prefer not to have to destroy session.
- */
 export const TerminalSession = React.forwardRef<State, Props>(function TerminalSession(props: Props, ref) {
 
   const state = useStateRef((): State => ({
+    container: null as any as HTMLDivElement,
     fitAddon: new FitAddon(),
     // 🔔 `undefined` for change detection
     session: undefined as any as Session,
     webglAddon: new WebglAddon(),
     xterm: null as any as ttyXtermClass,
+
+    // 🔔 setTimeout fixes Cannot read properties of undefined (reading 'dimensions')
+    containerRef: (el: null | HTMLDivElement) => el && !state.container &&
+      setTimeout(() => (state.container = el, update())
+    ),
   }));
 
   React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
   
   React.useEffect(() => {
-    if (props.container === null) {
+    if (state.container === null) {
       return;
     }
 
@@ -91,7 +94,7 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
 
     state.session.ttyShell.xterm = state.xterm;
 
-    xterm.open(props.container);
+    xterm.open(state.container);
 
     props.onCreateSession();
 
@@ -103,23 +106,35 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
       // props.onUnmount?.();
       state.xterm.dispose();
       state.session = state.xterm = null as any;
-      // state.ready = false;
     };
-  }, [props.container]);
+  }, [state.container]);
 
-  return null;
+  const update = useUpdate();
+
+  return (
+    <div
+      ref={state.containerRef}
+      className="xterm-container scrollable"
+      onKeyDown={stopKeysPropagating}
+    />
+  );
 });
 
 interface Props {
   sessionKey: string;
   env: Partial<Session["var"]>;
-  container: HTMLElement | null;
   onCreateSession(): void;
 }
 
 export interface State {
+  container: HTMLDivElement;
   fitAddon: FitAddon;
   session: Session;
   webglAddon: WebglAddon;
   xterm: ttyXtermClass;
+  containerRef(el: null | HTMLDivElement): void;
+}
+
+function stopKeysPropagating(e: React.KeyboardEvent) {
+  e.stopPropagation();
 }
