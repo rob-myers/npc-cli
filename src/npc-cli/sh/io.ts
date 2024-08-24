@@ -312,7 +312,7 @@ export class FifoDevice implements Device {
   }
 
   public finishedReading(query?: boolean) {
-    if (query) {
+    if (query === true) {
       return this.readerStatus === FifoStatus.Disconnected;
     }
     this.readerStatus = FifoStatus.Disconnected;
@@ -321,7 +321,7 @@ export class FifoDevice implements Device {
   }
 
   public finishedWriting(query?: boolean) {
-    if (query) {
+    if (query === true) {
       return this.writerStatus === FifoStatus.Disconnected;
     }
     this.writerStatus = FifoStatus.Disconnected;

@@ -648,7 +648,7 @@ class semanticsServiceClass {
     let itStartMs = -1, itLengthMs = 0;
 
     while (true) {
-      if (process.status === 2) {
+      if (process.status === ProcessStatus.Killed) {
         throw killError(node.meta);
       }
       // Force iteration to take at least 1 second

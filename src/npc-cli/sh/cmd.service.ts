@@ -391,7 +391,7 @@ class cmdServiceClass {
 
         function suppressLinks(process: ProcessMeta) {
           return (
-            process.status === 2 ||
+            process.status === ProcessStatus.Killed ||
             process.key === 0 || // suppress links when leader has descendant leader
             (!opts.a && !opts.s && getDescLeaders(process).length)
           );
