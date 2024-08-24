@@ -20,12 +20,15 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
   sessionKey,
   env,
   container,
+  onCreateSession,
 }: Props, ref) {
 
   const state = useStateRef((): State => ({
+    booted: false,
     fitAddon: new FitAddon(),
     ready: false,
-    session: null as any as Session,
+    // 🔔 `undefined` for change detection
+    session: undefined as any as Session,
     webglAddon: new WebglAddon(),
     xterm: null as any as ttyXtermClass,
   }));
@@ -95,6 +98,9 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
 
     xterm.open(container);
     state.ready = true;
+    state.booted = false;
+
+    onCreateSession();
 
     return () => {
       useSession.api.persistHistory(sessionKey);
@@ -114,13 +120,20 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
 });
 
 interface Props {
-  sessionKey: string,
-  env: Partial<Session["var"]>,
-  container: HTMLElement | null,
+  sessionKey: string;
+  env: Partial<Session["var"]>;
+  container: HTMLElement | null;
+  onCreateSession(): void;
 }
 
 export interface State {
+  /**
+   * Have we initiated the profile?
+   * We'll prevent HMR from re-running this.
+   */
+  booted: boolean;
   fitAddon: FitAddon;
+  /** Is `session` and `xterm` defined? */
   ready: boolean;
   session: Session;
   webglAddon: WebglAddon;

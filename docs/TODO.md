@@ -25,9 +25,19 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- 🚧 refactor Terminal
-- tty: while disabled can ctrl-c sourced and profile
-- tty: should be able to Ctrl-C while tty paused
+- ✅ refactor Terminal without pause/resume
+- ✅ refactor Terminal: add pause/resume
+- ✅ on hmr `TerminalSession` unpaused tty should reboot
+  - ✅ reset state.booted e.g. -> state.ts.booted
+- understand error message on restart Tabs with running tty in background
+- 🚧 init paused:
+  - ✅ tty should not run profile
+  - ✅ runs profile on resume
+  - ✅ cannot be ctrl-c'd
+  - ✅ hmr `Terminal` preserves "single line shown"
+  - ✅ hmr `TerminalSession` should render `Terminal`
+  - while disabled can ctrl-c sourced and profile
+  - should be able to ctrl-c while tty paused
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls

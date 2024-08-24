@@ -5,9 +5,13 @@ import debounce from 'debounce';
 
 import { isTouchDevice } from '../service/dom';
 import type { Session } from "../sh/session.store";
+import { ansi } from '../sh/const';
+import { formatMessage } from '../sh/util';
+
 import useStateRef from '../hooks/use-state-ref';
-import TouchHelperUi from './TouchHelperUi';
 import useUpdate from '../hooks/use-update';
+import useSession, { ProcessStatus } from '../sh/session.store';
+import TouchHelperUi from './TouchHelperUi';
 import { TerminalSession, State as TerminalSessionState } from './TerminalSession';
 
 export default function Terminal2(props: Props) {
@@ -15,17 +19,16 @@ export default function Terminal2(props: Props) {
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
   const state = useStateRef(() => ({
-    /**
-     * Initiated profile and sourced etc files?
-     * We prevent HMR from re-running this.
-     */
-    booted: false,
     bounds,
     container: null as any as HTMLDivElement,
     fitDebounced: debounce(() => { state.ts.fitAddon.fit(); }, 300),
+    focusedBeforePause: false,
+    inputBeforePause: undefined as string | undefined,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
+    pausedPids: {} as Record<number, true>,
     ts: { ready: false } as TerminalSessionState,
+    typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
     containerRef(el: null | HTMLDivElement) {
       if (el && !state.container) {
@@ -39,6 +42,15 @@ export default function Terminal2(props: Props) {
         state.ts.xterm.setCursor(state.inputOnFocus.cursor);
         state.inputOnFocus = undefined;
       }
+    },
+    pauseRunningProcesses() {
+      Object.values(state.ts.session.process ?? {})
+        .filter((p) => p.status === ProcessStatus.Running)
+        .forEach((p) => {
+          p.onSuspends = p.onSuspends.filter((onSuspend) => onSuspend());
+          p.status = ProcessStatus.Suspended;
+          state.pausedPids[p.key] = true;
+        });
     },
     async resize() {
       if (state.isTouchDevice) {
@@ -55,9 +67,78 @@ export default function Terminal2(props: Props) {
         state.fitDebounced();
       }
     },
+    restoreInput() {
+      if (state.inputBeforePause) {
+        state.ts.xterm.clearInput();
+        state.ts.xterm.setInput(state.inputBeforePause);
+        state.inputBeforePause = undefined;
+      } else {
+        state.ts.xterm.showPendingInputImmediately();
+      }
+    },
+    resumeRunningProcesses() {
+      Object.values(state.ts.session?.process ?? {})
+        .filter((p) => state.pausedPids[p.key])
+        .forEach((p) => {
+          if (p.status === ProcessStatus.Suspended) {
+            p.onResumes = p.onResumes.filter((onResume) => onResume());
+            p.status = ProcessStatus.Running;
+          }
+          delete state.pausedPids[p.key];
+        });
+    },
   }));
 
   // 🚧 pause/resume
+  React.useEffect(() => {
+    if (props.disabled && state.ts.ready) {
+      const { xterm } = state.ts;
+      state.focusedBeforePause = document.activeElement === xterm.xterm.textarea;
+
+      if (xterm.isPromptReady()) {
+        state.inputBeforePause = xterm.getInput();
+        xterm.clearInput();
+      }
+
+      useSession.api.writeMsgCleanly(
+        props.sessionKey,
+        formatMessage(state.ts.booted ? pausedLine : initiallyPausedLine, "info"), { prompt: false },
+      );
+
+      state.pauseRunningProcesses();
+
+      // 🚧 tidy
+      // Can use terminal whilst "paused" (previously running processes suspended)
+      if (state.ts.booted) {
+        state.typedWhilstPaused.value = false;
+        state.typedWhilstPaused.onDataSub = xterm.xterm.onData(() => {
+          state.typedWhilstPaused.value = true;
+          state.restoreInput();
+        });
+      }
+
+      return () => {
+
+        state.focusedBeforePause && xterm.xterm.focus();
+
+        // 🚧 tidy
+        // Remove `pausedLine` unless used terminal whilst paused
+        state.typedWhilstPaused.onDataSub.dispose();
+        if (state.typedWhilstPaused.value === false) {
+          xterm.xterm.write(`\x1b[F\x1b[2K`);
+        } else {
+          useSession.api.writeMsgCleanly(
+            props.sessionKey, formatMessage(resumedLine, "info"),
+          );
+        }
+        
+        state.restoreInput();
+
+        state.resumeRunningProcesses();
+
+      };
+    }
+  }, [props.disabled, state.ts.session])
 
   React.useEffect(() => {// Bind external events
     if (state.ts.ready) {
@@ -71,7 +152,7 @@ export default function Terminal2(props: Props) {
         xterm.textarea?.removeEventListener("focus", state.onFocus);
       };
     }
-  }, [state.ts.ready]);
+  }, [state.ts.session]);
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;
@@ -79,8 +160,8 @@ export default function Terminal2(props: Props) {
   }, [bounds]);
 
   React.useEffect(() => {// Boot profile
-    if (state.ts.ready && !state.booted) {
-      state.booted = true;
+    if (state.ts.ready && !props.disabled && !state.ts.booted) {
+      state.ts.booted = true;
 
       const { xterm, session } = state.ts;
       xterm.initialise();
@@ -91,7 +172,7 @@ export default function Terminal2(props: Props) {
         await session.ttyShell.runProfile();
       });      
     }
-  }, [state.ts.ready]);
+  }, [state.ts.session, props.disabled]);
 
   const update = useUpdate();
 
@@ -102,6 +183,7 @@ export default function Terminal2(props: Props) {
       sessionKey={props.sessionKey}
       env={props.env}
       container={state.container}
+      onCreateSession={update}
     />
 
     <div className={rootCss} ref={rootRef}>
@@ -157,3 +239,10 @@ const rootCss = css`
 function stopKeysPropagating(e: React.KeyboardEvent) {
   e.stopPropagation();
 }
+
+const initiallyPausedLine = `${ansi.White}initially paused...`;
+const pausedLine = `${ansi.White}paused processes`;
+/** Only used when we type whilst paused */
+const resumedLine = `${ansi.White}resumed processes`;
+
+1;
