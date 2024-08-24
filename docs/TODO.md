@@ -25,26 +25,9 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- ✅ change way tabs are disabled/enabled
-  - ✅ initially disabled tty shouldn't run profile
-  - ✅ initially disabled World should be greyed out
-  - ✅ while disabled, switching to an as-yet-unseen tab should mount it
-    - believe this was already working
-
-- ✅ tty: better disabled mount
-  - we show message: "initially disabled"
-- 🚧 tty while disabled can ctrl-c sourced ✅ profile 🚧
-  - tried sourced by adding `sleep 10` inside game-functions.sh
-  - ✅ can pause/resume even when initially disabled
-  - ✅ fix pause then resume while initially sourcing
-  - ✅ cannot ctrl-c while initially paused
-    - ℹ️ on hmr when paused (after resume) get blank tty, but works if resume tabs
-- 🚧 tty: should be able to Ctrl-C while tty paused
-- review Terminal i.e. try to refactor so clearer
-
-- ✅ import icons directly into Menu
-  - rather than using `components/Icon`
-- ✅ tty: avoid deleting paused line if user has typed something
+- 🚧 refactor Terminal
+- tty: while disabled can ctrl-c sourced and profile
+- tty: should be able to Ctrl-C while tty paused
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
@@ -1970,3 +1953,22 @@
     - ✅ WorldWorkers has state.hash so can compare
     - ✅ send changed gmKeys
   - ℹ️ maybe can improve via murmur, but wait for timings via notifications
+
+- ✅ import icons directly into Menu
+  - rather than using `components/Icon`
+- ✅ tty: avoid deleting paused line if user has typed something
+
+- ✅ change way tabs are disabled/enabled
+  - ✅ initially disabled tty shouldn't run profile
+  - ✅ initially disabled World should be greyed out
+  - ✅ while disabled, switching to an as-yet-unseen tab should mount it
+    - believe this was already working
+
+- ✅ tty: better disabled mount
+  - we show message: "initially disabled"
+- ✅ tty while disabled can ctrl-c sourced
+  - tried sourced by adding `sleep 10` inside game-functions.sh
+  - ✅ can pause/resume even when initially disabled
+  - ✅ fix pause then resume while initially sourcing
+  - ✅ cannot ctrl-c while initially paused
+    - ℹ️ on hmr when paused (after resume) get blank tty, but works if resume tabs
