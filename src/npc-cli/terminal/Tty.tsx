@@ -12,7 +12,7 @@ import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 import useSession, { ProcessStatus } from '../sh/session.store';
 import TouchHelperUi from './TouchHelperUi';
-import { BaseTty, State as TerminalSessionState } from './BaseTty';
+import { BaseTty, State as BaseTtyState } from './BaseTty';
 
 /**
  * Pausable and Bootable `BaseTty`.
@@ -22,19 +22,19 @@ export default function Tty(props: Props) {
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
   const state = useStateRef(() => ({
+    base: {} as BaseTtyState,
     /**
      * Have we initiated the profile?
      * Don't want to re-run on hmr.
      */
     booted: false,
     bounds,
-    fitDebounced: debounce(() => { state.ts.fitAddon.fit(); }, 300),
+    fitDebounced: debounce(() => { state.base.fitAddon.fit(); }, 300),
     focusedBeforePause: false,
     inputBeforePause: undefined as string | undefined,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
-    ts: {} as TerminalSessionState,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
     onCreateSession() {
@@ -43,13 +43,13 @@ export default function Tty(props: Props) {
     },
     onFocus() {
       if (state.inputOnFocus) {
-        state.ts.xterm.setInput(state.inputOnFocus.input);
-        state.ts.xterm.setCursor(state.inputOnFocus.cursor);
+        state.base.xterm.setInput(state.inputOnFocus.input);
+        state.base.xterm.setCursor(state.inputOnFocus.cursor);
         state.inputOnFocus = undefined;
       }
     },
     pauseRunningProcesses() {
-      Object.values(state.ts.session.process ?? {})
+      Object.values(state.base.session.process ?? {})
         .filter((p) => p.status === ProcessStatus.Running)
         .forEach((p) => {
           p.onSuspends = p.onSuspends.filter((onSuspend) => onSuspend());
@@ -62,10 +62,10 @@ export default function Tty(props: Props) {
         state.fitDebounced();
       } else {
         // Hide input to prevent issues when screen gets too small
-        const input = state.ts.xterm.getInput();
-        const cursor = state.ts.xterm.getCursor();
-        if (input && state.ts.xterm.isPromptReady()) {
-          state.ts.xterm.clearInput();
+        const input = state.base.xterm.getInput();
+        const cursor = state.base.xterm.getCursor();
+        if (input && state.base.xterm.isPromptReady()) {
+          state.base.xterm.clearInput();
           state.inputOnFocus = { input, cursor };
         }
         // setTimeout(() => state.fitAddon.fit());
@@ -74,15 +74,15 @@ export default function Tty(props: Props) {
     },
     restoreInput() {
       if (state.inputBeforePause) {
-        state.ts.xterm.clearInput();
-        state.ts.xterm.setInput(state.inputBeforePause);
+        state.base.xterm.clearInput();
+        state.base.xterm.setInput(state.inputBeforePause);
         state.inputBeforePause = undefined;
       } else {
-        state.ts.xterm.showPendingInputImmediately();
+        state.base.xterm.showPendingInputImmediately();
       }
     },
     resumeRunningProcesses() {
-      Object.values(state.ts.session?.process ?? {})
+      Object.values(state.base.session?.process ?? {})
         .filter((p) => state.pausedPids[p.key])
         .forEach((p) => {
           if (p.status === ProcessStatus.Suspended) {
@@ -95,8 +95,8 @@ export default function Tty(props: Props) {
   }));
 
   React.useEffect(() => {// Pause/resume
-    if (props.disabled && state.ts.session) {
-      const { xterm } = state.ts;
+    if (props.disabled && state.base.session) {
+      const { xterm } = state.base;
       state.focusedBeforePause = document.activeElement === xterm.xterm.textarea;
 
       if (xterm.isPromptReady()) {
@@ -142,12 +142,12 @@ export default function Tty(props: Props) {
 
       };
     }
-  }, [props.disabled, state.ts.session])
+  }, [props.disabled, state.base.session])
 
   React.useEffect(() => {// Bind external events
-    if (state.ts.session) {
+    if (state.base.session) {
       state.resize();
-      const { xterm } = state.ts.xterm;
+      const { xterm } = state.base.xterm;
       const onKeyDispose = xterm.onKey((e) => props.onKey?.(e.domEvent));
       xterm.textarea?.addEventListener("focus", state.onFocus);
       
@@ -156,18 +156,18 @@ export default function Tty(props: Props) {
         xterm.textarea?.removeEventListener("focus", state.onFocus);
       };
     }
-  }, [state.ts.session]);
+  }, [state.base.session]);
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;
-    state.ts.session && state.resize();
+    state.base.session && state.resize();
   }, [bounds]);
 
   React.useEffect(() => {// Boot profile
-    if (state.ts.session && !props.disabled && !state.booted) {
+    if (state.base.session && !props.disabled && !state.booted) {
       state.booted = true;
 
-      const { xterm, session } = state.ts;
+      const { xterm, session } = state.base;
       xterm.initialise();
       session.ttyShell.initialise(xterm).then(async () => {
         await props.onReady?.(session);
@@ -176,20 +176,20 @@ export default function Tty(props: Props) {
         await session.ttyShell.runProfile();
       });      
     }
-  }, [state.ts.session, props.disabled]);
+  }, [state.base.session, props.disabled]);
 
   const update = useUpdate();
 
   return (
     <div className={rootCss} ref={rootRef}>
       <BaseTty
-        ref={ts => ts && (state.ts = ts)}
+        ref={ts => ts && (state.base = ts)}
         sessionKey={props.sessionKey}
         env={props.env}
         onCreateSession={state.onCreateSession}
       />
-      {state.ts.session && (
-        <TouchHelperUi session={state.ts.session} disabled={props.disabled} />
+      {state.base.session && (
+        <TouchHelperUi session={state.base.session} disabled={props.disabled} />
       )}
     </div>
   );
