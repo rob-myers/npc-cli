@@ -12,9 +12,12 @@ import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 import useSession, { ProcessStatus } from '../sh/session.store';
 import TouchHelperUi from './TouchHelperUi';
-import { TerminalSession, State as TerminalSessionState } from './TerminalSession';
+import { BaseTty, State as TerminalSessionState } from './BaseTty';
 
-export default function Terminal2(props: Props) {
+/**
+ * Pausable and Bootable `BaseTty`.
+ */
+export default function Tty(props: Props) {
 
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
@@ -179,7 +182,7 @@ export default function Terminal2(props: Props) {
 
   return (
     <div className={rootCss} ref={rootRef}>
-      <TerminalSession
+      <BaseTty
         ref={ts => ts && (state.ts = ts)}
         sessionKey={props.sessionKey}
         env={props.env}

@@ -13,7 +13,7 @@ import useSession, { type Session } from "../sh/session.store";
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 
-export const TerminalSession = React.forwardRef<State, Props>(function TerminalSession(props: Props, ref) {
+export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Props, ref) {
 
   const state = useStateRef((): State => ({
     container: null as any as HTMLDivElement,
@@ -103,7 +103,6 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
       useSession.api.persistHome(props.sessionKey);
       useSession.api.removeSession(props.sessionKey);
 
-      // props.onUnmount?.();
       state.xterm.dispose();
       state.session = state.xterm = null as any;
     };

@@ -10,7 +10,7 @@ import { error, keys } from "../service/generic";
 import useSession, { Session } from "../sh/session.store";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import Terminal, { type Props } from "./Terminal";
+import Tty, { type Props } from "./Tty";
 
 const functionFiles = {
   'util-functions.sh': utilFunctionsSh,
@@ -28,13 +28,14 @@ const functionFiles = {
 };
 
 /**
- * We wrap `Terminal` for "easy" hot-reloading of source code.
+ * `Tty` with hot-reloading of source code.
  */
-export default function WrappedTerminal(props: Props) {
+export default function TtyWithEtc(props: Props) {
 
   const state = useStateRef(() => ({
     session: null as null | Session,
     updates: 0,
+
     async onReady(session: Session) {
       await state.sourceFuncs(session);
       state.session = session;
@@ -79,9 +80,9 @@ export default function WrappedTerminal(props: Props) {
   }, [state.session, props.env.PROFILE]);
 
   return (
-    <Terminal
+    <Tty
       onReady={state.onReady}
-      onUnmount={() => { state.session = null }} // 🚧 not hooked up
+      // onUnmount={() => { state.session = null }} // 🚧 not hooked up
       {...props}
     />
   );

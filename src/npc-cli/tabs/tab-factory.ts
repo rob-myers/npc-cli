@@ -2,7 +2,7 @@ import React from "react";
 import loadable from "@loadable/component";
 import { IJsonModel, Model, TabNode } from "flexlayout-react";
 
-import type ActualTerminal from "../terminal/WrappedTerminal";
+import type ActualTerminal from "../terminal/TtyWithEtc";
 import {
   deepClone,
   tryLocalStorageGet,
@@ -140,7 +140,7 @@ function FallbackComponentFactory(componentKey: string) {
     );
 }
 
-export const Terminal = loadable(() => import("../terminal/WrappedTerminal"), {
+export const Terminal = loadable(() => import("../terminal/TtyWithEtc"), {
   ssr: false,
 }) as typeof ActualTerminal;
 
