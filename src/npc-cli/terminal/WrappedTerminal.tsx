@@ -1,5 +1,4 @@
 import React from "react";
-import Terminal, { Props } from "./Terminal";
 
 import utilFunctionsSh from "!!raw-loader!../sh/src/util-functions.sh";
 import gameFunctionsSh from "!!raw-loader!../sh/src/game-functions.sh";
@@ -11,6 +10,7 @@ import { error, keys } from "../service/generic";
 import useSession, { Session } from "../sh/session.store";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import Terminal, { type Props } from "./Terminal";
 
 const functionFiles = {
   'util-functions.sh': utilFunctionsSh,
@@ -56,9 +56,9 @@ export default function WrappedTerminal(props: Props) {
       ));
     },
     writeError(sessionKey: string, message: string, origError: any) {
-      try {// session may no longer exist
-        useSession.api.writeMsgCleanly(sessionKey, `${message} (see console)`, { level: 'error' });
-      } catch {};
+      useSession.api.writeMsgCleanly(sessionKey, `${message} (see console)`, { level: 'error' }).catch(() => {
+        // session may no longer exist
+      });
       error(message);
       console.error(origError);
     },
@@ -81,7 +81,7 @@ export default function WrappedTerminal(props: Props) {
   return (
     <Terminal
       onReady={state.onReady}
-      onUnmount={() => { state.session = null }}
+      onUnmount={() => { state.session = null }} // 🚧 not hooked up
       {...props}
     />
   );

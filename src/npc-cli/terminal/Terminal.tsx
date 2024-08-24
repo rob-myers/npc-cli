@@ -1,68 +1,68 @@
-import React from "react";
-import { css } from "@emotion/css";
-import { Terminal as XTermTerminal } from "xterm";
-import loadable from "@loadable/component";
-import useMeasure from "react-use-measure";
-import { FitAddon } from "xterm-addon-fit";
+import React from 'react';
+import { css } from '@emotion/css';
+import useMeasure from 'react-use-measure';
+import debounce from 'debounce';
 
-// 🔔 debugging "Cannot read properties of undefined" onRequestRedraw
-// import { WebglAddon } from "xterm-addon-webgl";
-import { WebglAddon } from "@xterm/addon-webgl";
+import { isTouchDevice } from '../service/dom';
+import type { Session } from "../sh/session.store";
+import { ansi } from '../sh/const';
+import { formatMessage } from '../sh/util';
 
-import { ttyXtermClass } from "../sh/tty.xterm";
-import { ansi } from "../sh/const";
-import { isTouchDevice } from "../service/dom";
+import useStateRef from '../hooks/use-state-ref';
+import useUpdate from '../hooks/use-update';
+import useSession, { ProcessStatus } from '../sh/session.store';
+import TouchHelperUi from './TouchHelperUi';
+import { TerminalSession, State as TerminalSessionState } from './TerminalSession';
 
-import { formatMessage, stripAnsi } from "../sh/util";
-import useSession, { ProcessStatus, Session } from "../sh/session.store";
-import { scrollback } from "../sh/io";
+export default function Terminal2(props: Props) {
 
-import useStateRef from "../hooks/use-state-ref";
-import type ActualTouchHelperUi from "./TouchHelperUi";
-import useUpdate from "../hooks/use-update";
-import { LinkProvider } from "./xterm-link-provider";
-import debounce from "debounce";
-
-export default function Terminal(props: Props) {
-  const update = useUpdate();
-
-  // 🔔 Saw cursor preservation fail at debounce 20
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
   const state = useStateRef(() => ({
+    /**
+     * Have we initiated the profile?
+     * Don't want to re-run on hmr.
+     */
+    booted: false,
     bounds,
-    container: {} as HTMLDivElement,
-    inputBeforePause: undefined as string | undefined,
-    fitAddon: new FitAddon(),
+    fitDebounced: debounce(() => { state.ts.fitAddon.fit(); }, 300),
     focusedBeforePause: false,
-    everDisabled: false,
+    inputBeforePause: undefined as string | undefined,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
-    status: 'init' as 'init' | 'made-session' | 'running-profile' | 'ready',
-    session: {} as Session,
+    ts: {} as TerminalSessionState,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
-    webglAddon: new WebglAddon(),
-    xterm: {} as ttyXtermClass,
 
-    cleanup: () => {},
-    fitDebounced: debounce(() => { state.fitAddon.fit(); }, 300),
+    onCreateSession() {
+      state.booted = false;
+      update();
+    },
     onFocus() {
       if (state.inputOnFocus) {
-        state.xterm.setInput(state.inputOnFocus.input);
-        state.xterm.setCursor(state.inputOnFocus.cursor);
+        state.ts.xterm.setInput(state.inputOnFocus.input);
+        state.ts.xterm.setCursor(state.inputOnFocus.cursor);
         state.inputOnFocus = undefined;
       }
+    },
+    pauseRunningProcesses() {
+      Object.values(state.ts.session.process ?? {})
+        .filter((p) => p.status === ProcessStatus.Running)
+        .forEach((p) => {
+          p.onSuspends = p.onSuspends.filter((onSuspend) => onSuspend());
+          p.status = ProcessStatus.Suspended;
+          state.pausedPids[p.key] = true;
+        });
     },
     async resize() {
       if (state.isTouchDevice) {
         state.fitDebounced();
       } else {
         // Hide input to prevent issues when screen gets too small
-        const input = state.xterm.getInput();
-        const cursor = state.xterm.getCursor();
-        if (input && state.xterm.isPromptReady()) {
-          state.xterm.clearInput();
+        const input = state.ts.xterm.getInput();
+        const cursor = state.ts.xterm.getCursor();
+        if (input && state.ts.xterm.isPromptReady()) {
+          state.ts.xterm.clearInput();
           state.inputOnFocus = { input, cursor };
         }
         // setTimeout(() => state.fitAddon.fit());
@@ -71,70 +71,15 @@ export default function Terminal(props: Props) {
     },
     restoreInput() {
       if (state.inputBeforePause) {
-        state.xterm.clearInput();
-        state.xterm.setInput(state.inputBeforePause);
+        state.ts.xterm.clearInput();
+        state.ts.xterm.setInput(state.inputBeforePause);
         state.inputBeforePause = undefined;
       } else {
-        state.xterm.showPendingInputImmediately();
+        state.ts.xterm.showPendingInputImmediately();
       }
     },
-  }));
-
-  // 🔔 before "create session" avoids dup initial `pausedLine`
-  React.useEffect(() => {// Handle session pause/resume
-    if (state.status === 'init') {
-      return;
-    }
-
-    if (props.disabled) {// Pause
-      state.everDisabled = true;
-      state.focusedBeforePause = document.activeElement === state.xterm.xterm.textarea;
-
-      if (state.xterm.isPromptReady()) {
-        state.inputBeforePause = state.xterm.getInput();
-        state.xterm.clearInput();
-      }
-
-      useSession.api.writeMsgCleanly(
-        props.sessionKey, formatMessage(pausedLine, "info"), { prompt: false },
-      );
-
-      // Pause running processes
-      Object.values(state.session.process ?? {})
-        .filter((p) => p.status === ProcessStatus.Running)
-        .forEach((p) => {
-          p.onSuspends = p.onSuspends.filter((onSuspend) => onSuspend());
-          p.status = ProcessStatus.Suspended;
-          state.pausedPids[p.key] = true;
-        });
-      
-      // Can use terminal whilst "paused" (previously running processes suspended)
-      state.typedWhilstPaused.value = false;
-      state.typedWhilstPaused.onDataSub = state.xterm.xterm.onData(() => {
-        state.typedWhilstPaused.value = true;
-        state.restoreInput();
-      });
-    }
-
-    // if (!props.disabled && state.everDisabled) {// Resume
-    if (!props.disabled) {// Resume
-      state.focusedBeforePause && state.xterm.xterm.focus();
-
-      // Remove `pausedLine` unless used terminal whilst paused
-      state.typedWhilstPaused.onDataSub.dispose();
-      if (state.typedWhilstPaused.value === false) {
-        state.xterm.xterm.write(`\x1b[F\x1b[2K`);
-      } else {
-        useSession.api.writeMsgCleanly(
-          props.sessionKey, formatMessage(resumedLine, "info"),
-        );
-      }
-      
-      state.restoreInput();
-
-      // Resume processes we suspended
-      const processes = Object.values(state.session?.process ?? {});
-      processes
+    resumeRunningProcesses() {
+      Object.values(state.ts.session?.process ?? {})
         .filter((p) => state.pausedPids[p.key])
         .forEach((p) => {
           if (p.status === ProcessStatus.Suspended) {
@@ -143,153 +88,127 @@ export default function Terminal(props: Props) {
           }
           delete state.pausedPids[p.key];
         });
-    }
-  }, [props.disabled, state.status !== 'init']);
+    },
+  }));
 
-  React.useEffect(() => {// Create session
-    if (state.status === 'init') {
-      state.session = useSession.api.createSession(props.sessionKey, props.env);
+  React.useEffect(() => {// Pause/resume
+    if (props.disabled && state.ts.session) {
+      const { xterm } = state.ts;
+      state.focusedBeforePause = document.activeElement === xterm.xterm.textarea;
 
-      const xterm = new XTermTerminal({
-        allowProposedApi: true, // Needed for WebLinksAddon
-        fontSize: 16,
-        cursorBlink: true,
-        // rendererType: "canvas",
-        // mobile: can select single word via long press
-        rightClickSelectsWord: true,
-        theme: {
-          background: "black",
-          foreground: "#41FF00",
-        },
-        convertEol: false,
-        scrollback: scrollback,
-        rows: 50,
-      });
+      if (xterm.isPromptReady()) {
+        state.inputBeforePause = xterm.getInput();
+        xterm.clearInput();
+      }
 
-      xterm.registerLinkProvider(
-        new LinkProvider(xterm, /(\[ [^\]]+ \])/gi, async function callback(
-          _event,
-          linkText,
-          { lineText, linkStartIndex, lineNumber }
-        ) {
-          // console.log('clicked link', {
-          //   sessionKey: props.sessionKey,
-          //   linkText,
-          //   lineText,
-          //   linkStartIndex,
-          //   lineNumber,
-          // });
-          useSession.api.onTtyLink({
-            sessionKey: props.sessionKey,
-            lineText: stripAnsi(lineText),
-            // Omit square brackets and spacing:
-            linkText: stripAnsi(linkText).slice(2, -2),
-            linkStartIndex,
-            lineNumber,
-          });
-        })
+      useSession.api.writeMsgCleanly(
+        props.sessionKey,
+        formatMessage(state.booted ? pausedLine : initiallyPausedLine, "info"), { prompt: false },
       );
 
-      state.xterm = new ttyXtermClass(xterm, {
-        key: state.session.key,
-        io: state.session.ttyIo,
-        rememberLastValue(msg) {
-          state.session.var._ = msg;
-        },
-      });
-      // state.xterm.initialise();
+      state.pauseRunningProcesses();
 
-      const onKeyDisposable = xterm.onKey((e) => {
-        props.onKey?.(e.domEvent);
-      });
-      
-      xterm.loadAddon(state.fitAddon = new FitAddon());
-      xterm.loadAddon(state.webglAddon = new WebglAddon());
-      state.webglAddon.onContextLoss(() => {
-        state.webglAddon.dispose(); // 🚧 WIP
-      });
-      xterm.open(state.container);
-      
-      state.resize();
-      xterm.textarea?.addEventListener("focus", state.onFocus);
+      // 🚧 tidy
+      // Can use terminal whilst "paused" (previously running processes suspended)
+      if (state.booted) {
+        state.typedWhilstPaused.value = false;
+        state.typedWhilstPaused.onDataSub = xterm.xterm.onData(() => {
+          state.typedWhilstPaused.value = true;
+          state.restoreInput();
+        });
+      }
 
-      state.cleanup = () => {
-        onKeyDisposable.dispose();
-        xterm.dispose();
+      return () => {
+
+        state.focusedBeforePause && xterm.xterm.focus();
+
+        // 🚧 tidy
+        // Remove `pausedLine` unless used terminal whilst paused
+        state.typedWhilstPaused.onDataSub.dispose();
+        if (state.typedWhilstPaused.value === false) {
+          xterm.xterm.write(`\x1b[F\x1b[2K`);
+        } else {
+          useSession.api.writeMsgCleanly(
+            props.sessionKey, formatMessage(resumedLine, "info"),
+          );
+        }
+        
+        state.restoreInput();
+
+        state.resumeRunningProcesses();
+
       };
-
-      state.session.ttyShell.xterm = state.xterm;
-      state.status = 'made-session';
-      update();
-      return;
     }
+  }, [props.disabled, state.ts.session])
 
-    if (state.status === 'made-session' && !props.disabled) {
-      state.xterm.initialise();
-      state.session.ttyShell.initialise(state.xterm).then(async () => {
-        await props.onReady?.(state.session);
-        state.status = 'ready';
-        update();
-        // 🚧 can ctrl-c while paused
-        await state.session.ttyShell.runProfile();
-      });
-
-      state.status = 'running-profile';
+  React.useEffect(() => {// Bind external events
+    if (state.ts.session) {
+      state.resize();
+      const { xterm } = state.ts.xterm;
+      const onKeyDispose = xterm.onKey((e) => props.onKey?.(e.domEvent));
+      xterm.textarea?.addEventListener("focus", state.onFocus);
+      
+      return () => {
+        onKeyDispose.dispose();
+        xterm.textarea?.removeEventListener("focus", state.onFocus);
+      };
     }
-
-  }, [props.disabled, state.status]);
-
-  React.useEffect(() => () => {// Destroy session
-    if (state.status === 'ready') {
-      useSession.api.persistHistory(props.sessionKey);
-      useSession.api.persistHome(props.sessionKey);
-      useSession.api.removeSession(props.sessionKey);
-    }
-    props.onUnmount?.();
-    state.status = 'init';
-    state.session = state.xterm = {} as any;
-    state.cleanup();
-  }, []);
+  }, [state.ts.session]);
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;
-    state.status !== 'init' && state.resize();
+    state.ts.session && state.resize();
   }, [bounds]);
+
+  React.useEffect(() => {// Boot profile
+    if (state.ts.session && !props.disabled && !state.booted) {
+      state.booted = true;
+
+      const { xterm, session } = state.ts;
+      xterm.initialise();
+      session.ttyShell.initialise(xterm).then(async () => {
+        await props.onReady?.(session);
+        update();
+        // 🚧 can ctrl-c while paused
+        await session.ttyShell.runProfile();
+      });      
+    }
+  }, [state.ts.session, props.disabled]);
+
+  const update = useUpdate();
 
   return (
     <div className={rootCss} ref={rootRef}>
-      <div
-        ref={(el) => el && (state.container = el)}
-        className="xterm-container scrollable"
-        onKeyDown={stopKeysPropagating}
+      <TerminalSession
+        ref={ts => ts && (state.ts = ts)}
+        sessionKey={props.sessionKey}
+        env={props.env}
+        onCreateSession={state.onCreateSession}
       />
-
-      {state.status === 'ready' && (
-        <TouchHelperUi session={state.session} disabled={props.disabled} />
+      {state.ts.session && (
+        <TouchHelperUi session={state.ts.session} disabled={props.disabled} />
       )}
     </div>
   );
 }
 
 export interface Props {
+  sessionKey: string;
   disabled?: boolean;
   /** Can initialize variables */
   env: Partial<Session["var"]>;
   onKey?(e: KeyboardEvent): void;
   onReady?(session: Session): void | Promise<void>;
   onUnmount?(): void;
-  sessionKey: string;
 }
 
 const rootCss = css`
-  /* background: purple; */
   height: 100%;
   padding: 4px;
 
   .xterm-container {
     height: inherit;
     background: black;
-    /* background: yellow; */
 
     > div {
       width: 100%;
@@ -308,15 +227,7 @@ const rootCss = css`
   }
 `;
 
-const TouchHelperUi = loadable(() => import("./TouchHelperUi"), {
-  ssr: false,
-}) as typeof ActualTouchHelperUi;
-
-function stopKeysPropagating(e: React.KeyboardEvent) {
-  e.stopPropagation();
-}
-
+const initiallyPausedLine = `${ansi.White}initially paused...`;
 const pausedLine = `${ansi.White}paused processes`;
-
 /** Only used when we type whilst paused */
 const resumedLine = `${ansi.White}resumed processes`;
