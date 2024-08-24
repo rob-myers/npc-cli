@@ -16,29 +16,24 @@ import { LinkProvider } from './xterm-link-provider';
  * We use a null-rendering-component to isolate HMR,
  * i.e. we'd prefer not to have to destroy session.
  */
-export const TerminalSession = React.forwardRef<State, Props>(function TerminalSession({
-  sessionKey,
-  env,
-  container,
-  onCreateSession,
-}: Props, ref) {
+export const TerminalSession = React.forwardRef<State, Props>(function TerminalSession(props: Props, ref) {
 
   const state = useStateRef((): State => ({
-    booted: false,
     fitAddon: new FitAddon(),
-    ready: false,
     // 🔔 `undefined` for change detection
     session: undefined as any as Session,
     webglAddon: new WebglAddon(),
     xterm: null as any as ttyXtermClass,
   }));
+
+  React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
   
   React.useEffect(() => {
-    if (container === null) {
+    if (props.container === null) {
       return;
     }
 
-    state.session = useSession.api.createSession(sessionKey, env);
+    state.session = useSession.api.createSession(props.sessionKey, props.env);
   
     const xterm = new XTermTerminal({
       allowProposedApi: true, // Needed for WebLinksAddon
@@ -70,7 +65,7 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
         //   lineNumber,
         // });
         useSession.api.onTtyLink({
-          sessionKey: sessionKey,
+          sessionKey: props.sessionKey,
           lineText: stripAnsi(lineText),
           // Omit square brackets and spacing:
           linkText: stripAnsi(linkText).slice(2, -2),
@@ -96,25 +91,21 @@ export const TerminalSession = React.forwardRef<State, Props>(function TerminalS
 
     state.session.ttyShell.xterm = state.xterm;
 
-    xterm.open(container);
-    state.ready = true;
-    state.booted = false;
+    xterm.open(props.container);
 
-    onCreateSession();
+    props.onCreateSession();
 
     return () => {
-      useSession.api.persistHistory(sessionKey);
-      useSession.api.persistHome(sessionKey);
-      useSession.api.removeSession(sessionKey);
+      useSession.api.persistHistory(props.sessionKey);
+      useSession.api.persistHome(props.sessionKey);
+      useSession.api.removeSession(props.sessionKey);
 
       // props.onUnmount?.();
       state.xterm.dispose();
       state.session = state.xterm = null as any;
-      state.ready = false;
+      // state.ready = false;
     };
-  }, [container]);
-
-  React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
+  }, [props.container]);
 
   return null;
 });
@@ -127,14 +118,7 @@ interface Props {
 }
 
 export interface State {
-  /**
-   * Have we initiated the profile?
-   * We'll prevent HMR from re-running this.
-   */
-  booted: boolean;
   fitAddon: FitAddon;
-  /** Is `session` and `xterm` defined? */
-  ready: boolean;
   session: Session;
   webglAddon: WebglAddon;
   xterm: ttyXtermClass;

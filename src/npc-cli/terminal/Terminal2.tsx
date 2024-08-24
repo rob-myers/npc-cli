@@ -19,6 +19,11 @@ export default function Terminal2(props: Props) {
   const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });
 
   const state = useStateRef(() => ({
+    /**
+     * Have we initiated the profile?
+     * We'll prevent HMR from re-running this.
+     */
+    booted: false,
     bounds,
     container: null as any as HTMLDivElement,
     fitDebounced: debounce(() => { state.ts.fitAddon.fit(); }, 300),
@@ -27,7 +32,9 @@ export default function Terminal2(props: Props) {
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
-    ts: { ready: false } as TerminalSessionState,
+    /** Is session and xterm ready? */
+    ready: false,
+    ts: {} as TerminalSessionState,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
     containerRef(el: null | HTMLDivElement) {
@@ -35,6 +42,11 @@ export default function Terminal2(props: Props) {
         state.container = el;
         update();
       }
+    },
+    onCreateSession() {
+      state.ready = true;
+      state.booted = false;
+      update();
     },
     onFocus() {
       if (state.inputOnFocus) {
@@ -89,9 +101,8 @@ export default function Terminal2(props: Props) {
     },
   }));
 
-  // 🚧 pause/resume
-  React.useEffect(() => {
-    if (props.disabled && state.ts.ready) {
+  React.useEffect(() => {// Pause/resume
+    if (props.disabled && state.ready) {
       const { xterm } = state.ts;
       state.focusedBeforePause = document.activeElement === xterm.xterm.textarea;
 
@@ -102,14 +113,14 @@ export default function Terminal2(props: Props) {
 
       useSession.api.writeMsgCleanly(
         props.sessionKey,
-        formatMessage(state.ts.booted ? pausedLine : initiallyPausedLine, "info"), { prompt: false },
+        formatMessage(state.booted ? pausedLine : initiallyPausedLine, "info"), { prompt: false },
       );
 
       state.pauseRunningProcesses();
 
       // 🚧 tidy
       // Can use terminal whilst "paused" (previously running processes suspended)
-      if (state.ts.booted) {
+      if (state.booted) {
         state.typedWhilstPaused.value = false;
         state.typedWhilstPaused.onDataSub = xterm.xterm.onData(() => {
           state.typedWhilstPaused.value = true;
@@ -141,7 +152,7 @@ export default function Terminal2(props: Props) {
   }, [props.disabled, state.ts.session])
 
   React.useEffect(() => {// Bind external events
-    if (state.ts.ready) {
+    if (state.ready) {
       state.resize();
       const { xterm } = state.ts.xterm;
       const onKeyDispose = xterm.onKey((e) => props.onKey?.(e.domEvent));
@@ -156,12 +167,12 @@ export default function Terminal2(props: Props) {
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;
-    state.ts.ready && state.resize();
+    state.ready && state.resize();
   }, [bounds]);
 
   React.useEffect(() => {// Boot profile
-    if (state.ts.ready && !props.disabled && !state.ts.booted) {
-      state.ts.booted = true;
+    if (state.ready && !props.disabled && !state.booted) {
+      state.booted = true;
 
       const { xterm, session } = state.ts;
       xterm.initialise();
@@ -183,7 +194,7 @@ export default function Terminal2(props: Props) {
       sessionKey={props.sessionKey}
       env={props.env}
       container={state.container}
-      onCreateSession={update}
+      onCreateSession={state.onCreateSession}
     />
 
     <div className={rootCss} ref={rootRef}>
@@ -193,7 +204,7 @@ export default function Terminal2(props: Props) {
         onKeyDown={stopKeysPropagating}
       />
 
-      {state.ts.ready && (
+      {state.ready && (
         <TouchHelperUi session={state.ts.session} disabled={props.disabled} />
       )}
     </div>
@@ -244,5 +255,3 @@ const initiallyPausedLine = `${ansi.White}initially paused...`;
 const pausedLine = `${ansi.White}paused processes`;
 /** Only used when we type whilst paused */
 const resumedLine = `${ansi.White}resumed processes`;
-
-1;
