@@ -11,25 +11,9 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 npc move strategy dictates different navQuery
-  - `anywhere`: no restriction (except sealed)
-  - `adjacent`: can only nav to adjacent rooms
-    - 🚧 track npc current room
-  - `accessible`:
-    - block non-auto closed doors (including locked)
-    - block locked auto doors
-- ✅ svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
-  - we convert `meta.switch` into a number during parse
-- support non-door sensor i.e. decor circle/poly
-- support click switch to open door, instead of click door
-- mobile has difficulty pressing switches
-  - try provide "echo circle" for touch devices
-
-- ✅ can ctrl-c profile while tty paused (not init)
-- ✅ fix: do not unpause on ctrl-c while paused
-  - this means we cannot start initially paused via enter
-
-- 🚧 try merge TtyWithEtc into Tty
+- ✅ can use terminal whilst paused
+  - ✅ can start typing
+  - ✅ can ctrl-c out of running process
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
@@ -54,6 +38,17 @@
     - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - `nav-changed` event for code supporting level-editing
+
+- 🚧 npc move strategy dictates different navQuery
+  - `anywhere`: no restriction (except sealed)
+  - `adjacent`: can only nav to adjacent rooms
+  - `accessible`:
+    - block non-auto closed doors (including locked)
+    - block locked auto doors
+- support non-door sensor i.e. decor circle/poly
+- support click switch to open door, instead of click door
+- mobile has difficulty pressing switches
+  - try provide "echo circle" for touch devices
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
@@ -1989,3 +1984,13 @@
   - ✅ can enter/esc while init paused
 
 - ✅ fix hmr onchange tty.shell while paused (init or not)
+
+- ✅ svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
+  - we convert `meta.switch` into a number during parse
+
+- ✅ can ctrl-c profile while tty paused (not init)
+- ✅ fix: do not unpause on ctrl-c while paused
+  - this means we cannot start initially paused via enter
+
+- ❌ try merge TtyWithEtc into Tty
+- ✅ TtyWithEtc -> TtyWithFunctions simplify forwards props.functionFiles
