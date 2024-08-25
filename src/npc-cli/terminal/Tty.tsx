@@ -3,6 +3,7 @@ import { css } from '@emotion/css';
 import useMeasure from 'react-use-measure';
 import debounce from 'debounce';
 
+import { error, keys } from '../service/generic';
 import { isTouchDevice } from '../service/dom';
 import type { Session } from "../sh/session.store";
 import { ansi } from '../sh/const';
@@ -31,6 +32,7 @@ export default function Tty(props: Props) {
     bounds,
     fitDebounced: debounce(() => { state.base.fitAddon.fit(); }, 300),
     focusedBeforePause: false,
+    functionFiles: {} as Props['functionFiles'],
     inputBeforePause: undefined as string | undefined,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
@@ -92,7 +94,33 @@ export default function Tty(props: Props) {
           delete state.pausedPids[p.key];
         });
     },
+    async sourceFuncs() {
+      const session = state.base.session;
+      Object.assign(session.etc, state.functionFiles);
+
+      await Promise.all(keys(props.functionFiles).map(filename =>
+        session.ttyShell.sourceEtcFile(filename).catch(e => {
+          if (typeof e?.$type === 'string') {// mvdan.cc/sh/v3/syntax.ParseError
+            const fileContents = props.functionFiles[filename];
+            const [line, column] = [e.Pos.Line(), e.Pos.Col()];
+            const errorMsg = `${e.Error()}:\n${fileContents.split('\n')[line - 1]}` ;
+            state.writeError(session.key, `/etc/${filename}: ${e.$type}`, errorMsg);
+          } else {
+            state.writeError(session.key, `/etc/${filename}: failed to run`, e)
+          }
+        })
+      ));
+    },
+    writeError(sessionKey: string, message: string, origError: any) {
+      useSession.api.writeMsgCleanly(sessionKey,
+        `${message} (see console)`, { level: 'error' },
+      ).catch(() => { /** session may no longer exist */ });
+      error(message);
+      console.error(origError);
+    },
   }));
+
+  state.functionFiles = props.functionFiles;
 
   React.useEffect(() => {// Pause/resume
     if (props.disabled && state.base.session) {
@@ -106,12 +134,12 @@ export default function Tty(props: Props) {
 
       if (state.booted) {
         useSession.api.writeMsgCleanly(
-          props.sessionKey, formatMessage(pausedLine, "info"), { prompt: false },
+          props.sessionKey, formatMessage(line.paused, "info"), { prompt: false },
         );
       } else {
         xterm.clearScreen();
         useSession.api.writeMsgCleanly(
-          props.sessionKey, formatMessage(neverUnpausedLine, "info"), { prompt: false },
+          props.sessionKey, formatMessage(line.neverUnpaused, "info"), { prompt: false },
         );
       }
 
@@ -139,7 +167,7 @@ export default function Tty(props: Props) {
             xterm.xterm.write(`\x1b[F\x1b[2K`);
           } else {
             useSession.api.writeMsgCleanly(
-              props.sessionKey, formatMessage(resumedLine, "info"),
+              props.sessionKey, formatMessage(line.resumed, "info"),
             );
           }
           
@@ -171,15 +199,26 @@ export default function Tty(props: Props) {
     state.base.session && state.resize();
   }, [bounds]);
 
+  React.useEffect(() => {// sync shell functions
+    if (state.base.session && state.booted) {
+      state.sourceFuncs();
+    }
+  }, [state.base.session, ...Object.values(props.functionFiles)]);
+
+  React.useEffect(() => {// sync ~/PROFILE
+    if (state.base.session) {
+      state.base.session.var.PROFILE = props.env.PROFILE;
+    }
+  }, [state.base.session, props.env.PROFILE]);
+
   React.useEffect(() => {// Boot profile
     if (state.base.session && !props.disabled && !state.booted) {
-      state.booted = true;
-
       const { xterm, session } = state.base;
+
+      state.booted = true;
       xterm.initialise();
       session.ttyShell.initialise(xterm).then(async () => {
-        // source files etc/*
-        await props.onBeforeProfile?.(session);
+        await state.sourceFuncs();
         update();
         await session.ttyShell.runProfile();
       });      
@@ -208,9 +247,9 @@ export interface Props {
   disabled?: boolean;
   /** Can initialize variables */
   env: Partial<Session["var"]>;
+  functionFiles: Record<string, string>;
   onKey?(e: KeyboardEvent): void;
-  onBeforeProfile?(session: Session): void | Promise<void>;
-  onUnmount?(): void;
+  // onUnmount?(): void;
 }
 
 const rootCss = css`
@@ -238,7 +277,10 @@ const rootCss = css`
   }
 `;
 
-const neverUnpausedLine = `enable tabs to start`;
-const pausedLine = `${ansi.White}paused processes`;
-/** Only used when we type whilst paused */
-const resumedLine = `${ansi.White}resumed processes`;
+const line = {
+  /** Only used when starts paused */
+  neverUnpaused: `enable tabs to start`,
+  paused: `${ansi.White}paused processes`,
+  /** Only used when we type whilst paused */
+  resumed: `${ansi.White}resumed processes`,
+};
