@@ -26,8 +26,10 @@
   - try provide "echo circle" for touch devices
 
 - ✅ can ctrl-c profile while tty paused (not init)
+- ✅ fix: do not unpause on ctrl-c while paused
+  - this means we cannot start initially paused via enter
 
-- try merge TtyWtihEtc into Tty
+- 🚧 try merge TtyWithEtc into Tty
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls

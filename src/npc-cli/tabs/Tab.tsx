@@ -47,13 +47,7 @@ export function Tab({ def, api, state: tabState }: TabProps) {
           if (api.enabled === true) {
             e.key === 'Escape' && api.toggleEnabled(false);
           }
-          
-          if (api.enabled === false) {
-            // 🔔 ctrl-c while paused also resumes
-            if (e.key === 'Enter' || e.ctrlKey && (e.key === "c" || e.key === "C")) {
-              api.toggleEnabled(true);
-            }
-          }
+          // 🔔 enable on 'Enter' breaks paused usage of terminal
         }}
       />
     );

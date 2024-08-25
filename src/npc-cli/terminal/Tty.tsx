@@ -111,7 +111,7 @@ export default function Tty(props: Props) {
       } else {
         xterm.clearScreen();
         useSession.api.writeMsgCleanly(
-          props.sessionKey, formatMessage(initiallyPausedLine, "info"), { prompt: false },
+          props.sessionKey, formatMessage(neverUnpausedLine, "info"), { prompt: false },
         );
       }
 
@@ -238,7 +238,7 @@ const rootCss = css`
   }
 `;
 
-const initiallyPausedLine = `enter to start`;
+const neverUnpausedLine = `enable tabs to start`;
 const pausedLine = `${ansi.White}paused processes`;
 /** Only used when we type whilst paused */
 const resumedLine = `${ansi.White}resumed processes`;
