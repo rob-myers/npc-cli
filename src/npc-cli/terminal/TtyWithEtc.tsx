@@ -81,7 +81,7 @@ export default function TtyWithEtc(props: Props) {
 
   return (
     <Tty
-      onReady={state.onReady}
+      onBeforeProfile={state.onReady}
       // onUnmount={() => { state.session = null }} // 🚧 not hooked up
       {...props}
     />

@@ -143,23 +143,25 @@ export class ttyShellClass implements Device {
    * This explicit approach can be avoided via `source`.
    */
   async runProfile() {
-    const profile =
-      useSession.api.getVar({ pid: 0, sessionKey: this.sessionKey } as Sh.BaseMeta, "PROFILE") ||
-      "";
-    const { ttyShell } = useSession.api.getSession(this.sessionKey);
+    const profile = useSession.api.getVar(
+      { pid: 0, sessionKey: this.sessionKey } as Sh.BaseMeta,
+      "PROFILE",
+    ) || "";
+
+    const session = useSession.api.getSession(this.sessionKey);
 
     try {
-      ttyShell.xterm.historyEnabled = false;
+      session.ttyShell.xterm.historyEnabled = false;
       useSession.api.writeMsg(
         this.sessionKey,
         `${ansi.Blue}${this.sessionKey}${ansi.White} running ${ansi.Blue}/home/PROFILE${ansi.Reset}`,
         "info"
       );
-      await ttyShell.xterm.pasteLines(profile.split("\n"), true);
+      await session.ttyShell.xterm.pasteLines(profile.split("\n"), true);
       this.prompt("$");
     } catch {
     } finally {
-      ttyShell.xterm.historyEnabled = true;
+      session.ttyShell.xterm.historyEnabled = true;
     }
   }
 
@@ -334,3 +336,5 @@ export class ttyShellClass implements Device {
   }
   //#endregion
 }
+
+0;

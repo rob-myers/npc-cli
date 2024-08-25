@@ -170,9 +170,9 @@ export default function Tty(props: Props) {
       const { xterm, session } = state.base;
       xterm.initialise();
       session.ttyShell.initialise(xterm).then(async () => {
-        await props.onReady?.(session);
+        // source files etc/*
+        await props.onBeforeProfile?.(session);
         update();
-        // 🚧 can ctrl-c while paused
         await session.ttyShell.runProfile();
       });      
     }
@@ -201,7 +201,7 @@ export interface Props {
   /** Can initialize variables */
   env: Partial<Session["var"]>;
   onKey?(e: KeyboardEvent): void;
-  onReady?(session: Session): void | Promise<void>;
+  onBeforeProfile?(session: Session): void | Promise<void>;
   onUnmount?(): void;
 }
 
