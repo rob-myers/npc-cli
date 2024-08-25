@@ -39,6 +39,28 @@ export default function Tty(props: Props) {
     pausedPids: {} as Record<number, true>,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
+    handleTypingWhilePaused() {
+      const { xterm } = state.base.xterm;
+      state.typedWhilstPaused.value = false;
+      state.typedWhilstPaused.onDataSub = xterm.onData(() => {
+        state.typedWhilstPaused.value = true;
+        state.restoreInput();
+      });
+    },
+    indicateResumed() {
+      const { xterm } = state.base.xterm;
+      state.typedWhilstPaused.onDataSub.dispose();
+
+      // Remove `pausedLine` unless used terminal whilst paused
+      if (state.typedWhilstPaused.value === false) {
+        xterm.write(`\x1b[F\x1b[2K`);
+      } else {
+        useSession.api.writeMsgCleanly(props.sessionKey,
+          formatMessage(line.resumed, "info"),
+        );
+      }
+      state.restoreInput();
+    },
     onCreateSession() {
       state.booted = false;
       update();
@@ -70,7 +92,6 @@ export default function Tty(props: Props) {
           state.base.xterm.clearInput();
           state.inputOnFocus = { input, cursor };
         }
-        // setTimeout(() => state.fitAddon.fit());
         state.fitDebounced();
       }
     },
@@ -125,57 +146,36 @@ export default function Tty(props: Props) {
   React.useEffect(() => {// Pause/resume
     if (props.disabled && state.base.session) {
       const { xterm } = state.base;
+
       state.focusedBeforePause = document.activeElement === xterm.xterm.textarea;
 
       if (xterm.isPromptReady()) {
         state.inputBeforePause = xterm.getInput();
         xterm.clearInput();
       }
-
-      if (state.booted) {
-        useSession.api.writeMsgCleanly(
-          props.sessionKey, formatMessage(line.paused, "info"), { prompt: false },
-        );
-      } else {
+      if (!state.booted) {
         xterm.clearScreen();
-        useSession.api.writeMsgCleanly(
-          props.sessionKey, formatMessage(line.neverUnpaused, "info"), { prompt: false },
-        );
       }
+
+      useSession.api.writeMsgCleanly(props.sessionKey,
+        formatMessage(state.booted ? line.paused : line.neverUnpaused, "info"),
+        { prompt: false },
+      );
 
       state.pauseRunningProcesses();
 
-      // 🚧 tidy
-      // Can use terminal whilst "paused" (previously running processes suspended)
-      if (state.booted) {
-        state.typedWhilstPaused.value = false;
-        state.typedWhilstPaused.onDataSub = xterm.xterm.onData(() => {
-          state.typedWhilstPaused.value = true;
-          state.restoreInput();
-        });
+      if (state.booted) {// Can use terminal whilst "paused"
+        state.handleTypingWhilePaused();
       }
 
       return () => {
-
-        state.focusedBeforePause && xterm.xterm.focus();
-
-        if (state.base.session) {
-          // 🚧 tidy
-          // Remove `pausedLine` unless used terminal whilst paused
-          state.typedWhilstPaused.onDataSub.dispose();
-          if (state.typedWhilstPaused.value === false) {
-            xterm.xterm.write(`\x1b[F\x1b[2K`);
-          } else {
-            useSession.api.writeMsgCleanly(
-              props.sessionKey, formatMessage(line.resumed, "info"),
-            );
-          }
-          
-          state.restoreInput();
+        if (state.focusedBeforePause) {
+          xterm.xterm.focus();
         }
-
+        if (state.base.session) {
+          state.indicateResumed();
+        }
         state.resumeRunningProcesses();
-
       };
     }
   }, [props.disabled, state.base.session])
@@ -214,9 +214,9 @@ export default function Tty(props: Props) {
   React.useEffect(() => {// Boot profile
     if (state.base.session && !props.disabled && !state.booted) {
       const { xterm, session } = state.base;
-
       state.booted = true;
       xterm.initialise();
+
       session.ttyShell.initialise(xterm).then(async () => {
         await state.sourceFuncs();
         update();
