@@ -37,8 +37,9 @@
   - ✅ hmr `Terminal` preserves "single line shown"
   - ✅ hmr `TerminalSession` should render `Terminal`
   - ✅ can enter/esc while init paused
-- 🚧 fix hmr onchange tty.shell
-- should be able to ctrl-c profile while tty paused (not init paused)
+
+- ✅ fix hmr onchange tty.shell while paused (init or not)
+- should be able to ctrl-c profile while tty paused (not init)
 - try merge TtyWtihEtc into Tty
 
 - 🚧 optionally permit camera movement while World paused 

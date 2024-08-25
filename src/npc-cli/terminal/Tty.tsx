@@ -104,10 +104,16 @@ export default function Tty(props: Props) {
         xterm.clearInput();
       }
 
-      useSession.api.writeMsgCleanly(
-        props.sessionKey,
-        formatMessage(state.booted ? pausedLine : initiallyPausedLine, "info"), { prompt: false },
-      );
+      if (state.booted) {
+        useSession.api.writeMsgCleanly(
+          props.sessionKey, formatMessage(pausedLine, "info"), { prompt: false },
+        );
+      } else {
+        xterm.clearScreen();
+        useSession.api.writeMsgCleanly(
+          props.sessionKey, formatMessage(initiallyPausedLine, "info"), { prompt: false },
+        );
+      }
 
       state.pauseRunningProcesses();
 
@@ -136,7 +142,7 @@ export default function Tty(props: Props) {
           );
         }
         
-        state.restoreInput();
+        state.base.session && state.restoreInput();
 
         state.resumeRunningProcesses();
 
@@ -230,7 +236,7 @@ const rootCss = css`
   }
 `;
 
-const initiallyPausedLine = `${ansi.White}initially paused...`;
+const initiallyPausedLine = `enter to start`;
 const pausedLine = `${ansi.White}paused processes`;
 /** Only used when we type whilst paused */
 const resumedLine = `${ansi.White}resumed processes`;

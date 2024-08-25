@@ -336,5 +336,3 @@ export class ttyShellClass implements Device {
   }
   //#endregion
 }
-
-0;
