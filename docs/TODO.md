@@ -25,7 +25,8 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- 🚧 should be able to ctrl-c profile while tty paused (not init)
+- ✅ can ctrl-c profile while tty paused (not init)
+
 - try merge TtyWtihEtc into Tty
 
 - 🚧 optionally permit camera movement while World paused 

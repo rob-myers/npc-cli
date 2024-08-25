@@ -44,11 +44,15 @@ export function Tab({ def, api, state: tabState }: TabProps) {
           CACHE_SHORTCUTS: { w: "WORLD_KEY" },
         }}
         onKey={(e) => {
-          if (e.key === "Escape" && api.enabled) {
-            api.toggleEnabled(false);
+          if (api.enabled === true) {
+            e.key === 'Escape' && api.toggleEnabled(false);
           }
-          if (e.key === "Enter" && !api.enabled) {
-            api.toggleEnabled(true);
+          
+          if (api.enabled === false) {
+            // 🔔 ctrl-c while paused also resumes
+            if (e.key === 'Enter' || e.ctrlKey && (e.key === "c" || e.key === "C")) {
+              api.toggleEnabled(true);
+            }
           }
         }}
       />

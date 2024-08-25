@@ -131,18 +131,20 @@ export default function Tty(props: Props) {
 
         state.focusedBeforePause && xterm.xterm.focus();
 
-        // 🚧 tidy
-        // Remove `pausedLine` unless used terminal whilst paused
-        state.typedWhilstPaused.onDataSub.dispose();
-        if (state.typedWhilstPaused.value === false) {
-          xterm.xterm.write(`\x1b[F\x1b[2K`);
-        } else {
-          useSession.api.writeMsgCleanly(
-            props.sessionKey, formatMessage(resumedLine, "info"),
-          );
+        if (state.base.session) {
+          // 🚧 tidy
+          // Remove `pausedLine` unless used terminal whilst paused
+          state.typedWhilstPaused.onDataSub.dispose();
+          if (state.typedWhilstPaused.value === false) {
+            xterm.xterm.write(`\x1b[F\x1b[2K`);
+          } else {
+            useSession.api.writeMsgCleanly(
+              props.sessionKey, formatMessage(resumedLine, "info"),
+            );
+          }
+          
+          state.restoreInput();
         }
-        
-        state.base.session && state.restoreInput();
 
         state.resumeRunningProcesses();
 

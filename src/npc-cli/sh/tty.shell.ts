@@ -92,13 +92,11 @@ export class ttyShellClass implements Device {
           new ProcessError(SigEnum.SIGKILL, 0, this.sessionKey)
         ));
         this.oneTimeReaders.length = 0;
-        if (this.process.status !== ProcessStatus.Running) {
-          this.prompt("$");
-        } else {
-          semanticsService.handleTopLevelProcessError(
-            new ProcessError(SigEnum.SIGKILL, 0, this.sessionKey)
-          );
-        }
+
+        // 🔔 can ctrl-c even when paused
+        semanticsService.handleTopLevelProcessError(
+          new ProcessError(SigEnum.SIGKILL, 0, this.sessionKey)
+        );
         break;
       }
       default:
