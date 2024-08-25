@@ -25,21 +25,7 @@
 - mobile has difficulty pressing switches
   - try provide "echo circle" for touch devices
 
-- ✅ refactor Terminal without pause/resume
-- ✅ refactor Terminal: add pause/resume
-- ✅ on hmr `TerminalSession` unpaused tty should reboot
-  - ✅ reset state.booted e.g. -> state.ts.booted
-- understand error message on restart Tabs with running tty in background
-- 🚧 init paused:
-  - ✅ tty should not run profile
-  - ✅ runs profile on resume
-  - ✅ cannot be ctrl-c'd
-  - ✅ hmr `Terminal` preserves "single line shown"
-  - ✅ hmr `TerminalSession` should render `Terminal`
-  - ✅ can enter/esc while init paused
-
-- ✅ fix hmr onchange tty.shell while paused (init or not)
-- should be able to ctrl-c profile while tty paused (not init)
+- 🚧 should be able to ctrl-c profile while tty paused (not init)
 - try merge TtyWtihEtc into Tty
 
 - 🚧 optionally permit camera movement while World paused 
@@ -1985,3 +1971,18 @@
   - ✅ fix pause then resume while initially sourcing
   - ✅ cannot ctrl-c while initially paused
     - ℹ️ on hmr when paused (after resume) get blank tty, but works if resume tabs
+
+- ✅ refactor Terminal without pause/resume
+- ✅ refactor Terminal: add pause/resume
+- ✅ on hmr `TerminalSession` unpaused tty should reboot
+  - ✅ reset state.booted e.g. -> state.ts.booted
+- understand error message on restart Tabs with running tty in background
+- ✅ init paused:
+  - ✅ tty should not run profile
+  - ✅ runs profile on resume
+  - ✅ cannot be ctrl-c'd
+  - ✅ hmr `Terminal` preserves "single line shown"
+  - ✅ hmr `TerminalSession` should render `Terminal`
+  - ✅ can enter/esc while init paused
+
+- ✅ fix hmr onchange tty.shell while paused (init or not)
