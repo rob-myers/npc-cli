@@ -36,8 +36,10 @@
   - ✅ cannot be ctrl-c'd
   - ✅ hmr `Terminal` preserves "single line shown"
   - ✅ hmr `TerminalSession` should render `Terminal`
-  - while disabled can ctrl-c sourced and profile
-  - should be able to ctrl-c while tty paused
+  - ✅ can enter/esc while init paused
+  - 🚧 while disabled can ctrl-c sourced and profile
+  - 🚧 should be able to ctrl-c while tty paused
+- try merge TtyWtihEtc into Tty
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls

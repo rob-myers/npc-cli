@@ -156,7 +156,7 @@ export default function Tty(props: Props) {
         xterm.textarea?.removeEventListener("focus", state.onFocus);
       };
     }
-  }, [state.base.session]);
+  }, [state.base.session, props.onKey]);
 
   React.useEffect(() => {// Handle resize
     state.bounds = bounds;

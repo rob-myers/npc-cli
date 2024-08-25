@@ -45,7 +45,10 @@ export function Tab({ def, api, state: tabState }: TabProps) {
         }}
         onKey={(e) => {
           if (e.key === "Escape" && api.enabled) {
-            api.toggleEnabled();
+            api.toggleEnabled(false);
+          }
+          if (e.key === "Enter" && !api.enabled) {
+            api.toggleEnabled(true);
           }
         }}
       />

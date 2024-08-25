@@ -28,10 +28,10 @@ export default function Viewer() {
     }, 1000),
     onKeyDown(e) {
       if (e.key === "Escape" && state.tabs.enabled) {
-        state.tabs.toggleEnabled();
+        state.tabs.toggleEnabled(false);
       }
       if (e.key === "Enter" && !state.tabs.enabled) {
-        state.tabs.toggleEnabled();
+        state.tabs.toggleEnabled(true);
       }
     },
   }));
