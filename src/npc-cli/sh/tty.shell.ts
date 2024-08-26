@@ -94,6 +94,7 @@ export class ttyShellClass implements Device {
         this.oneTimeReaders.length = 0;
 
         // 🔔 can ctrl-c even when paused
+        this.prompt('$');
         semanticsService.handleTopLevelProcessError(
           new ProcessError(SigEnum.SIGKILL, 0, this.sessionKey)
         );

@@ -11,9 +11,13 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ can use terminal whilst paused
-  - ✅ can start typing
-  - ✅ can ctrl-c out of running process
+- try this while World in background
+  > w npc.npc.rob.moveTo $( dst/v3 
+
+- ✅ BUG ctrl-c of `echo 'foo\r\n`
+  - wrong prompt shown after ctrl-c
+
+- BUG scrolling back through history of `echo 'foo\r\n\r\n'` loses a newline
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
@@ -1994,3 +1998,7 @@
 
 - ❌ try merge TtyWithEtc into Tty
 - ✅ TtyWithEtc -> TtyWithFunctions simplify forwards props.functionFiles
+
+- ✅ can use terminal whilst paused
+  - ✅ can start typing
+  - ✅ can ctrl-c out of running process
