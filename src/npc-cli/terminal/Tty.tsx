@@ -45,6 +45,13 @@ export default function Tty(props: Props) {
     pausedPids: {} as Record<number, true>,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
+    enterDebugMode() {
+      state.base.setDisabled(false);
+      useSession.api.writeMsgCleanly(props.sessionKey, `debugging whilst paused`, { level: 'info' });
+      setTimeout(() => {// 🚧
+        state.restoreInput();
+      });
+    },
     onCreateSession() {
       state.booted = false;
       update();
@@ -75,6 +82,7 @@ export default function Tty(props: Props) {
         if (input && state.base.xterm.isPromptReady()) {
           state.base.xterm.clearInput();
           state.inputOnFocus = { input, cursor };
+          state.base.xterm.xterm.blur(); // Must blur
         }
         state.fitDebounced();
       }
@@ -144,14 +152,19 @@ export default function Tty(props: Props) {
       // ✅ [ unpause ] or [ debug ]
       // ✅ unpause enables Tabs
       // ✅ cannot type whilst paused (not even ctrl-c)
-      // 🚧 debug link restores input
+      // ✅ debug link restores input
+      // 🚧 show resumed message on resume during debug
       // 🚧 clean
       if (state.booted) {
         useSession.api.writeMsgCleanly(props.sessionKey, line.paused, { prompt: false, level: 'info' });
         const lineText = stripAnsi(line.paused);
         useSession.api.addTtyLineCtxts(props.sessionKey, lineText, [
-          { lineText, linkText: 'unpause', linkStartIndex: lineText.indexOf('[ unpause ]') + 1, callback() { console.log('unpause'); props.setTabsEnabled(true); }  },
-          { lineText, linkText: 'debug', linkStartIndex: lineText.indexOf('[ debug ]') + 1, callback() { console.log('debug') }  },
+          { lineText, linkText: 'unpause', linkStartIndex: lineText.indexOf('[ unpause ]') + 1,
+            callback() { console.log('unpause'); props.setTabsEnabled(true); },
+          },
+          { lineText, linkText: 'debug', linkStartIndex: lineText.indexOf('[ debug ]') + 1,
+            callback() { console.log('debug'); state.enterDebugMode(); },
+          },
         ]);
         state.base.setDisabled(true);
       } else {
@@ -165,12 +178,14 @@ export default function Tty(props: Props) {
           xterm.xterm.focus();
         }
 
-        state.base.setDisabled(false);
         if (state.base.session) {
           useSession.api.removeTtyLineCtxts(props.sessionKey, stripAnsi(line.paused));
-          xterm.xterm.write(`\x1b[F\x1b[2K`); // delete `line.paused`
+          if (xterm.xterm.textarea?.disabled) {
+            xterm.xterm.write(`\x1b[F\x1b[2K`); // delete `line.paused`
+          }
           state.restoreInput();
         }
+        state.base.setDisabled(false);
 
         state.resumeRunningProcesses();
       };

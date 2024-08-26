@@ -19,6 +19,8 @@
 - ✅ BUG scrolling back through history of `echo 'foo\r\n\r\n'` loses a newline
   - happens when scroll back just beyond it
 
+- ✅ Tty: resize-clear-input should also blur xterm
+
 - 🚧 pause tty ui issues
   - ℹ️ on switch tab, terminal pauses, and when come back, unclear whether should just continue
   - ℹ️ on continue using terminal when paused, enter can immediately launch unseen command
