@@ -156,6 +156,47 @@ export class Npc {
     this.changeSkin(this.def.skinKey);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
+  /** @param {THREE.Vector3Like} dst  */
+  async moveTo(dst, debugPath = showLastNavPath) {
+    // await this.cancel(); // 🚧 move to process proxy
+    if (this.agent === null) {
+      return warn(`walkTo: npc ${this.key} has no agent (${JSON.stringify({dst})})`);
+    }
+
+    const closest = this.w.npc.getClosestNavigable(dst, 0.15);
+    if (closest === null) {
+      return;
+    }
+    if (debugPath) {
+      const path = this.w.npc.findPath(this.getPosition(), closest);
+      this.w.debug.setNavPath(path ?? []);
+    }
+    const position = this.getPosition();
+    if (position.distanceTo(closest) < 0.25) {
+      return;
+    }
+
+    this.s.moving = true;
+    this.mixer.timeScale = 1;
+    this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
+    this.agent.requestMoveTarget(closest);
+    this.s.target = this.lastTarget.copy(closest);
+    const nextAct = this.s.run ? 'Run' : 'Walk';
+    if (this.s.act !== nextAct) {
+      this.startAnimation(nextAct);
+    }
+    
+    try {
+      await new Promise((resolve, reject) => {
+        this.s.rejectMove = reject; // permit cancel
+        this.waitUntilStopped().then(resolve).catch(resolve);
+      });
+    } catch (e) {
+      this.stopMoving();
+    } finally {
+      this.s.moving = false;
+    }
+  }
   /** @param {number} deltaMs  */
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
@@ -260,47 +301,6 @@ export class Npc {
     this.agent.requestMoveTarget(position);
 
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
-  }
-  /** @param {THREE.Vector3Like} dst  */
-  async moveTo(dst, debugPath = showLastNavPath) {
-    // await this.cancel(); // 🚧 move to process proxy
-    if (this.agent === null) {
-      return warn(`walkTo: npc ${this.key} has no agent (${JSON.stringify({dst})})`);
-    }
-
-    const closest = this.w.npc.getClosestNavigable(dst, 0.15);
-    if (closest === null) {
-      return;
-    }
-    if (debugPath) {
-      const path = this.w.npc.findPath(this.getPosition(), closest);
-      this.w.debug.setNavPath(path ?? []);
-    }
-    const position = this.getPosition();
-    if (position.distanceTo(closest) < 0.25) {
-      return;
-    }
-
-    this.s.moving = true;
-    this.mixer.timeScale = 1;
-    this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
-    this.agent.requestMoveTarget(closest);
-    this.s.target = this.lastTarget.copy(closest);
-    const nextAct = this.s.run ? 'Run' : 'Walk';
-    if (this.s.act !== nextAct) {
-      this.startAnimation(nextAct);
-    }
-    
-    try {
-      await new Promise((resolve, reject) => {
-        this.s.rejectMove = reject; // permit cancel
-        this.waitUntilStopped().then(resolve).catch(resolve);
-      });
-    } catch (e) {
-      this.stopMoving();
-    } finally {
-      this.s.moving = false;
-    }
   }
   toJSON() {
     return {
