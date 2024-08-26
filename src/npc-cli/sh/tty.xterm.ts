@@ -511,8 +511,8 @@ export class ttyXtermClass {
       col = 0;
     for (let i = 0; i < cursor; ++i) {
       const chr = input.charAt(i);
-      if (col === 0 && (chr === "\r" || chr === "\n")) {
-        // NOOP
+      if (col === 0 && chr === "\n") {
+        row++;
       } else if (chr === "\n") {
         col = 0;
         row++;
