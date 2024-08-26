@@ -221,7 +221,7 @@ export default function Tty(props: Props) {
         await state.sourceFuncs();
         update();
         await session.ttyShell.runProfile();
-      });      
+      });
     }
   }, [state.base.session, props.disabled]);
 
