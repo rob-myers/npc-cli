@@ -359,29 +359,9 @@ const useStore = create<State>()(
           //   api.getSession(opts.sessionKey).ttyLink,
           //   api.getSession(opts.sessionKey).ttyLink[opts.lineText],
           // );
-          api
-            .getSession(opts.sessionKey)
-            .ttyLink[opts.lineText]?.find(
-              (x) => x.linkStartIndex === opts.linkStartIndex && x.linkText === opts.linkText
-            )
-            ?.callback(opts.lineNumber);
-
-          try {
-            // 🔔 HACK: permit toggle link (e.g. on/off) without leaving link first
-            const { xterm } = api.getSession(opts.sessionKey).ttyShell.xterm;
-            const linkifier = (xterm as any)._core.linkifier2;
-            // console.log(linkifier);
-            setTimeout(() => {
-              const position = linkifier._positionFromMouseEvent(
-                linkifier._lastMouseEvent,
-                linkifier._element,
-                linkifier._mouseService!
-              );
-              position && linkifier._askForLink(position, false);
-            });
-          } catch (e) {
-            console.warn("HACK: permit toggle link: failed", e);
-          }
+          api.getSession(opts.sessionKey).ttyLink[opts.lineText]?.find(
+            x => x.linkStartIndex === opts.linkStartIndex && x.linkText === opts.linkText
+          )?.callback(opts.lineNumber);
         },
 
         persistHistory(sessionKey) {
