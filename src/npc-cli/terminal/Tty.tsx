@@ -45,26 +45,6 @@ export default function Tty(props: Props) {
     pausedPids: {} as Record<number, true>,
     typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
-    handleTypingWhilePaused() {
-      const { xterm } = state.base.xterm;
-      state.typedWhilstPaused.value = false;
-      state.typedWhilstPaused.onDataSub = xterm.onData(() => {
-        state.typedWhilstPaused.value = true;
-        state.restoreInput();
-      });
-    },
-    indicateResumed() {
-      const { xterm } = state.base.xterm;
-      state.typedWhilstPaused.onDataSub.dispose();
-
-      // Remove `pausedLine` unless used terminal whilst paused
-      if (state.typedWhilstPaused.value === false) {
-        xterm.write(`\x1b[F\x1b[2K`);
-      } else {
-        useSession.api.writeMsgCleanly(props.sessionKey, line.resumed, { level: 'info' });
-      }
-      state.restoreInput();
-    },
     onCreateSession() {
       state.booted = false;
       update();
@@ -163,7 +143,7 @@ export default function Tty(props: Props) {
 
       // ✅ [ unpause ] or [ debug ]
       // ✅ unpause enables Tabs
-      // 🚧 cannot type whilst paused
+      // ✅ cannot type whilst paused (not even ctrl-c)
       // 🚧 debug link restores input
       // 🚧 clean
       if (state.booted) {
@@ -173,24 +153,25 @@ export default function Tty(props: Props) {
           { lineText, linkText: 'unpause', linkStartIndex: lineText.indexOf('[ unpause ]') + 1, callback() { console.log('unpause'); props.setTabsEnabled(true); }  },
           { lineText, linkText: 'debug', linkStartIndex: lineText.indexOf('[ debug ]') + 1, callback() { console.log('debug') }  },
         ]);
+        state.base.setDisabled(true);
       } else {
         useSession.api.writeMsgCleanly(props.sessionKey, line.neverUnpaused, { prompt: false, level: 'info' });
       }
       
       state.pauseRunningProcesses();
 
-      if (state.booted) {// Can use terminal whilst "paused"
-        state.handleTypingWhilePaused();
-      }
-
       return () => {
         if (state.focusedBeforePause) {
           xterm.xterm.focus();
         }
-        useSession.api.removeTtyLineCtxts(props.sessionKey, stripAnsi(line.paused));
+
+        state.base.setDisabled(false);
         if (state.base.session) {
-          state.indicateResumed();
+          useSession.api.removeTtyLineCtxts(props.sessionKey, stripAnsi(line.paused));
+          xterm.xterm.write(`\x1b[F\x1b[2K`); // delete `line.paused`
+          state.restoreInput();
         }
+
         state.resumeRunningProcesses();
       };
     }

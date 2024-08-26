@@ -314,7 +314,7 @@ export class ttyXtermClass {
   }
 
   private async handleXtermInput(data: string) {
-    if (!this.readyForInput && data !== "\x03") {
+    if (this.readyForInput === false && data !== "\x03") {
       return;
     }
     if (data.length > 1 && data.includes("\r")) {
