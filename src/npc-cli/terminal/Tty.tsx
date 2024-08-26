@@ -289,9 +289,9 @@ const rootCss = css`
 
 const line = {
   /** Only used when starts paused */
-  neverUnpaused: 'enable tabs to start',
+  neverUnpaused: `${ansi.GreyBg}${ansi.Black}${ansi.Bold} paused ${ansi.Reset}${ansi.White} please enable tabs`,
   // paused: 'paused processes',
-  paused: `${ansi.GreyBg}${ansi.Black} paused ${ansi.Reset}${ansi.White} [ ${ansi.BrightGreen}unpause${ansi.White} ] or [ ${ansi.BrightGreen}debug${ansi.White} ]`,
+  paused: `${ansi.GreyBg}${ansi.Black}${ansi.Bold} paused ${ansi.Reset}${ansi.White} [ ${ansi.BrightGreen}unpause${ansi.White} ] or [ ${ansi.BrightGreen}debug${ansi.White} ]`,
   /** Only used when we type whilst paused */
   resumed: 'resumed processes',
 };
