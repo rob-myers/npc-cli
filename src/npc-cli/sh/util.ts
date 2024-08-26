@@ -232,7 +232,7 @@ export function formatLink(linkText: string) {
 
 export function formatMessage(msg: string, level: "info" | "error") {
   return level === "info"
-    ? `ℹ️  ${ansi.Cyan}${msg}${ansi.Reset}`
+    ? `${ansi.Cyan}${msg}${ansi.Reset}`
     : `${ansi.Red}${msg}${ansi.Reset}`;
 }
 
