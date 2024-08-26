@@ -22,11 +22,15 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
     session: undefined as any as Session,
     webglAddon: new WebglAddon(),
     xterm: null as any as ttyXtermClass,
-
-    // 🔔 setTimeout fixes Cannot read properties of undefined (reading 'dimensions')
+    // 🔔 setTimeout fixes "Cannot read properties of undefined (reading 'dimensions')"
     containerRef: (el: null | HTMLDivElement) => el && !state.container &&
       setTimeout(() => (state.container = el, update())
     ),
+    setDisabled(next: boolean) {
+      if (state.xterm.xterm.textarea !== undefined) {
+        state.xterm.xterm.textarea.disabled = next;
+      }
+    },
   }));
 
   React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
@@ -132,6 +136,7 @@ export interface State {
   webglAddon: WebglAddon;
   xterm: ttyXtermClass;
   containerRef(el: null | HTMLDivElement): void;
+  setDisabled(next: boolean): void;
 }
 
 function stopKeysPropagating(e: React.KeyboardEvent) {
