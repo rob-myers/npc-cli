@@ -1,13 +1,16 @@
 import React from "react";
 
 import type { TabState, State as TabsApi } from "./Tabs";
-import { TabDef, getComponent, Terminal } from "./tab-factory";
+import { TabDef, getComponent, Terminal, BaseTabProps } from "./tab-factory";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 
 export function Tab({ def, api, state: tabState }: TabProps) {
   const state = useStateRef(() => ({
     component: null as Awaited<ReturnType<typeof getComponent>> | null,
+    setTabsEnabled(next: boolean) {
+      api.toggleEnabled(next);
+    },
   }));
 
   const update = useUpdate();
@@ -23,11 +26,9 @@ export function Tab({ def, api, state: tabState }: TabProps) {
   if (def.type === "component") {
     return (
       (state.component &&
-        React.createElement(state.component as React.FunctionComponent<any>, {
+        React.createElement(state.component as React.FunctionComponent<BaseTabProps>, {
           disabled: tabState.disabled,
-          setTabsEnabled(next: boolean) {
-            api.toggleEnabled(next);
-          },
+          setTabsEnabled: state.setTabsEnabled,
           ...def.props,
         })) ||
       null
@@ -38,6 +39,8 @@ export function Tab({ def, api, state: tabState }: TabProps) {
     return (
       <Terminal
         disabled={tabState.disabled}
+        setTabsEnabled={state.setTabsEnabled}
+
         sessionKey={def.filepath}
         env={{
           ...def.env,
@@ -47,7 +50,8 @@ export function Tab({ def, api, state: tabState }: TabProps) {
           if (api.enabled === true) {
             e.key === 'Escape' && api.toggleEnabled(false);
           }
-          // 🔔 enable on 'Enter' breaks paused usage of terminal
+          // 🔔 cannot enable Tabs on 'Enter' because we permit
+          // using the terminal whilst !api.enabled (debug mode)
         }}
       />
     );

@@ -15,5 +15,5 @@ const helloWorldCss = css`
 `;
 
 /**
- * @typedef {import("../tabs/tab-factory").BaseComponentProps} Props
+ * @typedef {import("../tabs/tab-factory").BaseTabProps} Props
  */

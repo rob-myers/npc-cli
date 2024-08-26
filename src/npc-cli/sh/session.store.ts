@@ -186,7 +186,10 @@ export interface TtyLinkCtxt {
   lineText: string;
   /** Label text stripped of ansi-codes e.g. `[ foo ]` has link text `foo` */
   linkText: string;
-  /** Where `linkText` occurs in `lineText` */
+  /**
+   * One character before the link text occurs,
+   * or equivalently one character after the leading square bracket.
+   */
   linkStartIndex: number;
   /** Callback associated with link */
   callback: (/** Line we clicked on (possibly wrapped) */ lineNumber: number) => void;

@@ -6,17 +6,23 @@ import debounce from 'debounce';
 import { error, keys } from '../service/generic';
 import { isTouchDevice } from '../service/dom';
 import type { Session } from "../sh/session.store";
-import { ansi } from '../sh/const';
-import { formatMessage } from '../sh/util';
+import { stripAnsi } from '../sh/util';
+import type { BaseTabProps } from '../tabs/tab-factory';
 
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 import useSession, { ProcessStatus } from '../sh/session.store';
 import TouchHelperUi from './TouchHelperUi';
 import { BaseTty, State as BaseTtyState } from './BaseTty';
+import { ansi } from '../sh/const';
 
 /**
- * Pausable and Bootable `BaseTty`.
+ * A `BaseTty` which can be:
+ * - paused/resumed
+ * - booted with a shell profile
+ *  - stored at ~/PROFILE
+ * - sourced with externally provided shell functions
+ *  - stored at /etc/*
  */
 export default function Tty(props: Props) {
 
@@ -26,7 +32,7 @@ export default function Tty(props: Props) {
     base: {} as BaseTtyState,
     /**
      * Have we initiated the profile?
-     * Don't want to re-run on hmr.
+     * We don't want to re-run it on hmr.
      */
     booted: false,
     bounds,
@@ -55,9 +61,7 @@ export default function Tty(props: Props) {
       if (state.typedWhilstPaused.value === false) {
         xterm.write(`\x1b[F\x1b[2K`);
       } else {
-        useSession.api.writeMsgCleanly(props.sessionKey,
-          formatMessage(line.resumed, "info"),
-        );
+        useSession.api.writeMsgCleanly(props.sessionKey, line.resumed, { level: 'info' });
       }
       state.restoreInput();
     },
@@ -133,9 +137,9 @@ export default function Tty(props: Props) {
       ));
     },
     writeError(sessionKey: string, message: string, origError: any) {
-      useSession.api.writeMsgCleanly(sessionKey,
-        `${message} (see console)`, { level: 'error' },
-      ).catch(() => { /** session may no longer exist */ });
+      useSession.api.writeMsgCleanly(sessionKey, `${message} (see console)`, { level: 'error' }).catch(
+        () => { /** session may no longer exist */ }
+      );
       error(message);
       console.error(origError);
     },
@@ -157,11 +161,22 @@ export default function Tty(props: Props) {
         xterm.clearScreen();
       }
 
-      useSession.api.writeMsgCleanly(props.sessionKey,
-        formatMessage(state.booted ? line.paused : line.neverUnpaused, "info"),
-        { prompt: false },
-      );
-
+      // ✅ [ unpause ] or [ debug ]
+      // ✅ unpause enables Tabs
+      // 🚧 cannot type whilst paused
+      // 🚧 debug link restores input
+      // 🚧 clean
+      if (state.booted) {
+        useSession.api.writeMsgCleanly(props.sessionKey, line.paused, { prompt: false, level: 'info' });
+        const lineText = stripAnsi(line.paused);
+        useSession.api.addTtyLineCtxts(props.sessionKey, lineText, [
+          { lineText, linkText: 'unpause', linkStartIndex: lineText.indexOf('[ unpause ]') + 1, callback() { console.log('unpause'); props.setTabsEnabled(true); }  },
+          { lineText, linkText: 'debug', linkStartIndex: lineText.indexOf('[ debug ]') + 1, callback() { console.log('debug') }  },
+        ]);
+      } else {
+        useSession.api.writeMsgCleanly(props.sessionKey, line.neverUnpaused, { prompt: false, level: 'info' });
+      }
+      
       state.pauseRunningProcesses();
 
       if (state.booted) {// Can use terminal whilst "paused"
@@ -172,6 +187,7 @@ export default function Tty(props: Props) {
         if (state.focusedBeforePause) {
           xterm.xterm.focus();
         }
+        useSession.api.removeTtyLineCtxts(props.sessionKey, stripAnsi(line.paused));
         if (state.base.session) {
           state.indicateResumed();
         }
@@ -242,14 +258,12 @@ export default function Tty(props: Props) {
   );
 }
 
-export interface Props {
+export interface Props extends BaseTabProps {
   sessionKey: string;
-  disabled?: boolean;
   /** Can initialize variables */
   env: Partial<Session["var"]>;
   functionFiles: Record<string, string>;
   onKey?(e: KeyboardEvent): void;
-  // onUnmount?(): void;
 }
 
 const rootCss = css`
@@ -280,7 +294,8 @@ const rootCss = css`
 const line = {
   /** Only used when starts paused */
   neverUnpaused: 'enable tabs to start',
-  paused: 'paused processes',
+  // paused: 'paused processes',
+  paused: `${ansi.GreyBg}${ansi.Black} paused ${ansi.Reset}${ansi.White} [ ${ansi.BrightGreen}unpause${ansi.White} ] or [ ${ansi.BrightGreen}debug${ansi.White} ]`,
   /** Only used when we type whilst paused */
   resumed: 'resumed processes',
 };

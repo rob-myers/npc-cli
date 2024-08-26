@@ -324,7 +324,7 @@ export default function World(props) {
 }
 
 /**
- * @typedef {import("../tabs/tab-factory").BaseComponentProps & {
+ * @typedef {import("../tabs/tab-factory").BaseTabProps & {
  *   mapKey: keyof import('static/assets/geomorphs.json')['map'];
  *   worldKey: string;   
  * }} Props

@@ -119,14 +119,18 @@ type ComponentClassKeyToProps = {
   [K in ComponentClassKey]: Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0];
 };
 
-export interface BaseComponentProps {
+export interface BaseTabProps {
   /**
    * Is this Tab disabled?
-   * Either (a) every tab is disabled, or (b) every tab is enabled.
+   * Either
+   * - every tab is disabled
+   * - every tab is enabled (except background component tabs)
    */
   disabled?: boolean;
   /**
-   * For example, can set all tabs enabled onclick a single tab.
+   * For example, can enable all tabs:
+   * - onclick anywhere in a single tab (World)
+   * - onclick a link (Tty)
    */
   setTabsEnabled(next: boolean): void;
 }
