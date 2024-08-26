@@ -11,13 +11,11 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- try this while World in background
-  > w npc.npc.rob.moveTo $( dst/v3 
-
 - ✅ BUG ctrl-c of `echo 'foo\r\n`
   - wrong prompt shown after ctrl-c
-
-- BUG scrolling back through history of `echo 'foo\r\n\r\n'` loses a newline
+- 🚧 BUG scrolling back through history of `echo 'foo\r\n\r\n'` loses a newline
+- try this while World in background
+  > w npc.npc.rob.moveTo {x:-6.43,y:0,z:7.3}
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
@@ -80,6 +78,8 @@
       - i.e. preset large bounds, and use geometry.setDrawRange
     - could use underlying gl api to remove attributes
 
+- ✅ xterm.js selection bug with gold text
+  - needed to upgrade to `@xterm/xterm`
 - ✅ hmr: support gm-graph
   - can ignore gm-room-graph because shouldn't really change,
     i.e. any "related" methods should inside gm-graph instead

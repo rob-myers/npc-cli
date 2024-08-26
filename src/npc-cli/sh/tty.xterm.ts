@@ -1,4 +1,4 @@
-import type { Terminal } from "xterm";
+import type { Terminal } from "@xterm/xterm";
 import debounce from "debounce";
 import { ansi } from "./const";
 import { formatMessage } from "./util";

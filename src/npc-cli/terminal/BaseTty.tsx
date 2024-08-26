@@ -1,6 +1,6 @@
 import React from 'react';
-import { Terminal as XTermTerminal } from "xterm";
-import { FitAddon } from "xterm-addon-fit";
+import { Terminal as XTermTerminal } from "@xterm/xterm";
+import { FitAddon } from "@xterm/addon-fit";
 // 🔔 debugging "Cannot read properties of undefined" onRequestRedraw
 // import { WebglAddon } from "xterm-addon-webgl";
 import { WebglAddon } from "@xterm/addon-webgl";
