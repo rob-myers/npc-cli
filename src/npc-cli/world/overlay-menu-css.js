@@ -40,7 +40,7 @@ export const pausedControlsCss = css`
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     border-width: 1px 0 1px 1px;
-    border-color: #777;
+    border-color: #555;
     font-size: 0.8rem;
 
     width: 100px;

@@ -16,6 +16,7 @@ export default function TtyMenu(props: Props) {
     open: true,
     clickEnableAll() {
       props.setTabsEnabled(true);
+      xterm.xterm.focus();
     },
     async onClickMenu(e: React.MouseEvent) {
       const target = e.target as HTMLElement;

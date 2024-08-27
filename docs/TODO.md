@@ -18,9 +18,10 @@
   - ℹ️ decided on overlay instead
 
 - ✅ World: "enable all" and "debug" overlay
-- 🚧 Tty: "enable all" and "debug" overlay
+- ✅ Tty: "enable all" and "debug" overlay
   - ✅ overlay fader and buttons
-  - 🚧 clean away other approach
+  - ✅ clean away other approach
+  - ✅ avoid props.onKey from triggering resize
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls

@@ -6,7 +6,6 @@ import debounce from 'debounce';
 import { error, keys } from '../service/generic';
 import { isTouchDevice } from '../service/dom';
 import type { Session } from "../sh/session.store";
-import { stripAnsi } from '../sh/util';
 import type { BaseTabProps } from '../tabs/tab-factory';
 
 import useStateRef from '../hooks/use-state-ref';
@@ -35,21 +34,11 @@ export default function Tty(props: Props) {
     booted: false,
     bounds,
     fitDebounced: debounce(() => { state.base.fitAddon.fit(); }, 300),
-    focusedBeforePause: false,
     functionFiles: {} as Props['functionFiles'],
-    inputBeforePause: undefined as string | undefined,
     inputOnFocus: undefined as undefined | { input: string; cursor: number },
     isTouchDevice: isTouchDevice(),
     pausedPids: {} as Record<number, true>,
-    typedWhilstPaused: { value: false, onDataSub: { dispose() {} } },
 
-    enterDebugMode() {
-      state.base.setDisabled(false);
-      useSession.api.writeMsgCleanly(props.sessionKey, `debugging whilst paused`, { level: 'info' });
-      setTimeout(() => {// 🚧
-        state.restoreInput();
-      });
-    },
     onCreateSession() {
       state.booted = false;
       update();
@@ -83,15 +72,6 @@ export default function Tty(props: Props) {
           state.base.xterm.xterm.blur(); // Must blur
         }
         state.fitDebounced();
-      }
-    },
-    restoreInput() {
-      if (state.inputBeforePause) {
-        state.base.xterm.clearInput();
-        state.base.xterm.setInput(state.inputBeforePause);
-        state.inputBeforePause = undefined;
-      } else {
-        state.base.xterm.showPendingInputImmediately();
       }
     },
     resumeRunningProcesses() {
@@ -135,56 +115,8 @@ export default function Tty(props: Props) {
 
   React.useEffect(() => {// Pause/resume
     if (props.disabled && state.base.session) {
-      const { xterm } = state.base;
-
-      state.focusedBeforePause = document.activeElement === xterm.xterm.textarea;
-
-      if (xterm.isPromptReady()) {
-        state.inputBeforePause = xterm.getInput();
-        xterm.clearInput();
-      }
-      if (!state.booted) {
-        xterm.clearScreen();
-      }
-
-      // ✅ [ unpause ] or [ debug ]
-      // ✅ unpause enables Tabs
-      // ✅ cannot type whilst paused (not even ctrl-c)
-      // ✅ debug link restores input
-      // 🚧 show resumed message on resume during debug
-      // 🚧 clean
-      if (state.booted) {
-        useSession.api.writeMsgCleanly(props.sessionKey, line.paused, { prompt: false, level: 'info' });
-        const lineText = stripAnsi(line.paused);
-        useSession.api.addTtyLineCtxts(props.sessionKey, lineText, [
-          { lineText, linkText: 'unpause', linkStartIndex: lineText.indexOf('[ unpause ]') + 1,
-            callback() { console.log('unpause'); props.setTabsEnabled(true); },
-          },
-          { lineText, linkText: 'debug', linkStartIndex: lineText.indexOf('[ debug ]') + 1,
-            callback() { console.log('debug'); state.enterDebugMode(); },
-          },
-        ]);
-        state.base.setDisabled(true);
-      } else {
-        useSession.api.writeMsgCleanly(props.sessionKey, line.neverUnpaused, { prompt: false, level: 'info' });
-      }
-      
       state.pauseRunningProcesses();
-
       return () => {
-        if (state.focusedBeforePause) {
-          xterm.xterm.focus();
-        }
-
-        if (state.base.session) {
-          useSession.api.removeTtyLineCtxts(props.sessionKey, stripAnsi(line.paused));
-          if (xterm.xterm.textarea?.disabled) {
-            xterm.xterm.write(`\x1b[F\x1b[2K`); // delete `line.paused`
-          }
-          state.restoreInput();
-        }
-        state.base.setDisabled(false);
-
         state.resumeRunningProcesses();
       };
     }

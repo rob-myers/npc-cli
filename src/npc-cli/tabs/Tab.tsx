@@ -6,8 +6,16 @@ import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 
 export function Tab({ def, api, state: tabState }: TabProps) {
+
   const state = useStateRef(() => ({
     component: null as Awaited<ReturnType<typeof getComponent>> | null,
+    onTerminalKey(e: KeyboardEvent) {
+      if (api.enabled === true) {
+        e.key === 'Escape' && api.toggleEnabled(false);
+      }
+      // 🔔 cannot enable Tabs on 'Enter' because we permit
+      // using the terminal whilst !api.enabled (debug mode)
+    },
     setTabsEnabled(next: boolean) {
       api.toggleEnabled(next);
     },
@@ -46,13 +54,7 @@ export function Tab({ def, api, state: tabState }: TabProps) {
           ...def.env,
           CACHE_SHORTCUTS: { w: "WORLD_KEY" },
         }}
-        onKey={(e) => {
-          if (api.enabled === true) {
-            e.key === 'Escape' && api.toggleEnabled(false);
-          }
-          // 🔔 cannot enable Tabs on 'Enter' because we permit
-          // using the terminal whilst !api.enabled (debug mode)
-        }}
+        onKey={state.onTerminalKey}
       />
     );
   }
