@@ -45,7 +45,10 @@ export const pausedControlsCss = css`
 
     width: 100px;
 
-    &.highlight {
+    &.text-white {
+      color: #fff;
+    }
+    &.text-green {
       color: #0f0;
     }
   }

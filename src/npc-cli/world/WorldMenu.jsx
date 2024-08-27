@@ -69,19 +69,20 @@ export default function WorldMenu(props) {
 
     <div // Fade Overlay
       className={cx(faderOverlayCss, w.disabled && !state.debugWhilePaused ? 'faded' : 'clear')}
-      // {...{// 🔔 shortcut to enable all tabs
-      //   [isTouchDevice() ? 'onPointerDown' : 'onPointerUp']: () => props.setTabsEnabled(true)
-      // }}
+      onPointerUp={() => props.setTabsEnabled(true)}
     />
 
     {w.disabled && (// Overlay Buttons
       <div className={pausedControlsCss}>
-        <button onClick={state.clickEnableAll}>
+        <button
+          onClick={state.clickEnableAll}
+          className="text-white"
+        >
           enable all
         </button>
         <button
           onClick={state.toggleDebug}
-          className={state.debugWhilePaused ? 'highlight' : undefined}
+          className={state.debugWhilePaused ? 'text-green' : undefined}
         >
           debug
         </button>

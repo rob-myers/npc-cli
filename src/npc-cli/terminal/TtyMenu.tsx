@@ -13,7 +13,7 @@ export default function TtyMenu(props: Props) {
 
   const state = useStateRef(() => ({
     debugWhilePaused: false,
-    open: true,
+    touchMenuOpen: true,
     clickEnableAll() {
       props.setTabsEnabled(true);
       xterm.xterm.focus();
@@ -51,8 +51,8 @@ export default function TtyMenu(props: Props) {
       // xterm.xterm.focus();
     },
     onClickToggle() {
-      const next = !state.open;
-      state.open = next;
+      const next = !state.touchMenuOpen;
+      state.touchMenuOpen = next;
       tryLocalStorageSet(localStorageKey.touchTtyOpen, `${next}`);
       update();
     },
@@ -73,31 +73,32 @@ export default function TtyMenu(props: Props) {
       tryLocalStorageSet(localStorageKey.touchTtyOpen, "false");
     }
     xterm.setCanType(tryLocalStorageGet(localStorageKey.touchTtyCanType) === "true");
-    state.open = tryLocalStorageGet(localStorageKey.touchTtyOpen) === "true";
+    state.touchMenuOpen = tryLocalStorageGet(localStorageKey.touchTtyOpen) === "true";
     return () => void xterm.setCanType(true);
   }, []);
 
   return <>
     <div // Fade Overlay
       className={cx(faderOverlayCss, props.disabled && !state.debugWhilePaused ? 'faded' : 'clear')}
+      onPointerUp={() => props.setTabsEnabled(true)}
     />
 
     <div // Overlay Menu
-      className={cx(menuCss, { disabled: props.disabled, open: state.open })}
+      className={cx(menuCss, { disabled: props.disabled, open: state.touchMenuOpen })}
       onClick={state.onClickMenu}
     >
       <div className="left-menu-overlay">
         <div className="menu-toggler" onClick={state.onClickToggle}>
-          {state.open ? ">" : "<"}
+          {state.touchMenuOpen ? ">" : "<"}
         </div>
         {props.disabled && (// Overlay Buttons
           <div className={pausedControlsCss}>
-            <button onClick={state.clickEnableAll}>
+            <button className="text-white" onClick={state.clickEnableAll}>
               enable all
             </button>
             <button
               onClick={state.toggleDebug}
-              className={state.debugWhilePaused ? 'highlight' : undefined}
+              className={state.debugWhilePaused ? 'text-green' : undefined}
             >
               debug
             </button>
