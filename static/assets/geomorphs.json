@@ -3428,7 +3428,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.51},
+          "meta": {"decor": true, "label": "fuel", "y": 2.01},
           "bounds2d": {"x": 9.875, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 12,
           "y": 0.7,
@@ -3437,25 +3437,25 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.51},
-          "bounds2d": {"x": 15.875, "y": -1.425, "width": 4.25, "height": 4.25},
-          "x": 18,
+          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "bounds2d": {"x": 15.885, "y": -1.425, "width": 4.25, "height": 4.25},
+          "x": 18.01,
           "y": 0.7,
           "orient": 0
         },
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.51},
-          "bounds2d": {"x": 24.875, "y": -1.425, "width": 4.25, "height": 4.25},
-          "x": 27,
+          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "bounds2d": {"x": 24.885, "y": -1.425, "width": 4.25, "height": 4.25},
+          "x": 27.01,
           "y": 0.7,
           "orient": 0
         },
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.51},
+          "meta": {"decor": true, "label": "fuel", "y": 2.01},
           "bounds2d": {"x": 9.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 12,
           "y": 27.7,
@@ -3464,7 +3464,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.51},
+          "meta": {"decor": true, "label": "fuel", "y": 2.01},
           "bounds2d": {"x": 15.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 18,
           "y": 27.7,
@@ -3473,7 +3473,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.51},
+          "meta": {"decor": true, "label": "fuel", "y": 2.01},
           "bounds2d": {"x": 24.905, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 27.03,
           "y": 27.7,
@@ -3482,7 +3482,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.51},
+          "meta": {"decor": true, "label": "fuel", "y": 2.01},
           "bounds2d": {"x": 0.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 3,
           "y": 27.7,
@@ -6389,7 +6389,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2.5,
+          "height": 2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6414,7 +6414,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2.5,
+          "height": 2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6427,7 +6427,7 @@
               "obsId": 0
             }
           },
-          "transform": [1, 0, 0, 1, 15, 0],
+          "transform": [1, 0, 0, 1, 15.01, 0],
           "center": {"x": 18, "y": 1.5},
           "meta": {
             "obstacle": true,
@@ -6439,7 +6439,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2.5,
+          "height": 2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6452,8 +6452,8 @@
               "obsId": 0
             }
           },
-          "transform": [1, 0, 0, 1, 24, 0],
-          "center": {"x": 27, "y": 1.5},
+          "transform": [1, 0, 0, 1, 24.01, 0],
+          "center": {"x": 27.01, "y": 1.5},
           "meta": {
             "obstacle": true,
             "color": "#ddd",
@@ -6464,7 +6464,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2.5,
+          "height": 2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6489,7 +6489,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2.5,
+          "height": 2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6514,7 +6514,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2.5,
+          "height": 2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6539,7 +6539,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2.5,
+          "height": 2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -7138,10 +7138,10 @@
               [16.5, 6],
               [16.55, 6],
               [16.55, 3.095],
-              [21.0925, 3.095],
-              [21.0925, 0.1],
-              [23.905, 0.1],
-              [23.905, 3.095],
+              [21.1025, 3.095],
+              [21.1025, 0.1],
+              [23.915, 0.1],
+              [23.915, 3.095],
               [29.9, 3.095],
               [29.9, 8.95],
               [25.45, 8.95],
@@ -7618,8 +7618,8 @@
               [8.95, 3.095],
               [8.905, 3.095],
               [8.905, -0.0975],
-              [21.0925, -0.0975],
-              [21.0925, 3.095],
+              [21.1025, -0.0975],
+              [21.1025, 3.095],
               [16.55, 3.095],
               [16.55, 6],
               [16.5, 6],
@@ -7940,11 +7940,11 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [23.905, -0.0975],
-              [30.0925, -0.0975],
-              [30.0925, 3.095],
-              [23.905, 3.095],
-              [23.905, -0.0975]
+              [23.915, -0.0975],
+              [30.1025, -0.0975],
+              [30.1025, 3.095],
+              [23.915, 3.095],
+              [23.915, -0.0975]
             ]
           ],
           "meta": {"wall": true}
@@ -8530,10 +8530,10 @@
           {"x": 16.8, "y": 6.3},
           {"x": 16.85, "y": 6.3},
           {"x": 16.85, "y": 3.395},
-          {"x": 21.3925, "y": 3.395},
-          {"x": 21.3925, "y": 0.4},
-          {"x": 23.605, "y": 0.4},
-          {"x": 23.605, "y": 3.395},
+          {"x": 21.4025, "y": 3.395},
+          {"x": 21.4025, "y": 0.4},
+          {"x": 23.615, "y": 0.4},
+          {"x": 23.615, "y": 3.395},
           {"x": 24.275, "y": 3.395},
           {"x": 24.275, "y": 3.8116},
           {"x": 25.2961, "y": 3.8207},
@@ -9452,8 +9452,8 @@
           [400, 411, 429],
           [411, 400, 410],
           [400, 403, 410],
-          [400, 402, 403],
-          [400, 401, 402],
+          [403, 400, 401],
+          [403, 401, 402],
           [403, 405, 410],
           [403, 404, 405],
           [408, 410, 405],
