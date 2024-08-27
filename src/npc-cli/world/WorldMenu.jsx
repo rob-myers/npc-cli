@@ -1,13 +1,11 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
 import { isTouchDevice } from "../service/dom";
 import { geom } from '../service/geom';
+import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { WorldContext } from "./world-context";
 
 
 /**
@@ -18,27 +16,30 @@ export default function WorldMenu(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    menuEl: /** @type {*} */ (null),
+    ctMenuEl: /** @type {*} */ (null),
     ctOpen: false,
     justOpen: false,
-    pausedCamera: false,
+    debugWhilePaused: false,
 
+    clickEnableAll() {
+      props.setTabsEnabled(true);
+    },
     hide() {
       state.ctOpen = false;
       update();
     },
     show(at) {
-      const menuDim = state.menuEl.getBoundingClientRect();
+      const menuDim = state.ctMenuEl.getBoundingClientRect();
       const canvasDim = w.ui.canvas.getBoundingClientRect();
       const x = geom.clamp(at.x, 0, canvasDim.width - menuDim.width);
       const y = geom.clamp(at.y, 0, canvasDim.height - menuDim.height);
-      state.menuEl.style.transform = `translate(${x}px, ${y}px)`;
+      state.ctMenuEl.style.transform = `translate(${x}px, ${y}px)`;
       state.ctOpen = true;
       update();
     },
-    togglePausedCamera() {
-      state.pausedCamera = !state.pausedCamera;
-      // 🚧
+    toggleDebug() {
+      // by hiding overlay we permit user to use camera while World paused
+      state.debugWhilePaused = !state.debugWhilePaused;
       update();
     },
   }));
@@ -51,8 +52,8 @@ export default function WorldMenu(props) {
 
   return <>
 
-    <div // ContextMenu
-      ref={(x) => x && (state.menuEl = x)}
+    <div // Context Menu
+      ref={(x) => x && (state.ctMenuEl = x)}
       className={contextMenuCss}
       onContextMenu={(e) => e.preventDefault()}
       // 🔔 use 'visibility' to compute menuDim.height
@@ -65,21 +66,26 @@ export default function WorldMenu(props) {
       </div>
     </div>
 
-    <div // Fade overlay
-      className={cx(faderOverlayCss, w.disabled ? 'faded' : 'clear')}
-      {...{// 🔔 shortcut to enable all tabs
-        [isTouchDevice() ? 'onPointerDown' : 'onPointerUp']: () => props.setTabsEnabled(true)
-      }}
+    <div // Fade Overlay
+      className={cx(faderOverlayCss, w.disabled && !state.debugWhilePaused ? 'faded' : 'clear')}
+      // {...{// 🔔 shortcut to enable all tabs
+      //   [isTouchDevice() ? 'onPointerDown' : 'onPointerUp']: () => props.setTabsEnabled(true)
+      // }}
     />
 
-    <div className={pausedControlsCss}>
-      <button
-        className={cx('camera', { disabled: !state.pausedCamera })}
-        onClick={state.togglePausedCamera}
-      >
-        <FontAwesomeIcon icon={faCamera} size="1x" />
-      </button>
+    {w.disabled && (// Overlay Buttons
+      <div className={pausedControlsCss}>
+        <button onClick={state.clickEnableAll}>
+          enable all
+        </button>
+        <button
+          onClick={state.toggleDebug}
+          className={state.debugWhilePaused ? 'highlight' : undefined}
+        >
+          debug
+        </button>
     </div>
+    )}
   </>;
 }
 
@@ -132,9 +138,6 @@ const faderOverlayCss = css`
     opacity: 0.5;
     transition: opacity 0.5s ease-in;
   }
-
-  &:not(.faded) {
-  }
 `;
 
 const pausedControlsCss = css`
@@ -142,28 +145,28 @@ const pausedControlsCss = css`
   right: 0;
   top: 64px;
   z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 
-  .camera {
-    color: white;
+  button {
+    color: #aaa;
     padding: 8px 12px 8px 12px;
-    background-color: #222;
+    background-color: #000;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     border-width: 1px 0 1px 1px;
     border-color: #444;
     font-size: 0.8rem;
 
-    svg {
-      filter: drop-shadow(2px 2px #900);
-    }
-
-    &:hover {
-      transform: scale(1.1);
+    &.highlight {
+      color: #0f0;
     }
   }
 
-  .disabled {
-    filter: brightness(0.5);
+  transition: filter 1s;
+  &:hover {
+    filter: brightness(2) ;
   }
 `;
 
@@ -171,10 +174,11 @@ const pausedControlsCss = css`
  * @typedef State
  * @property {boolean} ctOpen Is the context menu open?
  * @property {boolean} justOpen Was the context menu just opened?
- * @property {boolean} pausedCamera Is the camera usable whilst paused?
- * @property {HTMLDivElement} menuEl
+ * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
+ * @property {HTMLDivElement} ctMenuEl
  *
+ * @property {() => void} clickEnableAll
  * @property {() => void} hide
  * @property {(at: Geom.VectJson) => void} show
- * @property {() => void} togglePausedCamera
+ * @property {() => void} toggleDebug
  */

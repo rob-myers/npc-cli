@@ -17,7 +17,7 @@
   - ❌ link choice instead: [ unpause ] or [ debug ]
   - ℹ️ decided on overlay instead
 
-- World: "enable all" and "debug" overlay
+- ✅ World: "enable all" and "debug" overlay
 - Tty: "enable all" and "debug" overlay
 
 - 🚧 optionally permit camera movement while World paused 
