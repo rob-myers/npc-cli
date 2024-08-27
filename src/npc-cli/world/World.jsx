@@ -33,7 +33,7 @@ import Walls from "./Walls";
 import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
-import Menu from "./Menu";
+import WorldMenu from "./WorldMenu";
 import WorldWorkers from "./WorldWorkers";
 
 /**
@@ -317,7 +317,7 @@ export default function World(props) {
           </group>
         )}
       </WorldCanvas>
-      <Menu setTabsEnabled={props.setTabsEnabled} />
+      <WorldMenu setTabsEnabled={props.setTabsEnabled} />
       <WorldWorkers />
     </WorldContext.Provider>
   );
@@ -361,7 +361,7 @@ export default function World(props) {
  * @property {import('./Doors').State} door
  * @property {import('./Npcs').State} npc
  * Npcs (dynamic)
- * @property {import('./Menu').State} menu
+ * @property {import('./WorldMenu').State} menu
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
  *

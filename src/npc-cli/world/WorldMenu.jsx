@@ -13,7 +13,7 @@ import { WorldContext } from "./world-context";
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
  */
-export default function Menu(props) {
+export default function WorldMenu(props) {
 
   const w = React.useContext(WorldContext);
 
