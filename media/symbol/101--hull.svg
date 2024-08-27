@@ -300,26 +300,26 @@
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 0.00010681200365070254, 0)" xlink:href="#symbol-13">
       <title>fuel--010--4x2 y=1.01 wallsH=1</title>
     </use>
-    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.000036000019463244826)" xlink:href="#symbol-13">
-      <title>fuel--010--4x2 y=2</title>
+    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.00003600002310122363)" xlink:href="#symbol-13">
+      <title>fuel--010--4x2 y=2.5</title>
     </use>
-    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3000, 0.00003814703813986853)" xlink:href="#symbol-13">
-      <title>fuel--010--4x2 y=2</title>
+    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3000, 0.000038147041777847335)" xlink:href="#symbol-13">
+      <title>fuel--010--4x2 y=2.5</title>
     </use>
-    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4800, 0.00003814703813986853)" xlink:href="#symbol-13">
-      <title>fuel--010--4x2 y=2</title>
+    <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4800, 0.000038147041777847335)" xlink:href="#symbol-13">
+      <title>fuel--010--4x2 y=2.5</title>
     </use>
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 5400)" xlink:href="#symbol-13">
-      <title>fuel--010--4x2 y=2</title>
+      <title>fuel--010--4x2 y=2.5</title>
     </use>
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3000, 5400)" xlink:href="#symbol-13">
-      <title>fuel--010--4x2 y=2</title>
+      <title>fuel--010--4x2 y=2.5</title>
     </use>
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4805, 5400)" xlink:href="#symbol-13">
-      <title>fuel--010--4x2 y=2</title>
+      <title>fuel--010--4x2 y=2.5</title>
     </use>
     <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 0.0000667572021484375, 5400)" xlink:href="#symbol-13">
-      <title>fuel--010--4x2 y=2</title>
+      <title>fuel--010--4x2 y=2.5</title>
     </use>
     <use width="600" height="1200" transform="matrix(0, -1, 1, 0, 300, 300)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-14">
       <title>machinery--158--1.8x3.6 y=1</title>
