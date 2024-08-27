@@ -23,14 +23,16 @@
   - ✅ clean away other approach
   - ✅ avoid props.onKey from triggering resize
 
-- 🚧 optionally permit camera movement while World paused 
+- "enable all" is highlighted when hover fader
+
+- ✅ optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
   - ✅ remove fader from Tabs
   - ✅ add fader to World
   - ✅ can initially enable via click anywhere
   - ✅ on disable World fades by default; click anywhere to unpause
   - ✅ World has camera icon
-  - 🚧 can move camera when clicked
+  - ✅ can move camera when clicked
 
 - 🚧 fire event when npc enters/exits a room
   - ✅ sensor in each doorway, triggered on leave
