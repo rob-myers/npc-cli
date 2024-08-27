@@ -12,17 +12,15 @@ import type { BaseTabProps } from '../tabs/tab-factory';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 import useSession, { ProcessStatus } from '../sh/session.store';
-import TouchHelperUi from './TouchHelperUi';
+import TtyMenu from './TtyMenu';
 import { BaseTty, State as BaseTtyState } from './BaseTty';
 import { ansi } from '../sh/const';
 
 /**
  * A `BaseTty` which can be:
  * - paused/resumed
- * - booted with a shell profile
- *  - stored at ~/PROFILE
- * - sourced with externally provided shell functions
- *  - stored at /etc/*
+ * - booted with a shell profile (~/PROFILE)
+ * - sourced with externally provided shell functions (/etc/*)
  */
 export default function Tty(props: Props) {
 
@@ -248,7 +246,11 @@ export default function Tty(props: Props) {
         onCreateSession={state.onCreateSession}
       />
       {state.base.session && (
-        <TouchHelperUi session={state.base.session} disabled={props.disabled} />
+        <TtyMenu
+          session={state.base.session}
+          disabled={props.disabled}
+          setTabsEnabled={props.setTabsEnabled}
+        />
       )}
     </div>
   );

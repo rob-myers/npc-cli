@@ -18,7 +18,9 @@
   - ℹ️ decided on overlay instead
 
 - ✅ World: "enable all" and "debug" overlay
-- Tty: "enable all" and "debug" overlay
+- 🚧 Tty: "enable all" and "debug" overlay
+  - ✅ overlay fader and buttons
+  - 🚧 clean away other approach
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
