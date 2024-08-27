@@ -11,20 +11,14 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ BUG ctrl-c of `echo 'foo\r\n`
-  - wrong prompt shown after ctrl-c
-- ✅ World pauses in background
-  - e.g. try `w npc.npc.rob.moveTo '{x:-6.43,y:0,z:7.3}'`
-  - could potentially permit "pause override" in future (e.g. pause one World, not other)
-- ✅ BUG scrolling back through history of `echo 'foo\r\n\r\n'` loses a newline
-  - happens when scroll back just beyond it
-
-- ✅ Tty: resize-clear-input should also blur xterm
-
-- 🚧 pause tty ui issues
+- ❌ pause tty ui issues
   - ℹ️ on switch tab, terminal pauses, and when come back, unclear whether should just continue
   - ℹ️ on continue using terminal when paused, enter can immediately launch unseen command
-  - link choice instead: [ unpause ] or [ debug ]
+  - ❌ link choice instead: [ unpause ] or [ debug ]
+  - ℹ️ decided on overlay instead
+
+- World: "enable all" and "debug" overlay
+- Tty: "enable all" and "debug" overlay
 
 - 🚧 optionally permit camera movement while World paused 
   - ✅ pause/play toggle in viewer controls
@@ -2011,3 +2005,13 @@
 - ✅ can use terminal whilst paused
   - ✅ can start typing
   - ✅ can ctrl-c out of running process
+
+- ✅ BUG ctrl-c of `echo 'foo\r\n`
+  - wrong prompt shown after ctrl-c
+- ✅ World pauses in background
+  - e.g. try `w npc.npc.rob.moveTo '{x:-6.43,y:0,z:7.3}'`
+  - could potentially permit "pause override" in future (e.g. pause one World, not other)
+- ✅ BUG scrolling back through history of `echo 'foo\r\n\r\n'` loses a newline
+  - happens when scroll back just beyond it
+
+- ✅ Tty: resize-clear-input should also blur xterm
