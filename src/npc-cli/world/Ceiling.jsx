@@ -58,7 +58,7 @@ export default function Ceiling(props) {
       
       // wall/door tops
       const black = 'rgb(0, 0, 0)';
-      const blue200with150 = 'rgb(150, 150, 200)';
+      const ceilColor = 'rgb(90, 50, 50)';
       const grey90 = 'rgb(90, 90, 90)';
       // const grey60 = 'rgb(60, 60, 60)';
       // const grey100 = 'rgb(100, 100, 100)';
@@ -66,18 +66,18 @@ export default function Ceiling(props) {
       const thickLineWidth = 0.08;
 
       if (state.thickerTops) {
-        drawPolygons(ct, tops.nonHull, [blue200with150, null]);
-        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [blue200with150, null]);
-        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [blue200with150, null]);
+        drawPolygons(ct, tops.nonHull, [ceilColor, null]);
+        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [ceilColor, null]);
+        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [ceilColor, null]);
         drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
       } else {
-        drawPolygons(ct, tops.nonHull, [black, blue200with150, thinLineWidth]);
-        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [black, blue200with150, thinLineWidth]);
-        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [blue200with150, blue200with150]);
+        drawPolygons(ct, tops.nonHull, [black, ceilColor, thinLineWidth]);
+        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [black, ceilColor, thinLineWidth]);
+        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [ceilColor, ceilColor]);
       }
 
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, hullWalls, [blue200with150, blue200with150]);
+      drawPolygons(ct, hullWalls, [ceilColor, ceilColor]);
       
       // decals
       polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
