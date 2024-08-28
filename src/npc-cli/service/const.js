@@ -9,6 +9,18 @@ export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });
 
+/** @type {import('@xterm/xterm').ITheme} */
+export const xtermJsTheme = {
+  background: "black",
+  foreground: "#41FF00",
+};
+
+/** @type {import('@xterm/xterm').ITheme} */
+export const xtermJsDebugTheme = {
+  background: "#020",
+  foreground: "#41FF00",
+};
+
 /** Size of starship geomorphs grid side in meters */
 export const geomorphGridMeters = 1.5;
 

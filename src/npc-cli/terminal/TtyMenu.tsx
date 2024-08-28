@@ -1,7 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { tryLocalStorageGet, tryLocalStorageSet } from "../service/generic";
-import { zIndex, localStorageKey } from "../service/const";
+import { zIndex, localStorageKey, xtermJsTheme, xtermJsDebugTheme } from "../service/const";
 import type { Session } from "../sh/session.store";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -9,59 +9,63 @@ import { faderOverlayCss, pausedControlsCss } from "../world/overlay-menu-css";
 
 export default function TtyMenu(props: Props) {
   const update = useUpdate();
-  const { xterm } = props.session.ttyShell;
 
   const state = useStateRef(() => ({
     debugWhilePaused: false,
+    xterm: props.session.ttyShell.xterm,
     touchMenuOpen: true,
     clickEnableAll() {
       props.setTabsEnabled(true);
-      xterm.xterm.focus();
+      state.xterm.xterm.focus();
     },
     async onClickMenu(e: React.MouseEvent) {
       const target = e.target as HTMLElement;
-      xterm.xterm.scrollToBottom();
+      state.xterm.xterm.scrollToBottom();
       if (target.classList.contains("paste")) {
         try {
           const textToPaste = await navigator.clipboard.readText();
-          xterm.spliceInput(textToPaste);
+          state.xterm.spliceInput(textToPaste);
         } catch {}
       } else if (target.classList.contains("can-type")) {
-        const next = !xterm.canType();
-        xterm.setCanType(next);
+        const next = !state.xterm.canType();
+        state.xterm.setCanType(next);
         tryLocalStorageSet(localStorageKey.touchTtyCanType, `${next}`);
-        next && xterm.warnIfNotReady();
+        next && state.xterm.warnIfNotReady();
         update();
       } else if (target.classList.contains("ctrl-c")) {
-        xterm.sendSigKill();
+        state.xterm.sendSigKill();
       } else if (target.classList.contains("enter")) {
-        if (!xterm.warnIfNotReady()) {
+        if (!state.xterm.warnIfNotReady()) {
           // avoid sending 'newline' whilst 'await-prompt'
-          xterm.queueCommands([{ key: "newline" }]);
+          state.xterm.queueCommands([{ key: "newline" }]);
         }
       } else if (target.classList.contains("delete")) {
-        xterm.deletePreviousWord();
+        state.xterm.deletePreviousWord();
       } else if (target.classList.contains("clear")) {
-        xterm.clearScreen();
+        state.xterm.clearScreen();
       } else if (target.classList.contains("up")) {
-        xterm.reqHistoryLine(+1);
+        state.xterm.reqHistoryLine(+1);
       } else if (target.classList.contains("down")) {
-        xterm.reqHistoryLine(-1);
+        state.xterm.reqHistoryLine(-1);
       }
       // xterm.xterm.focus();
     },
-    onClickToggle() {
+    toggleDebug() {
+      // hiding overlay permits user to use terminal whilst paused
+      state.debugWhilePaused = !state.debugWhilePaused;
+      // change background colour in debug mode
+      state.xterm.updateOptions({ theme: state.debugWhilePaused ? xtermJsDebugTheme : xtermJsTheme });
+      update();
+    },
+    toggleTouchMenu() {
       const next = !state.touchMenuOpen;
       state.touchMenuOpen = next;
       tryLocalStorageSet(localStorageKey.touchTtyOpen, `${next}`);
       update();
     },
-    toggleDebug() {
-      // by hiding overlay we permit user to use terminal while paused
-      state.debugWhilePaused = !state.debugWhilePaused;
-      update();
-    },
   }));
+
+  state.xterm = props.session.ttyShell.xterm;
 
   React.useMemo(() => {
     if (!tryLocalStorageGet(localStorageKey.touchTtyCanType)) {
@@ -72,9 +76,9 @@ export default function TtyMenu(props: Props) {
       // touch menu closed by default
       tryLocalStorageSet(localStorageKey.touchTtyOpen, "false");
     }
-    xterm.setCanType(tryLocalStorageGet(localStorageKey.touchTtyCanType) === "true");
+    state.xterm.setCanType(tryLocalStorageGet(localStorageKey.touchTtyCanType) === "true");
     state.touchMenuOpen = tryLocalStorageGet(localStorageKey.touchTtyOpen) === "true";
-    return () => void xterm.setCanType(true);
+    return () => void state.xterm.setCanType(true);
   }, []);
 
   return <>
@@ -88,7 +92,7 @@ export default function TtyMenu(props: Props) {
       onClick={state.onClickMenu}
     >
       <div className="left-menu-overlay">
-        <div className="menu-toggler" onClick={state.onClickToggle}>
+        <div className="menu-toggler" onClick={state.toggleTouchMenu}>
           {state.touchMenuOpen ? ">" : "<"}
         </div>
         {props.disabled && (// Overlay Buttons
@@ -106,8 +110,8 @@ export default function TtyMenu(props: Props) {
         )}
       </div>
       <div
-        className={cx("icon can-type", { enabled: xterm.canType() })}
-        title={`text input ${xterm.canType() ? "enabled" : "disabled"}`}
+        className={cx("icon can-type", { enabled: state.xterm.canType() })}
+        title={`text input ${state.xterm.canType() ? "enabled" : "disabled"}`}
       >
         $
       </div>

@@ -5,6 +5,7 @@ import { FitAddon } from "@xterm/addon-fit";
 // import { WebglAddon } from "xterm-addon-webgl";
 import { WebglAddon } from "@xterm/addon-webgl";
 
+import { xtermJsTheme } from '../service/const';
 import { stripAnsi } from '../sh/util';
 import { scrollback } from '../sh/io';
 import { ttyXtermClass } from '../sh/tty.xterm';
@@ -44,10 +45,7 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
       // rendererType: "canvas",
       // mobile: can select single word via long press
       rightClickSelectsWord: true,
-      theme: {
-        background: "black",
-        foreground: "#41FF00",
-      },
+      theme: xtermJsTheme,
       convertEol: false,
       scrollback: scrollback,
       rows: 50,

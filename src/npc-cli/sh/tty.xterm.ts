@@ -1,4 +1,4 @@
-import type { Terminal } from "@xterm/xterm";
+import type { ITerminalOptions, Terminal } from "@xterm/xterm";
 import debounce from "debounce";
 import { ansi } from "./const";
 import { formatMessage } from "./util";
@@ -932,6 +932,10 @@ export class ttyXtermClass {
     } else {
       this.warnIfNotReady();
     }
+  }
+
+  updateOptions(opts: ITerminalOptions) {
+    this.xterm.options = opts;
   }
 
   warnIfNotReady() {
