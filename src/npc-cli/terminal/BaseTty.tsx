@@ -26,11 +26,6 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
     containerRef: (el: null | HTMLDivElement) => el && !state.container &&
       setTimeout(() => (state.container = el, update())
     ),
-    setDisabled(next: boolean) {
-      if (state.xterm.xterm.textarea !== undefined) {
-        state.xterm.xterm.textarea.disabled = next;
-      }
-    },
   }));
 
   React.useMemo(() => void (ref as React.RefCallback<State>)?.(state), [ref]);
@@ -136,7 +131,6 @@ export interface State {
   webglAddon: WebglAddon;
   xterm: ttyXtermClass;
   containerRef(el: null | HTMLDivElement): void;
-  setDisabled(next: boolean): void;
 }
 
 function stopKeysPropagating(e: React.KeyboardEvent) {
