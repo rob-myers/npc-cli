@@ -2,37 +2,11 @@
 
 ## WIP
 
-- Boxy rounding errors issue
-  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
-
 - 🚧 migrate sub-symbols to actual symbols
   - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
   - bridge ✅ lifeboat ✅
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
-
-- ❌ pause tty ui issues
-  - ℹ️ on switch tab, terminal pauses, and when come back, unclear whether should just continue
-  - ℹ️ on continue using terminal when paused, enter can immediately launch unseen command
-  - ❌ link choice instead: [ unpause ] or [ debug ]
-  - ℹ️ decided on overlay instead
-
-- ✅ World: "enable all" and "debug" overlay
-- ✅ Tty: "enable all" and "debug" overlay
-  - ✅ overlay fader and buttons
-  - ✅ clean away other approach
-  - ✅ avoid props.onKey from triggering resize
-
-- "enable all" is highlighted when hover fader
-
-- ✅ optionally permit camera movement while World paused 
-  - ✅ pause/play toggle in viewer controls
-  - ✅ remove fader from Tabs
-  - ✅ add fader to World
-  - ✅ can initially enable via click anywhere
-  - ✅ on disable World fades by default; click anywhere to unpause
-  - ✅ World has camera icon
-  - ✅ can move camera when clicked
 
 - 🚧 fire event when npc enters/exits a room
   - ✅ sensor in each doorway, triggered on leave
@@ -74,6 +48,8 @@
   - ensure up to date
   - work on migrating Viewer
 
+- Boxy rounding errors issue
+  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
 - 🚧 memory leaks
   - ℹ️ use incognito to avoid extensions memory leak
     > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
@@ -2020,3 +1996,27 @@
   - happens when scroll back just beyond it
 
 - ✅ Tty: resize-clear-input should also blur xterm
+
+- ❌ pause tty ui issues
+  - ℹ️ on switch tab, terminal pauses, and when come back, unclear whether should just continue
+  - ℹ️ on continue using terminal when paused, enter can immediately launch unseen command
+  - ❌ link choice instead: [ unpause ] or [ debug ]
+  - ℹ️ decided on overlay instead
+
+- ✅ World: "enable all" and "debug" overlay
+- ✅ Tty: "enable all" and "debug" overlay
+  - ✅ overlay fader and buttons
+  - ✅ clean away other approach
+  - ✅ avoid props.onKey from triggering resize
+
+- ❌ "enable all" is highlighted when hover fader
+  - instead, it is always highlighted whilst paused
+
+- ✅ optionally permit camera movement while World paused 
+  - ✅ pause/play toggle in viewer controls
+  - ✅ remove fader from Tabs
+  - ✅ add fader to World
+  - ✅ can initially enable via click anywhere
+  - ✅ on disable World fades by default; click anywhere to unpause
+  - ✅ World has camera icon
+  - ✅ can move camera when clicked
