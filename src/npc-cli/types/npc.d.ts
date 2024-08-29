@@ -81,6 +81,8 @@ declare namespace NPC {
          * - geomorph `map.gms[gmId].gmKey` has different navPoly
          * 
          * The latter is true whenever a room polygon changes.
+         * 
+         * It is defined for each `gmId` in current map.
          */
         changedGmIds: boolean[];
       }

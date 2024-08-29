@@ -14,6 +14,8 @@ export default function useHandleEvents(w) {
     npcToAccess: {},
     npcToNearby: {},
     npcToRoom: new Map(),
+    roomToNpcs: [],
+    externalNpcs: new Set(),
 
     async handleEvents(e) {
       // info('useHandleEvents', e);
@@ -54,26 +56,34 @@ export default function useHandleEvents(w) {
           w.setReady();
           break;
         case "pre-request-nav": {
-          // 🚧 recompute for changed gmIds, over time (not all at once)
-          // - expect user to pause while editing nav etc.
-          // - will remove pause overlay from World
-          // - will show notification during recompute
-          // - warn about agents outside any room, leaving them in bad state
-          // - roomToNpcs[gmId][roomId]
+          // ℹ️ (re)compute npcToRoom and roomToNpcs
+          const prevRoomToNpcs = state.roomToNpcs;
+          const prevExternalNpcs = state.externalNpcs;
+          state.roomToNpcs = w.gms.map((_, gmId) => 
+            e.changedGmIds[gmId] === false ? prevRoomToNpcs[gmId] : {}
+          );
+          state.externalNpcs = new Set();
 
-          for (const [npcKey, { gmId }] of state.npcToRoom) {
+          for (const [gmId, byRoom] of prevRoomToNpcs.entries()) {
             if (e.changedGmIds[gmId] === false) {
               continue;
-            }
-            const npc = w.npc.npc[npcKey];
-            const grId = w.gmGraph.findRoomContaining(npc.getPoint(), true);
+            } // else `true` (changed) or `undefined` (gmId no longer exists)
+            
+            // We'll recompute every npc previously in this gmId
+            const npcs = Object.values(byRoom).flatMap(npcKeys =>
+              Array.from(npcKeys).map(npcKey => w.npc.npc[npcKey])
+            );
 
-            if (grId !== null) {
-              state.npcToRoom.set(npc.key, grId);
-            } else {// leave in bad state?
-              warn(`${npc.key}: no longer inside any room`);
+            for (const [i, npc] of npcs.entries()) {
+              if (i > 0 && i % 5 === 0) await pause(); // batching
+              state.tryPutNpcIntoRoom(npc);
             }
-            await pause(); // 🚧 wip
+          }
+
+          // try fix previous external npcs
+          for (const npcKey of prevExternalNpcs) {
+            const npc = w.npc.npc[npcKey];
+            state.tryPutNpcIntoRoom(npc);
           }
           break;
         }
@@ -103,6 +113,7 @@ export default function useHandleEvents(w) {
             });
           }
           state.npcToRoom.set(npc.key, {...e.gmRoomId});
+          (state.roomToNpcs[e.gmRoomId.gmId][e.gmRoomId.roomId] ??= new Set()).add(e.npcKey);
           break;
         }
         case "removed-npc":
@@ -111,7 +122,13 @@ export default function useHandleEvents(w) {
             npcKeys: [e.npcKey],
           });
           state.removeFromSensors(e.key);
-          state.npcToRoom.delete(e.npcKey);
+          const gmRoomId = state.npcToRoom.get(e.npcKey);
+          if (gmRoomId !== undefined) {
+            state.npcToRoom.delete(e.npcKey);
+            state.roomToNpcs[gmRoomId.gmId][gmRoomId.roomId].delete(e.npcKey);
+          } else {
+            state.externalNpcs.delete(e.key);
+          }
           break;
       }
     },
@@ -170,7 +187,12 @@ export default function useHandleEvents(w) {
           return warn(`${e.npcKey}: expected non-null next room (${door.gdKey})`);
         }
         setTimeout(() => {
+          const gmRoomId = state.npcToRoom.get(e.npcKey);
+          if (gmRoomId !== undefined) {
+            state.roomToNpcs[gmRoomId.gmId][gmRoomId.roomId].delete(e.npcKey);
+          }
           state.npcToRoom.set(e.npcKey, next);
+          (state.roomToNpcs[next.gmId][next.roomId] ??= new Set()).add(e.npcKey);
           w.events.next({ key: 'exit-room', npcKey: e.npcKey, ...prev });
           w.events.next({ key: 'enter-room', npcKey: e.npcKey, ...next });
         });
@@ -238,9 +260,21 @@ export default function useHandleEvents(w) {
         }
       }, defaultDoorCloseMs);
     },
+    tryPutNpcIntoRoom(npc) {
+      const grId = w.gmGraph.findRoomContaining(npc.getPoint(), true);
+      if (grId !== null) {
+        state.npcToRoom.set(npc.key, grId);
+        state.externalNpcs.delete(npc.key);
+        (state.roomToNpcs[grId.gmId][grId.roomId] ??= new Set()).add(npc.key);
+      } else {// Erase stale info and warn
+        state.npcToRoom.delete(npc.key);
+        state.externalNpcs.add(npc.key);
+        warn(`${npc.key}: no longer inside any room`);
+      }
+    },
   }));
   
-  w.e = state; // s for 'shared'
+  w.e = state; // e for 'events state'
 
   React.useEffect(() => {
     const sub = w.events.subscribe(state.handleEvents);
@@ -260,6 +294,10 @@ export default function useHandleEvents(w) {
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room
+ * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
+ * `roomToNpc[gmId][roomId]` is a set of npcKeys
+ * @property {Set<string>} externalNpcs
+ * Keys of npcs not inside any room
  *
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents
@@ -274,4 +312,5 @@ export default function useHandleEvents(w) {
  * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleLockOpts) => boolean} toggleLock
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
+ * @property {(npc: NPC.NPC) => void} tryPutNpcIntoRoom
  */

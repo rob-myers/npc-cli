@@ -16,10 +16,14 @@
     - ℹ️ seen "npc position" not in room when running through hull door
     - possibly exasperated by collider near g0d0?
   - ✅ enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
-  - roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
-  - 🚧 on reload nav.worker, recompute w.es.npcToRoom
+  - ✅ on reload nav.worker, recompute w.es.npcToRoom
     - ❌ clear lookup, except for unchanged gmKeys
     - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
+    - ℹ️ expect dev to handle this e.g. be in debug mode World/Tty
+    - ✅ recompute over time; if not in room set undefined and warn
+    - ✅ witness re-computation, and npc outside all rooms
+  - ✅ roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
+
   - on reload physics.worker, clear w.es.{npc,door}ToNearby
   - `nav-changed` event for code supporting level-editing
 
