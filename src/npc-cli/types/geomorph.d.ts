@@ -95,6 +95,7 @@ declare namespace Geomorph {
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
+    doorway: Geom.Poly;
 
     closeTimeoutId?: number;
   }

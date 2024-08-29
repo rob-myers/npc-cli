@@ -84,6 +84,7 @@ export default function Doors(props) {
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(normal.clone()),
             segLength: u.distanceTo(v),
+            doorway: door.computeDoorway().applyMatrix(tmpMat1),
           };
           instId++;
         })

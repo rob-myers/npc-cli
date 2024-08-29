@@ -141,30 +141,55 @@ export default function useHandleEvents(w) {
           break;
       }
     },
-    npcCanAccess(npcKey, gdKey) {
-      return Array.from(
-        state.npcToAccess[npcKey] ?? []
-      ).some(prefix => gdKey.startsWith(prefix));
+    isUpcomingDoor(npc, door) {
+      const { target } = npc.s;
+      if (npc.agent === null || target === null) {
+        return false;
+      }
+
+      if (door.doorway.contains({ x: target.x, y: target.z }) === true) {
+        return true; // intersecting door we don't necessarily go through
+      }
+
+      // Does polyline induced by upcoming corners intersect door's seg?
+      const corners = npc.agent.corners().map(({ x, z }) => ({ x, y: z }));
+      let src = npc.getPoint();
+      return corners.some(corner => {
+        if (geom.getLineSegsIntersection(src, corner, door.src, door.dst) !== null) {
+          return true;
+        }
+        src = corner;
+      });
     },
-    npcNearDoor(npcKey, gmId, doorId) {
-      const npc = w.npc.getNpc(npcKey);
-      const position = npc.getPosition();
-      const gm = w.gms[gmId];
-      const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
-      return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
+    npcCanAccess(npcKey, gdKey) {
+      return Array.from(state.npcToAccess[npcKey] ?? []).some(
+        prefix => gdKey.startsWith(prefix)
+      );
+    },
+    npcNearDoor(npcKey, gdKey) {
+      return state.doorToNearby[gdKey]?.has(npcKey);
+      // const npc = w.npc.getNpc(npcKey);
+      // const position = npc.getPosition();
+      // const gm = w.gms[gmId];
+      // const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
+      // return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
     },
     onEnterSensor(e) {
-      const door = w.door.byKey[e.gdKey];
-      const npc = w.npc.getNpc(e.npcKey);
-
       if (e.type === 'nearby') {
         (state.npcToNearby[e.npcKey] ??= new Set).add(e.gdKey);
         (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
-        if (npc.s.permitNav === 'anywhere' || (door.auto === true && !door.locked)) {
+        
+        const door = w.door.byKey[e.gdKey];
+        if (door.auto === true && door.locked === false) {
           state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+        } 
+        
+        const npc = w.npc.getNpc(e.npcKey);
+        if (npc.s.permitNav === 'anywhere' && state.isUpcomingDoor(npc, door) === true) {
+          state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
         }
       } else if (e.type === 'inside') {
-        w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: door.gmId, doorId: door.doorId, gdKey: door.gdKey });
+        w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: e.gmId, doorId: e.doorId, gdKey: e.gdKey });
       }
     },
     onExitSensor(e) {
@@ -231,27 +256,30 @@ export default function useHandleEvents(w) {
       }
       state.npcToNearby[npcKey]?.clear();
     },
+    someNpcNearDoor(gdKey) {
+      return state.doorToNearby[gdKey]?.size > 0;
+    },
     toggleDoor(gdKey, opts = {}) {
       const door = w.door.byKey[gdKey];
 
       if (typeof opts.npcKey === 'string') {
-        if (!state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
+        if (state.npcNearDoor(opts.npcKey, gdKey) === false) {
           return door.open; // not close enough
         }
-        opts.access ??= state.npcCanAccess(opts.npcKey, door.gdKey);
+        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
       }
 
-      opts.clear = !(state.doorToNearby[door.gdKey]?.size > 0);
+      opts.clear = state.someNpcNearDoor(gdKey) === false;
       return w.door.toggleDoorRaw(door, opts);
     },
     toggleLock(gdKey, opts = {}) {
       const door = w.door.byKey[gdKey];
 
       if (typeof opts.npcKey === 'string') {
-        if (!state.npcNearDoor(opts.npcKey, door.gmId, door.doorId)) {
+        if (state.npcNearDoor(opts.npcKey, gdKey) === false) {
           return door.locked; // not close enough
         }
-        opts.access ??= state.npcCanAccess(opts.npcKey, door.gdKey);
+        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
       }
 
       return w.door.toggleLockRaw(door, opts);
@@ -307,15 +335,17 @@ export default function useHandleEvents(w) {
  * @property {Set<string>} externalNpcs
  * Keys of npcs not inside any room
  *
+ * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-sensor' }>) => void} onEnterSensor
  * @property {(e: Extract<NPC.Event, { key: 'exit-sensor' }>) => void} onExitSensor
- * @property {(npcKey: string, gdKey: number, doorId: number) => boolean} npcNearDoor
+ * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  * @property {(npcKey: string) => void} removeFromSensors
+ * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleLockOpts) => boolean} toggleLock
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor

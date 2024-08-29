@@ -14,15 +14,17 @@
   - ℹ️ in 2-player, changing levels shouldn't depend on this event
 
 - 🚧 npc move strategy dictates different navQuery
-  - `anywhere`: no restriction (except sealed)
-  - `adjacent`: can only nav to adjacent rooms
+  - 🚧 `anywhere`: no restriction (except sealed)
+    - ✅ only open non-auto if (a) about to go thru, or (b) would intersect
+  - 🚧 `adjacent`: can only nav to adjacent rooms
   - `accessible`:
     - block non-auto closed doors (including locked)
     - block locked auto doors
+
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door
-- mobile has difficulty pressing switches
-  - try provide "echo circle" for touch devices
+  - mobile has difficulty pressing switches
+    - try provide "echo circle" for touch devices
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
