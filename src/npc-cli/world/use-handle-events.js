@@ -57,6 +57,8 @@ export default function useHandleEvents(w) {
           break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
+          // ℹ️ dev should handle partial correctness e.g. by pausing
+
           const prevRoomToNpcs = state.roomToNpcs;
           const prevExternalNpcs = state.externalNpcs;
           state.roomToNpcs = w.gms.map((_, gmId) => 
@@ -88,7 +90,9 @@ export default function useHandleEvents(w) {
           break;
         }
         case "pre-setup-physics":
-          // 🚧
+          // ℹ️ dev should handle partial correctness e.g. by pausing
+          state.doorToNearby = {};
+          state.npcToNearby = {};
           break;
         case "try-close-door":
           state.tryCloseDoor(e.gmId, e.doorId, e.meta);

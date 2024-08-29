@@ -8,24 +8,10 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 fire event when npc enters/exits a room
-  - ✅ sensor in each doorway, triggered on leave
-    e.g. `inside g1d3` vs `nearby g1d3`
-  - ✅ update npcToRoom
-  - ✅ fix entered-room triggering
-    - ℹ️ seen "npc position" not in room when running through hull door
-    - possibly exasperated by collider near g0d0?
-  - ✅ enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
-  - ✅ on reload nav.worker, recompute w.es.npcToRoom
-    - ❌ clear lookup, except for unchanged gmKeys
-    - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
-    - ℹ️ expect dev to handle this e.g. be in debug mode World/Tty
-    - ✅ recompute over time; if not in room set undefined and warn
-    - ✅ witness re-computation, and npc outside all rooms
-  - ✅ roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
-
-  - on reload physics.worker, clear w.es.{npc,door}ToNearby
-  - `nav-changed` event for code supporting level-editing
+- ✅ on reload physics.worker, clear w.es.{npc,door}ToNearby
+- ❌ `nav-changed` event for code supporting level-editing
+  - ℹ️ dev should pause World while editing nav
+  - ℹ️ in 2-player, changing levels shouldn't depend on this event
 
 - 🚧 npc move strategy dictates different navQuery
   - `anywhere`: no restriction (except sealed)
@@ -2024,3 +2010,19 @@
   - ✅ on disable World fades by default; click anywhere to unpause
   - ✅ World has camera icon
   - ✅ can move camera when clicked
+
+- ✅ fire event when npc enters/exits a room
+  - ✅ sensor in each doorway, triggered on leave
+    e.g. `inside g1d3` vs `nearby g1d3`
+  - ✅ update npcToRoom
+  - ✅ fix entered-room triggering
+    - ℹ️ seen "npc position" not in room when running through hull door
+    - possibly exasperated by collider near g0d0?
+  - ✅ enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
+  - ✅ on reload nav.worker, recompute w.es.npcToRoom
+    - ❌ clear lookup, except for unchanged gmKeys
+    - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
+    - ℹ️ expect dev to handle this e.g. be in debug mode World/Tty
+    - ✅ recompute over time; if not in room set undefined and warn
+    - ✅ witness re-computation, and npc outside all rooms
+  - ✅ roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
