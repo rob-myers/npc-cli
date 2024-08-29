@@ -111,6 +111,11 @@ export default function useHandleEvents(w) {
               type: 'add-npcs',
               npcs: [{ npcKey: e.npcKey, position: { x, y, z } }],
             });
+          } else {// Respawn
+            const prevGrId = state.npcToRoom.get(npc.key);
+            if (prevGrId !== undefined) {
+              state.roomToNpcs[prevGrId.gmId][prevGrId.roomId]?.delete(npc.key);
+            }
           }
           state.npcToRoom.set(npc.key, {...e.gmRoomId});
           (state.roomToNpcs[e.gmRoomId.gmId][e.gmRoomId.roomId] ??= new Set()).add(e.npcKey);
@@ -163,8 +168,10 @@ export default function useHandleEvents(w) {
       const npc = w.npc.getNpc(e.npcKey);
 
       if (e.type === 'nearby') {
-        state.npcToNearby[e.npcKey]?.delete(e.gdKey);
-        state.doorToNearby[e.gdKey]?.delete(e.npcKey);
+        state.npcToNearby[e.npcKey].delete(e.gdKey);
+        const nearbyNpcs = state.doorToNearby[e.gdKey];
+        nearbyNpcs.delete(e.npcKey);
+        nearbyNpcs.size === 0 && door.auto === true && state.tryCloseDoor(door.gmId, door.doorId);
         return;
       }
       
@@ -216,10 +223,7 @@ export default function useHandleEvents(w) {
     removeFromSensors(npcKey) {
       for (const gdKey of state.npcToNearby[npcKey] ?? []) {
         const door = w.door.byKey[gdKey];
-        state.doorToNearby[gdKey].delete(npcKey);
-        if (door.auto === true && !(state.doorToNearby[gdKey]?.size > 0)) {
-          state.tryCloseDoor(door.gmId, door.doorId);
-        }
+        state.onExitSensor({ key: 'exit-sensor', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
       }
       state.npcToNearby[npcKey]?.clear();
     },

@@ -209,6 +209,7 @@ export default function Doors(props) {
           return true;
         }
         if (opts.clear !== true) {
+          // if every npc exits nearby sensor of auto door, we trigger close elsewhere
           return true;
         }
       } else {// was closed
