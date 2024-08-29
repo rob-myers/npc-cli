@@ -223,9 +223,9 @@
     "fresher--025--3x2": {"outputHash": 1611432482, "pngHash": -1324814803},
     "fresher--036--4x2": {"outputHash": 253826638, "pngHash": 633687707},
     "fuel--010--4x2": {
-      "outputHash": 1526524382,
+      "outputHash": -1254617445,
       "pngHash": 858873613,
-      "obsHashes": [-520622282]
+      "obsHashes": [-65124301]
     },
     "iris-valves--005--1x1": {
       "outputHash": 545371427,
@@ -11324,7 +11324,7 @@
           ],
           "meta": {
             "obstacle": true,
-            "color": "#aaa",
+            "color": "#ddd",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
