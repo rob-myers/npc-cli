@@ -175,7 +175,8 @@ export const hitTestRed = /** @type {const} */ ({
   room: 0,
 });
 
-export const defaultDoorCloseMs = 12000;
+// export const defaultDoorCloseMs = 12000;
+export const defaultDoorCloseMs = 3000;
 
 /** Meters */
 export const doorSwitchHeight = 1;
