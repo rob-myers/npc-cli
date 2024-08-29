@@ -132,9 +132,11 @@ export default function Npcs(props) {
     restore() {// onchange nav-mesh
       // restore agents
       Object.values(state.npc).forEach(npc => {
+        if (npc.agent === null) {
+          return;
+        }
         npc.removeAgent();
         const agent = npc.attachAgent();
-        
         const closest = state.getClosestNavigable(npc.getPosition());
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
           npc.startAnimation('Idle');

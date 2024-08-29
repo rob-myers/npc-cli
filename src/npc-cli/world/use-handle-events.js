@@ -161,6 +161,52 @@ export default function useHandleEvents(w) {
         src = corner;
       });
     },
+    async moveNpcTo(npcKey, dst) {
+      const npc = w.npc.getNpc(npcKey);
+
+      if (npc.agent === null) {
+        throw new Error(`${npc.key}: npc lacks agent`);
+      }
+
+      const grId = state.npcToRoom.get(npcKey);
+      if (grId === undefined) {
+        throw new Error(`${npc.key}: npc not in any room`);
+      }
+
+      const vec3 = { x: dst.x, y: 0, z: dst.y };
+      const closest = w.npc.getClosestNavigable(vec3, 0.15);
+      if (closest === null) {
+        throw new Error(`${npc.key}: not navigable (${JSON.stringify(dst)})`);
+      }
+
+      npc.agent.queryFilterType = 0;
+      switch (npc.s.permitNav) {
+        case 'anywhere':
+          break;
+        case 'adjacent': {
+          // within 0.15 of navigable should be inside some room/doors
+          const nextGrId = /** @type {Geomorph.GmRoomId} */ (
+            w.gmGraph.findRoomContaining(dst, true)
+          );
+          if (grId.grKey === nextGrId.grKey) {
+            break; // same room allowed
+          } else if (w.gmRoomGraph.isConnected(
+            w.gmRoomGraph.getNode(grId.gmId, grId.roomId),
+            w.gmRoomGraph.getNode(nextGrId.gmId, nextGrId.roomId),
+          )) {
+            break; // adjacent room allowed
+          } else {
+            throw new Error(`${npc.key}: `);
+          }
+        }
+        case 'accessible':
+          // 🚧 behave as 'adjacent' if possible
+          // 🚧 otherwise compute/set queryFilter at 1
+          break;
+      }
+
+      await npc.moveTo(vec3);
+    },
     npcCanAccess(npcKey, gdKey) {
       return Array.from(state.npcToAccess[npcKey] ?? []).some(
         prefix => gdKey.startsWith(prefix)
@@ -336,6 +382,7 @@ export default function useHandleEvents(w) {
  * Keys of npcs not inside any room
  *
  * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
+ * @property {(npcKey: string, dst: Geom.VectJson) => void} moveNpcTo
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents

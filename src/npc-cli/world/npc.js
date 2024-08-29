@@ -156,31 +156,31 @@ export class Npc {
     this.changeSkin(this.def.skinKey);
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
-  /** @param {THREE.Vector3Like} dst  */
+  /**
+   * Assume `dst` is navigable.
+   * @param {THREE.Vector3Like} dst
+   */
   async moveTo(dst, debugPath = showLastNavPath) {
-    // await this.cancel(); // 🚧 move to process proxy
+    // await this.cancel();
     if (this.agent === null) {
-      return warn(`walkTo: npc ${this.key} has no agent (${JSON.stringify({dst})})`);
+      throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    const closest = this.w.npc.getClosestNavigable(dst, 0.15);
-    if (closest === null) {
-      return;
-    }
     if (debugPath) {
-      const path = this.w.npc.findPath(this.getPosition(), closest);
+      const path = this.w.npc.findPath(this.getPosition(), dst);
       this.w.debug.setNavPath(path ?? []);
     }
+
     const position = this.getPosition();
-    if (position.distanceTo(closest) < 0.25) {
+    if (position.distanceTo(dst) < 0.25) {
       return;
     }
 
     this.s.moving = true;
     this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
-    this.agent.requestMoveTarget(closest);
-    this.s.target = this.lastTarget.copy(closest);
+    this.agent.requestMoveTarget(dst);
+    this.s.target = this.lastTarget.copy(dst);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
       this.startAnimation(nextAct);

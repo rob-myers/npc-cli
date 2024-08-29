@@ -15,8 +15,10 @@
 
 - 🚧 npc move strategy dictates different navQuery
   - 🚧 `anywhere`: no restriction (except sealed)
-    - ✅ only open non-auto if (a) about to go thru, or (b) would intersect
+    - ✅ only open non-auto if (a) about to go through, or (b) would intersect
+    - 🚧 fix case where already nearby then move into/thru doorway
   - 🚧 `adjacent`: can only nav to adjacent rooms
+    - 🚧 prevent nav through locked/closed-non-auto doors via "enter inside"
   - `accessible`:
     - block non-auto closed doors (including locked)
     - block locked auto doors
