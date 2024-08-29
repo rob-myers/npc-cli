@@ -65,13 +65,13 @@ export default function Ceiling(props) {
       const thickLineWidth = 0.08;
 
       if (state.thickerTops) {
-        drawPolygons(ct, tops.nonHull, [grey100, null]);
-        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
+        drawPolygons(ct, tops.nonHull, [grey60, null]);
+        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey60, null]);
         drawPolygons(ct, tops.door.filter(x => x.meta.hull), [grey60, null]);
         drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
       } else {
-        drawPolygons(ct, tops.nonHull, [black, grey90, thinLineWidth]);
-        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [black, grey90, thinLineWidth]);
+        drawPolygons(ct, tops.nonHull, [black, grey60, thinLineWidth]);
+        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [black, grey60, thinLineWidth]);
         drawPolygons(ct, tops.door.filter(x => x.meta.hull), [grey60, grey60]);
       }
 

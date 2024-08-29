@@ -6372,7 +6372,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6381,7 +6381,7 @@
           "center": {"x": 3, "y": 1.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6397,7 +6397,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6406,7 +6406,7 @@
           "center": {"x": 12, "y": 1.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6422,7 +6422,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6431,7 +6431,7 @@
           "center": {"x": 18, "y": 1.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6447,7 +6447,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6456,7 +6456,7 @@
           "center": {"x": 27.01, "y": 1.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6472,7 +6472,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6481,7 +6481,7 @@
           "center": {"x": 12, "y": 28.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6497,7 +6497,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6506,7 +6506,7 @@
           "center": {"x": 18, "y": 28.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6522,7 +6522,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6531,7 +6531,7 @@
           "center": {"x": 27.03, "y": 28.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -6547,7 +6547,7 @@
             ],
             "meta": {
               "obstacle": true,
-              "color": "#ddd",
+              "color": "#aaa",
               "symKey": "fuel--010--4x2",
               "obsId": 0
             }
@@ -6556,7 +6556,7 @@
           "center": {"x": 3, "y": 28.5},
           "meta": {
             "obstacle": true,
-            "color": "#ddd",
+            "color": "#aaa",
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -39498,6 +39498,6 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": -1267809538
+    "imagesHash": 65069303
   }
 }
