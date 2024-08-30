@@ -82,7 +82,8 @@ class GeomorphService {
 
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
-      ...symbolObstacles,
+      // ...symbolObstacles,
+      ...symbolObstacles.flatMap((x) => geom.createOutset(x, obstacleOutset)),
       ...decor.flatMap(d => // 🔔 decor cuboid can effect nav-mesh
         d.type === 'cuboid' && d.meta.nav === true
           ? geom.applyUnitQuadTransformWithOutset(tmpMat1.feedFromArray(d.transform), obstacleOutset)
