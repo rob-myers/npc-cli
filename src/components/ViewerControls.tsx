@@ -1,6 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
+import debounce from "debounce";
 
 import useSite from "./site.store";
 import { afterBreakpoint, breakpoint, nav, view } from "../const";
@@ -29,10 +30,10 @@ export default function ViewerControls({ api }: Props) {
       api.tabs.hardReset();
       update();
     },
-    onReset() {
+    onReset: debounce(() => {
       api.tabs.reset();
       update();
-    },
+    }, 300),
     toggleEnabled() {
       api.tabs.toggleEnabled();
       update();
