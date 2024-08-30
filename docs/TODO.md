@@ -13,15 +13,20 @@
   - ℹ️ dev should pause World while editing nav
   - ℹ️ in 2-player, changing levels shouldn't depend on this event
 
-- 🚧 npc move strategy dictates different navQuery
-  - 🚧 `anywhere`: no restriction (except sealed)
+- ❌ npc move strategy dictates different navQuery
+  - ❌ `anywhere`: no restriction (except sealed)
     - ✅ only open non-auto if (a) about to go through, or (b) would intersect
-    - 🚧 fix case where already nearby then move into/thru doorway
-  - 🚧 `adjacent`: can only nav to adjacent rooms
-    - 🚧 prevent nav through locked/closed-non-auto doors via "enter inside"
+    - ❌ fix case where already nearby then move into/thru doorway
+  - ❌ `adjacent`: can only nav to adjacent rooms
+    - ❌ prevent nav through locked/closed-non-auto doors via "enter inside"
   - `accessible`:
     - block non-auto closed doors (including locked)
     - block locked auto doors
+
+- 🚧 remove `npc.s.permitNav` i.e. only one "move strategy" will be supported
+  - ✅ refactor access keys as regexs
+  - "all access" (e.g. via empty-string) replaces `anywhere`
+  - ...
 
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door

@@ -17,6 +17,21 @@ export default function useHandleEvents(w) {
     roomToNpcs: [],
     externalNpcs: new Set(),
 
+    canNpcAccess(npcKey, gdKey) {
+      for (const regexDef of state.npcToAccess[npcKey] ?? []) {
+        if ((regexCache[regexDef] ??= new RegExp(regexDef)).test(gdKey)) {
+          return true;
+        }
+      }
+      return false;
+    },
+    changeNpcAccess(npcKey, regexDef, act = '+') {
+      if (act === '+') {
+        (state.npcToAccess[npcKey] ??= new Set()).add(regexDef);
+      } else {
+        (state.npcToAccess[npcKey] ??= new Set()).delete(regexDef);
+      }
+    },
     async handleEvents(e) {
       // info('useHandleEvents', e);
 
@@ -207,11 +222,6 @@ export default function useHandleEvents(w) {
 
       await npc.moveTo(vec3);
     },
-    npcCanAccess(npcKey, gdKey) {
-      return Array.from(state.npcToAccess[npcKey] ?? []).some(
-        prefix => gdKey.startsWith(prefix)
-      );
-    },
     npcNearDoor(npcKey, gdKey) {
       return state.doorToNearby[gdKey]?.has(npcKey);
       // const npc = w.npc.getNpc(npcKey);
@@ -312,7 +322,7 @@ export default function useHandleEvents(w) {
         if (state.npcNearDoor(opts.npcKey, gdKey) === false) {
           return door.open; // not close enough
         }
-        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
+        opts.access ??= state.canNpcAccess(opts.npcKey, gdKey);
       }
 
       opts.clear = state.someNpcNearDoor(gdKey) === false;
@@ -325,7 +335,7 @@ export default function useHandleEvents(w) {
         if (state.npcNearDoor(opts.npcKey, gdKey) === false) {
           return door.locked; // not close enough
         }
-        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
+        opts.access ??= state.canNpcAccess(opts.npcKey, gdKey);
       }
 
       return w.door.toggleLockRaw(door, opts);
@@ -371,19 +381,20 @@ export default function useHandleEvents(w) {
  * @property {{ [gdKey: Geomorph.GmDoorKey]: Set<string> }} doorToNearby
  * Relates `Geomorph.GmDoorKey` to nearby `npcKey`s
  * @property {{ [npcKey: string]: Set<string> }} npcToAccess
- * Relates `npcKey` to prefixes of accessible `Geomorph.GmDoorKey`s
+ * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Set<Geomorph.GmDoorKey> }} npcToNearby
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
- * `roomToNpc[gmId][roomId]` is a set of npcKeys
+ * The "inverse" of npcToRoom i.e. `roomToNpc[gmId][roomId]` is a set of `npcKey`s
  * @property {Set<string>} externalNpcs
- * Keys of npcs not inside any room
+ * `npcKey`s not inside any room
  *
  * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
  * @property {(npcKey: string, dst: Geom.VectJson) => void} moveNpcTo
- * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
+ * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} canNpcAccess
+ * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-sensor' }>) => void} onEnterSensor
@@ -399,3 +410,6 @@ export default function useHandleEvents(w) {
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {(npc: NPC.NPC) => void} tryPutNpcIntoRoom
  */
+
+/** e.g. `'^g0'` -> `/^g0/` */
+const regexCache = /** @type {Record<string, RegExp>} */ ({});
