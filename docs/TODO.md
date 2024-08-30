@@ -27,8 +27,10 @@
   - ℹ️ "all access" (e.g. `/./`) replaces `anywhere`
   - ✅ refactor access keys as regexs
   - ✅ remove `npc.s.permitNav`
-  - 🚧 fix move into doorway when already nearby
-  - 🚧 fix move through doorway when already nearby
+  - ✅ w.e.moveNpc(npcKey, point)
+  - 🚧 assuming all access, fix move into doorway when already nearby
+  - 🚧 assuming all access, fix move through doorway when already nearby
+  - ...
 
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door

@@ -150,7 +150,7 @@ export async function walkTest(input, { w, home })  {
   if (npc) {
     // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
     npc.s.run = input.keys?.includes("shift") ?? false;
-    npc.moveTo(input.v3);
+    await w.e.moveNpc(npc.key, input);
   }
 }
 

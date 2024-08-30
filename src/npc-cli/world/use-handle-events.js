@@ -176,6 +176,11 @@ export default function useHandleEvents(w) {
         src = corner;
       });
     },
+    async moveNpc(npcKey, point) {
+      const npc = w.npc.getNpc(npcKey);
+      // 🚧
+      await npc.moveTo({ x: point.x, y: 0, z: point.y });
+    },
     npcNearDoor(npcKey, gdKey) {
       return state.doorToNearby[gdKey]?.has(npcKey);
       // const npc = w.npc.getNpc(npcKey);
@@ -204,6 +209,7 @@ export default function useHandleEvents(w) {
       
       if (e.type === 'inside') {
         w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: e.gmId, doorId: e.doorId, gdKey: e.gdKey });
+        return;
       }
     },
     onExitSensor(e) {
@@ -356,6 +362,7 @@ export default function useHandleEvents(w) {
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-sensor' }>) => void} onEnterSensor
  * @property {(e: Extract<NPC.Event, { key: 'exit-sensor' }>) => void} onExitSensor
+ * @property {(npcKey: string, point: Geom.VectJson) => Promise<void>} moveNpc
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
