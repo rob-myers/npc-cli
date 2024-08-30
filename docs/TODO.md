@@ -23,10 +23,12 @@
     - block non-auto closed doors (including locked)
     - block locked auto doors
 
-- 🚧 remove `npc.s.permitNav` i.e. only one "move strategy" will be supported
+- 🚧 refactor `npc.s.permitNav` i.e. support only one "move strategy"
+  - ℹ️ "all access" (e.g. `/./`) replaces `anywhere`
   - ✅ refactor access keys as regexs
-  - "all access" (e.g. via empty-string) replaces `anywhere`
-  - ...
+  - ✅ remove `npc.s.permitNav`
+  - 🚧 fix move into doorway when already nearby
+  - 🚧 fix move through doorway when already nearby
 
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door

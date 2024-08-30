@@ -28,17 +28,6 @@ declare namespace NPC {
     agent?: boolean;
   }
 
-  /**
-   * - `anywhere` means anywhere except sealed
-   * - `accessible` (default) means anywhere via unlocked-auto or locked-open doors
-   * - `adjacent` for adjacent accessible rooms only
-   */
-  type PermitNav = (
-    | 'anywhere'
-    | 'accessible'
-    | 'adjacent'
-  );
-
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
   type Event =

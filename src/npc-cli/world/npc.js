@@ -30,9 +30,6 @@ export class Npc {
     /** Is this npc moving? */
     moving: false,
     paused: false,
-    /** @type {NPC.PermitNav} */
-    // permitNav: 'accessible',
-    permitNav: 'anywhere', // temp
     rejectMove: emptyReject,
     run: false,
     spawns: 0,
@@ -166,21 +163,26 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
+    const closest = this.w.npc.getClosestNavigable(dst, 0.15);
+    if (closest === null) {
+      throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
+    }
+
     if (debugPath) {
-      const path = this.w.npc.findPath(this.getPosition(), dst);
+      const path = this.w.npc.findPath(this.getPosition(), closest);
       this.w.debug.setNavPath(path ?? []);
     }
 
     const position = this.getPosition();
-    if (position.distanceTo(dst) < 0.25) {
+    if (position.distanceTo(closest) < 0.25) {
       return;
     }
 
     this.s.moving = true;
     this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
-    this.agent.requestMoveTarget(dst);
-    this.s.target = this.lastTarget.copy(dst);
+    this.agent.requestMoveTarget(closest);
+    this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
       this.startAnimation(nextAct);
