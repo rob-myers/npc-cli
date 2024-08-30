@@ -650,7 +650,9 @@ class cmdServiceClass {
       let reject = (_?: any) => {};
       const cleanup = () => reject();
       getProcess(meta).cleanups.push(cleanup);
+
       // ℹ️ pause/resume handling not needed: cannot click links when paused
+      // 🚧 although we can in debug mode...
 
       const linkPromFactory = parsedLines.some((x) => x.linkCtxtsFactory)
         ? () =>
@@ -666,7 +668,8 @@ class cmdServiceClass {
                   )
               );
             })
-        : undefined;
+        : undefined
+      ;
 
       if (typeof secs === "number" || !linkPromFactory) {
         // links have timeout (also if no links, with fallback 0)
