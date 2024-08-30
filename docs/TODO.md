@@ -31,7 +31,7 @@
   - ✅ assuming all access
     - ✅ fix move into doorway when already nearby
     - ✅ fix move through doorway when already nearby
-  - 🚧 get working when lack access
+  - ✅ npc move should also work when lack access to door
   - 🚧 clean
 
 - doors should close when nothing `inside` (rather than `nearby`)
