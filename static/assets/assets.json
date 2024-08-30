@@ -124,9 +124,9 @@
       "obsHashes": [-1912350195]
     },
     "extra--002--fresher--0.5x0.5": {
-      "outputHash": 1001289017,
+      "outputHash": 1662607177,
       "pngHash": 482008010,
-      "obsHashes": [997944906]
+      "obsHashes": [1665074508]
     },
     "extra--003--chair--0.25x0.25": {
       "outputHash": -1896320059,
@@ -214,9 +214,9 @@
       "obsHashes": [1508393284]
     },
     "fresher--002--0.4x0.6": {
-      "outputHash": -1931642542,
+      "outputHash": -1014187854,
       "pngHash": -1792259774,
-      "obsHashes": [1124240817]
+      "obsHashes": [162440445]
     },
     "fresher--015--1x2": {"outputHash": 829502856, "pngHash": -1481245979},
     "fresher--020--2x2": {"outputHash": -196495568, "pngHash": 1107295627},
@@ -9850,6 +9850,7 @@
           ],
           "meta": {
             "obstacle": true,
+            "nav-outset": 4,
             "symKey": "extra--002--fresher--0.5x0.5",
             "obsId": 0
           }
@@ -10629,6 +10630,7 @@
           "meta": {
             "obstacle": true,
             "toilet": true,
+            "nav-outset": 4,
             "symKey": "fresher--002--0.4x0.6",
             "obsId": 0
           }
