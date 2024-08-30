@@ -292,7 +292,7 @@ export default function useHandleEvents(w) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        w.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
+        e.is3d && w.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
       } else if (!e.justLongDown) {
         w.menu.hide();
       }
