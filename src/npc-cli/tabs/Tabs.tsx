@@ -76,9 +76,10 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       }
       return act;
     },
-    onModelChange: debounce(() => {
+    // 🔔 saw "Debounced method called with different contexts" for 300ms
+    onModelChange: debounce((() => {
       storeModelAsJson(props.id, state.model);
-    }, 300),
+    }), 30),
     reset() {
       state.tabsState = {};
       if (!state.enabled) {
