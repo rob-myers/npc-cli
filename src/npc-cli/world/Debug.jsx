@@ -132,7 +132,7 @@ export default function Debug(props) {
         <mesh
           name="origNavPoly"
           args={[w.gmsData[gm.key].navPoly, origNavPolyMaterial]}
-          position={[0, 0.001, 0]}
+          position={[0, 0.0001, 0]}
           visible={props.showOrigNavPoly}
         />
       </group>
