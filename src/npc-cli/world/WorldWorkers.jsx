@@ -1,7 +1,7 @@
 import React from 'react';
 import { init as initRecastNav } from "@recast-navigation/core";
 
-import { info, isDevelopment, warn } from '../service/generic';
+import { info, isDevelopment, warn, debug } from '../service/generic';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 
@@ -27,7 +27,7 @@ export default function WorldWorkers() {
     },
     async handlePhysicsWorkerMessage(e) {
       const msg = e.data;
-      info("main thread received from physics worker", msg);
+      debug("main thread received from physics worker", msg);
 
       if (msg.type === "npc-collisions") {
         msg.collisionEnd.forEach(({ npcKey, otherKey }) => {
