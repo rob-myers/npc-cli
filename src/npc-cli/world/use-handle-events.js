@@ -17,7 +17,7 @@ export default function useHandleEvents(w) {
     roomToNpcs: [],
     externalNpcs: new Set(),
 
-    canNpcAccess(npcKey, gdKey) {
+    npcCanAccess(npcKey, gdKey) {
       for (const regexDef of state.npcToAccess[npcKey] ?? []) {
         if ((regexCache[regexDef] ??= new RegExp(regexDef)).test(gdKey)) {
           return true;
@@ -178,8 +178,36 @@ export default function useHandleEvents(w) {
     },
     async moveNpc(npcKey, point) {
       const npc = w.npc.getNpc(npcKey);
-      // 🚧
-      await npc.moveTo({ x: point.x, y: 0, z: point.y });
+      const nearbyDoors = Array.from(
+        state.npcToNearby[npcKey] ?? []
+      ).map(gdKey => w.door.byKey[gdKey]);
+
+      // handle move into doorway when already nearby
+      for (const door of nearbyDoors) {
+        if (door.doorway.contains(point)) {
+          if (state.npcCanAccess(npcKey, door.gdKey)) {
+            w.door.toggleDoorRaw(door, { open: true, access: true });
+          } else {
+            throw Error(`${npc.key}: cannot move into doorway`);
+          }
+          break;
+        }
+      }
+
+      await npc.moveTo({ x: point.x, y: 0, z: point.y }, {
+        onStart() {// handle move through doorway when already nearby
+          for (const door of nearbyDoors) {
+            if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
+              if (state.npcCanAccess(npcKey, door.gdKey)) {
+                w.door.toggleDoorRaw(door, { open: true, access: true });
+              } else {
+                npc.stopMoving();
+              }
+              break;
+            }
+          }
+        },
+      });
     },
     npcNearDoor(npcKey, gdKey) {
       return state.doorToNearby[gdKey]?.has(npcKey);
@@ -195,14 +223,21 @@ export default function useHandleEvents(w) {
         (state.doorToNearby[e.gdKey] ??= new Set).add(e.npcKey);
         
         const door = w.door.byKey[e.gdKey];
+        if (door.open === true) {
+          return;
+        }
+
         if (door.auto === true && door.locked === false) {
           state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
         } 
         
         const npc = w.npc.getNpc(e.npcKey);
-        // 🚧 only auto-open if door.auto
-        if (w.e.canNpcAccess(e.npcKey, e.gdKey) && state.isUpcomingDoor(npc, door) === true) {
-          state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
+        if (state.isUpcomingDoor(npc, door) === true) {
+          if (door.auto === true && w.e.npcCanAccess(e.npcKey, e.gdKey) === true) {
+            state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
+          } else {
+            npc.stopMoving();
+          }
         }
         return;
       }
@@ -286,7 +321,7 @@ export default function useHandleEvents(w) {
         if (state.npcNearDoor(opts.npcKey, gdKey) === false) {
           return door.open; // not close enough
         }
-        opts.access ??= state.canNpcAccess(opts.npcKey, gdKey);
+        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
       }
 
       opts.clear = state.someNpcNearDoor(gdKey) === false;
@@ -299,7 +334,7 @@ export default function useHandleEvents(w) {
         if (state.npcNearDoor(opts.npcKey, gdKey) === false) {
           return door.locked; // not close enough
         }
-        opts.access ??= state.canNpcAccess(opts.npcKey, gdKey);
+        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
       }
 
       return w.door.toggleLockRaw(door, opts);
@@ -356,7 +391,7 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
- * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} canNpcAccess
+ * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents

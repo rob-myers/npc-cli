@@ -28,9 +28,14 @@
   - ✅ refactor access keys as regexs
   - ✅ remove `npc.s.permitNav`
   - ✅ w.e.moveNpc(npcKey, point)
-  - 🚧 assuming all access, fix move into doorway when already nearby
-  - 🚧 assuming all access, fix move through doorway when already nearby
-  - ...
+  - ✅ assuming all access
+    - ✅ fix move into doorway when already nearby
+    - ✅ fix move through doorway when already nearby
+  - 🚧 get working when lack access
+  - 🚧 clean
+
+- doors should close when nothing `inside` (rather than `nearby`)
+  - ensure npc does not think it is open when it is not
 
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door

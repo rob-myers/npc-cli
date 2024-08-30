@@ -95,6 +95,7 @@ export default function World(props) {
     },
 
     e: /** @type {*} */ (null), // useHandleEvents
+    oneTimeTicks: [],
 
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -122,6 +123,8 @@ export default function World(props) {
       state.npc.onTick(deltaMs);
       state.door.onTick();
       // info(state.r3f.gl.info.render);
+
+      while (state.oneTimeTicks.shift()?.());
     },
     async resolveOnReady() {
       if (state.isReady()) {
@@ -367,6 +370,7 @@ export default function World(props) {
  *
  * @property {import("./use-handle-events").State} e
  * Events state i.e. useHandleEvents state
+ * @property {(() => void)[]} oneTimeTicks
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex
  * @property {import("../service/three").CanvasTexMeta} decorTex

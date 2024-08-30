@@ -154,10 +154,13 @@ export class Npc {
     // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
   /**
-   * Assume `dst` is navigable.
    * @param {THREE.Vector3Like} dst
+   * @param {object} [opts]
+   * @param {boolean} [opts.debugPath]
+   * @param {() => void} [opts.onStart]
+   * A callback to invoke after npc has started walking in crowd
    */
-  async moveTo(dst, debugPath = showLastNavPath) {
+  async moveTo(dst, opts = {}) {
     // await this.cancel();
     if (this.agent === null) {
       throw new Error(`${this.key}: npc lacks agent`);
@@ -168,7 +171,7 @@ export class Npc {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
 
-    if (debugPath) {
+    if (opts.debugPath ?? showLastNavPath) {
       const path = this.w.npc.findPath(this.getPosition(), closest);
       this.w.debug.setNavPath(path ?? []);
     }
@@ -182,6 +185,9 @@ export class Npc {
     this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     this.agent.requestMoveTarget(closest);
+    if (opts.onStart !== undefined) {
+      this.w.oneTimeTicks.push(opts.onStart);
+    }
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
