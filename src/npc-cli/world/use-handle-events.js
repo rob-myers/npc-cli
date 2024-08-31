@@ -190,36 +190,20 @@ export default function useHandleEvents(w) {
     },
     async moveNpc(npcKey, point) {
       const npc = w.npc.getNpc(npcKey);
-      const nearbyDoors = Array.from(
-        state.npcToNearby[npcKey] ?? []
-      ).map(gdKey => w.door.byKey[gdKey]);
-
-      // handle move into doorway when already nearby
-      for (const door of nearbyDoors) {
-        if (door.doorway.contains(point)) {
-          if (state.npcCanAccess(npcKey, door.gdKey)) {
-            w.door.toggleDoorRaw(door, { open: true, access: true });
-          } else {
-            throw Error(`${npc.key}: cannot move into doorway`);
-          }
-          break;
-        }
-      }
-
-      await npc.moveTo({ x: point.x, y: 0, z: point.y }, {
-        onStart() {// handle move through doorway when already nearby
-          for (const door of nearbyDoors) {
-            if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
-              if (state.npcCanAccess(npcKey, door.gdKey)) {
-                w.door.toggleDoorRaw(door, { open: true, access: true });
-              } else {
-                npc.stopMoving();
-              }
-              break;
+      await npc.moveTo({ x: point.x, y: 0, z: point.y }, { onStart() {
+        // handle move into/through doorway when already nearby
+        for (const gdKey of state.npcToNearby[npcKey] ?? []) {
+          const door = w.door.byKey[gdKey];
+          if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
+            if (state.npcCanAccess(npcKey, door.gdKey)) {
+              w.door.toggleDoorRaw(door, { open: true, access: true });
+            } else {
+              npc.stopMoving();
             }
+            break;
           }
-        },
-      });
+        }
+      }});
     },
     npcNearDoor(npcKey, gdKey) {
       return state.doorToNearby[gdKey]?.has(npcKey);
