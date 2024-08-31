@@ -279,7 +279,7 @@ export default function useHandleEvents(w) {
 
         // npc entered room
         state.npcToDoor[e.npcKey].inside.delete(e.gdKey);
-        state.doorToNpc[e.gdKey].nearby.delete(e.npcKey);
+        state.doorToNpc[e.gdKey].inside.delete(e.npcKey);
 
         const prev = state.npcToRoom.get(e.npcKey);
         if (door.gmId !== prev?.gmId) {
