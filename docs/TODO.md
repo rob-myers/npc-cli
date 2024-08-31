@@ -11,6 +11,9 @@
 - 🚧 locked doors should close when
   - nothing `inside` (rather than `nearby`)
   - no nearby npc are moving
+  - trigger check when nearby npc stops (currently only on exit nearby sensor)
+
+- cannot close door when npc nearby
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
