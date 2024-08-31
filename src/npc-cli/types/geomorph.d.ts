@@ -74,6 +74,8 @@ declare namespace Geomorph {
 
     /** Is the door automatic? */
     auto: boolean;
+    /** Is this an axis-aligned rectangle? */
+    axisAligned: boolean;
     /** Is the door open? */
     open: boolean;
     /** Is the door locked? */
@@ -90,12 +92,17 @@ declare namespace Geomorph {
     src: Geom.VectJson;
     /** Dst of transformed door segment */
     dst: Geom.VectJson;
+    /** Center of transformed door */
+    center: Geom.Vect;
     /** Direction of transformed door segment */
     dir: Geom.VectJson;
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
+    /** Transformed `door.poly`. */
     doorway: Geom.Poly;
+    /** Bounds of `doorway`. */
+    rect: Geom.Rect;
 
     closeTimeoutId?: number;
   }

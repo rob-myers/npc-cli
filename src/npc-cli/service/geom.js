@@ -607,7 +607,7 @@ class geomServiceClass {
     let /** @type {number} */ s, /** @type {number} */ t;
 
     if (z === 0) {
-      if (ignoreColinear) return null;
+      if (ignoreColinear === true) return null;
       /**
        * Line segs are parallel, so both have non-normalized
        * normal (-dpy, dpx). For colinearity they must have

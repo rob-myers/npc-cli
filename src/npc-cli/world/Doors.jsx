@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth } from "../service/const";
+import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision } from "../service/const";
 import * as glsl from "../service/glsl";
 import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
@@ -52,12 +52,14 @@ export default function Doors(props) {
       w.gms.forEach((gm, gmId) => {
         const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorState[]} */ ([]);
         gm.doors.forEach((door, doorId) => {
-          const { seg: [u, v], normal, center } = door;
+          const [u, v] = door.seg;
           tmpMat1.feedFromArray(gm.transform);
           tmpMat1.transformPoint(tmpVec1.copy(u));
           tmpMat1.transformPoint(tmpVec2.copy(v));
+          const center = new Vect((tmpVec1.x + tmpVec2.x) / 2, (tmpVec1.y + tmpVec2.y) / 2);
           const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-          
+          const doorwayPoly = door.computeDoorway().applyMatrix(tmpMat1).precision(precision);
+
           const gdKey = /** @type {const} */ (`g${gmId}d${doorId}`);
           const posKey = /** @type {const} */ (`${center.x},${center.y}`);
 
@@ -71,6 +73,7 @@ export default function Doors(props) {
 
             // auto: prev?.auto ?? (door.meta.auto === true),
             auto: true,
+            axisAligned: door.normal.x === 0 || door.normal.y === 0,
             locked: prev?.locked ?? (door.meta.locked === true),
             open : prev?.open ?? false,
             sealed: hull === true
@@ -81,10 +84,12 @@ export default function Doors(props) {
             ratio: prev?.ratio ?? 1, // 1 means closed
             src: tmpVec1.json,
             dst: tmpVec2.json,
+            center,
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
-            normal: tmpMat1.transformSansTranslate(normal.clone()),
+            normal: tmpMat1.transformSansTranslate(door.normal.clone()),
             segLength: u.distanceTo(v),
-            doorway: door.computeDoorway().applyMatrix(tmpMat1),
+            doorway: doorwayPoly,
+            rect: doorwayPoly.rect.precision(precision),
           };
           instId++;
         })
