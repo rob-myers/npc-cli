@@ -1,7 +1,7 @@
 import React from "react";
 import { defaultDoorCloseMs } from "../service/const";
 import { pause, warn } from "../service/generic";
-import { geom } from "../service/geom";
+import { geom, tmpVec1 } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -162,19 +162,31 @@ export default function useHandleEvents(w) {
         return false;
       }
 
-      if (door.doorway.contains({ x: target.x, y: target.z }) === true) {
-        return true; // intersecting door we don't necessarily go through
+      // Is target inside doorway?
+      tmpVec1.set(target.x, target.z);
+      if (door.axisAligned === true
+        ? door.rect.contains(tmpVec1) === true
+        : door.doorway.contains(tmpVec1) === true
+      ) {// intersecting door we don't necessarily go through
+        return true;
       }
 
       // Does polyline induced by upcoming corners intersect door's seg?
-      const corners = npc.agent.corners().map(({ x, z }) => ({ x, y: z }));
       let src = npc.getPoint();
-      return corners.some(corner => {
-        if (geom.getLineSegsIntersection(src, corner, door.src, door.dst) !== null) {
-          return true;
+      let dist = door.center.distanceToSquared(src), nextDist = 0;
+
+      for (const corner of npc.agent.corners()) {
+        if (geom.getLineSegsIntersection(src, tmpVec1.set(corner.x, corner.z), door.src, door.dst, true) !== null) {
+          return true; // typically 1st seg intersects, if any
         }
-        src = corner;
-      });
+        if ((nextDist = door.center.distanceToSquared(tmpVec1)) > dist) {
+          return false; // distance must decrease before intersect
+        } else {
+          dist = nextDist;
+        }
+      }
+
+      return false;
     },
     async moveNpc(npcKey, point) {
       const npc = w.npc.getNpc(npcKey);
@@ -224,12 +236,12 @@ export default function useHandleEvents(w) {
         
         const door = w.door.byKey[e.gdKey];
         if (door.open === true) {
-          return;
+          return; // door already open
         }
 
         if (door.auto === true && door.locked === false) {
           state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
-          return;
+          return; // opened auto unlocked door
         } 
         
         const npc = w.npc.getNpc(e.npcKey);
@@ -237,6 +249,7 @@ export default function useHandleEvents(w) {
           if (door.auto === true && w.e.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
           } else {
+            // setTimeout(() => npc.stopMoving(), 300);
             npc.stopMoving();
           }
         }

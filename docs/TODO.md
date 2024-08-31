@@ -32,10 +32,13 @@
     - ✅ fix move into doorway when already nearby
     - ✅ fix move through doorway when already nearby
   - ✅ npc move should also work when lack access to door
+  - ✅ no-access npc should not stop when going through auto door
+  - ✅ can avoid checking each corner if no intersect and further away
   - 🚧 clean
 
-- doors should close when nothing `inside` (rather than `nearby`)
-  - ensure npc does not think it is open when it is not
+- locked doors should close when nothing `inside` (rather than `nearby`)
+  - probably also assume no nearby npc is moving
+- no-access npc stops early when onEnterSensor
 
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door
