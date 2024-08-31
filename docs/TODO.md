@@ -8,42 +8,9 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ on reload physics.worker, clear w.es.{npc,door}ToNearby
-- ❌ `nav-changed` event for code supporting level-editing
-  - ℹ️ dev should pause World while editing nav
-  - ℹ️ in 2-player, changing levels shouldn't depend on this event
-
-- ❌ npc move strategy dictates different navQuery
-  - ❌ `anywhere`: no restriction (except sealed)
-    - ✅ only open non-auto if (a) about to go through, or (b) would intersect
-    - ❌ fix case where already nearby then move into/thru doorway
-  - ❌ `adjacent`: can only nav to adjacent rooms
-    - ❌ prevent nav through locked/closed-non-auto doors via "enter inside"
-  - `accessible`:
-    - block non-auto closed doors (including locked)
-    - block locked auto doors
-
-- 🚧 refactor `npc.s.permitNav` i.e. support only one "move strategy"
-  - ℹ️ "all access" (e.g. `/./`) replaces `anywhere`
-  - ✅ refactor access keys as regexs
-  - ✅ remove `npc.s.permitNav`
-  - ✅ w.e.moveNpc(npcKey, point)
-  - ✅ assuming all access
-    - ✅ fix move into doorway when already nearby
-    - ✅ fix move through doorway when already nearby
-  - ✅ npc move should also work when lack access to door
-  - ✅ no-access npc should not stop when going through auto door
-  - ✅ can avoid checking each corner if no intersect and further away
-  - 🚧 clean
-
-- locked doors should close when nothing `inside` (rather than `nearby`)
-  - probably also assume no nearby npc is moving
-- no-access npc stops early when onEnterSensor
-
-- support non-door sensor i.e. decor circle/poly
-- support click switch to open door, instead of click door
-  - mobile has difficulty pressing switches
-    - try provide "echo circle" for touch devices
+- 🚧 locked doors should close when
+  - nothing `inside` (rather than `nearby`)
+  - no nearby npc are moving
 
 - create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
@@ -73,13 +40,10 @@
       - i.e. preset large bounds, and use geometry.setDrawRange
     - could use underlying gl api to remove attributes
 
-- ✅ xterm.js selection bug with gold text
-  - needed to upgrade to `@xterm/xterm`
-- ✅ hmr: support gm-graph
-  - can ignore gm-room-graph because shouldn't really change,
-    i.e. any "related" methods should inside gm-graph instead
-- 🚧 hmr issue editing obstacle outline
-  - seems fixed by always re-generating obstacle texture, irrespective of size change
+- support non-door sensor i.e. decor circle/poly
+- support click switch to open door, instead of click door
+  - mobile has difficulty pressing switches, so
+    try provide "echo circle" for touch devices
 - hmr issue with Connector class
 - hull door enter-room triggers late?
 - towards faster raycast against instancedmesh
@@ -2047,3 +2011,40 @@
     - ✅ recompute over time; if not in room set undefined and warn
     - ✅ witness re-computation, and npc outside all rooms
   - ✅ roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
+
+- ✅ xterm.js selection bug with gold text
+  - needed to upgrade to `@xterm/xterm`
+- ✅ hmr: support gm-graph
+  - can ignore gm-room-graph because shouldn't really change,
+    i.e. any "related" methods should inside gm-graph instead
+- ✅ hmr issue editing obstacle outline
+  - seems fixed by always re-generating obstacle texture, irrespective of size change
+
+- ✅ on reload physics.worker, clear w.es.{npc,door}ToNearby
+- ❌ `nav-changed` event for code supporting level-editing
+  - ℹ️ dev should pause World while editing nav
+  - ℹ️ in 2-player, changing levels shouldn't depend on this event
+
+- ❌ npc move strategy dictates different navQuery
+  - ❌ `anywhere`: no restriction (except sealed)
+    - ✅ only open non-auto if (a) about to go through, or (b) would intersect
+    - ❌ fix case where already nearby then move into/thru doorway
+  - ❌ `adjacent`: can only nav to adjacent rooms
+    - ❌ prevent nav through locked/closed-non-auto doors via "enter inside"
+  - `accessible`:
+    - block non-auto closed doors (including locked)
+    - block locked auto doors
+
+- ✅ refactor `npc.s.permitNav` i.e. support only one "move strategy"
+- ℹ️ "all access" (e.g. `/./`) replaces `anywhere`
+- ✅ refactor access keys as regexs
+- ✅ remove `npc.s.permitNav`
+- ✅ w.e.moveNpc(npcKey, point)
+- ✅ assuming all access
+  - ✅ fix move into doorway when already nearby
+  - ✅ fix move through doorway when already nearby
+- ✅ npc move should also work when lack access to door
+- ✅ no-access npc should not stop when going through auto door
+- ✅ can avoid checking each corner if no intersect and further away
+- ℹ️ no-access npc stops early when onEnterSensor
+- ✅ clean
