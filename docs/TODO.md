@@ -8,13 +8,7 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- ✅ locked doors should close when
-  - ✅ nothing `inside` and no `nearby` npc moving
-  - ✅ trigger check when nearby npc stops (currently only on exit nearby sensor)
-
-- ✅ fix bug: cannot close door when npc nearby
-
-- create "hyper casual" characters, rather then pseudo minecraft character
+- 🚧 create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
   - based on these models e.g. 3 bones: body > head, shadow
 
@@ -2050,3 +2044,9 @@
 - ✅ can avoid checking each corner if no intersect and further away
 - ℹ️ no-access npc stops early when onEnterSensor
 - ✅ clean
+
+- ✅ locked doors should close when
+  - ✅ nothing `inside` and no `nearby` npc moving
+  - ✅ trigger check when nearby npc stops (currently only on exit nearby sensor)
+
+- ✅ fix bug: cannot close door when npc nearby
