@@ -8,10 +8,9 @@
   - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 locked doors should close when
-  - nothing `inside` (rather than `nearby`)
-  - no nearby npc are moving
-  - trigger check when nearby npc stops (currently only on exit nearby sensor)
+- ✅ locked doors should close when
+  - ✅ nothing `inside` and no `nearby` npc moving
+  - ✅ trigger check when nearby npc stops (currently only on exit nearby sensor)
 
 - ✅ fix bug: cannot close door when npc nearby
 

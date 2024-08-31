@@ -17,13 +17,23 @@ export default function useHandleEvents(w) {
     roomToNpcs: [],
     externalNpcs: new Set(),
 
-    npcCanAccess(npcKey, gdKey) {
-      for (const regexDef of state.npcToAccess[npcKey] ?? []) {
-        if ((regexCache[regexDef] ??= new RegExp(regexDef)).test(gdKey)) {
-          return true;
-        }
+    canCloseDoor(door) {
+      const closeNpcs = state.doorToNpc[door.gdKey];
+      if (closeNpcs.inside.size > 0) {
+        return false;
       }
-      return false;
+      if (closeNpcs.nearby.size === 0) {
+        return true;
+      }
+      if (door.auto === true && door.locked === false) {
+        return false;
+      }
+
+      for (const npcKey of closeNpcs.nearby) {
+        if (w.npc.npc[npcKey]?.s.moving === true)
+          return false;
+      }
+      return true;
     },
     changeNpcAccess(npcKey, regexDef, act = '+') {
       if (act === '+') {
@@ -140,7 +150,7 @@ export default function useHandleEvents(w) {
           (state.roomToNpcs[e.gmRoomId.gmId][e.gmRoomId.roomId] ??= new Set()).add(e.npcKey);
           break;
         }
-        case "removed-npc":
+        case "removed-npc": {
           w.physics.worker.postMessage({
             type: 'remove-npcs',
             npcKeys: [e.npcKey],
@@ -154,6 +164,14 @@ export default function useHandleEvents(w) {
             state.externalNpcs.delete(e.key);
           }
           break;
+        }
+        case "stopped-moving": {
+          for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+            const door = w.door.byKey[gdKey];
+            door.open === true && state.tryCloseDoor(door.gmId, door.doorId);
+          }
+          break;
+        }
       }
     },
     isUpcomingDoor(npc, door) {
@@ -204,6 +222,14 @@ export default function useHandleEvents(w) {
           }
         }
       }});
+    },
+    npcCanAccess(npcKey, gdKey) {
+      for (const regexDef of state.npcToAccess[npcKey] ?? []) {
+        if ((regexCache[regexDef] ??= new RegExp(regexDef)).test(gdKey)) {
+          return true;
+        }
+      }
+      return false;
     },
     npcNearDoor(npcKey, gdKey) {
       return state.doorToNpc[gdKey]?.nearby.has(npcKey);
@@ -259,11 +285,7 @@ export default function useHandleEvents(w) {
         // ℹ️ try close door under conditions
         if (door.open === true) {
           return;
-        } else if (door.locked === true && closeNpcs.inside.size === 0) {
-          // if locked, none inside, none moving nearby, try close 
-          for (const npcKey of closeNpcs.nearby) {
-            if (w.npc.npc[npcKey]?.s.moving === true) return;
-          }
+        } else if (door.locked === true) {
           state.tryCloseDoor(door.gmId, door.doorId)
         } else if (door.auto === true && closeNpcs.nearby.size === 0) {
           // if auto and none nearby, try close 
@@ -372,7 +394,7 @@ export default function useHandleEvents(w) {
       door.closeTimeoutId = window.setTimeout(() => {
         if (door.open === true) {
           w.door.toggleDoorRaw(door, {
-            clear: !state.someNpcNearDoor(door.gdKey),
+            clear: state.canCloseDoor(door) === true,
             eventMeta,
           });
           state.tryCloseDoor(gmId, doorId); // recheck in {ms}
@@ -420,6 +442,7 @@ export default function useHandleEvents(w) {
  * @property {Set<string>} externalNpcs
  * `npcKey`s not inside any room
  *
+ * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
