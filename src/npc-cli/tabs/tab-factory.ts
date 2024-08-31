@@ -2,7 +2,7 @@ import React from "react";
 import loadable from "@loadable/component";
 import { IJsonModel, Model, TabNode } from "flexlayout-react";
 
-import type ActualTerminal from "../terminal/WrappedTerminal";
+import type ActualTerminal from "../terminal/TtyWithFunctions";
 import {
   deepClone,
   tryLocalStorageGet,
@@ -11,6 +11,7 @@ import {
 } from "../service/generic";
 import { Props as TabsProps, State as TabsApi } from "./Tabs";
 import { TabMemo } from "./Tab";
+import { isTouchDevice } from "../service/dom";
 
 export function factory(node: TabNode, api: TabsApi, forceUpdate: boolean) {
   const state = api.tabsState[node.getId()];
@@ -111,15 +112,27 @@ type TabMetaPropsDistributed<K extends ComponentClassKey> = K extends infer A
 
 type TabMetaPropsGeneric<K extends ComponentClassKey> = {
   class: K;
-  props: ComponentClassKeyToProps[K];
+  props: Omit<ComponentClassKeyToProps[K], 'setTabsEnabled'>;
 };
 
 type ComponentClassKeyToProps = {
   [K in ComponentClassKey]: Parameters<ReturnType<(typeof classToComponent)[K]["get"]>>[0];
 };
 
-export interface BaseComponentProps {
+export interface BaseTabProps {
+  /**
+   * Is this Tab disabled?
+   * Either
+   * - every tab is disabled
+   * - every tab is enabled (except background component tabs)
+   */
   disabled?: boolean;
+  /**
+   * For example, can enable all tabs:
+   * - onclick anywhere in a single tab (World)
+   * - onclick a link (Tty)
+   */
+  setTabsEnabled(next: boolean): void;
 }
 
 function FallbackComponentFactory(componentKey: string) {
@@ -131,7 +144,7 @@ function FallbackComponentFactory(componentKey: string) {
     );
 }
 
-export const Terminal = loadable(() => import("../terminal/WrappedTerminal"), {
+export const Terminal = loadable(() => import("../terminal/TtyWithFunctions"), {
   ssr: false,
 }) as typeof ActualTerminal;
 
@@ -197,8 +210,10 @@ function computeJsonModel(tabsDefs: TabDef[][], rootOrientationVertical?: boolea
       tabEnableRename: false,
       rootOrientationVertical,
       tabEnableClose: false,
+      tabSetEnableDivide: !isTouchDevice(),
+      enableEdgeDock: !isTouchDevice(),
       // Use `visibility: hidden` instead of `display: none`,
-      // so we can e.g. getBoundingClientRect() for npc getPosition.
+      // otherwise <World> does not progress
       enableUseVisibility: true,
       splitterExtra: 12,
       splitterSize: 2,

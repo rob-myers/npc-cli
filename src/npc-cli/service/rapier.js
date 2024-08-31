@@ -5,7 +5,7 @@ import { hashText } from "./generic";
  * for "more efficient" messaging between worker and main thread.
  * 
  * We also record the correspondence in two dictionaries.
- * @param {string} bodyKey e.g. an npcKey or a gmDoorKey
+ * @param {WW.PhysicsBodyKey} bodyKey
  * @param {PhysicsBijection} lookups 
  * @returns {number}
  */
@@ -18,6 +18,13 @@ export function addBodyKeyUidRelation(bodyKey, lookups) {
 
 /**
  * @typedef PhysicsBijection
- * @property {{ [bodyKey: string]: number }} bodyKeyToUid
- * @property {{ [bodyUid: number]: string }} bodyUidToKey
+ * @property {{ [bodyKey: WW.PhysicsBodyKey]: number }} bodyKeyToUid
+ * @property {{ [bodyUid: number]: WW.PhysicsBodyKey }} bodyUidToKey
  */
+
+/**
+ * @param {string} npcKey
+ */
+export function npcToBodyKey(npcKey) {
+  return /** @type {const} */ (`npc ${npcKey}`);
+}

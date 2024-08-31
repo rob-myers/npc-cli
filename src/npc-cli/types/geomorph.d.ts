@@ -7,7 +7,11 @@ declare namespace Geomorph {
     symbols: Record<Geomorph.SymbolKey, Geomorph.SymbolGeneric<T, P, R>>;
     maps: Record<string, Geomorph.MapDef>;
     sheet: SpriteSheet;
-    /** `metaKey` is a `Geomorph.SymbolKey` or a mapKey e.g. `demo-map-1` */
+    /**
+     * `metaKey` is either
+     * - a `Geomorph.SymbolKey`
+     * - a mapKey e.g. `demo-map-1`
+     */
     meta: { [metaKey: string]: {
       /** Hash of parsed symbol */
       outputHash: number;
@@ -20,6 +24,31 @@ declare namespace Geomorph {
 
   type AssetsJson = AssetsGeneric<Geom.GeoJsonPolygon, Geom.VectJson, Geom.RectJson>;
   type Assets = AssetsGeneric<Geom.Poly, Geom.Vect, Geom.Rect>;
+
+  type GeomorphsHash = PerGeomorphHash & {
+    /** `${maps} ${layouts} ${sheets}` */
+    full: `${number} ${number} ${number}`;
+
+    /** Hash of all maps */
+    maps: number;
+    /** Hash of all layouts */
+    layouts: number;
+    /** Depends on rect lookup _and_ images */
+    sheets: number;
+    /** `${layouts} ${maps}` */
+    decor: `${number} ${number}`;
+    /** Hash of current map */
+    map: number;
+
+    /** `gmHashes[gmId]` is hash of `map.gms[gmId]` */
+    gmHashes: number[];
+  }
+
+  type PerGeomorphHash = Record<Geomorph.GeomorphKey, {
+    full: number;
+    decor: number;
+    nav: number;
+  }>;
 
   type Connector = import("../service/geomorph").Connector;
 
@@ -45,6 +74,8 @@ declare namespace Geomorph {
 
     /** Is the door automatic? */
     auto: boolean;
+    /** Is this an axis-aligned rectangle? */
+    axisAligned: boolean;
     /** Is the door open? */
     open: boolean;
     /** Is the door locked? */
@@ -57,20 +88,49 @@ declare namespace Geomorph {
 
     /** Between `0.1` (open) and `1` (closed) */
     ratio: number;
-    /** Source of transformed door segment */
+    /** Src of transformed door segment */
     src: Geom.VectJson;
+    /** Dst of transformed door segment */
+    dst: Geom.VectJson;
+    /** Center of transformed door */
+    center: Geom.Vect;
     /** Direction of transformed door segment */
     dir: Geom.VectJson;
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
+    /** Transformed `door.poly`. */
+    doorway: Geom.Poly;
+    /** Bounds of `doorway`. */
+    rect: Geom.Rect;
 
     closeTimeoutId?: number;
+  }
 
-    /** NPCs which are nearby this door */
-    nearbyNpcKeys: Set<string>;
-    /** NPCs which can unlock this door */
-    unlockNpcKeys: Set<string>;
+  interface ToggleDoorOpts extends BaseDoorToggle {
+    /** Is the doorway clear? */
+    clear?: boolean;
+    /** Should we close the door? */
+    close?: boolean;
+    /** Should we open door? */
+    open?: boolean;
+  }
+  
+  interface ToggleLockOpts extends BaseDoorToggle {
+    /** Should we lock the door? */
+    lock?: boolean;
+    /** Should we unlock the door? */
+    unlock?: boolean;
+  }
+
+  interface BaseDoorToggle {
+    /**
+     * Does the instigator exist (boolean) and have access (true)?
+     * See also `w.e.canAccess(npcKey, gdKey)`.
+     */
+    access?: boolean;
+    /** Extra meta for door events */
+    eventMeta?: Geom.Meta;
   }
 
   interface GeomorphsGeneric<
@@ -79,12 +139,6 @@ declare namespace Geomorph {
     R extends Geom.RectJson | Geom.Rect,
     C extends Geomorph.Connector | Geomorph.ConnectorJson
   > {
-    /** `${mapsHash} ${layoutsHash} ${sheetsHash} ${imagesHash}` */
-    hash: string;
-    mapsHash: number;
-    layoutsHash: number;
-    sheetsHash: number;
-    imagesHash: number;
     map: Record<string, Geomorph.MapDef>;
     layout: Record<Geomorph.GeomorphKey, Geomorph.LayoutGeneric<T, P, R, C>>;
     sheet: SpriteSheet;
@@ -205,6 +259,10 @@ declare namespace Geomorph {
     gms: { gmKey: GeomorphKey; transform: Geom.SixTuple; }[];
   }
 
+  /**
+   * `rooms` + `doors` + `walls` form a disjoint union covering the `hullPoly`.
+   * 🚧 what about `windows`?
+   */
   interface LayoutGeneric<
     P extends Geom.GeoJsonPolygon | Geom.Poly,
     V extends Geom.VectJson | Geom.Vect,
@@ -286,7 +344,7 @@ declare namespace Geomorph {
     | DecorCuboid
     | DecorPoint
     | DecorQuad
-    | DecorPoly
+    | DecorRect
   );
 
   interface DecorCircle extends BaseDecor, Geom.Circle {
@@ -299,15 +357,12 @@ declare namespace Geomorph {
   interface DecorCuboid extends BaseDecor {
     type: 'cuboid';
     center: import('three').Vector3Like;
-    /** Half-extents */
-    extent: import('three').Vector3Like;
-    /** Radians */
-    angle: number;
+    transform: Geom.SixTuple;
   }
 
   interface DecorPoint extends BaseDecor, Geom.VectJson {
     type: 'point';
-    /** Orientation in degrees, like `meta.orient` */
+    /** Orientation in degrees, where the unit vector `(1, 0)` corresponds to `0`  */
     orient: number;
   }
   
@@ -318,8 +373,8 @@ declare namespace Geomorph {
     center: Geom.VectJson;
   }
 
-  interface DecorPoly extends BaseDecor {
-    type: 'poly';
+  interface DecorRect extends BaseDecor {
+    type: 'rect';
     points: Geom.VectJson[];
     /** Center of `new Poly(points)` */
     center: Geom.VectJson;
@@ -347,7 +402,7 @@ declare namespace Geomorph {
   type DecorImgKey = import('../service/const.js').DecorImgKey;
 
   /** 🚧 clarify */
-  type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorPoly;
+  type DecorCollidable = Geomorph.DecorCircle | Geomorph.DecorRect;
 
   /** `byGrid[x][y]` */
   type DecorGrid = Set<Geomorph.Decor>[][];
@@ -384,6 +439,7 @@ declare namespace Geomorph {
     obstacleDim: { width: number; height: number; }
     decorDim: { width: number; height: number; }
     decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
+    imagesHash: number;
   }
 
   interface ObstacleSheetRectCtxt {

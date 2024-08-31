@@ -2,6 +2,52 @@
 <svg viewBox="0 0 375 225" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
     <bx:grid x="0" y="0" width="300" height="300"/>
+    <symbol id="symbol-6" viewBox="0 0 1 1">
+      <title>decor-unit-quad</title>
+      <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill-opacity: 0.5; vector-effect: non-scaling-stroke; stroke: rgb(218, 85, 85); fill: none; stroke-width: 10px; stroke-dasharray: 10;">
+        <title>fill</title>
+      </rect>
+      <rect width="1" height="1" style="fill: url('#pattern-1');">
+        <title>pattern</title>
+      </rect>
+    </symbol>
+    <pattern x="0" y="0" width="0.5" height="0.5" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-1">
+      <title>decor-quad-pattern</title>
+      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+      </g>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </pattern>
+    <pattern id="pattern-0" viewBox="0 0 300 300" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="1" height="1" bx:pinned="true">
+      <title>decor-arrow-pattern</title>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+      <rect x="0.000029" y="-0.000047" width="300.000003" height="299.999989" style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;">
+        <title>bg</title>
+      </rect>
+      <rect width="149.998993" height="19.999998" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);" y="139.999992" x="50.000671">
+        <title>arrow-body</title>
+      </rect>
+      <path d="M 199.999648 125 L 249.999314 149.999997 L 199.999648 174.999997 L 199.999648 125 Z" style="stroke: rgb(0, 0, 0);">
+        <title>arrow-head</title>
+      </path>
+    </pattern>
+    <symbol id="symbol-1" viewBox="0 0 1 1">
+      <title>decor-arrow</title>
+      <rect width="1" height="1" style="fill: url('#pattern-0');">
+        <title>pattern</title>
+      </rect>
+    </symbol>
   </defs>
   <image width="382" height="202" x="-3.5" y="11.5" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAX4AAADKCAQAAAAI/+OgAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAACYktHRAD/h4/MvwAAAAd0SU1FB+gEDhAuJAi+rDEAAAR6SURBVHja7d3BjttGEEVRyZj//2Vl4QSBZjRSN9mUWPXOWQRIAEdc3C4V28b4ertcbxeIc7v+kT6p/nz6AeBTrheTn1AmP7HETyzxE+vr/l8rvABcyz0xZ3HfjslPrPLxX/f/LwhVMH6LDmsUjB/WED+xxE8s8ROrQfzue9imQfywTcn4XXayQsn4YQXxE0v8xBI/sVrE77KTLYrG776H/YrGD/uJn1jiJ5b4idUkfvc9zGsSP8wrG7/LTvYqGz/sJX5iiZ9Y4idWm/hddjLra/YXfCay28P/Jnj2mJz8cqOPImuPQ8d6ReKH9YrE7/dzWa9I/COsRswpEr+wWW/qqvN7gkcuIyO5u+xkjx2T/9g93JbP0YqsPbBemfgtOKw2Eb/86GXz5D9+J5//BMeTGWXWnse8FrNdofjNddYajl96dLNx8r9n3bDUcKRCaw+sVSr+16uX5Yxxg/GLin42Tf737eKvP8l7AVuVWntgpWLxW79YZyh+ydHRhsn/3i3bTs9Riq09r/mWYlS5+H/G7buBbQbiN0vpaXryv3/Omuwco9zaA6uIn1gN4/eOwpiG8cOYFvF7JWaLgvFba1jjZfxSo6sSk99awxEm45chfZSY/LOsaoxoEr9vJOY1iR/miZ9Y4idWyfi90LLCi/jPktnsC+1Znpszm5r87lTopOTa84iDyaw28cMs8RNL/MQSP7GKxu+vqWC/MvH7Sf2sViZ+WE38xBI/scRPrMbxu+/hucbxw3Ot4nfZyYxW8cMM8RNL/MQSP7Fax++yk2eaxe++h3HN4odx4ieW+IklfmI1j999D79rHj/8rl38LjsZ1S5+GCV+YomfWGXid2/DamXivzf+WuvQ8Jui8T/jvocxDeOHMeInlviJJX5iTcVf8+ak5lNzvCKTX8Cs9yL+mteGNZ+adysy+e+JmxVKxg8riJ9Y4idWRPzuinikafxeiXltMn4zlD5exn+GGerIcYSCa88ZjiMdFIwf1giJ3+LETyHxw09t4/dmwCtt44dXpuO3PdPFQPyfXiAcN45Rbu359FGkj3Lxb+X7g+82xF8lI98RPHf6yV/lqFHPUPznmaHneRLqO/3kh6Nsit8qQgcnn/wrj5kjy73B+M+xa5/jKeji5JN/H4eFZzbGb4WgvlNPfkeMIw3H//kV4vNPQC+nnvxwpM3xV1xJKj4zxznx5F+RqlWJ303E/9mQZMxqJ578cKwd8dugqe1rzy+WP5VNTf7P7d2rPtlx5X9Fdn7Rsl6R+LdzS8RvisQvYdYrEj+sNxn/Zyawuc8Rpq86b5e/r5/vCPJdn0OmTff87wryiM+5Ok78K2DnFzuPBcQPj4mfWOInlviJFRi/PyfEX4Hxw18R8bvs5JGI+OER8RNL/MQSP7Ei43fZyeUSE7/7Hn4KiR9+Ej+xxE8s8RMrNH73PcTGD0Hxu+zku5j44TvxE0v8xBI/sWLjd9lJUPzue7gXFD/cEz+x/NBiYpn8xBI/scRPLPET6nYVP7Gut//+ATFu18vlcvkHGRxYlshUCmoAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjQtMDQtMTRUMTY6NDY6MzYrMDA6MDCHsHBjAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI0LTA0LTE0VDE2OjQ2OjM2KzAwOjAw9u3I3wAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNC0wNC0xNFQxNjo0NjozNiswMDowMKH46QAAAAAASUVORK5CYII=">
     <title>bed--005--0.6x1.2</title>
@@ -9,10 +55,10 @@
   <rect x="-4.070072" y="10.000001" width="382.891196" height="205.000015" style="fill-opacity: 0.5; fill: rgb(0, 0, 255);">
     <title>obstacle</title>
   </rect>
-  <rect width="10" height="10" style="fill-opacity: 0.5; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" x="83" y="107.5">
-    <title>decor do lie bed orient=0 y=0.01</title>
-  </rect>
-  <rect width="375" height="200" style="paint-order: fill; stroke: rgb(255, 0, 0); opacity: 0.5;" y="12.5">
-    <title>decor cuboid table h=0.2 y=-0.2</title>
-  </rect>
+  <use width="1" height="1" transform="matrix(382.321136474609, 0, 0, 200, 187.160568237305, 112)" style="transform-origin: 0.5px 0.5px; opacity: 0.5;" xlink:href="#symbol-6">
+    <title>decor cuboid h=0.2 y=-0.2</title>
+  </use>
+  <use width="1" height="1" transform="matrix(20, 0, 0, 20, 84.5, 112)" style="opacity: 0.5; transform-origin: 0.5px 0.5px;" xlink:href="#symbol-1">
+    <title>decor do lie bed y=0.01</title>
+  </use>
 </svg>

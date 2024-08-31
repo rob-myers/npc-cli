@@ -3,8 +3,8 @@ import * as THREE from "three";
 
 import { Mat, Vect } from "../geom";
 import { wallHeight } from "../service/const";
-import { quadGeometryXY } from "../service/three";
-import { geomorphService } from "../service/geomorph";
+import { getQuadGeometryXY } from "../service/three";
+import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -35,7 +35,7 @@ export default function Walls(props) {
       [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
       const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
       const len = u.distanceTo(v);
-      return geomorphService.embedXZMat4(
+      return geomorph.embedXZMat4(
         [len * Math.cos(rad), len * Math.sin(rad), -Math.sin(rad), Math.cos(rad), tmpVec1.x, tmpVec1.y],
         { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
       );
@@ -47,7 +47,10 @@ export default function Walls(props) {
         event: e,
         is3d: true,
         justLongDown: false,
-        meta: state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+        meta: {
+          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
+        },
       }));
       e.stopPropagation();
     },
@@ -56,7 +59,10 @@ export default function Walls(props) {
         key: "pointerup",
         event: e,
         is3d: true,
-        meta: state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+        meta: {
+          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
+        },
       }));
       e.stopPropagation();
     },
@@ -81,19 +87,20 @@ export default function Walls(props) {
 
   React.useEffect(() => {
     state.positionInstances();
-  }, [w.hash, w.gmsData.wallCount]);
+  }, [w.mapKey, w.hash.full, w.gmsData.wallCount, wallHeight]);
 
   return (
     <instancedMesh
       name="walls"
-      key={w.hash}
+      key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.wallsInst = instances)}
-      args={[quadGeometryXY, undefined, w.gmsData.wallCount]}
+      args={[getQuadGeometryXY('walls-xy'), undefined, w.gmsData.wallCount]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
       >
       <meshBasicMaterial side={THREE.DoubleSide} color="black" />
+      {/* <meshBasicMaterial side={THREE.DoubleSide} color="#f00" wireframe /> */}
     </instancedMesh>
   );
 }

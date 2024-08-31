@@ -2,8 +2,6 @@
  * @typedef {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | import('canvas').CanvasRenderingContext2D} CanvasContext2DType
  */
 
-import { isDevelopment } from './generic';
-
 /** Non-empty iff running in browser */
 export const tmpCanvasCtxts = typeof window !== 'undefined' ?
   Array.from({ length: 2 }).map(_ => /** @type {CanvasRenderingContext2D} */ (
@@ -11,8 +9,11 @@ export const tmpCanvasCtxts = typeof window !== 'undefined' ?
   ) : []
 ;
 
-/** @param {number} dim */
-export function createGridPattern(dim, color = 'rgba(255, 255, 255, 0.1)') {
+/**
+ * @param {number} dim
+ * @param {string} color
+ */
+export function createGridPattern(dim, color) {
   const [tmpCtxt] = tmpCanvasCtxts;
   tmpCtxt.canvas.width = tmpCtxt.canvas.height = dim;
   tmpCtxt.resetTransform();
@@ -74,12 +75,12 @@ export function drawPolygons(ct, polys, [fillStyle, strokeStyle, lineWidth] = []
     for (const hole of poly.holes) {
       fillRing(ct, hole, false);
     }
-    if (strokeStyle !== null) {
-      ct.closePath();
-      ct.stroke();
-    }
     if (fillStyle !== null) {
       clip === false ? ct.fill() : ct.clip();
+    }
+    ct.closePath();
+    if (strokeStyle !== null) {
+      ct.stroke();
     }
   }
 }

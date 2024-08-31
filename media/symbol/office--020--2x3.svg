@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
-    <bx:grid x="0" y="0" width="300" height="300" />
+    <bx:grid x="0" y="0" width="300" height="300"/>
     <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937" />
-        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937" />
-        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)" />
-        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)" />
-        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)" />
-        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)" />
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
       </g>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300" />
+        <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
     <symbol id="symbol-2" vioewbox="0 0 150 150" viewBox="0 0 150 150">
@@ -24,26 +24,60 @@
         <title>console--051--0.4x0.6 y=0.4</title>
       </rect>
     </symbol>
-    <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-3" />
-    <pattern id="pattern-3" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0" />
+    <pattern id="pattern-2-0" patternTransform="matrix(1.000004768372, 0.000009289364, -0.000009289364, 1.000004768372, -0.000484466553, 150.001953125)" xlink:href="#pattern-3"/>
+    <pattern id="pattern-3" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0"/>
     <symbol id="symbol-0" viewBox="0 0 600 900" bx:pinned="true">
       <title>extra--014--table--2x3</title>
       <rect width="600" height="900" style="filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); opacity: 0.25; fill: url('#pattern-0'); transform-origin: 300.001px 450.004px;">
         <title>extra--014--table--2x3</title>
       </rect>
       <defs>
-        <bx:grid x="0" y="0" width="300" height="300" />
+        <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </symbol>
+    <symbol id="symbol-9" viewBox="0 0 1 1">
+      <title>decor-unit-quad</title>
+      <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
+        <title>fill</title>
+      </rect>
+      <rect width="1" height="1" style="fill: url('#pattern-1');">
+        <title>pattern</title>
+      </rect>
+    </symbol>
+    <pattern x="0" y="0" width="0.5" height="0.5" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-1">
+      <title>decor-quad-pattern</title>
+      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+      </g>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </pattern>
   </defs>
   <image width="620" height="920" style="pointer-events: none;" x="-9" y="-7" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmwAAAOYAgMAAAAVj0cNAAAABGdBTUEAALGPC/xhBQAAAAd0SU1FB+UJGg8ELZIGK1cAAAAQY2FOdgAAAnkAAAOYAAAAAAAAAAAVQ85IAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAAAFiS0dEAmYLfGQAAAPjSURBVHja7d3NkeIwEAZQ+eAQyMch+ODmQAjOZ0LwAUe5h2VqDzv+KQajBt4XQNcrsFoUZbVKaSJnulJKUloMJe3HFlFKm9bWlVNaW5/YNqRdCmz3L1Q2NjY2NraXss3ZwsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxvY021fiuaCZbcHGxvbXNpRnho2NjY2NjS2tbfXSq66urV2/24mNjS2FbVwqcmVj+xDb91a68edAV9M2rtv6GrZ23XZlY/sc2zjP87Rsu+xtcmxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGzvalsM28varAU2NrZ7bVvvRVe0XbdsIxvbg22LRerbzktFptq2y1qZiY2NjY3toD1rLWxsbGx67wFnijdsVc87s72VrXl9W1fDVk57bHsqHTLbpNmydbvKsLGxHWrbCBvbI2devbKtVLS167Rhv21IOhf0lNzWJ7W1iW1NRHRJbSViKFltbfRpbf+6HBsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbG9sj0kaX1hYxZLU1EZHV1kZEl9R2iog+sW1IaotDbLGRzLZuf5VH2xo2Nrab7bJWZmJjY6tsayJiy7avjVSz9TVsLRsb2802Xrds45XtR9tG2NjY2PReNjY2tny/3xaLJNizxp9rXNnYHmybt2xzRdu0bjvXtM3ztGy7zDMbGxvblm0xbC9rsxbY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY/rfdzq4tvxdd97wz21vZmnXbnME2r9u6GrZyioiI81KRafdIrkNmm3w3uYUHrt9ZhI3tLWwrYWP7IFvz+8l0h9lum+pvplseZ3tE2NjY2NjY2J5tqxC2z7V9sd1luya2PTlsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGwvZcsZNjY2NjY2tl9nSG07sd2Rfv1Kqcq2Jq2tKyXv41bSfql9+QMPoqgkSrDAKwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0wOS0yNlQxNTowNDozOSswMDowMNCG1uMAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMDktMjZUMTU6MDQ6MzkrMDA6MDCh225fAAAAAElFTkSuQmCC">
     <title>office--020--2x3</title>
   </image>
+  <g>
+    <title>symbols</title>
+    <use width="600" height="900" xlink:href="#symbol-0">
+      <title>extra--014--table--2x3 y=0.8</title>
+    </use>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(2.1073401512694545e-7, 1.0000007152557373, -1.0000007152557373, 2.1073401512694545e-7, 299.98614501953125, 162.17320251464844)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+      <title>console--051--0.4x0.6 y=0.4</title>
+    </use>
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(2.1073401512694545e-7, -1.0000007152557373, -1.0000007152557373, -2.1073401512694545e-7, 299.98614501953125, 593.1732177734375)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
+      <title>console--051--0.4x0.6 y=0.4</title>
+    </use>
+  </g>
   <rect x="300" y="399.9" width="10" height="10" style="fill: rgb(216, 216, 216);">
     <title>decor label=office</title>
-  </rect>
-  <rect x="585" y="340" width="30" height="220" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;">
-    <title>door</title>
   </rect>
   <rect y="-10" width="20" height="920" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" x="590">
     <title>wall</title>
@@ -57,16 +91,13 @@
   <rect width="610" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" y="-10">
     <title>wall</title>
   </rect>
-  <g>
-    <title>symbols</title>
-    <use width="600" height="900" xlink:href="#symbol-0">
-      <title>extra--014--table--2x3 y=0.8</title>
-    </use>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(2.10734e-7, 1.000000715256, -1.000000715256, 2.10734e-7, 299.986145019531, 162.173202514648)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
-      <title>console--051--0.4x0.6 y=0.4</title>
-    </use>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(2.10734e-7, -1.000000715256, -1.000000715256, -2.10734e-7, 299.986145019531, 593.173217773438)" style="transform-origin: 75.0064px 75.0064px;" xlink:href="#symbol-2">
-      <title>console--051--0.4x0.6 y=0.4</title>
-    </use>
-  </g>
+  <rect x="585" y="340" width="30" height="220" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0); fill-opacity: 0.8; stroke-width: 4px;">
+    <title>door locked</title>
+  </rect>
+  <use width="1" height="1" transform="matrix(0, -30, 30, 0, 586.5, 324.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch inner</title>
+  </use>
+  <use width="1" height="1" transform="matrix(0, -30, 30, 0, 611.5, 324.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch</title>
+  </use>
 </svg>

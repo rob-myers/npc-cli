@@ -391,7 +391,7 @@ class cmdServiceClass {
 
         function suppressLinks(process: ProcessMeta) {
           return (
-            process.status === 2 ||
+            process.status === ProcessStatus.Killed ||
             process.key === 0 || // suppress links when leader has descendant leader
             (!opts.a && !opts.s && getDescLeaders(process).length)
           );
@@ -580,11 +580,14 @@ class cmdServiceClass {
         break;
       }
       case "source": {
+        if (args[0] === undefined) {
+          return;
+        }
         const script = this.get(node, [args[0]])[0];
         if (script === undefined) {
           useSession.api.writeMsg(meta.sessionKey, `source: "${args[0]}" not found`, "error");
         } else if (typeof script !== "string") {
-          useSession.api.writeMsg(meta.sessionKey, `source: "${args[0]}" is not a string`, "error");
+          useSession.api.writeMsg(meta.sessionKey, `source: "${args[0]}" does not resolve as a string`, "error");
         } else {
           // We cache scripts
           const parsed = parseService.parse(script, true);
@@ -647,7 +650,9 @@ class cmdServiceClass {
       let reject = (_?: any) => {};
       const cleanup = () => reject();
       getProcess(meta).cleanups.push(cleanup);
+
       // ℹ️ pause/resume handling not needed: cannot click links when paused
+      // 🚧 although we can in debug mode...
 
       const linkPromFactory = parsedLines.some((x) => x.linkCtxtsFactory)
         ? () =>
@@ -663,7 +668,8 @@ class cmdServiceClass {
                   )
               );
             })
-        : undefined;
+        : undefined
+      ;
 
       if (typeof secs === "number" || !linkPromFactory) {
         // links have timeout (also if no links, with fallback 0)

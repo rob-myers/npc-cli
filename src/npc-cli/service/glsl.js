@@ -336,7 +336,6 @@ export const meshDiffuseTest = {// Supports instancing
 
     mvPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * mvPosition;
-    //#endregion
 
     // <logdepthbuf_vertex>
     #ifdef USE_LOGDEPTHBUF
@@ -347,13 +346,10 @@ export const meshDiffuseTest = {// Supports instancing
     // <defaultnormal_vertex>
     vec3 transformedNormal = objectNormal;
     #ifdef USE_INSTANCING
-      // this is in lieu of a per-instance normal-matrix
-      // shear transforms in the instance matrix are not supported
       mat3 im = mat3( instanceMatrix );
-      // transformedNormal /= vec3( dot( im[ 0 ], im[ 0 ] ), dot( im[ 1 ], im[ 1 ] ), dot( im[ 2 ], im[ 2 ] ) );
       transformedNormal = im * transformedNormal;
     #endif
-    // 🚧 what does this do exactly?
+    // normalMatrix is mat3 of worldMatrix (?)
     transformedNormal = normalMatrix * transformedNormal;
 
     vColor = vec3(1.0);
@@ -361,8 +357,9 @@ export const meshDiffuseTest = {// Supports instancing
       vColor.xyz *= instanceColor.xyz;
     #endif
 
-    vec3 lightDir = normalize(cameraPosition - mvPosition.xyz);
-    dotProduct = max(dot(normalize(transformedNormal), lightDir), 0.0);
+    vec4 mvCameraPosition = modelViewMatrix * vec4(cameraPosition, 1.0);
+    vec3 lightDir = normalize(mvPosition.xyz - mvCameraPosition.xyz);
+    dotProduct = -min(dot(normalize(transformedNormal), lightDir), 0.0);
   }
   `,
 
@@ -377,7 +374,7 @@ export const meshDiffuseTest = {// Supports instancing
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = vec4(vColor * diffuse * (0.25 + 0.5 * dotProduct), 1);
+    gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
 
     #include <logdepthbuf_fragment>
   }

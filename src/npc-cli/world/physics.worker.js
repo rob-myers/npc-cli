@@ -2,11 +2,11 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { geomorphGridMeters, glbMeta, wallHeight } from '../service/const';
-import { error, info, warn, debug } from "../service/generic";
+import { geomorphGridMeters, glbMeta, wallHeight, wallOutset } from '../service/const';
+import { info, warn, debug } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
-import { geomorphService } from '../service/geomorph';
-import { addBodyKeyUidRelation } from '../service/rapier';
+import { geomorph } from '../service/geomorph';
+import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 import { helper } from '../service/helper';
 
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToPhysicsWorker>} */ (
@@ -16,7 +16,8 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToP
 const config = {
   fps: 60,
   agentHeight: glbMeta.height * glbMeta.scale,
-  agentRadius: glbMeta.radius * glbMeta.scale * (2/3),
+  // agentRadius: glbMeta.radius * glbMeta.scale * 0.5,
+  agentRadius: 0.25,
 };
 
 /** @type {State} */
@@ -30,7 +31,6 @@ const state = {
   bodyKeyToUid: {},
   bodyUidToKey: {},
 
-  npcKeys: new Set(),
 };
 
 /** @param {MessageEvent<WW.MsgToPhysicsWorker>} e */
@@ -47,20 +47,22 @@ async function handleMessages(e) {
   switch (msg.type) {
     case "add-npcs":
       for (const npc of msg.npcs) {
-        if (state.npcKeys.has(npc.npcKey) === true) {
+        if (npcToBodyKey(npc.npcKey) in state.bodyKeyToUid) {
           warn(`physics worker: ${msg.type}: cannot re-add body (${npc.npcKey})`)
           continue;
         }
-        state.npcKeys.add(npc.npcKey);
         const body = createRigidBody({
           type: RAPIER.RigidBodyType.KinematicPositionBased,
-          halfHeight: config.agentHeight / 2,
-          radius: config.agentRadius,
+          geomDef: {
+            type: 'cylinder',
+            halfHeight: config.agentHeight / 2,
+            radius: config.agentRadius,
+          },
           position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
           userData: {
             npc: true,
-            bodyKey: npc.npcKey,
-            bodyUid: addBodyKeyUidRelation(npc.npcKey, state),
+            bodyKey: npcToBodyKey(npc.npcKey),
+            bodyUid: addBodyKeyUidRelation(npcToBodyKey(npc.npcKey), state),
           },
         });
       }
@@ -68,29 +70,28 @@ async function handleMessages(e) {
     case "remove-npcs":
       // 🔔 no need to remove when not moving (can set asleep)
       for (const npcKey of msg.npcKeys) {
-        state.npcKeys.delete(npcKey);
-        const body = state.bodyKeyToBody.get(npcKey);
+        const body = state.bodyKeyToBody.get(npcToBodyKey(npcKey));
         if (body !== undefined) {
           state.bodyHandleToKey.delete(body.handle);
-          state.bodyKeyToBody.delete(npcKey);
-          state.bodyKeyToCollider.delete(npcKey);
+          state.bodyKeyToBody.delete(npcToBodyKey(npcKey));
+          state.bodyKeyToCollider.delete(npcToBodyKey(npcKey));
           state.world.removeRigidBody(body);
         }
       }
     break;
     case "send-npc-positions": {
       // set kinematic body positions
-      let npcKey = '';
+      let npcBodyKey = /** @type {WW.PhysicsBodyKey} */ ('');
       let position = /** @type {{ x: number; y: number; z: number;  }} */ ({});
       // decode: [npcBodyUid, positionX, positionY, positionZ, ...]
       for (const [index, value] of msg.positions.entries()) {
         switch (index % 4) {
-          case 0: npcKey = state.bodyUidToKey[value]; break;
+          case 0: npcBodyKey = state.bodyUidToKey[value]; break;
           case 1: position.x = value; break;
           case 2: position.y = config.agentHeight/2; break; // overwrite y
           case 3:
             position.z = value;
-            /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcKey))
+            /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcBodyKey))
               .setTranslation(position, true) // awaken on move
             ;
             break;
@@ -119,13 +120,14 @@ function stepWorld() {
   
   state.eventQueue.drainCollisionEvents((handle1, handle2, started) => {
     collided = true;
-    const bodyKey1 = /** @type {string} */ (state.bodyHandleToKey.get(handle1));
-    const bodyKey2 = /** @type {string} */ (state.bodyHandleToKey.get(handle2));
-    // 🔔 currently only have npcs and door sensors
+    const bodyKey1 = /** @type {WW.PhysicsBodyKey} */ (state.bodyHandleToKey.get(handle1));
+    const bodyKey2 = /** @type {WW.PhysicsBodyKey} */ (state.bodyHandleToKey.get(handle2));
+
+    // 🔔 currently only have npcs and door inside/nearby sensors
     (started === true ? collisionStart : collisionEnd).push(
-      state.npcKeys.has(bodyKey1) === true
-        ? { npcKey: bodyKey1, otherKey: bodyKey2 }
-        : { npcKey: bodyKey2, otherKey: bodyKey1 }
+      bodyKey1.startsWith('npc')
+        ? { npcKey: bodyKey1.slice('npc '.length), otherKey: bodyKey2 }
+        : { npcKey: bodyKey2.slice('npc '.length), otherKey: bodyKey1 }
     );
   });
 
@@ -155,48 +157,72 @@ async function setupWorld(mapKey, npcs) {
     state.bodyKeyToBody.clear();
     state.bodyKeyToCollider.clear();
     state.bodyHandleToKey.clear();
-    state.world.bodies.free();
-    state.world.colliders.free();
+    // state.world.bodies.free();
+    // state.world.colliders.free();
   }
 
-  const geomorphs = geomorphService.deserializeGeomorphs(await fetchGeomorphsJson());
+  const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
   const mapDef = geomorphs.map[mapKey];
   const gms = mapDef.gms.map(({ gmKey, transform }, gmId) =>
-    geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
+    geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
-  // door sensors
-  const gmDoorBodies = gms.map((gm, gmId) => 
-    gm.doors.map((door, doorId) => {
-      const center = gm.matrix.transformPoint(door.center.clone());
-      const bodyKey = helper.getGmDoorKey(gmId, doorId);
-      return createRigidBody({
+  // door sensors: nearby ✅ inside ✅
+  const gmDoorBodies = gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
+    const center = gm.matrix.transformPoint(door.center.clone());
+    const gdKey = helper.getGmDoorKey(gmId, doorId);
+    const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
+    const insideKey = /** @type {const} */ (`inside ${gdKey}`);
+
+    return [
+      // hull door sensor ~ 2x2 grid
+      // non-hull door sensor ~ 1x1 grid
+      createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
-        // hull door sensor ~ 2x2 grid
-        // non-hull door sensor ~ 1x1 grid
-        radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
-        halfHeight: wallHeight / 2,
+        geomDef: {
+          type: 'cylinder',
+          radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
+          halfHeight: wallHeight / 2,
+        },
         position: { x: center.x, y: wallHeight/2, z: center.y },
         userData: {
           npc: false,
-          bodyKey,
-          bodyUid: addBodyKeyUidRelation(bodyKey, state),
+          bodyKey: nearbyKey,
+          bodyUid: addBodyKeyUidRelation(nearbyKey, state),
         },
-      })
-    })
-  );
+      }),
+      createRigidBody({
+        type: RAPIER.RigidBodyType.Fixed,
+        geomDef: {
+          type: 'cuboid',
+          halfDim: [(door.baseRect.width - 2 * wallOutset)/2, wallHeight / 2, door.baseRect.height/2],
+        },
+        position: { x: center.x, y: wallHeight/2, z: center.y },
+        angle: door.angle,
+        userData: {
+          npc: false,
+          bodyKey: insideKey,
+          bodyUid: addBodyKeyUidRelation(insideKey, state),
+        },
+      }),
+    ]
+  }));
 
   // on worker hmr we need to restore npcs
   for (const { npcKey, position } of npcs) {
+    const bodyKey = npcToBodyKey(npcKey);
     createRigidBody({
       type: RigidBodyType.KinematicPositionBased,
-      halfHeight: config.agentHeight / 2,
-      radius: config.agentRadius,
+      geomDef: {
+        type: 'cylinder',
+        halfHeight: config.agentHeight / 2,
+        radius: config.agentRadius,
+      },
       position,
       userData: {
         npc: true,
-        bodyKey: npcKey,
-        bodyUid: addBodyKeyUidRelation(npcKey, state),
+        bodyKey,
+        bodyUid: addBodyKeyUidRelation(bodyKey, state),
       },
     });
   }
@@ -205,23 +231,28 @@ async function setupWorld(mapKey, npcs) {
 }
 
 /**
- * Create cylindrical static or kinematic-position sensor.
+ * Create:
+ * - cylindrical static
+ * - cylindrical kinematic-position sensor.
  * @param {object} opts
  * @param {RAPIER.RigidBodyType.Fixed | RAPIER.RigidBodyType.KinematicPositionBased} opts.type
- * @param {number} opts.halfHeight
- * @param {number} opts.radius
+ * @param {WW.PhysicsBodyGeom} opts.geomDef
  * @param {import('three').Vector3Like} opts.position
+ * @param {number} [opts.angle] radians in XZ plane
  * @param {BodyUserData} opts.userData
  */
-function createRigidBody({ type, halfHeight, radius, position, userData }) {
+function createRigidBody({ type, geomDef, position, angle, userData }) {
 
   const bodyDescription = new RAPIER.RigidBodyDesc(type)
     .setCanSleep(true)
     .setCcdEnabled(false)
   ;
 
-  const colliderDescription = ColliderDesc.cylinder(halfHeight, radius)
-    .setDensity(0)
+  const colliderDescription = (
+    geomDef.type === 'cylinder'
+      ? ColliderDesc.cylinder(geomDef.halfHeight, geomDef.radius)
+      : ColliderDesc.cuboid(...geomDef.halfDim)
+    ).setDensity(0)
     .setFriction(0)
     .setFrictionCombineRule(RAPIER.CoefficientCombineRule.Max)
     .setRestitution(0)
@@ -244,6 +275,9 @@ function createRigidBody({ type, halfHeight, radius, position, userData }) {
   state.bodyKeyToCollider.set(userData.bodyKey, collider);
   state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
+  if (typeof angle === 'number') {
+    rigidBody.setRotation(new RAPIER.Quaternion(0, -angle, 0, 1), false);
+  }
   rigidBody.setTranslation(position, true);
 
   return /** @type {RAPIER.RigidBody & { userData: BodyUserData }} */ (rigidBody);
@@ -266,7 +300,7 @@ if (typeof window === 'undefined') {
 
 /**
  * @typedef BodyUserData
- * @property {string} bodyKey
+ * @property {WW.PhysicsBodyKey} bodyKey
  * @property {number} bodyUid This is the numeric hash of `bodyKey`
  * @property {boolean} npc
  */
@@ -279,8 +313,8 @@ if (typeof window === 'undefined') {
  * @typedef BaseState
  * @property {RAPIER.World} world
  * @property {RAPIER.EventQueue} eventQueue
- * @property {Map<number, string>} bodyHandleToKey
- * @property {Map<string, RAPIER.Collider>} bodyKeyToCollider
- * @property {Map<string, RAPIER.RigidBody>} bodyKeyToBody
- * @property {Set<string>} npcKeys A subset of body keys
+ * @property {Map<number, WW.PhysicsBodyKey>} bodyHandleToKey
+ * @property {Map<WW.PhysicsBodyKey, RAPIER.Collider>} bodyKeyToCollider
+ * @property {Map<WW.PhysicsBodyKey, RAPIER.RigidBody>} bodyKeyToBody
+ * //@property {Set<string>} npcKeys A subset of body keys
  */

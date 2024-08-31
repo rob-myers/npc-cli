@@ -1,3 +1,4 @@
+import { useScrollRestoration } from "gatsby";
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
@@ -12,11 +13,14 @@ export default function Main(props: React.PropsWithChildren) {
 
   const overlayOpen = site.mainOverlay || (site.navOpen && isSmallView());
 
+  const scrollRestoration = useScrollRestore('main-component')
+
   return (
     <section
       className={cx(sectionMainCss, "prose max-w-screen-lg prose-headings:font-light")}
       data-testid="main"
       {...{ [sideNoteRootDataAttribute]: true }}
+      {...scrollRestoration}
     >
       <header className={mainHeaderCss} data-testid="main-title">
         NPC CLI
@@ -37,7 +41,7 @@ export default function Main(props: React.PropsWithChildren) {
 const sectionMainCss = css`
   > header {
     background-color: #fff;
-    z-index: 1;
+    z-index: 4;
   }
   > main {
     background-color: #fff;
@@ -95,7 +99,7 @@ const mainHeaderCss = css`
 const overlayCss = css`
   -webkit-tap-highlight-color: transparent;
   position: absolute;
-  z-index: 1;
+  z-index: 4;
   background-color: rgba(0, 0, 0, 0.5);
   left: 0;
   top: 0;
@@ -112,3 +116,14 @@ const overlayCss = css`
     opacity: 1;
   }
 `;
+
+export function useScrollRestore(key: string) {
+  if (typeof window !== 'undefined') {
+    return useScrollRestoration(key) as {
+      ref: React.MutableRefObject<HTMLElement | null>;
+      onScroll(): void;
+    };
+  } else {
+    return null;
+  }
+}

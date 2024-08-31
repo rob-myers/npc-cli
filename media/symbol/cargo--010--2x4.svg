@@ -1,21 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 600 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <defs />
+<svg viewBox="0 0 600 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <symbol id="symbol-8" viewBox="0 0 1 1">
+      <title>decor-arrow</title>
+      <rect width="1" height="1" style="fill: url('#pattern-2');">
+        <title>pattern</title>
+      </rect>
+    </symbol>
+    <pattern id="pattern-2" viewBox="0 0 300 300" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="1" height="1">
+      <title>decor-arrow-pattern</title>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+      <rect x="0.000029" y="-0.000047" width="300.000003" height="299.999989" style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;">
+        <title>bg</title>
+      </rect>
+      <rect width="149.998993" height="19.999998" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);" y="139.999992" x="50.000671">
+        <title>arrow-body</title>
+      </rect>
+      <path d="M 199.999648 125 L 249.999314 149.999997 L 199.999648 174.999997 L 199.999648 125 Z" style="stroke: rgb(0, 0, 0);">
+        <title>arrow-head</title>
+      </path>
+    </pattern>
+    <symbol id="symbol-9" viewBox="0 0 1 1">
+      <title>decor-unit-quad</title>
+      <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
+        <title>fill</title>
+      </rect>
+      <rect width="1" height="1" style="fill: url('#pattern-3');">
+        <title>pattern</title>
+      </rect>
+    </symbol>
+    <pattern x="0" y="0" width="0.5" height="0.5" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-3">
+      <title>decor-quad-pattern</title>
+      <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
+        <path d="M 134.37503 0 L 181.695688 23.660329 L 134.37503 47.320661 L 134.37503 0 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="298.120113" x="-7.586937"/>
+        <path d="M 134.37503 283.923959 L 181.695688 307.584288 L 134.37503 331.244617 L 134.37503 283.923959 Z" style="stroke: rgb(0, 0, 0);"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3469px -6.3e-05px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, -80.933799975588, 236.603372341917)"/>
+        <path d="M -31.247306 165.62343 L 16.073355 141.9631 L -31.247306 118.302771 L -31.247306 165.62343 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: -7.58879px 141.961px;" transform="matrix(0, -1, 1, 0, -0.000009560453, 0.000005180922)"/>
+        <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 73.3474px 0.000253px;" y="-9.464131" x="2.366032" transform="matrix(0, -1, -1, 0, 202.989607986441, 236.602919754019)"/>
+        <path d="M 252.676102 165.622793 L 299.99676 141.962464 L 252.676102 118.302135 L 252.676102 165.622793 Z" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0); transform-origin: 276.337px 141.96px;" transform="matrix(0, -1, 1, 0, -0.000008448851, 0.000005559184)"/>
+      </g>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </pattern>
+    <bx:grid x="0" y="0" width="300" height="300"/>
+  </defs>
   <image width="620" height="1220" x="-10" y="-10" style="opacity: 0.5; pointer-events: none;" xlink:href="data:image/png;base64,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">
     <title>cargo--010--2x4</title>
   </image>
   <rect width="10" height="10" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="298.229" y="391.394">
     <title>decor label=cargo</title>
   </rect>
-  <rect x="170" y="800" width="10" height="10" style="fill-opacity: 0.9; stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);">
-    <title>decor do sit orient=270 obscured</title>
-  </rect>
-  <rect x="340" y="1185" width="220" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door s</title>
-  </rect>
-  <rect x="40" y="1185" width="220" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
-    <title>door s</title>
-  </rect>
+  <use width="1" height="1" transform="matrix(0, -20, -20, 0, 174.5, 804.4998779296875)" style="opacity: 0.5; transform-origin: 0.5px 0.5px;" xlink:href="#symbol-8">
+    <title>decor do sit obscured</title>
+  </use>
   <rect width="134.117083" height="194.245108" style="fill: rgb(0, 0, 255); fill-opacity: 0.5; transform-box: fill-box; transform-origin: 50% 50%;" x="62.842036" y="31.473018" transform="matrix(0.992528676987, 0.12201192975, -0.12201192975, 0.992528676987, -8.308224725497, 4.134996160105)">
     <title>obstacle box</title>
   </rect>
@@ -46,4 +88,22 @@
   <rect x="-10" width="620" height="20" style="fill-opacity: 0.5; fill: rgb(255, 0, 0);" y="1190">
     <title>wall s</title>
   </rect>
+  <rect x="340" y="1185" width="220" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+    <title>door s</title>
+  </rect>
+  <use width="1" height="1" transform="matrix(30, 0, 0, 30, 24.500001907349, 1188.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch inner</title>
+  </use>
+  <use width="1" height="1" transform="matrix(30, 0, 0, 30, 24.500001907349, 1210.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch</title>
+  </use>
+  <rect x="40" y="1185" width="220" height="30" style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255); fill-opacity: 0.9; stroke-width: 4px;">
+    <title>door s</title>
+  </rect>
+  <use width="1" height="1" transform="matrix(30, 0, 0, 30, 574.5, 1188.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch inner</title>
+  </use>
+  <use width="1" height="1" transform="matrix(30, 0, 0, 30, 574.5, 1210.5)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-9">
+    <title>decor quad switch</title>
+  </use>
 </svg>

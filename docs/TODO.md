@@ -3,75 +3,66 @@
 ## WIP
 
 - 🚧 migrate sub-symbols to actual symbols
-  - ✅ 301 ✅ 302 ✅ 303 ✅ 101 🚧 102
-  - ✅ bridge ✅ lifeboat
-  - consoles
-  - extras
+  - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
+  - bridge ✅ lifeboat ✅
+  - consoles 🚧 extras 🚧 ...
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 doors open automatically when npc nearby
-  - ✅ doors can be open/closed, locked/unlocked, manual/auto
-  - ✅ doors can be sealed
-  - ✅ track door -> nearby npcs
-  - ✅ track npc -> door sensors e.g. for clean-up
-  - ❌ toggle other hull door automatically
-    - can open them individually
-    - sensors already work
-  - ✅ don't auto close door when npcs still within sensor range
-  - ✅ clarify auto doors
-    - ✅ do not auto-close when not auto
-    - ✅ do not auto-open when not auto
-  - ❌ manual doors are "blocked" inside nav query
-    - we'll add physical switches for all doors, usable for manual
-  - ✅ move worker handlers into WorldWorker
-    - want handler edit to restart workers
-  - ✅ clean
+- ✅ locked doors should close when
+  - ✅ nothing `inside` and no `nearby` npc moving
+  - ✅ trigger check when nearby npc stops (currently only on exit nearby sensor)
 
-- ✅ tty: support recursive stringify of `Set` and `Map`
-  - ✅ in tty.xterm output
-  - ✅ `declare -x`
-  - ✅ in shell expansion
-  - ✅ separated shell function `pretty` into `pretty` and `json`
-    - `pretty` is essentially `javascriptStringify` with indent 2
-    - `json` is essentially `prettyCompact` and projects to JSON
-      - e.g. does not support `Set`
+- ✅ fix bug: cannot close door when npc nearby
 
-- ✅ shell session: support restore Set and Map
-  - ✅ serialize via `jsStringify` then re-evaluate
-  - ✅ persist session on reset/unload
-  - ✅ do not persist variable on run command (only on unload)
+- create "hyper casual" characters, rather then pseudo minecraft character
+  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
+  - based on these models e.g. 3 bones: body > head, shadow
 
-- ✅ service/npc -> service/helper
-  - ℹ️ available runtime as w.lib.*
-  - ℹ️ used by assets script
-  - ✅ move key defs into helper
-    - avoids totally rebuilding geomorphs.json
-  - ✅ helper file should trigger watch script
+- investigate GPU object picking via 2 render targets written to by 1 fragment shader
+  - based on PR where render targets first added to three.js
+    > https://github.com/mrdoob/three.js/pull/16390
+  - can provide vertex indices via attribute, hence instanceId too
+    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
 
-- ✅ can pipe `w.events` into shell
-  - ✅ define `events` in game-generators.js
-  - ✅ better error messages on mvdan parse error
+- return to next.js project
+  - ensure up to date
+  - work on migrating Viewer
 
-- 🚧 new branch `refine-doors`
-  - every door has 2 switches (inner, outer)
-  - doors can slide in specific direction
-    - sometimes not possible e.g. toilet
-  - doors have small wall above them
-    - locked indicator could go in center
-  - navQuery blocks non-auto doors
-  - support non-door sensor i.e. decor circle/poly
+- Boxy rounding errors issue
+  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
+- 🚧 memory leaks
+  - ℹ️ use incognito to avoid extensions memory leak
+    > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
+  - ℹ️ https://superuser.com/questions/1817473/what-accounts-for-the-discrepancy-between-the-memory-use-shown-when-hovering-on
+  - ℹ️ can also use three.js stats UI which has a memory indicator
+  - 🚧 interact, then take memory snapshot of both workers
+  - geometry attributes are a possible memory leak
+    - could update geometry attributes rather than create new attributes
+      - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
+      - i.e. preset large bounds, and use geometry.setDrawRange
+    - could use underlying gl api to remove attributes
 
-- consider alternatives to current custom minecraft character
-  - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-people-cartoon-characters-15126#description
-  - https://assetstore.unity.com/packages/3d/characters/humanoids/simple-space-characters-cartoon-assets-93756
-  - probably won't use but can compare for ideas e.g. better textures, modelling
-
+- support non-door sensor i.e. decor circle/poly
+- support click switch to open door, instead of click door
+  - mobile has difficulty pressing switches, so
+    try provide "echo circle" for touch devices
+- hmr issue with Connector class
+- hull door enter-room triggers late?
+- towards faster raycast against instancedmesh
+  - https://github.com/gkjohnson/three-mesh-bvh
+  - https://github.com/pmndrs/drei/blob/master/src/core/Bvh.tsx
+  - Walls has `useBvhRaycast` which constructs static geom and hijacks raycast
+  - Doors has `useBvhRaycast` which constructs geom (doors closed) and hijacks raycast
+    - will need "door open ratios"
+  - 🤔 maybe use object-picking + canonical point instead
+- doors can slide in specific direction
+  - try scaling door and changing uv map
 - maybe "move" constants into geomorphs.json
   - to avoid HMR versus geomorphs.json "alternate routes"
 - workers should only hot reload when directly edited or geomorphs.json changes
   - workers should get constants from geomorphs.json
   - otherwise might restart early, retrieving old geomorphs.json
-- can color obstacles
+- ✅ can color obstacles
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
 - permit single quotes inside e.g. game-generators
@@ -91,6 +82,8 @@
   - try refactor `faderOverlayCss` e.g. merge into `<figure>`
 - change camera fov based on camera height and/or visible-world
 
+- BUG obstacles.png slightly different onchange
+  - no visible difference, probably due to "quick approach"
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData
 - avoid connector re-computation i.e. extend serialization
 - currently single quotes are breaking game-generators
@@ -98,7 +91,7 @@
   - https://boxy-svg.com/bugs/370/intermittent-slow-saving
   - 🚧 try replicate again in Chrome vs Incognito Chrome
   - 🚧 try turn off "FileVault" on Mac OS
-- `w` command by itself should not throw
+- ✅ `w` command by itself should not throw
 - syntax highlighting in the shell
   - https://github.com/wooorm/emphasize
   - for `declare -f foo`
@@ -1747,3 +1740,313 @@
       - rely on rapier to auto set bodies asleep
       - https://rapier.rs/docs/user_guides/bevy_plugin/rigid_bodies/#sleeping
   - ✅ clean
+
+- ✅ doors open automatically when npc nearby
+  - ✅ doors can be open/closed, locked/unlocked, manual/auto
+  - ✅ doors can be sealed
+  - ✅ track door -> nearby npcs
+  - ✅ track npc -> door sensors e.g. for clean-up
+  - ❌ toggle other hull door automatically
+    - can open them individually
+    - sensors already work
+  - ✅ don't auto close door when npcs still within sensor range
+  - ✅ clarify auto doors
+    - ✅ do not auto-close when not auto
+    - ✅ do not auto-open when not auto
+  - ❌ manual doors are "blocked" inside nav query
+    - we'll add physical switches for all doors, usable for manual
+  - ✅ move worker handlers into WorldWorker
+    - want handler edit to restart workers
+  - ✅ clean
+
+- ✅ tty: support recursive stringify of `Set` and `Map`
+  - ✅ in tty.xterm output
+  - ✅ `declare -x`
+  - ✅ in shell expansion
+  - ✅ separated shell function `pretty` into `pretty` and `json`
+    - `pretty` is essentially `javascriptStringify` with indent 2
+    - `json` is essentially `prettyCompact` and projects to JSON
+      - e.g. does not support `Set`
+
+- ✅ shell session: support restore Set and Map
+  - ✅ serialize via `jsStringify` then re-evaluate
+  - ✅ persist session on reset/unload
+  - ✅ do not persist variable on run command (only on unload)
+
+- ✅ service/npc -> service/helper
+  - ℹ️ available runtime as w.lib.*
+  - ℹ️ used by assets script
+  - ✅ move key defs into helper
+    - avoids totally rebuilding geomorphs.json
+  - ✅ helper file should trigger watch script
+
+- ✅ can pipe `w.events` into shell
+  - ✅ define `events` in game-generators.js
+  - ✅ better error messages on mvdan parse error
+
+- ✅ fix restart while `events | map key`
+  - ℹ️ pipe child terminated late, triggering pid 0 cleanups, cancelling next awaitWorld
+  - ℹ️ due to pipe semantics i.e. 30ms delay "to permit child cleanup setup"
+  - ℹ️ need some delay (setTimeout `0`) e.g. for `take 3 | true` to terminate immediately
+  - seems to be fixed, but somewhat hacky
+
+- ✅ start new branch `refine-doors`
+
+- ✅ decor cuboid shader: flipped cuboid has wrong normal/colour
+  - ✅ use decor-quad symbol instead (neater)
+    - didn't fix problem though
+  - ℹ️ no, normals are fine
+    - issue also happens when we simply translate stateroom 036
+  - ✅ possibly fixed via mvCameraPosition
+
+- ✅ clean extractGeom into `extractDecorPoly` and `extractPoly`
+
+- ✅ clean Decor
+  - ✅ can specify decor point via symbol (infer direction)
+    - ✅ pattern: single arrow
+    - ✅ replace `orient={degrees}` in one symbol
+    - ✅ replace `orient={degrees}` for all
+  - ✅ simplify cuboid nav outset
+  - ✅ decor poly -> decor rect
+  - ✅ decor circle can use `<circle>`
+    - ✅ add missing iris valves
+    - ✅ iris value uses `<circle>`
+  - ❌ decor rect uses symbol
+
+- ✅ every door has 2 switches (inner, outer)
+  - ✅ some symbol has two switches
+  - ✅ can rotate decor quad so in XY plane via `tilt`
+  - ✅ efficient computation of "post-rotation-matrix"
+    - e.g. via caching
+  - ✅ door switches format: `decor switch={symbolDoorId} inner`
+    - ℹ️ decor quad because using decor quad symbol
+    - ✅ `inner` optional; `y=1 tilt img=icon--square` implied
+    - ✅ `switch` localDoorId -> doorId on instantiation
+      - ✅ remove switches when "parent door" is identified
+      - ✅ for identified doors, assume both switches are `inner`
+      - ✅ remove switches when "parent door" is removed
+  - ✅ add to hull doors
+  - ✅ add to other hull symbol doors
+    - 101 ✅ 102 ✅ 301 ✅ 302 ✅ bridge ✅
+  - ✅ on remove doors and resp switches, adjust other switches
+    - ✅ when doors coincide
+    - ✅ when doors are manually removed
+    - ✅ fix issue in 302
+  - ✅ add to room symbol doors
+    - cargo---010 ✅ empty-room 006 ✅ 020 ✅ 039 ✅
+    - engineering--047 ✅ fresher--036 ✅ medical 007 ✅ 008 ✅
+    - office 001 ✅ 004 ✅ 006 ✅ ...
+    - empty-room ✅
+    - fresher ✅
+    - lab ✅
+    - lifeboat ✅ medical ✅ cartography ✅
+    - office up to 026 ✅ after 026 ✅
+    - ships-locker ✅
+    - stateroom ✅
+  - ✅ add missing door switches in hull symbols
+  - ✅ fix fresher-036 switches
+
+  - ✅ pre-existing issue with gaps around top of doors
+- ✅ fix nav-mesh on edge of 303
+  - ✅ fixed computeDoorway
+  - ✅ cleaner approach?
+- ✅ LOD: when zoomed out a lot try making ceiling tops more solid
+  - ✅ when far: fill but no stroke
+  - ✅ when far: improve "large monochrome areas" e.g. lifeboat
+    - tag svg symbols with `broad`
+  - ✅ clean + fix HMR
+    - seems MapControls onChange prop already supports hmr
+  
+- ✅ fix npc `way-point` event
+  - ✅ event extends { ...current, next }
+  - ✅ fires at final waypoint
+  - ✅ doors have small wall above them
+  - ✅ wall meta should have roomId
+    - increase resolution of hitTest canvas
+  - ✅ try extending `Walls` with two quads per door
+    - i.e. two degenerate "one-segment-walls"
+  - ✅ clean
+  - ✅ locked indicator could go in center
+    - ✅ render them inside `Doors`
+    - ✅ green unlocked, red locked
+    - ✅ setup initially locked doors
+      - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
+    - ✅ preserve locked flag via "door lookup by center"
+
+- ✅ doors are specified as `auto`
+  - ✅ temporarily set all doors `auto` 
+  - 101 ✅ 102 ✅ 103 ✅ 301 ✅ 302 ✅ 303 ✅
+  - ✅ unsealed hull doors implicitly `auto`
+  - ✅ unsealed non-hull locked doors default to auto
+    - we're setting "public" unlocked doors as auto
+    - but e.g. unlocked fresher door inside locked room is not auto
+  - ✅ implement "force-open" navigation while we implement navQuery
+    - ✅ move door/npc logic outside Doors
+    - ✅ move toggleDoor/toggleLock into w.s (shared)
+    - ✅ w.s.toggle{Door,Lock} -> w.s.toggle
+    - ℹ️ force-opening is distinct from having a key
+    - ❌ toggle door opts.force
+      - can already set opts.access undefined
+    - ✅ npc.strategy 'default' or 'forced'
+    - ✅ temp npc.strategy default to 'forced'
+  - ✅ fix lock indicator for hull doors
+  - ✅ w.s -> w.es
+  - ✅ simplify w.es.toggle e.g. expects gdKey
+  - ✅ w.es.toggle -> w.es.toggleDoor, w.es.toggleLock
+
+- ✅ physics body keys `npc {npcKey}`, `nearby {gdKey}`
+- ✅ physics body keys `inside {gdKey}`
+
+- ✅ BUG onchange mapKey in Viewer
+  - ℹ️ w.gmsData was being disposed before it could be used
+  - ✅ physics.worker cannot read `world`
+  - ✅ Walls/Doors not visible
+
+- ✅ hash refactor
+  - ✅ support w.hash[gmKey] and clean up
+  - ✅ w.hash[gmKey].{full,nav,decor}
+  - ✅ avoid recompute hash.images
+  - ✅ can remove hash.images
+    - sheets now contains imagesHash
+  - ✅ move hash computations to browser
+  - ✅ remove w.decor.computeHash
+    - w.decor.hash points to last seen w.hash
+  - ✅ use gmKey nav hash to avoid clearing npcToRoom
+    - ✅ WorldWorkers has state.hash so can compare
+    - ✅ send changed gmKeys
+  - ℹ️ maybe can improve via murmur, but wait for timings via notifications
+
+- ✅ import icons directly into Menu
+  - rather than using `components/Icon`
+- ✅ tty: avoid deleting paused line if user has typed something
+
+- ✅ change way tabs are disabled/enabled
+  - ✅ initially disabled tty shouldn't run profile
+  - ✅ initially disabled World should be greyed out
+  - ✅ while disabled, switching to an as-yet-unseen tab should mount it
+    - believe this was already working
+
+- ✅ tty: better disabled mount
+  - we show message: "initially disabled"
+- ✅ tty while disabled can ctrl-c sourced
+  - tried sourced by adding `sleep 10` inside game-functions.sh
+  - ✅ can pause/resume even when initially disabled
+  - ✅ fix pause then resume while initially sourcing
+  - ✅ cannot ctrl-c while initially paused
+    - ℹ️ on hmr when paused (after resume) get blank tty, but works if resume tabs
+
+- ✅ refactor Terminal without pause/resume
+- ✅ refactor Terminal: add pause/resume
+- ✅ on hmr `TerminalSession` unpaused tty should reboot
+  - ✅ reset state.booted e.g. -> state.ts.booted
+- understand error message on restart Tabs with running tty in background
+- ✅ init paused:
+  - ✅ tty should not run profile
+  - ✅ runs profile on resume
+  - ✅ cannot be ctrl-c'd
+  - ✅ hmr `Terminal` preserves "single line shown"
+  - ✅ hmr `TerminalSession` should render `Terminal`
+  - ✅ can enter/esc while init paused
+
+- ✅ fix hmr onchange tty.shell while paused (init or not)
+
+- ✅ svg tag `switch={doorId}` -> `switch` and rely upon relative order to doors
+  - we convert `meta.switch` into a number during parse
+
+- ✅ can ctrl-c profile while tty paused (not init)
+- ✅ fix: do not unpause on ctrl-c while paused
+  - this means we cannot start initially paused via enter
+
+- ❌ try merge TtyWithEtc into Tty
+- ✅ TtyWithEtc -> TtyWithFunctions simplify forwards props.functionFiles
+
+- ✅ can use terminal whilst paused
+  - ✅ can start typing
+  - ✅ can ctrl-c out of running process
+
+- ✅ BUG ctrl-c of `echo 'foo\r\n`
+  - wrong prompt shown after ctrl-c
+- ✅ World pauses in background
+  - e.g. try `w npc.npc.rob.moveTo '{x:-6.43,y:0,z:7.3}'`
+  - could potentially permit "pause override" in future (e.g. pause one World, not other)
+- ✅ BUG scrolling back through history of `echo 'foo\r\n\r\n'` loses a newline
+  - happens when scroll back just beyond it
+
+- ✅ Tty: resize-clear-input should also blur xterm
+
+- ❌ pause tty ui issues
+  - ℹ️ on switch tab, terminal pauses, and when come back, unclear whether should just continue
+  - ℹ️ on continue using terminal when paused, enter can immediately launch unseen command
+  - ❌ link choice instead: [ unpause ] or [ debug ]
+  - ℹ️ decided on overlay instead
+
+- ✅ World: "enable all" and "debug" overlay
+- ✅ Tty: "enable all" and "debug" overlay
+  - ✅ overlay fader and buttons
+  - ✅ clean away other approach
+  - ✅ avoid props.onKey from triggering resize
+
+- ❌ "enable all" is highlighted when hover fader
+  - instead, it is always highlighted whilst paused
+
+- ✅ optionally permit camera movement while World paused 
+  - ✅ pause/play toggle in viewer controls
+  - ✅ remove fader from Tabs
+  - ✅ add fader to World
+  - ✅ can initially enable via click anywhere
+  - ✅ on disable World fades by default; click anywhere to unpause
+  - ✅ World has camera icon
+  - ✅ can move camera when clicked
+
+- ✅ fire event when npc enters/exits a room
+  - ✅ sensor in each doorway, triggered on leave
+    e.g. `inside g1d3` vs `nearby g1d3`
+  - ✅ update npcToRoom
+  - ✅ fix entered-room triggering
+    - ℹ️ seen "npc position" not in room when running through hull door
+    - possibly exasperated by collider near g0d0?
+  - ✅ enter-room ✅ exit-room ✅ enter-doorway ✅ exit-doorway ✅ enter-sensor ✅ exit-sensor ✅
+  - ✅ on reload nav.worker, recompute w.es.npcToRoom
+    - ❌ clear lookup, except for unchanged gmKeys
+    - ❌ lazily compute e.g. `w.es.getNpcRoom('rob')`
+    - ℹ️ expect dev to handle this e.g. be in debug mode World/Tty
+    - ✅ recompute over time; if not in room set undefined and warn
+    - ✅ witness re-computation, and npc outside all rooms
+  - ✅ roomToNpcs[gmId][roomId] i.e. inverse of npcToRoom
+
+- ✅ xterm.js selection bug with gold text
+  - needed to upgrade to `@xterm/xterm`
+- ✅ hmr: support gm-graph
+  - can ignore gm-room-graph because shouldn't really change,
+    i.e. any "related" methods should inside gm-graph instead
+- ✅ hmr issue editing obstacle outline
+  - seems fixed by always re-generating obstacle texture, irrespective of size change
+
+- ✅ on reload physics.worker, clear w.es.{npc,door}ToNearby
+- ❌ `nav-changed` event for code supporting level-editing
+  - ℹ️ dev should pause World while editing nav
+  - ℹ️ in 2-player, changing levels shouldn't depend on this event
+
+- ❌ npc move strategy dictates different navQuery
+  - ❌ `anywhere`: no restriction (except sealed)
+    - ✅ only open non-auto if (a) about to go through, or (b) would intersect
+    - ❌ fix case where already nearby then move into/thru doorway
+  - ❌ `adjacent`: can only nav to adjacent rooms
+    - ❌ prevent nav through locked/closed-non-auto doors via "enter inside"
+  - `accessible`:
+    - block non-auto closed doors (including locked)
+    - block locked auto doors
+
+- ✅ refactor `npc.s.permitNav` i.e. support only one "move strategy"
+- ℹ️ "all access" (e.g. `/./`) replaces `anywhere`
+- ✅ refactor access keys as regexs
+- ✅ remove `npc.s.permitNav`
+- ✅ w.e.moveNpc(npcKey, point)
+- ✅ assuming all access
+  - ✅ fix move into doorway when already nearby
+  - ✅ fix move through doorway when already nearby
+- ✅ npc move should also work when lack access to door
+- ✅ no-access npc should not stop when going through auto door
+- ✅ can avoid checking each corner if no intersect and further away
+- ℹ️ no-access npc stops early when onEnterSensor
+- ✅ clean

@@ -13,20 +13,22 @@ const xzIndices = [2, 1, 0, 0, 3, 2];
 const xzNormals = [0,1,0, 0,1,0, 0,1,0, 0,1,0]; // For shadows
 quadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(xzVertices.slice(), 3));
 quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
-quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
+quadGeometryXZ.setAttribute("normal", new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
 /** Cache to avoid re-creation on HMR */
-const quadLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
+const quadXZLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
 
 const colorLookup = /** @type {Record<string, THREE.Color>} */ ({});
+
+const rotMatLookup = /** @type {Record<string, THREE.Matrix4>} */ ({});
 
 /**
  * Clone to avoid overwriting attributes used by custom shaders
  * @param {string} key
  */
 export function getQuadGeometryXZ(key) {
-  return quadLookup[key] ??= quadGeometryXZ.clone();
+  return quadXZLookup[key] ??= quadGeometryXZ.clone();
 }
 
 /**
@@ -36,10 +38,42 @@ export function getColor(colorRep) {
   return colorLookup[colorRep] ??= new THREE.Color(colorRep);
 }
 
-// 🚧 repeat above for XY quad
+/**
+ * Get a matrix which rotates around unit vector.
+ * 🔔 May be mutated for "rotation around a point",
+ * @see getRotAxisMatrix
+ * @param {number} ux unit vector x
+ * @param {number} uy unit vector y
+ * @param {number} uz unit vector z
+ * @param {number} degrees 
+ */
+export function getRotAxisMatrix(ux, uy, uz, degrees) {
+  const key = `${ux} ${uy} ${uz} ${degrees}`;
+  return rotMatLookup[key] ??= new THREE.Matrix4().makeRotationAxis(
+    tmpVectThree1.set(ux, uy, uz),
+    degrees * (Math.PI / 180),
+  );
+}
+
+/**
+ * Mutate matrix `mat` so that:
+ * > `mat := translate(cx, cy, cz) . mat . translate(-cx, -cy, -cz)`
+ * @param {THREE.Matrix4} mat 
+ * @param {number} cx
+ * @param {number} cy
+ * @param {number} cz
+ * @returns {THREE.Matrix4}
+ */
+export function setRotMatrixAboutPoint(mat, cx, cy, cz) {
+  const me = mat.elements;
+  mat.elements[12] = (me[0] * -cx + me[4] * -cy + me[8 ] * -cz) + cx;
+  mat.elements[13] = (me[1] * -cx + me[5] * -cy + me[9 ] * -cz) + cy;
+  mat.elements[14] = (me[2] * -cx + me[6] * -cy + me[10] * -cz) + cz;
+  return mat;
+}
 
 /** Unit quad extending from (0, 0, 0) to (1, 1, 0) */
-export const quadGeometryXY = new THREE.BufferGeometry();
+const quadGeometryXY = new THREE.BufferGeometry();
 const xyVertices = new Float32Array([0,0,0, 0,1,0, 1,1,0, 1,0,0]);
 const xyUvs = new Float32Array([0,1, 0,0, 1,0, 1,1]); // flipY false, Origin at topLeft of image
 const xyIndices = [2, 1, 0, 0, 3, 2];
@@ -48,6 +82,17 @@ quadGeometryXY.setAttribute("position", new THREE.BufferAttribute(xyVertices.sli
 quadGeometryXY.setAttribute("uv", new THREE.BufferAttribute(xyUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xyNormals.slice(), 3 ) );
 quadGeometryXY.setIndex(xyIndices.slice());
+
+/** Cache to avoid re-creation on HMR */
+const quadXYLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
+
+/**
+ * Clone to avoid overwriting attributes used by custom shaders
+ * @param {string} key
+ */
+export function getQuadGeometryXY(key) {
+  return quadXYLookup[key] ??= quadGeometryXY.clone();
+}
 
 export const tmpBufferGeom1 = new THREE.BufferGeometry();
 
@@ -112,13 +157,6 @@ function decompToXZAttribs(decomp) {
   const uvs = decomp.vs.flatMap(({ x, y }) => [(x - bounds.x) / bounds.width, (y - bounds.y) / bounds.height]);
   return { vertices, indices, uvs };
 }
-
-export const greenWireFrameMat = new THREE.MeshStandardMaterial({
-  // wireframe: true,
-  color: "green",
-  transparent: true,
-  opacity: 0.5,
-});
 
 export const redWireFrameMat = new THREE.MeshStandardMaterial({
   wireframe: true,

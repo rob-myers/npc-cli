@@ -1,6 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import { shallow } from "zustand/shallow";
+import debounce from "debounce";
 
 import useSite from "./site.store";
 import { afterBreakpoint, breakpoint, nav, view } from "../const";
@@ -15,6 +16,7 @@ import {
   faCirclePauseThin,
   faChevronRight,
   faGrip,
+  faCirclePlay,
 } from "./Icon";
 import useLongPress from "src/npc-cli/hooks/use-long-press";
 import useUpdate from "src/npc-cli/hooks/use-update";
@@ -28,16 +30,12 @@ export default function ViewerControls({ api }: Props) {
       api.tabs.hardReset();
       update();
     },
-    onReset() {
+    onReset: debounce(() => {
       api.tabs.reset();
       update();
-    },
-    onEnable() {
-      api.tabs.toggleEnabled(true);
-      update();
-    },
-    onPause() {
-      api.tabs.toggleEnabled(false);
+    }, 300),
+    toggleEnabled() {
+      api.tabs.toggleEnabled();
       update();
     },
     onMaximize() {
@@ -130,11 +128,16 @@ export default function ViewerControls({ api }: Props) {
 
   return (
     <div className={cx("viewer-buttons", buttonsCss)} onPointerDown={state.onDragStart}>
-      <div className="draggable">
-        <FontAwesomeIcon icon={faGrip} size="1x" />
+      <div className="left-or-bottom-group">
+        <div className="drag-indicator">
+          <FontAwesomeIcon icon={faGrip} size="1x" />
+        </div>
       </div>
-      <button title="pause tabs" onClick={state.onPause} disabled={!api.tabs.enabled}>
-        <FontAwesomeIcon icon={faCirclePauseThin} size="1x" />
+      <button
+        title={api.tabs.enabled ? "pause tabs" : "enable tabs"}
+        onClick={state.toggleEnabled}
+      >
+        <FontAwesomeIcon icon={api.tabs.enabled ? faCirclePauseThin : faCirclePlay} size="1x" />
       </button>
       <button title="reset tabs" {...resetHandlers}>
         <FontAwesomeIcon icon={faRefreshThin} size="1x" />
@@ -181,14 +184,18 @@ const buttonsCss = css`
     height: ${view.barSize};
   }
 
-  .draggable {
+  .left-or-bottom-group {
     flex: 1;
     display: flex;
     align-items: end;
     padding: 12px 16px;
     pointer-events: none;
-    color: #666;
-  }  
+
+    .drag-indicator {
+      color: #666;
+    }
+  }
+
 
   button {
     display: flex;

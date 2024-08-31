@@ -1,4 +1,4 @@
-import type { Terminal } from "xterm";
+import type { ITerminalOptions, Terminal } from "@xterm/xterm";
 import debounce from "debounce";
 import { ansi } from "./const";
 import { formatMessage } from "./util";
@@ -314,7 +314,7 @@ export class ttyXtermClass {
   }
 
   private async handleXtermInput(data: string) {
-    if (!this.readyForInput && data !== "\x03") {
+    if (this.readyForInput === false && data !== "\x03") {
       return;
     }
     if (data.length > 1 && data.includes("\r")) {
@@ -511,8 +511,8 @@ export class ttyXtermClass {
       col = 0;
     for (let i = 0; i < cursor; ++i) {
       const chr = input.charAt(i);
-      if (col === 0 && (chr === "\r" || chr === "\n")) {
-        // NOOP
+      if (col === 0 && chr === "\n") {
+        row++;
       } else if (chr === "\n") {
         col = 0;
         row++;
@@ -932,6 +932,10 @@ export class ttyXtermClass {
     } else {
       this.warnIfNotReady();
     }
+  }
+
+  updateOptions(opts: ITerminalOptions) {
+    this.xterm.options = opts;
   }
 
   warnIfNotReady() {

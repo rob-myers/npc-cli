@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 
 import { alloc, error, info } from "../service/generic";
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
@@ -19,12 +19,12 @@ async function handleMessages(e) {
 
   switch (msg.type) {
     case "request-nav-mesh":
-      const geomorphs = geomorphService.deserializeGeomorphs(await fetchGeomorphsJson());
+      const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
 
       const { mapKey } = msg;
       const map = geomorphs.map[mapKey ?? "demo-map-1"];
       const gms = map.gms.map(({ gmKey, transform }, gmId) =>
-        geomorphService.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
+        geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
       );
 
       const customAreaDefs = /** @type {NPC.TileCacheConvexAreaDef[]} */ ([]);

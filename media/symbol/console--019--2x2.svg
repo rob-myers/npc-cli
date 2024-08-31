@@ -44,7 +44,7 @@
     <pattern id="pattern-3" patternTransform="matrix(1.000004768372, 0.000009289363, -0.000009289363, 1.000004768372, 44.074474334717, 808.832702636719)" xlink:href="#pattern-0"/>
     <symbol id="symbol-0" viewBox="0 0 1 1" bx:pinned="true">
       <title>decor-unit-quad</title>
-      <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill: rgb(255, 0, 0); fill-opacity: 0.5;">
+      <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
         <title>fill</title>
       </rect>
       <rect width="1" height="1" style="fill: url('#pattern-1');">
@@ -59,13 +59,13 @@
     <title>obstacle y=0.6</title>
   </path>
   <use width="1" height="1" transform="matrix(49.497474670410156, -49.497474670410156, 67.88224792480469, 67.88224792480469, 131.44882202148438, 199.49082946777344)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
-    <title>decor img=icon--doc y=0.61</title>
+    <title>decor quad img=icon--doc y=0.61</title>
   </use>
   <use width="1" height="1" transform="matrix(49.497474670410156, -49.497474670410156, 67.88224792480469, 67.88224792480469, 209.84280395507812, 124.1253890991211)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
-    <title>decor img=icon--doc y=0.61</title>
+    <title>decor quad img=icon--doc y=0.61</title>
   </use>
   <use width="1" height="1" transform="matrix(79.36923217773438, 0, 0, 54.970664978027344, 358.8257141113281, 62.7278938293457)" style="transform-origin: 0.5px 0.5px;" xlink:href="#symbol-0">
-    <title>decor img=icon--key-card y=0.61 color=#fff</title>
+    <title>decor quad img=icon--key-card y=0.61 color=#fff</title>
   </use>
   <g>
     <title>symbols</title>

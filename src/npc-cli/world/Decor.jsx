@@ -5,9 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import { decorGridSize, decorIconRadius, decorPointFallbackImgKey, decorQuadFallbackImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
 import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, getColor, getQuadGeometryXZ, tmpMatFour1 } from "../service/three";
+import { boxGeometry, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import packRectangles from "../service/rects-packer";
 import { helper } from "../service/helper";
@@ -25,7 +25,7 @@ export default function Decor(props) {
     byRoom: [],
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
-    hash : /** @type {State['hash']} */ ({ mapHash: 0 }),
+    seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
@@ -111,7 +111,7 @@ export default function Decor(props) {
       const uvDimensions = /** @type {number[]} */ ([]);
       
       for (const d of state.quads) {
-        const item = geomorphService.isDecorImgKey(d.meta.img)
+        const item = geomorph.isDecorImgKey(d.meta.img)
           ? sheet[d.meta.img] // fallback differs for 'point' vs 'quad'
           : d.type === 'point' ? sheet[decorPointFallbackImgKey] : sheet[decorQuadFallbackImgKey];
         ;
@@ -127,36 +127,13 @@ export default function Decor(props) {
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
     },
-    computeHash() {
-      const { layout } = w.geomorphs;
-      const map = w.geomorphs.map[w.mapKey];
-      return {
-        mapHash: hashJson(map),
-        ...mapValues(w.lib.toGmNum, (_, gmKey) => 
-          hashJson(layout[gmKey].decor)
-        ),
-      };
-    },
     createCuboidMatrix4(d) {
-      tmpMat1.feedFromArray(d.angle !== 0
-        ? [
-            d.extent.x * 2 * Math.cos(d.angle),
-            d.extent.x * 2 * Math.sin(d.angle),
-            d.extent.z * 2 * -Math.sin(d.angle),
-            d.extent.z * 2 * Math.cos(d.angle),
-            d.center.x,
-            d.center.z,
-          ]
-        : [
-            d.extent.x * 2, 0, 0, d.extent.z * 2,
-            d.center.x, d.center.z,
-          ]
-      );
-      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+      tmpMat1.feedFromArray(d.transform);
+      return geomorph.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
-        yHeight: d.center.y,
-        yScale: d.extent.y * 2,
-      });
+        yHeight: d.meta.y + (d.meta.h / 2),
+        yScale: d.meta.h, // scaling centred unit cuboid
+      }).multiply(centreUnitQuad);
     },
     createLabelMatrix4(d) {
       const { width, height } = state.label.sheet[d.meta.label];
@@ -166,7 +143,7 @@ export default function Decor(props) {
         d.x - (width * scale) / 2,
         d.y - (height * scale) / 2,
       ]);
-      return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+      return geomorph.embedXZMat4(tmpMat1.toArray(), {
         mat4: tmpMatFour1,
         yHeight: wallHeight + 0.1,
       });
@@ -192,17 +169,28 @@ export default function Decor(props) {
           ]);
         }
 
-        return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+        return geomorph.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
           yHeight: d.meta.y,
         });
       
       } else {// d.type === 'quad'
+
         tmpMat1.feedFromArray(d.transform);
-        return geomorphService.embedXZMat4(tmpMat1.toArray(), {
+        const mat4 = geomorph.embedXZMat4(tmpMat1.toArray(), {
           mat4: tmpMatFour1,
           yHeight: d.meta.y,
         });
+
+        if (d.meta.tilt === true) {
+          // 🔔 remove scale to get local x unit vector
+          const vecLen = Math.sqrt(tmpMat1.a ** 2 + tmpMat1.b ** 2);
+          const rotMat = getRotAxisMatrix(tmpMat1.a / vecLen, 0, tmpMat1.b / vecLen, 90);
+          setRotMatrixAboutPoint(rotMat, d.center.x, d.meta.y, d.center.y);
+          mat4.premultiply(rotMat); // 🔔 premultiply means post-rotate
+        }
+
+        return mat4;
       }
     },
     detectClick(e) {// 🚧
@@ -307,10 +295,9 @@ export default function Decor(props) {
           break;
         case "cuboid": {
           const center = gm.matrix.transformPoint({ x: d.center.x, y: d.center.z });
-          const extent = gm.matrix.transformSansTranslate({ x: d.extent.x, y: d.extent.z });
           instance = { ...d, ...base,
             center: { x: center.x, y: d.center.y, z: center.y },
-            extent: { x: extent.x, y: d.extent.y, z: extent.y },
+            transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
           };
           break;
         }
@@ -321,7 +308,7 @@ export default function Decor(props) {
           instance.meta.orient = orient; // update `meta` too
           break;
         }
-        case "poly":
+        case "rect":
           instance = { ...d, ...base,
             center: gm.matrix.transformPoint({ ...d.center }),
             points: d.points.map(p => gm.matrix.transformPoint({ ...p })),
@@ -336,7 +323,7 @@ export default function Decor(props) {
         default:
           throw testNever(d);
       }
-      instance.key = geomorphService.getDerivedDecorKey(instance);
+      instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
     instantiateGmDecor(gmId, gm) {
@@ -388,14 +375,14 @@ export default function Decor(props) {
     positionInstances() { 
       const { cuboidInst, quadInst, labelInst } = state;
       
-      const defaultCuboidColor = '#ddd';
+      const defaultCuboidColor = '#ddd'; // 🚧 move to const
       for (const [instId, d] of state.cuboids.entries()) {
         const mat4 = state.createCuboidMatrix4(d);
         cuboidInst.setMatrixAt(instId, mat4);
         cuboidInst.setColorAt(instId, getColor(d.meta.color ?? defaultCuboidColor));
       }
       
-      const defaultQuadColor = 'white';
+      const defaultQuadColor = 'white'; // 🚧 move to const
       for (const [instId, d] of state.quads.entries()) {
         const mat4 = state.createQuadMatrix4(d);
         quadInst.setMatrixAt(instId, mat4);
@@ -486,7 +473,7 @@ export default function Decor(props) {
     },
     updateDecorLists() {
       state.cuboids = Object.values(state.byKey).filter(
-        geomorphService.isDecorCuboid
+        geomorph.isDecorCuboid
       );
 
       state.quads = Object.values(state.byKey).filter(
@@ -503,14 +490,16 @@ export default function Decor(props) {
   w.decor = state;
   
   // instantiate geomorph decor
-  // 🚧 force recompute on hmr: invalidate hash (?)
-  state.queryStatus = useQuery({
-    queryKey: ['decor', w.key, w.decorHash],
+  const query = useQuery({
+    // 🚧 should depend on sheetsHash?
+    queryKey: ['decor', w.key, w.mapKey, w.hash.decor],
     async queryFn() {
-      // console.log('🔔 query debug', ['decor', w.key, w.decorHash]);
-      const prev = state.hash;
-      const next = state.computeHash();
-      const mapChanged = prev.mapHash !== next.mapHash;
+      if (module.hot?.active === false) {
+        return false; // Avoid query from disposed module
+      }
+      const prev = state.seenHash;
+      const next = w.hash;
+      const mapChanged = prev.map !== next.map;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
       state.ensureLabelSheet();
@@ -541,10 +530,10 @@ export default function Decor(props) {
         }
       }
 
-      state.hash = next;
+      state.seenHash = next;
       w.events.next({ key: 'decor-instantiated' });
       update();
-      return null;
+      return true;
     },
     // refetchOnMount: false,
     // refetchOnReconnect: false,
@@ -554,16 +543,19 @@ export default function Decor(props) {
     retry: false, // fix dup invokes
     gcTime: 0,
     // throwOnError: true,
-  }).status;
+  });
 
+  state.queryStatus = query.status;
   const labels = state.showLabels ? state.labels : [];
 
   React.useEffect(() => {
-    if (state.queryStatus === 'success') {
+    if (query.data === true) {
       state.addQuadUvs();
       state.positionInstances();
+    } else if (query.data === false) {
+      query.refetch(); // hmr
     }
-  }, [state.queryStatus, state.cuboids.length, state.quads.length, labels.length]);
+  }, [query.data, state.cuboids.length, state.quads.length, labels.length]);
 
   const update = useUpdate();
 
@@ -577,7 +569,7 @@ export default function Decor(props) {
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
     >
-      {/* <meshBasicMaterial color="red" /> */}
+      {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <meshDiffuseTestMaterial
         key={glsl.MeshDiffuseTestMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
@@ -631,16 +623,14 @@ export default function Decor(props) {
 /**
  * @typedef State
  * @property {Geomorph.DecorGrid} byGrid
- * PoCollidable decors in global grid where `byGrid[x][y]` covers the square:
+ * Decor in global grid where `byGrid[x][y]` covers the square:
  * (x * decorGridSize, y * decorGridSize, decorGridSize, decorGridSize)
  * @property {Record<string, Geomorph.Decor>} byKey
  * @property {Geomorph.RoomDecor[][]} byRoom
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
- * @property {{ mapHash: number; } & Record<Geomorph.GeomorphKey, number>} hash
- * If any decor changed in a geomorph re-instantiate all.
- * Record previous map so can remove stale decor
+ * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
  * @property {LabelsMeta} label
@@ -658,7 +648,6 @@ export default function Decor(props) {
  * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
- * @property {() => State['hash']} computeHash
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorQuad) => THREE.Matrix4} createQuadMatrix4
  * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4
@@ -685,3 +674,5 @@ export default function Decor(props) {
  * @property {{ [label: string]: Geom.RectJson }} sheet
  * @property {THREE.CanvasTexture} tex
  */
+
+const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));

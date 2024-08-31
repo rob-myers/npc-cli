@@ -6,7 +6,7 @@ import { defaultSkinKey, glbMeta } from "../service/const";
 import { info, warn } from "../service/generic";
 import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
 import { helper } from "../service/helper";
-import { Npc, hotModuleReloadNpc } from "./create-npc";
+import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -116,7 +116,8 @@ export default function Npcs(props) {
         }
       }
 
-      const positions = new Float32Array(npcPositions);
+      // 🔔 Float32Array caused issues i.e. decode failed
+      const positions = new Float64Array(npcPositions);
       w.physics.worker.postMessage({ type: 'send-npc-positions', positions }, [positions.buffer]);
     },
     removeObstacle(obstacleId) {
@@ -131,9 +132,11 @@ export default function Npcs(props) {
     restore() {// onchange nav-mesh
       // restore agents
       Object.values(state.npc).forEach(npc => {
+        if (npc.agent === null) {
+          return;
+        }
         npc.removeAgent();
         const agent = npc.attachAgent();
-        
         const closest = state.getClosestNavigable(npc.getPosition());
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
           npc.startAnimation('Idle');
@@ -175,9 +178,14 @@ export default function Npcs(props) {
         throw Error(`invalid skinKey: ${JSON.stringify(e.skinKey)}`);
       }
       
+      const gmRoomId = w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }, true);
+      if (gmRoomId === null) {
+        throw Error(`must be in some room: ${JSON.stringify(e.point)}`);
+      }
+
       let npc = state.npc[e.npcKey];
 
-      if (npc) {// Respawn
+      if (npc !== undefined) {// Respawn
         await npc.cancel();
         npc.epochMs = Date.now();
 
@@ -226,7 +234,7 @@ export default function Npcs(props) {
       }
 
       npc.s.spawns++;
-      w.events.next({ key: 'spawned', npcKey: npc.key });
+      w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },

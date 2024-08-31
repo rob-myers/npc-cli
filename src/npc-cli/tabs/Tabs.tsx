@@ -25,11 +25,10 @@ import useUpdate from "../hooks/use-update";
 import Spinner from "./Spinner";
 
 export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
-  const state = useStateRef<State>(() => ({
+  const state = useStateRef((): State => ({
     enabled: false,
     everEnabled: false,
     hash: "",
-    overlayColor: "black",
     prevFocused: null,
     resetCount: 0,
     rootEl: null as any,
@@ -77,9 +76,10 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       }
       return act;
     },
-    onModelChange: debounce(() => {
+    // 🔔 saw "Debounced method called with different contexts" for 300ms
+    onModelChange: debounce((() => {
       storeModelAsJson(props.id, state.model);
-    }, 300),
+    }), 30),
     reset() {
       state.tabsState = {};
       if (!state.enabled) {
@@ -89,14 +89,16 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
       update();
     },
     toggleEnabled(next) {
-      next ??= !state.enabled;
+      const prev = state.enabled;
+      // toggle if `next` undefined, else set
+      next ??= !prev;
+
+      if (prev === next) {
+        return;
+      }
+
       state.everEnabled ||= next;
       state.enabled = next;
-      if (state.everEnabled) {
-        state.overlayColor = next ? "clear" : "faded";
-      } else {
-        state.overlayColor = "black";
-      }
 
       if (next) {
         const prevFocused = state.prevFocused;
@@ -108,11 +110,17 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         state.rootEl.focus();
       }
 
-      const { tabsState } = state;
-      Object.keys(tabsState).forEach((key) => (tabsState[key].disabled = !next as boolean));
+      // Toggle all tabs
+      state.toggleTabsDisabled(next);
       update();
 
       props.onToggled?.(next);
+    },
+    toggleTabsDisabled(next) {
+      const { tabsState } = state;
+      for (const key of Object.keys(tabsState)) {
+        tabsState[key].disabled = !next 
+      }
     },
   }));
 
@@ -132,29 +140,27 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
 
       node.setEventListener("visibility", async ({ visible }) => {
         const [key, tabDef] = [node.getId(), (node as TabNode).getConfig() as TabDef];
+        // console.log('visibility', key, visible);
         state.tabsState[key] ??= {
           key,
           type: tabDef.type,
-          disabled: false,
+          disabled: !state.enabled,
           everUncovered: false,
           justCovered: false,
         };
 
-        if (!visible) {
-          if (tabDef.type === "component") {
-            // we don't disable hidden terminals
-            state.tabsState[key].disabled = true;
-            setTimeout(update);
-          }
-        } else {
-          if (!state.enabled) {
-            return; // Fix HMR
-          }
-
-          state.tabsState[key].disabled = false;
+        if (visible) {
+          state.tabsState[key].disabled = !state.enabled;
           const maxNode = state.model.getMaximizedTabset()?.getSelectedNode();
           state.tabsState[key].everUncovered ||= maxNode ? node === maxNode : true;
           setTimeout(update); // 🔔 Cannot update a component (`Tabs`) while rendering a different component (`Layout`)
+        }
+        
+        if (!visible && tabDef.type === "component") {
+          // - invisible tabs of type "component" get disabled in background
+          // - tabs of type "terminal" stay enabled in background
+          state.tabsState[key].disabled = true;
+          setTimeout(update);
         }
       });
     });
@@ -187,27 +193,26 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         )}
       </figure>
 
-      <button
-        onPointerDown={() => state.toggleEnabled()}
-        className={cx(interactOverlayCss, { enabled: state.enabled, collapsed: props.collapsed })}
-      >
-        <div>{props.browserLoaded ? "interact" : <Spinner size={24} />}</div>
-      </button>
+      {!state.everEnabled && (
+        <button
+          className={cx(interactButtonCss, { collapsed: props.collapsed })}
+          onPointerDown={() => state.toggleEnabled(true)}
+        >
+          <div>
+            {props.browserLoaded ? "interact" : <Spinner size={24} />}
+          </div>
+        </button>
+      )}
 
-      <div
-        className={cx(faderOverlayCss, {
-          clear: state.overlayColor === "clear",
-          faded: state.overlayColor === "faded",
-        })}
-      />
     </>
   );
 });
 
 export interface Props extends TabsDef {
-  rootOrientationVertical?: boolean;
-  collapsed: boolean;
   browserLoaded: boolean;
+  collapsed: boolean;
+  rootOrientationVertical?: boolean;
+  /** Invoked onchange state.enabled */
   onToggled?(next: boolean): void;
 }
 
@@ -215,8 +220,6 @@ export interface State {
   enabled: boolean;
   everEnabled: boolean;
   hash: string;
-  /** Initially `black` afterwards `faded` or `clear` */
-  overlayColor: "black" | "faded" | "clear";
   prevFocused: null | HTMLElement;
   resetCount: number;
   rootEl: HTMLElement;
@@ -229,6 +232,7 @@ export interface State {
   onModelChange(): void;
   reset(): void;
   toggleEnabled(next?: boolean): void;
+  toggleTabsDisabled(next: boolean): void;
 }
 
 export interface TabState {
@@ -237,13 +241,11 @@ export interface TabState {
   type: TabDef["type"];
   disabled: boolean;
   /**
-   * `false` iff some other tab has always been maximised.
-   *
-   * According to flexlayout-react, a selected tab is visible when obscured by a maximised tab.
-   * We prevent rendering in such cases
+   * `true` iff this tab's contents has ever been visible,
+   * in which case we should have mounted the respective component.
    */
   everUncovered: boolean;
-  /** True iff was just covered by a maximised tab */
+  /** `true` iff was just covered by a maximised tab */
   justCovered: boolean;
 }
 
@@ -306,9 +308,11 @@ const tabsCss = css`
   }
 `;
 
-const interactOverlayCss = css`
+const interactButtonCss = css`
   position: absolute;
-  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   @media (min-width: ${afterBreakpoint}) {
     left: var(--view-bar-size);
@@ -318,65 +322,22 @@ const interactOverlayCss = css`
   }
   @media (max-width: ${breakpoint}) {
     left: 0;
-    top: var(--view-bar-size);
+    top: calc(var(--view-bar-size) + 32px + 4px);
     width: 100%;
-    height: calc(100% - var(--view-bar-size));
+    height: calc(100% - 2 * var(--view-bar-size));
   }
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: rgba(0, 0, 0, 0);
-  cursor: pointer;
   user-select: none;
-
-  &.enabled {
-    pointer-events: none;
-    opacity: 0;
-  }
   &.collapsed {
     display: none;
   }
 
   > div {
-    font-size: 1.2rem;
     letter-spacing: 2px;
+    pointer-events: all;
+    
+    cursor: pointer;
+    font-size: 1rem;
     color: white;
-    filter: drop-shadow(0 2px #006);
-  }
-`;
-
-const faderOverlayCss = css`
-  position: absolute;
-  z-index: 4;
-  background: rgba(1, 1, 1, 1);
-
-  @media (min-width: ${afterBreakpoint}) {
-    left: var(--view-bar-size);
-    top: 0;
-    width: calc(100% + (-1 * var(--view-bar-size)));
-    height: 100%;
-  }
-  @media (max-width: ${breakpoint}) {
-    left: 0;
-    top: var(--view-bar-size);
-    width: 100%;
-    height: calc(100% + (-1 * var(--view-bar-size)));
-  }
-
-  opacity: 1;
-  transition: opacity 1s ease-in;
-  &.clear {
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-  }
-  &.faded {
-    opacity: 0.6;
-    transition: opacity 0.5s ease-in;
-  }
-
-  &:not(.faded) {
-    pointer-events: none;
   }
 `;

@@ -26,6 +26,7 @@ export default function WorldCanvas(props) {
     lastScreenPoint: new Vect(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
+    zoomState: 'near',
 
     canvasRef(canvasEl) {
       if (canvasEl && !state.canvas) {
@@ -82,6 +83,11 @@ export default function WorldCanvas(props) {
     getNumPointers() {
       return state.down?.pointerIds.length ?? 0;
     },
+    onChangeControls(e) {
+      const zoomState = state.controls.getDistance() > 30 ? 'far' : 'near';
+      zoomState !== state.zoomState && w.events.next({ key: 'changed-zoom', level: zoomState });
+      state.zoomState = zoomState;
+    },
     onCreated(rootState) {
       state.rootState = rootState;
       w.threeReady = true;
@@ -89,22 +95,29 @@ export default function WorldCanvas(props) {
       w.update(); // e.g. show stats
     },
     onGridPointerDown(e) {
-      // state.downPoint = e.point.clone();
+      const { x, z: y } = e.point;
       w.events.next(state.getNpcPointerEvent({
         key: "pointerdown",
         distancePx: 0,
         event: e,
         is3d: true,
         justLongDown: false,
-        meta: { floor: true },
+        meta: {
+          floor: true,
+          ...w.gmGraph.findRoomContaining({ x, y }, true),
+        },
       }));
     },
     onGridPointerUp(e) {
+      const { x, z: y } = e.point;
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
         event: e,
         is3d: true,
-        meta: { floor: true },
+        meta: {
+          floor: true,
+          ...w.gmGraph.findRoomContaining({ x, y }, true),
+        },
       }));
     },
     onPointerDown(e) {
@@ -188,7 +201,7 @@ export default function WorldCanvas(props) {
       }));
     },
     onWheel(e) {
-      if (w.menu.isOpen === true) {
+      if (w.menu.ctOpen === true) {
         w.menu.hide();
         w.menu.justOpen = false;
       }
@@ -214,9 +227,10 @@ export default function WorldCanvas(props) {
   w.ui = state;
 
   React.useEffect(() => {
-    // 🚧 do not trigger on HMR
-    state.controls?.setPolarAngle(Math.PI / 6);
-    state.controls?.setAzimuthalAngle(touchFixedAzimuth);
+    if (state.controls) {
+      state.controls.setPolarAngle(Math.PI / 4);
+      state.controls.setAzimuthalAngle(touchFixedAzimuth);
+    }
   }, [state.controls]);
 
   return (
@@ -243,18 +257,23 @@ export default function WorldCanvas(props) {
       <PerspectiveCamera
         position={[0, 16, 0]}
         makeDefault
-        fov={30}
+        fov={15}
+        zoom={0.5}
       />
 
       <MapControls
-        ref={(x) => x && (state.controls = x)}
+        ref={x => state.controls = x ?? state.controls}
         makeDefault
         zoomToCursor
+        onChange={state.onChangeControls}
 
         {...isTouchDevice() && {
           minAzimuthAngle: touchFixedAzimuth,
           maxAzimuthAngle: touchFixedAzimuth,
         }}
+        minDistance={5}
+        panSpeed={2}
+        maxPolarAngle={Math.PI/2 * 0.5}
       />
 
       <ambientLight intensity={1} />
@@ -300,9 +319,12 @@ export default function WorldCanvas(props) {
  * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
+ * @property {'near' | 'far'} zoomState
+ *
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
  * @property {(def: PointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getNpcPointerEvent
+ * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp

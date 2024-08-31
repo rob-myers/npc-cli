@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+        </defs>
+        <rect width="64" height="64" style="fill: rgb(255, 255, 255);">
+                <title>bg</title>
+        </rect>
+        <rect width="20" height="48" style="" x="8" y="8.026731">
+                <title>fg</title>
+        </rect>
+        <rect width="20" height="48" style="" x="36" y="8.026731">
+                <title>fg</title>
+        </rect>
+</svg>

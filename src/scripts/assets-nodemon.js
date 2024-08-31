@@ -46,7 +46,7 @@ async function onRestart(nodemonFiles = []) {
   await labelledSpawn('assets',
     'sucrase-node', 'src/scripts/assets', `--changedFiles=${JSON.stringify(changedFiles)}`,
   );
-  const seconds = ((Date.now() - startEpochMs) / 1000).toFixed(1);
+  const seconds = ((Date.now() - startEpochMs) / 1000).toFixed(2);
   info(`took ${seconds}s`);
   changed.forEach((epochMs, file) =>
     epochMs <= startEpochMs && changed.delete(file)

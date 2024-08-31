@@ -3,9 +3,9 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { info, warn } from "../service/generic";
-import { getQuadGeometryXZ } from "../service/three";
+import { getColor, getQuadGeometryXZ } from "../service/three";
 import * as glsl from "../service/glsl"
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -51,7 +51,7 @@ export default function Obstacles(props) {
       // transform unit (XZ) square into `rect`, then apply `transform` followed by `gmTransform`
       mat.feedFromArray([rect.width, 0, 0, rect.height, rect.x, rect.y]);
       mat.postMultiply(transform).postMultiply(gmTransform);
-      return geomorphService.embedXZMat4(mat.toArray(), { mat4, yHeight: height });
+      return geomorph.embedXZMat4(mat.toArray(), { mat4, yHeight: height });
     },
     decodeObstacleId(instanceId) {
       let id = instanceId;
@@ -126,13 +126,20 @@ export default function Obstacles(props) {
     positionObstacles() {
       const { inst: obsInst } = state;
       let oId = 0;
+      const defaultObstacleColor = '#fff'; // 🚧 move to const
       w.gms.forEach(({ obstacles, transform: gmTransform }) => {
-        obstacles.forEach((obstacle) => {
-          const mat4 = state.createObstacleMatrix4(gmTransform, obstacle);
-          obsInst.setMatrixAt(oId++, mat4);
+        obstacles.forEach(o => {
+          const mat4 = state.createObstacleMatrix4(gmTransform, o);
+          obsInst.setColorAt(oId, getColor(o.meta.color ?? defaultObstacleColor));
+          obsInst.setMatrixAt(oId, mat4);
+          oId++;
         });
       });
+
       obsInst.instanceMatrix.needsUpdate = true;
+      if (obsInst.instanceColor !== null) {
+        obsInst.instanceColor.needsUpdate = true;
+      }
       obsInst.computeBoundingSphere();
     },
   }));
@@ -142,12 +149,12 @@ export default function Obstacles(props) {
   React.useEffect(() => {
     state.addObstacleUvs();
     state.positionObstacles();
-  }, [w.hash, w.gmsData.obstaclesCount]);
+  }, [w.mapKey, w.hash.full, w.gmsData.obstaclesCount]);
 
   return (
     <instancedMesh
       name="static-obstacles"
-      key={w.hash}
+      key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.inst = instances)}
       args={[state.quadGeom, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}

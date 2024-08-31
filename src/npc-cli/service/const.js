@@ -9,6 +9,18 @@ export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
 });
 
+/** @type {import('@xterm/xterm').ITheme} */
+export const xtermJsTheme = {
+  background: "black",
+  foreground: "#41FF00",
+};
+
+/** @type {import('@xterm/xterm').ITheme} */
+export const xtermJsDebugTheme = {
+  background: "#020",
+  foreground: "#41FF00",
+};
+
 /** Size of starship geomorphs grid side in meters */
 export const geomorphGridMeters = 1.5;
 
@@ -38,6 +50,9 @@ export const spriteSheetSymbolExtraScale = 2.5;
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetDecorExtraScale = 3;
 
+/** Smaller e.g. `1.5` breaks "wall in room" e.g. 102 lab */
+export const gmHitTestExtraScale = 2;
+
 export const gmLabelHeightSgu = 12;
 
 /** Higher resolution labels */
@@ -50,13 +65,31 @@ export const wallOutset = 12 * sguToWorldScale;
 
 export const obstacleOutset = 10 * sguToWorldScale;
 
+/**
+ * Walls with any of these tags will not be merged with adjacent walls
+ * - `y` (numeric) Height of base off the floor
+ * - `h` (numeric) Height of wall
+ * - `broad` (true) Not thin e.g. back of lifeboat
+ */
+export const specialWallMetaKeys = /** @type {const} */ ([
+  'y',
+  'h',
+  'broad',
+]);
+
 export const wallHeight = 2;
 
+export const doorHeight = 1.8;
+
 /** Depth of doorway along line walking through hull door */
-export const hullDoorDepth = 8 * sguToWorldScale * sguSymbolScaleDown;
+export const hullDoorDepth = 40 * sguToWorldScale * sguSymbolScaleDown;
 
 /** Depth of doorway along line walking through door */
 export const doorDepth = 20 * sguToWorldScale * sguSymbolScaleDown;
+
+export const doorLockedColor = 'rgb(255, 230, 230)';
+
+export const doorUnlockedColor = 'rgb(230, 255, 230)';
 
 /**
  * Properties of exported GLB file.
@@ -142,7 +175,14 @@ export const hitTestRed = /** @type {const} */ ({
   room: 0,
 });
 
-export const defaultDoorCloseMs = 12000;
+// export const defaultDoorCloseMs = 12000;
+export const defaultDoorCloseMs = 3000;
+
+/** Meters */
+export const doorSwitchHeight = 1;
+
+/** @type {Geomorph.DecorImgKey} */
+export const doorSwitchDecorImgKey = 'icon--square';
 
 /**
  * @typedef {keyof fromDecorImgKey} DecorImgKey
@@ -156,6 +196,7 @@ export const fromDecorImgKey = {// 🔔 must extend when adding new decor
   'icon--doc': true,
   'icon--warn': true,
   'icon--key-card': true,
+  'icon--square': true,
 };
 
 /**
@@ -178,7 +219,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "bridge--042--8x9": true,
   "cargo--002--2x2": true,
   "cargo--010--2x4": true,
-  "cargo--003--2x4.svg": true,
+  "cargo--003--2x4": true,
   "console--005--1.2x4": true,
   "console--006--1.2x3": true,
   "console--010--1.2x2": true,

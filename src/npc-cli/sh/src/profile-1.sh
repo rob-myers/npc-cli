@@ -1,8 +1,9 @@
 awaitWorld
 
 # open door on click
-click | map '({meta}, {w}) =>
-  void (meta.door && w.door.toggleByInstance(meta.instanceId))' &
+click | map '({meta}, {w}) => {
+  meta.door && w.e.toggleDoor(meta.gdKey)
+}' &
 
 # write selectedNpcKey on click npc
 click | map meta.npcKey >selectedNpcKey &
@@ -15,9 +16,11 @@ click | filter meta.navigable | walkTest &
 setupDemo1
 
 # 🚧 introduce `spawn` command
-w npc.spawn '{ npcKey: "kate", point: { x: 5 * 1.5, y: 0, z: 7 * 1.5 }, agent: true }' >/dev/null
+w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 0, z: 7 * 1.5 }, agent: true }' >/dev/null
 w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 0, z: 3 * 1.5 }, agent: true }' >/dev/null
-w npc.spawn '{ npcKey: "rob", point: { x: 1 * 1.5, y: 0, z: 5 * 1.5 }, agent: true }'  >/dev/null
+w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 0, z: 5 * 1.5 }, agent: true }'  >/dev/null
+
+w e.changeNpcAccess rob . +
 
 selectedNpcKey="rob"
 

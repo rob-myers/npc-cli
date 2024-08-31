@@ -12,62 +12,85 @@ import {
 
 import SideNote from 'src/components/SideNote';
 import Card from 'src/components/Card';
+import ScrollTo from 'src/components/ScrollTo';
 
 # Home
 
 ## Intent
 
-This site is driven by a difficult problem. 
+This website focuses on one difficult problem. 
 
-<Card> 
+<Card id="underlying-problem"> 
 **Underlying Problem**
 
-For some video game with a sufficiently rich environment,
-fabricate Non-Player Characters <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by a Player.</SideNote>
-indistinguishable from Players.
-<SideNote width={400}>This is Turing's test relative to the particulars of the video game e.g. multiple-choice dialog.</SideNote>
+Create a video game with a sufficiently rich environment,
+such that the Player cannot distinguish any Non-Player Character <SideNote>A "Non-Player Character" (NPC) is a video game character not controlled by the Player.</SideNote>
+from human-controlled characters.
 </Card>
 
-In particular, we're talking about video games.
-They simulate _sensation_ (sight and sounds) and _identity_ (character controls, collision detection, [skins](https://namemc.com/minecraft-skins/random)).
-You temporarily _become_ something, whose sensory input and possible actions reflect your virtual position and state.
-But it's not much fun without other beings, either humans or more commonly Non-Player Characters (NPCs).
+What do we mean by a video game?
+Technically speaking, any simulation of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
+What about the other jargon?
+Well, the _Player_ is both (a) the human experiencing the simulation, (b) their respective simulated character.
+A Non-Player character (_NPC_) is a simulated character not controlled by the Player.
+The Player observes and interacts with the NPCs,
+and we're interested in improving the quality of these observations and interactions.
+
+The underlying problem requires each NPC to behave as if controlled by a human playing a particular role.
+Individuals needn't be sophisticated (e.g. multiple choice dialogue), but they must collectively interact just like humans would.
+
 {/* To better understand our objectives let us place them in the context of an underlying problem. */}
 {/* Although we won't try to solve it directly, we will work towards an intermediate problem. */}
 
-Amazingly and unexpectedly, Chat Bots can now hold flexible and meaningful conversations <SideNote>Putting aside their hallucinations and somewhat memoryless nature.</SideNote>.
-But before reaching towards Artificial General Intelligence,
-consider the current state of Non-Player Characters. 
-The word _NPC_ is now used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
-Popular films depict them as conversationally rigid and predictable,
+Ok, but why this particular problem?
+
+Recently, simulations of human behaviour have taken a step forwards.
+Chat Bots can now converse in an apparently flexible and meaningful manner <SideNote>Putting aside their so-called _hallucinations_ and somewhat memoryless nature.</SideNote>.
+But before aiming for Artificial General Intelligence,
+consider Non-Player Characters. 
+Nowadays the word _NPC_ is used to insult someone who [does not think for themselves](https://en.wikipedia.org/wiki/NPC_(meme)).
+Popular films depict them as conversationally rigid,
 usually with a single linear conversation <SideNote>The Jumanji reboot [1](https://en.wikipedia.org/wiki/Jumanji:_Welcome_to_the_Jungle) and [2](https://en.wikipedia.org/wiki/Jumanji:_The_Next_Level).</SideNote>.
 In our search for intelligent machines, we should remember that Turing's test was a _party game_.
-Almost 75 years later we have a multi-billion dollar video game industry,
-and a distinct lack of flexible or believable NPCs.
+Almost 75 years later we have a multi-billion dollar video game industry
+and a distinct lack of believable NPCs.
+Society's interest in robots
+apparently does not extend to the ones we've already invited into our homes.
 
-🚧 WIP
+So let's do something about it.
 
-> Why?
->
-> Because video games must behave soundly over all user journeys,
-> so the [state space explosion problem](https://en.wikipedia.org/wiki/Combinatorial_explosion) severely limits the number of states.
 
-In other words, rich environments have a huge number of possibilities which cannot be anticipated by developers.
-A balance is needed between steering the Player along a narrative,
-and allowing the Player to make free choices.
-Instead of tackling this problem head on, we'll work towards an intermediate solution.
-Then this website has two objectives.
+We're not going to attack the <ScrollTo id="underlying-problem">underlying problem</ScrollTo> directly.
+A head-on approach is way too hard.
+The video game industry has many talented developers and designers, and there's no reason to believe we can do any better.
+To make progress we're going to move the goal posts.
+We still want NPCs to collectively behave like humans from the Player's perspective.
+However, we're going to assume _another_ human controls them i.e. the _Game Master_.
+Then we have two objectives:
 
 <Card>
 **Objectives**
 
 1. Build real-time control systems for NPCs.
-2. Enable one human to act indistinguishably from many Players.
+2. Enable the Game Master to act indistinguishably from many humans.
 </Card>
 
+The first objective amounts to building a system.
+The second objective is a property this system must satisfy.
+Importantly we've already created the system's foundations,
+as we'll explain in our next blog entry.
+
+{/* Why aren't we interested in the robots we have already invited into our homes i.e. NPCs? */}
+{/* Take a step back. We're not ready yet. Lots of islands of ... */}
 
 
-🚧 WIP
+{/* Because video games must behave soundly over all user journeys,
+so the [state space explosion problem](https://en.wikipedia.org/wiki/Combinatorial_explosion) severely limits the number of states.
+In other words, rich environments have a huge number of possibilities which cannot be anticipated by developers. */}
+
+{/* A balance is needed between steering the Player along a narrative,
+and allowing the Player to make free choices. */}
+
 
 {/* For starters we won't work inside a video game development cycle i.e.
 we're not trying to create some finished product which we can sell.

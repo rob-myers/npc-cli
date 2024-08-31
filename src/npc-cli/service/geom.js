@@ -17,6 +17,23 @@ class geomServiceClass {
   }
 
   /**
+   * Given an affine transform designed to act on unit quad `(0, 0)...(1, 1)`,
+   * apply it with an additional `outset`.
+   * @param {Geom.Mat} mat 
+   * @param {number} outset
+   * @returns {Geom.Poly}
+   */
+  applyUnitQuadTransformWithOutset(mat, outset) {
+    const width = tempVect1.set(mat.a, mat.b).length;
+    const height = tempVect1.set(mat.c, mat.d).length;
+    const sx = (width + 2 * outset) / width;
+    const sy = (height + 2 * outset) / height;
+    const ox = (2 * outset) / (width + 2 * outset);
+    const oy = (2 * outset) / (height + 2 * outset);
+    return Poly.fromRect({ x: -ox, y: -oy, width: sx, height: sy }).applyMatrix(mat);
+  }
+
+  /**
    * @param {Geom.VectJson} extent Half extents
    * @param {Geom.VectJson} center
    * @param {number} angle
@@ -590,7 +607,7 @@ class geomServiceClass {
     let /** @type {number} */ s, /** @type {number} */ t;
 
     if (z === 0) {
-      if (ignoreColinear) return null;
+      if (ignoreColinear === true) return null;
       /**
        * Line segs are parallel, so both have non-normalized
        * normal (-dpy, dpx). For colinearity they must have
@@ -841,9 +858,9 @@ class geomServiceClass {
   }
 
   /**
-   * Convert a polygonal rectangle back into a `Rect` and `angle`,
-   * where rectangle needs to be rotated about its top-left point.
-   * - We ensure the width is greater than or equal to the height.
+   * Convert a polygonal rectangle back into a `Rect` and `angle` s.t.
+   * - rectangle needs to be rotated about its top-left point.
+   * - rectangle width is greater than or equal to its height.
    * @param {Geom.Poly} poly
    * @returns {Geom.AngledRect<Geom.Rect>}
    */

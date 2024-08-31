@@ -2,16 +2,16 @@
  * @param {RunArg} ctxt
  */
 export async function* awaitWorld({ api, home: { WORLD_KEY }, w }) {
-
-  api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`)
+  api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`);
+  
   while (!(w = api.getCached(WORLD_KEY))) {
     yield* api.sleep(0.5);
   }
 
-  await Promise.race([
-    w.awaitReady(),
-    new Promise((_, reject) => api.addCleanup(reject)),
-  ]);
+  const rejectOnCleanup = new Promise((_, reject) =>
+    api.addCleanup(() => reject("cancelled"))
+  );
+  await Promise.race([w.resolveOnReady(), rejectOnCleanup]);
   // w.npc.connectSession(api.meta.sessionKey)
 }
 
@@ -150,7 +150,8 @@ export async function walkTest(input, { w, home })  {
   if (npc) {
     // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
     npc.s.run = input.keys?.includes("shift") ?? false;
-    npc.moveTo(input.v3);
+    // 🔔 do not await so can override
+    w.e.moveNpc(npc.key, input).catch(() => {});
   }
 }
 
@@ -160,7 +161,7 @@ export async function walkTest(input, { w, home })  {
  * w
  * w 'x => x.crowd'`
  * w crowd
- * w vert.toggleDoor 15
+ * w s.toggleDoor '{gdKey:"g0d0"}'
  * ```
  * - 🚧 `w "x => x.gmGraph.findRoomContaining($( click 1 ))"`
  * - 🚧 `w gmGraph.findRoomContaining $( click 1 )`

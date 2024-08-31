@@ -21,5 +21,10 @@
   },
   "[xml]": {
     "editor.formatOnSave": false
-  }
+  },
+  "html.format.enable": false,
+  "[svg]": {
+      "editor.formatOnSave": false
+  },
+  "scm.showHistoryGraph" : false
 }

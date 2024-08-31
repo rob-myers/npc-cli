@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
 import { geomorphGridMeters, gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { keys } from "../service/generic";
+import { keys, pause } from "../service/generic";
 import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
@@ -16,10 +16,19 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    gridPattern: createGridPattern(geomorphGridMeters * worldToCanvas),
+    gridPattern: createGridPattern(
+      geomorphGridMeters * worldToCanvas,
+      'rgba(255, 255, 255, 0.075)',
+    ),
     tex: w.floor.tex, // Pass in textures
 
-    drawFloor(gmKey) {
+    async draw() {
+      for (const gmKey of keys(state.tex)) {
+        state.drawGmKey(gmKey);
+        await pause();
+      }
+    },
+    drawGmKey(gmKey) {
       const { ct, tex, canvas } = state.tex[gmKey];
       const gm = w.geomorphs.layout[gmKey];
       const { pngRect, hullPoly, navDecomp, walls } = gm;
@@ -51,17 +60,18 @@ export default function Floor(props) {
       // drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
+      const shadowColor = 'rgba(20, 20, 20, 1)'
       const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(ct, shadowPolys, ['rgba(0, 0, 0, 0.25)', null]);
+      drawPolygons(ct, shadowPolys, [shadowColor, shadowColor]);
 
       // 🧪 debug decor
       // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
       gm.decor.forEach((decor) => {
         if (decor.type === 'circle') {
-          drawCircle(ct, decor.center, decor.radius, [null, '#500', 0.04]);
-        } else if (decor.type === 'poly') {
+          drawCircle(ct, decor.center, decor.radius, [null, '#009', 0.04]);
+        } else if (decor.type === 'rect') {
           drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
         }
       });
@@ -84,8 +94,8 @@ export default function Floor(props) {
   w.floor = state;
 
   React.useEffect(() => {// initial + redraw on HMR
-    keys(state.tex).forEach(gmKey => state.drawFloor(gmKey));
-  }, [w.hash]);
+    state.draw();
+  }, [w.mapKey, w.hash.full]);
 
   return <>
     {w.gms.map((gm, gmId) => (
@@ -122,7 +132,8 @@ export default function Floor(props) {
  * @typedef State
  * @property {CanvasPattern} gridPattern
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
- * @property {(gmKey: Geomorph.GeomorphKey) => void} drawFloor
+ * @property {() => Promise<void>} draw
+ * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
  */
 
 const tmpMat1 = new Mat();

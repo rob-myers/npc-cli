@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { navMeta, greenWireFrameMat, decompToXZGeometry } from "../service/three";
+import { navMeta, decompToXZGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -98,7 +98,7 @@ export default function Debug(props) {
   React.useMemo(() => {
     state.navMesh = new NavMeshHelper({
       navMesh: w.nav.navMesh,
-      navMeshMaterial: greenWireFrameMat,
+      navMeshMaterial: navPolyMaterial,
     });
   }, [w.nav.navMesh]);
 
@@ -132,7 +132,7 @@ export default function Debug(props) {
         <mesh
           name="origNavPoly"
           args={[w.gmsData[gm.key].navPoly, origNavPolyMaterial]}
-          position={[0, 0.001, 0]}
+          position={[0, 0.0001, 0]}
           visible={props.showOrigNavPoly}
         />
       </group>
@@ -160,10 +160,18 @@ export default function Debug(props) {
 const origNavPolyMaterial = new THREE.MeshBasicMaterial({
   side: THREE.FrontSide,
   color: "green",
-  wireframe: true,
+  // wireframe: true,
   transparent: true,
   opacity: 0.8,
 });
+
+const navPolyMaterial = new THREE.MeshStandardMaterial({
+  wireframe: true,
+  color: "#ff0",
+  transparent: true,
+  opacity: 1,
+});
+
 
 const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   side: THREE.FrontSide,

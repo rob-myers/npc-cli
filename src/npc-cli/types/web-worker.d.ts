@@ -68,8 +68,8 @@ declare namespace WW {
 
   interface SendNpcPositions {
     type: 'send-npc-positions';
-    /** [npcBodyUid, positionX, positionY, positionZ, ...] (repeated 4s) */
-    positions: Float32Array;
+    // 🔔 Float32Array caused issues i.e. decode failed
+    positions: Float64Array;
   }
 
   interface WorldSetupResponse {
@@ -79,9 +79,20 @@ declare namespace WW {
   /** Each collision pair of bodyKeys should involve one npc, and one non-npc e.g. a door sensor */
   interface NpcCollisionResponse {
     type: 'npc-collisions';
-    collisionStart: { npcKey: string; otherKey: string }[];
-    collisionEnd: { npcKey: string; otherKey: string }[];
+    collisionStart: { npcKey: string; otherKey: PhysicsBodyKey }[];
+    collisionEnd: { npcKey: string; otherKey: PhysicsBodyKey }[];
   }
+
+  type PhysicsBodyKey = (
+    | `npc ${string}` // npc {npcKey}
+    | `nearby ${Geomorph.GmDoorKey}` // door neighbourhood
+    | `inside ${Geomorph.GmDoorKey}` // door cuboid
+  );
+
+  type PhysicsBodyGeom = (
+    | { type: 'cylinder'; halfHeight: number; radius: number }
+    | { type: 'cuboid'; halfDim: [number, number, number]  }
+  )
 
   //#endregion
 

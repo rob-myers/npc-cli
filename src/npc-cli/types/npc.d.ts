@@ -3,7 +3,7 @@ declare namespace NPC {
   /** Skin names. */
   type SkinKey = keyof import('../service/helper').Helper['fromSkinKey'];
 
-  type NPC = import('../world/create-npc').Npc;
+  type NPC = import('../world/npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */
@@ -39,17 +39,43 @@ declare namespace NPC {
     | { key: "disabled" }
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
-    | { key: "spawned"; npcKey: string }
+    | { key: "spawned"; npcKey: string; gmRoomId: Geomorph.GmRoomId }
     | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
+    | { key: "way-point"; npcKey: string; next: Geom.VectJson | null } & Geom.VectJson
+    | { key: "enter-doorway"; npcKey: string } & Geomorph.GmDoorId
+    | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
+    | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId
+    | { key: "exit-room"; npcKey: string } & Geomorph.GmRoomId
     | { key: "decor-instantiated" }
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
-    | { key: "opened-door"; gmId: number; doorId: number; npcKey?: string }
-    | { key: "closed-door"; gmId: number; doorId: number; npcKey?: string }
-    | { key: "entered-sensor" | "exited-sensor"; npcKey: string } & (
-      | { type: 'door' } & Geomorph.GmDoorId
-    )
+    | {
+      /** Try close door after countdown, and keep trying thereafter */
+      key: "try-close-door";
+      gmId: number; doorId: number; meta?: Geom.Meta
+    }
+    | { key: "opened-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "closed-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
+    | { key: "changed-zoom"; level: 'near' | 'far' }
+    | { key: "enter-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { key: "exit-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | {
+        key: "pre-request-nav";
+        /**
+         * `changedGmIds[gmId]` is `true` iff either:
+         * - `map.gms[gmId]` has different `gmKey` or `transform`
+         * - geomorph `map.gms[gmId].gmKey` has different navPoly
+         * 
+         * The latter is true whenever a room polygon changes.
+         * 
+         * It is defined for each `gmId` in current map.
+         */
+        changedGmIds: boolean[];
+      }
+    | { key: "pre-setup-physics" }
     // 🚧 ...
 
   type PointerUpEvent = Pretty<BasePointerEvent & {

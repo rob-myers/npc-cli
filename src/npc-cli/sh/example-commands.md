@@ -37,13 +37,28 @@ seq 100000 | log
 
 events
 events | map key
+
+call '() => { throw Error("bad") }'
+
+{
+  call '() => { throw "❌" }' | true
+  true | { sleep 1; echo 🔔; }
+}
+
+w gmsData.g-102--research-deck.hitCtxt.canvas.toDataURL | log
+
+# log events with timestamp
+events | flatMap 'x => [new Date().toGMTString(), x]'
+
+# unlock/lock specific door
+w es.toggleLock g0d16
 ```
 
 ## Local variables
 
 ```sh
-( local y=42; echo $y )
-( local y='{ foo: 42 }'; y/foo )
+( local y; y=42; echo $y )
+( local y; y='{ foo: 42 }'; y/foo )
 ```
 
 ## if then elif else
@@ -105,7 +120,7 @@ run '({ api }) { throw api.getKillError(); }' | take 1
 # terminates because last pipe-child killed
 # exit code 130
 take 1 | run '({ api }) { throw api.getKillError(); }'
-# fix ctrl-c i.e. should kill whole while loop
+# ctrl-c should kill whole while loop
 while true; do click 1 >clicked; clicked/meta/nav; done
 ```
 

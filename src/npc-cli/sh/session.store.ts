@@ -10,6 +10,7 @@ import {
   tryLocalStorageSet,
   KeyedLookup,
   jsStringify,
+  warn,
 } from "../service/generic";
 import {
   computeNormalizedParts,
@@ -185,7 +186,10 @@ export interface TtyLinkCtxt {
   lineText: string;
   /** Label text stripped of ansi-codes e.g. `[ foo ]` has link text `foo` */
   linkText: string;
-  /** Where `linkText` occurs in `lineText` */
+  /**
+   * One character before the link text occurs,
+   * or equivalently one character after the leading square bracket.
+   */
   linkStartIndex: number;
   /** Callback associated with link */
   callback: (/** Line we clicked on (possibly wrapped) */ lineNumber: number) => void;
@@ -358,17 +362,11 @@ const useStore = create<State>()(
           //   api.getSession(opts.sessionKey).ttyLink,
           //   api.getSession(opts.sessionKey).ttyLink[opts.lineText],
           // );
-          api
-            .getSession(opts.sessionKey)
-            .ttyLink[opts.lineText]?.find(
-              (x) => x.linkStartIndex === opts.linkStartIndex && x.linkText === opts.linkText
-            )
-            ?.callback(opts.lineNumber);
 
           try {
             // 🔔 HACK: permit toggle link (e.g. on/off) without leaving link first
             const { xterm } = api.getSession(opts.sessionKey).ttyShell.xterm;
-            const linkifier = (xterm as any)._core.linkifier2;
+            const linkifier = (xterm as any)._core.linkifier;
             // console.log(linkifier);
             setTimeout(() => {
               const position = linkifier._positionFromMouseEvent(
@@ -381,6 +379,11 @@ const useStore = create<State>()(
           } catch (e) {
             console.warn("HACK: permit toggle link: failed", e);
           }
+
+
+          api.getSession(opts.sessionKey).ttyLink[opts.lineText]?.find(
+            x => x.linkStartIndex === opts.linkStartIndex && x.linkText === opts.linkText
+          )?.callback(opts.lineNumber);
         },
 
         persistHistory(sessionKey) {
@@ -446,11 +449,11 @@ const useStore = create<State>()(
             const { process, ttyShell } = session;
             session.verbose = false;
             ttyShell.dispose();
-            Object.values(process).forEach((x) => killProcess(x));
+            Object.values(process).reverse().forEach((x) => killProcess(x));
             delete get().device[ttyShell.key];
             set(({ session }) => ({ session: removeFromLookup(sessionKey, session) }));
           } else {
-            console.log(`removeSession: ${sessionKey}: cannot remove non-existent session`);
+            warn(`removeSession: ${sessionKey}: cannot remove non-existent session`);
           }
         },
 

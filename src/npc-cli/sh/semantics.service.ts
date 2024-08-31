@@ -171,11 +171,9 @@ class semanticsServiceClass {
         process.cleanups.push(killPipeChildren); // Handle Ctrl-C
 
         const stdIn = useSession.api.resolve(0, stmts[0].meta);
-        const fifos = stmts
-          .slice(0, -1)
-          .map(({ meta }, i) =>
-            useSession.api.createFifo(`/dev/fifo-${sessionKey}-${meta.pid}-${i}`)
-          );
+        const fifos = stmts.slice(0, -1).map(({ meta }, i) =>
+          useSession.api.createFifo(`/dev/fifo-${sessionKey}-${meta.pid}-${i}`)
+        );
         const stdOut = useSession.api.resolve(1, stmts.at(-1)!.meta);
 
         try {
@@ -183,46 +181,41 @@ class semanticsServiceClass {
           const clones = stmts.map((x) => wrapInFile(cloneParsed(x), { ppid, pgid }));
           fifos.forEach((fifo, i) => (clones[i + 1].meta.fd[0] = clones[i].meta.fd[1] = fifo.key));
 
-          let errors = [] as any[],
-            exitCode = undefined as undefined | number;
+          let errors = [] as any[];
+          let exitCode = undefined as undefined | number;
+          const cleanupSetupMs = 0; // 🔔 30ms caused restart issue while `events | map key`
 
-          await Promise.allSettled(
-            clones
-              .slice()
-              .reverse()
-              .map(
-                (file, j) =>
-                  new Promise<void>(async (resolve, reject) => {
-                    const i = clones.length - 1 - j;
-                    try {
-                      await ttyShell.spawn(file, {
-                        localVar: true, // cleanup for e.g. `take 3 | true`
-                        cleanups:
-                          i === 0 && isTtyAt(file.meta, 0)
-                            ? [() => ttyShell.finishedReading()]
-                            : [],
-                      });
-                      resolve();
-                    } catch (e) {
-                      errors.push(e);
-                      reject(e);
-                    } finally {
-                      (fifos[i] ?? stdOut).finishedWriting(); // pipe-child `i` won't write any more
-                      (fifos[i - 1] ?? stdIn).finishedReading(); // pipe-child `i` won't read any more
+          await Promise.allSettled(clones.map((file, i) =>
+            new Promise<void>(async (resolve, reject) => {
+              try {
+                await ttyShell.spawn(file, {
+                  localVar: true,
+                  cleanups: // for e.g. `take 3 | true`
+                    i === 0 && isTtyAt(file.meta, 0)
+                      ? [() => ttyShell.finishedReading()]
+                      : [],
+                });
+                resolve();
+              } catch (e) {
+                errors.push(e);
+                reject(e);
+              } finally {
+                (fifos[i] ?? stdOut).finishedWriting(); // pipe-child `i` won't write any more
+                (fifos[i - 1] ?? stdIn).finishedReading(); // pipe-child `i` won't read any more
 
-                      if (i === clones.length - 1 && errors.length === 0) {
-                        exitCode = file.exitCode ?? 0;
-                      } else if (errors.length !== 1) {
-                        return; // No error, or already handled
-                      }
-                      // Kill other pipe-children (delay permits cleanup setup)
-                      setTimeout(killPipeChildren, 30);
-                    }
-                  })
-              )
-          );
-          // Avoid killing pipe children of next pipeline when ppid 0
-          await pause(30);
+                if (i === clones.length - 1 && errors.length === 0) {
+                  exitCode = file.exitCode ?? 0;
+                } else if (errors.length !== 1) {
+                  return; // No error, or already handled
+                }
+                // 🔔 Kill other pipe-children (delay permits cleanup setup)
+                setTimeout(killPipeChildren, cleanupSetupMs);
+              }
+            })
+          ));
+          // 🔔 Avoid above `killPipeChildren` killing children of next pipeline
+          // e.g. call '() => { throw "❌" }' | true; true | { sleep 1; echo 🔔; }
+          await pause(cleanupSetupMs);
 
           if (
             exitCode === undefined ||
@@ -655,7 +648,7 @@ class semanticsServiceClass {
     let itStartMs = -1, itLengthMs = 0;
 
     while (true) {
-      if (process.status === 2) {
+      if (process.status === ProcessStatus.Killed) {
         throw killError(node.meta);
       }
       // Force iteration to take at least 1 second

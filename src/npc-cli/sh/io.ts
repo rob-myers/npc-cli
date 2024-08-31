@@ -312,7 +312,7 @@ export class FifoDevice implements Device {
   }
 
   public finishedReading(query?: boolean) {
-    if (query) {
+    if (query === true) {
       return this.readerStatus === FifoStatus.Disconnected;
     }
     this.readerStatus = FifoStatus.Disconnected;
@@ -321,7 +321,7 @@ export class FifoDevice implements Device {
   }
 
   public finishedWriting(query?: boolean) {
-    if (query) {
+    if (query === true) {
       return this.writerStatus === FifoStatus.Disconnected;
     }
     this.writerStatus = FifoStatus.Disconnected;
@@ -435,7 +435,7 @@ export class VoiceDevice implements Device {
   pending = [] as (() => void)[];
   speaking = false;
 
-  constructor(public key: "/dev/voice", defaultVoiceName = "Google UK English Male") {
+  constructor(public key: "/dev/voice", defaultVoiceName = "Daniel") {
     // https://stackoverflow.com/a/52005323/2917822
     setTimeout(() => {
       this.voices = this.synth.getVoices();

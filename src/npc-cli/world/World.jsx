@@ -1,4 +1,5 @@
 import React from "react";
+import { cx } from "@emotion/css";
 import { useQuery } from "@tanstack/react-query";
 import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -10,11 +11,11 @@ import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause } from "../service/generic";
+import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
 import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
-import { geomorphService } from "../service/geomorph";
+import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
 import { createCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
@@ -32,7 +33,7 @@ import Walls from "./Walls";
 import Doors from "./Doors";
 import Npcs from "./Npcs";
 import Debug from "./Debug";
-import ContextMenu from "./ContextMenu";
+import WorldMenu from "./WorldMenu";
 import WorldWorkers from "./WorldWorkers";
 
 /**
@@ -44,8 +45,9 @@ export default function World(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     key: props.worldKey,
     disabled: !!props.disabled,
-    hash: /** @type {*} */ (''),
-    decorHash: /** @type {*} */ (''),
+    hash: /** @type {State['hash']} */ ({
+      full: /** @type {*} */ (''),
+    }),
     mapKey: props.mapKey,
     r3f: /** @type {*} */ (null),
     readyResolvers: [],
@@ -62,7 +64,8 @@ export default function World(props) {
     gms: [],
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
-    hmr: { createGmsData },
+    hmr: /** @type {*} */ ({}),
+    // 🚧 avoid recreating texture on HMR
     obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
     decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
 
@@ -76,11 +79,11 @@ export default function World(props) {
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
       onTick() {},
-      toggleByInstance(_instanceId) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {*} */ (null), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
+    // 🚧 support hmr e.g. via state.hmr
     lib: {
       filter,
       firstValueFrom,
@@ -91,11 +94,9 @@ export default function World(props) {
       ...helper,
     },
 
-    async awaitReady() {
-      if (!state.isReady()) {
-        return new Promise(resolve => state.readyResolvers.push(resolve));
-      }
-    },
+    e: /** @type {*} */ (null), // useHandleEvents
+    oneTimeTicks: [],
+
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
@@ -122,11 +123,23 @@ export default function World(props) {
       state.npc.onTick(deltaMs);
       state.door.onTick();
       // info(state.r3f.gl.info.render);
+
+      while (state.oneTimeTicks.shift()?.());
+    },
+    async resolveOnReady() {
+      if (state.isReady()) {
+        return;
+      } else {
+        return new Promise(resolve => state.readyResolvers.push(resolve));
+      }
     },
     setReady() {
-      while (state.readyResolvers.length > 0) {
+      while (state.readyResolvers.length > 0)
         /** @type {() => void} */ (state.readyResolvers.pop())();
-      }
+    },
+    trackHmr(nextHmr) {
+      const output = mapValues(state.hmr, (prev, key) => prev !== nextHmr[key])
+      return state.hmr = nextHmr, output;
     },
     update(mutator) {
       mutator?.(state);
@@ -138,34 +151,37 @@ export default function World(props) {
 
   useHandleEvents(state);
 
-  useQuery({
+  const query = useQuery({
     queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
     queryFn: async () => {
-      // console.log('🔔 query debug', [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey])
+      if (module.hot?.active === false) {
+        return false; // Avoid query from disposed module
+      }
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
 
       /**
        * Used to apply changes synchronously.
-       * These values can be overridden below.
-       * @type {Pick<State, 'geomorphs' | 'mapKey' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph'>}
+       * @type {Pick<State, 'geomorphs' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph' | 'hash' | 'mapKey'>}
        */
       const next = {
+        // prev values: (may overwrite below)
         geomorphs: prevGeomorphs,
-        mapKey: props.mapKey,
         gms: state.gms,
         gmsData: state.gmsData,
         gmGraph: state.gmGraph,
         gmRoomGraph: state.gmRoomGraph,
+        // next values:
+        hash: geomorph.computeHash(geomorphsJson, props.mapKey),
+        mapKey: props.mapKey,
       };
 
-      const dataChanged = !prevGeomorphs || state.geomorphs.hash !== geomorphsJson.hash;
-      const mapChanged = dataChanged || state.mapKey !== props.mapKey;
-
+      const dataChanged = !prevGeomorphs || state.hash.full !== next.hash.full;
       if (dataChanged) {
-        next.geomorphs = geomorphService.deserializeGeomorphs(geomorphsJson);
+        next.geomorphs = geomorph.deserializeGeomorphs(geomorphsJson);
       }
-
+      
+      const mapChanged = dataChanged || state.mapKey !== props.mapKey;
       if (mapChanged) {
         next.mapKey = props.mapKey;
         const mapDef = next.geomorphs.map[next.mapKey];
@@ -183,23 +199,21 @@ export default function World(props) {
         }
 
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
-          geomorphService.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
+          geomorph.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
         );
       }
       
-      // detect if the function `createGmsData` has changed
-      const createGmsData = await import('../service/create-gms-data').then(x => x.default);
-      const gmsDataChanged = state.hmr.createGmsData !== createGmsData;
-      state.hmr.createGmsData = createGmsData;
+      const { createGmsData: gmsDataChanged, GmGraphClass: gmGraphChanged } = state.trackHmr(
+        { createGmsData, GmGraphClass },
+      );
 
       if (mapChanged || gmsDataChanged) {
         next.gmsData = createGmsData(
-          // reuse gmData lookup, unless:
-          // (a) geomorphs.json changed, or (b) create-gms-data changed
+          // reuse gmKey -> GmData lookup unless geomorphs.json or createGmsData changed
           { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
         );
 
-        // ensure gmData per layout in map
+        // ensure GmData per gmKey in map
         for (const gmKey of new Set(next.gms.map(({ key }) => key))) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
@@ -208,7 +222,9 @@ export default function World(props) {
         };
         
         next.gmsData.computeRoot(next.gms);
-        
+      }
+      
+      if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
         next.gmGraph = GmGraphClass.fromGms(next.gms, { permitErrors: true });
         next.gmGraph.w = state;
@@ -217,44 +233,49 @@ export default function World(props) {
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
       }
 
+      // apply changes synchronously
+      if (state.gmGraph !== next.gmGraph) {
+        state.gmGraph.dispose();
+        state.gmRoomGraph.dispose();
+      }
       if (dataChanged || gmsDataChanged) {
+        // only when GmData lookup has been rebuilt
         state.gmsData?.dispose();
       }
-      // apply changes synchronously
       Object.assign(state, next);
-      state.hash = `${state.mapKey} ${state.geomorphs.hash}`;
-      state.decorHash = `${state.mapKey} ${state.geomorphs.layoutsHash} ${state.geomorphs.mapsHash}`;
-
       debug({
         prevGeomorphs: !!prevGeomorphs,
         dataChanged,
         mapChanged,
         gmsDataChanged,
+        gmGraphChanged,
         hash: state.hash,
-      });      
+      });
 
-      if (dataChanged) {
+      if (dataChanged) {// 🤔 separate hash.sheets from hash.full?
         for (const { src, tm, invert } of [
           { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
           { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
         ]) {
           const img = await imageLoader.loadAsync(src);
-          if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
+          // 🔔 commenting below due to issue editing obstacle outlines
+          // if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
             [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
             tm.tex.dispose();
             tm.tex = new THREE.CanvasTexture(tm.canvas);
             tm.tex.flipY = false; // align with XZ/XY quad uv-map
-            tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
-          }
+          // }
+          tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           tm.ct.drawImage(img, 0, 0);
           invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
+          tm.tex.needsUpdate = true;
           update();
         }
       } else {
         update();
       }
 
-      return null;
+      return true;
     },
     refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
@@ -262,8 +283,9 @@ export default function World(props) {
     // throwOnError: true, // breaks on restart dev env
   });
 
-  React.useEffect(() => {// expose world for terminal
+  React.useEffect(() => {// provide world for tty + hmr query
     setCached([props.worldKey], state);
+    query.data === false && query.refetch();
     return () => removeCached([props.worldKey]);
   }, []);
 
@@ -298,17 +320,17 @@ export default function World(props) {
           </group>
         )}
       </WorldCanvas>
-      <ContextMenu />
+      <WorldMenu setTabsEnabled={props.setTabsEnabled} />
       <WorldWorkers />
     </WorldContext.Provider>
   );
 }
 
 /**
- * @typedef Props
- * @property {boolean} [disabled]
- * @property {keyof import('static/assets/geomorphs.json')['map']} mapKey
- * @property {string} worldKey
+ * @typedef {import("../tabs/tab-factory").BaseTabProps & {
+ *   mapKey: keyof import('static/assets/geomorphs.json')['map'];
+ *   worldKey: string;   
+ * }} Props
  */
 
 /**
@@ -316,14 +338,11 @@ export default function World(props) {
  * @property {string} key This is `props.worldKey` and never changes
  * @property {boolean} disabled
  * @property {string} mapKey
- * @property {`${string} ${string}`} hash
- * `${mapKey} ${geomorphs.hash}` 
- * @property {`${string} ${number} ${number}`} decorHash
- * `${mapKey} ${geomorphs.layoutsHash} ${geomorphs.mapsHash}` 
+ * @property {Geomorph.GeomorphsHash} hash
  * @property {Geomorph.GmsData} gmsData
  * Data determined by `w.gms` or a `Geomorph.GeomorphKey`.
  * - A geomorph key is "non-empty" iff `gmsData[gmKey].wallPolyCount` non-zero.
- * @property {{ createGmsData: typeof createGmsData }} hmr
+ * @property {{ createGmsData: typeof createGmsData; GmGraphClass: typeof GmGraphClass }} hmr
  * Change-tracking for Hot Module Reloading (HMR) only
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
@@ -345,9 +364,13 @@ export default function World(props) {
  * @property {import('./Doors').State} door
  * @property {import('./Npcs').State} npc
  * Npcs (dynamic)
- * @property {import('./ContextMenu').State} menu
+ * @property {import('./WorldMenu').State} menu
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
+ *
+ * @property {import("./use-handle-events").State} e
+ * Events state i.e. useHandleEvents state
+ * @property {(() => void)[]} oneTimeTicks
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex
  * @property {import("../service/three").CanvasTexMeta} decorTex
@@ -358,11 +381,13 @@ export default function World(props) {
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
  *
- * @property {() => Promise<void>} awaitReady
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
+ * @property {() => Promise<void>} resolveOnReady
  * @property {() => void} setReady
+ * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
+ * Has function `createGmsData` changed?
  * @property {(mutator?: (w: State) => void) => void} update
  */
 
