@@ -229,6 +229,7 @@ export default function useHandleEvents(w) {
 
         if (door.auto === true && door.locked === false) {
           state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+          return;
         } 
         
         const npc = w.npc.getNpc(e.npcKey);
