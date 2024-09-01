@@ -11,6 +11,18 @@
 - 🚧 create "hyper casual" characters, rather then pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
   - based on these models e.g. 3 bones: body > head, shadow
+  - ✅ unity: create project with imported assets
+  - ✅ blender: import exported fbx as static model
+  - ℹ️ investigate mesh
+    - tris: base_body 280 (head 140, body 140)
+    - tris: hair_man 172, cap 128, hair_woman 278, hair_pony 256, knit_hat 144
+    - no texture map
+  - ℹ️ mesh spec (1st attempt)
+    - body: cuboid with split 0.33 * h from base, and another at 0.7 * h inset by 0.185 * w
+      - width = depth = 200 (arbitrary units), height 230 (or 245 with top curve)
+    - head: cylinder with 3 * 4 sides
+      - width = depth = 200 (radius), height 125 (or 170 with curves)
+  - 🚧 implement mesh spec
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js
@@ -40,6 +52,8 @@
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so
     try provide "echo circle" for touch devices
+- stationary npc with agent uses navQuery with blocked doors?
+  - to avoid being pushed through doors by other npcs
 - hmr issue with Connector class
 - hull door enter-room triggers late?
 - towards faster raycast against instancedmesh
