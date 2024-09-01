@@ -18,11 +18,12 @@
     - tris: hair_man 172, cap 128, hair_woman 278, hair_pony 256, knit_hat 144
     - no texture map
   - ℹ️ mesh spec (1st attempt)
-    - body: cuboid with split 0.33 * h from base, and another at 0.7 * h inset by 0.185 * w
+    - body: cuboid with split 0.34 * h from base, and another at 0.7 * h inset by 0.185 * w
       - width = depth = 200 (arbitrary units), height 230 (or 245 with top curve)
     - head: cylinder with 3 * 4 sides
       - width = depth = 200 (radius), height 125 (or 170 with curves)
   - 🚧 implement mesh spec
+    - edit mode: Cmd+R loop cut
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js
