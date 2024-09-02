@@ -22,15 +22,19 @@
       - width = depth = 200 (arbitrary units), height 230 (or 245 with top curve)
     - head: cylinder with 3 * 4 sides
       - width = depth = 200 (radius), height 125 (or 170 with curves)
-  - 🚧 implement mesh spec
-    - head: 12-side cylinder
-    - body: cuboid (x2 vert split, tapered towards head) + bevel modifier (?)
-    - needs shadow too
+  - ✅ 1st attempt at character
+    - facing along negative Y
+    - head: 12-side cylinder + bevel modifier
+    - body: cuboid (x2 vert split, tapered towards head) + bevel modifier
+    - ❌ needs shadow too (on hold)
   - ℹ️ blender:
     - set pivot mode in top menu e.g. as 3d cursor
   - ℹ️ blender edit mode:
     - Cmd+R loop cut
     - Option+Click edge for edge loop
+  - texture mapping
+    - try provide strong outline for body
+    - try provide strong outline for face
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js
