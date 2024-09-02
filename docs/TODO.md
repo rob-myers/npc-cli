@@ -25,6 +25,9 @@
   - 🚧 implement mesh spec
     - head: 12-side cylinder
     - body: cuboid (x2 vert split, tapered towards head) + bevel modifier (?)
+    - needs shadow too
+  - ℹ️ blender:
+    - set pivot mode in top menu e.g. as 3d cursor
   - ℹ️ blender edit mode:
     - Cmd+R loop cut
     - Option+Click edge for edge loop
