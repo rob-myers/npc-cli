@@ -26,15 +26,19 @@
     - facing along negative Y
     - head: 12-side cylinder + bevel modifier
     - body: cuboid (x2 vert split, tapered towards head) + bevel modifier
-    - ❌ needs shadow too (on hold)
+    - needs shadow too
   - ℹ️ blender:
     - set pivot mode in top menu e.g. as 3d cursor
   - ℹ️ blender edit mode:
     - Cmd+R loop cut
     - Option+Click edge for edge loop
-  - texture mapping
+  - 🚧 texture mapping
     - try provide strong outline for body
     - try provide strong outline for face
+  - test import into World
+  - idle animation
+  - walk animation
+  - test import into World
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js
