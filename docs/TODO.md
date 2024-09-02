@@ -29,6 +29,7 @@
     - needs shadow too
   - ℹ️ blender:
     - set pivot mode in top menu e.g. as 3d cursor
+    - absolute positions: N to toggle
   - ℹ️ blender edit mode:
     - Cmd+R loop cut
     - Option+Click edge for edge loop
