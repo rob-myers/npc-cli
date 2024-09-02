@@ -23,7 +23,9 @@
     - head: cylinder with 3 * 4 sides
       - width = depth = 200 (radius), height 125 (or 170 with curves)
   - 🚧 implement mesh spec
-    - edit mode: Cmd+R loop cut
+    - 12-side cylinder for head
+    - try 8-side cylinder for body
+  - ℹ️ blender: edit mode: Cmd+R loop cut
 
 - investigate GPU object picking via 2 render targets written to by 1 fragment shader
   - based on PR where render targets first added to three.js
