@@ -34,6 +34,7 @@
     - Cmd+R loop cut
     - Option+Click edge for edge loop
   - 🚧 texture mapping
+    - mark seams
     - try provide strong outline for body
     - try provide strong outline for face
   - test import into World
