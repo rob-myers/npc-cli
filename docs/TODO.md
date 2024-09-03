@@ -34,9 +34,10 @@
     - Cmd+R loop cut
     - Option+Click edge for edge loop
   - 🚧 texture mapping
-    - mark seams
-    - try provide strong outline for body
-    - try provide strong outline for face
+    - ✅ UV > mark seams, unwrap
+    - export UV map, and use a background in Boxy SVG
+      - try provide strong outline for body
+      - try provide strong outline for face
   - test import into World
   - idle animation
   - walk animation
