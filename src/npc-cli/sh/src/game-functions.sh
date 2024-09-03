@@ -4,8 +4,7 @@ gm() {
   gmId="${1:-0}"
   selector="${2:-x=>x}"
   shift 2
-  call '({ api, home }) => api.getCached(home.WORLD_KEY).gms['$gmId']' |
-    map "$selector" "$@"
+  call '({ w }) => w.gms['$gmId']' | map "$selector" "$@"
 }
 
 # 🔔 initial ctrl-c test
