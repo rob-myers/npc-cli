@@ -53,20 +53,8 @@
   - ensure up to date
   - work on migrating Viewer
 
-- Boxy rounding errors issue
-  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
-- 🚧 memory leaks
-  - ℹ️ use incognito to avoid extensions memory leak
-    > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
-  - ℹ️ https://superuser.com/questions/1817473/what-accounts-for-the-discrepancy-between-the-memory-use-shown-when-hovering-on
-  - ℹ️ can also use three.js stats UI which has a memory indicator
-  - 🚧 interact, then take memory snapshot of both workers
-  - geometry attributes are a possible memory leak
-    - could update geometry attributes rather than create new attributes
-      - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
-      - i.e. preset large bounds, and use geometry.setDrawRange
-    - could use underlying gl api to remove attributes
-
+- fix flickering hull door base (onchange camera view)
+  - suffices to add a matching line
 - support non-door sensor i.e. decor circle/poly
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so
@@ -108,6 +96,19 @@
 - `Tabs` css should not reference src/const
   - try refactor `faderOverlayCss` e.g. merge into `<figure>`
 - change camera fov based on camera height and/or visible-world
+- Boxy rounding errors issue
+  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
+- 🚧 memory leaks
+  - ℹ️ use incognito to avoid extensions memory leak
+    > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
+  - ℹ️ https://superuser.com/questions/1817473/what-accounts-for-the-discrepancy-between-the-memory-use-shown-when-hovering-on
+  - ℹ️ can also use three.js stats UI which has a memory indicator
+  - 🚧 interact, then take memory snapshot of both workers
+  - geometry attributes are a possible memory leak
+    - could update geometry attributes rather than create new attributes
+      - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
+      - i.e. preset large bounds, and use geometry.setDrawRange
+    - could use underlying gl api to remove attributes
 
 - BUG obstacles.png slightly different onchange
   - no visible difference, probably due to "quick approach"
