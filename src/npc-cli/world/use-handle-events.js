@@ -19,7 +19,7 @@ export default function useHandleEvents(w) {
 
     canCloseDoor(door) {
       const closeNpcs = state.doorToNpc[door.gdKey];
-      if (closeNpcs.inside.size > 0) {
+      if (!(closeNpcs?.inside.size === 0)) {
         return false;
       }
       if (closeNpcs.nearby.size === 0) {
