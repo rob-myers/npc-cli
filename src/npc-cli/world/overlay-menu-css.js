@@ -43,7 +43,7 @@ export const pausedControlsCss = css`
     border-color: #555;
     font-size: 0.8rem;
 
-    width: 100px;
+    width: 80px;
 
     &.text-white {
       color: #fff;

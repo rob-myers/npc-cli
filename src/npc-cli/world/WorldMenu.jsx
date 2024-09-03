@@ -78,7 +78,7 @@ export default function WorldMenu(props) {
           onClick={state.clickEnableAll}
           className="text-white"
         >
-          enable all
+          enable
         </button>
         <button
           onClick={state.toggleDebug}

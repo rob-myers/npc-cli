@@ -98,7 +98,7 @@ export default function TtyMenu(props: Props) {
         {props.disabled && (// Overlay Buttons
           <div className={pausedControlsCss}>
             <button className="text-white" onClick={state.clickEnableAll}>
-              enable all
+              enable
             </button>
             <button
               onClick={state.toggleDebug}
