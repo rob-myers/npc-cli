@@ -177,7 +177,7 @@ export default function WorldCanvas(props) {
       if (!state.down) {
         return;
       }
-      
+
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
         event: e,
@@ -239,7 +239,11 @@ export default function WorldCanvas(props) {
       className={canvasCss}
       frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
-      gl={{ toneMapping: 3, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
+      gl={{
+        toneMapping: 3,
+        toneMappingExposure: 1,
+        logarithmicDepthBuffer: true,
+      }}
       onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}
       onPointerMissed={state.onPointerMissed}
@@ -289,8 +293,6 @@ export default function WorldCanvas(props) {
       >
         <mesh args={[getQuadGeometryXZ('vanilla-xz')]} position={[-0.5, 0, -0.5]} />
       </group>
-
-
     </Canvas>
   );
 }
