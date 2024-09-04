@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": 1274415872, "pngHash": 568633107},
+    "101--hull": {"outputHash": 170838324, "pngHash": 568633107},
     "102--hull": {"outputHash": 1057984362, "pngHash": 184103855},
     "103--hull": {"outputHash": 1221905667, "pngHash": -1937509879},
     "301--hull": {"outputHash": -1843567132, "pngHash": 787602800},
@@ -2051,49 +2051,49 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 2.2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 9, 0]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 2.2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 15.01, 0]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 2.2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 24.01, 0]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 2.2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 9, 27]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 2.2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 15, 27]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 2.2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 24.03, 27]
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 2},
+          "meta": {"key": "fuel--010--4x2", "y": 2.2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 0, 27]

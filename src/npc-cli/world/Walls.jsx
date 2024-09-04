@@ -87,7 +87,7 @@ export default function Walls(props) {
 
   React.useEffect(() => {
     state.positionInstances();
-  }, [w.mapKey, w.hash.full, w.gmsData.wallCount, wallHeight]);
+  }, [w.mapKey, w.hash.full, w.gmsData.wallCount, w.gmsData]);
 
   return (
     <instancedMesh

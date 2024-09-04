@@ -60,31 +60,29 @@
 - 🚧 towards gpu object picking
   - 🚧 Walls shader has boolean uniform `objectPicking` and behaves differently based on it
 
-- 🚧 try 200 npcs
-
-- ✅ BUG: tty: xterm paste (fails when line is single newline)
-  - pasted newlines are normalized as `\r`: https://github.com/xtermjs/xterm.js/issues/1382#issuecomment-380309962
+- 🚧 measure 200 npcs FPS with current setup
+- why can't we move them?
 ```sh
-# repro
-w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
+w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
 
+run '({ w, api }) {
+  for (const [gmId, gm] of w.gms.entries()) {
+    for (const [roomId, { center }] of gm.rooms.entries()) {
+      try {
+        console.log({gmId, roomId});
+        gm.matrix.transformPoint(center);
+        await w.npc.spawn({ npcKey: `room-npc-${gmId}-${roomId}`, point: { x: center.x, y: 0, z: center.y } })
+      } catch {}
+      yield* api.sleep(0.05);
+    }
+  }
 }'
 ```
-- ✅ BUG: tty: xterm paste then historical up (cursor in wrong place)
-  - changed pasting behaviour i.e. previously we ran each line upon encountering newline,
-    but now we just insert into to input
-- ✅ BUG tty: xterm: cursor should skip over \r (now we normalize as \r\n)
 
-- ✅ BUG: tty: xterm delete from end (moves one line down)
-  - commented out "Right-edge detection" in `setInput`
-```sh
-# repros
-echo 'foo {
-}'
-echo 'bar {
-
-}'
-```
+- Consider brighter style
+- Possible rethink about composition of shell/js functions
+  - i.e. hard to make shell functions
+- ✅ Support SVG symbol syntax `y=wallHeight`
 
 - BUG tty: xterm: delete inside multiline command
 ```sh
@@ -96,6 +94,8 @@ call '() => {
 
 - ✅ `take n` exits with non-zero code when doesn't take everything
   - so this terminates `{ echo foo; echo bar; } | while take 1 >tmp; do echo $tmp; done`
+  - ✅ BUG `seq 5 | while take 1 >pos; do pos; done`
+    - seems we cannot handle chunks using this method
 
 - return to next.js project
   - ensure up to date
@@ -2134,3 +2134,27 @@ call '() => {
   - ✅ trigger check when nearby npc stops (currently only on exit nearby sensor)
 
 - ✅ fix bug: cannot close door when npc nearby
+
+- ✅ BUG: tty: xterm paste (fails when line is single newline)
+  - pasted newlines are normalized as `\r`: https://github.com/xtermjs/xterm.js/issues/1382#issuecomment-380309962
+```sh
+# repro
+w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
+
+}'
+```
+- ✅ BUG: tty: xterm paste then historical up (cursor in wrong place)
+  - changed pasting behaviour i.e. previously we ran each line upon encountering newline,
+    but now we just insert into to input
+- ✅ BUG tty: xterm: cursor should skip over \r (now we normalize as \r\n)
+
+- ✅ BUG: tty: xterm delete from end (moves one line down)
+  - commented out "Right-edge detection" in `setInput`
+```sh
+# repros
+echo 'foo {
+}'
+echo 'bar {
+
+}'
+```

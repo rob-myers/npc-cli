@@ -346,6 +346,24 @@ export function parseJsArg(input) {
 }
 
 /**
+ * Parse input with context with string fallback
+ * - preserves `undefined`
+ * - preserves empty-string
+ * @param {string} [input]
+ * @param {string[]} names
+ * @param {any[]} values
+ */
+export function parseJsWithCt(input, names = [], values = []) {
+  try {
+    if (input === "") return input;
+    // eslint-disable-next-line no-new-func
+    return Function(...names, `return ${input}`)(...values);
+  } catch (e) {
+    return input;
+  }
+}
+
+/**
  * JSON.parse with string fallback
  * @param {string} input
  */

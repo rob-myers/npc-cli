@@ -3428,7 +3428,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "meta": {"decor": true, "label": "fuel", "y": 2.21},
           "bounds2d": {"x": 9.875, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 12,
           "y": 0.7,
@@ -3437,7 +3437,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "meta": {"decor": true, "label": "fuel", "y": 2.21},
           "bounds2d": {"x": 15.885, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 18.01,
           "y": 0.7,
@@ -3446,7 +3446,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "meta": {"decor": true, "label": "fuel", "y": 2.21},
           "bounds2d": {"x": 24.885, "y": -1.425, "width": 4.25, "height": 4.25},
           "x": 27.01,
           "y": 0.7,
@@ -3455,7 +3455,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "meta": {"decor": true, "label": "fuel", "y": 2.21},
           "bounds2d": {"x": 9.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 12,
           "y": 27.7,
@@ -3464,7 +3464,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "meta": {"decor": true, "label": "fuel", "y": 2.21},
           "bounds2d": {"x": 15.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 18,
           "y": 27.7,
@@ -3473,7 +3473,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "meta": {"decor": true, "label": "fuel", "y": 2.21},
           "bounds2d": {"x": 24.905, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 27.03,
           "y": 27.7,
@@ -3482,7 +3482,7 @@
         {
           "type": "point",
           "key": "",
-          "meta": {"decor": true, "label": "fuel", "y": 2.01},
+          "meta": {"decor": true, "label": "fuel", "y": 2.21},
           "bounds2d": {"x": 0.875, "y": 25.575, "width": 4.25, "height": 4.25},
           "x": 3,
           "y": 27.7,
@@ -6403,7 +6403,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 2.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6428,7 +6428,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 2.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6453,7 +6453,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 2.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6478,7 +6478,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 2.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6503,7 +6503,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 2.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6528,7 +6528,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 2.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -6553,7 +6553,7 @@
         {
           "symbolKey": "fuel--010--4x2",
           "obstacleId": 0,
-          "height": 2,
+          "height": 2.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [

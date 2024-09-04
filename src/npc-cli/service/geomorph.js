@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -14,6 +14,7 @@ import {
   keys,
   toPrecision,
   hashJson,
+  parseJsWithCt,
 } from "./generic";
 import { geom, tmpRect1 } from "./geom";
 import { helper } from "./helper";
@@ -1195,7 +1196,7 @@ class GeomorphService {
     return tags.reduce((meta, tag) => {
       const eqIndex = tag.indexOf("=");
       if (eqIndex > -1) {
-        meta[tag.slice(0, eqIndex)] = parseJsArg(tag.slice(eqIndex + 1));
+        meta[tag.slice(0, eqIndex)] = parseJsWithCt(tag.slice(eqIndex + 1), metaVarNames, metaVarValues);
       } else {
         meta[tag] = true; // Omit tags `foo=bar`
       }
@@ -1393,3 +1394,6 @@ const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
 const tmpVect1 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMat2 = new Mat();
+
+const metaVarNames = ['wallHeight'];
+const metaVarValues = [wallHeight];
