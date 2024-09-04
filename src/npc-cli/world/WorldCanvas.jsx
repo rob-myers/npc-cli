@@ -276,6 +276,7 @@ export default function WorldCanvas(props) {
           maxAzimuthAngle: touchFixedAzimuth,
         }}
         minDistance={5}
+        maxDistance={50}
         panSpeed={2}
         maxPolarAngle={Math.PI/2 * 0.5}
       />
