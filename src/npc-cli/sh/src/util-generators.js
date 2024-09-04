@@ -76,11 +76,13 @@ export async function* map(ctxt) {
   const func = api.generateSelector(baseSelector, args.slice(1).map(api.parseJsArg));
   // fix e.g. `expr "new Set([1, 2, 3])" | map Array.from`
   const nativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
+  let count = 0;
 
   while ((datum = await api.read(true)) !== api.eof)
     yield api.isDataChunk(datum)
-      ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt)))
-      : func(datum, ...nativeCode ? [] : [ctxt]);
+      ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++)))
+      // : func(datum, ...nativeCode ? [] : [ctxt]);
+      : nativeCode ? func(datum) : func(datum, ctxt, count++);
 }
 
 /**
