@@ -73,7 +73,14 @@ w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
 - ✅ BUG: tty: xterm paste then historical up (cursor in wrong place)
   - changed pasting behaviour i.e. previously we ran each line upon encountering newline,
     but now we just insert into to input
-- BUG: tty: xterm delete from end (moves one line down)
+- ✅ BUG tty: xterm: cursor should skip over \r (now we normalize as \r\n)
+
+- 🚧 BUG: tty: xterm delete from end (moves one line down)
+```sh
+# repro
+w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
+}'
+```
 
 - return to next.js project
   - ensure up to date

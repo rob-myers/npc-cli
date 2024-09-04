@@ -310,7 +310,15 @@ export class ttyXtermClass {
    * Move cursor forwards/backwards (+1/-1).
    */
   private handleCursorMove(dir: -1 | 1) {
-    this.setCursor(Math.min(this.input.length, Math.max(0, this.cursor + dir)));
+    // Assume newlines always occur as \r\n
+    const clampedCursor = Math.min(this.input.length, Math.max(0, this.cursor + dir));
+    if (dir === 1 && this.input[clampedCursor] === '\r') {
+      this.setCursor(clampedCursor + 1);
+    } else if (dir === -1 && this.input[clampedCursor] === '\n') {
+      this.setCursor(clampedCursor - 1);
+    } else {
+      this.setCursor(clampedCursor);
+    }
   }
 
   private async handleXtermInput(data: string) {
@@ -497,6 +505,9 @@ export class ttyXtermClass {
       const chr = input.charAt(i);
       if (col === 0 && chr === "\n") {
         row++;
+      } else if (chr === "\r") {
+        // NOOP
+        // Assume new lines always occur as \r\n
       } else if (chr === "\n") {
         col = 0;
         row++;
