@@ -504,7 +504,10 @@ class cmdServiceClass {
             handleProcessError(node, e);
           } else if (e instanceof ShError) {
             node.exitCode = e.exitCode;
-            throw e;
+            // Permit silent errors i.e. just set exit code
+            if (e.message.length > 0) {
+              throw e;
+            }
           } else {
             console.error(e); // Provide JS stack
             node.exitCode = 1;
@@ -821,6 +824,10 @@ class cmdServiceClass {
 
     getProcess() {
       return getProcess(this.meta);
+    },
+
+    getShError(message: string, exitCode = 1) {
+      return new ShError(message, exitCode);
     },
 
     /** Returns a string e.g. `60f5bfdb9b9` */

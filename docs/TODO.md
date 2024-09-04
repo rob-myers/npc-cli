@@ -86,6 +86,17 @@ echo 'bar {
 }'
 ```
 
+- BUG tty: xterm: delete inside multiline command
+```sh
+# repro by deleting from !")👈
+call '() => {
+  console.log("Wowsers!")
+}'
+```
+
+- ✅ `take n` exits with non-zero code when doesn't take everything
+  - so this terminates `{ echo foo; echo bar; } | while take 1 >tmp; do echo $tmp; done`
+
 - return to next.js project
   - ensure up to date
   - work on migrating Viewer

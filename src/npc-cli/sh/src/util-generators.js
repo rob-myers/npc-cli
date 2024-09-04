@@ -162,6 +162,9 @@ export async function* take({ api, args, datum }) {
         yield datum;
       }
     }
+    if (remainder >= 0) {
+      throw api.getShError("", 1);
+    }
   } catch (e) {
     throw e ?? api.getKillError();
   }

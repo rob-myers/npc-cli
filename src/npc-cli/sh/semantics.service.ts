@@ -658,7 +658,10 @@ class semanticsServiceClass {
       itStartMs = Date.now();
 
       yield* this.stmts(node, Cond);
+
       if (Until ? !node.exitCode : node.exitCode) {
+        // e.g. consider `while false; do echo foo; done`
+        node.exitCode = 0;
         break;
       }
 
