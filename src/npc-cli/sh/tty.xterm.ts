@@ -274,12 +274,9 @@ export class ttyXtermClass {
       if (cursor <= 0) {
         return;
       }
-      let delta = -1;
-      const charToDelete = this.input.charAt(this.cursor + delta);
-      if (charToDelete === "\n") {
-        delta = -2;
-      }
 
+      // when deleting a newline, need to delete \r\n 
+      const delta = input.charAt(cursor - 1) === '\n' ? -2 : -1;
       const newInput = input.slice(0, cursor + delta) + input.slice(cursor);
       this.clearInput();
       this.setInput(newInput);
@@ -506,8 +503,7 @@ export class ttyXtermClass {
       if (col === 0 && chr === "\n") {
         row++;
       } else if (chr === "\r") {
-        // NOOP
-        // Assume new lines always occur as \r\n
+        // Assume newlines always occur as \r\n
       } else if (chr === "\n") {
         col = 0;
         row++;
@@ -878,12 +874,13 @@ export class ttyXtermClass {
     this.setCursor(0); // Return to start of input.
     const realNewInput = this.actualLine(newInput);
     this.xterm.write(realNewInput);
+
     /**
-     * Right-edge detection uses {newInput} sans prompt.
-     * Use guard {realNewInput} to avoid case of blank line,
-     * arising from unguarded builtin 'read' when deleting.
+     * Currently when cursor at right edge of terminal and we press a key
+     * it does not move (🤔 why?). We force it to jump to next line.
+     * This must be suppressed when deleting 1st character of multiline input.
      */
-    if (realNewInput && this.inputEndsAtEdge(newInput)) {
+    if (!realNewInput.endsWith('\n') && this.inputEndsAtEdge(newInput)) {
       this.xterm.write("\r\n");
     }
     this.input = newInput;

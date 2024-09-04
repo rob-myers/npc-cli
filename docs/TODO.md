@@ -75,10 +75,14 @@ w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
     but now we just insert into to input
 - ✅ BUG tty: xterm: cursor should skip over \r (now we normalize as \r\n)
 
-- 🚧 BUG: tty: xterm delete from end (moves one line down)
+- ✅ BUG: tty: xterm delete from end (moves one line down)
+  - commented out "Right-edge detection" in `setInput`
 ```sh
-# repro
-w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
+# repros
+echo 'foo {
+}'
+echo 'bar {
+
 }'
 ```
 
