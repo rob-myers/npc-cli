@@ -43,8 +43,8 @@
   - walk animation
   - test import into World
 
-- 🚧 investigate GPU object picking via 2 render targets written to by 1 fragment shader
-  - ℹ️ based on PR where render targets first added to three.js
+- ✅ investigate GPU object picking via 2 render targets written to by 1 fragment shader
+  - ℹ️ PR where render targets first added to three.js:
     > https://github.com/mrdoob/three.js/pull/16390
   - ℹ️ can provide vertex indices via attribute, hence instanceId too
     > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
@@ -52,9 +52,28 @@
   - ℹ️ Asked question https://discourse.threejs.org/t/is-gpu-object-picking-possible-with-a-single-render/70228
     - if we use a single shader with 2 outputs, seems we need a render target with 2 textures,
       and our "main scene" would be a full-screen quad, which breaks r3f pointer events
-  - 🚧 try re-use main scene as "picking scene" with different picking materials,
+  - ℹ️ could re-use main scene as "picking scene" with different picking materials,
     - https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
     - need to extend approach to support instancedmesh e.g. via extra attribute
+    - could avoid different shaders via boolean uniform
+
+- 🚧 towards gpu object picking
+  - 🚧 Walls shader has boolean uniform `objectPicking` and behaves differently based on it
+
+- 🚧 try 200 npcs
+
+- ✅ BUG: tty: xterm paste (fails when line is single newline)
+  - pasted newlines are normalized as `\r`: https://github.com/xtermjs/xterm.js/issues/1382#issuecomment-380309962
+```sh
+# repro
+w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
+
+}'
+```
+- ✅ BUG: tty: xterm paste then historical up (cursor in wrong place)
+  - changed pasting behaviour i.e. previously we ran each line upon encountering newline,
+    but now we just insert into to input
+- BUG: tty: xterm delete from end (moves one line down)
 
 - return to next.js project
   - ensure up to date

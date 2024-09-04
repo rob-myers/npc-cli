@@ -156,7 +156,7 @@ export class ttyShellClass implements Device {
         `${ansi.Blue}${this.sessionKey}${ansi.White} running ${ansi.Blue}/home/PROFILE${ansi.Reset}`,
         "info"
       );
-      await session.ttyShell.xterm.pasteLines(profile.split("\n"), true);
+      await session.ttyShell.xterm.pasteAndRunLines(profile.split("\n"), true);
       this.prompt("$");
     } catch {
     } finally {

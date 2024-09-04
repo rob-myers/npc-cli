@@ -317,32 +317,16 @@ export class ttyXtermClass {
     if (this.readyForInput === false && data !== "\x03") {
       return;
     }
-    if (data.length > 1 && data.includes("\r")) {
-      // Handle pasting of multiple lines
-      const text = data.replace(/[\r\n]+/g, "\n");
-      const lines = text.split("\n");
-      lines[0] = `${this.input}${lines[0]}`;
-      const last = !text.endsWith("\n") && lines.pop();
 
-      try {
-        await this.pasteLines(lines);
-        last &&
-          this.queueCommands([
-            {
-              key: "resolve",
-              resolve: () => {
-                // setTimeout so xterm.println has chance to print (e.g. `echo foo\n`)
-                setTimeout(() => {
-                  // Set as pending input but don't send
-                  this.clearInput();
-                  this.setInput(last);
-                });
-              },
-            },
-          ]);
-      } catch {
-        /** NOOP */
-      }
+    if (data.length > 1 && data.includes("\r")) {
+      // ℹ️ Handle multi-line paste
+      // - xterm.js normalizes pasted newlines to be '\r'
+      // - previously we greedily executed upon encountering newline,
+      //   but now we just insert into input
+      const text = data.replace(/\r/g, "\r\n");
+      const { input, cursor } = this;
+      this.clearInput();
+      this.setInput(`${input.slice(0, cursor)}${text}${input.slice(cursor)}`)
     } else {
       this.handleXtermKeypresses(data);
     }
@@ -631,7 +615,10 @@ export class ttyXtermClass {
     }
   }
 
-  async pasteLines(lines: string[], fromProfile = false) {
+  /**
+   * Paste lines, greedily running them as soon as a newline is encountered.
+   */
+  async pasteAndRunLines(lines: string[], fromProfile = false) {
     // Clear pending input which should now prefix `lines[0]`
     this.clearInput();
     this.xterm.write(this.prompt);
