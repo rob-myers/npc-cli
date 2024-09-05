@@ -570,8 +570,8 @@ export default function Decor(props) {
       onPointerDown={state.onPointerDown}
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
-      <meshDiffuseTestMaterial
-        key={glsl.MeshDiffuseTestMaterial.key}
+      <cameraLightMaterial
+        key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
       />

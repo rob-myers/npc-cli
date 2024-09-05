@@ -309,8 +309,8 @@ export default function Doors(props) {
       args={[boxGeometry, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
     >
-      <meshDiffuseTestMaterial
-        key={glsl.MeshDiffuseTestMaterial.key}
+      <cameraLightMaterial
+        key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
       />
