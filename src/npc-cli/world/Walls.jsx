@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { Mat, Vect } from "../geom";
 import { wallHeight } from "../service/const";
 import { getQuadGeometryXY } from "../service/three";
+import { InstancedMonochromeShader } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -69,17 +70,26 @@ export default function Walls(props) {
     positionInstances() {
       const { wallsInst: ws } = state;
       let wId = 0;
-      w.gms.forEach(({ key: gmKey, transform }) =>
-        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) =>
+      const attributeGmIds = /** @type {number[]} */ ([]);
+      const attributeWallSegIds = /** @type {number[]} */ ([]);
+
+      w.gms.forEach(({ key: gmKey, transform }, gmId) =>
+        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }, wallSegId) => {
+          attributeGmIds.push(gmId);
+          attributeWallSegIds.push(wallSegId);
           ws.setMatrixAt(wId++, state.getWallMat(
             seg,
             transform,
             typeof meta.h === 'number' ? meta.h : undefined,
             typeof meta.y === 'number' ? meta.y : undefined,
-          ))),
+          ));
+      }),
       );
       ws.instanceMatrix.needsUpdate = true;
       ws.computeBoundingSphere();
+
+      ws.geometry.setAttribute('gmId', new THREE.InstancedBufferAttribute(new Int32Array(attributeGmIds), 1));
+      ws.geometry.setAttribute('wallSegId', new THREE.InstancedBufferAttribute(new Int32Array(attributeWallSegIds), 1));
     },
   }));
 
@@ -99,8 +109,9 @@ export default function Walls(props) {
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
       >
-      <meshBasicMaterial side={THREE.DoubleSide} color="black" />
+      {/* <meshBasicMaterial side={THREE.DoubleSide} color="black" /> */}
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#f00" wireframe /> */}
+      <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0, 0, 0]} objectPicking={true} />
     </instancedMesh>
   );
 }

@@ -2,7 +2,66 @@ import * as THREE from "three";
 import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 
-// 🚧 walls shader i.e. monochrome, instancing, support uniform 'objectPick'
+// 🚧 walls shader supports uniform 'objectPicking'
+
+const instancedMonochromeShader = {
+  Vert: /*glsl*/`
+
+  attribute int gmId;
+  attribute int wallSegId;
+  flat varying int vGmId;
+  flat varying int vWallSegId;
+
+  #include <common>
+  #include <logdepthbuf_pars_vertex>
+
+  void main() {
+    vGmId = gmId;
+    vWallSegId = wallSegId;
+
+    vec4 modelViewPosition = vec4(position, 1.0);
+    modelViewPosition = instanceMatrix * modelViewPosition;
+    modelViewPosition = modelViewMatrix * modelViewPosition;
+    
+    gl_Position = projectionMatrix * modelViewPosition;
+
+    #include <logdepthbuf_vertex>
+  }
+
+  `,
+
+  Frag: /*glsl*/`
+
+  uniform vec3 diffuse;
+  uniform bool objectPicking;
+  flat varying int vGmId;
+  flat varying int vWallSegId;
+
+  #include <common>
+  #include <logdepthbuf_pars_fragment>
+
+  void main() {
+
+    if (objectPicking == true) {
+      // 🚧 use vGmId, vWallSegId
+      // gl_FragColor = vec4(float(vGmId) / 8.0, 0, 1, 1);
+      // 0 means wall
+      gl_FragColor = vec4(
+        // 0,
+        float(vGmId) / 255.0,
+        float((vWallSegId >> 8) & 255) / 255.0,
+        float(vWallSegId & 255) / 255.0,
+        1
+      );
+      return;
+    }
+    
+    gl_FragColor = vec4(diffuse, 1);
+
+    #include <logdepthbuf_fragment>
+  }
+  `,
+};
 
 const instancedUvMappingShader = {
   Vert: /*glsl*/`
@@ -80,7 +139,6 @@ const instancedUvMappingShader = {
  * 
  */
 const cameraLightShader = {
-
   Vert: /*glsl*/`
 
   // <color_pars_vertex>
@@ -157,6 +215,15 @@ const cameraLightShader = {
   `,
 };
 
+export const InstancedMonochromeShader = shaderMaterial(
+  {
+    diffuse: new THREE.Vector3(1, 0.5, 0.5),
+    objectPicking: false,
+  },
+  instancedMonochromeShader.Vert,
+  instancedMonochromeShader.Frag,
+);
+
 export const InstancedSpriteSheetMaterial = shaderMaterial(
   {
     map: null,
@@ -179,6 +246,7 @@ export const CameraLightMaterial = shaderMaterial(
 
 // See glsl.d.ts
 extend({
+  InstancedMonochromeShader,
   InstancedSpriteSheetMaterial,
   CameraLightMaterial,
 });

@@ -58,7 +58,11 @@
     - could avoid different shaders via boolean uniform
 
 - 🚧 towards gpu object picking
-  - 🚧 Walls shader has boolean uniform `objectPicking` and behaves differently based on it
+  - ✅ Walls shader has own monochrome shader
+  - ✅ Walls shader has boolean uniform `objectPicking` and behaves differently based on it
+  - ✅ Walls shader has `gmId` attribute
+  - ✅ Walls shader has `wallSegId` attribute
+  - 🚧 decode clicked pixel when shader turned on
 
 - return to next.js project
   - ensure up to date
@@ -74,7 +78,8 @@
     try provide "echo circle" for touch devices
 - stationary npc with agent uses navQuery with blocked doors?
   - to avoid being pushed through doors by other npcs
-- hmr issue with Connector class
+- ❌ hmr issue with Connector class
+  - we don't support it
 - hull door enter-room triggers late?
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh

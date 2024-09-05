@@ -1,12 +1,22 @@
 declare global {
   namespace JSX {
+
+    type BaseExtendedShaderMaterial<T = {}> = import('@react-three/fiber').Object3DNode<
+      import('three').ShaderMaterial,
+      typeof THREE.ShaderMaterial
+    > & T;
+    
     interface IntrinsicElements {
-      instancedSpriteSheetMaterial: import('@react-three/fiber').Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
-        map: THREE.CanvasTexture;
-      };
-      cameraLightMaterial: import('@react-three/fiber').Object3DNode<THREE.ShaderMaterial, typeof THREE.ShaderMaterial> & {
-        // ...
-      };
+      instancedMonochromeShader: BaseExtendedShaderMaterial<{
+        diffuse?: import('three').Vector3Tuple | import('three').Vector3Like;
+        objectPicking?: boolean;
+      }>;
+      instancedSpriteSheetMaterial: BaseExtendedShaderMaterial<{
+        map: import('three').CanvasTexture;
+      }>;
+      cameraLightMaterial: BaseExtendedShaderMaterial<{
+        diffuse?: import('three').Vector3Tuple | import('three').Vector3Like;
+      }>;
     }
   }
 }
