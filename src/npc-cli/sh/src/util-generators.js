@@ -153,14 +153,10 @@ export async function* sponge({ api, datum }) {
 export async function* take({ api, args, datum }) {
   try {
     let remainder = Number(args[0] || Number.POSITIVE_INFINITY);
-    while (remainder-- > 0 && (datum = await api.read(true)) !== api.eof) {
-      if (api.isDataChunk(datum)) {
-        const items = datum.items.slice(0, remainder + 1);
-        remainder -= items.length - 1;
-        yield api.dataChunk(items);
-      } else {
-        yield datum;
-      }
+    // 🔔 cannot support chunks if want pattern:
+    // seq 5 | while take 1 >foo; do foo; done
+    while (remainder-- > 0 && (datum = await api.read(false)) !== api.eof) {
+      yield datum;
     }
     if (remainder >= 0) {
       throw api.getShError("", 1);

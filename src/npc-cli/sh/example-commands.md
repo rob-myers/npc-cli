@@ -17,6 +17,9 @@ bar/toUpperCase'()'
 # wc -l is `reduce '(sum, x) => sum + 1' 0` e.g.
 w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
 
+# can use `take` like `read`
+seq 5 | while take 1 >foo; do foo; done
+
 ```
 
 ```sh
