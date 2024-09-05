@@ -24,7 +24,6 @@ const instancedMonochromeShader = {
     modelViewPosition = modelViewMatrix * modelViewPosition;
     
     gl_Position = projectionMatrix * modelViewPosition;
-
     #include <logdepthbuf_vertex>
   }
 
@@ -43,21 +42,18 @@ const instancedMonochromeShader = {
   void main() {
 
     if (objectPicking == true) {
-      // 🚧 use vGmId, vWallSegId
-      // gl_FragColor = vec4(float(vGmId) / 8.0, 0, 1, 1);
-      // 0 means wall
       gl_FragColor = vec4(
-        // 0,
+        0, // 0 means wall
         float(vGmId) / 255.0,
         float((vWallSegId >> 8) & 255) / 255.0,
-        float(vWallSegId & 255) / 255.0,
-        1
+        float(vWallSegId & 255) / 255.0
+        // 1
       );
+      #include <logdepthbuf_fragment>
       return;
     }
     
     gl_FragColor = vec4(diffuse, 1);
-
     #include <logdepthbuf_fragment>
   }
   `,
