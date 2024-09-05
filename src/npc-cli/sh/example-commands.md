@@ -13,6 +13,10 @@ bar/charAt'(0)'
 # f
 bar/toUpperCase'()'
 # FOO
+
+# wc -l is `reduce '(sum, x) => sum + 1' 0` e.g.
+w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
+
 ```
 
 ```sh
