@@ -156,11 +156,11 @@ export default function Tty(props: Props) {
   React.useEffect(() => {// Boot profile
     if (state.base.session && !props.disabled && !state.booted) {
       const { xterm, session } = state.base;
-      state.booted = true;
       xterm.initialise();
-
+      
       session.ttyShell.initialise(xterm).then(async () => {
         await state.sourceFuncs();
+        state.booted = true;
         update();
         await session.ttyShell.runProfile();
       });
