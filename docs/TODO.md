@@ -5,7 +5,7 @@
 - 🚧 migrate sub-symbols to actual symbols
   - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
   - bridge ✅ lifeboat ✅
-  - consoles 🚧 extras 🚧 ...
+  - beds ✅ consoles ✅ counter 🚧 engineering extra fresher lab medical cartography shop stateroom table
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 create "hyper casual" characters, rather then pseudo minecraft character
@@ -60,50 +60,9 @@
 - 🚧 towards gpu object picking
   - 🚧 Walls shader has boolean uniform `objectPicking` and behaves differently based on it
 
-- ✅ measure ~200 npcs FPS with current setup
-  - ℹ️ 120 FPS with 177 without agent
-  - ℹ️ 120 FPS with 177 with agent
-```sh
-# 177 npcs
-w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
-
-run '({ w, api }) {
-  for (const [gmId, gm] of w.gms.entries()) {
-    for (const [roomId, { center }] of gm.rooms.entries()) {
-      try {
-        console.log({gmId, roomId});
-        gm.matrix.transformPoint(center);
-        await w.npc.spawn({
-          npcKey: `room-npc-${gmId}-${roomId}`,
-          point: { x: center.x, y: 0, z: center.y },
-          agent: true,
-        });
-      } catch {}
-      yield* api.sleep(0.05);
-    }
-  }
-}'
-```
-
-- ✅ Support SVG symbol syntax `y=wallHeight`
-
-- ✅ `take n` exits with non-zero code when doesn't take everything
-  - so this terminates `{ echo foo; echo bar; } | while take 1 >tmp; do echo $tmp; done`
-  - ✅ BUG `seq 5 | while take 1 >pos; do pos; done`
-    - seems we cannot handle chunks using this method
-
 - return to next.js project
   - ensure up to date
   - work on migrating Viewer
-
-- ❌ BUG tty: xterm: delete inside multiline command
-  - repro didn't work
-```sh
-# repro by deleting from !")👈
-call '() => {
-  console.log("Wowsers!")
-}'
-```
 
 - fix "flipped decor" i.e. if decor quad transform determinant is negative,
   flip the quad across "central vertical axis"
@@ -2160,5 +2119,46 @@ echo 'foo {
 }'
 echo 'bar {
 
+}'
+```
+
+- ✅ Support SVG symbol syntax `y=wallHeight`
+
+- ✅ `take n` exits with non-zero code when doesn't take everything
+  - so this terminates `{ echo foo; echo bar; } | while take 1 >tmp; do echo $tmp; done`
+  - ✅ BUG `seq 5 | while take 1 >pos; do pos; done`
+    - seems we cannot handle chunks using this method
+
+- ❌ BUG tty: xterm: delete inside multiline command
+  - repro didn't work
+```sh
+# repro by deleting from !")👈
+call '() => {
+  console.log("Wowsers!")
+}'
+```
+
+- ✅ measure ~200 npcs FPS with current setup
+  - ℹ️ 120 FPS with 177 without agent
+  - ℹ️ 120 FPS with 177 with agent
+```sh
+# 177 npcs
+w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
+
+run '({ w, api }) {
+  for (const [gmId, gm] of w.gms.entries()) {
+    for (const [roomId, { center }] of gm.rooms.entries()) {
+      try {
+        console.log({gmId, roomId});
+        gm.matrix.transformPoint(center);
+        await w.npc.spawn({
+          npcKey: `room-npc-${gmId}-${roomId}`,
+          point: { x: center.x, y: 0, z: center.y },
+          agent: true,
+        });
+      } catch {}
+      yield* api.sleep(0.05);
+    }
+  }
 }'
 ```
