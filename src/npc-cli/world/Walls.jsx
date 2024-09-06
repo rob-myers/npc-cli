@@ -111,6 +111,7 @@ export default function Walls(props) {
       >
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="black" /> */}
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#f00" wireframe /> */}
+      {/* <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0, 0, 0]} objectPicking={true} /> */}
       <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0, 0, 0]} objectPicking={false} />
     </instancedMesh>
   );

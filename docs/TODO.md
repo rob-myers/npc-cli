@@ -62,7 +62,14 @@
   - ✅ Walls shader has boolean uniform `objectPicking` and behaves differently based on it
   - ✅ Walls shader has `gmId` attribute
   - ✅ Walls shader has `wallSegId` attribute
-  - 🚧 decode clicked pixel when shader turned on
+  - ✅ decode clicked pixel when shader turned on
+  - ✅ fix hull wall z-fighting
+    - ℹ️ object-picking issue (not visually where every wall black)
+    - ❌ could omit/set-height-0 "outer overlapping walls"
+      - too complex
+    - ✅ manually inset outer hull walls slightly  
+  - 🚧 async read pixel
+  - tidy
 
 - return to next.js project
   - ensure up to date
