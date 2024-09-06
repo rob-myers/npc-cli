@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 
-import { alloc, error, info } from "../service/generic";
+import { alloc, error, info, debug } from "../service/generic";
 import { geomorph } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
@@ -15,7 +15,7 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWo
 /** @param {MessageEvent<WW.MsgToNavWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
-  info("worker received message", msg);
+  debug("🤖 nav worker received", JSON.stringify(msg));
 
   switch (msg.type) {
     case "request-nav-mesh":

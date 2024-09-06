@@ -41,7 +41,7 @@ async function handleMessages(e) {
     return; // Fixes HMR of this file
   }
   if (msg.type !== 'send-npc-positions') {
-    info("worker received message", msg); // 🔔 Debug
+    debug("🤖 physics worker received:", JSON.stringify(msg)); // 🔔 Debug
   }
 
   switch (msg.type) {
