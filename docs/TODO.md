@@ -68,7 +68,7 @@
     - ❌ could omit/set-height-0 "outer overlapping walls"
       - too complex
     - ✅ manually inset outer hull walls slightly  
-  - 🚧 async read pixel
+  - ✅ async read pixel
   - tidy
 
 - return to next.js project

@@ -224,9 +224,10 @@ export default function WorldCanvas(props) {
       gl.setRenderTarget(pickingRenderTarget);
       gl.clear();
       gl.render(emptySceneForPicking, camera);
-      // 🚧 async
-      gl.readRenderTargetPixels(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer);
-      console.log('🔔', Array.from(pixelBuffer));
+      // gl.readRenderTargetPixels(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer);
+      gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer).then((x) => {
+        console.log('🔔', Array.from(x));
+      });
       gl.setRenderTarget(null);
       camera.clearViewOffset();
     },
