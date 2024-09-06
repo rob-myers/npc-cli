@@ -119,9 +119,10 @@
       <title>cargo--003--2x4</title>
     </use>
   </g>
-  <path d="M 20 5980 L 5980 5980 L 5980 20 L 20 20 L 20 5980 Z M 6020 -20 L 6020 6020 L -20 6020 L -20 -20 L 6020 -20 Z" style="fill: rgb(255, 0, 0);">
-    <title>wall hull hull--20x20</title>
+  <path d="M 20 5980 L 5980 5980 L 5980 20 L 20 20 L 20 5980 Z M 6019 -19 L 6019 6019 L -19 6019 L -19 -19 L 6019 -19 Z" style="fill: rgb(255, 0, 0);">
+          <title>wall hull hull--20x20</title>
   </path>
+
   <rect x="-20" y="1260" width="40" height="480" style="fill: rgb(255, 255, 255); stroke: rgb(0, 0, 0);">
     <title>door hull edge=w</title>
   </rect>

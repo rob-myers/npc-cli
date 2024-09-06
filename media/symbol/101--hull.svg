@@ -300,13 +300,13 @@
                 <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 0.00010681200365070254, 0)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=1.01 wallsH=1</title>
                 </use>
-                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.00003600003037718125)" xlink:href="#symbol-13">
+                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1800, 0.000036000034015160054)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=wallHeight</title>
                 </use>
-                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3001, 0.00003814705996774137)" xlink:href="#symbol-13">
+                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 3001, 0.00003814706360572018)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=wallHeight</title>
                 </use>
-                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4801, 0.00003814705996774137)" xlink:href="#symbol-13">
+                <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 4801, 0.00003814706360572018)" xlink:href="#symbol-13">
                         <title>fuel--010--4x2 y=wallHeight</title>
                 </use>
                 <use width="1200" height="600" transform="matrix(1, 0, 0, 1, 1799, 5400)" xlink:href="#symbol-13">
@@ -346,7 +346,7 @@
                         <title>iris-valves--005--1x1</title>
                 </use>
         </g>
-        <path d="M 20 5980 L 5980 5980 L 5980 20 L 20 20 L 20 5980 Z M 6020 -20 L 6020 6020 L -20 6020 L -20 -20 L 6020 -20 Z" style="fill: rgb(255, 0, 0);">
+        <path d="M 20 5980 L 5980 5980 L 5980 20 L 20 20 L 20 5980 Z M 6019 -19 L 6019 6019 L -19 6019 L -19 -19 L 6019 -19 Z" style="fill: rgb(255, 0, 0);">
                 <title>wall hull hull--20x20</title>
         </path>
         <rect x="1450" y="1150" width="50" height="50" style="fill-opacity: 0.9; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);">
