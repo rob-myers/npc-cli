@@ -44,16 +44,16 @@ class GeomorphService {
 
     const { pngRect, hullWalls } = assets.symbols[helper.toHullKey[gmKey]];
     const hullPoly = Poly.union(hullWalls).map(x => x.precision(precision));
-    const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
+    const hullOutline = hullPoly.map((x) => new Poly(x.outline).clone()); // sans holes
 
     const uncutWalls = symbol.walls;
     const plainWallMeta = { wall: true };
     const hullWallMeta = { wall: true, hull: true };
+
     /**
-     * Cutting pointwise avoids errors (e.g. for 301).
-     * It also permits us to propagate wall `meta` whenever:
-     * - it has a special key e.g. `h` (height)
-     * - it has 'hull' (hull wall)
+     * Cut doors from walls pointwise. The latter:
+     * - avoids errors (e.g. for 301).
+     * - permits meta propagation e.g. `h` (height), 'hull' (hull wall)
      */
     const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
       Object.assign(y, {
