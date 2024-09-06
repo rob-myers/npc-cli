@@ -43,7 +43,7 @@ const instancedMonochromeShader = {
 
     if (objectPicking == true) {
       gl_FragColor = vec4(
-        0, // 0 means wall
+        1.0 / 255.0, // 1 means wall
         float(vGmId) / 255.0,
         float((vWallSegId >> 8) & 255) / 255.0,
         float(vWallSegId & 255) / 255.0

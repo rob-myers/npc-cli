@@ -7,7 +7,7 @@ import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { getQuadGeometryXZ } from "../service/three.js";
+import { emptySceneForPicking, getQuadGeometryXZ, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
 import { Origin } from "../aux/MiscThree.jsx";
@@ -178,6 +178,8 @@ export default function WorldCanvas(props) {
         return;
       }
 
+      state.pickObject(e) // 🚧 WIP
+
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
         event: e,
@@ -206,6 +208,50 @@ export default function WorldCanvas(props) {
         w.menu.justOpen = false;
       }
     },
+    pickObject(e) {// 🚧 WIP https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
+
+      const { gl, camera } = state.rootState;
+      // Set the projection matrix to only look at the pixel we are interested in.
+      camera.setViewOffset(
+        state.canvas.width,
+        state.canvas.height,
+        e.nativeEvent.offsetX * window.devicePixelRatio,
+        e.nativeEvent.offsetY * window.devicePixelRatio,
+        1,
+        1,
+      );
+
+      gl.setRenderTarget(pickingRenderTarget);
+      gl.clear();
+      gl.render(emptySceneForPicking, camera);
+      // 🚧 async
+      gl.readRenderTargetPixels(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer);
+      console.log('🔔', Array.from(pixelBuffer));
+      gl.setRenderTarget(null);
+      camera.clearViewOffset();
+    },
+    renderObjectPicking() {// 🚧 WIP
+      const { gl, scene, camera } = state.rootState;
+      // This is the magic, these render lists are still filled with valid data.  So we can
+      // submit them again for picking and save lots of work!
+      const renderList = gl.renderLists.get(scene, 0);
+      // renderList.opaque.forEach(processItem);
+      // renderList.transmissive.forEach(processItem);
+      // renderList.transparent.forEach(processItem);
+      renderList.opaque.forEach(x => {
+        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPicking) {
+          x.material.uniforms.objectPicking.value = true;
+          x.material.uniformsNeedUpdate = true;
+          gl.renderBufferDirect(camera, scene, /** @type {*} */ (x.geometry), x.material, x.object, null);
+        }
+      });
+      renderList.opaque.forEach(x => {
+        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPicking) {
+          x.material.uniforms.objectPicking.value = false;
+          x.material.uniformsNeedUpdate = true;
+        }
+      });
+    },
     setLastDown(e) {
       if (e.is3d || !state.lastDown) {
         state.lastDown = {
@@ -231,6 +277,7 @@ export default function WorldCanvas(props) {
       state.controls.setPolarAngle(Math.PI / 4);
       state.controls.setAzimuthalAngle(touchFixedAzimuth);
     }
+    emptySceneForPicking.onAfterRender = state.renderObjectPicking;
   }, [state.controls]);
 
   return (
@@ -337,6 +384,8 @@ export default function WorldCanvas(props) {
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
+ * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
+ * @property {() => void} renderObjectPicking
  * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  */
 
@@ -381,3 +430,4 @@ const statsCss = css`
  */
 
 const touchFixedAzimuth = Math.PI / 6;
+const pixelBuffer = new Uint8Array(4);

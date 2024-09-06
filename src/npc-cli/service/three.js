@@ -266,3 +266,14 @@ export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
  * @property {THREE.CanvasTexture} tex
  * @property {HTMLCanvasElement} canvas
  */
+
+export const emptySceneForPicking = new THREE.Scene();
+
+/**
+ * This is the 1x1 pixel render target we use to do object picking.
+ */
+export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
+  minFilter: THREE.NearestFilter,
+  magFilter: THREE.NearestFilter,
+  format: THREE.RGBAFormat,
+});
