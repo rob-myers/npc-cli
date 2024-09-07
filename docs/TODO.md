@@ -46,7 +46,7 @@
 w debug.testChar.add
 w debug.testChar.remove 0
 w debug.testChar.remove
-# update skin
+# update skin without full page refresh
 w debug.testChar.setSkin 0
 ```
   - ✅ try inverted colours
@@ -54,8 +54,10 @@ w debug.testChar.setSkin 0
     - fix transparency by setting floor renderOrder `-1`
   - ✅ should be higher off ground but still ~1.5m total
   - ✅ can reload texture without hard-refresh
-  - 🚧 thinner outline?
-  - 🚧 idle animation
+  - ✅ try get CameraLightMaterial working
+    - might help to `<mesh>` instead of `<primitive>`
+  - 🚧 CameraLightMaterial should support texture map
+  - idle animation
     - try using `class Npc`
   - walk animation
 

@@ -132,16 +132,14 @@ const instancedUvMappingShader = {
  * - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
  * 
  */
-const cameraLightShader = {
+export const cameraLightShader = {
   Vert: /*glsl*/`
 
-  // <color_pars_vertex>
   varying vec3 vColor;
   #include <common>
 
   varying float dotProduct;
 
-  // <logdepthbuf_pars_vertex>
   #ifdef USE_LOGDEPTHBUF
     varying float vFragDepth;
     varying float vIsPerspective;
@@ -149,13 +147,8 @@ const cameraLightShader = {
 
   void main() {
 
-    // <beginnormal_vertex>
     vec3 objectNormal = vec3( normal );
-
-    // <begin_vertex>
     vec3 transformed = vec3( position );
-
-    // <project_vertex>
     vec4 mvPosition = vec4( transformed, 1.0 );
 
     #ifdef USE_INSTANCING
@@ -165,13 +158,11 @@ const cameraLightShader = {
     mvPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * mvPosition;
 
-    // <logdepthbuf_vertex>
     #ifdef USE_LOGDEPTHBUF
       vFragDepth = 1.0 + gl_Position.w;
       vIsPerspective = float( isPerspectiveMatrix( projectionMatrix ) );
     #endif
 
-    // <defaultnormal_vertex>
     vec3 transformedNormal = objectNormal;
     #ifdef USE_INSTANCING
       mat3 im = mat3( instanceMatrix );
@@ -185,7 +176,7 @@ const cameraLightShader = {
       vColor.xyz *= instanceColor.xyz;
     #endif
 
-    vec4 mvCameraPosition = modelViewMatrix * vec4(cameraPosition, 1.0);
+    vec4 mvCameraPosition = modelMatrix * vec4(cameraPosition, 1.0);
     vec3 lightDir = normalize(mvPosition.xyz - mvCameraPosition.xyz);
     dotProduct = -min(dot(normalize(transformedNormal), lightDir), 0.0);
   }
@@ -203,7 +194,6 @@ const cameraLightShader = {
 
   void main() {
     gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
-
     #include <logdepthbuf_fragment>
   }
   `,

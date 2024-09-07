@@ -4,6 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 import { buildObjectLookup, textureLoader } from "../service/three";
+import { cameraLightShader } from '../service/glsl';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 
@@ -20,11 +21,16 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
     add(initPos = [4.5 * 1.5, 0.02, 7 * 1.5], skinKey = 'test-hyper-casual.blend.png') {
       const object = SkeletonUtils.clone(gltf.scene);
       const model = { object, initPos, graph: buildObjectLookup(object) };
-      const material = model.graph.materials[meta.materialName];
-      material.transparent = true;
-      // material.depthWrite = false;
+      const material = /** @type {THREE.MeshPhysicalMaterial} */ (model.graph.materials[meta.materialName]);
+      material.transparent = true; // For drop shadow
+      
+      // // 🚧 support texture map
+      // const testMaterial = new THREE.ShaderMaterial({ transparent: true, uniforms: { diffuse: { value: [0.5, 0.5, 0.5] } }, vertexShader: cameraLightShader.Vert, fragmentShader: cameraLightShader.Frag });
+      // const mesh = /** @type {THREE.Mesh} */ (model.graph.nodes[meta.meshName]);
+      // mesh.material = testMaterial;
+
       state.models.push(model);
-      // state.changeSkin(0, 'test-hyper-casual.blend.png');
+      state.setSkin(0, 'test-hyper-casual.blend.png'); // 🔔 for skin debug
 
       update();
     },
@@ -58,14 +64,13 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
 
-  return state.models.map(({ object: model, initPos }, i) =>
+  return state.models.map(({ object: model, initPos, graph }, i) =>
     <primitive
       key={i}
       object={model}
       position={initPos}
       scale={meta.scale}
       dispose={null}
-      // onClick={() => onClick?.(i)}
     />
   );
 });
@@ -90,6 +95,7 @@ const meta = {
   scale: 1,
   height: 1.5,
   materialName: 'Material',
+  meshName: 'hc-character-mesh',
 };
 
 /**
