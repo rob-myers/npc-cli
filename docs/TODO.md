@@ -33,43 +33,21 @@
   - ℹ️ blender edit mode:
     - Cmd+R loop cut
     - Option+Click edge for edge loop
-  - 🚧 texture mapping
+  - ✅ texture mapping
     - ✅ UV > mark seams, unwrap
-    - export UV map, and use a background in Boxy SVG
+    - ✅ export UV map as SVG and import to Boxy SVG
       - try provide strong outline for body
       - try provide strong outline for face
+    - ✅ add new material to mesh (e.g. in shader view)
+      - add Texture > Image Texture
+      - export Boxy SVG as PNG, as use as image
   - test import into World
+  - try inverted colours
   - idle animation
   - walk animation
   - test import into World
 
-- ✅ investigate GPU object picking via 2 render targets written to by 1 fragment shader
-  - ℹ️ PR where render targets first added to three.js:
-    > https://github.com/mrdoob/three.js/pull/16390
-  - ℹ️ can provide vertex indices via attribute, hence instanceId too
-    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
-  - ℹ️ https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_cubes_gpu.html
-  - ℹ️ Asked question https://discourse.threejs.org/t/is-gpu-object-picking-possible-with-a-single-render/70228
-    - if we use a single shader with 2 outputs, seems we need a render target with 2 textures,
-      and our "main scene" would be a full-screen quad, which breaks r3f pointer events
-  - ℹ️ could re-use main scene as "picking scene" with different picking materials,
-    - https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
-    - need to extend approach to support instancedmesh e.g. via extra attribute
-    - could avoid different shaders via boolean uniform
-
-- 🚧 towards gpu object picking
-  - ✅ Walls shader has own monochrome shader
-  - ✅ Walls shader has boolean uniform `objectPicking` and behaves differently based on it
-  - ✅ Walls shader has `gmId` attribute
-  - ✅ Walls shader has `wallSegId` attribute
-  - ✅ decode clicked pixel when shader turned on
-  - ✅ fix hull wall z-fighting
-    - ℹ️ object-picking issue (not visually where every wall black)
-    - ❌ could omit/set-height-0 "outer overlapping walls"
-      - too complex
-    - ✅ manually inset outer hull walls slightly  
-  - ✅ async read pixel
-  - tidy
+- 🚧 create super-simple npc e.g. cuboid + cylinder
 
 - return to next.js project
   - ensure up to date
@@ -2174,3 +2152,32 @@ run '({ w, api }) {
   }
 }'
 ```
+
+- ✅ investigate GPU object picking via 2 render targets written to by 1 fragment shader
+  - ℹ️ PR where render targets first added to three.js:
+    > https://github.com/mrdoob/three.js/pull/16390
+  - ℹ️ can provide vertex indices via attribute, hence instanceId too
+    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
+  - ℹ️ https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_cubes_gpu.html
+  - ℹ️ Asked question https://discourse.threejs.org/t/is-gpu-object-picking-possible-with-a-single-render/70228
+    - if we use a single shader with 2 outputs, seems we need a render target with 2 textures,
+      and our "main scene" would be a full-screen quad, which breaks r3f pointer events
+  - ℹ️ could re-use main scene as "picking scene" with different picking materials,
+    - https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
+    - need to extend approach to support instancedmesh e.g. via extra attribute
+    - could avoid different shaders via boolean uniform
+
+- ✅ towards gpu object picking: get walls working
+  - ✅ Walls shader has own monochrome shader
+  - ✅ Walls shader has boolean uniform `objectPicking` and behaves differently based on it
+  - ✅ Walls shader has `gmId` attribute
+  - ✅ Walls shader has `wallSegId` attribute
+  - ✅ decode clicked pixel when shader turned on
+  - ✅ fix hull wall z-fighting
+    - ℹ️ object-picking issue (not visually where every wall black)
+    - ❌ could omit/set-height-0 "outer overlapping walls"
+      - too complex
+    - ✅ manually inset outer hull walls slightly  
+  - ✅ async read pixel
+  - ✅ tidy: still running atm, will extend bit-by-bit
+  - ℹ️ rgba is `(1, gmId, ((wallSegId >> 8) & 255)/255, (wallSegId & 255)/255)`
