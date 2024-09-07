@@ -2,8 +2,6 @@ import * as THREE from "three";
 import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 
-// 🚧 walls shader supports uniform 'objectPicking'
-
 const instancedMonochromeShader = {
   Vert: /*glsl*/`
 
