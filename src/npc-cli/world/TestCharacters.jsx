@@ -17,12 +17,26 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
   const state = useStateRef(/** @returns {State} */ () => ({
     models: /** @type {*} */ ([]),
-    addModel(skinKey, initPos = [4.5 * 1.5, 0.01, 7 * 1.5]) {
-      const model = SkeletonUtils.clone(gltf.scene);
-      state.models.push({ model, initPos, graph: buildObjectLookup(model) });
+    add(initPos = [4.5 * 1.5, 0.02, 7 * 1.5], skinKey = 'test-hyper-casual.blend.png') {
+      const object = SkeletonUtils.clone(gltf.scene);
+      const model = { object, initPos, graph: buildObjectLookup(object) };
+      const material = model.graph.materials[meta.materialName];
+      material.transparent = true;
+      // material.depthWrite = false;
+      state.models.push(model);
+      // state.changeSkin(0, 'test-hyper-casual.blend.png');
+
       update();
     },
-    changeSkin(charIndex, skinKey) {
+    remove(charIndex) {
+      if (typeof charIndex === 'number') {
+        state.models.splice(charIndex, 1);
+      } else {
+        state.models.length = 0;
+      }
+      update();
+    },
+    setSkin(charIndex, skinKey = 'test-hyper-casual.blend.png') {
       const model = state.models[charIndex];
       if (!model) {
         return;
@@ -32,29 +46,19 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       );
       const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
 
-      textureLoader.loadAsync(`/assets/3d/${skinKey}`).then((tex) => {
-        // // console.log(material.map, tex);
-        // tex.flipY = false;
-        // tex.wrapS = tex.wrapT = 1000;
-        // tex.colorSpace = "srgb";
-        // tex.minFilter = 1004;
-        // tex.magFilter = 1003;
+      textureLoader.loadAsync(`/assets/3d/${skinKey}?v=${Date.now()}`).then((tex) => {
+        // console.log(material.map, tex);
+        tex.flipY = false;
         clonedMaterial.map = tex;
         skinnedMesh.material = clonedMaterial;
       });
-    },
-    removeModel(charIndex) {
-      if (state.models[charIndex]) {
-        state.models.splice(charIndex, 1);
-        update();
-      }
     },
     update,
   }));
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
 
-  return state.models.map(({ model, initPos }, i) =>
+  return state.models.map(({ object: model, initPos }, i) =>
     <primitive
       key={i}
       object={model}
@@ -73,10 +77,10 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
 /**
  * @typedef State
- * @property {{ model: THREE.Object3D; initPos: THREE.Vector3Tuple; graph: import("@react-three/fiber").ObjectMap }[]} models
- * @property {(skinKey: TestSkinKey, initPos?: THREE.Vector3Tuple) => void} addModel 🚧
- * @property {(charIndex: number, skinKey: TestSkinKey) => void} changeSkin 🚧
- * @property {(charIndex: number) => void} removeModel
+ * @property {{ object: THREE.Object3D; initPos: THREE.Vector3Tuple; graph: import("@react-three/fiber").ObjectMap }[]} models
+ * @property {(initPos?: THREE.Vector3Tuple, skinKey?: TestSkinKey) => void} add 🚧
+ * @property {(charIndex: number, skinKey?: TestSkinKey) => void} setSkin 🚧
+ * @property {(charIndex?: number) => void} remove
  * @property {() => void} update
  */
 
@@ -85,6 +89,7 @@ const meta = {
   // scale: 1 / 1.5,
   scale: 1,
   height: 1.5,
+  materialName: 'Material',
 };
 
 /**

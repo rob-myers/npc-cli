@@ -89,7 +89,7 @@ export default function Floor(props) {
       ct.resetTransform();
       tex.needsUpdate = true;
     },
-  }));
+  }), { overwrite: { gridPattern: false } });
 
   w.floor = state;
 
@@ -109,6 +109,7 @@ export default function Floor(props) {
           geometry={getQuadGeometryXZ('vanilla-xz')}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
           position={[gm.pngRect.x, 0, gm.pngRect.y]}
+          renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
         >
           <meshBasicMaterial
             side={THREE.FrontSide}

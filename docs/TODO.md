@@ -42,12 +42,20 @@
       - add Texture > Image Texture
       - export Boxy SVG as PNG, as use as image
   - ✅ test import into World
-    - add `w debug.testChar.addModel test-hyper-casual.blend.png`
-    - remove `w debug.testChar.removeModel 0`
+```sh
+w debug.testChar.add
+w debug.testChar.remove 0
+w debug.testChar.remove
+# update skin
+w debug.testChar.setSkin 0
+```
   - ✅ try inverted colours
-  - improve drop shadow
-  - should be higher off ground but still ~1.5m total
-  - idle animation
+  - ✅ improve drop shadow
+    - fix transparency by setting floor renderOrder `-1`
+  - ✅ should be higher off ground but still ~1.5m total
+  - ✅ can reload texture without hard-refresh
+  - 🚧 thinner outline?
+  - 🚧 idle animation
     - try using `class Npc`
   - walk animation
 
