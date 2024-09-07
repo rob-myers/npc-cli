@@ -17,7 +17,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
   const state = useStateRef(/** @returns {State} */ () => ({
     models: /** @type {*} */ ([]),
-    addModel(skinKey, initPos = [4.5 * 1.5, 0, 7 * 1.5]) {
+    addModel(skinKey, initPos = [4.5 * 1.5, 0.01, 7 * 1.5]) {
       const model = SkeletonUtils.clone(gltf.scene);
       state.models.push({ model, initPos, graph: buildObjectLookup(model) });
       update();
@@ -59,7 +59,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       key={i}
       object={model}
       position={initPos}
-      // scale={0.25}
+      scale={meta.scale}
       dispose={null}
       // onClick={() => onClick?.(i)}
     />
@@ -82,8 +82,9 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
 const meta = {
   url: '/assets/3d/test-hyper-casual.glb',
-  // scale: 0.25,
-  // height: 2,
+  // scale: 1 / 1.5,
+  scale: 1,
+  height: 1.5,
 };
 
 /**

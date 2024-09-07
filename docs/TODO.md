@@ -44,11 +44,12 @@
   - ✅ test import into World
     - add `w debug.testChar.addModel test-hyper-casual.blend.png`
     - remove `w debug.testChar.removeModel 0`
-  - 🚧 try inverted colours
+  - ✅ try inverted colours
+  - improve drop shadow
+  - should be higher off ground but still ~1.5m total
   - idle animation
     - try using `class Npc`
   - walk animation
-  - test import into World
 
 - return to next.js project
   - ensure up to date
