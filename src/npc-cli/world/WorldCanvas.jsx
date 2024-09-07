@@ -174,7 +174,7 @@ export default function WorldCanvas(props) {
       state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
     onPointerUp(e) {// After 3D pointerup
-      if (!state.down) {
+      if (state.down === undefined) {
         return;
       }
 

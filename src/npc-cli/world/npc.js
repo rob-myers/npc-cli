@@ -149,9 +149,7 @@ export class Npc {
     const skinnedMesh = this.map.nodes[glbMeta.skinnedMeshName];
     skinnedMesh.userData.npcKey = this.key;
 
-    // this.changeSkin('scientist-dabeyt--with-arms.png');
     this.changeSkin(this.def.skinKey);
-    // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
   }
   /**
    * @param {THREE.Vector3Like} dst
