@@ -6,7 +6,7 @@ import { getQuadGeometryXZ } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 import TestCanvas from "./TestCanvas";
 // import { TestCharacterOld } from "./TestCharacterOld";
-import { TestCharacters } from "./TestCharacters";
+import { TestCharactersOld } from "./TestCharactersOld";
 
 /**
  * @param {Props} props
@@ -38,7 +38,7 @@ export function TestCharacterDemo(props) {
         />
         */}
 
-        <TestCharacters
+        <TestCharactersOld
           ref={x => x && (state.characters = x)}
           onClick={(charIndex) => state.selected = charIndex}
         />
@@ -70,7 +70,7 @@ export function TestCharacterDemo(props) {
 
 /**
  * @typedef State
- * @property {import('./TestCharacters').State} characters
+ * @property {import('./TestCharactersOld').State} characters
  * @property {import('./TestCharacterOld').State} controller
  * @property {number} downAt
  * @property {number} selected

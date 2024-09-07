@@ -17,7 +17,7 @@ const meta = {
 /**
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
-export const TestCharacters = React.forwardRef(function TestCharacters({
+export const TestCharactersOld = React.forwardRef(function TestCharacters({
   count = 6,
   onClick,
 }, ref) {
