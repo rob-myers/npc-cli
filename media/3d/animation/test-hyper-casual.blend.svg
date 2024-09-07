@@ -10,8 +10,12 @@
     </filter>
   </defs>
   <desc>test-hyper-casual.blend, (Blender 4.1.0)</desc>
+  <g>
+    <title>shadow</title>
+    <polygon points="960 832 960 768 1024 768 1024 832" style="stroke-linejoin: round; stroke-linecap: round; fill-opacity: 0.43; stroke-width: 4px;"/>
+  </g>
   <g style="filter: url('#invert-filter-0');">
-    <title>root</title>
+    <title>body</title>
     <polygon points="960 512 1024 512 1024 576 960 576" style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgb(255, 255, 255);" stroke="black"/>
     <polygon points="362.605,381.439 374.208,285.974 677.772,285.974 689.375,381.439 " style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgb(255, 255, 255);" stroke="black"/>
     <polygon points="391.127991 617.088989 410.691986 509.449005 676.77301 515.218018 692.323975 620.370972" style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgb(255, 255, 255);" stroke="black"/>
@@ -92,6 +96,5 @@
     <polygon points="439.628998 807.215027 358.309998 807.041016 359.079987 765.922974 439.218994 763.817993" style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgb(255, 255, 255);" stroke="black"/>
     <polygon points="354.596985 954.606018 436.768005 952.89801 436.934998 995.919983 355.287994 998.596985" style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgb(255, 255, 255);" stroke="black"/>
     <polygon points="845.585022 606.258972 817.098022 622.705017 784.203979 622.705017 755.718018 606.257996 739.270996 577.771973 739.270996 544.877991 755.718018 516.392029 784.203979 499.945007 817.098022 499.945007 845.585022 516.392029 862.031006 544.877991 862.031006 577.771973" style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgb(255, 255, 255);" stroke="black"/>
-    <polygon points="960 832 960 768 1024 768 1024 832" style="stroke-linejoin: round; stroke-linecap: round; stroke-width: 12px; fill: rgb(255, 255, 255);" stroke="black"/>
   </g>
 </svg>
