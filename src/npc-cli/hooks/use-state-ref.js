@@ -50,7 +50,7 @@ export default function useStateRef(initializer, opts = {}) {
         } else if (!(k in state)) {
           // console.log({ setting: [k, v] })
           state[key] = v;
-        } else if (opts.overwrite?.[key]) {
+        } else if (opts.overwrite?.[key] === true) {
           // Update if initial values changed and specified `overwrite`
           state[key] = newInit[key];
         }
@@ -78,7 +78,7 @@ module.hot?.decline();
 /**
  * @template {Record<string, any>} State
  * @typedef Options
- * @property {import('../service/generic').KeyedTrue<State>} [overwrite]
+ * @property {Partial<Record<keyof State, boolean>>} [overwrite]
  * Reset field on HMR?
  * @property {any[]} [deps]
  */
