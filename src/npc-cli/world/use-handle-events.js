@@ -77,9 +77,6 @@ export default function useHandleEvents(w) {
         case "pointerup-outside":
           !e.touch && state.onPointerUpMenuDesktop(e);
           break;
-        case "decor-instantiated":
-          w.setReady();
-          break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
           // ℹ️ dev should handle partial correctness e.g. by pausing

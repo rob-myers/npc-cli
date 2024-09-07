@@ -50,7 +50,6 @@ export default function World(props) {
     }),
     mapKey: props.mapKey,
     r3f: /** @type {*} */ (null),
-    readyResolvers: [],
     reqAnimId: 0,
     threeReady: false,
     timer: new Timer(),
@@ -125,17 +124,6 @@ export default function World(props) {
       // info(state.r3f.gl.info.render);
 
       while (state.oneTimeTicks.shift()?.());
-    },
-    async resolveOnReady() {
-      if (state.isReady()) {
-        return;
-      } else {
-        return new Promise(resolve => state.readyResolvers.push(resolve));
-      }
-    },
-    setReady() {
-      while (state.readyResolvers.length > 0)
-        /** @type {() => void} */ (state.readyResolvers.pop())();
     },
     trackHmr(nextHmr) {
       const output = mapValues(state.hmr, (prev, key) => prev !== nextHmr[key])
@@ -348,7 +336,6 @@ export default function World(props) {
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
- * @property {(() => void)[]} readyResolvers
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
@@ -385,8 +372,6 @@ export default function World(props) {
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
- * @property {() => Promise<void>} resolveOnReady
- * @property {() => void} setReady
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?
  * @property {(mutator?: (w: State) => void) => void} update
