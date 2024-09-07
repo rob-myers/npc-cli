@@ -7,6 +7,7 @@ import { navMeta, decompToXZGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import { TestCharacters } from "./TestCharacters";
 
 /**
  * @param {Props} props 
@@ -18,6 +19,7 @@ export default function Debug(props) {
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
     selectedNavPolys: new THREE.BufferGeometry(),
+    testChar: /** @type {*} */ (null),
 
     ensureNavPoly(gmKey) {
       if (!w.gmsData[gmKey].navPoly) {
@@ -137,6 +139,10 @@ export default function Debug(props) {
         />
       </group>
     ))}
+
+    {props.showTestCharacters && (
+      <TestCharacters ref={x => state.testChar = x ?? state.testChar} />
+    )}
   </>;
 }
 
@@ -145,6 +151,7 @@ export default function Debug(props) {
  * @property {boolean} [disabled]
  * @property {boolean} [showNavMesh]
  * @property {boolean} [showOrigNavPoly]
+ * @property {boolean} [showTestCharacters]
  */
 
 /**
@@ -152,6 +159,7 @@ export default function Debug(props) {
  * @property {NavMeshHelper} navMesh
  * @property {THREE.Group} navPath
  * @property {THREE.BufferGeometry} selectedNavPolys
+ * @property {import('./TestCharacters').State} testChar
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
  * @property {(polyIds: number[]) => void} selectNavPolys

@@ -41,13 +41,14 @@
     - ✅ add new material to mesh (e.g. in shader view)
       - add Texture > Image Texture
       - export Boxy SVG as PNG, as use as image
-  - test import into World
-  - try inverted colours
+  - ✅ test import into World
+    - add `w debug.testChar.addModel test-hyper-casual.blend.png`
+    - remove `w debug.testChar.removeModel 0`
+  - 🚧 try inverted colours
   - idle animation
+    - try using `class Npc`
   - walk animation
   - test import into World
-
-- 🚧 create super-simple npc e.g. cuboid + cylinder
 
 - return to next.js project
   - ensure up to date
