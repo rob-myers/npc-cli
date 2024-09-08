@@ -153,9 +153,7 @@ info({ opts });
       obstacle: {}, decor: /** @type {*} */ ({}),
       obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 },
       imagesHash: 0,
-      skins: {
-        lastModified: 0,
-      },
+      skins: { svgHash: {} },
     },
     symbols: /** @type {*} */ ({}), maps: {},
   };
@@ -212,8 +210,7 @@ info({ opts });
 
   if (!prev.skipNpcTex) {
     info('creating npc textures');
-    createNpcTextures(prev);
-    assetsJson.sheet.skins.lastModified = Date.now();
+    await createNpcTextures(assetsJson, prev);
   } else {
     info('skipping npc textures');
   }
@@ -645,22 +642,27 @@ function getNpcTextureMetas() {
     const { mtimeMs: svgMtimeMs } = fs.statSync(svgPath);
     const pngPath = path.resolve(assets3dDir, svgBaseName.slice(0, -'.svg'.length).concat('.png'));
     let pngMtimeMs = 0; try { pngMtimeMs = fs.statSync(pngPath).mtimeMs } catch {};
-    return { svgPath, pngPath, canSkip: svgMtimeMs < pngMtimeMs };
+    return { svgBaseName, svgPath, pngPath, canSkip: svgMtimeMs < pngMtimeMs };
   });
 }
 
 /**
  * Convert SVGs into PNGs.
- * @param {Prev} prev 
+ * @param {Geomorph.AssetsJson} assets
+ * @param {Prev} prev
  */
-async function createNpcTextures(prev) {
-  for (const { svgPath, pngPath } of prev.npcTexMetas.filter(x => !x.canSkip)) {
-    const svgDataUrl = `data:image/svg+xml;utf8,${fs.readFileSync(svgPath).toString()}`;
+async function createNpcTextures(assets, prev) {
+  const { skins } = assets.sheet
+  const changedMetas = prev.npcTexMetas.filter(x => !x.canSkip || !skins.svgHash[x.svgBaseName]);
+  await Promise.all(changedMetas.map(async ({ svgBaseName, svgPath, pngPath }) => {
+    const svgContents = fs.readFileSync(svgPath).toString();
+    skins.svgHash[svgBaseName] = hashText(svgContents);
+    const svgDataUrl = `data:image/svg+xml;utf8,${svgContents}`;
     const image = await loadImage(svgDataUrl);
     const canvas = createCanvas(image.width, image.height);
     canvas.getContext('2d').drawImage(image, 0, 0);
     await saveCanvasAsFile(canvas, pngPath);
-  }
+  }));
 }
 
 /**
@@ -668,7 +670,7 @@ async function createNpcTextures(prev) {
  * @property {Geomorph.AssetsJson | null} assets
  * @property {import('canvas').Image | null} obstaclesPng
  * @property {import('canvas').Image | null} decorPng
- * @property {{ svgPath: string; pngPath: string; canSkip: boolean; }[]} npcTexMetas
+ * @property {{ svgBaseName: string; svgPath: string; pngPath: string; canSkip: boolean; }[]} npcTexMetas
  * @property {boolean} skipMaps
  * @property {boolean} skipObstacles
  * @property {boolean} skipDecor

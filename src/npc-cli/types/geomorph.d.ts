@@ -440,12 +440,9 @@ declare namespace Geomorph {
     decorDim: { width: number; height: number; }
     decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
     imagesHash: number;
-    skins: CharacterSkins;
-  }
-
-  interface CharacterSkins {
-    lastModified: number;
-    // 🚧 e.g. record uvs of shadow quad...
+    skins: {
+      svgHash: { [svgBaseName: string]: number; };
+    };
   }
 
   interface ObstacleSheetRectCtxt {
