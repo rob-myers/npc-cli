@@ -5,6 +5,7 @@ import { SkeletonUtils } from "three-stdlib";
 
 import { buildObjectLookup, textureLoader } from "../service/three";
 import { cameraLightShader } from '../service/glsl';
+import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 
@@ -12,15 +13,17 @@ import useUpdate from '../hooks/use-update';
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
 export const TestCharacters = React.forwardRef(function TestCharacters(props, ref) {
+  const w = React.useContext(WorldContext);
+
   const gltf = useGLTF(meta.url);
 
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
     models: /** @type {*} */ ([]),
-    add(initPos = [4.5 * 1.5, 0.02, 7 * 1.5], skinKey = 'test-hyper-casual.blend.png') {
+    add(initPos = [4.5 * 1.5, 0.02, 7 * 1.5], skinKey = testSkins.firstHcTex) {
       const object = SkeletonUtils.clone(gltf.scene);
-      const model = { object, initPos, graph: buildObjectLookup(object) };
+      const model = { object, initPos, skinKey, graph: buildObjectLookup(object) };
       const material = /** @type {THREE.MeshPhysicalMaterial} */ (model.graph.materials[meta.materialName]);
       material.transparent = true; // For drop shadow
       
@@ -30,7 +33,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       // mesh.material = testMaterial;
 
       state.models.push(model);
-      state.setSkin(0, 'test-hyper-casual.blend.png'); // 🔔 for skin debug
+      state.setSkin(0, testSkins.firstHcTex); // 🔔 for skin debug
 
       update();
     },
@@ -42,14 +45,14 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       }
       update();
     },
-    setSkin(charIndex, skinKey = 'test-hyper-casual.blend.png') {
+    setSkin(charIndex, skinKey = testSkins.firstHcTex) {
       const model = state.models[charIndex];
       if (!model) {
         return;
       }
-      const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (
-        model.graph.nodes['hc-character-mesh']
-      );
+
+      model.skinKey = skinKey;
+      const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (model.graph.nodes[meta.meshName]);
       const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
 
       textureLoader.loadAsync(`/assets/3d/${skinKey}?v=${Date.now()}`).then((tex) => {
@@ -63,6 +66,10 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
   }));
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
+  
+  React.useEffect(() => {// Hot reload skins
+    state.models.forEach(({ skinKey }, charIndex) => state.setSkin(charIndex, skinKey));
+  }, [w.hash.sheets]);
 
   return state.models.map(({ object: model, initPos, graph }, i) =>
     <primitive
@@ -82,7 +89,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
 /**
  * @typedef State
- * @property {{ object: THREE.Object3D; initPos: THREE.Vector3Tuple; graph: import("@react-three/fiber").ObjectMap }[]} models
+ * @property {{ object: THREE.Object3D; initPos: THREE.Vector3Tuple; skinKey: TestSkinKey; graph: import("@react-three/fiber").ObjectMap }[]} models
  * @property {(initPos?: THREE.Vector3Tuple, skinKey?: TestSkinKey) => void} add 🚧
  * @property {(charIndex: number, skinKey?: TestSkinKey) => void} setSkin 🚧
  * @property {(charIndex?: number) => void} remove
@@ -99,7 +106,12 @@ const meta = {
 };
 
 /**
- * @typedef {'test-hyper-casual.blend.png'} TestSkinKey
+ * @typedef {testSkins[keyof testSkins]} TestSkinKey
  */
+
+/** hc ~ hyper casual */
+const testSkins = /** @type {const} */ ({
+  firstHcTex: 'test-hyper-casual.tex.png',
+});
 
 useGLTF.preload(meta.url);

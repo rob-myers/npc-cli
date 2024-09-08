@@ -33,7 +33,7 @@ declare namespace Geomorph {
     maps: number;
     /** Hash of all layouts */
     layouts: number;
-    /** Depends on rect lookup _and_ images */
+    /** Depends on rect lookup, images, and skins */
     sheets: number;
     /** `${layouts} ${maps}` */
     decor: `${number} ${number}`;
@@ -440,6 +440,12 @@ declare namespace Geomorph {
     decorDim: { width: number; height: number; }
     decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
     imagesHash: number;
+    skins: CharacterSkins;
+  }
+
+  interface CharacterSkins {
+    lastModified: number;
+    // 🚧 e.g. record uvs of shadow quad...
   }
 
   interface ObstacleSheetRectCtxt {

@@ -21,6 +21,7 @@ nodemon({
     'media/symbol/',
     'media/map/',
     'media/decor/',
+    'media/npc/',
   ],
   exitcrash: true,
 }).on('restart', onRestart).on('quit', onQuit);

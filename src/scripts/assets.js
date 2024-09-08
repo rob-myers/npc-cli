@@ -13,6 +13,7 @@
  * - geomorphs.json
  * - obstacles sprite-sheet (using media/symbol/*.svg)
  * - decor sprite-sheet (using media/decor/*.svg)
+ * - npc textures (using media/npc/*.tex.svg)
  * - webp from png
  */
 /// <reference path="./deps.d.ts"/>
@@ -78,8 +79,8 @@ function computeOpts() {
     detectChanges: !all && changedFiles.length > 0,
     /**
      * When about to push:
-     * - ensure every webp.
-     * - fail if any asset not committed.
+     * - ensure every webp
+     * - fail if any asset not committed
      */
     prePush: Boolean(rawOpts.prePush),
   };
@@ -87,21 +88,23 @@ function computeOpts() {
 
 /** @returns {Promise<Prev>} */
 async function computePrev() {
-  const [prevAssetsStr, obstaclesPng, decorPng] = await Promise.all([
+  const [prevAssetsStr, obstaclesPng, decorPng, npcTexMetas] = await Promise.all([
     !opts.all ? tryReadString(assetsFilepath) : null,
     tryLoadImage(obstaclesPngPath),
     tryLoadImage(decorPngPath),
+    getNpcTextureMetas(),
   ]);
-  const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (
-    JSON.parse(prevAssetsStr ?? 'null')
-  );
+  const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (JSON.parse(prevAssetsStr ?? 'null'));
+  const skipPossible = !opts.all && opts.detectChanges;
   return {
     assets: prevAssets,
     obstaclesPng,
     decorPng,
-    skipMaps: !opts.all && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(mapsDir)),
-    skipObstacles: !opts.all && !!obstaclesPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(symbolsDir)),
-    skipDecor: !opts.all && !!decorPng && opts.detectChanges && !opts.changedFiles.some(x => x.startsWith(decorDir)),
+    npcTexMetas,
+    skipMaps: skipPossible && !opts.changedFiles.some(x => x.startsWith(mapsDir)),
+    skipObstacles: skipPossible && !!obstaclesPng && !opts.changedFiles.some(x => x.startsWith(symbolsDir)),
+    skipDecor: skipPossible && !!decorPng && !opts.changedFiles.some(x => x.startsWith(decorDir)),
+    skipNpcTex: skipPossible && npcTexMetas.every(x => x.canSkip) && !opts.changedFiles.some(x => x.startsWith(npcDir)),
   };
 }
 
@@ -113,8 +116,10 @@ const mediaDir = path.resolve(__dirname, "../../media");
 const mapsDir = path.resolve(mediaDir, "map");
 const symbolsDir = path.resolve(mediaDir, "symbol");
 const assets2dDir = path.resolve(staticAssetsDir, "2d");
+const assets3dDir = path.resolve(staticAssetsDir, "3d");
 const graphDir = path.resolve(mediaDir, "graph");
 const decorDir = path.resolve(mediaDir, "decor");
+const npcDir = path.resolve(mediaDir, "npc");
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
 const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
 const decorPngPath = path.resolve(assets2dDir, `decor.png`);
@@ -148,6 +153,9 @@ info({ opts });
       obstacle: {}, decor: /** @type {*} */ ({}),
       obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 },
       imagesHash: 0,
+      skins: {
+        lastModified: 0,
+      },
     },
     symbols: /** @type {*} */ ({}), maps: {},
   };
@@ -202,12 +210,20 @@ info({ opts });
     info('skipping decor sprite-sheet');
   }
 
+  if (!prev.skipNpcTex) {
+    info('creating npc textures');
+    createNpcTextures(prev);
+    assetsJson.sheet.skins.lastModified = Date.now();
+  } else {
+    info('skipping npc textures');
+  }
+
   const changedSymbolAndMapKeys = Object.keys(assetsJson.meta).filter(
     key => assetsJson.meta[key].outputHash !== prev.assets?.meta[key]?.outputHash
   );
   info({ changedKeys: changedSymbolAndMapKeys });
 
-  // hash sprite-sheet images
+  // hash sprite-sheet PNGs (including skins lastModified)
   assetsJson.sheet.imagesHash =
     prev.skipObstacles && prev.skipDecor && assetsJson.sheet.imagesHash
       ? assetsJson.sheet.imagesHash
@@ -621,12 +637,40 @@ function extractObstacleDescriptor(meta) {
   return 'obstacle';
 }
 
+function getNpcTextureMetas() {
+  return fs.readdirSync(npcDir).filter(
+    (baseName) => baseName.endsWith(".tex.svg")
+  ).sort().map((svgBaseName) => {
+    const svgPath = path.resolve(npcDir, svgBaseName);
+    const { mtimeMs: svgMtimeMs } = fs.statSync(svgPath);
+    const pngPath = path.resolve(assets3dDir, svgBaseName.slice(0, -'.svg'.length).concat('.png'));
+    let pngMtimeMs = 0; try { pngMtimeMs = fs.statSync(pngPath).mtimeMs } catch {};
+    return { svgPath, pngPath, canSkip: svgMtimeMs < pngMtimeMs };
+  });
+}
+
+/**
+ * Convert SVGs into PNGs.
+ * @param {Prev} prev 
+ */
+async function createNpcTextures(prev) {
+  for (const { svgPath, pngPath } of prev.npcTexMetas.filter(x => !x.canSkip)) {
+    const svgDataUrl = `data:image/svg+xml;utf8,${fs.readFileSync(svgPath).toString()}`;
+    const image = await loadImage(svgDataUrl);
+    const canvas = createCanvas(image.width, image.height);
+    canvas.getContext('2d').drawImage(image, 0, 0);
+    await saveCanvasAsFile(canvas, pngPath);
+  }
+}
+
 /**
  * @typedef Prev
  * @property {Geomorph.AssetsJson | null} assets
  * @property {import('canvas').Image | null} obstaclesPng
  * @property {import('canvas').Image | null} decorPng
+ * @property {{ svgPath: string; pngPath: string; canSkip: boolean; }[]} npcTexMetas
  * @property {boolean} skipMaps
  * @property {boolean} skipObstacles
  * @property {boolean} skipDecor
+ * @property {boolean} skipNpcTex
  */

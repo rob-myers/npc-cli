@@ -61,9 +61,11 @@ w debug.testChar.setSkin 0
     - media/npc (ongoing)
   - ✅ cleanup static/assets/3d and related to jsx
     - do not delete minecraft-skins until complete character migration
-  - 🚧 auto-update test character onchange SVG
-    - media/npc/{x}.uv-map.svg to static/assets/3d/{x}.uv-map.png
-    - auto update character skin
+  - ✅ auto-update test character onchange SVG
+    - ✅ media/npc/{x}.tex.svg to static/assets/3d/{x}.tex.png
+    - ✅ TestCharacters reads a tex.png
+    - ✅ auto update character skin
+      - expose hash and `w.debug.testChar.setSkin(i)`
   - CameraLightMaterial should support texture map
   - try import original asset e.g. with hair
   - idle animation

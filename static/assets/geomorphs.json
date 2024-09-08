@@ -37858,6 +37858,7 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": -1267809538
+    "imagesHash": -1267809538,
+    "skins": {"lastModified": 1725806388369}
   }
 }
