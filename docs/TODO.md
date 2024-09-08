@@ -55,8 +55,15 @@ w debug.testChar.setSkin 0
   - ✅ should be higher off ground but still ~1.5m total
   - ✅ can reload texture without hard-refresh
   - ✅ try get CameraLightMaterial working
-    - might help to `<mesh>` instead of `<primitive>`
+    -  try debug via `<mesh>` instead of `<primitive>`
+  - ✅ cleanup media/3d
+    - media/npc-old (minecraft)
+    - media/npc (ongoing)
+  - auto-update test character onchange SVG
+    - auto SVG to assets PNG
+    - auto update character skin
   - 🚧 CameraLightMaterial should support texture map
+  - try import original asset e.g. with hair
   - idle animation
     - try using `class Npc`
   - walk animation
