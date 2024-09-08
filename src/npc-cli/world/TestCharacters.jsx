@@ -20,11 +20,12 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    models: /** @type {*} */ ([]),
-    add(initPos = [4.5 * 1.5, 0.02, 7 * 1.5], skinKey = testSkins.firstHcTex) {
+    characters: /** @type {*} */ ([]),
+    add(initPos = { x: 4.5 * 1.5, y: 7 * 1.5 }, skinKey = testSkins.firstHcTex) {
       const object = SkeletonUtils.clone(gltf.scene);
-      const model = { object, initPos, skinKey, graph: buildObjectLookup(object) };
-      const material = /** @type {THREE.MeshPhysicalMaterial} */ (model.graph.materials[meta.materialName]);
+      /** @type {TestCharacter} */
+      const character = { object, initPos, skinKey, graph: buildObjectLookup(object) };
+      const material = /** @type {THREE.MeshPhysicalMaterial} */ (character.graph.materials[meta.materialName]);
       material.transparent = true; // For drop shadow
       
       // // 🚧 support texture map
@@ -32,21 +33,22 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       // const mesh = /** @type {THREE.Mesh} */ (model.graph.nodes[meta.meshName]);
       // mesh.material = testMaterial;
 
-      state.models.push(model);
-      state.setSkin(0, testSkins.firstHcTex); // 🔔 for skin debug
+      state.characters.push(character);
+      const charIndex = state.characters.length - 1;
+      state.setSkin(charIndex, testSkins.firstHcTex); // 🔔 for skin debug
 
       update();
     },
     remove(charIndex) {
       if (typeof charIndex === 'number') {
-        state.models.splice(charIndex, 1);
+        state.characters.splice(charIndex, 1);
       } else {
-        state.models.length = 0;
+        state.characters.length = 0;
       }
       update();
     },
     setSkin(charIndex, skinKey = testSkins.firstHcTex) {
-      const model = state.models[charIndex];
+      const model = state.characters[charIndex];
       if (!model) {
         return;
       }
@@ -68,14 +70,14 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
   
   React.useEffect(() => {// Hot reload skins
-    state.models.forEach(({ skinKey }, charIndex) => state.setSkin(charIndex, skinKey));
+    state.characters.forEach(({ skinKey }, charIndex) => state.setSkin(charIndex, skinKey));
   }, [w.hash.sheets]);
 
-  return state.models.map(({ object: model, initPos, graph }, i) =>
+  return state.characters.map(({ object: model, initPos, graph }, i) =>
     <primitive
       key={i}
       object={model}
-      position={initPos}
+      position={[initPos.x, 0.02, initPos.y]}
       scale={meta.scale}
       dispose={null}
     />
@@ -89,9 +91,9 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
 /**
  * @typedef State
- * @property {{ object: THREE.Object3D; initPos: THREE.Vector3Tuple; skinKey: TestSkinKey; graph: import("@react-three/fiber").ObjectMap }[]} models
- * @property {(initPos?: THREE.Vector3Tuple, skinKey?: TestSkinKey) => void} add 🚧
- * @property {(charIndex: number, skinKey?: TestSkinKey) => void} setSkin 🚧
+ * @property {TestCharacter[]} characters
+ * @property {(initPos?: Geom.VectJson, skinKey?: TestSkinKey) => void} add
+ * @property {(charIndex: number, skinKey?: TestSkinKey) => void} setSkin
  * @property {(charIndex?: number) => void} remove
  * @property {() => void} update
  */
@@ -107,6 +109,13 @@ const meta = {
 
 /**
  * @typedef {testSkins[keyof testSkins]} TestSkinKey
+ */
+/**
+ * @typedef TestCharacter
+ * @property {THREE.Object3D} object
+ * @property {Geom.VectJson} initPos
+ * @property {TestSkinKey} skinKey
+ * @property {import("@react-three/fiber").ObjectMap} graph
  */
 
 /** hc ~ hyper casual */
