@@ -135,10 +135,9 @@ const instancedUvMappingShader = {
 export const cameraLightShader = {
   Vert: /*glsl*/`
 
+  flat varying float dotProduct;
   varying vec3 vColor;
   #include <common>
-
-  varying float dotProduct;
 
   #ifdef USE_LOGDEPTHBUF
     varying float vFragDepth;
@@ -146,7 +145,6 @@ export const cameraLightShader = {
   #endif
 
   void main() {
-
     vec3 objectNormal = vec3( normal );
     vec3 transformed = vec3( position );
     vec4 mvPosition = vec4( transformed, 1.0 );
@@ -168,7 +166,6 @@ export const cameraLightShader = {
       mat3 im = mat3( instanceMatrix );
       transformedNormal = im * transformedNormal;
     #endif
-    // normalMatrix is mat3 of worldMatrix (?)
     transformedNormal = normalMatrix * transformedNormal;
 
     vColor = vec3(1.0);
@@ -176,19 +173,16 @@ export const cameraLightShader = {
       vColor.xyz *= instanceColor.xyz;
     #endif
 
-    vec4 mvCameraPosition = modelMatrix * vec4(cameraPosition, 1.0);
-    vec3 lightDir = normalize(mvPosition.xyz - mvCameraPosition.xyz);
+    vec3 lightDir = normalize(mvPosition.xyz);
     dotProduct = -min(dot(normalize(transformedNormal), lightDir), 0.0);
   }
   `,
 
   Frag: /*glsl*/`
 
-  // <color_pars_vertex>
+	flat varying float dotProduct;
   varying vec3 vColor;
-
   uniform vec3 diffuse;
-	varying float dotProduct;
 
   #include <logdepthbuf_pars_fragment>
 
