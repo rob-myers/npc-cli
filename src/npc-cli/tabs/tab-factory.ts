@@ -61,24 +61,10 @@ function getTabIdentifier(meta: TabDef) {
 }
 
 const classToComponent = {
-  TestCharacterDemo: {
-    loadable: loadable(() => import("../aux/TestCharacterDemo")),
-    get:
-      (module: typeof import("../aux/TestCharacterDemo")) =>
-      (props: React.ComponentProps<(typeof module)["default"]>) =>
-        React.createElement(module.default, { disabled: true, ...props }),
-  },
   HelloWorld: {
     loadable: loadable(() => import("../aux/HelloWorld")),
     get:
       (module: typeof import("../aux/HelloWorld")) =>
-      (props: React.ComponentProps<(typeof module)["default"]>) =>
-        React.createElement(module.default, { disabled: true, ...props }),
-  },
-  TestWorker: {
-    loadable: loadable(() => import("../aux/TestWorker")),
-    get:
-      (module: typeof import("../aux/TestWorker")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },

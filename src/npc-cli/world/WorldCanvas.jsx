@@ -10,7 +10,6 @@ import { longPressMs } from "../service/const.js";
 import { emptySceneForPicking, getQuadGeometryXZ, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
-import { Origin } from "../aux/MiscThree.jsx";
 
 /**
  * @param {Props} props
@@ -432,3 +431,12 @@ const statsCss = css`
 
 const touchFixedAzimuth = Math.PI / 6;
 const pixelBuffer = new Uint8Array(4);
+
+function Origin() {
+  return (
+    <mesh scale={[0.025, 1, 0.025]} position={[0, 0.5 - 0.001, 0]}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshBasicMaterial color="red" />
+    </mesh>
+  );
+}
