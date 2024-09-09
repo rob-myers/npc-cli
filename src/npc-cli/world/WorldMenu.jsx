@@ -1,5 +1,6 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
+import debounce from "debounce";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { isTouchDevice } from "../service/dom";
@@ -23,16 +24,16 @@ export default function WorldMenu(props) {
     justOpen: false,
     debugWhilePaused: false,
     durationKeys: {},
-    textareaMeta: {
+    textarea: {
+      el: /** @type {*} */ (null),
       initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
       pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
+      text: '',
     },
-    textAreaEl: /** @type {*} */ (null),
-    textAreaText: '',
 
     changeTextareaPin(e) {
-      state.textareaMeta.pinned = e.currentTarget.checked;
-      tryLocalStorageSet(`pin-log@${w.key}`, `${state.textareaMeta.pinned}`);
+      state.textarea.pinned = e.currentTarget.checked;
+      tryLocalStorageSet(`pin-log@${w.key}`, `${state.textarea.pinned}`);
       update();
     },
     enableAll() {
@@ -44,19 +45,22 @@ export default function WorldMenu(props) {
     },
     log(msg, type) {
       if (typeof type === undefined) {
-        state.textAreaText += `${msg}\n`;
+        state.textarea.text += `${msg}\n`;
       } else if (type === '⏱') {
         if (msg in state.durationKeys) {
           const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(2);
-          state.textAreaText += `${msg} (${durationMs})\n`;
+          state.textarea.text += `${msg} (${durationMs})\n`;
           delete state.durationKeys[msg];
         } else {
           state.durationKeys[msg] = performance.now();
         }
       }
-      state.textAreaEl.scrollTo({ top: Number.MAX_SAFE_INTEGER });
+      state.logsToBottom();
       update();
     },
+    logsToBottom: debounce(() => {
+      state.textarea.el?.scrollTo({ top: Number.MAX_SAFE_INTEGER })
+    }, 300, { immediate: true }),
     show(at) {
       const menuDim = state.ctMenuEl.getBoundingClientRect();
       const canvasDim = w.ui.canvas.getBoundingClientRect();
@@ -68,7 +72,7 @@ export default function WorldMenu(props) {
     },
     storeTextareaHeight() {
       tryLocalStorageSet(`log-height-px@${w.key}`, `${
-        Math.max(100, state.textAreaEl.getBoundingClientRect().height)
+        Math.max(100, state.textarea.el.getBoundingClientRect().height)
       }`);
     },
     toggleDebug() {
@@ -124,18 +128,18 @@ export default function WorldMenu(props) {
       </div>
     )}
 
-    {(w.disabled || state.textareaMeta.pinned) && (
+    {(state.debugWhilePaused || state.textarea.pinned) && (
       <div className={textareaCss}>
         <textarea
-          ref={(x) => x && (state.textAreaEl = x)}
+          ref={(x) => x && (state.textarea.el = x)}
           readOnly
-          value={state.textAreaText}
-          style={{ height: state.textareaMeta.initHeight }}
+          value={state.textarea.text}
+          style={{ height: state.textarea.initHeight }}
         />
         <label>
           <input
             type="checkbox"
-            defaultChecked={state.textareaMeta.pinned}
+            defaultChecked={state.textarea.pinned}
             onChange={state.changeTextareaPin}
           />
           pin
@@ -205,15 +209,14 @@ const textareaCss = css`
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
- * @property {{ pinned: boolean; initHeight: number; }} textareaMeta
- * @property {HTMLTextAreaElement} textAreaEl
- * @property {string} textAreaText
+ * @property {{ el: HTMLTextAreaElement; pinned: boolean; initHeight: number; text: string; }} textarea
  *
  * @property {() => void} enableAll
  * @property {() => void} hide
  * @property {(msg: string, type?: '⏱') => void} log
  * - Can log durations by sending same `msg` twice.
  * - Can also log plain strings.
+ * @property {() => void} logsToBottom
  * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeTextareaPin
  * @property {() => void} storeTextareaHeight
  * @property {(at: Geom.VectJson) => void} show
