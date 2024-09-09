@@ -1,7 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
-import { tryLocalStorageGet, tryLocalStorageSet } from "../service/generic";
+import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { isTouchDevice } from "../service/dom";
 import { geom } from '../service/geom';
 import { WorldContext } from "./world-context";
@@ -24,15 +24,15 @@ export default function WorldMenu(props) {
     debugWhilePaused: false,
     durationKeys: {},
     textareaMeta: {
-      initHeight: JSON.parse(tryLocalStorageGet(`log-height-px@${w.key}`) ?? JSON.stringify(300)),
-      pinned: JSON.parse(tryLocalStorageGet(`pin-log@${w.key}`) ?? JSON.stringify(false)),
+      initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 300,
+      pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
     },
     textAreaEl: /** @type {*} */ (null),
     textAreaText: '',
 
     changeTextareaPin(e) {
       state.textareaMeta.pinned = e.currentTarget.checked;
-      tryLocalStorageSet(`pin-log@${w.key}`, `${state.textareaMeta}`);
+      tryLocalStorageSet(`pin-log@${w.key}`, `${state.textareaMeta.pinned}`);
       update();
     },
     enableAll() {

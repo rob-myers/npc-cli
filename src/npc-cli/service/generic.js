@@ -489,6 +489,20 @@ export function tryLocalStorageGet(key, logErr = false) {
 }
 
 /**
+ * @template T
+ * @param {string} key
+ * @returns {T | null}
+ */
+export function tryLocalStorageGetParsed(key, logErr = false) {
+  try {
+    return /** @type {T} */ JSON.parse(localStorage.getItem(key) ?? '');
+  } catch (e) {
+    logErr && console.error(e);
+    return null;
+  }
+}
+
+/**
  * @param {string} key
  */
 export function tryLocalStorageRemove(key, logErr = true) {
