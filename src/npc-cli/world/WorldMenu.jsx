@@ -1,6 +1,7 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
+import { tryLocalStorageGet, tryLocalStorageSet } from "../service/generic";
 import { isTouchDevice } from "../service/dom";
 import { geom } from '../service/geom';
 import { WorldContext } from "./world-context";
@@ -21,18 +22,39 @@ export default function WorldMenu(props) {
     ctOpen: false,
     justOpen: false,
     debugWhilePaused: false,
-    pinTextarea: false,
-    textAreaText: 'logging goes here',
+    durationKeys: {},
+    textareaMeta: {
+      initHeight: JSON.parse(tryLocalStorageGet(`log-height-px@${w.key}`) ?? JSON.stringify(300)),
+      pinned: JSON.parse(tryLocalStorageGet(`pin-log@${w.key}`) ?? JSON.stringify(false)),
+    },
+    textAreaEl: /** @type {*} */ (null),
+    textAreaText: '',
 
-    clickEnableAll() {
+    changeTextareaPin(e) {
+      state.textareaMeta.pinned = e.currentTarget.checked;
+      tryLocalStorageSet(`pin-log@${w.key}`, `${state.textareaMeta}`);
+      update();
+    },
+    enableAll() {
       props.setTabsEnabled(true);
     },
     hide() {
       state.ctOpen = false;
       update();
     },
-    onChangeTextareaPin(e) {
-      state.pinTextarea = e.currentTarget.checked;
+    log(msg, type) {
+      if (typeof type === undefined) {
+        state.textAreaText += `${msg}\n`;
+      } else if (type === '⏱') {
+        if (msg in state.durationKeys) {
+          const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(2);
+          state.textAreaText += `${msg} (${durationMs})\n`;
+          delete state.durationKeys[msg];
+        } else {
+          state.durationKeys[msg] = performance.now();
+        }
+      }
+      state.textAreaEl.scrollTo({ top: Number.MAX_SAFE_INTEGER });
       update();
     },
     show(at) {
@@ -44,6 +66,11 @@ export default function WorldMenu(props) {
       state.ctOpen = true;
       update();
     },
+    storeTextareaHeight() {
+      tryLocalStorageSet(`log-height-px@${w.key}`, `${
+        Math.max(100, state.textAreaEl.getBoundingClientRect().height)
+      }`);
+    },
     toggleDebug() {
       // by hiding overlay we permit user to use camera while World paused
       state.debugWhilePaused = !state.debugWhilePaused;
@@ -54,6 +81,8 @@ export default function WorldMenu(props) {
   w.menu = state;
 
   const update = useUpdate();
+
+  React.useLayoutEffect(() => () => state.storeTextareaHeight(), []);
 
   const meta3d = w.ui.lastDown?.threeD?.meta;
 
@@ -81,7 +110,7 @@ export default function WorldMenu(props) {
     {w.disabled && (// Overlay Buttons
       <div className={pausedControlsCss}>
         <button
-          onClick={state.clickEnableAll}
+          onClick={state.enableAll}
           className="text-white"
         >
           enable
@@ -95,14 +124,19 @@ export default function WorldMenu(props) {
       </div>
     )}
 
-    {(w.disabled || state.pinTextarea) && (
+    {(w.disabled || state.textareaMeta) && (
       <div className={textareaCss}>
-        <textarea readOnly value={state.textAreaText} />
+        <textarea
+          ref={(x) => x && (state.textAreaEl = x)}
+          readOnly
+          value={state.textAreaText}
+          style={{ height: state.textareaMeta.initHeight }}
+        />
         <label>
           <input
             type="checkbox"
-            defaultChecked={state.pinTextarea}
-            onChange={state.onChangeTextareaPin}
+            defaultChecked={state.textareaMeta.pinned}
+            onChange={state.changeTextareaPin}
           />
           pin
         </label>
@@ -149,9 +183,13 @@ const textareaCss = css`
   align-items: end;
 
   color: white;
+  font-size: 12px;
+  font-family: 'Courier New', Courier, monospace;
+
   textarea {
     background: rgba(0, 50, 0, 0.35);
     padding: 0 8px;
+    width: 220px;
   }
   label {
     display: flex;
@@ -162,16 +200,22 @@ const textareaCss = css`
 
 /**
  * @typedef State
+ * @property {HTMLDivElement} ctMenuEl
  * @property {boolean} ctOpen Is the context menu open?
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
- * @property {boolean} pinTextarea
+ * @property {{ [durKey: string]: number }} durationKeys
+ * @property {{ pinned: boolean; initHeight: number; }} textareaMeta
+ * @property {HTMLTextAreaElement} textAreaEl
  * @property {string} textAreaText
- * @property {HTMLDivElement} ctMenuEl
  *
- * @property {() => void} clickEnableAll
+ * @property {() => void} enableAll
  * @property {() => void} hide
- * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} onChangeTextareaPin
+ * @property {(msg: string, type?: '⏱') => void} log
+ * - Can log durations by sending same `msg` twice.
+ * - Can also log plain strings.
+ * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeTextareaPin
+ * @property {() => void} storeTextareaHeight
  * @property {(at: Geom.VectJson) => void} show
  * @property {() => void} toggleDebug
  */

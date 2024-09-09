@@ -505,6 +505,7 @@ export default function Decor(props) {
       state.ensureLabelSheet();
       state.addLabelUvs();
 
+      w.menu.log('instantiateGmDecor', '⏱');
       if (mapChanged) {
         // Re-instantiate all cleanly
         state.removeAllInstantiated();
@@ -529,6 +530,7 @@ export default function Decor(props) {
           await pause();
         }
       }
+      w.menu.log('instantiateGmDecor', '⏱');
 
       state.seenHash = next;
       w.events.next({ key: 'decor-instantiated' });

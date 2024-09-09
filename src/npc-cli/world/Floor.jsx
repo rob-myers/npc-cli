@@ -23,10 +23,12 @@ export default function Floor(props) {
     tex: w.floor.tex, // Pass in textures
 
     async draw() {
+      w.menu.log('Floor.draw', '⏱');
       for (const gmKey of keys(state.tex)) {
         state.drawGmKey(gmKey);
         await pause();
       }
+      w.menu.log('Floor.draw', '⏱');
     },
     drawGmKey(gmKey) {
       const { ct, tex, canvas } = state.tex[gmKey];

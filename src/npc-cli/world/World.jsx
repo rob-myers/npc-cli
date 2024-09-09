@@ -1,5 +1,4 @@
 import React from "react";
-import { cx } from "@emotion/css";
 import { useQuery } from "@tanstack/react-query";
 import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -153,13 +152,13 @@ export default function World(props) {
        * @type {Pick<State, 'geomorphs' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph' | 'hash' | 'mapKey'>}
        */
       const next = {
-        // prev values: (may overwrite below)
+        // previous values (possibly overwritten below)
         geomorphs: prevGeomorphs,
         gms: state.gms,
         gmsData: state.gmsData,
         gmGraph: state.gmGraph,
         gmRoomGraph: state.gmRoomGraph,
-        // next values:
+        // next values
         hash: geomorph.computeHash(geomorphsJson, props.mapKey),
         mapKey: props.mapKey,
       };
@@ -202,23 +201,28 @@ export default function World(props) {
         );
 
         // ensure GmData per gmKey in map
+        state.menu.log('computeGmData', '⏱');
         for (const gmKey of new Set(next.gms.map(({ key }) => key))) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
             await next.gmsData.computeGmData(next.geomorphs.layout[gmKey]);
           }
         };
-        
+        state.menu.log('computeGmData', '⏱');
         next.gmsData.computeRoot(next.gms);
       }
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
+        state.menu.log('gmGraph', '⏱');
         next.gmGraph = GmGraphClass.fromGms(next.gms, { permitErrors: true });
+        state.menu.log('gmGraph', '⏱');
         next.gmGraph.w = state;
         
         await pause();
+        state.menu.log('gmRoomGraph', '⏱');
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
+        state.menu.log('gmRoomGraph', '⏱');
       }
 
       // apply changes synchronously
