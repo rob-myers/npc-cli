@@ -2,7 +2,8 @@
  * Usage:
  * ```sh
  * npm run assets
- * yarn assets
+ * yarn assets-fast
+ * yarn assets-fast --changedFiles=[]
  * yarn assets-fast --all
  * yarn assets-fast --changedFiles=['/path/to/file/a', '/path/to/file/b']
  * yarn assets-fast --prePush
@@ -21,6 +22,7 @@
 import fs from "fs";
 import path from "path";
 import childProcess from "child_process";
+import { performance, PerformanceObserver } from 'perf_hooks'
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 import { createCanvas, loadImage } from 'canvas';
@@ -75,8 +77,8 @@ function computeOpts() {
     changedFiles,
     /** Restriction of @see changedFiles to decor SVG baseNames */
     changedDecorBaseNames,
-    /** Only use @see changedFiles when non-empty and !opts.all  */
-    detectChanges: !all && changedFiles.length > 0,
+    /** If `!opts.all` and changedFiles explicitly provided  */
+    detectChanges: !all && !!rawOpts.changedFiles,
     /**
      * When about to push:
      * - ensure every webp
@@ -108,6 +110,12 @@ async function computePrev() {
   };
 }
 
+new PerformanceObserver((list) =>
+  list.getEntries()
+    .sort((a, b) => a.startTime + a.duration < b.startTime + b.duration ? -1 : 1)
+    .forEach(entry => info(`⏱ ${entry.name}: ${entry.duration.toFixed(2)} ms`))
+).observe({ entryTypes: ['measure'] });
+
 const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
@@ -128,18 +136,24 @@ const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send
 const dataUrlRegEx = /"data:image\/png(.*)"/;
 const gitStaticAssetsRegex = new RegExp('^static/assets/');
 const emptyStringHash = hashText('');
+const measuringLabels = /** @type {Set<string>} */ (new Set());
 
 const opts = computeOpts();
 info({ opts });
 
 (async function main() {
 
+  perf('computePrev');
   const prev = await computePrev();
+  // info({ prev });
+  perf('computePrev');
 
+  perf('{symbol,map}BaseNames');
   const [symbolBaseNames, mapBaseNames] = await Promise.all([
     fs.promises.readdir(symbolsDir).then(xs => xs.filter((x) => x.endsWith(".svg")).sort()),
     fs.promises.readdir(mapsDir).then(xs => xs.filter((x) => x.endsWith(".svg")).sort()),
   ]);
+  perf('{symbol,map}BaseNames');
 
   const symbolBaseNamesToUpdate = opts.all
     ? symbolBaseNames
@@ -174,43 +188,48 @@ info({ opts });
   }
 
   //#region ℹ️ Compute assets.json and sprite-sheets
-
+  perf('assets.json');
   if (symbolBaseNamesToUpdate.length) {
-    info(`parsing ${symbolBaseNamesToUpdate.length === symbolBaseNames.length
+    perf('parseSymbols', `parsing ${symbolBaseNamesToUpdate.length === symbolBaseNames.length
       ? `all symbols`
       : `symbols: ${JSON.stringify(symbolBaseNamesToUpdate)}`
     }`);
     parseSymbols(assetsJson, symbolBaseNamesToUpdate);
+    perf('parseSymbols');
   } else {
     info('skipping all symbols');
   }
 
   if (!prev.skipMaps) {
-    info('parsing maps');
+    perf('parseMaps', 'parsing maps');
     parseMaps(assetsJson, mapBaseNames);
+    perf('parseMaps');
   } else {
     info('skipping maps');
   }
 
   if (!prev.skipObstacles) {
-    info('creating obstacles sprite-sheet');
+    perf('obstacles', 'creating obstacles sprite-sheet');
     createObstaclesSheetJson(assetsJson);
     await drawObstaclesSheet(assetsJson, prev);
+    perf('obstacles');
   } else {
     info('skipping obstacles sprite-sheet');
   }
 
   if (!prev.skipDecor) {
-    info('creating decor sprite-sheet');
+    perf('decor', 'creating decor sprite-sheet');
     const toDecorImg = await createDecorSheetJson(assetsJson, prev);
     await drawDecorSheet(assetsJson, toDecorImg, prev);
+    perf('decor');
   } else {
     info('skipping decor sprite-sheet');
   }
 
   if (!prev.skipNpcTex) {
-    info('creating npc textures');
+    perf('createNpcTextures', 'creating npc textures');
     await createNpcTextures(assetsJson, prev);
+    perf('createNpcTextures');
   } else {
     info('skipping npc textures');
   }
@@ -221,17 +240,21 @@ info({ opts });
   info({ changedKeys: changedSymbolAndMapKeys });
 
   // hash sprite-sheet PNGs (including skins lastModified)
+  perf('sheet.imagesHash');
   assetsJson.sheet.imagesHash =
     prev.skipObstacles && prev.skipDecor && assetsJson.sheet.imagesHash
       ? assetsJson.sheet.imagesHash
       : hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString())
     )
   ;
+  perf('sheet.imagesHash');
 
   fs.writeFileSync(assetsFilepath, stringify(assetsJson));
+  perf('assets.json');
   //#endregion
 
   //#region ℹ️ Compute geomorphs.json
+  perf('geomorphs.json');
   
   /** @see assetsJson where e.g. rects and polys are `Rect`s and `Poly`s */
   const assets = geomorph.deserializeAssets(assetsJson);
@@ -239,15 +262,19 @@ info({ opts });
   /** Compute flat symbols i.e. recursively unfold "symbols" folder. */
   // 🚧 reuse unchanged i.e. `changedSymbolAndMapKeys` unreachable
   const flattened = /** @type {Record<Geomorph.SymbolKey, Geomorph.FlatSymbol>} */ ({});
+  perf('stratified symbolGraph');
   const symbolGraph = SymbolGraphClass.from(assetsJson.symbols);
   const symbolsStratified = symbolGraph.stratify();
+  perf('stratified symbolGraph');
   // debug(util.inspect({ symbolsStratified }, false, 5))
 
   // Traverse stratified symbols from leaves to co-leaves,
   // creating `FlatSymbol`s via `flattenSymbol` and `instantiateFlatSymbol`
+  perf('flatten symbols');
   symbolsStratified.forEach(level => level.forEach(({ id: symbolKey }) =>
     geomorph.flattenSymbol(assets.symbols[symbolKey], flattened)
   ));
+  perf('flatten symbols');
   // debug("stateroom--036--2x4", util.inspect(flattened["stateroom--036--2x4"], false, 5));
 
   // fs.writeFileSync(symbolGraphVizPath, symbolGraph.getGraphviz('symbolGraph'));
@@ -259,6 +286,7 @@ info({ opts });
   });
   info({ changedGmKeys });
 
+  perf('createLayouts');
   /** @type {Record<Geomorph.GeomorphKey, Geomorph.Layout>} */
   const layout = keyedItemsToLookup(geomorph.gmKeys.map(gmKey => {
     const hullKey = helper.toHullKey[gmKey];
@@ -266,7 +294,7 @@ info({ opts });
     return geomorph.createLayout(gmKey, flatSymbol, assets);
   }));
   const layoutJson = mapValues(layout, geomorph.serializeLayout);
-
+  perf('createLayouts');
 
   /** @type {Geomorph.GeomorphsJson} */
   const geomorphs = {
@@ -277,6 +305,7 @@ info({ opts });
 
   fs.writeFileSync(geomorphsFilepath, stringify(geomorphs));
 
+  perf('geomorphs.json');
   //#endregion
 
   /**
@@ -676,3 +705,20 @@ async function createNpcTextures(assets, prev) {
  * @property {boolean} skipDecor
  * @property {boolean} skipNpcTex
  */
+
+/**
+ * Measure durations.
+ * @param {string} label 
+ * @param {string} [initMessage] 
+ */
+function perf(label, initMessage) {
+  if (measuringLabels.has(label) === false) {
+    performance.mark(`${label}...`); 
+    measuringLabels.add(label);
+    if (initMessage !== undefined) info(initMessage);
+  } else {
+    performance.mark(`...${label}`);
+    performance.measure(label, `${label}...`, `...${label}`);
+    measuringLabels.delete(label);
+  }
+}

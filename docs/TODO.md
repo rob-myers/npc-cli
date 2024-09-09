@@ -72,6 +72,11 @@ w debug.testChar.setSkin 0
     - try using `class Npc`
   - walk animation
 
+- 🚧 add perf logging
+  - ✅ assets.js timings
+  - 🚧 Viewer has optional textarea
+  - start writing logs from `World`
+
 - return to next.js project
   - ensure up to date
   - work on migrating Viewer
