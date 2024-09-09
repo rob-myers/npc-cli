@@ -194,6 +194,7 @@ const textareaCss = css`
     background: rgba(0, 50, 0, 0.35);
     padding: 0 8px;
     width: 220px;
+    resize: both;
   }
   label {
     display: flex;
