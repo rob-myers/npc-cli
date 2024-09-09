@@ -24,7 +24,7 @@ export default function WorldMenu(props) {
     debugWhilePaused: false,
     durationKeys: {},
     textareaMeta: {
-      initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 300,
+      initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
       pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
     },
     textAreaEl: /** @type {*} */ (null),
@@ -124,7 +124,7 @@ export default function WorldMenu(props) {
       </div>
     )}
 
-    {(w.disabled || state.textareaMeta) && (
+    {(w.disabled || state.textareaMeta.pinned) && (
       <div className={textareaCss}>
         <textarea
           ref={(x) => x && (state.textAreaEl = x)}
