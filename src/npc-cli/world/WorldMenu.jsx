@@ -21,12 +21,18 @@ export default function WorldMenu(props) {
     ctOpen: false,
     justOpen: false,
     debugWhilePaused: false,
+    pinTextarea: false,
+    textAreaText: 'logging goes here',
 
     clickEnableAll() {
       props.setTabsEnabled(true);
     },
     hide() {
       state.ctOpen = false;
+      update();
+    },
+    onChangeTextareaPin(e) {
+      state.pinTextarea = e.currentTarget.checked;
       update();
     },
     show(at) {
@@ -88,6 +94,22 @@ export default function WorldMenu(props) {
         </button>
       </div>
     )}
+
+    {(w.disabled || state.pinTextarea) && (
+      <div className={textareaCss}>
+        <textarea readOnly value={state.textAreaText} />
+        <label>
+          <input
+            type="checkbox"
+            defaultChecked={state.pinTextarea}
+            onChange={state.onChangeTextareaPin}
+          />
+          pin
+        </label>
+      </div>
+    )}
+
+
   </>;
 }
 
@@ -118,15 +140,38 @@ const contextMenuCss = css`
   }
 `;
 
+const textareaCss = css`
+  position: absolute;
+  z-index: 7;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+
+  color: white;
+  textarea {
+    background: rgba(0, 50, 0, 0.35);
+    padding: 0 8px;
+  }
+  label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+`
+
 /**
  * @typedef State
  * @property {boolean} ctOpen Is the context menu open?
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
+ * @property {boolean} pinTextarea
+ * @property {string} textAreaText
  * @property {HTMLDivElement} ctMenuEl
  *
  * @property {() => void} clickEnableAll
  * @property {() => void} hide
+ * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} onChangeTextareaPin
  * @property {(at: Geom.VectJson) => void} show
  * @property {() => void} toggleDebug
  */

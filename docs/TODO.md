@@ -74,7 +74,7 @@ w debug.testChar.setSkin 0
 
 - 🚧 add perf logging
   - ✅ assets.js timings
-  - 🚧 Viewer has optional textarea
+  - ✅ World has pin-able textarea
   - start writing logs from `World`
 
 - return to next.js project
