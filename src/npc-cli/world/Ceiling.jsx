@@ -38,12 +38,12 @@ export default function Ceiling(props) {
       return rgba[3] === 0 ? null : { gmId };
     },
     async draw() {
-      w.menu.log('Ceil.draw', '⏱');
+      w.menu.log('ceil.draw()');
       for (const gmKey of keys(state.tex)) {
         state.drawGmKey(gmKey);
         await pause();
       }
-      w.menu.log('Ceil.draw', '⏱');
+      w.menu.log('ceil.draw()');
     },
     drawGmKey(gmKey) {
       const { ct, tex, canvas} = state.tex[gmKey];

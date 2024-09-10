@@ -3,7 +3,6 @@ import { css, cx } from "@emotion/css";
 import debounce from "debounce";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
-import { isTouchDevice } from "../service/dom";
 import { geom } from '../service/geom';
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -43,12 +42,12 @@ export default function WorldMenu(props) {
       state.ctOpen = false;
       update();
     },
-    log(msg, type) {
-      if (typeof type === undefined) {
+    log(msg, immediate) {
+      if (immediate === true) {
         state.textarea.text += `${msg}\n`;
-      } else if (type === '⏱') {
+      } else {
         if (msg in state.durationKeys) {
-          const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(2);
+          const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
           state.textarea.text += `${msg} (${durationMs})\n`;
           delete state.durationKeys[msg];
         } else {
@@ -71,7 +70,7 @@ export default function WorldMenu(props) {
       update();
     },
     storeTextareaHeight() {
-      tryLocalStorageSet(`log-height-px@${w.key}`, `${
+      state.textarea.el && tryLocalStorageSet(`log-height-px@${w.key}`, `${
         Math.max(100, state.textarea.el.getBoundingClientRect().height)
       }`);
     },
@@ -86,7 +85,13 @@ export default function WorldMenu(props) {
 
   const update = useUpdate();
 
-  React.useLayoutEffect(() => () => state.storeTextareaHeight(), []);
+  React.useEffect(() => {
+    const ro = new ResizeObserver((_items) =>
+      state.storeTextareaHeight()
+    );
+    ro.observe(state.textarea.el);
+    return () => ro.disconnect();
+  }, []);
 
   const meta3d = w.ui.lastDown?.threeD?.meta;
 
@@ -193,7 +198,7 @@ const textareaCss = css`
   textarea {
     background: rgba(0, 50, 0, 0.35);
     padding: 0 8px;
-    width: 220px;
+    width: 256px;
     resize: both;
   }
   label {
@@ -214,9 +219,9 @@ const textareaCss = css`
  *
  * @property {() => void} enableAll
  * @property {() => void} hide
- * @property {(msg: string, type?: '⏱') => void} log
- * - Can log durations by sending same `msg` twice.
- * - Can also log plain strings.
+ * @property {(msg: string, immediate?: boolean) => void} log
+ * - Log durations by sending same `msg` twice.
+ * - Log plain message by setting `immediate` true.
  * @property {() => void} logsToBottom
  * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeTextareaPin
  * @property {() => void} storeTextareaHeight

@@ -326,7 +326,8 @@ export default function Decor(props) {
       instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
-    instantiateGmDecor(gmId, gm) {
+    addGm(gmId) {
+      const gm = w.gms[gmId];
       state.addDecor(gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
         // Don't re-instantiate explicitly removed
         .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
@@ -456,7 +457,7 @@ export default function Decor(props) {
         }
       }
     },
-    removeInstantiated(gmId) {
+    removeGm(gmId) {
       const byRoomId = state.byRoom[gmId];
       for (const ds of byRoomId) {
         ds.forEach(d => d.src !== undefined && ds.delete(d) && delete state.byKey[d.key]);
@@ -505,7 +506,7 @@ export default function Decor(props) {
       state.ensureLabelSheet();
       state.addLabelUvs();
 
-      w.menu.log('instantiateGmDecor', '⏱');
+      w.menu.log('decor.addGm(gmId)');
       if (mapChanged) {
         // Re-instantiate all cleanly
         state.removeAllInstantiated();
@@ -515,8 +516,8 @@ export default function Decor(props) {
         });
         await pause();
 
-        for (const [gmId, gm] of w.gms.entries()) {
-          state.instantiateGmDecor(gmId, gm);
+        for (const [gmId] of w.gms.entries()) {
+          state.addGm(gmId);
           await pause();
         }
       } else {
@@ -525,12 +526,12 @@ export default function Decor(props) {
           if (prev[gm.key] === next[gm.key]) {
             continue;
           }
-          state.removeInstantiated(gmId);
-          state.instantiateGmDecor(gmId, gm);
+          state.removeGm(gmId);
+          state.addGm(gmId);
           await pause();
         }
       }
-      w.menu.log('instantiateGmDecor', '⏱');
+      w.menu.log('decor.addGm(gmId)');
 
       state.seenHash = next;
       w.events.next({ key: 'decor-instantiated' });
@@ -658,14 +659,14 @@ export default function Decor(props) {
  * @property {() => void} ensureLabelSheet
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
- * @property {(gmId: number, gm: Geomorph.LayoutInstance) => void} instantiateGmDecor
+ * @property {(gmId: number) => void} addGm
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
  * @property {() => void} removeAllInstantiated
- * @property {(gmId: number) => void} removeInstantiated
+ * @property {(gmId: number) => void} removeGm
  * @property {() => void} updateDecorLists
  */
 
