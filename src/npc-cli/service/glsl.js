@@ -118,33 +118,25 @@ const instancedUvMappingShader = {
 };
 
 /**
- * Shade color `diffuse` by light whose direction is always the camera's direction.
- * 
- * Supports instancing.
- * 
- * Assume these are NOT defined:
- * - FLAT_SHADED
- * - DOUBLE_SIDED, FLIP_SIDED
- * - USE_TANGENT, USE_NORMALMAP_TANGENTSPACE, USE_CLEARCOAT_NORMALMAP
- * - USE_ANISOTROPY
- *
- * We're using this as a guide:
- * - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
- * 
+ * - Shade color `diffuse` by light whose direction is always the camera's direction.
+ * - Supports instancing.
+ * - We're using this as a guide:
+ *   - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
+ *   - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/basic/vertex
  */
 export const cameraLightShader = {
   Vert: /*glsl*/`
 
   flat varying float dotProduct;
   varying vec3 vColor;
-  #include <common>
 
-  #ifdef USE_LOGDEPTHBUF
-    varying float vFragDepth;
-    varying float vIsPerspective;
-  #endif
+  #include <common>
+  #include <uv_pars_vertex>
+  #include <logdepthbuf_pars_vertex>
 
   void main() {
+    #include <uv_vertex>
+
     vec3 objectNormal = vec3( normal );
     vec3 transformed = vec3( position );
     vec4 mvPosition = vec4( transformed, 1.0 );
@@ -184,11 +176,18 @@ export const cameraLightShader = {
   varying vec3 vColor;
   uniform vec3 diffuse;
 
+  #include <common>
+  #include <uv_pars_fragment>
+  #include <map_pars_fragment>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
+    vec4 diffuseColor = vec4( diffuse, 1);
     #include <logdepthbuf_fragment>
+    #include <map_fragment>
+
+    // gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
+    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
   }
   `,
 };
@@ -217,6 +216,9 @@ export const InstancedSpriteSheetMaterial = shaderMaterial(
 export const CameraLightMaterial = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
+    // 🔔 map, mapTransform required else can get weird texture
+    map: null,
+    mapTransform: new THREE.Matrix3(),
   },
   cameraLightShader.Vert,
   cameraLightShader.Frag,

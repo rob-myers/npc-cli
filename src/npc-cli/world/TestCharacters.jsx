@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 import { buildObjectLookup, emptyTexture, textureLoader } from "../service/three";
-import { cameraLightShader } from '../service/glsl';
+import { CameraLightMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
@@ -86,17 +86,22 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
     <group
       key={i}
       position={initPos}
-      dispose={null}
+      // dispose={null}
     >
       <mesh
         geometry={mesh.geometry}
         position={mesh.position}
         scale={mesh.scale}
       >
-        <meshPhysicalMaterial
-          // color="blue"
+        {/* <meshBasicMaterial
+          key="change_me"
           map={texture}
           transparent
+        /> */}
+        <cameraLightMaterial
+          key={CameraLightMaterial.key}
+          transparent
+          map={texture}
         />
       </mesh>
     </group>

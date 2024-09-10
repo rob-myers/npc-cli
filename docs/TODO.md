@@ -66,11 +66,11 @@ w debug.testChar.setSkin 0
     - ✅ TestCharacters reads a tex.png
     - ✅ auto update character skin
       - expose hash and `w.debug.testChar.setSkin(i)`
-  - 🚧 CameraLightMaterial should support texture map
-  - try import original asset e.g. with hair
-  - idle animation
+  - ✅ CameraLightMaterial should support texture map
+  - import original asset e.g. with hair
+    > https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
+  - animation: idle, walk
     - try using `class Npc`
-  - walk animation
 
 - ✅ add perf logging
   - ✅ assets.js timings
