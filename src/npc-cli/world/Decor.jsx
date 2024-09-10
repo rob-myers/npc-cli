@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
-import { decorGridSize, decorIconRadius, decorPointFallbackImgKey, decorQuadFallbackImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
+import { decorGridSize, decorIconRadius, fallbackDecorImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
 import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
@@ -86,6 +86,15 @@ export default function Decor(props) {
         state.rmKeys.delete(d.key);
       }
     },
+    addGm(gmId) {
+      const gm = w.gms[gmId];
+      state.addDecor(gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
+        // Don't re-instantiate explicitly removed
+        .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
+          warn(`decor "${d.key}" cannot be instantiated: not in any room`, d)
+        )
+      ), false);
+    },
     addLabelUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
@@ -111,13 +120,24 @@ export default function Decor(props) {
       const uvDimensions = /** @type {number[]} */ ([]);
       
       for (const d of state.quads) {
-        const item = geomorph.isDecorImgKey(d.meta.img)
-          ? sheet[d.meta.img] // fallback differs for 'point' vs 'quad'
-          : d.type === 'point' ? sheet[decorPointFallbackImgKey] : sheet[decorQuadFallbackImgKey];
-        ;
-        const { x, y, width, height } = item;
-        uvOffsets.push(x / dim.width,  y / dim.height);
-        uvDimensions.push(width / dim.width, height / dim.height);
+        if (d.type === 'point') {
+          const { x, y, width, height } = sheet[
+            geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.point
+          ];
+          uvOffsets.push(x / dim.width,  y / dim.height);
+          uvDimensions.push(width / dim.width, height / dim.height);
+        } else {
+          const { x, y, width, height } = sheet[
+            geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.quad
+          ];
+          if (d.det < 0) {// fix "flipped" decor quads
+            uvOffsets.push((x + width) / dim.width,  y / dim.height);
+            uvDimensions.push(-width / dim.width, height / dim.height);
+          } else {
+            uvOffsets.push(x / dim.width,  y / dim.height);
+            uvDimensions.push(width / dim.width, height / dim.height);
+          }
+        }
       }
 
       state.quadInst.geometry.setAttribute('uvOffsets',
@@ -318,6 +338,7 @@ export default function Decor(props) {
           instance = { ...d, ...base,
             center: gm.matrix.transformPoint({ ...d.center }),
             transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
+            det: tmpMat1.a * tmpMat1.d - tmpMat1.b * tmpMat1.c,
           };
           break;
         default:
@@ -325,15 +346,6 @@ export default function Decor(props) {
       }
       instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
-    },
-    addGm(gmId) {
-      const gm = w.gms[gmId];
-      state.addDecor(gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
-        // Don't re-instantiate explicitly removed
-        .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
-          warn(`decor "${d.key}" cannot be instantiated: not in any room`, d)
-        )
-      ), false);
     },
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);

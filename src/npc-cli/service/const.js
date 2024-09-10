@@ -159,10 +159,12 @@ export const decorGridSize = geomorphGridMeters * 2;
 
 export const decorIconRadius = 5 * sguToWorldScale;
 
-/** @type {Geomorph.DecorImgKey} */
-export const decorPointFallbackImgKey = 'icon--info';
-/** @type {Geomorph.DecorImgKey} */
-export const decorQuadFallbackImgKey = 'icon--warn';
+export const fallbackDecorImgKey = {
+  /** @type {Geomorph.DecorImgKey} */
+  point: 'icon--info',
+  /** @type {Geomorph.DecorImgKey} */
+  quad: 'icon--warn',
+};
 
 /**
  * - Each value is an integer in [0, 255].

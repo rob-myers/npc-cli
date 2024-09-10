@@ -371,6 +371,8 @@ declare namespace Geomorph {
     type: 'quad';
     transform: Geom.SixTuple;
     center: Geom.VectJson;
+    /** Determinant of 2x2 part of `transform` */
+    det: number;
   }
 
   interface DecorRect extends BaseDecor {

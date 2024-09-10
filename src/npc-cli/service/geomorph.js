@@ -318,8 +318,8 @@ class GeomorphService {
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
-      delete poly.meta.transform;
-      return { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json };
+      delete poly.meta.transform; // 🔔 `det` provided on instantiation
+      return { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json, det: 1 };
     } else if (meta.cuboid === true) {
       // decor cuboids follow "decor quad approach"
       const polyRect = poly.rect.precision(precision);

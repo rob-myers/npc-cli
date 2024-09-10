@@ -81,8 +81,8 @@ w debug.testChar.setSkin 0
   - ensure up to date
   - work on migrating Viewer
 
-- fix "flipped decor" i.e. if decor quad transform determinant is negative,
-  flip the quad across "central vertical axis"
+- ✅ fix "flipped decor" i.e. if decor quad transform determinant is negative,
+  flip the quad's uvs across "central vertical axis"
 - fix flickering hull door base (onchange camera view)
   - suffices to add a matching line
 - support non-door sensor i.e. decor circle/poly
