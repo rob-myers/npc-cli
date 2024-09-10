@@ -9,7 +9,6 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 
-
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
  */
@@ -23,7 +22,7 @@ export default function WorldMenu(props) {
     justOpen: false,
     debugWhilePaused: false,
     durationKeys: {},
-    textarea: {
+    debugLog: {
       el: /** @type {*} */ (null),
       initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
       pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
@@ -31,8 +30,8 @@ export default function WorldMenu(props) {
     },
 
     changeTextareaPin(e) {
-      state.textarea.pinned = e.currentTarget.checked;
-      tryLocalStorageSet(`pin-log@${w.key}`, `${state.textarea.pinned}`);
+      state.debugLog.pinned = e.currentTarget.checked;
+      tryLocalStorageSet(`pin-log@${w.key}`, `${state.debugLog.pinned}`);
       update();
     },
     enableAll() {
@@ -44,11 +43,11 @@ export default function WorldMenu(props) {
     },
     log(msg, immediate) {
       if (immediate === true) {
-        state.textarea.text += `${msg}\n`;
+        state.debugLog.text += `${msg}\n`;
       } else {
         if (msg in state.durationKeys) {
           const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
-          state.textarea.text += `${msg} (${durationMs})\n`;
+          state.debugLog.text += `${msg} (${durationMs})\n`;
           delete state.durationKeys[msg];
         } else {
           state.durationKeys[msg] = performance.now();
@@ -58,7 +57,7 @@ export default function WorldMenu(props) {
       update();
     },
     logsToBottom: debounce(() => {
-      state.textarea.el?.scrollTo({ top: Number.MAX_SAFE_INTEGER })
+      state.debugLog.el?.scrollTo({ top: Number.MAX_SAFE_INTEGER })
     }, 300, { immediate: true }),
     show(at) {
       const menuDim = state.ctMenuEl.getBoundingClientRect();
@@ -70,8 +69,8 @@ export default function WorldMenu(props) {
       update();
     },
     storeTextareaHeight() {
-      state.textarea.el && tryLocalStorageSet(`log-height-px@${w.key}`, `${
-        Math.max(100, state.textarea.el.getBoundingClientRect().height)
+      state.debugLog.el && tryLocalStorageSet(`log-height-px@${w.key}`, `${
+        Math.max(100, state.debugLog.el.getBoundingClientRect().height)
       }`);
     },
     toggleDebug() {
@@ -86,12 +85,14 @@ export default function WorldMenu(props) {
   const update = useUpdate();
 
   React.useEffect(() => {
-    const ro = new ResizeObserver((_items) =>
-      state.storeTextareaHeight()
-    );
-    ro.observe(state.textarea.el);
-    return () => ro.disconnect();
-  }, []);
+    if (state.debugLog.el) {
+      const ro = new ResizeObserver((_items) =>
+        state.storeTextareaHeight()
+      );
+      ro.observe(state.debugLog.el);
+      return () => ro.disconnect();
+    }
+  }, [state.debugLog.el]);
 
   const meta3d = w.ui.lastDown?.threeD?.meta;
 
@@ -133,18 +134,18 @@ export default function WorldMenu(props) {
       </div>
     )}
 
-    {(state.debugWhilePaused || state.textarea.pinned) && (
+    {(state.debugWhilePaused || state.debugLog.pinned) && (// Debug log
       <div className={textareaCss}>
         <textarea
-          ref={(x) => x && (state.textarea.el = x)}
+          ref={(x) => x && (state.debugLog.el = x)}
           readOnly
-          value={state.textarea.text}
-          style={{ height: state.textarea.initHeight }}
+          value={state.debugLog.text}
+          style={{ height: state.debugLog.initHeight }}
         />
         <label>
           <input
             type="checkbox"
-            defaultChecked={state.textarea.pinned}
+            defaultChecked={state.debugLog.pinned}
             onChange={state.changeTextareaPin}
           />
           pin
@@ -199,7 +200,7 @@ const textareaCss = css`
     background: rgba(0, 50, 0, 0.35);
     padding: 0 8px;
     width: 256px;
-    resize: both;
+    /* resize: both; */
   }
   label {
     display: flex;
@@ -215,7 +216,7 @@ const textareaCss = css`
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
- * @property {{ el: HTMLTextAreaElement; pinned: boolean; initHeight: number; text: string; }} textarea
+ * @property {{ el: HTMLTextAreaElement; pinned: boolean; initHeight: number; text: string; }} debugLog
  *
  * @property {() => void} enableAll
  * @property {() => void} hide
