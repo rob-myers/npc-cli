@@ -66,7 +66,7 @@ w debug.testChar.setSkin 0
     - ✅ TestCharacters reads a tex.png
     - ✅ auto update character skin
       - expose hash and `w.debug.testChar.setSkin(i)`
-  - CameraLightMaterial should support texture map
+  - 🚧 CameraLightMaterial should support texture map
   - try import original asset e.g. with hair
   - idle animation
     - try using `class Npc`

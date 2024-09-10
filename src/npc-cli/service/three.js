@@ -172,6 +172,7 @@ export const tmpBox1 = new THREE.Box3();
 
 export const imageLoader = new THREE.ImageLoader();
 export const textureLoader = new THREE.TextureLoader();
+export const emptyTexture = new THREE.Texture();
 // console.log('cache enabled', THREE.Cache.enabled); // false
 
 const navPathColor = 0x00aa00;
