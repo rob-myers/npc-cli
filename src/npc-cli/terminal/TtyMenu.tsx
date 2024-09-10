@@ -14,6 +14,7 @@ export default function TtyMenu(props: Props) {
     debugWhilePaused: false,
     xterm: props.session.ttyShell.xterm,
     touchMenuOpen: true,
+
     clickEnableAll() {
       props.setTabsEnabled(true);
       state.xterm.xterm.focus();
@@ -50,11 +51,8 @@ export default function TtyMenu(props: Props) {
       }
       // xterm.xterm.focus();
     },
-    toggleDebug() {
-      // hiding overlay permits user to use terminal whilst paused
+    toggleDebug() {// hiding overlay permits user to use terminal whilst paused
       state.debugWhilePaused = !state.debugWhilePaused;
-      // change background colour in debug mode
-      state.xterm.updateOptions({ theme: state.debugWhilePaused ? xtermJsDebugTheme : xtermJsTheme });
       update();
     },
     toggleTouchMenu() {
