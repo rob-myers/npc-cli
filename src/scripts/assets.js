@@ -681,17 +681,21 @@ function getNpcTextureMetas() {
  * @param {Prev} prev
  */
 async function createNpcTextures(assets, prev) {
-  const { skins } = assets.sheet
-  const changedMetas = prev.npcTexMetas.filter(x => !x.canSkip || !skins.svgHash[x.svgBaseName]);
-  await Promise.all(changedMetas.map(async ({ svgBaseName, svgPath, pngPath }) => {
-    const svgContents = fs.readFileSync(svgPath).toString();
-    skins.svgHash[svgBaseName] = hashText(svgContents);
-    const svgDataUrl = `data:image/svg+xml;utf8,${svgContents}`;
-    const image = await loadImage(svgDataUrl);
-    const canvas = createCanvas(image.width, image.height);
-    canvas.getContext('2d').drawImage(image, 0, 0);
-    await saveCanvasAsFile(canvas, pngPath);
-  }));
+  const { skins, skins: { svgHash } } = assets.sheet
+  skins.svgHash = {};
+  for (const { canSkip, svgBaseName, svgPath, pngPath } of prev.npcTexMetas) {
+    if (canSkip && svgHash[svgBaseName]) {
+      skins.svgHash[svgBaseName] = svgHash[svgBaseName];
+    } else {
+      const svgContents = fs.readFileSync(svgPath).toString();
+      skins.svgHash[svgBaseName] = hashText(svgContents);
+      const svgDataUrl = `data:image/svg+xml;utf8,${svgContents}`;
+      const image = await loadImage(svgDataUrl);
+      const canvas = createCanvas(image.width, image.height);
+      canvas.getContext('2d').drawImage(image, 0, 0);
+      await saveCanvasAsFile(canvas, pngPath);
+    }
+  }
 }
 
 /**
