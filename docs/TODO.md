@@ -8,7 +8,8 @@
   - beds ✅ consoles ✅ counter 🚧 engineering extra fresher lab medical cartography shop stateroom table
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 create "hyper casual" characters, rather then pseudo minecraft character
+- 🚧 first draft of "hyper casual" characters
+  - instead of pseudo minecraft character
   - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
   - based on these models e.g. 3 bones: body > head, shadow
   - ✅ unity: create project with imported assets
@@ -43,11 +44,11 @@
       - export Boxy SVG as PNG, as use as image
   - ✅ test import into World
 ```sh
-w debug.testChar.add
-w debug.testChar.remove 0
-w debug.testChar.remove
+w debug.char.add
+w debug.char.remove 0
+w debug.char.remove
 # update skin without full page refresh
-w debug.testChar.setSkin 0
+w debug.char.setSkin 0
 ```
   - ✅ try inverted colours
   - ✅ improve drop shadow
@@ -65,24 +66,24 @@ w debug.testChar.setSkin 0
     - ✅ media/npc/{x}.tex.svg to static/assets/3d/{x}.tex.png
     - ✅ TestCharacters reads a tex.png
     - ✅ auto update character skin
-      - expose hash and `w.debug.testChar.setSkin(i)`
+      - expose hash and `w.debug.char.setSkin(i)`
   - ✅ CameraLightMaterial should support texture map
-  - import original asset e.g. with hair
-    > https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
-  - animation: idle, walk
-    - try using `class Npc`
+  - ✅ `w.debug.testChar` --> `w.debug.char`
+  - extend test character with hair (based on original asset)
+  - improve/add skins
 
-- ✅ add perf logging
-  - ✅ assets.js timings
-  - ✅ World has pin-able textarea
-  - ✅ start writing logs from `World`
+- animation: idle, walk
+  - try using `class Npc`
+
+- hyper casual character continued
+  - geometry
+  - skins
+  - animation
 
 - return to next.js project
   - ensure up to date
   - work on migrating Viewer
 
-- ✅ fix "flipped decor" i.e. if decor quad transform determinant is negative,
-  flip the quad's uvs across "central vertical axis"
 - fix flickering hull door base (onchange camera view)
   - suffices to add a matching line
 - support non-door sensor i.e. decor circle/poly
@@ -2209,3 +2210,11 @@ run '({ w, api }) {
   - ✅ async read pixel
   - ✅ tidy: still running atm, will extend bit-by-bit
   - ℹ️ rgba is `(1, gmId, ((wallSegId >> 8) & 255)/255, (wallSegId & 255)/255)`
+
+- ✅ add perf logging
+  - ✅ assets.js timings
+  - ✅ World has pin-able textarea
+  - ✅ start writing logs from `World`
+
+- ✅ fix "flipped decor" i.e. if decor quad transform determinant is negative,
+  - flip the quad's uvs across "central vertical axis"
