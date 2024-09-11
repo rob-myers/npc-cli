@@ -201,15 +201,15 @@ export default function World(props) {
         );
 
         // ensure GmData per gmKey in map
-        state.menu.log('gmsData.computeGmData()');
+        state.menu.log('gmsData');
         for (const gmKey of new Set(next.gms.map(({ key }) => key))) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
             await next.gmsData.computeGmData(next.geomorphs.layout[gmKey]);
           }
         };
-        state.menu.log('gmsData.computeGmData()');
         next.gmsData.computeRoot(next.gms);
+        state.menu.log('gmsData');
       }
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {

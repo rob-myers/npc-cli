@@ -47,7 +47,7 @@ export default function WorldMenu(props) {
       } else {
         if (msg in state.durationKeys) {
           const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
-          state.debugLog.text += `${msg} (${durationMs})\n`;
+          state.debugLog.text += `${msg} ${durationMs}\n`;
           delete state.durationKeys[msg];
         } else {
           state.durationKeys[msg] = performance.now();
@@ -199,7 +199,7 @@ const textareaCss = css`
   textarea {
     background: rgba(0, 50, 0, 0.35);
     padding: 0 8px;
-    width: 256px;
+    width: 168px;
     /* resize: both; */
   }
   label {
