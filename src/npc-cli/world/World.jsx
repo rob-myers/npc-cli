@@ -19,7 +19,6 @@ import createGmsData from "../service/create-gms-data";
 import { createCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { helper } from "../service/helper";
-import packRectangles from "../service/rects-packer";
 import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
@@ -92,56 +91,10 @@ export default function World(props) {
       vectFrom: Vect.from,
       ...helper,
     },
-    label: {
-      sheet: {},
-      tex: new THREE.CanvasTexture(document.createElement('canvas')),
-    },
 
     e: /** @type {*} */ (null), // useHandleEvents
     oneTimeTicks: [],
 
-    extendLabels(labels) {
-      const newLabels = labels.filter(x => !(x in state.label.sheet)).sort();
-      if (newLabels.length === 0) {
-        return;
-      }
-      
-      // Create sprite-sheet
-      const canvas = /** @type {HTMLCanvasElement} */ (state.label.tex.image);
-      const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
-
-      ct.font = `${fontHeight}px 'Courier new'`;
-      /** @type {import("../service/rects-packer").PrePackedRect<{ label: string }>[]} */
-      const rects = labels.map(label => ({
-        width: ct.measureText(label).width,
-        height: fontHeight,
-        data: { label },
-      }));
-      const bin = packRectangles(rects, { logPrefix: 'w.ensureLabelSheet', packedPadding: 2 });
-      state.label.sheet = bin.rects.reduce((agg, r) => {
-        agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
-        return agg;
-      }, /** @type {LabelsMeta['sheet']} */ ({}));
-      
-      // Draw sprite-sheet
-      if (canvas.width !== bin.width || canvas.height !== bin.height) {
-        state.label.tex.dispose();
-        [canvas.width, canvas.height] = [bin.width, bin.height];
-        state.label.tex = new THREE.CanvasTexture(canvas);
-        state.label.tex.flipY = false;
-      }
-      ct.clearRect(0, 0, bin.width, bin.height);
-      ct.strokeStyle = ct.fillStyle = 'white';
-      ct.font = `${fontHeight}px 'Courier new'`;
-      ct.textBaseline = 'top';
-      bin.rects.forEach(rect => {
-        ct.fillText(rect.data.label, rect.x, rect.y);
-        ct.strokeText(rect.data.label, rect.x, rect.y);
-      });
-
-      state.label.tex.needsUpdate = true;
-    },
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
     },
@@ -406,7 +359,6 @@ export default function World(props) {
  * @property {import('./WorldMenu').State} menu
  * @property {import('./Debug').State} debug
  * @property {StateUtil & import("../service/helper").Helper} lib
- * @property {LabelsMeta} label
  *
  * @property {import("./use-handle-events").State} e
  * Events state i.e. useHandleEvents state
@@ -421,7 +373,6 @@ export default function World(props) {
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
  *
- * @property {(labels: string[]) => void} extendLabels
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
@@ -445,8 +396,3 @@ export default function World(props) {
  * //@property {typeof take} take
  */
 
-/**
- * @typedef LabelsMeta
- * @property {{ [label: string]: Geom.RectJson }} sheet
- * @property {THREE.CanvasTexture} tex
- */

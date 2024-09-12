@@ -4,6 +4,7 @@
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
+import packRectangles from "./rects-packer";
 
 /** Unit quad extending from (0, 0, 0) to (1, 0, 1) */
 const quadGeometryXZ = new THREE.BufferGeometry();
@@ -255,6 +256,59 @@ export function createDebugCylinder(position, radius, height) {
   return mesh;
 }
 
+/**
+ * Expects possibly empty (a) rects lookup, (b) texture,
+ * where it will write the output.
+ * 
+ * We cannot "extend" an existing sprite-sheet because maxrect-packer
+ * does not support this i.e. it won't necessarily respect constraints (x, y).
+ * Consequently we must re-create every time.
+ * 
+ * @param {string[]} labels Assumed to be duplicate-free.
+ * @param {LabelsSheetAndTex} sheet The sprite-sheet we'll create/mutate.
+ * @param {number} fontHeight
+ */
+export function createLabelSpriteSheet(labels, sheet, fontHeight) {
+  if (labels.length === sheet.numLabels && labels.every(label => label in sheet.lookup)) {
+    return; // Avoid re-computation
+  }
+
+  // Create sprite-sheet
+  const canvas = /** @type {HTMLCanvasElement} */ (sheet.tex.image);
+  const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+  ct.font = `${fontHeight}px 'Courier new'`;
+
+  const rects = labels.map(label => ({
+    width: ct.measureText(label).width, height: fontHeight, data: { label },
+  }));
+
+  const bin = packRectangles(rects, { logPrefix: 'w.extendLabels', packedPadding: 2 });
+
+  sheet.lookup = bin.rects.reduce((agg, r) => {
+    agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
+    return agg;
+  }, /** @type {LabelsSheetAndTex['lookup']} */ ({}));
+  sheet.numLabels = labels.length;
+  
+  // Draw sprite-sheet
+  if (canvas.width !== bin.width || canvas.height !== bin.height) {
+    sheet.tex.dispose();
+    [canvas.width, canvas.height] = [bin.width, bin.height];
+    sheet.tex = new THREE.CanvasTexture(canvas);
+    sheet.tex.flipY = false;
+  }
+  ct.clearRect(0, 0, bin.width, bin.height);
+  ct.strokeStyle = ct.fillStyle = 'white';
+  ct.font = `${fontHeight}px 'Courier new'`;
+  ct.textBaseline = 'top';
+  bin.rects.forEach(rect => {
+    ct.fillText(rect.data.label, rect.x, rect.y);
+    ct.strokeText(rect.data.label, rect.x, rect.y);
+  });
+
+  sheet.tex.needsUpdate = true;
+}
+
 export const yAxis = new THREE.Vector3(0, 1, 0);
 
 export const emptyGroup = new THREE.Group();
@@ -278,3 +332,10 @@ export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
   magFilter: THREE.NearestFilter,
   format: THREE.RGBAFormat,
 });
+
+/**
+ * @typedef LabelsSheetAndTex
+ * @property {{ [label: string]: Geom.RectJson }} lookup
+ * @property {number} numLabels
+ * @property {THREE.CanvasTexture} tex
+ */

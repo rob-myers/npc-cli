@@ -20,6 +20,12 @@ w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
 # can use `take` like `read`
 seq 5 | while take 1 >foo; do foo; done
 
+# then copy paste as location in e.g. chrome
+w decor.label.tex.image.toDataURL | log
+# likewise
+w npc.updateLabels '["foo", "bar", "baz qux"]'
+w npc.label.tex.image.toDataURL | log
+
 ```
 
 ```sh

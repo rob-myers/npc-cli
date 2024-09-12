@@ -77,11 +77,17 @@ w debug.char.setSkin 0
 - character animation: idle, walk
   - try using `class Npc`
 
-- 🚧 can dynamically add to label sprite-sheet
+- ✅ can dynamically add to label sprite-sheet
   - ℹ️ `w update 'w => w.decor.showLabels = true'`
   - ✅ move `w.decor.label.quad` to `w.decor.labelQuad`
   - ✅ move `w.decor.{label,ensureLabelSheet}` to `w.label`
-  - 🚧 can incrementally extend
+  - ❌ can incrementally extend
+    - doesn't necessarily keep previous rects in same position
+    - so, decor label uvs need to be recomputed
+  - ✅ two label textures i.e. decor, npc (dynamic)
+    - ✅ w.label -> w.decor.label
+    - ✅ w.label -> w.npc.label
+    - ✅ w.npc.updateLabels(["foo", "bar", "baz"])
 
 - WorldMenu log should be a partially transparent xterm
   - pin checkbox ✅ debug checkbox 🚧

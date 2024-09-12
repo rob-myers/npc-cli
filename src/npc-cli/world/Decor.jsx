@@ -7,9 +7,8 @@ import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../serv
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
+import { boxGeometry, createLabelSpriteSheet, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
-import packRectangles from "../service/rects-packer";
 import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -28,6 +27,11 @@ export default function Decor(props) {
     seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
     labels: [],
     labelInst: /** @type {*} */ (null),
+    label: {
+      numLabels: 0,
+      lookup: {},
+      tex: new THREE.CanvasTexture(document.createElement('canvas')),
+    },
     labelQuad: getQuadGeometryXZ(`${w.key}-decor-labels-xz`),
     quads: [],
     quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
@@ -93,7 +97,7 @@ export default function Decor(props) {
     addLabelUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
-      const { sheet, tex } = w.label;
+      const { lookup: sheet, tex } = state.label;
       const { width: sheetWidth, height: sheetHeight } = /** @type {HTMLCanvasElement} */ (tex.image);
 
       for (const d of state.labels) {
@@ -151,7 +155,7 @@ export default function Decor(props) {
       }).multiply(centreUnitQuad);
     },
     createLabelMatrix4(d) {
-      const { width, height } = w.label.sheet[d.meta.label];
+      const { width, height } = state.label.lookup[d.meta.label];
       const scale = sguToWorldScale * (1 / spriteSheetLabelExtraScale);
       tmpMat1.feedFromArray([
         width * scale, 0, 0, height * scale,
@@ -464,9 +468,14 @@ export default function Decor(props) {
       const prev = state.seenHash;
       const next = w.hash;
       const mapChanged = prev.map !== next.map;
+      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
-      w.extendLabels(state.labels.map(x => /** @type {string} */ (x.meta.label)));
+      createLabelSpriteSheet(
+        removeDups(state.labels.map(x => /** @type {string} */ (x.meta.label))),
+        state.label,
+        fontHeight,
+      );
       state.addLabelUvs();
 
       w.menu.log('decor.addGm');
@@ -573,7 +582,7 @@ export default function Decor(props) {
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
-        map={w.label.tex}
+        map={state.label.tex}
         transparent
         diffuse={new THREE.Vector3(1, 1, 1)}
       />
@@ -599,8 +608,8 @@ export default function Decor(props) {
  * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
+ * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {THREE.BufferGeometry} labelQuad
- * For InstancedMesh, hence has attributes uvOffsets and uvDimensions.
  * @property {(Geomorph.DecorPoint | Geomorph.DecorQuad)[]} quads
  * This is `Object.values(state.byKey)`
  * @property {THREE.BufferGeometry} quadGeom
@@ -634,3 +643,5 @@ export default function Decor(props) {
  */
 
 const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));
+
+

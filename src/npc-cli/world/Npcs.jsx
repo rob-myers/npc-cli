@@ -2,9 +2,9 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultSkinKey, glbMeta } from "../service/const";
+import { defaultSkinKey, glbMeta, gmLabelHeightSgu, spriteSheetDecorExtraScale } from "../service/const";
 import { info, warn } from "../service/generic";
-import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
+import { createDebugBox, createDebugCylinder, createLabelSpriteSheet, tmpVectThree1, yAxis } from "../service/three";
 import { helper } from "../service/helper";
 import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
@@ -20,6 +20,11 @@ export default function Npcs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     group: /** @type {*} */ (null),
+    label: {
+      numLabels: 0,
+      lookup: {},
+      tex: new THREE.CanvasTexture(document.createElement('canvas')),
+    },
     nextObstacleId: 0,
     npc: {},
     obstacle: {},
@@ -238,6 +243,10 @@ export default function Npcs(props) {
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
+    updateLabels(labels) {
+      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
+      createLabelSpriteSheet(labels, state.label, fontHeight);
+    },
 
     // 🚧 old below
     updateTileCache() {// 🚧 spread out updates
@@ -283,6 +292,7 @@ export default function Npcs(props) {
 /**
  * @typedef State
  * @property {THREE.Group} group
+ * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {THREE.Group} obsGroup
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {{ curr: null | string; prev: null | string; many: string[]; }} select 🚧 move to script
@@ -304,6 +314,7 @@ export default function Npcs(props) {
  * @property {(obstacleId: number) => void} removeObstacle
  * @property {(npcKey: string) => void} removeNpc
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
+ * @property {(labels: string[]) => void} updateLabels
  * @property {() => void} updateTileCache
  */
 
