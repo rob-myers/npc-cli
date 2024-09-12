@@ -77,6 +77,12 @@ w debug.char.setSkin 0
 - character animation: idle, walk
   - try using `class Npc`
 
+- 🚧 can dynamically add to label sprite-sheet
+  - ℹ️ `w update 'w => w.decor.showLabels = true'`
+  - ✅ move `w.decor.label.quad` to `w.decor.labelQuad`
+  - ✅ move `w.decor.{label,ensureLabelSheet}` to `w.label`
+  - 🚧 can incrementally extend
+
 - WorldMenu log should be a partially transparent xterm
   - pin checkbox ✅ debug checkbox 🚧
   - can resize on mobile too

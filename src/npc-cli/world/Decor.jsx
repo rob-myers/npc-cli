@@ -28,12 +28,7 @@ export default function Decor(props) {
     seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
     labels: [],
     labelInst: /** @type {*} */ (null),
-    label: {
-      hash: 0,
-      quad: getQuadGeometryXZ(`${w.key}-labels-xz`),
-      sheet: {},
-      tex: new THREE.CanvasTexture(document.createElement('canvas')),
-    },
+    labelQuad: getQuadGeometryXZ(`${w.key}-decor-labels-xz`),
     quads: [],
     quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
@@ -98,7 +93,7 @@ export default function Decor(props) {
     addLabelUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
-      const { quad, sheet, tex } = state.label;
+      const { sheet, tex } = w.label;
       const { width: sheetWidth, height: sheetHeight } = /** @type {HTMLCanvasElement} */ (tex.image);
 
       for (const d of state.labels) {
@@ -107,10 +102,10 @@ export default function Decor(props) {
         uvDimensions.push(width / sheetWidth, height / sheetHeight);
       }
 
-      quad.setAttribute('uvOffsets',
+      state.labelQuad.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
-      quad.setAttribute('uvDimensions',
+      state.labelQuad.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
     },
@@ -156,7 +151,7 @@ export default function Decor(props) {
       }).multiply(centreUnitQuad);
     },
     createLabelMatrix4(d) {
-      const { width, height } = state.label.sheet[d.meta.label];
+      const { width, height } = w.label.sheet[d.meta.label];
       const scale = sguToWorldScale * (1 / spriteSheetLabelExtraScale);
       tmpMat1.feedFromArray([
         width * scale, 0, 0, height * scale,
@@ -248,50 +243,6 @@ export default function Decor(props) {
         decor.meta.grKey ??= helper.getGmRoomKey(decor.meta.gmId, decor.meta.roomId);
         return decor.meta;
       }
-    },
-    ensureLabelSheet() {
-      // Avoid needless recompute
-      const labels = removeDups(Array.from(state.labels.map(x => /** @type {string} */ (x.meta.label)))).sort();
-      const hash = hashJson(labels);
-      if (hash === state.label.hash) {
-        return;
-      }
-      state.label.hash = hash;
-      
-      // Create sprite-sheet
-      const canvas = /** @type {HTMLCanvasElement} */ (state.label.tex.image);
-      const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
-
-      ct.font = `${fontHeight}px 'Courier new'`;
-      /** @type {import("../service/rects-packer").PrePackedRect<{ label: string }>[]} */
-      const rects = labels.map(label => ({
-        width: ct.measureText(label).width,
-        height: fontHeight,
-        data: { label },
-      }));
-      const bin = packRectangles(rects, { logPrefix: 'w.ensureLabelSheet', packedPadding: 2 });
-      state.label.sheet = bin.rects.reduce((agg, r) => {
-        agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
-        return agg;
-      }, /** @type {LabelsMeta['sheet']} */ ({}));
-      
-      // Draw sprite-sheet
-      if (canvas.width !== bin.width || canvas.height !== bin.height) {
-        state.label.tex.dispose();
-        [canvas.width, canvas.height] = [bin.width, bin.height];
-        state.label.tex = new THREE.CanvasTexture(canvas);
-        state.label.tex.flipY = false;
-      }
-      ct.clearRect(0, 0, bin.width, bin.height);
-      ct.strokeStyle = ct.fillStyle = 'white';
-      ct.font = `${fontHeight}px 'Courier new'`;
-      ct.textBaseline = 'top';
-      bin.rects.forEach(rect => {
-        ct.fillText(rect.data.label, rect.x, rect.y);
-        ct.strokeText(rect.data.label, rect.x, rect.y);
-      });
-      state.label.tex.needsUpdate = true;
     },
     getDecorOrigin(decor) {
       return decor.type === 'point' ? decor : decor.center;
@@ -515,7 +466,7 @@ export default function Decor(props) {
       const mapChanged = prev.map !== next.map;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
-      state.ensureLabelSheet();
+      w.extendLabels(state.labels.map(x => /** @type {string} */ (x.meta.label)));
       state.addLabelUvs();
 
       w.menu.log('decor.addGm');
@@ -615,14 +566,14 @@ export default function Decor(props) {
       name="decor-labels"
       key={`${labels.length} labels`}
       ref={instances => instances && (state.labelInst = instances)}
-      args={[state.label.quad, undefined, labels.length]}
+      args={[state.labelQuad, undefined, labels.length]}
       frustumCulled={false}
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
         side={THREE.DoubleSide}
-        map={state.label.tex}
+        map={w.label.tex}
         transparent
         diffuse={new THREE.Vector3(1, 1, 1)}
       />
@@ -648,7 +599,8 @@ export default function Decor(props) {
  * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
- * @property {LabelsMeta} label
+ * @property {THREE.BufferGeometry} labelQuad
+ * For InstancedMesh, hence has attributes uvOffsets and uvDimensions.
  * @property {(Geomorph.DecorPoint | Geomorph.DecorQuad)[]} quads
  * This is `Object.values(state.byKey)`
  * @property {THREE.BufferGeometry} quadGeom
@@ -668,7 +620,6 @@ export default function Decor(props) {
  * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
- * @property {() => void} ensureLabelSheet
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
  * @property {(gmId: number) => void} addGm
@@ -680,14 +631,6 @@ export default function Decor(props) {
  * @property {() => void} removeAllInstantiated
  * @property {(gmId: number) => void} removeGm
  * @property {() => void} updateDecorLists
- */
-
-/**
- * @typedef LabelsMeta
- * @property {number} hash
- * @property {THREE.BufferGeometry} quad
- * @property {{ [label: string]: Geom.RectJson }} sheet
- * @property {THREE.CanvasTexture} tex
  */
 
 const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));
