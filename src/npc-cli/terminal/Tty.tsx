@@ -199,33 +199,4 @@ export interface Props extends BaseTabProps {
 const rootCss = css`
   height: 100%;
   padding: 4px;
-
-  .xterm-container {
-    height: inherit;
-    background: black;
-
-    > div {
-      width: 100%;
-    }
-
-    /** Fix xterm-addon-fit when open keyboard on mobile */
-    .xterm-helper-textarea {
-      top: 0 !important;
-    }
-
-    /** This hack avoids <2 col width, where cursor row breaks */
-    min-width: 100px;
-    .xterm-screen {
-      min-width: 100px;
-    }
-  }
 `;
-
-const line = {
-  /** Only used when starts paused */
-  neverUnpaused: `${ansi.GreyBg}${ansi.Black}${ansi.Bold} paused ${ansi.Reset}${ansi.White} please enable tabs`,
-  // paused: 'paused processes',
-  paused: `${ansi.GreyBg}${ansi.Black}${ansi.Bold} paused ${ansi.Reset}${ansi.White} [ ${ansi.BrightGreen}unpause${ansi.White} ] or [ ${ansi.BrightGreen}debug${ansi.White} ]`,
-  /** Only used when we type whilst paused */
-  resumed: 'resumed processes',
-};
