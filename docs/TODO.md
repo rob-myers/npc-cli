@@ -69,16 +69,17 @@ w debug.char.setSkin 0
       - expose hash and `w.debug.char.setSkin(i)`
   - ✅ CameraLightMaterial should support texture map
   - ✅ `w.debug.testChar` --> `w.debug.char`
-  - extend test character with hair (based on original asset)
-  - improve/add skins
+  - 🚧 make alternate model
+    - cuboid head, cuboid body
+    - shadow quad, selector quad, label quad
+  - 🚧 make alternate skin(s)
 
-- animation: idle, walk
+- character animation: idle, walk
   - try using `class Npc`
 
-- hyper casual character continued
-  - geometry
-  - skins
-  - animation
+- WorldMenu log should be a partially transparent xterm
+  - pin checkbox ✅ debug checkbox 🚧
+  - can resize on mobile too
 
 - return to next.js project
   - ensure up to date

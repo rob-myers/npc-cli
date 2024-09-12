@@ -76,30 +76,16 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
   }, [w.hash.sheets]);
 
   return state.characters.map(({ object, initPos, graph, mesh, texture }, i) =>
-    // <primitive
-    //   key={i}
-    //   object={object}
-    //   position={[initPos.x, 0.02, initPos.y]}
-    //   scale={meta.scale}
-    //   dispose={null}
-    // />
-    <group
-      key={i}
-      position={initPos}
-      // dispose={null}
-    >
+    <group key={i} position={initPos}>
       <mesh
         geometry={mesh.geometry}
         position={mesh.position}
         scale={mesh.scale}
       >
-        {/* <meshBasicMaterial
-          key="change_me"
-          map={texture}
-          transparent
-        /> */}
+        {/* <meshBasicMaterial key="change_me" map={texture} transparent/> */}
         <cameraLightMaterial
           key={CameraLightMaterial.key}
+          diffuse={[1, 1, 1]}
           transparent
           map={texture}
         />
