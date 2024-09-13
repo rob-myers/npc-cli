@@ -89,7 +89,8 @@ w debug.char.setSkin 0
     - ✅ w.label -> w.npc.label
     - ✅ w.npc.updateLabels(["foo", "bar", "baz"])
 
-- WorldMenu log should be a partially transparent xterm
+- 🚧 WorldMenu log should be a partially transparent xterm
+  - use `BaseTty` but readonly
   - pin checkbox ✅ debug checkbox 🚧
   - can resize on mobile too
 
