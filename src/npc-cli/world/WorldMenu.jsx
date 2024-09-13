@@ -1,16 +1,14 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
-import debounce from "debounce";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { geom } from '../service/geom';
+import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Logger } from "../terminal/Logger";
-
-// 🚧 clean away textarea, migrating resize observer
 
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
@@ -25,18 +23,14 @@ export default function WorldMenu(props) {
     justOpen: false,
     debugWhilePaused: false,
     durationKeys: {},
-    debugLog: {
-      el: /** @type {*} */ (null),
-      initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
-      pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
-      text: '',
-    },
-
+    
     logger: /** @type {*} */ (null),
+    initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
+    pinned: tryLocalStorageGetParsed(`pin-log@${w.key}`) ?? false,
 
-    changeTextareaPin(e) {
-      state.debugLog.pinned = e.currentTarget.checked;
-      tryLocalStorageSet(`pin-log@${w.key}`, `${state.debugLog.pinned}`);
+    changeLoggerPin(e) {
+      state.pinned = e.currentTarget.checked;
+      tryLocalStorageSet(`pin-log@${w.key}`, `${state.pinned}`);
       update();
     },
     enableAll() {
@@ -48,25 +42,18 @@ export default function WorldMenu(props) {
     },
     log(msg, immediate) {
       if (immediate === true) {
-        state.debugLog.text += `${msg}\n`;
         state.logger.xterm.writeln(msg);
       } else {
         if (msg in state.durationKeys) {
           const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
-          state.debugLog.text += `${msg} ${durationMs}\n`;
-          state.logger.xterm.writeln(`${msg} ${durationMs}`);
+          state.logger.xterm.writeln(`${msg} ${ansi.BrightYellow}${durationMs}${ansi.Reset}`);
           delete state.durationKeys[msg];
         } else {
           state.durationKeys[msg] = performance.now();
         }
       }
-      state.logsToBottom();
-      update();
+      // update();
     },
-
-    logsToBottom: debounce(() => {
-      state.debugLog.el?.scrollTo({ top: Number.MAX_SAFE_INTEGER })
-    }, 300, { immediate: true }),
 
     show(at) {
       const menuDim = state.ctMenuEl.getBoundingClientRect();
@@ -78,8 +65,8 @@ export default function WorldMenu(props) {
       update();
     },
     storeTextareaHeight() {
-      state.debugLog.el && tryLocalStorageSet(`log-height-px@${w.key}`, `${
-        Math.max(100, state.debugLog.el.getBoundingClientRect().height)
+      tryLocalStorageSet(`log-height-px@${w.key}`, `${
+        Math.max(100, state.logger.loggerEl.getBoundingClientRect().height)
       }`);
     },
     toggleDebug() {
@@ -92,16 +79,6 @@ export default function WorldMenu(props) {
   w.menu = state;
 
   const update = useUpdate();
-
-  React.useEffect(() => {// 🚧 old
-    if (state.debugLog.el) {
-      const ro = new ResizeObserver((_items) =>
-        state.storeTextareaHeight()
-      );
-      ro.observe(state.debugLog.el);
-      return () => ro.disconnect();
-    }
-  }, [state.debugLog.el]);
 
   const meta3d = w.ui.lastDown?.threeD?.meta;
 
@@ -145,7 +122,7 @@ export default function WorldMenu(props) {
 
     <div
       className={loggerCss}
-      {...!(state.debugWhilePaused || state.debugLog.pinned) && {
+      {...!(state.debugWhilePaused || state.pinned) && {
         style: { display: 'none' }
       }}
     >
@@ -157,8 +134,8 @@ export default function WorldMenu(props) {
       <label>
         <input
           type="checkbox"
-          defaultChecked={state.debugLog.pinned}
-          onChange={state.changeTextareaPin}
+          defaultChecked={state.pinned}
+          onChange={state.changeLoggerPin}
         />
         pin
       </label>
@@ -206,8 +183,8 @@ const loggerCss = css`
   font-family: 'Courier New', Courier, monospace;
 
   .world-logger {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
   }
   label {
     display: flex;
@@ -223,16 +200,16 @@ const loggerCss = css`
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
- * @property {{ el: HTMLTextAreaElement; pinned: boolean; initHeight: number; text: string; }} debugLog
  * @property {import('../terminal/Logger').State} logger
+ * @property {number} initHeight
+ * @property {boolean} pinned
  * 
  * @property {() => void} enableAll
  * @property {() => void} hide
  * @property {(msg: string, immediate?: boolean) => void} log
  * - Log durations by sending same `msg` twice.
  * - Log plain message by setting `immediate` true.
- * @property {() => void} logsToBottom
- * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeTextareaPin
+ * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeLoggerPin
  * @property {() => void} storeTextareaHeight
  * @property {(at: Geom.VectJson) => void} show
  * @property {() => void} toggleDebug

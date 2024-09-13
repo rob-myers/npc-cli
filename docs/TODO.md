@@ -92,9 +92,10 @@ w debug.char.setSkin 0
 - 🚧 WorldMenu log should be a partially transparent xterm
   - ❌ use `BaseTty` but readonly
   - ✅ use vanilla `@xterm/xterm` Terminal i.e. `Logger`
-  - 🚧 manual resize + resize observer
-  - pin checkbox ✅ debug checkbox 🚧
-  - can resize on mobile too
+  - ✅ clean up
+  - manual resize (mobile too) + resize observer
+    - e.g. https://www.npmjs.com/package/re-resizable
+  - checkboxes: pin ✅ show debug logs 🚧
 
 - return to next.js project
   - ensure up to date
