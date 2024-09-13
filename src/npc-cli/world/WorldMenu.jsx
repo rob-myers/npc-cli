@@ -8,6 +8,9 @@ import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
+import { Logger } from "../terminal/Logger";
+
+// 🚧 clean away textarea, migrating resize observer
 
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
@@ -29,6 +32,8 @@ export default function WorldMenu(props) {
       text: '',
     },
 
+    logger: /** @type {*} */ (null),
+
     changeTextareaPin(e) {
       state.debugLog.pinned = e.currentTarget.checked;
       tryLocalStorageSet(`pin-log@${w.key}`, `${state.debugLog.pinned}`);
@@ -44,10 +49,12 @@ export default function WorldMenu(props) {
     log(msg, immediate) {
       if (immediate === true) {
         state.debugLog.text += `${msg}\n`;
+        state.logger.xterm.writeln(msg);
       } else {
         if (msg in state.durationKeys) {
           const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
           state.debugLog.text += `${msg} ${durationMs}\n`;
+          state.logger.xterm.writeln(`${msg} ${durationMs}`);
           delete state.durationKeys[msg];
         } else {
           state.durationKeys[msg] = performance.now();
@@ -56,9 +63,11 @@ export default function WorldMenu(props) {
       state.logsToBottom();
       update();
     },
+
     logsToBottom: debounce(() => {
       state.debugLog.el?.scrollTo({ top: Number.MAX_SAFE_INTEGER })
     }, 300, { immediate: true }),
+
     show(at) {
       const menuDim = state.ctMenuEl.getBoundingClientRect();
       const canvasDim = w.ui.canvas.getBoundingClientRect();
@@ -84,7 +93,7 @@ export default function WorldMenu(props) {
 
   const update = useUpdate();
 
-  React.useEffect(() => {
+  React.useEffect(() => {// 🚧 old
     if (state.debugLog.el) {
       const ro = new ResizeObserver((_items) =>
         state.storeTextareaHeight()
@@ -134,25 +143,26 @@ export default function WorldMenu(props) {
       </div>
     )}
 
-    {(state.debugWhilePaused || state.debugLog.pinned) && (// Debug log
-      <div className={textareaCss}>
-        <textarea
-          ref={(x) => x && (state.debugLog.el = x)}
-          readOnly
-          value={state.debugLog.text}
-          style={{ height: state.debugLog.initHeight }}
-        />
-        <label>
-          <input
-            type="checkbox"
-            defaultChecked={state.debugLog.pinned}
-            onChange={state.changeTextareaPin}
-          />
-          pin
-        </label>
-      </div>
-    )}
+    <div
+      className={loggerCss}
+      {...!(state.debugWhilePaused || state.debugLog.pinned) && {
+        style: { display: 'none' }
+      }}
+    >
+      <Logger
+        ref={api => state.logger = state.logger ?? api}
+        className="world-logger"
+      />
 
+      <label>
+        <input
+          type="checkbox"
+          defaultChecked={state.debugLog.pinned}
+          onChange={state.changeTextareaPin}
+        />
+        pin
+      </label>
+    </div>
 
   </>;
 }
@@ -162,9 +172,8 @@ const contextMenuCss = css`
   left: 0;
   top: 0;
   z-index: 0;
-  /* height: 100px; */
+
   max-width: 256px;
-  /* user-select: none; */
 
   opacity: 0.8;
   font-size: 0.9rem;
@@ -184,7 +193,7 @@ const contextMenuCss = css`
   }
 `;
 
-const textareaCss = css`
+const loggerCss = css`
   position: absolute;
   z-index: 7;
   top: 0;
@@ -196,18 +205,16 @@ const textareaCss = css`
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
 
-  textarea {
-    background: rgba(0, 50, 0, 0.35);
-    padding: 0 8px;
-    width: 168px;
-    /* resize: both; */
+  .world-logger {
+    width: 300px;
+    height: 300px;
   }
   label {
     display: flex;
     align-items: center;
     gap: 8px;
   }
-`
+`;
 
 /**
  * @typedef State
@@ -217,7 +224,8 @@ const textareaCss = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {{ el: HTMLTextAreaElement; pinned: boolean; initHeight: number; text: string; }} debugLog
- *
+ * @property {import('../terminal/Logger').State} logger
+ * 
  * @property {() => void} enableAll
  * @property {() => void} hide
  * @property {(msg: string, immediate?: boolean) => void} log
