@@ -185,6 +185,9 @@ const loggerCss = css`
   .world-logger {
     width: 200px;
     height: 200px;
+    textarea {
+      visibility: hidden; // Hide cursor
+    }
   }
   label {
     display: flex;
