@@ -66,7 +66,7 @@ export default function WorldMenu(props) {
     },
     storeTextareaHeight() {
       tryLocalStorageSet(`log-height-px@${w.key}`, `${
-        Math.max(100, state.logger.loggerEl.getBoundingClientRect().height)
+        Math.max(100, state.logger.container.getBoundingClientRect().height)
       }`);
     },
     toggleDebug() {

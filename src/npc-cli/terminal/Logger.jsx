@@ -1,5 +1,5 @@
 import React from "react";
-import { css, cx } from "@emotion/css";
+import { cx } from "@emotion/css";
 
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
@@ -18,12 +18,12 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
   const state = useStateRef(/** @returns {State} */ () => ({
     contents: '',
     fitAddon: new FitAddon(),
-    loggerEl: /** @type {*} */ (null),
+    container: /** @type {*} */ (null),
     webglAddon: new WebglAddon(),
     xterm: /** @type {*} */ (null),
 
-    loggerElRef: (el) => el && !state.loggerEl &&
-      setTimeout(() => (state.loggerEl = el, update())
+    containerRef: (el) => el && !state.container &&
+      setTimeout(() => (state.container = el, update())
     ),
   }));
 
@@ -32,7 +32,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
   React.useMemo(() => void /** @type {React.RefCallback<State>} */ (ref)?.(state), [ref]);
 
   React.useEffect(() => {
-    if (state.loggerEl === null) {
+    if (state.container === null) {
       return;
     }
 
@@ -60,7 +60,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
         linkText,
         { lineText, linkStartIndex, lineNumber }
       ) {
-        console.log('BaseTerminal: clicked link', {
+        console.log('Logger: clicked link', {
           linkText,
           lineText,
           linkStartIndex,
@@ -84,7 +84,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     });
 
     xterm.write(state.contents);
-    xterm.open(state.loggerEl);
+    xterm.open(state.container);
     state.fitAddon.fit();
     
     return () => {
@@ -97,12 +97,12 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
 
       state.xterm.dispose();
     };
-  }, [state.loggerEl]);
+  }, [state.container]);
 
   return (
     <div
       className={cx(props.className, "scrollable")}
-      ref={state.loggerElRef}
+      ref={state.containerRef}
     />
   );
 });
@@ -115,9 +115,9 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
 /**
  * @typedef State
  * @property {string} contents
- * @property {HTMLDivElement} loggerEl
+ * @property {HTMLDivElement} container
  * @property {Terminal} xterm
  * @property {FitAddon} fitAddon
  * @property {WebglAddon} webglAddon
- * @property {(el: null | HTMLDivElement) => void} loggerElRef
+ * @property {(el: null | HTMLDivElement) => void} containerRef
  */
