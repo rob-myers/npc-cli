@@ -22,7 +22,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     webglAddon: new WebglAddon(),
     xterm: /** @type {*} */ (null),
 
-    loggerContainerRef: (el) => el && !state.loggerEl &&
+    loggerElRef: (el) => el && !state.loggerEl &&
       setTimeout(() => (state.loggerEl = el, update())
     ),
   }));
@@ -40,7 +40,9 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       allowProposedApi: true, // Needed for WebLinksAddon
       allowTransparency: true,
       fontSize: 16,
-      cursorBlink: true,
+      cursorBlink: false,
+      disableStdin: true,
+      cursorInactiveStyle: 'none',
       // rendererType: "canvas",
       // mobile: can select single word via long press
       rightClickSelectsWord: true,
@@ -81,12 +83,6 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
       state.webglAddon.dispose(); // 🚧 WIP
     });
 
-    xterm.options = {
-      disableStdin: true, // 🚧 should be optional
-      cursorInactiveStyle: 'none',
-      cursorBlink: false,
-    }; 
-
     xterm.write(state.contents);
     xterm.open(state.loggerEl);
     state.fitAddon.fit();
@@ -106,7 +102,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
   return (
     <div
       className={cx(props.className, "scrollable")}
-      ref={state.loggerContainerRef}
+      ref={state.loggerElRef}
     />
   );
 });
@@ -123,5 +119,5 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
  * @property {Terminal} xterm
  * @property {FitAddon} fitAddon
  * @property {WebglAddon} webglAddon
- * @property {(el: null | HTMLDivElement) => void} loggerContainerRef
+ * @property {(el: null | HTMLDivElement) => void} loggerElRef
  */
