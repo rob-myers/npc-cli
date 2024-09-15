@@ -6,7 +6,7 @@
   <desc>cuboid-character.blend, (Blender 4.1.0)</desc>
   <g>
     <title>uv-map</title>
-    <polygon stroke="black" stroke-width="1" points="1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400 " style="fill: rgb(255, 255, 255);">
+    <polygon stroke="black" stroke-width="1" points="1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400 " style="fill: rgb(255, 255, 255); fill-opacity: 0;">
       <title>ground-ring</title>
     </polygon>
     <polygon stroke="black" stroke-width="1" points="320.000,544.000 160.000,544.000 160.000,384.000 320.000,384.000 " style="fill: rgb(255, 255, 255);">
@@ -45,7 +45,7 @@
     <polygon stroke="black" stroke-width="1" points="544.000,704.000 544.000,544.000 704.000,544.000 704.000,704.000 " style="fill: rgb(255, 255, 255);">
       <title>body-left</title>
     </polygon>
-    <polygon stroke="black" stroke-width="1" points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill: rgb(255, 255, 255);">
+    <polygon stroke="black" stroke-width="1" points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill-opacity: 0.25;">
       <title>ground-shadow</title>
     </polygon>
     <polygon stroke="black" stroke-width="1" points="665.600,0.000 153.600,0.000 153.600,128.000 665.600,128.000 " style="fill: rgb(255, 255, 255);">
@@ -54,6 +54,7 @@
     <polygon stroke="black" stroke-width="1" points="102.400,0.000 0.000,0.000 0.000,102.400 102.400,102.400 " style="fill: rgb(255, 255, 255);">
       <title>ui-icon</title>
     </polygon>
+    <circle style="fill: rgb(216, 216, 216); stroke: rgb(255, 0, 0); stroke-width: 8px;" cx="973.158508" cy="50.841564" r="46.558437"/>
   </g>
   <g>
     <title>head</title>

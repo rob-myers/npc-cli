@@ -8,12 +8,14 @@
   - beds ✅ consoles ✅ counter 🚧 engineering extra fresher lab medical cartography shop stateroom table
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 import model into npc-cli TestCharacters
-- model shader handles label/icon properly
-- cuboid model skin
-
-- character animation: idle, walk
-  - try using `class Npc`
+- 🚧 integrate cuboid model
+  - 🚧 import model into npc-cli TestCharacters
+    - export as cuboid-model.glb
+  - model shader handles label/icon properly
+    - can identify these two quads
+  - improve cuboid model skin
+  - character animation: idle, walk
+    - try using `class Npc`
 
 - return to next.js project
   - ensure up to date
