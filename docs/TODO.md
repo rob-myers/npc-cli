@@ -70,32 +70,12 @@ w debug.char.setSkin 0
   - ✅ CameraLightMaterial should support texture map
   - ✅ `w.debug.testChar` --> `w.debug.char`
   - 🚧 make alternate model
-    - cuboid head, cuboid body
-    - shadow quad, selector quad, label quad
-  - 🚧 make alternate skin(s)
+    - 🚧 cuboid head, cuboid body
+    - 🚧 shadow quad, selector quad, label quad, icon quad
+  - make alternate skin(s)
 
 - character animation: idle, walk
   - try using `class Npc`
-
-- ✅ can dynamically add to label sprite-sheet
-  - ℹ️ `w update 'w => w.decor.showLabels = true'`
-  - ✅ move `w.decor.label.quad` to `w.decor.labelQuad`
-  - ✅ move `w.decor.{label,ensureLabelSheet}` to `w.label`
-  - ❌ can incrementally extend
-    - doesn't necessarily keep previous rects in same position
-    - so, decor label uvs need to be recomputed
-  - ✅ two label textures i.e. decor, npc (dynamic)
-    - ✅ w.label -> w.decor.label
-    - ✅ w.label -> w.npc.label
-    - ✅ w.npc.updateLabels(["foo", "bar", "baz"])
-
-- 🚧 WorldMenu log should be a partially transparent xterm
-  - ❌ use `BaseTty` but readonly
-  - ✅ use vanilla `@xterm/xterm` Terminal i.e. `Logger`
-  - ✅ clean up
-  - manual resize (mobile too) + resize observer
-    - e.g. https://www.npmjs.com/package/re-resizable
-  - checkboxes: pin ✅ show debug logs 🚧
 
 - return to next.js project
   - ensure up to date
@@ -158,6 +138,10 @@ w debug.char.setSkin 0
       - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
       - i.e. preset large bounds, and use geometry.setDrawRange
     - could use underlying gl api to remove attributes
+WorldMenu log extras
+  - permit resize (mobile too)
+  - resize observer fits
+  - checkboxes: pin ✅ show debug logs 🚧
 
 - BUG obstacles.png slightly different onchange
   - no visible difference, probably due to "quick approach"
@@ -2235,3 +2219,20 @@ run '({ w, api }) {
 
 - ✅ fix "flipped decor" i.e. if decor quad transform determinant is negative,
   - flip the quad's uvs across "central vertical axis"
+
+- ✅ can dynamically add to label sprite-sheet
+  - ℹ️ `w update 'w => w.decor.showLabels = true'`
+  - ✅ move `w.decor.label.quad` to `w.decor.labelQuad`
+  - ✅ move `w.decor.{label,ensureLabelSheet}` to `w.label`
+  - ❌ can incrementally extend
+    - doesn't necessarily keep previous rects in same position
+    - so, decor label uvs need to be recomputed
+  - ✅ two label textures i.e. decor, npc (dynamic)
+    - ✅ w.label -> w.decor.label
+    - ✅ w.label -> w.npc.label
+    - ✅ w.npc.updateLabels(["foo", "bar", "baz"])
+
+- ✅ WorldMenu log should be a partially transparent xterm
+  - ❌ use `BaseTty` but readonly
+  - ✅ use vanilla `@xterm/xterm` Terminal i.e. `Logger`
+  - ✅ clean up
