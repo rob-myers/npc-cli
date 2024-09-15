@@ -46,11 +46,6 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       };
       const material = /** @type {THREE.MeshPhysicalMaterial} */ (character.graph.materials[meta.materialName]);
       material.transparent = true; // For drop shadow
-      
-      // // 🚧 support texture map
-      // const testMaterial = new THREE.ShaderMaterial({ transparent: true, uniforms: { diffuse: { value: [0.5, 0.5, 0.5] } }, vertexShader: cameraLightShader.Vert, fragmentShader: cameraLightShader.Frag });
-      // const mesh = /** @type {THREE.Mesh} */ (model.graph.nodes[meta.meshName]);
-      // mesh.material = testMaterial;
 
       state.characters.push(character);
 
@@ -76,7 +71,6 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       tex.flipY = false;
       model.texture = tex;
     },
-    update,
   }));
 
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
@@ -98,7 +92,6 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
           diffuse={[1, 1, 1]}
           transparent
           map={texture}
-          // side={THREE.DoubleSide}
         />
       </mesh>
     </group>
@@ -116,7 +109,6 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
  * @property {(initPoint?: Geom.VectJson, charKey?: CharacterKey) => Promise<void>} add
  * @property {(charIndex: number, charKey?: CharacterKey) => Promise<void>} setSkin
  * @property {(charIndex?: number) => void} remove
- * @property {() => void} update
  */
 
 /**
