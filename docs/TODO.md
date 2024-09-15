@@ -9,8 +9,14 @@
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 integrate cuboid model
-  - 🚧 import model into npc-cli TestCharacters
-    - export as cuboid-model.glb
+  - ✅ import model into npc-cli TestCharacters
+    - ✅ export as cuboid-model.glb
+    - ✅ configure TestCharacters for "multiple character meta"
+    ```sh
+    w debug.char.add $( click 1 ) hcTest
+    w debug.char.add $( click 1 ) cuboidChar
+    ```
+
   - model shader handles label/icon properly
     - can identify these two quads
   - improve cuboid model skin

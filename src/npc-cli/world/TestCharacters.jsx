@@ -15,14 +15,22 @@ import useUpdate from '../hooks/use-update';
 export const TestCharacters = React.forwardRef(function TestCharacters(props, ref) {
   const w = React.useContext(WorldContext);
 
-  const gltf = useGLTF(meta.url);
+  charKeyToGltf.hcTest = useGLTF(charKeyToMeta.hcTest.url);
+  charKeyToGltf.cuboidChar = useGLTF(charKeyToMeta.cuboidChar.url);
 
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
     characters: /** @type {*} */ ([]),
 
-    async add(initPoint = { x: 4.5 * 1.5, y: 7 * 1.5 }, skinKey = testSkins.firstHcTex) {
+    /**
+     * @param {Geom.VectJson} initPoint 
+     * @param {CharacterKey} [charKey]
+     */
+    async add(initPoint = { x: 4.5 * 1.5, y: 7 * 1.5 }, charKey = 'hcTest') {
+      const gltf = charKeyToGltf[charKey];
+      const meta = charKeyToMeta[charKey];
+
       const object = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(object);
       const scene = /** @type {THREE.Group} */ (graph.nodes[meta.groupName]);
@@ -31,7 +39,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       const character = {
         object,
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
-        skinKey,
+        charKey,
         graph: buildObjectLookup(object),
         mesh: /** @type {THREE.Mesh} */ (graph.nodes[meta.meshName]),
         texture: emptyTexture,
@@ -47,7 +55,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       state.characters.push(character);
 
       const charIndex = state.characters.length - 1;
-      await state.setSkin(charIndex, testSkins.firstHcTex);
+      await state.setSkin(charIndex, charKey);
       update();
     },
     remove(charIndex) {
@@ -58,11 +66,13 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       }
       update();
     },
-    async setSkin(charIndex, skinKey = testSkins.firstHcTex) {
+    // 🚧 support multiple skins for single character
+    async setSkin(charIndex, charKey = 'hcTest') {
       const model = state.characters[charIndex];
-      model.skinKey = skinKey;
       // 🚧 hash instead of Date.now() ?
-      const tex = await textureLoader.loadAsync(`/assets/3d/${skinKey}?v=${Date.now()}`);
+      // const tex = await textureLoader.loadAsync(`/assets/3d/${skinKey}?v=${Date.now()}`);
+      const { skinBaseName } = charKeyToMeta[charKey];
+      const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${Date.now()}`);
       tex.flipY = false;
       model.texture = tex;
     },
@@ -72,7 +82,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
   React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
   
   React.useEffect(() => {// Hot reload skins
-    state.characters.forEach(({ skinKey }, charIndex) => state.setSkin(charIndex, skinKey));
+    state.characters.forEach(({ charKey }, charIndex) => state.setSkin(charIndex, charKey));
   }, [w.hash.sheets]);
 
   return state.characters.map(({ object, initPos, graph, mesh, texture }, i) =>
@@ -88,6 +98,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
           diffuse={[1, 1, 1]}
           transparent
           map={texture}
+          // side={THREE.DoubleSide}
         />
       </mesh>
     </group>
@@ -102,38 +113,58 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 /**
  * @typedef State
  * @property {TestCharacter[]} characters
- * @property {(initPoint?: Geom.VectJson, skinKey?: TestSkinKey) => Promise<void>} add
- * @property {(charIndex: number, skinKey?: TestSkinKey) => Promise<void>} setSkin
+ * @property {(initPoint?: Geom.VectJson, charKey?: CharacterKey) => Promise<void>} add
+ * @property {(charIndex: number, charKey?: CharacterKey) => Promise<void>} setSkin
  * @property {(charIndex?: number) => void} remove
  * @property {() => void} update
  */
 
-const meta = {
-  url: '/assets/3d/test-hyper-casual.glb',
-  // scale: 1 / 1.5,
-  scale: 1,
-  height: 1.5,
-  materialName: 'Material',
-  meshName: 'hc-character-mesh',
-  groupName: 'Scene',
+/**
+ * @typedef {'hcTest' | 'cuboidChar'} CharacterKey
+ */
+
+/** @type {Record<CharacterKey, TestCharacterMeta>} */
+const charKeyToMeta = {
+  /** hc ~ hyper casual */
+  hcTest: {
+    url: '/assets/3d/test-hyper-casual.glb',
+    scale: 1,
+    materialName: 'Material',
+    meshName: 'hc-character-mesh',
+    groupName: 'Scene',
+    skinBaseName: 'test-hyper-casual.tex.png',
+  },
+  cuboidChar: {
+    url: '/assets/3d/cuboid-character.glb',
+    scale: 1,
+    materialName: 'cuboid-character-material',
+    meshName: 'cuboid-character-mesh',
+    groupName: 'Scene',
+    skinBaseName: 'cuboid-character.tex.png',
+  },
 };
 
-/**
- * @typedef {testSkins[keyof testSkins]} TestSkinKey
- */
+const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLTF>} */ ({})
+
 /**
  * @typedef TestCharacter
+ * @property {CharacterKey} charKey
  * @property {import("@react-three/fiber").ObjectMap} graph
  * @property {THREE.Vector3} initPos
  * @property {THREE.Object3D} object
  * @property {THREE.Mesh | THREE.SkinnedMesh} mesh
- * @property {TestSkinKey} skinKey
  * @property {THREE.Texture} texture
  */
 
-/** hc ~ hyper casual */
-const testSkins = /** @type {const} */ ({
-  firstHcTex: 'test-hyper-casual.tex.png',
-});
+/**
+ * @typedef TestCharacterMeta
+ * @property {string} url e.g. '/assets/3d/test-hyper-casual.glb'
+ * @property {number} scale e.g. `1`
+ * @property {string} materialName e.g. 'Material'
+ * @property {string} meshName e.g. 'hc-character-mesh'
+ * @property {string} groupName e.g. 'Scene'
+ * @property {string} skinBaseName e.g. 'test-hyper-casual.tex.png'
+ */
 
-useGLTF.preload(meta.url);
+
+useGLTF.preload(Object.values(charKeyToMeta).map(x => x.url));
