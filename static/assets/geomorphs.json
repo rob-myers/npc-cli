@@ -38197,6 +38197,11 @@
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
     "imagesHash": -1267809538,
-    "skins": {"svgHash": {"test-hyper-casual.tex.svg": -168379416}}
+    "skins": {
+      "svgHash": {
+        "cuboid-character.tex.svg": -2035691216,
+        "test-hyper-casual.tex.svg": -168379416
+      }
+    }
   }
 }

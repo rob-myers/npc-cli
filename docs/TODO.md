@@ -8,76 +8,7 @@
   - beds ✅ consoles ✅ counter 🚧 engineering extra fresher lab medical cartography shop stateroom table
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 first draft of "hyper casual" characters
-  - instead of pseudo minecraft character
-  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
-  - based on these models e.g. 3 bones: body > head, shadow
-  - ✅ unity: create project with imported assets
-  - ✅ blender: import exported fbx as static model
-  - ℹ️ investigate mesh
-    - tris: base_body 280 (head 140, body 140)
-    - tris: hair_man 172, cap 128, hair_woman 278, hair_pony 256, knit_hat 144
-    - no texture map
-  - ℹ️ mesh spec (1st attempt)
-    - body: cuboid with split 0.34 * h from base, and another at 0.7 * h inset by 0.185 * w
-      - width = depth = 200 (arbitrary units), height 230 (or 245 with top curve)
-    - head: cylinder with 3 * 4 sides
-      - width = depth = 200 (radius), height 125 (or 170 with curves)
-  - ✅ 1st attempt at character
-    - facing along negative Y
-    - head: 12-side cylinder + bevel modifier
-    - body: cuboid (x2 vert split, tapered towards head) + bevel modifier
-    - needs shadow too
-  - ℹ️ blender:
-    - set pivot mode in top menu e.g. as 3d cursor
-    - absolute positions: N to toggle
-  - ℹ️ blender edit mode:
-    - Cmd+R loop cut
-    - Option+Click edge for edge loop
-  - ✅ texture mapping
-    - ✅ UV > mark seams, unwrap
-    - ✅ export UV map as SVG and import to Boxy SVG
-      - try provide strong outline for body
-      - try provide strong outline for face
-    - ✅ add new material to mesh (e.g. in shader view)
-      - add Texture > Image Texture
-      - export Boxy SVG as PNG, as use as image
-  - ✅ test import into World
-```sh
-w debug.char.add
-w debug.char.remove 0
-w debug.char.remove
-# update skin without full page refresh
-w debug.char.setSkin 0
-```
-  - ✅ try inverted colours
-  - ✅ improve drop shadow
-    - fix transparency by setting floor renderOrder `-1`
-  - ✅ should be higher off ground but still ~1.5m total
-  - ✅ can reload texture without hard-refresh
-  - ✅ try get CameraLightMaterial working
-    -  try debug via `<mesh>` instead of `<primitive>`
-  - ✅ cleanup media/3d
-    - media/npc-old (minecraft)
-    - media/npc (ongoing)
-  - ✅ cleanup static/assets/3d and related to jsx
-    - do not delete minecraft-skins until complete character migration
-  - ✅ auto-update test character onchange SVG
-    - ✅ media/npc/{x}.tex.svg to static/assets/3d/{x}.tex.png
-    - ✅ TestCharacters reads a tex.png
-    - ✅ auto update character skin
-      - expose hash and `w.debug.char.setSkin(i)`
-  - ✅ CameraLightMaterial should support texture map
-  - ✅ `w.debug.testChar` --> `w.debug.char`
-  - 🚧 make cuboid model
-    - ℹ️ uv cube: follow active quads > even, then unwrap (?)
-    - ℹ️ uv map cube first, before deform scale
-    - ℹ️ cuboid-{character,mesh,material}
-    - cuboid: head ✅ body ✅
-    - quad: shadow (ground) ✅ ring (ground) ✅ label (above) ✅ icon (above) ✅
-    - 🚧 basic skin
-
-- import model
+- 🚧 import model into npc-cli TestCharacters
 - model shader handles label/icon properly
 - cuboid model skin
 
@@ -2243,3 +2174,73 @@ run '({ w, api }) {
   - ❌ use `BaseTty` but readonly
   - ✅ use vanilla `@xterm/xterm` Terminal i.e. `Logger`
   - ✅ clean up
+
+
+- ✅ first draft of "hyper casual" characters
+  - instead of pseudo minecraft character
+  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
+  - based on these models e.g. 3 bones: body > head, shadow
+  - ✅ unity: create project with imported assets
+  - ✅ blender: import exported fbx as static model
+  - ℹ️ investigate mesh
+    - tris: base_body 280 (head 140, body 140)
+    - tris: hair_man 172, cap 128, hair_woman 278, hair_pony 256, knit_hat 144
+    - no texture map
+  - ℹ️ mesh spec (1st attempt)
+    - body: cuboid with split 0.34 * h from base, and another at 0.7 * h inset by 0.185 * w
+      - width = depth = 200 (arbitrary units), height 230 (or 245 with top curve)
+    - head: cylinder with 3 * 4 sides
+      - width = depth = 200 (radius), height 125 (or 170 with curves)
+  - ✅ 1st attempt at character
+    - facing along negative Y
+    - head: 12-side cylinder + bevel modifier
+    - body: cuboid (x2 vert split, tapered towards head) + bevel modifier
+    - needs shadow too
+  - ℹ️ blender:
+    - set pivot mode in top menu e.g. as 3d cursor
+    - absolute positions: N to toggle
+  - ℹ️ blender edit mode:
+    - Cmd+R loop cut
+    - Option+Click edge for edge loop
+  - ✅ texture mapping
+    - ✅ UV > mark seams, unwrap
+    - ✅ export UV map as SVG and import to Boxy SVG
+      - try provide strong outline for body
+      - try provide strong outline for face
+    - ✅ add new material to mesh (e.g. in shader view)
+      - add Texture > Image Texture
+      - export Boxy SVG as PNG, as use as image
+  - ✅ test import into World
+    ```sh
+    w debug.char.add
+    w debug.char.remove 0
+    w debug.char.remove
+    # update skin without full page refresh
+    w debug.char.setSkin 0
+    ```
+  - ✅ try inverted colours
+  - ✅ improve drop shadow
+    - fix transparency by setting floor renderOrder `-1`
+  - ✅ should be higher off ground but still ~1.5m total
+  - ✅ can reload texture without hard-refresh
+  - ✅ try get CameraLightMaterial working
+    -  try debug via `<mesh>` instead of `<primitive>`
+  - ✅ cleanup media/3d
+    - media/npc-old (minecraft)
+    - media/npc (ongoing)
+  - ✅ cleanup static/assets/3d and related to jsx
+    - do not delete minecraft-skins until complete character migration
+  - ✅ auto-update test character onchange SVG
+    - ✅ media/npc/{x}.tex.svg to static/assets/3d/{x}.tex.png
+    - ✅ TestCharacters reads a tex.png
+    - ✅ auto update character skin
+      - expose hash and `w.debug.char.setSkin(i)`
+  - ✅ CameraLightMaterial should support texture map
+  - ✅ `w.debug.testChar` --> `w.debug.char`
+  - ✅ make cuboid model
+    - ℹ️ uv cube: follow active quads > even, then unwrap (?)
+    - ℹ️ uv map cube first, before deform scale
+    - ℹ️ cuboid-{character,mesh,material}
+    - cuboid: head ✅ body ✅
+    - quad: shadow (ground) ✅ ring (ground) ✅ label (above) ✅ icon (above) ✅
+    - ✅ basic skin i.e. eyes

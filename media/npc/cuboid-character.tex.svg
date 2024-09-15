@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:grid x="0" y="0" width="6.4" height="6.4"/>
+  </defs>
+  <desc>cuboid-character.blend, (Blender 4.1.0)</desc>
+  <g>
+    <title>uv-map</title>
+    <polygon stroke="black" stroke-width="1" points="1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400 " style="fill: rgb(255, 255, 255);">
+      <title>ground-ring</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="320.000,544.000 160.000,544.000 160.000,384.000 320.000,384.000 " style="fill: rgb(255, 255, 255);">
+      <title>head-top</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="320.000,1024.000 160.000,1024.000 160.000,864.000 320.000,864.000 " style="fill: rgb(255, 255, 255);">
+      <title>head-back</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="320.000,864.000 160.000,864.000 160.000,704.000 320.000,704.000 " style="fill: rgb(255, 255, 255);">
+      <title>head-bottom</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="320.000,704.000 160.000,704.000 160.000,544.000 320.000,544.000 " style="fill: rgb(255, 255, 255);">
+      <title>head-front</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="480.000,544.000 480.000,704.000 320.000,704.000 320.000,544.000 " style="fill: rgb(255, 255, 255);">
+      <title>head-right</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="0.000,704.000 0.000,544.000 160.000,544.000 160.000,704.000 " style="fill: rgb(255, 255, 255);">
+      <title>head-left</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="864 544 704 544 704 384 864 384" style="fill: rgb(255, 255, 255);">
+      <title>body-top</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="864.000,1024.000 704.000,1024.000 704.000,864.000 864.000,864.000 " style="fill: rgb(255, 255, 255);">
+      <title>body-back</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="864.000,864.000 704.000,864.000 704.000,704.000 864.000,704.000 " style="fill: rgb(255, 255, 255);">
+      <title>body-bottom</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="864.000,704.000 704.000,704.000 704.000,544.000 864.000,544.000 " style="fill: rgb(255, 255, 255);">
+      <title>body-front</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="1024.000,544.000 1024.000,704.000 864.000,704.000 864.000,544.000 " style="fill: rgb(255, 255, 255);">
+      <title>body-right</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="544.000,704.000 544.000,544.000 704.000,544.000 704.000,704.000 " style="fill: rgb(255, 255, 255);">
+      <title>body-left</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill: rgb(255, 255, 255);">
+      <title>ground-shadow</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="665.600,0.000 153.600,0.000 153.600,128.000 665.600,128.000 " style="fill: rgb(255, 255, 255);">
+      <title>ui-label</title>
+    </polygon>
+    <polygon stroke="black" stroke-width="1" points="102.400,0.000 0.000,0.000 0.000,102.400 102.400,102.400 " style="fill: rgb(255, 255, 255);">
+      <title>ui-icon</title>
+    </polygon>
+  </g>
+  <g>
+    <title>head</title>
+    <circle style="stroke: rgb(0, 0, 0);" cx="199.769836" cy="606.569885" r="12.169814"/>
+    <circle style="stroke: rgb(0, 0, 0);" cx="278.630219" cy="606.569885" r="12.169814"/>
+  </g>
+</svg>
