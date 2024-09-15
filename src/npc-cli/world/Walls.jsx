@@ -108,11 +108,12 @@ export default function Walls(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
+      // position={[0, 0.002, 0]}
       >
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="black" /> */}
-      {/* <meshBasicMaterial side={THREE.DoubleSide} color="#f00" wireframe /> */}
+      {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
       {/* <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0, 0, 0]} objectPicking={true} /> */}
-      <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0, 0, 0]} objectPicking={false} />
+      <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0.05, 0.05, 0.05]} objectPicking={false} />
     </instancedMesh>
   );
 }
