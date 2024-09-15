@@ -24657,7 +24657,7 @@
           }
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
+          "symbolKey": "iris-valves--006--1x1",
           "obstacleId": 0,
           "height": 0,
           "origPoly": {
@@ -24674,7 +24674,7 @@
               "obstacle": true,
               "no-shadow": true,
               "permit-nav": true,
-              "symKey": "iris-valves--005--1x1",
+              "symKey": "iris-valves--006--1x1",
               "obsId": 0
             }
           },
@@ -24684,12 +24684,12 @@
             "obstacle": true,
             "no-shadow": true,
             "permit-nav": true,
-            "symKey": "iris-valves--005--1x1",
+            "symKey": "iris-valves--006--1x1",
             "obsId": 0
           }
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
+          "symbolKey": "iris-valves--006--1x1",
           "obstacleId": 0,
           "height": 0,
           "origPoly": {
@@ -24706,7 +24706,7 @@
               "obstacle": true,
               "no-shadow": true,
               "permit-nav": true,
-              "symKey": "iris-valves--005--1x1",
+              "symKey": "iris-valves--006--1x1",
               "obsId": 0
             }
           },
@@ -24716,12 +24716,12 @@
             "obstacle": true,
             "no-shadow": true,
             "permit-nav": true,
-            "symKey": "iris-valves--005--1x1",
+            "symKey": "iris-valves--006--1x1",
             "obsId": 0
           }
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
+          "symbolKey": "iris-valves--006--1x1",
           "obstacleId": 0,
           "height": 0,
           "origPoly": {
@@ -24738,7 +24738,7 @@
               "obstacle": true,
               "no-shadow": true,
               "permit-nav": true,
-              "symKey": "iris-valves--005--1x1",
+              "symKey": "iris-valves--006--1x1",
               "obsId": 0
             }
           },
@@ -24748,12 +24748,12 @@
             "obstacle": true,
             "no-shadow": true,
             "permit-nav": true,
-            "symKey": "iris-valves--005--1x1",
+            "symKey": "iris-valves--006--1x1",
             "obsId": 0
           }
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
+          "symbolKey": "iris-valves--006--1x1",
           "obstacleId": 0,
           "height": 0,
           "origPoly": {
@@ -24770,7 +24770,7 @@
               "obstacle": true,
               "no-shadow": true,
               "permit-nav": true,
-              "symKey": "iris-valves--005--1x1",
+              "symKey": "iris-valves--006--1x1",
               "obsId": 0
             }
           },
@@ -24780,7 +24780,7 @@
             "obstacle": true,
             "no-shadow": true,
             "permit-nav": true,
-            "symKey": "iris-valves--005--1x1",
+            "symKey": "iris-valves--006--1x1",
             "obsId": 0
           }
         }
@@ -38000,6 +38000,15 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
+      "iris-valves--006--1x1 0": {
+        "x": 1922,
+        "y": 1700,
+        "width": 110,
+        "height": 110,
+        "symbolKey": "iris-valves--006--1x1",
+        "obstacleId": 0,
+        "type": "obstacle"
+      },
       "cargo--010--2x4 0": {
         "x": 2061,
         "y": 1588,
@@ -38010,8 +38019,8 @@
         "type": "obstacle"
       },
       "extra--007--desk--0.4x0.66 0": {
-        "x": 1785,
-        "y": 1806,
+        "x": 2034,
+        "y": 1700,
         "width": 104,
         "height": 64,
         "symbolKey": "extra--007--desk--0.4x0.66",
@@ -38019,8 +38028,8 @@
         "type": "surface"
       },
       "table--009--0.8x0.8 0": {
-        "x": 1792,
-        "y": 1872,
+        "x": 1785,
+        "y": 1812,
         "width": 92,
         "height": 92,
         "symbolKey": "table--009--0.8x0.8",
@@ -38196,7 +38205,7 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": -1267809538,
+    "imagesHash": -971336744,
     "skins": {
       "svgHash": {
         "cuboid-character.tex.svg": -2128374531,

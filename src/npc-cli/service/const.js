@@ -252,6 +252,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "fresher--036--4x2": true,
   "fuel--010--4x2": true,
   "iris-valves--005--1x1": true,
+  "iris-valves--006--1x1": true,
   "lab--012--4x3": true,
   "lab--018--4x4": true,
   "lab--023--4x4": true,

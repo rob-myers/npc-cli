@@ -3,7 +3,7 @@
     "101--hull": {"outputHash": 449046708, "pngHash": 568633107},
     "102--hull": {"outputHash": -234772630, "pngHash": 184103855},
     "103--hull": {"outputHash": -1566389117, "pngHash": -1937509879},
-    "301--hull": {"outputHash": -1371603804, "pngHash": 787602800},
+    "301--hull": {"outputHash": 1384432740, "pngHash": 787602800},
     "302--hull": {"outputHash": -927176817, "pngHash": -1557128953},
     "303--hull": {
       "outputHash": -363740642,
@@ -231,6 +231,11 @@
       "outputHash": 545371427,
       "pngHash": 1810420148,
       "obsHashes": [-2082156787]
+    },
+    "iris-valves--006--1x1": {
+      "outputHash": 1563319043,
+      "pngHash": -1425171654,
+      "obsHashes": [-1389055090]
     },
     "lab--012--4x3": {
       "outputHash": -1335149025,
@@ -885,6 +890,15 @@
         "obstacleId": 0,
         "type": "obstacle"
       },
+      "iris-valves--006--1x1 0": {
+        "x": 1922,
+        "y": 1700,
+        "width": 110,
+        "height": 110,
+        "symbolKey": "iris-valves--006--1x1",
+        "obstacleId": 0,
+        "type": "obstacle"
+      },
       "cargo--010--2x4 0": {
         "x": 2061,
         "y": 1588,
@@ -895,8 +909,8 @@
         "type": "obstacle"
       },
       "extra--007--desk--0.4x0.66 0": {
-        "x": 1785,
-        "y": 1806,
+        "x": 2034,
+        "y": 1700,
         "width": 104,
         "height": 64,
         "symbolKey": "extra--007--desk--0.4x0.66",
@@ -904,8 +918,8 @@
         "type": "surface"
       },
       "table--009--0.8x0.8 0": {
-        "x": 1792,
-        "y": 1872,
+        "x": 1785,
+        "y": 1812,
         "width": 92,
         "height": 92,
         "symbolKey": "table--009--0.8x0.8",
@@ -1081,7 +1095,7 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": -1267809538,
+    "imagesHash": -971336744,
     "skins": {
       "svgHash": {
         "cuboid-character.tex.svg": -2128374531,
@@ -4121,29 +4135,29 @@
           "transform": [1, 0, 0, 1, 21, 1.5]
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
-          "meta": {"key": "iris-valves--005--1x1"},
+          "symbolKey": "iris-valves--006--1x1",
+          "meta": {"key": "iris-valves--006--1x1"},
           "width": 1.5,
           "height": 1.5,
           "transform": [0, -1, -1, 0, 1.5, 9]
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
-          "meta": {"key": "iris-valves--005--1x1"},
+          "symbolKey": "iris-valves--006--1x1",
+          "meta": {"key": "iris-valves--006--1x1"},
           "width": 1.5,
           "height": 1.5,
           "transform": [-1, 0, 0, 1, 9, 13.5]
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
-          "meta": {"key": "iris-valves--005--1x1"},
+          "symbolKey": "iris-valves--006--1x1",
+          "meta": {"key": "iris-valves--006--1x1"},
           "width": 1.5,
           "height": 1.5,
           "transform": [-1, 0, 0, 1, 24, 13.5]
         },
         {
-          "symbolKey": "iris-valves--005--1x1",
-          "meta": {"key": "iris-valves--005--1x1"},
+          "symbolKey": "iris-valves--006--1x1",
+          "meta": {"key": "iris-valves--006--1x1"},
           "width": 1.5,
           "height": 1.5,
           "transform": [0, 1, -1, 0, 30, 6]
@@ -11416,6 +11430,43 @@
             "no-shadow": true,
             "permit-nav": true,
             "symKey": "iris-valves--005--1x1",
+            "obsId": 0
+          }
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [],
+      "decor": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[1.1, 0.2], [1.1, 1.3], [0, 1.3], [0, 0.2]]],
+          "meta": {"decor": true, "hatch": true, "circle": true}
+        }
+      ],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 1.5,
+      "pngRect": {"x": 0, "y": 0.2, "width": 1.105, "height": 1.1},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
+    "iris-valves--006--1x1": {
+      "key": "iris-valves--006--1x1",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [[1.105, 0.2002], [1.105, 1.3002], [0.002, 1.2998], [0.002, 0.1998]]
+          ],
+          "meta": {
+            "obstacle": true,
+            "no-shadow": true,
+            "permit-nav": true,
+            "symKey": "iris-valves--006--1x1",
             "obsId": 0
           }
         }
