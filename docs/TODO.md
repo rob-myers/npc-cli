@@ -70,6 +70,9 @@ w debug.char.setSkin 0
   - ✅ CameraLightMaterial should support texture map
   - ✅ `w.debug.testChar` --> `w.debug.char`
   - 🚧 make alternate model
+    - ℹ️ uv cube: follow active quads > even, then unwrap (?)
+    - ℹ️ uv map cube first, before deform scale
+    - cuboid-character-material
     - 🚧 cuboid head, cuboid body
     - 🚧 shadow quad, selector quad, label quad, icon quad
   - make alternate skin(s)
