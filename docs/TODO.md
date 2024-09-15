@@ -69,13 +69,17 @@ w debug.char.setSkin 0
       - expose hash and `w.debug.char.setSkin(i)`
   - ✅ CameraLightMaterial should support texture map
   - ✅ `w.debug.testChar` --> `w.debug.char`
-  - 🚧 make alternate model
+  - 🚧 make cuboid model
     - ℹ️ uv cube: follow active quads > even, then unwrap (?)
     - ℹ️ uv map cube first, before deform scale
-    - cuboid-character-material
-    - 🚧 cuboid head, cuboid body
-    - 🚧 shadow quad, selector quad, label quad, icon quad
-  - make alternate skin(s)
+    - ℹ️ cuboid-{character,mesh,material}
+    - cuboid: head ✅ body ✅
+    - quad: shadow (ground) ✅ ring (ground) ✅ label (above) ✅ icon (above) ✅
+    - 🚧 basic skin
+
+- import model
+- model shader handles label/icon properly
+- cuboid model skin
 
 - character animation: idle, walk
   - try using `class Npc`
