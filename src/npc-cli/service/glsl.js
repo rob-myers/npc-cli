@@ -196,13 +196,16 @@ export const cameraLightShader = {
 /**
  * - Based on `cameraLightShader`
  * - Does not support instancing
+ * - Assumes USE_LOGDEPTHBUF
  * - Intend to render some triangles as sprites.
  */
 export const testCharacterShader = {
   Vert: /*glsl*/`
 
-  flat varying float dotProduct;
+  attribute int vertexId;
+  flat varying int vId;
   varying vec3 vColor;
+  flat varying float dotProduct;
 
   #include <common>
   #include <uv_pars_vertex>
@@ -215,11 +218,9 @@ export const testCharacterShader = {
     mvPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * mvPosition;
 
-    #ifdef USE_LOGDEPTHBUF
-      vFragDepth = 1.0 + gl_Position.w;
-      vIsPerspective = float( isPerspectiveMatrix( projectionMatrix ) );
-    #endif
+    #include <logdepthbuf_vertex>
 
+    vId = vertexId;
     vColor = vec3(1.0);
 
     vec3 transformedNormal = normalize(normalMatrix * vec3(normal));
@@ -230,6 +231,7 @@ export const testCharacterShader = {
 
   Frag: /*glsl*/`
 
+  flat varying int vId;
 	flat varying float dotProduct;
   varying vec3 vColor;
   uniform vec3 diffuse;
@@ -240,10 +242,14 @@ export const testCharacterShader = {
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    vec4 diffuseColor = vec4( diffuse, 1);
+    vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
     #include <map_fragment>
     gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
+
+    if (vId > 56) {// 🚧 WIP
+      gl_FragColor = vec4(1, 1, 0, 1);
+    }
   }
   `,
 };

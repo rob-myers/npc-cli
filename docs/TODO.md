@@ -18,10 +18,14 @@ w debug.char.add $( click 1 ) cuboidChar
 ```
   - 🚧 model shader handles label/icon properly
     - ✅ dup cameraLightShader as testCharacterShader sans instancing
-    - 🚧 identify label/icon quad via attribute/shader (?)
+    - ✅ identify label/icon quad via attribute/shader (?)
+      - ℹ️ vertex ids ≥ 56 (out of 64)
+    - 🚧 render as sprite i.e. always face camera
   - improve cuboid model skin
   - character animation: idle, walk
     - try using `class Npc`
+
+- support multiple skins for single test character
 
 - return to next.js project
   - ensure up to date

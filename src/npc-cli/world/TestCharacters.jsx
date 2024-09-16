@@ -37,6 +37,10 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       // 🚧 SkinnedMesh
       const mesh = /** @type {THREE.Mesh} */ (graph.nodes[meta.meshName]);
 
+      const numVertices = mesh.geometry.getAttribute('position').count;
+      const vertexIds = [...Array(numVertices)].map((_,i) => i);
+      mesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
+
       /** @type {TestCharacter} */
       const character = {
         object,
