@@ -17,6 +17,9 @@ declare global {
       cameraLightMaterial: BaseExtendedShaderMaterial<{
         diffuse?: import('three').Vector3Tuple | import('three').Vector3Like;
       }>;
+      testCharacterMaterial: BaseExtendedShaderMaterial<{
+        diffuse?: import('three').Vector3Tuple | import('three').Vector3Like;
+      }>;
     }
   }
 }

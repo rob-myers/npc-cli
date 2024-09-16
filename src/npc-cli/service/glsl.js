@@ -120,6 +120,7 @@ const instancedUvMappingShader = {
 /**
  * - Shade color `diffuse` by light whose direction is always the camera's direction.
  * - Supports instancing.
+ * - Supports a single texture.
  * - We're using this as a guide:
  *   - https://github.com/mrdoob/three.js/blob/master/src/renderers/shaders/ShaderLib/meshphong.glsl.js
  *   - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/basic/vertex
@@ -192,6 +193,61 @@ export const cameraLightShader = {
   `,
 };
 
+/**
+ * - Based on `cameraLightShader`
+ * - Does not support instancing
+ * - Intend to render some triangles as sprites.
+ */
+export const testCharacterShader = {
+  Vert: /*glsl*/`
+
+  flat varying float dotProduct;
+  varying vec3 vColor;
+
+  #include <common>
+  #include <uv_pars_vertex>
+  #include <logdepthbuf_pars_vertex>
+
+  void main() {
+    #include <uv_vertex>
+
+    vec4 mvPosition = vec4(position, 1.0);
+    mvPosition = modelViewMatrix * mvPosition;
+    gl_Position = projectionMatrix * mvPosition;
+
+    #ifdef USE_LOGDEPTHBUF
+      vFragDepth = 1.0 + gl_Position.w;
+      vIsPerspective = float( isPerspectiveMatrix( projectionMatrix ) );
+    #endif
+
+    vColor = vec3(1.0);
+
+    vec3 transformedNormal = normalize(normalMatrix * vec3(normal));
+    vec3 lightDir = normalize(mvPosition.xyz);
+    dotProduct = -min(dot(transformedNormal, lightDir), 0.0);
+  }
+  `,
+
+  Frag: /*glsl*/`
+
+	flat varying float dotProduct;
+  varying vec3 vColor;
+  uniform vec3 diffuse;
+
+  #include <common>
+  #include <uv_pars_fragment>
+  #include <map_pars_fragment>
+  #include <logdepthbuf_pars_fragment>
+
+  void main() {
+    vec4 diffuseColor = vec4( diffuse, 1);
+    #include <logdepthbuf_fragment>
+    #include <map_fragment>
+    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
+  }
+  `,
+};
+
 export const InstancedMonochromeShader = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.5, 0.5),
@@ -224,9 +280,23 @@ export const CameraLightMaterial = shaderMaterial(
   cameraLightShader.Frag,
 );
 
-// See glsl.d.ts
+export const TestCharacterMaterial = shaderMaterial(
+  {
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
+    // 🔔 map, mapTransform required else can get weird texture
+    map: null,
+    mapTransform: new THREE.Matrix3(),
+  },
+  testCharacterShader.Vert,
+  testCharacterShader.Frag,
+);
+
+/**
+ * @see glsl.d.ts
+ */
 extend({
   InstancedMonochromeShader,
   InstancedSpriteSheetMaterial,
   CameraLightMaterial,
+  TestCharacterMaterial,
 });

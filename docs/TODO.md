@@ -12,13 +12,13 @@
   - ✅ import model into npc-cli TestCharacters
     - ✅ export as cuboid-model.glb
     - ✅ configure TestCharacters for "multiple character meta"
-    ```sh
-    w debug.char.add $( click 1 ) hcTest
-    w debug.char.add $( click 1 ) cuboidChar
-    ```
-
-  - model shader handles label/icon properly
-    - can identify these two quads
+```sh
+w debug.char.add $( click 1 ) hcTest
+w debug.char.add $( click 1 ) cuboidChar
+```
+  - 🚧 model shader handles label/icon properly
+    - ✅ dup cameraLightShader as testCharacterShader sans instancing
+    - 🚧 identify label/icon quad via attribute/shader (?)
   - improve cuboid model skin
   - character animation: idle, walk
     - try using `class Npc`

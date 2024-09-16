@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 import { buildObjectLookup, emptyTexture, textureLoader } from "../service/three";
-import { CameraLightMaterial } from '../service/glsl';
+import { CameraLightMaterial, TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
@@ -34,6 +34,8 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       const object = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(object);
       const scene = /** @type {THREE.Group} */ (graph.nodes[meta.groupName]);
+      // 🚧 SkinnedMesh
+      const mesh = /** @type {THREE.Mesh} */ (graph.nodes[meta.meshName]);
 
       /** @type {TestCharacter} */
       const character = {
@@ -41,7 +43,8 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
         charKey,
         graph: buildObjectLookup(object),
-        mesh: /** @type {THREE.Mesh} */ (graph.nodes[meta.meshName]),
+        mesh,
+        scale: mesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
       };
       const material = /** @type {THREE.MeshPhysicalMaterial} */ (character.graph.materials[meta.materialName]);
@@ -79,16 +82,16 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
     state.characters.forEach(({ charKey }, charIndex) => state.setSkin(charIndex, charKey));
   }, [w.hash.sheets]);
 
-  return state.characters.map(({ object, initPos, graph, mesh, texture }, i) =>
+  return state.characters.map(({ object, initPos, graph, mesh, scale, texture }, i) =>
     <group key={i} position={initPos}>
       <mesh
         geometry={mesh.geometry}
         position={mesh.position}
-        scale={mesh.scale}
+        scale={scale}
       >
         {/* <meshBasicMaterial key="change_me" map={texture} transparent/> */}
-        <cameraLightMaterial
-          key={CameraLightMaterial.key}
+        <testCharacterMaterial
+          key={TestCharacterMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
           map={texture}
@@ -128,7 +131,8 @@ const charKeyToMeta = {
   },
   cuboidChar: {
     url: '/assets/3d/cuboid-character.glb',
-    scale: 1,
+    // scale: 1,
+    scale: 0.75,
     materialName: 'cuboid-character-material',
     meshName: 'cuboid-character-mesh',
     groupName: 'Scene',
@@ -145,6 +149,7 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
  * @property {THREE.Vector3} initPos
  * @property {THREE.Object3D} object
  * @property {THREE.Mesh | THREE.SkinnedMesh} mesh
+ * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
  */
 
