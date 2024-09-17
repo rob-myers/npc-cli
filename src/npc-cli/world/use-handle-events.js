@@ -347,7 +347,7 @@ export default function useHandleEvents(w) {
     },
     removeFromSensors(npcKey) {
       const closeDoors = state.npcToDoor[npcKey];
-      for (const gdKey of closeDoors.nearby ?? []) {
+      for (const gdKey of closeDoors?.nearby ?? []) {// npc may never have been close to any door
         const door = w.door.byKey[gdKey];
         state.onExitSensor({ key: 'exit-sensor', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
         if (closeDoors.inside.delete(gdKey) === true) {
