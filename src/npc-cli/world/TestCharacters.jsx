@@ -134,8 +134,7 @@ const charKeyToMeta = {
     skinBaseName: 'test-hyper-casual.tex.png',
   },
   cuboidChar: {
-    // url: '/assets/3d/cuboid-character.glb',
-    url: '/assets/3d/cuboid-character-test2.glb',
+    url: '/assets/3d/cuboid-character.glb',
     // scale: 1,
     scale: 0.75,
     materialName: 'cuboid-character-material',
