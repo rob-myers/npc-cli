@@ -217,10 +217,10 @@ export const testCharacterShader = {
     vColor = vec3(1.0);
 
     if (vId >= 56 && vId < 60) {// 🚧 WIP
-      vec4 mvPosition = modelViewMatrix * vec4( 0.0, 3.0, 0.0, 1.0 );
+      vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.5, 0.0, 1.0 );
       vec2 scale = vec2(1.0);
-      // scale.x = length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) );
-      // scale.y = length( vec3( modelMatrix[ 1 ].x, modelMatrix[ 1 ].y, modelMatrix[ 1 ].z ) );
+      scale.x = length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) );
+      scale.y = length( vec3( modelMatrix[ 1 ].x, modelMatrix[ 1 ].y, modelMatrix[ 1 ].z ) );
       vec2 alignedPosition = position.xy * scale;
 
       mvPosition.xy += alignedPosition;
@@ -261,6 +261,9 @@ export const testCharacterShader = {
     gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
 
     if (vId >= 56 && vId < 60) {// 🚧 WIP
+      if (diffuseColor.a < 0.5) {
+        discard;
+      }
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
     }
   }
