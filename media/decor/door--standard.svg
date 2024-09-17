@@ -13,11 +13,25 @@
       <feComposite operator="in" in="color" in2="choke" result="shadow"/>
       <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
     </filter>
+    <filter id="filter-1" color-interpolation-filters="sRGB" x="-50%" y="-50%" width="200%" height="200%" bx:preset="inner-shadow 1 0 0 4 0.68 rgba(0,0,0,0.7)">
+      <feOffset dx="0" dy="0"/>
+      <feGaussianBlur stdDeviation="4"/>
+      <feComposite operator="out" in="SourceGraphic"/>
+      <feComponentTransfer result="choke">
+        <feFuncA type="linear" slope="1.36"/>
+      </feComponentTransfer>
+      <feFlood flood-color="rgba(0,0,0,0.7)" result="color"/>
+      <feComposite operator="in" in="color" in2="choke" result="shadow"/>
+      <feComposite operator="over" in="shadow" in2="SourceGraphic"/>
+    </filter>
   </defs>
   <path d="M 219.99999 -0.000003 L 219.99999 399.9999 L 0.000001 399.9999 L 0.000001 -0.000003 L 219.99999 -0.000003 Z" style="stroke: rgb(0, 0, 0); filter: none; fill: rgb(170, 170, 170);">
     <title>bg</title>
   </path>
   <path d="M 200.000022 30.000002 L 200.000022 400.000028 L 20.000002 400.000028 L 20.000002 30.000002 L 200.000022 30.000002 Z" style="stroke: rgb(0, 0, 0); filter: url('#filter-3');">
+    <title>inner</title>
+  </path>
+  <path d="M 210.000011 19.999999 L 210.000011 399.999976 L 10 399.999976 L 10 19.999999 L 210.000011 19.999999 Z" style="stroke: rgb(0, 0, 0); filter: url('#filter-1'); fill: none; stroke-width: 2px;">
     <title>inner</title>
   </path>
 </svg>
