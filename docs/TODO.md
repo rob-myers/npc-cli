@@ -21,6 +21,11 @@ w debug.char.add $( click 1 ) cuboidChar
     - ✅ identify label/icon quad via attribute/shader (?)
       - ℹ️ vertex ids ≥ 56 (out of 64)
     - 🚧 render as sprite i.e. always face camera
+      - ℹ️ centre label quad in model (about XZ blender coords)
+      - ℹ️ use shader to draw "above" npc
+      - ✅ label has transparency
+      - 🚧 fix label normal, return to cuboid-character.glb
+    - icon quad "normal" and double-sided
   - improve cuboid model skin
   - character animation: idle, walk
     - try using `class Npc`
