@@ -9,7 +9,7 @@
     <polygon points="1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400 " style="fill-opacity: 0; stroke-width: 8px;">
       <title>ground-ring</title>
     </polygon>
-    <circle style="stroke-width: 8px; stroke: rgb(255, 0, 0); fill: none;" cx="973.158508" cy="50.841564" r="46.558437"/>
+    <circle style="fill: none; stroke-width: 2px; stroke: rgb(221, 221, 255);" cx="973.158508" cy="50.841564" r="46.558437"/>
     <polygon points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill-opacity: 0.25; stroke-width: 8px; fill: none;">
       <title>ground-shadow</title>
     </polygon>

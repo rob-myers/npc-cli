@@ -32,6 +32,7 @@ w debug.char.add $( click 1 ) cuboidChar
     - ❌ label text has outline
     - ✅ shadow circular
     - body has icon
+    - can toggle/color selector
   - character animation: idle, walk
     - try using `class Npc`
 
