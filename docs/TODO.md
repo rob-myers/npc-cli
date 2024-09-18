@@ -51,6 +51,7 @@
     - ✅ Main, Nav
     - ✅ Viewer
 
+- bug: tty: `map 'x => 2 ** x'` then press delete
 - fix flickering hull door base (onchange camera view)
   - suffices to add a matching line
 - support non-door sensor i.e. decor circle/poly
