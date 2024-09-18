@@ -231,7 +231,8 @@ export const testCharacterShader = {
 
       if (showLabel == false) return; 
 
-      vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.5, 0.0, 1.0 );
+      // 🚧 remove 0.75 scale
+      vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.2 * (1.0 / 0.75), 0.0, 1.0 );
       
       vec2 scale = vec2(1.0);
       scale.x = length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) );
