@@ -202,6 +202,10 @@ export const cameraLightShader = {
 export const testCharacterShader = {
   Vert: /*glsl*/`
 
+  uniform bool showLabel;
+  uniform bool showSelector;
+  uniform vec3 selectorColor;
+
   attribute int vertexId;
   flat varying int vId;
   varying vec3 vColor;
@@ -216,7 +220,17 @@ export const testCharacterShader = {
     vId = vertexId;
     vColor = vec3(1.0);
 
-    if (vId >= 56) {// final quad -> sprite
+    // selectorColor
+
+    if (vId < 4) {// selector quad
+      if (showSelector == false) return;
+      vColor = selectorColor;
+    }
+
+    if (vId >= 56) {// label quad
+
+      if (showLabel == false) return; 
+
       vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.5, 0.0, 1.0 );
       
       vec2 scale = vec2(1.0);
@@ -260,8 +274,11 @@ export const testCharacterShader = {
     #include <logdepthbuf_fragment>
     #include <map_fragment>
 
-    if (vId >= 56) {// final quad -> sprite
-      if (diffuseColor.a < 0.5) discard;
+    if (diffuseColor.a < 0.1) {
+      discard;
+    }
+
+    if (vId < 4 || vId >= 56) {// selector quad, label quad
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
       return;
     }
@@ -309,6 +326,9 @@ export const TestCharacterMaterial = shaderMaterial(
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
+    showLabel: true,
+    showSelector: true,
+    selectorColor: [0, 0, 1],
   },
   testCharacterShader.Vert,
   testCharacterShader.Frag,

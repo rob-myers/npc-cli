@@ -93,12 +93,13 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
         position={mesh.position}
         scale={scale}
       >
-        {/* <meshBasicMaterial key="change_me" map={texture} transparent/> */}
+        {/* <meshBasicMaterial key="change_me" map={texture} transparent /> */}
         <testCharacterMaterial
           key={TestCharacterMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
           map={texture}
+          selectorColor={[0.6, 0.6, 1]}
         />
       </mesh>
     </group>

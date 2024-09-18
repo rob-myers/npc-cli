@@ -5,20 +5,25 @@ declare global {
       import('three').ShaderMaterial,
       typeof THREE.ShaderMaterial
     > & T;
+
+    type Vector3Input = import('three').Vector3Tuple | import('three').Vector3Like;
     
     interface IntrinsicElements {
       instancedMonochromeShader: BaseExtendedShaderMaterial<{
-        diffuse?: import('three').Vector3Tuple | import('three').Vector3Like;
+        diffuse?: Vector3Input;
         objectPicking?: boolean;
       }>;
       instancedSpriteSheetMaterial: BaseExtendedShaderMaterial<{
         map: import('three').CanvasTexture;
       }>;
       cameraLightMaterial: BaseExtendedShaderMaterial<{
-        diffuse?: import('three').Vector3Tuple | import('three').Vector3Like;
+        diffuse?: Vector3Input;
       }>;
       testCharacterMaterial: BaseExtendedShaderMaterial<{
-        diffuse?: import('three').Vector3Tuple | import('three').Vector3Like;
+        diffuse?: Vector3Input;
+        showLabel?: boolean;
+        showSelector?: boolean;
+        selectorColor?: Vector3Input;
       }>;
     }
   }

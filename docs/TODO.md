@@ -12,10 +12,10 @@
   - ✅ import model into npc-cli TestCharacters
     - ✅ export as cuboid-model.glb
     - ✅ configure TestCharacters for "multiple character meta"
-```sh
-w debug.char.add $( click 1 ) hcTest
-w debug.char.add $( click 1 ) cuboidChar
-```
+    ```sh
+    w debug.char.add $( click 1 ) hcTest
+    w debug.char.add $( click 1 ) cuboidChar
+    ```
   - ✅ model shader handles label/icon properly
     - ✅ dup cameraLightShader as testCharacterShader sans instancing
     - ✅ identify label/icon quad via attribute/shader (?)
@@ -28,17 +28,24 @@ w debug.char.add $( click 1 ) cuboidChar
     - ❌ icon quad "normal" and double-sided
       - removed icon quad
   - 🚧 improve cuboid model/skin
-    - selector has smaller radius
+    - ✅ selector has smaller radius
     - ❌ label text has outline
     - ✅ shadow circular
-    - body has icon
-    - can toggle/color selector
+    - 🚧 body has icon
+      - 🚧 1st redo uv-map i.e. stretch body
+    - ✅ can toggle selector/label
+      - uniforms showSelector, showLabel
+    - ✅ can change selector color
+    - label higher so doesn't come through walls?
+    - selector intersection problem
+      - ✅ discard alpha < 0.1
+      - higher, so drop shadow always beneath
   - character animation: idle, walk
     - try using `class Npc`
 
 - support multiple skins for single test character
 
-- return to next.js project
+- 🚧 return to next.js project
   - ensure up to date
   - work on migrating Viewer
 
@@ -80,7 +87,7 @@ w debug.char.add $( click 1 ) cuboidChar
   - maybe detect/warn "duplicate process def"
 - duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
-- tty pause/resume loses should remember cursor position
+- tty pause/resume should remember cursor position
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
 - `Tabs` css should not reference src/const
