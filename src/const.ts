@@ -40,8 +40,8 @@ export const allArticlesMeta: Record<ArticleKey, ArticleMeta> = {
     tags: ['cli', 'web dev', 'behaviour', 'video games'],
     
   },
-  intro: {
-    key: 'intro',
+  "strategy-1": {
+    key: 'strategy-1',
     date: '2024-02-18',
     info: 'Introduction',
     giscusTerm: '/intro',

@@ -148,7 +148,7 @@ export type State = {
 
 export type ArticleKey = (
   | 'index'
-  | 'intro'
+  | 'strategy-1'
 );
 
 export interface ArticleMeta {
