@@ -216,8 +216,9 @@ export const testCharacterShader = {
     vId = vertexId;
     vColor = vec3(1.0);
 
-    if (vId >= 56 && vId < 60) {// 🚧 WIP
+    if (vId >= 56) {// final quad -> sprite
       vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.5, 0.0, 1.0 );
+      
       vec2 scale = vec2(1.0);
       scale.x = length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) );
       scale.y = length( vec3( modelMatrix[ 1 ].x, modelMatrix[ 1 ].y, modelMatrix[ 1 ].z ) );
@@ -258,14 +259,14 @@ export const testCharacterShader = {
     vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
     #include <map_fragment>
-    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
 
-    if (vId >= 56 && vId < 60) {// 🚧 WIP
-      if (diffuseColor.a < 0.5) {
-        discard;
-      }
+    if (vId >= 56) {// final quad -> sprite
+      if (diffuseColor.a < 0.5) discard;
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
+      return;
     }
+
+    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
   }
   `,
 };

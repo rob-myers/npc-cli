@@ -16,17 +16,22 @@
 w debug.char.add $( click 1 ) hcTest
 w debug.char.add $( click 1 ) cuboidChar
 ```
-  - 🚧 model shader handles label/icon properly
+  - ✅ model shader handles label/icon properly
     - ✅ dup cameraLightShader as testCharacterShader sans instancing
     - ✅ identify label/icon quad via attribute/shader (?)
       - ℹ️ vertex ids ≥ 56 (out of 64)
-    - 🚧 render as sprite i.e. always face camera
+    - ✅ render as sprite i.e. always face camera
       - ℹ️ centre label quad in model (about XZ blender coords)
       - ℹ️ use shader to draw "above" npc
       - ✅ label has transparency
-      - 🚧 fix label normal, return to cuboid-character.glb
-    - icon quad "normal" and double-sided
+      - ✅ fix label normal, return to cuboid-character.glb
+    - ❌ icon quad "normal" and double-sided
+      - removed icon quad
   - improve cuboid model skin
+    - selector has smaller radius
+    - label text has outline
+    - shadow circular
+    - body has icon
   - character animation: idle, walk
     - try using `class Npc`
 
