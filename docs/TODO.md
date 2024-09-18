@@ -27,10 +27,10 @@ w debug.char.add $( click 1 ) cuboidChar
       - ✅ fix label normal, return to cuboid-character.glb
     - ❌ icon quad "normal" and double-sided
       - removed icon quad
-  - improve cuboid model skin
+  - 🚧 improve cuboid model/skin
     - selector has smaller radius
-    - label text has outline
-    - shadow circular
+    - ❌ label text has outline
+    - ✅ shadow circular
     - body has icon
   - character animation: idle, walk
     - try using `class Npc`

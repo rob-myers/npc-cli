@@ -10,13 +10,13 @@
       <title>ground-ring</title>
     </polygon>
     <circle style="stroke-width: 8px; stroke: rgb(255, 0, 0); fill: none;" cx="973.158508" cy="50.841564" r="46.558437"/>
-    <polygon points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill-opacity: 0.25; stroke-width: 8px;">
+    <polygon points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill-opacity: 0.25; stroke-width: 8px; fill: none;">
       <title>ground-shadow</title>
     </polygon>
-    <polygon points="320.000,544.000 160.000,544.000 160.000,384.000 320.000,384.000 " style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill: rgb(255, 255, 255);">
+    <polygon points="320.000,544.000 160.000,544.000 160.000,384.000 320.000,384.000 " style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill: rgb(170, 170, 170);">
       <title>head-top</title>
     </polygon>
-    <polygon points="320.000,1024.000 160.000,1024.000 160.000,864.000 320.000,864.000 " style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill: rgb(255, 255, 255);">
+    <polygon points="320.000,1024.000 160.000,1024.000 160.000,864.000 320.000,864.000 " style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill: rgb(170, 170, 170);">
       <title>head-back</title>
     </polygon>
     <polygon points="320.000,864.000 160.000,864.000 160.000,704.000 320.000,704.000 " style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
@@ -55,7 +55,8 @@
     <polygon points="102.400,0.000 0.000,0.000 0.000,102.400 102.400,102.400 " style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
       <title>ui-icon</title>
     </polygon>
-    <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 49px; white-space: pre;" x="224" y="73.0947">Foo bar baz qux</text>
+    <text style="fill: rgb(255, 255, 221); font-family: Arial, sans-serif; font-size: 49px; white-space: pre;" x="224" y="73.0947">Foo bar baz qux</text>
+    <circle style="stroke-width: 8px; fill-opacity: 0.3;" cx="768.158508" cy="50.841564" r="46.558437"/>
   </g>
   <g>
     <title>head</title>
