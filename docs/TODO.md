@@ -45,11 +45,11 @@
 
 - support multiple skins for single test character
 
-- 🚧 return to next.js project
+- ✅ return to next.js project
   - ✅ ensure up to date
-  - 🚧 work on migrating Root
+  - ✅ work on migrating Root
     - ✅ Main, Nav
-    - 🚧 Viewer
+    - ✅ Viewer
 
 - fix flickering hull door base (onchange camera view)
   - suffices to add a matching line

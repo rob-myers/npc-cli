@@ -42,7 +42,7 @@ export default function Viewer() {
     trackVisible: true,
   });
 
-  React.useEffect(() => state.tabs.focusRoot(), []);
+  // React.useEffect(() => state.tabs.focusRoot(), []);
 
   const update = useUpdate();
 
