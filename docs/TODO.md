@@ -2,11 +2,11 @@
 
 ## WIP
 
-- 🚧 migrate sub-symbols to actual symbols
+- ✅ migrate sub-symbols to actual symbols
   - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
   - bridge ✅ lifeboat ✅
   - beds ✅ consoles ✅
-  - counter ✅ engineering ✅ extra ✅ fresher ✅ lab ✅ medical ✅ cartography ✅ shop ✅ stateroom ✅ table 🚧
+  - counter ✅ engineering ✅ extra ✅ fresher ✅ lab ✅ medical ✅ cartography ✅ shop ✅ stateroom ✅ table ✅
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 integrate cuboid model
