@@ -281,6 +281,7 @@ export class ttyXtermClass {
       this.clearInput();
       this.setInput(newInput);
       this.setCursor(cursor + delta);
+      // console.log({ input, cursor, newInput, nextCursor: cursor + delta });
     } else {
       const newInput = input.slice(0, cursor) + input.slice(cursor + 1);
       this.clearInput();
@@ -876,11 +877,14 @@ export class ttyXtermClass {
     this.xterm.write(realNewInput);
 
     /**
-     * Currently when cursor at right edge of terminal and we press a key
-     * it does not move (🤔 why?). We force it to jump to next line.
-     * This must be suppressed when deleting 1st character of multiline input.
+     * If cursor at right-edge and press key it does not move (🤔 why?),
+     * so we force it to jump to next line.
+     * 
+     * Exceptions:
+     * (a) delete 1st character of multiline input.
+     * (b) delete 1st character while TTY connected to process e.g. `map 'x => 2 ** x'`
      */
-    if (!realNewInput.endsWith('\n') && this.inputEndsAtEdge(newInput)) {
+    if (!(realNewInput.endsWith('\n') || !this.promptReady) && this.inputEndsAtEdge(newInput)) {
       this.xterm.write("\r\n");
     }
     this.input = newInput;

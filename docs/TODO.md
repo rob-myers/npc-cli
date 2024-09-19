@@ -5,7 +5,8 @@
 - 🚧 migrate sub-symbols to actual symbols
   - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
   - bridge ✅ lifeboat ✅
-  - beds ✅ consoles ✅ counter 🚧 engineering extra fresher lab medical cartography shop stateroom table
+  - beds ✅ consoles ✅
+  - counter 🚧 engineering extra fresher lab medical cartography shop stateroom table
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 integrate cuboid model
@@ -43,15 +44,14 @@
   - character animation: idle, walk
     - try using `class Npc`
 
+
+- 🚧 next.js project (npc-cli-next)
+  - keep in sync e.g. glsl.js
+  - get Decor working
+
+- ✅ bug: tty: `map 'x => 2 ** x'` then press delete
+  - ✅ also when type 1 char then delete 1st char
 - support multiple skins for single test character
-
-- ✅ return to next.js project
-  - ✅ ensure up to date
-  - ✅ work on migrating Root
-    - ✅ Main, Nav
-    - ✅ Viewer
-
-- bug: tty: `map 'x => 2 ** x'` then press delete
 - fix flickering hull door base (onchange camera view)
   - suffices to add a matching line
 - support non-door sensor i.e. decor circle/poly
@@ -2277,3 +2277,9 @@ run '({ w, api }) {
     - cuboid: head ✅ body ✅
     - quad: shadow (ground) ✅ ring (ground) ✅ label (above) ✅ icon (above) ✅
     - ✅ basic skin i.e. eyes
+
+- ✅ return to next.js project
+  - ✅ ensure up to date
+  - ✅ work on migrating Root
+    - ✅ Main, Nav
+    - ✅ Viewer
