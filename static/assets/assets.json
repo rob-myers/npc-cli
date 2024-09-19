@@ -220,7 +220,7 @@
     },
     "fresher--015--1x2": {"outputHash": 829502856, "pngHash": -1481245979},
     "fresher--020--2x2": {"outputHash": -196495568, "pngHash": 1107295627},
-    "fresher--025--3x2": {"outputHash": 1611432482, "pngHash": -1324814803},
+    "fresher--025--3x2": {"outputHash": 1614970316, "pngHash": -1324814803},
     "fresher--036--4x2": {"outputHash": 253826638, "pngHash": 633687707},
     "fuel--010--4x2": {
       "outputHash": -1254617445,
@@ -11073,27 +11073,6 @@
       "pngRect": {"x": -0.05, "y": -0.05, "width": 4.6, "height": 3.1},
       "symbols": [
         {
-          "symbolKey": "extra--002--fresher--0.5x0.5",
-          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
-          "width": 0.75,
-          "height": 0.75,
-          "transform": [1, 0, 0, 1, 1.62, 0]
-        },
-        {
-          "symbolKey": "extra--002--fresher--0.5x0.5",
-          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
-          "width": 0.75,
-          "height": 0.75,
-          "transform": [1, 0, 0, 1, 2.62, 0]
-        },
-        {
-          "symbolKey": "extra--002--fresher--0.5x0.5",
-          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
-          "width": 0.75,
-          "height": 0.75,
-          "transform": [1, 0, 0, 1, 3.62, 0]
-        },
-        {
           "symbolKey": "counter--010--0.4x0.4",
           "meta": {"key": "counter--010--0.4x0.4", "y": 0.65},
           "width": 0.75,
@@ -11109,10 +11088,31 @@
         },
         {
           "symbolKey": "extra--006--desk--0.4x1",
-          "meta": {"key": "extra--006--desk--0.4x1"},
+          "meta": {"key": "extra--006--desk--0.4x1", "y": 0.6},
           "width": 1.5,
           "height": 0.6,
           "transform": [1, 0, 0, 1, 0, 0]
+        },
+        {
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 1.63, 0]
+        },
+        {
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 2.63, 0]
+        },
+        {
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "meta": {"key": "extra--002--fresher--0.5x0.5", "y": 0.4},
+          "width": 0.75,
+          "height": 0.75,
+          "transform": [1, 0, 0, 1, 3.63, 0]
         }
       ],
       "removableDoors": [],
