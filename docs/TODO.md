@@ -36,10 +36,10 @@
     - ✅ can toggle selector/label
       - uniforms showSelector, showLabel
     - ✅ can change selector color
-    - label higher so doesn't come through walls?
-    - selector intersection problem
+    - ✅ label higher so doesn't come through walls?
+    - ✅ selector intersection problem
       - ✅ discard alpha < 0.1
-      - higher, so drop shadow always beneath
+      - ✅ higher, so drop shadow always beneath
   - character animation: idle, walk
     - try using `class Npc`
 
