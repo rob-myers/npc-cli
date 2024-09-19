@@ -279,12 +279,12 @@
       "pngHash": -763382708,
       "obsHashes": [-2014374468]
     },
-    "medical--007--3x2": {"outputHash": 1882882588, "pngHash": -74184864},
+    "medical--007--3x2": {"outputHash": -101840900, "pngHash": -74184864},
     "medical--008--3x2": {"outputHash": -1424224284, "pngHash": -1263266565},
     "medical-bed--005--0.6x1.2": {
-      "outputHash": -2029681887,
+      "outputHash": -352366401,
       "pngHash": -172295595,
-      "obsHashes": [1688686898]
+      "obsHashes": [-448200094]
     },
     "medical-bed--006--1.6x3.6": {
       "outputHash": 1212434630,
@@ -728,21 +728,21 @@
         "obstacleId": 0,
         "type": "surface"
       },
-      "bed--005--0.6x1.2 0": {
+      "medical-bed--005--0.6x1.2 0": {
         "x": 1393,
         "y": 1760,
-        "width": 191,
+        "width": 192,
         "height": 102,
-        "symbolKey": "bed--005--0.6x1.2",
+        "symbolKey": "medical-bed--005--0.6x1.2",
         "obstacleId": 0,
         "type": "obstacle"
       },
-      "medical-bed--005--0.6x1.2 0": {
-        "x": 623,
-        "y": 160,
-        "width": 189,
-        "height": 99,
-        "symbolKey": "medical-bed--005--0.6x1.2",
+      "bed--005--0.6x1.2 0": {
+        "x": 1225,
+        "y": 314,
+        "width": 191,
+        "height": 102,
+        "symbolKey": "bed--005--0.6x1.2",
         "obstacleId": 0,
         "type": "obstacle"
       },
@@ -756,8 +756,8 @@
         "type": "obstacle"
       },
       "cargo--010--2x4 1": {
-        "x": 1225,
-        "y": 314,
+        "x": 623,
+        "y": 160,
         "width": 164,
         "height": 102,
         "symbolKey": "cargo--010--2x4",
@@ -936,8 +936,8 @@
         "type": "obstacle"
       },
       "console--033--0.4x0.6 0": {
-        "x": 1586,
-        "y": 1755,
+        "x": 2079,
+        "y": 1356,
         "width": 67,
         "height": 81,
         "symbolKey": "console--033--0.4x0.6",
@@ -955,7 +955,7 @@
       },
       "console--051--0.4x0.6 0": {
         "x": 2079,
-        "y": 1356,
+        "y": 1439,
         "width": 69,
         "height": 75,
         "symbolKey": "console--051--0.4x0.6",
@@ -964,7 +964,7 @@
       },
       "extra--001--fresher--0.5x0.5 0": {
         "x": 2079,
-        "y": 1433,
+        "y": 1516,
         "width": 69,
         "height": 59,
         "symbolKey": "extra--001--fresher--0.5x0.5",
@@ -1018,7 +1018,7 @@
       },
       "extra--018--table-0.25x0.25 0": {
         "x": 623,
-        "y": 261,
+        "y": 264,
         "width": 49,
         "height": 48,
         "symbolKey": "extra--018--table-0.25x0.25",
@@ -1095,7 +1095,7 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": 2113468169,
+    "imagesHash": 2115706008,
     "skins": {
       "svgHash": {
         "cuboid-character.tex.svg": -49979608,
@@ -12704,14 +12704,14 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [0, -1, -1, 0, 0.92, 2.13]
+          "transform": [0, -1, -1, 0, 0.93, 2.13]
         },
         {
           "symbolKey": "medical-bed--005--0.6x1.2",
           "meta": {"key": "medical-bed--005--0.6x1.2", "y": 0.5},
           "width": 1.9,
           "height": 1,
-          "transform": [0, -1, 1, 0, 1.73, 2.71]
+          "transform": [0, -1, 1, 0, 1.74, 2.71]
         },
         {
           "symbolKey": "medical-bed--005--0.6x1.2",
@@ -12946,12 +12946,12 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [-0.009, 0.7284],
-              [-0.0029, 0.2929],
+              [-0.009, 0.7434],
+              [-0.0029, 0.2529],
               [0.4515, -0.0071],
-              [1.8791, 0.2745],
-              [1.8791, 0.7529],
-              [0.4771, 0.9829]
+              [1.9091, 0.2545],
+              [1.9041, 0.7429],
+              [0.4621, 1.0129]
             ]
           ],
           "meta": {

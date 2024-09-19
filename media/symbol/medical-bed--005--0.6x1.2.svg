@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
-  <defs>
-    <bx:grid x="0" y="0" width="300" height="300"/>
-    <symbol id="symbol-8" viewBox="0 0 1 1">
-      <title>decor-arrow</title>
-      <rect width="1" height="1" style="fill: url('#pattern-2');">
-        <title>pattern</title>
-      </rect>
-    </symbol>
-    <pattern id="pattern-2" viewBox="0 0 300 300" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="1" height="1">
-      <title>decor-arrow-pattern</title>
-      <defs>
-        <bx:grid x="0" y="0" width="300" height="300"/>
-      </defs>
-      <rect x="0.000029" y="-0.000047" width="300.000003" height="299.999989" style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;">
-        <title>bg</title>
-      </rect>
-      <rect width="149.998993" height="19.999998" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);" y="139.999992" x="50.000671">
-        <title>arrow-body</title>
-      </rect>
-      <path d="M 199.999648 125 L 249.999314 149.999997 L 199.999648 174.999997 L 199.999648 125 Z" style="stroke: rgb(0, 0, 0);">
-        <title>arrow-head</title>
-      </path>
-    </pattern>
-  </defs>
-  <image width="382" height="202" x="-1" y="-1" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAX4AAADKCAQAAAAI/+OgAAAABGdBTUEAALGPC/xhBQAAAAJiS0dEAP+Hj8y/AAAAB3RJTUUH5QkMFCkPAk10jgAAB9xJREFUeNrtndF2IjkMBWEP///L7EOWJQG7291tS1dS1dssxFh2Sblk2Mz9FpHnx5/v3huCiETU5rnxWMR6wIlosjwPPDdabWBMJEGOiB+3SjAjjhbn1Y9aMSwmhgqzxI9YOyxDX4A14n+ifw4wHe1LtxH/L9onAhNRvuph9V9PnF6M8unAZVSv97n94H3nybQB7KN4qc/9B+8HvoRGgDZqFzkgfmvbYwmJNoDfaF3fc/yhveBjXrjWScIAOlc2OPPbG7/yYyHaoCoaF3VQ/NbG5/xUlEaohP/lnBC/tfHZfyVAG+TH+0oOpPztra/8+zAaISee13By5re3HvRTELSBI16Hf1H81tatPwtBI0TH58AvhJ3+5j0+CNTah+KC0ML+mCfM/Pbm/eTv70lxQXhhe7QTxf/evIb8vd0pLlgduwOdLH5r82r693eqt2BFrA5xUsrf3r6u/L0dKy5YB4ujWzDz29uPIH9/94oL5mb1cS0Uv7X9aPr36tBbMCMrD2mx+K3tR5V/qyat5TKx7mgWpfztAjLI36tNccHYrDkOg5nfLiCX/P061ZaLyfxDMBS/VUBe/XsV6y0YhdmFG4WdfgH55e/XrregNjPLNZ757RIqyd8/BcUF9ZhVopP43yVUlf8NbWBZmKP4rRLQ/w2NsLYY85S/VwLyt6ANZpfgPPPbRSD/HjTC1W2LiP9dBPKPU7sNzm1WSPxWEeh/hnqNcGaD7il/rwjkv0aVNji6LbGZ3y4D+eeRuRGObEVU/O8ykH8F+dpgdAPC4rfK8N9RbnI0wtiLyqX8vTI0dlWByG2w/1LiM79diM6+KhGtEbaXDyL+dyFae6tHjDbYWlQ+7GwVorfDqug2Qm+hQDO/XYjiHquj1gatLw8nfqsU3X3C7abRCIcGprZQyB8TvzYYNkZfJoJPfGwb4f1g4JnfrjTGnqGNRRv8/CdXT+a9OPLnZNWvbbnfBCyZtQHkz87UNrg/+o48/T95dK029E/H7xu9budj5GVWM0vT6O0KR3g7c/bWm/JbT0wmNFzhZBs8H/2F4kPwqcaxWPS48sWzQFKYz/73g8fYQn8Xm8GqXw9N6odPem3wz/EFAHLQld92gq56Nb4PQJ/hyQ+QjUH554eeVTGKeAajyEx+AgpY05E/j4p5KoHZOE5+Agr4MiR/LE1j7Rb8aMrvExUIKGCLzBveddBU0GZA/nUxgoACnkhNfpN/GhLgPxryExOgBruTf+0U9fn3GgFuN7HYA2BJUvlJ/bBPUvkB9hGTn8/1gx1f8qMJVMF98vO5fvBiR34Ugry4T34riHPwSWL5+a4F2ySWH2AbOfmJJ2DFh/we6lnFE9oK/rI5+aOn5uj7h7XIxR4AK0rJT/CB35SSH+A3gvLPnM+kfugjKD+ADRLy281nUj+8kZAfwIP08pP6oUd6+QF6lJOf1A8vyskP8KKA/KR+aFNAfoA2BeUn9cMPBeUH+KGE/KR+aFFCfoAWJeUn9cPtVlR+gNutjPykfvimiPwA3xSVn9QPIvKjInggIf9f1uRzUj98Iig/gA1l5SdqQSH5CT7wl035mY6QGYHJT4uBDx/yV4oGNF11BCb/X1a2X6XWhn3k5AeworT8BJ/alJYfarMjf7bZSOqHN1/yW+uRrb0gDmKxh9YDO8TkB7CjnPykfnhRTn6AF7vyZ0/F2euDPs6TH/XAj4b8fqnY5pVJ/fADmR/KMiD/umiiEXo0dgH2NOUnGEAFhGKPXcvR3HC7Dcq/JhgQN8AXocnvB21Yk4789sGAKALWDE7+bLORVgPH2JOtnSAeXflrzUZasSIib3hrtRpoMCz/3NnoP2lpNxCZ/AD2PPoPPT/m87pprTCF7xK7AEsKT35kr8X9a3w/Tq0DEIStvPL4fqr9RCRywExGA/qj/aW2MmqoTwvG5vh70k7s8fkOYM1T4EeucIVL93ffyPw/k3C1HvlbDGYzy8ndEZ9bzs9jzF1tZKYP4ft7zaINgPzarFC+/YeSDfD3eLNWGYm1wm89sHH7OcVAfg3slN96SrH5T/Dxw0P4/acXagDkt8Zb+ZEvLBOACD7r0RF+dJEi8x/5V6Gp/PhyBRqA4DMTdeGPLp28AZD/OpGUP/4iqd8BEHzOEFP4cy+YeP4j/zjxlT/70kkbgOCzh/E7TdmqEjYA8rfINONnbijdOwCCz4ucM37u5pLN/9ry55/x87eZqAEqBp+qys/bcJIAVEV+hJ+7+STzP3PwQfmVZSRogGzyI7xlScEbIEfwQXm/4gK/A4grP8KrFBp4/scKPiivWXLQBtCXH+FjlB+wAVSDD8qvYuVBhHsHoDP7Ed6CtYcSbP57y4/ytqw/nkAN4CE/wvthc1RBGsAu9aO8AnaHFuIdwMrZj/BqWB5ggPk/X36U18X6KMUbYE7wQfgYeByrcAC6Ij/KR8PngIXn/7Hgg/CR8Tts0QYYkR/lc+B77IIN0As+CJ8P/ysQewew+ED8zxv+R+EyxOY/M74KKhfj3gAoXw+lK3JogEq/ogk+Ubsug3cAzHj4Qe/iFs1/Zjx8onmJkxqAGQ9b6F7n6QCE8jCG8sUemP8ID8dRv2TbH/OrnwZMJcJ1r22ACCcAS4hy9bMbIErdsJA4ElzXP06tYEIsIc40QKwKwZB4aow0QLyqwIGYmhj9PyaQm7jCPIPvH9z5F5BPZ1N3Zd2pAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTA5LTEyVDIwOjQxOjEwKzAwOjAwty6tQAAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wOS0xMlQyMDo0MToxMCswMDowMMZzFfwAAAAASUVORK5CYII=">
-    <title>medical-bed--005--0.6x1.2</title>
-  </image>
-  <path d="M 235.117009 286.395025 L 148.016009 285.174025 L 88.016009 194.309025 L 144.334009 -91.225975 L 240.016009 -91.225975 L 286.016009 189.174025 L 235.117009 286.395025 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5; transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(0, 1, -1, 0, -0.000009528066, 0.000001111469)">
-    <title>obstacle</title>
-  </path>
-  <use width="1" height="1" transform="matrix(20, 0, 0, -20, 89.500007629395, 94.500007629395)" style="opacity: 0.5; transform-origin: 0.5px 0.5px;" xlink:href="#symbol-8">
-    <title>decor do lie pod medical obscured y=0.01</title>
-  </use>
+        <defs>
+                <bx:grid x="0" y="0" width="300" height="300"/>
+                <symbol id="symbol-8" viewBox="0 0 1 1">
+                        <title>decor-arrow</title>
+                        <rect width="1" height="1" style="fill: url('#pattern-2');">
+                                <title>pattern</title>
+                        </rect>
+                </symbol>
+                <pattern id="pattern-2" viewBox="0 0 300 300" patternUnits="userSpaceOnUse" preserveAspectRatio="none" width="1" height="1">
+                        <title>decor-arrow-pattern</title>
+                        <defs>
+                                <bx:grid x="0" y="0" width="300" height="300"/>
+                        </defs>
+                        <rect x="0.000029" y="-0.000047" width="300.000003" height="299.999989" style="stroke: rgb(0, 0, 0); fill: none; stroke-width: 8px;">
+                                <title>bg</title>
+                        </rect>
+                        <rect width="149.998993" height="19.999998" style="stroke: rgb(0, 0, 0); fill: rgb(255, 0, 0);" y="139.999992" x="50.000671">
+                                <title>arrow-body</title>
+                        </rect>
+                        <path d="M 199.999648 125 L 249.999314 149.999997 L 199.999648 174.999997 L 199.999648 125 Z" style="stroke: rgb(0, 0, 0);">
+                                <title>arrow-head</title>
+                        </path>
+                </pattern>
+        </defs>
+        <image width="382" height="202" x="-1" y="-1" xlink:href="data:image/png;base64,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">
+                <title>medical-bed--005--0.6x1.2</title>
+        </image>
+        <path d="M -1.7945 148.685513 L -0.5735 50.584513 L 90.2915 -1.415487 L 381.8265 50.902513 L 380.8265 148.584513 L 92.4265 202.584513 L -1.7945 148.685513 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5; transform-origin: 187.016px 97.5845px;">
+                <title>obstacle</title>
+        </path>
+        <use width="1" height="1" transform="matrix(20, 0, 0, -20, 89.50000762939453, 94.50000762939453)" style="opacity: 0.5; transform-origin: 0.5px 0.5px;" xlink:href="#symbol-8">
+                <title>decor do lie pod medical obscured y=0.01</title>
+        </use>
 </svg>
