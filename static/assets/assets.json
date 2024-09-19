@@ -291,12 +291,12 @@
       "pngHash": -839723950
     },
     "misc-stellar-cartography--020--10x10": {
-      "outputHash": 2054740075,
+      "outputHash": -101387348,
       "pngHash": -1181495790,
       "obsHashes": [-129623447, -2072447270, -1550635528]
     },
     "misc-stellar-cartography--023--4x4": {
-      "outputHash": -344852204,
+      "outputHash": 2141668761,
       "pngHash": 1510139639,
       "obsHashes": [194424169]
     },
@@ -13405,7 +13405,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [1, 0, 0, 1, 7.06, 8.65]
+          "transform": [1, 0, 0, 1, 7.06, 8.66]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
@@ -13612,7 +13612,7 @@
           "meta": {"key": "console--051--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0.966, 0.259, -0.259, 0.966, 1.8, 2.28]
+          "transform": [0.966, 0.259, -0.259, 0.966, 1.79, 2.29]
         }
       ],
       "removableDoors": [],
