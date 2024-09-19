@@ -351,11 +351,11 @@
       "obsHashes": [1562717456]
     },
     "stateroom--012--2x2": {"outputHash": 785562292, "pngHash": 285590873},
-    "stateroom--014--2x2": {"outputHash": -64962426, "pngHash": 810806279},
-    "stateroom--018--2x3": {"outputHash": -1324431485, "pngHash": -932858017},
-    "stateroom--019--2x3": {"outputHash": 300785918, "pngHash": 464993285},
-    "stateroom--020--2x3": {"outputHash": -554186615, "pngHash": 987326316},
-    "stateroom--035--2x3": {"outputHash": -1259853693, "pngHash": -866865591},
+    "stateroom--014--2x2": {"outputHash": -273660729, "pngHash": 810806279},
+    "stateroom--018--2x3": {"outputHash": -288613215, "pngHash": -932858017},
+    "stateroom--019--2x3": {"outputHash": -461726773, "pngHash": 464993285},
+    "stateroom--020--2x3": {"outputHash": 1728456556, "pngHash": 987326316},
+    "stateroom--035--2x3": {"outputHash": 604363138, "pngHash": -866865591},
     "stateroom--036--2x4": {"outputHash": 1899833730, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
       "outputHash": 2105116103,
@@ -1095,7 +1095,7 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": 2115706008,
+    "imagesHash": 1083923908,
     "skins": {
       "svgHash": {
         "cuboid-character.tex.svg": -49979608,
@@ -16136,7 +16136,7 @@
           "meta": {"key": "fresher--002--0.4x0.6", "y": 0.4},
           "width": 0.75,
           "height": 0.75,
-          "transform": [1, 0, 0, 1, 1.87, 0]
+          "transform": [1, 0, 0, 1, 1.88, 0]
         }
       ],
       "removableDoors": [],
@@ -16269,10 +16269,10 @@
         },
         {
           "symbolKey": "extra--003--chair--0.25x0.25",
-          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
+          "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.4},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, -1, 0.88, 2.44]
+          "transform": [1, 0, 0, -1, 0.87, 2.44]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -16406,18 +16406,18 @@
           "transform": [0, 1, 1, 0, 0.56, 0.9]
         },
         {
+          "symbolKey": "extra--004--desk--0.5x1",
+          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
+          "width": 0.75,
+          "height": 1.5,
+          "transform": [0, 1, -1, 0, 1.5, 0.04]
+        },
+        {
           "symbolKey": "bed--003--1x1.6",
           "meta": {"key": "bed--003--1x1.6", "y": 0.5},
           "width": 2.5,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 0, 3.01]
-        },
-        {
-          "symbolKey": "extra--004--desk--0.5x1",
-          "meta": {"key": "extra--004--desk--0.5x1", "y": 0.7},
-          "width": 0.75,
-          "height": 1.5,
-          "transform": [0, 1, -1, 0, 1.5, 0.01]
         },
         {
           "symbolKey": "console--051--0.4x0.6",
@@ -16533,7 +16533,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, -1, 0.88, 3.95]
+          "transform": [1, 0, 0, -1, 0.86, 3.94]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -16711,7 +16711,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, -1, 0.68, 2.43]
+          "transform": [1, 0, 0, -1, 0.67, 2.43]
         },
         {
           "symbolKey": "extra--006--desk--0.4x1",
