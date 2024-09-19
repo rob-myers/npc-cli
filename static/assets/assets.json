@@ -307,7 +307,7 @@
     "office--023--2x3": {"outputHash": 595472643, "pngHash": 112007124},
     "office--026--2x3": {"outputHash": -710546195, "pngHash": -1111441141},
     "office--061--3x4": {"outputHash": -2062082384, "pngHash": 1103253101},
-    "office--074--4x4": {"outputHash": -534684170, "pngHash": 194408083},
+    "office--074--4x4": {"outputHash": -1109691199, "pngHash": 194408083},
     "office--089--4x4": {
       "outputHash": 1723099069,
       "pngHash": -1241808431,
@@ -14899,7 +14899,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 5.13, 5.08]
+          "transform": [-1, 0, 0, 1, 5.13, 5.07]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -14913,7 +14913,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 3.63, 5.08]
+          "transform": [-1, 0, 0, 1, 3.63, 5.07]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -14927,7 +14927,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 2.13, 5.08]
+          "transform": [-1, 0, 0, 1, 2.13, 5.07]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -14941,7 +14941,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 5.13, 0.58]
+          "transform": [-1, 0, 0, 1, 5.13, 0.57]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -14955,7 +14955,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 3.63, 0.58]
+          "transform": [-1, 0, 0, 1, 3.63, 0.57]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -14969,7 +14969,7 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 2.13, 0.58]
+          "transform": [-1, 0, 0, 1, 2.13, 0.57]
         },
         {
           "symbolKey": "extra--004--desk--0.5x1",
@@ -14983,21 +14983,21 @@
           "meta": {"key": "extra--003--chair--0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-1, 0, 0, 1, 0.63, 0.58]
+          "transform": [-1, 0, 0, 1, 0.63, 0.57]
         },
         {
           "symbolKey": "table--012--0.8x0.8",
           "meta": {"key": "table--012--0.8x0.8"},
           "width": 1.5,
           "height": 1.5,
-          "transform": [0, -1, -1, 0, 4.5, 3.75]
+          "transform": [1, 0, 0, 1, 3, 2.25]
         },
         {
           "symbolKey": "extra--001--fresher--0.5x0.5",
           "meta": {"key": "extra--001--fresher--0.5x0.5", "y": 0.7},
           "width": 0.75,
           "height": 0.75,
-          "transform": [0, -1, 1, 0, 0, 5.63]
+          "transform": [0, -1, 0.995, 0, 0, 5.63]
         },
         {
           "symbolKey": "extra--002--fresher--0.5x0.5",
