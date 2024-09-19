@@ -304,7 +304,7 @@
     "office--004--2x2": {"outputHash": -1519726328, "pngHash": -945108248},
     "office--006--2x2": {"outputHash": -602057084, "pngHash": 213915332},
     "office--020--2x3": {"outputHash": 1865805766, "pngHash": 1677157900},
-    "office--023--2x3": {"outputHash": 1783909383, "pngHash": 112007124},
+    "office--023--2x3": {"outputHash": 595472643, "pngHash": 112007124},
     "office--026--2x3": {"outputHash": -710546195, "pngHash": -1111441141},
     "office--061--3x4": {"outputHash": -108153392, "pngHash": 1103253101},
     "office--074--4x4": {"outputHash": -534684170, "pngHash": 194408083},
@@ -14388,7 +14388,7 @@
       "symbols": [
         {
           "symbolKey": "extra--010--machine--2x1",
-          "meta": {"key": "extra--010--machine--2x1", "y": 1},
+          "meta": {"key": "extra--010--machine--2x1", "y": 1.2},
           "width": 3,
           "height": 1.5,
           "transform": [1, 0, 0, 1, 0, 0]

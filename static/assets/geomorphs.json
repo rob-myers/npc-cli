@@ -4811,7 +4811,7 @@
         {
           "symbolKey": "extra--010--machine--2x1",
           "obstacleId": 0,
-          "height": 1,
+          "height": 1.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [

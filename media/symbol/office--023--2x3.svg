@@ -2,7 +2,7 @@
 <svg viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
     <bx:grid x="0" y="0" width="300" height="300"/>
-    <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+    <pattern x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
         <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
@@ -25,7 +25,6 @@
         <title>extra--017--table--2x0.5</title>
       </rect>
     </symbol>
-    <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, 0.000012355142, -0.000006415236)" xlink:href="#pattern-0"/>
     <symbol id="symbol-0" viewBox="0 0 600 150" bx:pinned="true">
       <title>extra--017--table--2x0.5 y=0.8</title>
       <rect width="600" height="150" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 299.971px 75.0011px; vector-effect: non-scaling-stroke;">
@@ -60,21 +59,36 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
+    <symbol id="symbol-2" viewBox="0 0 600 300">
+      <title>extra--010--machine--2x1</title>
+      <rect width="600" height="300" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 300px 150px;">
+        <title>extra--010--machine--2x1</title>
+      </rect>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </symbol>
+    <symbol id="symbol-3" viewBox="0 0 75 75">
+      <title>extra--003--chair--0.25x0.25</title>
+      <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0');">
+        <title>extra--003--chair--0.25x0.25</title>
+      </rect>
+    </symbol>
   </defs>
   <image width="620" height="920" x="-10" y="-10" xlink:href="data:image/png;base64,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">
     <title>office--023--2x3</title>
   </image>
   <g>
     <title>symbols</title>
-    <rect width="600" height="300" style="opacity: 1; filter: none; fill-rule: nonzero; paint-order: fill; stroke-width: 4px; stroke: rgb(0, 0, 255); fill: url('#pattern-0'); transform-origin: 299.971px 150.003px;">
-      <title>extra--010--machine--2x1 y=1</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: -388.19px -751.828px;" y="-789.325134" x="-425.696655" transform="matrix(-1, 0, 0, -1, 776.380004882813, 1503.656005859375)">
+    <use width="600" height="300" transform="matrix(1, 0, 0, 1, 0.000001985006, -0.00000568265)" xlink:href="#symbol-2">
+      <title>extra--010--machine--2x1 y=1.2</title>
+    </use>
+    <use width="75" height="75" transform="matrix(-1.000000357628, -1.34679e-7, 1.34679e-7, -1.000000357628, 350.696685791016, 714.325134277344)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-3">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: -388.19px -451.828px;" y="-489.325134" x="-425.696655" transform="matrix(-1, 0, 0, -1, 776.380004882813, 903.656005859375)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1.000000357628, -1.34679e-7, 1.34679e-7, -1.000000357628, 350.696685791016, 414.325134277344)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-3">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
+    </use>
     <use width="600" height="150" transform="matrix(0, 1, -1, 0, 225, 525)" style="transform-box: fill-box; transform-origin: 50% 50%;" xlink:href="#symbol-0">
       <title>extra--017--table--2x0.5 y=0.8</title>
     </use>
