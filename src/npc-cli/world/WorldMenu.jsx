@@ -172,7 +172,7 @@ const contextMenuCss = css`
 
 const loggerCss = css`
   position: absolute;
-  z-index: 7;
+  z-index: 6;
   top: 0;
   display: flex;
   flex-direction: column;
