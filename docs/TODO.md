@@ -52,17 +52,24 @@
   - ✅ can manually add:
     ```sh
     w physics.worker.postMessage '{
-      type: "add-collider",
-      colliderKey: "myTestCollider",
-      geom: { type: "cuboid", halfDim: [0.75, 1, 0.75] },
-      position: { x: 3, y: 7.5 },
+      type: "add-colliders",
+      colliders: [{
+        colliderKey: "myTestCollider",
+        geom: { type: "cuboid", halfDim: [0.75, 1, 0.75] },
+        position: { x: 3, y: 7.5 },
+      }],
     }'
     ```
   - ✅ can detect collisions: `{npcKey: 'rob', otherKey: 'rect myTestCollider'}`
   - ✅ trigger events `enter-collider` and `exit-collider`
+  - ✅ can remove
+    ```sh
+    w physics.worker.postMessage '{
+      type: "remove-bodies",
+      bodyKeys: ["rect myTestCollider"],
+    }'
   - 🚧 decor circle/rect tagged with collider induce colliders
   - support angled rect
-  - can remove
 - support multiple skins for single test character
 - fix flickering hull door base (onchange camera view)
   - suffices to add a matching line

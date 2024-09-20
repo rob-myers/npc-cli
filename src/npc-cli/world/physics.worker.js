@@ -46,66 +46,66 @@ async function handleMessages(e) {
   }
 
   switch (msg.type) {
-    case "add-collider": {
-      /** @type {WW.PhysicsBodyKey} */
-      const bodyKey = msg.geom.type === 'cuboid' ? `rect ${msg.colliderKey}` : `circle ${msg.colliderKey}`;
-
-      if (!(bodyKey in state.bodyKeyToUid)) {
-        const _body = createRigidBody({
-          type: RAPIER.RigidBodyType.Fixed,
-          geomDef: msg.geom,
-          position: {
-            x: msg.position.x, // place static collider on floor:
-            y: msg.geom.type === 'cylinder' ? msg.geom.halfHeight : msg.geom.halfDim[1],
-            z: msg.position.y,
-          },
-          userData: {
-            npc: false,
-            bodyKey,
-            bodyUid: addBodyKeyUidRelation(bodyKey, state),
-          },
-        });
-      } else {
-        warn(`physics worker: ${msg.type}: cannot re-add body (${bodyKey})`)
+    case "add-colliders":
+      for (const { colliderKey, geom, position } of msg.colliders) {
+        /** @type {WW.PhysicsBodyKey} */
+        const bodyKey = geom.type === 'cuboid' ? `rect ${colliderKey}` : `circle ${colliderKey}`;
+  
+        if (!(bodyKey in state.bodyKeyToUid)) {
+          const _body = createRigidBody({
+            type: RAPIER.RigidBodyType.Fixed,
+            geomDef: geom,
+            position: {
+              x: position.x, // place static collider on floor:
+              y: geom.type === 'cylinder' ? geom.halfHeight : geom.halfDim[1],
+              z: position.y,
+            },
+            userData: {
+              npc: false,
+              bodyKey,
+              bodyUid: addBodyKeyUidRelation(bodyKey, state),
+            },
+          });
+        } else {
+          warn(`physics worker: ${msg.type}: cannot re-add body (${bodyKey})`)
+        }
       }
       break;
-    }
     case "add-npcs":
       for (const npc of msg.npcs) {
         const bodyKey = npcToBodyKey(npc.npcKey);
-        if (bodyKey in state.bodyKeyToUid) {
-          warn(`physics worker: ${msg.type}: cannot re-add body: ${bodyKey}`)
-          continue;
-        }
 
-        const _body = createRigidBody({
-          type: RAPIER.RigidBodyType.KinematicPositionBased,
-          geomDef: {
-            type: 'cylinder',
-            halfHeight: config.agentHeight / 2,
-            radius: config.agentRadius,
-          },
-          position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
-          userData: {
-            npc: true,
-            bodyKey,
-            bodyUid: addBodyKeyUidRelation(bodyKey, state),
-          },
-        });
+        if (!(bodyKey in state.bodyKeyToUid)) {
+          const _body = createRigidBody({
+            type: RAPIER.RigidBodyType.KinematicPositionBased,
+            geomDef: {
+              type: 'cylinder',
+              halfHeight: config.agentHeight / 2,
+              radius: config.agentRadius,
+            },
+            position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
+            userData: {
+              npc: true,
+              bodyKey,
+              bodyUid: addBodyKeyUidRelation(bodyKey, state),
+            },
+          });
+        } else {
+          warn(`physics worker: ${msg.type}: cannot re-add body: ${bodyKey}`)
+        }
       }
       break;
-    case "remove-npcs":
-      // 🔔 no need to remove when not moving (can set asleep)
-      for (const npcKey of msg.npcKeys) {
-        const body = state.bodyKeyToBody.get(npcToBodyKey(npcKey));
+    case "remove-bodies":
+      for (const bodyKey of msg.bodyKeys) {
+        const body = state.bodyKeyToBody.get(bodyKey);
         if (body !== undefined) {
           state.bodyHandleToKey.delete(body.handle);
-          state.bodyKeyToBody.delete(npcToBodyKey(npcKey));
-          state.bodyKeyToCollider.delete(npcToBodyKey(npcKey));
+          state.bodyKeyToBody.delete(bodyKey);
+          state.bodyKeyToCollider.delete(bodyKey);
           state.world.removeRigidBody(body);
         }
       }
-    break;
+      break;
     case "send-npc-positions": {
       // set kinematic body positions
       let npcBodyKey = /** @type {WW.PhysicsBodyKey} */ ('');

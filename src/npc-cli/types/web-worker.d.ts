@@ -36,8 +36,8 @@ declare namespace WW {
 
   type MsgToPhysicsWorker = (
     | AddNPCs
-    | AddCollider
-    | RemoveNPCs
+    | AddColliders
+    | RemoveBodies
     | SendNpcPositions
     | SetupPhysicsWorld
   );
@@ -48,12 +48,14 @@ declare namespace WW {
   );
 
   //#region MsgToPhysicsWorker
-  interface AddCollider {
-    type: 'add-collider';
-    colliderKey: string;
-    geom: PhysicsBodyGeom;
-    /** Colliders always on ground, so 2d suffices */
-    position: Geom.VectJson;
+  interface AddColliders {
+    type: 'add-colliders';
+    colliders: {
+      colliderKey: string;
+      geom: PhysicsBodyGeom;
+      /** Colliders always on ground, so 2d suffices */
+      position: Geom.VectJson;
+    }[];
   }
 
   /**
@@ -65,9 +67,9 @@ declare namespace WW {
     npcs: NpcDef[];
   }
 
-  interface RemoveNPCs {
-    type: 'remove-npcs';
-    npcKeys: string[];
+  interface RemoveBodies {
+    type: 'remove-bodies';
+    bodyKeys: WW.PhysicsBodyKey[];
   }
 
   interface SendNpcPositions {

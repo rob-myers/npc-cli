@@ -2,6 +2,7 @@ import React from "react";
 import { defaultDoorCloseMs } from "../service/const";
 import { pause, warn } from "../service/generic";
 import { geom, tmpVec1 } from "../service/geom";
+import { npcToBodyKey } from "../service/rapier";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -149,8 +150,8 @@ export default function useHandleEvents(w) {
         }
         case "removed-npc": {
           w.physics.worker.postMessage({
-            type: 'remove-npcs',
-            npcKeys: [e.npcKey],
+            type: 'remove-bodies',
+            bodyKeys: [npcToBodyKey(e.npcKey)],
           });
           state.removeFromSensors(e.npcKey);
           const gmRoomId = state.npcToRoom.get(e.npcKey);
