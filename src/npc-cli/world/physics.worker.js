@@ -3,7 +3,7 @@
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
 import { geomorphGridMeters, glbMeta, wallHeight, wallOutset } from '../service/const';
-import { info, warn, debug } from "../service/generic";
+import { info, warn, debug, testNever } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorph } from '../service/geomorph';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
@@ -40,18 +40,45 @@ async function handleMessages(e) {
   if (state.world === undefined && msg.type !== 'setup-physics-world') {
     return; // Fixes HMR of this file
   }
+  // 🔔 avoid logging 60fps messages
   if (msg.type !== 'send-npc-positions') {
-    debug("🤖 physics worker received:", JSON.stringify(msg)); // 🔔 Debug
+    debug("🤖 physics worker received:", JSON.stringify(msg));
   }
 
   switch (msg.type) {
+    case "add-collider": {
+      /** @type {WW.PhysicsBodyKey} */
+      const bodyKey = msg.geom.type === 'cuboid' ? `rect ${msg.colliderKey}` : `circle ${msg.colliderKey}`;
+
+      if (!(bodyKey in state.bodyKeyToUid)) {
+        const _body = createRigidBody({
+          type: RAPIER.RigidBodyType.Fixed,
+          geomDef: msg.geom,
+          position: {
+            x: msg.position.x, // place static collider on floor:
+            y: msg.geom.type === 'cylinder' ? msg.geom.halfHeight : msg.geom.halfDim[1],
+            z: msg.position.y,
+          },
+          userData: {
+            npc: false,
+            bodyKey,
+            bodyUid: addBodyKeyUidRelation(bodyKey, state),
+          },
+        });
+      } else {
+        warn(`physics worker: ${msg.type}: cannot re-add body (${bodyKey})`)
+      }
+      break;
+    }
     case "add-npcs":
       for (const npc of msg.npcs) {
-        if (npcToBodyKey(npc.npcKey) in state.bodyKeyToUid) {
-          warn(`physics worker: ${msg.type}: cannot re-add body (${npc.npcKey})`)
+        const bodyKey = npcToBodyKey(npc.npcKey);
+        if (bodyKey in state.bodyKeyToUid) {
+          warn(`physics worker: ${msg.type}: cannot re-add body: ${bodyKey}`)
           continue;
         }
-        const body = createRigidBody({
+
+        const _body = createRigidBody({
           type: RAPIER.RigidBodyType.KinematicPositionBased,
           geomDef: {
             type: 'cylinder',
@@ -61,8 +88,8 @@ async function handleMessages(e) {
           position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
           userData: {
             npc: true,
-            bodyKey: npcToBodyKey(npc.npcKey),
-            bodyUid: addBodyKeyUidRelation(npcToBodyKey(npc.npcKey), state),
+            bodyKey,
+            bodyUid: addBodyKeyUidRelation(bodyKey, state),
           },
         });
       }
@@ -100,14 +127,13 @@ async function handleMessages(e) {
       stepWorld();
       break;
     }
-    case "setup-physics-world": {
+    case "setup-physics-world":
       await setupWorld(msg.mapKey, msg.npcs);
       selfTyped.postMessage({ type: 'world-is-setup' });
       break;
-    }
     default:
       info("physics worker: unhandled:", msg);
-      break;
+      throw testNever(msg);
   }
 }
 

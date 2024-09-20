@@ -35,10 +35,11 @@ declare namespace WW {
   type PhysicsWorker = WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>;
 
   type MsgToPhysicsWorker = (
+    | AddNPCs
+    | AddCollider
+    | RemoveNPCs
     | SendNpcPositions
     | SetupPhysicsWorld
-    | AddNPCs
-    | RemoveNPCs
   );
 
   type MsgFromPhysicsWorker = (
@@ -46,10 +47,13 @@ declare namespace WW {
     | NpcCollisionResponse
   );
 
-  interface SetupPhysicsWorld {
-    type: 'setup-physics-world';
-    mapKey: string;
-    npcs: NpcDef[];
+  //#region MsgToPhysicsWorker
+  interface AddCollider {
+    type: 'add-collider';
+    colliderKey: string;
+    geom: PhysicsBodyGeom;
+    /** Colliders always on ground, so 2d suffices */
+    position: Geom.VectJson;
   }
 
   /**
@@ -72,6 +76,13 @@ declare namespace WW {
     positions: Float64Array;
   }
 
+  interface SetupPhysicsWorld {
+    type: 'setup-physics-world';
+    mapKey: string;
+    npcs: NpcDef[];
+  }
+  //#endregion
+
   interface WorldSetupResponse {
     type: 'world-is-setup';
   }
@@ -84,9 +95,11 @@ declare namespace WW {
   }
 
   type PhysicsBodyKey = (
+    | `circle ${string}` // custom cylindrical collider
+    | `inside ${Geomorph.GmDoorKey}` // door cuboid
     | `npc ${string}` // npc {npcKey}
     | `nearby ${Geomorph.GmDoorKey}` // door neighbourhood
-    | `inside ${Geomorph.GmDoorKey}` // door cuboid
+    | `rect ${string}` // custom cuboid collider (possibly angled)
   );
 
   type PhysicsBodyGeom = (
@@ -100,13 +113,13 @@ declare namespace WW {
    * https://github.com/microsoft/TypeScript/issues/48396
    */
   interface WorkerGeneric<Receive = any, Send = any, SendError = Send>
-    extends EventTarget,
-      AbstractWorker {
+    extends Omit<EventTarget, 'addEventListener' | 'removeEventListener'>,
+    Omit<AbstractWorker, 'addEventListener'> {
     onmessage: ((this: Worker, ev: MessageEvent<Send>) => any) | null;
     onmessageerror: ((this: Worker, ev: MessageEvent<SendError>) => any) | null;
     postMessage(message: Receive, transfer: Transferable[]): void;
     postMessage(message: Receive, options?: StructuredSerializeOptions): void;
-    addEventListener(event: "message", handler: (message: MessageEvent<Send>) => void);
+    addEventListener(event: "message", handler: (message: MessageEvent<Send>) => void): void;
     terminate(): void;
     // ...
   }

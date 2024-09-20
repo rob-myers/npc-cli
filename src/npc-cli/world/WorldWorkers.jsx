@@ -1,7 +1,7 @@
 import React from 'react';
 import { init as initRecastNav } from "@recast-navigation/core";
 
-import { info, isDevelopment, warn, debug } from '../service/generic';
+import { isDevelopment, warn, debug, testNever } from '../service/generic';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 
@@ -16,35 +16,47 @@ export default function WorldWorkers() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     seenHash: /** @type {*} */ ({}),
+
     async handleNavWorkerMessage(e) {
       const msg = e.data;
-      info("main thread received from nav worker", msg);
+      // 🔔 avoid logging navMesh to save memory
+      debug("main thread received from nav worker", msg.type);
       if (msg.type === "nav-mesh-response") {
         await initRecastNav();
         w.loadTiledMesh(msg.exportedNavMesh);
         w.update(); // for w.npc
       }
     },
+
+    handlePhysicsCollision(npcKey, otherKey, isEnter) {
+      const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
+      switch (type) {
+        case 'npc':
+          warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
+          break;
+        case 'inside':
+        case 'nearby':
+          w.events.next({ key: isEnter === true ? 'enter-sensor' : 'exit-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
+          break;
+        case 'circle':
+        case 'rect':
+          w.events.next({ key: isEnter === true ? 'enter-collider' : 'exit-collider', npcKey, type, colliderKey: subKey });
+          break;
+        default:
+          throw testNever(type);
+      }
+    },
+
     async handlePhysicsWorkerMessage(e) {
       const msg = e.data;
       debug("main thread received from physics worker", msg);
 
       if (msg.type === "npc-collisions") {
         msg.collisionEnd.forEach(({ npcKey, otherKey }) => {
-          const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
-          if (type === 'npc') {
-            return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
-          }
-          // handle inside/nearby
-          w.events.next({ key: 'exit-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
+          state.handlePhysicsCollision(npcKey, otherKey, false);
         });
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
-          const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
-          if (type === 'npc') {
-            return warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
-          }
-          // handle inside/nearby
-          w.events.next({ key: 'enter-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
+          state.handlePhysicsCollision(npcKey, otherKey, true);
         });
       }
     },
@@ -109,9 +121,10 @@ if (isDevelopment()) {// propagate HMR to this file onchange worker files
  * @typedef State
  * @property {Geomorph.GeomorphsHash} seenHash
  * @property {(e: MessageEvent<WW.MsgFromNavWorker>) => Promise<void>} handleNavWorkerMessage
+ * @property {(npcKey: string, otherKey: WW.PhysicsBodyKey, isEnter?: boolean) => void} handlePhysicsCollision
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
  * @property {(key: WW.PhysicsBodyKey) => (
- *   | ['npc', string]
+ *   | ['npc' | 'circle' | 'rect', string]
  *   | ['nearby' | 'inside', Geomorph.GmDoorKey]
  * )} parsePhysicsBodyKey
  */

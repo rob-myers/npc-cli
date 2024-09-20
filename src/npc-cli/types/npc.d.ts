@@ -62,6 +62,8 @@ declare namespace NPC {
     | { key: "changed-zoom"; level: 'near' | 'far' }
     | { key: "enter-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
     | { key: "exit-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { key: "enter-collider"; npcKey: string; type: 'circle' | 'rect'; colliderKey: string }
+    | { key: "exit-collider"; npcKey: string; type: 'circle' | 'rect'; colliderKey: string }
     | {
         key: "pre-request-nav";
         /**
