@@ -2,15 +2,6 @@
 
 ## WIP
 
-- ✅ migrate sub-symbols to actual symbols
-  - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
-  - bridge ✅ lifeboat ✅
-  - beds ✅ consoles ✅
-  - counter ✅ engineering ✅ extra ✅ fresher ✅ lab ✅ medical ✅ cartography ✅ shop ✅ stateroom ✅ table ✅
-  - ✅ remaining:
-    - ✅ office--023--2x3
-    - ✅ office--061--3x4
-    - ✅ office--074--4x4
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 integrate cuboid model
@@ -37,8 +28,8 @@
     - ❌ label text has outline
     - ✅ shadow circular
     - 🚧 body has icon
-      - 🚧 sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
-      - 🚧 redo uv-map i.e. stretch body
+      - ✅ boxy SVG: sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
+      - 🚧 redo uv-map using above as guide
     - ✅ can toggle selector/label
       - uniforms showSelector, showLabel
     - ✅ can change selector color
@@ -2288,3 +2279,14 @@ run '({ w, api }) {
   - ✅ work on migrating Root
     - ✅ Main, Nav
     - ✅ Viewer
+
+- ✅ migrate sub-symbols to actual symbols
+  - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
+  - bridge ✅ lifeboat ✅
+  - beds ✅ consoles ✅
+  - counter ✅ engineering ✅ extra ✅ fresher ✅ lab ✅ medical ✅ cartography ✅ shop ✅ stateroom ✅ table ✅
+  - ✅ remaining:
+    - ✅ office--023--2x3
+    - ✅ office--061--3x4
+    - ✅ office--074--4x4
+  
