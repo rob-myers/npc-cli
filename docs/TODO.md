@@ -37,7 +37,8 @@
     - ❌ label text has outline
     - ✅ shadow circular
     - 🚧 body has icon
-      - 🚧 1st redo uv-map i.e. stretch body
+      - 🚧 sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
+      - 🚧 redo uv-map i.e. stretch body
     - ✅ can toggle selector/label
       - uniforms showSelector, showLabel
     - ✅ can change selector color
