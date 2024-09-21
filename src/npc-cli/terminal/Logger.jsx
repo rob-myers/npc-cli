@@ -25,6 +25,14 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     containerRef: (el) => el && !state.container &&
       setTimeout(() => (state.container = el, update())
     ),
+    getContents() {
+      const { active } = state.xterm.buffer;
+      const numLines = active.baseY + active.cursorY;
+      return [...Array(numLines)].reduce((agg, _, index) => {
+        const line = active.getLine(index);
+        return line !== undefined ? `${agg}${line.translateToString(true)}\r\n` : agg;
+      }, '');
+    },
   }));
 
   const update = useUpdate();
@@ -88,13 +96,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     state.fitAddon.fit();
     
     return () => {
-      const { active } = state.xterm.buffer;
-      const numLines = active.baseY + active.cursorY;
-      state.contents = [...Array(numLines)].reduce((agg, _, index) => {
-        const line = active.getLine(index);
-        return line !== undefined ? `${agg}${line.translateToString(true)}\r\n` : agg;
-      }, '');
-
+      state.contents = state.getContents();
       state.xterm.dispose();
     };
   }, [state.container]);
@@ -120,4 +122,5 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
  * @property {FitAddon} fitAddon
  * @property {WebglAddon} webglAddon
  * @property {(el: null | HTMLDivElement) => void} containerRef
+ * @property {() => string} getContents
  */
