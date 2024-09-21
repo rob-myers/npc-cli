@@ -4,6 +4,7 @@ import { cx } from "@emotion/css";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import { WebglAddon } from "@xterm/addon-webgl";
+import { SerializeAddon } from "@xterm/addon-serialize";
 
 import { LinkProvider } from "./xterm-link-provider";
 import useStateRef from "../hooks/use-state-ref";
@@ -20,19 +21,12 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     fitAddon: new FitAddon(),
     container: /** @type {*} */ (null),
     webglAddon: new WebglAddon(),
+    serializeAddon: new SerializeAddon(),
     xterm: /** @type {*} */ (null),
 
     containerRef: (el) => el && !state.container &&
       setTimeout(() => (state.container = el, update())
     ),
-    getContents() {
-      const { active } = state.xterm.buffer;
-      const numLines = active.baseY + active.cursorY;
-      return [...Array(numLines)].reduce((agg, _, index) => {
-        const line = active.getLine(index);
-        return line !== undefined ? `${agg}${line.translateToString(true)}\r\n` : agg;
-      }, '');
-    },
   }));
 
   const update = useUpdate();
@@ -90,13 +84,14 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
     state.webglAddon.onContextLoss(() => {
       state.webglAddon.dispose(); // 🚧 WIP
     });
+    xterm.loadAddon(state.serializeAddon = new SerializeAddon());
 
     xterm.write(state.contents);
     xterm.open(state.container);
     state.fitAddon.fit();
     
     return () => {
-      state.contents = state.getContents();
+      state.contents = state.serializeAddon.serialize();
       state.xterm.dispose();
     };
   }, [state.container]);
@@ -121,6 +116,6 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
  * @property {Terminal} xterm
  * @property {FitAddon} fitAddon
  * @property {WebglAddon} webglAddon
+ * @property {SerializeAddon} serializeAddon
  * @property {(el: null | HTMLDivElement) => void} containerRef
- * @property {() => string} getContents
  */
