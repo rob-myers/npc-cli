@@ -32,9 +32,14 @@
       - ℹ️ cannot avoid dup vertices: 8 + (3 * 16) = 60
         - https://stackoverflow.com/a/76713671/2917822
       - ✅ redo uv-map using above as guide
-    - 🚧 change vertex ordering: head < body < shadow < selector < label
+    - ✅ change vertex ordering: head < body < selector < shadow < label
+      - ℹ️ head < body < selector < shadow < label
+        - 60 vertices in total (after 3 * - for cuboid vertices)
+        - `head` 3 * 8 [0, 23] < `body` 3 * 8 [24, 47] < `selector` 4 [48, 51] * < `shadow` 4 [52, 55] < `label` 4 [56, 59]
+      - ✅ selector < shadow < label via: s (key) then re-join (mesh > join)
+    - 🚧 head < body < shadow < selector  < label
     - 🚧 body has icon
-      - 🚧 mesh has extra center-front quad
+      - 🚧 center-front quad: head < body < shadow < selector < front-icon < label
       - various different icons in character sprite-sheet,
         but could be many more in e.g. decor sprite-sheet
     - ✅ can toggle selector/label
@@ -63,7 +68,7 @@
       type: "add-colliders",
       colliders: [{
         colliderKey: "myTestCollider",
-        geom: { type: "cuboid", halfDim: [0.75, 1, 0.75] },
+        geom: { type: "cuboid", halfDim: [0.75, 1, 0.75 },
         position: { x: 3, y: 7.5 },
       }],
     }'

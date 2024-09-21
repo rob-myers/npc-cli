@@ -222,7 +222,7 @@ export const testCharacterShader = {
 
     // selectorColor
 
-    if (vId < 4) {// selector quad
+    if (vId >= 48 && vId < 52) {// selector quad
       if (showSelector == false) return;
       vColor = selectorColor;
     }
@@ -279,7 +279,7 @@ export const testCharacterShader = {
       discard;
     }
 
-    if (vId < 4 || vId >= 56) {// selector quad, label quad
+    if ((vId >= 48 && vId < 52) || vId >= 56) {// selector quad, label quad
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
       return;
     }
