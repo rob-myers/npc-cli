@@ -12,8 +12,10 @@
     - ℹ️ blender: K for keyframe
     - ✅ seems we need an animation first
     - ✅ parent armature + weight paint
-  - 🚧 bug: blender: gltf export deforms original file (fixable by undoing rotateX)
-    - removed/added armature with single bone, seems to work
+  - ✅ bug: blender: gltf export deforms original file (fixable by undoing rotateX)
+    - upgraded to blender 4.2 (didn't fix)
+    - removed other mesh/armature (didn't fix)
+    - removed/added armature (seemed to work)
   - 🚧 idle animation
   - try using `class Npc`
 
