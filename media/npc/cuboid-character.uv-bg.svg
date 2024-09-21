@@ -54,6 +54,21 @@
     <polygon points="863.999954 720 703.99997 720 703.99997 559.999939 863.999954 559.999939" style="stroke: rgb(255, 255, 255);">
       <title>front-label</title>
     </polygon>
+    <polygon points="1024 720 864 720 864 559.999939 1024 559.999939" style="stroke: rgb(255, 255, 255);">
+      <title>front-label</title>
+    </polygon>
+    <polygon points="543.999908 880.000122 383.999969 880.000122 383.999969 720.000061 543.999908 720.000061" style="stroke: rgb(255, 255, 255);">
+      <title>front-label</title>
+    </polygon>
+    <polygon points="703.999969 880.000122 543.999969 880.000122 543.999969 720.000061 703.999969 720.000061" style="stroke: rgb(255, 255, 255);">
+      <title>front-label</title>
+    </polygon>
+    <polygon points="863.999939 879.999999 704.000061 879.999999 704.000061 719.999938 863.999939 719.999938" style="stroke: rgb(255, 255, 255);">
+      <title>front-label</title>
+    </polygon>
+    <polygon points="1024 879.999999 864 879.999999 864 719.999938 1024 719.999938" style="stroke: rgb(255, 255, 255);">
+      <title>front-label</title>
+    </polygon>
   </g>
   <g transform="matrix(1, 0, 0, 1, -160, -90)">
     <title>head</title>

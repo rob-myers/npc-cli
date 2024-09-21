@@ -4,66 +4,14 @@
 
 - 🚧 extend chair/table symbols with chair/table tag on obstacle
 
-- 🚧 integrate cuboid model
-  - ✅ import model into npc-cli TestCharacters
-    - ✅ export as cuboid-model.glb
-    - ✅ configure TestCharacters for "multiple character meta"
-    ```sh
-    w debug.char.add $( click 1 ) hcTest
-    w debug.char.add $( click 1 ) cuboidChar
-    ```
-  - ✅ model shader handles label/icon properly
-    - ✅ dup cameraLightShader as testCharacterShader sans instancing
-    - ✅ identify label/icon quad via attribute/shader (?)
-      - ℹ️ vertex ids ≥ 56 (out of 64)
-    - ✅ render as sprite i.e. always face camera
-      - ℹ️ centre label quad in model (about XZ blender coords)
-      - ℹ️ use shader to draw "above" npc
-      - ✅ label has transparency
-      - ✅ fix label normal, return to cuboid-character.glb
-    - ❌ icon quad "normal" and double-sided
-      - removed icon quad
-  - ✅ improve cuboid model/skin
-    - ✅ selector has smaller radius
-    - ❌ label text has outline
-    - ✅ shadow circular
-    - ✅ fix body uv-map
-      - ✅ boxy SVG: sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
-      - ℹ️ cannot avoid dup vertices: 8 + (3 * 16) = 60
-        - https://stackoverflow.com/a/76713671/2917822
-      - ✅ redo uv-map using above as guide
-    - ✅ change vertex ordering: head < body < selector < shadow < label
-      - ℹ️ head < body < selector < shadow < label
-        - 60 vertices in total (after 3 * - for cuboid vertices)
-        - `head` 3 * 8 [0, 23] < `body` 3 * 8 [24, 47] < `selector` 4 [48, 51] * < `shadow` 4 [52, 55] < `label` 4 [56, 59]
-      - ✅ selector < shadow < label via: `p` (key), select in "right-order", re-join (object > join)
-    - ✅ head < body < shadow < selector < label
-    - ✅ body has icon
-      - ℹ️ boxy: cmd+shift to scale uniformly to center 
-      - ✅ center-front quad: head < body < shadow < selector < front-icon < label
-    - ✅ can toggle selector/label
-      - uniforms showSelector, showLabel
-    - ✅ can change selector color
-    - ✅ label higher so doesn't come through walls?
-    - ✅ selector intersection problem
-      - ✅ discard alpha < 0.1
-      - ✅ higher, so drop shadow always beneath
-  - ✅ control vertex ids in Blender
-
-  - 🚧 avoid 2 SVGs if possible i.e. uv-bg, tex
-  - various different icons in character sprite-sheet
-    - ℹ️ more in e.g. decor sprite-sheet
-  - character animation: idle, walk
-    - try using `class Npc`
+- 🚧 character animation: idle, walk
+  - try using `class Npc`
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-- ✅ bug: tty: `map 'x => 2 ** x'` then press delete
-  - ✅ also when type 1 char then delete 1st char
-- ✅ avoid logging navmesh creation message
 - 🚧 support non-door sensor i.e. decor circle/rect
   - ✅ can manually add:
     ```sh
@@ -2328,4 +2276,57 @@ run '({ w, api }) {
     - ✅ office--023--2x3
     - ✅ office--061--3x4
     - ✅ office--074--4x4
-  
+
+- ✅ integrate cuboid model
+  - ✅ import model into npc-cli TestCharacters
+    - ✅ export as cuboid-model.glb
+    - ✅ configure TestCharacters for "multiple character meta"
+    ```sh
+    w debug.char.add $( click 1 ) hcTest
+    w debug.char.add $( click 1 ) cuboidChar
+    ```
+  - ✅ model shader handles label/icon properly
+    - ✅ dup cameraLightShader as testCharacterShader sans instancing
+    - ✅ identify label/icon quad via attribute/shader (?)
+      - ℹ️ vertex ids ≥ 56 (out of 64)
+    - ✅ render as sprite i.e. always face camera
+      - ℹ️ centre label quad in model (about XZ blender coords)
+      - ℹ️ use shader to draw "above" npc
+      - ✅ label has transparency
+      - ✅ fix label normal, return to cuboid-character.glb
+    - ❌ icon quad "normal" and double-sided
+      - removed icon quad
+  - ✅ improve cuboid model/skin
+    - ✅ selector has smaller radius
+    - ❌ label text has outline
+    - ✅ shadow circular
+    - ✅ fix body uv-map
+      - ✅ boxy SVG: sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
+      - ℹ️ cannot avoid dup vertices: 8 + (3 * 16) = 60
+        - https://stackoverflow.com/a/76713671/2917822
+      - ✅ redo uv-map using above as guide
+    - ✅ change vertex ordering: head < body < selector < shadow < label
+      - ℹ️ head < body < selector < shadow < label
+        - 60 vertices in total (after 3 * - for cuboid vertices)
+        - `head` 3 * 8 [0, 23] < `body` 3 * 8 [24, 47] < `selector` 4 [48, 51] * < `shadow` 4 [52, 55] < `label` 4 [56, 59]
+      - ✅ selector < shadow < label via: `p` (key), select in "right-order", re-join (object > join)
+    - ✅ head < body < shadow < selector < label
+    - ✅ body has icon
+      - ℹ️ boxy: cmd+shift to scale uniformly to center 
+      - ✅ center-front quad: head < body < shadow < selector < front-icon < label
+    - ✅ can toggle selector/label
+      - uniforms showSelector, showLabel
+    - ✅ can change selector color
+    - ✅ label higher so doesn't come through walls?
+    - ✅ selector intersection problem
+      - ✅ discard alpha < 0.1
+      - ✅ higher, so drop shadow always beneath
+  - ✅ control vertex ids in Blender
+  - ❌ avoid 2 SVGs if possible i.e. uv-bg, tex
+    - keep them separate e.g. can label "B-F" for body front
+  - ✅ various different icons in character sprite-sheet
+    - ℹ️ more in e.g. decor sprite-sheet
+
+- ✅ bug: tty: `map 'x => 2 ** x'` then press delete
+  - ✅ also when type 1 char then delete 1st char
+- ✅ avoid logging navmesh creation message
