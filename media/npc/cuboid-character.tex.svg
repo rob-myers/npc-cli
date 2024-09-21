@@ -51,7 +51,7 @@
     <polygon points="665.600,0.000 153.600,0.000 153.600,128.000 665.600,128.000 " style="fill-opacity: 0.2; fill: none; stroke: rgb(0, 0, 0); stroke-width: 4px; stroke-opacity: 0.25;">
       <title>ui-label</title>
     </polygon>
-    <polygon points="864 720.000183 704 720.000183 704 560.000061 864 560.000061" style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
+    <polygon points="864 720.000183 704 720.000183 704 560.000061 864 560.000061" style="stroke-width: 12px;">
       <title>front-label</title>
     </polygon>
   </g>
