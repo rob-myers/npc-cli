@@ -4038,6 +4038,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -4047,6 +4048,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -4127,6 +4129,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--018--table-0.25x0.25",
               "obsId": 0
             }
@@ -4136,6 +4139,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--018--table-0.25x0.25",
             "obsId": 0
           }
@@ -4246,6 +4250,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -4255,6 +4260,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -4335,6 +4341,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--018--table-0.25x0.25",
               "obsId": 0
             }
@@ -4344,6 +4351,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--018--table-0.25x0.25",
             "obsId": 0
           }
@@ -4454,6 +4462,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -4463,6 +4472,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -4543,6 +4553,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--018--table-0.25x0.25",
               "obsId": 0
             }
@@ -4552,6 +4563,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--018--table-0.25x0.25",
             "obsId": 0
           }
@@ -4577,6 +4589,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--014--table--2x3",
               "obsId": 0
             }
@@ -4586,6 +4599,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--014--table--2x3",
             "obsId": 0
           }
@@ -4661,6 +4675,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--014--table--2x3",
               "obsId": 0
             }
@@ -4670,6 +4685,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--014--table--2x3",
             "obsId": 0
           }
@@ -4745,6 +4761,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--014--table--2x3",
               "obsId": 0
             }
@@ -4754,6 +4771,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--014--table--2x3",
             "obsId": 0
           }
@@ -4919,6 +4937,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--017--table--2x0.5",
               "obsId": 0
             }
@@ -4928,6 +4947,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--017--table--2x0.5",
             "obsId": 0
           }
@@ -4944,6 +4964,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--007--desk--0.4x0.66",
               "obsId": 0
             }
@@ -4953,6 +4974,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--007--desk--0.4x0.66",
             "obsId": 0
           }
@@ -5187,6 +5209,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -5196,6 +5219,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -5362,6 +5386,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -5371,6 +5396,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -5453,6 +5479,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
@@ -5462,6 +5489,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -5649,6 +5677,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
@@ -5658,6 +5687,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -5889,6 +5919,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--015--table--3x0.5",
               "obsId": 0
             }
@@ -5898,6 +5929,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--015--table--3x0.5",
             "obsId": 0
           }
@@ -5924,6 +5956,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--015--table--3x0.5",
               "obsId": 0
             }
@@ -5933,6 +5966,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--015--table--3x0.5",
             "obsId": 0
           }
@@ -5989,6 +6023,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -5998,6 +6033,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -13345,6 +13381,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--008--desk--0.4x1.33",
               "obsId": 0
             }
@@ -13354,6 +13391,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--008--desk--0.4x1.33",
             "obsId": 0
           }
@@ -14315,6 +14353,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -14324,6 +14363,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -14378,6 +14418,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -14387,6 +14428,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -14441,6 +14483,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -14450,6 +14493,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -14504,6 +14548,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -14513,6 +14558,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -14567,6 +14613,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -14576,6 +14623,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -14630,6 +14678,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -14639,6 +14688,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -14693,6 +14743,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -14702,6 +14753,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -15690,6 +15742,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--018--table-0.25x0.25",
               "obsId": 0
             }
@@ -15699,6 +15752,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--018--table-0.25x0.25",
             "obsId": 0
           }
@@ -23971,6 +24025,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--004--desk--0.5x1",
               "obsId": 0
             }
@@ -23980,6 +24035,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--004--desk--0.5x1",
             "obsId": 0
           }
@@ -24553,6 +24609,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "y": 0.7,
               "symKey": "console--031--1x1.2",
               "obsId": 0
@@ -24563,6 +24620,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "y": 0.7,
             "symKey": "console--031--1x1.2",
             "obsId": 0
@@ -24615,6 +24673,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "y": 0.7,
               "symKey": "console--031--1x1.2",
               "obsId": 0
@@ -24625,6 +24684,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "y": 0.7,
             "symKey": "console--031--1x1.2",
             "obsId": 0
@@ -28425,6 +28485,7 @@
             ],
             "meta": {
               "obstacle": true,
+              "table": true,
               "y": 0.8,
               "symKey": "console--010--1.2x2",
               "obsId": 0
@@ -28434,6 +28495,7 @@
           "center": {"x": 2.12, "y": 4.51},
           "meta": {
             "obstacle": true,
+            "table": true,
             "y": 0.8,
             "symKey": "console--010--1.2x2",
             "obsId": 0
@@ -28644,6 +28706,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--018--table-0.25x0.25",
               "obsId": 0
             }
@@ -28653,6 +28716,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--018--table-0.25x0.25",
             "obsId": 0
           }
@@ -28683,6 +28747,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--018--table-0.25x0.25",
               "obsId": 0
             }
@@ -28692,6 +28757,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--018--table-0.25x0.25",
             "obsId": 0
           }
@@ -33878,6 +33944,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
@@ -33887,6 +33954,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -34033,6 +34101,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
@@ -34042,6 +34111,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -34188,6 +34258,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
@@ -34197,6 +34268,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -34343,6 +34415,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--006--desk--0.4x1",
               "obsId": 0
             }
@@ -34352,6 +34425,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--006--desk--0.4x1",
             "obsId": 0
           }
@@ -35000,6 +35074,7 @@
             "meta": {
               "obstacle": true,
               "surface": true,
+              "table": true,
               "symKey": "extra--017--table--2x0.5",
               "obsId": 0
             }
@@ -35009,6 +35084,7 @@
           "meta": {
             "obstacle": true,
             "surface": true,
+            "table": true,
             "symKey": "extra--017--table--2x0.5",
             "obsId": 0
           }
@@ -37637,7 +37713,7 @@
         "height": 450,
         "symbolKey": "extra--014--table--2x3",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "extra--015--table--3x0.5 0": {
         "x": 1698,
@@ -37646,7 +37722,7 @@
         "height": 75,
         "symbolKey": "extra--015--table--3x0.5",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "extra--011--machine--1x3 0": {
         "x": 2000,
@@ -37718,7 +37794,7 @@
         "height": 304,
         "symbolKey": "console--010--1.2x2",
         "obstacleId": 0,
-        "type": "obstacle"
+        "type": "table"
       },
       "extra--019--table-0.5x2 0": {
         "x": 421,
@@ -37745,7 +37821,7 @@
         "height": 75,
         "symbolKey": "extra--017--table--2x0.5",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "303--hull 0": {
         "x": 904,
@@ -37835,7 +37911,7 @@
         "height": 64,
         "symbolKey": "extra--008--desk--0.4x1.33",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "medical-bed--005--0.6x1.2 0": {
         "x": 1393,
@@ -37898,7 +37974,7 @@
         "height": 154,
         "symbolKey": "extra--004--desk--0.5x1",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "extra--006--desk--0.4x1 0": {
         "x": 1211,
@@ -37907,7 +37983,7 @@
         "height": 64,
         "symbolKey": "extra--006--desk--0.4x1",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "console--031--1x1.2 0": {
         "x": 1655,
@@ -37916,7 +37992,7 @@
         "height": 153,
         "symbolKey": "console--031--1x1.2",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "bed--003--1x1.6 0": {
         "x": 2079,
@@ -38024,7 +38100,7 @@
         "height": 64,
         "symbolKey": "extra--007--desk--0.4x0.66",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "table--009--0.8x0.8 0": {
         "x": 1785,
@@ -38132,7 +38208,7 @@
         "height": 48,
         "symbolKey": "extra--018--table-0.25x0.25",
         "obstacleId": 0,
-        "type": "surface"
+        "type": "table"
       },
       "extra--005--chair-0.25x0.25 0": {
         "x": 1367,
@@ -38204,7 +38280,7 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": 1083923908,
+    "imagesHash": 2115706008,
     "skins": {
       "svgHash": {
         "cuboid-character.tex.svg": 1761035033,

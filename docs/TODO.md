@@ -2,7 +2,7 @@
 
 ## WIP
 
-- 🚧 extend chair/table symbols with chair/table tag on obstacle
+- ✅ extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 character animation: idle, walk
   - try using `class Npc`
