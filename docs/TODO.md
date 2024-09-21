@@ -5,6 +5,15 @@
 - ✅ extend chair/table symbols with chair/table tag on obstacle
 
 - 🚧 character animation: idle, walk
+  - ✅ add skeleton: hips.bone -> head.bone, shadow.bone
+  - ✅ import SkinnedMesh
+    - ℹ️ blender: select armature + mesh, ctrl + p, with automatic weights
+    - ℹ️ blender: weight paint mode (sibling of edit/object/pose)
+    - ℹ️ blender: K for keyframe
+    - ✅ seems we need an animation first
+    - ✅ parent armature + weight paint
+    - 🔔 bug: blender: gltf export deforms original file (fixable by undoing rotateX)
+  - 🚧 idle animation
   - try using `class Npc`
 
 - 🚧 next.js project (npc-cli-next)

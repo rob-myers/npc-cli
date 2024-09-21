@@ -34,8 +34,8 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       const object = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(object);
       const scene = /** @type {THREE.Group} */ (graph.nodes[meta.groupName]);
-      // 🚧 SkinnedMesh
-      const mesh = /** @type {THREE.Mesh} */ (graph.nodes[meta.meshName]);
+      // SkinnedMesh if exported with animations, which we'll assume
+      const mesh = /** @type {THREE.SkinnedMesh} */ (graph.nodes[meta.meshName]);
 
       const numVertices = mesh.geometry.getAttribute('position').count;
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
@@ -153,7 +153,7 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
  * @property {import("@react-three/fiber").ObjectMap} graph
  * @property {THREE.Vector3} initPos
  * @property {THREE.Object3D} object
- * @property {THREE.Mesh | THREE.SkinnedMesh} mesh
+ * @property {THREE.SkinnedMesh} mesh
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
  */
