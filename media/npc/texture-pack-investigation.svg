@@ -1,76 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="1024" height="1024" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
-        <defs>
-                <bx:grid x="0" y="0" width="16" height="16"/>
-        </defs>
-        <desc>cuboid-character.blend, (Blender 4.1.0)</desc>
-        <g>
-                <title>uv-map</title>
-                <polygon points="1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400 " style="fill-opacity: 0; stroke-width: 8px;">
-                        <title>ground-ring</title>
-                </polygon>
-                <polygon points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill-opacity: 0.25; stroke-width: 8px; fill: none;">
-                        <title>ground-shadow</title>
-                </polygon>
-                <polygon points="160 320 0 320 0 160 160 160" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill: rgb(170, 170, 170);">
-                        <title>head-top</title>
-                </polygon>
-                <polygon points="320 320.000031 160.000015 320.000031 160.000015 160.000031 320 160.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
-                        <title>head-bottom</title>
-                </polygon>
-                <polygon points="0 480.000031 0 320.000031 160 320.000031 160 480.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
-                        <title>head-left</title>
-                </polygon>
-                <polygon points="320 320 320 480.000031 160 480.000031 160 320" style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
-                        <title>head-right</title>
-                </polygon>
-                <polygon points="160 642.000031 0 642.000031 0 482.000031 160 482.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
-                        <title>head-front</title>
-                </polygon>
-                <polygon points="320 642.000031 160.000015 642.000031 160.000015 482.000031 320 482.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill: rgb(170, 170, 170);">
-                        <title>head-back</title>
-                </polygon>
-                <polygon points="704 560.000031 544 560.000031 544 160.000031 704 160.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill-opacity: 0.5;">
-                        <title>body-front</title>
-                </polygon>
-                <polygon points="1024 560.000031 864 560.000031 864 160.000031 1024 160.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill-opacity: 0.5;">
-                        <title>body-back</title>
-                </polygon>
-                <polygon points="864 160.000031 864 560.000031 704 560.000031 704 160.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill-opacity: 0.5;">
-                        <title>body-right</title>
-                </polygon>
-                <polygon points="384 560.000031 384 160.000031 544 160.000031 544 560.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill-opacity: 0.5;">
-                        <title>body-left</title>
-                </polygon>
-                <polygon points="543.999939 720.000031 383.999969 720.000031 383.999969 560.000031 543.999939 560.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill-opacity: 0.5;">
-                        <title>body-top</title>
-                </polygon>
-                <polygon points="704 720.000031 544 720.000031 544 560.000031 704 560.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px; fill-opacity: 0.5;">
-                        <title>body-bottom</title>
-                </polygon>
-                <polygon points="665.600,0.000 153.600,0.000 153.600,128.000 665.600,128.000 " style="fill-opacity: 0.2; fill: none; stroke: rgb(0, 0, 0); stroke-width: 4px; stroke-opacity: 0.25;">
-                        <title>ui-label</title>
-                </polygon>
-        </g>
-        <g transform="matrix(1, 0, 0, 1, -160, -90)">
-                <title>head</title>
-                <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="195.303809" cy="619.496219" r="14.10377">
-                        <title>eye</title>
-                </circle>
-                <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="286.696219" cy="619.496219" r="14.10377">
-                        <title>eye</title>
-                </circle>
-        </g>
-        <g>
-                <title>selector</title>
-                <circle style="fill: none; stroke-width: 2px; stroke: rgb(221, 221, 255);" cx="973.158508" cy="50.841564" r="46.558437"/>
-        </g>
-        <g>
-                <title>drop-shadow</title>
-                <circle style="stroke-width: 8px; fill-opacity: 0.3;" cx="768.158508" cy="50.841564" r="46.558437"/>
-        </g>
-        <g>
-                <title>label-text</title>
-                <text style="fill: rgb(255, 255, 221); font-family: Arial, sans-serif; font-size: 49px; white-space: pre;" x="224" y="73.0947">Foo bar baz qux</text>
-        </g>
+  <defs>
+    <bx:grid x="0" y="0" width="16" height="16"/>
+  </defs>
+  <desc>cuboid-character.blend, (Blender 4.1.0)</desc>
+  <g>
+    <title>uv-map</title>
+    <polygon points="1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400 " style="fill-opacity: 0; stroke-width: 8px;">
+      <title>ground-ring</title>
+    </polygon>
+    <polygon points="819.200,0.000 716.800,0.000 716.800,102.400 819.200,102.400 " style="fill-opacity: 0.25; stroke-width: 8px; fill: none;">
+      <title>ground-shadow</title>
+    </polygon>
+    <polygon points="160 320 0 320 0 160 160 160" style="stroke: rgb(255, 255, 255); fill: rgb(170, 170, 170);">
+      <title>head-top</title>
+    </polygon>
+    <polygon points="320 320.000031 160.000015 320.000031 160.000015 160.000031 320 160.000031" style="stroke: rgb(255, 255, 255);">
+      <title>head-bottom</title>
+    </polygon>
+    <polygon points="0 480.000031 0 320.000031 160 320.000031 160 480.000031" style="stroke: rgb(255, 255, 255);">
+      <title>head-left</title>
+    </polygon>
+    <polygon points="320 320 320 480.000031 160 480.000031 160 320" style="stroke: rgb(255, 255, 255);">
+      <title>head-right</title>
+    </polygon>
+    <polygon points="160 640.000031 0 640.000031 0 480 160 480" style="stroke: rgb(255, 255, 255);">
+      <title>head-front</title>
+    </polygon>
+    <polygon points="320 640.000031 160.000015 640.000031 160.000015 480 320 480" style="stroke: rgb(255, 255, 255); fill: rgb(170, 170, 170);">
+      <title>head-back</title>
+    </polygon>
+    <polygon points="704 560.000031 544 560.000031 544 160.000031 704 160.000031" style="stroke: rgb(255, 255, 255); fill-opacity: 0.5;">
+      <title>body-front</title>
+    </polygon>
+    <polygon points="1024 560.000031 864 560.000031 864 160.000031 1024 160.000031" style="stroke: rgb(255, 255, 255); fill-opacity: 0.5;">
+      <title>body-back</title>
+    </polygon>
+    <polygon points="864 160.000031 864 560.000031 704 560.000031 704 160.000031" style="stroke: rgb(255, 255, 255); fill-opacity: 0.5;">
+      <title>body-right</title>
+    </polygon>
+    <polygon points="384 560.000031 384 160.000031 544 160.000031 544 560.000031" style="stroke: rgb(255, 255, 255); fill-opacity: 0.5;">
+      <title>body-left</title>
+    </polygon>
+    <polygon points="543.999939 720.000031 383.999969 720.000031 383.999969 560.000031 543.999939 560.000031" style="stroke: rgb(255, 255, 255); fill-opacity: 0.5;">
+      <title>body-top</title>
+    </polygon>
+    <polygon points="704 720.000031 544 720.000031 544 560.000031 704 560.000031" style="stroke: rgb(255, 255, 255); fill-opacity: 0.5;">
+      <title>body-bottom</title>
+    </polygon>
+    <polygon points="665.600,0.000 153.600,0.000 153.600,128.000 665.600,128.000 " style="fill-opacity: 0.2; fill: none; stroke: rgb(0, 0, 0); stroke-width: 4px; stroke-opacity: 0.25;">
+      <title>ui-label</title>
+    </polygon>
+  </g>
+  <g transform="matrix(1, 0, 0, 1, -160, -90)">
+    <title>head</title>
+    <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="195.303809" cy="619.496219" r="14.10377">
+      <title>eye</title>
+    </circle>
+    <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="286.696219" cy="619.496219" r="14.10377">
+      <title>eye</title>
+    </circle>
+  </g>
+  <g>
+    <title>selector</title>
+    <circle style="fill: none; stroke-width: 2px; stroke: rgb(221, 221, 255);" cx="973.158508" cy="50.841564" r="46.558437"/>
+  </g>
+  <g>
+    <title>drop-shadow</title>
+    <circle style="stroke-width: 8px; fill-opacity: 0.3;" cx="768.158508" cy="50.841564" r="46.558437"/>
+  </g>
+  <g>
+    <title>label-text</title>
+    <text style="fill: rgb(255, 255, 221); font-family: Arial, sans-serif; font-size: 49px; white-space: pre;" x="224" y="73.0947">Foo bar baz qux</text>
+  </g>
 </svg>

@@ -29,6 +29,8 @@
     - ✅ shadow circular
     - 🚧 body has icon
       - ✅ boxy SVG: sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
+      - ℹ️ cannot avoid dup vertices: 8 + (3 * 16) = 60
+        - https://stackoverflow.com/a/76713671/2917822
       - 🚧 redo uv-map using above as guide
     - ✅ can toggle selector/label
       - uniforms showSelector, showLabel
@@ -37,12 +39,13 @@
     - ✅ selector intersection problem
       - ✅ discard alpha < 0.1
       - ✅ higher, so drop shadow always beneath
+  - control vertex ids in Blender
   - character animation: idle, walk
     - try using `class Npc`
 
-
 - 🚧 next.js project (npc-cli-next)
-  - keep in sync e.g. glsl.js
+  - keep in sync e.g. glsl.js, Logger
+    - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
 - ✅ bug: tty: `map 'x => 2 ** x'` then press delete
