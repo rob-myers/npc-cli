@@ -40,21 +40,15 @@ export default function WorldMenu(props) {
       state.ctOpen = false;
       update();
     },
-    log(msg, immediate) {
-      if (immediate === true) {
-        state.logger.xterm.writeln(msg);
+    measure(msg) {
+      if (msg in state.durationKeys) {
+        const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
+        state.logger.xterm.writeln(`${msg} ${ansi.BrightYellow}${durationMs}${ansi.Reset}`);
+        delete state.durationKeys[msg];
       } else {
-        if (msg in state.durationKeys) {
-          const durationMs = (performance.now() - state.durationKeys[msg]).toFixed(1);
-          state.logger.xterm.writeln(`${msg} ${ansi.BrightYellow}${durationMs}${ansi.Reset}`);
-          delete state.durationKeys[msg];
-        } else {
-          state.durationKeys[msg] = performance.now();
-        }
+        state.durationKeys[msg] = performance.now();
       }
-      // update();
     },
-
     show(at) {
       const menuDim = state.ctMenuEl.getBoundingClientRect();
       const canvasDim = w.ui.canvas.getBoundingClientRect();
@@ -181,6 +175,7 @@ const loggerCss = css`
   color: white;
   font-size: 12px;
   font-family: 'Courier New', Courier, monospace;
+  padding: 8px;
 
   .world-logger {
     width: 200px;
@@ -206,12 +201,10 @@ const loggerCss = css`
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
  * @property {boolean} pinned
- * 
  * @property {() => void} enableAll
  * @property {() => void} hide
- * @property {(msg: string, immediate?: boolean) => void} log
- * - Log durations by sending same `msg` twice.
- * - Log plain message by setting `immediate` true.
+ * @property {(msg: string) => void} measure
+ * Measure durations by sending same `msg` twice.
  * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeLoggerPin
  * @property {() => void} storeTextareaHeight
  * @property {(at: Geom.VectJson) => void} show

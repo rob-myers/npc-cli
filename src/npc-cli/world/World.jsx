@@ -201,7 +201,7 @@ export default function World(props) {
         );
 
         // ensure GmData per gmKey in map
-        state.menu.log('gmsData');
+        state.menu.measure('gmsData');
         for (const gmKey of new Set(next.gms.map(({ key }) => key))) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
@@ -209,20 +209,20 @@ export default function World(props) {
           }
         };
         next.gmsData.computeRoot(next.gms);
-        state.menu.log('gmsData');
+        state.menu.measure('gmsData');
       }
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
-        state.menu.log('gmGraph');
+        state.menu.measure('gmGraph');
         next.gmGraph = GmGraphClass.fromGms(next.gms, { permitErrors: true });
-        state.menu.log('gmGraph');
+        state.menu.measure('gmGraph');
         next.gmGraph.w = state;
         
         await pause();
-        state.menu.log('gmRoomGraph');
+        state.menu.measure('gmRoomGraph');
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
-        state.menu.log('gmRoomGraph');
+        state.menu.measure('gmRoomGraph');
       }
 
       // apply changes synchronously
