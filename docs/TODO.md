@@ -23,7 +23,7 @@
       - ✅ fix label normal, return to cuboid-character.glb
     - ❌ icon quad "normal" and double-sided
       - removed icon quad
-  - 🚧 improve cuboid model/skin
+  - ✅ improve cuboid model/skin
     - ✅ selector has smaller radius
     - ❌ label text has outline
     - ✅ shadow circular
@@ -38,10 +38,9 @@
         - `head` 3 * 8 [0, 23] < `body` 3 * 8 [24, 47] < `selector` 4 [48, 51] * < `shadow` 4 [52, 55] < `label` 4 [56, 59]
       - ✅ selector < shadow < label via: `p` (key), select in "right-order", re-join (object > join)
     - ✅ head < body < shadow < selector < label
-    - 🚧 body has icon
-      - 🚧 center-front quad: head < body < shadow < selector < front-icon < label
-      - various different icons in character sprite-sheet,
-        but could be many more in e.g. decor sprite-sheet
+    - ✅ body has icon
+      - ℹ️ boxy: cmd+shift to scale uniformly to center 
+      - ✅ center-front quad: head < body < shadow < selector < front-icon < label
     - ✅ can toggle selector/label
       - uniforms showSelector, showLabel
     - ✅ can change selector color
@@ -49,7 +48,11 @@
     - ✅ selector intersection problem
       - ✅ discard alpha < 0.1
       - ✅ higher, so drop shadow always beneath
-  - control vertex ids in Blender
+  - ✅ control vertex ids in Blender
+
+  - 🚧 avoid 2 SVGs if possible i.e. uv-bg, tex
+  - various different icons in character sprite-sheet
+    - ℹ️ more in e.g. decor sprite-sheet
   - character animation: idle, walk
     - try using `class Npc`
 
