@@ -17,7 +17,8 @@
     - removed other mesh/armature (didn't fix)
     - removed/added armature (seemed to work)
   - 🚧 idle animation
-  - try using `class Npc`
+  - walk animation
+  - start migrating into `<NPCs>`
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
