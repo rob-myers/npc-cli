@@ -36,8 +36,8 @@
       - ℹ️ head < body < selector < shadow < label
         - 60 vertices in total (after 3 * - for cuboid vertices)
         - `head` 3 * 8 [0, 23] < `body` 3 * 8 [24, 47] < `selector` 4 [48, 51] * < `shadow` 4 [52, 55] < `label` 4 [56, 59]
-      - ✅ selector < shadow < label via: s (key) then re-join (mesh > join)
-    - 🚧 head < body < shadow < selector  < label
+      - ✅ selector < shadow < label via: `p` (key), select in "right-order", re-join (object > join)
+    - ✅ head < body < shadow < selector < label
     - 🚧 body has icon
       - 🚧 center-front quad: head < body < shadow < selector < front-icon < label
       - various different icons in character sprite-sheet,
