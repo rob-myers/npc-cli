@@ -27,11 +27,16 @@
     - ✅ selector has smaller radius
     - ❌ label text has outline
     - ✅ shadow circular
-    - 🚧 body has icon
+    - ✅ fix body uv-map
       - ✅ boxy SVG: sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
       - ℹ️ cannot avoid dup vertices: 8 + (3 * 16) = 60
         - https://stackoverflow.com/a/76713671/2917822
-      - 🚧 redo uv-map using above as guide
+      - ✅ redo uv-map using above as guide
+    - 🚧 change vertex ordering: head < body < shadow < selector < label
+    - 🚧 body has icon
+      - 🚧 mesh has extra center-front quad
+      - various different icons in character sprite-sheet,
+        but could be many more in e.g. decor sprite-sheet
     - ✅ can toggle selector/label
       - uniforms showSelector, showLabel
     - ✅ can change selector color
@@ -74,6 +79,7 @@
   - 🚧 decor circle/rect tagged with collider induce colliders
   - support angled rect
 - support multiple skins for single test character
+- consider transparent body skin
 - fix flickering hull door base (onchange camera view)
   - suffices to add a matching line
 - support click switch to open door, instead of click door
