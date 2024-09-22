@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
+import { Poly } from '../geom';
 import { geom, tmpVec1 } from "./geom";
 import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
@@ -55,8 +56,8 @@ export default function createGmsData({ prevGmData }) {
       );
       gmData.tops = {
         broad: gm.walls.filter(x => x.meta.broad === true),
-        door: gm.doors.map(door => door.computeThinPoly()),
-        nonHull: nonHullWallsTouchCeil,
+        door: gm.hullDoors.map(door => door.computeThinPoly()),
+        nonHull: Poly.union(nonHullWallsTouchCeil.concat(gm.doors.map(door => door.computeThinPoly()))),
       };
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
