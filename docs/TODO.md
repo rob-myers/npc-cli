@@ -2,8 +2,6 @@
 
 ## WIP
 
-- ✅ extend chair/table symbols with chair/table tag on obstacle
-
 - 🚧 character animation: idle, walk
   - ✅ add skeleton: hips.bone -> head.bone, shadow.bone
   - ✅ import SkinnedMesh
@@ -28,12 +26,11 @@
     - ℹ️ works when use `<primitive>`
     - ✅ try gltf to jsx i.e. add bones
   - 🚧 idle animation
-    - ✅ support breathing via root bone scale
+    - 🚧 support breathing via root bone scale
       - head_bone: Bone > Relations > Inherit Scale: `None`
   - walk animation
-  - start migrating into `<NPCs>`
 
-- ✅ merge {enter,exit}-sensor into {enter,exit}-collider
+- start migrating into `<NPCs>`
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -47,7 +44,7 @@
       type: "add-colliders",
       colliders: [{
         colliderKey: "myTestCollider",
-        geom: { type: "cuboid", halfDim: [0.75, 1, 0.75 },
+        geom: { type: "cuboid", halfDim: [0.75, 1, 0.75] },
         position: { x: 3, y: 7.5 },
       }],
     }'
@@ -2358,3 +2355,7 @@ run '({ w, api }) {
 - ✅ bug: tty: `map 'x => 2 ** x'` then press delete
   - ✅ also when type 1 char then delete 1st char
 - ✅ avoid logging navmesh creation message
+
+- ✅ extend chair/table symbols with chair/table tag on obstacle
+
+- ✅ merge {enter,exit}-sensor into {enter,exit}-collider
