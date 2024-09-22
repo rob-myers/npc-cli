@@ -34,7 +34,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       const object = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(object);
       const scene = /** @type {THREE.Group} */ (graph.nodes[meta.groupName]);
-      // SkinnedMesh if exported with animations, which we'll assume
+      // Must be SkinnedMesh i.e. gltf exported with animations
       const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (graph.nodes[meta.meshName]);
 
       const numVertices = skinnedMesh.geometry.getAttribute('position').count;
@@ -47,10 +47,11 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
 
       /** @type {TestCharacter} */
       const character = {
+        bones: Object.values(graph.nodes).filter(x => x instanceof THREE.Bone),
         object,
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
         charKey,
-        graph: buildObjectLookup(object),
+        graph,
         skinnedMesh,
         mixer,
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
@@ -62,11 +63,6 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       skinnedMesh.updateMatrixWorld();
       skinnedMesh.computeBoundingBox();
       skinnedMesh.computeBoundingSphere();
-      // info({
-      //   bbox: skinnedMesh.boundingBox,
-      //   bsph: skinnedMesh.boundingSphere,
-      // });
-
 
       state.characters.push(character);
 
@@ -100,17 +96,19 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
     state.characters.forEach(({ charKey }, charIndex) => state.setSkin(charIndex, charKey));
   }, [w.hash.sheets]);
 
-  return state.characters.map(({ object, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
+  return state.characters.map(({ bones, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
     <group
       key={i}
       position={initPos}
+      dispose={null}
     >
+      {bones.map((bone, i) => <primitive key={i} object={bone} />)}
       <skinnedMesh
         geometry={mesh.geometry}
         position={mesh.position}
         skeleton={mesh.skeleton}
         scale={scale}
-        frustumCulled={false} // 🚧 remove once bounding-box fixed
+        // frustumCulled={false}
       >
         {/* <meshBasicMaterial key="change_me" map={texture} transparent /> */}
         <testCharacterMaterial
@@ -168,6 +166,7 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
 
 /**
  * @typedef TestCharacter
+ * @property {THREE.Bone[]} bones
  * @property {CharacterKey} charKey
  * @property {import("@react-three/fiber").ObjectMap} graph
  * @property {THREE.Vector3} initPos
@@ -187,6 +186,5 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
  * @property {string} groupName e.g. 'Scene'
  * @property {string} skinBaseName e.g. 'test-hyper-casual.tex.png'
  */
-
 
 useGLTF.preload(Object.values(charKeyToMeta).map(x => x.url));

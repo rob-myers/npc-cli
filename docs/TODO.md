@@ -22,11 +22,11 @@
     - ✅ added a keyframe to "Idle" (must do this)
   - ✅ `<mesh>` -> `<skinnedMesh>`
     - ✅ Idle animation is imported
-  - 🚧 fix frustum culling
+  - ✅ fix frustum culling
     - ✅ compute bounding{Box,Sphere} (did not fix)
     - ✅ temp set frustumCulling false on `<skinnedMesh>`
     - ℹ️ works when use `<primitive>`
-    -  try gltf to jsx
+    - ✅ try gltf to jsx i.e. add bones
   - 🚧 idle animation
     - ✅ support breathing via root bone scale
       - head_bone: Bone > Relations > Inherit Scale: `None`
