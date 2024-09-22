@@ -20,8 +20,13 @@
     - ℹ️ it was probably due to various "Fake User" animations from deleted armature/meshes
     - ✅ move root bone down to origin
     - ✅ added a keyframe to "Idle" (must do this)
-  - 🚧 `<mesh>` -> `<skinnedMesh>`
+  - ✅ `<mesh>` -> `<skinnedMesh>`
     - ✅ Idle animation is imported
+  - 🚧 fix frustum culling
+    - ✅ compute bounding{Box,Sphere} (did not fix)
+    - ✅ temp set frustumCulling false on `<skinnedMesh>`
+    - ℹ️ works when use `<primitive>`
+    -  try gltf to jsx
   - 🚧 idle animation
     - ✅ support breathing via root bone scale
       - head_bone: Bone > Relations > Inherit Scale: `None`

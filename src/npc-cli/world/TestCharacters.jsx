@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 import { buildObjectLookup, emptyTexture, textureLoader } from "../service/three";
-import { CameraLightMaterial, TestCharacterMaterial } from '../service/glsl';
+import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
@@ -35,11 +35,11 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       const graph = buildObjectLookup(object);
       const scene = /** @type {THREE.Group} */ (graph.nodes[meta.groupName]);
       // SkinnedMesh if exported with animations, which we'll assume
-      const mesh = /** @type {THREE.SkinnedMesh} */ (graph.nodes[meta.meshName]);
+      const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (graph.nodes[meta.meshName]);
 
-      const numVertices = mesh.geometry.getAttribute('position').count;
+      const numVertices = skinnedMesh.geometry.getAttribute('position').count;
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
-      mesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
+      skinnedMesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
 
       // 🚧
       console.log('animations', gltf.animations);
@@ -51,13 +51,22 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
         charKey,
         graph: buildObjectLookup(object),
-        mesh,
+        skinnedMesh,
         mixer,
-        scale: mesh.scale.clone().multiplyScalar(meta.scale),
+        scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
       };
       const material = /** @type {THREE.MeshPhysicalMaterial} */ (character.graph.materials[meta.materialName]);
       material.transparent = true; // For drop shadow
+
+      skinnedMesh.updateMatrixWorld();
+      skinnedMesh.computeBoundingBox();
+      skinnedMesh.computeBoundingSphere();
+      // info({
+      //   bbox: skinnedMesh.boundingBox,
+      //   bsph: skinnedMesh.boundingSphere,
+      // });
+
 
       state.characters.push(character);
 
@@ -91,19 +100,18 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
     state.characters.forEach(({ charKey }, charIndex) => state.setSkin(charIndex, charKey));
   }, [w.hash.sheets]);
 
-  return state.characters.map(({ object, initPos, graph, mesh, scale, texture }, i) =>
-    <group key={i} position={initPos}>
-      <mesh
-        geometry={mesh.geometry}
-        position={mesh.position}
-        scale={scale}
-      >
-      {/* <skinnedMesh
+  return state.characters.map(({ object, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
+    <group
+      key={i}
+      position={initPos}
+    >
+      <skinnedMesh
         geometry={mesh.geometry}
         position={mesh.position}
         skeleton={mesh.skeleton}
         scale={scale}
-      > */}
+        frustumCulled={false} // 🚧 remove once bounding-box fixed
+      >
         {/* <meshBasicMaterial key="change_me" map={texture} transparent /> */}
         <testCharacterMaterial
           key={TestCharacterMaterial.key}
@@ -112,8 +120,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
           map={texture}
           selectorColor={[0.6, 0.6, 1]}
         />
-      {/* </skinnedMesh> */}
-      </mesh>
+      </skinnedMesh>
     </group>
   );
 });
@@ -165,7 +172,7 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
  * @property {import("@react-three/fiber").ObjectMap} graph
  * @property {THREE.Vector3} initPos
  * @property {THREE.Object3D} object
- * @property {THREE.SkinnedMesh} mesh
+ * @property {THREE.SkinnedMesh} skinnedMesh
  * @property {THREE.AnimationMixer} mixer
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
