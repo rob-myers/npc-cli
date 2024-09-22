@@ -26,6 +26,9 @@ w decor.label.tex.image.toDataURL | log
 w npc.updateLabels '["foo", "bar", "baz qux"]'
 w npc.label.tex.image.toDataURL | log
 
+while true; do
+  w debug.char.add $( click 1 ) cuboidChar
+done
 ```
 
 ```sh
