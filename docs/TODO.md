@@ -20,6 +20,8 @@
   - walk animation
   - start migrating into `<NPCs>`
 
+- ✅ merge {enter,exit}-sensor into {enter,exit}-collider
+
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`

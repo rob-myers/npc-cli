@@ -124,11 +124,15 @@ export default function useHandleEvents(w) {
     },
     handleNpcEvents(e) {
       switch (e.key) {
-        case "enter-sensor": 
-          state.onEnterSensor(e);
+        case "enter-collider":
+          if (e.type === 'nearby' || e.type === 'inside') {
+            state.onEnterDoorCollider(e);
+          }
           break;
-        case "exit-sensor":
-          state.onExitSensor(e);
+        case "exit-collider":
+          if (e.type === 'nearby' || e.type === 'inside') {
+            state.onExitDoorCollider(e);
+          }
           break;
         case "spawned": {
           const npc = w.npc.npc[e.npcKey];
@@ -237,7 +241,7 @@ export default function useHandleEvents(w) {
       // const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
       // return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
     },
-    onEnterSensor(e) {
+    onEnterDoorCollider(e) {
       if (e.type === 'nearby') {
         (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.gdKey);
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
@@ -271,7 +275,7 @@ export default function useHandleEvents(w) {
         return;
       }
     },
-    onExitSensor(e) {
+    onExitDoorCollider(e) {
       const door = w.door.byKey[e.gdKey];
       const npc = w.npc.npc[e.npcKey]; // undefined on removal
 
@@ -350,9 +354,9 @@ export default function useHandleEvents(w) {
       const closeDoors = state.npcToDoor[npcKey];
       for (const gdKey of closeDoors?.nearby ?? []) {// npc may never have been close to any door
         const door = w.door.byKey[gdKey];
-        state.onExitSensor({ key: 'exit-sensor', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
+        state.onExitDoorCollider({ key: 'exit-collider', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
         if (closeDoors.inside.delete(gdKey) === true) {
-          state.onExitSensor({ key: 'exit-sensor', type: 'inside', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
+          state.onExitDoorCollider({ key: 'exit-collider', type: 'inside', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
         }
       }
       state.npcToDoor[npcKey]?.nearby.clear();
@@ -446,8 +450,8 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
- * @property {(e: Extract<NPC.Event, { key: 'enter-sensor' }>) => void} onEnterSensor
- * @property {(e: Extract<NPC.Event, { key: 'exit-sensor' }>) => void} onExitSensor
+ * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
+ * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
  * @property {(npcKey: string, point: Geom.VectJson) => Promise<void>} moveNpc
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop

@@ -30,20 +30,15 @@ export default function WorldWorkers() {
 
     handlePhysicsCollision(npcKey, otherKey, isEnter) {
       const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
-      switch (type) {
-        case 'npc':
-          warn(`${'handlePhysicsWorkerMessage'}: unexpected otherKey: "${otherKey}"`);
-          break;
-        case 'inside':
-        case 'nearby':
-          w.events.next({ key: isEnter === true ? 'enter-sensor' : 'exit-sensor', npcKey, type, ...w.lib.getGmDoorId(subKey) });
-          break;
-        case 'circle':
-        case 'rect':
-          w.events.next({ key: isEnter === true ? 'enter-collider' : 'exit-collider', npcKey, type, colliderKey: subKey });
-          break;
-        default:
-          throw testNever(type);
+
+      if (type === 'npc') {
+        warn(`${'handlePhysicsCollision'}: unexpected otherKey: "${otherKey}"`);
+      } else {
+        w.events.next({ key: isEnter === true ? 'enter-collider' : 'exit-collider', npcKey,
+          ...(type === 'inside' || type === 'nearby') 
+            ? { type, ...w.lib.getGmDoorId(subKey) }
+            : { type, colliderKey: subKey }
+        });
       }
     },
 

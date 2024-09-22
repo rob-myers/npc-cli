@@ -60,10 +60,8 @@ declare namespace NPC {
     | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "changed-zoom"; level: 'near' | 'far' }
-    | { key: "enter-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
-    | { key: "exit-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
-    | { key: "enter-collider"; npcKey: string; type: 'circle' | 'rect'; colliderKey: string }
-    | { key: "exit-collider"; npcKey: string; type: 'circle' | 'rect'; colliderKey: string }
+    | { key: "enter-collider"; npcKey: string; } & BaseColliderEvent
+    | { key: "exit-collider"; npcKey: string; } & BaseColliderEvent
     | {
         key: "pre-request-nav";
         /**
@@ -78,7 +76,12 @@ declare namespace NPC {
         changedGmIds: boolean[];
       }
     | { key: "pre-setup-physics" }
-    // 🚧 ...
+    // ...
+
+  type BaseColliderEvent = (
+    | { type: 'circle' | 'rect'; colliderKey: string }
+    | { type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+  );
 
   type PointerUpEvent = Pretty<BasePointerEvent & {
     key: "pointerup";
