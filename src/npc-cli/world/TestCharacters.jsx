@@ -41,6 +41,10 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
       mesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
 
+      // 🚧
+      console.log('animations', gltf.animations);
+      const mixer = new THREE.AnimationMixer(object);
+
       /** @type {TestCharacter} */
       const character = {
         object,
@@ -48,6 +52,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
         charKey,
         graph: buildObjectLookup(object),
         mesh,
+        mixer,
         scale: mesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
       };
@@ -93,6 +98,12 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
         position={mesh.position}
         scale={scale}
       >
+      {/* <skinnedMesh
+        geometry={mesh.geometry}
+        position={mesh.position}
+        skeleton={mesh.skeleton}
+        scale={scale}
+      > */}
         {/* <meshBasicMaterial key="change_me" map={texture} transparent /> */}
         <testCharacterMaterial
           key={TestCharacterMaterial.key}
@@ -101,6 +112,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
           map={texture}
           selectorColor={[0.6, 0.6, 1]}
         />
+      {/* </skinnedMesh> */}
       </mesh>
     </group>
   );
@@ -154,6 +166,7 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
  * @property {THREE.Vector3} initPos
  * @property {THREE.Object3D} object
  * @property {THREE.SkinnedMesh} mesh
+ * @property {THREE.AnimationMixer} mixer
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
  */

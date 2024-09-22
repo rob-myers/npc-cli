@@ -16,7 +16,13 @@
     - upgraded to blender 4.2 (didn't fix)
     - removed other mesh/armature (didn't fix)
     - removed/added armature (seemed to work)
+  - 🚧 saw gltf export bug again after
+    - moving root bone down to origin (must do this)
+    - added a keyframe to "Idle" (must do this)
+  - 🚧 `<mesh>` -> `<skinnedMesh>`
   - 🚧 idle animation
+    - ✅ support breathing via root bone scale
+      - head_bone: Bone > Relations > Inherit Scale: `None`
   - walk animation
   - start migrating into `<NPCs>`
 
