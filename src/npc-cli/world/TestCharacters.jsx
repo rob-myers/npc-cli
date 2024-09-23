@@ -10,9 +10,9 @@ import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 
 /**
- * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
+ * @param {Props} props
  */
-export const TestCharacters = React.forwardRef(function TestCharacters(props, ref) {
+export default function TestCharacters(props) {
   const w = React.useContext(WorldContext);
 
   charKeyToGltf.hcTest = useGLTF(charKeyToMeta.hcTest.url);
@@ -90,8 +90,8 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
     },
   }));
 
-  React.useMemo(() => void (/** @type {Function} */ (ref)?.(state)), [ref]);
-  
+  w.debug.char = state;
+
   React.useEffect(() => {// Hot reload skins
     state.characters.forEach(({ charKey }, charIndex) => state.setSkin(charIndex, charKey));
   }, [w.hash.sheets]);
@@ -121,7 +121,7 @@ export const TestCharacters = React.forwardRef(function TestCharacters(props, re
       </skinnedMesh>
     </group>
   );
-});
+}
 
 /**
  * @typedef Props

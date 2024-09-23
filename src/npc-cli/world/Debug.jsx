@@ -7,7 +7,7 @@ import { navMeta, decompToXZGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { TestCharacters } from "./TestCharacters";
+import TestCharacters from "./TestCharacters";
 
 /**
  * @param {Props} props 
@@ -141,7 +141,9 @@ export default function Debug(props) {
     ))}
 
     {props.showTestCharacters && (
-      <TestCharacters ref={x => state.char = x ?? state.char} />
+      <React.Suspense>
+        <TestCharacters />
+      </React.Suspense>
     )}
   </>;
 }
