@@ -204,6 +204,23 @@ export class Npc {
       this.s.moving = false;
     }
   }
+  /**
+   * 🚧 clean
+   * @param {THREE.Group | null} group 
+   */
+  onMount = (group) => {
+    if (group !== null) {
+      this.group = group;
+
+      this.mixer = new THREE.AnimationMixer(this.group);
+      this.animMap = this.animations.reduce((agg, a) => helper.isAnimKey(a.name)
+        ? (agg[a.name] = this.mixer.clipAction(a), agg)
+        : (warn(`ignored unexpected animation: ${a.name}`), agg)
+      , /** @type {typeof this['animMap']} */ ({}));
+
+      this.startAnimation('Idle');
+    }
+  }
   /** @param {number} deltaMs  */
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
@@ -274,23 +291,6 @@ export class Npc {
     if (this.agent !== null) {
       this.w.crowd.removeAgent(this.agent.agentIndex);
       this.agent = null;
-    }
-  }
-  /**
-   * 🚧 clean
-   * @param {THREE.Group | null} group 
-   */
-  rootRef(group) {
-    if (group && this.group === emptyGroup) {
-      this.group = group;
-
-      this.mixer = new THREE.AnimationMixer(this.group);
-      this.animMap = this.animations.reduce((agg, a) => helper.isAnimKey(a.name)
-        ? (agg[a.name] = this.mixer.clipAction(a), agg)
-        : (warn(`ignored unexpected animation: ${a.name}`), agg)
-      , /** @type {typeof this['animMap']} */ ({}));
-
-      this.startAnimation('Idle');
     }
   }
   /** @param {THREE.Vector3Like} dst  */

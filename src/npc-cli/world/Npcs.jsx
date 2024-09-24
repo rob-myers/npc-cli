@@ -333,7 +333,7 @@ useGLTF.preload(glbMeta.url);
 function NPC({ npc }) {
   return (
     <group
-      ref={g => npc.rootRef(g)}
+      ref={npc.onMount} // avoid inline ref
       scale={glbMeta.scale}
       // dispose={null}
     >

@@ -32,8 +32,12 @@
 
 - 🚧 start migrating into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format
+  - ℹ️ refs get called often if use inline function,
+      - use e.g. `ref={state.foo}` instead
+      - https://legacy.reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
   - 🚧 fix `<NPCs>` hmr
   - 🚧 clean
+  - 🚧 remove nav-obstacles for the moment (not needed)
   - use React.memo with optional force
   - migrate cuboid-character (leave TestCharacters as is)
 
