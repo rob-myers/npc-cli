@@ -47,7 +47,9 @@ export default function TestCharacters(props) {
 
       /** @type {TestCharacter} */
       const character = {
-        bones: Object.values(graph.nodes).filter(x => x instanceof THREE.Bone),
+        bones: Object.values(graph.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
+          x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
+        ),
         object,
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
         charKey,
@@ -166,7 +168,7 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
 
 /**
  * @typedef TestCharacter
- * @property {THREE.Bone[]} bones
+ * @property {THREE.Bone[]} bones Root bones
  * @property {CharacterKey} charKey
  * @property {import("@react-three/fiber").ObjectMap} graph
  * @property {THREE.Vector3} initPos
