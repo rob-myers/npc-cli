@@ -117,7 +117,7 @@ export default function Npcs(props) {
       for (const npc of npcs) {
         npc.onTick(deltaMs);
         if (npc.s.moving === true) {
-          const { x, y, z } = npc.group.position;
+          const { x, y, z } = npc.position;
           npcPositions.push(npc.bodyUid, x, y, z);
         }
       }
@@ -259,13 +259,12 @@ export default function Npcs(props) {
   w.n = state.npc;
 
   React.useEffect(() => {
-    // 🚧 get this working again
-    // if (process.env.NODE_ENV === 'development') {
-    //   info('hot-reloading npcs');
-    //   Object.values(state.npc).forEach(npc =>
-    //     state.npc[npc.key] = hotModuleReloadNpc(npc)
-    //   );
-    // }
+    if (process.env.NODE_ENV === 'development') {
+      info('hot-reloading npcs');
+      Object.values(state.npc).forEach(npc =>
+        state.npc[npc.key] = hotModuleReloadNpc(npc)
+      );
+    }
   }, []);
 
   const update = useUpdate();
@@ -331,23 +330,23 @@ useGLTF.preload(glbMeta.url);
  * @param {{ npc: Npc }} props 
  */
 function NPC({ npc }) {
+  const { m } = npc;
+
   return (
     <group
       ref={npc.onMount} // avoid inline ref
       scale={glbMeta.scale}
       // dispose={null}
     >
-      <group
-        position={[0, 3, 0]} // via `npx gtfljsx`
-      >
-        {npc.bones.map((bone, i) => <primitive key={i} object={bone} />)}
+      <group position={[0, 3, 0]}>
+        {m.bones.map((bone, i) => <primitive key={i} object={bone} />)}
         <skinnedMesh
-          geometry={npc.skinnedMesh.geometry}
-          position={npc.skinnedMesh.position}
-          skeleton={npc.skinnedMesh.skeleton}
-          userData={npc.skinnedMesh.userData}
+          geometry={m.mesh.geometry}
+          position={m.mesh.position}
+          skeleton={m.mesh.skeleton}
+          userData={m.mesh.userData}
         >
-          <meshPhysicalMaterial transparent map={npc.material.map} />
+          <meshPhysicalMaterial transparent map={m.material.map} />
         </skinnedMesh>
       </group>
     </group>

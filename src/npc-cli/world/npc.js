@@ -4,7 +4,7 @@ import { dampLookAt } from "maath/easing";
 
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1 } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 
@@ -16,19 +16,26 @@ export class Npc {
   /** @type {number} When we (re)spawned */ epochMs;
   /** @type {number} Physics body identifier i.e. `hashText(key)` */ bodyUid;
   
-  group = emptyGroup;
-  gltf = emptyGroup;
-  animations = /** @type {THREE.AnimationClip[]} */ ([]);
-
-  skinnedMesh = /** @type {THREE.SkinnedMesh} */ ({});
-  /** Root bones */
-  bones = /** @type {THREE.Bone[]} */ ([]);
-  material = /** @type {THREE.MeshPhysicalMaterial} */ ({});
-
-  /** Sub `nodes` and `materials` */
-  sub = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
-  animMap = /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({});
+  /** Model */
+  m = {
+    /** Clone of GLTF scene */
+    gltf: emptyGroup,
+    /** Root group */
+    group: emptyGroup,
+    
+    /** Sub `nodes` and `materials` */
+    sub: /** @type {import('@react-three/fiber').ObjectMap} */ ({}),
+    mesh: /** @type {THREE.SkinnedMesh} */ ({}),
+    /** Root bones */
+    bones: /** @type {THREE.Bone[]} */ ([]),
+    animations: /** @type {THREE.AnimationClip[]} */ ([]),
+    animMap: /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({}),
+    material: /** @type {THREE.MeshPhysicalMaterial} */ ({}),
+  }
+  
   mixer = emptyAnimationMixer;
+  /** Shortcut to `this.m.group.position` */
+  position = tmpVectThree1;
 
   /** State */
   s = {
@@ -64,7 +71,7 @@ export class Npc {
     this.bodyUid = addBodyKeyUidRelation(npcToBodyKey(def.key), w.physics)
   }
   attachAgent() {
-    return this.agent ??= this.w.crowd.addAgent(this.group.position, {
+    return this.agent ??= this.w.crowd.addAgent(this.position, {
       ...crowdAgentParams,
       maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed
     });
@@ -92,7 +99,7 @@ export class Npc {
    */
   async changeSkin(skinKey) {// 🚧 redo
     this.def.skinKey = skinKey;
-    const skinnedMesh = this.skinnedMesh;
+    const skinnedMesh = this.m.mesh;
     const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
 
     await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
@@ -106,20 +113,20 @@ export class Npc {
       // clonedMaterial.uniformsNeedUpdate = true;
       skinnedMesh.material = clonedMaterial;
 
-      this.material = clonedMaterial;
+      this.m.material = clonedMaterial;
       this.w.update();
     });
   }
   getAngle() {// Assume only rotated about y axis
-    return this.group.rotation.y;
+    return this.m.group.rotation.y;
   }
   /** @returns {Geom.VectJson} */
   getPoint() {
-    const { x, z: y } = this.group.position;
+    const { x, z: y } = this.position;
     return { x, y };
   }
   getPosition() {
-    return this.group.position;
+    return this.position;
   }
   getRadius() {
     return helper.defaults.radius;
@@ -132,25 +139,25 @@ export class Npc {
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
    */
   initialize({ scene, animations }) {
-    this.gltf = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
-    this.animations = animations;
+    const { m } = this;
+    m.gltf = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
+    m.animations = animations;
 
-    this.sub = buildObjectLookup(this.gltf);
+    m.sub = buildObjectLookup(m.gltf);
     
-    this.bones = Object.values(this.sub.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
+    m.bones = Object.values(m.sub.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
       x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
     );
-    this.skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.sub.nodes[glbMeta.skinnedMeshName]);
-    this.material = /** @type {Npc['material']} */ (this.skinnedMesh.material);
-    this.skinnedMesh.userData.npcKey = this.key; // To decode pointer events
+    m.mesh = /** @type {THREE.SkinnedMesh} */ (m.sub.nodes[glbMeta.skinnedMeshName]);
+    m.material = /** @type {Npc['m']['material']} */ (m.mesh.material);
+    m.mesh.userData.npcKey = this.key; // To decode pointer events
 
-    this.skinnedMesh.updateMatrixWorld();
-    this.skinnedMesh.computeBoundingBox();
-    this.skinnedMesh.computeBoundingSphere();
-
-    // ℹ️ cannot setup mixer until <group> mounts
+    m.mesh.updateMatrixWorld();
+    m.mesh.computeBoundingBox();
+    m.mesh.computeBoundingSphere();
 
     this.changeSkin(this.def.skinKey);
+    // ℹ️ cannot setup mixer until <group> mounts
   }
   /**
    * @param {THREE.Vector3Like} dst
@@ -210,13 +217,15 @@ export class Npc {
    */
   onMount = (group) => {
     if (group !== null) {
-      this.group = group;
+      const { m } = this;
+      m.group = group;
+      this.position = group.position;
 
-      this.mixer = new THREE.AnimationMixer(this.group);
-      this.animMap = this.animations.reduce((agg, a) => helper.isAnimKey(a.name)
+      this.mixer = new THREE.AnimationMixer(m.group);
+      m.animMap = m.animations.reduce((agg, a) => helper.isAnimKey(a.name)
         ? (agg[a.name] = this.mixer.clipAction(a), agg)
         : (warn(`ignored unexpected animation: ${a.name}`), agg)
-      , /** @type {typeof this['animMap']} */ ({}));
+      , /** @type {typeof this['m']['animMap']} */ ({}));
 
       this.startAnimation('Idle');
     }
@@ -230,7 +239,7 @@ export class Npc {
     }
 
     if (this.s.lookAt !== null) {
-      dampLookAt(this.group, this.s.lookAt, 0.25, deltaMs);
+      dampLookAt(this.m.group, this.s.lookAt, 0.25, deltaMs);
     }
   }
   /**
@@ -242,7 +251,7 @@ export class Npc {
     const vel = agent.velocity();
     const speed = Math.sqrt(vel.x ** 2 + vel.z ** 2);
     
-    this.group.position.copy(pos);
+    this.position.copy(pos);
 
     if (speed > 0.2) {
       this.s.lookAt = this.lastLookAt.copy(pos).add(vel);
@@ -295,12 +304,12 @@ export class Npc {
   }
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
-    this.group.position.copy(dst);
+    this.position.copy(dst);
   }
   /** @param {NPC.AnimKey} act */
   startAnimation(act) {
-    const anim = this.animMap[this.s.act];
-    const next = this.animMap[act];
+    const anim = this.m.animMap[this.s.act];
+    const next = this.m.animMap[act];
     anim.fadeOut(glbFadeOut[this.s.act][act]);
     next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
     this.s.act = act;
@@ -360,17 +369,16 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, group, s, sub, animMap, mixer, agent, lastLookAt, lastTarget, lastCorner } = npc;
+  const { def, epochMs, m, s, mixer, position, agent, lastLookAt, lastTarget, lastCorner } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
   // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
   const nextNpc = new Npc(def, npc.w);
   return Object.assign(nextNpc, /** @type {Partial<Npc>} */ ({
     epochMs,
-    group,
+    m,
     s: Object.assign(nextNpc.s, s),
-    sub,
-    animMap,
     mixer,
+    position,
     agent,
     lastLookAt,
     lastTarget,
