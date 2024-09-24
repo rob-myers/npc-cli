@@ -29,35 +29,8 @@ export default function Npcs(props) {
     nextObstacleId: 0,
     npc: {},
     obstacle: {},
-    obsGroup: /** @type {*} */ (null),
     select: { curr: null, prev: null, many: [] },
 
-    addBoxObstacle(position, extent, angle) {
-      const { obstacle, success } = w.nav.tileCache.addBoxObstacle(position, extent, angle);
-      state.updateTileCache();
-      if (success) {
-        const id = state.nextObstacleId++;
-        const mesh = createDebugBox(position, obstacle.extent); // 🚧 angle
-        state.obsGroup.add(mesh);
-        return state.obstacle[id] = { id, o: obstacle, mesh };
-      } else {
-        warn(`failed to add obstacle (box) at ${JSON.stringify(position)}`);
-        return null;
-      }
-    },
-    addCylinderObstacle(position, radius, height) {
-      const { obstacle, success } = w.nav.tileCache.addCylinderObstacle(position, radius, height);
-      state.updateTileCache();
-      if (success) {
-        const id = state.nextObstacleId++;
-        const mesh = createDebugCylinder(position, radius, height);
-        state.obsGroup.add(mesh);
-        return state.obstacle[id] = { id, o: obstacle, mesh };
-      } else {
-        warn(`failed to add obstacle (cylinder) at ${JSON.stringify(position)}`);
-        return null;
-      }
-    },
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = w.crowd.navMeshQuery;
       const { path, success } = query.computePath(src, dst, {
@@ -126,15 +99,6 @@ export default function Npcs(props) {
       const positions = new Float64Array(npcPositions);
       w.physics.worker.postMessage({ type: 'send-npc-positions', positions }, [positions.buffer]);
     },
-    removeObstacle(obstacleId) {
-      const obstacle = state.obstacle[obstacleId];
-      if (obstacle) {
-        delete state.obstacle[obstacleId];
-        w.nav.tileCache.removeObstacle(obstacle.o);
-        state.obsGroup.remove(obstacle.mesh);
-        state.updateTileCache();
-      }
-    },
     restore() {// onchange nav-mesh
       // restore agents
       Object.values(state.npc).forEach(npc => {
@@ -152,17 +116,8 @@ export default function Npcs(props) {
           agent.requestMoveTarget(npc.getPosition());
         }
       });
-
-      // restore obstacles (overwrite)
-      Object.values(state.obstacle).forEach(obstacle => {
-        if (obstacle.o.type === 'box') {
-          state.addBoxObstacle(obstacle.o.position, obstacle.o.extent, 0);
-        } else {
-          state.addCylinderObstacle(obstacle.o.position, obstacle.o.radius, obstacle.o.height);
-        }
-      });
     },
-    removeNpc(npcKey) {
+    remove(npcKey) {
       const npc = state.getNpc(npcKey); // throw if n'exist pas
       // npc.setGmRoomId(null);
       delete state.npc[npcKey];
@@ -246,13 +201,6 @@ export default function Npcs(props) {
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
       createLabelSpriteSheet(labels, state.label, fontHeight);
     },
-
-    // 🚧 old below
-    updateTileCache() {// 🚧 spread out updates
-      const { tileCache, navMesh } = w.nav;
-      for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
-      console.log(`updateTileCached: ${tileCache.update(navMesh).upToDate}`);
-    },
   }));
 
   w.npc = state;
@@ -269,13 +217,7 @@ export default function Npcs(props) {
 
   const update = useUpdate();
 
-  return <>
-
-    <group
-      name="nav-obstacles"
-      ref={x => state.obsGroup = x ?? state.obsGroup}
-    />
-
+  return (
     <group
       name="npcs"
       ref={x => state.group = x ?? state.group}
@@ -286,8 +228,7 @@ export default function Npcs(props) {
         <NPC key={npc.key} npc={npc} />
       )}
     </group>
-
-  </>;
+  );
 }
 
 /**
@@ -299,14 +240,11 @@ export default function Npcs(props) {
  * @typedef State
  * @property {THREE.Group} group
  * @property {import("../service/three").LabelsSheetAndTex} label
- * @property {THREE.Group} obsGroup
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {{ curr: null | string; prev: null | string; many: string[]; }} select 🚧 move to script
  * @property {number} nextObstacleId
  * @property {Record<string, NPC.Obstacle>} obstacle
  *
- * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
- * @property {(position: THREE.Vector3Like, radius: number, height: number) => NPC.Obstacle | null} addCylinderObstacle
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist
@@ -317,11 +255,9 @@ export default function Npcs(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
- * @property {(obstacleId: number) => void} removeObstacle
- * @property {(npcKey: string) => void} removeNpc
+ * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {(labels: string[]) => void} updateLabels
- * @property {() => void} updateTileCache
  */
 
 useGLTF.preload(glbMeta.url);

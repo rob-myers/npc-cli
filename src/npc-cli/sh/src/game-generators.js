@@ -110,10 +110,6 @@ export async function* events({ api, w }) {
  * @param {RunArg} ctxt
  */
 export async function* setupDemo1({ w }) {
-
-    // create an obstacle (before query)
-    const obstacle = w.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
-
     // find and exclude a poly
     const { polyRefs } =  w.crowd.navMeshQuery.queryPolygons(
       // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
@@ -125,12 +121,11 @@ export async function* setupDemo1({ w }) {
       { x: 0.2, y: 0.1, z: 0.01 },
     );
     console.log({ polyRefs });
+
     const filter = w.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
     polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
     w.debug.selectNavPolys(polyRefs); // display via debug
-    
-    w.update(); // Show obstacle
 }
 
 /**
