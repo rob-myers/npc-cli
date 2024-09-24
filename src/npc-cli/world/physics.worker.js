@@ -51,7 +51,7 @@ async function handleMessages(e) {
         /** @type {WW.PhysicsBodyKey} */
         const bodyKey = geom.type === 'cuboid' ? `rect ${colliderKey}` : `circle ${colliderKey}`;
   
-        if (!(bodyKey in state.bodyKeyToUid)) {
+        if (!(bodyKey in state.bodyKeyToBody)) {
           const _body = createRigidBody({
             type: RAPIER.RigidBodyType.Fixed,
             geomDef: geom,
@@ -75,7 +75,7 @@ async function handleMessages(e) {
       for (const npc of msg.npcs) {
         const bodyKey = npcToBodyKey(npc.npcKey);
 
-        if (!(bodyKey in state.bodyKeyToUid)) {
+        if (!(bodyKey in state.bodyKeyToBody)) {
           const _body = createRigidBody({
             type: RAPIER.RigidBodyType.KinematicPositionBased,
             geomDef: {
