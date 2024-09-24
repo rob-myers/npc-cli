@@ -7,7 +7,6 @@ import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
-// import * as glsl from '../service/glsl';
 
 export class Npc {
 
@@ -18,7 +17,16 @@ export class Npc {
   /** @type {number} Physics body identifier i.e. `hashText(key)` */ bodyUid;
   
   group = emptyGroup;
-  map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
+  gltf = emptyGroup;
+  animations = /** @type {THREE.AnimationClip[]} */ ([]);
+
+  skinnedMesh = /** @type {THREE.SkinnedMesh} */ ({});
+  /** Root bones */
+  bones = /** @type {THREE.Bone[]} */ ([]);
+  material = /** @type {THREE.MeshPhysicalMaterial} */ ({});
+
+  /** Sub `nodes` and `materials` */
+  sub = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
   animMap = /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({});
   mixer = emptyAnimationMixer;
 
@@ -82,18 +90,10 @@ export class Npc {
    * 🚧 remove async once skin sprite-sheet available
    * @param {NPC.SkinKey} skinKey
    */
-  async changeSkin(skinKey) {
+  async changeSkin(skinKey) {// 🚧 redo
     this.def.skinKey = skinKey;
-    const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.map.nodes[glbMeta.skinnedMeshName]);
+    const skinnedMesh = this.skinnedMesh;
     const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
-    // const clonedMaterial = new THREE.MeshBasicMaterial();
-    // 🚧 convert MeshBasicMaterial to ShaderMaterial
-    // const clonedMaterial = new THREE.ShaderMaterial({
-    //   vertexShader: THREE.ShaderLib.basic.vertexShader,
-    //   fragmentShader: THREE.ShaderLib.basic.fragmentShader,
-    //   uniforms: THREE.UniformsUtils.clone(THREE.ShaderLib.basic.uniforms),
-    //   defines: { USE_SKINNING: '', USE_MAP: '',  USE_UVS: '' },
-    // });
 
     await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
       tex.flipY = false;
@@ -105,6 +105,9 @@ export class Npc {
       // clonedMaterial.uniforms.map.value = tex;
       // clonedMaterial.uniformsNeedUpdate = true;
       skinnedMesh.material = clonedMaterial;
+
+      this.material = clonedMaterial;
+      this.w.update();
     });
   }
   getAngle() {// Assume only rotated about y axis
@@ -125,29 +128,27 @@ export class Npc {
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
   }
   /**
+   * Initialization we can do before mounting
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
    */
-  initialize(gltf) {
-    const scale = glbMeta.scale;
-    this.group = /** @type {THREE.Group} */ (SkeletonUtils.clone(gltf.scene));
-    this.group.scale.set(scale, scale, scale);
+  initialize({ scene, animations }) {
+    this.gltf = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
+    this.animations = animations;
 
-    this.mixer = new THREE.AnimationMixer(this.group);
-
-    this.animMap = gltf.animations.reduce((agg, a) => {
-      if (helper.isAnimKey(a.name)) {
-        agg[a.name] = this.mixer.clipAction(a);
-      } else {
-        warn(`ignored unexpected animation: ${a.name}`);
-      }
-      return agg;
-    }, /** @type {typeof this['animMap']} */ ({}));
-
-    this.map = buildObjectLookup(this.group);
+    this.sub = buildObjectLookup(this.gltf);
     
-    // Mutate userData to decode pointer events
-    const skinnedMesh = this.map.nodes[glbMeta.skinnedMeshName];
-    skinnedMesh.userData.npcKey = this.key;
+    this.bones = Object.values(this.sub.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
+      x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
+    );
+    this.skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.sub.nodes[glbMeta.skinnedMeshName]);
+    this.material = /** @type {Npc['material']} */ (this.skinnedMesh.material);
+    this.skinnedMesh.userData.npcKey = this.key; // To decode pointer events
+
+    this.skinnedMesh.updateMatrixWorld();
+    this.skinnedMesh.computeBoundingBox();
+    this.skinnedMesh.computeBoundingSphere();
+
+    // ℹ️ cannot setup mixer until <group> mounts
 
     this.changeSkin(this.def.skinKey);
   }
@@ -275,6 +276,23 @@ export class Npc {
       this.agent = null;
     }
   }
+  /**
+   * 🚧 clean
+   * @param {THREE.Group | null} group 
+   */
+  rootRef(group) {
+    if (group && this.group === emptyGroup) {
+      this.group = group;
+
+      this.mixer = new THREE.AnimationMixer(this.group);
+      this.animMap = this.animations.reduce((agg, a) => helper.isAnimKey(a.name)
+        ? (agg[a.name] = this.mixer.clipAction(a), agg)
+        : (warn(`ignored unexpected animation: ${a.name}`), agg)
+      , /** @type {typeof this['animMap']} */ ({}));
+
+      this.startAnimation('Idle');
+    }
+  }
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
     this.group.position.copy(dst);
@@ -342,7 +360,7 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, group, s, map, animMap, mixer, agent, lastLookAt, lastTarget, lastCorner } = npc;
+  const { def, epochMs, group, s, sub, animMap, mixer, agent, lastLookAt, lastTarget, lastCorner } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
   // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
   const nextNpc = new Npc(def, npc.w);
@@ -350,7 +368,7 @@ export function hotModuleReloadNpc(npc) {
     epochMs,
     group,
     s: Object.assign(nextNpc.s, s),
-    map,
+    sub,
     animMap,
     mixer,
     agent,

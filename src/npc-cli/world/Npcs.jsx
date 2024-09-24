@@ -9,6 +9,7 @@ import { helper } from "../service/helper";
 import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -166,10 +167,8 @@ export default function Npcs(props) {
       // npc.setGmRoomId(null);
       delete state.npc[npcKey];
       npc.removeAgent();
-      state.group.remove(npc.group);
-      // if (state.playerKey === npcKey) {
-      //   state.npcAct({ action: 'set-player', npcKey: undefined });
-      // }
+      update();
+      
       w.events.next({ key: 'removed-npc', npcKey });
     },
     async spawn(e) {
@@ -220,16 +219,15 @@ export default function Npcs(props) {
         }, w);
 
         npc.initialize(gltf);
-        npc.startAnimation('Idle');
-        state.group.add(npc.group);
       }
       
+      // 🚧 rethink
       if (npc.agent !== null) {
         if (e.agent === false) {
           npc.removeAgent();
         } else {
           npc.agent.teleport(e.point);
-          npc.startAnimation('Idle');
+          // npc.startAnimation('Idle');
         }
       } else {
         npc.setPosition(e.point);
@@ -238,6 +236,7 @@ export default function Npcs(props) {
         e.agent && npc.attachAgent().requestMoveTarget(e.point);
       }
 
+      update();
       npc.s.spawns++;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
@@ -257,15 +256,19 @@ export default function Npcs(props) {
   }));
 
   w.npc = state;
+  w.n = state.npc;
 
   React.useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
-      info('hot-reloading npcs');
-      Object.values(state.npc).forEach(npc =>
-        state.npc[npc.key] = hotModuleReloadNpc(npc)
-      );
-    }
+    // 🚧 get this working again
+    // if (process.env.NODE_ENV === 'development') {
+    //   info('hot-reloading npcs');
+    //   Object.values(state.npc).forEach(npc =>
+    //     state.npc[npc.key] = hotModuleReloadNpc(npc)
+    //   );
+    // }
   }, []);
+
+  const update = useUpdate();
 
   return <>
 
@@ -273,13 +276,17 @@ export default function Npcs(props) {
       name="nav-obstacles"
       ref={x => state.obsGroup = x ?? state.obsGroup}
     />
-  
+
     <group
       name="npcs"
       ref={x => state.group = x ?? state.group}
       onPointerDown={state.onNpcPointerDown}
       onPointerUp={state.onNpcPointerUp}
-    />
+    >
+      {Object.values(state.npc).map(npc =>
+        <NPC key={npc.key} npc={npc} />
+      )}
+    </group>
 
   </>;
 }
@@ -319,3 +326,30 @@ export default function Npcs(props) {
  */
 
 useGLTF.preload(glbMeta.url);
+
+/**
+ * @param {{ npc: Npc }} props 
+ */
+function NPC({ npc }) {
+  return (
+    <group
+      ref={g => npc.rootRef(g)}
+      scale={glbMeta.scale}
+      // dispose={null}
+    >
+      <group
+        position={[0, 3, 0]} // via `npx gtfljsx`
+      >
+        {npc.bones.map((bone, i) => <primitive key={i} object={bone} />)}
+        <skinnedMesh
+          geometry={npc.skinnedMesh.geometry}
+          position={npc.skinnedMesh.position}
+          skeleton={npc.skinnedMesh.skeleton}
+          userData={npc.skinnedMesh.userData}
+        >
+          <meshPhysicalMaterial transparent map={npc.material.map} />
+        </skinnedMesh>
+      </group>
+    </group>
+  )
+}

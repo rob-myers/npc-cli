@@ -93,6 +93,7 @@ export default function World(props) {
     },
 
     e: /** @type {*} */ (null), // useHandleEvents
+    n: /** @type {*} */ {}, // w.npc.npc
     oneTimeTicks: [],
 
     isReady() {
@@ -301,15 +302,17 @@ export default function World(props) {
               <Obstacles />
               <Ceiling />
             </group>
-            {state.crowd && <>
-              <Decor />
-              <Npcs />
-              <Debug
-                // showNavMesh
-                // showOrigNavPoly
-                showTestCharacters
-              />
-            </>}
+            <React.Suspense>
+              {state.crowd && <>
+                <Decor />
+                <Npcs />
+                <Debug
+                  // showNavMesh
+                  // showOrigNavPoly
+                  showTestCharacters
+                />
+              </>}
+            </React.Suspense>
           </group>
         )}
       </WorldCanvas>
@@ -362,6 +365,8 @@ export default function World(props) {
  *
  * @property {import("./use-handle-events").State} e
  * Events state i.e. useHandleEvents state
+ * @property {import("./Npcs").State['npc']} n
+ * Shortcut for `w.npc.npc`
  * @property {(() => void)[]} oneTimeTicks
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex

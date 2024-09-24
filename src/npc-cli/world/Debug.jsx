@@ -140,11 +140,7 @@ export default function Debug(props) {
       </group>
     ))}
 
-    {props.showTestCharacters && (
-      <React.Suspense>
-        <TestCharacters />
-      </React.Suspense>
-    )}
+    {props.showTestCharacters && <TestCharacters />}
   </>;
 }
 

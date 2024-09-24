@@ -30,7 +30,12 @@
       - head_bone: Bone > Relations > Inherit Scale: `None`
   - walk animation
 
-- start migrating into `<NPCs>`
+- 🚧 start migrating into `<NPCs>`
+  - ✅ convert minecraft mesh into jsx format
+  - 🚧 fix `<NPCs>` hmr
+  - 🚧 clean
+  - use React.memo with optional force
+  - migrate cuboid-character (leave TestCharacters as is)
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
