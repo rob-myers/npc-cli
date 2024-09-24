@@ -117,14 +117,15 @@ export default function Npcs(props) {
         }
       });
     },
-    remove(npcKey) {
-      const npc = state.getNpc(npcKey); // throw if n'exist pas
-      // npc.setGmRoomId(null);
-      delete state.npc[npcKey];
-      npc.removeAgent();
+    remove(...npcKeys) {
+      for (const npcKey of npcKeys) {
+        const npc = state.getNpc(npcKey); // throw if n'exist pas
+        // npc.setGmRoomId(null);
+        delete state.npc[npcKey];
+        npc.removeAgent();
+        w.events.next({ key: 'removed-npc', npcKey });
+      }
       update();
-      
-      w.events.next({ key: 'removed-npc', npcKey });
     },
     async spawn(e) {
       if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
