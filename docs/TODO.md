@@ -66,8 +66,15 @@
       type: "remove-bodies",
       bodyKeys: ["rect myTestCollider"],
     }'
-  - 🚧 decor circle/rect tagged with collider induce colliders
-  - support angled rect
+    ```
+  - 🚧 decor circle/rect tagged `collider` induce colliders
+    - ℹ️ decor key e.g. `rect[-21,0_01,30]` with meta.gmId and meta.collider
+    - ✅ can provide `userData` in "add-colliders"
+    - 🚧 events `{ key: "decor-instantiated", gmId }`
+    - events `{ key: "decor-instantiated", gmId }` trigger
+      - removal of previous physics bodies with userData.gmId
+      - creation of physics bodies with userData.gmId
+  - 🚧 support angled rect
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - consider transparent body skin

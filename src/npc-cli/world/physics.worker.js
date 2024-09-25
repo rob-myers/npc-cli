@@ -47,7 +47,7 @@ async function handleMessages(e) {
 
   switch (msg.type) {
     case "add-colliders":
-      for (const { colliderKey, geom, position } of msg.colliders) {
+      for (const { colliderKey, geom, position, angle, userData } of msg.colliders) {
         /** @type {WW.PhysicsBodyKey} */
         const bodyKey = geom.type === 'cuboid' ? `rect ${colliderKey}` : `circle ${colliderKey}`;
   
@@ -60,7 +60,9 @@ async function handleMessages(e) {
               y: geom.type === 'cylinder' ? geom.halfHeight : geom.halfDim[1],
               z: position.y,
             },
+            angle,
             userData: {
+              ...userData,
               npc: false,
               bodyKey,
               bodyUid: addBodyKeyUidRelation(bodyKey, state),

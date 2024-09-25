@@ -55,6 +55,9 @@ declare namespace WW {
       geom: PhysicsBodyGeom;
       /** Colliders always on ground, so 2d suffices */
       position: Geom.VectJson;
+      /** Only for rects i.e. `geom.type` is `cuboid` */
+      angle?: number;
+      userData?: Record<string, any>;
     }[];
   }
 

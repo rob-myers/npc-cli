@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
 import { decorGridSize, decorIconRadius, fallbackDecorImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
-import { hashJson, mapValues, pause, removeDups, testNever, warn } from "../service/generic";
+import { pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
@@ -552,7 +552,7 @@ export default function Decor(props) {
       />
     </instancedMesh>
 
-    <instancedMesh //quad
+    <instancedMesh //quads
       name="decor-quads"
       key={`${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
