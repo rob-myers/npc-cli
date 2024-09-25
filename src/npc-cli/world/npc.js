@@ -4,7 +4,7 @@ import { dampLookAt } from "maath/easing";
 
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1 } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, toV3 } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 
@@ -172,7 +172,7 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    const closest = this.w.npc.getClosestNavigable(dst, 0.15);
+    const closest = this.w.npc.getClosestNavigable(toV3(dst), 0.15);
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }

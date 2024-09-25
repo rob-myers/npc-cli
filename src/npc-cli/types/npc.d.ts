@@ -11,7 +11,6 @@ declare namespace NPC {
     skinKey: SkinKey;
     /** Radians */
     angle: number;
-    position: import("three").Vector3Like;
     /** World units per second */
     runSpeed: number;
     /** World units per second */
@@ -21,7 +20,7 @@ declare namespace NPC {
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
     skinKey?: NPC.SkinKey;
-    point: import("three").Vector3Like;
+    point: Geom.VectJson;
     meta?: Geom.Meta;
     requireNav?: boolean;
     /** Should NPC have agent? */

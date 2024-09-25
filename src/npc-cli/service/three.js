@@ -339,3 +339,16 @@ export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
  * @property {number} numLabels
  * @property {THREE.CanvasTexture} tex
  */
+
+/**
+ * - identity on `THREE.Vector3`
+ * - convert { x, y, z } to `new THREE.Vector3(x, y, z)`
+ * - convert {x, y } to `new THREE.Vector3(x, 0, y)`
+ * @param {Geom.VectJson | THREE.Vector3Like} input 
+ */
+export function toV3(input) {
+  return 'z' in input
+    ? input instanceof THREE.Vector3 ? input : new THREE.Vector3().copy(input)
+    : new THREE.Vector3(input.x, 0, input.y)
+  ;
+}

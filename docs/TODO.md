@@ -37,7 +37,7 @@
       - https://legacy.reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
   - ✅ fix `<NPCs>` hmr
   - ✅ remove nav-obstacles (not needed)
-  - 🚧 clean
+  - 🚧 clean e.g. spawn
   - use React.memo with optional force
   - migrate cuboid-character (leave TestCharacters as is)
 

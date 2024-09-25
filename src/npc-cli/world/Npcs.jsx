@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultSkinKey, glbMeta, gmLabelHeightSgu, spriteSheetDecorExtraScale } from "../service/const";
 import { info, warn } from "../service/generic";
-import { createDebugBox, createDebugCylinder, createLabelSpriteSheet, tmpVectThree1, yAxis } from "../service/three";
+import { createLabelSpriteSheet, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
 import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
@@ -45,8 +45,10 @@ export default function Npcs(props) {
       const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p);
       if (success === false) {
         warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
+        return null;
+      } else {
+        return p.distanceTo(closest) < maxDelta ? toV3(closest) : null;
       }
-      return success === true && tmpVectThree1.copy(closest).distanceTo(p) < maxDelta ? closest : null;
     },
     getNpc(npcKey, processApi) {
       const npc = processApi === undefined
@@ -128,17 +130,17 @@ export default function Npcs(props) {
       update();
     },
     async spawn(e) {
-      if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
-        throw Error(`invalid npc key: ${JSON.stringify(e.npcKey)}`);
-      } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.z === 'number')) {
-        throw Error(`invalid point: ${JSON.stringify(e.point)}`);
-      } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
+      if (!(typeof e.npcKey === 'string' && /^[a-z0-9-_]+$/i.test(e.npcKey))) {
+        throw Error(`npc key: ${JSON.stringify(e.npcKey)} must match /^[a-z0-9-_]+$/i`);
+      } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.y === 'number')) {
+        throw Error(`invalid point {x, y}: ${JSON.stringify(e.point)}`);
+      } else if (e.requireNav && state.getClosestNavigable(toV3(e.point)) === null) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
       } else if (e.skinKey && !w.lib.isSkinKey(e.skinKey)) {
         throw Error(`invalid skinKey: ${JSON.stringify(e.skinKey)}`);
       }
       
-      const gmRoomId = w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }, true);
+      const gmRoomId = w.gmGraph.findRoomContaining(e.point, true);
       if (gmRoomId === null) {
         throw Error(`must be in some room: ${JSON.stringify(e.point)}`);
       }
@@ -153,7 +155,6 @@ export default function Npcs(props) {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
           skinKey: e.skinKey ?? npc.def.skinKey,
-          position: e.point, // 🚧 remove?
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         };
@@ -169,7 +170,6 @@ export default function Npcs(props) {
           key: e.npcKey,
           angle: e.angle ?? 0,
           skinKey: e.skinKey ?? defaultSkinKey,
-          position: e.point,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
@@ -177,19 +177,21 @@ export default function Npcs(props) {
         npc.initialize(gltf);
       }
       
+      const position = toV3(e.point);
+
       // 🚧 rethink
       if (npc.agent !== null) {
         if (e.agent === false) {
           npc.removeAgent();
         } else {
-          npc.agent.teleport(e.point);
+          npc.agent.teleport(position);
           // npc.startAnimation('Idle');
         }
       } else {
-        npc.setPosition(e.point);
+        npc.setPosition(position);
         this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
         // pin to current position, so "moves out of the way"
-        e.agent && npc.attachAgent().requestMoveTarget(e.point);
+        e.agent && npc.attachAgent().requestMoveTarget(position);
       }
 
       update();
@@ -252,7 +254,7 @@ export default function Npcs(props) {
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist
  * 🚧 any -> ProcessApi (?)
- * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
+ * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
  * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp

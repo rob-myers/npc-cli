@@ -68,6 +68,10 @@ events | flatMap 'x => [new Date().toGMTString(), x]'
 
 # unlock/lock specific door
 w es.toggleLock g0d16
+
+# 🔔 Function('return 09') is 9, so if
+# 🔔 an npc was named "09" we'd have to:
+w npc.remove '"09"'
 ```
 
 ## Local variables
