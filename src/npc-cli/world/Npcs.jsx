@@ -198,9 +198,11 @@ export default function Npcs(props) {
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
-    updateLabels(labels) {
+    updateLabels(...labels) {
+      w.menu.measure('npc.updateLabels');
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
       createLabelSpriteSheet(labels, state.label, fontHeight);
+      w.menu.measure('npc.updateLabels');
     },
   }));
 
@@ -258,7 +260,7 @@ export default function Npcs(props) {
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
- * @property {(labels: string[]) => void} updateLabels
+ * @property {(...labels: string[]) => void} updateLabels
  */
 
 useGLTF.preload(glbMeta.url);
