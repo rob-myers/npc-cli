@@ -46,7 +46,10 @@ declare namespace NPC {
     | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId
     | { key: "exit-room"; npcKey: string } & Geomorph.GmRoomId
-    | { key: "decor-instantiated" }
+    | { key: "gm-decor"; } & (
+      | { type: 'updated'; gmId: number; } // update includes first-time-add
+      | { type: 'removed-all' }
+    )
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
     | {

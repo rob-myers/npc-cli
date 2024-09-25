@@ -70,11 +70,13 @@
   - 🚧 decor circle/rect tagged `collider` induce colliders
     - ℹ️ decor key e.g. `rect[-21,0_01,30]` with meta.gmId and meta.collider
     - ✅ can provide `userData` in "add-colliders"
-    - 🚧 events `{ key: "decor-instantiated", gmId }`
-    - events `{ key: "decor-instantiated", gmId }` trigger
+    - ✅ event `{ key: "gm-decor", type: 'updated', gmId }`
+    - ✅ event `{ key: "gm-decor", type: 'removed-all' }`
+    - 🚧 events trigger:
       - removal of previous physics bodies with userData.gmId
       - creation of physics bodies with userData.gmId
   - 🚧 support angled rect
+
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - consider transparent body skin

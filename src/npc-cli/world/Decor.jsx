@@ -459,8 +459,8 @@ export default function Decor(props) {
   
   // instantiate geomorph decor
   const query = useQuery({
-    // 🚧 should depend on sheetsHash?
-    queryKey: ['decor', w.key, w.mapKey, w.hash.decor],
+    queryKey: ['decor', w.key, w.mapKey, w.hash.decor], // depends on sheetsHash?
+
     async queryFn() {
       if (module.hot?.active === false) {
         return false; // Avoid query from disposed module
@@ -479,17 +479,20 @@ export default function Decor(props) {
       state.addLabelUvs();
 
       w.menu.measure('decor.addGm');
+
       if (mapChanged) {
         // Re-instantiate all cleanly
         state.removeAllInstantiated();
-        w.gms.forEach((gm, gmId) => {
+        w.events.next({ key: 'gm-decor', type: 'removed-all' });
+        for (const [gmId, gm] of w.gms.entries()) {
           state.byRoom[gmId] ??= gm.rooms.map(_ => new Set());
           gm.rooms.forEach((_, roomId) => state.byRoom[gmId][roomId] ??= new Set());
-        });
+        };
         await pause();
 
         for (const [gmId] of w.gms.entries()) {
           state.addGm(gmId);
+          w.events.next({ key: 'gm-decor', type: 'updated', gmId });
           await pause();
         }
       } else {
@@ -500,13 +503,13 @@ export default function Decor(props) {
           }
           state.removeGm(gmId);
           state.addGm(gmId);
+          w.events.next({ key: 'gm-decor', type: 'updated', gmId });
           await pause();
         }
       }
-      w.menu.measure('decor.addGm');
 
+      w.menu.measure('decor.addGm');
       state.seenHash = next;
-      w.events.next({ key: 'decor-instantiated' });
       update();
       return true;
     },
