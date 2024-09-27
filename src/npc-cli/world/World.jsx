@@ -89,6 +89,7 @@ export default function World(props) {
       precision: toPrecision,
       removeFirst,
       vectFrom: Vect.from,
+      Subject,
       ...helper,
     },
 
@@ -392,6 +393,7 @@ export default function World(props) {
  * @property {typeof firstValueFrom} firstValueFrom
  * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
  * @property {typeof removeFirst} removeFirst
+ * @property {typeof Subject} Subject
  * @property {typeof toPrecision} precision
  * @property {typeof import('../geom').Vect['from']} vectFrom
  * 
