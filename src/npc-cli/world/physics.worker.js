@@ -97,6 +97,9 @@ async function handleMessages(e) {
         }
       }
       break;
+    case "get-debug-data":
+      debugWorld();
+      break;
     case "remove-bodies":
       for (const bodyKey of msg.bodyKeys) {
         const body = state.bodyKeyToBody.get(bodyKey);
@@ -108,17 +111,23 @@ async function handleMessages(e) {
         }
       }
       break;
-    case "npc-event": {
+    case "npc-event":
       /**
        * 🚧 handle event "updated-gm-decor"
        */
+      if (msg.event.type === 'all') {
+        // 🚧
+      } else if (msg.event.type === 'partial') {
+        // 🚧
+      }
       break;
-    }
     case "send-npc-positions": {
       // set kinematic body positions
       let npcBodyKey = /** @type {WW.PhysicsBodyKey} */ ('');
       let position = /** @type {{ x: number; y: number; z: number;  }} */ ({});
-      // decode: [npcBodyUid, positionX, positionY, positionZ, ...]
+      /**
+       * ℹ️ decode: [npcBodyUid, positionX, positionY, positionZ, ...]
+       */
       for (const [index, value] of msg.positions.entries()) {
         switch (index % 4) {
           case 0: npcBodyKey = state.bodyUidToKey[value]; break;
@@ -201,16 +210,28 @@ async function setupWorld(mapKey, npcs) {
     geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
-  // door sensors: nearby ✅ inside ✅
-  const gmDoorBodies = gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
+  createDoorSensors(gms);
+
+  restoreNpcs(npcs);
+
+  // fire initial collisions
+  stepWorld();
+}
+
+/**
+ * - door sensors: nearby, inside
+ * - hull door nearby ~ 2x2 grid
+ * - non-hull door nearby ~ 1x1 grid
+ * @param {Geomorph.LayoutInstance[]} gms
+ */
+function createDoorSensors(gms) {
+  return gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
     const center = gm.matrix.transformPoint(door.center.clone());
     const gdKey = helper.getGmDoorKey(gmId, doorId);
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
     const insideKey = /** @type {const} */ (`inside ${gdKey}`);
 
     return [
-      // hull door sensor ~ 2x2 grid
-      // non-hull door sensor ~ 1x1 grid
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
@@ -241,8 +262,13 @@ async function setupWorld(mapKey, npcs) {
       }),
     ]
   }));
+}
 
-  // on worker hmr we need to restore npcs
+/**
+ * On worker HMR we need to restore npcs
+ * @param {WW.NpcDef[]} npcs 
+ */
+function restoreNpcs(npcs) {
   for (const { npcKey, position } of npcs) {
     const bodyKey = npcToBodyKey(npcKey);
     createRigidBody({
@@ -260,8 +286,6 @@ async function setupWorld(mapKey, npcs) {
       },
     });
   }
-
-  stepWorld(); // fires initial collisions
 }
 
 /**
@@ -318,13 +342,13 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
 }
 
 function debugWorld() {
-  debug('world',
-    state.world.bodies.getAll().map((x) => ({
-      userData: x.userData,
-      position: {...x.translation()},
-      enabled: x.isEnabled(),
-    }))
-  );
+  const physicsDebugData = state.world.bodies.getAll().map((x) => ({
+    userData: /** @type {Record<string, any>} */ (x.userData),
+    position: {...x.translation()},
+    enabled: x.isEnabled(),
+  }));
+  // debug({physicsDebugData});
+  selfTyped.postMessage({ type: 'debug-data', items: physicsDebugData })
 }
 
 if (typeof window === 'undefined') {

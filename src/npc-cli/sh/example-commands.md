@@ -72,6 +72,8 @@ w es.toggleLock g0d16
 # 🔔 Function('return 09') is 9, so if
 # 🔔 an npc was named "09" we'd have to:
 w npc.remove '"09"'
+
+w physics.worker.postMessage '{ type: "get-debug-data" }'
 ```
 
 ## Local variables

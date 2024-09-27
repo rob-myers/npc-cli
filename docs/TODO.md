@@ -75,6 +75,7 @@
     - ✅ simplify events i.e. only send one:
       - `{ key: "updated-gm-decor", type: "partial", gmIds }`
       - `{ key: "updated-gm-decor", type: "all" }`
+        - clean not necessary, because world recreated?
     - ✅ events forwarded to physics worker
     - 🚧 events trigger:
       - removal of previous physics bodies with userData.{instanced,gmId}

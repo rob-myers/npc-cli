@@ -41,11 +41,13 @@ declare namespace WW {
     | SendNpcPositions
     | SetupPhysicsWorld
     | { type: 'npc-event'; event: NPC.UpdatedGmDecorEvent; }
+    | { type: 'get-debug-data' }
   );
 
   type MsgFromPhysicsWorker = (
     | WorldSetupResponse
     | NpcCollisionResponse
+    | PhysicsDebugDataResponse
   );
 
   //#region MsgToPhysicsWorker
@@ -93,6 +95,20 @@ declare namespace WW {
     type: 'world-is-setup';
   }
 
+  interface PhysicsDebugDataResponse {
+    type: 'debug-data';
+    items: {
+      userData: Record<string, any>;
+      position: {
+          x: number;
+          y: number;
+          z: number;
+      };
+      enabled: boolean;
+    }[]
+  }
+  
+
   /** Each collision pair of bodyKeys should involve one npc, and one non-npc e.g. a door sensor */
   interface NpcCollisionResponse {
     type: 'npc-collisions';
@@ -126,6 +142,7 @@ declare namespace WW {
     postMessage(message: Receive, transfer: Transferable[]): void;
     postMessage(message: Receive, options?: StructuredSerializeOptions): void;
     addEventListener(event: "message", handler: (message: MessageEvent<Send>) => void): void;
+    removeEventListener(event: "message", handler: (message: MessageEvent<Send>) => void): void;
     terminate(): void;
     // ...
   }
