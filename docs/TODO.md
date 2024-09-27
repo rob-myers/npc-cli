@@ -72,9 +72,13 @@
     - ✅ can provide `userData` in "add-colliders"
     - ✅ event `{ key: "gm-decor", type: 'updated', gmId }`
     - ✅ event `{ key: "gm-decor", type: 'removed-all' }`
+    - ✅ simplify events i.e. only send one:
+      - `{ key: "updated-gm-decor", type: "partial", gmIds }`
+      - `{ key: "updated-gm-decor", type: "all" }`
+    - ✅ events forwarded to physics worker
     - 🚧 events trigger:
-      - removal of previous physics bodies with userData.gmId
-      - creation of physics bodies with userData.gmId
+      - removal of previous physics bodies with userData.{instanced,gmId}
+      - creation of physics bodies with userData.{instanced,gmId}
   - 🚧 support angled rect
 
 - support multiple skins for single test character

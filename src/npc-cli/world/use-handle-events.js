@@ -55,6 +55,12 @@ export default function useHandleEvents(w) {
           w.ceil.thickerTops = e.level === 'far';
           w.ceil.draw();
           break;
+        case "updated-gm-decor":
+          w.physics.worker.postMessage({
+            type: 'npc-event',
+            event: e,
+          }); // forward to physics worker
+          break;
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu
           if (e.distancePx <= (e.touch ? 10 : 5)) {

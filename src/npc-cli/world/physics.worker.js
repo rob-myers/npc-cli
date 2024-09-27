@@ -108,6 +108,12 @@ async function handleMessages(e) {
         }
       }
       break;
+    case "npc-event": {
+      /**
+       * 🚧 handle event "updated-gm-decor"
+       */
+      break;
+    }
     case "send-npc-positions": {
       // set kinematic body positions
       let npcBodyKey = /** @type {WW.PhysicsBodyKey} */ ('');

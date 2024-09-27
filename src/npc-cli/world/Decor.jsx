@@ -483,7 +483,6 @@ export default function Decor(props) {
       if (mapChanged) {
         // Re-instantiate all cleanly
         state.removeAllInstantiated();
-        w.events.next({ key: 'gm-decor', type: 'removed-all' });
         for (const [gmId, gm] of w.gms.entries()) {
           state.byRoom[gmId] ??= gm.rooms.map(_ => new Set());
           gm.rooms.forEach((_, roomId) => state.byRoom[gmId][roomId] ??= new Set());
@@ -492,9 +491,12 @@ export default function Decor(props) {
 
         for (const [gmId] of w.gms.entries()) {
           state.addGm(gmId);
-          w.events.next({ key: 'gm-decor', type: 'updated', gmId });
           await pause();
         }
+        w.events.next({
+          key: 'updated-gm-decor',
+          type: 'all',
+        });
       } else {
         // Only re-instantiate changed geomorphs
         for (const [gmId, gm] of w.gms.entries()) {
@@ -503,9 +505,13 @@ export default function Decor(props) {
           }
           state.removeGm(gmId);
           state.addGm(gmId);
-          w.events.next({ key: 'gm-decor', type: 'updated', gmId });
           await pause();
         }
+        w.events.next({
+          key: 'updated-gm-decor',
+          type: 'partial',
+          gmIds: w.gms.flatMap((gm, gmId) => prev[gm.key] !== next[gm.key] ? gmId : []),
+        });
       }
 
       w.menu.measure('decor.addGm');

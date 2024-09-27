@@ -46,10 +46,7 @@ declare namespace NPC {
     | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId
     | { key: "exit-room"; npcKey: string } & Geomorph.GmRoomId
-    | { key: "gm-decor"; } & (
-      | { type: 'updated'; gmId: number; } // update includes first-time-add
-      | { type: 'removed-all' }
-    )
+    | UpdatedGmDecorEvent
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
     | {
@@ -79,6 +76,11 @@ declare namespace NPC {
       }
     | { key: "pre-setup-physics" }
     // ...
+
+  type UpdatedGmDecorEvent = { key: "updated-gm-decor" } & (
+    | { type: 'partial'; gmIds: number[]; } // partial <=> gmsIds.length did not change
+    | { type: 'all' }
+  );
 
   type BaseColliderEvent = (
     | { type: 'circle' | 'rect'; colliderKey: string }

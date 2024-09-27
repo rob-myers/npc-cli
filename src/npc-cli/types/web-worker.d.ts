@@ -40,6 +40,7 @@ declare namespace WW {
     | RemoveBodies
     | SendNpcPositions
     | SetupPhysicsWorld
+    | { type: 'npc-event'; event: NPC.UpdatedGmDecorEvent; }
   );
 
   type MsgFromPhysicsWorker = (
