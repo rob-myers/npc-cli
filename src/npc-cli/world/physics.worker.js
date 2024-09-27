@@ -23,6 +23,7 @@ const config = {
 /** @type {State} */
 const state = {
   world: /** @type {*} */ (undefined),
+  gms: /** @type {Geomorph.LayoutInstance[]} */ ([]),
   eventQueue: /** @type {*} */ (undefined),
 
   bodyHandleToKey: new Map(),
@@ -111,16 +112,15 @@ async function handleMessages(e) {
         }
       }
       break;
-    case "npc-event":
-      /**
-       * 🚧 handle event "updated-gm-decor"
-       */
-      if (msg.event.type === 'all') {
-        // 🚧
-      } else if (msg.event.type === 'partial') {
-        // 🚧
+    case "updated-gm-decor": { // originally an npc event
+      const { npcEvent } = msg;
+      if (npcEvent.type === 'all') {
+        createGmColliders();
+      } else if (npcEvent.type === 'partial') {
+        createGmColliders(npcEvent.gmIds);
       }
       break;
+    }
     case "send-npc-positions": {
       // set kinematic body positions
       let npcBodyKey = /** @type {WW.PhysicsBodyKey} */ ('');
@@ -206,11 +206,11 @@ async function setupWorld(mapKey, npcs) {
 
   const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
   const mapDef = geomorphs.map[mapKey];
-  const gms = mapDef.gms.map(({ gmKey, transform }, gmId) =>
+  state.gms = mapDef.gms.map(({ gmKey, transform }, gmId) =>
     geomorph.computeLayoutInstance(geomorphs.layout[gmKey], gmId, transform)
   );
 
-  createDoorSensors(gms);
+  createDoorSensors();
 
   restoreNpcs(npcs);
 
@@ -222,10 +222,9 @@ async function setupWorld(mapKey, npcs) {
  * - door sensors: nearby, inside
  * - hull door nearby ~ 2x2 grid
  * - non-hull door nearby ~ 1x1 grid
- * @param {Geomorph.LayoutInstance[]} gms
  */
-function createDoorSensors(gms) {
-  return gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
+function createDoorSensors() {
+  return state.gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
     const center = gm.matrix.transformPoint(door.center.clone());
     const gdKey = helper.getGmDoorKey(gmId, doorId);
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
@@ -262,6 +261,21 @@ function createDoorSensors(gms) {
       }),
     ]
   }));
+}
+
+/**
+ * @param {number[]} [gmIds]
+ */
+function createGmColliders(gmIds = state.gms.map((_, gmId) => gmId)) {
+  for (const gmId of gmIds) {
+    const gm = state.gms[gmId];
+    const decor = gm.decor.filter(x => x.meta.collider === true);
+    // 🚧
+    console.log('physics: createGmColliders', {
+      gmId,
+      decor,
+    });
+  }
 }
 
 /**
@@ -370,6 +384,7 @@ if (typeof window === 'undefined') {
 /**
  * @typedef BaseState
  * @property {RAPIER.World} world
+ * @property {Geomorph.LayoutInstance[]} gms
  * @property {RAPIER.EventQueue} eventQueue
  * @property {Map<number, WW.PhysicsBodyKey>} bodyHandleToKey
  * @property {Map<WW.PhysicsBodyKey, RAPIER.Collider>} bodyKeyToCollider

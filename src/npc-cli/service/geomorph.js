@@ -219,7 +219,7 @@ class GeomorphService {
       sheets: sheetsHash,
       decor: `${layoutsHash} ${mapsHash}`,
       map: hashJson(geomorphs.map[mapKey]),
-      gmHashes: geomorphs.map[mapKey].gms.map((x) => hashJson(x)),
+      mapGmHashes: geomorphs.map[mapKey].gms.map((x) => hashJson(x)),
     };
   }
 

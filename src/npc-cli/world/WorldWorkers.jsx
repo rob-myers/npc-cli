@@ -84,7 +84,7 @@ export default function WorldWorkers() {
       const next = w.hash;
       const changedGmIds = w.gms.map(({ key }, gmId) =>
         next[key].nav !== prev[key]?.nav // geomorph changed
-        || next.gmHashes[gmId] !== prev.gmHashes[gmId] // geomorph instance changed
+        || next.mapGmHashes[gmId] !== prev.mapGmHashes[gmId] // geomorph instance changed
       );
       
       w.events.next({ key: 'pre-request-nav', changedGmIds });

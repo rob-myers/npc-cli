@@ -19950,7 +19950,13 @@
         {
           "type": "rect",
           "key": "",
-          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
+          "meta": {
+            "decor": true,
+            "rect": true,
+            "shower": true,
+            "collider": true,
+            "y": 0.01
+          },
           "bounds2d": {"x": 4.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "points": [
             {"x": 4.55, "y": 11.95},
@@ -20078,7 +20084,13 @@
         {
           "type": "rect",
           "key": "",
-          "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
+          "meta": {
+            "decor": true,
+            "rect": true,
+            "shower": true,
+            "collider": true,
+            "y": 0.01
+          },
           "bounds2d": {"x": 1.55, "y": 10.5, "width": 1.45, "height": 1.45},
           "points": [
             {"x": 1.55, "y": 11.95},

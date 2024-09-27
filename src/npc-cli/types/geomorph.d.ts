@@ -40,8 +40,11 @@ declare namespace Geomorph {
     /** Hash of current map */
     map: number;
 
-    /** `gmHashes[gmId]` is hash of `map.gms[gmId]` */
-    gmHashes: number[];
+    /**
+     * 🔔 `gmHashes[gmId]` is hash of `map.gms[gmId]`
+     * i.e. hashing { gmKey, transform } 
+     */
+    mapGmHashes: number[];
   }
 
   type PerGeomorphHash = Record<Geomorph.GeomorphKey, {

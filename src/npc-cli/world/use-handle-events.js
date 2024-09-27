@@ -57,8 +57,8 @@ export default function useHandleEvents(w) {
           break;
         case "updated-gm-decor":
           w.physics.worker.postMessage({
-            type: 'npc-event',
-            event: e,
+            type: 'updated-gm-decor',
+            npcEvent: e,
           }); // forward to physics worker
           break;
         case "long-pointerdown":

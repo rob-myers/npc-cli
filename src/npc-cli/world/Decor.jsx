@@ -493,10 +493,7 @@ export default function Decor(props) {
           state.addGm(gmId);
           await pause();
         }
-        w.events.next({
-          key: 'updated-gm-decor',
-          type: 'all',
-        });
+        w.events.next({ key: 'updated-gm-decor', type: 'all' });
       } else {
         // Only re-instantiate changed geomorphs
         for (const [gmId, gm] of w.gms.entries()) {
@@ -510,7 +507,9 @@ export default function Decor(props) {
         w.events.next({
           key: 'updated-gm-decor',
           type: 'partial',
-          gmIds: w.gms.flatMap((gm, gmId) => prev[gm.key] !== next[gm.key] ? gmId : []),
+          gmIds: w.gms.flatMap((gm, gmId) =>
+            prev[gm.key].decor !== next[gm.key].decor ? gmId : []
+          ),
         });
       }
 
