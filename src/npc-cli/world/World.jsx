@@ -118,13 +118,19 @@ export default function World(props) {
       state.reqAnimId = requestAnimationFrame(state.onTick);
       state.timer.update();
       const deltaMs = state.timer.getDelta();
-      // state.crowd.update(1 / 60, deltaMs);
+
+      if (state.npc === null) {
+        return; // wait for <NPCs>
+      }
+
       state.crowd.update(deltaMs);
       state.npc.onTick(deltaMs);
       state.door.onTick();
       // info(state.r3f.gl.info.render);
 
-      state.debug.npc?.onTick(deltaMs);
+      if (state.debug.npc !== null) {
+        state.debug.npc.onTick(deltaMs);
+      }
 
       while (state.oneTimeTicks.shift()?.());
     },
@@ -289,11 +295,11 @@ export default function World(props) {
 
   React.useEffect(() => {// enable/disable animation
     state.timer.reset();
-    if (!state.disabled && !!state.npc) {
+    if (!state.disabled) {
       state.onTick();
     }
     return () => cancelAnimationFrame(state.reqAnimId);
-  }, [state.disabled, state.npc]);
+  }, [state.disabled]);
 
   return (
     <WorldContext.Provider value={state}>

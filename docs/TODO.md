@@ -33,9 +33,12 @@
       - ✅ create basic idle animation
       - ✅ works with `<meshPhysicalMaterial>`
       - 🚧 works with our custom shader
-      - 🚧 animation only starts on pause/unpause
+        - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
+        - probably need skinning_*
       - 🚧 animation scaling issue
         - maybe `npc.act[anim.name].reset().fadeIn(300).play();`
+  - ✅ fix initial animation start
+  
 
   - walk animation
 

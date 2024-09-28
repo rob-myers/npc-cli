@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
+import { info } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyTexture, textureLoader } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
@@ -77,7 +78,8 @@ export default function TestNpcs(props) {
     },
     onMountNpc(group) {
       if (group !== null) {// mounted
-        const npc = state.npc[group.name];
+        const npcKey = group.name;
+        const npc = state.npc[npcKey];
         state.setupNpcMixer(npc, group);
       }
     },
@@ -106,7 +108,7 @@ export default function TestNpcs(props) {
     },
     setupNpcMixer(npc, rootGroup) {// 🚧
       const gltf = classKeyToGltf[npc.classKey];
-      console.info('animations', gltf.animations);
+      info('animations', gltf.animations);
       const mixer = new THREE.AnimationMixer(rootGroup);
       mixer.timeScale = 1;
       
@@ -119,7 +121,6 @@ export default function TestNpcs(props) {
       }
 
       npc.mixer = mixer;
-      update();
     }
 
   }));
