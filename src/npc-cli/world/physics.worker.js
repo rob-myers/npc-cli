@@ -44,7 +44,9 @@ async function handleMessages(e) {
   }
 
   // 🔔 avoid logging 60fps messages
-  debug("🤖 physics.worker received:", msg.type !== 'send-npc-positions' ? JSON.stringify(msg) : msg.type);
+  msg.type !== 'send-npc-positions' && debug(
+    "🤖 physics.worker received:", JSON.stringify(msg)
+  );
 
   switch (msg.type) {
     case "add-colliders":
@@ -302,7 +304,7 @@ function createGmColliders(gmIds = state.gms.map((_, gmId) => gmId)) {
             gmDecor: true,
             gmId: d.meta.gmId,
           },
-          // 🚧 infer angle from points?
+          angle: d.angle,
         });
       }
     }

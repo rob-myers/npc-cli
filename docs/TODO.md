@@ -90,9 +90,9 @@
     - ❌ events trigger:
       - removal of previous physics bodies with userData.{instanced,gmId}
       - creation of physics bodies with userData.{instanced,gmId}
-  - 🚧 support angled rect
+  - ✅ support angled rect
     - ✅ can specify in `add-colliders`
-    - 🚧 can handle angled gm-decor rect
+    - ✅ can handle angled gm-decor rect
   - simplify add-colliders message
     - e.g. can only send rect
   - can remove-colliders

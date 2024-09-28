@@ -29,6 +29,8 @@ w npc.label.tex.image.toDataURL | log
 while true; do
   w debug.char.add $( click 1 ) cuboidChar
 done
+
+w decor.byRoom.0.2 | split | filter /collider/
 ```
 
 ```sh

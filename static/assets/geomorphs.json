@@ -19964,7 +19964,8 @@
             {"x": 6, "y": 10.5},
             {"x": 6, "y": 11.95}
           ],
-          "center": {"x": 5.275, "y": 11.225}
+          "center": {"x": 5.275, "y": 11.225},
+          "angle": 0
         },
         {
           "type": "point",
@@ -20098,7 +20099,8 @@
             {"x": 3, "y": 10.5},
             {"x": 3, "y": 11.95}
           ],
-          "center": {"x": 2.275, "y": 11.225}
+          "center": {"x": 2.275, "y": 11.225},
+          "angle": 0
         },
         {
           "type": "point",
@@ -20219,14 +20221,15 @@
           "type": "rect",
           "key": "",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
-          "bounds2d": {"x": 0, "y": 0, "width": 0.9, "height": 1.5},
+          "bounds2d": {"x": 0.9, "y": 0, "width": 1.5, "height": 0.9},
           "points": [
             {"x": 0.9, "y": 0},
             {"x": 0.9, "y": 1.5},
             {"x": 0, "y": 1.5},
             {"x": 0, "y": 0}
           ],
-          "center": {"x": 0.45, "y": 0.75}
+          "center": {"x": 0.45, "y": 0.75},
+          "angle": 1.5707963267948966
         },
         {
           "type": "point",
@@ -20443,14 +20446,15 @@
           "type": "rect",
           "key": "",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
-          "bounds2d": {"x": 29.1, "y": 0, "width": 0.9, "height": 1.5},
+          "bounds2d": {"x": 30, "y": 0, "width": 1.5, "height": 0.9},
           "points": [
             {"x": 30, "y": 0},
             {"x": 30, "y": 1.5},
             {"x": 29.1, "y": 1.5},
             {"x": 29.1, "y": 0}
           ],
-          "center": {"x": 29.55, "y": 0.75}
+          "center": {"x": 29.55, "y": 0.75},
+          "angle": 1.5707963267948966
         },
         {
           "type": "point",
@@ -20674,7 +20678,8 @@
             {"x": 1.5, "y": 15},
             {"x": 0, "y": 15}
           ],
-          "center": {"x": 0.75, "y": 14.55}
+          "center": {"x": 0.75, "y": 14.55},
+          "angle": 0
         },
         {
           "type": "point",
@@ -30630,14 +30635,15 @@
           "type": "rect",
           "key": "",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
-          "bounds2d": {"x": 20.1, "y": 13.5, "width": 0.9, "height": 1.5},
+          "bounds2d": {"x": 20.1, "y": 15, "width": 1.5, "height": 0.9},
           "points": [
             {"x": 20.1, "y": 15},
             {"x": 20.1, "y": 13.5},
             {"x": 21, "y": 13.5},
             {"x": 21, "y": 15}
           ],
-          "center": {"x": 20.55, "y": 14.25}
+          "center": {"x": 20.55, "y": 14.25},
+          "angle": -1.5707963267948966
         },
         {
           "type": "point",
@@ -30864,14 +30870,15 @@
           "type": "rect",
           "key": "",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
-          "bounds2d": {"x": 17.1, "y": 13.5, "width": 0.9, "height": 1.5},
+          "bounds2d": {"x": 17.1, "y": 15, "width": 1.5, "height": 0.9},
           "points": [
             {"x": 17.1, "y": 15},
             {"x": 17.1, "y": 13.5},
             {"x": 18, "y": 13.5},
             {"x": 18, "y": 15}
           ],
-          "center": {"x": 17.55, "y": 14.25}
+          "center": {"x": 17.55, "y": 14.25},
+          "angle": -1.5707963267948966
         },
         {
           "type": "point",
@@ -31098,14 +31105,15 @@
           "type": "rect",
           "key": "",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
-          "bounds2d": {"x": 12, "y": 13.5, "width": 0.9, "height": 1.5},
+          "bounds2d": {"x": 12, "y": 15, "width": 1.5, "height": 0.9},
           "points": [
             {"x": 12, "y": 15},
             {"x": 12, "y": 13.5},
             {"x": 12.9, "y": 13.5},
             {"x": 12.9, "y": 15}
           ],
-          "center": {"x": 12.45, "y": 14.25}
+          "center": {"x": 12.45, "y": 14.25},
+          "angle": -1.5707963267948966
         },
         {
           "type": "point",
@@ -31332,14 +31340,15 @@
           "type": "rect",
           "key": "",
           "meta": {"decor": true, "rect": true, "shower": true, "y": 0.01},
-          "bounds2d": {"x": 9, "y": 13.5, "width": 0.9, "height": 1.5},
+          "bounds2d": {"x": 9, "y": 15, "width": 1.5, "height": 0.9},
           "points": [
             {"x": 9, "y": 15},
             {"x": 9, "y": 13.5},
             {"x": 9.9, "y": 13.5},
             {"x": 9.9, "y": 15}
           ],
-          "center": {"x": 9.45, "y": 14.25}
+          "center": {"x": 9.45, "y": 14.25},
+          "angle": -1.5707963267948966
         },
         {
           "type": "point",
