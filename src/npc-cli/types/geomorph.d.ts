@@ -383,6 +383,8 @@ declare namespace Geomorph {
     points: Geom.VectJson[];
     /** Center of `new Poly(points)` */
     center: Geom.VectJson;
+    /** Radians; makes an `Geom.AngledRect` together with `bounds2d`  */
+    angle: number;
   }
 
   interface BaseDecor {

@@ -310,11 +310,13 @@ class GeomorphService {
     const base = { key: '', meta };
     
     if (meta.rect === true) {
-      const polyRect = poly.rect.precision(precision);
       if (poly.outline.length !== 4) {
         warn(`${'decorFromPoly'}: decor rect expected 4 points (saw ${poly.outline.length})`, poly.meta);
       }
-      return { type: 'rect', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json };
+      // const polyRect = poly.rect.precision(precision);
+      const { baseRect, angle } = geom.polyToAngledRect(poly);
+      baseRect.precision(precision);
+      return { type: 'rect', ...base, bounds2d: baseRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json, angle };
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
