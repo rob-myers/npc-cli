@@ -261,6 +261,8 @@ export default function World(props) {
           tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           tm.ct.drawImage(img, 0, 0);
           invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
+          // Sharper via getMaxAnisotropy()
+          tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
           tm.tex.needsUpdate = true;
           update();
         }
