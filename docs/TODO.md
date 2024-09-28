@@ -46,63 +46,6 @@
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-- ✅ support non-door sensor i.e. decor circle/rect
-  - ✅ can manually add:
-    ```sh
-    w physics.worker.postMessage '{
-      type: "add-colliders",
-      colliders: [{
-        type: "rect", width: 1.5, height: 1.5, x: 3, y: 7.5,
-        colliderKey: "myTestCollider",
-      }],
-    }'
-    ```
-  - ✅ can detect collisions: `{npcKey: 'rob', otherKey: 'rect myTestCollider'}`
-  - ✅ trigger events `enter-collider` and `exit-collider`
-  - ✅ can remove
-    ```sh
-    w physics.worker.postMessage '{
-      type: "remove-bodies",
-      bodyKeys: ["rect myTestCollider"],
-    }'
-    w physics.worker.postMessage '{
-      type: "remove-colliders",
-      colliders: [{ type: "rect", colliderKey: "myTestCollider"}],
-    }'
-    ```
-  - 🚧 decor circle/rect tagged `collider` induce colliders
-    - ℹ️ decor key e.g. `rect[-21,0_01,30]` with meta.gmId and meta.collider
-    - ✅ can provide `userData` in "add-colliders"
-    - ✅ event `{ key: "gm-decor", type: 'updated', gmId }`
-    - ✅ event `{ key: "gm-decor", type: 'removed-all' }`
-    - ✅ simplify events i.e. only send one:
-      - `{ key: "updated-gm-decor", type: "partial", gmIds }`
-      - `{ key: "updated-gm-decor", type: "all" }`
-        - clean not necessary, because world recreated?
-    - ✅ events forwarded to physics worker
-    - ✅ onchange decor rect (add meta.collider)
-      - ✅ decor queryKey changed
-      - ✅ "updated-gm-decor" emitted
-      - ✅ `w.hash.gmHashes` -> `w.hash.mapGmHashes`
-      - ✅ fix `{key:"updated-gm-decor",type:"partial",gmIds:[0,1,2,3,4,5,6,7]}` when only 301 changed
-    - ❌ physics worker receives message
-      - ℹ️ sending too early i.e. worker is being reset?
-    - ✅ on reset worker world physics includes gm-decor
-      - ℹ️ no need to forward event `updated-gm-decor`
-      - ℹ️ wasteful i.e. could partially rebuild physics
-    - ❌ events trigger:
-      - removal of previous physics bodies with userData.{instanced,gmId}
-      - creation of physics bodies with userData.{instanced,gmId}
-  - ✅ support angled rect
-    - ✅ can specify in `add-colliders`
-    - ✅ can handle angled gm-decor rect
-  - ✅ simplify add-colliders message
-    - ✅ `rect` or `circle` rather than `cuboid` or `cylinder`
-    - ✅ reformat
-  - ✅ can remove-colliders
-    - e.g. no need to specify bodyKey 
-  - ✅ bug: remove collider while colliding
-
 - bug: tty: ctrl + w while multiple input: goes back a line
   - need repro
 - support multiple skins for single test character
@@ -2406,3 +2349,61 @@ run '({ w, api }) {
 - ✅ extend chair/table symbols with chair/table tag on obstacle
 
 - ✅ merge {enter,exit}-sensor into {enter,exit}-collider
+
+- ✅ support non-door sensor i.e. decor circle/rect
+  - ✅ can manually add:
+    ```sh
+    w physics.worker.postMessage '{
+      type: "add-colliders",
+      colliders: [{
+        type: "rect", width: 1.5, height: 1.5, x: 3, y: 7.5,
+        colliderKey: "myTestCollider",
+      }],
+    }'
+    ```
+  - ✅ can detect collisions: `{npcKey: 'rob', otherKey: 'rect myTestCollider'}`
+  - ✅ trigger events `enter-collider` and `exit-collider`
+  - ✅ can remove
+    ```sh
+    w physics.worker.postMessage '{
+      type: "remove-bodies",
+      bodyKeys: ["rect myTestCollider"],
+    }'
+    w physics.worker.postMessage '{
+      type: "remove-colliders",
+      colliders: [{ type: "rect", colliderKey: "myTestCollider"}],
+    }'
+    ```
+  - 🚧 decor circle/rect tagged `collider` induce colliders
+    - ℹ️ decor key e.g. `rect[-21,0_01,30]` with meta.gmId and meta.collider
+    - ✅ can provide `userData` in "add-colliders"
+    - ✅ event `{ key: "gm-decor", type: 'updated', gmId }`
+    - ✅ event `{ key: "gm-decor", type: 'removed-all' }`
+    - ✅ simplify events i.e. only send one:
+      - `{ key: "updated-gm-decor", type: "partial", gmIds }`
+      - `{ key: "updated-gm-decor", type: "all" }`
+        - clean not necessary, because world recreated?
+    - ✅ events forwarded to physics worker
+    - ✅ onchange decor rect (add meta.collider)
+      - ✅ decor queryKey changed
+      - ✅ "updated-gm-decor" emitted
+      - ✅ `w.hash.gmHashes` -> `w.hash.mapGmHashes`
+      - ✅ fix `{key:"updated-gm-decor",type:"partial",gmIds:[0,1,2,3,4,5,6,7]}` when only 301 changed
+    - ❌ physics worker receives message
+      - ℹ️ sending too early i.e. worker is being reset?
+    - ✅ on reset worker world physics includes gm-decor
+      - ℹ️ no need to forward event `updated-gm-decor`
+      - ℹ️ wasteful i.e. could partially rebuild physics
+    - ❌ events trigger:
+      - removal of previous physics bodies with userData.{instanced,gmId}
+      - creation of physics bodies with userData.{instanced,gmId}
+  - ✅ support angled rect
+    - ✅ can specify in `add-colliders`
+    - ✅ can handle angled gm-decor rect
+  - ✅ simplify add-colliders message
+    - ✅ `rect` or `circle` rather than `cuboid` or `cylinder`
+    - ✅ reformat
+  - ✅ can remove-colliders
+    - e.g. no need to specify bodyKey 
+  - ✅ bug: remove collider while colliding
+  
