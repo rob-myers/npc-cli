@@ -556,7 +556,7 @@ export function visibleUnicodeLength(input) {
  * @type {(...args: any[]) => void}
  */
 export const debug = (function () {
-  return Function.prototype.bind.call(console.debug, console, "\x1b[34mDEBUG\x1b[0m");
+  return Function.prototype.bind.call(console.debug, console, "\x1b[36mDEBUG\x1b[0m");
 })();
 
 /** @param {string} text */
