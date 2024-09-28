@@ -56,12 +56,7 @@ export default function useHandleEvents(w) {
           w.ceil.draw();
           break;
         case "updated-gm-decor":
-          // 🚧 is worker being reset?
-          w.physics.worker.postMessage({
-            type: 'updated-gm-decor',
-            npcEvent: e,
-          });
-          break;
+          break; // NOOP e.g. physics worker restarted onchange geomorphs
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu
           if (e.distancePx <= (e.touch ? 10 : 5)) {

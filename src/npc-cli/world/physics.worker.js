@@ -112,15 +112,6 @@ async function handleMessages(e) {
         }
       }
       break;
-    case "updated-gm-decor": { // originally an npc event
-      const { npcEvent } = msg;
-      if (npcEvent.type === 'all') {
-        createGmColliders();
-      } else if (npcEvent.type === 'partial') {
-        createGmColliders(npcEvent.gmIds);
-      }
-      break;
-    }
     case "send-npc-positions": {
       // set kinematic body positions
       let npcBodyKey = /** @type {WW.PhysicsBodyKey} */ ('');
@@ -211,6 +202,8 @@ async function setupWorld(mapKey, npcs) {
   );
 
   createDoorSensors();
+
+  createGmColliders();
 
   restoreNpcs(npcs);
 

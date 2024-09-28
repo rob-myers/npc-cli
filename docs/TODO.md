@@ -77,19 +77,24 @@
       - `{ key: "updated-gm-decor", type: "all" }`
         - clean not necessary, because world recreated?
     - ✅ events forwarded to physics worker
-    - 🚧 onchange decor rect (add meta.collider)
+    - ✅ onchange decor rect (add meta.collider)
       - ✅ decor queryKey changed
       - ✅ "updated-gm-decor" emitted
       - ✅ `w.hash.gmHashes` -> `w.hash.mapGmHashes`
       - ✅ fix `{key:"updated-gm-decor",type:"partial",gmIds:[0,1,2,3,4,5,6,7]}` when only 301 changed
-      - 🚧 physics worker receives message
-        - ℹ️ sending too early i.e. worker is being reset?
-        - could always reset worker and rebuild decor every time
-        - could prevent reset worker...
-    - 🚧 events trigger:
+    - ❌ physics worker receives message
+      - ℹ️ sending too early i.e. worker is being reset?
+    - 🚧 on reset worker world physics includes gm-decor
+      - ℹ️ no need to forward event `updated-gm-decor`
+      - ℹ️ wasteful i.e. could partially rebuild physics
+    - ❌ events trigger:
       - removal of previous physics bodies with userData.{instanced,gmId}
       - creation of physics bodies with userData.{instanced,gmId}
-  - 🚧 support angled rect
+  - ✅ support angled rect
+  - simplify add-colliders message
+    - e.g. can only send rect
+  - can remove-colliders
+    - e.g. no need to specify bodyKey 
 
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
