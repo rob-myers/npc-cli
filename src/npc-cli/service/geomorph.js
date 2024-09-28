@@ -692,7 +692,7 @@ class GeomorphService {
   /**
    * - 🔔 instantiated decor should be determined by min(3D AABB)
    * - replace decimal points by `_` so can `w decor.byKey.point[29_5225,0,33_785]`
-   * @param {Geomorph.Decor} d 
+   * @param {Pick<Geomorph.Decor, 'type' | 'bounds2d' | 'meta'>} d 
    */
   getDerivedDecorKey(d) {
     return `${d.type}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`.replace(/[.]/g, '_');

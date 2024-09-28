@@ -8,6 +8,7 @@ import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorph } from '../service/geomorph';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 import { helper } from '../service/helper';
+import { tmpRect1 } from '../service/geom';
 
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToPhysicsWorker>} */ (
   /** @type {*} */ (self)
@@ -41,10 +42,9 @@ async function handleMessages(e) {
   if (state.world === undefined && msg.type !== 'setup-physics-world') {
     return; // Fixes HMR of this file
   }
+
   // 🔔 avoid logging 60fps messages
-  if (msg.type !== 'send-npc-positions') {
-    debug("🤖 physics worker received:", JSON.stringify(msg));
-  }
+  debug("🤖 physics.worker received:", msg.type !== 'send-npc-positions' ? JSON.stringify(msg) : msg.type);
 
   switch (msg.type) {
     case "add-colliders":
@@ -70,7 +70,7 @@ async function handleMessages(e) {
             },
           });
         } else {
-          warn(`physics worker: ${msg.type}: cannot re-add body (${bodyKey})`)
+          warn(`🤖 physics.worker: ${msg.type}: cannot re-add body (${bodyKey})`)
         }
       }
       break;
@@ -140,7 +140,7 @@ async function handleMessages(e) {
       selfTyped.postMessage({ type: 'world-is-setup' });
       break;
     default:
-      info("physics worker: unhandled:", msg);
+      warn("🤖 physics.worker: unhandled", msg);
       throw testNever(msg);
   }
 }
@@ -257,17 +257,57 @@ function createDoorSensors() {
 }
 
 /**
+ * Supports partial recreation (currently unused)
  * @param {number[]} [gmIds]
  */
 function createGmColliders(gmIds = state.gms.map((_, gmId) => gmId)) {
   for (const gmId of gmIds) {
     const gm = state.gms[gmId];
-    const decor = gm.decor.filter(x => x.meta.collider === true);
-    // 🚧
-    console.log('physics: createGmColliders', {
-      gmId,
-      decor,
-    });
+    const decor = gm.decor.filter(
+      /** @returns {d is Geomorph.DecorCircle | Geomorph.DecorRect} */ d =>
+      d.meta.collider === true && (d.type === 'circle' || d.type === 'rect')
+    );
+
+    for (const d of decor) {
+      // Transform (instantiate) as in `Decor`
+      const bounds2d = tmpRect1.copy(d.bounds2d).applyMatrix(gm.matrix).json;
+      const center = gm.matrix.transformPoint({ ...d.center });
+      // Key depends on instantiation as in `Decor`
+      const decorKey = geomorph.getDerivedDecorKey({ type: d.type, bounds2d, meta: d.meta });
+      
+      if (d.type === 'circle') {
+        /** @type {WW.PhysicsBodyKey} */
+        const bodyKey = `circle ${decorKey}`;
+        createRigidBody({
+          type: RAPIER.RigidBodyType.Fixed,
+          geomDef: { type: 'cylinder', radius: d.radius, halfHeight: wallHeight / 2 },
+          position: { x: center.x, y: wallHeight/2, z: center.y },
+          userData: {
+            bodyKey,
+            bodyUid: addBodyKeyUidRelation(bodyKey, state),
+            gmDecor: true,
+            gmId: d.meta.gmId,
+          },
+        });
+      } else if (d.type === 'rect') {
+        /** @type {WW.PhysicsBodyKey} */
+        const bodyKey = `rect ${decorKey}`;
+        createRigidBody({
+          type: RAPIER.RigidBodyType.Fixed,
+          geomDef: { type: 'cuboid', halfDim: [bounds2d.width / 2, wallHeight / 2, bounds2d.height / 2] },
+          position: { x: center.x, y: wallHeight/2, z: center.y },
+          userData: {
+            bodyKey,
+            bodyUid: addBodyKeyUidRelation(bodyKey, state),
+            gmDecor: true,
+            gmId: d.meta.gmId,
+          },
+          // 🚧 infer angle from points?
+        });
+      }
+    }
+
+    decor.length && debug(`🤖 physics.worker: gmId ${gmId} decor: created ${decor.length}`);
   }
 }
 
@@ -359,7 +399,7 @@ function debugWorld() {
 }
 
 if (typeof window === 'undefined') {
-  info("🤖 physics worker started", import.meta.url);
+  info("🤖 physics.worker started", import.meta.url);
   selfTyped.addEventListener("message", handleMessages);
 }
 
@@ -367,7 +407,9 @@ if (typeof window === 'undefined') {
  * @typedef BodyUserData
  * @property {WW.PhysicsBodyKey} bodyKey
  * @property {number} bodyUid This is the numeric hash of `bodyKey`
- * @property {boolean} npc
+ * @property {boolean} [npc] Is this the body of an NPC?
+ * @property {boolean} [gmDecor] Is this static body a decor rect/circle for some geomorph `gmId`?
+ * @property {number} [gmId]
  */
 
 /**
@@ -382,5 +424,4 @@ if (typeof window === 'undefined') {
  * @property {Map<number, WW.PhysicsBodyKey>} bodyHandleToKey
  * @property {Map<WW.PhysicsBodyKey, RAPIER.Collider>} bodyKeyToCollider
  * @property {Map<WW.PhysicsBodyKey, RAPIER.RigidBody>} bodyKeyToBody
- * //@property {Set<string>} npcKeys A subset of body keys
  */

@@ -83,7 +83,7 @@ declare namespace NPC {
   );
 
   type BaseColliderEvent = (
-    | { type: 'circle' | 'rect'; colliderKey: string }
+    | { type: 'circle' | 'rect'; decorKey: string }
     | { type: 'nearby' | 'inside' } & Geomorph.GmDoorId
   );
 

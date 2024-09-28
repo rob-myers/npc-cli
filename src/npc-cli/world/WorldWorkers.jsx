@@ -37,7 +37,7 @@ export default function WorldWorkers() {
         w.events.next({ key: isEnter === true ? 'enter-collider' : 'exit-collider', npcKey,
           ...(type === 'inside' || type === 'nearby') 
             ? { type, ...w.lib.getGmDoorId(subKey) }
-            : { type, colliderKey: subKey }
+            : { type, decorKey: subKey }
         });
       }
     },
@@ -122,4 +122,10 @@ if (isDevelopment()) {// propagate HMR to this file onchange worker files
  *   | ['npc' | 'circle' | 'rect', string]
  *   | ['nearby' | 'inside', Geomorph.GmDoorKey]
  * )} parsePhysicsBodyKey
+ * Format:
+ * - `['npc', npcKey]`
+ * - `['circle', decorKey]`
+ * - `['rect', decorKey]`
+ * - `['nearby', gmDoorKey]`
+ * - `['inside', gmDoorKey]`
  */

@@ -84,13 +84,15 @@
       - ✅ fix `{key:"updated-gm-decor",type:"partial",gmIds:[0,1,2,3,4,5,6,7]}` when only 301 changed
     - ❌ physics worker receives message
       - ℹ️ sending too early i.e. worker is being reset?
-    - 🚧 on reset worker world physics includes gm-decor
+    - ✅ on reset worker world physics includes gm-decor
       - ℹ️ no need to forward event `updated-gm-decor`
       - ℹ️ wasteful i.e. could partially rebuild physics
     - ❌ events trigger:
       - removal of previous physics bodies with userData.{instanced,gmId}
       - creation of physics bodies with userData.{instanced,gmId}
-  - ✅ support angled rect
+  - 🚧 support angled rect
+    - ✅ can specify in `add-colliders`
+    - 🚧 can handle angled gm-decor rect
   - simplify add-colliders message
     - e.g. can only send rect
   - can remove-colliders
