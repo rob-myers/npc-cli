@@ -46,7 +46,7 @@
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-- 🚧 support non-door sensor i.e. decor circle/rect
+- ✅ support non-door sensor i.e. decor circle/rect
   - ✅ can manually add:
     ```sh
     w physics.worker.postMessage '{
