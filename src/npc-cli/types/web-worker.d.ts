@@ -124,8 +124,19 @@ declare namespace WW {
   );
 
   type PhysicsBodyGeom = (
-    | { type: 'cylinder'; halfHeight: number; radius: number }
-    | { type: 'cuboid'; halfDim: [number, number, number]  }
+    | {
+        /** Induces cylinder placed on floor with wall's height.  */
+        type: 'circle';
+        radius: number;
+      }
+    | {
+        /** Induces cuboid placed on floor with wall's height.  */
+        type: 'rect';
+        /** x-ordinate */
+        width: number;
+        /** z-ordinate */
+        height: number;
+      }
   )
 
   //#endregion

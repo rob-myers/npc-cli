@@ -53,7 +53,7 @@
       type: "add-colliders",
       colliders: [{
         colliderKey: "myTestCollider",
-        geom: { type: "cuboid", halfDim: [0.75, 1, 0.75] },
+        geom: { type: "rect", width: 1.5, height: 1.5 },
         position: { x: 3, y: 7.5 },
       }],
     }'
@@ -93,9 +93,9 @@
   - ✅ support angled rect
     - ✅ can specify in `add-colliders`
     - ✅ can handle angled gm-decor rect
-  - simplify add-colliders message
+  - 🚧 simplify add-colliders message
     - e.g. can only send rect
-  - can remove-colliders
+  - 🚧 can remove-colliders
     - e.g. no need to specify bodyKey 
 
 - support multiple skins for single test character

@@ -52,15 +52,15 @@ async function handleMessages(e) {
     case "add-colliders":
       for (const { colliderKey, geom, position, angle, userData } of msg.colliders) {
         /** @type {WW.PhysicsBodyKey} */
-        const bodyKey = geom.type === 'cuboid' ? `rect ${colliderKey}` : `circle ${colliderKey}`;
+        const bodyKey = `${geom.type} ${colliderKey}`;
   
         if (!(bodyKey in state.bodyKeyToBody)) {
           const _body = createRigidBody({
             type: RAPIER.RigidBodyType.Fixed,
             geomDef: geom,
             position: {
-              x: position.x, // place static collider on floor:
-              y: geom.type === 'cylinder' ? geom.halfHeight : geom.halfDim[1],
+              x: position.x,
+              y: wallHeight / 2, // place static collider on floor with height `wallHeight`
               z: position.y,
             },
             angle,
@@ -84,8 +84,7 @@ async function handleMessages(e) {
           const _body = createRigidBody({
             type: RAPIER.RigidBodyType.KinematicPositionBased,
             geomDef: {
-              type: 'cylinder',
-              halfHeight: config.agentHeight / 2,
+              type: 'circle',
               radius: config.agentRadius,
             },
             position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
@@ -229,9 +228,8 @@ function createDoorSensors() {
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
-          type: 'cylinder',
+          type: 'circle',
           radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
-          halfHeight: wallHeight / 2,
         },
         position: { x: center.x, y: wallHeight/2, z: center.y },
         userData: {
@@ -243,8 +241,9 @@ function createDoorSensors() {
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
-          type: 'cuboid',
-          halfDim: [(door.baseRect.width - 2 * wallOutset)/2, wallHeight / 2, door.baseRect.height/2],
+          type: 'rect',
+          width: (door.baseRect.width - 2 * wallOutset),
+          height: door.baseRect.height,
         },
         position: { x: center.x, y: wallHeight/2, z: center.y },
         angle: door.angle,
@@ -282,7 +281,7 @@ function createGmColliders(gmIds = state.gms.map((_, gmId) => gmId)) {
         const bodyKey = `circle ${decorKey}`;
         createRigidBody({
           type: RAPIER.RigidBodyType.Fixed,
-          geomDef: { type: 'cylinder', radius: d.radius, halfHeight: wallHeight / 2 },
+          geomDef: { type: 'circle', radius: d.radius },
           position: { x: center.x, y: wallHeight/2, z: center.y },
           userData: {
             bodyKey,
@@ -296,7 +295,7 @@ function createGmColliders(gmIds = state.gms.map((_, gmId) => gmId)) {
         const bodyKey = `rect ${decorKey}`;
         createRigidBody({
           type: RAPIER.RigidBodyType.Fixed,
-          geomDef: { type: 'cuboid', halfDim: [bounds2d.width / 2, wallHeight / 2, bounds2d.height / 2] },
+          geomDef: { type: 'rect', width: bounds2d.width, height: bounds2d.height },
           position: { x: center.x, y: wallHeight/2, z: center.y },
           userData: {
             bodyKey,
@@ -323,8 +322,7 @@ function restoreNpcs(npcs) {
     createRigidBody({
       type: RigidBodyType.KinematicPositionBased,
       geomDef: {
-        type: 'cylinder',
-        halfHeight: config.agentHeight / 2,
+        type: 'circle',
         radius: config.agentRadius,
       },
       position,
@@ -356,9 +354,9 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
   ;
 
   const colliderDescription = (
-    geomDef.type === 'cylinder'
-      ? ColliderDesc.cylinder(geomDef.halfHeight, geomDef.radius)
-      : ColliderDesc.cuboid(...geomDef.halfDim)
+    geomDef.type === 'circle'
+      ? ColliderDesc.cylinder(wallHeight / 2, geomDef.radius)
+      : ColliderDesc.cuboid(geomDef.width / 2, wallHeight / 2, geomDef.height / 2)
     ).setDensity(0)
     .setFriction(0)
     .setFrictionCombineRule(RAPIER.CoefficientCombineRule.Max)
