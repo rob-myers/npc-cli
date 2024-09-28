@@ -61,10 +61,10 @@ async function handleMessages(e) {
       
       if (result.success) {
         const { navMesh, tileCache } = result;
-        const tilePolyCounts = alloc(navMesh.getMaxTiles()).flatMap((_, i) =>
+        const polysPerTile = alloc(navMesh.getMaxTiles()).flatMap((_, i) =>
           navMesh.getTile(i).header()?.polyCount() ?? []
         );
-        info('total tiles', tilePolyCounts.length, { tilePolyCounts });
+        info('🤖 nav.worker', { totalTiles: polysPerTile.length, polysPerTile });
 
         selfTyped.postMessage({
           type: "nav-mesh-response",
@@ -81,7 +81,7 @@ async function handleMessages(e) {
       meshes.forEach((mesh) => mesh.geometry.dispose());
       break;
     default:
-      warn("nav.worker: unhandled message", msg);
+      warn("🤖 nav.worker: unhandled message", msg);
       break;
   }
 }
