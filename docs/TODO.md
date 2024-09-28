@@ -34,7 +34,8 @@
       - ✅ works with `<meshPhysicalMaterial>`
       - 🚧 works with our custom shader
         - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
-        - probably need skinning_*
+        - ✅ probably need skinning_*
+        - 🚧 fix scaling
       - 🚧 animation scaling issue
         - maybe `npc.act[anim.name].reset().fadeIn(300).play();`
   - ✅ fix initial animation start

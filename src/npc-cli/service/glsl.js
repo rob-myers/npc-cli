@@ -213,10 +213,16 @@ export const testCharacterShader = {
 
   #include <common>
   #include <uv_pars_vertex>
+  #include <skinning_pars_vertex>
   #include <logdepthbuf_pars_vertex>
 
   void main() {
     #include <uv_vertex>
+    #include <skinbase_vertex>
+    vec3 transformed = vec3( position );
+    // #include <skinnormal_vertex>
+    #include <skinning_vertex>
+
     vId = vertexId;
     vColor = vec3(1.0);
 
@@ -237,7 +243,8 @@ export const testCharacterShader = {
       vec2 scale = vec2(1.0);
       scale.x = length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) );
       scale.y = length( vec3( modelMatrix[ 1 ].x, modelMatrix[ 1 ].y, modelMatrix[ 1 ].z ) );
-      vec2 alignedPosition = position.xy * scale;
+      // vec2 alignedPosition = position.xy * scale;
+      vec2 alignedPosition = transformed.xy * scale;
 
       mvPosition.xy += alignedPosition;
       gl_Position = projectionMatrix * mvPosition;
@@ -246,7 +253,8 @@ export const testCharacterShader = {
       return;
     }
 
-    vec4 mvPosition = vec4(position, 1.0);
+    // vec4 mvPosition = vec4(position, 1.0);
+    vec4 mvPosition = vec4(transformed, 1.0);
     mvPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * mvPosition;
 

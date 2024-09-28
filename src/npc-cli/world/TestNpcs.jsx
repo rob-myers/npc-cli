@@ -110,7 +110,7 @@ export default function TestNpcs(props) {
       const gltf = classKeyToGltf[npc.classKey];
       info('animations', gltf.animations);
       const mixer = new THREE.AnimationMixer(rootGroup);
-      mixer.timeScale = 1;
+      mixer.timeScale = 0.25; // 🚧 -> 1
       
       for (const anim of gltf.animations) {
         npc.act[anim.name] = mixer.clipAction(anim);
@@ -148,14 +148,14 @@ export default function TestNpcs(props) {
         // frustumCulled={false}
       >
         {/* <meshBasicMaterial color="red" key="change_me" map={texture} transparent /> */}
-        <meshPhysicalMaterial key="change_me" map={texture} transparent />
-        {/* <testCharacterMaterial
+        {/* <meshPhysicalMaterial key="change_me" map={texture} transparent /> */}
+        <testCharacterMaterial
           key={TestCharacterMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
           map={texture}
           selectorColor={[0.6, 0.6, 1]}
-        /> */}
+        />
       </skinnedMesh>
     </group>
   );
