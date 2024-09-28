@@ -124,6 +124,8 @@ export default function World(props) {
       state.door.onTick();
       // info(state.r3f.gl.info.render);
 
+      state.debug.npc?.onTick(deltaMs);
+
       while (state.oneTimeTicks.shift()?.());
     },
     trackHmr(nextHmr) {

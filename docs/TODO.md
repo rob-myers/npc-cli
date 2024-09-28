@@ -26,8 +26,17 @@
     - ℹ️ works when use `<primitive>`
     - ✅ try gltf to jsx i.e. add bones
   - 🚧 idle animation
+    - ℹ️ blender: graph editor: vertical scale: ctrl + scroll
+    - ℹ️ blender: graph editor: interpolation: t
     - 🚧 support breathing via root bone scale
-      - head_bone: Bone > Relations > Inherit Scale: `None`
+      - ✅ head_bone: Bone > Relations > Inherit Scale: `None`
+      - ✅ create basic idle animation
+      - ✅ works with `<meshPhysicalMaterial>`
+      - 🚧 works with our custom shader
+      - 🚧 animation only starts on pause/unpause
+      - 🚧 animation scaling issue
+        - maybe `npc.act[anim.name].reset().fadeIn(300).play();`
+
   - walk animation
 
 - 🚧 start migrating into `<NPCs>`

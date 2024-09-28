@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
-import { buildObjectLookup, emptyTexture, textureLoader } from "../service/three";
+import { buildObjectLookup, emptyAnimationMixer, emptyTexture, textureLoader } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
@@ -15,8 +15,8 @@ import useUpdate from '../hooks/use-update';
 export default function TestNpcs(props) {
   const w = React.useContext(WorldContext);
 
-  charKeyToGltf.hcTest = useGLTF(charKeyToMeta.hcTest.url);
-  charKeyToGltf.cuboidChar = useGLTF(charKeyToMeta.cuboidChar.url);
+  classKeyToGltf.hcTest = useGLTF(charKeyToMeta.hcTest.url);
+  classKeyToGltf.cuboidChar = useGLTF(charKeyToMeta.cuboidChar.url);
 
   const update = useUpdate();
 
@@ -34,11 +34,11 @@ export default function TestNpcs(props) {
       // npcClassKey = 'hcTest',
       npcClassKey = 'cuboidChar',
     ) {
-      const gltf = charKeyToGltf[npcClassKey];
+      const gltf = classKeyToGltf[npcClassKey];
       const meta = charKeyToMeta[npcClassKey];
 
-      const object = SkeletonUtils.clone(gltf.scene);
-      const graph = buildObjectLookup(object);
+      const clonedScene = SkeletonUtils.clone(gltf.scene);
+      const graph = buildObjectLookup(clonedScene);
       const scene = /** @type {THREE.Group} */ (graph.nodes[meta.groupName]);
       // Must be SkinnedMesh i.e. gltf exported with animations
       const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (graph.nodes[meta.meshName]);
@@ -47,22 +47,19 @@ export default function TestNpcs(props) {
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
       skinnedMesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
 
-      // 🚧
-      console.log('animations', gltf.animations);
-      const mixer = new THREE.AnimationMixer(object);
-
       /** @type {TestNpc} */
       const character = {
         npcKey,
+        act: {},
         bones: Object.values(graph.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
           x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
         ),
-        object,
+        object: clonedScene,
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
         classKey: npcClassKey,
         graph,
         skinnedMesh,
-        mixer,
+        mixer: emptyAnimationMixer,
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
       };
@@ -75,9 +72,17 @@ export default function TestNpcs(props) {
 
       state.npc[npcKey] = character;
 
-      const charIndex = Object.keys(state.npc).length - 1;
       await state.setSkin(npcKey, npcClassKey);
       update();
+    },
+    onMountNpc(group) {
+      if (group !== null) {// mounted
+        const npc = state.npc[group.name];
+        state.setupNpcMixer(npc, group);
+      }
+    },
+    onTick(deltaMs) {
+      Object.values(state.npc).forEach(x => x.mixer.update(deltaMs));
     },
     remove(npcKey) {
       if (npcKey === undefined) {
@@ -99,37 +104,57 @@ export default function TestNpcs(props) {
       tex.flipY = false;
       npc.texture = tex;
     },
+    setupNpcMixer(npc, rootGroup) {// 🚧
+      const gltf = classKeyToGltf[npc.classKey];
+      console.info('animations', gltf.animations);
+      const mixer = new THREE.AnimationMixer(rootGroup);
+      mixer.timeScale = 1;
+      
+      for (const anim of gltf.animations) {
+        npc.act[anim.name] = mixer.clipAction(anim);
+        if (anim.name === "Idle") {
+          npc.act[anim.name].play();
+          // npc.act[anim.name].reset().fadeIn(300).play();
+        }
+      }
+
+      npc.mixer = mixer;
+      update();
+    }
+
   }));
 
   w.debug.npc = state;
 
   React.useEffect(() => {// Hot reload skins
-    Object.values(state.npc).forEach(({ classKey, npcKey }, charIndex) =>
-      state.setSkin(npcKey, classKey));
+    Object.values(state.npc).forEach(({ classKey, npcKey }) => state.setSkin(npcKey, classKey))
   }, [w.hash.sheets]);
 
-  return Object.values(state.npc).map(({ bones, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
+  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
     <group
       key={i}
       position={initPos}
       dispose={null}
+      ref={state.onMountNpc}
+      name={npcKey} // hack to lookup npc without "inline ref"
     >
       {bones.map((bone, i) => <primitive key={i} object={bone} />)}
       <skinnedMesh
         geometry={mesh.geometry}
         position={mesh.position}
         skeleton={mesh.skeleton}
-        scale={scale}
+        scale={scale} // 🚧 anim issue
         // frustumCulled={false}
       >
-        {/* <meshBasicMaterial key="change_me" map={texture} transparent /> */}
-        <testCharacterMaterial
+        {/* <meshBasicMaterial color="red" key="change_me" map={texture} transparent /> */}
+        <meshPhysicalMaterial key="change_me" map={texture} transparent />
+        {/* <testCharacterMaterial
           key={TestCharacterMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
           map={texture}
           selectorColor={[0.6, 0.6, 1]}
-        />
+        /> */}
       </skinnedMesh>
     </group>
   );
@@ -144,8 +169,11 @@ export default function TestNpcs(props) {
  * @typedef State
  * @property {{ [npcKey: string]:  TestNpc }} npc
  * @property {(initPoint?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
- * @property {(npcKey: string, charKey?: TestNpcClassKey) => Promise<void>} setSkin
+ * @property {(group: null | THREE.Group) => void} onMountNpc
+ * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey?: string) => void} remove
+ * @property {(npcKey: string, charKey?: TestNpcClassKey) => Promise<void>} setSkin
+ * @property {(npc: TestNpc, rootGroup: THREE.Group) => void} setupNpcMixer
  */
 
 /**
@@ -174,11 +202,12 @@ const charKeyToMeta = {
   },
 };
 
-const charKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib").GLTF>} */ ({})
+const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib").GLTF>} */ ({})
 
 /**
  * @typedef TestNpc
  * @property {string} npcKey
+ * @property {{ [animName: string]: THREE.AnimationAction }} act
  * @property {THREE.Bone[]} bones Root bones
  * @property {TestNpcClassKey} classKey
  * @property {import("@react-three/fiber").ObjectMap} graph
