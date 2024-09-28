@@ -131,23 +131,22 @@ export default function TestNpcs(props) {
     Object.values(state.npc).forEach(({ classKey, npcKey }) => state.setSkin(npcKey, classKey))
   }, [w.hash.sheets]);
 
-  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
+  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, skinnedMesh: mesh, scale, texture },) =>
     <group
-      key={i}
+      key={npcKey}
       position={initPos}
       dispose={null}
       ref={state.onMountNpc}
       name={npcKey} // hack to lookup npc without "inline ref"
+      scale={scale}
     >
       {bones.map((bone, i) => <primitive key={i} object={bone} />)}
       <skinnedMesh
         geometry={mesh.geometry}
         position={mesh.position}
         skeleton={mesh.skeleton}
-        scale={scale} // 🚧 anim issue
         // frustumCulled={false}
       >
-        {/* <meshBasicMaterial color="red" key="change_me" map={texture} transparent /> */}
         {/* <meshPhysicalMaterial key="change_me" map={texture} transparent /> */}
         <testCharacterMaterial
           key={TestCharacterMaterial.key}

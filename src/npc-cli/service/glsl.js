@@ -220,13 +220,10 @@ export const testCharacterShader = {
     #include <uv_vertex>
     #include <skinbase_vertex>
     vec3 transformed = vec3( position );
-    // #include <skinnormal_vertex>
     #include <skinning_vertex>
 
     vId = vertexId;
     vColor = vec3(1.0);
-
-    // selectorColor
 
     if (vId >= 52 && vId < 56) {// selector quad
       if (showSelector == false) return;
@@ -237,14 +234,10 @@ export const testCharacterShader = {
 
       if (showLabel == false) return; 
 
-      // 🚧 remove 0.75 scale
+      // 🚧 get 0.75 scale from uniform
       vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.2 * (1.0 / 0.75), 0.0, 1.0 );
-      
-      vec2 scale = vec2(1.0);
-      scale.x = length( vec3( modelMatrix[ 0 ].x, modelMatrix[ 0 ].y, modelMatrix[ 0 ].z ) );
-      scale.y = length( vec3( modelMatrix[ 1 ].x, modelMatrix[ 1 ].y, modelMatrix[ 1 ].z ) );
-      // vec2 alignedPosition = position.xy * scale;
-      vec2 alignedPosition = transformed.xy * scale;
+      // vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.2, 0.0, 1.0 );
+      vec2 alignedPosition = transformed.xy;
 
       mvPosition.xy += alignedPosition;
       gl_Position = projectionMatrix * mvPosition;

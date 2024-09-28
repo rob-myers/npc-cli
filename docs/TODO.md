@@ -25,22 +25,20 @@
     - ✅ temp set frustumCulling false on `<skinnedMesh>`
     - ℹ️ works when use `<primitive>`
     - ✅ try gltf to jsx i.e. add bones
-  - 🚧 idle animation
+  - 🚧 idle animation (1st attempt)
     - ℹ️ blender: graph editor: vertical scale: ctrl + scroll
     - ℹ️ blender: graph editor: interpolation: t
     - 🚧 support breathing via root bone scale
       - ✅ head_bone: Bone > Relations > Inherit Scale: `None`
-      - ✅ create basic idle animation
-      - ✅ works with `<meshPhysicalMaterial>`
-      - 🚧 works with our custom shader
-        - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
-        - ✅ probably need skinning_*
-        - 🚧 fix scaling
-      - 🚧 animation scaling issue
-        - maybe `npc.act[anim.name].reset().fadeIn(300).play();`
+    - ✅ create basic idle animation
+    - ✅ works with `<meshPhysicalMaterial>`
+    - ✅ works with our custom shader
+      - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
+      - ✅ probably need skinning_*
+      - ✅ fix scaling
+    - 🚧 clean up
   - ✅ fix initial animation start
-  
-
+  - improved idle animation
   - walk animation
 
 - 🚧 start migrating into `<NPCs>`
