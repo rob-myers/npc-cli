@@ -1,6 +1,6 @@
 import React from "react";
 import { defaultDoorCloseMs } from "../service/const";
-import { pause, warn } from "../service/generic";
+import { pause, warn, debug } from "../service/generic";
 import { geom, tmpVec1 } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
 import useStateRef from "../hooks/use-state-ref";
@@ -44,7 +44,7 @@ export default function useHandleEvents(w) {
       }
     },
     async handleEvents(e) {
-      // info('useHandleEvents', e);
+      // debug('useHandleEvents', e);
 
       if ('npcKey' in e) {
         return state.handleNpcEvents(e);
@@ -56,10 +56,11 @@ export default function useHandleEvents(w) {
           w.ceil.draw();
           break;
         case "updated-gm-decor":
+          // 🚧 is worker being reset?
           w.physics.worker.postMessage({
             type: 'updated-gm-decor',
             npcEvent: e,
-          }); // forward to physics worker
+          });
           break;
         case "long-pointerdown":
           // mobile/desktop show/hide ContextMenu

@@ -83,7 +83,9 @@
       - ✅ `w.hash.gmHashes` -> `w.hash.mapGmHashes`
       - ✅ fix `{key:"updated-gm-decor",type:"partial",gmIds:[0,1,2,3,4,5,6,7]}` when only 301 changed
       - 🚧 physics worker receives message
-        - maybe sending too early i.e. worker is being reset?
+        - ℹ️ sending too early i.e. worker is being reset?
+        - could always reset worker and rebuild decor every time
+        - could prevent reset worker...
     - 🚧 events trigger:
       - removal of previous physics bodies with userData.{instanced,gmId}
       - creation of physics bodies with userData.{instanced,gmId}
