@@ -50,19 +50,16 @@ async function handleMessages(e) {
 
   switch (msg.type) {
     case "add-colliders":
-      for (const { colliderKey, geom, position, angle, userData } of msg.colliders) {
+      for (const { colliderKey, x, y: z, angle, userData, ...geomDef } of msg.colliders) {
         /** @type {WW.PhysicsBodyKey} */
-        const bodyKey = `${geom.type} ${colliderKey}`;
+        const bodyKey = `${geomDef.type} ${colliderKey}`;
   
         if (!(bodyKey in state.bodyKeyToBody)) {
           const _body = createRigidBody({
             type: RAPIER.RigidBodyType.Fixed,
-            geomDef: geom,
-            position: {
-              x: position.x,
-              y: wallHeight / 2, // place static collider on floor with height `wallHeight`
-              z: position.y,
-            },
+            geomDef,
+            // place static collider on floor with height `wallHeight`
+            position: { x, y: wallHeight / 2, z },
             angle,
             userData: {
               ...userData,

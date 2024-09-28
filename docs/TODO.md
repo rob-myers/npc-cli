@@ -52,9 +52,10 @@
     w physics.worker.postMessage '{
       type: "add-colliders",
       colliders: [{
+        type: "rect",
+        width: 1.5, height: 1.5,
+        x: 3, y: 7.5,
         colliderKey: "myTestCollider",
-        geom: { type: "rect", width: 1.5, height: 1.5 },
-        position: { x: 3, y: 7.5 },
       }],
     }'
     ```
@@ -93,11 +94,13 @@
   - ✅ support angled rect
     - ✅ can specify in `add-colliders`
     - ✅ can handle angled gm-decor rect
-  - 🚧 simplify add-colliders message
-    - e.g. can only send rect
+  - ✅ simplify add-colliders message
+    - ✅ `rect` or `circle` rather than `cuboid` or `cylinder`
+    - ✅ reformat
   - 🚧 can remove-colliders
     - e.g. no need to specify bodyKey 
 
+- bug: tty: ctrl + w while multiple input: goes back a line
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - consider transparent body skin

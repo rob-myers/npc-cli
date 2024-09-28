@@ -52,15 +52,14 @@ declare namespace WW {
   //#region MsgToPhysicsWorker
   interface AddColliders {
     type: 'add-colliders';
-    colliders: {
+    /** Colliders always on ground hence 2D position suffices */
+    colliders: (Geom.VectJson & PhysicsBodyGeom & {
+      /** For gm decor this is a `decorKey`. */
       colliderKey: string;
-      geom: PhysicsBodyGeom;
-      /** Colliders always on ground, so 2d suffices */
-      position: Geom.VectJson;
-      /** Only for rects i.e. `geom.type` is `cuboid` */
+      /** Only applicable when `type` is `"rect"` */
       angle?: number;
       userData?: Record<string, any>;
-    }[];
+    })[];
   }
 
   /**
