@@ -12,7 +12,7 @@ import useUpdate from '../hooks/use-update';
 /**
  * @param {Props} props
  */
-export default function TestCharacters(props) {
+export default function TestNpcs(props) {
   const w = React.useContext(WorldContext);
 
   charKeyToGltf.hcTest = useGLTF(charKeyToMeta.hcTest.url);
@@ -21,15 +21,21 @@ export default function TestCharacters(props) {
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    characters: /** @type {*} */ ([]),
+    npc: /** @type {*} */ ({}),
 
     /**
      * @param {Geom.VectJson} initPoint 
-     * @param {CharacterKey} [charKey]
+     * @param {string} [npcKey]
+     * @param {TestNpcClassKey} [npcClassKey]
      */
-    async add(initPoint = { x: 4.5 * 1.5, y: 7 * 1.5 }, charKey = 'hcTest') {
-      const gltf = charKeyToGltf[charKey];
-      const meta = charKeyToMeta[charKey];
+    async add(
+      initPoint = { x: 4.5 * 1.5, y: 7 * 1.5 },
+      npcKey = `npc-${Object.keys(state.npc).length}`,
+      // npcClassKey = 'hcTest',
+      npcClassKey = 'cuboidChar',
+    ) {
+      const gltf = charKeyToGltf[npcClassKey];
+      const meta = charKeyToMeta[npcClassKey];
 
       const object = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(object);
@@ -45,14 +51,15 @@ export default function TestCharacters(props) {
       console.log('animations', gltf.animations);
       const mixer = new THREE.AnimationMixer(object);
 
-      /** @type {TestCharacter} */
+      /** @type {TestNpc} */
       const character = {
+        npcKey,
         bones: Object.values(graph.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
           x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
         ),
         object,
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
-        charKey,
+        classKey: npcClassKey,
         graph,
         skinnedMesh,
         mixer,
@@ -66,39 +73,42 @@ export default function TestCharacters(props) {
       skinnedMesh.computeBoundingBox();
       skinnedMesh.computeBoundingSphere();
 
-      state.characters.push(character);
+      state.npc[npcKey] = character;
 
-      const charIndex = state.characters.length - 1;
-      await state.setSkin(charIndex, charKey);
+      const charIndex = Object.keys(state.npc).length - 1;
+      await state.setSkin(npcKey, npcClassKey);
       update();
     },
-    remove(charIndex) {
-      if (typeof charIndex === 'number') {
-        state.characters.splice(charIndex, 1);
+    remove(npcKey) {
+      if (npcKey === undefined) {
+        for (const npcKey in state.npc) {
+          delete state.npc[npcKey];
+        }
       } else {
-        state.characters.length = 0;
+        delete state.npc[npcKey];
       }
       update();
     },
     // 🚧 support multiple skins for single character
-    async setSkin(charIndex, charKey = 'hcTest') {
-      const model = state.characters[charIndex];
+    async setSkin(npcKey, charKey = 'cuboidChar') {
+      const npc = state.npc[npcKey];
       // 🚧 hash instead of Date.now() ?
       // const tex = await textureLoader.loadAsync(`/assets/3d/${skinKey}?v=${Date.now()}`);
       const { skinBaseName } = charKeyToMeta[charKey];
       const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${Date.now()}`);
       tex.flipY = false;
-      model.texture = tex;
+      npc.texture = tex;
     },
   }));
 
-  w.debug.char = state;
+  w.debug.npc = state;
 
   React.useEffect(() => {// Hot reload skins
-    state.characters.forEach(({ charKey }, charIndex) => state.setSkin(charIndex, charKey));
+    Object.values(state.npc).forEach(({ classKey, npcKey }, charIndex) =>
+      state.setSkin(npcKey, classKey));
   }, [w.hash.sheets]);
 
-  return state.characters.map(({ bones, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
+  return Object.values(state.npc).map(({ bones, initPos, graph, skinnedMesh: mesh, scale, texture }, i) =>
     <group
       key={i}
       position={initPos}
@@ -132,17 +142,17 @@ export default function TestCharacters(props) {
 
 /**
  * @typedef State
- * @property {TestCharacter[]} characters
- * @property {(initPoint?: Geom.VectJson, charKey?: CharacterKey) => Promise<void>} add
- * @property {(charIndex: number, charKey?: CharacterKey) => Promise<void>} setSkin
- * @property {(charIndex?: number) => void} remove
+ * @property {{ [npcKey: string]:  TestNpc }} npc
+ * @property {(initPoint?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
+ * @property {(npcKey: string, charKey?: TestNpcClassKey) => Promise<void>} setSkin
+ * @property {(npcKey?: string) => void} remove
  */
 
 /**
- * @typedef {'hcTest' | 'cuboidChar'} CharacterKey
+ * @typedef {'hcTest' | 'cuboidChar'} TestNpcClassKey
  */
 
-/** @type {Record<CharacterKey, TestCharacterMeta>} */
+/** @type {Record<TestNpcClassKey, TestNpcClassDef>} */
 const charKeyToMeta = {
   /** hc ~ hyper casual */
   hcTest: {
@@ -164,12 +174,13 @@ const charKeyToMeta = {
   },
 };
 
-const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLTF>} */ ({})
+const charKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib").GLTF>} */ ({})
 
 /**
- * @typedef TestCharacter
+ * @typedef TestNpc
+ * @property {string} npcKey
  * @property {THREE.Bone[]} bones Root bones
- * @property {CharacterKey} charKey
+ * @property {TestNpcClassKey} classKey
  * @property {import("@react-three/fiber").ObjectMap} graph
  * @property {THREE.Vector3} initPos
  * @property {THREE.Object3D} object
@@ -180,7 +191,7 @@ const charKeyToGltf = /** @type {Record<CharacterKey, import("three-stdlib").GLT
  */
 
 /**
- * @typedef TestCharacterMeta
+ * @typedef TestNpcClassDef
  * @property {string} url e.g. '/assets/3d/test-hyper-casual.glb'
  * @property {number} scale e.g. `1`
  * @property {string} materialName e.g. 'Material'

@@ -26,8 +26,10 @@ w decor.label.tex.image.toDataURL | log
 w npc.updateLabels '["foo", "bar", "baz qux"]'
 w npc.label.tex.image.toDataURL | log
 
+w debug.npc.add $( click 1 ) foo cuboidChar
+
 while true; do
-  w debug.char.add $( click 1 ) cuboidChar
+  w debug.npc.add $( click 1 )
 done
 
 w decor.byRoom.0.2 | split | filter /collider/

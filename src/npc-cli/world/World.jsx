@@ -312,7 +312,7 @@ export default function World(props) {
                 <Debug
                   // showNavMesh
                   // showOrigNavPoly
-                  showTestCharacters
+                  showTestNpcs
                 />
               </>}
             </React.Suspense>
