@@ -48,6 +48,10 @@ export default function WorldWorkers() {
 
       if (msg.type === "npc-collisions") {
         msg.collisionEnd.forEach(({ npcKey, otherKey }) => {
+          if (otherKey === undefined) {
+            warn(`${npcKey}: ${'handlePhysicsWorkerMessage'} collider removed whilst colliding`);
+            return;
+          }
           state.handlePhysicsCollision(npcKey, otherKey, false);
         });
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {

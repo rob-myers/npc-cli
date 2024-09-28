@@ -38,6 +38,7 @@ declare namespace WW {
     | AddNPCs
     | AddColliders
     | RemoveBodies
+    | RemoveColliders
     | SendNpcPositions
     | SetupPhysicsWorld
     | { type: 'get-debug-data' }
@@ -74,6 +75,11 @@ declare namespace WW {
   interface RemoveBodies {
     type: 'remove-bodies';
     bodyKeys: WW.PhysicsBodyKey[];
+  }
+
+  interface RemoveColliders {
+    type: 'remove-colliders';
+    colliders: { type: 'circle' | 'rect'; colliderKey: string; }[];
   }
 
   interface SendNpcPositions {

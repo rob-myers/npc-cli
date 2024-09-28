@@ -52,9 +52,7 @@
     w physics.worker.postMessage '{
       type: "add-colliders",
       colliders: [{
-        type: "rect",
-        width: 1.5, height: 1.5,
-        x: 3, y: 7.5,
+        type: "rect", width: 1.5, height: 1.5, x: 3, y: 7.5,
         colliderKey: "myTestCollider",
       }],
     }'
@@ -66,6 +64,10 @@
     w physics.worker.postMessage '{
       type: "remove-bodies",
       bodyKeys: ["rect myTestCollider"],
+    }'
+    w physics.worker.postMessage '{
+      type: "remove-colliders",
+      colliders: [{ type: "rect", colliderKey: "myTestCollider"}],
     }'
     ```
   - 🚧 decor circle/rect tagged `collider` induce colliders
@@ -97,10 +99,12 @@
   - ✅ simplify add-colliders message
     - ✅ `rect` or `circle` rather than `cuboid` or `cylinder`
     - ✅ reformat
-  - 🚧 can remove-colliders
+  - ✅ can remove-colliders
     - e.g. no need to specify bodyKey 
+  - ✅ bug: remove collider while colliding
 
 - bug: tty: ctrl + w while multiple input: goes back a line
+  - need repro
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - consider transparent body skin

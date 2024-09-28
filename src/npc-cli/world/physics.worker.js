@@ -100,7 +100,12 @@ async function handleMessages(e) {
       debugWorld();
       break;
     case "remove-bodies":
-      for (const bodyKey of msg.bodyKeys) {
+    case "remove-colliders": {
+      const bodyKeys = msg.type === 'remove-bodies'
+        ? msg.bodyKeys
+        : msg.colliders.map(c => /** @type {const} */ (`${c.type} ${c.colliderKey}`))
+      ;
+      for (const bodyKey of bodyKeys) {
         const body = state.bodyKeyToBody.get(bodyKey);
         if (body !== undefined) {
           state.bodyHandleToKey.delete(body.handle);
@@ -110,6 +115,7 @@ async function handleMessages(e) {
         }
       }
       break;
+    }
     case "send-npc-positions": {
       // set kinematic body positions
       let npcBodyKey = /** @type {WW.PhysicsBodyKey} */ ('');
