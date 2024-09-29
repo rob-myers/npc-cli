@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
-import { info } from '../service/generic';
+import { debug } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyTexture, textureLoader } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
@@ -37,6 +37,7 @@ export default function TestNpcs(props) {
     ) {
       const gltf = classKeyToGltf[npcClassKey];
       const meta = classKeyToMeta[npcClassKey];
+      debug('saw animations', gltf.animations);
 
       const clonedScene = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(clonedScene);
@@ -104,24 +105,24 @@ export default function TestNpcs(props) {
       tex.flipY = false;
       npc.texture = tex;
     },
-    setupNpcMixer(npc, rootGroup) {// 🚧
+    setupNpcMixer(npc, rootGroup) {
       const gltf = classKeyToGltf[npc.classKey];
-      info('animations', gltf.animations);
+
       const mixer = new THREE.AnimationMixer(rootGroup);
-      mixer.timeScale = 1; // 🚧 -> 1
-      
+      mixer.timeScale = 1;
       for (const anim of gltf.animations) {
         npc.act[anim.name] = mixer.clipAction(anim);
-        if (anim.name === "Idle") {
-          npc.act[anim.name].play();
-          // npc.act[anim.name].reset().fadeIn(300).play();
-        }
+      }
+
+      if ("Idle" in npc.act) {
+        mixer.timeScale = classKeyToMeta[npc.classKey].timeScale["Idle"] ?? 1;
+        npc.act["Idle"].reset().fadeIn(0.3).play();
       }
 
       npc.mixer = mixer;
     }
 
-  }), { preserve: { onMountNpc: true }, reset: { onMountNpc: false } });
+  }), { preserve: { onMountNpc: true }, reset: { onMountNpc: true } });
 
   w.debug.npc = state;
 
@@ -189,6 +190,7 @@ const classKeyToMeta = {
     meshName: 'hc-character-mesh',
     groupName: 'Scene',
     skinBaseName: 'test-hyper-casual.tex.png',
+    timeScale: {},
   },
   cuboidChar: {
     url: '/assets/3d/cuboid-character.glb',
@@ -198,6 +200,7 @@ const classKeyToMeta = {
     meshName: 'cuboid-character-mesh',
     groupName: 'Scene',
     skinBaseName: 'cuboid-character.tex.png',
+    timeScale: { 'Idle': 0.25 },
   },
 };
 
@@ -226,6 +229,7 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {string} meshName e.g. 'hc-character-mesh'
  * @property {string} groupName e.g. 'Scene'
  * @property {string} skinBaseName e.g. 'test-hyper-casual.tex.png'
+ * @property {{ [animName: string]: number }} timeScale
  */
 
 useGLTF.preload(Object.values(classKeyToMeta).map(x => x.url));
