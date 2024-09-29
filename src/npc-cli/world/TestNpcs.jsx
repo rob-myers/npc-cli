@@ -123,7 +123,7 @@ export default function TestNpcs(props) {
       npc.mixer = mixer;
     }
 
-  }));
+  }), { pure: { onMountNpc: true } });
 
   w.debug.npc = state;
 
@@ -131,11 +131,11 @@ export default function TestNpcs(props) {
     Object.values(state.npc).forEach(({ classKey, npcKey }) => state.setSkin(npcKey, classKey))
   }, [w.hash.sheets]);
 
-  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, skinnedMesh: mesh, scale, texture },) =>
+  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, skinnedMesh: mesh, scale, texture }) =>
     <group
       key={npcKey}
       position={initPos}
-      dispose={null}
+      // dispose={null}
       ref={state.onMountNpc}
       name={npcKey} // hack to lookup npc without "inline ref"
       scale={scale}
@@ -154,6 +154,7 @@ export default function TestNpcs(props) {
           transparent
           map={texture}
           selectorColor={[0.6, 0.6, 1]}
+          // showSelector={false}
         />
       </skinnedMesh>
     </group>
