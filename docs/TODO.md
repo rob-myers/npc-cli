@@ -46,8 +46,9 @@
     - ℹ️ blender: scale frames by shifting to 1 and setting 1 as current frame
     - ✅ smaller sway
     - ✅ breathing
+    - 🚧 shadow motion
     - head motion
-    - shadow motion
+      - already some via breathing (scale hips along z)
   - walk animation
 
 - cuboid char improvements
