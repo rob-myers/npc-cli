@@ -33,6 +33,28 @@ while true; do
 done
 
 w decor.byRoom.0.2 | split | filter /collider/
+
+
+w debug.npc.remove
+w debug.npc.add $( click 1 )
+w debug.npc.npc.npc-0.act.Idle.stop
+w debug.npc.npc.npc-0.act.Idle.play
+w debug.npc.npc.npc-0.act.Idle.fadeOut 1
+w debug.npc.npc.npc-0.act.Idle.reset
+w debug.npc.npc.npc-0.act.Walk.fadeIn 0.5
+w debug.npc.npc.npc-0.act.Walk.play
+w debug.npc.npc.npc-0.mixer | map 'm => m.timeScale = 0.5'
+
+w debug.npc.npc.npc-0.act.Walk.reset
+w debug.npc.npc.npc-0.act.Walk.fadeIn 0.5
+w debug.npc.npc.npc-0.act.Walk.play
+
+w debug.npc.npc.npc-0 > npc
+npc/act/Idle/stop'()'
+npc/act/Walk/stop'()'
+npc/act/Walk/play'()'
+npc/mixer | map 'm => m.timeScale = 0.6'
+
 ```
 
 ```sh

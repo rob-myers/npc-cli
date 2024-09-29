@@ -3,6 +3,7 @@
 ## WIP
 
 - 🚧 character animation: walk
+  - ✅ try sway with almost upright head
 
 - 🚧 cuboid char improvements
   - ✅ can set label height
