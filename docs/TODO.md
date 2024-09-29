@@ -28,8 +28,8 @@
   - 🚧 idle animation (1st attempt)
     - ℹ️ blender: graph editor: vertical scale: ctrl + scroll
     - ℹ️ blender: graph editor: interpolation: t
-    - 🚧 support breathing via root bone scale
-      - ✅ head_bone: Bone > Relations > Inherit Scale: `None`
+    - ✅ support breathing via root bone scale
+      - head_bone: Bone > Relations > Inherit Scale: `None`
     - ✅ create basic idle animation
     - ✅ works with `<meshPhysicalMaterial>`
     - ✅ works with our custom shader
@@ -39,7 +39,19 @@
     - 🚧 clean up
   - ✅ fix initial animation start
   - improved idle animation
+    - breathing
+    - head motion
+    - shadow motion
   - walk animation
+
+- cuboid char improvements
+  - can set label height
+  - smaller shadow
+  - can change label
+  - can change icon
+  - can change face
+
+- replace hcTest with another cuboid character e.g. pet, or bot
 
 - 🚧 start migrating into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format
