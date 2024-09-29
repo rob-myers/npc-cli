@@ -15,6 +15,10 @@ declare namespace NPC {
     runSpeed: number;
     /** World units per second */
     walkSpeed: number;
+    /** Position at which NPC was spawned */
+    initPosition: import('three').Vector3;
+    /** Does this NPC have a Recast/Detour agent? */
+    hasAgent: boolean;
   }
 
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {

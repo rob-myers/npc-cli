@@ -4,7 +4,7 @@ import { dampLookAt } from "maath/easing";
 
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, toV3 } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, toV3, yAxis } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 
@@ -221,6 +221,8 @@ export class Npc {
       m.group = group;
       this.position = group.position;
 
+      // Finish setup started in initialize:
+
       this.mixer = new THREE.AnimationMixer(m.group);
       m.animMap = m.animations.reduce((agg, a) => helper.isAnimKey(a.name)
         ? (agg[a.name] = this.mixer.clipAction(a), agg)
@@ -228,6 +230,12 @@ export class Npc {
       , /** @type {typeof this['m']['animMap']} */ ({}));
 
       this.startAnimation('Idle');
+
+      if (this.agent === null) {
+        this.setPosition(this.def.initPosition);
+        this.m.group.setRotationFromAxisAngle(yAxis, this.def.angle);
+        this.def.hasAgent && this.attachAgent().requestMoveTarget(this.position);
+      }
     }
   }
   /** @param {number} deltaMs  */

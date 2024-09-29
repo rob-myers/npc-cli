@@ -4,6 +4,7 @@
 
 - 🚧 character animation: walk
   - ✅ try sway with almost upright head
+  - ...
 
 - 🚧 cuboid char improvements
   - ✅ can set label height
@@ -11,11 +12,6 @@
   - can change label
   - can change icon
   - can change face
-
-- replace hcTest with another cuboid character e.g. pet, or bot
-
-- change fov with camera distance?
-  - e.g. 15 far, 30 close
 
 - 🚧 start migrating into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format
@@ -25,16 +21,28 @@
   - ✅ fix `<NPCs>` hmr
   - ✅ remove nav-obstacles (not needed)
   - 🚧 clean e.g. spawn
+    - ✅ npc.onMount does
+      - ✅ npc.startAnimation('Idle')
+      - ✅ initializes position/angle of npc sans agent
+      - ✅ on add agent pins it to current position
+    - 🚧 w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
+
   - use React.memo with optional force
-  - migrate cuboid-character (leave TestCharacters as is)
+  - rename `cuboidChar` -> `cuboid-man`
+  - replace `hcTest` with another cuboid character e.g.
+    - `cuboid-pet`
+    - `cuboid-bot`
+  - migrate `cuboid-man` (leave TestCharacters as is)
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
+- bug: initially open hull door via spawn does not close
 - bug: tty: ctrl + w while multiple input: goes back a line
   - need repro
+- change fov with camera distance? e.g. 15 far, 30 close
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - consider transparent body skin

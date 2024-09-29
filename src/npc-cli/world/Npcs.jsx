@@ -146,6 +146,7 @@ export default function Npcs(props) {
       }
 
       let npc = state.npc[e.npcKey];
+      const position = toV3(e.point);
 
       if (npc !== undefined) {// Respawn
         await npc.cancel();
@@ -157,6 +158,8 @@ export default function Npcs(props) {
           skinKey: e.skinKey ?? npc.def.skinKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
+          initPosition: position,
+          hasAgent: Boolean(e.agent),
         };
         if (typeof e.skinKey === 'string') {
           npc.changeSkin(e.skinKey);
@@ -172,26 +175,20 @@ export default function Npcs(props) {
           skinKey: e.skinKey ?? defaultSkinKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
+          initPosition: position,
+          hasAgent: Boolean(e.agent),
         }, w);
 
         npc.initialize(gltf);
       }
       
-      const position = toV3(e.point);
-
-      // 🚧 rethink
+      // Can remove/reuse agent before mount
       if (npc.agent !== null) {
         if (e.agent === false) {
           npc.removeAgent();
         } else {
           npc.agent.teleport(position);
-          // npc.startAnimation('Idle');
         }
-      } else {
-        npc.setPosition(position);
-        this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
-        // pin to current position, so "moves out of the way"
-        e.agent && npc.attachAgent().requestMoveTarget(position);
       }
 
       update();
