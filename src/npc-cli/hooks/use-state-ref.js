@@ -37,6 +37,7 @@ export default function useStateRef(initializer, opts = {}) {
        * - update all functions
        * - add new properties
        * - remove stale keys
+       * - we don't support getters or setters
        */
       const newInit = initializer();
 
@@ -44,15 +45,15 @@ export default function useStateRef(initializer, opts = {}) {
         // console.log({ key: k })
         const key = /** @type {keyof State} */ (k);
 
-        // ℹ️ we don't support getters or setters
-        if (typeof v === "function") {
+        if (typeof v === "function" && !(
+          opts.pure?.[key] === true && v.toString() === state[key]?.toString()
+        )) {
           state[key] = v;
         } else if (!(k in state)) {
           // console.log({ setting: [k, v] })
           state[key] = v;
-        } else if (opts.overwrite?.[key] === true) {
-          // Update if initial values changed and specified `overwrite`
-          state[key] = newInit[key];
+        } else if (opts.reset?.[key] === true) {
+          state[key] = v;
         }
       }
 
@@ -78,7 +79,9 @@ module.hot?.decline();
 /**
  * @template {Record<string, any>} State
  * @typedef Options
- * @property {Partial<Record<keyof State, boolean>>} [overwrite]
+ * @property {Partial<Record<keyof State, boolean>>} [reset]
  * Reset field on HMR?
+ * @property {Partial<Record<keyof State, boolean>>} [pure]
+ * Specify a function as pure i.e. only depends on args and `state`.
  * @property {any[]} [deps]
  */

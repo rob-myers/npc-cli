@@ -91,7 +91,7 @@ export default function Floor(props) {
       ct.resetTransform();
       tex.needsUpdate = true;
     },
-  }), { overwrite: { gridPattern: false } });
+  }), { reset: { gridPattern: false } });
 
   w.floor = state;
 
