@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
+import { wallHeight } from "./const";
 
 const instancedMonochromeShader = {
   Vert: /*glsl*/`
@@ -203,6 +204,7 @@ export const testCharacterShader = {
   Vert: /*glsl*/`
 
   uniform bool showLabel;
+  uniform float labelHeight;
   uniform bool showSelector;
   uniform vec3 selectorColor;
 
@@ -231,28 +233,22 @@ export const testCharacterShader = {
     }
 
     if (vId >= 60) {// label quad
-
       if (showLabel == false) return; 
-
-      // 🚧 get 0.75 scale from uniform
-      vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.2 * (1.0 / 0.75), 0.0, 1.0 );
-      // vec4 mvPosition = modelViewMatrix * vec4( 0.0, 2.2, 0.0, 1.0 );
+      vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
       vec2 alignedPosition = transformed.xy;
-
       mvPosition.xy += alignedPosition;
       gl_Position = projectionMatrix * mvPosition;
-
       #include <logdepthbuf_vertex>
       return;
     }
 
-    // vec4 mvPosition = vec4(position, 1.0);
     vec4 mvPosition = vec4(transformed, 1.0);
     mvPosition = modelViewMatrix * mvPosition;
     gl_Position = projectionMatrix * mvPosition;
 
     #include <logdepthbuf_vertex>
 
+    // compute dot product for fragment shader
     vec3 transformedNormal = normalize(normalMatrix * vec3(normal));
     vec3 lightDir = normalize(mvPosition.xyz);
     dotProduct = -min(dot(transformedNormal, lightDir), 0.0);
@@ -329,6 +325,7 @@ export const TestCharacterMaterial = shaderMaterial(
     map: null,
     mapTransform: new THREE.Matrix3(),
     showLabel: true,
+    labelHeight: wallHeight,
     showSelector: true,
     selectorColor: [0, 0, 1],
   },

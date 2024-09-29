@@ -22,6 +22,7 @@ declare global {
       testCharacterMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
         showLabel?: boolean;
+        labelHeight?: number;
         showSelector?: boolean;
         selectorColor?: Vector3Input;
       }>;

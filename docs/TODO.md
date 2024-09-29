@@ -25,7 +25,7 @@
     - ✅ temp set frustumCulling false on `<skinnedMesh>`
     - ℹ️ works when use `<primitive>`
     - ✅ try gltf to jsx i.e. add bones
-  - 🚧 idle animation (1st attempt)
+  - ✅ idle animation (1st attempt)
     - ℹ️ blender: graph editor: vertical scale: ctrl + scroll
     - ℹ️ blender: graph editor: interpolation: t
     - ✅ support breathing via root bone scale
@@ -36,7 +36,7 @@
       - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
       - ✅ probably need skinning_*
       - ✅ fix scaling
-    - 🚧 clean up
+    - ✅ clean up
   - ✅ fix initial animation start
   - improved idle animation
     - breathing
@@ -52,6 +52,9 @@
   - can change face
 
 - replace hcTest with another cuboid character e.g. pet, or bot
+
+- change fov with camera distance?
+  - e.g. 15 far, 30 close
 
 - 🚧 start migrating into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format

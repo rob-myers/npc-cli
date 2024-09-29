@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
+import { wallHeight } from '../service/const';
 import { debug } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyTexture, textureLoader } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
@@ -152,6 +153,7 @@ export default function TestNpcs(props) {
           diffuse={[1, 1, 1]}
           transparent
           map={texture}
+          labelHeight={wallHeight * (1 / scale.x)}
           selectorColor={[0.6, 0.6, 1]}
           // showSelector={false}
         />
