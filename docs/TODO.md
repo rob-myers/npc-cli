@@ -51,7 +51,7 @@
       - already some via breathing (scale hips along z)
   - walk animation
 
-- cuboid char improvements
+- 🚧 cuboid char improvements
   - ✅ can set label height
   - ✅ smaller shadow
   - can change label
