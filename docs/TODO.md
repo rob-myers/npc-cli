@@ -2,7 +2,7 @@
 
 ## WIP
 
-- 🚧 character animation: idle, walk
+- ✅ character animation: idle
   - ✅ add skeleton: hips.bone -> head.bone, shadow.bone
   - ✅ import SkinnedMesh
     - ℹ️ blender: select armature + mesh, ctrl + p, with automatic weights
@@ -51,7 +51,8 @@
     - ✅ head motion
       - already some via breathing (scale hips along z)
       - basic head nod
-  - walk animation
+
+- character animation: walk
 
 - 🚧 cuboid char improvements
   - ✅ can set label height
