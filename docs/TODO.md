@@ -44,11 +44,13 @@
       - Scene > Output > Time Stretching > 100, 600
       - Given 24 frames (Start=0, End=22), End := 23 * 6 - 1 = 137
     - ℹ️ blender: scale frames by shifting to 1 and setting 1 as current frame
+    - ℹ️ blender: center: shift + c
     - ✅ smaller sway
     - ✅ breathing
-    - 🚧 shadow motion
-    - head motion
+    - ✅ shadow motion
+    - ✅ head motion
       - already some via breathing (scale hips along z)
+      - basic head nod
   - walk animation
 
 - 🚧 cuboid char improvements
