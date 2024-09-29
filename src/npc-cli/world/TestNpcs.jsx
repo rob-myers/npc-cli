@@ -202,7 +202,7 @@ const classKeyToMeta = {
     meshName: 'cuboid-character-mesh',
     groupName: 'Scene',
     skinBaseName: 'cuboid-character.tex.png',
-    timeScale: { 'Idle': 0.25 },
+    timeScale: { 'Idle': 0.2 },
   },
 };
 
