@@ -2,57 +2,7 @@
 
 ## WIP
 
-- ✅ character animation: idle
-  - ✅ add skeleton: hips.bone -> head.bone, shadow.bone
-  - ✅ import SkinnedMesh
-    - ℹ️ blender: select armature + mesh, ctrl + p, with automatic weights
-    - ℹ️ blender: weight paint mode (sibling of edit/object/pose)
-    - ℹ️ blender: K for keyframe
-    - ✅ seems we need an animation first
-    - ✅ parent armature + weight paint
-  - ✅ bug: blender: gltf export deforms original file (fixable by undoing rotateX)
-    - upgraded to blender 4.2 (didn't fix)
-    - removed other mesh/armature (didn't fix)
-    - removed/added armature (seemed to work)
-  - ✅ saw gltf export bug again
-    - ℹ️ it was probably due to various "Fake User" animations from deleted armature/meshes
-    - ✅ move root bone down to origin
-    - ✅ added a keyframe to "Idle" (must do this)
-  - ✅ `<mesh>` -> `<skinnedMesh>`
-    - ✅ Idle animation is imported
-  - ✅ fix frustum culling
-    - ✅ compute bounding{Box,Sphere} (did not fix)
-    - ✅ temp set frustumCulling false on `<skinnedMesh>`
-    - ℹ️ works when use `<primitive>`
-    - ✅ try gltf to jsx i.e. add bones
-  - ✅ idle animation (1st attempt)
-    - ℹ️ blender: graph editor: vertical scale: ctrl + scroll
-    - ℹ️ blender: graph editor: interpolation: t
-    - ✅ support breathing via root bone scale
-      - head_bone: Bone > Relations > Inherit Scale: `None`
-    - ✅ create basic idle animation
-    - ✅ works with `<meshPhysicalMaterial>`
-    - ✅ works with our custom shader
-      - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
-      - ✅ probably need skinning_*
-      - ✅ fix scaling
-    - ✅ clean up
-  - ✅ fix initial animation start
-  - 🚧 improved idle animation
-    - ℹ️ blender: next/prev keyframe: up/down
-    - ℹ️ blender: slow down animation:
-      - Scene > Output > Time Stretching > 100, 600
-      - Given 24 frames (Start=0, End=22), End := 23 * 6 - 1 = 137
-    - ℹ️ blender: scale frames by shifting to 1 and setting 1 as current frame
-    - ℹ️ blender: center: shift + c
-    - ✅ smaller sway
-    - ✅ breathing
-    - ✅ shadow motion
-    - ✅ head motion
-      - already some via breathing (scale hips along z)
-      - basic head nod
-
-- character animation: walk
+- 🚧 character animation: walk
 
 - 🚧 cuboid char improvements
   - ✅ can set label height
@@ -2443,3 +2393,53 @@ run '({ w, api }) {
     - e.g. no need to specify bodyKey 
   - ✅ bug: remove collider while colliding
   
+
+- ✅ character animation: idle
+  - ✅ add skeleton: hips.bone -> head.bone, shadow.bone
+  - ✅ import SkinnedMesh
+    - ℹ️ blender: select armature + mesh, ctrl + p, with automatic weights
+    - ℹ️ blender: weight paint mode (sibling of edit/object/pose)
+    - ℹ️ blender: K for keyframe
+    - ✅ seems we need an animation first
+    - ✅ parent armature + weight paint
+  - ✅ bug: blender: gltf export deforms original file (fixable by undoing rotateX)
+    - upgraded to blender 4.2 (didn't fix)
+    - removed other mesh/armature (didn't fix)
+    - removed/added armature (seemed to work)
+  - ✅ saw gltf export bug again
+    - ℹ️ it was probably due to various "Fake User" animations from deleted armature/meshes
+    - ✅ move root bone down to origin
+    - ✅ added a keyframe to "Idle" (must do this)
+  - ✅ `<mesh>` -> `<skinnedMesh>`
+    - ✅ Idle animation is imported
+  - ✅ fix frustum culling
+    - ✅ compute bounding{Box,Sphere} (did not fix)
+    - ✅ temp set frustumCulling false on `<skinnedMesh>`
+    - ℹ️ works when use `<primitive>`
+    - ✅ try gltf to jsx i.e. add bones
+  - ✅ idle animation (1st attempt)
+    - ℹ️ blender: graph editor: vertical scale: ctrl + scroll
+    - ℹ️ blender: graph editor: interpolation: t
+    - ✅ support breathing via root bone scale
+      - head_bone: Bone > Relations > Inherit Scale: `None`
+    - ✅ create basic idle animation
+    - ✅ works with `<meshPhysicalMaterial>`
+    - ✅ works with our custom shader
+      - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
+      - ✅ probably need skinning_*
+      - ✅ fix scaling
+    - ✅ clean up
+  - ✅ fix initial animation start
+  - 🚧 improved idle animation
+    - ℹ️ blender: next/prev keyframe: up/down
+    - ℹ️ blender: slow down animation:
+      - Scene > Output > Time Stretching > 100, 600
+      - Given 24 frames (Start=0, End=22), End := 23 * 6 - 1 = 137
+    - ℹ️ blender: scale frames by shifting to 1 and setting 1 as current frame
+    - ℹ️ blender: center: shift + c
+    - ✅ smaller sway
+    - ✅ breathing
+    - ✅ shadow motion
+    - ✅ head motion
+      - already some via breathing (scale hips along z)
+      - basic head nod
