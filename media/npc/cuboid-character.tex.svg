@@ -83,9 +83,9 @@
     <title>selector</title>
     <circle style="fill: none; stroke-width: 2px; stroke: rgb(221, 221, 255);" cx="973.158508" cy="50.841564" r="46.558437"/>
   </g>
-  <g style="" transform="matrix(1.073919177055, 0, 0, 1.095397591591, -56.940181732178, -4.69172668457)">
+  <g style="" transform="matrix(1.073919177055, 0, 0, 1.073919177055, -56.940181732178, -3.599732160568)">
     <title>drop-shadow</title>
-    <circle style="stroke-width: 8px; fill-opacity: 0.3;" cx="768.158508" cy="50.841564" r="46.558437"/>
+    <circle style="fill-opacity: 0.25; fill: rgb(177, 177, 177); stroke-width: 1.8439px; stroke: rgb(203, 203, 203); stroke-dasharray: 10;" cx="768.158508" cy="50.841564" r="46.558437"/>
   </g>
   <g>
     <title>label-text</title>
