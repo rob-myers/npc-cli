@@ -16,8 +16,8 @@ import useUpdate from '../hooks/use-update';
 export default function TestNpcs(props) {
   const w = React.useContext(WorldContext);
 
-  classKeyToGltf.hcTest = useGLTF(charKeyToMeta.hcTest.url);
-  classKeyToGltf.cuboidChar = useGLTF(charKeyToMeta.cuboidChar.url);
+  classKeyToGltf.hcTest = useGLTF(classKeyToMeta.hcTest.url);
+  classKeyToGltf.cuboidChar = useGLTF(classKeyToMeta.cuboidChar.url);
 
   const update = useUpdate();
 
@@ -36,7 +36,7 @@ export default function TestNpcs(props) {
       npcClassKey = 'cuboidChar',
     ) {
       const gltf = classKeyToGltf[npcClassKey];
-      const meta = charKeyToMeta[npcClassKey];
+      const meta = classKeyToMeta[npcClassKey];
 
       const clonedScene = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(clonedScene);
@@ -96,12 +96,10 @@ export default function TestNpcs(props) {
       }
       update();
     },
-    // 🚧 support multiple skins for single character
-    async setSkin(npcKey, charKey = 'cuboidChar') {
+    async setSkin(npcKey, classKey = 'cuboidChar') {
       const npc = state.npc[npcKey];
-      // 🚧 hash instead of Date.now() ?
-      // const tex = await textureLoader.loadAsync(`/assets/3d/${skinKey}?v=${Date.now()}`);
-      const { skinBaseName } = charKeyToMeta[charKey];
+      const { skinBaseName } = classKeyToMeta[classKey];
+      // 🚧 hash instead of Date.now()
       const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${Date.now()}`);
       tex.flipY = false;
       npc.texture = tex;
@@ -110,7 +108,7 @@ export default function TestNpcs(props) {
       const gltf = classKeyToGltf[npc.classKey];
       info('animations', gltf.animations);
       const mixer = new THREE.AnimationMixer(rootGroup);
-      mixer.timeScale = 0.25; // 🚧 -> 1
+      mixer.timeScale = 1; // 🚧 -> 1
       
       for (const anim of gltf.animations) {
         npc.act[anim.name] = mixer.clipAction(anim);
@@ -123,7 +121,7 @@ export default function TestNpcs(props) {
       npc.mixer = mixer;
     }
 
-  }), { pure: { onMountNpc: true } });
+  }), { preserve: { onMountNpc: true }, reset: { onMountNpc: false } });
 
   w.debug.npc = state;
 
@@ -182,7 +180,7 @@ export default function TestNpcs(props) {
  */
 
 /** @type {Record<TestNpcClassKey, TestNpcClassDef>} */
-const charKeyToMeta = {
+const classKeyToMeta = {
   /** hc ~ hyper casual */
   hcTest: {
     url: '/assets/3d/test-hyper-casual.glb',
@@ -230,4 +228,4 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {string} skinBaseName e.g. 'test-hyper-casual.tex.png'
  */
 
-useGLTF.preload(Object.values(charKeyToMeta).map(x => x.url));
+useGLTF.preload(Object.values(classKeyToMeta).map(x => x.url));

@@ -46,7 +46,7 @@ export default function useStateRef(initializer, opts = {}) {
         const key = /** @type {keyof State} */ (k);
 
         if (typeof v === "function" && !(
-          opts.pure?.[key] === true && v.toString() === state[key]?.toString()
+          opts.preserve?.[key] === true && v.toString() === state[key]?.toString()
         )) {
           state[key] = v;
         } else if (!(k in state)) {
@@ -81,7 +81,7 @@ module.hot?.decline();
  * @typedef Options
  * @property {Partial<Record<keyof State, boolean>>} [reset]
  * Reset field on HMR?
- * @property {Partial<Record<keyof State, boolean>>} [pure]
- * Specify a function as pure i.e. only depends on args and `state`.
+ * @property {Partial<Record<keyof State, boolean>>} [preserve]
+ * Preserve equality of function when toString() does not change? 
  * @property {any[]} [deps]
  */
