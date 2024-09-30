@@ -28,7 +28,7 @@
     - ❌ w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
     - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
   - ✅ use React.memo with epochMs override
-  - 🚧 rename `cuboidChar` -> `cuboid-man`
+  - ✅ rename `cuboidChar` -> `cuboid-man`
   - replace `hcTest` with another cuboid character e.g.
     - `cuboid-pet`
     - `cuboid-bot`

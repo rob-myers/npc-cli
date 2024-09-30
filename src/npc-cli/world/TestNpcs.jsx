@@ -18,7 +18,7 @@ export default function TestNpcs(props) {
   const w = React.useContext(WorldContext);
 
   classKeyToGltf.hcTest = useGLTF(classKeyToMeta.hcTest.url);
-  classKeyToGltf.cuboidChar = useGLTF(classKeyToMeta.cuboidChar.url);
+  classKeyToGltf['cuboid-man'] = useGLTF(classKeyToMeta['cuboid-man'].url);
 
   const update = useUpdate();
 
@@ -34,7 +34,7 @@ export default function TestNpcs(props) {
       initPoint = { x: 4.5 * 1.5, y: 7 * 1.5 },
       npcKey = `npc-${Object.keys(state.npc).length}`,
       // npcClassKey = 'hcTest',
-      npcClassKey = 'cuboidChar',
+      npcClassKey = 'cuboid-man',
     ) {
       const gltf = classKeyToGltf[npcClassKey];
       const meta = classKeyToMeta[npcClassKey];
@@ -98,7 +98,7 @@ export default function TestNpcs(props) {
       }
       update();
     },
-    async setSkin(npcKey, classKey = 'cuboidChar') {
+    async setSkin(npcKey, classKey = 'cuboid-man') {
       const npc = state.npc[npcKey];
       const { skinBaseName } = classKeyToMeta[classKey];
       // 🚧 hash instead of Date.now()
@@ -179,7 +179,7 @@ export default function TestNpcs(props) {
  */
 
 /**
- * @typedef {'hcTest' | 'cuboidChar'} TestNpcClassKey
+ * @typedef {'hcTest' | 'cuboid-man'} TestNpcClassKey
  */
 
 /** @type {Record<TestNpcClassKey, TestNpcClassDef>} */
@@ -194,7 +194,7 @@ const classKeyToMeta = {
     skinBaseName: 'test-hyper-casual.tex.png',
     timeScale: {},
   },
-  cuboidChar: {
+  'cuboid-man': {
     url: '/assets/3d/cuboid-character.glb',
     // scale: 1,
     scale: 0.75,
