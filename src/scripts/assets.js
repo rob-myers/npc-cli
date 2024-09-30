@@ -167,7 +167,10 @@ info({ opts });
       obstacle: {}, decor: /** @type {*} */ ({}),
       obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 },
       imagesHash: 0,
-      skins: { svgHash: {} },
+      skins: {
+        svgHash: {},
+        uvMap: {},
+      },
     },
     symbols: /** @type {*} */ ({}), maps: {},
   };
@@ -228,7 +231,7 @@ info({ opts });
 
   if (!prev.skipNpcTex) {
     perf('createNpcTextures', 'creating npc textures');
-    await createNpcTextures(assetsJson, prev);
+    await createNpcTexturesAndUvMeta(assetsJson, prev);
     perf('createNpcTextures');
   } else {
     info('skipping npc textures');
@@ -680,7 +683,7 @@ function getNpcTextureMetas() {
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
  */
-async function createNpcTextures(assets, prev) {
+async function createNpcTexturesAndUvMeta(assets, prev) {
   const { skins, skins: { svgHash } } = assets.sheet
   skins.svgHash = {};
   for (const { canSkip, svgBaseName, svgPath, pngPath } of prev.npcTexMetas) {
@@ -688,6 +691,12 @@ async function createNpcTextures(assets, prev) {
       skins.svgHash[svgBaseName] = svgHash[svgBaseName];
     } else {
       const svgContents = fs.readFileSync(svgPath).toString();
+
+      // extract uv-mapping from top-level folder "uv-map"
+      const npcUvMeta = geomorph.parseUvMapRects(svgContents, svgBaseName);
+      assets.sheet.skins.uvMap[svgBaseName] = npcUvMeta;
+
+      // convert SVG to PNG
       skins.svgHash[svgBaseName] = hashText(svgContents);
       const svgDataUrl = `data:image/svg+xml;utf8,${svgContents}`;
       const image = await loadImage(svgDataUrl);

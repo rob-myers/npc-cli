@@ -279,12 +279,15 @@ export class Rect {
     );
   }
 
-  /** @param {number} k */
-  scale(k) {
-    this.x *= k;
-    this.y *= k;
-    this.width *= k;
-    this.height *= k;
+  /**
+   * @param {number} kx
+   * @param {number} [ky]
+   */
+  scale(kx, ky = kx) {
+    this.x *= kx;
+    this.y *= ky;
+    this.width *= kx;
+    this.height *= ky;
     return this;
   }
 

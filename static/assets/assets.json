@@ -1100,6 +1100,154 @@
       "svgHash": {
         "cuboid-man.tex.svg": 2019725523,
         "cuboid-pet.tex.svg": 2019725523
+      },
+      "uvMap": {
+        "cuboid-man.tex.svg": {
+          "ground-ring": {"x": 0.9, "y": 0, "width": 0.1, "height": 0.1},
+          "ground-shadow": {"x": 0.7, "y": 0, "width": 0.1, "height": 0.1},
+          "head-top": {"x": 0, "y": 0.1563, "width": 0.1563, "height": 0.1563},
+          "head-bottom": {
+            "x": 0.1563,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "head-left": {"x": 0, "y": 0.3125, "width": 0.1563, "height": 0.1563},
+          "head-right": {
+            "x": 0.1563,
+            "y": 0.3125,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "head-front": {
+            "x": 0,
+            "y": 0.4688,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "head-back": {
+            "x": 0.1563,
+            "y": 0.4688,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "body-front": {
+            "x": 0.5313,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-back": {
+            "x": 0.8438,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-right": {
+            "x": 0.6875,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-left": {
+            "x": 0.375,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-top": {
+            "x": 0.375,
+            "y": 0.5469,
+            "width": 0.1562,
+            "height": 0.1563
+          },
+          "body-bottom": {
+            "x": 0.5313,
+            "y": 0.5469,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "ui-label": {"x": 0.15, "y": 0, "width": 0.5, "height": 0.125},
+          "front-label": {
+            "x": 0.8438,
+            "y": 0.7031,
+            "width": 0.1563,
+            "height": 0.1563
+          }
+        },
+        "cuboid-pet.tex.svg": {
+          "ground-ring": {"x": 0.9, "y": 0, "width": 0.1, "height": 0.1},
+          "ground-shadow": {"x": 0.7, "y": 0, "width": 0.1, "height": 0.1},
+          "head-top": {"x": 0, "y": 0.1563, "width": 0.1563, "height": 0.1563},
+          "head-bottom": {
+            "x": 0.1563,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "head-left": {"x": 0, "y": 0.3125, "width": 0.1563, "height": 0.1563},
+          "head-right": {
+            "x": 0.1563,
+            "y": 0.3125,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "head-front": {
+            "x": 0,
+            "y": 0.4688,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "head-back": {
+            "x": 0.1563,
+            "y": 0.4688,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "body-front": {
+            "x": 0.5313,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-back": {
+            "x": 0.8438,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-right": {
+            "x": 0.6875,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-left": {
+            "x": 0.375,
+            "y": 0.1563,
+            "width": 0.1563,
+            "height": 0.3906
+          },
+          "body-top": {
+            "x": 0.375,
+            "y": 0.5469,
+            "width": 0.1562,
+            "height": 0.1563
+          },
+          "body-bottom": {
+            "x": 0.5313,
+            "y": 0.5469,
+            "width": 0.1563,
+            "height": 0.1563
+          },
+          "ui-label": {"x": 0.15, "y": 0, "width": 0.5, "height": 0.125},
+          "front-label": {
+            "x": 0.8438,
+            "y": 0.7031,
+            "width": 0.1563,
+            "height": 0.1563
+          }
+        }
       }
     }
   },

@@ -449,6 +449,7 @@ declare namespace Geomorph {
     imagesHash: number;
     skins: {
       svgHash: { [svgBaseName: string]: number; };
+      uvMap: { [svgBaseName: string]: UvRectLookup; };
     };
   }
 
@@ -457,6 +458,10 @@ declare namespace Geomorph {
     obstacleId: number;
     /** e.g. `chair` */
     type: string;
+  }
+
+  interface UvRectLookup {
+    [uvRectName: string]: Geom.RectJson
   }
 
   type GmsData = import('../service/create-gms-data').GmsData;

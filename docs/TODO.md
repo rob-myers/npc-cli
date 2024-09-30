@@ -2,14 +2,15 @@
 
 ## WIP
 
-- 🚧 character animation: walk
-  - ✅ try sway with almost upright head
-  - ...
+- ✅ parse "uv-map folder" from *.tex.svg
+- ✅ [0, 1]✖️[0, 1] rect lookup:
+  - `assets.sheet.skins.uvMap[svgBaseName][uvRectName]`
+  - `geomorphs.sheet.skins.uvMap[svgBaseName][uvRectName]`
 
-- 🚧 cuboid char improvements
+- 🚧 cuboid-man improvements
   - ✅ can set label height
   - ✅ smaller shadow
-  - can change label
+  - 🚧 can change label
   - can change icon
   - can change face
 
@@ -33,11 +34,20 @@
   - ✅ debug npc respawn should not stop animation
   - migrate `cuboid-man` (leave TestCharacters as is)
 
+- 🚧 character animation: walk
+  - ✅ try sway with almost upright head
+  - ...
+
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
+
+- ongoing "large Chrome memory in tab" issue
+  - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
+  - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`
+  - ℹ️ `cat '/Users/robmyers/Library/Application Support/Google/Chrome/chrome_debug.log'`
 - ✅ bug: initially open hull door via spawn does not close
   - seems fixed by npc.spawn cleanup
 - bug: tty: ctrl + w while multiple input: goes back a line

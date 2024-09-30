@@ -507,13 +507,14 @@ class GeomorphService {
    * - <path> e.g. complex obstacle
    * - <circle> i.e. decor circle
    * - <image> i.e. background image in symbol
+   * - <polygon>
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {Geom.Meta} meta
+   * @param {number} [scale]
    * @returns {Geom.Poly | null}
    */
-  extractPoly(tagMeta, meta) {
-    const scale = sguToWorldScale * sguSymbolScaleDown;
+  extractPoly(tagMeta, meta, scale = sguToWorldScale * sguSymbolScaleDown) {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
 
@@ -521,7 +522,7 @@ class GeomorphService {
       poly = Poly.fromRect(new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0)));
     } else if (tagName === 'path') {
       poly = geom.svgPathToPolygon(a.d);
-      if (!poly) {
+      if (poly === null) {
         warn(`${'extractPoly'}: path must be single connected polygon with ≥ 0 holes`, a);
         return null;
       }
@@ -529,6 +530,13 @@ class GeomorphService {
       const r = Number(a.r ?? 0);
       poly = Poly.fromRect(new Rect(Number(a.cx ?? 0) - r, Number(a.cy ?? 0) - r, 2 * r, 2 * r));
       meta.circle = true;
+    } else if (tagName === 'polygon') {
+      // e.g. "1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400"
+      poly = geom.svgPathToPolygon(`M${a.points}Z`);
+      if (poly === null) {
+        warn(`${'extractPoly'}: ${tagName}: invalid induced path: M${a.points}Z`, a);
+        return null;
+      }
     } else {
       warn(`${'extractPoly'}: ${tagName}: unexpected tagName`, a);
       return null;
@@ -1088,6 +1096,69 @@ class GeomorphService {
       unsorted,
       ...postParse,
     };
+  }
+
+  /**
+   * Given SVG contents with `<g><title>uv-map</title> {...} </g>`,
+   * parse name to UV Rect i.e. normalized to [0, 1] x [0, 1]
+   * @param {string} svgContents 
+   * @param {string} logLabel 
+   * @returns {{ [uvRectName: string]: Geom.RectJson }}
+   */
+  parseUvMapRects(svgContents, logLabel) {
+    const output = /** @type {{ [uvRectName: string]: Geom.RectJson }} */ ({});
+    const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
+    const folderStack = /** @type {string[]} */ ([]);
+    let svgWidth = 0, svgHeight = 0;
+
+    const parser = new htmlparser2.Parser({
+      onopentag(name, attributes) {
+        if (tagStack.length === 0) {
+          svgWidth = Number(attributes.width) || 0;
+          svgHeight = Number(attributes.height) || 0;
+        }
+        tagStack.push({ tagName: name, attributes });
+      },
+      ontext(contents) {
+        const parent = tagStack.at(-2);
+
+        if (!parent || tagStack.at(-1)?.tagName !== "title") {
+          return; // only consider <title> tags
+        }
+        
+        if (parent.tagName === "g") {
+          return folderStack.push(contents); // track folders
+        }
+        
+        if (folderStack.at(-1) !== 'uv-map') {
+          return; // only consider top-level folder "uv-map"
+        }
+
+        // Blender UV SVG Export generates <polygon>'s
+        if (parent.tagName !== "polygon") {
+          return void (
+            warn(`${'parseUvMapRects'}: ${logLabel}: ${parent?.tagName} ${contents}: ignored non <polygon>`)
+          );
+        }
+
+        const poly = geomorph.extractPoly({ ...parent, title: contents }, {}, 1);
+
+        if (poly) {// output sub-rect of [0, 1] x [0, 1]
+          const uvRectName = contents; // e.g. `head-right`
+          output[uvRectName] = poly.rect
+            .scale(1 / svgWidth, 1 / svgHeight)
+            .precision(4).json
+          ;
+        }
+      },
+      onclosetag() {
+        tagStack.pop();
+      },
+    });
+
+    parser.write(svgContents);
+    parser.end();
+    return output;
   }
 
   /**
