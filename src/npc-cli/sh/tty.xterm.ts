@@ -411,9 +411,17 @@ export class ttyXtermClass {
     } else if (ord < 32 || ord === 0x7f) {
       // Handle special characters
       switch (data) {
-        case "\r": // Enter
+        case "\r": // Enter i.e. send command
           this.queueCommands([{ key: "newline" }]);
           break;
+        case "\n": {// Ctrl + J i.e. literal newline (readline Ctrl+V, Ctrl+J)
+          const input = this.input;
+          const cursor = this.cursor;
+          this.clearInput();
+          this.setInput(`${input.slice(0, cursor)}\r\n${input.slice(cursor)}`);
+          this.setCursor(cursor + 2);
+          break;
+        }
         case "\x7F": // Backspace
           this.handleCursorErase(true);
           break;
