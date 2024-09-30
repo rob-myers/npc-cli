@@ -58,6 +58,8 @@ export class Npc {
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
   lastCorner = new THREE.Vector3();
+  /** @type {undefined | ((value?: any) => void)} */
+  resolve;
 
   /**
    * @param {NPC.NPCDef} def
@@ -217,25 +219,12 @@ export class Npc {
    */
   onMount = (group) => {
     if (group !== null) {
-      const { m } = this;
-      m.group = group;
+      // Reference mounted group
+      this.m.group = group;
+      // Setup shortcut
       this.position = group.position;
-
-      // Finish setup started in initialize:
-
-      this.mixer = new THREE.AnimationMixer(m.group);
-      m.animMap = m.animations.reduce((agg, a) => helper.isAnimKey(a.name)
-        ? (agg[a.name] = this.mixer.clipAction(a), agg)
-        : (warn(`ignored unexpected animation: ${a.name}`), agg)
-      , /** @type {typeof this['m']['animMap']} */ ({}));
-
-      this.startAnimation('Idle');
-
-      if (this.agent === null) {
-        this.setPosition(this.def.initPosition);
-        this.m.group.setRotationFromAxisAngle(yAxis, this.def.angle);
-        this.def.hasAgent && this.attachAgent().requestMoveTarget(this.position);
-      }
+      // Resume `w.npc.spawn`
+      this.resolve?.();
     }
   }
   /** @param {number} deltaMs  */
@@ -309,6 +298,13 @@ export class Npc {
       this.w.crowd.removeAgent(this.agent.agentIndex);
       this.agent = null;
     }
+  }
+  setupMixer() {
+    this.mixer = new THREE.AnimationMixer(this.m.group);
+    this.m.animMap = this.m.animations.reduce((agg, a) => helper.isAnimKey(a.name)
+      ? (agg[a.name] = this.mixer.clipAction(a), agg)
+      : (warn(`ignored unexpected animation: ${a.name}`), agg)
+    , /** @type {typeof this['m']['animMap']} */ ({}));
   }
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {

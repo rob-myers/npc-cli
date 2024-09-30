@@ -20,13 +20,13 @@
       - https://legacy.reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
   - ✅ fix `<NPCs>` hmr
   - ✅ remove nav-obstacles (not needed)
-  - 🚧 clean e.g. spawn
+  - ✅ clean e.g. spawn
     - ✅ npc.onMount does
       - ✅ npc.startAnimation('Idle')
       - ✅ initializes position/angle of npc sans agent
       - ✅ on add agent pins it to current position
-    - 🚧 w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
-
+    - ❌ w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
+    - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
   - use React.memo with optional force
   - rename `cuboidChar` -> `cuboid-man`
   - replace `hcTest` with another cuboid character e.g.
@@ -39,7 +39,9 @@
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-- bug: initially open hull door via spawn does not close
+- 🚧 bug: initially open hull door via spawn does not close
+  - ℹ️ now sensor is not firing initially
+  - maybe need to send initial position
 - bug: tty: ctrl + w while multiple input: goes back a line
   - need repro
 - change fov with camera distance? e.g. 15 far, 30 close

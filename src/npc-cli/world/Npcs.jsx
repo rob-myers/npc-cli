@@ -158,8 +158,6 @@ export default function Npcs(props) {
           skinKey: e.skinKey ?? npc.def.skinKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
-          initPosition: position,
-          hasAgent: Boolean(e.agent),
         };
         if (typeof e.skinKey === 'string') {
           npc.changeSkin(e.skinKey);
@@ -175,25 +173,35 @@ export default function Npcs(props) {
           skinKey: e.skinKey ?? defaultSkinKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
-          initPosition: position,
-          hasAgent: Boolean(e.agent),
         }, w);
 
         npc.initialize(gltf);
       }
-      
-      // Can remove/reuse agent before mount
-      if (npc.agent !== null) {
+
+      npc.s.spawns === 0 && await new Promise(resolve => {
+        npc.resolve = resolve;
+        update();
+      });
+
+      npc.setupMixer(); // on respawn?
+      npc.startAnimation('Idle');
+
+      if (npc.agent === null) {
+        npc.setPosition(position);
+        npc.m.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
+        // if specified add an agent pinned to current position
+        e.agent && npc.attachAgent().requestMoveTarget(npc.position);
+      } else {
         if (e.agent === false) {
           npc.removeAgent();
         } else {
           npc.agent.teleport(position);
         }
       }
-
-      update();
+      
       npc.s.spawns++;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
+
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
