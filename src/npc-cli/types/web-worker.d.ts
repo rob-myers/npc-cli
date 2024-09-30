@@ -13,7 +13,7 @@ declare namespace WW {
   );
 
   interface RequestNavMesh {
-    type: "request-nav-mesh";
+    type: "request-nav";
     mapKey: string;
   }
 
@@ -89,14 +89,14 @@ declare namespace WW {
   }
 
   interface SetupPhysicsWorld {
-    type: 'setup-physics-world';
+    type: 'setup-physics';
     mapKey: string;
     npcs: NpcDef[];
   }
   //#endregion
 
   interface WorldSetupResponse {
-    type: 'world-is-setup';
+    type: 'physics-is-setup';
   }
 
   interface PhysicsDebugDataResponse {

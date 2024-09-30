@@ -178,7 +178,7 @@ const loggerCss = css`
   padding: 8px;
 
   .world-logger {
-    width: 200px;
+    width: 230px;
     height: 200px;
     textarea {
       visibility: hidden; // Hide cursor

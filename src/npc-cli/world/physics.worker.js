@@ -39,7 +39,7 @@ const state = {
 async function handleMessages(e) {
   const msg = e.data;
 
-  if (state.world === undefined && msg.type !== 'setup-physics-world') {
+  if (state.world === undefined && msg.type !== 'setup-physics') {
     return; // Fixes HMR of this file
   }
 
@@ -139,9 +139,9 @@ async function handleMessages(e) {
       stepWorld();
       break;
     }
-    case "setup-physics-world":
+    case "setup-physics":
       await setupWorld(msg.mapKey, msg.npcs);
-      selfTyped.postMessage({ type: 'world-is-setup' });
+      selfTyped.postMessage({ type: 'physics-is-setup' });
       break;
     default:
       warn("🤖 physics.worker: unhandled", msg);

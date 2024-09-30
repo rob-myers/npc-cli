@@ -22,6 +22,7 @@ export default function WorldWorkers() {
       // 🔔 avoid logging navMesh to save memory
       debug("main thread received from nav worker", msg.type);
       if (msg.type === "nav-mesh-response") {
+        w.menu.measure('request-nav');
         await initRecastNav();
         w.loadTiledMesh(msg.exportedNavMesh);
         w.update(); // for w.npc
@@ -57,6 +58,8 @@ export default function WorldWorkers() {
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
           state.handlePhysicsCollision(npcKey, otherKey, true);
         });
+      } else if (msg.type === 'physics-is-setup') {
+        w.menu.measure('setup-physics');
       }
     },
     parsePhysicsBodyKey(bodyKey) {
@@ -92,11 +95,13 @@ export default function WorldWorkers() {
       );
       
       w.events.next({ key: 'pre-request-nav', changedGmIds });
-      w.nav.worker.postMessage({ type: "request-nav-mesh", mapKey: w.mapKey });
+      w.menu.measure('request-nav');
+      w.nav.worker.postMessage({ type: "request-nav", mapKey: w.mapKey });
 
       w.events.next({ key: 'pre-setup-physics' });
+      w.menu.measure('setup-physics');
       w.physics.worker.postMessage({
-        type: "setup-physics-world",
+        type: "setup-physics",
         mapKey: w.mapKey, // On HMR must provide existing npcs:
         npcs: Object.values(w.npc?.npc ?? {}).map((npc) => ({
           npcKey: npc.key,

@@ -18,7 +18,7 @@ async function handleMessages(e) {
   debug("🤖 nav.worker received", JSON.stringify(msg));
 
   switch (msg.type) {
-    case "request-nav-mesh":
+    case "request-nav":
       const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
 
       const { mapKey } = msg;

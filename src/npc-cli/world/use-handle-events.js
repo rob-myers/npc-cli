@@ -84,6 +84,7 @@ export default function useHandleEvents(w) {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
           // ℹ️ dev should handle partial correctness e.g. by pausing
 
+          w.menu.measure('pre-request-nav');
           const prevRoomToNpcs = state.roomToNpcs;
           const prevExternalNpcs = state.externalNpcs;
           state.roomToNpcs = w.gms.map((_, gmId) => 
@@ -112,6 +113,7 @@ export default function useHandleEvents(w) {
             const npc = w.npc.npc[npcKey];
             state.tryPutNpcIntoRoom(npc);
           }
+          w.menu.measure('pre-request-nav');
           break;
         }
         case "pre-setup-physics":
