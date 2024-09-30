@@ -1097,12 +1097,9 @@
     "decorDim": {"width": 438, "height": 438},
     "imagesHash": 1083923908,
     "skins": {
-      "svgHash": {
-        "cuboid-man.tex.svg": 2019725523,
-        "cuboid-pet.tex.svg": 2019725523
-      },
+      "svgHash": {"cuboid-man": 2019725523, "cuboid-pet": 2019725523},
       "uvMap": {
-        "cuboid-man.tex.svg": {
+        "cuboid-man": {
           "ground-ring": {"x": 0.9, "y": 0, "width": 0.1, "height": 0.1},
           "ground-shadow": {"x": 0.7, "y": 0, "width": 0.1, "height": 0.1},
           "head-top": {"x": 0, "y": 0.1563, "width": 0.1563, "height": 0.1563},
@@ -1175,7 +1172,7 @@
             "height": 0.1563
           }
         },
-        "cuboid-pet.tex.svg": {
+        "cuboid-pet": {
           "ground-ring": {"x": 0.9, "y": 0, "width": 0.1, "height": 0.1},
           "ground-shadow": {"x": 0.7, "y": 0, "width": 0.1, "height": 0.1},
           "head-top": {"x": 0, "y": 0.1563, "width": 0.1563, "height": 0.1563},

@@ -448,8 +448,8 @@ declare namespace Geomorph {
     decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
     imagesHash: number;
     skins: {
-      svgHash: { [svgBaseName: string]: number; };
-      uvMap: { [svgBaseName: string]: UvRectLookup; };
+      svgHash: { [npcClassKey: string]: number; };
+      uvMap: { [npcClassKey: string]: UvRectLookup; };
     };
   }
 

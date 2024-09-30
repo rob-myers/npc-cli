@@ -3,14 +3,26 @@
 ## WIP
 
 - ✅ parse "uv-map folder" from *.tex.svg
-- ✅ [0, 1]✖️[0, 1] rect lookup:
+- ✅ [0, 1] * [0, 1] rect lookup:
   - `assets.sheet.skins.uvMap[svgBaseName][uvRectName]`
   - `geomorphs.sheet.skins.uvMap[svgBaseName][uvRectName]`
+- ✅ svgBaseName -> npcClassKey
+  - e.g. `cuboid-man.tex.svg` -> `cuboid-man`
+
 
 - 🚧 cuboid-man improvements
   - ✅ can set label height
   - ✅ smaller shadow
   - 🚧 can change label
+    - ✅ create some npcs labels
+    ```sh
+    w npc.updateLabels rob kate will
+    w npc.label.tex.image.toDataURL | log
+    ```
+    - 🚧 manually re-map `ui-label` to something in npc labels tex
+    ```sh
+    w geomorphs.sheet.skins.uvMap.cuboid-man
+    ```
   - can change icon
   - can change face
 

@@ -666,6 +666,9 @@ function extractObstacleDescriptor(meta) {
   return 'obstacle';
 }
 
+/**
+ * @returns {NPC.TexMeta[]}
+ */
 function getNpcTextureMetas() {
   return fs.readdirSync(npcDir).filter(
     (baseName) => baseName.endsWith(".tex.svg")
@@ -674,7 +677,14 @@ function getNpcTextureMetas() {
     const { mtimeMs: svgMtimeMs } = fs.statSync(svgPath);
     const pngPath = path.resolve(assets3dDir, svgBaseName.slice(0, -'.svg'.length).concat('.png'));
     let pngMtimeMs = 0; try { pngMtimeMs = fs.statSync(pngPath).mtimeMs } catch {};
-    return { svgBaseName, svgPath, pngPath, canSkip: svgMtimeMs < pngMtimeMs };
+    return {
+      // 🔔 assume `{npcClassKey}.tex.svg`
+      npcClassKey: svgBaseName.split('.', 1)[0],
+      svgBaseName,
+      svgPath,
+      pngPath,
+      canSkip: svgMtimeMs < pngMtimeMs,
+    };
   });
 }
 
@@ -686,18 +696,18 @@ function getNpcTextureMetas() {
 async function createNpcTexturesAndUvMeta(assets, prev) {
   const { skins, skins: { svgHash } } = assets.sheet
   skins.svgHash = {};
-  for (const { canSkip, svgBaseName, svgPath, pngPath } of prev.npcTexMetas) {
-    if (canSkip && svgHash[svgBaseName]) {
-      skins.svgHash[svgBaseName] = svgHash[svgBaseName];
+  for (const { npcClassKey, canSkip, svgBaseName, svgPath, pngPath } of prev.npcTexMetas) {
+    if (canSkip && svgHash[npcClassKey]) {
+      skins.svgHash[npcClassKey] = svgHash[npcClassKey];
     } else {
       const svgContents = fs.readFileSync(svgPath).toString();
 
       // extract uv-mapping from top-level folder "uv-map"
       const npcUvMeta = geomorph.parseUvMapRects(svgContents, svgBaseName);
-      assets.sheet.skins.uvMap[svgBaseName] = npcUvMeta;
+      assets.sheet.skins.uvMap[npcClassKey] = npcUvMeta;
 
       // convert SVG to PNG
-      skins.svgHash[svgBaseName] = hashText(svgContents);
+      skins.svgHash[npcClassKey] = hashText(svgContents);
       const svgDataUrl = `data:image/svg+xml;utf8,${svgContents}`;
       const image = await loadImage(svgDataUrl);
       const canvas = createCanvas(image.width, image.height);
@@ -712,7 +722,7 @@ async function createNpcTexturesAndUvMeta(assets, prev) {
  * @property {Geomorph.AssetsJson | null} assets
  * @property {import('canvas').Image | null} obstaclesPng
  * @property {import('canvas').Image | null} decorPng
- * @property {{ svgBaseName: string; svgPath: string; pngPath: string; canSkip: boolean; }[]} npcTexMetas
+ * @property {NPC.TexMeta[]} npcTexMetas
  * @property {boolean} skipMaps
  * @property {boolean} skipObstacles
  * @property {boolean} skipDecor

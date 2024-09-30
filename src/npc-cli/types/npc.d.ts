@@ -17,6 +17,19 @@ declare namespace NPC {
     walkSpeed: number;
   }
 
+  interface TexMeta {
+    /**
+     * e.g. `cuboid-man`
+     * 🚧 refine type
+     */
+    npcClassKey: string;
+    /** e.g. `cuboid-man.tex.svg` */
+    svgBaseName: string;
+    svgPath: string;
+    pngPath: string;
+    canSkip: boolean;
+  }
+
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
     skinKey?: NPC.SkinKey;
