@@ -29,7 +29,7 @@
     - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
   - ✅ use React.memo with epochMs override
   - ✅ rename `cuboidChar` -> `cuboid-man`
-  - replace `hcTest` with another cuboid character e.g.
+  - 🚧 replace `hcTest` with another cuboid character e.g.
     - `cuboid-pet`
     - `cuboid-bot`
   - migrate `cuboid-man` (leave TestCharacters as is)

@@ -195,13 +195,13 @@ const classKeyToMeta = {
     timeScale: {},
   },
   'cuboid-man': {
-    url: '/assets/3d/cuboid-character.glb',
+    url: '/assets/3d/cuboid-man.glb',
     // scale: 1,
     scale: 0.75,
-    materialName: 'cuboid-character-material',
-    meshName: 'cuboid-character-mesh',
+    materialName: 'cuboid-man-material',
+    meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
-    skinBaseName: 'cuboid-character.tex.png',
+    skinBaseName: 'cuboid-man.tex.png',
     timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
   },
 };
