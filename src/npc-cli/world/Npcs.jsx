@@ -235,7 +235,12 @@ export default function Npcs(props) {
       onPointerUp={state.onNpcPointerUp}
     >
       {Object.values(state.npc).map(npc =>
-        <NPC key={npc.key} npc={npc} />
+        // <NPC key={npc.key} npc={npc} />
+        <MemoizedNPC
+          key={npc.key}
+          npc={npc}
+          epochMs={npc.epochMs} // override memo
+        />
       )}
     </group>
   );
@@ -273,28 +278,36 @@ export default function Npcs(props) {
 useGLTF.preload(glbMeta.url);
 
 /**
- * @param {{ npc: Npc }} props 
+ * @param {NPCProps} props 
  */
 function NPC({ npc }) {
-  const { m } = npc;
+  const { bones, mesh, material } = npc.m;
 
   return (
     <group
-      ref={npc.onMount} // avoid inline ref
+      ref={npc.onMount}
       scale={glbMeta.scale}
       // dispose={null}
     >
       <group position={[0, 3, 0]}>
-        {m.bones.map((bone, i) => <primitive key={i} object={bone} />)}
+        {bones.map((bone, i) => <primitive key={i} object={bone} />)}
         <skinnedMesh
-          geometry={m.mesh.geometry}
-          position={m.mesh.position}
-          skeleton={m.mesh.skeleton}
-          userData={m.mesh.userData}
+          geometry={mesh.geometry}
+          position={mesh.position}
+          skeleton={mesh.skeleton}
+          userData={mesh.userData}
         >
-          <meshPhysicalMaterial transparent map={m.material.map} />
+          <meshPhysicalMaterial transparent map={material.map} />
         </skinnedMesh>
       </group>
     </group>
   )
 }
+
+/**
+ * @typedef NPCProps
+ * @property {NPC.NPC} npc
+ */
+
+/** @type {React.MemoExoticComponent<(props: NPCProps & { epochMs: number }) => JSX.Element>} */
+const MemoizedNPC = React.memo(NPC);

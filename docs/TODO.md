@@ -27,8 +27,8 @@
       - ✅ on add agent pins it to current position
     - ❌ w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
     - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
-  - use React.memo with optional force
-  - rename `cuboidChar` -> `cuboid-man`
+  - ✅ use React.memo with epochMs override
+  - 🚧 rename `cuboidChar` -> `cuboid-man`
   - replace `hcTest` with another cuboid character e.g.
     - `cuboid-pet`
     - `cuboid-bot`
@@ -39,9 +39,8 @@
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-- 🚧 bug: initially open hull door via spawn does not close
-  - ℹ️ now sensor is not firing initially
-  - maybe need to send initial position
+- ✅ bug: initially open hull door via spawn does not close
+  - seems fixed by npc.spawn cleanup
 - bug: tty: ctrl + w while multiple input: goes back a line
   - need repro
 - change fov with camera distance? e.g. 15 far, 30 close

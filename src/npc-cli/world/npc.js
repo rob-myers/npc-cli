@@ -214,7 +214,8 @@ export class Npc {
     }
   }
   /**
-   * 🚧 clean
+   * An arrow function avoids using an inline-ref in <NPC>. However,
+   * `this.onMount` changes on HMR so we rely on idempotence nonetheless.
    * @param {THREE.Group | null} group 
    */
   onMount = (group) => {
