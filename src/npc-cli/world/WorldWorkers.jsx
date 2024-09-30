@@ -20,7 +20,7 @@ export default function WorldWorkers() {
     async handleNavWorkerMessage(e) {
       const msg = e.data;
       // 🔔 avoid logging navMesh to save memory
-      debug("main thread received from nav worker", msg.type);
+      debug(`main thread received "${msg.type}" from 🤖 nav.worker`);
       if (msg.type === "nav-mesh-response") {
         w.menu.measure('request-nav');
         await initRecastNav();
@@ -45,7 +45,7 @@ export default function WorldWorkers() {
 
     async handlePhysicsWorkerMessage(e) {
       const msg = e.data;
-      debug("main thread received from physics worker", msg);
+      debug(`main thread received "${msg.type}" from 🤖 physics.worker`, msg);
 
       if (msg.type === "npc-collisions") {
         msg.collisionEnd.forEach(({ npcKey, otherKey }) => {

@@ -45,7 +45,7 @@ async function handleMessages(e) {
 
   // 🔔 avoid logging 60fps messages
   msg.type !== 'send-npc-positions' && debug(
-    "🤖 physics.worker received:", JSON.stringify(msg)
+    "🤖 physics.worker received:", msg
   );
 
   switch (msg.type) {
