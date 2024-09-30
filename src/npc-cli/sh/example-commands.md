@@ -56,10 +56,16 @@ npc | map act.Idle.reset
 npc | map act.Idle.fadeOut 1
 npc | map 'x => x.mixer.timeScale = 0.6'
 
-
 # change fov
 w update 'w => w.r3f.camera.fov = 30'
 w update 'w => w.r3f.camera.fov = 15'
+
+numPets=0
+while true; do 
+  # better increment? we intentionally lack shell arithmetic operators
+  call '({ home }) => home.numPets++'
+  w debug.npc.add $( click 1 ) pet-${numPets} cuboid-pet
+done
 ```
 
 ```sh

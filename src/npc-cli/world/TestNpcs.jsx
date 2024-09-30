@@ -4,8 +4,8 @@ import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 import { wallHeight } from '../service/const';
-import { debug } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyTexture, textureLoader } from "../service/three";
+import { debug, keys } from '../service/generic';
+import { buildObjectLookup, emptyAnimationMixer, emptyTexture, textureLoader, toV3 } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
@@ -17,8 +17,9 @@ import useUpdate from '../hooks/use-update';
 export default function TestNpcs(props) {
   const w = React.useContext(WorldContext);
 
-  classKeyToGltf.hcTest = useGLTF(classKeyToMeta.hcTest.url);
-  classKeyToGltf['cuboid-man'] = useGLTF(classKeyToMeta['cuboid-man'].url);
+  for (const classKey of keys(classKeyToMeta)) {
+    classKeyToGltf[classKey] = useGLTF(classKeyToMeta[classKey].url);
+  }
 
   const update = useUpdate();
 
@@ -33,9 +34,18 @@ export default function TestNpcs(props) {
     async add(
       initPoint = { x: 4.5 * 1.5, y: 7 * 1.5 },
       npcKey = `npc-${Object.keys(state.npc).length}`,
-      // npcClassKey = 'hcTest',
       npcClassKey = 'cuboid-man',
+      // npcClassKey = 'cuboid-pet',
     ) {
+
+      if (npcKey in state.npc) {
+        // basic respawn logic e.g. because we don't remount
+        const npc = state.npc[npcKey];
+        npc.initPos = toV3(initPoint);
+        update();
+        return;
+      }
+
       const gltf = classKeyToGltf[npcClassKey];
       const meta = classKeyToMeta[npcClassKey];
       debug('saw animations', gltf.animations);
@@ -123,7 +133,11 @@ export default function TestNpcs(props) {
       npc.mixer = mixer;
     }
 
-  }), { preserve: { onMountNpc: true }, reset: { onMountNpc: true } });
+  }), {
+    preserve: { onMountNpc: true },
+    reset: { onMountNpc: true },
+    // deps: [classKeyToGltf],
+  });
 
   w.debug.npc = state;
 
@@ -179,21 +193,11 @@ export default function TestNpcs(props) {
  */
 
 /**
- * @typedef {'hcTest' | 'cuboid-man'} TestNpcClassKey
+ * @typedef {'cuboid-man' | 'cuboid-pet'} TestNpcClassKey
  */
 
 /** @type {Record<TestNpcClassKey, TestNpcClassDef>} */
 const classKeyToMeta = {
-  /** hc ~ hyper casual */
-  hcTest: {
-    url: '/assets/3d/test-hyper-casual.glb',
-    scale: 1,
-    materialName: 'Material',
-    meshName: 'hc-character-mesh',
-    groupName: 'Scene',
-    skinBaseName: 'test-hyper-casual.tex.png',
-    timeScale: {},
-  },
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
     // scale: 1,
@@ -202,6 +206,16 @@ const classKeyToMeta = {
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
     skinBaseName: 'cuboid-man.tex.png',
+    timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
+  },
+  'cuboid-pet': {
+    url: '/assets/3d/cuboid-pet.glb',
+    // scale: 1,
+    scale: 0.75,
+    materialName: 'cuboid-pet-material',
+    meshName: 'cuboid-pet-mesh',
+    groupName: 'Scene',
+    skinBaseName: 'cuboid-pet.tex.png',
     timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
   },
 };

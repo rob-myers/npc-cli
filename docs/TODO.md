@@ -29,9 +29,8 @@
     - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
   - ✅ use React.memo with epochMs override
   - ✅ rename `cuboidChar` -> `cuboid-man`
-  - 🚧 replace `hcTest` with another cuboid character e.g.
-    - `cuboid-pet`
-    - `cuboid-bot`
+  - ✅ replace `hcTest` with another cuboid character i.e. `cuboid-pet`
+  - ✅ debug npc respawn should not stop animation
   - migrate `cuboid-man` (leave TestCharacters as is)
 
 - 🚧 next.js project (npc-cli-next)
