@@ -50,11 +50,16 @@ w debug.npc.npc.npc-0.act.Walk.fadeIn 0.5
 w debug.npc.npc.npc-0.act.Walk.play
 
 w debug.npc.npc.npc-0 > npc
-npc/act/Idle/stop'()'
-npc/act/Walk/stop'()'
-npc/act/Walk/play'()'
-npc/mixer | map 'm => m.timeScale = 0.6'
+# npc/act/Idle/stop'()'
+npc | map act.Idle.stop
+npc | map act.Idle.reset
+npc | map act.Idle.fadeOut 1
+npc | map 'x => x.mixer.timeScale = 0.6'
 
+
+# change fov
+w update 'w => w.r3f.camera.fov = 30'
+w update 'w => w.r3f.camera.fov = 15'
 ```
 
 ```sh
