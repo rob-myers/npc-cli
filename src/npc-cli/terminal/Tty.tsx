@@ -157,10 +157,10 @@ export default function Tty(props: Props) {
     if (state.base.session && !props.disabled && !state.booted) {
       const { xterm, session } = state.base;
       xterm.initialise();
+      state.booted = true;
       
       session.ttyShell.initialise(xterm).then(async () => {
         await state.sourceFuncs();
-        state.booted = true;
         update();
         await session.ttyShell.runProfile();
       });
