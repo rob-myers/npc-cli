@@ -79,7 +79,7 @@ export default function World(props) {
       onTick() {},
     }),
     npc: /** @type {*} */ (null), // Npcs
-    menu: /** @type {*} */ (null), // ContextMenu
+    menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
     // 🚧 support hmr e.g. via state.hmr
     lib: {
@@ -281,7 +281,8 @@ export default function World(props) {
 
       return true;
     },
-    refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
+    refetchOnWindowFocus: isDevelopment() ? "always" : false,
+    // refetchOnWindowFocus: false,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
     gcTime: 0, // concurrent queries with different mapKey can break HMR
     // throwOnError: true, // breaks on restart dev env
