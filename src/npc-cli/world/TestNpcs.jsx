@@ -201,7 +201,7 @@ const classKeyToMeta = {
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
     // scale: 1,
-    scale: 0.75,
+    scale: 0.7,
     materialName: 'cuboid-man-material',
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
