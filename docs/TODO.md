@@ -24,6 +24,9 @@
   - can change icon
   - can change face
 
+- cuboid-pet improvements
+  - smaller, with head in front of body
+
 - 🚧 prepare for migration into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format
   - ℹ️ refs get called often if use inline function,
