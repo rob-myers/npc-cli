@@ -4,29 +4,27 @@
 
 - ✅ parse "uv-map folder" from *.tex.svg
 - ✅ [0, 1] * [0, 1] rect lookup:
-  - `assets.sheet.skins.uvMap[svgBaseName][uvRectName]`
-  - `geomorphs.sheet.skins.uvMap[svgBaseName][uvRectName]`
+  - `assets.sheet.skins.uvMap[npcClassKey][uvRectName]`
+  - `geomorphs.sheet.skins.uvMap[npcClassKey][uvRectName]`
 - ✅ svgBaseName -> npcClassKey
   - e.g. `cuboid-man.tex.svg` -> `cuboid-man`
-
 
 - 🚧 cuboid-man improvements
   - ✅ can set label height
   - ✅ smaller shadow
   - 🚧 can change label
     - ✅ create some npcs labels
-    ```sh
-    w npc.updateLabels rob kate will
-    w npc.label.tex.image.toDataURL | log
-    ```
+      - `w npc.updateLabels rob kate will`
+      - `w npc.label.tex.image.toDataURL | log`
     - 🚧 manually re-map `ui-label` to something in npc labels tex
-    ```sh
-    w geomorphs.sheet.skins.uvMap.cuboid-man
-    ```
+      - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man`
+      - ✅ can modify label width in shader
+        - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
+      - simplify original label width
   - can change icon
   - can change face
 
-- 🚧 start migrating into `<NPCs>`
+- 🚧 prepare for migration into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format
   - ℹ️ refs get called often if use inline function,
       - use e.g. `ref={state.foo}` instead
@@ -44,22 +42,22 @@
   - ✅ rename `cuboidChar` -> `cuboid-man`
   - ✅ replace `hcTest` with another cuboid character i.e. `cuboid-pet`
   - ✅ debug npc respawn should not stop animation
-  - migrate `cuboid-man` (leave TestCharacters as is)
+  - 🚧 animation: walk
+    - ✅ try sway with almost upright head
+    - ...
 
-- 🚧 character animation: walk
-  - ✅ try sway with almost upright head
-  - ...
+- migrate `cuboid-man` (leave TestCharacters as is)
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`
   - ℹ️ `cat '/Users/robmyers/Library/Application Support/Google/Chrome/chrome_debug.log'`
+  - create a branch and repro without workers/crowd
 - ✅ bug: initially open hull door via spawn does not close
   - seems fixed by npc.spawn cleanup
 - bug: tty: ctrl + w while multiple input: goes back a line

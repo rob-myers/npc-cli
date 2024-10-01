@@ -237,6 +237,10 @@ export const testCharacterShader = {
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
       vec2 alignedPosition = transformed.xy;
       mvPosition.xy += alignedPosition;
+      // 🚧 narrow label (+0.5,-0.5)
+      // 🚧 widen label (-0.5,+0.5)
+      // mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;
+
       gl_Position = projectionMatrix * mvPosition;
       #include <logdepthbuf_vertex>
       return;
