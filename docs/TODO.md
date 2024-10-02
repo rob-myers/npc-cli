@@ -27,6 +27,7 @@
 - 🚧 cuboid-pet improvements
   - ✅ smaller, with head in front of body
   - fix shadow
+  - smaller head
 
 - 🚧 prepare for migration into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format
