@@ -24,8 +24,9 @@
   - can change icon
   - can change face
 
-- cuboid-pet improvements
-  - smaller, with head in front of body
+- 🚧 cuboid-pet improvements
+  - ✅ smaller, with head in front of body
+  - fix shadow
 
 - 🚧 prepare for migration into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format

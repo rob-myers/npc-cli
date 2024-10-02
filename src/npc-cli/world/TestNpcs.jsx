@@ -211,7 +211,7 @@ const classKeyToMeta = {
   'cuboid-pet': {
     url: '/assets/3d/cuboid-pet.glb',
     // scale: 1,
-    scale: 0.75,
+    scale: 0.5,
     materialName: 'cuboid-pet-material',
     meshName: 'cuboid-pet-mesh',
     groupName: 'Scene',
