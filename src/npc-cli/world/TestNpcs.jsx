@@ -166,7 +166,8 @@ export default function TestNpcs(props) {
           key={TestCharacterMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
-          map={texture}
+          // map={texture}
+          textures={[texture]}
           labelHeight={wallHeight * (1 / scale.x)}
           selectorColor={[0.6, 0.6, 1]}
           // showSelector={false}

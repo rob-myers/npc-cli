@@ -13,16 +13,21 @@
   - ✅ can set label height
   - ✅ smaller shadow
   - 🚧 can change label
-    - ✅ create some npcs labels
-      - `w npc.updateLabels rob kate will`
-      - `w npc.label.tex.image.toDataURL | log`
-    - 🚧 manually re-map `ui-label` to something in npc labels tex
-      - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man`
-      - ✅ can modify label width in shader
-        - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
-      - simplify original label width
+  - ✅ create some npcs labels
+    ```sh
+    w npc.updateLabels rob kate will
+    w npc.label.tex.image.toDataURL | log
+    ```
+  - 🚧 manually re-map `ui-label` to something in npc labels tex
+    - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man`
+    - ✅ can modify label width in shader
+      - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
+    - ✅ read npc texture from array of textures
+    - uv map can reference texture index
+
   - can change icon
   - can change face
+  - simplify original label width (currently 369 / 1024 ~ .36)
 
 - 🚧 cuboid-pet improvements
   - ✅ smaller, with head in front of body
@@ -51,7 +56,7 @@
     - ✅ try sway with almost upright head
     - ...
 
-- migrate `cuboid-man` (leave TestCharacters as is)
+- migrate `cuboid-man` into `<NPCs>` (leave `<TestNpcs>` as is)
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger

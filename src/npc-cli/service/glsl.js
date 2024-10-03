@@ -207,6 +207,7 @@ export const testCharacterShader = {
   uniform float labelHeight;
   uniform bool showSelector;
   uniform vec3 selectorColor;
+  varying vec2 vUv;
 
   attribute int vertexId;
   flat varying int vId;
@@ -226,6 +227,7 @@ export const testCharacterShader = {
 
     vId = vertexId;
     vColor = vec3(1.0);
+    vUv = uv;
 
     if (vId >= 52 && vId < 56) {// selector quad
       if (showSelector == false) return;
@@ -237,8 +239,7 @@ export const testCharacterShader = {
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
       vec2 alignedPosition = transformed.xy;
       mvPosition.xy += alignedPosition;
-      // 🚧 narrow label (+0.5,-0.5)
-      // 🚧 widen label (-0.5,+0.5)
+      // 🚧 narrow label (+0.5,-0.5); widen label (-0.5,+0.5)
       // mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;
 
       gl_Position = projectionMatrix * mvPosition;
@@ -265,6 +266,8 @@ export const testCharacterShader = {
 	flat varying float dotProduct;
   varying vec3 vColor;
   uniform vec3 diffuse;
+  varying vec2 vUv;
+  uniform sampler2D textures[1];
 
   #include <common>
   #include <uv_pars_fragment>
@@ -275,6 +278,12 @@ export const testCharacterShader = {
     vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
     #include <map_fragment>
+
+    if (textures.length() > 0) {
+      // can use multiple textures
+      vec4 texelColor = texture2D(textures[0], vUv);
+      diffuseColor *= texelColor;
+    }
 
     if (diffuseColor.a < 0.1) {
       discard;
@@ -328,6 +337,7 @@ export const TestCharacterMaterial = shaderMaterial(
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
+    textures: [],
     showLabel: true,
     labelHeight: wallHeight,
     showSelector: true,
