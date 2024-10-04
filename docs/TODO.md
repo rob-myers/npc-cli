@@ -23,8 +23,40 @@
     - ✅ can modify label width in shader
       - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
     - ✅ read npc texture from array of textures
-    - uv map can reference texture index
+    - ✅ understand final 2 tris ~ label quad
+      - https://threejs.org/docs/?q=bufferge#api/en/core/BufferGeometry.index
+      ```sh
+      # ℹ️ final 2 triangles of npc geometry
+      w debug.npc.npc.npc-0.mesh.geometry.index
+      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON
+      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON | map array
+      # length 96 i.e. 32 triangles
+      # i.e. (6 * 2) + (6 * 2) + (4 * 2)
+      # final two triangles: 60,61,63,60,63,62
 
+      # ℹ️ uv rect of final quad ~ final 2 triangles
+      w debug.npc.npc.npc-0.mesh.geometry.attributes | keys
+      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map array
+      # length 128 i.e. 64 vertices and 2 coords per vertex
+      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map 'x => x.array.slice(-8)'
+      # [0.6499999761581421,5.960464477539063e-8,0.15000002086162567,0,0.6499999761581421,0.12500005960464478,0.15000000596046448,0.125]
+
+      w geomorphs.sheet.skins.uvMap.cuboid-man | keys
+      w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label
+      # {x:0.15,y:0,width:0.5,height:0.125}
+      ```
+      - ✅ get vIds, get corresponding UVs
+        - vIds: [60,61,62,63]
+        - UVs (modulo precision): [0.65, 0, 0.15, 0, 0.65, 0.125, 0.15, 0.125]
+      - ✅ compare to label uvRect
+        - corresponds to rect
+    - ℹ️ cannot edit geometry attributes because shared
+    - 🚧 uv map into 2nd texture
+      - 🚧 encode existing uvs as DataTexture and read using vertex id
+      - encode texture id too
+      - can provide "other uv maps" inside DataTexture
+
+  - can change label
   - can change icon
   - can change face
   - simplify original label width (currently 369 / 1024 ~ .36)
@@ -63,6 +95,8 @@
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
+- ✅ bug: tabs: un-maximise tty can resume World while tty stays paused
+  - ℹ️ unpaused, maximise tty, pause, un-maximise
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`

@@ -47,7 +47,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         if (state.model.getMaximizedTabset()) {
           // On minimise, enable justCovered tabs
           Object.values(state.tabsState).forEach((x) => {
-            x.justCovered && (x.disabled = false);
+            x.justCovered && state.enabled && (x.disabled = false);
             x.everUncovered = true;
             x.justCovered = false;
           });
