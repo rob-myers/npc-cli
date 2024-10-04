@@ -133,7 +133,9 @@ export default function TestNpcs(props) {
     },
     remove(...npcKeys) {
       if (npcKeys.length === 0) npcKeys = Object.keys(state.npc);
-      for (const npcKey in npcKeys) delete state.npc[npcKey];
+      for (const npcKey of npcKeys) {
+        delete state.npc[npcKey];
+      }
       update();
     },
     async setSkin(npcKey, classKey = 'cuboid-man') {
@@ -237,7 +239,7 @@ const classKeyToMeta = {
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
     // scale: 1,
-    scale: 0.7,
+    scale: 0.75,
     materialName: 'cuboid-man-material',
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
