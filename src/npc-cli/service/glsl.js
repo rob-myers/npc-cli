@@ -207,6 +207,7 @@ export const testCharacterShader = {
   uniform float labelHeight;
   uniform bool showSelector;
   uniform vec3 selectorColor;
+  uniform sampler2D textures[2]; // [skin, dataTex]
   varying vec2 vUv;
 
   attribute int vertexId;
@@ -227,7 +228,11 @@ export const testCharacterShader = {
 
     vId = vertexId;
     vColor = vec3(1.0);
-    vUv = uv;
+
+    // 🔔 0th uv map
+    vec2 uvId = vec2( float (vId) / 64.0, 0.0);
+    vUv = texture2D(textures[1], uvId).xy;
+    // vUv = uv;
 
     if (vId >= 52 && vId < 56) {// selector quad
       if (showSelector == false) return;
@@ -267,7 +272,7 @@ export const testCharacterShader = {
   varying vec3 vColor;
   uniform vec3 diffuse;
   varying vec2 vUv;
-  uniform sampler2D textures[1];
+  uniform sampler2D textures[2]; // [skin, dataTex]
 
   #include <common>
   #include <uv_pars_fragment>

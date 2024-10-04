@@ -4,8 +4,8 @@ import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 import { wallHeight } from '../service/const';
-import { debug, keys } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyTexture, textureLoader, toV3 } from "../service/three";
+import { debug, keys, warn } from '../service/generic';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, emptyTexture, textureLoader, toV3 } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
@@ -25,6 +25,7 @@ export default function TestNpcs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     npc: /** @type {*} */ ({}),
+    dataTex: /** @type {*} */ (null),
 
     /**
      * @param {Geom.VectJson} initPoint 
@@ -60,6 +61,9 @@ export default function TestNpcs(props) {
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
       skinnedMesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
 
+      // assume cuboid-{man,pet} have same uv-map (?)
+      state.dataTex ??= state.createDataTexture(skinnedMesh);
+
       /** @type {TestNpc} */
       const character = {
         npcKey,
@@ -67,11 +71,11 @@ export default function TestNpcs(props) {
         bones: Object.values(graph.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
           x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
         ),
-        object: clonedScene,
+        group: emptyGroup, // overridden on mount
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
         classKey: npcClassKey,
         graph,
-        skinnedMesh,
+        mesh: skinnedMesh,
         mixer: emptyAnimationMixer,
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
@@ -88,24 +92,48 @@ export default function TestNpcs(props) {
       await state.setSkin(npcKey, npcClassKey);
       update();
     },
+    createDataTexture(skinnedMesh) {
+      const meshUvs = /** @type {THREE.BufferAttribute} */ (
+        skinnedMesh.geometry.getAttribute('uv')
+      ).toJSON().array;
+
+      if (meshUvs.length !== 64 * 2) {
+        warn('expected 64 vertices')
+      }
+
+      // 64 vertices (width)
+      // 8 uv maps 🔔 all the same i.e. inherited from mesh
+      // 4 (r,g,b,a)
+      const data = new Float32Array(64 * 8 * 4);
+      let i = 0;
+      for(let uvMapId = 0; uvMapId < 8; uvMapId++) {
+        for(let vId = 0; vId < 64; vId++) {
+          data[i + 0] = meshUvs[2 * vId + 0]
+          data[i + 1] = meshUvs[2 * vId + 1]
+          data[i + 2] = 0; // texture id
+          data[i + 3] = 0; // unused
+          i += 4;
+        }
+      }
+
+      const texture = new THREE.DataTexture(data, 64, 8, THREE.RGBAFormat, THREE.FloatType);
+      texture.needsUpdate = true;
+      return texture;
+    },
     onMountNpc(group) {
       if (group !== null) {// mounted
         const npcKey = group.name;
         const npc = state.npc[npcKey];
         state.setupNpcMixer(npc, group);
+        npc.group = group;
       }
     },
     onTick(deltaMs) {
       Object.values(state.npc).forEach(x => x.mixer.update(deltaMs));
     },
-    remove(npcKey) {
-      if (npcKey === undefined) {
-        for (const npcKey in state.npc) {
-          delete state.npc[npcKey];
-        }
-      } else {
-        delete state.npc[npcKey];
-      }
+    remove(...npcKeys) {
+      if (npcKeys.length === 0) npcKeys = Object.keys(state.npc);
+      for (const npcKey in npcKeys) delete state.npc[npcKey];
       update();
     },
     async setSkin(npcKey, classKey = 'cuboid-man') {
@@ -145,14 +173,14 @@ export default function TestNpcs(props) {
     Object.values(state.npc).forEach(({ classKey, npcKey }) => state.setSkin(npcKey, classKey))
   }, [w.hash.sheets]);
 
-  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, skinnedMesh: mesh, scale, texture }) =>
+  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, mesh: mesh, scale, texture }) =>
     <group
       key={npcKey}
       position={initPos}
-      // dispose={null}
       ref={state.onMountNpc}
       name={npcKey} // hack to lookup npc without "inline ref"
       scale={scale}
+      // dispose={null}
     >
       {bones.map((bone, i) => <primitive key={i} object={bone} />)}
       <skinnedMesh
@@ -167,7 +195,11 @@ export default function TestNpcs(props) {
           diffuse={[1, 1, 1]}
           transparent
           // map={texture}
-          textures={[texture]}
+          // textures={[texture]}
+          textures={[
+            texture,
+            state.dataTex,
+          ]}
           labelHeight={wallHeight * (1 / scale.x)}
           selectorColor={[0.6, 0.6, 1]}
           // showSelector={false}
@@ -184,11 +216,14 @@ export default function TestNpcs(props) {
 
 /**
  * @typedef State
+ * @property {THREE.DataTexture} dataTex
  * @property {{ [npcKey: string]:  TestNpc }} npc
+ *
  * @property {(initPoint?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
+ * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} createDataTexture
  * @property {(group: null | THREE.Group) => void} onMountNpc
  * @property {(deltaMs: number) => void} onTick
- * @property {(npcKey?: string) => void} remove
+ * @property {(...npcKeys: string[]) => void} remove
  * @property {(npcKey: string, charKey?: TestNpcClassKey) => Promise<void>} setSkin
  * @property {(npc: TestNpc, rootGroup: THREE.Group) => void} setupNpcMixer
  */
@@ -231,8 +266,8 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {TestNpcClassKey} classKey
  * @property {import("@react-three/fiber").ObjectMap} graph
  * @property {THREE.Vector3} initPos
- * @property {THREE.Object3D} object
- * @property {THREE.SkinnedMesh} skinnedMesh
+ * @property {THREE.Object3D} group
+ * @property {THREE.SkinnedMesh} mesh
  * @property {THREE.AnimationMixer} mixer
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture

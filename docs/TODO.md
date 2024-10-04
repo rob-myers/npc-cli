@@ -52,9 +52,12 @@
         - corresponds to rect
     - ℹ️ cannot edit geometry attributes because shared
     - 🚧 uv map into 2nd texture
-      - 🚧 encode existing uvs as DataTexture and read using vertex id
-      - encode texture id too
-      - can provide "other uv maps" inside DataTexture
+      - ℹ️ https://stackoverflow.com/questions/48503775/storing-data-as-a-texture-for-use-in-vertex-shader-for-instanced-geometry-three
+      - ℹ️ https://codepen.io/prisoner849/pen/WNQNdpv?editors=0010
+      - ✅ encode existing uvs as DataTexture and read using vertex id
+      - ✅ encode texture id too
+      - 🚧 can provide "other uv maps" inside DataTexture
+      - cleanup e.g. which index for DataTexture?
 
   - can change label
   - can change icon
