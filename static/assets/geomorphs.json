@@ -38303,7 +38303,7 @@
     "decorDim": {"width": 438, "height": 438},
     "imagesHash": 1083923908,
     "skins": {
-      "svgHash": {"cuboid-man": 1990824225, "cuboid-pet": -1131387317},
+      "svgHash": {"cuboid-man": 1990824225, "cuboid-pet": -1799404787},
       "uvMap": {
         "cuboid-man": {
           "ground-ring": {"x": 0.9, "y": 0, "width": 0.1, "height": 0.1},
@@ -38443,7 +38443,7 @@
             "width": 0.1563,
             "height": 0.1563
           },
-          "ui-label": {"x": 0.15, "y": 0, "width": 0.5, "height": 0.125},
+          "ui-label": {"x": 0, "y": 0, "width": 0.25, "height": 0.125},
           "front-label": {
             "x": 0.8438,
             "y": 0.7031,
