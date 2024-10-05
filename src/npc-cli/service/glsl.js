@@ -198,7 +198,7 @@ export const cameraLightShader = {
  * - Based on `cameraLightShader`
  * - Does not support instancing
  * - Assumes USE_LOGDEPTHBUF
- * - Intend to render some triangles as sprites.
+ * - Assumes specific mesh with 64 vertices.
  */
 export const testCharacterShader = {
   Vert: /*glsl*/`
@@ -208,10 +208,11 @@ export const testCharacterShader = {
   uniform bool showSelector;
   uniform vec3 selectorColor;
   uniform sampler2D textures[2]; // [skin, dataTex]
-  varying vec2 vUv;
-
+  
   attribute int vertexId;
+
   flat varying int vId;
+  varying vec2 vUv;
   varying vec3 vColor;
   flat varying float dotProduct;
 
@@ -223,16 +224,16 @@ export const testCharacterShader = {
   void main() {
     #include <uv_vertex>
     #include <skinbase_vertex>
-    vec3 transformed = vec3( position );
+    vec3 transformed = vec3(position);
     #include <skinning_vertex>
 
     vId = vertexId;
     vColor = vec3(1.0);
+    vUv = uv;
 
-    // 🔔 0th uv map
-    vec2 uvId = vec2( float (vId) / 64.0, 0.0);
-    vUv = texture2D(textures[1], uvId).xy;
-    // vUv = uv;
+    // could get uvs from DataTexture
+    // vec2 uvId = vec2( float (vId) / 64.0, 0.0);
+    // vUv = texture2D(textures[1], uvId).xy;
 
     if (vId >= 52 && vId < 56) {// selector quad
       if (showSelector == false) return;

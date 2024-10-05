@@ -12,7 +12,6 @@
 - 🚧 cuboid-man improvements
   - ✅ can set label height
   - ✅ smaller shadow
-  - 🚧 can change label
   - ✅ create some npcs labels
     ```sh
     w npc.updateLabels rob kate will
@@ -56,7 +55,10 @@
       - ℹ️ https://codepen.io/prisoner849/pen/WNQNdpv?editors=0010
       - ✅ encode existing uvs as DataTexture and read using vertex id
       - ✅ encode texture id too
-      - 🚧 can provide "other uv maps" inside DataTexture
+      - ℹ️ no need for DataTexture
+        - use uniforms for face/icon/label instead
+        - uniform int uQuadTextureId[3] (3 for face/icon/label)
+        - uniform vec2 uLabelUv[4] (4 for quad)
       - cleanup e.g. which index for DataTexture?
 
   - can change label
