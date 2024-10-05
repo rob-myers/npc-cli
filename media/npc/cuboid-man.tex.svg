@@ -48,7 +48,7 @@
     <polygon points="704 720.000031 544 720.000031 544 560.000031 704 560.000031" style="stroke: rgb(255, 255, 255); stroke-width: 12px;">
       <title>body-bottom</title>
     </polygon>
-    <polygon points="665.600,0.000 153.600,0.000 153.600,128.000 665.600,128.000 " style="fill-opacity: 0.2; fill: none; stroke-width: 4px; stroke-opacity: 0.25;">
+    <polygon points="256.000015 0 0 0 0 128 256.000015 128" style="fill-opacity: 0.2; fill: none; stroke-width: 4px; stroke-opacity: 0.25;">
       <title>ui-label</title>
     </polygon>
     <polygon points="864 720.000183 704 720.000183 704 560.000061 864 560.000061" style="stroke: rgb(0, 0, 0);">
@@ -88,9 +88,9 @@
     <circle style="fill-opacity: 0.2; stroke-width: 2.79351px; fill: rgb(163, 135, 135); stroke-opacity: 0.5; stroke-dasharray: 10;" cx="768.158508" cy="50.841564" r="46.558437"/>
     <circle style="fill: rgb(181, 79, 79); stroke-width: 1.86234px; stroke-opacity: 0.2; fill-opacity: 0.3; stroke: rgb(255, 255, 255);" cx="768.158657" cy="49.910404" r="16.761046"/>
   </g>
-  <g>
+  <g transform="matrix(1.437226057053, 0, 0, 1.437226057053, -16.531440734863, -14.418210983276)" style="">
     <title>label-text</title>
-    <text style="fill: rgb(255, 255, 221); font-family: 'American Typewriter'; font-size: 49px; white-space: pre;" x="224" y="73.0947">Foo bar baz qux</text>
+    <text style="fill: rgb(255, 255, 221); font-family: 'American Typewriter'; font-size: 20px; white-space: pre; transform-box: fill-box; transform-origin: 59.107px 9.04302px;" x="25.2641" y="62.3968">Foo bar baz qux</text>
   </g>
   <g transform="matrix(10.304659843445, 0, 0, 10.322573661804, 1094.99462890625, 372.301391601563)" style="">
     <title>front-labels</title>

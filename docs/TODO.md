@@ -67,7 +67,7 @@
       - ✅ relative to npcClassKey
       - 🚧 setup uniforms for label quad, and use them
         - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label`
-        - 🚧 resize default label
+        - ✅ resize default label
         - 🚧 provide alt labels in "base skin"
         - 🚧 can instantiate uvs i.e. apply uvDeltas to rect (center, dimensions)
       - cleanup
