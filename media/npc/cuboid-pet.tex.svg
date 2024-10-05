@@ -85,8 +85,8 @@
   </g>
   <g style="" transform="matrix(1.073919177055, 0, 0, 1.073919177055, -56.940181732178, -3.599732160568)">
     <title>drop-shadow</title>
-    <circle style="fill-opacity: 0.2; stroke-width: 2.79351px; fill: rgb(163, 135, 135); stroke-opacity: 0.5; stroke: rgb(255, 255, 255); visibility: hidden;" cx="768.158508" cy="50.841564" r="46.558437"/>
-    <polygon points="814.717041 5.214296 721.600159 5.214296 721.600159 98.331182 814.717041 98.331182" style="fill-opacity: 0.25; stroke: rgb(255, 255, 255); stroke-width: 3.72468px; stroke-opacity: 0.5;">
+    <circle style="fill-opacity: 0.2; stroke-width: 2.79351px; stroke-opacity: 0.5; visibility: hidden; fill: rgb(187, 159, 159);" cx="768.158508" cy="50.841564" r="46.558437"/>
+    <polygon points="814.717041 5.214296 721.600159 5.214296 721.600159 98.331182 814.717041 98.331182" style="fill-opacity: 0.25; stroke-width: 3.72468px; stroke-opacity: 0.5; fill: rgb(187, 159, 159);">
       <title>ground-shadow</title>
     </polygon>
   </g>
