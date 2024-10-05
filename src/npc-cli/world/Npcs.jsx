@@ -4,6 +4,7 @@ import { useGLTF } from "@react-three/drei";
 
 import { defaultSkinKey, glbMeta, gmLabelHeightSgu, spriteSheetDecorExtraScale } from "../service/const";
 import { info, warn } from "../service/generic";
+import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
 import { Npc, hotModuleReloadNpc } from "./npc";
@@ -24,7 +25,7 @@ export default function Npcs(props) {
     label: {
       numLabels: 0,
       lookup: {},
-      tex: new THREE.CanvasTexture(document.createElement('canvas')),
+      tex: new THREE.CanvasTexture(getCanvas(`${w.key} npc.label`)),
     },
     nextObstacleId: 0,
     npc: {},

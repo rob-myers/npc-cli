@@ -9,9 +9,9 @@ import { importNavMesh, Crowd } from "@recast-navigation/core";
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
-import { gmFloorExtraScale, gmLabelHeightSgu, spriteSheetDecorExtraScale, worldToSguScale } from "../service/const";
+import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
-import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
+import { getContext2d, invertCanvas } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
@@ -269,7 +269,7 @@ export default function World(props) {
           // }
           tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           tm.ct.drawImage(img, 0, 0);
-          invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
+          invert && invertCanvas(tm.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
           // Sharper via getMaxAnisotropy()
           tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
           tm.tex.needsUpdate = true;

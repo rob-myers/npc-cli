@@ -1,20 +1,28 @@
 /**
- * @typedef {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | import('canvas').CanvasRenderingContext2D} CanvasContext2DType
+ * @param {string} key
  */
+export function getCanvas(key) {
+  return canvasLookup[key] ??= document.createElement('canvas');
+}
 
-/** Non-empty iff running in browser */
-export const tmpCanvasCtxts = typeof window !== 'undefined' ?
-  Array.from({ length: 2 }).map(_ => /** @type {CanvasRenderingContext2D} */ (
-    document.createElement('canvas').getContext('2d'))
-  ) : []
-;
+/**
+ * @param {string} key
+ */
+export function getContext2d(key) {
+  return /** @type {CanvasRenderingContext2D} */ ((
+    canvasLookup[key] ??= document.createElement('canvas')
+  ).getContext('2d'));
+}
+
+/** Cache to avoid re-creation on HMR */
+const canvasLookup = /** @type {Record<string, HTMLCanvasElement>} */ ({});
 
 /**
  * @param {number} dim
  * @param {string} color
  */
 export function createGridPattern(dim, color) {
-  const [tmpCtxt] = tmpCanvasCtxts;
+  const tmpCtxt = getContext2d('create-grid-pattern');
   tmpCtxt.canvas.width = tmpCtxt.canvas.height = dim;
   tmpCtxt.resetTransform();
   tmpCtxt.clearRect(0, 0, dim, dim);
@@ -202,3 +210,7 @@ export function strokeLine(ct, from, to) {
   ct.lineTo(to.x, to.y);
   ct.stroke();
 }
+
+/**
+ * @typedef {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | import('canvas').CanvasRenderingContext2D} CanvasContext2DType
+ */
