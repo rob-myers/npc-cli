@@ -3,8 +3,9 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
+import { Rect, Vect } from '../geom';
 import { wallHeight } from '../service/const';
-import { debug, keys, warn } from '../service/generic';
+import { debug, keys, range, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, emptyTexture, textureLoader, toV3 } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
@@ -25,7 +26,8 @@ export default function TestNpcs(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     npc: /** @type {*} */ ({}),
-    dataTex: /** @type {*} */ (null),
+    testDataTex: /** @type {*} */ (null), // 🔔 unused
+    testQuadMeta: /** @type {*} */ ({}),
 
     /**
      * @param {Geom.VectJson} initPoint 
@@ -61,8 +63,8 @@ export default function TestNpcs(props) {
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
       skinnedMesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
 
-      // assume cuboid-{man,pet} have same uv-map (?)
-      state.dataTex ??= state.createDataTexture(skinnedMesh);
+      // state.testDataTex ??= state.createTestDataTexture(skinnedMesh);
+      state.testQuadMeta[npcClassKey] ??= state.preComputeUvOffsets(skinnedMesh);
 
       /** @type {TestNpc} */
       const character = {
@@ -92,7 +94,11 @@ export default function TestNpcs(props) {
       await state.setSkin(npcKey, npcClassKey);
       update();
     },
-    createDataTexture(skinnedMesh) {
+    /**
+     * Considered sending multiple uv-maps via DataTexture
+     * but will use multiple uniforms instead.
+     */
+    createTestDataTexture(skinnedMesh) {
       const meshUvs = /** @type {THREE.BufferAttribute} */ (
         skinnedMesh.geometry.getAttribute('uv')
       ).toJSON().array;
@@ -102,7 +108,7 @@ export default function TestNpcs(props) {
       }
 
       // 64 vertices (width)
-      // 8 uv maps 🔔 all the same i.e. inherited from mesh
+      // 8 uv maps 🔔 (height) [all the same i.e. inherited from mesh]
       // 4 (r,g,b,a)
       const data = new Float32Array(64 * 8 * 4);
       let i = 0;
@@ -130,6 +136,55 @@ export default function TestNpcs(props) {
     },
     onTick(deltaMs) {
       Object.values(state.npc).forEach(x => x.mixer.update(deltaMs));
+    },
+    preComputeUvOffsets(skinnedMesh) {
+      
+      const emptyRect = new Rect();
+      const emptyUvDeltas = /** @type {Geom.VectJson[]} */ ([]);
+      
+      /**
+       * Blender Mesh has 32 vertices.
+       * 
+       * GLTF Mesh has 64 vertices:
+       * - (3 * 8) + (3 * 8) + (4 * 4) = 64
+       *   i.e. head (cuboid), body (cuboid), 4 quads
+       * - head < body < shadow quad < selector quad < icon quad < label quad
+       * - concerning face:
+       *   - cuboid vertices duped 3 times (adjacently) due to uv map
+       *   - via vertex normals, face corresponds to 1st copy (4 times)
+       * 
+       * ∴ label quad vertex ids: 60, 61, 62, 63
+       * ∴ icon quad vertex ids: 56, 57, 58, 59
+       * ∴ face quad vertex ids: 3 * 0, 3 * 1, 3 * 4, 3 * 5 
+       * 
+       * @type {TestNpcQuadMeta}
+       */
+      const quadMeta = {
+        face: { vertexIds: [0, 3, 3 * 4, 3 * 5], uvRect: emptyRect, uvDeltas: emptyUvDeltas },
+        icon: { vertexIds: [56, 57, 58, 59], uvRect: emptyRect, uvDeltas: emptyUvDeltas },
+        label: { vertexIds: [60, 61, 62, 63], uvRect: emptyRect, uvDeltas: emptyUvDeltas },
+      };
+
+      const uvs = /** @type {THREE.BufferAttribute} */ (
+        skinnedMesh.geometry.getAttribute('uv')
+      ).toJSON().array.reduce((agg, x, i, xs) =>
+        (i % 2 === 1 && agg.push(new Vect(xs[i - 1], x).precision(6)), agg)
+      , /** @type {Geom.VectJson[]} */ ([]));
+
+      // compute uv rects, infer normalized deltas for each corner
+      for (const quadKey of keys(quadMeta)) {
+        const { vertexIds } = quadMeta[quadKey];
+        const quadUvs = vertexIds.map(vId => uvs[vId]);
+        const uvRect = Rect.fromPoints(...quadUvs).precision(6);
+        quadMeta[quadKey].uvRect = uvRect;
+        quadMeta[quadKey].uvDeltas = quadUvs.map(p => ({
+          x: p.x === uvRect.x ? -0.5 : 0.5,
+          y: p.y === uvRect.y ? -0.5 : 0.5,
+        }));
+      }
+
+      // console.log({ quadMeta });
+      return quadMeta;
     },
     remove(...npcKeys) {
       if (npcKeys.length === 0) npcKeys = Object.keys(state.npc);
@@ -202,6 +257,8 @@ export default function TestNpcs(props) {
           labelHeight={wallHeight * (1 / scale.x)}
           selectorColor={[0.6, 0.6, 1]}
           // showSelector={false}
+          // uLabelTexId={0}
+          // uLabelUv={state.testQuadMeta.label.uvDeltas}
         />
       </skinnedMesh>
     </group>
@@ -215,13 +272,15 @@ export default function TestNpcs(props) {
 
 /**
  * @typedef State
- * @property {THREE.DataTexture} dataTex
+ * @property {THREE.DataTexture} testDataTex
+ * @property {Record<TestNpcClassKey, TestNpcQuadMeta>} testQuadMeta
  * @property {{ [npcKey: string]:  TestNpc }} npc
  *
  * @property {(initPoint?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
- * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} createDataTexture
+ * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} createTestDataTexture
  * @property {(group: null | THREE.Group) => void} onMountNpc
  * @property {(deltaMs: number) => void} onTick
+ * @property {(skinnedMesh: THREE.SkinnedMesh) => TestNpcQuadMeta} preComputeUvOffsets
  * @property {(...npcKeys: string[]) => void} remove
  * @property {(npcKey: string, charKey?: TestNpcClassKey) => Promise<void>} setSkin
  * @property {(npc: TestNpc, rootGroup: THREE.Group) => void} setupNpcMixer
@@ -281,6 +340,16 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {string} groupName e.g. 'Scene'
  * @property {string} skinBaseName e.g. 'test-hyper-casual.tex.png'
  * @property {{ [animName: string]: number }} timeScale
+ */
+
+/**
+ * @typedef {Record<(
+ *  | 'face'
+ *  | 'icon'
+ *  | 'label'
+ * ),{
+ *   vertexIds: number[]; uvRect: Rect; uvDeltas: Geom.VectJson[];
+ * }>} TestNpcQuadMeta
  */
 
 useGLTF.preload(Object.values(classKeyToMeta).map(x => x.url));

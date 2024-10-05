@@ -57,9 +57,20 @@
       - ✅ encode texture id too
       - ℹ️ no need for DataTexture
         - use uniforms for face/icon/label instead
-        - uniform int uQuadTextureId[3] (3 for face/icon/label)
-        - uniform vec2 uLabelUv[4] (4 for quad)
-      - cleanup e.g. which index for DataTexture?
+        - `uniform int uLabelTexId` (which texture to use)
+        - `uniform vec2 uLabelUv[4]` (4 for quad)
+      - ✅ pre-compute ±0.5 coords for label quad
+        ```sh
+        w debug.npc.add $( click 1 )
+        w debug.npc.testQuadMeta.cuboid-man
+        ```
+      - ✅ relative to npcClassKey
+      - 🚧 setup uniforms for label quad, and use them
+        - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label`
+        - 🚧 resize default label
+        - 🚧 provide alt labels in "base skin"
+        - 🚧 can instantiate uvs i.e. apply uvDeltas to rect (center, dimensions)
+      - cleanup
 
   - can change label
   - can change icon
