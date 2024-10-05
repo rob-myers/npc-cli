@@ -209,7 +209,7 @@ export default function Npcs(props) {
     updateLabels(...labels) {
       w.menu.measure('npc.updateLabels');
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
-      createLabelSpriteSheet(labels, state.label, fontHeight);
+      createLabelSpriteSheet(labels, state.label, { fontHeight });
       w.menu.measure('npc.updateLabels');
     },
   }));

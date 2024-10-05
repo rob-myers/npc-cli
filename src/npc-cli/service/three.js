@@ -266,9 +266,9 @@ export function createDebugCylinder(position, radius, height) {
  * 
  * @param {string[]} labels Assumed to be duplicate-free.
  * @param {LabelsSheetAndTex} sheet The sprite-sheet we'll create/mutate.
- * @param {number} fontHeight
+ * @param {{ fontHeight: number; }} opts
  */
-export function createLabelSpriteSheet(labels, sheet, fontHeight) {
+export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   if (labels.length === sheet.numLabels && labels.every(label => label in sheet.lookup)) {
     return; // Avoid re-computation
   }
@@ -279,7 +279,9 @@ export function createLabelSpriteSheet(labels, sheet, fontHeight) {
   ct.font = `${fontHeight}px 'Courier new'`;
 
   const rects = labels.map(label => ({
-    width: ct.measureText(label).width, height: fontHeight, data: { label },
+    width: ct.measureText(label).width,
+    height: fontHeight,
+    data: { label },
   }));
 
   const bin = packRectangles(rects, { logPrefix: 'w.extendLabels', packedPadding: 2 });

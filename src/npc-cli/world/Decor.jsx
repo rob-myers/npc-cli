@@ -474,7 +474,7 @@ export default function Decor(props) {
       createLabelSpriteSheet(
         removeDups(state.labels.map(x => /** @type {string} */ (x.meta.label))),
         state.label,
-        fontHeight,
+        { fontHeight },
       );
       state.addLabelUvs();
 
