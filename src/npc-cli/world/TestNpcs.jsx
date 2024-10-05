@@ -63,22 +63,30 @@ export default function TestNpcs(props) {
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
       skinnedMesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
 
+      const rootBones = Object.values(graph.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
+        x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
+      );
+
       // state.testDataTex ??= state.createTestDataTexture(skinnedMesh);
-      state.testQuadMeta[npcClassKey] ??= state.preComputeUvOffsets(skinnedMesh);
+      const quadMeta = state.testQuadMeta[npcClassKey] ??= state.preComputeUvOffsets(skinnedMesh);
 
       /** @type {TestNpc} */
       const character = {
         npcKey,
         act: {},
-        bones: Object.values(graph.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
-          x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
-        ),
+        bones: rootBones,
         group: emptyGroup, // overridden on mount
         initPos: scene.position.clone().add({ x: initPoint.x, y: 0.02, z: initPoint.y }),
         classKey: npcClassKey,
         graph,
         mesh: skinnedMesh,
         mixer: emptyAnimationMixer,
+        quad: {
+          label: {
+            texId: 0,
+            uvs: state.instantiateUvDeltas(quadMeta.label.uvDeltas, quadMeta.label.uvRect),
+          },
+        },
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
       };
@@ -125,6 +133,34 @@ export default function TestNpcs(props) {
       const texture = new THREE.DataTexture(data, 64, 8, THREE.RGBAFormat, THREE.FloatType);
       texture.needsUpdate = true;
       return texture;
+    },
+    changeUvQuad(npcKey, opts) {// 🚧 WIP
+      const npc = state.npc[npcKey];
+      const quadMeta = state.testQuadMeta[npc.classKey];
+
+      if (opts.label) {
+        const npcLabel = w.npc.label;
+        const srcRect = npcLabel.lookup[opts.label];
+        if (!srcRect) {
+          throw Error(`${npcKey}: label not found: ${JSON.stringify(opts.label)}`)
+        }
+
+        const srcUvRect = Rect.fromJson(srcRect).scale(
+          1 / npcLabel.tex.image.width,
+          1 / npcLabel.tex.image.height,
+        );
+        npc.quad.label.uvs = state.instantiateUvDeltas(quadMeta.label.uvDeltas, srcUvRect);
+        npc.quad.label.texId = 1; // 🚧 hard-coded npc labels texture
+      }
+
+      update();
+    },
+    instantiateUvDeltas(uvDeltas, uvRect) {
+      const { center, width, height } = uvRect;
+      return uvDeltas.map(p => new THREE.Vector2(
+        center.x + (width * p.x),
+        center.y + (height * p.y),
+      ));
     },
     onMountNpc(group) {
       if (group !== null) {// mounted
@@ -230,7 +266,7 @@ export default function TestNpcs(props) {
     Object.values(state.npc).forEach(({ classKey, npcKey }) => state.setSkin(npcKey, classKey))
   }, [w.hash.sheets]);
 
-  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, mesh: mesh, scale, texture }) =>
+  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, mesh, quad, scale, texture }) =>
     <group
       key={npcKey}
       position={initPos}
@@ -253,12 +289,15 @@ export default function TestNpcs(props) {
           transparent
           // map={texture}
           // textures={[ texture, state.dataTex ]}
-          textures={[texture]}
+          textures={[
+            texture, // base skin
+            w.npc.label.tex, // labels
+          ]}
           labelHeight={wallHeight * (1 / scale.x)}
           selectorColor={[0.6, 0.6, 1]}
           // showSelector={false}
-          // uLabelTexId={0}
-          // uLabelUv={state.testQuadMeta.label.uvDeltas}
+          uLabelTexId={quad.label.texId}
+          uLabelUv={quad.label.uvs}
         />
       </skinnedMesh>
     </group>
@@ -277,7 +316,9 @@ export default function TestNpcs(props) {
  * @property {{ [npcKey: string]:  TestNpc }} npc
  *
  * @property {(initPoint?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
+ * @property {(npcKey: string, opts: { label?: string; }) => void} changeUvQuad
  * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} createTestDataTexture
+ * @property {(uvDeltas: Geom.VectJson[], uvRect: Rect) => THREE.Vector2[]} instantiateUvDeltas
  * @property {(group: null | THREE.Group) => void} onMountNpc
  * @property {(deltaMs: number) => void} onTick
  * @property {(skinnedMesh: THREE.SkinnedMesh) => TestNpcQuadMeta} preComputeUvOffsets
@@ -295,7 +336,7 @@ const classKeyToMeta = {
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
     // scale: 1,
-    scale: 0.6,
+    scale: 0.7,
     materialName: 'cuboid-man-material',
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
@@ -305,12 +346,12 @@ const classKeyToMeta = {
   'cuboid-pet': {
     url: '/assets/3d/cuboid-pet.glb',
     // scale: 1,
-    scale: 0.5,
+    scale: 0.6,
     materialName: 'cuboid-pet-material',
     meshName: 'cuboid-pet-mesh',
     groupName: 'Scene',
     skinBaseName: 'cuboid-pet.tex.png',
-    timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
+    timeScale: { 'Idle': 0.4, 'Walk': 0.5 },
   },
 };
 
@@ -327,6 +368,8 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {THREE.Object3D} group
  * @property {THREE.SkinnedMesh} mesh
  * @property {THREE.AnimationMixer} mixer
+ * @property {{ label: { texId: number; uvs: THREE.Vector2[] } }} quad
+ * These are mutated and fed as uniforms into the shader(s)
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
  */

@@ -68,8 +68,19 @@
       - 🚧 setup uniforms for label quad, and use them
         - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label`
         - ✅ resize default label
-        - 🚧 provide alt labels in "base skin"
-        - 🚧 can instantiate uvs i.e. apply uvDeltas to rect (center, dimensions)
+        - ✅ use uvs from uniforms for label
+        - ✅ can change label
+        - 🚧 fix label size
+```sh
+w debug.npc.add $( click 1 ) rob
+
+w npc.updateLabels rob kate will
+w npc.label.tex.image.toDataURL | log
+w npc.label.lookup.rob
+
+w debug.npc.changeUvQuad rob '{ label: "rob" }'
+```
+        - account for different length label i.e. adjust in shader
       - cleanup
 
   - can change label

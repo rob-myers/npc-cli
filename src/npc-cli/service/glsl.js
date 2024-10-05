@@ -207,8 +207,10 @@ export const testCharacterShader = {
   uniform float labelHeight;
   uniform bool showSelector;
   uniform vec3 selectorColor;
-  uniform sampler2D textures[2]; // [skin, dataTex]
+  uniform sampler2D textures[2]; // [skin, ...]
   
+  uniform vec2 uLabelUv[4];
+
   attribute int vertexId;
 
   flat varying int vId;
@@ -231,7 +233,7 @@ export const testCharacterShader = {
     vColor = vec3(1.0);
     vUv = uv;
 
-    // could get uvs from DataTexture
+    // 🤔 could get uvs from DataTexture
     // vec2 uvId = vec2( float (vId) / 64.0, 0.0);
     // vUv = texture2D(textures[1], uvId).xy;
 
@@ -242,6 +244,10 @@ export const testCharacterShader = {
 
     if (vId >= 60) {// label quad
       if (showLabel == false) return; 
+
+      // 🔔 overwrite uvs
+      vUv = uLabelUv[vId - 60];
+
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
       vec2 alignedPosition = transformed.xy;
       mvPosition.xy += alignedPosition;
@@ -268,12 +274,14 @@ export const testCharacterShader = {
 
   Frag: /*glsl*/`
 
+  uniform vec3 diffuse;
+  uniform sampler2D textures[2]; // [skin, ...]
+  uniform int uLabelTexId;
+
   flat varying int vId;
 	flat varying float dotProduct;
   varying vec3 vColor;
-  uniform vec3 diffuse;
   varying vec2 vUv;
-  uniform sampler2D textures[2]; // [skin, dataTex]
 
   #include <common>
   #include <uv_pars_fragment>
@@ -285,9 +293,14 @@ export const testCharacterShader = {
     #include <logdepthbuf_fragment>
     #include <map_fragment>
 
-    if (textures.length() > 0) {
-      // can use multiple textures
-      vec4 texelColor = texture2D(textures[0], vUv);
+    if (textures.length() > 0) {// can use multiple textures
+      vec4 texelColor = vec4(0.0);
+      if (vId >= 60) {
+        // 🔔 label quad uses label texture
+        texelColor = texture2D(textures[1], vUv);
+      } else {
+        texelColor = texture2D(textures[0], vUv);
+      }
       diffuseColor *= texelColor;
     }
 
@@ -344,10 +357,13 @@ export const TestCharacterMaterial = shaderMaterial(
     map: null,
     mapTransform: new THREE.Matrix3(),
     textures: [],
+
     showLabel: true,
     labelHeight: wallHeight,
     showSelector: true,
     selectorColor: [0, 0, 1],
+    uLabelTexId: 0,
+    uLabelUv: [],
   },
   testCharacterShader.Vert,
   testCharacterShader.Frag,

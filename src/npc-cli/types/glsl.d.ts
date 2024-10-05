@@ -25,6 +25,8 @@ declare global {
         labelHeight?: number;
         showSelector?: boolean;
         selectorColor?: Vector3Input;
+        uLabelTexId?: number;
+        uLabelUv?: Geom.VectJson[];
       }>;
     }
   }
