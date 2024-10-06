@@ -50,7 +50,7 @@
       - ✅ compare to label uvRect
         - corresponds to rect
     - ℹ️ cannot edit geometry attributes because shared
-    - 🚧 uv map into 2nd texture
+    - ✅ uv map into 2nd texture
       - ℹ️ https://stackoverflow.com/questions/48503775/storing-data-as-a-texture-for-use-in-vertex-shader-for-instanced-geometry-three
       - ℹ️ https://codepen.io/prisoner849/pen/WNQNdpv?editors=0010
       - ✅ encode existing uvs as DataTexture and read using vertex id
@@ -65,7 +65,7 @@
         w debug.npc.testQuadMeta.cuboid-man
         ```
       - ✅ relative to npcClassKey
-      - 🚧 setup uniforms for label quad, and use them
+      - ✅ setup uniforms for label quad, and use them
         - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label`
         - ✅ resize default label
         - ✅ use uvs from uniforms for label
@@ -88,9 +88,9 @@
 
         w debug.npc.changeUvQuad kate '{ label: "a-really-long-name" }'
         ```
-      - 🚧 cleanup
+      - ✅ cleanup
 
-  - can change label
+  - ✅ can change label
   - can change icon
   - can change face
 

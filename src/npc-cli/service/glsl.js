@@ -246,14 +246,13 @@ export const testCharacterShader = {
     if (vId >= 60) {// label quad
       if (showLabel == false) return; 
 
-      // 🔔 overwrite uvs
+      // 🔔 overwrite label uvs
       vUv = uLabelUv[vId - 60];
 
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
+      // mvPosition.xy += transformed.xy;
 
-      // vec2 alignedPosition = transformed.xy;
-      // mvPosition.xy += alignedPosition;
-
+      // 🔔 overwrite label geometry
       if (vId == 60) {
         mvPosition.xy += vec2(uLabelDim.x, uLabelDim.y) * 0.5;
       } else if (vId == 61) {
@@ -285,7 +284,7 @@ export const testCharacterShader = {
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-  /** [skin, npc.label, 🚧 another skin]  */
+  /** skin, npc.label, 🚧 another skin  */
   uniform sampler2D textures[3];
   uniform int uLabelTexId;
 
@@ -300,7 +299,7 @@ export const testCharacterShader = {
   #include <logdepthbuf_pars_fragment>
 
   //#region getTexelColor
-  // https://stackoverflow.com/a/74729081/2917822
+  // ℹ️ https://stackoverflow.com/a/74729081/2917822
   vec4 getTexelColor(int texId, vec2 uv) {
     switch (texId) {
       case 0: return texture2D(textures[0], uv);
@@ -345,13 +344,11 @@ export const testCharacterShader = {
     #include <logdepthbuf_fragment>
     #include <map_fragment>
 
-    vec4 texelColor = vec4(0.0);
     if (vId >= 60) {
-      texelColor = getTexelColor(uLabelTexId, vUv);
+      diffuseColor *= getTexelColor(uLabelTexId, vUv);
     } else {
-      texelColor = texture2D(textures[0], vUv);
+      diffuseColor *= texture2D(textures[0], vUv);
     }
-    diffuseColor *= texelColor;
 
     if (diffuseColor.a < 0.1) {
       discard;
