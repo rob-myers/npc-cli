@@ -52,16 +52,16 @@
       <title>ui-label</title>
     </polygon>
     <polygon points="864 720.000183 704 720.000183 704 560.000061 864 560.000061" style="stroke: rgb(0, 0, 0);">
-      <title>front-label</title>
+      <title>front-label-man</title>
     </polygon>
     <polygon points="1024.000122 720.000122 864.000122 720.000122 864.000122 560.000061 1024.000122 560.000061" style="stroke: rgb(255, 255, 255);">
-      <title>front-label</title>
+      <title>front-label-food</title>
     </polygon>
     <polygon points="543.999939 880.000244 384 880.000244 384 720.000183 543.999939 720.000183" style="stroke: rgb(255, 255, 255);">
-      <title>front-label</title>
+      <title>front-label-mask</title>
     </polygon>
     <polygon points="704 880.000244 544 880.000244 544 720.000183 704 720.000183" style="stroke: rgb(255, 255, 255);">
-      <title>front-label</title>
+      <title>front-face-angry</title>
     </polygon>
     <polygon points="864 880.000122 704.000122 880.000122 704.000122 720.000061 864 720.000061" style="stroke: rgb(255, 255, 255);">
       <title>front-label</title>
@@ -72,12 +72,26 @@
   </g>
   <g transform="matrix(1, 0, 0, 1, -160, -90)">
     <title>head</title>
-    <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="195.303809" cy="619.496219" r="14.10377">
-      <title>eye</title>
-    </circle>
-    <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="286.696219" cy="619.496219" r="14.10377">
-      <title>eye</title>
-    </circle>
+    <g>
+      <title>eyes</title>
+      <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="195.303809" cy="619.496219" r="14.10377">
+        <title>eye</title>
+      </circle>
+      <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="286.696219" cy="619.496219" r="14.10377">
+        <title>eye</title>
+      </circle>
+    </g>
+    <g transform="matrix(1.003344535828, 0, 0, 1, 542.193969726563, 247.142349243164)">
+      <title>eyes</title>
+      <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="195.303802" cy="629.496216" r="14.10377">
+        <title>eye</title>
+      </circle>
+      <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="286.696228" cy="629.496216" r="14.10377">
+        <title>eye</title>
+      </circle>
+      <rect x="184.748923" y="419.317517" width="33.563195" height="11.590216" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" transform="matrix(0.926528565892, 0.376224423166, -0.178050956069, 1.006998506151, 83.310478210449, 92.391891479495)"/>
+      <rect x="184.748905" y="419.317421" width="33.563199" height="11.590206" style="fill: rgb(216, 216, 216); stroke: rgb(0, 0, 0);" transform="matrix(-0.926528575859, 0.376224398621, 0.17805069204, 1.006998607246, 398.697926492178, 92.385476600288)"/>
+    </g>
   </g>
   <g>
     <title>selector</title>
