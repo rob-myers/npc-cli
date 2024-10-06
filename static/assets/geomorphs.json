@@ -38475,6 +38475,10 @@
             "height": 0.1563
           }
         }
+      },
+      "uvMapDim": {
+        "cuboid-man": {"width": 1024, "height": 1024},
+        "cuboid-pet": {"width": 1024, "height": 1024}
       }
     }
   }

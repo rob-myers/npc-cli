@@ -17,7 +17,7 @@
     w npc.updateLabels rob kate will
     w npc.label.tex.image.toDataURL | log
     ```
-  - 🚧 manually re-map `ui-label` to something in npc labels tex
+  - ✅ re-map `ui-label` to something in npc labels tex
     - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man`
     - ✅ can modify label width in shader
       - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
@@ -91,8 +91,16 @@
       - ✅ cleanup
 
   - ✅ can change label
-  - can change icon
-  - can change face
+  - 🚧 can change icon/face
+    - ✅ feed in uniforms
+    - ✅ get alt face uv rect
+      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry`
+    - ✅ get alt icon uv rect
+      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food`
+    - 🚧 can change face
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: { uvMap: "cuboid-man", uvKey: "front-face-angry" } }'`
+      - ✅ `w.geomorphs.sheet.skins.uvMapDim`
+    - 🚧 can change icon
 
 - ✅ cuboid-pet improvements
   - ✅ smaller, with head in front of body

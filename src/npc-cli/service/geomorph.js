@@ -1103,19 +1103,22 @@ class GeomorphService {
    * parse name to UV Rect i.e. normalized to [0, 1] x [0, 1]
    * @param {string} svgContents 
    * @param {string} logLabel 
-   * @returns {{ [uvRectName: string]: Geom.RectJson }}
+   * @returns {{ width: number; height: number; uvMap: { [uvRectName: string]: Geom.RectJson }; }}
    */
   parseUvMapRects(svgContents, logLabel) {
-    const output = /** @type {{ [uvRectName: string]: Geom.RectJson }} */ ({});
+    const output = /** @type {ReturnType<GeomorphService['parseUvMapRects']>} */ ({
+      width: 0,
+      height: 0,
+      uvMap: {},
+    });
     const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
     const folderStack = /** @type {string[]} */ ([]);
-    let svgWidth = 0, svgHeight = 0;
 
     const parser = new htmlparser2.Parser({
       onopentag(name, attributes) {
         if (tagStack.length === 0) {
-          svgWidth = Number(attributes.width) || 0;
-          svgHeight = Number(attributes.height) || 0;
+          output.width = Number(attributes.width) || 0;
+          output.height = Number(attributes.height) || 0;
         }
         tagStack.push({ tagName: name, attributes });
       },
@@ -1145,8 +1148,8 @@ class GeomorphService {
 
         if (poly) {// output sub-rect of [0, 1] x [0, 1]
           const uvRectName = contents; // e.g. `head-right`
-          output[uvRectName] = poly.rect
-            .scale(1 / svgWidth, 1 / svgHeight)
+          output.uvMap[uvRectName] = poly.rect
+            .scale(1 / output.width, 1 / output.height)
             .precision(4).json
           ;
         }

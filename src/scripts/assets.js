@@ -170,6 +170,7 @@ info({ opts });
       skins: {
         svgHash: {},
         uvMap: {},
+        uvMapDim: {},
       },
     },
     symbols: /** @type {*} */ ({}), maps: {},
@@ -703,8 +704,9 @@ async function createNpcTexturesAndUvMeta(assets, prev) {
       const svgContents = fs.readFileSync(svgPath).toString();
 
       // extract uv-mapping from top-level folder "uv-map"
-      const npcUvMeta = geomorph.parseUvMapRects(svgContents, svgBaseName);
-      assets.sheet.skins.uvMap[npcClassKey] = npcUvMeta;
+      const { width, height, uvMap } = geomorph.parseUvMapRects(svgContents, svgBaseName);
+      assets.sheet.skins.uvMap[npcClassKey] = uvMap;
+      assets.sheet.skins.uvMapDim[npcClassKey] = { width, height };
 
       // convert SVG to PNG
       skins.svgHash[npcClassKey] = hashText(svgContents);
