@@ -7,6 +7,7 @@ declare global {
     > & T;
 
     type Vector3Input = import('three').Vector3Tuple | import('three').Vector3Like;
+    type Vector2Input = import('three').Vector2Tuple | import('three').Vector2;
     
     interface IntrinsicElements {
       instancedMonochromeShader: BaseExtendedShaderMaterial<{
@@ -25,8 +26,10 @@ declare global {
         labelHeight?: number;
         showSelector?: boolean;
         selectorColor?: Vector3Input;
+
         uLabelTexId?: number;
-        uLabelUv?: Geom.VectJson[];
+        uLabelUv?: Vector2Input[];
+        uLabelDim?: Vector2Input;
       }>;
     }
   }

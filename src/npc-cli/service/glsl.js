@@ -210,6 +210,7 @@ export const testCharacterShader = {
 
   uniform int uLabelTexId;
   uniform vec2 uLabelUv[4];
+  uniform vec2 uLabelDim;
 
   attribute int vertexId;
 
@@ -249,13 +250,19 @@ export const testCharacterShader = {
       vUv = uLabelUv[vId - 60];
 
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
-      vec2 alignedPosition = transformed.xy;
-      mvPosition.xy += alignedPosition;
-      // 🚧 narrow label (+0.5,-0.5); widen label (-0.5,+0.5)
-      // mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;
-      // 🚧 uniform + aspect ratio
-      // mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x + 0.25 : mvPosition.x - 0.25;
-      // mvPosition.y = vId == 60 || vId == 61 ? mvPosition.y - 0.11 : mvPosition.y + 0.11;
+
+      // vec2 alignedPosition = transformed.xy;
+      // mvPosition.xy += alignedPosition;
+
+      if (vId == 60) {
+        mvPosition.xy += vec2(uLabelDim.x, uLabelDim.y) * 0.5;
+      } else if (vId == 61) {
+        mvPosition.xy += vec2(-uLabelDim.x, uLabelDim.y) * 0.5;
+      } else if (vId == 62) {
+        mvPosition.xy += vec2(uLabelDim.x, -uLabelDim.y) * 0.5;
+      } else {
+        mvPosition.xy += vec2(-uLabelDim.x, -uLabelDim.y) * 0.5;
+      }
 
       gl_Position = projectionMatrix * mvPosition;
       #include <logdepthbuf_vertex>
@@ -292,6 +299,7 @@ export const testCharacterShader = {
   #include <map_pars_fragment>
   #include <logdepthbuf_pars_fragment>
 
+  //#region getTexelColor
   // https://stackoverflow.com/a/74729081/2917822
   vec4 getTexelColor(int texId, vec2 uv) {
     switch (texId) {
@@ -330,6 +338,7 @@ export const testCharacterShader = {
     }
     return vec4(0.0);
   }
+  //#endregion
 
   void main() {
     vec4 diffuseColor = vec4(diffuse, 1);
@@ -350,10 +359,10 @@ export const testCharacterShader = {
 
     if ((vId >= 52 && vId < 56) || vId >= 60) {// selector quad (52..55), label quad (60..63)
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
-      return;
+    } else {
+      gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
     }
 
-    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
   }
   `,
 };
@@ -404,6 +413,7 @@ export const TestCharacterMaterial = shaderMaterial(
     selectorColor: [0, 0, 1],
     uLabelTexId: 0,
     uLabelUv: [],
+    uLabelDim: null, // 🚧
   },
   testCharacterShader.Vert,
   testCharacterShader.Frag,

@@ -73,8 +73,8 @@
         - ❌ fix label by center-ing uvRect inside geometry rect
         - ❌ npc.label always has a fallback label we point to
         - ✅ default label comes from base skin
-        - 🚧 fix label by changing geometry of quad
-          - could overwrite it rather than introducing deltas
+        - ✅ can set width/height of label by changing geometry of quad
+        - 🚧 auto change width/height for better custom labels
 ```sh
 w debug.npc.add $( click 1 ) rob
 

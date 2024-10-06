@@ -85,6 +85,7 @@ export default function TestNpcs(props) {
           label: {
             texId: 0,
             uvs: state.instantiateUvDeltas(quadMeta.label.uvDeltas, quadMeta.label.uvRect),
+            dim: [0.75, 0.375], // 🚧 inferred from Blender model
           },
         },
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
@@ -159,6 +160,7 @@ export default function TestNpcs(props) {
     },
     instantiateUvDeltas(uvDeltas, uvRect) {
       const { center, width, height } = uvRect;
+      // 🔔 Geom.VectJSON throws error, but could use pairs
       return uvDeltas.map(p => new THREE.Vector2(
         center.x + (width * p.x),
         center.y + (height * p.y),
@@ -301,6 +303,8 @@ export default function TestNpcs(props) {
           // showLabel={false}
           uLabelTexId={quad.label.texId}
           uLabelUv={quad.label.uvs}
+          // uLabelDim={quad.label.dim}
+          uLabelDim={[0.75, 0.375]}
         />
       </skinnedMesh>
     </group>
@@ -371,7 +375,7 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {THREE.Object3D} group
  * @property {THREE.SkinnedMesh} mesh
  * @property {THREE.AnimationMixer} mixer
- * @property {{ label: { texId: number; uvs: THREE.Vector2[] } }} quad
+ * @property {{ label: { texId: number; uvs: THREE.Vector2[]; dim: [number, number] } }} quad
  * These are mutated and fed as uniforms into the shader(s)
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
