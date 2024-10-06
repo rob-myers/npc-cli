@@ -81,8 +81,8 @@
         <title>eye</title>
       </circle>
     </g>
-    <g transform="matrix(1.003344535828, 0, 0, 1, 542.193969726563, 247.142349243164)">
-      <title>eyes</title>
+    <g transform="matrix(1.003344535828, 0, 0, 1, 542.193969726563, 267.142333984375)">
+      <title>eyes-angry</title>
       <circle style="stroke: rgb(0, 0, 0); fill: rgb(255, 255, 255);" cx="195.303802" cy="629.496216" r="14.10377">
         <title>eye</title>
       </circle>
