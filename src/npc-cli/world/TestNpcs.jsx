@@ -145,12 +145,14 @@ export default function TestNpcs(props) {
           throw Error(`${npcKey}: label not found: ${JSON.stringify(opts.label)}`)
         }
 
-        const srcUvRect = Rect.fromJson(srcRect).scale(
-          1 / npcLabel.tex.image.width,
-          1 / npcLabel.tex.image.height,
-        );
+        const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height,);
         npc.quad.label.uvs = state.instantiateUvDeltas(quadMeta.label.uvDeltas, srcUvRect);
-        npc.quad.label.texId = 1; // 🚧 hard-coded npc labels texture
+        npc.quad.label.texId = 1; // 🔔 npc.label.tex
+      }
+      
+      if (opts.label === null) {
+        npc.quad.label.uvs = state.instantiateUvDeltas(quadMeta.label.uvDeltas, quadMeta.label.uvRect),
+        npc.quad.label.texId = 0; // 🔔 base skin
       }
 
       update();
@@ -266,7 +268,7 @@ export default function TestNpcs(props) {
     Object.values(state.npc).forEach(({ classKey, npcKey }) => state.setSkin(npcKey, classKey))
   }, [w.hash.sheets]);
 
-  return Object.values(state.npc).map(({ npcKey, bones, initPos, graph, mesh, quad, scale, texture }) =>
+  return Object.values(state.npc).map(({ classKey, npcKey, bones, initPos, graph, mesh, quad, scale, texture }) =>
     <group
       key={npcKey}
       position={initPos}
@@ -288,14 +290,15 @@ export default function TestNpcs(props) {
           diffuse={[1, 1, 1]}
           transparent
           // map={texture}
-          // textures={[ texture, state.dataTex ]}
           textures={[
             texture, // base skin
             w.npc.label.tex, // labels
           ]}
           labelHeight={wallHeight * (1 / scale.x)}
-          selectorColor={[0.6, 0.6, 1]}
+          // labelHeight={wallHeight * (1 / 0.9)}
+          selectorColor={classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
           // showSelector={false}
+          // showLabel={false}
           uLabelTexId={quad.label.texId}
           uLabelUv={quad.label.uvs}
         />
@@ -316,7 +319,7 @@ export default function TestNpcs(props) {
  * @property {{ [npcKey: string]:  TestNpc }} npc
  *
  * @property {(initPoint?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
- * @property {(npcKey: string, opts: { label?: string; }) => void} changeUvQuad
+ * @property {(npcKey: string, opts: { label?: string | null; }) => void} changeUvQuad
  * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} createTestDataTexture
  * @property {(uvDeltas: Geom.VectJson[], uvRect: Rect) => THREE.Vector2[]} instantiateUvDeltas
  * @property {(group: null | THREE.Group) => void} onMountNpc
@@ -336,7 +339,7 @@ const classKeyToMeta = {
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
     // scale: 1,
-    scale: 0.7,
+    scale: 0.6,
     materialName: 'cuboid-man-material',
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',

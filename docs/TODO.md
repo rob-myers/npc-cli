@@ -59,7 +59,7 @@
         - use uniforms for face/icon/label instead
         - `uniform int uLabelTexId` (which texture to use)
         - `uniform vec2 uLabelUv[4]` (4 for quad)
-      - ✅ pre-compute ±0.5 coords for label quad
+      - ✅ pre-compute ±0.5 uv coords for label quad
         ```sh
         w debug.npc.add $( click 1 )
         w debug.npc.testQuadMeta.cuboid-man
@@ -70,7 +70,11 @@
         - ✅ resize default label
         - ✅ use uvs from uniforms for label
         - ✅ can change label
-        - 🚧 fix label size
+        - ❌ fix label by center-ing uvRect inside geometry rect
+        - ❌ npc.label always has a fallback label we point to
+        - ✅ default label comes from base skin
+        - 🚧 fix label by changing geometry of quad
+          - could overwrite it rather than introducing deltas
 ```sh
 w debug.npc.add $( click 1 ) rob
 
@@ -80,18 +84,16 @@ w npc.label.lookup.rob
 
 w debug.npc.changeUvQuad rob '{ label: "rob" }'
 ```
-        - account for different length label i.e. adjust in shader
       - cleanup
 
   - can change label
   - can change icon
   - can change face
-  - simplify original label width (currently 369 / 1024 ~ .36)
 
-- 🚧 cuboid-pet improvements
+- ✅ cuboid-pet improvements
   - ✅ smaller, with head in front of body
-  - fix shadow
-  - smaller head
+  - ✅ fix shadow
+  - ✅ smaller head
 
 - 🚧 prepare for migration into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format

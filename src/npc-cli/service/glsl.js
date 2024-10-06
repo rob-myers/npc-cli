@@ -207,8 +207,8 @@ export const testCharacterShader = {
   uniform float labelHeight;
   uniform bool showSelector;
   uniform vec3 selectorColor;
-  uniform sampler2D textures[2]; // [skin, ...]
-  
+
+  uniform int uLabelTexId;
   uniform vec2 uLabelUv[4];
 
   attribute int vertexId;
@@ -253,6 +253,9 @@ export const testCharacterShader = {
       mvPosition.xy += alignedPosition;
       // 🚧 narrow label (+0.5,-0.5); widen label (-0.5,+0.5)
       // mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;
+      // 🚧 uniform + aspect ratio
+      // mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x + 0.25 : mvPosition.x - 0.25;
+      // mvPosition.y = vId == 60 || vId == 61 ? mvPosition.y - 0.11 : mvPosition.y + 0.11;
 
       gl_Position = projectionMatrix * mvPosition;
       #include <logdepthbuf_vertex>
@@ -275,7 +278,8 @@ export const testCharacterShader = {
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-  uniform sampler2D textures[2]; // [skin, ...]
+  /** [skin, npc.label, 🚧 another skin]  */
+  uniform sampler2D textures[3];
   uniform int uLabelTexId;
 
   flat varying int vId;
@@ -288,27 +292,63 @@ export const testCharacterShader = {
   #include <map_pars_fragment>
   #include <logdepthbuf_pars_fragment>
 
+  // https://stackoverflow.com/a/74729081/2917822
+  vec4 getTexelColor(int texId, vec2 uv) {
+    switch (texId) {
+      case 0: return texture2D(textures[0], uv);
+      case 1: return texture2D(textures[1], uv);
+      case 2: return texture2D(textures[2], uv);
+      // case 3: return texture2D(textures[3], uv);
+      // case 4: return texture2D(textures[4], uv);
+      // case 5: return texture2D(textures[5], uv);
+      // case 6: return texture2D(textures[6], uv);
+      // case 7: return texture2D(textures[7], uv);
+      // case 8: return texture2D(textures[8], uv);
+      // case 9: return texture2D(textures[9], uv);
+      // case 10: return texture2D(textures[10], uv);
+      // case 11: return texture2D(textures[11], uv);
+      // case 12: return texture2D(textures[12], uv);
+      // case 13: return texture2D(textures[13], uv);
+      // case 14: return texture2D(textures[14], uv);
+      // case 15: return texture2D(textures[15], uv);
+      // case 16: return texture2D(textures[16], uv);
+      // case 17: return texture2D(textures[17], uv);
+      // case 18: return texture2D(textures[18], uv);
+      // case 19: return texture2D(textures[19], uv);
+      // case 20: return texture2D(textures[20], uv);
+      // case 21: return texture2D(textures[21], uv);
+      // case 22: return texture2D(textures[22], uv);
+      // case 23: return texture2D(textures[23], uv);
+      // case 24: return texture2D(textures[24], uv);
+      // case 25: return texture2D(textures[25], uv);
+      // case 26: return texture2D(textures[26], uv);
+      // case 27: return texture2D(textures[27], uv);
+      // case 28: return texture2D(textures[28], uv);
+      // case 29: return texture2D(textures[29], uv);
+      // case 30: return texture2D(textures[30], uv);
+      // case 31: return texture2D(textures[31], uv);
+    }
+    return vec4(0.0);
+  }
+
   void main() {
     vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
     #include <map_fragment>
 
-    if (textures.length() > 0) {// can use multiple textures
-      vec4 texelColor = vec4(0.0);
-      if (vId >= 60) {
-        // 🔔 label quad uses label texture
-        texelColor = texture2D(textures[1], vUv);
-      } else {
-        texelColor = texture2D(textures[0], vUv);
-      }
-      diffuseColor *= texelColor;
+    vec4 texelColor = vec4(0.0);
+    if (vId >= 60) {
+      texelColor = getTexelColor(uLabelTexId, vUv);
+    } else {
+      texelColor = texture2D(textures[0], vUv);
     }
+    diffuseColor *= texelColor;
 
     if (diffuseColor.a < 0.1) {
       discard;
     }
 
-    if ((vId >= 52 && vId < 56) || vId >= 60) {// selector quad (52..56), label quad (60..64)
+    if ((vId >= 52 && vId < 56) || vId >= 60) {// selector quad (52..55), label quad (60..63)
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
       return;
     }
