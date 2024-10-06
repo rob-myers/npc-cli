@@ -150,6 +150,11 @@ export default function TestNpcs(props) {
         const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);
         npc.quad.label.uvs = state.instantiateUvDeltas(quadMeta.label.uvDeltas, srcUvRect);
         npc.quad.label.texId = 1; // 🔔 npc.label.tex
+        npc.quad.label.dim = [
+          // 🚧 justify constant (take npc scale factor into account)
+          0.004 * srcRect.width,
+          0.004 * srcRect.height,
+        ];
       }
       
       if (opts.label === null) {// Reset
@@ -315,9 +320,7 @@ export default function TestNpcs(props) {
           // showLabel={false}
           uLabelTexId={quad.label.texId}
           uLabelUv={quad.label.uvs}
-          // uLabelDim={quad.label.dim}
-          uLabelDim={[0.75, 0.375]}
-          // uLabelDim={[0.25, 0.125]}
+          uLabelDim={quad.label.dim}
         />
       </skinnedMesh>
     </group>

@@ -74,17 +74,21 @@
         - ❌ npc.label always has a fallback label we point to
         - ✅ default label comes from base skin
         - ✅ can set width/height of label by changing geometry of quad
-        - 🚧 auto change width/height for better custom labels
-```sh
-w debug.npc.add $( click 1 ) rob
+        - ✅ auto choose width/height for better custom labels
+        ```sh
+        w debug.npc.add $( click 1 ) rob
+        w debug.npc.add $( click 1 ) kate
 
-w npc.updateLabels rob kate will
-w npc.label.tex.image.toDataURL | log
-w npc.label.lookup.rob
+        w npc.updateLabels rob kate will a-really-long-name
+        w npc.label.tex.image.toDataURL | log
+        w npc.label.lookup.rob
 
-w debug.npc.changeUvQuad rob '{ label: "rob" }'
-```
-      - cleanup
+        w debug.npc.changeUvQuad rob '{ label: "rob" }'
+        w debug.npc.changeUvQuad kate '{ label: "kate" }'
+
+        w debug.npc.changeUvQuad kate '{ label: "a-really-long-name" }'
+        ```
+      - 🚧 cleanup
 
   - can change label
   - can change icon
