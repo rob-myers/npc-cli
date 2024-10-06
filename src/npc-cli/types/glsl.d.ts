@@ -27,6 +27,11 @@ declare global {
         showSelector?: boolean;
         selectorColor?: Vector3Input;
 
+        uFaceTexId?: number;
+        uFaceUv?: Vector2Input[];
+        uIconTexId?: number;
+        uIconUv?: Vector2Input[];
+
         uLabelTexId?: number;
         uLabelUv?: Vector2Input[];
         uLabelDim?: Vector2Input;

@@ -100,6 +100,8 @@
     - 🚧 can change face
       - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: { uvMap: "cuboid-man", uvKey: "front-face-angry" } }'`
       - ✅ `w.geomorphs.sheet.skins.uvMapDim`
+      - ✅ augment shader
+      - 🚧 cleanup
     - 🚧 can change icon
 
 - ✅ cuboid-pet improvements

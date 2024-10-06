@@ -56,6 +56,7 @@ export default function TestNpcs(props) {
       const clonedScene = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(clonedScene);
       const scene = /** @type {THREE.Group} */ (graph.nodes[meta.groupName]);
+
       // Must be SkinnedMesh i.e. GLTF exported with animations
       const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (graph.nodes[meta.meshName]);
 
@@ -82,12 +83,9 @@ export default function TestNpcs(props) {
         mesh: skinnedMesh,
         mixer: emptyAnimationMixer,
         quad: {
-          label: {// clone quadMeta.label.default
-            texId: quadMeta.label.default.texId,
-            dim: /** @type {[number, number]} */ (quadMeta.label.default.dim.slice()),
-            uvs: quadMeta.label.default.uvs.map(v => v.clone()), // THREE.Vector2
-          },
-          // ...
+          label: state.cloneUvQuadInstance(quadMeta.label.default),
+          face: state.cloneUvQuadInstance(quadMeta.face.default),
+          icon: state.cloneUvQuadInstance(quadMeta.icon.default),
         },
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
@@ -103,38 +101,6 @@ export default function TestNpcs(props) {
 
       await state.setSkin(npcKey, npcClassKey);
       update();
-    },
-    /**
-     * Considered sending multiple uv-maps via DataTexture
-     * but will use multiple uniforms instead.
-     */
-    createTestDataTexture(skinnedMesh) {
-      const meshUvs = /** @type {THREE.BufferAttribute} */ (
-        skinnedMesh.geometry.getAttribute('uv')
-      ).toJSON().array;
-
-      if (meshUvs.length !== 64 * 2) {
-        warn('expected 64 vertices')
-      }
-
-      // 64 vertices (width)
-      // 8 uv maps 🔔 (height) [all the same i.e. inherited from mesh]
-      // 4 (r,g,b,a)
-      const data = new Float32Array(64 * 8 * 4);
-      let i = 0;
-      for(let uvMapId = 0; uvMapId < 8; uvMapId++) {
-        for(let vId = 0; vId < 64; vId++) {
-          data[i + 0] = meshUvs[2 * vId + 0]
-          data[i + 1] = meshUvs[2 * vId + 1]
-          data[i + 2] = 0; // texture id
-          data[i + 3] = 0; // unused
-          i += 4;
-        }
-      }
-
-      const texture = new THREE.DataTexture(data, 64, 8, THREE.RGBAFormat, THREE.FloatType);
-      texture.needsUpdate = true;
-      return texture;
     },
     changeUvQuad(npcKey, opts) {
       const npc = state.npc[npcKey];
@@ -158,13 +124,38 @@ export default function TestNpcs(props) {
           0.006 * npcScale * srcRect.height,
         ];
       } else if (opts.label === null) {// Reset
-        npc.quad.label = quadMeta.label.default;
+        npc.quad.label = state.cloneUvQuadInstance(quadMeta.label.default);
       }
 
-      // 🚧 face
+      // face
+      if (opts.face) {
+        const { uvMap } = w.geomorphs.sheet.skins;
+        const { uvMap: uvMapKey, uvKey } = opts.face;
+
+        const srcRect = uvMap[uvMapKey]?.[uvKey];
+        if (!srcRect) {
+          throw Error(`${npcKey}: uv{Map,Key} not found: ${JSON.stringify(opts.face)}`)
+        }
+
+        // 🔔 srcRect is already a sub-rect of [0, 1]x[0, 1]
+        const srcUvRect = Rect.fromJson(srcRect);
+        npc.quad.face.uvs = state.instantiateUvDeltas(quadMeta.face.uvDeltas, srcUvRect);
+        npc.quad.face.texId = 0; // 🚧 should follow from uvMapKey
+
+      } else if (opts.face === null) {// Reset
+        npc.quad.face = state.cloneUvQuadInstance(quadMeta.face.default);
+      }
+
       // 🚧 icon
 
       update();
+    },
+    cloneUvQuadInstance(uvQuadInst) {
+      return {// clone quadMeta.label.default
+        texId: uvQuadInst.texId,
+        dim: /** @type {[number, number]} */ (uvQuadInst.dim.slice()),
+        uvs: uvQuadInst.uvs.map(v => v.clone()), // THREE.Vector2
+      };
     },
     instantiateUvDeltas(uvDeltas, uvRect) {
       const { center, width, height } = uvRect;
@@ -185,28 +176,27 @@ export default function TestNpcs(props) {
     onTick(deltaMs) {
       Object.values(state.npc).forEach(x => x.mixer.update(deltaMs));
     },
+    /**
+     * Blender Mesh has 32 vertices.
+     * 
+     * GLTF Mesh has 64 vertices:
+     * - (3 * 8) + (3 * 8) + (4 * 4) = 64
+     *   i.e. head (cuboid), body (cuboid), 4 quads
+     * - head < body < shadow quad < selector quad < icon quad < label quad
+     * - concerning face:
+     *   - cuboid vertices duped 3 times (adjacently) due to uv map
+     *   - via vertex normals, face corresponds to 1st copy (4 times)
+     * 
+     * ∴ label quad vertex ids: 60, 61, 62, 63
+     * ∴ icon quad vertex ids: 56, 57, 58, 59
+     * ∴ face quad vertex ids: 3 * 0, 3 * 1, 3 * 4, 3 * 5 
+     */
     preComputeUvOffsets(skinnedMesh) {
       const emptyRect = new Rect();
       const emptyUvDeltas = /** @type {Geom.VectJson[]} */ ([]);
       const emptyUvQuadInst = /** @type {UvQuadInstance} */ ({});
       
-      /**
-       * Blender Mesh has 32 vertices.
-       * 
-       * GLTF Mesh has 64 vertices:
-       * - (3 * 8) + (3 * 8) + (4 * 4) = 64
-       *   i.e. head (cuboid), body (cuboid), 4 quads
-       * - head < body < shadow quad < selector quad < icon quad < label quad
-       * - concerning face:
-       *   - cuboid vertices duped 3 times (adjacently) due to uv map
-       *   - via vertex normals, face corresponds to 1st copy (4 times)
-       * 
-       * ∴ label quad vertex ids: 60, 61, 62, 63
-       * ∴ icon quad vertex ids: 56, 57, 58, 59
-       * ∴ face quad vertex ids: 3 * 0, 3 * 1, 3 * 4, 3 * 5 
-       * 
-       * @type {TestNpcQuadMeta}
-       */
+      /** @type {TestNpcQuadMeta} */
       const quadMeta = {
         face: { vertexIds: [0, 3, 3 * 4, 3 * 5], uvRect: emptyRect, uvDeltas: emptyUvDeltas, default: emptyUvQuadInst },
         icon: { vertexIds: [56, 57, 58, 59], uvRect: emptyRect, uvDeltas: emptyUvDeltas, default: emptyUvQuadInst },
@@ -231,18 +221,15 @@ export default function TestNpcs(props) {
           y: p.y === uvRect.y ? -0.5 : 0.5,
         }));
 
-        quad.default.texId = 0;
-        quad.default.uvs = state.instantiateUvDeltas(quad.uvDeltas, quad.uvRect);
-
-        // inferred from Blender model
-        if (quadKey === 'label') {
-          quad.default.dim = [0.75, 0.375];
-        } else {// 'face' and 'icon' have same dimension
-          quad.default.dim = [0.4, 0.4];
-        }
+        quad.default = {
+          texId: 0, // base skin
+          uvs: state.instantiateUvDeltas(quad.uvDeltas, quad.uvRect),
+          // inferred from Blender model
+          // 'face' and 'icon' have same dimension
+          dim: quadKey === 'label' ? [0.75, 0.375] : [0.4, 0.4],
+        };
       }
 
-      // console.log({ quadMeta });
       return quadMeta;
     },
     remove(...npcKeys) {
@@ -275,7 +262,39 @@ export default function TestNpcs(props) {
       }
 
       npc.mixer = mixer;
-    }
+    },
+    /**
+     * Considered sending multiple uv-maps via DataTexture
+     * but will use multiple uniforms instead.
+     */
+    unusedCreateDataTexture(skinnedMesh) {
+      const meshUvs = /** @type {THREE.BufferAttribute} */ (
+        skinnedMesh.geometry.getAttribute('uv')
+      ).toJSON().array;
+
+      if (meshUvs.length !== 64 * 2) {
+        warn('expected 64 vertices')
+      }
+
+      // 64 vertices (width)
+      // 8 uv maps 🔔 (height) [all the same i.e. inherited from mesh]
+      // 4 (r,g,b,a)
+      const data = new Float32Array(64 * 8 * 4);
+      let i = 0;
+      for(let uvMapId = 0; uvMapId < 8; uvMapId++) {
+        for(let vId = 0; vId < 64; vId++) {
+          data[i + 0] = meshUvs[2 * vId + 0]
+          data[i + 1] = meshUvs[2 * vId + 1]
+          data[i + 2] = 0; // texture id
+          data[i + 3] = 0; // unused
+          i += 4;
+        }
+      }
+
+      const texture = new THREE.DataTexture(data, 64, 8, THREE.RGBAFormat, THREE.FloatType);
+      texture.needsUpdate = true;
+      return texture;
+    },
 
   }), {
     preserve: { onMountNpc: true },
@@ -323,6 +342,11 @@ export default function TestNpcs(props) {
           uLabelTexId={quad.label.texId}
           uLabelUv={quad.label.uvs}
           uLabelDim={quad.label.dim}
+
+          uFaceTexId={quad.face.texId}
+          uFaceUv={quad.face.uvs}
+          uIconTexId={quad.icon.texId}
+          uIconUv={quad.icon.uvs}
         />
       </skinnedMesh>
     </group>
@@ -341,8 +365,9 @@ export default function TestNpcs(props) {
  * @property {{ [npcKey: string]:  TestNpc }} npc
  *
  * @property {(position?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
- * @property {(npcKey: string, opts: { label?: string | null; }) => void} changeUvQuad
- * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} createTestDataTexture
+ * @property {(input: UvQuadInstance) => UvQuadInstance} cloneUvQuadInstance
+ * @property {(npcKey: string, opts: { label?: string | null; face?: { uvMap: "cuboid-man"; uvKey: string; } }) => void} changeUvQuad
+ * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} unusedCreateDataTexture
  * @property {(uvDeltas: Geom.VectJson[], uvRect: Rect) => THREE.Vector2[]} instantiateUvDeltas
  * @property {(group: null | THREE.Group) => void} onMountNpc
  * @property {(deltaMs: number) => void} onTick
@@ -392,7 +417,7 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {THREE.Object3D} group
  * @property {THREE.SkinnedMesh} mesh
  * @property {THREE.AnimationMixer} mixer
- * @property {{ label: UvQuadInstance }} quad
+ * @property {Record<UvQuadKey, UvQuadInstance>} quad
  * These are mutated and fed as uniforms into the shader(s)
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
@@ -415,12 +440,16 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  */
 
 /**
- * @typedef {Record<'face' | 'icon' | 'label', {
+ * @typedef {Record<UvQuadKey, {
  *   vertexIds: number[];
  *   uvRect: Rect;
  *   uvDeltas: Geom.VectJson[];
  *   default: UvQuadInstance;
  * }>} TestNpcQuadMeta
+ */
+
+/**
+ * @typedef {'face' | 'icon' | 'label'} UvQuadKey
  */
 
 useGLTF.preload(Object.values(classKeyToMeta).map(x => x.url));

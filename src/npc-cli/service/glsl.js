@@ -208,6 +208,11 @@ export const testCharacterShader = {
   uniform bool showSelector;
   uniform vec3 selectorColor;
 
+  uniform int uFaceTexId;
+  uniform vec2 uFaceUv[4];
+  uniform int uIconTexId;
+  uniform vec2 uIconUv[4];
+
   uniform int uLabelTexId;
   uniform vec2 uLabelUv[4];
   uniform vec2 uLabelDim;
@@ -234,7 +239,7 @@ export const testCharacterShader = {
     vColor = vec3(1.0);
     vUv = uv;
 
-    // 🤔 could get uvs from DataTexture
+    // ℹ️ unused "uvs from DataTexture"
     // vec2 uvId = vec2( float (vId) / 64.0, 0.0);
     // vUv = texture2D(textures[1], uvId).xy;
 
@@ -251,7 +256,6 @@ export const testCharacterShader = {
 
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
       // mvPosition.xy += transformed.xy;
-
       // 🔔 overwrite label geometry
       if (vId == 60) {
         mvPosition.xy += vec2(uLabelDim.x, uLabelDim.y) * 0.5;
@@ -266,6 +270,17 @@ export const testCharacterShader = {
       gl_Position = projectionMatrix * mvPosition;
       #include <logdepthbuf_vertex>
       return;
+    }
+
+    // 3 * 0, 3 * 1, 3 * 4, 3 * 5
+    if (vId == 0 || vId == 3 || vId == 3 * 4 || vId == 3 * 5) {
+      // vUv = vec2(0.0);
+      switch (vId) {
+        case 0: vUv = uFaceUv[0]; break;
+        case 3: vUv = uFaceUv[1]; break;
+        case 12: vUv = uFaceUv[2]; break;
+        case 15: vUv = uFaceUv[3]; break;
+      }
     }
 
     vec4 mvPosition = vec4(transformed, 1.0);
@@ -408,9 +423,14 @@ export const TestCharacterMaterial = shaderMaterial(
     labelHeight: wallHeight,
     showSelector: true,
     selectorColor: [0, 0, 1],
+
+    uFaceTexId: 0,
+    uFaceUv: [],
+    uIconTexId: 0,
+    uIconUv: [],
     uLabelTexId: 0,
     uLabelUv: [],
-    uLabelDim: null, // 🚧
+    uLabelDim: null,
   },
   testCharacterShader.Vert,
   testCharacterShader.Frag,
