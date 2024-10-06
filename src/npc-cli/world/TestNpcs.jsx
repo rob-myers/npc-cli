@@ -127,26 +127,26 @@ export default function TestNpcs(props) {
         npc.quad.label = state.cloneUvQuadInstance(quadMeta.label.default);
       }
 
-      // face
-      if (opts.face) {
-        const { uvMap } = w.geomorphs.sheet.skins;
-        const { uvMap: uvMapKey, uvKey } = opts.face;
-
-        const srcRect = uvMap[uvMapKey]?.[uvKey];
-        if (!srcRect) {
-          throw Error(`${npcKey}: uv{Map,Key} not found: ${JSON.stringify(opts.face)}`)
+      // face, icon
+      for (const quadKey of /** @type {const} */ (['face', 'icon'])) {
+        if (opts[quadKey]) {
+          const { uvMap } = w.geomorphs.sheet.skins;
+          const [uvMapKey, uvKey] = opts[quadKey];
+          const srcRect = uvMap[uvMapKey]?.[uvKey];
+  
+          if (!srcRect) {
+            throw Error(`${npcKey}: ${quadKey}: [uvMap, uvKey] not found: ${JSON.stringify(opts[quadKey])}`)
+          }
+  
+          // 🔔 srcRect is already a sub-rect of [0, 1]x[0, 1]
+          const srcUvRect = Rect.fromJson(srcRect);
+          npc.quad[quadKey].uvs = state.instantiateUvDeltas(quadMeta[quadKey].uvDeltas, srcUvRect);
+          npc.quad[quadKey].texId = 0; // 🚧 should follow from uvMapKey
+  
+        } else if (opts[quadKey] === null) {// Reset
+          npc.quad[quadKey] = state.cloneUvQuadInstance(quadMeta[quadKey].default);
         }
-
-        // 🔔 srcRect is already a sub-rect of [0, 1]x[0, 1]
-        const srcUvRect = Rect.fromJson(srcRect);
-        npc.quad.face.uvs = state.instantiateUvDeltas(quadMeta.face.uvDeltas, srcUvRect);
-        npc.quad.face.texId = 0; // 🚧 should follow from uvMapKey
-
-      } else if (opts.face === null) {// Reset
-        npc.quad.face = state.cloneUvQuadInstance(quadMeta.face.default);
       }
-
-      // 🚧 icon
 
       update();
     },
@@ -366,7 +366,7 @@ export default function TestNpcs(props) {
  *
  * @property {(position?: Geom.VectJson, charKey?: TestNpcClassKey) => Promise<void>} add
  * @property {(input: UvQuadInstance) => UvQuadInstance} cloneUvQuadInstance
- * @property {(npcKey: string, opts: { label?: string | null; face?: { uvMap: "cuboid-man"; uvKey: string; } }) => void} changeUvQuad
+ * @property {(npcKey: string, opts: { label?: string | null; face?: [string, string]; icon?: [string, string] }) => void} changeUvQuad
  * @property {(skinnedMesh: THREE.SkinnedMesh) => THREE.DataTexture} unusedCreateDataTexture
  * @property {(uvDeltas: Geom.VectJson[], uvRect: Rect) => THREE.Vector2[]} instantiateUvDeltas
  * @property {(group: null | THREE.Group) => void} onMountNpc

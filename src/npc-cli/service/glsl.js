@@ -243,15 +243,10 @@ export const testCharacterShader = {
     // vec2 uvId = vec2( float (vId) / 64.0, 0.0);
     // vUv = texture2D(textures[1], uvId).xy;
 
-    if (vId >= 52 && vId < 56) {// selector quad
-      if (showSelector == false) return;
-      vColor = selectorColor;
-    }
-
     if (vId >= 60) {// label quad
+
       if (showLabel == false) return; 
 
-      // 🔔 overwrite label uvs
       vUv = uLabelUv[vId - 60];
 
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
@@ -270,11 +265,17 @@ export const testCharacterShader = {
       gl_Position = projectionMatrix * mvPosition;
       #include <logdepthbuf_vertex>
       return;
-    }
+    } else if (vId >= 56) {// icon quad
 
-    // 3 * 0, 3 * 1, 3 * 4, 3 * 5
-    if (vId == 0 || vId == 3 || vId == 3 * 4 || vId == 3 * 5) {
-      // vUv = vec2(0.0);
+      vUv = uIconUv[vId - 56];
+
+    } else if (vId >= 52) {// selector quad
+      
+      if (showSelector == false) return;
+      vColor = selectorColor;
+
+    } else if (vId <= 3 * 5) {// face quad
+      // [3 * 0, 3 * 1, 3 * 4, 3 * 5]
       switch (vId) {
         case 0: vUv = uFaceUv[0]; break;
         case 3: vUv = uFaceUv[1]; break;

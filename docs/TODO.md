@@ -97,12 +97,13 @@
       - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry`
     - ✅ get alt icon uv rect
       - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food`
-    - 🚧 can change face
-      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: { uvMap: "cuboid-man", uvKey: "front-face-angry" } }'`
+    -  ✅ can change face
       - ✅ `w.geomorphs.sheet.skins.uvMapDim`
       - ✅ augment shader
-      - 🚧 cleanup
-    - 🚧 can change icon
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: ["cuboid-man", "front-face-angry"] }'`
+    -  ✅ can change icon
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ icon: ["cuboid-man", "front-label-food"] }'`
+    - 🚧 cleanup
 
 - ✅ cuboid-pet improvements
   - ✅ smaller, with head in front of body
