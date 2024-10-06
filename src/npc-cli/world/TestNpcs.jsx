@@ -5,7 +5,7 @@ import { SkeletonUtils } from "three-stdlib";
 
 import { Rect, Vect } from '../geom';
 import { wallHeight } from '../service/const';
-import { debug, keys, range, warn } from '../service/generic';
+import { debug, deepClone, keys, range, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, emptyTexture, textureLoader, toV3 } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
@@ -83,10 +83,11 @@ export default function TestNpcs(props) {
         mixer: emptyAnimationMixer,
         quad: {
           label: {
-            texId: 0,
-            uvs: state.instantiateUvDeltas(quadMeta.label.uvDeltas, quadMeta.label.uvRect),
-            dim: [0.75, 0.375], // 🚧 inferred from Blender model
+            texId: quadMeta.label.default.texId,
+            dim: /** @type {[number, number]} */ (quadMeta.label.default.dim.slice()),
+            uvs: quadMeta.label.default.uvs.map(v => v.clone()), // THREE.Vector2
           },
+          // ...
         },
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
@@ -146,21 +147,20 @@ export default function TestNpcs(props) {
           throw Error(`${npcKey}: label not found: ${JSON.stringify(opts.label)}`)
         }
 
-        const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height,);
+        const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);
         npc.quad.label.uvs = state.instantiateUvDeltas(quadMeta.label.uvDeltas, srcUvRect);
         npc.quad.label.texId = 1; // 🔔 npc.label.tex
       }
       
-      if (opts.label === null) {
-        npc.quad.label.uvs = state.instantiateUvDeltas(quadMeta.label.uvDeltas, quadMeta.label.uvRect),
-        npc.quad.label.texId = 0; // 🔔 base skin
+      if (opts.label === null) {// Reset
+        npc.quad.label = quadMeta.label.default;
       }
 
       update();
     },
     instantiateUvDeltas(uvDeltas, uvRect) {
       const { center, width, height } = uvRect;
-      // 🔔 Geom.VectJSON throws error, but could use pairs
+      // 🔔 array of Geom.VectJSON or pairs throws error
       return uvDeltas.map(p => new THREE.Vector2(
         center.x + (width * p.x),
         center.y + (height * p.y),
@@ -181,6 +181,7 @@ export default function TestNpcs(props) {
       
       const emptyRect = new Rect();
       const emptyUvDeltas = /** @type {Geom.VectJson[]} */ ([]);
+      const emptyUvQuadInst = /** @type {UvQuadInstance} */ ({});
       
       /**
        * Blender Mesh has 32 vertices.
@@ -200,9 +201,9 @@ export default function TestNpcs(props) {
        * @type {TestNpcQuadMeta}
        */
       const quadMeta = {
-        face: { vertexIds: [0, 3, 3 * 4, 3 * 5], uvRect: emptyRect, uvDeltas: emptyUvDeltas },
-        icon: { vertexIds: [56, 57, 58, 59], uvRect: emptyRect, uvDeltas: emptyUvDeltas },
-        label: { vertexIds: [60, 61, 62, 63], uvRect: emptyRect, uvDeltas: emptyUvDeltas },
+        face: { vertexIds: [0, 3, 3 * 4, 3 * 5], uvRect: emptyRect, uvDeltas: emptyUvDeltas, default: emptyUvQuadInst },
+        icon: { vertexIds: [56, 57, 58, 59], uvRect: emptyRect, uvDeltas: emptyUvDeltas, default: emptyUvQuadInst },
+        label: { vertexIds: [60, 61, 62, 63], uvRect: emptyRect, uvDeltas: emptyUvDeltas, default: emptyUvQuadInst },
       };
 
       const uvs = /** @type {THREE.BufferAttribute} */ (
@@ -213,14 +214,25 @@ export default function TestNpcs(props) {
 
       // compute uv rects, infer normalized deltas for each corner
       for (const quadKey of keys(quadMeta)) {
-        const { vertexIds } = quadMeta[quadKey];
-        const quadUvs = vertexIds.map(vId => uvs[vId]);
+        const quad = quadMeta[quadKey];
+
+        const quadUvs = quad.vertexIds.map(vId => uvs[vId]);
         const uvRect = Rect.fromPoints(...quadUvs).precision(6);
-        quadMeta[quadKey].uvRect = uvRect;
-        quadMeta[quadKey].uvDeltas = quadUvs.map(p => ({
+        quad.uvRect = uvRect;
+        quad.uvDeltas = quadUvs.map(p => ({
           x: p.x === uvRect.x ? -0.5 : 0.5,
           y: p.y === uvRect.y ? -0.5 : 0.5,
         }));
+
+        quad.default.texId = 0;
+        quad.default.uvs = state.instantiateUvDeltas(quad.uvDeltas, quad.uvRect);
+
+        // inferred from Blender model
+        if (quadKey === 'label') {
+          quad.default.dim = [0.75, 0.375];
+        } else {// 'face' and 'icon' have same dimension
+          quad.default.dim = [0.4, 0.4];
+        }
       }
 
       // console.log({ quadMeta });
@@ -305,6 +317,7 @@ export default function TestNpcs(props) {
           uLabelUv={quad.label.uvs}
           // uLabelDim={quad.label.dim}
           uLabelDim={[0.75, 0.375]}
+          // uLabelDim={[0.25, 0.125]}
         />
       </skinnedMesh>
     </group>
@@ -375,7 +388,7 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @property {THREE.Object3D} group
  * @property {THREE.SkinnedMesh} mesh
  * @property {THREE.AnimationMixer} mixer
- * @property {{ label: { texId: number; uvs: THREE.Vector2[]; dim: [number, number] } }} quad
+ * @property {{ label: UvQuadInstance }} quad
  * These are mutated and fed as uniforms into the shader(s)
  * @property {THREE.Vector3} scale
  * @property {THREE.Texture} texture
@@ -393,12 +406,16 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  */
 
 /**
- * @typedef {Record<(
- *  | 'face'
- *  | 'icon'
- *  | 'label'
- * ),{
- *   vertexIds: number[]; uvRect: Rect; uvDeltas: Geom.VectJson[];
+ * Assumed `deepClone`able.
+ * @typedef {{ texId: number; uvs: THREE.Vector2[]; dim: [number, number] }} UvQuadInstance
+ */
+
+/**
+ * @typedef {Record<'face' | 'icon' | 'label', {
+ *   vertexIds: number[];
+ *   uvRect: Rect;
+ *   uvDeltas: Geom.VectJson[];
+ *   default: UvQuadInstance;
  * }>} TestNpcQuadMeta
  */
 
