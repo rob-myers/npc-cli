@@ -32,11 +32,14 @@
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
+- 🚧 fix blurred curved table in 303
+  - ✅ extra--020--table-2x0.66
+  - 🚧 add placeholder symbol to 303
+
+- ✅ fix symbols in 303 i.e. definitions should have correct size
+
 - ✅ bug: tabs: un-maximise tty can resume World while tty stays paused
   - ℹ️ unpaused, maximise tty, pause, un-maximise
-- 🚧 fix blurry curved table in 303
-  - ✅ extra--020--table-2x0.66
-  - 🚧 add placeholder synbol to 303
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`
