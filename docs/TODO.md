@@ -91,6 +91,8 @@
       - ✅ cleanup
 
   - ✅ can change label
+      - ℹ️ `w npc.updateLabels rob kate will a-really-long-label`
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ label: "a-really-long-label" }'`
   - 🚧 can change icon/face
     - ✅ feed in uniforms
     - ✅ get alt face uv rect
@@ -150,6 +152,8 @@
   - seems fixed by npc.spawn cleanup
 - bug: tty: ctrl + w while multiple input: goes back a line
   - need repro
+- improve alternate character faces
+- improve alternate character icons
 - change fov with camera distance? e.g. 15 far, 30 close
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader

@@ -201,20 +201,22 @@ export const cameraLightShader = {
  * - Assumes specific mesh with 64 vertices.
  */
 export const testCharacterShader = {
+
   Vert: /*glsl*/`
 
   uniform bool showLabel;
-  uniform float labelHeight;
   uniform bool showSelector;
+
+  uniform float labelHeight;
   uniform vec3 selectorColor;
 
   uniform int uFaceTexId;
   uniform vec2 uFaceUv[4];
   uniform int uIconTexId;
   uniform vec2 uIconUv[4];
-
   uniform int uLabelTexId;
   uniform vec2 uLabelUv[4];
+  // label width/height changes
   uniform vec2 uLabelDim;
 
   attribute int vertexId;
@@ -243,15 +245,20 @@ export const testCharacterShader = {
     // vec2 uvId = vec2( float (vId) / 64.0, 0.0);
     // vUv = texture2D(textures[1], uvId).xy;
 
-    if (vId >= 60) {// label quad
+    if (vId >= 60) {// ⭐️ label quad
 
-      if (showLabel == false) return; 
+      if (showLabel == false) {
+        return;
+      }
 
       vUv = uLabelUv[vId - 60];
 
+      // Point above head
       vec4 mvPosition = modelViewMatrix * vec4(0.0, labelHeight, 0.0, 1.0);
+      
+      // Quad faces the camera
       // mvPosition.xy += transformed.xy;
-      // 🔔 overwrite label geometry
+      // Overwrite geometry for custom label width/height
       if (vId == 60) {
         mvPosition.xy += vec2(uLabelDim.x, uLabelDim.y) * 0.5;
       } else if (vId == 61) {
@@ -261,20 +268,24 @@ export const testCharacterShader = {
       } else {
         mvPosition.xy += vec2(-uLabelDim.x, -uLabelDim.y) * 0.5;
       }
-
       gl_Position = projectionMatrix * mvPosition;
       #include <logdepthbuf_vertex>
       return;
-    } else if (vId >= 56) {// icon quad
+
+    } else if (vId >= 56) {// ⭐️ icon quad
 
       vUv = uIconUv[vId - 56];
 
-    } else if (vId >= 52) {// selector quad
+    } else if (vId >= 52) {// ⭐️ selector quad
       
-      if (showSelector == false) return;
+      if (showSelector == false) {
+        return;
+      }
+
       vColor = selectorColor;
 
-    } else if (vId <= 3 * 5) {// face quad
+    } else if (vId <= 3 * 5) {// ⭐️ face quad
+
       // [3 * 0, 3 * 1, 3 * 4, 3 * 5]
       switch (vId) {
         case 0: vUv = uFaceUv[0]; break;
@@ -282,6 +293,7 @@ export const testCharacterShader = {
         case 12: vUv = uFaceUv[2]; break;
         case 15: vUv = uFaceUv[3]; break;
       }
+
     }
 
     vec4 mvPosition = vec4(transformed, 1.0);
@@ -290,7 +302,7 @@ export const testCharacterShader = {
 
     #include <logdepthbuf_vertex>
 
-    // compute dot product for fragment shader
+    // dot product for basic lighting in fragment shader
     vec3 transformedNormal = normalize(normalMatrix * vec3(normal));
     vec3 lightDir = normalize(mvPosition.xyz);
     dotProduct = -min(dot(transformedNormal, lightDir), 0.0);
@@ -300,8 +312,11 @@ export const testCharacterShader = {
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-  /** skin, npc.label, 🚧 another skin  */
+  // skin, npc.label, 🚧 another skin
   uniform sampler2D textures[3];
+
+  uniform int uFaceTexId;
+  uniform int uIconTexId;
   uniform int uLabelTexId;
 
   flat varying int vId;
@@ -360,20 +375,42 @@ export const testCharacterShader = {
     #include <logdepthbuf_fragment>
     #include <map_fragment>
 
-    if (vId >= 60) {
+    if (vId >= 60) {// ⭐️ label quad
+
       diffuseColor *= getTexelColor(uLabelTexId, vUv);
+
+    } else if (vId >= 56) {// ⭐️ icon quad
+
+      diffuseColor *= getTexelColor(uIconTexId, vUv);
+      
     } else {
-      diffuseColor *= texture2D(textures[0], vUv);
+
+      switch (vId) {
+        case 0: case 3: case 12: case 15: // ⭐️ face quad
+          diffuseColor *= getTexelColor(uFaceTexId, vUv);
+        break;
+        default:
+          diffuseColor *= texture2D(textures[0], vUv);
+      }
+
     }
 
     if (diffuseColor.a < 0.1) {
       discard;
     }
 
-    if ((vId >= 52 && vId < 56) || vId >= 60) {// selector quad (52..55), label quad (60..63)
+    if (vId >= 60) {// ⭐️ label quad (no lighting)
+
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
-    } else {
+
+    } else if (vId >= 52 && vId < 56) { // ⭐️ selector quad (no lighting)
+
+      gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
+
+    } else {// basic lighting
+
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
+
     }
 
   }
