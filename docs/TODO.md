@@ -9,7 +9,7 @@
 - ✅ svgBaseName -> npcClassKey
   - e.g. `cuboid-man.tex.svg` -> `cuboid-man`
 
-- 🚧 cuboid-man improvements
+- ✅ cuboid-man improvements
   - ✅ can set label height
   - ✅ smaller shadow
   - ✅ create some npcs labels
@@ -93,7 +93,7 @@
   - ✅ can change label
       - ℹ️ `w npc.updateLabels rob kate will a-really-long-label`
       - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ label: "a-really-long-label" }'`
-  - 🚧 can change icon/face
+  - ✅ can change icon/face
     - ✅ feed in uniforms
     - ✅ get alt face uv rect
       - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry`
@@ -105,7 +105,7 @@
       - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: ["cuboid-man", "front-face-angry"] }'`
     -  ✅ can change icon
       - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ icon: ["cuboid-man", "front-label-food"] }'`
-    - 🚧 cleanup
+    - ✅ cleanup
 
 - ✅ cuboid-pet improvements
   - ✅ smaller, with head in front of body

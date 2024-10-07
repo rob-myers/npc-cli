@@ -38,7 +38,6 @@ export default function TestNpcs(props) {
       point = { x: 4.5 * 1.5, y: 7 * 1.5 },
       npcKey = `npc-${keys(state.npc).length}`,
       npcClassKey = 'cuboid-man',
-      // npcClassKey = 'cuboid-pet',
     ) {
 
       if (npcKey in state.npc) {
@@ -51,7 +50,7 @@ export default function TestNpcs(props) {
 
       const gltf = classKeyToGltf[npcClassKey];
       const meta = classKeyToMeta[npcClassKey];
-      debug('saw animations', gltf.animations);
+      debug('saw animations', gltf.animations.map(x => x.name));
 
       const clonedScene = SkeletonUtils.clone(gltf.scene);
       const graph = buildObjectLookup(clonedScene);
@@ -72,7 +71,7 @@ export default function TestNpcs(props) {
       const quadMeta = state.quadMeta[npcClassKey] ??= state.preComputeUvOffsets(skinnedMesh);
 
       /** @type {TestNpc} */
-      const character = {
+      const npc = {
         npcKey,
         act: {},
         bones: rootBones,
@@ -90,14 +89,14 @@ export default function TestNpcs(props) {
         scale: skinnedMesh.scale.clone().multiplyScalar(meta.scale),
         texture: emptyTexture,
       };
-      const material = /** @type {THREE.MeshPhysicalMaterial} */ (character.graph.materials[meta.materialName]);
+      const material = /** @type {THREE.MeshPhysicalMaterial} */ (graph.materials[meta.materialName]);
       material.transparent = true; // For drop shadow
 
       skinnedMesh.updateMatrixWorld();
       skinnedMesh.computeBoundingBox();
       skinnedMesh.computeBoundingSphere();
 
-      state.npc[npcKey] = character;
+      state.npc[npcKey] = npc;
 
       await state.setSkin(npcKey, npcClassKey);
       update();
@@ -256,7 +255,7 @@ export default function TestNpcs(props) {
         npc.act[anim.name] = mixer.clipAction(anim);
       }
 
-      if ("Idle" in npc.act) {
+      if ("Idle" in npc.act) {// default to Idle
         mixer.timeScale = classKeyToMeta[npc.classKey].timeScale["Idle"] ?? 1;
         npc.act["Idle"].reset().fadeIn(0.3).play();
       }
