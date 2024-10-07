@@ -2,6 +2,7 @@ import * as THREE from "three";
 import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 import { wallHeight } from "./const";
+import { defaultQuadUvs } from "./three";
 
 const instancedMonochromeShader = {
   Vert: /*glsl*/`
@@ -463,12 +464,12 @@ export const TestCharacterMaterial = shaderMaterial(
     selectorColor: [0, 0, 1],
 
     uFaceTexId: 0,
-    uFaceUv: [],
+    uFaceUv: defaultQuadUvs,
     uIconTexId: 0,
-    uIconUv: [],
+    uIconUv: defaultQuadUvs,
     uLabelTexId: 0,
-    uLabelUv: [],
-    uLabelDim: null,
+    uLabelUv: defaultQuadUvs,
+    uLabelDim: defaultQuadUvs[0],
   },
   testCharacterShader.Vert,
   testCharacterShader.Frag,

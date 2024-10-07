@@ -354,3 +354,5 @@ export function toV3(input) {
     : new THREE.Vector3(input.x, 0, input.y)
   ;
 }
+
+export const defaultQuadUvs = [...Array(4)].map(_ => new THREE.Vector2());
