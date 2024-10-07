@@ -2,116 +2,6 @@
 
 ## WIP
 
-- ✅ parse "uv-map folder" from *.tex.svg
-- ✅ [0, 1] * [0, 1] rect lookup:
-  - `assets.sheet.skins.uvMap[npcClassKey][uvRectName]`
-  - `geomorphs.sheet.skins.uvMap[npcClassKey][uvRectName]`
-- ✅ svgBaseName -> npcClassKey
-  - e.g. `cuboid-man.tex.svg` -> `cuboid-man`
-
-- ✅ cuboid-man improvements
-  - ✅ can set label height
-  - ✅ smaller shadow
-  - ✅ create some npcs labels
-    ```sh
-    w npc.updateLabels rob kate will
-    w npc.label.tex.image.toDataURL | log
-    ```
-  - ✅ re-map `ui-label` to something in npc labels tex
-    - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man`
-    - ✅ can modify label width in shader
-      - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
-    - ✅ read npc texture from array of textures
-    - ✅ understand final 2 tris ~ label quad
-      - https://threejs.org/docs/?q=bufferge#api/en/core/BufferGeometry.index
-      ```sh
-      # ℹ️ final 2 triangles of npc geometry
-      w debug.npc.npc.npc-0.mesh.geometry.index
-      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON
-      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON | map array
-      # length 96 i.e. 32 triangles
-      # i.e. (6 * 2) + (6 * 2) + (4 * 2)
-      # final two triangles: 60,61,63,60,63,62
-
-      # ℹ️ uv rect of final quad ~ final 2 triangles
-      w debug.npc.npc.npc-0.mesh.geometry.attributes | keys
-      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map array
-      # length 128 i.e. 64 vertices and 2 coords per vertex
-      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map 'x => x.array.slice(-8)'
-      # [0.6499999761581421,5.960464477539063e-8,0.15000002086162567,0,0.6499999761581421,0.12500005960464478,0.15000000596046448,0.125]
-
-      w geomorphs.sheet.skins.uvMap.cuboid-man | keys
-      w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label
-      # {x:0.15,y:0,width:0.5,height:0.125}
-      ```
-      - ✅ get vIds, get corresponding UVs
-        - vIds: [60,61,62,63]
-        - UVs (modulo precision): [0.65, 0, 0.15, 0, 0.65, 0.125, 0.15, 0.125]
-      - ✅ compare to label uvRect
-        - corresponds to rect
-    - ℹ️ cannot edit geometry attributes because shared
-    - ✅ uv map into 2nd texture
-      - ℹ️ https://stackoverflow.com/questions/48503775/storing-data-as-a-texture-for-use-in-vertex-shader-for-instanced-geometry-three
-      - ℹ️ https://codepen.io/prisoner849/pen/WNQNdpv?editors=0010
-      - ✅ encode existing uvs as DataTexture and read using vertex id
-      - ✅ encode texture id too
-      - ℹ️ no need for DataTexture
-        - use uniforms for face/icon/label instead
-        - `uniform int uLabelTexId` (which texture to use)
-        - `uniform vec2 uLabelUv[4]` (4 for quad)
-      - ✅ pre-compute ±0.5 uv coords for label quad
-        ```sh
-        w debug.npc.add $( click 1 )
-        w debug.npc.testQuadMeta.cuboid-man
-        ```
-      - ✅ relative to npcClassKey
-      - ✅ setup uniforms for label quad, and use them
-        - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label`
-        - ✅ resize default label
-        - ✅ use uvs from uniforms for label
-        - ✅ can change label
-        - ❌ fix label by center-ing uvRect inside geometry rect
-        - ❌ npc.label always has a fallback label we point to
-        - ✅ default label comes from base skin
-        - ✅ can set width/height of label by changing geometry of quad
-        - ✅ auto choose width/height for better custom labels
-        ```sh
-        w debug.npc.add $( click 1 ) rob
-        w debug.npc.add $( click 1 ) kate
-
-        w npc.updateLabels rob kate will a-really-long-name
-        w npc.label.tex.image.toDataURL | log
-        w npc.label.lookup.rob
-
-        w debug.npc.changeUvQuad rob '{ label: "rob" }'
-        w debug.npc.changeUvQuad kate '{ label: "kate" }'
-
-        w debug.npc.changeUvQuad kate '{ label: "a-really-long-name" }'
-        ```
-      - ✅ cleanup
-
-  - ✅ can change label
-      - ℹ️ `w npc.updateLabels rob kate will a-really-long-label`
-      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ label: "a-really-long-label" }'`
-  - ✅ can change icon/face
-    - ✅ feed in uniforms
-    - ✅ get alt face uv rect
-      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry`
-    - ✅ get alt icon uv rect
-      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food`
-    -  ✅ can change face
-      - ✅ `w.geomorphs.sheet.skins.uvMapDim`
-      - ✅ augment shader
-      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: ["cuboid-man", "front-face-angry"] }'`
-    -  ✅ can change icon
-      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ icon: ["cuboid-man", "front-label-food"] }'`
-    - ✅ cleanup
-
-- ✅ cuboid-pet improvements
-  - ✅ smaller, with head in front of body
-  - ✅ fix shadow
-  - ✅ smaller head
-
 - 🚧 prepare for migration into `<NPCs>`
   - ✅ convert minecraft mesh into jsx format
   - ℹ️ refs get called often if use inline function,
@@ -2564,3 +2454,113 @@ run '({ w, api }) {
     - ✅ head motion
       - already some via breathing (scale hips along z)
       - basic head nod
+
+- ✅ parse "uv-map folder" from *.tex.svg
+- ✅ [0, 1] * [0, 1] rect lookup:
+  - `assets.sheet.skins.uvMap[npcClassKey][uvRectName]`
+  - `geomorphs.sheet.skins.uvMap[npcClassKey][uvRectName]`
+- ✅ svgBaseName -> npcClassKey
+  - e.g. `cuboid-man.tex.svg` -> `cuboid-man`
+
+- ✅ cuboid-man improvements
+  - ✅ can set label height
+  - ✅ smaller shadow
+  - ✅ create some npcs labels
+    ```sh
+    w npc.updateLabels rob kate will
+    w npc.label.tex.image.toDataURL | log
+    ```
+  - ✅ re-map `ui-label` to something in npc labels tex
+    - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man`
+    - ✅ can modify label width in shader
+      - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
+    - ✅ read npc texture from array of textures
+    - ✅ understand final 2 tris ~ label quad
+      - https://threejs.org/docs/?q=bufferge#api/en/core/BufferGeometry.index
+      ```sh
+      # ℹ️ final 2 triangles of npc geometry
+      w debug.npc.npc.npc-0.mesh.geometry.index
+      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON
+      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON | map array
+      # length 96 i.e. 32 triangles
+      # i.e. (6 * 2) + (6 * 2) + (4 * 2)
+      # final two triangles: 60,61,63,60,63,62
+
+      # ℹ️ uv rect of final quad ~ final 2 triangles
+      w debug.npc.npc.npc-0.mesh.geometry.attributes | keys
+      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map array
+      # length 128 i.e. 64 vertices and 2 coords per vertex
+      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map 'x => x.array.slice(-8)'
+      # [0.6499999761581421,5.960464477539063e-8,0.15000002086162567,0,0.6499999761581421,0.12500005960464478,0.15000000596046448,0.125]
+
+      w geomorphs.sheet.skins.uvMap.cuboid-man | keys
+      w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label
+      # {x:0.15,y:0,width:0.5,height:0.125}
+      ```
+      - ✅ get vIds, get corresponding UVs
+        - vIds: [60,61,62,63]
+        - UVs (modulo precision): [0.65, 0, 0.15, 0, 0.65, 0.125, 0.15, 0.125]
+      - ✅ compare to label uvRect
+        - corresponds to rect
+    - ℹ️ cannot edit geometry attributes because shared
+    - ✅ uv map into 2nd texture
+      - ℹ️ https://stackoverflow.com/questions/48503775/storing-data-as-a-texture-for-use-in-vertex-shader-for-instanced-geometry-three
+      - ℹ️ https://codepen.io/prisoner849/pen/WNQNdpv?editors=0010
+      - ✅ encode existing uvs as DataTexture and read using vertex id
+      - ✅ encode texture id too
+      - ℹ️ no need for DataTexture
+        - use uniforms for face/icon/label instead
+        - `uniform int uLabelTexId` (which texture to use)
+        - `uniform vec2 uLabelUv[4]` (4 for quad)
+      - ✅ pre-compute ±0.5 uv coords for label quad
+        ```sh
+        w debug.npc.add $( click 1 )
+        w debug.npc.testQuadMeta.cuboid-man
+        ```
+      - ✅ relative to npcClassKey
+      - ✅ setup uniforms for label quad, and use them
+        - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label`
+        - ✅ resize default label
+        - ✅ use uvs from uniforms for label
+        - ✅ can change label
+        - ❌ fix label by center-ing uvRect inside geometry rect
+        - ❌ npc.label always has a fallback label we point to
+        - ✅ default label comes from base skin
+        - ✅ can set width/height of label by changing geometry of quad
+        - ✅ auto choose width/height for better custom labels
+        ```sh
+        w debug.npc.add $( click 1 ) rob
+        w debug.npc.add $( click 1 ) kate
+
+        w npc.updateLabels rob kate will a-really-long-name
+        w npc.label.tex.image.toDataURL | log
+        w npc.label.lookup.rob
+
+        w debug.npc.changeUvQuad rob '{ label: "rob" }'
+        w debug.npc.changeUvQuad kate '{ label: "kate" }'
+
+        w debug.npc.changeUvQuad kate '{ label: "a-really-long-name" }'
+        ```
+      - ✅ cleanup
+
+  - ✅ can change label
+      - ℹ️ `w npc.updateLabels rob kate will a-really-long-label`
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ label: "a-really-long-label" }'`
+  - ✅ can change icon/face
+    - ✅ feed in uniforms
+    - ✅ get alt face uv rect
+      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry`
+    - ✅ get alt icon uv rect
+      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food`
+    -  ✅ can change face
+      - ✅ `w.geomorphs.sheet.skins.uvMapDim`
+      - ✅ augment shader
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: ["cuboid-man", "front-face-angry"] }'`
+    -  ✅ can change icon
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ icon: ["cuboid-man", "front-label-food"] }'`
+    - ✅ cleanup
+
+- ✅ cuboid-pet improvements
+  - ✅ smaller, with head in front of body
+  - ✅ fix shadow
+  - ✅ smaller head
