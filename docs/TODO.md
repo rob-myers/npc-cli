@@ -24,7 +24,8 @@
     - ✅ try sway with almost upright head
     - ...
 
-- migrate `cuboid-man` into `<NPCs>` (leave `<TestNpcs>` as is)
+- migrate `cuboid-man` into `<NPCs>`
+  - ℹ️ leave `<TestNpcs>` as is
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -33,6 +34,9 @@
 
 - ✅ bug: tabs: un-maximise tty can resume World while tty stays paused
   - ℹ️ unpaused, maximise tty, pause, un-maximise
+- 🚧 fix blurry curved table in 303
+  - ✅ extra--020--table-2x0.66
+  - 🚧 add placeholder synbol to 303
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`

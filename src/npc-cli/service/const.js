@@ -319,4 +319,5 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "extra--017--table--2x0.5": true,
   "extra--018--table-0.25x0.25": true,
   "extra--019--table-0.5x2": true,
+  "extra--020--table-2x0.66": true,
 };
