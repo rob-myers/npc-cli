@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultSkinKey, glbMeta, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale } from "../service/const";
+import { defaultClassKey, defaultSkinKey, glbMeta, gmLabelHeightSgu, npcClassToMeta, spriteSheetDecorExtraScale } from "../service/const";
 import { info, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, toV3, yAxis } from "../service/three";
@@ -154,6 +154,7 @@ export default function Npcs(props) {
         npc.def = {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
+          classKey: e.classKey ?? npc.def.classKey ?? 'cuboid-man',
           skinKey: e.skinKey ?? npc.def.skinKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
@@ -169,6 +170,7 @@ export default function Npcs(props) {
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
           angle: e.angle ?? 0,
+          classKey: e.classKey ?? defaultClassKey,
           skinKey: e.skinKey ?? defaultSkinKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,

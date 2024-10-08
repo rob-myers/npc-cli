@@ -50,6 +50,7 @@ export class Npc {
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
+    quad: /** @type {null | import('../service/uv').CuboidManQuads} */ (null),
   };
 
   /** @type {null | NPC.CrowdAgent} */

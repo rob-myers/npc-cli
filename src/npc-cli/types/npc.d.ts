@@ -8,7 +8,8 @@ declare namespace NPC {
   interface NPCDef {
     /** User specified e.g. `rob` */
     key: string;
-    skinKey: SkinKey;
+    classKey: ClassKey;
+    skinKey: SkinKey; // 🚧 remove
     /** Radians */
     angle: number;
     /** World units per second */
@@ -53,7 +54,8 @@ declare namespace NPC {
 
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
-    skinKey?: NPC.SkinKey;
+    classKey?: NPC.ClassKey;
+    skinKey?: NPC.SkinKey; // 🚧 remove
     point: Geom.VectJson;
     meta?: Geom.Meta;
     requireNav?: boolean;

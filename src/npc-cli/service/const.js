@@ -123,6 +123,9 @@ export const glbMeta = /** @type {const} */ ({
 /** @type {NPC.SkinKey} */
 export const defaultSkinKey = 'scientist-dabeyt--with-arms.png';
 
+/** @type {NPC.ClassKey} */
+export const defaultClassKey = 'cuboid-man';
+
 /**
  * Fade out previous animation (seconds)
  * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
