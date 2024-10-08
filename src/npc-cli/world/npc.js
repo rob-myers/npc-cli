@@ -7,6 +7,7 @@ import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, toV3, yAxis } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
+import { cmUvService } from "../service/uv";
 
 export class Npc {
 
@@ -158,7 +159,11 @@ export class Npc {
     m.mesh.computeBoundingBox();
     m.mesh.computeBoundingSphere();
 
-    this.changeSkin(this.def.skinKey);
+    const npcClassKey = 'cuboid-man'; // 🚧 this.classKey
+    const quadMeta = cmUvService.getQuadMetas(npcClassKey, m.mesh);
+    // 🚧
+
+    // this.changeSkin(this.def.skinKey);
     // ℹ️ cannot setup mixer until <group> mounts
   }
   /**

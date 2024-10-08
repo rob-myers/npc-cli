@@ -356,3 +356,16 @@ export function toV3(input) {
 }
 
 export const defaultQuadUvs = [...Array(4)].map(_ => new THREE.Vector2());
+
+/**
+ * - precision 6
+ * @param {THREE.BufferGeometry} geometry 
+ * @returns {Geom.VectJson[]}
+ */
+export function getGeometryUvs(geometry) {
+  return /** @type {THREE.BufferAttribute} */ (
+    geometry.getAttribute('uv')
+  ).toJSON().array.reduce((agg, x, i, xs) =>
+    (i % 2 === 1 && agg.push(new Vect(xs[i - 1], x).precision(6)), agg)
+  , /** @type {Geom.VectJson[]} */ ([]));
+}

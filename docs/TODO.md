@@ -8,8 +8,9 @@
     - NPC.ClassKey
     - NPC.ClassDef
   - ✅ classKeyToGltf -> npc.class[classKey].gltf
-  - 🚧 service/uv-map.js
-    - cloneUvQuadInstance, instantiateUvDeltas, changeUvQuad
+  - 🚧 service/uv.js
+    - ✅ quadMeta -> cmUvService.toQuadMetas
+    - 🚧 cloneUvQuadInstance, ✅ instantiateUvDeltas, 🚧 changeUvQuad
   - 🚧 quad -> npc.uv
 
 - one-frame animations: Sit, Lie
