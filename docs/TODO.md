@@ -12,7 +12,10 @@
     - ✅ quadMeta -> cmUvService.toQuadMetas
     - ✅ cloneUvQuadInstance, ✅ instantiateUvDeltas, ✅ changeUvQuad
     - ✅ quad -> npc.s.quad
+  - 🚧 changeUvQuad infers texId
   - ...
+  - npc.changeLabel
+  - npc.changeQuad
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie

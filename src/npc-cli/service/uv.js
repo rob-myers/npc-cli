@@ -18,9 +18,9 @@ import { npcClassToMeta } from "./const";
  *   - cuboid vertices duped 3 times (adjacently) due to uv map
  *   - via vertex normals, face corresponds to 1st copy (4 times)
  * 
- * ∴ label quad vertex ids: 60, 61, 62, 63
- * ∴ icon quad vertex ids: 56, 57, 58, 59
- * ∴ face quad vertex ids: 3 * 0, 3 * 1, 3 * 4, 3 * 5 
+ * => label quad vertex ids: 60, 61, 62, 63
+ * => icon quad vertex ids: 56, 57, 58, 59
+ * => face quad vertex ids: 3 * 0, 3 * 1, 3 * 4, 3 * 5 
  */
 class CuboidManUvService {
 
