@@ -101,50 +101,13 @@ class CuboidManUvService {
   }
 
   /**
-   * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey 
-   * @returns {CuboidManQuads}
-   */
-  getDefaultUvQuads(npcClassKey) {
-    // Assume exists
-    const quadMeta = this.toQuadMetas[npcClassKey];
-    return {// clone quadMeta.label.default
-      label: this.cloneUvQuadInstance(quadMeta.label.default),
-      face: this.cloneUvQuadInstance(quadMeta.face.default),
-      icon: this.cloneUvQuadInstance(quadMeta.icon.default),
-    };
-  }
-
-  /**
-   * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey
-   * @param {THREE.SkinnedMesh} skinnedMesh
-   * @returns {CuboidManQuadMetas};
-   */
-  getQuadMetas(npcClassKey, skinnedMesh) {
-    return this.toQuadMetas[npcClassKey] ??= this.storeUvOffsets(npcClassKey, skinnedMesh);
-  }
-
-  /**
-   * @param {Geom.VectJson[]} uvDeltas 
-   * @param {Rect} uvRect 
-   * @returns {THREE.Vector2[]}
-   */
-  instantiateUvDeltas(uvDeltas, uvRect) {
-    const { center, width, height } = uvRect;
-    // 🔔 Array of Geom.VectJSON or [number, number] throws error
-    return uvDeltas.map(p => new THREE.Vector2(
-      center.x + (width * p.x),
-      center.y + (height * p.y),
-    ));
-  }
-
-  /**
    * Set value of `toQuadMetas[npcClassKey]` (never changes).
    * @private
    * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey 
    * @param {THREE.SkinnedMesh} skinnedMesh 
    * @returns {CuboidManQuadMetas};
    */
-  storeUvOffsets(npcClassKey, skinnedMesh) {
+  computeQuadMetas(npcClassKey, skinnedMesh) {
     const uvs = getGeometryUvs(skinnedMesh.geometry);
 
     /** @type {CuboidManQuadMetas} */
@@ -174,6 +137,43 @@ class CuboidManUvService {
     }
 
     return this.toQuadMetas[npcClassKey] = toQuadMeta;
+  }
+
+  /**
+   * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey 
+   * @returns {CuboidManQuads}
+   */
+  getDefaultUvQuads(npcClassKey) {
+    // Assume exists
+    const quadMeta = this.toQuadMetas[npcClassKey];
+    return {// clone quadMeta.label.default
+      label: this.cloneUvQuadInstance(quadMeta.label.default),
+      face: this.cloneUvQuadInstance(quadMeta.face.default),
+      icon: this.cloneUvQuadInstance(quadMeta.icon.default),
+    };
+  }
+
+  /**
+   * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey
+   * @param {THREE.SkinnedMesh} skinnedMesh
+   * @returns {CuboidManQuadMetas};
+   */
+  getQuadMetas(npcClassKey, skinnedMesh) {
+    return this.toQuadMetas[npcClassKey] ??= this.computeQuadMetas(npcClassKey, skinnedMesh);
+  }
+
+  /**
+   * @param {Geom.VectJson[]} uvDeltas 
+   * @param {Rect} uvRect 
+   * @returns {THREE.Vector2[]}
+   */
+  instantiateUvDeltas(uvDeltas, uvRect) {
+    const { center, width, height } = uvRect;
+    // 🔔 Array of Geom.VectJSON or [number, number] throws error
+    return uvDeltas.map(p => new THREE.Vector2(
+      center.x + (width * p.x),
+      center.y + (height * p.y),
+    ));
   }
 
 }
