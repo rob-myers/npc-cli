@@ -308,8 +308,8 @@ export default function WorldCanvas(props) {
       <PerspectiveCamera
         position={[0, 16, 0]}
         makeDefault
-        // fov={15}
-        fov={20}
+        fov={15}
+        // fov={20}
         zoom={0.5}
       />
 
@@ -404,6 +404,7 @@ const canvasCss = css`
     background-color: rgba(20, 20, 20, 1);
     width: 100%;
     height: 100%;
+    /* filter: sepia(1) invert(1); */
   }
 `;
 
