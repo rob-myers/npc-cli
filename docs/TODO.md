@@ -2,30 +2,12 @@
 
 ## WIP
 
-- 🚧 prepare for migration into `<NPCs>`
-  - ✅ convert minecraft mesh into jsx format
-  - ℹ️ refs get called often if use inline function,
-      - use e.g. `ref={state.foo}` instead
-      - https://legacy.reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
-  - ✅ fix `<NPCs>` hmr
-  - ✅ remove nav-obstacles (not needed)
-  - ✅ clean e.g. spawn
-    - ✅ npc.onMount does
-      - ✅ npc.startAnimation('Idle')
-      - ✅ initializes position/angle of npc sans agent
-      - ✅ on add agent pins it to current position
-    - ❌ w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
-    - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
-  - ✅ use React.memo with epochMs override
-  - ✅ rename `cuboidChar` -> `cuboid-man`
-  - ✅ replace `hcTest` with another cuboid character i.e. `cuboid-pet`
-  - ✅ debug npc respawn should not stop animation
-  - 🚧 animation: walk
-    - ✅ try sway with almost upright head
-    - ...
-
-- migrate `cuboid-man` into `<NPCs>`
+- migrate cuboid-man into `<NPCs>`
   - ℹ️ leave `<TestNpcs>` as is
+
+- one-frame animations: Sit, Lie
+- can transition to Sit or Lie
+- implement "do points"
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -2571,3 +2553,25 @@ run '({ w, api }) {
   - ✅ smaller, with head in front of body
   - ✅ fix shadow
   - ✅ smaller head
+
+- ✅ prepare for migration into `<NPCs>`
+  - ✅ convert minecraft mesh into jsx format
+  - ℹ️ refs get called often if use inline function,
+      - use e.g. `ref={state.foo}` instead
+      - https://legacy.reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
+  - ✅ fix `<NPCs>` hmr
+  - ✅ remove nav-obstacles (not needed)
+  - ✅ clean e.g. spawn
+    - ✅ npc.onMount does
+      - ✅ npc.startAnimation('Idle')
+      - ✅ initializes position/angle of npc sans agent
+      - ✅ on add agent pins it to current position
+    - ❌ w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
+    - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
+  - ✅ use React.memo with epochMs override
+  - ✅ rename `cuboidChar` -> `cuboid-man`
+  - ✅ replace `hcTest` with another cuboid character i.e. `cuboid-pet`
+  - ✅ debug npc respawn should not stop animation
+  - ✅ animation: walk
+    - ✅ try sway with almost upright head
+  
