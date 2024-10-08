@@ -4,7 +4,7 @@ import { useGLTF } from "@react-three/drei";
 import { SkeletonUtils } from "three-stdlib";
 
 import { Rect, Vect } from '../geom';
-import { wallHeight } from '../service/const';
+import { npcClassToMeta, wallHeight } from '../service/const';
 import { debug, keys, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, emptyTexture, textureLoader, toV3 } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
@@ -18,8 +18,8 @@ import useUpdate from '../hooks/use-update';
 export default function TestNpcs(props) {
   const w = React.useContext(WorldContext);
 
-  for (const classKey of keys(classKeyToMeta)) {
-    classKeyToGltf[classKey] = useGLTF(classKeyToMeta[classKey].url);
+  for (const classKey of keys(npcClassToMeta)) {
+    classKeyToGltf[classKey] = useGLTF(npcClassToMeta[classKey].url);
   }
 
   const update = useUpdate();
@@ -49,7 +49,7 @@ export default function TestNpcs(props) {
       }
 
       const gltf = classKeyToGltf[npcClassKey];
-      const meta = classKeyToMeta[npcClassKey];
+      const meta = npcClassToMeta[npcClassKey];
       debug('saw animations', gltf.animations.map(x => x.name));
 
       const clonedScene = SkeletonUtils.clone(gltf.scene);
@@ -113,7 +113,7 @@ export default function TestNpcs(props) {
         }
 
         const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);
-        const npcScale = classKeyToMeta[npc.classKey].scale;
+        const npcScale = npcClassToMeta[npc.classKey].scale;
 
         npc.quad.label.uvs = state.instantiateUvDeltas(quadMeta.label.uvDeltas, srcUvRect);
         npc.quad.label.texId = 1; // 🔔 npc.label.tex
@@ -240,7 +240,7 @@ export default function TestNpcs(props) {
     },
     async setSkin(npcKey, classKey = 'cuboid-man') {
       const npc = state.npc[npcKey];
-      const { skinBaseName } = classKeyToMeta[classKey];
+      const { skinBaseName } = npcClassToMeta[classKey];
       // 🚧 hash instead of Date.now()
       const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${Date.now()}`);
       tex.flipY = false;
@@ -256,7 +256,7 @@ export default function TestNpcs(props) {
       }
 
       if ("Idle" in npc.act) {// default to Idle
-        mixer.timeScale = classKeyToMeta[npc.classKey].timeScale["Idle"] ?? 1;
+        mixer.timeScale = npcClassToMeta[npc.classKey].timeScale["Idle"] ?? 1;
         npc.act["Idle"].reset().fadeIn(0.3).play();
       }
 
@@ -380,29 +380,6 @@ export default function TestNpcs(props) {
  * @typedef {'cuboid-man' | 'cuboid-pet'} TestNpcClassKey
  */
 
-/** @type {Record<TestNpcClassKey, TestNpcClassDef>} */
-const classKeyToMeta = {
-  'cuboid-man': {
-    url: '/assets/3d/cuboid-man.glb',
-    scale: 0.6,
-    materialName: 'cuboid-man-material',
-    meshName: 'cuboid-man-mesh',
-    groupName: 'Scene',
-    skinBaseName: 'cuboid-man.tex.png',
-    timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
-  },
-  'cuboid-pet': {
-    url: '/assets/3d/cuboid-pet.glb',
-    // scale: 1,
-    scale: 0.6,
-    materialName: 'cuboid-pet-material',
-    meshName: 'cuboid-pet-mesh',
-    groupName: 'Scene',
-    skinBaseName: 'cuboid-pet.tex.png',
-    timeScale: { 'Idle': 0.4, 'Walk': 0.5 },
-  },
-};
-
 const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib").GLTF>} */ ({})
 
 /**
@@ -423,18 +400,6 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  */
 
 /**
- * @typedef TestNpcClassDef
- * @property {string} url e.g. '/assets/3d/test-hyper-casual.glb'
- * @property {number} scale e.g. `1`
- * @property {string} materialName e.g. 'Material'
- * @property {string} meshName e.g. 'hc-character-mesh'
- * @property {string} groupName e.g. 'Scene'
- * @property {string} skinBaseName e.g. 'test-hyper-casual.tex.png'
- * @property {{ [animName: string]: number }} timeScale
- */
-
-/**
- * Assumed `deepClone`able.
  * @typedef {{ texId: number; uvs: THREE.Vector2[]; dim: [number, number] }} UvQuadInstance
  */
 
@@ -451,4 +416,4 @@ const classKeyToGltf = /** @type {Record<TestNpcClassKey, import("three-stdlib")
  * @typedef {'face' | 'icon' | 'label'} UvQuadKey
  */
 
-useGLTF.preload(Object.values(classKeyToMeta).map(x => x.url));
+useGLTF.preload(Object.values(npcClassToMeta).map(x => x.url));

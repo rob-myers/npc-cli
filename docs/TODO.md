@@ -2,8 +2,15 @@
 
 ## WIP
 
-- migrate cuboid-man into `<NPCs>`
+- 🚧 migrate cuboid-man into `<NPCs>`
   - ℹ️ leave `<TestNpcs>` as is
+  - ✅ classKeyToMeta -> const npcClassToMeta
+    - NPC.ClassKey
+    - NPC.ClassDef
+  - ✅ classKeyToGltf -> npc.class[classKey].gltf
+  - 🚧 service/uv-map.js
+    - cloneUvQuadInstance, instantiateUvDeltas, changeUvQuad
+  - 🚧 quad -> npc.uv
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie

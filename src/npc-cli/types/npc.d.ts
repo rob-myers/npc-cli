@@ -17,6 +17,27 @@ declare namespace NPC {
     walkSpeed: number;
   }
 
+  type ClassKey = (
+    | 'cuboid-man'
+    | 'cuboid-pet'
+  );
+
+  interface ClassDef {
+    /** e.g. '/assets/3d/cuboid-man.glb' */
+    url: string;
+    /** e.g. `1` */
+    scale :number;
+    /** e.g. 'cuboid-man-material' */
+    materialName: string; 
+    /** e.g. 'cuboid-man' */
+    meshName: string;
+    /** e.g. 'Scene' */
+    groupName: string;
+    /** e.g. 'cuboid-man.tex.png' */
+    skinBaseName: string;
+    timeScale: { [animName: string]: number };
+  }
+
   interface TexMeta {
     /**
      * e.g. `cuboid-man`

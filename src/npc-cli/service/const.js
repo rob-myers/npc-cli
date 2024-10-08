@@ -321,3 +321,30 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "extra--019--table-0.5x2": true,
   "extra--020--table-2x0.66": true,
 };
+
+/** @type {Record<NPC.ClassKey, NPC.ClassDef>} */
+export const npcClassToMeta = {
+  'cuboid-man': {
+    url: '/assets/3d/cuboid-man.glb',
+    scale: 0.6,
+    materialName: 'cuboid-man-material',
+    meshName: 'cuboid-man-mesh',
+    groupName: 'Scene',
+    skinBaseName: 'cuboid-man.tex.png',
+    timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
+  },
+  'cuboid-pet': {
+    url: '/assets/3d/cuboid-pet.glb',
+    // scale: 1,
+    scale: 0.6,
+    materialName: 'cuboid-pet-material',
+    meshName: 'cuboid-pet-mesh',
+    groupName: 'Scene',
+    skinBaseName: 'cuboid-pet.tex.png',
+    timeScale: { 'Idle': 0.4, 'Walk': 0.5 },
+  },
+};
+
+export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
+  Object.keys(npcClassToMeta)
+);

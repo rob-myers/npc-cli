@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultSkinKey, glbMeta, gmLabelHeightSgu, spriteSheetDecorExtraScale } from "../service/const";
+import { defaultSkinKey, glbMeta, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale } from "../service/const";
 import { info, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, toV3, yAxis } from "../service/three";
@@ -21,6 +21,7 @@ export default function Npcs(props) {
   const gltf = useGLTF(glbMeta.url);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    gltf: /** @type {*} */ ({}),
     group: /** @type {*} */ (null),
     label: {
       numLabels: 0,
@@ -214,6 +215,9 @@ export default function Npcs(props) {
   w.npc = state;
   w.n = state.npc;
 
+  state.gltf["cuboid-man"] = useGLTF(npcClassToMeta["cuboid-man"].url);
+  state.gltf["cuboid-pet"] = useGLTF(npcClassToMeta["cuboid-pet"].url);
+  
   React.useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       info('hot-reloading npcs');
@@ -254,6 +258,7 @@ export default function Npcs(props) {
  * @property {THREE.Group} group
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {{ [npcKey: string]: Npc }} npc
+ * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF>} gltf
  *
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
@@ -306,3 +311,5 @@ function NPC({ npc }) {
 
 /** @type {React.MemoExoticComponent<(props: NPCProps & { epochMs: number }) => JSX.Element>} */
 const MemoizedNPC = React.memo(NPC);
+
+useGLTF.preload(Object.values(npcClassToMeta).map(x => x.url));
