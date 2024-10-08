@@ -27,10 +27,7 @@ export default function Npcs(props) {
       lookup: {},
       tex: new THREE.CanvasTexture(getCanvas(`${w.key} npc.label`)),
     },
-    nextObstacleId: 0,
     npc: {},
-    obstacle: {},
-    select: { curr: null, prev: null, many: [] },
 
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = w.crowd.navMeshQuery;
@@ -257,9 +254,6 @@ export default function Npcs(props) {
  * @property {THREE.Group} group
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {{ [npcKey: string]: Npc }} npc
- * @property {{ curr: null | string; prev: null | string; many: string[]; }} select 🚧 move to script
- * @property {number} nextObstacleId
- * @property {Record<string, NPC.Obstacle>} obstacle
  *
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
