@@ -40,6 +40,7 @@
 
 - ✅ bug: tabs: un-maximise tty can resume World while tty stays paused
   - ℹ️ unpaused, maximise tty, pause, un-maximise
+- bug: door sometimes not auto opening for permitted npc when unpermitted npc nearby
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`

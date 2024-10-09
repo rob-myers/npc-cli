@@ -266,18 +266,18 @@ export class Npc {
       return;
     }
     
-    if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
-      // Turn off obstacle avoidance to avoid deceleration near nav border
-      // 🤔 might not need for hyper casual
-      agent.updateParameters({ updateFlags: agent.updateFlags & ~2 });
-    }
+    // if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
+    //   // Turn off obstacle avoidance to avoid deceleration near nav border
+    //   // 🤔 might not need for hyper casual
+    //   agent.updateParameters({ updateFlags: agent.updateFlags & ~2 });
+    // }
 
-    if (distance < 2 * this.agentRadius) {// undo speed scale
-      // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-      agent.updateParameters({
-        maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
-      });
-    }
+    // if (distance < 2 * this.agentRadius) {// undo speed scale
+    //   // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
+    //   agent.updateParameters({
+    //     maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
+    //   });
+    // }
   }
   removeAgent() {
     if (this.agent !== null) {
