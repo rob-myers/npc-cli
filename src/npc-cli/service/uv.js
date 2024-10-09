@@ -38,8 +38,8 @@ class CuboidManUvService {
       const mesh = /** @type {THREE.SkinnedMesh} */ (nodes[meta.meshName]);
       // each npc class has a corresponding constant "quad meta"
       this.toQuadMetas[npcClassKey] = this.initComputeQuadMetas(mesh);
-      // each npc class is also a uvMapKey, fed as 1st texture
-      this.toTexId[npcClassKey][npcClassKey] = 0;
+      // each npc class is also a uvMapKey, fed as 0th texture
+      (this.toTexId[npcClassKey] ??= {})[npcClassKey] = 0;
     }
 
     // ℹ️ w.npc.label.tex ~ texture id 1
