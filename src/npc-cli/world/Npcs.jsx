@@ -7,6 +7,7 @@ import { info, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
+import { cmUvService } from "../service/uv";
 import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -227,6 +228,7 @@ export default function Npcs(props) {
         state.npc[npc.key] = hotModuleReloadNpc(npc)
       );
     }
+    cmUvService.initialize(state.gltf);
   }, []);
 
   const update = useUpdate();

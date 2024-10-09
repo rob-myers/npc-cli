@@ -2,12 +2,12 @@ import * as THREE from "three";
 
 import { Rect } from "../geom";
 import { keys } from "./generic";
-import { getGeometryUvs } from "./three";
-import { npcClassToMeta } from "./const";
+import { buildObjectLookup, getGeometryUvs } from "./three";
+import { npcClassKeys, npcClassToMeta } from "./const";
 
 /**
  * For `'cuboid-man'` or `'cuboid-pet'` i.e. `NPC.ClassKey`.
- * - ℹ️ in future may have incompatible models with own uv service
+ * - ℹ️ additional models may need separate uv service
  * 
  * Their Blender Mesh has 32 vertices, whereas
  * their GLTF Mesh has 64 vertices:
@@ -26,10 +26,26 @@ class CuboidManUvService {
 
   toQuadMetas = /** @type {Record<NPC.ClassKey, CuboidManQuadMetas>} */ ({});
 
-  // 🚧 toTexId['cuboid-man']['cuboid-man'] = 0
-  // 🚧 toTexId['cuboid-man']['alt-cuboid-skin'] = 1
   toTexId = /** @type {Record<NPC.ClassKey, { [uvMapKey: string]: number }>} */ ({});
   
+  /**
+   * @param {Record<NPC.ClassKey, import("three-stdlib").GLTF>} gltf 
+   */
+  initialize(gltf) {
+    for (const npcClassKey of npcClassKeys) {
+      const meta = npcClassToMeta[npcClassKey];
+      const { nodes } = buildObjectLookup(gltf[npcClassKey].scene);
+      const mesh = /** @type {THREE.SkinnedMesh} */ (nodes[meta.meshName]);
+      // each npc class has a corresponding constant "quad meta"
+      this.toQuadMetas[npcClassKey] = this.initComputeQuadMetas(mesh);
+      // each npc class is also a uvMapKey, fed as 1st texture
+      this.toTexId[npcClassKey][npcClassKey] = 0;
+    }
+
+    // ℹ️ w.npc.label.tex ~ texture id 1
+    // 🚧 e.g. toTexId['cuboid-man']['alt-cuboid-skin'] = 2
+  }
+
   /**
    * @param {NPC.NPC} npc
    * @param {string | null} label
@@ -63,7 +79,6 @@ class CuboidManUvService {
 
   /**
    * 'face' or 'icon' ('label' handled elsewhere)
-   * 🚧 infer texId
    * @param {NPC.NPC} npc
    * @param {ChangeUvQuadOpts} [opts]
    */
@@ -83,7 +98,7 @@ class CuboidManUvService {
         // 🔔 srcRect is already in [0, 1]x[0, 1]
         const srcUvRect = Rect.fromJson(srcRect);
         quad[quadKey].uvs = this.instantiateUvDeltas(quadMeta[quadKey].uvDeltas, srcUvRect);
-        quad[quadKey].texId = 0; // 🚧 should follow from uvMapKey
+        quad[quadKey].texId = this.toTexId[npc.def.classKey][uvMapKey]; // e.g. 0
 
       } else if (opts[quadKey] === null) {// Reset
         quad[quadKey] = this.cloneUvQuadInstance(quadMeta[quadKey].default);
@@ -105,13 +120,26 @@ class CuboidManUvService {
   }
 
   /**
-   * Set value of `toQuadMetas[npcClassKey]` (never changes).
-   * @private
    * @param {NPC.ClassKey} npcClassKey 
+   * @returns {CuboidManQuads}
+   */
+  getDefaultUvQuads(npcClassKey) {
+    // Assume exists
+    const quadMeta = this.toQuadMetas[npcClassKey];
+    return {// clone quadMeta.label.default
+      label: this.cloneUvQuadInstance(quadMeta.label.default),
+      face: this.cloneUvQuadInstance(quadMeta.face.default),
+      icon: this.cloneUvQuadInstance(quadMeta.icon.default),
+    };
+  }
+
+  /**
+   * We only need to compute this once for each npc class.
+   * @private
    * @param {THREE.SkinnedMesh} skinnedMesh 
    * @returns {CuboidManQuadMetas};
    */
-  computeQuadMetas(npcClassKey, skinnedMesh) {
+  initComputeQuadMetas(skinnedMesh) {
     const uvs = getGeometryUvs(skinnedMesh.geometry);
 
     /** @type {CuboidManQuadMetas} */
@@ -140,30 +168,7 @@ class CuboidManUvService {
       };
     }
 
-    return this.toQuadMetas[npcClassKey] = toQuadMeta;
-  }
-
-  /**
-   * @param {NPC.ClassKey} npcClassKey 
-   * @returns {CuboidManQuads}
-   */
-  getDefaultUvQuads(npcClassKey) {
-    // Assume exists
-    const quadMeta = this.toQuadMetas[npcClassKey];
-    return {// clone quadMeta.label.default
-      label: this.cloneUvQuadInstance(quadMeta.label.default),
-      face: this.cloneUvQuadInstance(quadMeta.face.default),
-      icon: this.cloneUvQuadInstance(quadMeta.icon.default),
-    };
-  }
-
-  /**
-   * @param {NPC.ClassKey} npcClassKey
-   * @param {THREE.SkinnedMesh} skinnedMesh
-   * @returns {CuboidManQuadMetas};
-   */
-  getQuadMetas(npcClassKey, skinnedMesh) {
-    return this.toQuadMetas[npcClassKey] ??= this.computeQuadMetas(npcClassKey, skinnedMesh);
+    return toQuadMeta;
   }
 
   /**

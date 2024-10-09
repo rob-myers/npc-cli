@@ -160,8 +160,8 @@ export class Npc {
     m.mesh.computeBoundingBox();
     m.mesh.computeBoundingSphere();
 
-    const npcClassKey = 'cuboid-man'; // 🚧 this.classKey
-    const quadMeta = cmUvService.getQuadMetas(npcClassKey, m.mesh);
+    const npcClassKey = this.def.classKey;
+    const quadMeta = cmUvService.toQuadMetas[npcClassKey];
     // 🚧
 
     // this.changeSkin(this.def.skinKey);
