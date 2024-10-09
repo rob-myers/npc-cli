@@ -369,3 +369,13 @@ export function getGeometryUvs(geometry) {
     (i % 2 === 1 && agg.push(new Vect(xs[i - 1], x).precision(6)), agg)
   , /** @type {Geom.VectJson[]} */ ([]));
 }
+
+/**
+ * @param {THREE.Object3D[]} objs 
+ * @returns {THREE.Bone[]}
+ */
+export function getParentBones(objs) {
+  return objs.filter(/** @returns {x is THREE.Bone} */ (x) =>
+    x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
+  );
+}

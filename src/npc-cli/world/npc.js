@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 import { dampLookAt } from "maath/easing";
 
-import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
+import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader, tmpVectThree1, toV3, yAxis } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 import { cmUvService } from "../service/uv";
@@ -56,6 +56,7 @@ export class Npc {
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
   agentRadius = helper.defaults.radius;
+  scale = 1;
 
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
@@ -144,15 +145,15 @@ export class Npc {
    */
   initialize({ scene, animations }) {
     const { m } = this;
+    const meta = npcClassToMeta[this.def.classKey];
+
     m.gltf = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
     m.animations = animations;
 
     m.sub = buildObjectLookup(m.gltf);
     
-    m.bones = Object.values(m.sub.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
-      x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
-    );
-    m.mesh = /** @type {THREE.SkinnedMesh} */ (m.sub.nodes[glbMeta.skinnedMeshName]);
+    m.bones = getParentBones(Object.values(m.sub.nodes));
+    m.mesh = /** @type {THREE.SkinnedMesh} */ (m.sub.nodes[meta.meshName]);
     m.material = /** @type {Npc['m']['material']} */ (m.mesh.material);
     m.mesh.userData.npcKey = this.key; // To decode pointer events
 
@@ -163,6 +164,7 @@ export class Npc {
     const npcClassKey = this.def.classKey;
     const quadMeta = cmUvService.toQuadMetas[npcClassKey];
     // 🚧
+    this.scale = npcClassToMeta[npcClassKey].scale;
 
     // this.changeSkin(this.def.skinKey);
     // ℹ️ cannot setup mixer until <group> mounts
@@ -312,6 +314,12 @@ export class Npc {
       ? (agg[a.name] = this.mixer.clipAction(a), agg)
       : (warn(`ignored unexpected animation: ${a.name}`), agg)
     , /** @type {typeof this['m']['animMap']} */ ({}));
+
+    if ("Idle" in this.m.animMap) {// default to Idle
+      this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale["Idle"] ?? 1;
+      this.m.animMap["Idle"].reset().fadeIn(0.3).play();
+    }
+
   }
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
@@ -380,7 +388,7 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, m, s, mixer, position, agent, lastLookAt, lastTarget, lastCorner } = npc;
+  const { def, epochMs, m, s, mixer, position, agent, lastLookAt, lastTarget, lastCorner, scale } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
   // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
   const nextNpc = new Npc(def, npc.w);
@@ -394,6 +402,7 @@ export function hotModuleReloadNpc(npc) {
     lastLookAt,
     lastTarget,
     lastCorner,
+    scale,
   }));
 }
 

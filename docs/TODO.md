@@ -10,10 +10,13 @@
   - ✅ classKeyToGltf -> npc.class[classKey].gltf
   - ✅ service/uv.js
     - ✅ quadMeta -> cmUvService.toQuadMetas
-    - ✅ cloneUvQuadInstance, ✅ instantiateUvDeltas, ✅ changeUvQuad
+    - ✅ cloneUvQuadInstance ✅ instantiateUvDeltas ✅ changeUvQuad
     - ✅ quad -> npc.s.quad
   - ✅ changeUvQuad infers texId
-  - ...
+  - ✅ replace minecraft models with cuboid-man
+  - 🚧 remove minecraft models
+  - fix shader 
+  - adjust animation timeScale after transition
   - methods directly on npc instances
     - npc.changeLabel
     - npc.changeQuad

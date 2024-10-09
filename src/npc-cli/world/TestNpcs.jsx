@@ -6,7 +6,7 @@ import { SkeletonUtils } from "three-stdlib";
 import { Rect, Vect } from '../geom';
 import { npcClassToMeta, wallHeight } from '../service/const';
 import { debug, keys, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, emptyTexture, textureLoader, toV3 } from "../service/three";
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, emptyTexture, getParentBones, textureLoader, toV3 } from "../service/three";
 import { TestCharacterMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
@@ -63,9 +63,7 @@ export default function TestNpcs(props) {
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
       skinnedMesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
 
-      const rootBones = Object.values(graph.nodes).filter(/** @returns {x is THREE.Bone} */ (x) =>
-        x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
-      );
+      const rootBones = getParentBones(Object.values(graph.nodes));
 
       // state.unusedDataTex ??= state.createTestDataTexture(skinnedMesh);
       const quadMeta = state.quadMeta[npcClassKey] ??= state.preComputeUvOffsets(skinnedMesh);

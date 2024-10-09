@@ -19,7 +19,7 @@ import useUpdate from "../hooks/use-update";
 export default function Npcs(props) {
   const w = React.useContext(WorldContext);
 
-  const gltf = useGLTF(glbMeta.url);
+  // const gltf = useGLTF(glbMeta.url);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     gltf: /** @type {*} */ ({}),
@@ -177,7 +177,7 @@ export default function Npcs(props) {
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
 
-        npc.initialize(gltf);
+        npc.initialize(state.gltf[npc.def.classKey]);
       }
 
       npc.s.spawns === 0 && await new Promise(resolve => {
@@ -236,7 +236,7 @@ export default function Npcs(props) {
   return (
     <group
       name="npcs"
-      ref={x => state.group = x ?? state.group}
+      ref={x => void (state.group = x ?? state.group)}
       onPointerDown={state.onNpcPointerDown}
       onPointerUp={state.onNpcPointerUp}
     >
@@ -262,7 +262,7 @@ export default function Npcs(props) {
  * @property {THREE.Group} group
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {{ [npcKey: string]: Npc }} npc
- * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF>} gltf
+ * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
  *
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
@@ -288,22 +288,38 @@ function NPC({ npc }) {
   const { bones, mesh, material } = npc.m;
 
   return (
+    // <group
+    //   ref={npc.onMount}
+    //   scale={glbMeta.scale}
+    //   // dispose={null}
+    // >
+    //   <group position={[0, 3, 0]}>
+    //     {bones.map((bone, i) => <primitive key={i} object={bone} />)}
+    //     <skinnedMesh
+    //       geometry={mesh.geometry}
+    //       position={mesh.position}
+    //       skeleton={mesh.skeleton}
+    //       userData={mesh.userData}
+    //     >
+    //       <meshPhysicalMaterial transparent map={material.map} />
+    //     </skinnedMesh>
+    //   </group>
+    // </group>
     <group
       ref={npc.onMount}
-      scale={glbMeta.scale}
+      // scale={glbMeta.scale}
+      scale={npc.scale}
       // dispose={null}
     >
-      <group position={[0, 3, 0]}>
-        {bones.map((bone, i) => <primitive key={i} object={bone} />)}
-        <skinnedMesh
-          geometry={mesh.geometry}
-          position={mesh.position}
-          skeleton={mesh.skeleton}
-          userData={mesh.userData}
-        >
-          <meshPhysicalMaterial transparent map={material.map} />
-        </skinnedMesh>
-      </group>
+      {bones.map((bone, i) => <primitive key={i} object={bone} />)}
+      <skinnedMesh
+        geometry={mesh.geometry}
+        position={mesh.position}
+        skeleton={mesh.skeleton}
+        userData={mesh.userData}
+      >
+        <meshPhysicalMaterial transparent map={material.map} />
+      </skinnedMesh>
     </group>
   )
 }

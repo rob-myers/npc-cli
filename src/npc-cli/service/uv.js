@@ -43,7 +43,8 @@ class CuboidManUvService {
     }
 
     // ℹ️ w.npc.label.tex ~ texture id 1
-    // 🚧 e.g. toTexId['cuboid-man']['alt-cuboid-skin'] = 2
+    // 🚧 extend this.toTexId
+    //    e.g. toTexId['cuboid-man']['alt-cuboid-skin'] = 2
   }
 
   /**
