@@ -2,12 +2,13 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultClassKey, gmLabelHeightSgu, npcClassToMeta, spriteSheetDecorExtraScale } from "../service/const";
+import { defaultClassKey, gmLabelHeightSgu, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
 import { info, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
 import { cmUvService } from "../service/uv";
+import { TestCharacterMaterial } from "../service/glsl";
 import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -293,7 +294,31 @@ function NPC({ npc }) {
         skeleton={mesh.skeleton}
         userData={mesh.userData}
       >
+        {/* 🚧 npc.textures [texture, state.label.tex] */}
         <meshPhysicalMaterial transparent map={material.map} />
+        {/* <testCharacterMaterial
+          key={TestCharacterMaterial.key}
+          diffuse={[1, 1, 1]}
+          transparent
+          // map={texture}
+          textures={[
+            texture, // base skin
+            state.label.tex, // labels
+          ]}
+          labelHeight={wallHeight * (1 / npc.scale.x)}
+          // labelHeight={wallHeight * (1 / 0.9)}
+          selectorColor={npc.def.classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
+          // showSelector={false}
+          // showLabel={false}
+          uLabelTexId={npc.quad.label.texId}
+          uLabelUv={quad.label.uvs}
+          uLabelDim={quad.label.dim}
+
+          uFaceTexId={quad.face.texId}
+          uFaceUv={quad.face.uvs}
+          uIconTexId={quad.icon.texId}
+          uIconUv={quad.icon.uvs}
+        /> */}
       </skinnedMesh>
     </group>
   )

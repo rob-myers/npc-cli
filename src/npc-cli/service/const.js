@@ -99,11 +99,9 @@ export const defaultClassKey = 'cuboid-man';
  * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
  */
 export const glbFadeOut = {
-    Idle: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleLeftLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleRightLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.2, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
-    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
+    Idle: { Idle: 0, Run: 0.2, Walk: 0.2 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.2 },
+    Walk: { Idle: 0.25, Run: 0.2, Walk: 0 },
 };
 
 /**
@@ -111,11 +109,9 @@ export const glbFadeOut = {
  * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
  */
  export const glbFadeIn = {
-    Idle: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleLeftLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
-    IdleRightLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.1, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
-    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
+    Idle: { Idle: 0, Run: 0.1, Walk: 0.1 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.1 },
+    Walk: { Idle: 0.25, Run: 0.1, Walk: 0 },
 };
 
 export const showLastNavPath = false;
@@ -305,8 +301,8 @@ export const npcClassToMeta = {
     timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
     // 🚧
     radius: 0.5,
-    walkSpeed: 0.5,
-    runSpeed: 1,
+    walkSpeed: 2,
+    runSpeed: 4,
   },
   'cuboid-pet': {
     url: '/assets/3d/cuboid-pet.glb',
@@ -319,11 +315,13 @@ export const npcClassToMeta = {
     timeScale: { 'Idle': 0.4, 'Walk': 0.5 },
     // 🚧
     radius: 0.5,
-    walkSpeed: 0.5,
-    runSpeed: 1,
+    walkSpeed: 2,
+    runSpeed: 4,
   },
 };
 
 export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
   Object.keys(npcClassToMeta)
 );
+
+0;

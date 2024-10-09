@@ -50,7 +50,7 @@ export class Npc {
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
-    quad: /** @type {null | import('../service/uv').CuboidManQuads} */ (null),
+    quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
   };
 
   /** @type {null | NPC.CrowdAgent} */
@@ -138,9 +138,11 @@ export class Npc {
     m.mesh.computeBoundingSphere();
 
     const npcClassKey = this.def.classKey;
-    const quadMeta = cmUvService.toQuadMetas[npcClassKey];
+
     // 🚧
+    const quadMeta = cmUvService.toQuadMetas[npcClassKey];
     this.scale = npcClassToMeta[npcClassKey].scale;
+    this.s.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
 
     // ℹ️ cannot setup mixer until <group> mounts
   }
@@ -173,7 +175,7 @@ export class Npc {
     }
 
     this.s.moving = true;
-    this.mixer.timeScale = 1;
+    // this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     this.agent.requestMoveTarget(closest);
     if (opts.onStart !== undefined) {
@@ -251,7 +253,7 @@ export class Npc {
       this.lastCorner.copy(nextCorner);
     }
 
-    this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
+    // this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
     const distance = this.s.target.distanceTo(pos);
     // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
 
@@ -289,12 +291,6 @@ export class Npc {
       ? (agg[a.name] = this.mixer.clipAction(a), agg)
       : (warn(`ignored unexpected animation: ${a.name}`), agg)
     , /** @type {typeof this['m']['animMap']} */ ({}));
-
-    if ("Idle" in this.m.animMap) {// default to Idle
-      this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale["Idle"] ?? 1;
-      this.m.animMap["Idle"].reset().fadeIn(0.3).play();
-    }
-
   }
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
@@ -306,6 +302,7 @@ export class Npc {
     const next = this.m.animMap[act];
     anim.fadeOut(glbFadeOut[this.s.act][act]);
     next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
+    this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[act] ?? 1;
     this.s.act = act;
   }
   stopMoving() {

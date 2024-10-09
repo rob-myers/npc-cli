@@ -15,7 +15,9 @@
   - ✅ changeUvQuad infers texId
   - ✅ replace minecraft models with cuboid-man
   - ✅ remove minecraft models
-  - fix shader 
+  - 🚧 use testCharacterMaterial
+    - migrate npc.setSkin and hot-reloads
+    - npc.textures is [skinTex, labelTex]
   - adjust animation timeScale after transition
   - methods directly on npc instances
     - npc.changeLabel
