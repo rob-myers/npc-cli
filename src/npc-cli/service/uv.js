@@ -6,25 +6,29 @@ import { getGeometryUvs } from "./three";
 import { npcClassToMeta } from "./const";
 
 /**
- * For `'cuboid-man'` | `'cuboid-pet'` ≤ `NPC.ClassKey`
+ * For `'cuboid-man'` or `'cuboid-pet'` i.e. `NPC.ClassKey`.
+ * - ℹ️ in future may have incompatible models with own uv service
  * 
- * Their Blender Mesh has 32 vertices,
- * whereas their GLTF Mesh has 64 vertices:
+ * Their Blender Mesh has 32 vertices, whereas
+ * their GLTF Mesh has 64 vertices:
  * 
  * - (3 * 8) + (3 * 8) + (4 * 4) = 64
  *   i.e. head (cuboid), body (cuboid), 4 quads
  * - head < body < shadow quad < selector quad < icon quad < label quad
- * - concerning face:
- *   - cuboid vertices duped 3 times (adjacently) due to uv map
- *   - via vertex normals, face corresponds to 1st copy (4 times)
+ * - cuboid vertices duped 3 times (adjacently) due to uv map
  * 
- * => label quad vertex ids: 60, 61, 62, 63
- * => icon quad vertex ids: 56, 57, 58, 59
- * => face quad vertex ids: 3 * 0, 3 * 1, 3 * 4, 3 * 5 
+ * In particular:
+ * - face quad vertex ids: 3 * 0, 3 * 1, 3 * 4, 3 * 5 
+ * - icon quad vertex ids: 56, 57, 58, 59
+ * - label quad vertex ids: 60, 61, 62, 63
  */
 class CuboidManUvService {
 
-  toQuadMetas = /** @type {Record<'cuboid-man' | 'cuboid-pet', CuboidManQuadMetas>} */ ({});
+  toQuadMetas = /** @type {Record<NPC.ClassKey, CuboidManQuadMetas>} */ ({});
+
+  // 🚧 toTexId['cuboid-man']['cuboid-man'] = 0
+  // 🚧 toTexId['cuboid-man']['alt-cuboid-skin'] = 1
+  toTexId = /** @type {Record<NPC.ClassKey, { [uvMapKey: string]: number }>} */ ({});
   
   /**
    * @param {NPC.NPC} npc
@@ -76,7 +80,7 @@ class CuboidManUvService {
           throw Error(`${npc.key}: ${quadKey}: [uvMap, uvKey] not found: ${JSON.stringify(opts[quadKey])}`)
         }
 
-        // 🔔 srcRect is already a sub-rect of [0, 1]x[0, 1]
+        // 🔔 srcRect is already in [0, 1]x[0, 1]
         const srcUvRect = Rect.fromJson(srcRect);
         quad[quadKey].uvs = this.instantiateUvDeltas(quadMeta[quadKey].uvDeltas, srcUvRect);
         quad[quadKey].texId = 0; // 🚧 should follow from uvMapKey
@@ -103,7 +107,7 @@ class CuboidManUvService {
   /**
    * Set value of `toQuadMetas[npcClassKey]` (never changes).
    * @private
-   * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey 
+   * @param {NPC.ClassKey} npcClassKey 
    * @param {THREE.SkinnedMesh} skinnedMesh 
    * @returns {CuboidManQuadMetas};
    */
@@ -140,7 +144,7 @@ class CuboidManUvService {
   }
 
   /**
-   * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey 
+   * @param {NPC.ClassKey} npcClassKey 
    * @returns {CuboidManQuads}
    */
   getDefaultUvQuads(npcClassKey) {
@@ -154,7 +158,7 @@ class CuboidManUvService {
   }
 
   /**
-   * @param {'cuboid-man' | 'cuboid-pet'} npcClassKey
+   * @param {NPC.ClassKey} npcClassKey
    * @param {THREE.SkinnedMesh} skinnedMesh
    * @returns {CuboidManQuadMetas};
    */
