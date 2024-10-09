@@ -2,7 +2,7 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { geomorphGridMeters, glbMeta, wallHeight, wallOutset } from '../service/const';
+import { geomorphGridMeters, wallHeight, wallOutset } from '../service/const';
 import { info, warn, debug, testNever } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorph } from '../service/geomorph';
@@ -16,9 +16,8 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToP
 
 const config = {
   fps: 60,
-  agentHeight: glbMeta.height * glbMeta.scale,
-  // agentRadius: glbMeta.radius * glbMeta.scale * 0.5,
-  agentRadius: 0.25,
+  agentHeight: 1.5, // 🚧
+  agentRadius: 0.25, // 🚧
 };
 
 /** @type {State} */

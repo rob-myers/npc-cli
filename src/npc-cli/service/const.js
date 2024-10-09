@@ -91,38 +91,6 @@ export const doorLockedColor = 'rgb(255, 230, 230)';
 
 export const doorUnlockedColor = 'rgb(230, 255, 230)';
 
-/**
- * Properties of exported GLB file.
- */
-export const glbMeta = /** @type {const} */ ({
-  url: '/assets/3d/minecraft-anim.glb',
-  skinnedMeshName: 'minecraft-character-mesh',
-  /** Scale factor we'll apply to original model */
-  scale: 1.5 / 8,
-  /** Height of original model (meters) */
-  height: 8,
-  /** Dimension [x, y, z] of original model (meters) */
-  dimensions: [4, 8, 2],
-  /**
-   * Collide radius of original model (meters)
-   * 🚧 larger for running legs?
-   */
-  radius: 4,
-  /**
-   * Walking speed of original model (meters per second).
-   * Inferred by manually testing using root bone.
-   */
-  walkSpeed: 5,
-  /**
-   * Running speed of original model (meters per second).
-   * Inferred by manually testing using root bone.
-   */
-  runSpeed: 10,
-});
-
-/** @type {NPC.SkinKey} */
-export const defaultSkinKey = 'scientist-dabeyt--with-arms.png';
-
 /** @type {NPC.ClassKey} */
 export const defaultClassKey = 'cuboid-man';
 
@@ -335,6 +303,10 @@ export const npcClassToMeta = {
     groupName: 'Scene',
     skinBaseName: 'cuboid-man.tex.png',
     timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
+    // 🚧
+    radius: 0.5,
+    walkSpeed: 0.5,
+    runSpeed: 1,
   },
   'cuboid-pet': {
     url: '/assets/3d/cuboid-pet.glb',
@@ -345,6 +317,10 @@ export const npcClassToMeta = {
     groupName: 'Scene',
     skinBaseName: 'cuboid-pet.tex.png',
     timeScale: { 'Idle': 0.4, 'Walk': 0.5 },
+    // 🚧
+    radius: 0.5,
+    walkSpeed: 0.5,
+    runSpeed: 1,
   },
 };
 

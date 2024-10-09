@@ -14,7 +14,7 @@
     - ✅ quad -> npc.s.quad
   - ✅ changeUvQuad infers texId
   - ✅ replace minecraft models with cuboid-man
-  - 🚧 remove minecraft models
+  - ✅ remove minecraft models
   - fix shader 
   - adjust animation timeScale after transition
   - methods directly on npc instances

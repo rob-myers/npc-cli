@@ -9,7 +9,6 @@ declare namespace NPC {
     /** User specified e.g. `rob` */
     key: string;
     classKey: ClassKey;
-    skinKey: SkinKey; // 🚧 remove
     /** Radians */
     angle: number;
     /** World units per second */
@@ -36,7 +35,12 @@ declare namespace NPC {
     groupName: string;
     /** e.g. 'cuboid-man.tex.png' */
     skinBaseName: string;
+    /** Animation to timeScale, default 1 */
     timeScale: { [animName: string]: number };
+    /** Pre-scale */
+    radius: number;
+    walkSpeed: number;
+    runSpeed: number;
   }
 
   interface TexMeta {
@@ -55,7 +59,6 @@ declare namespace NPC {
   interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
     classKey?: NPC.ClassKey;
-    skinKey?: NPC.SkinKey; // 🚧 remove
     point: Geom.VectJson;
     meta?: Geom.Meta;
     requireNav?: boolean;

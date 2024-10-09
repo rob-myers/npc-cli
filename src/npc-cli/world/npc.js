@@ -98,30 +98,6 @@ export class Npc {
 
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
-  /**
-   * 🚧 remove async once skin sprite-sheet available
-   * @param {NPC.SkinKey} skinKey
-   */
-  async changeSkin(skinKey) {// 🚧 redo
-    this.def.skinKey = skinKey;
-    const skinnedMesh = this.m.mesh;
-    const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
-
-    await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
-      tex.flipY = false;
-      tex.wrapS = tex.wrapT = 1000;
-      tex.colorSpace = "srgb";
-      tex.minFilter = 1004;
-      tex.magFilter = 1003;
-      clonedMaterial.map = tex;
-      // clonedMaterial.uniforms.map.value = tex;
-      // clonedMaterial.uniformsNeedUpdate = true;
-      skinnedMesh.material = clonedMaterial;
-
-      this.m.material = clonedMaterial;
-      this.w.update();
-    });
-  }
   getAngle() {// Assume only rotated about y axis
     return this.m.group.rotation.y;
   }
@@ -166,7 +142,6 @@ export class Npc {
     // 🚧
     this.scale = npcClassToMeta[npcClassKey].scale;
 
-    // this.changeSkin(this.def.skinKey);
     // ℹ️ cannot setup mixer until <group> mounts
   }
   /**

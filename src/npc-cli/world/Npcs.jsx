@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultClassKey, defaultSkinKey, glbMeta, gmLabelHeightSgu, npcClassToMeta, spriteSheetDecorExtraScale } from "../service/const";
+import { defaultClassKey, gmLabelHeightSgu, npcClassToMeta, spriteSheetDecorExtraScale } from "../service/const";
 import { info, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, toV3, yAxis } from "../service/three";
@@ -18,8 +18,6 @@ import useUpdate from "../hooks/use-update";
  */
 export default function Npcs(props) {
   const w = React.useContext(WorldContext);
-
-  // const gltf = useGLTF(glbMeta.url);
 
   const state = useStateRef(/** @returns {State} */ () => ({
     gltf: /** @type {*} */ ({}),
@@ -136,8 +134,8 @@ export default function Npcs(props) {
         throw Error(`invalid point {x, y}: ${JSON.stringify(e.point)}`);
       } else if (e.requireNav && state.getClosestNavigable(toV3(e.point)) === null) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
-      } else if (e.skinKey && !w.lib.isSkinKey(e.skinKey)) {
-        throw Error(`invalid skinKey: ${JSON.stringify(e.skinKey)}`);
+      } else if (e.classKey && !w.lib.isNpcClassKey(e.classKey)) {
+        throw Error(`invalid classKey: ${JSON.stringify(e.classKey)}`);
       }
       
       const gmRoomId = w.gmGraph.findRoomContaining(e.point, true);
@@ -155,14 +153,11 @@ export default function Npcs(props) {
         npc.def = {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
-          classKey: e.classKey ?? npc.def.classKey ?? 'cuboid-man',
-          skinKey: e.skinKey ?? npc.def.skinKey,
+          classKey: e.classKey ?? npc.def.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         };
-        if (typeof e.skinKey === 'string') {
-          npc.changeSkin(e.skinKey);
-        }
+
         // Reorder keys
         delete state.npc[e.npcKey];
         state.npc[e.npcKey] = npc;
@@ -172,7 +167,6 @@ export default function Npcs(props) {
           key: e.npcKey,
           angle: e.angle ?? 0,
           classKey: e.classKey ?? defaultClassKey,
-          skinKey: e.skinKey ?? defaultSkinKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
@@ -279,35 +273,16 @@ export default function Npcs(props) {
  * @property {(...labels: string[]) => void} updateLabels
  */
 
-useGLTF.preload(glbMeta.url);
-
 /**
  * @param {NPCProps} props 
  */
 function NPC({ npc }) {
   const { bones, mesh, material } = npc.m;
 
+  // 🚧 testCharacterMaterial
   return (
-    // <group
-    //   ref={npc.onMount}
-    //   scale={glbMeta.scale}
-    //   // dispose={null}
-    // >
-    //   <group position={[0, 3, 0]}>
-    //     {bones.map((bone, i) => <primitive key={i} object={bone} />)}
-    //     <skinnedMesh
-    //       geometry={mesh.geometry}
-    //       position={mesh.position}
-    //       skeleton={mesh.skeleton}
-    //       userData={mesh.userData}
-    //     >
-    //       <meshPhysicalMaterial transparent map={material.map} />
-    //     </skinnedMesh>
-    //   </group>
-    // </group>
     <group
       ref={npc.onMount}
-      // scale={glbMeta.scale}
       scale={npc.scale}
       // dispose={null}
     >
