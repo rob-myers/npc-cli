@@ -323,5 +323,3 @@ export const npcClassToMeta = {
 export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
   Object.keys(npcClassToMeta)
 );
-
-0;
