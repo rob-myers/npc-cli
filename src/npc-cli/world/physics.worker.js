@@ -231,7 +231,8 @@ function createDoorSensors() {
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
           type: 'circle',
-          radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
+          // radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
+          radius: door.meta.hull === true ? geomorphGridMeters : (geomorphGridMeters / 2) * 0.9,
         },
         position: { x: center.x, y: wallHeight/2, z: center.y },
         userData: {

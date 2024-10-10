@@ -28,6 +28,8 @@
 - 🚧 bug: permitted npc going thru closed door
   - ℹ️ `state.isUpcomingDoor(npc, door)` is false when should be true
   - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
+  - ❌ try smaller nearby sensor 0.9 * x
+  - case where other npc is in the way
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie
