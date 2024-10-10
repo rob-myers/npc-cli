@@ -5,11 +5,12 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 
 import { Rect, Vect } from "../geom/index.js";
-import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom.js";
+import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { emptySceneForPicking, getQuadGeometryXZ, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
+import useOnResize from "../hooks/use-on-resize.js";
 
 /**
  * @param {Props} props
@@ -280,6 +281,9 @@ export default function WorldCanvas(props) {
     emptySceneForPicking.onAfterRender = state.renderObjectPicking;
   }, [state.controls]);
 
+  const smallViewport = isSmallViewport();
+  useOnResize();
+
   return (
     <Canvas
       ref={state.canvasRef}
@@ -315,18 +319,20 @@ export default function WorldCanvas(props) {
 
       <MapControls
         ref={x => state.controls = x ?? state.controls}
+        key={`${smallViewport}`}
         makeDefault
         zoomToCursor
         onChange={state.onChangeControls}
 
-        {...isTouchDevice() && {
-          minAzimuthAngle: touchFixedAzimuth,
-          maxAzimuthAngle: touchFixedAzimuth,
+        {...smallViewport ? {
+          minPolarAngle: touchFixedPolar,
+          maxPolarAngle: touchFixedPolar,
+        } : {
+          maxPolarAngle: Math.PI/2 * 0.5,
         }}
         minDistance={5}
-        maxDistance={50}
+        maxDistance={smallViewport ? 25 : 50}
         panSpeed={2}
-        maxPolarAngle={Math.PI/2 * 0.5}
       />
 
       <ambientLight intensity={1} />
@@ -432,6 +438,7 @@ const statsCss = css`
  */
 
 const touchFixedAzimuth = Math.PI / 6;
+const touchFixedPolar = Math.PI / 6;
 const pixelBuffer = new Uint8Array(4);
 
 function Origin() {

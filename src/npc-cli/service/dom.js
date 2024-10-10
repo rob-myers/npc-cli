@@ -214,3 +214,7 @@ export function strokeLine(ct, from, to) {
 /**
  * @typedef {CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D | import('canvas').CanvasRenderingContext2D} CanvasContext2DType
  */
+
+export function isSmallViewport() {
+  return typeof window !== "undefined" && window.matchMedia(`(max-width: ${'700px'})`).matches;
+}
