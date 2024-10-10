@@ -16,8 +16,10 @@
   - ✅ replace minecraft models with cuboid-man
   - ✅ remove minecraft models
   - 🚧 use testCharacterMaterial
-    - migrate npc.setSkin and hot-reloads
-    - npc.textures is [skinTex, labelTex]
+    - ✅ migrate npc.setSkin and hot-reloads
+    - ✅ npc.textures is [skinTex, labelTex]
+    - ✅ skin auto-updates
+    - 🚧 clean
   - adjust animation timeScale after transition
   - methods directly on npc instances
     - npc.changeLabel

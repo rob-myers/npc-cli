@@ -36,15 +36,19 @@ class CuboidManUvService {
       const meta = npcClassToMeta[npcClassKey];
       const { nodes } = buildObjectLookup(gltf[npcClassKey].scene);
       const mesh = /** @type {THREE.SkinnedMesh} */ (nodes[meta.meshName]);
+      
       // each npc class has a corresponding constant "quad meta"
       this.toQuadMetas[npcClassKey] = this.initComputeQuadMetas(mesh);
-      // each npc class is also a uvMapKey, fed as 0th texture
-      (this.toTexId[npcClassKey] ??= {})[npcClassKey] = 0;
-    }
 
-    // ℹ️ w.npc.label.tex ~ texture id 1
-    // 🚧 extend this.toTexId
-    //    e.g. toTexId['cuboid-man']['alt-cuboid-skin'] = 2
+      // each npc class is also a uvMapKey, fed as 0th texture
+      // ℹ️ w.npc.label.tex ~ texture id 1
+      (this.toTexId[npcClassKey] ??= {})[npcClassKey] = 0;
+
+      // shader needs vertexId attribute
+      const numVertices = mesh.geometry.getAttribute('position').count;
+      const vertexIds = [...Array(numVertices)].map((_,i) => i);
+      mesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
+    }
   }
 
   /**

@@ -366,6 +366,7 @@ export function hotModuleReloadNpc(npc) {
   const nextNpc = new Npc(def, npc.w);
   return Object.assign(nextNpc, /** @type {Partial<Npc>} */ ({
     epochMs,
+    // epochMs: Date.now(),
     m,
     s: Object.assign(nextNpc.s, s),
     mixer,
