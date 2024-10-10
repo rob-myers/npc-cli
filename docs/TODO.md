@@ -20,7 +20,7 @@
     - ✅ npc.textures is [skinTex, labelTex]
     - ✅ skin auto-updates
     - 🚧 clean
-  - adjust animation timeScale after transition
+  - ✅ adjust animation timeScale after transition
   - methods directly on npc instances
     - npc.changeLabel
     - npc.changeQuad

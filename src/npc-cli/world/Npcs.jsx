@@ -233,8 +233,7 @@ export default function Npcs(props) {
       // Fresh array triggers uniform update
       state.tex[classKey] = [emptyTexture, state.label.tex]; // [baseSkin, labels, ...]
       const { skinBaseName } = npcClassToMeta[classKey];
-      // 🚧 hash instead of Date.now()
-      const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${Date.now()}`);
+      const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${w.hash.sheets}`);
       tex.flipY = false;
       state.tex[classKey][0] = tex;
     })).then(() => {// override memo to force update npcs
@@ -318,7 +317,7 @@ function NPC({ npc }) {
           diffuse={[1, 1, 1]}
           transparent
 
-          textures={npc.w.npc.tex[npc.def.classKey]} // 🚧 shortcut
+          textures={npc.textures}
           labelHeight={wallHeight * (1 / npc.scale)}
           // labelHeight={wallHeight * (1 / 0.9)}
           selectorColor={npc.def.classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}

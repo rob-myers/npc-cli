@@ -64,6 +64,10 @@ export class Npc {
   /** @type {undefined | ((value?: any) => void)} */
   resolve;
 
+  get textures() {
+    return this.w.npc.tex[this.def.classKey];
+  }
+
   /**
    * @param {NPC.NPCDef} def
    * @param {import('./World').State} w
