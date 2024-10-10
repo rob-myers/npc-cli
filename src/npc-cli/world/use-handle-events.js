@@ -261,6 +261,7 @@ export default function useHandleEvents(w) {
         } 
         
         const npc = w.npc.getNpc(e.npcKey);
+        // console.log('isUpcomingDoor', state.isUpcomingDoor(npc, door));
         if (state.isUpcomingDoor(npc, door) === true) {
           if (door.auto === true && w.e.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
