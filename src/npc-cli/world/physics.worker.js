@@ -2,11 +2,11 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { geomorphGridMeters, wallHeight, wallOutset } from '../service/const';
+import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius, wallHeight, wallOutset } from '../service/const';
 import { info, warn, debug, testNever } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorph } from '../service/geomorph';
-import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
+import { addBodyKeyUidRelation, npcToBodyKey, parsePhysicsBodyKey } from '../service/rapier';
 import { helper } from '../service/helper';
 import { tmpRect1 } from '../service/geom';
 
@@ -230,14 +230,15 @@ function createDoorSensors() {
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
           type: 'circle',
-          // 🚧
-          // radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
-          radius: door.meta.hull === true ? geomorphGridMeters : (geomorphGridMeters / 2) * 0.9,
+          radius: door.meta.hull === true
+            ? nearbyHullDoorSensorRadius
+            : nearbyDoorSensorRadius,
         },
-        position: { x: center.x, y: wallHeight/2, z: center.y },
+        position: { x: center.x, y: colliderHeight / 2, z: center.y },
         userData: {
           bodyKey: nearbyKey,
           bodyUid: addBodyKeyUidRelation(nearbyKey, state),
+          ...door.meta.hull === true && { hull: true },
         },
       }),
       createRigidBody({
@@ -391,6 +392,7 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
 
 function sendDebugData() {
   const physicsDebugData = state.world.bodies.getAll().map((x) => ({
+    parsedKey: parsePhysicsBodyKey(/** @type {WW.PhysicsUserData} */ (x.userData).bodyKey),
     userData: /** @type {WW.PhysicsUserData} */ (x.userData),
     position: {...x.translation()},
     enabled: x.isEnabled(),

@@ -101,15 +101,14 @@ declare namespace WW {
 
   interface PhysicsDebugDataResponse {
     type: 'debug-data';
-    items: {
-      userData: WW.PhysicsUserData;
-      position: {
-          x: number;
-          y: number;
-          z: number;
-      };
-      enabled: boolean;
-    }[]
+    items: PhysicDebugItem[];
+  }
+
+  interface PhysicDebugItem {
+    parsedKey: PhysicsParsedBodyKey;
+    userData: WW.PhysicsUserData;
+    position: import('three').Vector3Like;
+    enabled: boolean;
   }
   
 
@@ -126,6 +125,11 @@ declare namespace WW {
     | `npc ${string}` // npc {npcKey}
     | `nearby ${Geomorph.GmDoorKey}` // door neighbourhood
     | `rect ${string}` // custom cuboid collider (possibly angled)
+  );
+
+  type PhysicsParsedBodyKey = (
+    | ['npc' | 'circle' | 'rect', string]
+    | ['nearby' | 'inside', Geomorph.GmDoorKey]
   );
 
   type PhysicsBodyGeom = (
@@ -149,6 +153,8 @@ declare namespace WW {
     /** This is the numeric hash of `bodyKey` */
     bodyUid: number;
 
+    /** Is this the body of a hull door? */
+    hull?: true;
     /** Is this the body of an NPC? */
     npc?: true;
     /** Is this static body a decor rect/circle for some geomorph `gmId`? */

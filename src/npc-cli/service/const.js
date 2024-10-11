@@ -121,6 +121,12 @@ export const showLastNavPath = false;
  */
 export const defaultAgentUpdateFlags = 1 + 2 + 4;
 
+export const nearbyDoorSensorRadius = (geomorphGridMeters / 2) * 0.9;
+
+export const nearbyHullDoorSensorRadius = geomorphGridMeters;
+
+export const colliderHeight = 1.8;
+
 /** In meters, or equivalently 2 grid squares */
 export const decorGridSize = geomorphGridMeters * 2;
 

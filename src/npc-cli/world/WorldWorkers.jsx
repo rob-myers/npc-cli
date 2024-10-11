@@ -2,6 +2,7 @@ import React from 'react';
 import { init as initRecastNav } from "@recast-navigation/core";
 
 import { isDevelopment, warn, debug, testNever } from '../service/generic';
+import { parsePhysicsBodyKey } from '../service/rapier';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 
@@ -30,7 +31,7 @@ export default function WorldWorkers() {
     },
 
     handlePhysicsCollision(npcKey, otherKey, isEnter) {
-      const [type, subKey] = state.parsePhysicsBodyKey(otherKey);
+      const [type, subKey] = parsePhysicsBodyKey(otherKey);
 
       if (type === 'npc') {
         warn(`${'handlePhysicsCollision'}: unexpected otherKey: "${otherKey}"`);
@@ -64,11 +65,6 @@ export default function WorldWorkers() {
         w.physics.rebuilds++;
         w.menu.measure('setup-physics');
       }
-    },
-    parsePhysicsBodyKey(bodyKey) {
-      return /** @type {*} */ (
-        bodyKey.split(' ')
-      );
     },
   }));
 
@@ -130,14 +126,4 @@ if (isDevelopment()) {// propagate HMR to this file onchange worker files
  * @property {(e: MessageEvent<WW.MsgFromNavWorker>) => Promise<void>} handleNavWorkerMessage
  * @property {(npcKey: string, otherKey: WW.PhysicsBodyKey, isEnter?: boolean) => void} handlePhysicsCollision
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => Promise<void>} handlePhysicsWorkerMessage
- * @property {(key: WW.PhysicsBodyKey) => (
- *   | ['npc' | 'circle' | 'rect', string]
- *   | ['nearby' | 'inside', Geomorph.GmDoorKey]
- * )} parsePhysicsBodyKey
- * Format:
- * - `['npc', npcKey]`
- * - `['circle', decorKey]`
- * - `['rect', decorKey]`
- * - `['nearby', gmDoorKey]`
- * - `['inside', gmDoorKey]`
  */

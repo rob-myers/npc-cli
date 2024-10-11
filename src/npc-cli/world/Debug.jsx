@@ -3,7 +3,8 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { navMeta, decompToXZGeometry } from "../service/three";
+import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius } from "../service/const";
+import { navMeta, decompToXZGeometry, cylinderGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -118,6 +119,9 @@ export default function Debug(props) {
       w.physics.worker.addEventListener('message', state.onPhysicsDebugData);
       w.physics.worker.postMessage({ type: 'get-debug-data' });
       return () => void w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
+    } else {
+      state.staticColliders = [];
+      update();
     }
   }, [props.showStaticColliders, w.physics.rebuilds]);
 
@@ -157,11 +161,26 @@ export default function Debug(props) {
       </group>
     ))}
     
-    <group name="StaticColliders">
-      {state.staticColliders.map(x =>
-        // 🚧 render colliders
-        null
-      )}
+    <group name="StaticColliders" renderOrder={1}>
+      {state.staticColliders.map(({ parsedKey, position, userData }) => {
+
+        if (parsedKey[0] === 'nearby') {
+          return (
+            <mesh
+              geometry={cylinderGeometry}
+              position={[position.x, colliderHeight / 2, position.z]}
+              scale={userData.hull
+                ? [nearbyHullDoorSensorRadius, colliderHeight, nearbyHullDoorSensorRadius]
+                : [nearbyDoorSensorRadius, colliderHeight, nearbyDoorSensorRadius]
+              }
+            >
+              <meshBasicMaterial color="red" transparent opacity={0.5} />
+            </mesh>
+          )
+        }
+
+        return null;
+      })}
     </group>
 
     {props.showTestNpcs && <TestNpcs />}
@@ -183,7 +202,7 @@ export default function Debug(props) {
  * @property {THREE.Group} navPath
  * @property {import('./TestNpcs').State} npc
  * @property {THREE.BufferGeometry} selectedNavPolys
- * @property {WW.PhysicsDebugDataResponse['items']} staticColliders
+ * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath

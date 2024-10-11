@@ -322,7 +322,7 @@ export default function World(props) {
                   // showNavMesh
                   // showOrigNavPoly
                   showTestNpcs
-                  showStaticColliders
+                  // showStaticColliders
                 />
               </>}
             </React.Suspense>

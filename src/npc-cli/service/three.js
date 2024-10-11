@@ -211,7 +211,8 @@ export function buildObjectLookup(object) {
 }
 
 export const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
-const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
+
+export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
 /**
  * @param {number} width 
