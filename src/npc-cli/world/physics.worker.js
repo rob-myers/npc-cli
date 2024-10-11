@@ -61,10 +61,9 @@ async function handleMessages(e) {
             position: { x, y: wallHeight / 2, z },
             angle,
             userData: {
-              ...userData,
-              npc: false,
               bodyKey,
               bodyUid: addBodyKeyUidRelation(bodyKey, state),
+              custom: userData,
             },
           });
         } else {
@@ -85,9 +84,9 @@ async function handleMessages(e) {
             },
             position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
             userData: {
-              npc: true,
               bodyKey,
               bodyUid: addBodyKeyUidRelation(bodyKey, state),
+              npc: true,
             },
           });
         } else {
@@ -96,7 +95,7 @@ async function handleMessages(e) {
       }
       break;
     case "get-debug-data":
-      debugWorld();
+      sendDebugData();
       break;
     case "remove-bodies":
     case "remove-colliders": {
@@ -139,7 +138,7 @@ async function handleMessages(e) {
       break;
     }
     case "setup-physics":
-      await setupWorld(msg.mapKey, msg.npcs);
+      await setupOrRebuildWorld(msg.mapKey, msg.npcs);
       selfTyped.postMessage({ type: 'physics-is-setup' });
       break;
     default:
@@ -181,7 +180,7 @@ function stepWorld() {
  * @param {string} mapKey 
  * @param {WW.NpcDef[]} npcs
  */
-async function setupWorld(mapKey, npcs) {
+async function setupOrRebuildWorld(mapKey, npcs) {
 
   if (!state.world) {
     await RAPIER.init();
@@ -231,12 +230,12 @@ function createDoorSensors() {
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
           type: 'circle',
+          // 🚧
           // radius: door.meta.hull === true ? geomorphGridMeters : geomorphGridMeters / 2,
           radius: door.meta.hull === true ? geomorphGridMeters : (geomorphGridMeters / 2) * 0.9,
         },
         position: { x: center.x, y: wallHeight/2, z: center.y },
         userData: {
-          npc: false,
           bodyKey: nearbyKey,
           bodyUid: addBodyKeyUidRelation(nearbyKey, state),
         },
@@ -251,7 +250,6 @@ function createDoorSensors() {
         position: { x: center.x, y: wallHeight/2, z: center.y },
         angle: door.angle,
         userData: {
-          npc: false,
           bodyKey: insideKey,
           bodyUid: addBodyKeyUidRelation(insideKey, state),
         },
@@ -330,9 +328,9 @@ function restoreNpcs(npcs) {
       },
       position,
       userData: {
-        npc: true,
         bodyKey,
         bodyUid: addBodyKeyUidRelation(bodyKey, state),
+        npc: true,
       },
     });
   }
@@ -347,7 +345,7 @@ function restoreNpcs(npcs) {
  * @param {WW.PhysicsBodyGeom} opts.geomDef
  * @param {import('three').Vector3Like} opts.position
  * @param {number} [opts.angle] radians in XZ plane
- * @param {BodyUserData} opts.userData
+ * @param {WW.PhysicsUserData} opts.userData
  */
 function createRigidBody({ type, geomDef, position, angle, userData }) {
 
@@ -388,12 +386,12 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
   }
   rigidBody.setTranslation(position, true);
 
-  return /** @type {RAPIER.RigidBody & { userData: BodyUserData }} */ (rigidBody);
+  return /** @type {RAPIER.RigidBody & { userData: WW.PhysicsUserData }} */ (rigidBody);
 }
 
-function debugWorld() {
+function sendDebugData() {
   const physicsDebugData = state.world.bodies.getAll().map((x) => ({
-    userData: /** @type {Record<string, any>} */ (x.userData),
+    userData: /** @type {WW.PhysicsUserData} */ (x.userData),
     position: {...x.translation()},
     enabled: x.isEnabled(),
   }));
@@ -406,14 +404,14 @@ if (typeof window === 'undefined') {
   selfTyped.addEventListener("message", handleMessages);
 }
 
-/**
- * @typedef BodyUserData
- * @property {WW.PhysicsBodyKey} bodyKey
- * @property {number} bodyUid This is the numeric hash of `bodyKey`
- * @property {boolean} [npc] Is this the body of an NPC?
- * @property {boolean} [gmDecor] Is this static body a decor rect/circle for some geomorph `gmId`?
- * @property {number} [gmId]
- */
+// /**
+//  * @typedef BodyUserData
+//  * @property {WW.PhysicsBodyKey} bodyKey
+//  * @property {number} bodyUid This is the numeric hash of `bodyKey`
+//  * @property {boolean} [npc] Is this the body of an NPC?
+//  * @property {boolean} [gmDecor] Is this static body a decor rect/circle for some geomorph `gmId`?
+//  * @property {number} [gmId]
+//  */
 
 /**
  * @typedef {BaseState & import('../service/rapier').PhysicsBijection} State

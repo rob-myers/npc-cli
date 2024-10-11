@@ -102,7 +102,7 @@ declare namespace WW {
   interface PhysicsDebugDataResponse {
     type: 'debug-data';
     items: {
-      userData: Record<string, any>;
+      userData: WW.PhysicsUserData;
       position: {
           x: number;
           y: number;
@@ -143,6 +143,22 @@ declare namespace WW {
         height: number;
       }
   )
+
+  interface PhysicsUserData {
+    bodyKey: WW.PhysicsBodyKey;
+    /** This is the numeric hash of `bodyKey` */
+    bodyUid: number;
+
+    /** Is this the body of an NPC? */
+    npc?: true;
+    /** Is this static body a decor rect/circle for some geomorph `gmId`? */
+    gmDecor?: true;
+    /** Is this static body a decor rect/circle for some geomorph `gmId`? */
+    gmId?: number;
+
+    /** Custom UserData */
+    custom?: Record<string, any>;
+  }
 
   //#endregion
 

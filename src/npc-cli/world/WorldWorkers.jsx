@@ -43,8 +43,7 @@ export default function WorldWorkers() {
       }
     },
 
-    async handlePhysicsWorkerMessage(e) {
-      const msg = e.data;
+    async handlePhysicsWorkerMessage({ data: msg }) {
       debug(`main thread received "${msg.type}" from 🤖 physics.worker`, msg);
 
       if (msg.type === "npc-collisions") {
@@ -58,7 +57,11 @@ export default function WorldWorkers() {
         msg.collisionStart.forEach(({ npcKey, otherKey }) => {
           state.handlePhysicsCollision(npcKey, otherKey, true);
         });
-      } else if (msg.type === 'physics-is-setup') {
+        return;
+      }
+
+      if (msg.type === 'physics-is-setup') {
+        w.physics.rebuilds++;
         w.menu.measure('setup-physics');
       }
     },
@@ -69,7 +72,7 @@ export default function WorldWorkers() {
     },
   }));
 
-  React.useEffect(() => {// restart worker onchange geomorphs.json
+  React.useEffect(() => {// restart workers
     if (w.threeReady && w.hash.full) {
       w.nav.worker = new Worker(new URL("./nav.worker", import.meta.url), { type: "module" });
       w.nav.worker.addEventListener("message", state.handleNavWorkerMessage);
@@ -84,7 +87,7 @@ export default function WorldWorkers() {
     }
   }, [w.threeReady, w.hash.full]);
 
-  React.useEffect(() => {// request nav-mesh onchange geomorphs.json or mapKey
+  React.useEffect(() => {// request nav-mesh, fresh physics world
     if (w.threeReady && w.hash.full) {
 
       const prev = state.seenHash;

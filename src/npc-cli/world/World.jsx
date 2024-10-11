@@ -54,7 +54,7 @@ export default function World(props) {
     timer: new Timer(),
 
     nav: /** @type {*} */ ({}),
-    physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {} },
+    physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {}, rebuilds: 0 },
 
     gmsData: /** @type {*} */ (null),
     events: new Subject(),
@@ -322,6 +322,7 @@ export default function World(props) {
                   // showNavMesh
                   // showOrigNavPoly
                   showTestNpcs
+                  showStaticColliders
                 />
               </>}
             </React.Suspense>
@@ -360,7 +361,7 @@ export default function World(props) {
  * @property {Timer} timer
  *
  * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
- * @property {{ worker: WW.PhysicsWorker } & import("../service/rapier").PhysicsBijection} physics
+ * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor

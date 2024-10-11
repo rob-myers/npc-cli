@@ -35,8 +35,12 @@
     - even worse when another npc is in the way
   - ❌ try smaller nearby sensor 0.9 * x
   - ✅ fallback: open on trigger "inside" sensor
-  - 🚧 can debug physics colliders
   - try cuboid "nearby" sensor
+
+- 🚧 can debug physics colliders
+  - ✅ connect `Debug` to physic.worker
+  - ✅ refine userData type: `WW.PhysicsUserData`
+  - 🚧 render in Debug
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie

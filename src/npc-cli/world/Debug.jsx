@@ -18,14 +18,23 @@ export default function Debug(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
-    selectedNavPolys: new THREE.BufferGeometry(),
     npc: /** @type {*} */ (null),
+    selectedNavPolys: new THREE.BufferGeometry(),
+    staticColliders: [],
 
     ensureNavPoly(gmKey) {
       if (!w.gmsData[gmKey].navPoly) {
         const layout = w.geomorphs.layout[gmKey];
         // Fix normals for recast/detour -- triangulation ordering?
         w.gmsData[gmKey].navPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
+        update();
+      }
+    },
+    onPhysicsDebugData(e) {
+      if (e.data.type === 'debug-data') {
+        // console.log('🔔 RECEIVED', e.data);
+        state.staticColliders = e.data.items;
+        w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
         update();
       }
     },
@@ -104,6 +113,14 @@ export default function Debug(props) {
     });
   }, [w.nav.navMesh]);
 
+  React.useEffect(() => {// debug colliders via physics.worker
+    if (props.showStaticColliders) {
+      w.physics.worker.addEventListener('message', state.onPhysicsDebugData);
+      w.physics.worker.postMessage({ type: 'get-debug-data' });
+      return () => void w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
+    }
+  }, [props.showStaticColliders, w.physics.rebuilds]);
+
   const update = useUpdate();
 
   return <>
@@ -139,6 +156,13 @@ export default function Debug(props) {
         />
       </group>
     ))}
+    
+    <group name="StaticColliders">
+      {state.staticColliders.map(x =>
+        // 🚧 render colliders
+        null
+      )}
+    </group>
 
     {props.showTestNpcs && <TestNpcs />}
   </>;
@@ -149,6 +173,7 @@ export default function Debug(props) {
  * @property {boolean} [disabled]
  * @property {boolean} [showNavMesh]
  * @property {boolean} [showOrigNavPoly]
+ * @property {boolean} [showStaticColliders]
  * @property {boolean} [showTestNpcs]
  */
 
@@ -156,9 +181,11 @@ export default function Debug(props) {
  * @typedef State
  * @property {NavMeshHelper} navMesh
  * @property {THREE.Group} navPath
- * @property {THREE.BufferGeometry} selectedNavPolys
  * @property {import('./TestNpcs').State} npc
+ * @property {THREE.BufferGeometry} selectedNavPolys
+ * @property {WW.PhysicsDebugDataResponse['items']} staticColliders
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
+ * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
  * @property {(polyIds: number[]) => void} selectNavPolys
  */
