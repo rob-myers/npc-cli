@@ -19,6 +19,7 @@
     - ✅ migrate npc.setSkin and hot-reloads
     - ✅ npc.textures is [skinTex, labelTex]
     - ✅ skin auto-updates
+    - 🚧 rename as cuboidManMaterial
     - 🚧 clean
   - ✅ adjust animation timeScale after transition
   - can toggle npc selector 
@@ -31,7 +32,7 @@
   - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
     - even worse when another npc is in the way
   - ❌ try smaller nearby sensor 0.9 * x
-  - open for permitted when trigger "inside" sensor
+  - ✅ fallback: open on trigger "inside" sensor
   - try cuboid "nearby" sensor
 
 - one-frame animations: Sit, Lie

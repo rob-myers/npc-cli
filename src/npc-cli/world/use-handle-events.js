@@ -251,8 +251,8 @@ export default function useHandleEvents(w) {
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
         
         const door = w.door.byKey[e.gdKey];
-        if (door.open === true) {
-          return; // door already open
+        if (door.open === true) {// door already open
+          return;
         }
 
         if (door.auto === true && door.locked === false) {
@@ -261,9 +261,8 @@ export default function useHandleEvents(w) {
         } 
         
         const npc = w.npc.getNpc(e.npcKey);
-        // console.log('isUpcomingDoor', state.isUpcomingDoor(npc, door));
         if (state.isUpcomingDoor(npc, door) === true) {
-          if (door.auto === true && w.e.npcCanAccess(e.npcKey, e.gdKey) === true) {
+          if (door.auto === true && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
           } else {
             // setTimeout(() => npc.stopMoving(), 300);
@@ -276,6 +275,12 @@ export default function useHandleEvents(w) {
       if (e.type === 'inside') {
         (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.gdKey);
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
+
+        const door = w.door.byKey[e.gdKey];
+        if (door.open === false && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
+          state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+        }
+
         w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: e.gmId, doorId: e.doorId, gdKey: e.gdKey });
         return;
       }
