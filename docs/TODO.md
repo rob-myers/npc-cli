@@ -27,12 +27,15 @@
     - npc.changeLabel
     - npc.changeQuad
 
+- uv-map for label seems wrong i.e. should cover 256 * 128
+
 - 🚧 bug: permitted npc going thru closed door
   - ❌ `state.isUpcomingDoor(npc, door)` is false when should be true
   - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
     - even worse when another npc is in the way
   - ❌ try smaller nearby sensor 0.9 * x
   - ✅ fallback: open on trigger "inside" sensor
+  - 🚧 can debug physics colliders
   - try cuboid "nearby" sensor
 
 - one-frame animations: Sit, Lie
