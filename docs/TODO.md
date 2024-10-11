@@ -21,15 +21,18 @@
     - ✅ skin auto-updates
     - 🚧 clean
   - ✅ adjust animation timeScale after transition
+  - can toggle npc selector 
   - methods directly on npc instances
     - npc.changeLabel
     - npc.changeQuad
 
 - 🚧 bug: permitted npc going thru closed door
-  - ℹ️ `state.isUpcomingDoor(npc, door)` is false when should be true
+  - ❌ `state.isUpcomingDoor(npc, door)` is false when should be true
   - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
+    - even worse when another npc is in the way
   - ❌ try smaller nearby sensor 0.9 * x
-  - case where other npc is in the way
+  - open for permitted when trigger "inside" sensor
+  - try cuboid "nearby" sensor
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie
@@ -46,15 +49,12 @@
 
 - ✅ fix symbols in 303 i.e. definitions should have correct size
 
-- ✅ bug: tabs: un-maximise tty can resume World while tty stays paused
-  - ℹ️ unpaused, maximise tty, pause, un-maximise
+- Tabs: can specify initially awake background tabs e.g. tty for mobile
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`
   - ℹ️ `cat '/Users/robmyers/Library/Application Support/Google/Chrome/chrome_debug.log'`
   - create a branch and repro without workers/crowd
-- ✅ bug: initially open hull door via spawn does not close
-  - seems fixed by npc.spawn cleanup
 - bug: tty: ctrl + w while multiple input: goes back a line
   - need repro
 - improve alternate character faces
@@ -2601,3 +2601,7 @@ run '({ w, api }) {
   - ✅ animation: walk
     - ✅ try sway with almost upright head
   
+- ✅ bug: tabs: un-maximise tty can resume World while tty stays paused
+  - ℹ️ unpaused, maximise tty, pause, un-maximise
+- ✅ bug: initially open hull door via spawn does not close
+  - seems fixed by npc.spawn cleanup
