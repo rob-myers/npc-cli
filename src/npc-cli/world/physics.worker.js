@@ -226,14 +226,19 @@ function createDoorSensors() {
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
     const insideKey = /** @type {const} */ (`inside ${gdKey}`);
 
+    const nearbyRadius = door.meta.hull === true ? nearbyHullDoorSensorRadius : nearbyDoorSensorRadius;
+    const insideDef = {
+      width: (door.baseRect.width - 2 * wallOutset),
+      height: door.baseRect.height,
+      angle,
+    };
+
     return [
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
           type: 'circle',
-          radius: door.meta.hull === true
-            ? nearbyHullDoorSensorRadius
-            : nearbyDoorSensorRadius,
+          radius: nearbyRadius,
         },
         position: { x: center.x, y: colliderHeight / 2, z: center.y },
         userData: {
@@ -246,8 +251,8 @@ function createDoorSensors() {
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
           type: 'rect',
-          width: (door.baseRect.width - 2 * wallOutset),
-          height: door.baseRect.height,
+          width: insideDef.width,
+          height: insideDef.height,
         },
         position: { x: center.x, y: wallHeight/2, z: center.y },
         angle,

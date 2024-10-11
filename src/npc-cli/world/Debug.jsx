@@ -162,44 +162,10 @@ export default function Debug(props) {
     ))}
     
     <group name="StaticColliders">
-      {state.staticColliders.map(({ parsedKey, position, userData }) => {
-        /**
-         * 🔔 debug only i.e. inefficient
-         * assumes behaviour of physics.worker `createDoorSensors`
-         */
-        if (parsedKey[0] === 'nearby') {
-          return (
-            <mesh
-              geometry={cylinderGeometry}
-              position={[position.x, colliderHeight / 2, position.z]}
-              scale={userData.hull
-                ? [nearbyHullDoorSensorRadius, colliderHeight, nearbyHullDoorSensorRadius]
-                : [nearbyDoorSensorRadius, colliderHeight, nearbyDoorSensorRadius]
-              }
-              renderOrder={2}
-            >
-              <meshBasicMaterial color="red" transparent opacity={0.2} />
-            </mesh>
-          );
-        }
-        
-        if (parsedKey[0] === 'inside') {
-          const { door: { baseRect }, angle } = w.door.byKey[parsedKey[1]];
-          return (
-            <mesh
-              geometry={boxGeometry}
-              position={[position.x, colliderHeight / 2, position.z]}
-              scale={[baseRect.width, colliderHeight, baseRect.height]}
-              rotation={[0, angle, 0]}
-              renderOrder={1}
-            >
-              <meshBasicMaterial color="green" transparent opacity={0.25} />
-            </mesh>
-          );
-        }
-
-        return null;
-      })}
+      <MemoizedStaticColliders
+        staticColliders={state.staticColliders}
+        w={w}
+      />
     </group>
 
     {props.showTestNpcs && <TestNpcs />}
@@ -253,3 +219,50 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
 });
 
 const showNavNodes = false;
+
+/**
+ * 🔔 debug only i.e. inefficient
+ * assumes behaviour of physics.worker `createDoorSensors`
+ * @param {{ staticColliders: State['staticColliders']; w: import('./World').State }} props
+ * @returns 
+ */
+function StaticColliders({ staticColliders, w }) {
+  return staticColliders.map(({ parsedKey, position, userData }) => {
+    if (parsedKey[0] === 'nearby' || parsedKey[0] === 'circle') {
+      return (
+        <mesh
+          geometry={cylinderGeometry}
+          position={[position.x, colliderHeight / 2, position.z]}
+          scale={userData.hull
+            ? [nearbyHullDoorSensorRadius, colliderHeight, nearbyHullDoorSensorRadius]
+            : [nearbyDoorSensorRadius, colliderHeight, nearbyDoorSensorRadius]
+          }
+          renderOrder={2}
+        >
+          <meshBasicMaterial color="red" transparent opacity={0.2} />
+        </mesh>
+      );
+    }
+    
+    if (parsedKey[0] === 'inside') {
+      const { door: { baseRect }, angle } = w.door.byKey[parsedKey[1]];
+      return (
+        <mesh
+          geometry={boxGeometry}
+          position={[position.x, colliderHeight / 2, position.z]}
+          scale={[baseRect.width, colliderHeight, baseRect.height]}
+          rotation={[0, angle, 0]}
+          renderOrder={1}
+        >
+          <meshBasicMaterial color="green" transparent opacity={0.25} />
+        </mesh>
+      );
+    }
+
+
+
+    return null;
+  });
+}
+
+const MemoizedStaticColliders = React.memo(StaticColliders);
