@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius } from "../service/const";
+import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius, wallOutset } from "../service/const";
 import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -250,7 +250,7 @@ function StaticColliders({ staticColliders, w }) {
         <mesh
           geometry={boxGeometry}
           position={[position.x, colliderHeight / 2, position.z]}
-          scale={[baseRect.width, colliderHeight, baseRect.height]}
+          scale={[baseRect.width - 2 * wallOutset, colliderHeight, baseRect.height]}
           rotation={[0, angle, 0]}
           renderOrder={1}
         >
