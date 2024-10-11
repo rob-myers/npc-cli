@@ -325,8 +325,8 @@ export default function WorldCanvas(props) {
         onChange={state.onChangeControls}
 
         {...smallViewport ? {
-          minPolarAngle: touchFixedPolar,
-          maxPolarAngle: touchFixedPolar,
+          minPolarAngle: fixedPolarAngle,
+          maxPolarAngle: fixedPolarAngle,
         } : {
           maxPolarAngle: Math.PI/2 * 0.5,
         }}
@@ -438,7 +438,7 @@ const statsCss = css`
  */
 
 const touchFixedAzimuth = Math.PI / 6;
-const touchFixedPolar = Math.PI / 6;
+const fixedPolarAngle = Math.PI / 5;
 const pixelBuffer = new Uint8Array(4);
 
 function Origin() {
