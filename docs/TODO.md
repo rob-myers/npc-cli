@@ -62,7 +62,8 @@
 
 - ✅ fix symbols in 303 i.e. definitions should have correct size
 
-- Tabs: can specify initially awake background tabs e.g. tty for mobile
+- ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
+  - background tab never was rendered
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`
