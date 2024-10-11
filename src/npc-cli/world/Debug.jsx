@@ -4,7 +4,7 @@ import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
 import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius } from "../service/const";
-import { navMeta, decompToXZGeometry, cylinderGeometry } from "../service/three";
+import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -161,9 +161,12 @@ export default function Debug(props) {
       </group>
     ))}
     
-    <group name="StaticColliders" renderOrder={1}>
+    <group name="StaticColliders">
       {state.staticColliders.map(({ parsedKey, position, userData }) => {
-
+        /**
+         * 🔔 debug only i.e. inefficient
+         * assumes behaviour of physics.worker `createDoorSensors`
+         */
         if (parsedKey[0] === 'nearby') {
           return (
             <mesh
@@ -173,10 +176,26 @@ export default function Debug(props) {
                 ? [nearbyHullDoorSensorRadius, colliderHeight, nearbyHullDoorSensorRadius]
                 : [nearbyDoorSensorRadius, colliderHeight, nearbyDoorSensorRadius]
               }
+              renderOrder={2}
             >
-              <meshBasicMaterial color="red" transparent opacity={0.5} />
+              <meshBasicMaterial color="red" transparent opacity={0.2} />
             </mesh>
-          )
+          );
+        }
+        
+        if (parsedKey[0] === 'inside') {
+          const { door: { baseRect }, angle } = w.door.byKey[parsedKey[1]];
+          return (
+            <mesh
+              geometry={boxGeometry}
+              position={[position.x, colliderHeight / 2, position.z]}
+              scale={[baseRect.width, colliderHeight, baseRect.height]}
+              rotation={[0, angle, 0]}
+              renderOrder={1}
+            >
+              <meshBasicMaterial color="green" transparent opacity={0.25} />
+            </mesh>
+          );
         }
 
         return null;

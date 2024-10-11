@@ -221,6 +221,7 @@ async function setupOrRebuildWorld(mapKey, npcs) {
 function createDoorSensors() {
   return state.gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
     const center = gm.matrix.transformPoint(door.center.clone());
+    const angle = gm.matrix.transformAngle(door.angle);
     const gdKey = helper.getGmDoorKey(gmId, doorId);
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
     const insideKey = /** @type {const} */ (`inside ${gdKey}`);
@@ -249,7 +250,7 @@ function createDoorSensors() {
           height: door.baseRect.height,
         },
         position: { x: center.x, y: wallHeight/2, z: center.y },
-        angle: door.angle,
+        angle,
         userData: {
           bodyKey: insideKey,
           bodyUid: addBodyKeyUidRelation(insideKey, state),

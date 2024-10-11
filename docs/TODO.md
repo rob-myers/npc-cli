@@ -40,9 +40,10 @@
 - 🚧 can debug physics colliders
   - ✅ connect `Debug` to physic.worker
   - ✅ refine userData type: `WW.PhysicsUserData`
-  - ✅ render nearby in Debug
-  - 🚧 render inside in Debug
-  - 🚧 render custom colliders in Debug
+  - ✅ can render `nearby` colliders in Debug
+  - ✅ can render `inside` colliders in Debug
+    - maybe fixed issue with untransformed nearby door `angle` in physics.worker
+  - 🚧 can render custom colliders in Debug
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie

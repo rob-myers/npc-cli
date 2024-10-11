@@ -90,6 +90,7 @@ export default function Doors(props) {
             segLength: u.distanceTo(v),
             doorway: doorwayPoly,
             rect: doorwayPoly.rect.precision(precision),
+            angle: radians,
           };
           instId++;
         })

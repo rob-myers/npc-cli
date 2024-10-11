@@ -106,6 +106,8 @@ declare namespace Geomorph {
     doorway: Geom.Poly;
     /** Bounds of `doorway`. */
     rect: Geom.Rect;
+    /** Transform angle (radians) */
+    angle: number;
 
     closeTimeoutId?: number;
   }
