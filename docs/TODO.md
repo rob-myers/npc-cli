@@ -31,7 +31,7 @@
     - ✅ can change label
       - fix: ensure fresh textures supplied to npc when change w.npc.label
       - `w npc.npc.rob.setLabel rob`
-    - can change label without render
+    - 🚧 can change label without render
     - 🚧 can change face/icon
 
 - ❌ avoid cloning "scene"

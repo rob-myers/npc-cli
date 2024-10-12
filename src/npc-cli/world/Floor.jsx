@@ -80,7 +80,7 @@ export default function Floor(props) {
 
       // 🧪 debug original geomorph image
       // imageLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((img) => {
-      //   ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+      //   ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       //   ct.globalAlpha = 0.2;
       //   ct.drawImage(img, 0, 0, img.width, img.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
       //   ct.globalAlpha = 1;
