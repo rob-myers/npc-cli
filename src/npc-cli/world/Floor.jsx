@@ -68,15 +68,15 @@ export default function Floor(props) {
       ));
       drawPolygons(ct, shadowPolys, [shadowColor, shadowColor]);
 
-      // 🧪 debug decor
-      // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
-      gm.decor.forEach((decor) => {
-        if (decor.type === 'circle') {
-          drawCircle(ct, decor.center, decor.radius, [null, '#009', 0.04]);
-        } else if (decor.type === 'rect') {
-          drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
-        }
-      });
+      // debug decor: moved to <Debug/>
+      // // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+      // gm.decor.forEach((decor) => {
+      //   if (decor.type === 'circle') {
+      //     drawCircle(ct, decor.center, decor.radius, [null, '#009', 0.04]);
+      //   } else if (decor.type === 'rect') {
+      //     drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
+      //   }
+      // });
 
       // 🧪 debug original geomorph image
       // imageLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((img) => {
