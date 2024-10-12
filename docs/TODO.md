@@ -46,8 +46,8 @@
   - ✅ can render `inside` colliders in Debug
     - maybe fixed issue with untransformed nearby door `angle` in physics.worker
   - ✅ UserData has type i.e. npc, cuboid or cylinder
-  - 🚧 can render custom colliders in Debug
-  - can then remove outlines from Floor
+  - ✅ can render custom colliders in Debug
+  - 🚧 can then remove outlines from Floor
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie

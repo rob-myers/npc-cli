@@ -221,45 +221,38 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
 const showNavNodes = false;
 
 /**
- * 🔔 debug only i.e. inefficient
- * assumes behaviour of physics.worker `createDoorSensors`
+ * 🔔 debug only (inefficient)
  * @param {{ staticColliders: State['staticColliders']; w: import('./World').State }} props
- * @returns 
  */
 function StaticColliders({ staticColliders, w }) {
   return staticColliders.map(({ parsedKey, position, userData }) => {
-    if (parsedKey[0] === 'nearby' || parsedKey[0] === 'circle') {
+
+    if (userData.type === 'cylinder') {
       return (
         <mesh
           geometry={cylinderGeometry}
           position={[position.x, colliderHeight / 2, position.z]}
-          scale={userData.custom?.hull
-            ? [nearbyHullDoorSensorRadius, colliderHeight, nearbyHullDoorSensorRadius]
-            : [nearbyDoorSensorRadius, colliderHeight, nearbyDoorSensorRadius]
-          }
+          scale={[userData.radius, colliderHeight, userData.radius]}
           renderOrder={2}
         >
           <meshBasicMaterial color="red" transparent opacity={0.2} />
         </mesh>
       );
     }
-    
-    if (parsedKey[0] === 'inside') {
-      const { door: { baseRect }, angle } = w.door.byKey[parsedKey[1]];
+
+    if (userData.type === 'cuboid') {
       return (
         <mesh
           geometry={boxGeometry}
           position={[position.x, colliderHeight / 2, position.z]}
-          scale={[baseRect.width - 2 * wallOutset, colliderHeight, baseRect.height]}
-          rotation={[0, angle, 0]}
+          scale={[userData.width, colliderHeight, userData.depth]}
+          rotation={[0, userData.angle, 0]}
           renderOrder={1}
         >
           <meshBasicMaterial color="green" transparent opacity={0.25} />
         </mesh>
       );
     }
-
-
 
     return null;
   });
