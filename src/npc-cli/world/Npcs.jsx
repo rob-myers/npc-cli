@@ -301,7 +301,7 @@ function NPC({ npc }) {
   return (
     <group
       ref={npc.onMount}
-      scale={npc.scale}
+      scale={npc.m.scale}
       // dispose={null}
     >
       {bones.map((bone, i) => <primitive key={i} object={bone} />)}
@@ -318,7 +318,7 @@ function NPC({ npc }) {
           transparent
 
           textures={npc.textures}
-          labelHeight={wallHeight * (1 / npc.scale)}
+          labelHeight={wallHeight * (1 / npc.m.scale)}
           // labelHeight={wallHeight * (1 / 0.9)}
           selectorColor={npc.def.classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
           showSelector={npc.s.showSelector}

@@ -29,6 +29,7 @@ export class Npc {
     /** Mounted mesh */
     mesh: /** @type {THREE.SkinnedMesh} */ ({}),
     toAct: /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({}),
+    scale: 1,
   }
   
   mixer = emptyAnimationMixer;
@@ -54,7 +55,6 @@ export class Npc {
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
   agentRadius = helper.defaults.radius;
-  scale = 1; // 🚧 move to m
 
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
@@ -142,10 +142,10 @@ export class Npc {
     m.mesh.updateMatrixWorld();
     m.mesh.computeBoundingBox();
     m.mesh.computeBoundingSphere();
-
+    
     const npcClassKey = this.def.classKey;
-
-    this.scale = npcClassToMeta[npcClassKey].scale;
+    m.scale = npcClassToMeta[npcClassKey].scale;
+    
     this.s.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
 
     // see w.npc.spawn for more initialization
@@ -388,7 +388,7 @@ export class Npc {
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, m, s, mixer, position, agent, lastLookAt, lastTarget, lastCorner, scale } = npc;
+  const { def, epochMs, m, s, mixer, position, agent, lastLookAt, lastTarget, lastCorner } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
   // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
   const nextNpc = new Npc(def, npc.w);
@@ -403,7 +403,6 @@ export function hotModuleReloadNpc(npc) {
     lastLookAt,
     lastTarget,
     lastCorner,
-    scale,
   }));
 }
 
