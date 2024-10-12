@@ -233,7 +233,7 @@ function StaticColliders({ staticColliders, w }) {
         <mesh
           geometry={cylinderGeometry}
           position={[position.x, colliderHeight / 2, position.z]}
-          scale={userData.hull
+          scale={userData.custom?.hull
             ? [nearbyHullDoorSensorRadius, colliderHeight, nearbyHullDoorSensorRadius]
             : [nearbyDoorSensorRadius, colliderHeight, nearbyDoorSensorRadius]
           }

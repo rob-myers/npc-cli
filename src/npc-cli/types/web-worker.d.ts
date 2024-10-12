@@ -148,20 +148,19 @@ declare namespace WW {
       }
   )
 
-  interface PhysicsUserData {
+  /**
+   * ℹ️ Height is always fixed.
+   */
+  type PhysicsUserData = BasePhysicsUserData & (
+    | { type: 'npc'; radius: number; }
+    | { type: 'cylinder'; radius: number; }
+    | { type: 'cuboid'; width: number; depth: number; angle: number; }
+  );
+
+  interface BasePhysicsUserData {
     bodyKey: WW.PhysicsBodyKey;
     /** This is the numeric hash of `bodyKey` */
     bodyUid: number;
-
-    /** Is this the body of a hull door? */
-    hull?: true;
-    /** Is this the body of an NPC? */
-    npc?: true;
-    /** Is this static body a decor rect/circle for some geomorph `gmId`? */
-    gmDecor?: true;
-    /** Is this static body a decor rect/circle for some geomorph `gmId`? */
-    gmId?: number;
-
     /** Custom UserData */
     custom?: Record<string, any>;
   }

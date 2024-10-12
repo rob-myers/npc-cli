@@ -61,6 +61,9 @@ async function handleMessages(e) {
             position: { x, y: wallHeight / 2, z },
             angle,
             userData: {
+              ...geomDef.type === 'circle'
+                ? { type: 'cylinder', radius: geomDef.radius }
+                : { type: 'cuboid', width: geomDef.width, depth: geomDef.height, angle: angle ?? 0 },
               bodyKey,
               bodyUid: addBodyKeyUidRelation(bodyKey, state),
               custom: userData,
@@ -86,7 +89,8 @@ async function handleMessages(e) {
             userData: {
               bodyKey,
               bodyUid: addBodyKeyUidRelation(bodyKey, state),
-              npc: true,
+              type: 'npc',
+              radius: config.agentRadius,
             },
           });
         } else {
@@ -244,7 +248,10 @@ function createDoorSensors() {
         userData: {
           bodyKey: nearbyKey,
           bodyUid: addBodyKeyUidRelation(nearbyKey, state),
-          ...door.meta.hull === true && { hull: true },
+          // ...door.meta.hull === true && { hull: true },
+          type: 'cylinder',
+          radius: nearbyRadius,
+          custom: { hull: door.meta.hull === true },
         },
       }),
       createRigidBody({
@@ -259,6 +266,10 @@ function createDoorSensors() {
         userData: {
           bodyKey: insideKey,
           bodyUid: addBodyKeyUidRelation(insideKey, state),
+          type: 'cuboid',
+          width: insideDef.width,
+          depth: insideDef.height,
+          angle,
         },
       }),
     ]
@@ -294,8 +305,12 @@ function createGmColliders(gmIds = state.gms.map((_, gmId) => gmId)) {
           userData: {
             bodyKey,
             bodyUid: addBodyKeyUidRelation(bodyKey, state),
-            gmDecor: true,
-            gmId: d.meta.gmId,
+            type: 'cylinder',
+            radius: d.radius,
+            custom: {
+              gmDecor: true,
+              gmId: d.meta.gmId,
+            },
           },
         });
       } else if (d.type === 'rect') {
@@ -308,8 +323,14 @@ function createGmColliders(gmIds = state.gms.map((_, gmId) => gmId)) {
           userData: {
             bodyKey,
             bodyUid: addBodyKeyUidRelation(bodyKey, state),
-            gmDecor: true,
-            gmId: d.meta.gmId,
+            type: 'cuboid',
+            width: bounds2d.width,
+            depth: bounds2d.height,
+            angle: d.angle,
+            custom: {
+              gmDecor: true,
+              gmId: d.meta.gmId,
+            },
           },
           angle: d.angle,
         });
@@ -337,7 +358,8 @@ function restoreNpcs(npcs) {
       userData: {
         bodyKey,
         bodyUid: addBodyKeyUidRelation(bodyKey, state),
-        npc: true,
+        type: 'npc',
+        radius: config.agentRadius,
       },
     });
   }
