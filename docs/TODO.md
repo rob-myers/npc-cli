@@ -15,40 +15,18 @@
   - ✅ changeUvQuad infers texId
   - ✅ replace minecraft models with cuboid-man
   - ✅ remove minecraft models
-  - 🚧 use testCharacterMaterial
+  - ✅ use testCharacterMaterial
     - ✅ migrate npc.setSkin and hot-reloads
     - ✅ npc.textures is [skinTex, labelTex]
     - ✅ skin auto-updates
-    - 🚧 rename as cuboidManMaterial
-    - 🚧 clean
+    - ✅ rename as cuboidManMaterial
+    - ✅ clean
   - ✅ adjust animation timeScale after transition
-  - can toggle npc selector 
+  - 🚧 can toggle npc selector
+    - preferably without render of `<Npcs>`
   - methods directly on npc instances
     - npc.changeLabel
     - npc.changeQuad
-
-- ✅ uv-map for label seems wrong i.e. should cover 256 * 128
-  - 🔔 seems npm module `canvas` does not support scaled text properly
-    when `saveCanvasAsFile`, so change text size instead
-
-- ✅ bug: permitted npc going thru closed door
-  - ❌ `state.isUpcomingDoor(npc, door)` is false when should be true
-  - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
-    - even worse when another npc is in the way
-  - ❌ try smaller nearby sensor 0.9 * x
-  - ✅ fallback: open on trigger "inside" sensor
-  - ✅ try cuboid "nearby" sensor
-  - ℹ️ still happens i.e. door opens at last moment, but will suffice for the moment
-
-- ✅ can debug physics colliders
-  - ✅ connect `Debug` to physic.worker
-  - ✅ refine userData type: `WW.PhysicsUserData`
-  - ✅ can render `nearby` colliders in Debug
-  - ✅ can render `inside` colliders in Debug
-    - maybe fixed issue with untransformed nearby door `angle` in physics.worker
-  - ✅ UserData has type i.e. npc, cuboid or cylinder
-  - ✅ can render custom colliders in Debug
-  - ✅ can then remove outlines from Floor
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie
@@ -2623,3 +2601,27 @@ run '({ w, api }) {
   - ℹ️ unpaused, maximise tty, pause, un-maximise
 - ✅ bug: initially open hull door via spawn does not close
   - seems fixed by npc.spawn cleanup
+
+
+- ✅ uv-map for label seems wrong i.e. should cover 256 * 128
+  - 🔔 seems npm module `canvas` does not support scaled text properly
+    when `saveCanvasAsFile`, so change text size instead
+
+- ✅ bug: permitted npc going thru closed door
+  - ❌ `state.isUpcomingDoor(npc, door)` is false when should be true
+  - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
+    - even worse when another npc is in the way
+  - ❌ try smaller nearby sensor 0.9 * x
+  - ✅ fallback: open on trigger "inside" sensor
+  - ✅ try cuboid "nearby" sensor
+  - ℹ️ still happens i.e. door opens at last moment, but will suffice for the moment
+
+- ✅ can debug physics colliders
+  - ✅ connect `Debug` to physic.worker
+  - ✅ refine userData type: `WW.PhysicsUserData`
+  - ✅ can render `nearby` colliders in Debug
+  - ✅ can render `inside` colliders in Debug
+    - maybe fixed issue with untransformed nearby door `angle` in physics.worker
+  - ✅ UserData has type i.e. npc, cuboid or cylinder
+  - ✅ can render custom colliders in Debug
+  - ✅ can then remove outlines from Floor

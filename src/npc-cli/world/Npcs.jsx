@@ -8,7 +8,7 @@ import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
 import { cmUvService } from "../service/uv";
-import { TestCharacterMaterial } from "../service/glsl";
+import { CuboidManMaterial } from "../service/glsl";
 import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -312,8 +312,8 @@ function NPC({ npc }) {
         userData={mesh.userData}
       >
         {/* <meshPhysicalMaterial transparent map={material.map} /> */}
-        <testCharacterMaterial
-          key={TestCharacterMaterial.key}
+        <cuboidManMaterial
+          key={CuboidManMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
 

@@ -20,7 +20,7 @@ declare global {
       cameraLightMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
       }>;
-      testCharacterMaterial: BaseExtendedShaderMaterial<{
+      cuboidManMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
         showLabel?: boolean;
         labelHeight?: number;

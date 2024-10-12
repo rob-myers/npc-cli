@@ -196,12 +196,13 @@ export const cameraLightShader = {
 };
 
 /**
+ * - Assumes specific mesh cuboid-man with 64 vertices.
+ * - Supports similar mesh i.e. cuboid-pet.
  * - Based on `cameraLightShader`
  * - Does not support instancing
  * - Assumes USE_LOGDEPTHBUF
- * - Assumes specific mesh with 64 vertices.
  */
-export const testCharacterShader = {
+export const cuboidManShader = {
 
   Vert: /*glsl*/`
 
@@ -450,7 +451,7 @@ export const CameraLightMaterial = shaderMaterial(
   cameraLightShader.Frag,
 );
 
-export const TestCharacterMaterial = shaderMaterial(
+export const CuboidManMaterial = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
     // 🔔 map, mapTransform required else can get weird texture
@@ -471,8 +472,8 @@ export const TestCharacterMaterial = shaderMaterial(
     uLabelUv: defaultQuadUvs,
     uLabelDim: defaultQuadUvs[0],
   },
-  testCharacterShader.Vert,
-  testCharacterShader.Frag,
+  cuboidManShader.Vert,
+  cuboidManShader.Frag,
 );
 
 /**
@@ -482,5 +483,5 @@ extend({
   InstancedMonochromeShader,
   InstancedSpriteSheetMaterial,
   CameraLightMaterial,
-  TestCharacterMaterial,
+  CuboidManMaterial,
 });

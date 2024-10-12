@@ -7,7 +7,7 @@ import { Rect, Vect } from '../geom';
 import { npcClassToMeta, wallHeight } from '../service/const';
 import { debug, keys, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, emptyTexture, getParentBones, textureLoader, toV3 } from "../service/three";
-import { TestCharacterMaterial } from '../service/glsl';
+import { CuboidManMaterial } from '../service/glsl';
 import { WorldContext } from './world-context';
 import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
@@ -322,8 +322,8 @@ export default function TestNpcs(props) {
         // frustumCulled={false}
       >
         {/* <meshPhysicalMaterial key="change_me" map={texture} transparent /> */}
-        <testCharacterMaterial
-          key={TestCharacterMaterial.key}
+        <cuboidManMaterial
+          key={CuboidManMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
           // map={texture}
