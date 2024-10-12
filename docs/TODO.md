@@ -27,7 +27,9 @@
     - npc.changeLabel
     - npc.changeQuad
 
-- uv-map for label seems wrong i.e. should cover 256 * 128
+- ✅ uv-map for label seems wrong i.e. should cover 256 * 128
+  - 🔔 seems npm module `canvas` does not support scaled text properly
+    when `saveCanvasAsFile`, so change text size instead
 
 - 🚧 bug: permitted npc going thru closed door
   - ❌ `state.isUpcomingDoor(npc, door)` is false when should be true
