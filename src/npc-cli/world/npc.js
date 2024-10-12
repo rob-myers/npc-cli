@@ -48,7 +48,7 @@ export class Npc {
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
     quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
-    selector: true,
+    showSelector: true,
   };
 
   /** @type {null | NPC.CrowdAgent} */
@@ -311,6 +311,19 @@ export class Npc {
   setPosition(dst) {
     this.position.copy(dst);
   }
+
+  /**
+   * @param {boolean} shouldShow
+   */
+  showSelector(shouldShow = !this.s.showSelector) {
+    shouldShow = Boolean(shouldShow);
+    // directly change uniform sans render
+    this.m.material.uniforms.showSelector.value = shouldShow;
+    this.m.material.uniformsNeedUpdate = true;
+    // also remember for next render
+    this.s.showSelector = shouldShow;
+  }
+
   /** @param {NPC.AnimKey} act */
   startAnimation(act) {
     const curr = this.m.toAct[this.s.act];

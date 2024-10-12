@@ -24,10 +24,11 @@
   - ✅ adjust animation timeScale after transition
   - ✅ npc.m.mesh is mounted SkinnedMesh
   - ✅ npc.m.material is mounted ShaderMaterial
-  - 🚧 can toggle npc selector without re-render
-  - methods directly on npc instances
-    - npc.changeLabel
-    - npc.changeQuad
+  - 🚧 methods directly on npc instances
+    - ✅ can toggle selector without re-render: npc.showSelector([bool])
+    - can change selector color
+    - can change label
+    - can change face/icon
 
 - ❌ avoid cloning "scene"
   - makes sense to clone i.e. group containing bones and skinnedMesh
