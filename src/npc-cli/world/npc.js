@@ -49,6 +49,7 @@ export class Npc {
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
     quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
+    selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: true,
   };
 
@@ -78,12 +79,14 @@ export class Npc {
     this.w = w;
     this.bodyUid = addBodyKeyUidRelation(npcToBodyKey(def.key), w.physics)
   }
+
   attachAgent() {
     return this.agent ??= this.w.crowd.addAgent(this.position, {
       ...crowdAgentParams,
       maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed
     });
   }
+
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
 
@@ -101,23 +104,29 @@ export class Npc {
 
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
+
   getAngle() {// Assume only rotated about y axis
     return this.m.group.rotation.y;
   }
+
   /** @returns {Geom.VectJson} */
   getPoint() {
     const { x, z: y } = this.position;
     return { x, y };
   }
+
   getPosition() {
     return this.position;
   }
+
   getRadius() {
     return helper.defaults.radius;
   }
+
   getMaxSpeed() {
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
   }
+
   /**
    * Initialization we can do before mounting
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
@@ -150,6 +159,7 @@ export class Npc {
 
     // see w.npc.spawn for more initialization
   }
+
   /**
    * @param {THREE.Vector3Like} dst
    * @param {object} [opts]
@@ -202,6 +212,7 @@ export class Npc {
       this.s.moving = false;
     }
   }
+
   /**
    * An arrow function avoids using an inline-ref in <NPC>. However,
    * `this.onMount` changes on HMR so we rely on idempotence nonetheless.
@@ -227,6 +238,7 @@ export class Npc {
       this.resolve?.();
     }
   }
+
   /** @param {number} deltaMs  */
   onTick(deltaMs) {
     this.mixer.update(deltaMs);
@@ -239,6 +251,7 @@ export class Npc {
       dampLookAt(this.m.group, this.s.lookAt, 0.25, deltaMs);
     }
   }
+
   /**
    * @param {number} deltaMs
    * @param {import('@recast-navigation/core').CrowdAgent} agent
@@ -293,12 +306,14 @@ export class Npc {
     //   });
     // }
   }
+
   removeAgent() {
     if (this.agent !== null) {
       this.w.crowd.removeAgent(this.agent.agentIndex);
       this.agent = null;
     }
   }
+
   setupMixer() {
     this.mixer = new THREE.AnimationMixer(this.m.group);
 
@@ -307,9 +322,25 @@ export class Npc {
       : (warn(`ignored unexpected animation: ${a.name}`), agg)
     , /** @type {typeof this['m']['toAct']} */ ({}));
   }
+
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
     this.position.copy(dst);
+  }
+
+  /**
+   * @param {number} r in `[0, 1]`
+   * @param {number} g in `[0, 1]`
+   * @param {number} b in `[0, 1]`
+   */
+  setSelectorRgb(r, g, b) {
+    /** @type {[number, number, number]} */
+    const selectorColor = [Number(r) || 0, Number(g) || 0, Number(b) || 0];
+    // directly change uniform sans render
+    this.m.material.uniforms.selectorColor.value = selectorColor;
+    this.m.material.uniformsNeedUpdate = true;
+    // remember for next render
+    this.s.selectorColor = selectorColor;
   }
 
   /**
@@ -320,7 +351,7 @@ export class Npc {
     // directly change uniform sans render
     this.m.material.uniforms.showSelector.value = shouldShow;
     this.m.material.uniformsNeedUpdate = true;
-    // also remember for next render
+    // remember for next render
     this.s.showSelector = shouldShow;
   }
 
@@ -333,6 +364,7 @@ export class Npc {
     this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[act] ?? 1;
     this.s.act = act;
   }
+
   stopMoving() {
     if (this.agent == null) {
       return;
@@ -354,6 +386,7 @@ export class Npc {
 
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
   }
+
   toJSON() {
     return {
       key: this.key,
@@ -362,6 +395,7 @@ export class Npc {
       s: this.s,
     };
   }
+
   async waitUntilStopped() {
     if (this.s.moving === false) {
       return;

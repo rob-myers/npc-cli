@@ -26,7 +26,8 @@
   - ✅ npc.m.material is mounted ShaderMaterial
   - 🚧 methods directly on npc instances
     - ✅ can toggle selector without re-render: npc.showSelector([bool])
-    - can change selector color
+    - ✅ can change selector color
+      - `w npc.npc.rob.setSelectorRgb 1 0.5 1`
     - can change label
     - can change face/icon
 
