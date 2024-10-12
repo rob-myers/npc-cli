@@ -30,7 +30,7 @@ export class Npc {
     /** Root bones */
     bones: /** @type {THREE.Bone[]} */ ([]),
     animations: /** @type {THREE.AnimationClip[]} */ ([]),
-    animMap: /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({}),
+    toAct: /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({}),
     material: /** @type {THREE.MeshPhysicalMaterial} */ ({}),
   }
   
@@ -51,12 +51,13 @@ export class Npc {
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
     quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
+    selector: true,
   };
 
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
   agentRadius = helper.defaults.radius;
-  scale = 1;
+  scale = 1; // 🚧 move to m
 
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
@@ -64,6 +65,7 @@ export class Npc {
   /** @type {undefined | ((value?: any) => void)} */
   resolve;
 
+  /** Shortcut */
   get textures() {
     return this.w.npc.tex[this.def.classKey];
   }
@@ -128,6 +130,7 @@ export class Npc {
     const meta = npcClassToMeta[this.def.classKey];
 
     m.gltf = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
+    // m.gltf = scene;
     m.animations = animations;
 
     m.sub = buildObjectLookup(m.gltf);
@@ -143,8 +146,6 @@ export class Npc {
 
     const npcClassKey = this.def.classKey;
 
-    // 🚧
-    const quadMeta = cmUvService.toQuadMetas[npcClassKey];
     this.scale = npcClassToMeta[npcClassKey].scale;
     this.s.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
 
@@ -211,6 +212,7 @@ export class Npc {
     if (group !== null) {
       // Reference mounted group
       this.m.group = group;
+      // this.m.material = /** @type {THREE.ShaderMaterial} */ (this.m.mesh.material);
       // Setup shortcut
       this.position = group.position;
       // Resume `w.npc.spawn`
@@ -291,10 +293,11 @@ export class Npc {
   }
   setupMixer() {
     this.mixer = new THREE.AnimationMixer(this.m.group);
-    this.m.animMap = this.m.animations.reduce((agg, a) => helper.isAnimKey(a.name)
+
+    this.m.toAct = this.m.animations.reduce((agg, a) => helper.isAnimKey(a.name)
       ? (agg[a.name] = this.mixer.clipAction(a), agg)
       : (warn(`ignored unexpected animation: ${a.name}`), agg)
-    , /** @type {typeof this['m']['animMap']} */ ({}));
+    , /** @type {typeof this['m']['toAct']} */ ({}));
   }
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
@@ -302,9 +305,9 @@ export class Npc {
   }
   /** @param {NPC.AnimKey} act */
   startAnimation(act) {
-    const anim = this.m.animMap[this.s.act];
-    const next = this.m.animMap[act];
-    anim.fadeOut(glbFadeOut[this.s.act][act]);
+    const curr = this.m.toAct[this.s.act];
+    const next = this.m.toAct[act];
+    curr.fadeOut(glbFadeOut[this.s.act][act]);
     next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
     this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[act] ?? 1;
     this.s.act = act;
@@ -325,7 +328,7 @@ export class Npc {
     this.startAnimation('Idle');
     // suppress final movement
     this.agent.teleport(position);
-    // keep target, so moves out of the way of other npcs
+    // 🔔 keep target, so moves out of the way of other npcs
     this.agent.requestMoveTarget(position);
 
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });

@@ -321,7 +321,7 @@ function NPC({ npc }) {
           labelHeight={wallHeight * (1 / npc.scale)}
           // labelHeight={wallHeight * (1 / 0.9)}
           selectorColor={npc.def.classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
-          // showSelector={false}
+          showSelector={npc.s.selector}
           // showLabel={false}
           uLabelTexId={quad.label.texId}
           uLabelUv={quad.label.uvs}

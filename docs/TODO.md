@@ -28,6 +28,10 @@
     - npc.changeLabel
     - npc.changeQuad
 
+- 🚧 avoid cloning "scene"
+  - try just cloning the skeleton
+  - provide access to shader material so can update directly
+
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie
 - implement "do points"
