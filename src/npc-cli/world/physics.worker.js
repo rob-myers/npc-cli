@@ -230,7 +230,12 @@ function createDoorSensors() {
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
     const insideKey = /** @type {const} */ (`inside ${gdKey}`);
 
-    const nearbyRadius = door.meta.hull === true ? nearbyHullDoorSensorRadius : nearbyDoorSensorRadius;
+    // const nearbyRadius = door.meta.hull === true ? nearbyHullDoorSensorRadius : nearbyDoorSensorRadius;
+    const nearbyDef = {
+      width: door.baseRect.width,
+      height: door.baseRect.height + 2 * wallOutset,
+      angle,
+    };
     const insideDef = {
       width: (door.baseRect.width - 2 * wallOutset),
       height: door.baseRect.height,
@@ -238,20 +243,37 @@ function createDoorSensors() {
     };
 
     return [
+      // createRigidBody({
+      //   type: RAPIER.RigidBodyType.Fixed,
+      //   geomDef: {
+      //     type: 'circle',
+      //     radius: nearbyRadius,
+      //   },
+      //   position: { x: center.x, y: colliderHeight / 2, z: center.y },
+      //   userData: {
+      //     bodyKey: nearbyKey,
+      //     bodyUid: addBodyKeyUidRelation(nearbyKey, state),
+      //     type: 'cylinder',
+      //     radius: nearbyRadius,
+      //     custom: { hull: door.meta.hull === true },
+      //   },
+      // }),
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
-          type: 'circle',
-          radius: nearbyRadius,
+          type: 'rect',
+          width: nearbyDef.width,
+          height: nearbyDef.height,
         },
-        position: { x: center.x, y: colliderHeight / 2, z: center.y },
+        position: { x: center.x, y: wallHeight/2, z: center.y },
+        angle,
         userData: {
           bodyKey: nearbyKey,
           bodyUid: addBodyKeyUidRelation(nearbyKey, state),
-          // ...door.meta.hull === true && { hull: true },
-          type: 'cylinder',
-          radius: nearbyRadius,
-          custom: { hull: door.meta.hull === true },
+          type: 'cuboid',
+          width: nearbyDef.width,
+          depth: nearbyDef.height,
+          angle,
         },
       }),
       createRigidBody({

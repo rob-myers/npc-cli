@@ -233,9 +233,13 @@ function StaticColliders({ staticColliders, w }) {
           geometry={cylinderGeometry}
           position={[position.x, colliderHeight / 2, position.z]}
           scale={[userData.radius, colliderHeight, userData.radius]}
-          renderOrder={2}
+          renderOrder={toColliderMeta[parsedKey[0]]?.renderOrder ?? 3}
         >
-          <meshBasicMaterial color="red" transparent opacity={0.2} />
+          <meshBasicMaterial
+            color={toColliderMeta[parsedKey[0]]?.color ?? 'blue'}
+            transparent
+            opacity={0.25}
+          />
         </mesh>
       );
     }
@@ -247,9 +251,13 @@ function StaticColliders({ staticColliders, w }) {
           position={[position.x, colliderHeight / 2, position.z]}
           scale={[userData.width, colliderHeight, userData.depth]}
           rotation={[0, userData.angle, 0]}
-          renderOrder={1}
+          renderOrder={toColliderMeta[parsedKey[0]]?.renderOrder ?? 3}
         >
-          <meshBasicMaterial color="green" transparent opacity={0.25} />
+          <meshBasicMaterial
+            color={toColliderMeta[parsedKey[0]]?.color ?? 'blue'}
+            transparent
+            opacity={0.25}
+          />
         </mesh>
       );
     }
@@ -259,3 +267,8 @@ function StaticColliders({ staticColliders, w }) {
 }
 
 const MemoizedStaticColliders = React.memo(StaticColliders);
+
+const toColliderMeta = /** @type {Record<string, { color: string; renderOrder: Number; }>} */ ({
+  inside: { color: 'green', renderOrder: 1 },
+  nearby: { color: 'red', renderOrder: 2 },
+});

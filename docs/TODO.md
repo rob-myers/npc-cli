@@ -31,13 +31,14 @@
   - 🔔 seems npm module `canvas` does not support scaled text properly
     when `saveCanvasAsFile`, so change text size instead
 
-- 🚧 bug: permitted npc going thru closed door
+- ✅ bug: permitted npc going thru closed door
   - ❌ `state.isUpcomingDoor(npc, door)` is false when should be true
   - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
     - even worse when another npc is in the way
   - ❌ try smaller nearby sensor 0.9 * x
   - ✅ fallback: open on trigger "inside" sensor
-  - try cuboid "nearby" sensor
+  - ✅ try cuboid "nearby" sensor
+  - ℹ️ still happens i.e. door opens at last moment, but will suffice for the moment
 
 - ✅ can debug physics colliders
   - ✅ connect `Debug` to physic.worker
