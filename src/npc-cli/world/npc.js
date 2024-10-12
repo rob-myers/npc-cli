@@ -19,19 +19,16 @@ export class Npc {
   
   /** Model */
   m = {
-    /** Clone of GLTF scene */
-    gltf: emptyGroup,
-    /** Root group */
-    group: emptyGroup,
-    
-    /** Sub `nodes` and `materials` */
-    sub: /** @type {import('@react-three/fiber').ObjectMap} */ ({}),
-    mesh: /** @type {THREE.SkinnedMesh} */ ({}),
+    animations: /** @type {THREE.AnimationClip[]} */ ([]),
     /** Root bones */
     bones: /** @type {THREE.Bone[]} */ ([]),
-    animations: /** @type {THREE.AnimationClip[]} */ ([]),
+    /** Root group available on mount */
+    group: emptyGroup,
+    /** Mounted material (initially THREE.MeshPhysicalMaterial via GLTF) */
+    material: /** @type {THREE.ShaderMaterial} */ ({}),
+    /** Mounted mesh */
+    mesh: /** @type {THREE.SkinnedMesh} */ ({}),
     toAct: /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({}),
-    material: /** @type {THREE.MeshPhysicalMaterial} */ ({}),
   }
   
   mixer = emptyAnimationMixer;
@@ -129,14 +126,16 @@ export class Npc {
     const { m } = this;
     const meta = npcClassToMeta[this.def.classKey];
 
-    m.gltf = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
-    // m.gltf = scene;
-    m.animations = animations;
 
-    m.sub = buildObjectLookup(m.gltf);
-    
-    m.bones = getParentBones(Object.values(m.sub.nodes));
-    m.mesh = /** @type {THREE.SkinnedMesh} */ (m.sub.nodes[meta.meshName]);
+    const clonedRoot = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
+    const objectLookup = buildObjectLookup(clonedRoot);
+
+    m.animations = animations;
+    // cloned bones
+    m.bones = getParentBones(Object.values(objectLookup.nodes));
+    // cloned mesh (overridden on mount)
+    m.mesh = /** @type {THREE.SkinnedMesh} */ (objectLookup.nodes[meta.meshName]);
+    // overridden on mount
     m.material = /** @type {Npc['m']['material']} */ (m.mesh.material);
     m.mesh.userData.npcKey = this.key; // To decode pointer events
 
@@ -149,7 +148,7 @@ export class Npc {
     this.scale = npcClassToMeta[npcClassKey].scale;
     this.s.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
 
-    // ℹ️ cannot setup mixer until <group> mounts
+    // see w.npc.spawn for more initialization
   }
   /**
    * @param {THREE.Vector3Like} dst
@@ -210,8 +209,17 @@ export class Npc {
    */
   onMount = (group) => {
     if (group !== null) {
-      // Reference mounted group
       this.m.group = group;
+
+      // overwrite cloned with mounted
+      const skinnedMesh = group.children.find(x => x instanceof THREE.SkinnedMesh);
+      if (skinnedMesh) {
+        this.m.mesh = skinnedMesh;
+        this.m.material = skinnedMesh.material;
+      } else {
+        warn('expected a SkinnedMesh in this.m.group.children');
+      }
+
       // this.m.material = /** @type {THREE.ShaderMaterial} */ (this.m.mesh.material);
       // Setup shortcut
       this.position = group.position;

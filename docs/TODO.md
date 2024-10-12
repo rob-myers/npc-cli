@@ -22,15 +22,15 @@
     - ✅ rename as cuboidManMaterial
     - ✅ clean
   - ✅ adjust animation timeScale after transition
-  - 🚧 can toggle npc selector
-    - preferably without render of `<Npcs>`
+  - ✅ npc.m.mesh is mounted SkinnedMesh
+  - ✅ npc.m.material is mounted ShaderMaterial
+  - 🚧 can toggle npc selector without re-render
   - methods directly on npc instances
     - npc.changeLabel
     - npc.changeQuad
 
-- 🚧 avoid cloning "scene"
-  - try just cloning the skeleton
-  - provide access to shader material so can update directly
+- ❌ avoid cloning "scene"
+  - makes sense to clone i.e. group containing bones and skinnedMesh
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie
