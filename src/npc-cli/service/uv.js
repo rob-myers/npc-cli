@@ -79,7 +79,6 @@ class CuboidManUvService {
         0.006 * npcScale * srcRect.height,
       ];
     }
-    npc.w.update();
   }
 
   /**
@@ -109,7 +108,6 @@ class CuboidManUvService {
         quad[quadKey] = this.cloneUvQuadInstance(quadMeta[quadKey].default);
       }
     }
-    npc.w.update();
   }
 
   /**

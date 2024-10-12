@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
 import { defaultClassKey, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
-import { info, warn } from "../service/generic";
+import { info, removeDups, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
@@ -20,6 +20,8 @@ import useUpdate from "../hooks/use-update";
 export default function Npcs(props) {
   const w = React.useContext(WorldContext);
 
+  const update = useUpdate();
+
   const state = useStateRef(/** @returns {State} */ () => ({
     gltf: /** @type {*} */ ({}),
     group: /** @type {*} */ (null),
@@ -31,6 +33,14 @@ export default function Npcs(props) {
     npc: {},
     tex: /** @type {*} */ ({}),
 
+    ensureLabels(...labels) {
+      const { lookup } = state.label;
+      if (!labels.every(label => label in lookup)) {
+        state.updateLabels(
+          ...removeDups([...Object.keys(lookup), ...labels])
+        );
+      }
+    },
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = w.crowd.navMeshQuery;
       const { path, success } = query.computePath(src, dst, {
@@ -203,6 +213,7 @@ export default function Npcs(props) {
       // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
       return npc;
     },
+    update,
     updateLabels(...labels) {
       w.menu.measure('npc.updateLabels');
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
@@ -236,13 +247,8 @@ export default function Npcs(props) {
       const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${w.hash.sheets}`);
       tex.flipY = false;
       state.tex[classKey][0] = tex;
-    })).then(() => {// override memo to force update npcs
-        Object.values(state.npc).forEach(npc => npc.epochMs = Date.now());
-        update();
-    });
-  }, [w.hash.sheets]);
-
-  const update = useUpdate();
+    })).then(() => Object.values(state.npc).forEach(npc => npc.forceUpdate()));
+  }, [w.hash.sheets, state.label.tex]);
 
   return (
     <group
@@ -276,6 +282,7 @@ export default function Npcs(props) {
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {Record<NPC.ClassKey, THREE.Texture[]>} tex
  *
+ * @property {(...labels: string[]) => void} ensureLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist
@@ -288,6 +295,7 @@ export default function Npcs(props) {
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
+ * @property {() => void} update
  * @property {(...labels: string[]) => void} updateLabels
  */
 

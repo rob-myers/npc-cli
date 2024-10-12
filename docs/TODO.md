@@ -28,8 +28,11 @@
     - ✅ can toggle selector without re-render: npc.showSelector([bool])
     - ✅ can change selector color
       - `w npc.npc.rob.setSelectorRgb 1 0.5 1`
-    - can change label
-    - can change face/icon
+    - ✅ can change label
+      - fix: ensure fresh textures supplied to npc when change w.npc.label
+      - `w npc.npc.rob.setLabel rob`
+    - can change label without render
+    - 🚧 can change face/icon
 
 - ❌ avoid cloning "scene"
   - makes sense to clone i.e. group containing bones and skinnedMesh

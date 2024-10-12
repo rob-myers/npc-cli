@@ -105,6 +105,11 @@ export class Npc {
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
 
+  forceUpdate() {
+    this.epochMs = Date.now();
+    this.w.npc.update();
+  }
+
   getAngle() {// Assume only rotated about y axis
     return this.m.group.rotation.y;
   }
@@ -321,6 +326,22 @@ export class Npc {
       ? (agg[a.name] = this.mixer.clipAction(a), agg)
       : (warn(`ignored unexpected animation: ${a.name}`), agg)
     , /** @type {typeof this['m']['toAct']} */ ({}));
+  }
+
+  /**
+   * Updates label sprite-sheet if necessary.
+   * @param {string | null} label
+   */
+  setLabel(label) {
+    // 🚧 directly change uniform sans render
+    if (label === null) {
+      cmUvService.changeLabel(this, null);
+    } else {
+      this.w.npc.ensureLabels(label);
+      cmUvService.changeLabel(this, label);
+    }
+
+    this.forceUpdate();
   }
 
   /** @param {THREE.Vector3Like} dst  */
