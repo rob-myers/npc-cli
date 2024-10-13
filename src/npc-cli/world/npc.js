@@ -334,6 +334,7 @@ export class Npc {
    */
   setLabel(label) {
     // 🚧 directly change uniform sans render
+    // 🚧 might need to update all other npc labels too...
     if (label === null) {
       cmUvService.changeLabel(this, null);
     } else {

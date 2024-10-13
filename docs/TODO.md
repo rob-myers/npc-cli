@@ -22,6 +22,8 @@
     - ✅ rename as cuboidManMaterial
     - ✅ clean
   - ✅ adjust animation timeScale after transition
+  - ❌ avoid cloning "scene"
+    - makes sense to clone i.e. group containing bones and skinnedMesh
   - ✅ npc.m.mesh is mounted SkinnedMesh
   - ✅ npc.m.material is mounted ShaderMaterial
   - 🚧 methods directly on npc instances
@@ -31,11 +33,9 @@
     - ✅ can change label
       - fix: ensure fresh textures supplied to npc when change w.npc.label
       - `w npc.npc.rob.setLabel rob`
-    - 🚧 can change label without render
-    - 🚧 can change face/icon
-
-- ❌ avoid cloning "scene"
-  - makes sense to clone i.e. group containing bones and skinnedMesh
+    - 🚧 bug: change label twice breaks first change
+    - can change label without render
+    - can change face/icon
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie

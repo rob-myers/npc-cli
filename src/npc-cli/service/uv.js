@@ -58,27 +58,24 @@ class CuboidManUvService {
   changeLabel(npc, label) {
     const quad = /** @type {CuboidManQuads} */ (npc.s.quad);
     const quadMeta = this.toQuadMetas[npc.def.classKey];
-    const { label: npcLabel } = npc.w.npc;
-
-    if (label === null) {
-      quad.label = this.cloneUvQuadInstance(quadMeta.label.default);
-    } else {
-      const srcRect = npcLabel.lookup[label];
-      if (!srcRect) {
-        throw Error(`${npc.key}: label not found: ${JSON.stringify(label)}`)
-      }
-  
-      const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);
-      const npcScale = npcClassToMeta[npc.def.classKey].scale;
-  
-      quad.label.uvs = this.instantiateUvDeltas(quadMeta.label.uvDeltas, srcUvRect);
-      quad.label.texId = 1; // 🔔 npc.label.tex
-      quad.label.dim = [
-        0.006 * npcScale * srcRect.width,
-        // ℹ️ height ~ 0.13 (13cms) when npcScale is 0.6 
-        0.006 * npcScale * srcRect.height,
-      ];
+    
+    if (label === null) {// reset
+      return this.copyUvQuadInstance(quadMeta.label.default, quad.label);
     }
+    
+    const { label: npcLabel } = npc.w.npc;
+    const srcRect = npcLabel.lookup[label];
+
+    if (!srcRect) {
+      throw Error(`${npc.key}: label not found: ${JSON.stringify(label)}`)
+    }
+
+    const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);
+    const npcScale = npcClassToMeta[npc.def.classKey].scale;
+
+    this.instantiateUvDeltas(quad.label, quadMeta.label.uvDeltas, srcUvRect);
+    quad.label.texId = 1; // 🔔 npc.label.tex
+    quad.label.dim = [0.006 * npcScale * srcRect.width, 0.006 * npcScale * srcRect.height];
   }
 
   /**
@@ -101,7 +98,7 @@ class CuboidManUvService {
 
         // 🔔 srcRect is already in [0, 1]x[0, 1]
         const srcUvRect = Rect.fromJson(srcRect);
-        quad[quadKey].uvs = this.instantiateUvDeltas(quadMeta[quadKey].uvDeltas, srcUvRect);
+        this.instantiateUvDeltas(quad[quadKey], quadMeta[quadKey].uvDeltas, srcUvRect);
         quad[quadKey].texId = this.toTexId[npc.def.classKey][uvMapKey]; // e.g. 0
 
       } else if (opts[quadKey] === null) {// Reset
@@ -123,12 +120,24 @@ class CuboidManUvService {
   }
 
   /**
+   * @param {UvQuadInstance} src 
+   * @param {UvQuadInstance} dst 
+   * @returns {UvQuadInstance}
+   */
+  copyUvQuadInstance(src, dst) {
+    dst.texId = src.texId;
+    dst.dim[0] = src.dim[0];
+    dst.dim[1] = src.dim[1];
+    dst.uvs.forEach((v, i) => v.copy(src.uvs[i]));
+    return dst;
+  }
+
+  /**
    * @param {NPC.ClassKey} npcClassKey 
    * @returns {CuboidManQuads}
    */
   getDefaultUvQuads(npcClassKey) {
-    // Assume exists
-    const quadMeta = this.toQuadMetas[npcClassKey];
+    const quadMeta = this.toQuadMetas[npcClassKey]; // Assume exists
     return {// clone quadMeta.label.default
       label: this.cloneUvQuadInstance(quadMeta.label.default),
       face: this.cloneUvQuadInstance(quadMeta.face.default),
@@ -164,27 +173,26 @@ class CuboidManUvService {
       }));
       quad.default = {
         texId: 0, // base skin
-        uvs: this.instantiateUvDeltas(quad.uvDeltas, quad.uvRect),
-        // ℹ️ inferred from Blender model
-        // ℹ️ 'face' and 'icon' have same dimension
+        uvs: [...Array(4)].map(_ => new THREE.Vector2()),
+        // Dimensions come from Blender Model
         dim: quadKey === 'label' ? [0.75, 0.375] : [0.4, 0.4],
       };
+      this.instantiateUvDeltas(quad.default, quad.uvDeltas, quad.uvRect);
     }
 
     return toQuadMeta;
   }
 
   /**
+   * @param {UvQuadInstance} quad 
    * @param {Geom.VectJson[]} uvDeltas 
    * @param {Rect} uvRect 
-   * @returns {THREE.Vector2[]}
    */
-  instantiateUvDeltas(uvDeltas, uvRect) {
+  instantiateUvDeltas(quad, uvDeltas, uvRect) {
     const { center, width, height } = uvRect;
-    // 🔔 Array of Geom.VectJSON or [number, number] throws error
-    return uvDeltas.map(p => new THREE.Vector2(
-      center.x + (width * p.x),
-      center.y + (height * p.y),
+    quad.uvs.forEach((uv, i) => uv.set(
+      center.x + (width * uvDeltas[i].x),
+      center.y + (height * uvDeltas[i].y),
     ));
   }
 

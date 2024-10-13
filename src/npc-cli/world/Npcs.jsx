@@ -35,11 +35,12 @@ export default function Npcs(props) {
 
     ensureLabels(...labels) {
       const { lookup } = state.label;
-      if (!labels.every(label => label in lookup)) {
-        state.updateLabels(
-          ...removeDups([...Object.keys(lookup), ...labels])
-        );
+      if (labels.every(label => label in lookup)) {
+        return;
       }
+      state.updateLabels(
+        ...removeDups([...Object.keys(lookup), ...labels])
+      );
     },
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = w.crowd.navMeshQuery;
