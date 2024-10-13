@@ -592,7 +592,7 @@ export default function Decor(props) {
         side={THREE.DoubleSide}
         map={state.label.tex}
         transparent
-        diffuse={new THREE.Vector3(1, 1, 1)}
+        diffuse={new THREE.Vector3(0.5, 0.5, 0.5)}
       />
     </instancedMesh>
   </>;
