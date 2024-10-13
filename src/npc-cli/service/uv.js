@@ -169,8 +169,7 @@ class CuboidManUvService {
    * @param {NPC.NPC} npc
    */
   updateLabelQuad(npc) {
-    const label = npc.s.label;
-    const quad = /** @type {CuboidManQuads} */ (npc.s.quad);
+    const { label, quad } = npc.s;
     const quadMeta = this.toQuadMetas[npc.def.classKey];
     
     if (label === null) {// reset
@@ -178,11 +177,10 @@ class CuboidManUvService {
       return;
     }
     
-    const { label: npcLabel } = npc.w.npc;
+    const npcLabel = npc.w.npc.label;
     const srcRect = npcLabel.lookup[label];
 
     if (!srcRect) {// reset it
-      // throw Error(`${npc.key}: label not found: ${JSON.stringify(label)}`)
       warn(`${npc.key}: label not found: ${JSON.stringify(label)}`);
       this.copyUvQuadInstance(quadMeta.label.default, quad.label);
       return;
@@ -193,7 +191,7 @@ class CuboidManUvService {
 
     this.instantiateUvDeltas(quad.label, quadMeta.label.uvDeltas, srcUvRect);
     quad.label.texId = 1; // 🔔 npc.label.tex
-    quad.label.dim = [0.006 * npcScale * srcRect.width, 0.006 * npcScale * srcRect.height];
+    quad.label.dim = /** @type {[number, number]} */ ([0.006 * npcScale * srcRect.width, 0.006 * npcScale * srcRect.height]);
   }
 
 }
