@@ -140,17 +140,16 @@ class CuboidManUvService {
       const uvRect = Rect.fromPoints(...quadUvs).precision(6);
 
       quad.uvRect = uvRect;
-      quad.uvDeltas = quadUvs.map(p => ({
-        x: p.x === uvRect.x ? -0.5 : 0.5,
-        y: p.y === uvRect.y ? -0.5 : 0.5,
-      }));
-      quad.default = {
-        texId: 0, // base skin
-        uvs: [...Array(4)].map(_ => new THREE.Vector2()),
-        // Dimensions come from Blender Model
-        dim: quadKey === 'label' ? [0.75, 0.375] : [0.4, 0.4],
-      };
-      this.instantiateUvDeltas(quad.default, quad.uvDeltas, quad.uvRect);
+      quad.uvDeltas = quadUvs.map(p => ({ x: p.x === uvRect.x ? -0.5 : 0.5, y: p.y === uvRect.y ? -0.5 : 0.5 }));
+
+      if (quadKey === 'label') {// initially empty
+        quad.default = { texId: 1, uvs: [...Array(4)].map(_ => new THREE.Vector2()), dim: [0, 0] };
+        // quad.default = { texId: 0, uvs: [...Array(4)].map(_ => new THREE.Vector2()), dim: [0.75, 0.375] };
+        // this.instantiateUvDeltas(quad.default, quad.uvDeltas, quad.uvRect);
+      } else {// base skin; 0.4 * 0.4 from Blender model
+        quad.default = { texId: 0, uvs: [...Array(4)].map(_ => new THREE.Vector2()), dim: [0.4, 0.4] };
+        this.instantiateUvDeltas(quad.default, quad.uvDeltas, quad.uvRect);
+      }
     }
 
     return toQuadMeta;
@@ -162,11 +161,8 @@ class CuboidManUvService {
    * @param {Rect} uvRect 
    */
   instantiateUvDeltas(quad, uvDeltas, uvRect) {
-    const { center, width, height } = uvRect;
-    quad.uvs.forEach((uv, i) => uv.set(
-      center.x + (width * uvDeltas[i].x),
-      center.y + (height * uvDeltas[i].y),
-    ));
+    const { center: c, width, height } = uvRect;
+    quad.uvs.forEach((uv, i) => uv.set(c.x + (width * uvDeltas[i].x), c.y + (height * uvDeltas[i].y)));
   }
 
   /**

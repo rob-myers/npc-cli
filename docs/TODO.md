@@ -34,7 +34,8 @@
       - fix: ensure fresh textures supplied to npc when change w.npc.label
       - `w npc.npc.rob.setLabel rob`
     - ✅ bug: change label twice breaks first change
-    - 🚧 bug: initial flicker on 1st change label
+    - ✅ bug: initial flicker on 1st change label
+      - seems shader is reading mutated data
     - can change label without render
     - can change face/icon
 

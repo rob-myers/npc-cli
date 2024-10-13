@@ -343,7 +343,7 @@ export class Npc {
     }
     cmUvService.updateLabelQuad(this);
 
-    // 🚧 directly change uniform sans render
+    // 🚧 directly change uniform sans render?
     this.forceUpdate();
   }
 
