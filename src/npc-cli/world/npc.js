@@ -51,6 +51,7 @@ export class Npc {
     quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: true,
+    label: /** @type {null | string} */ (null),
   };
 
   /** @type {null | NPC.CrowdAgent} */
@@ -335,11 +336,13 @@ export class Npc {
   setLabel(label) {
     // 🚧 directly change uniform sans render
     // 🚧 might need to update all other npc labels too...
+    this.s.label = label;
+
     if (label === null) {
-      cmUvService.changeLabel(this, null);
+      cmUvService.updateLabelQuad(this);
     } else {
       this.w.npc.ensureLabels(label);
-      cmUvService.changeLabel(this, label);
+      cmUvService.updateLabelQuad(this);
     }
 
     this.forceUpdate();

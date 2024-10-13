@@ -52,33 +52,6 @@ class CuboidManUvService {
   }
 
   /**
-   * @param {NPC.NPC} npc
-   * @param {string | null} label
-   */
-  changeLabel(npc, label) {
-    const quad = /** @type {CuboidManQuads} */ (npc.s.quad);
-    const quadMeta = this.toQuadMetas[npc.def.classKey];
-    
-    if (label === null) {// reset
-      return this.copyUvQuadInstance(quadMeta.label.default, quad.label);
-    }
-    
-    const { label: npcLabel } = npc.w.npc;
-    const srcRect = npcLabel.lookup[label];
-
-    if (!srcRect) {
-      throw Error(`${npc.key}: label not found: ${JSON.stringify(label)}`)
-    }
-
-    const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);
-    const npcScale = npcClassToMeta[npc.def.classKey].scale;
-
-    this.instantiateUvDeltas(quad.label, quadMeta.label.uvDeltas, srcUvRect);
-    quad.label.texId = 1; // 🔔 npc.label.tex
-    quad.label.dim = [0.006 * npcScale * srcRect.width, 0.006 * npcScale * srcRect.height];
-  }
-
-  /**
    * 'face' or 'icon' ('label' handled elsewhere)
    * @param {NPC.NPC} npc
    * @param {ChangeUvQuadOpts} [opts]
@@ -194,6 +167,33 @@ class CuboidManUvService {
       center.x + (width * uvDeltas[i].x),
       center.y + (height * uvDeltas[i].y),
     ));
+  }
+
+  /**
+   * @param {NPC.NPC} npc
+   */
+  updateLabelQuad(npc) {
+    const label = npc.s.label;
+    const quad = /** @type {CuboidManQuads} */ (npc.s.quad);
+    const quadMeta = this.toQuadMetas[npc.def.classKey];
+    
+    if (label === null) {// reset
+      return this.copyUvQuadInstance(quadMeta.label.default, quad.label);
+    }
+    
+    const { label: npcLabel } = npc.w.npc;
+    const srcRect = npcLabel.lookup[label];
+
+    if (!srcRect) {
+      throw Error(`${npc.key}: label not found: ${JSON.stringify(label)}`)
+    }
+
+    const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);
+    const npcScale = npcClassToMeta[npc.def.classKey].scale;
+
+    this.instantiateUvDeltas(quad.label, quadMeta.label.uvDeltas, srcUvRect);
+    quad.label.texId = 1; // 🔔 npc.label.tex
+    quad.label.dim = [0.006 * npcScale * srcRect.width, 0.006 * npcScale * srcRect.height];
   }
 
 }
