@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { Rect } from "../geom";
-import { keys } from "./generic";
+import { keys, warn } from "./generic";
 import { buildObjectLookup, getGeometryUvs } from "./three";
 import { npcClassKeys, npcClassToMeta } from "./const";
 
@@ -99,8 +99,8 @@ class CuboidManUvService {
    */
   copyUvQuadInstance(src, dst) {
     dst.texId = src.texId;
-    dst.dim[0] = src.dim[0];
-    dst.dim[1] = src.dim[1];
+    // 🔔 mutating dim caused issue on null label
+    dst.dim = [src.dim[0], src.dim[1]];
     dst.uvs.forEach((v, i) => v.copy(src.uvs[i]));
     return dst;
   }
@@ -178,14 +178,18 @@ class CuboidManUvService {
     const quadMeta = this.toQuadMetas[npc.def.classKey];
     
     if (label === null) {// reset
-      return this.copyUvQuadInstance(quadMeta.label.default, quad.label);
+      this.copyUvQuadInstance(quadMeta.label.default, quad.label);
+      return;
     }
     
     const { label: npcLabel } = npc.w.npc;
     const srcRect = npcLabel.lookup[label];
 
-    if (!srcRect) {
-      throw Error(`${npc.key}: label not found: ${JSON.stringify(label)}`)
+    if (!srcRect) {// reset it
+      // throw Error(`${npc.key}: label not found: ${JSON.stringify(label)}`)
+      warn(`${npc.key}: label not found: ${JSON.stringify(label)}`);
+      this.copyUvQuadInstance(quadMeta.label.default, quad.label);
+      return;
     }
 
     const srcUvRect = Rect.fromJson(srcRect).scale(1 / npcLabel.tex.image.width, 1 / npcLabel.tex.image.height);

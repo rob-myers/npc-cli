@@ -334,17 +334,16 @@ export class Npc {
    * @param {string | null} label
    */
   setLabel(label) {
-    // 🚧 directly change uniform sans render
-    // 🚧 might need to update all other npc labels too...
     this.s.label = label;
 
-    if (label === null) {
-      cmUvService.updateLabelQuad(this);
-    } else {
+    if (label !== null) {
+      // every npc label may need updating,
+      // avoidable by precomputing labels 
       this.w.npc.ensureLabels(label);
-      cmUvService.updateLabelQuad(this);
     }
+    cmUvService.updateLabelQuad(this);
 
+    // 🚧 directly change uniform sans render
     this.forceUpdate();
   }
 

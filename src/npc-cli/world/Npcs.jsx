@@ -37,10 +37,11 @@ export default function Npcs(props) {
       const { lookup } = state.label;
       if (labels.every(label => label in lookup)) {
         return;
+      } else {
+        state.updateLabels(...removeDups([...Object.keys(lookup), ...labels]));
+        // can avoid by precomputing labels
+        Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
       }
-      state.updateLabels(
-        ...removeDups([...Object.keys(lookup), ...labels])
-      );
     },
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = w.crowd.navMeshQuery;
@@ -284,6 +285,7 @@ export default function Npcs(props) {
  * @property {Record<NPC.ClassKey, THREE.Texture[]>} tex
  *
  * @property {(...labels: string[]) => void} ensureLabels
+ * Returns `false` iff had to add some new label
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist
