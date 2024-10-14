@@ -11,11 +11,16 @@ import { cmUvService } from "../service/uv";
 
 export class Npc {
 
-  /** @type {string} User specified e.g. `rob` */ key;
-  /** @type {import('./World').State} World API */ w;
-  /** @type {NPC.NPCDef} Initial definition */ def;
-  /** @type {number} When we (re)spawned */ epochMs;
-  /** @type {number} Physics body identifier i.e. `hashText(key)` */ bodyUid;
+  /** @type {string} User specified e.g. `rob` */
+  key;
+  /** @type {import('./World').State} World API */
+  w;
+  /** @type {NPC.NPCDef} Initial definition */
+  def;
+  /** @type {number} When we (re)spawned */
+  epochMs;
+  /** @type {number} Physics body identifier i.e. `hashText(key)` */
+  bodyUid;
   
   /** Model */
   m = {
@@ -38,20 +43,23 @@ export class Npc {
 
   /** State */
   s = {
-    cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
+    cancels: 0,
+    faceId: /** @type {null | NPC.UvQuadId} */ (null),
+    iconId: /** @type {null | NPC.UvQuadId} */ (null),
+    label: /** @type {null | string} */ (null),
     lookAt: /** @type {null | THREE.Vector3} */ (null),
     /** Is this npc moving? */
     moving: false,
+    /** 🚧 unused */
     paused: false,
+    quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
     rejectMove: emptyReject,
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
-    quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: true,
-    label: /** @type {null | string} */ (null),
   };
 
   /** @type {null | NPC.CrowdAgent} */
@@ -331,6 +339,32 @@ export class Npc {
       ? (agg[a.name] = this.mixer.clipAction(a), agg)
       : (warn(`ignored unexpected animation: ${a.name}`), agg)
     , /** @type {typeof this['m']['toAct']} */ ({}));
+  }
+
+  /**
+   * @param {null | NPC.UvQuadId} faceId 
+   */
+  setFace(faceId) {
+    this.s.faceId = faceId;
+    cmUvService.updateFaceQuad(this);
+    // directly change uniform sans render
+    const { texId, uvs } = this.s.quad.face;
+    this.m.material.uniforms.uFaceTexId.value = texId;
+    this.m.material.uniforms.uFaceUv.value = uvs;
+    this.m.material.uniformsNeedUpdate = true;
+  }
+
+  /**
+   * @param {null | NPC.UvQuadId} iconId 
+   */
+  setIcon(iconId) {
+    this.s.iconId = iconId;
+    cmUvService.updateIconQuad(this);
+    // directly change uniform sans render
+    const { texId, uvs } = this.s.quad.icon;
+    this.m.material.uniforms.uIconTexId.value = texId;
+    this.m.material.uniforms.uIconUv.value = uvs;
+    this.m.material.uniformsNeedUpdate = true;
   }
 
   /**

@@ -2,7 +2,7 @@
 
 ## WIP
 
-- 🚧 migrate cuboid-man into `<NPCs>`
+- ✅ migrate cuboid-man into `<NPCs>`
   - ℹ️ leave `<TestNpcs>` as is
   - ✅ classKeyToMeta -> const npcClassToMeta
     - NPC.ClassKey
@@ -26,7 +26,7 @@
     - makes sense to clone i.e. group containing bones and skinnedMesh
   - ✅ npc.m.mesh is mounted SkinnedMesh
   - ✅ npc.m.material is mounted ShaderMaterial
-  - 🚧 methods directly on npc instances
+  - ✅ methods directly on npc instances
     - ✅ can toggle selector without re-render: npc.showSelector([bool])
     - ✅ can change selector color
       - `w npc.npc.rob.setSelectorRgb 1 0.5 1`
@@ -41,7 +41,16 @@
     - ✅ add clearLabels
     - ✅ uniform `textures` -> uniforms u{Base,Label,Alt1}Texture
      - cleanup lookup `npc.tex`
-    - can change face/icon
+    - ✅ can change face/icon
+    ```sh
+    w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry
+    w npc.npc.rob.setFace null
+    w npc.npc.rob.setFace '{ uvMapKey: "cuboid-man", uvQuadKey: "front-face-angry" }'
+
+    w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food
+    w npc.npc.rob.setIcon null
+    w npc.npc.rob.setIcon '{ uvMapKey: "cuboid-man", uvQuadKey: "front-label-food" }'
+    ```
 
 - one-frame animations: Sit, Lie
 - can transition to Sit or Lie

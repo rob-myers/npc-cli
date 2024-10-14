@@ -28,6 +28,11 @@ declare namespace NPC {
     // | 'cuboid-man-alt-1'
   );
 
+  interface UvQuadId {
+    uvMapKey: NPC.TextureKey;
+    uvQuadKey: string;
+  }
+
   interface ClassDef {
     /** e.g. '/assets/3d/cuboid-man.glb' */
     url: string;

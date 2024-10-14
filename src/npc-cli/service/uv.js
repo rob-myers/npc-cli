@@ -41,42 +41,13 @@ class CuboidManUvService {
       this.toQuadMetas[npcClassKey] = this.initComputeQuadMetas(mesh);
 
       // each npc class is also a uvMapKey, fed as 0th texture
-      // ℹ️ w.npc.label.tex ~ texture id 1
+      // 🚧 setup alt texture when available
       (this.toTexId[npcClassKey] ??= {})[npcClassKey] = 0;
 
       // shader needs vertexId attribute
       const numVertices = mesh.geometry.getAttribute('position').count;
       const vertexIds = [...Array(numVertices)].map((_,i) => i);
       mesh.geometry.setAttribute('vertexId', new THREE.BufferAttribute(new Int32Array(vertexIds), 1));
-    }
-  }
-
-  /**
-   * 'face' or 'icon' ('label' handled elsewhere)
-   * @param {NPC.NPC} npc
-   * @param {ChangeUvQuadOpts} [opts]
-   */
-  changeUvQuad(npc, opts = {}) {
-    const quad = /** @type {CuboidManQuads} */ (npc.s.quad);
-    const quadMeta = this.toQuadMetas[npc.def.classKey];
-    const { uvMap } = npc.w.geomorphs.sheet.skins;
-
-    for (const quadKey of /** @type {const} */ (['face', 'icon'])) {
-      if (opts[quadKey]) {
-        const [uvMapKey, uvKey] = opts[quadKey];
-        const srcRect = uvMap[uvMapKey]?.[uvKey];
-        if (!srcRect) {
-          throw Error(`${npc.key}: ${quadKey}: [uvMap, uvKey] not found: ${JSON.stringify(opts[quadKey])}`)
-        }
-
-        // 🔔 srcRect is already in [0, 1]x[0, 1]
-        const srcUvRect = Rect.fromJson(srcRect);
-        this.instantiateUvDeltas(quad[quadKey], quadMeta[quadKey].uvDeltas, srcUvRect);
-        quad[quadKey].texId = this.toTexId[npc.def.classKey][uvMapKey]; // e.g. 0
-
-      } else if (opts[quadKey] === null) {// Reset
-        quad[quadKey] = this.cloneUvQuadInstance(quadMeta[quadKey].default);
-      }
     }
   }
 
@@ -163,6 +134,56 @@ class CuboidManUvService {
   instantiateUvDeltas(quad, uvDeltas, uvRect) {
     const { center: c, width, height } = uvRect;
     quad.uvs.forEach((uv, i) => uv.set(c.x + (width * uvDeltas[i].x), c.y + (height * uvDeltas[i].y)));
+  }
+
+  /**
+   * @param {NPC.NPC} npc
+   */
+  updateFaceQuad(npc) {
+    const { faceId: face, quad } = npc.s;
+    const quadMeta = this.toQuadMetas[npc.def.classKey];
+    
+    if (face === null) {// Reset
+      this.copyUvQuadInstance(quad.face, quadMeta.face.default);
+      return;
+    }
+
+    const { uvMap } = npc.w.geomorphs.sheet.skins;
+    const srcRect = uvMap[face.uvMapKey]?.[face.uvQuadKey];
+    if (!srcRect) {
+      throw Error(`${npc.key}: face: uvMapKey, uvQuadKey not found: ${JSON.stringify(face)}`)
+    }
+
+    // 🔔 srcRect is already in [0, 1]x[0, 1]
+    const srcUvRect = Rect.fromJson(srcRect);
+    this.instantiateUvDeltas(quad.face, quadMeta.face.uvDeltas, srcUvRect);
+    // 🔔 currently always `0` because we lack other textures
+    quad.face.texId = this.toTexId[npc.def.classKey][face.uvMapKey];
+  }
+
+  /**
+   * @param {NPC.NPC} npc
+   */
+  updateIconQuad(npc) {
+    const { iconId: icon, quad } = npc.s;
+    const quadMeta = this.toQuadMetas[npc.def.classKey];
+    
+    if (icon === null) {// Reset
+      this.copyUvQuadInstance(quad.icon, quadMeta.icon.default);
+      return;
+    }
+
+    const { uvMap } = npc.w.geomorphs.sheet.skins;
+    const srcRect = uvMap[icon.uvMapKey]?.[icon.uvQuadKey];
+    if (!srcRect) {
+      throw Error(`${npc.key}: icon: uvMapKey, uvQuadKey not found: ${JSON.stringify(icon)}`)
+    }
+
+    // 🔔 srcRect is already in [0, 1]x[0, 1]
+    const srcUvRect = Rect.fromJson(srcRect);
+    this.instantiateUvDeltas(quad.icon, quadMeta.icon.uvDeltas, srcUvRect);
+    // 🔔 currently always `0` because we lack other textures
+    quad.icon.texId = this.toTexId[npc.def.classKey][icon.uvMapKey];
   }
 
   /**
