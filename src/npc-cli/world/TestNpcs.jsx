@@ -326,16 +326,16 @@ export default function TestNpcs(props) {
           key={CuboidManMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
-          // map={texture}
-          textures={[
-            texture, // base skin
-            w.npc.label.tex, // labels
-          ]}
           labelHeight={wallHeight * (1 / scale.x)}
           // labelHeight={wallHeight * (1 / 0.9)}
           selectorColor={classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
           // showSelector={false}
           // showLabel={false}
+
+          uBaseTexture={texture}
+          uLabelTexture={w.npc.label.tex}
+          uAlt1Texture={emptyTexture}
+
           uLabelTexId={quad.label.texId}
           uLabelUv={quad.label.uvs}
           uLabelDim={quad.label.dim}
