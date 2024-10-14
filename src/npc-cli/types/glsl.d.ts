@@ -9,6 +9,8 @@ declare global {
     type Vector3Input = import('three').Vector3Tuple | import('three').Vector3Like;
     type Vector2Input = import('three').Vector2Tuple | import('three').Vector2;
     
+    type Texture = import('three').Texture;
+
     interface IntrinsicElements {
       instancedMonochromeShader: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
@@ -27,13 +29,18 @@ declare global {
         showSelector?: boolean;
         selectorColor?: Vector3Input;
 
-        uFaceTexId?: number;
-        uFaceUv?: Vector2Input[];
-        uIconTexId?: number;
-        uIconUv?: Vector2Input[];
+        uBaseTexture: Texture;
+        uLabelTexture: Texture;
+        uAlt1Texture: Texture;
 
+        uFaceTexId?: number;
+        uIconTexId?: number;
         uLabelTexId?: number;
+
+        uFaceUv?: Vector2Input[];
+        uIconUv?: Vector2Input[];
         uLabelUv?: Vector2Input[];
+
         uLabelDim?: Vector2Input;
       }>;
     }

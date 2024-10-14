@@ -251,10 +251,11 @@ export default function Npcs(props) {
     }
   }, []);
 
+  // 🚧 do not store array of textures
   React.useEffect(() => {// npc textures
     Promise.all(npcClassKeys.map(async classKey => {
       // Fresh array triggers uniform update
-      state.tex[classKey] = [emptyTexture, state.label.tex]; // [baseSkin, labels, ...]
+      state.tex[classKey] = [state.tex[classKey]?.[0] ?? emptyTexture, state.label.tex]; // [baseSkin, labels, ...]
       const { skinBaseName } = npcClassToMeta[classKey];
       const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${w.hash.sheets}`);
       tex.flipY = false;
@@ -341,21 +342,27 @@ function NPC({ npc }) {
           diffuse={[1, 1, 1]}
           transparent
 
-          textures={npc.textures}
           labelHeight={wallHeight * (1 / npc.m.scale)}
           // labelHeight={wallHeight * (1 / 0.9)}
           // selectorColor={npc.def.classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
           selectorColor={npc.s.selectorColor}
           showSelector={npc.s.showSelector}
           // showLabel={false}
-          uLabelTexId={quad.label.texId}
-          uLabelUv={quad.label.uvs}
-          uLabelDim={quad.label.dim}
 
+          // 🚧
+          uBaseTexture={npc.w.npc.tex[npc.def.classKey][0]}
+          uLabelTexture={npc.w.npc.label.tex}
+          uAlt1Texture={emptyTexture}
+          
           uFaceTexId={quad.face.texId}
-          uFaceUv={quad.face.uvs}
           uIconTexId={quad.icon.texId}
+          uLabelTexId={quad.label.texId}
+
+          uFaceUv={quad.face.uvs}
           uIconUv={quad.icon.uvs}
+          uLabelUv={quad.label.uvs}
+          
+          uLabelDim={quad.label.dim}
         />
       </skinnedMesh>
     </group>

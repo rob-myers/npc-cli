@@ -317,6 +317,10 @@ export const cuboidManShader = {
   // skin, npc.label, 🚧 another skin
   uniform sampler2D textures[3];
 
+  uniform sampler2D uBaseTexture;
+  uniform sampler2D uLabelTexture;
+  uniform sampler2D uAlt1Texture;
+
   uniform int uFaceTexId;
   uniform int uIconTexId;
   uniform int uLabelTexId;
@@ -335,38 +339,9 @@ export const cuboidManShader = {
   // ℹ️ https://stackoverflow.com/a/74729081/2917822
   vec4 getTexelColor(int texId, vec2 uv) {
     switch (texId) {
-      case 0: return texture2D(textures[0], uv);
-      case 1: return texture2D(textures[1], uv);
-      case 2: return texture2D(textures[2], uv);
-      // case 3: return texture2D(textures[3], uv);
-      // case 4: return texture2D(textures[4], uv);
-      // case 5: return texture2D(textures[5], uv);
-      // case 6: return texture2D(textures[6], uv);
-      // case 7: return texture2D(textures[7], uv);
-      // case 8: return texture2D(textures[8], uv);
-      // case 9: return texture2D(textures[9], uv);
-      // case 10: return texture2D(textures[10], uv);
-      // case 11: return texture2D(textures[11], uv);
-      // case 12: return texture2D(textures[12], uv);
-      // case 13: return texture2D(textures[13], uv);
-      // case 14: return texture2D(textures[14], uv);
-      // case 15: return texture2D(textures[15], uv);
-      // case 16: return texture2D(textures[16], uv);
-      // case 17: return texture2D(textures[17], uv);
-      // case 18: return texture2D(textures[18], uv);
-      // case 19: return texture2D(textures[19], uv);
-      // case 20: return texture2D(textures[20], uv);
-      // case 21: return texture2D(textures[21], uv);
-      // case 22: return texture2D(textures[22], uv);
-      // case 23: return texture2D(textures[23], uv);
-      // case 24: return texture2D(textures[24], uv);
-      // case 25: return texture2D(textures[25], uv);
-      // case 26: return texture2D(textures[26], uv);
-      // case 27: return texture2D(textures[27], uv);
-      // case 28: return texture2D(textures[28], uv);
-      // case 29: return texture2D(textures[29], uv);
-      // case 30: return texture2D(textures[30], uv);
-      // case 31: return texture2D(textures[31], uv);
+      case 0: return texture2D(uBaseTexture, uv);
+      case 1: return texture2D(uLabelTexture, uv);
+      case 2: return texture2D(uAlt1Texture, uv);
     }
     return vec4(0.0);
   }
@@ -392,7 +367,7 @@ export const cuboidManShader = {
           diffuseColor *= getTexelColor(uFaceTexId, vUv);
         break;
         default:
-          diffuseColor *= texture2D(textures[0], vUv);
+          diffuseColor *= getTexelColor(0, vUv);
       }
 
     }
@@ -417,6 +392,53 @@ export const cuboidManShader = {
 
   }
   `,
+};
+
+// 🚧 WIP
+export const instancedMultiTextureShader = {
+  Vert: ``,
+  Frag: /* glsl */`
+    //#region getTexelColor
+    // ℹ️ https://stackoverflow.com/a/74729081/2917822
+    vec4 getTexelColor(int texId, vec2 uv) {
+      switch (texId) {
+        case 0: return texture2D(textures[0], uv);
+        case 1: return texture2D(textures[1], uv);
+        case 2: return texture2D(textures[2], uv);
+        case 3: return texture2D(textures[3], uv);
+        case 4: return texture2D(textures[4], uv);
+        case 5: return texture2D(textures[5], uv);
+        case 6: return texture2D(textures[6], uv);
+        case 7: return texture2D(textures[7], uv);
+        case 8: return texture2D(textures[8], uv);
+        case 9: return texture2D(textures[9], uv);
+        case 10: return texture2D(textures[10], uv);
+        case 11: return texture2D(textures[11], uv);
+        case 12: return texture2D(textures[12], uv);
+        case 13: return texture2D(textures[13], uv);
+        case 14: return texture2D(textures[14], uv);
+        case 15: return texture2D(textures[15], uv);
+        case 16: return texture2D(textures[16], uv);
+        case 17: return texture2D(textures[17], uv);
+        case 18: return texture2D(textures[18], uv);
+        case 19: return texture2D(textures[19], uv);
+        case 20: return texture2D(textures[20], uv);
+        case 21: return texture2D(textures[21], uv);
+        case 22: return texture2D(textures[22], uv);
+        case 23: return texture2D(textures[23], uv);
+        case 24: return texture2D(textures[24], uv);
+        case 25: return texture2D(textures[25], uv);
+        case 26: return texture2D(textures[26], uv);
+        case 27: return texture2D(textures[27], uv);
+        case 28: return texture2D(textures[28], uv);
+        case 29: return texture2D(textures[29], uv);
+        case 30: return texture2D(textures[30], uv);
+        case 31: return texture2D(textures[31], uv);
+      }
+      return vec4(0.0);
+    }
+    //#endregion
+  `, // 🚧
 };
 
 export const InstancedMonochromeShader = shaderMaterial(
@@ -457,18 +479,22 @@ export const CuboidManMaterial = shaderMaterial(
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
-    textures: [],
+    // textures: [],
 
     showLabel: true,
     labelHeight: wallHeight,
     showSelector: true,
     selectorColor: [0, 0, 1],
 
+    uBaseTexture: null,
+    uLabelTexture: null,
+    uAlt1Texture: null,
+
     uFaceTexId: 0,
-    uFaceUv: defaultQuadUvs,
     uIconTexId: 0,
-    uIconUv: defaultQuadUvs,
     uLabelTexId: 0,
+    uFaceUv: defaultQuadUvs,
+    uIconUv: defaultQuadUvs,
     uLabelUv: defaultQuadUvs,
     uLabelDim: defaultQuadUvs[0],
   },

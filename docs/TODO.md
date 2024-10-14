@@ -40,6 +40,7 @@
     - ✅ absorb ensureLabels into updateLabels
     - ✅ add clearLabels
     - 🚧 uniform `textures` -> uniforms {base,label,alt}Texture
+     - cleanup lookup `npc.tex`
     - can change face/icon
 
 - one-frame animations: Sit, Lie
@@ -56,6 +57,8 @@
   - 🚧 add placeholder symbol to 303
 
 - ✅ fix symbols in 303 i.e. definitions should have correct size
+
+- Tabs: support keyboard shortcut to switch tabs e.g. option `]`
 
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
