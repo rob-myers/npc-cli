@@ -38312,7 +38312,7 @@
     "decorDim": {"width": 438, "height": 438},
     "imagesHash": 1252931287,
     "skins": {
-      "svgHash": {"cuboid-man": -1764386579, "cuboid-pet": -1224685710},
+      "svgHash": {"cuboid-man": 1108334893, "cuboid-pet": -1224685710},
       "uvMap": {
         "cuboid-man": {
           "ground-ring": {"x": 0.9, "y": 0, "width": 0.1, "height": 0.1},
