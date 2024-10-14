@@ -336,14 +336,14 @@ export class Npc {
   setLabel(label) {
     this.s.label = label;
 
-    if (label !== null) {
-      // every npc label may need updating,
-      // avoidable by precomputing labels 
-      this.w.npc.ensureLabels(label);
+    if (label === null) {
+      cmUvService.updateLabelQuad(this);
+    } else if (this.w.npc.updateLabels(label) === false) {
+      // if updateLabels noop, need to apply update
+      cmUvService.updateLabelQuad(this);
     }
-    cmUvService.updateLabelQuad(this);
 
-    // 🚧 directly change uniform sans render?
+    // may touch every npc via sprite-sheet change
     this.forceUpdate();
   }
 

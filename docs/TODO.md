@@ -37,9 +37,9 @@
     - ✅ bug: initial flicker on 1st change label
       - seems shader is reading mutated data
     - ❌ can change label without render
-    - absorb ensureLabels into updateLabels
-      - add clearLabels
-    - uniform `textures` -> uniforms {base,label,alt}Texture
+    - ✅ absorb ensureLabels into updateLabels
+    - ✅ add clearLabels
+    - 🚧 uniform `textures` -> uniforms {base,label,alt}Texture
     - can change face/icon
 
 - one-frame animations: Sit, Lie

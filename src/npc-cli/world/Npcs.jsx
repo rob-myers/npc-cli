@@ -33,15 +33,13 @@ export default function Npcs(props) {
     npc: {},
     tex: /** @type {*} */ ({}),
 
-    ensureLabels(...labels) {
-      const { lookup } = state.label;
-      if (labels.every(label => label in lookup)) {
-        return;
-      } else {
-        state.updateLabels(...removeDups([...Object.keys(lookup), ...labels]));
-        // can avoid by precomputing labels
-        Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
-      }
+    clearLabels() {
+      w.menu.measure('npc.clearLabels');
+      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
+      createLabelSpriteSheet([], state.label, { fontHeight });
+      // 🔔 warns from npc with non-null label
+      Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
+      w.menu.measure('npc.clearLabels');
     },
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = w.crowd.navMeshQuery;
@@ -216,11 +214,23 @@ export default function Npcs(props) {
       return npc;
     },
     update,
-    updateLabels(...labels) {
+    updateLabels(...incomingLabels) {
+      const { lookup } = state.label;
+      const unseenLabels = incomingLabels.filter(label => !(label in lookup));
+
+      if (unseenLabels.length === 0) {
+        return false;
+      }
+      
       w.menu.measure('npc.updateLabels');
+      const nextLabels = [...Object.keys(lookup), ...unseenLabels];
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
-      createLabelSpriteSheet(labels, state.label, { fontHeight });
+      createLabelSpriteSheet(nextLabels, state.label, { fontHeight });
       w.menu.measure('npc.updateLabels');
+
+      // update npc labels (avoidable by precomputing labels)
+      Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
+      return true;
     },
   }));
 
@@ -284,8 +294,7 @@ export default function Npcs(props) {
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {Record<NPC.ClassKey, THREE.Texture[]>} tex
  *
- * @property {(...labels: string[]) => void} ensureLabels
- * Returns `false` iff had to add some new label
+ * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist
@@ -299,7 +308,11 @@ export default function Npcs(props) {
  * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
  * @property {() => void} update
- * @property {(...labels: string[]) => void} updateLabels
+ * @property {(...incomingLabels: string[]) => boolean} updateLabels
+ * - Ensures incomingLabels i.e. does not replace.
+ * - Returns `true` iff the label sprite-sheet had to be updated.
+ * - Every npc label may need updating,
+     avoidable by precomputing labels 
  */
 
 /**
