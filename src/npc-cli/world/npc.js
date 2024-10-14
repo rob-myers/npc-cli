@@ -65,8 +65,12 @@ export class Npc {
   resolve;
 
   /** Shortcut */
-  get textures() {
+  get baseTexture() {
     return this.w.npc.tex[this.def.classKey];
+  }
+  /** Shortcut */
+  get labelTexture() {
+    return this.w.npc.tex.labels;
   }
 
   /**

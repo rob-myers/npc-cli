@@ -37,6 +37,7 @@ export default function Npcs(props) {
       w.menu.measure('npc.clearLabels');
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
       createLabelSpriteSheet([], state.label, { fontHeight });
+      state.tex.labels = state.label.tex;
       // 🔔 warns from npc with non-null label
       Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
       w.menu.measure('npc.clearLabels');
@@ -226,6 +227,7 @@ export default function Npcs(props) {
       const nextLabels = [...Object.keys(lookup), ...unseenLabels];
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
       createLabelSpriteSheet(nextLabels, state.label, { fontHeight });
+      state.tex.labels = state.label.tex;
       w.menu.measure('npc.updateLabels');
 
       // update npc labels (avoidable by precomputing labels)
@@ -251,17 +253,15 @@ export default function Npcs(props) {
     }
   }, []);
 
-  // 🚧 do not store array of textures
   React.useEffect(() => {// npc textures
     Promise.all(npcClassKeys.map(async classKey => {
-      // Fresh array triggers uniform update
-      state.tex[classKey] = [state.tex[classKey]?.[0] ?? emptyTexture, state.label.tex]; // [baseSkin, labels, ...]
+      state.tex[classKey] = emptyTexture;
       const { skinBaseName } = npcClassToMeta[classKey];
       const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${w.hash.sheets}`);
       tex.flipY = false;
-      state.tex[classKey][0] = tex;
+      state.tex[classKey] = tex;
     })).then(() => Object.values(state.npc).forEach(npc => npc.forceUpdate()));
-  }, [w.hash.sheets, state.label.tex]);
+  }, [w.hash.sheets]);
 
   return (
     <group
@@ -293,7 +293,7 @@ export default function Npcs(props) {
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
  * @property {{ [npcKey: string]: Npc }} npc
- * @property {Record<NPC.ClassKey, THREE.Texture[]>} tex
+ * @property {Record<NPC.TextureKey, THREE.Texture>} tex
  *
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
@@ -349,9 +349,8 @@ function NPC({ npc }) {
           showSelector={npc.s.showSelector}
           // showLabel={false}
 
-          // 🚧
-          uBaseTexture={npc.w.npc.tex[npc.def.classKey][0]}
-          uLabelTexture={npc.w.npc.label.tex}
+          uBaseTexture={npc.baseTexture}
+          uLabelTexture={npc.labelTexture}
           uAlt1Texture={emptyTexture}
           
           uFaceTexId={quad.face.texId}

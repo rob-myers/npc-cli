@@ -21,6 +21,12 @@ declare namespace NPC {
     | 'cuboid-man'
     | 'cuboid-pet'
   );
+  
+  type TextureKey = (
+    | ClassKey
+    | 'labels'
+    // | 'cuboid-man-alt-1'
+  );
 
   interface ClassDef {
     /** e.g. '/assets/3d/cuboid-man.glb' */

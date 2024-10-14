@@ -39,7 +39,7 @@
     - ❌ can change label without render
     - ✅ absorb ensureLabels into updateLabels
     - ✅ add clearLabels
-    - 🚧 uniform `textures` -> uniforms {base,label,alt}Texture
+    - ✅ uniform `textures` -> uniforms u{Base,Label,Alt1}Texture
      - cleanup lookup `npc.tex`
     - can change face/icon
 
