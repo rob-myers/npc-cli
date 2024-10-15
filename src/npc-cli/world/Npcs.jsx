@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
 import { defaultClassKey, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
-import { info, removeDups, warn } from "../service/generic";
+import { info, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
@@ -105,6 +105,9 @@ export default function Npcs(props) {
         if (npc.s.moving === true) {
           const { x, y, z } = npc.position;
           npcPositions.push(npc.bodyUid, x, y, z);
+        }
+        if (npc.s.opacityTarget !== null) {
+          // 🚧
         }
       }
 
@@ -320,8 +323,7 @@ export default function Npcs(props) {
  * @param {NPCProps} props 
  */
 function NPC({ npc }) {
-  const { bones, mesh, material } = npc.m;
-  const { quad } = npc.s;
+  const { bones, mesh, quad, material } = npc.m;
 
   return (
     <group
@@ -341,7 +343,7 @@ function NPC({ npc }) {
           key={CuboidManMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
-          // opacity={0.5}
+          opacity={npc.s.opacity}
 
           labelHeight={wallHeight * (1 / npc.m.scale)}
           // labelHeight={wallHeight * (1 / 0.9)}

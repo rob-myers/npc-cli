@@ -140,57 +140,57 @@ class CuboidManUvService {
    * @param {NPC.NPC} npc
    */
   updateFaceQuad(npc) {
-    const { faceId: face, quad } = npc.s;
+    const { s: { faceId }, m: { quad } } = npc;
     const quadMeta = this.toQuadMetas[npc.def.classKey];
     
-    if (face === null) {// Reset
+    if (faceId === null) {// Reset
       this.copyUvQuadInstance(quad.face, quadMeta.face.default);
       return;
     }
 
     const { uvMap } = npc.w.geomorphs.sheet.skins;
-    const srcRect = uvMap[face.uvMapKey]?.[face.uvQuadKey];
+    const srcRect = uvMap[faceId.uvMapKey]?.[faceId.uvQuadKey];
     if (!srcRect) {
-      throw Error(`${npc.key}: face: uvMapKey, uvQuadKey not found: ${JSON.stringify(face)}`)
+      throw Error(`${npc.key}: face: uvMapKey, uvQuadKey not found: ${JSON.stringify(faceId)}`)
     }
 
     // 🔔 srcRect is already in [0, 1]x[0, 1]
     const srcUvRect = Rect.fromJson(srcRect);
     this.instantiateUvDeltas(quad.face, quadMeta.face.uvDeltas, srcUvRect);
     // 🔔 currently always `0` because we lack other textures
-    quad.face.texId = this.toTexId[npc.def.classKey][face.uvMapKey];
+    quad.face.texId = this.toTexId[npc.def.classKey][faceId.uvMapKey];
   }
 
   /**
    * @param {NPC.NPC} npc
    */
   updateIconQuad(npc) {
-    const { iconId: icon, quad } = npc.s;
+    const { s: { iconId }, m: { quad } } = npc;
     const quadMeta = this.toQuadMetas[npc.def.classKey];
     
-    if (icon === null) {// Reset
+    if (iconId === null) {// Reset
       this.copyUvQuadInstance(quad.icon, quadMeta.icon.default);
       return;
     }
 
     const { uvMap } = npc.w.geomorphs.sheet.skins;
-    const srcRect = uvMap[icon.uvMapKey]?.[icon.uvQuadKey];
+    const srcRect = uvMap[iconId.uvMapKey]?.[iconId.uvQuadKey];
     if (!srcRect) {
-      throw Error(`${npc.key}: icon: uvMapKey, uvQuadKey not found: ${JSON.stringify(icon)}`)
+      throw Error(`${npc.key}: icon: uvMapKey, uvQuadKey not found: ${JSON.stringify(iconId)}`)
     }
 
     // 🔔 srcRect is already in [0, 1]x[0, 1]
     const srcUvRect = Rect.fromJson(srcRect);
     this.instantiateUvDeltas(quad.icon, quadMeta.icon.uvDeltas, srcUvRect);
     // 🔔 currently always `0` because we lack other textures
-    quad.icon.texId = this.toTexId[npc.def.classKey][icon.uvMapKey];
+    quad.icon.texId = this.toTexId[npc.def.classKey][iconId.uvMapKey];
   }
 
   /**
    * @param {NPC.NPC} npc
    */
   updateLabelQuad(npc) {
-    const { label, quad } = npc.s;
+    const { s: { label }, m: { quad } } = npc;
     const quadMeta = this.toQuadMetas[npc.def.classKey];
     
     if (label === null) {// reset

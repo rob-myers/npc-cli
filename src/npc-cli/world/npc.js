@@ -33,6 +33,7 @@ export class Npc {
     material: /** @type {THREE.ShaderMaterial} */ ({}),
     /** Mounted mesh */
     mesh: /** @type {THREE.SkinnedMesh} */ ({}),
+    quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
     toAct: /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({}),
     scale: 1,
   }
@@ -51,9 +52,10 @@ export class Npc {
     lookAt: /** @type {null | THREE.Vector3} */ (null),
     /** Is this npc moving? */
     moving: false,
+    opacity: 1,
+    opacityTarget: /** @type {null | number} */ (null),
     /** 🚧 unused */
     paused: false,
-    quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
     rejectMove: emptyReject,
     run: false,
     spawns: 0,
@@ -173,7 +175,7 @@ export class Npc {
     const npcClassKey = this.def.classKey;
     m.scale = npcClassToMeta[npcClassKey].scale;
     
-    this.s.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
+    this.m.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
 
     // see w.npc.spawn for more initialization
   }
@@ -348,7 +350,7 @@ export class Npc {
     this.s.faceId = faceId;
     cmUvService.updateFaceQuad(this);
     // directly change uniform sans render
-    const { texId, uvs } = this.s.quad.face;
+    const { texId, uvs } = this.m.quad.face;
     this.m.material.uniforms.uFaceTexId.value = texId;
     this.m.material.uniforms.uFaceUv.value = uvs;
     this.m.material.uniformsNeedUpdate = true;
@@ -361,7 +363,7 @@ export class Npc {
     this.s.iconId = iconId;
     cmUvService.updateIconQuad(this);
     // directly change uniform sans render
-    const { texId, uvs } = this.s.quad.icon;
+    const { texId, uvs } = this.m.quad.icon;
     this.m.material.uniforms.uIconTexId.value = texId;
     this.m.material.uniforms.uIconUv.value = uvs;
     this.m.material.uniformsNeedUpdate = true;
@@ -486,7 +488,6 @@ export class Npc {
 export function hotModuleReloadNpc(npc) {
   const { def, epochMs, m, s, mixer, position, agent, lastLookAt, lastTarget, lastCorner } = npc;
   agent?.updateParameters({ maxSpeed: agent.maxSpeed });
-  // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
   const nextNpc = new Npc(def, npc.w);
   return Object.assign(nextNpc, /** @type {Partial<Npc>} */ ({
     epochMs,
