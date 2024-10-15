@@ -8,10 +8,13 @@
     - `w npc.npc.rob.fade 0.2`
     - `w npc.npc.rob.fade 1`
   - ✅ async npc.fade
-  - ✅ npc.fadeSpawn
-  - npc.onMeshDo
-  - npc.offMeshDo
-  - npc.do
+  - ✅ async npc.fadeSpawn
+    - `w npc.npc.rob.fadeSpawn $( click 1 )`
+  - 🚧 async npc.turn
+  - 🚧 async npc.startDoAnimation
+  - 🚧 async npc.onMeshDo
+  - async npc.offMeshDo
+  - async npc.do
   - one-frame animations: Sit, Lie
 
 - 🚧 next.js project (npc-cli-next)

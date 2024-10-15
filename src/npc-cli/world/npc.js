@@ -136,7 +136,7 @@ export class Npc {
   }
 
   /**
-   * @param {Geom.VectJson & { meta?: Geom.Meta }} point 
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {Geom.Meta} [opts.meta]
    * @param {number} [opts.angle]
@@ -277,6 +277,41 @@ export class Npc {
     } finally {
       this.s.moving = false;
     }
+  }
+
+  /**
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {object} opts
+   * @param {boolean} [opts.preferSpawn]
+   * @param {boolean} [opts.suppressThrow]
+   */
+  async onMeshDo(point, opts = {}) {
+    const src = this.getPoint();
+    const meta = point.meta ?? {};
+    /** 🚧 Actual "do point" usually differs from clicked point */
+    const doPoint = /** @type {Geom.VectJson} */ (meta.doPoint) ?? point;
+
+    if (!opts.suppressThrow && !meta.do) {
+      throw Error('not doable');
+    }
+    if (!this.w.gmGraph.inSameRoom(src, doPoint)) {
+      throw Error('too far away');
+    }
+    
+    // 🔔 could do visibility check e.g. raycast?
+    if (this.w.npc.isPointInNavmesh(toV3(doPoint)) && !(opts.preferSpawn && true)) {
+      // Walk, [Turn], Do
+      await this.w.e.moveNpc(this.key, doPoint)
+      if (typeof meta.orient === 'number') {
+        const targetRadians = (meta.orient + 90) * (Math.PI / 180);
+        // await this.animateRotate(targetRadians, 500 * geom.compareAngles(this.getAngle(), targetRadians));
+      }
+      // this.startAnimationByMeta(meta);
+      return;
+    }
+
+    // 🚧
+
   }
 
   /**
