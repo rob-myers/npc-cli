@@ -164,13 +164,13 @@ export default function Doors(props) {
       }));
       e.stopPropagation();
     },
-    onTick() {
+    onTick(deltaMs) {
       if (state.movingDoors.size === 0) {
         return;
       }
-      const deltaMs = w.timer.getDelta();
+      
+      // 🚧 control via "float array" of ratios instead of 4x4 matrices
       const { instanceMatrix } = state.doorsInst;
-
       for (const [instanceId, meta] of state.movingDoors.entries()) {
         const dstRatio = meta.open ? 0.1 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
@@ -346,7 +346,7 @@ export default function Doors(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleLockOpts) => boolean} toggleLockRaw
- * @property {() => void} onTick
+ * @property {(deltaMs: number) => void} onTick
  * @property {() => void} positionInstances
  */
 

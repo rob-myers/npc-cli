@@ -76,7 +76,7 @@ export default function World(props) {
     obs: /** @type {*} */ (null), // Obstacles
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
-      onTick() {},
+      onTick(_) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
@@ -125,7 +125,7 @@ export default function World(props) {
 
       state.crowd.update(deltaMs);
       state.npc.onTick(deltaMs);
-      state.door.onTick();
+      state.door.onTick(deltaMs);
       // info(state.r3f.gl.info.render);
 
       if (state.debug.npc !== null) {
