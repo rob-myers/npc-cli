@@ -147,7 +147,7 @@ export class Npc {
     try {
       const meta = opts.meta ?? point.meta ?? {};
       point.meta ??= meta; // 🚧 justify
-      await this.fade(0, 100);
+      await this.fade(0, 300);
 
       const currPoint = Vect.from(this.getPoint());
       await this.w.npc.spawn({
@@ -162,7 +162,7 @@ export class Npc {
         requireNav: opts.requireNav,
       });
     } finally {
-      await this.fade(1, 200);
+      await this.fade(1, 300);
     }
   }
 
@@ -362,7 +362,7 @@ export class Npc {
     }
 
     if (this.s.opacityDst !== null) {
-      if (damp(this.s, 'opacity', this.s.opacityDst, this.s.fadeSecs, deltaMs) === false) {
+      if (damp(this.s, 'opacity', this.s.opacityDst, this.s.fadeSecs, deltaMs, undefined, undefined, 0.1) === false) {
         this.s.opacityDst = null;
         this.resolveFade?.();
       }
