@@ -71,8 +71,11 @@ export class Npc {
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
   lastCorner = new THREE.Vector3();
+
   /** @type {undefined | ((value?: any) => void)} */
-  resolve;
+  resolveFade;
+  /** @type {undefined | ((value?: any) => void)} */
+  resolveSpawn;
 
   /** Shortcut */
   get baseTexture() {
@@ -123,8 +126,9 @@ export class Npc {
   /**
    * @param {number} opacityDst 
    */
-  fade(opacityDst) {
+  async fade(opacityDst) {
     this.s.opacityDst = opacityDst;
+    await new Promise(resolve => this.resolveFade = resolve);
   }
 
   forceUpdate() {
@@ -262,7 +266,7 @@ export class Npc {
       // Setup shortcut
       this.position = group.position;
       // Resume `w.npc.spawn`
-      this.resolve?.();
+      this.resolveSpawn?.();
     }
   }
 

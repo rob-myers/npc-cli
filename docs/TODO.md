@@ -5,7 +5,10 @@
 - 🚧 implement "do points"
   - ℹ️ see repo the-last-redoubt src/projects/world-pixi/create-npc.js
   - ✅ npc.fade (in or out)
-  - 🚧 npc.fadeSpawn
+    - `w npc.npc.rob.fade 0.2`
+    - `w npc.npc.rob.fade 1`
+  - ✅ async npc.fade
+  - npc.fadeSpawn
   - npc.onMeshDo
   - npc.offMeshDo
   - npc.do

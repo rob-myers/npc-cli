@@ -108,8 +108,9 @@ export default function Npcs(props) {
           npcPositions.push(npc.bodyUid, x, y, z);
         }
         if (npc.s.opacityDst !== null) {
-          if (damp(npc.s, 'opacity', npc.s.opacityDst, 0.1, deltaMs) === false) {
+          if (damp(npc.s, 'opacity', npc.s.opacityDst, 0.2, deltaMs) === false) {
             npc.s.opacityDst = null;
+            npc.resolveFade?.();
           }
           npc.setUniform('opacity', npc.s.opacity);
         }
@@ -195,7 +196,7 @@ export default function Npcs(props) {
       }
 
       npc.s.spawns === 0 && await new Promise(resolve => {
-        npc.resolve = resolve;
+        npc.resolveSpawn = resolve;
         update();
       });
 
