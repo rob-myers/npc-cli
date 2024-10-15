@@ -1,7 +1,6 @@
 import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
-import { damp } from "maath/easing"
 
 import { defaultClassKey, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
 import { info, warn } from "../service/generic";
@@ -98,30 +97,11 @@ export default function Npcs(props) {
       e.stopPropagation();
     },
     onTick(deltaMs) {
-      const npcs = Object.values(state.npc);
-      const positions = /** @type {number[]} */ ([]);
-
-      for (const npc of npcs) {
-        npc.onTick(deltaMs);
-        if (npc.s.moving === true) {
-          const { x, y, z } = npc.position;
-          positions.push(npc.bodyUid, x, y, z);
-        }
-        if (npc.s.opacityDst !== null) {
-          if (damp(npc.s, 'opacity', npc.s.opacityDst, npc.s.fadeSecs, deltaMs) === false) {
-            npc.s.opacityDst = null;
-            npc.resolveFade?.();
-          }
-          npc.setUniform('opacity', npc.s.opacity);
-        }
-      }
-
+      const npcPositions = /** @type {number[]} */ ([]);
+      Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, npcPositions));
       // 🔔 Float32Array caused issues i.e. decode failed
-      const typedPositions = new Float64Array(positions);
-      w.physics.worker.postMessage({
-        type: 'send-npc-positions',
-        positions: typedPositions
-      }, [typedPositions.buffer]);
+      const positions = new Float64Array(npcPositions);
+      w.physics.worker.postMessage({ type: 'send-npc-positions', positions}, [positions.buffer]);
     },
     restore() {// onchange nav-mesh
       // restore agents

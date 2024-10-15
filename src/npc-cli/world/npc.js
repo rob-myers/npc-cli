@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
-import { dampLookAt } from "maath/easing";
+import { dampLookAt, damp } from "maath/easing";
 
 import { Vect } from '../geom';
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
@@ -340,8 +340,12 @@ export class Npc {
     }
   }
 
-  /** @param {number} deltaMs  */
-  onTick(deltaMs) {
+  /**
+   * @param {number} deltaMs
+   * @param {number[]} positions
+   * Format `[..., bodyUid_i, x_i, y_i, z_i, ...]` for physics.worker
+   */
+  onTick(deltaMs, positions) {
     this.mixer.update(deltaMs);
 
     if (this.agent !== null) {
@@ -350,6 +354,19 @@ export class Npc {
 
     if (this.s.lookAt !== null) {
       dampLookAt(this.m.group, this.s.lookAt, 0.25, deltaMs);
+    }
+
+    if (this.s.moving === true) {
+      const { x, y, z } = this.position;
+      positions.push(this.bodyUid, x, y, z);
+    }
+
+    if (this.s.opacityDst !== null) {
+      if (damp(this.s, 'opacity', this.s.opacityDst, this.s.fadeSecs, deltaMs) === false) {
+        this.s.opacityDst = null;
+        this.resolveFade?.();
+      }
+      this.setUniform('opacity', this.s.opacity);
     }
   }
 
