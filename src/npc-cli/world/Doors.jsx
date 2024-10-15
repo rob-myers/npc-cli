@@ -293,6 +293,7 @@ export default function Doors(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
+      renderOrder={-1}
     >
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}

@@ -314,8 +314,7 @@ export const cuboidManShader = {
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-  // skin, npc.label, 🚧 another skin
-  uniform sampler2D textures[3];
+  uniform float opacity;
 
   uniform sampler2D uBaseTexture;
   uniform sampler2D uLabelTexture;
@@ -371,6 +370,8 @@ export const cuboidManShader = {
       }
 
     }
+
+    diffuseColor.a *= opacity;
 
     if (diffuseColor.a < 0.1) {
       discard;
@@ -479,7 +480,7 @@ export const CuboidManMaterial = shaderMaterial(
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
-    // textures: [],
+    opacity: 1,
 
     showLabel: true,
     labelHeight: wallHeight,

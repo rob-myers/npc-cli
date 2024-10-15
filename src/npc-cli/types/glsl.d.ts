@@ -24,6 +24,8 @@ declare global {
       }>;
       cuboidManMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
+        opacity?: number;
+
         showLabel?: boolean;
         labelHeight?: number;
         showSelector?: boolean;

@@ -341,6 +341,7 @@ function NPC({ npc }) {
           key={CuboidManMaterial.key}
           diffuse={[1, 1, 1]}
           transparent
+          // opacity={0.5}
 
           labelHeight={wallHeight * (1 / npc.m.scale)}
           // labelHeight={wallHeight * (1 / 0.9)}
