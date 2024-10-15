@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
 import { dampLookAt } from "maath/easing";
 
+import { Vect } from '../geom';
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
@@ -47,6 +48,7 @@ export class Npc {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     cancels: 0,
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
+    fadeSecs: 300,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
     label: /** @type {null | string} */ (null),
     lookAt: /** @type {null | THREE.Vector3} */ (null),
@@ -124,11 +126,44 @@ export class Npc {
   }
 
   /**
-   * @param {number} opacityDst 
+   * @param {number} [opacityDst] 
+   * @param {number} [ms] 
    */
-  async fade(opacityDst) {
+  async fade(opacityDst = 0.2, ms = 300) {
     this.s.opacityDst = opacityDst;
+    this.s.fadeSecs = ms / 1000;
     await new Promise(resolve => this.resolveFade = resolve);
+  }
+
+  /**
+   * @param {Geom.VectJson & { meta?: Geom.Meta }} point 
+   * @param {object} opts
+   * @param {Geom.Meta} [opts.meta]
+   * @param {number} [opts.angle]
+   * @param {NPC.ClassKey} [opts.classKey]
+   * @param {boolean} [opts.requireNav]
+   */
+  async fadeSpawn(point, opts = {}) {
+    try {
+      const meta = opts.meta ?? point.meta ?? {};
+      point.meta ??= meta; // 🚧 justify
+      await this.fade(0, 100);
+
+      const currPoint = Vect.from(this.getPoint());
+      await this.w.npc.spawn({
+        npcKey: this.key,
+        point,
+        angle: opts.angle ?? (currPoint.equals(point)
+          ? undefined // 🚧 verify
+          : currPoint.angleTo(point)
+          // : Math.PI/2 + Vect.from(point).sub(currPoint).angle
+        ),
+        classKey: opts.classKey,
+        requireNav: opts.requireNav,
+      });
+    } finally {
+      await this.fade(1, 200);
+    }
   }
 
   forceUpdate() {

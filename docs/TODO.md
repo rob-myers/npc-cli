@@ -8,7 +8,7 @@
     - `w npc.npc.rob.fade 0.2`
     - `w npc.npc.rob.fade 1`
   - ✅ async npc.fade
-  - npc.fadeSpawn
+  - ✅ npc.fadeSpawn
   - npc.onMeshDo
   - npc.offMeshDo
   - npc.do

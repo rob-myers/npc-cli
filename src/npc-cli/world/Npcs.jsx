@@ -99,16 +99,16 @@ export default function Npcs(props) {
     },
     onTick(deltaMs) {
       const npcs = Object.values(state.npc);
-      const npcPositions = /** @type {number[]} */ ([]);
+      const positions = /** @type {number[]} */ ([]);
 
       for (const npc of npcs) {
         npc.onTick(deltaMs);
         if (npc.s.moving === true) {
           const { x, y, z } = npc.position;
-          npcPositions.push(npc.bodyUid, x, y, z);
+          positions.push(npc.bodyUid, x, y, z);
         }
         if (npc.s.opacityDst !== null) {
-          if (damp(npc.s, 'opacity', npc.s.opacityDst, 0.2, deltaMs) === false) {
+          if (damp(npc.s, 'opacity', npc.s.opacityDst, npc.s.fadeSecs, deltaMs) === false) {
             npc.s.opacityDst = null;
             npc.resolveFade?.();
           }
@@ -117,8 +117,11 @@ export default function Npcs(props) {
       }
 
       // 🔔 Float32Array caused issues i.e. decode failed
-      const positions = new Float64Array(npcPositions);
-      w.physics.worker.postMessage({ type: 'send-npc-positions', positions }, [positions.buffer]);
+      const typedPositions = new Float64Array(positions);
+      w.physics.worker.postMessage({
+        type: 'send-npc-positions',
+        positions: typedPositions
+      }, [typedPositions.buffer]);
     },
     restore() {// onchange nav-mesh
       // restore agents
