@@ -2,59 +2,13 @@
 
 ## WIP
 
-- ✅ migrate cuboid-man into `<NPCs>`
-  - ℹ️ leave `<TestNpcs>` as is
-  - ✅ classKeyToMeta -> const npcClassToMeta
-    - NPC.ClassKey
-    - NPC.ClassDef
-  - ✅ classKeyToGltf -> npc.class[classKey].gltf
-  - ✅ service/uv.js
-    - ✅ quadMeta -> cmUvService.toQuadMetas
-    - ✅ cloneUvQuadInstance ✅ instantiateUvDeltas ✅ changeUvQuad
-    - ✅ quad -> npc.s.quad
-  - ✅ changeUvQuad infers texId
-  - ✅ replace minecraft models with cuboid-man
-  - ✅ remove minecraft models
-  - ✅ use testCharacterMaterial
-    - ✅ migrate npc.setSkin and hot-reloads
-    - ✅ npc.textures is [skinTex, labelTex]
-    - ✅ skin auto-updates
-    - ✅ rename as cuboidManMaterial
-    - ✅ clean
-  - ✅ adjust animation timeScale after transition
-  - ❌ avoid cloning "scene"
-    - makes sense to clone i.e. group containing bones and skinnedMesh
-  - ✅ npc.m.mesh is mounted SkinnedMesh
-  - ✅ npc.m.material is mounted ShaderMaterial
-  - ✅ methods directly on npc instances
-    - ✅ can toggle selector without re-render: npc.showSelector([bool])
-    - ✅ can change selector color
-      - `w npc.npc.rob.setSelectorRgb 1 0.5 1`
-    - ✅ can change label
-      - fix: ensure fresh textures supplied to npc when change w.npc.label
-      - `w npc.npc.rob.setLabel rob`
-    - ✅ bug: change label twice breaks first change
-    - ✅ bug: initial flicker on 1st change label
-      - seems shader is reading mutated data
-    - ❌ can change label without render
-    - ✅ absorb ensureLabels into updateLabels
-    - ✅ add clearLabels
-    - ✅ uniform `textures` -> uniforms u{Base,Label,Alt1}Texture
-     - cleanup lookup `npc.tex`
-    - ✅ can change face/icon
-    ```sh
-    w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry
-    w npc.npc.rob.setFace null
-    w npc.npc.rob.setFace '{ uvMapKey: "cuboid-man", uvQuadKey: "front-face-angry" }'
-
-    w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food
-    w npc.npc.rob.setIcon null
-    w npc.npc.rob.setIcon '{ uvMapKey: "cuboid-man", uvQuadKey: "front-label-food" }'
-    ```
-
-- one-frame animations: Sit, Lie
-- can transition to Sit or Lie
 - implement "do points"
+  - npc.fade (in or out)
+  - npc.fadeSpawn
+  - npc.onMeshDo
+  - npc.offMeshDo
+  - npc.do
+  - one-frame animations: Sit, Lie
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -2651,3 +2605,53 @@ run '({ w, api }) {
   - ✅ UserData has type i.e. npc, cuboid or cylinder
   - ✅ can render custom colliders in Debug
   - ✅ can then remove outlines from Floor
+
+- ✅ migrate cuboid-man into `<NPCs>`
+  - ℹ️ leave `<TestNpcs>` as is
+  - ✅ classKeyToMeta -> const npcClassToMeta
+    - NPC.ClassKey
+    - NPC.ClassDef
+  - ✅ classKeyToGltf -> npc.class[classKey].gltf
+  - ✅ service/uv.js
+    - ✅ quadMeta -> cmUvService.toQuadMetas
+    - ✅ cloneUvQuadInstance ✅ instantiateUvDeltas ✅ changeUvQuad
+    - ✅ quad -> npc.s.quad
+  - ✅ changeUvQuad infers texId
+  - ✅ replace minecraft models with cuboid-man
+  - ✅ remove minecraft models
+  - ✅ use testCharacterMaterial
+    - ✅ migrate npc.setSkin and hot-reloads
+    - ✅ npc.textures is [skinTex, labelTex]
+    - ✅ skin auto-updates
+    - ✅ rename as cuboidManMaterial
+    - ✅ clean
+  - ✅ adjust animation timeScale after transition
+  - ❌ avoid cloning "scene"
+    - makes sense to clone i.e. group containing bones and skinnedMesh
+  - ✅ npc.m.mesh is mounted SkinnedMesh
+  - ✅ npc.m.material is mounted ShaderMaterial
+  - ✅ methods directly on npc instances
+    - ✅ can toggle selector without re-render: npc.showSelector([bool])
+    - ✅ can change selector color
+      - `w npc.npc.rob.setSelectorRgb 1 0.5 1`
+    - ✅ can change label
+      - fix: ensure fresh textures supplied to npc when change w.npc.label
+      - `w npc.npc.rob.setLabel rob`
+    - ✅ bug: change label twice breaks first change
+    - ✅ bug: initial flicker on 1st change label
+      - seems shader is reading mutated data
+    - ❌ can change label without render
+    - ✅ absorb ensureLabels into updateLabels
+    - ✅ add clearLabels
+    - ✅ uniform `textures` -> uniforms u{Base,Label,Alt1}Texture
+     - cleanup lookup `npc.tex`
+    - ✅ can change face/icon
+    ```sh
+    w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry
+    w npc.npc.rob.setFace null
+    w npc.npc.rob.setFace '{ uvMapKey: "cuboid-man", uvQuadKey: "front-face-angry" }'
+
+    w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food
+    w npc.npc.rob.setIcon null
+    w npc.npc.rob.setIcon '{ uvMapKey: "cuboid-man", uvQuadKey: "front-label-food" }'
+    ```
