@@ -2,8 +2,9 @@
 
 ## WIP
 
-- implement "do points"
-  - npc.fade (in or out)
+- 🚧 implement "do points"
+  - ℹ️ see repo the-last-redoubt src/projects/world-pixi/create-npc.js
+  - 🚧 npc.fade (in or out)
   - npc.fadeSpawn
   - npc.onMeshDo
   - npc.offMeshDo
@@ -15,9 +16,9 @@
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-- 🚧 fix blurred curved table in 303
+- ✅ fix blurred curved table in 303
   - ✅ extra--020--table-2x0.66
-  - 🚧 add placeholder symbol to 303
+  - ✅ add placeholder symbol to 303
 
 - ✅ fix symbols in 303 i.e. definitions should have correct size
 
