@@ -1,6 +1,7 @@
 import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
+import { damp } from "maath/easing"
 
 import { defaultClassKey, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
 import { info, warn } from "../service/generic";
@@ -106,8 +107,11 @@ export default function Npcs(props) {
           const { x, y, z } = npc.position;
           npcPositions.push(npc.bodyUid, x, y, z);
         }
-        if (npc.s.opacityTarget !== null) {
-          // 🚧
+        if (npc.s.opacityDst !== null) {
+          if (damp(npc.s, 'opacity', npc.s.opacityDst, 0.1, deltaMs) === false) {
+            npc.s.opacityDst = null;
+          }
+          npc.setUniform('opacity', npc.s.opacity);
         }
       }
 

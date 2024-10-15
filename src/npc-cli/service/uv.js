@@ -144,7 +144,7 @@ class CuboidManUvService {
     const quadMeta = this.toQuadMetas[npc.def.classKey];
     
     if (faceId === null) {// Reset
-      this.copyUvQuadInstance(quad.face, quadMeta.face.default);
+      this.copyUvQuadInstance(quadMeta.face.default, quad.face);
       return;
     }
 
@@ -169,7 +169,7 @@ class CuboidManUvService {
     const quadMeta = this.toQuadMetas[npc.def.classKey];
     
     if (iconId === null) {// Reset
-      this.copyUvQuadInstance(quad.icon, quadMeta.icon.default);
+      this.copyUvQuadInstance(quadMeta.icon.default, quad.icon);
       return;
     }
 

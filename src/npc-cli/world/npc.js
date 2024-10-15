@@ -53,7 +53,7 @@ export class Npc {
     /** Is this npc moving? */
     moving: false,
     opacity: 1,
-    opacityTarget: /** @type {null | number} */ (null),
+    opacityDst: /** @type {null | number} */ (null),
     /** 🚧 unused */
     paused: false,
     rejectMove: emptyReject,
@@ -118,6 +118,13 @@ export class Npc {
     }
 
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
+  }
+
+  /**
+   * @param {number} opacityDst 
+   */
+  fade(opacityDst) {
+    this.s.opacityDst = opacityDst;
   }
 
   forceUpdate() {
@@ -351,9 +358,9 @@ export class Npc {
     cmUvService.updateFaceQuad(this);
     // directly change uniform sans render
     const { texId, uvs } = this.m.quad.face;
-    this.m.material.uniforms.uFaceTexId.value = texId;
-    this.m.material.uniforms.uFaceUv.value = uvs;
-    this.m.material.uniformsNeedUpdate = true;
+    this.setUniform('uFaceTexId', texId);
+    this.setUniform('uFaceUv', uvs);
+    this.updateUniforms();
   }
 
   /**
@@ -364,9 +371,9 @@ export class Npc {
     cmUvService.updateIconQuad(this);
     // directly change uniform sans render
     const { texId, uvs } = this.m.quad.icon;
-    this.m.material.uniforms.uIconTexId.value = texId;
-    this.m.material.uniforms.uIconUv.value = uvs;
-    this.m.material.uniformsNeedUpdate = true;
+    this.setUniform('uIconTexId', texId);
+    this.setUniform('uIconUv', uvs);
+    this.updateUniforms();
   }
 
   /**
@@ -401,10 +408,19 @@ export class Npc {
     /** @type {[number, number, number]} */
     const selectorColor = [Number(r) || 0, Number(g) || 0, Number(b) || 0];
     // directly change uniform sans render
-    this.m.material.uniforms.selectorColor.value = selectorColor;
-    this.m.material.uniformsNeedUpdate = true;
+    this.setUniform('selectorColor', selectorColor);
+    this.updateUniforms();
     // remember for next render
     this.s.selectorColor = selectorColor;
+  }
+
+  /**
+   * 🚧 refine type
+   * @param {'opacity' | 'uFaceTexId' | 'uFaceUv' | 'uIconTexId' | 'uIconUv' | 'selectorColor' | 'showSelector'} name 
+   * @param {number | THREE.Vector2[] | [number, number, number] | boolean} value 
+   */
+  setUniform(name, value) {
+    this.m.material.uniforms[name].value = value; 
   }
 
   /**
@@ -412,11 +428,10 @@ export class Npc {
    */
   showSelector(shouldShow = !this.s.showSelector) {
     shouldShow = Boolean(shouldShow);
-    // directly change uniform sans render
-    this.m.material.uniforms.showSelector.value = shouldShow;
-    this.m.material.uniformsNeedUpdate = true;
-    // remember for next render
     this.s.showSelector = shouldShow;
+    // directly change uniform sans render
+    this.setUniform('showSelector', true);
+    this.updateUniforms();
   }
 
   /** @param {NPC.AnimKey} act */
@@ -458,6 +473,10 @@ export class Npc {
       epochMs: this.epochMs,
       s: this.s,
     };
+  }
+
+  updateUniforms() {
+    this.m.material.uniformsNeedUpdate = true;
   }
 
   async waitUntilStopped() {
