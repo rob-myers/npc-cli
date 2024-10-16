@@ -11,11 +11,13 @@
   - ✅ async npc.fadeSpawn
     - `w npc.npc.rob.fadeSpawn $( click 1 )`
   - ✅ async npc.turn
-  - 🚧 npc.startAnimation handles meta
   - 🚧 async npc.onMeshDo
+    - ℹ️ for the moment use `startAnimation('Idle')`
   - async npc.offMeshDo
   - async npc.do
   - one-frame animations: Sit, Lie
+  - onclick do point provide `meta.doPoint` e.g. centre of icon
+  - npc.startAnimation handles do meta
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger

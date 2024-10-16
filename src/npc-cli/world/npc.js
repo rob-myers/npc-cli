@@ -5,6 +5,7 @@ import { damp, dampAngle } from "maath/easing";
 import { Vect } from '../geom';
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
+import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
@@ -175,8 +176,11 @@ export class Npc {
     this.w.npc.update();
   }
 
+  /**
+   * ccw from east convention
+   */
   getAngle() {// Assume only rotated about y axis
-    return this.m.group.rotation.y;
+    return geom.radRange(Math.PI/2 - this.m.group.rotation.y);
   }
 
   /** @returns {Geom.VectJson} */
@@ -308,11 +312,15 @@ export class Npc {
       await this.w.e.moveNpc(this.key, doPoint);
 
       if (typeof meta.orient === 'number') {
-        const targetRadians = (meta.orient + 90) * (Math.PI / 180);
-        // 🚧 await this.turn(targetRadians);
-        // await this.animateRotate(targetRadians, 500 * geom.compareAngles(this.getAngle(), targetRadians));
+        /**
+         * meta.orient (degrees) uses "cw from north" convention,
+         * so convert to more-standard "ccw from east"
+         */
+        const dstRadians = Math.PI/2 - (meta.orient * (Math.PI / 180));
+        await this.turn(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
       }
-      // this.startAnimationByMeta(meta);
+
+      this.startAnimation('Idle'); // 🚧 induced by meta e.g. meta.sit
       return;
     }
 
@@ -576,11 +584,12 @@ export class Npc {
   }
 
   /**
-   * @param {number} dstAngle radians
+   * @param {number} dstAngle radians (ccw from east)
    * @param {number} ms
    */
   async turn(dstAngle, ms = 300) {
     this.s.lookAngle = Math.PI/2 - dstAngle;
+    // this.s.lookAngle = dstAngle;
     this.s.lookSecs = ms / 1000;
     await new Promise(resolve => this.resolveTurn = resolve);
   }
