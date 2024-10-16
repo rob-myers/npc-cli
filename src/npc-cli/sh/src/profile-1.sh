@@ -10,7 +10,8 @@ click | map meta.npcKey >selectedNpcKey &
 
 # click navmesh to move selectedNpcKey
 # see `declare -f walkTest`
-click | filter meta.navigable | walkTest &
+# click | filter meta.navigable | walkTest &
+click | filter meta.floor | walkTest &
 
 # 🚧 clean
 setupDemo1

@@ -374,7 +374,7 @@
       "obsHashes": [-502406732]
     },
     "demo-map-1": {"outputHash": 1429562441},
-    "small-map-1": {"outputHash": -1987240735}
+    "small-map-1": {"outputHash": 1980923211}
   },
   "sheet": {
     "obstacle": {
@@ -17427,9 +17427,7 @@
     },
     "small-map-1": {
       "key": "small-map-1",
-      "gms": [
-        {"gmKey": "g-102--research-deck", "transform": [1, 0, 0, 1, 0, 0]}
-      ]
+      "gms": [{"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0.025, 0]}]
     }
   }
 }

@@ -52,8 +52,10 @@ export default function Npcs(props) {
       }
       return success === false || path.length === 0 ? null : path;
     },
-    getClosestNavigable(p, maxDelta = 0.01) {
-      const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p);
+    getClosestNavigable(p, maxDelta = 0.5) {
+      const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p, {
+        halfExtents: new THREE.Vector3(maxDelta / 2, maxDelta / 2, maxDelta / 2),
+      });
       if (success === false) {
         warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
         return null;

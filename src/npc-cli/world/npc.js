@@ -149,7 +149,7 @@ export class Npc {
     try {
       const meta = opts.meta ?? point.meta ?? {};
       point.meta ??= meta; // 🚧 justify
-      await this.fade(0, 100);
+      await this.fade(0, 300);
 
       const currPoint = Vect.from(this.getPoint());
       await this.w.npc.spawn({
@@ -164,7 +164,7 @@ export class Npc {
         requireNav: opts.requireNav,
       });
     } finally {
-      await this.fade(1, 200);
+      await this.fade(1, 300);
     }
   }
 
@@ -241,7 +241,7 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    const closest = this.w.npc.getClosestNavigable(toV3(dst), 0.15);
+    const closest = this.w.npc.getClosestNavigable(toV3(dst));
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
@@ -252,7 +252,7 @@ export class Npc {
     }
 
     const position = this.getPosition();
-    if (position.distanceTo(closest) < 0.25) {
+    if (position.distanceTo(closest) < 0.1) {
       return;
     }
 
@@ -369,7 +369,7 @@ export class Npc {
     }
 
     if (this.s.opacityDst !== null) {
-      if (damp(this.s, 'opacity', this.s.opacityDst, this.s.fadeSecs, deltaMs) === false) {
+      if (damp(this.s, 'opacity', this.s.opacityDst, this.s.fadeSecs, deltaMs, undefined, undefined, 0.1) === false) {
         this.s.opacityDst = null;
         this.resolveFade?.();
       }
