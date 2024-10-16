@@ -11,8 +11,10 @@
   - ✅ async npc.fadeSpawn
     - `w npc.npc.rob.fadeSpawn $( click 1 )`
   - ✅ async npc.turn
-  - 🚧 async npc.onMeshDo
+  - ✅ async npc.onMeshDo
     - ℹ️ for the moment use `startAnimation('Idle')`
+  - ✅ turn faster whilst walking
+  - 🚧 try refactor walk onStart callback
   - async npc.offMeshDo
   - async npc.do
   - one-frame animations: Sit, Lie

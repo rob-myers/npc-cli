@@ -263,6 +263,7 @@ export class Npc {
     }
 
     this.s.moving = true;
+    this.s.lookSecs = 0.2;
     // this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     this.agent.requestMoveTarget(closest);
@@ -296,36 +297,42 @@ export class Npc {
   async onMeshDo(point, opts = {}) {
     const src = this.getPoint();
     const meta = point.meta ?? {};
+
     /** 🚧 Actual "do point" usually differs from clicked point */
     const doPoint = /** @type {Geom.VectJson} */ (meta.doPoint) ?? point;
 
-    if (!opts.suppressThrow && !meta.do) {
+    if (!opts.suppressThrow && meta.do !== true) {
       throw Error('not doable');
     }
     if (!this.w.gmGraph.inSameRoom(src, doPoint)) {
       throw Error('too far away');
     }
+
+    /**
+     * `meta.orient` (degrees) uses "cw from north" convention,
+     * so convert to more-standard "ccw from east"
+     */
+    const dstRadians = typeof meta.orient === 'number'
+      ? Math.PI/2 - (meta.orient * (Math.PI / 180))
+      : undefined
+    ;
     
-    // 🔔 could do visibility check e.g. raycast?
-    if (this.w.npc.isPointInNavmesh(toV3(doPoint)) && !(opts.preferSpawn && true)) {
+    // ℹ️ could do visibility check (raycast)
+    if (this.w.npc.isPointInNavmesh(toV3(doPoint)) && !opts.preferSpawn) {
       // Walk, [Turn], Do
       await this.w.e.moveNpc(this.key, doPoint);
-
-      if (typeof meta.orient === 'number') {
-        /**
-         * meta.orient (degrees) uses "cw from north" convention,
-         * so convert to more-standard "ccw from east"
-         */
-        const dstRadians = Math.PI/2 - (meta.orient * (Math.PI / 180));
+      if (typeof dstRadians === 'number') {
         await this.turn(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
       }
-
-      this.startAnimation('Idle'); // 🚧 induced by meta e.g. meta.sit
-      return;
+      this.startAnimation('Idle'); // 🚧 e.g. meta.sit -> Sit
+    } else {
+      await this.fadeSpawn(doPoint, {
+        angle: dstRadians,
+        requireNav: false,
+        // fadeOutMs: opts.fadeOutMs,
+        meta,
+      });
     }
-
-    // 🚧
-
   }
 
   /**
