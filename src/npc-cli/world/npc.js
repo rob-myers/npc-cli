@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
-import { dampLookAt, damp } from "maath/easing";
+import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
 import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
@@ -51,7 +51,7 @@ export class Npc {
     fadeSecs: 300,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
     label: /** @type {null | string} */ (null),
-    lookAt: /** @type {null | THREE.Vector3} */ (null),
+    lookAngle: /** @type {null | number} */ (null),
     /** Is this npc moving? */
     moving: false,
     opacity: 1,
@@ -78,6 +78,8 @@ export class Npc {
   resolveFade;
   /** @type {undefined | ((value?: any) => void)} */
   resolveSpawn;
+  /** @type {undefined | ((value?: any) => void)} */
+  resolveTurn;
 
   /** Shortcut */
   get baseTexture() {
@@ -301,9 +303,11 @@ export class Npc {
     // 🔔 could do visibility check e.g. raycast?
     if (this.w.npc.isPointInNavmesh(toV3(doPoint)) && !(opts.preferSpawn && true)) {
       // Walk, [Turn], Do
-      await this.w.e.moveNpc(this.key, doPoint)
+      await this.w.e.moveNpc(this.key, doPoint);
+
       if (typeof meta.orient === 'number') {
         const targetRadians = (meta.orient + 90) * (Math.PI / 180);
+        // 🚧 await this.turn(targetRadians);
         // await this.animateRotate(targetRadians, 500 * geom.compareAngles(this.getAngle(), targetRadians));
       }
       // this.startAnimationByMeta(meta);
@@ -352,8 +356,11 @@ export class Npc {
       this.onTickAgent(deltaMs, this.agent);
     }
 
-    if (this.s.lookAt !== null) {
-      dampLookAt(this.m.group, this.s.lookAt, 0.25, deltaMs);
+    if (this.s.lookAngle !== null) {
+      if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngle, 0.25, deltaMs) === false) {
+        this.s.lookAngle = null;
+        this.resolveTurn?.();
+      }
     }
 
     if (this.s.moving === true) {
@@ -382,7 +389,7 @@ export class Npc {
     this.position.copy(pos);
 
     if (speed > 0.2) {
-      this.s.lookAt = this.lastLookAt.copy(pos).add(vel);
+      this.s.lookAngle = Math.PI/2 - Math.atan2(vel.z, vel.x);
     } 
 
     if (this.s.target === null) {
@@ -542,7 +549,7 @@ export class Npc {
 
     const position = this.agent.position();
     this.s.target = null;
-    this.s.lookAt = null;
+    this.s.lookAngle = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
