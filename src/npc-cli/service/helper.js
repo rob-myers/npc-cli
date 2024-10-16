@@ -66,6 +66,29 @@ export const helper = {
   },
 
   /**
+   * Try construct degenerate "id" from partial.
+   * @param {Partial<Geomorph.GmDoorId>} meta 
+   * @returns {null | Geomorph.GmDoorId}
+   */
+  extractGmDoorId(meta) {
+    if (typeof meta.gdKey === 'string') {
+      return {
+        gdKey: meta.gdKey,
+        gmId: meta.gmId ?? Number(meta.gdKey.slice(1).split('d', 1)[0]),
+        doorId: meta.doorId ?? Number(meta.gdKey.split('d', 1)[1]),
+      };
+    } else if (typeof meta.gmId === 'number' &&  typeof meta.doorId === 'number') {
+      return {
+        gdKey: `g${meta.gmId}d${meta.doorId}`,
+        gmId: meta.gmId,
+        doorId: meta.doorId,
+      };
+    } else {
+      return null;
+    }
+  },
+
+  /**
    * Usage:
    * - `getGmDoorId(gdKey)`
    * - `getGmDoorId(gmId, doorId)`

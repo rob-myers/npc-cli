@@ -48,6 +48,7 @@ export class Npc {
   s = {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     cancels: 0,
+    doMeta: /** @type {null | Geom.Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
     fadeSecs: 0.3,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -128,6 +129,61 @@ export class Npc {
     }
 
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
+  }
+
+  /**
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {object} opts
+   * @param {any[]} [opts.extraParams]
+   */
+  async do(point, opts = {}) {
+    if (!Vect.isVectJson(point)) {
+      throw Error('point expected');
+    }
+    point.meta ??= {};
+
+    const gmDoorId = helper.extractGmDoorId(point.meta);
+
+    // Assume point.meta.door || point.meta.do || (point.meta.nav && npc.doMeta)
+    // i.e. (1) door, (2) do point, or (3) non-do nav point whilst at do point
+    if (point.meta.door === true && gmDoorId !== null) {
+      /** `undefined` -> toggle, `true` -> open, `false` -> close */
+      const extraParam = opts.extraParams?.[0] === undefined ? undefined : !!opts.extraParams[0];
+      const open = extraParam === true;
+      const close = extraParam === false;
+      const wasOpen = this.w.door.byGmId[gmDoorId.gmId][gmDoorId.doorId].open;
+      const isOpen = this.w.e.toggleDoor(gmDoorId.gdKey,{ npcKey: this.key, close, open });
+      if (close) {
+        if (isOpen) throw Error('cannot close door');
+      } else if (open) {
+        if (!isOpen) throw Error('cannot open door');
+      } else {
+        if (wasOpen === isOpen) throw Error('cannot toggle door');
+      }
+      return;
+    }
+
+    // Handle (point.meta.nav && npc.doMeta) || point.meta.do
+    const onNav = this.w.npc.isPointInNavmesh(this.getPosition());
+    if (point.meta.do !== true) {// point.meta.nav && npc.doMeta
+      this.doMeta = null;
+      if (onNav === true) {
+        await this.moveTo(point);
+      // } else if (this.w.npc.canSee(this.getPosition(), point, this.getInteractRadius())) {
+      } else if (true) {
+        await this.fadeSpawn(point);
+      } else {
+        throw Error('cannot reach navigable point')
+      }
+      return;
+    } else if (onNav === true) {// nav -> do point
+      this.doMeta = null;
+      await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
+      this.doMeta = point.meta;
+    } else {// off nav -> do point
+      await this.offMeshDo(point, { /** fadeOutMs */ });
+      this.doMeta = point.meta;
+    }
   }
 
   /**

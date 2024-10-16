@@ -328,6 +328,7 @@ export default function Doors(props) {
 /**
  * @typedef State
  * @property {{ [gmId in number]: Geomorph.DoorState[] }} byGmId
+ * Format `byGmId[gmId][doorId]`
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
  * @property {{ [center in `${number},${number}`]: Geomorph.DoorState }} byPos
  * @property {THREE.InstancedMesh} doorsInst
