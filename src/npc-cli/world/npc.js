@@ -3,7 +3,7 @@ import { SkeletonUtils } from 'three-stdlib';
 import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
-import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
+import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
 import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
@@ -183,6 +183,10 @@ export class Npc {
     return geom.radRange(Math.PI/2 - this.m.group.rotation.y);
   }
 
+  getInteractRadius() {
+    return defaultNpcInteractRadius;
+  }
+
   /** @returns {Geom.VectJson} */
   getPoint() {
     const { x, z: y } = this.position;
@@ -283,6 +287,45 @@ export class Npc {
     } finally {
       this.s.moving = false;
     }
+  }
+
+  /**
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {object} opts
+   * @param {boolean} [opts.suppressThrow]
+   */
+  async offMeshDo(point, opts = {}) {
+    const src = Vect.from(this.getPoint());
+    const meta = point.meta ?? {};
+
+    if (!opts.suppressThrow && meta.do !== true && meta.nav !== true) {
+      throw Error('not doable nor navigable');
+    }
+
+    if (!opts.suppressThrow && (
+      src.distanceTo(point) > this.getInteractRadius()
+      || !this.w.gmGraph.inSameRoom(src, point)
+      // || !this.w.npc.canSee(src, point, this.getInteractRadius())
+    )) {
+      throw Error('too far away');
+    }
+
+    await this.fadeSpawn(// non-navigable uses doPoint:
+      { ...point, ...meta.nav !== true && /** @type {Geom.VectJson} */ (meta.doPoint) },
+      {
+        angle: meta.nav === true && meta.do !== true
+          // use direction src --> point if entering navmesh
+          ? src.equals(point)
+            ? undefined
+            : src.angleTo(point)
+          // use meta.orient if staying off-mesh
+          : typeof meta.orient === 'number'
+            ? Math.PI/2 - (meta.orient * (Math.PI / 180)) // convert to "ccw from east"
+            : undefined,
+        // fadeOutMs: opts.fadeOutMs,
+        meta,
+      },
+    );    
   }
 
   /**

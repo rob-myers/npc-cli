@@ -15,8 +15,9 @@
     - ℹ️ for the moment use `startAnimation('Idle')`
   - ✅ turn faster whilst walking
   - ✅ refactor walk onStart callback
-  - async npc.offMeshDo
-  - async npc.do
+  - ✅ async npc.offMeshDo
+  - 🚧 async npc.do
+  - 🚧 clarify initial angle convention e.g. ccw from east
   - one-frame animations: Sit, Lie
   - onclick do point provide `meta.doPoint` e.g. centre of icon
   - npc.startAnimation handles do meta

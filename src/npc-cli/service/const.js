@@ -114,6 +114,8 @@ export const glbFadeOut = {
     Walk: { Idle: 0.25, Run: 0.1, Walk: 0 },
 };
 
+export const defaultNpcInteractRadius = geomorphGridMeters;
+
 export const showLastNavPath = false;
 
 /**
