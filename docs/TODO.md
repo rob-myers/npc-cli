@@ -14,7 +14,7 @@
   - ✅ async npc.onMeshDo
     - ℹ️ for the moment use `startAnimation('Idle')`
   - ✅ turn faster whilst walking
-  - 🚧 try refactor walk onStart callback
+  - ✅ refactor walk onStart callback
   - async npc.offMeshDo
   - async npc.do
   - one-frame animations: Sit, Lie

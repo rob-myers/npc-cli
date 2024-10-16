@@ -79,7 +79,7 @@ declare namespace NPC {
 
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
-  type Event =
+  type Event = (
     | PointerUpOutsideEvent
     | PointerUpEvent
     | PointerDownEvent
@@ -89,6 +89,7 @@ declare namespace NPC {
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
     | { key: "spawned"; npcKey: string; gmRoomId: Geomorph.GmRoomId }
+    | { key: 'started-moving'; npcKey: string }
     | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "way-point"; npcKey: string; next: Geom.VectJson | null } & Geom.VectJson
@@ -126,6 +127,7 @@ declare namespace NPC {
       }
     | { key: "pre-setup-physics" }
     // ...
+  );
 
   type UpdatedGmDecorEvent = { key: "updated-gm-decor" } & (
     | { type: 'partial'; gmIds: number[]; } // partial <=> gmsIds.length did not change

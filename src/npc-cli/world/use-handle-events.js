@@ -171,6 +171,23 @@ export default function useHandleEvents(w) {
           }
           break;
         }
+        case "started-moving":
+          // Handle move into/through doorway when already nearby
+          w.oneTimeTicks.push(function onNpcStartMove() {
+            const npc = w.npc.npc[e.npcKey];
+            for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+              const door = w.door.byKey[gdKey];
+              if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
+                if (state.npcCanAccess(e.npcKey, door.gdKey)) {
+                  w.door.toggleDoorRaw(door, { open: true, access: true });
+                } else {
+                  npc.stopMoving();
+                }
+                break;
+              }
+            }
+          });
+          break;
         case "stopped-moving": {
           for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
@@ -211,23 +228,6 @@ export default function useHandleEvents(w) {
       }
 
       return false;
-    },
-    async moveNpc(npcKey, point) {
-      const npc = w.npc.getNpc(npcKey);
-      await npc.moveTo({ x: point.x, y: 0, z: point.y }, { onStart() {
-        // handle move into/through doorway when already nearby
-        for (const gdKey of state.npcToDoor[npcKey]?.nearby ?? []) {
-          const door = w.door.byKey[gdKey];
-          if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
-            if (state.npcCanAccess(npcKey, door.gdKey)) {
-              w.door.toggleDoorRaw(door, { open: true, access: true });
-            } else {
-              npc.stopMoving();
-            }
-            break;
-          }
-        }
-      }});
     },
     npcCanAccess(npcKey, gdKey) {
       for (const regexDef of state.npcToAccess[npcKey] ?? []) {
@@ -462,7 +462,6 @@ export default function useHandleEvents(w) {
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
  * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
- * @property {(npcKey: string, point: Geom.VectJson) => Promise<void>} moveNpc
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d

@@ -235,10 +235,9 @@ export class Npc {
   }
 
   /**
-   * @param {THREE.Vector3Like} dst
+   * @param {Geom.VectJson} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
-   * @param {() => void} [opts.onStart]
    * A callback to invoke after npc has started walking in crowd
    */
   async moveTo(dst, opts = {}) {
@@ -267,9 +266,6 @@ export class Npc {
     // this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     this.agent.requestMoveTarget(closest);
-    if (opts.onStart !== undefined) {
-      this.w.oneTimeTicks.push(opts.onStart);
-    }
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
@@ -277,6 +273,7 @@ export class Npc {
     }
     
     try {
+      this.w.events.next({ key: 'started-moving', npcKey: this.key });
       await new Promise((resolve, reject) => {
         this.s.rejectMove = reject; // permit cancel
         this.waitUntilStopped().then(resolve).catch(resolve);
@@ -320,7 +317,7 @@ export class Npc {
     // ℹ️ could do visibility check (raycast)
     if (this.w.npc.isPointInNavmesh(toV3(doPoint)) && !opts.preferSpawn) {
       // Walk, [Turn], Do
-      await this.w.e.moveNpc(this.key, doPoint);
+      await this.moveTo(doPoint);
       if (typeof dstRadians === 'number') {
         await this.turn(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
       }

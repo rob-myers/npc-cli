@@ -117,7 +117,7 @@ export default function Npcs(props) {
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
           npc.startAnimation('Idle');
         } else if (npc.s.target !== null) {
-          npc.moveTo(npc.s.target);
+          npc.moveTo({ x: npc.s.target.x, y: npc.s.target.z });
         } else {// so they'll move "out of the way" of other npcs
           agent.requestMoveTarget(npc.getPosition());
         }
