@@ -10,8 +10,8 @@
   - ✅ async npc.fade
   - ✅ async npc.fadeSpawn
     - `w npc.npc.rob.fadeSpawn $( click 1 )`
-  - 🚧 async npc.turn
-  - 🚧 async npc.startDoAnimation
+  - ✅ async npc.turn
+  - 🚧 npc.startAnimation handles meta
   - 🚧 async npc.onMeshDo
   - async npc.offMeshDo
   - async npc.do

@@ -48,9 +48,10 @@ export class Npc {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     cancels: 0,
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
-    fadeSecs: 300,
+    fadeSecs: 0.3,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
     label: /** @type {null | string} */ (null),
+    /** Euler angle around y-axis i.e. `Math.PI/2 - usualAngle` */
     lookAngle: /** @type {null | number} */ (null),
     /** Is this npc moving? */
     moving: false,
@@ -62,6 +63,7 @@ export class Npc {
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
+    lookSecs: 0.3,
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: true,
   };
@@ -357,7 +359,7 @@ export class Npc {
     }
 
     if (this.s.lookAngle !== null) {
-      if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngle, 0.25, deltaMs) === false) {
+      if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngle, this.s.lookSecs, deltaMs, Infinity, undefined, 0.01) === false) {
         this.s.lookAngle = null;
         this.resolveTurn?.();
       }
@@ -571,6 +573,16 @@ export class Npc {
       epochMs: this.epochMs,
       s: this.s,
     };
+  }
+
+  /**
+   * @param {number} dstAngle radians
+   * @param {number} ms
+   */
+  async turn(dstAngle, ms = 300) {
+    this.s.lookAngle = Math.PI/2 - dstAngle;
+    this.s.lookSecs = ms / 1000;
+    await new Promise(resolve => this.resolveTurn = resolve);
   }
 
   updateUniforms() {
