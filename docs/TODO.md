@@ -18,12 +18,15 @@
   - ✅ async npc.offMeshDo
   - 🚧 async npc.do
     - ✅ migrate code
-    - 🚧 spawns to non-nav point
-    - fix all cases
+    - 🚧 can spawn to non-nav point
+    - enumerate/fix other cases
   - clarify initial angle convention e.g. ccw from east
   - one-frame animations: Sit, Lie
   - onclick do point provide `meta.doPoint` e.g. centre of icon
   - npc.startAnimation handles do meta
+
+- merge npc.waitUntilStopped into useHandleEvents
+- does e.g. resolveTurn need a way to reject?
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
