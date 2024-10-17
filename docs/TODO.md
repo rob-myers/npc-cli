@@ -21,6 +21,8 @@
     - ✅ remove agent
     - ✅ restore agent on re-enter nav
   - npc.do fix orientation angle
+  - npc.fadeSpawn can specify agent
+    - defaults true when spawn on nav
   - clarify initial angle convention e.g. ccw from east
   - one-frame animations: Sit, Lie
   - onclick do point provide `meta.doPoint` e.g. centre of icon
