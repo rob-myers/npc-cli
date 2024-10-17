@@ -199,7 +199,6 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         ref={(x) => x && (state.rootEl = x)}
         tabIndex={0}
         onKeyDown={state.onKeyDown}
-        onClick={(e) => console.log('click', e.target)}
       >
         {state.everEnabled && (
           <FlexLayout
