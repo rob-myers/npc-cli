@@ -63,7 +63,7 @@ export default function Ceiling(props) {
       const grey90 = 'rgb(90, 90, 90)';
       const grey60 = 'rgb(60, 60, 60)';
       const grey100 = 'rgb(100, 100, 100)';
-      const thinLineWidth = 0.04;
+      const thinLineWidth = 0.02;
       const thickLineWidth = 0.08;
 
       if (state.thickerTops) {
