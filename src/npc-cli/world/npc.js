@@ -269,8 +269,6 @@ export class Npc {
   initialize({ scene, animations }) {
     const { m } = this;
     const meta = npcClassToMeta[this.def.classKey];
-
-
     const clonedRoot = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
     const objectLookup = buildObjectLookup(clonedRoot);
 
@@ -289,10 +287,8 @@ export class Npc {
     
     const npcClassKey = this.def.classKey;
     m.scale = npcClassToMeta[npcClassKey].scale;
-    
-    this.m.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
-
-    // see w.npc.spawn for more initialization
+    m.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
+    // ℹ️ see w.npc.spawn for more initialization
   }
 
   /**

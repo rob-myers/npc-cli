@@ -21,6 +21,7 @@
     - ✅ remove agent
     - ✅ restore agent on re-enter nav
   - npc.do fix orientation angle
+    - also saw "moveTo" rotation out-of-sync
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
   - clarify initial angle convention e.g. ccw from east
