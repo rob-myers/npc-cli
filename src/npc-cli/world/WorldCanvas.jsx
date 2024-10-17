@@ -84,7 +84,7 @@ export default function WorldCanvas(props) {
       return state.down?.pointerIds.length ?? 0;
     },
     onChangeControls(e) {
-      const zoomState = state.controls.getDistance() > 30 ? 'far' : 'near';
+      const zoomState = state.controls.getDistance() > 20 ? 'far' : 'near';
       zoomState !== state.zoomState && w.events.next({ key: 'changed-zoom', level: zoomState });
       state.zoomState = zoomState;
     },
