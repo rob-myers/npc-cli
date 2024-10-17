@@ -26,6 +26,7 @@
   - onclick do point provide `meta.doPoint` e.g. centre of icon
   - npc.startAnimation handles do meta
 
+
 - merge npc.waitUntilStopped into useHandleEvents
 - does e.g. resolveTurn need a way to reject?
 
@@ -40,11 +41,13 @@
 
 - ✅ fix symbols in 303 i.e. definitions should have correct size
 
-- Tabs: support keyboard shortcut to switch tabs e.g. option `]`
 
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
 - consider mobile helper UI which directs user to tty-1 and back...
+- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
+  - ✅ shortcut works in active tabset
+  - clicking tab sets active tabset
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`

@@ -6,6 +6,7 @@ import { FitAddon } from "@xterm/addon-fit";
 // import { WebglAddon } from "xterm-addon-webgl";
 import { WebglAddon } from "@xterm/addon-webgl";
 
+import { detectTabPrevNextShortcut } from '../service/generic';
 import { xtermJsTheme } from '../service/const';
 import { stripAnsi } from '../sh/util';
 import { scrollback } from '../sh/io';
@@ -133,6 +134,9 @@ export interface State {
 }
 
 function stopKeysPropagating(e: React.KeyboardEvent) {
+  if (detectTabPrevNextShortcut(e)) {
+    return;
+  }
   e.stopPropagation();
 }
 

@@ -525,6 +525,19 @@ export function tryLocalStorageSet(key, value, logErr = true) {
   }
 }
 
+/**
+ * ctrl+[ or ctrl+]
+ * @param {KeyboardEvent | import('react').KeyboardEvent} e 
+ * @returns {false | -1 | 1}
+ */
+export function detectTabPrevNextShortcut(e) {
+  if (e.ctrlKey === true) {
+    return e.key === '[' ? -1 : e.key === ']' ? 1 : false;
+  } else {
+    return false;
+  }
+}
+
 /** @param {string} input */
 function zealousTrim(input) {
   return input.trim().replace(/\s\s+/g, " ").trim();
