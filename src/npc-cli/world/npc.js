@@ -210,7 +210,6 @@ export class Npc {
       point.meta ??= meta; // 🚧 justify
       await this.fade(0, 300);
 
-      // 🚧 can spawn off mesh
       const currPoint = Vect.from(this.getPoint());
       await this.w.npc.spawn({
         npcKey: this.key,

@@ -206,10 +206,12 @@ export default function Npcs(props) {
         }
       } else {
         hadAgent = true;
-        // npc.agent.teleport(position);
-        npc.setPosition(position);
         if (dstNav === false || e.agent === false) {
+          npc.setPosition(position);
+          npc.m.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
           npc.removeAgent();
+        } else {
+          npc.agent.teleport(position);
         }
       }
       
