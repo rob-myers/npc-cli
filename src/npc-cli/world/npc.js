@@ -48,7 +48,7 @@ export class Npc {
   s = {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     cancels: 0,
-    doMeta: /** @type {null | Geom.Meta} */ (null),
+    doMeta: /** @type {null | Geom.Meta<{ hadAgent?: boolean; }>} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
     fadeSecs: 0.3,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -61,7 +61,7 @@ export class Npc {
     opacityDst: /** @type {null | number} */ (null),
     /** 🚧 unused */
     paused: false,
-    rejectMove: emptyReject,
+    rejectMove: emptyReject, // 🚧 move outside?
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
@@ -134,7 +134,7 @@ export class Npc {
   /**
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
-   * @param {any[]} [opts.extraParams]
+   * @param {any[]} [opts.extraParams] // 🚧 clarify
    */
   async do(point, opts = {}) {
     if (!Vect.isVectJson(point)) {
@@ -164,7 +164,7 @@ export class Npc {
     }
 
     // Handle (point.meta.nav && npc.doMeta) || point.meta.do
-    const onNav = this.w.npc.isPointInNavmesh(this.getPosition());
+    const onNav = this.w.npc.isPointInNavmesh(this.getPoint());
     if (point.meta.do !== true) {// point.meta.nav && npc.doMeta
       this.doMeta = null;
       if (onNav === true) {
@@ -210,6 +210,7 @@ export class Npc {
       point.meta ??= meta; // 🚧 justify
       await this.fade(0, 300);
 
+      // 🚧 can spawn off mesh
       const currPoint = Vect.from(this.getPoint());
       await this.w.npc.spawn({
         npcKey: this.key,
@@ -221,6 +222,7 @@ export class Npc {
         ),
         classKey: opts.classKey,
         requireNav: opts.requireNav,
+        meta: opts.meta,
       });
     } finally {
       await this.fade(1, 300);
@@ -414,7 +416,7 @@ export class Npc {
     ;
     
     // ℹ️ could do visibility check (raycast)
-    if (this.w.npc.isPointInNavmesh(toV3(doPoint)) && !opts.preferSpawn) {
+    if (!opts.preferSpawn && this.w.npc.isPointInNavmesh(doPoint) === true) {
       // Walk, [Turn], Do
       await this.moveTo(doPoint);
       if (typeof dstRadians === 'number') {

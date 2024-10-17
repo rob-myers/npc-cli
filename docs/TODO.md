@@ -16,10 +16,11 @@
   - ✅ turn faster whilst walking
   - ✅ refactor walk onStart callback
   - ✅ async npc.offMeshDo
-  - 🚧 async npc.do
-    - ✅ migrate code
-    - 🚧 can spawn to non-nav point
-    - enumerate/fix other cases
+  - ✅ async npc.do (migrate code)
+  - ✅ can spawn to non-nav point
+    - ✅ remove agent
+    - ✅ restore agent on re-enter nav
+  - npc: do: enumerate/fix other cases
   - clarify initial angle convention e.g. ccw from east
   - one-frame animations: Sit, Lie
   - onclick do point provide `meta.doPoint` e.g. centre of icon

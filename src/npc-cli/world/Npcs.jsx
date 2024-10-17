@@ -75,7 +75,7 @@ export default function Npcs(props) {
       }
     },
     isPointInNavmesh(p) {
-      const { success } = w.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
+      const { success } = w.crowd.navMeshQuery.findClosestPoint(toV3(p), { halfExtents: { x: 0, y: 0.1, z: 0 } });
       return success;
     },
     onNpcPointerDown(e) {
@@ -136,17 +136,23 @@ export default function Npcs(props) {
     async spawn(e) {
       if (!(typeof e.npcKey === 'string' && /^[a-z0-9-_]+$/i.test(e.npcKey))) {
         throw Error(`npc key: ${JSON.stringify(e.npcKey)} must match /^[a-z0-9-_]+$/i`);
-      } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.y === 'number')) {
-        throw Error(`invalid point {x, y}: ${JSON.stringify(e.point)}`);
-      } else if (e.requireNav && state.getClosestNavigable(toV3(e.point)) === null) {
-        throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
-      } else if (e.classKey && !w.lib.isNpcClassKey(e.classKey)) {
-        throw Error(`invalid classKey: ${JSON.stringify(e.classKey)}`);
+      } else if (!(typeof e.point?.x === 'number' && typeof e.point.y === 'number')) {
+        throw Error(`invalid point {x, y}: ${JSON.stringify(e)}`);
+      }
+
+      const dstNav = state.isPointInNavmesh(e.point);
+
+      if (e.requireNav === true && dstNav === false) {
+        throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e)}`);
+      } else if (e.agent === true && dstNav === false) {
+        throw Error(`cannot add agent outside navPoly`);
+      } else if (e.classKey !== undefined && !w.lib.isNpcClassKey(e.classKey)) {
+        throw Error(`invalid classKey: ${JSON.stringify(e)}`);
       }
       
       const gmRoomId = w.gmGraph.findRoomContaining(e.point, true);
       if (gmRoomId === null) {
-        throw Error(`must be in some room: ${JSON.stringify(e.point)}`);
+        throw Error(`must be in some room: ${JSON.stringify(e)}`);
       }
 
       let npc = state.npc[e.npcKey];
@@ -180,31 +186,40 @@ export default function Npcs(props) {
         npc.initialize(state.gltf[npc.def.classKey]);
       }
 
-      npc.s.spawns === 0 && await new Promise(resolve => {
-        npc.resolveSpawn = resolve;
-        update();
-      });
+      if (npc.s.spawns === 0) {
+        await new Promise(resolve => {
+          npc.resolveSpawn = resolve;
+          update();
+        });
+        npc.setupMixer();
+      }
 
-      npc.setupMixer(); // on respawn?
       npc.startAnimation('Idle');
+      let hadAgent = false;
 
       if (npc.agent === null) {
         npc.setPosition(position);
         npc.m.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
-        // if specified add an agent pinned to current position
-        e.agent && npc.attachAgent().requestMoveTarget(npc.position);
+        // 🔔 if specified/had agent, pin to current position
+        if (e.agent === true || npc.s.doMeta?.hadAgent === true) {
+          npc.attachAgent().requestMoveTarget(npc.position);
+        }
       } else {
-        if (e.agent === false) {
+        hadAgent = true;
+        // npc.agent.teleport(position);
+        npc.setPosition(position);
+        if (dstNav === false || e.agent === false) {
           npc.removeAgent();
-        } else {
-          npc.agent.teleport(position);
         }
       }
       
       npc.s.spawns++;
+      npc.s.doMeta = e.meta?.do === true
+        ? { ...e.meta, hadAgent, } // remember hadAgent if go off mesh
+        : null
+      ;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
 
-      npc.s.doMeta = e.meta?.do === true ? e.meta : null;
       return npc;
     },
     update,
@@ -294,7 +309,7 @@ export default function Npcs(props) {
  * Throws if does not exist
  * 🚧 any -> ProcessApi (?)
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
- * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
+ * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp
  * @property {() => void} restore
