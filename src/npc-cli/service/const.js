@@ -99,9 +99,10 @@ export const defaultClassKey = 'cuboid-man';
  * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
  */
 export const glbFadeOut = {
-    Idle: { Idle: 0, Run: 0.2, Walk: 0.2 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.2 },
-    Walk: { Idle: 0.25, Run: 0.2, Walk: 0 },
+    Idle: { Idle: 0, Run: 0.2, Walk: 0.2, Sit: 0.2 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.2, Sit: 0.2 },
+    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, Sit: 0.25 },
+    Sit: { Idle: 0, Run: 0.2, Walk: 0.2, Sit: 0 },
 };
 
 /**
@@ -109,9 +110,10 @@ export const glbFadeOut = {
  * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
  */
  export const glbFadeIn = {
-    Idle: { Idle: 0, Run: 0.1, Walk: 0.1 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.1 },
-    Walk: { Idle: 0.25, Run: 0.1, Walk: 0 },
+    Idle: { Idle: 0, Run: 0.1, Walk: 0.1, Sit: 0.1 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.1, Sit: 0.2 },
+    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, Sit: 0.2 },
+    Sit: { Idle: 0.1, Run: 0.1, Walk: 0.1, Sit: 0 },
 };
 
 export const defaultNpcInteractRadius = geomorphGridMeters;
@@ -301,7 +303,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
 export const npcClassToMeta = {
   'cuboid-man': {
     url: '/assets/3d/cuboid-man.glb',
-    scale: 0.6,
+    scale: 0.75,
     materialName: 'cuboid-man-material',
     meshName: 'cuboid-man-mesh',
     groupName: 'Scene',
