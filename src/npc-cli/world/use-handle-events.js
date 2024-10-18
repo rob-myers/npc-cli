@@ -53,7 +53,7 @@ export default function useHandleEvents(w) {
       switch (e.key) {
         case "changed-zoom":
           w.ceil.thickerTops = e.level === 'far';
-          w.ceil.draw();
+          // w.ceil.draw();
           break;
         case "updated-gm-decor":
           break; // NOOP e.g. physics worker restarted onchange geomorphs
