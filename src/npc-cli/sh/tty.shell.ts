@@ -42,6 +42,10 @@ export class ttyShellClass implements Device {
     this.cleanups.length = 0;
   }
 
+  get initialized() {
+    return !!this.process;
+  }
+
   async initialise(xterm: ttyXtermClass) {
     await loadMvdanSh(); // ensure parser loaded
 
@@ -49,16 +53,12 @@ export class ttyShellClass implements Device {
     this.cleanups.push(this.io.read(this.onMessage.bind(this)));
 
     // session corresponds to leading process where pid = ppid = pgid = 0
-    useSession.api.createProcess({
+    this.process = useSession.api.createProcess({
       sessionKey: this.sessionKey,
       ppid: 0,
       pgid: 0,
       src: "",
     });
-    this.process = useSession.api.getSession(this.sessionKey).process[0];
-
-    // useSession.api.writeMsg(this.sessionKey, `${ansiColor.White}Connected to session ${ansiColor.Blue}${this.sessionKey}${ansiColor.Reset}`, 'info');
-    // await this.runProfile();
   }
 
   private onMessage(msg: MessageFromXterm) {

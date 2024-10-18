@@ -1,5 +1,6 @@
 import type Sh from "mvdan-sh";
 import cloneWithRefs from "lodash.clonedeep";
+//@ts-ignore
 import getopts from "getopts";
 import { testNever, last } from "../service/generic";
 

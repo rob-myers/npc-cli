@@ -142,7 +142,7 @@ export default function Tty(props: Props) {
   }, [bounds]);
 
   React.useEffect(() => {// sync shell functions
-    if (state.base.session && state.booted) {
+    if (state.base.session?.ttyShell.initialized === true) {
       state.sourceFuncs();
     }
   }, [state.base.session, ...Object.values(props.functionFiles)]);
