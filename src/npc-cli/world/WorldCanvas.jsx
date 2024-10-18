@@ -330,7 +330,7 @@ export default function WorldCanvas(props) {
           maxPolarAngle: Math.PI/2 * 0.5,
         }}
         minDistance={5}
-        maxDistance={smallViewport ? 25 : 50}
+        maxDistance={smallViewport ? 15 : 50}
         panSpeed={2}
       />
 
