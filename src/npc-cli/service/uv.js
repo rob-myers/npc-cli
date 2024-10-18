@@ -56,7 +56,7 @@ class CuboidManUvService {
    * @returns {UvQuadInstance}
    */
   cloneUvQuadInstance(uvQuadInst) {
-    return {// clone quadMeta.label.default
+    return {
       texId: uvQuadInst.texId,
       dim: /** @type {[number, number]} */ (uvQuadInst.dim.slice()),
       uvs: uvQuadInst.uvs.map(v => v.clone()), // THREE.Vector2
@@ -82,7 +82,7 @@ class CuboidManUvService {
    */
   getDefaultUvQuads(npcClassKey) {
     const quadMeta = this.toQuadMetas[npcClassKey]; // Assume exists
-    return {// clone quadMeta.label.default
+    return {
       label: this.cloneUvQuadInstance(quadMeta.label.default),
       face: this.cloneUvQuadInstance(quadMeta.face.default),
       icon: this.cloneUvQuadInstance(quadMeta.icon.default),
