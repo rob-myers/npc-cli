@@ -233,7 +233,7 @@ function createDoorSensors() {
     // const nearbyRadius = door.meta.hull === true ? nearbyHullDoorSensorRadius : nearbyDoorSensorRadius;
     const nearbyDef = {
       width: door.baseRect.width,
-      height: door.baseRect.height + 2 * wallOutset,
+      height: door.baseRect.height + 4 * wallOutset,
       angle,
     };
     const insideDef = {
