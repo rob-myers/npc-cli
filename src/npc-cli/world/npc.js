@@ -67,7 +67,7 @@ export class Npc {
     target: /** @type {null | THREE.Vector3} */ (null),
     lookSecs: 0.3,
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
-    showSelector: true,
+    showSelector: false,
   };
 
   /** @type {null | NPC.CrowdAgent} */
@@ -640,7 +640,7 @@ export class Npc {
     shouldShow = Boolean(shouldShow);
     this.s.showSelector = shouldShow;
     // directly change uniform sans render
-    this.setUniform('showSelector', true);
+    this.setUniform('showSelector', this.s.showSelector);
     this.updateUniforms();
   }
 

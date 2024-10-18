@@ -5,8 +5,21 @@ click | map '({meta}, {w}) => {
   meta.door && w.e.toggleDoor(meta.gdKey)
 }' &
 
+# 🚧 maybe can cover door and move
+# 🚧 maybe cover click switch instead of door
+# click | filter 'x => x.meta.door || x.meta.do'
+
 # write selectedNpcKey on click npc
-click | map meta.npcKey >selectedNpcKey &
+# click | map meta.npcKey >selectedNpcKey &
+click | map '({ meta }, { home, w }) => {
+  if (meta.npcKey) {
+    const prevNpc = w.npc.npc[home.selectedNpcKey];
+    const nextNpc = w.npc.npc[meta.npcKey];
+    prevNpc?.showSelector(false);
+    nextNpc?.showSelector(true);
+    home.selectedNpcKey = meta.npcKey;
+  }
+}' &
 
 # click navmesh to move selectedNpcKey
 # see `declare -f walkTest`
