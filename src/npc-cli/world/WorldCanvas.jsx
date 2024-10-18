@@ -178,7 +178,7 @@ export default function WorldCanvas(props) {
         return;
       }
 
-      state.pickObject(e) // 🚧 WIP
+      state.rootState === null && state.pickObject(e) // 🚧 WIP
 
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
@@ -209,7 +209,6 @@ export default function WorldCanvas(props) {
       }
     },
     pickObject(e) {// 🚧 WIP https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
-
       const { gl, camera } = state.rootState;
       // Set the projection matrix to only look at the pixel we are interested in.
       camera.setViewOffset(
