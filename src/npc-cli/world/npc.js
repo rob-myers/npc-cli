@@ -417,7 +417,9 @@ export class Npc {
       if (typeof dstRadians === 'number') {
         await this.turn(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
       }
-      this.startAnimation('Idle'); // 🚧 e.g. meta.sit -> Sit
+      // 🚧 e.g. meta.sit -> Sit
+      this.startAnimation('Idle');
+      // this.startAnimation('Sit')
     } else {
       await this.fadeSpawn(doPoint, {
         angle: dstRadians,

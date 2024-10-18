@@ -61,6 +61,7 @@ export const helper = {
   // /** @type {Record<NPC.AnimKey, true>} */
   fromAnimKey: {
     Idle: true,
+    Sit: true,
     Walk: true,
     Run: true,
   },
