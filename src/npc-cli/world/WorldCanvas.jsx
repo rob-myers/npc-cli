@@ -275,7 +275,7 @@ export default function WorldCanvas(props) {
   React.useEffect(() => {
     if (state.controls) {
       state.controls.setPolarAngle(Math.PI / 4);
-      state.controls.setAzimuthalAngle(touchFixedAzimuth);
+      state.controls.setAzimuthalAngle(initAzimuth);
     }
     emptySceneForPicking.onAfterRender = state.renderObjectPicking;
   }, [state.controls]);
@@ -311,8 +311,7 @@ export default function WorldCanvas(props) {
       <PerspectiveCamera
         position={[0, 16, 0]}
         makeDefault
-        fov={10}
-        // fov={20}
+        fov={smallViewport ? 20 : 10}
         zoom={0.5}
       />
 
@@ -327,10 +326,10 @@ export default function WorldCanvas(props) {
           minPolarAngle: fixedPolarAngle,
           maxPolarAngle: fixedPolarAngle,
         } : {
-          maxPolarAngle: Math.PI/2 * 0.5,
+          maxPolarAngle: Math.PI / 4,
         }}
         minDistance={5}
-        maxDistance={smallViewport ? 15 : 50}
+        maxDistance={smallViewport ? 10 : 50}
         panSpeed={2}
       />
 
@@ -436,8 +435,8 @@ const statsCss = css`
  * @property {Geom.Meta} meta
  */
 
-const touchFixedAzimuth = Math.PI / 6;
-const fixedPolarAngle = Math.PI / 5;
+const initAzimuth = Math.PI / 6;
+const fixedPolarAngle = Math.PI / 7;
 const pixelBuffer = new Uint8Array(4);
 
 function Origin() {
