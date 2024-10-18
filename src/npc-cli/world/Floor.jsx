@@ -56,6 +56,16 @@ export default function Floor(props) {
       ct.fillRect(0, 0, canvas.width, canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
+      // cover hull doorway z-fighting (visible from certain angles)
+      gm.hullDoors.forEach(hullDoor => {
+        const poly = hullDoor.computeDoorway(true);
+        const [p, q, r, s] = poly.outline;
+        drawPolygons(ct, poly, ['#000', '#333', 0.025]);
+        ct.strokeStyle = '#777';
+        ct.beginPath(); ct.moveTo(q.x, q.y); ct.lineTo(r.x, r.y); ct.stroke();
+        ct.beginPath(); ct.moveTo(s.x, s.y); ct.lineTo(p.x, p.y); ct.stroke();
+      });
+
       // Walls
       drawPolygons(ct, walls, ['black', null]);
       // // Doors

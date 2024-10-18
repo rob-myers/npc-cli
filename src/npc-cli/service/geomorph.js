@@ -1410,16 +1410,17 @@ export class Connector {
    * - They are deeper then the door by
    *   (a) `wallOutset` for hull doors.
    *   (b) `2 * wallOutset` for non-hull doors.
+   * @param {boolean} [thin]
    * @returns {Geom.Poly}
    */
-  computeDoorway() {
+  computeDoorway(thin = false) {
     const doorHalfDepth = 0.5 * (this.meta.hull ? hullDoorDepth : doorDepth);
-    const inwardsExtrude = wallOutset;
+    const inwardsExtrude = thin === true ? 0 : wallOutset;
     /**
      * For hull doors, normals point outwards from geomorphs,
      * and we exclude "outer part" of doorway to fix doorway normalization.
      */
-    const outwardsExtrude = this.meta.hull === true ? 0 : wallOutset;
+    const outwardsExtrude = thin === true || this.meta.hull === true ? 0 : wallOutset;
 
     const normal = this.normal;
     const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);
