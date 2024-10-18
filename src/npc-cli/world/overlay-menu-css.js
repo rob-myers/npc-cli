@@ -42,6 +42,7 @@ export const pausedControlsCss = css`
     border-width: 1px 0 1px 1px;
     border-color: #555;
     font-size: 0.8rem;
+    user-select: none;
 
     width: 80px;
 
