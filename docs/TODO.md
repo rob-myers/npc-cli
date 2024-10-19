@@ -29,7 +29,7 @@
     - use meta.y to raise off ground
   - ✅ fix cuboidManShader when `Lie`
     - ℹ️ not taking bone transforms into account
-  - 🚧 opacity/showSelector breaking?
+  - ✅ opacity/showSelector breaking?
     - ℹ️ e.g. ineffective: `w npc.npc.rob.fade 0.5`
     - maybe stale reference to shader?
   - npc.fadeSpawn can specify agent

@@ -348,6 +348,10 @@ function NPC({ npc }) {
         position={mesh.position}
         skeleton={mesh.skeleton}
         userData={mesh.userData}
+        onUpdate={(skinnedMesh) => {// 🔔 keep shader up-to-date
+          npc.m.mesh = skinnedMesh; 
+          npc.m.material = /** @type {THREE.ShaderMaterial} */ (skinnedMesh.material);
+        }}
       >
         {/* <meshPhysicalMaterial transparent map={material.map} /> */}
         <cuboidManMaterial
