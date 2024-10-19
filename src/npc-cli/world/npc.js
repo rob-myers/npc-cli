@@ -239,6 +239,16 @@ export class Npc {
     return geom.radRange(Math.PI/2 - this.m.group.rotation.y);
   }
 
+  /**
+   * @param {number} ccwEastAngle ccw from east (standard mathematical convention)
+   * @returns {number} respective value of `rotation.y` taking initial facing angle into account
+   * - euler y rotation has same sense/sign as "ccw from east"
+   * - +pi/2 because character initially facing along +z
+   */
+  getEulerAngle(ccwEastAngle) {
+    return Math.PI/2 + ccwEastAngle;
+  }
+
   getInteractRadius() {
     return defaultNpcInteractRadius;
   }

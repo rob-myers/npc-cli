@@ -199,7 +199,7 @@ export default function Npcs(props) {
 
       if (npc.agent === null) {
         npc.setPosition(position);
-        npc.m.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
+        npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
         // 🔔 if specified/had agent, pin to current position
         if (e.agent === true || npc.s.doMeta?.hadAgent === true) {
           npc.attachAgent().requestMoveTarget(npc.position);
@@ -208,7 +208,7 @@ export default function Npcs(props) {
         hadAgent = true;
         if (dstNav === false || e.agent === false) {
           npc.setPosition(position);
-          npc.m.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
+          npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
           npc.removeAgent();
         } else {
           npc.agent.teleport(position);

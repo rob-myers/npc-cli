@@ -22,8 +22,9 @@
     - ✅ restore agent on re-enter nav
   - ✅ restore Walk/Run animations
     - simplified to a single frame i.e. lean forwards
-  - 🚧 npc.do fix orientation angle
-    - also saw "moveTo" rotation out-of-sync
+  - ✅ npc.do fix orientation angle
+    - seems group.rotation.order `XYZ` rotates about y-axis ccw (x right, -z up)
+  - 🚧 npc.do can Sit
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
   - clarify initial angle convention e.g. ccw from east
