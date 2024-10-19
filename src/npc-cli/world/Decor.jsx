@@ -557,6 +557,7 @@ export default function Decor(props) {
         key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
+        transparent
       />
     </instancedMesh>
 
