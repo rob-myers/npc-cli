@@ -27,7 +27,11 @@
   - ✅ npc.do can Sit (1st attempt)
   - ✅ npc.do can Lie (1st attempt)
     - use meta.y to raise off ground
-  - 🚧 fix cuboidManShader when `Lie` i.e. hips transform not taken into account
+  - ✅ fix cuboidManShader when `Lie`
+    - ℹ️ not taking bone transforms into account
+  - 🚧 opacity/showSelector breaking?
+    - ℹ️ e.g. ineffective: `w npc.npc.rob.fade 0.5`
+    - maybe stale reference to shader?
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent

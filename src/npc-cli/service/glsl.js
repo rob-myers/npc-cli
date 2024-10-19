@@ -236,6 +236,8 @@ export const cuboidManShader = {
   void main() {
     #include <uv_vertex>
     #include <skinbase_vertex>
+    #include <beginnormal_vertex>
+    #include <skinnormal_vertex>
     vec3 transformed = vec3(position);
     #include <skinning_vertex>
 
@@ -305,7 +307,8 @@ export const cuboidManShader = {
     #include <logdepthbuf_vertex>
 
     // dot product for basic lighting in fragment shader
-    vec3 transformedNormal = normalize(normalMatrix * vec3(normal));
+    // vec3 transformedNormal = normalize(normalMatrix * vec3(normal));
+    vec3 transformedNormal = normalize(normalMatrix * vec3(objectNormal));
     vec3 lightDir = normalize(mvPosition.xyz);
     dotProduct = -min(dot(transformedNormal, lightDir), 0.0);
   }
