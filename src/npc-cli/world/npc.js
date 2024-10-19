@@ -61,7 +61,6 @@ export class Npc {
     opacityDst: /** @type {null | number} */ (null),
     /** 🚧 unused */
     paused: false,
-    rejectMove: emptyReject, // 🚧 move outside?
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
@@ -69,15 +68,15 @@ export class Npc {
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
   };
-
+  
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
-  agentRadius = helper.defaults.radius;
-
+  
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
   lastCorner = new THREE.Vector3();
-
+  
+  rejectMove = emptyReject;
   /** @type {undefined | ((value?: any) => void)} */
   resolveFade;
   /** @type {undefined | ((value?: any) => void)} */
@@ -121,7 +120,7 @@ export class Npc {
 
     await Promise.all([
       this.waitUntilStopped(),
-      this.s.rejectMove(`${'cancel'}: cancelled move`),
+      this.rejectMove(`${'cancel'}: cancelled move`),
     ]);
 
     if (cancelCount !== this.s.cancels) {
@@ -332,7 +331,7 @@ export class Npc {
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
       await new Promise((resolve, reject) => {
-        this.s.rejectMove = reject; // permit cancel
+        this.rejectMove = reject; // permit cancel
         this.waitUntilStopped().then(resolve).catch(resolve);
       });
     } catch (e) {
@@ -722,25 +721,13 @@ export class Npc {
 
 /**
  * Creates a new NPC loaded with previous one's data.
+ * ℹ️ We simply overwrite non-methods
  * @param {NPC.NPC} npc 
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, m, s, mixer, position, agent, lastLookAt, lastTarget, lastCorner } = npc;
-  agent?.updateParameters({ maxSpeed: agent.maxSpeed });
-  const nextNpc = new Npc(def, npc.w);
-  return Object.assign(nextNpc, /** @type {Partial<Npc>} */ ({
-    epochMs,
-    // epochMs: Date.now(),
-    m,
-    s: Object.assign(nextNpc.s, s),
-    mixer,
-    position,
-    agent,
-    lastLookAt,
-    lastTarget,
-    lastCorner,
-  }));
+  const nextNpc = new Npc(npc.def, npc.w);
+  return Object.assign(nextNpc, {...npc});
 }
 
 /** @param {any} error */

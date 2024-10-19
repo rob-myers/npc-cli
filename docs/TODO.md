@@ -20,7 +20,7 @@
   - ✅ can spawn to non-nav point
     - ✅ remove agent
     - ✅ restore agent on re-enter nav
-  - npc.do fix orientation angle
+  - 🚧 npc.do fix orientation angle
     - also saw "moveTo" rotation out-of-sync
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
@@ -31,7 +31,7 @@
 
 
 - merge npc.waitUntilStopped into useHandleEvents
-- does e.g. resolveTurn need a way to reject?
+- a single reject for resolveTurn, resolveFade, walking
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
