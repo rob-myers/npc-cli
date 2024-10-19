@@ -20,6 +20,8 @@
   - ✅ can spawn to non-nav point
     - ✅ remove agent
     - ✅ restore agent on re-enter nav
+  - ✅ restore Walk/Run animations
+    - simplified to a single frame i.e. lean forwards
   - 🚧 npc.do fix orientation angle
     - also saw "moveTo" rotation out-of-sync
   - npc.fadeSpawn can specify agent
@@ -51,6 +53,10 @@
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+- useGLTFsAsync hook
+  - replaces synchronous useGLTF
+  - supports multiple and provides each when ready
+  - hmr: can provide hash (e.g. lastModified) triggering reload
 - ongoing "large Chrome memory in tab" issue
   - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
   - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`
