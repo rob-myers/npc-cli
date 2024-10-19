@@ -165,8 +165,8 @@ export class Npc {
     // Handle (point.meta.nav && npc.doMeta) || point.meta.do
     const onNav = this.w.npc.isPointInNavmesh(this.getPoint());
     if (point.meta.do !== true) {// point.meta.nav && npc.doMeta
-      this.doMeta = null;
       if (onNav === true) {
+        this.s.doMeta = null;
         await this.moveTo(point);
       // } else if (this.w.npc.canSee(this.getPosition(), point, this.getInteractRadius())) {
       } else if (true) {
@@ -174,14 +174,10 @@ export class Npc {
       } else {
         throw Error('cannot reach navigable point')
       }
-      return;
     } else if (onNav === true) {// nav -> do point
-      this.doMeta = null;
       await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
-      this.doMeta = point.meta;
     } else {// off nav -> do point
-      await this.offMeshDo(point, { /** fadeOutMs */ });
-      this.doMeta = point.meta;
+      await this.offMeshDo(point);
     }
   }
 
@@ -196,6 +192,8 @@ export class Npc {
   }
 
   /**
+   * Fade out, spawn, then fade in.
+   * - `spawn` sets `npc.doMeta` when `meta.do === true`
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {Geom.Meta} [opts.meta]
@@ -213,10 +211,8 @@ export class Npc {
       await this.w.npc.spawn({
         npcKey: this.key,
         point,
-        angle: opts.angle ?? (currPoint.equals(point)
-          ? undefined // 🚧 verify
-          : currPoint.angleTo(point)
-          // : Math.PI/2 + Vect.from(point).sub(currPoint).angle
+        angle: opts.angle ?? (
+          currPoint.equals(point) ? undefined : currPoint.angleTo(point)
         ),
         classKey: opts.classKey,
         requireNav: opts.requireNav,
@@ -353,27 +349,28 @@ export class Npc {
 
   /**
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
-   * @param {object} opts
-   * @param {boolean} [opts.suppressThrow]
    */
-  async offMeshDo(point, opts = {}) {
+  async offMeshDo(point) {
     const src = Vect.from(this.getPoint());
     const meta = point.meta ?? {};
 
-    if (!opts.suppressThrow && meta.do !== true && meta.nav !== true) {
+    if (meta.do !== true && meta.nav !== true) {
       throw Error('not doable nor navigable');
     }
 
-    if (!opts.suppressThrow && (
+    if (
       src.distanceTo(point) > this.getInteractRadius()
       || !this.w.gmGraph.inSameRoom(src, point)
       // || !this.w.npc.canSee(src, point, this.getInteractRadius())
-    )) {
+    ) {
       throw Error('too far away');
     }
 
-    await this.fadeSpawn(// non-navigable uses doPoint:
-      { ...point, ...meta.nav !== true && /** @type {Geom.VectJson} */ (meta.doPoint) },
+    await this.fadeSpawn(
+      {// non-navigable uses doPoint:
+        ...point,
+        ...meta.nav !== true && /** @type {Geom.VectJson} */ (meta.doPoint)
+      },
       {
         angle: meta.nav === true && meta.do !== true
           // use direction src --> point if entering navmesh
@@ -394,7 +391,6 @@ export class Npc {
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {boolean} [opts.preferSpawn]
-   * @param {boolean} [opts.suppressThrow]
    */
   async onMeshDo(point, opts = {}) {
     const src = this.getPoint();
@@ -403,7 +399,7 @@ export class Npc {
     /** 🚧 Actual "do point" usually differs from clicked point */
     const doPoint = /** @type {Geom.VectJson} */ (meta.doPoint) ?? point;
 
-    if (!opts.suppressThrow && meta.do !== true) {
+    if (meta.do !== true) {
       throw Error('not doable');
     }
     if (!this.w.gmGraph.inSameRoom(src, doPoint)) {
@@ -411,7 +407,7 @@ export class Npc {
     }
 
     /**
-     * `meta.orient` (degrees) uses "cw from north" convention,
+     * `meta.orient` (degrees) uses "cw from north",
      * so convert to more-standard "ccw from east"
      */
     const dstRadians = typeof meta.orient === 'number'
@@ -421,20 +417,23 @@ export class Npc {
     
     // ℹ️ could do visibility check (raycast)
     if (!opts.preferSpawn && this.w.npc.isPointInNavmesh(doPoint) === true) {
-      // Walk, [Turn], Do
+      /**
+       * Walk, [Turn], Do
+       */
       await this.moveTo(doPoint);
       if (typeof dstRadians === 'number') {
         await this.turn(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
       }
-      // 🚧 e.g. meta.sit -> Sit
-      this.startAnimation('Idle');
-      // this.startAnimation('Sit')
+      // this.startAnimation('Idle');
+      this.startAnimationByMeta(meta);
+      this.doMeta = meta.do === true ? meta : null;
     } else {
+      // sets `this.s.doMeta` because `meta.do === true`
       await this.fadeSpawn(doPoint, {
         angle: dstRadians,
         requireNav: false,
-        // fadeOutMs: opts.fadeOutMs,
         meta,
+        // fadeOutMs: opts.fadeOutMs,
       });
     }
   }
@@ -661,6 +660,27 @@ export class Npc {
     next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
     this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[act] ?? 1;
     this.s.act = act;
+  }
+
+  /**
+   * @param {Geom.Meta} meta
+   * @returns {number} height off ground
+   */
+  startAnimationByMeta(meta) {
+    switch (true) {
+      case meta.sit:
+        this.startAnimation('Sit');
+        return 0; // 🚧
+      case meta.stand:
+        this.startAnimation('Idle');
+        return 0;
+      case meta.lie:
+        this.startAnimation('Lie');
+        return typeof meta.y === 'number' ? meta.y : 0;
+      default:
+        this.startAnimation('Idle');
+        return 0;
+    }
   }
 
   stopMoving() {

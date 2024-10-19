@@ -24,9 +24,13 @@
     - simplified to a single frame i.e. lean forwards
   - ✅ npc.do fix orientation angle
     - seems group.rotation.order `XYZ` rotates about y-axis ccw (x right, -z up)
-  - 🚧 npc.do can Sit
+  - ✅ npc.do can Sit (1st attempt)
+  - ✅ npc.do can Lie (1st attempt)
+    - use meta.y to raise off ground
+  - 🚧 fix cuboidManShader when `Lie` i.e. hips transform not taken into account
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
+    - avoid setting doMeta.hadAgent
   - clarify initial angle convention e.g. ccw from east
   - one-frame animations: Sit, Lie
   - onclick do point provide `meta.doPoint` e.g. centre of icon

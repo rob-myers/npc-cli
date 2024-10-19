@@ -194,7 +194,9 @@ export default function Npcs(props) {
         npc.setupMixer();
       }
 
-      npc.startAnimation('Idle');
+      // npc.startAnimation('Idle');
+      position.y = npc.startAnimationByMeta(e.meta ?? { stand: true });
+      
       let hadAgent = false;
 
       if (npc.agent === null) {
@@ -217,6 +219,8 @@ export default function Npcs(props) {
       
       npc.s.spawns++;
       npc.s.doMeta = e.meta?.do === true
+        // 🚧 maybe remove hadAgent i.e. auto-add agent onenter nav,
+        // so can maintain meta identity-checking
         ? { ...e.meta, hadAgent, } // remember hadAgent if go off mesh
         : null
       ;
