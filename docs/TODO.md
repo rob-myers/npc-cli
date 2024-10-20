@@ -38,11 +38,11 @@
       - ℹ️ `click 1` outputs nothing if you do a long click
       - ℹ️ `click --long 1` works instead
     - ✅ profile-1 has custom code
-  - hide shadow for Lie, Sit via animation
+  - ✅ hide shadow for Lie, Sit via animation
   - improve shadow for other animations
   - more centred on do points
   - can specify do point offset e.g. further back for stool
-  - fix briefing table do point orients
+  - ✅ fix briefing table do point orients
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent
@@ -51,25 +51,6 @@
   - onclick do point provide `meta.doPoint` e.g. centre of icon
   - ✅ npc.startAnimationByMeta handles do meta
 
-- ✅ bug: sh: isolate bug involving nested pipelines terminating early, e.g.
-  - ℹ️ still happens when we comment out `killPipeChildren`
-  - ℹ️ thrown by preProcessWrite i.e. pipeline-between-whiles has finished reading
-```sh
-# 1st repro
-click --long | filter meta.do | while take 1 >lastClick; do
-  w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
-done &
-
-# 2nd repro
-while true; do
-  echo foo
-done | while take 1; do
-  # echo bar
-  echo bar | echo baz
-done
-```
-
-- bug: sh: paste multiline command and start Cmd-Deleting midway
 
 - merge npc.waitUntilStopped into useHandleEvents
 - a single reject for resolveTurn, resolveFade, walking
@@ -92,6 +73,7 @@ done
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+- bug: sh: paste multiline command and start Cmd-Deleting midway
 - useGLTFsAsync hook
   - replaces synchronous useGLTF
   - supports multiple and provides each when ready
@@ -2733,3 +2715,21 @@ run '({ w, api }) {
 
 - ✅ can run e.g. `w npc.npc.rob` inside pipeline.
   - i.e. use syntax `click 1 | w --stdin gmGraph.findRoomContaining`
+
+- ✅ bug: sh: isolate bug involving nested pipelines terminating early, e.g.
+  - ℹ️ still happens when we comment out `killPipeChildren`
+  - ℹ️ thrown by preProcessWrite i.e. pipeline-between-whiles has finished reading
+```sh
+# 1st repro
+click --long | filter meta.do | while take 1 >lastClick; do
+  w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
+done &
+
+# 2nd repro
+while true; do
+  echo foo
+done | while take 1; do
+  # echo bar
+  echo bar | echo baz
+done
+```
