@@ -551,6 +551,7 @@ export default function Decor(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
+      renderOrder={-1}
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <cameraLightMaterial

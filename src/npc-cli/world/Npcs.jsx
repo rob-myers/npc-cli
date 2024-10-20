@@ -340,6 +340,7 @@ function NPC({ npc }) {
     <group
       ref={npc.onMount}
       scale={npc.m.scale}
+      renderOrder={1}
       // dispose={null}
     >
       {bones.map((bone, i) => <primitive key={i} object={bone} />)}
