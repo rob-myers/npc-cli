@@ -43,6 +43,7 @@
   - ✅ npc.startAnimationByMeta handles do meta
   - ✅ fix briefing table do point orients
   - more centred on do points
+  - fix do points at head of briefing table
   - can specify do point offset e.g. further back for stool
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav

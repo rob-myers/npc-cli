@@ -30,36 +30,36 @@
   <path d="M 170.971072 602.734828 L 106.953013 598.734828 L 61.6016 564.734828 L 47.492274 523.734828 L 41.739704 437.677828 L 41.739704 397.677828 L 41.739704 317.677828 L 41.739704 277.677828 L 41.739704 197.677828 L 41.739704 157.677828 L 45.476651 75.734828 L 88.812453 12.734828 L 138.569002 -2.070172 L 173.802004 -2.198172 L 217.812022 17.734828 L 259.132212 70.734828 L 259.636118 157.734828 L 259.636118 197.734828 L 259.636118 277.734828 L 259.636118 317.734828 L 259.636118 397.734828 L 259.636118 437.734828 L 257.116587 523.734828 L 217.812022 582.734828 L 170.971072 602.734828 Z" style="fill-opacity: 0.5; fill: rgb(0, 0, 255); transform-origin: 153.21px 300.268px;">
     <title>obstacle table surface y=0.35</title>
   </path>
-  <g transform="matrix(1, 0, 0, 1, -1.1368683772161603e-13, 0)" style="pointer-events: none;">
+  <g transform="matrix(1, 0, 0, 1, -1.1368683772161603e-13, 0)" style="">
     <title>symbols</title>
-    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.000015258789, 82.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.00001525878906, 82.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.000015258789, 202.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.00001525878906, 202.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.000015258789, 322.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.00001525878906, 322.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.000015258789, 442.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 238.00001525878906, 442.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605, 82.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605469, 82.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605, 202.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605469, 202.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605, 322.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605469, 322.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605, 442.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(1, 0, 0, 1, -11.999992370605469, 442.5)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(0, 1, -1, 0, 112.500015258789, -52.500011444092)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(0, 1, -1, 0, 112.500015258789, -59.500011444092)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
-    <use width="75" height="75" transform="matrix(0, -1, -1, 0, 112.500015258789, 577.499938964844)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
+    <use width="75" height="75" transform="matrix(0, -1, -1, 0, 112.500015258789, 590.499938964844)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--005--chair-0.25x0.25</title>
     </use>
   </g>

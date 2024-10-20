@@ -359,7 +359,7 @@
     "stateroom--035--2x3": {"outputHash": 604363138, "pngHash": -866865591},
     "stateroom--036--2x4": {"outputHash": 1899833730, "pngHash": 1301313076},
     "table--004--1.2x2.4": {
-      "outputHash": -1520308126,
+      "outputHash": 1050867787,
       "pngHash": 1027833859,
       "obsHashes": [942184542]
     },
@@ -17239,14 +17239,14 @@
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [0, 1, -1, 0, 0.94, -0.26]
+          "transform": [0, 1, -1, 0, 0.94, -0.3]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25"},
           "width": 0.375,
           "height": 0.375,
-          "transform": [0, -1, -1, 0, 0.94, 3.26]
+          "transform": [0, -1, -1, 0, 0.94, 3.33]
         }
       ],
       "removableDoors": [],
