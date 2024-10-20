@@ -15,7 +15,6 @@ export default function Ceiling(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    thickerTops: false,
     tex: w.ceil.tex, // Pass in textures
 
     detectClick(e) {
@@ -166,7 +165,6 @@ export default function Ceiling(props) {
 
 /**
  * @typedef State
- * @property {boolean} thickerTops
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {() => Promise<void>} draw

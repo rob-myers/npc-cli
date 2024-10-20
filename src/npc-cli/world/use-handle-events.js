@@ -52,13 +52,16 @@ export default function useHandleEvents(w) {
 
       switch (e.key) {
         case "changed-zoom":
-          w.ceil.thickerTops = e.level === 'far';
-          // w.ceil.draw();
+          // 'near' or 'far'
           break;
         case "updated-gm-decor":
-          break; // NOOP e.g. physics worker restarted onchange geomorphs
+          // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
+          break;
         case "long-pointerdown":
-          // mobile/desktop show/hide ContextMenu
+          // mobile/desktop toggle ContextMenu
+          if (w.ui.getLastMeta()?.do === true) {
+            return; // ignore do points
+          }
           if (e.distancePx <= (e.touch ? 10 : 5)) {
             w.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
