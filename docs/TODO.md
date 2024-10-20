@@ -51,21 +51,25 @@
   - onclick do point provide `meta.doPoint` e.g. centre of icon
   - ✅ npc.startAnimationByMeta handles do meta
 
-
-- ✅ sh: semantics: support e.g. `foo=$( w npc.npc.rob )`
-  - ℹ️ we were "javascript stringifying" inside command substitution
-  - ℹ️ now, command subst directly inside an assign forwards non-string value/values
-  - e.g. `foo=$( seq 3 )`, `foo=$( w npc.npc.rob )`
-
-- ✅ can run e.g. `w npc.npc.rob` inside pipeline.
-  - i.e. use syntax `click 1 | w --stdin gmGraph.findRoomContaining`
-
-- sh: isolate bug involving nested pipelines terminating early, e.g.
+- ✅ bug: sh: isolate bug involving nested pipelines terminating early, e.g.
+  - ℹ️ still happens when we comment out `killPipeChildren`
+  - ℹ️ thrown by preProcessWrite i.e. pipeline-between-whiles has finished reading
 ```sh
+# 1st repro
 click --long | filter meta.do | while take 1 >lastClick; do
   w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
 done &
+
+# 2nd repro
+while true; do
+  echo foo
+done | while take 1; do
+  # echo bar
+  echo bar | echo baz
+done
 ```
+
+- bug: sh: paste multiline command and start Cmd-Deleting midway
 
 - merge npc.waitUntilStopped into useHandleEvents
 - a single reject for resolveTurn, resolveFade, walking
@@ -2721,3 +2725,11 @@ run '({ w, api }) {
     w npc.npc.rob.setIcon null
     w npc.npc.rob.setIcon '{ uvMapKey: "cuboid-man", uvQuadKey: "front-label-food" }'
     ```
+
+- ✅ sh: semantics: support e.g. `foo=$( w npc.npc.rob )`
+  - ℹ️ we were "javascript stringifying" inside command substitution
+  - ℹ️ now, command subst directly inside an assign forwards non-string value/values
+  - e.g. `foo=$( seq 3 )`, `foo=$( w npc.npc.rob )`
+
+- ✅ can run e.g. `w npc.npc.rob` inside pipeline.
+  - i.e. use syntax `click 1 | w --stdin gmGraph.findRoomContaining`

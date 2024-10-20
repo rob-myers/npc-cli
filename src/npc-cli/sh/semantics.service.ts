@@ -165,8 +165,7 @@ class semanticsServiceClass {
       }
       case "|": {
         const { sessionKey, pid: ppid } = node.meta;
-        /** Inherit process group, except 0 */
-        const pgid = node.meta.pgid || ppid;
+        const pgid = ppid; // 🔔 `node.meta.pgid` breaks pgid 0, and nested pipelines
         const { ttyShell } = useSession.api.getSession(sessionKey);
 
         const process = useSession.api.getProcess(node.meta);
@@ -180,7 +179,7 @@ class semanticsServiceClass {
         }
         process.cleanups.push(killPipeChildren); // Handle Ctrl-C
 
-        const stdIn = useSession.api.resolve(0, stmts[0].meta);
+        // const stdIn = useSession.api.resolve(0, stmts[0].meta);
         const fifos = stmts.slice(0, -1).map(({ meta }, i) =>
           useSession.api.createFifo(`/dev/fifo-${sessionKey}-${meta.pid}-${i}`)
         );
@@ -210,8 +209,10 @@ class semanticsServiceClass {
                 errors.push(e);
                 reject(e);
               } finally {
+                // 🔔 assume we're the only process writing to `stdOut`
                 (fifos[i] ?? stdOut).finishedWriting(); // pipe-child `i` won't write any more
-                (fifos[i - 1] ?? stdIn).finishedReading(); // pipe-child `i` won't read any more
+                // (fifos[i - 1] ?? stdIn).finishedReading(); // pipe-child `i` won't read any more
+                fifos[i - 1]?.finishedReading(); // pipe-child `i` won't read any more
 
                 if (i === clones.length - 1 && errors.length === 0) {
                   exitCode = file.exitCode ?? 0;

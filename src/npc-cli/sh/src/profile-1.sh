@@ -7,12 +7,15 @@ click | map '({meta}, {w}) => {
 }' &
 
 call '({w}) => w.e.shouldIgnoreLongClick = (meta) => meta.do || meta.floor'
-click --long | run '({ api, w, datum }) {
-  while ((datum = await api.read()) !== api.eof) {
-    const npc = w.npc.npc.rob; // 🚧 hard-coded npcKey
-    await npc.do(datum).catch(() => {});
-  }
-}' &
+# click --long | run '({ api, w, datum }) {
+#   while ((datum = await api.read()) !== api.eof) {
+#     const npc = w.npc.npc.rob; // 🚧 hard-coded npcKey
+#     await npc.do(datum).catch(() => {});
+#   }
+# }' &
+click --long | while take 1 >lastClick; do
+  w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
+done &
 
 # write selectedNpcKey on click npc
 # click | map meta.npcKey >selectedNpcKey &

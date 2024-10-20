@@ -180,6 +180,7 @@ run '({ api }) { throw api.getKillError(); }' | take 1
 # exit code 130
 take 1 | run '({ api }) { throw api.getKillError(); }'
 # ctrl-c should kill whole while loop
+awaitWorld
 while true; do click 1 >clicked; clicked/meta/nav; done
 ```
 

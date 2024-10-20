@@ -227,9 +227,8 @@ export class ttyShellClass implements Device {
         );
     } catch (e) {
       if (e instanceof ProcessError) {
-        console.error(
-          `${meta.sessionKey}${meta.pgid ? " (background)" : ""}: ${meta.pid}: ${e.code}`
-        );
+        // 🔔 possibly via preProcessWrite
+        console.error(`${meta.sessionKey}${meta.pgid ? " (background)" : ""}: ${meta.pid}: ${e.code}`);
         // Ctrl-C code is 130 unless overridden
         term.exitCode = e.exitCode ?? 130; // 🚧 or 137?
       } else if (e instanceof ShError) {
