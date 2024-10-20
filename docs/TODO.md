@@ -39,18 +39,17 @@
       - ℹ️ `click --long 1` works instead
     - ✅ profile-1 has custom code
   - ✅ hide shadow for Lie, Sit via animation
-  - improve shadow for other animations
+  - ✅ one-frame animations: Sit, Lie
+  - ✅ npc.startAnimationByMeta handles do meta
+  - ✅ fix briefing table do point orients
   - more centred on do points
   - can specify do point offset e.g. further back for stool
-  - ✅ fix briefing table do point orients
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent
   - clarify initial angle convention e.g. ccw from east
-  - ✅ one-frame animations: Sit, Lie
   - onclick do point provide `meta.doPoint` e.g. centre of icon
-  - ✅ npc.startAnimationByMeta handles do meta
-
+  - improve shadow for other animations
 
 - merge npc.waitUntilStopped into useHandleEvents
 - a single reject for resolveTurn, resolveFade, walking
@@ -59,13 +58,6 @@
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
-
-- ✅ fix blurred curved table in 303
-  - ✅ extra--020--table-2x0.66
-  - ✅ add placeholder symbol to 303
-
-- ✅ fix symbols in 303 i.e. definitions should have correct size
-
 
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
@@ -2634,6 +2626,11 @@ run '({ w, api }) {
 - ✅ bug: initially open hull door via spawn does not close
   - seems fixed by npc.spawn cleanup
 
+- ✅ fix blurred curved table in 303
+  - ✅ extra--020--table-2x0.66
+  - ✅ add placeholder symbol to 303
+
+- ✅ fix symbols in 303 i.e. definitions should have correct size
 
 - ✅ uv-map for label seems wrong i.e. should cover 256 * 128
   - 🔔 seems npm module `canvas` does not support scaled text properly

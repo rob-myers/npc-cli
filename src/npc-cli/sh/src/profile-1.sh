@@ -13,7 +13,7 @@ call '({w}) => w.e.shouldIgnoreLongClick = (meta) => meta.do || meta.floor'
 #     await npc.do(datum).catch(() => {});
 #   }
 # }' &
-click --long | while take 1 >lastClick; do
+click --long | while take 1 >lastClick; do # 🚧 hard-coded npcKey
   w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
 done &
 
