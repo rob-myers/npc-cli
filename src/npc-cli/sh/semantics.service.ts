@@ -123,13 +123,22 @@ class semanticsServiceClass {
   }
 
   private async *Assign({ meta, Name, Value, Naked }: Sh.Assign) {
-    const textValue = !Naked && Value ? (await this.lastExpanded(sem.Expand(Value))).value : "";
-    useSession.api.setVar(
-      meta,
-      Name.Value,
-      // Attempt to interpret as number, dictionary etc.
-      parseJsArg(textValue)
-    );
+    if (Naked || !Value) {
+      useSession.api.setVar(meta, Name.Value, '');
+      return;
+    }
+
+    const expanded = await this.lastExpanded(sem.Expand(Value));
+    if (expanded.values.some(x => typeof x !== 'string')) {
+      // forward non-string values from command substitution `foo=$( bar )`
+      useSession.api.setVar(meta, Name.Value,
+        expanded.values.length === 1 ? expanded.values[0] : expanded.values,
+      );
+    } else {
+      useSession.api.setVar(meta, Name.Value,
+        parseJsArg(expanded.value) // could interpret as number, Set etc.
+      );
+    }
   }
 
   private async *BinaryCmd(node: Sh.BinaryCmd) {
@@ -164,7 +173,8 @@ class semanticsServiceClass {
         function killPipeChildren(SIGINT?: boolean) {
           useSession.api
             .getProcesses(process.sessionKey, pgid)
-            .filter((x) => x.key !== ppid)
+            // 🚧 safety while debug nested-pipeline-issue
+            .filter((x) => x.key !== ppid && x.status !== ProcessStatus.Killed)
             .reverse()
             .forEach((x) => killProcess(x, SIGINT));
         }
@@ -479,13 +489,17 @@ class semanticsServiceClass {
         await ttyShell.spawn(cloned, { localVar: true });
 
         try {
-          yield expand(
-            device
-              .readAll()
+          const values = device.readAll();
+          if (node.parent?.type === 'Word' && node.parent.Parts.length === 1 && node.parent.parent?.type === 'Assign') {
+            // In case `foo=$( bar )` we forward non-string values
+            yield expand(values);
+          } else {
+            yield expand(values
               .map((x: any) => (typeof x === "string" ? x : jsStringify(x)))
               .join("\n")
-              .replace(/\n*$/, "")
-          );
+              .replace(/\n*$/, "") // remove trailing newlines
+            );
+          }
         } finally {
           useSession.api.removeDevice(device.key);
         }

@@ -32,14 +32,40 @@
   - ✅ opacity/showSelector breaking?
     - ℹ️ e.g. ineffective: `w npc.npc.rob.fade 0.5`
     - maybe stale reference to shader?
+  - ✅ can `do` via long press
+    - ✅ useHandleEvents ignores long press of do point
+    - ✅ clarify `click 1` returning nothing on e.g. RMB
+      - ℹ️ `click 1` outputs nothing if you do a long click
+      - ℹ️ `click --long 1` works instead
+    - ✅ profile-1 has custom code
+  - hide shadow for Lie, Sit via animation
+  - improve shadow for other animations
+  - more centred on do points
+  - can specify do point offset e.g. further back for stool
+  - fix briefing table do point orients
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent
   - clarify initial angle convention e.g. ccw from east
-  - one-frame animations: Sit, Lie
+  - ✅ one-frame animations: Sit, Lie
   - onclick do point provide `meta.doPoint` e.g. centre of icon
-  - npc.startAnimation handles do meta
+  - ✅ npc.startAnimationByMeta handles do meta
 
+
+- ✅ sh: semantics: support e.g. `foo=$( w npc.npc.rob )`
+  - ℹ️ we were "javascript stringifying" inside command substitution
+  - ℹ️ now, command subst directly inside an assign forwards non-string value/values
+  - e.g. `foo=$( seq 3 )`, `foo=$( w npc.npc.rob )`
+
+- ✅ can run e.g. `w npc.npc.rob` inside pipeline.
+  - i.e. use syntax `click 1 | w --stdin gmGraph.findRoomContaining`
+
+- sh: isolate bug involving nested pipelines terminating early, e.g.
+```sh
+click --long | filter meta.do | while take 1 >lastClick; do
+  w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
+done &
+```
 
 - merge npc.waitUntilStopped into useHandleEvents
 - a single reject for resolveTurn, resolveFade, walking

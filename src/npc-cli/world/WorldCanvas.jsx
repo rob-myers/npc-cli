@@ -37,7 +37,7 @@ export default function WorldCanvas(props) {
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
     },
-    getLastMeta() {
+    getLastDownMeta() {
       return state.lastDown?.threeD?.meta ?? null;
     },
     getNpcPointerEvent({
@@ -381,7 +381,7 @@ export default function WorldCanvas(props) {
  *
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
- * @property {() => null | Geom.Meta} getLastMeta
+ * @property {() => null | Geom.Meta} getLastDownMeta
  * @property {(def: PointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getNpcPointerEvent
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated

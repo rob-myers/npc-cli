@@ -17,6 +17,7 @@ export default function useHandleEvents(w) {
     npcToRoom: new Map(),
     roomToNpcs: [],
     externalNpcs: new Set(),
+    shouldIgnoreLongClick: undefined,
 
     canCloseDoor(door) {
       const closeNpcs = state.doorToNpc[door.gdKey];
@@ -51,17 +52,17 @@ export default function useHandleEvents(w) {
       }
 
       switch (e.key) {
-        case "changed-zoom":
-          // 'near' or 'far'
+        case "changed-zoom": // 'near' or 'far'
           break;
         case "updated-gm-decor":
           // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
           break;
-        case "long-pointerdown":
-          // mobile/desktop toggle ContextMenu
-          if (w.ui.getLastMeta()?.do === true) {
-            return; // ignore do points
+        case "long-pointerdown": { // toggle ContextMenu
+          const lastDownMeta = w.ui.getLastDownMeta();
+          if (lastDownMeta !== null && state.shouldIgnoreLongClick?.(lastDownMeta)) {
+            return;
           }
+
           if (e.distancePx <= (e.touch ? 10 : 5)) {
             w.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
@@ -71,6 +72,7 @@ export default function useHandleEvents(w) {
             w.menu.hide();
           }
           break;
+        }
         case "pointerdown":
           w.ui.setLastDown(e);
           w.menu.hide();
@@ -450,6 +452,7 @@ export default function useHandleEvents(w) {
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoor
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
+ * @property {undefined | ((lastDownMeta: Geom.Meta) => boolean)} shouldIgnoreLongClick
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs

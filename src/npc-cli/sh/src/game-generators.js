@@ -165,20 +165,26 @@ export async function* w(ctxt) {
     () => reject("potential ongoing computation")
   ));
 
-  if (api.isTtyAt(0)) {
+  // also support piped inputs via --stdin
+  // e.g. `click 1 | w --stdin gmGraph.findRoomContaining`
+  const { opts, operands } = api.getOpts(args, {
+    boolean: ["stdin"],
+  });
+
+  if (opts.stdin !== true) {
     const func = api.generateSelector(
-      api.parseFnOrStr(args[0]),
-      args.slice(1).map(x => api.parseJsArg(x)),
+      api.parseFnOrStr(operands[0]),
+      operands.slice(1).map(x => api.parseJsArg(x)),
     );
     const v = func(w, ctxt);
     yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
   } else {
     /** @type {*} */ let datum;
-    !args.includes("-") && args.push("-");
+    !operands.includes("-") && operands.push("-");
     while ((datum = await api.read()) !== api.eof) {
       const func = api.generateSelector(
-        api.parseFnOrStr(args[0]),
-        args.slice(1).map(x => x === "-" ? datum : api.parseJsArg(x)),
+        api.parseFnOrStr(operands[0]),
+        operands.slice(1).map(x => x === "-" ? datum : api.parseJsArg(x)),
       );
       try {
         const v = func(w, ctxt);
