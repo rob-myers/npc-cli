@@ -1,5 +1,23 @@
 awaitWorld
 
+# 🚧 introduce `spawn` command
+w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null
+w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 }, agent: true }' >/dev/null
+w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 5 * 1.5 }, agent: true }'  >/dev/null
+
+selectedNpcKey="rob"
+w npc.npc.rob.showSelector true
+w npc.npc.rob.setLabel Robbo
+w e.changeNpcAccess rob . +
+
+# write selectedNpcKey on click npc
+# click | map meta.npcKey >selectedNpcKey &
+click | filter meta.npcKey | map '({ meta }, { home, w }) => {
+  w.npc.npc[home.selectedNpcKey]?.showSelector(false);
+  w.npc.npc[meta.npcKey]?.showSelector(true);
+  home.selectedNpcKey = meta.npcKey;
+}' &
+
 # open door on click
 # 🚧 use switch instead of door
 click | map '({meta}, {w}) => {
@@ -19,27 +37,9 @@ click --long | while take 1 >lastClick; do
   w npc.npc.${selectedNpcKey} | map '(npc, {home}) => npc.do(home.lastClick)'
 done &
 
-# write selectedNpcKey on click npc
-# click | map meta.npcKey >selectedNpcKey &
-click | filter meta.npcKey | map '({ meta }, { home, w }) => {
-  w.npc.npc[home.selectedNpcKey]?.showSelector(false);
-  w.npc.npc[meta.npcKey]?.showSelector(true);
-  home.selectedNpcKey = meta.npcKey;
-}' &
-
 # click navmesh to move selectedNpcKey
 # see `declare -f walkTest`
 # click | filter meta.navigable | walkTest &
 click | filter meta.floor | walkTest &
 
-# 🚧 introduce `spawn` command
-w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null
-w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 }, agent: true }' >/dev/null
-w npc.spawn '{ npcKey: "rob", point: { x: 0.5 * 1.5, y: 5 * 1.5 }, agent: true }'  >/dev/null
-
-selectedNpcKey="rob"
-w npc.npc.rob.showSelector true
-w npc.npc.rob.setLabel Robbo
-w e.changeNpcAccess rob . +
-
-w update 'w => w.decor.showLabels = true'
+w | map 'w => w.decor.showLabels = true'
