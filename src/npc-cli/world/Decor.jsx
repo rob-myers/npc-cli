@@ -146,6 +146,14 @@ export default function Decor(props) {
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
     },
+    computeDecorMeta(decor, instanceId) {
+      /** @type {Geom.Meta} */
+      const meta = { decor: true, ...decor.meta, instanceId };
+      if (decor.type === 'point' && decor.meta.do === true) {
+        meta.doPoint = { x: decor.x, y: decor.y };
+      }
+      return meta;
+    },
     createCuboidMatrix4(d) {
       tmpMat1.feedFromArray(d.transform);
       return geomorph.embedXZMat4(tmpMat1.toArray(), {
@@ -307,20 +315,13 @@ export default function Decor(props) {
       const decor = state.detectClick(e);
 
       if (decor !== null) {
-
-        /** @type {Geom.Meta} */
-        const meta = { decor: true, ...decor.meta, instanceId };
-        if (decor.type === 'point' && decor.meta.do === true) {
-          meta.doPoint = { x: decor.x, y: decor.y };
-        }
-
         w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerdown",
           distancePx: 0,
           event: e,
           is3d: true,
           justLongDown: false,
-          meta,
+          meta: state.computeDecorMeta(decor, instanceId),
         }));
         e.stopPropagation();
       }
@@ -334,11 +335,7 @@ export default function Decor(props) {
           key: "pointerup",
           event: e,
           is3d: true,
-          meta: {
-            decor: true,
-            ...decor.meta,
-            instanceId,
-          },
+          meta: state.computeDecorMeta(decor, instanceId),
         }));
         e.stopPropagation();
       }
@@ -636,6 +633,7 @@ export default function Decor(props) {
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor
  * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
+ * @property {(decor: Geomorph.Decor, instanceId: number) => Geom.Meta} computeDecorMeta
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorQuad) => THREE.Matrix4} createQuadMatrix4
