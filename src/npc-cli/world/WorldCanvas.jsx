@@ -314,7 +314,7 @@ export default function WorldCanvas(props) {
       <PerspectiveCamera
         position={[0, 16, 0]}
         makeDefault
-        fov={20}
+        fov={smallViewport ? 20 : 10}
         zoom={0.5}
       />
 
