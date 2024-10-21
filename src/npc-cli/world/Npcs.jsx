@@ -195,7 +195,7 @@ export default function Npcs(props) {
       }
 
       // npc.startAnimation('Idle');
-      position.y = npc.startAnimationByMeta(e.meta ?? { stand: true });
+      position.y = npc.startAnimation(e.meta ?? 'Idle');
       
       let hadAgent = false;
 

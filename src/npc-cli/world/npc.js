@@ -425,7 +425,7 @@ export class Npc {
         await this.turn(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
       }
       // this.startAnimation('Idle');
-      this.startAnimationByMeta(meta);
+      this.startAnimation(meta);
       this.doMeta = meta.do === true ? meta : null;
     } else {
       // sets `this.s.doMeta` because `meta.do === true`
@@ -652,34 +652,36 @@ export class Npc {
     this.updateUniforms();
   }
 
-  /** @param {NPC.AnimKey} act */
-  startAnimation(act) {
-    const curr = this.m.toAct[this.s.act];
-    const next = this.m.toAct[act];
-    curr.fadeOut(glbFadeOut[this.s.act][act]);
-    next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
-    this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[act] ?? 1;
-    this.s.act = act;
-  }
-
   /**
-   * @param {Geom.Meta} meta
-   * @returns {number} height off ground
+   * Start specific animation, or animation induced by meta.
+   * Returns height to raise off ground e.g. for beds. 
+   * @param {NPC.AnimKey | Geom.Meta} input
+   * @returns {number}
    */
-  startAnimationByMeta(meta) {
-    switch (true) {
-      case meta.sit:
-        this.startAnimation('Sit');
-        return 0; // 🚧
-      case meta.stand:
-        this.startAnimation('Idle');
-        return 0;
-      case meta.lie:
-        this.startAnimation('Lie');
-        return typeof meta.y === 'number' ? meta.y : 0;
-      default:
-        this.startAnimation('Idle');
-        return 0;
+  startAnimation(input) {
+    if (typeof input === 'string') {
+      const curr = this.m.toAct[this.s.act];
+      const next = this.m.toAct[input];
+      curr.fadeOut(glbFadeOut[this.s.act][input]);
+      next.reset().fadeIn(glbFadeIn[this.s.act][input]).play();
+      this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[input] ?? 1;
+      this.s.act = input;
+      return 0;
+    } else { // input is Geom.Meta
+      switch (true) {
+        case input.sit:
+          this.startAnimation('Sit');
+          return 0; // 🚧
+        case input.stand:
+          this.startAnimation('Idle');
+          return 0;
+        case input.lie:
+          this.startAnimation('Lie');
+          return typeof input.y === 'number' ? input.y : 0;
+        default:
+          this.startAnimation('Idle');
+          return 0;
+      }
     }
   }
 
