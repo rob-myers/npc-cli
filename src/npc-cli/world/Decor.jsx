@@ -307,17 +307,20 @@ export default function Decor(props) {
       const decor = state.detectClick(e);
 
       if (decor !== null) {
+
+        /** @type {Geom.Meta} */
+        const meta = { decor: true, ...decor.meta, instanceId };
+        if (decor.type === 'point' && decor.meta.do === true) {
+          meta.doPoint = { x: decor.x, y: decor.y };
+        }
+
         w.events.next(w.ui.getNpcPointerEvent({
           key: "pointerdown",
           distancePx: 0,
           event: e,
           is3d: true,
           justLongDown: false,
-          meta: {
-            decor: true,
-            ...decor.meta,
-            instanceId,
-          },
+          meta,
         }));
         e.stopPropagation();
       }

@@ -42,14 +42,14 @@
   - ✅ one-frame animations: Sit, Lie
   - ✅ npc.startAnimationByMeta handles do meta
   - ✅ fix briefing table do point orients
-  - more centred on do points
+  - 🚧 more centred on do points
+    - ✅ onclick do point provide `meta.doPoint` e.g. centre of icon
   - fix do points at head of briefing table
   - can specify do point offset e.g. further back for stool
   - npc.fadeSpawn can specify agent
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent
   - clarify initial angle convention e.g. ccw from east
-  - onclick do point provide `meta.doPoint` e.g. centre of icon
   - improve shadow for other animations
 
 - merge npc.waitUntilStopped into useHandleEvents

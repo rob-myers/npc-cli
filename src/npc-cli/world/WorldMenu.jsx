@@ -88,7 +88,7 @@ export default function WorldMenu(props) {
       <div>
         {/* 🚧 */}
         {meta3d && Object.entries(meta3d).map(([k, v]) =>
-          <div key={k}>{v === true ? k : `${k}: ${v}`}</div>
+          <div key={k}>{v === true ? k : `${k}: ${JSON.stringify(v)}`}</div>
         )}
       </div>
     </div>
