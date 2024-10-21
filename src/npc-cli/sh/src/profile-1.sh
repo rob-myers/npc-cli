@@ -6,15 +6,17 @@ click | map '({meta}, {w}) => {
   meta.door && w.e.toggleDoor(meta.gdKey)
 }' &
 
-call '({w}) => w.e.shouldIgnoreLongClick = (meta) => meta.do || meta.floor'
-# click --long | run '({ api, w, datum }) {
+# call '({w}) => w.e.shouldIgnoreLongClick = (meta) => meta.do || meta.floor'
+w | map 'w => (w.e.shouldIgnoreLongClick = (meta) => meta.do || meta.floor)'
+
+# click --long | run '({ api, home, w, datum }) {
 #   while ((datum = await api.read()) !== api.eof) {
-#     const npc = w.npc.npc.rob; // 🚧 hard-coded npcKey
+#     const npc = w.npc.npc[home.selectedNpcKey];
 #     await npc.do(datum).catch(() => {});
 #   }
 # }' &
-click --long | while take 1 >lastClick; do # 🚧 hard-coded npcKey
-  w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
+click --long | while take 1 >lastClick; do
+  w npc.npc.${selectedNpcKey} | map '(npc, {home}) => npc.do(home.lastClick)'
 done &
 
 # write selectedNpcKey on click npc
@@ -29,9 +31,6 @@ click | filter meta.npcKey | map '({ meta }, { home, w }) => {
 # see `declare -f walkTest`
 # click | filter meta.navigable | walkTest &
 click | filter meta.floor | walkTest &
-
-# 🚧 clean
-setupDemo1
 
 # 🚧 introduce `spawn` command
 w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null

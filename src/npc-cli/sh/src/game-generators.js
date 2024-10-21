@@ -109,7 +109,7 @@ export async function* events({ api, w }) {
 /**
  * @param {RunArg} ctxt
  */
-export async function* setupDemo1({ w }) {
+export async function* selectPolysDemo({ w }) {
     // find and exclude a poly
     const { polyRefs } =  w.crowd.navMeshQuery.queryPolygons(
       // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
