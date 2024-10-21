@@ -73,7 +73,10 @@ declare namespace NPC {
     point: Geom.VectJson;
     meta?: Geom.Meta;
     requireNav?: boolean;
-    /** Should NPC have agent? */
+    /**
+     * Should NPC have agent?
+     * - defaults true if `point` navigable
+     */
     agent?: boolean;
   }
 

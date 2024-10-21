@@ -141,6 +141,8 @@ export default function Npcs(props) {
       }
 
       const dstNav = state.isPointInNavmesh(e.point);
+      // 🔔 attach agent by default if dst navigable
+      dstNav === true && (e.agent ??= true);
 
       if (e.requireNav === true && dstNav === false) {
         throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e)}`);
@@ -196,18 +198,16 @@ export default function Npcs(props) {
 
       // npc.startAnimation('Idle');
       position.y = npc.startAnimation(e.meta ?? 'Idle');
-      
-      let hadAgent = false;
 
       if (npc.agent === null) {
         npc.setPosition(position);
         npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
-        // 🔔 if specified/had agent, pin to current position
-        if (e.agent === true || npc.s.doMeta?.hadAgent === true) {
-          npc.attachAgent().requestMoveTarget(npc.position);
+        if (e.agent === true) {
+          const agent = npc.attachAgent();
+          // 🔔 pin to current position
+          agent.requestMoveTarget(npc.position);
         }
       } else {
-        hadAgent = true;
         if (dstNav === false || e.agent === false) {
           npc.setPosition(position);
           npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
@@ -218,12 +218,7 @@ export default function Npcs(props) {
       }
       
       npc.s.spawns++;
-      npc.s.doMeta = e.meta?.do === true
-        // 🚧 maybe remove hadAgent i.e. auto-add agent onenter nav,
-        // so can maintain meta identity-checking
-        ? { ...e.meta, hadAgent, } // remember hadAgent if go off mesh
-        : null
-      ;
+      npc.s.doMeta = e.meta?.do === true ? e.meta : null;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
 
       return npc;

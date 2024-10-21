@@ -48,7 +48,7 @@ export class Npc {
   s = {
     act: /** @type {NPC.AnimKey} */ ('Idle'),
     cancels: 0,
-    doMeta: /** @type {null | Geom.Meta<{ hadAgent?: boolean; }>} */ (null),
+    doMeta: /** @type {null | Geom.Meta} */ (null),
     faceId: /** @type {null | NPC.UvQuadId} */ (null),
     fadeSecs: 0.3,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
@@ -197,6 +197,7 @@ export class Npc {
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {Geom.Meta} [opts.meta]
+   * @param {boolean} [opts.agent]
    * @param {number} [opts.angle]
    * @param {NPC.ClassKey} [opts.classKey]
    * @param {boolean} [opts.requireNav]
@@ -209,14 +210,13 @@ export class Npc {
 
       const currPoint = Vect.from(this.getPoint());
       await this.w.npc.spawn({
+        agent: opts.agent,
+        angle: opts.angle ?? (currPoint.equals(point) ? undefined : currPoint.angleTo(point)),
+        classKey: opts.classKey,
+        meta: opts.meta,
         npcKey: this.key,
         point,
-        angle: opts.angle ?? (
-          currPoint.equals(point) ? undefined : currPoint.angleTo(point)
-        ),
-        classKey: opts.classKey,
         requireNav: opts.requireNav,
-        meta: opts.meta,
       });
     } finally {
       await this.fade(1, 300);

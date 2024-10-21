@@ -46,14 +46,16 @@
     - ✅ onclick do point provide `meta.doPoint` e.g. centre of icon
   - ✅ fix do points at head of briefing table
   - ❌ can specify do point offset e.g. further back for stool
-  - npc.fadeSpawn can specify agent
+  - ✅ fadeSpawn/spawn can specify agent
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent
-  - clarify initial angle convention e.g. ccw from east
+  - verify can set initial angle (ccw from east)
   - improve shadow for other animations
 
-- merge npc.waitUntilStopped into useHandleEvents
-- a single reject for resolveTurn, resolveFade, walking
+- cleanup before merge branch
+  - merge npc.waitUntilStopped into useHandleEvents
+  - a single reject for resolveTurn, resolveFade, walking
+  - improve cuboid-pet
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
