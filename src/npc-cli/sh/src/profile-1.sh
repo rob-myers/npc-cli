@@ -42,4 +42,4 @@ done &
 # click | filter meta.navigable | walkTest &
 click | filter meta.nav | walkTest &
 
-w | map 'w => w.decor.showLabels = true'
+w update 'w => w.decor.showLabels = true'
