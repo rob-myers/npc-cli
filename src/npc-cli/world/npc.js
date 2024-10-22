@@ -450,17 +450,6 @@ export class Npc {
   onMount = (group) => {
     if (group !== null) {
       this.m.group = group;
-
-      // overwrite cloned with mounted
-      const skinnedMesh = group.children.find(x => x instanceof THREE.SkinnedMesh);
-      if (skinnedMesh) {
-        this.m.mesh = skinnedMesh;
-        this.m.material = skinnedMesh.material;
-      } else {
-        warn('expected a SkinnedMesh in this.m.group.children');
-      }
-
-      // this.m.material = /** @type {THREE.ShaderMaterial} */ (this.m.mesh.material);
       // Setup shortcut
       this.position = group.position;
       // Resume `w.npc.spawn`
