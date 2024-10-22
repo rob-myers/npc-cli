@@ -49,6 +49,8 @@
   - ✅ fadeSpawn/spawn can specify agent
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent
+  - 🚧 fix do point on particular seat on briefing room table
+    - seems to think it is in navmesh e.g. small island?
   - verify can set initial angle (ccw from east)
   - improve shadow for other animations
 

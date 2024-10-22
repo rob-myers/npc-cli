@@ -40,6 +40,6 @@ done &
 # click navmesh to move selectedNpcKey
 # see `declare -f walkTest`
 # click | filter meta.navigable | walkTest &
-click | filter meta.floor | walkTest &
+click | filter meta.nav | walkTest &
 
 w | map 'w => w.decor.showLabels = true'
