@@ -49,10 +49,18 @@ export default function WorldCanvas(props) {
       meta,
     }) {
       if (key === 'pointerup' || key === 'pointerdown') {
+
+        // ThreeEvent<PointerEvent>
+        const position = is3d === true && 'point' in event ? {
+          x: w.lib.precision(event.point.x),
+          y: w.lib.precision(event.point.y),
+          z: w.lib.precision(event.point.z),
+        } : undefined;
+
         return {
           key,
-          ...is3d && 'point' in event // ThreeEvent<PointerEvent>
-            ? { is3d: true, point: event.point }
+          ...position !== undefined
+            ? { is3d: true, position, point: { x: position.x, y: position.z } }
             : { is3d: false },
           distancePx,
           justLongDown,
@@ -260,7 +268,7 @@ export default function WorldCanvas(props) {
         state.lastDown = {
           epochMs: Date.now(),
           screenPoint: Vect.from(e.screenPoint),
-          threeD: e.is3d ? { point: new THREE.Vector3().copy(e.point), meta: e.meta } : null,
+          threeD: e.is3d === true ? { point: new THREE.Vector3().copy(e.position), meta: e.meta } : null,
         };
       } else {
         state.lastDown.epochMs = Date.now();

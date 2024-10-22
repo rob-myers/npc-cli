@@ -68,22 +68,15 @@ export async function* click({ api, args, w }) {
       continue;
     }
 
-    const v3 = {
-      x: w.lib.precision(e.point.x),
-      y: w.lib.precision(e.point.y),
-      z: w.lib.precision(e.point.z),
-    };
-
     /** @type {NPC.ClickMeta} */
     const output = {
-      x: v3.x,
-      y: v3.z, // project to XZ plane
+      ...e.point,
       ...e.keys && { keys: e.keys },
       meta: { ...e.meta,
         nav: w.npc.isPointInNavmesh(e.point),
-        // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
+        // 🚧 ...w.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
-      v3,
+      v3: {...e.position},
     };
 
     yield output;

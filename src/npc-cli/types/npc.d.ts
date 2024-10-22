@@ -179,10 +179,14 @@ declare namespace NPC {
     /** Touch device? */
     touch: boolean;
   } &  (
-    | { is3d: false; }
+    | {
+        is3d: false;
+      }
     | {
         is3d: true;
-        point: import("three").Vector3Like;
+        position: import("three").Vector3Like;
+        /** `{ x: position.x, y: position.z }` */
+        point: Geom.VectJson;
         /** Properties of the thing we clicked. */
         meta: Geom.Meta;
       }
