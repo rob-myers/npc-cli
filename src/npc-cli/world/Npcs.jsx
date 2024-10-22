@@ -198,17 +198,16 @@ export default function Npcs(props) {
 
       // npc.startAnimation('Idle');
       position.y = npc.startAnimation(e.meta ?? 'Idle');
+      npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
 
       if (npc.agent === null) {
         npc.setPosition(position);
-        npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
         if (e.agent === true) {
           const agent = npc.attachAgent();
           // 🔔 pin to current position
           agent.requestMoveTarget(npc.position);
         }
       } else {
-        npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
         if (dstNav === false || e.agent === false) {
           npc.setPosition(position);
           npc.removeAgent();

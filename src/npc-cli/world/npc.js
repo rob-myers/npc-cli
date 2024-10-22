@@ -208,10 +208,14 @@ export class Npc {
       point.meta ??= meta; // 🚧 justify
       await this.fade(0, 300);
 
-      const currPoint = Vect.from(this.getPoint());
+      const currPoint = this.getPoint();
+      const dx = point.x - currPoint.x;
+      const dy = point.y - currPoint.y;
+
       await this.w.npc.spawn({
         agent: opts.agent,
-        angle: opts.angle ?? (currPoint.equals(point) ? undefined : currPoint.angleTo(point)),
+        // -dy because "ccw east" relative to (+x,-z)
+        angle: opts.angle ?? (dx === 0 && dy === 0 ? undefined : Math.atan2(-dy, dx)),
         classKey: opts.classKey,
         meta: opts.meta,
         npcKey: this.key,
