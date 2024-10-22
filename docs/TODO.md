@@ -50,7 +50,7 @@
     - defaults true when spawn on nav
     - avoid setting doMeta.hadAgent
   - ✅ verify can set initial angle (ccw from east)
-  - 🚧 fix do point on particular seat on briefing room table
+  - ✅ fix do point on particular seat on briefing room table
     - seems to think it is in navmesh e.g. small island?
   - improve shadow for other animations
 

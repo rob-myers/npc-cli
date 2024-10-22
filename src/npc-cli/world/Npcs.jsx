@@ -75,8 +75,8 @@ export default function Npcs(props) {
       }
     },
     isPointInNavmesh(p) {
-      const { success } = w.crowd.navMeshQuery.findClosestPoint(toV3(p), { halfExtents: { x: 0, y: 0.01, z: 0 } });
-      return success;
+      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(toV3(p), { halfExtents: { x: 0, y: 0.01, z: 0 } });
+      return success === true && Math.abs(point.x - p.x) < 0.001 && Math.abs(point.z - p.y) < 0.001;
     },
     onNpcPointerDown(e) {
       const npcKey = /** @type {string} */ (e.object.userData.npcKey);
