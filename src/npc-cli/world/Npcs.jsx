@@ -208,9 +208,9 @@ export default function Npcs(props) {
           agent.requestMoveTarget(npc.position);
         }
       } else {
+        npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
         if (dstNav === false || e.agent === false) {
           npc.setPosition(position);
-          npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
           npc.removeAgent();
         } else {
           npc.agent.teleport(position);
