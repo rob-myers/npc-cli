@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
+import { damp } from "maath/easing";
 
 import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
@@ -16,16 +17,20 @@ import useOnResize from "../hooks/use-on-resize.js";
  * @param {Props} props
  */
 export default function WorldCanvas(props) {
+  const smallViewport = isSmallViewport();
+
   const state = useStateRef(/** @returns {State} */ () => ({
     canvas: /** @type {*} */ (null),
     clickIds: [],
     controls: /** @type {*} */ (null),
     down: undefined,
+    fov: smallViewport ? 20 : 10,
     justLongDown: false,
     lastDown: undefined,
     lastScreenPoint: new Vect(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
+    targetFov: /** @type {null | number} */ (null),
     zoomState: 'near',
 
     canvasRef(canvasEl) {
@@ -213,6 +218,15 @@ export default function WorldCanvas(props) {
         meta: {},
       }));
     },
+    onTick(deltaMs) {
+      if (state.targetFov !== null && state.rootState !== null) {
+        if (damp(state, 'fov', state.targetFov, 0.2, deltaMs, undefined, undefined, undefined) === false) {
+          state.targetFov = null;
+        }
+        /** @type {THREE.PerspectiveCamera} */ (state.rootState.camera).fov = state.fov;
+        state.rootState.camera.updateProjectionMatrix();
+      }
+    },
     onWheel(e) {
       if (w.menu.ctOpen === true) {
         w.menu.hide();
@@ -291,7 +305,6 @@ export default function WorldCanvas(props) {
     emptySceneForPicking.onAfterRender = state.renderObjectPicking;
   }, [state.controls]);
 
-  const smallViewport = isSmallViewport();
   useOnResize();
 
   return (
@@ -322,7 +335,7 @@ export default function WorldCanvas(props) {
       <PerspectiveCamera
         position={[0, 16, 0]}
         makeDefault
-        fov={smallViewport ? 20 : 10}
+        fov={state.fov}
         zoom={0.5}
       />
 
@@ -378,6 +391,7 @@ export default function WorldCanvas(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down
  * Defined iff at least one pointer is down.
+ * @property {number} fov
  * @property {BaseDown & { threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
@@ -385,6 +399,7 @@ export default function WorldCanvas(props) {
  * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
+ * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
  *
  * @property {() => number} getDownDistancePx
@@ -400,6 +415,7 @@ export default function WorldCanvas(props) {
  * @property {(e: React.PointerEvent) => void} onPointerLeave
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
+ * @property {(deltaMs: number) => void} onTick
  * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {() => void} renderObjectPicking

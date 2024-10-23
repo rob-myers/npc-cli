@@ -132,6 +132,8 @@ export default function World(props) {
         state.debug.npc.onTick(deltaMs);
       }
 
+      state.ui.onTick(deltaMs);
+
       while (state.oneTimeTicks.shift()?.());
     },
     trackHmr(nextHmr) {

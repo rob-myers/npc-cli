@@ -43,3 +43,4 @@ done &
 click | filter meta.nav | walkTest &
 
 w update 'w => w.decor.showLabels = true'
+w update 'w => w.ui.targetFov = 20'
