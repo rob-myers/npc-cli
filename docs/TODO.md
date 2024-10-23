@@ -54,6 +54,10 @@
     - seems to think it is in navmesh e.g. small island?
   - improve shadow for other animations
 
+- door click should not propagate to floor
+- nearby nav click should cause move to
+- understand duplicated npcs e.g. on edit recast-detour.js
+
 - cleanup before merge branch
   - merge npc.waitUntilStopped into useHandleEvents
   - a single reject for resolveTurn, resolveFade, walking
