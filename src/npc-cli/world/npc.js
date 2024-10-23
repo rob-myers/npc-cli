@@ -664,7 +664,7 @@ export class Npc {
       switch (true) {
         case input.sit:
           this.startAnimation('Sit');
-          return 0; // 🚧
+          return typeof input.y === 'number' ? input.y : 0;
         case input.stand:
           this.startAnimation('Idle');
           return 0;
