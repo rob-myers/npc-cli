@@ -13,6 +13,59 @@ bar/charAt'(0)'
 # f
 bar/toUpperCase'()'
 # FOO
+
+# wc -l is `reduce '(sum, x) => sum + 1' 0` e.g.
+w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
+
+# can use `take` like `read`
+seq 5 | while take 1 >foo; do foo; done
+
+# then copy paste as location in e.g. chrome
+w decor.label.tex.image.toDataURL | log
+# likewise
+w npc.updateLabels '["foo", "bar", "baz qux"]'
+w npc.label.tex.image.toDataURL | log
+
+w debug.npc.add $( click 1 ) foo cuboid-man
+
+while true; do
+  w debug.npc.add $( click 1 )
+done
+
+w decor.byRoom.0.2 | split | filter /collider/
+
+
+w debug.npc.remove
+w debug.npc.add $( click 1 )
+w debug.npc.npc.npc-0.act.Idle.stop
+w debug.npc.npc.npc-0.act.Idle.play
+w debug.npc.npc.npc-0.act.Idle.fadeOut 1
+w debug.npc.npc.npc-0.act.Idle.reset
+w debug.npc.npc.npc-0.act.Walk.fadeIn 0.5
+w debug.npc.npc.npc-0.act.Walk.play
+w debug.npc.npc.npc-0.mixer | map 'm => m.timeScale = 0.5'
+
+w debug.npc.npc.npc-0.act.Walk.reset
+w debug.npc.npc.npc-0.act.Walk.fadeIn 0.5
+w debug.npc.npc.npc-0.act.Walk.play
+
+w debug.npc.npc.npc-0 > npc
+# npc/act/Idle/stop'()'
+npc | map act.Idle.stop
+npc | map act.Idle.reset
+npc | map act.Idle.fadeOut 1
+npc | map 'x => x.mixer.timeScale = 0.6'
+
+# change fov
+w update 'w => w.r3f.camera.fov = 30'
+w update 'w => w.r3f.camera.fov = 15'
+
+numPets=0
+while true; do 
+  # better increment? we intentionally lack shell arithmetic operators
+  call '({ home }) => home.numPets++'
+  w debug.npc.add $( click 1 ) pet-${numPets} cuboid-pet
+done
 ```
 
 ```sh
@@ -52,6 +105,15 @@ events | flatMap 'x => [new Date().toGMTString(), x]'
 
 # unlock/lock specific door
 w es.toggleLock g0d16
+
+# 🔔 Function('return 09') is 9, so if
+# 🔔 an npc was named "09" we'd have to:
+w npc.remove '"09"'
+
+w physics.worker.postMessage '{ type: "get-debug-data" }'
+
+w npc.npc.rob.look Math.PI/2
+w npc.npc.rob.look -Math.PI/2 # ❌
 ```
 
 ## Local variables
@@ -121,6 +183,7 @@ run '({ api }) { throw api.getKillError(); }' | take 1
 # exit code 130
 take 1 | run '({ api }) { throw api.getKillError(); }'
 # ctrl-c should kill whole while loop
+awaitWorld
 while true; do click 1 >clicked; clicked/meta/nav; done
 ```
 

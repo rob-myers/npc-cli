@@ -64,4 +64,6 @@ declare namespace Geom {
   type SixTuple = [number, number, number, number, number, number];
 
   type Meta<T extends {} = {}> = Record<string, any> & T;
+
+  type MaybeMeta<T, U extends {} = {}> = T & { meta?: Meta<U> };
 }

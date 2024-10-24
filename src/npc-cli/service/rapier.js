@@ -28,3 +28,19 @@ export function addBodyKeyUidRelation(bodyKey, lookups) {
 export function npcToBodyKey(npcKey) {
   return /** @type {const} */ (`npc ${npcKey}`);
 }
+
+/**
+ * @param {WW.PhysicsBodyKey} bodyKey
+* @returns {WW.PhysicsParsedBodyKey}
+* Format:
+* - `['npc', npcKey]`
+* - `['circle', decorKey]`
+* - `['rect', decorKey]`
+* - `['nearby', gmDoorKey]`
+* - `['inside', gmDoorKey]`
+ */
+export function parsePhysicsBodyKey(bodyKey) {
+  return /** @type {*} */ (
+    bodyKey.split(' ')
+  );
+}

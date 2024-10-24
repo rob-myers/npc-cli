@@ -12,6 +12,7 @@ import { useBeforeunload } from "react-beforeunload";
 import { css, cx } from "@emotion/css";
 
 import { afterBreakpoint, breakpoint } from "src/const";
+import { detectTabPrevNextShortcut } from "../service/generic";
 import {
   TabDef,
   TabsDef,
@@ -47,7 +48,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         if (state.model.getMaximizedTabset()) {
           // On minimise, enable justCovered tabs
           Object.values(state.tabsState).forEach((x) => {
-            x.justCovered && (x.disabled = false);
+            x.justCovered && state.enabled && (x.disabled = false);
             x.everUncovered = true;
             x.justCovered = false;
           });
@@ -75,6 +76,22 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         state.focusRoot();
       }
       return act;
+    },
+    onKeyDown(e) {
+      const tabDir = detectTabPrevNextShortcut(e);
+      if (tabDir) {// cycle through current tabset
+        e.stopPropagation();
+        e.preventDefault();
+        const tabset = state.model.getActiveTabset();
+        const node = tabset?.getSelectedNode();
+        if (tabset && node) {
+          const children = tabset.getChildren();
+          const numChildren = children.length;
+          const currIndex = children.findIndex(x => x === node);
+          const nextIndex = (currIndex + tabDir + numChildren) % numChildren;
+          state.model.doAction(Actions.selectTab(children[nextIndex].getId()));
+        }
+      }
     },
     // 🔔 saw "Debounced method called with different contexts" for 300ms
     onModelChange: debounce((() => {
@@ -181,6 +198,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         className={cx("tabs", tabsCss)}
         ref={(x) => x && (state.rootEl = x)}
         tabIndex={0}
+        onKeyDown={state.onKeyDown}
       >
         {state.everEnabled && (
           <FlexLayout
@@ -229,6 +247,7 @@ export interface State {
   focusRoot(): void;
   hardReset(): void;
   onAction(act: Action): Action | undefined;
+  onKeyDown(e: React.KeyboardEvent): void;
   onModelChange(): void;
   reset(): void;
   toggleEnabled(next?: boolean): void;

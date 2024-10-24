@@ -61,7 +61,7 @@
   /** @param {Geom.VectJson} p */
   angleTo(p) {
     return Math.atan2(p.y - this.y, p.x - this.x);
-  }  
+  }
 
   /** @param {Geom.VectJson[]} vectors */
   static average(vectors) {

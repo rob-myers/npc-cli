@@ -13,7 +13,7 @@ declare namespace WW {
   );
 
   interface RequestNavMesh {
-    type: "request-nav-mesh";
+    type: "request-nav";
     mapKey: string;
   }
 
@@ -35,21 +35,32 @@ declare namespace WW {
   type PhysicsWorker = WW.WorkerGeneric<WW.MsgToPhysicsWorker, WW.MsgFromPhysicsWorker>;
 
   type MsgToPhysicsWorker = (
+    | AddNPCs
+    | AddColliders
+    | RemoveBodies
+    | RemoveColliders
     | SendNpcPositions
     | SetupPhysicsWorld
-    | AddNPCs
-    | RemoveNPCs
+    | { type: 'get-debug-data' }
   );
 
   type MsgFromPhysicsWorker = (
     | WorldSetupResponse
     | NpcCollisionResponse
+    | PhysicsDebugDataResponse
   );
 
-  interface SetupPhysicsWorld {
-    type: 'setup-physics-world';
-    mapKey: string;
-    npcs: NpcDef[];
+  //#region MsgToPhysicsWorker
+  interface AddColliders {
+    type: 'add-colliders';
+    /** Colliders always on ground hence 2D position suffices */
+    colliders: (Geom.VectJson & PhysicsBodyGeom & {
+      /** For gm decor this is a `decorKey`. */
+      colliderKey: string;
+      /** Only applicable when `type` is `"rect"` */
+      angle?: number;
+      userData?: Record<string, any>;
+    })[];
   }
 
   /**
@@ -61,9 +72,14 @@ declare namespace WW {
     npcs: NpcDef[];
   }
 
-  interface RemoveNPCs {
-    type: 'remove-npcs';
-    npcKeys: string[];
+  interface RemoveBodies {
+    type: 'remove-bodies';
+    bodyKeys: WW.PhysicsBodyKey[];
+  }
+
+  interface RemoveColliders {
+    type: 'remove-colliders';
+    colliders: { type: 'circle' | 'rect'; colliderKey: string; }[];
   }
 
   interface SendNpcPositions {
@@ -72,9 +88,29 @@ declare namespace WW {
     positions: Float64Array;
   }
 
-  interface WorldSetupResponse {
-    type: 'world-is-setup';
+  interface SetupPhysicsWorld {
+    type: 'setup-physics';
+    mapKey: string;
+    npcs: NpcDef[];
   }
+  //#endregion
+
+  interface WorldSetupResponse {
+    type: 'physics-is-setup';
+  }
+
+  interface PhysicsDebugDataResponse {
+    type: 'debug-data';
+    items: PhysicDebugItem[];
+  }
+
+  interface PhysicDebugItem {
+    parsedKey: PhysicsParsedBodyKey;
+    userData: WW.PhysicsUserData;
+    position: import('three').Vector3Like;
+    enabled: boolean;
+  }
+  
 
   /** Each collision pair of bodyKeys should involve one npc, and one non-npc e.g. a door sensor */
   interface NpcCollisionResponse {
@@ -84,15 +120,50 @@ declare namespace WW {
   }
 
   type PhysicsBodyKey = (
+    | `circle ${string}` // custom cylindrical collider
+    | `inside ${Geomorph.GmDoorKey}` // door cuboid
     | `npc ${string}` // npc {npcKey}
     | `nearby ${Geomorph.GmDoorKey}` // door neighbourhood
-    | `inside ${Geomorph.GmDoorKey}` // door cuboid
+    | `rect ${string}` // custom cuboid collider (possibly angled)
+  );
+
+  type PhysicsParsedBodyKey = (
+    | ['npc' | 'circle' | 'rect', string]
+    | ['nearby' | 'inside', Geomorph.GmDoorKey]
   );
 
   type PhysicsBodyGeom = (
-    | { type: 'cylinder'; halfHeight: number; radius: number }
-    | { type: 'cuboid'; halfDim: [number, number, number]  }
+    | {
+        /** Induces cylinder placed on floor with wall's height.  */
+        type: 'circle';
+        radius: number;
+      }
+    | {
+        /** Induces cuboid placed on floor with wall's height.  */
+        type: 'rect';
+        /** x-ordinate */
+        width: number;
+        /** z-ordinate */
+        height: number;
+      }
   )
+
+  /**
+   * ℹ️ Height is always fixed.
+   */
+  type PhysicsUserData = BasePhysicsUserData & (
+    | { type: 'npc'; radius: number; }
+    | { type: 'cylinder'; radius: number; }
+    | { type: 'cuboid'; width: number; depth: number; angle: number; }
+  );
+
+  interface BasePhysicsUserData {
+    bodyKey: WW.PhysicsBodyKey;
+    /** This is the numeric hash of `bodyKey` */
+    bodyUid: number;
+    /** Custom UserData */
+    custom?: Record<string, any>;
+  }
 
   //#endregion
 
@@ -100,13 +171,14 @@ declare namespace WW {
    * https://github.com/microsoft/TypeScript/issues/48396
    */
   interface WorkerGeneric<Receive = any, Send = any, SendError = Send>
-    extends EventTarget,
-      AbstractWorker {
+    extends Omit<EventTarget, 'addEventListener' | 'removeEventListener'>,
+    Omit<AbstractWorker, 'addEventListener'> {
     onmessage: ((this: Worker, ev: MessageEvent<Send>) => any) | null;
     onmessageerror: ((this: Worker, ev: MessageEvent<SendError>) => any) | null;
     postMessage(message: Receive, transfer: Transferable[]): void;
     postMessage(message: Receive, options?: StructuredSerializeOptions): void;
-    addEventListener(event: "message", handler: (message: MessageEvent<Send>) => void);
+    addEventListener(event: "message", handler: (message: MessageEvent<Send>) => void): void;
+    removeEventListener(event: "message", handler: (message: MessageEvent<Send>) => void): void;
     terminate(): void;
     // ...
   }

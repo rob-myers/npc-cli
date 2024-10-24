@@ -72,15 +72,27 @@ export async function* log({ api, args, datum }) {
  */
 export async function* map(ctxt) {
   let { api, args, datum } = ctxt;
-  const baseSelector = api.parseFnOrStr(args[0]);
-  const func = api.generateSelector(baseSelector, args.slice(1).map(api.parseJsArg));
+  const { operands, opts } = api.getOpts(args, { boolean: ["forever"] });
+
+  const baseSelector = api.parseFnOrStr(operands[0]);
+  const func = api.generateSelector(baseSelector, operands.slice(1).map(api.parseJsArg));
   // fix e.g. `expr "new Set([1, 2, 3])" | map Array.from`
   const nativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
+  let count = 0;
 
-  while ((datum = await api.read(true)) !== api.eof)
-    yield api.isDataChunk(datum)
-      ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt)))
-      : func(datum, ...nativeCode ? [] : [ctxt]);
+  while ((datum = await api.read(true)) !== api.eof) {
+    try {
+      yield api.isDataChunk(datum)
+        ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++)))
+        // : func(datum, ...nativeCode ? [] : [ctxt]);
+        : nativeCode ? func(datum) : func(datum, ctxt, count++)
+      ;
+    } catch (e) {
+      if (opts.forever !== true) {
+        throw e;
+      }
+    }
+  }
 }
 
 /**
@@ -151,14 +163,13 @@ export async function* sponge({ api, datum }) {
 export async function* take({ api, args, datum }) {
   try {
     let remainder = Number(args[0] || Number.POSITIVE_INFINITY);
-    while (remainder-- > 0 && (datum = await api.read(true)) !== api.eof) {
-      if (api.isDataChunk(datum)) {
-        const items = datum.items.slice(0, remainder + 1);
-        remainder -= items.length - 1;
-        yield api.dataChunk(items);
-      } else {
-        yield datum;
-      }
+    // 🔔 cannot support chunks if want pattern:
+    // seq 5 | while take 1 >foo; do foo; done
+    while (remainder-- > 0 && (datum = await api.read(false)) !== api.eof) {
+      yield datum;
+    }
+    if (remainder >= 0) {
+      throw api.getShError("", 1);
     }
   } catch (e) {
     throw e ?? api.getKillError();

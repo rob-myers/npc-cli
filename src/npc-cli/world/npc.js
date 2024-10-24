@@ -1,48 +1,104 @@
 import * as THREE from 'three';
 import { SkeletonUtils } from 'three-stdlib';
-import { dampLookAt } from "maath/easing";
+import { damp, dampAngle } from "maath/easing";
 
-import { defaultAgentUpdateFlags, glbFadeIn, glbFadeOut, glbMeta, showLastNavPath } from '../service/const';
+import { Vect } from '../geom';
+import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
 import { info, warn } from '../service/generic';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, textureLoader } from '../service/three';
+import { geom } from '../service/geom';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
-// import * as glsl from '../service/glsl';
+import { cmUvService } from "../service/uv";
 
 export class Npc {
 
-  /** @type {string} User specified e.g. `rob` */ key;
-  /** @type {import('./World').State} World API */ w;
-  /** @type {NPC.NPCDef} Initial definition */ def;
-  /** @type {number} When we (re)spawned */ epochMs;
-  /** @type {number} Physics body identifier i.e. `hashText(key)` */ bodyUid;
+  /** @type {string} User specified e.g. `rob` */
+  key;
+  /** @type {import('./World').State} World API */
+  w;
+  /** @type {NPC.NPCDef} Initial definition */
+  def;
+  /** @type {number} When we (re)spawned */
+  epochMs;
+  /** @type {number} Physics body identifier i.e. `hashText(key)` */
+  bodyUid;
   
-  group = emptyGroup;
-  map = /** @type {import('@react-three/fiber').ObjectMap} */ ({});
-  animMap = /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({});
+  /** Model */
+  m = {
+    animations: /** @type {THREE.AnimationClip[]} */ ([]),
+    /** Root bones */
+    bones: /** @type {THREE.Bone[]} */ ([]),
+    /** Root group available on mount */
+    group: emptyGroup,
+    /** Mounted material (initially THREE.MeshPhysicalMaterial via GLTF) */
+    material: /** @type {THREE.ShaderMaterial} */ ({}),
+    /** Mounted mesh */
+    mesh: /** @type {THREE.SkinnedMesh} */ ({}),
+    quad: /** @type {import('../service/uv').CuboidManQuads} */ ({}),
+    toAct: /** @type {Record<NPC.AnimKey, THREE.AnimationAction>} */ ({}),
+    scale: 1,
+  }
+  
   mixer = emptyAnimationMixer;
+  /** Shortcut to `this.m.group.position` */
+  position = tmpVectThree1;
 
   /** State */
   s = {
-    cancels: 0,
     act: /** @type {NPC.AnimKey} */ ('Idle'),
-    lookAt: /** @type {null | THREE.Vector3} */ (null),
+    cancels: 0,
+    doMeta: /** @type {null | Geom.Meta} */ (null),
+    faceId: /** @type {null | NPC.UvQuadId} */ (null),
+    fadeSecs: 0.3,
+    iconId: /** @type {null | NPC.UvQuadId} */ (null),
+    label: /** @type {null | string} */ (null),
+    /** Desired look angle (rotation.y) */
+    lookAngleDst: /** @type {null | number} */ (null),
     /** Is this npc moving? */
     moving: false,
+    opacity: 1,
+    /** Desired opacity */
+    opacityDst: /** @type {null | number} */ (null),
+    /** 🚧 unused */
     paused: false,
-    rejectMove: emptyReject,
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
+    lookSecs: 0.3,
+    selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
+    showSelector: false,
   };
-
+  
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
-  agentRadius = helper.defaults.radius;
-
+  
   lastLookAt = new THREE.Vector3();
   lastTarget = new THREE.Vector3();
   lastCorner = new THREE.Vector3();
+  
+  resolve = {
+    fade: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+    move: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+    spawn: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+    turn: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+  };
+
+  reject = {
+    fade: /** @type {undefined | ((error: any) => void)} */ (undefined),
+    move: /** @type {undefined | ((error: any) => void)} */ (undefined),
+    // spawn: /** @type {undefined | ((error: any) => void)} */ (undefined),
+    turn: /** @type {undefined | ((error: any) => void)} */ (undefined),
+  };
+
+  /** Shortcut */
+  get baseTexture() {
+    return this.w.npc.tex[this.def.classKey];
+  }
+  /** Shortcut */
+  get labelTexture() {
+    return this.w.npc.tex.labels;
+  }
 
   /**
    * @param {NPC.NPCDef} def
@@ -55,109 +111,247 @@ export class Npc {
     this.w = w;
     this.bodyUid = addBodyKeyUidRelation(npcToBodyKey(def.key), w.physics)
   }
+
   attachAgent() {
-    return this.agent ??= this.w.crowd.addAgent(this.group.position, {
+    return this.agent ??= this.w.crowd.addAgent(this.position, {
       ...crowdAgentParams,
       maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed
     });
   }
+
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
-
-    const cancelCount = ++this.s.cancels;
     this.s.paused = false;
 
-    await Promise.all([
-      this.waitUntilStopped(),
-      this.s.rejectMove(`${'cancel'}: cancelled move`),
-    ]);
-
-    if (cancelCount !== this.s.cancels) {
-      throw Error(`${'cancel'}: cancel was cancelled`);
-    }
+    this.reject.fade?.(`${'cancel'}: cancelled fade`);
+    this.reject.move?.(`${'cancel'}: cancelled move`);
+    this.reject.turn?.(`${'cancel'}: cancelled turn`);
 
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
-  /**
-   * 🚧 remove async once skin sprite-sheet available
-   * @param {NPC.SkinKey} skinKey
-   */
-  async changeSkin(skinKey) {
-    this.def.skinKey = skinKey;
-    const skinnedMesh = /** @type {THREE.SkinnedMesh} */ (this.map.nodes[glbMeta.skinnedMeshName]);
-    const clonedMaterial = /** @type {THREE.MeshPhysicalMaterial} */ (skinnedMesh.material).clone();
-    // const clonedMaterial = new THREE.MeshBasicMaterial();
-    // 🚧 convert MeshBasicMaterial to ShaderMaterial
-    // const clonedMaterial = new THREE.ShaderMaterial({
-    //   vertexShader: THREE.ShaderLib.basic.vertexShader,
-    //   fragmentShader: THREE.ShaderLib.basic.fragmentShader,
-    //   uniforms: THREE.UniformsUtils.clone(THREE.ShaderLib.basic.uniforms),
-    //   defines: { USE_SKINNING: '', USE_MAP: '',  USE_UVS: '' },
-    // });
 
-    await textureLoader.loadAsync(`/assets/3d/minecraft-skins/${skinKey}`).then((tex) => {
-      tex.flipY = false;
-      tex.wrapS = tex.wrapT = 1000;
-      tex.colorSpace = "srgb";
-      tex.minFilter = 1004;
-      tex.magFilter = 1003;
-      clonedMaterial.map = tex;
-      // clonedMaterial.uniforms.map.value = tex;
-      // clonedMaterial.uniformsNeedUpdate = true;
-      skinnedMesh.material = clonedMaterial;
-    });
+  /**
+   * Assume any of these preconditions:
+   * - `point.meta.door === true` (point on a door)
+   * - `point.meta.do === true` (point is a "do point")
+   * - `point.meta.nav === true && !!npc.doMeta` (point navigable, npc at a "do point")
+   * 
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {object} opts
+   * @param {any[]} [opts.extraParams] // 🚧 clarify
+   */
+  async do(point, opts = {}) {
+    if (!Vect.isVectJson(point)) {
+      throw Error('point expected');
+    }
+    if (!point.meta) {
+      throw Error('point.meta expected');
+    }
+
+    // 🚧 door switch instead of door?
+    const gmDoorId = helper.extractGmDoorId(point.meta);
+    if (point.meta.door === true && gmDoorId !== null) {
+      /** `undefined` -> toggle, `true` -> open, `false` -> close */
+      const extraParam = opts.extraParams?.[0] === undefined ? undefined : !!opts.extraParams[0];
+      const open = extraParam === true;
+      const close = extraParam === false;
+      const wasOpen = this.w.door.byGmId[gmDoorId.gmId][gmDoorId.doorId].open;
+      const isOpen = this.w.e.toggleDoor(gmDoorId.gdKey,{ npcKey: this.key, close, open });
+      if (close) {
+        if (isOpen) throw Error('cannot close door');
+      } else if (open) {
+        if (!isOpen) throw Error('cannot open door');
+      } else {
+        if (wasOpen === isOpen) throw Error('cannot toggle door');
+      }
+      return;
+    }
+
+    // point.meta.do, or (point.meta.nav && npc.doMeta)
+    
+    const srcNav = this.w.npc.isPointInNavmesh(this.getPoint());
+    if (point.meta.do === true) {
+      if (srcNav === true) {// nav -> do point
+        await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
+      } else {// off nav -> do point
+        await this.offMeshDo(point);
+      }
+      return;
+    }
+
+    if (point.meta.nav === true && this.s.doMeta !== null) {
+      if (srcNav === true) {
+        this.s.doMeta = null;
+        await this.moveTo(point);
+      // } else if (this.w.npc.canSee(this.getPosition(), point, this.getInteractRadius())) {
+      } else if (true) {
+        await this.fadeSpawn(point);
+      } else {
+        throw Error('cannot reach navigable point')
+      }
+      return;
+    }
+
+    // NOOP
   }
+
+  /**
+   * @param {number} [opacityDst] 
+   * @param {number} [ms] 
+   */
+  async fade(opacityDst = 0.2, ms = 300) {
+    if (!Number.isFinite(opacityDst)) {
+      throw new Error(`${'fade'}: 1st arg must be numeric`);
+    }
+    this.s.opacityDst = opacityDst;
+    this.s.fadeSecs = ms / 1000;
+    
+    try {
+      await new Promise((resolve, reject) => {
+        this.resolve.fade = resolve;
+        this.reject.fade = reject;
+      });
+    } catch (e) {
+      this.s.opacityDst = null;
+      throw e;
+    }
+  }
+
+  /**
+   * Fade out, spawn, then fade in.
+   * - `spawn` sets `npc.doMeta` when `meta.do === true`
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {object} opts
+   * @param {Geom.Meta} [opts.meta]
+   * @param {boolean} [opts.agent]
+   * @param {number} [opts.angle]
+   * @param {NPC.ClassKey} [opts.classKey]
+   * @param {boolean} [opts.requireNav]
+   */
+  async fadeSpawn(point, opts = {}) {
+    try {
+      const meta = opts.meta ?? point.meta ?? {};
+      point.meta ??= meta; // 🚧 justify
+      await this.fade(0, 300);
+
+      const currPoint = this.getPoint();
+      const dx = point.x - currPoint.x;
+      const dy = point.y - currPoint.y;
+
+      await this.w.npc.spawn({
+        agent: opts.agent,
+        // -dy because "ccw east" relative to (+x,-z)
+        angle: opts.angle ?? (dx === 0 && dy === 0 ? undefined : Math.atan2(-dy, dx)),
+        classKey: opts.classKey,
+        meta: opts.meta,
+        npcKey: this.key,
+        point,
+        requireNav: opts.requireNav,
+      });
+    } finally {
+      await this.fade(1, 300);
+    }
+  }
+
+  forceUpdate() {
+    this.epochMs = Date.now();
+    this.w.npc.update();
+  }
+
+  /**
+   * ccw from east convention
+   */
   getAngle() {// Assume only rotated about y axis
-    return this.group.rotation.y;
+    return geom.radRange(Math.PI/2 - this.m.group.rotation.y);
   }
+
+  /**
+   * @param {number} ccwEastAngle ccw from east (standard mathematical convention)
+   * @returns {number} respective value of `rotation.y` taking initial facing angle into account
+   * - euler y rotation has same sense/sign as "ccw from east"
+   * - +pi/2 because character initially facing along +z
+   */
+  getEulerAngle(ccwEastAngle) {
+    return Math.PI/2 + ccwEastAngle;
+  }
+
+  getInteractRadius() {
+    return defaultNpcInteractRadius;
+  }
+
   /** @returns {Geom.VectJson} */
   getPoint() {
-    const { x, z: y } = this.group.position;
+    const { x, z: y } = this.position;
     return { x, y };
   }
+
   getPosition() {
-    return this.group.position;
+    return this.position;
   }
+
   getRadius() {
     return helper.defaults.radius;
   }
+
   getMaxSpeed() {
     return this.s.run === true ? this.def.runSpeed : this.def.walkSpeed;
   }
+
   /**
+   * Initialization we can do before mounting
    * @param {import('three-stdlib').GLTF & import('@react-three/fiber').ObjectMap} gltf
    */
-  initialize(gltf) {
-    const scale = glbMeta.scale;
-    this.group = /** @type {THREE.Group} */ (SkeletonUtils.clone(gltf.scene));
-    this.group.scale.set(scale, scale, scale);
+  initialize({ scene, animations }) {
+    const { m } = this;
+    const meta = npcClassToMeta[this.def.classKey];
+    const clonedRoot = /** @type {THREE.Group} */ (SkeletonUtils.clone(scene));
+    const objectLookup = buildObjectLookup(clonedRoot);
 
-    this.mixer = new THREE.AnimationMixer(this.group);
+    m.animations = animations;
+    // cloned bones
+    m.bones = getParentBones(Object.values(objectLookup.nodes));
+    // cloned mesh (overridden on mount)
+    m.mesh = /** @type {THREE.SkinnedMesh} */ (objectLookup.nodes[meta.meshName]);
+    // overridden on mount
+    m.material = /** @type {Npc['m']['material']} */ (m.mesh.material);
+    m.mesh.userData.npcKey = this.key; // To decode pointer events
 
-    this.animMap = gltf.animations.reduce((agg, a) => {
-      if (helper.isAnimKey(a.name)) {
-        agg[a.name] = this.mixer.clipAction(a);
-      } else {
-        warn(`ignored unexpected animation: ${a.name}`);
-      }
-      return agg;
-    }, /** @type {typeof this['animMap']} */ ({}));
-
-    this.map = buildObjectLookup(this.group);
+    m.mesh.updateMatrixWorld();
+    m.mesh.computeBoundingBox();
+    m.mesh.computeBoundingSphere();
     
-    // Mutate userData to decode pointer events
-    const skinnedMesh = this.map.nodes[glbMeta.skinnedMeshName];
-    skinnedMesh.userData.npcKey = this.key;
-
-    // this.changeSkin('scientist-dabeyt--with-arms.png');
-    this.changeSkin(this.def.skinKey);
-    // this.setGmRoomId(api.gmGraph.findRoomContaining(this.def.position, true));
+    const npcClassKey = this.def.classKey;
+    m.scale = npcClassToMeta[npcClassKey].scale;
+    m.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
+    // ℹ️ see w.npc.spawn for more initialization
   }
+
   /**
-   * @param {THREE.Vector3Like} dst
+   * @param {number} dstAngle radians (ccw from east)
+   * @param {number} ms
+   */
+  async look(dstAngle, ms = 300) {
+    if (!Number.isFinite(dstAngle)) {
+      throw new Error(`${'look'}: 1st arg must be numeric`);
+    }
+    this.s.lookAngleDst = this.getEulerAngle(dstAngle);
+    this.s.lookSecs = ms / 1000;
+
+    try {
+      await new Promise((resolve, reject) => {
+        this.resolve.turn = resolve;
+        this.reject.turn = reject;
+      });
+    } catch (e) {
+      this.s.lookAngleDst = null;
+      throw e;
+    }
+  }
+
+  /**
+   * @param {Geom.VectJson} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
-   * @param {() => void} [opts.onStart]
    * A callback to invoke after npc has started walking in crowd
    */
   async moveTo(dst, opts = {}) {
@@ -166,7 +360,7 @@ export class Npc {
       throw new Error(`${this.key}: npc lacks agent`);
     }
 
-    const closest = this.w.npc.getClosestNavigable(dst, 0.15);
+    const closest = this.w.npc.getClosestNavigable(toV3(dst));
     if (closest === null) {
       throw new Error(`${this.key}: not navigable: ${JSON.stringify(dst)}`);
     }
@@ -177,17 +371,15 @@ export class Npc {
     }
 
     const position = this.getPosition();
-    if (position.distanceTo(closest) < 0.25) {
+    if (position.distanceTo(closest) < 0.1) {
       return;
     }
 
     this.s.moving = true;
-    this.mixer.timeScale = 1;
+    this.s.lookSecs = 0.2;
+    // this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     this.agent.requestMoveTarget(closest);
-    if (opts.onStart !== undefined) {
-      this.w.oneTimeTicks.push(opts.onStart);
-    }
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
     if (this.s.act !== nextAct) {
@@ -195,28 +387,154 @@ export class Npc {
     }
     
     try {
-      await new Promise((resolve, reject) => {
-        this.s.rejectMove = reject; // permit cancel
-        this.waitUntilStopped().then(resolve).catch(resolve);
-      });
+      this.w.events.next({ key: 'started-moving', npcKey: this.key });
+      await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
     } finally {
       this.s.moving = false;
     }
   }
-  /** @param {number} deltaMs  */
-  onTick(deltaMs) {
+
+  /**
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   */
+  async offMeshDo(point) {
+    const src = Vect.from(this.getPoint());
+    const meta = point.meta ?? {};
+
+    if (meta.do !== true && meta.nav !== true) {
+      throw Error('not doable nor navigable');
+    }
+
+    if (
+      src.distanceTo(point) > this.getInteractRadius()
+      || !this.w.gmGraph.inSameRoom(src, point)
+      // || !this.w.npc.canSee(src, point, this.getInteractRadius())
+    ) {
+      throw Error('too far away');
+    }
+
+    await this.fadeSpawn(
+      {// non-navigable uses doPoint:
+        ...point,
+        ...meta.nav !== true && /** @type {Geom.VectJson} */ (meta.doPoint)
+      },
+      {
+        angle: meta.nav === true && meta.do !== true
+          // use direction src --> point if entering navmesh
+          ? src.equals(point)
+            ? undefined
+            : src.angleTo(point)
+          // use meta.orient if staying off-mesh
+          : typeof meta.orient === 'number'
+            ? Math.PI/2 - (meta.orient * (Math.PI / 180)) // convert to "ccw from east"
+            : undefined,
+        // fadeOutMs: opts.fadeOutMs,
+        meta,
+      },
+    );    
+  }
+
+  /**
+   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {object} opts
+   * @param {boolean} [opts.preferSpawn]
+   */
+  async onMeshDo(point, opts = {}) {
+    const src = this.getPoint();
+    const meta = point.meta ?? {};
+
+    /** 🚧 Actual "do point" usually differs from clicked point */
+    const doPoint = /** @type {Geom.VectJson} */ (meta.doPoint) ?? point;
+
+    if (meta.do !== true) {
+      throw Error('not doable');
+    }
+    if (!this.w.gmGraph.inSameRoom(src, doPoint)) {
+      throw Error('too far away');
+    }
+
+    /**
+     * `meta.orient` (degrees) uses "cw from north",
+     * so convert to more-standard "ccw from east"
+     */
+    const dstRadians = typeof meta.orient === 'number'
+      ? Math.PI/2 - (meta.orient * (Math.PI / 180))
+      : undefined
+    ;
+    
+    // ℹ️ could do visibility check (raycast)
+    if (!opts.preferSpawn && this.w.npc.isPointInNavmesh(doPoint) === true) {
+      /**
+       * Walk, [Turn], Do
+       */
+      await this.moveTo(doPoint);
+      if (typeof dstRadians === 'number') {
+        await this.look(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
+      }
+      // this.startAnimation('Idle');
+      this.startAnimation(meta);
+      this.doMeta = meta.do === true ? meta : null;
+    } else {
+      // sets `this.s.doMeta` because `meta.do === true`
+      await this.fadeSpawn(doPoint, {
+        angle: dstRadians,
+        requireNav: false,
+        meta,
+        // fadeOutMs: opts.fadeOutMs,
+      });
+    }
+  }
+
+  /**
+   * An arrow function avoids using an inline-ref in <NPC>. However,
+   * `this.onMount` changes on HMR so we rely on idempotence nonetheless.
+   * @param {THREE.Group | null} group 
+   */
+  onMount = (group) => {
+    if (group !== null) {
+      this.m.group = group;
+      // Setup shortcut
+      this.position = group.position;
+      // Resume `w.npc.spawn`
+      this.resolve.spawn?.();
+    }
+  }
+
+  /**
+   * @param {number} deltaMs
+   * @param {number[]} positions
+   * Format `[..., bodyUid_i, x_i, y_i, z_i, ...]` for physics.worker
+   */
+  onTick(deltaMs, positions) {
     this.mixer.update(deltaMs);
 
     if (this.agent !== null) {
       this.onTickAgent(deltaMs, this.agent);
     }
 
-    if (this.s.lookAt !== null) {
-      dampLookAt(this.group, this.s.lookAt, 0.25, deltaMs);
+    if (this.s.lookAngleDst !== null) {
+      if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngleDst, this.s.lookSecs, deltaMs, Infinity, undefined, 0.01) === false) {
+        this.s.lookAngleDst = null;
+        this.resolve.turn?.();
+      }
+    }
+
+    if (this.s.moving === true) {
+      const { x, y, z } = this.position;
+      positions.push(this.bodyUid, x, y, z);
+    }
+
+    if (this.s.opacityDst !== null) {
+      if (damp(this.s, 'opacity', this.s.opacityDst, this.s.fadeSecs, deltaMs, undefined, undefined, 0.1) === false) {
+        this.s.opacityDst = null;
+        this.resolve.fade?.();
+      }
+      this.setUniform('opacity', this.s.opacity);
     }
   }
+
   /**
    * @param {number} deltaMs
    * @param {import('@recast-navigation/core').CrowdAgent} agent
@@ -226,10 +544,10 @@ export class Npc {
     const vel = agent.velocity();
     const speed = Math.sqrt(vel.x ** 2 + vel.z ** 2);
     
-    this.group.position.copy(pos);
+    this.position.copy(pos);
 
     if (speed > 0.2) {
-      this.s.lookAt = this.lastLookAt.copy(pos).add(vel);
+      this.s.lookAngleDst = Math.PI/2 - Math.atan2(vel.z, vel.x);
     } 
 
     if (this.s.target === null) {
@@ -245,7 +563,7 @@ export class Npc {
       this.lastCorner.copy(nextCorner);
     }
 
-    this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
+    // this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
     const distance = this.s.target.distanceTo(pos);
     // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
 
@@ -258,37 +576,153 @@ export class Npc {
       return;
     }
     
-    if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
-      // Turn off obstacle avoidance to avoid deceleration near nav border
-      // 🤔 might not need for hyper casual
-      agent.updateParameters({ updateFlags: agent.updateFlags & ~2 });
-    }
+    // if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
+    //   // Turn off obstacle avoidance to avoid deceleration near nav border
+    //   // 🤔 might not need for hyper casual
+    //   agent.updateParameters({ updateFlags: agent.updateFlags & ~2 });
+    // }
 
-    if (distance < 2 * this.agentRadius) {// undo speed scale
-      // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-      agent.updateParameters({
-        maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
-      });
-    }
+    // if (distance < 2 * this.agentRadius) {// undo speed scale
+    //   // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
+    //   agent.updateParameters({
+    //     maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
+    //   });
+    // }
   }
+
   removeAgent() {
     if (this.agent !== null) {
       this.w.crowd.removeAgent(this.agent.agentIndex);
       this.agent = null;
     }
   }
+
+  setupMixer() {
+    this.mixer = new THREE.AnimationMixer(this.m.group);
+
+    this.m.toAct = this.m.animations.reduce((agg, a) => helper.isAnimKey(a.name)
+      ? (agg[a.name] = this.mixer.clipAction(a), agg)
+      : (warn(`ignored unexpected animation: ${a.name}`), agg)
+    , /** @type {typeof this['m']['toAct']} */ ({}));
+  }
+
+  /**
+   * @param {null | NPC.UvQuadId} faceId 
+   */
+  setFace(faceId) {
+    this.s.faceId = faceId;
+    cmUvService.updateFaceQuad(this);
+    // directly change uniform sans render
+    const { texId, uvs } = this.m.quad.face;
+    this.setUniform('uFaceTexId', texId);
+    this.setUniform('uFaceUv', uvs);
+    this.updateUniforms();
+  }
+
+  /**
+   * @param {null | NPC.UvQuadId} iconId 
+   */
+  setIcon(iconId) {
+    this.s.iconId = iconId;
+    cmUvService.updateIconQuad(this);
+    // directly change uniform sans render
+    const { texId, uvs } = this.m.quad.icon;
+    this.setUniform('uIconTexId', texId);
+    this.setUniform('uIconUv', uvs);
+    this.updateUniforms();
+  }
+
+  /**
+   * Updates label sprite-sheet if necessary.
+   * @param {string | null} label
+   */
+  setLabel(label) {
+    this.s.label = label;
+
+    if (label === null) {
+      cmUvService.updateLabelQuad(this);
+    } else if (this.w.npc.updateLabels(label) === false) {
+      // if updateLabels noop, need to apply update
+      cmUvService.updateLabelQuad(this);
+    }
+
+    // may touch every npc via sprite-sheet change
+    this.forceUpdate();
+  }
+
   /** @param {THREE.Vector3Like} dst  */
   setPosition(dst) {
-    this.group.position.copy(dst);
+    this.position.copy(dst);
   }
-  /** @param {NPC.AnimKey} act */
-  startAnimation(act) {
-    const anim = this.animMap[this.s.act];
-    const next = this.animMap[act];
-    anim.fadeOut(glbFadeOut[this.s.act][act]);
-    next.reset().fadeIn(glbFadeIn[this.s.act][act]).play();
-    this.s.act = act;
+
+  /**
+   * @param {number} r in `[0, 1]`
+   * @param {number} g in `[0, 1]`
+   * @param {number} b in `[0, 1]`
+   */
+  setSelectorRgb(r, g, b) {
+    /** @type {[number, number, number]} */
+    const selectorColor = [Number(r) || 0, Number(g) || 0, Number(b) || 0];
+    // directly change uniform sans render
+    this.setUniform('selectorColor', selectorColor);
+    this.updateUniforms();
+    // remember for next render
+    this.s.selectorColor = selectorColor;
   }
+
+  /**
+   * 🚧 refine type
+   * @param {'opacity' | 'uFaceTexId' | 'uFaceUv' | 'uIconTexId' | 'uIconUv' | 'selectorColor' | 'showSelector'} name 
+   * @param {number | THREE.Vector2[] | [number, number, number] | boolean} value 
+   */
+  setUniform(name, value) {
+    this.m.material.uniforms[name].value = value; 
+  }
+
+  /**
+   * @param {boolean} shouldShow
+   */
+  showSelector(shouldShow = !this.s.showSelector) {
+    shouldShow = Boolean(shouldShow);
+    this.s.showSelector = shouldShow;
+    // directly change uniform sans render
+    this.setUniform('showSelector', this.s.showSelector);
+    this.updateUniforms();
+  }
+
+  /**
+   * Start specific animation, or animation induced by meta.
+   * Returns height to raise off ground e.g. for beds. 
+   * @param {NPC.AnimKey | Geom.Meta} input
+   * @returns {number}
+   */
+  startAnimation(input) {
+    if (typeof input === 'string') {
+      const curr = this.m.toAct[this.s.act];
+      const next = this.m.toAct[input];
+      curr.fadeOut(glbFadeOut[this.s.act][input]);
+      next.reset().fadeIn(glbFadeIn[this.s.act][input]).play();
+      this.mixer.timeScale = npcClassToMeta[this.def.classKey].timeScale[input] ?? 1;
+      this.s.act = input;
+      return 0;
+    } else { // input is Geom.Meta
+      switch (true) {
+        case input.sit:
+          this.startAnimation('Sit');
+          return typeof input.y === 'number' ? input.y : 0;
+        case input.stand:
+          this.startAnimation('Idle');
+          return 0;
+        case input.lie:
+          this.startAnimation('Lie');
+          return typeof input.y === 'number' ? input.y : 0;
+        default:
+          this.startAnimation('Idle');
+          return 0;
+      }
+    }
+  }
+
   stopMoving() {
     if (this.agent == null) {
       return;
@@ -296,7 +730,7 @@ export class Npc {
 
     const position = this.agent.position();
     this.s.target = null;
-    this.s.lookAt = null;
+    this.s.lookAngleDst = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
@@ -305,11 +739,12 @@ export class Npc {
     this.startAnimation('Idle');
     // suppress final movement
     this.agent.teleport(position);
-    // keep target, so moves out of the way of other npcs
+    // 🔔 keep target, so moves out of the way of other npcs
     this.agent.requestMoveTarget(position);
 
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
   }
+
   toJSON() {
     return {
       key: this.key,
@@ -318,48 +753,28 @@ export class Npc {
       s: this.s,
     };
   }
+
+  updateUniforms() {
+    this.m.material.uniformsNeedUpdate = true;
+  }
+
   async waitUntilStopped() {
-    if (this.s.moving === false) {
-      return;
-    }
-    await new Promise((resolve, reject) => {
-      const sub = this.w.events.pipe(
-        this.w.lib.filter(e => 'npcKey' in e && e.npcKey === this.key)
-      ).subscribe(e => {
-        if (e.key === 'stopped-moving') {
-          sub.unsubscribe();
-          resolve(null);
-        } else if (e.key === 'removed-npc') {
-          sub.unsubscribe();
-          reject(`${'waitUntilStopped'}: npc was removed`)
-        }
-      });
+    this.s.moving === true && await new Promise((resolve, reject) => {
+      this.resolve.move = resolve; // see "stopped-moving"
+      this.reject.move = reject; // see w.npc.remove
     });
   }
 }
 
 /**
  * Creates a new NPC loaded with previous one's data.
+ * ℹ️ We simply overwrite non-methods
  * @param {NPC.NPC} npc 
  * @returns {NPC.NPC}
  */
 export function hotModuleReloadNpc(npc) {
-  const { def, epochMs, group, s, map, animMap, mixer, agent, lastLookAt, lastTarget, lastCorner } = npc;
-  agent?.updateParameters({ maxSpeed: agent.maxSpeed });
-  // npc.changeSkin('robot-vaccino.png'); // 🔔 Skin debug
-  const nextNpc = new Npc(def, npc.w);
-  return Object.assign(nextNpc, /** @type {Partial<Npc>} */ ({
-    epochMs,
-    group,
-    s: Object.assign(nextNpc.s, s),
-    map,
-    animMap,
-    mixer,
-    agent,
-    lastLookAt,
-    lastTarget,
-    lastCorner,
-  }));
+  const nextNpc = new Npc(npc.def, npc.w);
+  return Object.assign(nextNpc, {...npc});
 }
 
 /** @param {any} error */

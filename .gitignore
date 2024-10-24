@@ -6,11 +6,13 @@ src/gatsby-types.d.ts
 
 media/Geomorphs
 media/GeomorphsHighRes
+media/GeomorphsHighRes.zip
 media/CustomTiles
 media/CustomTilesHighRes
 media/Symbols
 media/SymbolsHighRes
 media/Small Craft
+media/unity/*
 
 media/3d/Cycles_Minecraft_Rig BSS Edit V6.5.zip
 media/3d/Cycles_Minecraft_Rig BSS Edit V6.5

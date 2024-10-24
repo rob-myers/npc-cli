@@ -31,11 +31,11 @@
     <title>console--031--1x1.2</title>
   </image>
   <path d="M -3 -3 L 237.5 -2 L 252.244 15.164 L 237.786 57.459 L 215.598 134.964 L 225.858 214.874 L 253.069 283.15 L 238.3 303 L -3 303 L -3 -3 Z" style="fill: rgb(0, 0, 255); fill-opacity: 0.5;">
-    <title>obstacle surface y=0.7</title>
+    <title>obstacle surface table y=0.7</title>
   </path>
   <g style="">
     <title>symbols</title>
-    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 231.056945800781, 74.574150085449)" xlink:href="#symbol-0">
+    <use width="150.01280212402344" height="150.01280212402344" transform="matrix(1, 0, 0, 1, 231.05694580078125, 74.57415008544922)" xlink:href="#symbol-0">
       <title>console--051--0.4x0.6 y=0.4</title>
     </use>
   </g>

@@ -23,10 +23,12 @@ export default function Floor(props) {
     tex: w.floor.tex, // Pass in textures
 
     async draw() {
+      w.menu.measure('floor.draw');
       for (const gmKey of keys(state.tex)) {
         state.drawGmKey(gmKey);
         await pause();
       }
+      w.menu.measure('floor.draw');
     },
     drawGmKey(gmKey) {
       const { ct, tex, canvas } = state.tex[gmKey];
@@ -54,31 +56,41 @@ export default function Floor(props) {
       ct.fillRect(0, 0, canvas.width, canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
+      // cover hull doorway z-fighting (visible from certain angles)
+      gm.hullDoors.forEach(hullDoor => {
+        const poly = hullDoor.computeDoorway(true);
+        const [p, q, r, s] = poly.outline;
+        drawPolygons(ct, poly, ['#000', '#333', 0.025]);
+        ct.strokeStyle = '#777';
+        ct.beginPath(); ct.moveTo(q.x, q.y); ct.lineTo(r.x, r.y); ct.stroke();
+        ct.beginPath(); ct.moveTo(s.x, s.y); ct.lineTo(p.x, p.y); ct.stroke();
+      });
+
       // Walls
       drawPolygons(ct, walls, ['black', null]);
       // // Doors
       // drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
-      const shadowColor = 'rgba(20, 20, 20, 1)'
+      const shadowColor = 'rgba(30, 30, 30, 0.4)'
       const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
       drawPolygons(ct, shadowPolys, [shadowColor, shadowColor]);
 
-      // 🧪 debug decor
-      // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
-      gm.decor.forEach((decor) => {
-        if (decor.type === 'circle') {
-          drawCircle(ct, decor.center, decor.radius, [null, '#009', 0.04]);
-        } else if (decor.type === 'rect') {
-          drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
-        }
-      });
+      // debug decor: moved to <Debug/>
+      // // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+      // gm.decor.forEach((decor) => {
+      //   if (decor.type === 'circle') {
+      //     drawCircle(ct, decor.center, decor.radius, [null, '#009', 0.04]);
+      //   } else if (decor.type === 'rect') {
+      //     drawSimplePoly(ct, decor.points, [null, '#070', 0.04]);
+      //   }
+      // });
 
       // 🧪 debug original geomorph image
       // imageLoader.loadAsync(`/assets/debug/${gmKey}.png`).then((img) => {
-      //   ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
+      //   ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       //   ct.globalAlpha = 0.2;
       //   ct.drawImage(img, 0, 0, img.width, img.height, pngRect.x, pngRect.y, pngRect.width, pngRect.height);
       //   ct.globalAlpha = 1;
@@ -89,7 +101,7 @@ export default function Floor(props) {
       ct.resetTransform();
       tex.needsUpdate = true;
     },
-  }));
+  }), { reset: { gridPattern: false } });
 
   w.floor = state;
 
@@ -109,6 +121,7 @@ export default function Floor(props) {
           geometry={getQuadGeometryXZ('vanilla-xz')}
           scale={[gm.pngRect.width, 1, gm.pngRect.height]}
           position={[gm.pngRect.x, 0, gm.pngRect.y]}
+          renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
         >
           <meshBasicMaterial
             side={THREE.FrontSide}

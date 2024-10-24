@@ -274,16 +274,14 @@ export class ttyXtermClass {
       if (cursor <= 0) {
         return;
       }
-      let delta = -1;
-      const charToDelete = this.input.charAt(this.cursor + delta);
-      if (charToDelete === "\n") {
-        delta = -2;
-      }
 
+      // when deleting a newline, need to delete \r\n 
+      const delta = input.charAt(cursor - 1) === '\n' ? -2 : -1;
       const newInput = input.slice(0, cursor + delta) + input.slice(cursor);
       this.clearInput();
       this.setInput(newInput);
       this.setCursor(cursor + delta);
+      // console.log({ input, cursor, newInput, nextCursor: cursor + delta });
     } else {
       const newInput = input.slice(0, cursor) + input.slice(cursor + 1);
       this.clearInput();
@@ -310,39 +308,31 @@ export class ttyXtermClass {
    * Move cursor forwards/backwards (+1/-1).
    */
   private handleCursorMove(dir: -1 | 1) {
-    this.setCursor(Math.min(this.input.length, Math.max(0, this.cursor + dir)));
+    // Assume newlines always occur as \r\n
+    const clampedCursor = Math.min(this.input.length, Math.max(0, this.cursor + dir));
+    if (dir === 1 && this.input[clampedCursor] === '\r') {
+      this.setCursor(clampedCursor + 1);
+    } else if (dir === -1 && this.input[clampedCursor] === '\n') {
+      this.setCursor(clampedCursor - 1);
+    } else {
+      this.setCursor(clampedCursor);
+    }
   }
 
   private async handleXtermInput(data: string) {
     if (this.readyForInput === false && data !== "\x03") {
       return;
     }
-    if (data.length > 1 && data.includes("\r")) {
-      // Handle pasting of multiple lines
-      const text = data.replace(/[\r\n]+/g, "\n");
-      const lines = text.split("\n");
-      lines[0] = `${this.input}${lines[0]}`;
-      const last = !text.endsWith("\n") && lines.pop();
 
-      try {
-        await this.pasteLines(lines);
-        last &&
-          this.queueCommands([
-            {
-              key: "resolve",
-              resolve: () => {
-                // setTimeout so xterm.println has chance to print (e.g. `echo foo\n`)
-                setTimeout(() => {
-                  // Set as pending input but don't send
-                  this.clearInput();
-                  this.setInput(last);
-                });
-              },
-            },
-          ]);
-      } catch {
-        /** NOOP */
-      }
+    if (data.length > 1 && data.includes("\r")) {
+      // ℹ️ Handle multi-line paste
+      // - xterm.js normalizes pasted newlines to be '\r'
+      // - previously we greedily executed upon encountering newline,
+      //   but now we just insert into input
+      const text = data.replace(/\r/g, "\r\n");
+      const { input, cursor } = this;
+      this.clearInput();
+      this.setInput(`${input.slice(0, cursor)}${text}${input.slice(cursor)}`)
     } else {
       this.handleXtermKeypresses(data);
     }
@@ -421,9 +411,17 @@ export class ttyXtermClass {
     } else if (ord < 32 || ord === 0x7f) {
       // Handle special characters
       switch (data) {
-        case "\r": // Enter
+        case "\r": // Enter i.e. send command
           this.queueCommands([{ key: "newline" }]);
           break;
+        case "\n": {// Ctrl + J i.e. literal newline (readline Ctrl+V, Ctrl+J)
+          const input = this.input;
+          const cursor = this.cursor;
+          this.clearInput();
+          this.setInput(`${input.slice(0, cursor)}\r\n${input.slice(cursor)}`);
+          this.setCursor(cursor + 2);
+          break;
+        }
         case "\x7F": // Backspace
           this.handleCursorErase(true);
           break;
@@ -513,6 +511,8 @@ export class ttyXtermClass {
       const chr = input.charAt(i);
       if (col === 0 && chr === "\n") {
         row++;
+      } else if (chr === "\r") {
+        // Assume newlines always occur as \r\n
       } else if (chr === "\n") {
         col = 0;
         row++;
@@ -631,7 +631,10 @@ export class ttyXtermClass {
     }
   }
 
-  async pasteLines(lines: string[], fromProfile = false) {
+  /**
+   * Paste lines, greedily running them as soon as a newline is encountered.
+   */
+  async pasteAndRunLines(lines: string[], fromProfile = false) {
     // Clear pending input which should now prefix `lines[0]`
     this.clearInput();
     this.xterm.write(this.prompt);
@@ -880,12 +883,16 @@ export class ttyXtermClass {
     this.setCursor(0); // Return to start of input.
     const realNewInput = this.actualLine(newInput);
     this.xterm.write(realNewInput);
+
     /**
-     * Right-edge detection uses {newInput} sans prompt.
-     * Use guard {realNewInput} to avoid case of blank line,
-     * arising from unguarded builtin 'read' when deleting.
+     * If cursor at right-edge and press key it does not move (🤔 why?),
+     * so we force it to jump to next line.
+     * 
+     * Exceptions:
+     * (a) delete 1st character of multiline input.
+     * (b) delete 1st character while TTY connected to process e.g. `map 'x => 2 ** x'`
      */
-    if (realNewInput && this.inputEndsAtEdge(newInput)) {
+    if (!(realNewInput.endsWith('\n') || !this.promptReady) && this.inputEndsAtEdge(newInput)) {
       this.xterm.write("\r\n");
     }
     this.input = newInput;

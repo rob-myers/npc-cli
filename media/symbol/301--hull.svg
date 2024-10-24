@@ -96,7 +96,7 @@
       </defs>
     </pattern>
     <symbol id="symbol-7" viewBox="0 0 300 300">
-      <title>iris-valves--005--1x1</title>
+      <title>iris-valves--006--1x1</title>
       <rect width="300" height="300" style="stroke-width: 4px; stroke: rgb(0, 0, 255); transform-origin: 150px 150px; fill: url('#pattern-2');">
         <title>iris-valves--005--1x1</title>
       </rect>
@@ -157,16 +157,16 @@
       <title>console--031--1x1.2</title>
     </use>
     <use width="300" height="300" transform="matrix(0, -1, -1, 0, 0, 1500)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
-      <title>iris-valves--005--1x1</title>
+      <title>iris-valves--006--1x1</title>
     </use>
     <use width="300" height="300" transform="matrix(-1, 0, 0, 1, 1500, 2700)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
-      <title>iris-valves--005--1x1</title>
+      <title>iris-valves--006--1x1</title>
     </use>
     <use width="300" height="300" transform="matrix(-1, 0, 0, 1, 4500, 2699.999755859375)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
-      <title>iris-valves--005--1x1</title>
+      <title>iris-valves--006--1x1</title>
     </use>
     <use width="300" height="300" transform="matrix(0, 1, -1, 0, 5700, 1200.0001220703125)" style="transform-origin: 150px 150px;" xlink:href="#symbol-7">
-      <title>iris-valves--005--1x1</title>
+      <title>iris-valves--006--1x1</title>
     </use>
   </g>
   <path d="M 2123.27 591.485 L 2189.085 533.805 L 2277.51 466.135 L 2371.545 407.795 L 2467.505 356.8 L 2568.75 313.4 L 2672.56 282.72 L 2784.675 258.115 L 2891.59 246.59 L 3000 238.96 L 3108.315 244.155 L 3217.465 257.48 L 3323.625 283.85 L 3430.035 315.38 L 3529.985 354.67 L 3630.93 407.97 L 3721.455 466.64 L 3807.825 533.22 L 3872.73 591.52 L 3889.095 611.855 L 3846.715 652.23 L 3832.5 637.245 L 3771.625 579.72 L 3688.09 516.645 L 3600 460.69 L 3506.085 412.4 L 3409.055 371.095 L 3306.92 340.325 L 3208.11 318.48 L 3105 305 L 3000 300 L 2895.665 305.425 L 2789.87 318.5 L 2689.17 342.31 L 2590.15 372.47 L 2492.575 412.66 L 2400 461.295 L 2311.875 518.875 L 2226.915 580.86 L 2146.05 661.65 L 2100 617.15 L 2123.27 591.485 Z" style="stroke: rgb(0, 0, 0); fill-opacity: 0.31; fill: rgb(255, 0, 0);">
@@ -175,7 +175,7 @@
   <path d="M 2113.57 587.34 L 2269.24 456.78 L 2460.74 345.91 L 2667.47 270.28 L 2889.09 235.02 L 3105.81 229.98 L 3322.61 270.31 L 3534.22 345.89 L 3725.76 456.78 L 3882.19 587.98 L 3908.4 620.74 L 3860.74 668.4 L 3857.245 665.605 L 3853.75 662.81 L 3828.6 642.68 L 3679.32 518.28 L 3500.79 419.1 L 3302.27 344.66 L 3099.03 305 L 2890.97 305 L 2687.77 344.65 L 2494.34 419.04 L 2315.75 523.23 L 2171.74 642.4 L 2140.4 673.74 L 2080.43 620.43 L 2084.18 616.68 L 2087.93 612.93 L 2113.57 587.34 Z" style="stroke: rgb(0, 0, 0); fill-opacity: 0.31;">
     <title>wall hull _window</title>
   </path>
-  <path d="M -20 -20 L 20 -20 L 20 2980 L 5980 2980 L 5980 -20 L 6020 -20 L 6020 3020 L -20 3020 L -20 -20 Z" style="fill: rgb(255, 0, 0);">
+  <path d="M -19 -20 L 20 -20 L 20 2980 L 5980 2980 L 5980 -20 L 6019 -20 L 6019 3019 L -19 3019 L -19 -20 Z" style="fill: rgb(255, 0, 0);">
     <title>wall hull sans-n--20x10</title>
   </path>
   <path d="M 1792 316.5 L 900 316.5 L 885.5 310.5 L 595.5 20 L -20 20 L -20 -20 L 612 -20 L 908.5 276.5 L 1802.5 276.5 L 1815.5 283.5 L 2123.5 595 L 2095 623.5 L 1792 316.5 Z" style="fill: rgb(255, 0, 0);">

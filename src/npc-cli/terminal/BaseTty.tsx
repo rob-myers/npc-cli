@@ -1,10 +1,12 @@
 import React from 'react';
+import { css, cx } from '@emotion/css';
 import { Terminal as XTermTerminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 // 🔔 debugging "Cannot read properties of undefined" onRequestRedraw
 // import { WebglAddon } from "xterm-addon-webgl";
 import { WebglAddon } from "@xterm/addon-webgl";
 
+import { detectTabPrevNextShortcut } from '../service/generic';
 import { xtermJsTheme } from '../service/const';
 import { stripAnsi } from '../sh/util';
 import { scrollback } from '../sh/io';
@@ -110,7 +112,7 @@ export const BaseTty = React.forwardRef<State, Props>(function BaseTty(props: Pr
   return (
     <div
       ref={state.containerRef}
-      className="xterm-container scrollable"
+      className={cx(xtermContainerCss, "scrollable")}
       onKeyDown={stopKeysPropagating}
     />
   );
@@ -132,5 +134,28 @@ export interface State {
 }
 
 function stopKeysPropagating(e: React.KeyboardEvent) {
+  if (detectTabPrevNextShortcut(e)) {
+    return;
+  }
   e.stopPropagation();
 }
+
+const xtermContainerCss = css`
+  height: inherit;
+  background: black;
+
+  > div {
+    width: 100%;
+  }
+
+  /** Fix xterm-addon-fit when open keyboard on mobile */
+  .xterm-helper-textarea {
+    top: 0 !important;
+  }
+
+  /** This hack avoids <2 col width, where cursor row breaks */
+  min-width: 100px;
+  .xterm-screen {
+    min-width: 100px;
+  }
+`;

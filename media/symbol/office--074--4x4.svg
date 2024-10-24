@@ -2,8 +2,7 @@
 <svg viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:bx="https://boxy-svg.com">
   <defs>
     <bx:grid x="0" y="0" width="300" height="300"/>
-    <pattern id="pattern-6" patternTransform="matrix(1, 0, 0, 1, 974.997528076172, 974.995121002197)" xlink:href="#pattern-0"/>
-    <pattern x="0" y="0" width="75" height="75" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
+    <pattern x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse" viewBox="0 0 300 300" id="pattern-0">
       <title>symbol-rect-pattern</title>
       <g transform="matrix(1.056613922119, 0, 0, 1.056620836258, 8.044093132019, -25.138132095337)">
         <rect width="141.961975" height="18.928265" style="stroke: rgb(0, 0, 0); fill: rgb(0, 255, 0);" y="14.196193" x="-7.586937"/>
@@ -19,22 +18,6 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
-    <pattern id="pattern-4" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -1025.328552246094, 1089.98108291626)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-1" patternTransform="matrix(1, 0, 0, 1, 674.99755859375, 974.9951171875)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-2" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -725.32861328125, 1089.981079101563)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-3" patternTransform="matrix(1, 0, 0, 1, 374.99755859375, 974.9951171875)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-5" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -425.32861328125, 1089.981079101563)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-7" patternTransform="matrix(1, 0, 0, 1, 974.99755859375, 74.9951171875)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-8" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -1025.32861328125, 189.981079101563)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-9" patternTransform="matrix(1, 0, 0, 1, 674.99755859375, 74.9951171875)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-10" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -725.32861328125, 189.981079101563)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-11" patternTransform="matrix(1, 0, 0, 1, 374.99755859375, 74.9951171875)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-12" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -425.32861328125, 189.981079101563)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-13" patternTransform="matrix(1, 0, 0, 1, 74.99755859375, 74.9951171875)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-14" patternTransform="matrix(0.499998033047, 0.000004924002, -0.000004924002, 0.499998003244, -125.32861328125, 189.981079101563)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-15" patternTransform="matrix(1.999992132187, 0.000019696021, -0.000019696028, 1.999991893768, -0.017593383789, -299.998565673828)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-16" patternTransform="matrix(1.000001192093, 0.000009571727, -0.000009571727, 1.000001192093, 44.073413848877, 808.830017089844)" xlink:href="#pattern-0"/>
-    <pattern id="pattern-17" patternTransform="matrix(1.000001192093, 0.000009571979, -0.000009571979, 1.000001192093, -0.00627421774, 827.759643554688)" xlink:href="#pattern-0"/>
     <symbol id="symbol-9" viewBox="0 0 1 1">
       <title>decor-unit-quad</title>
       <rect x="-0.000001" y="-0.000003" width="1" height="1" style="fill-opacity: 0.5; fill: rgb(255, 255, 0);">
@@ -60,63 +43,99 @@
         <bx:grid x="0" y="0" width="300" height="300"/>
       </defs>
     </pattern>
+    <symbol id="symbol-5" viewBox="0 0 150.0118 150.0118">
+      <title>extra--001--fresher--0.5x0.5</title>
+      <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; transform-origin: 75.0042px 75.0041px; fill: url('#pattern-0');">
+        <title>extra--001--fresher--0.5x0.5 y=0.7</title>
+      </rect>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </symbol>
+    <symbol id="symbol-6" viewBox="0 0 150 150">
+      <title>extra--002--fresher--0.5x0.5</title>
+      <rect width="150" height="150" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; transform-origin: 75.0047px 74.9983px; fill: url('#pattern-0');">
+        <title>extra--002--fresher--0.5x0.5</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-1" viewBox="0 0 75 75">
+      <title>extra--003--chair--0.25x0.25</title>
+      <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; transform-origin: 243.882px 1578.28px; fill: url('#pattern-0');">
+        <title>extra--003--chair--0.25x0.25</title>
+      </rect>
+    </symbol>
+    <symbol id="symbol-2" viewBox="0 0 150 300">
+      <title>extra--004--desk--0.5x1</title>
+      <rect width="150" height="300" style="stroke-dasharray : 8; stroke : rgb(255, 0, 255); stroke-width : 4px; alignment-baseline : initial; fill : url('#pattern-0');">
+        <title>extra--004--desk--0.5x1</title>
+      </rect>
+      <defs>
+        <bx:grid x="0" y="0" width="300" height="300"/>
+      </defs>
+    </symbol>
+    <symbol id="symbol-0" viewBox="0 0 300 300" bx:pinned="true">
+      <title>table--012--0.8x0.8</title>
+      <rect width="300" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-0'); alignment-baseline: initial;">
+        <title>table--012--0.8x0.8</title>
+      </rect>
+    </symbol>
   </defs>
   <image width="1220" height="1220" x="-10" y="-10" xlink:href="data:image/png;base64,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">
     <title>office--074--4x4</title>
   </image>
   <g>
     <title>symbols</title>
-    <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-6'); transform-origin: 1125px 1049.99px;" y="900.000004" x="1050.000031">
+    <use width="150" height="300" transform="matrix(1, 0, 0, 1, 1050, 900)" style="transform-origin: 75px 150px;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-4'); transform-origin: -987.824px 1052.48px;" y="1014.983402" x="-1025.329712" transform="matrix(-1, 0, 0, 1, 1975.647949218753, 0)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 950.329711914063, 1014.9833984375)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-1'); transform-origin: 825px 1049.99px;" y="900" x="750">
+    </use>
+    <use width="150" height="300" transform="matrix(1, 0, 0, 1, 750, 900)" style="transform-origin: 75px 150px;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-2'); transform-origin: -687.824px 1052.48px;" y="1014.983398" x="-725.329712" transform="matrix(-1, 0, 0, 1, 1375.64794921875, 0)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 650.329711914063, 1014.9833984375)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-3'); transform-origin: 525px 1049.99px;" y="900" x="450">
+    </use>
+    <use width="150" height="300" transform="matrix(1, 0, 0, 1, 450, 900)" style="transform-origin: 75px 150px;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-5'); transform-origin: -387.824px 1052.48px;" y="1014.983398" x="-425.329712" transform="matrix(-1, 0, 0, 1, 775.648010253906, 0)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 350.329711914063, 1014.9833984375)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-7'); transform-origin: 1125px 149.99px;" x="1050">
+    </use>
+    <use width="150" height="300" transform="matrix(1, 0, 0, 1, 1050, 0)" style="transform-origin: 75px 150px;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-8'); transform-origin: -987.824px 152.48px;" y="114.983398" x="-1025.329712" transform="matrix(-1, 0, 0, 1, 1975.64794921875, 0)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 950.329711914063, 114.9833984375)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-9'); transform-origin: 825px 149.99px;" x="750">
+    </use>
+    <use width="150" height="300" transform="matrix(1, 0, 0, 1, 750, 0)" style="transform-origin: 75px 150px;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-10'); transform-origin: -687.824px 152.48px;" y="114.983398" x="-725.329712" transform="matrix(-1, 0, 0, 1, 1375.64794921875, 0)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 650.329711914063, 114.9833984375)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-11'); transform-origin: 525px 149.99px;" x="450">
+    </use>
+    <use width="150" height="300" transform="matrix(1, 0, 0, 1, 450, 0)" style="transform-origin: 75px 150px;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-12'); transform-origin: -387.824px 152.48px;" y="114.983398" x="-425.329712" transform="matrix(-1, 0, 0, 1, 775.648010253906, 0)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 350.329711914063, 114.9833984375)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="150" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-13'); transform-origin: 225px 149.99px;" x="150">
+    </use>
+    <use width="150" height="300" transform="matrix(1, 0, 0, 1, 150, 0)" style="transform-origin: 75px 150px;" xlink:href="#symbol-2">
       <title>extra--004--desk--0.5x1 y=0.7</title>
-    </rect>
-    <rect width="75" height="75" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-14'); transform-origin: -87.824px 152.48px;" y="114.983398" x="-125.329712" transform="matrix(-1, 0, 0, 1, 175.647994995117, 0)">
+    </use>
+    <use width="75" height="75" transform="matrix(-1, 0, 0, 1, 50.329711914063, 114.9833984375)" style="transform-origin: 37.5px 37.5px;" xlink:href="#symbol-1">
       <title>extra--003--chair--0.25x0.25 y=0.3</title>
-    </rect>
-    <rect width="300" height="300" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-15'); transform-origin: 150.002px -449.996px;" y="-599.992065" transform="matrix(0, -1, -1, 0, 600.001937866211, 1049.994003295899)">
+    </use>
+    <use width="300" height="300" transform="matrix(1, 0, 0, 1, 600, 450.000030517578)" xlink:href="#symbol-0">
       <title>table--012--0.8x0.8</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-16'); transform-origin: 119.078px 733.831px;" y="658.83246" x="44.080284" transform="matrix(0.000073543008, -1, 1, 0.000073543008, -44.073762176775, 316.967969603188)">
+    </use>
+    <use width="150.0117950439453" height="150.0117950439453" transform="matrix(0, -1, 0.994919359684, 0, 0.381266653538, 975.790405273438)" style="transform-origin: 75.0059px 75.0059px;" xlink:href="#symbol-5">
       <title>extra--001--fresher--0.5x0.5 y=0.7</title>
-    </rect>
-    <rect width="150.000748" height="150.000763" style="stroke-dasharray: 8; stroke: rgb(255, 0, 255); stroke-width: 4px; fill: url('#pattern-17'); transform-origin: 74.9991px 752.761px;" y="677.762268" transform="matrix(0, -1, 1, 0, -0.000015258789, -0.999954223633)">
+    </use>
+    <use width="150" height="150" style="transform-origin: 75px 75px;" transform="matrix(0, -1, 1, 0, 0.762352526188, 676.759399414063)" xlink:href="#symbol-6">
       <title>extra--002--fresher--0.5x0.5 y=0.5</title>
-    </rect>
+    </use>
   </g>
   <rect width="10" height="10" style="fill: rgb(216, 216, 216); fill-opacity: 0.5;" x="425" y="600">
     <title>decor label=office</title>

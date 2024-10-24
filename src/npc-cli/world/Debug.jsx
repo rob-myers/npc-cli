@@ -3,10 +3,12 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { navMeta, decompToXZGeometry } from "../service/three";
+import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius, wallOutset } from "../service/const";
+import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
+import TestNpcs from "./TestNpcs";
 
 /**
  * @param {Props} props 
@@ -17,13 +19,23 @@ export default function Debug(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
+    npc: /** @type {*} */ (null),
     selectedNavPolys: new THREE.BufferGeometry(),
+    staticColliders: [],
 
     ensureNavPoly(gmKey) {
       if (!w.gmsData[gmKey].navPoly) {
         const layout = w.geomorphs.layout[gmKey];
         // Fix normals for recast/detour -- triangulation ordering?
         w.gmsData[gmKey].navPoly = decompToXZGeometry(layout.navDecomp, { reverse: true });
+        update();
+      }
+    },
+    onPhysicsDebugData(e) {
+      if (e.data.type === 'debug-data') {
+        // console.log('🔔 RECEIVED', e.data);
+        state.staticColliders = e.data.items;
+        w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
         update();
       }
     },
@@ -102,6 +114,17 @@ export default function Debug(props) {
     });
   }, [w.nav.navMesh]);
 
+  React.useEffect(() => {// debug colliders via physics.worker
+    if (props.showStaticColliders) {
+      w.physics.worker.addEventListener('message', state.onPhysicsDebugData);
+      w.physics.worker.postMessage({ type: 'get-debug-data' });
+      return () => void w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
+    } else {
+      state.staticColliders = [];
+      update();
+    }
+  }, [props.showStaticColliders, w.physics.rebuilds]);
+
   const update = useUpdate();
 
   return <>
@@ -137,6 +160,15 @@ export default function Debug(props) {
         />
       </group>
     ))}
+    
+    <group name="StaticColliders">
+      <MemoizedStaticColliders
+        staticColliders={state.staticColliders}
+        w={w}
+      />
+    </group>
+
+    {props.showTestNpcs && <TestNpcs />}
   </>;
 }
 
@@ -145,14 +177,19 @@ export default function Debug(props) {
  * @property {boolean} [disabled]
  * @property {boolean} [showNavMesh]
  * @property {boolean} [showOrigNavPoly]
+ * @property {boolean} [showStaticColliders]
+ * @property {boolean} [showTestNpcs]
  */
 
 /**
  * @typedef State
  * @property {NavMeshHelper} navMesh
  * @property {THREE.Group} navPath
+ * @property {import('./TestNpcs').State} npc
  * @property {THREE.BufferGeometry} selectedNavPolys
+ * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
+ * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
  * @property {(polyIds: number[]) => void} selectNavPolys
  */
@@ -167,7 +204,7 @@ const origNavPolyMaterial = new THREE.MeshBasicMaterial({
 
 const navPolyMaterial = new THREE.MeshStandardMaterial({
   wireframe: true,
-  color: "#ff0",
+  color: "#797",
   transparent: true,
   opacity: 1,
 });
@@ -182,3 +219,56 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
 });
 
 const showNavNodes = false;
+
+/**
+ * 🔔 debug only (inefficient)
+ * @param {{ staticColliders: State['staticColliders']; w: import('./World').State }} props
+ */
+function StaticColliders({ staticColliders, w }) {
+  return staticColliders.map(({ parsedKey, position, userData }) => {
+
+    if (userData.type === 'cylinder') {
+      return (
+        <mesh
+          geometry={cylinderGeometry}
+          position={[position.x, colliderHeight / 2, position.z]}
+          scale={[userData.radius, colliderHeight, userData.radius]}
+          renderOrder={toColliderMeta[parsedKey[0]]?.renderOrder ?? 3}
+        >
+          <meshBasicMaterial
+            color={toColliderMeta[parsedKey[0]]?.color ?? 'blue'}
+            transparent
+            opacity={0.25}
+          />
+        </mesh>
+      );
+    }
+
+    if (userData.type === 'cuboid') {
+      return (
+        <mesh
+          geometry={boxGeometry}
+          position={[position.x, colliderHeight / 2, position.z]}
+          scale={[userData.width, colliderHeight, userData.depth]}
+          rotation={[0, userData.angle, 0]}
+          renderOrder={toColliderMeta[parsedKey[0]]?.renderOrder ?? 3}
+        >
+          <meshBasicMaterial
+            color={toColliderMeta[parsedKey[0]]?.color ?? 'blue'}
+            transparent
+            opacity={0.25}
+          />
+        </mesh>
+      );
+    }
+
+    return null;
+  });
+}
+
+const MemoizedStaticColliders = React.memo(StaticColliders);
+
+const toColliderMeta = /** @type {Record<string, { color: string; renderOrder: Number; }>} */ ({
+  inside: { color: 'green', renderOrder: 1 },
+  nearby: { color: 'red', renderOrder: 2 },
+});

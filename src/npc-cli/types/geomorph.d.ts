@@ -33,15 +33,18 @@ declare namespace Geomorph {
     maps: number;
     /** Hash of all layouts */
     layouts: number;
-    /** Depends on rect lookup _and_ images */
+    /** Depends on rect lookup, images, and skins */
     sheets: number;
     /** `${layouts} ${maps}` */
     decor: `${number} ${number}`;
     /** Hash of current map */
     map: number;
 
-    /** `gmHashes[gmId]` is hash of `map.gms[gmId]` */
-    gmHashes: number[];
+    /**
+     * 🔔 `gmHashes[gmId]` is hash of `map.gms[gmId]`
+     * i.e. hashing { gmKey, transform } 
+     */
+    mapGmHashes: number[];
   }
 
   type PerGeomorphHash = Record<Geomorph.GeomorphKey, {
@@ -103,6 +106,8 @@ declare namespace Geomorph {
     doorway: Geom.Poly;
     /** Bounds of `doorway`. */
     rect: Geom.Rect;
+    /** Transform angle (radians) */
+    angle: number;
 
     closeTimeoutId?: number;
   }
@@ -371,6 +376,8 @@ declare namespace Geomorph {
     type: 'quad';
     transform: Geom.SixTuple;
     center: Geom.VectJson;
+    /** Determinant of 2x2 part of `transform` */
+    det: number;
   }
 
   interface DecorRect extends BaseDecor {
@@ -378,6 +385,8 @@ declare namespace Geomorph {
     points: Geom.VectJson[];
     /** Center of `new Poly(points)` */
     center: Geom.VectJson;
+    /** Radians; makes an `Geom.AngledRect` together with `bounds2d`  */
+    angle: number;
   }
 
   interface BaseDecor {
@@ -440,6 +449,14 @@ declare namespace Geomorph {
     decorDim: { width: number; height: number; }
     decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
     imagesHash: number;
+    skins: {
+      /** e.g. `npcClassKey` is a `uvMapKey` */
+      svgHash: { [uvMapKey: string]: number; };
+      /** e.g. `npcClassKey` is a `uvMapKey` */
+      uvMap: { [uvMapKey: string]: UvRectLookup; };
+      /** e.g. `npcClassKey` is a `uvMapKey` */
+      uvMapDim: { [uvMapKey: string]: { width: number; height: number; }; };
+    };
   }
 
   interface ObstacleSheetRectCtxt {
@@ -447,6 +464,10 @@ declare namespace Geomorph {
     obstacleId: number;
     /** e.g. `chair` */
     type: string;
+  }
+
+  interface UvRectLookup {
+    [uvRectName: string]: Geom.RectJson
   }
 
   type GmsData = import('../service/create-gms-data').GmsData;

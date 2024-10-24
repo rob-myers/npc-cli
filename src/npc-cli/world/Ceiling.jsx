@@ -15,7 +15,6 @@ export default function Ceiling(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    thickerTops: false,
     tex: w.ceil.tex, // Pass in textures
 
     detectClick(e) {
@@ -38,10 +37,12 @@ export default function Ceiling(props) {
       return rgba[3] === 0 ? null : { gmId };
     },
     async draw() {
+      w.menu.measure('ceil.draw');
       for (const gmKey of keys(state.tex)) {
         state.drawGmKey(gmKey);
         await pause();
       }
+      w.menu.measure('ceil.draw');
     },
     drawGmKey(gmKey) {
       const { ct, tex, canvas} = state.tex[gmKey];
@@ -61,22 +62,15 @@ export default function Ceiling(props) {
       const grey90 = 'rgb(90, 90, 90)';
       const grey60 = 'rgb(60, 60, 60)';
       const grey100 = 'rgb(100, 100, 100)';
-      const thinLineWidth = 0.04;
+      const thinLineWidth = 0.02;
       const thickLineWidth = 0.08;
 
-      if (state.thickerTops) {
-        drawPolygons(ct, tops.nonHull, [grey100, null]);
-        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
-        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [grey60, null]);
-        drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
-      } else {
-        drawPolygons(ct, tops.nonHull, [black, grey90, thinLineWidth]);
-        drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [black, grey90, thinLineWidth]);
-        drawPolygons(ct, tops.door.filter(x => x.meta.hull), [grey60, grey60]);
-      }
-
+      drawPolygons(ct, tops.nonHull, ['#667', null, thinLineWidth]);
+      drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
+      drawPolygons(ct, tops.door.filter(x => x.meta.hull), ['#778', null]);
+      drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, hullWalls, [grey60, grey60]);
+      drawPolygons(ct, hullWalls, ['#667', '#667']);
       
       // decals
       polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
@@ -171,7 +165,6 @@ export default function Ceiling(props) {
 
 /**
  * @typedef State
- * @property {boolean} thickerTops
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {() => Promise<void>} draw

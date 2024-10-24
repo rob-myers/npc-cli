@@ -123,13 +123,22 @@ class semanticsServiceClass {
   }
 
   private async *Assign({ meta, Name, Value, Naked }: Sh.Assign) {
-    const textValue = !Naked && Value ? (await this.lastExpanded(sem.Expand(Value))).value : "";
-    useSession.api.setVar(
-      meta,
-      Name.Value,
-      // Attempt to interpret as number, dictionary etc.
-      parseJsArg(textValue)
-    );
+    if (Naked || !Value) {
+      useSession.api.setVar(meta, Name.Value, '');
+      return;
+    }
+
+    const expanded = await this.lastExpanded(sem.Expand(Value));
+    if (expanded.values.some(x => typeof x !== 'string')) {
+      // forward non-string values from command substitution `foo=$( bar )`
+      useSession.api.setVar(meta, Name.Value,
+        expanded.values.length === 1 ? expanded.values[0] : expanded.values,
+      );
+    } else {
+      useSession.api.setVar(meta, Name.Value,
+        parseJsArg(expanded.value) // could interpret as number, Set etc.
+      );
+    }
   }
 
   private async *BinaryCmd(node: Sh.BinaryCmd) {
@@ -156,21 +165,21 @@ class semanticsServiceClass {
       }
       case "|": {
         const { sessionKey, pid: ppid } = node.meta;
-        /** Inherit process group, except 0 */
-        const pgid = node.meta.pgid || ppid;
+        const pgid = ppid; // 🔔 `node.meta.pgid` breaks pgid 0, and nested pipelines
         const { ttyShell } = useSession.api.getSession(sessionKey);
 
         const process = useSession.api.getProcess(node.meta);
         function killPipeChildren(SIGINT?: boolean) {
           useSession.api
             .getProcesses(process.sessionKey, pgid)
-            .filter((x) => x.key !== ppid)
+            // 🚧 safety while debug nested-pipeline-issue
+            .filter((x) => x.key !== ppid && x.status !== ProcessStatus.Killed)
             .reverse()
             .forEach((x) => killProcess(x, SIGINT));
         }
         process.cleanups.push(killPipeChildren); // Handle Ctrl-C
 
-        const stdIn = useSession.api.resolve(0, stmts[0].meta);
+        // const stdIn = useSession.api.resolve(0, stmts[0].meta);
         const fifos = stmts.slice(0, -1).map(({ meta }, i) =>
           useSession.api.createFifo(`/dev/fifo-${sessionKey}-${meta.pid}-${i}`)
         );
@@ -200,8 +209,10 @@ class semanticsServiceClass {
                 errors.push(e);
                 reject(e);
               } finally {
+                // 🔔 assume we're the only process writing to `stdOut`
                 (fifos[i] ?? stdOut).finishedWriting(); // pipe-child `i` won't write any more
-                (fifos[i - 1] ?? stdIn).finishedReading(); // pipe-child `i` won't read any more
+                // (fifos[i - 1] ?? stdIn).finishedReading(); // pipe-child `i` won't read any more
+                fifos[i - 1]?.finishedReading(); // pipe-child `i` won't read any more
 
                 if (i === clones.length - 1 && errors.length === 0) {
                   exitCode = file.exitCode ?? 0;
@@ -479,13 +490,17 @@ class semanticsServiceClass {
         await ttyShell.spawn(cloned, { localVar: true });
 
         try {
-          yield expand(
-            device
-              .readAll()
+          const values = device.readAll();
+          if (node.parent?.type === 'Word' && node.parent.Parts.length === 1 && node.parent.parent?.type === 'Assign') {
+            // In case `foo=$( bar )` we forward non-string values
+            yield expand(values);
+          } else {
+            yield expand(values
               .map((x: any) => (typeof x === "string" ? x : jsStringify(x)))
               .join("\n")
-              .replace(/\n*$/, "")
-          );
+              .replace(/\n*$/, "") // remove trailing newlines
+            );
+          }
         } finally {
           useSession.api.removeDevice(device.key);
         }
@@ -658,7 +673,10 @@ class semanticsServiceClass {
       itStartMs = Date.now();
 
       yield* this.stmts(node, Cond);
+
       if (Until ? !node.exitCode : node.exitCode) {
+        // e.g. consider `while false; do echo foo; done`
+        node.exitCode = 0;
         break;
       }
 

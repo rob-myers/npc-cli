@@ -1,7 +1,7 @@
 import * as htmlparser2 from "htmlparser2";
 import * as THREE from "three";
 
-import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys } from "./const";
+import { sguToWorldScale, precision, wallOutset, obstacleOutset, hullDoorDepth, doorDepth, decorIconRadius, sguSymbolScaleDown, doorSwitchHeight, doorSwitchDecorImgKey, specialWallMetaKeys, wallHeight } from "./const";
 import { Mat, Poly, Rect, Vect } from "../geom";
 import {
   info,
@@ -14,6 +14,7 @@ import {
   keys,
   toPrecision,
   hashJson,
+  parseJsWithCt,
 } from "./generic";
 import { geom, tmpRect1 } from "./geom";
 import { helper } from "./helper";
@@ -43,16 +44,16 @@ class GeomorphService {
 
     const { pngRect, hullWalls } = assets.symbols[helper.toHullKey[gmKey]];
     const hullPoly = Poly.union(hullWalls).map(x => x.precision(precision));
-    const hullOutline = hullPoly.map((x) => x.clone().removeHoles());
+    const hullOutline = hullPoly.map((x) => new Poly(x.outline).clone()); // sans holes
 
     const uncutWalls = symbol.walls;
     const plainWallMeta = { wall: true };
     const hullWallMeta = { wall: true, hull: true };
+
     /**
-     * Cutting pointwise avoids errors (e.g. for 301).
-     * It also permits us to propagate wall `meta` whenever:
-     * - it has a special key e.g. `h` (height)
-     * - it has 'hull' (hull wall)
+     * Cut doors from walls pointwise. The latter:
+     * - avoids errors (e.g. for 301).
+     * - permits meta propagation e.g. `h` (height), 'hull' (hull wall)
      */
     const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
       Object.assign(y, {
@@ -218,7 +219,7 @@ class GeomorphService {
       sheets: sheetsHash,
       decor: `${layoutsHash} ${mapsHash}`,
       map: hashJson(geomorphs.map[mapKey]),
-      gmHashes: geomorphs.map[mapKey].gms.map((x) => hashJson(x)),
+      mapGmHashes: geomorphs.map[mapKey].gms.map((x) => hashJson(x)),
     };
   }
 
@@ -309,16 +310,18 @@ class GeomorphService {
     const base = { key: '', meta };
     
     if (meta.rect === true) {
-      const polyRect = poly.rect.precision(precision);
       if (poly.outline.length !== 4) {
         warn(`${'decorFromPoly'}: decor rect expected 4 points (saw ${poly.outline.length})`, poly.meta);
       }
-      return { type: 'rect', ...base, bounds2d: polyRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json };
+      // const polyRect = poly.rect.precision(precision);
+      const { baseRect, angle } = geom.polyToAngledRect(poly);
+      baseRect.precision(precision);
+      return { type: 'rect', ...base, bounds2d: baseRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json, angle };
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
-      delete poly.meta.transform;
-      return { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json };
+      delete poly.meta.transform; // 🔔 `det` provided on instantiation
+      return { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json, det: 1 };
     } else if (meta.cuboid === true) {
       // decor cuboids follow "decor quad approach"
       const polyRect = poly.rect.precision(precision);
@@ -504,13 +507,14 @@ class GeomorphService {
    * - <path> e.g. complex obstacle
    * - <circle> i.e. decor circle
    * - <image> i.e. background image in symbol
+   * - <polygon>
    * @private
    * @param {{ tagName: string; attributes: Record<string, string>; title: string; }} tagMeta
    * @param {Geom.Meta} meta
+   * @param {number} [scale]
    * @returns {Geom.Poly | null}
    */
-  extractPoly(tagMeta, meta) {
-    const scale = sguToWorldScale * sguSymbolScaleDown;
+  extractPoly(tagMeta, meta, scale = sguToWorldScale * sguSymbolScaleDown) {
     const { tagName, attributes: a, title } = tagMeta;
     let poly = /** @type {Geom.Poly | null} */ (null);
 
@@ -518,7 +522,7 @@ class GeomorphService {
       poly = Poly.fromRect(new Rect(Number(a.x ?? 0), Number(a.y ?? 0), Number(a.width ?? 0), Number(a.height ?? 0)));
     } else if (tagName === 'path') {
       poly = geom.svgPathToPolygon(a.d);
-      if (!poly) {
+      if (poly === null) {
         warn(`${'extractPoly'}: path must be single connected polygon with ≥ 0 holes`, a);
         return null;
       }
@@ -526,6 +530,13 @@ class GeomorphService {
       const r = Number(a.r ?? 0);
       poly = Poly.fromRect(new Rect(Number(a.cx ?? 0) - r, Number(a.cy ?? 0) - r, 2 * r, 2 * r));
       meta.circle = true;
+    } else if (tagName === 'polygon') {
+      // e.g. "1024.000,0.000 921.600,0.000 921.600,102.400 1024.000,102.400"
+      poly = geom.svgPathToPolygon(`M${a.points}Z`);
+      if (poly === null) {
+        warn(`${'extractPoly'}: ${tagName}: invalid induced path: M${a.points}Z`, a);
+        return null;
+      }
     } else {
       warn(`${'extractPoly'}: ${tagName}: unexpected tagName`, a);
       return null;
@@ -691,7 +702,7 @@ class GeomorphService {
   /**
    * - 🔔 instantiated decor should be determined by min(3D AABB)
    * - replace decimal points by `_` so can `w decor.byKey.point[29_5225,0,33_785]`
-   * @param {Geomorph.Decor} d 
+   * @param {Pick<Geomorph.Decor, 'type' | 'bounds2d' | 'meta'>} d 
    */
   getDerivedDecorKey(d) {
     return `${d.type}[${d.bounds2d.x},${Number(d.meta.y) || 0},${d.bounds2d.y}]`.replace(/[.]/g, '_');
@@ -1088,6 +1099,72 @@ class GeomorphService {
   }
 
   /**
+   * Given SVG contents with `<g><title>uv-map</title> {...} </g>`,
+   * parse name to UV Rect i.e. normalized to [0, 1] x [0, 1]
+   * @param {string} svgContents 
+   * @param {string} logLabel 
+   * @returns {{ width: number; height: number; uvMap: { [uvRectName: string]: Geom.RectJson }; }}
+   */
+  parseUvMapRects(svgContents, logLabel) {
+    const output = /** @type {ReturnType<GeomorphService['parseUvMapRects']>} */ ({
+      width: 0,
+      height: 0,
+      uvMap: {},
+    });
+    const tagStack = /** @type {{ tagName: string; attributes: Record<string, string>; }[]} */ ([]);
+    const folderStack = /** @type {string[]} */ ([]);
+
+    const parser = new htmlparser2.Parser({
+      onopentag(name, attributes) {
+        if (tagStack.length === 0) {
+          output.width = Number(attributes.width) || 0;
+          output.height = Number(attributes.height) || 0;
+        }
+        tagStack.push({ tagName: name, attributes });
+      },
+      ontext(contents) {
+        const parent = tagStack.at(-2);
+
+        if (!parent || tagStack.at(-1)?.tagName !== "title") {
+          return; // only consider <title> tags
+        }
+        
+        if (parent.tagName === "g") {
+          return folderStack.push(contents); // track folders
+        }
+        
+        if (folderStack.at(-1) !== 'uv-map') {
+          return; // only consider top-level folder "uv-map"
+        }
+
+        // Blender UV SVG Export generates <polygon>'s
+        if (parent.tagName !== "polygon") {
+          return void (
+            warn(`${'parseUvMapRects'}: ${logLabel}: ${parent?.tagName} ${contents}: ignored non <polygon>`)
+          );
+        }
+
+        const poly = geomorph.extractPoly({ ...parent, title: contents }, {}, 1);
+
+        if (poly) {// output sub-rect of [0, 1] x [0, 1]
+          const uvRectName = contents; // e.g. `head-right`
+          output.uvMap[uvRectName] = poly.rect
+            .scale(1 / output.width, 1 / output.height)
+            .precision(4).json
+          ;
+        }
+      },
+      onclosetag() {
+        tagStack.pop();
+      },
+    });
+
+    parser.write(svgContents);
+    parser.end();
+    return output;
+  }
+
+  /**
    * @param {Geomorph.PreSymbol} partial
    * @returns {Geomorph.PostSymbol}
    */
@@ -1195,7 +1272,7 @@ class GeomorphService {
     return tags.reduce((meta, tag) => {
       const eqIndex = tag.indexOf("=");
       if (eqIndex > -1) {
-        meta[tag.slice(0, eqIndex)] = parseJsArg(tag.slice(eqIndex + 1));
+        meta[tag.slice(0, eqIndex)] = parseJsWithCt(tag.slice(eqIndex + 1), metaVarNames, metaVarValues);
       } else {
         meta[tag] = true; // Omit tags `foo=bar`
       }
@@ -1333,16 +1410,17 @@ export class Connector {
    * - They are deeper then the door by
    *   (a) `wallOutset` for hull doors.
    *   (b) `2 * wallOutset` for non-hull doors.
+   * @param {boolean} [thin]
    * @returns {Geom.Poly}
    */
-  computeDoorway() {
+  computeDoorway(thin = false) {
     const doorHalfDepth = 0.5 * (this.meta.hull ? hullDoorDepth : doorDepth);
-    const inwardsExtrude = wallOutset;
+    const inwardsExtrude = thin === true ? 0 : wallOutset;
     /**
      * For hull doors, normals point outwards from geomorphs,
      * and we exclude "outer part" of doorway to fix doorway normalization.
      */
-    const outwardsExtrude = this.meta.hull === true ? 0 : wallOutset;
+    const outwardsExtrude = thin === true || this.meta.hull === true ? 0 : wallOutset;
 
     const normal = this.normal;
     const delta = tmpVect1.copy(this.seg[1]).sub(this.seg[0]);
@@ -1393,3 +1471,6 @@ const splitTagRegex = /[^\s=]+(?:=(?:(?:'[^']*')|(?:[^']\S*)))?/gi;
 const tmpVect1 = new Vect();
 const tmpMat1 = new Mat();
 const tmpMat2 = new Mat();
+
+const metaVarNames = ['wallHeight'];
+const metaVarValues = [wallHeight];

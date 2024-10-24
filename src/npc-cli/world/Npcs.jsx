@@ -2,13 +2,17 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultSkinKey, glbMeta } from "../service/const";
+import { defaultClassKey, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
 import { info, warn } from "../service/generic";
-import { createDebugBox, createDebugCylinder, tmpVectThree1, yAxis } from "../service/three";
+import { getCanvas } from "../service/dom";
+import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
+import { cmUvService } from "../service/uv";
+import { CuboidManMaterial } from "../service/glsl";
 import { Npc, hotModuleReloadNpc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -16,41 +20,27 @@ import useStateRef from "../hooks/use-state-ref";
 export default function Npcs(props) {
   const w = React.useContext(WorldContext);
 
-  const gltf = useGLTF(glbMeta.url);
+  const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    gltf: /** @type {*} */ ({}),
     group: /** @type {*} */ (null),
-    nextObstacleId: 0,
-    npc: {},
-    obstacle: {},
-    obsGroup: /** @type {*} */ (null),
-    select: { curr: null, prev: null, many: [] },
-
-    addBoxObstacle(position, extent, angle) {
-      const { obstacle, success } = w.nav.tileCache.addBoxObstacle(position, extent, angle);
-      state.updateTileCache();
-      if (success) {
-        const id = state.nextObstacleId++;
-        const mesh = createDebugBox(position, obstacle.extent); // 🚧 angle
-        state.obsGroup.add(mesh);
-        return state.obstacle[id] = { id, o: obstacle, mesh };
-      } else {
-        warn(`failed to add obstacle (box) at ${JSON.stringify(position)}`);
-        return null;
-      }
+    label: {
+      numLabels: 0,
+      lookup: {},
+      tex: new THREE.CanvasTexture(getCanvas(`${w.key} npc.label`)),
     },
-    addCylinderObstacle(position, radius, height) {
-      const { obstacle, success } = w.nav.tileCache.addCylinderObstacle(position, radius, height);
-      state.updateTileCache();
-      if (success) {
-        const id = state.nextObstacleId++;
-        const mesh = createDebugCylinder(position, radius, height);
-        state.obsGroup.add(mesh);
-        return state.obstacle[id] = { id, o: obstacle, mesh };
-      } else {
-        warn(`failed to add obstacle (cylinder) at ${JSON.stringify(position)}`);
-        return null;
-      }
+    npc: {},
+    tex: /** @type {*} */ ({}),
+
+    clearLabels() {
+      w.menu.measure('npc.clearLabels');
+      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
+      createLabelSpriteSheet([], state.label, { fontHeight });
+      state.tex.labels = state.label.tex;
+      // 🔔 warns from npc with non-null label
+      Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
+      w.menu.measure('npc.clearLabels');
     },
     findPath(src, dst) {// 🔔 agent may follow different path
       const query = w.crowd.navMeshQuery;
@@ -62,12 +52,16 @@ export default function Npcs(props) {
       }
       return success === false || path.length === 0 ? null : path;
     },
-    getClosestNavigable(p, maxDelta = 0.01) {
-      const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p);
+    getClosestNavigable(p, maxDelta = 0.5) {
+      const { success, point: closest } = w.crowd.navMeshQuery.findClosestPoint(p, {
+        halfExtents: new THREE.Vector3(maxDelta / 2, maxDelta / 2, maxDelta / 2),
+      });
       if (success === false) {
         warn(`${'getClosestNavigable'} failed: ${JSON.stringify(p)}`);
+        return null;
+      } else {
+        return p.distanceTo(closest) < maxDelta ? toV3(closest) : null;
       }
-      return success === true && tmpVectThree1.copy(closest).distanceTo(p) < maxDelta ? closest : null;
     },
     getNpc(npcKey, processApi) {
       const npc = processApi === undefined
@@ -81,8 +75,8 @@ export default function Npcs(props) {
       }
     },
     isPointInNavmesh(p) {
-      const { success } = w.crowd.navMeshQuery.findClosestPoint(p, { halfExtents: { x: 0, y: 0.1, z: 0 } });
-      return success;
+      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(toV3(p), { halfExtents: { x: 0, y: 0.01, z: 0 } });
+      return success === true && Math.abs(point.x - p.x) < 0.001 && Math.abs(point.z - p.y) < 0.001;
     },
     onNpcPointerDown(e) {
       const npcKey = /** @type {string} */ (e.object.userData.npcKey);
@@ -105,29 +99,11 @@ export default function Npcs(props) {
       e.stopPropagation();
     },
     onTick(deltaMs) {
-      const npcs = Object.values(state.npc);
       const npcPositions = /** @type {number[]} */ ([]);
-
-      for (const npc of npcs) {
-        npc.onTick(deltaMs);
-        if (npc.s.moving === true) {
-          const { x, y, z } = npc.group.position;
-          npcPositions.push(npc.bodyUid, x, y, z);
-        }
-      }
-
+      Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, npcPositions));
       // 🔔 Float32Array caused issues i.e. decode failed
       const positions = new Float64Array(npcPositions);
-      w.physics.worker.postMessage({ type: 'send-npc-positions', positions }, [positions.buffer]);
-    },
-    removeObstacle(obstacleId) {
-      const obstacle = state.obstacle[obstacleId];
-      if (obstacle) {
-        delete state.obstacle[obstacleId];
-        w.nav.tileCache.removeObstacle(obstacle.o);
-        state.obsGroup.remove(obstacle.mesh);
-        state.updateTileCache();
-      }
+      w.physics.worker.postMessage({ type: 'send-npc-positions', positions}, [positions.buffer]);
     },
     restore() {// onchange nav-mesh
       // restore agents
@@ -141,49 +117,49 @@ export default function Npcs(props) {
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
           npc.startAnimation('Idle');
         } else if (npc.s.target !== null) {
-          npc.moveTo(npc.s.target);
+          npc.moveTo({ x: npc.s.target.x, y: npc.s.target.z });
         } else {// so they'll move "out of the way" of other npcs
           agent.requestMoveTarget(npc.getPosition());
         }
       });
-
-      // restore obstacles (overwrite)
-      Object.values(state.obstacle).forEach(obstacle => {
-        if (obstacle.o.type === 'box') {
-          state.addBoxObstacle(obstacle.o.position, obstacle.o.extent, 0);
-        } else {
-          state.addCylinderObstacle(obstacle.o.position, obstacle.o.radius, obstacle.o.height);
-        }
-      });
     },
-    removeNpc(npcKey) {
-      const npc = state.getNpc(npcKey); // throw if n'exist pas
-      // npc.setGmRoomId(null);
-      delete state.npc[npcKey];
-      npc.removeAgent();
-      state.group.remove(npc.group);
-      // if (state.playerKey === npcKey) {
-      //   state.npcAct({ action: 'set-player', npcKey: undefined });
-      // }
-      w.events.next({ key: 'removed-npc', npcKey });
+    remove(...npcKeys) {
+      for (const npcKey of npcKeys) {
+        const npc = state.getNpc(npcKey); // throw if n'exist pas
+        npc.cancel(); // rejects promises
+        // npc.setGmRoomId(null);
+        delete state.npc[npcKey];
+        npc.removeAgent();
+        w.events.next({ key: 'removed-npc', npcKey });
+      }
+      update();
     },
     async spawn(e) {
-      if (!(e.npcKey && typeof e.npcKey === 'string' && e.npcKey.trim())) {
-        throw Error(`invalid npc key: ${JSON.stringify(e.npcKey)}`);
-      } else if (!(e.point && typeof e.point.x === 'number' && typeof e.point.z === 'number')) {
-        throw Error(`invalid point: ${JSON.stringify(e.point)}`);
-      } else if (e.requireNav && state.getClosestNavigable(e.point) === null) {
-        throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e.point)}`);
-      } else if (e.skinKey && !w.lib.isSkinKey(e.skinKey)) {
-        throw Error(`invalid skinKey: ${JSON.stringify(e.skinKey)}`);
+      if (!(typeof e.npcKey === 'string' && /^[a-z0-9-_]+$/i.test(e.npcKey))) {
+        throw Error(`npc key: ${JSON.stringify(e.npcKey)} must match /^[a-z0-9-_]+$/i`);
+      } else if (!(typeof e.point?.x === 'number' && typeof e.point.y === 'number')) {
+        throw Error(`invalid point {x, y}: ${JSON.stringify(e)}`);
+      }
+
+      const dstNav = state.isPointInNavmesh(e.point);
+      // 🔔 attach agent by default if dst navigable
+      dstNav === true && (e.agent ??= true);
+
+      if (e.requireNav === true && dstNav === false) {
+        throw Error(`cannot spawn outside navPoly: ${JSON.stringify(e)}`);
+      } else if (e.agent === true && dstNav === false) {
+        throw Error(`cannot add agent outside navPoly`);
+      } else if (e.classKey !== undefined && !w.lib.isNpcClassKey(e.classKey)) {
+        throw Error(`invalid classKey: ${JSON.stringify(e)}`);
       }
       
-      const gmRoomId = w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }, true);
+      const gmRoomId = w.gmGraph.findRoomContaining(e.point, true);
       if (gmRoomId === null) {
-        throw Error(`must be in some room: ${JSON.stringify(e.point)}`);
+        throw Error(`must be in some room: ${JSON.stringify(e)}`);
       }
 
       let npc = state.npc[e.npcKey];
+      const position = toV3(e.point);
 
       if (npc !== undefined) {// Respawn
         await npc.cancel();
@@ -192,14 +168,11 @@ export default function Npcs(props) {
         npc.def = {
           key: e.npcKey,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
-          skinKey: e.skinKey ?? npc.def.skinKey,
-          position: e.point, // 🚧 remove?
+          classKey: e.classKey ?? npc.def.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         };
-        if (typeof e.skinKey === 'string') {
-          npc.changeSkin(e.skinKey);
-        }
+
         // Reorder keys
         delete state.npc[e.npcKey];
         state.npc[e.npcKey] = npc;
@@ -208,48 +181,79 @@ export default function Npcs(props) {
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
           angle: e.angle ?? 0,
-          skinKey: e.skinKey ?? defaultSkinKey,
-          position: e.point,
+          classKey: e.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
 
-        npc.initialize(gltf);
-        npc.startAnimation('Idle');
-        state.group.add(npc.group);
+        npc.initialize(state.gltf[npc.def.classKey]);
       }
-      
-      if (npc.agent !== null) {
-        if (e.agent === false) {
-          npc.removeAgent();
-        } else {
-          npc.agent.teleport(e.point);
-          npc.startAnimation('Idle');
+
+      if (npc.s.spawns === 0) {
+        await new Promise(resolve => {
+          npc.resolve.spawn = resolve;
+          update();
+        });
+        npc.setupMixer();
+      }
+
+      // npc.startAnimation('Idle');
+      position.y = npc.startAnimation(e.meta ?? 'Idle');
+      npc.m.group.rotation.y = npc.getEulerAngle(npc.def.angle);
+
+      if (npc.agent === null) {
+        npc.setPosition(position);
+        if (e.agent === true) {
+          const agent = npc.attachAgent();
+          // 🔔 pin to current position
+          agent.requestMoveTarget(npc.position);
         }
       } else {
-        npc.setPosition(e.point);
-        this.group.setRotationFromAxisAngle(yAxis, npc.def.angle);
-        // pin to current position, so "moves out of the way"
-        e.agent && npc.attachAgent().requestMoveTarget(e.point);
+        if (dstNav === false || e.agent === false) {
+          npc.setPosition(position);
+          npc.removeAgent();
+        } else {
+          npc.agent.teleport(position);
+        }
       }
-
+      
       npc.s.spawns++;
+      npc.s.doMeta = e.meta?.do === true ? e.meta : null;
       w.events.next({ key: 'spawned', npcKey: npc.key, gmRoomId });
-      // state.npc[e.npcKey].doMeta = e.meta?.do ? e.meta : null;
+
       return npc;
     },
+    update,
+    updateLabels(...incomingLabels) {
+      const { lookup } = state.label;
+      const unseenLabels = incomingLabels.filter(label => !(label in lookup));
 
-    // 🚧 old below
-    updateTileCache() {// 🚧 spread out updates
-      const { tileCache, navMesh } = w.nav;
-      for (let i = 0; i < 5; i++) if (tileCache.update(navMesh).upToDate) break;
-      console.log(`updateTileCached: ${tileCache.update(navMesh).upToDate}`);
+      if (unseenLabels.length === 0) {
+        return false;
+      }
+      
+      w.menu.measure('npc.updateLabels');
+      const nextLabels = [...Object.keys(lookup), ...unseenLabels];
+      const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
+      createLabelSpriteSheet(nextLabels, state.label, { fontHeight });
+      state.tex.labels = state.label.tex;
+      w.menu.measure('npc.updateLabels');
+
+      // update npc labels (avoidable by precomputing labels)
+      Object.values(state.npc).forEach(npc => cmUvService.updateLabelQuad(npc));
+      return true;
     },
   }));
 
   w.npc = state;
+  w.n = state.npc;
 
+  state.gltf["cuboid-man"] = useGLTF(npcClassToMeta["cuboid-man"].url);
+  state.gltf["cuboid-pet"] = useGLTF(npcClassToMeta["cuboid-pet"].url);
+  
   React.useEffect(() => {
+    cmUvService.initialize(state.gltf);
+
     if (process.env.NODE_ENV === 'development') {
       info('hot-reloading npcs');
       Object.values(state.npc).forEach(npc =>
@@ -258,21 +262,33 @@ export default function Npcs(props) {
     }
   }, []);
 
-  return <>
+  React.useEffect(() => {// npc textures
+    Promise.all(npcClassKeys.map(async classKey => {
+      state.tex[classKey] = emptyTexture;
+      const { skinBaseName } = npcClassToMeta[classKey];
+      const tex = await textureLoader.loadAsync(`/assets/3d/${skinBaseName}?v=${w.hash.sheets}`);
+      tex.flipY = false;
+      state.tex[classKey] = tex;
+    })).then(() => Object.values(state.npc).forEach(npc => npc.forceUpdate()));
+  }, [w.hash.sheets]);
 
-    <group
-      name="nav-obstacles"
-      ref={x => state.obsGroup = x ?? state.obsGroup}
-    />
-  
+  return (
     <group
       name="npcs"
-      ref={x => state.group = x ?? state.group}
+      ref={x => void (state.group = x ?? state.group)}
       onPointerDown={state.onNpcPointerDown}
       onPointerUp={state.onNpcPointerUp}
-    />
-
-  </>;
+    >
+      {Object.values(state.npc).map(npc =>
+        // <NPC key={npc.key} npc={npc} />
+        <MemoizedNPC
+          key={npc.key}
+          npc={npc}
+          epochMs={npc.epochMs} // override memo
+        />
+      )}
+    </group>
+  );
 }
 
 /**
@@ -283,28 +299,96 @@ export default function Npcs(props) {
 /**
  * @typedef State
  * @property {THREE.Group} group
- * @property {THREE.Group} obsGroup
+ * @property {import("../service/three").LabelsSheetAndTex} label
+ * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
  * @property {{ [npcKey: string]: Npc }} npc
- * @property {{ curr: null | string; prev: null | string; many: string[]; }} select 🚧 move to script
- * @property {number} nextObstacleId
- * @property {Record<string, NPC.Obstacle>} obstacle
+ * @property {Record<NPC.TextureKey, THREE.Texture>} tex
  *
- * @property {(position: THREE.Vector3Like, extent: THREE.Vector3Like, angle: number) => NPC.Obstacle | null} addBoxObstacle
- * @property {(position: THREE.Vector3Like, radius: number, height: number) => NPC.Obstacle | null} addCylinderObstacle
+ * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist
  * 🚧 any -> ProcessApi (?)
- * @property {(p: THREE.Vector3Like, maxDelta?: number) => null | THREE.Vector3Like} getClosestNavigable
- * @property {(p: THREE.Vector3Like) => boolean} isPointInNavmesh
+ * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
+ * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerDown
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
- * @property {(obstacleId: number) => void} removeObstacle
- * @property {(npcKey: string) => void} removeNpc
+ * @property {(npcKey: string) => void} remove
  * @property {(e: NPC.SpawnOpts) => Promise<NPC.NPC>} spawn
- * @property {() => void} updateTileCache
+ * @property {() => void} update
+ * @property {(...incomingLabels: string[]) => boolean} updateLabels
+ * - Ensures incomingLabels i.e. does not replace.
+ * - Returns `true` iff the label sprite-sheet had to be updated.
+ * - Every npc label may need updating,
+     avoidable by precomputing labels 
  */
 
-useGLTF.preload(glbMeta.url);
+/**
+ * @param {NPCProps} props 
+ */
+function NPC({ npc }) {
+  const { bones, mesh, quad, material } = npc.m;
+
+  return (
+    <group
+      key={npc.key}
+      ref={npc.onMount}
+      scale={npc.m.scale}
+      renderOrder={1}
+      // dispose={null}
+    >
+      {bones.map((bone, i) => <primitive key={i} object={bone} />)}
+      <skinnedMesh
+        geometry={mesh.geometry}
+        position={mesh.position}
+        skeleton={mesh.skeleton}
+        userData={mesh.userData}
+        onUpdate={(skinnedMesh) => {// 🔔 keep shader up-to-date
+          npc.m.mesh = skinnedMesh; 
+          npc.m.material = /** @type {THREE.ShaderMaterial} */ (skinnedMesh.material);
+        }}
+      >
+        {/* <meshPhysicalMaterial transparent map={material.map} /> */}
+        <cuboidManMaterial
+          key={CuboidManMaterial.key}
+          diffuse={[1, 1, 1]}
+          transparent
+          opacity={npc.s.opacity}
+
+          labelHeight={wallHeight * (1 / npc.m.scale)}
+          // labelHeight={wallHeight * (1 / 0.9)}
+          // selectorColor={npc.def.classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
+          selectorColor={npc.s.selectorColor}
+          showSelector={npc.s.showSelector}
+          // showLabel={false}
+
+          uBaseTexture={npc.baseTexture}
+          uLabelTexture={npc.labelTexture}
+          uAlt1Texture={emptyTexture}
+          
+          uFaceTexId={quad.face.texId}
+          uIconTexId={quad.icon.texId}
+          uLabelTexId={quad.label.texId}
+
+          uFaceUv={quad.face.uvs}
+          uIconUv={quad.icon.uvs}
+          uLabelUv={quad.label.uvs}
+          
+          uLabelDim={quad.label.dim}
+        />
+      </skinnedMesh>
+    </group>
+  )
+}
+
+/**
+ * @typedef NPCProps
+ * @property {NPC.NPC} npc
+ */
+
+/** @type {React.MemoExoticComponent<(props: NPCProps & { epochMs: number }) => JSX.Element>} */
+const MemoizedNPC = React.memo(NPC);
+
+useGLTF.preload(Object.values(npcClassToMeta).map(x => x.url));

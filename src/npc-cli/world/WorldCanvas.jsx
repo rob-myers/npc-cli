@@ -3,29 +3,34 @@ import * as THREE from "three";
 import { css } from "@emotion/css";
 import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
+import { damp } from "maath/easing";
 
 import { Rect, Vect } from "../geom/index.js";
-import { getModifierKeys, isRMB, isTouchDevice } from "../service/dom.js";
+import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { getQuadGeometryXZ } from "../service/three.js";
+import { emptySceneForPicking, getQuadGeometryXZ, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
-import { Origin } from "../aux/MiscThree.jsx";
+import useOnResize from "../hooks/use-on-resize.js";
 
 /**
  * @param {Props} props
  */
 export default function WorldCanvas(props) {
+  const smallViewport = isSmallViewport();
+
   const state = useStateRef(/** @returns {State} */ () => ({
     canvas: /** @type {*} */ (null),
     clickIds: [],
     controls: /** @type {*} */ (null),
     down: undefined,
+    fov: smallViewport ? 20 : 10,
     justLongDown: false,
     lastDown: undefined,
     lastScreenPoint: new Vect(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
+    targetFov: /** @type {null | number} */ (null),
     zoomState: 'near',
 
     canvasRef(canvasEl) {
@@ -37,6 +42,9 @@ export default function WorldCanvas(props) {
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
     },
+    getLastDownMeta() {
+      return state.lastDown?.threeD?.meta ?? null;
+    },
     getNpcPointerEvent({
       key,
       distancePx = state.getDownDistancePx(),
@@ -46,10 +54,18 @@ export default function WorldCanvas(props) {
       meta,
     }) {
       if (key === 'pointerup' || key === 'pointerdown') {
+
+        // ThreeEvent<PointerEvent>
+        const position = is3d === true && 'point' in event ? {
+          x: w.lib.precision(event.point.x),
+          y: w.lib.precision(event.point.y),
+          z: w.lib.precision(event.point.z),
+        } : undefined;
+
         return {
           key,
-          ...is3d && 'point' in event // ThreeEvent<PointerEvent>
-            ? { is3d: true, point: event.point }
+          ...position !== undefined
+            ? { is3d: true, position, point: { x: position.x, y: position.z } }
             : { is3d: false },
           distancePx,
           justLongDown,
@@ -84,7 +100,7 @@ export default function WorldCanvas(props) {
       return state.down?.pointerIds.length ?? 0;
     },
     onChangeControls(e) {
-      const zoomState = state.controls.getDistance() > 30 ? 'far' : 'near';
+      const zoomState = state.controls.getDistance() > 20 ? 'far' : 'near';
       zoomState !== state.zoomState && w.events.next({ key: 'changed-zoom', level: zoomState });
       state.zoomState = zoomState;
     },
@@ -174,10 +190,12 @@ export default function WorldCanvas(props) {
       state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
     onPointerUp(e) {// After 3D pointerup
-      if (!state.down) {
+      if (state.down === undefined) {
         return;
       }
-      
+
+      state.rootState === null && state.pickObject(e) // 🚧 WIP
+
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
         event: e,
@@ -200,18 +218,71 @@ export default function WorldCanvas(props) {
         meta: {},
       }));
     },
+    onTick(deltaMs) {
+      if (state.targetFov !== null && state.rootState !== null) {
+        if (damp(state, 'fov', state.targetFov, 0.2, deltaMs, undefined, undefined, undefined) === false) {
+          state.targetFov = null;
+        }
+        /** @type {THREE.PerspectiveCamera} */ (state.rootState.camera).fov = state.fov;
+        state.rootState.camera.updateProjectionMatrix();
+      }
+    },
     onWheel(e) {
       if (w.menu.ctOpen === true) {
         w.menu.hide();
         w.menu.justOpen = false;
       }
     },
+    pickObject(e) {// 🚧 WIP https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
+      const { gl, camera } = state.rootState;
+      // Set the projection matrix to only look at the pixel we are interested in.
+      camera.setViewOffset(
+        state.canvas.width,
+        state.canvas.height,
+        e.nativeEvent.offsetX * window.devicePixelRatio,
+        e.nativeEvent.offsetY * window.devicePixelRatio,
+        1,
+        1,
+      );
+
+      gl.setRenderTarget(pickingRenderTarget);
+      gl.clear();
+      gl.render(emptySceneForPicking, camera);
+      // gl.readRenderTargetPixels(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer);
+      gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer).then((x) => {
+        console.log('🔔', Array.from(x));
+      });
+      gl.setRenderTarget(null);
+      camera.clearViewOffset();
+    },
+    renderObjectPicking() {// 🚧 WIP
+      const { gl, scene, camera } = state.rootState;
+      // This is the magic, these render lists are still filled with valid data.  So we can
+      // submit them again for picking and save lots of work!
+      const renderList = gl.renderLists.get(scene, 0);
+      // renderList.opaque.forEach(processItem);
+      // renderList.transmissive.forEach(processItem);
+      // renderList.transparent.forEach(processItem);
+      renderList.opaque.forEach(x => {
+        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPicking) {
+          x.material.uniforms.objectPicking.value = true;
+          x.material.uniformsNeedUpdate = true;
+          gl.renderBufferDirect(camera, scene, /** @type {*} */ (x.geometry), x.material, x.object, null);
+        }
+      });
+      renderList.opaque.forEach(x => {
+        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPicking) {
+          x.material.uniforms.objectPicking.value = false;
+          x.material.uniformsNeedUpdate = true;
+        }
+      });
+    },
     setLastDown(e) {
       if (e.is3d || !state.lastDown) {
         state.lastDown = {
           epochMs: Date.now(),
           screenPoint: Vect.from(e.screenPoint),
-          threeD: e.is3d ? { point: new THREE.Vector3().copy(e.point), meta: e.meta } : null,
+          threeD: e.is3d === true ? { point: new THREE.Vector3().copy(e.position), meta: e.meta } : null,
         };
       } else {
         state.lastDown.epochMs = Date.now();
@@ -229,9 +300,12 @@ export default function WorldCanvas(props) {
   React.useEffect(() => {
     if (state.controls) {
       state.controls.setPolarAngle(Math.PI / 4);
-      state.controls.setAzimuthalAngle(touchFixedAzimuth);
+      state.controls.setAzimuthalAngle(initAzimuth);
     }
+    emptySceneForPicking.onAfterRender = state.renderObjectPicking;
   }, [state.controls]);
+
+  useOnResize();
 
   return (
     <Canvas
@@ -239,7 +313,11 @@ export default function WorldCanvas(props) {
       className={canvasCss}
       frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
-      gl={{ toneMapping: 3, toneMappingExposure: 1, logarithmicDepthBuffer: true }}
+      gl={{
+        toneMapping: 3,
+        toneMappingExposure: 1,
+        logarithmicDepthBuffer: true,
+      }}
       onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}
       onPointerMissed={state.onPointerMissed}
@@ -257,23 +335,26 @@ export default function WorldCanvas(props) {
       <PerspectiveCamera
         position={[0, 16, 0]}
         makeDefault
-        fov={15}
+        fov={state.fov}
         zoom={0.5}
       />
 
       <MapControls
         ref={x => state.controls = x ?? state.controls}
+        key={`${smallViewport}`}
         makeDefault
         zoomToCursor
         onChange={state.onChangeControls}
 
-        {...isTouchDevice() && {
-          minAzimuthAngle: touchFixedAzimuth,
-          maxAzimuthAngle: touchFixedAzimuth,
+        {...smallViewport ? {
+          minPolarAngle: fixedPolarAngle,
+          maxPolarAngle: fixedPolarAngle,
+        } : {
+          maxPolarAngle: Math.PI / 4,
         }}
         minDistance={5}
+        maxDistance={smallViewport ? 10 : 50}
         panSpeed={2}
-        maxPolarAngle={Math.PI/2 * 0.5}
       />
 
       <ambientLight intensity={1} />
@@ -289,8 +370,6 @@ export default function WorldCanvas(props) {
       >
         <mesh args={[getQuadGeometryXZ('vanilla-xz')]} position={[-0.5, 0, -0.5]} />
       </group>
-
-
     </Canvas>
   );
 }
@@ -312,6 +391,7 @@ export default function WorldCanvas(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down
  * Defined iff at least one pointer is down.
+ * @property {number} fov
  * @property {BaseDown & { threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
@@ -319,10 +399,12 @@ export default function WorldCanvas(props) {
  * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
+ * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
  *
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
+ * @property {() => null | Geom.Meta} getLastDownMeta
  * @property {(def: PointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getNpcPointerEvent
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
@@ -333,7 +415,10 @@ export default function WorldCanvas(props) {
  * @property {(e: React.PointerEvent) => void} onPointerLeave
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
+ * @property {(deltaMs: number) => void} onTick
  * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
+ * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
+ * @property {() => void} renderObjectPicking
  * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  */
 
@@ -351,6 +436,7 @@ const canvasCss = css`
     background-color: rgba(20, 20, 20, 1);
     width: 100%;
     height: 100%;
+    /* filter: sepia(1) invert(1); */
   }
 `;
 
@@ -377,4 +463,15 @@ const statsCss = css`
  * @property {Geom.Meta} meta
  */
 
-const touchFixedAzimuth = Math.PI / 6;
+const initAzimuth = Math.PI / 6;
+const fixedPolarAngle = Math.PI / 7;
+const pixelBuffer = new Uint8Array(4);
+
+function Origin() {
+  return (
+    <mesh scale={[0.025, 1, 0.025]} position={[0, 0.5 - 0.001, 0]}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshBasicMaterial color="red" />
+    </mesh>
+  );
+}

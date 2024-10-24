@@ -8,29 +8,80 @@ declare namespace NPC {
   interface NPCDef {
     /** User specified e.g. `rob` */
     key: string;
-    skinKey: SkinKey;
+    classKey: ClassKey;
     /** Radians */
     angle: number;
-    position: import("three").Vector3Like;
     /** World units per second */
     runSpeed: number;
     /** World units per second */
     walkSpeed: number;
   }
 
-  interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'runSpeed' | 'walkSpeed'>> {
+  type ClassKey = (
+    | 'cuboid-man'
+    | 'cuboid-pet'
+  );
+  
+  type TextureKey = (
+    | ClassKey
+    | 'labels'
+    // | 'cuboid-man-alt-1'
+  );
+
+  interface UvQuadId {
+    uvMapKey: NPC.TextureKey;
+    uvQuadKey: string;
+  }
+
+  interface ClassDef {
+    /** e.g. '/assets/3d/cuboid-man.glb' */
+    url: string;
+    /** e.g. `1` */
+    scale :number;
+    /** e.g. 'cuboid-man-material' */
+    materialName: string; 
+    /** e.g. 'cuboid-man' */
+    meshName: string;
+    /** e.g. 'Scene' */
+    groupName: string;
+    /** e.g. 'cuboid-man.tex.png' */
+    skinBaseName: string;
+    /** Animation to timeScale, default 1 */
+    timeScale: { [animName: string]: number };
+    /** Pre-scale */
+    radius: number;
+    walkSpeed: number;
+    runSpeed: number;
+  }
+
+  interface TexMeta {
+    /**
+     * e.g. `cuboid-man`
+     * 🚧 refine type
+     */
+    npcClassKey: string;
+    /** e.g. `cuboid-man.tex.svg` */
+    svgBaseName: string;
+    svgPath: string;
+    pngPath: string;
+    canSkip: boolean;
+  }
+
+  interface SpawnOpts extends Partial<Pick<NPCDef, 'angle' | 'classKey' | 'runSpeed' | 'walkSpeed'>> {
     npcKey: string;
-    skinKey?: NPC.SkinKey;
-    point: import("three").Vector3Like;
+    point: Geom.VectJson;
+    /**
+     * Should NPC have agent?
+     * - defaults true if `point` navigable
+     */
+    agent?: boolean;
     meta?: Geom.Meta;
     requireNav?: boolean;
-    /** Should NPC have agent? */
-    agent?: boolean;
   }
 
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
-  type Event =
+  type Event = (
     | PointerUpOutsideEvent
     | PointerUpEvent
     | PointerDownEvent
@@ -40,6 +91,7 @@ declare namespace NPC {
     | { key: "enabled" }
     | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
     | { key: "spawned"; npcKey: string; gmRoomId: Geomorph.GmRoomId }
+    | { key: 'started-moving'; npcKey: string }
     | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "way-point"; npcKey: string; next: Geom.VectJson | null } & Geom.VectJson
@@ -47,7 +99,7 @@ declare namespace NPC {
     | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId
     | { key: "exit-room"; npcKey: string } & Geomorph.GmRoomId
-    | { key: "decor-instantiated" }
+    | UpdatedGmDecorEvent
     | { key: "decors-removed"; decors: Geomorph.Decor[] }
     | { key: "decors-added"; decors: Geomorph.Decor[] }
     | {
@@ -60,8 +112,8 @@ declare namespace NPC {
     | { key: "locked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "unlocked-door"; gmId: number; doorId: number; meta?: Geom.Meta }
     | { key: "changed-zoom"; level: 'near' | 'far' }
-    | { key: "enter-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
-    | { key: "exit-sensor"; npcKey: string; type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+    | { key: "enter-collider"; npcKey: string; } & BaseColliderEvent
+    | { key: "exit-collider"; npcKey: string; } & BaseColliderEvent
     | {
         key: "pre-request-nav";
         /**
@@ -76,7 +128,18 @@ declare namespace NPC {
         changedGmIds: boolean[];
       }
     | { key: "pre-setup-physics" }
-    // 🚧 ...
+    // ...
+  );
+
+  type UpdatedGmDecorEvent = { key: "updated-gm-decor" } & (
+    | { type: 'partial'; gmIds: number[]; } // partial <=> gmsIds.length did not change
+    | { type: 'all' }
+  );
+
+  type BaseColliderEvent = (
+    | { type: 'circle' | 'rect'; decorKey: string }
+    | { type: 'nearby' | 'inside' } & Geomorph.GmDoorId
+  );
 
   type PointerUpEvent = Pretty<BasePointerEvent & {
     key: "pointerup";
@@ -116,10 +179,14 @@ declare namespace NPC {
     /** Touch device? */
     touch: boolean;
   } &  (
-    | { is3d: false; }
+    | {
+        is3d: false;
+      }
     | {
         is3d: true;
-        point: import("three").Vector3Like;
+        position: import("three").Vector3Like;
+        /** `{ x: position.x, y: position.z }` */
+        point: Geom.VectJson;
         /** Properties of the thing we clicked. */
         meta: Geom.Meta;
       }

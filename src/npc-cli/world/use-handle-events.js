@@ -1,7 +1,8 @@
 import React from "react";
 import { defaultDoorCloseMs } from "../service/const";
-import { pause, warn } from "../service/generic";
+import { pause, warn, debug } from "../service/generic";
 import { geom, tmpVec1 } from "../service/geom";
+import { npcToBodyKey } from "../service/rapier";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -16,16 +17,17 @@ export default function useHandleEvents(w) {
     npcToRoom: new Map(),
     roomToNpcs: [],
     externalNpcs: new Set(),
+    shouldIgnoreLongClick: undefined,
 
     canCloseDoor(door) {
       const closeNpcs = state.doorToNpc[door.gdKey];
-      if (closeNpcs.inside.size > 0) {
-        return false;
-      }
-      if (closeNpcs.nearby.size === 0) {
+      if (closeNpcs === undefined) {
         return true;
-      }
-      if (door.auto === true && door.locked === false) {
+      } else if (closeNpcs.inside.size > 0) {
+        return false;
+      } else if (closeNpcs.nearby.size === 0) {
+        return true;
+      } else if (door.auto === true && door.locked === false) {
         return false;
       }
 
@@ -43,19 +45,24 @@ export default function useHandleEvents(w) {
       }
     },
     async handleEvents(e) {
-      // info('useHandleEvents', e);
+      // debug('useHandleEvents', e);
 
       if ('npcKey' in e) {
         return state.handleNpcEvents(e);
       }
 
       switch (e.key) {
-        case "changed-zoom":
-          w.ceil.thickerTops = e.level === 'far';
-          w.ceil.draw();
+        case "changed-zoom": // 'near' or 'far'
           break;
-        case "long-pointerdown":
-          // mobile/desktop show/hide ContextMenu
+        case "updated-gm-decor":
+          // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
+          break;
+        case "long-pointerdown": { // toggle ContextMenu
+          const lastDownMeta = w.ui.getLastDownMeta();
+          if (lastDownMeta !== null && state.shouldIgnoreLongClick?.(lastDownMeta)) {
+            return;
+          }
+
           if (e.distancePx <= (e.touch ? 10 : 5)) {
             w.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
@@ -65,6 +72,7 @@ export default function useHandleEvents(w) {
             w.menu.hide();
           }
           break;
+        }
         case "pointerdown":
           w.ui.setLastDown(e);
           w.menu.hide();
@@ -77,13 +85,11 @@ export default function useHandleEvents(w) {
         case "pointerup-outside":
           !e.touch && state.onPointerUpMenuDesktop(e);
           break;
-        case "decor-instantiated":
-          w.setReady();
-          break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
           // ℹ️ dev should handle partial correctness e.g. by pausing
 
+          w.menu.measure('pre-request-nav');
           const prevRoomToNpcs = state.roomToNpcs;
           const prevExternalNpcs = state.externalNpcs;
           state.roomToNpcs = w.gms.map((_, gmId) => 
@@ -112,6 +118,7 @@ export default function useHandleEvents(w) {
             const npc = w.npc.npc[npcKey];
             state.tryPutNpcIntoRoom(npc);
           }
+          w.menu.measure('pre-request-nav');
           break;
         }
         case "pre-setup-physics":
@@ -126,11 +133,15 @@ export default function useHandleEvents(w) {
     },
     handleNpcEvents(e) {
       switch (e.key) {
-        case "enter-sensor": 
-          state.onEnterSensor(e);
+        case "enter-collider":
+          if (e.type === 'nearby' || e.type === 'inside') {
+            state.onEnterDoorCollider(e);
+          }
           break;
-        case "exit-sensor":
-          state.onExitSensor(e);
+        case "exit-collider":
+          if (e.type === 'nearby' || e.type === 'inside') {
+            state.onExitDoorCollider(e);
+          }
           break;
         case "spawned": {
           const npc = w.npc.npc[e.npcKey];
@@ -152,8 +163,8 @@ export default function useHandleEvents(w) {
         }
         case "removed-npc": {
           w.physics.worker.postMessage({
-            type: 'remove-npcs',
-            npcKeys: [e.npcKey],
+            type: 'remove-bodies',
+            bodyKeys: [npcToBodyKey(e.npcKey)],
           });
           state.removeFromSensors(e.npcKey);
           const gmRoomId = state.npcToRoom.get(e.npcKey);
@@ -165,7 +176,26 @@ export default function useHandleEvents(w) {
           }
           break;
         }
+        case "started-moving":
+          // Handle move into/through doorway when already nearby
+          w.oneTimeTicks.push(function onNpcStartMove() {
+            const npc = w.npc.npc[e.npcKey];
+            for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+              const door = w.door.byKey[gdKey];
+              if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
+                if (state.npcCanAccess(e.npcKey, door.gdKey)) {
+                  w.door.toggleDoorRaw(door, { open: true, access: true });
+                } else {
+                  npc.stopMoving();
+                }
+                break;
+              }
+            }
+          });
+          break;
         case "stopped-moving": {
+          const npc = w.npc.npc[e.npcKey];
+          npc.resolve.move?.();
           for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
             door.open === true && state.tryCloseDoor(door.gmId, door.doorId);
@@ -206,23 +236,6 @@ export default function useHandleEvents(w) {
 
       return false;
     },
-    async moveNpc(npcKey, point) {
-      const npc = w.npc.getNpc(npcKey);
-      await npc.moveTo({ x: point.x, y: 0, z: point.y }, { onStart() {
-        // handle move into/through doorway when already nearby
-        for (const gdKey of state.npcToDoor[npcKey]?.nearby ?? []) {
-          const door = w.door.byKey[gdKey];
-          if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
-            if (state.npcCanAccess(npcKey, door.gdKey)) {
-              w.door.toggleDoorRaw(door, { open: true, access: true });
-            } else {
-              npc.stopMoving();
-            }
-            break;
-          }
-        }
-      }});
-    },
     npcCanAccess(npcKey, gdKey) {
       for (const regexDef of state.npcToAccess[npcKey] ?? []) {
         if ((regexCache[regexDef] ??= new RegExp(regexDef)).test(gdKey)) {
@@ -239,14 +252,14 @@ export default function useHandleEvents(w) {
       // const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
       // return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
     },
-    onEnterSensor(e) {
+    onEnterDoorCollider(e) {
       if (e.type === 'nearby') {
         (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.gdKey);
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
         
         const door = w.door.byKey[e.gdKey];
-        if (door.open === true) {
-          return; // door already open
+        if (door.open === true) {// door already open
+          return;
         }
 
         if (door.auto === true && door.locked === false) {
@@ -256,7 +269,7 @@ export default function useHandleEvents(w) {
         
         const npc = w.npc.getNpc(e.npcKey);
         if (state.isUpcomingDoor(npc, door) === true) {
-          if (door.auto === true && w.e.npcCanAccess(e.npcKey, e.gdKey) === true) {
+          if (door.auto === true && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
           } else {
             // setTimeout(() => npc.stopMoving(), 300);
@@ -269,11 +282,17 @@ export default function useHandleEvents(w) {
       if (e.type === 'inside') {
         (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.gdKey);
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
+
+        const door = w.door.byKey[e.gdKey];
+        if (door.open === false && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
+          state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+        }
+
         w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: e.gmId, doorId: e.doorId, gdKey: e.gdKey });
         return;
       }
     },
-    onExitSensor(e) {
+    onExitDoorCollider(e) {
       const door = w.door.byKey[e.gdKey];
       const npc = w.npc.npc[e.npcKey]; // undefined on removal
 
@@ -350,11 +369,11 @@ export default function useHandleEvents(w) {
     },
     removeFromSensors(npcKey) {
       const closeDoors = state.npcToDoor[npcKey];
-      for (const gdKey of closeDoors.nearby ?? []) {
+      for (const gdKey of closeDoors?.nearby ?? []) {// npc may never have been close to any door
         const door = w.door.byKey[gdKey];
-        state.onExitSensor({ key: 'exit-sensor', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
+        state.onExitDoorCollider({ key: 'exit-collider', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
         if (closeDoors.inside.delete(gdKey) === true) {
-          state.onExitSensor({ key: 'exit-sensor', type: 'inside', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
+          state.onExitDoorCollider({ key: 'exit-collider', type: 'inside', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
         }
       }
       state.npcToDoor[npcKey]?.nearby.clear();
@@ -435,6 +454,7 @@ export default function useHandleEvents(w) {
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoor
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
+ * @property {undefined | ((lastDownMeta: Geom.Meta) => boolean)} shouldIgnoreLongClick
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
@@ -448,9 +468,8 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
- * @property {(e: Extract<NPC.Event, { key: 'enter-sensor' }>) => void} onEnterSensor
- * @property {(e: Extract<NPC.Event, { key: 'exit-sensor' }>) => void} onExitSensor
- * @property {(npcKey: string, point: Geom.VectJson) => Promise<void>} moveNpc
+ * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
+ * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d

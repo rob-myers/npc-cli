@@ -77,7 +77,7 @@ export const specialWallMetaKeys = /** @type {const} */ ([
   'broad',
 ]);
 
-export const wallHeight = 2;
+export const wallHeight = 2.2;
 
 export const doorHeight = 1.8;
 
@@ -91,48 +91,19 @@ export const doorLockedColor = 'rgb(255, 230, 230)';
 
 export const doorUnlockedColor = 'rgb(230, 255, 230)';
 
-/**
- * Properties of exported GLB file.
- */
-export const glbMeta = /** @type {const} */ ({
-  url: '/assets/3d/minecraft-anim.glb',
-  skinnedMeshName: 'minecraft-character-mesh',
-  /** Scale factor we'll apply to original model */
-  scale: 1.5 / 8,
-  /** Height of original model (meters) */
-  height: 8,
-  /** Dimension [x, y, z] of original model (meters) */
-  dimensions: [4, 8, 2],
-  /**
-   * Collide radius of original model (meters)
-   * 🚧 larger for running legs?
-   */
-  radius: 4,
-  /**
-   * Walking speed of original model (meters per second).
-   * Inferred by manually testing using root bone.
-   */
-  walkSpeed: 5,
-  /**
-   * Running speed of original model (meters per second).
-   * Inferred by manually testing using root bone.
-   */
-  runSpeed: 10,
-});
-
-/** @type {NPC.SkinKey} */
-export const defaultSkinKey = 'scientist-dabeyt--with-arms.png';
+/** @type {NPC.ClassKey} */
+export const defaultClassKey = 'cuboid-man';
 
 /**
  * Fade out previous animation (seconds)
  * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
  */
 export const glbFadeOut = {
-    Idle: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleLeftLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleRightLead: { Idle: 0, Run: 0.2, Walk: 0.2, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.2, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
-    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
+    Idle: { Idle: 0, Run: 0.2, Walk: 0.2, Sit: 0.2, Lie: 0 },
+    Lie: { Idle: 0, Run: 0, Walk: 0, Sit: 0, Lie: 0 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.2, Sit: 0.2, Lie: 0 },
+    Sit: { Idle: 0, Run: 0.2, Walk: 0.2, Sit: 0, Lie: 0 },
+    Walk: { Idle: 0.25, Run: 0.2, Walk: 0, Sit: 0.25, Lie: 0 },
 };
 
 /**
@@ -140,12 +111,14 @@ export const glbFadeOut = {
  * @type {Record<NPC.AnimKey, Record<NPC.AnimKey, number>>}
  */
  export const glbFadeIn = {
-    Idle: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.2, IdleRightLead: 0.2 },
-    IdleLeftLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
-    IdleRightLead: { Idle: 0, Run: 0.1, Walk: 0.1, IdleLeftLead: 0.1, IdleRightLead: 0.1 },
-    Run: { Idle: 0.3, Run: 0, Walk: 0.1, IdleLeftLead: 0.3, IdleRightLead: 0.3 },
-    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, IdleLeftLead: 0.25, IdleRightLead: 0.25 },
+    Idle: { Idle: 0, Run: 0.1, Walk: 0.1, Sit: 0.1, Lie: 0 },
+    Lie: { Idle: 0, Run: 0, Walk: 0, Sit: 0, Lie: 0 },
+    Walk: { Idle: 0.25, Run: 0.1, Walk: 0, Sit: 0.2, Lie: 0 },
+    Run: { Idle: 0.3, Run: 0, Walk: 0.1, Sit: 0.2, Lie: 0 },
+    Sit: { Idle: 0.1, Run: 0.1, Walk: 0.1, Sit: 0, Lie: 0 },
 };
+
+export const defaultNpcInteractRadius = geomorphGridMeters;
 
 export const showLastNavPath = false;
 
@@ -154,15 +127,23 @@ export const showLastNavPath = false;
  */
 export const defaultAgentUpdateFlags = 1 + 2 + 4;
 
+export const nearbyDoorSensorRadius = (geomorphGridMeters / 2) * 0.9;
+
+export const nearbyHullDoorSensorRadius = geomorphGridMeters;
+
+export const colliderHeight = 1.8;
+
 /** In meters, or equivalently 2 grid squares */
 export const decorGridSize = geomorphGridMeters * 2;
 
 export const decorIconRadius = 5 * sguToWorldScale;
 
-/** @type {Geomorph.DecorImgKey} */
-export const decorPointFallbackImgKey = 'icon--info';
-/** @type {Geomorph.DecorImgKey} */
-export const decorQuadFallbackImgKey = 'icon--warn';
+export const fallbackDecorImgKey = {
+  /** @type {Geomorph.DecorImgKey} */
+  point: 'icon--info',
+  /** @type {Geomorph.DecorImgKey} */
+  quad: 'icon--warn',
+};
 
 /**
  * - Each value is an integer in [0, 255].
@@ -250,6 +231,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "fresher--036--4x2": true,
   "fuel--010--4x2": true,
   "iris-valves--005--1x1": true,
+  "iris-valves--006--1x1": true,
   "lab--012--4x3": true,
   "lab--018--4x4": true,
   "lab--023--4x4": true,
@@ -316,4 +298,40 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "extra--017--table--2x0.5": true,
   "extra--018--table-0.25x0.25": true,
   "extra--019--table-0.5x2": true,
+  "extra--020--table-2x0.66": true,
 };
+
+/** @type {Record<NPC.ClassKey, NPC.ClassDef>} */
+export const npcClassToMeta = {
+  'cuboid-man': {
+    url: '/assets/3d/cuboid-man.glb',
+    scale: 0.7,
+    materialName: 'cuboid-man-material',
+    meshName: 'cuboid-man-mesh',
+    groupName: 'Scene',
+    skinBaseName: 'cuboid-man.tex.png',
+    timeScale: { 'Idle': 0.2, 'Walk': 0.5 },
+    // 🚧
+    radius: 0.5,
+    walkSpeed: 2,
+    runSpeed: 4,
+  },
+  'cuboid-pet': {
+    url: '/assets/3d/cuboid-pet.glb',
+    // scale: 1,
+    scale: 0.6,
+    materialName: 'cuboid-pet-material',
+    meshName: 'cuboid-pet-mesh',
+    groupName: 'Scene',
+    skinBaseName: 'cuboid-pet.tex.png',
+    timeScale: { 'Idle': 0.4, 'Walk': 0.5 },
+    // 🚧
+    radius: 0.5,
+    walkSpeed: 2,
+    runSpeed: 4,
+  },
+};
+
+export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
+  Object.keys(npcClassToMeta)
+);

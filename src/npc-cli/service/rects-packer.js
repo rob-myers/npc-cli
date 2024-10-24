@@ -15,6 +15,7 @@ export default function packRectangles(rectsToPack, opts) {
     border: opts.packedPadding,
     // smart: false,
   });
+  // 🔔 can provide rect (x, y) but maxrects-packer doesn't necessarily respect it
   packer.addArray(rectsToPack.map(x => {
     const rect = new Rectangle(x.width, x.height);
     rect.data = x.data;

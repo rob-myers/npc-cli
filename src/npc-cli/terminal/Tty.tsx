@@ -142,7 +142,7 @@ export default function Tty(props: Props) {
   }, [bounds]);
 
   React.useEffect(() => {// sync shell functions
-    if (state.base.session && state.booted) {
+    if (state.base.session?.ttyShell.initialized === true) {
       state.sourceFuncs();
     }
   }, [state.base.session, ...Object.values(props.functionFiles)]);
@@ -156,9 +156,9 @@ export default function Tty(props: Props) {
   React.useEffect(() => {// Boot profile
     if (state.base.session && !props.disabled && !state.booted) {
       const { xterm, session } = state.base;
-      state.booted = true;
       xterm.initialise();
-
+      state.booted = true;
+      
       session.ttyShell.initialise(xterm).then(async () => {
         await state.sourceFuncs();
         update();
@@ -199,33 +199,4 @@ export interface Props extends BaseTabProps {
 const rootCss = css`
   height: 100%;
   padding: 4px;
-
-  .xterm-container {
-    height: inherit;
-    background: black;
-
-    > div {
-      width: 100%;
-    }
-
-    /** Fix xterm-addon-fit when open keyboard on mobile */
-    .xterm-helper-textarea {
-      top: 0 !important;
-    }
-
-    /** This hack avoids <2 col width, where cursor row breaks */
-    min-width: 100px;
-    .xterm-screen {
-      min-width: 100px;
-    }
-  }
 `;
-
-const line = {
-  /** Only used when starts paused */
-  neverUnpaused: `${ansi.GreyBg}${ansi.Black}${ansi.Bold} paused ${ansi.Reset}${ansi.White} please enable tabs`,
-  // paused: 'paused processes',
-  paused: `${ansi.GreyBg}${ansi.Black}${ansi.Bold} paused ${ansi.Reset}${ansi.White} [ ${ansi.BrightGreen}unpause${ansi.White} ] or [ ${ansi.BrightGreen}debug${ansi.White} ]`,
-  /** Only used when we type whilst paused */
-  resumed: 'resumed processes',
-};

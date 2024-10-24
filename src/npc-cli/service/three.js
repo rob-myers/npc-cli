@@ -4,6 +4,7 @@
 import * as THREE from "three";
 import { LineMaterial } from "three-stdlib";
 import { Rect, Vect } from "../geom";
+import packRectangles from "./rects-packer";
 
 /** Unit quad extending from (0, 0, 0) to (1, 0, 1) */
 const quadGeometryXZ = new THREE.BufferGeometry();
@@ -172,6 +173,7 @@ export const tmpBox1 = new THREE.Box3();
 
 export const imageLoader = new THREE.ImageLoader();
 export const textureLoader = new THREE.TextureLoader();
+export const emptyTexture = new THREE.Texture();
 // console.log('cache enabled', THREE.Cache.enabled); // false
 
 const navPathColor = 0x00aa00;
@@ -209,7 +211,8 @@ export function buildObjectLookup(object) {
 }
 
 export const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
-const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
+
+export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
 /**
  * @param {number} width 
@@ -254,6 +257,61 @@ export function createDebugCylinder(position, radius, height) {
   return mesh;
 }
 
+/**
+ * Expects possibly empty (a) rects lookup, (b) texture,
+ * where it will write the output.
+ * 
+ * We cannot "extend" an existing sprite-sheet because maxrect-packer
+ * does not support this i.e. it won't necessarily respect constraints (x, y).
+ * Consequently we must re-create every time.
+ * 
+ * @param {string[]} labels Assumed to be duplicate-free.
+ * @param {LabelsSheetAndTex} sheet The sprite-sheet we'll create/mutate.
+ * @param {{ fontHeight: number; }} opts
+ */
+export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
+  if (labels.length === sheet.numLabels && labels.every(label => label in sheet.lookup)) {
+    return; // Avoid re-computation
+  }
+
+  // Create sprite-sheet
+  const canvas = /** @type {HTMLCanvasElement} */ (sheet.tex.image);
+  const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
+  ct.font = `${fontHeight}px 'Courier new'`;
+
+  const rects = labels.map(label => ({
+    width: ct.measureText(label).width,
+    height: fontHeight,
+    data: { label },
+  }));
+
+  const bin = packRectangles(rects, { logPrefix: 'w.extendLabels', packedPadding: 2 });
+
+  sheet.lookup = bin.rects.reduce((agg, r) => {
+    agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
+    return agg;
+  }, /** @type {LabelsSheetAndTex['lookup']} */ ({}));
+  sheet.numLabels = labels.length;
+  
+  // Draw sprite-sheet
+  if (canvas.width !== bin.width || canvas.height !== bin.height) {
+    sheet.tex.dispose();
+    [canvas.width, canvas.height] = [bin.width, bin.height];
+    sheet.tex = new THREE.CanvasTexture(canvas);
+    sheet.tex.flipY = false;
+  }
+  ct.clearRect(0, 0, bin.width, bin.height);
+  ct.strokeStyle = ct.fillStyle = 'white';
+  ct.font = `${fontHeight}px 'Courier new'`;
+  ct.textBaseline = 'top';
+  bin.rects.forEach(rect => {
+    ct.fillText(rect.data.label, rect.x, rect.y);
+    ct.strokeText(rect.data.label, rect.x, rect.y);
+  });
+
+  sheet.tex.needsUpdate = true;
+}
+
 export const yAxis = new THREE.Vector3(0, 1, 0);
 
 export const emptyGroup = new THREE.Group();
@@ -266,3 +324,59 @@ export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
  * @property {THREE.CanvasTexture} tex
  * @property {HTMLCanvasElement} canvas
  */
+
+export const emptySceneForPicking = new THREE.Scene();
+
+/**
+ * This is the 1x1 pixel render target we use to do object picking.
+ */
+export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
+  minFilter: THREE.NearestFilter,
+  magFilter: THREE.NearestFilter,
+  format: THREE.RGBAFormat,
+});
+
+/**
+ * @typedef LabelsSheetAndTex
+ * @property {{ [label: string]: Geom.RectJson }} lookup
+ * @property {number} numLabels
+ * @property {THREE.CanvasTexture} tex
+ */
+
+/**
+ * - identity on `THREE.Vector3`
+ * - convert { x, y, z } to `new THREE.Vector3(x, y, z)`
+ * - convert {x, y } to `new THREE.Vector3(x, 0, y)`
+ * @param {Geom.VectJson | THREE.Vector3Like} input 
+ */
+export function toV3(input) {
+  return 'z' in input
+    ? input instanceof THREE.Vector3 ? input : new THREE.Vector3().copy(input)
+    : new THREE.Vector3(input.x, 0, input.y)
+  ;
+}
+
+export const defaultQuadUvs = [...Array(4)].map(_ => new THREE.Vector2());
+
+/**
+ * - precision 6
+ * @param {THREE.BufferGeometry} geometry 
+ * @returns {Geom.VectJson[]}
+ */
+export function getGeometryUvs(geometry) {
+  return /** @type {THREE.BufferAttribute} */ (
+    geometry.getAttribute('uv')
+  ).toJSON().array.reduce((agg, x, i, xs) =>
+    (i % 2 === 1 && agg.push(new Vect(xs[i - 1], x).precision(6)), agg)
+  , /** @type {Geom.VectJson[]} */ ([]));
+}
+
+/**
+ * @param {THREE.Object3D[]} objs 
+ * @returns {THREE.Bone[]}
+ */
+export function getParentBones(objs) {
+  return objs.filter(/** @returns {x is THREE.Bone} */ (x) =>
+    x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
+  );
+}

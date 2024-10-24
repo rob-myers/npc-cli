@@ -1,4 +1,5 @@
-import { type StateCreator, create } from "zustand";
+import { type StateCreator } from "zustand";
+import { createWithEqualityFn as create } from "zustand/traditional";
 import { devtools } from "zustand/middleware";
 import { focusManager } from "@tanstack/react-query";
 
@@ -148,7 +149,7 @@ export type State = {
 
 export type ArticleKey = (
   | 'index'
-  | 'intro'
+  | 'strategy-1'
 );
 
 export interface ArticleMeta {

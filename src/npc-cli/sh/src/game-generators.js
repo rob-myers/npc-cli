@@ -1,18 +1,12 @@
 /**
  * @param {RunArg} ctxt
  */
-export async function* awaitWorld({ api, home: { WORLD_KEY }, w }) {
+export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
   api.info(`awaiting ${api.ansi.White}${WORLD_KEY}`);
   
-  while (!(w = api.getCached(WORLD_KEY))) {
-    yield* api.sleep(0.5);
+  while (api.getCached(WORLD_KEY)?.isReady() !== true) {
+    yield* api.sleep(0.05);
   }
-
-  const rejectOnCleanup = new Promise((_, reject) =>
-    api.addCleanup(() => reject("cancelled"))
-  );
-  await Promise.race([w.resolveOnReady(), rejectOnCleanup]);
-  // w.npc.connectSession(api.meta.sessionKey)
 }
 
 /**
@@ -74,22 +68,15 @@ export async function* click({ api, args, w }) {
       continue;
     }
 
-    const v3 = {
-      x: w.lib.precision(e.point.x),
-      y: w.lib.precision(e.point.y),
-      z: w.lib.precision(e.point.z),
-    };
-
     /** @type {NPC.ClickMeta} */
     const output = {
-      x: v3.x,
-      y: v3.z, // project to XZ plane
+      ...e.point,
       ...e.keys && { keys: e.keys },
       meta: { ...e.meta,
-        ...w.npc.isPointInNavmesh(e.point) && { navigable: true },
-        // 🚧 ...world.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
+        nav: e.meta.floor === true ? w.npc.isPointInNavmesh(e.point) : false,
+        // 🚧 ...w.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
-      v3,
+      v3: {...e.position},
     };
 
     yield output;
@@ -115,11 +102,7 @@ export async function* events({ api, w }) {
 /**
  * @param {RunArg} ctxt
  */
-export async function* setupDemo1({ w }) {
-
-    // create an obstacle (before query)
-    const obstacle = w.npc.addBoxObstacle({ x: 1 * 1.5, y: 0.5 + 0.01, z: 5 * 1.5 }, { x: 0.5, y: 0.5, z: 0.5 }, 0);
-
+export async function* selectPolysDemo({ w }) {
     // find and exclude a poly
     const { polyRefs } =  w.crowd.navMeshQuery.queryPolygons(
       // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
@@ -131,12 +114,11 @@ export async function* setupDemo1({ w }) {
       { x: 0.2, y: 0.1, z: 0.01 },
     );
     console.log({ polyRefs });
+
     const filter = w.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
     polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
     w.debug.selectNavPolys(polyRefs); // display via debug
-    
-    w.update(); // Show obstacle
 }
 
 /**
@@ -145,13 +127,11 @@ export async function* setupDemo1({ w }) {
  * @param {RunArg} ctxt
  */
 export async function walkTest(input, { w, home })  {
-  const { selectedNpcKey } = home;
-  const npc = w.npc.npc[selectedNpcKey];
+  const npc = w.npc.npc[home.selectedNpcKey];
   if (npc) {
-    // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
     npc.s.run = input.keys?.includes("shift") ?? false;
-    // 🔔 do not await so can override
-    w.e.moveNpc(npc.key, input).catch(() => {});
+    // do not await so can override
+    npc.moveTo(input).catch(() => {});
   }
 }
 
@@ -176,20 +156,26 @@ export async function* w(ctxt) {
     () => reject("potential ongoing computation")
   ));
 
-  if (api.isTtyAt(0)) {
+  // also support piped inputs via --stdin
+  // e.g. `click 1 | w --stdin gmGraph.findRoomContaining`
+  const { opts, operands } = api.getOpts(args, {
+    boolean: ["stdin"],
+  });
+
+  if (opts.stdin !== true) {
     const func = api.generateSelector(
-      api.parseFnOrStr(args[0]),
-      args.slice(1).map(x => api.parseJsArg(x)),
+      api.parseFnOrStr(operands[0]),
+      operands.slice(1).map(x => api.parseJsArg(x)),
     );
     const v = func(w, ctxt);
     yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
   } else {
     /** @type {*} */ let datum;
-    !args.includes("-") && args.push("-");
+    !operands.includes("-") && operands.push("-");
     while ((datum = await api.read()) !== api.eof) {
       const func = api.generateSelector(
-        api.parseFnOrStr(args[0]),
-        args.slice(1).map(x => x === "-" ? datum : api.parseJsArg(x)),
+        api.parseFnOrStr(operands[0]),
+        operands.slice(1).map(x => x === "-" ? datum : api.parseJsArg(x)),
       );
       try {
         const v = func(w, ctxt);

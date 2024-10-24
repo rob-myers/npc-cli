@@ -90,6 +90,7 @@ export default function Doors(props) {
             segLength: u.distanceTo(v),
             doorway: doorwayPoly,
             rect: doorwayPoly.rect.precision(precision),
+            angle: radians,
           };
           instId++;
         })
@@ -144,6 +145,7 @@ export default function Doors(props) {
       return this.byGmId[gmId][doorId].open;
     },
     onPointerDown(e) {
+      e.stopPropagation();
       w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerdown",
         distancePx: 0,
@@ -152,24 +154,23 @@ export default function Doors(props) {
         justLongDown: false,
         meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
       }));
-      e.stopPropagation();
     },
     onPointerUp(e) {
+      e.stopPropagation();
       w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerup",
         event: e,
         is3d: true,
         meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
       }));
-      e.stopPropagation();
     },
-    onTick() {
+    onTick(deltaMs) {
       if (state.movingDoors.size === 0) {
         return;
       }
-      const deltaMs = w.timer.getDelta();
+      
+      // 🚧 control via "float array" of ratios instead of 4x4 matrices
       const { instanceMatrix } = state.doorsInst;
-
       for (const [instanceId, meta] of state.movingDoors.entries()) {
         const dstRatio = meta.open ? 0.1 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
@@ -292,6 +293,7 @@ export default function Doors(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
+      renderOrder={-1}
     >
       <instancedSpriteSheetMaterial
         key={glsl.InstancedSpriteSheetMaterial.key}
@@ -309,8 +311,8 @@ export default function Doors(props) {
       args={[boxGeometry, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
     >
-      <meshDiffuseTestMaterial
-        key={glsl.MeshDiffuseTestMaterial.key}
+      <cameraLightMaterial
+        key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
       />
@@ -326,6 +328,7 @@ export default function Doors(props) {
 /**
  * @typedef State
  * @property {{ [gmId in number]: Geomorph.DoorState[] }} byGmId
+ * Format `byGmId[gmId][doorId]`
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
  * @property {{ [center in `${number},${number}`]: Geomorph.DoorState }} byPos
  * @property {THREE.InstancedMesh} doorsInst
@@ -344,7 +347,7 @@ export default function Doors(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleLockOpts) => boolean} toggleLockRaw
- * @property {() => void} onTick
+ * @property {(deltaMs: number) => void} onTick
  * @property {() => void} positionInstances
  */
 

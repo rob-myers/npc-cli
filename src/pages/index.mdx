@@ -18,7 +18,7 @@ import ScrollTo from 'src/components/ScrollTo';
 
 ## Intent
 
-This website focuses on one difficult problem. 
+This website focuses on a fun yet difficult problem. 
 
 <Card id="underlying-problem"> 
 **Underlying Problem**
@@ -29,18 +29,15 @@ from human-controlled characters.
 </Card>
 
 What do we mean by a video game?
-Technically speaking, any simulation of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
+Technically speaking, any entertaining simulation of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
 What about the other jargon?
 Well, the _Player_ is both (a) the human experiencing the simulation, (b) their respective simulated character.
 A Non-Player character (_NPC_) is a simulated character not controlled by the Player.
 The Player observes and interacts with the NPCs,
 and we're interested in improving the quality of these observations and interactions.
 
-The underlying problem requires each NPC to behave as if controlled by a human playing a particular role.
+Then the underlying problem requires each NPC to behave as if controlled by a human playing a particular role.
 Individuals needn't be sophisticated (e.g. multiple choice dialogue), but they must collectively interact just like humans would.
-
-{/* To better understand our objectives let us place them in the context of an underlying problem. */}
-{/* Although we won't try to solve it directly, we will work towards an intermediate problem. */}
 
 Ok, but why this particular problem?
 
@@ -54,8 +51,8 @@ usually with a single linear conversation <SideNote>The Jumanji reboot [1](https
 In our search for intelligent machines, we should remember that Turing's test was a _party game_.
 Almost 75 years later we have a multi-billion dollar video game industry
 and a distinct lack of believable NPCs.
-Society's interest in robots
-apparently does not extend to the ones we've already invited into our homes.
+It seems that society's interest in robots
+does not extend to the ones we've already invited into our homes.
 
 So let's do something about it.
 
@@ -64,7 +61,7 @@ We're not going to attack the <ScrollTo id="underlying-problem">underlying probl
 A head-on approach is way too hard.
 The video game industry has many talented developers and designers, and there's no reason to believe we can do any better.
 To make progress we're going to move the goal posts.
-We still want NPCs to collectively behave like humans from the Player's perspective.
+We still want NPCs to behave like humans from the Player's perspective.
 However, we're going to assume _another_ human controls them i.e. the _Game Master_.
 Then we have two objectives:
 
@@ -75,13 +72,13 @@ Then we have two objectives:
 2. Enable the Game Master to act indistinguishably from many humans.
 </Card>
 
-The first objective amounts to building a system.
-The second objective is a property this system must satisfy.
+The first objective amounts to building a system,
+whereas the second is a property this system must satisfy.
+Collectively they would solve the underlying problem from the Player's perspective (assuming the experience is entertaining).
+The next problem would be to somehow automate the Game Master, but that's out of scope.
+This website is entirely focused on the two objectives listed above.
 Importantly we've already created the system's foundations,
-as we'll explain in our next blog entry.
-
-{/* Why aren't we interested in the robots we have already invited into our homes i.e. NPCs? */}
-{/* Take a step back. We're not ready yet. Lots of islands of ... */}
+as we shall explain in our next blog entry.
 
 
 {/* Because video games must behave soundly over all user journeys,
@@ -90,7 +87,6 @@ In other words, rich environments have a huge number of possibilities which cann
 
 {/* A balance is needed between steering the Player along a narrative,
 and allowing the Player to make free choices. */}
-
 
 {/* For starters we won't work inside a video game development cycle i.e.
 we're not trying to create some finished product which we can sell.
@@ -114,12 +110,6 @@ why should we expect it within the additional constraints of "real life"? */}
 
 {/* Finally as a way for us to understand our own behaviour */}
 
-## Strategy
-
-{/* 
-Here are some icons:
-- <FontAwesomeIcon icon={faChevronRight} size="1x" />
-- <FontAwesomeIcon icon={faCoffee} size="1x" />
-- <FontAwesomeIcon icon={faLungs} size="1x" /> */}
+{/* ## Strategy */}
 
 export { Head } from '../components/Head';

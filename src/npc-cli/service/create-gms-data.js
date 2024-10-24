@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
+import { Poly } from '../geom';
 import { geom, tmpVec1 } from "./geom";
 import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
@@ -55,8 +56,8 @@ export default function createGmsData({ prevGmData }) {
       );
       gmData.tops = {
         broad: gm.walls.filter(x => x.meta.broad === true),
-        door: gm.doors.map(door => door.computeThinPoly()),
-        nonHull: nonHullWallsTouchCeil,
+        door: gm.hullDoors.map(door => door.computeThinPoly()),
+        nonHull: Poly.union(nonHullWallsTouchCeil.concat(gm.doors.map(door => door.computeThinPoly()))),
       };
 
       // canvas for quick "point -> roomId", "point -> doorId" computation
@@ -175,17 +176,26 @@ export default function createGmsData({ prevGmData }) {
      * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta }[]}
      */
     getLintelSegs({ seg: [u, v], normal, meta }) {
-      const depth = meta.hull === true ? hullDoorDepth : doorDepth;
+      const depths = lintelDepths[meta.hull === true ? 'hull' : 'nonHull'];
       meta = { ...meta, y: doorHeight, h: wallHeight - doorHeight };
-      return [1, -1].map(sign => ({
+      return [1, -1].map((sign, i) => ({
         seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
-          [u, v].map(p => p.clone().addScaled(normal, sign * 0.5 * depth))
+          [u, v].map(p => p.clone().addScaled(normal, sign * 0.5 * depths[i]))
         ),
         meta,
       }));
     },
   };
   return gmsData;
+};
+
+const lintelDepths = {
+  /**
+   * 1st ~ hull door normal i.e. points outwards.
+   * We lessen the depth to avoid z-fighting adjacent hull door.
+   */
+  hull: [hullDoorDepth - 0.01, hullDoorDepth],
+  nonHull: [doorDepth, doorDepth],
 };
 
 /** @type {GmData} */

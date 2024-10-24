@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 
-import { alloc, error, info } from "../service/generic";
+import { alloc, error, info, debug, warn } from "../service/generic";
 import { geomorph } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
@@ -15,10 +15,10 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWo
 /** @param {MessageEvent<WW.MsgToNavWorker>} e */
 async function handleMessages(e) {
   const msg = e.data;
-  info("worker received message", msg);
+  debug("🤖 nav.worker received", JSON.stringify(msg));
 
   switch (msg.type) {
-    case "request-nav-mesh":
+    case "request-nav":
       const geomorphs = geomorph.deserializeGeomorphs(await fetchGeomorphsJson());
 
       const { mapKey } = msg;
@@ -46,9 +46,11 @@ async function handleMessages(e) {
         return mesh;
       });
 
-      info('total vertices', meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0));
-      info('total triangles', meshes.reduce((agg, mesh) => agg + (mesh.geometry.index?.count ?? 0) / 3, 0));
-      info('total meshes', meshes.length);
+      debug('🤖 nav.worker', {
+        'total vertices': meshes.reduce((agg, mesh) => agg + (mesh.geometry.getAttribute('position')?.count ?? 0), 0),
+        'total triangles': meshes.reduce((agg, mesh) => agg + (mesh.geometry.index?.count ?? 0) / 3, 0),
+        'total meshes': meshes.length,
+      });
 
       await initRecastNav();
       const result = customThreeToTileCache(
@@ -59,10 +61,10 @@ async function handleMessages(e) {
       
       if (result.success) {
         const { navMesh, tileCache } = result;
-        const tilePolyCounts = alloc(navMesh.getMaxTiles()).flatMap((_, i) =>
+        const polysPerTile = alloc(navMesh.getMaxTiles()).flatMap((_, i) =>
           navMesh.getTile(i).header()?.polyCount() ?? []
         );
-        info('total tiles', tilePolyCounts.length, { tilePolyCounts });
+        info('🤖 nav.worker', { totalTiles: polysPerTile.length, polysPerTile });
 
         selfTyped.postMessage({
           type: "nav-mesh-response",
@@ -79,12 +81,12 @@ async function handleMessages(e) {
       meshes.forEach((mesh) => mesh.geometry.dispose());
       break;
     default:
-      info("nav worker: unhandled:", msg);
+      warn("🤖 nav.worker: unhandled message", msg);
       break;
   }
 }
 
 if (typeof window === 'undefined') {
-  info("🤖 nav worker started", import.meta.url);
+  info("🤖 nav.worker started", import.meta.url);
   selfTyped.addEventListener("message", handleMessages);
 }

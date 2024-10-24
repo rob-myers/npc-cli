@@ -1,4 +1,4 @@
-import { fromDecorImgKey, fromSymbolKey, glbMeta } from "./const";
+import { fromDecorImgKey, fromSymbolKey, npcClassToMeta } from "./const";
 
 /**
  * 🚧 try singleton instance instead, including other methods
@@ -14,24 +14,10 @@ export const helper = {
   /** Aligned to media/decor/{key}.svg */
   fromDecorImgKey,
 
-  /** static/assets/3d/minecraft-skins/* */
-  fromSkinKey: {
-    'minecraft-alex-with-arms.png': true,
-    'minecraft-ari.png': true,
-    'minecraft-borders.128x128.png': true,
-    'minecraft-efe-with-arms.png': true,
-    'minecraft-kai.png': true,
-    'minecraft-makena-with-arms.png': true,
-    'minecraft-noor-with-arms.png': true,
-    'minecraft-steve.png': true,
-    'minecraft-sunny.png': true,
-    'minecraft-zuri.png': true,
-    'scientist-dabeyt--with-arms.png': true,
-    'scientist-4w4ny4--with-arms.png': true,
-    'soldier-_Markovka123_.png': true,
-    'soldier-russia.png': true,
-    'soldier-darkleonard2.png': true,
-    'robot-vaccino.png': true,
+  /** @type {Record<NPC.ClassKey, true>} */
+  fromNpcClassKey: {
+    'cuboid-man': true,
+    "cuboid-pet": true,
   },
 
   /** @type {Record<Geomorph.GeomorphNumber, Geomorph.GeomorphKey>} */
@@ -66,19 +52,42 @@ export const helper = {
   
   defaults: {
     /** 🔔 division by 3 improves collisions */
-    radius: glbMeta.radius * glbMeta.scale / 3,
-    runSpeed: glbMeta.runSpeed * glbMeta.scale,
-    walkSpeed: glbMeta.walkSpeed * glbMeta.scale,
+    radius: npcClassToMeta["cuboid-man"].radius * npcClassToMeta["cuboid-man"].scale / 3,
+    runSpeed: npcClassToMeta["cuboid-man"].runSpeed * npcClassToMeta["cuboid-man"].scale,
+    walkSpeed: npcClassToMeta["cuboid-man"].walkSpeed * npcClassToMeta["cuboid-man"].scale,
   },
 
   // 🚧 fix types
   // /** @type {Record<NPC.AnimKey, true>} */
   fromAnimKey: {
     Idle: true,
-    IdleLeftLead: true,
-    IdleRightLead: true,
-    Walk: true,
+    Lie: true,
     Run: true,
+    Sit: true,
+    Walk: true,
+  },
+
+  /**
+   * Try construct degenerate "id" from partial.
+   * @param {Partial<Geomorph.GmDoorId>} meta 
+   * @returns {null | Geomorph.GmDoorId}
+   */
+  extractGmDoorId(meta) {
+    if (typeof meta.gdKey === 'string') {
+      return {
+        gdKey: meta.gdKey,
+        gmId: meta.gmId ?? Number(meta.gdKey.slice(1).split('d', 1)[0]),
+        doorId: meta.doorId ?? Number(meta.gdKey.split('d', 1)[1]),
+      };
+    } else if (typeof meta.gmId === 'number' &&  typeof meta.doorId === 'number') {
+      return {
+        gdKey: `g${meta.gmId}d${meta.doorId}`,
+        gmId: meta.gmId,
+        doorId: meta.doorId,
+      };
+    } else {
+      return null;
+    }
   },
 
   /**
@@ -133,10 +142,10 @@ export const helper = {
 
   /**
    * @param {string} input 
-   * @returns {input is NPC.SkinKey}
+   * @returns {input is NPC.ClassKey}
    */
-  isSkinKey(input) {
-    return input in helper.fromSkinKey;
+  isNpcClassKey(input) {
+    return input in helper.fromNpcClassKey;
   },
   
   /**

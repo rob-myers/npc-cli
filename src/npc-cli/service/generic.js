@@ -346,6 +346,24 @@ export function parseJsArg(input) {
 }
 
 /**
+ * Parse input with context with string fallback
+ * - preserves `undefined`
+ * - preserves empty-string
+ * @param {string} [input]
+ * @param {string[]} names
+ * @param {any[]} values
+ */
+export function parseJsWithCt(input, names = [], values = []) {
+  try {
+    if (input === "") return input;
+    // eslint-disable-next-line no-new-func
+    return Function(...names, `return ${input}`)(...values);
+  } catch (e) {
+    return input;
+  }
+}
+
+/**
  * JSON.parse with string fallback
  * @param {string} input
  */
@@ -471,6 +489,20 @@ export function tryLocalStorageGet(key, logErr = false) {
 }
 
 /**
+ * @template T
+ * @param {string} key
+ * @returns {T | null}
+ */
+export function tryLocalStorageGetParsed(key, logErr = false) {
+  try {
+    return /** @type {T} */ JSON.parse(localStorage.getItem(key) ?? '');
+  } catch (e) {
+    logErr && console.error(e);
+    return null;
+  }
+}
+
+/**
  * @param {string} key
  */
 export function tryLocalStorageRemove(key, logErr = true) {
@@ -490,6 +522,19 @@ export function tryLocalStorageSet(key, value, logErr = true) {
     localStorage.setItem(key, value);
   } catch (e) {
     logErr && console.error(e);
+  }
+}
+
+/**
+ * ctrl+[ or ctrl+]
+ * @param {KeyboardEvent | import('react').KeyboardEvent} e 
+ * @returns {false | -1 | 1}
+ */
+export function detectTabPrevNextShortcut(e) {
+  if (e.ctrlKey === true) {
+    return e.key === '[' ? -1 : e.key === ']' ? 1 : false;
+  } else {
+    return false;
   }
 }
 
@@ -524,7 +569,7 @@ export function visibleUnicodeLength(input) {
  * @type {(...args: any[]) => void}
  */
 export const debug = (function () {
-  return Function.prototype.bind.call(console.debug, console, "\x1b[34mDEBUG\x1b[0m");
+  return Function.prototype.bind.call(console.debug, console, "\x1b[36mDEBUG\x1b[0m");
 })();
 
 /** @param {string} text */

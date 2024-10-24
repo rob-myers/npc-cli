@@ -2,51 +2,59 @@
 
 ## WIP
 
-- 🚧 migrate sub-symbols to actual symbols
-  - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
-  - bridge ✅ lifeboat ✅
-  - consoles 🚧 extras 🚧 ...
-- 🚧 extend chair/table symbols with chair/table tag on obstacle
+- ✅ cleanup before merge branch
+  - ✅ door click should not propagate to floor
+    - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
+  - ✅ nearby nav click should cause move to
+  - ✅ merge npc.waitUntilStopped into useHandleEvents
+  - ✅ reject.turn, reject.fade
+  - ✅ npc.turn -> npc.look
+  - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
 
-- ✅ locked doors should close when
-  - ✅ nothing `inside` and no `nearby` npc moving
-  - ✅ trigger check when nearby npc stops (currently only on exit nearby sensor)
+- 🚧 next.js project (npc-cli-next)
+  - keep in sync e.g. glsl.js, Logger
+    - `git diff --name-only "@{Sat 18 Sep}"`
+  - get Decor working
 
-- ✅ fix bug: cannot close door when npc nearby
+- ✅ sh: `map --forever` does not terminate on throw
 
-- create "hyper casual" characters, rather then pseudo minecraft character
-  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
-  - based on these models e.g. 3 bones: body > head, shadow
-
-- investigate GPU object picking via 2 render targets written to by 1 fragment shader
-  - based on PR where render targets first added to three.js
-    > https://github.com/mrdoob/three.js/pull/16390
-  - can provide vertex indices via attribute, hence instanceId too
-    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
-
-- return to next.js project
-  - ensure up to date
-  - work on migrating Viewer
-
-- Boxy rounding errors issue
-  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
-- 🚧 memory leaks
-  - ℹ️ use incognito to avoid extensions memory leak
-    > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
-  - ℹ️ https://superuser.com/questions/1817473/what-accounts-for-the-discrepancy-between-the-memory-use-shown-when-hovering-on
-  - ℹ️ can also use three.js stats UI which has a memory indicator
-  - 🚧 interact, then take memory snapshot of both workers
-  - geometry attributes are a possible memory leak
-    - could update geometry attributes rather than create new attributes
-      - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
-      - i.e. preset large bounds, and use geometry.setDrawRange
-    - could use underlying gl api to remove attributes
-
-- support non-door sensor i.e. decor circle/poly
+- 🚧 understand duplicated npcs e.g. on edit recast-detour.js
+  - ℹ️ seems npc `will` is coinciding with npc `rob`
+  - need repro, tried adding `key`.
+- ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
+  - background tab never was rendered
+- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
+- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
+  - ✅ shortcut works in active tabset
+  - clicking tab sets active tabset
+- improve cuboid-pet animations
+- bug: sh: paste multiline command and start Cmd-Deleting midway
+- useGLTFsAsync hook
+  - replaces synchronous useGLTF
+  - supports multiple and provides each when ready
+  - hmr: can provide hash (e.g. lastModified) triggering reload
+- ongoing "large Chrome memory in tab" issue
+  - ℹ️ https://support.google.com/chrome/a/answer/6271282?hl=en#zippy=%2Cmac
+  - ℹ️ `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --enable-logging --v=1 --verbose`
+  - ℹ️ `cat '/Users/robmyers/Library/Application Support/Google/Chrome/chrome_debug.log'`
+  - create a branch and repro without workers/crowd
+- bug: tty: ctrl + w while multiple input: goes back a line
+  - need repro
+- improve alternate character faces
+- improve alternate character icons
+- ❌ change fov with camera distance? e.g. 15 far, 30 close
+- support multiple skins for single test character
+- decor labels should be instancedmesh with custom shader
+- consider transparent body skin
+- fix flickering hull door base (onchange camera view)
+  - suffices to add a matching line
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so
     try provide "echo circle" for touch devices
-- hmr issue with Connector class
+- stationary npc with agent uses navQuery with blocked doors?
+  - to avoid being pushed through doors by other npcs
+- ❌ hmr issue with Connector class
+  - we don't support it
 - hull door enter-room triggers late?
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh
@@ -66,21 +74,39 @@
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
 - permit single quotes inside e.g. game-generators
-- rebuild animation actions `IdleLeftLead`, `IdleRightLead`
+- ❌ rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 - decor sprite bounds issue on edit decor
   - e.g. resize extant decor sprite
-- support recursive stringified Set
+- ✅ support recursive stringified Set
+  - `expr 'new Set([new Set([0,0,1,1])])'`
 - running `source PROFILE` twice breaks e.g. toggle door
   - maybe detect/warn "duplicate process def"
 - duplicate walls in a symbol seemed to cancel each other out
 - tty resize while multiline input is broken again
-- tty pause/resume loses should remember cursor position
+- tty pause/resume should remember cursor position
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
 - `Tabs` css should not reference src/const
   - try refactor `faderOverlayCss` e.g. merge into `<figure>`
-- change camera fov based on camera height and/or visible-world
+- ❌ change camera fov based on camera height and/or visible-world
+- Boxy rounding errors issue
+  - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
+- 🚧 memory leaks
+  - ℹ️ use incognito to avoid extensions memory leak
+    > https://superuser.com/questions/1843134/my-chrome-tab-memory-usage-increases-with-every-tab-reload-going-up-to-2gb-per-t
+  - ℹ️ https://superuser.com/questions/1817473/what-accounts-for-the-discrepancy-between-the-memory-use-shown-when-hovering-on
+  - ℹ️ can also use three.js stats UI which has a memory indicator
+  - 🚧 interact, then take memory snapshot of both workers
+  - geometry attributes are a possible memory leak
+    - could update geometry attributes rather than create new attributes
+      - see https://github.com/mrdoob/three.js/issues/26835#issuecomment-1733180984
+      - i.e. preset large bounds, and use geometry.setDrawRange
+    - could use underlying gl api to remove attributes
+WorldMenu log extras
+  - permit resize (mobile too)
+  - resize observer fits
+  - checkboxes: pin ✅ show debug logs 🚧
 
 - BUG obstacles.png slightly different onchange
   - no visible difference, probably due to "quick approach"
@@ -2050,3 +2076,673 @@
 - ✅ can avoid checking each corner if no intersect and further away
 - ℹ️ no-access npc stops early when onEnterSensor
 - ✅ clean
+
+- ✅ locked doors should close when
+  - ✅ nothing `inside` and no `nearby` npc moving
+  - ✅ trigger check when nearby npc stops (currently only on exit nearby sensor)
+
+- ✅ fix bug: cannot close door when npc nearby
+
+- ✅ BUG: tty: xterm paste (fails when line is single newline)
+  - pasted newlines are normalized as `\r`: https://github.com/xtermjs/xterm.js/issues/1382#issuecomment-380309962
+```sh
+# repro
+w gms | split | flatMap 'x => x.rooms' | map '({ center }, { w }, i) => {
+
+}'
+```
+- ✅ BUG: tty: xterm paste then historical up (cursor in wrong place)
+  - changed pasting behaviour i.e. previously we ran each line upon encountering newline,
+    but now we just insert into to input
+- ✅ BUG tty: xterm: cursor should skip over \r (now we normalize as \r\n)
+
+- ✅ BUG: tty: xterm delete from end (moves one line down)
+  - commented out "Right-edge detection" in `setInput`
+```sh
+# repros
+echo 'foo {
+}'
+echo 'bar {
+
+}'
+```
+
+- ✅ Support SVG symbol syntax `y=wallHeight`
+
+- ✅ `take n` exits with non-zero code when doesn't take everything
+  - so this terminates `{ echo foo; echo bar; } | while take 1 >tmp; do echo $tmp; done`
+  - ✅ BUG `seq 5 | while take 1 >pos; do pos; done`
+    - seems we cannot handle chunks using this method
+
+- ❌ BUG tty: xterm: delete inside multiline command
+  - repro didn't work
+```sh
+# repro by deleting from !")👈
+call '() => {
+  console.log("Wowsers!")
+}'
+```
+
+- ✅ measure ~200 npcs FPS with current setup
+  - ℹ️ 120 FPS with 177 without agent
+  - ℹ️ 120 FPS with 177 with agent
+```sh
+# 177 npcs
+w gms | split | flatMap 'x => x.rooms' | reduce '(sum, x) => sum + 1' 0
+
+run '({ w, api }) {
+  for (const [gmId, gm] of w.gms.entries()) {
+    for (const [roomId, { center }] of gm.rooms.entries()) {
+      try {
+        console.log({gmId, roomId});
+        gm.matrix.transformPoint(center);
+        await w.npc.spawn({
+          npcKey: `room-npc-${gmId}-${roomId}`,
+          point: { x: center.x, y: 0, z: center.y },
+          agent: true,
+        });
+      } catch {}
+      yield* api.sleep(0.05);
+    }
+  }
+}'
+```
+
+- ✅ investigate GPU object picking via 2 render targets written to by 1 fragment shader
+  - ℹ️ PR where render targets first added to three.js:
+    > https://github.com/mrdoob/three.js/pull/16390
+  - ℹ️ can provide vertex indices via attribute, hence instanceId too
+    > e.g. https://discourse.threejs.org/t/how-do-i-get-the-vertex-data-from-my-position-attribute-into-a-shader-with-a-datatexture/52041
+  - ℹ️ https://github.com/mrdoob/three.js/blob/master/examples/webgl_interactive_cubes_gpu.html
+  - ℹ️ Asked question https://discourse.threejs.org/t/is-gpu-object-picking-possible-with-a-single-render/70228
+    - if we use a single shader with 2 outputs, seems we need a render target with 2 textures,
+      and our "main scene" would be a full-screen quad, which breaks r3f pointer events
+  - ℹ️ could re-use main scene as "picking scene" with different picking materials,
+    - https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
+    - need to extend approach to support instancedmesh e.g. via extra attribute
+    - could avoid different shaders via boolean uniform
+
+- ✅ towards gpu object picking: get walls working
+  - ✅ Walls shader has own monochrome shader
+  - ✅ Walls shader has boolean uniform `objectPicking` and behaves differently based on it
+  - ✅ Walls shader has `gmId` attribute
+  - ✅ Walls shader has `wallSegId` attribute
+  - ✅ decode clicked pixel when shader turned on
+  - ✅ fix hull wall z-fighting
+    - ℹ️ object-picking issue (not visually where every wall black)
+    - ❌ could omit/set-height-0 "outer overlapping walls"
+      - too complex
+    - ✅ manually inset outer hull walls slightly  
+  - ✅ async read pixel
+  - ✅ tidy: still running atm, will extend bit-by-bit
+  - ℹ️ rgba is `(1, gmId, ((wallSegId >> 8) & 255)/255, (wallSegId & 255)/255)`
+
+- ✅ add perf logging
+  - ✅ assets.js timings
+  - ✅ World has pin-able textarea
+  - ✅ start writing logs from `World`
+
+- ✅ fix "flipped decor" i.e. if decor quad transform determinant is negative,
+  - flip the quad's uvs across "central vertical axis"
+
+- ✅ can dynamically add to label sprite-sheet
+  - ℹ️ `w update 'w => w.decor.showLabels = true'`
+  - ✅ move `w.decor.label.quad` to `w.decor.labelQuad`
+  - ✅ move `w.decor.{label,ensureLabelSheet}` to `w.label`
+  - ❌ can incrementally extend
+    - doesn't necessarily keep previous rects in same position
+    - so, decor label uvs need to be recomputed
+  - ✅ two label textures i.e. decor, npc (dynamic)
+    - ✅ w.label -> w.decor.label
+    - ✅ w.label -> w.npc.label
+    - ✅ w.npc.updateLabels(["foo", "bar", "baz"])
+
+- ✅ WorldMenu log should be a partially transparent xterm
+  - ❌ use `BaseTty` but readonly
+  - ✅ use vanilla `@xterm/xterm` Terminal i.e. `Logger`
+  - ✅ clean up
+
+
+- ✅ first draft of "hyper casual" characters
+  - instead of pseudo minecraft character
+  - https://assetstore.unity.com/packages/3d/characters/hyper-casual-low-poly-simple-people-175599
+  - based on these models e.g. 3 bones: body > head, shadow
+  - ✅ unity: create project with imported assets
+  - ✅ blender: import exported fbx as static model
+  - ℹ️ investigate mesh
+    - tris: base_body 280 (head 140, body 140)
+    - tris: hair_man 172, cap 128, hair_woman 278, hair_pony 256, knit_hat 144
+    - no texture map
+  - ℹ️ mesh spec (1st attempt)
+    - body: cuboid with split 0.34 * h from base, and another at 0.7 * h inset by 0.185 * w
+      - width = depth = 200 (arbitrary units), height 230 (or 245 with top curve)
+    - head: cylinder with 3 * 4 sides
+      - width = depth = 200 (radius), height 125 (or 170 with curves)
+  - ✅ 1st attempt at character
+    - facing along negative Y
+    - head: 12-side cylinder + bevel modifier
+    - body: cuboid (x2 vert split, tapered towards head) + bevel modifier
+    - needs shadow too
+  - ℹ️ blender:
+    - set pivot mode in top menu e.g. as 3d cursor
+    - absolute positions: N to toggle
+  - ℹ️ blender edit mode:
+    - Cmd+R loop cut
+    - Option+Click edge for edge loop
+  - ✅ texture mapping
+    - ✅ UV > mark seams, unwrap
+    - ✅ export UV map as SVG and import to Boxy SVG
+      - try provide strong outline for body
+      - try provide strong outline for face
+    - ✅ add new material to mesh (e.g. in shader view)
+      - add Texture > Image Texture
+      - export Boxy SVG as PNG, as use as image
+  - ✅ test import into World
+    ```sh
+    w debug.char.add
+    w debug.char.remove 0
+    w debug.char.remove
+    # update skin without full page refresh
+    w debug.char.setSkin 0
+    ```
+  - ✅ try inverted colours
+  - ✅ improve drop shadow
+    - fix transparency by setting floor renderOrder `-1`
+  - ✅ should be higher off ground but still ~1.5m total
+  - ✅ can reload texture without hard-refresh
+  - ✅ try get CameraLightMaterial working
+    -  try debug via `<mesh>` instead of `<primitive>`
+  - ✅ cleanup media/3d
+    - media/npc-old (minecraft)
+    - media/npc (ongoing)
+  - ✅ cleanup static/assets/3d and related to jsx
+    - do not delete minecraft-skins until complete character migration
+  - ✅ auto-update test character onchange SVG
+    - ✅ media/npc/{x}.tex.svg to static/assets/3d/{x}.tex.png
+    - ✅ TestCharacters reads a tex.png
+    - ✅ auto update character skin
+      - expose hash and `w.debug.char.setSkin(i)`
+  - ✅ CameraLightMaterial should support texture map
+  - ✅ `w.debug.testChar` --> `w.debug.char`
+  - ✅ make cuboid model
+    - ℹ️ uv cube: follow active quads > even, then unwrap (?)
+    - ℹ️ uv map cube first, before deform scale
+    - ℹ️ cuboid-{character,mesh,material}
+    - cuboid: head ✅ body ✅
+    - quad: shadow (ground) ✅ ring (ground) ✅ label (above) ✅ icon (above) ✅
+    - ✅ basic skin i.e. eyes
+
+- ✅ return to next.js project
+  - ✅ ensure up to date
+  - ✅ work on migrating Root
+    - ✅ Main, Nav
+    - ✅ Viewer
+
+- ✅ migrate sub-symbols to actual symbols
+  - 301 ✅ 302 ✅ 303 ✅ 101 ✅ 102 ✅
+  - bridge ✅ lifeboat ✅
+  - beds ✅ consoles ✅
+  - counter ✅ engineering ✅ extra ✅ fresher ✅ lab ✅ medical ✅ cartography ✅ shop ✅ stateroom ✅ table ✅
+  - ✅ remaining:
+    - ✅ office--023--2x3
+    - ✅ office--061--3x4
+    - ✅ office--074--4x4
+
+- ✅ integrate cuboid model
+  - ✅ import model into npc-cli TestCharacters
+    - ✅ export as cuboid-model.glb
+    - ✅ configure TestCharacters for "multiple character meta"
+    ```sh
+    w debug.char.add $( click 1 ) hcTest
+    w debug.char.add $( click 1 ) cuboidChar
+    ```
+  - ✅ model shader handles label/icon properly
+    - ✅ dup cameraLightShader as testCharacterShader sans instancing
+    - ✅ identify label/icon quad via attribute/shader (?)
+      - ℹ️ vertex ids ≥ 56 (out of 64)
+    - ✅ render as sprite i.e. always face camera
+      - ℹ️ centre label quad in model (about XZ blender coords)
+      - ℹ️ use shader to draw "above" npc
+      - ✅ label has transparency
+      - ✅ fix label normal, return to cuboid-character.glb
+    - ❌ icon quad "normal" and double-sided
+      - removed icon quad
+  - ✅ improve cuboid model/skin
+    - ✅ selector has smaller radius
+    - ❌ label text has outline
+    - ✅ shadow circular
+    - ✅ fix body uv-map
+      - ✅ boxy SVG: sketch out more efficient uv-map (0.4 cuboid head, 0.4 * 1 * 1 body)
+      - ℹ️ cannot avoid dup vertices: 8 + (3 * 16) = 60
+        - https://stackoverflow.com/a/76713671/2917822
+      - ✅ redo uv-map using above as guide
+    - ✅ change vertex ordering: head < body < selector < shadow < label
+      - ℹ️ head < body < selector < shadow < label
+        - 60 vertices in total (after 3 * - for cuboid vertices)
+        - `head` 3 * 8 [0, 23] < `body` 3 * 8 [24, 47] < `selector` 4 [48, 51] * < `shadow` 4 [52, 55] < `label` 4 [56, 59]
+      - ✅ selector < shadow < label via: `p` (key), select in "right-order", re-join (object > join)
+    - ✅ head < body < shadow < selector < label
+    - ✅ body has icon
+      - ℹ️ boxy: cmd+shift to scale uniformly to center 
+      - ✅ center-front quad: head < body < shadow < selector < front-icon < label
+    - ✅ can toggle selector/label
+      - uniforms showSelector, showLabel
+    - ✅ can change selector color
+    - ✅ label higher so doesn't come through walls?
+    - ✅ selector intersection problem
+      - ✅ discard alpha < 0.1
+      - ✅ higher, so drop shadow always beneath
+  - ✅ control vertex ids in Blender
+  - ❌ avoid 2 SVGs if possible i.e. uv-bg, tex
+    - keep them separate e.g. can label "B-F" for body front
+  - ✅ various different icons in character sprite-sheet
+    - ℹ️ more in e.g. decor sprite-sheet
+
+- ✅ bug: tty: `map 'x => 2 ** x'` then press delete
+  - ✅ also when type 1 char then delete 1st char
+- ✅ avoid logging navmesh creation message
+
+- ✅ extend chair/table symbols with chair/table tag on obstacle
+
+- ✅ merge {enter,exit}-sensor into {enter,exit}-collider
+
+- ✅ support non-door sensor i.e. decor circle/rect
+  - ✅ can manually add:
+    ```sh
+    w physics.worker.postMessage '{
+      type: "add-colliders",
+      colliders: [{
+        type: "rect", width: 1.5, height: 1.5, x: 3, y: 7.5,
+        colliderKey: "myTestCollider",
+      }],
+    }'
+    ```
+  - ✅ can detect collisions: `{npcKey: 'rob', otherKey: 'rect myTestCollider'}`
+  - ✅ trigger events `enter-collider` and `exit-collider`
+  - ✅ can remove
+    ```sh
+    w physics.worker.postMessage '{
+      type: "remove-bodies",
+      bodyKeys: ["rect myTestCollider"],
+    }'
+    w physics.worker.postMessage '{
+      type: "remove-colliders",
+      colliders: [{ type: "rect", colliderKey: "myTestCollider"}],
+    }'
+    ```
+  - 🚧 decor circle/rect tagged `collider` induce colliders
+    - ℹ️ decor key e.g. `rect[-21,0_01,30]` with meta.gmId and meta.collider
+    - ✅ can provide `userData` in "add-colliders"
+    - ✅ event `{ key: "gm-decor", type: 'updated', gmId }`
+    - ✅ event `{ key: "gm-decor", type: 'removed-all' }`
+    - ✅ simplify events i.e. only send one:
+      - `{ key: "updated-gm-decor", type: "partial", gmIds }`
+      - `{ key: "updated-gm-decor", type: "all" }`
+        - clean not necessary, because world recreated?
+    - ✅ events forwarded to physics worker
+    - ✅ onchange decor rect (add meta.collider)
+      - ✅ decor queryKey changed
+      - ✅ "updated-gm-decor" emitted
+      - ✅ `w.hash.gmHashes` -> `w.hash.mapGmHashes`
+      - ✅ fix `{key:"updated-gm-decor",type:"partial",gmIds:[0,1,2,3,4,5,6,7]}` when only 301 changed
+    - ❌ physics worker receives message
+      - ℹ️ sending too early i.e. worker is being reset?
+    - ✅ on reset worker world physics includes gm-decor
+      - ℹ️ no need to forward event `updated-gm-decor`
+      - ℹ️ wasteful i.e. could partially rebuild physics
+    - ❌ events trigger:
+      - removal of previous physics bodies with userData.{instanced,gmId}
+      - creation of physics bodies with userData.{instanced,gmId}
+  - ✅ support angled rect
+    - ✅ can specify in `add-colliders`
+    - ✅ can handle angled gm-decor rect
+  - ✅ simplify add-colliders message
+    - ✅ `rect` or `circle` rather than `cuboid` or `cylinder`
+    - ✅ reformat
+  - ✅ can remove-colliders
+    - e.g. no need to specify bodyKey 
+  - ✅ bug: remove collider while colliding
+  
+
+- ✅ character animation: idle
+  - ✅ add skeleton: hips.bone -> head.bone, shadow.bone
+  - ✅ import SkinnedMesh
+    - ℹ️ blender: select armature + mesh, ctrl + p, with automatic weights
+    - ℹ️ blender: weight paint mode (sibling of edit/object/pose)
+    - ℹ️ blender: K for keyframe
+    - ✅ seems we need an animation first
+    - ✅ parent armature + weight paint
+  - ✅ bug: blender: gltf export deforms original file (fixable by undoing rotateX)
+    - upgraded to blender 4.2 (didn't fix)
+    - removed other mesh/armature (didn't fix)
+    - removed/added armature (seemed to work)
+  - ✅ saw gltf export bug again
+    - ℹ️ it was probably due to various "Fake User" animations from deleted armature/meshes
+    - ✅ move root bone down to origin
+    - ✅ added a keyframe to "Idle" (must do this)
+  - ✅ `<mesh>` -> `<skinnedMesh>`
+    - ✅ Idle animation is imported
+  - ✅ fix frustum culling
+    - ✅ compute bounding{Box,Sphere} (did not fix)
+    - ✅ temp set frustumCulling false on `<skinnedMesh>`
+    - ℹ️ works when use `<primitive>`
+    - ✅ try gltf to jsx i.e. add bones
+  - ✅ idle animation (1st attempt)
+    - ℹ️ blender: graph editor: vertical scale: ctrl + scroll
+    - ℹ️ blender: graph editor: interpolation: t
+    - ✅ support breathing via root bone scale
+      - head_bone: Bone > Relations > Inherit Scale: `None`
+    - ✅ create basic idle animation
+    - ✅ works with `<meshPhysicalMaterial>`
+    - ✅ works with our custom shader
+      - https://ycw.github.io/three-shaderlib-skim/dist/#/latest/physical/vertex
+      - ✅ probably need skinning_*
+      - ✅ fix scaling
+    - ✅ clean up
+  - ✅ fix initial animation start
+  - 🚧 improved idle animation
+    - ℹ️ blender: next/prev keyframe: up/down
+    - ℹ️ blender: slow down animation:
+      - Scene > Output > Time Stretching > 100, 600
+      - Given 24 frames (Start=0, End=22), End := 23 * 6 - 1 = 137
+    - ℹ️ blender: scale frames by shifting to 1 and setting 1 as current frame
+    - ℹ️ blender: center: shift + c
+    - ✅ smaller sway
+    - ✅ breathing
+    - ✅ shadow motion
+    - ✅ head motion
+      - already some via breathing (scale hips along z)
+      - basic head nod
+
+- ✅ parse "uv-map folder" from *.tex.svg
+- ✅ [0, 1] * [0, 1] rect lookup:
+  - `assets.sheet.skins.uvMap[npcClassKey][uvRectName]`
+  - `geomorphs.sheet.skins.uvMap[npcClassKey][uvRectName]`
+- ✅ svgBaseName -> npcClassKey
+  - e.g. `cuboid-man.tex.svg` -> `cuboid-man`
+
+- ✅ cuboid-man improvements
+  - ✅ can set label height
+  - ✅ smaller shadow
+  - ✅ create some npcs labels
+    ```sh
+    w npc.updateLabels rob kate will
+    w npc.label.tex.image.toDataURL | log
+    ```
+  - ✅ re-map `ui-label` to something in npc labels tex
+    - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man`
+    - ✅ can modify label width in shader
+      - `mvPosition.x = vId == 61 || vId == 63 ? mvPosition.x - 0.5 : mvPosition.x + 0.5;`
+    - ✅ read npc texture from array of textures
+    - ✅ understand final 2 tris ~ label quad
+      - https://threejs.org/docs/?q=bufferge#api/en/core/BufferGeometry.index
+      ```sh
+      # ℹ️ final 2 triangles of npc geometry
+      w debug.npc.npc.npc-0.mesh.geometry.index
+      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON
+      w debug.npc.npc.npc-0.mesh.geometry.index.toJSON | map array
+      # length 96 i.e. 32 triangles
+      # i.e. (6 * 2) + (6 * 2) + (4 * 2)
+      # final two triangles: 60,61,63,60,63,62
+
+      # ℹ️ uv rect of final quad ~ final 2 triangles
+      w debug.npc.npc.npc-0.mesh.geometry.attributes | keys
+      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map array
+      # length 128 i.e. 64 vertices and 2 coords per vertex
+      w debug.npc.npc.npc-0.mesh.geometry.attributes.uv.toJSON | map 'x => x.array.slice(-8)'
+      # [0.6499999761581421,5.960464477539063e-8,0.15000002086162567,0,0.6499999761581421,0.12500005960464478,0.15000000596046448,0.125]
+
+      w geomorphs.sheet.skins.uvMap.cuboid-man | keys
+      w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label
+      # {x:0.15,y:0,width:0.5,height:0.125}
+      ```
+      - ✅ get vIds, get corresponding UVs
+        - vIds: [60,61,62,63]
+        - UVs (modulo precision): [0.65, 0, 0.15, 0, 0.65, 0.125, 0.15, 0.125]
+      - ✅ compare to label uvRect
+        - corresponds to rect
+    - ℹ️ cannot edit geometry attributes because shared
+    - ✅ uv map into 2nd texture
+      - ℹ️ https://stackoverflow.com/questions/48503775/storing-data-as-a-texture-for-use-in-vertex-shader-for-instanced-geometry-three
+      - ℹ️ https://codepen.io/prisoner849/pen/WNQNdpv?editors=0010
+      - ✅ encode existing uvs as DataTexture and read using vertex id
+      - ✅ encode texture id too
+      - ℹ️ no need for DataTexture
+        - use uniforms for face/icon/label instead
+        - `uniform int uLabelTexId` (which texture to use)
+        - `uniform vec2 uLabelUv[4]` (4 for quad)
+      - ✅ pre-compute ±0.5 uv coords for label quad
+        ```sh
+        w debug.npc.add $( click 1 )
+        w debug.npc.testQuadMeta.cuboid-man
+        ```
+      - ✅ relative to npcClassKey
+      - ✅ setup uniforms for label quad, and use them
+        - ℹ️ `w geomorphs.sheet.skins.uvMap.cuboid-man.ui-label`
+        - ✅ resize default label
+        - ✅ use uvs from uniforms for label
+        - ✅ can change label
+        - ❌ fix label by center-ing uvRect inside geometry rect
+        - ❌ npc.label always has a fallback label we point to
+        - ✅ default label comes from base skin
+        - ✅ can set width/height of label by changing geometry of quad
+        - ✅ auto choose width/height for better custom labels
+        ```sh
+        w debug.npc.add $( click 1 ) rob
+        w debug.npc.add $( click 1 ) kate
+
+        w npc.updateLabels rob kate will a-really-long-name
+        w npc.label.tex.image.toDataURL | log
+        w npc.label.lookup.rob
+
+        w debug.npc.changeUvQuad rob '{ label: "rob" }'
+        w debug.npc.changeUvQuad kate '{ label: "kate" }'
+
+        w debug.npc.changeUvQuad kate '{ label: "a-really-long-name" }'
+        ```
+      - ✅ cleanup
+
+  - ✅ can change label
+      - ℹ️ `w npc.updateLabels rob kate will a-really-long-label`
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ label: "a-really-long-label" }'`
+  - ✅ can change icon/face
+    - ✅ feed in uniforms
+    - ✅ get alt face uv rect
+      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry`
+    - ✅ get alt icon uv rect
+      - `w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food`
+    -  ✅ can change face
+      - ✅ `w.geomorphs.sheet.skins.uvMapDim`
+      - ✅ augment shader
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ face: ["cuboid-man", "front-face-angry"] }'`
+    -  ✅ can change icon
+      - ℹ️ `w debug.npc.changeUvQuad npc-0 '{ icon: ["cuboid-man", "front-label-food"] }'`
+    - ✅ cleanup
+
+- ✅ cuboid-pet improvements
+  - ✅ smaller, with head in front of body
+  - ✅ fix shadow
+  - ✅ smaller head
+
+- ✅ prepare for migration into `<NPCs>`
+  - ✅ convert minecraft mesh into jsx format
+  - ℹ️ refs get called often if use inline function,
+      - use e.g. `ref={state.foo}` instead
+      - https://legacy.reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
+  - ✅ fix `<NPCs>` hmr
+  - ✅ remove nav-obstacles (not needed)
+  - ✅ clean e.g. spawn
+    - ✅ npc.onMount does
+      - ✅ npc.startAnimation('Idle')
+      - ✅ initializes position/angle of npc sans agent
+      - ✅ on add agent pins it to current position
+    - ❌ w.npc.npcRef invokes npc.onMount, so can avoid invoke on HMR
+    - ✅ npc.onMount does minimal setup, instead invoking npc.resolve to continue npc.spawn
+  - ✅ use React.memo with epochMs override
+  - ✅ rename `cuboidChar` -> `cuboid-man`
+  - ✅ replace `hcTest` with another cuboid character i.e. `cuboid-pet`
+  - ✅ debug npc respawn should not stop animation
+  - ✅ animation: walk
+    - ✅ try sway with almost upright head
+  
+- ✅ bug: tabs: un-maximise tty can resume World while tty stays paused
+  - ℹ️ unpaused, maximise tty, pause, un-maximise
+- ✅ bug: initially open hull door via spawn does not close
+  - seems fixed by npc.spawn cleanup
+
+- ✅ fix blurred curved table in 303
+  - ✅ extra--020--table-2x0.66
+  - ✅ add placeholder symbol to 303
+
+- ✅ fix symbols in 303 i.e. definitions should have correct size
+
+- ✅ uv-map for label seems wrong i.e. should cover 256 * 128
+  - 🔔 seems npm module `canvas` does not support scaled text properly
+    when `saveCanvasAsFile`, so change text size instead
+
+- ✅ bug: permitted npc going thru closed door
+  - ❌ `state.isUpcomingDoor(npc, door)` is false when should be true
+  - ℹ️ 301 npc starts near closed door of office, click adjacent stateroom
+    - even worse when another npc is in the way
+  - ❌ try smaller nearby sensor 0.9 * x
+  - ✅ fallback: open on trigger "inside" sensor
+  - ✅ try cuboid "nearby" sensor
+  - ℹ️ still happens i.e. door opens at last moment, but will suffice for the moment
+
+- ✅ can debug physics colliders
+  - ✅ connect `Debug` to physic.worker
+  - ✅ refine userData type: `WW.PhysicsUserData`
+  - ✅ can render `nearby` colliders in Debug
+  - ✅ can render `inside` colliders in Debug
+    - maybe fixed issue with untransformed nearby door `angle` in physics.worker
+  - ✅ UserData has type i.e. npc, cuboid or cylinder
+  - ✅ can render custom colliders in Debug
+  - ✅ can then remove outlines from Floor
+
+- ✅ migrate cuboid-man into `<NPCs>`
+  - ℹ️ leave `<TestNpcs>` as is
+  - ✅ classKeyToMeta -> const npcClassToMeta
+    - NPC.ClassKey
+    - NPC.ClassDef
+  - ✅ classKeyToGltf -> npc.class[classKey].gltf
+  - ✅ service/uv.js
+    - ✅ quadMeta -> cmUvService.toQuadMetas
+    - ✅ cloneUvQuadInstance ✅ instantiateUvDeltas ✅ changeUvQuad
+    - ✅ quad -> npc.s.quad
+  - ✅ changeUvQuad infers texId
+  - ✅ replace minecraft models with cuboid-man
+  - ✅ remove minecraft models
+  - ✅ use testCharacterMaterial
+    - ✅ migrate npc.setSkin and hot-reloads
+    - ✅ npc.textures is [skinTex, labelTex]
+    - ✅ skin auto-updates
+    - ✅ rename as cuboidManMaterial
+    - ✅ clean
+  - ✅ adjust animation timeScale after transition
+  - ❌ avoid cloning "scene"
+    - makes sense to clone i.e. group containing bones and skinnedMesh
+  - ✅ npc.m.mesh is mounted SkinnedMesh
+  - ✅ npc.m.material is mounted ShaderMaterial
+  - ✅ methods directly on npc instances
+    - ✅ can toggle selector without re-render: npc.showSelector([bool])
+    - ✅ can change selector color
+      - `w npc.npc.rob.setSelectorRgb 1 0.5 1`
+    - ✅ can change label
+      - fix: ensure fresh textures supplied to npc when change w.npc.label
+      - `w npc.npc.rob.setLabel rob`
+    - ✅ bug: change label twice breaks first change
+    - ✅ bug: initial flicker on 1st change label
+      - seems shader is reading mutated data
+    - ❌ can change label without render
+    - ✅ absorb ensureLabels into updateLabels
+    - ✅ add clearLabels
+    - ✅ uniform `textures` -> uniforms u{Base,Label,Alt1}Texture
+     - cleanup lookup `npc.tex`
+    - ✅ can change face/icon
+    ```sh
+    w geomorphs.sheet.skins.uvMap.cuboid-man.front-face-angry
+    w npc.npc.rob.setFace null
+    w npc.npc.rob.setFace '{ uvMapKey: "cuboid-man", uvQuadKey: "front-face-angry" }'
+
+    w geomorphs.sheet.skins.uvMap.cuboid-man.front-label-food
+    w npc.npc.rob.setIcon null
+    w npc.npc.rob.setIcon '{ uvMapKey: "cuboid-man", uvQuadKey: "front-label-food" }'
+    ```
+
+- ✅ sh: semantics: support e.g. `foo=$( w npc.npc.rob )`
+  - ℹ️ we were "javascript stringifying" inside command substitution
+  - ℹ️ now, command subst directly inside an assign forwards non-string value/values
+  - e.g. `foo=$( seq 3 )`, `foo=$( w npc.npc.rob )`
+
+- ✅ can run e.g. `w npc.npc.rob` inside pipeline.
+  - i.e. use syntax `click 1 | w --stdin gmGraph.findRoomContaining`
+
+- ✅ bug: sh: isolate bug involving nested pipelines terminating early, e.g.
+  - ℹ️ still happens when we comment out `killPipeChildren`
+  - ℹ️ thrown by preProcessWrite i.e. pipeline-between-whiles has finished reading
+```sh
+# 1st repro
+click --long | filter meta.do | while take 1 >lastClick; do
+  w npc.npc.rob | map '(npc, {home}) => npc.do(home.lastClick)'
+done &
+
+# 2nd repro
+while true; do
+  echo foo
+done | while take 1; do
+  # echo bar
+  echo bar | echo baz
+done
+```
+
+- ✅ implement "do points"
+  - ℹ️ see repo the-last-redoubt src/projects/world-pixi/create-npc.js
+  - ✅ npc.fade (in or out)
+    - `w npc.npc.rob.fade 0.2`
+    - `w npc.npc.rob.fade 1`
+  - ✅ async npc.fade
+  - ✅ async npc.fadeSpawn
+    - `w npc.npc.rob.fadeSpawn $( click 1 )`
+  - ✅ async npc.turn
+  - ✅ async npc.onMeshDo
+    - ℹ️ for the moment use `startAnimation('Idle')`
+  - ✅ turn faster whilst walking
+  - ✅ refactor walk onStart callback
+  - ✅ async npc.offMeshDo
+  - ✅ async npc.do (migrate code)
+  - ✅ can spawn to non-nav point
+    - ✅ remove agent
+    - ✅ restore agent on re-enter nav
+  - ✅ restore Walk/Run animations
+    - simplified to a single frame i.e. lean forwards
+  - ✅ npc.do fix orientation angle
+    - seems group.rotation.order `XYZ` rotates about y-axis ccw (x right, -z up)
+  - ✅ npc.do can Sit (1st attempt)
+  - ✅ npc.do can Lie (1st attempt)
+    - use meta.y to raise off ground
+  - ✅ fix cuboidManShader when `Lie`
+    - ℹ️ not taking bone transforms into account
+  - ✅ opacity/showSelector breaking?
+    - ℹ️ e.g. ineffective: `w npc.npc.rob.fade 0.5`
+    - maybe stale reference to shader?
+  - ✅ can `do` via long press
+    - ✅ useHandleEvents ignores long press of do point
+    - ✅ clarify `click 1` returning nothing on e.g. RMB
+      - ℹ️ `click 1` outputs nothing if you do a long click
+      - ℹ️ `click --long 1` works instead
+    - ✅ profile-1 has custom code
+  - ✅ hide shadow for Lie, Sit via animation
+  - ✅ one-frame animations: Sit, Lie
+  - ✅ npc.startAnimationByMeta handles do meta
+  - ✅ fix briefing table do point orients
+  - ✅ more centred on do points
+    - ✅ onclick do point provide `meta.doPoint` e.g. centre of icon
+  - ✅ fix do points at head of briefing table
+  - ❌ can specify do point offset e.g. further back for stool
+  - ✅ fadeSpawn/spawn can specify agent
+    - defaults true when spawn on nav
+    - avoid setting doMeta.hadAgent
+  - ✅ verify can set initial angle (ccw from east)
+  - ✅ fix do point on particular seat on briefing room table
+    - seems to think it is in navmesh e.g. small island?
+  - ✅ improve shadow for other animations

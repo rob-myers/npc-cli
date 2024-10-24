@@ -1,5 +1,4 @@
 import React from "react";
-import { cx } from "@emotion/css";
 import { useQuery } from "@tanstack/react-query";
 import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
@@ -12,7 +11,7 @@ import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
-import { invertCanvas, tmpCanvasCtxts } from "../service/dom";
+import { getContext2d, invertCanvas } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
@@ -50,13 +49,12 @@ export default function World(props) {
     }),
     mapKey: props.mapKey,
     r3f: /** @type {*} */ (null),
-    readyResolvers: [],
     reqAnimId: 0,
     threeReady: false,
     timer: new Timer(),
 
     nav: /** @type {*} */ ({}),
-    physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {} },
+    physics: { worker: /** @type {*} */ (null), bodyKeyToUid: {}, bodyUidToKey: {}, rebuilds: 0 },
 
     gmsData: /** @type {*} */ (null),
     events: new Subject(),
@@ -78,10 +76,10 @@ export default function World(props) {
     obs: /** @type {*} */ (null), // Obstacles
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
-      onTick() {},
+      onTick(_) {},
     }),
     npc: /** @type {*} */ (null), // Npcs
-    menu: /** @type {*} */ (null), // ContextMenu
+    menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
     // 🚧 support hmr e.g. via state.hmr
     lib: {
@@ -91,10 +89,12 @@ export default function World(props) {
       precision: toPrecision,
       removeFirst,
       vectFrom: Vect.from,
+      Subject,
       ...helper,
     },
 
     e: /** @type {*} */ (null), // useHandleEvents
+    n: /** @type {*} */ {}, // w.npc.npc
     oneTimeTicks: [],
 
     isReady() {
@@ -118,24 +118,23 @@ export default function World(props) {
       state.reqAnimId = requestAnimationFrame(state.onTick);
       state.timer.update();
       const deltaMs = state.timer.getDelta();
-      // state.crowd.update(1 / 60, deltaMs);
+
+      if (state.npc === null) {
+        return; // wait for <NPCs>
+      }
+
       state.crowd.update(deltaMs);
       state.npc.onTick(deltaMs);
-      state.door.onTick();
+      state.door.onTick(deltaMs);
       // info(state.r3f.gl.info.render);
 
-      while (state.oneTimeTicks.shift()?.());
-    },
-    async resolveOnReady() {
-      if (state.isReady()) {
-        return;
-      } else {
-        return new Promise(resolve => state.readyResolvers.push(resolve));
+      if (state.debug.npc !== null) {
+        state.debug.npc.onTick(deltaMs);
       }
-    },
-    setReady() {
-      while (state.readyResolvers.length > 0)
-        /** @type {() => void} */ (state.readyResolvers.pop())();
+
+      state.ui.onTick(deltaMs);
+
+      while (state.oneTimeTicks.shift()?.());
     },
     trackHmr(nextHmr) {
       const output = mapValues(state.hmr, (prev, key) => prev !== nextHmr[key])
@@ -165,13 +164,13 @@ export default function World(props) {
        * @type {Pick<State, 'geomorphs' | 'gms' | 'gmsData' | 'gmGraph' | 'gmRoomGraph' | 'hash' | 'mapKey'>}
        */
       const next = {
-        // prev values: (may overwrite below)
+        // previous values (possibly overwritten below)
         geomorphs: prevGeomorphs,
         gms: state.gms,
         gmsData: state.gmsData,
         gmGraph: state.gmGraph,
         gmRoomGraph: state.gmRoomGraph,
-        // next values:
+        // next values
         hash: geomorph.computeHash(geomorphsJson, props.mapKey),
         mapKey: props.mapKey,
       };
@@ -214,23 +213,28 @@ export default function World(props) {
         );
 
         // ensure GmData per gmKey in map
+        state.menu.measure('gmsData');
         for (const gmKey of new Set(next.gms.map(({ key }) => key))) {
           if (next.gmsData[gmKey].unseen) {
             await pause(); // breathing space
             await next.gmsData.computeGmData(next.geomorphs.layout[gmKey]);
           }
         };
-        
         next.gmsData.computeRoot(next.gms);
+        state.menu.measure('gmsData');
       }
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
         await pause();
+        state.menu.measure('gmGraph');
         next.gmGraph = GmGraphClass.fromGms(next.gms, { permitErrors: true });
+        state.menu.measure('gmGraph');
         next.gmGraph.w = state;
         
         await pause();
+        state.menu.measure('gmRoomGraph');
         next.gmRoomGraph = GmRoomGraphClass.fromGmGraph(next.gmGraph, next.gmsData);
+        state.menu.measure('gmRoomGraph');
       }
 
       // apply changes synchronously
@@ -267,7 +271,9 @@ export default function World(props) {
           // }
           tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           tm.ct.drawImage(img, 0, 0);
-          invert && invertCanvas(tm.canvas, tmpCanvasCtxts[0], tmpCanvasCtxts[1]);
+          invert && invertCanvas(tm.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
+          // Sharper via getMaxAnisotropy()
+          tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
           tm.tex.needsUpdate = true;
           update();
         }
@@ -277,10 +283,12 @@ export default function World(props) {
 
       return true;
     },
-    refetchOnWindowFocus: isDevelopment() ? "always" : undefined,
+    refetchOnWindowFocus: isDevelopment() ? "always" : false,
+    // refetchOnWindowFocus: false,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
     gcTime: 0, // concurrent queries with different mapKey can break HMR
     // throwOnError: true, // breaks on restart dev env
+    networkMode: isDevelopment() ? 'always' : 'online',
   });
 
   React.useEffect(() => {// provide world for tty + hmr query
@@ -291,11 +299,11 @@ export default function World(props) {
 
   React.useEffect(() => {// enable/disable animation
     state.timer.reset();
-    if (!state.disabled && !!state.npc) {
+    if (!state.disabled) {
       state.onTick();
     }
     return () => cancelAnimationFrame(state.reqAnimId);
-  }, [state.disabled, state.npc]);
+  }, [state.disabled]);
 
   return (
     <WorldContext.Provider value={state}>
@@ -309,14 +317,18 @@ export default function World(props) {
               <Obstacles />
               <Ceiling />
             </group>
-            {state.crowd && <>
-              <Decor />
-              <Npcs />
-              <Debug
-                // showNavMesh
-                // showOrigNavPoly
-              />
-            </>}
+            <React.Suspense>
+              {state.crowd && <>
+                <Decor />
+                <Npcs />
+                <Debug
+                  // showNavMesh
+                  // showOrigNavPoly
+                  showTestNpcs
+                  // showStaticColliders
+                />
+              </>}
+            </React.Suspense>
           </group>
         )}
       </WorldCanvas>
@@ -347,13 +359,12 @@ export default function World(props) {
  * @property {Subject<NPC.Event>} events
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
- * @property {(() => void)[]} readyResolvers
  * @property {number} reqAnimId
  * @property {import("@react-three/fiber").RootState} r3f
  * @property {Timer} timer
  *
  * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
- * @property {{ worker: WW.PhysicsWorker } & import("../service/rapier").PhysicsBijection} physics
+ * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *
  * @property {import('./WorldCanvas').State} ui
  * @property {import('./Floor').State} floor
@@ -370,6 +381,8 @@ export default function World(props) {
  *
  * @property {import("./use-handle-events").State} e
  * Events state i.e. useHandleEvents state
+ * @property {import("./Npcs").State['npc']} n
+ * Shortcut for `w.npc.npc`
  * @property {(() => void)[]} oneTimeTicks
  *
  * @property {import("../service/three").CanvasTexMeta} obsTex
@@ -384,8 +397,6 @@ export default function World(props) {
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
  * @property {() => void} onTick
- * @property {() => Promise<void>} resolveOnReady
- * @property {() => void} setReady
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?
  * @property {(mutator?: (w: State) => void) => void} update
@@ -397,6 +408,7 @@ export default function World(props) {
  * @property {typeof firstValueFrom} firstValueFrom
  * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
  * @property {typeof removeFirst} removeFirst
+ * @property {typeof Subject} Subject
  * @property {typeof toPrecision} precision
  * @property {typeof import('../geom').Vect['from']} vectFrom
  * 
@@ -405,3 +417,4 @@ export default function World(props) {
  * //@property {typeof merge} merge
  * //@property {typeof take} take
  */
+
