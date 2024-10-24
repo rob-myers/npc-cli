@@ -39,7 +39,7 @@ done &
 
 # click navmesh to move selectedNpcKey
 # click | filter meta.nav | walkTest &
-click | filter meta.nav | map --forever '(input, { w, home }) => {
+click | filter meta.floor | map --forever '(input, { w, home }) => {
   const npc = w.npc.npc[home.selectedNpcKey];
   npc.s.run = input.keys?.includes("shift") ?? false;
   npc.moveTo(input).catch(() => {}); // can override

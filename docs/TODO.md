@@ -5,8 +5,8 @@
 - 🚧 cleanup before merge branch
   - ✅ door click should not propagate to floor
     - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
-  - 🚧 nearby nav click should cause move to
-  - understand duplicated npcs e.g. on edit recast-detour.js
+  - ✅ nearby nav click should cause move to
+  - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
   - merge npc.waitUntilStopped into useHandleEvents
   - a single reject for resolveTurn, resolveFade, walking
 
