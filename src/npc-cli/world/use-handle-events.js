@@ -195,7 +195,7 @@ export default function useHandleEvents(w) {
           break;
         case "stopped-moving": {
           const npc = w.npc.npc[e.npcKey];
-          npc.resolveMove?.();
+          npc.resolve.move?.();
           for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
             door.open === true && state.tryCloseDoor(door.gmId, door.doorId);

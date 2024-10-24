@@ -76,15 +76,19 @@ export class Npc {
   lastTarget = new THREE.Vector3();
   lastCorner = new THREE.Vector3();
   
-  rejectMove = emptyReject;
-  /** @type {undefined | ((value?: any) => void)} */
-  resolveFade;
-  /** @type {undefined | ((value?: any) => void)} */
-  resolveMove;
-  /** @type {undefined | ((value?: any) => void)} */
-  resolveSpawn;
-  /** @type {undefined | ((value?: any) => void)} */
-  resolveTurn;
+  resolve = {
+    fade: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+    move: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+    spawn: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+    turn: /** @type {undefined | ((value?: any) => void)} */ (undefined),
+  };
+
+  reject = {
+    fade: /** @type {undefined | ((error: any) => void)} */ (undefined),
+    move: /** @type {undefined | ((error: any) => void)} */ (undefined),
+    // spawn: /** @type {undefined | ((error: any) => void)} */ (undefined),
+    turn: /** @type {undefined | ((error: any) => void)} */ (undefined),
+  };
 
   /** Shortcut */
   get baseTexture() {
@@ -120,7 +124,7 @@ export class Npc {
     const cancelCount = ++this.s.cancels;
     this.s.paused = false;
 
-    this.rejectMove(`${'cancel'}: cancelled move`);
+    this.reject.move?.(`${'cancel'}: cancelled move`);
 
     if (cancelCount !== this.s.cancels) {
       throw Error(`${'cancel'}: cancel was cancelled`);
@@ -187,7 +191,7 @@ export class Npc {
   async fade(opacityDst = 0.2, ms = 300) {
     this.s.opacityDst = opacityDst;
     this.s.fadeSecs = ms / 1000;
-    await new Promise(resolve => this.resolveFade = resolve);
+    await new Promise(resolve => this.resolve.fade = resolve);
   }
 
   /**
@@ -449,7 +453,7 @@ export class Npc {
       // Setup shortcut
       this.position = group.position;
       // Resume `w.npc.spawn`
-      this.resolveSpawn?.();
+      this.resolve.spawn?.();
     }
   }
 
@@ -468,7 +472,7 @@ export class Npc {
     if (this.s.lookAngle !== null) {
       if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngle, this.s.lookSecs, deltaMs, Infinity, undefined, 0.01) === false) {
         this.s.lookAngle = null;
-        this.resolveTurn?.();
+        this.resolve.turn?.();
       }
     }
 
@@ -480,7 +484,7 @@ export class Npc {
     if (this.s.opacityDst !== null) {
       if (damp(this.s, 'opacity', this.s.opacityDst, this.s.fadeSecs, deltaMs, undefined, undefined, 0.1) === false) {
         this.s.opacityDst = null;
-        this.resolveFade?.();
+        this.resolve.fade?.();
       }
       this.setUniform('opacity', this.s.opacity);
     }
@@ -713,7 +717,7 @@ export class Npc {
     this.s.lookAngle = Math.PI/2 - dstAngle;
     // this.s.lookAngle = dstAngle;
     this.s.lookSecs = ms / 1000;
-    await new Promise(resolve => this.resolveTurn = resolve);
+    await new Promise(resolve => this.resolve.turn = resolve);
   }
 
   updateUniforms() {
@@ -722,8 +726,8 @@ export class Npc {
 
   async waitUntilStopped() {
     this.s.moving === true && await new Promise((resolve, reject) => {
-      this.resolveMove = resolve; // see "stopped-moving"
-      this.rejectMove = reject; // see w.npc.remove
+      this.resolve.move = resolve; // see "stopped-moving"
+      this.reject.move = reject; // see w.npc.remove
     });
   }
 }

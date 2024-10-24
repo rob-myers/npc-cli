@@ -129,7 +129,7 @@ export default function Npcs(props) {
         // npc.setGmRoomId(null);
         delete state.npc[npcKey];
         npc.removeAgent();
-        npc.rejectMove?.('npc was removed');
+        npc.reject.move?.('npc was removed');
         w.events.next({ key: 'removed-npc', npcKey });
       }
       update();
@@ -191,7 +191,7 @@ export default function Npcs(props) {
 
       if (npc.s.spawns === 0) {
         await new Promise(resolve => {
-          npc.resolveSpawn = resolve;
+          npc.resolve.spawn = resolve;
           update();
         });
         npc.setupMixer();
