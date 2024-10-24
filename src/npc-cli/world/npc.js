@@ -53,11 +53,12 @@ export class Npc {
     fadeSecs: 0.3,
     iconId: /** @type {null | NPC.UvQuadId} */ (null),
     label: /** @type {null | string} */ (null),
-    /** Euler angle around y-axis i.e. `Math.PI/2 - usualAngle` */
-    lookAngle: /** @type {null | number} */ (null),
+    /** Desired look angle (rotation.y) */
+    lookAngleDst: /** @type {null | number} */ (null),
     /** Is this npc moving? */
     moving: false,
     opacity: 1,
+    /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
     /** 🚧 unused */
     paused: false,
@@ -120,15 +121,11 @@ export class Npc {
 
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
-
-    const cancelCount = ++this.s.cancels;
     this.s.paused = false;
 
+    this.reject.fade?.(`${'cancel'}: cancelled fade`);
     this.reject.move?.(`${'cancel'}: cancelled move`);
-
-    if (cancelCount !== this.s.cancels) {
-      throw Error(`${'cancel'}: cancel was cancelled`);
-    }
+    this.reject.turn?.(`${'cancel'}: cancelled turn`);
 
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
@@ -189,9 +186,21 @@ export class Npc {
    * @param {number} [ms] 
    */
   async fade(opacityDst = 0.2, ms = 300) {
+    if (!Number.isFinite(opacityDst)) {
+      throw new Error(`${'fade'}: 1st arg must be numeric`);
+    }
     this.s.opacityDst = opacityDst;
     this.s.fadeSecs = ms / 1000;
-    await new Promise(resolve => this.resolve.fade = resolve);
+    
+    try {
+      await new Promise((resolve, reject) => {
+        this.resolve.fade = resolve;
+        this.reject.fade = reject;
+      });
+    } catch (e) {
+      this.s.opacityDst = null;
+      throw e;
+    }
   }
 
   /**
@@ -301,6 +310,28 @@ export class Npc {
     m.scale = npcClassToMeta[npcClassKey].scale;
     m.quad = cmUvService.getDefaultUvQuads(this.def.classKey);
     // ℹ️ see w.npc.spawn for more initialization
+  }
+
+  /**
+   * @param {number} dstAngle radians (ccw from east)
+   * @param {number} ms
+   */
+  async look(dstAngle, ms = 300) {
+    if (!Number.isFinite(dstAngle)) {
+      throw new Error(`${'look'}: 1st arg must be numeric`);
+    }
+    this.s.lookAngleDst = this.getEulerAngle(dstAngle);
+    this.s.lookSecs = ms / 1000;
+
+    try {
+      await new Promise((resolve, reject) => {
+        this.resolve.turn = resolve;
+        this.reject.turn = reject;
+      });
+    } catch (e) {
+      this.s.lookAngleDst = null;
+      throw e;
+    }
   }
 
   /**
@@ -426,7 +457,7 @@ export class Npc {
        */
       await this.moveTo(doPoint);
       if (typeof dstRadians === 'number') {
-        await this.turn(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
+        await this.look(dstRadians, 500 * geom.compareAngles(this.getAngle(), dstRadians));
       }
       // this.startAnimation('Idle');
       this.startAnimation(meta);
@@ -469,9 +500,9 @@ export class Npc {
       this.onTickAgent(deltaMs, this.agent);
     }
 
-    if (this.s.lookAngle !== null) {
-      if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngle, this.s.lookSecs, deltaMs, Infinity, undefined, 0.01) === false) {
-        this.s.lookAngle = null;
+    if (this.s.lookAngleDst !== null) {
+      if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngleDst, this.s.lookSecs, deltaMs, Infinity, undefined, 0.01) === false) {
+        this.s.lookAngleDst = null;
         this.resolve.turn?.();
       }
     }
@@ -502,7 +533,7 @@ export class Npc {
     this.position.copy(pos);
 
     if (speed > 0.2) {
-      this.s.lookAngle = Math.PI/2 - Math.atan2(vel.z, vel.x);
+      this.s.lookAngleDst = Math.PI/2 - Math.atan2(vel.z, vel.x);
     } 
 
     if (this.s.target === null) {
@@ -685,7 +716,7 @@ export class Npc {
 
     const position = this.agent.position();
     this.s.target = null;
-    this.s.lookAngle = null;
+    this.s.lookAngleDst = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
@@ -707,17 +738,6 @@ export class Npc {
       epochMs: this.epochMs,
       s: this.s,
     };
-  }
-
-  /**
-   * @param {number} dstAngle radians (ccw from east)
-   * @param {number} ms
-   */
-  async turn(dstAngle, ms = 300) {
-    this.s.lookAngle = Math.PI/2 - dstAngle;
-    // this.s.lookAngle = dstAngle;
-    this.s.lookSecs = ms / 1000;
-    await new Promise(resolve => this.resolve.turn = resolve);
   }
 
   updateUniforms() {

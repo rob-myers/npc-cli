@@ -111,6 +111,9 @@ w es.toggleLock g0d16
 w npc.remove '"09"'
 
 w physics.worker.postMessage '{ type: "get-debug-data" }'
+
+w npc.npc.rob.look Math.PI/2
+w npc.npc.rob.look -Math.PI/2 # ❌
 ```
 
 ## Local variables

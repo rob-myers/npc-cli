@@ -7,7 +7,8 @@
     - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
   - ✅ nearby nav click should cause move to
   - ✅ merge npc.waitUntilStopped into useHandleEvents
-  - 🚧 reject.turn, reject.fade
+  - ✅ reject.turn, reject.fade
+  - ✅ npc.turn -> npc.look
   - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
   - cannot spawn to arbitrary off-mesh position from off-mesh do point
 

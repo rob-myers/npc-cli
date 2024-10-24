@@ -126,10 +126,10 @@ export default function Npcs(props) {
     remove(...npcKeys) {
       for (const npcKey of npcKeys) {
         const npc = state.getNpc(npcKey); // throw if n'exist pas
+        npc.cancel(); // rejects promises
         // npc.setGmRoomId(null);
         delete state.npc[npcKey];
         npc.removeAgent();
-        npc.reject.move?.('npc was removed');
         w.events.next({ key: 'removed-npc', npcKey });
       }
       update();
