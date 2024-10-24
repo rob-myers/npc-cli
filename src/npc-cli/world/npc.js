@@ -80,6 +80,8 @@ export class Npc {
   /** @type {undefined | ((value?: any) => void)} */
   resolveFade;
   /** @type {undefined | ((value?: any) => void)} */
+  resolveMove;
+  /** @type {undefined | ((value?: any) => void)} */
   resolveSpawn;
   /** @type {undefined | ((value?: any) => void)} */
   resolveTurn;
@@ -341,7 +343,7 @@ export class Npc {
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
       await new Promise((resolve, reject) => {
-        this.rejectMove = reject; // permit cancel
+        // this.rejectMove = reject; // permit cancel
         this.waitUntilStopped().then(resolve).catch(resolve);
       });
     } catch (e) {
@@ -725,21 +727,9 @@ export class Npc {
   }
 
   async waitUntilStopped() {
-    if (this.s.moving === false) {
-      return;
-    }
-    await new Promise((resolve, reject) => {
-      const sub = this.w.events.pipe(
-        this.w.lib.filter(e => 'npcKey' in e && e.npcKey === this.key)
-      ).subscribe(e => {
-        if (e.key === 'stopped-moving') {
-          sub.unsubscribe();
-          resolve(null);
-        } else if (e.key === 'removed-npc') {
-          sub.unsubscribe();
-          reject(`${'waitUntilStopped'}: npc was removed`)
-        }
-      });
+    this.s.moving === true && await new Promise((resolve, reject) => {
+      this.resolveMove = resolve; // see "stopped-moving"
+      this.rejectMove = reject; // see w.npc.remove
     });
   }
 }

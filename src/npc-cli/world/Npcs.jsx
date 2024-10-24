@@ -129,6 +129,7 @@ export default function Npcs(props) {
         // npc.setGmRoomId(null);
         delete state.npc[npcKey];
         npc.removeAgent();
+        npc.rejectMove?.('npc was removed');
         w.events.next({ key: 'removed-npc', npcKey });
       }
       update();

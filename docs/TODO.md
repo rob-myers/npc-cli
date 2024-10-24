@@ -6,9 +6,10 @@
   - ✅ door click should not propagate to floor
     - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
   - ✅ nearby nav click should cause move to
+  - ✅ merge npc.waitUntilStopped into useHandleEvents
   - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
-  - merge npc.waitUntilStopped into useHandleEvents
   - a single reject for resolveTurn, resolveFade, walking
+  - cannot spawn to arbitrary off-mesh position from off-mesh do point
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
