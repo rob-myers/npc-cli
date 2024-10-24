@@ -288,6 +288,7 @@ export default function World(props) {
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
     gcTime: 0, // concurrent queries with different mapKey can break HMR
     // throwOnError: true, // breaks on restart dev env
+    networkMode: isDevelopment() ? 'always' : 'online',
   });
 
   React.useEffect(() => {// provide world for tty + hmr query

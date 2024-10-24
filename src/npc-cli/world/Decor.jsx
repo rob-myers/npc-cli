@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
 import { decorGridSize, decorIconRadius, fallbackDecorImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
-import { pause, removeDups, testNever, warn } from "../service/generic";
+import { isDevelopment, pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
@@ -526,6 +526,7 @@ export default function Decor(props) {
     retry: false, // fix dup invokes
     gcTime: 0,
     // throwOnError: true,
+    networkMode: isDevelopment() ? 'always' : 'online',
   });
 
   state.queryStatus = query.status;
