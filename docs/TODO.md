@@ -2,66 +2,13 @@
 
 ## WIP
 
-- ✅ implement "do points"
-  - ℹ️ see repo the-last-redoubt src/projects/world-pixi/create-npc.js
-  - ✅ npc.fade (in or out)
-    - `w npc.npc.rob.fade 0.2`
-    - `w npc.npc.rob.fade 1`
-  - ✅ async npc.fade
-  - ✅ async npc.fadeSpawn
-    - `w npc.npc.rob.fadeSpawn $( click 1 )`
-  - ✅ async npc.turn
-  - ✅ async npc.onMeshDo
-    - ℹ️ for the moment use `startAnimation('Idle')`
-  - ✅ turn faster whilst walking
-  - ✅ refactor walk onStart callback
-  - ✅ async npc.offMeshDo
-  - ✅ async npc.do (migrate code)
-  - ✅ can spawn to non-nav point
-    - ✅ remove agent
-    - ✅ restore agent on re-enter nav
-  - ✅ restore Walk/Run animations
-    - simplified to a single frame i.e. lean forwards
-  - ✅ npc.do fix orientation angle
-    - seems group.rotation.order `XYZ` rotates about y-axis ccw (x right, -z up)
-  - ✅ npc.do can Sit (1st attempt)
-  - ✅ npc.do can Lie (1st attempt)
-    - use meta.y to raise off ground
-  - ✅ fix cuboidManShader when `Lie`
-    - ℹ️ not taking bone transforms into account
-  - ✅ opacity/showSelector breaking?
-    - ℹ️ e.g. ineffective: `w npc.npc.rob.fade 0.5`
-    - maybe stale reference to shader?
-  - ✅ can `do` via long press
-    - ✅ useHandleEvents ignores long press of do point
-    - ✅ clarify `click 1` returning nothing on e.g. RMB
-      - ℹ️ `click 1` outputs nothing if you do a long click
-      - ℹ️ `click --long 1` works instead
-    - ✅ profile-1 has custom code
-  - ✅ hide shadow for Lie, Sit via animation
-  - ✅ one-frame animations: Sit, Lie
-  - ✅ npc.startAnimationByMeta handles do meta
-  - ✅ fix briefing table do point orients
-  - ✅ more centred on do points
-    - ✅ onclick do point provide `meta.doPoint` e.g. centre of icon
-  - ✅ fix do points at head of briefing table
-  - ❌ can specify do point offset e.g. further back for stool
-  - ✅ fadeSpawn/spawn can specify agent
-    - defaults true when spawn on nav
-    - avoid setting doMeta.hadAgent
-  - ✅ verify can set initial angle (ccw from east)
-  - ✅ fix do point on particular seat on briefing room table
-    - seems to think it is in navmesh e.g. small island?
-  - ✅ improve shadow for other animations
-
-- door click should not propagate to floor
-- nearby nav click should cause move to
-- understand duplicated npcs e.g. on edit recast-detour.js
-
-- cleanup before merge branch
+- 🚧 cleanup before merge branch
+  - ✅ door click should not propagate to floor
+    - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
+  - nearby nav click should cause move to
+  - understand duplicated npcs e.g. on edit recast-detour.js
   - merge npc.waitUntilStopped into useHandleEvents
   - a single reject for resolveTurn, resolveFade, walking
-  - improve cuboid-pet
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -70,10 +17,11 @@
 
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
-- consider mobile helper UI which directs user to tty-1 and back...
+- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+- improve cuboid-pet animations
 - bug: sh: paste multiline command and start Cmd-Deleting midway
 - useGLTFsAsync hook
   - replaces synchronous useGLTF
@@ -88,7 +36,7 @@
   - need repro
 - improve alternate character faces
 - improve alternate character icons
-- change fov with camera distance? e.g. 15 far, 30 close
+- ❌ change fov with camera distance? e.g. 15 far, 30 close
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - consider transparent body skin
@@ -120,11 +68,12 @@
 - request new nav-mesh onchange base "getTileCacheGeneratorConfig()"
 - can choose colour of obstacle instances
 - permit single quotes inside e.g. game-generators
-- rebuild animation actions `IdleLeftLead`, `IdleRightLead`
+- ❌ rebuild animation actions `IdleLeftLead`, `IdleRightLead`
 - ❌ shoulder mesh (extend from chest), or arms closer to chest ❌
 - decor sprite bounds issue on edit decor
   - e.g. resize extant decor sprite
-- support recursive stringified Set
+- ✅ support recursive stringified Set
+  - `expr 'new Set([new Set([0,0,1,1])])'`
 - running `source PROFILE` twice breaks e.g. toggle door
   - maybe detect/warn "duplicate process def"
 - duplicate walls in a symbol seemed to cancel each other out
@@ -134,7 +83,7 @@
   - e.g. by focusing window whilst ongoing?
 - `Tabs` css should not reference src/const
   - try refactor `faderOverlayCss` e.g. merge into `<figure>`
-- change camera fov based on camera height and/or visible-world
+- ❌ change camera fov based on camera height and/or visible-world
 - Boxy rounding errors issue
   - https://boxy-svg.com/bugs/382/grouped-duplicate-then-snap-has-errors
 - 🚧 memory leaks
@@ -2739,3 +2688,55 @@ done | while take 1; do
   echo bar | echo baz
 done
 ```
+
+- ✅ implement "do points"
+  - ℹ️ see repo the-last-redoubt src/projects/world-pixi/create-npc.js
+  - ✅ npc.fade (in or out)
+    - `w npc.npc.rob.fade 0.2`
+    - `w npc.npc.rob.fade 1`
+  - ✅ async npc.fade
+  - ✅ async npc.fadeSpawn
+    - `w npc.npc.rob.fadeSpawn $( click 1 )`
+  - ✅ async npc.turn
+  - ✅ async npc.onMeshDo
+    - ℹ️ for the moment use `startAnimation('Idle')`
+  - ✅ turn faster whilst walking
+  - ✅ refactor walk onStart callback
+  - ✅ async npc.offMeshDo
+  - ✅ async npc.do (migrate code)
+  - ✅ can spawn to non-nav point
+    - ✅ remove agent
+    - ✅ restore agent on re-enter nav
+  - ✅ restore Walk/Run animations
+    - simplified to a single frame i.e. lean forwards
+  - ✅ npc.do fix orientation angle
+    - seems group.rotation.order `XYZ` rotates about y-axis ccw (x right, -z up)
+  - ✅ npc.do can Sit (1st attempt)
+  - ✅ npc.do can Lie (1st attempt)
+    - use meta.y to raise off ground
+  - ✅ fix cuboidManShader when `Lie`
+    - ℹ️ not taking bone transforms into account
+  - ✅ opacity/showSelector breaking?
+    - ℹ️ e.g. ineffective: `w npc.npc.rob.fade 0.5`
+    - maybe stale reference to shader?
+  - ✅ can `do` via long press
+    - ✅ useHandleEvents ignores long press of do point
+    - ✅ clarify `click 1` returning nothing on e.g. RMB
+      - ℹ️ `click 1` outputs nothing if you do a long click
+      - ℹ️ `click --long 1` works instead
+    - ✅ profile-1 has custom code
+  - ✅ hide shadow for Lie, Sit via animation
+  - ✅ one-frame animations: Sit, Lie
+  - ✅ npc.startAnimationByMeta handles do meta
+  - ✅ fix briefing table do point orients
+  - ✅ more centred on do points
+    - ✅ onclick do point provide `meta.doPoint` e.g. centre of icon
+  - ✅ fix do points at head of briefing table
+  - ❌ can specify do point offset e.g. further back for stool
+  - ✅ fadeSpawn/spawn can specify agent
+    - defaults true when spawn on nav
+    - avoid setting doMeta.hadAgent
+  - ✅ verify can set initial angle (ccw from east)
+  - ✅ fix do point on particular seat on briefing room table
+    - seems to think it is in navmesh e.g. small island?
+  - ✅ improve shadow for other animations

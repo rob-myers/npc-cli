@@ -145,6 +145,7 @@ export default function Doors(props) {
       return this.byGmId[gmId][doorId].open;
     },
     onPointerDown(e) {
+      e.stopPropagation();
       w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerdown",
         distancePx: 0,
@@ -153,16 +154,15 @@ export default function Doors(props) {
         justLongDown: false,
         meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
       }));
-      e.stopPropagation();
     },
     onPointerUp(e) {
+      e.stopPropagation();
       w.events.next(w.ui.getNpcPointerEvent({
         key: "pointerup",
         event: e,
         is3d: true,
         meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
       }));
-      e.stopPropagation();
     },
     onTick(deltaMs) {
       if (state.movingDoors.size === 0) {

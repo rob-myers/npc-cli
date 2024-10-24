@@ -73,7 +73,7 @@ export async function* click({ api, args, w }) {
       ...e.point,
       ...e.keys && { keys: e.keys },
       meta: { ...e.meta,
-        nav: w.npc.isPointInNavmesh(e.point),
+        nav: e.meta.floor === true ? w.npc.isPointInNavmesh(e.point) : false,
         // 🚧 ...w.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
       v3: {...e.position},
