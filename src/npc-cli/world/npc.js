@@ -120,10 +120,7 @@ export class Npc {
     const cancelCount = ++this.s.cancels;
     this.s.paused = false;
 
-    await Promise.all([
-      this.waitUntilStopped(),
-      this.rejectMove(`${'cancel'}: cancelled move`),
-    ]);
+    this.rejectMove(`${'cancel'}: cancelled move`);
 
     if (cancelCount !== this.s.cancels) {
       throw Error(`${'cancel'}: cancel was cancelled`);
@@ -342,10 +339,7 @@ export class Npc {
     
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
-      await new Promise((resolve, reject) => {
-        // this.rejectMove = reject; // permit cancel
-        this.waitUntilStopped().then(resolve).catch(resolve);
-      });
+      await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
     } finally {
