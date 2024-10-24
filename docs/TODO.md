@@ -5,7 +5,7 @@
 - 🚧 cleanup before merge branch
   - ✅ door click should not propagate to floor
     - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
-  - nearby nav click should cause move to
+  - 🚧 nearby nav click should cause move to
   - understand duplicated npcs e.g. on edit recast-detour.js
   - merge npc.waitUntilStopped into useHandleEvents
   - a single reject for resolveTurn, resolveFade, walking
@@ -14,6 +14,8 @@
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
+
+- ✅ sh: `map --forever` does not terminate on throw
 
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered

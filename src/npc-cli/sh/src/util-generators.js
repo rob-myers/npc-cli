@@ -72,17 +72,27 @@ export async function* log({ api, args, datum }) {
  */
 export async function* map(ctxt) {
   let { api, args, datum } = ctxt;
-  const baseSelector = api.parseFnOrStr(args[0]);
-  const func = api.generateSelector(baseSelector, args.slice(1).map(api.parseJsArg));
+  const { operands, opts } = api.getOpts(args, { boolean: ["forever"] });
+
+  const baseSelector = api.parseFnOrStr(operands[0]);
+  const func = api.generateSelector(baseSelector, operands.slice(1).map(api.parseJsArg));
   // fix e.g. `expr "new Set([1, 2, 3])" | map Array.from`
   const nativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
   let count = 0;
 
-  while ((datum = await api.read(true)) !== api.eof)
-    yield api.isDataChunk(datum)
-      ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++)))
-      // : func(datum, ...nativeCode ? [] : [ctxt]);
-      : nativeCode ? func(datum) : func(datum, ctxt, count++);
+  while ((datum = await api.read(true)) !== api.eof) {
+    try {
+      yield api.isDataChunk(datum)
+        ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++)))
+        // : func(datum, ...nativeCode ? [] : [ctxt]);
+        : nativeCode ? func(datum) : func(datum, ctxt, count++)
+      ;
+    } catch (e) {
+      if (opts.forever !== true) {
+        throw e;
+      }
+    }
+  }
 }
 
 /**
