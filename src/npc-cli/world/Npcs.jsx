@@ -333,6 +333,7 @@ function NPC({ npc }) {
 
   return (
     <group
+      key={npc.key}
       ref={npc.onMount}
       scale={npc.m.scale}
       renderOrder={1}

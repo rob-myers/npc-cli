@@ -2,7 +2,7 @@
 
 ## WIP
 
-- 🚧 cleanup before merge branch
+- ✅ cleanup before merge branch
   - ✅ door click should not propagate to floor
     - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
   - ✅ nearby nav click should cause move to
@@ -10,7 +10,6 @@
   - ✅ reject.turn, reject.fade
   - ✅ npc.turn -> npc.look
   - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
-  - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -19,6 +18,9 @@
 
 - ✅ sh: `map --forever` does not terminate on throw
 
+- 🚧 understand duplicated npcs e.g. on edit recast-detour.js
+  - ℹ️ seems npc `will` is coinciding with npc `rob`
+  - need repro, tried adding `key`.
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
 - desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
