@@ -9,8 +9,8 @@
   - ✅ merge npc.waitUntilStopped into useHandleEvents
   - ✅ reject.turn, reject.fade
   - ✅ npc.turn -> npc.look
+  - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
   - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
-  - cannot spawn to arbitrary off-mesh position from off-mesh do point
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger

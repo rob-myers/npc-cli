@@ -131,6 +131,11 @@ export class Npc {
   }
 
   /**
+   * Assume any of these preconditions:
+   * - `point.meta.door === true` (point on a door)
+   * - `point.meta.do === true` (point is a "do point")
+   * - `point.meta.nav === true && !!npc.doMeta` (point navigable, npc at a "do point")
+   * 
    * @param {Geom.MaybeMeta<Geom.VectJson>} point 
    * @param {object} opts
    * @param {any[]} [opts.extraParams] // 🚧 clarify
@@ -139,12 +144,12 @@ export class Npc {
     if (!Vect.isVectJson(point)) {
       throw Error('point expected');
     }
-    point.meta ??= {};
+    if (!point.meta) {
+      throw Error('point.meta expected');
+    }
 
+    // 🚧 door switch instead of door?
     const gmDoorId = helper.extractGmDoorId(point.meta);
-
-    // Assume point.meta.door || point.meta.do || (point.meta.nav && npc.doMeta)
-    // i.e. (1) door, (2) do point, or (3) non-do nav point whilst at do point
     if (point.meta.door === true && gmDoorId !== null) {
       /** `undefined` -> toggle, `true` -> open, `false` -> close */
       const extraParam = opts.extraParams?.[0] === undefined ? undefined : !!opts.extraParams[0];
@@ -162,10 +167,20 @@ export class Npc {
       return;
     }
 
-    // Handle (point.meta.nav && npc.doMeta) || point.meta.do
-    const onNav = this.w.npc.isPointInNavmesh(this.getPoint());
-    if (point.meta.do !== true) {// point.meta.nav && npc.doMeta
-      if (onNav === true) {
+    // point.meta.do, or (point.meta.nav && npc.doMeta)
+    
+    const srcNav = this.w.npc.isPointInNavmesh(this.getPoint());
+    if (point.meta.do === true) {
+      if (srcNav === true) {// nav -> do point
+        await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
+      } else {// off nav -> do point
+        await this.offMeshDo(point);
+      }
+      return;
+    }
+
+    if (point.meta.nav === true && this.s.doMeta !== null) {
+      if (srcNav === true) {
         this.s.doMeta = null;
         await this.moveTo(point);
       // } else if (this.w.npc.canSee(this.getPosition(), point, this.getInteractRadius())) {
@@ -174,11 +189,10 @@ export class Npc {
       } else {
         throw Error('cannot reach navigable point')
       }
-    } else if (onNav === true) {// nav -> do point
-      await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
-    } else {// off nav -> do point
-      await this.offMeshDo(point);
+      return;
     }
+
+    // NOOP
   }
 
   /**
