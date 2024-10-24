@@ -2,7 +2,7 @@
 
 ## WIP
 
-- 🚧 implement "do points"
+- ✅ implement "do points"
   - ℹ️ see repo the-last-redoubt src/projects/world-pixi/create-npc.js
   - ✅ npc.fade (in or out)
     - `w npc.npc.rob.fade 0.2`
@@ -52,7 +52,7 @@
   - ✅ verify can set initial angle (ccw from east)
   - ✅ fix do point on particular seat on briefing room table
     - seems to think it is in navmesh e.g. small island?
-  - improve shadow for other animations
+  - ✅ improve shadow for other animations
 
 - door click should not propagate to floor
 - nearby nav click should cause move to

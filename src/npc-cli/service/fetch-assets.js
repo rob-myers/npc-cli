@@ -76,11 +76,11 @@ export function connectDevEventsWebsocket() {
     });
   };
 
-  wsClient.onopen = (e) => {
+  wsClient.onopen = (_e) => {
     info(`${url} connected`);
     wsAttempts = 0;
   };
-  wsClient.onclose = (e) => {
+  wsClient.onclose = (_e) => {
     info(`${url} closed: reconnecting...`);
     if (++wsAttempts <= 5) {
       setTimeout(connectDevEventsWebsocket, (2 ** wsAttempts) * 300);
