@@ -38,9 +38,12 @@ click --long | while take 1 >lastClick; do
 done &
 
 # click navmesh to move selectedNpcKey
-# see `declare -f walkTest`
-# click | filter meta.navigable | walkTest &
-click | filter meta.nav | walkTest &
+# click | filter meta.nav | walkTest &
+click | filter meta.nav | map --forever '(input, { w, home }) => {
+  const npc = w.npc.npc[home.selectedNpcKey];
+  npc.s.run = input.keys?.includes("shift") ?? false;
+  npc.moveTo(input).catch(() => {}); // can override
+}' &
 
 w update 'w => w.decor.showLabels = true'
 w update 'w => w.ui.targetFov = 20'

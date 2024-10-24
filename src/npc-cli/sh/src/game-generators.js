@@ -127,12 +127,10 @@ export async function* selectPolysDemo({ w }) {
  * @param {RunArg} ctxt
  */
 export async function walkTest(input, { w, home })  {
-  const { selectedNpcKey } = home;
-  const npc = w.npc.npc[selectedNpcKey];
+  const npc = w.npc.npc[home.selectedNpcKey];
   if (npc) {
-    // npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
     npc.s.run = input.keys?.includes("shift") ?? false;
-    // 🔔 do not await so can override
+    // do not await so can override
     npc.moveTo(input).catch(() => {});
   }
 }
