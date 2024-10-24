@@ -369,7 +369,7 @@
       "obsHashes": [-1295640843]
     },
     "table--012--0.8x0.8": {
-      "outputHash": -1324124811,
+      "outputHash": 167772073,
       "pngHash": 293366403,
       "obsHashes": [-502406732]
     },
@@ -1096,7 +1096,7 @@
     },
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
-    "imagesHash": -1732874345,
+    "imagesHash": 450235421,
     "skins": {
       "svgHash": {"cuboid-man": -1087841574, "cuboid-pet": -1224685710},
       "uvMap": {
@@ -17375,28 +17375,28 @@
           "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
-          "transform": [0.707, 0.707, -0.707, 0.707, 1.2, 0.04]
+          "transform": [-0.707, 0.707, 0.707, 0.707, 1.2, 0.04]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
-          "transform": [0.707, 0.707, 0.707, -0.707, 0.94, 1.2]
+          "transform": [-0.707, -0.707, -0.707, 0.707, 1.47, 1.2]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-0.707, 0.707, 0.707, 0.707, 0.3, 0.94]
+          "transform": [0.707, -0.707, -0.707, -0.707, 0.3, 1.47]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.35},
           "width": 0.375,
           "height": 0.375,
-          "transform": [-0.707, -0.707, -0.707, 0.707, 0.57, 0.3]
+          "transform": [0.707, 0.707, 0.707, -0.707, 0.04, 0.3]
         }
       ],
       "removableDoors": [],
