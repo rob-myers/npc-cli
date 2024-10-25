@@ -33,9 +33,20 @@ w | map 'w => (w.e.shouldIgnoreLongClick = (meta) => meta.do || meta.floor)'
 #     await npc.do(datum).catch(() => {});
 #   }
 # }' &
-click --long | while take 1 >lastClick; do
-  w npc.npc.${selectedNpcKey} | map '(npc, {home}) => npc.do(home.lastClick)'
-done &
+# click --long | while take 1 >lastClick; do
+#   selectedNpc=$( w npc.npc.${selectedNpcKey} )
+#   # lastClick.meta.floor exists AND selectedNpc.s.doMeta falsy
+#   if get lastClick/meta/floor && ! test $( get selectedNpc/s/doMeta ); then
+#     selectedNpc | map '(npc, {home}) => npc.look(home.lastClick)'
+#   else
+#     selectedNpc | map '(npc, {home}) => npc.do(home.lastClick)'
+#   fi
+# done &
+click --long | map '(x, {home, w}) => {
+  const npc = w.npc.npc[home.selectedNpcKey];
+  if (x.meta.floor === true && !npc.s.doMeta) npc.look(x);
+  else npc.do(x);
+}' &
 
 # click navmesh to move selectedNpcKey
 # click | filter meta.nav | walkTest &

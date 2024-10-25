@@ -327,14 +327,25 @@ export class Npc {
   }
 
   /**
-   * @param {number} dstAngle radians (ccw from east)
-   * @param {number} ms
+   * @param {number | Geom.VectJson} input
+   * - radians (ccw from east), or
+   * - point
+   * @param {number} [ms]
    */
-  async look(dstAngle, ms = 300) {
-    if (!Number.isFinite(dstAngle)) {
-      throw new Error(`${'look'}: 1st arg must be numeric`);
+  async look(input, ms = 300) {
+    if (this.w.lib.isVectJson(input)) {
+      const src = this.getPoint();
+      input = src.x === input.x && src.y === input.y
+        ? this.getAngle()
+        : Math.atan2(-(input.y - src.y), input.x - src.x)
+      ;
     }
-    this.s.lookAngleDst = this.getEulerAngle(dstAngle);
+
+    if (!Number.isFinite(input)) {
+      throw new Error(`${'look'}: 1st arg must be radians or point`);
+    }
+
+    this.s.lookAngleDst = this.getEulerAngle(input);
     this.s.lookSecs = ms / 1000;
 
     try {

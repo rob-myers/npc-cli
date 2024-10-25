@@ -2,10 +2,17 @@
 
 ## WIP
 
+- ✅ avoid initial instanced mesh render
+- ✅ profile-1: long click floor makes npc look towards it
+  - ℹ️ `get lastClick/meta/floor` has exit code `0` iff `lastClick.meta.floor` exists
+  - ℹ️ `test foo` has exit code `0` iff evaluated JavaScript `foo` is truthy
+    > e.g. `test $( w | map 'w => ...' )`
+  - e.g. `test $( call '({ home }) => home.lastClick.meta.floor === true' )`
+  - e.g. `test $( get lastClick/meta/floor )`
+  - ✅ two approaches i.e. via `while` or `map`
+
 - gpu object-pick encoding
   - ℹ️ e.g. (r,g,b,a) -> wall, gmId, roomId, instanceId
-
-- avoid initial instanced mesh render
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
