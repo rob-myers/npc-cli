@@ -28,8 +28,13 @@ export default function Walls(props) {
         segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
       );
       const wall = gm.walls[foundWallId];
-      // console.log({ foundGmId, foundWallId })
-      return { gmId: foundGmId, ...wall.meta, instanceId };
+
+      if (wall !== undefined) {
+        return { gmId: foundGmId, ...wall.meta, instanceId };
+      } else {
+        const doorId = Math.floor(foundWallSegId / 2); // 2 lintels per door
+        return { gmId: foundGmId, wall: true, lintel: true, doorId, instanceId };
+      }
     },
     getWallMat([u, v], transform, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
