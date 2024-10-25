@@ -2,31 +2,25 @@
 
 ## WIP
 
-- ✅ cleanup before merge branch
-  - ✅ door click should not propagate to floor
-    - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
-  - ✅ nearby nav click should cause move to
-  - ✅ merge npc.waitUntilStopped into useHandleEvents
-  - ✅ reject.turn, reject.fade
-  - ✅ npc.turn -> npc.look
-  - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
+- gpu object-pick encoding
+  - ℹ️ e.g. (r,g,b,a) -> wall, gmId, roomId, instanceId
+
+- avoid initial instanced mesh render
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
-- ✅ sh: `map --forever` does not terminate on throw
-
 - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - need repro, tried adding `key`.
-- ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
-  - background tab never was rendered
-- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+- ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
+  - background tab never was rendered
+- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
 - improve cuboid-pet animations
 - bug: sh: paste multiline command and start Cmd-Deleting midway
 - useGLTFsAsync hook
@@ -2746,3 +2740,14 @@ done
   - ✅ fix do point on particular seat on briefing room table
     - seems to think it is in navmesh e.g. small island?
   - ✅ improve shadow for other animations
+
+- ✅ cleanup before merge branch
+  - ✅ door click should not propagate to floor
+    - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
+  - ✅ nearby nav click should cause move to
+  - ✅ merge npc.waitUntilStopped into useHandleEvents
+  - ✅ reject.turn, reject.fade
+  - ✅ npc.turn -> npc.look
+  - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
+
+- ✅ sh: `map --forever` does not terminate on throw
