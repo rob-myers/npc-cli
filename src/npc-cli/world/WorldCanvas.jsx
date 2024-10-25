@@ -8,6 +8,7 @@ import { damp } from "maath/easing";
 import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
+import { warn } from "../service/generic.js";
 import { emptySceneForPicking, getQuadGeometryXZ, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
@@ -38,6 +39,21 @@ export default function WorldCanvas(props) {
         state.canvas = canvasEl;
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
+    },
+    decodeObjectPick(r, g, b, a) {
+      if (r === 1) {// wall ~ 1 in 0..255
+        const gmId = Math.floor(g);
+        const instanceId = (b << 8) + a;
+        const meta = w.wall.decodeWallInstanceId(instanceId);
+        return {
+          key: 'wall',
+          gmId,
+          instanceId,
+          ...meta, // 🚧 clarify
+        };
+      }
+      // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
+      return null;
     },
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
@@ -194,7 +210,7 @@ export default function WorldCanvas(props) {
         return;
       }
 
-      state.rootState === null && state.pickObject(e) // 🚧 WIP
+      state.rootState !== null && state.pickObject(e) // 🚧 WIP
 
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
@@ -250,12 +266,14 @@ export default function WorldCanvas(props) {
       gl.render(emptySceneForPicking, camera);
       // gl.readRenderTargetPixels(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer);
       gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer).then((x) => {
-        console.log('🔔', Array.from(x));
+        const [r, g, b, a] = Array.from(x);
+        const decoded = state.decodeObjectPick(r, g, b, a);
+        console.log('🔔', { r, g, b, a }, decoded);
       });
       gl.setRenderTarget(null);
       camera.clearViewOffset();
     },
-    renderObjectPickScene() {// 🚧 WIP
+    renderObjectPickScene() {// 🚧 WIP e.g. transparent needed
       const { gl, scene, camera } = state.rootState;
       // This is the magic, these render lists are still filled with valid data.  So we can
       // submit them again for picking and save lots of work!
@@ -389,6 +407,7 @@ export default function WorldCanvas(props) {
  * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('three-stdlib').MapControls} controls
+ * @property {(r: number, g: number, b: number, a: number) => void} decodeObjectPick
  * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down
  * Defined iff at least one pointer is down.
  * @property {number} fov

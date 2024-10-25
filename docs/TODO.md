@@ -14,8 +14,9 @@
 - 🚧 gpu object-pick encode/decode
   - ℹ️ decode (js)   e.g. (r,g,b,a) -> wall, gmId, roomId, instanceId
   - ℹ️ encode (glsl) e.g. inverse
-  - 🚧 walls: glsl encode uses function
-  - 🚧 walls: js decode uses function
+  - ✅ walls: glsl encode uses function
+  - ✅ walls: js decode uses function
+  - 🚧 ...
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger

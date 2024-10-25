@@ -10,6 +10,10 @@ const instancedMonochromeShader = {
   attribute int gmId;
   attribute int wallSegId;
   flat varying int vGmId;
+  /**
+   * index into wallSegs[gmId]_gmId,
+   * equivalently InstancedMesh instanceId
+   */
   flat varying int vWallSegId;
 
   #include <common>
@@ -39,18 +43,24 @@ const instancedMonochromeShader = {
   #include <common>
   #include <logdepthbuf_pars_fragment>
 
+  /**
+   * - 1 means wall
+   * - vGmId in 0..255
+   * - vWallSegId in 0..65535: (msByte, lsByte)
+   */
+  vec4 encodeWallObjectPick() {
+    return vec4(
+      1.0,
+      float(vGmId),
+      float((vWallSegId >> 8) & 255),
+      float(vWallSegId & 255)
+    ) / 255.0;
+  }
+
   void main() {
 
     if (objectPick == true) {
-      gl_FragColor = vec4(
-        // 1 means wall
-        1.0 / 255.0,
-        // vGmId in 0..255
-        float(vGmId) / 255.0,
-        // vWallSegId in 0..65536: (msbyte, lsbyte)
-        float((vWallSegId >> 8) & 255) / 255.0,
-        float(vWallSegId & 255) / 255.0
-      );
+      gl_FragColor = encodeWallObjectPick();
       #include <logdepthbuf_fragment>
       return;
     }

@@ -70,13 +70,16 @@ export default function Walls(props) {
     positionInstances() {
       const { wallsInst: ws } = state;
       let wId = 0;
+      let wallSegId = 0;
       const attributeGmIds = /** @type {number[]} */ ([]);
+      // 🚧 rename as attributeInstanceIds ?
+      // this is just [0, 1, 2, 3, ...]
       const attributeWallSegIds = /** @type {number[]} */ ([]);
 
       w.gms.forEach(({ key: gmKey, transform }, gmId) =>
-        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }, wallSegId) => {
+        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) => {
           attributeGmIds.push(gmId);
-          attributeWallSegIds.push(wallSegId);
+          attributeWallSegIds.push(wallSegId++);
           ws.setMatrixAt(wId++, state.getWallMat(
             seg,
             transform,
