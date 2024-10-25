@@ -62,9 +62,7 @@ const instancedMonochromeShader = {
 const instancedUvMappingShader = {
   Vert: /*glsl*/`
 
-  // <color_pars_vertex>
   varying vec3 vColor;
-  
   varying vec2 vUv;
   attribute vec2 uvDimensions;
   attribute vec2 uvOffsets;
@@ -79,7 +77,6 @@ const instancedUvMappingShader = {
 
     // USE_INSTANCING
     modelViewPosition = instanceMatrix * modelViewPosition;
-    
     modelViewPosition = modelViewMatrix * modelViewPosition;
     gl_Position = projectionMatrix * modelViewPosition;
 
@@ -95,11 +92,9 @@ const instancedUvMappingShader = {
 
   Frag: /*glsl*/`
 
-  // <color_pars_fragment>
   varying vec3 vColor;
-  uniform sampler2D map;
-
   varying vec2 vUv;
+  uniform sampler2D map;
   uniform vec3 diffuse;
 
   #include <common>
@@ -400,8 +395,48 @@ export const cuboidManShader = {
 
 // 🚧 WIP
 export const instancedMultiTextureShader = {
-  Vert: ``,
+  Vert: /* glsl */`
+
+    varying vec3 vColor;
+    varying vec2 vUv;
+    flat varying int vTextureId; 
+    attribute vec2 uvDimensions;
+    attribute vec2 uvOffsets;
+    attribute int uvTextureIds;
+
+    #include <common>
+    #include <logdepthbuf_pars_vertex>
+
+    void main() {
+      // vUv = uv;
+      vUv = (uv * uvDimensions) + uvOffsets;
+      vTextureId = uvTextureIds;
+      
+      vec4 modelViewPosition = vec4(position, 1.0);
+
+      // USE_INSTANCING
+      modelViewPosition = instanceMatrix * modelViewPosition;
+      modelViewPosition = modelViewMatrix * modelViewPosition;
+      gl_Position = projectionMatrix * modelViewPosition;
+
+      vColor = vec3(1.0);
+      #ifdef USE_INSTANCING_COLOR
+        vColor.xyz *= instanceColor.xyz;
+      #endif
+
+      #include <logdepthbuf_vertex>
+  
+  `,
+
   Frag: /* glsl */`
+
+    varying vec3 vColor;
+    varying vec2 vUv;
+    flat varying int vTextureId;
+
+    uniform sampler2D[] textures;
+    uniform vec3 diffuse;
+
     //#region getTexelColor
     // ℹ️ https://stackoverflow.com/a/74729081/2917822
     vec4 getTexelColor(int texId, vec2 uv) {
@@ -442,7 +477,22 @@ export const instancedMultiTextureShader = {
       return vec4(0.0);
     }
     //#endregion
-  `, // 🚧
+
+    #include <common>
+    #include <logdepthbuf_pars_fragment>
+  
+    void main() {
+      gl_FragColor = getTexelColor(vTextureId, vUv) * vec4(vColor * diffuse, 1);
+  
+      // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
+      if(gl_FragColor.a < 0.5) {
+        discard;
+      }
+  
+      #include <logdepthbuf_fragment>
+    }
+  
+  `,
 };
 
 export const InstancedMonochromeShader = shaderMaterial(
