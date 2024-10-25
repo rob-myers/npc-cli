@@ -255,7 +255,7 @@ export default function WorldCanvas(props) {
       gl.setRenderTarget(null);
       camera.clearViewOffset();
     },
-    renderObjectPicking() {// 🚧 WIP
+    renderObjectPickScene() {// 🚧 WIP
       const { gl, scene, camera } = state.rootState;
       // This is the magic, these render lists are still filled with valid data.  So we can
       // submit them again for picking and save lots of work!
@@ -264,15 +264,15 @@ export default function WorldCanvas(props) {
       // renderList.transmissive.forEach(processItem);
       // renderList.transparent.forEach(processItem);
       renderList.opaque.forEach(x => {
-        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPicking) {
-          x.material.uniforms.objectPicking.value = true;
+        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPick) {
+          x.material.uniforms.objectPick.value = true;
           x.material.uniformsNeedUpdate = true;
           gl.renderBufferDirect(camera, scene, /** @type {*} */ (x.geometry), x.material, x.object, null);
         }
       });
       renderList.opaque.forEach(x => {
-        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPicking) {
-          x.material.uniforms.objectPicking.value = false;
+        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPick) {
+          x.material.uniforms.objectPick.value = false;
           x.material.uniformsNeedUpdate = true;
         }
       });
@@ -302,7 +302,7 @@ export default function WorldCanvas(props) {
       state.controls.setPolarAngle(Math.PI / 4);
       state.controls.setAzimuthalAngle(initAzimuth);
     }
-    emptySceneForPicking.onAfterRender = state.renderObjectPicking;
+    emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
 
   useOnResize();
@@ -418,7 +418,7 @@ export default function WorldCanvas(props) {
  * @property {(deltaMs: number) => void} onTick
  * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
- * @property {() => void} renderObjectPicking
+ * @property {() => void} renderObjectPickScene
  * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  */
 

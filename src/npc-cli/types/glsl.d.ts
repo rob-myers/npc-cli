@@ -11,11 +11,14 @@ declare global {
     
     type Texture = import('three').Texture;
 
+    interface SupportsObjectPick {
+        objectPick?: boolean;
+    }
+
     interface IntrinsicElements {
       instancedMonochromeShader: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
-        objectPicking?: boolean;
-      }>;
+      } & SupportsObjectPick>;
       instancedSpriteSheetMaterial: BaseExtendedShaderMaterial<{
         map: import('three').CanvasTexture;
       }>;

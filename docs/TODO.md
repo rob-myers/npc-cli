@@ -9,10 +9,13 @@
     > e.g. `test $( w | map 'w => ...' )`
   - e.g. `test $( call '({ home }) => home.lastClick.meta.floor === true' )`
   - e.g. `test $( get lastClick/meta/floor )`
-  - ✅ two approaches i.e. via `while` or `map`
+  - ✅ two approaches i.e. `while` or `map`
 
-- gpu object-pick encoding
-  - ℹ️ e.g. (r,g,b,a) -> wall, gmId, roomId, instanceId
+- 🚧 gpu object-pick encode/decode
+  - ℹ️ decode (js)   e.g. (r,g,b,a) -> wall, gmId, roomId, instanceId
+  - ℹ️ encode (glsl) e.g. inverse
+  - 🚧 walls: glsl encode uses function
+  - 🚧 walls: js decode uses function
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -46,8 +49,9 @@
 - ❌ change fov with camera distance? e.g. 15 far, 30 close
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
-- consider transparent body skin
-- fix flickering hull door base (onchange camera view)
+- ✅ consider transparent body skin
+  - transparency supported
+- ✅ fix flickering hull door base (onchange camera view)
   - suffices to add a matching line
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so

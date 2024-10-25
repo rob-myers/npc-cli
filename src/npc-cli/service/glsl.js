@@ -32,7 +32,7 @@ const instancedMonochromeShader = {
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-  uniform bool objectPicking;
+  uniform bool objectPick;
   flat varying int vGmId;
   flat varying int vWallSegId;
 
@@ -41,13 +41,15 @@ const instancedMonochromeShader = {
 
   void main() {
 
-    if (objectPicking == true) {
+    if (objectPick == true) {
       gl_FragColor = vec4(
-        1.0 / 255.0, // 1 means wall
+        // 1 means wall
+        1.0 / 255.0,
+        // vGmId in 0..255
         float(vGmId) / 255.0,
+        // vWallSegId in 0..65536: (msbyte, lsbyte)
         float((vWallSegId >> 8) & 255) / 255.0,
         float(vWallSegId & 255) / 255.0
-        // 1
       );
       #include <logdepthbuf_fragment>
       return;
@@ -498,7 +500,7 @@ export const instancedMultiTextureShader = {
 export const InstancedMonochromeShader = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.5, 0.5),
-    objectPicking: false,
+    objectPick: false,
   },
   instancedMonochromeShader.Vert,
   instancedMonochromeShader.Frag,
