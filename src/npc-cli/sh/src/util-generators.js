@@ -67,7 +67,10 @@ export async function* log({ api, args, datum }) {
 }
 
 /**
- * Apply function to each item from stdin
+ * Apply function to each item from stdin.
+ * 
+ * To await promises before continuing use `run`.
+ * Otherwise, the provided function must begin with `async ...`.
  * @param {RunArg} ctxt
  */
 export async function* map(ctxt) {
@@ -88,7 +91,9 @@ export async function* map(ctxt) {
         : nativeCode ? func(datum) : func(datum, ctxt, count++)
       ;
     } catch (e) {
-      if (opts.forever !== true) {
+      if (opts.forever === true) {
+        api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
+      } else {
         throw e;
       }
     }
