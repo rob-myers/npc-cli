@@ -69,8 +69,7 @@ export async function* log({ api, args, datum }) {
 /**
  * Apply function to each item from stdin.
  * 
- * To await promises before continuing use `run`.
- * Otherwise, the provided function must begin with `async ...`.
+ * To use `await`, the provided function must begin with `async`.
  * @param {RunArg} ctxt
  */
 export async function* map(ctxt) {
