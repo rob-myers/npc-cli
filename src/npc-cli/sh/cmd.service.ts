@@ -812,6 +812,10 @@ class cmdServiceClass {
 
     eof: EOF,
 
+    error(message: string) {
+      useSession.api.writeMsgCleanly(this.meta.sessionKey, message, { level: "error" });
+    },
+
     generateSelector,
 
     getCached,
