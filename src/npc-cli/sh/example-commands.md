@@ -296,6 +296,9 @@ click | npc rob do
 npc rob do "$( click 1 )" '{ extraParams: [0] }'
 # foo open door at
 npc rob do "$( click 1 )" '{ extraParams: [1] }'
+
+{ echo foo; echo bar; echo baz; } |
+  map 'async (input, {api}) => { await new Promise(r => setTimeout(r, 1000)); return input }'
 ```
 
 🚧 test from here

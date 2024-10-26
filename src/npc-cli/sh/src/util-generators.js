@@ -80,23 +80,22 @@ export async function* map(ctxt) {
   const baseSelector = api.parseFnOrStr(operands[0]);
   const func = api.generateSelector(baseSelector, operands.slice(1).map(api.parseJsArg));
   // fix e.g. `expr "new Set([1, 2, 3])" | map Array.from`
-  const nativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
-  let count = 0;
-
+  const isNativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
   const isAsync = func.constructor.name === "AsyncFunction";
+  let count = 0;
 
   while ((datum = await api.read(true)) !== api.eof) {
     try {
-      if (isAsync === true) {// respects await:
-        yield api.isDataChunk(datum)
-          ? api.dataChunk(await Promise.all(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++))))
-          : await (nativeCode ? func(datum) : func(datum, ctxt, count++))
-        ;
-      } else {// faster on chunks:
-        yield api.isDataChunk(datum)
-          ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++)))
-          : nativeCode ? func(datum) : func(datum, ctxt, count++)
-        ;
+      if (api.isDataChunk(datum) === true) {
+        if (isAsync === true) {// unwind chunks:
+          for (const item of datum.items) {
+            yield await (isNativeCode ? func(item) : func(item, ctxt, count++));
+          }
+        } else {// fast on chunks:
+          yield api.dataChunk(datum.items.map(isNativeCode ? func : x => func(x, ctxt, count++)));
+        }
+      } else {
+        yield await (isNativeCode ? func(datum) : func(datum, ctxt, count++));
       }
     } catch (e) {
       if (opts.forever === true) {
