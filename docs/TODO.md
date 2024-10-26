@@ -27,6 +27,11 @@
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
 
+- ✅ `map` awaits when working with an async function
+  - ℹ️ we still require "async" keyword to be manually provided
+  - `seq 1000000 | map 'x => x + 1'` (fast)
+  - `seq 1000000 | map 'async x => x + 1'` (slow: many promises)
+
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.ui.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)

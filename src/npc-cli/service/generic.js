@@ -243,10 +243,17 @@ export function generateSelector(selector, extraArgs) {
     };
   }
   if (typeof selector === "function") {
-    /** @param {any} x @param {any[]} xs */
-    return function selectByFn(x, ...xs) {
-      return /** @type {(...args: any[]) => any} */ (selector)(x, ...(extraArgs ?? []), ...xs);
-    };
+    if (selector.constructor.name === "AsyncFunction") {
+      /** @param {any} x @param {any[]} xs */
+      return async function selectByFn(x, ...xs) {
+        return /** @type {(...args: any[]) => any} */ (selector)(x, ...(extraArgs ?? []), ...xs);
+      };
+    } else {
+      /** @param {any} x @param {any[]} xs */
+      return function selectByFn(x, ...xs) {
+        return /** @type {(...args: any[]) => any} */ (selector)(x, ...(extraArgs ?? []), ...xs);
+      };
+    }
   }
   if (selector instanceof RegExp) {
     /** @param {string} x @param {any[]} xs */
@@ -309,6 +316,9 @@ export function jsStringify(input, pretty = false) {
     // use double-quotes instead of single-quotes
     if (typeof value === "string") {
       return '"' + value.replace(/"/g, '\\"') + '"';
+    }
+    if (value instanceof Promise) {
+      return '{ /* Promise */ }';
     }
     return stringify(value);
   }, pretty === true ? 2 : undefined) ?? '';

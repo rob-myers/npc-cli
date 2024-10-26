@@ -83,13 +83,21 @@ export async function* map(ctxt) {
   const nativeCode = /\{\s*\[\s*native code\s*\]\s*\}$/m.test(`${baseSelector}`);
   let count = 0;
 
+  const isAsync = func.constructor.name === "AsyncFunction";
+
   while ((datum = await api.read(true)) !== api.eof) {
     try {
-      yield api.isDataChunk(datum)
-        ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++)))
-        // : func(datum, ...nativeCode ? [] : [ctxt]);
-        : nativeCode ? func(datum) : func(datum, ctxt, count++)
-      ;
+      if (isAsync === true) {// respects await:
+        yield api.isDataChunk(datum)
+          ? api.dataChunk(await Promise.all(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++))))
+          : await (nativeCode ? func(datum) : func(datum, ctxt, count++))
+        ;
+      } else {// faster on chunks:
+        yield api.isDataChunk(datum)
+          ? api.dataChunk(datum.items.map(nativeCode ? func : x => func(x, ctxt, count++)))
+          : nativeCode ? func(datum) : func(datum, ctxt, count++)
+        ;
+      }
     } catch (e) {
       if (opts.forever === true) {
         api.error(`${api.meta.stack.join(": ")}: ${e instanceof Error ? e.message : e}`);
