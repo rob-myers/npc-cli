@@ -245,7 +245,7 @@
     },
     "lab--018--4x4": {"outputHash": -607924482, "pngHash": -113261385},
     "lab--023--4x4": {
-      "outputHash": 2052922649,
+      "outputHash": 515282103,
       "pngHash": -1594118441,
       "obsHashes": [1641095410]
     },
@@ -12170,21 +12170,21 @@
           "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, 1, 0.76, 0.87]
+          "transform": [-1, 0, 0, 1, 1.14, 0.87]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, 1, 0.76, 3.87]
+          "transform": [-1, 0, 0, 1, 1.14, 3.87]
         },
         {
           "symbolKey": "extra--005--chair-0.25x0.25",
           "meta": {"key": "extra--005--chair-0.25x0.25", "y": 0.3},
           "width": 0.375,
           "height": 0.375,
-          "transform": [1, 0, 0, 1, 2.14, 4.87]
+          "transform": [0, 1, -1, 0, 2.51, 4.87]
         }
       ],
       "removableDoors": [],
