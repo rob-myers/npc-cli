@@ -18,15 +18,21 @@ export default function TtyWithFunctions(props: Omit<Props, 'functionFiles'>) {
   );
 }
 
+const generatorConstructorNames = ['AsyncGeneratorFunction', 'GeneratorFunction'];
+
 const functionFiles = {
   'util-functions.sh': utilFunctionsSh,
   'game-functions.sh': gameFunctionsSh,
   'util-generators.sh': Object.entries(utilGeneratorsJs).map(
-    ([key, fn]) => `${key}() ${wrapWithRun(fn)}`
+    ([key, fn]) => `${key}() ${
+      generatorConstructorNames.includes(fn.constructor.name)
+        ? wrapWithRun(fn as AsyncGeneratorFunction)
+        : wrapWithMap(fn) // assume 'AsyncFunction' or 'Function'
+    }`
   ).join('\n\n'),
   'game-generators.sh': Object.entries(gameGeneratorsJs).map(
     ([key, fn]) => `${key}() ${
-      fn.constructor.name === 'AsyncGeneratorFunction'
+      generatorConstructorNames.includes(fn.constructor.name)
         ? wrapWithRun(fn as AsyncGeneratorFunction)
         : wrapWithMap(fn) // assume 'AsyncFunction' or 'Function'
     }`
