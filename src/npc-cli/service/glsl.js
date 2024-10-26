@@ -8,20 +8,20 @@ const instancedMonochromeShader = {
   Vert: /*glsl*/`
 
   attribute int gmId;
-  attribute int wallSegId;
+  attribute int instanceId;
   flat varying int vGmId;
   /**
    * index into wallSegs[gmId]_gmId,
    * equivalently InstancedMesh instanceId
    */
-  flat varying int vWallSegId;
+  flat varying int vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_vertex>
 
   void main() {
     vGmId = gmId;
-    vWallSegId = wallSegId;
+    vInstanceId = instanceId;
 
     vec4 modelViewPosition = vec4(position, 1.0);
     modelViewPosition = instanceMatrix * modelViewPosition;
@@ -38,7 +38,7 @@ const instancedMonochromeShader = {
   uniform vec3 diffuse;
   uniform bool objectPick;
   flat varying int vGmId;
-  flat varying int vWallSegId;
+  flat varying int vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
@@ -46,14 +46,14 @@ const instancedMonochromeShader = {
   /**
    * - 1 means wall
    * - vGmId in 0..255
-   * - vWallSegId in 0..65535: (msByte, lsByte)
+   * - vInstanceId in 0..65535: (msByte, lsByte)
    */
   vec4 encodeWallObjectPick() {
     return vec4(
       1.0,
       float(vGmId),
-      float((vWallSegId >> 8) & 255),
-      float(vWallSegId & 255)
+      float((vInstanceId >> 8) & 255),
+      float(vInstanceId & 255)
     ) / 255.0;
   }
 

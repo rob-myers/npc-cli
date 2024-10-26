@@ -75,16 +75,15 @@ export default function Walls(props) {
     positionInstances() {
       const { wallsInst: ws } = state;
       let wId = 0;
-      let wallSegId = 0;
+      let instanceId = 0;
       const attributeGmIds = /** @type {number[]} */ ([]);
-      // 🚧 rename as attributeInstanceIds ?
-      // this is just [0, 1, 2, 3, ...]
-      const attributeWallSegIds = /** @type {number[]} */ ([]);
+      /** `[0, 1, 2, ... , instanceCount - 1]` */
+      const attributeInstanceIds = /** @type {number[]} */ ([]);
 
       w.gms.forEach(({ key: gmKey, transform }, gmId) =>
         w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) => {
           attributeGmIds.push(gmId);
-          attributeWallSegIds.push(wallSegId++);
+          attributeInstanceIds.push(instanceId++);
           ws.setMatrixAt(wId++, state.getWallMat(
             seg,
             transform,
@@ -97,7 +96,7 @@ export default function Walls(props) {
       ws.computeBoundingSphere();
 
       ws.geometry.setAttribute('gmId', new THREE.InstancedBufferAttribute(new Int32Array(attributeGmIds), 1));
-      ws.geometry.setAttribute('wallSegId', new THREE.InstancedBufferAttribute(new Int32Array(attributeWallSegIds), 1));
+      ws.geometry.setAttribute('instanceId', new THREE.InstancedBufferAttribute(new Int32Array(attributeInstanceIds), 1));
     },
   }));
 

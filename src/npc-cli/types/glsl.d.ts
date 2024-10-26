@@ -19,12 +19,15 @@ declare global {
       instancedMonochromeShader: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
       } & SupportsObjectPick>;
+
       instancedSpriteSheetMaterial: BaseExtendedShaderMaterial<{
         map: import('three').CanvasTexture;
       }>;
+
       cameraLightMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
       }>;
+
       cuboidManMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
         opacity?: number;

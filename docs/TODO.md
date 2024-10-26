@@ -12,8 +12,8 @@
   - ✅ two approaches i.e. `while` or `map`
 
 - 🚧 gpu object-pick encode/decode
-  - ℹ️ decode (js)   e.g. (r,g,b,a) -> wall, gmId, roomId, instanceId
-  - ℹ️ encode (glsl) e.g. inverse
+  - ℹ️ encode (glsl) e.g. gmId, instanceId -> (1, gmId, instanceId >> 8, instanceId)
+  - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
   - ✅ walls: glsl encode uses function
   - ✅ walls: js decode uses function
   - 🚧 ...
