@@ -11,12 +11,16 @@
   - e.g. `test $( get lastClick/meta/floor )`
   - ✅ two approaches i.e. `while` or `map`
 
-- 🚧 gpu object-pick encode/decode
+- 🚧 gpu object-pick
   - ℹ️ encode (glsl) e.g. gmId, instanceId -> (1, gmId, instanceId >> 8, instanceId)
   - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
   - ✅ walls: glsl encode uses function
   - ✅ walls: js decode uses function
-  - 🚧 ...
+  - support transparent
+  - handle npcs
+  - migrate Floor to single draw-call
+  - migrate Ceil to single draw-call
+
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger

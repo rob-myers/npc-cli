@@ -44,7 +44,7 @@ export default function WorldCanvas(props) {
       if (r === 1) {// wall ~ 1 in 0..255
         const gmId = Math.floor(g);
         const instanceId = (b << 8) + a;
-        const meta = w.wall.decodeWallInstanceId(instanceId);
+        const meta = w.wall.decodeInstanceId(instanceId);
         return {
           key: 'wall',
           gmId,
@@ -286,14 +286,16 @@ export default function WorldCanvas(props) {
           x.material.uniforms.objectPick.value = true;
           x.material.uniformsNeedUpdate = true;
           gl.renderBufferDirect(camera, scene, /** @type {*} */ (x.geometry), x.material, x.object, null);
-        }
-      });
-      renderList.opaque.forEach(x => {
-        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPick) {
           x.material.uniforms.objectPick.value = false;
           x.material.uniformsNeedUpdate = true;
         }
       });
+      // renderList.opaque.forEach(x => {
+      //   if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPick) {
+      //     x.material.uniforms.objectPick.value = false;
+      //     x.material.uniformsNeedUpdate = true;
+      //   }
+      // });
     },
     setLastDown(e) {
       if (e.is3d || !state.lastDown) {

@@ -18,22 +18,32 @@ export default function Walls(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     wallsInst: /** @type {*} */ (null),
 
-    decodeWallInstanceId(instanceId) {
-      let foundWallSegId = instanceId;
-      const foundGmId = w.gmsData.wallPolySegCounts.findIndex(
-        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
+    decodeInstanceId(instanceId) {
+      // compute gmId, gmData.wallSegs[wallSegsId]
+      let wallSegsId = instanceId;
+      const gmId = w.gmsData.wallPolySegCounts.findIndex(
+        segCount => wallSegsId < segCount ? true : (wallSegsId -= segCount, false)
       );
-      const gm = w.gms[foundGmId];
-      const foundWallId = w.gmsData[gm.key].wallPolySegCounts.findIndex(
-        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
+
+      const gm = w.gms[gmId];
+      const gmData = w.gmsData[gm.key];
+      // 🔔 could provide roomId from shader
+      const wallSeg = gmData.wallSegs[wallSegsId];
+      const center = wallSeg.seg[0].clone().add(wallSeg.seg[1]).scale(0.5);
+      const roomId = w.gmsData.findRoomIdContaining(gm, center, true);
+      
+      // compute gm.walls[wallId][wallSegId]
+      let wallSegId = wallSegsId;
+      const wallId = gmData.wallPolySegCounts.findIndex(
+        segCount => wallSegId < segCount ? true : (wallSegId -= segCount, false)
       );
-      const wall = gm.walls[foundWallId];
+      const wall = gm.walls[wallId];
 
       if (wall !== undefined) {
-        return { gmId: foundGmId, ...wall.meta, instanceId };
+        return { gmId, ...wall.meta, roomId, instanceId };
       } else {
-        const doorId = Math.floor(foundWallSegId / 2); // 2 lintels per door
-        return { gmId: foundGmId, wall: true, lintel: true, doorId, instanceId };
+        const doorId = Math.floor(wallSegId / 2); // 2 lintels per door
+        return { gmId, wall: true, lintel: true, roomId, doorId, instanceId };
       }
     },
     getWallMat([u, v], transform, height, baseHeight) {
@@ -54,7 +64,7 @@ export default function Walls(props) {
         is3d: true,
         justLongDown: false,
         meta: {
-          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+          ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
           ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
         },
       }));
@@ -66,7 +76,7 @@ export default function Walls(props) {
         event: e,
         is3d: true,
         meta: {
-          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
+          ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
           ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
         },
       }));
@@ -139,7 +149,7 @@ export default function Walls(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} wallsInst
  *
- * @property {(instanceId: number) => Geom.Meta} decodeWallInstanceId
+ * @property {(instanceId: number) => Geom.Meta} decodeInstanceId
  * @property {(
  *  seg: [Geom.Vect, Geom.Vect],
  *  transform: Geom.SixTuple,
