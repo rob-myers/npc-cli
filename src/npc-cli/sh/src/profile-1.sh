@@ -42,10 +42,10 @@ w | map 'w => (w.e.shouldIgnoreLongClick = (meta) => meta.do || meta.floor)'
 #     selectedNpc | map '(npc, {home}) => npc.do(home.lastClick)'
 #   fi
 # done &
-click --long | map '(x, {home, w}) => {
+click --long | map --forever 'async (x, {home, w}) => {
   const npc = w.npc.npc[home.selectedNpcKey];
   if (x.meta.floor === true && !npc.s.doMeta) npc.look(x);
-  else npc.do(x);
+  else await npc.do(x);
 }' &
 
 # click navmesh to move selectedNpcKey

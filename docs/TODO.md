@@ -19,8 +19,11 @@
   - support transparent
   - handle npcs
   - migrate Floor to single draw-call
+    - still need floor pointer events for navigation
   - migrate Ceil to single draw-call
 
+- ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
+  - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
@@ -29,7 +32,7 @@
 
 - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
-  - need repro, tried adding `key`.
+  - ℹ️ saw happen when changed symbol chairs
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
