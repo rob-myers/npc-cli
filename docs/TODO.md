@@ -2,15 +2,6 @@
 
 ## WIP
 
-- ✅ avoid initial instanced mesh render
-- ✅ profile-1: long click floor makes npc look towards it
-  - ℹ️ `get lastClick/meta/floor` has exit code `0` iff `lastClick.meta.floor` exists
-  - ℹ️ `test foo` has exit code `0` iff evaluated JavaScript `foo` is truthy
-    > e.g. `test $( w | map 'w => ...' )`
-  - e.g. `test $( call '({ home }) => home.lastClick.meta.floor === true' )`
-  - e.g. `test $( get lastClick/meta/floor )`
-  - ✅ two approaches i.e. `while` or `map`
-
 - 🚧 gpu object-pick
   - ℹ️ encode (glsl) e.g. gmId, instanceId -> (1, gmId, instanceId >> 8, instanceId)
   - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
@@ -22,9 +13,6 @@
     - still need floor pointer events for navigation
   - migrate Ceil to single draw-call
 
-- ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
-  - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
-
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
@@ -33,9 +21,16 @@
 - 🚧 understand duplicated npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - ℹ️ saw happen when changed symbol chairs
+- 🚧 avoid initial instanced mesh render
+  - still seeing issue on mobile
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+
+- auto reduce fov when World canvas wide with short height?
+  > `w update 'w => w.ui.targetFov = 5'`
+- ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
+  - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
 - desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
@@ -2770,3 +2765,11 @@ done
   - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
 
 - ✅ sh: `map --forever` does not terminate on throw
+
+- ✅ profile-1: long click floor makes npc look towards it
+  - ℹ️ `get lastClick/meta/floor` has exit code `0` iff `lastClick.meta.floor` exists
+  - ℹ️ `test foo` has exit code `0` iff evaluated JavaScript `foo` is truthy
+    > e.g. `test $( w | map 'w => ...' )`
+  - e.g. `test $( call '({ home }) => home.lastClick.meta.floor === true' )`
+  - e.g. `test $( get lastClick/meta/floor )`
+  - ✅ two approaches i.e. `while` or `map`
