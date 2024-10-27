@@ -27,11 +27,10 @@
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
 
-- ✅ `map` awaits when working with an async function
-  - ℹ️ we still require "async" keyword to be manually provided
-  - `seq 1000000 | map 'x => x + 1'` (fast)
-  - `seq 1000000 | map 'async x => x + 1'` (slow: many promises)
-
+- 🚧 support `await api.sleep(1)` inside `map`
+  - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
+  - ✅  simplify `choice` so it does not use `sleep`
+  - refactor `sleep` as AsyncFunction
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.ui.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
@@ -2778,3 +2777,8 @@ done
   - e.g. `test $( call '({ home }) => home.lastClick.meta.floor === true' )`
   - e.g. `test $( get lastClick/meta/floor )`
   - ✅ two approaches i.e. `while` or `map`
+
+- ✅ `map` awaits when working with an async function
+  - ℹ️ we still require "async" keyword to be manually provided
+  - `seq 1000000 | map 'x => x + 1'` (fast)
+  - `seq 100000 | map 'async x => x + 1'` (slow: many promises)
