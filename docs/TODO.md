@@ -8,11 +8,11 @@
   - ✅ walls: glsl encode uses function
   - ✅ walls: js decode uses function
   - ✅ support transparent
-  - 🚧 handle npcs
+  - ✅ handle npcs
     - ✅ npc click detected
-    - 🚧 npcs need integer uid
-      - ℹ️ maybe assume max npcs 256
-      - ℹ️ maybe maintain Set([0..255])
+    - ✅ npcs need integer uid
+      - ℹ️ assume max npcs 256
+      - ℹ️ maintain Set([0..255])
   - migrate Floor to single draw-call
     - still need floor pointer events for navigation
   - migrate Ceil to single draw-call

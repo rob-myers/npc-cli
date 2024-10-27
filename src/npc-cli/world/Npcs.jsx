@@ -2,8 +2,8 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultClassKey, gmLabelHeightSgu, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
-import { info, warn } from "../service/generic";
+import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
+import { info, range, takeFirst, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
@@ -32,6 +32,10 @@ export default function Npcs(props) {
     },
     npc: {},
     tex: /** @type {*} */ ({}),
+    uid: {
+      free: new Set(range(maxNumberOfNpcs)),
+      toKey: new Map(),
+    },
 
     clearLabels() {
       w.menu.measure('npc.clearLabels');
@@ -127,9 +131,12 @@ export default function Npcs(props) {
       for (const npcKey of npcKeys) {
         const npc = state.getNpc(npcKey); // throw if n'exist pas
         npc.cancel(); // rejects promises
-        // npc.setGmRoomId(null);
-        delete state.npc[npcKey];
         npc.removeAgent();
+        
+        delete state.npc[npcKey];
+        state.uid.free.add(npc.def.uid);
+        state.uid.toKey.delete(npc.def.uid);
+
         w.events.next({ key: 'removed-npc', npcKey });
       }
       update();
@@ -167,6 +174,7 @@ export default function Npcs(props) {
 
         npc.def = {
           key: e.npcKey,
+          uid: npc.def.uid,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
           classKey: e.classKey ?? npc.def.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
@@ -177,14 +185,17 @@ export default function Npcs(props) {
         delete state.npc[e.npcKey];
         state.npc[e.npcKey] = npc;
       } else {
+        
         // Spawn
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
+          uid: takeFirst(state.uid.free),
           angle: e.angle ?? 0,
           classKey: e.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
+        state.uid.toKey.set(npc.def.uid, e.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
       }
@@ -303,6 +314,9 @@ export default function Npcs(props) {
  * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
  * @property {{ [npcKey: string]: Npc }} npc
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
+ * @property {{ free: Set<number>; toKey: Map<number, string> }} uid
+ * `uid.free` are the as-yet-unused npc uids.
+ * They are removed/added on spawn/remove npc.
  *
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
@@ -356,6 +370,7 @@ function NPC({ npc }) {
           diffuse={[1, 1, 1]}
           transparent
           opacity={npc.s.opacity}
+          uNpcUid={npc.def.uid}
           // objectPick={true}
 
           labelHeight={wallHeight * (1 / npc.m.scale)}

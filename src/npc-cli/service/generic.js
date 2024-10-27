@@ -447,6 +447,21 @@ export function safeJsonParse(input) {
 }
 
 /**
+ * - Take the first element of the set, removing it in the process.
+ * - Throws on empty-set.
+ * @template T
+ * @param {Set<T>} set
+ * @returns {T}
+ */
+export function takeFirst(set) {
+  for (const item of set) {
+    set.delete(item);
+    return item;
+  }
+  throw new Error(`cannot take from empty set`)
+}
+
+/**
  * Usage `default: throw testNever(x)`.
  * @param {never} x
  * @param {{ override?: string; suffix?: string }} [opts]

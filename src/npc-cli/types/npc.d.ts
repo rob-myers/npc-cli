@@ -1,13 +1,13 @@
 declare namespace NPC {
 
-  /** Skin names. */
-  type SkinKey = keyof import('../service/helper').Helper['fromSkinKey'];
-
   type NPC = import('../world/npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */
     key: string;
+    /** Numeric id used in object-picking */
+    uid: number;
+    /** Specifies the underlying 3D model */
     classKey: ClassKey;
     /** Radians */
     angle: number;

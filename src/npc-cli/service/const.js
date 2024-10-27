@@ -335,3 +335,9 @@ export const npcClassToMeta = {
 export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
   Object.keys(npcClassToMeta)
 );
+
+/**
+ * Relates to `npc.def.uid` which is used for object-picking.
+ * Technically we can choose any `maxNumberOfNpcs ≤ 2^16 = 65536`.
+ */
+export const maxNumberOfNpcs = 256;

@@ -40,6 +40,7 @@ export default function WorldCanvas(props) {
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
     },
+    // 🚧 move to useHandleEvents because it depends on a lot of sub-apis
     decodeObjectPick(r, g, b, a) {
       if (r === 1) {// wall
         const gmId = Math.floor(g);
@@ -55,10 +56,11 @@ export default function WorldCanvas(props) {
 
       if (r === 8) {// npc
         const npcUid = (g << 8) + b;
-        // 🚧 decode npcKey
+        const npcKey = w.npc.uid.toKey.get(npcUid);
         return {
           key: 'npc',
           npcUid,
+          npcKey,
         };
       }
 
