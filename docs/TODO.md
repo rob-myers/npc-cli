@@ -15,9 +15,12 @@
       - ℹ️ maintain Set([0..255])
   - 🚧 migrate Floor to single draw-call
     - ℹ️ still need floor pointer events for navigation
+    - ✅ positionInstances
+    - 🚧 specify textureId convention
+    - 🚧 addUvs
   - migrate Ceil to single draw-call
 
-- 🚧 understand ~duplicated~ coinciding npcs e.g. on edit recast-detour.js
+- 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - ℹ️ saw happen when changed symbol chairs
 - 🚧 avoid initial instanced mesh render
