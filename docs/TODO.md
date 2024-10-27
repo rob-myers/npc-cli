@@ -17,28 +17,33 @@
     - ℹ️ still need floor pointer events for navigation
     - ✅ positionInstances
     - 🚧 specify textureId convention
+      - could order by "occurring gmNumber"
     - 🚧 addUvs
   - migrate Ceil to single draw-call
 
-- 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
-  - ℹ️ seems npc `will` is coinciding with npc `rob`
-  - ℹ️ saw happen when changed symbol chairs
-- 🚧 avoid initial instanced mesh render
-  - still seeing issue on mobile
-- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
-  - ✅ shortcut works in active tabset
-  - clicking tab sets active tabset
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅  simplify `choice` so it does not use `sleep`
   - ✅ refactor underlying `choice` as AsyncFunction 
   - refactor `sleep` as AsyncFunction
+- 🚧 avoid initial instanced mesh render
+  - still seeing issue on mobile
+- 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
+  - ℹ️ seems npc `will` is coinciding with npc `rob`
+  - ℹ️ saw happen when changed symbol chairs
+- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
+  - ✅ shortcut works in active tabset
+  - clicking tab sets active tabset
 
 - 🚧 next.js project (npc-cli-next)
   - keep in sync e.g. glsl.js, Logger
     - `git diff --name-only "@{Sat 18 Sep}"`
   - get Decor working
 
+- can only spawn onto navigable floor or do point
+  - spawn onto do point uses orient
+- ✅ spawn near auto door triggers sensor
+- ✅ spawn from near auto door triggers sensor
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.ui.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)

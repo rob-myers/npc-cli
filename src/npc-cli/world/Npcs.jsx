@@ -31,6 +31,7 @@ export default function Npcs(props) {
       tex: new THREE.CanvasTexture(getCanvas(`${w.key} npc.label`)),
     },
     npc: {},
+    physicsPositions: [],
     tex: /** @type {*} */ ({}),
     uid: {
       free: new Set(range(maxNumberOfNpcs)),
@@ -103,10 +104,9 @@ export default function Npcs(props) {
       e.stopPropagation();
     },
     onTick(deltaMs) {
-      const npcPositions = /** @type {number[]} */ ([]);
-      Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, npcPositions));
+      Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, state.physicsPositions));
       // 🔔 Float32Array caused issues i.e. decode failed
-      const positions = new Float64Array(npcPositions);
+      const positions = new Float64Array(state.physicsPositions);
       w.physics.worker.postMessage({ type: 'send-npc-positions', positions}, [positions.buffer]);
     },
     restore() {// onchange nav-mesh
@@ -218,11 +218,15 @@ export default function Npcs(props) {
           const agent = npc.attachAgent();
           // 🔔 pin to current position
           agent.requestMoveTarget(npc.position);
+          // must tell physics.worker because not moving
+          state.physicsPositions.push(npc.bodyUid, position.x, position.y, position.z);
         }
       } else {
         if (dstNav === false || e.agent === false) {
           npc.setPosition(position);
           npc.removeAgent();
+          // must tell physics.worker because not moving
+          state.physicsPositions.push(npc.bodyUid, position.x, position.y, position.z);
         } else {
           npc.agent.teleport(position);
         }
@@ -313,6 +317,8 @@ export default function Npcs(props) {
  * @property {import("../service/three").LabelsSheetAndTex} label
  * @property {Record<NPC.ClassKey, import("three-stdlib").GLTF & import("@react-three/fiber").ObjectMap>} gltf
  * @property {{ [npcKey: string]: Npc }} npc
+ * @property {number[]} physicsPositions
+ * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
  * @property {{ free: Set<number>; toKey: Map<number, string> }} uid
  * `uid.free` are the as-yet-unused npc uids.
