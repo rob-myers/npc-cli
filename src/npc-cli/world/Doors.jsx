@@ -24,7 +24,7 @@ export default function Doors(props) {
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
 
-    addDoorUvs() {
+    addUvs() {
       const { decor, decorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
@@ -105,7 +105,7 @@ export default function Doors(props) {
       //   state.cancelClose(state.byGmId[adjHull.adjGmId][adjHull.adjDoorId]);
       // }
     },
-    decodeDoorInstance(instanceId) {
+    decodeInstance(instanceId) {
       let doorId = instanceId;
       const gmId = w.gms.findIndex((gm) => (
         doorId < gm.doors.length ? true : (doorId -= gm.doors.length, false)
@@ -152,7 +152,7 @@ export default function Doors(props) {
         event: e,
         is3d: true,
         justLongDown: false,
-        meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
+        meta: state.decodeInstance(/** @type {number} */ (e.instanceId)),
       }));
     },
     onPointerUp(e) {
@@ -161,7 +161,7 @@ export default function Doors(props) {
         key: "pointerup",
         event: e,
         is3d: true,
-        meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
+        meta: state.decodeInstance(/** @type {number} */ (e.instanceId)),
       }));
     },
     onTick(deltaMs) {
@@ -281,7 +281,7 @@ export default function Doors(props) {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
-    state.addDoorUvs();
+    state.addUvs();
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
 
   return <>
@@ -335,10 +335,10 @@ export default function Doors(props) {
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
  *
- * @property {() => void} addDoorUvs
+ * @property {() => void} addUvs
  * @property {() => void} buildLookups
  * @property {(item: Geomorph.DoorState) => void} cancelClose
- * @property {(instanceId: number) => Geom.Meta} decodeDoorInstance
+ * @property {(instanceId: number) => Geom.Meta} decodeInstance
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors

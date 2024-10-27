@@ -586,7 +586,7 @@ export default function Decor(props) {
     <instancedMesh // labels
       name="decor-labels"
       key={`${labels.length} labels`}
-      ref={instances => instances && (state.labelInst = instances)}
+      ref={instances => void (instances && (state.labelInst = instances))}
       args={[state.labelQuad, undefined, labels.length]}
       frustumCulled={false}
     >
