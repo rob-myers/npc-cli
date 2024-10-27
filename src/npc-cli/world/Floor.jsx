@@ -5,6 +5,7 @@ import { Mat, Poly } from "../geom";
 import { geomorphGridMeters, gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys, pause } from "../service/generic";
 import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
+import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -20,6 +21,7 @@ export default function Floor(props) {
       geomorphGridMeters * worldToCanvas,
       'rgba(255, 255, 255, 0.075)',
     ),
+    quadGeom: getQuadGeometryXZ('multi-tex-floor-xz'),
     tex: w.floor.tex, // Pass in textures
 
     async draw() {
@@ -110,6 +112,27 @@ export default function Floor(props) {
   }, [w.mapKey, w.hash.full]);
 
   return <>
+
+    {/* 🚧 */}
+    {/* <instancedMesh
+      name={"multi-tex-floor"}
+      args={[state.quadGeom, undefined, w.gms.length]}
+      renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
+    >
+      {
+        // <meshBasicMaterial color="red" />
+      }
+      <instancedMultiTextureMaterial
+        key={InstancedMultiTextureMaterial.key}
+        side={THREE.FrontSide}
+        transparent
+        textures={[
+          // 🚧
+        ]}
+        depthWrite={false} // fix z-fighting
+      />
+    </instancedMesh> */}
+
     {w.gms.map((gm, gmId) => (
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
@@ -144,6 +167,7 @@ export default function Floor(props) {
 /**
  * @typedef State
  * @property {CanvasPattern} gridPattern
+ * @property {THREE.BufferGeometry} quadGeom
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey

@@ -433,7 +433,8 @@ export const instancedMultiTextureShader = {
 
     varying vec3 vColor;
     varying vec2 vUv;
-    flat varying int vTextureId; 
+    flat varying int vTextureId;
+
     attribute vec2 uvDimensions;
     attribute vec2 uvOffsets;
     attribute int uvTextureIds;
@@ -550,6 +551,18 @@ export const InstancedSpriteSheetMaterial = shaderMaterial(
   instancedUvMappingShader.Frag,
 );
 
+export const InstancedMultiTextureMaterial = shaderMaterial(
+  {
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
+    // 🔔 map, mapTransform required else can get weird texture
+    map: null,
+    mapTransform: new THREE.Matrix3(),
+    textures: [], // 🚧
+  },
+  instancedMultiTextureShader.Vert,
+  instancedMultiTextureShader.Frag,
+);
+
 export const CameraLightMaterial = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
@@ -598,6 +611,7 @@ export const CuboidManMaterial = shaderMaterial(
 extend({
   InstancedMonochromeShader,
   InstancedSpriteSheetMaterial,
+  InstancedMultiTextureMaterial,
   CameraLightMaterial,
   CuboidManMaterial,
 });

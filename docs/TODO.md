@@ -13,8 +13,8 @@
     - ✅ npcs need integer uid
       - ℹ️ assume max npcs 256
       - ℹ️ maintain Set([0..255])
-  - migrate Floor to single draw-call
-    - still need floor pointer events for navigation
+  - 🚧 migrate Floor to single draw-call
+    - ℹ️ still need floor pointer events for navigation
   - migrate Ceil to single draw-call
 
 - 🚧 understand ~duplicated~ coinciding npcs e.g. on edit recast-detour.js

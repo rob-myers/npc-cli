@@ -24,6 +24,11 @@ declare global {
         map: import('three').CanvasTexture;
       }>;
 
+      instancedMultiTextureMaterial: BaseExtendedShaderMaterial<{
+        diffuse?: Vector3Input;
+        textures: import('three').CanvasTexture[];
+      }>;
+
       cameraLightMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
       }>;
