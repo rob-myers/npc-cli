@@ -148,14 +148,10 @@ class cmdServiceClass {
       }
       case "choice": {
         if (isTtyAt(meta, 0)) {
-          // `choice {textWithLinks}+ [secondsToWait] [defaultValue]`
+          // `choice {textWithLinks}+`
           // text may contain newlines
-          const secsIndex = args.findIndex((x) => Number.isFinite(parseInt(x)));
-          const text = args.slice(0, secsIndex >= 0 ? secsIndex : undefined).join(" ");
-          const secs = secsIndex >= 0 ? parseInt(args[secsIndex]) : undefined;
-          const defaultValue = secsIndex >= 0 ? parseJsArg(args[secsIndex + 1]) : undefined;
-
-          yield* this.choice(meta, { text, defaultValue, secs });
+          const text = args.join(" ");
+          yield* this.choice(meta, { text });
         } else {
           // `choice` expects to read `ChoiceReadValue`s
           let datum: ChoiceReadValue;
@@ -634,56 +630,29 @@ class cmdServiceClass {
     }
   }
 
-  /**
-   * `defaultValue` emitted:
-   * - on timeout without link selected
-   * - on link selected with value undefined e.g. [foo](-) or [foo](undefined)
-   */
-  private async *choice(meta: Sh.BaseMeta, { text, defaultValue, secs }: ChoiceReadValue) {
+  private async *choice(meta: Sh.BaseMeta, { text }: ChoiceReadValue) {
     const lines = text.replace(/\r/g, "").split(/\n/);
-    const parsedLines = lines.map((text) =>
-      parseTtyMarkdownLinks(text, defaultValue, meta.sessionKey)
-    );
+    const defaultValue = undefined;
+    const parsedLines = lines.map((text) => parseTtyMarkdownLinks(text, defaultValue, meta.sessionKey));
     for (const { ttyText } of parsedLines) {
       await useSession.api.writeMsgCleanly(meta.sessionKey, ttyText);
     }
 
     try {
-      /** Avoid many cleanups if pause/resume many times: @see {sleep} */
-      let reject = (_?: any) => {};
-      const cleanup = () => reject();
-      getProcess(meta).cleanups.push(cleanup);
-
-      // ℹ️ pause/resume handling not needed: cannot click links when paused
-      // 🚧 although we can in debug mode...
-
-      const linkPromFactory = parsedLines.some((x) => x.linkCtxtsFactory)
-        ? () =>
-            new Promise<any>((resolve, currReject) => {
-              reject = currReject;
-              parsedLines.forEach(
-                ({ ttyTextKey, linkCtxtsFactory }) =>
-                  linkCtxtsFactory &&
-                  useSession.api.addTtyLineCtxts(
-                    meta.sessionKey,
-                    ttyTextKey,
-                    linkCtxtsFactory(resolve)
-                  )
-              );
-            })
-        : undefined
-      ;
-
-      if (typeof secs === "number" || !linkPromFactory) {
-        // links have timeout (also if no links, with fallback 0)
-        // yield* sleep(meta, secs, linkPromFactory);
-        let lastValue: any = undefined;
-        for await (const value of sleep(meta, secs ?? 0, linkPromFactory))
-          yield (lastValue = value);
-        if (lastValue === undefined) yield defaultValue;
-      } else {
+      if (parsedLines.some((x) => x.linkCtxtsFactory)) {
         // some link must be clicked to proceed
-        yield await linkPromFactory();
+        yield await new Promise<any>((resolve, reject) => {
+          getProcess(meta).cleanups.push(reject);
+          parsedLines.forEach(
+            ({ ttyTextKey, linkCtxtsFactory }) =>
+              linkCtxtsFactory &&
+              useSession.api.addTtyLineCtxts(
+                meta.sessionKey,
+                ttyTextKey,
+                linkCtxtsFactory(resolve)
+              )
+          );
+        })
       }
     } finally {
       // ℹ️ currently assume one time usage
@@ -1071,7 +1040,6 @@ async function read(meta: Sh.BaseMeta, chunks = false) {
 export async function* sleep(
   meta: Sh.BaseMeta,
   seconds: number,
-  interruptFactory?: () => Promise<any>
 ) {
   const process = getProcess(meta);
   let duration = 1000 * seconds,
@@ -1080,30 +1048,21 @@ export async function* sleep(
   const cleanup = () => reject(killError(meta));
   process.cleanups.push(cleanup);
   do {
-    let resolvedSleep = false;
-    const value = await Promise.race([
-      new Promise<void>((resolve, currReject) => {
-        const resolveSleep = () => {
-          resolvedSleep = true;
-          resolve();
-        };
-        process.onSuspends.push(() => {
-          duration -= Date.now() - startedAt;
-          resolveSleep();
-        });
-        process.onResumes.push(() => {
-          startedAt = Date.now();
-        });
-        reject = currReject; // We update cleanup here
-        (startedAt = Date.now()) && setTimeout(resolveSleep, duration);
-      }),
-      ...(interruptFactory ? [interruptFactory()] : []),
-    ]);
-    if (!resolvedSleep) {
-      // Interrupted
-      yield value;
-      break;
-    }
+    await new Promise<void>((resolve, currReject) => {
+      const resolveSleep = () => {
+        resolve();
+      };
+      process.onSuspends.push(() => {
+        duration -= Date.now() - startedAt;
+        resolveSleep();
+      });
+      process.onResumes.push(() => {
+        startedAt = Date.now();
+      });
+      reject = currReject; // We update cleanup here
+      (startedAt = Date.now()) && setTimeout(resolveSleep, duration);
+    });
+
     yield; // This yield pauses execution if process suspended
   } while (Date.now() - startedAt < duration - 1);
   // If process continually re-sleeps, avoid many cleanups
@@ -1114,8 +1073,6 @@ export async function* sleep(
 
 interface ChoiceReadValue {
   text: string;
-  defaultValue?: any;
-  secs?: number;
 }
 
 export const cmdService = new cmdServiceClass();
