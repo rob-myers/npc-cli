@@ -323,7 +323,9 @@ export const cuboidManShader = {
 
   Frag: /*glsl*/`
 
+  uniform int uNpcUid;
   uniform vec3 diffuse;
+  uniform bool objectPick;
   uniform float opacity;
 
   uniform sampler2D uBaseTexture;
@@ -356,6 +358,21 @@ export const cuboidManShader = {
   }
   //#endregion
 
+  /**
+   * - 8 means npc
+   * - uNpcUid in 0..65535 (msByte, lsByte),
+   *   although probably in 0..255
+   */
+  vec4 encodeNpcObjectPick() {
+    return vec4(
+      8.0,
+      // 255.0,
+      float((uNpcUid >> 8) & 255),
+      float(uNpcUid & 255),
+      255.0
+    ) / 255.0;
+  }
+
   void main() {
     vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
@@ -385,6 +402,11 @@ export const cuboidManShader = {
 
     if (diffuseColor.a < 0.1) {
       discard;
+    }
+
+    if (objectPick == true) {
+      gl_FragColor = encodeNpcObjectPick();
+      return;
     }
 
     if (vId >= 60) {// ⭐️ label quad (no lighting)
@@ -546,6 +568,8 @@ export const CuboidManMaterial = shaderMaterial(
     map: null,
     mapTransform: new THREE.Matrix3(),
     opacity: 1,
+    objectPick: false,
+    uNpcUid: 0,
 
     showLabel: true,
     labelHeight: wallHeight,

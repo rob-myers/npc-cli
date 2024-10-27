@@ -356,10 +356,10 @@ function NPC({ npc }) {
           diffuse={[1, 1, 1]}
           transparent
           opacity={npc.s.opacity}
+          // objectPick={true}
 
           labelHeight={wallHeight * (1 / npc.m.scale)}
           // labelHeight={wallHeight * (1 / 0.9)}
-          // selectorColor={npc.def.classKey === 'cuboid-man' ? [0.6, 0.6, 1] : [0.8, 0.3, 0.4]}
           selectorColor={npc.s.selectorColor}
           showSelector={npc.s.showSelector}
           // showLabel={false}

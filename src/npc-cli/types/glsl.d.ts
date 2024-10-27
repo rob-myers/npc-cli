@@ -29,6 +29,7 @@ declare global {
       }>;
 
       cuboidManMaterial: BaseExtendedShaderMaterial<{
+        uNpcUid?: number;
         diffuse?: Vector3Input;
         opacity?: number;
 
@@ -50,7 +51,7 @@ declare global {
         uLabelUv?: Vector2Input[];
 
         uLabelDim?: Vector2Input;
-      }>;
+      } & SupportsObjectPick>;
     }
   }
 }

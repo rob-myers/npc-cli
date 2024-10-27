@@ -7,18 +7,15 @@
   - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
   - ✅ walls: glsl encode uses function
   - ✅ walls: js decode uses function
-  - support transparent
-  - handle npcs
+  - ✅ support transparent
+  - 🚧 handle npcs
+    - ✅ npc click detected
+    - npcs need integer uid
   - migrate Floor to single draw-call
     - still need floor pointer events for navigation
   - migrate Ceil to single draw-call
 
-- 🚧 next.js project (npc-cli-next)
-  - keep in sync e.g. glsl.js, Logger
-    - `git diff --name-only "@{Sat 18 Sep}"`
-  - get Decor working
-
-- 🚧 understand duplicated npcs e.g. on edit recast-detour.js
+- 🚧 understand ~duplicated~ coinciding npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - ℹ️ saw happen when changed symbol chairs
 - 🚧 avoid initial instanced mesh render
@@ -26,11 +23,17 @@
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
-
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅  simplify `choice` so it does not use `sleep`
+  - refactor `choice` as AsyncFunction 
   - refactor `sleep` as AsyncFunction
+
+- 🚧 next.js project (npc-cli-next)
+  - keep in sync e.g. glsl.js, Logger
+    - `git diff --name-only "@{Sat 18 Sep}"`
+  - get Decor working
+
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.ui.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)

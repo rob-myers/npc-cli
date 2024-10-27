@@ -9,7 +9,7 @@ import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
 import { warn } from "../service/generic.js";
-import { emptySceneForPicking, getQuadGeometryXZ, pickingRenderTarget } from "../service/three.js";
+import { emptySceneForPicking, getQuadGeometryXZ, hasObjectPickShaderMaterial, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
 import useOnResize from "../hooks/use-on-resize.js";
@@ -41,7 +41,7 @@ export default function WorldCanvas(props) {
       }
     },
     decodeObjectPick(r, g, b, a) {
-      if (r === 1) {// wall ~ 1 in 0..255
+      if (r === 1) {// wall
         const gmId = Math.floor(g);
         const instanceId = (b << 8) + a;
         const meta = w.wall.decodeInstanceId(instanceId);
@@ -49,9 +49,19 @@ export default function WorldCanvas(props) {
           key: 'wall',
           gmId,
           instanceId,
-          ...meta, // 🚧 clarify
+          ...meta,
         };
       }
+
+      if (r === 8) {// npc
+        const npcUid = (g << 8) + b;
+        // 🚧 decode npcKey
+        return {
+          key: 'npc',
+          npcUid,
+        };
+      }
+
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
     },
@@ -273,29 +283,31 @@ export default function WorldCanvas(props) {
       gl.setRenderTarget(null);
       camera.clearViewOffset();
     },
-    renderObjectPickScene() {// 🚧 WIP e.g. transparent needed
+    renderObjectPickItem(gl, scene, camera, x) {
+      x.material.uniforms.objectPick.value = true;
+      x.material.uniformsNeedUpdate = true;
+      gl.renderBufferDirect(camera, scene, /** @type {THREE.BufferGeometry} */ (x.geometry), x.material, x.object, null);
+      // We immediately turn objectPick off e.g. overriding manual prop in Memoed <Npc>
+      x.material.uniforms.objectPick.value = false;
+      x.material.uniformsNeedUpdate = true;
+    },
+    renderObjectPickScene() {// 🚧 WIP
       const { gl, scene, camera } = state.rootState;
       // This is the magic, these render lists are still filled with valid data.  So we can
       // submit them again for picking and save lots of work!
       const renderList = gl.renderLists.get(scene, 0);
-      // renderList.opaque.forEach(processItem);
-      // renderList.transmissive.forEach(processItem);
-      // renderList.transparent.forEach(processItem);
+
       renderList.opaque.forEach(x => {
-        if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPick) {
-          x.material.uniforms.objectPick.value = true;
-          x.material.uniformsNeedUpdate = true;
-          gl.renderBufferDirect(camera, scene, /** @type {*} */ (x.geometry), x.material, x.object, null);
-          x.material.uniforms.objectPick.value = false;
-          x.material.uniformsNeedUpdate = true;
+        if (hasObjectPickShaderMaterial(x)) {
+          state.renderObjectPickItem(gl, scene, camera, x);
         }
       });
-      // renderList.opaque.forEach(x => {
-      //   if (x.material instanceof THREE.ShaderMaterial && x.material.uniforms.objectPick) {
-      //     x.material.uniforms.objectPick.value = false;
-      //     x.material.uniformsNeedUpdate = true;
-      //   }
-      // });
+      // renderList.transmissive.forEach(processItem);
+      renderList.transparent.forEach(x => {
+        if (hasObjectPickShaderMaterial(x)) {
+          state.renderObjectPickItem(gl, scene, camera, x);
+        }
+      });
     },
     setLastDown(e) {
       if (e.is3d || !state.lastDown) {
@@ -439,6 +451,7 @@ export default function WorldCanvas(props) {
  * @property {(deltaMs: number) => void} onTick
  * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
+ * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
  * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  */

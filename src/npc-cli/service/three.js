@@ -380,3 +380,15 @@ export function getParentBones(objs) {
     x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
   );
 }
+
+/**
+ * @template {{ material: THREE.Material }} T
+ * @param {T} o
+ * @returns {o is (T & { material: THREE.ShaderMaterial })}
+ */
+export function hasObjectPickShaderMaterial(o) {
+  return (
+    o.material instanceof THREE.ShaderMaterial
+    && 'objectPick' in o.material.uniforms
+  );
+}
