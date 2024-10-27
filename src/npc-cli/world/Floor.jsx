@@ -113,7 +113,7 @@ export default function Floor(props) {
         const mat = (new Mat([gm.pngRect.width, 0, 0, gm.pngRect.height, gm.pngRect.x, gm.pngRect.y])).postMultiply(gm.matrix);
         // if (mat.determinant < 0) mat.preMultiply([-1, 0, 0, 1, 1, 0])
         state.inst.setMatrixAt(gmId, geomorph.embedXZMat4(mat.toArray(), {
-          yHeight: 0.2, // 🚧 debug
+          yHeight: 0.2, // 🚧 debug only
         }));
       }
       state.inst.instanceMatrix.needsUpdate = true;
@@ -130,19 +130,19 @@ export default function Floor(props) {
 
   return <>
 
-    {
-      // 🚧 single draw-call via InstancedMesh with Multi Texture shader
-    }
-    {/* <instancedMesh
+    {/** 🚧 single draw-call via InstancedMesh with Multi Texture shader */}
+    <instancedMesh
       name={"multi-tex-floor"}
       ref={instances => void (instances && (state.inst = instances))}
       args={[state.quadGeom, undefined, w.gms.length]}
       renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
+
+      visible={false} // 🚧 WIP
     >
       {
         <meshBasicMaterial color="red" side={THREE.DoubleSide} />
       }
-      <instancedMultiTextureMaterial
+      {/* <instancedMultiTextureMaterial
         key={InstancedMultiTextureMaterial.key}
         side={THREE.FrontSide}
         transparent
@@ -150,8 +150,8 @@ export default function Floor(props) {
           // 🚧
         ]}
         depthWrite={false} // fix z-fighting
-      />
-    </instancedMesh> */}
+      /> */}
+    </instancedMesh>
 
     {w.gms.map((gm, gmId) => (
       <group
