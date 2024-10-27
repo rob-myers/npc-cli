@@ -8,7 +8,6 @@ import { damp } from "maath/easing";
 import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { warn } from "../service/generic.js";
 import { emptySceneForPicking, getQuadGeometryXZ, hasObjectPickShaderMaterial, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
@@ -39,33 +38,6 @@ export default function WorldCanvas(props) {
         state.canvas = canvasEl;
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
-    },
-    // 🚧 move to useHandleEvents because it depends on a lot of sub-apis
-    decodeObjectPick(r, g, b, a) {
-      if (r === 1) {// wall
-        const gmId = Math.floor(g);
-        const instanceId = (b << 8) + a;
-        const meta = w.wall.decodeInstanceId(instanceId);
-        return {
-          key: 'wall',
-          gmId,
-          instanceId,
-          ...meta,
-        };
-      }
-
-      if (r === 8) {// npc
-        const npcUid = (g << 8) + b;
-        const npcKey = w.npc.uid.toKey.get(npcUid);
-        return {
-          key: 'npc',
-          npcUid,
-          npcKey,
-        };
-      }
-
-      // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
-      return null;
     },
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
@@ -279,7 +251,7 @@ export default function WorldCanvas(props) {
       // gl.readRenderTargetPixels(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer);
       gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer).then((x) => {
         const [r, g, b, a] = Array.from(x);
-        const decoded = state.decodeObjectPick(r, g, b, a);
+        const decoded = w.e.decodeObjectPick(r, g, b, a);
         console.log('🔔', { r, g, b, a }, decoded);
       });
       gl.setRenderTarget(null);
@@ -423,7 +395,6 @@ export default function WorldCanvas(props) {
  * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('three-stdlib').MapControls} controls
- * @property {(r: number, g: number, b: number, a: number) => void} decodeObjectPick
  * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down
  * Defined iff at least one pointer is down.
  * @property {number} fov

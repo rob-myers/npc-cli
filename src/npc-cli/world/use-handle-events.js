@@ -44,6 +44,32 @@ export default function useHandleEvents(w) {
         (state.npcToAccess[npcKey] ??= new Set()).delete(regexDef);
       }
     },
+    decodeObjectPick(r, g, b, a) {
+      if (r === 1) {// wall
+        const gmId = Math.floor(g);
+        const instanceId = (b << 8) + a;
+        const meta = w.wall.decodeInstanceId(instanceId);
+        return {
+          key: 'wall',
+          gmId,
+          instanceId,
+          ...meta,
+        };
+      }
+
+      if (r === 8) {// npc
+        const npcUid = (g << 8) + b;
+        const npcKey = w.npc.uid.toKey.get(npcUid);
+        return {
+          key: 'npc',
+          npcUid,
+          npcKey,
+        };
+      }
+
+      // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
+      return null;
+    },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
 
@@ -466,6 +492,7 @@ export default function useHandleEvents(w) {
  * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
+ * @property {(r: number, g: number, b: number, a: number) => void} decodeObjectPick
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
