@@ -148,14 +148,14 @@ class cmdServiceClass {
       }
       case "choice": {
         if (isTtyAt(meta, 0)) {
-          // `choice {textWithLinks}+`
-          // text may contain newlines
+          // `choice {textWithLinks}+` where text may contain newlines
           const text = args.join(" ");
-          yield* this.choice(meta, { text });
+          yield await this.choice(meta, { text });
         } else {
           // `choice` expects to read `ChoiceReadValue`s
           let datum: ChoiceReadValue;
-          while ((datum = await read(meta)) !== EOF) yield* this.choice(meta, datum);
+          while ((datum = await read(meta)) !== EOF)
+            yield await this.choice(meta, datum);
         }
         break;
       }
@@ -630,7 +630,7 @@ class cmdServiceClass {
     }
   }
 
-  private async *choice(meta: Sh.BaseMeta, { text }: ChoiceReadValue) {
+  private async choice(meta: Sh.BaseMeta, { text }: ChoiceReadValue) {
     const lines = text.replace(/\r/g, "").split(/\n/);
     const defaultValue = undefined;
     const parsedLines = lines.map((text) => parseTtyMarkdownLinks(text, defaultValue, meta.sessionKey));
@@ -641,7 +641,7 @@ class cmdServiceClass {
     try {
       if (parsedLines.some((x) => x.linkCtxtsFactory)) {
         // some link must be clicked to proceed
-        yield await new Promise<any>((resolve, reject) => {
+        return await new Promise<any>((resolve, reject) => {
           getProcess(meta).cleanups.push(reject);
           parsedLines.forEach(
             ({ ttyTextKey, linkCtxtsFactory }) =>

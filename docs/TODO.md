@@ -10,7 +10,9 @@
   - ✅ support transparent
   - 🚧 handle npcs
     - ✅ npc click detected
-    - npcs need integer uid
+    - 🚧 npcs need integer uid
+      - ℹ️ maybe assume max npcs 256
+      - ℹ️ maybe maintain Set([0..255])
   - migrate Floor to single draw-call
     - still need floor pointer events for navigation
   - migrate Ceil to single draw-call
@@ -26,7 +28,7 @@
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅  simplify `choice` so it does not use `sleep`
-  - refactor `choice` as AsyncFunction 
+  - ✅ refactor underlying `choice` as AsyncFunction 
   - refactor `sleep` as AsyncFunction
 
 - 🚧 next.js project (npc-cli-next)
