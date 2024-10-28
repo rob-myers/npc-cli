@@ -16,9 +16,12 @@
   - 🚧 migrate Floor to single draw-call
     - ℹ️ still need floor pointer events for navigation
     - ✅ positionInstances
-    - 🚧 specify textureId convention
-      - could order by "occurring gmNumber"
-    - 🚧 addUvs
+    - ✅ specify textureId convention
+      - ℹ️ by first seen respective gmKey
+    - ✅ addUvs
+    - coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
+    - multiple instancedMesh?
+    - does "texture atlas approach" permit partial rebuild?
   - migrate Ceil to single draw-call
 
 - 🚧 support `await api.sleep(1)` inside `map`

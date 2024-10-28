@@ -70,8 +70,8 @@ export default function World(props) {
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // WorldCanvas
-    floor: /** @type {State['floor']} */ ({ tex: {} }),
-    ceil: /** @type {State['ceil']} */ ({ tex: {} }),
+    floor: /** @type {State['floor']} */ ({ tex: {}, textures: /** @type {any[]} */ ([]) }),
+    ceil: /** @type {State['ceil']} */ ({ tex: {}, textures: /** @type {any[]} */ ([]) }),
     decor: /** @type {*} */ (null), // Decor
     obs: /** @type {*} */ (null), // Obstacles
     wall: /** @type {*} */ (null),
@@ -186,14 +186,20 @@ export default function World(props) {
         const mapDef = next.geomorphs.map[next.mapKey];
 
         // onchange map may see new gmKeys
-        for(const { gmKey } of mapDef.gms.filter(x => !state.floor.tex[x.gmKey])) {
+        // 🔔 could discard unused gmKeys and filter `textures`
+        const unseenGmKeys = new Set(
+          mapDef.gms.flatMap(x => x.gmKey in state.floor.tex ? [] : x.gmKey)
+        );
+        for (const gmKey of unseenGmKeys) {
           const { pngRect } = next.geomorphs.layout[gmKey];
-          for (const lookup of [state.floor.tex, state.ceil.tex]) {
-            lookup[gmKey] = createCanvasTexMeta(
+          const texId = state.floor.textures.length;
+          for (const api of [state.floor, state.ceil]) {
+            api.tex[gmKey] = createCanvasTexMeta(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
               pngRect.height * worldToSguScale * gmFloorExtraScale,
-              { willReadFrequently: true },
+              { willReadFrequently: true, texId },
             );
+            api.textures = api.textures.concat(api.tex[gmKey].tex); // fresh
           }
         }
 

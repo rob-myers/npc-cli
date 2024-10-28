@@ -219,6 +219,7 @@ export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
  * @param {number} height 
  * @param {object} [opts]
  * @param {boolean} [opts.willReadFrequently]
+ * @param {number} [opts.texId]
  * @returns {CanvasTexMeta}
  */
 export function createCanvasTexMeta(width, height, opts) {
@@ -231,7 +232,7 @@ export function createCanvasTexMeta(width, height, opts) {
     '2d',
     { willReadFrequently: opts?.willReadFrequently },
   ));
-  return { canvas, tex, ct };
+  return { canvas, tex, ct, texId : opts?.texId ?? null };
 }
 
 /**
@@ -323,6 +324,7 @@ export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
  * @property {CanvasRenderingContext2D} ct
  * @property {THREE.CanvasTexture} tex
  * @property {HTMLCanvasElement} canvas
+ * @property {null | number} texId
  */
 
 export const emptySceneForPicking = new THREE.Scene();

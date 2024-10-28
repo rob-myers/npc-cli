@@ -23,11 +23,34 @@ export default function Floor(props) {
       'rgba(255, 255, 255, 0.075)',
     ),
     inst: /** @type {*} */ (null),
-    quadGeom: getQuadGeometryXZ('multi-tex-floor-xz'),
-    tex: w.floor.tex, // Pass in textures
+    quad: getQuadGeometryXZ('multi-tex-floor-xz'),
+
+    // Pass in textures
+    tex: w.floor.tex,
+    textures: w.floor.textures,
 
     addUvs() {
-      // 🚧
+      const uvOffsets = /** @type {number[]} */ ([]);
+      const uvDimensions = /** @type {number[]} */ ([]);
+      const uvTextureIds = /** @type {number[]} */ ([]);
+
+      for (const [gmId, gm] of w.gms.entries()) {
+        // each quad instance uses entire texture
+        uvOffsets.push(0, 0);
+        uvDimensions.push(1, 1);
+        uvTextureIds.push(/** @type {number} */ (state.tex[gm.key].texId));
+        // console.log({texId: state.tex[gm.key].texId }, state.tex, gm.key)
+      }
+
+      state.inst.geometry.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
+      );
+      state.inst.geometry.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
+      );
+      state.inst.geometry.setAttribute('uvTextureIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
     },
     async draw() {
       w.menu.measure('floor.draw');
@@ -112,9 +135,7 @@ export default function Floor(props) {
       for (const [gmId, gm] of w.gms.entries()) {
         const mat = (new Mat([gm.pngRect.width, 0, 0, gm.pngRect.height, gm.pngRect.x, gm.pngRect.y])).postMultiply(gm.matrix);
         // if (mat.determinant < 0) mat.preMultiply([-1, 0, 0, 1, 1, 0])
-        state.inst.setMatrixAt(gmId, geomorph.embedXZMat4(mat.toArray(), {
-          yHeight: 0.2, // 🚧 debug only
-        }));
+        state.inst.setMatrixAt(gmId, geomorph.embedXZMat4(mat.toArray()));
       }
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
@@ -126,57 +147,28 @@ export default function Floor(props) {
   React.useEffect(() => {
     state.draw();
     state.positionInstances();
+    state.addUvs();
   }, [w.mapKey, w.hash.full]);
 
-  return <>
-
-    {/** 🚧 single draw-call via InstancedMesh with Multi Texture shader */}
+  return (
     <instancedMesh
       name={"multi-tex-floor"}
       ref={instances => void (instances && (state.inst = instances))}
-      args={[state.quadGeom, undefined, w.gms.length]}
+      args={[state.quad, undefined, w.gms.length]}
       renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
-
-      visible={false} // 🚧 WIP
     >
       {
-        <meshBasicMaterial color="red" side={THREE.DoubleSide} />
+        // <meshBasicMaterial color="red" side={THREE.DoubleSide} />
       }
-      {/* <instancedMultiTextureMaterial
+      <instancedMultiTextureMaterial
         key={InstancedMultiTextureMaterial.key}
-        side={THREE.FrontSide}
+        side={THREE.DoubleSide}
         transparent
-        textures={[
-          // 🚧
-        ]}
+        textures={state.textures}
         depthWrite={false} // fix z-fighting
-      /> */}
+      />
     </instancedMesh>
-
-    {w.gms.map((gm, gmId) => (
-      <group
-        key={`${gm.key} ${gmId} ${gm.transform}`}
-        onUpdate={(group) => group.applyMatrix4(gm.mat4)}
-        // ref={(group) => group?.applyMatrix4(gm.mat4)}
-      >
-        <mesh
-          name={`floor-gm-${gmId}`}
-          geometry={getQuadGeometryXZ('vanilla-xz')}
-          scale={[gm.pngRect.width, 1, gm.pngRect.height]}
-          position={[gm.pngRect.x, 0, gm.pngRect.y]}
-          renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
-        >
-          <meshBasicMaterial
-            side={THREE.FrontSide}
-            transparent
-            map={state.tex[gm.key].tex}
-            depthWrite={false} // fix z-fighting
-          />
-        </mesh>
-      </group>
-    ))}
-  </>
-  
+  );
 }
 
 /**
@@ -188,8 +180,9 @@ export default function Floor(props) {
  * @typedef State
  * @property {CanvasPattern} gridPattern
  * @property {THREE.InstancedMesh} inst
- * @property {THREE.BufferGeometry} quadGeom
+ * @property {THREE.BufferGeometry} quad
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
+ * @property {THREE.CanvasTexture[]} textures
  *
  * @property {() => void} addUvs
  * @property {() => Promise<void>} draw

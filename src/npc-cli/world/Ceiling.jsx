@@ -15,7 +15,9 @@ export default function Ceiling(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    tex: w.ceil.tex, // Pass in textures
+    // Pass in textures
+    tex: w.ceil.tex,
+    textures: w.ceil.textures,
 
     detectClick(e) {
       const gmId = Number(e.object.name.slice('ceil-gm-'.length));
@@ -166,6 +168,8 @@ export default function Ceiling(props) {
 /**
  * @typedef State
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
+ * @property {THREE.CanvasTexture[]} textures
+ *
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey

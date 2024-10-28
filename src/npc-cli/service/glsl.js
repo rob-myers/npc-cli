@@ -434,7 +434,7 @@ export const instancedMultiTextureShader = {
     varying vec3 vColor;
     varying vec2 vUv;
     flat varying int vTextureId;
-
+    
     attribute vec2 uvDimensions;
     attribute vec2 uvOffsets;
     attribute int uvTextureIds;
@@ -448,8 +448,6 @@ export const instancedMultiTextureShader = {
       vTextureId = uvTextureIds;
       
       vec4 modelViewPosition = vec4(position, 1.0);
-
-      // USE_INSTANCING
       modelViewPosition = instanceMatrix * modelViewPosition;
       modelViewPosition = modelViewMatrix * modelViewPosition;
       gl_Position = projectionMatrix * modelViewPosition;
@@ -460,7 +458,7 @@ export const instancedMultiTextureShader = {
       #endif
 
       #include <logdepthbuf_vertex>
-  
+    }
   `,
 
   Frag: /* glsl */`
@@ -469,7 +467,9 @@ export const instancedMultiTextureShader = {
     varying vec2 vUv;
     flat varying int vTextureId;
 
-    uniform sampler2D[] textures;
+    // 🔔 max 16 different geomorph classes
+    // 🔔 some devices only support 8
+    uniform sampler2D textures[16];
     uniform vec3 diffuse;
 
     //#region getTexelColor
@@ -492,22 +492,6 @@ export const instancedMultiTextureShader = {
         case 13: return texture2D(textures[13], uv);
         case 14: return texture2D(textures[14], uv);
         case 15: return texture2D(textures[15], uv);
-        case 16: return texture2D(textures[16], uv);
-        case 17: return texture2D(textures[17], uv);
-        case 18: return texture2D(textures[18], uv);
-        case 19: return texture2D(textures[19], uv);
-        case 20: return texture2D(textures[20], uv);
-        case 21: return texture2D(textures[21], uv);
-        case 22: return texture2D(textures[22], uv);
-        case 23: return texture2D(textures[23], uv);
-        case 24: return texture2D(textures[24], uv);
-        case 25: return texture2D(textures[25], uv);
-        case 26: return texture2D(textures[26], uv);
-        case 27: return texture2D(textures[27], uv);
-        case 28: return texture2D(textures[28], uv);
-        case 29: return texture2D(textures[29], uv);
-        case 30: return texture2D(textures[30], uv);
-        case 31: return texture2D(textures[31], uv);
       }
       return vec4(0.0);
     }
@@ -553,7 +537,7 @@ export const InstancedSpriteSheetMaterial = shaderMaterial(
 
 export const InstancedMultiTextureMaterial = shaderMaterial(
   {
-    diffuse: new THREE.Vector3(1, 0.9, 0.6),
+    diffuse: new THREE.Vector3(1, 1, 1),
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
