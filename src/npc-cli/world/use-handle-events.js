@@ -59,7 +59,7 @@ export default function useHandleEvents(w) {
 
       if (r === 8) {// npc
         const npcUid = (g << 8) + b;
-        const npcKey = w.npc.uid.toKey.get(npcUid);
+        const npcKey = w.npc.pickUid.toKey.get(npcUid);
         return {
           key: 'npc',
           npcUid,

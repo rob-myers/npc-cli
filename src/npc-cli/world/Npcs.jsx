@@ -32,11 +32,11 @@ export default function Npcs(props) {
     },
     npc: {},
     physicsPositions: [],
-    tex: /** @type {*} */ ({}),
-    uid: {
+    pickUid: {
       free: new Set(range(maxNumberOfNpcs)),
       toKey: new Map(),
     },
+    tex: /** @type {*} */ ({}),
 
     clearLabels() {
       w.menu.measure('npc.clearLabels');
@@ -135,8 +135,8 @@ export default function Npcs(props) {
         npc.removeAgent();
         
         delete state.npc[npcKey];
-        state.uid.free.add(npc.def.uid);
-        state.uid.toKey.delete(npc.def.uid);
+        state.pickUid.free.add(npc.def.pickUid);
+        state.pickUid.toKey.delete(npc.def.pickUid);
 
         w.events.next({ key: 'removed-npc', npcKey });
       }
@@ -175,7 +175,7 @@ export default function Npcs(props) {
 
         npc.def = {
           key: e.npcKey,
-          uid: npc.def.uid,
+          pickUid: npc.def.pickUid,
           angle: e.angle ?? npc.getAngle() ?? 0, // prev angle fallback
           classKey: e.classKey ?? npc.def.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
@@ -190,13 +190,13 @@ export default function Npcs(props) {
         // Spawn
         npc = state.npc[e.npcKey] = new Npc({
           key: e.npcKey,
-          uid: takeFirst(state.uid.free),
+          pickUid: takeFirst(state.pickUid.free),
           angle: e.angle ?? 0,
           classKey: e.classKey ?? defaultClassKey,
           runSpeed: e.runSpeed ?? helper.defaults.runSpeed,
           walkSpeed: e.walkSpeed ?? helper.defaults.walkSpeed,
         }, w);
-        state.uid.toKey.set(npc.def.uid, e.npcKey);
+        state.pickUid.toKey.set(npc.def.pickUid, e.npcKey);
 
         npc.initialize(state.gltf[npc.def.classKey]);
       }
@@ -321,7 +321,7 @@ export default function Npcs(props) {
  * @property {number[]} physicsPositions
  * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
- * @property {{ free: Set<number>; toKey: Map<number, string> }} uid
+ * @property {{ free: Set<number>; toKey: Map<number, string> }} pickUid
  * `uid.free` are the as-yet-unused npc uids.
  * They are removed/added on spawn/remove npc.
  *
@@ -377,11 +377,10 @@ function NPC({ npc }) {
           diffuse={[1, 1, 1]}
           transparent
           opacity={npc.s.opacity}
-          uNpcUid={npc.def.uid}
+          uNpcUid={npc.def.pickUid}
           // objectPick={true}
 
-          labelHeight={wallHeight * (1 / npc.m.scale)}
-          // labelHeight={wallHeight * (1 / 0.9)}
+          labelHeight={wallHeight * (1 / 0.65)}
           selectorColor={npc.s.selectorColor}
           showSelector={npc.s.showSelector}
           // showLabel={false}

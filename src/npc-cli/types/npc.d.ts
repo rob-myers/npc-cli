@@ -6,7 +6,7 @@ declare namespace NPC {
     /** User specified e.g. `rob` */
     key: string;
     /** Numeric id used in object-picking */
-    uid: number;
+    pickUid: number;
     /** Specifies the underlying 3D model */
     classKey: ClassKey;
     /** Radians */
