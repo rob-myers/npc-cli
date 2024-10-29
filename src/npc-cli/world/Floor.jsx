@@ -162,10 +162,9 @@ export default function Floor(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        textures={state.textures.map(({ tex }) => tex)}
-        texturesNew={state.atlas?.arrayTex ?? emptyDataArrayTexture}
+        atlas={state.atlas?.arrayTex ?? emptyDataArrayTexture}
         depthWrite={false} // fix z-fighting
-        // diffuse={[0.75, 0.75, 0.75]}
+        diffuse={[1, 0.75, 0.75]}
       />
     </instancedMesh>
   );

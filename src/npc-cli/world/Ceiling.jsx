@@ -184,8 +184,7 @@ export default function Ceiling(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        textures={state.textures.map(({ tex }) => tex)}
-        texturesNew={state.atlas?.arrayTex ?? emptyDataArrayTexture}
+        atlas={state.atlas?.arrayTex ?? emptyDataArrayTexture}
         alphaTest={0.9} // 0.5 flickered on (301, 101) border
         // diffuse={[0.75, 0.75, 0.75]}
       />

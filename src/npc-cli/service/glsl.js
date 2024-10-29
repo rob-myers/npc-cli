@@ -467,50 +467,21 @@ export const instancedMultiTextureShader = {
     varying vec2 vUv;
     flat varying int vTextureId;
 
-    // 🔔 max 16 different geomorph classes
-    // 🔔 some devices only support 8
-    uniform sampler2D textures[16];
-    uniform sampler2DArray texturesNew;
+    uniform sampler2DArray atlas;
     uniform vec3 diffuse;
-
-    //#region getTexelColor
-    // ℹ️ https://stackoverflow.com/a/74729081/2917822
-    vec4 getTexelColor(int texId, vec2 uv) {
-      switch (texId) {
-        case 0: return texture2D(textures[0], uv);
-        case 1: return texture2D(textures[1], uv);
-        case 2: return texture2D(textures[2], uv);
-        case 3: return texture2D(textures[3], uv);
-        case 4: return texture2D(textures[4], uv);
-        case 5: return texture2D(textures[5], uv);
-        case 6: return texture2D(textures[6], uv);
-        case 7: return texture2D(textures[7], uv);
-        case 8: return texture2D(textures[8], uv);
-        case 9: return texture2D(textures[9], uv);
-        case 10: return texture2D(textures[10], uv);
-        case 11: return texture2D(textures[11], uv);
-        case 12: return texture2D(textures[12], uv);
-        case 13: return texture2D(textures[13], uv);
-        case 14: return texture2D(textures[14], uv);
-        case 15: return texture2D(textures[15], uv);
-      }
-      return vec4(0.0);
-    }
-    //#endregion
 
     #include <common>
     #include <logdepthbuf_pars_fragment>
   
     void main() {
-      // gl_FragColor = getTexelColor(vTextureId, vUv) * vec4(vColor * diffuse, 1);
-      // gl_FragColor = texture(texturesNew, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
-      gl_FragColor = texture(texturesNew, vec3(vUv, vTextureId)) * vec4(3.0, 3.0, 3.0, 1.0);
-  
+      gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
+
       // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
       if(gl_FragColor.a < 0.5) {
         discard;
       }
   
+      #include <colorspace_fragment>
       #include <logdepthbuf_fragment>
     }
   
@@ -544,8 +515,7 @@ export const InstancedMultiTextureMaterial = shaderMaterial(
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
-    textures: [], // 🚧
-    texturesNew: emptyDataArrayTexture, // 🚧
+    atlas: emptyDataArrayTexture,
   },
   instancedMultiTextureShader.Vert,
   instancedMultiTextureShader.Frag,

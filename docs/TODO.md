@@ -28,8 +28,11 @@
     - ✅ permits partial rebuild
     - ✅ fix HMR initialisation
     - ✅ must have same resolution `2424 * 2424`
-    - 🚧 fix brightness
-    - clean e.g. texturesNew -> textures
+    - ✅ fix brightness
+    - 🚧 verify hmr
+      - ✅ on change ceiling drawGmKey
+    - check ceiling pointer events
+    - 🚧 clean e.g. texturesNew -> textures
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

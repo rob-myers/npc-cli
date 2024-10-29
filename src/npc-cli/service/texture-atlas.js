@@ -27,13 +27,15 @@ export class TextureAtlas {
     const arrayTex = new THREE.DataArrayTexture(data, width, height, textures.length);
     arrayTex.format = THREE.RGBAFormat;
     arrayTex.type = THREE.UnsignedByteType;
-    arrayTex.anisotropy = textures[0].tex.anisotropy;
-    // arrayTex.minFilter = THREE.LinearMipMapLinearFilter;
-    // arrayTex.magFilter = THREE.LinearFilter;
-    // arrayTex.wrapS = THREE.RepeatWrapping;
-    // arrayTex.wrapT = THREE.RepeatWrapping;
-    // arrayTex.generateMipmaps = true;
+
+    const firstTex = textures[0].tex;
+    arrayTex.anisotropy = firstTex.anisotropy;
+    arrayTex.minFilter = firstTex.minFilter;
+    arrayTex.magFilter = firstTex.magFilter;
+    arrayTex.wrapS = firstTex.wrapS;
+    arrayTex.wrapT = firstTex.wrapT;
     // arrayTex.encoding = THREE.sRGBEncoding;
+    // arrayTex.generateMipmaps = true;
     // arrayTex.needsUpdate = true;
 
     this.arrayTex = arrayTex;
