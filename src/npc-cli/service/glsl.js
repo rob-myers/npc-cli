@@ -470,6 +470,7 @@ export const instancedMultiTextureShader = {
     // 🔔 max 16 different geomorph classes
     // 🔔 some devices only support 8
     uniform sampler2D textures[16];
+    // uniform sampler2DArray textures;
     uniform vec3 diffuse;
 
     //#region getTexelColor

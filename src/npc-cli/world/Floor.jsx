@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { Mat, Poly } from "../geom";
 import { geomorphGridMeters, gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { keys, pause } from "../service/generic";
-import { createGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
+import { getGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { geomorph } from "../service/geomorph";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { getQuadGeometryXZ } from "../service/three";
@@ -18,13 +18,9 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    gridPattern: createGridPattern(
-      geomorphGridMeters * worldToCanvas,
-      'rgba(255, 255, 255, 0.075)',
-    ),
+    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(255, 255, 255, 0.075)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-floor-xz'),
-
     // Pass in textures
     tex: w.floor.tex,
     textures: w.floor.textures,
@@ -82,7 +78,7 @@ export default function Floor(props) {
 
       // draw grid
       ct.setTransform(1, 0, 0, 1, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
-      ct.fillStyle = state.gridPattern;
+      ct.fillStyle = state.grid;
       ct.fillRect(0, 0, canvas.width, canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
@@ -140,7 +136,7 @@ export default function Floor(props) {
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
     },
-  }), { reset: { gridPattern: false } });
+  }), { reset: { grid: false } });
 
   w.floor = state;
 
@@ -166,6 +162,7 @@ export default function Floor(props) {
         transparent
         textures={state.textures}
         depthWrite={false} // fix z-fighting
+        diffuse={[0.75, 0.75, 0.75]}
       />
     </instancedMesh>
   );
@@ -178,7 +175,7 @@ export default function Floor(props) {
 
 /**
  * @typedef State
- * @property {CanvasPattern} gridPattern
+ * @property {CanvasPattern} grid
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex

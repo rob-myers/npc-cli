@@ -13,16 +13,20 @@
     - ✅ npcs need integer uid
       - ℹ️ assume max npcs 256
       - ℹ️ maintain Set([0..255])
-  - 🚧 migrate Floor to single draw-call
-    - ℹ️ still need floor pointer events for navigation
-    - ✅ positionInstances
-    - ✅ specify textureId convention
-      - ℹ️ by first seen respective gmKey
-    - ✅ addUvs
-    - coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
-    - multiple instancedMesh?
-    - does "texture atlas approach" permit partial rebuild?
-  - migrate Ceil to single draw-call
+  - 🚧 ...
+
+- 🚧 migrate Floor to single draw-call
+  - ℹ️ still need floor pointer events for navigation
+  - ✅ positionInstances
+  - ✅ specify textureId convention
+    - ℹ️ by first seen respective gmKey
+  - ✅ addUvs
+  - coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
+  - multiple instancedMesh?
+- 🚧 try texture atlas approach
+  - permits partial rebuild?
+  - https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
+- migrate Ceil to single draw-call
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
