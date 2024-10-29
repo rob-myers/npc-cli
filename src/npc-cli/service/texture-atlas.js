@@ -6,27 +6,29 @@ import * as THREE from 'three';
  */
 export class TextureAtlas {
   
-  /** @type {Record<string, KeyedAtlas>} */
-  textures = {};
+  arrayTex = /** @type {THREE.DataArrayTexture} */ ({});
+  height = 0;
+  textures = /** @type {TextureItem[]} */ ([]);
+  width = 0;
 
   /**
-   * @param {string} atlasKey 
+   * Call `this.update()` after construction.
    * @param {TextureItem[]} textures
    */
-  add(atlasKey, textures) {
+  constructor(textures) {
     if (textures.length === 0) {
-      throw Error(`${'TextureAtlas.add'}: textures.length cannot be 0`);
+      throw Error(`${'TextureAtlas'}: textures.length cannot be 0`);
     }
     
     // assume all same width, height e.g. 1024 * 1024
     const { width, height } = textures[0].ct.canvas;
     const data = new Uint8Array(textures.length * 4 *  width * height);
 
-    for (const [index, { ct }] of textures.entries()) {
-      const imageData = ct.getImageData(0, 0, ct.canvas.width, ct.canvas.height);
-      const offset = index * (4 * width * height);
-      data.set(imageData.data, offset);
-    }
+    // for (const [index, { ct }] of textures.entries()) {
+    //   const imageData = ct.getImageData(0, 0, ct.canvas.width, ct.canvas.height);
+    //   const offset = index * (4 * width * height);
+    //   data.set(imageData.data, offset);
+    // }
 
     const arrayTex = new THREE.DataArrayTexture(data, width, height, textures.length);
     arrayTex.format = THREE.RGBAFormat;
@@ -37,51 +39,34 @@ export class TextureAtlas {
     arrayTex.wrapT = THREE.RepeatWrapping;
     arrayTex.generateMipmaps = true;
     // arrayTex.encoding = THREE.sRGBEncoding;
-    arrayTex.needsUpdate = true;
+    // arrayTex.needsUpdate = true;
 
-    this.textures[atlasKey] = { textures, arrayTex, width, height };
+    this.arrayTex = arrayTex;
+    this.height = height;
+    this.textures = textures;
+    this.width = width;
+
   }
-  
-  /**
-   * @param {string} atlasKey 
-   */
-  remove(atlasKey, disposeTextures = false) {
-    const { arrayTex, textures } = this.textures[atlasKey];
+
+  dispose(disposeTextures = false) {
     if (disposeTextures) {
-      textures.forEach(({ tex }) => tex.dispose());
+      this.textures.forEach(({ tex }) => tex.dispose());
     }
-    arrayTex.dispose();
-    delete this.textures[atlasKey];
+    this.arrayTex.dispose();
   }
 
   /**
    * Assume width/height/textures.length stays the same.
-   * @param {string} atlasKey 
    */
-  update(atlasKey) {
-    const prev = this.textures[atlasKey];
-    if (!prev) {
-      throw Error(`${'TextureAtlas.update'}: ${atlasKey}: does not exist`);
-    }
-
-    for (const [index, { ct }] of prev.textures.entries()) {
+  update() {
+    for (const [index, { ct }] of this.textures.entries()) {
       const imageData = ct.getImageData(0, 0, ct.canvas.width, ct.canvas.height);
-      const offset = index * (4 * prev.width * prev.height);
-      prev.arrayTex.image.data.set(imageData.data, offset);
+      const offset = index * (4 * this.width * this.height);
+      this.arrayTex.image.data.set(imageData.data, offset);
     }
-
-    prev.arrayTex.needsUpdate = true;
+    this.arrayTex.needsUpdate = true;
   }
 }
-
-
-/**
- * @typedef {object} KeyedAtlas
- * @property {TextureItem[]} textures
- * @property {THREE.DataArrayTexture} arrayTex
- * @property {number} width
- * @property {number} height
- */
 
 /**
  * @typedef {{ tex: THREE.CanvasTexture; ct: CanvasRenderingContext2D }} TextureItem
