@@ -187,9 +187,7 @@ export default function World(props) {
 
         // onchange map may see new gmKeys
         // 🔔 could discard unused gmKeys and filter `textures`
-        const unseenGmKeys = new Set(
-          mapDef.gms.flatMap(x => x.gmKey in state.floor.tex ? [] : x.gmKey)
-        );
+        const unseenGmKeys = new Set(mapDef.gms.flatMap(x => x.gmKey in state.floor.tex ? [] : x.gmKey));
         for (const gmKey of unseenGmKeys) {
           const { pngRect } = next.geomorphs.layout[gmKey];
           const texId = state.floor.textures.length;
@@ -197,9 +195,11 @@ export default function World(props) {
             api.tex[gmKey] = createCanvasTexMeta(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
               pngRect.height * worldToSguScale * gmFloorExtraScale,
+              // // 🔔 force same dimensions for TextureAtlas
+              // pngRect.width * worldToSguScale * gmFloorExtraScale,
               { willReadFrequently: true, texId },
             );
-            api.textures = api.textures.concat(api.tex[gmKey].tex); // fresh
+            api.textures = api.textures.concat(api.tex[gmKey]); // fresh
           }
         }
 
@@ -268,17 +268,16 @@ export default function World(props) {
           { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
         ]) {
           const img = await imageLoader.loadAsync(src);
-          // 🔔 commenting below due to issue editing obstacle outlines
-          // if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
-            [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
-            tm.tex.dispose();
-            tm.tex = new THREE.CanvasTexture(tm.canvas);
-            tm.tex.flipY = false; // align with XZ/XY quad uv-map
-          // }
+
+          [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
+          tm.tex.dispose();
+          tm.tex = new THREE.CanvasTexture(tm.canvas);
+          tm.tex.flipY = false; // align with XZ/XY quad uv-map
+
           tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
           tm.ct.drawImage(img, 0, 0);
           invert && invertCanvas(tm.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
-          // Sharper via getMaxAnisotropy()
+          // 🔔 Sharper via getMaxAnisotropy()
           tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
           tm.tex.needsUpdate = true;
           update();

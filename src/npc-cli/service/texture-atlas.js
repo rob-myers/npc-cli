@@ -22,22 +22,17 @@ export class TextureAtlas {
     
     // assume all same width, height e.g. 1024 * 1024
     const { width, height } = textures[0].ct.canvas;
-    const data = new Uint8Array(textures.length * 4 *  width * height);
-
-    // for (const [index, { ct }] of textures.entries()) {
-    //   const imageData = ct.getImageData(0, 0, ct.canvas.width, ct.canvas.height);
-    //   const offset = index * (4 * width * height);
-    //   data.set(imageData.data, offset);
-    // }
+    const data = new Uint8Array(textures.length * 4 * width * height);
 
     const arrayTex = new THREE.DataArrayTexture(data, width, height, textures.length);
     arrayTex.format = THREE.RGBAFormat;
     arrayTex.type = THREE.UnsignedByteType;
-    arrayTex.minFilter = THREE.LinearMipMapLinearFilter;
-    arrayTex.magFilter = THREE.LinearFilter;
-    arrayTex.wrapS = THREE.RepeatWrapping;
-    arrayTex.wrapT = THREE.RepeatWrapping;
-    arrayTex.generateMipmaps = true;
+    arrayTex.anisotropy = textures[0].tex.anisotropy;
+    // arrayTex.minFilter = THREE.LinearMipMapLinearFilter;
+    // arrayTex.magFilter = THREE.LinearFilter;
+    // arrayTex.wrapS = THREE.RepeatWrapping;
+    // arrayTex.wrapT = THREE.RepeatWrapping;
+    // arrayTex.generateMipmaps = true;
     // arrayTex.encoding = THREE.sRGBEncoding;
     // arrayTex.needsUpdate = true;
 

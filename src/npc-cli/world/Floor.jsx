@@ -7,7 +7,8 @@ import { keys, pause } from "../service/generic";
 import { getGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { geomorph } from "../service/geomorph";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
-import { getQuadGeometryXZ } from "../service/three";
+import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
+import { TextureAtlas } from "../service/texture-atlas";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -21,9 +22,11 @@ export default function Floor(props) {
     grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(255, 255, 255, 0.075)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-floor-xz'),
+    
     // Pass in textures
     tex: w.floor.tex,
     textures: w.floor.textures,
+    atlas: /** @type {*} */ (null),
 
     addUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
@@ -141,9 +144,12 @@ export default function Floor(props) {
   w.floor = state;
 
   React.useEffect(() => {
-    state.draw();
+    state.atlas ??= new TextureAtlas(state.textures);
+    state.draw().then(() => state.atlas.update());
+    
     state.positionInstances();
     state.addUvs();
+
   }, [w.mapKey, w.hash.full]);
 
   return (
@@ -153,16 +159,15 @@ export default function Floor(props) {
       args={[state.quad, undefined, w.gms.length]}
       renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
     >
-      {
-        // <meshBasicMaterial color="red" side={THREE.DoubleSide} />
-      }
+      {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <instancedMultiTextureMaterial
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        textures={state.textures}
+        textures={state.textures.map(({ tex }) => tex)}
+        texturesNew={state.atlas?.arrayTex ?? emptyDataArrayTexture}
         depthWrite={false} // fix z-fighting
-        diffuse={[0.75, 0.75, 0.75]}
+        // diffuse={[0.75, 0.75, 0.75]}
       />
     </instancedMesh>
   );
@@ -179,7 +184,8 @@ export default function Floor(props) {
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
- * @property {THREE.CanvasTexture[]} textures
+ * @property {import("../service/three").CanvasTexMeta[]} textures
+ * @property {TextureAtlas} atlas
  *
  * @property {() => void} addUvs
  * @property {() => Promise<void>} draw

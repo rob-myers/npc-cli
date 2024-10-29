@@ -168,7 +168,7 @@ export default function Ceiling(props) {
 /**
  * @typedef State
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
- * @property {THREE.CanvasTexture[]} textures
+ * @property {import("../service/three").CanvasTexMeta[]} textures
  *
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {() => Promise<void>} draw

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 import { wallHeight } from "./const";
-import { defaultQuadUvs } from "./three";
+import { defaultQuadUvs, emptyDataArrayTexture } from "./three";
 
 const instancedMonochromeShader = {
   Vert: /*glsl*/`
@@ -470,7 +470,7 @@ export const instancedMultiTextureShader = {
     // 🔔 max 16 different geomorph classes
     // 🔔 some devices only support 8
     uniform sampler2D textures[16];
-    // uniform sampler2DArray textures;
+    uniform sampler2DArray texturesNew;
     uniform vec3 diffuse;
 
     //#region getTexelColor
@@ -503,6 +503,8 @@ export const instancedMultiTextureShader = {
   
     void main() {
       gl_FragColor = getTexelColor(vTextureId, vUv) * vec4(vColor * diffuse, 1);
+      // gl_FragColor = texture(texturesNew, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
+      // gl_FragColor = texture(texturesNew, vec3(vUv, vTextureId)) * vec4(2.0, 2.0, 2.0, 1.0);
   
       // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
       if(gl_FragColor.a < 0.5) {
@@ -543,6 +545,7 @@ export const InstancedMultiTextureMaterial = shaderMaterial(
     map: null,
     mapTransform: new THREE.Matrix3(),
     textures: [], // 🚧
+    texturesNew: emptyDataArrayTexture, // 🚧
   },
   instancedMultiTextureShader.Vert,
   instancedMultiTextureShader.Frag,

@@ -24,8 +24,12 @@
   - coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
   - multiple instancedMesh?
 - 🚧 try texture atlas approach
-  - permits partial rebuild?
-  - https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
+  - ℹ️ https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
+  - ✅ permits partial rebuild
+  - ✅ fix HMR initialisation
+  - 🚧 must have same resolution `2424 * 2424`
+  - 🚧 fix brightness
+  - clean e.g. texturesNew -> textures
 - migrate Ceil to single draw-call
 
 - 🚧 support `await api.sleep(1)` inside `map`

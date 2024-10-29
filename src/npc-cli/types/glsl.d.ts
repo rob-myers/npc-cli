@@ -27,6 +27,7 @@ declare global {
       instancedMultiTextureMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
         textures: import('three').CanvasTexture[];
+        texturesNew: import('three').DataArrayTexture;
       }>;
 
       cameraLightMaterial: BaseExtendedShaderMaterial<{
