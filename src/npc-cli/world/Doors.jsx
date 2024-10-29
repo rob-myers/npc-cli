@@ -172,7 +172,7 @@ export default function Doors(props) {
       // 🚧 control via "float array" of ratios instead of 4x4 matrices
       const { instanceMatrix } = state.doorsInst;
       for (const [instanceId, meta] of state.movingDoors.entries()) {
-        const dstRatio = meta.open ? 0.1 : 1;
+        const dstRatio = meta.open ? 0 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
         const length = meta.ratio * meta.segLength;
         // set e1 (x,,z)
