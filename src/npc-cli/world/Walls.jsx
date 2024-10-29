@@ -133,7 +133,7 @@ export default function Walls(props) {
       <instancedMonochromeShader
         key={InstancedMonochromeShader.key}
         side={THREE.DoubleSide}
-        diffuse={[0.0, 0.0, 0.0]}
+        diffuse={[0, 0, 0]}
         objectPick={false}
       />
     </instancedMesh>

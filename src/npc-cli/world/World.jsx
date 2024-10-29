@@ -156,6 +156,7 @@ export default function World(props) {
       if (module.hot?.active === false) {
         return false; // Avoid query from disposed module
       }
+
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
 
