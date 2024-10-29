@@ -164,7 +164,7 @@ export default function Floor(props) {
         transparent
         atlas={state.atlas?.arrayTex ?? emptyDataArrayTexture}
         depthWrite={false} // fix z-fighting
-        diffuse={[1, 0.75, 0.75]}
+        diffuse={[1, 1, 0.8]}
       />
     </instancedMesh>
   );
