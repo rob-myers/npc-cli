@@ -456,15 +456,6 @@ if (typeof window === 'undefined') {
   selfTyped.addEventListener("message", handleMessages);
 }
 
-// /**
-//  * @typedef BodyUserData
-//  * @property {WW.PhysicsBodyKey} bodyKey
-//  * @property {number} bodyUid This is the numeric hash of `bodyKey`
-//  * @property {boolean} [npc] Is this the body of an NPC?
-//  * @property {boolean} [gmDecor] Is this static body a decor rect/circle for some geomorph `gmId`?
-//  * @property {number} [gmId]
-//  */
-
 /**
  * @typedef {BaseState & import('../service/rapier').PhysicsBijection} State
  */

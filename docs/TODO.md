@@ -34,6 +34,9 @@
     - check ceiling pointer events
     - 🚧 clean e.g. texturesNew -> textures
 
+- ✅ bug: `w npc.remove will` breaks door collision detection
+  - must clear positions (surprising didn't have issue)
+
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅  simplify `choice` so it does not use `sleep`

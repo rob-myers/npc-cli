@@ -108,6 +108,7 @@ export default function Npcs(props) {
       // 🔔 Float32Array caused issues i.e. decode failed
       const positions = new Float64Array(state.physicsPositions);
       w.physics.worker.postMessage({ type: 'send-npc-positions', positions}, [positions.buffer]);
+      state.physicsPositions.length = 0;
     },
     restore() {// onchange nav-mesh
       // restore agents
