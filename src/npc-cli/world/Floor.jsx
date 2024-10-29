@@ -23,10 +23,9 @@ export default function Floor(props) {
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-floor-xz'),
     
-    // Pass in textures
-    tex: w.floor.tex,
-    textures: w.floor.textures,
-    atlas: /** @type {*} */ (null),
+    tex: w.floor.tex, // to lookup seen
+    textures: w.floor.textures, // orders seen
+    atlas: /** @type {*} */ (null), // for shader
 
     addUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
@@ -36,7 +35,8 @@ export default function Floor(props) {
       for (const [gmId, gm] of w.gms.entries()) {
         // each quad instance uses entire texture
         uvOffsets.push(0, 0);
-        uvDimensions.push(1, 1);
+        // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
+        uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
         uvTextureIds.push(/** @type {number} */ (state.tex[gm.key].texId));
         // console.log({texId: state.tex[gm.key].texId }, state.tex, gm.key)
       }
@@ -146,10 +146,8 @@ export default function Floor(props) {
   React.useEffect(() => {
     state.atlas ??= new TextureAtlas(state.textures);
     state.draw().then(() => state.atlas.update());
-    
     state.positionInstances();
     state.addUvs();
-
   }, [w.mapKey, w.hash.full]);
 
   return (
@@ -180,8 +178,8 @@ export default function Floor(props) {
 
 /**
  * @typedef State
- * @property {CanvasPattern} grid
  * @property {THREE.InstancedMesh} inst
+ * @property {CanvasPattern} grid
  * @property {THREE.BufferGeometry} quad
  * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
  * @property {import("../service/three").CanvasTexMeta[]} textures

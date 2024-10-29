@@ -12,7 +12,7 @@ declare global {
     type Texture = import('three').Texture;
 
     interface SupportsObjectPick {
-        objectPick?: boolean;
+      objectPick?: boolean;
     }
 
     interface IntrinsicElements {

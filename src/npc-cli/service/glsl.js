@@ -502,9 +502,9 @@ export const instancedMultiTextureShader = {
     #include <logdepthbuf_pars_fragment>
   
     void main() {
-      gl_FragColor = getTexelColor(vTextureId, vUv) * vec4(vColor * diffuse, 1);
+      // gl_FragColor = getTexelColor(vTextureId, vUv) * vec4(vColor * diffuse, 1);
       // gl_FragColor = texture(texturesNew, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
-      // gl_FragColor = texture(texturesNew, vec3(vUv, vTextureId)) * vec4(2.0, 2.0, 2.0, 1.0);
+      gl_FragColor = texture(texturesNew, vec3(vUv, vTextureId)) * vec4(3.0, 3.0, 3.0, 1.0);
   
       // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
       if(gl_FragColor.a < 0.5) {

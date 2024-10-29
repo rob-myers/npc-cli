@@ -194,9 +194,9 @@ export default function World(props) {
           for (const api of [state.floor, state.ceil]) {
             api.tex[gmKey] = createCanvasTexMeta(
               pngRect.width * worldToSguScale * gmFloorExtraScale,
-              pngRect.height * worldToSguScale * gmFloorExtraScale,
-              // // 🔔 force same dimensions for TextureAtlas
-              // pngRect.width * worldToSguScale * gmFloorExtraScale,
+              // pngRect.height * worldToSguScale * gmFloorExtraScale,
+              // 🔔 force same dimensions for TextureAtlas
+              pngRect.width * worldToSguScale * gmFloorExtraScale,
               { willReadFrequently: true, texId },
             );
             api.textures = api.textures.concat(api.tex[gmKey]); // fresh
