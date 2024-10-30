@@ -9,25 +9,30 @@ import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
 import { createCanvasTexMeta } from './three';
+import { TextureAtlas } from './texture-atlas';
 
 /**
- * @param {object} opts
+ * @param {object} [opts]
  * @param {Record<Geomorph.GeomorphKey, GmData>} [opts.prevGmData]
+ * @param {number} [opts.nextTexId]
  * Previous lookup to avoid recomputation
 */
-export default function createGmsData({ prevGmData }) {
+export default function createGmsData({ prevGmData, nextTexId } = {}) {
   const gmsData = {
     ...mapValues(helper.toGmNum,
       (_, gmKey) => prevGmData?.[gmKey] ?? ({ ...emptyGmData, gmKey })
     ),
-    
     /** Total number of doors, each being a single quad (🔔 may change):  */
     doorCount: 0,
+    nextTexId: nextTexId ?? 0,
     /** Total number of obstacles, each being a single quad:  */
     obstaclesCount: 0,
-    nextTexId: 0,
     /** `gmData[gm.key].texId` is index of `gm.key` */
     seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
+    /** texture array */
+    texFloor: /** @type {TextureAtlas} */ ({}),
+    /** texture array */
+    texCeil: /** @type {TextureAtlas} */ ({}),
     /** Total number of walls, where each wall is a single quad:  */
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
@@ -126,19 +131,27 @@ export default function createGmsData({ prevGmData }) {
       gmsData.doorCount = gms.reduce((sum, { key }) => sum + gmsData[key].doorSegs.length, 0);
       gmsData.wallCount = gms.reduce((sum, { key }) => sum + gmsData[key].wallSegs.length, 0);
       gmsData.obstaclesCount = gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
-
       gmsData.wallPolySegCounts = gms.map(({ key: gmKey }) =>
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
+      gmsData.texFloor = new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].floor));
+      gmsData.texCeil = new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].ceil));
     },
     /** Dispose `GmData` lookup. */
     dispose() {
       for (const gmKey of geomorph.gmKeys) {
-        Object.values(gmsData[gmKey]).forEach(v => {
+        /** @type {any[]} */ ([]).concat(
+          Object.values(gmsData[gmKey]),
+          // Object.values(gmsData[gmKey].floor),
+          // Object.values(gmsData[gmKey].ceil),
+          // 🚧 gmsData.texFloor
+        ).forEach(v => {
           if (Array.isArray(v)) {
             v.length = 0;
           } else if (v instanceof CanvasRenderingContext2D) {
             v.canvas.width = v.canvas.height = 0;
+          } else if (v instanceof THREE.Texture) {
+            v.dispose();
           } else if (v instanceof THREE.BufferGeometry) {
             v.dispose();
           } else if (v instanceof BaseGraph) {

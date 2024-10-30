@@ -8,7 +8,6 @@ import { getGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../ser
 import { geomorph } from "../service/geomorph";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
-import { TextureAtlas } from "../service/texture-atlas";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -22,7 +21,6 @@ export default function Floor(props) {
     grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(255, 255, 255, 0.075)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-floor-xz'),
-    atlas: /** @type {*} */ (null), // for shader
 
     addUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
@@ -52,7 +50,7 @@ export default function Floor(props) {
         state.drawGmKey(gmKey);
         await pause();
       }
-      state.atlas.update();
+      w.gmsData.texFloor.update();
       w.menu.measure('floor.draw');
     },
     drawGmKey(gmKey) {
@@ -141,7 +139,6 @@ export default function Floor(props) {
   w.floor = state;
 
   React.useEffect(() => {
-    state.atlas ??= new TextureAtlas(w.gmsData.seenGmKeys.map(gmKey => w.gmsData[gmKey].floor));
     state.draw();
     state.positionInstances();
     state.addUvs();
@@ -159,7 +156,7 @@ export default function Floor(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={state.atlas?.arrayTex ?? emptyDataArrayTexture}
+        atlas={w.gmsData.texFloor.arrayTex ?? emptyDataArrayTexture}
         depthWrite={false} // fix z-fighting
         diffuse={[1, 1, 0.8]}
       />
@@ -177,7 +174,6 @@ export default function Floor(props) {
  * @property {THREE.InstancedMesh} inst
  * @property {CanvasPattern} grid
  * @property {THREE.BufferGeometry} quad
- * @property {TextureAtlas} atlas
  *
  * @property {() => void} addUvs
  * @property {() => Promise<void>} draw

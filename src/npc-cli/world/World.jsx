@@ -194,10 +194,8 @@ export default function World(props) {
       );
 
       if (mapChanged || gmsDataChanged) {
-        next.gmsData = createGmsData(
-          // reuse gmKey -> GmData lookup unless geomorphs.json or createGmsData changed
-          { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
-        );
+        const reuse = !dataChanged && !gmsDataChanged;
+        next.gmsData = createGmsData(reuse ? state.gmsData : undefined);
 
         // ensure GmData per gmKey in map
         state.menu.measure('gmsData');

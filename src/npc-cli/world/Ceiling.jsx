@@ -21,7 +21,6 @@ export default function Ceiling(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-ceiling-xz'),
-    atlas: /** @type {*} */ (null), // for shader
 
     addUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
@@ -71,7 +70,7 @@ export default function Ceiling(props) {
         state.drawGmKey(gmKey);
         await pause();
       }
-      state.atlas.update();
+      w.gmsData.texCeil.update();
       w.menu.measure('ceil.draw');
     },
     drawGmKey(gmKey) {
@@ -163,7 +162,6 @@ export default function Ceiling(props) {
   w.ceil = state;
 
   React.useEffect(() => {
-    state.atlas ??= new TextureAtlas(w.gmsData.seenGmKeys.map(gmKey => w.gmsData[gmKey].ceil));
     state.draw();
     state.positionInstances();
     state.addUvs();
@@ -181,7 +179,7 @@ export default function Ceiling(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={state.atlas?.arrayTex ?? emptyDataArrayTexture}
+        atlas={w.gmsData.texCeil.arrayTex ?? emptyDataArrayTexture}
         alphaTest={0.9} // 0.5 flickered on (301, 101) border
         // diffuse={[0.75, 0.75, 0.75]}
       />
@@ -198,7 +196,6 @@ export default function Ceiling(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
- * @property {TextureAtlas} atlas
  *
  * @property {() => void} addUvs
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick

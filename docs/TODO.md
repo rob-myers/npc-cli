@@ -31,11 +31,13 @@
     - ✅ fix brightness
     - 🚧 verify hmr
       - ✅ on change ceiling drawGmKey
+      - ✅ on change symbol
       - on change map
     - 🚧 clean
       - ✅ texturesNew -> textures
       - ✅ move floor/ceiling textures into w.gmsData
-      - move/rename TextureAtlas
+      - 🚧 move TextureAtlas e.g. to fix hmr
+      - rename TextureAtlas
     - check ceiling pointer events
 
 - ✅ bug: `w npc.remove will` breaks door collision detection
