@@ -75,6 +75,7 @@ export default function Ceiling(props) {
         state.drawGmKey(gmKey);
         await pause();
       }
+      state.atlas.update();
       w.menu.measure('ceil.draw');
     },
     drawGmKey(gmKey) {
@@ -167,7 +168,7 @@ export default function Ceiling(props) {
 
   React.useEffect(() => {
     state.atlas ??= new TextureAtlas(state.textures);
-    state.draw().then(() => state.atlas.update());
+    state.draw();
     state.positionInstances();
     state.addUvs();
   }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);
