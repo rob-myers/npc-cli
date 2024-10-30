@@ -8,23 +8,28 @@ import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
-import { createCanvasTexMeta } from './three';
+import { getCanvasTexMeta } from './three';
 import { TextureAtlas } from './texture-atlas';
 
 /**
- * @param {object} [opts]
- * @param {Record<Geomorph.GeomorphKey, GmData>} [opts.prevGmData]
- * @param {number} [opts.nextTexId]
- * Previous lookup to avoid recomputation
+ * @param {Record<Geomorph.GeomorphKey, GmData> & {
+ *   nextTexId: number;
+ *   seenGmKeys: Geomorph.GeomorphKey[];
+ *   texFloor: TextureAtlas;
+ *   texCeil: TextureAtlas;
+ * } | null} prevGmsData
+ * Previous lookup to avoid re-computation
+ * @param {boolean} preserveGmData
+ * Can preserve gmKey to GmData if data hasn't changed.
 */
-export default function createGmsData({ prevGmData, nextTexId } = {}) {
+export default function createGmsData(prevGmsData, preserveGmData) {
   const gmsData = {
     ...mapValues(helper.toGmNum,
-      (_, gmKey) => prevGmData?.[gmKey] ?? ({ ...emptyGmData, gmKey })
+      (_, gmKey) => (preserveGmData && prevGmsData?.[gmKey]) || ({ ...emptyGmData, gmKey })
     ),
     /** Total number of doors, each being a single quad (🔔 may change):  */
     doorCount: 0,
-    nextTexId: nextTexId ?? 0,
+    nextTexId: (preserveGmData && prevGmsData?.nextTexId) || 0,
     /** Total number of obstacles, each being a single quad:  */
     obstaclesCount: 0,
     /** `gmData[gm.key].texId` is index of `gm.key` */
@@ -46,24 +51,21 @@ export default function createGmsData({ prevGmData, nextTexId } = {}) {
     async computeGmData(gm) {
       const gmData = gmsData[gm.key];
 
-      // 🚧 floor/ceiling texture
       const texId = gmsData.nextTexId++;
       gmsData.seenGmKeys.push(gm.key);
 
-      gmData.floor = createCanvasTexMeta(
-        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        // pngRect.height * worldToSguScale * gmFloorExtraScale,
+      gmData.floor = getCanvasTexMeta(`floor-${gm.key}`, {
+        width: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
         // 🔔 force same dimensions for TextureAtlas
-        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        { willReadFrequently: true, texId },
-      );
-      gmData.ceil = createCanvasTexMeta(
-        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        // pngRect.height * worldToSguScale * gmFloorExtraScale,
+        height: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
+        opts: { willReadFrequently: true, texId },
+      });
+      gmData.ceil = getCanvasTexMeta(`ceil-${gm.key}`, {
+        width: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
         // 🔔 force same dimensions for TextureAtlas
-        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        { willReadFrequently: true, texId },
-      );
+        height: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
+        opts: { willReadFrequently: true, texId },
+      });
 
       gmData.doorSegs = gm.doors.map(({ seg }) => seg);
       gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
@@ -134,18 +136,16 @@ export default function createGmsData({ prevGmData, nextTexId } = {}) {
       gmsData.wallPolySegCounts = gms.map(({ key: gmKey }) =>
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
-      gmsData.texFloor = new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].floor));
-      gmsData.texCeil = new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].ceil));
+
+      // Preserve texture array if same number of textures
+      const preserveTexArray = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length;
+      gmsData.texFloor = preserveTexArray ? prevGmsData.texFloor : new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].floor));
+      gmsData.texCeil = preserveTexArray ? prevGmsData.texCeil : new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].ceil));
     },
     /** Dispose `GmData` lookup. */
     dispose() {
       for (const gmKey of geomorph.gmKeys) {
-        /** @type {any[]} */ ([]).concat(
-          Object.values(gmsData[gmKey]),
-          // Object.values(gmsData[gmKey].floor),
-          // Object.values(gmsData[gmKey].ceil),
-          // 🚧 gmsData.texFloor
-        ).forEach(v => {
+        Object.values(gmsData[gmKey]).forEach(v => {
           if (Array.isArray(v)) {
             v.length = 0;
           } else if (v instanceof CanvasRenderingContext2D) {
@@ -158,6 +158,10 @@ export default function createGmsData({ prevGmData, nextTexId } = {}) {
             v.dispose();
           }
         });
+      }
+      if (prevGmsData && gmsData.texFloor !== prevGmsData.texFloor) {
+        prevGmsData.texFloor.dispose();
+        prevGmsData.texCeil.dispose();
       }
     },
     /**

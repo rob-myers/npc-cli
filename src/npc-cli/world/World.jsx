@@ -15,7 +15,7 @@ import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { createCanvasTexMeta, imageLoader } from "../service/three";
+import { getCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
@@ -62,9 +62,8 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
-    // 🚧 avoid recreating texture on HMR
-    obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
-    decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
+    obsTex: getCanvasTexMeta(`obs-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
+    decorTex: getCanvasTexMeta(`decor-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
 
     crowd: /** @type {*} */ (null),
 
@@ -194,8 +193,8 @@ export default function World(props) {
       );
 
       if (mapChanged || gmsDataChanged) {
-        const reuse = !dataChanged && !gmsDataChanged;
-        next.gmsData = createGmsData(reuse ? state.gmsData : undefined);
+        const preserveGmData = !dataChanged && !gmsDataChanged;
+        next.gmsData = createGmsData(state.gmsData, preserveGmData);
 
         // ensure GmData per gmKey in map
         state.menu.measure('gmsData');

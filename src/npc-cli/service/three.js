@@ -215,25 +215,33 @@ export const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
 
 export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
+const canvasTexMetaLookup = /** @type {Record<string, CanvasTexMeta>} */ ({});
+
 /**
- * @param {number} width 
- * @param {number} height 
- * @param {object} [opts]
- * @param {boolean} [opts.willReadFrequently]
- * @param {number} [opts.texId]
+ * Get cached THREE.CanvasTexture and auxiliary structures.
+ * They never need to be mutated if width/height don't change.
+ * @param {string} key
+ * @param {CanvasTexMetaDef} def
  * @returns {CanvasTexMeta}
  */
-export function createCanvasTexMeta(width, height, opts) {
+export function getCanvasTexMeta(key, def) {
+  return canvasTexMetaLookup[key] ??= createCanvasTexMeta(def);
+}
+
+/**
+ * @param {CanvasTexMetaDef} def
+ * @returns {CanvasTexMeta}
+ */
+function createCanvasTexMeta(def) {
   const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
+  canvas.width = def.width;
+  canvas.height = def.height;
   const tex = new THREE.CanvasTexture(canvas);
   tex.flipY = false; // align with XZ quad uv-map
-  const ct = /** @type {CanvasRenderingContext2D} */(canvas.getContext(
-    '2d',
-    { willReadFrequently: opts?.willReadFrequently },
+  const ct = /** @type {CanvasRenderingContext2D} */(
+    canvas.getContext('2d', { willReadFrequently: def.opts?.willReadFrequently },
   ));
-  return { canvas, tex, ct, texId : opts?.texId ?? null };
+  return { canvas, tex, ct, texId : def.opts?.texId ?? null };
 }
 
 /**
@@ -319,6 +327,15 @@ export const yAxis = new THREE.Vector3(0, 1, 0);
 export const emptyGroup = new THREE.Group();
 
 export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
+
+/**
+ * @typedef CanvasTexMetaDef
+ * @property {number} width 
+ * @property {number} height 
+ * @property {object} [opts]
+ * @property {boolean} [opts.willReadFrequently]
+ * @property {number} [opts.texId]
+ */
 
 /**
  * @typedef CanvasTexMeta

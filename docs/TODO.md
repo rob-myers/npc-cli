@@ -37,6 +37,8 @@
       - ✅ texturesNew -> textures
       - ✅ move floor/ceiling textures into w.gmsData
       - 🚧 move TextureAtlas e.g. to fix hmr
+        - ✅ reuse TextureAtlas whenever possible
+        - fix hmr on edit create-gms-data
       - rename TextureAtlas
     - check ceiling pointer events
 
