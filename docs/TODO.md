@@ -31,8 +31,12 @@
     - ✅ fix brightness
     - 🚧 verify hmr
       - ✅ on change ceiling drawGmKey
+      - on change map
+    - 🚧 clean
+      - ✅ texturesNew -> textures
+      - ✅ move floor/ceiling textures into w.gmsData
+      - move/rename TextureAtlas
     - check ceiling pointer events
-    - 🚧 clean e.g. texturesNew -> textures
 
 - ✅ bug: `w npc.remove will` breaks door collision detection
   - must clear positions (surprising didn't have issue)

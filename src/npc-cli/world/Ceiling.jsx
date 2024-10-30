@@ -21,9 +21,6 @@ export default function Ceiling(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-ceiling-xz'),
-
-    tex: w.ceil.tex,  // to lookup seen
-    textures: w.ceil.textures, // to order seen
     atlas: /** @type {*} */ (null), // for shader
 
     addUvs() {
@@ -36,7 +33,7 @@ export default function Ceiling(props) {
         uvOffsets.push(0, 0);
         // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
         uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
-        uvTextureIds.push(/** @type {number} */ (state.tex[gm.key].texId));
+        uvTextureIds.push(/** @type {number} */ (w.gmsData[gm.key].ceil.texId));
         // console.log({texId: state.tex[gm.key].texId }, state.tex, gm.key)
       }
 
@@ -50,28 +47,29 @@ export default function Ceiling(props) {
         new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
       );
     },
-    detectClick(e) {
-      const gmId = Number(e.object.name.slice('ceil-gm-'.length));
-      const gm = w.gms[gmId];
+    detectClick(e) {// 🚧 replace with object-pick
+      // const gmId = Number(e.object.name.slice('ceil-gm-'.length));
+      // const gm = w.gms[gmId];
       
-      // 3d point -> local world coords (ignoring y)
-      const mat4 = gm.mat4.clone().invert();
-      const localWorldPnt = e.point.clone().applyMatrix4(mat4);
-      // local world coords -> canvas coords
-      const worldToCanvas = worldToSguScale * gmFloorExtraScale;
-      const canvasX = (localWorldPnt.x - gm.pngRect.x) * worldToCanvas;
-      const canvasY = (localWorldPnt.z - gm.pngRect.y) * worldToCanvas;
+      // // 3d point -> local world coords (ignoring y)
+      // const mat4 = gm.mat4.clone().invert();
+      // const localWorldPnt = e.point.clone().applyMatrix4(mat4);
+      // // local world coords -> canvas coords
+      // const worldToCanvas = worldToSguScale * gmFloorExtraScale;
+      // const canvasX = (localWorldPnt.x - gm.pngRect.x) * worldToCanvas;
+      // const canvasY = (localWorldPnt.z - gm.pngRect.y) * worldToCanvas;
 
-      const { ct } = state.tex[gm.key];
-      const { data: rgba } = ct.getImageData(canvasX, canvasY, 1, 1, { colorSpace: 'srgb' });
-      // console.log(Array.from(rgba), { gmId, point3d: e.point, localWorldPnt, canvasX, canvasY });
+      // const { ct } = state.tex[gm.key];
+      // const { data: rgba } = ct.getImageData(canvasX, canvasY, 1, 1, { colorSpace: 'srgb' });
+      // // console.log(Array.from(rgba), { gmId, point3d: e.point, localWorldPnt, canvasX, canvasY });
       
-      // ignore clicks on fully transparent pixels
-      return rgba[3] === 0 ? null : { gmId };
+      // // ignore clicks on fully transparent pixels
+      // return rgba[3] === 0 ? null : { gmId };
+      return null;
     },
     async draw() {
       w.menu.measure('ceil.draw');
-      for (const gmKey of keys(state.tex)) {
+      for (const gmKey of w.gmsData.seenGmKeys) {
         state.drawGmKey(gmKey);
         await pause();
       }
@@ -79,7 +77,7 @@ export default function Ceiling(props) {
       w.menu.measure('ceil.draw');
     },
     drawGmKey(gmKey) {
-      const { ct, tex, canvas} = state.tex[gmKey];
+      const { ct, tex, canvas} = w.gmsData[gmKey].ceil;
       const layout = w.geomorphs.layout[gmKey];
       const { pngRect } = layout;
 
@@ -167,7 +165,7 @@ export default function Ceiling(props) {
   w.ceil = state;
 
   React.useEffect(() => {
-    state.atlas ??= new TextureAtlas(state.textures);
+    state.atlas ??= new TextureAtlas(w.gmsData.seenGmKeys.map(gmKey => w.gmsData[gmKey].ceil));
     state.draw();
     state.positionInstances();
     state.addUvs();
@@ -202,8 +200,6 @@ export default function Ceiling(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
- * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
- * @property {import("../service/three").CanvasTexMeta[]} textures
  * @property {TextureAtlas} atlas
  *
  * @property {() => void} addUvs

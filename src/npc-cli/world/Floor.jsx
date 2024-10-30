@@ -22,9 +22,6 @@ export default function Floor(props) {
     grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(255, 255, 255, 0.075)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-floor-xz'),
-    
-    tex: w.floor.tex, // to lookup seen
-    textures: w.floor.textures, // orders seen
     atlas: /** @type {*} */ (null), // for shader
 
     addUvs() {
@@ -37,7 +34,7 @@ export default function Floor(props) {
         uvOffsets.push(0, 0);
         // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
         uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
-        uvTextureIds.push(/** @type {number} */ (state.tex[gm.key].texId));
+        uvTextureIds.push(/** @type {number} */ (w.gmsData[gm.key].floor.texId));
         // console.log({texId: state.tex[gm.key].texId }, state.tex, gm.key)
       }
 
@@ -53,7 +50,7 @@ export default function Floor(props) {
     },
     async draw() {
       w.menu.measure('floor.draw');
-      for (const gmKey of keys(state.tex)) {
+      for (const gmKey of w.gmsData.seenGmKeys) {
         state.drawGmKey(gmKey);
         await pause();
       }
@@ -61,7 +58,8 @@ export default function Floor(props) {
       w.menu.measure('floor.draw');
     },
     drawGmKey(gmKey) {
-      const { ct, tex, canvas } = state.tex[gmKey];
+      // const { ct, tex, canvas } = state.tex[gmKey];
+      const { ct, tex, canvas } = w.gmsData[gmKey].floor;
       const gm = w.geomorphs.layout[gmKey];
       const { pngRect, hullPoly, navDecomp, walls } = gm;
 
@@ -145,7 +143,8 @@ export default function Floor(props) {
   w.floor = state;
 
   React.useEffect(() => {
-    state.atlas ??= new TextureAtlas(state.textures);
+    // state.atlas ??= new TextureAtlas(state.textures);
+    state.atlas ??= new TextureAtlas(w.gmsData.seenGmKeys.map(gmKey => w.gmsData[gmKey].floor));
     state.draw();
     state.positionInstances();
     state.addUvs();
@@ -181,8 +180,6 @@ export default function Floor(props) {
  * @property {THREE.InstancedMesh} inst
  * @property {CanvasPattern} grid
  * @property {THREE.BufferGeometry} quad
- * @property {Record<Geomorph.GeomorphKey, import("../service/three").CanvasTexMeta>} tex
- * @property {import("../service/three").CanvasTexMeta[]} textures
  * @property {TextureAtlas} atlas
  *
  * @property {() => void} addUvs

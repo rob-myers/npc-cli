@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
+import { doorDepth, doorHeight, gmFloorExtraScale, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { Poly } from '../geom';
@@ -8,6 +8,7 @@ import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
+import { createCanvasTexMeta } from './three';
 
 /**
  * @param {object} opts
@@ -24,20 +25,40 @@ export default function createGmsData({ prevGmData }) {
     doorCount: 0,
     /** Total number of obstacles, each being a single quad:  */
     obstaclesCount: 0,
+    nextTexId: 0,
+    /** `gmData[gm.key].texId` is index of `gm.key` */
+    seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
     /** Total number of walls, where each wall is a single quad:  */
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
     wallPolySegCounts: /** @type {number[]} */ ([]),
     
     /**
-     * Recomputed (dev only),
-     * - onchange geomorphs.json
-     * - on edit create-gms-data
+     * Recomputed (dev only) onchange geomorphs.json or edit create-gms-data
      * @param {Geomorph.Layout} gm
      * This is the "incoming" value.
      */
     async computeGmData(gm) {
       const gmData = gmsData[gm.key];
+
+      // 🚧 floor/ceiling texture
+      const texId = gmsData.nextTexId++;
+      gmsData.seenGmKeys.push(gm.key);
+
+      gmData.floor = createCanvasTexMeta(
+        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
+        // pngRect.height * worldToSguScale * gmFloorExtraScale,
+        // 🔔 force same dimensions for TextureAtlas
+        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
+        { willReadFrequently: true, texId },
+      );
+      gmData.ceil = createCanvasTexMeta(
+        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
+        // pngRect.height * worldToSguScale * gmFloorExtraScale,
+        // 🔔 force same dimensions for TextureAtlas
+        gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
+        { willReadFrequently: true, texId },
+      );
 
       gmData.doorSegs = gm.doors.map(({ seg }) => seg);
       gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
@@ -202,6 +223,8 @@ const lintelDepths = {
 /** @type {GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose', // overridden
+  ceil: /** @type {*} */ (null),
+  floor: /** @type {*} */ (null),
   doorSegs: [],
   hitCtxt: /** @type {*} */ (null),
   navPoly: undefined,
@@ -225,6 +248,8 @@ const emptyGmData = {
  * We do not store in `w.gms` to avoid duplication.
  * @typedef GmData
  * @property {Geomorph.GeomorphKey} gmKey
+ * @property {import('./three').CanvasTexMeta} floor
+ * @property {import('./three').CanvasTexMeta} ceil
  * @property {[Geom.Vect, Geom.Vect][]} doorSegs
  * @property {CanvasRenderingContext2D} hitCtxt
  * @property {import('three').BufferGeometry} [navPoly] Debug only

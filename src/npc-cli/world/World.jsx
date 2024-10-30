@@ -9,7 +9,6 @@ import { importNavMesh, Crowd } from "@recast-navigation/core";
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
-import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
 import { getContext2d, invertCanvas } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
@@ -70,8 +69,8 @@ export default function World(props) {
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // WorldCanvas
-    floor: /** @type {State['floor']} */ ({ tex: {}, textures: /** @type {any[]} */ ([]) }),
-    ceil: /** @type {State['ceil']} */ ({ tex: {}, textures: /** @type {any[]} */ ([]) }),
+    floor: /** @type {*} */ ({}),
+    ceil: /** @type {*} */ ({}),
     decor: /** @type {*} */ (null), // Decor
     obs: /** @type {*} */ (null), // Obstacles
     wall: /** @type {*} */ (null),
@@ -185,24 +184,6 @@ export default function World(props) {
       if (mapChanged) {
         next.mapKey = props.mapKey;
         const mapDef = next.geomorphs.map[next.mapKey];
-
-        // onchange map may see new gmKeys
-        // 🔔 could discard unused gmKeys and filter `textures`
-        const unseenGmKeys = new Set(mapDef.gms.flatMap(x => x.gmKey in state.floor.tex ? [] : x.gmKey));
-        for (const gmKey of unseenGmKeys) {
-          const { pngRect } = next.geomorphs.layout[gmKey];
-          const texId = state.floor.textures.length;
-          for (const api of [state.floor, state.ceil]) {
-            api.tex[gmKey] = createCanvasTexMeta(
-              pngRect.width * worldToSguScale * gmFloorExtraScale,
-              // pngRect.height * worldToSguScale * gmFloorExtraScale,
-              // 🔔 force same dimensions for TextureAtlas
-              pngRect.width * worldToSguScale * gmFloorExtraScale,
-              { willReadFrequently: true, texId },
-            );
-            api.textures = api.textures.concat(api.tex[gmKey]); // fresh
-          }
-        }
 
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
           geomorph.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
