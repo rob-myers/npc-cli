@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { Mat } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
-import { keys, pause } from "../service/generic";
+import { pause } from "../service/generic";
 import { drawPolygons } from "../service/dom";
 import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
@@ -29,12 +29,10 @@ export default function Ceiling(props) {
       const uvTextureIds = /** @type {number[]} */ ([]);
 
       for (const [gmId, gm] of w.gms.entries()) {
-        // each quad instance uses entire texture
         uvOffsets.push(0, 0);
         // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
         uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
         uvTextureIds.push(/** @type {number} */ (w.gmsData[gm.key].ceil.texId));
-        // console.log({texId: state.tex[gm.key].texId }, state.tex, gm.key)
       }
 
       state.inst.geometry.setAttribute('uvOffsets',

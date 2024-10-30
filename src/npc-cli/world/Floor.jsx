@@ -3,7 +3,7 @@ import * as THREE from "three";
 
 import { Mat, Poly } from "../geom";
 import { geomorphGridMeters, gmFloorExtraScale, worldToSguScale } from "../service/const";
-import { keys, pause } from "../service/generic";
+import { pause } from "../service/generic";
 import { getGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { geomorph } from "../service/geomorph";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
@@ -30,12 +30,10 @@ export default function Floor(props) {
       const uvTextureIds = /** @type {number[]} */ ([]);
 
       for (const [gmId, gm] of w.gms.entries()) {
-        // each quad instance uses entire texture
         uvOffsets.push(0, 0);
         // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
         uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
         uvTextureIds.push(/** @type {number} */ (w.gmsData[gm.key].floor.texId));
-        // console.log({texId: state.tex[gm.key].texId }, state.tex, gm.key)
       }
 
       state.inst.geometry.setAttribute('uvOffsets',
@@ -143,7 +141,6 @@ export default function Floor(props) {
   w.floor = state;
 
   React.useEffect(() => {
-    // state.atlas ??= new TextureAtlas(state.textures);
     state.atlas ??= new TextureAtlas(w.gmsData.seenGmKeys.map(gmKey => w.gmsData[gmKey].floor));
     state.draw();
     state.positionInstances();

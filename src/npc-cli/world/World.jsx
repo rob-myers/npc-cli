@@ -184,7 +184,6 @@ export default function World(props) {
       if (mapChanged) {
         next.mapKey = props.mapKey;
         const mapDef = next.geomorphs.map[next.mapKey];
-
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
           geomorph.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
         );
