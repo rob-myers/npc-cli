@@ -8,7 +8,7 @@ import { drawPolygons } from "../service/dom";
 import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
-import { TextureAtlas } from "../service/texture-atlas";
+import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -179,7 +179,7 @@ export default function Ceiling(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.gmsData.texCeil.arrayTex ?? emptyDataArrayTexture}
+        atlas={w.gmsData.texCeil.tex ?? emptyDataArrayTexture}
         alphaTest={0.9} // 0.5 flickered on (301, 101) border
         // diffuse={[0.75, 0.75, 0.75]}
       />

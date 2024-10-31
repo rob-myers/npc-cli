@@ -9,14 +9,14 @@ import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
 import { getCanvasTexMeta } from './three';
-import { TextureAtlas } from './texture-atlas';
+import { TexArray } from './tex-array';
 
 /**
  * @param {Record<Geomorph.GeomorphKey, GmData> & {
  *   nextTexId: number;
  *   seenGmKeys: Geomorph.GeomorphKey[];
- *   texFloor: TextureAtlas;
- *   texCeil: TextureAtlas;
+ *   texFloor: TexArray;
+ *   texCeil: TexArray;
  * } | null} prevGmsData
  * Previous lookup to avoid re-computation
  * @param {boolean} preserveGmData
@@ -35,9 +35,9 @@ export default function createGmsData(prevGmsData, preserveGmData) {
     /** `gmData[gm.key].texId` is index of `gm.key` */
     seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
     /** texture array */
-    texFloor: /** @type {TextureAtlas} */ ({}),
+    texFloor: /** @type {TexArray} */ ({}),
     /** texture array */
-    texCeil: /** @type {TextureAtlas} */ ({}),
+    texCeil: /** @type {TexArray} */ ({}),
     /** Total number of walls, where each wall is a single quad:  */
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
@@ -139,8 +139,8 @@ export default function createGmsData(prevGmsData, preserveGmData) {
 
       // Preserve texture array if same number of textures
       const preserveTexArray = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length;
-      gmsData.texFloor = preserveTexArray ? prevGmsData.texFloor : new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].floor));
-      gmsData.texCeil = preserveTexArray ? prevGmsData.texCeil : new TextureAtlas(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].ceil));
+      gmsData.texFloor = preserveTexArray ? prevGmsData.texFloor : new TexArray(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].floor));
+      gmsData.texCeil = preserveTexArray ? prevGmsData.texCeil : new TexArray(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].ceil));
     },
     /** Dispose `GmData` lookup. */
     dispose() {

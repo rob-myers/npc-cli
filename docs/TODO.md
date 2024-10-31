@@ -43,7 +43,7 @@
       - ✅ move floor/ceiling textures into w.gmsData
       - ✅ move TextureAtlas e.g. to fix hmr
       - ✅ reuse TextureAtlas whenever possible
-      - rename TextureAtlas
+      - ✅ rename TextureAtlas as TexArray
     - check ceiling pointer events
 
 - ✅ bug: `w npc.remove will` breaks door collision detection

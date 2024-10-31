@@ -156,7 +156,7 @@ export default function Floor(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.gmsData.texFloor.arrayTex ?? emptyDataArrayTexture}
+        atlas={w.gmsData.texFloor.tex ?? emptyDataArrayTexture}
         depthWrite={false} // fix z-fighting
         diffuse={[1, 1, 0.8]}
       />

@@ -4,9 +4,9 @@ import * as THREE from 'three';
  * Based on:
  * https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
  */
-export class TextureAtlas {
+export class TexArray {
   
-  arrayTex = /** @type {THREE.DataArrayTexture} */ ({});
+  tex = /** @type {THREE.DataArrayTexture} */ ({});
   height = 0;
   textures = /** @type {TextureItem[]} */ ([]);
   width = 0;
@@ -38,7 +38,7 @@ export class TextureAtlas {
     // arrayTex.generateMipmaps = true;
     // arrayTex.needsUpdate = true;
 
-    this.arrayTex = arrayTex;
+    this.tex = arrayTex;
     this.height = height;
     this.textures = textures;
     this.width = width;
@@ -49,7 +49,7 @@ export class TextureAtlas {
     if (disposeTextures) {
       this.textures.forEach(({ tex }) => tex.dispose());
     }
-    this.arrayTex.dispose();
+    this.tex.dispose();
   }
 
   /**
@@ -59,9 +59,9 @@ export class TextureAtlas {
     for (const [index, { ct }] of this.textures.entries()) {
       const imageData = ct.getImageData(0, 0, ct.canvas.width, ct.canvas.height);
       const offset = index * (4 * this.width * this.height);
-      this.arrayTex.image.data.set(imageData.data, offset);
+      this.tex.image.data.set(imageData.data, offset);
     }
-    this.arrayTex.needsUpdate = true;
+    this.tex.needsUpdate = true;
   }
 }
 
