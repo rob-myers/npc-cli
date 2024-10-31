@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { getContext2d } from './dom';
 
 /**
  * Based on:
@@ -6,65 +7,71 @@ import * as THREE from 'three';
  */
 export class TexArray {
   
-  tex = /** @type {THREE.DataArrayTexture} */ ({});
-  height = 0;
-  textures = /** @type {TextureItem[]} */ ([]);
-  width = 0;
+  /** @type {TexArrayOpts} */
+  opts;
+  /** @type {CanvasRenderingContext2D} */
+  ct;
+  /** @type {THREE.DataArrayTexture} */
+  tex;
 
   /**
-   * Call `this.update()` after construction.
-   * @param {TextureItem[]} textures
+   * @param {TexArrayOpts} opts
    */
-  constructor(textures) {
-    if (textures.length === 0) {
-      throw Error(`${'TextureAtlas'}: textures.length cannot be 0`);
+  constructor(opts) {
+    if (opts.numTextures === 0) {
+      throw Error(`${'TexArray'}: numTextures cannot be 0`);
     }
+
+    this.opts = opts;
+    this.ct = getContext2d(opts.ctKey);
+    this.ct.canvas.width = opts.width;
+    this.ct.canvas.height = opts.height;
     
-    // assume all same width, height e.g. 1024 * 1024
-    const { width, height } = textures[0].ct.canvas;
-    const data = new Uint8Array(textures.length * 4 * width * height);
+    const data = new Uint8Array(opts.numTextures * 4 * opts.width * opts.height);
 
-    const arrayTex = new THREE.DataArrayTexture(data, width, height, textures.length);
-    arrayTex.format = THREE.RGBAFormat;
-    arrayTex.type = THREE.UnsignedByteType;
+    const tex = new THREE.DataArrayTexture(data, opts.width, opts.height, opts.numTextures);
+    tex.format = THREE.RGBAFormat;
+    tex.type = THREE.UnsignedByteType;
+    this.tex = tex;
 
-    const firstTex = textures[0].tex;
-    arrayTex.anisotropy = firstTex.anisotropy;
-    arrayTex.minFilter = firstTex.minFilter;
-    arrayTex.magFilter = firstTex.magFilter;
-    arrayTex.wrapS = firstTex.wrapS;
-    arrayTex.wrapT = firstTex.wrapT;
-    // arrayTex.encoding = THREE.sRGBEncoding;
-    // arrayTex.generateMipmaps = true;
-    // arrayTex.needsUpdate = true;
-
-    this.tex = arrayTex;
-    this.height = height;
-    this.textures = textures;
-    this.width = width;
-
+    // const firstTex = textures[0].tex;
+    // tex.anisotropy = firstTex.anisotropy;
+    // tex.minFilter = firstTex.minFilter;
+    // tex.magFilter = firstTex.magFilter;
+    // tex.wrapS = firstTex.wrapS;
+    // tex.wrapT = firstTex.wrapT;
+    // tex.encoding = THREE.sRGBEncoding;
+    // tex.generateMipmaps = true;
+    // tex.needsUpdate = true;
   }
 
-  dispose(disposeTextures = false) {
-    if (disposeTextures) {
-      this.textures.forEach(({ tex }) => tex.dispose());
-    }
+  dispose() {
     this.tex.dispose();
   }
 
-  /**
-   * Assume width/height/textures.length stays the same.
-   */
   update() {
-    for (const [index, { ct }] of this.textures.entries()) {
-      const imageData = ct.getImageData(0, 0, ct.canvas.width, ct.canvas.height);
-      const offset = index * (4 * this.width * this.height);
-      this.tex.image.data.set(imageData.data, offset);
-    }
     this.tex.needsUpdate = true;
+  }
+
+  /**
+   * @param {number} index
+   */
+  updateIndex(index) {
+    const imageData = this.ct.getImageData(0, 0, this.opts.width, this.opts.height);
+    const offset = index * (4 * this.opts.width * this.opts.height);
+    this.tex.image.data.set(imageData.data, offset);
+    // this.tex.needsUpdate = true;
   }
 }
 
 /**
  * @typedef {{ tex: THREE.CanvasTexture; ct: CanvasRenderingContext2D }} TextureItem
+ */
+
+/**
+ * @typedef TexArrayOpts
+ * @property {number} opts.numTextures
+ * @property {number} opts.width
+ * @property {number} opts.height
+ * @property {string} opts.ctKey key for cached canvas context
  */

@@ -46,20 +46,20 @@ export default function Floor(props) {
     },
     async draw() {
       w.menu.measure('floor.draw');
-      for (const gmKey of w.gmsData.seenGmKeys) {
+      for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
         state.drawGmKey(gmKey);
+        w.gmsData.texFloor.updateIndex(texId);
         await pause();
       }
       w.gmsData.texFloor.update();
       w.menu.measure('floor.draw');
     },
     drawGmKey(gmKey) {
-      // const { ct, tex, canvas } = state.tex[gmKey];
-      const { ct, tex, canvas } = w.gmsData[gmKey].floor;
+      const { ct } = w.gmsData.texFloor;
       const gm = w.geomorphs.layout[gmKey];
       const { pngRect, hullPoly, navDecomp, walls } = gm;
 
-      ct.clearRect(0, 0, canvas.width, canvas.height);
+      ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.fillStyle = 'red';
       ct.strokeStyle = 'green';
 
@@ -77,7 +77,7 @@ export default function Floor(props) {
       // draw grid
       ct.setTransform(1, 0, 0, 1, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       ct.fillStyle = state.grid;
-      ct.fillRect(0, 0, canvas.width, canvas.height);
+      ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // cover hull doorway z-fighting (visible from certain angles)
@@ -123,7 +123,6 @@ export default function Floor(props) {
       // });
 
       ct.resetTransform();
-      tex.needsUpdate = true;
     },
     positionInstances() {
       for (const [gmId, gm] of w.gms.entries()) {

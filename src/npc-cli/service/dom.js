@@ -7,11 +7,12 @@ export function getCanvas(key) {
 
 /**
  * @param {string} key
+ * @param {CanvasRenderingContext2DSettings} [opts]
  */
-export function getContext2d(key) {
+export function getContext2d(key, opts) {
   return /** @type {CanvasRenderingContext2D} */ ((
     canvasLookup[key] ??= document.createElement('canvas')
-  ).getContext('2d'));
+  ).getContext('2d', opts));
 }
 
 /** Cache to avoid re-creation on HMR */

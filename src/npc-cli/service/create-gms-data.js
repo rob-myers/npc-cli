@@ -8,12 +8,10 @@ import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
-import { getCanvasTexMeta } from './three';
 import { TexArray } from './tex-array';
 
 /**
  * @param {Record<Geomorph.GeomorphKey, GmData> & {
- *   nextTexId: number;
  *   seenGmKeys: Geomorph.GeomorphKey[];
  *   texFloor: TexArray;
  *   texCeil: TexArray;
@@ -29,10 +27,9 @@ export default function createGmsData(prevGmsData, preserveGmData) {
     ),
     /** Total number of doors, each being a single quad (🔔 may change):  */
     doorCount: 0,
-    nextTexId: (preserveGmData && prevGmsData?.nextTexId) || 0,
     /** Total number of obstacles, each being a single quad:  */
     obstaclesCount: 0,
-    /** `gmData[gm.key].texId` is index of `gm.key` */
+    /** This induces the floor/ceil texture array ordering */
     seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
     /** texture array */
     texFloor: /** @type {TexArray} */ ({}),
@@ -50,23 +47,7 @@ export default function createGmsData(prevGmsData, preserveGmData) {
      */
     async computeGmData(gm) {
       const gmData = gmsData[gm.key];
-
-      // 🚧
-      const texId = gmsData.nextTexId++;
       gmsData.seenGmKeys.push(gm.key);
-
-      gmData.floor = getCanvasTexMeta(`floor-${gm.key}`, {
-        width: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        // 🔔 force same dimensions for TextureAtlas
-        height: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        opts: { willReadFrequently: true, texId },
-      });
-      gmData.ceil = getCanvasTexMeta(`ceil-${gm.key}`, {
-        width: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        // 🔔 force same dimensions for TextureAtlas
-        height: gm.pngRect.width * worldToSguScale * gmFloorExtraScale,
-        opts: { willReadFrequently: true, texId },
-      });
 
       gmData.doorSegs = gm.doors.map(({ seg }) => seg);
       gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
@@ -140,8 +121,9 @@ export default function createGmsData(prevGmsData, preserveGmData) {
 
       // Preserve texture array if same number of textures
       const preserveTexArray = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length;
-      gmsData.texFloor = preserveTexArray ? prevGmsData.texFloor : new TexArray(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].floor));
-      gmsData.texCeil = preserveTexArray ? prevGmsData.texCeil : new TexArray(gmsData.seenGmKeys.map(gmKey => gmsData[gmKey].ceil));
+      const dimension = gms[0].pngRect.width * worldToSguScale * gmFloorExtraScale; // 🚧 provide constant
+      gmsData.texFloor = preserveTexArray ? prevGmsData.texFloor : new TexArray({ ctKey: 'tex-array-floor', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
+      gmsData.texCeil = preserveTexArray ? prevGmsData.texCeil : new TexArray({ ctKey: 'tex-array-ceil', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
     },
     /** Dispose `GmData` lookup. */
     dispose() {
@@ -248,8 +230,6 @@ const lintelDepths = {
 /** @type {GmData} */
 const emptyGmData = {
   gmKey: 'g-101--multipurpose', // overridden
-  ceil: /** @type {*} */ (null),
-  floor: /** @type {*} */ (null),
   doorSegs: [],
   hitCtxt: /** @type {*} */ (null),
   navPoly: undefined,
@@ -273,8 +253,6 @@ const emptyGmData = {
  * We do not store in `w.gms` to avoid duplication.
  * @typedef GmData
  * @property {Geomorph.GeomorphKey} gmKey
- * @property {import('./three').CanvasTexMeta} floor
- * @property {import('./three').CanvasTexMeta} ceil
  * @property {[Geom.Vect, Geom.Vect][]} doorSegs
  * @property {CanvasRenderingContext2D} hitCtxt
  * @property {import('three').BufferGeometry} [navPoly] Debug only

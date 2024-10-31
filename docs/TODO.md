@@ -32,10 +32,10 @@
     - 🚧 fix hmr
       - ✅ on change ceiling drawGmKey
       - ✅ on change symbol
-      - 🚧 fix stale texId inside cached CanvasTexMeta
-        - 🚧 try use a single temp CanvasTexture for floor/ceil
-        - 🚧 TextureAtlas needn't contain any CanvasTextures
-        - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
+      - ✅ fix stale texId inside cached CanvasTexMeta
+        - ✅ try use a single temp CanvasTexture for floor/ceil
+        - ✅ TexArray needn't contain any CanvasTextures
+      - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
       - fix on edit create-gms-data
       - fix on change map
     - 🚧 clean

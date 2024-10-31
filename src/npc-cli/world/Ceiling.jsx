@@ -66,20 +66,21 @@ export default function Ceiling(props) {
     },
     async draw() {
       w.menu.measure('ceil.draw');
-      for (const gmKey of w.gmsData.seenGmKeys) {
+      for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
         state.drawGmKey(gmKey);
+        w.gmsData.texCeil.updateIndex(texId);
         await pause();
       }
       w.gmsData.texCeil.update();
       w.menu.measure('ceil.draw');
     },
     drawGmKey(gmKey) {
-      const { ct, tex, canvas} = w.gmsData[gmKey].ceil;
+      const { ct } = w.gmsData.texCeil;
       const layout = w.geomorphs.layout[gmKey];
       const { pngRect } = layout;
 
       ct.resetTransform();
-      ct.clearRect(0, 0, canvas.width, canvas.height);
+      ct.clearRect(0, 0, ct.canvas.width, ct.canvas.height);
 
       const worldToCanvas = worldToSguScale * gmFloorExtraScale;
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
@@ -109,8 +110,6 @@ export default function Ceiling(props) {
         drawPolygons(ct, x, [x.meta.fill || 'red', x.meta.stroke || 'white', strokeWidth]);
         // drawPolygons(ct, x, ['red', 'white', 0.08]);
       });
-
-      tex.needsUpdate = true;
     },
     onPointerDown(e) {
       const result = state.detectClick(e);
