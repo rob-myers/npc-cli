@@ -26,12 +26,15 @@ export default function Floor(props) {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
       const uvTextureIds = /** @type {number[]} */ ([]);
+      /** `[0, 1, ..., maxGmId]` */
+      const instanceIds = /** @type {number[]} */ ([]);
 
       for (const [gmId, gm] of w.gms.entries()) {
         uvOffsets.push(0, 0);
         // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
         uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
         uvTextureIds.push(w.gmsData.getTextureId(gm.key));
+        instanceIds.push(gmId);
       }
 
       state.inst.geometry.setAttribute('uvOffsets',
@@ -42,6 +45,9 @@ export default function Floor(props) {
       );
       state.inst.geometry.setAttribute('uvTextureIds',
         new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.inst.geometry.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     async draw() {
@@ -158,6 +164,7 @@ export default function Floor(props) {
         atlas={w.gmsData.texFloor.tex ?? emptyDataArrayTexture}
         depthWrite={false} // fix z-fighting
         diffuse={[1, 1, 0.8]}
+        objectPickRed={2}
       />
     </instancedMesh>
   );

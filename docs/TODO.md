@@ -14,41 +14,10 @@
       - ℹ️ assume max npcs 256
       - ℹ️ maintain Set([0..255])
   - 🚧 floor object-pick
+    - (2, gmId, 0, 0)
   - 🚧 ceiling object-pick
-
-- ✅ migrate Floor and Ceiling to single draw-call
-  - ℹ️ still need floor pointer events for navigation
-  - ✅ positionInstances
-  - ✅ specify textureId convention
-    - ℹ️ by first seen respective gmKey
-  - ✅ addUvs
-  - ❌ coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
-  - ❌ multiple instancedMesh?
-  - ✅ try texture array approach
-    - ℹ️ https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
-    - ✅ permits partial rebuild
-    - ✅ fix HMR initialisation
-    - ✅ must have same resolution `2424 * 2424`
-    - ✅ fix brightness
-    - ✅ fix hmr
-      - ✅ on change ceiling drawGmKey
-      - ✅ on change symbol
-      - ✅ fix stale texId inside cached CanvasTexMeta
-        - ✅ try use a single temp CanvasTexture for floor/ceil
-        - ✅ TexArray needn't contain any CanvasTextures
-      - ✅ fix on edit create-gms-data
-      - ✅ fix on change map
-    - ✅ clean
-      - ✅ texturesNew -> textures
-      - ✅ move floor/ceiling textures into w.gmsData
-      - ✅ move TextureAtlas e.g. to fix hmr
-      - ✅ reuse TextureAtlas whenever possible
-      - ✅ rename TextureAtlas as TexArray
-    - ✅ check ceiling pointer events
-      - ℹ️ won't fix because will be replaced by object-pick
-
-- ✅ bug: `w npc.remove will` breaks door collision detection
-  - must clear positions (surprising didn't have issue)
+    - (3, gmId, 0, 0)
+  - w.ceiling uses w.floor quad
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
@@ -2825,3 +2794,37 @@ done
   - ℹ️ we still require "async" keyword to be manually provided
   - `seq 1000000 | map 'x => x + 1'` (fast)
   - `seq 100000 | map 'async x => x + 1'` (slow: many promises)
+
+- ✅ migrate Floor and Ceiling to single draw-call
+  - ℹ️ still need floor pointer events for navigation
+  - ✅ positionInstances
+  - ✅ specify textureId convention
+    - ℹ️ by first seen respective gmKey
+  - ✅ addUvs
+  - ❌ coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
+  - ❌ multiple instancedMesh?
+  - ✅ try texture array approach
+    - ℹ️ https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
+    - ✅ permits partial rebuild
+    - ✅ fix HMR initialisation
+    - ✅ must have same resolution `2424 * 2424`
+    - ✅ fix brightness
+    - ✅ fix hmr
+      - ✅ on change ceiling drawGmKey
+      - ✅ on change symbol
+      - ✅ fix stale texId inside cached CanvasTexMeta
+        - ✅ try use a single temp CanvasTexture for floor/ceil
+        - ✅ TexArray needn't contain any CanvasTextures
+      - ✅ fix on edit create-gms-data
+      - ✅ fix on change map
+    - ✅ clean
+      - ✅ texturesNew -> textures
+      - ✅ move floor/ceiling textures into w.gmsData
+      - ✅ move TextureAtlas e.g. to fix hmr
+      - ✅ reuse TextureAtlas whenever possible
+      - ✅ rename TextureAtlas as TexArray
+    - ✅ check ceiling pointer events
+      - ℹ️ won't fix because will be replaced by object-pick
+
+- ✅ bug: `w npc.remove will` breaks door collision detection
+  - must clear positions (surprising didn't have issue)

@@ -1,5 +1,5 @@
 import React from "react";
-import { defaultDoorCloseMs } from "../service/const";
+import { defaultDoorCloseMs, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom, tmpVec1 } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
@@ -50,10 +50,29 @@ export default function useHandleEvents(w) {
         const instanceId = (b << 8) + a;
         const meta = w.wall.decodeInstanceId(instanceId);
         return {
-          key: 'wall',
+          picked: 'wall',
           gmId,
           instanceId,
           ...meta,
+        };
+      }
+
+      if (r === 2) {// floor
+        const gmId = Math.floor(g);
+        return {
+          picked: 'floor',
+          gmId,
+          floor: true,
+        };
+      }
+
+      if (r === 3) {// ceiling
+        const gmId = Math.floor(g);
+        return {
+          picked: 'ceiling',
+          gmId,
+          ceiling: true,
+          height: wallHeight,
         };
       }
 
@@ -61,7 +80,7 @@ export default function useHandleEvents(w) {
         const npcUid = (g << 8) + b;
         const npcKey = w.npc.pickUid.toKey.get(npcUid);
         return {
-          key: 'npc',
+          picked: 'npc',
           npcUid,
           npcKey,
         };
@@ -492,7 +511,7 @@ export default function useHandleEvents(w) {
  * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
- * @property {(r: number, g: number, b: number, a: number) => void} decodeObjectPick
+ * @property {(r: number, g: number, b: number, a: number) => null | Geom.Meta} decodeObjectPick
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider

@@ -27,7 +27,9 @@ declare global {
       instancedMultiTextureMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
         atlas: import('three').DataArrayTexture;
-      }>;
+        /** Red component in [0..255] used by objectPick rgba */
+        objectPickRed?: number;
+      } & SupportsObjectPick>;
 
       cameraLightMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;

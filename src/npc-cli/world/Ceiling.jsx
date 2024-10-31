@@ -21,16 +21,20 @@ export default function Ceiling(props) {
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-ceiling-xz'),
 
+    // 🚧 reuse floor quad instead
     addUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
       const uvTextureIds = /** @type {number[]} */ ([]);
+      /** `[0, 1, ..., maxGmId]` */
+      const instanceIds = /** @type {number[]} */ ([]);
 
       for (const [gmId, gm] of w.gms.entries()) {
         uvOffsets.push(0, 0);
         // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
         uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
         uvTextureIds.push(w.gmsData.getTextureId(gm.key));
+        instanceIds.push(gmId);
       }
 
       state.inst.geometry.setAttribute('uvOffsets',
@@ -41,6 +45,9 @@ export default function Ceiling(props) {
       );
       state.inst.geometry.setAttribute('uvTextureIds',
         new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.inst.geometry.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     detectClick(e) {// 🚧 replace with object-pick
@@ -180,6 +187,7 @@ export default function Ceiling(props) {
         atlas={w.gmsData.texCeil.tex ?? emptyDataArrayTexture}
         alphaTest={0.9} // 0.5 flickered on (301, 101) border
         // diffuse={[0.75, 0.75, 0.75]}
+        objectPickRed={3}
       />
     </instancedMesh>
   );

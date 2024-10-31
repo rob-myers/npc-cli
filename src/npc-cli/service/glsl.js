@@ -427,17 +427,19 @@ export const cuboidManShader = {
   `,
 };
 
-// 🚧 WIP
 export const instancedMultiTextureShader = {
   Vert: /* glsl */`
 
     varying vec3 vColor;
     varying vec2 vUv;
     flat varying int vTextureId;
+    flat varying int vInstanceId;
     
     attribute vec2 uvDimensions;
     attribute vec2 uvOffsets;
     attribute int uvTextureIds;
+    // e.g. can be used to infer gmId
+    attribute int instanceIds;
 
     #include <common>
     #include <logdepthbuf_pars_vertex>
@@ -446,7 +448,8 @@ export const instancedMultiTextureShader = {
       // vUv = uv;
       vUv = (uv * uvDimensions) + uvOffsets;
       vTextureId = uvTextureIds;
-      
+      vInstanceId = instanceIds;
+
       vec4 modelViewPosition = vec4(position, 1.0);
       modelViewPosition = instanceMatrix * modelViewPosition;
       modelViewPosition = modelViewMatrix * modelViewPosition;
@@ -463,12 +466,14 @@ export const instancedMultiTextureShader = {
 
   Frag: /* glsl */`
 
+    uniform bool objectPick;
+    uniform int objectPickRed;
+    uniform sampler2DArray atlas;
+    uniform vec3 diffuse;
+
     varying vec3 vColor;
     varying vec2 vUv;
     flat varying int vTextureId;
-
-    uniform sampler2DArray atlas;
-    uniform vec3 diffuse;
 
     #include <common>
     #include <logdepthbuf_pars_fragment>
