@@ -20,7 +20,7 @@ export default function Obstacles(props) {
     quadGeom: getQuadGeometryXZ(`${w.key}-obs-xz`),
 
     addObstacleUvs() {
-      const { obstacle: sheet, obstacleDim: sheetDim } = w.geomorphs.sheet;
+      const { obstacle: [sheet], obstacleDim: sheetDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   
@@ -68,7 +68,7 @@ export default function Obstacles(props) {
       const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
       const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
       // transform unit quad point into spritesheet
-      const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
+      const meta = w.geomorphs.sheet.obstacle[0][`${obstacle.symbolKey} ${obstacle.obstacleId}`];
       const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
       const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
 

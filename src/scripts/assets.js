@@ -164,7 +164,7 @@ info({ opts });
   const assetsJson = {
     meta: {},
     sheet: {
-      obstacle: {}, decor: /** @type {*} */ ({}),
+      obstacle: [], decor: /** @type {*} */ ({}),
       obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 },
       imagesHash: 0,
       skins: {
@@ -443,24 +443,26 @@ function createObstaclesSheetJson(assets) {
     }
   }
 
-  const bin = packRectangles(Object.values(obstacleKeyToRect), { logPrefix: 'createObstaclesSheetJson', packedPadding: imgOpts.packedPadding });
+  const { bins, width, height } = packRectangles(Object.values(obstacleKeyToRect), { logPrefix: 'createObstaclesSheetJson', packedPadding: imgOpts.packedPadding });
   
   /** @type {Pick<Geomorph.SpriteSheet, 'obstacle' | 'obstacleDim'>} */
-  const json = ({ obstacle: {}, obstacleDim: { width: bin.width, height: bin.height } });
-  // ℹ️ can try forcing 4096 x 4096 to debug sprite-sheet hmr
-  // const json = ({ obstacle: {}, obstaclesHeight: 4096, obstaclesWidth: 4096 });
-  bin.rects.forEach(r => {
-    const { symbolKey, obstacleId, type } = /** @type {Geomorph.ObstacleSheetRectCtxt} */ (r.data);
-    json.obstacle[`${symbolKey} ${obstacleId}`] = {
-      x: toPrecision(r.x),
-      y: toPrecision(r.y),
-      width: r.width,
-      height: r.height,
-      symbolKey,
-      obstacleId,
-      type,
-    }
-  });
+  const json = ({ obstacle: bins.map(_ => ({})), obstacleDim: { width, height } });
+
+  for (const [binIndex, bin] of bins.entries()) {
+    const lookup = json.obstacle[binIndex];
+    bin.rects.forEach(r => {
+      const { symbolKey, obstacleId, type } = /** @type {Geomorph.ObstacleSheetRectCtxt} */ (r.data);
+      lookup[`${symbolKey} ${obstacleId}`] = {
+        x: toPrecision(r.x),
+        y: toPrecision(r.y),
+        width: r.width,
+        height: r.height,
+        symbolKey,
+        obstacleId,
+        type,
+      }
+    });
+  }
 
   assets.sheet = { ...assets.sheet, ...json }; // Overwrite initial/previous
 }
@@ -472,7 +474,7 @@ function createObstaclesSheetJson(assets) {
 async function drawObstaclesSheet(assets, prev) {
   
   const { obstacle, obstacleDim } = assets.sheet;
-  const obstacles = Object.values(obstacle);
+  const obstacles = Object.values(obstacle[0]); // 🚧 hardcoded 1st sheet
   const ct = createCanvas(obstacleDim.width, obstacleDim.height).getContext('2d');
 
   const { changed: changedObstacles, removed: removedObstacles } = detectChangedObstacles(obstacles, assets, prev);
@@ -495,7 +497,7 @@ async function drawObstaclesSheet(assets, prev) {
 
       if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
         // info(`${symbolKey} ${obstacleId} obstacle did not change`);
-        const prevObs = /** @type {Geomorph.AssetsJson} */ (prev.assets).sheet.obstacle[`${symbolKey} ${obstacleId}`];
+        const prevObs = /** @type {Geomorph.AssetsJson} */ (prev.assets).sheet.obstacle[0][`${symbolKey} ${obstacleId}`];
         ct.drawImage(/** @type {import('canvas').Image} */ (prev.obstaclesPng),
           prevObs.x, prevObs.y, prevObs.width, prevObs.height,
           x, y, width, height,
@@ -525,6 +527,7 @@ async function drawObstaclesSheet(assets, prev) {
 }
 
 /**
+ * 🚧 support multiple sheets
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
  * @returns {Promise<{ [key in Geomorph.DecorImgKey]?: import('canvas').Image }>}
@@ -538,7 +541,7 @@ async function createDecorSheetJson(assets, prev) {
     warn(`${'createDecorSheetJson'}: ignored file (unknown decorImgKey "${decorImgKey}")`);
   }).sort();
 
-  const prevDecorSheet = prev.assets?.sheet.decor;
+  const prevDecorSheet = prev.assets?.sheet.decor[0];
   const changedSvgBasenames = !!prevDecorSheet && opts.detectChanges
     ? svgBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
     : svgBasenames
@@ -576,26 +579,29 @@ async function createDecorSheetJson(assets, prev) {
       };
     } else {
       // 🔔 keeping meta.{x,y,width,height} avoids nondeterminism in sheet.decor json
-      const meta = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecorSheet)[decorImgKey];
+      const meta = /** @type {Geomorph.SpriteSheet['decor'][0]} */ (prevDecorSheet)[decorImgKey];
       imgKeyToRect[decorImgKey] = { width: meta.width, height: meta.height, data: { ...meta, fileKey: baseName } };
     }
   }
 
-  const bin = packRectangles(Object.values(imgKeyToRect), { logPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
+  const { bins, width, height } = packRectangles(Object.values(imgKeyToRect), { logPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
 
   /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'decorDim'>} */
-  const json = ({ decor: /** @type {*} */ ({}), decorDim: { width: bin.width, height: bin.height } });
-  bin.rects.forEach(r => {
-    const meta = /** @type {Geomorph.DecorSheetRectCtxt} */ (r.data);
+  const json = ({ decor: bins.map(_ => /** @type {*} */ ({})), decorDim: { width, height } });
 
-    json.decor[meta.decorImgKey] = {
-      ...meta,
-      x: toPrecision(r.x),
-      y: toPrecision(r.y),
-      width: r.width,
-      height: r.height,
-    };
-  });
+  for (const [binIndex, bin] of bins.entries()) {
+    const lookup = json.decor[binIndex];
+    bin.rects.forEach(r => {
+      const meta = /** @type {Geomorph.DecorSheetRectCtxt} */ (r.data);
+      lookup[meta.decorImgKey] = {
+        ...meta,
+        x: toPrecision(r.x),
+        y: toPrecision(r.y),
+        width: r.width,
+        height: r.height,
+      };
+    });
+  }
 
   assets.sheet = { ...assets.sheet, ...json }; // Overwrite initial/previous
 
@@ -608,10 +614,10 @@ async function createDecorSheetJson(assets, prev) {
  * @param {Prev} prev
  */
 async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
-  const { decor, decorDim } = assets.sheet;
+  const { decor: [decor], decorDim } = assets.sheet;
   const decors = Object.values(decor);
   const ct = createCanvas(decorDim.width, decorDim.height).getContext('2d');
-  const prevDecor = prev.assets?.sheet.decor;
+  const prevDecor = prev.assets?.sheet.decor[0];
   
   for (const { x, y, width, height, decorImgKey } of decors) {
     const image = decorImgKeyToImage[decorImgKey];
@@ -619,7 +625,7 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
       info(`${decorImgKey} redrawing...`);
       ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
     } else {// assume image available in previous sprite-sheet
-      const prevRect = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecor)[decorImgKey];
+      const prevRect = /** @type {Geomorph.SpriteSheet['decor'][0]} */ (prevDecor)[decorImgKey];
       ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPng),
         prevRect.x, prevRect.y, prevRect.width, prevRect.height,
         x, y, width, height,
@@ -632,7 +638,7 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
 
 /**
  * Uses special hashes constructed in `assets.meta`.
- * @param {Geomorph.SpriteSheet['obstacle'][*][]} obstacles
+ * @param {Geomorph.SpriteSheet['obstacle'][0][*][]} obstacles
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
  * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
@@ -640,7 +646,7 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
 function detectChangedObstacles(obstacles, assets, prev) {
   if (prev.assets && prev.obstaclesPng) {
     const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
-    const removed = new Set(Object.values(prev.assets.sheet.obstacle).map(geomorph.symbolObstacleToKey));
+    const removed = new Set(Object.values(prev.assets.sheet.obstacle[0]).map(geomorph.symbolObstacleToKey));
     const [currMeta, prevMeta] = [assets.meta, prev.assets.meta];
     obstacles.forEach(({ symbolKey, obstacleId }) => {
       const key = geomorph.symbolObstacleToKey({ symbolKey, obstacleId });

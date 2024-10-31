@@ -377,723 +377,727 @@
     "small-map-1": {"outputHash": 1980923211}
   },
   "sheet": {
-    "obstacle": {
-      "bridge--042--8x9 3": {
-        "x": 2,
-        "y": 2,
-        "width": 811,
-        "height": 156,
-        "symbolKey": "bridge--042--8x9",
-        "obstacleId": 3,
-        "type": "obstacle"
-      },
-      "fuel--010--4x2 0": {
-        "x": 2,
-        "y": 160,
-        "width": 619,
-        "height": 320,
-        "symbolKey": "fuel--010--4x2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "extra--009--table--4x4 0": {
-        "x": 2,
-        "y": 482,
-        "width": 610,
-        "height": 610,
-        "symbolKey": "extra--009--table--4x4",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "machinery--357--4x2 0": {
-        "x": 815,
-        "y": 2,
-        "width": 610,
-        "height": 310,
-        "symbolKey": "machinery--357--4x2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "bridge--042--8x9 2": {
-        "x": 623,
-        "y": 314,
-        "width": 600,
-        "height": 151,
-        "symbolKey": "bridge--042--8x9",
-        "obstacleId": 2,
-        "type": "obstacle"
-      },
-      "cargo--003--2x4 0": {
-        "x": 614,
-        "y": 482,
-        "width": 300,
-        "height": 600,
-        "symbolKey": "cargo--003--2x4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "console--005--1.2x4 0": {
-        "x": 916,
-        "y": 467,
-        "width": 102,
-        "height": 600,
-        "symbolKey": "console--005--1.2x4",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--016--table--4x0.5 0": {
-        "x": 2,
-        "y": 1094,
-        "width": 600,
-        "height": 75,
-        "symbolKey": "extra--016--table--4x0.5",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "misc-stellar-cartography--023--4x4 0": {
-        "x": 2,
-        "y": 1171,
-        "width": 600,
-        "height": 600,
-        "symbolKey": "misc-stellar-cartography--023--4x4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "lab--023--4x4 0": {
-        "x": 604,
-        "y": 1094,
-        "width": 298,
-        "height": 596,
-        "symbolKey": "lab--023--4x4",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "machinery--158--1.8x3.6 0": {
-        "x": 1020,
-        "y": 467,
-        "width": 279,
-        "height": 551,
-        "symbolKey": "machinery--158--1.8x3.6",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "machinery--156--2x4 0": {
-        "x": 1020,
-        "y": 1020,
-        "width": 281,
-        "height": 550,
-        "symbolKey": "machinery--156--2x4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "machinery--155--1.8x3.6 0": {
-        "x": 1427,
-        "y": 2,
-        "width": 260,
-        "height": 548,
-        "symbolKey": "machinery--155--1.8x3.6",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "misc-stellar-cartography--020--10x10 0": {
-        "x": 1689,
-        "y": 2,
-        "width": 460,
-        "height": 458,
-        "symbolKey": "misc-stellar-cartography--020--10x10",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "lab--012--4x3 0": {
-        "x": 1301,
-        "y": 552,
-        "width": 395,
-        "height": 455,
-        "symbolKey": "lab--012--4x3",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "console--006--1.2x3 0": {
-        "x": 904,
-        "y": 1084,
-        "width": 106,
-        "height": 450,
-        "symbolKey": "console--006--1.2x3",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--014--table--2x3 0": {
-        "x": 1698,
-        "y": 462,
-        "width": 300,
-        "height": 450,
-        "symbolKey": "extra--014--table--2x3",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--015--table--3x0.5 0": {
-        "x": 1698,
-        "y": 914,
-        "width": 450,
-        "height": 75,
-        "symbolKey": "extra--015--table--3x0.5",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--011--machine--1x3 0": {
-        "x": 2000,
-        "y": 462,
-        "width": 125,
-        "height": 395,
-        "symbolKey": "extra--011--machine--1x3",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "extra--012--battery--3x2 0": {
-        "x": 1698,
-        "y": 991,
-        "width": 392,
-        "height": 211,
-        "symbolKey": "extra--012--battery--3x2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "misc-stellar-cartography--020--10x10 1": {
-        "x": 1303,
-        "y": 1009,
-        "width": 390,
-        "height": 249,
-        "symbolKey": "misc-stellar-cartography--020--10x10",
-        "obstacleId": 1,
-        "type": "obstacle"
-      },
-      "office--089--4x4 0": {
-        "x": 1695,
-        "y": 1204,
-        "width": 382,
-        "height": 382,
-        "symbolKey": "office--089--4x4",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "misc-stellar-cartography--020--10x10 2": {
-        "x": 1303,
-        "y": 1260,
-        "width": 233,
-        "height": 379,
-        "symbolKey": "misc-stellar-cartography--020--10x10",
-        "obstacleId": 2,
-        "type": "obstacle"
-      },
-      "cargo--010--2x4 5": {
-        "x": 1538,
-        "y": 1260,
-        "width": 132,
-        "height": 312,
-        "symbolKey": "cargo--010--2x4",
-        "obstacleId": 5,
-        "type": "obstacle"
-      },
-      "console--019--2x2 0": {
-        "x": 2,
-        "y": 1773,
-        "width": 305,
-        "height": 305,
-        "symbolKey": "console--019--2x2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "console--010--1.2x2 0": {
-        "x": 309,
-        "y": 1773,
-        "width": 110,
-        "height": 304,
-        "symbolKey": "console--010--1.2x2",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--019--table-0.5x2 0": {
-        "x": 421,
-        "y": 1773,
-        "width": 79,
-        "height": 304,
-        "symbolKey": "extra--019--table-0.5x2",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "table--004--1.2x2.4 0": {
-        "x": 502,
-        "y": 1773,
-        "width": 109,
-        "height": 302,
-        "symbolKey": "table--004--1.2x2.4",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--017--table--2x0.5 0": {
-        "x": 604,
-        "y": 1692,
-        "width": 300,
-        "height": 75,
-        "symbolKey": "extra--017--table--2x0.5",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--020--table-2x0.66 0": {
-        "x": 904,
-        "y": 1572,
-        "width": 296,
-        "height": 94,
-        "symbolKey": "extra--020--table-2x0.66",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "bridge--042--8x9 1": {
-        "x": 613,
-        "y": 1769,
-        "width": 263,
-        "height": 241,
-        "symbolKey": "bridge--042--8x9",
-        "obstacleId": 1,
-        "type": "obstacle"
-      },
-      "bridge--042--8x9 0": {
-        "x": 878,
-        "y": 1769,
-        "width": 261,
-        "height": 244,
-        "symbolKey": "bridge--042--8x9",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "shop--033--0.6x1.6 0": {
-        "x": 906,
-        "y": 1668,
-        "width": 254,
-        "height": 98,
-        "symbolKey": "shop--033--0.6x1.6",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "extra--010--machine--2x1 0": {
-        "x": 1141,
-        "y": 1768,
-        "width": 250,
-        "height": 100,
-        "symbolKey": "extra--010--machine--2x1",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "shop--027--1.6x0.4 0": {
-        "x": 613,
-        "y": 2012,
-        "width": 244,
-        "height": 64,
-        "symbolKey": "shop--027--1.6x0.4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "shop--028--1.6x0.8 0": {
-        "x": 1202,
-        "y": 1641,
-        "width": 242,
-        "height": 117,
-        "symbolKey": "shop--028--1.6x0.8",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "extra--013--privacy-screen--1.5x0.2 0": {
-        "x": 859,
-        "y": 2015,
-        "width": 225,
-        "height": 30,
-        "symbolKey": "extra--013--privacy-screen--1.5x0.2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "couch-and-chairs--006--0.4x2 2": {
-        "x": 1141,
-        "y": 1870,
-        "width": 68,
-        "height": 207,
-        "symbolKey": "couch-and-chairs--006--0.4x2",
-        "obstacleId": 2,
-        "type": "obstacle"
-      },
-      "extra--008--desk--0.4x1.33 0": {
-        "x": 1211,
-        "y": 1870,
-        "width": 204,
-        "height": 64,
-        "symbolKey": "extra--008--desk--0.4x1.33",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "medical-bed--005--0.6x1.2 0": {
-        "x": 1393,
-        "y": 1760,
-        "width": 192,
-        "height": 102,
-        "symbolKey": "medical-bed--005--0.6x1.2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "bed--005--0.6x1.2 0": {
-        "x": 1225,
-        "y": 314,
-        "width": 191,
-        "height": 102,
-        "symbolKey": "bed--005--0.6x1.2",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "low-berth--003--1x1 0": {
-        "x": 1538,
-        "y": 1574,
-        "width": 154,
-        "height": 179,
-        "symbolKey": "low-berth--003--1x1",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "cargo--010--2x4 1": {
-        "x": 623,
-        "y": 160,
-        "width": 164,
-        "height": 102,
-        "symbolKey": "cargo--010--2x4",
-        "obstacleId": 1,
-        "type": "obstacle"
-      },
-      "console--018--1x1 0": {
-        "x": 1417,
-        "y": 1864,
-        "width": 155,
-        "height": 154,
-        "symbolKey": "console--018--1x1",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "counter--007--0.4x1 0": {
-        "x": 1211,
-        "y": 1936,
-        "width": 154,
-        "height": 64,
-        "symbolKey": "counter--007--0.4x1",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "extra--004--desk--0.5x1 0": {
-        "x": 1574,
-        "y": 1864,
-        "width": 79,
-        "height": 154,
-        "symbolKey": "extra--004--desk--0.5x1",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--006--desk--0.4x1 0": {
-        "x": 1211,
-        "y": 2002,
-        "width": 154,
-        "height": 64,
-        "symbolKey": "extra--006--desk--0.4x1",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "console--031--1x1.2 0": {
-        "x": 1655,
-        "y": 1755,
-        "width": 128,
-        "height": 153,
-        "symbolKey": "console--031--1x1.2",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "bed--003--1x1.6 0": {
-        "x": 2079,
-        "y": 1204,
-        "width": 60,
-        "height": 150,
-        "symbolKey": "bed--003--1x1.6",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "cargo--010--2x4 3": {
-        "x": 1694,
-        "y": 1588,
-        "width": 141,
-        "height": 139,
-        "symbolKey": "cargo--010--2x4",
-        "obstacleId": 3,
-        "type": "obstacle"
-      },
-      "shop--031--0.4x0.8 0": {
-        "x": 1655,
-        "y": 1910,
-        "width": 135,
-        "height": 75,
-        "symbolKey": "shop--031--0.4x0.8",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "shop--035--0.4x0.8 0": {
-        "x": 1655,
-        "y": 1987,
-        "width": 135,
-        "height": 75,
-        "symbolKey": "shop--035--0.4x0.8",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "shop--037--0.4x0.8 0": {
-        "x": 1785,
-        "y": 1729,
-        "width": 135,
-        "height": 75,
-        "symbolKey": "shop--037--0.4x0.8",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "table--012--0.8x0.8 0": {
-        "x": 1301,
-        "y": 418,
-        "width": 110,
-        "height": 112,
-        "symbolKey": "table--012--0.8x0.8",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "cargo--010--2x4 2": {
-        "x": 1446,
-        "y": 1641,
-        "width": 90,
-        "height": 111,
-        "symbolKey": "cargo--010--2x4",
-        "obstacleId": 2,
-        "type": "obstacle"
-      },
-      "cargo--010--2x4 4": {
-        "x": 1837,
-        "y": 1588,
-        "width": 110,
-        "height": 109,
-        "symbolKey": "cargo--010--2x4",
-        "obstacleId": 4,
-        "type": "obstacle"
-      },
-      "iris-valves--005--1x1 0": {
-        "x": 1949,
-        "y": 1588,
-        "width": 110,
-        "height": 110,
-        "symbolKey": "iris-valves--005--1x1",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "iris-valves--006--1x1 0": {
-        "x": 1922,
-        "y": 1700,
-        "width": 110,
-        "height": 110,
-        "symbolKey": "iris-valves--006--1x1",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "cargo--010--2x4 0": {
-        "x": 2061,
-        "y": 1588,
-        "width": 78,
-        "height": 105,
-        "symbolKey": "cargo--010--2x4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "extra--007--desk--0.4x0.66 0": {
-        "x": 2034,
-        "y": 1700,
-        "width": 104,
-        "height": 64,
-        "symbolKey": "extra--007--desk--0.4x0.66",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "table--009--0.8x0.8 0": {
-        "x": 1785,
-        "y": 1812,
-        "width": 92,
-        "height": 92,
-        "symbolKey": "table--009--0.8x0.8",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "fresher--002--0.4x0.6 0": {
-        "x": 2092,
-        "y": 991,
-        "width": 53,
-        "height": 90,
-        "symbolKey": "fresher--002--0.4x0.6",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "console--033--0.4x0.6 0": {
-        "x": 2079,
-        "y": 1356,
-        "width": 67,
-        "height": 81,
-        "symbolKey": "console--033--0.4x0.6",
-        "obstacleId": 0,
-        "type": "chair"
-      },
-      "extra--002--fresher--0.5x0.5 0": {
-        "x": 2092,
-        "y": 1083,
-        "width": 57,
-        "height": 79,
-        "symbolKey": "extra--002--fresher--0.5x0.5",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "console--051--0.4x0.6 0": {
-        "x": 2079,
-        "y": 1439,
-        "width": 69,
-        "height": 75,
-        "symbolKey": "console--051--0.4x0.6",
-        "obstacleId": 0,
-        "type": "chair"
-      },
-      "extra--001--fresher--0.5x0.5 0": {
-        "x": 2079,
-        "y": 1516,
-        "width": 69,
-        "height": 59,
-        "symbolKey": "extra--001--fresher--0.5x0.5",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "couch-and-chairs--006--0.4x2 0": {
-        "x": 904,
-        "y": 1536,
-        "width": 56,
-        "height": 33,
-        "symbolKey": "couch-and-chairs--006--0.4x2",
-        "obstacleId": 0,
-        "type": "surface"
-      },
-      "couch-and-chairs--006--0.4x2 1": {
-        "x": 962,
-        "y": 1536,
-        "width": 56,
-        "height": 34,
-        "symbolKey": "couch-and-chairs--006--0.4x2",
-        "obstacleId": 1,
-        "type": "surface"
-      },
-      "counter--009--0.4x0.4 0": {
-        "x": 1086,
-        "y": 2015,
-        "width": 52,
-        "height": 54,
-        "symbolKey": "counter--009--0.4x0.4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "extra--003--chair--0.25x0.25 0": {
-        "x": 2000,
-        "y": 859,
-        "width": 49,
-        "height": 52,
-        "symbolKey": "extra--003--chair--0.25x0.25",
-        "obstacleId": 0,
-        "type": "chair"
-      },
-      "counter--010--0.4x0.4 0": {
-        "x": 1225,
-        "y": 418,
-        "width": 51,
-        "height": 47,
-        "symbolKey": "counter--010--0.4x0.4",
-        "obstacleId": 0,
-        "type": "obstacle"
-      },
-      "extra--018--table-0.25x0.25 0": {
-        "x": 623,
-        "y": 264,
-        "width": 49,
-        "height": 48,
-        "symbolKey": "extra--018--table-0.25x0.25",
-        "obstacleId": 0,
-        "type": "table"
-      },
-      "extra--005--chair-0.25x0.25 0": {
-        "x": 1367,
-        "y": 1936,
-        "width": 48,
-        "height": 47,
-        "symbolKey": "extra--005--chair-0.25x0.25",
-        "obstacleId": 0,
-        "type": "chair"
+    "obstacle": [
+      {
+        "bridge--042--8x9 3": {
+          "x": 2,
+          "y": 2,
+          "width": 811,
+          "height": 156,
+          "symbolKey": "bridge--042--8x9",
+          "obstacleId": 3,
+          "type": "obstacle"
+        },
+        "fuel--010--4x2 0": {
+          "x": 2,
+          "y": 160,
+          "width": 619,
+          "height": 320,
+          "symbolKey": "fuel--010--4x2",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "extra--009--table--4x4 0": {
+          "x": 2,
+          "y": 482,
+          "width": 610,
+          "height": 610,
+          "symbolKey": "extra--009--table--4x4",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "machinery--357--4x2 0": {
+          "x": 815,
+          "y": 2,
+          "width": 610,
+          "height": 310,
+          "symbolKey": "machinery--357--4x2",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "bridge--042--8x9 2": {
+          "x": 623,
+          "y": 314,
+          "width": 600,
+          "height": 151,
+          "symbolKey": "bridge--042--8x9",
+          "obstacleId": 2,
+          "type": "obstacle"
+        },
+        "cargo--003--2x4 0": {
+          "x": 614,
+          "y": 482,
+          "width": 300,
+          "height": 600,
+          "symbolKey": "cargo--003--2x4",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "console--005--1.2x4 0": {
+          "x": 916,
+          "y": 467,
+          "width": 102,
+          "height": 600,
+          "symbolKey": "console--005--1.2x4",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--016--table--4x0.5 0": {
+          "x": 2,
+          "y": 1094,
+          "width": 600,
+          "height": 75,
+          "symbolKey": "extra--016--table--4x0.5",
+          "obstacleId": 0,
+          "type": "surface"
+        },
+        "misc-stellar-cartography--023--4x4 0": {
+          "x": 2,
+          "y": 1171,
+          "width": 600,
+          "height": 600,
+          "symbolKey": "misc-stellar-cartography--023--4x4",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "lab--023--4x4 0": {
+          "x": 604,
+          "y": 1094,
+          "width": 298,
+          "height": 596,
+          "symbolKey": "lab--023--4x4",
+          "obstacleId": 0,
+          "type": "surface"
+        },
+        "machinery--158--1.8x3.6 0": {
+          "x": 1020,
+          "y": 467,
+          "width": 279,
+          "height": 551,
+          "symbolKey": "machinery--158--1.8x3.6",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "machinery--156--2x4 0": {
+          "x": 1020,
+          "y": 1020,
+          "width": 281,
+          "height": 550,
+          "symbolKey": "machinery--156--2x4",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "machinery--155--1.8x3.6 0": {
+          "x": 1427,
+          "y": 2,
+          "width": 260,
+          "height": 548,
+          "symbolKey": "machinery--155--1.8x3.6",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "misc-stellar-cartography--020--10x10 0": {
+          "x": 1689,
+          "y": 2,
+          "width": 460,
+          "height": 458,
+          "symbolKey": "misc-stellar-cartography--020--10x10",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "lab--012--4x3 0": {
+          "x": 1301,
+          "y": 552,
+          "width": 395,
+          "height": 455,
+          "symbolKey": "lab--012--4x3",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "console--006--1.2x3 0": {
+          "x": 904,
+          "y": 1084,
+          "width": 106,
+          "height": 450,
+          "symbolKey": "console--006--1.2x3",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--014--table--2x3 0": {
+          "x": 1698,
+          "y": 462,
+          "width": 300,
+          "height": 450,
+          "symbolKey": "extra--014--table--2x3",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--015--table--3x0.5 0": {
+          "x": 1698,
+          "y": 914,
+          "width": 450,
+          "height": 75,
+          "symbolKey": "extra--015--table--3x0.5",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--011--machine--1x3 0": {
+          "x": 2000,
+          "y": 462,
+          "width": 125,
+          "height": 395,
+          "symbolKey": "extra--011--machine--1x3",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "extra--012--battery--3x2 0": {
+          "x": 1698,
+          "y": 991,
+          "width": 392,
+          "height": 211,
+          "symbolKey": "extra--012--battery--3x2",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "misc-stellar-cartography--020--10x10 1": {
+          "x": 1303,
+          "y": 1009,
+          "width": 390,
+          "height": 249,
+          "symbolKey": "misc-stellar-cartography--020--10x10",
+          "obstacleId": 1,
+          "type": "obstacle"
+        },
+        "office--089--4x4 0": {
+          "x": 1695,
+          "y": 1204,
+          "width": 382,
+          "height": 382,
+          "symbolKey": "office--089--4x4",
+          "obstacleId": 0,
+          "type": "surface"
+        },
+        "misc-stellar-cartography--020--10x10 2": {
+          "x": 1303,
+          "y": 1260,
+          "width": 233,
+          "height": 379,
+          "symbolKey": "misc-stellar-cartography--020--10x10",
+          "obstacleId": 2,
+          "type": "obstacle"
+        },
+        "cargo--010--2x4 5": {
+          "x": 1538,
+          "y": 1260,
+          "width": 132,
+          "height": 312,
+          "symbolKey": "cargo--010--2x4",
+          "obstacleId": 5,
+          "type": "obstacle"
+        },
+        "console--019--2x2 0": {
+          "x": 2,
+          "y": 1773,
+          "width": 305,
+          "height": 305,
+          "symbolKey": "console--019--2x2",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "console--010--1.2x2 0": {
+          "x": 309,
+          "y": 1773,
+          "width": 110,
+          "height": 304,
+          "symbolKey": "console--010--1.2x2",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--019--table-0.5x2 0": {
+          "x": 421,
+          "y": 1773,
+          "width": 79,
+          "height": 304,
+          "symbolKey": "extra--019--table-0.5x2",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "table--004--1.2x2.4 0": {
+          "x": 502,
+          "y": 1773,
+          "width": 109,
+          "height": 302,
+          "symbolKey": "table--004--1.2x2.4",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--017--table--2x0.5 0": {
+          "x": 604,
+          "y": 1692,
+          "width": 300,
+          "height": 75,
+          "symbolKey": "extra--017--table--2x0.5",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--020--table-2x0.66 0": {
+          "x": 904,
+          "y": 1572,
+          "width": 296,
+          "height": 94,
+          "symbolKey": "extra--020--table-2x0.66",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "bridge--042--8x9 1": {
+          "x": 613,
+          "y": 1769,
+          "width": 263,
+          "height": 241,
+          "symbolKey": "bridge--042--8x9",
+          "obstacleId": 1,
+          "type": "obstacle"
+        },
+        "bridge--042--8x9 0": {
+          "x": 878,
+          "y": 1769,
+          "width": 261,
+          "height": 244,
+          "symbolKey": "bridge--042--8x9",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "shop--033--0.6x1.6 0": {
+          "x": 906,
+          "y": 1668,
+          "width": 254,
+          "height": 98,
+          "symbolKey": "shop--033--0.6x1.6",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "extra--010--machine--2x1 0": {
+          "x": 1141,
+          "y": 1768,
+          "width": 250,
+          "height": 100,
+          "symbolKey": "extra--010--machine--2x1",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "shop--027--1.6x0.4 0": {
+          "x": 613,
+          "y": 2012,
+          "width": 244,
+          "height": 64,
+          "symbolKey": "shop--027--1.6x0.4",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "shop--028--1.6x0.8 0": {
+          "x": 1202,
+          "y": 1641,
+          "width": 242,
+          "height": 117,
+          "symbolKey": "shop--028--1.6x0.8",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "extra--013--privacy-screen--1.5x0.2 0": {
+          "x": 859,
+          "y": 2015,
+          "width": 225,
+          "height": 30,
+          "symbolKey": "extra--013--privacy-screen--1.5x0.2",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "couch-and-chairs--006--0.4x2 2": {
+          "x": 1141,
+          "y": 1870,
+          "width": 68,
+          "height": 207,
+          "symbolKey": "couch-and-chairs--006--0.4x2",
+          "obstacleId": 2,
+          "type": "obstacle"
+        },
+        "extra--008--desk--0.4x1.33 0": {
+          "x": 1211,
+          "y": 1870,
+          "width": 204,
+          "height": 64,
+          "symbolKey": "extra--008--desk--0.4x1.33",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "medical-bed--005--0.6x1.2 0": {
+          "x": 1393,
+          "y": 1760,
+          "width": 192,
+          "height": 102,
+          "symbolKey": "medical-bed--005--0.6x1.2",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "bed--005--0.6x1.2 0": {
+          "x": 1225,
+          "y": 314,
+          "width": 191,
+          "height": 102,
+          "symbolKey": "bed--005--0.6x1.2",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "low-berth--003--1x1 0": {
+          "x": 1538,
+          "y": 1574,
+          "width": 154,
+          "height": 179,
+          "symbolKey": "low-berth--003--1x1",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "cargo--010--2x4 1": {
+          "x": 623,
+          "y": 160,
+          "width": 164,
+          "height": 102,
+          "symbolKey": "cargo--010--2x4",
+          "obstacleId": 1,
+          "type": "obstacle"
+        },
+        "console--018--1x1 0": {
+          "x": 1417,
+          "y": 1864,
+          "width": 155,
+          "height": 154,
+          "symbolKey": "console--018--1x1",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "counter--007--0.4x1 0": {
+          "x": 1211,
+          "y": 1936,
+          "width": 154,
+          "height": 64,
+          "symbolKey": "counter--007--0.4x1",
+          "obstacleId": 0,
+          "type": "surface"
+        },
+        "extra--004--desk--0.5x1 0": {
+          "x": 1574,
+          "y": 1864,
+          "width": 79,
+          "height": 154,
+          "symbolKey": "extra--004--desk--0.5x1",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--006--desk--0.4x1 0": {
+          "x": 1211,
+          "y": 2002,
+          "width": 154,
+          "height": 64,
+          "symbolKey": "extra--006--desk--0.4x1",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "console--031--1x1.2 0": {
+          "x": 1655,
+          "y": 1755,
+          "width": 128,
+          "height": 153,
+          "symbolKey": "console--031--1x1.2",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "bed--003--1x1.6 0": {
+          "x": 2079,
+          "y": 1204,
+          "width": 60,
+          "height": 150,
+          "symbolKey": "bed--003--1x1.6",
+          "obstacleId": 0,
+          "type": "surface"
+        },
+        "cargo--010--2x4 3": {
+          "x": 1694,
+          "y": 1588,
+          "width": 141,
+          "height": 139,
+          "symbolKey": "cargo--010--2x4",
+          "obstacleId": 3,
+          "type": "obstacle"
+        },
+        "shop--031--0.4x0.8 0": {
+          "x": 1655,
+          "y": 1910,
+          "width": 135,
+          "height": 75,
+          "symbolKey": "shop--031--0.4x0.8",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "shop--035--0.4x0.8 0": {
+          "x": 1655,
+          "y": 1987,
+          "width": 135,
+          "height": 75,
+          "symbolKey": "shop--035--0.4x0.8",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "shop--037--0.4x0.8 0": {
+          "x": 1785,
+          "y": 1729,
+          "width": 135,
+          "height": 75,
+          "symbolKey": "shop--037--0.4x0.8",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "table--012--0.8x0.8 0": {
+          "x": 1301,
+          "y": 418,
+          "width": 110,
+          "height": 112,
+          "symbolKey": "table--012--0.8x0.8",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "cargo--010--2x4 2": {
+          "x": 1446,
+          "y": 1641,
+          "width": 90,
+          "height": 111,
+          "symbolKey": "cargo--010--2x4",
+          "obstacleId": 2,
+          "type": "obstacle"
+        },
+        "cargo--010--2x4 4": {
+          "x": 1837,
+          "y": 1588,
+          "width": 110,
+          "height": 109,
+          "symbolKey": "cargo--010--2x4",
+          "obstacleId": 4,
+          "type": "obstacle"
+        },
+        "iris-valves--005--1x1 0": {
+          "x": 1949,
+          "y": 1588,
+          "width": 110,
+          "height": 110,
+          "symbolKey": "iris-valves--005--1x1",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "iris-valves--006--1x1 0": {
+          "x": 1922,
+          "y": 1700,
+          "width": 110,
+          "height": 110,
+          "symbolKey": "iris-valves--006--1x1",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "cargo--010--2x4 0": {
+          "x": 2061,
+          "y": 1588,
+          "width": 78,
+          "height": 105,
+          "symbolKey": "cargo--010--2x4",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "extra--007--desk--0.4x0.66 0": {
+          "x": 2034,
+          "y": 1700,
+          "width": 104,
+          "height": 64,
+          "symbolKey": "extra--007--desk--0.4x0.66",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "table--009--0.8x0.8 0": {
+          "x": 1785,
+          "y": 1812,
+          "width": 92,
+          "height": 92,
+          "symbolKey": "table--009--0.8x0.8",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "fresher--002--0.4x0.6 0": {
+          "x": 2092,
+          "y": 991,
+          "width": 53,
+          "height": 90,
+          "symbolKey": "fresher--002--0.4x0.6",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "console--033--0.4x0.6 0": {
+          "x": 2079,
+          "y": 1356,
+          "width": 67,
+          "height": 81,
+          "symbolKey": "console--033--0.4x0.6",
+          "obstacleId": 0,
+          "type": "chair"
+        },
+        "extra--002--fresher--0.5x0.5 0": {
+          "x": 2092,
+          "y": 1083,
+          "width": 57,
+          "height": 79,
+          "symbolKey": "extra--002--fresher--0.5x0.5",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "console--051--0.4x0.6 0": {
+          "x": 2079,
+          "y": 1439,
+          "width": 69,
+          "height": 75,
+          "symbolKey": "console--051--0.4x0.6",
+          "obstacleId": 0,
+          "type": "chair"
+        },
+        "extra--001--fresher--0.5x0.5 0": {
+          "x": 2079,
+          "y": 1516,
+          "width": 69,
+          "height": 59,
+          "symbolKey": "extra--001--fresher--0.5x0.5",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "couch-and-chairs--006--0.4x2 0": {
+          "x": 904,
+          "y": 1536,
+          "width": 56,
+          "height": 33,
+          "symbolKey": "couch-and-chairs--006--0.4x2",
+          "obstacleId": 0,
+          "type": "surface"
+        },
+        "couch-and-chairs--006--0.4x2 1": {
+          "x": 962,
+          "y": 1536,
+          "width": 56,
+          "height": 34,
+          "symbolKey": "couch-and-chairs--006--0.4x2",
+          "obstacleId": 1,
+          "type": "surface"
+        },
+        "counter--009--0.4x0.4 0": {
+          "x": 1086,
+          "y": 2015,
+          "width": 52,
+          "height": 54,
+          "symbolKey": "counter--009--0.4x0.4",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "extra--003--chair--0.25x0.25 0": {
+          "x": 2000,
+          "y": 859,
+          "width": 49,
+          "height": 52,
+          "symbolKey": "extra--003--chair--0.25x0.25",
+          "obstacleId": 0,
+          "type": "chair"
+        },
+        "counter--010--0.4x0.4 0": {
+          "x": 1225,
+          "y": 418,
+          "width": 51,
+          "height": 47,
+          "symbolKey": "counter--010--0.4x0.4",
+          "obstacleId": 0,
+          "type": "obstacle"
+        },
+        "extra--018--table-0.25x0.25 0": {
+          "x": 623,
+          "y": 264,
+          "width": 49,
+          "height": 48,
+          "symbolKey": "extra--018--table-0.25x0.25",
+          "obstacleId": 0,
+          "type": "table"
+        },
+        "extra--005--chair-0.25x0.25 0": {
+          "x": 1367,
+          "y": 1936,
+          "width": 48,
+          "height": 47,
+          "symbolKey": "extra--005--chair-0.25x0.25",
+          "obstacleId": 0,
+          "type": "chair"
+        }
       }
-    },
-    "decor": {
-      "door--hull": {
-        "door": true,
-        "decorImgKey": "door--hull",
-        "x": 2,
-        "y": 2,
-        "width": 300,
-        "height": 360
-      },
-      "door--standard": {
-        "door": true,
-        "decorImgKey": "door--standard",
-        "x": 304,
-        "y": 2,
-        "width": 132,
-        "height": 240
-      },
-      "icon--warn": {
-        "icon": true,
-        "decorImgKey": "icon--warn",
-        "x": 304,
-        "y": 244,
-        "width": 84,
-        "height": 75
-      },
-      "icon--doc": {
-        "icon": true,
-        "decorImgKey": "icon--doc",
-        "x": 2,
-        "y": 364,
-        "width": 50,
-        "height": 72
-      },
-      "icon--key-card": {
-        "icon": true,
-        "decorImgKey": "icon--key-card",
-        "x": 54,
-        "y": 364,
-        "width": 72,
-        "height": 48
-      },
-      "icon--info": {
-        "icon": true,
-        "decorImgKey": "icon--info",
-        "x": 128,
-        "y": 364,
-        "width": 60,
-        "height": 60
-      },
-      "icon--square": {
-        "icon": true,
-        "decorImgKey": "icon--square",
-        "x": 390,
-        "y": 244,
-        "width": 38,
-        "height": 38
+    ],
+    "decor": [
+      {
+        "door--hull": {
+          "door": true,
+          "decorImgKey": "door--hull",
+          "x": 2,
+          "y": 2,
+          "width": 300,
+          "height": 360
+        },
+        "door--standard": {
+          "door": true,
+          "decorImgKey": "door--standard",
+          "x": 304,
+          "y": 2,
+          "width": 132,
+          "height": 240
+        },
+        "icon--warn": {
+          "icon": true,
+          "decorImgKey": "icon--warn",
+          "x": 304,
+          "y": 244,
+          "width": 84,
+          "height": 75
+        },
+        "icon--doc": {
+          "icon": true,
+          "decorImgKey": "icon--doc",
+          "x": 2,
+          "y": 364,
+          "width": 50,
+          "height": 72
+        },
+        "icon--key-card": {
+          "icon": true,
+          "decorImgKey": "icon--key-card",
+          "x": 54,
+          "y": 364,
+          "width": 72,
+          "height": 48
+        },
+        "icon--info": {
+          "icon": true,
+          "decorImgKey": "icon--info",
+          "x": 128,
+          "y": 364,
+          "width": 60,
+          "height": 60
+        },
+        "icon--square": {
+          "icon": true,
+          "decorImgKey": "icon--square",
+          "x": 390,
+          "y": 244,
+          "width": 38,
+          "height": 38
+        }
       }
-    },
+    ],
     "obstacleDim": {"width": 2151, "height": 2080},
     "decorDim": {"width": 438, "height": 438},
     "imagesHash": 450235421,

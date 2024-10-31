@@ -114,7 +114,7 @@ export default function Decor(props) {
       );
     },
     addQuadUvs() {
-      const { decor: sheet, decorDim: dim } = w.geomorphs.sheet;
+      const { decor: [sheet], decorDim: dim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
       

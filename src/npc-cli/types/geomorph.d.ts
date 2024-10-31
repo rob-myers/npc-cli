@@ -444,10 +444,12 @@ declare namespace Geomorph {
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
-    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
+    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>[];
+    /** Maximum over all sheets, for texture array */
     obstacleDim: { width: number; height: number; }
+    /** Maximum over all sheets, for texture array */
     decorDim: { width: number; height: number; }
-    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
+    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>[];
     imagesHash: number;
     skins: {
       /** e.g. `npcClassKey` is a `uvMapKey` */

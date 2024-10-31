@@ -295,7 +295,7 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
     data: { label },
   }));
 
-  const bin = packRectangles(rects, { logPrefix: 'w.extendLabels', packedPadding: 2 });
+  const { bins: [bin] } = packRectangles(rects, { logPrefix: 'w.extendLabels', packedPadding: 2 });
 
   sheet.lookup = bin.rects.reduce((agg, r) => {
     agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };

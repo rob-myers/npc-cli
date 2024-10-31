@@ -25,7 +25,7 @@ export default function Doors(props) {
     movingDoors: new Map(),
 
     addUvs() {
-      const { decor, decorDim } = w.geomorphs.sheet;
+      const { decor: [decor], decorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
   

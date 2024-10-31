@@ -23,8 +23,12 @@
   - doors object-pick
   - decor object-pick
 
-- 🚧 migrate instancedUvMappingShader (Doors, Obstacles, Decor)
-  to instancedMultiTextureShader
+- 🚧 instancedUvMappingShader (Doors, Obstacles, Decor) -> instancedMultiTextureShader
+  - ✅ bin packer supports multiple sheets
+  - decor can have multiple images
+  - obstacles can have multiple images
+  - decor texture array
+  - obstacles texture array
 
 
 - 🚧 support `await api.sleep(1)` inside `map`
