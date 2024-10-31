@@ -164,8 +164,8 @@ export default function Obstacles(props) {
       }}
       position={[0, 0.001, 0]} // 🚧
     >
-      <instancedSpriteSheetMaterial
-        key={glsl.InstancedSpriteSheetMaterial.key}
+      <instancedUvMappingMaterial
+        key={glsl.InstancedUvMappingMaterial.key}
         side={THREE.DoubleSide}
         transparent
         map={w.obsTex.tex}

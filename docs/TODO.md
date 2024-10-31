@@ -19,7 +19,13 @@
   - ✅ ceiling object-pick
     - must compute non-object-pick opacity
     - `(3, gmId, 0, gl_FragColor.a)`
-  - 🚧 w.ceiling uses w.floor quad
+  - ✅ w.ceiling uses w.floor quad
+  - doors object-pick
+  - decor object-pick
+
+- 🚧 migrate instancedUvMappingShader (Doors, Obstacles, Decor)
+  to instancedMultiTextureShader
+
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

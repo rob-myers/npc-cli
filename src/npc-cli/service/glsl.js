@@ -506,7 +506,7 @@ export const InstancedMonochromeShader = shaderMaterial(
   instancedMonochromeShader.Frag,
 );
 
-export const InstancedSpriteSheetMaterial = shaderMaterial(
+export const InstancedUvMappingMaterial = shaderMaterial(
   {
     map: null,
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
@@ -579,7 +579,7 @@ export const CuboidManMaterial = shaderMaterial(
  */
 extend({
   InstancedMonochromeShader,
-  InstancedSpriteSheetMaterial,
+  InstancedUvMappingMaterial,
   InstancedMultiTextureMaterial,
   CameraLightMaterial,
   CuboidManMaterial,

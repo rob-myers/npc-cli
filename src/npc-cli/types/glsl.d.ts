@@ -20,7 +20,7 @@ declare global {
         diffuse?: Vector3Input;
       } & SupportsObjectPick>;
 
-      instancedSpriteSheetMaterial: BaseExtendedShaderMaterial<{
+      instancedUvMappingMaterial: BaseExtendedShaderMaterial<{
         map: import('three').CanvasTexture;
       }>;
 

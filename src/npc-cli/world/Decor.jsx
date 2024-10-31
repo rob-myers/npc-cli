@@ -574,8 +574,8 @@ export default function Decor(props) {
       onPointerDown={state.onPointerDown}
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <instancedSpriteSheetMaterial
-        key={glsl.InstancedSpriteSheetMaterial.key}
+      <instancedUvMappingMaterial
+        key={glsl.InstancedUvMappingMaterial.key}
         side={THREE.DoubleSide}
         map={w.decorTex.tex}
         transparent
@@ -591,8 +591,8 @@ export default function Decor(props) {
       frustumCulled={false}
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <instancedSpriteSheetMaterial
-        key={glsl.InstancedSpriteSheetMaterial.key}
+      <instancedUvMappingMaterial
+        key={glsl.InstancedUvMappingMaterial.key}
         side={THREE.DoubleSide}
         map={state.label.tex}
         transparent
