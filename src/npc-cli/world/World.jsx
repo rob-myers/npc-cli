@@ -274,11 +274,14 @@ export default function World(props) {
     networkMode: isDevelopment() ? 'always' : 'online',
   });
 
-  React.useEffect(() => {// provide world for tty + hmr query
+  React.useEffect(() => {// provide world for tty
     setCached([props.worldKey], state);
-    query.data === false && query.refetch();
     return () => removeCached([props.worldKey]);
   }, []);
+
+  React.useEffect(() => {// hmr query
+    query.data === false && query.refetch();
+  }, [query.data === false]);
 
   React.useEffect(() => {// enable/disable animation
     state.timer.reset();
