@@ -29,16 +29,20 @@
     - ✅ fix HMR initialisation
     - ✅ must have same resolution `2424 * 2424`
     - ✅ fix brightness
-    - 🚧 verify hmr
+    - 🚧 fix hmr
       - ✅ on change ceiling drawGmKey
       - ✅ on change symbol
-      - on change map
+      - 🚧 fix stale texId inside cached CanvasTexMeta
+        - try use a single temp CanvasTexture for floor/ceil
+        - TextureAtlas needn't contain any CanvasTextures
+        - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
+      - fix on edit create-gms-data
+      - fix on change map
     - 🚧 clean
       - ✅ texturesNew -> textures
       - ✅ move floor/ceiling textures into w.gmsData
-      - 🚧 move TextureAtlas e.g. to fix hmr
-        - ✅ reuse TextureAtlas whenever possible
-        - fix hmr on edit create-gms-data
+      - ✅ move TextureAtlas e.g. to fix hmr
+      - ✅ reuse TextureAtlas whenever possible
       - rename TextureAtlas
     - check ceiling pointer events
 

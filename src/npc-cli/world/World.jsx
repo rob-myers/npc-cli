@@ -70,8 +70,8 @@ export default function World(props) {
     ui: /** @type {*} */ (null), // WorldCanvas
     floor: /** @type {*} */ ({}),
     ceil: /** @type {*} */ ({}),
-    decor: /** @type {*} */ (null), // Decor
-    obs: /** @type {*} */ (null), // Obstacles
+    decor: /** @type {*} */ (null),
+    obs: /** @type {*} */ (null),
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
       onTick(_) {},
@@ -124,7 +124,7 @@ export default function World(props) {
       state.crowd.update(deltaMs);
       state.npc.onTick(deltaMs);
       state.door.onTick(deltaMs);
-      // info(state.r3f.gl.info.render);
+      // console.info(state.r3f.gl.info.render);
 
       if (state.debug.npc !== null) {
         state.debug.npc.onTick(deltaMs);
