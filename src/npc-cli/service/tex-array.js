@@ -75,3 +75,5 @@ export class TexArray {
  * @property {number} opts.height
  * @property {string} opts.ctKey key for cached canvas context
  */
+
+export const emptyTexArray = new TexArray({ ctKey: 'empty', width: 0, height: 0, numTextures: 1 });

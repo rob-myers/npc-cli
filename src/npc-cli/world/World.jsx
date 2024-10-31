@@ -193,7 +193,7 @@ export default function World(props) {
       );
 
       if (mapChanged || gmsDataChanged) {
-        next.gmsData = createGmsData(state.gmsData);
+        next.gmsData = createGmsData();
 
         // ensure GmData per gmKey in map
         state.menu.measure('gmsData');
@@ -204,6 +204,7 @@ export default function World(props) {
           }
         };
         next.gmsData.computeRoot(next.gms);
+        next.gmsData.computeTextureArrays(state.gmsData);
         state.menu.measure('gmsData');
       }
       

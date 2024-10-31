@@ -44,6 +44,12 @@ export const worldToSguScale = 1 / sguToWorldScale;
 /** Higher resolution floors */
 export const gmFloorExtraScale = 2;
 
+/** Unchangeable */
+export const geomorphPngRectWidth = 30.3;
+
+/** This is the width, but also the height even for edge geomorphs, because we use texture arrays */
+export const floorTextureDimension = geomorphPngRectWidth * worldToSguScale * gmFloorExtraScale;
+
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetSymbolExtraScale = 2.5;
 
