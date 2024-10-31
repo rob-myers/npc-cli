@@ -21,35 +21,6 @@ export default function Ceiling(props) {
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ('multi-tex-ceiling-xz'),
 
-    // 🚧 reuse floor quad instead
-    addUvs() {
-      const uvOffsets = /** @type {number[]} */ ([]);
-      const uvDimensions = /** @type {number[]} */ ([]);
-      const uvTextureIds = /** @type {number[]} */ ([]);
-      /** `[0, 1, ..., maxGmId]` */
-      const instanceIds = /** @type {number[]} */ ([]);
-
-      for (const [gmId, gm] of w.gms.entries()) {
-        uvOffsets.push(0, 0);
-        // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
-        uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
-        uvTextureIds.push(w.gmsData.getTextureId(gm.key));
-        instanceIds.push(gmId);
-      }
-
-      state.inst.geometry.setAttribute('uvOffsets',
-        new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
-      );
-      state.inst.geometry.setAttribute('uvDimensions',
-        new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
-      );
-      state.inst.geometry.setAttribute('uvTextureIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
-      );
-      state.inst.geometry.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
-      );
-    },
     detectClick(e) {// 🚧 replace with object-pick
       // const gmId = Number(e.object.name.slice('ceil-gm-'.length));
       // const gm = w.gms[gmId];
@@ -169,14 +140,13 @@ export default function Ceiling(props) {
   React.useEffect(() => {
     state.draw();
     state.positionInstances();
-    state.addUvs();
   }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);
 
   return (
     <instancedMesh
       name={"multi-tex-ceiling"}
       ref={instances => void (instances && (state.inst = instances))}
-      args={[state.quad, undefined, w.gms.length]}
+      args={[w.floor.quad, undefined, w.gms.length]} // 🔔 reuse floor quad
       position={[0, wallHeight, 0]}
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
@@ -203,7 +173,6 @@ export default function Ceiling(props) {
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
  *
- * @property {() => void} addUvs
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
