@@ -252,7 +252,7 @@ export default function WorldCanvas(props) {
       gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer).then((x) => {
         const [r, g, b, a] = Array.from(x);
         const decoded = w.e.decodeObjectPick(r, g, b, a);
-        console.log('🔔', { r, g, b, a }, decoded);
+        console.log('🔔', { r, g, b, a }, '\n', decoded);
       });
       gl.setRenderTarget(null);
       camera.clearViewOffset();

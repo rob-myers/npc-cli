@@ -13,11 +13,13 @@
     - ✅ npcs need integer uid
       - ℹ️ assume max npcs 256
       - ℹ️ maintain Set([0..255])
-  - 🚧 floor object-pick
-    - (2, gmId, 0, 0)
-  - 🚧 ceiling object-pick
-    - (3, gmId, 0, 0)
-  - w.ceiling uses w.floor quad
+  - ✅ floor object-pick
+    - must compute non-object-pick opacity
+    - `(2, gmId, 0, gl_FragColor.a)`
+  - ✅ ceiling object-pick
+    - must compute non-object-pick opacity
+    - `(3, gmId, 0, gl_FragColor.a)`
+  - 🚧 w.ceiling uses w.floor quad
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

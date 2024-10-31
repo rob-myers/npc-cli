@@ -474,6 +474,7 @@ export const instancedMultiTextureShader = {
     varying vec3 vColor;
     varying vec2 vUv;
     flat varying int vTextureId;
+    flat varying int vInstanceId;
 
     #include <common>
     #include <logdepthbuf_pars_fragment>
@@ -481,11 +482,14 @@ export const instancedMultiTextureShader = {
     void main() {
       gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
 
-      // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
-      if(gl_FragColor.a < 0.5) {
-        discard;
+      if (gl_FragColor.a < 0.5) {
+        discard; // stop transparent pixels taking precedence
       }
-  
+
+      if (objectPick == true) {
+        gl_FragColor = vec4(float(objectPickRed) / 255.0, float(vInstanceId) / 255.0, 0.0, gl_FragColor.a);
+      }
+      
       #include <colorspace_fragment>
       #include <logdepthbuf_fragment>
     }
@@ -516,11 +520,13 @@ export const InstancedSpriteSheetMaterial = shaderMaterial(
 
 export const InstancedMultiTextureMaterial = shaderMaterial(
   {
+    atlas: emptyDataArrayTexture,
     diffuse: new THREE.Vector3(1, 1, 1),
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
-    atlas: emptyDataArrayTexture,
+    objectPick: false,
+    objectPickRed: 0,
   },
   instancedMultiTextureShader.Vert,
   instancedMultiTextureShader.Frag,
