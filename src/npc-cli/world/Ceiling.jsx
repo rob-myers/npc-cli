@@ -8,7 +8,6 @@ import { drawPolygons } from "../service/dom";
 import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
-import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 

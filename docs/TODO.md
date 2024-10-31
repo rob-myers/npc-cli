@@ -13,9 +13,10 @@
     - ✅ npcs need integer uid
       - ℹ️ assume max npcs 256
       - ℹ️ maintain Set([0..255])
-  - 🚧 ...
+  - 🚧 floor object-pick
+  - 🚧 ceiling object-pick
 
-- 🚧 migrate Floor and Ceiling to single draw-call
+- ✅ migrate Floor and Ceiling to single draw-call
   - ℹ️ still need floor pointer events for navigation
   - ✅ positionInstances
   - ✅ specify textureId convention
@@ -23,13 +24,13 @@
   - ✅ addUvs
   - ❌ coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
   - ❌ multiple instancedMesh?
-  - 🚧 try texture array approach
+  - ✅ try texture array approach
     - ℹ️ https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
     - ✅ permits partial rebuild
     - ✅ fix HMR initialisation
     - ✅ must have same resolution `2424 * 2424`
     - ✅ fix brightness
-    - 🚧 fix hmr
+    - ✅ fix hmr
       - ✅ on change ceiling drawGmKey
       - ✅ on change symbol
       - ✅ fix stale texId inside cached CanvasTexMeta
@@ -37,13 +38,14 @@
         - ✅ TexArray needn't contain any CanvasTextures
       - ✅ fix on edit create-gms-data
       - ✅ fix on change map
-    - 🚧 clean
+    - ✅ clean
       - ✅ texturesNew -> textures
       - ✅ move floor/ceiling textures into w.gmsData
       - ✅ move TextureAtlas e.g. to fix hmr
       - ✅ reuse TextureAtlas whenever possible
       - ✅ rename TextureAtlas as TexArray
-    - check ceiling pointer events
+    - ✅ check ceiling pointer events
+      - ℹ️ won't fix because will be replaced by object-pick
 
 - ✅ bug: `w npc.remove will` breaks door collision detection
   - must clear positions (surprising didn't have issue)
