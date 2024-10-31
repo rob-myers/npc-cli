@@ -51,6 +51,7 @@ export default function createGmsData(prevGmsData, preserveGmData) {
     async computeGmData(gm) {
       const gmData = gmsData[gm.key];
 
+      // 🚧
       const texId = gmsData.nextTexId++;
       gmsData.seenGmKeys.push(gm.key);
 
@@ -224,6 +225,13 @@ export default function createGmsData(prevGmsData, preserveGmData) {
         meta,
       }));
     },
+    /**
+     * @param {Geomorph.GeomorphKey} gmKey 
+     * @returns {number}
+     */
+    getTextureId(gmKey) {
+      return gmsData.seenGmKeys.indexOf(gmKey);
+    }
   };
   return gmsData;
 };

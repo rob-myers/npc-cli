@@ -31,7 +31,7 @@ export default function Floor(props) {
         uvOffsets.push(0, 0);
         // 🔔 edge geomorph 301 pngRect height/width ~ 0.5 (not equal)
         uvDimensions.push(1, geomorph.isEdgeGm(gm.key) ? (gm.pngRect.height / gm.pngRect.width) : 1);
-        uvTextureIds.push(/** @type {number} */ (w.gmsData[gm.key].floor.texId));
+        uvTextureIds.push(w.gmsData.getTextureId(gm.key));
       }
 
       state.inst.geometry.setAttribute('uvOffsets',
