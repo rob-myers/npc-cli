@@ -78,42 +78,45 @@ export default function WorldMenu(props) {
 
   return <>
 
-    <div // Context Menu
-      ref={(x) => x && (state.ctMenuEl = x)}
+    <div
       className={contextMenuCss}
+      ref={(x) => x && (state.ctMenuEl = x)}
       onContextMenu={(e) => e.preventDefault()}
-      // 🔔 use 'visibility' to compute menuDim.height
+      // 🔔 'visibility' permits computing menuDim.height
       style={{ visibility: state.ctOpen ? 'visible' : 'hidden' }}
     >
-      <div>
-        {/* 🚧 */}
+      <div className="key-values">
         {meta3d && Object.entries(meta3d).map(([k, v]) =>
-          <div key={k}>{v === true ? k : `${k}: ${JSON.stringify(v)}`}</div>
+          <div key={k}>
+            <span className="meta-key">{k}</span>
+            {v !== true && <>
+              {': '}
+              <span className="meta-value">{JSON.stringify(v)}</span>
+            </>}
+          </div>
         )}
       </div>
     </div>
 
-    <div // Fade Overlay
+    <div
       className={cx(faderOverlayCss, w.disabled && !state.debugWhilePaused ? 'faded' : 'clear')}
       onPointerUp={() => props.setTabsEnabled(true)}
     />
 
-    {w.disabled && (// Overlay Buttons
-      <div className={pausedControlsCss}>
-        <button
-          onClick={state.enableAll}
-          className="text-white"
-        >
-          enable
-        </button>
-        <button
-          onClick={state.toggleDebug}
-          className={state.debugWhilePaused ? 'text-green' : undefined}
-        >
-          debug
-        </button>
-      </div>
-    )}
+    {w.disabled && <div className={pausedControlsCss}>
+      <button
+        onClick={state.enableAll}
+        className="text-white"
+      >
+        enable
+      </button>
+      <button
+        onClick={state.toggleDebug}
+        className={state.debugWhilePaused ? 'text-green' : undefined}
+      >
+        debug
+      </button>
+    </div>}
 
     <div
       className={loggerCss}
@@ -144,18 +147,27 @@ const contextMenuCss = css`
   left: 0;
   top: 0;
   z-index: 0;
-
   max-width: 256px;
-
+  
   opacity: 0.8;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: white;
   
-  > div {
-    border: 2px solid #aaa;
-    border-radius: 5px;
-    padding: 8px;
+  div.key-values {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
     background-color: #222;
+    border: 1px solid #aaa;
+    padding: 12px;
+  }
+
+  div.key-values .meta-key {
+    color: #ff9;
+  }
+  div.key-values .meta-value {
+    font-family: 'Courier New', Courier, monospace;
   }
 
   select {
