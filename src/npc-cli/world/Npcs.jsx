@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
 import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
-import { info, range, takeFirst, warn } from "../service/generic";
+import { info, pause, range, takeFirst, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, yAxis } from "../service/three";
 import { helper } from "../service/helper";
@@ -110,13 +110,11 @@ export default function Npcs(props) {
       w.physics.worker.postMessage({ type: 'send-npc-positions', positions}, [positions.buffer]);
       state.physicsPositions.length = 0;
     },
-    restore() {// onchange nav-mesh
-      // restore agents
-      Object.values(state.npc).forEach(npc => {
-        if (npc.agent === null) {
-          return;
-        }
-        npc.removeAgent();
+    async restore() {// onchange nav-mesh restore agents
+      const npcs = Object.values(state.npc).filter(x => x.agent !== null);
+      for (const npc of npcs) npc.removeAgent();
+      await pause();
+      for(const npc of npcs ) {
         const agent = npc.attachAgent();
         const closest = state.getClosestNavigable(npc.getPosition());
         if (closest === null) {// Agent outside nav keeps target but `Idle`s 
@@ -126,7 +124,7 @@ export default function Npcs(props) {
         } else {// so they'll move "out of the way" of other npcs
           agent.requestMoveTarget(npc.getPosition());
         }
-      });
+      }
     },
     remove(...npcKeys) {
       for (const npcKey of npcKeys) {
