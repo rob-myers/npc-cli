@@ -23,7 +23,7 @@
   - ✅ addUvs
   - ❌ coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
   - ❌ multiple instancedMesh?
-  - 🚧 try texture atlas approach
+  - 🚧 try texture array approach
     - ℹ️ https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
     - ✅ permits partial rebuild
     - ✅ fix HMR initialisation
@@ -36,8 +36,7 @@
         - ✅ try use a single temp CanvasTexture for floor/ceil
         - ✅ TexArray needn't contain any CanvasTextures
       - ✅ fix on edit create-gms-data
-      - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
-      - fix on change map
+      - ✅ fix on change map
     - 🚧 clean
       - ✅ texturesNew -> textures
       - ✅ move floor/ceiling textures into w.gmsData
@@ -70,6 +69,7 @@
 
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
+- try avoid recreate decor/obstacles CanvasTexture by fixing texture size
 - ✅ spawn near auto door triggers sensor
 - ✅ spawn from near auto door triggers sensor
 - auto reduce fov when World canvas wide with short height?

@@ -17,14 +17,10 @@ import { TexArray } from './tex-array';
  *   texCeil: TexArray;
  * } | null} prevGmsData
  * Previous lookup to avoid re-computation
- * @param {boolean} preserveGmData
- * Can preserve gmKey to GmData if data hasn't changed.
 */
-export default function createGmsData(prevGmsData, preserveGmData) {
+export default function createGmsData(prevGmsData) {
   const gmsData = {
-    ...mapValues(helper.toGmNum,
-      (_, gmKey) => (preserveGmData && prevGmsData?.[gmKey]) || ({ ...emptyGmData, gmKey })
-    ),
+    ...mapValues(helper.toGmNum, (_, gmKey) => ({ ...emptyGmData, gmKey })),
     /** Total number of doors, each being a single quad (🔔 may change):  */
     doorCount: 0,
     /** Total number of obstacles, each being a single quad:  */
@@ -119,6 +115,7 @@ export default function createGmsData(prevGmsData, preserveGmData) {
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
 
+      // 🚧 avoid prevGmsData somehow
       // Preserve texture array if same number of textures
       const preserveTexArray = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length;
       const dimension = gms[0].pngRect.width * worldToSguScale * gmFloorExtraScale; // 🚧 provide constant

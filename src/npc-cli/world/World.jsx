@@ -193,8 +193,7 @@ export default function World(props) {
       );
 
       if (mapChanged || gmsDataChanged) {
-        const preserveGmData = !dataChanged && !gmsDataChanged;
-        next.gmsData = createGmsData(state.gmsData, preserveGmData);
+        next.gmsData = createGmsData(state.gmsData);
 
         // ensure GmData per gmKey in map
         state.menu.measure('gmsData');
