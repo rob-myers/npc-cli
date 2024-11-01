@@ -574,7 +574,7 @@ export class Npc {
       this.w.events.next({
         key: 'way-point',
         npcKey: this.key,
-        index: this.s.wayIndex++,
+        index: this.s.wayIndex,
         x: this.lastCorner.x, y: this.lastCorner.z,
         next: null,
       });

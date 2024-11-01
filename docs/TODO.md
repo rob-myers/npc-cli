@@ -32,12 +32,17 @@
   - decor texture array
   - obstacles texture array
 
-- 🚧 bug: can navigate through locked door when target is adjacent room (toilet)
-  - must be "right around corner from initial door"
-  - must be "nearby initial door"
-  - ✅ test upcoming door on every waypoint
-  - 🚧 test nextTargetInPath rather than corners
+- 🚧 bug: can navigate through locked door
+  - ℹ️ improved by testing on each `way-point`
+  - ℹ️ could test nextTargetInPath rather than all corners
+  - 🚧 fix "repeated-clicking" when npc next to door
+  - 🚧 try restricting nav mesh via query filter instead (at most 16)
+    - maybe necessary e.g. when room has two ways to enter
 
+- 🚧 next.js project (npc-cli-next)
+  - keep in sync e.g. glsl.js, Logger
+    - `git diff --name-only "@{Sat 18 Sep}"`
+  - get Decor working
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
@@ -49,15 +54,10 @@
 - 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - ℹ️ saw happen when changed symbol chairs
+  - might have fixed `w.npc.restore()`
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
-
-- 🚧 next.js project (npc-cli-next)
-  - keep in sync e.g. glsl.js, Logger
-    - `git diff --name-only "@{Sat 18 Sep}"`
-  - get Decor working
-
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
 - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
