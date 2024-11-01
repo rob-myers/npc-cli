@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius, wallOutset } from "../service/const";
+import { colliderHeight } from "../service/const";
 import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";

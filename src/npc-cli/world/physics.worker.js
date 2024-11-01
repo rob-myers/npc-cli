@@ -2,7 +2,7 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius, wallHeight, wallOutset } from '../service/const';
+import { wallHeight, wallOutset } from '../service/const';
 import { info, warn, debug, testNever } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorph } from '../service/geomorph';
@@ -230,10 +230,10 @@ function createDoorSensors() {
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
     const insideKey = /** @type {const} */ (`inside ${gdKey}`);
 
-    // const nearbyRadius = door.meta.hull === true ? nearbyHullDoorSensorRadius : nearbyDoorSensorRadius;
     const nearbyDef = {
       width: door.baseRect.width,
       height: door.baseRect.height + 4 * wallOutset,
+      // height: door.baseRect.height + 2 * wallOutset,
       angle,
     };
     const insideDef = {
