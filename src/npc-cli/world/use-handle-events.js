@@ -221,22 +221,21 @@ export default function useHandleEvents(w) {
           }
           break;
         }
-        case "started-moving":
+        case "way-point":
+          // 🚧 reduce complexity e.g. nextTargetInPath instead of corners
           // Handle move into/through doorway when already nearby
-          w.oneTimeTicks.push(function onNpcStartMove() {
-            const npc = w.npc.npc[e.npcKey];
-            for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
-              const door = w.door.byKey[gdKey];
-              if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
-                if (state.npcCanAccess(e.npcKey, door.gdKey)) {
-                  w.door.toggleDoorRaw(door, { open: true, access: true });
-                } else {
-                  npc.stopMoving();
-                }
-                break;
+          const npc = w.npc.npc[e.npcKey];
+          for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+            const door = w.door.byKey[gdKey];
+            if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
+              if (state.npcCanAccess(e.npcKey, door.gdKey)) {
+                w.door.toggleDoorRaw(door, { open: true, access: true });
+              } else {
+                npc.stopMoving();
               }
+              break;
             }
-          });
+          }
           break;
         case "stopped-moving": {
           const npc = w.npc.npc[e.npcKey];

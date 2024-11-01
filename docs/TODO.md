@@ -25,10 +25,18 @@
 
 - 🚧 instancedUvMappingShader (Doors, Obstacles, Decor) -> instancedMultiTextureShader
   - ✅ bin packer supports multiple sheets
-  - decor can have multiple images
-  - obstacles can have multiple images
+  - 🚧 decor can have multiple images
+    - test by forcing small sheets 
+  - 🚧 obstacles can have multiple images
+    - test by forcing small sheets 
   - decor texture array
   - obstacles texture array
+
+- 🚧 bug: can navigate through locked door when target is adjacent room (toilet)
+  - must be "right around corner from initial door"
+  - must be "nearby initial door"
+  - ✅ test upcoming door on every waypoint
+  - 🚧 test nextTargetInPath rather than corners
 
 
 - 🚧 support `await api.sleep(1)` inside `map`

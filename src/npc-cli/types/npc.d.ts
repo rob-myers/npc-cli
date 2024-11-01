@@ -94,7 +94,7 @@ declare namespace NPC {
     | { key: 'started-moving'; npcKey: string }
     | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
-    | { key: "way-point"; npcKey: string; next: Geom.VectJson | null } & Geom.VectJson
+    | { key: "way-point"; npcKey: string; index: number; next: Geom.VectJson | null } & Geom.VectJson
     | { key: "enter-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId

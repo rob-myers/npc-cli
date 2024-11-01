@@ -68,6 +68,7 @@ export class Npc {
     lookSecs: 0.3,
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
+    wayIndex: 0,
   };
   
   /** @type {null | NPC.CrowdAgent} */
@@ -387,6 +388,7 @@ export class Npc {
     }
 
     this.s.moving = true;
+    this.s.wayIndex = 0;
     this.s.lookSecs = 0.2;
     // this.mixer.timeScale = 1;
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
@@ -565,40 +567,31 @@ export class Npc {
       return;
     }
 
-    const nextCorner = agent.nextTargetInPath();
-    if (this.lastCorner.equals(nextCorner) === false) {
-      this.w.events.next({ key: 'way-point', npcKey: this.key,
-        x: this.lastCorner.x, y: this.lastCorner.z,
-        next: { x: nextCorner.x, y: nextCorner.z },
-      });
-      this.lastCorner.copy(nextCorner);
-    }
-
-    // this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
     const distance = this.s.target.distanceTo(pos);
-    // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
 
     if (distance < 0.15) {// Reached target
       this.stopMoving();
-      this.w.events.next({ key: 'way-point', npcKey: this.key,
+      this.w.events.next({
+        key: 'way-point',
+        npcKey: this.key,
+        index: this.s.wayIndex++,
         x: this.lastCorner.x, y: this.lastCorner.z,
         next: null,
       });
       return;
     }
-    
-    // if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
-    //   // Turn off obstacle avoidance to avoid deceleration near nav border
-    //   // 🤔 might not need for hyper casual
-    //   agent.updateParameters({ updateFlags: agent.updateFlags & ~2 });
-    // }
 
-    // if (distance < 2 * this.agentRadius) {// undo speed scale
-    //   // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-    //   agent.updateParameters({
-    //     maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
-    //   });
-    // }
+    const nextCorner = agent.nextTargetInPath();
+    if (this.lastCorner.equals(nextCorner) === false) {
+      this.w.events.next({
+        key: 'way-point',
+        npcKey: this.key,
+        index: this.s.wayIndex++,
+        x: this.lastCorner.x, y: this.lastCorner.z,
+        next: { x: nextCorner.x, y: nextCorner.z },
+      });
+      this.lastCorner.copy(nextCorner);
+    }
   }
 
   removeAgent() {
