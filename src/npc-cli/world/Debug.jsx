@@ -144,6 +144,7 @@ export default function Debug(props) {
     <mesh
       name="SelectedNavPolys"
       args={[state.selectedNavPolys, selectedNavPolysMaterial]}
+      renderOrder={0}
     />
 
     {props.showOrigNavPoly && w.gms.map((gm, gmId) => (
@@ -215,7 +216,7 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   color: "blue",
   wireframe: false,
   transparent: true,
-  opacity: 0.5,
+  opacity: 0.2,
 });
 
 const showNavNodes = false;

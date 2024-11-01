@@ -1,5 +1,11 @@
 # TODO
 
+## Migration to Next.js (npc-cli-next)
+
+- keep in sync e.g. glsl.js, Logger
+  - `git diff --name-only "@{Sat 18 Sep}"`
+- get Decor working
+
 ## WIP
 
 - 🚧 gpu object-pick
@@ -36,17 +42,15 @@
   - ℹ️ improved by testing on each `way-point`
   - ℹ️ could test nextTargetInPath rather than all corners
   - 🚧 fix "repeated-clicking" when npc next to door
-  - 🚧 try restricting nav mesh via query filter instead (at most 16)
-    - maybe necessary e.g. when room has two ways to enter
+  - 🚧 restrict nav to current room when npc position "close to" doorway
 
-- 🚧 next.js project (npc-cli-next)
-  - keep in sync e.g. glsl.js, Logger
-    - `git diff --name-only "@{Sat 18 Sep}"`
-  - get Decor working
+- 🚧 try restrict nav mesh via filter instead (at most 16)
+  - ℹ️ see `selectPolysDemo`
+  - only partial solution due to "going stale during navigation"
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
-  - ✅  simplify `choice` so it does not use `sleep`
+  - ✅ simplify `choice` so it does not use `sleep`
   - ✅ refactor underlying `choice` as AsyncFunction 
   - refactor `sleep` as AsyncFunction
 - 🚧 avoid initial instanced mesh render
