@@ -254,38 +254,6 @@ export default function useHandleEvents(w) {
         }
       }
     },
-    isUpcomingDoor(npc, door) {
-      const { target } = npc.s;
-      if (npc.agent === null || target === null) {
-        return false;
-      }
-
-      // Is target inside doorway?
-      tmpVec1.set(target.x, target.z);
-      if (door.axisAligned === true
-        ? door.rect.contains(tmpVec1) === true
-        : door.doorway.contains(tmpVec1) === true
-      ) {// intersecting door we don't necessarily go through
-        return true;
-      }
-
-      // Does polyline induced by upcoming corners intersect door's seg?
-      let src = npc.getPoint();
-      let dist = door.center.distanceToSquared(src), nextDist = 0;
-
-      for (const corner of npc.agent.corners()) {
-        if (geom.getLineSegsIntersection(src, tmpVec1.set(corner.x, corner.z), door.src, door.dst, true) !== null) {
-          return true; // typically 1st seg intersects, if any
-        }
-        if ((nextDist = door.center.distanceToSquared(tmpVec1)) > dist) {
-          return false; // distance must decrease before intersect
-        } else {
-          dist = nextDist;
-        }
-      }
-
-      return false;
-    },
     navSegIntersectsDoorway(u, v, door) {
       if (door.axisAligned === true) {
         const mx = Math.min(u.x, v.x);
@@ -523,7 +491,6 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
- * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
