@@ -74,9 +74,17 @@ export class Npc {
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
   
-  lastLookAt = new THREE.Vector3();
+  /**
+   * - Current target (if moving)
+   * - Last set one (if not)
+   */
   lastTarget = new THREE.Vector3();
-  lastCorner = new THREE.Vector3();
+  /**
+   * - Next corner in nav (if moving).
+   * - Or last future corner (if not).
+   * - We stop slightly before final corner. 
+   */
+  nextCorner = new THREE.Vector3();
   
   resolve = {
     fade: /** @type {undefined | ((value?: any) => void)} */ (undefined),
@@ -399,7 +407,7 @@ export class Npc {
     
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
-      this.lastCorner.copy(position); // trigger 0th way-point on next tick
+      this.nextCorner.copy(position); // trigger 0th way-point on next tick
       await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
@@ -581,15 +589,15 @@ export class Npc {
     }
 
     const nextCorner = agent.nextTargetInPath();
-    if (this.lastCorner.equals(nextCorner) === false) {
+    if (this.nextCorner.equals(nextCorner) === false) {
       this.w.events.next({
         key: 'way-point',
         npcKey: this.key,
         index: this.s.wayIndex++,
-        x: this.lastCorner.x, y: this.lastCorner.z,
+        x: this.nextCorner.x, y: this.nextCorner.z,
         next: { x: nextCorner.x, y: nextCorner.z },
       });
-      this.lastCorner.copy(nextCorner);
+      this.nextCorner.copy(nextCorner);
     }
   }
 

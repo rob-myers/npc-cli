@@ -223,15 +223,20 @@ export default function useHandleEvents(w) {
         }
         // case "started-moving":
         case "way-point":
-          // 🚧 reduce complexity e.g. nextTargetInPath instead of corners
-          // Handle move into/through doorway when already nearby
-          const npc = w.npc.npc[e.npcKey];
+          if (e.next === null) {
+            return; // final
+          }
+          
           for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
-            if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
+            if (// incoming closed door
+              door.open === false
+              && state.navSegIntersectsDoorway(e, e.next, door) === true
+            ) {
               if (state.npcCanAccess(e.npcKey, door.gdKey)) {
                 w.door.toggleDoorRaw(door, { open: true, access: true });
               } else {
+                const npc = w.npc.npc[e.npcKey];
                 npc.stopMoving();
               }
               break;
@@ -281,6 +286,17 @@ export default function useHandleEvents(w) {
 
       return false;
     },
+    navSegIntersectsDoorway(u, v, door) {
+      if (door.axisAligned === true) {
+        const mx = Math.min(u.x, v.x);
+        const my = Math.min(u.y, v.y);
+        const Mx = Math.max(u.x, v.x);
+        const My = Math.max(u.y, v.y);
+        return door.rect.intersectsArgs(mx, my, Mx - mx, My - my);
+      } else {// more costly but rare
+        return geom.lineSegIntersectsPolygon(u, v, door.doorway);
+      }
+    },
     npcCanAccess(npcKey, gdKey) {
       for (const regexDef of state.npcToAccess[npcKey] ?? []) {
         if ((regexCache[regexDef] ??= new RegExp(regexDef)).test(gdKey)) {
@@ -313,11 +329,10 @@ export default function useHandleEvents(w) {
         } 
         
         const npc = w.npc.getNpc(e.npcKey);
-        if (state.isUpcomingDoor(npc, door) === true) {
+        if (state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door) === true) {
           if (door.auto === true && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
           } else {
-            // setTimeout(() => npc.stopMoving(), 300);
             npc.stopMoving();
           }
         }
@@ -509,6 +524,7 @@ export default function useHandleEvents(w) {
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
  * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
+ * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | Geom.Meta} decodeObjectPick

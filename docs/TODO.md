@@ -43,7 +43,8 @@
   - ℹ️ could test nextTargetInPath rather than all corners
   - ℹ️ nav mesh via filter is only partial solution due to "going stale during navigation"
 
-- 🚧 for way-point door collision check, try only checking one-step ahead
+- ✅ more efficient door collision testing
+  - only check one-step ahead (next target, not corners)
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
