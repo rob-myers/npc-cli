@@ -50,7 +50,7 @@ export function getTileCacheGeneratorConfig() {
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
     // maxSimplificationError: 0.8,
-    // maxSimplificationError: 0.2,
+    maxSimplificationError: 0.2, // fix "inside" sensor when door not targeted
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
