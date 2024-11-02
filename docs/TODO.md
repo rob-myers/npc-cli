@@ -55,8 +55,10 @@
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
 - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
-- ✅ spawn near auto door triggers sensor
-- ✅ spawn from near auto door triggers sensor
+- hmr sometimes breaks opacity
+- consider using rapier for raycasting, rather than adding three-mesh-bvh
+  - try adding static non-colliding "walls and doors" and raycast against them
+  - could filter out doors which are open
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.ui.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
@@ -2851,3 +2853,6 @@ done
 
 - ✅ more efficient door collision testing
   - only check one-step ahead (next target, not corners)
+
+- ✅ spawn near auto door triggers sensor
+- ✅ spawn from near auto door triggers sensor
