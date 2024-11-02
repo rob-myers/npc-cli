@@ -38,15 +38,12 @@
   - decor texture array
   - obstacles texture array
 
-- 🚧 bug: can navigate through locked door
+- ✅ bug: can navigate through locked door
   - ℹ️ improved by testing on each `way-point`
   - ℹ️ could test nextTargetInPath rather than all corners
-  - 🚧 fix "repeated-clicking" when npc next to door
-  - 🚧 restrict nav to current room when npc position "close to" doorway
+  - ℹ️ nav mesh via filter is only partial solution due to "going stale during navigation"
 
-- 🚧 try restrict nav mesh via filter instead (at most 16)
-  - ℹ️ see `selectPolysDemo`
-  - only partial solution due to "going stale during navigation"
+- 🚧 for way-point door collision check, try only checking one-step ahead
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

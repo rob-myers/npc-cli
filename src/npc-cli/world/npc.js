@@ -364,10 +364,8 @@ export class Npc {
    * @param {Geom.VectJson} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
-   * A callback to invoke after npc has started walking in crowd
    */
   async moveTo(dst, opts = {}) {
-    // await this.cancel();
     if (this.agent === null) {
       throw new Error(`${this.key}: npc lacks agent`);
     }
@@ -390,7 +388,7 @@ export class Npc {
     this.s.moving = true;
     this.s.wayIndex = 0;
     this.s.lookSecs = 0.2;
-    // this.mixer.timeScale = 1;
+
     this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
     this.agent.requestMoveTarget(closest);
     this.s.target = this.lastTarget.copy(closest);
@@ -401,6 +399,7 @@ export class Npc {
     
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
+      this.lastCorner.copy(position); // trigger 0th way-point on next tick
       await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
@@ -575,7 +574,7 @@ export class Npc {
         key: 'way-point',
         npcKey: this.key,
         index: this.s.wayIndex,
-        x: this.lastCorner.x, y: this.lastCorner.z,
+        ...this.getPoint(),
         next: null,
       });
       return;

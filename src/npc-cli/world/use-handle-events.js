@@ -221,6 +221,7 @@ export default function useHandleEvents(w) {
           }
           break;
         }
+        // case "started-moving":
         case "way-point":
           // 🚧 reduce complexity e.g. nextTargetInPath instead of corners
           // Handle move into/through doorway when already nearby
