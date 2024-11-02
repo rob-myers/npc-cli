@@ -1,7 +1,7 @@
 import React from "react";
 import { defaultDoorCloseMs, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
-import { geom, tmpVec1 } from "../service/geom";
+import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -312,7 +312,12 @@ export default function useHandleEvents(w) {
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
 
         const door = w.door.byKey[e.gdKey];
-        if (door.open === false && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
+        const npc = w.npc.npc[e.npcKey];
+        if (
+          door.open === false
+          && state.npcCanAccess(e.npcKey, e.gdKey) === true
+          && state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door)
+        ) {
           state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
         }
 
