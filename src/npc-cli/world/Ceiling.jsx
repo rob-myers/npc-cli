@@ -67,17 +67,18 @@ export default function Ceiling(props) {
       // wall/door tops
       const black = 'rgb(0, 0, 0)';
       const grey90 = 'rgb(90, 90, 90)';
-      const grey60 = 'rgb(60, 60, 60)';
+      const wallsColor = '#888';
+      const hullDoorsColor = '#777';
       const grey100 = 'rgb(100, 100, 100)';
       const thinLineWidth = 0.02;
       const thickLineWidth = 0.08;
 
-      drawPolygons(ct, tops.nonHull, ['#667', null, thinLineWidth]);
+      drawPolygons(ct, tops.nonHull, [wallsColor, null, thinLineWidth]);
       drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
-      drawPolygons(ct, tops.door.filter(x => x.meta.hull), ['#778', null]);
+      drawPolygons(ct, tops.door.filter(x => x.meta.hull), [hullDoorsColor, null]);
       drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
       const hullWalls = layout.walls.filter(x => x.meta.hull);
-      drawPolygons(ct, hullWalls, ['#667', '#667']);
+      drawPolygons(ct, hullWalls, [wallsColor, wallsColor]);
       
       // decals
       polyDecals.filter(x => x.meta.ceil === true).forEach(x => {
