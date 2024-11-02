@@ -36,8 +36,8 @@ export function getTileCacheMeshProcess() {
 
 /** @returns {Partial<TileCacheGeneratorConfig>} */
 export function getTileCacheGeneratorConfig() {
-  // const cs = 0.1;
-  const cs = 0.11;
+  // const cs = 0.11;
+  const cs = 0.1;
   return {
     // tileSize: 8 / cs,
     // tileSize: 7.2 / cs,
@@ -49,8 +49,7 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    // maxSimplificationError: 0.8,
-    maxSimplificationError: 0.2, // fix "inside" sensor when door not targeted
+    maxSimplificationError: 0.8, // fix "inside" sensor when door not targeted
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
