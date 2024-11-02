@@ -553,7 +553,7 @@ export default function Decor(props) {
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
       renderOrder={-1}
-      visible={w.nav.navMesh !== undefined} // avoid initial flicker
+      visible={state.cuboids.length > 0} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <cameraLightMaterial
@@ -572,6 +572,7 @@ export default function Decor(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
+      visible={state.quads.length > 0} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedUvMappingMaterial

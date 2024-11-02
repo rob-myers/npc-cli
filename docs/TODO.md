@@ -38,14 +38,6 @@
   - decor texture array
   - obstacles texture array
 
-- ✅ bug: can navigate through locked door
-  - ℹ️ improved by testing on each `way-point`
-  - ℹ️ could test nextTargetInPath rather than all corners
-  - ℹ️ nav mesh via filter is only partial solution due to "going stale during navigation"
-
-- ✅ more efficient door collision testing
-  - only check one-step ahead (next target, not corners)
-
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅ simplify `choice` so it does not use `sleep`
@@ -2850,3 +2842,12 @@ done
 
 - ✅ bug: `w npc.remove will` breaks door collision detection
   - must clear positions (surprising didn't have issue)
+
+
+- ✅ bug: can navigate through locked door
+  - ℹ️ improved by testing on each `way-point`
+  - ℹ️ could test nextTargetInPath rather than all corners
+  - ℹ️ nav mesh via filter is only partial solution due to "going stale during navigation"
+
+- ✅ more efficient door collision testing
+  - only check one-step ahead (next target, not corners)
