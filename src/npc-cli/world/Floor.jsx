@@ -154,7 +154,7 @@ export default function Floor(props) {
       name={"multi-tex-floor"}
       ref={instances => void (instances && (state.inst = instances))}
       args={[state.quad, undefined, w.gms.length]}
-      renderOrder={-1} // 🔔 must render before other transparent e.g. npc drop shadow
+      renderOrder={-3} // 🔔 must render before other transparent e.g. npc drop shadow
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <instancedMultiTextureMaterial
