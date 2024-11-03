@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision } from "../service/const";
+import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision, wallOutset } from "../service/const";
 import * as glsl from "../service/glsl";
 import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
@@ -58,7 +58,8 @@ export default function Doors(props) {
           tmpMat1.transformPoint(tmpVec2.copy(v));
           const center = new Vect((tmpVec1.x + tmpVec2.x) / 2, (tmpVec1.y + tmpVec2.y) / 2);
           const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-          const doorwayPoly = door.computeDoorway().applyMatrix(tmpMat1).precision(precision);
+          // 🔔 wider and less depth than "computeDoorway()" for better navSeg intersections
+          const collidePoly = door.computeThinPoly(2 * wallOutset - 0.05).applyMatrix(tmpMat1).precision(precision);
 
           const gdKey = /** @type {const} */ (`g${gmId}d${doorId}`);
           const posKey = /** @type {const} */ (`${center.x},${center.y}`);
@@ -88,8 +89,8 @@ export default function Doors(props) {
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(door.normal.clone()),
             segLength: u.distanceTo(v),
-            doorway: doorwayPoly,
-            rect: doorwayPoly.rect.precision(precision),
+            collidePoly,
+            rect: collidePoly.rect.precision(precision),
             angle: radians,
           };
           instId++;

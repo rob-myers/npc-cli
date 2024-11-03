@@ -102,8 +102,8 @@ declare namespace Geomorph {
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
-    /** Transformed doorway polygon. */
-    doorway: Geom.Poly;
+    /** As wide as door, slightly less deep than doorway. */
+    collidePoly: Geom.Poly;
     /** Bounds of `doorway`. */
     rect: Geom.Rect;
     /** Transform angle (radians) */

@@ -262,7 +262,7 @@ export default function useHandleEvents(w) {
         const My = Math.max(u.y, v.y);
         return door.rect.intersectsArgs(mx, my, Mx - mx, My - my);
       } else {// more costly but rare
-        return geom.lineSegIntersectsPolygon(u, v, door.doorway);
+        return geom.lineSegIntersectsPolygon(u, v, door.collidePoly);
       }
     },
     npcCanAccess(npcKey, gdKey) {
@@ -316,7 +316,7 @@ export default function useHandleEvents(w) {
         if (
           door.open === false
           && state.npcCanAccess(e.npcKey, e.gdKey) === true
-          && state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door)
+          // && state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door)
         ) {
           state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
         }
