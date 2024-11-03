@@ -43,13 +43,13 @@ export function getTileCacheGeneratorConfig() {
     // tileSize: 7.2 / cs,
     // tileSize: 7 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
-    ch: 0.01, // EPSILON breaks obstacles
+    ch: 0.1, // EPSILON breaks obstacles
     borderSize: 0,
     expectedLayersPerTile: 1,
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    maxSimplificationError: 0.8, // fix "inside" sensor when door not targeted
+    // maxSimplificationError: 0.8, // fix "inside" sensor when door not targeted
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
