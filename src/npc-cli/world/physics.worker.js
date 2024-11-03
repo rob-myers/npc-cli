@@ -17,7 +17,7 @@ const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToP
 const config = {
   fps: 60,
   agentHeight: 1.5, // 🚧
-  agentRadius: 0.25, // 🚧
+  agentRadius: 0.2, // 🚧
 };
 
 /** @type {State} */
