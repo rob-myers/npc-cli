@@ -795,9 +795,9 @@ function emptyReject(error) {}
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration: 10, // Large enough for 'Run'
+  maxAcceleration: 10,
   // maxSpeed: 0, // Set elsewhere
-  pathOptimizationRange: helper.defaults.radius * 20, // 🚧 clarify
+  pathOptimizationRange: 5, // 🚧 clarify
   // collisionQueryRange: 2.5,
   collisionQueryRange: 0.7,
   separationWeight: 1,
