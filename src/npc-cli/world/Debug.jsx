@@ -219,7 +219,7 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   opacity: 0.2,
 });
 
-const showNavNodes = false;
+const showNavNodes = true;
 
 /**
  * 🔔 debug only (inefficient)

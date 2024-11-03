@@ -178,18 +178,18 @@ export const emptyDataArrayTexture = new THREE.DataArrayTexture();
 // console.log('cache enabled', THREE.Cache.enabled); // false
 
 const navPathColor = 0x00aa00;
-const navNodeColor = 0xaa0000;
+const navNodeColor = 0x777777;
 export const navMeta = {
   pathColor: navPathColor,
   nodeColor: navNodeColor,
   groundOffset: 0.01,
   lineMaterial: new LineMaterial({
     color: navPathColor,
-    linewidth: 0.001,
+    linewidth: 1,
     // vertexColors: true,
   }),
   nodeMaterial: new THREE.MeshBasicMaterial({ color: navNodeColor }),
-  nodeGeometry: new THREE.SphereGeometry(0.08),
+  nodeGeometry: new THREE.SphereGeometry(0.04),
 };
 
 /**
