@@ -108,6 +108,7 @@ export default function World(props) {
       Object.assign(state.nav, tiledCacheResult);
       state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
+        // maxAgents: 200,
         maxAgentRadius: helper.defaults.radius,
       });
       state.npc?.restore();
@@ -243,7 +244,8 @@ export default function World(props) {
       if (dataChanged) {// 🤔 separate hash.sheets from hash.full?
         for (const { src, tm, invert } of [
           { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
-          { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
+          // 🚧 every decor sheet
+          { src: getDecorSheetUrl(0), tm: state.decorTex, invert: false },
         ]) {
           const img = await imageLoader.loadAsync(src);
 

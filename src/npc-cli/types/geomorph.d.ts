@@ -406,7 +406,11 @@ declare namespace Geomorph {
     // tags?: string[];
   }
 
-  type DecorSheetRectCtxt = Geom.Meta<{ decorImgKey: Geomorph.DecorImgKey }>;
+  type DecorSheetRectCtxt = Geom.Meta<{
+    decorImgKey: Geomorph.DecorImgKey;
+    /** 0-based index of sheet */
+    sheetId: number;
+  }>;
 
   type DecorImgKey = import('../service/const.js').DecorImgKey;
 

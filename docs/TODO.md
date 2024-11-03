@@ -32,11 +32,18 @@
 - 🚧 instancedUvMappingShader (Doors, Obstacles, Decor) -> instancedMultiTextureShader
   - ✅ bin packer supports multiple sheets
   - 🚧 decor can have multiple images
+    - ✅ static/assets/2d/decor.{sheetId}.png
+    - 🚧 World loads all into TexArray
     - test by forcing small sheets 
   - 🚧 obstacles can have multiple images
     - test by forcing small sheets 
   - decor texture array
   - obstacles texture array
+
+- ✅ more nav through doorways issues
+  - ℹ️ sometimes triggers much too late when "winding round corner of door"
+  - ✅ nav seg was outside doorway, so door.doorway -> door.collidePoly,
+    which is wider (full door width) yet shallow (slightly less than doorway)
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

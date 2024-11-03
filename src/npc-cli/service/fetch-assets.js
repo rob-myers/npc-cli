@@ -48,8 +48,9 @@ export function getObstaclesSheetUrl() {
   return `${assetsEndpoint}/2d/obstacles.${imgExt}${getDevCacheBustQueryParam()}`;
 }
 
-export function getDecorSheetUrl() {
-  return `${assetsEndpoint}/2d/decor.${imgExt}${getDevCacheBustQueryParam()}`;
+/** @param {number} sheetId */
+export function getDecorSheetUrl(sheetId) {
+  return `${assetsEndpoint}/2d/decor.${sheetId}.${imgExt}${getDevCacheBustQueryParam()}`;
 }
 
 /** Override cache in development */

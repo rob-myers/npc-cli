@@ -31,7 +31,7 @@ import PQueue from "p-queue-compat";
 // relative urls for sucrase-node
 import { Poly } from "../npc-cli/geom";
 import { spriteSheetSymbolExtraScale, worldToSguScale, spriteSheetDecorExtraScale, sguSymbolScaleDown, sguSymbolScaleUp } from "../npc-cli/service/const";
-import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, } from "../npc-cli/service/generic";
+import { hashText, info, keyedItemsToLookup, warn, debug, error, assertNonNull, hashJson, toPrecision, mapValues, range } from "../npc-cli/service/generic";
 import { drawPolygons } from "../npc-cli/service/dom";
 import { geomorph } from "../npc-cli/service/geomorph";
 import { DEV_EXPRESS_WEBSOCKET_PORT, DEV_ORIGIN, ASSETS_JSON_FILENAME, GEOMORPHS_JSON_FILENAME } from "../npc-cli/service/fetch-assets";
@@ -90,22 +90,23 @@ function computeOpts() {
 
 /** @returns {Promise<Prev>} */
 async function computePrev() {
-  const [prevAssetsStr, obstaclesPng, decorPng, npcTexMetas] = await Promise.all([
-    !opts.all ? tryReadString(assetsFilepath) : null,
+  const prevAssetsStr = !opts.all ? await tryReadString(assetsFilepath) : null
+  const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (JSON.parse(prevAssetsStr ?? 'null'));
+
+  const [obstaclesPng, decorPngs, npcTexMetas] = await Promise.all([
     tryLoadImage(obstaclesPngPath),
-    tryLoadImage(decorPngPath),
+    Promise.all(getDecorPngPaths(prevAssets).map(tryLoadImage)),
     getNpcTextureMetas(),
   ]);
-  const prevAssets = /** @type {Geomorph.AssetsJson | null} */ (JSON.parse(prevAssetsStr ?? 'null'));
   const skipPossible = !opts.all && opts.detectChanges;
   return {
     assets: prevAssets,
     obstaclesPng,
-    decorPng,
+    decorPngs,
     npcTexMetas,
     skipMaps: skipPossible && !opts.changedFiles.some(x => x.startsWith(mapsDir)),
     skipObstacles: skipPossible && !!obstaclesPng && !opts.changedFiles.some(x => x.startsWith(symbolsDir)),
-    skipDecor: skipPossible && !!decorPng && !opts.changedFiles.some(x => x.startsWith(decorDir)),
+    skipDecor: skipPossible && decorPngs.every(Boolean) && !opts.changedFiles.some(x => x.startsWith(decorDir)),
     skipNpcTex: skipPossible && npcTexMetas.every(x => x.canSkip) && !opts.changedFiles.some(x => x.startsWith(npcDir)),
   };
 }
@@ -129,9 +130,9 @@ const graphDir = path.resolve(mediaDir, "graph");
 const decorDir = path.resolve(mediaDir, "decor");
 const npcDir = path.resolve(mediaDir, "npc");
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
-const obstaclesPngPath = path.resolve(assets2dDir, `obstacles.png`);
-const decorPngPath = path.resolve(assets2dDir, `decor.png`);
-const symbolGraphVizPath = path.resolve(graphDir, `symbols-graph.dot`);
+const obstaclesPngPath = path.resolve(assets2dDir, 'obstacles.png');
+const baseDecorPath = path.resolve(assets2dDir, 'decor');
+const symbolGraphVizPath = path.resolve(graphDir, 'symbols-graph.dot');
 const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const dataUrlRegEx = /"data:image\/png(.*)"/;
 const gitStaticAssetsRegex = new RegExp('^static/assets/');
@@ -248,7 +249,10 @@ info({ opts });
   assetsJson.sheet.imagesHash =
     prev.skipObstacles && prev.skipDecor && assetsJson.sheet.imagesHash
       ? assetsJson.sheet.imagesHash
-      : hashJson([obstaclesPngPath, decorPngPath].map(x => fs.readFileSync(x).toString())
+      : hashJson([
+          obstaclesPngPath,
+          ...getDecorPngPaths(assetsJson),
+        ].map(x => fs.readFileSync(x).toString())
     )
   ;
   perf('sheet.imagesHash');
@@ -328,7 +332,7 @@ info({ opts });
 
   let pngPaths = [
     obstaclesPngPath,
-    decorPngPath,
+    ...getDecorPngPaths(assetsJson),
   ];
   if (!opts.prePush) {
     // Only convert PNG if (i) lacks a WEBP, or (ii) has an "older one"
@@ -526,6 +530,8 @@ async function drawObstaclesSheet(assets, prev) {
   await saveCanvasAsFile(ct.canvas, obstaclesPngPath);
 }
 
+//#region decor
+
 /**
  * 🚧 support multiple sheets
  * @param {Geomorph.AssetsJson} assets
@@ -575,7 +581,7 @@ async function createDecorSheetJson(assets, prev) {
       imgKeyToRect[decorImgKey] = {
         width: toPrecision(img.width * scale, 0),
         height: toPrecision(img.height * scale, 0),
-        data: { ...meta, decorImgKey: decorImgKey },
+        data: { ...meta, decorImgKey: decorImgKey, sheetId: -1 },
       };
     } else {
       // 🔔 keeping meta.{x,y,width,height} avoids nondeterminism in sheet.decor json
@@ -587,7 +593,10 @@ async function createDecorSheetJson(assets, prev) {
   const { bins, width, height } = packRectangles(Object.values(imgKeyToRect), { logPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
 
   /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'decorDim'>} */
-  const json = ({ decor: bins.map(_ => /** @type {*} */ ({})), decorDim: { width, height } });
+  const json = ({
+    decor: bins.map(_ => /** @type {*} */ ({})),
+    decorDim: { width, height },
+  });
 
   for (const [binIndex, bin] of bins.entries()) {
     const lookup = json.decor[binIndex];
@@ -599,6 +608,7 @@ async function createDecorSheetJson(assets, prev) {
         y: toPrecision(r.y),
         width: r.width,
         height: r.height,
+        sheetId: binIndex,
       };
     });
   }
@@ -614,27 +624,38 @@ async function createDecorSheetJson(assets, prev) {
  * @param {Prev} prev
  */
 async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
-  const { decor: [decor], decorDim } = assets.sheet;
-  const decors = Object.values(decor);
+  const { decor: decors, decorDim } = assets.sheet;
   const ct = createCanvas(decorDim.width, decorDim.height).getContext('2d');
   const prevDecor = prev.assets?.sheet.decor[0];
   
-  for (const { x, y, width, height, decorImgKey } of decors) {
-    const image = decorImgKeyToImage[decorImgKey];
-    if (image) {
-      info(`${decorImgKey} redrawing...`);
-      ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
-    } else {// assume image available in previous sprite-sheet
-      const prevRect = /** @type {Geomorph.SpriteSheet['decor'][0]} */ (prevDecor)[decorImgKey];
-      ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPng),
-        prevRect.x, prevRect.y, prevRect.width, prevRect.height,
-        x, y, width, height,
-      );
+  for (const [sheetId, decor] of decors.entries()) {
+    for (const { x, y, width, height, decorImgKey } of Object.values(decor)) {
+      const image = decorImgKeyToImage[decorImgKey];
+      if (image) {
+        info(`${decorImgKey} redrawing...`);
+        ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
+      } else {// assume image available in previous sprite-sheet
+        const prevRect = /** @type {Geomorph.SpriteSheet['decor'][0]} */ (prevDecor)[decorImgKey];
+        ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPngs[sheetId]),
+          prevRect.x, prevRect.y, prevRect.width, prevRect.height,
+          x, y, width, height,
+        );
+      }
     }
+    await saveCanvasAsFile(ct.canvas, `${baseDecorPath}.${sheetId}.png`);
   }
-
-  await saveCanvasAsFile(ct.canvas, decorPngPath);
 }
+
+/**
+ * @param {Geomorph.AssetsJson | null} [assets]
+ */
+function getDecorPngPaths(assets) {
+  const numDecorSheets = assets?.sheet.decor.length ?? 0;
+  return range(numDecorSheets).map(i => `${baseDecorPath}.${i}.png`);
+}
+
+//#endregion
+
 
 /**
  * Uses special hashes constructed in `assets.meta`.
@@ -729,7 +750,7 @@ async function createNpcTexturesAndUvMeta(assets, prev) {
  * @typedef Prev
  * @property {Geomorph.AssetsJson | null} assets
  * @property {import('canvas').Image | null} obstaclesPng
- * @property {import('canvas').Image | null} decorPng
+ * @property {(import('canvas').Image | null)[]} decorPngs
  * @property {NPC.TexMeta[]} npcTexMetas
  * @property {boolean} skipMaps
  * @property {boolean} skipObstacles

@@ -12,6 +12,8 @@ import { warn } from "./generic";
  *   width: number;
  *   height: number;
  * }}
+ * Output width is maximum over all sheet widths.
+ * Output height is maximum over all sheet heights.
  */
 export default function packRectangles(rectsToPack, opts) {
   const packer = new MaxRectsPacker(4096, 4096, opts.packedPadding, {

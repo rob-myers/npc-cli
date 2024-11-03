@@ -38248,6 +38248,7 @@
         "door--hull": {
           "door": true,
           "decorImgKey": "door--hull",
+          "sheetId": 0,
           "x": 2,
           "y": 2,
           "width": 300,
@@ -38256,6 +38257,7 @@
         "door--standard": {
           "door": true,
           "decorImgKey": "door--standard",
+          "sheetId": 0,
           "x": 304,
           "y": 2,
           "width": 132,
@@ -38264,6 +38266,7 @@
         "icon--warn": {
           "icon": true,
           "decorImgKey": "icon--warn",
+          "sheetId": 0,
           "x": 304,
           "y": 244,
           "width": 84,
@@ -38272,6 +38275,7 @@
         "icon--doc": {
           "icon": true,
           "decorImgKey": "icon--doc",
+          "sheetId": 0,
           "x": 2,
           "y": 364,
           "width": 50,
@@ -38280,6 +38284,7 @@
         "icon--key-card": {
           "icon": true,
           "decorImgKey": "icon--key-card",
+          "sheetId": 0,
           "x": 54,
           "y": 364,
           "width": 72,
@@ -38288,6 +38293,7 @@
         "icon--info": {
           "icon": true,
           "decorImgKey": "icon--info",
+          "sheetId": 0,
           "x": 128,
           "y": 364,
           "width": 60,
@@ -38296,6 +38302,7 @@
         "icon--square": {
           "icon": true,
           "decorImgKey": "icon--square",
+          "sheetId": 0,
           "x": 390,
           "y": 244,
           "width": 38,
