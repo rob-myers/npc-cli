@@ -433,7 +433,7 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
   state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
   if (typeof angle === 'number') {
-    rigidBody.setRotation(new RAPIER.Quaternion(0, -angle, 0, 1), false);
+    rigidBody.setRotation(new RAPIER.Quaternion(0, Math.PI/2 - angle, 0, 1), false);
   }
   rigidBody.setTranslation(position, true);
 
