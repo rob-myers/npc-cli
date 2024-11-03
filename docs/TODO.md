@@ -61,6 +61,8 @@
   - clicking tab sets active tabset
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
+- locked accessible doors auto-open earlier
+  - e.g. check up to two corners in this case
 - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
 - hmr sometimes breaks opacity
 - consider using rapier for raycasting, rather than adding three-mesh-bvh

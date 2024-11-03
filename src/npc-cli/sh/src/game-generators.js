@@ -127,7 +127,7 @@ export async function* selectPolysDemo({ w }) {
  * @param {RunArg} ctxt
  */
 export async function walkTest(input, { w, home })  {
-  const npc = w.npc.npc[home.selectedNpcKey];
+  const npc = w.n[home.selectedNpcKey];
   if (npc) {
     npc.s.run = input.keys?.includes("shift") ?? false;
     // do not await so can override
