@@ -397,7 +397,7 @@ export class Npc {
     this.s.wayIndex = 0;
     this.s.lookSecs = 0.2;
 
-    this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
+    this.agent.updateParameters({ maxSpeed: 0 }); // don't move until 0th way-point
     this.agent.requestMoveTarget(closest);
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
