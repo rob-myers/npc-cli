@@ -225,7 +225,6 @@ async function setupOrRebuildWorld(mapKey, npcs) {
 function createDoorSensors() {
   return state.gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
     const center = gm.matrix.transformPoint(door.center.clone());
-    // const center = door.poly.clone().applyMatrix(gm.matrix).center;
     const angle = gm.matrix.transformAngle(door.angle);
     const gdKey = helper.getGmDoorKey(gmId, doorId);
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
@@ -385,7 +384,6 @@ function restoreNpcs(npcs) {
  * @param {WW.PhysicsUserData} opts.userData
  */
 function createRigidBody({ type, geomDef, position, angle, userData }) {
-
   const bodyDescription = new RAPIER.RigidBodyDesc(type)
     .setCanSleep(true)
     .setCcdEnabled(false)
@@ -420,7 +418,8 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
   state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
   if (typeof angle === 'number') {
-    rigidBody.setRotation(new RAPIER.Quaternion(0, angle, 0, 1), false);
+    angle -= Math.PI;
+    rigidBody.setRotation(new RAPIER.Quaternion(0, angle, 0, angle), false);
   }
   rigidBody.setTranslation(position, false);
 
@@ -428,14 +427,21 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
 }
 
 function sendDebugData() {
+  const { vertices } = state.world.debugRender();
+
   const physicsDebugData = state.world.bodies.getAll().map((x) => ({
     parsedKey: parsePhysicsBodyKey(/** @type {WW.PhysicsUserData} */ (x.userData).bodyKey),
     userData: /** @type {WW.PhysicsUserData} */ (x.userData),
     position: {...x.translation()},
     enabled: x.isEnabled(),
   }));
+
   // debug({physicsDebugData});
-  selfTyped.postMessage({ type: 'debug-data', items: physicsDebugData })
+  selfTyped.postMessage({
+    type: 'debug-data',
+    items: physicsDebugData,
+    lines: Array.from(vertices),
+  })
 }
 
 if (typeof window === 'undefined') {

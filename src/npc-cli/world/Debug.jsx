@@ -22,6 +22,7 @@ export default function Debug(props) {
     npc: /** @type {*} */ (null),
     selectedNavPolys: new THREE.BufferGeometry(),
     staticColliders: [],
+    physicsLines: new THREE.BufferGeometry(),
 
     ensureNavPoly(gmKey) {
       if (!w.gmsData[gmKey].navPoly) {
@@ -35,6 +36,9 @@ export default function Debug(props) {
       if (e.data.type === 'debug-data') {
         // console.log('🔔 RECEIVED', e.data);
         state.staticColliders = e.data.items;
+        state.physicsLines.dispose();
+        state.physicsLines = new THREE.BufferGeometry();
+        state.physicsLines.setAttribute('position', new THREE.BufferAttribute(new Float32Array(e.data.lines), 3))
         w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
         update();
       }
@@ -121,6 +125,7 @@ export default function Debug(props) {
       return () => void w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
     } else {
       state.staticColliders = [];
+      state.physicsLines = new THREE.BufferGeometry();
       update();
     }
   }, [props.showStaticColliders, w.physics.rebuilds]);
@@ -162,7 +167,13 @@ export default function Debug(props) {
       </group>
     ))}
     
-    <group name="StaticColliders">
+    <group
+      name="StaticColliders"
+      visible={state.staticColliders.length > 0}
+    >
+      <lineSegments geometry={state.physicsLines}>
+        <lineBasicMaterial color="green" />
+      </lineSegments>
       <MemoizedStaticColliders
         staticColliders={state.staticColliders}
         w={w}
@@ -189,6 +200,7 @@ export default function Debug(props) {
  * @property {import('./TestNpcs').State} npc
  * @property {THREE.BufferGeometry} selectedNavPolys
  * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
+ * @property {THREE.BufferGeometry} physicsLines
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath

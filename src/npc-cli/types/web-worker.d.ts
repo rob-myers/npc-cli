@@ -102,6 +102,8 @@ declare namespace WW {
   interface PhysicsDebugDataResponse {
     type: 'debug-data';
     items: PhysicDebugItem[];
+    /** [ux, uy, vx, vy, ...] */
+    lines: number[];
   }
 
   interface PhysicDebugItem {
