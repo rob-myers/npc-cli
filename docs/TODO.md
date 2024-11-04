@@ -40,6 +40,9 @@
   - decor texture array
   - obstacles texture array
 
+- physics colliders still aren't rotated correctly
+  - maybe mismatch between angled rect around "min {x,y}" vs center
+
 - ✅ more nav through doorways issues
   - ℹ️ sometimes triggers much too late when "winding round corner of door"
   - ✅ nav seg was outside doorway, so door.doorway -> door.collidePoly,

@@ -225,6 +225,7 @@ async function setupOrRebuildWorld(mapKey, npcs) {
 function createDoorSensors() {
   return state.gms.map((gm, gmId) => gm.doors.flatMap((door, doorId) => {
     const center = gm.matrix.transformPoint(door.center.clone());
+    // const center = door.poly.clone().applyMatrix(gm.matrix).center;
     const angle = gm.matrix.transformAngle(door.angle);
     const gdKey = helper.getGmDoorKey(gmId, doorId);
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
@@ -243,21 +244,6 @@ function createDoorSensors() {
     };
 
     return [
-      // createRigidBody({
-      //   type: RAPIER.RigidBodyType.Fixed,
-      //   geomDef: {
-      //     type: 'circle',
-      //     radius: nearbyRadius,
-      //   },
-      //   position: { x: center.x, y: colliderHeight / 2, z: center.y },
-      //   userData: {
-      //     bodyKey: nearbyKey,
-      //     bodyUid: addBodyKeyUidRelation(nearbyKey, state),
-      //     type: 'cylinder',
-      //     radius: nearbyRadius,
-      //     custom: { hull: door.meta.hull === true },
-      //   },
-      // }),
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
@@ -418,6 +404,7 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
     // .setCollisionGroups(1) // 👈 breaks things
     .setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS)
     .setActiveCollisionTypes(RAPIER.ActiveCollisionTypes.DEFAULT | RAPIER.ActiveCollisionTypes.KINEMATIC_FIXED)
+    .setEnabled(true)
   ;
 
   const rigidBody = state.world.createRigidBody(bodyDescription);
@@ -433,7 +420,7 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
   state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
   if (typeof angle === 'number') {
-    rigidBody.setRotation(new RAPIER.Quaternion(0, angle, 0, 1), true);
+    rigidBody.setRotation(new RAPIER.Quaternion(0, angle, 0, 1), false);
   }
   rigidBody.setTranslation(position, false);
 
