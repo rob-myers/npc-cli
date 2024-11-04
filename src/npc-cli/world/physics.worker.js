@@ -232,7 +232,7 @@ function createDoorSensors() {
 
     const nearbyDef = {
       width: door.baseRect.width,
-      height: door.baseRect.height + 4 * wallOutset,
+      height: door.baseRect.height + 6 * wallOutset,
       // height: door.baseRect.height + 2 * wallOutset,
       angle,
     };
