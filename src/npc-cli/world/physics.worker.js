@@ -418,8 +418,7 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
   state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
   if (typeof angle === 'number') {
-    angle -= Math.PI;
-    rigidBody.setRotation(new RAPIER.Quaternion(0, angle, 0, angle), false);
+    rigidBody.setRotation(getQuaternionFromAxisAngle(unitYAxis, angle), false);
   }
   rigidBody.setTranslation(position, false);
 
@@ -462,3 +461,22 @@ if (typeof window === 'undefined') {
  * @property {Map<WW.PhysicsBodyKey, RAPIER.Collider>} bodyKeyToCollider
  * @property {Map<WW.PhysicsBodyKey, RAPIER.RigidBody>} bodyKeyToBody
  */
+
+const unitYAxis = /** @type {const} */ ({ x: 0, y: 1, z: 0 });
+
+/**
+ * assumes axis is normalized
+ * https://github.com/mrdoob/three.js/blob/c3f685f49d7a747397d44b8f9fedd4fcec792fa7/src/math/Quaternion.js#L275
+ * @param {{ x: number; y: number; z: number }} axis 
+ * @param {number} angle radians
+ */
+function getQuaternionFromAxisAngle(axis, angle) {
+  const halfAngle = angle / 2;
+  const s = Math.sin(halfAngle);
+  return {
+    x: axis.x * s,
+    y: axis.y * s,
+    z: axis.z * s,
+    w: Math.cos( halfAngle ),
+  };
+}
