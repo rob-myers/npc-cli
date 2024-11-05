@@ -33,18 +33,14 @@
   - ✅ bin packer supports multiple sheets
   - 🚧 decor can have multiple images
     - ✅ static/assets/2d/decor.{sheetId}.png
-    - 🚧 World loads all into TexArray
-    - test by forcing small sheets 
+    - ✅ World loads all into TexArray
+    - 🚧 use TexArray instead of CanvasTexture
+    - 🚧 test by forcing small sheets 
   - 🚧 obstacles can have multiple images
     - test by forcing small sheets 
   - decor texture array
   - obstacles texture array
 
-- 🚧 physics colliders still aren't rotated correctly
-  - ✅ compute and send lines from world.debugRender
-  - ✅ draw lines from world.debugRender
-  - ✅ fix alignment
-  - 🚧 fix issue on refresh (colliders stop working)
 
 - ✅ more nav through doorways issues
   - ℹ️ sometimes triggers much too late when "winding round corner of door"
@@ -2871,3 +2867,10 @@ done
 
 - ✅ spawn near auto door triggers sensor
 - ✅ spawn from near auto door triggers sensor
+
+- ✅ physics colliders still aren't rotated correctly
+  - ✅ compute and send lines from world.debugRender
+  - ✅ draw lines from world.debugRender
+  - ✅ fix alignment
+  - ❌ fix colliders issue on refresh
+    - no repro, might be hmr-related

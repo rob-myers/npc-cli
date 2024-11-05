@@ -46,7 +46,27 @@ export class TexArray {
   }
 
   dispose() {
+    // We don't `this.ct.canvas.{width,height} = 0`,
+    // because context is cached under `opts.ctKey`.
     this.tex.dispose();
+  }
+
+  /**
+   * @param {Omit<TexArrayOpts, 'ctKey'>} opts
+   */
+  resize(opts) {
+    Object.assign(this.opts, opts);
+
+    this.ct.canvas.width = opts.width;
+    this.ct.canvas.height = opts.height;
+    
+    this.tex.dispose();
+    const data = new Uint8Array(opts.numTextures * 4 * opts.width * opts.height);
+
+    const tex = new THREE.DataArrayTexture(data, opts.width, opts.height, opts.numTextures);
+    tex.format = THREE.RGBAFormat;
+    tex.type = THREE.UnsignedByteType;
+    this.tex = tex;
   }
 
   update() {

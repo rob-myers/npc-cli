@@ -18,6 +18,7 @@ import createGmsData from "../service/create-gms-data";
 import { getCanvasTexMeta, imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { helper } from "../service/helper";
+import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
@@ -62,8 +63,12 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
-    obsTex: getCanvasTexMeta(`obs-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
+
+    texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
+    texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
+
     decorTex: getCanvasTexMeta(`decor-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
+    obsTex: getCanvasTexMeta(`obs-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
 
     crowd: /** @type {*} */ (null),
 
@@ -242,9 +247,40 @@ export default function World(props) {
       });
 
       if (dataChanged) {// 🤔 separate hash.sheets from hash.full?
+
+        // 🚧 use TexArray instead
+        const { sheet } = state.geomorphs;
+        for (const { src, dim, ta, invert } of [
+          {
+            src: sheet.obstacle.map((_, sheetId) => getDecorSheetUrl(sheetId)),
+            ta: state.texDecor,
+            dim: sheet.obstacleDim,
+            invert: false,
+          },
+          // 🚧
+          // { src: getObstaclesSheetUrl(), ta: state.texObs, invert: true, },
+        ]) {
+
+          if (dim.width !== ta.opts.width || dim.height !== ta.opts.height || src.length !== ta.opts.numTextures) {
+            ta.resize({ width: dim.width, height: dim.height, numTextures: src.length });
+          }
+
+          await Promise.all(src.map(async (url, sheetId) => {
+            const img = await imageLoader.loadAsync(url);
+            ta.ct.drawImage(img, 0, 0);
+            invert && invertCanvas(ta.ct.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
+            ta.updateIndex(sheetId);
+          }));
+
+          // 🚧 Sharper via getMaxAnisotropy()
+          // tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
+          ta.update();
+
+          update();
+        }
+
         for (const { src, tm, invert } of [
           { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
-          // 🚧 every decor sheet
           { src: getDecorSheetUrl(0), tm: state.decorTex, invert: false },
         ]) {
           const img = await imageLoader.loadAsync(src);
@@ -373,8 +409,10 @@ export default function World(props) {
  * Shortcut for `w.npc.npc`
  * @property {(() => void)[]} oneTimeTicks
  *
- * @property {import("../service/three").CanvasTexMeta} obsTex
- * @property {import("../service/three").CanvasTexMeta} decorTex
+ * @property {TexArray} texDecor
+ * @property {TexArray} texObs
+ * @property {import("../service/three").CanvasTexMeta} decorTex 🚧 remove
+ * @property {import("../service/three").CanvasTexMeta} obsTex 🚧 remove
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
