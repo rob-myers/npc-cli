@@ -407,8 +407,6 @@ export class Npc {
       await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
-    } finally {
-      this.s.moving = false;
     }
   }
 
@@ -574,13 +572,7 @@ export class Npc {
 
     if (distance < 0.15) {// Reached target
       this.stopMoving();
-      this.w.events.next({
-        key: 'way-point',
-        npcKey: this.key,
-        index: this.s.wayIndex,
-        ...this.getPoint(),
-        next: null,
-      });
+      this.w.events.next({ key: 'way-point', npcKey: this.key, index: this.s.wayIndex, ...this.getPoint(), next: null });
       return;
     }
 
@@ -738,6 +730,7 @@ export class Npc {
     const position = this.agent.position();
     this.s.target = null;
     this.s.lookAngleDst = null;
+    this.s.moving = false;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
@@ -749,6 +742,7 @@ export class Npc {
     // 🔔 keep target, so moves out of the way of other npcs
     this.agent.requestMoveTarget(position);
 
+    this.resolve.move?.();
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
   }
 
