@@ -254,7 +254,7 @@ export default function World(props) {
           {
             src: sheet.obstacle.map((_, sheetId) => getDecorSheetUrl(sheetId)),
             ta: state.texDecor,
-            dim: sheet.obstacleDim,
+            dim: sheet.decorDim,
             invert: false,
           },
           // 🚧

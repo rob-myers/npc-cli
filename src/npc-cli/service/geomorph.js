@@ -321,7 +321,12 @@ class GeomorphService {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
       delete poly.meta.transform; // 🔔 `det` provided on instantiation
-      return { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json, det: 1 };
+      const quadMeta = /** @type {Geomorph.DecorQuad['meta']} */ (base.meta);
+      if (!this.isDecorImgKey(quadMeta.img)) {
+        warn(`${'decorFromPoly'}: decor quad should have meta.img in DecorImgKey (using "icon--warn")`);
+        quadMeta.img = 'icon--warn';
+      }
+      return { type: 'quad', key: base.key, meta: quadMeta, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json, det: 1 };
     } else if (meta.cuboid === true) {
       // decor cuboids follow "decor quad approach"
       const polyRect = poly.rect.precision(precision);
@@ -348,6 +353,11 @@ class GeomorphService {
       const direction = /** @type {Geom.VectJson} */ (meta.direction) || { x: 0, y: 0 };
       delete meta.direction;
       const orient = toPrecision((180 / Math.PI) * Math.atan2(direction.y, direction.x));
+
+      if ('img' in meta && !this.isDecorImgKey(meta.img)) {
+        warn(`${'decorFromPoly'}: decor point with meta.img must be in DecorImgKey (using "icon--warn")`);
+        meta.img = 'icon--warn';
+      }
       return { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
     }
   }
@@ -479,7 +489,7 @@ class GeomorphService {
     ;
     const poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
 
-    // 🔔 currently only support cuboid/point/quad, with point fallback
+    // 🔔 only support cuboid/point/quad, with point fallback
     poly.meta = Object.assign(meta, {
       ...meta.cuboid === true && {
         transform: tmpMat1.toArray(),
@@ -487,6 +497,7 @@ class GeomorphService {
         quad: true,
         transform: tmpMat1.toArray(),
         // 🔔 meta.switch means door switch
+        // 🔔 SVG symbols with meta.quad should have meta.img
         ...typeof meta.switch === 'number' && {
           y: doorSwitchHeight,
           tilt: true, // 90° so in XY plane
@@ -777,11 +788,11 @@ class GeomorphService {
   }
 
   /**
-   * @param {string} input
+   * @param {string | undefined} input
    * @returns {input is Geomorph.DecorImgKey}
    */
   isDecorImgKey(input) {
-    return input in helper.fromDecorImgKey;
+    return input !== undefined && input in helper.fromDecorImgKey;
   }
 
   /**

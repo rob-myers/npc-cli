@@ -23,6 +23,7 @@ import fs from "fs";
 import path from "path";
 import childProcess from "child_process";
 import { performance, PerformanceObserver } from 'perf_hooks'
+//@ts-ignore
 import getopts from 'getopts';
 import stringify from "json-stringify-pretty-compact";
 import { createCanvas, loadImage } from 'canvas';

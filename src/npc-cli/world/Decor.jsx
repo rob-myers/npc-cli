@@ -7,7 +7,7 @@ import { isDevelopment, pause, removeDups, testNever, warn } from "../service/ge
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, createLabelSpriteSheet, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
+import { boxGeometry, createLabelSpriteSheet, emptyDataArrayTexture, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
@@ -60,9 +60,11 @@ export default function Decor(props) {
         return agg;
       }, /** @type {Record<`g${number}r${number}`, { meta: Geom.Meta<Geomorph.GmRoomId> } & { [x in 'add' | 'remove']: Geomorph.Decor[] }>} */ ({}));
 
-      removeExisting && Object.values(grouped).forEach(({ meta, remove }) =>
-        state.removeDecorFromRoom(meta.gmId, meta.roomId, remove)
-      );
+      if (removeExisting) {
+        Object.values(grouped).forEach(({ meta, remove }) =>
+          state.removeDecorFromRoom(meta.gmId, meta.roomId, remove)
+        );
+      }
 
       Object.values(grouped).forEach(({ meta, add }) =>
         state.addDecorToRoom(meta.gmId, meta.roomId, add)
@@ -114,36 +116,53 @@ export default function Decor(props) {
       );
     },
     addQuadUvs() {
-      const { decor: [sheet], decorDim: dim } = w.geomorphs.sheet;
+      const { decor: decors, decorDim: maxDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
+      const uvTextureIds = /** @type {number[]} */ ([]);
+      /** `[0, 1, ..., maxInstanceId]` */
+      const instanceIds = /** @type {number[]} */ ([]);
       
-      for (const d of state.quads) {
-        if (d.type === 'point') {
-          const { x, y, width, height } = sheet[
-            geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.point
-          ];
-          uvOffsets.push(x / dim.width,  y / dim.height);
-          uvDimensions.push(width / dim.width, height / dim.height);
-        } else {
-          const { x, y, width, height } = sheet[
-            geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.quad
-          ];
-          if (d.det < 0) {// fix "flipped" decor quads
-            uvOffsets.push((x + width) / dim.width,  y / dim.height);
-            uvDimensions.push(-width / dim.width, height / dim.height);
+      // 🚧 use width/height for specific sheet
+      // 🚧 state.quads entries should have sheetId
+      // 🚧 invert here?
+      for (const [sheetId, sheet] of decors.entries()) {
+        for (const d of state.quads) {
+          if (d.type === 'point') {
+            const { x, y, width, height } = sheet[
+              geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.point
+            ];
+            uvOffsets.push(x / maxDim.width, y / maxDim.height);
+            uvDimensions.push(width / maxDim.width, height / maxDim.height);
           } else {
-            uvOffsets.push(x / dim.width,  y / dim.height);
-            uvDimensions.push(width / dim.width, height / dim.height);
+            const { x, y, width, height } = sheet[
+              geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.quad
+            ];
+            if (d.det < 0) {// fix "flipped" decor quads
+              uvOffsets.push((x + width) / maxDim.width, y / maxDim.height);
+              uvDimensions.push(-width / maxDim.width, height / maxDim.height);
+            } else {
+              uvOffsets.push(x / maxDim.width,  y / maxDim.height);
+              uvDimensions.push(width / maxDim.width, height / maxDim.height);
+            }
           }
+
+          uvTextureIds.push(sheetId);
+          instanceIds.push(instanceIds.length);
         }
       }
 
-      state.quadInst.geometry.setAttribute('uvOffsets',
+      state.quadGeom.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
-      state.quadInst.geometry.setAttribute('uvDimensions',
+      state.quadGeom.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
+      );
+      state.quadGeom.setAttribute('uvTextureIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.quadGeom.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     computeDecorMeta(decor, instanceId) {
@@ -298,7 +317,7 @@ export default function Decor(props) {
           };
           break;
         case "quad":
-          instance = { ...d, ...base,
+          instance = { ...d, ...base, meta: d.meta,
             center: gm.matrix.transformPoint({ ...d.center }),
             transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
             det: tmpMat1.a * tmpMat1.d - tmpMat1.b * tmpMat1.c,
@@ -444,6 +463,7 @@ export default function Decor(props) {
         geomorph.isDecorCuboid
       );
 
+      // 🚧 elements of state.byKey should have sheetId
       state.quads = Object.values(state.byKey).filter(
         /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorQuad} */
         x => x.type === 'point' && (
@@ -575,12 +595,22 @@ export default function Decor(props) {
       visible={state.quads.length > 0} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <instancedUvMappingMaterial
+      {/* <instancedUvMappingMaterial
         key={glsl.InstancedUvMappingMaterial.key}
         side={THREE.DoubleSide}
         map={w.decorTex.tex}
         transparent
         diffuse={new THREE.Vector3(1, 1, 1)}
+      /> */}
+      <instancedMultiTextureMaterial
+        key={glsl.InstancedMultiTextureMaterial.key}
+        // key='foo'
+        side={THREE.DoubleSide}
+        transparent
+        atlas={w.texDecor.tex ?? emptyDataArrayTexture}
+        // depthWrite={false} // fix z-fighting
+        diffuse={[1, 1, 0.8]}
+        objectPickRed={3}
       />
     </instancedMesh>
 

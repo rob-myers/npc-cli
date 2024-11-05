@@ -369,6 +369,7 @@ declare namespace Geomorph {
     type: 'point';
     /** Orientation in degrees, where the unit vector `(1, 0)` corresponds to `0`  */
     orient: number;
+    meta: Geom.Meta<Geomorph.GmRoomId & { img?: DecorImgKey }>;
   }
   
   /** Simple polygon sans holes. */
@@ -378,6 +379,7 @@ declare namespace Geomorph {
     center: Geom.VectJson;
     /** Determinant of 2x2 part of `transform` */
     det: number;
+    meta: Geom.Meta<Geomorph.GmRoomId & { img: DecorImgKey }>;
   }
 
   interface DecorRect extends BaseDecor {
