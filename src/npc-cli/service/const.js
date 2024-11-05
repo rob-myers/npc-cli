@@ -343,3 +343,9 @@ export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
  * Technically we can choose any `maxNumberOfNpcs ≤ 2^16 = 65536`.
  */
 export const maxNumberOfNpcs = 256;
+
+export const physicsConfig = {
+  fps: 60,
+  agentHeight: 1.5,
+  agentRadius: 0.2,
+};

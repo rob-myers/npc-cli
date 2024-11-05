@@ -2,7 +2,7 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { wallHeight, wallOutset } from '../service/const';
+import { physicsConfig, wallHeight, wallOutset } from '../service/const';
 import { info, warn, debug, testNever } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorph } from '../service/geomorph';
@@ -13,12 +13,6 @@ import { tmpRect1 } from '../service/geom';
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToPhysicsWorker>} */ (
   /** @type {*} */ (self)
 );
-
-const config = {
-  fps: 60,
-  agentHeight: 1.5, // 🚧
-  agentRadius: 0.2, // 🚧
-};
 
 /** @type {State} */
 const state = {
@@ -83,14 +77,14 @@ async function handleMessages(e) {
             type: RAPIER.RigidBodyType.KinematicPositionBased,
             geomDef: {
               type: 'circle',
-              radius: config.agentRadius,
+              radius: physicsConfig.agentRadius,
             },
-            position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
+            position: { x: npc.position.x, y: physicsConfig.agentHeight / 2, z: npc.position.z },
             userData: {
               bodyKey,
               bodyUid: addBodyKeyUidRelation(bodyKey, state),
               type: 'npc',
-              radius: config.agentRadius,
+              radius: physicsConfig.agentRadius,
             },
           });
         } else {
@@ -129,7 +123,7 @@ async function handleMessages(e) {
         switch (index % 4) {
           case 0: npcBodyKey = state.bodyUidToKey[value]; break;
           case 1: position.x = value; break;
-          case 2: position.y = config.agentHeight/2; break; // overwrite y
+          case 2: position.y = physicsConfig.agentHeight/2; break; // overwrite y
           case 3:
             position.z = value;
             /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcBodyKey))
@@ -189,7 +183,7 @@ async function setupOrRebuildWorld(mapKey, npcs) {
   if (!state.world) {
     await RAPIER.init();
     state.world = new RAPIER.World({ x: 0, y: 0, z: 0 });
-    state.world.timestep = 1 / config.fps; // in seconds
+    state.world.timestep = 1 / physicsConfig.fps; // in seconds
     state.eventQueue = new RAPIER.EventQueue(true);
   } else {
     state.world.forEachRigidBody(rigidBody => state.world.removeRigidBody(rigidBody));
@@ -359,14 +353,14 @@ function restoreNpcs(npcs) {
       type: RigidBodyType.KinematicPositionBased,
       geomDef: {
         type: 'circle',
-        radius: config.agentRadius,
+        radius: physicsConfig.agentRadius,
       },
       position,
       userData: {
         bodyKey,
         bodyUid: addBodyKeyUidRelation(bodyKey, state),
         type: 'npc',
-        radius: config.agentRadius,
+        radius: physicsConfig.agentRadius,
       },
     });
   }

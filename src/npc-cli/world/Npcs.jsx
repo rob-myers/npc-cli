@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 
-import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
+import { defaultClassKey, gmLabelHeightSgu, maxNumberOfNpcs, npcClassKeys, npcClassToMeta, physicsConfig, spriteSheetDecorExtraScale, wallHeight } from "../service/const";
 import { info, pause, range, takeFirst, warn } from "../service/generic";
 import { getCanvas } from "../service/dom";
 import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, yAxis } from "../service/three";
@@ -348,16 +348,20 @@ export default function Npcs(props) {
  * @param {NPCProps} props 
  */
 function NPC({ npc }) {
-  const { bones, mesh, quad, material } = npc.m;
+  const { bones, mesh, quad } = npc.m;
 
   return (
     <group
       key={npc.key}
       ref={npc.onMount}
       scale={npc.m.scale}
-      renderOrder={0}
       // dispose={null}
     >
+      {/* <mesh position={[0, physicsConfig.agentHeight / 2, 0]} scale={1/npc.m.scale} renderOrder={1}>
+        <cylinderGeometry args={[physicsConfig.agentRadius, physicsConfig.agentRadius, 1.5, 32]} />
+        <meshBasicMaterial color="red" transparent opacity={0.25} />
+      </mesh> */}
+
       {bones.map((bone, i) => <primitive key={i} object={bone} />)}
       <skinnedMesh
         geometry={mesh.geometry}
@@ -368,8 +372,9 @@ function NPC({ npc }) {
           npc.m.mesh = skinnedMesh; 
           npc.m.material = /** @type {THREE.ShaderMaterial} */ (skinnedMesh.material);
         }}
+        renderOrder={0}
       >
-        {/* <meshPhysicalMaterial transparent map={material.map} /> */}
+        {/* <meshPhysicalMaterial transparent color="red" /> */}
         <cuboidManMaterial
           key={CuboidManMaterial.key}
           diffuse={[1, 1, 1]}
