@@ -388,11 +388,6 @@ export class Npc {
       this.w.debug.setNavPath(path ?? []);
     }
 
-    const position = this.getPosition();
-    if (position.distanceTo(closest) < 0.1) {
-      return;
-    }
-
     this.s.moving = true;
     this.s.wayIndex = 0;
     this.s.lookSecs = 0.2;
@@ -407,6 +402,7 @@ export class Npc {
     
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
+      const position = this.getPosition();
       this.nextCorner.copy(position); // trigger 0th way-point on next tick
       await this.waitUntilStopped();
     } catch (e) {
