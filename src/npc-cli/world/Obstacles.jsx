@@ -182,7 +182,7 @@ export default function Obstacles(props) {
         side={THREE.DoubleSide}
         transparent
         atlas={w.texObs.tex}
-        diffuse={[0.6, 0.6, 0.6]}
+        diffuse={[0.4, 0.4, 0.4]}
         objectPickRed={6}
       />
     </instancedMesh>
