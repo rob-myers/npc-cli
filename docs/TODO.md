@@ -53,11 +53,7 @@
   - ✅ obstacles texture array
   - 🚧 decor labels
 
-
-- ✅ more nav through doorways issues
-  - ℹ️ sometimes triggers much too late when "winding round corner of door"
-  - ✅ nav seg was outside doorway, so door.doorway -> door.collidePoly,
-    which is wider (full door width) yet shallow (slightly less than doorway)
+- try animate ceiling diffuse i.e. more/less white
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
@@ -2886,3 +2882,8 @@ done
   - ✅ fix alignment
   - ❌ fix colliders issue on refresh
     - no repro, might be hmr-related
+
+- ✅ more nav through doorways issues
+  - ℹ️ sometimes triggers much too late when "winding round corner of door"
+  - ✅ nav seg was outside doorway, so door.doorway -> door.collidePoly,
+    which is wider (full door width) yet shallow (slightly less than doorway)

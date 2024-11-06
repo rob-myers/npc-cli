@@ -17,7 +17,7 @@ export default function Obstacles(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
-    quadGeom: getQuadGeometryXZ(`${w.key}-obs-xz`),
+    quad: getQuadGeometryXZ(`${w.key}-obs-xz`),
 
     addObstacleUvs() {
       const { obstacle: sheet, maxObstacleDim: sheetDim } = w.geomorphs.sheet;
@@ -43,16 +43,16 @@ export default function Obstacles(props) {
         })
       );
 
-      state.quadGeom.setAttribute('uvOffsets',
+      state.quad.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
       );
-      state.quadGeom.setAttribute('uvDimensions',
+      state.quad.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
-      state.quadGeom.setAttribute('uvTextureIds',
+      state.quad.setAttribute('uvTextureIds',
         new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
       );
-      state.quadGeom.setAttribute('instanceIds',
+      state.quad.setAttribute('instanceIds',
         new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
@@ -169,7 +169,7 @@ export default function Obstacles(props) {
       name="static-obstacles"
       key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.inst = instances)}
-      args={[state.quadGeom, undefined, w.gmsData.obstaclesCount]}
+      args={[state.quad, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
       // {...w.obsTex && {
       //   onPointerUp: state.onPointerUp,
@@ -198,7 +198,7 @@ export default function Obstacles(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} inst
- * @property {THREE.BufferGeometry} quadGeom
+ * @property {THREE.BufferGeometry} quad
  * @property {() => void} addObstacleUvs
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
  * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId

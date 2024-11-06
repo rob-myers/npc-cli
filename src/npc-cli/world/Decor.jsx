@@ -34,7 +34,7 @@ export default function Decor(props) {
     },
     labelQuad: getQuadGeometryXZ(`${w.key}-decor-labels-xz`),
     quads: [],
-    quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
+    quad: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
     queryStatus: 'pending',
     rmKeys: new Set(),
@@ -149,16 +149,16 @@ export default function Decor(props) {
         instanceIds.push(instanceId);
       }
 
-      state.quadGeom.setAttribute('uvOffsets',
+      state.quad.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
-      state.quadGeom.setAttribute('uvDimensions',
+      state.quad.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
-      state.quadGeom.setAttribute('uvTextureIds',
+      state.quad.setAttribute('uvTextureIds',
         new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
       );
-      state.quadGeom.setAttribute('instanceIds',
+      state.quad.setAttribute('instanceIds',
         new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
@@ -585,7 +585,7 @@ export default function Decor(props) {
       name="decor-quads"
       key={`${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
-      args={[state.quadGeom, undefined, state.quads.length]}
+      args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
@@ -644,7 +644,7 @@ export default function Decor(props) {
  * @property {THREE.BufferGeometry} labelQuad
  * @property {(Geomorph.DecorPoint | Geomorph.DecorQuad)[]} quads
  * This is `Object.values(state.byKey)`
- * @property {THREE.BufferGeometry} quadGeom
+ * @property {THREE.BufferGeometry} quad
  * @property {THREE.InstancedMesh} quadInst
  * @property {import("@tanstack/react-query").QueryStatus} queryStatus
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
