@@ -599,7 +599,6 @@ async function createDecorSheetJson(assets, prev) {
 
   /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'maxDecorDim' | 'decorDims'>} */
   const json = ({
-    // decor: bins.map(_ => /** @type {*} */ ({})),
     decor: /** @type {*} */ ({}),
     maxDecorDim: { width, height },
     decorDims: bins.map(({ width, height }) => ({ width, height })),
@@ -641,6 +640,7 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
   }, /** @type {Geomorph.SpriteSheet['decor'][]} */ ([]));
 
   for (const [sheetId, decor] of bySheetId.entries()) {
+    // 🔔 sheet-dependent, whereas texture array will be maxDecorDim
     const { width, height } = decorDims[sheetId];
     ct.canvas.width = width;
     ct.canvas.height = height;

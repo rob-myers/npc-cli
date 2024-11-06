@@ -25,23 +25,33 @@ export default function Doors(props) {
     movingDoors: new Map(),
 
     addUvs() {
-      const { decor, maxDecorDim: decorDim } = w.geomorphs.sheet;
+      const { decor: sheet, maxDecorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
-  
+      const uvTextureIds = /** @type {number[]} */ ([]);
+      const instanceIds = /** @type {number[]} */ ([]);
+
       for (const meta of Object.values(state.byKey)) {
         /** @type {Geomorph.DecorImgKey} */
         const key = meta.door.meta.hull ? 'door--hull' : 'door--standard';
-        const { x, y, width, height } = decor[key];
-        uvOffsets.push(x / decorDim.width, y / decorDim.height);
-        uvDimensions.push(width / decorDim.width, height / decorDim.height);
+        const { x, y, width, height, sheetId } = sheet[key];
+        uvOffsets.push(x / maxDecorDim.width, y / maxDecorDim.height);
+        uvDimensions.push(width / maxDecorDim.width, height / maxDecorDim.height);
+        uvTextureIds.push(sheetId);
+        instanceIds.push(meta.instanceId);
       }
 
       state.doorsInst.geometry.setAttribute('uvOffsets',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+        new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
       state.doorsInst.geometry.setAttribute('uvDimensions',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+        new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
+      );
+      state.doorsInst.geometry.setAttribute('uvTextureIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.doorsInst.geometry.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     buildLookups() {
@@ -296,12 +306,20 @@ export default function Doors(props) {
       onPointerDown={state.onPointerDown}
       renderOrder={-1}
     >
-      <instancedUvMappingMaterial
+      {/* <instancedUvMappingMaterial
         key={glsl.InstancedUvMappingMaterial.key}
         side={THREE.DoubleSide}
         map={w.decorTex.tex}
         transparent
         diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+      /> */}
+      <instancedMultiTextureMaterial
+        key={glsl.InstancedMultiTextureMaterial.key}
+        side={THREE.DoubleSide}
+        transparent
+        atlas={w.texDecor.tex}
+        diffuse={[.6, .6, .6]}
+        objectPickRed={4}
       />
     </instancedMesh>
 

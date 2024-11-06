@@ -7,7 +7,7 @@ import { isDevelopment, pause, removeDups, testNever, warn } from "../service/ge
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, createLabelSpriteSheet, emptyDataArrayTexture, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
+import { boxGeometry, createLabelSpriteSheet, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
@@ -116,11 +116,10 @@ export default function Decor(props) {
       );
     },
     addQuadUvs() {
-      const { decor: sheet, decorDims } = w.geomorphs.sheet;
+      const { decor: sheet, maxDecorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
       const uvTextureIds = /** @type {number[]} */ ([]);
-      /** `[0, 1, ..., maxInstanceId]` */
       const instanceIds = /** @type {number[]} */ ([]);
       
       for (const [instanceId, d] of state.quads.entries()) {
@@ -128,24 +127,22 @@ export default function Decor(props) {
           const { x, y, width, height, sheetId } = sheet[
             geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.point
           ];
-          const dim = decorDims[sheetId];
           uvTextureIds.push(sheetId);
 
-          uvOffsets.push(x / dim.width, y / dim.height);
-          uvDimensions.push(width / dim.width, height / dim.height);
+          uvOffsets.push(x / maxDecorDim.width, y / maxDecorDim.height);
+          uvDimensions.push(width / maxDecorDim.width, height / maxDecorDim.height);
         } else {
           const { x, y, width, height, sheetId } = sheet[
             geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.quad
           ];
-          const dim = decorDims[sheetId];
           uvTextureIds.push(sheetId);
           
           if (d.det < 0) {// fix "flipped" decor quads
-            uvOffsets.push((x + width) / dim.width, y / dim.height);
-            uvDimensions.push(-width / dim.width, height / dim.height);
+            uvOffsets.push((x + width) / maxDecorDim.width, y / maxDecorDim.height);
+            uvDimensions.push(-width / maxDecorDim.width, height / maxDecorDim.height);
           } else {
-            uvOffsets.push(x / dim.width,  y / dim.height);
-            uvDimensions.push(width / dim.width, height / dim.height);
+            uvOffsets.push(x / maxDecorDim.width,  y / maxDecorDim.height);
+            uvDimensions.push(width / maxDecorDim.width, height / maxDecorDim.height);
           }
         }
 
@@ -592,7 +589,7 @@ export default function Decor(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
-      visible={state.quads.length > 0} // avoid initial flicker
+      visible={state.quads.length > 0} // 🚧 avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
       {/* <instancedUvMappingMaterial
@@ -606,7 +603,7 @@ export default function Decor(props) {
         key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.texDecor.tex ?? emptyDataArrayTexture}
+        atlas={w.texDecor.tex}
         diffuse={[1, 1, 0.8]}
         objectPickRed={3}
         // depthWrite={false} // fix z-fighting

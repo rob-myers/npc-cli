@@ -254,7 +254,8 @@ export default function World(props) {
           {
             src: sheet.obstacle.map((_, sheetId) => getDecorSheetUrl(sheetId)),
             ta: state.texDecor,
-            dim: sheet.maxDecorDim,
+            // 🔔 texture array uses fixed width/height for all textures
+            dim: sheet.maxDecorDim, 
             invert: false,
           },
           // 🚧
