@@ -37582,6 +37582,73 @@
     }
   },
   "sheet": {
+    "decor": {
+      "door--hull": {
+        "door": true,
+        "decorImgKey": "door--hull",
+        "sheetId": 0,
+        "x": 2,
+        "y": 2,
+        "width": 300,
+        "height": 360
+      },
+      "door--standard": {
+        "door": true,
+        "decorImgKey": "door--standard",
+        "sheetId": 0,
+        "x": 304,
+        "y": 2,
+        "width": 132,
+        "height": 240
+      },
+      "icon--warn": {
+        "icon": true,
+        "decorImgKey": "icon--warn",
+        "sheetId": 0,
+        "x": 304,
+        "y": 244,
+        "width": 84,
+        "height": 75
+      },
+      "icon--doc": {
+        "icon": true,
+        "decorImgKey": "icon--doc",
+        "sheetId": 0,
+        "x": 2,
+        "y": 364,
+        "width": 50,
+        "height": 72
+      },
+      "icon--key-card": {
+        "icon": true,
+        "decorImgKey": "icon--key-card",
+        "sheetId": 0,
+        "x": 54,
+        "y": 364,
+        "width": 72,
+        "height": 48
+      },
+      "icon--info": {
+        "icon": true,
+        "decorImgKey": "icon--info",
+        "sheetId": 0,
+        "x": 128,
+        "y": 364,
+        "width": 60,
+        "height": 60
+      },
+      "icon--square": {
+        "icon": true,
+        "decorImgKey": "icon--square",
+        "sheetId": 0,
+        "x": 390,
+        "y": 244,
+        "width": 38,
+        "height": 38
+      }
+    },
+    "maxDecorDim": {"width": 438, "height": 438},
+    "decorDims": [{"width": 438, "height": 438}],
     "obstacle": [
       {
         "bridge--042--8x9 3": {
@@ -38243,75 +38310,7 @@
         }
       }
     ],
-    "decor": [
-      {
-        "door--hull": {
-          "door": true,
-          "decorImgKey": "door--hull",
-          "sheetId": 0,
-          "x": 2,
-          "y": 2,
-          "width": 300,
-          "height": 360
-        },
-        "door--standard": {
-          "door": true,
-          "decorImgKey": "door--standard",
-          "sheetId": 0,
-          "x": 304,
-          "y": 2,
-          "width": 132,
-          "height": 240
-        },
-        "icon--warn": {
-          "icon": true,
-          "decorImgKey": "icon--warn",
-          "sheetId": 0,
-          "x": 304,
-          "y": 244,
-          "width": 84,
-          "height": 75
-        },
-        "icon--doc": {
-          "icon": true,
-          "decorImgKey": "icon--doc",
-          "sheetId": 0,
-          "x": 2,
-          "y": 364,
-          "width": 50,
-          "height": 72
-        },
-        "icon--key-card": {
-          "icon": true,
-          "decorImgKey": "icon--key-card",
-          "sheetId": 0,
-          "x": 54,
-          "y": 364,
-          "width": 72,
-          "height": 48
-        },
-        "icon--info": {
-          "icon": true,
-          "decorImgKey": "icon--info",
-          "sheetId": 0,
-          "x": 128,
-          "y": 364,
-          "width": 60,
-          "height": 60
-        },
-        "icon--square": {
-          "icon": true,
-          "decorImgKey": "icon--square",
-          "sheetId": 0,
-          "x": 390,
-          "y": 244,
-          "width": 38,
-          "height": 38
-        }
-      }
-    ],
     "obstacleDim": {"width": 2151, "height": 2080},
-    "decorDim": {"width": 438, "height": 438},
     "imagesHash": 450235421,
     "skins": {
       "svgHash": {"cuboid-man": -1087841574, "cuboid-pet": -1224685710},

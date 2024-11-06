@@ -74,9 +74,14 @@ class GeomorphService {
 
     const decor = /** @type {Geomorph.Decor[]} */ ([]);
     const labels = /** @type {Geomorph.DecorPoint[]} */ ([]);
-    symbol.decor.forEach((d) => (
-      typeof d.meta.label === 'string' ? labels : decor).push(this.decorFromPoly(d))
-    );
+    for (const poly of symbol.decor) {
+      const d = this.decorFromPoly(poly, assets);
+      if (typeof poly.meta.label === 'string' && d.type === 'point') {
+        labels.push(d); // decor points with meta.label
+      } else {
+        decor.push(d);
+      }
+    }
 
     const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const symbolObstacles = symbol.obstacles.filter(d => d.meta['permit-nav'] !== true);
@@ -301,9 +306,10 @@ class GeomorphService {
    * - Script only.
    * - Only invoked for layouts, not nested symbols.
    * @param {Geom.Poly} poly
+   * @param {Geomorph.Assets} assets
    * @returns {Geomorph.Decor}
    */
-  decorFromPoly(poly) {
+  decorFromPoly(poly, assets) {
     // 🔔 key, gmId, roomId provided on instantiation
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
     meta.y = toPrecision(Number(meta.y) || 0);
@@ -313,19 +319,21 @@ class GeomorphService {
       if (poly.outline.length !== 4) {
         warn(`${'decorFromPoly'}: decor rect expected 4 points (saw ${poly.outline.length})`, poly.meta);
       }
-      // const polyRect = poly.rect.precision(precision);
       const { baseRect, angle } = geom.polyToAngledRect(poly);
       baseRect.precision(precision);
       return { type: 'rect', ...base, bounds2d: baseRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json, angle };
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
-      delete poly.meta.transform; // 🔔 `det` provided on instantiation
+      delete poly.meta.transform;
+
       const quadMeta = /** @type {Geomorph.DecorQuad['meta']} */ (base.meta);
       if (!this.isDecorImgKey(quadMeta.img)) {
-        warn(`${'decorFromPoly'}: decor quad should have meta.img in DecorImgKey (using "icon--warn")`);
+        warn(`${'decorFromPoly'}: decor quad meta.img must be in DecorImgKey (using "icon--warn")`);
         quadMeta.img = 'icon--warn';
       }
+
+      // 🔔 `det` provided on instantiation
       return { type: 'quad', key: base.key, meta: quadMeta, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json, det: 1 };
     } else if (meta.cuboid === true) {
       // decor cuboids follow "decor quad approach"

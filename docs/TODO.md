@@ -36,8 +36,9 @@
     - ✅ World loads all into TexArray
     - ✅ decor point/quad has meta.img properly typed
     - ✅ use TexArray instead of CanvasTexture
-    - 🚧 decor point/quad has meta.sheetId
-    - 🚧 test by forcing small sheets 
+    - ✅ decor point/quad has meta.sheetId
+    - 🚧 Doors too
+    - 🚧 test by forcing small sheets
   - 🚧 obstacles can have multiple images
     - test by forcing small sheets 
   - decor texture array

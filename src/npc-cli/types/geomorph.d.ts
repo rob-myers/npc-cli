@@ -454,8 +454,11 @@ declare namespace Geomorph {
     /** Maximum over all sheets, for texture array */
     obstacleDim: { width: number; height: number; }
     /** Maximum over all sheets, for texture array */
-    decorDim: { width: number; height: number; }
-    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>[];
+    maxDecorDim: { width: number; height: number; }
+    /** Aligned to sheets; its length is the number of the sheets. */
+    decorDims: { width: number; height: number; }[];
+    /** Over all sheets */
+    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
     imagesHash: number;
     skins: {
       /** e.g. `npcClassKey` is a `uvMapKey` */

@@ -166,8 +166,11 @@ info({ opts });
   const assetsJson = {
     meta: {},
     sheet: {
-      obstacle: [], decor: /** @type {*} */ ({}),
-      obstacleDim: { width: 0, height: 0 }, decorDim: { width: 0, height: 0 },
+      decor: /** @type {*} */ ({}),
+      maxDecorDim: { width: 0, height: 0 },
+      decorDims: [],
+      obstacle: [],
+      obstacleDim: { width: 0, height: 0 },
       imagesHash: 0,
       skins: {
         svgHash: {},
@@ -548,7 +551,8 @@ async function createDecorSheetJson(assets, prev) {
     warn(`${'createDecorSheetJson'}: ignored file (unknown decorImgKey "${decorImgKey}")`);
   }).sort();
 
-  const prevDecorSheet = prev.assets?.sheet.decor[0];
+  // 🚧
+  const prevDecorSheet = prev.assets?.sheet.decor;
   const changedSvgBasenames = !!prevDecorSheet && opts.detectChanges
     ? svgBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
     : svgBasenames
@@ -582,28 +586,29 @@ async function createDecorSheetJson(assets, prev) {
       imgKeyToRect[decorImgKey] = {
         width: toPrecision(img.width * scale, 0),
         height: toPrecision(img.height * scale, 0),
-        data: { ...meta, decorImgKey: decorImgKey, sheetId: -1 },
+        data: { ...meta, decorImgKey, sheetId: -1 },
       };
     } else {
       // 🔔 keeping meta.{x,y,width,height} avoids nondeterminism in sheet.decor json
-      const meta = /** @type {Geomorph.SpriteSheet['decor'][0]} */ (prevDecorSheet)[decorImgKey];
+      const meta = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecorSheet)[decorImgKey];
       imgKeyToRect[decorImgKey] = { width: meta.width, height: meta.height, data: { ...meta, fileKey: baseName } };
     }
   }
 
   const { bins, width, height } = packRectangles(Object.values(imgKeyToRect), { logPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
 
-  /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'decorDim'>} */
+  /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'maxDecorDim' | 'decorDims'>} */
   const json = ({
-    decor: bins.map(_ => /** @type {*} */ ({})),
-    decorDim: { width, height },
+    // decor: bins.map(_ => /** @type {*} */ ({})),
+    decor: /** @type {*} */ ({}),
+    maxDecorDim: { width, height },
+    decorDims: bins.map(({ width, height }) => ({ width, height })),
   });
 
   for (const [binIndex, bin] of bins.entries()) {
-    const lookup = json.decor[binIndex];
     bin.rects.forEach(r => {
       const meta = /** @type {Geomorph.DecorSheetRectCtxt} */ (r.data);
-      lookup[meta.decorImgKey] = {
+      json.decor[meta.decorImgKey] = {
         ...meta,
         x: toPrecision(r.x),
         y: toPrecision(r.y),
@@ -625,18 +630,27 @@ async function createDecorSheetJson(assets, prev) {
  * @param {Prev} prev
  */
 async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
-  const { decor: decors, decorDim } = assets.sheet;
-  const ct = createCanvas(decorDim.width, decorDim.height).getContext('2d');
-  const prevDecor = prev.assets?.sheet.decor[0];
+  const { decor: allDecor, decorDims } = assets.sheet;
+  const ct = createCanvas(0, 0).getContext('2d');
+  const prevDecor = prev.assets?.sheet.decor;
   
-  for (const [sheetId, decor] of decors.entries()) {
+  // group global decor lookup by sheet
+  const bySheetId = Object.values(allDecor).reduce((agg, d) => {
+    (agg[d.sheetId] ??= /** @type {*} */ ({}))[d.decorImgKey] = d;
+    return agg;
+  }, /** @type {Geomorph.SpriteSheet['decor'][]} */ ([]));
+
+  for (const [sheetId, decor] of bySheetId.entries()) {
+    const { width, height } = decorDims[sheetId];
+    ct.canvas.width = width;
+    ct.canvas.height = height;
     for (const { x, y, width, height, decorImgKey } of Object.values(decor)) {
       const image = decorImgKeyToImage[decorImgKey];
       if (image) {
         info(`${decorImgKey} redrawing...`);
         ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
       } else {// assume image available in previous sprite-sheet
-        const prevRect = /** @type {Geomorph.SpriteSheet['decor'][0]} */ (prevDecor)[decorImgKey];
+        const prevRect = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecor)[decorImgKey];
         ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPngs[sheetId]),
           prevRect.x, prevRect.y, prevRect.width, prevRect.height,
           x, y, width, height,
@@ -651,7 +665,7 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
  * @param {Geomorph.AssetsJson | null} [assets]
  */
 function getDecorPngPaths(assets) {
-  const numDecorSheets = assets?.sheet.decor.length ?? 0;
+  const numDecorSheets = assets?.sheet.decorDims.length ?? 0;
   return range(numDecorSheets).map(i => `${baseDecorPath}.${i}.png`);
 }
 

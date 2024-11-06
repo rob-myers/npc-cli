@@ -116,40 +116,40 @@ export default function Decor(props) {
       );
     },
     addQuadUvs() {
-      const { decor: decors, decorDim: maxDim } = w.geomorphs.sheet;
+      const { decor: sheet, decorDims } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
       const uvTextureIds = /** @type {number[]} */ ([]);
       /** `[0, 1, ..., maxInstanceId]` */
       const instanceIds = /** @type {number[]} */ ([]);
       
-      // 🚧 use width/height for specific sheet
-      // 🚧 state.quads entries should have sheetId
-      // 🚧 invert here?
-      for (const [sheetId, sheet] of decors.entries()) {
-        for (const d of state.quads) {
-          if (d.type === 'point') {
-            const { x, y, width, height } = sheet[
-              geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.point
-            ];
-            uvOffsets.push(x / maxDim.width, y / maxDim.height);
-            uvDimensions.push(width / maxDim.width, height / maxDim.height);
-          } else {
-            const { x, y, width, height } = sheet[
-              geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.quad
-            ];
-            if (d.det < 0) {// fix "flipped" decor quads
-              uvOffsets.push((x + width) / maxDim.width, y / maxDim.height);
-              uvDimensions.push(-width / maxDim.width, height / maxDim.height);
-            } else {
-              uvOffsets.push(x / maxDim.width,  y / maxDim.height);
-              uvDimensions.push(width / maxDim.width, height / maxDim.height);
-            }
-          }
-
+      for (const [instanceId, d] of state.quads.entries()) {
+        if (d.type === 'point') {
+          const { x, y, width, height, sheetId } = sheet[
+            geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.point
+          ];
+          const dim = decorDims[sheetId];
           uvTextureIds.push(sheetId);
-          instanceIds.push(instanceIds.length);
+
+          uvOffsets.push(x / dim.width, y / dim.height);
+          uvDimensions.push(width / dim.width, height / dim.height);
+        } else {
+          const { x, y, width, height, sheetId } = sheet[
+            geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.quad
+          ];
+          const dim = decorDims[sheetId];
+          uvTextureIds.push(sheetId);
+          
+          if (d.det < 0) {// fix "flipped" decor quads
+            uvOffsets.push((x + width) / dim.width, y / dim.height);
+            uvDimensions.push(-width / dim.width, height / dim.height);
+          } else {
+            uvOffsets.push(x / dim.width,  y / dim.height);
+            uvDimensions.push(width / dim.width, height / dim.height);
+          }
         }
+
+        instanceIds.push(instanceId);
       }
 
       state.quadGeom.setAttribute('uvOffsets',
@@ -604,13 +604,12 @@ export default function Decor(props) {
       /> */}
       <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
-        // key='foo'
         side={THREE.DoubleSide}
         transparent
         atlas={w.texDecor.tex ?? emptyDataArrayTexture}
-        // depthWrite={false} // fix z-fighting
         diffuse={[1, 1, 0.8]}
         objectPickRed={3}
+        // depthWrite={false} // fix z-fighting
       />
     </instancedMesh>
 
