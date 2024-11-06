@@ -26,8 +26,11 @@
     - must compute non-object-pick opacity
     - `(3, gmId, 0, gl_FragColor.a)`
   - ✅ w.ceiling uses w.floor quad
-  - doors object-pick
-  - decor object-pick
+  - ✅ doors object-pick
+    - `(4, instancedId, 0, gl_FragColor.a)`
+  - ✅ decor quad object-pick
+    - `(5, quadInstanceId, 0, gl_FragColor.a)`
+  - 🚧 decor cuboid object-pick
 
 - 🚧 instancedUvMappingShader (Doors, Obstacles, Decor) -> instancedMultiTextureShader
   - ✅ bin packer supports multiple sheets

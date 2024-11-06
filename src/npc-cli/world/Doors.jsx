@@ -350,7 +350,7 @@ export default function Doors(props) {
  * @property {() => void} addUvs
  * @property {() => void} buildLookups
  * @property {(item: Geomorph.DoorState) => void} cancelClose
- * @property {(instanceId: number) => Geom.Meta} decodeInstance
+ * @property {(instanceId: number) => Geom.Meta<Geomorph.GmDoorId>} decodeInstance
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors

@@ -76,6 +76,26 @@ export default function useHandleEvents(w) {
         };
       }
 
+      if (r === 4) {// door
+        const instanceId = Math.floor(g);
+        const decoded = w.door.decodeInstance(instanceId);
+        return {
+          picked: 'door',
+          door: true,
+          ...decoded,
+        };
+      }
+
+      if (r === 5) {// decor quad
+        const instanceId = Math.floor(g);
+        const quad = w.decor.quads[instanceId];
+        return {
+          picked: 'quad',
+          quad: true,
+          ...quad.meta,
+        };
+      }
+
       if (r === 8) {// npc
         const npcUid = (g << 8) + b;
         const npcKey = w.npc.pickUid.toKey.get(npcUid);
