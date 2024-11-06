@@ -30,6 +30,7 @@
     - `(4, instancedId, 0, gl_FragColor.a)`
   - ✅ decor quad object-pick
     - `(5, quadInstanceId, 0, gl_FragColor.a)`
+  - ✅ obstacle object-pick
   - 🚧 decor cuboid object-pick
 
 - 🚧 instancedUvMappingShader (Doors, Obstacles, Decor) -> instancedMultiTextureShader
@@ -47,8 +48,10 @@
   - 🚧 obstacles can have multiple images
     - ✅ refactor
     - ✅ test by forcing small sheets 
+    - 🚧 decor/obstacles should be darkened
     - 🚧 clean
   - ✅ obstacles texture array
+  - 🚧 decor labels
 
 
 - ✅ more nav through doorways issues

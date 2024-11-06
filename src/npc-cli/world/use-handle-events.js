@@ -96,6 +96,16 @@ export default function useHandleEvents(w) {
         };
       }
 
+      if (r === 6) {// obstacle
+        const instanceId = Math.floor(g);
+        const decoded = w.obs.decodeObstacleId(instanceId);
+        return {
+          picked: 'obstacle',
+          obstacle: true,
+          ...decoded,
+        };
+      }
+
       if (r === 8) {// npc
         const npcUid = (g << 8) + b;
         const npcKey = w.npc.pickUid.toKey.get(npcUid);

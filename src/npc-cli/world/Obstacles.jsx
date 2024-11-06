@@ -66,9 +66,11 @@ export default function Obstacles(props) {
     decodeObstacleId(instanceId) {
       let id = instanceId;
       const gmId = w.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
-      return { gmId, obstacleId: id };
+      const gm = w.gms[gmId];
+      const obstacle = gm.obstacles[id];
+      return { gmId, obstacleId: id, ...obstacle.meta };
     },
-    detectClick(e) {
+    detectClick(e) {// 🚧 replace with object-pick
       // const instanceId = /** @type {number} */ (e.instanceId);
       // const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
       // const gm = w.gms[gmId];
@@ -175,13 +177,6 @@ export default function Obstacles(props) {
       // }}
       position={[0, 0.001, 0]} // 🚧
     >
-      {/* <instancedUvMappingMaterial
-        key={glsl.InstancedUvMappingMaterial.key}
-        side={THREE.DoubleSide}
-        transparent
-        map={w.obsTex.tex}
-        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
-      /> */}
       <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
