@@ -34,14 +34,15 @@
 
 - 🚧 instancedUvMappingShader (Doors, Obstacles, Decor) -> instancedMultiTextureShader
   - ✅ bin packer supports multiple sheets
-  - 🚧 decor can have multiple images
+  - ✅ decor can have multiple images
     - ✅ static/assets/2d/decor.{sheetId}.png
     - ✅ World loads all into TexArray
     - ✅ decor point/quad has meta.img properly typed
     - ✅ use TexArray instead of CanvasTexture
     - ✅ decor point/quad has meta.sheetId
     - ✅ Doors too
-    - 🚧 clean + test by forcing small sheets
+    - ✅ test by forcing small sheets
+    - ✅ clean
   - 🚧 obstacles can have multiple images
     - test by forcing small sheets 
   - decor texture array

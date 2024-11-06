@@ -7,6 +7,8 @@ import { warn } from "./generic";
  * @param {object} opts
  * @param {string} opts.logPrefix
  * @param {number} opts.packedPadding
+ * @param {number} [opts.maxWidth]
+ * @param {number} [opts.maxHeight]
  * @returns {{
  *   bins: Pick<import("maxrects-packer").Bin<Rectangle>, 'width' | 'height' | 'rects'>[];
  *   width: number;
@@ -16,7 +18,8 @@ import { warn } from "./generic";
  * Output height is maximum over all sheet heights.
  */
 export default function packRectangles(rectsToPack, opts) {
-  const packer = new MaxRectsPacker(4096, 4096, opts.packedPadding, {
+  const { maxWidth = 4096, maxHeight = 4096 } = opts;
+  const packer = new MaxRectsPacker(maxWidth, maxHeight, opts.packedPadding, {
     pot: false,
     border: opts.packedPadding,
     // smart: false,

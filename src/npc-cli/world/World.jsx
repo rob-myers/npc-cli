@@ -251,7 +251,7 @@ export default function World(props) {
         const { sheet } = state.geomorphs;
         for (const { src, dim, ta, invert } of [
           {
-            src: sheet.obstacle.map((_, sheetId) => getDecorSheetUrl(sheetId)),
+            src: sheet.decorDims.map((_, sheetId) => getDecorSheetUrl(sheetId)),
             ta: state.texDecor,
             // 🔔 texture array uses fixed width/height for all textures
             dim: sheet.maxDecorDim, 

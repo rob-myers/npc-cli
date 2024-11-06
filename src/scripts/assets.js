@@ -551,7 +551,6 @@ async function createDecorSheetJson(assets, prev) {
     warn(`${'createDecorSheetJson'}: ignored file (unknown decorImgKey "${decorImgKey}")`);
   }).sort();
 
-  // 🚧
   const prevDecorSheet = prev.assets?.sheet.decor;
   const changedSvgBasenames = !!prevDecorSheet && opts.detectChanges
     ? svgBasenames.filter(x => opts.changedDecorBaseNames.includes(x) || !(x in prevDecorSheet))
@@ -595,7 +594,12 @@ async function createDecorSheetJson(assets, prev) {
     }
   }
 
-  const { bins, width, height } = packRectangles(Object.values(imgKeyToRect), { logPrefix: 'createDecorSheetJson', packedPadding: imgOpts.packedPadding });
+  const { bins, width, height } = packRectangles(Object.values(imgKeyToRect), {
+    logPrefix: 'createDecorSheetJson',
+    packedPadding: imgOpts.packedPadding,
+    // maxWidth: 200,
+    // maxHeight: 200,
+  });
 
   /** @type {Pick<Geomorph.SpriteSheet, 'decor' | 'maxDecorDim' | 'decorDims'>} */
   const json = ({

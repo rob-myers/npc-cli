@@ -476,7 +476,7 @@ export default function Decor(props) {
   
   // instantiate geomorph decor
   const query = useQuery({
-    queryKey: ['decor', w.key, w.mapKey, w.hash.decor], // depends on sheetsHash?
+    queryKey: ['decor', w.key, w.mapKey, w.hash.decor, w.hash.sheets],
 
     async queryFn() {
       if (module.hot?.active === false) {
@@ -589,7 +589,7 @@ export default function Decor(props) {
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
-      visible={state.quads.length > 0} // 🚧 avoid initial flicker
+      // visible={state.quads.length > 0} // 🚧 avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedMultiTextureMaterial
