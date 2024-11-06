@@ -35,7 +35,7 @@ export default function Obstacles(props) {
             uvDimensions.push(width / sheetDim.width, height / sheetDim.height);
           } else {
             warn(`${symbolKey} (${obstacleId}) not found in sprite-sheet`);
-            uvOffsets.push(0,  0);
+            uvOffsets.push(0, 0);
             uvDimensions.push(1, 1);
           }
           uvTextureIds.push(item.sheetId);
@@ -43,10 +43,10 @@ export default function Obstacles(props) {
         })
       );
 
-      state.inst.geometry.setAttribute('uvOffsets',
+      state.quadGeom.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
       );
-      state.inst.geometry.setAttribute('uvDimensions',
+      state.quadGeom.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
       state.quadGeom.setAttribute('uvTextureIds',
@@ -69,25 +69,26 @@ export default function Obstacles(props) {
       return { gmId, obstacleId: id };
     },
     detectClick(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
-      const gm = w.gms[gmId];
-      const obstacle = gm.obstacles[obstacleId];
+      // const instanceId = /** @type {number} */ (e.instanceId);
+      // const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
+      // const gm = w.gms[gmId];
+      // const obstacle = gm.obstacles[obstacleId];
       
-      // transform 3D point back to unit XZ quad
-      const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
-      const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
-      // transform unit quad point into spritesheet
-      const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
-      const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
-      const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
+      // // transform 3D point back to unit XZ quad
+      // const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
+      // const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
+      // // transform unit quad point into spritesheet
+      // const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
+      // const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
+      // const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
 
-      const { ct } = w.obsTex;
-      const { data: rgba } = ct.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
-      // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
+      // const { ct } = w.obsTex;
+      // const { data: rgba } = ct.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
+      // // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
       
-      // ignore clicks on fully transparent pixels
-      return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
+      // // ignore clicks on fully transparent pixels
+      // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
+      return null;
     },
     onPointerDown(e) {
       const instanceId = /** @type {number} */ (e.instanceId);
@@ -168,10 +169,10 @@ export default function Obstacles(props) {
       ref={instances => instances && (state.inst = instances)}
       args={[state.quadGeom, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
-      {...w.obsTex && {
-        onPointerUp: state.onPointerUp,
-        onPointerDown: state.onPointerDown,
-      }}
+      // {...w.obsTex && {
+      //   onPointerUp: state.onPointerUp,
+      //   onPointerDown: state.onPointerDown,
+      // }}
       position={[0, 0.001, 0]} // 🚧
     >
       {/* <instancedUvMappingMaterial

@@ -46,8 +46,9 @@
   - ✅ decor texture array
   - 🚧 obstacles can have multiple images
     - ✅ refactor
-    - 🚧 test by forcing small sheets 
-  - obstacles texture array
+    - ✅ test by forcing small sheets 
+    - 🚧 clean
+  - ✅ obstacles texture array
 
 
 - ✅ more nav through doorways issues

@@ -67,8 +67,6 @@ export default function World(props) {
     texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
 
-    obsTex: getCanvasTexMeta(`obs-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
-
     crowd: /** @type {*} */ (null),
 
     ui: /** @type {*} */ (null), // WorldCanvas
@@ -247,7 +245,6 @@ export default function World(props) {
 
       if (dataChanged) {// 🤔 separate hash.sheets from hash.full?
 
-        // 🚧 use TexArray instead
         const { sheet } = state.geomorphs;
         for (const { src, dim, ta, invert } of [
           {
@@ -257,7 +254,6 @@ export default function World(props) {
             dim: sheet.maxDecorDim, 
             invert: false,
           },
-          // 🚧
           {
             src: sheet.obstacleDims.map((_, sheetId) => getObstaclesSheetUrl(sheetId)),
             ta: state.texObs,
@@ -272,6 +268,7 @@ export default function World(props) {
 
           await Promise.all(src.map(async (url, sheetId) => {
             const img = await imageLoader.loadAsync(url);
+            ta.ct.clearRect(0, 0, dim.width, dim.height);
             ta.ct.drawImage(img, 0, 0);
             invert && invertCanvas(ta.ct.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
             ta.updateIndex(sheetId);
@@ -280,29 +277,9 @@ export default function World(props) {
           // 🚧 Sharper via getMaxAnisotropy()
           // tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
           ta.update();
-
           update();
         }
 
-        // for (const { src, tm, invert } of [
-        //   // { src: getDecorSheetUrl(0), tm: state.decorTex, invert: false },
-        //   { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
-        // ]) {
-        //   const img = await imageLoader.loadAsync(src);
-
-        //   [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
-        //   tm.tex.dispose();
-        //   tm.tex = new THREE.CanvasTexture(tm.canvas);
-        //   tm.tex.flipY = false; // align with XZ/XY quad uv-map
-
-        //   tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
-        //   tm.ct.drawImage(img, 0, 0);
-        //   invert && invertCanvas(tm.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
-        //   // 🔔 Sharper via getMaxAnisotropy()
-        //   tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
-        //   tm.tex.needsUpdate = true;
-        //   update();
-        // }
       } else {
         update();
       }
@@ -416,7 +393,6 @@ export default function World(props) {
  *
  * @property {TexArray} texDecor
  * @property {TexArray} texObs
- * @property {import("../service/three").CanvasTexMeta} obsTex 🚧 remove
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.

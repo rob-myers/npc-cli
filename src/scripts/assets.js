@@ -457,7 +457,12 @@ function createObstaclesSheetJson(assets) {
     }
   }
 
-  const { bins, width, height } = packRectangles(Object.values(obstacleKeyToRect), { logPrefix: 'createObstaclesSheetJson', packedPadding: imgOpts.packedPadding });
+  const { bins, width, height } = packRectangles(Object.values(obstacleKeyToRect), {
+    logPrefix: 'createObstaclesSheetJson',
+    packedPadding: imgOpts.packedPadding,
+    // maxWidth: 1000,
+    // maxHeight: 1000,
+  });
   
   /** @type {Pick<Geomorph.SpriteSheet, 'obstacle' | 'obstacleDims' | 'maxObstacleDim'>} */
   const json = ({
@@ -557,8 +562,6 @@ async function drawObstaclesSheet(assets, prev) {
     await saveCanvasAsFile(ct.canvas, `${baseObstaclePath}.${sheetId}.png`);
   }
 
-
-  // await saveCanvasAsFile(ct.canvas, obstaclesPngPath);
 }
 
 //#endregion
