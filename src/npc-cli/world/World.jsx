@@ -67,7 +67,6 @@ export default function World(props) {
     texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
 
-    decorTex: getCanvasTexMeta(`decor-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
     obsTex: getCanvasTexMeta(`obs-tex`, { width: 0, height: 0, opts: { willReadFrequently: true }}),
 
     crowd: /** @type {*} */ (null),
@@ -281,8 +280,8 @@ export default function World(props) {
         }
 
         for (const { src, tm, invert } of [
+          // { src: getDecorSheetUrl(0), tm: state.decorTex, invert: false },
           { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
-          { src: getDecorSheetUrl(0), tm: state.decorTex, invert: false },
         ]) {
           const img = await imageLoader.loadAsync(src);
 
@@ -412,7 +411,6 @@ export default function World(props) {
  *
  * @property {TexArray} texDecor
  * @property {TexArray} texObs
- * @property {import("../service/three").CanvasTexMeta} decorTex 🚧 remove
  * @property {import("../service/three").CanvasTexMeta} obsTex 🚧 remove
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.

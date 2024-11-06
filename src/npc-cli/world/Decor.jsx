@@ -592,20 +592,13 @@ export default function Decor(props) {
       visible={state.quads.length > 0} // 🚧 avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
-      {/* <instancedUvMappingMaterial
-        key={glsl.InstancedUvMappingMaterial.key}
-        side={THREE.DoubleSide}
-        map={w.decorTex.tex}
-        transparent
-        diffuse={new THREE.Vector3(1, 1, 1)}
-      /> */}
       <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
         atlas={w.texDecor.tex}
         diffuse={[1, 1, 0.8]}
-        objectPickRed={3}
+        objectPickRed={5}
         // depthWrite={false} // fix z-fighting
       />
     </instancedMesh>

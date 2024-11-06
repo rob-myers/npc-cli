@@ -306,13 +306,6 @@ export default function Doors(props) {
       onPointerDown={state.onPointerDown}
       renderOrder={-1}
     >
-      {/* <instancedUvMappingMaterial
-        key={glsl.InstancedUvMappingMaterial.key}
-        side={THREE.DoubleSide}
-        map={w.decorTex.tex}
-        transparent
-        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
-      /> */}
       <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
