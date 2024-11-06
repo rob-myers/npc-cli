@@ -51,8 +51,7 @@ export const helper = {
   },
   
   defaults: {
-    /** 🔔 division by 3 improves collisions */
-    radius: npcClassToMeta["cuboid-man"].radius * npcClassToMeta["cuboid-man"].scale / 3,
+    radius: npcClassToMeta["cuboid-man"].radius * npcClassToMeta["cuboid-man"].scale / 2,
     runSpeed: npcClassToMeta["cuboid-man"].runSpeed * npcClassToMeta["cuboid-man"].scale,
     walkSpeed: npcClassToMeta["cuboid-man"].walkSpeed * npcClassToMeta["cuboid-man"].scale,
   },
