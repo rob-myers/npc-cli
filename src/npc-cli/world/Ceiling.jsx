@@ -67,7 +67,7 @@ export default function Ceiling(props) {
       // wall/door tops
       const black = 'rgb(0, 0, 0)';
       const grey90 = 'rgb(90, 90, 90)';
-      const wallsColor = '#788';
+      const wallsColor = '#889';
       const hullDoorsColor = '#777';
       const grey100 = 'rgb(100, 100, 100)';
       const thinLineWidth = 0.02;
@@ -157,7 +157,8 @@ export default function Ceiling(props) {
         transparent
         atlas={w.gmsData.texCeil.tex ?? emptyDataArrayTexture}
         alphaTest={0.9} // 0.5 flickered on (301, 101) border
-        // diffuse={[0.75, 0.75, 0.75]}
+        diffuse={[1, 1, 1]}
+        colorSpace
         objectPickRed={3}
       />
     </instancedMesh>

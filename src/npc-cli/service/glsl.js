@@ -467,6 +467,7 @@ export const instancedMultiTextureShader = {
   Frag: /* glsl */`
 
     uniform bool objectPick;
+    uniform bool colorSpace;
     uniform int objectPickRed;
     uniform sampler2DArray atlas;
     uniform vec3 diffuse;
@@ -491,7 +492,10 @@ export const instancedMultiTextureShader = {
         gl_FragColor = vec4(float(objectPickRed) / 255.0, float(vInstanceId) / 255.0, 0.0, gl_FragColor.a);
       }
       
-      #include <colorspace_fragment>
+      if (colorSpace == true) {
+        #include <colorspace_fragment>
+      }
+
       #include <logdepthbuf_fragment>
     }
   
@@ -522,10 +526,11 @@ export const InstancedUvMappingMaterial = shaderMaterial(
 export const InstancedMultiTextureMaterial = shaderMaterial(
   {
     atlas: emptyDataArrayTexture,
-    diffuse: new THREE.Vector3(1, 1, 1),
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
+    colorSpace: false,
     objectPick: false,
     objectPickRed: 0,
   },

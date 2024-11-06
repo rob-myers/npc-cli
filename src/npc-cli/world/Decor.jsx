@@ -597,7 +597,7 @@ export default function Decor(props) {
         side={THREE.DoubleSide}
         transparent
         atlas={w.texDecor.tex}
-        diffuse={[1, 1, 0.8]}
+        diffuse={[1, 1, 1]}
         objectPickRed={5}
         // depthWrite={false} // fix z-fighting
       />

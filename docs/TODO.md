@@ -48,7 +48,7 @@
   - 🚧 obstacles can have multiple images
     - ✅ refactor
     - ✅ test by forcing small sheets 
-    - 🚧 decor/obstacles should be darkened
+    - ✅ can darken decor/obstacles
     - 🚧 clean
   - ✅ obstacles texture array
   - 🚧 decor labels

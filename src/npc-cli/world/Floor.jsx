@@ -165,6 +165,7 @@ export default function Floor(props) {
         depthWrite={false} // fix z-fighting
         diffuse={[1, 1, 0.8]}
         objectPickRed={2}
+        colorSpace
       />
     </instancedMesh>
   );
