@@ -43,9 +43,10 @@
     - ✅ Doors too
     - ✅ test by forcing small sheets
     - ✅ clean
+  - ✅ decor texture array
   - 🚧 obstacles can have multiple images
-    - test by forcing small sheets 
-  - decor texture array
+    - ✅ refactor
+    - 🚧 test by forcing small sheets 
   - obstacles texture array
 
 

@@ -20,9 +20,11 @@ export default function Obstacles(props) {
     quadGeom: getQuadGeometryXZ(`${w.key}-obs-xz`),
 
     addObstacleUvs() {
-      const { obstacle: [sheet], obstacleDim: sheetDim } = w.geomorphs.sheet;
+      const { obstacle: sheet, maxObstacleDim: sheetDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
+      const uvTextureIds = /** @type {number[]} */ ([]);
+      const instanceIds = /** @type {number[]} */ ([]);
   
       w.gms.forEach(({ obstacles }) =>
         obstacles.forEach(({ symbolKey, obstacleId }) => {
@@ -36,6 +38,8 @@ export default function Obstacles(props) {
             uvOffsets.push(0,  0);
             uvDimensions.push(1, 1);
           }
+          uvTextureIds.push(item.sheetId);
+          instanceIds.push(instanceIds.length);
         })
       );
 
@@ -44,6 +48,12 @@ export default function Obstacles(props) {
       );
       state.inst.geometry.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
+      state.quadGeom.setAttribute('uvTextureIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.quadGeom.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     createObstacleMatrix4(gmTransform, { origPoly: { rect }, transform, height }) {
@@ -68,7 +78,7 @@ export default function Obstacles(props) {
       const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
       const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
       // transform unit quad point into spritesheet
-      const meta = w.geomorphs.sheet.obstacle[0][`${obstacle.symbolKey} ${obstacle.obstacleId}`];
+      const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
       const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
       const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
 
@@ -164,12 +174,20 @@ export default function Obstacles(props) {
       }}
       position={[0, 0.001, 0]} // 🚧
     >
-      <instancedUvMappingMaterial
+      {/* <instancedUvMappingMaterial
         key={glsl.InstancedUvMappingMaterial.key}
         side={THREE.DoubleSide}
         transparent
         map={w.obsTex.tex}
         diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+      /> */}
+      <instancedMultiTextureMaterial
+        key={glsl.InstancedMultiTextureMaterial.key}
+        side={THREE.DoubleSide}
+        transparent
+        atlas={w.texObs.tex}
+        diffuse={[0.6, 0.6, 0.6]}
+        objectPickRed={6}
       />
     </instancedMesh>
   );

@@ -258,7 +258,12 @@ export default function World(props) {
             invert: false,
           },
           // 🚧
-          // { src: getObstaclesSheetUrl(), ta: state.texObs, invert: true, },
+          {
+            src: sheet.obstacleDims.map((_, sheetId) => getObstaclesSheetUrl(sheetId)),
+            ta: state.texObs,
+            dim: sheet.maxObstacleDim, 
+            invert: true,
+          },
         ]) {
 
           if (dim.width !== ta.opts.width || dim.height !== ta.opts.height || src.length !== ta.opts.numTextures) {
@@ -279,25 +284,25 @@ export default function World(props) {
           update();
         }
 
-        for (const { src, tm, invert } of [
-          // { src: getDecorSheetUrl(0), tm: state.decorTex, invert: false },
-          { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
-        ]) {
-          const img = await imageLoader.loadAsync(src);
+        // for (const { src, tm, invert } of [
+        //   // { src: getDecorSheetUrl(0), tm: state.decorTex, invert: false },
+        //   { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
+        // ]) {
+        //   const img = await imageLoader.loadAsync(src);
 
-          [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
-          tm.tex.dispose();
-          tm.tex = new THREE.CanvasTexture(tm.canvas);
-          tm.tex.flipY = false; // align with XZ/XY quad uv-map
+        //   [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
+        //   tm.tex.dispose();
+        //   tm.tex = new THREE.CanvasTexture(tm.canvas);
+        //   tm.tex.flipY = false; // align with XZ/XY quad uv-map
 
-          tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
-          tm.ct.drawImage(img, 0, 0);
-          invert && invertCanvas(tm.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
-          // 🔔 Sharper via getMaxAnisotropy()
-          tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
-          tm.tex.needsUpdate = true;
-          update();
-        }
+        //   tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
+        //   tm.ct.drawImage(img, 0, 0);
+        //   invert && invertCanvas(tm.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
+        //   // 🔔 Sharper via getMaxAnisotropy()
+        //   tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
+        //   tm.tex.needsUpdate = true;
+        //   update();
+        // }
       } else {
         update();
       }

@@ -446,19 +446,24 @@ declare namespace Geomorph {
    * All sprite-sheet metadata.
    */
   interface SpriteSheet {
+    /** Over all sheets */
+    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
+    /** Aligned to sheets; its length is the number of the sheets. */
+    decorDims: { width: number; height: number; }[];
+    /** Maximum over all sheets, for texture array */
+    maxDecorDim: { width: number; height: number; }
+
     /**
+     * Over all sheets
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
-    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>[];
-    /** Maximum over all sheets, for texture array */
-    obstacleDim: { width: number; height: number; }
-    /** Maximum over all sheets, for texture array */
-    maxDecorDim: { width: number; height: number; }
+    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
     /** Aligned to sheets; its length is the number of the sheets. */
-    decorDims: { width: number; height: number; }[];
-    /** Over all sheets */
-    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
+    obstacleDims: { width: number; height: number; }[];
+    /** Maximum over all sheets, for texture array */
+    maxObstacleDim: { width: number; height: number; }
+
     imagesHash: number;
     skins: {
       /** e.g. `npcClassKey` is a `uvMapKey` */
@@ -475,6 +480,7 @@ declare namespace Geomorph {
     obstacleId: number;
     /** e.g. `chair` */
     type: string;
+    sheetId: number;
   }
 
   interface UvRectLookup {

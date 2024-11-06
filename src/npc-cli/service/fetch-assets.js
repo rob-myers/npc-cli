@@ -44,8 +44,9 @@ export async function fetchGeomorphsJson() {
   ).then((x) => x.json());
 }
 
-export function getObstaclesSheetUrl() {
-  return `${assetsEndpoint}/2d/obstacles.${imgExt}${getDevCacheBustQueryParam()}`;
+/** @param {number} sheetId */
+export function getObstaclesSheetUrl(sheetId) {
+  return `${assetsEndpoint}/2d/obstacles.${sheetId}.${imgExt}${getDevCacheBustQueryParam()}`;
 }
 
 /** @param {number} sheetId */
