@@ -243,44 +243,37 @@ export default function World(props) {
         hash: state.hash,
       });
 
-      if (dataChanged) {// 🤔 separate hash.sheets from hash.full?
+      if (!dataChanged) {
+        update();
+        return true;
+      }
 
-        const { sheet } = state.geomorphs;
-        for (const { src, dim, ta, invert } of [
-          {
-            src: sheet.decorDims.map((_, sheetId) => getDecorSheetUrl(sheetId)),
-            ta: state.texDecor,
-            // 🔔 texture array uses fixed width/height for all textures
-            dim: sheet.maxDecorDim, 
-            invert: false,
-          },
-          {
-            src: sheet.obstacleDims.map((_, sheetId) => getObstaclesSheetUrl(sheetId)),
-            ta: state.texObs,
-            dim: sheet.maxObstacleDim, 
-            invert: true,
-          },
-        ]) {
+      // Update texture arrays
+      const { decorDims, maxDecorDim, obstacleDims, maxObstacleDim } = state.geomorphs.sheet;
 
-          if (dim.width !== ta.opts.width || dim.height !== ta.opts.height || src.length !== ta.opts.numTextures) {
-            ta.resize({ width: dim.width, height: dim.height, numTextures: src.length });
-          }
+      for (const { src, dim, texArray, invert } of [{
+        src: decorDims.map((_, sheetId) => getDecorSheetUrl(sheetId)),
+        texArray: state.texDecor,
+        dim: maxDecorDim, 
+        invert: false,
+      }, {
+        src: obstacleDims.map((_, sheetId) => getObstaclesSheetUrl(sheetId)),
+        texArray: state.texObs,
+        dim: maxObstacleDim, 
+        invert: true,
+      }]) {
+        texArray.resize({ width: dim.width, height: dim.height, numTextures: src.length });
+        texArray.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
 
-          await Promise.all(src.map(async (url, sheetId) => {
-            const img = await imageLoader.loadAsync(url);
-            ta.ct.clearRect(0, 0, dim.width, dim.height);
-            ta.ct.drawImage(img, 0, 0);
-            invert && invertCanvas(ta.ct.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
-            ta.updateIndex(sheetId);
-          }));
+        await Promise.all(src.map(async (url, sheetId) => {
+          const img = await imageLoader.loadAsync(url);
+          texArray.ct.clearRect(0, 0, dim.width, dim.height);
+          texArray.ct.drawImage(img, 0, 0);
+          invert && invertCanvas(texArray.ct.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
+          texArray.updateIndex(sheetId);
+        }));
 
-          // 🚧 Sharper via getMaxAnisotropy()
-          // tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
-          ta.update();
-          update();
-        }
-
-      } else {
+        texArray.update();
         update();
       }
 

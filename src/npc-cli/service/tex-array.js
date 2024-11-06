@@ -55,6 +55,10 @@ export class TexArray {
    * @param {Omit<TexArrayOpts, 'ctKey'>} opts
    */
   resize(opts) {
+    if (opts.width === this.opts.width && opts.height === this.opts.height && opts.numTextures === this.opts.numTextures) {
+      return; // resize not needed
+    }
+
     Object.assign(this.opts, opts);
 
     this.ct.canvas.width = opts.width;
