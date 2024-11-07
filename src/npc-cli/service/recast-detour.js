@@ -49,7 +49,7 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    maxSimplificationError: 0.85,
+    maxSimplificationError: 0.85, // 🔔 try avoid "nav edge too close to doorway"
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,

@@ -57,12 +57,8 @@
   - ✅ decor labels
     - ✅ new labels shader
   - ℹ️ decor cuboids shader won't be migrated
-  - 🚧 test decor hmr for multiple sheets
+  - ✅ test decor hmr for multiple sheets
   - 🚧 test obstacle hmr for multiple sheets
-
-- clarify connected nav issues:
-  - ℹ️ inaccessible door should not prevent nav through open door
-  - ℹ️ npc should not be able to get too close to inaccessible door
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
@@ -78,6 +74,10 @@
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+- 🚧 clarify connected nav issues:
+  - ℹ️ inaccessible door should not prevent nav through open door
+    - `maxSimplificationError: 0.85` helped, but causes nav kinks
+  - ℹ️ npc should not be able to get too close to inaccessible door
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
 - try animate ceiling diffuse i.e. more/less white
@@ -113,10 +113,6 @@
 - ❌ change fov with camera distance? e.g. 15 far, 30 close
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
-- ✅ consider transparent body skin
-  - transparency supported
-- ✅ fix flickering hull door base (onchange camera view)
-  - suffices to add a matching line
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so
     try provide "echo circle" for touch devices
@@ -2897,3 +2893,7 @@ done
   - ℹ️ sometimes triggers much too late when "winding round corner of door"
   - ✅ nav seg was outside doorway, so door.doorway -> door.collidePoly,
     which is wider (full door width) yet shallow (slightly less than doorway)
+- ✅ consider transparent body skin
+  - transparency supported
+- ✅ fix flickering hull door base (onchange camera view)
+  - suffices to add a matching line
