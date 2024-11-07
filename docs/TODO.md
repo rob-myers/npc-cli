@@ -57,8 +57,8 @@
   - ✅ decor labels
     - ✅ new labels shader
   - ℹ️ decor cuboids shader won't be migrated
-  - test decor hmr
-  - test obstacle hmr
+  - 🚧 test decor hmr for multiple sheets
+  - 🚧 test obstacle hmr for multiple sheets
 
 - clarify connected nav issues:
   - ℹ️ inaccessible door should not prevent nav through open door

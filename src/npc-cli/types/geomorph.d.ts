@@ -458,7 +458,7 @@ declare namespace Geomorph {
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
-    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
+    obstacle: Record<Geomorph.ObstacleKey, Geom.RectJson & ObstacleSheetRectCtxt>;
     /** Aligned to sheets; its length is the number of the sheets. */
     obstacleDims: { width: number; height: number; }[];
     /** Maximum over all sheets, for texture array */
@@ -474,6 +474,8 @@ declare namespace Geomorph {
       uvMapDim: { [uvMapKey: string]: { width: number; height: number; }; };
     };
   }
+
+  type ObstacleKey = `${Geomorph.SymbolKey} ${number}`;
 
   interface ObstacleSheetRectCtxt {
     symbolKey: Geomorph.SymbolKey;

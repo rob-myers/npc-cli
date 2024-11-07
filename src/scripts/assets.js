@@ -438,12 +438,14 @@ function validateSubSymbolDimensions(symbols) {
 //#region obstacles
 
 /**
+ * Given `media/symbol/{symbolKey}.svg` construct `assets.sheet.obstacle`.
  * @param {Geomorph.AssetsJson} assets
  */
 function createObstaclesSheetJson(assets) {
 
   // Each one of a symbol's obstacles induces a respective packed rect
-  const obstacleKeyToRect = /** @type {Record<`${Geomorph.SymbolKey} ${number}`, { width: number; height: Number; data: Geomorph.ObstacleSheetRectCtxt }>} */ ({});
+  const obstacleKeyToRect = /** @type {Record<Geomorph.ObstacleKey, { width: number; height: number; data: Geomorph.ObstacleSheetRectCtxt }>} */ ({});
+
   for (const { key: symbolKey, obstacles, isHull } of Object.values(assets.symbols)) {
     /** World coords -> Starship Geomorph coords, modulo additional scale in [1, 5] */
     const scale = worldToSguScale * spriteSheetSymbolExtraScale;
@@ -535,12 +537,13 @@ async function drawObstaclesSheet(assets, prev) {
         if (!changedObstacles.has(`${symbolKey} ${obstacleId}`)) {
           // info(`${symbolKey} ${obstacleId} obstacle did not change`);
           const prevObs = /** @type {Geomorph.AssetsJson} */ (prev.assets).sheet.obstacle[`${symbolKey} ${obstacleId}`];
-          ct.drawImage(/** @type {import('canvas').Image} */ (prev.obstaclePngs[sheetId]),
+          ct.drawImage(/** @type {import('canvas').Image} */ (prev.obstaclePngs[prevObs.sheetId]),
             prevObs.x, prevObs.y, prevObs.width, prevObs.height,
             x, y, width, height,
           );
         } else {
-          info(`${symbolKey} ${obstacleId} redrawing...`);
+
+          info(`${symbolKey} ${obstacleId}: redrawing...`);
           const symbolPath = path.resolve(symbolsDir, `${symbolKey}.svg`);
           const matched = fs.readFileSync(symbolPath).toString().match(dataUrlRegEx);
           /**
@@ -570,12 +573,11 @@ async function drawObstaclesSheet(assets, prev) {
  * @param {Geomorph.SpriteSheet['obstacle'][*][]} obstacles
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
- * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
+ * @returns {Record<'changed' | 'removed', Set<Geomorph.ObstacleKey>>}
  */
 function detectChangedObstacles(obstacles, assets, prev) {
-  // 🚧
   if (prev.assets && prev.obstaclePngs.every(Boolean)) {
-    const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
+    const changed = /** @type {Set<Geomorph.ObstacleKey>} */ (new Set);
     const removed = new Set(Object.values(prev.assets.sheet.obstacle).map(geomorph.symbolObstacleToKey));
     const [currMeta, prevMeta] = [assets.meta, prev.assets.meta];
     obstacles.forEach(({ symbolKey, obstacleId }) => {
