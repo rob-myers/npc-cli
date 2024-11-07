@@ -32,8 +32,10 @@
     - `(5, quadInstanceId, 0, gl_FragColor.a)`
   - ✅ obstacle object-pick
   - 🚧 decor cuboid object-pick
+  - WorldCanvas: manual approach to floor onPointer{Down,Up}
+    - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
 
-- 🚧 instancedUvMappingShader (Doors, Obstacles, Decor) -> instancedMultiTextureShader
+- 🚧 instancedUvMappingShader (Doors, Obstacles, Decor quads/labels) -> instancedMultiTextureShader
   - ✅ bin packer supports multiple sheets
   - ✅ decor can have multiple images
     - ✅ static/assets/2d/decor.{sheetId}.png
@@ -45,15 +47,22 @@
     - ✅ test by forcing small sheets
     - ✅ clean
   - ✅ decor texture array
-  - 🚧 obstacles can have multiple images
+  - ✅ obstacles can have multiple images
     - ✅ refactor
     - ✅ test by forcing small sheets 
     - ✅ can darken decor/obstacles
-    - 🚧 clean
+    - ✅ clean
+      - ℹ️ cannot clean away onPointer{Down,Up} yet
   - ✅ obstacles texture array
-  - 🚧 decor labels
+  - ✅ decor labels
+    - ✅ new labels shader
+  - ℹ️ decor cuboids shader won't be migrated
+  - test decor hmr
+  - test obstacle hmr
 
-- try animate ceiling diffuse i.e. more/less white
+- clarify connected nav issues:
+  - ℹ️ inaccessible door should not prevent nav through open door
+  - ℹ️ npc should not be able to get too close to inaccessible door
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
@@ -71,6 +80,7 @@
   - clicking tab sets active tabset
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
+- try animate ceiling diffuse i.e. more/less white
 - locked accessible doors auto-open earlier
   - e.g. check up to two corners in this case
 - try avoid recreate decor/obstacles CanvasTexture by fixing texture size

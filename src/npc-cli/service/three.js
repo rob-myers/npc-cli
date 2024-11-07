@@ -84,6 +84,11 @@ quadGeometryXY.setAttribute("uv", new THREE.BufferAttribute(xyUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xyNormals.slice(), 3 ) );
 quadGeometryXY.setIndex(xyIndices.slice());
 
+const centeredQuadGeometryXY = quadGeometryXY.clone();
+centeredQuadGeometryXY.setAttribute("position", new THREE.BufferAttribute(new Float32Array([
+  -0.5,-0.5,0, -0.5,0.5,0, 0.5,0.5,0, 0.5,-0.5,0
+]), 3));
+
 /** Cache to avoid re-creation on HMR */
 const quadXYLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
 
@@ -91,8 +96,8 @@ const quadXYLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
  * Clone to avoid overwriting attributes used by custom shaders
  * @param {string} key
  */
-export function getQuadGeometryXY(key) {
-  return quadXYLookup[key] ??= quadGeometryXY.clone();
+export function getQuadGeometryXY(key, centered = false) {
+  return quadXYLookup[key] ??= (centered ? centeredQuadGeometryXY : quadGeometryXY).clone();
 }
 
 export const tmpBufferGeom1 = new THREE.BufferGeometry();

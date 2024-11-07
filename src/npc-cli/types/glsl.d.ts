@@ -20,8 +20,13 @@ declare global {
         diffuse?: Vector3Input;
       } & SupportsObjectPick>;
 
-      instancedUvMappingMaterial: BaseExtendedShaderMaterial<{
+      // instancedUvMappingMaterial: BaseExtendedShaderMaterial<{
+      //   map: import('three').CanvasTexture;
+      // }>;
+
+      instancedLabelsMaterial: BaseExtendedShaderMaterial<{
         map: import('three').CanvasTexture;
+        // ...
       }>;
 
       instancedMultiTextureMaterial: BaseExtendedShaderMaterial<{

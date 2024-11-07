@@ -7,7 +7,7 @@ import { isDevelopment, pause, removeDups, testNever, warn } from "../service/ge
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, createLabelSpriteSheet, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
+import { boxGeometry, createLabelSpriteSheet, getColor, getQuadGeometryXY, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
@@ -32,7 +32,7 @@ export default function Decor(props) {
       lookup: {},
       tex: new THREE.CanvasTexture(document.createElement('canvas')),
     },
-    labelQuad: getQuadGeometryXZ(`${w.key}-decor-labels-xz`),
+    labelQuad: getQuadGeometryXY(`${w.key}-decor-labels-xy`, true),
     quads: [],
     quad: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
@@ -186,10 +186,17 @@ export default function Decor(props) {
         d.x - (width * scale) / 2,
         d.y - (height * scale) / 2,
       ]);
-      return geomorph.embedXZMat4(tmpMat1.toArray(), {
-        mat4: tmpMatFour1,
-        yHeight: wallHeight + 0.1,
-      });
+      // return geomorph.embedXZMat4(tmpMat1.toArray(), {
+      //   mat4: tmpMatFour1,
+      //   yHeight: wallHeight + 0.1,
+      // });
+      const transform = tmpMat1.toArray();
+      return tmpMatFour1.set(
+        transform[0], 0, 0, transform[4],
+        0, transform[3], 0, wallHeight,
+        0, 0, 1, transform[5],
+        0, 0, 0, 1
+      );
     },
     createQuadMatrix4(d) {
       if (d.type === 'point') {
@@ -611,12 +618,12 @@ export default function Decor(props) {
       frustumCulled={false}
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <instancedUvMappingMaterial
-        key={glsl.InstancedUvMappingMaterial.key}
+      <instancedLabelsMaterial
+        key={glsl.InstancedLabelsMaterial.key}
         side={THREE.DoubleSide}
         map={state.label.tex}
         transparent
-        diffuse={new THREE.Vector3(0.5, 0.5, 0.5)}
+        diffuse={new THREE.Vector3(1, 1, 0.8)}
       />
     </instancedMesh>
   </>;
