@@ -118,22 +118,23 @@ new PerformanceObserver((list) =>
     .forEach(entry => info(`⏱ ${entry.name}: ${entry.duration.toFixed(2)} ms`))
 ).observe({ entryTypes: ['measure'] });
 
-const staticAssetsDir = path.resolve(__dirname, "../../static/assets");
+const staticAssetsDir = path.resolve(__dirname, '../../static/assets');
 const assetsFilepath = path.resolve(staticAssetsDir, ASSETS_JSON_FILENAME);
 const assetsScriptFilepath = __filename;
 const geomorphServicePath = path.resolve(__dirname, '../npc-cli/service', 'geomorph.js');
-const mediaDir = path.resolve(__dirname, "../../media");
-const mapsDir = path.resolve(mediaDir, "map");
-const symbolsDir = path.resolve(mediaDir, "symbol");
-const assets2dDir = path.resolve(staticAssetsDir, "2d");
-const assets3dDir = path.resolve(staticAssetsDir, "3d");
-const graphDir = path.resolve(mediaDir, "graph");
-const decorDir = path.resolve(mediaDir, "decor");
-const npcDir = path.resolve(mediaDir, "npc");
+const mediaDir = path.resolve(__dirname, '../../media');
+const mapsDir = path.resolve(mediaDir, 'map');
+const symbolsDir = path.resolve(mediaDir, 'symbol');
+const assets2dDir = path.resolve(staticAssetsDir, '2d');
+const assets3dDir = path.resolve(staticAssetsDir, '3d');
+const graphDir = path.resolve(mediaDir, 'graph');
+const decorDir = path.resolve(mediaDir, 'decor');
+const npcDir = path.resolve(mediaDir, 'npc');
 const geomorphsFilepath = path.resolve(staticAssetsDir, GEOMORPHS_JSON_FILENAME);
-const baseObstaclePath = path.resolve(assets2dDir, 'obstacles');
-// const obstaclesPngPath = path.resolve(assets2dDir, 'obstacles.png');
+/** Extended as `${baseDecorPath}.${sheetId}.{png,webp}` */
 const baseDecorPath = path.resolve(assets2dDir, 'decor');
+/** Extended as `${baseObstaclePath}.${sheetId}.{png,webp}` */
+const baseObstaclePath = path.resolve(assets2dDir, 'obstacles');
 const symbolGraphVizPath = path.resolve(graphDir, 'symbols-graph.dot');
 const sendDevEventUrl = `http://${DEV_ORIGIN}:${DEV_EXPRESS_WEBSOCKET_PORT}/send-dev-event`;
 const dataUrlRegEx = /"data:image\/png(.*)"/;
@@ -564,6 +565,44 @@ async function drawObstaclesSheet(assets, prev) {
 
 }
 
+/**
+ * Uses special hashes constructed in `assets.meta`.
+ * @param {Geomorph.SpriteSheet['obstacle'][*][]} obstacles
+ * @param {Geomorph.AssetsJson} assets
+ * @param {Prev} prev
+ * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
+ */
+function detectChangedObstacles(obstacles, assets, prev) {
+  // 🚧
+  if (prev.assets && prev.obstaclePngs.every(Boolean)) {
+    const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
+    const removed = new Set(Object.values(prev.assets.sheet.obstacle).map(geomorph.symbolObstacleToKey));
+    const [currMeta, prevMeta] = [assets.meta, prev.assets.meta];
+    obstacles.forEach(({ symbolKey, obstacleId }) => {
+      const key = geomorph.symbolObstacleToKey({ symbolKey, obstacleId });
+      removed.delete(key);
+      // optional-chaining in case symbol is new
+      (currMeta[symbolKey].pngHash !== prevMeta[symbolKey]?.pngHash
+        || currMeta[symbolKey].obsHashes?.[obstacleId] !== prevMeta[symbolKey].obsHashes?.[obstacleId]
+      ) && changed.add(key);
+    });
+    return { changed, removed };
+  } else {
+    return {
+      changed: new Set(obstacles.map(geomorph.symbolObstacleToKey)),
+      removed: new Set(),
+    };
+  }
+}
+
+/** @param {Geom.Meta} meta */
+function extractObstacleDescriptor(meta) {
+  for (const tag of ['table', 'chair', 'bed', 'shower', 'surface']) {
+    if (meta[tag] === true) return tag;
+  }
+  return 'obstacle';
+}
+
 //#endregion
 
 //#region decor
@@ -715,44 +754,7 @@ function getObstaclePngPaths(assets) {
 
 //#endregion
 
-
-/**
- * Uses special hashes constructed in `assets.meta`.
- * @param {Geomorph.SpriteSheet['obstacle'][*][]} obstacles
- * @param {Geomorph.AssetsJson} assets
- * @param {Prev} prev
- * @returns {Record<'changed' | 'removed', Set<`${Geomorph.SymbolKey} ${number}`>>}
- */
-function detectChangedObstacles(obstacles, assets, prev) {
-  // 🚧
-  if (prev.assets && prev.obstaclePngs.every(Boolean)) {
-    const changed = /** @type {Set<`${Geomorph.SymbolKey} ${number}`>} */ (new Set);
-    const removed = new Set(Object.values(prev.assets.sheet.obstacle).map(geomorph.symbolObstacleToKey));
-    const [currMeta, prevMeta] = [assets.meta, prev.assets.meta];
-    obstacles.forEach(({ symbolKey, obstacleId }) => {
-      const key = geomorph.symbolObstacleToKey({ symbolKey, obstacleId });
-      removed.delete(key);
-      // optional-chaining in case symbol is new
-      (currMeta[symbolKey].pngHash !== prevMeta[symbolKey]?.pngHash
-        || currMeta[symbolKey].obsHashes?.[obstacleId] !== prevMeta[symbolKey].obsHashes?.[obstacleId]
-      ) && changed.add(key);
-    });
-    return { changed, removed };
-  } else {
-    return {
-      changed: new Set(obstacles.map(geomorph.symbolObstacleToKey)),
-      removed: new Set(),
-    };
-  }
-}
-
-/** @param {Geom.Meta} meta */
-function extractObstacleDescriptor(meta) {
-  for (const tag of ['table', 'chair', 'bed', 'shower', 'surface']) {
-    if (meta[tag] === true) return tag;
-  }
-  return 'obstacle';
-}
+//#region npcs
 
 /**
  * @returns {NPC.TexMeta[]}
@@ -805,6 +807,8 @@ async function createNpcTexturesAndUvMeta(assets, prev) {
     }
   }
 }
+
+//#endregion
 
 /**
  * @typedef Prev
