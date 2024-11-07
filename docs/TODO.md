@@ -35,7 +35,7 @@
   - WorldCanvas: manual approach to floor onPointer{Down,Up}
     - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
 
-- 🚧 instancedUvMappingShader (Doors, Obstacles, Decor quads/labels) -> instancedMultiTextureShader
+- ✅ instancedUvMappingShader (Doors, Obstacles, Decor quads/labels) -> instancedMultiTextureShader
   - ✅ bin packer supports multiple sheets
   - ✅ decor can have multiple images
     - ✅ static/assets/2d/decor.{sheetId}.png
@@ -58,7 +58,7 @@
     - ✅ new labels shader
   - ℹ️ decor cuboids shader won't be migrated
   - ✅ test decor hmr for multiple sheets
-  - 🚧 test obstacle hmr for multiple sheets
+  - ✅ test obstacle hmr for multiple sheets
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
