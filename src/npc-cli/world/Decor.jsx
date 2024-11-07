@@ -192,7 +192,7 @@ export default function Decor(props) {
       // });
       return tmpMatFour1.set(
         transform[0], 0, 0, transform[4],
-        0, transform[3], 0, wallHeight,
+        0, transform[3], 0, wallHeight + 0.2,
         0, 0, 1, transform[5],
         0, 0, 0, 1
       );
