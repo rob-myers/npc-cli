@@ -603,23 +603,39 @@ function extractObstacleDescriptor(meta) {
   return 'obstacle';
 }
 
+/**
+ * @param {Geomorph.AssetsJson | null} [assets]
+ */
+function getObstaclePngPaths(assets) {
+  const numObstacleSheets = assets?.sheet.obstacleDims.length ?? 0;
+  return range(numObstacleSheets).map(i => `${baseObstaclePath}.${i}.png`);
+}
+
 //#endregion
 
 //#region decor
 
 /**
+ * Given `media/decor/{decorImgKey}.svg` construct `assets.sheet.decor`.
+ * Returns lookup from _changed_ DecorImgKey to respective PNG (side-effect).
+ * 
  * @param {Geomorph.AssetsJson} assets
  * @param {Prev} prev
  * @returns {Promise<{ [key in Geomorph.DecorImgKey]?: import('canvas').Image }>}
  */
 async function createDecorSheetJson(assets, prev) {
+
   /** `media/decor/{baseName}` for SVGs corresponding to decorImgKeys */
-  const svgBasenames = fs.readdirSync(decorDir).filter((baseName) => {
-    if (!baseName.endsWith(".svg")) return false;
-    const decorImgKey = baseName.slice(0, -'.svg'.length);
-    if (geomorph.isDecorImgKey(decorImgKey)) return true;
-    warn(`${'createDecorSheetJson'}: ignored file (unknown decorImgKey "${decorImgKey}")`);
-  }).sort();
+  const svgBasenames = fs.readdirSync(decorDir)
+    .filter(baseName => baseName.endsWith(".svg"))
+    .filter((baseName) => {
+      if (geomorph.isDecorImgKey(baseName.slice(0, -'.svg'.length))) {
+        return true;
+      } else {
+        warn(`${'createDecorSheetJson'}: expected {decorImgKey}.svg: "${baseName}"`);
+      }
+    }
+  ).sort();
 
   const prevDecorSheet = prev.assets?.sheet.decor;
   const changedSvgBasenames = !!prevDecorSheet && opts.detectChanges
@@ -692,12 +708,15 @@ async function createDecorSheetJson(assets, prev) {
     });
   }
 
-  assets.sheet = { ...assets.sheet, ...json }; // Overwrite initial/previous
+  // Overwrite initial/previous
+  assets.sheet = { ...assets.sheet, ...json };
 
   return imgKeyToImg; // possibly partial
 }
 
 /**
+ * Create the actual sprite-sheet PNG(s).
+ * 
  * @param {Geomorph.AssetsJson} assets
  * @param {Partial<Record<Geomorph.DecorImgKey, import('canvas').Image>>} decorImgKeyToImage
  * @param {Prev} prev
@@ -714,7 +733,7 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
   }, /** @type {Geomorph.SpriteSheet['decor'][]} */ ([]));
 
   for (const [sheetId, decor] of bySheetId.entries()) {
-    // 🔔 sheet-dependent, whereas texture array will be maxDecorDim
+    // 🔔 sheet-dependent, whereas texture array will have dimension `maxDecorDim`
     const { width, height } = decorDims[sheetId];
     ct.canvas.width = width;
     ct.canvas.height = height;
@@ -722,16 +741,18 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
     for (const { x, y, width, height, decorImgKey } of Object.values(decor)) {
       const image = decorImgKeyToImage[decorImgKey];
       if (image) {
-        info(`${decorImgKey} redrawing...`);
+        info(`${decorImgKey} changed: redrawing...`);
         ct.drawImage(image, 0, 0, image.width, image.height, x, y, width, height);
-      } else {// assume image available in previous sprite-sheet
-        const prevRect = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecor)[decorImgKey];
-        ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPngs[sheetId]),
-          prevRect.x, prevRect.y, prevRect.width, prevRect.height,
+      } else {
+        // assume image available in previous sprite-sheet
+        const prevItem = /** @type {Geomorph.SpriteSheet['decor']} */ (prevDecor)[decorImgKey];
+        ct.drawImage(/** @type {import('canvas').Image} */ (prev.decorPngs[prevItem.sheetId]),
+          prevItem.x, prevItem.y, prevItem.width, prevItem.height,
           x, y, width, height,
         );
       }
     }
+
     await saveCanvasAsFile(ct.canvas, `${baseDecorPath}.${sheetId}.png`);
   }
 }
@@ -742,14 +763,6 @@ async function drawDecorSheet(assets, decorImgKeyToImage, prev) {
 function getDecorPngPaths(assets) {
   const numDecorSheets = assets?.sheet.decorDims.length ?? 0;
   return range(numDecorSheets).map(i => `${baseDecorPath}.${i}.png`);
-}
-
-/**
- * @param {Geomorph.AssetsJson | null} [assets]
- */
-function getObstaclePngPaths(assets) {
-  const numObstacleSheets = assets?.sheet.obstacleDims.length ?? 0;
-  return range(numObstacleSheets).map(i => `${baseObstaclePath}.${i}.png`);
 }
 
 //#endregion
