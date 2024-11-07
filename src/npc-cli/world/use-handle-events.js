@@ -91,7 +91,6 @@ export default function useHandleEvents(w) {
         const quad = w.decor.quads[instanceId];
         return {
           picked: 'quad',
-          quad: true,
           ...quad.meta,
         };
       }
@@ -106,6 +105,15 @@ export default function useHandleEvents(w) {
         };
       }
 
+      if (r === 7) {// decor cuboid
+        const instanceId = Math.floor(g);
+        const cuboid = w.decor.cuboids[instanceId];
+        return {
+          picked: 'cuboid',
+          ...cuboid.meta,
+        };
+      }
+
       if (r === 8) {// npc
         const npcUid = (g << 8) + b;
         const npcKey = w.npc.pickUid.toKey.get(npcUid);
@@ -113,6 +121,15 @@ export default function useHandleEvents(w) {
           picked: 'npc',
           npcUid,
           npcKey,
+        };
+      }
+
+      if (r === 9) {// lock-light
+        const instanceId = Math.floor(g);
+        const door = w.door.decodeInstance(instanceId);
+        return {
+          picked: 'lock-light',
+          ...door.meta,
         };
       }
 

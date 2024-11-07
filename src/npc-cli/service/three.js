@@ -218,6 +218,13 @@ export function buildObjectLookup(object) {
 
 export const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
 
+/** @param {string} key */
+export function getBoxGeometry(key) {
+  return boxGeomLookup[key] ??= boxGeometry.clone();
+}
+
+const boxGeomLookup = /** @type {Record<string, THREE.BoxGeometry>} */ ({});
+
 export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
 const canvasTexMetaLookup = /** @type {Record<string, CanvasTexMeta>} */ ({});

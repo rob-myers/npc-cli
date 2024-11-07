@@ -31,34 +31,12 @@
   - ✅ decor quad object-pick
     - `(5, quadInstanceId, 0, gl_FragColor.a)`
   - ✅ obstacle object-pick
-  - 🚧 decor cuboid object-pick
+  - ✅ decor cuboid object-pick
+  - ✅ lock light object-pick
   - WorldCanvas: manual approach to floor onPointer{Down,Up}
     - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
 
-- ✅ instancedUvMappingShader (Doors, Obstacles, Decor quads/labels) -> instancedMultiTextureShader
-  - ✅ bin packer supports multiple sheets
-  - ✅ decor can have multiple images
-    - ✅ static/assets/2d/decor.{sheetId}.png
-    - ✅ World loads all into TexArray
-    - ✅ decor point/quad has meta.img properly typed
-    - ✅ use TexArray instead of CanvasTexture
-    - ✅ decor point/quad has meta.sheetId
-    - ✅ Doors too
-    - ✅ test by forcing small sheets
-    - ✅ clean
-  - ✅ decor texture array
-  - ✅ obstacles can have multiple images
-    - ✅ refactor
-    - ✅ test by forcing small sheets 
-    - ✅ can darken decor/obstacles
-    - ✅ clean
-      - ℹ️ cannot clean away onPointer{Down,Up} yet
-  - ✅ obstacles texture array
-  - ✅ decor labels
-    - ✅ new labels shader
-  - ℹ️ decor cuboids shader won't be migrated
-  - ✅ test decor hmr for multiple sheets
-  - ✅ test obstacle hmr for multiple sheets
+- cached geometries should have `w.key` prefix
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
@@ -2897,3 +2875,28 @@ done
   - transparency supported
 - ✅ fix flickering hull door base (onchange camera view)
   - suffices to add a matching line
+
+- ✅ instancedUvMappingShader (Doors, Obstacles, Decor quads/labels) -> instancedMultiTextureShader
+  - ✅ bin packer supports multiple sheets
+  - ✅ decor can have multiple images
+    - ✅ static/assets/2d/decor.{sheetId}.png
+    - ✅ World loads all into TexArray
+    - ✅ decor point/quad has meta.img properly typed
+    - ✅ use TexArray instead of CanvasTexture
+    - ✅ decor point/quad has meta.sheetId
+    - ✅ Doors too
+    - ✅ test by forcing small sheets
+    - ✅ clean
+  - ✅ decor texture array
+  - ✅ obstacles can have multiple images
+    - ✅ refactor
+    - ✅ test by forcing small sheets 
+    - ✅ can darken decor/obstacles
+    - ✅ clean
+      - ℹ️ cannot clean away onPointer{Down,Up} yet
+  - ✅ obstacles texture array
+  - ✅ decor labels
+    - ✅ new labels shader
+  - ℹ️ decor cuboids shader won't be migrated
+  - ✅ test decor hmr for multiple sheets
+  - ✅ test obstacle hmr for multiple sheets

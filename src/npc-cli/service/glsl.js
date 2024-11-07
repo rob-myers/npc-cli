@@ -71,61 +71,6 @@ const instancedMonochromeShader = {
   `,
 };
 
-// const instancedUvMappingShader = {
-//   Vert: /*glsl*/`
-
-//   varying vec3 vColor;
-//   varying vec2 vUv;
-//   attribute vec2 uvDimensions;
-//   attribute vec2 uvOffsets;
-
-//   #include <common>
-//   #include <logdepthbuf_pars_vertex>
-
-//   void main() {
-//     // vUv = uv;
-//     vUv = (uv * uvDimensions) + uvOffsets;
-//     vec4 modelViewPosition = vec4(position, 1.0);
-
-//     // USE_INSTANCING
-//     modelViewPosition = instanceMatrix * modelViewPosition;
-//     modelViewPosition = modelViewMatrix * modelViewPosition;
-//     gl_Position = projectionMatrix * modelViewPosition;
-
-//     vColor = vec3(1.0);
-//     #ifdef USE_INSTANCING_COLOR
-//       vColor.xyz *= instanceColor.xyz;
-//     #endif
-
-//     #include <logdepthbuf_vertex>
-//   }
-
-//   `,
-
-//   Frag: /*glsl*/`
-
-//   varying vec3 vColor;
-//   varying vec2 vUv;
-//   uniform sampler2D map;
-//   uniform vec3 diffuse;
-
-//   #include <common>
-//   #include <logdepthbuf_pars_fragment>
-
-//   void main() {
-//     gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, 1);
-
-//     // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
-//     if(gl_FragColor.a < 0.5) {
-//       discard;
-//     }
-
-//     #include <logdepthbuf_fragment>
-//   }
-//   `,
-
-// };
-
 /**
  * Use with centered XY quad.
  */
@@ -181,7 +126,6 @@ const instancedLabelsShader = {
     #include <logdepthbuf_fragment>
   }
   `,
-
 };
 
 /**
@@ -197,6 +141,9 @@ export const cameraLightShader = {
 
   flat varying float dotProduct;
   varying vec3 vColor;
+  flat varying int vInstanceId;
+
+  attribute int instanceIds;
 
   #include <common>
   #include <uv_pars_vertex>
@@ -204,10 +151,11 @@ export const cameraLightShader = {
 
   void main() {
     #include <uv_vertex>
+    vInstanceId = instanceIds;
 
-    vec3 objectNormal = vec3( normal );
-    vec3 transformed = vec3( position );
-    vec4 mvPosition = vec4( transformed, 1.0 );
+    vec3 objectNormal = vec3(normal);
+    vec3 transformed = vec3(position);
+    vec4 mvPosition = vec4(transformed, 1.0);
 
     #ifdef USE_INSTANCING
       mvPosition = instanceMatrix * mvPosition;
@@ -240,9 +188,13 @@ export const cameraLightShader = {
 
   Frag: /*glsl*/`
 
+  flat varying int vInstanceId;
 	flat varying float dotProduct;
   varying vec3 vColor;
+
   uniform vec3 diffuse;
+  uniform bool objectPick;
+  uniform int objectPickRed;
 
   #include <common>
   #include <uv_pars_fragment>
@@ -250,12 +202,16 @@ export const cameraLightShader = {
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    vec4 diffuseColor = vec4( diffuse, 1);
+    vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
     #include <map_fragment>
 
     // gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
     gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
+
+    if (objectPick == true) {
+      gl_FragColor = vec4(float(objectPickRed) / 255.0, float(vInstanceId) / 255.0, 0.0, gl_FragColor.a);
+    }
   }
   `,
 };
@@ -569,18 +525,6 @@ export const InstancedMonochromeShader = shaderMaterial(
   instancedMonochromeShader.Frag,
 );
 
-// export const InstancedUvMappingMaterial = shaderMaterial(
-//   {
-//     map: null,
-//     diffuse: new THREE.Vector3(1, 0.9, 0.6),
-//     opacity: 0.6,
-//     alphaTest: 0.5,
-//     // mapTransform: new THREE.Matrix3(),
-//   },
-//   instancedUvMappingShader.Vert,
-//   instancedUvMappingShader.Frag,
-// );
-
 export const InstancedLabelsMaterial = shaderMaterial(
   {
     map: null,
@@ -613,6 +557,8 @@ export const CameraLightMaterial = shaderMaterial(
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
+    objectPick: false,
+    objectPickRed: 0,
   },
   cameraLightShader.Vert,
   cameraLightShader.Frag,

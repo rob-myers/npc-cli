@@ -7,7 +7,7 @@ import { isDevelopment, pause, removeDups, testNever, warn } from "../service/ge
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, createLabelSpriteSheet, getColor, getQuadGeometryXY, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
+import { createLabelSpriteSheet, getBoxGeometry, getColor, getQuadGeometryXY, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
@@ -22,6 +22,7 @@ export default function Decor(props) {
     byKey: {},
     byGrid: [],
     byRoom: [],
+    cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
     seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
@@ -95,6 +96,12 @@ export default function Decor(props) {
           warn(`decor "${d.key}" cannot be instantiated: not in any room`, d)
         )
       ), false);
+    },
+    addCuboidAttributes() {
+      const instanceIds = state.cuboids.map((_, instanceId) => instanceId);
+      state.cuboidGeom.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+      );
     },
     addLabelUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
@@ -558,6 +565,7 @@ export default function Decor(props) {
   React.useEffect(() => {
     if (query.data === true) {
       state.addQuadUvs();
+      state.addCuboidAttributes();
       state.positionInstances();
     } else if (query.data === false) {
       query.refetch(); // hmr
@@ -571,7 +579,7 @@ export default function Decor(props) {
       name="decor-cuboids"
       key={`${state.cuboids.length} cuboids`}
       ref={instances => instances && (state.cuboidInst = instances)}
-      args={[boxGeometry, undefined, state.cuboids.length]}
+      args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
       onPointerUp={state.onPointerUp}
       onPointerDown={state.onPointerDown}
@@ -584,6 +592,7 @@ export default function Decor(props) {
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
         transparent
+        objectPickRed={7}
       />
     </instancedMesh>
 
@@ -641,6 +650,7 @@ export default function Decor(props) {
  * @property {Record<string, Geomorph.Decor>} byKey
  * @property {Geomorph.RoomDecor[][]} byRoom
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
+ * @property {THREE.BoxGeometry} cuboidGeom
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
  * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
@@ -661,6 +671,7 @@ export default function Decor(props) {
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor
  * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
+ * @property {() => void} addCuboidAttributes
  * @property {(decor: Geomorph.Decor, instanceId: number) => Geom.Meta} computeDecorMeta
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4

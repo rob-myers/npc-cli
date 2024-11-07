@@ -5,7 +5,7 @@ import { damp } from "maath/easing"
 import { Mat, Vect } from "../geom";
 import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision, wallOutset } from "../service/const";
 import * as glsl from "../service/glsl";
-import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
+import { getBoxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -21,9 +21,16 @@ export default function Doors(props) {
     byGmId: {},
     byPos: {},
     doorsInst: /** @type {*} */ (null),
+    lockLightsGeom: getBoxGeometry(`${w.key}-lock-lights`),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
 
+    addCuboidAttributes() {
+      const instanceIds = Object.values(state.byKey).map((_, instanceId) => instanceId);
+      state.lockLightsGeom.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+      );
+    },
     addUvs() {
       const { decor: sheet, maxDecorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
@@ -292,6 +299,7 @@ export default function Doors(props) {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
+    state.addCuboidAttributes();
     state.addUvs();
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
 
@@ -320,13 +328,14 @@ export default function Doors(props) {
       name="lock-lights"
       key={`${w.hash} lock-lights`}
       ref={instances => instances && (state.lockSigInst = instances)}
-      args={[boxGeometry, undefined, w.gmsData.doorCount]}
+      args={[state.lockLightsGeom, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
     >
       <cameraLightMaterial
         key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
+        objectPickRed={9}
       />
     </instancedMesh>
   </>;
@@ -344,9 +353,11 @@ export default function Doors(props) {
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
  * @property {{ [center in `${number},${number}`]: Geomorph.DoorState }} byPos
  * @property {THREE.InstancedMesh} doorsInst
+ * @property {THREE.BoxGeometry} lockLightsGeom
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
  *
+ * @property {() => void} addCuboidAttributes
  * @property {() => void} addUvs
  * @property {() => void} buildLookups
  * @property {(item: Geomorph.DoorState) => void} cancelClose
