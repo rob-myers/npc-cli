@@ -3,7 +3,7 @@ import { SkeletonUtils } from 'three-stdlib';
 import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
-import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
+import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
 import { info, warn } from '../service/generic';
 import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
@@ -778,9 +778,6 @@ export function hotModuleReloadNpc(npc) {
   return Object.assign(nextNpc, {...npc});
 }
 
-/** @param {any} error */
-function emptyReject(error) {}
-
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
@@ -796,3 +793,5 @@ export const crowdAgentParams = {
   // obstacleAvoidanceType
   updateFlags: defaultAgentUpdateFlags,
 };
+
+const showLastNavPath = false;

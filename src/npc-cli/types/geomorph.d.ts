@@ -105,9 +105,7 @@ declare namespace Geomorph {
     /** As wide as door, slightly less deep than doorway. */
     collidePoly: Geom.Poly;
     /** Bounds of `doorway`. */
-    rect: Geom.Rect;
-    /** Transform angle (radians) */
-    angle: number;
+    collideRect: Geom.Rect;
 
     closeTimeoutId?: number;
   }

@@ -299,15 +299,8 @@ export default function useHandleEvents(w) {
       }
     },
     navSegIntersectsDoorway(u, v, door) {
-      if (door.axisAligned === true) {
-        const mx = Math.min(u.x, v.x);
-        const my = Math.min(u.y, v.y);
-        const Mx = Math.max(u.x, v.x);
-        const My = Math.max(u.y, v.y);
-        return door.rect.intersectsArgs(mx, my, Mx - mx, My - my);
-      } else {// more costly but rare
-        return geom.lineSegIntersectsPolygon(u, v, door.collidePoly);
-      }
+      // 🤔 more efficient approach?
+      return geom.lineSegIntersectsPolygon(u, v, door.collidePoly);
     },
     npcCanAccess(npcKey, gdKey) {
       for (const regexDef of state.npcToAccess[npcKey] ?? []) {

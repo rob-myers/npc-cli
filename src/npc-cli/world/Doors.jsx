@@ -106,9 +106,9 @@ export default function Doors(props) {
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(door.normal.clone()),
             segLength: u.distanceTo(v),
+
             collidePoly,
-            rect: collidePoly.rect.precision(precision),
-            angle: radians,
+            collideRect: collidePoly.rect.precision(precision),
           };
           instId++;
         })

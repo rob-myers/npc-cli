@@ -126,8 +126,6 @@ export const glbFadeOut = {
 
 export const defaultNpcInteractRadius = geomorphGridMeters;
 
-export const showLastNavPath = false;
-
 /**
  * Maximum `1 + 2 + 4 + 8 + 16`
  */
