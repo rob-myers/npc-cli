@@ -17,6 +17,11 @@ quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setAttribute("normal", new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
+const centeredQuadGeometryXZ = quadGeometryXZ.clone();
+centeredQuadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(new Float32Array([
+  -0.5,0,-0.5, 0.5,0,-0.5, 0.5,0,0.5, -0.5,0,0.5
+]), 3));
+
 /** Cache to avoid re-creation on HMR */
 const quadXZLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
 
@@ -28,8 +33,8 @@ const rotMatLookup = /** @type {Record<string, THREE.Matrix4>} */ ({});
  * Clone to avoid overwriting attributes used by custom shaders
  * @param {string} key
  */
-export function getQuadGeometryXZ(key) {
-  return quadXZLookup[key] ??= quadGeometryXZ.clone();
+export function getQuadGeometryXZ(key, centered = false) {
+  return quadXZLookup[key] ??= (centered ? centeredQuadGeometryXZ : quadGeometryXZ).clone();
 }
 
 /**
