@@ -33,10 +33,13 @@
   - ✅ obstacle object-pick
   - ✅ decor cuboid object-pick
   - ✅ lock light object-pick
-  - WorldCanvas: manual approach to floor onPointer{Down,Up}
+  - 🚧 WorldCanvas: manual approach to floor onPointer{Down,Up}
     - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
+    - ✅ on pick floor, raycast against infinite floor plane
+    - 🚧 send pointer events
 
 - cached geometries should have `w.key` prefix
+- w.ui -> w.r3 (?)
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

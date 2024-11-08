@@ -24,10 +24,13 @@ export default function WorldCanvas(props) {
     clickIds: [],
     controls: /** @type {*} */ (null),
     down: undefined,
+    groundGeom: getQuadGeometryXZ('ground-plane-xz', true),
+    groundMesh: /** @type {*} */ (null),
     fov: smallViewport ? 20 : 10,
     justLongDown: false,
     lastDown: undefined,
     lastScreenPoint: new Vect(),
+    raycaster: new THREE.Raycaster(),
     rootEl: /** @type {*} */ (null),
     rootState: /** @type {*} */ (null),
     targetFov: /** @type {null | number} */ (null),
@@ -107,7 +110,7 @@ export default function WorldCanvas(props) {
     onCreated(rootState) {
       state.rootState = rootState;
       w.threeReady = true;
-      w.r3f = rootState;
+      w.r3f = /** @type {typeof w['r3f']} */ (rootState);
       w.update(); // e.g. show stats
     },
     onGridPointerDown(e) {
@@ -233,7 +236,7 @@ export default function WorldCanvas(props) {
         w.menu.justOpen = false;
       }
     },
-    pickObject(e) {// 🚧 WIP https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
+    pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = state.rootState;
       // Set the projection matrix to only look at the pixel we are interested in.
       camera.setViewOffset(
@@ -253,6 +256,9 @@ export default function WorldCanvas(props) {
         const [r, g, b, a] = Array.from(x);
         const decoded = w.e.decodeObjectPick(r, g, b, a);
         console.log('🔔', { r, g, b, a }, '\n', decoded);
+        if (decoded !== null) {
+          w.e.handleObjectPick(e, decoded);
+        }
       });
       gl.setRenderTarget(null);
       camera.clearViewOffset();
@@ -265,8 +271,9 @@ export default function WorldCanvas(props) {
       x.material.uniforms.objectPick.value = false;
       x.material.uniformsNeedUpdate = true;
     },
-    renderObjectPickScene() {// 🚧 WIP
+    renderObjectPickScene() {
       const { gl, scene, camera } = state.rootState;
+      // https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       // This is the magic, these render lists are still filled with valid data.  So we can
       // submit them again for picking and save lots of work!
       const renderList = gl.renderLists.get(scene, 0);
@@ -367,15 +374,15 @@ export default function WorldCanvas(props) {
 
       <Origin />
 
-      <group
-        name="floor"
-        scale={[2000, 1, 2000]}
+      <mesh
+        ref={x => void ((x !== null) && (state.groundMesh = x))}
+        name="ground"
+        args={[state.groundGeom]}
         onPointerDown={state.onGridPointerDown}
         onPointerUp={state.onGridPointerUp}
+        scale={[2000, 1, 2000]}
         visible={false}
-      >
-        <mesh args={[getQuadGeometryXZ('vanilla-xz')]} position={[-0.5, 0, -0.5]} />
-      </group>
+      />
     </Canvas>
   );
 }
@@ -397,12 +404,15 @@ export default function WorldCanvas(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down
  * Defined iff at least one pointer is down.
+ * @property {THREE.BufferGeometry} groundGeom
+ * @property {THREE.Mesh} groundMesh Larger than floor, which is an InstancedMesh
  * @property {number} fov
  * @property {BaseDown & { threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
  * @property {Geom.Vect} lastScreenPoint
  * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
+ * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
  * @property {import('@react-three/fiber').RootState} rootState
  * @property {null | number} targetFov

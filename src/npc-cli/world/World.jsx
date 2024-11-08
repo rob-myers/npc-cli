@@ -359,7 +359,7 @@ export default function World(props) {
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
  * @property {number} reqAnimId
- * @property {import("@react-three/fiber").RootState} r3f
+ * @property {import("@react-three/fiber").RootState & { camera: THREE.PerspectiveCamera }} r3f
  * @property {Timer} timer
  *
  * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
