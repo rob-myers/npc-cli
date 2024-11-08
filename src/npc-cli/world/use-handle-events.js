@@ -299,19 +299,6 @@ export default function useHandleEvents(w) {
           break;
       }
     },
-    handleObjectPick(e, decoded) {
-        if (decoded.picked === 'floor') {// raycast against ground plane
-          const { camera, scene } =  w.r3f;
-          const normalizedDeviceCoords = new THREE.Vector2(
-            -1 + 2 * ((e.nativeEvent.offsetX * window.devicePixelRatio) / w.ui.canvas.width),
-            +1 - 2 * ((e.nativeEvent.offsetY * window.devicePixelRatio) / w.ui.canvas.height),
-          );
-          w.ui.raycaster.setFromCamera(normalizedDeviceCoords, camera);
-          const [intersected] = w.ui.raycaster.intersectObjects([w.ui.groundMesh]);
-          // 🚧
-          console.log({intersected});
-        }
-    },
     navSegIntersectsDoorway(u, v, door) {
       // 🤔 more efficient approach?
       return geom.lineSegIntersectsPolygon(u, v, door.collidePoly);
@@ -553,7 +540,6 @@ export default function useHandleEvents(w) {
  * @property {(r: number, g: number, b: number, a: number) => null | DecodedObjectPick} decodeObjectPick
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
- * @property {(e: React.PointerEvent, decoded: DecodedObjectPick) => void} handleObjectPick
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
  * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor

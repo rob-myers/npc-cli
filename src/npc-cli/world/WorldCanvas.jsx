@@ -139,9 +139,35 @@ export default function WorldCanvas(props) {
         },
       }));
     },
+    onObjectPickPixel(e, pixel) {
+      const [r, g, b, a] = Array.from(pixel);
+      const decoded = w.e.decodeObjectPick(r, g, b, a);
+      console.log('🔔', { r, g, b, a }, '\n', decoded);
+
+      if (decoded === null) {
+        return;
+      }
+
+      if (decoded.picked === 'floor') {// raycast against ground plane
+        const { camera } =  state.rootState;
+        const normalizedDeviceCoords = new THREE.Vector2(
+          -1 + 2 * ((e.nativeEvent.offsetX * window.devicePixelRatio) / state.canvas.width),
+          +1 - 2 * ((e.nativeEvent.offsetY * window.devicePixelRatio) / state.canvas.height),
+        );
+        state.raycaster.setFromCamera(normalizedDeviceCoords, camera);
+        const [intersected] = state.raycaster.intersectObjects([w.ui.groundMesh]);
+        // 🚧
+        console.log({intersected});
+
+        return;
+      }
+
+      // 🚧
+      
+    },
     onPointerDown(e) {
       const sp = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
-      state.lastScreenPoint.set(sp.x, sp.y);
+      state.lastScreenPoint.copy(sp);
       // No MultiTouch Long Press
       window.clearTimeout(state.down?.longTimeoutId);
       
@@ -163,6 +189,12 @@ export default function WorldCanvas(props) {
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
       };
 
+      if (state.rootState === null) {
+        return; // ignore early clicks
+      }
+      
+      state.pickObject(e)
+      // 🚧 move into onObjectPickPixel
       w.events.next(state.getNpcPointerEvent({
         key: "pointerdown",
         distancePx: 0,
@@ -192,13 +224,12 @@ export default function WorldCanvas(props) {
     onPointerMove(e) {
       state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
-    onPointerUp(e) {// After 3D pointerup
+    onPointerUp(e) {// React.PointerEvent
       if (state.down === undefined) {
         return;
       }
 
-      state.rootState !== null && state.pickObject(e) // 🚧 WIP
-
+      // 🚧 WIP
       w.events.next(state.getNpcPointerEvent({
         key: "pointerup",
         event: e,
@@ -251,15 +282,11 @@ export default function WorldCanvas(props) {
       gl.setRenderTarget(pickingRenderTarget);
       gl.clear();
       gl.render(emptySceneForPicking, camera);
-      // gl.readRenderTargetPixels(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer);
-      gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer).then((x) => {
-        const [r, g, b, a] = Array.from(x);
-        const decoded = w.e.decodeObjectPick(r, g, b, a);
-        console.log('🔔', { r, g, b, a }, '\n', decoded);
-        if (decoded !== null) {
-          w.e.handleObjectPick(e, decoded);
-        }
-      });
+
+      gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer)
+        .then(state.onObjectPickPixel.bind(null, e))
+      ;
+
       gl.setRenderTarget(null);
       camera.clearViewOffset();
     },
@@ -420,6 +447,7 @@ export default function WorldCanvas(props) {
  *
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
+ * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
  * @property {() => null | Geom.Meta} getLastDownMeta
  * @property {(def: PointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getNpcPointerEvent
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls

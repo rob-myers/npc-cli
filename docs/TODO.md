@@ -33,10 +33,13 @@
   - ✅ obstacle object-pick
   - ✅ decor cuboid object-pick
   - ✅ lock light object-pick
-  - 🚧 WorldCanvas: manual approach to floor onPointer{Down,Up}
+  - ✅ on pick floor, raycast against infinite floor plane
     - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
-    - ✅ on pick floor, raycast against infinite floor plane
-    - 🚧 send pointer events
+  - 🚧 send pointer events
+    - ℹ️ must object-pick on "down" e.g. for long press, but avoid on "up",
+      i.e. if close to down then use it, otherwise ignore it
+    - distinguish pointerevent via `type`
+  - replace long-pointer-down
 
 - cached geometries should have `w.key` prefix
 - w.ui -> w.r3 (?)
