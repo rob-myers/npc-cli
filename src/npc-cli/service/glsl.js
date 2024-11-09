@@ -211,7 +211,12 @@ export const cameraLightShader = {
     gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
 
     if (objectPick == true) {
-      gl_FragColor = vec4(float(objectPickRed) / 255.0, float(vInstanceId) / 255.0, 0.0, gl_FragColor.a);
+      gl_FragColor = vec4(
+        float(objectPickRed) / 255.0,
+        float((vInstanceId >> 8) & 255) / 255.0,
+        float(vInstanceId & 255) / 255.0,
+        gl_FragColor.a
+      );
     }
   }
   `,
