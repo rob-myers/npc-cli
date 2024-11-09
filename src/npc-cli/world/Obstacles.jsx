@@ -119,6 +119,7 @@ export default function Obstacles(props) {
         atlas={w.texObs.tex}
         diffuse={[0.4, 0.4, 0.4]}
         objectPickRed={6}
+        alphaTest={0.5}
       />
     </instancedMesh>
   );

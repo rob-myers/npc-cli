@@ -100,7 +100,7 @@ export default function Ceiling(props) {
         side={THREE.DoubleSide}
         transparent
         atlas={w.gmsData.texCeil.tex ?? emptyDataArrayTexture}
-        alphaTest={0.9} // 0.5 flickered on (301, 101) border
+        alphaTest={0.5} // 0.5 flickered on (301, 101) border
         diffuse={[1, 1, 1]}
         colorSpace
         objectPickRed={3}

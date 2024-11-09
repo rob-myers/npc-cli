@@ -555,6 +555,7 @@ export default function Decor(props) {
         diffuse={[1, 1, 1]}
         objectPickRed={5}
         // depthWrite={false} // fix z-fighting
+        alphaTest={0.5}
       />
     </instancedMesh>
 

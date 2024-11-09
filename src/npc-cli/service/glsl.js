@@ -44,6 +44,7 @@ const instancedMonochromeShader = {
   #include <logdepthbuf_pars_fragment>
 
   /**
+   * 🚧 handle 0 alpha
    * - 1 means wall
    * - vGmId in 0..255
    * - vInstanceId in 0..65535: (msByte, lsByte)
@@ -480,6 +481,7 @@ export const instancedMultiTextureShader = {
 
   Frag: /* glsl */`
 
+    uniform float alphaTest;
     uniform bool objectPick;
     uniform bool colorSpace;
     uniform int objectPickRed;
@@ -499,11 +501,17 @@ export const instancedMultiTextureShader = {
       // gl_FragColor = vec4(1.0, 0.0, 0.0, gl_FragColor.a);
 
       if (gl_FragColor.a < 0.5) {
+      // if (gl_FragColor.a < alphaTest) {
         discard; // stop transparent pixels taking precedence
       }
 
       if (objectPick == true) {
-        gl_FragColor = vec4(float(objectPickRed) / 255.0, float(vInstanceId) / 255.0, 0.0, gl_FragColor.a);
+        gl_FragColor = vec4(
+          float(objectPickRed) / 255.0,
+          float((vInstanceId >> 8) & 255) / 255.0,
+          float(vInstanceId & 255) / 255.0,
+          gl_FragColor.a
+        );
       }
       
       if (colorSpace == true) {
@@ -538,6 +546,7 @@ export const InstancedLabelsMaterial = shaderMaterial(
 
 export const InstancedMultiTextureMaterial = shaderMaterial(
   {
+    alphaTest: 0,
     atlas: emptyDataArrayTexture,
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
     // 🔔 map, mapTransform required else can get weird texture

@@ -30,6 +30,7 @@ declare global {
       }>;
 
       instancedMultiTextureMaterial: BaseExtendedShaderMaterial<{
+        alphaTest?: number;
         colorSpace?: boolean;
         diffuse?: Vector3Input;
         atlas: import('three').DataArrayTexture;

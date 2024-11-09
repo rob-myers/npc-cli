@@ -58,28 +58,28 @@ export default function useHandleEvents(w) {
       }
 
       if (r === 2) {// floor
-        const gmId = Math.floor(g);
+        const instanceId = (g << 8) + b;
         return {
           picked: 'floor',
-          gmId,
+          gmId: instanceId,
           floor: true,
-          instanceId: gmId,
+          instanceId,
         };
       }
 
       if (r === 3) {// ceiling
-        const gmId = Math.floor(g);
+        const instanceId = (g << 8) + b;
         return {
           picked: 'ceiling',
-          gmId,
+          gmId: instanceId,
           ceiling: true,
           height: wallHeight,
-          instanceId: gmId,
+          instanceId,
         };
       }
 
       if (r === 4) {// door
-        const instanceId = Math.floor(g);
+        const instanceId = (g << 8) + b;
         const decoded = w.door.decodeInstance(instanceId);
         return {
           picked: 'door',
@@ -90,7 +90,7 @@ export default function useHandleEvents(w) {
       }
 
       if (r === 5) {// decor quad
-        const instanceId = Math.floor(g);
+        const instanceId = (g << 8) + b;
         const quad = w.decor.quads[instanceId];
         return {
           picked: 'quad',
@@ -100,7 +100,7 @@ export default function useHandleEvents(w) {
       }
 
       if (r === 6) {// obstacle
-        const instanceId = Math.floor(g);
+        const instanceId = (g << 8) + b;
         const decoded = w.obs.decodeObstacleId(instanceId);
         return {
           picked: 'obstacle',
@@ -111,7 +111,7 @@ export default function useHandleEvents(w) {
       }
 
       if (r === 7) {// decor cuboid
-        const instanceId = Math.floor(g);
+        const instanceId = (g << 8) + b;
         const cuboid = w.decor.cuboids[instanceId];
         return {
           picked: 'cuboid',
@@ -133,7 +133,7 @@ export default function useHandleEvents(w) {
       }
 
       if (r === 9) {// lock-light
-        const instanceId = Math.floor(g);
+        const instanceId = (g << 8) + b;
         const door = w.door.decodeInstance(instanceId);
         return {
           picked: 'lock-light',
