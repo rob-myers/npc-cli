@@ -347,3 +347,18 @@ export const physicsConfig = {
   agentHeight: 1.5,
   agentRadius: 0.2,
 };
+
+/**
+ * @type {Record<NPC.ObjectPickedType, boolean>}
+ */
+export const pickedTypesInSomeRoom = {
+    wall: true,
+    floor: true,
+    ceiling: false,
+    door: false,
+    quad: true,
+    obstacle: true,
+    cuboid: true,
+    npc: true, // technically not
+    'lock-light': false,
+};

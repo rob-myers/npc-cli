@@ -13,11 +13,11 @@ export default function useHandleEvents(w) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     doorToNpc: {},
+    externalNpcs: new Set(),
     npcToAccess: {},
     npcToDoor: {},
     npcToRoom: new Map(),
     roomToNpcs: [],
-    externalNpcs: new Set(),
     shouldIgnoreLongClick: undefined,
 
     canCloseDoor(door) {
@@ -49,11 +49,11 @@ export default function useHandleEvents(w) {
       if (r === 1) {// wall
         const gmId = Math.floor(g);
         const instanceId = (b << 8) + a;
-        const meta = w.wall.decodeInstanceId(instanceId);
+        const decoded = w.wall.decodeInstanceId(instanceId);
         return {
           picked: 'wall',
           gmId,
-          ...meta,
+          ...decoded,
           instanceId,
         };
       }
@@ -182,9 +182,6 @@ export default function useHandleEvents(w) {
           e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
           !e.touch && state.onPointerUpMenuDesktop(e);
           w.menu.justOpen = w.menu.ctOpen;
-          break;
-        case "pointerup-outside":
-          !e.touch && state.onPointerUpMenuDesktop(e);
           break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
@@ -545,13 +542,13 @@ export default function useHandleEvents(w) {
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
- * @property {(r: number, g: number, b: number, a: number) => null | DecodedObjectPick} decodeObjectPick
+ * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
  * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
- * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
+ * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
  * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
@@ -564,21 +561,3 @@ export default function useHandleEvents(w) {
 
 /** e.g. `'^g0'` -> `/^g0/` */
 const regexCache = /** @type {Record<string, RegExp>} */ ({});
-
-/**
- * @typedef {Geom.Meta<{ picked: ObjectPickedType; instanceId: number; }>} DecodedObjectPick
- */
-
-/**
- * @typedef {(
-*  | 'wall'
-*  | 'floor'
-*  | 'ceiling'
-*  | 'door'
-*  | 'quad'
-*  | 'obstacle'
-*  | 'cuboid'
-*  | 'npc'
-*  | 'lock-light'
-* )} ObjectPickedType
-*/

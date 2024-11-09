@@ -57,32 +57,6 @@ export default function Walls(props) {
         { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
       );
     },
-    // onPointerDown(e) {
-    //   w.events.next(w.ui.getNpcPointerEvent({
-    //     key: "pointerdown",
-    //     distancePx: 0,
-    //     event: e,
-    //     is3d: true,
-    //     justLongDown: false,
-    //     meta: {
-    //       ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
-    //       ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
-    //     },
-    //   }));
-    //   e.stopPropagation();
-    // },
-    // onPointerUp(e) {
-    //   w.events.next(w.ui.getNpcPointerEvent({
-    //     key: "pointerup",
-    //     event: e,
-    //     is3d: true,
-    //     meta: {
-    //       ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
-    //       ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
-    //     },
-    //   }));
-    //   e.stopPropagation();
-    // },
     positionInstances() {
       const { inst: ws } = state;
       let wId = 0;
@@ -124,12 +98,8 @@ export default function Walls(props) {
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
-      // onPointerUp={state.onPointerUp}
-      // onPointerDown={state.onPointerDown}
     >
-      {/* <meshBasicMaterial side={THREE.DoubleSide} color="black" /> */}
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
-      {/* <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0, 0, 0]} objectPick={true} /> */}
       <instancedMonochromeShader
         key={InstancedMonochromeShader.key}
         side={THREE.DoubleSide}
@@ -157,8 +127,6 @@ export default function Walls(props) {
  *  height?: number,
  *  baseHeight?: number,
  * ) => THREE.Matrix4} getWallMat
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  */
 

@@ -320,7 +320,7 @@ export default function Npcs(props) {
  * Format `[npc.bodyUid, npc.position.x, npc.position.y, npc.position.z, ...]`
  * @property {Record<NPC.TextureKey, THREE.Texture>} tex
  * @property {{ free: Set<number>; toKey: Map<number, string> }} pickUid
- * `uid.free` are the as-yet-unused npc uids.
+ * `uid.free` are those npc uids not-yet-used.
  * They are removed/added on spawn/remove npc.
  *
  * @property {() => void} clearLabels

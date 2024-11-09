@@ -82,7 +82,6 @@ declare namespace NPC {
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
   type Event = (
-    | PointerUpOutsideEvent
     | PointerUpEvent
     | PointerDownEvent
     | LongPointerDownEvent
@@ -146,11 +145,6 @@ declare namespace NPC {
   }>;
 
   type PointerUp3DEvent = PointerUpEvent & { is3d: true };
-
-  type PointerUpOutsideEvent = Pretty<BasePointerEvent & {
-    key: "pointerup-outside";
-    is3d: false;
-  }>;
 
   type PointerDownEvent = Pretty<BasePointerEvent & {
     key: "pointerdown";
@@ -222,5 +216,22 @@ declare namespace NPC {
   };
 
   type ObstacleRef = import("@recast-navigation/core").ObstacleRef;
+
+  type DecodedObjectPick = Geom.Meta<{
+    picked: ObjectPickedType;
+    instanceId: number;
+  }>;
+
+  type ObjectPickedType = (
+    | 'wall'
+    | 'floor'
+    | 'ceiling'
+    | 'door'
+    | 'quad'
+    | 'obstacle'
+    | 'cuboid'
+    | 'npc'
+    | 'lock-light'
+  );
 
 }

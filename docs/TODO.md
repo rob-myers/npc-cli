@@ -35,17 +35,20 @@
   - ✅ lock light object-pick
   - ✅ on pick floor, raycast against infinite floor plane
     - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
-  - 🚧 send pointer events
+  - ✅ send pointer events
     - ℹ️ must object-pick on "down" e.g. for long press
     - ℹ️ can avoid object-pick on "up" (if close to down then use it)
     - ✅ `click 1` should provide a 3d position
       - all object-pick types have a position
     - ✅ fix RMB click: state.pickObject can end after native "pointerup"
-    - 🚧 enrich as before
+  - 🚧 enrich event meta as before
+    - WorldCanvas ✅ Floor ✅ Walls ✅ Doors ✅ ... 🚧
+  - 🚧 clean
 
 - ✅ cached geometries should have `w.key` prefix
+- avoid dup w.ui.rootState, w.r3f
+- w.ui -> w.r3
 - careful about alpha=0 in object-pick encoding
-- w.ui -> w.r3 (?)
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
