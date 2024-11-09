@@ -339,36 +339,36 @@ export default function Decor(props) {
       instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
-    onPointerDown(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const decor = state.detectClick(e);
+    // onPointerDown(e) {
+    //   const instanceId = /** @type {number} */ (e.instanceId);
+    //   const decor = state.detectClick(e);
 
-      if (decor !== null) {
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerdown",
-          distancePx: 0,
-          event: e,
-          is3d: true,
-          justLongDown: false,
-          meta: state.computeDecorMeta(decor, instanceId),
-        }));
-        e.stopPropagation();
-      }
-    },
-    onPointerUp(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const decor = state.detectClick(e);
+    //   if (decor !== null) {
+    //     w.events.next(w.ui.getNpcPointerEvent({
+    //       key: "pointerdown",
+    //       distancePx: 0,
+    //       event: e,
+    //       is3d: true,
+    //       justLongDown: false,
+    //       meta: state.computeDecorMeta(decor, instanceId),
+    //     }));
+    //     e.stopPropagation();
+    //   }
+    // },
+    // onPointerUp(e) {
+    //   const instanceId = /** @type {number} */ (e.instanceId);
+    //   const decor = state.detectClick(e);
 
-      if (decor !== null) {
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerup",
-          event: e,
-          is3d: true,
-          meta: state.computeDecorMeta(decor, instanceId),
-        }));
-        e.stopPropagation();
-      }
-    },
+    //   if (decor !== null) {
+    //     w.events.next(w.ui.getNpcPointerEvent({
+    //       key: "pointerup",
+    //       event: e,
+    //       is3d: true,
+    //       meta: state.computeDecorMeta(decor, instanceId),
+    //     }));
+    //     e.stopPropagation();
+    //   }
+    // },
     positionInstances() { 
       const { cuboidInst, quadInst, labelInst } = state;
       
@@ -581,8 +581,8 @@ export default function Decor(props) {
       ref={instances => instances && (state.cuboidInst = instances)}
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
+      // onPointerUp={state.onPointerUp}
+      // onPointerDown={state.onPointerDown}
       renderOrder={-1}
       visible={state.cuboids.length > 0} // avoid initial flicker
     >
@@ -602,8 +602,8 @@ export default function Decor(props) {
       ref={instances => instances && (state.quadInst = instances)}
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
+      // onPointerUp={state.onPointerUp}
+      // onPointerDown={state.onPointerDown}
       // visible={state.quads.length > 0} // 🚧 avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
@@ -682,8 +682,8 @@ export default function Decor(props) {
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
  * @property {(gmId: number) => void} addGm
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom

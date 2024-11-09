@@ -429,3 +429,23 @@ export function hasObjectPickShaderMaterial(o) {
     && 'objectPick' in o.material.uniforms
   );
 }
+
+const tempInstanceMesh = new THREE.Mesh();
+tempInstanceMesh.material = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
+const tempInstanceLocalMatrix = new THREE.Matrix4();
+const tempInstanceWorldMatrix = new THREE.Matrix4();
+
+/**
+ * 
+ * @param {THREE.InstancedMesh} inst 
+ * @param {number} instanceId 
+ */
+export function getTempInstanceMesh(inst, instanceId) {
+  if (inst.boundingSphere === null) inst.computeBoundingSphere();
+  const matrixWorld = inst.matrixWorld;
+  tempInstanceMesh.geometry = inst.geometry;
+  // tempInstanceMesh.material = inst.material;
+  inst.getMatrixAt(instanceId, tempInstanceLocalMatrix);
+  tempInstanceMesh.matrixWorld = tempInstanceWorldMatrix.multiplyMatrices(matrixWorld, tempInstanceLocalMatrix);
+  return tempInstanceMesh;
+}

@@ -56,32 +56,32 @@ export default function Walls(props) {
         { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
       );
     },
-    onPointerDown(e) {
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerdown",
-        distancePx: 0,
-        event: e,
-        is3d: true,
-        justLongDown: false,
-        meta: {
-          ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
-          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
-        },
-      }));
-      e.stopPropagation();
-    },
-    onPointerUp(e) {
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerup",
-        event: e,
-        is3d: true,
-        meta: {
-          ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
-          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
-        },
-      }));
-      e.stopPropagation();
-    },
+    // onPointerDown(e) {
+    //   w.events.next(w.ui.getNpcPointerEvent({
+    //     key: "pointerdown",
+    //     distancePx: 0,
+    //     event: e,
+    //     is3d: true,
+    //     justLongDown: false,
+    //     meta: {
+    //       ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
+    //       ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
+    //     },
+    //   }));
+    //   e.stopPropagation();
+    // },
+    // onPointerUp(e) {
+    //   w.events.next(w.ui.getNpcPointerEvent({
+    //     key: "pointerup",
+    //     event: e,
+    //     is3d: true,
+    //     meta: {
+    //       ...state.decodeInstanceId(/** @type {number} */ (e.instanceId)),
+    //       ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
+    //     },
+    //   }));
+    //   e.stopPropagation();
+    // },
     positionInstances() {
       const { wallsInst: ws } = state;
       let wId = 0;
@@ -123,8 +123,8 @@ export default function Walls(props) {
       ref={instances => instances && (state.wallsInst = instances)}
       args={[getQuadGeometryXY('walls-xy'), undefined, w.gmsData.wallCount]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
+      // onPointerUp={state.onPointerUp}
+      // onPointerDown={state.onPointerDown}
       // position={[0, 0.002, 0]}
     >
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="black" /> */}
@@ -156,8 +156,8 @@ export default function Walls(props) {
  *  height?: number,
  *  baseHeight?: number,
  * ) => THREE.Matrix4} getWallMat
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  */
 

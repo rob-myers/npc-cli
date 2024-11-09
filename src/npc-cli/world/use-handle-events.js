@@ -53,8 +53,8 @@ export default function useHandleEvents(w) {
         return {
           picked: 'wall',
           gmId,
-          instanceId,
           ...meta,
+          instanceId,
         };
       }
 
@@ -64,6 +64,7 @@ export default function useHandleEvents(w) {
           picked: 'floor',
           gmId,
           floor: true,
+          instanceId: gmId,
         };
       }
 
@@ -74,6 +75,7 @@ export default function useHandleEvents(w) {
           gmId,
           ceiling: true,
           height: wallHeight,
+          instanceId: gmId,
         };
       }
 
@@ -84,6 +86,7 @@ export default function useHandleEvents(w) {
           picked: 'door',
           door: true,
           ...decoded,
+          instanceId,
         };
       }
 
@@ -93,6 +96,7 @@ export default function useHandleEvents(w) {
         return {
           picked: 'quad',
           ...quad.meta,
+          instanceId,
         };
       }
 
@@ -103,6 +107,7 @@ export default function useHandleEvents(w) {
           picked: 'obstacle',
           obstacle: true,
           ...decoded,
+          instanceId,
         };
       }
 
@@ -112,6 +117,7 @@ export default function useHandleEvents(w) {
         return {
           picked: 'cuboid',
           ...cuboid.meta,
+          instanceId,
         };
       }
 
@@ -122,6 +128,7 @@ export default function useHandleEvents(w) {
           picked: 'npc',
           npcUid,
           npcKey,
+          instanceId: npcUid, // not really an instance
         };
       }
 
@@ -131,6 +138,7 @@ export default function useHandleEvents(w) {
         return {
           picked: 'lock-light',
           ...door.meta,
+          instanceId,
         };
       }
 
@@ -558,7 +566,7 @@ export default function useHandleEvents(w) {
 const regexCache = /** @type {Record<string, RegExp>} */ ({});
 
 /**
- * @typedef {Geom.Meta<{ picked: ObjectPickedType }>} DecodedObjectPick
+ * @typedef {Geom.Meta<{ picked: ObjectPickedType; instanceId: number; }>} DecodedObjectPick
  */
 
 /**

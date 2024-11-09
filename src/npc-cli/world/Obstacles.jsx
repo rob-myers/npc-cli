@@ -92,50 +92,50 @@ export default function Obstacles(props) {
       // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
       return null;
     },
-    onPointerDown(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const result = state.detectClick(e);
+    // onPointerDown(e) {
+    //   const instanceId = /** @type {number} */ (e.instanceId);
+    //   const result = state.detectClick(e);
 
-      if (result !== null) {
-        const { gmId, obstacle } = result;
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerdown",
-          distancePx: 0,
-          event: e,
-          is3d: true,
-          justLongDown: false,
-          meta: {
-            gmId,
-            obstacleId: obstacle.obstacleId,
-            height: obstacle.height,
-            ...obstacle.origPoly.meta,
-            instanceId,
-          },
-        }));
-        e.stopPropagation();
-      }
-    },
-    onPointerUp(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const result = state.detectClick(e);
+    //   if (result !== null) {
+    //     const { gmId, obstacle } = result;
+    //     w.events.next(w.ui.getNpcPointerEvent({
+    //       key: "pointerdown",
+    //       distancePx: 0,
+    //       event: e,
+    //       is3d: true,
+    //       justLongDown: false,
+    //       meta: {
+    //         gmId,
+    //         obstacleId: obstacle.obstacleId,
+    //         height: obstacle.height,
+    //         ...obstacle.origPoly.meta,
+    //         instanceId,
+    //       },
+    //     }));
+    //     e.stopPropagation();
+    //   }
+    // },
+    // onPointerUp(e) {
+    //   const instanceId = /** @type {number} */ (e.instanceId);
+    //   const result = state.detectClick(e);
 
-      if (result !== null) {
-        const { gmId, obstacleId, obstacle } = result;
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerup",
-          event: e,
-          is3d: true,
-          meta: {
-            gmId,
-            obstacleId,
-            height: obstacle.height,
-            ...obstacle.origPoly.meta,
-            instanceId,
-          },
-        }));
-        e.stopPropagation();
-      }
-    },
+    //   if (result !== null) {
+    //     const { gmId, obstacleId, obstacle } = result;
+    //     w.events.next(w.ui.getNpcPointerEvent({
+    //       key: "pointerup",
+    //       event: e,
+    //       is3d: true,
+    //       meta: {
+    //         gmId,
+    //         obstacleId,
+    //         height: obstacle.height,
+    //         ...obstacle.origPoly.meta,
+    //         instanceId,
+    //       },
+    //     }));
+    //     e.stopPropagation();
+    //   }
+    // },
     positionObstacles() {
       const { inst: obsInst } = state;
       let oId = 0;
@@ -206,8 +206,8 @@ export default function Obstacles(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
  *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
  * )} detectClick
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionObstacles
  */
 

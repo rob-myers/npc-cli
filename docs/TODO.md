@@ -36,12 +36,12 @@
   - ✅ on pick floor, raycast against infinite floor plane
     - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
   - 🚧 send pointer events
-    - ℹ️ must object-pick on "down" e.g. for long press, but avoid on "up",
-      i.e. if close to down then use it, otherwise ignore it
-    - distinguish pointerevent via `type`
-  - replace long-pointer-down
-
+    - ℹ️ must object-pick on "down" e.g. for long press
+    - ℹ️ can avoid object-pick on "up" (if close to down then use it)
+    - ✅ `click 1` should provide a 3d position
+      - all object-pick types have a position
 - cached geometries should have `w.key` prefix
+- careful about alpha=0 in object-pick encoding
 - w.ui -> w.r3 (?)
 
 - 🚧 support `await api.sleep(1)` inside `map`

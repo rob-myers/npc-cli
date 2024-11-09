@@ -89,42 +89,42 @@ export default function Ceiling(props) {
         // drawPolygons(ct, x, ['red', 'white', 0.08]);
       });
     },
-    onPointerDown(e) {
-      const result = state.detectClick(e);
+    // onPointerDown(e) {
+    //   const result = state.detectClick(e);
 
-      if (result !== null) {
-        const { gmId } = result;
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerdown",
-          event: e,
-          is3d: true,
-          meta: {
-            ceiling: true,
-            gmId,
-            height: wallHeight,
-          },
-        }));
-        e.stopPropagation();
-      }
-    },
-    onPointerUp(e) {
-      const result = state.detectClick(e);
+    //   if (result !== null) {
+    //     const { gmId } = result;
+    //     w.events.next(w.ui.getNpcPointerEvent({
+    //       key: "pointerdown",
+    //       event: e,
+    //       is3d: true,
+    //       meta: {
+    //         ceiling: true,
+    //         gmId,
+    //         height: wallHeight,
+    //       },
+    //     }));
+    //     e.stopPropagation();
+    //   }
+    // },
+    // onPointerUp(e) {
+    //   const result = state.detectClick(e);
 
-      if (result !== null) {
-        const { gmId } = result;
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerup",
-          event: e,
-          is3d: true,
-          meta: {
-            ceiling: true,
-            gmId,
-            height: wallHeight,
-          },
-        }));
-        e.stopPropagation();
-      }
-    },
+    //   if (result !== null) {
+    //     const { gmId } = result;
+    //     w.events.next(w.ui.getNpcPointerEvent({
+    //       key: "pointerup",
+    //       event: e,
+    //       is3d: true,
+    //       meta: {
+    //         ceiling: true,
+    //         gmId,
+    //         height: wallHeight,
+    //       },
+    //     }));
+    //     e.stopPropagation();
+    //   }
+    // },
     positionInstances() {
       for (const [gmId, gm] of w.gms.entries()) {
         const mat = (new Mat([gm.pngRect.width, 0, 0, gm.pngRect.height, gm.pngRect.x, gm.pngRect.y])).postMultiply(gm.matrix);
@@ -178,7 +178,7 @@ export default function Ceiling(props) {
  * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  */

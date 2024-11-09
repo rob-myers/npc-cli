@@ -162,26 +162,26 @@ export default function Doors(props) {
     isOpen(gmId, doorId) {
       return this.byGmId[gmId][doorId].open;
     },
-    onPointerDown(e) {
-      e.stopPropagation();
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerdown",
-        distancePx: 0,
-        event: e,
-        is3d: true,
-        justLongDown: false,
-        meta: state.decodeInstance(/** @type {number} */ (e.instanceId)),
-      }));
-    },
-    onPointerUp(e) {
-      e.stopPropagation();
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerup",
-        event: e,
-        is3d: true,
-        meta: state.decodeInstance(/** @type {number} */ (e.instanceId)),
-      }));
-    },
+    // onPointerDown(e) {
+    //   e.stopPropagation();
+    //   w.events.next(w.ui.getNpcPointerEvent({
+    //     key: "pointerdown",
+    //     distancePx: 0,
+    //     event: e,
+    //     is3d: true,
+    //     justLongDown: false,
+    //     meta: state.decodeInstance(/** @type {number} */ (e.instanceId)),
+    //   }));
+    // },
+    // onPointerUp(e) {
+    //   e.stopPropagation();
+    //   w.events.next(w.ui.getNpcPointerEvent({
+    //     key: "pointerup",
+    //     event: e,
+    //     is3d: true,
+    //     meta: state.decodeInstance(/** @type {number} */ (e.instanceId)),
+    //   }));
+    // },
     onTick(deltaMs) {
       if (state.movingDoors.size === 0) {
         return;
@@ -310,8 +310,8 @@ export default function Doors(props) {
       ref={instances => instances && (state.doorsInst = instances)}
       args={[getQuadGeometryXY('doors-xy'), undefined, w.gmsData.doorCount]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
+      // onPointerUp={state.onPointerUp}
+      // onPointerDown={state.onPointerDown}
       renderOrder={-1}
     >
       <instancedMultiTextureMaterial
@@ -366,8 +366,8 @@ export default function Doors(props) {
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleLockOpts) => boolean} toggleLockRaw
  * @property {(deltaMs: number) => void} onTick

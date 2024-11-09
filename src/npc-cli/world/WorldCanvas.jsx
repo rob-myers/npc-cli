@@ -5,10 +5,11 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { damp } from "maath/easing";
 
+import { testNever } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { emptySceneForPicking, getQuadGeometryXZ, hasObjectPickShaderMaterial, pickingRenderTarget } from "../service/three.js";
+import { emptySceneForPicking, getQuadGeometryXZ, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
 import useOnResize from "../hooks/use-on-resize.js";
@@ -48,7 +49,54 @@ export default function WorldCanvas(props) {
     getLastDownMeta() {
       return state.lastDown?.threeD?.meta ?? null;
     },
-    getNpcPointerEvent({
+    getWorldPointerEvent({
+      key,
+      distancePx = state.getDownDistancePx(),
+      event,
+      justLongDown = state.justLongDown,
+      meta,
+      // 🚧 on pointerup we fallback to last down point
+      position,
+    }) {
+      if (key === 'pointerup' || key === 'pointerdown') {
+        return {
+          key,
+          /**
+           * 🚧 is3d ~ means we have a specific 3d point (object-pick needn't)
+           */
+          ...position
+            ? { is3d: true, position, point: { x: position.x, y: position.z } }
+            : { is3d: false },
+          distancePx,
+          justLongDown,
+          keys: getModifierKeys(event.nativeEvent),
+          pointers: state.getNumPointers(),
+          rmb: isRMB(event.nativeEvent),
+          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          meta,
+          ...key === 'pointerup' && { clickId: state.clickIds.pop() },
+        };
+      }
+      if (key === 'long-pointerdown' || key === 'pointerup-outside') {
+        return {
+          key,
+          is3d: false, // 🚧
+          distancePx,
+          justLongDown,
+          keys: getModifierKeys(event.nativeEvent),
+          pointers: state.getNumPointers(),
+          rmb: isRMB(event.nativeEvent),
+          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
+          touch: isTouchDevice(),
+          meta,
+        };
+      }
+      throw Error(`${'getWorldPointerEvent'}: key "${key}" should be in ${
+        JSON.stringify(['pointerup', 'pointerdown', 'long-pointerdown', 'pointerup-outside'])
+      }`);
+    },
+    getNpcPointerEvent({// 🚧 remove
       key,
       distancePx = state.getDownDistancePx(),
       event,
@@ -113,32 +161,32 @@ export default function WorldCanvas(props) {
       w.r3f = /** @type {typeof w['r3f']} */ (rootState);
       w.update(); // e.g. show stats
     },
-    onGridPointerDown(e) {
-      const { x, z: y } = e.point;
-      w.events.next(state.getNpcPointerEvent({
-        key: "pointerdown",
-        distancePx: 0,
-        event: e,
-        is3d: true,
-        justLongDown: false,
-        meta: {
-          floor: true,
-          ...w.gmGraph.findRoomContaining({ x, y }, true),
-        },
-      }));
-    },
-    onGridPointerUp(e) {
-      const { x, z: y } = e.point;
-      w.events.next(state.getNpcPointerEvent({
-        key: "pointerup",
-        event: e,
-        is3d: true,
-        meta: {
-          floor: true,
-          ...w.gmGraph.findRoomContaining({ x, y }, true),
-        },
-      }));
-    },
+    // onGridPointerDown(e) {
+      // const { x, z: y } = e.point;
+      // w.events.next(state.getNpcPointerEvent({
+      //   key: "pointerdown",
+      //   distancePx: 0,
+      //   event: e,
+      //   is3d: true,
+      //   justLongDown: false,
+      //   meta: {
+      //     floor: true,
+      //     ...w.gmGraph.findRoomContaining({ x, y }, true),
+      //   },
+      // }));
+    // },
+    // onGridPointerUp(e) {
+      // const { x, z: y } = e.point;
+      // w.events.next(state.getNpcPointerEvent({
+      //   key: "pointerup",
+      //   event: e,
+      //   is3d: true,
+      //   meta: {
+      //     floor: true,
+      //     ...w.gmGraph.findRoomContaining({ x, y }, true),
+      //   },
+      // }));
+    // },
     onObjectPickPixel(e, pixel) {
       const [r, g, b, a] = Array.from(pixel);
       const decoded = w.e.decodeObjectPick(r, g, b, a);
@@ -148,22 +196,42 @@ export default function WorldCanvas(props) {
         return;
       }
 
-      if (decoded.picked === 'floor') {// raycast against ground plane
-        const { camera } =  state.rootState;
-        const normalizedDeviceCoords = new THREE.Vector2(
-          -1 + 2 * ((e.nativeEvent.offsetX * window.devicePixelRatio) / state.canvas.width),
-          +1 - 2 * ((e.nativeEvent.offsetY * window.devicePixelRatio) / state.canvas.height),
-        );
-        state.raycaster.setFromCamera(normalizedDeviceCoords, camera);
-        const [intersected] = state.raycaster.intersectObjects([w.ui.groundMesh]);
-        // 🚧
-        console.log({intersected});
+      /** @type {null | THREE.Intersection} */
+      let intersection = null;
+      /** @type {THREE.Mesh} */
+      let mesh;
 
-        return;
+      const normalizedDeviceCoords = new THREE.Vector2(
+        -1 + 2 * ((e.nativeEvent.offsetX * window.devicePixelRatio) / state.canvas.width),
+        +1 - 2 * ((e.nativeEvent.offsetY * window.devicePixelRatio) / state.canvas.height),
+      );
+      state.raycaster.setFromCamera(normalizedDeviceCoords, state.rootState.camera);
+
+      switch (decoded.picked) {
+        case 'floor': mesh = getTempInstanceMesh(w.floor.inst, decoded.instanceId); break;
+        case 'wall': mesh = getTempInstanceMesh(w.wall.wallsInst, decoded.instanceId); break;
+        case 'npc': mesh = w.n[decoded.npcKey].m.mesh; break;
+        case 'door': mesh = getTempInstanceMesh(w.door.doorsInst, decoded.instanceId); break;
+        case 'quad': mesh = getTempInstanceMesh(w.decor.quadInst, decoded.instanceId); break;
+        case 'obstacle': mesh = getTempInstanceMesh(w.obs.inst, decoded.instanceId); break;
+        case 'ceiling': mesh = getTempInstanceMesh(w.ceil.inst, decoded.instanceId); break;
+        case 'cuboid': mesh = getTempInstanceMesh(w.decor.cuboidInst, decoded.instanceId); break;
+        case 'lock-light': mesh = getTempInstanceMesh(w.door.lockSigInst, decoded.instanceId); break;
+        default: throw testNever(decoded.picked);
       }
 
-      // 🚧
-      
+      intersection = state.raycaster.intersectObject(mesh)[0];
+
+      if (intersection) {
+        w.events.next(state.getWorldPointerEvent({
+          key: "pointerdown",
+          distancePx: 0,
+          event: e,
+          justLongDown: false,
+          meta: decoded,
+          position: intersection.point, // 🚧 precision
+        }));
+      }
     },
     onPointerDown(e) {
       const sp = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
@@ -178,12 +246,18 @@ export default function WorldCanvas(props) {
         epochMs: Date.now(),
         longTimeoutId: state.down || cameraKey ? 0 : window.setTimeout(() => {
           state.justLongDown = true;
-          w.events.next(state.getNpcPointerEvent({
+          // w.events.next(state.getNpcPointerEvent({
+          //   key: "long-pointerdown",
+          //   event: e,
+          //   is3d: false,
+          //   justLongDown: false,
+          //   meta: {},
+          // }));
+          w.events.next(state.getWorldPointerEvent({
             key: "long-pointerdown",
             event: e,
-            is3d: false,
             justLongDown: false,
-            meta: {},
+            meta: {}, // 🚧 rely on prev meta stored somewhere?
           }));
         }, longPressMs),
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
@@ -194,15 +268,16 @@ export default function WorldCanvas(props) {
       }
       
       state.pickObject(e)
+
       // 🚧 move into onObjectPickPixel
-      w.events.next(state.getNpcPointerEvent({
-        key: "pointerdown",
-        distancePx: 0,
-        event: e,
-        is3d: false,
-        justLongDown: false,
-        meta: {},
-      }));
+      // w.events.next(state.getNpcPointerEvent({
+      //   key: "pointerdown",
+      //   distancePx: 0,
+      //   event: e,
+      //   is3d: false,
+      //   justLongDown: false,
+      //   meta: {},
+      // }));
     },
     onPointerLeave(e) {
       if (!state.down) {
@@ -230,11 +305,19 @@ export default function WorldCanvas(props) {
       }
 
       // 🚧 WIP
-      w.events.next(state.getNpcPointerEvent({
+      // w.events.next(state.getNpcPointerEvent({
+      //   key: "pointerup",
+      //   event: e,
+      //   is3d: false,
+      //   meta: {},
+      // }));
+      w.events.next(state.getWorldPointerEvent({
         key: "pointerup",
         event: e,
-        is3d: false,
-        meta: {},
+        // is3d: false,
+        // meta: {},
+        meta: state.getLastDownMeta() ?? {},
+        position: state.lastDown?.threeD?.point,
       }));
 
       state.onPointerLeave(e);
@@ -245,10 +328,16 @@ export default function WorldCanvas(props) {
         return;
       }
 
-      w.events.next(state.getNpcPointerEvent({
+      // w.events.next(state.getNpcPointerEvent({
+      //   key: "pointerup-outside",
+      //   event: /** @type {React.MouseEvent} */ ({ nativeEvent: e }),
+      //   is3d: false,
+      //   meta: {},
+      // }));
+      w.events.next(state.getWorldPointerEvent({
         key: "pointerup-outside",
         event: /** @type {React.MouseEvent} */ ({ nativeEvent: e }),
-        is3d: false,
+        // is3d: false,
         meta: {},
       }));
     },
@@ -318,7 +407,7 @@ export default function WorldCanvas(props) {
       });
     },
     setLastDown(e) {
-      if (e.is3d || !state.lastDown) {
+      if (e.is3d === true || !state.lastDown) {
         state.lastDown = {
           epochMs: Date.now(),
           screenPoint: Vect.from(e.screenPoint),
@@ -401,15 +490,15 @@ export default function WorldCanvas(props) {
 
       <Origin />
 
-      <mesh
+      {/* <mesh
         ref={x => void ((x !== null) && (state.groundMesh = x))}
         name="ground"
         args={[state.groundGeom]}
-        onPointerDown={state.onGridPointerDown}
-        onPointerUp={state.onGridPointerUp}
+        // onPointerDown={state.onGridPointerDown}
+        // onPointerUp={state.onGridPointerUp}
         scale={[2000, 1, 2000]}
         visible={false}
-      />
+      /> */}
     </Canvas>
   );
 }
@@ -449,11 +538,12 @@ export default function WorldCanvas(props) {
  * @property {() => number} getNumPointers
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
  * @property {() => null | Geom.Meta} getLastDownMeta
+ * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getWorldPointerEvent
  * @property {(def: PointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent | NPC.PointerUpOutsideEvent} getNpcPointerEvent
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
+//  * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerDown
+ * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onGridPointerUp
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown
  * @property {(e: MouseEvent) => void} onPointerMissed
  * @property {(e: React.PointerEvent) => void} onPointerLeave
@@ -499,13 +589,24 @@ const statsCss = css`
  */
 
 /**
- * @typedef PointerEventDef
+ * @typedef PointerEventDef // 🚧 remove
  * @property {'pointerup' | 'pointerdown' | 'long-pointerdown' | 'pointerup-outside'} key
  * @property {number} [distancePx]
  * @property {import('@react-three/fiber').ThreeEvent<PointerEvent> | React.PointerEvent | React.MouseEvent} event
  * @property {boolean} is3d
  * @property {boolean} [justLongDown]
  * @property {Geom.Meta} meta
+ */
+
+/**
+ * @typedef WorldPointerEventDef
+ * @property {'pointerup' | 'pointerdown' | 'long-pointerdown' | 'pointerup-outside'} key
+ * @property {number} [distancePx]
+ * @property {React.PointerEvent | React.MouseEvent} event
+ * //@property {boolean} is3d
+ * @property {boolean} [justLongDown]
+ * @property {Geom.Meta} meta
+ * @property {THREE.Vector3Like} [position]
  */
 
 const initAzimuth = Math.PI / 6;
