@@ -306,9 +306,11 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
   ct.font = `${fontHeight}px 'Courier new'`;
 
+  const strokeWidth = 3;
+
   const rects = labels.map(label => ({
-    width: ct.measureText(label).width,
-    height: fontHeight,
+    width: ct.measureText(label).width + 2 * strokeWidth,
+    height: fontHeight + 2 * strokeWidth,
     data: { label },
   }));
 
@@ -323,17 +325,21 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   // Draw sprite-sheet
   if (canvas.width !== bin.width || canvas.height !== bin.height) {
     sheet.tex.dispose();
-    [canvas.width, canvas.height] = [bin.width, bin.height];
+    canvas.width = bin.width;
+    canvas.height = bin.height;
     sheet.tex = new THREE.CanvasTexture(canvas);
     sheet.tex.flipY = false;
   }
   ct.clearRect(0, 0, bin.width, bin.height);
-  ct.strokeStyle = ct.fillStyle = 'white';
+  // ct.strokeStyle = ct.fillStyle = 'white';
+  ct.strokeStyle = 'black';
+  ct.fillStyle = 'white';
+  ct.lineWidth = strokeWidth;
   ct.font = `${fontHeight}px 'Courier new'`;
   ct.textBaseline = 'top';
   bin.rects.forEach(rect => {
-    ct.fillText(rect.data.label, rect.x, rect.y);
-    ct.strokeText(rect.data.label, rect.x, rect.y);
+    ct.strokeText(rect.data.label, rect.x + strokeWidth, rect.y + strokeWidth);
+    ct.fillText(rect.data.label, rect.x + strokeWidth, rect.y + strokeWidth);
   });
 
   sheet.tex.needsUpdate = true;
