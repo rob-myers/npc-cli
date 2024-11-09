@@ -118,9 +118,11 @@ export default function WorldCanvas(props) {
       /** @type {THREE.Mesh} */
       let mesh;
 
+      // handle fractional device pixel ratio e.g. 2.625 on Pixel
+      const devicePixelRatio = Math.floor(window.devicePixelRatio);
       const normalizedDeviceCoords = new THREE.Vector2(
-        -1 + 2 * ((e.nativeEvent.offsetX * window.devicePixelRatio) / state.canvas.width),
-        +1 - 2 * ((e.nativeEvent.offsetY * window.devicePixelRatio) / state.canvas.height),
+        -1 + 2 * ((e.nativeEvent.offsetX * devicePixelRatio) / state.canvas.width),
+        +1 - 2 * ((e.nativeEvent.offsetY * devicePixelRatio) / state.canvas.height),
       );
       state.raycaster.setFromCamera(normalizedDeviceCoords, w.r3f.camera);
 
@@ -255,12 +257,14 @@ export default function WorldCanvas(props) {
     },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
+      // handle fractional device pixel ratio e.g. 2.625 on Pixel
+      const devicePixelRatio = Math.floor(window.devicePixelRatio);
       // Set the projection matrix to only look at the pixel we are interested in.
       camera.setViewOffset(
         state.canvas.width,
         state.canvas.height,
-        e.nativeEvent.offsetX * window.devicePixelRatio,
-        e.nativeEvent.offsetY * window.devicePixelRatio,
+        e.nativeEvent.offsetX * devicePixelRatio,
+        e.nativeEvent.offsetY * devicePixelRatio,
         1,
         1,
       );
@@ -270,6 +274,7 @@ export default function WorldCanvas(props) {
       gl.render(emptySceneForPicking, camera);
 
       state.epoch.pickStart = Date.now();
+      e.persist();
       gl.readRenderTargetPixelsAsync(pickingRenderTarget, 0, 0, 1, 1, pixelBuffer)
         .then(state.onObjectPickPixel.bind(null, e))
         .finally(() => state.epoch.pickEnd = Date.now())
