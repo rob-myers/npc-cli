@@ -159,7 +159,7 @@ export default function useHandleEvents(w) {
           // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
           break;
         case "long-pointerdown": { // toggle ContextMenu
-          const lastDownMeta = w.ui.getLastDownMeta();
+          const lastDownMeta = w.view.getLastDownMeta();
           if (lastDownMeta !== null && state.shouldIgnoreLongClick?.(lastDownMeta)) {
             return;
           }
@@ -167,15 +167,15 @@ export default function useHandleEvents(w) {
           if (e.distancePx <= (e.touch ? 10 : 5)) {
             w.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
-            w.ui.controls.saveState();
-            w.ui.controls.reset();
+            w.view.controls.saveState();
+            w.view.controls.reset();
           } else {
             w.menu.hide();
           }
           break;
         }
         case "pointerdown":
-          w.ui.setLastDown(e);
+          w.view.setLastDown(e);
           w.menu.hide();
           break;
         case "pointerup":

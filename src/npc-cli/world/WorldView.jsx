@@ -10,7 +10,7 @@ import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
-import { WorldContext } from "./world-context";
+import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
 import useOnResize from "../hooks/use-on-resize.js";
 
@@ -321,7 +321,7 @@ export default function WorldCanvas(props) {
   }));
 
   const w = React.useContext(WorldContext);
-  w.ui = state;
+  w.view = state;
 
   React.useEffect(() => {
     if (state.controls) {

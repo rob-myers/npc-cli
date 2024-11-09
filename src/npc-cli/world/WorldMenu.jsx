@@ -51,7 +51,7 @@ export default function WorldMenu(props) {
     },
     show(at) {
       const menuDim = state.ctMenuEl.getBoundingClientRect();
-      const canvasDim = w.ui.canvas.getBoundingClientRect();
+      const canvasDim = w.view.canvas.getBoundingClientRect();
       const x = geom.clamp(at.x, 0, canvasDim.width - menuDim.width);
       const y = geom.clamp(at.y, 0, canvasDim.height - menuDim.height);
       state.ctMenuEl.style.transform = `translate(${x}px, ${y}px)`;
@@ -74,7 +74,7 @@ export default function WorldMenu(props) {
 
   const update = useUpdate();
 
-  const meta3d = w.ui.lastDown?.threeD?.meta;
+  const meta3d = w.view.lastDown?.threeD?.meta;
 
   return <>
 

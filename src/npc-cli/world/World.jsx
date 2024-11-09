@@ -23,7 +23,7 @@ import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import useHandleEvents from "./use-handle-events";
-import WorldCanvas from "./WorldCanvas";
+import WorldView from "./WorldView";
 import Floor from "./Floor";
 import Ceiling from "./Ceiling";
 import Decor from "./Decor";
@@ -69,7 +69,7 @@ export default function World(props) {
 
     crowd: /** @type {*} */ (null),
 
-    ui: /** @type {*} */ (null), // WorldCanvas
+    view: /** @type {*} */ (null),
     floor: /** @type {*} */ ({}),
     ceil: /** @type {*} */ ({}),
     decor: /** @type {*} */ (null),
@@ -133,7 +133,7 @@ export default function World(props) {
         state.debug.npc.onTick(deltaMs);
       }
 
-      state.ui.onTick(deltaMs);
+      state.view.onTick(deltaMs);
 
       while (state.oneTimeTicks.shift()?.());
     },
@@ -306,7 +306,7 @@ export default function World(props) {
 
   return (
     <WorldContext.Provider value={state}>
-      <WorldCanvas disabled={props.disabled} stats>
+      <WorldView disabled={props.disabled} stats>
         {state.geomorphs && (
           <group>
             <group>
@@ -330,7 +330,7 @@ export default function World(props) {
             </React.Suspense>
           </group>
         )}
-      </WorldCanvas>
+      </WorldView>
       <WorldMenu setTabsEnabled={props.setTabsEnabled} />
       <WorldWorkers />
     </WorldContext.Provider>
@@ -365,7 +365,7 @@ export default function World(props) {
  * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
  * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *
- * @property {import('./WorldCanvas').State} ui
+ * @property {import('./WorldView').State} view
  * @property {import('./Floor').State} floor
  * @property {import('./Ceiling').State} ceil
  * @property {import('./Decor').State} decor

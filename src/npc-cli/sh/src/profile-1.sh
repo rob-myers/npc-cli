@@ -57,4 +57,4 @@ click | filter meta.floor | map --forever '(input, { w, home }) => {
 }' &
 
 w update 'w => w.decor.showLabels = true'
-w update 'w => w.ui.targetFov = 15'
+w update 'w => w.view.targetFov = 15'

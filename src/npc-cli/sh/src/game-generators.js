@@ -35,7 +35,7 @@ export async function* click({ api, args, w }) {
 
   const clickId = operands[0] ? api.getUid() : undefined;
   if (clickId) {
-    api.addCleanup(() => w.lib.removeFirst(w.ui.clickIds, clickId));
+    api.addCleanup(() => w.lib.removeFirst(w.view.clickIds, clickId));
   }
 
   /** @type {import('rxjs').Subscription} */
@@ -43,7 +43,7 @@ export async function* click({ api, args, w }) {
   api.addCleanup(() => eventsSub?.unsubscribe());
 
   while (numClicks-- > 0) {
-    clickId && w.ui.clickIds.push(clickId);
+    clickId && w.view.clickIds.push(clickId);
     
     // 🚧 hook up to new pointer events
     const e = await /** @type {Promise<NPC.PointerUp3DEvent>} */ (new Promise((resolve, reject) => {

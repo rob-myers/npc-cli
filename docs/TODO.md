@@ -48,7 +48,7 @@
 - ✅ cached geometries should have `w.key` prefix
 - 🚧 clean before merge branch
   - ✅ avoid dup w.ui.rootState, w.r3f
-  - w.ui -> w.r3
+  - ✅ w.ui -> w.view
   - careful about alpha=0 in object-pick encoding
 
 - 🚧 support `await api.sleep(1)` inside `map`
@@ -80,7 +80,7 @@
   - try adding static non-colliding "walls and doors" and raycast against them
   - could filter out doors which are open
 - auto reduce fov when World canvas wide with short height?
-  > `w update 'w => w.ui.targetFov = 5'`
+  > `w update 'w => w.view.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
   - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
