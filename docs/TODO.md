@@ -49,7 +49,11 @@
 - 🚧 clean before merge branch
   - ✅ avoid dup w.ui.rootState, w.r3f
   - ✅ w.ui -> w.view
-  - careful about alpha=0 in object-pick encoding
+  - 🚧 try alt style
+    - ✅ outlined labels
+    - 🚧 adjust npc lighting
+  - 🚧 careful about alpha=0 in object-pick encoding
+    - e.g. 768 ~ 0 mod 256
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

@@ -36,7 +36,7 @@ export default function WorldCanvas(props) {
     zoomState: 'near',
 
     canvasRef(canvasEl) {
-      if (canvasEl && !state.canvas) {
+      if (canvasEl !== null) {
         state.canvas = canvasEl;
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
@@ -219,14 +219,14 @@ export default function WorldCanvas(props) {
     onPointerMove(e) {
       state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     },
-    onPointerUp(e) {// React.PointerEvent
+    onPointerUp(e) {
       state.epoch.pointerUp = Date.now();
       if (state.down === undefined) {
         return;
       }
 
       if (state.epoch.pickStart < state.epoch.pickEnd) {
-        // object-pick has finished, so we can send world event
+        // object-pick has finished, so can send world event
         w.events.next(state.getWorldPointerEvent({
           key: "pointerup",
           event: e,
@@ -450,7 +450,8 @@ const canvasCss = css`
   }
   canvas {
     /* background-color: rgba(255, 255, 255, 1); */
-    background-color: rgba(20, 20, 20, 1);
+    /* background-color: rgba(20, 20, 20, 1); */
+    background-color: rgba(60, 60, 60, 1);
     width: 100%;
     height: 100%;
     /* filter: sepia(1) invert(1); */

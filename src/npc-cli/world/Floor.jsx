@@ -18,7 +18,7 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(255, 255, 255, 0.075)'),
+    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(0, 0, 0, 0.05)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -72,12 +72,15 @@ export default function Floor(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Floor
-      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#333', null]);
+      // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#333', null]);
+      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#fff', null]);
 
       // Nav-mesh
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
-      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#777', 0.025]);
+      // drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#777', 0.025]);
+      drawPolygons(ct, navPoly, ['#cccccc33', '#9999ccbb', 0.03]);
+      
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
       // draw grid
@@ -163,8 +166,10 @@ export default function Floor(props) {
         transparent
         atlas={w.gmsData.texFloor.tex ?? emptyDataArrayTexture}
         depthWrite={false} // fix z-fighting
-        diffuse={[1, 1, 0.8]}
+        // diffuse={[1, 1, 0.8]}
+        diffuse={[1, 1, 1]}
         objectPickRed={2}
+        alphaTest={0.5}
         colorSpace
       />
     </instancedMesh>
