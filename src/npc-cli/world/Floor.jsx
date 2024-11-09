@@ -18,7 +18,7 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(0, 0, 0, 0.05)'),
+    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(0, 0, 0, 0.1)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -79,7 +79,7 @@ export default function Floor(props) {
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
       // drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#777', 0.025]);
-      drawPolygons(ct, navPoly, ['#cccccc33', '#9999ccbb', 0.03]);
+      drawPolygons(ct, navPoly, ['#aaaaaa55', '#999999bb', 0.03]);
       
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
@@ -105,11 +105,11 @@ export default function Floor(props) {
       // drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
-      const shadowColor = 'rgba(30, 30, 30, 0.6)'
+      const shadowColor = 'rgba(0, 0, 0, 0.25)'
       const shadowPolys = Poly.union(gm.obstacles.flatMap(x =>
         x.origPoly.meta['no-shadow'] ? [] : x.origPoly.clone().applyMatrix(tmpMat1.setMatrixValue(x.transform))
       ));
-      drawPolygons(ct, shadowPolys, [shadowColor, shadowColor]);
+      drawPolygons(ct, shadowPolys, [shadowColor, null]);
 
       // debug decor: moved to <Debug/>
       // // ct.setTransform(worldToSgu, 0, 0, worldToSgu, -pngRect.x * worldToSgu, -pngRect.y * worldToSgu);
