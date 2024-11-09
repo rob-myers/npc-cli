@@ -68,74 +68,13 @@ export default function Obstacles(props) {
       const gmId = w.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
       const gm = w.gms[gmId];
       const obstacle = gm.obstacles[id];
-      return { gmId, obstacleId: id, ...obstacle.meta };
+      return {
+        gmId,
+        obstacleId: id,
+        ...obstacle.meta,
+        height: obstacle.height,
+      };
     },
-    detectClick(e) {// 🚧 replace with object-pick
-      // const instanceId = /** @type {number} */ (e.instanceId);
-      // const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
-      // const gm = w.gms[gmId];
-      // const obstacle = gm.obstacles[obstacleId];
-      
-      // // transform 3D point back to unit XZ quad
-      // const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
-      // const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
-      // // transform unit quad point into spritesheet
-      // const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
-      // const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
-      // const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
-
-      // const { ct } = w.obsTex;
-      // const { data: rgba } = ct.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
-      // // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
-      
-      // // ignore clicks on fully transparent pixels
-      // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
-      return null;
-    },
-    // onPointerDown(e) {
-    //   const instanceId = /** @type {number} */ (e.instanceId);
-    //   const result = state.detectClick(e);
-
-    //   if (result !== null) {
-    //     const { gmId, obstacle } = result;
-    //     w.events.next(w.ui.getNpcPointerEvent({
-    //       key: "pointerdown",
-    //       distancePx: 0,
-    //       event: e,
-    //       is3d: true,
-    //       justLongDown: false,
-    //       meta: {
-    //         gmId,
-    //         obstacleId: obstacle.obstacleId,
-    //         height: obstacle.height,
-    //         ...obstacle.origPoly.meta,
-    //         instanceId,
-    //       },
-    //     }));
-    //     e.stopPropagation();
-    //   }
-    // },
-    // onPointerUp(e) {
-    //   const instanceId = /** @type {number} */ (e.instanceId);
-    //   const result = state.detectClick(e);
-
-    //   if (result !== null) {
-    //     const { gmId, obstacleId, obstacle } = result;
-    //     w.events.next(w.ui.getNpcPointerEvent({
-    //       key: "pointerup",
-    //       event: e,
-    //       is3d: true,
-    //       meta: {
-    //         gmId,
-    //         obstacleId,
-    //         height: obstacle.height,
-    //         ...obstacle.origPoly.meta,
-    //         instanceId,
-    //       },
-    //     }));
-    //     e.stopPropagation();
-    //   }
-    // },
     positionObstacles() {
       const { inst: obsInst } = state;
       let oId = 0;
@@ -171,10 +110,6 @@ export default function Obstacles(props) {
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
-      // {...w.obsTex && {
-      //   onPointerUp: state.onPointerUp,
-      //   onPointerDown: state.onPointerDown,
-      // }}
       position={[0, 0.001, 0]} // 🚧
     >
       <instancedMultiTextureMaterial
@@ -203,11 +138,6 @@ export default function Obstacles(props) {
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
  * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId
  * Points to `w.gms[gmId].obstacles[obstacleId]`.
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
- *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
- * )} detectClick
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionObstacles
  */
 

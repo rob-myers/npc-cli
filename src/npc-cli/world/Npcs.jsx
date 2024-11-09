@@ -83,26 +83,6 @@ export default function Npcs(props) {
       const { success, point } = w.crowd.navMeshQuery.findClosestPoint(toV3(p), { halfExtents: { x: 0, y: 0.05, z: 0 } });
       return success === true && Math.abs(point.x - p.x) < 0.001 && Math.abs(point.z - p.y) < 0.001;
     },
-    // onNpcPointerDown(e) {
-    //   const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-    //   w.events.next(w.ui.getNpcPointerEvent({
-    //     key: "pointerdown",
-    //     event: e,
-    //     is3d: true,
-    //     meta: { npc: true, npcKey },
-    //   }));
-    //   e.stopPropagation();
-    // },
-    // onNpcPointerUp(e) {
-    //   const npcKey = /** @type {string} */ (e.object.userData.npcKey);
-    //   w.events.next(w.ui.getNpcPointerEvent({
-    //     key: "pointerup",
-    //     event: e,
-    //     is3d: true,
-    //     meta: { npc: true, npcKey },
-    //   }));
-    //   e.stopPropagation();
-    // },
     onTick(deltaMs) {
       Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, state.physicsPositions));
       // 🔔 Float32Array caused issues i.e. decode failed
@@ -290,8 +270,6 @@ export default function Npcs(props) {
     <group
       name="npcs"
       ref={x => void (state.group = x ?? state.group)}
-      // onPointerDown={state.onNpcPointerDown}
-      // onPointerUp={state.onNpcPointerUp}
     >
       {Object.values(state.npc).map(npc =>
         // <NPC key={npc.key} npc={npc} />
@@ -326,12 +304,9 @@ export default function Npcs(props) {
  * @property {() => void} clearLabels
  * @property {(src: THREE.Vector3Like, dst: THREE.Vector3Like) => null | THREE.Vector3Like[]} findPath
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
- * Throws if does not exist
- * 🚧 any -> ProcessApi (?)
+ * Throws if does not exist 🚧 any -> ProcessApi (?)
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
  * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerDown
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onNpcPointerUp
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove

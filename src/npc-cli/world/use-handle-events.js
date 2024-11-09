@@ -1,5 +1,4 @@
 import React from "react";
-import * as THREE from "three";
 import { defaultDoorCloseMs, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
@@ -126,8 +125,9 @@ export default function useHandleEvents(w) {
         const npcKey = w.npc.pickUid.toKey.get(npcUid);
         return {
           picked: 'npc',
-          npcUid,
           npcKey,
+          npcUid,
+          npc: true,
           instanceId: npcUid, // not really an instance
         };
       }
@@ -179,7 +179,7 @@ export default function useHandleEvents(w) {
           w.menu.hide();
           break;
         case "pointerup":
-          e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
+          // e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
           !e.touch && state.onPointerUpMenuDesktop(e);
           w.menu.justOpen = w.menu.ctOpen;
           break;
@@ -435,14 +435,6 @@ export default function useHandleEvents(w) {
         w.menu.hide();
       }
     },
-    onPointerUp3d(e) {
-      if (e.rmb === true || e.justLongDown === true || e.pointers !== 1) {
-        return;
-      }
-      if (e.distancePx > (e.touch === true ? 5 : 1)) {
-        return;
-      }
-    },
     removeFromSensors(npcKey) {
       const closeDoors = state.npcToDoor[npcKey];
       for (const gdKey of closeDoors?.nearby ?? []) {// npc may never have been close to any door
@@ -549,7 +541,6 @@ export default function useHandleEvents(w) {
  * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
- * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor

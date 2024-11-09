@@ -249,32 +249,6 @@ export default function Decor(props) {
         return mat4;
       }
     },
-    detectClick(e) {// 🚧
-      // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const byInstId = e.object.name === 'decor-cuboids' ? state.cuboids : state.quads;
-      return byInstId[instanceId];
-      
-      // const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
-      // const gm = w.gms[gmId];
-      // const obstacle = gm.obstacles[obstacleId];
-      
-      // // transform 3D point back to unit XZ quad
-      // const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
-      // const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
-      // // transform unit quad point into spritesheet
-      // const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
-      // const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
-      // const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
-
-      // const canvas = /** @type {HTMLCanvasElement} */ (w.obsTex.image);
-      // const ctxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-      // const { data: rgba } = ctxt.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
-      // // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
-      
-      // // ignore clicks on fully transparent pixels
-      // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
-    },
     ensureGmRoomId(decor) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
         const decorOrigin = state.getDecorOrigin(decor);
@@ -339,36 +313,6 @@ export default function Decor(props) {
       instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
-    // onPointerDown(e) {
-    //   const instanceId = /** @type {number} */ (e.instanceId);
-    //   const decor = state.detectClick(e);
-
-    //   if (decor !== null) {
-    //     w.events.next(w.ui.getNpcPointerEvent({
-    //       key: "pointerdown",
-    //       distancePx: 0,
-    //       event: e,
-    //       is3d: true,
-    //       justLongDown: false,
-    //       meta: state.computeDecorMeta(decor, instanceId),
-    //     }));
-    //     e.stopPropagation();
-    //   }
-    // },
-    // onPointerUp(e) {
-    //   const instanceId = /** @type {number} */ (e.instanceId);
-    //   const decor = state.detectClick(e);
-
-    //   if (decor !== null) {
-    //     w.events.next(w.ui.getNpcPointerEvent({
-    //       key: "pointerup",
-    //       event: e,
-    //       is3d: true,
-    //       meta: state.computeDecorMeta(decor, instanceId),
-    //     }));
-    //     e.stopPropagation();
-    //   }
-    // },
     positionInstances() { 
       const { cuboidInst, quadInst, labelInst } = state;
       
@@ -581,8 +525,6 @@ export default function Decor(props) {
       ref={instances => instances && (state.cuboidInst = instances)}
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
-      // onPointerUp={state.onPointerUp}
-      // onPointerDown={state.onPointerDown}
       renderOrder={-1}
       visible={state.cuboids.length > 0} // avoid initial flicker
     >
@@ -602,8 +544,6 @@ export default function Decor(props) {
       ref={instances => instances && (state.quadInst = instances)}
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
-      // onPointerUp={state.onPointerUp}
-      // onPointerDown={state.onPointerDown}
       // visible={state.quads.length > 0} // 🚧 avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
@@ -677,13 +617,10 @@ export default function Decor(props) {
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorQuad) => THREE.Matrix4} createQuadMatrix4
  * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
  * @property {(gmId: number) => void} addGm
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
@@ -693,5 +630,3 @@ export default function Decor(props) {
  */
 
 const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));
-
-

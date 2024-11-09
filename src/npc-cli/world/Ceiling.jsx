@@ -21,26 +21,6 @@ export default function Ceiling(props) {
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-ceiling-xz`),
 
-    detectClick(e) {// 🚧 replace with object-pick
-      // const gmId = Number(e.object.name.slice('ceil-gm-'.length));
-      // const gm = w.gms[gmId];
-      
-      // // 3d point -> local world coords (ignoring y)
-      // const mat4 = gm.mat4.clone().invert();
-      // const localWorldPnt = e.point.clone().applyMatrix4(mat4);
-      // // local world coords -> canvas coords
-      // const worldToCanvas = worldToSguScale * gmFloorExtraScale;
-      // const canvasX = (localWorldPnt.x - gm.pngRect.x) * worldToCanvas;
-      // const canvasY = (localWorldPnt.z - gm.pngRect.y) * worldToCanvas;
-
-      // const { ct } = state.tex[gm.key];
-      // const { data: rgba } = ct.getImageData(canvasX, canvasY, 1, 1, { colorSpace: 'srgb' });
-      // // console.log(Array.from(rgba), { gmId, point3d: e.point, localWorldPnt, canvasX, canvasY });
-      
-      // // ignore clicks on fully transparent pixels
-      // return rgba[3] === 0 ? null : { gmId };
-      return null;
-    },
     async draw() {
       w.menu.measure('ceil.draw');
       for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
@@ -89,42 +69,6 @@ export default function Ceiling(props) {
         // drawPolygons(ct, x, ['red', 'white', 0.08]);
       });
     },
-    // onPointerDown(e) {
-    //   const result = state.detectClick(e);
-
-    //   if (result !== null) {
-    //     const { gmId } = result;
-    //     w.events.next(w.ui.getNpcPointerEvent({
-    //       key: "pointerdown",
-    //       event: e,
-    //       is3d: true,
-    //       meta: {
-    //         ceiling: true,
-    //         gmId,
-    //         height: wallHeight,
-    //       },
-    //     }));
-    //     e.stopPropagation();
-    //   }
-    // },
-    // onPointerUp(e) {
-    //   const result = state.detectClick(e);
-
-    //   if (result !== null) {
-    //     const { gmId } = result;
-    //     w.events.next(w.ui.getNpcPointerEvent({
-    //       key: "pointerup",
-    //       event: e,
-    //       is3d: true,
-    //       meta: {
-    //         ceiling: true,
-    //         gmId,
-    //         height: wallHeight,
-    //       },
-    //     }));
-    //     e.stopPropagation();
-    //   }
-    // },
     positionInstances() {
       for (const [gmId, gm] of w.gms.entries()) {
         const mat = (new Mat([gm.pngRect.width, 0, 0, gm.pngRect.height, gm.pngRect.x, gm.pngRect.y])).postMultiply(gm.matrix);
@@ -175,10 +119,7 @@ export default function Ceiling(props) {
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
  *
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | { gmId: number; }} detectClick
  * @property {() => Promise<void>} draw
  * @property {(gmKey: Geomorph.GeomorphKey) => void} drawGmKey
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * //@property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  */

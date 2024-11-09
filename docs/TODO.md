@@ -8,7 +8,7 @@
 
 ## WIP
 
-- 🚧 gpu object-pick
+- ✅ gpu object-pick
   - ℹ️ encode (glsl) e.g. gmId, instanceId -> (1, gmId, instanceId >> 8, instanceId)
   - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
   - ✅ walls: glsl encode uses function
@@ -41,9 +41,9 @@
     - ✅ `click 1` should provide a 3d position
       - all object-pick types have a position
     - ✅ fix RMB click: state.pickObject can end after native "pointerup"
-  - 🚧 enrich event meta as before
-    - WorldCanvas ✅ Floor ✅ Walls ✅ Doors ✅ ... 🚧
-  - 🚧 clean
+  - ✅ enrich event meta as before
+    - WorldCanvas ✅ Floor ✅ Walls ✅ Doors ✅ Obstacles ✅ Ceiling ✅ Decor ✅ Npcs ✅ 
+  - ✅ clean
 
 - ✅ cached geometries should have `w.key` prefix
 - avoid dup w.ui.rootState, w.r3f

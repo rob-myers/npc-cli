@@ -291,8 +291,6 @@ export default function Doors(props) {
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
-      // onPointerUp={state.onPointerUp}
-      // onPointerDown={state.onPointerDown}
       renderOrder={-1}
     >
       <instancedMultiTextureMaterial
