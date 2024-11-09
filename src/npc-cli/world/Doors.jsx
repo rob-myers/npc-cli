@@ -20,14 +20,15 @@ export default function Doors(props) {
     byKey: {},
     byGmId: {},
     byPos: {},
-    doorsInst: /** @type {*} */ (null),
-    lockLightsGeom: getBoxGeometry(`${w.key}-lock-lights`),
+    inst: /** @type {*} */ (null),
+    quad: getQuadGeometryXY(`${w.key}-doors-xy`),
+    lockSigGeom: getBoxGeometry(`${w.key}-lock-lights`),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
 
     addCuboidAttributes() {
       const instanceIds = Object.values(state.byKey).map((_, instanceId) => instanceId);
-      state.lockLightsGeom.setAttribute('instanceIds',
+      state.lockSigGeom.setAttribute('instanceIds',
         new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
@@ -48,16 +49,16 @@ export default function Doors(props) {
         instanceIds.push(meta.instanceId);
       }
 
-      state.doorsInst.geometry.setAttribute('uvOffsets',
+      state.inst.geometry.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
-      state.doorsInst.geometry.setAttribute('uvDimensions',
+      state.inst.geometry.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
-      state.doorsInst.geometry.setAttribute('uvTextureIds',
+      state.inst.geometry.setAttribute('uvTextureIds',
         new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
       );
-      state.doorsInst.geometry.setAttribute('instanceIds',
+      state.inst.geometry.setAttribute('instanceIds',
         new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
@@ -188,7 +189,7 @@ export default function Doors(props) {
       }
       
       // 🚧 control via "float array" of ratios instead of 4x4 matrices
-      const { instanceMatrix } = state.doorsInst;
+      const { instanceMatrix } = state.inst;
       for (const [instanceId, meta] of state.movingDoors.entries()) {
         const dstRatio = meta.open ? 0 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
@@ -205,7 +206,7 @@ export default function Doors(props) {
       instanceMatrix.needsUpdate = true;
     },
     positionInstances() {
-      const { doorsInst: ds, lockSigInst: ls } = state;
+      const { inst: ds, lockSigInst: ls } = state;
       for (const meta of Object.values(state.byKey)) {
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta));
         ls.setMatrixAt(meta.instanceId, state.getLockSigMat(meta));
@@ -307,8 +308,8 @@ export default function Doors(props) {
     <instancedMesh
       name="doors"
       key={`${w.hash} doors`}
-      ref={instances => instances && (state.doorsInst = instances)}
-      args={[getQuadGeometryXY('doors-xy'), undefined, w.gmsData.doorCount]}
+      ref={instances => instances && (state.inst = instances)}
+      args={[state.quad, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
       // onPointerUp={state.onPointerUp}
       // onPointerDown={state.onPointerDown}
@@ -328,7 +329,7 @@ export default function Doors(props) {
       name="lock-lights"
       key={`${w.hash} lock-lights`}
       ref={instances => instances && (state.lockSigInst = instances)}
-      args={[state.lockLightsGeom, undefined, w.gmsData.doorCount]}
+      args={[state.lockSigGeom, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
     >
       <cameraLightMaterial
@@ -352,8 +353,9 @@ export default function Doors(props) {
  * Format `byGmId[gmId][doorId]`
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
  * @property {{ [center in `${number},${number}`]: Geomorph.DoorState }} byPos
- * @property {THREE.InstancedMesh} doorsInst
- * @property {THREE.BoxGeometry} lockLightsGeom
+ * @property {THREE.InstancedMesh} inst
+ * @property {THREE.BufferGeometry} quad
+ * @property {THREE.BoxGeometry} lockSigGeom
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
  *

@@ -16,7 +16,8 @@ export default function Walls(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    wallsInst: /** @type {*} */ (null),
+    inst: /** @type {*} */ (null),
+    quad: getQuadGeometryXY(`${w.key}-walls-xy`),
 
     decodeInstanceId(instanceId) {
       // compute gmId, gmData.wallSegs[wallSegsId]
@@ -83,7 +84,7 @@ export default function Walls(props) {
     //   e.stopPropagation();
     // },
     positionInstances() {
-      const { wallsInst: ws } = state;
+      const { inst: ws } = state;
       let wId = 0;
       let instanceId = 0;
       const attributeGmIds = /** @type {number[]} */ ([]);
@@ -120,12 +121,11 @@ export default function Walls(props) {
     <instancedMesh
       name="walls"
       key={`${[w.mapKey, w.hash.full]}`}
-      ref={instances => instances && (state.wallsInst = instances)}
-      args={[getQuadGeometryXY('walls-xy'), undefined, w.gmsData.wallCount]}
+      ref={instances => instances && (state.inst = instances)}
+      args={[state.quad, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
       // onPointerUp={state.onPointerUp}
       // onPointerDown={state.onPointerDown}
-      // position={[0, 0.002, 0]}
     >
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="black" /> */}
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
@@ -147,7 +147,8 @@ export default function Walls(props) {
 
 /**
  * @typedef State
- * @property {THREE.InstancedMesh} wallsInst
+ * @property {THREE.InstancedMesh} inst
+ * @property {THREE.BufferGeometry} quad
  *
  * @property {(instanceId: number) => Geom.Meta} decodeInstanceId
  * @property {(

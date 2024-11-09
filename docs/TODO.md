@@ -40,7 +40,8 @@
     - ℹ️ can avoid object-pick on "up" (if close to down then use it)
     - ✅ `click 1` should provide a 3d position
       - all object-pick types have a position
-- cached geometries should have `w.key` prefix
+
+- ✅ cached geometries should have `w.key` prefix
 - careful about alpha=0 in object-pick encoding
 - w.ui -> w.r3 (?)
 

@@ -19,7 +19,7 @@ export default function Ceiling(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
-    quad: getQuadGeometryXZ('multi-tex-ceiling-xz'),
+    quad: getQuadGeometryXZ(`${w.key}-multi-tex-ceiling-xz`),
 
     detectClick(e) {// 🚧 replace with object-pick
       // const gmId = Number(e.object.name.slice('ceil-gm-'.length));

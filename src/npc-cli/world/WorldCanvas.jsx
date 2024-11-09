@@ -9,7 +9,7 @@ import { testNever } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs } from "../service/const.js";
-import { emptySceneForPicking, getQuadGeometryXZ, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget } from "../service/three.js";
+import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget } from "../service/three.js";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref.js";
 import useOnResize from "../hooks/use-on-resize.js";
@@ -25,8 +25,6 @@ export default function WorldCanvas(props) {
     clickIds: [],
     controls: /** @type {*} */ (null),
     down: undefined,
-    groundGeom: getQuadGeometryXZ('ground-plane-xz', true),
-    groundMesh: /** @type {*} */ (null),
     fov: smallViewport ? 20 : 10,
     justLongDown: false,
     lastDown: undefined,
@@ -209,9 +207,9 @@ export default function WorldCanvas(props) {
 
       switch (decoded.picked) {
         case 'floor': mesh = getTempInstanceMesh(w.floor.inst, decoded.instanceId); break;
-        case 'wall': mesh = getTempInstanceMesh(w.wall.wallsInst, decoded.instanceId); break;
+        case 'wall': mesh = getTempInstanceMesh(w.wall.inst, decoded.instanceId); break;
         case 'npc': mesh = w.n[decoded.npcKey].m.mesh; break;
-        case 'door': mesh = getTempInstanceMesh(w.door.doorsInst, decoded.instanceId); break;
+        case 'door': mesh = getTempInstanceMesh(w.door.inst, decoded.instanceId); break;
         case 'quad': mesh = getTempInstanceMesh(w.decor.quadInst, decoded.instanceId); break;
         case 'obstacle': mesh = getTempInstanceMesh(w.obs.inst, decoded.instanceId); break;
         case 'ceiling': mesh = getTempInstanceMesh(w.ceil.inst, decoded.instanceId); break;
@@ -520,8 +518,6 @@ export default function WorldCanvas(props) {
  * @property {import('three-stdlib').MapControls} controls
  * @property {(BaseDown & { pointerIds: number[]; longTimeoutId: number; }) | undefined} down
  * Defined iff at least one pointer is down.
- * @property {THREE.BufferGeometry} groundGeom
- * @property {THREE.Mesh} groundMesh Larger than floor, which is an InstancedMesh
  * @property {number} fov
  * @property {BaseDown & { threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.

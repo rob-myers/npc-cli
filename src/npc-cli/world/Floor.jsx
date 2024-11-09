@@ -20,7 +20,7 @@ export default function Floor(props) {
   const state = useStateRef(/** @returns {State} */ () => ({
     grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(255, 255, 255, 0.075)'),
     inst: /** @type {*} */ (null),
-    quad: getQuadGeometryXZ('multi-tex-floor-xz'),
+    quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
     addUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
