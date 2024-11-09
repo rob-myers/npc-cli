@@ -394,6 +394,20 @@ export function toV3(input) {
 }
 
 /**
+ * - `{ x, y, z }` -> `{ x, y: z }`
+ * - `THREE.Vector3` -> `{ x, y: z }`
+ * - `{ x, y }` -> `{ x, y }` (fresh)
+ * @param {Geom.VectJson | THREE.Vector3Like} input 
+ */
+export function toXZ(input) {
+  if ('z' in input) {
+    return { x: input.x, y: input.z };
+  } else {
+    return { x: input.x, y: input.y };
+  }
+}
+
+/**
  * Mutates vector
  * @param {THREE.Vector3} v 
  * @param {number} precision 
