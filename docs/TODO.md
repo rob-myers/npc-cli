@@ -46,9 +46,10 @@
   - ✅ clean
 
 - ✅ cached geometries should have `w.key` prefix
-- avoid dup w.ui.rootState, w.r3f
-- w.ui -> w.r3
-- careful about alpha=0 in object-pick encoding
+- 🚧 clean before merge branch
+  - ✅ avoid dup w.ui.rootState, w.r3f
+  - w.ui -> w.r3
+  - careful about alpha=0 in object-pick encoding
 
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`

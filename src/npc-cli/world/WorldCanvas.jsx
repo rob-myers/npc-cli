@@ -32,7 +32,6 @@ export default function WorldCanvas(props) {
     lastScreenPoint: new Vect(),
     raycaster: new THREE.Raycaster(),
     rootEl: /** @type {*} */ (null),
-    rootState: /** @type {*} */ (null),
     targetFov: /** @type {null | number} */ (null),
     zoomState: 'near',
 
@@ -101,7 +100,6 @@ export default function WorldCanvas(props) {
       state.zoomState = zoomState;
     },
     onCreated(rootState) {
-      state.rootState = rootState;
       w.threeReady = true;
       w.r3f = /** @type {typeof w['r3f']} */ (rootState);
       w.update(); // e.g. show stats
@@ -124,7 +122,7 @@ export default function WorldCanvas(props) {
         -1 + 2 * ((e.nativeEvent.offsetX * window.devicePixelRatio) / state.canvas.width),
         +1 - 2 * ((e.nativeEvent.offsetY * window.devicePixelRatio) / state.canvas.height),
       );
-      state.raycaster.setFromCamera(normalizedDeviceCoords, state.rootState.camera);
+      state.raycaster.setFromCamera(normalizedDeviceCoords, w.r3f.camera);
 
       switch (decoded.picked) {
         case 'floor': mesh = getTempInstanceMesh(w.floor.inst, decoded.instanceId); break;
@@ -194,7 +192,7 @@ export default function WorldCanvas(props) {
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
       };
 
-      if (state.rootState === null) {
+      if (w.r3f === null) {
         return; // ignore early clicks
       }
       
@@ -241,12 +239,12 @@ export default function WorldCanvas(props) {
       state.justLongDown = false;
     },
     onTick(deltaMs) {
-      if (state.targetFov !== null && state.rootState !== null) {
+      if (state.targetFov !== null && w.r3f !== null) {
         if (damp(state, 'fov', state.targetFov, 0.2, deltaMs, undefined, undefined, undefined) === false) {
           state.targetFov = null;
         }
-        /** @type {THREE.PerspectiveCamera} */ (state.rootState.camera).fov = state.fov;
-        state.rootState.camera.updateProjectionMatrix();
+        /** @type {THREE.PerspectiveCamera} */ (w.r3f.camera).fov = state.fov;
+        w.r3f.camera.updateProjectionMatrix();
       }
     },
     onWheel(e) {
@@ -256,7 +254,7 @@ export default function WorldCanvas(props) {
       }
     },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
-      const { gl, camera } = state.rootState;
+      const { gl, camera } = w.r3f;
       // Set the projection matrix to only look at the pixel we are interested in.
       camera.setViewOffset(
         state.canvas.width,
@@ -289,7 +287,7 @@ export default function WorldCanvas(props) {
       x.material.uniformsNeedUpdate = true;
     },
     renderObjectPickScene() {
-      const { gl, scene, camera } = state.rootState;
+      const { gl, scene, camera } = w.r3f;
       // https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       // This is the magic, these render lists are still filled with valid data.  So we can
       // submit them again for picking and save lots of work!
@@ -419,7 +417,6 @@ export default function WorldCanvas(props) {
  * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
- * @property {import('@react-three/fiber').RootState} rootState
  * @property {null | number} targetFov
  * @property {'near' | 'far'} zoomState
  *
