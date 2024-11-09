@@ -393,6 +393,19 @@ export function toV3(input) {
   ;
 }
 
+/**
+ * Mutates vector
+ * @param {THREE.Vector3} v 
+ * @param {number} precision 
+ */
+export function v3Precision(v, precision = 4) {
+  return v.set(
+    Number(v.x.toPrecision(precision)),
+    Number(v.y.toPrecision(precision)),
+    Number(v.z.toPrecision(precision)),
+  );
+}
+
 export const defaultQuadUvs = [...Array(4)].map(_ => new THREE.Vector2());
 
 /**
