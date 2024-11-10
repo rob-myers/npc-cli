@@ -413,11 +413,8 @@ export default function Decor(props) {
       }
     },
     updateDecorLists() {
-      state.cuboids = Object.values(state.byKey).filter(
-        geomorph.isDecorCuboid
-      );
+      state.cuboids = Object.values(state.byKey).filter(geomorph.isDecorCuboid);
 
-      // 🚧 elements of state.byKey should have sheetId
       state.quads = Object.values(state.byKey).filter(
         /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorQuad} */
         x => x.type === 'point' && (
@@ -511,7 +508,7 @@ export default function Decor(props) {
       state.addQuadUvs();
       state.addCuboidAttributes();
       state.positionInstances();
-    } else if (query.data === false) {
+    } else if (query.data === false && query.isRefetching === false) {
       query.refetch(); // hmr
     }
   }, [query.data, state.cuboids.length, state.quads.length, labels.length]);

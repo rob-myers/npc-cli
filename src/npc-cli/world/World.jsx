@@ -293,7 +293,9 @@ export default function World(props) {
   }, []);
 
   React.useEffect(() => {// hmr query
-    query.data === false && query.refetch();
+    if (query.data === false && query.isRefetching === false) {
+      query.refetch();
+    }
   }, [query.data === false]);
 
   React.useEffect(() => {// enable/disable animation
