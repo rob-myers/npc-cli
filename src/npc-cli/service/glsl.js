@@ -44,17 +44,15 @@ const instancedMonochromeShader = {
   #include <logdepthbuf_pars_fragment>
 
   /**
-   * 🚧 handle 0 alpha
    * - 1 means wall
-   * - vGmId in 0..255
    * - vInstanceId in 0..65535: (msByte, lsByte)
    */
   vec4 encodeWallObjectPick() {
     return vec4(
       1.0,
-      float(vGmId),
       float((vInstanceId >> 8) & 255),
-      float(vInstanceId & 255)
+      float(vInstanceId & 255),
+      255.0
     ) / 255.0;
   }
 

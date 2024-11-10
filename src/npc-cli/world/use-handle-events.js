@@ -46,12 +46,10 @@ export default function useHandleEvents(w) {
     },
     decodeObjectPick(r, g, b, a) {
       if (r === 1) {// wall
-        const gmId = Math.floor(g);
-        const instanceId = (b << 8) + a;
+        const instanceId = (g << 8) + b;
         const decoded = w.wall.decodeInstanceId(instanceId);
         return {
           picked: 'wall',
-          gmId,
           ...decoded,
           instanceId,
         };
