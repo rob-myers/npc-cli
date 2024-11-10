@@ -8,54 +8,6 @@
 
 ## WIP
 
-- ✅ gpu object-pick
-  - ℹ️ encode (glsl) e.g. gmId, instanceId -> (1, gmId, instanceId >> 8, instanceId)
-  - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
-  - ✅ walls: glsl encode uses function
-  - ✅ walls: js decode uses function
-  - ✅ support transparent
-  - ✅ handle npcs
-    - ✅ npc click detected
-    - ✅ npcs need integer uid
-      - ℹ️ assume max npcs 256
-      - ℹ️ maintain Set([0..255])
-  - ✅ floor object-pick
-    - must compute non-object-pick opacity
-    - `(2, gmId, 0, gl_FragColor.a)`
-  - ✅ ceiling object-pick
-    - must compute non-object-pick opacity
-    - `(3, gmId, 0, gl_FragColor.a)`
-  - ✅ w.ceiling uses w.floor quad
-  - ✅ doors object-pick
-    - `(4, instancedId, 0, gl_FragColor.a)`
-  - ✅ decor quad object-pick
-    - `(5, quadInstanceId, 0, gl_FragColor.a)`
-  - ✅ obstacle object-pick
-  - ✅ decor cuboid object-pick
-  - ✅ lock light object-pick
-  - ✅ on pick floor, raycast against infinite floor plane
-    - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
-  - ✅ send pointer events
-    - ℹ️ must object-pick on "down" e.g. for long press
-    - ℹ️ can avoid object-pick on "up" (if close to down then use it)
-    - ✅ `click 1` should provide a 3d position
-      - all object-pick types have a position
-    - ✅ fix RMB click: state.pickObject can end after native "pointerup"
-  - ✅ enrich event meta as before
-    - WorldCanvas ✅ Floor ✅ Walls ✅ Doors ✅ Obstacles ✅ Ceiling ✅ Decor ✅ Npcs ✅ 
-  - ✅ clean
-
-- ✅ cached geometries should have `w.key` prefix
-- 🚧 clean before merge branch
-  - ✅ avoid dup w.ui.rootState, w.r3f
-  - ✅ w.ui -> w.view
-  - ❌ try alt style
-    - ✅ outlined labels
-    - ❌ adjust npc lighting
-  - ✅ careful about alpha=0 in object-pick encoding
-    - ℹ️ e.g. 768 ~ 0 mod 256
-    - ✅ fix instancedMonochromeShader
-
 - 🚧 support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅ simplify `choice` so it does not use `sleep`
@@ -74,13 +26,14 @@
   - ℹ️ inaccessible door should not prevent nav through open door
     - `maxSimplificationError: 0.85` helped, but causes nav kinks
   - ℹ️ npc should not be able to get too close to inaccessible door
+- can select npc while paused e.g. click npc causes single frame update?
+- hmr sometimes breaks npc opacity/selector
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
 - try animate ceiling diffuse i.e. more/less white
 - locked accessible doors auto-open earlier
   - e.g. check up to two corners in this case
 - try avoid recreate decor/obstacles CanvasTexture by fixing texture size
-- hmr sometimes breaks opacity
 - consider using rapier for raycasting, rather than adding three-mesh-bvh
   - try adding static non-colliding "walls and doors" and raycast against them
   - could filter out doors which are open
@@ -2918,3 +2871,52 @@ done
   - ℹ️ decor cuboids shader won't be migrated
   - ✅ test decor hmr for multiple sheets
   - ✅ test obstacle hmr for multiple sheets
+
+
+- ✅ gpu object-pick
+  - ℹ️ encode (glsl) e.g. gmId, instanceId -> (1, gmId, instanceId >> 8, instanceId)
+  - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
+  - ✅ walls: glsl encode uses function
+  - ✅ walls: js decode uses function
+  - ✅ support transparent
+  - ✅ handle npcs
+    - ✅ npc click detected
+    - ✅ npcs need integer uid
+      - ℹ️ assume max npcs 256
+      - ℹ️ maintain Set([0..255])
+  - ✅ floor object-pick
+    - must compute non-object-pick opacity
+    - `(2, gmId, 0, gl_FragColor.a)`
+  - ✅ ceiling object-pick
+    - must compute non-object-pick opacity
+    - `(3, gmId, 0, gl_FragColor.a)`
+  - ✅ w.ceiling uses w.floor quad
+  - ✅ doors object-pick
+    - `(4, instancedId, 0, gl_FragColor.a)`
+  - ✅ decor quad object-pick
+    - `(5, quadInstanceId, 0, gl_FragColor.a)`
+  - ✅ obstacle object-pick
+  - ✅ decor cuboid object-pick
+  - ✅ lock light object-pick
+  - ✅ on pick floor, raycast against infinite floor plane
+    - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
+  - ✅ send pointer events
+    - ℹ️ must object-pick on "down" e.g. for long press
+    - ℹ️ can avoid object-pick on "up" (if close to down then use it)
+    - ✅ `click 1` should provide a 3d position
+      - all object-pick types have a position
+    - ✅ fix RMB click: state.pickObject can end after native "pointerup"
+  - ✅ enrich event meta as before
+    - WorldCanvas ✅ Floor ✅ Walls ✅ Doors ✅ Obstacles ✅ Ceiling ✅ Decor ✅ Npcs ✅ 
+  - ✅ clean
+
+- ✅ cached geometries should have `w.key` prefix
+- ✅ clean before merge branch
+  - ✅ avoid dup w.ui.rootState, w.r3f
+  - ✅ w.ui -> w.view
+  - ❌ try alt style
+    - ✅ outlined labels
+    - ❌ adjust npc lighting
+  - ✅ careful about alpha=0 in object-pick encoding
+    - ℹ️ e.g. 768 ~ 0 mod 256
+    - ✅ fix instancedMonochromeShader
