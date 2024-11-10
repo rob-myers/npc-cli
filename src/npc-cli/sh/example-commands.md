@@ -114,6 +114,9 @@ w physics.worker.postMessage '{ type: "get-debug-data" }'
 
 w npc.npc.rob.look Math.PI/2
 w npc.npc.rob.look -Math.PI/2 # ❌
+
+w n.rob.agent.parameters
+w n.rob.agent.parameters | map updateFlags
 ```
 
 ## Local variables
@@ -296,6 +299,9 @@ click | npc rob do
 npc rob do "$( click 1 )" '{ extraParams: [0] }'
 # foo open door at
 npc rob do "$( click 1 )" '{ extraParams: [1] }'
+
+{ echo foo; echo bar; echo baz; } |
+  map 'async (input, {api}) => { await new Promise(r => setTimeout(r, 1000)); return input }'
 ```
 
 🚧 test from here

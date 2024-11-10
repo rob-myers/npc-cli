@@ -16,20 +16,36 @@ export default function Walls(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    wallsInst: /** @type {*} */ (null),
+    inst: /** @type {*} */ (null),
+    quad: getQuadGeometryXY(`${w.key}-walls-xy`),
 
-    decodeWallInstanceId(instanceId) {
-      let foundWallSegId = instanceId;
-      const foundGmId = w.gmsData.wallPolySegCounts.findIndex(
-        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
+    decodeInstanceId(instanceId) {
+      // compute gmId, gmData.wallSegs[wallSegsId]
+      let wallSegsId = instanceId;
+      const gmId = w.gmsData.wallPolySegCounts.findIndex(
+        segCount => wallSegsId < segCount ? true : (wallSegsId -= segCount, false)
       );
-      const gm = w.gms[foundGmId];
-      const foundWallId = w.gmsData[gm.key].wallPolySegCounts.findIndex(
-        segCount => foundWallSegId < segCount ? true : (foundWallSegId -= segCount, false)
+
+      const gm = w.gms[gmId];
+      const gmData = w.gmsData[gm.key];
+      // 🔔 could provide roomId from shader
+      const wallSeg = gmData.wallSegs[wallSegsId];
+      const center = wallSeg.seg[0].clone().add(wallSeg.seg[1]).scale(0.5);
+      const roomId = w.gmsData.findRoomIdContaining(gm, center, true);
+      
+      // compute gm.walls[wallId][wallSegId]
+      let wallSegId = wallSegsId;
+      const wallId = gmData.wallPolySegCounts.findIndex(
+        segCount => wallSegId < segCount ? true : (wallSegId -= segCount, false)
       );
-      const wall = gm.walls[foundWallId];
-      // console.log({ foundGmId, foundWallId })
-      return { gmId: foundGmId, ...wall.meta, instanceId };
+      const wall = gm.walls[wallId];
+
+      if (wall !== undefined) {
+        return { gmId, ...wall.meta, roomId, instanceId };
+      } else {
+        const doorId = Math.floor(wallSegId / 2); // 2 lintels per door
+        return { gmId, wall: true, lintel: true, roomId, doorId, instanceId };
+      }
     },
     getWallMat([u, v], transform, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
@@ -41,42 +57,18 @@ export default function Walls(props) {
         { yScale: height ?? wallHeight, yHeight: baseHeight, mat4: tmpMatFour1 },
       );
     },
-    onPointerDown(e) {
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerdown",
-        distancePx: 0,
-        event: e,
-        is3d: true,
-        justLongDown: false,
-        meta: {
-          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
-          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
-        },
-      }));
-      e.stopPropagation();
-    },
-    onPointerUp(e) {
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerup",
-        event: e,
-        is3d: true,
-        meta: {
-          ...state.decodeWallInstanceId(/** @type {number} */ (e.instanceId)),
-          ...w.gmGraph.findRoomContaining({ x: e.point.x, y: e.point.z }),
-        },
-      }));
-      e.stopPropagation();
-    },
     positionInstances() {
-      const { wallsInst: ws } = state;
+      const { inst: ws } = state;
       let wId = 0;
+      let instanceId = 0;
       const attributeGmIds = /** @type {number[]} */ ([]);
-      const attributeWallSegIds = /** @type {number[]} */ ([]);
+      /** `[0, 1, 2, ... , instanceCount - 1]` */
+      const attributeInstanceIds = /** @type {number[]} */ ([]);
 
       w.gms.forEach(({ key: gmKey, transform }, gmId) =>
-        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }, wallSegId) => {
+        w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) => {
           attributeGmIds.push(gmId);
-          attributeWallSegIds.push(wallSegId);
+          attributeInstanceIds.push(instanceId++);
           ws.setMatrixAt(wId++, state.getWallMat(
             seg,
             transform,
@@ -89,7 +81,7 @@ export default function Walls(props) {
       ws.computeBoundingSphere();
 
       ws.geometry.setAttribute('gmId', new THREE.InstancedBufferAttribute(new Int32Array(attributeGmIds), 1));
-      ws.geometry.setAttribute('wallSegId', new THREE.InstancedBufferAttribute(new Int32Array(attributeWallSegIds), 1));
+      ws.geometry.setAttribute('instanceId', new THREE.InstancedBufferAttribute(new Int32Array(attributeInstanceIds), 1));
     },
   }));
 
@@ -103,17 +95,17 @@ export default function Walls(props) {
     <instancedMesh
       name="walls"
       key={`${[w.mapKey, w.hash.full]}`}
-      ref={instances => instances && (state.wallsInst = instances)}
-      args={[getQuadGeometryXY('walls-xy'), undefined, w.gmsData.wallCount]}
+      ref={instances => instances && (state.inst = instances)}
+      args={[state.quad, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
-      // position={[0, 0.002, 0]}
     >
-      {/* <meshBasicMaterial side={THREE.DoubleSide} color="black" /> */}
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
-      {/* <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0, 0, 0]} objectPicking={true} /> */}
-      <instancedMonochromeShader key={InstancedMonochromeShader.key} side={THREE.DoubleSide} diffuse={[0.0, 0.0, 0.0]} objectPicking={false} />
+      <instancedMonochromeShader
+        key={InstancedMonochromeShader.key}
+        side={THREE.DoubleSide}
+        diffuse={[0, 0, 0]}
+        objectPick={false}
+      />
     </instancedMesh>
   );
 }
@@ -125,17 +117,16 @@ export default function Walls(props) {
 
 /**
  * @typedef State
- * @property {THREE.InstancedMesh} wallsInst
+ * @property {THREE.InstancedMesh} inst
+ * @property {THREE.BufferGeometry} quad
  *
- * @property {(instanceId: number) => Geom.Meta} decodeWallInstanceId
+ * @property {(instanceId: number) => Geom.Meta} decodeInstanceId
  * @property {(
  *  seg: [Geom.Vect, Geom.Vect],
  *  transform: Geom.SixTuple,
  *  height?: number,
  *  baseHeight?: number,
  * ) => THREE.Matrix4} getWallMat
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  */
 

@@ -35,7 +35,7 @@ export async function* click({ api, args, w }) {
 
   const clickId = operands[0] ? api.getUid() : undefined;
   if (clickId) {
-    api.addCleanup(() => w.lib.removeFirst(w.ui.clickIds, clickId));
+    api.addCleanup(() => w.lib.removeFirst(w.view.clickIds, clickId));
   }
 
   /** @type {import('rxjs').Subscription} */
@@ -43,8 +43,9 @@ export async function* click({ api, args, w }) {
   api.addCleanup(() => eventsSub?.unsubscribe());
 
   while (numClicks-- > 0) {
-    clickId && w.ui.clickIds.push(clickId);
+    clickId && w.view.clickIds.push(clickId);
     
+    // 🚧 hook up to new pointer events
     const e = await /** @type {Promise<NPC.PointerUp3DEvent>} */ (new Promise((resolve, reject) => {
       eventsSub = w.events.subscribe({ next(e) {
         if (e.key !== "pointerup" || e.is3d === false || e.distancePx > 5 || !api.isRunning()) {
@@ -82,7 +83,6 @@ export async function* click({ api, args, w }) {
     yield output;
   }
 }
-
 
 /**
  * @param {RunArg} ctxt
@@ -127,7 +127,7 @@ export async function* selectPolysDemo({ w }) {
  * @param {RunArg} ctxt
  */
 export async function walkTest(input, { w, home })  {
-  const npc = w.npc.npc[home.selectedNpcKey];
+  const npc = w.n[home.selectedNpcKey];
   if (npc) {
     npc.s.run = input.keys?.includes("shift") ?? false;
     // do not await so can override

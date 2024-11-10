@@ -2,7 +2,7 @@
  * Based on: https://github.com/michealparks/sword
  */
 import RAPIER, { ColliderDesc, RigidBodyType } from '@dimforge/rapier3d-compat'
-import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius, wallHeight, wallOutset } from '../service/const';
+import { physicsConfig, wallHeight, wallOutset } from '../service/const';
 import { info, warn, debug, testNever } from "../service/generic";
 import { fetchGeomorphsJson } from '../service/fetch-assets';
 import { geomorph } from '../service/geomorph';
@@ -13,12 +13,6 @@ import { tmpRect1 } from '../service/geom';
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromPhysicsWorker, WW.MsgToPhysicsWorker>} */ (
   /** @type {*} */ (self)
 );
-
-const config = {
-  fps: 60,
-  agentHeight: 1.5, // 🚧
-  agentRadius: 0.25, // 🚧
-};
 
 /** @type {State} */
 const state = {
@@ -83,14 +77,14 @@ async function handleMessages(e) {
             type: RAPIER.RigidBodyType.KinematicPositionBased,
             geomDef: {
               type: 'circle',
-              radius: config.agentRadius,
+              radius: physicsConfig.agentRadius,
             },
-            position: { x: npc.position.x, y: config.agentHeight / 2, z: npc.position.z },
+            position: { x: npc.position.x, y: physicsConfig.agentHeight / 2, z: npc.position.z },
             userData: {
               bodyKey,
               bodyUid: addBodyKeyUidRelation(bodyKey, state),
               type: 'npc',
-              radius: config.agentRadius,
+              radius: physicsConfig.agentRadius,
             },
           });
         } else {
@@ -129,7 +123,7 @@ async function handleMessages(e) {
         switch (index % 4) {
           case 0: npcBodyKey = state.bodyUidToKey[value]; break;
           case 1: position.x = value; break;
-          case 2: position.y = config.agentHeight/2; break; // overwrite y
+          case 2: position.y = physicsConfig.agentHeight/2; break; // overwrite y
           case 3:
             position.z = value;
             /** @type {RAPIER.RigidBody} */ (state.bodyKeyToBody.get(npcBodyKey))
@@ -189,7 +183,7 @@ async function setupOrRebuildWorld(mapKey, npcs) {
   if (!state.world) {
     await RAPIER.init();
     state.world = new RAPIER.World({ x: 0, y: 0, z: 0 });
-    state.world.timestep = 1 / config.fps; // in seconds
+    state.world.timestep = 1 / physicsConfig.fps; // in seconds
     state.eventQueue = new RAPIER.EventQueue(true);
   } else {
     state.world.forEachRigidBody(rigidBody => state.world.removeRigidBody(rigidBody));
@@ -230,10 +224,10 @@ function createDoorSensors() {
     const nearbyKey = /** @type {const} */ (`nearby ${gdKey}`);
     const insideKey = /** @type {const} */ (`inside ${gdKey}`);
 
-    // const nearbyRadius = door.meta.hull === true ? nearbyHullDoorSensorRadius : nearbyDoorSensorRadius;
     const nearbyDef = {
       width: door.baseRect.width,
-      height: door.baseRect.height + 4 * wallOutset,
+      height: door.baseRect.height + 6 * wallOutset,
+      // height: door.baseRect.height + 2 * wallOutset,
       angle,
     };
     const insideDef = {
@@ -243,21 +237,6 @@ function createDoorSensors() {
     };
 
     return [
-      // createRigidBody({
-      //   type: RAPIER.RigidBodyType.Fixed,
-      //   geomDef: {
-      //     type: 'circle',
-      //     radius: nearbyRadius,
-      //   },
-      //   position: { x: center.x, y: colliderHeight / 2, z: center.y },
-      //   userData: {
-      //     bodyKey: nearbyKey,
-      //     bodyUid: addBodyKeyUidRelation(nearbyKey, state),
-      //     type: 'cylinder',
-      //     radius: nearbyRadius,
-      //     custom: { hull: door.meta.hull === true },
-      //   },
-      // }),
       createRigidBody({
         type: RAPIER.RigidBodyType.Fixed,
         geomDef: {
@@ -374,14 +353,14 @@ function restoreNpcs(npcs) {
       type: RigidBodyType.KinematicPositionBased,
       geomDef: {
         type: 'circle',
-        radius: config.agentRadius,
+        radius: physicsConfig.agentRadius,
       },
       position,
       userData: {
         bodyKey,
         bodyUid: addBodyKeyUidRelation(bodyKey, state),
         type: 'npc',
-        radius: config.agentRadius,
+        radius: physicsConfig.agentRadius,
       },
     });
   }
@@ -399,7 +378,6 @@ function restoreNpcs(npcs) {
  * @param {WW.PhysicsUserData} opts.userData
  */
 function createRigidBody({ type, geomDef, position, angle, userData }) {
-
   const bodyDescription = new RAPIER.RigidBodyDesc(type)
     .setCanSleep(true)
     .setCcdEnabled(false)
@@ -418,6 +396,7 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
     // .setCollisionGroups(1) // 👈 breaks things
     .setActiveEvents(RAPIER.ActiveEvents.COLLISION_EVENTS)
     .setActiveCollisionTypes(RAPIER.ActiveCollisionTypes.DEFAULT | RAPIER.ActiveCollisionTypes.KINEMATIC_FIXED)
+    .setEnabled(true)
   ;
 
   const rigidBody = state.world.createRigidBody(bodyDescription);
@@ -433,37 +412,35 @@ function createRigidBody({ type, geomDef, position, angle, userData }) {
   state.bodyHandleToKey.set(rigidBody.handle, userData.bodyKey);
 
   if (typeof angle === 'number') {
-    rigidBody.setRotation(new RAPIER.Quaternion(0, -angle, 0, 1), false);
+    rigidBody.setRotation(getQuaternionFromAxisAngle(unitYAxis, angle), false);
   }
-  rigidBody.setTranslation(position, true);
+  rigidBody.setTranslation(position, false);
 
   return /** @type {RAPIER.RigidBody & { userData: WW.PhysicsUserData }} */ (rigidBody);
 }
 
 function sendDebugData() {
+  const { vertices } = state.world.debugRender();
+
   const physicsDebugData = state.world.bodies.getAll().map((x) => ({
     parsedKey: parsePhysicsBodyKey(/** @type {WW.PhysicsUserData} */ (x.userData).bodyKey),
     userData: /** @type {WW.PhysicsUserData} */ (x.userData),
     position: {...x.translation()},
     enabled: x.isEnabled(),
   }));
+
   // debug({physicsDebugData});
-  selfTyped.postMessage({ type: 'debug-data', items: physicsDebugData })
+  selfTyped.postMessage({
+    type: 'debug-data',
+    items: physicsDebugData,
+    lines: Array.from(vertices),
+  })
 }
 
 if (typeof window === 'undefined') {
   info("🤖 physics.worker started", import.meta.url);
   selfTyped.addEventListener("message", handleMessages);
 }
-
-// /**
-//  * @typedef BodyUserData
-//  * @property {WW.PhysicsBodyKey} bodyKey
-//  * @property {number} bodyUid This is the numeric hash of `bodyKey`
-//  * @property {boolean} [npc] Is this the body of an NPC?
-//  * @property {boolean} [gmDecor] Is this static body a decor rect/circle for some geomorph `gmId`?
-//  * @property {number} [gmId]
-//  */
 
 /**
  * @typedef {BaseState & import('../service/rapier').PhysicsBijection} State
@@ -478,3 +455,22 @@ if (typeof window === 'undefined') {
  * @property {Map<WW.PhysicsBodyKey, RAPIER.Collider>} bodyKeyToCollider
  * @property {Map<WW.PhysicsBodyKey, RAPIER.RigidBody>} bodyKeyToBody
  */
+
+const unitYAxis = /** @type {const} */ ({ x: 0, y: 1, z: 0 });
+
+/**
+ * assumes axis is normalized
+ * https://github.com/mrdoob/three.js/blob/c3f685f49d7a747397d44b8f9fedd4fcec792fa7/src/math/Quaternion.js#L275
+ * @param {{ x: number; y: number; z: number }} axis 
+ * @param {number} angle radians
+ */
+function getQuaternionFromAxisAngle(axis, angle) {
+  const halfAngle = angle / 2;
+  const s = Math.sin(halfAngle);
+  return {
+    x: axis.x * s,
+    y: axis.y * s,
+    z: axis.z * s,
+    w: Math.cos( halfAngle ),
+  };
+}

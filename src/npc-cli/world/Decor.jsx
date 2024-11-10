@@ -7,7 +7,7 @@ import { isDevelopment, pause, removeDups, testNever, warn } from "../service/ge
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
-import { boxGeometry, createLabelSpriteSheet, getColor, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
+import { createLabelSpriteSheet, getBoxGeometry, getColor, getQuadGeometryXY, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
 import * as glsl from "../service/glsl";
 import { helper } from "../service/helper";
 import { WorldContext } from "./world-context";
@@ -22,6 +22,7 @@ export default function Decor(props) {
     byKey: {},
     byGrid: [],
     byRoom: [],
+    cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
     seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
@@ -32,9 +33,9 @@ export default function Decor(props) {
       lookup: {},
       tex: new THREE.CanvasTexture(document.createElement('canvas')),
     },
-    labelQuad: getQuadGeometryXZ(`${w.key}-decor-labels-xz`),
+    labelQuad: getQuadGeometryXY(`${w.key}-decor-labels-xy`, true),
     quads: [],
-    quadGeom: getQuadGeometryXZ(`${w.key}-decor-xz`),
+    quad: getQuadGeometryXZ(`${w.key}-decor-xz`),
     quadInst: /** @type {*} */ (null),
     queryStatus: 'pending',
     rmKeys: new Set(),
@@ -60,9 +61,11 @@ export default function Decor(props) {
         return agg;
       }, /** @type {Record<`g${number}r${number}`, { meta: Geom.Meta<Geomorph.GmRoomId> } & { [x in 'add' | 'remove']: Geomorph.Decor[] }>} */ ({}));
 
-      removeExisting && Object.values(grouped).forEach(({ meta, remove }) =>
-        state.removeDecorFromRoom(meta.gmId, meta.roomId, remove)
-      );
+      if (removeExisting) {
+        Object.values(grouped).forEach(({ meta, remove }) =>
+          state.removeDecorFromRoom(meta.gmId, meta.roomId, remove)
+        );
+      }
 
       Object.values(grouped).forEach(({ meta, add }) =>
         state.addDecorToRoom(meta.gmId, meta.roomId, add)
@@ -94,6 +97,12 @@ export default function Decor(props) {
         )
       ), false);
     },
+    addCuboidAttributes() {
+      const instanceIds = state.cuboids.map((_, instanceId) => instanceId);
+      state.cuboidGeom.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+      );
+    },
     addLabelUvs() {
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
@@ -114,36 +123,50 @@ export default function Decor(props) {
       );
     },
     addQuadUvs() {
-      const { decor: sheet, decorDim: dim } = w.geomorphs.sheet;
+      const { decor: sheet, maxDecorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
+      const uvTextureIds = /** @type {number[]} */ ([]);
+      const instanceIds = /** @type {number[]} */ ([]);
       
-      for (const d of state.quads) {
+      for (const [instanceId, d] of state.quads.entries()) {
         if (d.type === 'point') {
-          const { x, y, width, height } = sheet[
+          const { x, y, width, height, sheetId } = sheet[
             geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.point
           ];
-          uvOffsets.push(x / dim.width,  y / dim.height);
-          uvDimensions.push(width / dim.width, height / dim.height);
+          uvTextureIds.push(sheetId);
+
+          uvOffsets.push(x / maxDecorDim.width, y / maxDecorDim.height);
+          uvDimensions.push(width / maxDecorDim.width, height / maxDecorDim.height);
         } else {
-          const { x, y, width, height } = sheet[
+          const { x, y, width, height, sheetId } = sheet[
             geomorph.isDecorImgKey(d.meta.img) ? d.meta.img : fallbackDecorImgKey.quad
           ];
+          uvTextureIds.push(sheetId);
+          
           if (d.det < 0) {// fix "flipped" decor quads
-            uvOffsets.push((x + width) / dim.width,  y / dim.height);
-            uvDimensions.push(-width / dim.width, height / dim.height);
+            uvOffsets.push((x + width) / maxDecorDim.width, y / maxDecorDim.height);
+            uvDimensions.push(-width / maxDecorDim.width, height / maxDecorDim.height);
           } else {
-            uvOffsets.push(x / dim.width,  y / dim.height);
-            uvDimensions.push(width / dim.width, height / dim.height);
+            uvOffsets.push(x / maxDecorDim.width,  y / maxDecorDim.height);
+            uvDimensions.push(width / maxDecorDim.width, height / maxDecorDim.height);
           }
         }
+
+        instanceIds.push(instanceId);
       }
 
-      state.quadInst.geometry.setAttribute('uvOffsets',
+      state.quad.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
-      state.quadInst.geometry.setAttribute('uvDimensions',
+      state.quad.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
+      );
+      state.quad.setAttribute('uvTextureIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.quad.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     computeDecorMeta(decor, instanceId) {
@@ -165,15 +188,21 @@ export default function Decor(props) {
     createLabelMatrix4(d) {
       const { width, height } = state.label.lookup[d.meta.label];
       const scale = sguToWorldScale * (1 / spriteSheetLabelExtraScale);
-      tmpMat1.feedFromArray([
+      const transform = [
         width * scale, 0, 0, height * scale,
         d.x - (width * scale) / 2,
         d.y - (height * scale) / 2,
-      ]);
-      return geomorph.embedXZMat4(tmpMat1.toArray(), {
-        mat4: tmpMatFour1,
-        yHeight: wallHeight + 0.1,
-      });
+      ];
+      // return geomorph.embedXZMat4(transform, {
+      //   mat4: tmpMatFour1,
+      //   yHeight: wallHeight + 0.1,
+      // });
+      return tmpMatFour1.set(
+        transform[0], 0, 0, transform[4],
+        0, transform[3], 0, wallHeight + 0.2,
+        0, 0, 1, transform[5],
+        0, 0, 0, 1
+      );
     },
     createQuadMatrix4(d) {
       if (d.type === 'point') {
@@ -219,32 +248,6 @@ export default function Decor(props) {
 
         return mat4;
       }
-    },
-    detectClick(e) {// 🚧
-      // 🚧 decor quad may require detect non-transparent pixel in decor sprite-sheet
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const byInstId = e.object.name === 'decor-cuboids' ? state.cuboids : state.quads;
-      return byInstId[instanceId];
-      
-      // const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
-      // const gm = w.gms[gmId];
-      // const obstacle = gm.obstacles[obstacleId];
-      
-      // // transform 3D point back to unit XZ quad
-      // const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
-      // const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
-      // // transform unit quad point into spritesheet
-      // const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
-      // const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
-      // const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
-
-      // const canvas = /** @type {HTMLCanvasElement} */ (w.obsTex.image);
-      // const ctxt = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
-      // const { data: rgba } = ctxt.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
-      // // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
-      
-      // // ignore clicks on fully transparent pixels
-      // return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
     },
     ensureGmRoomId(decor) {
       if (!(decor.meta.gmId >= 0 && decor.meta.roomId >= 0)) {
@@ -298,7 +301,7 @@ export default function Decor(props) {
           };
           break;
         case "quad":
-          instance = { ...d, ...base,
+          instance = { ...d, ...base, meta: d.meta,
             center: gm.matrix.transformPoint({ ...d.center }),
             transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
             det: tmpMat1.a * tmpMat1.d - tmpMat1.b * tmpMat1.c,
@@ -309,36 +312,6 @@ export default function Decor(props) {
       }
       instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
-    },
-    onPointerDown(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const decor = state.detectClick(e);
-
-      if (decor !== null) {
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerdown",
-          distancePx: 0,
-          event: e,
-          is3d: true,
-          justLongDown: false,
-          meta: state.computeDecorMeta(decor, instanceId),
-        }));
-        e.stopPropagation();
-      }
-    },
-    onPointerUp(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const decor = state.detectClick(e);
-
-      if (decor !== null) {
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerup",
-          event: e,
-          is3d: true,
-          meta: state.computeDecorMeta(decor, instanceId),
-        }));
-        e.stopPropagation();
-      }
     },
     positionInstances() { 
       const { cuboidInst, quadInst, labelInst } = state;
@@ -444,6 +417,7 @@ export default function Decor(props) {
         geomorph.isDecorCuboid
       );
 
+      // 🚧 elements of state.byKey should have sheetId
       state.quads = Object.values(state.byKey).filter(
         /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorQuad} */
         x => x.type === 'point' && (
@@ -459,7 +433,7 @@ export default function Decor(props) {
   
   // instantiate geomorph decor
   const query = useQuery({
-    queryKey: ['decor', w.key, w.mapKey, w.hash.decor], // depends on sheetsHash?
+    queryKey: ['decor', w.key, w.mapKey, w.hash.decor, w.hash.sheets],
 
     async queryFn() {
       if (module.hot?.active === false) {
@@ -535,6 +509,7 @@ export default function Decor(props) {
   React.useEffect(() => {
     if (query.data === true) {
       state.addQuadUvs();
+      state.addCuboidAttributes();
       state.positionInstances();
     } else if (query.data === false) {
       query.refetch(); // hmr
@@ -548,11 +523,10 @@ export default function Decor(props) {
       name="decor-cuboids"
       key={`${state.cuboids.length} cuboids`}
       ref={instances => instances && (state.cuboidInst = instances)}
-      args={[boxGeometry, undefined, state.cuboids.length]}
+      args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
       renderOrder={-1}
+      visible={state.cuboids.length > 0} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <cameraLightMaterial
@@ -560,6 +534,7 @@ export default function Decor(props) {
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
         transparent
+        objectPickRed={7}
       />
     </instancedMesh>
 
@@ -567,35 +542,37 @@ export default function Decor(props) {
       name="decor-quads"
       key={`${state.quads.length} quads`}
       ref={instances => instances && (state.quadInst = instances)}
-      args={[state.quadGeom, undefined, state.quads.length]}
+      args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
+      // visible={state.quads.length > 0} // 🚧 avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <instancedSpriteSheetMaterial
-        key={glsl.InstancedSpriteSheetMaterial.key}
+      <instancedMultiTextureMaterial
+        key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
-        map={w.decorTex.tex}
         transparent
-        diffuse={new THREE.Vector3(1, 1, 1)}
+        atlas={w.texDecor.tex}
+        diffuse={[1, 1, 1]}
+        objectPickRed={5}
+        // depthWrite={false} // fix z-fighting
+        alphaTest={0.5}
       />
     </instancedMesh>
 
     <instancedMesh // labels
       name="decor-labels"
       key={`${labels.length} labels`}
-      ref={instances => instances && (state.labelInst = instances)}
+      ref={instances => void (instances && (state.labelInst = instances))}
       args={[state.labelQuad, undefined, labels.length]}
       frustumCulled={false}
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <instancedSpriteSheetMaterial
-        key={glsl.InstancedSpriteSheetMaterial.key}
+      <instancedLabelsMaterial
+        key={glsl.InstancedLabelsMaterial.key}
         side={THREE.DoubleSide}
         map={state.label.tex}
         transparent
-        diffuse={new THREE.Vector3(0.5, 0.5, 0.5)}
+        diffuse={new THREE.Vector3(1, 1, 0.8)}
       />
     </instancedMesh>
   </>;
@@ -614,6 +591,7 @@ export default function Decor(props) {
  * @property {Record<string, Geomorph.Decor>} byKey
  * @property {Geomorph.RoomDecor[][]} byRoom
  * Decor organised by `byRoom[gmId][roomId]` where (`gmId`, `roomId`) are unique
+ * @property {THREE.BoxGeometry} cuboidGeom
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
  * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
@@ -623,7 +601,7 @@ export default function Decor(props) {
  * @property {THREE.BufferGeometry} labelQuad
  * @property {(Geomorph.DecorPoint | Geomorph.DecorQuad)[]} quads
  * This is `Object.values(state.byKey)`
- * @property {THREE.BufferGeometry} quadGeom
+ * @property {THREE.BufferGeometry} quad
  * @property {THREE.InstancedMesh} quadInst
  * @property {import("@tanstack/react-query").QueryStatus} queryStatus
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
@@ -634,18 +612,16 @@ export default function Decor(props) {
  * Can manually `removeExisting` e.g. during re-instantiation of geomorph decor
  * @property {() => void} addLabelUvs
  * @property {() => void} addQuadUvs
+ * @property {() => void} addCuboidAttributes
  * @property {(decor: Geomorph.Decor, instanceId: number) => Geom.Meta} computeDecorMeta
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} addDecorToRoom
  * @property {(d: Geomorph.DecorCuboid) => THREE.Matrix4} createCuboidMatrix4
  * @property {(d: Geomorph.DecorPoint | Geomorph.DecorQuad) => THREE.Matrix4} createQuadMatrix4
  * @property {(d: Geomorph.DecorPoint) => THREE.Matrix4} createLabelMatrix4
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => null | Geomorph.Decor} detectClick
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
  * @property {(gmId: number) => void} addGm
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionInstances
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
@@ -655,5 +631,3 @@ export default function Decor(props) {
  */
 
 const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));
-
-

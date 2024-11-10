@@ -17,12 +17,14 @@ export default function Obstacles(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
-    quadGeom: getQuadGeometryXZ(`${w.key}-obs-xz`),
+    quad: getQuadGeometryXZ(`${w.key}-obs-xz`),
 
     addObstacleUvs() {
-      const { obstacle: sheet, obstacleDim: sheetDim } = w.geomorphs.sheet;
+      const { obstacle: sheet, maxObstacleDim: sheetDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
+      const uvTextureIds = /** @type {number[]} */ ([]);
+      const instanceIds = /** @type {number[]} */ ([]);
   
       w.gms.forEach(({ obstacles }) =>
         obstacles.forEach(({ symbolKey, obstacleId }) => {
@@ -33,17 +35,25 @@ export default function Obstacles(props) {
             uvDimensions.push(width / sheetDim.width, height / sheetDim.height);
           } else {
             warn(`${symbolKey} (${obstacleId}) not found in sprite-sheet`);
-            uvOffsets.push(0,  0);
+            uvOffsets.push(0, 0);
             uvDimensions.push(1, 1);
           }
+          uvTextureIds.push(item.sheetId);
+          instanceIds.push(instanceIds.length);
         })
       );
 
-      state.inst.geometry.setAttribute('uvOffsets',
+      state.quad.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
       );
-      state.inst.geometry.setAttribute('uvDimensions',
+      state.quad.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      );
+      state.quad.setAttribute('uvTextureIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.quad.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     createObstacleMatrix4(gmTransform, { origPoly: { rect }, transform, height }) {
@@ -56,72 +66,14 @@ export default function Obstacles(props) {
     decodeObstacleId(instanceId) {
       let id = instanceId;
       const gmId = w.gms.findIndex(gm => id < gm.obstacles.length || (id -= gm.obstacles.length, false));
-      return { gmId, obstacleId: id };
-    },
-    detectClick(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const { gmId, obstacleId } = state.decodeObstacleId(instanceId);
       const gm = w.gms[gmId];
-      const obstacle = gm.obstacles[obstacleId];
-      
-      // transform 3D point back to unit XZ quad
-      const mat4 = state.createObstacleMatrix4(gm.transform, obstacle).invert();
-      const unitQuadPnt = e.point.clone().applyMatrix4(mat4);
-      // transform unit quad point into spritesheet
-      const meta = w.geomorphs.sheet.obstacle[`${obstacle.symbolKey} ${obstacle.obstacleId}`];
-      const sheetX = Math.floor(meta.x + unitQuadPnt.x * meta.width);
-      const sheetY = Math.floor(meta.y + unitQuadPnt.z * meta.height);
-
-      const { ct } = w.obsTex;
-      const { data: rgba } = ct.getImageData(sheetX, sheetY, 1, 1, { colorSpace: 'srgb' });
-      // console.log(rgba, { obstacle, point3d: e.point, unitQuadPnt, sheetX, sheetY });
-      
-      // ignore clicks on fully transparent pixels
-      return rgba[3] === 0 ? null : { gmId, obstacleId, obstacle };
-    },
-    onPointerDown(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const result = state.detectClick(e);
-
-      if (result !== null) {
-        const { gmId, obstacle } = result;
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerdown",
-          distancePx: 0,
-          event: e,
-          is3d: true,
-          justLongDown: false,
-          meta: {
-            gmId,
-            obstacleId: obstacle.obstacleId,
-            height: obstacle.height,
-            ...obstacle.origPoly.meta,
-            instanceId,
-          },
-        }));
-        e.stopPropagation();
-      }
-    },
-    onPointerUp(e) {
-      const instanceId = /** @type {number} */ (e.instanceId);
-      const result = state.detectClick(e);
-
-      if (result !== null) {
-        const { gmId, obstacleId, obstacle } = result;
-        w.events.next(w.ui.getNpcPointerEvent({
-          key: "pointerup",
-          event: e,
-          is3d: true,
-          meta: {
-            gmId,
-            obstacleId,
-            height: obstacle.height,
-            ...obstacle.origPoly.meta,
-            instanceId,
-          },
-        }));
-        e.stopPropagation();
-      }
+      const obstacle = gm.obstacles[id];
+      return {
+        gmId,
+        obstacleId: id,
+        ...obstacle.meta,
+        height: obstacle.height,
+      };
     },
     positionObstacles() {
       const { inst: obsInst } = state;
@@ -156,20 +108,18 @@ export default function Obstacles(props) {
       name="static-obstacles"
       key={`${[w.mapKey, w.hash.full]}`}
       ref={instances => instances && (state.inst = instances)}
-      args={[state.quadGeom, undefined, w.gmsData.obstaclesCount]}
+      args={[state.quad, undefined, w.gmsData.obstaclesCount]}
       frustumCulled={false}
-      {...w.obsTex && {
-        onPointerUp: state.onPointerUp,
-        onPointerDown: state.onPointerDown,
-      }}
       position={[0, 0.001, 0]} // 🚧
     >
-      <instancedSpriteSheetMaterial
-        key={glsl.InstancedSpriteSheetMaterial.key}
+      <instancedMultiTextureMaterial
+        key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        map={w.obsTex.tex}
-        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+        atlas={w.texObs.tex}
+        diffuse={[0.4, 0.4, 0.4]}
+        objectPickRed={6}
+        alphaTest={0.5}
       />
     </instancedMesh>
   );
@@ -184,16 +134,11 @@ export default function Obstacles(props) {
 /**
  * @typedef State
  * @property {THREE.InstancedMesh} inst
- * @property {THREE.BufferGeometry} quadGeom
+ * @property {THREE.BufferGeometry} quad
  * @property {() => void} addObstacleUvs
  * @property {(gmTransform: Geom.SixTuple, obstacle: Geomorph.LayoutObstacle) => THREE.Matrix4} createObstacleMatrix4
  * @property {(instanceId: number) => { gmId: number; obstacleId: number; }} decodeObstacleId
  * Points to `w.gms[gmId].obstacles[obstacleId]`.
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => (
- *   null | { gmId: number; obstacleId: number; obstacle: Geomorph.LayoutObstacle; }
- * )} detectClick
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {() => void} positionObstacles
  */
 

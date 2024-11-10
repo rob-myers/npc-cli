@@ -1,7 +1,7 @@
 import React from "react";
-import { defaultDoorCloseMs } from "../service/const";
+import { defaultDoorCloseMs, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
-import { geom, tmpVec1 } from "../service/geom";
+import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -12,11 +12,11 @@ export default function useHandleEvents(w) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     doorToNpc: {},
+    externalNpcs: new Set(),
     npcToAccess: {},
     npcToDoor: {},
     npcToRoom: new Map(),
     roomToNpcs: [],
-    externalNpcs: new Set(),
     shouldIgnoreLongClick: undefined,
 
     canCloseDoor(door) {
@@ -44,6 +44,105 @@ export default function useHandleEvents(w) {
         (state.npcToAccess[npcKey] ??= new Set()).delete(regexDef);
       }
     },
+    decodeObjectPick(r, g, b, a) {
+      if (r === 1) {// wall
+        const instanceId = (g << 8) + b;
+        const decoded = w.wall.decodeInstanceId(instanceId);
+        return {
+          picked: 'wall',
+          ...decoded,
+          instanceId,
+        };
+      }
+
+      if (r === 2) {// floor
+        const instanceId = (g << 8) + b;
+        return {
+          picked: 'floor',
+          gmId: instanceId,
+          floor: true,
+          instanceId,
+        };
+      }
+
+      if (r === 3) {// ceiling
+        const instanceId = (g << 8) + b;
+        return {
+          picked: 'ceiling',
+          gmId: instanceId,
+          ceiling: true,
+          height: wallHeight,
+          instanceId,
+        };
+      }
+
+      if (r === 4) {// door
+        const instanceId = (g << 8) + b;
+        const decoded = w.door.decodeInstance(instanceId);
+        return {
+          picked: 'door',
+          door: true,
+          ...decoded,
+          instanceId,
+        };
+      }
+
+      if (r === 5) {// decor quad
+        const instanceId = (g << 8) + b;
+        const quad = w.decor.quads[instanceId];
+        return {
+          picked: 'quad',
+          ...quad.meta,
+          instanceId,
+        };
+      }
+
+      if (r === 6) {// obstacle
+        const instanceId = (g << 8) + b;
+        const decoded = w.obs.decodeObstacleId(instanceId);
+        return {
+          picked: 'obstacle',
+          obstacle: true,
+          ...decoded,
+          instanceId,
+        };
+      }
+
+      if (r === 7) {// decor cuboid
+        const instanceId = (g << 8) + b;
+        const cuboid = w.decor.cuboids[instanceId];
+        return {
+          picked: 'cuboid',
+          ...cuboid.meta,
+          instanceId,
+        };
+      }
+
+      if (r === 8) {// npc
+        const npcUid = (g << 8) + b;
+        const npcKey = w.npc.pickUid.toKey.get(npcUid);
+        return {
+          picked: 'npc',
+          npcKey,
+          npcUid,
+          npc: true,
+          instanceId: npcUid, // not really an instance
+        };
+      }
+
+      if (r === 9) {// lock-light
+        const instanceId = (g << 8) + b;
+        const door = w.door.decodeInstance(instanceId);
+        return {
+          picked: 'lock-light',
+          ...door.meta,
+          instanceId,
+        };
+      }
+
+      // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
+      return null;
+    },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
 
@@ -58,7 +157,7 @@ export default function useHandleEvents(w) {
           // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
           break;
         case "long-pointerdown": { // toggle ContextMenu
-          const lastDownMeta = w.ui.getLastDownMeta();
+          const lastDownMeta = w.view.getLastDownMeta();
           if (lastDownMeta !== null && state.shouldIgnoreLongClick?.(lastDownMeta)) {
             return;
           }
@@ -66,24 +165,21 @@ export default function useHandleEvents(w) {
           if (e.distancePx <= (e.touch ? 10 : 5)) {
             w.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
-            w.ui.controls.saveState();
-            w.ui.controls.reset();
+            w.view.controls.saveState();
+            w.view.controls.reset();
           } else {
             w.menu.hide();
           }
           break;
         }
         case "pointerdown":
-          w.ui.setLastDown(e);
+          w.view.setLastDown(e);
           w.menu.hide();
           break;
         case "pointerup":
-          e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
+          // e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
           !e.touch && state.onPointerUpMenuDesktop(e);
           w.menu.justOpen = w.menu.ctOpen;
-          break;
-        case "pointerup-outside":
-          !e.touch && state.onPointerUpMenuDesktop(e);
           break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
@@ -132,6 +228,8 @@ export default function useHandleEvents(w) {
       }
     },
     handleNpcEvents(e) {
+      const npc = w.n[e.npcKey];
+
       switch (e.key) {
         case "enter-collider":
           if (e.type === 'nearby' || e.type === 'inside') {
@@ -144,7 +242,6 @@ export default function useHandleEvents(w) {
           }
           break;
         case "spawned": {
-          const npc = w.npc.npc[e.npcKey];
           const { x, y, z } = npc.getPosition();
           if (npc.s.spawns === 1) {// 1st spawn
             w.physics.worker.postMessage({
@@ -176,65 +273,38 @@ export default function useHandleEvents(w) {
           }
           break;
         }
-        case "started-moving":
-          // Handle move into/through doorway when already nearby
-          w.oneTimeTicks.push(function onNpcStartMove() {
-            const npc = w.npc.npc[e.npcKey];
-            for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
-              const door = w.door.byKey[gdKey];
-              if (door.open === false && state.isUpcomingDoor(npc, door) === true) {
-                if (state.npcCanAccess(e.npcKey, door.gdKey)) {
-                  w.door.toggleDoorRaw(door, { open: true, access: true });
-                } else {
-                  npc.stopMoving();
-                }
-                break;
-              }
+        // case "started-moving":
+        case "way-point":
+          if (e.index === 0) {// start moving in next frame
+            npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
+          }
+          if (e.next === null) {// final
+            return;
+          }
+          
+          for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+            const door = w.door.byKey[gdKey];
+            if (!(door.open === false && state.navSegIntersectsDoorway(e, e.next, door) === true)) {
+              continue;
+            } // incoming closed door:
+            if (state.npcCanAccess(e.npcKey, door.gdKey) === true) {
+              w.door.toggleDoorRaw(door, { open: true, access: true });
+            } else {
+              npc.stopMoving();
             }
-          });
+          }
           break;
-        case "stopped-moving": {
-          const npc = w.npc.npc[e.npcKey];
-          npc.resolve.move?.();
+        case "stopped-moving":
           for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
             door.open === true && state.tryCloseDoor(door.gmId, door.doorId);
           }
           break;
-        }
       }
     },
-    isUpcomingDoor(npc, door) {
-      const { target } = npc.s;
-      if (npc.agent === null || target === null) {
-        return false;
-      }
-
-      // Is target inside doorway?
-      tmpVec1.set(target.x, target.z);
-      if (door.axisAligned === true
-        ? door.rect.contains(tmpVec1) === true
-        : door.doorway.contains(tmpVec1) === true
-      ) {// intersecting door we don't necessarily go through
-        return true;
-      }
-
-      // Does polyline induced by upcoming corners intersect door's seg?
-      let src = npc.getPoint();
-      let dist = door.center.distanceToSquared(src), nextDist = 0;
-
-      for (const corner of npc.agent.corners()) {
-        if (geom.getLineSegsIntersection(src, tmpVec1.set(corner.x, corner.z), door.src, door.dst, true) !== null) {
-          return true; // typically 1st seg intersects, if any
-        }
-        if ((nextDist = door.center.distanceToSquared(tmpVec1)) > dist) {
-          return false; // distance must decrease before intersect
-        } else {
-          dist = nextDist;
-        }
-      }
-
-      return false;
+    navSegIntersectsDoorway(u, v, door) {
+      // 🤔 more efficient approach?
+      return geom.lineSegIntersectsPolygon(u, v, door.collidePoly);
     },
     npcCanAccess(npcKey, gdKey) {
       for (const regexDef of state.npcToAccess[npcKey] ?? []) {
@@ -268,11 +338,10 @@ export default function useHandleEvents(w) {
         } 
         
         const npc = w.npc.getNpc(e.npcKey);
-        if (state.isUpcomingDoor(npc, door) === true) {
+        if (state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door) === true) {
           if (door.auto === true && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
           } else {
-            // setTimeout(() => npc.stopMoving(), 300);
             npc.stopMoving();
           }
         }
@@ -284,7 +353,12 @@ export default function useHandleEvents(w) {
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
 
         const door = w.door.byKey[e.gdKey];
-        if (door.open === false && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
+        const npc = w.npc.npc[e.npcKey];
+        if (
+          door.open === false
+          && state.npcCanAccess(e.npcKey, e.gdKey) === true
+          // && state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door)
+        ) {
           state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
         }
 
@@ -357,14 +431,6 @@ export default function useHandleEvents(w) {
         e.is3d && w.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
       } else if (!e.justLongDown) {
         w.menu.hide();
-      }
-    },
-    onPointerUp3d(e) {
-      if (e.rmb === true || e.justLongDown === true || e.pointers !== 1) {
-        return;
-      }
-      if (e.distancePx > (e.touch === true ? 5 : 1)) {
-        return;
       }
     },
     removeFromSensors(npcKey) {
@@ -463,16 +529,16 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
- * @property {(npc: NPC.NPC, door: Geomorph.DoorState) => boolean} isUpcomingDoor
+ * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
+ * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
  * @property {(e: Extract<NPC.Event, { key: 'exit-collider'; type: 'nearby' | 'inside' }>) => void} onExitDoorCollider
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
- * @property {(e: NPC.PointerUpEvent | NPC.PointerUpOutsideEvent) => void} onPointerUpMenuDesktop
- * @property {(e: NPC.PointerUpEvent & { is3d: true }) => void} onPointerUp3d
+ * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor

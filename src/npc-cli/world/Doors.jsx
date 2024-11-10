@@ -3,9 +3,9 @@ import * as THREE from "three";
 import { damp } from "maath/easing"
 
 import { Mat, Vect } from "../geom";
-import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision } from "../service/const";
+import { doorDepth, doorHeight, doorLockedColor, doorUnlockedColor, hullDoorDepth, precision, wallOutset } from "../service/const";
 import * as glsl from "../service/glsl";
-import { boxGeometry, getColor, getQuadGeometryXY } from "../service/three";
+import { getBoxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -20,28 +20,46 @@ export default function Doors(props) {
     byKey: {},
     byGmId: {},
     byPos: {},
-    doorsInst: /** @type {*} */ (null),
+    inst: /** @type {*} */ (null),
+    quad: getQuadGeometryXY(`${w.key}-doors-xy`),
+    lockSigGeom: getBoxGeometry(`${w.key}-lock-lights`),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
 
-    addDoorUvs() {
-      const { decor, decorDim } = w.geomorphs.sheet;
+    addCuboidAttributes() {
+      const instanceIds = Object.values(state.byKey).map((_, instanceId) => instanceId);
+      state.lockSigGeom.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+      );
+    },
+    addUvs() {
+      const { decor: sheet, maxDecorDim } = w.geomorphs.sheet;
       const uvOffsets = /** @type {number[]} */ ([]);
       const uvDimensions = /** @type {number[]} */ ([]);
-  
+      const uvTextureIds = /** @type {number[]} */ ([]);
+      const instanceIds = /** @type {number[]} */ ([]);
+
       for (const meta of Object.values(state.byKey)) {
         /** @type {Geomorph.DecorImgKey} */
         const key = meta.door.meta.hull ? 'door--hull' : 'door--standard';
-        const { x, y, width, height } = decor[key];
-        uvOffsets.push(x / decorDim.width, y / decorDim.height);
-        uvDimensions.push(width / decorDim.width, height / decorDim.height);
+        const { x, y, width, height, sheetId } = sheet[key];
+        uvOffsets.push(x / maxDecorDim.width, y / maxDecorDim.height);
+        uvDimensions.push(width / maxDecorDim.width, height / maxDecorDim.height);
+        uvTextureIds.push(sheetId);
+        instanceIds.push(meta.instanceId);
       }
 
-      state.doorsInst.geometry.setAttribute('uvOffsets',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvOffsets ), 2 ),
+      state.inst.geometry.setAttribute('uvOffsets',
+        new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
-      state.doorsInst.geometry.setAttribute('uvDimensions',
-        new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
+      state.inst.geometry.setAttribute('uvDimensions',
+        new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
+      );
+      state.inst.geometry.setAttribute('uvTextureIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+      );
+      state.inst.geometry.setAttribute('instanceIds',
+        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
     },
     buildLookups() {
@@ -58,7 +76,8 @@ export default function Doors(props) {
           tmpMat1.transformPoint(tmpVec2.copy(v));
           const center = new Vect((tmpVec1.x + tmpVec2.x) / 2, (tmpVec1.y + tmpVec2.y) / 2);
           const radians = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
-          const doorwayPoly = door.computeDoorway().applyMatrix(tmpMat1).precision(precision);
+          // 🔔 wider and less depth than "computeDoorway()" for better navSeg intersections
+          const collidePoly = door.computeThinPoly(2 * wallOutset - 0.05).applyMatrix(tmpMat1).precision(precision);
 
           const gdKey = /** @type {const} */ (`g${gmId}d${doorId}`);
           const posKey = /** @type {const} */ (`${center.x},${center.y}`);
@@ -88,9 +107,9 @@ export default function Doors(props) {
             dir: { x : Math.cos(radians), y: Math.sin(radians) },
             normal: tmpMat1.transformSansTranslate(door.normal.clone()),
             segLength: u.distanceTo(v),
-            doorway: doorwayPoly,
-            rect: doorwayPoly.rect.precision(precision),
-            angle: radians,
+
+            collidePoly,
+            collideRect: collidePoly.rect.precision(precision),
           };
           instId++;
         })
@@ -105,7 +124,7 @@ export default function Doors(props) {
       //   state.cancelClose(state.byGmId[adjHull.adjGmId][adjHull.adjDoorId]);
       // }
     },
-    decodeDoorInstance(instanceId) {
+    decodeInstance(instanceId) {
       let doorId = instanceId;
       const gmId = w.gms.findIndex((gm) => (
         doorId < gm.doors.length ? true : (doorId -= gm.doors.length, false)
@@ -144,35 +163,15 @@ export default function Doors(props) {
     isOpen(gmId, doorId) {
       return this.byGmId[gmId][doorId].open;
     },
-    onPointerDown(e) {
-      e.stopPropagation();
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerdown",
-        distancePx: 0,
-        event: e,
-        is3d: true,
-        justLongDown: false,
-        meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
-      }));
-    },
-    onPointerUp(e) {
-      e.stopPropagation();
-      w.events.next(w.ui.getNpcPointerEvent({
-        key: "pointerup",
-        event: e,
-        is3d: true,
-        meta: state.decodeDoorInstance(/** @type {number} */ (e.instanceId)),
-      }));
-    },
     onTick(deltaMs) {
       if (state.movingDoors.size === 0) {
         return;
       }
       
       // 🚧 control via "float array" of ratios instead of 4x4 matrices
-      const { instanceMatrix } = state.doorsInst;
+      const { instanceMatrix } = state.inst;
       for (const [instanceId, meta] of state.movingDoors.entries()) {
-        const dstRatio = meta.open ? 0.1 : 1;
+        const dstRatio = meta.open ? 0 : 1;
         damp(meta, 'ratio', dstRatio, 0.1, deltaMs);
         const length = meta.ratio * meta.segLength;
         // set e1 (x,,z)
@@ -187,7 +186,7 @@ export default function Doors(props) {
       instanceMatrix.needsUpdate = true;
     },
     positionInstances() {
-      const { doorsInst: ds, lockSigInst: ls } = state;
+      const { inst: ds, lockSigInst: ls } = state;
       for (const meta of Object.values(state.byKey)) {
         ds.setMatrixAt(meta.instanceId, state.getDoorMat(meta));
         ls.setMatrixAt(meta.instanceId, state.getLockSigMat(meta));
@@ -281,26 +280,26 @@ export default function Doors(props) {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
-    state.addDoorUvs();
+    state.addCuboidAttributes();
+    state.addUvs();
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
 
   return <>
     <instancedMesh
       name="doors"
       key={`${w.hash} doors`}
-      ref={instances => instances && (state.doorsInst = instances)}
-      args={[getQuadGeometryXY('doors-xy'), undefined, w.gmsData.doorCount]}
+      ref={instances => instances && (state.inst = instances)}
+      args={[state.quad, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
-      onPointerUp={state.onPointerUp}
-      onPointerDown={state.onPointerDown}
       renderOrder={-1}
     >
-      <instancedSpriteSheetMaterial
-        key={glsl.InstancedSpriteSheetMaterial.key}
+      <instancedMultiTextureMaterial
+        key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
-        map={w.decorTex.tex}
         transparent
-        diffuse={new THREE.Vector3(0.6, 0.6, 0.6)}
+        atlas={w.texDecor.tex}
+        diffuse={[.6, .6, .6]}
+        objectPickRed={4}
       />
     </instancedMesh>
 
@@ -308,13 +307,14 @@ export default function Doors(props) {
       name="lock-lights"
       key={`${w.hash} lock-lights`}
       ref={instances => instances && (state.lockSigInst = instances)}
-      args={[boxGeometry, undefined, w.gmsData.doorCount]}
+      args={[state.lockSigGeom, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
     >
       <cameraLightMaterial
         key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
+        objectPickRed={9}
       />
     </instancedMesh>
   </>;
@@ -331,20 +331,21 @@ export default function Doors(props) {
  * Format `byGmId[gmId][doorId]`
  * @property {{ [gmDoorKey in Geomorph.GmDoorKey]: Geomorph.DoorState }} byKey
  * @property {{ [center in `${number},${number}`]: Geomorph.DoorState }} byPos
- * @property {THREE.InstancedMesh} doorsInst
+ * @property {THREE.InstancedMesh} inst
+ * @property {THREE.BufferGeometry} quad
+ * @property {THREE.BoxGeometry} lockSigGeom
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
  *
- * @property {() => void} addDoorUvs
+ * @property {() => void} addCuboidAttributes
+ * @property {() => void} addUvs
  * @property {() => void} buildLookups
  * @property {(item: Geomorph.DoorState) => void} cancelClose
- * @property {(instanceId: number) => Geom.Meta} decodeDoorInstance
+ * @property {(instanceId: number) => Geom.Meta<Geomorph.GmDoorId>} decodeInstance
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerDown
- * @property {(e: import("@react-three/fiber").ThreeEvent<PointerEvent>) => void} onPointerUp
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleLockOpts) => boolean} toggleLockRaw
  * @property {(deltaMs: number) => void} onTick

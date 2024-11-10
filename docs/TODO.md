@@ -1,32 +1,49 @@
 # TODO
 
+## Migration to Next.js (npc-cli-next)
+
+- keep in sync e.g. glsl.js, Logger
+  - `git diff --name-only "@{Sat 18 Sep}"`
+- get Decor working
+
 ## WIP
 
-- ✅ cleanup before merge branch
-  - ✅ door click should not propagate to floor
-    - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
-  - ✅ nearby nav click should cause move to
-  - ✅ merge npc.waitUntilStopped into useHandleEvents
-  - ✅ reject.turn, reject.fade
-  - ✅ npc.turn -> npc.look
-  - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
-
-- 🚧 next.js project (npc-cli-next)
-  - keep in sync e.g. glsl.js, Logger
-    - `git diff --name-only "@{Sat 18 Sep}"`
-  - get Decor working
-
-- ✅ sh: `map --forever` does not terminate on throw
-
-- 🚧 understand duplicated npcs e.g. on edit recast-detour.js
+- 🚧 support `await api.sleep(1)` inside `map`
+  - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
+  - ✅ simplify `choice` so it does not use `sleep`
+  - ✅ refactor underlying `choice` as AsyncFunction 
+  - refactor `sleep` as AsyncFunction
+- 🚧 avoid initial instanced mesh render
+  - still seeing issue on mobile
+- 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
-  - need repro, tried adding `key`.
-- ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
-  - background tab never was rendered
-- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
+  - ℹ️ saw happen when changed symbol chairs
+  - might have fixed `w.npc.restore()`
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+- 🚧 clarify connected nav issues:
+  - ℹ️ inaccessible door should not prevent nav through open door
+    - `maxSimplificationError: 0.85` helped, but causes nav kinks
+  - ℹ️ npc should not be able to get too close to inaccessible door
+- can select npc while paused e.g. click npc causes single frame update?
+- hmr sometimes breaks npc opacity/selector
+- can only spawn onto navigable floor or do point
+  - spawn onto do point uses orient
+- try animate ceiling diffuse i.e. more/less white
+- locked accessible doors auto-open earlier
+  - e.g. check up to two corners in this case
+- try avoid recreate decor/obstacles CanvasTexture by fixing texture size
+- consider using rapier for raycasting, rather than adding three-mesh-bvh
+  - try adding static non-colliding "walls and doors" and raycast against them
+  - could filter out doors which are open
+- auto reduce fov when World canvas wide with short height?
+  > `w update 'w => w.view.targetFov = 5'`
+- ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
+  - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
+- ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
+  - background tab never was rendered
+- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
 - improve cuboid-pet animations
 - bug: sh: paste multiline command and start Cmd-Deleting midway
 - useGLTFsAsync hook
@@ -45,9 +62,6 @@
 - ❌ change fov with camera distance? e.g. 15 far, 30 close
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
-- consider transparent body skin
-- fix flickering hull door base (onchange camera view)
-  - suffices to add a matching line
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so
     try provide "echo circle" for touch devices
@@ -2746,3 +2760,163 @@ done
   - ✅ fix do point on particular seat on briefing room table
     - seems to think it is in navmesh e.g. small island?
   - ✅ improve shadow for other animations
+
+- ✅ cleanup before merge branch
+  - ✅ door click should not propagate to floor
+    - ℹ️ `click` will only set `meta.nav` as `true` if `meta.floor`
+  - ✅ nearby nav click should cause move to
+  - ✅ merge npc.waitUntilStopped into useHandleEvents
+  - ✅ reject.turn, reject.fade
+  - ✅ npc.turn -> npc.look
+  - ✅ cannot spawn to arbitrary off-mesh position from off-mesh do point
+
+- ✅ sh: `map --forever` does not terminate on throw
+
+- ✅ profile-1: long click floor makes npc look towards it
+  - ℹ️ `get lastClick/meta/floor` has exit code `0` iff `lastClick.meta.floor` exists
+  - ℹ️ `test foo` has exit code `0` iff evaluated JavaScript `foo` is truthy
+    > e.g. `test $( w | map 'w => ...' )`
+  - e.g. `test $( call '({ home }) => home.lastClick.meta.floor === true' )`
+  - e.g. `test $( get lastClick/meta/floor )`
+  - ✅ two approaches i.e. `while` or `map`
+
+- ✅ `map` awaits when working with an async function
+  - ℹ️ we still require "async" keyword to be manually provided
+  - `seq 1000000 | map 'x => x + 1'` (fast)
+  - `seq 100000 | map 'async x => x + 1'` (slow: many promises)
+
+- ✅ migrate Floor and Ceiling to single draw-call
+  - ℹ️ still need floor pointer events for navigation
+  - ✅ positionInstances
+  - ✅ specify textureId convention
+    - ℹ️ by first seen respective gmKey
+  - ✅ addUvs
+  - ❌ coverage of MAX_TEXTURE_IMAGE_UNITS at 16 vs min 8?
+  - ❌ multiple instancedMesh?
+  - ✅ try texture array approach
+    - ℹ️ https://discourse.threejs.org/t/how-can-i-color-the-plane-with-different-colors-as-squares-in-the-same-face/53418/8
+    - ✅ permits partial rebuild
+    - ✅ fix HMR initialisation
+    - ✅ must have same resolution `2424 * 2424`
+    - ✅ fix brightness
+    - ✅ fix hmr
+      - ✅ on change ceiling drawGmKey
+      - ✅ on change symbol
+      - ✅ fix stale texId inside cached CanvasTexMeta
+        - ✅ try use a single temp CanvasTexture for floor/ceil
+        - ✅ TexArray needn't contain any CanvasTextures
+      - ✅ fix on edit create-gms-data
+      - ✅ fix on change map
+    - ✅ clean
+      - ✅ texturesNew -> textures
+      - ✅ move floor/ceiling textures into w.gmsData
+      - ✅ move TextureAtlas e.g. to fix hmr
+      - ✅ reuse TextureAtlas whenever possible
+      - ✅ rename TextureAtlas as TexArray
+    - ✅ check ceiling pointer events
+      - ℹ️ won't fix because will be replaced by object-pick
+
+- ✅ bug: `w npc.remove will` breaks door collision detection
+  - must clear positions (surprising didn't have issue)
+
+
+- ✅ bug: can navigate through locked door
+  - ℹ️ improved by testing on each `way-point`
+  - ℹ️ could test nextTargetInPath rather than all corners
+  - ℹ️ nav mesh via filter is only partial solution due to "going stale during navigation"
+
+- ✅ more efficient door collision testing
+  - only check one-step ahead (next target, not corners)
+
+- ✅ spawn near auto door triggers sensor
+- ✅ spawn from near auto door triggers sensor
+
+- ✅ physics colliders still aren't rotated correctly
+  - ✅ compute and send lines from world.debugRender
+  - ✅ draw lines from world.debugRender
+  - ✅ fix alignment
+  - ❌ fix colliders issue on refresh
+    - no repro, might be hmr-related
+
+- ✅ more nav through doorways issues
+  - ℹ️ sometimes triggers much too late when "winding round corner of door"
+  - ✅ nav seg was outside doorway, so door.doorway -> door.collidePoly,
+    which is wider (full door width) yet shallow (slightly less than doorway)
+- ✅ consider transparent body skin
+  - transparency supported
+- ✅ fix flickering hull door base (onchange camera view)
+  - suffices to add a matching line
+
+- ✅ instancedUvMappingShader (Doors, Obstacles, Decor quads/labels) -> instancedMultiTextureShader
+  - ✅ bin packer supports multiple sheets
+  - ✅ decor can have multiple images
+    - ✅ static/assets/2d/decor.{sheetId}.png
+    - ✅ World loads all into TexArray
+    - ✅ decor point/quad has meta.img properly typed
+    - ✅ use TexArray instead of CanvasTexture
+    - ✅ decor point/quad has meta.sheetId
+    - ✅ Doors too
+    - ✅ test by forcing small sheets
+    - ✅ clean
+  - ✅ decor texture array
+  - ✅ obstacles can have multiple images
+    - ✅ refactor
+    - ✅ test by forcing small sheets 
+    - ✅ can darken decor/obstacles
+    - ✅ clean
+      - ℹ️ cannot clean away onPointer{Down,Up} yet
+  - ✅ obstacles texture array
+  - ✅ decor labels
+    - ✅ new labels shader
+  - ℹ️ decor cuboids shader won't be migrated
+  - ✅ test decor hmr for multiple sheets
+  - ✅ test obstacle hmr for multiple sheets
+
+
+- ✅ gpu object-pick
+  - ℹ️ encode (glsl) e.g. gmId, instanceId -> (1, gmId, instanceId >> 8, instanceId)
+  - ℹ️ decode (js)   e.g. (r, g, b, a) -> 'wall', gmId, instanceId
+  - ✅ walls: glsl encode uses function
+  - ✅ walls: js decode uses function
+  - ✅ support transparent
+  - ✅ handle npcs
+    - ✅ npc click detected
+    - ✅ npcs need integer uid
+      - ℹ️ assume max npcs 256
+      - ℹ️ maintain Set([0..255])
+  - ✅ floor object-pick
+    - must compute non-object-pick opacity
+    - `(2, gmId, 0, gl_FragColor.a)`
+  - ✅ ceiling object-pick
+    - must compute non-object-pick opacity
+    - `(3, gmId, 0, gl_FragColor.a)`
+  - ✅ w.ceiling uses w.floor quad
+  - ✅ doors object-pick
+    - `(4, instancedId, 0, gl_FragColor.a)`
+  - ✅ decor quad object-pick
+    - `(5, quadInstanceId, 0, gl_FragColor.a)`
+  - ✅ obstacle object-pick
+  - ✅ decor cuboid object-pick
+  - ✅ lock light object-pick
+  - ✅ on pick floor, raycast against infinite floor plane
+    - ℹ️ manual approach needed to avoid raycast large number of instanced meshes
+  - ✅ send pointer events
+    - ℹ️ must object-pick on "down" e.g. for long press
+    - ℹ️ can avoid object-pick on "up" (if close to down then use it)
+    - ✅ `click 1` should provide a 3d position
+      - all object-pick types have a position
+    - ✅ fix RMB click: state.pickObject can end after native "pointerup"
+  - ✅ enrich event meta as before
+    - WorldCanvas ✅ Floor ✅ Walls ✅ Doors ✅ Obstacles ✅ Ceiling ✅ Decor ✅ Npcs ✅ 
+  - ✅ clean
+
+- ✅ cached geometries should have `w.key` prefix
+- ✅ clean before merge branch
+  - ✅ avoid dup w.ui.rootState, w.r3f
+  - ✅ w.ui -> w.view
+  - ❌ try alt style
+    - ✅ outlined labels
+    - ❌ adjust npc lighting
+  - ✅ careful about alpha=0 in object-pick encoding
+    - ℹ️ e.g. 768 ~ 0 mod 256
+    - ✅ fix instancedMonochromeShader

@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
-import { colliderHeight, nearbyDoorSensorRadius, nearbyHullDoorSensorRadius, wallOutset } from "../service/const";
+import { colliderHeight } from "../service/const";
 import { navMeta, decompToXZGeometry, cylinderGeometry, boxGeometry } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -22,6 +22,7 @@ export default function Debug(props) {
     npc: /** @type {*} */ (null),
     selectedNavPolys: new THREE.BufferGeometry(),
     staticColliders: [],
+    physicsLines: new THREE.BufferGeometry(),
 
     ensureNavPoly(gmKey) {
       if (!w.gmsData[gmKey].navPoly) {
@@ -35,6 +36,9 @@ export default function Debug(props) {
       if (e.data.type === 'debug-data') {
         // console.log('🔔 RECEIVED', e.data);
         state.staticColliders = e.data.items;
+        state.physicsLines.dispose();
+        state.physicsLines = new THREE.BufferGeometry();
+        state.physicsLines.setAttribute('position', new THREE.BufferAttribute(new Float32Array(e.data.lines), 3))
         w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
         update();
       }
@@ -121,6 +125,7 @@ export default function Debug(props) {
       return () => void w.physics.worker.removeEventListener('message', state.onPhysicsDebugData);
     } else {
       state.staticColliders = [];
+      state.physicsLines = new THREE.BufferGeometry();
       update();
     }
   }, [props.showStaticColliders, w.physics.rebuilds]);
@@ -144,6 +149,7 @@ export default function Debug(props) {
     <mesh
       name="SelectedNavPolys"
       args={[state.selectedNavPolys, selectedNavPolysMaterial]}
+      renderOrder={0}
     />
 
     {props.showOrigNavPoly && w.gms.map((gm, gmId) => (
@@ -161,7 +167,13 @@ export default function Debug(props) {
       </group>
     ))}
     
-    <group name="StaticColliders">
+    <group
+      name="StaticColliders"
+      visible={state.staticColliders.length > 0}
+    >
+      <lineSegments geometry={state.physicsLines}>
+        <lineBasicMaterial color="green" />
+      </lineSegments>
       <MemoizedStaticColliders
         staticColliders={state.staticColliders}
         w={w}
@@ -188,6 +200,7 @@ export default function Debug(props) {
  * @property {import('./TestNpcs').State} npc
  * @property {THREE.BufferGeometry} selectedNavPolys
  * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
+ * @property {THREE.BufferGeometry} physicsLines
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
@@ -204,7 +217,7 @@ const origNavPolyMaterial = new THREE.MeshBasicMaterial({
 
 const navPolyMaterial = new THREE.MeshStandardMaterial({
   wireframe: true,
-  color: "#797",
+  color: "#7f7",
   transparent: true,
   opacity: 1,
 });
@@ -215,10 +228,10 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   color: "blue",
   wireframe: false,
   transparent: true,
-  opacity: 0.5,
+  opacity: 0.2,
 });
 
-const showNavNodes = false;
+const showNavNodes = true;
 
 /**
  * 🔔 debug only (inefficient)

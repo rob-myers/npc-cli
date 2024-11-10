@@ -7,21 +7,33 @@ export function getCanvas(key) {
 
 /**
  * @param {string} key
+ * @param {CanvasRenderingContext2DSettings} [opts]
  */
-export function getContext2d(key) {
+export function getContext2d(key, opts) {
   return /** @type {CanvasRenderingContext2D} */ ((
     canvasLookup[key] ??= document.createElement('canvas')
-  ).getContext('2d'));
+  ).getContext('2d', opts));
 }
 
 /** Cache to avoid re-creation on HMR */
 const canvasLookup = /** @type {Record<string, HTMLCanvasElement>} */ ({});
 
+const patternLookup = /** @type {Record<string, CanvasPattern>} */ ({});
+
 /**
  * @param {number} dim
  * @param {string} color
  */
-export function createGridPattern(dim, color) {
+export function getGridPattern(dim, color) {
+  const key = `grid-pattern-${dim}-${color}`;
+  return patternLookup[key] ??= createGridPattern(dim, color);
+}
+
+/**
+ * @param {number} dim
+ * @param {string} color
+ */
+function createGridPattern(dim, color) {
   const tmpCtxt = getContext2d('create-grid-pattern');
   tmpCtxt.canvas.width = tmpCtxt.canvas.height = dim;
   tmpCtxt.resetTransform();

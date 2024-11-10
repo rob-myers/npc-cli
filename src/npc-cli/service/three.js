@@ -17,6 +17,11 @@ quadGeometryXZ.setAttribute("uv", new THREE.BufferAttribute(xzUvs.slice(), 2));
 quadGeometryXZ.setAttribute("normal", new THREE.Float32BufferAttribute( xzNormals.slice(), 3 ) );
 quadGeometryXZ.setIndex(xzIndices.slice());
 
+const centeredQuadGeometryXZ = quadGeometryXZ.clone();
+centeredQuadGeometryXZ.setAttribute("position", new THREE.BufferAttribute(new Float32Array([
+  -0.5,0,-0.5, 0.5,0,-0.5, 0.5,0,0.5, -0.5,0,0.5
+]), 3));
+
 /** Cache to avoid re-creation on HMR */
 const quadXZLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
 
@@ -28,8 +33,8 @@ const rotMatLookup = /** @type {Record<string, THREE.Matrix4>} */ ({});
  * Clone to avoid overwriting attributes used by custom shaders
  * @param {string} key
  */
-export function getQuadGeometryXZ(key) {
-  return quadXZLookup[key] ??= quadGeometryXZ.clone();
+export function getQuadGeometryXZ(key, centered = false) {
+  return quadXZLookup[key] ??= (centered ? centeredQuadGeometryXZ : quadGeometryXZ).clone();
 }
 
 /**
@@ -84,6 +89,11 @@ quadGeometryXY.setAttribute("uv", new THREE.BufferAttribute(xyUvs.slice(), 2));
 quadGeometryXZ.setAttribute( 'normal', new THREE.Float32BufferAttribute( xyNormals.slice(), 3 ) );
 quadGeometryXY.setIndex(xyIndices.slice());
 
+const centeredQuadGeometryXY = quadGeometryXY.clone();
+centeredQuadGeometryXY.setAttribute("position", new THREE.BufferAttribute(new Float32Array([
+  -0.5,-0.5,0, -0.5,0.5,0, 0.5,0.5,0, 0.5,-0.5,0
+]), 3));
+
 /** Cache to avoid re-creation on HMR */
 const quadXYLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
 
@@ -91,8 +101,8 @@ const quadXYLookup = /** @type {Record<string, THREE.BufferGeometry>} */ ({});
  * Clone to avoid overwriting attributes used by custom shaders
  * @param {string} key
  */
-export function getQuadGeometryXY(key) {
-  return quadXYLookup[key] ??= quadGeometryXY.clone();
+export function getQuadGeometryXY(key, centered = false) {
+  return quadXYLookup[key] ??= (centered ? centeredQuadGeometryXY : quadGeometryXY).clone();
 }
 
 export const tmpBufferGeom1 = new THREE.BufferGeometry();
@@ -174,21 +184,22 @@ export const tmpBox1 = new THREE.Box3();
 export const imageLoader = new THREE.ImageLoader();
 export const textureLoader = new THREE.TextureLoader();
 export const emptyTexture = new THREE.Texture();
+export const emptyDataArrayTexture = new THREE.DataArrayTexture();
 // console.log('cache enabled', THREE.Cache.enabled); // false
 
 const navPathColor = 0x00aa00;
-const navNodeColor = 0xaa0000;
+const navNodeColor = 0x777777;
 export const navMeta = {
   pathColor: navPathColor,
   nodeColor: navNodeColor,
   groundOffset: 0.01,
   lineMaterial: new LineMaterial({
     color: navPathColor,
-    linewidth: 0.001,
+    linewidth: 1,
     // vertexColors: true,
   }),
   nodeMaterial: new THREE.MeshBasicMaterial({ color: navNodeColor }),
-  nodeGeometry: new THREE.SphereGeometry(0.08),
+  nodeGeometry: new THREE.SphereGeometry(0.04),
 };
 
 /**
@@ -212,27 +223,14 @@ export function buildObjectLookup(object) {
 
 export const boxGeometry = new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
 
-export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
-
-/**
- * @param {number} width 
- * @param {number} height 
- * @param {object} [opts]
- * @param {boolean} [opts.willReadFrequently]
- * @returns {CanvasTexMeta}
- */
-export function createCanvasTexMeta(width, height, opts) {
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.flipY = false; // align with XZ quad uv-map
-  const ct = /** @type {CanvasRenderingContext2D} */(canvas.getContext(
-    '2d',
-    { willReadFrequently: opts?.willReadFrequently },
-  ));
-  return { canvas, tex, ct };
+/** @param {string} key */
+export function getBoxGeometry(key) {
+  return boxGeomLookup[key] ??= boxGeometry.clone();
 }
+
+const boxGeomLookup = /** @type {Record<string, THREE.BoxGeometry>} */ ({});
+
+export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
 /**
  * @param {THREE.Vector3Like} position
@@ -279,13 +277,15 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   const ct = /** @type {CanvasRenderingContext2D} */ (canvas.getContext('2d'));
   ct.font = `${fontHeight}px 'Courier new'`;
 
+  const strokeWidth = 3;
+
   const rects = labels.map(label => ({
-    width: ct.measureText(label).width,
-    height: fontHeight,
+    width: ct.measureText(label).width + 2 * strokeWidth,
+    height: fontHeight + 2 * strokeWidth,
     data: { label },
   }));
 
-  const bin = packRectangles(rects, { logPrefix: 'w.extendLabels', packedPadding: 2 });
+  const { bins: [bin] } = packRectangles(rects, { logPrefix: 'w.extendLabels', packedPadding: 2 });
 
   sheet.lookup = bin.rects.reduce((agg, r) => {
     agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
@@ -296,17 +296,21 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   // Draw sprite-sheet
   if (canvas.width !== bin.width || canvas.height !== bin.height) {
     sheet.tex.dispose();
-    [canvas.width, canvas.height] = [bin.width, bin.height];
+    canvas.width = bin.width;
+    canvas.height = bin.height;
     sheet.tex = new THREE.CanvasTexture(canvas);
     sheet.tex.flipY = false;
   }
   ct.clearRect(0, 0, bin.width, bin.height);
-  ct.strokeStyle = ct.fillStyle = 'white';
+  // ct.strokeStyle = ct.fillStyle = 'white';
+  ct.strokeStyle = 'black';
+  ct.fillStyle = 'white';
+  ct.lineWidth = strokeWidth;
   ct.font = `${fontHeight}px 'Courier new'`;
   ct.textBaseline = 'top';
   bin.rects.forEach(rect => {
-    ct.fillText(rect.data.label, rect.x, rect.y);
-    ct.strokeText(rect.data.label, rect.x, rect.y);
+    ct.strokeText(rect.data.label, rect.x + strokeWidth, rect.y + strokeWidth);
+    ct.fillText(rect.data.label, rect.x + strokeWidth, rect.y + strokeWidth);
   });
 
   sheet.tex.needsUpdate = true;
@@ -319,10 +323,20 @@ export const emptyGroup = new THREE.Group();
 export const emptyAnimationMixer = new THREE.AnimationMixer(emptyGroup);
 
 /**
+ * @typedef CanvasTexMetaDef
+ * @property {number} width 
+ * @property {number} height 
+ * @property {object} [opts]
+ * @property {boolean} [opts.willReadFrequently]
+ * @property {number} [opts.texId]
+ */
+
+/**
  * @typedef CanvasTexMeta
  * @property {CanvasRenderingContext2D} ct
  * @property {THREE.CanvasTexture} tex
  * @property {HTMLCanvasElement} canvas
+ * @property {null | number} texId
  */
 
 export const emptySceneForPicking = new THREE.Scene();
@@ -356,6 +370,33 @@ export function toV3(input) {
   ;
 }
 
+/**
+ * - `{ x, y, z }` -> `{ x, y: z }`
+ * - `THREE.Vector3` -> `{ x, y: z }`
+ * - `{ x, y }` -> `{ x, y }` (fresh)
+ * @param {Geom.VectJson | THREE.Vector3Like} input 
+ */
+export function toXZ(input) {
+  if ('z' in input) {
+    return { x: input.x, y: input.z };
+  } else {
+    return { x: input.x, y: input.y };
+  }
+}
+
+/**
+ * Mutates vector
+ * @param {THREE.Vector3} v 
+ * @param {number} precision 
+ */
+export function v3Precision(v, precision = 4) {
+  return v.set(
+    Number(v.x.toPrecision(precision)),
+    Number(v.y.toPrecision(precision)),
+    Number(v.z.toPrecision(precision)),
+  );
+}
+
 export const defaultQuadUvs = [...Array(4)].map(_ => new THREE.Vector2());
 
 /**
@@ -379,4 +420,36 @@ export function getParentBones(objs) {
   return objs.filter(/** @returns {x is THREE.Bone} */ (x) =>
     x instanceof THREE.Bone && !(x.parent instanceof THREE.Bone)
   );
+}
+
+/**
+ * @template {{ material: THREE.Material }} T
+ * @param {T} o
+ * @returns {o is (T & { material: THREE.ShaderMaterial })}
+ */
+export function hasObjectPickShaderMaterial(o) {
+  return (
+    o.material instanceof THREE.ShaderMaterial
+    && 'objectPick' in o.material.uniforms
+  );
+}
+
+const tempInstanceMesh = new THREE.Mesh();
+tempInstanceMesh.material = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
+const tempInstanceLocalMatrix = new THREE.Matrix4();
+const tempInstanceWorldMatrix = new THREE.Matrix4();
+
+/**
+ * 
+ * @param {THREE.InstancedMesh} inst 
+ * @param {number} instanceId 
+ */
+export function getTempInstanceMesh(inst, instanceId) {
+  if (inst.boundingSphere === null) inst.computeBoundingSphere();
+  const matrixWorld = inst.matrixWorld;
+  tempInstanceMesh.geometry = inst.geometry;
+  // tempInstanceMesh.material = inst.material;
+  inst.getMatrixAt(instanceId, tempInstanceLocalMatrix);
+  tempInstanceMesh.matrixWorld = tempInstanceWorldMatrix.multiplyMatrices(matrixWorld, tempInstanceLocalMatrix);
+  return tempInstanceMesh;
 }

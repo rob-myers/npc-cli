@@ -102,12 +102,10 @@ declare namespace Geomorph {
     normal: Geom.VectJson;
     /** Length of `door.seg` */
     segLength: number;
-    /** Transformed `door.poly`. */
-    doorway: Geom.Poly;
+    /** As wide as door, slightly less deep than doorway. */
+    collidePoly: Geom.Poly;
     /** Bounds of `doorway`. */
-    rect: Geom.Rect;
-    /** Transform angle (radians) */
-    angle: number;
+    collideRect: Geom.Rect;
 
     closeTimeoutId?: number;
   }
@@ -369,6 +367,7 @@ declare namespace Geomorph {
     type: 'point';
     /** Orientation in degrees, where the unit vector `(1, 0)` corresponds to `0`  */
     orient: number;
+    meta: Geom.Meta<Geomorph.GmRoomId & { img?: DecorImgKey }>;
   }
   
   /** Simple polygon sans holes. */
@@ -378,6 +377,7 @@ declare namespace Geomorph {
     center: Geom.VectJson;
     /** Determinant of 2x2 part of `transform` */
     det: number;
+    meta: Geom.Meta<Geomorph.GmRoomId & { img: DecorImgKey }>;
   }
 
   interface DecorRect extends BaseDecor {
@@ -406,7 +406,11 @@ declare namespace Geomorph {
     // tags?: string[];
   }
 
-  type DecorSheetRectCtxt = Geom.Meta<{ decorImgKey: Geomorph.DecorImgKey }>;
+  type DecorSheetRectCtxt = Geom.Meta<{
+    decorImgKey: Geomorph.DecorImgKey;
+    /** 0-based index of sheet */
+    sheetId: number;
+  }>;
 
   type DecorImgKey = import('../service/const.js').DecorImgKey;
 
@@ -440,14 +444,24 @@ declare namespace Geomorph {
    * All sprite-sheet metadata.
    */
   interface SpriteSheet {
+    /** Over all sheets */
+    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
+    /** Aligned to sheets; its length is the number of the sheets. */
+    decorDims: { width: number; height: number; }[];
+    /** Maximum over all sheets, for texture array */
+    maxDecorDim: { width: number; height: number; }
+
     /**
+     * Over all sheets
      * - key format `{symbolKey} ${obstacleId}`
      * - `rect` in Starship Geomorphs Units (sgu), possibly scaled-up for higher-res images
      */
-    obstacle: Record<`${Geomorph.SymbolKey} ${number}`, Geom.RectJson & ObstacleSheetRectCtxt>;
-    obstacleDim: { width: number; height: number; }
-    decorDim: { width: number; height: number; }
-    decor: Record<Geomorph.DecorImgKey, Geom.RectJson & DecorSheetRectCtxt>;
+    obstacle: Record<Geomorph.ObstacleKey, Geom.RectJson & ObstacleSheetRectCtxt>;
+    /** Aligned to sheets; its length is the number of the sheets. */
+    obstacleDims: { width: number; height: number; }[];
+    /** Maximum over all sheets, for texture array */
+    maxObstacleDim: { width: number; height: number; }
+
     imagesHash: number;
     skins: {
       /** e.g. `npcClassKey` is a `uvMapKey` */
@@ -459,11 +473,14 @@ declare namespace Geomorph {
     };
   }
 
+  type ObstacleKey = `${Geomorph.SymbolKey} ${number}`;
+
   interface ObstacleSheetRectCtxt {
     symbolKey: Geomorph.SymbolKey;
     obstacleId: number;
     /** e.g. `chair` */
     type: string;
+    sheetId: number;
   }
 
   interface UvRectLookup {

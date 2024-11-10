@@ -9,21 +9,21 @@ import { importNavMesh, Crowd } from "@recast-navigation/core";
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
-import { gmFloorExtraScale, worldToSguScale } from "../service/const";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
 import { getContext2d, invertCanvas } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { createCanvasTexMeta, imageLoader } from "../service/three";
+import { imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { helper } from "../service/helper";
+import { TexArray } from "../service/tex-array";
 import { WorldContext } from "./world-context";
 import useUpdate from "../hooks/use-update";
 import useStateRef from "../hooks/use-state-ref";
 import useHandleEvents from "./use-handle-events";
-import WorldCanvas from "./WorldCanvas";
+import WorldView from "./WorldView";
 import Floor from "./Floor";
 import Ceiling from "./Ceiling";
 import Decor from "./Decor";
@@ -63,17 +63,17 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
-    // 🚧 avoid recreating texture on HMR
-    obsTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
-    decorTex: createCanvasTexMeta(0, 0, { willReadFrequently: true }),
+
+    texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
+    texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
 
     crowd: /** @type {*} */ (null),
 
-    ui: /** @type {*} */ (null), // WorldCanvas
-    floor: /** @type {State['floor']} */ ({ tex: {} }),
-    ceil: /** @type {State['ceil']} */ ({ tex: {} }),
-    decor: /** @type {*} */ (null), // Decor
-    obs: /** @type {*} */ (null), // Obstacles
+    view: /** @type {*} */ (null),
+    floor: /** @type {*} */ ({}),
+    ceil: /** @type {*} */ ({}),
+    decor: /** @type {*} */ (null),
+    obs: /** @type {*} */ (null),
     wall: /** @type {*} */ (null),
     door: /** @type {State['door']} */ ({
       onTick(_) {},
@@ -110,6 +110,7 @@ export default function World(props) {
       Object.assign(state.nav, tiledCacheResult);
       state.crowd = new Crowd(state.nav.navMesh, {
         maxAgents: 10,
+        // maxAgents: 200,
         maxAgentRadius: helper.defaults.radius,
       });
       state.npc?.restore();
@@ -126,13 +127,13 @@ export default function World(props) {
       state.crowd.update(deltaMs);
       state.npc.onTick(deltaMs);
       state.door.onTick(deltaMs);
-      // info(state.r3f.gl.info.render);
+      // console.info(state.r3f.gl.info.render);
 
       if (state.debug.npc !== null) {
         state.debug.npc.onTick(deltaMs);
       }
 
-      state.ui.onTick(deltaMs);
+      state.view.onTick(deltaMs);
 
       while (state.oneTimeTicks.shift()?.());
     },
@@ -156,6 +157,7 @@ export default function World(props) {
       if (module.hot?.active === false) {
         return false; // Avoid query from disposed module
       }
+
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
 
@@ -184,19 +186,6 @@ export default function World(props) {
       if (mapChanged) {
         next.mapKey = props.mapKey;
         const mapDef = next.geomorphs.map[next.mapKey];
-
-        // onchange map may see new gmKeys
-        for(const { gmKey } of mapDef.gms.filter(x => !state.floor.tex[x.gmKey])) {
-          const { pngRect } = next.geomorphs.layout[gmKey];
-          for (const lookup of [state.floor.tex, state.ceil.tex]) {
-            lookup[gmKey] = createCanvasTexMeta(
-              pngRect.width * worldToSguScale * gmFloorExtraScale,
-              pngRect.height * worldToSguScale * gmFloorExtraScale,
-              { willReadFrequently: true },
-            );
-          }
-        }
-
         next.gms = mapDef.gms.map(({ gmKey, transform }, gmId) => 
           geomorph.computeLayoutInstance(next.geomorphs.layout[gmKey], gmId, transform)
         );
@@ -207,10 +196,7 @@ export default function World(props) {
       );
 
       if (mapChanged || gmsDataChanged) {
-        next.gmsData = createGmsData(
-          // reuse gmKey -> GmData lookup unless geomorphs.json or createGmsData changed
-          { prevGmData: dataChanged || gmsDataChanged ? undefined : state.gmsData },
-        );
+        next.gmsData = createGmsData();
 
         // ensure GmData per gmKey in map
         state.menu.measure('gmsData');
@@ -221,6 +207,7 @@ export default function World(props) {
           }
         };
         next.gmsData.computeRoot(next.gms);
+        next.gmsData.computeTextureArrays(state.gmsData);
         state.menu.measure('gmsData');
       }
       
@@ -256,28 +243,37 @@ export default function World(props) {
         hash: state.hash,
       });
 
-      if (dataChanged) {// 🤔 separate hash.sheets from hash.full?
-        for (const { src, tm, invert } of [
-          { src: getObstaclesSheetUrl(), tm: state.obsTex, invert: true, },
-          { src: getDecorSheetUrl(), tm: state.decorTex, invert: false },
-        ]) {
-          const img = await imageLoader.loadAsync(src);
-          // 🔔 commenting below due to issue editing obstacle outlines
-          // if (tm.canvas.width !== img.width || tm.canvas.height !== img.height) {// update texTuple
-            [tm.canvas.width, tm.canvas.height] = [img.width, img.height];
-            tm.tex.dispose();
-            tm.tex = new THREE.CanvasTexture(tm.canvas);
-            tm.tex.flipY = false; // align with XZ/XY quad uv-map
-          // }
-          tm.ct = /** @type {CanvasRenderingContext2D} */ (tm.canvas.getContext('2d', { willReadFrequently: true }));
-          tm.ct.drawImage(img, 0, 0);
-          invert && invertCanvas(tm.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
-          // Sharper via getMaxAnisotropy()
-          tm.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
-          tm.tex.needsUpdate = true;
-          update();
-        }
-      } else {
+      if (!dataChanged) {
+        update();
+        return true;
+      }
+
+      // Update texture arrays
+      const { decorDims, maxDecorDim, obstacleDims, maxObstacleDim } = state.geomorphs.sheet;
+
+      for (const { src, dim, texArray, invert } of [{
+        src: decorDims.map((_, sheetId) => getDecorSheetUrl(sheetId)),
+        texArray: state.texDecor,
+        dim: maxDecorDim, 
+        invert: false,
+      }, {
+        src: obstacleDims.map((_, sheetId) => getObstaclesSheetUrl(sheetId)),
+        texArray: state.texObs,
+        dim: maxObstacleDim, 
+        invert: true,
+      }]) {
+        texArray.resize({ width: dim.width, height: dim.height, numTextures: src.length });
+        texArray.tex.anisotropy = state.r3f.gl.capabilities.getMaxAnisotropy();
+
+        await Promise.all(src.map(async (url, sheetId) => {
+          const img = await imageLoader.loadAsync(url);
+          texArray.ct.clearRect(0, 0, dim.width, dim.height);
+          texArray.ct.drawImage(img, 0, 0);
+          invert && invertCanvas(texArray.ct.canvas, getContext2d('invert-copy'), getContext2d('invert-mask'));
+          texArray.updateIndex(sheetId);
+        }));
+
+        texArray.update();
         update();
       }
 
@@ -291,11 +287,14 @@ export default function World(props) {
     networkMode: isDevelopment() ? 'always' : 'online',
   });
 
-  React.useEffect(() => {// provide world for tty + hmr query
+  React.useEffect(() => {// provide world for tty
     setCached([props.worldKey], state);
-    query.data === false && query.refetch();
     return () => removeCached([props.worldKey]);
   }, []);
+
+  React.useEffect(() => {// hmr query
+    query.data === false && query.refetch();
+  }, [query.data === false]);
 
   React.useEffect(() => {// enable/disable animation
     state.timer.reset();
@@ -307,7 +306,7 @@ export default function World(props) {
 
   return (
     <WorldContext.Provider value={state}>
-      <WorldCanvas disabled={props.disabled} stats>
+      <WorldView disabled={props.disabled} stats>
         {state.geomorphs && (
           <group>
             <group>
@@ -331,7 +330,7 @@ export default function World(props) {
             </React.Suspense>
           </group>
         )}
-      </WorldCanvas>
+      </WorldView>
       <WorldMenu setTabsEnabled={props.setTabsEnabled} />
       <WorldWorkers />
     </WorldContext.Provider>
@@ -360,13 +359,13 @@ export default function World(props) {
  * @property {Geomorph.Geomorphs} geomorphs
  * @property {boolean} threeReady
  * @property {number} reqAnimId
- * @property {import("@react-three/fiber").RootState} r3f
+ * @property {import("@react-three/fiber").RootState & { camera: THREE.PerspectiveCamera }} r3f
  * @property {Timer} timer
  *
  * @property {{ worker: WW.NavWorker } & NPC.TiledCacheResult} nav
  * @property {{ worker: WW.PhysicsWorker; rebuilds: number; } & import("../service/rapier").PhysicsBijection} physics
  *
- * @property {import('./WorldCanvas').State} ui
+ * @property {import('./WorldView').State} view
  * @property {import('./Floor').State} floor
  * @property {import('./Ceiling').State} ceil
  * @property {import('./Decor').State} decor
@@ -385,8 +384,8 @@ export default function World(props) {
  * Shortcut for `w.npc.npc`
  * @property {(() => void)[]} oneTimeTicks
  *
- * @property {import("../service/three").CanvasTexMeta} obsTex
- * @property {import("../service/three").CanvasTexMeta} decorTex
+ * @property {TexArray} texDecor
+ * @property {TexArray} texObs
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.

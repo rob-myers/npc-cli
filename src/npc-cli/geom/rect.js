@@ -229,6 +229,20 @@ export class Rect {
   }
 
   /**
+   * Does this filled bordered rectangle intersect with @see {other}?
+   * @param {number} x
+   * @param {number} y
+   * @param {number} width
+   * @param {number} height
+   */
+  intersectsArgs(x, y, width, height) {
+    return (
+      Math.abs(this.cx - (x + 0.5 * width)) * 2 <= this.width + width &&
+      Math.abs(this.cy - (y + 0.5 * height)) * 2 <= this.height + height
+    );
+  }
+
+  /**
    * Does this filled bordered rectangle intersect another centered at `cx, cy`?
    * @param {number} cx 
    * @param {number} cy 
@@ -317,7 +331,7 @@ export class Rect {
    * @param {Geom.VectJson[]} items
    */
   setFromPoints(...items) {
-    if (!items.length) {
+    if (items.length === 0) {
       return Rect.zero;
     } else {
       const vectors = /** @type {Vect[]} */ (items);

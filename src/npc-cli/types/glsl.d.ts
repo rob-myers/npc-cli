@@ -11,18 +11,39 @@ declare global {
     
     type Texture = import('three').Texture;
 
+    interface SupportsObjectPick {
+      objectPick?: boolean;
+    }
+
     interface IntrinsicElements {
       instancedMonochromeShader: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
-        objectPicking?: boolean;
-      }>;
-      instancedSpriteSheetMaterial: BaseExtendedShaderMaterial<{
+      } & SupportsObjectPick>;
+
+      // instancedUvMappingMaterial: BaseExtendedShaderMaterial<{
+      //   map: import('three').CanvasTexture;
+      // }>;
+
+      instancedLabelsMaterial: BaseExtendedShaderMaterial<{
         map: import('three').CanvasTexture;
+        // ...
       }>;
+
+      instancedMultiTextureMaterial: BaseExtendedShaderMaterial<{
+        alphaTest?: number;
+        colorSpace?: boolean;
+        diffuse?: Vector3Input;
+        atlas: import('three').DataArrayTexture;
+        /** Red component in [0..255] used by objectPick rgba */
+        objectPickRed?: number;
+      } & SupportsObjectPick>;
+
       cameraLightMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
       }>;
+
       cuboidManMaterial: BaseExtendedShaderMaterial<{
+        uNpcUid?: number;
         diffuse?: Vector3Input;
         opacity?: number;
 
@@ -44,7 +65,7 @@ declare global {
         uLabelUv?: Vector2Input[];
 
         uLabelDim?: Vector2Input;
-      }>;
+      } & SupportsObjectPick>;
     }
   }
 }

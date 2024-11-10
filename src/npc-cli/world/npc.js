@@ -3,7 +3,7 @@ import { SkeletonUtils } from 'three-stdlib';
 import { damp, dampAngle } from "maath/easing";
 
 import { Vect } from '../geom';
-import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta, showLastNavPath } from '../service/const';
+import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
 import { info, warn } from '../service/generic';
 import { geom } from '../service/geom';
 import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
@@ -68,14 +68,23 @@ export class Npc {
     lookSecs: 0.3,
     selectorColor: /** @type {[number, number, number]} */ ([0.6, 0.6, 1]),
     showSelector: false,
+    wayIndex: 0,
   };
   
   /** @type {null | NPC.CrowdAgent} */
   agent = null;
   
-  lastLookAt = new THREE.Vector3();
+  /**
+   * - Current target (if moving)
+   * - Last set one (if not)
+   */
   lastTarget = new THREE.Vector3();
-  lastCorner = new THREE.Vector3();
+  /**
+   * - Next corner in nav (if moving).
+   * - Or last future corner (if not).
+   * - We stop slightly before final corner. 
+   */
+  nextCorner = new THREE.Vector3();
   
   resolve = {
     fade: /** @type {undefined | ((value?: any) => void)} */ (undefined),
@@ -327,14 +336,25 @@ export class Npc {
   }
 
   /**
-   * @param {number} dstAngle radians (ccw from east)
-   * @param {number} ms
+   * @param {number | Geom.VectJson} input
+   * - radians (ccw from east), or
+   * - point
+   * @param {number} [ms]
    */
-  async look(dstAngle, ms = 300) {
-    if (!Number.isFinite(dstAngle)) {
-      throw new Error(`${'look'}: 1st arg must be numeric`);
+  async look(input, ms = 300) {
+    if (this.w.lib.isVectJson(input)) {
+      const src = this.getPoint();
+      input = src.x === input.x && src.y === input.y
+        ? this.getAngle()
+        : Math.atan2(-(input.y - src.y), input.x - src.x)
+      ;
     }
-    this.s.lookAngleDst = this.getEulerAngle(dstAngle);
+
+    if (!Number.isFinite(input)) {
+      throw new Error(`${'look'}: 1st arg must be radians or point`);
+    }
+
+    this.s.lookAngleDst = this.getEulerAngle(input);
     this.s.lookSecs = ms / 1000;
 
     try {
@@ -352,10 +372,8 @@ export class Npc {
    * @param {Geom.VectJson} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
-   * A callback to invoke after npc has started walking in crowd
    */
   async moveTo(dst, opts = {}) {
-    // await this.cancel();
     if (this.agent === null) {
       throw new Error(`${this.key}: npc lacks agent`);
     }
@@ -370,15 +388,16 @@ export class Npc {
       this.w.debug.setNavPath(path ?? []);
     }
 
-    const position = this.getPosition();
-    if (position.distanceTo(closest) < 0.1) {
-      return;
-    }
-
     this.s.moving = true;
+    this.s.wayIndex = 0;
     this.s.lookSecs = 0.2;
-    // this.mixer.timeScale = 1;
-    this.agent.updateParameters({ maxSpeed: this.getMaxSpeed() });
+
+    this.agent.updateParameters({
+      maxSpeed: 0, // don't move until 0th way-point
+      radius: helper.defaults.radius, // reset
+      collisionQueryRange: 1.5,
+      separationWeight: 1,
+    });
     this.agent.requestMoveTarget(closest);
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
@@ -388,11 +407,11 @@ export class Npc {
     
     try {
       this.w.events.next({ key: 'started-moving', npcKey: this.key });
+      const position = this.getPosition();
+      this.nextCorner.copy(position); // trigger 0th way-point on next tick
       await this.waitUntilStopped();
     } catch (e) {
       this.stopMoving();
-    } finally {
-      this.s.moving = false;
     }
   }
 
@@ -554,40 +573,25 @@ export class Npc {
       return;
     }
 
-    const nextCorner = agent.nextTargetInPath();
-    if (this.lastCorner.equals(nextCorner) === false) {
-      this.w.events.next({ key: 'way-point', npcKey: this.key,
-        x: this.lastCorner.x, y: this.lastCorner.z,
-        next: { x: nextCorner.x, y: nextCorner.z },
-      });
-      this.lastCorner.copy(nextCorner);
-    }
-
-    // this.mixer.timeScale = Math.max(0.5, speed / this.getMaxSpeed());
     const distance = this.s.target.distanceTo(pos);
-    // console.log({ speed, distance, dVel: agent.raw.dvel, nVel: agent.raw.nvel });
 
     if (distance < 0.15) {// Reached target
       this.stopMoving();
-      this.w.events.next({ key: 'way-point', npcKey: this.key,
-        x: this.lastCorner.x, y: this.lastCorner.z,
-        next: null,
-      });
+      this.w.events.next({ key: 'way-point', npcKey: this.key, index: this.s.wayIndex, ...this.getPoint(), next: null });
       return;
     }
-    
-    // if (distance < 2.5 * this.agentRadius && (agent.updateFlags & 2) !== 0) {
-    //   // Turn off obstacle avoidance to avoid deceleration near nav border
-    //   // 🤔 might not need for hyper casual
-    //   agent.updateParameters({ updateFlags: agent.updateFlags & ~2 });
-    // }
 
-    // if (distance < 2 * this.agentRadius) {// undo speed scale
-    //   // https://github.com/recastnavigation/recastnavigation/blob/455a019e7aef99354ac3020f04c1fe3541aa4d19/DetourCrowd/Source/DetourCrowd.cpp#L1205
-    //   agent.updateParameters({
-    //     maxSpeed: this.getMaxSpeed() * ((2 * this.agentRadius) / distance),
-    //   });
-    // }
+    const nextCorner = agent.nextTargetInPath();
+    if (this.nextCorner.equals(nextCorner) === false) {
+      this.w.events.next({
+        key: 'way-point',
+        npcKey: this.key,
+        index: this.s.wayIndex++,
+        x: this.nextCorner.x, y: this.nextCorner.z,
+        next: { x: nextCorner.x, y: nextCorner.z },
+      });
+      this.nextCorner.copy(nextCorner);
+    }
   }
 
   removeAgent() {
@@ -731,9 +735,13 @@ export class Npc {
     const position = this.agent.position();
     this.s.target = null;
     this.s.lookAngleDst = null;
+    this.s.moving = false;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
+      radius: helper.defaults.radius / 1.5,
+      collisionQueryRange: 1,
+      separationWeight: 2,
     });
     
     this.startAnimation('Idle');
@@ -742,6 +750,7 @@ export class Npc {
     // 🔔 keep target, so moves out of the way of other npcs
     this.agent.requestMoveTarget(position);
 
+    this.resolve.move?.();
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
   }
 
@@ -777,21 +786,18 @@ export function hotModuleReloadNpc(npc) {
   return Object.assign(nextNpc, {...npc});
 }
 
-/** @param {any} error */
-function emptyReject(error) {}
-
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration: 10, // Large enough for 'Run'
-  // maxSpeed: 0, // Set elsewhere
-  pathOptimizationRange: helper.defaults.radius * 20, // 🚧 clarify
-  // collisionQueryRange: 2.5,
-  collisionQueryRange: 0.7,
+  maxAcceleration: 10,
+  pathOptimizationRange: 5, // 🚧 clarify
+  // collisionQueryRange: 0.7,
+  collisionQueryRange: 2,
   separationWeight: 1,
   queryFilterType: 0,
-  // userData, // 🚧 not working?
   // obstacleAvoidanceType
   updateFlags: defaultAgentUpdateFlags,
 };
+
+const showLastNavPath = false;

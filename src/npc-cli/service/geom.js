@@ -602,7 +602,8 @@ class geomServiceClass {
       dqx = q1.x - q0.x,
       dqy = q1.y - q0.y,
       /** The z component of cross product `dp ｘ dq` */
-      z = -dqx * dpy + dpx * dqy;
+      z = -dqx * dpy + dpx * dqy
+    ;
 
     let /** @type {number} */ s, /** @type {number} */ t;
 

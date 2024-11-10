@@ -74,9 +74,14 @@ class GeomorphService {
 
     const decor = /** @type {Geomorph.Decor[]} */ ([]);
     const labels = /** @type {Geomorph.DecorPoint[]} */ ([]);
-    symbol.decor.forEach((d) => (
-      typeof d.meta.label === 'string' ? labels : decor).push(this.decorFromPoly(d))
-    );
+    for (const poly of symbol.decor) {
+      const d = this.decorFromPoly(poly, assets);
+      if (typeof poly.meta.label === 'string' && d.type === 'point') {
+        labels.push(d); // decor points with meta.label
+      } else {
+        decor.push(d);
+      }
+    }
 
     const ignoreNavPoints = decor.flatMap(d => d.type === 'point' && d.meta['ignore-nav'] ? d : []);
     const symbolObstacles = symbol.obstacles.filter(d => d.meta['permit-nav'] !== true);
@@ -301,9 +306,10 @@ class GeomorphService {
    * - Script only.
    * - Only invoked for layouts, not nested symbols.
    * @param {Geom.Poly} poly
+   * @param {Geomorph.Assets} assets
    * @returns {Geomorph.Decor}
    */
-  decorFromPoly(poly) {
+  decorFromPoly(poly, assets) {
     // 🔔 key, gmId, roomId provided on instantiation
     const meta = /** @type {Geom.Meta<Geomorph.GmRoomId>} */ (poly.meta);
     meta.y = toPrecision(Number(meta.y) || 0);
@@ -313,15 +319,22 @@ class GeomorphService {
       if (poly.outline.length !== 4) {
         warn(`${'decorFromPoly'}: decor rect expected 4 points (saw ${poly.outline.length})`, poly.meta);
       }
-      // const polyRect = poly.rect.precision(precision);
       const { baseRect, angle } = geom.polyToAngledRect(poly);
       baseRect.precision(precision);
       return { type: 'rect', ...base, bounds2d: baseRect.json, points: poly.outline.map(x => x.json), center: poly.center.precision(3).json, angle };
     } else if (meta.quad === true) {
       const polyRect = poly.rect.precision(precision);
       const { transform } = poly.meta;
-      delete poly.meta.transform; // 🔔 `det` provided on instantiation
-      return { type: 'quad', ...base, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json, det: 1 };
+      delete poly.meta.transform;
+
+      const quadMeta = /** @type {Geomorph.DecorQuad['meta']} */ (base.meta);
+      if (!this.isDecorImgKey(quadMeta.img)) {
+        warn(`${'decorFromPoly'}: decor quad meta.img must be in DecorImgKey (using "icon--warn")`);
+        quadMeta.img = 'icon--warn';
+      }
+
+      // 🔔 `det` provided on instantiation
+      return { type: 'quad', key: base.key, meta: quadMeta, bounds2d: polyRect.json, transform, center: poly.center.precision(3).json, det: 1 };
     } else if (meta.cuboid === true) {
       // decor cuboids follow "decor quad approach"
       const polyRect = poly.rect.precision(precision);
@@ -348,6 +361,11 @@ class GeomorphService {
       const direction = /** @type {Geom.VectJson} */ (meta.direction) || { x: 0, y: 0 };
       delete meta.direction;
       const orient = toPrecision((180 / Math.PI) * Math.atan2(direction.y, direction.x));
+
+      if ('img' in meta && !this.isDecorImgKey(meta.img)) {
+        warn(`${'decorFromPoly'}: decor point with meta.img must be in DecorImgKey (using "icon--warn")`);
+        meta.img = 'icon--warn';
+      }
       return { type: 'point', ...base, bounds2d, x: center.x, y: center.y, orient };
     }
   }
@@ -479,7 +497,7 @@ class GeomorphService {
     ;
     const poly = Poly.fromRect(new Rect(0, 0, 1, 1)).applyMatrix(tmpMat1);
 
-    // 🔔 currently only support cuboid/point/quad, with point fallback
+    // 🔔 only support cuboid/point/quad, with point fallback
     poly.meta = Object.assign(meta, {
       ...meta.cuboid === true && {
         transform: tmpMat1.toArray(),
@@ -487,6 +505,7 @@ class GeomorphService {
         quad: true,
         transform: tmpMat1.toArray(),
         // 🔔 meta.switch means door switch
+        // 🔔 SVG symbols with meta.quad should have meta.img
         ...typeof meta.switch === 'number' && {
           y: doorSwitchHeight,
           tilt: true, // 90° so in XY plane
@@ -777,11 +796,11 @@ class GeomorphService {
   }
 
   /**
-   * @param {string} input
+   * @param {string | undefined} input
    * @returns {input is Geomorph.DecorImgKey}
    */
   isDecorImgKey(input) {
-    return input in helper.fromDecorImgKey;
+    return input !== undefined && input in helper.fromDecorImgKey;
   }
 
   /**
@@ -1452,8 +1471,8 @@ export class Connector {
    * so it doesn't jut out from its surrounding walls.
    * @returns {Geom.Poly}
    */
-  computeThinPoly() {
-    const height = this.meta.hull ? hullDoorDepth : doorDepth;
+  computeThinPoly(extraDepth = 0) {
+    const height = (this.meta.hull ? hullDoorDepth : doorDepth) + extraDepth;
     const hNormal = this.normal;
     const topLeft = this.seg[0].clone().addScaled(hNormal, -height/2);
     const botLeft = topLeft.clone().addScaled(hNormal, height);

@@ -44,6 +44,12 @@ export const worldToSguScale = 1 / sguToWorldScale;
 /** Higher resolution floors */
 export const gmFloorExtraScale = 2;
 
+/** Unchangeable */
+export const geomorphPngRectWidth = 30.3;
+
+/** This is the width, but also the height even for edge geomorphs, because we use texture arrays */
+export const floorTextureDimension = geomorphPngRectWidth * worldToSguScale * gmFloorExtraScale;
+
 /** Can be any value in `[1, 5]`. */
 export const spriteSheetSymbolExtraScale = 2.5;
 
@@ -77,9 +83,9 @@ export const specialWallMetaKeys = /** @type {const} */ ([
   'broad',
 ]);
 
-export const wallHeight = 2.2;
+export const wallHeight = 2;
 
-export const doorHeight = 1.8;
+export const doorHeight = 1.6;
 
 /** Depth of doorway along line walking through hull door */
 export const hullDoorDepth = 40 * sguToWorldScale * sguSymbolScaleDown;
@@ -120,16 +126,15 @@ export const glbFadeOut = {
 
 export const defaultNpcInteractRadius = geomorphGridMeters;
 
-export const showLastNavPath = false;
-
 /**
- * Maximum `1 + 2 + 4 + 8 + 16`
+ * Maximum possible `1 + 2 + 4 + 8 + 16` i.e. `31`
+ * - `DT_CROWD_ANTICIPATE_TURNS` ~ `1`
+ * - `DT_CROWD_OBSTACLE_AVOIDANCE` ~ `2`
+ * - `DT_CROWD_SEPARATION` ~ `4`
+ * - `DT_CROWD_OPTIMIZE_VIS` ~ `8`
+ * - `DT_CROWD_OPTIMIZE_TOPO` ~ `16`
  */
 export const defaultAgentUpdateFlags = 1 + 2 + 4;
-
-export const nearbyDoorSensorRadius = (geomorphGridMeters / 2) * 0.9;
-
-export const nearbyHullDoorSensorRadius = geomorphGridMeters;
 
 export const colliderHeight = 1.8;
 
@@ -335,3 +340,30 @@ export const npcClassToMeta = {
 export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
   Object.keys(npcClassToMeta)
 );
+
+/**
+ * Relates to `npc.def.uid` which is used for object-picking.
+ * Technically we can choose any `maxNumberOfNpcs ≤ 2^16 = 65536`.
+ */
+export const maxNumberOfNpcs = 256;
+
+export const physicsConfig = {
+  fps: 60,
+  agentHeight: 1.5,
+  agentRadius: 0.2,
+};
+
+/**
+ * @type {Record<NPC.ObjectPickedType, boolean>}
+ */
+export const pickedTypesInSomeRoom = {
+    wall: true,
+    floor: true,
+    ceiling: false,
+    door: false,
+    quad: true,
+    obstacle: true,
+    cuboid: true,
+    npc: true, // technically not
+    'lock-light': false,
+};

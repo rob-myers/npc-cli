@@ -1,13 +1,13 @@
 declare namespace NPC {
 
-  /** Skin names. */
-  type SkinKey = keyof import('../service/helper').Helper['fromSkinKey'];
-
   type NPC = import('../world/npc').Npc;
 
   interface NPCDef {
     /** User specified e.g. `rob` */
     key: string;
+    /** Numeric id used in object-picking */
+    pickUid: number;
+    /** Specifies the underlying 3D model */
     classKey: ClassKey;
     /** Radians */
     angle: number;
@@ -82,7 +82,6 @@ declare namespace NPC {
   type AnimKey = keyof import('../service/helper').Helper['fromAnimKey'];
 
   type Event = (
-    | PointerUpOutsideEvent
     | PointerUpEvent
     | PointerDownEvent
     | LongPointerDownEvent
@@ -94,7 +93,7 @@ declare namespace NPC {
     | { key: 'started-moving'; npcKey: string }
     | { key: 'stopped-moving'; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
-    | { key: "way-point"; npcKey: string; next: Geom.VectJson | null } & Geom.VectJson
+    | { key: "way-point"; npcKey: string; index: number; next: Geom.VectJson | null } & Geom.VectJson
     | { key: "enter-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "exit-doorway"; npcKey: string } & Geomorph.GmDoorId
     | { key: "enter-room"; npcKey: string } & Geomorph.GmRoomId
@@ -146,11 +145,6 @@ declare namespace NPC {
   }>;
 
   type PointerUp3DEvent = PointerUpEvent & { is3d: true };
-
-  type PointerUpOutsideEvent = Pretty<BasePointerEvent & {
-    key: "pointerup-outside";
-    is3d: false;
-  }>;
 
   type PointerDownEvent = Pretty<BasePointerEvent & {
     key: "pointerdown";
@@ -222,5 +216,22 @@ declare namespace NPC {
   };
 
   type ObstacleRef = import("@recast-navigation/core").ObstacleRef;
+
+  type DecodedObjectPick = Geom.Meta<{
+    picked: ObjectPickedType;
+    instanceId: number;
+  }>;
+
+  type ObjectPickedType = (
+    | 'wall'
+    | 'floor'
+    | 'ceiling'
+    | 'door'
+    | 'quad'
+    | 'obstacle'
+    | 'cuboid'
+    | 'npc'
+    | 'lock-light'
+  );
 
 }

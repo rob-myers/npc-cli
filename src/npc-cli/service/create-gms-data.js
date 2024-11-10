@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { doorDepth, doorHeight, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
+import { doorDepth, doorHeight, floorTextureDimension, gmFloorExtraScale, gmHitTestExtraScale, hitTestRed, hullDoorDepth, wallHeight, worldToSguScale } from "./const";
 import { mapValues, pause, warn } from "./generic";
 import { drawPolygons } from "./dom";
 import { Poly } from '../geom';
@@ -8,36 +8,34 @@ import { geomorph } from "./geomorph";
 import { BaseGraph } from '../graph/base-graph';
 import { RoomGraphClass } from "../graph/room-graph";
 import { helper } from './helper';
+import { TexArray, emptyTexArray } from './tex-array';
 
-/**
- * @param {object} opts
- * @param {Record<Geomorph.GeomorphKey, GmData>} [opts.prevGmData]
- * Previous lookup to avoid recomputation
-*/
-export default function createGmsData({ prevGmData }) {
+export default function createGmsData() {
   const gmsData = {
-    ...mapValues(helper.toGmNum,
-      (_, gmKey) => prevGmData?.[gmKey] ?? ({ ...emptyGmData, gmKey })
-    ),
-    
+    ...mapValues(helper.toGmNum, (_, gmKey) => ({ ...emptyGmData, gmKey })),
     /** Total number of doors, each being a single quad (🔔 may change):  */
     doorCount: 0,
     /** Total number of obstacles, each being a single quad:  */
     obstaclesCount: 0,
+    /** This induces the floor/ceil texture array ordering */
+    seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
+    /** texture array */
+    texFloor: /** @type {TexArray} */ ({}),
+    /** texture array */
+    texCeil: /** @type {TexArray} */ ({}),
     /** Total number of walls, where each wall is a single quad:  */
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
     wallPolySegCounts: /** @type {number[]} */ ([]),
     
     /**
-     * Recomputed (dev only),
-     * - onchange geomorphs.json
-     * - on edit create-gms-data
+     * Recomputed (dev only) onchange geomorphs.json or edit create-gms-data
      * @param {Geomorph.Layout} gm
      * This is the "incoming" value.
      */
     async computeGmData(gm) {
       const gmData = gmsData[gm.key];
+      gmsData.seenGmKeys.push(gm.key);
 
       gmData.doorSegs = gm.doors.map(({ seg }) => seg);
       gmData.polyDecals = gm.unsorted.filter(x => x.meta.poly === true);
@@ -49,8 +47,9 @@ export default function createGmsData({ prevGmData }) {
       gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
         outline.length // main walls
         + holes.reduce((sum, hole) => sum + hole.length, 0) // inner walls
-        + 2 * gm.doors.length // lintels
       );
+      gmData.wallPolySegCounts.push(2 * gm.doors.length); // lintels
+
       const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
       );
@@ -104,11 +103,33 @@ export default function createGmsData({ prevGmData }) {
       gmsData.doorCount = gms.reduce((sum, { key }) => sum + gmsData[key].doorSegs.length, 0);
       gmsData.wallCount = gms.reduce((sum, { key }) => sum + gmsData[key].wallSegs.length, 0);
       gmsData.obstaclesCount = gms.reduce((sum, { obstacles }) => sum + obstacles.length, 0);
-
       gmsData.wallPolySegCounts = gms.map(({ key: gmKey }) =>
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
     },
+    
+    /**
+     * @param {{
+     *   seenGmKeys: Geomorph.GeomorphKey[];
+     *   texFloor: TexArray;
+     *   texCeil: TexArray;
+     * }} [prevGmsData]
+     * Previous lookup so can reuse memory
+     */
+    computeTextureArrays(prevGmsData) {
+      const dimension = floorTextureDimension;
+      const preserve = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length;
+      gmsData.texFloor = preserve ? prevGmsData.texFloor : new TexArray({ ctKey: 'tex-array-floor', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
+      gmsData.texCeil = preserve ? prevGmsData.texCeil : new TexArray({ ctKey: 'tex-array-ceil', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
+      
+      if (preserve) {// remove ref
+        prevGmsData.texFloor = prevGmsData.texCeil = emptyTexArray;
+      } else {// garbage collect
+        prevGmsData?.texFloor.dispose();
+        prevGmsData?.texCeil.dispose();
+      }
+    },
+
     /** Dispose `GmData` lookup. */
     dispose() {
       for (const gmKey of geomorph.gmKeys) {
@@ -117,6 +138,8 @@ export default function createGmsData({ prevGmData }) {
             v.length = 0;
           } else if (v instanceof CanvasRenderingContext2D) {
             v.canvas.width = v.canvas.height = 0;
+          } else if (v instanceof THREE.Texture) {
+            v.dispose();
           } else if (v instanceof THREE.BufferGeometry) {
             v.dispose();
           } else if (v instanceof BaseGraph) {
@@ -185,6 +208,13 @@ export default function createGmsData({ prevGmData }) {
         meta,
       }));
     },
+    /**
+     * @param {Geomorph.GeomorphKey} gmKey 
+     * @returns {number}
+     */
+    getTextureId(gmKey) {
+      return gmsData.seenGmKeys.indexOf(gmKey);
+    }
   };
   return gmsData;
 };

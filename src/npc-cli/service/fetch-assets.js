@@ -44,12 +44,14 @@ export async function fetchGeomorphsJson() {
   ).then((x) => x.json());
 }
 
-export function getObstaclesSheetUrl() {
-  return `${assetsEndpoint}/2d/obstacles.${imgExt}${getDevCacheBustQueryParam()}`;
+/** @param {number} sheetId */
+export function getObstaclesSheetUrl(sheetId) {
+  return `${assetsEndpoint}/2d/obstacles.${sheetId}.${imgExt}${getDevCacheBustQueryParam()}`;
 }
 
-export function getDecorSheetUrl() {
-  return `${assetsEndpoint}/2d/decor.${imgExt}${getDevCacheBustQueryParam()}`;
+/** @param {number} sheetId */
+export function getDecorSheetUrl(sheetId) {
+  return `${assetsEndpoint}/2d/decor.${sheetId}.${imgExt}${getDevCacheBustQueryParam()}`;
 }
 
 /** Override cache in development */

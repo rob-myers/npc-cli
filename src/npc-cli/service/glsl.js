@@ -2,22 +2,26 @@ import * as THREE from "three";
 import { extend } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
 import { wallHeight } from "./const";
-import { defaultQuadUvs } from "./three";
+import { defaultQuadUvs, emptyDataArrayTexture } from "./three";
 
 const instancedMonochromeShader = {
   Vert: /*glsl*/`
 
   attribute int gmId;
-  attribute int wallSegId;
+  attribute int instanceId;
   flat varying int vGmId;
-  flat varying int vWallSegId;
+  /**
+   * index into wallSegs[gmId]_gmId,
+   * equivalently InstancedMesh instanceId
+   */
+  flat varying int vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_vertex>
 
   void main() {
     vGmId = gmId;
-    vWallSegId = wallSegId;
+    vInstanceId = instanceId;
 
     vec4 modelViewPosition = vec4(position, 1.0);
     modelViewPosition = instanceMatrix * modelViewPosition;
@@ -32,23 +36,30 @@ const instancedMonochromeShader = {
   Frag: /*glsl*/`
 
   uniform vec3 diffuse;
-  uniform bool objectPicking;
+  uniform bool objectPick;
   flat varying int vGmId;
-  flat varying int vWallSegId;
+  flat varying int vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
 
+  /**
+   * - 1 means wall
+   * - vInstanceId in 0..65535: (msByte, lsByte)
+   */
+  vec4 encodeWallObjectPick() {
+    return vec4(
+      1.0,
+      float((vInstanceId >> 8) & 255),
+      float(vInstanceId & 255),
+      255.0
+    ) / 255.0;
+  }
+
   void main() {
 
-    if (objectPicking == true) {
-      gl_FragColor = vec4(
-        1.0 / 255.0, // 1 means wall
-        float(vGmId) / 255.0,
-        float((vWallSegId >> 8) & 255) / 255.0,
-        float(vWallSegId & 255) / 255.0
-        // 1
-      );
+    if (objectPick == true) {
+      gl_FragColor = encodeWallObjectPick();
       #include <logdepthbuf_fragment>
       return;
     }
@@ -59,12 +70,13 @@ const instancedMonochromeShader = {
   `,
 };
 
-const instancedUvMappingShader = {
+/**
+ * Use with centered XY quad.
+ */
+const instancedLabelsShader = {
   Vert: /*glsl*/`
 
-  // <color_pars_vertex>
   varying vec3 vColor;
-  
   varying vec2 vUv;
   attribute vec2 uvDimensions;
   attribute vec2 uvOffsets;
@@ -75,13 +87,11 @@ const instancedUvMappingShader = {
   void main() {
     // vUv = uv;
     vUv = (uv * uvDimensions) + uvOffsets;
-    vec4 modelViewPosition = vec4(position, 1.0);
 
-    // USE_INSTANCING
-    modelViewPosition = instanceMatrix * modelViewPosition;
-    
-    modelViewPosition = modelViewMatrix * modelViewPosition;
-    gl_Position = projectionMatrix * modelViewPosition;
+    // Quad faces the camera
+    vec4 mvPosition = modelViewMatrix * instanceMatrix * vec4(0.0, 0.0, 0.0, 1.0);
+    mvPosition.xy += position.xy * vec2(instanceMatrix[0][0], instanceMatrix[1][1]);
+    gl_Position = projectionMatrix * mvPosition;
 
     vColor = vec3(1.0);
     #ifdef USE_INSTANCING_COLOR
@@ -95,11 +105,9 @@ const instancedUvMappingShader = {
 
   Frag: /*glsl*/`
 
-  // <color_pars_fragment>
   varying vec3 vColor;
-  uniform sampler2D map;
-
   varying vec2 vUv;
+  uniform sampler2D map;
   uniform vec3 diffuse;
 
   #include <common>
@@ -107,6 +115,7 @@ const instancedUvMappingShader = {
 
   void main() {
     gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, 1);
+    // gl_FragColor = vec4(1.0, 0.0, 0.0, 1);
 
     // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
     if(gl_FragColor.a < 0.5) {
@@ -116,7 +125,6 @@ const instancedUvMappingShader = {
     #include <logdepthbuf_fragment>
   }
   `,
-
 };
 
 /**
@@ -132,6 +140,9 @@ export const cameraLightShader = {
 
   flat varying float dotProduct;
   varying vec3 vColor;
+  flat varying int vInstanceId;
+
+  attribute int instanceIds;
 
   #include <common>
   #include <uv_pars_vertex>
@@ -139,10 +150,11 @@ export const cameraLightShader = {
 
   void main() {
     #include <uv_vertex>
+    vInstanceId = instanceIds;
 
-    vec3 objectNormal = vec3( normal );
-    vec3 transformed = vec3( position );
-    vec4 mvPosition = vec4( transformed, 1.0 );
+    vec3 objectNormal = vec3(normal);
+    vec3 transformed = vec3(position);
+    vec4 mvPosition = vec4(transformed, 1.0);
 
     #ifdef USE_INSTANCING
       mvPosition = instanceMatrix * mvPosition;
@@ -175,9 +187,13 @@ export const cameraLightShader = {
 
   Frag: /*glsl*/`
 
+  flat varying int vInstanceId;
 	flat varying float dotProduct;
   varying vec3 vColor;
+
   uniform vec3 diffuse;
+  uniform bool objectPick;
+  uniform int objectPickRed;
 
   #include <common>
   #include <uv_pars_fragment>
@@ -185,12 +201,21 @@ export const cameraLightShader = {
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    vec4 diffuseColor = vec4( diffuse, 1);
+    vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
     #include <map_fragment>
 
     // gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
     gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
+
+    if (objectPick == true) {
+      gl_FragColor = vec4(
+        float(objectPickRed) / 255.0,
+        float((vInstanceId >> 8) & 255) / 255.0,
+        float(vInstanceId & 255) / 255.0,
+        gl_FragColor.a
+      );
+    }
   }
   `,
 };
@@ -316,7 +341,9 @@ export const cuboidManShader = {
 
   Frag: /*glsl*/`
 
+  uniform int uNpcUid;
   uniform vec3 diffuse;
+  uniform bool objectPick;
   uniform float opacity;
 
   uniform sampler2D uBaseTexture;
@@ -349,6 +376,21 @@ export const cuboidManShader = {
   }
   //#endregion
 
+  /**
+   * - 8 means npc
+   * - uNpcUid in 0..65535 (msByte, lsByte),
+   *   although probably in 0..255
+   */
+  vec4 encodeNpcObjectPick() {
+    return vec4(
+      8.0,
+      // 255.0,
+      float((uNpcUid >> 8) & 255),
+      float(uNpcUid & 255),
+      255.0
+    ) / 255.0;
+  }
+
   void main() {
     vec4 diffuseColor = vec4(diffuse, 1);
     #include <logdepthbuf_fragment>
@@ -380,6 +422,11 @@ export const cuboidManShader = {
       discard;
     }
 
+    if (objectPick == true) {
+      gl_FragColor = encodeNpcObjectPick();
+      return;
+    }
+
     if (vId >= 60) {// ⭐️ label quad (no lighting)
 
       gl_FragColor = vec4(vColor * vec3(diffuseColor) * 1.0, diffuseColor.a);
@@ -398,72 +445,122 @@ export const cuboidManShader = {
   `,
 };
 
-// 🚧 WIP
 export const instancedMultiTextureShader = {
-  Vert: ``,
-  Frag: /* glsl */`
-    //#region getTexelColor
-    // ℹ️ https://stackoverflow.com/a/74729081/2917822
-    vec4 getTexelColor(int texId, vec2 uv) {
-      switch (texId) {
-        case 0: return texture2D(textures[0], uv);
-        case 1: return texture2D(textures[1], uv);
-        case 2: return texture2D(textures[2], uv);
-        case 3: return texture2D(textures[3], uv);
-        case 4: return texture2D(textures[4], uv);
-        case 5: return texture2D(textures[5], uv);
-        case 6: return texture2D(textures[6], uv);
-        case 7: return texture2D(textures[7], uv);
-        case 8: return texture2D(textures[8], uv);
-        case 9: return texture2D(textures[9], uv);
-        case 10: return texture2D(textures[10], uv);
-        case 11: return texture2D(textures[11], uv);
-        case 12: return texture2D(textures[12], uv);
-        case 13: return texture2D(textures[13], uv);
-        case 14: return texture2D(textures[14], uv);
-        case 15: return texture2D(textures[15], uv);
-        case 16: return texture2D(textures[16], uv);
-        case 17: return texture2D(textures[17], uv);
-        case 18: return texture2D(textures[18], uv);
-        case 19: return texture2D(textures[19], uv);
-        case 20: return texture2D(textures[20], uv);
-        case 21: return texture2D(textures[21], uv);
-        case 22: return texture2D(textures[22], uv);
-        case 23: return texture2D(textures[23], uv);
-        case 24: return texture2D(textures[24], uv);
-        case 25: return texture2D(textures[25], uv);
-        case 26: return texture2D(textures[26], uv);
-        case 27: return texture2D(textures[27], uv);
-        case 28: return texture2D(textures[28], uv);
-        case 29: return texture2D(textures[29], uv);
-        case 30: return texture2D(textures[30], uv);
-        case 31: return texture2D(textures[31], uv);
-      }
-      return vec4(0.0);
+  Vert: /* glsl */`
+
+    varying vec3 vColor;
+    varying vec2 vUv;
+    flat varying int vTextureId;
+    flat varying int vInstanceId;
+    
+    attribute vec2 uvDimensions;
+    attribute vec2 uvOffsets;
+    attribute int uvTextureIds;
+    // e.g. can be used to infer gmId
+    attribute int instanceIds;
+
+    #include <common>
+    #include <logdepthbuf_pars_vertex>
+
+    void main() {
+      // vUv = uv;
+      vUv = (uv * uvDimensions) + uvOffsets;
+      vTextureId = uvTextureIds;
+      vInstanceId = instanceIds;
+
+      vec4 modelViewPosition = vec4(position, 1.0);
+      modelViewPosition = instanceMatrix * modelViewPosition;
+      modelViewPosition = modelViewMatrix * modelViewPosition;
+      gl_Position = projectionMatrix * modelViewPosition;
+
+      vColor = vec3(1.0);
+      #ifdef USE_INSTANCING_COLOR
+        vColor.xyz *= instanceColor.xyz;
+      #endif
+
+      #include <logdepthbuf_vertex>
     }
-    //#endregion
-  `, // 🚧
+  `,
+
+  Frag: /* glsl */`
+
+    uniform float alphaTest;
+    uniform bool objectPick;
+    uniform bool colorSpace;
+    uniform int objectPickRed;
+    uniform sampler2DArray atlas;
+    uniform vec3 diffuse;
+
+    varying vec3 vColor;
+    varying vec2 vUv;
+    flat varying int vTextureId;
+    flat varying int vInstanceId;
+
+    #include <common>
+    #include <logdepthbuf_pars_fragment>
+  
+    void main() {
+      gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
+      // gl_FragColor = vec4(1.0, 0.0, 0.0, gl_FragColor.a);
+
+      if (gl_FragColor.a < 0.5) {
+      // if (gl_FragColor.a < alphaTest) {
+        discard; // stop transparent pixels taking precedence
+      }
+
+      if (objectPick == true) {
+        gl_FragColor = vec4(
+          float(objectPickRed) / 255.0,
+          float((vInstanceId >> 8) & 255) / 255.0,
+          float(vInstanceId & 255) / 255.0,
+          gl_FragColor.a
+        );
+      }
+      
+      if (colorSpace == true) {
+        #include <colorspace_fragment>
+      }
+
+      #include <logdepthbuf_fragment>
+    }
+  
+  `,
 };
 
 export const InstancedMonochromeShader = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.5, 0.5),
-    objectPicking: false,
+    objectPick: false,
   },
   instancedMonochromeShader.Vert,
   instancedMonochromeShader.Frag,
 );
 
-export const InstancedSpriteSheetMaterial = shaderMaterial(
+export const InstancedLabelsMaterial = shaderMaterial(
   {
     map: null,
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
     opacity: 0.6,
     alphaTest: 0.5,
-    // mapTransform: new THREE.Matrix3(),
   },
-  instancedUvMappingShader.Vert,
-  instancedUvMappingShader.Frag,
+  instancedLabelsShader.Vert,
+  instancedLabelsShader.Frag,
+);
+
+export const InstancedMultiTextureMaterial = shaderMaterial(
+  {
+    alphaTest: 0,
+    atlas: emptyDataArrayTexture,
+    diffuse: new THREE.Vector3(1, 0.9, 0.6),
+    // 🔔 map, mapTransform required else can get weird texture
+    map: null,
+    mapTransform: new THREE.Matrix3(),
+    colorSpace: false,
+    objectPick: false,
+    objectPickRed: 0,
+  },
+  instancedMultiTextureShader.Vert,
+  instancedMultiTextureShader.Frag,
 );
 
 export const CameraLightMaterial = shaderMaterial(
@@ -472,6 +569,8 @@ export const CameraLightMaterial = shaderMaterial(
     // 🔔 map, mapTransform required else can get weird texture
     map: null,
     mapTransform: new THREE.Matrix3(),
+    objectPick: false,
+    objectPickRed: 0,
   },
   cameraLightShader.Vert,
   cameraLightShader.Frag,
@@ -484,6 +583,8 @@ export const CuboidManMaterial = shaderMaterial(
     map: null,
     mapTransform: new THREE.Matrix3(),
     opacity: 1,
+    objectPick: false,
+    uNpcUid: 0,
 
     showLabel: true,
     labelHeight: wallHeight,
@@ -511,7 +612,9 @@ export const CuboidManMaterial = shaderMaterial(
  */
 extend({
   InstancedMonochromeShader,
-  InstancedSpriteSheetMaterial,
+  // InstancedUvMappingMaterial,
+  InstancedLabelsMaterial,
+  InstancedMultiTextureMaterial,
   CameraLightMaterial,
   CuboidManMaterial,
 });
