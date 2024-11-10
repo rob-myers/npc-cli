@@ -58,6 +58,7 @@ export default function WorldCanvas(props) {
       meta,
       position,
     }) {
+      const targetRect = (/** @type {HTMLElement} */ (event.target)).getBoundingClientRect();
       if (key === 'pointerup' || key === 'pointerdown') {
         return {
           key,
@@ -70,7 +71,7 @@ export default function WorldCanvas(props) {
           keys: getModifierKeys(event.nativeEvent),
           pointers: state.getNumPointers(),
           rmb: isRMB(event.nativeEvent),
-          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
+          screenPoint: { x: event.clientX - targetRect.left, y: event.clientY - targetRect.top },
           touch: isTouchDevice(),
           meta,
           ...key === 'pointerup' && { clickId: state.clickIds.pop() },
@@ -85,7 +86,7 @@ export default function WorldCanvas(props) {
           keys: getModifierKeys(event.nativeEvent),
           pointers: state.getNumPointers(),
           rmb: isRMB(event.nativeEvent),
-          screenPoint: { x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY },
+          screenPoint: { x: event.clientX - targetRect.left, y: event.clientY - targetRect.top },
           touch: isTouchDevice(),
           meta,
         };
@@ -120,9 +121,11 @@ export default function WorldCanvas(props) {
 
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
       const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      const { left, top } = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+
       const normalizedDeviceCoords = new THREE.Vector2(
-        -1 + 2 * ((e.nativeEvent.offsetX * devicePixelRatio) / state.canvas.width),
-        +1 - 2 * ((e.nativeEvent.offsetY * devicePixelRatio) / state.canvas.height),
+        -1 + 2 * (((e.clientX - left) * devicePixelRatio) / state.canvas.width),
+        +1 - 2 * (((e.clientY - top) * devicePixelRatio) / state.canvas.height),
       );
       state.raycaster.setFromCamera(normalizedDeviceCoords, w.r3f.camera);
 
@@ -172,7 +175,8 @@ export default function WorldCanvas(props) {
       }
     },
     onPointerDown(e) {
-      const sp = { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+      const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+      const sp = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
       state.lastScreenPoint.copy(sp);
       state.epoch.pointerDown = Date.now();
 
@@ -219,7 +223,8 @@ export default function WorldCanvas(props) {
       }
     },
     onPointerMove(e) {
-      state.lastScreenPoint.set(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+      const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+      state.lastScreenPoint.set(e.clientX - targetRect.left, e.clientY - targetRect.top);
     },
     onPointerUp(e) {
       state.epoch.pointerUp = Date.now();
@@ -259,12 +264,14 @@ export default function WorldCanvas(props) {
       const { gl, camera } = w.r3f;
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
       const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+
       // Set the projection matrix to only look at the pixel we are interested in.
       camera.setViewOffset(
         state.canvas.width,
         state.canvas.height,
-        e.nativeEvent.offsetX * devicePixelRatio,
-        e.nativeEvent.offsetY * devicePixelRatio,
+        (e.clientX - targetRect.left) * devicePixelRatio,
+        (e.clientY - targetRect.top) * devicePixelRatio,
         1,
         1,
       );
