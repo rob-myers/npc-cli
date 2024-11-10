@@ -455,8 +455,8 @@ const canvasCss = css`
   }
   canvas {
     /* background-color: rgba(255, 255, 255, 1); */
-    /* background-color: rgba(20, 20, 20, 1); */
-    background-color: rgba(60, 60, 60, 1);
+    background-color: rgba(20, 20, 20, 1);
+    /* background-color: rgba(60, 60, 60, 1); */
     width: 100%;
     height: 100%;
     /* filter: sepia(1) invert(1); */

@@ -18,7 +18,7 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(0, 0, 0, 0.1)'),
+    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.25)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -72,14 +72,14 @@ export default function Floor(props) {
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // Floor
-      // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#333', null]);
-      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#fff', null]);
+      drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#333', null]);
+      // drawPolygons(ct, hullPoly.map(x => x.clone().removeHoles()), ['#fff', null]);
 
       // Nav-mesh
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
-      // drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#777', 0.025]);
-      drawPolygons(ct, navPoly, ['#aaaaaa55', '#999999bb', 0.03]);
+      drawPolygons(ct, navPoly, ['rgba(40, 40, 40, 1)', '#777', 0.025]);
+      // drawPolygons(ct, navPoly, ['#aaaaaa55', '#999999bb', 0.03]);
       
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
@@ -142,7 +142,7 @@ export default function Floor(props) {
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
     },
-  }), { reset: { grid: false } });
+  }), { reset: { grid: true } });
 
   w.floor = state;
 
