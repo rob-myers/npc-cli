@@ -232,35 +232,6 @@ const boxGeomLookup = /** @type {Record<string, THREE.BoxGeometry>} */ ({});
 
 export const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 32, 1);
 
-const canvasTexMetaLookup = /** @type {Record<string, CanvasTexMeta>} */ ({});
-
-/**
- * Get cached THREE.CanvasTexture and auxiliary structures.
- * They never need to be mutated if width/height don't change.
- * @param {string} key
- * @param {CanvasTexMetaDef} def
- * @returns {CanvasTexMeta}
- */
-export function getCanvasTexMeta(key, def) {
-  return canvasTexMetaLookup[key] ??= createCanvasTexMeta(def);
-}
-
-/**
- * @param {CanvasTexMetaDef} def
- * @returns {CanvasTexMeta}
- */
-function createCanvasTexMeta(def) {
-  const canvas = document.createElement('canvas');
-  canvas.width = def.width;
-  canvas.height = def.height;
-  const tex = new THREE.CanvasTexture(canvas);
-  tex.flipY = false; // align with XZ quad uv-map
-  const ct = /** @type {CanvasRenderingContext2D} */(
-    canvas.getContext('2d', { willReadFrequently: def.opts?.willReadFrequently },
-  ));
-  return { canvas, tex, ct, texId : def.opts?.texId ?? null };
-}
-
 /**
  * @param {THREE.Vector3Like} position
  * @param {THREE.Vector3Like} halfExtent

@@ -15,7 +15,7 @@ import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { getCanvasTexMeta, imageLoader } from "../service/three";
+import { imageLoader } from "../service/three";
 import { disposeCrowd, getTileCacheMeshProcess } from "../service/recast-detour";
 import { helper } from "../service/helper";
 import { TexArray } from "../service/tex-array";
