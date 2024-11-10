@@ -741,7 +741,7 @@ export class Npc {
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius / 1.5,
       collisionQueryRange: 1,
-      separationWeight: 2,
+      separationWeight: 4,
     });
     
     this.startAnimation('Idle');
@@ -791,7 +791,7 @@ export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 10,
-  pathOptimizationRange: 5, // 🚧 clarify
+  pathOptimizationRange: 10, // 🚧 clarify
   // collisionQueryRange: 0.7,
   collisionQueryRange: 2,
   separationWeight: 1,
