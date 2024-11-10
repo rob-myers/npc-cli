@@ -392,7 +392,12 @@ export class Npc {
     this.s.wayIndex = 0;
     this.s.lookSecs = 0.2;
 
-    this.agent.updateParameters({ maxSpeed: 0 }); // don't move until 0th way-point
+    this.agent.updateParameters({
+      maxSpeed: 0, // don't move until 0th way-point
+      radius: helper.defaults.radius, // reset
+      collisionQueryRange: 1.5,
+      separationWeight: 1,
+    });
     this.agent.requestMoveTarget(closest);
     this.s.target = this.lastTarget.copy(closest);
     const nextAct = this.s.run ? 'Run' : 'Walk';
@@ -734,6 +739,9 @@ export class Npc {
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
+      radius: helper.defaults.radius / 1.5,
+      collisionQueryRange: 1,
+      separationWeight: 2,
     });
     
     this.startAnimation('Idle');
@@ -783,13 +791,11 @@ export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
   maxAcceleration: 10,
-  // maxSpeed: 0, // Set elsewhere
   pathOptimizationRange: 5, // 🚧 clarify
-  // collisionQueryRange: 2.5,
-  collisionQueryRange: 0.7,
+  // collisionQueryRange: 0.7,
+  collisionQueryRange: 2,
   separationWeight: 1,
   queryFilterType: 0,
-  // userData, // 🚧 not working?
   // obstacleAvoidanceType
   updateFlags: defaultAgentUpdateFlags,
 };
