@@ -541,6 +541,7 @@ export default function Decor(props) {
       ref={instances => instances && (state.quadInst = instances)}
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
+      renderOrder={-1}
       // visible={state.quads.length > 0} // 🚧 avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
