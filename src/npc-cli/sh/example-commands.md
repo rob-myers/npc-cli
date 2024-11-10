@@ -114,6 +114,9 @@ w physics.worker.postMessage '{ type: "get-debug-data" }'
 
 w npc.npc.rob.look Math.PI/2
 w npc.npc.rob.look -Math.PI/2 # ❌
+
+w n.rob.agent.parameters
+w n.rob.agent.parameters | map updateFlags
 ```
 
 ## Local variables
