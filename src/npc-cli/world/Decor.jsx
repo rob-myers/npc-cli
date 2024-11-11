@@ -540,16 +540,16 @@ export default function Decor(props) {
     <instancedMesh // cuboids
       name="decor-cuboids"
       key={`${state.cuboids.length} cuboids`}
-      ref={instances => instances && (state.cuboidInst = instances)}
+      ref={instances => {
+        if (instances !== null && (state.cuboidInst !== instances)) {
+          state.cuboidInst = instances;
+          state.addCuboidAttributes();
+          state.positionCuboids();
+        }
+      }}
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
       renderOrder={-1}
-      onUpdate={(inst) => {// on (re)mount
-        state.cuboidInst = inst;
-        state.addCuboidAttributes();
-        state.positionCuboids();
-      }}
-      // visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <cameraLightMaterial
