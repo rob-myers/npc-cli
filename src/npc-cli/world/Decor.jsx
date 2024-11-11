@@ -552,6 +552,7 @@ export default function Decor(props) {
         diffuse={[1, 1, 1]}
         transparent
         objectPickRed={7}
+        opacity={query.status === 'success' ? 1 : 0}
       />
     </instancedMesh>
 
@@ -566,13 +567,13 @@ export default function Decor(props) {
       {/* <meshBasicMaterial color="red" /> */}
       <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
+        alphaTest={0.5}
+        diffuse={[1, 1, 1]}
+        atlas={w.texDecor.tex}
+        objectPickRed={5}
+        opacity={query.status === 'success' ? 1 : 0}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.texDecor.tex}
-        diffuse={[1, 1, 1]}
-        objectPickRed={5}
-        // depthWrite={false} // fix z-fighting
-        alphaTest={0.5}
       />
     </instancedMesh>
 
