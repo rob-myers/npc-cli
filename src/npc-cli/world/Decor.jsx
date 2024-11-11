@@ -23,7 +23,8 @@ export default function Decor(props) {
     byKey: {},
     byGrid: [],
     byRoom: [],
-    cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
+    // 🚧 WIP
+    cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid-${Date.now()}`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
     labels: [],
