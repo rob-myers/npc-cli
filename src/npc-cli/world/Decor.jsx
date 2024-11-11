@@ -100,6 +100,7 @@ export default function Decor(props) {
     },
     addCuboidAttributes() {
       const instanceIds = state.cuboids.map((_, instanceId) => instanceId);
+      state.cuboidGeom.deleteAttribute('instanceIds');
       state.cuboidGeom.setAttribute('instanceIds',
         new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
@@ -116,6 +117,8 @@ export default function Decor(props) {
         uvDimensions.push(width / sheetWidth, height / sheetHeight);
       }
 
+      state.labelQuad.deleteAttribute('uvOffsets');
+      state.labelQuad.deleteAttribute('uvDimensions');
       state.labelQuad.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
@@ -157,15 +160,19 @@ export default function Decor(props) {
         instanceIds.push(instanceId);
       }
 
+      state.quad.deleteAttribute('uvOffsets');
       state.quad.setAttribute('uvOffsets',
         new THREE.InstancedBufferAttribute(new Float32Array(uvOffsets), 2),
       );
+      state.quad.deleteAttribute('uvDimensions');
       state.quad.setAttribute('uvDimensions',
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
+      state.quad.deleteAttribute('uvTextureIds');
       state.quad.setAttribute('uvTextureIds',
         new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
       );
+      state.quad.deleteAttribute('instanceIds');
       state.quad.setAttribute('instanceIds',
         new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
       );
@@ -314,8 +321,8 @@ export default function Decor(props) {
       instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
-    positionInstances() { 
-      const { cuboidInst, quadInst, labelInst } = state;
+    positionCuboids() { 
+      const { cuboidInst } = state;
       
       const defaultCuboidColor = '#ddd'; // 🚧 move to const
       for (const [instId, d] of state.cuboids.entries()) {
@@ -323,7 +330,30 @@ export default function Decor(props) {
         cuboidInst.setMatrixAt(instId, mat4);
         cuboidInst.setColorAt(instId, getColor(d.meta.color ?? defaultCuboidColor));
       }
-      
+    
+      cuboidInst.instanceMatrix.needsUpdate = true;
+      if (cuboidInst.instanceColor !== null) {
+        cuboidInst.instanceColor.needsUpdate = true;
+      }
+      cuboidInst.computeBoundingSphere();   
+    },
+    positionInstances() { 
+      state.positionCuboids();
+      state.positionQuads();
+      state.positionLabels();
+    },
+    positionLabels() {
+      const { labelInst } = state;
+      for (const [instId, d] of state.labels.entries()) {
+        const mat4 = state.createLabelMatrix4(d);
+        labelInst.setMatrixAt(instId, mat4);
+      }
+    
+      labelInst.instanceMatrix.needsUpdate = true;
+      labelInst.computeBoundingSphere();
+    },
+    positionQuads() {
+      const { quadInst } = state;
       const defaultQuadColor = 'white'; // 🚧 move to const
       for (const [instId, d] of state.quads.entries()) {
         const mat4 = state.createQuadMatrix4(d);
@@ -331,23 +361,11 @@ export default function Decor(props) {
         quadInst.setColorAt(instId, getColor(d.meta.color ?? defaultQuadColor));
       }
 
-      for (const [instId, d] of state.labels.entries()) {
-        const mat4 = state.createLabelMatrix4(d);
-        labelInst.setMatrixAt(instId, mat4);
-      }
-    
-      cuboidInst.instanceMatrix.needsUpdate = true;
-      if (cuboidInst.instanceColor !== null) {
-        cuboidInst.instanceColor.needsUpdate = true;
-      }
-      cuboidInst.computeBoundingSphere();
       quadInst.instanceMatrix.needsUpdate = true;
       if (quadInst.instanceColor !== null) {
         quadInst.instanceColor.needsUpdate = true;
       }
       quadInst.computeBoundingSphere();
-      labelInst.instanceMatrix.needsUpdate = true;
-      labelInst.computeBoundingSphere();
     },
     removeAllInstantiated() {
       for (const d of Object.values(state.byKey)) {
@@ -506,6 +524,7 @@ export default function Decor(props) {
 
   React.useLayoutEffect(() => {
     if (query.data === true) {
+      // 🚧 avoid overwrite attributes
       state.addQuadUvs();
       state.addCuboidAttributes();
       state.positionInstances();
@@ -525,6 +544,11 @@ export default function Decor(props) {
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
       renderOrder={-1}
+      onUpdate={(inst) => {// on (re)mount
+        state.cuboidInst = inst;
+        state.addCuboidAttributes();
+        state.positionCuboids();
+      }}
       // visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
@@ -544,6 +568,11 @@ export default function Decor(props) {
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
       renderOrder={-1}
+      onUpdate={(inst) => {
+        state.quadInst = inst;
+        state.addQuadUvs();
+        state.positionQuads();
+      }}
       // visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
@@ -565,6 +594,10 @@ export default function Decor(props) {
       ref={instances => void (instances && (state.labelInst = instances))}
       args={[state.labelQuad, undefined, labels.length]}
       frustumCulled={false}
+      onUpdate={(inst) => {
+        state.labelInst = inst;
+        state.positionLabels();
+      }}
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedLabelsMaterial
@@ -622,10 +655,13 @@ export default function Decor(props) {
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
  * @property {(gmId: number) => void} addGm
+ * @property {() => void} positionCuboids
  * @property {() => void} positionInstances
+ * @property {() => void} positionLabels
+ * @property {() => void} positionQuads
+ * @property {() => void} removeAllInstantiated
  * @property {(...decorKeys: string[]) => void} removeDecor
  * @property {(gmId: number, roomId: number, decors: Geomorph.Decor[]) => void} removeDecorFromRoom
- * @property {() => void} removeAllInstantiated
  * @property {(gmId: number) => void} removeGm
  * @property {() => void} updateDecorLists
  */
