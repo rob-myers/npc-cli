@@ -194,6 +194,7 @@ export const cameraLightShader = {
   uniform vec3 diffuse;
   uniform bool objectPick;
   uniform int objectPickRed;
+  uniform float opacity;
 
   #include <common>
   #include <uv_pars_fragment>
@@ -206,7 +207,7 @@ export const cameraLightShader = {
     #include <map_fragment>
 
     // gl_FragColor = vec4(vColor * diffuse * (0.1 + 0.7 * dotProduct), 1);
-    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a);
+    gl_FragColor = vec4(vColor * vec3(diffuseColor) * (0.1 + 0.7 * dotProduct), diffuseColor.a * opacity);
 
     if (objectPick == true) {
       gl_FragColor = vec4(
@@ -571,6 +572,7 @@ export const CameraLightMaterial = shaderMaterial(
     mapTransform: new THREE.Matrix3(),
     objectPick: false,
     objectPickRed: 0,
+    opacity: 1,
   },
   cameraLightShader.Vert,
   cameraLightShader.Frag,

@@ -26,6 +26,7 @@ export default function Decor(props) {
     cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
+    everQueryTrue: false,
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
@@ -321,6 +322,14 @@ export default function Decor(props) {
       instance.key = geomorph.getDerivedDecorKey(instance);
       return /** @type {typeof d} */ (instance);
     },
+    /** @returns {d is Geomorph.DecorPoint | Geomorph.DecorQuad} */
+    isDecorQuad(d) {
+      return d.type === 'point' && (
+        d.meta.do === true || d.meta.button === true
+      ) || d.type === 'quad' && (
+        typeof d.meta.img === 'string' // 🚧 warn if n'exist pas?
+      );
+    },
     positionCuboids() { 
       const { cuboidInst } = state;
       
@@ -433,17 +442,9 @@ export default function Decor(props) {
     },
     updateDecorLists() {
       state.cuboids = Object.values(state.byKey).filter(geomorph.isDecorCuboid);
-      state.addCuboidAttributes();
-      state.positionCuboids();
-
-      state.quads = Object.values(state.byKey).filter(
-        /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorQuad} */
-        x => x.type === 'point' && (
-          x.meta.do === true || x.meta.button === true
-        ) || x.type === 'quad' && (
-          typeof x.meta.img === 'string' // 🚧 warn if n'exist pas?
-        )
-      );
+      // state.addCuboidAttributes();
+      // state.positionCuboids();
+      state.quads = Object.values(state.byKey).filter(state.isDecorQuad);
     },
   }));
 
@@ -524,11 +525,12 @@ export default function Decor(props) {
   state.queryStatus = query.status;
   const labels = state.showLabels ? state.labels : [];
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     if (query.data === true) {
       state.addQuadUvs();
       state.addCuboidAttributes();
       state.positionInstances();
+      state.everQueryTrue = true;
       update();
     } else if (query.data === false && query.isRefetching === false) {
       query.refetch(); // hmr
@@ -553,6 +555,7 @@ export default function Decor(props) {
         diffuse={[1, 1, 1]}
         transparent
         objectPickRed={7}
+        opacity={state.everQueryTrue ? 1 : 0}
       />
     </instancedMesh>
 
@@ -622,6 +625,7 @@ export default function Decor(props) {
  * @property {THREE.BoxGeometry} cuboidGeom
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
+ * @property {boolean} everQueryTrue
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
  * @property {import("../service/three").LabelsSheetAndTex} label
@@ -649,6 +653,7 @@ export default function Decor(props) {
  * @property {(d: Geomorph.Decor) => Geomorph.GmRoomId | null} ensureGmRoomId
  * @property {(d: Geomorph.Decor) => Geom.VectJson} getDecorOrigin
  * @property {<T extends Geomorph.Decor>(d: T, gmId: number, gm: Geomorph.LayoutInstance) => T} instantiateDecor
+ * @property {(d: Geomorph.Decor) => d is Geomorph.DecorPoint | Geomorph.DecorQuad} isDecorQuad
  * @property {(gmId: number) => void} addGm
  * @property {() => void} positionCuboids
  * @property {() => void} positionInstances
