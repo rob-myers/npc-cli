@@ -512,7 +512,6 @@ export default function Decor(props) {
     // refetchOnReconnect: false,
     // staleTime: Infinity,
     // 👆 all above stopped hmr
-    enabled: w.threeReady,
     refetchOnWindowFocus: false,
     retry: false, // fix dup invokes
     gcTime: 0,
@@ -552,6 +551,7 @@ export default function Decor(props) {
         diffuse={[1, 1, 1]}
         transparent
         objectPickRed={7}
+        opacity={query.status === 'success' ? 1 : 0}
       />
     </instancedMesh>
 
