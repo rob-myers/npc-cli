@@ -26,6 +26,7 @@
   - ℹ️ inaccessible door should not prevent nav through open door
     - `maxSimplificationError: 0.85` helped, but causes nav kinks
   - ℹ️ npc should not be able to get too close to inaccessible door
+
 - can select npc while paused e.g. click npc causes single frame update?
 - hmr sometimes breaks npc opacity/selector
 - can only spawn onto navigable floor or do point
@@ -37,6 +38,7 @@
 - consider using rapier for raycasting, rather than adding three-mesh-bvh
   - try adding static non-colliding "walls and doors" and raycast against them
   - could filter out doors which are open
+- decor hmr while paused is broke decor quads instanceId?
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.view.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
