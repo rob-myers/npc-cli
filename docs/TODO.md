@@ -8,11 +8,19 @@
 
 ## WIP
 
-- 🚧 support `await api.sleep(1)` inside `map`
+- 🚧 pre next.js migration
+  - 🚧 finish/close wip todos
+  - avoid stationary npc push through door
+  - support windows
+  - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
+  - redo cuboid-pet
+  - represent skins as single TexArray
+
+- ✅ support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅ simplify `choice` so it does not use `sleep`
   - ✅ refactor underlying `choice` as AsyncFunction 
-  - refactor `sleep` as AsyncFunction
+  - ✅ refactor `sleep` as AsyncFunction
 - 🚧 avoid initial instanced mesh render
   - still seeing issue on mobile
 - 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js

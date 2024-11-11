@@ -575,7 +575,7 @@ class cmdServiceClass {
       }
       case "sleep": {
         const seconds = args.length ? parseFloat(parseJsonArg(args[0])) || 0 : 1;
-        yield* sleep(meta, seconds);
+        await sleep(meta, seconds);
         break;
       }
       case "source": {
@@ -881,7 +881,7 @@ class cmdServiceClass {
     },
 
     async *sleep(seconds: number) {
-      yield* sleep(this.meta, seconds);
+      await sleep(this.meta, seconds);
     },
 
     verbose(e: any) {
@@ -1034,39 +1034,38 @@ export function parseFnOrStr(input: string) {
  */
 async function read(meta: Sh.BaseMeta, chunks = false) {
   const result = await cmdService.readOnce(meta, chunks);
-  return result?.eof ? EOF : result.data;
+  return result?.eof === true ? EOF : result.data;
 }
 
-export async function* sleep(
-  meta: Sh.BaseMeta,
-  seconds: number,
-) {
+export async function sleep(meta: Sh.BaseMeta, seconds: number) {
   const process = getProcess(meta);
-  let duration = 1000 * seconds,
-    startedAt = -1,
-    reject = (_: any) => {};
-  const cleanup = () => reject(killError(meta));
-  process.cleanups.push(cleanup);
-  do {
-    await new Promise<void>((resolve, currReject) => {
-      const resolveSleep = () => {
-        resolve();
-      };
-      process.onSuspends.push(() => {
-        duration -= Date.now() - startedAt;
-        resolveSleep();
-      });
-      process.onResumes.push(() => {
-        startedAt = Date.now();
-      });
-      reject = currReject; // We update cleanup here
-      (startedAt = Date.now()) && setTimeout(resolveSleep, duration);
-    });
+  
+  await new Promise<void>((resolveSleep, rejectSleep) => {
+    let durationMs = 1000 * seconds;
+    let startedAt = 0;
+    let timeoutId = 0;
 
-    yield; // This yield pauses execution if process suspended
-  } while (Date.now() - startedAt < duration - 1);
-  // If process continually re-sleeps, avoid many cleanups
-  removeFirst(process.cleanups, cleanup);
+    function onResume() {
+      startedAt = Date.now();
+      timeoutId = window.setTimeout(onResolve, durationMs);
+    }
+    function onSuspend() {
+      window.clearTimeout(timeoutId);
+      durationMs -= (Date.now() - startedAt);
+    }
+    function onResolve() {
+      removeFirst(process.cleanups, onCleanup);
+      resolveSleep();
+    }
+    function onCleanup() {
+      rejectSleep(killError(meta));
+    }
+
+    process.onSuspends.push(onSuspend);
+    process.onResumes.push(onResume);
+    process.cleanups.push(onCleanup);
+    onResume();
+  });
 }
 
 //#endregion

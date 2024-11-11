@@ -668,7 +668,7 @@ class semanticsServiceClass {
       }
       // Force iteration to take at least 1 second
       if ((itLengthMs = Date.now() - itStartMs) < 1000) {
-        yield* sleep(node.meta, 1 - itLengthMs / 1000);
+        await sleep(node.meta, 1 - itLengthMs / 1000);
       }
       itStartMs = Date.now();
 
