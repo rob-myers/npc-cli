@@ -26,7 +26,6 @@ export default function Decor(props) {
     cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
-    everSetup: false,
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
@@ -486,7 +485,6 @@ export default function Decor(props) {
         });
       }
 
-      state.everSetup = true;
       w.menu.measure('decor.addGm');
       state.seenHash = next;
       update();
@@ -506,7 +504,7 @@ export default function Decor(props) {
   state.queryStatus = query.status;
   const labels = state.showLabels ? state.labels : [];
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (query.data === true) {
       state.addQuadUvs();
       state.addCuboidAttributes();
@@ -527,7 +525,7 @@ export default function Decor(props) {
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
       renderOrder={-1}
-      visible={state.everSetup} // avoid initial flicker
+      // visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <cameraLightMaterial
@@ -546,7 +544,7 @@ export default function Decor(props) {
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
       renderOrder={-1}
-      visible={state.everSetup} // avoid initial flicker
+      // visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedMultiTextureMaterial
@@ -596,7 +594,6 @@ export default function Decor(props) {
  * @property {THREE.BoxGeometry} cuboidGeom
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
- * @property {boolean} everSetup Have the cuboid/quad instances ever been positioned?
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
  * @property {import("../service/three").LabelsSheetAndTex} label
