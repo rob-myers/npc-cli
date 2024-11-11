@@ -486,6 +486,7 @@ export default function Decor(props) {
         });
       }
 
+      state.everSetup = true;
       w.menu.measure('decor.addGm');
       state.seenHash = next;
       update();
@@ -510,7 +511,6 @@ export default function Decor(props) {
       state.addQuadUvs();
       state.addCuboidAttributes();
       state.positionInstances();
-      state.everSetup ||= state.cuboids.length > 0 && state.quads.length > 0;
       update();
     } else if (query.data === false && query.isRefetching === false) {
       query.refetch(); // hmr
