@@ -26,7 +26,6 @@ export default function Decor(props) {
     cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
-    everQueryTrue: false,
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
@@ -442,8 +441,6 @@ export default function Decor(props) {
     },
     updateDecorLists() {
       state.cuboids = Object.values(state.byKey).filter(geomorph.isDecorCuboid);
-      // state.addCuboidAttributes();
-      // state.positionCuboids();
       state.quads = Object.values(state.byKey).filter(state.isDecorQuad);
     },
   }));
@@ -530,7 +527,6 @@ export default function Decor(props) {
       state.addQuadUvs();
       state.addCuboidAttributes();
       state.positionInstances();
-      state.everQueryTrue = true;
       update();
     } else if (query.data === false && query.isRefetching === false) {
       query.refetch(); // hmr
@@ -555,7 +551,6 @@ export default function Decor(props) {
         diffuse={[1, 1, 1]}
         transparent
         objectPickRed={7}
-        opacity={state.everQueryTrue ? 1 : 0}
       />
     </instancedMesh>
 
@@ -566,12 +561,6 @@ export default function Decor(props) {
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
       renderOrder={-1}
-      onUpdate={(inst) => {
-        state.quadInst = inst;
-        state.addQuadUvs();
-        state.positionQuads();
-      }}
-      // visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedMultiTextureMaterial
@@ -592,10 +581,6 @@ export default function Decor(props) {
       ref={instances => void (instances && (state.labelInst = instances))}
       args={[state.labelQuad, undefined, labels.length]}
       frustumCulled={false}
-      onUpdate={(inst) => {
-        state.labelInst = inst;
-        state.positionLabels();
-      }}
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedLabelsMaterial
@@ -625,7 +610,6 @@ export default function Decor(props) {
  * @property {THREE.BoxGeometry} cuboidGeom
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
- * @property {boolean} everQueryTrue
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
  * @property {import("../service/three").LabelsSheetAndTex} label
