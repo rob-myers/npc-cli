@@ -26,7 +26,7 @@ export default function Decor(props) {
     cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
-    seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
+    everSetup: false,
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
@@ -40,6 +40,7 @@ export default function Decor(props) {
     quadInst: /** @type {*} */ (null),
     queryStatus: 'pending',
     rmKeys: new Set(),
+    seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
     showLabels: false,
 
     addDecor(ds, removeExisting = true) {
@@ -509,6 +510,8 @@ export default function Decor(props) {
       state.addQuadUvs();
       state.addCuboidAttributes();
       state.positionInstances();
+      state.everSetup = true;
+      update();
     } else if (query.data === false && query.isRefetching === false) {
       query.refetch(); // hmr
     }
@@ -524,7 +527,7 @@ export default function Decor(props) {
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
       renderOrder={-1}
-      visible={state.cuboids.length > 0} // avoid initial flicker
+      visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
       <cameraLightMaterial
@@ -543,7 +546,7 @@ export default function Decor(props) {
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
       renderOrder={-1}
-      // visible={state.quads.length > 0} // 🚧 avoid initial flicker
+      visible={state.everSetup} // avoid initial flicker
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedMultiTextureMaterial
@@ -593,7 +596,7 @@ export default function Decor(props) {
  * @property {THREE.BoxGeometry} cuboidGeom
  * @property {Geomorph.DecorCuboid[]} cuboids
  * @property {THREE.InstancedMesh} cuboidInst
- * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
+ * @property {boolean} everSetup Have the cuboid/quad instances ever been positioned?
  * @property {Geomorph.DecorPoint[]} labels
  * @property {THREE.InstancedMesh} labelInst
  * @property {import("../service/three").LabelsSheetAndTex} label
@@ -605,6 +608,7 @@ export default function Decor(props) {
  * @property {import("@tanstack/react-query").QueryStatus} queryStatus
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
  * but yet added back in. This is useful e.g. so can avoid re-instantiating geomorph decor
+ * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
  * @property {boolean} showLabels
  *
  * @property {(ds: Geomorph.Decor[], removeExisting?: boolean) => void} addDecor
