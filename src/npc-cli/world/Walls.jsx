@@ -87,7 +87,7 @@ export default function Walls(props) {
 
   w.wall = state;
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     state.positionInstances();
   }, [w.mapKey, w.hash.full, w.gmsData.wallCount, w.gmsData]);
 
