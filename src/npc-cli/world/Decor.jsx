@@ -23,8 +23,7 @@ export default function Decor(props) {
     byKey: {},
     byGrid: [],
     byRoom: [],
-    // 🚧 WIP
-    cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid-${Date.now()}`),
+    cuboidGeom: getBoxGeometry(`${w.key}-decor-cuboid`),
     cuboids: [],
     cuboidInst: /** @type {*} */ (null),
     labels: [],
@@ -513,6 +512,7 @@ export default function Decor(props) {
     // refetchOnReconnect: false,
     // staleTime: Infinity,
     // 👆 all above stopped hmr
+    enabled: w.threeReady,
     refetchOnWindowFocus: false,
     retry: false, // fix dup invokes
     gcTime: 0,

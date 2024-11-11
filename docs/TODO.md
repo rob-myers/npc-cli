@@ -22,8 +22,8 @@
   - ✅ refactor underlying `choice` as AsyncFunction 
   - ✅ refactor `sleep` as AsyncFunction
 - 🚧 avoid initial instanced mesh render
-  - still seeing issue on mobile
-  - avoid overwriting attributes
+  - ✅ avoid overwriting attributes
+  - still seeing issue on mobile, but only on reset
 - 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - ℹ️ saw happen when changed symbol chairs
