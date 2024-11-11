@@ -18,6 +18,7 @@ declare global {
     interface IntrinsicElements {
       instancedMonochromeShader: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
+        opacity?: number;
       } & SupportsObjectPick>;
 
       // instancedUvMappingMaterial: BaseExtendedShaderMaterial<{
@@ -36,10 +37,12 @@ declare global {
         atlas: import('three').DataArrayTexture;
         /** Red component in [0..255] used by objectPick rgba */
         objectPickRed?: number;
+        opacity?: number;
       } & SupportsObjectPick>;
 
       cameraLightMaterial: BaseExtendedShaderMaterial<{
         diffuse?: Vector3Input;
+        opacity?: number;
       }>;
 
       cuboidManMaterial: BaseExtendedShaderMaterial<{
