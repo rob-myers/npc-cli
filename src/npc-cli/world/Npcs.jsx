@@ -26,7 +26,7 @@ export default function Npcs(props) {
     gltf: /** @type {*} */ ({}),
     group: /** @type {*} */ (null),
     label: {
-      numLabels: 0,
+      count: 0,
       lookup: {},
       tex: new THREE.CanvasTexture(getCanvas(`${w.key} npc.label`)),
     },

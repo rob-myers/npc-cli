@@ -268,7 +268,7 @@ export function createDebugCylinder(position, radius, height) {
  * @param {{ fontHeight: number; }} opts
  */
 export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
-  if (labels.length === sheet.numLabels && labels.every(label => label in sheet.lookup)) {
+  if (labels.length === sheet.count && labels.every(label => label in sheet.lookup)) {
     return; // Avoid re-computation
   }
 
@@ -291,7 +291,7 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
     agg[r.data.label] = { x: r.x, y: r.y, width: r.width, height: r.height };
     return agg;
   }, /** @type {LabelsSheetAndTex['lookup']} */ ({}));
-  sheet.numLabels = labels.length;
+  sheet.count = labels.length;
   
   // Draw sprite-sheet
   if (canvas.width !== bin.width || canvas.height !== bin.height) {
@@ -353,7 +353,7 @@ export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
 /**
  * @typedef LabelsSheetAndTex
  * @property {{ [label: string]: Geom.RectJson }} lookup
- * @property {number} numLabels
+ * @property {number} count
  * @property {THREE.CanvasTexture} tex
  */
 

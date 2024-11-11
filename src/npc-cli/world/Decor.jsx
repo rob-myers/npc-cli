@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { decorGridSize, decorIconRadius, fallbackDecorImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
 import { isDevelopment, pause, removeDups, testNever, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
+import { getCanvas } from "../service/dom";
 import { geomorph } from "../service/geomorph";
 import { addToDecorGrid, removeFromDecorGrid } from "../service/grid";
 import { createLabelSpriteSheet, getBoxGeometry, getColor, getQuadGeometryXY, getQuadGeometryXZ, getRotAxisMatrix, setRotMatrixAboutPoint, tmpMatFour1 } from "../service/three";
@@ -29,9 +30,9 @@ export default function Decor(props) {
     labels: [],
     labelInst: /** @type {*} */ (null),
     label: {
-      numLabels: 0,
+      count: 0,
       lookup: {},
-      tex: new THREE.CanvasTexture(document.createElement('canvas')),
+      tex: new THREE.CanvasTexture(getCanvas(`${w.key}-decor-labels`)),
     },
     labelQuad: getQuadGeometryXY(`${w.key}-decor-labels-xy`, true),
     quads: [],
@@ -348,6 +349,22 @@ export default function Decor(props) {
       labelInst.instanceMatrix.needsUpdate = true;
       labelInst.computeBoundingSphere();
     },
+    removeAllInstantiated() {
+      for (const d of Object.values(state.byKey)) {
+        d.src !== undefined && delete state.byKey[d.key];
+      }
+      for (const byRoomId of state.byRoom) {
+        for (const decorSet of byRoomId) {
+          decorSet.forEach(d => d.src !== undefined && decorSet.delete(d));
+        }
+      }
+      for (const byY of state.byGrid) {
+        for (const decorSet of byY ?? []) {
+          // array can contain `undefined` (untouched by decor)
+          decorSet?.forEach(d => d.src !== undefined && decorSet.delete(d));
+        }
+      }
+    },
     removeDecor(...decorKeys) {
       const ds = decorKeys.map(x => state.byKey[x]).filter(Boolean);
       if (ds.length === 0) {
@@ -380,22 +397,6 @@ export default function Decor(props) {
       }
 
       ds.forEach(d => removeFromDecorGrid(d, state.byGrid));
-    },
-    removeAllInstantiated() {
-      for (const d of Object.values(state.byKey)) {
-        d.src !== undefined && delete state.byKey[d.key];
-      }
-      for (const byRoomId of state.byRoom) {
-        for (const decorSet of byRoomId) {
-          decorSet.forEach(d => d.src !== undefined && decorSet.delete(d));
-        }
-      }
-      for (const byY of state.byGrid) {
-        for (const decorSet of byY ?? []) {
-          // array can contain `undefined` (untouched by decor)
-          decorSet?.forEach(d => d.src !== undefined && decorSet.delete(d));
-        }
-      }
     },
     removeGm(gmId) {
       const byRoomId = state.byRoom[gmId];

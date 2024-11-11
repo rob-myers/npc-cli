@@ -30,6 +30,8 @@
 - 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
   - clicking tab sets active tabset
+- 🚧 fix initial shader errors
+  > [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
 - 🚧 clarify connected nav issues:
   - ℹ️ inaccessible door should not prevent nav through open door
     - `maxSimplificationError: 0.85` helped, but causes nav kinks
