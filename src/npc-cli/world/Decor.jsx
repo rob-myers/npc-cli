@@ -433,6 +433,8 @@ export default function Decor(props) {
     },
     updateDecorLists() {
       state.cuboids = Object.values(state.byKey).filter(geomorph.isDecorCuboid);
+      state.addCuboidAttributes();
+      state.positionCuboids();
 
       state.quads = Object.values(state.byKey).filter(
         /** @returns {x is Geomorph.DecorPoint | Geomorph.DecorQuad} */
@@ -524,7 +526,6 @@ export default function Decor(props) {
 
   React.useLayoutEffect(() => {
     if (query.data === true) {
-      // 🚧 avoid overwrite attributes
       state.addQuadUvs();
       state.addCuboidAttributes();
       state.positionInstances();
@@ -540,13 +541,7 @@ export default function Decor(props) {
     <instancedMesh // cuboids
       name="decor-cuboids"
       key={`${state.cuboids.length} cuboids`}
-      ref={instances => {
-        if (instances !== null && (state.cuboidInst !== instances)) {
-          state.cuboidInst = instances;
-          state.addCuboidAttributes();
-          state.positionCuboids();
-        }
-      }}
+      ref={instances => instances && (state.cuboidInst = instances)}
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
       renderOrder={-1}
