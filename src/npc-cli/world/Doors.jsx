@@ -9,7 +9,6 @@ import { getBoxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
-import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -69,6 +68,7 @@ export default function Doors(props) {
       const prevDoorByPos = state.byPos;
       state.byKey = {};
       state.byPos = {};
+
       w.gms.forEach((gm, gmId) => {
         const byGmId = state.byGmId[gmId] = /** @type {Geomorph.DoorState[]} */ ([]);
         gm.doors.forEach((door, doorId) => {
@@ -279,16 +279,14 @@ export default function Doors(props) {
 
   w.door = state;
 
+  // React.useLayoutEffect(() => {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
     state.addCuboidAttributes();
     state.addUvs();
-    state.ready = true;
-    update();
+    state.ready = true
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
-
-  const update = useUpdate();
 
   return <>
     <instancedMesh
@@ -298,16 +296,16 @@ export default function Doors(props) {
       args={[state.quad, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
       renderOrder={-1}
+      visible={state.ready}
     >
-      <instancedMultiTextureMaterial
+      {state.ready && <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
         atlas={w.texDecor.tex}
         diffuse={[.6, .6, .6]}
         objectPickRed={4}
-        opacity={state.ready ? 1 : 0}
-      />
+      />}
     </instancedMesh>
 
     <instancedMesh
@@ -316,13 +314,14 @@ export default function Doors(props) {
       ref={instances => instances && (state.lockSigInst = instances)}
       args={[state.lockSigGeom, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
+      visible={state.ready}
     >
-      <cameraLightMaterial
+      {state.ready && <cameraLightMaterial
         key={glsl.CameraLightMaterial.key}
         diffuse={[1, 1, 1]}
         objectPickRed={9}
         side={THREE.DoubleSide} // fix flipped gm
-      />
+      />}
     </instancedMesh>
   </>;
 }
