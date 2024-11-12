@@ -50,7 +50,6 @@
     "@mdx-js/react": "^2.3.0",
     "@react-three/drei": "^9.114.0",
     "@react-three/fiber": "^8.17.6",
-    "@react-three/offscreen": "0.0.8",
     "@react-three/rapier": "^1.3.0",
     "@recast-navigation/three": "^0.30.0",
     "@tailwindcss/typography": "^0.5.12",
