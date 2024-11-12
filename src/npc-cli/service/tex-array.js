@@ -23,7 +23,7 @@ export class TexArray {
     }
 
     this.opts = opts;
-    this.ct = getContext2d(opts.ctKey);
+    this.ct = getContext2d(opts.ctKey, { willReadFrequently: true });
     this.ct.canvas.width = opts.width;
     this.ct.canvas.height = opts.height;
     
