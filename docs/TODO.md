@@ -12,6 +12,8 @@
   - 🚧 finish/close wip todos
   - avoid stationary npc push through door
   - support windows
+  - touch indicator for mobile
+  - Viewer has help ui
   - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
   - redo cuboid-pet
   - represent skins as single TexArray
@@ -32,10 +34,11 @@
   - ✅ shortcut works in active tabset
   - ✅ clicking tab header sets active tabset
     - ℹ️ started working after npm upgrade
-- 🚧 fix initial shader errors
+- ✅ fix initial shader errors
   - [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
-  - useLayoutEffect related
-  - 🚧 try fix Floor, Walls, Doors, Obstacles, Ceiling (might break initial flicker fix)
+  - ℹ️ useLayoutEffect related
+  - ✅ try fix Floor, Walls, Doors, Obstacles, Ceiling (might break initial flicker fix)
+  - ✅ replace useLayoutEffect with "mount-shader-when-ready"
 - 🚧 clarify connected nav issues:
   - ℹ️ inaccessible door should not prevent nav through open door
   - ℹ️ `maxSimplificationError: 0.85` helped, but causes nav kinks, so removed
