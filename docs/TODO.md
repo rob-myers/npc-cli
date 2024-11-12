@@ -33,10 +33,12 @@
   - ✅ clicking tab header sets active tabset
     - ℹ️ started working after npm upgrade
 - 🚧 fix initial shader errors
-  > [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
+  - [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
+  - useLayoutEffect related
+  - 🚧 try fix Floor, Walls, Doors, Obstacles, Ceiling (might break initial flicker fix)
 - 🚧 clarify connected nav issues:
   - ℹ️ inaccessible door should not prevent nav through open door
-    - `maxSimplificationError: 0.85` helped, but causes nav kinks
+  - ℹ️ `maxSimplificationError: 0.85` helped, but causes nav kinks, so removed
   - ℹ️ npc should not be able to get too close to inaccessible door
 - 🚧 clean overwritten attributes using patched three.js:
   > `w.r3f.gl.getAttributes().remove(attribute)`

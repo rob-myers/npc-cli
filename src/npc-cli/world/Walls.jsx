@@ -59,32 +59,30 @@ export default function Walls(props) {
     },
     positionInstances() {
       const { inst: ws } = state;
-      let wId = 0;
       let instanceId = 0;
-      /** `[0, 1, 2, ... , instanceCount - 1]` */
       const instanceIds = /** @type {number[]} */ ([]);
 
       w.gms.forEach(({ key: gmKey, transform }, gmId) =>
         w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) => {
-          instanceIds.push(instanceId++);
-          ws.setMatrixAt(wId++, state.getWallMat(
+          ws.setMatrixAt(instanceId, state.getWallMat(
             seg,
             transform,
             typeof meta.h === 'number' ? meta.h : undefined,
             typeof meta.y === 'number' ? meta.y : undefined,
           ));
+          instanceIds.push(instanceId++);
       }),
       );
-      ws.instanceMatrix.needsUpdate = true;
-      ws.computeBoundingSphere();
-
+      
       state.quad.setAttribute('instanceIds', new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1));
+      ws.computeBoundingSphere();
+      ws.instanceMatrix.needsUpdate = true;
     },
   }));
 
   w.wall = state;
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     state.positionInstances();
   }, [w.mapKey, w.hash.full, w.gmsData.wallCount, w.gmsData]);
 

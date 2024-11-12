@@ -277,7 +277,7 @@ export default function Doors(props) {
 
   w.door = state;
 
-  React.useLayoutEffect(() => {
+  React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
     state.addCuboidAttributes();
