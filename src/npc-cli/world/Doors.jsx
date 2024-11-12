@@ -9,6 +9,7 @@ import { getBoxGeometry, getColor, getQuadGeometryXY } from "../service/three";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -25,6 +26,7 @@ export default function Doors(props) {
     lockSigGeom: getBoxGeometry(`${w.key}-lock-lights`),
     lockSigInst: /** @type {*} */ (null),
     movingDoors: new Map(),
+    ready: false,
 
     addCuboidAttributes() {
       const instanceIds = Object.values(state.byKey).map((_, instanceId) => instanceId);
@@ -282,7 +284,11 @@ export default function Doors(props) {
     state.positionInstances();
     state.addCuboidAttributes();
     state.addUvs();
+    state.ready = true;
+    update();
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
+
+  const update = useUpdate();
 
   return <>
     <instancedMesh
@@ -300,6 +306,7 @@ export default function Doors(props) {
         atlas={w.texDecor.tex}
         diffuse={[.6, .6, .6]}
         objectPickRed={4}
+        opacity={state.ready ? 1 : 0}
       />
     </instancedMesh>
 
@@ -336,6 +343,7 @@ export default function Doors(props) {
  * @property {THREE.BoxGeometry} lockSigGeom
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
+ * @property {boolean} ready
  *
  * @property {() => void} addCuboidAttributes
  * @property {() => void} addUvs
