@@ -4,8 +4,8 @@ import {
   Actions,
   Layout as FlexLayout,
   Model,
-  TabNode,
-  TabSetNode,
+  type TabNode,
+  type TabSetNode,
 } from "flexlayout-react";
 import debounce from "debounce";
 import { useBeforeunload } from "react-beforeunload";
@@ -30,11 +30,11 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
     enabled: false,
     everEnabled: false,
     hash: "",
+    model: {} as Model,
     prevFocused: null,
     resetCount: 0,
     rootEl: null as any,
     tabsState: {},
-    model: {} as Model,
 
     focusRoot() {
       state.rootEl.focus();
@@ -69,7 +69,7 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
           });
         }
       }
-      if (act.type === Actions.ADJUST_SPLIT) {
+      if (act.type === Actions.ADJUST_BORDER_SPLIT) {
         state.focusRoot();
       }
       if (act.type === Actions.SELECT_TAB) {
@@ -139,12 +139,14 @@ export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
         tabsState[key].disabled = !next 
       }
     },
+    updateHash(nextHash) {
+      const tabsDefChanged = state.hash !== nextHash;
+      state.hash = nextHash;
+      return tabsDefChanged;
+    },
   }));
-
-  // 🚧 move to state.updateHash
-  const hash = JSON.stringify(props.tabs);
-  const tabsDefChanged = state.hash !== hash;
-  state.hash = hash;
+  
+  const tabsDefChanged = state.updateHash(JSON.stringify(props.tabs));
 
   state.model = React.useMemo(() => {
     const output = createOrRestoreJsonModel(props);
@@ -252,6 +254,8 @@ export interface State {
   reset(): void;
   toggleEnabled(next?: boolean): void;
   toggleTabsDisabled(next: boolean): void;
+  /** Returns true iff hash changed */
+  updateHash(nextHash: string): boolean;
 }
 
 export interface TabState {

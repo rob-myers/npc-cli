@@ -21,22 +21,25 @@
   - ✅ simplify `choice` so it does not use `sleep`
   - ✅ refactor underlying `choice` as AsyncFunction 
   - ✅ refactor `sleep` as AsyncFunction
-- 🚧 avoid initial instanced mesh render
+- ✅ avoid initial instanced mesh render
   - ✅ avoid overwriting attributes
   - still seeing issue on mobile, but only on reset
-- 🚧 understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
+- ✅ understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - ℹ️ saw happen when changed symbol chairs
-  - might have fixed `w.npc.restore()`
-- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
+  - seems fixed via improved `w.npc.restore()`
+- ✅ Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
   - ✅ shortcut works in active tabset
-  - clicking tab sets active tabset
+  - ✅ clicking tab header sets active tabset
+    - ℹ️ started working after npm upgrade
 - 🚧 fix initial shader errors
   > [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
 - 🚧 clarify connected nav issues:
   - ℹ️ inaccessible door should not prevent nav through open door
     - `maxSimplificationError: 0.85` helped, but causes nav kinks
   - ℹ️ npc should not be able to get too close to inaccessible door
+- 🚧 clean overwritten attributes using patched three.js:
+  > `w.r3f.gl.getAttributes().remove(attribute)`
 
 - can select npc while paused e.g. click npc causes single frame update?
 - hmr sometimes breaks npc opacity/selector
