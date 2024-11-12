@@ -277,7 +277,7 @@ export default function Doors(props) {
 
   w.door = state;
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     state.buildLookups();
     state.positionInstances();
     state.addCuboidAttributes();
@@ -312,9 +312,9 @@ export default function Doors(props) {
     >
       <cameraLightMaterial
         key={glsl.CameraLightMaterial.key}
-        side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
         objectPickRed={9}
+        side={THREE.DoubleSide} // fix flipped gm
       />
     </instancedMesh>
   </>;

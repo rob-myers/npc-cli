@@ -39,6 +39,7 @@ const instancedMonochromeShader = {
   uniform bool objectPick;
   flat varying int vGmId;
   flat varying int vInstanceId;
+  uniform float opacity;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
@@ -64,7 +65,7 @@ const instancedMonochromeShader = {
       return;
     }
     
-    gl_FragColor = vec4(diffuse, 1);
+    gl_FragColor = vec4(diffuse, opacity);
     #include <logdepthbuf_fragment>
   }
   `,
@@ -491,6 +492,7 @@ export const instancedMultiTextureShader = {
     uniform int objectPickRed;
     uniform sampler2DArray atlas;
     uniform vec3 diffuse;
+    uniform float opacity;
 
     varying vec3 vColor;
     varying vec2 vUv;
@@ -501,7 +503,7 @@ export const instancedMultiTextureShader = {
     #include <logdepthbuf_pars_fragment>
   
     void main() {
-      gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, 1);
+      gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, opacity);
       // gl_FragColor = vec4(1.0, 0.0, 0.0, gl_FragColor.a);
 
       if (gl_FragColor.a < 0.5) {
@@ -532,6 +534,7 @@ export const InstancedMonochromeShader = shaderMaterial(
   {
     diffuse: new THREE.Vector3(1, 0.5, 0.5),
     objectPick: false,
+    opacity: 1,
   },
   instancedMonochromeShader.Vert,
   instancedMonochromeShader.Frag,
@@ -559,6 +562,7 @@ export const InstancedMultiTextureMaterial = shaderMaterial(
     colorSpace: false,
     objectPick: false,
     objectPickRed: 0,
+    opacity: 1,
   },
   instancedMultiTextureShader.Vert,
   instancedMultiTextureShader.Frag,
