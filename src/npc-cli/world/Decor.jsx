@@ -39,7 +39,7 @@ export default function Decor(props) {
     quadInst: /** @type {*} */ (null),
     queryStatus: 'pending',
     rmKeys: new Set(),
-    seenHash : /** @type {Geomorph.GeomorphsHash} */ ({}),
+    seenHash : /** @type {*} */ (null),
     showLabels: false,
 
     addDecor(ds, removeExisting = true) {
@@ -455,7 +455,7 @@ export default function Decor(props) {
       if (module.hot?.active === false) {
         return false; // Avoid query from disposed module
       }
-      const prev = state.seenHash;
+      const prev = state.seenHash ?? {};
       const next = w.hash;
       const mapChanged = prev.map !== next.map;
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
@@ -534,6 +534,7 @@ export default function Decor(props) {
   }, [query.data, state.cuboids.length, state.quads.length, labels.length]);
 
   const update = useUpdate();
+  const ready = !!state.seenHash;
 
   return <>
     <instancedMesh // cuboids
@@ -543,16 +544,17 @@ export default function Decor(props) {
       args={[state.cuboidGeom, undefined, state.cuboids.length]}
       frustumCulled={false}
       renderOrder={-1}
+      visible={ready}
     >
       {/* <meshBasicMaterial color="red" side={THREE.DoubleSide} /> */}
-      <cameraLightMaterial
+      {ready && <cameraLightMaterial
         key={glsl.CameraLightMaterial.key}
         side={THREE.DoubleSide} // fix flipped gm
         diffuse={[1, 1, 1]}
         transparent
         objectPickRed={7}
         opacity={query.status === 'success' ? 1 : 0}
-      />
+      />}
     </instancedMesh>
 
     <instancedMesh //quads
@@ -562,9 +564,10 @@ export default function Decor(props) {
       args={[state.quad, undefined, state.quads.length]}
       frustumCulled={false}
       renderOrder={-1}
+      visible={ready}
     >
       {/* <meshBasicMaterial color="red" /> */}
-      <instancedMultiTextureMaterial
+      {ready && <instancedMultiTextureMaterial
         key={glsl.InstancedMultiTextureMaterial.key}
         alphaTest={0.5}
         diffuse={[1, 1, 1]}
@@ -573,7 +576,7 @@ export default function Decor(props) {
         opacity={query.status === 'success' ? 1 : 0}
         side={THREE.DoubleSide}
         transparent
-      />
+      />}
     </instancedMesh>
 
     <instancedMesh // labels

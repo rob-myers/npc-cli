@@ -279,7 +279,6 @@ export default function Doors(props) {
 
   w.door = state;
 
-  // React.useLayoutEffect(() => {
   React.useEffect(() => {
     state.buildLookups();
     state.positionInstances();
@@ -292,7 +291,7 @@ export default function Doors(props) {
     <instancedMesh
       name="doors"
       key={`${w.hash} doors`}
-      ref={instances => instances && (state.inst = instances)}
+      ref={inst => inst && (state.inst = inst)}
       args={[state.quad, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
       renderOrder={-1}
@@ -311,7 +310,7 @@ export default function Doors(props) {
     <instancedMesh
       name="lock-lights"
       key={`${w.hash} lock-lights`}
-      ref={instances => instances && (state.lockSigInst = instances)}
+      ref={inst => inst && (state.lockSigInst = inst)}
       args={[state.lockSigGeom, undefined, w.gmsData.doorCount]}
       frustumCulled={false}
       visible={state.ready}
@@ -342,7 +341,7 @@ export default function Doors(props) {
  * @property {THREE.BoxGeometry} lockSigGeom
  * @property {THREE.InstancedMesh} lockSigInst
  * @property {Map<number, Geomorph.DoorState>} movingDoors To be animated until they open/close.
- * @property {boolean} ready
+ * @property {boolean} ready avoid initial flicker
  *
  * @property {() => void} addCuboidAttributes
  * @property {() => void} addUvs
