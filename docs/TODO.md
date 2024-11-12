@@ -2177,7 +2177,7 @@ run '({ w, api }) {
           agent: true,
         });
       } catch {}
-      yield* api.sleep(0.05);
+      await api.sleep(0.05);
     }
   }
 }'

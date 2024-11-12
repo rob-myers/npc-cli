@@ -397,7 +397,7 @@ range 10 | split | map 'x => x + 1'
 range 10 | split | map 'x => x + 1' |
   run '({ api, datum }) {
     while ((datum = await api.read()) !== api.eof) {
-      yield* api.sleep(1);
+      await api.sleep(1);
       yield datum;
     } }'
 # Ctrl-C
@@ -408,7 +408,7 @@ range 5 |
   split |
   run '({ api, datum }) {
     while ((datum = await api.read()) !== api.eof) {
-      yield* api.sleep(1);
+      await api.sleep(1);
       yield datum;
     } }' |
   map 'x => `Hello ${x}`'

@@ -880,7 +880,7 @@ class cmdServiceClass {
       }
     },
 
-    async *sleep(seconds: number) {
+    async sleep(seconds: number) {
       await sleep(this.meta, seconds);
     },
 
