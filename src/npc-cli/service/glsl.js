@@ -7,21 +7,14 @@ import { defaultQuadUvs, emptyDataArrayTexture } from "./three";
 const instancedMonochromeShader = {
   Vert: /*glsl*/`
 
-  attribute int gmId;
-  attribute int instanceId;
-  flat varying int vGmId;
-  /**
-   * index into wallSegs[gmId]_gmId,
-   * equivalently InstancedMesh instanceId
-   */
-  flat varying int vInstanceId;
+  attribute uint instanceIds;
+  flat varying uint vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_vertex>
 
   void main() {
-    vGmId = gmId;
-    vInstanceId = instanceId;
+    vInstanceId = instanceIds;
 
     vec4 modelViewPosition = vec4(position, 1.0);
     modelViewPosition = instanceMatrix * modelViewPosition;
@@ -37,9 +30,9 @@ const instancedMonochromeShader = {
 
   uniform vec3 diffuse;
   uniform bool objectPick;
-  flat varying int vGmId;
-  flat varying int vInstanceId;
   uniform float opacity;
+
+  flat varying uint vInstanceId;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
@@ -51,8 +44,8 @@ const instancedMonochromeShader = {
   vec4 encodeWallObjectPick() {
     return vec4(
       1.0,
-      float((vInstanceId >> 8) & 255),
-      float(vInstanceId & 255),
+      float((int(vInstanceId) >> 8) & 255),
+      float(int(vInstanceId) & 255),
       255.0
     ) / 255.0;
   }
@@ -141,9 +134,9 @@ export const cameraLightShader = {
 
   flat varying float dotProduct;
   varying vec3 vColor;
-  flat varying int vInstanceId;
+  flat varying uint vInstanceId;
 
-  attribute int instanceIds;
+  attribute uint instanceIds;
 
   #include <common>
   #include <uv_pars_vertex>
@@ -188,14 +181,15 @@ export const cameraLightShader = {
 
   Frag: /*glsl*/`
 
-  flat varying int vInstanceId;
-	flat varying float dotProduct;
-  varying vec3 vColor;
-
   uniform vec3 diffuse;
   uniform bool objectPick;
   uniform int objectPickRed;
   uniform float opacity;
+
+  flat varying uint vInstanceId;
+	flat varying float dotProduct;
+  varying vec3 vColor;
+
 
   #include <common>
   #include <uv_pars_fragment>
@@ -213,8 +207,8 @@ export const cameraLightShader = {
     if (objectPick == true) {
       gl_FragColor = vec4(
         float(objectPickRed) / 255.0,
-        float((vInstanceId >> 8) & 255) / 255.0,
-        float(vInstanceId & 255) / 255.0,
+        float((int(vInstanceId) >> 8) & 255) / 255.0,
+        float(int(vInstanceId) & 255) / 255.0,
         gl_FragColor.a
       );
     }
@@ -450,16 +444,16 @@ export const cuboidManShader = {
 export const instancedMultiTextureShader = {
   Vert: /* glsl */`
 
-    varying vec3 vColor;
-    varying vec2 vUv;
-    flat varying int vTextureId;
-    flat varying int vInstanceId;
-    
     attribute vec2 uvDimensions;
     attribute vec2 uvOffsets;
-    attribute int uvTextureIds;
+    attribute uint uvTextureIds;
     // e.g. can be used to infer gmId
-    attribute int instanceIds;
+    attribute uint instanceIds;
+  
+    varying vec3 vColor;
+    varying vec2 vUv;
+    flat varying uint vTextureId;
+    flat varying uint vInstanceId;
 
     #include <common>
     #include <logdepthbuf_pars_vertex>
@@ -496,8 +490,8 @@ export const instancedMultiTextureShader = {
 
     varying vec3 vColor;
     varying vec2 vUv;
-    flat varying int vTextureId;
-    flat varying int vInstanceId;
+    flat varying uint vTextureId;
+    flat varying uint vInstanceId;
 
     #include <common>
     #include <logdepthbuf_pars_fragment>
@@ -514,8 +508,8 @@ export const instancedMultiTextureShader = {
       if (objectPick == true) {
         gl_FragColor = vec4(
           float(objectPickRed) / 255.0,
-          float((vInstanceId >> 8) & 255) / 255.0,
-          float(vInstanceId & 255) / 255.0,
+          float((int(vInstanceId) >> 8) & 255) / 255.0,
+          float(int(vInstanceId) & 255) / 255.0,
           gl_FragColor.a
         );
       }

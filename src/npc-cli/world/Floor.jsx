@@ -44,10 +44,10 @@ export default function Floor(props) {
         new THREE.InstancedBufferAttribute(new Float32Array(uvDimensions), 2),
       );
       state.inst.geometry.setAttribute('uvTextureIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(uvTextureIds), 1),
       );
       state.inst.geometry.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     async draw() {

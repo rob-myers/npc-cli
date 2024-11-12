@@ -50,10 +50,10 @@ export default function Obstacles(props) {
         new THREE.InstancedBufferAttribute( new Float32Array( uvDimensions ), 2 ),
       );
       state.quad.setAttribute('uvTextureIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(uvTextureIds), 1),
       );
       state.quad.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     createObstacleMatrix4(gmTransform, { origPoly: { rect }, transform, height }) {

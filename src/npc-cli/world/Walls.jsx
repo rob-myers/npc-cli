@@ -61,14 +61,12 @@ export default function Walls(props) {
       const { inst: ws } = state;
       let wId = 0;
       let instanceId = 0;
-      const attributeGmIds = /** @type {number[]} */ ([]);
       /** `[0, 1, 2, ... , instanceCount - 1]` */
-      const attributeInstanceIds = /** @type {number[]} */ ([]);
+      const instanceIds = /** @type {number[]} */ ([]);
 
       w.gms.forEach(({ key: gmKey, transform }, gmId) =>
         w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) => {
-          attributeGmIds.push(gmId);
-          attributeInstanceIds.push(instanceId++);
+          instanceIds.push(instanceId++);
           ws.setMatrixAt(wId++, state.getWallMat(
             seg,
             transform,
@@ -80,8 +78,7 @@ export default function Walls(props) {
       ws.instanceMatrix.needsUpdate = true;
       ws.computeBoundingSphere();
 
-      ws.geometry.setAttribute('gmId', new THREE.InstancedBufferAttribute(new Int32Array(attributeGmIds), 1));
-      ws.geometry.setAttribute('instanceId', new THREE.InstancedBufferAttribute(new Int32Array(attributeInstanceIds), 1));
+      state.quad.setAttribute('instanceIds', new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1));
     },
   }));
 
@@ -104,7 +101,6 @@ export default function Walls(props) {
         key={InstancedMonochromeShader.key}
         side={THREE.DoubleSide}
         diffuse={[0, 0, 0]}
-        objectPick={false}
       />
     </instancedMesh>
   );

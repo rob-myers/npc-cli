@@ -102,7 +102,7 @@ export default function Decor(props) {
       const instanceIds = state.cuboids.map((_, instanceId) => instanceId);
       state.cuboidGeom.deleteAttribute('instanceIds');
       state.cuboidGeom.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     addLabelUvs() {
@@ -170,11 +170,11 @@ export default function Decor(props) {
       );
       state.quad.deleteAttribute('uvTextureIds');
       state.quad.setAttribute('uvTextureIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(uvTextureIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(uvTextureIds), 1),
       );
       state.quad.deleteAttribute('instanceIds');
       state.quad.setAttribute('instanceIds',
-        new THREE.InstancedBufferAttribute(new Int32Array(instanceIds), 1),
+        new THREE.InstancedBufferAttribute(new Uint32Array(instanceIds), 1),
       );
     },
     computeDecorMeta(decor, instanceId) {
