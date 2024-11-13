@@ -10,7 +10,7 @@ import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
-import { getContext2d, invertCanvas } from "../service/dom";
+import { getContext2d, invertCanvas, isSmallViewport } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
@@ -85,6 +85,7 @@ export default function World(props) {
     lib: {
       filter,
       firstValueFrom,
+      isSmallViewport,
       isVectJson: Vect.isVectJson,
       precision: toPrecision,
       removeFirst,
@@ -407,6 +408,7 @@ export default function World(props) {
  * @typedef StateUtil Utility classes and `rxjs` functions
  * @property {typeof filter} filter
  * @property {typeof firstValueFrom} firstValueFrom
+ * @property {typeof isSmallViewport} isSmallViewport
  * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
  * @property {typeof removeFirst} removeFirst
  * @property {typeof Subject} Subject
