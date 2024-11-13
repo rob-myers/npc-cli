@@ -10,7 +10,12 @@
 
 - 🚧 pre next.js migration
   - 🚧 finish/close wip todos
-  - avoid stationary npc push through door
+  - 🚧 avoid stationary npc push through door
+    - ✅ create a queryFilter with a doorway excluded and prevent a single agent from moving through it
+    - ℹ️ `ch: 0.05` broke "door triangles"
+    - ℹ️ `cs: 0.9` fixed bridge symbol disconnected component
+    - 🚧 maintain "stationary agents query filter" where seen doorways are excluded
+    - in case stationary agent stops inside a door, prevent them from "moving aside" instead
   - support windows
   - touch indicator for mobile
   - Viewer has help ui
@@ -39,7 +44,7 @@
   - ℹ️ useLayoutEffect related
   - ✅ try fix Floor, Walls, Doors, Obstacles, Ceiling (might break initial flicker fix)
   - ✅ replace useLayoutEffect with "mount-shader-when-ready"
-- 🚧 clarify connected nav issues:
+- ✅ clarify connected nav issues:
   - ℹ️ inaccessible door should not prevent nav through open door
   - ℹ️ `maxSimplificationError: 0.85` helped, but causes nav kinks, so removed
   - ℹ️ npc should not be able to get too close to inaccessible door

@@ -100,24 +100,25 @@ export async function* events({ api, w }) {
 }
 
 /**
+ * Make a single hard-coded polygon non-navigable,
+ * and also indicate it via debug polygon.
+ * ```sh
+ * selectPolysDemo [queryFilterType=0]
+ * ```
  * @param {RunArg} ctxt
  */
-export async function* selectPolysDemo({ w }) {
-    // find and exclude a poly
-    const { polyRefs } =  w.crowd.navMeshQuery.queryPolygons(
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 4 * 1.5  },
-      // { x: (2 + 0.5) * 1.5, y: 0, z: 4 * 1.5 },
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
-      // { x: (1 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
-      // { x: (3 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
+export async function* selectPolysDemo({ w, args }) {
+    const queryFilterType = Number(args[0]) || 0;
+    const { polyRefs } = w.crowd.navMeshQuery.queryPolygons(
       { x: 3.5 * 1.5, y: 0, z: 7 * 1.5 },
       { x: 0.01, y: 0.1, z: 0.01 },
       { maxPolys: 1 },
     );
     console.log({ polyRefs });
 
-    const filter = w.crowd.getFilter(0);
-    filter.excludeFlags = 2 ** 0; // all polys should already be set differently
+    const filter = w.crowd.getFilter(queryFilterType);
+    // by default all polys should not match this bitmask:
+    filter.excludeFlags = 2 ** 0;
     polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
     w.debug.selectNavPolys(...polyRefs); // display via debug
 }
