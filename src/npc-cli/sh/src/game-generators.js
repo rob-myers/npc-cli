@@ -110,15 +110,16 @@ export async function* selectPolysDemo({ w }) {
       // { x: (1 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
       // { x: (1 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
       // { x: (3 + 0.5) * 1.5, y: 0, z: 6 * 1.5 },
-      { x: (3 + 0.5) * 1.5, y: 0, z: 7 * 1.5 },
-      { x: 0.2, y: 0.1, z: 0.01 },
+      { x: 3.5 * 1.5, y: 0, z: 7 * 1.5 },
+      { x: 0.01, y: 0.1, z: 0.01 },
+      { maxPolys: 1 },
     );
     console.log({ polyRefs });
 
     const filter = w.crowd.getFilter(0);
     filter.excludeFlags = 2 ** 0; // all polys should already be set differently
     polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
-    w.debug.selectNavPolys(polyRefs); // display via debug
+    w.debug.selectNavPolys(...polyRefs); // display via debug
 }
 
 /**
