@@ -32,7 +32,7 @@ export default function useHandleEvents(w) {
       }
 
       for (const npcKey of closeNpcs.nearby) {
-        if (w.npc.npc[npcKey]?.s.moving === true)
+        if (w.n[npcKey]?.s.target !== null)
           return false;
       }
       return true;
@@ -294,12 +294,16 @@ export default function useHandleEvents(w) {
             }
           }
           break;
-        case "stopped-moving":
+        case "stopped-moving": {
+          if (!state.npcToDoor[e.npcKey]) {}
           for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+            // 🚧 if stopped inside door then make npc immovable
+            // 🚧 else use npcQueryFilterType.excludeDoors
             const door = w.door.byKey[gdKey];
             door.open === true && state.tryCloseDoor(door.gmId, door.doorId);
           }
           break;
+        }
       }
     },
     navSegIntersectsDoorway(u, v, door) {

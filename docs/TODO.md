@@ -14,7 +14,10 @@
     - ✅ create a queryFilter with a doorway excluded and prevent a single agent from moving through it
     - ℹ️ `ch: 0.05` broke "door triangles"
     - ℹ️ `cs: 0.9` fixed bridge symbol disconnected component
-    - 🚧 maintain "stationary agents query filter" where seen doorways are excluded
+    - ✅ npc.s.moving -> npc.s.target !== null
+    - ✅ moved "stationary agents" should trigger sensor
+    - on trigger nearby door, ensure excludeDoor queryFilter includes doors
+    - maintain "stationary agents query filter" where seen doorways are excluded
     - in case stationary agent stops inside a door, prevent them from "moving aside" instead
   - support windows
   - touch indicator for mobile

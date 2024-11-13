@@ -55,13 +55,9 @@ export class Npc {
     label: /** @type {null | string} */ (null),
     /** Desired look angle (rotation.y) */
     lookAngleDst: /** @type {null | number} */ (null),
-    /** Is this npc moving? */
-    moving: false,
     opacity: 1,
     /** Desired opacity */
     opacityDst: /** @type {null | number} */ (null),
-    /** 🚧 unused */
-    paused: false,
     run: false,
     spawns: 0,
     target: /** @type {null | THREE.Vector3} */ (null),
@@ -130,7 +126,6 @@ export class Npc {
 
   async cancel() {
     info(`${'cancel'}: cancelling ${this.key}`);
-    this.s.paused = false;
 
     this.reject.fade?.(`${'cancel'}: cancelled fade`);
     this.reject.move?.(`${'cancel'}: cancelled move`);
@@ -388,7 +383,6 @@ export class Npc {
       this.w.debug.setNavPath(path ?? []);
     }
 
-    this.s.moving = true;
     this.s.wayIndex = 0;
     this.s.lookSecs = 0.2;
 
@@ -529,20 +523,11 @@ export class Npc {
   onTick(deltaMs, positions) {
     this.mixer.update(deltaMs);
 
-    if (this.agent !== null) {
-      this.onTickAgent(deltaMs, this.agent);
-    }
-
     if (this.s.lookAngleDst !== null) {
       if (dampAngle(this.m.group.rotation, 'y', this.s.lookAngleDst, this.s.lookSecs, deltaMs, Infinity, undefined, 0.01) === false) {
         this.s.lookAngleDst = null;
         this.resolve.turn?.();
       }
-    }
-
-    if (this.s.moving === true) {
-      const { x, y, z } = this.position;
-      positions.push(this.bodyUid, x, y, z);
     }
 
     if (this.s.opacityDst !== null) {
@@ -551,6 +536,17 @@ export class Npc {
         this.resolve.fade?.();
       }
       this.setUniform('opacity', this.s.opacity);
+    }
+
+    if (this.agent === null) {
+      return;
+    }
+
+    this.onTickAgent(deltaMs, this.agent);
+
+    if (this.agent.raw.dvel !== 0) {
+      const { x, y, z } = this.position;
+      positions.push(this.bodyUid, x, y, z);
     }
   }
 
@@ -735,7 +731,6 @@ export class Npc {
     const position = this.agent.position();
     this.s.target = null;
     this.s.lookAngleDst = null;
-    this.s.moving = false;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
@@ -768,7 +763,7 @@ export class Npc {
   }
 
   async waitUntilStopped() {
-    this.s.moving === true && await new Promise((resolve, reject) => {
+    this.s.target !== null && await new Promise((resolve, reject) => {
       this.resolve.move = resolve; // see "stopped-moving"
       this.reject.move = reject; // see w.npc.remove
     });
