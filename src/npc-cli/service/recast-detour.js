@@ -36,20 +36,18 @@ export function getTileCacheMeshProcess() {
 
 /** @returns {Partial<TileCacheGeneratorConfig>} */
 export function getTileCacheGeneratorConfig() {
-  // const cs = 0.11;
-  const cs = 0.1;
+  // const cs = 0.1;
+  const cs = 0.09; // fix bridge accessibility without deforming door triangles much
   return {
-    // tileSize: 8 / cs,
-    // tileSize: 7.2 / cs,
     // tileSize: 7 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
-    ch: 0.05, // EPSILON breaks obstacles
+    ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,
     expectedLayersPerTile: 1,
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    // maxSimplificationError: 0.85, // 🔔 try avoid "nav edge too close to doorway"
+    // maxSimplificationError: 1,
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
