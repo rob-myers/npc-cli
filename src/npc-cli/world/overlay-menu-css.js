@@ -45,6 +45,7 @@ export const pausedControlsCss = css`
     user-select: none;
 
     width: 80px;
+    opacity: 0.75;
 
     &.text-white {
       color: #fff;
