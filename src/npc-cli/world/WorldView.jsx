@@ -370,10 +370,10 @@ export default function WorldCanvas(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 16, 0]}
+        position={[0, 64, 0]}
         makeDefault
         fov={state.fov}
-        zoom={0.5}
+        zoom={1}
       />
 
       <MapControls
@@ -390,7 +390,7 @@ export default function WorldCanvas(props) {
           maxPolarAngle: Math.PI / 4,
         }}
         minDistance={smallViewport ? 10 : 5}
-        maxDistance={smallViewport ? 20 : 40}
+        maxDistance={smallViewport ? 48 : 64}
         panSpeed={2}
       />
 
