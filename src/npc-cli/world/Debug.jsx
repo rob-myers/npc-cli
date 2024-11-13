@@ -66,7 +66,7 @@ export default function Debug(props) {
 
       group.visible = true;
     },
-    selectNavPolys(polyRefs) {
+    selectNavPolys(...polyRefs) {
       const { navMesh } = w.nav;
       const geom = new THREE.BufferGeometry();
       const positions = /** @type {number[]} */ ([]);
@@ -95,6 +95,18 @@ export default function Debug(props) {
                 tile.verts(tileVertsBaseId),
                 tile.verts(tileVertsBaseId + 1) + 0.1,
                 tile.verts(tileVertsBaseId + 2)
+              );
+            } else {// 🚧 explain this case
+              const tileVertsBaseIndex =
+                (polyDetail.vertBase() +
+                  tile.detailTris(detailTrisBaseId + i) -
+                  poly.vertCount()) *
+                3;
+  
+              positions.push(
+                tile.detailVerts(tileVertsBaseIndex),
+                tile.detailVerts(tileVertsBaseIndex + 1),
+                tile.detailVerts(tileVertsBaseIndex + 2)
               );
             }
             indices.push(tri++);
@@ -204,7 +216,8 @@ export default function Debug(props) {
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
- * @property {(polyIds: number[]) => void} selectNavPolys
+ * @property {(...polyIds: number[]) => void} selectNavPolys
+ * https://github.com/isaac-mason/recast-navigation-js/blob/bb3e49af3f4ff274afe84341d4c51a9f5fac609c/apps/navmesh-website/src/features/recast/export/nav-mesh-to-gltf.ts#L31
  */
 
 const origNavPolyMaterial = new THREE.MeshBasicMaterial({
@@ -225,10 +238,10 @@ const navPolyMaterial = new THREE.MeshStandardMaterial({
 
 const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   side: THREE.FrontSide,
-  color: "blue",
+  color: "red",
   wireframe: false,
   transparent: true,
-  opacity: 0.2,
+  opacity: 0.5,
 });
 
 const showNavNodes = true;
