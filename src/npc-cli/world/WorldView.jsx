@@ -370,7 +370,7 @@ export default function WorldCanvas(props) {
       }
 
       <PerspectiveCamera
-        position={[0, 64, 0]}
+        position={[0, 32, 0]}
         makeDefault
         fov={state.fov}
         zoom={1}
