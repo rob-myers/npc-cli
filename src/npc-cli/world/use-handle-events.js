@@ -318,10 +318,23 @@ export default function useHandleEvents(w) {
           }
           break;
         case "stopped-moving": {
-          if (!state.npcToDoor[e.npcKey]) {}
-          for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
-            // 🚧 if stopped inside door then make npc immovable
-            // 🚧 else use npcQueryFilterType.excludeDoors
+          const doorMeta = state.npcToDoor[e.npcKey];
+
+          if (doorMeta?.inside.size > 0) {// npc stays in doorway
+            npc.agent?.updateParameters({
+              collisionQueryRange: 1,
+              separationWeight: 0.5,
+              queryFilterType: w.lib.queryFilterType.default,
+            });
+          } else {// prevent npc from moving through doors
+            npc.agent?.updateParameters({
+              collisionQueryRange: 1,
+              separationWeight: 4,
+              queryFilterType: w.lib.queryFilterType.excludeDoors,
+            });
+          }
+
+          for (const gdKey of doorMeta?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
             door.open === true && state.tryCloseDoor(door.gmId, door.doorId);
           }
