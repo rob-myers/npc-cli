@@ -38,10 +38,10 @@ export function getTileCacheMeshProcess() {
 export function getTileCacheGeneratorConfig() {
   // 🚧 fix bridge accessibility without deforming door triangles much
   // const cs = 0.1;
-  const cs = 0.08;
-  // const cs = 0.1;
+  // const cs = 0.08;
+  const cs = 0.12;
   return {
-    // tileSize: 5.2 / cs,
+    // tileSize: 6.5 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
     ch: 0.01, // EPSILON breaks obstacles
     borderSize: 0,

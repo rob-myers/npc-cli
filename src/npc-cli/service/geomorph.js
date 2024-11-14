@@ -281,6 +281,7 @@ class GeomorphService {
     navDecomp.vs.forEach(v => v.precision(precision));
     navDoorways.forEach(poly => poly.precision(precision));
 
+    // 🚧 try remove i.e. use off-mesh connections instead
     // add two triangles for each doorway (we dup some verts)
     const navDoorwaysOffset = navDecomp.tris.length;
     navDoorways.forEach(doorway => {
