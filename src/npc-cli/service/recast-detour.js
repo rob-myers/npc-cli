@@ -38,7 +38,7 @@ export function getTileCacheMeshProcess() {
 export function getTileCacheGeneratorConfig() {
   // 🚧 fix bridge accessibility without deforming door triangles much
   // const cs = 0.1;
-  const cs = 0.09;
+  const cs = 0.08;
   // const cs = 0.1;
   return {
     // tileSize: 5.2 / cs,
