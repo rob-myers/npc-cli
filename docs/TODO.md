@@ -9,7 +9,7 @@
 ## WIP
 
 - 🚧 pre next.js migration
-  - 🚧 finish/close wip todos
+  - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
     - ✅ create a queryFilter with a doorway excluded and prevent a single agent from moving through it
     - ℹ️ `ch: 0.05` broke "door triangles"
@@ -19,40 +19,16 @@
     - ✅ on trigger nearby door, ensure excludeDoor queryFilter includes doors
     - ✅ maintain excludeDoors query filter where seen doorways are excluded
     - ✅ in case agent stops inside a door, prevent them from "moving aside" instead
+  - 🚧 avoid spinning targetless NPCs
   - support windows
   - touch indicator for mobile
-  - Viewer has help ui
+  - World shows closable message until 1st npc spawn
+    - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
   - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
   - redo cuboid-pet
   - represent skins as single TexArray
-
-- ✅ support `await api.sleep(1)` inside `map`
-  - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
-  - ✅ simplify `choice` so it does not use `sleep`
-  - ✅ refactor underlying `choice` as AsyncFunction 
-  - ✅ refactor `sleep` as AsyncFunction
-- ✅ avoid initial instanced mesh render
-  - ✅ avoid overwriting attributes
-  - still seeing issue on mobile, but only on reset
-- ✅ understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
-  - ℹ️ seems npc `will` is coinciding with npc `rob`
-  - ℹ️ saw happen when changed symbol chairs
-  - seems fixed via improved `w.npc.restore()`
-- ✅ Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
-  - ✅ shortcut works in active tabset
-  - ✅ clicking tab header sets active tabset
-    - ℹ️ started working after npm upgrade
-- ✅ fix initial shader errors
-  - [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
-  - ℹ️ useLayoutEffect related
-  - ✅ try fix Floor, Walls, Doors, Obstacles, Ceiling (might break initial flicker fix)
-  - ✅ replace useLayoutEffect with "mount-shader-when-ready"
-- ✅ clarify connected nav issues:
-  - ℹ️ inaccessible door should not prevent nav through open door
-  - ℹ️ `maxSimplificationError: 0.85` helped, but causes nav kinks, so removed
-  - ℹ️ npc should not be able to get too close to inaccessible door
-- 🚧 clean overwritten attributes using patched three.js:
-  > `w.r3f.gl.getAttributes().remove(attribute)`
+  - clean overwritten attributes using patched three.js:
+    > `w.r3f.gl.getAttributes().remove(attribute)`
 
 - can select npc while paused e.g. click npc causes single frame update?
 - hmr sometimes breaks npc opacity/selector
@@ -2949,3 +2925,31 @@ done
   - ✅ careful about alpha=0 in object-pick encoding
     - ℹ️ e.g. 768 ~ 0 mod 256
     - ✅ fix instancedMonochromeShader
+
+
+
+- ✅ support `await api.sleep(1)` inside `map`
+  - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
+  - ✅ simplify `choice` so it does not use `sleep`
+  - ✅ refactor underlying `choice` as AsyncFunction 
+  - ✅ refactor `sleep` as AsyncFunction
+- ✅ avoid initial instanced mesh render
+  - ✅ avoid overwriting attributes
+  - still seeing issue on mobile, but only on reset
+- ✅ understand ~~duplicated~~ coinciding npcs e.g. on edit recast-detour.js
+  - ℹ️ seems npc `will` is coinciding with npc `rob`
+  - ℹ️ saw happen when changed symbol chairs
+  - seems fixed via improved `w.npc.restore()`
+- ✅ Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
+  - ✅ shortcut works in active tabset
+  - ✅ clicking tab header sets active tabset
+    - ℹ️ started working after npm upgrade
+- ✅ fix initial shader errors
+  - [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
+  - ℹ️ useLayoutEffect related
+  - ✅ try fix Floor, Walls, Doors, Obstacles, Ceiling (might break initial flicker fix)
+  - ✅ replace useLayoutEffect with "mount-shader-when-ready"
+- ✅ clarify connected nav issues:
+  - ℹ️ inaccessible door should not prevent nav through open door
+  - ℹ️ `maxSimplificationError: 0.85` helped, but causes nav kinks, so removed
+  - ℹ️ npc should not be able to get too close to inaccessible door
