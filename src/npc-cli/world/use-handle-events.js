@@ -3,6 +3,7 @@ import { defaultDoorCloseMs, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
+import { toV3 } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -12,6 +13,7 @@ export default function useHandleEvents(w) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     doorToNpc: {},
+    doorToPolyRefs: {},
     externalNpcs: new Set(),
     npcToAccess: {},
     npcToDoor: {},
@@ -143,6 +145,21 @@ export default function useHandleEvents(w) {
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
     },
+    ensureDoorPolyRefs(door) {
+      if (door.gdKey in state.doorToPolyRefs) {
+        return;
+      }
+
+      const { polyRefs } = w.crowd.navMeshQuery.queryPolygons(
+        toV3(door.center),
+        { x: 0.01, y: 0.1, z: 0.01 },
+        { maxPolys: 1 }, // 🚧 https://github.com/isaac-mason/recast-navigation-js/discussions/444
+      );
+      state.doorToPolyRefs[door.gdKey] = polyRefs;
+
+      // 🔔 lazily compute unWalkable queryFilter
+      polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, w.lib.navPolyFlag.unWalkable));
+    },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
 
@@ -170,6 +187,12 @@ export default function useHandleEvents(w) {
           } else {
             w.menu.hide();
           }
+          break;
+        }
+        case "nav-updated": {
+          const excludeDoorsFilter = w.crowd.getFilter(w.lib.queryFilterType.excludeDoors);
+          excludeDoorsFilter.excludeFlags = w.lib.navPolyFlag.unWalkable;
+          state.doorToPolyRefs = {};
           break;
         }
         case "pointerdown":
@@ -330,8 +353,10 @@ export default function useHandleEvents(w) {
       if (e.type === 'nearby') {
         (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.gdKey);
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
-        
+
         const door = w.door.byKey[e.gdKey];
+        state.ensureDoorPolyRefs(door); // lazily compute unWalkable
+        
         if (door.open === true) {// door already open
           return;
         }
@@ -520,6 +545,8 @@ export default function useHandleEvents(w) {
  * @typedef State
  * @property {{ [gdKey: Geomorph.GmDoorKey]: Record<'nearby' | 'inside', Set<string>> }} doorToNpc
  * Relates `Geomorph.GmDoorKey` to nearby/inside `npcKey`s
+ * @property {{ [gdKey: Geomorph.GmDoorKey]: number[] }} doorToPolyRefs
+ * Ref of navigation polygons corresponding to the 2 triangles defining the doorway.
  * @property {{ [npcKey: string]: Set<string> }} npcToAccess
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoor
@@ -537,6 +564,7 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
+ * @property {(door: Geomorph.DoorState) => void} ensureDoorPolyRefs
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider

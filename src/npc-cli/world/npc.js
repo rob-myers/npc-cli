@@ -391,6 +391,7 @@ export class Npc {
       radius: helper.defaults.radius, // reset
       collisionQueryRange: 1.5,
       separationWeight: 1,
+      queryFilterType: this.w.lib.queryFilterType.default,
     });
     this.agent.requestMoveTarget(closest);
     this.s.target = this.lastTarget.copy(closest);
@@ -737,6 +738,7 @@ export class Npc {
       radius: helper.defaults.radius / 1.5,
       collisionQueryRange: 1,
       separationWeight: 4,
+      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     
     this.startAnimation('Idle');

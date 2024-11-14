@@ -117,9 +117,10 @@ export async function* selectPolysDemo({ w, args }) {
     console.log({ polyRefs });
 
     const filter = w.crowd.getFilter(queryFilterType);
+    const { navPolyFlag } = w.lib;
     // by default all polys should not match this bitmask:
-    filter.excludeFlags = 2 ** 0;
-    polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, 2 ** 0));
+    filter.excludeFlags = navPolyFlag.unWalkable;
+    polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, navPolyFlag.unWalkable));
     w.debug.selectNavPolys(...polyRefs); // display via debug
 }
 

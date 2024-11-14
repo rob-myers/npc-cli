@@ -27,6 +27,7 @@ export default function WorldWorkers() {
         await initRecastNav();
         w.loadTiledMesh(msg.exportedNavMesh);
         w.update(); // for w.npc
+        w.events.next({ key: 'nav-updated' });
       }
     },
 

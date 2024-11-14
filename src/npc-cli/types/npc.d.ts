@@ -88,10 +88,10 @@ declare namespace NPC {
     // | PointerMoveEvent
     | { key: "disabled" }
     | { key: "enabled" }
-    | { key: 'npc-internal'; npcKey: string; event: 'cancelled' | 'paused' | 'resumed' }
+    | { key: "npc-internal"; npcKey: string; event: "cancelled" | "paused" | "resumed" }
     | { key: "spawned"; npcKey: string; gmRoomId: Geomorph.GmRoomId }
-    | { key: 'started-moving'; npcKey: string }
-    | { key: 'stopped-moving'; npcKey: string }
+    | { key: "started-moving"; npcKey: string }
+    | { key: "stopped-moving"; npcKey: string }
     | { key: "removed-npc"; npcKey: string }
     | { key: "way-point"; npcKey: string; index: number; next: Geom.VectJson | null } & Geom.VectJson
     | { key: "enter-doorway"; npcKey: string } & Geomorph.GmDoorId
@@ -127,6 +127,7 @@ declare namespace NPC {
         changedGmIds: boolean[];
       }
     | { key: "pre-setup-physics" }
+    | { key: "nav-updated" }
     // ...
   );
 

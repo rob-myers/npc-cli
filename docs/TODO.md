@@ -16,9 +16,9 @@
     - ℹ️ `cs: 0.9` fixed bridge symbol disconnected component
     - ✅ npc.s.moving -> npc.s.target !== null
     - ✅ moved "stationary agents" should trigger sensor
-    - on trigger nearby door, ensure excludeDoor queryFilter includes doors
-    - maintain "stationary agents query filter" where seen doorways are excluded
-    - in case stationary agent stops inside a door, prevent them from "moving aside" instead
+    - ✅ on trigger nearby door, ensure excludeDoor queryFilter includes doors
+    - ✅ maintain excludeDoors query filter where seen doorways are excluded
+    - 🚧 in case stationary agent stops inside a door, prevent them from "moving aside" instead
   - support windows
   - touch indicator for mobile
   - Viewer has help ui
