@@ -4,13 +4,13 @@ import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 import { alloc, error, info, debug, warn } from "../service/generic";
 import { geomorph } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
-import { customThreeToTileCache, getTileCacheGeneratorConfig } from "../service/recast-detour";
+import { customThreeToTileCache, getTileCacheGeneratorConfig, getBasicTileCacheMeshProcess } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
+import { getGeomorphsTileCacheMeshProcess } from "../service/tile-cache";
 
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */ (
   /** @type {*} */ (self)
 );
-
 
 /** @param {MessageEvent<WW.MsgToNavWorker>} e */
 async function handleMessages(e) {
@@ -39,13 +39,16 @@ async function handleMessages(e) {
         mesh.applyMatrix4(mat4);
         mesh.updateMatrixWorld();
         
-        // 🚧 hard-coded area, height
+        // 🚧 avoid steiner points via extra areas?
         const { tris, vs, tris: { length: numTris }  } = navDecomp;
         const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4))
         for (let i = navDoorwaysOffset; i < numTris; i++) {
-          customAreaDefs.push({ areaId: 1, areas: [
-            { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) },
-          ]});
+          customAreaDefs.push({
+            areaId: 1, // 🚧
+            areas: [
+              { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }
+            ]
+          });
         }
         return mesh;
       });
@@ -57,9 +60,11 @@ async function handleMessages(e) {
       });
 
       await initRecastNav();
+      const tileCacheMeshProcess = getGeomorphsTileCacheMeshProcess(gms);
+
       const result = customThreeToTileCache(
         meshes,
-        getTileCacheGeneratorConfig(),
+        getTileCacheGeneratorConfig(tileCacheMeshProcess),
         { areas: customAreaDefs },
       );
       

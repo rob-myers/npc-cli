@@ -30,10 +30,11 @@
   - clean overwritten attributes using patched three.js:
     > `w.r3f.gl.getAttributes().remove(attribute)`
 
-- 🚧 try navMesh sans doorways using off-mesh connections instead
-  - add off-mesh connections per doorway
-  - replace queryFilter excludeDoors with forbidden connections
-  - add multiple for hull doors
+- ❌ try navMesh sans doorways using off-mesh connections instead
+  - ✅ add off-mesh connections per non-hull doorway
+  - ❌ detect when enter off-mesh connection
+  - ❌ try using requestMoveVelocity
+  - ℹ️ unnatural navigation + non-trivial to change on-connection speed
 
 - can select npc while paused e.g. click npc causes single frame update?
 - hmr sometimes breaks npc opacity/selector

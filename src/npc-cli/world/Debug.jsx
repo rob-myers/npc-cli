@@ -1,6 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { NavMeshHelper } from "@recast-navigation/three";
+import { NavMeshHelper, OffMeshConnectionsHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
 import { colliderHeight } from "../service/const";
@@ -128,6 +128,11 @@ export default function Debug(props) {
       navMesh: w.nav.navMesh,
       navMeshMaterial: navPolyMaterial,
     });
+    // 🤔 unclear how to get all off-mesh-connection from navMesh (could store elsewhere)
+    // state.offMeshConnections = new OffMeshConnectionsHelper({
+    //   offMeshConnections: w.nav.offMeshConnections,
+    //   lineMaterial: offMeshConnectionMaterial,
+    // })
   }, [w.nav.navMesh]);
 
   React.useEffect(() => {// debug colliders via physics.worker
@@ -233,6 +238,10 @@ const navPolyMaterial = new THREE.MeshStandardMaterial({
   color: "#7f7",
   transparent: true,
   opacity: 1,
+});
+
+const offMeshConnectionMaterial = new THREE.LineBasicMaterial({
+  color: "#f00",
 });
 
 

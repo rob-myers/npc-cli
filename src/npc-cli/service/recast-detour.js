@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { NavMesh, RecastBuildContext, TileCache, TileCacheMeshProcess, freeCompactHeightfield, freeHeightfield, TileCacheData, freeHeightfieldLayerSet, VerticesArray, TrianglesArray, ChunkIdsArray, TriangleAreasArray, createRcConfig, calcGridSize, DetourTileCacheParams, Raw, vec3, NavMeshParams, RecastChunkyTriMesh, cloneRcConfig, allocHeightfield, createHeightfield, markWalkableTriangles, rasterizeTriangles, filterLowHangingWalkableObstacles, filterLedgeSpans, filterWalkableLowHeightSpans, allocCompactHeightfield, buildCompactHeightfield, erodeWalkableArea, allocHeightfieldLayerSet, buildHeightfieldLayers, getHeightfieldLayerHeights, getHeightfieldLayerAreas, getHeightfieldLayerCons, buildTileCacheLayer,  markConvexPolyArea } from "@recast-navigation/core";
 import { getPositionsAndIndices } from "@recast-navigation/three";
-import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, generateTileCache, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
+import { createDefaultTileCacheMeshProcess, dtIlog2, dtNextPow2, getBoundingBox, tileCacheGeneratorConfigDefaults } from "@recast-navigation/generators";
 
 /**
  * @param {import("@recast-navigation/core").Crowd} crowd
@@ -12,15 +12,10 @@ export function disposeCrowd(crowd, navMesh) {
   crowd.destroy();
 }
 
-/** @param {import("@recast-navigation/core").CrowdAgent} agent  */
-export function getAgentTarget(agent) {
-  return agent.corners().length > 0 ? agent.nextTargetInPath() : null;
-}
-
 /**
  * https://github.com/isaac-mason/recast-navigation-js/blob/d64fa867361a316b53c2da1251820a0bd6567f82/packages/recast-navigation-generators/src/generators/generate-tile-cache.ts#L108
  */
-export function getTileCacheMeshProcess() {
+export function getBasicTileCacheMeshProcess() {
   return new TileCacheMeshProcess((navMeshCreateParams, polyAreas, polyFlags) => {
     // info({
     //   polyCount: navMeshCreateParams.polyCount(),
@@ -34,9 +29,11 @@ export function getTileCacheMeshProcess() {
   });
 }
 
-/** @returns {Partial<TileCacheGeneratorConfig>} */
-export function getTileCacheGeneratorConfig() {
-  // 🚧 fix bridge accessibility without deforming door triangles much
+/**
+ * @param {TileCacheMeshProcess} tileCacheMeshProcess
+ * @returns {Partial<TileCacheGeneratorConfig>}
+ */
+export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   // const cs = 0.1;
   // const cs = 0.08;
   const cs = 0.1;
@@ -48,7 +45,7 @@ export function getTileCacheGeneratorConfig() {
     expectedLayersPerTile: 1,
     detailSampleDist: 0,
     walkableClimb: 0,
-    tileCacheMeshProcess: getTileCacheMeshProcess(),
+    tileCacheMeshProcess,
     maxSimplificationError: 0.95,
     walkableRadius: 0,
     detailSampleMaxError: 0,
@@ -559,8 +556,6 @@ export function customGenerateTileCache(
 
 }
 
-const emptyUserData = {};
-
 /**
  * @typedef {import("@recast-navigation/generators").TileCacheGeneratorConfig} TileCacheGeneratorConfig
  */
@@ -591,4 +586,3 @@ const emptyUserData = {};
  * @property {boolean} [keepIntermediates]
  * @property {NPC.TileCacheConvexAreaDef[]} [areas]
  */
-
