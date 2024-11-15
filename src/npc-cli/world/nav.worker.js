@@ -32,6 +32,10 @@ async function handleMessages(e) {
         const determinant = a * d - b * c;
         // const mesh = new THREE.Mesh(polysToXZGeometry(navPolys, { reverse: determinant === 1 }));
         const mesh = new THREE.Mesh(decompToXZGeometry(navDecomp, { reverse: determinant === 1 }));
+        // const mesh = new THREE.Mesh(decompToXZGeometry({
+        //   vs: navDecomp.vs,
+        //   tris: navDecomp.tris.slice(0, navDoorwaysOffset),
+        // }, { reverse: determinant === 1 }));
         mesh.applyMatrix4(mat4);
         mesh.updateMatrixWorld();
         

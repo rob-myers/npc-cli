@@ -39,7 +39,7 @@ export function getTileCacheGeneratorConfig() {
   // 🚧 fix bridge accessibility without deforming door triangles much
   // const cs = 0.1;
   // const cs = 0.08;
-  const cs = 0.12;
+  const cs = 0.1;
   return {
     // tileSize: 6.5 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
@@ -49,7 +49,7 @@ export function getTileCacheGeneratorConfig() {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess: getTileCacheMeshProcess(),
-    // maxSimplificationError: 0.95,
+    maxSimplificationError: 0.95,
     walkableRadius: 0,
     detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
