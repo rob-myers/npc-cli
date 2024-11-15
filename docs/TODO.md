@@ -19,6 +19,7 @@
     - ✅ on trigger nearby door, ensure excludeDoor queryFilter includes doors
     - ✅ maintain excludeDoors query filter where seen doorways are excluded
     - ✅ in case agent stops inside a door, prevent them from "moving aside" instead
+  - 🚧 try clean navMesh by defining additional "areas"
   - avoid spinning targetless NPCs
   - support windows
   - touch indicator for mobile
@@ -29,6 +30,10 @@
   - represent skins as single TexArray
   - clean overwritten attributes using patched three.js:
     > `w.r3f.gl.getAttributes().remove(attribute)`
+  - clean away off-mesh-connection if we don't use them
+
+- ✅ can spawn whilst in debug mode
+  - pointerup triggers since update/render
 
 - ❌ try navMesh sans doorways using off-mesh connections instead
   - ✅ add off-mesh connections per non-hull doorway
@@ -36,7 +41,9 @@
   - ❌ try using requestMoveVelocity
   - ℹ️ unnatural navigation + non-trivial to change on-connection speed
 
-- can select npc while paused e.g. click npc causes single frame update?
+- 🚧 can select npc while paused e.g. click npc causes single frame update?
+  - ✅ via manually resumed process which controls selection
+  - better way?
 - hmr sometimes breaks npc opacity/selector
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient

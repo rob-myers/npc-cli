@@ -7,7 +7,7 @@ import { damp } from "maath/easing";
 
 import { testNever } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
-import { getModifierKeys, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
+import { getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
 import { WorldContext } from "./world-context.js";
@@ -58,7 +58,7 @@ export default function WorldCanvas(props) {
       meta,
       position,
     }) {
-      const targetRect = (/** @type {HTMLElement} */ (event.target)).getBoundingClientRect();
+      const screenPoint = getRelativePointer(event);
       if (key === 'pointerup' || key === 'pointerdown') {
         return {
           key,
@@ -71,7 +71,7 @@ export default function WorldCanvas(props) {
           keys: getModifierKeys(event.nativeEvent),
           pointers: state.getNumPointers(),
           rmb: isRMB(event.nativeEvent),
-          screenPoint: { x: event.clientX - targetRect.left, y: event.clientY - targetRect.top },
+          screenPoint,
           touch: isTouchDevice(),
           meta,
           ...key === 'pointerup' && { clickId: state.clickIds.pop() },
@@ -86,7 +86,7 @@ export default function WorldCanvas(props) {
           keys: getModifierKeys(event.nativeEvent),
           pointers: state.getNumPointers(),
           rmb: isRMB(event.nativeEvent),
-          screenPoint: { x: event.clientX - targetRect.left, y: event.clientY - targetRect.top },
+          screenPoint,
           touch: isTouchDevice(),
           meta,
         };
@@ -94,6 +94,15 @@ export default function WorldCanvas(props) {
       throw Error(`${'getWorldPointerEvent'}: key "${key}" should be in ${
         JSON.stringify(['pointerup', 'pointerdown', 'long-pointerdown', 'pointerup-outside'])
       }`);
+    },
+    handleClickInDebugMode(e) {
+      if (w.disabled === true && w.menu.debugWhilePaused === true) {
+        if (state.lastDown && state.lastDown?.screenPoint.distanceTo(getRelativePointer(e)) < 1) {
+          w.onTick();
+          cancelAnimationFrame(w.reqAnimId);
+          window.setTimeout(() => w.r3f.advance(Date.now()));
+        }
+      }
     },
     onChangeControls(e) {
       const zoomState = state.controls.getDistance() > 20 ? 'far' : 'near';
@@ -175,8 +184,7 @@ export default function WorldCanvas(props) {
       }
     },
     onPointerDown(e) {
-      const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
-      const sp = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
+      const sp = getRelativePointer(e);
       state.lastScreenPoint.copy(sp);
       state.epoch.pointerDown = Date.now();
 
@@ -203,7 +211,7 @@ export default function WorldCanvas(props) {
       }
       
       // includes async render-and-read-pixel
-      state.pickObject(e)
+      state.pickObject(e);
     },
     onPointerLeave(e) {
       if (!state.down) {
@@ -223,8 +231,7 @@ export default function WorldCanvas(props) {
       }
     },
     onPointerMove(e) {
-      const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
-      state.lastScreenPoint.set(e.clientX - targetRect.left, e.clientY - targetRect.top);
+      state.lastScreenPoint.copy(getRelativePointer(e));
     },
     onPointerUp(e) {
       state.epoch.pointerUp = Date.now();
@@ -244,6 +251,8 @@ export default function WorldCanvas(props) {
 
       state.onPointerLeave(e);
       state.justLongDown = false;
+
+      state.handleClickInDebugMode(e); // step world in debug mode
     },
     onTick(deltaMs) {
       if (state.targetFov !== null && w.r3f !== null) {
@@ -437,6 +446,7 @@ export default function WorldCanvas(props) {
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
  * @property {() => null | Geom.Meta} getLastDownMeta
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
+ * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
  * @property {import('@react-three/fiber').CanvasProps['onCreated']} onCreated
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerDown

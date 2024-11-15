@@ -30,6 +30,14 @@ export function getGridPattern(dim, color) {
 }
 
 /**
+ * @param {PointerEvent | React.PointerEvent | React.MouseEvent} e 
+ */
+export function getRelativePointer(e) {
+  const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
+  return { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
+}
+
+/**
  * @param {number} dim
  * @param {string} color
  */
