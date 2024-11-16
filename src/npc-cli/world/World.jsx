@@ -97,7 +97,6 @@ export default function World(props) {
 
     e: /** @type {*} */ (null), // useHandleEvents
     n: /** @type {*} */ {}, // w.npc.npc
-    oneTimeTicks: [],
 
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -136,8 +135,6 @@ export default function World(props) {
       }
 
       state.view.onTick(deltaMs);
-
-      while (state.oneTimeTicks.shift()?.());
     },
     trackHmr(nextHmr) {
       const output = mapValues(state.hmr, (prev, key) => prev !== nextHmr[key])
@@ -386,7 +383,6 @@ export default function World(props) {
  * Events state i.e. useHandleEvents state
  * @property {import("./Npcs").State['npc']} n
  * Shortcut for `w.npc.npc`
- * @property {(() => void)[]} oneTimeTicks
  *
  * @property {TexArray} texDecor
  * @property {TexArray} texObs
