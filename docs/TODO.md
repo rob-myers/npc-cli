@@ -27,7 +27,8 @@
     - ✅ fix object-pick
     - ✅ can specify window structure via `y` and `h`
     - ✅ Obstacles hmr not working i.e. onchange obstacle y=0 or y=0.5
-    - 🚧 need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
+    - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
+    - 🚧 finish lab windows
   - touch indicator for mobile
   - World shows closable message until 1st npc spawn
     - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
