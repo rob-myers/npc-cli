@@ -18,7 +18,7 @@
       "obsHashes": [895128349]
     },
     "bridge--042--8x9": {
-      "outputHash": -1439114245,
+      "outputHash": -299062918,
       "pngHash": 628461375,
       "obsHashes": [-1257084114, 2018744846, 1296475642, -1175340879]
     },
@@ -243,7 +243,7 @@
       "pngHash": -261688393,
       "obsHashes": [-1053519075]
     },
-    "lab--018--4x4": {"outputHash": -607924482, "pngHash": -113261385},
+    "lab--018--4x4": {"outputHash": -33453470, "pngHash": -113261385},
     "lab--023--4x4": {
       "outputHash": 515282103,
       "pngHash": -1594118441,
@@ -7098,7 +7098,7 @@
           "coordinates": [
             [[8.96, 7.51], [8.96, 7.82], [4.5, 7.82], [4.5, 7.51]]
           ],
-          "meta": {"window": true, "frosted": true}
+          "meta": {"window": true, "frosted": true, "y": 0.5, "h": 1.2}
         }
       ],
       "decor": [
@@ -12024,7 +12024,7 @@
               [0.7529, -0.145]
             ]
           ],
-          "meta": {"window": true}
+          "meta": {"window": true, "y": 0.5, "h": 1.5}
         }
       ],
       "decor": [

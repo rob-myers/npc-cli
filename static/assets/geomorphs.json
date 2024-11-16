@@ -17074,7 +17074,7 @@
                 [20.2471, 6.145]
               ]
             ],
-            "meta": {"window": true}
+            "meta": {"window": true, "y": 0.5, "h": 1.5}
           },
           "navRectId": -1,
           "roomIds": [null, null]
@@ -17106,7 +17106,7 @@
                 [11.2506, 6.145]
               ]
             ],
-            "meta": {"window": true}
+            "meta": {"window": true, "y": 0.5, "h": 1.5}
           },
           "navRectId": -1,
           "roomIds": [null, null]
@@ -25989,7 +25989,7 @@
             "coordinates": [
               [[17.96, 9.01], [17.96, 9.32], [13.5, 9.32], [13.5, 9.01]]
             ],
-            "meta": {"window": true, "frosted": true}
+            "meta": {"window": true, "frosted": true, "y": 0.5, "h": 1.2}
           },
           "navRectId": -1,
           "roomIds": [null, null]
