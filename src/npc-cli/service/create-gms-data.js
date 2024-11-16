@@ -44,6 +44,7 @@ export default function createGmsData() {
         ...gm.doors.flatMap(connector => this.getLintelSegs(connector)),
         ...gm.windows.flatMap(connector => this.getWindowSegs(connector)),
       ];
+
       gmData.wallPolyCount = gm.walls.length;
 
       gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
@@ -140,10 +141,11 @@ export default function createGmsData() {
     /** Dispose `GmData` lookup. */
     dispose() {
       for (const gmKey of geomorph.gmKeys) {
-        Object.values(gmsData[gmKey]).forEach(v => {
+        Object.entries(gmsData[gmKey]).forEach(([k, v]) => {
           if (Array.isArray(v)) {
             v.length = 0;
           } else if (v instanceof CanvasRenderingContext2D) {
+            // console.log(`🔔 disposing canvas: ${k}`);
             v.canvas.width = v.canvas.height = 0;
           } else if (v instanceof THREE.Texture) {
             v.dispose();
@@ -221,10 +223,12 @@ export default function createGmsData() {
      */
     getWindowSegs(connector) {
       // (connector => connector.poly.lineSegs.map(seg => ({ seg, meta: connector.meta }))
-      const { lineSegs } = connector.poly;
+      const { poly: { lineSegs }, meta } = connector;
+      const yBot = typeof meta.y === 'number' ? meta.y : 0.1;
+      const yTop = typeof meta.h === 'number' ? yBot + meta.h : wallHeight - 0.1;
       return [
-        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, h: wallHeight * (1/4) } })),
-        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, h: wallHeight * (1/4), y: wallHeight * (3/4) } })),
+        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, y: 0, h: yBot } })),
+        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, y: yTop, h: wallHeight - yTop } })),
       ];
     },
     /**
@@ -281,6 +285,9 @@ const emptyGmData = {
  * @property {import('../graph/room-graph').RoomGraphClass} roomGraph
  * @property {boolean} unseen Has this geomorph never occurred in any map so far?
  * @property {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta; }[]} wallSegs
+ * - `gm.walls` segs
+ * - lintels i.e. 2 segs per door in `gm.doors`
+ * - `gm.windows` segs
  * @property {number} wallPolyCount Number of wall polygons in geomorph, where each wall can have many line segments
  * @property {number[]} wallPolySegCounts Per wall, number of line segments
  */
