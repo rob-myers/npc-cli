@@ -19,9 +19,9 @@
     - ✅ on trigger nearby door, ensure excludeDoor queryFilter includes doors
     - ✅ maintain excludeDoors query filter where seen doorways are excluded
     - ✅ in case agent stops inside a door, prevent them from "moving aside" instead
-  - 🚧 try clean navMesh by defining additional "areas"
-  - avoid spinning targetless NPCs
-  - support windows
+  - ✅ avoid spinning targetless NPCs
+    - collision could cause other to look but only at a "higher level of behaviour"
+  - 🚧 support windows
   - touch indicator for mobile
   - World shows closable message until 1st npc spawn
     - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
@@ -141,6 +141,11 @@ WorldMenu log extras
   - resize observer fits
   - checkboxes: pin ✅ show debug logs 🚧
 
+- could clean navMesh by
+  - adjusting geometry e.g. table in briefing room
+  - adding custom areas
+    - like existing door polys
+    - tried "all room" already
 - BUG obstacles.png slightly different onchange
   - no visible difference, probably due to "quick approach"
 - verify HMR which propagates from assets -> geomorphs.json -> gmsData

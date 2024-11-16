@@ -562,13 +562,13 @@ export class Npc {
     
     this.position.copy(pos);
 
-    if (speed > 0.2) {
-      this.s.lookAngleDst = Math.PI/2 - Math.atan2(vel.z, vel.x);
-    } 
-
     if (this.s.target === null) {
       return;
     }
+
+    if (speed > 0.2) {
+      this.s.lookAngleDst = this.getEulerAngle(Math.atan2(-vel.z, vel.x));
+    } 
 
     const distance = this.s.target.distanceTo(pos);
 
