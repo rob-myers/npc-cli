@@ -126,7 +126,7 @@ export default function createGmsData() {
      */
     computeTextureArrays(prevGmsData) {
       const dimension = floorTextureDimension;
-      const preserve = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length;
+      const preserve = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length && gmsData.texFloor.ct.canvas.width !== 0;
       gmsData.texFloor = preserve ? prevGmsData.texFloor : new TexArray({ ctKey: 'tex-array-floor', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
       gmsData.texCeil = preserve ? prevGmsData.texCeil : new TexArray({ ctKey: 'tex-array-ceil', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
       
