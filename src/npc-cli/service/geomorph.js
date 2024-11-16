@@ -283,11 +283,11 @@ class GeomorphService {
 
     // add two triangles for each doorway (we dup some verts)
     const navDoorwaysOffset = navDecomp.tris.length;
-    // navDoorways.forEach(doorway => {
-    //   const vId = navDecomp.vs.length;
-    //   navDecomp.vs.push(...doorway.outline);
-    //   navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
-    // });
+    navDoorways.forEach(doorway => {
+      const vId = navDecomp.vs.length;
+      navDecomp.vs.push(...doorway.outline);
+      navDecomp.tris.push([vId, vId + 1, vId + 2], [vId + 2, vId + 3, vId]);
+    });
 
     const navRects = navPolyWithDoors.map(x => x.rect.precision(precision));
     navRects.sort(// Smaller rects 1st, else larger overrides (e.g. 102)

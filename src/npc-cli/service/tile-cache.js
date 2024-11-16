@@ -30,7 +30,7 @@ function getTestDoorwayOffMeshConnections(gms) {
   /** @type {import("@recast-navigation/core").OffMeshConnectionParams[]} */
   const offMeshConnectionDefs = [];
   
-  // return offMeshConnectionDefs;
+  return offMeshConnectionDefs;
 
   const center = new Vect();
   const normal = new Vect();
