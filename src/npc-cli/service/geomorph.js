@@ -55,7 +55,8 @@ class GeomorphService {
      * - avoids errors (e.g. for 301).
      * - permits meta propagation e.g. `h` (height), 'hull' (hull wall)
      */
-    const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(symbol.doors, [x]).map((y) =>
+    const connectors = symbol.doors.concat(symbol.windows);
+    const cutWalls = uncutWalls.flatMap((x) => Poly.cutOut(connectors, [x]).map((y) =>
       Object.assign(y, {
         meta: specialWallMetaKeys.some(key => key in x.meta)
           ? x.meta
