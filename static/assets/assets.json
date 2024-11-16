@@ -1,6 +1,6 @@
 {
   "meta": {
-    "101--hull": {"outputHash": 489704064, "pngHash": 568633107},
+    "101--hull": {"outputHash": -1018006266, "pngHash": 568633107},
     "102--hull": {"outputHash": -234772630, "pngHash": 184103855},
     "103--hull": {"outputHash": -1566389117, "pngHash": -1937509879},
     "301--hull": {"outputHash": 1384432740, "pngHash": 787602800},
@@ -18,7 +18,7 @@
       "obsHashes": [895128349]
     },
     "bridge--042--8x9": {
-      "outputHash": -1069513287,
+      "outputHash": 1381819685,
       "pngHash": 628461375,
       "obsHashes": [-1257084114, 2018744846, 1296475642, -1175340879]
     },
@@ -224,9 +224,9 @@
     "fresher--025--3x2": {"outputHash": 1614970316, "pngHash": -1324814803},
     "fresher--036--4x2": {"outputHash": 253826638, "pngHash": 633687707},
     "fuel--010--4x2": {
-      "outputHash": -1254617445,
+      "outputHash": -1083920717,
       "pngHash": 858873613,
-      "obsHashes": [-65124301]
+      "obsHashes": [-2011114281]
     },
     "iris-valves--005--1x1": {
       "outputHash": 545371427,
@@ -374,9 +374,9 @@
       "obsHashes": [-502406732]
     },
     "window--007--0x2.4": {
-      "outputHash": -759157445,
+      "outputHash": 1013458553,
       "pngHash": 1975320118,
-      "obsHashes": [949553693]
+      "obsHashes": [1857929119]
     },
     "demo-map-1": {"outputHash": 1429562441},
     "small-map-1": {"outputHash": 1980923211}
@@ -1193,7 +1193,7 @@
     },
     "obstacleDims": [{"width": 2151, "height": 2080}],
     "maxObstacleDim": {"width": 2151, "height": 2080},
-    "imagesHash": 357669506,
+    "imagesHash": -1080401626,
     "skins": {
       "svgHash": {"cuboid-man": -1087841574, "cuboid-pet": -1224685710},
       "uvMap": {
@@ -2345,7 +2345,7 @@
         },
         {
           "symbolKey": "fuel--010--4x2",
-          "meta": {"key": "fuel--010--4x2", "y": 1.01, "wallsH": 1},
+          "meta": {"key": "fuel--010--4x2", "y": 2},
           "width": 6,
           "height": 3,
           "transform": [1, 0, 0, 1, 0, 0]
@@ -7724,7 +7724,7 @@
         },
         {
           "symbolKey": "window--007--0x2.4",
-          "meta": {"key": "window--007--0x2.4", "wallsY": 0.5, "wallsH": 1.2},
+          "meta": {"key": "window--007--0x2.4", "y": 0.5, "h": 1.2},
           "width": 4.5,
           "height": 0.3,
           "transform": [1, 0, 0, 1, 4.5, 7.5]
@@ -11680,6 +11680,7 @@
           "meta": {
             "obstacle": true,
             "color": "#ddd",
+            "y": 0.01,
             "symKey": "fuel--010--4x2",
             "obsId": 0
           }
@@ -17513,12 +17514,7 @@
               [-0.0175, -0.0275]
             ]
           ],
-          "meta": {
-            "obstacle": true,
-            "y": 0.5,
-            "symKey": "window--007--0x2.4",
-            "obsId": 0
-          }
+          "meta": {"obstacle": true, "symKey": "window--007--0x2.4", "obsId": 0}
         }
       ],
       "walls": [],

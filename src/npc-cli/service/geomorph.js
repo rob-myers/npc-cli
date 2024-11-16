@@ -774,11 +774,6 @@ class GeomorphService {
       sym.addableWalls.filter(({ meta }) => !wallTags || wallTags.some((x) => meta[x] === true))
     );
 
-    // 🚧 walls{Y,H} -> inner{Y,H}
-    let extraWallMeta = /** @type {undefined | Geom.Meta} */ (undefined)
-    typeof meta.wallsY === 'number' && Object.assign(extraWallMeta ??= {}, { y: meta.wallsY });
-    typeof meta.wallsH === 'number' && Object.assign(extraWallMeta ??= {}, { h: meta.wallsH });
-
     return {
       key: sym.key,
       isHull: sym.isHull,
@@ -792,8 +787,9 @@ class GeomorphService {
         // aggregate transform
         ...{ transform: tmpMat2.feedFromArray(transform).preMultiply(x.meta.transform ?? [1, 0, 0, 1, 0, 0]).toArray() },
       })),
-      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1, extraWallMeta)),
-      windows: sym.windows.map((x) => x.cleanClone(tmpMat1, extraWallMeta)),
+      walls: sym.walls.concat(wallsToAdd).map((x) => x.cleanClone(tmpMat1)),
+      // meta.{y,h} define window dimension
+      windows: sym.windows.map((x) => x.cleanClone(tmpMat1, meta)),
       unsorted: sym.unsorted.map((x) => x.cleanClone(tmpMat1)),
     };
   }

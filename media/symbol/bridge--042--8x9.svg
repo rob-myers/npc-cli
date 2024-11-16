@@ -170,7 +170,7 @@
       <title>counter--009--0.4x0.4 y=0.6+0.1</title>
     </use>
     <use href="#symbol-10" width="900" height="60" transform="matrix(1, 0, 0, 1, 900, 1500)">
-      <title>window--007--0x2.4 wallsY=0.5 wallsH=1.2</title>
+      <title>window--007--0x2.4 y=0.5 h=1.2</title>
     </use>
   </g>
   <rect width="20" height="20" style="fill-opacity: 0.5; fill: rgb(0, 255, 0); stroke: rgb(0, 0, 0);" x="1190" y="590">
