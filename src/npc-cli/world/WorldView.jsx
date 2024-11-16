@@ -98,8 +98,7 @@ export default function WorldCanvas(props) {
     handleClickInDebugMode(e) {
       if (w.disabled === true && w.menu.debugWhilePaused === true) {
         if (state.lastDown && state.lastDown?.screenPoint.distanceTo(getRelativePointer(e)) < 1) {
-          w.onTick();
-          cancelAnimationFrame(w.reqAnimId);
+          w.onDebugTick();
           window.setTimeout(() => w.r3f.advance(Date.now()));
         }
       }

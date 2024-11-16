@@ -25,7 +25,8 @@
     - ✅ still need wall, implicit via window
     - ✅ exclude complex outer window: `window` -> `external-window`
     - ✅ fix object-pick
-    - 🚧 need tops e.g. via obstacle in symbol `window--007--0x2.4`
+    - ✅ can specify window structure via `y` and `h`
+    - 🚧 need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
   - touch indicator for mobile
   - World shows closable message until 1st npc spawn
     - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
@@ -36,10 +37,14 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
+- ✅ pause/resume should not progress motion along navMesh
 - ✅ can spawn whilst in debug mode
   - pointerup triggers since update/render
 
-- Decor: hmr issue i.e. disappears
+- 🚧 Decor/Doors: hmr issue i.e. disappears
+  - ℹ️ not dispose
+  - ✅ related to TexArray
+  - maybe fixed
 
 - ❌ try navMesh sans doorways using off-mesh connections instead
   - ✅ add off-mesh connections per non-hull doorway

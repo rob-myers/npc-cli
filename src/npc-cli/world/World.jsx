@@ -116,6 +116,9 @@ export default function World(props) {
       });
       state.npc?.restore();
     },
+    onDebugTick() {
+      state.npc.onTick(1000 / 60);
+    },
     onTick() {
       state.reqAnimId = requestAnimationFrame(state.onTick);
       state.timer.update();
@@ -297,7 +300,7 @@ export default function World(props) {
     }
   }, [query.data === false]);
 
-  React.useEffect(() => {// enable/disable animation
+  React.useEffect(() => {// enable/disable
     state.timer.reset();
     if (!state.disabled) {
       state.onTick();
@@ -395,6 +398,7 @@ export default function World(props) {
  *
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
+ * @property {() => void} onDebugTick
  * @property {() => void} onTick
  * @property {(next: State['hmr']) => Record<keyof State['hmr'], boolean>} trackHmr
  * Has function `createGmsData` changed?
