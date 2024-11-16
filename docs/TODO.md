@@ -22,6 +22,10 @@
   - ✅ avoid spinning targetless NPCs
     - collision could cause other to look but only at a "higher level of behaviour"
   - 🚧 support windows
+    - ✅ still need wall, implicit via window
+    - ✅ exclude complex outer window: `window` -> `external-window`
+    - ✅ fix object-pick
+    - 🚧 need tops e.g. via obstacle in symbol `window--007--0x2.4`
   - touch indicator for mobile
   - World shows closable message until 1st npc spawn
     - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
@@ -34,6 +38,8 @@
 
 - ✅ can spawn whilst in debug mode
   - pointerup triggers since update/render
+
+- Decor: hmr issue i.e. disappears
 
 - ❌ try navMesh sans doorways using off-mesh connections instead
   - ✅ add off-mesh connections per non-hull doorway
@@ -142,6 +148,7 @@ WorldMenu log extras
   - checkboxes: pin ✅ show debug logs 🚧
 
 - could clean navMesh by
+  - ℹ️ ongoing problem; we are "composing" recast-detour
   - adjusting geometry e.g. table in briefing room
   - adding custom areas
     - like existing door polys

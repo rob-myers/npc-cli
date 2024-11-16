@@ -42,13 +42,17 @@ export default function createGmsData() {
       gmData.wallSegs = [
         ...gm.walls.flatMap((x) => x.lineSegs.map(seg => ({ seg, meta: x.meta }))),
         ...gm.doors.flatMap(connector => this.getLintelSegs(connector)),
+        ...gm.windows.flatMap(connector => this.getWindowSegs(connector)),
       ];
       gmData.wallPolyCount = gm.walls.length;
+
       gmData.wallPolySegCounts = gm.walls.map(({ outline, holes }) =>
-        outline.length // main walls
-        + holes.reduce((sum, hole) => sum + hole.length, 0) // inner walls
+        outline.length + holes.reduce((sum, hole) => sum + hole.length, 0)
       );
-      gmData.wallPolySegCounts.push(2 * gm.doors.length); // lintels
+      // lintels (2 quads per door):
+      gmData.wallPolySegCounts.push(2 * gm.doors.length);
+      // windows (upper/lower, may not be quads):
+      gmData.wallPolySegCounts.push(2 * gm.windows.reduce((sum, x) => sum + x.poly.outline.length, 0));
 
       const nonHullWallsTouchCeil = gm.walls.filter(x => !x.meta.hull &&
         (x.meta.h === undefined || (x.meta.y + x.meta.h === wallHeight)) // touches ceiling
@@ -209,6 +213,18 @@ export default function createGmsData() {
         ),
         meta,
       }));
+    },
+    /**
+     * @param {Geomorph.Connector} connector 
+     * @returns {{ seg: [Geom.Vect, Geom.Vect]; meta: Geom.Meta }[]}
+     */
+    getWindowSegs(connector) {
+      // (connector => connector.poly.lineSegs.map(seg => ({ seg, meta: connector.meta }))
+      const { lineSegs } = connector.poly;
+      return [
+        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, h: wallHeight * (1/4) } })),
+        ...lineSegs.map(seg => ({ seg, meta: {...connector.meta, h: wallHeight * (1/4), y: wallHeight * (3/4) } })),
+      ];
     },
     /**
      * @param {Geomorph.GeomorphKey} gmKey 

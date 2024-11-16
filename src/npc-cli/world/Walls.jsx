@@ -33,7 +33,17 @@ export default function Walls(props) {
       const center = wallSeg.seg[0].clone().add(wallSeg.seg[1]).scale(0.5);
       const roomId = w.gmsData.findRoomIdContaining(gm, center, true);
       
-      // compute gm.walls[wallId][wallSegId]
+      /**
+       * Find `gm.walls[wallId][wallSegId]` or lintel (above door) or window,
+       * 
+       * ```js
+       * gmData.wallPolySegCounts ~ [
+       *   ...wallSegCounts,
+       *   lintelSegCounts,
+       *   ...windowSegCounts
+       * ]
+       * ```
+       */
       let wallSegId = wallSegsId;
       const wallId = gmData.wallPolySegCounts.findIndex(
         segCount => wallSegId < segCount ? true : (wallSegId -= segCount, false)
@@ -42,10 +52,17 @@ export default function Walls(props) {
 
       if (wall !== undefined) {
         return { gmId, ...wall.meta, roomId, instanceId };
-      } else {
+      }
+      
+      if (wallId === gm.walls.length) {
         const doorId = Math.floor(wallSegId / 2); // 2 lintels per door
         return { gmId, wall: true, lintel: true, roomId, doorId, instanceId };
       }
+      
+      let windowSegId = wallId - gm.walls.length;
+      const windowId = gm.windows.findIndex(({ poly: { outline } }) => windowSegId < outline.length ? true : (windowSegId -= outline.length, false));
+
+      return { gmId, wall: true, window: true, roomId, windowId, instanceId };
     },
     getWallMat([u, v], transform, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
