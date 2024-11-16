@@ -35,10 +35,10 @@
 - ✅ can spawn whilst in debug mode
   - pointerup triggers since update/render
 
-- ❌ try navMesh sans doorways using off-mesh connections instead
+- 🚧 try navMesh sans doorways using off-mesh connections instead
   - ✅ add off-mesh connections per non-hull doorway
-  - ❌ detect when enter off-mesh connection
-  - ❌ try using requestMoveVelocity
+  - 🚧 detect when enter off-mesh connection
+  - 🚧 try using requestMoveVelocity
   - ℹ️ unnatural navigation + non-trivial to change on-connection speed
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?

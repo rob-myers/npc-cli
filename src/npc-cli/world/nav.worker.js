@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
 
-import { alloc, error, info, debug, warn } from "../service/generic";
+import { alloc, error, info, debug, warn, removeDups } from "../service/generic";
 import { geomorph } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig, getBasicTileCacheMeshProcess } from "../service/recast-detour";
@@ -39,17 +39,16 @@ async function handleMessages(e) {
         mesh.applyMatrix4(mat4);
         mesh.updateMatrixWorld();
         
-        // 🚧 avoid steiner points via extra areas?
-        const { tris, vs, tris: { length: numTris }  } = navDecomp;
-        const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4))
-        for (let i = navDoorwaysOffset; i < numTris; i++) {
-          customAreaDefs.push({
-            areaId: 1, // 🚧
-            areas: [
-              { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }
-            ]
-          });
-        }
+        // const { tris, vs, tris: { length: numTris } } = navDecomp;
+        // const allVerts = vs.map(v => (new THREE.Vector3(v.x, 0, v.y)).applyMatrix4(mat4))
+        // for (let i = navDoorwaysOffset; i < numTris; i++) {
+        //   customAreaDefs.push({
+        //     areaId: 1, // 🚧
+        //     areas: [
+        //       { hmin: 0, hmax: 0.02, verts: tris[i].map(id => allVerts[id]) }
+        //     ]
+        //   });
+        // }
         return mesh;
       });
 

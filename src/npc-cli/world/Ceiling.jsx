@@ -84,6 +84,7 @@ export default function Ceiling(props) {
   w.ceil = state;
 
   React.useEffect(() => {
+    // 🚧 on edit const, this is triggered before texArray ready
     state.draw();
     state.positionInstances();
   }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);

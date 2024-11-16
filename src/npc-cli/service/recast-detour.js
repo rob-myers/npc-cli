@@ -17,10 +17,6 @@ export function disposeCrowd(crowd, navMesh) {
  */
 export function getBasicTileCacheMeshProcess() {
   return new TileCacheMeshProcess((navMeshCreateParams, polyAreas, polyFlags) => {
-    // info({
-    //   polyCount: navMeshCreateParams.polyCount(),
-    //   vertCount: navMeshCreateParams.vertCount(),
-    // });
     for (let i = 0; i < navMeshCreateParams.polyCount(); ++i) {
       polyAreas.set(i, 0);
       // polyFlags.set(i, 1);
@@ -46,9 +42,9 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
-    maxSimplificationError: 0.95,
+    // maxSimplificationError: 0.95,
     walkableRadius: 0,
-    detailSampleMaxError: 0,
+    // detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
   };
 }
@@ -368,6 +364,7 @@ export function customGenerateTileCache(
       config.walkableClimb,
       heightfield
     );
+    // 🔔 removing this improve edge accuracy, although "outset too far"
     filterLedgeSpans(
       buildContext,
       config.walkableHeight,
