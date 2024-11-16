@@ -680,26 +680,21 @@ class geomServiceClass {
   /**
    * Join disjoint triangulations
    * @param {Geom.Triangulation[]} triangulations
-   * @returns {Geom.Triangulation}
+   * @returns {Geom.Triangulation & { tOffsets: number[] }}
    */
   joinTriangulations(triangulations) {
-    if (triangulations.length === 1) return triangulations[0];
-    /** @type {Vect[]} */
-    const vs = [];
-    /** @type {[number, number, number][]} */
-    const tris = [];
-    let offset = 0;
+    const vs = /** @type {Vect[]} */ ([]);
+    const tris = /** @type {[number, number, number][]} */ ([]);
+    const tOffsets = /** @type {number[]} */ ([]);
+    let vOffset = 0;
+
     for (const decomp of triangulations) {
       vs.push(...decomp.vs);
-      tris.push(
-        ...decomp.tris.map(
-          // eslint-disable-next-line no-loop-func
-          (tri) => /** @type {[number, number, number]} */ (tri.map((x) => (x += offset)))
-        )
-      );
-      offset += decomp.vs.length;
+      tOffsets.push(tris.length);
+      tris.push(...decomp.tris.map((tri) => /** @type {[number, number, number]} */ (tri.map((x) => (x += vOffset)))));
+      vOffset += decomp.vs.length;
     }
-    return { vs, tris };
+    return { vs, tris, tOffsets };
   }
 
   /**
