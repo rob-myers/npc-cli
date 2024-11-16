@@ -88,6 +88,7 @@ class GeomorphService {
 
     const navPolyWithDoors = Poly.cutOut([
       ...cutWalls.flatMap((x) => geom.createOutset(x, wallOutset)),
+      ...symbol.windows,
       ...symbolObstacles.flatMap((x) => geom.createOutset(x,
         typeof x.meta['nav-outset'] === 'number' ? x.meta['nav-outset'] * sguToWorldScale : obstacleOutset
       )),
