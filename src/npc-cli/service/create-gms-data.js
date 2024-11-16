@@ -20,9 +20,9 @@ export default function createGmsData() {
     /** This induces the floor/ceil texture array ordering */
     seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
     /** texture array */
-    texFloor: /** @type {TexArray} */ ({}),
+    texFloor: emptyTexArray,
     /** texture array */
-    texCeil: /** @type {TexArray} */ ({}),
+    texCeil: emptyTexArray,
     /** Total number of walls, where each wall is a single quad:  */
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */

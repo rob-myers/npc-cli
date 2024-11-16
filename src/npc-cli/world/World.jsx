@@ -285,7 +285,11 @@ export default function World(props) {
     // refetchOnWindowFocus: false,
     enabled: state.threeReady, // 🔔 fixes horrible reset issue on mobile
     gcTime: 0, // concurrent queries with different mapKey can break HMR
-    // throwOnError: true, // breaks on restart dev env
+    /**
+     * 🔔 Very useful for debugging
+     * 🔔 Breaks on restart dev env
+     */
+    throwOnError: true,
     networkMode: isDevelopment() ? 'always' : 'online',
   });
 

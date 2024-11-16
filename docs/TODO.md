@@ -26,6 +26,7 @@
     - ✅ exclude complex outer window: `window` -> `external-window`
     - ✅ fix object-pick
     - ✅ can specify window structure via `y` and `h`
+    - ✅ Obstacles hmr not working i.e. onchange obstacle y=0 or y=0.5
     - 🚧 need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
   - touch indicator for mobile
   - World shows closable message until 1st npc spawn
@@ -41,10 +42,11 @@
 - ✅ can spawn whilst in debug mode
   - pointerup triggers since update/render
 
-- 🚧 Decor/Doors: hmr issue i.e. disappears
+- 🚧 Decor/Doors, Floor/Ceil: hmr issue i.e. disappears
   - ℹ️ not dispose
   - ✅ related to TexArray
-  - maybe fixed
+  - maybe fixed for Decor/Doors (0 width canvas check)
+  - maybe fixed for Floor/Ceil (0 width canvas check)
 
 - ❌ try navMesh sans doorways using off-mesh connections instead
   - ✅ add off-mesh connections per non-hull doorway
