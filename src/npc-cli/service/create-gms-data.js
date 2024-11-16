@@ -60,6 +60,7 @@ export default function createGmsData() {
       gmData.tops = {
         broad: gm.walls.filter(x => x.meta.broad === true),
         door: gm.hullDoors.map(door => door.computeThinPoly()),
+        window: gm.windows.map(window => window.poly),
         nonHull: Poly.union(nonHullWallsTouchCeil)
           .concat(gm.doors.map(door => door.computeThinPoly()))
           .flatMap(x => geom.createInset(x, 0.005)),
@@ -254,7 +255,7 @@ const emptyGmData = {
   navPoly: undefined,
   polyDecals: [],
   roomGraph: new RoomGraphClass(),
-  tops: { broad: [], door: [], nonHull: [] },
+  tops: { broad: [], door: [], nonHull: [], window: [] },
   unseen: true,
   wallPolyCount: 0,
   wallPolySegCounts: [],
@@ -275,7 +276,7 @@ const emptyGmData = {
  * @property {[Geom.Vect, Geom.Vect][]} doorSegs
  * @property {CanvasRenderingContext2D} hitCtxt
  * @property {import('three').BufferGeometry} [navPoly] Debug only
- * @property {{ broad: Geom.Poly[]; door: Geom.Poly[]; nonHull: Geom.Poly[] }} tops
+ * @property {{ broad: Geom.Poly[]; door: Geom.Poly[]; nonHull: Geom.Poly[]; window: Geom.Poly[]; }} tops
  * @property {Geom.Poly[]} polyDecals
  * @property {import('../graph/room-graph').RoomGraphClass} roomGraph
  * @property {boolean} unseen Has this geomorph never occurred in any map so far?
