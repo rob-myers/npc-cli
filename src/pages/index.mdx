@@ -18,7 +18,7 @@ import ScrollTo from 'src/components/ScrollTo';
 
 ## Intent
 
-This website focuses on a fun yet difficult problem. 
+This website focuses on a fun but difficult problem. 
 
 <Card id="underlying-problem"> 
 **Underlying Problem**
@@ -28,15 +28,17 @@ such that the Player cannot distinguish any Non-Player Character <SideNote>A "No
 from human-controlled characters.
 </Card>
 
-Video games are entertaining simulations of _sensation_ (sight, sounds) and _action_ (character controls, collision detection).
-We'll work in 3D, moving many characters around many rooms.
-What about the other terminology?
-Well, the _Player_ is both (a) the human experiencing the simulation, (b) their respective simulated character.
-Then a Non-Player character (_NPC_) is a simulated character not controlled by the Player.
+Let's clarify our terminology.
+_Video games_ are entertaining simulations of sensation (sight, sounds) and action (character controls, collision detection).
+The _Player_ is both (a) the human experiencing the simulation, (b) their respective simulated character.
+A _Non-Player character_ (a.k.a. _NPC_) is a simulated character not controlled by the Player.
 The Player observes and interacts with the NPCs,
 and we're interested in improving the quality of these observations and interactions.
 
-Then the underlying problem requires each NPC to behave as if controlled by a human playing a particular role.
+🚧 screenshot with caption
+{/* We'll work in 3D, moving many characters around many rooms. */}
+
+The underlying problem requires each NPC to behave as if controlled by a human playing a particular role.
 Individuals needn't be sophisticated (e.g. multiple choice dialogue), but they must collectively interact just like humans would.
 
 Ok, but why this particular problem?

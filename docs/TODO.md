@@ -12,12 +12,14 @@
   - 🚧 screenshots in 1st blog
     - ✅ screenshot data-url i.e. `w view.toDataURL`
     - ✅ open in browser i.e. `w view.openSnapshot`
-    - ...
+    - ℹ️ our api only captures the canvas e.g. no ContextMenu, logger, Tabs, tty etc.
+    - ℹ️ chrome devtool supports select node then >capture node screenshot
+    - 🚧 1st image goes after explanation of "underlying problem"
   - blog has ui to mutate Viewer
     - can totally overwrite
     - can change World mapKey
     - can change tty env (e.g. PROFILE) and reboot
-  - clean up profile-1
+  - 🚧 clean up profile-1
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
