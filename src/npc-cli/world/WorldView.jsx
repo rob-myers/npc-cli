@@ -7,7 +7,7 @@ import { damp } from "maath/easing";
 
 import { testNever } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
-import { getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
+import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
 import { WorldContext } from "./world-context.js";
@@ -267,6 +267,9 @@ export default function WorldCanvas(props) {
         w.r3f.camera.updateProjectionMatrix();
       }
     },
+    openSnapshot(type, quality) {
+      window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
+    },
     onWheel(e) {
       if (w.menu.ctOpen === true) {
         w.menu.hide();
@@ -344,6 +347,10 @@ export default function WorldCanvas(props) {
         }
       }
     },
+    toDataURL(type, quality) {
+      w.r3f.advance(Date.now());
+      return state.canvas.toDataURL(type, quality);
+    },
   }));
 
   const w = React.useContext(WorldContext);
@@ -369,6 +376,7 @@ export default function WorldCanvas(props) {
         toneMapping: 3,
         toneMappingExposure: 1,
         logarithmicDepthBuffer: true,
+        // preserveDrawingBuffer: true,
       }}
       onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}
@@ -460,10 +468,12 @@ export default function WorldCanvas(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
  * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
+ * @property {(type?: string, quality?: any) => void} openSnapshot
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
  * @property {(e: NPC.PointerDownEvent) => void} setLastDown
+ * @property {HTMLCanvasElement['toDataURL']} toDataURL
  */
 
 const canvasCss = css`

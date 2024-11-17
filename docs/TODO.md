@@ -10,6 +10,9 @@
 
 - 🚧 integrate Viewer into blog
   - 🚧 screenshots in 1st blog
+    - ✅ screenshot data-url i.e. `w view.toDataURL`
+    - ✅ open in browser i.e. `w view.openSnapshot`
+    - ...
   - blog has ui to mutate Viewer
     - can totally overwrite
     - can change World mapKey
