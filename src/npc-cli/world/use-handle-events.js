@@ -19,7 +19,7 @@ export default function useHandleEvents(w) {
     npcToDoor: {},
     npcToRoom: new Map(),
     roomToNpcs: [],
-    shouldIgnoreLongClick: undefined,
+    longClickPreventers: [],
 
     canCloseDoor(door) {
       const closeNpcs = state.doorToNpc[door.gdKey];
@@ -175,7 +175,7 @@ export default function useHandleEvents(w) {
           break;
         case "long-pointerdown": { // toggle ContextMenu
           const lastDownMeta = w.view.getLastDownMeta();
-          if (lastDownMeta !== null && state.shouldIgnoreLongClick?.(lastDownMeta)) {
+          if (lastDownMeta !== null && state.longClickPreventers.some(preventer => preventer(lastDownMeta))) {
             return;
           }
 
@@ -564,7 +564,8 @@ export default function useHandleEvents(w) {
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoor
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
- * @property {undefined | ((lastDownMeta: Geom.Meta) => boolean)} shouldIgnoreLongClick
+ * @property {((lastDownMeta: Geom.Meta) => boolean)[]} longClickPreventers
+ * Lock clicks are ignored if any of these functions returns `true`.
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
