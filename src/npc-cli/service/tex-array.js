@@ -33,16 +33,6 @@ export class TexArray {
     tex.format = THREE.RGBAFormat;
     tex.type = THREE.UnsignedByteType;
     this.tex = tex;
-
-    // const firstTex = textures[0].tex;
-    // tex.anisotropy = firstTex.anisotropy;
-    // tex.minFilter = firstTex.minFilter;
-    // tex.magFilter = firstTex.magFilter;
-    // tex.wrapS = firstTex.wrapS;
-    // tex.wrapT = firstTex.wrapT;
-    // tex.encoding = THREE.sRGBEncoding;
-    // tex.generateMipmaps = true;
-    // tex.needsUpdate = true;
   }
 
   dispose() {

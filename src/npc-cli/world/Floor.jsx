@@ -7,7 +7,7 @@ import { pause } from "../service/generic";
 import { getGridPattern, drawCircle, drawPolygons, drawSimplePoly } from "../service/dom";
 import { geomorph } from "../service/geomorph";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
-import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 
@@ -150,7 +150,7 @@ export default function Floor(props) {
     state.draw();
     state.positionInstances();
     state.addUvs();
-  }, [w.mapKey, w.hash.full]);
+  }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);
 
   return (
     <instancedMesh
@@ -164,7 +164,7 @@ export default function Floor(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.gmsData.texFloor.tex ?? emptyDataArrayTexture}
+        atlas={w.gmsData.texFloor.tex}
         depthWrite={false} // fix z-fighting
         // diffuse={[1, 1, 0.8]}
         diffuse={[1, 1, 1]}
