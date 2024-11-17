@@ -96,11 +96,15 @@ export default function WorldCanvas(props) {
       }`);
     },
     handleClickInDebugMode(e) {
-      if (w.disabled === true && w.menu.debugWhilePaused === true) {
-        if (state.lastDown && state.lastDown?.screenPoint.distanceTo(getRelativePointer(e)) < 1) {
-          w.onDebugTick();
-          window.setTimeout(() => w.r3f.advance(Date.now()));
-        }
+      if (
+        w.disabled === true
+        && w.menu.debugWhilePaused === true
+        && state.lastDown !== undefined
+        && state.lastDown.longDown === false
+        && state.lastDown.screenPoint.distanceTo(getRelativePointer(e)) < 1
+      ) {
+        w.onDebugTick();
+        window.setTimeout(() => w.r3f.advance(Date.now()));
       }
     },
     onChangeControls(e) {
@@ -195,6 +199,7 @@ export default function WorldCanvas(props) {
         screenPoint: state.lastScreenPoint.clone(),
         longTimeoutId: state.down || cameraKey ? 0 : window.setTimeout(() => {
           state.justLongDown = true;
+          state.lastDown && (state.lastDown.longDown = true);
           w.events.next(state.getWorldPointerEvent({
             key: "long-pointerdown",
             event: e,
@@ -328,6 +333,7 @@ export default function WorldCanvas(props) {
     setLastDown(e) {
       if (e.is3d === true || !state.lastDown) {
         state.lastDown = {
+          longDown: false,
           screenPoint: Vect.from(e.screenPoint),
           threeD: e.is3d === true ? { point: new THREE.Vector3().copy(e.position), meta: e.meta } : null,
         };
@@ -430,7 +436,7 @@ export default function WorldCanvas(props) {
  * @property {{ pickStart: number; pickEnd: number; pointerDown: number; pointerUp: number; }} epoch
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
- * @property {{ screenPoint: Geom.Vect; threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
+ * @property {{ longDown: boolean; screenPoint: Geom.Vect; threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
  * @property {Geom.Vect} lastScreenPoint
