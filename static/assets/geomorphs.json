@@ -36507,7 +36507,13 @@
                 [2.2125, -0.15]
               ]
             ],
-            "meta": {"window": true, "hull": true, "auto": true}
+            "meta": {
+              "window": true,
+              "hull": true,
+              "y": 0.25,
+              "h": 1.5,
+              "auto": true
+            }
           },
           "navRectId": -1,
           "roomIds": [null, null]
@@ -36523,7 +36529,13 @@
                 [6.7125, -0.15]
               ]
             ],
-            "meta": {"window": true, "hull": true, "auto": true}
+            "meta": {
+              "window": true,
+              "hull": true,
+              "y": 0.5,
+              "h": 1,
+              "auto": true
+            }
           },
           "navRectId": -1,
           "roomIds": [null, null]
@@ -36539,7 +36551,13 @@
                 [9.7125, -0.15]
               ]
             ],
-            "meta": {"window": true, "hull": true, "auto": true}
+            "meta": {
+              "window": true,
+              "hull": true,
+              "y": 0.5,
+              "h": 1,
+              "auto": true
+            }
           },
           "navRectId": -1,
           "roomIds": [null, null]
@@ -36555,7 +36573,13 @@
                 [12.7125, -0.15]
               ]
             ],
-            "meta": {"window": true, "hull": true, "auto": true}
+            "meta": {
+              "window": true,
+              "hull": true,
+              "y": 0.5,
+              "h": 1,
+              "auto": true
+            }
           },
           "navRectId": -1,
           "roomIds": [null, null]
@@ -36571,7 +36595,13 @@
                 [15.7125, -0.15]
               ]
             ],
-            "meta": {"window": true, "hull": true, "auto": true}
+            "meta": {
+              "window": true,
+              "hull": true,
+              "y": 0.5,
+              "h": 1,
+              "auto": true
+            }
           },
           "navRectId": -1,
           "roomIds": [null, null]
@@ -36587,7 +36617,13 @@
                 [21.7125, -0.15]
               ]
             ],
-            "meta": {"window": true, "hull": true, "auto": true}
+            "meta": {
+              "window": true,
+              "hull": true,
+              "y": 0.25,
+              "h": 1.5,
+              "auto": true
+            }
           },
           "navRectId": -1,
           "roomIds": [null, null]
