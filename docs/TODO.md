@@ -30,8 +30,13 @@
     - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
     - 🚧 finish lab windows
   - touch indicator for mobile
-  - World shows closable message until 1st npc spawn
+  - can open doors using switches
+  - World shows closable message until 1st resolved awaitWorld
     - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
+  - detect when moving npc is being obstructed by a stationary npc
+    - e.g. via npc neighbours + closeness check
+    - ℹ️ could use event to reposition stationary npc (via process)
+  - auto-open accessible door earlier
   - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
   - redo cuboid-pet
   - represent skins as single TexArray
@@ -59,6 +64,8 @@
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
   - better way?
+- create recast-navigation-js discussion
+  - How to use `state.crowd.raw.setObstacleAvoidanceParams(1, new Recast.dtObstacleAvoidanceParams())`?
 - hmr sometimes breaks npc opacity/selector
 - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
