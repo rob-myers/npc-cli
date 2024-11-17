@@ -267,7 +267,7 @@ export default function WorldCanvas(props) {
         w.r3f.camera.updateProjectionMatrix();
       }
     },
-    openSnapshot(type, quality) {
+    openSnapshot(type = 'image/webp', quality) {
       window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
     },
     onWheel(e) {
