@@ -31,7 +31,6 @@ click --long | map --forever 'async (x, {home, w}) => {
 }' &
 
 # click navmesh to move selectedNpcKey
-# click | filter meta.nav | walkTest &
 click | filter meta.floor | map --forever '(input, { w, home }) => {
   const npc = w.npc.npc[home.selectedNpcKey];
   npc.s.run = input.keys?.includes("shift") ?? false;
