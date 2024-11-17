@@ -11,7 +11,6 @@ w npc.npc.rob.setLabel Robbo
 w e.changeNpcAccess rob . +
 
 # write selectedNpcKey on click npc
-# click | map meta.npcKey >selectedNpcKey &
 click | filter meta.npcKey | map '({ meta }, { home, w }) => {
   w.npc.npc[home.selectedNpcKey]?.showSelector(false);
   w.npc.npc[meta.npcKey]?.showSelector(true);
@@ -24,21 +23,6 @@ click | map '({meta}, {w}) => {
   meta.door && w.e.toggleDoor(meta.gdKey)
 }' &
 
-# click --long | run '({ api, home, w, datum }) {
-#   while ((datum = await api.read()) !== api.eof) {
-#     const npc = w.npc.npc[home.selectedNpcKey];
-#     await npc.do(datum).catch(() => {});
-#   }
-# }' &
-# click --long | while take 1 >lastClick; do
-#   selectedNpc=$( w npc.npc.${selectedNpcKey} )
-#   # lastClick.meta.floor exists AND selectedNpc.s.doMeta falsy
-#   if get lastClick/meta/floor && ! test $( get selectedNpc/s/doMeta ); then
-#     selectedNpc | map '(npc, {home}) => npc.look(home.lastClick)'
-#   else
-#     selectedNpc | map '(npc, {home}) => npc.do(home.lastClick)'
-#   fi
-# done &
 click --long | map --forever 'async (x, {home, w}) => {
   const npc = w.npc.npc[home.selectedNpcKey];
   if (x.meta.floor === true && !npc.s.doMeta) npc.look(x);
@@ -46,7 +30,6 @@ click --long | map --forever 'async (x, {home, w}) => {
 }' &
 
 # click navmesh to move selectedNpcKey
-# click | filter meta.nav | walkTest &
 click | filter meta.floor | map --forever '(input, { w, home }) => {
   const npc = w.npc.npc[home.selectedNpcKey];
   npc.s.run = input.keys?.includes("shift") ?? false;

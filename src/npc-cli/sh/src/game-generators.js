@@ -125,20 +125,6 @@ export async function* selectPolysDemo({ w, args }) {
 }
 
 /**
- * 🔔 non-generators are interpreted as `map '{myFunction}'`
- * @param {NPC.ClickMeta} input
- * @param {RunArg} ctxt
- */
-export async function walkTest(input, { w, home })  {
-  const npc = w.n[home.selectedNpcKey];
-  if (npc) {
-    npc.s.run = input.keys?.includes("shift") ?? false;
-    // do not await so can override
-    npc.moveTo(input).catch(() => {});
-  }
-}
-
-/**
  * Usage:
  * ```sh
  * w

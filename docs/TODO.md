@@ -9,8 +9,11 @@
 ## WIP
 
 - 🚧 integrate Viewer into blog
-  - screenshots in 1st blog
-  - blog has ui to set Viewer
+  - 🚧 screenshots in 1st blog
+  - blog has ui to mutate Viewer
+    - can totally overwrite
+    - can change World mapKey
+    - can change tty env (e.g. PROFILE) and reboot
   - clean up profile-1
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
@@ -307,6 +310,69 @@ WorldMenu log extras
 - install cypress to test terminal
 - netlify site `npc-cli` at https://lastredoubt.co
 
+
+## Scratch Pad
+
+### Terminology
+
+The system involves three parties:
+- the _Player_.
+- the _Game Master_ (GM).
+- the _Environment_ (Env).
+
+The Player is human.
+The GM is either human or a computer program.
+The Env is the underlying computer program where games are played/created by the Player/GM.
+
+### Recast Detour Analysis
+
+- https://recastnav.com/
+- https://github.com/isaac-mason/recast-navigation-js/tree/main
+- https://github.com/recastnavigation/recastnavigation/issues/641#issuecomment-1622583548
+
+### Shell and JavaScript
+
+```sh
+# represent selected npc
+click | map meta.npcKey >selectedNpcKey &
+
+# selected npc does on long click
+click --long | run '({ api, home, w, datum }) {
+  while ((datum = await api.read()) !== api.eof) {
+    const npc = w.npc.npc[home.selectedNpcKey];
+    await npc.do(datum).catch(() => {});
+  }
+}' &
+
+# selected npc does/look on long click
+click --long | while take 1 >lastClick; do
+  selectedNpc=$( w npc.npc.${selectedNpcKey} )
+  if get lastClick/meta/floor && ! test $( get selectedNpc/s/doMeta ); then
+    selectedNpc | map '(npc, {home}) => npc.look(home.lastClick)'
+  else
+    selectedNpc | map '(npc, {home}) => npc.do(home.lastClick)'
+  fi
+done &
+
+click | filter meta.nav | walkTest &
+
+```
+
+```js
+/**
+ * 🔔 non-generators are interpreted as `map '{myFunction}'`
+ * @param {NPC.ClickMeta} input
+ * @param {RunArg} ctxt
+ */
+export async function walkTest(input, { w, home })  {
+  const npc = w.n[home.selectedNpcKey];
+  if (npc) {
+    npc.s.run = input.keys?.includes("shift") ?? false;
+    // do not await so can override
+    npc.moveTo(input).catch(() => {});
+  }
+}
+```
 
 ## Done
 
