@@ -8,6 +8,13 @@
 
 ## WIP
 
+- 🚧 integrate Viewer into blog
+  - screenshots in 1st blog
+  - blog has ui to set Viewer
+  - clean up profile-1
+    - e.g. `spawn rob $( click 1 ) --degrees=90`
+    - e.g. `npc rob --showSelector=true --setLabel=Robbo`
+
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
@@ -48,6 +55,8 @@
   - clean overwritten attributes using patched three.js:
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
+
+
 
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
