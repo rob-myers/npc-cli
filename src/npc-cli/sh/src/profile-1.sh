@@ -18,10 +18,11 @@ click | filter meta.npcKey | map '({ meta }, { home, w }) => {
 }' &
 
 # open door on click
-# 🚧 use switch instead of door
 click | map '({meta}, {w}) => {
   meta.door && w.e.toggleDoor(meta.gdKey)
 }' &
+
+w | map 'w => w.e.pressMenuFilters.push( (meta) => meta.do || meta.floor )'
 
 click --long | map --forever 'async (x, {home, w}) => {
   const npc = w.npc.npc[home.selectedNpcKey];
@@ -30,14 +31,12 @@ click --long | map --forever 'async (x, {home, w}) => {
 }' &
 
 # click navmesh to move selectedNpcKey
+# click | filter meta.nav | walkTest &
 click | filter meta.floor | map --forever '(input, { w, home }) => {
   const npc = w.npc.npc[home.selectedNpcKey];
   npc.s.run = input.keys?.includes("shift") ?? false;
   npc.moveTo(input).catch(() => {}); // can override
 }' &
 
-w update 'w => {
-  w.e.pressMenuFilters.push((meta) => meta.do || meta.floor);
-  w.decor.showLabels = true;
-  w.view.targetFov = 20;
-}'
+w update 'w => w.decor.showLabels = true'
+w update 'w => w.view.targetFov = 20'
