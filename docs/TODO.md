@@ -37,29 +37,18 @@
     - e.g. via npc neighbours + closeness check
     - ℹ️ could use event to reposition stationary npc (via process)
   - auto-open accessible door earlier
+    - e.g. check up to two corners in this case
+  - can only spawn onto navigable floor or do point
+  - spawn onto do point uses orient
   - redo cuboid-man: lower-spine-bone (for sit), independent face quad, clean skin
   - redo cuboid-pet
   - represent skins as single TexArray
+  - improve alternate character faces
+  - improve alternate character icons
   - clean overwritten attributes using patched three.js:
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
-- ✅ pause/resume should not progress motion along navMesh
-- ✅ can spawn whilst in debug mode
-  - pointerup triggers since update/render
-
-- 🚧 Decor/Doors, Floor/Ceil: hmr issue i.e. disappears
-  - ℹ️ not dispose
-  - ✅ related to TexArray
-  - maybe fixed for Decor/Doors (0 width canvas check)
-  - maybe fixed for Floor/Ceil (0 width canvas check)
-
-- ❌ try navMesh sans doorways using off-mesh connections instead
-  - ✅ add off-mesh connections per non-hull doorway
-  - ✅ detect when enter off-mesh connection
-    - prevState !== agent.state() and one equals `2`
-  - ❌ try using requestMoveVelocity (did not work)
-  - ℹ️ unnatural navigation + non-trivial to change on-connection speed
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
@@ -67,12 +56,8 @@
 - create recast-navigation-js discussion
   - How to use `state.crowd.raw.setObstacleAvoidanceParams(1, new Recast.dtObstacleAvoidanceParams())`?
 - hmr sometimes breaks npc opacity/selector
-- can only spawn onto navigable floor or do point
-  - spawn onto do point uses orient
 - try animate ceiling diffuse i.e. more/less white
-- locked accessible doors auto-open earlier
-  - e.g. check up to two corners in this case
-- try avoid recreate decor/obstacles CanvasTexture by fixing texture size
+- ✅ try avoid recreate decor/obstacles CanvasTexture by fixing texture size
 - consider using rapier for raycasting, rather than adding three-mesh-bvh
   - try adding static non-colliding "walls and doors" and raycast against them
   - could filter out doors which are open
@@ -83,8 +68,6 @@
   - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
-- desktop/mobile tty helper UI e.g. directs user to tty-1 and back to World
-- improve cuboid-pet animations
 - bug: sh: paste multiline command and start Cmd-Deleting midway
 - useGLTFsAsync hook
   - replaces synchronous useGLTF
@@ -97,8 +80,6 @@
   - create a branch and repro without workers/crowd
 - bug: tty: ctrl + w while multiple input: goes back a line
   - need repro
-- improve alternate character faces
-- improve alternate character icons
 - ❌ change fov with camera distance? e.g. 15 far, 30 close
 - support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
@@ -2994,3 +2975,20 @@ done
   - ℹ️ inaccessible door should not prevent nav through open door
   - ℹ️ `maxSimplificationError: 0.85` helped, but causes nav kinks, so removed
   - ℹ️ npc should not be able to get too close to inaccessible door
+
+- ✅ pause/resume should not progress motion along navMesh
+- ✅ can spawn whilst in debug mode
+  - pointerup triggers since update/render
+
+- ✅ Decor/Doors, Floor/Ceil: hmr issue i.e. disappears
+  - ℹ️ not dispose
+  - ✅ related to TexArray
+  - maybe fixed for Decor/Doors (0 width canvas check)
+  - maybe fixed for Floor/Ceil (0 width canvas check)
+
+- ❌ try navMesh sans doorways using off-mesh connections instead
+  - ✅ add off-mesh connections per non-hull doorway
+  - ✅ detect when enter off-mesh connection
+    - prevState !== agent.state() and one equals `2`
+  - ❌ try using requestMoveVelocity (did not work)
+  - ℹ️ unnatural navigation + non-trivial to change on-connection speed
