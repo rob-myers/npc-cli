@@ -24,7 +24,7 @@ click | map '({meta}, {w}) => {
   meta.door && w.e.toggleDoor(meta.gdKey)
 }' &
 
-w | map 'w => w.e.longClickPreventers.push( (meta) => meta.do || meta.floor )'
+w | map 'w => w.e.pressMenuFilters.push((meta) => meta.do || meta.floor)'
 
 # click --long | run '({ api, home, w, datum }) {
 #   while ((datum = await api.read()) !== api.eof) {
