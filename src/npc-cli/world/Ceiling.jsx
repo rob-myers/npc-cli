@@ -50,10 +50,10 @@ export default function Ceiling(props) {
       const wallsColor = '#aaa';
       const hullDoorsColor = '#777';
       const grey100 = 'rgb(100, 100, 100)';
-      const thinLineWidth = 0.03;
+      const thinLineWidth = 0.04;
       const thickLineWidth = 0.08;
 
-      drawPolygons(ct, tops.nonHull, [black, wallsColor, thinLineWidth]);
+      drawPolygons(ct, tops.nonHull, [wallsColor, black, thinLineWidth]);
       drawPolygons(ct, tops.window, [black, wallsColor, thinLineWidth]);
       drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
       drawPolygons(ct, tops.door.filter(x => x.meta.hull), [hullDoorsColor, null, thinLineWidth]);
