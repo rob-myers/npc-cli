@@ -78,8 +78,8 @@ export default function Floor(props) {
       // Nav-mesh
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
-      drawPolygons(ct, navPoly, ['#202029', '#777', 0.025]);
-      // drawPolygons(ct, navPoly, ['#aaaaaa55', '#999999bb', 0.03]);
+      // drawPolygons(ct, navPoly, ['#202029', '#777', 0.025]);
+      drawPolygons(ct, navPoly, ['#222', '#999999bb', 0.03]);
       
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
