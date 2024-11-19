@@ -26,7 +26,7 @@ export default function WorldCanvas(props) {
     controls: /** @type {*} */ (null),
     down: undefined,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
-    fov: smallViewport ? 20 : 10,
+    fov: 20,
     justLongDown: false,
     lastDown: undefined,
     lastScreenPoint: new Vect(),
@@ -358,8 +358,8 @@ export default function WorldCanvas(props) {
 
   React.useEffect(() => {
     if (state.controls) {
-      state.controls.setPolarAngle(Math.PI / 4);
-      state.controls.setAzimuthalAngle(initAzimuth);
+      state.controls.setPolarAngle(isSmallViewport() ? fixedPolarAngle : Math.PI / 5);
+      state.controls.setAzimuthalAngle(isSmallViewport() ? initAzimuth : Math.PI / 5);
     }
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
