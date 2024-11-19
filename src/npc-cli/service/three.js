@@ -359,28 +359,31 @@ export const pickingRenderTarget = new THREE.WebGLRenderTarget(1, 1, {
 
 /**
  * - identity on `THREE.Vector3`
- * - convert { x, y, z } to `new THREE.Vector3(x, y, z)`
- * - convert {x, y } to `new THREE.Vector3(x, 0, y)`
+ * - `{ x, y, z }` -> `new THREE.Vector3(x, y, z)`
+ * - `{ x, y }` -> `new THREE.Vector3(x, 0, y)`
  * @param {Geom.VectJson | THREE.Vector3Like} input 
+ * @returns {THREE.Vector3}
  */
 export function toV3(input) {
-  return 'z' in input
-    ? input instanceof THREE.Vector3 ? input : new THREE.Vector3().copy(input)
-    : new THREE.Vector3(input.x, 0, input.y)
-  ;
+  if ('z' in input) {
+    return input instanceof THREE.Vector3 ? input : new THREE.Vector3().copy(input);
+  } else {
+    return new THREE.Vector3(input.x, 0, input.y);
+  }
 }
 
 /**
  * - `{ x, y, z }` -> `{ x, y: z }`
  * - `THREE.Vector3` -> `{ x, y: z }`
- * - `{ x, y }` -> `{ x, y }` (fresh)
+ * - `{ x, y }` -> `{ x, y }`
  * @param {Geom.VectJson | THREE.Vector3Like} input 
+ * @returns {Geom.VectJson}
  */
 export function toXZ(input) {
   if ('z' in input) {
     return { x: input.x, y: input.z };
   } else {
-    return { x: input.x, y: input.y };
+    return input;
   }
 }
 

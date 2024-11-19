@@ -6,14 +6,14 @@ w npc.spawn '{ npcKey: "will", point: { x: 2.5, y: 3 * 1.5 }, agent: true }' >/d
 w npc.spawn '{ npcKey: "kate", point: { x: 4.5 * 1.5, y: 7 * 1.5 }, agent: true }' >/dev/null
 
 selectedNpcKey="rob"
-w npc.npc.rob.showSelector true
-w npc.npc.rob.setLabel Robbo
+w n.rob.showSelector true
+w n.rob.setLabel Robbo
 w e.changeNpcAccess rob . +
 
 # write selectedNpcKey on click npc
 click | filter meta.npcKey | map '({ meta }, { home, w }) => {
-  w.npc.npc[home.selectedNpcKey]?.showSelector(false);
-  w.npc.npc[meta.npcKey]?.showSelector(true);
+  w.n[home.selectedNpcKey]?.showSelector(false);
+  w.n[meta.npcKey]?.showSelector(true);
   home.selectedNpcKey = meta.npcKey;
 }' &
 
@@ -25,14 +25,14 @@ click | map '({meta}, {w}) => {
 w | map 'w => w.e.pressMenuFilters.push( (meta) => meta.do || meta.floor )'
 
 click --long | map --forever 'async (x, {home, w}) => {
-  const npc = w.npc.npc[home.selectedNpcKey];
+  const npc = w.n[home.selectedNpcKey];
   if (x.meta.floor === true && !npc.s.doMeta) npc.look(x);
   else await npc.do(x);
 }' &
 
 # click navmesh to move selectedNpcKey
 click | filter meta.floor | map --forever '(input, { w, home }) => {
-  const npc = w.npc.npc[home.selectedNpcKey];
+  const npc = w.n[home.selectedNpcKey];
   npc.s.run = input.keys?.includes("shift") ?? false;
   npc.moveTo(input).catch(() => {}); // can override
 }' &

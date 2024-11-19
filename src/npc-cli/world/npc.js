@@ -6,7 +6,7 @@ import { Vect } from '../geom';
 import { defaultAgentUpdateFlags, defaultNpcInteractRadius, glbFadeIn, glbFadeOut, npcClassToMeta } from '../service/const';
 import { info, warn } from '../service/generic';
 import { geom } from '../service/geom';
-import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, textureLoader, tmpVectThree1, toV3 } from '../service/three';
+import { buildObjectLookup, emptyAnimationMixer, emptyGroup, getParentBones, tmpVectThree1, toV3, toXZ } from '../service/three';
 import { helper } from '../service/helper';
 import { addBodyKeyUidRelation, npcToBodyKey } from '../service/rapier';
 import { cmUvService } from "../service/uv";
@@ -140,17 +140,19 @@ export class Npc {
    * - `point.meta.do === true` (point is a "do point")
    * - `point.meta.nav === true && !!npc.doMeta` (point navigable, npc at a "do point")
    * 
-   * @param {Geom.MaybeMeta<Geom.VectJson>} point 
+   * @param {Geom.Meta<Geom.VectJson | THREE.Vector3Like>} input 
    * @param {object} opts
    * @param {any[]} [opts.extraParams] // 🚧 clarify
    */
-  async do(point, opts = {}) {
-    if (!Vect.isVectJson(point)) {
+  async do(input, opts = {}) {
+    if (!Vect.isVectJson(input)) {
       throw Error('point expected');
     }
-    if (!point.meta) {
+    if (!input.meta) {
       throw Error('point.meta expected');
     }
+
+    const point = { ...toXZ(input), meta: input.meta }; // handle v3
 
     // 🚧 door switch instead of door?
     const gmDoorId = helper.extractGmDoorId(point.meta);
@@ -331,7 +333,7 @@ export class Npc {
   }
 
   /**
-   * @param {number | Geom.VectJson} input
+   * @param {number | Geom.VectJson | THREE.Vector3Like} input
    * - radians (ccw from east), or
    * - point
    * @param {number} [ms]
@@ -339,9 +341,10 @@ export class Npc {
   async look(input, ms = 300) {
     if (this.w.lib.isVectJson(input)) {
       const src = this.getPoint();
-      input = src.x === input.x && src.y === input.y
+      const p = toXZ(input); // handle v3
+      input = src.x === p.x && src.y === p.y
         ? this.getAngle()
-        : Math.atan2(-(input.y - src.y), input.x - src.x)
+        : Math.atan2(-(p.y - src.y), p.x - src.x)
       ;
     }
 
@@ -364,7 +367,7 @@ export class Npc {
   }
 
   /**
-   * @param {Geom.VectJson} dst
+   * @param {Geom.VectJson | THREE.Vector3Like} dst
    * @param {object} [opts]
    * @param {boolean} [opts.debugPath]
    */

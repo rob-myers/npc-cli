@@ -64,7 +64,17 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
-- ContextMenu has option to move camera to show room, and can revert
+- ✅ `click` is v3 and has `clicked.xz`?
+  - ✅ profile-1 click consumers could be 2d/3d agnostic
+  - `click 1 | w view.zoomTo --stdin`
+  - ℹ️ example where 2d project needed: `click 1 | w gmGraph.findRoomContaining`,
+    - could `click 1 | map xz | w gmGraph.findRoomContaining`
+    - could `click 1 | map meta`
+  - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
+
+- 🚧 ContextMenu has tilt/untilt option to move camera to show room
+  - 🚧 `w.view.zoomTo(point)`
+  - 🚧 `w.view.tiltTo(point)`
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
@@ -360,9 +370,6 @@ click --long | while take 1 >lastClick; do
     selectedNpc | map '(npc, {home}) => npc.do(home.lastClick)'
   fi
 done &
-
-click | filter meta.nav | walkTest &
-
 ```
 
 ```js

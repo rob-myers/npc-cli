@@ -15,7 +15,7 @@ import { removeCached, setCached } from "../service/query-client";
 import { fetchGeomorphsJson, getDecorSheetUrl, getObstaclesSheetUrl, WORLD_QUERY_FIRST_KEY } from "../service/fetch-assets";
 import { geomorph } from "../service/geomorph";
 import createGmsData from "../service/create-gms-data";
-import { imageLoader } from "../service/three";
+import { imageLoader, toV3, toXZ } from "../service/three";
 import { disposeCrowd } from "../service/recast-detour";
 import { helper } from "../service/helper";
 import { TexArray } from "../service/tex-array";
@@ -92,6 +92,8 @@ export default function World(props) {
       removeFirst,
       vectFrom: Vect.from,
       Subject,
+      toXZ,
+      toV3,
       ...helper,
     },
 
@@ -417,6 +419,8 @@ export default function World(props) {
  * @property {typeof import('../geom').Vect['isVectJson']} isVectJson
  * @property {typeof removeFirst} removeFirst
  * @property {typeof Subject} Subject
+ * @property {typeof toXZ} toXZ
+ * @property {typeof toV3} toV3
  * @property {typeof toPrecision} precision
  * @property {typeof import('../geom').Vect['from']} vectFrom
  * 

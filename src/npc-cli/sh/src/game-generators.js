@@ -69,15 +69,15 @@ export async function* click({ api, args, w }) {
       continue;
     }
 
-    /** @type {NPC.ClickMeta} */
+    /** @type {NPC.ClickOutput} */
     const output = {
-      ...e.point,
+      ...e.position,
       ...e.keys && { keys: e.keys },
-      meta: { ...e.meta,
+      meta: {
+        ...e.meta,
         nav: e.meta.floor === true ? w.npc.isPointInNavmesh(e.point) : false,
-        // 🚧 ...w.gmGraph.findRoomContaining(e.point) ?? { roomId: null },
       },
-      v3: {...e.position},
+      xz: {...e.point},
     };
 
     yield output;
