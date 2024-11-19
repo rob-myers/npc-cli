@@ -72,9 +72,10 @@
     - could `click 1 | map meta`
   - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
 
-- 🚧 ContextMenu has tilt/untilt option to move camera to show room
-  - 🚧 `w.view.zoomTo(point)`
-  - 🚧 `w.view.tiltTo(point)`
+- 🚧 ContextMenu has tilt/back option to move camera to show room
+  - 🚧 `w view.zoomTo $( click 1 ) true`
+  - 🚧 `click 1 | w ---stdin view.zoomTo - true` (issue with `w`)
+  - maybe on click wall
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection

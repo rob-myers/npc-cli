@@ -9,7 +9,7 @@ import { testNever } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
+import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, tmpVectThree1, toV3, toXZ, v3Precision } from "../service/three.js";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
 import useOnResize from "../hooks/use-on-resize.js";
@@ -351,6 +351,19 @@ export default function WorldCanvas(props) {
       w.r3f.advance(Date.now());
       return state.canvas.toDataURL(type, quality);
     },
+    zoomTo(target, tilt = false) {
+      // 🚧 get room center and zoom out to fit
+      const { camera } = w.r3f;
+      const v3 = toV3(target);
+      const direction = camera.getWorldDirection(tmpVectThree1).normalize();
+      const distance = 15;
+      // const distance = camera.position.distanceTo(state.controls.target);
+      state.controls.target.copy(v3);
+      camera.position.set(v3.x - distance * direction.x, v3.y - distance * direction.y, v3.z - distance * direction.z);
+      // state.controls.setAzimuthalAngle(0);
+      tilt && state.controls.setPolarAngle(Math.PI / 12);
+      w.update();
+    },
   }));
 
   const w = React.useContext(WorldContext);
@@ -359,7 +372,7 @@ export default function WorldCanvas(props) {
   React.useEffect(() => {
     if (state.controls) {
       state.controls.setPolarAngle(isSmallViewport() ? fixedPolarAngle : Math.PI / 5);
-      state.controls.setAzimuthalAngle(isSmallViewport() ? initAzimuth : Math.PI / 5);
+      state.controls.setAzimuthalAngle(isSmallViewport() ? initAzimuth : Math.PI / 4);
     }
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
@@ -474,6 +487,8 @@ export default function WorldCanvas(props) {
  * @property {() => void} renderObjectPickScene
  * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  * @property {HTMLCanvasElement['toDataURL']} toDataURL
+ * Canvas only e.g. no ContextMenu
+ * @property {(target: THREE.Vector3Like | Geom.VectJson) => void} zoomTo
  */
 
 const canvasCss = css`
