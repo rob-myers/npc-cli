@@ -70,10 +70,10 @@ const instancedMonochromeShader = {
 const instancedLabelsShader = {
   Vert: /*glsl*/`
 
-  varying vec3 vColor;
-  varying vec2 vUv;
   attribute vec2 uvDimensions;
   attribute vec2 uvOffsets;
+  varying vec3 vColor;
+  varying vec2 vUv;
 
   #include <common>
   #include <logdepthbuf_pars_vertex>
@@ -103,19 +103,13 @@ const instancedLabelsShader = {
   varying vec2 vUv;
   uniform sampler2D map;
   uniform vec3 diffuse;
+  uniform float opacity;
 
   #include <common>
   #include <logdepthbuf_pars_fragment>
 
   void main() {
-    gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, 1);
-    // gl_FragColor = vec4(1.0, 0.0, 0.0, 1);
-
-    // 🔔 fix depth-buffer issue i.e. stop transparent pixels taking precedence
-    if(gl_FragColor.a < 0.5) {
-      discard;
-    }
-
+    gl_FragColor = texture2D(map, vUv) * vec4(vColor * diffuse, opacity);
     #include <logdepthbuf_fragment>
   }
   `,
