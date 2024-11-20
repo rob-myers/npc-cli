@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 
 import { zIndex } from "../service/const";
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
-import { getRelativePointer } from "../service/dom";
+import { getRelativePointer, isSmallViewport } from "../service/dom";
 import { geom } from '../service/geom';
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
@@ -26,6 +26,7 @@ export default function WorldMenu(props) {
     debugWhilePaused: false,
     durationKeys: {},
     touchCircle: /** @type {*} */ (null),
+    touchCircleRadius: isSmallViewport() ? 70 : 35,
     
     logger: /** @type {*} */ (null),
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
@@ -81,8 +82,8 @@ export default function WorldMenu(props) {
 
     /** @param {PointerEvent} e */
     function onPointerDown (e) {
-      state.touchCircle.style.left = (e.clientX - touchCircleRadiusPx) + "px";
-      state.touchCircle.style.top = (e.clientY - touchCircleRadiusPx) + "px";
+      state.touchCircle.style.left = `${(e.clientX - state.touchCircleRadius)}px`;
+      state.touchCircle.style.top = `${(e.clientY - state.touchCircleRadius)}px`;
       state.touchCircle.classList.add('active');
     }
     /** @param {PointerEvent} e */
@@ -176,7 +177,15 @@ export default function WorldMenu(props) {
       </label>
     </div>
 
-    <div className={touchIndicatorCss} ref={x => void (x && (state.touchCircle = x))} />
+    <div
+      className={touchIndicatorCss}
+      ref={x => {
+        if (x) {
+          state.touchCircle = x;
+          state.touchCircle.style.setProperty('--touch-circle-radius', `${state.touchCircleRadius}px`);
+        }
+      }}
+    />
 
   </>;
 }
@@ -244,15 +253,13 @@ const loggerCss = css`
   }
 `;
 
-const touchCircleRadiusPx = 35;
-
 const touchIndicatorCss = css`
   position: fixed;
   z-index: ${zIndex.ttyTouchCircle};
 
-  // 🚧
-  width: ${touchCircleRadiusPx * 2}px;
-  height: ${touchCircleRadiusPx * 2}px;
+  --touch-circle-radius: 0px;
+  width: calc(2 * var(--touch-circle-radius));
+  height: calc(2 * var(--touch-circle-radius));
   background: #fff;
   border-radius:50%;
   pointer-events:none;
@@ -275,6 +282,7 @@ const touchIndicatorCss = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {HTMLDivElement} touchCircle
+ * @property {number} touchCircleRadius
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
  * @property {boolean} pinned
