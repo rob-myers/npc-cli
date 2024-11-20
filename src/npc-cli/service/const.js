@@ -8,6 +8,7 @@ export const longPressMs = 500;
 
 export const zIndex = /** @type {const} */ ({
   ttyTouchHelper: 5,
+  ttyTouchCircle: 100,
 });
 
 /** @type {import('@xterm/xterm').ITheme} */

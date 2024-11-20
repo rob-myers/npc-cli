@@ -1,7 +1,9 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
+import { zIndex } from "../service/const";
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
+import { getRelativePointer } from "../service/dom";
 import { geom } from '../service/geom';
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
@@ -23,6 +25,7 @@ export default function WorldMenu(props) {
     justOpen: false,
     debugWhilePaused: false,
     durationKeys: {},
+    touchCircle: /** @type {*} */ (null),
     
     logger: /** @type {*} */ (null),
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
@@ -72,8 +75,38 @@ export default function WorldMenu(props) {
 
   w.menu = state;
   const lastMeta = w.view.lastDown?.meta;
-  
   const update = useUpdate();
+
+  React.useEffect(() => {
+
+    /** @param {PointerEvent} e */
+    function onPointerDown (e) {
+      state.touchCircle.style.left = (e.clientX - touchCircleRadiusPx) + "px";
+      state.touchCircle.style.top = (e.clientY - touchCircleRadiusPx) + "px";
+      state.touchCircle.classList.add('active');
+    }
+    /** @param {PointerEvent} e */
+    function onPointerUp (e) {
+      state.touchCircle.classList.remove('active');
+    }
+    /** @param {PointerEvent} e */
+    function onPointerMove(e) {
+      if (w.view.down !== undefined && w.view.down.screenPoint.distanceTo(getRelativePointer(e)) > 5) {
+        state.touchCircle.classList.remove('active');
+      }
+    }
+
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointerup', onPointerUp);
+    document.addEventListener('pointermove', onPointerMove);
+    
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('pointerup', onPointerUp);
+      document.removeEventListener('pointermove', onPointerMove);
+    };
+
+  }, []);
 
   return <>
 
@@ -143,6 +176,8 @@ export default function WorldMenu(props) {
       </label>
     </div>
 
+    <div className={touchIndicatorCss} ref={x => void (x && (state.touchCircle = x))} />
+
   </>;
 }
 
@@ -209,6 +244,29 @@ const loggerCss = css`
   }
 `;
 
+const touchCircleRadiusPx = 35;
+
+const touchIndicatorCss = css`
+  position: fixed;
+  z-index: ${zIndex.ttyTouchCircle};
+
+  // 🚧
+  width: ${touchCircleRadiusPx * 2}px;
+  height: ${touchCircleRadiusPx * 2}px;
+  background: #fff;
+  border-radius:50%;
+  pointer-events:none;
+
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s 0s, transform 0.3s 0s;
+
+  &.active {
+    transform: scale(1);
+    opacity: 0.2;
+  }
+`;
+
 /**
  * @typedef State
  * @property {HTMLDivElement} ctMenuEl
@@ -216,6 +274,7 @@ const loggerCss = css`
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
+ * @property {HTMLDivElement} touchCircle
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
  * @property {boolean} pinned
