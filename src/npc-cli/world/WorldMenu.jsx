@@ -25,9 +25,11 @@ export default function WorldMenu(props) {
     justOpen: false,
     debugWhilePaused: false,
     durationKeys: {},
+
     touchCircle: /** @type {*} */ (null),
     touchRadiusPx: isSmallViewport() ? 70 : 35,
     touchErrorPx: isSmallViewport() ? 10 : 5,
+    touchFadeSecs: isSmallViewport() ? 2 : 1,
     
     logger: /** @type {*} */ (null),
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
@@ -186,7 +188,8 @@ export default function WorldMenu(props) {
       ref={x => {
         if (x) {
           state.touchCircle = x;
-          state.touchCircle.style.setProperty('--touch-circle-radius', `${state.touchRadiusPx}px`);
+          state.touchCircle.style.setProperty('--touch-radius', `${state.touchRadiusPx}px`);
+          state.touchCircle.style.setProperty('--touch-fade-duration', `${state.touchFadeSecs}s`);
         }
       }}
     />
@@ -261,17 +264,18 @@ const touchIndicatorCss = css`
   position: fixed;
   z-index: ${zIndex.ttyTouchCircle};
 
-  --touch-circle-radius: 0px;
+  --touch-radius: 0px;
+  --touch-fade-duration: 0s;
 
-  width: calc(2 * var(--touch-circle-radius));
-  height: calc(2 * var(--touch-circle-radius));
+  width: calc(2 * var(--touch-radius));
+  height: calc(2 * var(--touch-radius));
   background: #fff;
   border-radius:50%;
   pointer-events:none;
 
   opacity: 0;
   transform: scale(0);
-  transition: opacity 2s, transform ease-out 2s;
+  transition: opacity var(--touch-fade-duration), transform ease-out var(--touch-fade-duration);
   
   &.active {
     transform: scale(1);
@@ -290,6 +294,7 @@ const touchIndicatorCss = css`
  * @property {HTMLDivElement} touchCircle
  * @property {number} touchRadiusPx
  * @property {number} touchErrorPx
+ * @property {number} touchFadeSecs
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
  * @property {boolean} pinned
