@@ -36,7 +36,7 @@
     - ✅ in case agent stops inside a door, prevent them from "moving aside" instead
   - ✅ avoid spinning targetless NPCs
     - collision could cause other to look but only at a "higher level of behaviour"
-  - 🚧 support windows
+  - ✅ support windows
     - ✅ still need wall, implicit via window
     - ✅ exclude complex outer window: `window` -> `external-window`
     - ✅ fix object-pick
