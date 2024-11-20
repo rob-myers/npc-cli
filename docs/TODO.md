@@ -43,14 +43,17 @@
     - ✅ can specify window structure via `y` and `h`
     - ✅ Obstacles hmr not working i.e. onchange obstacle y=0 or y=0.5
     - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
-    - 🚧 finish lab windows
+    - ✅ finish lab windows
+    - finish other windows
   - 🚧 touch indicator for mobile
   - can open doors using switches
-  - World shows closable message until 1st resolved awaitWorld
-    - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
+    - e.g. when npc locked in room can still leave
+  - World shows closable message until 1st resolved true isReady
+    - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
     - e.g. via npc neighbours + closeness check
     - ℹ️ could use event to reposition stationary npc (via process)
+  - stationary npcs should rotate a bit when they move out of the way
   - auto-open accessible door earlier
     - e.g. check up to two corners in this case
   - can only spawn onto navigable floor or do point
@@ -74,7 +77,6 @@
 
 - `w --stdin` issue
   - e.g. `echo image/webp | w --stdIn view.openSnapshot - 0` should be low quality
-
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection

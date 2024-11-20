@@ -243,7 +243,7 @@
       "pngHash": -261688393,
       "obsHashes": [-1053519075]
     },
-    "lab--018--4x4": {"outputHash": -33453470, "pngHash": -113261385},
+    "lab--018--4x4": {"outputHash": -60363701, "pngHash": -664822987},
     "lab--023--4x4": {
       "outputHash": 515282103,
       "pngHash": -1594118441,
@@ -373,10 +373,15 @@
       "pngHash": 293366403,
       "obsHashes": [-502406732]
     },
+    "window--001--0x1": {
+      "outputHash": 1993537781,
+      "pngHash": -914365221,
+      "obsHashes": [-2069728194]
+    },
     "window--007--0x2.4": {
-      "outputHash": 1013458553,
+      "outputHash": 675103545,
       "pngHash": 1975320118,
-      "obsHashes": [1857929119]
+      "obsHashes": [596298591]
     },
     "demo-map-1": {"outputHash": 1429562441},
     "small-map-1": {"outputHash": 1980923211}
@@ -930,6 +935,16 @@
         "type": "table",
         "sheetId": 0
       },
+      "window--001--0x1 0": {
+        "x": 1162,
+        "y": 1725,
+        "width": 154,
+        "height": 34,
+        "symbolKey": "window--001--0x1",
+        "obstacleId": 0,
+        "type": "obstacle",
+        "sheetId": 0
+      },
       "console--031--1x1.2 0": {
         "x": 1524,
         "y": 1857,
@@ -1193,7 +1208,7 @@
     },
     "obstacleDims": [{"width": 2151, "height": 2080}],
     "maxObstacleDim": {"width": 2151, "height": 2080},
-    "imagesHash": 357669506,
+    "imagesHash": 794708850,
     "skins": {
       "svgHash": {"cuboid-man": -1087841574, "cuboid-pet": -1224685710},
       "uvMap": {
@@ -12023,32 +12038,7 @@
           "meta": {"door": true, "locked": true}
         }
       ],
-      "windows": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [2.2656, -0.13],
-              [2.2652, 0.1601],
-              [0.7675, 0.1601],
-              [0.7679, -0.13]
-            ]
-          ],
-          "meta": {"window": true, "frosted": true, "_one-way-reverse": true}
-        },
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [
-              [2.2506, -0.145],
-              [2.2502, 0.1451],
-              [0.7525, 0.1451],
-              [0.7529, -0.145]
-            ]
-          ],
-          "meta": {"window": true, "y": 0.5, "h": 1.5}
-        }
-      ],
+      "windows": [],
       "decor": [
         {
           "type": "Polygon",
@@ -12128,6 +12118,13 @@
           "width": 0.75,
           "height": 0.75,
           "transform": [-0.707, 0.707, 0.707, 0.707, 1.93, 3.98]
+        },
+        {
+          "symbolKey": "window--001--0x1",
+          "meta": {"key": "window--001--0x1", "y": 0.5, "h": 1.2},
+          "width": 1.5,
+          "height": 0.3,
+          "transform": [1, 0, 0, 1, 0.75, -0.16]
         }
       ],
       "removableDoors": [],
@@ -17499,6 +17496,42 @@
       "removableDoors": [],
       "addableWalls": []
     },
+    "window--001--0x1": {
+      "key": "window--001--0x1",
+      "isHull": false,
+      "hullWalls": [],
+      "obstacles": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [1.5175, -0.0175],
+              [1.5175, 0.3175],
+              [-0.0175, 0.3175],
+              [-0.0175, -0.0175]
+            ]
+          ],
+          "meta": {"obstacle": true, "symKey": "window--001--0x1", "obsId": 0}
+        }
+      ],
+      "walls": [],
+      "doors": [],
+      "windows": [
+        {
+          "type": "Polygon",
+          "coordinates": [[[1.5, 0], [1.5, 0.3], [0, 0.3], [0, 0]]],
+          "meta": {"window": true, "frosted": true}
+        }
+      ],
+      "decor": [],
+      "unsorted": [],
+      "width": 1.5,
+      "height": 0.3,
+      "pngRect": {"x": -0.0175, "y": -0.0175, "width": 1.535, "height": 0.335},
+      "symbols": [],
+      "removableDoors": [],
+      "addableWalls": []
+    },
     "window--007--0x2.4": {
       "key": "window--007--0x2.4",
       "isHull": false,
@@ -17508,10 +17541,10 @@
           "type": "Polygon",
           "coordinates": [
             [
-              [4.5175, -0.0275],
-              [4.5175, 0.3075],
-              [-0.0175, 0.3075],
-              [-0.0175, -0.0275]
+              [4.5175, -0.0175],
+              [4.5175, 0.3175],
+              [-0.0175, 0.3175],
+              [-0.0175, -0.0175]
             ]
           ],
           "meta": {"obstacle": true, "symKey": "window--007--0x2.4", "obsId": 0}
