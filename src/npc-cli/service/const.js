@@ -286,6 +286,7 @@ export const fromSymbolKey = {// 🔔 must extend when adding new symbols
   "table--009--0.8x0.8": true,
   "table--012--0.8x0.8": true,
   "window--001--0x1": true,
+  "window--005--0x2": true,
   "window--007--0x2.4": true,
 
   "extra--001--fresher--0.5x0.5": true,
