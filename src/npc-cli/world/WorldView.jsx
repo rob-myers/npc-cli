@@ -134,6 +134,9 @@ export default function WorldView(props) {
       const decoded = w.e.decodeObjectPick(r, g, b, a);
       debug('picked:', { r, g, b, a }, '\n', decoded);
 
+      // overwritten below on successful raycast
+      state.lastDown = undefined;
+
       if (decoded === null) {
         return;
       }
@@ -218,7 +221,10 @@ export default function WorldView(props) {
         screenPoint: state.lastScreenPoint.clone(),
         longTimeoutId: state.down || cameraKey ? 0 : window.setTimeout(() => {
           state.justLongDown = true;
-          state.lastDown && (state.lastDown.longDown = true);
+          if (state.lastDown === undefined) {
+            return;
+          }
+          state.lastDown.longDown = true;
           w.events.next(state.getWorldPointerEvent({
             key: "long-pointerdown",
             event: e,
@@ -405,7 +411,6 @@ export default function WorldView(props) {
         zoomToCursor
         onChange={state.onChangeControls}
         panSpeed={2}
-        enableDamping={!isSmallViewport()}
         {...state.controlsViewportOpts}
       />
 

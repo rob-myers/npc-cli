@@ -175,7 +175,10 @@ export default function useHandleEvents(w) {
           break;
         case "long-pointerdown": { // toggle ContextMenu
           const lastDownMeta = w.view.lastDown?.meta;
-          if (lastDownMeta !== undefined && state.pressMenuFilters.some(fltr => fltr(lastDownMeta))) {
+          if (lastDownMeta === undefined) {
+            return; // should be unreachable
+          }
+          if (state.pressMenuFilters.some(fltr => fltr(lastDownMeta))) {
             return; // prevent ContextMenu
           }
 
