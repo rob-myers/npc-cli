@@ -18,7 +18,7 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(150, 150, 150, 0.25)'),
+    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 110, 110, 0.25)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -79,7 +79,7 @@ export default function Floor(props) {
       const triangles = navDecomp.tris.map(tri => new Poly(tri.map(i => navDecomp.vs[i])));
       const navPoly = Poly.union(triangles);
       // drawPolygons(ct, navPoly, ['#202029', '#777', 0.025]);
-      drawPolygons(ct, navPoly, ['#000', '#99999977', 0.03]);
+      drawPolygons(ct, navPoly, ['#191921', '#99999977', 0.03]);
       
       // drawPolygons(ct, triangles, [null, 'rgba(200, 200, 200, 0.3)', 0.01]); // outlines
 
