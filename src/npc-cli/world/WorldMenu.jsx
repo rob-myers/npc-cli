@@ -71,19 +71,18 @@ export default function WorldMenu(props) {
   }));
 
   w.menu = state;
-
-  const update = useUpdate();
-
   const lastMeta = w.view.lastDown?.meta;
+  
+  const update = useUpdate();
 
   return <>
 
     <div
       className={contextMenuCss}
-      ref={(x) => x && (state.ctMenuEl = x)}
-      onContextMenu={(e) => e.preventDefault()}
+      ref={(x) => void (x && (state.ctMenuEl = x))}
       // 🔔 'visibility' permits computing menuDim.height
       style={{ visibility: state.ctOpen ? 'visible' : 'hidden' }}
+      onContextMenu={(e) => e.preventDefault()}
     >
       <div className="key-values">
         {lastMeta !== undefined && Object.entries(lastMeta).map(([k, v]) =>
@@ -99,24 +98,29 @@ export default function WorldMenu(props) {
     </div>
 
     <div
-      className={cx(faderOverlayCss, w.disabled && !state.debugWhilePaused ? 'faded' : 'clear')}
+      className={cx(
+        faderOverlayCss,
+        w.disabled && !state.debugWhilePaused ? 'faded' : 'clear',
+      )}
       onPointerUp={() => props.setTabsEnabled(true)}
     />
 
-    {w.disabled && <div className={pausedControlsCss}>
-      <button
-        onClick={state.enableAll}
-        className="text-white"
-      >
-        enable
-      </button>
-      <button
-        onClick={state.toggleDebug}
-        className={state.debugWhilePaused ? 'text-green' : undefined}
-      >
-        debug
-      </button>
-    </div>}
+    {w.disabled && (
+      <div className={pausedControlsCss}>
+        <button
+          onClick={state.enableAll}
+          className="text-white"
+        >
+          enable
+        </button>
+        <button
+          onClick={state.toggleDebug}
+          className={state.debugWhilePaused ? 'text-green' : undefined}
+        >
+          debug
+        </button>
+      </div>
+    )}
 
     <div
       className={loggerCss}
