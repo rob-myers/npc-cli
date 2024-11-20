@@ -258,6 +258,7 @@ const touchIndicatorCss = css`
   z-index: ${zIndex.ttyTouchCircle};
 
   --touch-circle-radius: 0px;
+
   width: calc(2 * var(--touch-circle-radius));
   height: calc(2 * var(--touch-circle-radius));
   background: #fff;
@@ -266,11 +267,12 @@ const touchIndicatorCss = css`
 
   opacity: 0;
   transform: scale(0);
-  transition: opacity 0.3s 0s, transform 0.3s 0s;
-
+  transition: opacity 2s, transform ease-out 2s;
+  
   &.active {
     transform: scale(1);
     opacity: 0.2;
+    transition: opacity 0.3s, transform 0.3s;
   }
 `;
 
