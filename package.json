@@ -95,7 +95,6 @@
     "three": "0.168.0",
     "three-stdlib": "^2.33.0",
     "uid": "^2.0.2",
-    "xterm-addon-webgl": "^0.16.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
