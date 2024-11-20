@@ -4,7 +4,7 @@
     "102--hull": {"outputHash": -234772630, "pngHash": 184103855},
     "103--hull": {"outputHash": -1566389117, "pngHash": -1937509879},
     "301--hull": {"outputHash": 1384432740, "pngHash": 787602800},
-    "302--hull": {"outputHash": -927176817, "pngHash": -1557128953},
+    "302--hull": {"outputHash": -1365002543, "pngHash": -1557128953},
     "303--hull": {"outputHash": 1156010591, "pngHash": -299838577},
     "bed--003--1x1.6": {
       "outputHash": -2001357850,
@@ -4482,9 +4482,9 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[10.5, 10.2475], [10.5, 10.6], [6, 10.6], [6, 10.2475]]
+            [[10.5, 10.2684], [10.5, 10.5292], [6, 10.5292], [6, 10.2684]]
           ],
-          "meta": {"wall": true, "hull": true, "window": true}
+          "meta": {"wall": true, "hull": true, "_window": true}
         },
         {
           "type": "Polygon",
@@ -4590,9 +4590,9 @@
         {
           "type": "Polygon",
           "coordinates": [
-            [[10.5, 10.2475], [10.5, 10.6], [6, 10.6], [6, 10.2475]]
+            [[10.5, 10.2684], [10.5, 10.5292], [6, 10.5292], [6, 10.2684]]
           ],
-          "meta": {"wall": true, "hull": true, "window": true}
+          "meta": {"wall": true, "hull": true, "_window": true}
         },
         {
           "type": "Polygon",
@@ -4852,15 +4852,7 @@
           "meta": {"door": true, "locked": true}
         }
       ],
-      "windows": [
-        {
-          "type": "Polygon",
-          "coordinates": [
-            [[10.5, 10.2475], [10.5, 10.6], [6, 10.6], [6, 10.2475]]
-          ],
-          "meta": {"window": true}
-        }
-      ],
+      "windows": [],
       "decor": [
         {
           "type": "Polygon",
@@ -5522,6 +5514,13 @@
           "width": 1.5,
           "height": 1.5,
           "transform": [0, 1, -1, 0, 30, 6]
+        },
+        {
+          "symbolKey": "window--007--0x2.4",
+          "meta": {"key": "window--007--0x2.4", "y": 0.75, "h": 1},
+          "width": 4.5,
+          "height": 0.3,
+          "transform": [1, 0, 0, 1, 6, 10.25]
         }
       ],
       "removableDoors": [],
