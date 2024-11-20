@@ -24,6 +24,16 @@ export default function WorldView(props) {
     canvas: /** @type {*} */ (null),
     clickIds: [],
     controls: /** @type {*} */ (null),
+    controlsProps: {
+      ...smallViewport ? {
+        minPolarAngle: fixedPolarAngle,
+        maxPolarAngle: fixedPolarAngle,
+      } : {
+        maxPolarAngle: Math.PI / 4,
+      },
+      minDistance: smallViewport ? 10 : 5,
+      maxDistance: smallViewport ? 32 : 48,
+    },
     down: undefined,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
     fov: 20,
@@ -351,7 +361,7 @@ export default function WorldView(props) {
       w.r3f.advance(Date.now());
       return state.canvas.toDataURL(type, quality);
     },
-  }));
+  }), { reset: { controlsProps: true } });
 
   const w = React.useContext(WorldContext);
   w.view = state;
@@ -404,16 +414,8 @@ export default function WorldView(props) {
         makeDefault
         zoomToCursor
         onChange={state.onChangeControls}
-
-        {...smallViewport ? {
-          minPolarAngle: fixedPolarAngle,
-          maxPolarAngle: fixedPolarAngle,
-        } : {
-          maxPolarAngle: Math.PI / 4,
-        }}
-        minDistance={smallViewport ? 10 : 5}
-        maxDistance={smallViewport ? 32 : 48}
         panSpeed={2}
+        {...state.controlsProps}
       />
 
       <ambientLight intensity={1} />
@@ -439,6 +441,7 @@ export default function WorldView(props) {
  * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('three-stdlib').MapControls} controls
+ * @property {import('@react-three/drei').MapControlsProps} controlsProps
  * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | undefined} down
  * Defined iff at least one pointer is down.
  * @property {{ pickStart: number; pickEnd: number; pointerDown: number; pointerUp: number; }} epoch
