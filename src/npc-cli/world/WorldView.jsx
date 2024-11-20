@@ -412,6 +412,8 @@ export default function WorldView(props) {
         onChange={state.onChangeControls}
         panSpeed={2}
         {...state.controlsViewportOpts}
+        //@ts-ignore see three-stdlib patch
+        minPanDistance={smallViewport ? 0.05 : 0}
       />
 
       <ambientLight intensity={1} />

@@ -1,22 +1,30 @@
 diff --git a/node_modules/three-stdlib/controls/OrbitControls.js b/node_modules/three-stdlib/controls/OrbitControls.js
-index 23e5b19..36ba747 100644
+index 23e5b19..5b49099 100644
 --- a/node_modules/three-stdlib/controls/OrbitControls.js
 +++ b/node_modules/three-stdlib/controls/OrbitControls.js
-@@ -366,6 +366,9 @@ class OrbitControls extends EventDispatcher {
+@@ -98,6 +98,7 @@ class OrbitControls extends EventDispatcher {
+     this.target0 = this.target.clone();
+     this.position0 = this.object.position.clone();
+     this.zoom0 = this.object.zoom;
++    this.minPanDistance = 0;
+     this.getPolarAngle = () => spherical.phi;
+     this.getAzimuthalAngle = () => spherical.theta;
+     this.setPolarAngle = (value) => {
+@@ -366,6 +367,9 @@ class OrbitControls extends EventDispatcher {
        return function panLeft2(distance, objectMatrix) {
          v.setFromMatrixColumn(objectMatrix, 0);
          v.multiplyScalar(-distance);
-+        if (v.lengthSq() < 0.03 ** 2) {
++        if (Math.abs(distance) < scope.minPanDistance) {
 +          return;
 +        }
          panOffset.add(v);
        };
      })();
-@@ -379,6 +382,9 @@ class OrbitControls extends EventDispatcher {
+@@ -379,6 +383,9 @@ class OrbitControls extends EventDispatcher {
            v.crossVectors(scope.object.up, v);
          }
          v.multiplyScalar(distance);
-+        if (v.lengthSq() < 0.03 ** 2) {
++        if (Math.abs(distance) < scope.minPanDistance) {
 +          return;
 +        }
          panOffset.add(v);
