@@ -74,7 +74,7 @@ export default function WorldMenu(props) {
 
   const update = useUpdate();
 
-  const meta3d = w.view.lastDown?.threeD?.meta;
+  const lastMeta = w.view.lastDown?.meta;
 
   return <>
 
@@ -86,7 +86,7 @@ export default function WorldMenu(props) {
       style={{ visibility: state.ctOpen ? 'visible' : 'hidden' }}
     >
       <div className="key-values">
-        {meta3d && Object.entries(meta3d).map(([k, v]) =>
+        {lastMeta !== undefined && Object.entries(lastMeta).map(([k, v]) =>
           <div key={k}>
             <span className="meta-key">{k}</span>
             {v !== true && <>

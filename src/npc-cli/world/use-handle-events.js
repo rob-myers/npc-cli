@@ -174,8 +174,8 @@ export default function useHandleEvents(w) {
           // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
           break;
         case "long-pointerdown": { // toggle ContextMenu
-          const lastDownMeta = w.view.getLastDownMeta();
-          if (lastDownMeta !== null && state.pressMenuFilters.some(fltr => fltr(lastDownMeta))) {
+          const lastDownMeta = w.view.lastDown?.meta;
+          if (lastDownMeta !== undefined && state.pressMenuFilters.some(fltr => fltr(lastDownMeta))) {
             return; // prevent ContextMenu
           }
 

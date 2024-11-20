@@ -9,7 +9,7 @@ import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, tmpVectThree1, toV3, toXZ, v3Precision } from "../service/three.js";
+import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
 import { WorldContext } from "./world-context.js";
 import useStateRef from "../hooks/use-state-ref.js";
 import useOnResize from "../hooks/use-on-resize.js";
@@ -58,9 +58,6 @@ export default function WorldView(props) {
     },
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
-    },
-    getLastDownMeta() {
-      return state.lastDown?.threeD?.meta ?? null;
     },
     getNumPointers() {
       return state.down?.pointerIds.length ?? 0;
@@ -184,7 +181,8 @@ export default function WorldView(props) {
       state.lastDown = {
         longDown: false,
         screenPoint: Vect.from(getRelativePointer(e)),
-        threeD: { point: position.clone(), meta },
+        position: position.clone(),
+        meta,
       };
 
       w.events.next(state.getWorldPointerEvent({
@@ -269,8 +267,8 @@ export default function WorldView(props) {
         w.events.next(state.getWorldPointerEvent({
           key: "pointerup",
           event: e,
-          meta: state.getLastDownMeta() ?? {},
-          position: state.lastDown?.threeD?.point,
+          meta: state.lastDown?.meta ?? {},
+          position: state.lastDown?.position,
         }));
       }
 
@@ -440,7 +438,7 @@ export default function WorldView(props) {
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
  * @property {import('@react-three/fiber').RenderProps<HTMLCanvasElement>['gl']} glOpts
- * @property {{ longDown: boolean; screenPoint: Geom.Vect; threeD: { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
+ * @property {{ longDown: boolean; screenPoint: Geom.Vect; position: THREE.Vector3; meta: Geom.Meta }} [lastDown]
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
  * @property {Geom.Vect} lastScreenPoint Updated `onPointerMove` and `onPointerDown`.
@@ -452,7 +450,6 @@ export default function WorldView(props) {
  * @property {() => number} getDownDistancePx
  * @property {() => number} getNumPointers
  * @property {(e: React.PointerEvent, pixel: THREE.TypedArray) => void} onObjectPickPixel
- * @property {() => null | Geom.Meta} getLastDownMeta
  * @property {(def: WorldPointerEventDef) => NPC.PointerUpEvent | NPC.PointerDownEvent | NPC.LongPointerDownEvent} getWorldPointerEvent
  * @property {(e: React.PointerEvent) => void} handleClickInDebugMode
  * @property {import('@react-three/drei').MapControlsProps['onChange']} onChangeControls
