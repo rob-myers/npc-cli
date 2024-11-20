@@ -412,7 +412,7 @@ export default function World(props) {
  */
 
 /**
- * @typedef StateUtil Utility classes and `rxjs` functions
+ * @typedef StateUtil Utility functions and classes
  * @property {typeof filter} filter
  * @property {typeof firstValueFrom} firstValueFrom
  * @property {typeof isSmallViewport} isSmallViewport
@@ -423,10 +423,4 @@ export default function World(props) {
  * @property {typeof toV3} toV3
  * @property {typeof toPrecision} precision
  * @property {typeof import('../geom').Vect['from']} vectFrom
- * 
- * //@property {typeof first} first
- * //@property {typeof map} map
- * //@property {typeof merge} merge
- * //@property {typeof take} take
  */
-

@@ -24,7 +24,7 @@ export default function WorldView(props) {
     canvas: /** @type {*} */ (null),
     clickIds: [],
     controls: /** @type {*} */ (null),
-    controlsProps: {
+    controlsViewportOpts: {
       ...smallViewport ? {
         minPolarAngle: fixedPolarAngle,
         maxPolarAngle: fixedPolarAngle,
@@ -37,6 +37,11 @@ export default function WorldView(props) {
     down: undefined,
     epoch: { pickStart: 0, pickEnd: 0, pointerDown: 0, pointerUp: 0 },
     fov: 20,
+    glOpts: {
+      toneMapping: 3,
+      toneMappingExposure: 1,
+      logarithmicDepthBuffer: true,
+    },
     justLongDown: false,
     lastDown: undefined,
     lastScreenPoint: new Vect(),
@@ -361,7 +366,7 @@ export default function WorldView(props) {
       w.r3f.advance(Date.now());
       return state.canvas.toDataURL(type, quality);
     },
-  }), { reset: { controlsProps: true } });
+  }), { reset: { controlsViewportOpts: true } });
 
   const w = React.useContext(WorldContext);
   w.view = state;
@@ -382,12 +387,7 @@ export default function WorldView(props) {
       className={canvasCss}
       frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
-      gl={{
-        toneMapping: 3,
-        toneMappingExposure: 1,
-        logarithmicDepthBuffer: true,
-        // preserveDrawingBuffer: true,
-      }}
+      gl={state.glOpts}
       onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}
       onPointerMove={state.onPointerMove}
@@ -409,13 +409,13 @@ export default function WorldView(props) {
       />
 
       <MapControls
-        ref={x => state.controls = x ?? state.controls}
+        ref={x => void (state.controls = x ?? state.controls)}
         key={`${smallViewport}`}
         makeDefault
         zoomToCursor
         onChange={state.onChangeControls}
         panSpeed={2}
-        {...state.controlsProps}
+        {...state.controlsViewportOpts}
       />
 
       <ambientLight intensity={1} />
@@ -441,12 +441,13 @@ export default function WorldView(props) {
  * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
  * @property {import('three-stdlib').MapControls} controls
- * @property {import('@react-three/drei').MapControlsProps} controlsProps
+ * @property {import('@react-three/drei').MapControlsProps} controlsViewportOpts
  * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | undefined} down
  * Defined iff at least one pointer is down.
  * @property {{ pickStart: number; pickEnd: number; pointerDown: number; pointerUp: number; }} epoch
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
+ * @property {import('@react-three/fiber').RenderProps<HTMLCanvasElement>['gl']} glOpts
  * @property {{ longDown: boolean; screenPoint: Geom.Vect; threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
