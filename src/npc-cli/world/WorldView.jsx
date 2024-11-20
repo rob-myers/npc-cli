@@ -405,6 +405,7 @@ export default function WorldView(props) {
         zoomToCursor
         onChange={state.onChangeControls}
         panSpeed={2}
+        enableDamping={!isSmallViewport()}
         {...state.controlsViewportOpts}
       />
 
