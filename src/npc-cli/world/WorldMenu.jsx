@@ -29,7 +29,7 @@ export default function WorldMenu(props) {
     touchCircle: /** @type {*} */ (null),
     touchRadiusPx: isSmallViewport() ? 70 : 35,
     touchErrorPx: isSmallViewport() ? 10 : 5,
-    touchFadeSecs: isSmallViewport() ? 2 : 1,
+    touchFadeSecs: isSmallViewport() ? 2 : 0.2,
     
     logger: /** @type {*} */ (null),
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
@@ -103,14 +103,16 @@ export default function WorldMenu(props) {
       }
     }
 
-    document.addEventListener('pointerdown', onPointerDown);
-    document.addEventListener('pointerup', onPointerUp);
-    document.addEventListener('pointermove', onPointerMove);
+    const el = w.view.rootEl;
+
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('pointermove', onPointerMove);
     
     return () => {
-      document.removeEventListener('pointerdown', onPointerDown);
-      document.removeEventListener('pointerup', onPointerUp);
-      document.removeEventListener('pointermove', onPointerMove);
+      el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('pointermove', onPointerMove);
     };
 
   }, []);
@@ -280,7 +282,7 @@ const touchIndicatorCss = css`
   &.active {
     transform: scale(1);
     opacity: 0.2;
-    transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s 0.2s, transform 0.3s 0.2s;
   }
 `;
 
