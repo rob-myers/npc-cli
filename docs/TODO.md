@@ -44,7 +44,7 @@
     - ✅ Obstacles hmr not working i.e. onchange obstacle y=0 or y=0.5
     - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
     - 🚧 finish lab windows
-  - touch indicator for mobile
+  - 🚧 touch indicator for mobile
   - can open doors using switches
   - World shows closable message until 1st resolved awaitWorld
     - ℹ️ ~ "connect a tty e.g. by clicking its tab then coming back"
@@ -72,10 +72,9 @@
     - could `click 1 | map meta`
   - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
 
-- 🚧 ContextMenu has tilt/back option to move camera to show room
-  - 🚧 `w view.zoomTo $( click 1 ) true`
-  - 🚧 `click 1 | w ---stdin view.zoomTo - true` (issue with `w`)
-  - maybe on click wall
+- `w --stdin` issue
+  - e.g. `echo image/webp | w --stdIn view.openSnapshot - 0` should be low quality
+
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
