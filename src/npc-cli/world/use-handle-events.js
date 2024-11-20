@@ -196,7 +196,6 @@ export default function useHandleEvents(w) {
           break;
         }
         case "pointerdown":
-          w.view.setLastDown(e);
           w.menu.hide();
           break;
         case "pointerup":

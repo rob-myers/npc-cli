@@ -5,7 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { MapControls, PerspectiveCamera, Stats } from "@react-three/drei";
 import { damp } from "maath/easing";
 
-import { testNever } from "../service/generic.js";
+import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
@@ -135,7 +135,7 @@ export default function WorldView(props) {
     onObjectPickPixel(e, pixel) {
       const [r, g, b, a] = Array.from(pixel);
       const decoded = w.e.decodeObjectPick(r, g, b, a);
-      console.log('🔔', { r, g, b, a }, '\n', decoded);
+      debug('picked:', { r, g, b, a }, '\n', decoded);
 
       if (decoded === null) {
         return;
@@ -181,6 +181,12 @@ export default function WorldView(props) {
         ...pickedTypesInSomeRoom[decoded.picked] === true && w.gmGraph.findRoomContaining(toXZ(position), true),
       };
 
+      state.lastDown = {
+        longDown: false,
+        screenPoint: Vect.from(getRelativePointer(e)),
+        threeD: { point: position.clone(), meta },
+      };
+
       w.events.next(state.getWorldPointerEvent({
         key: "pointerdown",
         distancePx: 0,
@@ -191,7 +197,7 @@ export default function WorldView(props) {
       }));
 
       if (state.epoch.pointerUp > state.epoch.pickStart) {
-        // "pointerup" occurred before we finished this object-pick.
+        // Native "pointerup" occurred before we finished this object-pick.
         // We can now trigger the world event:
         w.events.next(state.getWorldPointerEvent({
           key: "pointerup",
@@ -348,20 +354,6 @@ export default function WorldView(props) {
         }
       });
     },
-    setLastDown(e) {
-      if (e.is3d === true || !state.lastDown) {
-        state.lastDown = {
-          longDown: false,
-          screenPoint: Vect.from(e.screenPoint),
-          threeD: e.is3d === true ? { point: new THREE.Vector3().copy(e.position), meta: e.meta } : null,
-        };
-      } else {
-        if (!state.lastDown.screenPoint.equals(e.screenPoint)) {
-          state.lastDown.screenPoint.copy(e.screenPoint);
-          state.lastDown.threeD = null; // 3d pointerdown happens before 2d pointerdown
-        }
-      }
-    },
     toDataURL(type, quality) {
       w.r3f.advance(Date.now());
       return state.canvas.toDataURL(type, quality);
@@ -448,11 +440,10 @@ export default function WorldView(props) {
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
  * @property {import('@react-three/fiber').RenderProps<HTMLCanvasElement>['gl']} glOpts
- * @property {{ longDown: boolean; screenPoint: Geom.Vect; threeD: null | { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
+ * @property {{ longDown: boolean; screenPoint: Geom.Vect; threeD: { point: import("three").Vector3; meta: Geom.Meta }} | undefined} lastDown
  * Defined iff pointer has ever been down.
  * @property {boolean} justLongDown
- * @property {Geom.Vect} lastScreenPoint
- * This is `PointerEvent.offset{X,Y}` and is updated `onPointerMove`.
+ * @property {Geom.Vect} lastScreenPoint Updated `onPointerMove` and `onPointerDown`.
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
  * @property {null | number} targetFov
@@ -476,7 +467,6 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
  * @property {() => void} renderObjectPickScene
- * @property {(e: NPC.PointerDownEvent) => void} setLastDown
  * @property {HTMLCanvasElement['toDataURL']} toDataURL
  * Canvas only e.g. no ContextMenu
  */
