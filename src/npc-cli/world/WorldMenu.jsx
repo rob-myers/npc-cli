@@ -26,7 +26,8 @@ export default function WorldMenu(props) {
     debugWhilePaused: false,
     durationKeys: {},
     touchCircle: /** @type {*} */ (null),
-    touchCircleRadius: isSmallViewport() ? 70 : 35,
+    touchRadiusPx: isSmallViewport() ? 70 : 35,
+    touchErrorPx: isSmallViewport() ? 10 : 5,
     
     logger: /** @type {*} */ (null),
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
@@ -82,8 +83,8 @@ export default function WorldMenu(props) {
 
     /** @param {PointerEvent} e */
     function onPointerDown (e) {
-      state.touchCircle.style.left = `${(e.clientX - state.touchCircleRadius)}px`;
-      state.touchCircle.style.top = `${(e.clientY - state.touchCircleRadius)}px`;
+      state.touchCircle.style.left = `${(e.clientX - state.touchRadiusPx)}px`;
+      state.touchCircle.style.top = `${(e.clientY - state.touchRadiusPx)}px`;
       state.touchCircle.classList.add('active');
     }
     /** @param {PointerEvent} e */
@@ -92,7 +93,10 @@ export default function WorldMenu(props) {
     }
     /** @param {PointerEvent} e */
     function onPointerMove(e) {
-      if (w.view.down !== undefined && w.view.down.screenPoint.distanceTo(getRelativePointer(e)) > 5) {
+      if (w.view.down === undefined) {
+        return;
+      }
+      if (w.view.down.screenPoint.distanceTo(getRelativePointer(e)) > state.touchErrorPx) {
         state.touchCircle.classList.remove('active');
       }
     }
@@ -182,7 +186,7 @@ export default function WorldMenu(props) {
       ref={x => {
         if (x) {
           state.touchCircle = x;
-          state.touchCircle.style.setProperty('--touch-circle-radius', `${state.touchCircleRadius}px`);
+          state.touchCircle.style.setProperty('--touch-circle-radius', `${state.touchRadiusPx}px`);
         }
       }}
     />
@@ -284,7 +288,8 @@ const touchIndicatorCss = css`
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {HTMLDivElement} touchCircle
- * @property {number} touchCircleRadius
+ * @property {number} touchRadiusPx
+ * @property {number} touchErrorPx
  * @property {import('../terminal/Logger').State} logger
  * @property {number} initHeight
  * @property {boolean} pinned
