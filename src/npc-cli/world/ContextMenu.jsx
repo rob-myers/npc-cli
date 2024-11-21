@@ -47,8 +47,16 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   w.cm = state;
   const lastMeta = w.view.lastDown?.meta;
 
-  const tags = lastMeta ? Object.keys(lastMeta).filter(k => lastMeta[k] === true) : [];
-  const kvs = Object.entries(lastMeta ?? {}).filter(([k, v]) => v !== true);
+  const { shortKvs, otherKvs } = React.useMemo(() => {
+    const shortKvs = /** @type {[string, any][]} */ ([]);
+    const otherKvs = /** @type {[string, any][]} */ ([]);
+    Object.entries(lastMeta ?? {}).forEach(([k, v]) =>
+      v === true || typeof v === 'number' || (typeof v === 'string' && v.length <= 4)
+        ? shortKvs.push([k, v])
+        : otherKvs.push([k, v])
+    );
+    return { shortKvs, otherKvs };
+  }, [lastMeta]);
 
   return (
     <div
@@ -61,15 +69,16 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
       {/* <div className="buttons">
         <button>open</button>
       </div> */}
-      <div className="tags">
-        {tags.map(tag => (
-          <div key={tag} className="key-value">
-            <span className="meta-key">{tag}</span>
+      <div className="short-kvs">
+        {shortKvs.map(([k, v]) => (
+          <div key={k} className="key-value">
+            <span className="meta-key">{k}</span>
+            {v !== true && <span className="meta-value">{typeof v === 'string' ? v : JSON.stringify(v)}</span>}
           </div>
         ))}
       </div>
       <div className="key-values">
-       {kvs.map(([key, value]) =>
+        {otherKvs.map(([key, value]) =>
           <div key={key} className="key-value">
             <span className="meta-key">{key}</span>
             <span className="meta-value">{typeof value === 'string' ? value : JSON.stringify(value)}</span>
@@ -89,10 +98,7 @@ const contextMenuCss = css`
   
   display: flex;
   flex-direction: column;
-  gap: 0px;
 
-  pointer-events: none;
-  
   opacity: 0.8;
   font-size: 0.8rem;
   color: white;
@@ -107,17 +113,10 @@ const contextMenuCss = css`
     pointer-events: all;
   }
 
-  div.key-values {
-    display: flex;
-    flex-direction: column;
-
-    overflow: hidden;
-    background-color: inherit;
-  }
-  
-  .tags {
+  .short-kvs {
     display: flex;
     flex-wrap: wrap;
+    max-width: 200px;
   }
 
   .key-value {
@@ -140,7 +139,6 @@ const contextMenuCss = css`
   }
 
   /* filter: sepia(1); */
-
 `;
 
 /**
