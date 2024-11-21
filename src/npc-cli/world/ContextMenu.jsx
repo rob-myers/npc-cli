@@ -47,7 +47,12 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   w.cm = state;
   const lastMeta = w.view.lastDown?.meta;
 
-  const kvs = React.useMemo(() => Object.entries(lastMeta ?? {}), [lastMeta]);
+  const kvs = React.useMemo(() => 
+    Object.entries(lastMeta ?? {}).map(([k, v]) => {
+      const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
+      return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
+    }).sort((a, b) => a.length < b.length ? -1 : 1)
+  , [lastMeta]);
 
   return (
     <div
@@ -61,10 +66,10 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
         <button>open</button>
       </div> */}
       <div className="kvs">
-        {kvs.map(([k, v]) => (
+        {kvs.map(({ k, v }) => (
           <div key={k} className="key-value">
             <span className="meta-key">{k}</span>
-            {v !== true && <span className="meta-value">{typeof v === 'string' ? v : JSON.stringify(v)}</span>}
+            {v !== '' && <span className="meta-value">{v}</span>}
           </div>
         ))}
       </div>
@@ -106,7 +111,7 @@ const contextMenuCss = css`
   .key-value {
     display: flex;
     /* align-items: center; */
-    justify-content: space-between;
+    justify-content: space-around;
 
     flex: 1;
     border: 1px solid white;
@@ -121,7 +126,7 @@ const contextMenuCss = css`
     .meta-value {
       padding: 4px;
       color: #0f0;
-      /* max-width: 128px; */
+      max-width: 128px;
     }
   }
 
