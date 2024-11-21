@@ -296,7 +296,7 @@ export default function WorldView(props) {
       window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
     },
     onWheel(e) {
-      if (w.menu.ctOpen === true) {
+      if (w.menu.ct.ctOpen === true) {
         w.menu.hide();
         w.menu.justOpen = false;
       }

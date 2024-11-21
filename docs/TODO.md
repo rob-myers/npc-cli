@@ -50,8 +50,10 @@
     - ✅ cancel on move a bit
     - ✅ clean into own component
     - 🚧 test on phone
-  - can open doors using switches
-    - e.g. when npc locked in room can still leave
+  - 🚧 can open doors using switches
+    - ℹ️ e.g. when npc locked in room can still leave
+    - 🚧 move meta into collapsed
+    - 🚧 door switch meta has button
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
