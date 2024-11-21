@@ -739,9 +739,10 @@ export class Npc {
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius / 1.5,
-      collisionQueryRange: 1,
+      collisionQueryRange: 2,
       separationWeight: 4,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
+      maxAcceleration: 20,
     });
     
     this.startAnimation('Idle');
