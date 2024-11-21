@@ -296,9 +296,9 @@ export default function WorldView(props) {
       window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
     },
     onWheel(e) {
-      if (w.menu.ct.ctOpen === true) {
-        w.menu.hide();
-        w.menu.justOpen = false;
+      if (w.cm.open === true) {
+        w.cm.hide();
+        w.cm.justOpen = false;
       }
     },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js

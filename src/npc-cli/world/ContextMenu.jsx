@@ -1,6 +1,8 @@
 import React from "react";
 import { css } from "@emotion/css";
+import { geom } from "../service/geom";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
 
 /**
@@ -11,20 +13,37 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    ctMenuEl: /** @type {*} */ (null),
-    ctOpen: false,
+    justOpen: false,
+    open: false,
+    rootEl: /** @type {*} */ (null),
+    hide() {
+      state.open = false;
+      update();
+    },
+    show(at) {
+      const menuDim = state.rootEl.getBoundingClientRect();
+      const canvasDim = w.view.canvas.getBoundingClientRect();
+      const x = geom.clamp(at.x, 0, canvasDim.width - menuDim.width);
+      const y = geom.clamp(at.y, 0, canvasDim.height - menuDim.height);
+      state.rootEl.style.transform = `translate(${x}px, ${y}px)`;
+      state.open = true;
+      update();
+    },
   }));
 
   React.useMemo(() => void /** @type {React.RefCallback<State>} */ (ref)?.(state), [ref]);
+  
+  const update = useUpdate();
 
+  w.cm = state;
   const lastMeta = w.view.lastDown?.meta;
 
   return (
     <div
       className={contextMenuCss}
-      ref={(x) => void (x && (state.ctMenuEl = x))}
+      ref={(x) => void (x && (state.rootEl = x))}
       // 🔔 'visibility' permits computing menuDim.height
-      style={{ visibility: state.ctOpen ? 'visible' : 'hidden' }}
+      style={{ visibility: state.open ? 'visible' : 'hidden' }}
       onContextMenu={(e) => e.preventDefault()}
     >
       <div className="key-values">
@@ -42,7 +61,6 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   );
 
 });
-
 
 const contextMenuCss = css`
   position: absolute;
@@ -85,6 +103,9 @@ const contextMenuCss = css`
 
 /**
  * @typedef State
- * @property {HTMLDivElement} ctMenuEl
- * @property {boolean} ctOpen Is the context menu open?
+ * @property {HTMLDivElement} rootEl
+ * @property {boolean} open Is the context menu open?
+ * @property {boolean} justOpen Was the context menu just opened?
+ * @property {() => void} hide
+ * @property {(at: Geom.VectJson) => void} show
  */

@@ -98,7 +98,8 @@ export default function World(props) {
     },
 
     e: /** @type {*} */ (null), // useHandleEvents
-    n: /** @type {*} */ {}, // w.npc.npc
+    n: /** @type {*} */ ({}), // w.npc.npc
+    cm: /** @type {*} */ ({}), // w.menu.ct
 
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -392,6 +393,8 @@ export default function World(props) {
  * Events state i.e. useHandleEvents state
  * @property {import("./Npcs").State['npc']} n
  * Shortcut for `w.npc.npc`
+ * @property {import("./ContextMenu").State} cm
+ * Shortcut for `w.menu.ct`
  *
  * @property {TexArray} texDecor
  * @property {TexArray} texObs

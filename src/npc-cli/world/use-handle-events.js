@@ -183,12 +183,12 @@ export default function useHandleEvents(w) {
           }
 
           if (e.distancePx <= (e.touch ? 10 : 5)) {
-            w.menu.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
+            w.cm.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
             // prevent pan whilst pointer held down
             w.view.controls.saveState();
             w.view.controls.reset();
           } else {
-            w.menu.hide();
+            w.cm.hide();
           }
           break;
         }
@@ -199,12 +199,12 @@ export default function useHandleEvents(w) {
           break;
         }
         case "pointerdown":
-          w.menu.hide();
+          w.cm.hide();
           break;
         case "pointerup":
           // e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
           !e.touch && state.onPointerUpMenuDesktop(e);
-          w.menu.justOpen = w.menu.ct.ctOpen;
+          w.cm.justOpen = w.cm.open;
           break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
@@ -472,9 +472,9 @@ export default function useHandleEvents(w) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        e.is3d && w.menu.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
+        e.is3d && w.cm.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
       } else if (!e.justLongDown) {
-        w.menu.hide();
+        w.cm.hide();
       }
     },
     removeFromSensors(npcKey) {
