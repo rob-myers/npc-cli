@@ -271,7 +271,8 @@ const touchIndicatorCss = css`
 
   width: calc(2 * var(--touch-radius));
   height: calc(2 * var(--touch-radius));
-  background: #fff;
+  /* background: #fff; */
+  border: 2px solid white;
   border-radius:50%;
   pointer-events:none;
 

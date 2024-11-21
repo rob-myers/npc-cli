@@ -49,7 +49,7 @@
     - ℹ️ https://codepen.io/mike_hendriks/pen/JjoxrON
     - ✅ cancel on move a bit
     - 🚧 test on phone
-    - 🚧 clean
+    - 🚧 clean e.g. hide on desktop
   - can open doors using switches
     - e.g. when npc locked in room can still leave
   - World shows closable message until 1st resolved true isReady
@@ -81,7 +81,7 @@
 
 - `w --stdin` issue
   - e.g. `echo image/webp | w --stdIn view.openSnapshot - 0` should be low quality
-- change const hmr issue i.e. floor/ceiling disappears
+- change const.js hmr issue i.e. floor/ceiling disappears
   - floor comes back if remount material...
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
