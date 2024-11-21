@@ -380,7 +380,7 @@ export default function WorldView(props) {
   return (
     <Canvas
       ref={state.canvasRef}
-      className={canvasCss}
+      className={rootCss}
       frameloop={props.disabled ? "demand" : "always"}
       resize={{ debounce: 300 }}
       gl={state.glOpts}
@@ -476,7 +476,7 @@ export default function WorldView(props) {
  * Canvas only e.g. no ContextMenu
  */
 
-const canvasCss = css`
+const rootCss = css`
   user-select: none;
 
   > div {
@@ -485,6 +485,7 @@ const canvasCss = css`
     align-items: center;
     justify-content: center;
   }
+
   canvas {
     background-color: rgba(20, 20, 20, 1);
     /* background-color: rgba(60, 60, 60, 1); */
