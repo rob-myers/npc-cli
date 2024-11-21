@@ -47,16 +47,7 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   w.cm = state;
   const lastMeta = w.view.lastDown?.meta;
 
-  const { shortKvs, otherKvs } = React.useMemo(() => {
-    const shortKvs = /** @type {[string, any][]} */ ([]);
-    const otherKvs = /** @type {[string, any][]} */ ([]);
-    Object.entries(lastMeta ?? {}).forEach(([k, v]) =>
-      v === true || typeof v === 'number' || (typeof v === 'string' && v.length <= 4)
-        ? shortKvs.push([k, v])
-        : otherKvs.push([k, v])
-    );
-    return { shortKvs, otherKvs };
-  }, [lastMeta]);
+  const kvs = React.useMemo(() => Object.entries(lastMeta ?? {}), [lastMeta]);
 
   return (
     <div
@@ -69,22 +60,15 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
       {/* <div className="buttons">
         <button>open</button>
       </div> */}
-      <div className="short-kvs">
-        {shortKvs.map(([k, v]) => (
+      <div className="kvs">
+        {kvs.map(([k, v]) => (
           <div key={k} className="key-value">
             <span className="meta-key">{k}</span>
             {v !== true && <span className="meta-value">{typeof v === 'string' ? v : JSON.stringify(v)}</span>}
           </div>
         ))}
       </div>
-      <div className="key-values">
-        {otherKvs.map(([key, value]) =>
-          <div key={key} className="key-value">
-            <span className="meta-key">{key}</span>
-            <span className="meta-value">{typeof value === 'string' ? value : JSON.stringify(value)}</span>
-          </div>
-        )}
-      </div>
+
     </div>
   );
 
@@ -113,16 +97,20 @@ const contextMenuCss = css`
     pointer-events: all;
   }
 
-  .short-kvs {
+  .kvs {
     display: flex;
     flex-wrap: wrap;
-    max-width: 200px;
+    width: 200px;
   }
 
   .key-value {
     display: flex;
-    align-items: baseline;
+    /* align-items: center; */
+    justify-content: space-between;
+
+    flex: 1;
     border: 1px solid white;
+    font-family: 'Courier New', Courier, monospace;
 
     pointer-events: all;
     background-color: black;
@@ -131,10 +119,9 @@ const contextMenuCss = css`
       padding: 4px;
     }
     .meta-value {
-      font-family: 'Courier New', Courier, monospace;
       padding: 4px;
       color: #0f0;
-      max-width: 128px;
+      /* max-width: 128px; */
     }
   }
 
