@@ -1,9 +1,8 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 
-import { zIndex } from "../service/const";
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
-import { getRelativePointer, isSmallViewport } from "../service/dom";
+import { isSmallViewport } from "../service/dom";
 import { geom } from '../service/geom';
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
@@ -11,6 +10,8 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
 import { Logger } from "../terminal/Logger";
+import useTouchIndicator from "./TouchIndicator";
+import TouchIndicator from "./TouchIndicator";
 
 /**
  * @param {Pick<import('./World').Props, 'setTabsEnabled'>} props 
@@ -81,42 +82,6 @@ export default function WorldMenu(props) {
   const lastMeta = w.view.lastDown?.meta;
   const update = useUpdate();
 
-  React.useEffect(() => {
-
-    /** @param {PointerEvent} e */
-    function onPointerDown (e) {
-      state.touchCircle.style.left = `${(e.clientX - state.touchRadiusPx)}px`;
-      state.touchCircle.style.top = `${(e.clientY - state.touchRadiusPx)}px`;
-      state.touchCircle.classList.add('active');
-    }
-    /** @param {PointerEvent} e */
-    function onPointerUp (e) {
-      state.touchCircle.classList.remove('active');
-    }
-    /** @param {PointerEvent} e */
-    function onPointerMove(e) {
-      if (w.view.down === undefined) {
-        return;
-      }
-      if (w.view.down.screenPoint.distanceTo(getRelativePointer(e)) > state.touchErrorPx) {
-        state.touchCircle.classList.remove('active');
-      }
-    }
-
-    const el = w.view.rootEl;
-
-    el.addEventListener('pointerdown', onPointerDown);
-    el.addEventListener('pointerup', onPointerUp);
-    el.addEventListener('pointermove', onPointerMove);
-    
-    return () => {
-      el.removeEventListener('pointerdown', onPointerDown);
-      el.removeEventListener('pointerup', onPointerUp);
-      el.removeEventListener('pointermove', onPointerMove);
-    };
-
-  }, []);
-
   return <>
 
     <div
@@ -185,16 +150,7 @@ export default function WorldMenu(props) {
       </label>
     </div>
 
-    <div
-      className={touchIndicatorCss}
-      ref={x => {
-        if (x) {
-          state.touchCircle = x;
-          state.touchCircle.style.setProperty('--touch-radius', `${state.touchRadiusPx}px`);
-          state.touchCircle.style.setProperty('--touch-fade-duration', `${state.touchFadeSecs}s`);
-        }
-      }}
-    />
+    <TouchIndicator/>
 
   </>;
 }
@@ -259,31 +215,6 @@ const loggerCss = css`
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-`;
-
-const touchIndicatorCss = css`
-  position: fixed;
-  z-index: ${zIndex.ttyTouchCircle};
-
-  --touch-radius: 0px;
-  --touch-fade-duration: 0s;
-
-  width: calc(2 * var(--touch-radius));
-  height: calc(2 * var(--touch-radius));
-  /* background: #fff; */
-  border: 2px solid white;
-  border-radius:50%;
-  pointer-events:none;
-
-  opacity: 0;
-  transform: scale(0);
-  transition: opacity var(--touch-fade-duration), transform ease-out var(--touch-fade-duration);
-  
-  &.active {
-    transform: scale(1);
-    opacity: 0.2;
-    transition: opacity 0.3s 0.2s, transform 0.3s 0.2s;
   }
 `;
 
