@@ -45,13 +45,14 @@
     - ✅ need top of low wall e.g. via obstacle in symbol `window--007--0x2.4`
     - ✅ finish lab windows
     - finish other windows
-  - 🚧 touch indicator for mobile
+  - ✅ touch indicator for mobile
     - ℹ️ https://codepen.io/mike_hendriks/pen/JjoxrON
     - ✅ cancel on move a bit
     - ✅ clean into own component
-    - 🚧 test on phone
+    - ✅ test on phone
   - 🚧 can open doors using switches
     - ℹ️ e.g. when npc locked in room can still leave
+    - ✅ refactor ContextMenu as own component
     - 🚧 move meta into collapsed
     - 🚧 door switch meta has button
   - World shows closable message until 1st resolved true isReady
@@ -60,6 +61,7 @@
     - e.g. via npc neighbours + closeness check
     - ℹ️ could use event to reposition stationary npc (via process)
   - stationary npcs should rotate a bit when they move out of the way
+    - ℹ️ use desiredVelocity to move ±5deg base direction
   - auto-open accessible door earlier
     - e.g. check up to two corners in this case
   - can only spawn onto navigable floor or do point
