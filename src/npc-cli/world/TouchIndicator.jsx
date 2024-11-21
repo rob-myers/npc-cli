@@ -10,6 +10,14 @@ export default function TouchIndicator() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef( () => ({
+    /** @param {null | HTMLDivElement} x */
+    rootRef(x) {
+      if (x !== null) {
+        state.touchCircle = x;
+        state.touchCircle.style.setProperty('--touch-radius', `${state.touchRadiusPx}px`);
+        state.touchCircle.style.setProperty('--touch-fade-duration', `${state.touchFadeSecs}s`);
+      }
+    },
     touchCircle: /** @type {HTMLDivElement} */ ({}),
     touchRadiusPx: isSmallViewport() ? 70 : 35,
     touchErrorPx: isSmallViewport() ? 10 : 5,
@@ -57,14 +65,10 @@ export default function TouchIndicator() {
   return (
     <div
       className={touchIndicatorCss}
-      ref={x => {
-        if (x) {
-          state.touchCircle = x;
-          state.touchCircle.style.setProperty('--touch-radius', `${state.touchRadiusPx}px`);
-          state.touchCircle.style.setProperty('--touch-fade-duration', `${state.touchFadeSecs}s`);
-        }
-      }}
-    />
+      ref={state.rootRef}
+    >
+      <div className="inner-circle" />
+    </div>
   );
 }
 
@@ -77,9 +81,8 @@ const touchIndicatorCss = css`
 
   width: calc(2 * var(--touch-radius));
   height: calc(2 * var(--touch-radius));
-  /* background: #fff; */
   border: 2px solid white;
-  border-radius:50%;
+  border-radius: 50%;
   pointer-events:none;
 
   opacity: 0;
@@ -88,7 +91,18 @@ const touchIndicatorCss = css`
   
   &.active {
     transform: scale(1);
-    opacity: 0.2;
+    opacity: 0.25;
     transition: opacity 0.3s 0.2s, transform 0.3s 0.2s;
   }
+
+  .inner-circle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: calc(var(--touch-radius) - 10px);
+    top: calc(var(--touch-radius) - 10px);
+    background: #f00;
+    border-radius: 50%;
+  }
+
 `;

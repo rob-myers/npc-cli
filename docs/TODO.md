@@ -48,8 +48,8 @@
   - 🚧 touch indicator for mobile
     - ℹ️ https://codepen.io/mike_hendriks/pen/JjoxrON
     - ✅ cancel on move a bit
+    - ✅ clean into own component
     - 🚧 test on phone
-    - 🚧 clean e.g. hide on desktop
   - can open doors using switches
     - e.g. when npc locked in room can still leave
   - World shows closable message until 1st resolved true isReady
