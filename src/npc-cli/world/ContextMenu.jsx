@@ -47,6 +47,9 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   w.cm = state;
   const lastMeta = w.view.lastDown?.meta;
 
+  const tags = lastMeta ? Object.keys(lastMeta).filter(k => lastMeta[k] === true) : [];
+  const kvs = Object.entries(lastMeta ?? {}).filter(([k, v]) => v !== true);
+
   return (
     <div
       className={contextMenuCss}
@@ -55,16 +58,21 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
       style={{ visibility: state.open ? 'visible' : 'hidden' }}
       onContextMenu={state.onContextMenu}
     >
-      <div className="buttons">
+      {/* <div className="buttons">
         <button>open</button>
+      </div> */}
+      <div className="tags">
+        {tags.map(tag => (
+          <div key={tag} className="key-value">
+            <span className="meta-key">{tag}</span>
+          </div>
+        ))}
       </div>
       <div className="key-values">
-        {lastMeta !== undefined && Object.entries(lastMeta).map(([k, v]) =>
-          <div key={k} className="key-value">
-            <div className="meta-key">
-              {k}
-            </div>
-            {v !== true && <div className="meta-value">{typeof v === 'string' ? v : JSON.stringify(v)}</div>}
+       {kvs.map(([key, value]) =>
+          <div key={key} className="key-value">
+            <span className="meta-key">{key}</span>
+            <span className="meta-value">{typeof value === 'string' ? value : JSON.stringify(value)}</span>
           </div>
         )}
       </div>
@@ -78,7 +86,6 @@ const contextMenuCss = css`
   left: 0;
   top: 0;
   z-index: 0;
-  max-width: 256px;
   
   display: flex;
   flex-direction: column;
@@ -89,10 +96,8 @@ const contextMenuCss = css`
   opacity: 0.8;
   font-size: 0.8rem;
   color: white;
-
-  .buttons {
-    padding-bottom: 16px;
-  }
+  background-color: #222;
+  border: 1px solid #fff;
 
   button {
     border: 1px solid #aaa;
@@ -104,43 +109,37 @@ const contextMenuCss = css`
 
   div.key-values {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    
-    /* padding: 8px; */
-    /* border: 1px solid #999; */
-    
-    /* max-height: 100px; // 🚧 */
+    flex-direction: column;
 
     overflow: hidden;
     background-color: inherit;
-    filter: contrast(2);
   }
   
-  div.key-value {
-    /* padding-right: 4px; */
-    border: 1px solid white;
+  .tags {
     display: flex;
-    align-items: end;
+    flex-wrap: wrap;
+  }
+
+  .key-value {
+    display: flex;
+    align-items: baseline;
+    border: 1px solid white;
 
     pointer-events: all;
     background-color: black;
 
     .meta-key {
-      display: inline-block;
       padding: 4px;
     }
     .meta-value {
-      display: inline-block;
       font-family: 'Courier New', Courier, monospace;
-      font-size: smaller;
       padding: 4px;
       color: #0f0;
+      max-width: 128px;
     }
   }
 
-  /* filter: invert(1); */
-  /* filter: drop-shadow(2px 2px #999); */
+  /* filter: sepia(1); */
 
 `;
 
