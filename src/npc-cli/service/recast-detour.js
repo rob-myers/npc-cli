@@ -32,7 +32,7 @@ export function getBasicTileCacheMeshProcess() {
 export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
   // const cs = 0.1;
   // const cs = 0.08;
-  const cs = 0.145;
+  const cs = 0.2;
   return {
     // tileSize: 6.5 / cs,
     cs, // Small `cs` means more tileCache updates when e.g. add obstacles
@@ -42,7 +42,7 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
-    // maxSimplificationError: 0.95,
+    maxSimplificationError: 0.5,
     walkableRadius: 0,
     // detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,
