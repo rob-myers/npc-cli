@@ -1,5 +1,5 @@
 import React from "react";
-import { defaultDoorCloseMs, wallHeight } from "../service/const";
+import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
@@ -159,6 +159,16 @@ export default function useHandleEvents(w) {
 
       // 🔔 lazily compute unWalkable queryFilter
       polyRefs.forEach(polyRef => w.nav.navMesh.setPolyFlags(polyRef, w.lib.navPolyFlag.unWalkable));
+    },
+    getNearbyNpcKeys(gmId, roomId, point) {
+      const npcKeys = /** @type {string[]} */ ([]);
+      for (const npcKey of state.roomToNpcs[gmId][roomId] ?? []) {
+        const npcPoint = w.n[npcKey].getPoint();
+        if (Math.abs(npcPoint.x - point.x) < npcNearUiDist && Math.abs(npcPoint.y - point.y) < npcNearUiDist) {
+          npcKeys.push(npcKey);
+        }
+      }
+      return npcKeys;
     },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
@@ -581,6 +591,7 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
  * @property {(door: Geomorph.DoorState) => void} ensureDoorPolyRefs
+ * @property {(gmId: number, roomId: number, point: Geom.VectJson) => string[]} getNearbyNpcKeys
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider

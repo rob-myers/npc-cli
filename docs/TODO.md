@@ -50,12 +50,14 @@
     - ✅ cancel on move a bit
     - ✅ clean into own component
     - ✅ test on phone
+  - ✅ refactor ContextMenu as own component
+  - ✅ restyle ContextMenu
+  - ✅ ContextMenu has "select" with nearby npc keys
+  - 🚧 ContextMenu has select with possible actions
   - 🚧 can open doors using switches
     - ℹ️ e.g. when npc locked in room can still leave
-    - ✅ refactor ContextMenu as own component
-    - ❌ move meta into collapsed
-    - ✅ restyle ContextMenu
-    - 🚧 door switch meta has button
+    - npc can open door using door switch 
+    - `inner` but not `secure` door switch can be opened
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
@@ -86,8 +88,9 @@
 
 - `w --stdin` issue
   - e.g. `echo image/webp | w --stdIn view.openSnapshot - 0` should be low quality
-- change const.js hmr issue i.e. floor/ceiling disappears
-  - floor comes back if remount material...
+- 🚧 change const.js hmr issue i.e. floor/ceiling disappears
+  - ℹ️ floor comes back if remount material...
+  - ℹ️ seems floor data texture `source.data` is all black
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection

@@ -7,8 +7,9 @@ export const localStorageKey = {
 export const longPressMs = 500;
 
 export const zIndex = /** @type {const} */ ({
+  contextMenu: 90,
   ttyTouchHelper: 5,
-  ttyTouchCircle: 100,
+  ttyTouchCircle: 80,
 });
 
 /** @type {import('@xterm/xterm').ITheme} */
@@ -352,6 +353,8 @@ export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
  * Technically we can choose any `maxNumberOfNpcs ≤ 2^16 = 65536`.
  */
 export const maxNumberOfNpcs = 256;
+
+export const npcNearUiDist = 1;
 
 export const physicsConfig = {
   fps: 60,
