@@ -147,7 +147,8 @@ export default function WorldView(props) {
       let mesh;
 
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
-      const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      // const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      const devicePixelRatio = window.devicePixelRatio;
       const { left, top } = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
 
       const normalizedDeviceCoords = new THREE.Vector2(
@@ -304,7 +305,8 @@ export default function WorldView(props) {
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
-      const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      // const devicePixelRatio = Math.floor(window.devicePixelRatio);
+      const devicePixelRatio = window.devicePixelRatio;
       const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
 
       // Set the projection matrix to only look at the pixel we are interested in.
