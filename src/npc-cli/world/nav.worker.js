@@ -6,7 +6,6 @@ import { geomorph } from "../service/geomorph";
 import { decompToXZGeometry, polysToXZGeometry } from "../service/three";
 import { customThreeToTileCache, getTileCacheGeneratorConfig, getBasicTileCacheMeshProcess } from "../service/recast-detour";
 import { fetchGeomorphsJson } from "../service/fetch-assets";
-import { getGeomorphsTileCacheMeshProcess } from "../service/tile-cache";
 
 const selfTyped = /** @type {WW.WorkerGeneric<WW.MsgFromNavWorker, WW.MsgToNavWorker>} */ (
   /** @type {*} */ (self)
@@ -59,7 +58,7 @@ async function handleMessages(e) {
       });
 
       await initRecastNav();
-      const tileCacheMeshProcess = getGeomorphsTileCacheMeshProcess(gms);
+      const tileCacheMeshProcess = getBasicTileCacheMeshProcess();
 
       const result = customThreeToTileCache(
         meshes,
