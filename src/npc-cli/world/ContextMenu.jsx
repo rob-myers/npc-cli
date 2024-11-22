@@ -88,7 +88,7 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
         </select>
 
         <div
-          className={cx("actions", { empty: noMetaActs })}
+          className="actions"
           onClick={e => {
             const item = /** @type {HTMLElement} */ (e.target);
             const index = Array.from(e.currentTarget.childNodes).indexOf(item);
@@ -152,25 +152,22 @@ const contextMenuCss = css`
     .actions {
       flex: 2;
       padding: 2px;
-      color: #33f;
-      background-color: #fff;
-
-      &.empty {
-        background-color: #aaa;
-        color: #444;
-      }
+      color: #fff;
+      background-color: #000;
     }
 
     .action {
       padding: 0 2px;
       cursor: pointer;
+      color: #ddd;
       &:hover {
-        background-color: #ddd;
+        background-color: #433;
       }
     }
     
     .action.selected {
-      background-color: #ddd;
+      color: #fff;
+      background-color: #433;
     }
   }
 
