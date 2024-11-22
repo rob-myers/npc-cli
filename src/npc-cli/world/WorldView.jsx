@@ -447,7 +447,7 @@ export default function WorldView(props) {
  * @property {number} fov
  * @property {import('@react-three/fiber').RenderProps<HTMLCanvasElement>['gl']} glOpts
  * @property {{ longDown: boolean; screenPoint: Geom.Vect; position: THREE.Vector3; meta: Geom.Meta }} [lastDown]
- * Defined iff pointer has ever been down.
+ * Defined iff last pointer was down over the World.
  * @property {boolean} justLongDown
  * @property {Geom.Vect} lastScreenPoint Updated `onPointerMove` and `onPointerDown`.
  * @property {THREE.Raycaster} raycaster
