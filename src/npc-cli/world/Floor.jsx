@@ -145,12 +145,13 @@ export default function Floor(props) {
   }), { reset: { grid: true } });
 
   w.floor = state;
+  const { tex } = w.gmsData.texFloor;
 
   React.useEffect(() => {
     state.draw();
     state.positionInstances();
     state.addUvs();
-  }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);
+  }, [w.mapKey, w.hash.full, w.hmr.createGmsData, tex.source.version]);
 
   return (
     <instancedMesh
@@ -164,7 +165,7 @@ export default function Floor(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.gmsData.texFloor.tex}
+        atlas={tex}
         depthWrite={false} // fix z-fighting
         // diffuse={[1, 1, 0.8]}
         diffuse={[1, 1, 1]}
