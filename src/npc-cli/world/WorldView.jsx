@@ -148,13 +148,12 @@ export default function WorldView(props) {
       let mesh;
 
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
-      // const devicePixelRatio = Math.floor(window.devicePixelRatio);
-      const devicePixelRatio = window.devicePixelRatio;
+      const glPixelRatio = w.r3f.gl.getPixelRatio();
       const { left, top } = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
 
       const normalizedDeviceCoords = new THREE.Vector2(
-        -1 + 2 * (((e.clientX - left) * devicePixelRatio) / state.canvas.width),
-        +1 - 2 * (((e.clientY - top) * devicePixelRatio) / state.canvas.height),
+        -1 + 2 * (((e.clientX - left) * glPixelRatio) / state.canvas.width),
+        +1 - 2 * (((e.clientY - top) * glPixelRatio) / state.canvas.height),
       );
       state.raycaster.setFromCamera(normalizedDeviceCoords, w.r3f.camera);
 
@@ -306,16 +305,15 @@ export default function WorldView(props) {
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
-      // const devicePixelRatio = Math.floor(window.devicePixelRatio);
-      const devicePixelRatio = window.devicePixelRatio;
+      const glPixelRatio = gl.getPixelRatio();
       const targetRect = (/** @type {HTMLElement} */ (e.target)).getBoundingClientRect();
 
       // Set the projection matrix to only look at the pixel we are interested in.
       camera.setViewOffset(
         state.canvas.width,
         state.canvas.height,
-        (e.clientX - targetRect.left) * devicePixelRatio,
-        (e.clientY - targetRect.top) * devicePixelRatio,
+        (e.clientX - targetRect.left) * glPixelRatio,
+        (e.clientY - targetRect.top) * glPixelRatio,
         1,
         1,
       );
