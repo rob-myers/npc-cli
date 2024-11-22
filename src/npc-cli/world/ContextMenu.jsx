@@ -1,5 +1,5 @@
 import React from "react";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import { zIndex } from "../service/const";
 import { geom } from "../service/geom";
 import { toXZ } from "../service/three";
@@ -64,6 +64,8 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
     }
   }, [meta]);
 
+  const noNearbyNpcs = nearbyNpcKeys.length === 0;
+
   return (
     <div
       className={contextMenuCss}
@@ -73,8 +75,8 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
       onContextMenu={state.onContextMenu}
     >
       <div className="actions">
-        <select className="actor">
-          <option disabled selected={nearbyNpcKeys.length === 0}>nearby npc</option>
+        <select className={cx("actor", { empty: noNearbyNpcs })}>
+          <option disabled selected={noNearbyNpcs}>nearby npc</option>
           {nearbyNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
         </select>
         <select className="action">
@@ -126,6 +128,9 @@ const contextMenuCss = css`
       flex: 1;
       color: #ddd;
       background-color: black;
+      &.empty {
+        color: #aaa;
+      }
     }
 
     select.action {
