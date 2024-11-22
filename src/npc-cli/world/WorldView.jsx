@@ -41,6 +41,7 @@ export default function WorldView(props) {
       toneMapping: 3,
       toneMappingExposure: 1,
       logarithmicDepthBuffer: true,
+      pixelRatio: window.devicePixelRatio,
     },
     justLongDown: false,
     lastDown: undefined,
