@@ -82,12 +82,13 @@ export default function Ceiling(props) {
   }));
 
   w.ceil = state;
+  const { tex } = w.gmsData.texCeil;
 
   React.useEffect(() => {
     // 🚧 on edit const, this is triggered before texArray ready
     state.draw();
     state.positionInstances();
-  }, [w.mapKey, w.hash.full, w.hmr.createGmsData]);
+  }, [w.mapKey, w.hash.full, w.hmr.createGmsData, tex.source.version]);
 
   return (
     <instancedMesh
@@ -101,7 +102,7 @@ export default function Ceiling(props) {
         key={InstancedMultiTextureMaterial.key}
         side={THREE.DoubleSide}
         transparent
-        atlas={w.gmsData.texCeil.tex ?? emptyDataArrayTexture}
+        atlas={tex}
         alphaTest={0.5} // 0.5 flickered on (301, 101) border
         diffuse={[1, 1, 1]}
         colorSpace
