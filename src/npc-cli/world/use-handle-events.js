@@ -145,6 +145,9 @@ export default function useHandleEvents(w) {
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
     },
+    async doMetaAct({ actKey, meta, npcKey }) {
+      // 🚧
+    },
     ensureDoorPolyRefs(door) {
       if (door.gdKey in state.doorToPolyRefs) {
         return;
@@ -169,6 +172,18 @@ export default function useHandleEvents(w) {
         }
       }
       return npcKeys;
+    },
+    getMetaActs(meta) {
+      // 🚧
+      if (typeof meta.switch === 'number') {
+        return [
+          `open g${meta.gmId}d${meta.switch}`,
+          `close g${meta.gmId}d${meta.switch}`,
+          `lock g${meta.gmId}d${meta.switch}`,
+        ];
+      }
+
+      return [];
     },
     async handleEvents(e) {
       // debug('useHandleEvents', e);
@@ -577,7 +592,7 @@ export default function useHandleEvents(w) {
  * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoor
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
  * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
- * Prevent ContextMenu if any of these functions returns `true`.
+ * Prevent ContextMenu on long press if any of these return `true`.
  * @property {Map<string, Geomorph.GmRoomId>} npcToRoom npcKey to gmRoomId
  * Relates `npcKey` to current room
  * @property {{[roomId: number]: Set<string>}[]} roomToNpcs
@@ -590,8 +605,11 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
+ * @property {(metaAct: NPC.MetaAct) => Promise<void>} doMetaAct
  * @property {(door: Geomorph.DoorState) => void} ensureDoorPolyRefs
  * @property {(gmId: number, roomId: number, point: Geom.VectJson) => string[]} getNearbyNpcKeys
+ * @property {(meta: Geom.Meta) => NPC.MetaActKey[]} getMetaActs
+ * 🚧 refine type to string literals
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider

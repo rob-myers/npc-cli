@@ -18,6 +18,7 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
     justOpen: false,
     open: false,
     rootEl: /** @type {*} */ (null),
+    selectedActKey: null,
 
     hide() {
       state.open = false;
@@ -63,8 +64,11 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
       return [];
     }
   }, [meta]);
+  
+  const metaActs = meta !== undefined ? w.e.getMetaActs(meta) : [];
 
   const noNearbyNpcs = nearbyNpcKeys.length === 0;
+  const noMetaActs = metaActs.length === 0;
 
   return (
     <div
@@ -76,13 +80,27 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
     >
       <div className="actions">
         <select className={cx("actor", { empty: noNearbyNpcs })}>
-          <option disabled selected={noNearbyNpcs}>nearby npc</option>
+          <option disabled selected={noNearbyNpcs}>
+            nearby npc
+          </option>
           {nearbyNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
         </select>
-        <select className="action">
-          <option>foo</option>
-          <option>bar</option>
-          <option>baz</option>
+
+        <select
+          className={cx("action", { empty: noMetaActs })}
+          multiple
+          onClick={e => {
+            // alert(`${e.currentTarget.value}, ${e.currentTarget.selectedOptions.length}`);
+            const selectedValue = /** @type {State['selectedActKey']} */ (e.currentTarget.selectedOptions.item(0));
+            state.selectedActKey = selectedValue;
+            update();
+          }}
+        >
+          {metaActs.map(act =>
+            <option key={act} value={act} selected={state.selectedActKey === act}>
+              {act}
+            </option>
+          )}
         </select>
       </div>
       <div className="key-values">
@@ -112,6 +130,8 @@ const contextMenuCss = css`
   color: white;
   background-color: #222222aa;
   border: 1px solid #fff;
+
+  /* user-select: none; */
   
   .actions {
     display: flex;
@@ -119,8 +139,6 @@ const contextMenuCss = css`
     select {
       pointer-events: all;
       border: 1px solid #aaa;
-      color: black;
-      background-color: white;
       padding: 2px 4px;
     }
     
@@ -132,9 +150,15 @@ const contextMenuCss = css`
         color: #aaa;
       }
     }
-
+    
     select.action {
       flex: 2;
+      color: #33f;
+      background-color: #fff;
+      &.empty {
+        background-color: #aaa;
+        color: #444;
+      }
     }
   }
 
@@ -153,9 +177,6 @@ const contextMenuCss = css`
     flex: 1;
     border: 1px solid white;
     font-family: 'Courier New', Courier, monospace;
-
-    pointer-events: all;
-    /* background-color: black; */
 
     .meta-key {
       padding: 4px;
@@ -177,6 +198,7 @@ const contextMenuCss = css`
 /**
  * @typedef State
  * @property {HTMLDivElement} rootEl
+ * @property {null | NPC.MetaActKey} selectedActKey
  * @property {boolean} open Is the context menu open?
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {() => void} hide

@@ -235,4 +235,16 @@ declare namespace NPC {
     | 'lock-light'
   );
 
+  type MetaActKey = (
+    | `open ${Geomorph.GmDoorKey}`
+    | `close ${Geomorph.GmDoorKey}`
+    | `lock ${Geomorph.GmDoorKey}`
+  );
+
+  interface MetaAct<T = {}> {
+    actKey: MetaActKey;
+    meta: Geom.Meta<T>;
+    npcKey?: string;
+  }
+
 }

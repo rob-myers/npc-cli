@@ -54,10 +54,10 @@
   - ✅ restyle ContextMenu
   - ✅ ContextMenu has "select" with nearby npc keys
   - 🚧 ContextMenu has select with possible actions
-  - 🚧 can open doors using switches
-    - ℹ️ e.g. when npc locked in room can still leave
-    - npc can open door using door switch 
-    - `inner` but not `secure` door switch can be opened
+    - 🚧 can open doors using switches
+      - ℹ️ e.g. npc in room with locked door can still leave
+      - ℹ️ `inner` but not `secure` door switch can be opened
+      - generic approach to deciding if actions are possible?
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
