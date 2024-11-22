@@ -90,10 +90,9 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
         <div
           className={cx("actions", { empty: noMetaActs })}
           onClick={e => {
-            // // alert(`${e.currentTarget.value}, ${e.currentTarget.selectedOptions.length}`);
-            // const selectedValue = /** @type {State['selectedActKey']} */ (e.currentTarget.selectedOptions.item(0));
-            // state.selectedActKey = selectedValue;
-            // alert(e.target);
+            const item = /** @type {HTMLElement} */ (e.target);
+            const index = Array.from(e.currentTarget.childNodes).indexOf(item);
+            if (index !== -1)  state.selectedActKey = metaActs[index];
             update();
           }}
         >
@@ -153,17 +152,25 @@ const contextMenuCss = css`
     .actions {
       flex: 2;
       padding: 2px;
-
       color: #33f;
       background-color: #fff;
+
       &.empty {
         background-color: #aaa;
         color: #444;
       }
     }
 
-    .actions .action {
+    .action {
       padding: 0 2px;
+      cursor: pointer;
+      &:hover {
+        background-color: #ddd;
+      }
+    }
+    
+    .action.selected {
+      background-color: #ddd;
     }
   }
 
