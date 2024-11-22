@@ -31,7 +31,7 @@ export default function WorldView(props) {
       } : {
         maxPolarAngle: Math.PI / 4,
       },
-      minDistance: smallViewport ? 10 : 5,
+      minDistance: smallViewport ? 5 : 5,
       maxDistance: smallViewport ? 32 : 48,
     },
     down: undefined,
