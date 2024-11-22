@@ -746,10 +746,13 @@ export class Npc {
     });
     
     this.startAnimation('Idle');
-    // suppress final movement
-    this.agent.teleport(position);
-    // 🔔 keep target, so moves out of the way of other npcs
-    this.agent.requestMoveTarget(position);
+
+    // ℹ️ alternative: suppress slow down
+    // this.agent.teleport(position);
+    // this.agent.requestMoveTarget(position);
+    
+    // ℹ️ alternative: keep fixed
+    // this.agent.requestMoveVelocity({ x: 0, y: 0, z: 0 });
 
     this.resolve.move?.();
     this.w.events.next({ key: 'stopped-moving', npcKey: this.key });
