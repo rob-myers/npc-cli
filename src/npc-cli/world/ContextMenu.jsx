@@ -78,7 +78,8 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
       style={{ visibility: state.open ? 'visible' : 'hidden' }}
       onContextMenu={state.onContextMenu}
     >
-      <div className="actions">
+      <div className="actor-and-actions">
+
         <select className={cx("actor", { empty: noNearbyNpcs })}>
           <option disabled selected={noNearbyNpcs}>
             nearby npc
@@ -86,23 +87,24 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
           {nearbyNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
         </select>
 
-        <select
-          className={cx("action", { empty: noMetaActs })}
-          multiple
+        <div
+          className={cx("actions", { empty: noMetaActs })}
           onClick={e => {
-            // alert(`${e.currentTarget.value}, ${e.currentTarget.selectedOptions.length}`);
-            const selectedValue = /** @type {State['selectedActKey']} */ (e.currentTarget.selectedOptions.item(0));
-            state.selectedActKey = selectedValue;
+            // // alert(`${e.currentTarget.value}, ${e.currentTarget.selectedOptions.length}`);
+            // const selectedValue = /** @type {State['selectedActKey']} */ (e.currentTarget.selectedOptions.item(0));
+            // state.selectedActKey = selectedValue;
+            // alert(e.target);
             update();
           }}
         >
           {metaActs.map(act =>
-            <option key={act} value={act} selected={state.selectedActKey === act}>
+            <div key={act} className={cx("action", { selected: state.selectedActKey === act })}>
               {act}
-            </option>
+            </div>
           )}
-        </select>
+        </div>
       </div>
+
       <div className="key-values">
         {kvs.map(({ k, v }) => (
           <div key={k} className="key-value">
@@ -133,16 +135,13 @@ const contextMenuCss = css`
 
   /* user-select: none; */
   
-  .actions {
+  .actor-and-actions {
     display: flex;
 
-    select {
+    select.actor {
       pointer-events: all;
       border: 1px solid #aaa;
       padding: 2px 4px;
-    }
-    
-    select.actor {
       flex: 1;
       color: #ddd;
       background-color: black;
@@ -151,14 +150,20 @@ const contextMenuCss = css`
       }
     }
     
-    select.action {
+    .actions {
       flex: 2;
+      padding: 2px;
+
       color: #33f;
       background-color: #fff;
       &.empty {
         background-color: #aaa;
         color: #444;
       }
+    }
+
+    .actions .action {
+      padding: 0 2px;
     }
   }
 
