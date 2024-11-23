@@ -742,14 +742,13 @@ export class Npc {
       collisionQueryRange: 2,
       separationWeight: 4,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
-      maxAcceleration: 20,
     });
     
     this.startAnimation('Idle');
 
-    // ℹ️ alternative: suppress slow down
-    // this.agent.teleport(position);
-    // this.agent.requestMoveTarget(position);
+    // ℹ️ pin agent + suppress slow down
+    this.agent.teleport(position);
+    this.agent.requestMoveTarget(position);
     
     // ℹ️ alternative: keep fixed
     // this.agent.requestMoveVelocity({ x: 0, y: 0, z: 0 });
