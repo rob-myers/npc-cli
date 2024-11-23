@@ -216,7 +216,11 @@ export default function WorldView(props) {
       state.epoch.pointerDown = Date.now();
 
       window.clearTimeout(state.down?.longTimeoutId); // No MultiTouch Long Press
-      
+
+      if (e.target !== state.canvas) {
+        return; // ignore ContextMenu clicks
+      }
+
       const cameraKey = e.metaKey || e.ctrlKey || e.shiftKey;
 
       state.down = {
