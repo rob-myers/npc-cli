@@ -2,13 +2,11 @@ import React from "react";
 import { css, cx } from "@emotion/css";
 
 import { tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
-import { geom } from '../service/geom';
 import { ansi } from "../sh/const";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { faderOverlayCss, pausedControlsCss } from "./overlay-menu-css";
-import { ContextMenu } from "./ContextMenu";
 import { Logger } from "../terminal/Logger";
 import TouchIndicator from "./TouchIndicator";
 
@@ -21,7 +19,6 @@ export default function WorldMenu(props) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
 
-    cm: /** @type {*} */ (null),
     debugWhilePaused: false,
     durationKeys: {},
     initHeight: tryLocalStorageGetParsed(`log-height-px@${w.key}`) ?? 200,
@@ -87,8 +84,6 @@ export default function WorldMenu(props) {
       </div>
     )}
 
-    <ContextMenu ref={api => state.cm = state.cm ?? api} />
-
     <div
       className={loggerCss}
       {...!(state.debugWhilePaused || state.pinned) && {
@@ -145,7 +140,6 @@ const loggerCss = css`
 
 /**
  * @typedef State
- * @property {import('./ContextMenu').State} cm
  * @property {boolean} debugWhilePaused Is the camera usable whilst paused?
  * @property {{ [durKey: string]: number }} durationKeys
  * @property {import('../terminal/Logger').State} logger

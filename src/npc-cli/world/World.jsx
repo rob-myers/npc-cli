@@ -35,6 +35,7 @@ import Npcs from "./Npcs";
 import Debug from "./Debug";
 import WorldMenu from "./WorldMenu";
 import WorldWorkers from "./WorldWorkers";
+import ContextMenu from "./ContextMenu";
 
 /**
  * @param {Props} props
@@ -85,6 +86,8 @@ export default function World(props) {
     npc: /** @type {*} */ (null), // Npcs
     menu: /** @type {State['menu']} */ ({ measure(_) {} }), // ContextMenu
     debug: /** @type {*} */ (null), // Debug
+    cm: /** @type {*} */ (null), // ContextMenu
+
     // 🚧 support hmr e.g. via state.hmr
     lib: {
       filter,
@@ -102,7 +105,6 @@ export default function World(props) {
 
     e: /** @type {*} */ (null), // useHandleEvents
     n: /** @type {*} */ ({}), // w.npc.npc
-    cm: /** @type {*} */ ({}), // w.menu.ct
 
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -352,6 +354,7 @@ export default function World(props) {
         )}
       </WorldView>
       <WorldMenu setTabsEnabled={props.setTabsEnabled} />
+      <ContextMenu/>
       <WorldWorkers />
     </WorldContext.Provider>
   );

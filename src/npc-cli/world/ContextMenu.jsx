@@ -7,10 +7,7 @@ import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
 
-/**
- * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
- */
-export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
+export default function ContextMenu() {
 
   const w = React.useContext(WorldContext);
 
@@ -44,7 +41,6 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   }));
 
   w.cm = state;
-  React.useMemo(() => void /** @type {React.RefCallback<State>} */ (ref)?.(state), [ref]);
   const update = useUpdate();
 
   const { lastDown } = w.view;
@@ -68,7 +64,6 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
   const metaActs = meta !== undefined ? w.e.getMetaActs(meta) : [];
 
   const noNearbyNpcs = nearbyNpcKeys.length === 0;
-  const noMetaActs = metaActs.length === 0;
 
   return (
     <div
@@ -116,7 +111,7 @@ export const ContextMenu = React.forwardRef(function ContextMenu(props, ref) {
     </div>
   );
 
-});
+}
 
 const contextMenuCss = css`
   position: absolute;
@@ -199,10 +194,6 @@ const contextMenuCss = css`
 
   /* filter: sepia(1); */
 `;
-
-/**
- * @typedef {{}} Props
- */
 
 /**
  * @typedef State
