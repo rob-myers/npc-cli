@@ -131,7 +131,7 @@ const contextMenuCss = css`
   font-size: 0.8rem;
   color: #ddd;
   background-color: #222222dd;
-  border: 1px solid #ddd;
+  border: 1px solid #aaa;
 
   /* user-select: none; */
   
@@ -153,10 +153,12 @@ const contextMenuCss = css`
       flex: 2;
       padding: 2px;
       background-color: #000;
+      display: flex;
+      /* flex-wrap: wrap; */
     }
-
+    
     .action {
-      padding: 0 2px;
+      padding: 4px;
       cursor: pointer;
       &:hover {
         background-color: #433;
@@ -178,11 +180,10 @@ const contextMenuCss = css`
 
   .key-value {
     display: flex;
-    /* align-items: center; */
     justify-content: space-around;
 
     flex: 1;
-    border: 1px solid #ccc;
+    border: 1px solid #555;
     font-family: 'Courier New', Courier, monospace;
 
     .meta-key {

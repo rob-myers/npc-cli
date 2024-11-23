@@ -71,12 +71,16 @@
     - fix click on ContextMenu
     - fix right click on ContextMenu
     - fix unfocus tab then click
+  - ContextMenu
+    - has close button
+    - has small sphere/cube indicating contact point?
+    - can track moving NPC?
+    - transparent for doors/walls when "behind contact normal"?
   - 🚧 ContextMenu has select with possible actions
+    - ℹ️ e.g. npc in room with locked door can still leave
+    - ℹ️ `inner` but not `secure` door switch can be opened
+    - ✅ generic approach to deciding if actions are possible?
     - 🚧 can open doors using switches
-      - ℹ️ e.g. npc in room with locked door can still leave
-      - ℹ️ `inner` but not `secure` door switch can be opened
-      - generic approach to deciding if actions are possible?
-  - ContextMenu can track moving NPC?
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
