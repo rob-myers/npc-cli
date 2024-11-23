@@ -67,8 +67,6 @@ export default function ContextMenu() {
   w.cm = state;
   const update = useUpdate();
 
-  const noNearNpcs = state.nearNpcKeys.length === 0;
-
   return (
     <Html
       visible={state.open}
@@ -85,14 +83,11 @@ export default function ContextMenu() {
       >
         <div className="actor-and-actions">
 
-          <select className={cx("actor", { empty: noNearNpcs })}>
-            <option disabled selected={noNearNpcs}>
-              nearby npc
-            </option>
+          {state.nearNpcKeys.length > 0 && <select className="actor">
             {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
-          </select>
+          </select>}
 
-          <div
+          {state.metaActs.length > 0 && <div
             className="actions"
             onClick={e => {
               const item = /** @type {HTMLElement} */ (e.target);
@@ -106,7 +101,7 @@ export default function ContextMenu() {
                 {act}
               </div>
             )}
-          </div>
+          </div>}
         </div>
 
         <div className="key-values">
@@ -134,9 +129,9 @@ const contextMenuCss = css`
   flex-direction: column;
 
   font-size: 0.8rem;
-  color: white;
-  background-color: #222222aa;
-  border: 1px solid #fff;
+  color: #ddd;
+  background-color: #222222dd;
+  border: 1px solid #ddd;
 
   /* user-select: none; */
   
@@ -148,7 +143,6 @@ const contextMenuCss = css`
       border: 1px solid #aaa;
       padding: 2px 4px;
       flex: 1;
-      color: #ddd;
       background-color: black;
       &.empty {
         color: #aaa;
@@ -158,14 +152,12 @@ const contextMenuCss = css`
     .actions {
       flex: 2;
       padding: 2px;
-      color: #fff;
       background-color: #000;
     }
 
     .action {
       padding: 0 2px;
       cursor: pointer;
-      color: #ddd;
       &:hover {
         background-color: #433;
       }
@@ -190,7 +182,7 @@ const contextMenuCss = css`
     justify-content: space-around;
 
     flex: 1;
-    border: 1px solid white;
+    border: 1px solid #ccc;
     font-family: 'Courier New', Courier, monospace;
 
     .meta-key {
@@ -198,12 +190,12 @@ const contextMenuCss = css`
     }
     .meta-value {
       padding: 4px;
-      color: #0f0;
+      color: #cca;
       max-width: 128px;
     }
   }
 
-  /* filter: sepia(1); */
+  /* filter: grayscale(1) brightness(0.7); */
 `;
 
 /**
