@@ -130,13 +130,15 @@ export async function* selectPolysDemo({ w, args }) {
  * w
  * w 'x => x.crowd'`
  * w crowd
- * w s.toggleDoor '{gdKey:"g0d0"}'
+ * w e.toggleDoor g0d0
+ * w gmGraph.findRoomContaining $( click 1 | map xz )
+ * click 1 | map xz | w --stdin gmGraph.findRoomContaining
+ * echo image/webp | w --stdin view.openSnapshot _ 0
  * ```
- * - 🚧 `w "x => x.gmGraph.findRoomContaining($( click 1 ))"`
- * - 🚧 `w gmGraph.findRoomContaining $( click 1 )`
- * - 🚧 `click | w gmGraph.findRoomContaining`
  *
  * ℹ️ can always `ctrl-c`, even without cleaning up ongoing computations
+ * ℹ️ --stdin option assumes stdin arg is represented via `_` (hyphen breaks getopts)
+ * 
  * @param {RunArg} ctxt
  */
 export async function* w(ctxt) {
@@ -160,11 +162,12 @@ export async function* w(ctxt) {
     yield v instanceof Promise ? Promise.race([v, getHandleProm()]) : v;
   } else {
     /** @type {*} */ let datum;
-    !operands.includes("-") && operands.push("-");
+    const stdinInputChar = "_";
+    if (!operands.includes(stdinInputChar)) operands.push(stdinInputChar);
     while ((datum = await api.read()) !== api.eof) {
       const func = api.generateSelector(
         api.parseFnOrStr(operands[0]),
-        operands.slice(1).map(x => x === "-" ? datum : api.parseJsArg(x)),
+        operands.slice(1).map(x => x === stdinInputChar ? datum : api.parseJsArg(x)),
       );
       try {
         const v = func(w, ctxt);

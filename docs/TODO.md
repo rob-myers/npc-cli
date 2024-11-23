@@ -32,7 +32,10 @@
 - ✅ jerky npc movement when pause then unpause while moving
   - ℹ️ Floor/Ceiling were needlessly recomputed
 
-- `w --stdin` e.g. `echo image/webp | w --stdIn view.openSnapshot - 0` should be low quality
+- ✅ `w --stdin` e.g. `echo image/webp | w --stdin view.openSnapshot - 0` should be low quality
+  - ℹ️ should be same as `w view.openSnapshot image/webp 0`
+  - ℹ️ getopts is reordering hyphen `-` i.e. need another dummy symbol to represent stdin
+  - use underscore `echo image/webp | w --stdin view.openSnapshot _ 0`
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

@@ -7,7 +7,7 @@ export const localStorageKey = {
 export const longPressMs = 500;
 
 export const zIndex = /** @type {const} */ ({
-  contextMenu: 4,
+  contextMenu: 3,
   faderOverlay: 4,
   ttyTouchHelper: 5,
   ttyTouchCircle: 3,

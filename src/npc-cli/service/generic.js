@@ -216,7 +216,7 @@ export function deepClone(input) {
 
 /**
  * Convert a function, regexp or string into a 'selector'.
- * - for functions we merely prefix args extraArgs
+ * - for functions we merely prefix args `extraArgs`
  * - for strings we support e.g.
  *   - `foo.bar.baz` -> function (x) { return x.foo.bar.baz }
  *   - `foo.bar.baz` -> function (x) { return x.foo.bar.baz() }
@@ -224,6 +224,8 @@ export function deepClone(input) {
  *
  * Technically the latter selectors are dependent on the particular value of `x`.
  * But in practice we can often expect them to act uniformly like the examples above.
+ * 
+ * 
  * @param {((x: any) => any) | string | RegExp} selector
  * @param {any[]} [extraArgs]
  * @returns {(x: any, ...xs: any[]) => any}
