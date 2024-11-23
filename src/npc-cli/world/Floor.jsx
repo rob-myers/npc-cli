@@ -54,14 +54,14 @@ export default function Floor(props) {
       w.menu.measure('floor.draw');
       for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
         state.drawGmKey(gmKey);
-        w.gmsData.texFloor.updateIndex(texId);
+        w.texFloor.updateIndex(texId);
         await pause();
       }
-      w.gmsData.texFloor.update();
+      w.texFloor.update();
       w.menu.measure('floor.draw');
     },
     drawGmKey(gmKey) {
-      const { ct } = w.gmsData.texFloor;
+      const { ct } = w.texFloor;
       const gm = w.geomorphs.layout[gmKey];
       const { pngRect, hullPoly, navDecomp, walls } = gm;
 
@@ -145,13 +145,14 @@ export default function Floor(props) {
   }), { reset: { grid: true } });
 
   w.floor = state;
-  const { tex } = w.gmsData.texFloor;
+  const { tex } = w.texFloor;
 
   React.useEffect(() => {
-    state.draw();
     state.positionInstances();
     state.addUvs();
-  }, [w.mapKey, w.hash.full, w.hmr.createGmsData, tex.source.version]);
+    // 🚧 prefer three.js api (tried w.texFloor.tex.needsUpdate = true)
+    state.draw().then(() => w.update());
+  }, [w.mapKey, w.hash.full, w.texVs.floor]);
 
   return (
     <instancedMesh

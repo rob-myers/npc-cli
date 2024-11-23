@@ -23,6 +23,17 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
+- ✅ change const.js hmr issue i.e. floor/ceiling disappears
+  - ℹ️ floor comes back if remount material...
+  - ℹ️ seems floor data texture `source.data` is all black
+  - ✅ `w.texVs.{floor,ceiling}++` in world query
+  - ✅ `w.tex{Floor,Ceil}`
+  - ℹ️ should try to replace `w.update()`
+- ✅ jerky npc movement when pause then unpause while moving
+  - ℹ️ Floor/Ceiling were needlessly recomputed
+
+- `w --stdin` e.g. `echo image/webp | w --stdIn view.openSnapshot - 0` should be low quality
+
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
@@ -85,12 +96,6 @@
     - could `click 1 | map xz | w gmGraph.findRoomContaining`
     - could `click 1 | map meta`
   - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
-
-- `w --stdin` issue
-  - e.g. `echo image/webp | w --stdIn view.openSnapshot - 0` should be low quality
-- 🚧 change const.js hmr issue i.e. floor/ceiling disappears
-  - ℹ️ floor comes back if remount material...
-  - ℹ️ seems floor data texture `source.data` is all black
 
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection

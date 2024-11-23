@@ -19,10 +19,6 @@ export default function createGmsData() {
     obstaclesCount: 0,
     /** This induces the floor/ceil texture array ordering */
     seenGmKeys: /** @type {Geomorph.GeomorphKey[]} */ ([]),
-    /** texture array */
-    texFloor: emptyTexArray,
-    /** texture array */
-    texCeil: emptyTexArray,
     /** Total number of walls, where each wall is a single quad:  */
     wallCount: 0,
     /** Per gmId, total number of wall line segments:  */
@@ -114,28 +110,6 @@ export default function createGmsData() {
       gmsData.wallPolySegCounts = gms.map(({ key: gmKey }) =>
         gmsData[gmKey].wallPolySegCounts.reduce((sum, count) => sum + count, 0),
       );
-    },
-    
-    /**
-     * @param {{
-     *   seenGmKeys: Geomorph.GeomorphKey[];
-     *   texFloor: TexArray;
-     *   texCeil: TexArray;
-     * }} [prevGmsData]
-     * Previous lookup so can reuse memory
-     */
-    computeTextureArrays(prevGmsData) {
-      const dimension = floorTextureDimension;
-      const preserve = prevGmsData?.seenGmKeys.length === gmsData.seenGmKeys.length && gmsData.texFloor.ct.canvas.width !== 0;
-      gmsData.texFloor = preserve ? prevGmsData.texFloor : new TexArray({ ctKey: 'tex-array-floor', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
-      gmsData.texCeil = preserve ? prevGmsData.texCeil : new TexArray({ ctKey: 'tex-array-ceil', width: dimension, height: dimension, numTextures: gmsData.seenGmKeys.length });
-      
-      if (preserve) {// remove ref
-        prevGmsData.texFloor = prevGmsData.texCeil = emptyTexArray;
-      } else {// garbage collect
-        prevGmsData?.texFloor.dispose();
-        prevGmsData?.texCeil.dispose();
-      }
     },
 
     /** Dispose `GmData` lookup. */

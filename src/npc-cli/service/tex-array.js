@@ -42,6 +42,7 @@ export class TexArray {
   }
 
   /**
+   * Resize if needed i.e. if "dimension" or "number of textures" has changed.
    * @param {Omit<TexArrayOpts, 'ctKey'>} opts
    */
   resize(opts) {

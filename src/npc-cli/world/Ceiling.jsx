@@ -5,7 +5,7 @@ import { Mat } from "../geom";
 import { wallHeight, gmFloorExtraScale, worldToSguScale, sguToWorldScale } from "../service/const";
 import { pause } from "../service/generic";
 import { drawPolygons } from "../service/dom";
-import { emptyDataArrayTexture, getQuadGeometryXZ } from "../service/three";
+import { getQuadGeometryXZ } from "../service/three";
 import { InstancedMultiTextureMaterial } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
@@ -25,14 +25,14 @@ export default function Ceiling(props) {
       w.menu.measure('ceil.draw');
       for (const [texId, gmKey] of w.gmsData.seenGmKeys.entries()) {
         state.drawGmKey(gmKey);
-        w.gmsData.texCeil.updateIndex(texId);
+        w.texCeil.updateIndex(texId);
         await pause();
       }
-      w.gmsData.texCeil.update();
+      w.texCeil.update();
       w.menu.measure('ceil.draw');
     },
     drawGmKey(gmKey) {
-      const { ct } = w.gmsData.texCeil;
+      const { ct } = w.texCeil;
       const layout = w.geomorphs.layout[gmKey];
       const { pngRect } = layout;
 
@@ -57,7 +57,7 @@ export default function Ceiling(props) {
       drawPolygons(ct, tops.window, [black, wallsColor, thinLineWidth]);
       drawPolygons(ct, tops.door.filter(x => !x.meta.hull), [grey100, null]);
       drawPolygons(ct, tops.door.filter(x => x.meta.hull), [hullDoorsColor, null, thinLineWidth]);
-      drawPolygons(ct, tops.broad, [black, grey90, thickLineWidth]);
+      drawPolygons(ct, tops.broad, [black, grey90, thinLineWidth]);
       const hullWalls = layout.walls.filter(x => x.meta.hull);
       drawPolygons(ct, hullWalls, [wallsColor, wallsColor]);
       
@@ -82,13 +82,13 @@ export default function Ceiling(props) {
   }));
 
   w.ceil = state;
-  const { tex } = w.gmsData.texCeil;
+  const { tex } = w.texCeil;
 
   React.useEffect(() => {
-    // 🚧 on edit const, this is triggered before texArray ready
-    state.draw();
     state.positionInstances();
-  }, [w.mapKey, w.hash.full, w.hmr.createGmsData, tex.source.version]);
+    // 🚧 prefer three.js api (tried w.texCeil.tex.needsUpdate = true)
+    state.draw().then(() => w.update());
+  }, [w.mapKey, w.hash.full, w.texVs.ceiling]);
 
   return (
     <instancedMesh

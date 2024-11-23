@@ -9,6 +9,7 @@ import { importNavMesh, Crowd } from "@recast-navigation/core";
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
 import { GmRoomGraphClass } from "../graph/gm-room-graph";
+import { floorTextureDimension } from "../service/const";
 import { debug, isDevelopment, keys, warn, removeFirst, toPrecision, pause, mapValues } from "../service/generic";
 import { getContext2d, invertCanvas, isSmallViewport } from "../service/dom";
 import { removeCached, setCached } from "../service/query-client";
@@ -64,8 +65,11 @@ export default function World(props) {
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
 
+    texFloor: new TexArray({ ctKey: 'floor-tex-array', numTextures: 1, width: 0, height: 0 }),
+    texCeil: new TexArray({ ctKey: 'ceil-tex-array', numTextures: 1, width: 0, height: 0 }),
     texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
+    texVs: { floor: 0, ceiling: 0 }, // 🚧
 
     crowd: /** @type {*} */ (null),
 
@@ -211,7 +215,13 @@ export default function World(props) {
           }
         };
         next.gmsData.computeRoot(next.gms);
-        next.gmsData.computeTextureArrays(state.gmsData);
+        
+        const dimension = floorTextureDimension;
+        state.texFloor.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
+        state.texCeil.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
+        state.texVs.floor++; // e.g. fix edit const.js
+        state.texVs.ceiling++;
+
         state.menu.measure('gmsData');
       }
       
@@ -395,8 +405,11 @@ export default function World(props) {
  * @property {import("./ContextMenu").State} cm
  * Shortcut for `w.menu.ct`
  *
+ * @property {TexArray} texFloor
+ * @property {TexArray} texCeil
  * @property {TexArray} texDecor
  * @property {TexArray} texObs
+ * @property {{ floor: number; ceiling: number; }} texVs
  * @property {Geomorph.LayoutInstance[]} gms
  * Aligned to `map.gms`.
  * Only populated for geomorph keys seen in some map.
