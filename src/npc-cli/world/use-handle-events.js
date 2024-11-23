@@ -207,11 +207,8 @@ export default function useHandleEvents(w) {
             return; // prevent ContextMenu
           }
 
-          if (e.distancePx <= (e.touch ? 10 : 5)) {
-            w.cm.show({ x: e.screenPoint.x - 128, y: e.screenPoint.y });
-            // prevent pan whilst pointer held down
-            w.view.controls.saveState();
-            w.view.controls.reset();
+          if (e.distancePx <= (e.touch ? 20 : 5)) {
+            w.cm.show();
           } else {
             w.cm.hide();
           }
@@ -224,7 +221,7 @@ export default function useHandleEvents(w) {
           break;
         }
         case "pointerdown":
-          w.cm.hide();
+          // w.cm.hide();
           break;
         case "pointerup":
           // e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
@@ -497,9 +494,9 @@ export default function useHandleEvents(w) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        e.is3d && w.cm.show({ x: e.screenPoint.x + 12, y: e.screenPoint.y });
+        e.is3d && w.cm.show();
       } else if (!e.justLongDown) {
-        w.cm.hide();
+        // w.cm.hide();
       }
     },
     removeFromSensors(npcKey) {

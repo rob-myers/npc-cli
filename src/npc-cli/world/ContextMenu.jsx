@@ -1,7 +1,7 @@
 import React from "react";
+import { Html } from "@react-three/drei";
 import { css, cx } from "@emotion/css";
-import { zIndex } from "../service/const";
-import { geom } from "../service/geom";
+import * as THREE from "three";
 import { toXZ } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -17,6 +17,11 @@ export default function ContextMenu() {
     rootEl: /** @type {*} */ (null),
     selectedActKey: null,
 
+    kvs: [],
+    nearNpcKeys: [],
+    metaActs: [],
+    position: [0, 0, 0],
+
     hide() {
       state.open = false;
       update();
@@ -29,96 +34,102 @@ export default function ContextMenu() {
         state.rootEl = el;
       }
     },
-    show(at) {
-      const menuDim = state.rootEl.getBoundingClientRect();
-      const canvasDim = w.view.canvas.getBoundingClientRect();
-      const x = geom.clamp(at.x, 0, canvasDim.width - menuDim.width);
-      const y = geom.clamp(at.y, 0, canvasDim.height - menuDim.height);
-      state.rootEl.style.transform = `translate(${x}px, ${y}px)`;
+    show() {
       state.open = true;
+      state.updateFromLastDown();
       update();
+    },
+    updateFromLastDown() {
+      const { lastDown } = w.view;
+      
+      if (lastDown === undefined) {
+        return;
+      }
+      const meta = lastDown?.meta;
+  
+      state.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
+        const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
+        return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
+      }).sort((a, b) => a.length < b.length ? -1 : 1);
+  
+      state.nearNpcKeys = (
+        (typeof meta?.gmId === 'number' && typeof meta.roomId === 'number')
+          ? w.e.getNearbyNpcKeys(meta.gmId, meta.roomId, toXZ(lastDown.position))
+          : []
+      );
+  
+      state.metaActs = w.e.getMetaActs(meta);
+  
+      state.position = lastDown.position.toArray();
     },
   }));
 
   w.cm = state;
   const update = useUpdate();
 
-  const { lastDown } = w.view;
-  const meta = lastDown?.meta;
-
-  const kvs = React.useMemo(() => 
-    Object.entries(meta ?? {}).map(([k, v]) => {
-      const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
-      return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
-    }).sort((a, b) => a.length < b.length ? -1 : 1)
-  , [meta]);
-
-  const nearbyNpcKeys = React.useMemo(() => {
-    if (lastDown !== undefined && typeof meta?.gmId === 'number' && typeof meta.roomId === 'number') {
-      return w.e.getNearbyNpcKeys(meta.gmId, meta.roomId, toXZ(lastDown.position));
-    } else {
-      return [];
-    }
-  }, [meta]);
-  
-  const metaActs = meta !== undefined ? w.e.getMetaActs(meta) : [];
-
-  const noNearbyNpcs = nearbyNpcKeys.length === 0;
+  const noNearNpcs = state.nearNpcKeys.length === 0;
 
   return (
-    <div
-      className={contextMenuCss}
-      ref={state.rootRef}
-      // 🔔 'visibility' permits computing menuDim.height
-      style={{ visibility: state.open ? 'visible' : 'hidden' }}
-      onContextMenu={state.onContextMenu}
+    <Html
+      visible={state.open}
+      position={state.position}
+      className="context-menu"
+      zIndexRange={[0]} // behind "disable" overlay
     >
-      <div className="actor-and-actions">
+      <div
+        className={contextMenuCss}
+        ref={state.rootRef}
+        // 🔔 'visibility' permits computing menuDim.height
+        style={{ visibility: state.open ? 'visible' : 'hidden' }}
+        onContextMenu={state.onContextMenu}
+      >
+        <div className="actor-and-actions">
 
-        <select className={cx("actor", { empty: noNearbyNpcs })}>
-          <option disabled selected={noNearbyNpcs}>
-            nearby npc
-          </option>
-          {nearbyNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
-        </select>
+          <select className={cx("actor", { empty: noNearNpcs })}>
+            <option disabled selected={noNearNpcs}>
+              nearby npc
+            </option>
+            {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
+          </select>
 
-        <div
-          className="actions"
-          onClick={e => {
-            const item = /** @type {HTMLElement} */ (e.target);
-            const index = Array.from(e.currentTarget.childNodes).indexOf(item);
-            if (index !== -1)  state.selectedActKey = metaActs[index];
-            update();
-          }}
-        >
-          {metaActs.map(act =>
-            <div key={act} className={cx("action", { selected: state.selectedActKey === act })}>
-              {act}
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="key-values">
-        {kvs.map(({ k, v }) => (
-          <div key={k} className="key-value">
-            <span className="meta-key">{k}</span>
-            {v !== '' && <span className="meta-value">{v}</span>}
+          <div
+            className="actions"
+            onClick={e => {
+              const item = /** @type {HTMLElement} */ (e.target);
+              const index = Array.from(e.currentTarget.childNodes).indexOf(item);
+              if (index !== -1)  state.selectedActKey = state.metaActs[index];
+              update();
+            }}
+          >
+            {state.metaActs.map(act =>
+              <div key={act} className={cx("action", { selected: state.selectedActKey === act })}>
+                {act}
+              </div>
+            )}
           </div>
-        ))}
-      </div>
+        </div>
 
-    </div>
+        <div className="key-values">
+          {state.kvs.map(({ k, v }) => (
+            <div key={k} className="key-value">
+              <span className="meta-key">{k}</span>
+              {v !== '' && <span className="meta-value">{v}</span>}
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </Html>
   );
 
 }
 
 const contextMenuCss = css`
+  /* otherwise it is centred */
   position: absolute;
   left: 0;
   top: 0;
-  z-index: ${zIndex.contextMenu};
-  
+
   display: flex;
   flex-direction: column;
 
@@ -197,12 +208,19 @@ const contextMenuCss = css`
 
 /**
  * @typedef State
+ * @property {boolean} justOpen Was the context menu just opened?
+ * @property {boolean} open Is the context menu open?
  * @property {HTMLDivElement} rootEl
  * @property {null | NPC.MetaActKey} selectedActKey
- * @property {boolean} open Is the context menu open?
- * @property {boolean} justOpen Was the context menu just opened?
+ *
+ * @property {{ k: string; v: string; length: number }[]} kvs
+ * @property {string[]} nearNpcKeys
+ * @property {NPC.MetaActKey[]} metaActs
+ * @property {THREE.Vector3Tuple} position
+ * 
  * @property {() => void} hide
  * @property {(e: React.MouseEvent) => void} onContextMenu
  * @property {(el: null | HTMLDivElement) => void} rootRef
- * @property {(at: Geom.VectJson) => void} show
+ * @property {() => void} show
+ * @property {() => void} updateFromLastDown
  */

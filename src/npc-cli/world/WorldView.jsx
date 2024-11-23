@@ -11,6 +11,7 @@ import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallVi
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
 import { WorldContext } from "./world-context.js";
+import ContextMenu from "./ContextMenu.jsx";
 import useStateRef from "../hooks/use-state-ref.js";
 import useOnResize from "../hooks/use-on-resize.js";
 
@@ -298,7 +299,7 @@ export default function WorldView(props) {
     },
     onWheel(e) {
       if (w.cm.open === true) {
-        w.cm.hide();
+        // w.cm.hide();
         w.cm.justOpen = false;
       }
     },
@@ -417,7 +418,7 @@ export default function WorldView(props) {
         minPanDistance={smallViewport ? 0.05 : 0}
       />
 
-      <ambientLight intensity={1} />
+      <ContextMenu/>
 
       <Origin />
 

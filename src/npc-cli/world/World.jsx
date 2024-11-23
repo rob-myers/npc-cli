@@ -35,7 +35,6 @@ import Npcs from "./Npcs";
 import Debug from "./Debug";
 import WorldMenu from "./WorldMenu";
 import WorldWorkers from "./WorldWorkers";
-import ContextMenu from "./ContextMenu";
 
 /**
  * @param {Props} props
@@ -354,7 +353,6 @@ export default function World(props) {
         )}
       </WorldView>
       <WorldMenu setTabsEnabled={props.setTabsEnabled} />
-      <ContextMenu/>
       <WorldWorkers />
     </WorldContext.Provider>
   );
