@@ -8,7 +8,7 @@ export const longPressMs = 500;
 
 export const zIndex = /** @type {const} */ ({
   contextMenu: 4,
-  faderOverlay: 5,
+  faderOverlay: 4,
   ttyTouchHelper: 5,
   ttyTouchCircle: 3,
 });
@@ -356,7 +356,7 @@ export const npcClassKeys = /** @type {NPC.ClassKey[]} */ (
  */
 export const maxNumberOfNpcs = 256;
 
-export const npcNearUiDist = 1;
+export const npcNearUiDist = 1.2;
 
 export const physicsConfig = {
   fps: 60,
