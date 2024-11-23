@@ -66,6 +66,7 @@ export default function ContextMenu() {
 
   w.cm = state;
   const update = useUpdate();
+  const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
 
   return (
     <Html
@@ -81,13 +82,14 @@ export default function ContextMenu() {
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
         onContextMenu={state.onContextMenu}
       >
-        <div className="actor-and-actions">
 
-          {state.nearNpcKeys.length > 0 && <select className="actor">
+        {canAct && <div className="actor-and-actions">
+
+          <select className="actor">
             {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
-          </select>}
+          </select>
 
-          {state.metaActs.length > 0 && <div
+          <div
             className="actions"
             onClick={e => {
               const item = /** @type {HTMLElement} */ (e.target);
@@ -101,8 +103,8 @@ export default function ContextMenu() {
                 {act}
               </div>
             )}
-          </div>}
-        </div>
+          </div>
+        </div>}
 
         <div className="key-values">
           {state.kvs.map(({ k, v }) => (

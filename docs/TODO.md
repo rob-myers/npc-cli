@@ -73,9 +73,12 @@
     - fix unfocus tab then click
   - ContextMenu
     - has close button
+    - has persist checkbox, otherwise auto-closes
     - has small sphere/cube indicating contact point?
     - can track moving NPC?
+      - need strategy for ContextMenu when clicked npc moves 
     - transparent for doors/walls when "behind contact normal"?
+    - maybe can choose side to not block door?
   - 🚧 ContextMenu has select with possible actions
     - ℹ️ e.g. npc in room with locked door can still leave
     - ℹ️ `inner` but not `secure` door switch can be opened
