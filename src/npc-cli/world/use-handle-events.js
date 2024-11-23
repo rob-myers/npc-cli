@@ -209,8 +209,6 @@ export default function useHandleEvents(w) {
 
           if (e.distancePx <= (e.touch ? 20 : 5)) {
             w.cm.show();
-          } else {
-            w.cm.hide();
           }
           break;
         }
