@@ -1,8 +1,9 @@
 import { css } from "@emotion/css";
+import { zIndex } from "../service/const";
 
 export const faderOverlayCss = css`
   position: absolute;
-  z-index: 4;
+  z-index: ${zIndex.faderOverlay};
 
   left: 0;
   top: 0;

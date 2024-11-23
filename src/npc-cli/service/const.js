@@ -7,9 +7,10 @@ export const localStorageKey = {
 export const longPressMs = 500;
 
 export const zIndex = /** @type {const} */ ({
-  contextMenu: 90,
+  contextMenu: 4,
+  faderOverlay: 5,
   ttyTouchHelper: 5,
-  ttyTouchCircle: 80,
+  ttyTouchCircle: 3,
 });
 
 /** @type {import('@xterm/xterm').ITheme} */
