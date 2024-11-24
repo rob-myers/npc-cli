@@ -117,22 +117,22 @@
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
   - better way?
-- create recast-navigation-js discussion
-  - How to use `state.crowd.raw.setObstacleAvoidanceParams(1, new Recast.dtObstacleAvoidanceParams())`?
+- Example of `state.crowd.raw.setObstacleAvoidanceParams(1, new Recast.dtObstacleAvoidanceParams())`?
+  - recast-navigation-js discussion?
 - hmr sometimes breaks npc opacity/selector
-- try animate ceiling diffuse i.e. more/less white
+- skins: can remap "cuboid" head/body too
+- ❌ try animate ceiling diffuse i.e. more/less white
 - ✅ try avoid recreate decor/obstacles CanvasTexture by fixing texture size
 - consider using rapier for raycasting, rather than adding three-mesh-bvh
   - try adding static non-colliding "walls and doors" and raycast against them
   - could filter out doors which are open
-- decor hmr while paused is broke decor quads instanceId?
+- decor hmr while paused broke decor quads instanceId?
 - auto reduce fov when World canvas wide with short height?
   > `w update 'w => w.view.targetFov = 5'`
 - ℹ️ to use `await ...` inside `map` we must write `async` in def (unlike `run`)
   - e.g. `echo foo | map 'async x => { await new Promise(r => r()); return x }'`
 - ❌ Tabs: can specify initially awake background tabs e.g. tty for mobile
   - background tab never was rendered
-- bug: sh: paste multiline command and start Cmd-Deleting midway
 - useGLTFsAsync hook
   - replaces synchronous useGLTF
   - supports multiple and provides each when ready
@@ -143,9 +143,12 @@
   - ℹ️ `cat '/Users/robmyers/Library/Application Support/Google/Chrome/chrome_debug.log'`
   - create a branch and repro without workers/crowd
 - bug: tty: ctrl + w while multiple input: goes back a line
-  - need repro
+- bug: sh: paste multiline command and start Cmd-Deleting midway
+- tty pause/resume should remember cursor position
+- ✅ tty resize while multiline input still bit broken
+  - resize small, then resize big and see broken line, resize bigger seems fixed
+  - ℹ️ but native terminal has same issue
 - ❌ change fov with camera distance? e.g. 15 far, 30 close
-- support multiple skins for single test character
 - decor labels should be instancedmesh with custom shader
 - support click switch to open door, instead of click door
   - mobile has difficulty pressing switches, so
@@ -182,8 +185,6 @@
 - running `source PROFILE` twice breaks e.g. toggle door
   - maybe detect/warn "duplicate process def"
 - duplicate walls in a symbol seemed to cancel each other out
-- tty resize while multiline input is broken again
-- tty pause/resume should remember cursor position
 - careful that world query doesn't "run twice at once"
   - e.g. by focusing window whilst ongoing?
 - `Tabs` css should not reference src/const
