@@ -15,6 +15,7 @@ export default function ContextMenu() {
   const state = useStateRef(/** @returns {State} */ () => ({
     justOpen: false,
     open: false,
+    persist: { id: `w-${w.key}-cm-persist`, el: /** @type {*} */ (null) },
     rootEl: /** @type {*} */ (null),
     selectedActKey: null,
 
@@ -36,7 +37,8 @@ export default function ContextMenu() {
       }
     },
     onClickClose() {
-      state.hide();
+      state.hide(); // 🔔 hacky:
+      state.rootEl.querySelector('.side-note-bubble')?.classList.remove('open');
     },
     onContextMenu(e) {
       // e.preventDefault();
@@ -90,23 +92,29 @@ export default function ContextMenu() {
       <div
         className={contextMenuCss}
         ref={state.rootRef}
-        // 🔔 'visibility' permits computing menuDim.height
+        // 🔔 visibility for computing menuDim.height
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
         onContextMenu={state.onContextMenu}
       >
 
         <div className="top-bar">
           <div className="options">
-            <SideNote>
-              Options go here...
+            <SideNote onlyOnClick width={300}>
+              <div className="controls">
+                <div className="control">
+                  <label htmlFor={state.persist.id}>persist</label>
+                  <input
+                    type="checkbox"
+                    id={state.persist.id}
+                    ref={el => void (el && (state.persist.el = el))}
+                  />
+                </div>
+              </div>
             </SideNote>
           </div>
-          <div
-            className="close-button"
-            onClick={state.onClickClose}
-          >
+          <button className="close-button" onClick={state.onClickClose}>
             x
-          </div>
+          </button>
         </div>
 
 
@@ -186,6 +194,17 @@ const contextMenuCss = css`
     height: 100%;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+  }
+  /* .options > .side-note-bubble {
+    transform: translateY(40px);
+  } */
+
+  .options .controls {
+    display: flex;
+  }
+  .options .control {
+    display: flex;
+    gap: 4px;
   }
 
   .close-button {
@@ -275,6 +294,7 @@ const contextMenuCss = css`
  * @property {boolean} open Is the context menu open?
  * @property {HTMLDivElement} rootEl
  * @property {null | NPC.MetaActKey} selectedActKey
+ * @property {OptionsControl} persist
  *
  * @property {{ k: string; v: string; length: number }[]} kvs
  * @property {string[]} nearNpcKeys
@@ -288,4 +308,10 @@ const contextMenuCss = css`
  * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
  * @property {() => void} updateFromLastDown
+ */
+
+/**
+ * @typedef OptionsControl
+ * @property {string} id
+ * @property {HTMLInputElement} el
  */

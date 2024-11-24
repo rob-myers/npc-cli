@@ -75,7 +75,8 @@
     - ✅ has close button
     - ✅ has options panel
     - 🚧 options panel:
-      - has persist checkbox, otherwise auto-closes
+      - ✅ has persist checkbox
+      - 🚧 auto-close if persist checkbox not ticked
       - can toggle enabled/disabled with transparency
       - maybe can choose left/right/top/bottom to not block door?
     - has small sphere/cube indicating contact point?
