@@ -5,8 +5,9 @@ import { css, cx } from '@emotion/css';
  * - Direction is `right` unless < 200 pixels to the right of
  *   root element, in which case direction is `left`
  * - Currently .dark-mode applies `filter: invert(1)`
+ * @param {React.PropsWithChildren<{ width?: number }>} props
  */
-export default function SideNote(props: React.PropsWithChildren<{ width?: number }>) {
+export default function SideNote(props) {
   const timeoutId = React.useRef(0);
 
   return <>
@@ -14,14 +15,14 @@ export default function SideNote(props: React.PropsWithChildren<{ width?: number
       className={cx("side-note", iconTriggerCss)}
       onClick={e => 
         open({
-          bubble: e.currentTarget.nextSibling as HTMLElement,
+          bubble: /** @type {HTMLElement} */ (e.currentTarget.nextSibling),
           rect: e.currentTarget.getBoundingClientRect(),
           width: props.width,
           timeoutId: timeoutId.current,
         })
       }
       onMouseEnter={e => {
-        const bubble = e.currentTarget.nextSibling as HTMLElement;
+        const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
         const rect = e.currentTarget.getBoundingClientRect();
         timeoutId.current = window.setTimeout(() => open({ bubble, rect, width: props.width, timeoutId: timeoutId.current }), hoverShowMs);
       }}
@@ -45,7 +46,10 @@ export default function SideNote(props: React.PropsWithChildren<{ width?: number
   </>;
 }
 
-function open({ bubble, rect, width, timeoutId }: { bubble: HTMLElement; rect: DOMRect; width: number | undefined, timeoutId: number; }) {
+/**
+ * @param {{ bubble: HTMLElement; rect: DOMRect; width: number | undefined, timeoutId: number; }} param0 
+ */
+function open({ bubble, rect, width, timeoutId }) {
   window.clearTimeout(timeoutId); // clear close timeout
 
   bubble.classList.add('open');
@@ -62,8 +66,12 @@ function open({ bubble, rect, width, timeoutId }: { bubble: HTMLElement; rect: D
   width && bubble.style.setProperty('--info-width', `${width}px`);
 }
 
-function close(e: React.MouseEvent, source: 'icon' | 'bubble') {
-  const bubble = (source === 'icon' ? e.currentTarget.nextSibling : e.currentTarget) as HTMLElement;
+/**
+ * @param {React.MouseEvent} e 
+ * @param {'icon' | 'bubble'} source 
+ */
+function close(e, source) {
+  const bubble = /** @type {HTMLElement} */ (source === 'icon' ? e.currentTarget.nextSibling : e.currentTarget);
   return window.setTimeout(() => {
     bubble.classList.remove('open', 'left', 'right', 'down');
     bubble.style.removeProperty('--info-width');
