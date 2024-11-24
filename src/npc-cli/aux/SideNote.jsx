@@ -3,41 +3,48 @@ import { css, cx } from '@emotion/css';
 import { zIndex } from '../service/const';
 
 /**
- * - Direction is `right` unless < 200 pixels to the right of
- *   root element, in which case direction is `left`
- * - Currently .dark-mode applies `filter: invert(1)`
- * @param {React.PropsWithChildren<{ width?: number }>} props
+ * @param {React.PropsWithChildren<{
+ *   width?: number;
+ *   onlyOnClick?: boolean;
+ * }>} props
  */
 export default function SideNote(props) {
   const timeoutId = React.useRef(0);
+  const onlyOnClick = props.onlyOnClick ?? false;
 
   return <>
     <span
       className={cx("side-note", iconTriggerCss)}
-      onClick={e => 
-        open({
-          bubble: /** @type {HTMLElement} */ (e.currentTarget.nextSibling),
-          rect: e.currentTarget.getBoundingClientRect(),
-          width: props.width,
-          timeoutId: timeoutId.current,
-        })
-      }
-      onMouseEnter={e => {
+      onClick={e => {
+        const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
+
+        if (bubble.classList.contains('open')) {
+          close(e, 'icon');
+        } else {
+          open({
+            bubble,
+            rect: e.currentTarget.getBoundingClientRect(),
+            width: props.width,
+            timeoutId: timeoutId.current,
+          });
+        }
+      }}
+      onMouseEnter={onlyOnClick ? undefined : e => {
         const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
         const rect = e.currentTarget.getBoundingClientRect();
         timeoutId.current = window.setTimeout(() => open({ bubble, rect, width: props.width, timeoutId: timeoutId.current }), hoverShowMs);
       }}
-      onMouseLeave={e => {
+      onMouseLeave={onlyOnClick ? undefined : e => {
         window.clearTimeout(timeoutId.current); // clear hover timeout
         timeoutId.current = close(e, 'icon');
       }}
-    >
+      >
       ⋯
     </span>
     <span
       className={cx("side-note-bubble", speechBubbleCss)}
-      onMouseEnter={_ => window.clearTimeout(timeoutId.current)}
-      onMouseLeave={e => (timeoutId.current = close(e, 'bubble'))} // Triggered on mobile click outside
+      onMouseEnter={onlyOnClick ? undefined : _ => window.clearTimeout(timeoutId.current)}
+      onMouseLeave={onlyOnClick ? undefined : e => timeoutId.current = close(e, 'bubble')} // Triggered on mobile click outside
     >
       <span className="arrow"/>
       <span className="info">
