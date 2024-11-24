@@ -84,17 +84,14 @@ export default function WorldMenu(props) {
       </div>
     )}
 
-    <div
-      className={loggerCss}
-      {...!(state.debugWhilePaused || state.pinned) && {
-        style: { display: 'none' }
-      }}
+    <div className={cx(loggerCss, {
+        hidden: !(state.pinned || (w.disabled && state.debugWhilePaused)),
+      })}
     >
       <Logger
         ref={api => state.logger = state.logger ?? api}
         className="world-logger"
       />
-
       <label>
         <input
           type="checkbox"
@@ -135,6 +132,9 @@ const loggerCss = css`
     display: flex;
     align-items: center;
     gap: 8px;
+  }
+  &.hidden {
+    display: none;
   }
 `;
 

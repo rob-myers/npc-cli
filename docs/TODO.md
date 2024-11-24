@@ -91,6 +91,7 @@
     - ✅ generic approach to deciding if actions are possible?
     - 🚧 can open doors using switches
   - long press do point: actual nav mesh may be strictly smaller
+    - ℹ️ closest point on nav mesh?
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
@@ -119,7 +120,8 @@
     - could `click 1 | map meta`
   - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
 
-- 🚧 can select npc while paused e.g. click npc causes single frame update?
+- ceiling shader lit according to camera angle
+- can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
   - better way?
 - npc should look ahead 2 segs and don't re-test
