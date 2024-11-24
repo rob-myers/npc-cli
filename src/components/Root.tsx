@@ -69,7 +69,7 @@ const rootCss = css`
       position: fixed;
       height: 100vh;
       height: 100dvh;
-      z-index: 7;
+      z-index: 11;
 
       &.${sidebarClasses.collapsed} {
         pointer-events: none;
