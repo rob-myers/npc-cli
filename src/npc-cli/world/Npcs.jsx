@@ -127,7 +127,8 @@ export default function Npcs(props) {
         throw Error(`invalid point {x, y}: ${JSON.stringify(e)}`);
       }
 
-      const dstNav = state.isPointInNavmesh(e.point);
+      // 🔔 meta.nav overrides nav test: seen "closest point" which fails test
+      const dstNav = e.meta?.nav === true || state.isPointInNavmesh(e.point);
       // 🔔 attach agent by default if dst navigable
       dstNav === true && (e.agent ??= true);
 

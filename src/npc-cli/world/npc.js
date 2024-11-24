@@ -204,7 +204,7 @@ export class Npc {
     // handle offMesh and click near nav
     if (srcNav === false && point.meta.nav === false) {
       const closest = this.w.npc.getClosestNavigable(toV3(input));
-      if (closest !== null) await this.offMeshDo(toXZ(closest));
+      if (closest !== null) await this.offMeshDo({...toXZ(closest), meta: { nav: true }});
     }
   }
 
