@@ -72,9 +72,10 @@
     - fix right click on ContextMenu
     - fix unfocus tab then click
   - 🚧 ContextMenu
-    - has close button
+    - ✅ has close button
     - has persist checkbox, otherwise auto-closes
     - has small sphere/cube indicating contact point?
+    - can toggle enabled/disabled with transparency
     - can track moving NPC?
       - strategy for ContextMenu when clicked npc moves
     - transparent for doors/walls when "behind contact normal"?

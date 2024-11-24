@@ -26,6 +26,17 @@ export default function ContextMenu() {
       state.open = false;
       update();
     },
+    onClickActions(e) {
+      const item = /** @type {HTMLElement} */ (e.target);
+      const index = Array.from(e.currentTarget.childNodes).indexOf(item);
+      if (index !== -1) {
+        state.selectedActKey = state.metaActs[index];
+        update();
+      }
+    },
+    onClickClose() {
+      state.hide();
+    },
     onContextMenu(e) {
       // e.preventDefault();
     },
@@ -83,6 +94,10 @@ export default function ContextMenu() {
         onContextMenu={state.onContextMenu}
       >
 
+        <div className="close-button" onClick={state.onClickClose}>
+          x
+        </div>
+
         {canAct && <div className="actor-and-actions">
 
           <select className="actor">
@@ -91,12 +106,7 @@ export default function ContextMenu() {
 
           <div
             className="actions"
-            onClick={e => {
-              const item = /** @type {HTMLElement} */ (e.target);
-              const index = Array.from(e.currentTarget.childNodes).indexOf(item);
-              if (index !== -1)  state.selectedActKey = state.metaActs[index];
-              update();
-            }}
+            onClick={state.onClickActions}
           >
             {state.metaActs.map(act =>
               <div key={act} className={cx("action", { selected: state.selectedActKey === act })}>
@@ -120,6 +130,8 @@ export default function ContextMenu() {
   );
 
 }
+
+const closeButtonRadius = `${14}px`;
 
 const contextMenuCss = css`
   /* otherwise it is centred */
@@ -175,6 +187,31 @@ const contextMenuCss = css`
     }
   }
 
+  .close-button {
+    position: absolute;
+    z-index: -1;
+    top: calc(-1.8 * ${closeButtonRadius});
+    right: calc(0 * ${closeButtonRadius});
+    width: calc(${closeButtonRadius} + ${closeButtonRadius});
+    height: calc(${closeButtonRadius} + ${closeButtonRadius});
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* opacity: 0.5; */
+
+    cursor: pointer;
+    border-radius: calc(${closeButtonRadius} * 0.5);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border: 2px solid #aad;
+    background-color: #d88;
+    color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: calc(${closeButtonRadius} * 1.2);
+
+    /* filter: sepia(1) hue-rotate(270deg); */
+  }
 
   .key-values {
     display: flex;
@@ -216,6 +253,8 @@ const contextMenuCss = css`
  * @property {THREE.Vector3Tuple} position
  * 
  * @property {() => void} hide
+ * @property {(e: React.MouseEvent) => void} onClickActions
+ * @property {(e: React.MouseEvent) => void} onClickClose
  * @property {(e: React.MouseEvent) => void} onContextMenu
  * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
