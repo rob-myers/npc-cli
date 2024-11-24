@@ -76,7 +76,7 @@
     - ✅ has options panel
     - 🚧 options panel:
       - ✅ has persist checkbox
-      - 🚧 auto-close if persist checkbox not ticked
+      - 🚧 auto-close if persist checkbox not ticked (see old `state.hide()`)
       - can toggle enabled/disabled with transparency
       - maybe can choose left/right/top/bottom to not block door?
     - has small sphere/cube indicating contact point?
@@ -90,6 +90,7 @@
     - ℹ️ `inner` but not `secure` door switch can be opened
     - ✅ generic approach to deciding if actions are possible?
     - 🚧 can open doors using switches
+  - long press do point: actual nav mesh may be strictly smaller
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc

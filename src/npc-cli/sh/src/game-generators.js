@@ -45,7 +45,6 @@ export async function* click({ api, args, w }) {
   while (numClicks-- > 0) {
     clickId && w.view.clickIds.push(clickId);
     
-    // 🚧 hook up to new pointer events
     const e = await /** @type {Promise<NPC.PointerUp3DEvent>} */ (new Promise((resolve, reject) => {
       eventsSub = w.events.subscribe({ next(e) {
         if (e.key !== "pointerup" || e.is3d === false || e.distancePx > 5 || !api.isRunning()) {

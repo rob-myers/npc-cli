@@ -40,9 +40,9 @@ export default function ContextMenu() {
       state.hide(); // 🔔 hacky:
       state.rootEl.querySelector('.side-note-bubble')?.classList.remove('open');
     },
-    onContextMenu(e) {
-      // e.preventDefault();
-    },
+    // onContextMenu(e) {
+    //   // e.preventDefault();
+    // },
     rootRef(el) {
       if (el) {
         state.rootEl = el;
@@ -94,7 +94,7 @@ export default function ContextMenu() {
         ref={state.rootRef}
         // 🔔 visibility for computing menuDim.height
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
-        onContextMenu={state.onContextMenu}
+        // onContextMenu={state.onContextMenu}
       >
 
         <div className="top-bar">
@@ -304,7 +304,7 @@ const contextMenuCss = css`
  * @property {() => void} hide
  * @property {(e: React.MouseEvent) => void} onClickActions
  * @property {(e: React.MouseEvent) => void} onClickClose
- * @property {(e: React.MouseEvent) => void} onContextMenu
+ * //@property {(e: React.MouseEvent) => void} onContextMenu
  * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
  * @property {() => void} updateFromLastDown
