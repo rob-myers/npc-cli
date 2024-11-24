@@ -440,7 +440,7 @@ export class Npc {
     }
 
     await this.fadeSpawn(
-      {...meta.do === true ? meta.doPoint : point},
+      {...meta.doPoint ?? point}, // 🚧 do points should have meta.doPoint
       {
         angle: meta.nav === true && meta.do !== true
           // use direction src --> point if entering navmesh
