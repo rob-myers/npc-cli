@@ -73,13 +73,15 @@
     - fix unfocus tab then click
   - 🚧 ContextMenu
     - ✅ has close button
-    - has persist checkbox, otherwise auto-closes
+    - ✅ has options panel
+    - 🚧 options panel:
+      - has persist checkbox, otherwise auto-closes
+      - can toggle enabled/disabled with transparency
+      - maybe can choose left/right/top/bottom to not block door?
     - has small sphere/cube indicating contact point?
-    - can toggle enabled/disabled with transparency
     - can track moving NPC?
       - strategy for ContextMenu when clicked npc moves
     - transparent for doors/walls when "behind contact normal"?
-    - maybe can choose left/right/top/bottom to not block door?
   - 🚧 ContextMenu simplify "key values"
     - e.g. picked value, grKey, gdKey (instantiated for switches)
   - 🚧 ContextMenu has select with possible actions
@@ -118,6 +120,7 @@
 - 🚧 can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
   - better way?
+- npc should look ahead 2 segs and don't re-test
 - Example of `state.crowd.raw.setObstacleAvoidanceParams(1, new Recast.dtObstacleAvoidanceParams())`?
   - recast-navigation-js discussion?
 - hmr sometimes breaks npc opacity/selector

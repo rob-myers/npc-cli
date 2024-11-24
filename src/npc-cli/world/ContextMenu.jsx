@@ -3,6 +3,7 @@ import { Html } from "@react-three/drei";
 import { css, cx } from "@emotion/css";
 import * as THREE from "three";
 import { toXZ } from "../service/three";
+import SideNote from "../aux/SideNote";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
@@ -94,9 +95,20 @@ export default function ContextMenu() {
         onContextMenu={state.onContextMenu}
       >
 
-        <div className="close-button" onClick={state.onClickClose}>
-          x
+        <div className="top-bar">
+          <div className="options">
+            <SideNote>
+              Options go here...
+            </SideNote>
+          </div>
+          <div
+            className="close-button"
+            onClick={state.onClickClose}
+          >
+            x
+          </div>
         </div>
+
 
         {canAct && <div className="actor-and-actions">
 
@@ -150,7 +162,50 @@ const contextMenuCss = css`
   border: 1px solid #aaa;
 
   /* user-select: none; */
-  
+
+  .top-bar {
+    position: absolute;
+    top: calc(-2 * ${closeButtonRadius});
+    right: calc(-2px);
+    display: flex;
+    justify-content: end;
+    opacity: 0.8;
+    gap: 4px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #333333aa;
+    width: 100%;
+  }
+
+  /* override side note opener */
+  .options > .side-note {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+    height: 100%;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .close-button {
+    width: calc(${closeButtonRadius} + ${closeButtonRadius});
+    height: calc(${closeButtonRadius} + ${closeButtonRadius});
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    cursor: pointer;
+    border-radius: calc(${closeButtonRadius} * 0.5);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    /* border: 2px solid #335; */
+    background-color: #fff;
+    color: #000;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: calc(${closeButtonRadius} * 1.2);
+  }
+
   .actor-and-actions {
     display: flex;
 
@@ -185,32 +240,6 @@ const contextMenuCss = css`
       color: #fff;
       background-color: #433;
     }
-  }
-
-  .close-button {
-    position: absolute;
-    z-index: -1;
-    top: calc(-1.75 * ${closeButtonRadius});
-    right: calc(-2px);
-    width: calc(${closeButtonRadius} + ${closeButtonRadius});
-    height: calc(${closeButtonRadius} + ${closeButtonRadius});
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0.8;
-
-    cursor: pointer;
-    border-radius: calc(${closeButtonRadius} * 0.5);
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-    border: 2px solid #335;
-    background-color: #fff;
-    color: #000;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: calc(${closeButtonRadius} * 1.2);
-
-    /* filter: sepia(1) hue-rotate(270deg); */
   }
 
   .key-values {
