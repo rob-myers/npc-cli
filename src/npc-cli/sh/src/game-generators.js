@@ -45,9 +45,9 @@ export async function* click({ api, args, w }) {
   while (numClicks-- > 0) {
     clickId && w.view.clickIds.push(clickId);
     
-    const e = await /** @type {Promise<NPC.PointerUp3DEvent>} */ (new Promise((resolve, reject) => {
+    const e = await /** @type {Promise<NPC.PointerUpEvent>} */ (new Promise((resolve, reject) => {
       eventsSub = w.events.subscribe({ next(e) {
-        if (e.key !== "pointerup" || e.is3d === false || e.distancePx > 5 || !api.isRunning()) {
+        if (e.key !== "pointerup" || e.distancePx > 5 || !api.isRunning()) {
           return;
         } else if (e.clickId && !clickId) {
           return; // `click {n}` overrides `click`

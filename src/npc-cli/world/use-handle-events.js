@@ -492,7 +492,7 @@ export default function useHandleEvents(w) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        e.is3d && w.cm.show();
+        w.cm.show();
       } else if (!e.justLongDown) {
         // w.cm.hide();
       }

@@ -145,15 +145,12 @@ declare namespace NPC {
     key: "pointerup";
   }>;
 
-  type PointerUp3DEvent = PointerUpEvent & { is3d: true };
-
   type PointerDownEvent = Pretty<BasePointerEvent & {
     key: "pointerdown";
   }>;
   
   type LongPointerDownEvent = BasePointerEvent & {
     key: "long-pointerdown";
-    is3d: false; // could extend to 3d
   }
 
   type BasePointerEvent = {
@@ -173,19 +170,12 @@ declare namespace NPC {
     screenPoint: Geom.VectJson;
     /** Touch device? */
     touch: boolean;
-  } &  (
-    | {
-        is3d: false;
-      }
-    | {
-        is3d: true;
-        position: import("three").Vector3Like;
-        /** `{ x: position.x, y: position.z }` */
-        point: Geom.VectJson;
-        /** Properties of the thing we clicked. */
-        meta: Geom.Meta;
-      }
-  );
+    position: import("three").Vector3Like;
+    /** `{ x: position.x, y: position.z }` */
+    point: Geom.VectJson;
+    /** Properties of the thing we clicked. */
+    meta: Geom.Meta;
+  };
 
   type ClickOutput = import('three').Vector3Like & {
     keys?: BasePointerEvent['keys'];

@@ -73,13 +73,12 @@ export default function WorldView(props) {
       position,
     }) {
       const screenPoint = getRelativePointer(event);
+      const point = { x: position.x, y: position.z };
       if (key === 'pointerup' || key === 'pointerdown') {
         return {
           key,
-          // is3d means we have a specific 3d point
-          ...position
-            ? { is3d: true, position, point: { x: position.x, y: position.z } }
-            : { is3d: false },
+          position: new THREE.Vector3().copy(position),
+          point,
           distancePx,
           justLongDown,
           keys: getModifierKeys(event.nativeEvent),
@@ -91,10 +90,11 @@ export default function WorldView(props) {
           ...key === 'pointerup' && { clickId: state.clickIds.pop() },
         };
       }
-      if (key === 'long-pointerdown' || key === 'pointerup-outside') {
+      if (key === 'long-pointerdown') {
         return {
           key,
-          is3d: false, // 🚧 could be true?
+          position: new THREE.Vector3().copy(position),
+          point,
           distancePx,
           justLongDown,
           keys: getModifierKeys(event.nativeEvent),
@@ -105,8 +105,8 @@ export default function WorldView(props) {
           meta,
         };
       }
-      throw Error(`${'getWorldPointerEvent'}: key "${key}" should be in ${
-        JSON.stringify(['pointerup', 'pointerdown', 'long-pointerdown', 'pointerup-outside'])
+      throw Error(`${'getWorldPointerEvent'}: "${key}" must be in ${
+        JSON.stringify(['pointerup', 'pointerdown', 'long-pointerdown'])
       }`);
     },
     handleClickInDebugMode(e) {
@@ -236,6 +236,7 @@ export default function WorldView(props) {
             event: e,
             justLongDown: false,
             meta: {},
+            position: state.lastDown.position,
           }));
         }, longPressMs),
         pointerIds: (state.down?.pointerIds ?? []).concat(e.pointerId),
@@ -270,7 +271,7 @@ export default function WorldView(props) {
     },
     onPointerUp(e) {
       state.epoch.pointerUp = Date.now();
-      if (state.down === undefined) {
+      if (state.down === undefined || state.lastDown === undefined) {
         return;
       }
 
@@ -279,8 +280,8 @@ export default function WorldView(props) {
         w.events.next(state.getWorldPointerEvent({
           key: "pointerup",
           event: e,
-          meta: state.lastDown?.meta ?? {},
-          position: state.lastDown?.position,
+          meta: state.lastDown.meta ?? {},
+          position: state.lastDown.position,
         }));
       }
 
@@ -516,7 +517,7 @@ const statsCss = css`
  * @property {React.PointerEvent | React.MouseEvent} event
  * @property {boolean} [justLongDown]
  * @property {Geom.Meta} meta
- * @property {THREE.Vector3Like} [position]
+ * @property {THREE.Vector3Like} position
  */
 
 const initAzimuth = Math.PI / 6;
