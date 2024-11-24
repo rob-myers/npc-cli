@@ -190,22 +190,22 @@ const contextMenuCss = css`
   .close-button {
     position: absolute;
     z-index: -1;
-    top: calc(-1.8 * ${closeButtonRadius});
-    right: calc(0 * ${closeButtonRadius});
+    top: calc(-1.75 * ${closeButtonRadius});
+    right: calc(-2px);
     width: calc(${closeButtonRadius} + ${closeButtonRadius});
     height: calc(${closeButtonRadius} + ${closeButtonRadius});
 
     display: flex;
     justify-content: center;
     align-items: center;
-    /* opacity: 0.5; */
+    opacity: 0.8;
 
     cursor: pointer;
     border-radius: calc(${closeButtonRadius} * 0.5);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border: 2px solid #aad;
-    background-color: #d88;
+    border: 2px solid #335;
+    background-color: #fff;
     color: #000;
     font-family: 'Courier New', Courier, monospace;
     font-size: calc(${closeButtonRadius} * 1.2);
