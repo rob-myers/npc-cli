@@ -233,17 +233,12 @@ const origNavPolyMaterial = new THREE.MeshBasicMaterial({
   opacity: 0.8,
 });
 
-const navPolyMaterial = new THREE.MeshStandardMaterial({
+const navPolyMaterial = new THREE.MeshBasicMaterial({
   wireframe: true,
   color: "#7f7",
   transparent: true,
   opacity: 1,
 });
-
-const offMeshConnectionMaterial = new THREE.LineBasicMaterial({
-  color: "#f00",
-});
-
 
 const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
   side: THREE.FrontSide,
