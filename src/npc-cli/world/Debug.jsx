@@ -124,8 +124,7 @@ export default function Debug(props) {
   w.debug = state;
 
   React.useMemo(() => {
-    state.navMesh = new NavMeshHelper({
-      navMesh: w.nav.navMesh,
+    state.navMesh = new NavMeshHelper(w.nav.navMesh, {
       navMeshMaterial: navPolyMaterial,
     });
     // 🤔 unclear how to get all off-mesh-connection from navMesh (could store elsewhere)

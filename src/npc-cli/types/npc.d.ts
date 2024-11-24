@@ -183,10 +183,7 @@ declare namespace NPC {
     xz: Geom.VectJson;
   };
 
-  type TiledCacheResult = Extract<
-    import("@recast-navigation/core").NavMeshImporterResult,
-    { tileCache?: any }
-  >;
+  type TiledCacheResult = import('@recast-navigation/core').ImportTileCacheResult;
 
   interface TileCacheConvexAreaDef {
     areaId: number;

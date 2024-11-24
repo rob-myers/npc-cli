@@ -4,7 +4,7 @@ import { Subject, firstValueFrom } from "rxjs";
 import { filter } from "rxjs/operators";
 import * as THREE from "three";
 import { Timer } from "three-stdlib";
-import { importNavMesh, Crowd } from "@recast-navigation/core";
+import { importTileCache, Crowd } from "@recast-navigation/core";
 
 import { Vect } from "../geom";
 import { GmGraphClass } from "../graph/gm-graph";
@@ -110,7 +110,7 @@ export default function World(props) {
     },
     loadTiledMesh(exportedNavMesh) {
       const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
-        importNavMesh(exportedNavMesh, getBasicTileCacheMeshProcess())
+        importTileCache(exportedNavMesh, getBasicTileCacheMeshProcess())
       );
       if (state.crowd) {
         disposeCrowd(state.crowd, state.nav.navMesh);

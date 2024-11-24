@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { init as initRecastNav, exportNavMesh } from "@recast-navigation/core";
+import { init as initRecastNav, exportTileCache } from "@recast-navigation/core";
 
 import { alloc, error, info, debug, warn, removeDups } from "../service/generic";
 import { geomorph } from "../service/geomorph";
@@ -76,7 +76,7 @@ async function handleMessages(e) {
         selfTyped.postMessage({
           type: "nav-mesh-response",
           mapKey,
-          exportedNavMesh: exportNavMesh(navMesh, tileCache),
+          exportedNavMesh: exportTileCache(navMesh, tileCache),
         });
 
         tileCache.destroy();
