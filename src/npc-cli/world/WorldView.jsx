@@ -26,12 +26,13 @@ export default function WorldView(props) {
     clickIds: [],
     controls: /** @type {*} */ (null),
     controlsViewportOpts: {
-      ...smallViewport ? {
-        minPolarAngle: fixedPolarAngle,
-        maxPolarAngle: fixedPolarAngle,
-      } : {
-        maxPolarAngle: Math.PI / 4,
-      },
+      // ...smallViewport ? {
+      //   minPolarAngle: fixedPolarAngle,
+      //   maxPolarAngle: fixedPolarAngle,
+      // } : {
+      //   maxPolarAngle: Math.PI / 4,
+      // },
+      maxPolarAngle: Math.PI / 4,
       minDistance: smallViewport ? 5 : 5,
       maxDistance: smallViewport ? 32 : 48,
     },
