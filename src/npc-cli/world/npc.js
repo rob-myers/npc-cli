@@ -135,6 +135,7 @@ export class Npc {
   }
 
   /**
+   * 🚧 move to w.e.doNpc because refers to doors?
    * Assume any of these preconditions:
    * - `point.meta.door === true` (point on a door)
    * - `point.meta.do === true` (point is a "do point")
@@ -173,7 +174,9 @@ export class Npc {
       return;
     }
 
-    // point.meta.do, or (point.meta.nav && npc.doMeta)
+    // point.meta.do, or
+    // point.meta.nav && npc.doMeta, or
+    // !point.meta.nav
     
     const srcNav = this.w.npc.isPointInNavmesh(this.getPoint());
     if (point.meta.do === true) {
@@ -198,7 +201,11 @@ export class Npc {
       return;
     }
 
-    // NOOP
+    // handle offMesh and click near nav
+    if (srcNav === false && point.meta.nav === false) {
+      const closest = this.w.npc.getClosestNavigable(toV3(input));
+      if (closest !== null) await this.offMeshDo(toXZ(closest));
+    }
   }
 
   /**
@@ -420,12 +427,12 @@ export class Npc {
     const src = Vect.from(this.getPoint());
     const meta = point.meta ?? {};
 
-    if (meta.do !== true && meta.nav !== true) {
-      throw Error('not doable nor navigable');
-    }
+    // if (meta.do !== true && meta.nav !== true) {
+    //   throw Error('not doable nor navigable');
+    // }
 
     if (
-      src.distanceTo(point) > this.getInteractRadius()
+      !(src.distanceTo(point) <= this.getInteractRadius())
       || !this.w.gmGraph.inSameRoom(src, point)
       // || !this.w.npc.canSee(src, point, this.getInteractRadius())
     ) {
@@ -433,10 +440,7 @@ export class Npc {
     }
 
     await this.fadeSpawn(
-      {// non-navigable uses doPoint:
-        ...point,
-        ...meta.nav !== true && /** @type {Geom.VectJson} */ (meta.doPoint)
-      },
+      {...meta.do === true ? meta.doPoint : point},
       {
         angle: meta.nav === true && meta.do !== true
           // use direction src --> point if entering navmesh
