@@ -8,6 +8,7 @@ export const longPressMs = 500;
 
 export const zIndex = /** @type {const} */ ({
   faderOverlay: 4,
+  speechBubble: 3,
   ttyTouchHelper: 5,
   ttyTouchCircle: 3,
 });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
+import { zIndex } from '../service/const';
 
 /**
  * - Direction is `right` unless < 200 pixels to the right of
@@ -80,7 +81,7 @@ function close(e, source) {
 
 const defaultInfoWidthPx = 300;
 const rootWidthPx = 16;
-const arrowDeltaX = 4;
+const arrowDeltaX = 8;
 
 const iconTriggerCss = css`
   width: ${rootWidthPx}px;
@@ -99,7 +100,7 @@ const iconTriggerCss = css`
 const speechBubbleCss = css`
   --info-width: ${defaultInfoWidthPx}px;
   position: relative;
-  z-index: 3;
+  z-index: ${zIndex.speechBubble};
   top: ${-rootWidthPx}px;
   /** Prevents bubble span from wrapping to next line? */
   display: inline-block;
