@@ -72,42 +72,20 @@ export default function WorldView(props) {
       meta,
       position,
     }) {
-      const screenPoint = getRelativePointer(event);
-      const point = { x: position.x, y: position.z };
-      if (key === 'pointerup' || key === 'pointerdown') {
-        return {
-          key,
-          position: new THREE.Vector3().copy(position),
-          point,
-          distancePx,
-          justLongDown,
-          keys: getModifierKeys(event.nativeEvent),
-          pointers: state.getNumPointers(),
-          rmb: isRMB(event.nativeEvent),
-          screenPoint,
-          touch: isTouchDevice(),
-          meta,
-          ...key === 'pointerup' && { clickId: state.clickIds.pop() },
-        };
-      }
-      if (key === 'long-pointerdown') {
-        return {
-          key,
-          position: new THREE.Vector3().copy(position),
-          point,
-          distancePx,
-          justLongDown,
-          keys: getModifierKeys(event.nativeEvent),
-          pointers: state.getNumPointers(),
-          rmb: isRMB(event.nativeEvent),
-          screenPoint,
-          touch: isTouchDevice(),
-          meta,
-        };
-      }
-      throw Error(`${'getWorldPointerEvent'}: "${key}" must be in ${
-        JSON.stringify(['pointerup', 'pointerdown', 'long-pointerdown'])
-      }`);
+      return {
+        key,
+        position: new THREE.Vector3().copy(position),
+        point: toXZ(position),
+        distancePx,
+        justLongDown,
+        keys: getModifierKeys(event.nativeEvent),
+        pointers: state.getNumPointers(),
+        rmb: isRMB(event.nativeEvent),
+        screenPoint: getRelativePointer(event),
+        touch: isTouchDevice(),
+        meta,
+        ...key === 'pointerup' && { clickId: state.clickIds.pop() },
+      };
     },
     handleClickInDebugMode(e) {
       if (
