@@ -82,7 +82,7 @@
     - has small sphere/cube indicating contact point?
     - can track moving NPC?
       - strategy for ContextMenu when clicked npc moves
-    - transparent for doors/walls when "behind contact normal"?
+    - ❌ transparent for doors/walls when "behind contact normal"?
   - 🚧 ContextMenu simplify "key values"
     - e.g. picked value, grKey, gdKey (instantiated for switches)
   - 🚧 ContextMenu has select with possible actions
@@ -90,8 +90,9 @@
     - ℹ️ `inner` but not `secure` door switch can be opened
     - ✅ generic approach to deciding if actions are possible?
     - 🚧 can open doors using switches
-  - long press do point: actual nav mesh may be strictly smaller
-    - ℹ️ closest point on nav mesh?
+  - 🚧 long press do point: actual nav mesh may be strictly smaller
+    - ✅ from off-mesh closest point on nav mesh
+    - still seeing long-press issues on mobile e.g. to bed from floor
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
