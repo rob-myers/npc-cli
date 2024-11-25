@@ -19,7 +19,7 @@ export default function ContextMenu() {
     justOpen: false,
     open: false,
     persist: { id: `w-${w.key}-cm-persist`, el: /** @type {*} */ (null) },
-    mini: { id: `w-${w.key}-cm-mini`, el: /** @type {*} */ (null) },
+    mini: { id: `w-${w.key}-cm-mini`, el: /** @type {*} */ ({ checked: false }) },
     
     selectedActKey: null,
     kvs: [],
@@ -145,7 +145,6 @@ export default function ContextMenu() {
 
         </div>
 
-
         {canAct && <div className="actor-and-actions">
 
           <select className="actor">
@@ -195,7 +194,7 @@ const contextMenuCss = css`
   font-size: 0.8rem;
   color: #ddd;
   background-color: #222222dd;
-  border: 1px solid #aaa;
+  /* border: 1px solid #aaa; */
 
   .top-bar {
     position: absolute;
