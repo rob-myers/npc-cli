@@ -219,10 +219,9 @@ export default function useHandleEvents(w) {
           break;
         }
         case "pointerdown":
-          // w.cm.hide();
+          w.cm.hideUnlessPersisted();
           break;
         case "pointerup":
-          // e.is3d && !w.menu.justOpen && state.onPointerUp3d(e);
           !e.touch && state.onPointerUpMenuDesktop(e);
           w.cm.justOpen = w.cm.open;
           break;

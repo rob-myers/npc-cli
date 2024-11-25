@@ -62,8 +62,9 @@
     - ✅ has options panel
     - 🚧 options panel:
       - ✅ has persist checkbox
-      - 🚧 auto-close if persist checkbox not ticked (see old `state.hide()`)
-      - can toggle enabled/disabled with transparency
+      - ✅ auto-close if persist checkbox not ticked
+        - ℹ️ see old `state.hide()`
+      - 🚧 can toggle enabled/disabled with transparency
       - can choose left/right/top/bottom to not block door?
       - SideNote "data root" should be World
     - has small sphere/cube indicating contact point?

@@ -28,7 +28,11 @@ export default function ContextMenu() {
 
     hide() {
       state.open = false;
+      closeSideNote(state.bubble, 0);
       update();
+    },
+    hideUnlessPersisted() {
+      !state.persist.el.checked && state.hide();
     },
     onClickActions(e) {
       const item = /** @type {HTMLElement} */ (e.target);
@@ -37,10 +41,6 @@ export default function ContextMenu() {
         state.selectedActKey = state.metaActs[index];
         update();
       }
-    },
-    onClickClose() {
-      state.hide();
-      closeSideNote(state.bubble, 0);
     },
     rootRef(el) {
       if (el !== null) {
@@ -119,7 +119,7 @@ export default function ContextMenu() {
               </div>
             </SideNote>
           </div>
-          <button className="close-button" onClick={state.onClickClose}>
+          <button className="close-button" onClick={state.hide}>
             x
           </button>
         </div>
@@ -312,8 +312,8 @@ const contextMenuCss = css`
  * @property {THREE.Vector3Tuple} position
  * 
  * @property {() => void} hide
+ * @property {() => void} hideUnlessPersisted
  * @property {(e: React.MouseEvent) => void} onClickActions
- * @property {(e: React.MouseEvent) => void} onClickClose
  * //@property {(e: React.MouseEvent) => void} onContextMenu
  * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
