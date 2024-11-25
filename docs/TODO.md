@@ -64,7 +64,7 @@
       - ✅ has persist checkbox
       - ✅ auto-close if persist checkbox not ticked
         - ℹ️ see old `state.hide()`
-      - 🚧 can toggle enabled/disabled with transparency
+      - ✅ can toggle mini view
       - can choose left/right/top/bottom to not block door?
       - SideNote "data root" should be World
     - has small sphere/cube indicating contact point?

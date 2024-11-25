@@ -14,11 +14,12 @@ export default function ContextMenu() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    rootEl: /** @type {*} */ (null),
     bubble: /** @type {*} */ (null),
     justOpen: false,
     open: false,
     persist: { id: `w-${w.key}-cm-persist`, el: /** @type {*} */ (null) },
-    rootEl: /** @type {*} */ (null),
+    mini: { id: `w-${w.key}-cm-mini`, el: /** @type {*} */ (null) },
     
     selectedActKey: null,
     kvs: [],
@@ -88,7 +89,9 @@ export default function ContextMenu() {
 
   w.cm = state;
   const update = useUpdate();
+
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
+  const showSummary = state.mini.el.checked === false;
 
   return (
     <Html
@@ -104,10 +107,15 @@ export default function ContextMenu() {
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
       >
 
-        <div className="top-bar" ref={state.topBarRef}>
+        <div
+          className={cx("top-bar", { mini: state.mini.el.checked })}
+          ref={state.topBarRef}
+        >
+
           <div className="options">
             <SideNote onlyOnClick width={300}>
               <div className="controls">
+
                 <div className="control">
                   <label htmlFor={state.persist.id}>persist</label>
                   <input
@@ -116,12 +124,25 @@ export default function ContextMenu() {
                     ref={el => void (el && (state.persist.el = el))}
                   />
                 </div>
+
+                <div className="control">
+                  <label htmlFor={state.mini.id}>mini</label>
+                  <input
+                    type="checkbox"
+                    id={state.mini.id}
+                    ref={el => void (el && (state.mini.el = el))}
+                    onChange={update}
+                  />
+                </div>
+
               </div>
             </SideNote>
           </div>
+
           <button className="close-button" onClick={state.hide}>
             x
           </button>
+
         </div>
 
 
@@ -143,14 +164,14 @@ export default function ContextMenu() {
           </div>
         </div>}
 
-        <div className="key-values">
+        {showSummary && <div className="key-values">
           {state.kvs.map(({ k, v }) => (
             <div key={k} className="key-value">
               <span className="meta-key">{k}</span>
               {v !== '' && <span className="meta-value">{v}</span>}
             </div>
           ))}
-        </div>
+        </div>}
 
       </div>
     </Html>
@@ -176,8 +197,6 @@ const contextMenuCss = css`
   background-color: #222222dd;
   border: 1px solid #aaa;
 
-  /* user-select: none; */
-
   .top-bar {
     position: absolute;
     top: calc(-2 * ${closeButtonRadius});
@@ -189,6 +208,13 @@ const contextMenuCss = css`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     width: 100%;
+  }
+
+  .mini {
+    .options .side-note, .close-button {
+      border-bottom-width: 2px;
+      border-radius: 8px;
+    }
   }
   
   /* override side note opener */
@@ -209,6 +235,8 @@ const contextMenuCss = css`
 
   .options .controls {
     display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   .options .control {
     display: flex;
@@ -216,8 +244,8 @@ const contextMenuCss = css`
   }
 
   .close-button {
-    width: calc(${closeButtonRadius} + ${closeButtonRadius});
-    height: calc(${closeButtonRadius} + ${closeButtonRadius});
+    min-width: calc(${closeButtonRadius} + ${closeButtonRadius});
+    min-height: calc(${closeButtonRadius} + ${closeButtonRadius});
     display: flex;
     justify-content: center;
     align-items: center;
@@ -305,6 +333,7 @@ const contextMenuCss = css`
  * @property {HTMLDivElement} rootEl
  * @property {null | NPC.MetaActKey} selectedActKey
  * @property {OptionsControl} persist
+ * @property {OptionsControl} mini
  *
  * @property {{ k: string; v: string; length: number }[]} kvs
  * @property {string[]} nearNpcKeys
