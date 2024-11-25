@@ -2,8 +2,9 @@ import React from "react";
 import { Html } from "@react-three/drei";
 import { css, cx } from "@emotion/css";
 import * as THREE from "three";
+import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
-import SideNote from "../aux/SideNote";
+import SideNote, { closeSideNote, openSideNote, isSideNoteOpen } from "../aux/SideNote";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
@@ -13,12 +14,13 @@ export default function ContextMenu() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    bubble: /** @type {*} */ (null),
     justOpen: false,
     open: false,
     persist: { id: `w-${w.key}-cm-persist`, el: /** @type {*} */ (null) },
     rootEl: /** @type {*} */ (null),
+    
     selectedActKey: null,
-
     kvs: [],
     nearNpcKeys: [],
     metaActs: [],
@@ -37,21 +39,27 @@ export default function ContextMenu() {
       }
     },
     onClickClose() {
-      state.hide(); // 🔔 hacky:
-      state.rootEl.querySelector('.side-note-bubble')?.classList.remove('open');
+      state.hide();
+      closeSideNote(state.bubble, 0);
     },
-    // onContextMenu(e) {
-    //   // e.preventDefault();
-    // },
     rootRef(el) {
-      if (el) {
+      if (el !== null) {
         state.rootEl = el;
       }
     },
     show() {
+      closeSideNote(state.bubble, 0);
       state.open = true;
       state.updateFromLastDown();
+      if (isSideNoteOpen(state.bubble)) {
+        pause(200).then(() => openSideNote(state.bubble));
+      }
       update();
+    },
+    topBarRef(el) {
+      if (el !== null) {
+        state.bubble = /** @type {HTMLElement} */ (el.querySelector('.side-note-bubble'));
+      }
     },
     updateFromLastDown() {
       const { lastDown } = w.view;
@@ -94,10 +102,9 @@ export default function ContextMenu() {
         ref={state.rootRef}
         // 🔔 visibility for computing menuDim.height
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
-        // onContextMenu={state.onContextMenu}
       >
 
-        <div className="top-bar">
+        <div className="top-bar" ref={state.topBarRef}>
           <div className="options">
             <SideNote onlyOnClick width={300}>
               <div className="controls">
@@ -220,7 +227,7 @@ const contextMenuCss = css`
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     font-family: 'Courier New', Courier, monospace;
-    font-size: calc(${closeButtonRadius} * 1.2);
+    font-size: calc(${closeButtonRadius} * 1);
     border: 2px solid #d77;
     border-bottom-width: 0;
     background-color: #000;
@@ -292,6 +299,7 @@ const contextMenuCss = css`
 
 /**
  * @typedef State
+ * @property {HTMLElement} bubble
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} open Is the context menu open?
  * @property {HTMLDivElement} rootEl
@@ -309,6 +317,7 @@ const contextMenuCss = css`
  * //@property {(e: React.MouseEvent) => void} onContextMenu
  * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
+ * @property {(el: null | HTMLElement) => void} topBarRef
  * @property {() => void} updateFromLastDown
  */
 
