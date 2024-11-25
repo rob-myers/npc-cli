@@ -60,13 +60,14 @@
   - 🚧 ContextMenu
     - ✅ has close button
     - ✅ has options panel
-    - 🚧 options panel:
+    - ✅ start options panel
       - ✅ has persist checkbox
       - ✅ auto-close if persist checkbox not ticked
         - ℹ️ see old `state.hide()`
       - ✅ can toggle mini view
-      - can choose left/right/top/bottom to not block door?
-      - SideNote "data root" should be World
+      - ✅ SideNote "data root" should be World
+      - ❌ can choose left/right/top/bottom to not block door?
+        - ℹ️ too complex? e.g. doesn't
     - has small sphere/cube indicating contact point?
     - can track moving NPC?
       - strategy for ContextMenu when clicked npc moves

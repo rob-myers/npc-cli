@@ -18,8 +18,8 @@ export default function ContextMenu() {
     bubble: /** @type {*} */ (null),
     justOpen: false,
     open: false,
-    persist: { id: `w-${w.key}-cm-persist`, el: /** @type {*} */ (null) },
-    mini: { id: `w-${w.key}-cm-mini`, el: /** @type {*} */ ({ checked: false }) },
+    persist: { id: `w-${w.key}-cm-persist`, el: /** @type {HTMLInputElement} */ ({ checked: false }) },
+    mini: { id: `w-${w.key}-cm-mini`, el: /** @type {HTMLInputElement} */ ({ checked: false }) },
     
     selectedActKey: null,
     kvs: [],
