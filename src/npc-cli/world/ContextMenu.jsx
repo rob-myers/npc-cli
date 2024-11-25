@@ -93,7 +93,7 @@ export default function ContextMenu() {
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
   const showSummary = state.mini.el.checked === false;
 
-  return (
+  return <>
     <Html
       visible={state.open}
       position={state.position}
@@ -174,7 +174,14 @@ export default function ContextMenu() {
 
       </div>
     </Html>
-  );
+    <mesh
+      position={state.position}
+      visible={state.open}
+    >
+      <sphereGeometry args={[0.025, 8, 8]} />
+      <meshBasicMaterial color="red" />
+    </mesh>
+  </>;
 
 }
 
@@ -184,9 +191,9 @@ const contextMenuCss = css`
   /* otherwise it is centred */
   position: absolute;
   left: 0;
-  /* right: 0; */
+  left: 20px;
   top: 0;
-  /* bottom: 0; */
+  /* top: 20px; */
 
   display: flex;
   flex-direction: column;
@@ -197,9 +204,9 @@ const contextMenuCss = css`
   /* border: 1px solid #aaa; */
 
   .top-bar {
-    position: absolute;
-    top: calc(-2 * ${closeButtonRadius});
-    right: 1px;
+    /* position: absolute; */
+    /* top: calc(-2 * ${closeButtonRadius}); */
+    right: 0;
     display: flex;
     justify-content: start;
     opacity: 0.8;

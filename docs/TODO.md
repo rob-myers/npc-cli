@@ -68,7 +68,7 @@
       - ✅ SideNote "data root" should be World
       - ❌ can choose left/right/top/bottom to not block door?
         - ℹ️ too complex? e.g. doesn't
-    - has small sphere/cube indicating contact point?
+    - ✅ has small sphere indicating contact point
     - can track moving NPC?
       - strategy for ContextMenu when clicked npc moves
     - ❌ transparent for doors/walls when "behind contact normal"?
