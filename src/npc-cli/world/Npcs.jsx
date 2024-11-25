@@ -79,9 +79,10 @@ export default function Npcs(props) {
         return npc;
       }
     },
-    isPointInNavmesh(p) {
-      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(toV3(p), { halfExtents: { x: 0, y: 0.05, z: 0 } });
-      return success === true && Math.abs(point.x - p.x) < 0.001 && Math.abs(point.z - p.y) < 0.001;
+    isPointInNavmesh(input) {
+      const v3 = toV3(input);
+      const { success, point } = w.crowd.navMeshQuery.findClosestPoint(v3, { halfExtents: { x: 0, y: 0.05, z: 0 } });
+      return success === true && Math.abs(point.x - v3.x) < 0.001 && Math.abs(point.z - v3.z) < 0.001;
     },
     onTick(deltaMs) {
       Object.values(state.npc).forEach(npc => npc.onTick(deltaMs, state.physicsPositions));
@@ -127,7 +128,6 @@ export default function Npcs(props) {
         throw Error(`invalid point {x, y}: ${JSON.stringify(e)}`);
       }
 
-      // 🔔 meta.nav overrides nav test: seen "closest point" which fails test
       const dstNav = e.meta?.nav === true || state.isPointInNavmesh(e.point);
       // 🔔 attach agent by default if dst navigable
       dstNav === true && (e.agent ??= true);
@@ -307,7 +307,7 @@ export default function Npcs(props) {
  * @property {(npcKey: string, processApi?: any) => NPC.NPC} getNpc
  * Throws if does not exist 🚧 any -> ProcessApi (?)
  * @property {(p: THREE.Vector3, maxDelta?: number) => null | THREE.Vector3} getClosestNavigable
- * @property {(p: Geom.VectJson) => boolean} isPointInNavmesh
+ * @property {(input: Geom.VectJson | THREE.Vector3Like) => boolean} isPointInNavmesh
  * @property {() => void} restore
  * @property {(deltaMs: number) => void} onTick
  * @property {(npcKey: string) => void} remove
