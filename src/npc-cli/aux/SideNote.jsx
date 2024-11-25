@@ -3,10 +3,13 @@ import { css, cx } from '@emotion/css';
 import { zIndex } from '../service/const';
 
 /**
- * @param {React.PropsWithChildren<{
- *   width?: number;
- *   onlyOnClick?: boolean;
- * }>} props
+ * This component can occur many times in a blog post.
+ * It is also used in ContextMenu of World.
+ * 
+ * Rather than expose an api via React.forwardRef,
+ * we export open/close functions directly.
+ * 
+ * @param {React.PropsWithChildren<Props>} props
  */
 export default function SideNote(props) {
   const timeoutId = React.useRef(0);
@@ -17,26 +20,20 @@ export default function SideNote(props) {
       className={cx("side-note", iconTriggerCss)}
       onClick={e => {
         const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-
-        if (bubble.classList.contains('open')) {
-          close(e, 'icon');
+        if (isSideNoteOpen(bubble)) {
+          closeSideNote(bubble);
         } else {
-          open({
-            bubble,
-            rect: e.currentTarget.getBoundingClientRect(),
-            width: props.width,
-            timeoutId: timeoutId.current,
-          });
+          openSideNote(bubble, props.width, timeoutId.current);
         }
       }}
       onMouseEnter={onlyOnClick ? undefined : e => {
         const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-        const rect = e.currentTarget.getBoundingClientRect();
-        timeoutId.current = window.setTimeout(() => open({ bubble, rect, width: props.width, timeoutId: timeoutId.current }), hoverShowMs);
+        timeoutId.current = window.setTimeout(() => openSideNote(bubble, props.width, timeoutId.current), hoverShowMs);
       }}
       onMouseLeave={onlyOnClick ? undefined : e => {
         window.clearTimeout(timeoutId.current); // clear hover timeout
-        timeoutId.current = close(e, 'icon');
+        const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
+        timeoutId.current = closeSideNote(bubble);
       }}
       >
       ⋯
@@ -44,7 +41,8 @@ export default function SideNote(props) {
     <span
       className={cx("side-note-bubble", speechBubbleCss)}
       onMouseEnter={onlyOnClick ? undefined : _ => window.clearTimeout(timeoutId.current)}
-      onMouseLeave={onlyOnClick ? undefined : e => timeoutId.current = close(e, 'bubble')} // Triggered on mobile click outside
+      // Triggered on mobile click outside
+      onMouseLeave={onlyOnClick ? undefined : e => timeoutId.current = closeSideNote(e.currentTarget)}
     >
       <span className="arrow"/>
       <span className="info">
@@ -54,16 +52,28 @@ export default function SideNote(props) {
   </>;
 }
 
+
 /**
- * @param {{ bubble: HTMLElement; rect: DOMRect; width: number | undefined, timeoutId: number; }} param0 
+ * @param {HTMLElement} bubble
  */
-function open({ bubble, rect, width, timeoutId }) {
+export function isSideNoteOpen(bubble) {
+  return bubble.classList.contains('open');
+}
+
+/**
+ * @param {HTMLElement} bubble
+ * @param {number | undefined} [width]
+ * @param {number | undefined} [timeoutId]
+ */
+export function openSideNote(bubble, width, timeoutId) {
   window.clearTimeout(timeoutId); // clear close timeout
 
   bubble.classList.add('open');
-  
+
   const root = bubble.closest(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
   const rootRect = root.getBoundingClientRect();
+
+  const rect = /** @type {HTMLElement} */ (bubble.previousSibling).getBoundingClientRect();
   const pixelsOnRight = rootRect.right - rect.right;
   const pixelsOnLeft = rect.x - rootRect.x;
   bubble.classList.remove('left', 'right', 'down');
@@ -75,15 +85,13 @@ function open({ bubble, rect, width, timeoutId }) {
 }
 
 /**
- * @param {React.MouseEvent} e 
- * @param {'icon' | 'bubble'} source 
+ * @param {HTMLElement} bubble
  */
-function close(e, source) {
-  const bubble = /** @type {HTMLElement} */ (source === 'icon' ? e.currentTarget.nextSibling : e.currentTarget);
+export function closeSideNote(bubble, ms = 100) {
   return window.setTimeout(() => {
     bubble.classList.remove('open', 'left', 'right', 'down');
     bubble.style.removeProperty('--info-width');
-  }, 100);
+  }, ms);
 }
 
 const defaultInfoWidthPx = 300;
@@ -121,6 +129,7 @@ const speechBubbleCss = css`
   &.open .info
   {
     visibility: visible;
+    opacity: 1;
   }
   &:not(.open) .info {
     right: 0; // prevent overflow scroll
@@ -128,6 +137,8 @@ const speechBubbleCss = css`
 
   .info {
     visibility: hidden;
+    opacity: 0;
+    transition: opacity 300ms;
     white-space: normal;
     position: absolute;
     width: var(--info-width);
@@ -149,6 +160,7 @@ const speechBubbleCss = css`
   }
   .arrow {
     visibility: hidden;
+    opacity: 0;
     position: absolute;
     z-index: 1;
     width: 0; 
@@ -200,3 +212,7 @@ const speechBubbleCss = css`
 export const sideNoteRootDataAttribute = 'data-side-note-root';
 
 const hoverShowMs = 500;
+
+/**
+ * @typedef {{ width?: number; onlyOnClick?: boolean; }} Props
+ */
