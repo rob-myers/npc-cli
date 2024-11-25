@@ -78,7 +78,8 @@
       - ✅ has persist checkbox
       - 🚧 auto-close if persist checkbox not ticked (see old `state.hide()`)
       - can toggle enabled/disabled with transparency
-      - maybe can choose left/right/top/bottom to not block door?
+      - can choose left/right/top/bottom to not block door?
+      - SideNote "data root" should be World
     - has small sphere/cube indicating contact point?
     - can track moving NPC?
       - strategy for ContextMenu when clicked npc moves

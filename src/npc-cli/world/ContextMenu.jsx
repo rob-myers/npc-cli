@@ -176,7 +176,7 @@ const contextMenuCss = css`
     top: calc(-2 * ${closeButtonRadius});
     right: calc(-2px);
     display: flex;
-    justify-content: end;
+    justify-content: start;
     opacity: 0.8;
     gap: 4px;
     border-top-left-radius: 4px;
