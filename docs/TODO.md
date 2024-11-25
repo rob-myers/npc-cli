@@ -69,11 +69,12 @@
       - ❌ can choose left/right/top/bottom to not block door?
         - ℹ️ too complex? e.g. doesn't
     - ✅ has small sphere indicating contact point
-    - can track moving NPC?
+    - 🚧 can track moving NPC?
       - strategy for ContextMenu when clicked npc moves
-    - ❌ transparent for doors/walls when "behind contact normal"?
+    - ❌ transparent for doors/walls when "behind contact normal"
   - 🚧 ContextMenu simplify "key values"
     - e.g. picked value, grKey, gdKey (instantiated for switches)
+    - complex values optionally inside SideNote?
   - 🚧 ContextMenu has select with possible actions
     - ℹ️ e.g. npc in room with locked door can still leave
     - ℹ️ `inner` but not `secure` door switch can be opened
