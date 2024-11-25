@@ -104,6 +104,9 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
+- 🚧 profile-1.sh edit should not hmr Viewer
+  - Viewer tabs def should not hmr Tabs
+  - might be due to flexlayout-react upgrade
 - ceiling shader lit according to camera angle
 - can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection
@@ -199,6 +202,12 @@ WorldMenu log extras
   - permit resize (mobile too)
   - resize observer fits
   - checkboxes: pin ✅ show debug logs 🚧
+- 🚧 Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
+  - ✅ shortcut works in active tabset
+  - ✅ clicking tab header sets active tabset
+    - ℹ️ started working after npm upgrade
+  - had to downgrade because profile edit remounts all tabs
+    - https://github.com/caplin/FlexLayout/issues/456#issuecomment-2499190906
 
 - could clean navMesh by
   - ℹ️ ongoing problem; we are "composing" recast-detour
@@ -3065,8 +3074,6 @@ done
     - ℹ️ e.g. 768 ~ 0 mod 256
     - ✅ fix instancedMonochromeShader
 
-
-
 - ✅ support `await api.sleep(1)` inside `map`
   - ℹ️ e.g. `{ echo foo; echo bar; echo baz; } | map 'async (input, {api}) => { await api.sleep(1); return input }'`
   - ✅ simplify `choice` so it does not use `sleep`
@@ -3079,10 +3086,6 @@ done
   - ℹ️ seems npc `will` is coinciding with npc `rob`
   - ℹ️ saw happen when changed symbol chairs
   - seems fixed via improved `w.npc.restore()`
-- ✅ Tabs: support keyboard shortcut to switch tabs: `ctrl+[`, `ctrl+]`
-  - ✅ shortcut works in active tabset
-  - ✅ clicking tab header sets active tabset
-    - ℹ️ started working after npm upgrade
 - ✅ fix initial shader errors
   - [.WebGL-0x11809663f00] GL_INVALID_OPERATION: Vertex shader input type does not match the type of the bound vertex attribute.
   - ℹ️ useLayoutEffect related
