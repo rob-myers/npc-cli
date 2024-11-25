@@ -23,20 +23,6 @@
     - e.g. `spawn rob $( click 1 ) --degrees=90`
     - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
-- ✅ change const.js hmr issue i.e. floor/ceiling disappears
-  - ℹ️ floor comes back if remount material...
-  - ℹ️ seems floor data texture `source.data` is all black
-  - ✅ `w.texVs.{floor,ceiling}++` in world query
-  - ✅ `w.tex{Floor,Ceil}`
-  - ℹ️ should try to replace `w.update()`
-- ✅ jerky npc movement when pause then unpause while moving
-  - ℹ️ Floor/Ceiling were needlessly recomputed
-
-- ✅ `w --stdin` e.g. `echo image/webp | w --stdin view.openSnapshot - 0` should be low quality
-  - ℹ️ should be same as `w view.openSnapshot image/webp 0`
-  - ℹ️ getopts is reordering hyphen `-` i.e. need another dummy symbol to represent stdin
-  - use underscore `echo image/webp | w --stdin view.openSnapshot _ 0`
-
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
   - ✅ avoid stationary npc push through door
@@ -114,14 +100,6 @@
   - clean overwritten attributes using patched three.js:
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
-
-- ✅ `click` is v3 and has `clicked.xz`?
-  - ✅ profile-1 click consumers could be 2d/3d agnostic
-  - `click 1 | w view.zoomTo --stdin`
-  - ℹ️ example where 2d project needed: `click 1 | w gmGraph.findRoomContaining`,
-    - could `click 1 | map xz | w gmGraph.findRoomContaining`
-    - could `click 1 | map meta`
-  - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
 
 - ceiling shader lit according to camera angle
 - can select npc while paused e.g. click npc causes single frame update?
@@ -3128,3 +3106,25 @@ done
     - prevState !== agent.state() and one equals `2`
   - ❌ try using requestMoveVelocity (did not work)
   - ℹ️ unnatural navigation + non-trivial to change on-connection speed
+
+- ✅ `click` is v3 and has `clicked.xz`?
+  - ✅ profile-1 click consumers could be 2d/3d agnostic
+  - `click 1 | w view.zoomTo --stdin`
+  - ℹ️ example where 2d project needed: `click 1 | w gmGraph.findRoomContaining`,
+    - could `click 1 | map xz | w gmGraph.findRoomContaining`
+    - could `click 1 | map meta`
+  - ℹ️ can use `w.lib.toXZ` and `w.lib.toV3`
+
+- ✅ `w --stdin` e.g. `echo image/webp | w --stdin view.openSnapshot - 0` should be low quality
+  - ℹ️ should be same as `w view.openSnapshot image/webp 0`
+  - ℹ️ getopts is reordering hyphen `-` i.e. need another dummy symbol to represent stdin
+  - use underscore `echo image/webp | w --stdin view.openSnapshot _ 0`
+
+- ✅ change const.js hmr issue i.e. floor/ceiling disappears
+  - ℹ️ floor comes back if remount material...
+  - ℹ️ seems floor data texture `source.data` is all black
+  - ✅ `w.texVs.{floor,ceiling}++` in world query
+  - ✅ `w.tex{Floor,Ceil}`
+  - ℹ️ should try to replace `w.update()`
+- ✅ jerky npc movement when pause then unpause while moving
+  - ℹ️ Floor/Ceiling were needlessly recomputed
