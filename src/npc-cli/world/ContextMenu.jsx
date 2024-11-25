@@ -174,17 +174,16 @@ const contextMenuCss = css`
   .top-bar {
     position: absolute;
     top: calc(-2 * ${closeButtonRadius});
-    right: calc(-2px);
+    right: 1px;
     display: flex;
     justify-content: start;
     opacity: 0.8;
     gap: 4px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    background-color: #333333aa;
     width: 100%;
   }
-
+  
   /* override side note opener */
   .options > .side-note {
     display: inline-flex;
@@ -194,10 +193,12 @@ const contextMenuCss = css`
     height: 100%;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    border: 2px solid #7d7;
+    border-bottom-width: 0;
+    font-size: calc(${closeButtonRadius} * 1.2);
+    background-color: #000;
+    color: #fff;
   }
-  /* .options > .side-note-bubble {
-    transform: translateY(40px);
-  } */
 
   .options .controls {
     display: flex;
@@ -218,11 +219,12 @@ const contextMenuCss = css`
     border-radius: calc(${closeButtonRadius} * 0.5);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    /* border: 2px solid #335; */
-    background-color: #fff;
-    color: #000;
     font-family: 'Courier New', Courier, monospace;
     font-size: calc(${closeButtonRadius} * 1.2);
+    border: 2px solid #d77;
+    border-bottom-width: 0;
+    background-color: #000;
+    color: #fff;
   }
 
   .actor-and-actions {
