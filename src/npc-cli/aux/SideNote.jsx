@@ -52,7 +52,6 @@ export default function SideNote(props) {
   </>;
 }
 
-
 /**
  * @param {HTMLElement} bubble
  */
@@ -69,7 +68,6 @@ export function openSideNote(bubble, width, timeoutId) {
   window.clearTimeout(timeoutId); // clear close timeout
 
   bubble.classList.add('open');
-
   const root = bubble.closest(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
   const rootRect = root.getBoundingClientRect();
 
@@ -94,9 +92,9 @@ export function closeSideNote(bubble, ms = 100) {
   }, ms);
 }
 
+const defaultArrowDeltaX = 8;
 const defaultInfoWidthPx = 300;
 const rootWidthPx = 16;
-const arrowDeltaX = 8;
 
 const iconTriggerCss = css`
   width: ${rootWidthPx}px;
@@ -113,7 +111,9 @@ const iconTriggerCss = css`
 `;
 
 const speechBubbleCss = css`
+  --info-arrow-delta-x: ${defaultArrowDeltaX}px;
   --info-width: ${defaultInfoWidthPx}px;
+
   position: relative;
   z-index: ${zIndex.speechBubble};
   top: ${-rootWidthPx}px;
@@ -171,11 +171,11 @@ const speechBubbleCss = css`
     left: ${-1.5 * rootWidthPx}px;
     .info {
       top: -16px;
-      left: calc(-1 * (0.5 * var(--info-width) + ${arrowDeltaX}px ));
+      left: calc(-1 * (0.5 * var(--info-width) + var(--info-arrow-delta-x) ));
     }
     .arrow {
       top: 0;
-      left: -${arrowDeltaX}px;
+      left: calc(-1 * var(--info-arrow-delta-x));
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
       border-left: 10px solid #444;
@@ -185,11 +185,11 @@ const speechBubbleCss = css`
     left: ${-rootWidthPx}px;
     .info {
       top: -16px;
-      left: calc(${rootWidthPx}px + 0.5 * var(--info-width) + ${arrowDeltaX}px);
+      left: calc(${rootWidthPx}px + 0.5 * var(--info-width) + var(--info-arrow-delta-x));
     }
     .arrow {
       top: 0;
-      left: ${rootWidthPx/2 + arrowDeltaX}px;
+      left: calc(${rootWidthPx / 2}px + var(--info-arrow-delta-x));
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
       border-right: 10px solid #444;
@@ -214,5 +214,8 @@ export const sideNoteRootDataAttribute = 'data-side-note-root';
 const hoverShowMs = 500;
 
 /**
- * @typedef {{ width?: number; onlyOnClick?: boolean; }} Props
+ * @typedef Props
+ * @property {number} [arrowDeltaX]
+ * @property {boolean} [onlyOnClick]
+ * @property {number} [width]
  */
