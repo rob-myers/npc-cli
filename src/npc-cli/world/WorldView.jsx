@@ -10,6 +10,7 @@ import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
 import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
+import { sideNoteRootDataAttribute } from "../aux/SideNote.jsx";
 import { WorldContext } from "./world-context.js";
 import ContextMenu from "./ContextMenu.jsx";
 import useStateRef from "../hooks/use-state-ref.js";
@@ -376,6 +377,7 @@ export default function WorldView(props) {
       onPointerUp={state.onPointerUp}
       onPointerLeave={state.onPointerLeave}
       onWheel={state.onWheel}
+      {...{ [sideNoteRootDataAttribute]: true }}
     >
       {props.children}
 

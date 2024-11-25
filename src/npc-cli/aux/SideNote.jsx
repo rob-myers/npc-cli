@@ -62,7 +62,7 @@ function open({ bubble, rect, width, timeoutId }) {
 
   bubble.classList.add('open');
   
-  const root = document.querySelector(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
+  const root = bubble.closest(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
   const rootRect = root.getBoundingClientRect();
   const pixelsOnRight = rootRect.right - rect.right;
   const pixelsOnLeft = rect.x - rootRect.x;
