@@ -16,7 +16,7 @@ export default function ContextMenu() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     rootEl: /** @type {*} */ (null),
-    object3d: /** @type {*} */ (null),
+    html: /** @type {*} */ (null),
     bubble: /** @type {*} */ (null),
     justOpen: false,
     showMeta: true,
@@ -34,7 +34,6 @@ export default function ContextMenu() {
     selectedActKey: null,
 
     calculatePosition(el, camera, size) {
-      state.object3d = el;
       // 🤔 support tracked offset vector?
       const objectPos = tmpVector3One.setFromMatrixPosition(
         state.tracked === null ? el.matrixWorld : state.tracked.matrixWorld
@@ -69,7 +68,7 @@ export default function ContextMenu() {
     },
     onToggleResize() {
       state.lock = !state.lock;
-      state.scale = 1 / objectScale(state.object3d, w.r3f.camera);
+      state.scale = 1 / objectScale(state.html.group, w.r3f.camera);
       update();
       pause(100).then(() => {
         // 🔔 hack to break memo https://github.com/pmndrs/drei/blob/89bcfdf1894b0b5f39771374e2820864647fc87c/src/web/Html.tsx#L293
@@ -146,6 +145,7 @@ export default function ContextMenu() {
       distanceFactor={state.lock ? state.scale : undefined}
       position={state.position}
       visible={state.open}
+      ref={x => x && (state.html = x)}
     >
       <div
         className={contextMenuCss}
@@ -413,7 +413,7 @@ const contextMenuCss = css`
 /**
  * @typedef State
  * @property {HTMLDivElement} rootEl
- * @property {THREE.Object3D} object3d
+ * @property {import('./Html3d').State} html
  * @property {HTMLElement} bubble For options
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} open Is the context menu open?

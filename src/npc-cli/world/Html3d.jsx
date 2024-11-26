@@ -2,64 +2,60 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 import * as THREE from 'three';
 import { ReactThreeFiber, useFrame, useThree } from '@react-three/fiber'
+import useStateRef from '../hooks/use-state-ref';
 
 /**
  * Based on https://github.com/pmndrs/drei/blob/master/src/web/Html.tsx
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
-export const Html3d = React.forwardRef(
-  (
-    {
-      children,
-      eps = 0.001,
-      style,
-      className,
-      distanceFactor,
-      castShadow,
-      receiveShadow,
-      calculatePosition = defaultCalculatePosition,
-      as = 'div',
-      wrapperClass,
-      ...props
-    },
-    ref, // 🚧
-  ) => {
-    const { gl, camera, scene, size, events } = useThree()
+export const Html3d = React.forwardRef(({
+  children,
+  eps = 0.001,
+  style,
+  className,
+  distanceFactor,
+  castShadow,
+  receiveShadow,
+  calculatePosition = defaultCalculatePosition,
+  wrapperClass,
+  ...props
+}, ref) => {
+    const { gl, camera, scene, size, events } = useThree();
 
-    const [el] = React.useState(() => document.createElement(as))
-    /** @type {React.MutableRefObject<ReactDOM.Root | undefined>} */
-    const root = React.useRef();
-    /** @type {React.RefObject<THREE.Group>} */
-    const group = React.useRef(null)
-    const oldZoom = React.useRef(0)
+    const state = useStateRef(/** @returns {State} */ () => ({
+      group: /** @type {*} */ (null),
+      rootDiv: document.createElement('div'),
+      reactRoot: /** @type {*} */ (null),
+    }));
+
+    React.useMemo(() => 
+      void (typeof ref === 'function' ? ref(state) : ref !== null && (ref.current = state))
+    , [ref]);
+
+    const oldZoom = React.useRef(0);
+
     const oldPosition = React.useRef([0, 0])
-    /** @type {React.RefObject<HTMLDivElement>} */
-    const transformOuterRef = React.useRef(null)
-    /** @type {React.RefObject<HTMLDivElement>} */
-    const transformInnerRef = React.useRef(null)
     // Append to the connected element, which makes HTML work with views
     const target = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
 
-    const isMeshSizeSet = React.useRef(false);
-
     React.useLayoutEffect(() => {
-      if (group.current) {
-        const currentRoot = (root.current = ReactDOM.createRoot(el))
+      if (state.group) {
+        const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv))
         scene.updateMatrixWorld()
-        const vec = calculatePosition(group.current, camera, size)
-        el.style.cssText = `position:absolute;top:0;left:0;transform:translate3d(${vec[0]}px,${vec[1]}px,0);transform-origin:0 0;`
+        const vec = calculatePosition(state.group, camera, size)
+        state.rootDiv.style.cssText = `position:absolute;top:0;left:0;transform:translate3d(${vec[0]}px,${vec[1]}px,0);transform-origin:0 0;`
         if (target) {
-          target.appendChild(el)
+          target.appendChild(state.rootDiv)
         }
         return () => {
-          if (target) target.removeChild(el)
+          if (target) target.removeChild(state.rootDiv)
           currentRoot.unmount()
         }
       }
     }, [target])
 
     React.useLayoutEffect(() => {
-      if (wrapperClass) el.className = wrapperClass
+      if (wrapperClass) state.rootDiv.className = wrapperClass
     }, [wrapperClass])
 
     /** @type {React.CSSProperties} */
@@ -72,8 +68,7 @@ export const Html3d = React.forwardRef(
     }, [style, size])
 
     React.useLayoutEffect(() => {
-      isMeshSizeSet.current = false
-      root.current?.render(
+      state.reactRoot?.render(
         <div
           // ref={ref}
           style={styles} className={className} children={children}
@@ -83,11 +78,11 @@ export const Html3d = React.forwardRef(
 
     const visible = React.useRef(true)
 
-    useFrame((gl) => {
-      if (group.current) {
+    useFrame((_gl) => {
+      if (state.group) {
         camera.updateMatrixWorld()
-        group.current.updateWorldMatrix(true, false)
-        const vec = calculatePosition(group.current, camera, size)
+        state.group.updateWorldMatrix(true, false)
+        const vec = calculatePosition(state.group, camera, size)
 
         if (
           Math.abs(oldZoom.current - camera.zoom) > eps ||
@@ -99,22 +94,20 @@ export const Html3d = React.forwardRef(
           visible.current = true;
 
           if (previouslyVisible !== visible.current) {
-            el.style.display = visible.current ? 'block' : 'none'
+            state.rootDiv.style.display = visible.current ? 'block' : 'none'
           }
 
-          el.style.zIndex = '0';
-
-          const scale = distanceFactor === undefined ? 1 : objectScale(group.current, camera) * distanceFactor
-          el.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`
+          const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
+          state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`
 
           oldPosition.current = vec
           oldZoom.current = camera.zoom
         }
       }
-    })
+    });
 
     return (
-      <group {...props} ref={group} />
+      <group {...props} ref={x => x && (state.group = x)} />
     );
   }
 );
@@ -125,14 +118,15 @@ export const Html3d = React.forwardRef(
 *   eps?: number;
 *   distanceFactor?: number;
 *   calculatePosition?: CalculatePosition;
-*   as?: string;
 *   wrapperClass?: string;
 * }, 'ref'>} Props
 */
 
 /**
 * @typedef State
-* @property {HTMLDivElement} div
+* @property {THREE.Group} group
+* @property {HTMLDivElement} rootDiv
+* @property {ReactDOM.Root} reactRoot
 */
 
 const v1 = new THREE.Vector3()
