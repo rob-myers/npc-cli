@@ -18,7 +18,7 @@ export default function ContextMenu() {
     bubble: /** @type {*} */ (null),
     justOpen: false,
     open: false,
-    persist: { id: `w-${w.key}-cm-persist`, el: /** @type {HTMLInputElement} */ ({ checked: false }) },
+    persist: false,
     mini: { id: `w-${w.key}-cm-mini`, el: /** @type {HTMLInputElement} */ ({ checked: false }) },
     
     selectedActKey: null,
@@ -33,7 +33,7 @@ export default function ContextMenu() {
       update();
     },
     hideUnlessPersisted() {
-      !state.persist.el.checked && state.hide();
+      !state.persist && state.hide();
     },
     onClickActions(e) {
       const item = /** @type {HTMLElement} */ (e.target);
@@ -55,6 +55,10 @@ export default function ContextMenu() {
       if (isSideNoteOpen(state.bubble)) {
         pause(200).then(() => openSideNote(state.bubble));
       }
+      update();
+    },
+    togglePersist() {
+      state.persist = !state.persist;
       update();
     },
     topBarRef(el) {
@@ -117,15 +121,6 @@ export default function ContextMenu() {
               <div className="controls">
 
                 <div className="control">
-                  <label htmlFor={state.persist.id}>persist</label>
-                  <input
-                    type="checkbox"
-                    id={state.persist.id}
-                    ref={el => void (el && (state.persist.el = el))}
-                  />
-                </div>
-
-                <div className="control">
                   <label htmlFor={state.mini.id}>mini</label>
                   <input
                     type="checkbox"
@@ -138,6 +133,14 @@ export default function ContextMenu() {
               </div>
             </SideNote>
           </div>
+
+          <button
+            className={cx("persist-button", { disabled: !state.persist })}
+            onClick={state.togglePersist}
+            title="persist"
+          >
+            !
+          </button>
 
           <button className="close-button" onClick={state.hide}>
             x
@@ -249,7 +252,7 @@ const contextMenuCss = css`
     gap: 4px;
   }
 
-  .close-button {
+  .close-button, .persist-button {
     min-width: calc(${closeButtonRadius} + ${closeButtonRadius});
     min-height: calc(${closeButtonRadius} + ${closeButtonRadius});
     display: flex;
@@ -262,10 +265,19 @@ const contextMenuCss = css`
     border-bottom-right-radius: 0;
     font-family: 'Courier New', Courier, monospace;
     font-size: calc(${closeButtonRadius} * 1);
-    border: 2px solid #d77;
-    border-bottom-width: 0;
     background-color: #000;
     color: #fff;
+  }
+  .close-button {
+    border: 2px solid #d77;
+    border-bottom-width: 0;
+  }
+  .persist-button {
+    border: 2px solid #77d;
+    border-bottom-width: 0;
+  }
+  .persist-button.disabled {
+    filter: brightness(0.5);
   }
 
   .actor-and-actions {
@@ -338,18 +350,19 @@ const contextMenuCss = css`
  * @property {boolean} open Is the context menu open?
  * @property {HTMLDivElement} rootEl
  * @property {null | NPC.MetaActKey} selectedActKey
- * @property {OptionsControl} persist
+ * @property {boolean} persist
  * @property {OptionsControl} mini
- *
- * @property {{ k: string; v: string; length: number }[]} kvs
- * @property {string[]} nearNpcKeys
- * @property {NPC.MetaActKey[]} metaActs
- * @property {THREE.Vector3Tuple} position
- * 
- * @property {() => void} hide
- * @property {() => void} hideUnlessPersisted
- * @property {(e: React.MouseEvent) => void} onClickActions
- * //@property {(e: React.MouseEvent) => void} onContextMenu
+*
+* @property {{ k: string; v: string; length: number }[]} kvs
+* @property {string[]} nearNpcKeys
+* @property {NPC.MetaActKey[]} metaActs
+* @property {THREE.Vector3Tuple} position
+* 
+* @property {() => void} hide
+* @property {() => void} hideUnlessPersisted
+* @property {(e: React.MouseEvent) => void} onClickActions
+* //@property {(e: React.MouseEvent) => void} onContextMenu
+ * @property {() => void} togglePersist
  * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
  * @property {(el: null | HTMLElement) => void} topBarRef
