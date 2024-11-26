@@ -15,12 +15,14 @@ export default function ContextMenu() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     rootEl: /** @type {*} */ (null),
+    object3d: /** @type {*} */ (null),
     bubble: /** @type {*} */ (null),
     justOpen: false,
-    mini: false,
+    showMeta: true,
     open: false,
     persist: true,
-    resize: false,
+    lock: false,
+    scale: 1,
     tracked: null,
     
     kvs: [],
@@ -31,8 +33,9 @@ export default function ContextMenu() {
     selectedActKey: null,
 
     calculatePosition(el, camera, size) {
-      const objectPos = tmpVector3.setFromMatrixPosition(
-        // 🤔 support tracked offset vector?
+      state.object3d = el;
+      // 🤔 support tracked offset vector?
+      const objectPos = tmpVector3One.setFromMatrixPosition(
         state.tracked === null ? el.matrixWorld : state.tracked.matrixWorld
       );
       objectPos.project(camera);
@@ -59,14 +62,19 @@ export default function ContextMenu() {
         update();
       }
     },
-    onToggleMini() {
-      state.mini = !state.mini;
+    onToggleMeta() {
+      state.showMeta = !state.showMeta;
       update();
     },
     onToggleResize() {
-      state.resize = !state.resize;
-      w.r3f.advance(Date.now());
+      state.lock = !state.lock;
+      state.scale = 1 / objectScale(state.object3d, w.r3f.camera);
       update();
+      pause(100).then(() => {
+        // 🔔 hack to break memo https://github.com/pmndrs/drei/blob/89bcfdf1894b0b5f39771374e2820864647fc87c/src/web/Html.tsx#L293
+        w.r3f.camera.zoom += 0.0001;
+        w.r3f.advance(Date.now());
+      });
     },
     rootRef(el) {
       if (el !== null) {
@@ -134,7 +142,7 @@ export default function ContextMenu() {
     <Html
       className="context-menu"
       calculatePosition={state.calculatePosition}
-      distanceFactor={state.resize ? 4 : undefined}
+      distanceFactor={state.lock ? state.scale : undefined}
       position={state.position}
       visible={state.open}
       zIndexRange={[0]} // behind "disable" overlay
@@ -147,29 +155,37 @@ export default function ContextMenu() {
       >
 
         <div
-          className={cx("top-bar", { mini: state.mini })}
+          className={cx("top-bar", { mini: state.showMeta })}
           ref={state.topBarRef}
         >
 
           <div className="options">
             <SideNote onlyOnClick width={300}>
               <div className="controls">
-
                 <button
-                  onClick={state.onToggleMini}
-                  className={cx({ disabled: !state.mini })}
+                  onClick={state.onToggleMeta}
+                  className={cx({ disabled: !state.showMeta })}
                 >
-                  mini
+                  meta
                 </button>
 
                 <button
                   onClick={state.onToggleResize}
-                  className={cx({ disabled: !state.resize })}
+                  className={cx({ disabled: !state.lock })}
                 >
-                  resize
+                  lock
                 </button>
-
               </div>
+
+              {state.showMeta && <div className="key-values">
+                {state.kvs.map(({ k, v }) => (
+                  <div key={k} className="key-value">
+                    <span className="meta-key">{k}</span>
+                    {v !== '' && <span className="meta-value">{v}</span>}
+                  </div>
+                ))}
+              </div>}
+
             </SideNote>
           </div>
 
@@ -205,14 +221,14 @@ export default function ContextMenu() {
           </div>
         </div>}
 
-        {!state.mini && <div className="key-values">
+        {/* {!state.mini && <div className="key-values">
           {state.kvs.map(({ k, v }) => (
             <div key={k} className="key-value">
               <span className="meta-key">{k}</span>
               {v !== '' && <span className="meta-value">{v}</span>}
             </div>
           ))}
-        </div>}
+        </div>} */}
 
       </div>
     </Html>
@@ -368,22 +384,24 @@ const contextMenuCss = css`
   .key-values {
     display: flex;
     flex-wrap: wrap;
-    width: 200px;
+    /* width: 200px; */
+    margin-top: 8px;
   }
 
   .key-value {
     display: flex;
     justify-content: space-around;
+    align-items: center;
 
-    flex: 1;
+    flex: 0.5;
     border: 1px solid #555;
-    font-family: 'Courier New', Courier, monospace;
+    /* font-family: 'Courier New', Courier, monospace; */
 
     .meta-key {
-      padding: 4px;
+      padding: 2px;
     }
     .meta-value {
-      padding: 4px;
+      padding: 0 4px;
       color: #cca;
       max-width: 128px;
     }
@@ -395,12 +413,14 @@ const contextMenuCss = css`
 /**
  * @typedef State
  * @property {HTMLDivElement} rootEl
+ * @property {THREE.Object3D} object3d
  * @property {HTMLElement} bubble For options
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} open Is the context menu open?
- * @property {boolean} mini
+ * @property {boolean} showMeta
  * @property {boolean} persist
- * @property {boolean} resize
+ * @property {boolean} lock
+ * @property {number} scale
  * @property {null | THREE.Object3D} tracked
 *
 * @property {null | NPC.MetaActKey} selectedActKey
@@ -414,7 +434,7 @@ const contextMenuCss = css`
 * @property {() => void} hide
 * @property {() => void} hideUnlessPersisted
 * @property {(npcKey: string) => boolean} isTracking
-* @property {() => void} onToggleMini
+* @property {() => void} onToggleMeta
 * @property {() => void} onToggleResize
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
@@ -426,4 +446,18 @@ const contextMenuCss = css`
  * @property {() => void} updateFromLastDown
  */
 
-const tmpVector3 = new THREE.Vector3();
+const tmpVector3One = new THREE.Vector3();
+const tmpVector3Two = new THREE.Vector3();
+
+/**
+ * @param {THREE.Object3D} el 
+ * @param {THREE.PerspectiveCamera} camera 
+ */
+function objectScale(el, camera) {
+  const objectPos = tmpVector3One.setFromMatrixPosition(el.matrixWorld);
+  const cameraPos = tmpVector3Two.setFromMatrixPosition(camera.matrixWorld);
+  const vFOV = (camera.fov * Math.PI) / 180;
+  const dist = objectPos.distanceTo(cameraPos);
+  const scaleFOV = 2 * Math.tan(vFOV / 2) * dist;
+  return 1 / scaleFOV;
+}
