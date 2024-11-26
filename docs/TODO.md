@@ -57,7 +57,7 @@
     - fix click on ContextMenu
     - fix right click on ContextMenu
     - fix unfocus tab then click
-  - 🚧 ContextMenu
+  - ✅ ContextMenu
     - ✅ has close button
     - ✅ has options panel
     - ✅ start options panel
@@ -69,8 +69,10 @@
       - ❌ can choose left/right/top/bottom to not block door?
         - ℹ️ too complex? e.g. doesn't
     - ✅ has small sphere indicating contact point
-    - 🚧 can track moving NPC?
-      - strategy for ContextMenu when clicked npc moves
+    - ✅ can track moving NPC?
+      - ✅ `w n.rob.m.group | w --stdin cm.track`
+      - ✅ `w cm.track`
+      - auto track npcs
     - ❌ transparent for doors/walls when "behind contact normal"
   - 🚧 ContextMenu simplify "key values"
     - e.g. picked value, grKey, gdKey (instantiated for switches)

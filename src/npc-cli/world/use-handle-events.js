@@ -315,6 +315,9 @@ export default function useHandleEvents(w) {
           } else {
             state.externalNpcs.delete(e.key);
           }
+          if (w.cm.isTracking(e.npcKey)) {
+            w.cm.track(null);
+          }
           break;
         }
         // case "started-moving":

@@ -20,14 +20,26 @@ export default function ContextMenu() {
     mini: false,
     open: false,
     persist: true,
-    scaled: false,
+    resize: false,
+    tracked: null,
     
-    selectedActKey: null,
     kvs: [],
-    nearNpcKeys: [],
+    meta: {},
     metaActs: [],
+    nearNpcKeys: [],
     position: [0, 0, 0],
+    selectedActKey: null,
 
+    calculatePosition(el, camera, size) {
+      const objectPos = tmpVector3.setFromMatrixPosition(
+        // 🤔 support tracked offset vector?
+        state.tracked === null ? el.matrixWorld : state.tracked.matrixWorld
+      );
+      objectPos.project(camera);
+      const widthHalf = size.width / 2;
+      const heightHalf = size.height / 2;
+      return [objectPos.x * widthHalf + widthHalf, -(objectPos.y * heightHalf) + heightHalf];
+    },
     hide() {
       state.open = false;
       closeSideNote(state.bubble, 0);
@@ -35,6 +47,9 @@ export default function ContextMenu() {
     },
     hideUnlessPersisted() {
       !state.persist && state.hide();
+    },
+    isTracking(npcKey) {
+      return state.tracked !== null && state.meta.npcKey === npcKey;
     },
     onClickActions(e) {
       const item = /** @type {HTMLElement} */ (e.target);
@@ -48,8 +63,8 @@ export default function ContextMenu() {
       state.mini = !state.mini;
       update();
     },
-    onToggleScale() {
-      state.scaled = !state.scaled;
+    onToggleResize() {
+      state.resize = !state.resize;
       w.r3f.advance(Date.now());
       update();
     },
@@ -59,10 +74,10 @@ export default function ContextMenu() {
       }
     },
     show() {
-      closeSideNote(state.bubble, 0);
       state.open = true;
       state.updateFromLastDown();
       if (isSideNoteOpen(state.bubble)) {
+        closeSideNote(state.bubble, 0);
         pause(200).then(() => openSideNote(state.bubble));
       }
       update();
@@ -76,27 +91,36 @@ export default function ContextMenu() {
         state.bubble = /** @type {HTMLElement} */ (el.querySelector('.side-note-bubble'));
       }
     },
+    track(input) {
+      if (input instanceof THREE.Object3D) {
+        state.tracked = input;
+      } else {
+        state.tracked = null;
+      }
+    },
     updateFromLastDown() {
       const { lastDown } = w.view;
-      
       if (lastDown === undefined) {
         return;
       }
-      const meta = lastDown?.meta;
+
+      state.meta = lastDown.meta;
   
-      state.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
+      state.kvs = Object.entries(state.meta ?? {}).map(([k, v]) => {
         const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
         return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
       }).sort((a, b) => a.length < b.length ? -1 : 1);
   
       state.nearNpcKeys = (
-        (typeof meta?.gmId === 'number' && typeof meta.roomId === 'number')
-          ? w.e.getNearbyNpcKeys(meta.gmId, meta.roomId, toXZ(lastDown.position))
+        (typeof state.meta?.gmId === 'number' && typeof state.meta.roomId === 'number')
+          ? w.e.getNearbyNpcKeys(state.meta.gmId, state.meta.roomId, toXZ(lastDown.position))
           : []
       );
   
-      state.metaActs = w.e.getMetaActs(meta);
-  
+      state.metaActs = w.e.getMetaActs(state.meta);
+      
+      // track npc if meta.npcKey valid
+      state.track(w.n[state.meta.npcKey]?.m.group);
       state.position = lastDown.position.toArray();
     },
   }));
@@ -108,11 +132,12 @@ export default function ContextMenu() {
 
   return <>
     <Html
-      visible={state.open}
-      position={state.position}
       className="context-menu"
+      calculatePosition={state.calculatePosition}
+      distanceFactor={state.resize ? 4 : undefined}
+      position={state.position}
+      visible={state.open}
       zIndexRange={[0]} // behind "disable" overlay
-      distanceFactor={state.scaled ? 4 : undefined}
     >
       <div
         className={contextMenuCss}
@@ -138,10 +163,10 @@ export default function ContextMenu() {
                 </button>
 
                 <button
-                  onClick={state.onToggleScale}
-                  className={cx({ disabled: !state.scaled })}
+                  onClick={state.onToggleResize}
+                  className={cx({ disabled: !state.resize })}
                 >
-                  scaled
+                  resize
                 </button>
 
               </div>
@@ -193,7 +218,7 @@ export default function ContextMenu() {
     </Html>
     <mesh
       position={state.position}
-      visible={state.open}
+      visible={state.open === true && state.tracked === null}
     >
       <sphereGeometry args={[0.025, 8, 8]} />
       <meshBasicMaterial color="red" />
@@ -369,29 +394,36 @@ const contextMenuCss = css`
 
 /**
  * @typedef State
- * @property {HTMLElement} bubble
- * @property {boolean} scaled
+ * @property {HTMLDivElement} rootEl
+ * @property {HTMLElement} bubble For options
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} open Is the context menu open?
- * @property {HTMLDivElement} rootEl
- * @property {null | NPC.MetaActKey} selectedActKey
- * @property {boolean} persist
  * @property {boolean} mini
+ * @property {boolean} persist
+ * @property {boolean} resize
+ * @property {null | THREE.Object3D} tracked
 *
+* @property {null | NPC.MetaActKey} selectedActKey
 * @property {{ k: string; v: string; length: number }[]} kvs
 * @property {string[]} nearNpcKeys
+* @property {Geom.Meta} meta
 * @property {NPC.MetaActKey[]} metaActs
 * @property {THREE.Vector3Tuple} position
 * 
+* @property {(el: THREE.Object3D, camera: THREE.Camera, size: { width: number; height: number }) => number[]} calculatePosition
 * @property {() => void} hide
 * @property {() => void} hideUnlessPersisted
+* @property {(npcKey: string) => boolean} isTracking
 * @property {() => void} onToggleMini
-* @property {() => void} onToggleScale
+* @property {() => void} onToggleResize
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
  * @property {() => void} togglePersist
  * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
  * @property {(el: null | HTMLElement) => void} topBarRef
+ * @property {(el: null | THREE.Object3D) => void} track
  * @property {() => void} updateFromLastDown
  */
+
+const tmpVector3 = new THREE.Vector3();
