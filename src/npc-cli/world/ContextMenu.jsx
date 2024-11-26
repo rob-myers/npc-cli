@@ -17,9 +17,10 @@ export default function ContextMenu() {
     rootEl: /** @type {*} */ (null),
     bubble: /** @type {*} */ (null),
     justOpen: false,
+    mini: false,
     open: false,
-    persist: false,
-    mini: { id: `w-${w.key}-cm-mini`, el: /** @type {HTMLInputElement} */ ({ checked: false }) },
+    persist: true,
+    scaled: false,
     
     selectedActKey: null,
     kvs: [],
@@ -42,6 +43,15 @@ export default function ContextMenu() {
         state.selectedActKey = state.metaActs[index];
         update();
       }
+    },
+    onToggleMini() {
+      state.mini = !state.mini;
+      update();
+    },
+    onToggleScale() {
+      state.scaled = !state.scaled;
+      w.r3f.advance(Date.now());
+      update();
     },
     rootRef(el) {
       if (el !== null) {
@@ -95,7 +105,6 @@ export default function ContextMenu() {
   const update = useUpdate();
 
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
-  const showSummary = state.mini.el.checked === false;
 
   return <>
     <Html
@@ -103,6 +112,7 @@ export default function ContextMenu() {
       position={state.position}
       className="context-menu"
       zIndexRange={[0]} // behind "disable" overlay
+      distanceFactor={state.scaled ? 4 : undefined}
     >
       <div
         className={contextMenuCss}
@@ -112,7 +122,7 @@ export default function ContextMenu() {
       >
 
         <div
-          className={cx("top-bar", { mini: state.mini.el.checked })}
+          className={cx("top-bar", { mini: state.mini })}
           ref={state.topBarRef}
         >
 
@@ -120,15 +130,19 @@ export default function ContextMenu() {
             <SideNote onlyOnClick width={300}>
               <div className="controls">
 
-                <div className="control">
-                  <label htmlFor={state.mini.id}>mini</label>
-                  <input
-                    type="checkbox"
-                    id={state.mini.id}
-                    ref={el => void (el && (state.mini.el = el))}
-                    onChange={update}
-                  />
-                </div>
+                <button
+                  onClick={state.onToggleMini}
+                  className={cx({ disabled: !state.mini })}
+                >
+                  mini
+                </button>
+
+                <button
+                  onClick={state.onToggleScale}
+                  className={cx({ disabled: !state.scaled })}
+                >
+                  scaled
+                </button>
 
               </div>
             </SideNote>
@@ -139,7 +153,7 @@ export default function ContextMenu() {
             onClick={state.togglePersist}
             title="persist"
           >
-            !
+            📌
           </button>
 
           <button className="close-button" onClick={state.hide}>
@@ -166,7 +180,7 @@ export default function ContextMenu() {
           </div>
         </div>}
 
-        {showSummary && <div className="key-values">
+        {!state.mini && <div className="key-values">
           {state.kvs.map(({ k, v }) => (
             <div key={k} className="key-value">
               <span className="meta-key">{k}</span>
@@ -193,10 +207,8 @@ const closeButtonRadius = `${14}px`;
 const contextMenuCss = css`
   /* otherwise it is centred */
   position: absolute;
-  left: 0;
   left: 20px;
   top: 0;
-  /* top: 20px; */
 
   display: flex;
   flex-direction: column;
@@ -220,8 +232,8 @@ const contextMenuCss = css`
   }
 
   .mini {
-    .options .side-note, .close-button {
-      border-bottom-width: 2px;
+    .options .side-note, .persist-button, .close-button {
+      border-bottom-width: 1px;
       border-radius: 8px;
     }
   }
@@ -235,18 +247,30 @@ const contextMenuCss = css`
     height: 100%;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border: 2px solid #7d7;
-    border-bottom-width: 0;
     font-size: calc(${closeButtonRadius} * 1.2);
     background-color: #000;
     color: #fff;
+    border: 1px solid #7d7;
+    border-bottom-width: 0;
   }
 
   .options .controls {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+
+    button {
+      background: white;
+      color: black;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    button.disabled {
+      filter: brightness(0.5);
+    }
   }
+
   .options .control {
     display: flex;
     gap: 4px;
@@ -269,11 +293,11 @@ const contextMenuCss = css`
     color: #fff;
   }
   .close-button {
-    border: 2px solid #d77;
+    border: 1px solid #d77;
     border-bottom-width: 0;
   }
   .persist-button {
-    border: 2px solid #77d;
+    border: 1px solid #77d;
     border-bottom-width: 0;
   }
   .persist-button.disabled {
@@ -346,12 +370,13 @@ const contextMenuCss = css`
 /**
  * @typedef State
  * @property {HTMLElement} bubble
+ * @property {boolean} scaled
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} open Is the context menu open?
  * @property {HTMLDivElement} rootEl
  * @property {null | NPC.MetaActKey} selectedActKey
  * @property {boolean} persist
- * @property {OptionsControl} mini
+ * @property {boolean} mini
 *
 * @property {{ k: string; v: string; length: number }[]} kvs
 * @property {string[]} nearNpcKeys
@@ -360,6 +385,8 @@ const contextMenuCss = css`
 * 
 * @property {() => void} hide
 * @property {() => void} hideUnlessPersisted
+* @property {() => void} onToggleMini
+* @property {() => void} onToggleScale
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
  * @property {() => void} togglePersist
@@ -367,10 +394,4 @@ const contextMenuCss = css`
  * @property {() => void} show
  * @property {(el: null | HTMLElement) => void} topBarRef
  * @property {() => void} updateFromLastDown
- */
-
-/**
- * @typedef OptionsControl
- * @property {string} id
- * @property {HTMLInputElement} el
  */
