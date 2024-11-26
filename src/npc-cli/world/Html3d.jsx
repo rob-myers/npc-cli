@@ -28,9 +28,7 @@ export const Html3d = React.forwardRef(({
       reactRoot: /** @type {*} */ (null),
     }));
 
-    React.useMemo(() => 
-      void (typeof ref === 'function' ? ref(state) : ref !== null && (ref.current = state))
-    , [ref]);
+    React.useImperativeHandle(ref, () => state, []);
 
     const oldZoom = React.useRef(0);
 
@@ -107,7 +105,10 @@ export const Html3d = React.forwardRef(({
     });
 
     return (
-      <group {...props} ref={x => x && (state.group = x)} />
+      <group
+        {...props}
+        ref={state.ref('group')}
+      />
     );
   }
 );

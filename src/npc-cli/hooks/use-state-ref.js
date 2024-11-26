@@ -14,7 +14,7 @@ import React from "react";
  * @param {Options<State>} [opts]
  */
 export default function useStateRef(initializer, opts = {}) {
-  const [state] = /** @type {[State & { _prevFn?: string }, any]} */ (
+  const [state] = /** @type {[State & ExtraState<State>, any]} */ (
     React.useState(initializer)
   );
 
@@ -27,6 +27,7 @@ export default function useStateRef(initializer, opts = {}) {
        * 🚧 avoid invocation in production
        */
       state._prevFn = initializer.toString();
+      state.ref = (key) => (value) => value === null ? (delete state[key]) : (state[key] = value);
     } else {
       /**
        * Either HMR or `opts.deps` has changed.
@@ -58,7 +59,7 @@ export default function useStateRef(initializer, opts = {}) {
       }
 
       for (const k of Object.keys(state)) {
-        if (!(k in newInit) && k !== "_prevFn") {
+        if (!(k in newInit) && k !== "_prevFn" && k !== "ref") {
           // console.log({ deleting: k })
           delete state[/** @type {keyof State} */ (k)];
         }
@@ -71,7 +72,7 @@ export default function useStateRef(initializer, opts = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, opts.deps ?? []);
 
-  return /** @type {State} */ (state);
+  return /** @type {State & Pick<ExtraState<State>, 'ref'>} */ (state);
 }
 
 module.hot?.decline();
@@ -84,4 +85,12 @@ module.hot?.decline();
  * @property {Partial<Record<keyof State, boolean>>} [preserve]
  * Preserve equality of function when toString() does not change? 
  * @property {any[]} [deps]
+ */
+
+/**
+ * @template {Record<string, any>} State
+ * @typedef {{
+ *   _prevFn?: string;
+ *   ref<Key extends keyof State, T extends State[Key]>(key: Key): ((value: T | null) => void);
+ * }} ExtraState
  */

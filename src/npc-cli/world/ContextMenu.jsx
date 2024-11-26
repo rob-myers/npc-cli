@@ -145,7 +145,7 @@ export default function ContextMenu() {
       distanceFactor={state.lock ? state.scale : undefined}
       position={state.position}
       visible={state.open}
-      ref={x => x && (state.html = x)}
+      ref={state.ref('html')}
     >
       <div
         className={contextMenuCss}

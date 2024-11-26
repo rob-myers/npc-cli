@@ -80,6 +80,7 @@
     - ✅ expose object3d
     - 🚧 can force update
     - 🚧 can CSS animate scale
+  - ContextMenu: preserve open SideNote during HMR
   - 🚧 ContextMenu simplify "key values"
     - e.g. picked value, grKey, gdKey (instantiated for switches)
     - complex values optionally inside SideNote?
@@ -112,9 +113,10 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
-- 🚧 profile-1.sh edit should not hmr Viewer
+- useStateRef provides `state.ref(key)` which deletes sub-refs on null
+- ✅ profile-1.sh edit should not hmr Viewer
   - Viewer tabs def should not hmr Tabs
-  - might be due to flexlayout-react upgrade
+  - downgraded flexlayout-react
 - ceiling shader lit according to camera angle
 - can select npc while paused e.g. click npc causes single frame update?
   - ✅ via manually resumed process which controls selection

@@ -31,7 +31,7 @@ export const Logger = React.forwardRef(function WorldLogger(props, ref) {
 
   const update = useUpdate();
 
-  React.useMemo(() => void /** @type {React.RefCallback<State>} */ (ref)?.(state), [ref]);
+  React.useImperativeHandle(ref, () => state, []);
 
   React.useEffect(() => {
     if (state.container === null) {
