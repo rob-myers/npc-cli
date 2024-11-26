@@ -1,10 +1,11 @@
 import React from "react";
-import { Html } from "@react-three/drei";
 import { css, cx } from "@emotion/css";
 import * as THREE from "three";
 import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
+
 import SideNote, { closeSideNote, openSideNote, isSideNoteOpen } from "../aux/SideNote";
+import { Html3d } from './Html3d';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
@@ -139,13 +140,12 @@ export default function ContextMenu() {
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
 
   return <>
-    <Html
+    <Html3d
       className="context-menu"
       calculatePosition={state.calculatePosition}
       distanceFactor={state.lock ? state.scale : undefined}
       position={state.position}
       visible={state.open}
-      zIndexRange={[0]} // behind "disable" overlay
     >
       <div
         className={contextMenuCss}
@@ -231,7 +231,7 @@ export default function ContextMenu() {
         </div>} */}
 
       </div>
-    </Html>
+    </Html3d>
     <mesh
       position={state.position}
       visible={state.open === true && state.tracked === null}
