@@ -17,14 +17,13 @@ export default function ContextMenu() {
   const state = useStateRef(/** @returns {State} */ () => ({
     rootEl: /** @type {*} */ (null),
     html: /** @type {*} */ (null),
-    bubble: /** @type {*} */ (null),
+    popup: /** @type {*} */ (null),
     justOpen: false,
     showMeta: true,
     open: false,
     persist: true,
     lock: false,
     scale: 1,
-    sideNote: /** @type {*} */ (null),
     tracked: null,
     
     kvs: [],
@@ -46,7 +45,7 @@ export default function ContextMenu() {
     },
     hide() {
       state.open = false;
-      state.sideNote.close(0);
+      state.popup.close(0);
       update();
     },
     hideUnlessPersisted() {
@@ -75,20 +74,15 @@ export default function ContextMenu() {
     show() {
       state.open = true;
       state.updateFromLastDown();
-      if (state.sideNote.opened) {
-        state.sideNote.close(0);
-        pause(200).then(() => state.sideNote.open());
+      if (state.popup.opened) {
+        state.popup.close(0);
+        pause(200).then(() => state.popup.open());
       }
       update();
     },
     togglePersist() {
       state.persist = !state.persist;
       update();
-    },
-    topBarRef(el) {
-      if (el !== null) {
-        state.bubble = /** @type {HTMLElement} */ (el.querySelector('.side-note-bubble'));
-      }
     },
     track(input) {
       if (input instanceof THREE.Object3D) {
@@ -129,13 +123,12 @@ export default function ContextMenu() {
 
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
 
-  React.useEffect(() => {
-    // trigger update on unlock
-    state.html.forceUpdate();
+  React.useEffect(() => {// trigger update on unlock
+    state.lock === false && state.html.forceUpdate();
   }, [state.lock]);
 
-  React.useEffect(() => {
-    state.open && state.sideNote?.open();
+  React.useEffect(() => {// initially open
+    state.open && state.popup?.open();
   }, [state.open]);
 
   return <>
@@ -154,13 +147,10 @@ export default function ContextMenu() {
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
       >
 
-        <div
-          className={cx("top-bar", { mini: state.showMeta })}
-          ref={state.topBarRef}
-        >
+        <div className={cx("top-bar", { mini: state.showMeta })}>
           <div className="options">
             <PopUp
-              ref={state.ref('sideNote')}
+              ref={state.ref('popup')}
               width={300}
             >
               <div className="controls">
@@ -411,14 +401,13 @@ const contextMenuCss = css`
  * @typedef State
  * @property {HTMLDivElement} rootEl
  * @property {import('../components/Html3d').State} html
- * @property {HTMLElement} bubble For options
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} open Is the context menu open?
  * @property {boolean} showMeta
  * @property {boolean} persist
  * @property {boolean} lock
  * @property {number} scale
- * @property {import('../components/PopUp').State} sideNote
+ * @property {import('../components/PopUp').State} popup
  * @property {null | THREE.Object3D} tracked
 *
 * @property {null | NPC.MetaActKey} selectedActKey
@@ -438,7 +427,6 @@ const contextMenuCss = css`
 * //@property {(e: React.MouseEvent) => void} onContextMenu
  * @property {() => void} togglePersist
  * @property {() => void} show
- * @property {(el: null | HTMLElement) => void} topBarRef
  * @property {(el: null | THREE.Object3D) => void} track
  * @property {() => void} updateFromLastDown
  */
