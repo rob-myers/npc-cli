@@ -80,18 +80,19 @@
     - ✅ expose object3d
     - ✅ can force update
     - ✅ can CSS animate scale
-  - ContextMenu: preserve open SideNote during HMR
+  - ❌ ContextMenu: preserve open SideNote during HMR of Html3d
+    - ℹ️ happens because we root.unmount() in useLayoutEffect
+    - ℹ️ don't want to start caching roots per instance
   - 🚧 ContextMenu simplify "key values"
-    - e.g. picked value, grKey, gdKey (instantiated for switches)
-    - complex values optionally inside SideNote?
+    - picked value, grKey, gdKey (instantiated for switches), symbolKey
+    - complex values optionally showable
   - 🚧 ContextMenu has select with possible actions
-    - ℹ️ e.g. npc in room with locked door can still leave
-    - ℹ️ `inner` but not `secure` door switch can be opened
-    - ✅ generic approach to deciding if actions are possible?
-    - 🚧 can open doors using switches
-  - 🚧 long press do point: actual nav mesh may be strictly smaller
+    - can open doors using switches
+    - npc in room with locked door can still leave
+    - `inner` but not `secure` door switch can be opened
+  - ✅ long press do point: actual nav mesh may be strictly smaller
     - ✅ from off-mesh closest point on nav mesh
-    - still seeing long-press issues on mobile e.g. to bed from floor
+    - ✅ still seeing long-press issues on mobile e.g. to bed from floor
   - meta.doPoint should be defined on all do points
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"

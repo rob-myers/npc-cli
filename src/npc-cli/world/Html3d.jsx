@@ -52,7 +52,7 @@ export const Html3d = React.forwardRef(({
         }
         return () => {
           if (target) target.removeChild(state.rootDiv)
-          currentRoot.unmount()
+          currentRoot.unmount() // 🔔 breaks HMR of children onchange this file
         }
       }
     }, [target])
@@ -115,7 +115,6 @@ export const Html3d = React.forwardRef(({
 *   eps?: number;
 *   distanceFactor?: number;
 *   calculatePosition?: CalculatePosition;
-*   wrapperClass?: string;
 * }, 'ref'>} Props
 */
 
