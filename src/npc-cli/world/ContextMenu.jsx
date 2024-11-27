@@ -233,7 +233,7 @@ const contextMenuCss = css`
   /* otherwise it is centred */
   position: absolute;
   left: 0;
-  top: 12px;
+  top: 0;
 
   display: flex;
   flex-direction: column;

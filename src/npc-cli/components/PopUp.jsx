@@ -43,6 +43,8 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       state.right = !state.left;
       state.down = false;
       
+      state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 20 : 12}px`);
+
       const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
       width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
       width && state.bubble.style.setProperty('--info-width', `${width}px`);
@@ -102,7 +104,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {(ms?: number) => number} close
  */
 
-const defaultArrowDeltaX = 8;
+const defaultArrowDeltaX = 20;
 const defaultInfoWidthPx = 300;
 const rootWidthPx = 16;
 
