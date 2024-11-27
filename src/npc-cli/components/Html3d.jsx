@@ -42,7 +42,7 @@ export const Html3d = React.forwardRef(({
     const target = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
 
     React.useLayoutEffect(() => {
-      if (state.group) {
+      if (state.group !== null) {
         const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv))
         scene.updateMatrixWorld()
         const vec = calculatePosition(state.group, camera, size)

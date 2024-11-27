@@ -1,9 +1,9 @@
 import React from "react";
 import { css, cx } from "@emotion/css";
 import * as THREE from "three";
+
 import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
-
 import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from '../components/Html3d';
 import useStateRef from "../hooks/use-state-ref";
@@ -119,17 +119,18 @@ export default function ContextMenu() {
   }));
 
   w.cm = state;
-  const update = useUpdate();
-
+  
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
-
+  
   React.useEffect(() => {// trigger update on unlock
     state.lock === false && state.html.forceUpdate();
   }, [state.lock]);
-
+  
   React.useEffect(() => {// initially open
     state.open && state.popup?.open();
   }, [state.open]);
+  
+  const update = useUpdate();
 
   return <>
     <Html3d
