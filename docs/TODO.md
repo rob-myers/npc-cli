@@ -75,11 +75,11 @@
       - auto track npcs
     - ❌ transparent for doors/walls when "behind contact normal"
   - ✅ ContextMenu: resize -> lock
-  - 🚧 ContextMenu: customize @react-three/drei Html
+  - ✅ ContextMenu: customize @react-three/drei Html
     - ✅ create JavaScript projection
     - ✅ expose object3d
-    - 🚧 can force update
-    - 🚧 can CSS animate scale
+    - ✅ can force update
+    - ✅ can CSS animate scale
   - ContextMenu: preserve open SideNote during HMR
   - 🚧 ContextMenu simplify "key values"
     - e.g. picked value, grKey, gdKey (instantiated for switches)

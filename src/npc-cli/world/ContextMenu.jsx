@@ -5,7 +5,7 @@ import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
 
 import SideNote, { closeSideNote, openSideNote, isSideNoteOpen } from "../aux/SideNote";
-import { Html3d } from './Html3d';
+import { Html3d, objectScale } from './Html3d';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
@@ -35,7 +35,7 @@ export default function ContextMenu() {
 
     calculatePosition(el, camera, size) {
       // 🤔 support tracked offset vector?
-      const objectPos = tmpVector3One.setFromMatrixPosition(
+      const objectPos = tmpVector3.setFromMatrixPosition(
         state.tracked === null ? el.matrixWorld : state.tracked.matrixWorld
       );
       objectPos.project(camera);
@@ -446,18 +446,4 @@ const contextMenuCss = css`
  * @property {() => void} updateFromLastDown
  */
 
-const tmpVector3One = new THREE.Vector3();
-const tmpVector3Two = new THREE.Vector3();
-
-/**
- * @param {THREE.Object3D} el 
- * @param {THREE.PerspectiveCamera} camera 
- */
-function objectScale(el, camera) {
-  const objectPos = tmpVector3One.setFromMatrixPosition(el.matrixWorld);
-  const cameraPos = tmpVector3Two.setFromMatrixPosition(camera.matrixWorld);
-  const vFOV = (camera.fov * Math.PI) / 180;
-  const dist = objectPos.distanceTo(cameraPos);
-  const scaleFOV = 2 * Math.tan(vFOV / 2) * dist;
-  return 1 / scaleFOV;
-}
+const tmpVector3 = new THREE.Vector3();

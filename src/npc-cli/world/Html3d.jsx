@@ -17,20 +17,21 @@ export const Html3d = React.forwardRef(({
   castShadow,
   receiveShadow,
   calculatePosition = defaultCalculatePosition,
-  wrapperClass,
   ...props
 }, ref) => {
     const { gl, camera, scene, size, events, advance } = useThree();
 
     const state = useStateRef(/** @returns {State} */ () => ({
       delta: [0, 0],
+      distanceFactor: 0,
       group: /** @type {*} */ (null),
+      innerDiv: /** @type {*} */ (null),
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
       zoom: 0,
 
       forceUpdate() {
-        state.zoom = 0; // 🔔 trigger change detection
+        state.zoom = 0; // 🔔 violate change detection
         advance(Date.now());
       },
     }));
@@ -56,30 +57,22 @@ export const Html3d = React.forwardRef(({
       }
     }, [target])
 
-    React.useLayoutEffect(() => {
-      if (wrapperClass) state.rootDiv.className = wrapperClass
-    }, [wrapperClass])
-
     /** @type {React.CSSProperties} */
-    const styles = React.useMemo(() => {
-      return {
-        position: 'absolute',
-        transform: 'none',
-        ...style,
-      }
-    }, [style, size])
+    const styles = React.useMemo(() => ({ position: 'absolute', ...style, }), [style])
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
         <div
-          // ref={ref}
-          style={styles} className={className} children={children}
+          ref={state.ref('innerDiv')}
+          style={styles}
+          className={className}
+          children={children}
         />
       )
     });
 
     useFrame((_gl) => {
-      if (state.group) {
+      if (state.group !== null && state.innerDiv !== null) {
         camera.updateMatrixWorld()
         state.group.updateWorldMatrix(true, false)
         const vec = calculatePosition(state.group, camera, size)
@@ -91,10 +84,18 @@ export const Html3d = React.forwardRef(({
         ) {
 
           const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
-          state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`
+          
+          state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
 
-          state.delta = vec
-          state.zoom = camera.zoom
+          if (state.distanceFactor !== distanceFactor) {// 🔔 animate resize on unlock
+            state.innerDiv.style.transition = distanceFactor === undefined ? 'transform 300ms' : '';
+            state.distanceFactor = distanceFactor;
+          }
+
+          state.innerDiv.style.transform = `scale(${scale})`;
+
+          state.delta = vec;
+          state.zoom = camera.zoom;
         }
       }
     });
@@ -121,7 +122,9 @@ export const Html3d = React.forwardRef(({
 /**
 * @typedef State
 * @property {[number, number]} delta 2D translation
+* @property {number | undefined} distanceFactor
 * @property {THREE.Group} group
+* @property {HTMLDivElement} innerDiv
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
 * @property {number} zoom
@@ -153,7 +156,7 @@ function defaultCalculatePosition(el, camera, size) {
  * @param {THREE.Object3D} el 
  * @param {THREE.Camera} camera 
  */
-function objectScale(el, camera) {
+export function objectScale(el, camera) {
   if (camera instanceof THREE.OrthographicCamera) {
     return camera.zoom
   } else if (camera instanceof THREE.PerspectiveCamera) {
