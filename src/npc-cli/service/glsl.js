@@ -497,8 +497,7 @@ export const instancedMultiTextureShader = {
       gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, opacity);
       // gl_FragColor = vec4(1.0, 0.0, 0.0, gl_FragColor.a);
 
-      if (gl_FragColor.a < 0.5) {
-      // if (gl_FragColor.a < alphaTest) {
+      if (gl_FragColor.a < alphaTest) {
         discard; // stop transparent pixels taking precedence
       }
 
@@ -544,7 +543,7 @@ export const InstancedLabelsMaterial = shaderMaterial(
 
 export const InstancedMultiTextureMaterial = shaderMaterial(
   {
-    alphaTest: 0,
+    alphaTest: 0.5,
     atlas: emptyDataArrayTexture,
     diffuse: new THREE.Vector3(1, 0.9, 0.6),
     // 🔔 map, mapTransform required else can get weird texture
