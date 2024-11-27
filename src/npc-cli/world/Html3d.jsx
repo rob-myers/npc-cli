@@ -20,19 +20,23 @@ export const Html3d = React.forwardRef(({
   wrapperClass,
   ...props
 }, ref) => {
-    const { gl, camera, scene, size, events } = useThree();
+    const { gl, camera, scene, size, events, advance } = useThree();
 
     const state = useStateRef(/** @returns {State} */ () => ({
+      delta: [0, 0],
       group: /** @type {*} */ (null),
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
+      zoom: 0,
+
+      forceUpdate() {
+        state.zoom = 0; // 🔔 trigger change detection
+        advance(Date.now());
+      },
     }));
 
     React.useImperativeHandle(ref, () => state, []);
 
-    const oldZoom = React.useRef(0);
-
-    const oldPosition = React.useRef([0, 0])
     // Append to the connected element, which makes HTML work with views
     const target = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
 
@@ -74,8 +78,6 @@ export const Html3d = React.forwardRef(({
       )
     });
 
-    const visible = React.useRef(true)
-
     useFrame((_gl) => {
       if (state.group) {
         camera.updateMatrixWorld()
@@ -83,23 +85,16 @@ export const Html3d = React.forwardRef(({
         const vec = calculatePosition(state.group, camera, size)
 
         if (
-          Math.abs(oldZoom.current - camera.zoom) > eps ||
-          Math.abs(oldPosition.current[0] - vec[0]) > eps ||
-          Math.abs(oldPosition.current[1] - vec[1]) > eps
+          Math.abs(state.zoom - camera.zoom) > eps ||
+          Math.abs(state.delta[0] - vec[0]) > eps ||
+          Math.abs(state.delta[1] - vec[1]) > eps
         ) {
-
-          const previouslyVisible = visible.current
-          visible.current = true;
-
-          if (previouslyVisible !== visible.current) {
-            state.rootDiv.style.display = visible.current ? 'block' : 'none'
-          }
 
           const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`
 
-          oldPosition.current = vec
-          oldZoom.current = camera.zoom
+          state.delta = vec
+          state.zoom = camera.zoom
         }
       }
     });
@@ -125,9 +120,12 @@ export const Html3d = React.forwardRef(({
 
 /**
 * @typedef State
+* @property {[number, number]} delta 2D translation
 * @property {THREE.Group} group
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
+* @property {number} zoom
+* @property {() => void} forceUpdate
 */
 
 const v1 = new THREE.Vector3()
@@ -137,6 +135,7 @@ const v2 = new THREE.Vector3()
  * @param {THREE.Object3D} el 
  * @param {THREE.Camera} camera 
  * @param {{ width: number; height: number }} size 
+ * @returns {[number, number]}
  */
 function defaultCalculatePosition(el, camera, size) {
   const objectPos = v1.setFromMatrixPosition(el.matrixWorld)

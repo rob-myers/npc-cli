@@ -70,11 +70,6 @@ export default function ContextMenu() {
       state.lock = !state.lock;
       state.scale = 1 / objectScale(state.html.group, w.r3f.camera);
       update();
-      pause(100).then(() => {
-        // 🔔 hack to break memo https://github.com/pmndrs/drei/blob/89bcfdf1894b0b5f39771374e2820864647fc87c/src/web/Html.tsx#L293
-        w.r3f.camera.zoom += 0.0001;
-        w.r3f.advance(Date.now());
-      });
     },
     rootRef(el) {
       if (el !== null) {
@@ -137,6 +132,11 @@ export default function ContextMenu() {
   const update = useUpdate();
 
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
+
+  React.useEffect(() => {
+    // trigger update on unlock
+    state.html.forceUpdate();
+  }, [state.lock]);
 
   return <>
     <Html3d
@@ -430,7 +430,7 @@ const contextMenuCss = css`
 * @property {NPC.MetaActKey[]} metaActs
 * @property {THREE.Vector3Tuple} position
 * 
-* @property {(el: THREE.Object3D, camera: THREE.Camera, size: { width: number; height: number }) => number[]} calculatePosition
+* @property {import('./Html3d').CalculatePosition} calculatePosition
 * @property {() => void} hide
 * @property {() => void} hideUnlessPersisted
 * @property {(npcKey: string) => boolean} isTracking
