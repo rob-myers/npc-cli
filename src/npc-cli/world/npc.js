@@ -399,7 +399,7 @@ export class Npc {
     this.agent.updateParameters({
       maxSpeed: 0, // don't move until 0th way-point
       radius: helper.defaults.radius, // reset
-      collisionQueryRange: 1.5,
+      collisionQueryRange: 2.5,
       separationWeight: 1,
       queryFilterType: this.w.lib.queryFilterType.default,
     });
@@ -743,7 +743,7 @@ export class Npc {
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius / 1.5,
-      collisionQueryRange: 2,
+      collisionQueryRange: 2.5,
       separationWeight: 4,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
@@ -800,7 +800,7 @@ export const crowdAgentParams = {
   maxAcceleration: 10,
   pathOptimizationRange: 10, // 🚧 clarify
   // collisionQueryRange: 0.7,
-  collisionQueryRange: 2,
+  collisionQueryRange: 2.5,
   separationWeight: 1,
   queryFilterType: 0,
   // obstacleAvoidanceType
