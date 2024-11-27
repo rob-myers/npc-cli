@@ -4,8 +4,8 @@ import * as THREE from "three";
 import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
 
-import {PopUp} from "../popup/PopUp";
-import { Html3d, objectScale } from './Html3d';
+import {PopUp} from "../components/PopUp";
+import { Html3d, objectScale } from '../components/Html3d';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
 import { WorldContext } from "./world-context";
@@ -409,7 +409,7 @@ const contextMenuCss = css`
 /**
  * @typedef State
  * @property {HTMLDivElement} rootEl
- * @property {import('./Html3d').State} html
+ * @property {import('../components/Html3d').State} html
  * @property {HTMLElement} bubble For options
  * @property {boolean} justOpen Was the context menu just opened?
  * @property {boolean} open Is the context menu open?
@@ -417,7 +417,7 @@ const contextMenuCss = css`
  * @property {boolean} persist
  * @property {boolean} lock
  * @property {number} scale
- * @property {import('../popup/PopUp').State} sideNote
+ * @property {import('../components/PopUp').State} sideNote
  * @property {null | THREE.Object3D} tracked
 *
 * @property {null | NPC.MetaActKey} selectedActKey
@@ -427,7 +427,7 @@ const contextMenuCss = css`
 * @property {NPC.MetaActKey[]} metaActs
 * @property {THREE.Vector3Tuple} position
 * 
-* @property {import('./Html3d').CalculatePosition} calculatePosition
+* @property {import('../components/Html3d').CalculatePosition} calculatePosition
 * @property {() => void} hide
 * @property {() => void} hideUnlessPersisted
 * @property {(npcKey: string) => boolean} isTracking

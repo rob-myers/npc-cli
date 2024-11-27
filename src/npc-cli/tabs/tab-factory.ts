@@ -62,9 +62,9 @@ function getTabIdentifier(meta: TabDef) {
 
 const classToComponent = {
   HelloWorld: {
-    loadable: loadable(() => import("../aux/HelloWorld")),
+    loadable: loadable(() => import("../components/HelloWorld")),
     get:
-      (module: typeof import("../aux/HelloWorld")) =>
+      (module: typeof import("../components/HelloWorld")) =>
       (props: React.ComponentProps<(typeof module)["default"]>) =>
         React.createElement(module.default, { disabled: true, ...props }),
   },

@@ -23,7 +23,7 @@ import {
 } from "./tab-factory";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import Spinner from "./Spinner";
+import Spinner from "../components/Spinner";
 
 export const Tabs = React.forwardRef<State, Props>(function Tabs(props, ref) {
   const state = useStateRef((): State => ({
