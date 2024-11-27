@@ -27,7 +27,9 @@ export default function useStateRef(initializer, opts = {}) {
        * 🚧 avoid invocation in production
        */
       state._prevFn = initializer.toString();
-      state.ref = (key) => (value) => void (value === null ? (delete state[key]) : (state[key] = value));
+      state.ref = (key) => (value) => void (
+        state[key] = value === null ? /** @type {*} */ (null) : value
+      );
     } else {
       /**
        * Either HMR or `opts.deps` has changed.
