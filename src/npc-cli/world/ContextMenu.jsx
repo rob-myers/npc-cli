@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
 
-import {PopUp} from "../components/PopUp";
+import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from '../components/Html3d';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -46,7 +46,7 @@ export default function ContextMenu() {
     },
     hide() {
       state.open = false;
-      state.sideNote.closeSideNote(state.bubble, 0);
+      state.sideNote.close(0);
       update();
     },
     hideUnlessPersisted() {
@@ -72,17 +72,12 @@ export default function ContextMenu() {
       state.scale = 1 / objectScale(state.html.group, w.r3f.camera);
       update();
     },
-    rootRef(el) {
-      if (el !== null) {
-        state.rootEl = el;
-      }
-    },
     show() {
       state.open = true;
       state.updateFromLastDown();
-      if (state.sideNote.open) {
-        state.sideNote.closeSideNote(state.bubble, 0);
-        pause(200).then(() => state.sideNote.openSideNote(state.bubble));
+      if (state.sideNote.opened) {
+        state.sideNote.close(0);
+        pause(200).then(() => state.sideNote.open());
       }
       update();
     },
@@ -139,6 +134,10 @@ export default function ContextMenu() {
     state.html.forceUpdate();
   }, [state.lock]);
 
+  React.useEffect(() => {
+    state.open && state.sideNote?.open();
+  }, [state.open]);
+
   return <>
     <Html3d
       className="context-menu"
@@ -150,7 +149,7 @@ export default function ContextMenu() {
     >
       <div
         className={contextMenuCss}
-        ref={state.rootRef}
+        ref={state.ref('rootEl')}
         // 🔔 visibility for computing menuDim.height
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
       >
@@ -159,9 +158,11 @@ export default function ContextMenu() {
           className={cx("top-bar", { mini: state.showMeta })}
           ref={state.topBarRef}
         >
-
           <div className="options">
-            <PopUp onlyOnClick width={300} ref={state.ref('sideNote')}>
+            <PopUp
+              ref={state.ref('sideNote')}
+              width={300}
+            >
               <div className="controls">
                 <button
                   onClick={state.onToggleMeta}
@@ -436,7 +437,6 @@ const contextMenuCss = css`
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
  * @property {() => void} togglePersist
- * @property {(el: null | HTMLDivElement) => void} rootRef
  * @property {() => void} show
  * @property {(el: null | HTMLElement) => void} topBarRef
  * @property {(el: null | THREE.Object3D) => void} track
@@ -444,3 +444,5 @@ const contextMenuCss = css`
  */
 
 const tmpVector3 = new THREE.Vector3();
+
+0;

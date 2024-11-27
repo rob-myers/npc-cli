@@ -115,6 +115,7 @@
   - clean away off-mesh-connection if we don't use them
 
 - useStateRef provides `state.ref(key)` which deletes sub-refs on null
+  - maybe `useStateRef(() => state, { refs: ... })` to avoid re-creation
 - ✅ profile-1.sh edit should not hmr Viewer
   - Viewer tabs def should not hmr Tabs
   - downgraded flexlayout-react

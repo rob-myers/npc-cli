@@ -8,35 +8,35 @@ import useUpdate from '../hooks/use-update';
  * @type {React.ForwardRefExoticComponent<React.PropsWithChildren<Props> & React.RefAttributes<State>>}
  */
 export const PopUp = React.forwardRef(function PopUp(props, ref) {
-  const onlyOnClick = props.onlyOnClick ?? false;
-
   const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    open: false,
+    opened: false,
     timeoutId: 0,
     left: false,
     right: false,
     down: false,
+    bubble: /** @type {*} */ (null),
+    icon: /** @type {*} */ (null),
 
-    closeSideNote(bubble, ms = 100) {
+    close(ms = 100) {
       return window.setTimeout(() => {
-        state.open = false;
+        state.opened = false;
         state.left = false;
         state.right = false;
         state.down = false;
-        bubble.style.removeProperty('--info-width');
+        state.bubble.style.removeProperty('--info-width');
         update();
       }, ms);
     },
-    openSideNote(bubble, width) {
+    open(width) {
       window.clearTimeout(state.timeoutId); // clear close timeout
     
-      state.open = true;
-      const root = bubble.closest(`[${popUpRootDataAttribute}]`) ?? document.documentElement;
+      state.opened = true;
+      const root = state.bubble.closest(`[${popUpRootDataAttribute}]`) ?? document.documentElement;
       const rootRect = root.getBoundingClientRect();
     
-      const rect = /** @type {HTMLElement} */ (bubble.previousSibling).getBoundingClientRect();
+      const rect = state.icon.getBoundingClientRect();
       const pixelsOnRight = rootRect.right - rect.right;
       const pixelsOnLeft = rect.x - rootRect.x;
       state.left = pixelsOnRight < pixelsOnLeft;
@@ -45,7 +45,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       
       const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
       width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
-      width && bubble.style.setProperty('--info-width', `${width}px`);
+      width && state.bubble.style.setProperty('--info-width', `${width}px`);
       update();
     },
   }));
@@ -54,37 +54,26 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
 
   return <>
     <span
+      ref={state.ref('icon')}
       className={cx("side-note", iconTriggerCss)}
       onClick={e => {
-        const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-        if (state.open) {
-          state.closeSideNote(bubble);
+        if (state.opened) {
+          state.close();
         } else {
-          state.openSideNote(bubble, props.width);
+          state.open(props.width);
         }
       }}
-      onMouseEnter={onlyOnClick ? undefined : e => {
-        const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-        state.timeoutId = window.setTimeout(() => state.openSideNote(bubble, props.width), hoverShowMs);
-      }}
-      onMouseLeave={onlyOnClick ? undefined : e => {
-        window.clearTimeout(state.timeoutId); // clear hover timeout
-        const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-        state.timeoutId = state.closeSideNote(bubble);
-      }}
-      >
+    >
       ⋯
     </span>
     <span
+      ref={state.ref('bubble')}
       className={cx("side-note-bubble", {
-        open: state.open,
+        open: state.opened,
         left: state.left,
         right: state.right,
         down: state.down,
       }, speechBubbleCss)}
-      onMouseEnter={onlyOnClick ? undefined : _ => window.clearTimeout(state.timeoutId)}
-      // Triggered on mobile click outside
-      onMouseLeave={onlyOnClick ? undefined : e => state.timeoutId = state.closeSideNote(e.currentTarget)}
     >
       <span className="arrow"/>
       <span className="info">
@@ -97,19 +86,20 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
 /**
  * @typedef Props
  * @property {number} [arrowDeltaX]
- * @property {boolean} [onlyOnClick]
  * @property {number} [width]
  */
 
 /**
  * @typedef State
- * @property {boolean} open
+ * @property {boolean} opened
  * @property {number} timeoutId
  * @property {boolean} left
  * @property {boolean} right
  * @property {boolean} down
- * @property {(bubble: HTMLElement, width?: number | undefined) => void} openSideNote
- * @property {(bubble: HTMLElement, ms?: number) => number} closeSideNote
+ * @property {HTMLSpanElement} bubble
+ * @property {HTMLSpanElement} icon
+ * @property {(width?: number | undefined) => void} open
+ * @property {(ms?: number) => number} close
  */
 
 const defaultArrowDeltaX = 8;
