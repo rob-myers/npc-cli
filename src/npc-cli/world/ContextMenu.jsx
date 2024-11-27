@@ -221,7 +221,7 @@ export default function ContextMenu() {
       visible={state.open === true && state.tracked === null}
     >
       <sphereGeometry args={[0.025, 8, 8]} />
-      <meshBasicMaterial color="red" />
+      <meshBasicMaterial color="green" />
     </mesh>
   </>;
 
@@ -230,7 +230,6 @@ export default function ContextMenu() {
 const closeButtonRadius = `${14}px`;
 
 const contextMenuCss = css`
-  /* otherwise it is centred */
   position: absolute;
   left: 0;
   top: 0;
@@ -240,12 +239,8 @@ const contextMenuCss = css`
 
   font-size: 0.8rem;
   color: #ddd;
-  /* background-color: #222222dd; */
-  /* border: 1px solid #aaa; */
 
   .top-bar {
-    /* position: absolute; */
-    /* top: calc(-2 * ${closeButtonRadius}); */
     right: 0;
     display: flex;
     justify-content: start;
@@ -433,5 +428,3 @@ const contextMenuCss = css`
  */
 
 const tmpVector3 = new THREE.Vector3();
-
-0;
