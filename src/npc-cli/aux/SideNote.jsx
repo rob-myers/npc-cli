@@ -1,48 +1,93 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
 import { zIndex } from '../service/const';
+import useStateRef from '../hooks/use-state-ref';
+import useUpdate from '../hooks/use-update';
 
 /**
  * This component can occur many times in a blog post.
- * It is also used in ContextMenu of World.
+ * It is also used in `ContextMenu` of `World`.
  * 
- * Rather than expose an api via React.forwardRef,
- * we export open/close functions directly.
- * 
- * @param {React.PropsWithChildren<Props>} props
+ * @type {React.ForwardRefExoticComponent<React.PropsWithChildren<Props> & React.RefAttributes<State>>}
  */
-export default function SideNote(props) {
-  const timeoutId = React.useRef(0);
+export const SideNote = React.forwardRef(function SideNote(props, ref) {
   const onlyOnClick = props.onlyOnClick ?? false;
+
+  const update = useUpdate();
+
+  const state = useStateRef(/** @returns {State} */ () => ({
+    open: false,
+    timeoutId: 0,
+    left: false,
+    right: false,
+    down: false,
+
+    closeSideNote(bubble, ms = 100) {
+      return window.setTimeout(() => {
+        state.open = false;
+        state.left = false;
+        state.right = false;
+        state.down = false;
+        bubble.style.removeProperty('--info-width');
+        update();
+      }, ms);
+    },
+    openSideNote(bubble, width) {
+      window.clearTimeout(state.timeoutId); // clear close timeout
+    
+      state.open = true;
+      const root = bubble.closest(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
+      const rootRect = root.getBoundingClientRect();
+    
+      const rect = /** @type {HTMLElement} */ (bubble.previousSibling).getBoundingClientRect();
+      const pixelsOnRight = rootRect.right - rect.right;
+      const pixelsOnLeft = rect.x - rootRect.x;
+      state.left = pixelsOnRight < pixelsOnLeft;
+      state.right = !state.left;
+      state.down = false;
+      
+      const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
+      width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
+      width && bubble.style.setProperty('--info-width', `${width}px`);
+      update();
+    },
+  }));
+
+  React.useImperativeHandle(ref, () => state, []);
 
   return <>
     <span
       className={cx("side-note", iconTriggerCss)}
       onClick={e => {
         const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-        if (isSideNoteOpen(bubble)) {
-          closeSideNote(bubble);
+        if (state.open) {
+          state.closeSideNote(bubble);
         } else {
-          openSideNote(bubble, props.width, timeoutId.current);
+          state.openSideNote(bubble, props.width);
         }
       }}
       onMouseEnter={onlyOnClick ? undefined : e => {
         const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-        timeoutId.current = window.setTimeout(() => openSideNote(bubble, props.width, timeoutId.current), hoverShowMs);
+        state.timeoutId = window.setTimeout(() => state.openSideNote(bubble, props.width), hoverShowMs);
       }}
       onMouseLeave={onlyOnClick ? undefined : e => {
-        window.clearTimeout(timeoutId.current); // clear hover timeout
+        window.clearTimeout(state.timeoutId); // clear hover timeout
         const bubble = /** @type {HTMLElement} */ (e.currentTarget.nextSibling);
-        timeoutId.current = closeSideNote(bubble);
+        state.timeoutId = state.closeSideNote(bubble);
       }}
       >
       ⋯
     </span>
     <span
-      className={cx("side-note-bubble", speechBubbleCss)}
-      onMouseEnter={onlyOnClick ? undefined : _ => window.clearTimeout(timeoutId.current)}
+      className={cx("side-note-bubble", {
+        open: state.open,
+        left: state.left,
+        right: state.right,
+        down: state.down,
+      }, speechBubbleCss)}
+      onMouseEnter={onlyOnClick ? undefined : _ => window.clearTimeout(state.timeoutId)}
       // Triggered on mobile click outside
-      onMouseLeave={onlyOnClick ? undefined : e => timeoutId.current = closeSideNote(e.currentTarget)}
+      onMouseLeave={onlyOnClick ? undefined : e => state.timeoutId = state.closeSideNote(e.currentTarget)}
     >
       <span className="arrow"/>
       <span className="info">
@@ -50,47 +95,25 @@ export default function SideNote(props) {
       </span>
     </span>
   </>;
-}
+});
 
 /**
- * @param {HTMLElement} bubble
+ * @typedef Props
+ * @property {number} [arrowDeltaX]
+ * @property {boolean} [onlyOnClick]
+ * @property {number} [width]
  */
-export function isSideNoteOpen(bubble) {
-  return bubble.classList.contains('open');
-}
 
 /**
- * @param {HTMLElement} bubble
- * @param {number | undefined} [width]
- * @param {number | undefined} [timeoutId]
+ * @typedef State
+ * @property {boolean} open
+ * @property {number} timeoutId
+ * @property {boolean} left
+ * @property {boolean} right
+ * @property {boolean} down
+ * @property {(bubble: HTMLElement, width?: number | undefined) => void} openSideNote
+ * @property {(bubble: HTMLElement, ms?: number) => number} closeSideNote
  */
-export function openSideNote(bubble, width, timeoutId) {
-  window.clearTimeout(timeoutId); // clear close timeout
-
-  bubble.classList.add('open');
-  const root = bubble.closest(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
-  const rootRect = root.getBoundingClientRect();
-
-  const rect = /** @type {HTMLElement} */ (bubble.previousSibling).getBoundingClientRect();
-  const pixelsOnRight = rootRect.right - rect.right;
-  const pixelsOnLeft = rect.x - rootRect.x;
-  bubble.classList.remove('left', 'right', 'down');
-  bubble.classList.add(pixelsOnRight < pixelsOnLeft ? 'left' : 'right');
-  
-  const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
-  width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
-  width && bubble.style.setProperty('--info-width', `${width}px`);
-}
-
-/**
- * @param {HTMLElement} bubble
- */
-export function closeSideNote(bubble, ms = 100) {
-  return window.setTimeout(() => {
-    bubble.classList.remove('open', 'left', 'right', 'down');
-    bubble.style.removeProperty('--info-width');
-  }, ms);
-}
 
 const defaultArrowDeltaX = 8;
 const defaultInfoWidthPx = 300;
@@ -213,9 +236,3 @@ export const sideNoteRootDataAttribute = 'data-side-note-root';
 
 const hoverShowMs = 500;
 
-/**
- * @typedef Props
- * @property {number} [arrowDeltaX]
- * @property {boolean} [onlyOnClick]
- * @property {number} [width]
- */

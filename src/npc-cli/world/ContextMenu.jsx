@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
 
-import SideNote, { closeSideNote, openSideNote, isSideNoteOpen } from "../aux/SideNote";
+import {SideNote} from "../aux/SideNote";
 import { Html3d, objectScale } from './Html3d';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -24,6 +24,7 @@ export default function ContextMenu() {
     persist: true,
     lock: false,
     scale: 1,
+    sideNote: /** @type {*} */ (null),
     tracked: null,
     
     kvs: [],
@@ -45,7 +46,7 @@ export default function ContextMenu() {
     },
     hide() {
       state.open = false;
-      closeSideNote(state.bubble, 0);
+      state.sideNote.closeSideNote(state.bubble, 0);
       update();
     },
     hideUnlessPersisted() {
@@ -79,9 +80,9 @@ export default function ContextMenu() {
     show() {
       state.open = true;
       state.updateFromLastDown();
-      if (isSideNoteOpen(state.bubble)) {
-        closeSideNote(state.bubble, 0);
-        pause(200).then(() => openSideNote(state.bubble));
+      if (state.sideNote.open) {
+        state.sideNote.closeSideNote(state.bubble, 0);
+        pause(200).then(() => state.sideNote.openSideNote(state.bubble));
       }
       update();
     },
@@ -160,7 +161,7 @@ export default function ContextMenu() {
         >
 
           <div className="options">
-            <SideNote onlyOnClick width={300}>
+            <SideNote onlyOnClick width={300} ref={state.ref('sideNote')}>
               <div className="controls">
                 <button
                   onClick={state.onToggleMeta}
@@ -416,6 +417,7 @@ const contextMenuCss = css`
  * @property {boolean} persist
  * @property {boolean} lock
  * @property {number} scale
+ * @property {import('../aux/SideNote').State} sideNote
  * @property {null | THREE.Object3D} tracked
 *
 * @property {null | NPC.MetaActKey} selectedActKey
