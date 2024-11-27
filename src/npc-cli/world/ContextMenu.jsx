@@ -221,15 +221,6 @@ export default function ContextMenu() {
           </div>
         </div>}
 
-        {/* {!state.mini && <div className="key-values">
-          {state.kvs.map(({ k, v }) => (
-            <div key={k} className="key-value">
-              <span className="meta-key">{k}</span>
-              {v !== '' && <span className="meta-value">{v}</span>}
-            </div>
-          ))}
-        </div>} */}
-
       </div>
     </Html3d>
     <mesh
@@ -248,15 +239,15 @@ const closeButtonRadius = `${14}px`;
 const contextMenuCss = css`
   /* otherwise it is centred */
   position: absolute;
-  left: 20px;
-  top: 0;
+  left: 0;
+  top: 12px;
 
   display: flex;
   flex-direction: column;
 
   font-size: 0.8rem;
   color: #ddd;
-  background-color: #222222dd;
+  /* background-color: #222222dd; */
   /* border: 1px solid #aaa; */
 
   .top-bar {
@@ -293,6 +284,10 @@ const contextMenuCss = css`
     color: #fff;
     border: 1px solid #7d7;
     border-bottom-width: 0;
+  }
+
+  .options .info {
+    /* background-color: unset; */
   }
 
   .options .controls {
@@ -393,7 +388,7 @@ const contextMenuCss = css`
     justify-content: space-around;
     align-items: center;
 
-    flex: 0.5;
+    flex: 1;
     border: 1px solid #555;
     /* font-family: 'Courier New', Courier, monospace; */
 
@@ -407,7 +402,7 @@ const contextMenuCss = css`
     }
   }
 
-  /* filter: grayscale(1) brightness(0.7); */
+  /* filter: sepia(1); */
 `;
 
 /**
