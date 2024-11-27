@@ -6,7 +6,7 @@ import { shallow } from "zustand/shallow";
 import { afterBreakpoint, breakpoint } from "../const";
 import useSite from "./site.store";
 import { isSmallView } from "./layout";
-import { sideNoteRootDataAttribute } from "../npc-cli/aux/SideNote";
+import { sideNoteRootDataAttribute } from "./SideNote";
 
 export default function Main(props: React.PropsWithChildren) {
   const site = useSite(({ navOpen, mainOverlay }) => ({ navOpen, mainOverlay }), shallow);

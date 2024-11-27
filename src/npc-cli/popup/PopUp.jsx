@@ -5,12 +5,9 @@ import useStateRef from '../hooks/use-state-ref';
 import useUpdate from '../hooks/use-update';
 
 /**
- * This component can occur many times in a blog post.
- * It is also used in `ContextMenu` of `World`.
- * 
  * @type {React.ForwardRefExoticComponent<React.PropsWithChildren<Props> & React.RefAttributes<State>>}
  */
-export const SideNote = React.forwardRef(function SideNote(props, ref) {
+export const PopUp = React.forwardRef(function PopUp(props, ref) {
   const onlyOnClick = props.onlyOnClick ?? false;
 
   const update = useUpdate();
@@ -36,7 +33,7 @@ export const SideNote = React.forwardRef(function SideNote(props, ref) {
       window.clearTimeout(state.timeoutId); // clear close timeout
     
       state.open = true;
-      const root = bubble.closest(`[${sideNoteRootDataAttribute}]`) ?? document.documentElement;
+      const root = bubble.closest(`[${popUpRootDataAttribute}]`) ?? document.documentElement;
       const rootRect = root.getBoundingClientRect();
     
       const rect = /** @type {HTMLElement} */ (bubble.previousSibling).getBoundingClientRect();
@@ -232,7 +229,6 @@ const speechBubbleCss = css`
   }
 `;
 
-export const sideNoteRootDataAttribute = 'data-side-note-root';
+export const popUpRootDataAttribute = 'data-pop-up-root';
 
 const hoverShowMs = 500;
-

@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
 
-import {SideNote} from "../aux/SideNote";
+import {PopUp} from "../popup/PopUp";
 import { Html3d, objectScale } from './Html3d';
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -161,7 +161,7 @@ export default function ContextMenu() {
         >
 
           <div className="options">
-            <SideNote onlyOnClick width={300} ref={state.ref('sideNote')}>
+            <PopUp onlyOnClick width={300} ref={state.ref('sideNote')}>
               <div className="controls">
                 <button
                   onClick={state.onToggleMeta}
@@ -187,7 +187,7 @@ export default function ContextMenu() {
                 ))}
               </div>}
 
-            </SideNote>
+            </PopUp>
           </div>
 
           <button
@@ -417,7 +417,7 @@ const contextMenuCss = css`
  * @property {boolean} persist
  * @property {boolean} lock
  * @property {number} scale
- * @property {import('../aux/SideNote').State} sideNote
+ * @property {import('../popup/PopUp').State} sideNote
  * @property {null | THREE.Object3D} tracked
 *
 * @property {null | NPC.MetaActKey} selectedActKey
