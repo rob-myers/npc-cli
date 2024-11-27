@@ -165,11 +165,15 @@ export default function useHandleEvents(w) {
     },
     getNearbyNpcKeys(gmId, roomId, point) {
       const npcKeys = /** @type {string[]} */ ([]);
-      for (const npcKey of state.roomToNpcs[gmId][roomId] ?? []) {
-        const npcPoint = w.n[npcKey].getPoint();
-        if (Math.abs(npcPoint.x - point.x) < npcNearUiDist && Math.abs(npcPoint.y - point.y) < npcNearUiDist) {
-          npcKeys.push(npcKey);
+      try {
+        for (const npcKey of state.roomToNpcs[gmId][roomId] ?? []) {
+          const npcPoint = w.n[npcKey].getPoint();
+          if (Math.abs(npcPoint.x - point.x) < npcNearUiDist && Math.abs(npcPoint.y - point.y) < npcNearUiDist) {
+            npcKeys.push(npcKey);
+          }
         }
+      } catch (e) {
+        console.error('getNearbyNpcKeys failed', e);
       }
       return npcKeys;
     },
@@ -233,7 +237,7 @@ export default function useHandleEvents(w) {
           const prevRoomToNpcs = state.roomToNpcs;
           const prevExternalNpcs = state.externalNpcs;
           state.roomToNpcs = w.gms.map((_, gmId) => 
-            e.changedGmIds[gmId] === false ? prevRoomToNpcs[gmId] : {}
+            e.changedGmIds[gmId] === false ? prevRoomToNpcs[gmId] : []
           );
           state.externalNpcs = new Set();
 
@@ -244,7 +248,7 @@ export default function useHandleEvents(w) {
             
             // We'll recompute every npc previously in this gmId
             const npcs = Object.values(byRoom).flatMap(npcKeys =>
-              Array.from(npcKeys).map(npcKey => w.npc.npc[npcKey])
+              Array.from(npcKeys).map(npcKey => w.n[npcKey])
             );
 
             for (const [i, npc] of npcs.entries()) {
