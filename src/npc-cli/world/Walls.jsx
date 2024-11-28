@@ -28,13 +28,12 @@ export default function Walls(props) {
 
       const gm = w.gms[gmId];
       const gmData = w.gmsData[gm.key];
-      // 🔔 could provide roomId from shader
       const wallSeg = gmData.wallSegs[wallSegsId];
       const center = wallSeg.seg[0].clone().add(wallSeg.seg[1]).scale(0.5);
       const roomId = w.gmsData.findRoomIdContaining(gm, center, true);
       
       /**
-       * Find `gm.walls[wallId][wallSegId]` or lintel (above door) or window,
+       * Find `gm.walls[wallId][wallSegId]` _or_ lintel (above door) _or_ window,
        * 
        * ```js
        * gmData.wallPolySegCounts ~ [
@@ -64,9 +63,13 @@ export default function Walls(props) {
 
       return { gmId, wall: true, window: true, roomId, windowId, instanceId };
     },
-    getWallMat([u, v], transform, height, baseHeight) {
+    getWallMat([u, v], transform, determinant, height, baseHeight) {
       tmpMat1.feedFromArray(transform);
-      [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
+      if (determinant > 0) {// (v, u) so outer walls are shown
+        [tmpVec1.copy(v), tmpVec2.copy(u)].forEach(x => tmpMat1.transformPoint(x));
+      } else {// (u, v) because transform flips
+        [tmpVec1.copy(u), tmpVec2.copy(v)].forEach(x => tmpMat1.transformPoint(x));
+      }
       const rad = Math.atan2(tmpVec2.y - tmpVec1.y, tmpVec2.x - tmpVec1.x);
       const len = u.distanceTo(v);
       return geomorph.embedXZMat4(
@@ -79,11 +82,12 @@ export default function Walls(props) {
       let instanceId = 0;
       const instanceIds = /** @type {number[]} */ ([]);
 
-      w.gms.forEach(({ key: gmKey, transform }, gmId) =>
+      w.gms.forEach(({ key: gmKey, transform, determinant }, gmId) =>
         w.gmsData[gmKey].wallSegs.forEach(({ seg, meta }) => {
           ws.setMatrixAt(instanceId, state.getWallMat(
             seg,
             transform,
+            determinant,
             typeof meta.h === 'number' ? meta.h : undefined,
             typeof meta.y === 'number' ? meta.y : undefined,
           ));
@@ -114,7 +118,7 @@ export default function Walls(props) {
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
       <instancedMonochromeShader
         key={InstancedMonochromeShader.key}
-        side={THREE.DoubleSide}
+        // side={THREE.DoubleSide}
         diffuse={[0, 0, 0]}
       />
     </instancedMesh>
@@ -135,6 +139,7 @@ export default function Walls(props) {
  * @property {(
  *  seg: [Geom.Vect, Geom.Vect],
  *  transform: Geom.SixTuple,
+ *  determinant: number,
  *  height?: number,
  *  baseHeight?: number,
  * ) => THREE.Matrix4} getWallMat

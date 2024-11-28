@@ -249,6 +249,7 @@ class GeomorphService {
       gridRect: sguGridRect.scale(sguToWorldScale).applyMatrix(matrix),
       inverseMatrix: matrix.getInverseMatrix(),
       mat4: geomorph.embedXZMat4(transform),
+      determinant: transform[0] * transform[3] - transform[1] * transform[2],
 
       getOtherRoomId(doorId, roomId) {
         // We support case where roomIds are equal e.g. 303

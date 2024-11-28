@@ -438,6 +438,8 @@ export function hasObjectPickShaderMaterial(o) {
 }
 
 const tempInstanceMesh = new THREE.Mesh();
+// 🚧 remove THREE.DoubleSide when e.g. all decor quads face correct way
+// tempInstanceMesh.material = new THREE.MeshBasicMaterial();
 tempInstanceMesh.material = new THREE.MeshBasicMaterial({ side: THREE.DoubleSide });
 const tempInstanceLocalMatrix = new THREE.Matrix4();
 const tempInstanceWorldMatrix = new THREE.Matrix4();

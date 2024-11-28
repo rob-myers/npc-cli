@@ -184,12 +184,14 @@ export default function createGmsData() {
     getLintelSegs({ seg: [u, v], normal, meta }) {
       const depths = lintelDepths[meta.hull === true ? 'hull' : 'nonHull'];
       meta = { ...meta, y: doorHeight, h: wallHeight - doorHeight };
-      return [1, -1].map((sign, i) => ({
-        seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
-          [u, v].map(p => p.clone().addScaled(normal, sign * 0.5 * depths[i]))
-        ),
-        meta,
-      }));
+      return [
+        { seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
+            [v, u].map(p => p.clone().addScaled(normal, +1 * 0.5 * depths[0]))
+          ), meta },
+        { seg: /** @type {[Geom.Vect, Geom.Vect]} */ (
+            [u, v].map(p => p.clone().addScaled(normal, -1 * 0.5 * depths[1]))
+          ), meta },
+      ];
     },
     /**
      * @param {Geomorph.Connector} connector 

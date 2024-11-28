@@ -87,6 +87,10 @@
     - ✅ switch decor have gdKey
     - ❌ picked value, grKey, gdKey, symbolKey
     - ❌ complex values optionally showable
+  - 🚧 object-pick provides normal
+    - ✅ Walls material should be one-sided i.e. walls + lintels + windows
+    - 🚧 Decor Quads material should be one-sided
+  - 🚧 ContextMenu use arrow or line instead of sphere
   - 🚧 ContextMenu has select with possible actions
     - 🚧 can open doors using switches
     - npc in room with locked door can still leave
