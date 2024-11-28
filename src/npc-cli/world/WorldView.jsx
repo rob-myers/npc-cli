@@ -14,7 +14,6 @@ import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
 import ContextMenu from "./ContextMenu.jsx";
 import useStateRef from "../hooks/use-state-ref.js";
-import useOnResize from "../hooks/use-on-resize.js";
 
 /**
  * @param {Props} props
@@ -356,7 +355,7 @@ export default function WorldView(props) {
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
 
-  useOnResize();
+  // useOnResize(() => setTimeout(() => w.cm.html.forceUpdate(), 30));
 
   return (
     <Canvas

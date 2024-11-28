@@ -6,9 +6,10 @@ import { pause } from "../service/generic";
 import { toXZ } from "../service/three";
 import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from '../components/Html3d';
+import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { WorldContext } from "./world-context";
+import useOnResize from "../hooks/use-on-resize";
 
 export default function ContextMenu() {
 
@@ -131,6 +132,8 @@ export default function ContextMenu() {
   }, [state.open]);
   
   const update = useUpdate();
+
+  useOnResize(); // 🔔 handle non-continuous window resize
 
   return <>
     <Html3d
