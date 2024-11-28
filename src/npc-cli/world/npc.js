@@ -398,9 +398,9 @@ export class Npc {
 
     this.agent.updateParameters({
       maxSpeed: 0, // don't move until 0th way-point
-      radius: helper.defaults.radius, // reset
+      radius: (this.s.run ? 3 : 1) * helper.defaults.radius, // reset
       collisionQueryRange: 2.5,
-      separationWeight: 1,
+      separationWeight: 0.25,
       queryFilterType: this.w.lib.queryFilterType.default,
     });
     this.agent.requestMoveTarget(closest);
@@ -742,7 +742,7 @@ export class Npc {
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
       updateFlags: defaultAgentUpdateFlags,
-      radius: helper.defaults.radius / 1.5,
+      radius: helper.defaults.radius,
       collisionQueryRange: 2.5,
       separationWeight: 4,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
