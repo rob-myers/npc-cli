@@ -259,12 +259,10 @@ const contextMenuCss = css`
   .top-bar {
     right: 0;
     display: flex;
-    justify-content: start;
     opacity: 0.8;
     gap: 4px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    width: 100%;
     margin-bottom: 6px;
   }
 
@@ -281,7 +279,6 @@ const contextMenuCss = css`
     background-color: #000;
     color: #fff;
     border: 1px solid #7d7;
-    border-bottom-width: 1px;
     border-radius: 8px;
   }
 
@@ -295,8 +292,9 @@ const contextMenuCss = css`
 
   .options .controls {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 2px;
+    gap: 4px;
 
     button {
       background: white;
@@ -304,11 +302,6 @@ const contextMenuCss = css`
       padding: 2px 4px;
       border-radius: 4px;
     }
-  }
-
-  .options .control {
-    display: flex;
-    gap: 4px;
   }
 
   .close-button, .persist-button {
@@ -358,7 +351,9 @@ const contextMenuCss = css`
     }
     
     .action {
-      padding: 4px 0;
+      display: flex;
+      justify-content: center;
+      padding: 2px 4px;
       cursor: pointer;
       &:hover {
         background-color: #433;
@@ -373,8 +368,6 @@ const contextMenuCss = css`
   .key-values {
     display: flex;
     flex-wrap: wrap;
-    /* width: 200px; */
-    margin-top: 8px;
   }
 
   .key-value {
