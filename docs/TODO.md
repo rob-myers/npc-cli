@@ -84,8 +84,9 @@
     - ℹ️ happens because we root.unmount() in useLayoutEffect
     - ℹ️ don't want to start caching roots per instance
   - 🚧 ContextMenu simplify "key values"
-    - picked value, grKey, gdKey (instantiated for switches), symbolKey
-    - complex values optionally showable
+    - ✅ switch decor have gdKey
+    - 🚧 picked value, grKey, gdKey (instantiated for switches), symbolKey
+    - 🚧 complex values optionally showable
   - 🚧 ContextMenu has select with possible actions
     - can open doors using switches
     - npc in room with locked door can still leave
