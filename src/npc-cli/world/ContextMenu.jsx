@@ -244,6 +244,7 @@ const contextMenuCss = css`
   position: absolute;
   left: 0;
   top: 0;
+  pointer-events: none;
   
   @media(max-width: ${700}px) {
     left: 8px;
@@ -258,6 +259,7 @@ const contextMenuCss = css`
 
   .top-bar {
     right: 0;
+    pointer-events: all;
     display: flex;
     opacity: 0.8;
     gap: 4px;
@@ -351,6 +353,7 @@ const contextMenuCss = css`
     }
     
     .action {
+      pointer-events: all;
       display: flex;
       justify-content: center;
       padding: 2px 4px;
