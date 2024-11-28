@@ -136,7 +136,7 @@ export default function ContextMenu() {
   
   const update = useUpdate();
 
-  // 🔔 handle non-continuous window resize
+  // 🔔 handle discontinuous window resize
   useOnResize(state.onWindowResize);
 
   return <>
@@ -240,6 +240,11 @@ const contextMenuCss = css`
   position: absolute;
   left: 0;
   top: 0;
+  
+  @media(max-width: ${700}px) {
+    left: 8px;
+    top: 8px;
+  }
 
   display: flex;
   flex-direction: column;
