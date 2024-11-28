@@ -363,7 +363,7 @@ export default function WorldView(props) {
       ref={state.canvasRef}
       className={rootCss}
       frameloop={props.disabled ? "demand" : "always"}
-      resize={{ debounce: 300 }}
+      resize={{ debounce: 0 }}
       gl={state.glOpts}
       onCreated={state.onCreated}
       onPointerDown={state.onPointerDown}

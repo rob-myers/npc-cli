@@ -90,9 +90,6 @@
     - can open doors using switches
     - npc in room with locked door can still leave
     - `inner` but not `secure` door switch can be opened
-  - ContextMenu fades out while resizing
-    - ℹ️ `const [rootRef, bounds] = useMeasure({ debounce: 0, scroll: false });`
-    - 🚧 events `resize-begin` `resize-end`, so can fade ContextMenu while resizing
   - ✅ long press do point: actual nav mesh may be strictly smaller
     - ✅ from off-mesh closest point on nav mesh
     - ✅ still seeing long-press issues on mobile e.g. to bed from floor
