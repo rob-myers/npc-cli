@@ -19,15 +19,13 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
     bubble: /** @type {*} */ (null),
     icon: /** @type {*} */ (null),
 
-    close(ms = 100) {
-      return window.setTimeout(() => {
-        state.opened = false;
-        state.left = false;
-        state.right = false;
-        state.down = false;
-        state.bubble.style.removeProperty('--info-width');
-        update();
-      }, ms);
+    close() {
+      state.opened = false;
+      state.left = false;
+      state.right = false;
+      state.down = false;
+      state.bubble.style.removeProperty('--info-width');
+      update();
     },
     open(width) {
       window.clearTimeout(state.timeoutId); // clear close timeout
@@ -101,7 +99,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {HTMLSpanElement} bubble
  * @property {HTMLSpanElement} icon
  * @property {(width?: number | undefined) => void} open
- * @property {(ms?: number) => number} close
+ * @property {() => void} close
  */
 
 const defaultArrowDeltaX = 20;

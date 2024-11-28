@@ -46,7 +46,7 @@ export default function ContextMenu() {
     },
     hide() {
       state.open = false;
-      state.popup.close(0);
+      state.popup.close();
       update();
     },
     hideUnlessPersisted() {
@@ -79,7 +79,7 @@ export default function ContextMenu() {
       state.open = true;
       state.updateFromLastDown();
       if (state.popup.opened) {
-        state.popup.close(0);
+        state.popup.close(); // 🔔 wait for next render
         pause(200).then(() => state.popup.open());
       }
       update();
@@ -155,7 +155,7 @@ export default function ContextMenu() {
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
       >
 
-        <div className={cx("top-bar", { mini: state.showMeta })}>
+        <div className="top-bar">
           <div className="options">
             <PopUp
               ref={state.ref('popup')}
@@ -258,13 +258,6 @@ const contextMenuCss = css`
     width: 100%;
   }
 
-  .mini {
-    .options .side-note, .persist-button, .close-button {
-      border-bottom-width: 1px;
-      border-radius: 8px;
-    }
-  }
-  
   /* override side note opener */
   .options > .side-note {
     display: inline-flex;
@@ -278,7 +271,8 @@ const contextMenuCss = css`
     background-color: #000;
     color: #fff;
     border: 1px solid #7d7;
-    border-bottom-width: 0;
+    border-bottom-width: 1px;
+    border-radius: 8px;
   }
 
   .options .info {
@@ -322,14 +316,14 @@ const contextMenuCss = css`
     font-size: calc(${closeButtonRadius} * 1);
     background-color: #000;
     color: #fff;
+    border-bottom-width: 1px;
+    border-radius: 8px;
   }
   .close-button {
     border: 1px solid #d77;
-    border-bottom-width: 0;
   }
   .persist-button {
     border: 1px solid #77d;
-    border-bottom-width: 0;
   }
   .persist-button.disabled {
     filter: brightness(0.5);
