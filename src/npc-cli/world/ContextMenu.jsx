@@ -19,7 +19,7 @@ export default function ContextMenu() {
     rootEl: /** @type {*} */ (null),
     html: /** @type {*} */ (null),
     popup: /** @type {*} */ (null),
-    justOpen: false,
+    everOpen: false,
     showMeta: true,
     open: false,
     persist: true,
@@ -78,10 +78,18 @@ export default function ContextMenu() {
     show() {
       state.open = true;
       state.updateFromLastDown();
-      if (state.popup.opened) {
-        state.popup.close(); // 🔔 wait for next render
+
+      if (state.popup.opened === true) {
+        // 🔔 reopen on next render to "get direction right" 
+        state.popup.close();
         pause(200).then(() => state.popup.open());
       }
+
+      if (state.everOpen === false) {// 🔔 initially open
+        state.popup?.open();
+        state.everOpen = true;
+      }
+
       update();
     },
     togglePersist() {
@@ -126,13 +134,9 @@ export default function ContextMenu() {
   
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
   
-  React.useEffect(() => {
+  React.useEffect(() => {// on unlock while paused update style.transform 
     state.lock === false && state.html.forceUpdate();
   }, [state.lock]);
-  
-  React.useEffect(() => {// initially open
-    state.open && state.popup?.open();
-  }, [state.open]);
   
   const update = useUpdate();
 
@@ -261,6 +265,7 @@ const contextMenuCss = css`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     width: 100%;
+    margin-bottom: 6px;
   }
 
   /* override side note opener */
@@ -284,6 +289,10 @@ const contextMenuCss = css`
     font-size: smaller;
   }
 
+  button.disabled {
+    filter: brightness(0.5);
+  }
+
   .options .controls {
     display: flex;
     flex-wrap: wrap;
@@ -294,10 +303,6 @@ const contextMenuCss = css`
       color: black;
       padding: 2px 4px;
       border-radius: 4px;
-    }
-
-    button.disabled {
-      filter: brightness(0.5);
     }
   }
 
@@ -349,15 +354,11 @@ const contextMenuCss = css`
     }
     
     .actions {
-      flex: 2;
-      padding: 2px;
-      background-color: #000;
-      display: flex;
-      /* flex-wrap: wrap; */
+      // NOOP
     }
     
     .action {
-      padding: 4px;
+      padding: 4px 0;
       cursor: pointer;
       &:hover {
         background-color: #433;
@@ -365,8 +366,7 @@ const contextMenuCss = css`
     }
     
     .action.selected {
-      color: #fff;
-      background-color: #433;
+      background-color: #277a2799;
     }
   }
 
@@ -403,7 +403,7 @@ const contextMenuCss = css`
  * @typedef State
  * @property {HTMLDivElement} rootEl
  * @property {import('../components/Html3d').State} html
- * @property {boolean} justOpen Was the context menu just opened?
+ * @property {boolean} everOpen
  * @property {boolean} open Is the context menu open?
  * @property {boolean} showMeta
  * @property {boolean} persist
