@@ -276,13 +276,13 @@ const contextMenuCss = css`
   }
 
   .options .info {
-    /* background-color: unset; */
+    font-size: smaller;
   }
 
   .options .controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 2px;
 
     button {
       background: white;

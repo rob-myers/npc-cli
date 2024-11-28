@@ -153,13 +153,13 @@ const speechBubbleCss = css`
     position: absolute;
     width: var(--info-width);
     margin-left: calc(-0.5 * var(--info-width));
-    padding: 16px;
-    line-height: 1.6;
+    /* padding: 16px; */
+    /* line-height: 1.6; */
 
     background-color: black;
     color: white;
-    border-radius: 4px;
-    border: 2px solid #444;
+    /* border-radius: 4px; */
+    border: 1px solid #444;
 
     a {
       color: #dd0;
