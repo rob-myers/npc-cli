@@ -398,7 +398,7 @@ export class Npc {
 
     this.agent.updateParameters({
       maxSpeed: 0, // don't move until 0th way-point
-      radius: (this.s.run ? 3 : 1) * helper.defaults.radius, // reset
+      radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       collisionQueryRange: 2.5,
       separationWeight: 0.25,
       queryFilterType: this.w.lib.queryFilterType.default,
