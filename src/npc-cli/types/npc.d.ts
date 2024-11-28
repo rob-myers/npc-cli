@@ -230,6 +230,7 @@ declare namespace NPC {
 
   interface MetaAct<T = {}> {
     actKey: MetaActKey;
+    actLabel: string;
     meta: Geom.Meta<T>;
     npcKey?: string;
   }

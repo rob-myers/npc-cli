@@ -59,7 +59,7 @@ export default function ContextMenu() {
       const item = /** @type {HTMLElement} */ (e.target);
       const index = Array.from(e.currentTarget.childNodes).indexOf(item);
       if (index !== -1) {
-        state.selectedActKey = state.metaActs[index];
+        state.selectedActKey = state.metaActs[index].actKey;
         update();
       }
     },
@@ -214,8 +214,8 @@ export default function ContextMenu() {
             onClick={state.onClickActions}
           >
             {state.metaActs.map(act =>
-              <div key={act} className={cx("action", { selected: state.selectedActKey === act })}>
-                {act}
+              <div key={act.actKey} className={cx("action", { selected: state.selectedActKey === act.actKey })}>
+                {act.actLabel}
               </div>
             )}
           </div>
@@ -318,25 +318,25 @@ const contextMenuCss = css`
     color: #fff;
     border-bottom-width: 1px;
     border-radius: 8px;
-  }
-  .close-button {
     border: 1px solid #d77;
   }
-  .persist-button {
-    border: 1px solid #77d;
+  .close-button {
+    border-color: #d77;
   }
-  .persist-button.disabled {
-    filter: brightness(0.5);
+  .persist-button {
+    border-color: #77d;
   }
 
   .actor-and-actions {
     display: flex;
+    flex-direction: column;
+    align-items: start;
 
     select.actor {
       pointer-events: all;
-      border: 1px solid #aaa;
       padding: 2px 4px;
       flex: 1;
+      border: 1px solid #aaa;
       background-color: black;
       &.empty {
         color: #aaa;
@@ -411,7 +411,7 @@ const contextMenuCss = css`
 * @property {{ k: string; v: string; length: number }[]} kvs
 * @property {string[]} nearNpcKeys
 * @property {Geom.Meta} meta
-* @property {NPC.MetaActKey[]} metaActs
+* @property {NPC.MetaAct[]} metaActs
 * @property {THREE.Vector3Tuple} position
 * 
 * @property {import('../components/Html3d').CalculatePosition} calculatePosition
