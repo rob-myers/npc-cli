@@ -227,7 +227,6 @@ export default function useHandleEvents(w) {
           break;
         case "pointerup":
           !e.touch && state.onPointerUpMenuDesktop(e);
-          w.cm.justOpen = w.cm.open;
           break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs

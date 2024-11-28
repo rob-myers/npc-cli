@@ -275,12 +275,6 @@ export default function WorldView(props) {
     openSnapshot(type = 'image/webp', quality) {
       window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
     },
-    onWheel(e) {
-      if (w.cm.open === true) {
-        // w.cm.hide();
-        w.cm.justOpen = false;
-      }
-    },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
@@ -369,7 +363,6 @@ export default function WorldView(props) {
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
       onPointerLeave={state.onPointerLeave}
-      onWheel={state.onWheel}
       {...{ [popUpRootDataAttribute]: true }}
     >
       {props.children}
@@ -448,7 +441,6 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
- * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
  * @property {(type?: string, quality?: any) => void} openSnapshot
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
