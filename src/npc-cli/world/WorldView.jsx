@@ -42,6 +42,11 @@ export default function WorldView(props) {
     justLongDown: false,
     lastDown: undefined,
     lastScreenPoint: new Vect(),
+    normal: {
+      tri: new THREE.Triangle(),
+      indices: new THREE.Vector3(),
+      mat3: new THREE.Matrix3(),
+    },
     raycaster: new THREE.Raycaster(),
     rootEl: /** @type {*} */ (null),
     targetFov: /** @type {null | number} */ (null),
@@ -52,6 +57,19 @@ export default function WorldView(props) {
         state.canvas = canvasEl;
         state.rootEl = /** @type {*} */ (canvasEl.parentElement?.parentElement);
       }
+    },
+    computeNormal(mesh, intersection) {// 🚧
+      const n = state.normal;
+      const output = new THREE.Vector3();
+      n.indices.fromArray(
+        /** @type {THREE.BufferAttribute} */ (mesh.geometry.index).array,
+        /** @type {number} */ (intersection.faceIndex) * 3,
+      );
+      n.tri.setFromAttributeAndIndices(mesh.geometry.attributes.position, n.indices.x, n.indices.y, n.indices.z);
+      n.tri.getNormal(output);
+      const normalMatrix = n.mat3.getNormalMatrix(mesh.matrixWorld);
+      output.applyNormalMatrix(normalMatrix);
+      return output;
     },
     getDownDistancePx() {
       return state.down?.screenPoint.distanceTo(state.lastScreenPoint) ?? 0;
@@ -144,13 +162,18 @@ export default function WorldView(props) {
         default: throw testNever(decoded.picked);
       }
 
-      intersection = state.raycaster.intersectObject(mesh)[0];
+      [intersection] = state.raycaster.intersectObject(mesh);
 
       if (intersection === undefined) {
         return;
       }
-    
-      const position = v3Precision(intersection.point);  
+
+      const position = v3Precision(intersection.point.clone());
+      // 🚧
+      const normal = decoded.picked === 'npc' ? null : state.computeNormal(mesh, intersection);
+      console.log('intersection', intersection);
+      console.log('normal', normal);
+
       const meta = {
         ...decoded,
         ...pickedTypesInSomeRoom[decoded.picked] === true && w.gmGraph.findRoomContaining(toXZ(position), true),
@@ -160,6 +183,7 @@ export default function WorldView(props) {
         longDown: false,
         screenPoint: Vect.from(getRelativePointer(e)),
         position: position.clone(),
+        normal,
         meta,
       };
 
@@ -275,12 +299,6 @@ export default function WorldView(props) {
     openSnapshot(type = 'image/webp', quality) {
       window.open(dataUrlToBlobUrl(state.toDataURL(type, quality)), '_blank');
     },
-    onWheel(e) {
-      if (w.cm.open === true) {
-        // w.cm.hide();
-        w.cm.justOpen = false;
-      }
-    },
     pickObject(e) {// https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       const { gl, camera } = w.r3f;
       // handle fractional device pixel ratio e.g. 2.625 on Pixel
@@ -369,7 +387,6 @@ export default function WorldView(props) {
       onPointerMove={state.onPointerMove}
       onPointerUp={state.onPointerUp}
       onPointerLeave={state.onPointerLeave}
-      onWheel={state.onWheel}
       {...{ [popUpRootDataAttribute]: true }}
     >
       {props.children}
@@ -419,6 +436,7 @@ export default function WorldView(props) {
  * - Pending click identifiers, provided by shell.
  * - The last click identifier is the "current one".
  * @property {(canvasEl: null | HTMLCanvasElement) => void} canvasRef
+ * @property {(mesh: THREE.Mesh, intersection: THREE.Intersection) => THREE.Vector3} computeNormal
  * @property {import('three-stdlib').MapControls} controls
  * @property {import('@react-three/drei').MapControlsProps} controlsViewportOpts
  * @property {{ screenPoint: Geom.Vect; pointerIds: number[]; longTimeoutId: number; } | undefined} down
@@ -427,10 +445,11 @@ export default function WorldView(props) {
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
  * @property {import('@react-three/fiber').RenderProps<HTMLCanvasElement>['gl']} glOpts
- * @property {{ longDown: boolean; screenPoint: Geom.Vect; position: THREE.Vector3; meta: Geom.Meta }} [lastDown]
+ * @property {LastDownData} [lastDown]
  * Defined iff last pointer was down over the World.
  * @property {boolean} justLongDown
  * @property {Geom.Vect} lastScreenPoint Updated `onPointerMove` and `onPointerDown`.
+ * @property {{ tri: THREE.Triangle; indices: THREE.Vector3; mat3: THREE.Matrix3 }} normal
  * @property {THREE.Raycaster} raycaster
  * @property {HTMLDivElement} rootEl
  * @property {null | number} targetFov
@@ -448,7 +467,6 @@ export default function WorldView(props) {
  * @property {(e: React.PointerEvent) => void} onPointerMove
  * @property {(e: React.PointerEvent<HTMLElement>) => void} onPointerUp
  * @property {(deltaMs: number) => void} onTick
- * @property {(e: React.WheelEvent<HTMLElement>) => void} onWheel
  * @property {(type?: string, quality?: any) => void} openSnapshot
  * @property {(e: React.PointerEvent<HTMLElement>) => void} pickObject
  * @property {(gl: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, ri: THREE.RenderItem & { material: THREE.ShaderMaterial }) => void} renderObjectPickItem
@@ -492,6 +510,15 @@ const statsCss = css`
  * @property {boolean} [justLongDown]
  * @property {Geom.Meta} meta
  * @property {THREE.Vector3Like} position
+*/
+
+/**
+ * @typedef LastDownData
+ * @property {boolean} longDown
+ * @property {Geom.Vect} screenPoint
+ * @property {THREE.Vector3} position
+ * @property {null | THREE.Vector3} normal
+ * @property {Geom.Meta} meta
  */
 
 const initAzimuth = Math.PI / 6;

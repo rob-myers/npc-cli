@@ -83,13 +83,23 @@
   - ❌ ContextMenu: preserve open SideNote during HMR of Html3d
     - ℹ️ happens because we root.unmount() in useLayoutEffect
     - ℹ️ don't want to start caching roots per instance
-  - 🚧 ContextMenu simplify "key values"
-    - picked value, grKey, gdKey (instantiated for switches), symbolKey
-    - complex values optionally showable
+  - ❌ ContextMenu simplify "key values"
+    - ✅ switch decor have gdKey
+    - ❌ picked value, grKey, gdKey, symbolKey
+    - ❌ complex values optionally showable
+  - 🚧 object-pick provides normal
+    - ✅ Walls material should be one-sided i.e. walls + lintels + windows
+    - ✅ compute lastDown.normal
+    - 🚧 Decor quads material should be one-sided
+    - 🚧 Doors should be two quads so get correct normal
+  - 🚧 ContextMenu use arrow or line instead of sphere
   - 🚧 ContextMenu has select with possible actions
-    - can open doors using switches
+    - 🚧 can open doors using switches
     - npc in room with locked door can still leave
     - `inner` but not `secure` door switch can be opened
+    - can open doors using doors
+    - npc can open nearby doors
+      - needs to refresh somehow
   - ✅ long press do point: actual nav mesh may be strictly smaller
     - ✅ from off-mesh closest point on nav mesh
     - ✅ still seeing long-press issues on mobile e.g. to bed from floor

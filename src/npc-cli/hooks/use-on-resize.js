@@ -3,13 +3,14 @@ import useUpdate from "./use-update";
 
 /**
  * Trigger render on window resize.
+ * @param {() => void} [callback]
  */
-export default function useOnResize() {
+export default function useOnResize(callback) {
   const update = useUpdate();
 
   React.useEffect(() => {
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const cb = callback ?? update;
+    window.addEventListener("resize", cb);
+    return () => window.removeEventListener("resize", cb);
+  }, [callback]);
 }

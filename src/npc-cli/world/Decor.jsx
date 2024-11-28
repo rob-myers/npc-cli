@@ -314,6 +314,10 @@ export default function Decor(props) {
             transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
             det: tmpMat1.a * tmpMat1.d - tmpMat1.b * tmpMat1.c,
           };
+          if (typeof d.meta.switch === 'number') {
+            d.meta.doorId = d.meta.switch;
+            d.meta.gdKey = `g${gmId}d${d.meta.doorId}`;
+          }
           break;
         default:
           throw testNever(d);
@@ -453,6 +457,7 @@ export default function Decor(props) {
 
     async queryFn() {
       if (module.hot?.active === false) {
+        state.seenHash.map = 0; // 🔔 force refresh
         return false; // Avoid query from disposed module
       }
       const prev = state.seenHash ?? {};
@@ -656,3 +661,5 @@ export default function Decor(props) {
  */
 
 const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));
+
+1;

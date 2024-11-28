@@ -181,9 +181,9 @@ export default function useHandleEvents(w) {
       // 🚧
       if (typeof meta.switch === 'number') {
         return [
-          `open g${meta.gmId}d${meta.switch}`,
-          `close g${meta.gmId}d${meta.switch}`,
-          `lock g${meta.gmId}d${meta.switch}`,
+          { actKey: `open g${meta.gmId}d${meta.switch}`, actLabel: 'open', meta },
+          { actKey: `close g${meta.gmId}d${meta.switch}`, actLabel: 'close', meta },
+          { actKey: `lock g${meta.gmId}d${meta.switch}`, actLabel: 'lock', meta },
         ];
       }
 
@@ -227,7 +227,6 @@ export default function useHandleEvents(w) {
           break;
         case "pointerup":
           !e.touch && state.onPointerUpMenuDesktop(e);
-          w.cm.justOpen = w.cm.open;
           break;
         case "pre-request-nav": {
           // ℹ️ (re)compute npcToRoom and roomToNpcs
@@ -609,7 +608,7 @@ export default function useHandleEvents(w) {
  * @property {(metaAct: NPC.MetaAct) => Promise<void>} doMetaAct
  * @property {(door: Geomorph.DoorState) => void} ensureDoorPolyRefs
  * @property {(gmId: number, roomId: number, point: Geom.VectJson) => string[]} getNearbyNpcKeys
- * @property {(meta: Geom.Meta) => NPC.MetaActKey[]} getMetaActs
+ * @property {(meta: Geom.Meta) => NPC.MetaAct[]} getMetaActs
  * 🚧 refine type to string literals
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents

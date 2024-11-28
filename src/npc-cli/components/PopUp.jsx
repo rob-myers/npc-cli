@@ -15,19 +15,15 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
     timeoutId: 0,
     left: false,
     right: false,
-    down: false,
     bubble: /** @type {*} */ (null),
     icon: /** @type {*} */ (null),
 
-    close(ms = 100) {
-      return window.setTimeout(() => {
-        state.opened = false;
-        state.left = false;
-        state.right = false;
-        state.down = false;
-        state.bubble.style.removeProperty('--info-width');
-        update();
-      }, ms);
+    close() {
+      state.opened = false;
+      state.left = false;
+      state.right = false;
+      state.bubble.style.removeProperty('--info-width');
+      update();
     },
     open(width) {
       window.clearTimeout(state.timeoutId); // clear close timeout
@@ -41,7 +37,6 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       const pixelsOnLeft = rect.x - rootRect.x;
       state.left = pixelsOnRight < pixelsOnLeft;
       state.right = !state.left;
-      state.down = false;
       
       state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 20 : 12}px`);
 
@@ -74,7 +69,6 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
         open: state.opened,
         left: state.left,
         right: state.right,
-        down: state.down,
       }, speechBubbleCss)}
     >
       <span className="arrow"/>
@@ -97,11 +91,10 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
  * @property {number} timeoutId
  * @property {boolean} left
  * @property {boolean} right
- * @property {boolean} down
  * @property {HTMLSpanElement} bubble
  * @property {HTMLSpanElement} icon
  * @property {(width?: number | undefined) => void} open
- * @property {(ms?: number) => number} close
+ * @property {() => void} close
  */
 
 const defaultArrowDeltaX = 20;
@@ -123,6 +116,7 @@ const iconTriggerCss = css`
 `;
 
 const speechBubbleCss = css`
+  --info-arrow-color: #ffffff77;
   --info-arrow-delta-x: ${defaultArrowDeltaX}px;
   --info-width: ${defaultInfoWidthPx}px;
 
@@ -155,13 +149,13 @@ const speechBubbleCss = css`
     position: absolute;
     width: var(--info-width);
     margin-left: calc(-0.5 * var(--info-width));
-    padding: 16px;
-    line-height: 1.6;
+    /* padding: 16px; */
+    /* line-height: 1.6; */
 
     background-color: black;
     color: white;
-    border-radius: 4px;
-    border: 2px solid #444;
+    /* border-radius: 4px; */
+    border: 1px solid var(--info-arrow-color);
 
     a {
       color: #dd0;
@@ -190,7 +184,7 @@ const speechBubbleCss = css`
       left: calc(-1 * var(--info-arrow-delta-x));
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
-      border-left: 10px solid #444;
+      border-left: 10px solid var(--info-arrow-color);
     }
   }
   &.right {
@@ -204,23 +198,9 @@ const speechBubbleCss = css`
       left: calc(${rootWidthPx / 2}px + var(--info-arrow-delta-x));
       border-top: 10px solid transparent;
       border-bottom: 10px solid transparent;
-      border-right: 10px solid #444;
-    }
-  }
-  &.down {
-    .info {
-      top: 20px;
-    }
-    .arrow {
-      top: calc(-10px + 20px);
-      left: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 10px solid #444;
+      border-right: 10px solid var(--info-arrow-color);
     }
   }
 `;
 
 export const popUpRootDataAttribute = 'data-pop-up-root';
-
-const hoverShowMs = 500;

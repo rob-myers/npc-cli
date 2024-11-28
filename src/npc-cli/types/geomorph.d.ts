@@ -307,6 +307,7 @@ declare namespace Geomorph {
     gridRect: Geom.Rect;
     inverseMatrix: Geom.Mat;
     mat4: import("three").Matrix4;
+    determinant: number;
 
     getOtherRoomId(doorId: number, roomId: number): number;
     isHullDoor(doorId: number): boolean;

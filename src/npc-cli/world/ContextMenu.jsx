@@ -19,7 +19,7 @@ export default function ContextMenu() {
     rootEl: /** @type {*} */ (null),
     html: /** @type {*} */ (null),
     popup: /** @type {*} */ (null),
-    justOpen: false,
+    everOpen: false,
     showMeta: true,
     open: false,
     persist: true,
@@ -46,7 +46,7 @@ export default function ContextMenu() {
     },
     hide() {
       state.open = false;
-      state.popup.close(0);
+      state.popup.close();
       update();
     },
     hideUnlessPersisted() {
@@ -59,7 +59,7 @@ export default function ContextMenu() {
       const item = /** @type {HTMLElement} */ (e.target);
       const index = Array.from(e.currentTarget.childNodes).indexOf(item);
       if (index !== -1) {
-        state.selectedActKey = state.metaActs[index];
+        state.selectedActKey = state.metaActs[index].actKey;
         update();
       }
     },
@@ -72,13 +72,24 @@ export default function ContextMenu() {
       state.scale = 1 / objectScale(state.html.group, w.r3f.camera);
       update();
     },
+    onWindowResize() {
+      setTimeout(state.html.forceUpdate, 30);
+    },
     show() {
       state.open = true;
       state.updateFromLastDown();
-      if (state.popup.opened) {
-        state.popup.close(0);
+
+      if (state.popup.opened === true) {
+        // 🔔 reopen on next render to "get direction right" 
+        state.popup.close();
         pause(200).then(() => state.popup.open());
       }
+
+      if (state.everOpen === false) {// 🔔 initially open
+        state.popup?.open();
+        state.everOpen = true;
+      }
+
       update();
     },
     togglePersist() {
@@ -123,17 +134,14 @@ export default function ContextMenu() {
   
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
   
-  React.useEffect(() => {// trigger update on unlock
+  React.useEffect(() => {// on unlock while paused update style.transform 
     state.lock === false && state.html.forceUpdate();
   }, [state.lock]);
   
-  React.useEffect(() => {// initially open
-    state.open && state.popup?.open();
-  }, [state.open]);
-  
   const update = useUpdate();
 
-  useOnResize(); // 🔔 handle non-continuous window resize
+  // 🔔 handle discontinuous window resize
+  useOnResize(state.onWindowResize);
 
   return <>
     <Html3d
@@ -151,7 +159,7 @@ export default function ContextMenu() {
         style={{ visibility: state.open ? 'visible' : 'hidden' }}
       >
 
-        <div className={cx("top-bar", { mini: state.showMeta })}>
+        <div className="top-bar">
           <div className="options">
             <PopUp
               ref={state.ref('popup')}
@@ -210,8 +218,8 @@ export default function ContextMenu() {
             onClick={state.onClickActions}
           >
             {state.metaActs.map(act =>
-              <div key={act} className={cx("action", { selected: state.selectedActKey === act })}>
-                {act}
+              <div key={act.actKey} className={cx("action", { selected: state.selectedActKey === act.actKey })}>
+                {act.actLabel}
               </div>
             )}
           </div>
@@ -236,6 +244,11 @@ const contextMenuCss = css`
   position: absolute;
   left: 0;
   top: 0;
+  
+  @media(max-width: ${700}px) {
+    left: 8px;
+    top: 8px;
+  }
 
   display: flex;
   flex-direction: column;
@@ -246,21 +259,13 @@ const contextMenuCss = css`
   .top-bar {
     right: 0;
     display: flex;
-    justify-content: start;
     opacity: 0.8;
     gap: 4px;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    width: 100%;
+    margin-bottom: 6px;
   }
 
-  .mini {
-    .options .side-note, .persist-button, .close-button {
-      border-bottom-width: 1px;
-      border-radius: 8px;
-    }
-  }
-  
   /* override side note opener */
   .options > .side-note {
     display: inline-flex;
@@ -274,17 +279,22 @@ const contextMenuCss = css`
     background-color: #000;
     color: #fff;
     border: 1px solid #7d7;
-    border-bottom-width: 0;
+    border-radius: 8px;
   }
 
   .options .info {
-    /* background-color: unset; */
+    font-size: smaller;
+  }
+
+  button.disabled {
+    filter: brightness(0.5);
   }
 
   .options .controls {
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 4px;
 
     button {
       background: white;
@@ -292,15 +302,6 @@ const contextMenuCss = css`
       padding: 2px 4px;
       border-radius: 4px;
     }
-
-    button.disabled {
-      filter: brightness(0.5);
-    }
-  }
-
-  .options .control {
-    display: flex;
-    gap: 4px;
   }
 
   .close-button, .persist-button {
@@ -318,27 +319,27 @@ const contextMenuCss = css`
     font-size: calc(${closeButtonRadius} * 1);
     background-color: #000;
     color: #fff;
+    border-bottom-width: 1px;
+    border-radius: 8px;
+    border: 1px solid #d77;
   }
   .close-button {
-    border: 1px solid #d77;
-    border-bottom-width: 0;
+    border-color: #d77;
   }
   .persist-button {
-    border: 1px solid #77d;
-    border-bottom-width: 0;
-  }
-  .persist-button.disabled {
-    filter: brightness(0.5);
+    border-color: #77d;
   }
 
   .actor-and-actions {
     display: flex;
+    flex-direction: column;
+    align-items: start;
 
     select.actor {
       pointer-events: all;
-      border: 1px solid #aaa;
       padding: 2px 4px;
       flex: 1;
+      border: 1px solid #aaa;
       background-color: black;
       &.empty {
         color: #aaa;
@@ -346,15 +347,13 @@ const contextMenuCss = css`
     }
     
     .actions {
-      flex: 2;
-      padding: 2px;
-      background-color: #000;
-      display: flex;
-      /* flex-wrap: wrap; */
+      // NOOP
     }
     
     .action {
-      padding: 4px;
+      display: flex;
+      justify-content: center;
+      padding: 2px 4px;
       cursor: pointer;
       &:hover {
         background-color: #433;
@@ -362,16 +361,13 @@ const contextMenuCss = css`
     }
     
     .action.selected {
-      color: #fff;
-      background-color: #433;
+      background-color: #277a2799;
     }
   }
 
   .key-values {
     display: flex;
     flex-wrap: wrap;
-    /* width: 200px; */
-    margin-top: 8px;
   }
 
   .key-value {
@@ -400,7 +396,7 @@ const contextMenuCss = css`
  * @typedef State
  * @property {HTMLDivElement} rootEl
  * @property {import('../components/Html3d').State} html
- * @property {boolean} justOpen Was the context menu just opened?
+ * @property {boolean} everOpen
  * @property {boolean} open Is the context menu open?
  * @property {boolean} showMeta
  * @property {boolean} persist
@@ -413,19 +409,20 @@ const contextMenuCss = css`
 * @property {{ k: string; v: string; length: number }[]} kvs
 * @property {string[]} nearNpcKeys
 * @property {Geom.Meta} meta
-* @property {NPC.MetaActKey[]} metaActs
+* @property {NPC.MetaAct[]} metaActs
 * @property {THREE.Vector3Tuple} position
 * 
 * @property {import('../components/Html3d').CalculatePosition} calculatePosition
 * @property {() => void} hide
 * @property {() => void} hideUnlessPersisted
 * @property {(npcKey: string) => boolean} isTracking
-* @property {() => void} onToggleMeta
-* @property {() => void} onToggleResize
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
+* @property {() => void} onToggleMeta
+* @property {() => void} onToggleResize
+* @property {() => void} onWindowResize
+* @property {() => void} show
  * @property {() => void} togglePersist
- * @property {() => void} show
  * @property {(el: null | THREE.Object3D) => void} track
  * @property {() => void} updateFromLastDown
  */
