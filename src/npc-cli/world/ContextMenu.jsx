@@ -72,6 +72,9 @@ export default function ContextMenu() {
       state.scale = 1 / objectScale(state.html.group, w.r3f.camera);
       update();
     },
+    onWindowResize() {
+      setTimeout(state.html.forceUpdate, 30);
+    },
     show() {
       state.open = true;
       state.updateFromLastDown();
@@ -123,7 +126,7 @@ export default function ContextMenu() {
   
   const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
   
-  React.useEffect(() => {// trigger update on unlock
+  React.useEffect(() => {
     state.lock === false && state.html.forceUpdate();
   }, [state.lock]);
   
@@ -133,7 +136,8 @@ export default function ContextMenu() {
   
   const update = useUpdate();
 
-  useOnResize(); // 🔔 handle non-continuous window resize
+  // 🔔 handle non-continuous window resize
+  useOnResize(state.onWindowResize);
 
   return <>
     <Html3d
@@ -420,12 +424,13 @@ const contextMenuCss = css`
 * @property {() => void} hide
 * @property {() => void} hideUnlessPersisted
 * @property {(npcKey: string) => boolean} isTracking
-* @property {() => void} onToggleMeta
-* @property {() => void} onToggleResize
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
+* @property {() => void} onToggleMeta
+* @property {() => void} onToggleResize
+* @property {() => void} onWindowResize
+* @property {() => void} show
  * @property {() => void} togglePersist
- * @property {() => void} show
  * @property {(el: null | THREE.Object3D) => void} track
  * @property {() => void} updateFromLastDown
  */
