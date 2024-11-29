@@ -1368,6 +1368,7 @@ export class Connector {
         || edge === 'w' && this.normal.x > 0
       ) {
         this.normal.scale(-1);
+        this.seg = [v, u];
       }
     }
 
