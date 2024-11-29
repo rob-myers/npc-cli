@@ -24,7 +24,10 @@
     },
     "small-map-1": {
       "key": "small-map-1",
-      "gms": [{"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0.025, 0]}]
+      "gms": [
+        {"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0.025, 0]},
+        {"gmKey": "g-301--bridge", "transform": [1, 0, 0, -1, 0, 30]}
+      ]
     }
   },
   "layout": {

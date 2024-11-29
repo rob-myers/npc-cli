@@ -395,7 +395,7 @@
       "obsHashes": [596298591]
     },
     "demo-map-1": {"outputHash": 1429562441},
-    "small-map-1": {"outputHash": 1980923211}
+    "small-map-1": {"outputHash": -905190363}
   },
   "sheet": {
     "decor": {
@@ -17589,7 +17589,10 @@
     },
     "small-map-1": {
       "key": "small-map-1",
-      "gms": [{"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0.025, 0]}]
+      "gms": [
+        {"gmKey": "g-301--bridge", "transform": [1, 0, 0, 1, 0.025, 0]},
+        {"gmKey": "g-301--bridge", "transform": [1, 0, 0, -1, 0, 30]}
+      ]
     }
   }
 }
