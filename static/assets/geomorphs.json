@@ -3630,7 +3630,7 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "obstacleId": 0,
-          "height": 0.6000000000000001,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -3739,7 +3739,7 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "obstacleId": 0,
-          "height": 0.6000000000000001,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -3848,7 +3848,7 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "obstacleId": 0,
-          "height": 0.6000000000000001,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -3957,7 +3957,7 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "obstacleId": 0,
-          "height": 0.6000000000000001,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -13212,7 +13212,7 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "obstacleId": 0,
-          "height": 0.6000000000000001,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -13276,7 +13276,7 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "obstacleId": 0,
-          "height": 0.6000000000000001,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -15174,7 +15174,7 @@
         {
           "symbolKey": "console--006--1.2x3",
           "obstacleId": 0,
-          "height": 0.6499999999999999,
+          "height": 0.65,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -24287,7 +24287,7 @@
         {
           "symbolKey": "table--004--1.2x2.4",
           "obstacleId": 0,
-          "height": 0.6499999999999999,
+          "height": 0.65,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -28859,7 +28859,7 @@
         {
           "symbolKey": "couch-and-chairs--006--0.4x2",
           "obstacleId": 0,
-          "height": 0.19999999999999998,
+          "height": 0.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -28886,7 +28886,7 @@
         {
           "symbolKey": "couch-and-chairs--006--0.4x2",
           "obstacleId": 1,
-          "height": 0.19999999999999998,
+          "height": 0.2,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
@@ -35116,7 +35116,7 @@
         {
           "symbolKey": "extra--019--table-0.5x2",
           "obstacleId": 0,
-          "height": 0.6000000000000001,
+          "height": 0.6,
           "origPoly": {
             "type": "Polygon",
             "coordinates": [
