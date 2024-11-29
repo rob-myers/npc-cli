@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import * as THREE from "three";
 
 import { pause } from "../service/generic";
-import { toXZ } from "../service/three";
+import { toXZ, unitXVector3 } from "../service/three";
 import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from '../components/Html3d';
 import { WorldContext } from "./world-context";
@@ -27,11 +27,13 @@ export default function ContextMenu() {
     scale: 1,
     tracked: null,
     
-    kvs: [],
     meta: {},
+    normal: null,
+    kvs: [],
     metaActs: [],
     nearNpcKeys: [],
     position: [0, 0, 0],
+    quaternion: null,
     selectedActKey: null,
 
     calculatePosition(el, camera, size) {
@@ -110,7 +112,9 @@ export default function ContextMenu() {
       }
 
       state.meta = lastDown.meta;
-  
+      state.normal = lastDown.normal;
+      state.quaternion = state.normal === null ? null : new THREE.Quaternion().setFromUnitVectors(unitXVector3, state.normal);
+
       state.kvs = Object.entries(state.meta ?? {}).map(([k, v]) => {
         const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
         return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
@@ -227,13 +231,23 @@ export default function ContextMenu() {
 
       </div>
     </Html3d>
-    <mesh
-      position={state.position}
-      visible={state.open === true && state.tracked === null}
-    >
-      <sphereGeometry args={[0.025, 8, 8]} />
-      <meshBasicMaterial color="green" />
-    </mesh>
+
+    {state.quaternion !== null && (
+      <group
+        name="object-pick-normal"
+        position={state.position}
+        quaternion={state.quaternion}
+      >
+        <mesh
+          position={[0.01, 0, 0]}
+          rotation={[0, Math.PI/2, 0]}
+          renderOrder={1}
+        >
+          <circleGeometry args={[0.1, 24]} />
+          <meshBasicMaterial color="green" opacity={0.5} transparent wireframe={false} />
+        </mesh>
+      </group>
+    )}
   </>;
 
 }
@@ -415,8 +429,10 @@ const contextMenuCss = css`
 * @property {{ k: string; v: string; length: number }[]} kvs
 * @property {string[]} nearNpcKeys
 * @property {Geom.Meta} meta
+* @property {import("./WorldView").LastDownData['normal']} normal
 * @property {NPC.MetaAct[]} metaActs
 * @property {THREE.Vector3Tuple} position
+* @property {null | THREE.Quaternion} quaternion
 * 
 * @property {import('../components/Html3d').CalculatePosition} calculatePosition
 * @property {() => void} hide

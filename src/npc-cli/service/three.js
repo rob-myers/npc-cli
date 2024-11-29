@@ -316,7 +316,7 @@ export function createLabelSpriteSheet(labels, sheet, { fontHeight }) {
   sheet.tex.needsUpdate = true;
 }
 
-export const yAxis = new THREE.Vector3(0, 1, 0);
+export const unitXVector3 = new THREE.Vector3(1, 0, 0);
 
 export const emptyGroup = new THREE.Group();
 

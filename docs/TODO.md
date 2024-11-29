@@ -87,7 +87,7 @@
     - ✅ switch decor have gdKey
     - ❌ picked value, grKey, gdKey, symbolKey
     - ❌ complex values optionally showable
-  - 🚧 object-pick provides normal
+  - ✅ object-pick provides normal
     - ✅ Walls material should be one-sided i.e. walls + lintels + windows
     - ✅ compute lastDown.normal
     - ✅ Decor quads
@@ -95,7 +95,7 @@
       - ✅ fix normal direction (flip) using camera direction
     - ✅ Decor cuboids
     - ✅ Doors should be two quads so get correct normal
-  - 🚧 ContextMenu use arrow or line instead of sphere
+  - ✅ ContextMenu use circle instead of sphere
   - 🚧 ContextMenu has select with possible actions
     - 🚧 can open doors using switches
     - npc in room with locked door can still leave
