@@ -218,9 +218,9 @@ export default function ContextMenu() {
             onClick={state.onClickActions}
           >
             {state.metaActs.map(act =>
-              <div key={act.actKey} className={cx("action", { selected: state.selectedActKey === act.actKey })}>
+              <button key={act.actKey} className={cx("action", { selected: state.selectedActKey === act.actKey })}>
                 {act.actLabel}
-              </div>
+              </button>
             )}
           </div>
         </div>}
@@ -244,8 +244,12 @@ const contextMenuCss = css`
   position: absolute;
   left: 0;
   top: 0;
-  pointer-events: none;
   
+  pointer-events: none;
+  button, select {
+    pointer-events: all;
+  }
+
   @media(max-width: ${700}px) {
     left: 8px;
     top: 8px;
@@ -259,7 +263,6 @@ const contextMenuCss = css`
 
   .top-bar {
     right: 0;
-    pointer-events: all;
     display: flex;
     opacity: 0.8;
     gap: 4px;
@@ -270,6 +273,7 @@ const contextMenuCss = css`
 
   /* override side note opener */
   .options > .side-note {
+    pointer-events: all;
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -338,7 +342,7 @@ const contextMenuCss = css`
     align-items: start;
 
     select.actor {
-      pointer-events: all;
+      /* pointer-events: all; */
       padding: 2px 4px;
       flex: 1;
       border: 1px solid #aaa;
@@ -353,7 +357,6 @@ const contextMenuCss = css`
     }
     
     .action {
-      pointer-events: all;
       display: flex;
       justify-content: center;
       padding: 2px 4px;
