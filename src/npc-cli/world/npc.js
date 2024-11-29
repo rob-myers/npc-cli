@@ -741,7 +741,7 @@ export class Npc {
     this.s.target = null;
     this.s.lookAngleDst = null;
     this.agent.updateParameters({
-      maxSpeed: this.getMaxSpeed(),
+      maxSpeed: this.getMaxSpeed() / 2,
       maxAcceleration: maxAcceleration / 4,
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius,
@@ -801,7 +801,7 @@ const maxAcceleration = 10;
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration,
+  maxAcceleration: maxAcceleration / 4,
   pathOptimizationRange: 10, // 🚧 clarify
   // collisionQueryRange: 0.7,
   collisionQueryRange: 2.5,
