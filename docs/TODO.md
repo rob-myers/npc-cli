@@ -96,6 +96,7 @@
     - ✅ Decor cuboids
     - ✅ Doors should be two quads so get correct normal
   - ✅ ContextMenu use circle instead of sphere
+  - fix 301 room 11 i.e. bridge room should be split in two
   - 🚧 ContextMenu has select with possible actions
     - 🚧 can open doors using switches
     - npc in room with locked door can still leave
@@ -127,6 +128,8 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
+
+- Game Master option for partially transparent walls, where object-pick ignores walls
 - useStateRef provides `state.ref(key)` which deletes sub-refs on null
   - maybe `useStateRef(() => state, { refs: ... })` to avoid re-creation
 - ✅ profile-1.sh edit should not hmr Viewer

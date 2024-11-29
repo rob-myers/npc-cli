@@ -114,12 +114,13 @@ export default function Walls(props) {
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
+      // renderOrder={2} // ℹ️ for partial transparency
     >
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
       <instancedMonochromeShader
         key={InstancedMonochromeShader.key}
-        // side={THREE.DoubleSide}
         diffuse={[0, 0, 0]}
+        // depthWrite={false} transparent opacity={0.5} // ℹ️ for partial transparency
       />
     </instancedMesh>
   );
