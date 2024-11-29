@@ -169,8 +169,15 @@ export default function WorldView(props) {
       }
 
       const position = v3Precision(intersection.point.clone());
-      // 🚧
+      
       const normal = decoded.picked === 'npc' ? null : state.computeNormal(mesh, intersection);
+
+      if (normal !== null) {
+        // 🔔 fix flipped normals e.g. double-sided decor quad
+        w.r3f.camera.getWorldDirection(tmpVectThree);
+        if (normal.dot(tmpVectThree) > 0) normal.multiplyScalar(-1);
+      }
+
       console.log('intersection', intersection);
       console.log('normal', normal);
 
@@ -524,6 +531,7 @@ const statsCss = css`
 const initAzimuth = Math.PI / 6;
 const fixedPolarAngle = Math.PI / 7;
 const pixelBuffer = new Uint8Array(4);
+const tmpVectThree = new THREE.Vector3();
 
 function Origin() {
   return (

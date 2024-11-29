@@ -90,8 +90,11 @@
   - 🚧 object-pick provides normal
     - ✅ Walls material should be one-sided i.e. walls + lintels + windows
     - ✅ compute lastDown.normal
-    - 🚧 Decor quads material should be one-sided
-    - 🚧 Doors should be two quads so get correct normal
+    - ✅ Decor quads
+      - ❌ material should be one-sided (subtle e.g. need to flip document icons)
+      - ✅ fix normal direction (flip) using camera direction
+    - ✅ Decor cuboids
+    - ✅ Doors should be two quads so get correct normal
   - 🚧 ContextMenu use arrow or line instead of sphere
   - 🚧 ContextMenu has select with possible actions
     - 🚧 can open doors using switches
