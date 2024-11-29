@@ -397,6 +397,7 @@ export class Npc {
     this.s.lookSecs = 0.2;
 
     this.agent.updateParameters({
+      maxAcceleration,
       maxSpeed: 0, // don't move until 0th way-point
       radius: (this.s.run ? 3 : 2) * helper.defaults.radius, // reset
       collisionQueryRange: 2.5,
@@ -741,6 +742,7 @@ export class Npc {
     this.s.lookAngleDst = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed(),
+      maxAcceleration: maxAcceleration / 4,
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius,
       collisionQueryRange: 2.5,
@@ -793,11 +795,13 @@ export function hotModuleReloadNpc(npc) {
   return Object.assign(nextNpc, {...npc});
 }
 
+const maxAcceleration = 10;
+
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
   radius: helper.defaults.radius, // 🔔 too large causes jerky collisions
   height: 1.5,
-  maxAcceleration: 10,
+  maxAcceleration,
   pathOptimizationRange: 10, // 🚧 clarify
   // collisionQueryRange: 0.7,
   collisionQueryRange: 2.5,
