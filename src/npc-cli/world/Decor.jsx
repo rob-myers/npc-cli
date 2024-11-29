@@ -240,16 +240,15 @@ export default function Decor(props) {
       
       } else {// d.type === 'quad'
 
-        tmpMat1.feedFromArray(d.transform);
-        const mat4 = geomorph.embedXZMat4(tmpMat1.toArray(), {
+        const mat4 = geomorph.embedXZMat4(d.transform, {
           mat4: tmpMatFour1,
           yHeight: d.meta.y,
         });
-
+        
         if (d.meta.tilt === true) {
-          // 🔔 remove scale to get local x unit vector
-          const vecLen = Math.sqrt(tmpMat1.a ** 2 + tmpMat1.b ** 2);
-          const rotMat = getRotAxisMatrix(tmpMat1.a / vecLen, 0, tmpMat1.b / vecLen, 90);
+          const [a, b] = d.transform
+          const vecLen = Math.sqrt(a ** 2 + b ** 2); // remove scale to get local x unit vector
+          const rotMat = getRotAxisMatrix(a / vecLen, 0, b / vecLen, 90);
           setRotMatrixAboutPoint(rotMat, d.center.x, d.meta.y, d.center.y);
           mat4.premultiply(rotMat); // 🔔 premultiply means post-rotate
         }
@@ -661,5 +660,3 @@ export default function Decor(props) {
  */
 
 const centreUnitQuad = new THREE.Matrix4().makeTranslation(-(-0.5), 0, -(-0.5));
-
-1;
