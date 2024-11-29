@@ -234,9 +234,10 @@ export default function ContextMenu() {
 
     {state.quaternion !== null && (
       <group
-        name="object-pick-normal"
+        name="object-pick-circle"
         position={state.position}
         quaternion={state.quaternion}
+        visible={state.open}
       >
         <mesh
           position={[0.01, 0, 0]}
