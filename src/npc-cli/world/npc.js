@@ -805,7 +805,7 @@ export const crowdAgentParams = {
   pathOptimizationRange: 10, // 🚧 clarify
   // collisionQueryRange: 0.7,
   collisionQueryRange: 2.5,
-  separationWeight: 1,
+  separationWeight: 4,
   queryFilterType: 0,
   // obstacleAvoidanceType
   updateFlags: defaultAgentUpdateFlags,
