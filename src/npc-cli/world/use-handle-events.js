@@ -193,6 +193,7 @@ export default function useHandleEvents(w) {
       // debug('useHandleEvents', e);
 
       if ('npcKey' in e) {
+        // 🔔 assume if key present then value truthy
         return state.handleNpcEvents(e);
       }
 

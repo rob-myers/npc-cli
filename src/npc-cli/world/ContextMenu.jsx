@@ -21,9 +21,10 @@ export default function ContextMenu() {
     popup: /** @type {*} */ (null),
 
     everOpen: false,
-    open: false,
     lastAct: null,
     lock: false,
+    actNpcKey: null,
+    open: false,
     persist: true,
     scale: 1,
     showMeta: true,
@@ -61,10 +62,18 @@ export default function ContextMenu() {
     onClickActions(e) {
       const item = /** @type {HTMLElement} */ (e.target);
       const index = Array.from(e.currentTarget.childNodes).indexOf(item);
-      if (index !== -1) {
-        state.lastAct = state.metaActs[index];
-        update();
+      const lastAct = state.metaActs[index];
+      state.lastAct = lastAct;
+
+      if (state.actNpcKey !== null) {// nearby npc click
+        w.events.next({ key: 'click-act', act: lastAct, npcKey: state.actNpcKey });
+      } else {// 🚧 Game Master click
+        w.events.next({ key: 'click-act-gm', act: lastAct });
       }
+      update();
+    },
+    onSelectNearbyNpc(e) {
+
     },
     onToggleMeta() {
       state.showMeta = !state.showMeta;
@@ -126,6 +135,7 @@ export default function ContextMenu() {
           ? w.e.getNearbyNpcKeys(state.meta.gmId, state.meta.roomId, toXZ(lastDown.position))
           : []
       );
+      state.actNpcKey = state.nearNpcKeys.length === 0 ? null : state.nearNpcKeys[0];
   
       state.metaActs = w.e.getMetaActs(state.meta);
       
@@ -214,8 +224,12 @@ export default function ContextMenu() {
 
         {canAct && <div className="actor-and-actions">
 
-          <select className="actor">
-            {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey} >{npcKey}</option>)}
+          <select
+            className="actor"
+            onChange={state.onSelectNearbyNpc}
+            value={state.actNpcKey ?? undefined}
+          >
+            {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey}>{npcKey}</option>)}
           </select>
 
           <div
@@ -419,6 +433,7 @@ const contextMenuCss = css`
  * @property {HTMLDivElement} rootEl
  * @property {import('../components/Html3d').State} html
  * @property {boolean} everOpen
+ * @property {null | string} actNpcKey Currently select npc
  * @property {boolean} open Is the context menu open?
  * @property {boolean} showMeta
  * @property {boolean} persist
@@ -442,6 +457,7 @@ const contextMenuCss = css`
 * @property {(npcKey: string) => boolean} isTracking
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
+* @property {(e: React.ChangeEvent<HTMLSelectElement>) => void} onSelectNearbyNpc
 * @property {() => void} onToggleMeta
 * @property {() => void} onToggleResize
 * @property {() => void} onWindowResize

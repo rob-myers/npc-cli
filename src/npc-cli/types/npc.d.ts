@@ -128,6 +128,11 @@ declare namespace NPC {
       }
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
+    | { key: 'click-act', act: NPC.MetaAct; npcKey: string }
+    | {
+        /** Game Master click */
+        key: 'click-act-gm'; act: NPC.MetaAct;
+      }
     // ...
   );
 
