@@ -192,8 +192,7 @@ export default function useHandleEvents(w) {
     async handleEvents(e) {
       // debug('useHandleEvents', e);
 
-      if ('npcKey' in e) {
-        // 🔔 assume if key present then value truthy
+      if ('npcKey' in e) {// 🔔 if key present, assume value truthy
         return state.handleNpcEvents(e);
       }
 
@@ -325,26 +324,6 @@ export default function useHandleEvents(w) {
           break;
         }
         // case "started-moving":
-        case "way-point":
-          if (e.index === 0) {// start moving in next frame
-            npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
-          }
-          if (e.next === null) {// final
-            return;
-          }
-          
-          for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
-            const door = w.door.byKey[gdKey];
-            if (!(door.open === false && state.navSegIntersectsDoorway(e, e.next, door) === true)) {
-              continue;
-            } // incoming closed door:
-            if (state.npcCanAccess(e.npcKey, door.gdKey) === true) {
-              w.door.toggleDoorRaw(door, { open: true, access: true });
-            } else {
-              npc.stopMoving();
-            }
-          }
-          break;
         case "stopped-moving": {
           const doorMeta = state.npcToDoor[e.npcKey];
 
@@ -368,6 +347,26 @@ export default function useHandleEvents(w) {
           }
           break;
         }
+        case "way-point":
+          if (e.index === 0) {// start moving in next frame
+            npc.agent?.updateParameters({ maxSpeed: npc.getMaxSpeed() });
+          }
+          if (e.next === null) {// final
+            return;
+          }
+          
+          for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+            const door = w.door.byKey[gdKey];
+            if (!(door.open === false && state.navSegIntersectsDoorway(e, e.next, door) === true)) {
+              continue;
+            } // incoming closed door:
+            if (state.npcCanAccess(e.npcKey, door.gdKey) === true) {
+              w.door.toggleDoorRaw(door, { open: true, access: true });
+            } else {
+              npc.stopMoving();
+            }
+          }
+          break;
       }
     },
     navSegIntersectsDoorway(u, v, door) {
