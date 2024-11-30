@@ -19,22 +19,23 @@ export default function ContextMenu() {
     rootEl: /** @type {*} */ (null),
     html: /** @type {*} */ (null),
     popup: /** @type {*} */ (null),
+
     everOpen: false,
-    showMeta: true,
     open: false,
-    persist: true,
+    lastAct: null,
     lock: false,
+    persist: true,
     scale: 1,
+    showMeta: true,
     tracked: null,
     
-    meta: {},
-    normal: null,
     kvs: [],
+    meta: {},
     metaActs: [],
+    normal: null,
     nearNpcKeys: [],
     position: [0, 0, 0],
     quaternion: null,
-    selectedActKey: null,
 
     calculatePosition(el, camera, size) {
       // 🤔 support tracked offset vector?
@@ -61,7 +62,7 @@ export default function ContextMenu() {
       const item = /** @type {HTMLElement} */ (e.target);
       const index = Array.from(e.currentTarget.childNodes).indexOf(item);
       if (index !== -1) {
-        state.selectedActKey = state.metaActs[index].actKey;
+        state.lastAct = state.metaActs[index];
         update();
       }
     },
@@ -222,7 +223,7 @@ export default function ContextMenu() {
             onClick={state.onClickActions}
           >
             {state.metaActs.map(act =>
-              <button key={act.actKey} className={cx("action", { selected: state.selectedActKey === act.actKey })}>
+              <button key={act.actKey} className={cx("action", { selected: state.lastAct === act })}>
                 {act.actLabel}
               </button>
             )}
@@ -426,7 +427,7 @@ const contextMenuCss = css`
  * @property {import('../components/PopUp').State} popup
  * @property {null | THREE.Object3D} tracked
 *
-* @property {null | NPC.MetaActKey} selectedActKey
+* @property {null | NPC.MetaAct} lastAct
 * @property {{ k: string; v: string; length: number }[]} kvs
 * @property {string[]} nearNpcKeys
 * @property {Geom.Meta} meta
