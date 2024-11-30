@@ -28,6 +28,7 @@ export const Html3d = React.forwardRef(({
       innerDiv: /** @type {*} */ (null),
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
+      sign: 0,
       zoom: 0,
 
       forceUpdate() {
@@ -80,6 +81,14 @@ export const Html3d = React.forwardRef(({
       state.group.updateWorldMatrix(true, false)
       const vec = calculatePosition(state.group, camera, size)
 
+      // use props.normal to hide when behind
+      camera.getWorldDirection(cameraNormal);
+      const sign = props.normal !== undefined ? Math.sign(cameraNormal.dot(props.normal)) : -1;
+      if (sign !== state.sign) {
+        state.sign = sign;
+        state.rootDiv.style.display = sign === 1 ? 'none' : 'initial';
+      }
+
       if (
         Math.abs(state.zoom - camera.zoom) > eps ||
         Math.abs(state.delta[0] - vec[0]) > eps ||
@@ -117,6 +126,7 @@ export const Html3d = React.forwardRef(({
 *   eps?: number;
 *   distanceFactor?: number;
 *   calculatePosition?: CalculatePosition;
+*   normal?: THREE.Vector3;
 * }, 'ref'>} Props
 */
 
@@ -128,6 +138,7 @@ export const Html3d = React.forwardRef(({
 * @property {HTMLDivElement} innerDiv
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
+* @property {number} sign
 * @property {number} zoom
 * @property {() => void} forceUpdate
 */
@@ -214,3 +225,5 @@ function getCSSMatrix(matrix, multipliers, prepend = '') {
  * | 'inherit'
  * )} PointerEventsProperties
  */
+
+const cameraNormal = new THREE.Vector3();

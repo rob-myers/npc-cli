@@ -171,6 +171,7 @@ export default function ContextMenu() {
       calculatePosition={state.calculatePosition}
       distanceFactor={state.lock ? state.scale : undefined}
       position={state.position}
+      normal={state.normal ?? undefined} // for hiding
       visible={state.open}
       ref={state.ref('html')}
     >
@@ -389,6 +390,10 @@ const contextMenuCss = css`
       }
     }
     
+    /* .actions {
+      display: flex;
+    } */
+
     .action {
       display: flex;
       justify-content: center;

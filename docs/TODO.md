@@ -108,11 +108,13 @@
       - ℹ️ trigger auto doors in case they've been manually closed
     - ✅ BUG closed auto door
       - ℹ️ trigger auto doors in case they've been manually closed
-    - 🚧 ContextMenu refresh strategy
+    - 🚧 ContextMenu strategy
+      - ✅ hide when camera normal has negative dot product with normal
+      - could show actions independently of npc distance
+      - acts can fail with colour red vs green
       - refresh when new npc gets close?
       - switch with selected npc?
-      - ℹ️ could show actions independently of npc distance
-      - ℹ️ acts can fail with colour red vs green
+      - hide actions inside
     - can open doors using doors
     - npc can open nearby doors
       - needs to refresh somehow
