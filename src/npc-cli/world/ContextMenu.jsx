@@ -135,19 +135,19 @@ export default function ContextMenu() {
           ? w.e.getNearbyNpcKeys(state.meta.gmId, state.meta.roomId, toXZ(lastDown.position))
           : []
       );
-      state.actNpcKey = state.nearNpcKeys.length === 0 ? null : state.nearNpcKeys[0];
-  
+
       state.metaActs = w.e.getMetaActs(state.meta);
       
-      // track npc if meta.npcKey valid
+      const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
+      state.actNpcKey = canAct === true ? state.nearNpcKeys[0] : null;
+      
+      // track npc if meta.npcKey is a valid npc
       state.track(w.n[state.meta.npcKey]?.m.group);
       state.position = lastDown.position.toArray();
     },
   }));
 
   w.cm = state;
-  
-  const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
   
   React.useEffect(() => {// on unlock while paused update style.transform 
     state.lock === false && state.html.forceUpdate();
@@ -222,12 +222,12 @@ export default function ContextMenu() {
 
         </div>
 
-        {canAct && <div className="actor-and-actions">
+        {state.actNpcKey !== null && <div className="actor-and-actions">
 
           <select
             className="actor"
             onChange={state.onSelectNearbyNpc}
-            value={state.actNpcKey ?? undefined}
+            value={state.actNpcKey}
           >
             {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey}>{npcKey}</option>)}
           </select>
