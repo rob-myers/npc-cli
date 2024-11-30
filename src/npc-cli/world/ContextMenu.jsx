@@ -387,15 +387,10 @@ const contextMenuCss = css`
       }
     }
     
-    .actions {
-      // NOOP
-    }
-    
     .action {
       display: flex;
       justify-content: center;
       padding: 2px 4px;
-      cursor: pointer;
       &:hover {
         background-color: #433;
       }

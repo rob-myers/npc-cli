@@ -12,22 +12,17 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     opened: false,
-    timeoutId: 0,
     left: false,
-    right: false,
     bubble: /** @type {*} */ (null),
     icon: /** @type {*} */ (null),
 
     close() {
       state.opened = false;
       state.left = false;
-      state.right = false;
       state.bubble.style.removeProperty('--info-width');
       update();
     },
     open(width) {
-      window.clearTimeout(state.timeoutId); // clear close timeout
-    
       state.opened = true;
       const root = state.bubble.closest(`[${popUpRootDataAttribute}]`) ?? document.documentElement;
       const rootRect = root.getBoundingClientRect();
@@ -36,13 +31,14 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       const pixelsOnRight = rootRect.right - rect.right;
       const pixelsOnLeft = rect.x - rootRect.x;
       state.left = pixelsOnRight < pixelsOnLeft;
-      state.right = !state.left;
       
       state.bubble.style.setProperty('--info-arrow-delta-x', `${state.left ? 20 : 12}px`);
 
       const maxWidthAvailable = Math.max(pixelsOnLeft, pixelsOnRight);
       width = maxWidthAvailable < (width ?? defaultInfoWidthPx) ? maxWidthAvailable : width;
       width && state.bubble.style.setProperty('--info-width', `${width}px`);
+
+      state.icon.focus();
       update();
     },
   }));
@@ -50,7 +46,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
   React.useImperativeHandle(ref, () => state, []);
 
   return <>
-    <span
+    <button
       ref={state.ref('icon')}
       className={cx("side-note", iconTriggerCss)}
       onClick={e => {
@@ -62,13 +58,13 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
       }}
     >
       ⋯
-    </span>
+    </button>
     <span
       ref={state.ref('bubble')}
       className={cx("side-note-bubble", {
         open: state.opened,
         left: state.left,
-        right: state.right,
+        right: !state.left,
       }, speechBubbleCss)}
     >
       <span className="arrow"/>
@@ -88,9 +84,7 @@ export const PopUp = React.forwardRef(function PopUp(props, ref) {
 /**
  * @typedef State
  * @property {boolean} opened
- * @property {number} timeoutId
- * @property {boolean} left
- * @property {boolean} right
+ * @property {boolean} left or right
  * @property {HTMLSpanElement} bubble
  * @property {HTMLSpanElement} icon
  * @property {(width?: number | undefined) => void} open
