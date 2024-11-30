@@ -742,7 +742,7 @@ export class Npc {
     this.s.lookAngleDst = null;
     this.agent.updateParameters({
       maxSpeed: this.getMaxSpeed() * 0.75,
-      maxAcceleration: maxAcceleration / 2,
+      maxAcceleration: maxAcceleration,
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius,
       collisionQueryRange: 1.5,
