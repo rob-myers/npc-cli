@@ -36,7 +36,6 @@ class GeomorphService {
    * @param {Geomorph.GeomorphKey} gmKey 
    * @param {Geomorph.FlatSymbol} symbol Flat hull symbol
    * @param {Geomorph.Assets} assets
-   * //@param {Pick<Geomorph.Symbol, 'hullWalls' | 'pngRect'>} context
    * @returns {Geomorph.Layout}
    */
   createLayout(gmKey, symbol, assets) {
@@ -64,7 +63,7 @@ class GeomorphService {
         }
       )
     ));
-    const rooms = Poly.union(uncutWalls).flatMap((x) =>
+    const rooms = Poly.union(uncutWalls.concat(symbol.windows)).flatMap((x) =>
       x.holes.map((ring) => new Poly(ring).fixOrientation())
     );
     // room meta comes from decor.meta tagged meta

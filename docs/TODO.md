@@ -96,7 +96,7 @@
     - ✅ Decor cuboids
     - ✅ Doors should be two quads so get correct normal
   - ✅ ContextMenu use circle instead of sphere
-  - fix 301 room 11 i.e. bridge room should be split in two
+  - ✅ fix 301 room 11 i.e. bridge room should be split in two
   - 🚧 ContextMenu has select with possible actions
     - 🚧 can open doors using switches
     - npc in room with locked door can still leave
