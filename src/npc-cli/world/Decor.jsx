@@ -274,8 +274,8 @@ export default function Decor(props) {
       let instance;
       /** @type {Geomorph.BaseDecor} */
       const base = {
-        key: '', // must compute after apply transform
-        meta: { ...d.meta, gmId },
+        key: '', // computed below
+        meta: { ...d.meta, gmId }, // 🔔 must not mutate d.meta
         bounds2d: tmpRect1.copy(d.bounds2d).applyMatrix(gm.matrix).json,
         src: gm.key,
       };
@@ -308,14 +308,14 @@ export default function Decor(props) {
           };
           break;
         case "quad":
-          instance = { ...d, ...base, meta: d.meta,
+          instance = { ...d, .../** @type {Geomorph.DecorQuad}} */ (base),
             center: gm.matrix.transformPoint({ ...d.center }),
             transform: tmpMat1.setMatrixValue(gm.matrix).preMultiply(d.transform).toArray(),
             det: tmpMat1.a * tmpMat1.d - tmpMat1.b * tmpMat1.c,
           };
           if (typeof d.meta.switch === 'number') {
-            d.meta.doorId = d.meta.switch;
-            d.meta.gdKey = `g${gmId}d${d.meta.doorId}`;
+            instance.meta.doorId = d.meta.switch;
+            instance.meta.gdKey = `g${gmId}d${d.meta.switch}`;
           }
           break;
         default:
