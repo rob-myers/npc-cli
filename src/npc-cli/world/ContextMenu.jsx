@@ -267,7 +267,7 @@ export default function ContextMenu() {
           rotation={[0, Math.PI/2, 0]}
           renderOrder={1}
         >
-          <circleGeometry args={[0.1, 24]} />
+          <circleGeometry args={[0.05, 24]} />
           <meshBasicMaterial color="green" opacity={0.5} transparent wireframe={false} />
         </mesh>
       </group>
