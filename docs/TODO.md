@@ -101,7 +101,9 @@
     - ✅ switches: can open doors
     - ✅ switches: can close doors
     - ✅ switches: can lock/unlock doors
-    - 🚧 switch `inner` but not `secure` can be opened by anyone
+    - ✅ switch `inner` but not `secure` can be opened by anyone
+      - on leave room refresh ContextMenu
+    - strategy for refresh-rate of ContextMenu
     - 🚧 npc in room with locked door can still leave
     - can open doors using doors
     - npc can open nearby doors

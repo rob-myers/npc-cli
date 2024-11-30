@@ -37,6 +37,7 @@ export default function ContextMenu() {
     nearNpcKeys: [],
     position: [0, 0, 0],
     quaternion: null,
+    shownDown: null,
 
     calculatePosition(el, camera, size) {
       // 🤔 support tracked offset vector?
@@ -94,7 +95,7 @@ export default function ContextMenu() {
     },
     show() {
       state.open = true;
-      state.updateFromLastDown();
+      state.updateFrom(w.view.lastDown ?? null);
 
       if (state.popup.opened === true) {
         // 🔔 reopen on next render to "get direction right" 
@@ -120,14 +121,15 @@ export default function ContextMenu() {
         state.tracked = null;
       }
     },
-    updateFromLastDown() {
-      const { lastDown } = w.view;
-      if (lastDown === undefined) {
+    updateFrom(lastDown) {
+      if (lastDown === null) {
         return;
       }
 
+      state.shownDown = lastDown;
       state.meta = lastDown.meta;
       state.normal = lastDown.normal;
+
       state.quaternion = state.normal === null ? null : new THREE.Quaternion().setFromUnitVectors(unitXVector3, state.normal);
 
       state.kvs = Object.entries(state.meta ?? {}).map(([k, v]) => {
@@ -397,7 +399,7 @@ const contextMenuCss = css`
     }
     
     .action.selected {
-      background-color: #277a2799;
+      background-color: #744c1599;
     }
   }
 
@@ -444,6 +446,7 @@ const contextMenuCss = css`
 *
 * @property {null | NPC.MetaAct} lastAct
 * @property {{ k: string; v: string; length: number }[]} kvs
+* @property {null | import("./WorldView").LastDownData} shownDown
 * @property {string[]} nearNpcKeys
 * @property {Geom.Meta} meta
 * @property {import("./WorldView").LastDownData['normal']} normal
@@ -464,7 +467,7 @@ const contextMenuCss = css`
 * @property {() => void} show
  * @property {() => void} togglePersist
  * @property {(el: null | THREE.Object3D) => void} track
- * @property {() => void} updateFromLastDown
+ * @property {(lastDown: null | import("./WorldView").LastDownData) => void} updateFrom
  */
 
 const tmpVector3 = new THREE.Vector3();
