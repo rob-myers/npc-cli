@@ -63,8 +63,12 @@ export default function ContextMenu() {
       const item = /** @type {HTMLElement} */ (e.target);
       const index = Array.from(e.currentTarget.childNodes).indexOf(item);
       const lastAct = state.metaActs[index];
-      state.lastAct = lastAct;
+      if (lastAct === undefined) {
+        console.warn(`onClickActions: state.metaActs[index] not found`, state.metaActs, index);
+        return;
+      }
 
+      state.lastAct = lastAct;
       if (state.actNpcKey !== null) {// nearby npc click
         w.events.next({ key: 'click-act', act: lastAct, npcKey: state.actNpcKey });
       } else {// 🚧 Game Master click

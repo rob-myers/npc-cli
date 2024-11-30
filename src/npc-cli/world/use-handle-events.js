@@ -368,11 +368,16 @@ export default function useHandleEvents(w) {
           break;
       }
     },
-    onClickAct({ act, npcKey }) {
-      if (act.def.key === 'open') {
-        state.toggleDoor(act.def.gdKey, { npcKey, open: true });
+    onClickAct({ act: { def, meta }, npcKey }) {
+      switch (def.key) {
+        case 'open':
+          state.toggleDoor(def.gdKey, { npcKey, open: true, button: true });
+          break;
+        case 'close':
+          state.toggleDoor(def.gdKey, { npcKey, close: true, button: true });
+          break;
+        // 🚧
       }
-      // 🚧
     },
     navSegIntersectsDoorway(u, v, door) {
       // 🤔 more efficient approach?
@@ -519,6 +524,9 @@ export default function useHandleEvents(w) {
       state.npcToDoor[npcKey]?.nearby.clear();
       state.npcToDoor[npcKey]?.inside.clear();
     },
+    someNpcInsideDoor(gdKey) {
+      return state.doorToNpc[gdKey]?.inside.size > 0;
+    },
     someNpcNearDoor(gdKey) {
       return state.doorToNpc[gdKey]?.nearby.size > 0;
     },
@@ -526,13 +534,13 @@ export default function useHandleEvents(w) {
       const door = w.door.byKey[gdKey];
 
       if (typeof opts.npcKey === 'string') {
-        if (state.npcNearDoor(opts.npcKey, gdKey) === false) {
+        if (opts.button !== true && state.npcNearDoor(opts.npcKey, gdKey) === false) {
           return door.open; // not close enough
         }
         opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
       }
 
-      opts.clear = state.someNpcNearDoor(gdKey) === false;
+      opts.clear = state.someNpcInsideDoor(gdKey) === false;
       return w.door.toggleDoorRaw(door, opts);
     },
     toggleLock(gdKey, opts = {}) {
@@ -622,8 +630,9 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
  * @property {(npcKey: string) => void} removeFromSensors
+ * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcInsideDoor
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
- * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
+ * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string; button?: boolean; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string } & Geomorph.ToggleLockOpts) => boolean} toggleLock
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
