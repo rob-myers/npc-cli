@@ -72,31 +72,33 @@ export const Html3d = React.forwardRef(({
     });
 
     useFrame((_gl) => {
-      if (state.group !== null && state.innerDiv !== null) {
-        camera.updateMatrixWorld()
-        state.group.updateWorldMatrix(true, false)
-        const vec = calculatePosition(state.group, camera, size)
+      if (state.group === null || state.innerDiv === null) {
+        return;
+      }
 
-        if (
-          Math.abs(state.zoom - camera.zoom) > eps ||
-          Math.abs(state.delta[0] - vec[0]) > eps ||
-          Math.abs(state.delta[1] - vec[1]) > eps
-        ) {
+      camera.updateMatrixWorld()
+      state.group.updateWorldMatrix(true, false)
+      const vec = calculatePosition(state.group, camera, size)
 
-          const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
-          
-          state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
+      if (
+        Math.abs(state.zoom - camera.zoom) > eps ||
+        Math.abs(state.delta[0] - vec[0]) > eps ||
+        Math.abs(state.delta[1] - vec[1]) > eps
+      ) {
 
-          if (state.distanceFactor !== distanceFactor) {// 🔔 animate resize on unlock
-            state.innerDiv.style.transition = distanceFactor === undefined ? 'transform 300ms' : '';
-            state.distanceFactor = distanceFactor;
-          }
+        const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
+        
+        state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
 
-          state.innerDiv.style.transform = `scale(${scale})`;
-
-          state.delta = vec;
-          state.zoom = camera.zoom;
+        if (state.distanceFactor !== distanceFactor) {// 🔔 animate resize on unlock
+          state.innerDiv.style.transition = distanceFactor === undefined ? 'transform 300ms' : '';
+          state.distanceFactor = distanceFactor;
         }
+
+        state.innerDiv.style.transform = `scale(${scale})`;
+
+        state.delta = vec;
+        state.zoom = camera.zoom;
       }
     });
 
