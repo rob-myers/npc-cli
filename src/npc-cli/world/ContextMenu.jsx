@@ -77,7 +77,8 @@ export default function ContextMenu() {
       update();
     },
     onSelectNearbyNpc(e) {
-
+      state.actNpcKey = e.currentTarget.value;
+      update();
     },
     onToggleMeta() {
       state.showMeta = !state.showMeta;
@@ -230,8 +231,8 @@ export default function ContextMenu() {
 
           <select
             className="actor"
-            onChange={state.onSelectNearbyNpc}
             value={state.actNpcKey}
+            onChange={state.onSelectNearbyNpc}
           >
             {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey}>{npcKey}</option>)}
           </select>

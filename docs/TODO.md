@@ -100,9 +100,9 @@
   - 🚧 ContextMenu has select with possible actions
     - ✅ switches: can open doors
     - ✅ switches: can close doors
-    - 🚧 switches: can lock/unlock doors
-    - switch `inner` but not `secure` can be opened by anyone
-    - npc in room with locked door can still leave
+    - ✅ switches: can lock/unlock doors
+    - 🚧 switch `inner` but not `secure` can be opened by anyone
+    - 🚧 npc in room with locked door can still leave
     - can open doors using doors
     - npc can open nearby doors
       - needs to refresh somehow

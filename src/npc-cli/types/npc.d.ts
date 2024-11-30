@@ -228,9 +228,7 @@ declare namespace NPC {
   );
 
   type MetaActDef = (
-    | { key: 'open'; gdKey: Geomorph.GmDoorKey; }
-    | { key: 'close'; gdKey:Geomorph.GmDoorKey; }
-    | { key: 'lock'; gdKey: Geomorph.GmDoorKey; }
+    | { key: 'open' | 'close' | 'lock' | 'unlock'; gdKey: Geomorph.GmDoorKey; }
     // ...
   );
 
