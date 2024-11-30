@@ -363,9 +363,17 @@ export default function useHandleEvents(w) {
           
           for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
-            if (!(door.open === false && state.navSegIntersectsDoorway(e, e.next, door) === true)) {
+            if (door.open === true || state.navSegIntersectsDoorway(e, e.next, door) === false) {
               continue;
-            } // incoming closed door:
+            }
+
+            // trigger auto-open doors which have been manually closed
+            if (door.auto === true && door.locked === false) {
+              w.door.toggleDoorRaw(door, { open: true, access: true });
+              continue;
+            }
+            
+            // incoming closed door
             if (state.npcCanAccess(e.npcKey, door.gdKey) === true) {
               w.door.toggleDoorRaw(door, { open: true, access: true });
             } else {
@@ -380,14 +388,14 @@ export default function useHandleEvents(w) {
         case 'open':
         case 'close':
           state.toggleDoor(def.gdKey, { npcKey, [def.key]: true,
-            button: meta.switch === true,
-            access: meta.inner === true && meta.secure !== true,
+            button: typeof meta.switch === 'number',
+            access: meta.inner === true && meta.secure !== true ? true : undefined,
           });
           break;
         case 'lock':
         case 'unlock':
           state.toggleLock(def.gdKey, { npcKey, [def.key]: true,
-            button: meta.switch === true,
+            button: typeof meta.switch === 'number',
           });
           break;
         // 🚧

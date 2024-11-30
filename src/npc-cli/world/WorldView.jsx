@@ -178,9 +178,6 @@ export default function WorldView(props) {
         if (normal.dot(tmpVectThree) > 0) normal.multiplyScalar(-1);
       }
 
-      console.log('intersection', intersection);
-      console.log('normal', normal);
-
       const meta = {
         ...decoded,
         ...pickedTypesInSomeRoom[decoded.picked] === true && w.gmGraph.findRoomContaining(toXZ(position), true),

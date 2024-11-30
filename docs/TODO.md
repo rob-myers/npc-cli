@@ -103,8 +103,16 @@
     - ✅ switches: can lock/unlock doors
     - ✅ switch `inner` but not `secure` can be opened by anyone
       - on leave room refresh ContextMenu
-    - strategy for refresh-rate of ContextMenu
-    - 🚧 npc in room with locked door can still leave
+    - ✅ npc in room with locked door can still leave
+    - ✅ BUG unlocked auto door
+      - ℹ️ trigger auto doors in case they've been manually closed
+    - ✅ BUG closed auto door
+      - ℹ️ trigger auto doors in case they've been manually closed
+    - 🚧 ContextMenu refresh strategy
+      - refresh when new npc gets close?
+      - switch with selected npc?
+      - ℹ️ could show actions independently of npc distance
+      - ℹ️ acts can fail with colour red vs green
     - can open doors using doors
     - npc can open nearby doors
       - needs to refresh somehow
@@ -133,6 +141,8 @@
   - clean away off-mesh-connection if we don't use them
 
 
+- BUG saw e.npcToDoor missing key
+  - ℹ️ maybe physics.worker broke on hmr
 - Game Master option for partially transparent walls, where object-pick ignores walls
 - useStateRef provides `state.ref(key)` which deletes sub-refs on null
   - maybe `useStateRef(() => state, { refs: ... })` to avoid re-creation
