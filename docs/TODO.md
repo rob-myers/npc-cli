@@ -98,7 +98,7 @@
   - ✅ ContextMenu use circle instead of sphere
   - ✅ fix 301 room 11 i.e. bridge room should be split in two
   - 🚧 ContextMenu has select with possible actions
-    - 🚧 switches: can open doors
+    - ✅ switches: can open doors
     - 🚧 switches: can close doors
     - 🚧 switches: can lock/unlock doors
     - switch `inner` but not `secure` can be opened by anyone

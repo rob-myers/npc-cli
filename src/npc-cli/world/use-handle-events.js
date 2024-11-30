@@ -145,9 +145,6 @@ export default function useHandleEvents(w) {
       // warn(`${'decodeObjectPick'}: failed to decode: ${JSON.stringify({ r, g, b, a })}`);
       return null;
     },
-    async doMetaAct({ actKey, meta, npcKey }) {
-      // 🚧
-    },
     ensureDoorPolyRefs(door) {
       if (door.gdKey in state.doorToPolyRefs) {
         return;
@@ -177,13 +174,12 @@ export default function useHandleEvents(w) {
       }
       return npcKeys;
     },
-    getMetaActs(meta) {
-      // 🚧
+    getMetaActs(meta) {// 🚧 WIP
       if (typeof meta.switch === 'number') {
         return [
-          { actKey: `open g${meta.gmId}d${meta.switch}`, actLabel: 'open', meta },
-          { actKey: `close g${meta.gmId}d${meta.switch}`, actLabel: 'close', meta },
-          { actKey: `lock g${meta.gmId}d${meta.switch}`, actLabel: 'lock', meta },
+          { def: { key: 'open', gdKey: meta.gdKey, }, label: 'open', meta },
+          { def: { key: 'close', gdKey: meta.gdKey, }, label: 'close', meta },
+          { def: { key: 'lock', gdKey: meta.gdKey, }, label: 'lock', meta },
         ];
       }
 
@@ -278,6 +274,9 @@ export default function useHandleEvents(w) {
       const npc = w.n[e.npcKey];
 
       switch (e.key) {
+        case "click-act":
+          state.onClickAct(e);
+          break;
         case "enter-collider":
           if (e.type === 'nearby' || e.type === 'inside') {
             state.onEnterDoorCollider(e);
@@ -368,6 +367,12 @@ export default function useHandleEvents(w) {
           }
           break;
       }
+    },
+    onClickAct({ act, npcKey }) {
+      if (act.def.key === 'open') {
+        state.toggleDoor(act.def.gdKey, { npcKey, open: true });
+      }
+      // 🚧
     },
     navSegIntersectsDoorway(u, v, door) {
       // 🤔 more efficient approach?
@@ -601,11 +606,11 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
+ * @property {(e: Extract<NPC.Event, { key: 'click-act' }>) => void} onClickAct
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
  * @property {(r: number, g: number, b: number, a: number) => null | NPC.DecodedObjectPick} decodeObjectPick
- * @property {(metaAct: NPC.MetaAct) => Promise<void>} doMetaAct
  * @property {(door: Geomorph.DoorState) => void} ensureDoorPolyRefs
  * @property {(gmId: number, roomId: number, point: Geom.VectJson) => string[]} getNearbyNpcKeys
  * @property {(meta: Geom.Meta) => NPC.MetaAct[]} getMetaActs

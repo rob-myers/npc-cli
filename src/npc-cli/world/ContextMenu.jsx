@@ -237,8 +237,8 @@ export default function ContextMenu() {
             onClick={state.onClickActions}
           >
             {state.metaActs.map(act =>
-              <button key={act.actKey} className={cx("action", { selected: state.lastAct === act })}>
-                {act.actLabel}
+              <button key={act.label} className={cx("action", { selected: state.lastAct === act })}>
+                {act.label}
               </button>
             )}
           </div>

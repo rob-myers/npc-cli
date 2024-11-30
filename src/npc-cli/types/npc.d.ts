@@ -227,17 +227,20 @@ declare namespace NPC {
     | 'lock-light'
   );
 
-  type MetaActKey = (
-    | `open ${Geomorph.GmDoorKey}`
-    | `close ${Geomorph.GmDoorKey}`
-    | `lock ${Geomorph.GmDoorKey}`
+  type MetaActDef = (
+    | { key: 'open'; gdKey: Geomorph.GmDoorKey; }
+    | { key: 'close'; gdKey:Geomorph.GmDoorKey; }
+    | { key: 'lock'; gdKey: Geomorph.GmDoorKey; }
+    // ...
   );
 
+  /** Action triggered from ContextMenu */
   interface MetaAct<T = {}> {
-    actKey: MetaActKey;
-    actLabel: string;
+    def: MetaActDef;
+    /** Label of button */
+    label: string;
+    /** The meta of ContextMenu (from prior click) when button was clicked */
     meta: Geom.Meta<T>;
-    npcKey?: string;
   }
 
 }
