@@ -37,7 +37,6 @@ export default function ContextMenu() {
     npcKeys: [],
     position: [0, 0, 0],
     quaternion: null,
-    seenNpcKeys: new Set(),
     shownDown: null,
 
     calculatePosition(el, camera, size) {
@@ -136,13 +135,14 @@ export default function ContextMenu() {
         return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
       }).sort((a, b) => a.length < b.length ? -1 : 1);
   
-      if (typeof state.meta.gmId === 'number' && typeof state.meta.roomId === 'number') {
-        w.e.roomToNpcs[state.meta.gmId][state.meta.roomId]?.forEach(
-          npcKey => state.seenNpcKeys.add(npcKey)
-        );
+      const roomNpcKeys = (typeof state.meta.gmId === 'number' && typeof state.meta.roomId === 'number') 
+        ? Array.from(w.e.roomToNpcs[state.meta.gmId][state.meta.roomId] ?? [])
+        : []
+      ;
+      state.npcKeys = state.meta.npcKey === undefined ? roomNpcKeys : [state.meta.npcKey];
+      if (state.npcKey === null || !roomNpcKeys.includes(state.npcKey)) {
+        state.npcKey ??= state.npcKeys[0] ?? null;
       }
-      state.npcKeys = state.meta.npcKey === undefined ? Array.from(state.seenNpcKeys) : [state.meta.npcKey];
-      state.npcKey ??= state.npcKeys[0] ?? null;
 
       state.metaActs = w.e.getMetaActs(state.meta);
       
@@ -441,30 +441,28 @@ const contextMenuCss = css`
  * @property {number} scale
  * @property {import('../components/PopUp').State} popup
  * @property {null | THREE.Object3D} tracked
-*
-* @property {null | NPC.MetaAct} lastAct
-* @property {{ k: string; v: string; length: number }[]} kvs
-* @property {null | import("./WorldView").LastDownData} shownDown
-* @property {Set<string>} seenNpcKeys
-* Track npcKeys of npcs of the rooms ContextMenu was opened.
-* @property {Geom.Meta} meta
-* @property {import("./WorldView").LastDownData['normal']} normal
-* @property {NPC.MetaAct[]} metaActs
-* @property {string[]} npcKeys
-* @property {THREE.Vector3Tuple} position
-* @property {null | THREE.Quaternion} quaternion
-* 
-* @property {import('../components/Html3d').CalculatePosition} calculatePosition
-* @property {() => void} hide
-* @property {() => void} hideUnlessPersisted
-* @property {(npcKey: string) => boolean} isTracking
-* @property {(e: React.MouseEvent) => void} onClickActions
-* //@property {(e: React.MouseEvent) => void} onContextMenu
-* @property {(e: React.ChangeEvent<HTMLSelectElement>) => void} onSelectNpc
-* @property {() => void} onToggleMeta
-* @property {() => void} onToggleResize
-* @property {() => void} onWindowResize
-* @property {() => void} show
+ *
+ * @property {null | NPC.MetaAct} lastAct
+ * @property {{ k: string; v: string; length: number }[]} kvs
+ * @property {null | import("./WorldView").LastDownData} shownDown
+ * @property {Geom.Meta} meta
+ * @property {import("./WorldView").LastDownData['normal']} normal
+ * @property {NPC.MetaAct[]} metaActs
+ * @property {string[]} npcKeys
+ * @property {THREE.Vector3Tuple} position
+ * @property {null | THREE.Quaternion} quaternion
+ * 
+ * @property {import('../components/Html3d').CalculatePosition} calculatePosition
+ * @property {() => void} hide
+ * @property {() => void} hideUnlessPersisted
+ * @property {(npcKey: string) => boolean} isTracking
+ * @property {(e: React.MouseEvent) => void} onClickActions
+ * //@property {(e: React.MouseEvent) => void} onContextMenu
+ * @property {(e: React.ChangeEvent<HTMLSelectElement>) => void} onSelectNpc
+ * @property {() => void} onToggleMeta
+ * @property {() => void} onToggleResize
+ * @property {() => void} onWindowResize
+ * @property {() => void} show
  * @property {() => void} togglePersist
  * @property {(el: null | THREE.Object3D) => void} track
  * @property {() => void} updateFromLastDown
