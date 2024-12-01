@@ -110,7 +110,7 @@
       - ℹ️ trigger auto doors in case they've been manually closed
     - 🚧 ContextMenu strategy
       - ✅ hide when camera normal has +ve dot product with normal
-      - 🚧 list all npcs ever seen in room i.e. keep adding
+      - ✅ list all npcs ever seen i.e. keep adding
       - show actions independently of npc distance
       - acts can fail with colour red vs green
       - acts fail e.g. if npc is now in another room

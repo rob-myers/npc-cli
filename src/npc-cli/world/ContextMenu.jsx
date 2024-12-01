@@ -22,7 +22,7 @@ export default function ContextMenu() {
 
     everOpen: false,
     lastAct: null,
-    actNpcKey: null,
+    npcKey: null,
     open: false,
     persist: true,
     scale: 1,
@@ -34,9 +34,10 @@ export default function ContextMenu() {
     meta: {},
     metaActs: [],
     normal: null,
-    nearNpcKeys: [],
+    npcKeys: [],
     position: [0, 0, 0],
     quaternion: null,
+    seenNpcKeys: new Set(),
     shownDown: null,
 
     calculatePosition(el, camera, size) {
@@ -52,6 +53,7 @@ export default function ContextMenu() {
     hide() {
       state.open = false;
       state.popup.close();
+      w.view.rootEl.focus();
       update();
     },
     hideUnlessPersisted() {
@@ -70,15 +72,15 @@ export default function ContextMenu() {
       }
 
       state.lastAct = lastAct;
-      if (state.actNpcKey !== null) {// nearby npc click
-        w.events.next({ key: 'click-act', act: lastAct, npcKey: state.actNpcKey });
+      if (state.npcKey !== null) {// nearby npc click
+        w.events.next({ key: 'click-act', act: lastAct, npcKey: state.npcKey });
       } else {// 🚧 Game Master click
         w.events.next({ key: 'click-act-gm', act: lastAct });
       }
       update();
     },
-    onSelectNearbyNpc(e) {
-      state.actNpcKey = e.currentTarget.value;
+    onSelectNpc(e) {
+      state.npcKey = e.currentTarget.value;
       update();
     },
     onToggleMeta() {
@@ -138,16 +140,14 @@ export default function ContextMenu() {
         return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
       }).sort((a, b) => a.length < b.length ? -1 : 1);
   
-      state.nearNpcKeys = (
-        (typeof state.meta?.gmId === 'number' && typeof state.meta.roomId === 'number')
-          ? w.e.getNearbyNpcKeys(state.meta.gmId, state.meta.roomId, toXZ(lastDown.position))
-          : []
-      );
+      if (typeof state.meta.gmId === 'number' && typeof state.meta.roomId === 'number') {
+        w.e.roomToNpcs[state.meta.gmId][state.meta.roomId]?.forEach(
+          npcKey => state.seenNpcKeys.add(npcKey)
+        );
+      }
+      state.npcKeys = state.meta.npcKey === undefined ? Array.from(state.seenNpcKeys) : [state.meta.npcKey];
 
       state.metaActs = w.e.getMetaActs(state.meta);
-      
-      const canAct = state.nearNpcKeys.length > 0 && state.metaActs.length > 0;
-      state.actNpcKey = canAct === true ? state.nearNpcKeys[0] : null;
       
       // track npc if meta.npcKey is a valid npc
       state.track(w.n[state.meta.npcKey]?.m.group);
@@ -224,14 +224,16 @@ export default function ContextMenu() {
 
         </div>
 
-        {state.actNpcKey !== null && <div className="actor-and-actions">
+        <div className="actor-and-actions">
 
           <select
             className="actor"
-            value={state.actNpcKey}
-            onChange={state.onSelectNearbyNpc}
+            value={state.npcKey ?? undefined}
+            onChange={state.onSelectNpc}
           >
-            {state.nearNpcKeys.map(npcKey => <option key={npcKey} value={npcKey}>{npcKey}</option>)}
+            {state.npcKeys.map(
+              npcKey => <option key={npcKey} value={npcKey}>{npcKey}</option>
+            )}
           </select>
 
           <div
@@ -244,7 +246,7 @@ export default function ContextMenu() {
               </button>
             )}
           </div>
-        </div>}
+        </div>
 
       </div>
     </Html3d>
@@ -434,7 +436,7 @@ const contextMenuCss = css`
  * @property {HTMLDivElement} rootEl
  * @property {import('../components/Html3d').State} html
  * @property {boolean} everOpen
- * @property {null | string} actNpcKey Currently select npc
+ * @property {null | string} npcKey Currently select npc
  * @property {boolean} open Is the context menu open?
  * @property {boolean} showMeta
  * @property {boolean} persist
@@ -446,10 +448,12 @@ const contextMenuCss = css`
 * @property {null | NPC.MetaAct} lastAct
 * @property {{ k: string; v: string; length: number }[]} kvs
 * @property {null | import("./WorldView").LastDownData} shownDown
-* @property {string[]} nearNpcKeys
+* @property {Set<string>} seenNpcKeys
+* Track npcKeys of npcs of the rooms ContextMenu was opened.
 * @property {Geom.Meta} meta
 * @property {import("./WorldView").LastDownData['normal']} normal
 * @property {NPC.MetaAct[]} metaActs
+* @property {string[]} npcKeys
 * @property {THREE.Vector3Tuple} position
 * @property {null | THREE.Quaternion} quaternion
 * 
@@ -459,7 +463,7 @@ const contextMenuCss = css`
 * @property {(npcKey: string) => boolean} isTracking
 * @property {(e: React.MouseEvent) => void} onClickActions
 * //@property {(e: React.MouseEvent) => void} onContextMenu
-* @property {(e: React.ChangeEvent<HTMLSelectElement>) => void} onSelectNearbyNpc
+* @property {(e: React.ChangeEvent<HTMLSelectElement>) => void} onSelectNpc
 * @property {() => void} onToggleMeta
 * @property {() => void} onToggleResize
 * @property {() => void} onWindowResize
