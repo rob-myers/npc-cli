@@ -449,7 +449,7 @@ export default function WorldView(props) {
  * Each uses Date.now() i.e. milliseconds since epoch
  * @property {number} fov
  * @property {import('@react-three/fiber').RenderProps<HTMLCanvasElement>['gl']} glOpts
- * @property {LastDownData} [lastDown]
+ * @property {NPC.DownData} [lastDown]
  * Defined iff last pointer was down over the World.
  * @property {boolean} justLongDown
  * @property {Geom.Vect} lastScreenPoint Updated `onPointerMove` and `onPointerDown`.
@@ -515,15 +515,6 @@ const statsCss = css`
  * @property {Geom.Meta} meta
  * @property {THREE.Vector3Like} position
 */
-
-/**
- * @typedef LastDownData
- * @property {boolean} longDown
- * @property {Geom.Vect} screenPoint
- * @property {THREE.Vector3} position
- * @property {null | THREE.Vector3} normal
- * @property {Geom.Meta} meta
- */
 
 const initAzimuth = Math.PI / 6;
 const fixedPolarAngle = Math.PI / 7;

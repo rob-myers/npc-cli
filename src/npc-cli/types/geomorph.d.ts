@@ -132,8 +132,6 @@ declare namespace Geomorph {
      * See also `w.e.canAccess(npcKey, gdKey)`.
      */
     access?: boolean;
-    /** Extra meta for door events */
-    eventMeta?: Geom.Meta;
   }
 
   interface GeomorphsGeneric<

@@ -209,24 +209,23 @@ export default function Doors(props) {
       
       state.cancelClose(door); // Cancel any pending close
 
+      if (opts.access === false) {
+        return false; // No access
+      }
+
       if (door.open === true) {// was open
         if (opts.open === true) {
           door.auto === true && w.events.next({
-            key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+            key: 'try-close-door', gmId: door.gmId, doorId: door.doorId,
           });
           return true;
         }
         if (opts.clear !== true) {
-          // if every npc exits nearby sensor of auto door, we trigger close elsewhere
-          return true;
+          return false; // cannot close or toggle
         }
       } else {// was closed
         if (opts.close === true) {
-          return false;
-        }
-        // Ignore locks if `opts.access` unspecified
-        if (door.locked === true && opts.access === false) {
-          return false; // Cannot open door if locked
+          return true;
         }
       }
 
@@ -234,18 +233,18 @@ export default function Doors(props) {
       door.open = !door.open;
       state.movingDoors.set(door.instanceId, door);
       w.events.next(door.open ? {
-        key: 'opened-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'opened-door', gmId: door.gmId, doorId: door.doorId,
       } : {
-        key: 'closed-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'closed-door', gmId: door.gmId, doorId: door.doorId,
       });
 
       if (door.auto === true && door.open === true) { 
         w.events.next({
-          key: 'try-close-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+          key: 'try-close-door', gmId: door.gmId, doorId: door.doorId,
         });
       }
 
-      return door.open;
+      return true;
     },
     toggleLockRaw(door, opts = {}) {
       if (door.sealed === true) {
@@ -253,7 +252,7 @@ export default function Doors(props) {
       }
 
       if (opts.access === false) {
-        return door.locked; // No access
+        return false; // No access
       }
 
       if (door.locked === true) {
@@ -268,12 +267,12 @@ export default function Doors(props) {
       /** @type {THREE.InstancedBufferAttribute} */ (state.lockSigInst.instanceColor).needsUpdate = true;
 
       w.events.next(door.locked ? {
-        key: 'locked-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'locked-door', gmId: door.gmId, doorId: door.doorId,
       } : {
-        key: 'unlocked-door', gmId: door.gmId, doorId: door.doorId, meta: opts.eventMeta,
+        key: 'unlocked-door', gmId: door.gmId, doorId: door.doorId,
       });
 
-      return door.locked;
+      return true;
     },
   }));
 
@@ -353,7 +352,9 @@ export default function Doors(props) {
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
+ * Returns `true` iff successful.
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleLockOpts) => boolean} toggleLockRaw
+ * Returns `true` iff successful.
  * @property {(deltaMs: number) => void} onTick
  * @property {() => void} positionInstances
  */

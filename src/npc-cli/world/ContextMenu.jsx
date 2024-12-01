@@ -41,7 +41,7 @@ export default function ContextMenu() {
 
     calculatePosition(el, camera, size) {
       // 🤔 support tracked offset vector?
-      const objectPos = tmpVector3.setFromMatrixPosition(
+      const objectPos = tmpVector1.setFromMatrixPosition(
         state.tracked === null ? el.matrixWorld : state.tracked.matrixWorld
       );
       objectPos.project(camera);
@@ -64,14 +64,19 @@ export default function ContextMenu() {
     onClickActions(e) {
       const item = /** @type {HTMLElement} */ (e.target);
       const index = Array.from(e.currentTarget.childNodes).indexOf(item);
-      const lastAct = state.metaActs[index];
+      const act = state.metaActs[index];
 
-      if (lastAct === undefined || state.npcKey === null) {
-        return console.warn(`onClickActions: failed`, { index, lastAct, npcKey: state.npcKey });
+      if (act === undefined || state.npcKey === null) {
+        return console.warn(`${'onClickActions'}: ignored`, { index, act, npcKey: state.npcKey });
       }
 
-      state.lastAct = lastAct;
-      w.events.next({ key: 'click-act', act: lastAct, npcKey: state.npcKey });
+      state.lastAct = act;
+      w.events.next({
+        key: 'click-act',
+        act,
+        npcKey: state.npcKey,
+        point: { x: state.position[0], y: state.position[2] },
+      });
       update();
     },
     onSelectNpc(e) {
@@ -141,7 +146,7 @@ export default function ContextMenu() {
       ;
       state.npcKeys = state.meta.npcKey === undefined ? roomNpcKeys : [state.meta.npcKey];
       if (state.npcKey === null || !roomNpcKeys.includes(state.npcKey)) {
-        state.npcKey ??= state.npcKeys[0] ?? null;
+        state.npcKey = state.npcKeys[0] ?? null;
       }
 
       state.metaActs = w.e.getMetaActs(state.meta);
@@ -444,9 +449,9 @@ const contextMenuCss = css`
  *
  * @property {null | NPC.MetaAct} lastAct
  * @property {{ k: string; v: string; length: number }[]} kvs
- * @property {null | import("./WorldView").LastDownData} shownDown
+ * @property {null | NPC.DownData} shownDown
  * @property {Geom.Meta} meta
- * @property {import("./WorldView").LastDownData['normal']} normal
+ * @property {NPC.DownData['normal']} normal
  * @property {NPC.MetaAct[]} metaActs
  * @property {string[]} npcKeys
  * @property {THREE.Vector3Tuple} position
@@ -468,4 +473,4 @@ const contextMenuCss = css`
  * @property {() => void} updateFromLastDown
  */
 
-const tmpVector3 = new THREE.Vector3();
+const tmpVector1 = new THREE.Vector3();

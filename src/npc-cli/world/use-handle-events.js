@@ -1,4 +1,5 @@
 import React from "react";
+import { Vect } from "../geom";
 import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
@@ -276,7 +277,9 @@ export default function useHandleEvents(w) {
 
       switch (e.key) {
         case "click-act":
-          state.onClickAct(e);
+          const success = state.onClickAct(e);
+          // 🚧 colour act red/green
+          console.log({success});
           break;
         case "enter-collider":
           if (e.type === 'nearby' || e.type === 'inside') {
@@ -377,21 +380,19 @@ export default function useHandleEvents(w) {
           break;
       }
     },
-    onClickAct({ act: { def, meta }, npcKey }) {
+    onClickAct({ act: { def, meta }, npcKey, point }) {
       switch (def.key) {
         case 'open':
         case 'close':
-          state.toggleDoor(def.gdKey, { npcKey, [def.key]: true,
-            button: typeof meta.switch === 'number',
+          return state.toggleDoor(def.gdKey, { npcKey, [def.key]: true,
             access: meta.inner === true && meta.secure !== true ? true : undefined,
+            point,
           });
-          break;
         case 'lock':
         case 'unlock':
-          state.toggleLock(def.gdKey, { npcKey, [def.key]: true,
-            button: typeof meta.switch === 'number',
+          return state.toggleLock(def.gdKey, { npcKey, [def.key]: true,
+            point,
           });
-          break;
         // 🚧
       }
     },
@@ -407,13 +408,15 @@ export default function useHandleEvents(w) {
       }
       return false;
     },
-    npcNearDoor(npcKey, gdKey) {
-      return state.doorToNpc[gdKey]?.nearby.has(npcKey);
-      // const npc = w.npc.getNpc(npcKey);
-      // const position = npc.getPosition();
-      // const gm = w.gms[gmId];
-      // const center = gm.inverseMatrix.transformPoint({ x: position.x, y: position.z });
-      // return geom.circleIntersectsConvexPolygon(center, npc.getRadius(), gm.doors[doorId].poly);
+    npcNearDoor(npcKey, gdKey) {// 🚧 unused
+      // return state.doorToNpc[gdKey]?.nearby.has(npcKey);
+      const { src, dst } = w.door.byKey[gdKey];
+      return geom.lineSegIntersectsCircle(
+        src,
+        dst,
+        w.n[npcKey].getPoint(),
+        1.5, // 🚧 hard-coded
+      );
     },
     onEnterDoorCollider(e) {
       if (e.type === 'nearby') {
@@ -428,7 +431,7 @@ export default function useHandleEvents(w) {
         }
 
         if (door.auto === true && door.locked === false) {
-          state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+          state.toggleDoor(e.gdKey, { open: true, npcKey: e.npcKey });
           return; // opened auto unlocked door
         } 
         
@@ -448,13 +451,13 @@ export default function useHandleEvents(w) {
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
 
         const door = w.door.byKey[e.gdKey];
-        const npc = w.npc.npc[e.npcKey];
+        const npc = w.n[e.npcKey];
         if (
           door.open === false
           && state.npcCanAccess(e.npcKey, e.gdKey) === true
           // && state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door)
         ) {
-          state.toggleDoor(e.gdKey, { open: true, eventMeta: { nearbyNpcKey: e.npcKey } });
+          state.toggleDoor(e.gdKey, { open: true, npcKey: e.npcKey });
         }
 
         w.events.next({ key: 'enter-doorway', npcKey: e.npcKey, gmId: e.gmId, doorId: e.doorId, gdKey: e.gdKey });
@@ -546,28 +549,32 @@ export default function useHandleEvents(w) {
     someNpcNearDoor(gdKey) {
       return state.doorToNpc[gdKey]?.nearby.size > 0;
     },
-    toggleDoor(gdKey, opts = {}) {
+    toggleDoor(gdKey, opts) {
       const door = w.door.byKey[gdKey];
 
-      if (typeof opts.npcKey === 'string') {
-        if (opts.button !== true && state.npcNearDoor(opts.npcKey, gdKey) === false) {
-          return door.open; // not close enough
-        }
-        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
+      if (opts.point === undefined) {
+        // e.g. npc hits inside sensor
+        // e.g. npc with access enters doorway
+        return w.door.toggleDoorRaw(door, opts);
       }
 
+      if (tmpVect1.copy(opts.point).distanceTo(w.n[opts.npcKey].getPoint()) > 1.5) {
+        return false; // e.g. button not close enough
+      }
+
+      opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
       opts.clear = state.someNpcInsideDoor(gdKey) === false;
+
       return w.door.toggleDoorRaw(door, opts);
     },
-    toggleLock(gdKey, opts = {}) {
+    toggleLock(gdKey, opts) {
       const door = w.door.byKey[gdKey];
 
-      if (typeof opts.npcKey === 'string') {
-        if (opts.button !== true && state.npcNearDoor(opts.npcKey, gdKey) === false) {
-          return door.locked; // not close enough
-        }
-        opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
+      if (tmpVect1.copy(opts.point).distanceTo(w.n[opts.npcKey].getPoint()) > 1.5) {
+        return false; // e.g. button not close enough
       }
+
+      opts.access ??= state.npcCanAccess(opts.npcKey, gdKey);
 
       return w.door.toggleLockRaw(door, opts);
     },
@@ -578,7 +585,6 @@ export default function useHandleEvents(w) {
         if (door.open === true) {
           w.door.toggleDoorRaw(door, {
             clear: state.canCloseDoor(door) === true,
-            eventMeta,
           });
           state.tryCloseDoor(gmId, doorId); // recheck in {ms}
         } else {
@@ -630,7 +636,8 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
- * @property {(e: Extract<NPC.Event, { key: 'click-act' }>) => void} onClickAct
+ * @property {(e: Extract<NPC.Event, { key: 'click-act' }>) => boolean} onClickAct
+ * Returns `true` iff successful.
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
@@ -638,7 +645,7 @@ export default function useHandleEvents(w) {
  * @property {(door: Geomorph.DoorState) => void} ensureDoorPolyRefs
  * @property {(gmId: number, roomId: number, point: Geom.VectJson) => string[]} getNearbyNpcKeys
  * @property {(meta: Geom.Meta) => NPC.MetaAct[]} getMetaActs
- * 🚧 refine type to string literals
+ * Get possible meta acts e.g. may not be possible because npc not close enough
  * @property {(e: NPC.Event) => void} handleEvents
  * @property {(e: Extract<NPC.Event, { npcKey?: string }>) => void} handleNpcEvents
  * @property {(e: Extract<NPC.Event, { key: 'enter-collider'; type: 'nearby' | 'inside' }>) => void} onEnterDoorCollider
@@ -648,8 +655,10 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string) => void} removeFromSensors
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcInsideDoor
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
- * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string; button?: boolean; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
- * @property {(gdKey: Geomorph.GmDoorKey, opts?: { npcKey?: string; button?: boolean; } & Geomorph.ToggleLockOpts) => boolean} toggleLock
+ * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey: string; point?: Geom.VectJson; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor
+ * Returns `true` iff successful.
+ * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey: string; point: Geom.VectJson; } & Geomorph.ToggleLockOpts) => boolean} toggleLock
+ * Returns `true` iff successful.
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {(npc: NPC.NPC) => void} tryPutNpcIntoRoom
@@ -657,3 +666,4 @@ export default function useHandleEvents(w) {
 
 /** e.g. `'^g0'` -> `/^g0/` */
 const regexCache = /** @type {Record<string, RegExp>} */ ({});
+const tmpVect1 = new Vect();

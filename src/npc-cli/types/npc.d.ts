@@ -128,7 +128,7 @@ declare namespace NPC {
       }
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
-    | { key: 'click-act', act: NPC.MetaAct; npcKey: string }
+    | { key: 'click-act', act: NPC.MetaAct; npcKey: string; point: Geom.VectJson }
     // ...
   );
 
@@ -235,6 +235,14 @@ declare namespace NPC {
     label: string;
     /** The meta of ContextMenu (from prior click) when button was clicked */
     meta: Geom.Meta<T>;
+  }
+
+  interface DownData {
+    longDown: boolean;
+    screenPoint: Geom.Vect;
+    position: import('three').Vector3;
+    normal: null | import('three').Vector3;
+    meta: Geom.Meta;
   }
 
 }
