@@ -111,9 +111,9 @@
     - 🚧 ContextMenu strategy
       - ✅ hide when camera normal has +ve dot product with normal
       - ✅ list all npcs ever seen i.e. keep adding
-      - show actions independently of npc distance
-      - acts can fail with colour red vs green
-      - acts fail e.g. if npc is now in another room
+      - 🚧 show actions independently of npc distance
+        - 🚧 acts can fail with colour red vs green
+        - 🚧 acts fail e.g. npc in another room, npc too far
       - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
     - can open/close doors using doors e.g. for mobile users
   - ✅ long press do point: actual nav mesh may be strictly smaller

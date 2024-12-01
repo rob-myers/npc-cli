@@ -66,17 +66,13 @@ export default function ContextMenu() {
       const item = /** @type {HTMLElement} */ (e.target);
       const index = Array.from(e.currentTarget.childNodes).indexOf(item);
       const lastAct = state.metaActs[index];
-      if (lastAct === undefined) {
-        console.warn(`onClickActions: state.metaActs[index] not found`, state.metaActs, index);
-        return;
+
+      if (lastAct === undefined || state.npcKey === null) {
+        return console.warn(`onClickActions: failed`, { index, lastAct, npcKey: state.npcKey });
       }
 
       state.lastAct = lastAct;
-      if (state.npcKey !== null) {// nearby npc click
-        w.events.next({ key: 'click-act', act: lastAct, npcKey: state.npcKey });
-      } else {// 🚧 Game Master click
-        w.events.next({ key: 'click-act-gm', act: lastAct });
-      }
+      w.events.next({ key: 'click-act', act: lastAct, npcKey: state.npcKey });
       update();
     },
     onSelectNpc(e) {
@@ -146,6 +142,7 @@ export default function ContextMenu() {
         );
       }
       state.npcKeys = state.meta.npcKey === undefined ? Array.from(state.seenNpcKeys) : [state.meta.npcKey];
+      state.npcKey ??= state.npcKeys[0] ?? null;
 
       state.metaActs = w.e.getMetaActs(state.meta);
       
