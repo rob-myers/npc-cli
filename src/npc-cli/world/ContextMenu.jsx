@@ -95,7 +95,7 @@ export default function ContextMenu() {
     },
     show() {
       state.open = true;
-      state.updateFrom(w.view.lastDown ?? null);
+      state.updateFromLastDown();
 
       if (state.popup.opened === true) {
         // 🔔 reopen on next render to "get direction right" 
@@ -103,8 +103,8 @@ export default function ContextMenu() {
         pause(200).then(() => state.popup.open());
       }
 
-      if (state.everOpen === false) {// 🔔 initially open
-        state.popup?.open();
+      if (state.everOpen === false) {
+        // state.popup?.open(); // initially open
         state.everOpen = true;
       }
 
@@ -121,8 +121,9 @@ export default function ContextMenu() {
         state.tracked = null;
       }
     },
-    updateFrom(lastDown) {
-      if (lastDown === null) {
+    updateFromLastDown() {
+      const { lastDown } = w.view;
+      if (lastDown === undefined) {
         return;
       }
 
@@ -472,7 +473,7 @@ const contextMenuCss = css`
 * @property {() => void} show
  * @property {() => void} togglePersist
  * @property {(el: null | THREE.Object3D) => void} track
- * @property {(lastDown: null | import("./WorldView").LastDownData) => void} updateFrom
+ * @property {() => void} updateFromLastDown
  */
 
 const tmpVector3 = new THREE.Vector3();

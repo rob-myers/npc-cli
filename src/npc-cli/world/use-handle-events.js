@@ -288,12 +288,6 @@ export default function useHandleEvents(w) {
             state.onExitDoorCollider(e);
           }
           break;
-        case "exit-room":
-          if (w.cm.actNpcKey === e.npcKey && w.cm.open === true) {// update ContextMenu
-            w.cm.updateFrom(w.cm.shownDown);
-            w.update();
-          }
-          break;
         case "spawned": {
           const { x, y, z } = npc.getPosition();
           if (npc.s.spawns === 1) {// 1st spawn

@@ -109,12 +109,10 @@
     - ✅ BUG closed auto door
       - ℹ️ trigger auto doors in case they've been manually closed
     - 🚧 ContextMenu strategy
-      - ✅ hide when camera normal has negative dot product with normal
-      - could show actions independently of npc distance
+      - ✅ hide when camera normal has +ve dot product with normal
+      - list all npcs ever seen in room i.e. keep adding
+      - show actions independently of npc distance
       - acts can fail with colour red vs green
-      - refresh when new npc gets close?
-      - switch with selected npc?
-      - hide actions inside
     - can open doors using doors
     - npc can open nearby doors
       - needs to refresh somehow
