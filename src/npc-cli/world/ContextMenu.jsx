@@ -22,11 +22,11 @@ export default function ContextMenu() {
 
     everOpen: false,
     lastAct: null,
-    lock: false,
     actNpcKey: null,
     open: false,
     persist: true,
     scale: 1,
+    scaled: false,
     showMeta: true,
     tracked: null,
     
@@ -86,7 +86,7 @@ export default function ContextMenu() {
       update();
     },
     onToggleResize() {
-      state.lock = !state.lock;
+      state.scaled = !state.scaled;
       state.scale = 1 / objectScale(state.html.group, w.r3f.camera);
       update();
     },
@@ -157,9 +157,9 @@ export default function ContextMenu() {
 
   w.cm = state;
   
-  React.useEffect(() => {// on unlock while paused update style.transform 
-    state.lock === false && state.html.forceUpdate();
-  }, [state.lock]);
+  React.useEffect(() => {// on turn off scaled while paused update style.transform 
+    state.scaled === false && state.html.forceUpdate();
+  }, [state.scaled]);
   
   const update = useUpdate();
 
@@ -170,7 +170,7 @@ export default function ContextMenu() {
     <Html3d
       className="context-menu"
       calculatePosition={state.calculatePosition}
-      distanceFactor={state.lock ? state.scale : undefined}
+      distanceFactor={state.scaled ? state.scale : undefined}
       position={state.position}
       normal={state.normal ?? undefined} // for hiding
       visible={state.open}
@@ -191,17 +191,10 @@ export default function ContextMenu() {
             >
               <div className="controls">
                 <button
-                  onClick={state.onToggleMeta}
-                  className={cx({ disabled: !state.showMeta })}
-                >
-                  meta
-                </button>
-
-                <button
                   onClick={state.onToggleResize}
-                  className={cx({ disabled: !state.lock })}
+                  className={cx({ disabled: !state.scaled })}
                 >
-                  lock
+                  scaled
                 </button>
               </div>
 
@@ -337,6 +330,7 @@ const contextMenuCss = css`
 
   .options .controls {
     display: flex;
+    justify-content: right;
     align-items: center;
     flex-wrap: wrap;
     gap: 4px;
@@ -345,7 +339,6 @@ const contextMenuCss = css`
       background: white;
       color: black;
       padding: 2px 4px;
-      border-radius: 4px;
     }
   }
 
@@ -445,7 +438,7 @@ const contextMenuCss = css`
  * @property {boolean} open Is the context menu open?
  * @property {boolean} showMeta
  * @property {boolean} persist
- * @property {boolean} lock
+ * @property {boolean} scaled
  * @property {number} scale
  * @property {import('../components/PopUp').State} popup
  * @property {null | THREE.Object3D} tracked
