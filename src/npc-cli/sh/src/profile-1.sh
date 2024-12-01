@@ -19,7 +19,7 @@ click | filter meta.npcKey | map '({ meta }, { home, w }) => {
 
 # open door on click
 click | map '({meta}, {w}) => {
-  meta.door && w.e.toggleDoor(meta.gdKey)
+  meta.door && w.e.toggleDoor(meta.gdKey, {})
 }' &
 
 w | map 'w => w.e.pressMenuFilters.push( (meta) => meta.do || meta.floor )'
