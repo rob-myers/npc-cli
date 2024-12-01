@@ -113,9 +113,9 @@
       - list all npcs ever seen in room i.e. keep adding
       - show actions independently of npc distance
       - acts can fail with colour red vs green
-    - can open doors using doors
-    - npc can open nearby doors
-      - needs to refresh somehow
+      - acts fail e.g. if npc is now in another room
+      - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
+    - can open/close doors using doors e.g. for mobile users
   - ✅ long press do point: actual nav mesh may be strictly smaller
     - ✅ from off-mesh closest point on nav mesh
     - ✅ still seeing long-press issues on mobile e.g. to bed from floor
