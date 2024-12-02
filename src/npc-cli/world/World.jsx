@@ -104,6 +104,7 @@ export default function World(props) {
 
     e: /** @type {*} */ (null), // useHandleEvents
     n: /** @type {*} */ ({}), // w.npc.npc
+    d: /** @type {*} */ ({}), // w.door.byKey
 
     isReady() {
       return state.crowd !== null && state.decor?.queryStatus === 'success';
@@ -403,6 +404,8 @@ export default function World(props) {
  * Events state i.e. useHandleEvents state
  * @property {import("./Npcs").State['npc']} n
  * Shortcut for `w.npc.npc`
+ * @property {import("./Doors").State['byKey']} d
+ * Shortcut for `w.door.byKey`
  * @property {import("./ContextMenu").State} cm
  * Shortcut for `w.menu.ct`
  *

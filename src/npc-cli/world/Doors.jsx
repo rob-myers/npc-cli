@@ -283,6 +283,7 @@ export default function Doors(props) {
     state.positionInstances();
     state.addCuboidAttributes();
     state.addUvs();
+    w.d = state.byKey;
     state.ready = true
   }, [w.mapKey, w.hash.full, w.gmsData.doorCount]);
 
