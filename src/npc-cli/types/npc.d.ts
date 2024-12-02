@@ -128,6 +128,7 @@ declare namespace NPC {
       }
     | { key: "pre-setup-physics" }
     | { key: "nav-updated" }
+    | { key: 'update-context-menu' }
     | { key: 'click-act', act: NPC.MetaAct; npcKey: string; point: Geom.VectJson }
     // ...
   );

@@ -3,7 +3,6 @@ import { css, cx } from "@emotion/css";
 import * as THREE from "three";
 
 import { pause } from "../service/generic";
-import { unitXVector3 } from "../service/three";
 import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from '../components/Html3d';
 import { WorldContext } from "./world-context";
@@ -14,6 +13,8 @@ import useOnResize from "../hooks/use-on-resize";
 export default function ContextMenu() {
 
   const w = React.useContext(WorldContext);
+
+  const update = useUpdate();
 
   const state = useStateRef(/** @returns {State} */ () => ({
     rootEl: /** @type {*} */ (null),
@@ -101,7 +102,6 @@ export default function ContextMenu() {
     },
     show() {
       state.open = true;
-      state.updateFromLastDown();
 
       if (state.popup.opened === true) {
         // 🔔 reopen on next render to "get direction right" 
@@ -114,7 +114,7 @@ export default function ContextMenu() {
         state.everOpen = true;
       }
 
-      update();
+      w.events.next({ key: 'update-context-menu' });
     },
     togglePersist() {
       state.persist = !state.persist;
@@ -127,38 +127,7 @@ export default function ContextMenu() {
         state.tracked = null;
       }
     },
-    updateFromLastDown() {
-      const { lastDown } = w.view;
-      if (lastDown === undefined) {
-        return;
-      }
-
-      state.shownDown = lastDown;
-      state.meta = lastDown.meta;
-      state.normal = lastDown.normal;
-
-      state.quaternion = state.normal === null ? null : new THREE.Quaternion().setFromUnitVectors(unitXVector3, state.normal);
-
-      state.kvs = Object.entries(state.meta ?? {}).map(([k, v]) => {
-        const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
-        return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
-      }).sort((a, b) => a.length < b.length ? -1 : 1);
-  
-      const roomNpcKeys = (typeof state.meta.gmId === 'number' && typeof state.meta.roomId === 'number') 
-        ? Array.from(w.e.roomToNpcs[state.meta.gmId][state.meta.roomId] ?? [])
-        : []
-      ;
-      state.npcKeys = state.meta.npcKey === undefined ? roomNpcKeys : [state.meta.npcKey];
-      if (state.npcKey === null || !roomNpcKeys.includes(state.npcKey)) {
-        state.npcKey = state.npcKeys[0] ?? null;
-      }
-
-      state.metaActs = w.e.getMetaActs(state.meta);
-      
-      // track npc if meta.npcKey is a valid npc
-      state.track(w.n[state.meta.npcKey]?.m.group);
-      state.position = lastDown.position.toArray();
-    },
+    update,
   }));
 
   w.cm = state;
@@ -166,8 +135,6 @@ export default function ContextMenu() {
   React.useEffect(() => {// on turn off scaled while paused update style.transform 
     state.scaled === false && state.html.forceUpdate();
   }, [state.scaled]);
-  
-  const update = useUpdate();
 
   // 🔔 handle discontinuous window resize
   useOnResize(state.onWindowResize);
@@ -481,7 +448,7 @@ const contextMenuCss = css`
  * @property {() => void} show
  * @property {() => void} togglePersist
  * @property {(el: null | THREE.Object3D) => void} track
- * @property {() => void} updateFromLastDown
+ * @property {() => void} update
  */
 
 const tmpVector1 = new THREE.Vector3();

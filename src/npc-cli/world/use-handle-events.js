@@ -1,10 +1,11 @@
 import React from "react";
+import * as THREE from "three";
 import { Vect } from "../geom";
 import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const";
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
-import { toV3 } from "../service/three";
+import { toV3, unitXVector3 } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -266,6 +267,9 @@ export default function useHandleEvents(w) {
           // ℹ️ dev should handle partial correctness e.g. by pausing
           state.doorToNpc = {};
           state.npcToDoor = {};
+          break;
+        case "update-context-menu":
+          state.updateContextMenu();
           break;
         case "try-close-door":
           state.tryCloseDoor(e.gmId, e.doorId, e.meta);
@@ -608,6 +612,45 @@ export default function useHandleEvents(w) {
         warn(`${npc.key}: no longer inside any room`);
       }
     },
+    updateContextMenu() {
+      const { lastDown } = w.view;
+      if (lastDown === undefined) {
+        return;
+      }
+
+      const { meta, normal } = lastDown;
+
+      w.cm.metaActs = state.getMetaActs(meta);
+
+      w.cm.shownDown = lastDown;
+      w.cm.meta = meta;
+      w.cm.normal = normal;
+      w.cm.quaternion = normal === null
+        ? null
+        : new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal)
+      ;
+
+      w.cm.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
+        const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
+        return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
+      }).sort((a, b) => a.length < b.length ? -1 : 1);
+  
+      const roomNpcKeys = (typeof meta.gmId === 'number' && typeof meta.roomId === 'number') 
+        ? Array.from(state.roomToNpcs[meta.gmId][meta.roomId] ?? [])
+        : []
+      ;
+
+      w.cm.npcKeys = meta.npcKey === undefined ? roomNpcKeys : [meta.npcKey];
+      if (w.cm.npcKey === null || !roomNpcKeys.includes(w.cm.npcKey)) {
+        w.cm.npcKey = w.cm.npcKeys[0] ?? null;
+      }
+
+      // track npc if meta.npcKey is a valid npc
+      w.cm.track(w.n[meta.npcKey]?.m.group);
+      w.cm.position = lastDown.position.toArray();
+
+      w.cm.update();
+    },
   }));
   
   w.e = state; // e for 'events state'
@@ -666,6 +709,7 @@ export default function useHandleEvents(w) {
  * @property {(gmId: number, doorId: number, eventMeta?: Geom.Meta) => void} tryCloseDoor
  * Try close door every `N` seconds, starting in `N` seconds.
  * @property {(npc: NPC.NPC) => void} tryPutNpcIntoRoom
+ * @property {() => void} updateContextMenu
  */
 
 /** e.g. `'^g0'` -> `/^g0/` */
