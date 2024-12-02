@@ -113,9 +113,10 @@
       - ✅ list all npcs ever seen i.e. keep adding
       - ✅ show actions independently of npc distance
       - ✅ acts fail if npc too far
-      - 🚧 acts fail if npc in another room
-      - 🚧 if acts fail/succeed then coloured red/green
+      - ✅ acts fail if npc in another room
+      - ✅ if acts fail/succeed then coloured red/green
       - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
+    - 🚧 updateFromLastDown -> useHandleEvents
     - can open/close doors using doors e.g. for mobile users
   - ✅ long press do point: actual nav mesh may be strictly smaller
     - ✅ from off-mesh closest point on nav mesh

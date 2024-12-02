@@ -278,8 +278,8 @@ export default function useHandleEvents(w) {
       switch (e.key) {
         case "click-act":
           const success = state.onClickAct(e);
-          // 🚧 colour act red/green
-          console.log({success});
+          // colour act red/green
+          w.cm.setSelectedActColor(success ? '#7f7' : 'red');
           break;
         case "enter-collider":
           if (e.type === 'nearby' || e.type === 'inside') {
@@ -381,6 +381,10 @@ export default function useHandleEvents(w) {
       }
     },
     onClickAct({ act: { def, meta }, npcKey, point }) {
+      if (meta.grKey !== undefined && state.npcToRoom.get(npcKey)?.grKey !== meta.grKey) {
+        return false; // acted inside different room
+      }
+
       switch (def.key) {
         case 'open':
         case 'close':

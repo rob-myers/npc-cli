@@ -3,7 +3,7 @@ import { css, cx } from "@emotion/css";
 import * as THREE from "three";
 
 import { pause } from "../service/generic";
-import { toXZ, unitXVector3 } from "../service/three";
+import { unitXVector3 } from "../service/three";
 import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from '../components/Html3d';
 import { WorldContext } from "./world-context";
@@ -62,8 +62,7 @@ export default function ContextMenu() {
       return state.tracked !== null && state.meta.npcKey === npcKey;
     },
     onClickActions(e) {
-      const item = /** @type {HTMLElement} */ (e.target);
-      const index = Array.from(e.currentTarget.childNodes).indexOf(item);
+      const index = Array.from(e.currentTarget.childNodes).indexOf(/** @type {HTMLElement} */ (e.target));
       const act = state.metaActs[index];
 
       if (act === undefined || state.npcKey === null) {
@@ -71,6 +70,8 @@ export default function ContextMenu() {
       }
 
       state.lastAct = act;
+      state.setSelectedActColor('white');
+
       w.events.next({
         key: 'click-act',
         act,
@@ -94,6 +95,9 @@ export default function ContextMenu() {
     },
     onWindowResize() {
       setTimeout(state.html.forceUpdate, 30);
+    },
+    setSelectedActColor(color) {
+      state.rootEl.style.setProperty('--selected-act-color', color);
     },
     show() {
       state.open = true;
@@ -243,7 +247,10 @@ export default function ContextMenu() {
             onClick={state.onClickActions}
           >
             {state.metaActs.map(act =>
-              <button key={act.label} className={cx("action", { selected: state.lastAct === act })}>
+              <button
+                key={act.label}
+                className={cx("action", { selected: state.lastAct === act })}
+              >
                 {act.label}
               </button>
             )}
@@ -277,6 +284,8 @@ export default function ContextMenu() {
 const closeButtonRadius = `${14}px`;
 
 const contextMenuCss = css`
+  --selected-act-color: white;
+
   position: absolute;
   left: 0;
   top: 0;
@@ -402,7 +411,8 @@ const contextMenuCss = css`
     }
     
     .action.selected {
-      background-color: #744c1599;
+      color: var(--selected-act-color);
+      background-color: #00000077;
     }
   }
 
@@ -467,6 +477,7 @@ const contextMenuCss = css`
  * @property {() => void} onToggleMeta
  * @property {() => void} onToggleResize
  * @property {() => void} onWindowResize
+ * @property {(color: string) => void} setSelectedActColor
  * @property {() => void} show
  * @property {() => void} togglePersist
  * @property {(el: null | THREE.Object3D) => void} track
