@@ -144,6 +144,7 @@
   - clean away off-mesh-connection if we don't use them
 
 - try creating nav tiles to see if it avoids "steiner points"
+  - `request-nav-tiles` requests tile-by-tile
 
 - ✅ BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
   - ℹ️ by running quickly many times

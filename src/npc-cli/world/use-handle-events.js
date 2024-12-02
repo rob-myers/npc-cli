@@ -5,7 +5,7 @@ import { defaultDoorCloseMs, npcNearUiDist, wallHeight } from "../service/const"
 import { pause, warn, debug } from "../service/generic";
 import { geom } from "../service/geom";
 import { npcToBodyKey } from "../service/rapier";
-import { toV3, unitXVector3 } from "../service/three";
+import { toV3, toXZ, unitXVector3 } from "../service/three";
 import useStateRef from "../hooks/use-state-ref";
 
 /**
@@ -431,8 +431,8 @@ export default function useHandleEvents(w) {
         (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.gdKey);
         (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
 
-        const door = w.door.byKey[e.gdKey];
-        state.ensureDoorPolyRefs(door); // lazily compute unWalkable
+        const door = w.d[e.gdKey];
+        state.ensureDoorPolyRefs(door);
         
         if (door.open === true) {// door already open
           return;
@@ -441,10 +441,17 @@ export default function useHandleEvents(w) {
         if (door.auto === true && door.locked === false) {
           state.toggleDoor(e.gdKey, { open: true, npcKey: e.npcKey });
           return; // opened auto unlocked door
-        } 
+        }
         
-        const npc = w.npc.getNpc(e.npcKey);
-        if (state.navSegIntersectsDoorway(npc.getPoint(), { x: npc.nextCorner.x, y: npc.nextCorner.z }, door) === true) {
+        // look two nav segs ahead
+        const npc = w.n[e.npcKey];
+        const p = npc.getPoint();
+        const [q, r] = /** @type {NPC.CrowdAgent} */ (npc.agent).corners().map(toXZ);
+
+        if ((q !== undefined) && (
+          state.navSegIntersectsDoorway(p, q, door) === true
+          || r !== undefined && state.navSegIntersectsDoorway(q, r, door) === true
+        )) {
           if (door.auto === true && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
           } else {
