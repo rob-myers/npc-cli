@@ -434,8 +434,8 @@ export default function useHandleEvents(w) {
         const door = w.d[e.gdKey];
         state.ensureDoorPolyRefs(door);
         
-        if (door.open === true) {// door already open
-          return;
+        if (door.open === true) {
+          return; // door already open
         }
 
         if (door.auto === true && door.locked === false) {
@@ -443,22 +443,21 @@ export default function useHandleEvents(w) {
           return; // opened auto unlocked door
         }
         
-        // look two nav segs ahead
+        // look all segs ahead so door opens (or npc stops) earlier enough
         const npc = w.n[e.npcKey];
-        const p = npc.getPoint();
-        const [q, r] = /** @type {NPC.CrowdAgent} */ (npc.agent).corners().map(toXZ);
-
-        if ((q !== undefined) && (
-          state.navSegIntersectsDoorway(p, q, door) === true
-          || r !== undefined && state.navSegIntersectsDoorway(q, r, door) === true
-        )) {
+        let src = npc.getPoint();
+        for (const corner of /** @type {NPC.CrowdAgent} */ (npc.agent).corners().map(toXZ)) {
+          if (state.navSegIntersectsDoorway(src, corner, door) === false) {
+            src = corner;
+            continue;
+          }
           if (door.auto === true && state.npcCanAccess(e.npcKey, e.gdKey) === true) {
             state.toggleDoor(e.gdKey, { open: true, npcKey: npc.key, access: true });
           } else {
             npc.stopMoving();
           }
+          return;
         }
-        return;
       }
       
       if (e.type === 'inside') {
