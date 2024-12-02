@@ -143,10 +143,12 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
-- BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
-  - got there by running quickly many times
-  - `w n.rob.agent.velocity` is `{x:0,y:0,z:0}`
-  - ℹ️ might be issue with nav mesh (cs too small)
+- try creating nav tiles to see if it avoids "steiner points"
+
+- ✅ BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
+  - ℹ️ by running quickly many times
+  - ℹ️ `w n.rob.agent.velocity` is `{x:0,y:0,z:0}`
+  - ✅ seems to be issue with nav mesh (cs too small)
 - BUG saw e.npcToDoor missing key
   - ℹ️ maybe physics.worker broke on hmr
 - Game Master option for partially transparent walls, where object-pick ignores walls
