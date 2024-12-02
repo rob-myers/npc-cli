@@ -75,6 +75,7 @@ export async function* click({ api, args, w }) {
       meta: {
         ...e.meta,
         nav: e.meta.floor === true ? w.npc.isPointInNavmesh(e.point) : false,
+        // longClick: e.justLongDown,
       },
       xz: {...e.point},
     };

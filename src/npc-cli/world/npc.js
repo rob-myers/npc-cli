@@ -135,59 +135,38 @@ export class Npc {
   }
 
   /**
-   * 🚧 move to w.e.doNpc because refers to doors?
-   * Assume any of these preconditions:
-   * - `point.meta.door === true` (point on a door)
-   * - `point.meta.do === true` (point is a "do point")
-   * - `point.meta.nav === true && !!npc.doMeta` (point navigable, npc at a "do point")
+   * Either:
+   * - `p.meta.do` i.e. p is a "do point"
+   * - `p.meta.nav` and `npc.doMeta` i.e. point navigable, npc at a "do point"
+   * - `p` is nearly navigable and `npc` is off-mesh
    * 
-   * @param {Geom.Meta<Geom.VectJson | THREE.Vector3Like>} input 
+   * @param {Geom.Meta<Geom.VectJson | THREE.Vector3Like>} p 
    * @param {object} opts
    * @param {any[]} [opts.extraParams] // 🚧 clarify
    */
-  async do(input, opts = {}) {
-    if (!Vect.isVectJson(input)) {
+  async do(p, opts = {}) {
+    if (!Vect.isVectJson(p)) {
       throw Error('point expected');
     }
-    if (!input.meta) {
+    if (!p.meta) {
       throw Error('point.meta expected');
     }
 
-    const point = { ...toXZ(input), meta: input.meta }; // handle v3
-
-    // 🚧 door switch instead of door?
-    const gmDoorId = helper.extractGmDoorId(point.meta);
-    if (point.meta.door === true && gmDoorId !== null) {
-      /** `undefined` -> toggle, `true` -> open, `false` -> close */
-      const extraParam = opts.extraParams?.[0] === undefined ? undefined : !!opts.extraParams[0];
-      const open = extraParam === true;
-      const close = extraParam === false;
-      const wasOpen = this.w.door.byGmId[gmDoorId.gmId][gmDoorId.doorId].open;
-      const isOpen = this.w.e.toggleDoor(gmDoorId.gdKey,{ npcKey: this.key, close, open });
-      if (close) {
-        if (isOpen) throw Error('cannot close door');
-      } else if (open) {
-        if (!isOpen) throw Error('cannot open door');
-      } else {
-        if (wasOpen === isOpen) throw Error('cannot toggle door');
-      }
-      return;
-    }
-
-    // point.meta.do, or
-    // point.meta.nav && npc.doMeta, or
-    // !point.meta.nav
-    
+    const point = { ...toXZ(p), meta: p.meta }; // handle v3
     const srcNav = this.w.npc.isPointInNavmesh(this.getPoint());
+    
+    // point.meta.do
     if (point.meta.do === true) {
       if (srcNav === true) {// nav -> do point
-        await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
+        // await this.onMeshDo(point, { ...opts, preferSpawn: !!point.meta.longClick });
+        await this.onMeshDo(point, { ...opts, preferSpawn: false });
       } else {// off nav -> do point
         await this.offMeshDo(point);
       }
       return;
     }
 
+    // point.meta.nav && npc.doMeta
     if (point.meta.nav === true && this.s.doMeta !== null) {
       if (srcNav === true) {
         this.s.doMeta = null;
@@ -203,7 +182,7 @@ export class Npc {
 
     // handle offMesh and click near nav
     if (srcNav === false && point.meta.nav === false) {
-      const closest = this.w.npc.getClosestNavigable(toV3(input));
+      const closest = this.w.npc.getClosestNavigable(toV3(p));
       if (closest !== null) await this.offMeshDo({...toXZ(closest), meta: { nav: true }});
     }
   }
