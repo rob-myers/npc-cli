@@ -13,7 +13,7 @@ export const faderOverlayCss = css`
   background: rgba(1, 1, 1, 1);
   opacity: 1;
   transition: opacity 1s ease-in;
-  &.clear {
+  &:not(.faded) {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s ease-in;

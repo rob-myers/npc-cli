@@ -42,6 +42,9 @@ export default function WorldMenu(props) {
         state.durationKeys[msg] = performance.now();
       }
     },
+    onOverlayPointerUp() {
+      props.setTabsEnabled(true);
+    },
     storeTextareaHeight() {
       tryLocalStorageSet(`log-height-px@${w.key}`, `${
         Math.max(100, state.logger.container.getBoundingClientRect().height)
@@ -60,11 +63,10 @@ export default function WorldMenu(props) {
   return <>
 
     <div
-      className={cx(
-        faderOverlayCss,
-        w.disabled && !state.debugWhilePaused ? 'faded' : 'clear',
-      )}
-      onPointerUp={() => props.setTabsEnabled(true)}
+      className={cx(faderOverlayCss, {
+        faded: w.disabled && !state.debugWhilePaused,
+      })}
+      onPointerUp={state.onOverlayPointerUp}
     />
 
     {w.disabled && (
@@ -85,7 +87,7 @@ export default function WorldMenu(props) {
     )}
 
     <div className={cx(loggerCss, {
-        hidden: !(state.pinned || (w.disabled && state.debugWhilePaused)),
+        shown: state.pinned || (w.disabled && state.debugWhilePaused),
       })}
     >
       <Logger
@@ -133,7 +135,7 @@ const loggerCss = css`
     align-items: center;
     gap: 8px;
   }
-  &.hidden {
+  &:not(.shown) {
     display: none;
   }
 `;
@@ -149,6 +151,7 @@ const loggerCss = css`
  * @property {(msg: string) => void} measure
  * Measure durations by sending same `msg` twice.
  * @property {React.ChangeEventHandler<HTMLInputElement & { type: 'checkbox' }>} changeLoggerPin
+ * @property {() => void} onOverlayPointerUp
  * @property {() => void} storeTextareaHeight
  * @property {() => void} toggleDebug
  */

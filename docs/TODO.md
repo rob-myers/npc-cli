@@ -122,8 +122,8 @@
   - ✅ long press do point: actual nav mesh may be strictly smaller
     - ✅ from off-mesh closest point on nav mesh
     - ✅ still seeing long-press issues on mobile e.g. to bed from floor
-  - 🚧 meta.doPoint should be defined on all do points
-  - World shows closable message until 1st resolved true isReady
+  - ✅ meta.doPoint should be defined on all do points
+  - 🚧 World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
     - e.g. via npc neighbours + closeness check

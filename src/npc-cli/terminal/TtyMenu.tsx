@@ -81,7 +81,7 @@ export default function TtyMenu(props: Props) {
 
   return <>
     <div // Fade Overlay
-      className={cx(faderOverlayCss, props.disabled && !state.debugWhilePaused ? 'faded' : 'clear')}
+      className={cx(faderOverlayCss, { faded: props.disabled && !state.debugWhilePaused })}
       onPointerUp={() => props.setTabsEnabled(true)}
     />
 
