@@ -69,22 +69,20 @@ export default function WorldMenu(props) {
       onPointerUp={state.onOverlayPointerUp}
     />
 
-    {w.disabled && (
-      <div className={pausedControlsCss}>
-        <button
-          onClick={state.enableAll}
-          className="text-white"
-        >
-          enable
-        </button>
-        <button
-          onClick={state.toggleDebug}
-          className={state.debugWhilePaused ? 'text-green' : undefined}
-        >
-          debug
-        </button>
-      </div>
-    )}
+    {w.disabled && <div className={pausedControlsCss}>
+      <button
+        onClick={state.enableAll}
+        className="text-white"
+      >
+        enable
+      </button>
+      <button
+        onClick={state.toggleDebug}
+        className={state.debugWhilePaused ? 'text-green' : undefined}
+      >
+        debug
+      </button>
+    </div>}
 
     <div className={cx(loggerCss, {
         shown: state.pinned || (w.disabled && state.debugWhilePaused),
@@ -105,6 +103,13 @@ export default function WorldMenu(props) {
     </div>
 
     <TouchIndicator/>
+
+    <div className={cx(cssTtyDisconnectedMessage, {
+      shown: w.someTtyConnected === false
+    })}>
+      <h3>[TTY disconnected]</h3>
+      Click or show a TTY tab, then return.
+    </div>
 
   </>;
 }
@@ -139,6 +144,37 @@ const loggerCss = css`
     display: none;
   }
 `;
+
+const cssTtyDisconnectedMessage = css`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 5;
+  
+  pointer-events: none;
+  padding: 16px;
+  margin: 0 16px 16px 0;
+  @media (max-width: 700px) {
+    margin: 0;
+  }
+
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 0.9rem;
+  
+  color: #aaa;
+
+  h3 {
+    font-family: 'Courier New', Courier, monospace;
+    color: #8f8;
+  }
+
+  transition: opacity 600ms;
+  opacity: 0;
+  &.shown {
+    opacity: 100;
+  }
+`;
+
 
 /**
  * @typedef State

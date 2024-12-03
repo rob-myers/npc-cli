@@ -7,6 +7,8 @@ export async function* awaitWorld({ api, home: { WORLD_KEY } }) {
   while (api.getCached(WORLD_KEY)?.isReady() !== true) {
     await api.sleep(0.05);
   }
+
+  api.getCached(WORLD_KEY).someTtyConnected = true;
 }
 
 /**
