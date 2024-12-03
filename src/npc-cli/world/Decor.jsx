@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { useQuery } from "@tanstack/react-query";
 
 import { decorGridSize, decorIconRadius, fallbackDecorImgKey, gmLabelHeightSgu, sguToWorldScale, spriteSheetDecorExtraScale, spriteSheetLabelExtraScale, wallHeight } from "../service/const";
-import { isDevelopment, pause, removeDups, testNever, warn } from "../service/generic";
+import { isDevelopment, pause, removeDups, testNever, toPrecision, warn } from "../service/generic";
 import { tmpMat1, tmpRect1 } from "../service/geom";
 import { getCanvas } from "../service/dom";
 import { geomorph } from "../service/geomorph";
@@ -299,6 +299,8 @@ export default function Decor(props) {
           // +90 after transform so bottom-to-top sprite-sheet text "faces" direction
           const orient = (gm.matrix.transformDegrees(d.orient) + 90) % 360;
           instance = gm.matrix.transformPoint(/** @type {Geomorph.DecorPoint} */ ({ ...d, ...base, orient }));
+          instance.x = toPrecision(instance.x);
+          instance.y = toPrecision(instance.y);
           instance.meta.orient = orient; // update `meta` too
           if (base.meta.do === true) {
             instance.meta.doPoint = { x: instance.x, y: instance.y };
