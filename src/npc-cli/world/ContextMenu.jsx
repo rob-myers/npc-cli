@@ -199,15 +199,15 @@ export default function ContextMenu() {
 
         <div className="actor-and-actions">
 
-          <select
+          {state.npcKey !== null && <select
             className="actor"
-            value={state.npcKey ?? undefined}
+            value={state.npcKey}
             onChange={state.onSelectNpc}
           >
             {state.npcKeys.map(
               npcKey => <option key={npcKey} value={npcKey}>{npcKey}</option>
             )}
-          </select>
+          </select>}
 
           <div
             className="actions"
