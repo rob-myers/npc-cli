@@ -110,7 +110,7 @@ export default function WorldMenu(props) {
       shown: w.disconnected === true
     })}>
       <h3>[disconnected]</h3>
-      click or show a TTY tab
+      click or show a tty tab
     </div>
 
   </>;
