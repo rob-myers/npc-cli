@@ -262,7 +262,7 @@ export default function Doors(props) {
       if (door.locked === true) {
         if (opts.lock === true) return true; // Already locked
       } else {
-        if (opts.unlock === true) return false; // Already unlocked
+        if (opts.unlock === true) return true; // Already unlocked
       }
 
       // Actually lock/unlock door
