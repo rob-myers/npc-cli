@@ -371,13 +371,11 @@ export default function WorldView(props) {
 
   React.useEffect(() => {
     if (state.controls) {
-      state.controls.setPolarAngle(isSmallViewport() ? fixedPolarAngle : Math.PI / 5);
-      state.controls.setAzimuthalAngle(isSmallViewport() ? initAzimuth : Math.PI / 4);
+      state.controls.setPolarAngle(isSmallViewport() ? Math.PI / 2 : Math.PI / 4);
+      state.controls.setAzimuthalAngle(isSmallViewport() ? Math.PI / 6 : Math.PI / 4);
     }
     emptySceneForPicking.onAfterRender = state.renderObjectPickScene;
   }, [state.controls]);
-
-  // useOnResize(() => setTimeout(() => w.cm.html.forceUpdate(), 30));
 
   return (
     <Canvas
@@ -516,8 +514,6 @@ const statsCss = css`
  * @property {THREE.Vector3Like} position
 */
 
-const initAzimuth = Math.PI / 6;
-const fixedPolarAngle = Math.PI / 7;
 const pixelBuffer = new Uint8Array(4);
 const tmpVectThree = new THREE.Vector3();
 
