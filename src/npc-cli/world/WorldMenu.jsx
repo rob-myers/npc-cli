@@ -17,6 +17,8 @@ export default function WorldMenu(props) {
 
   const w = React.useContext(WorldContext);
 
+  const update = useUpdate();
+
   const state = useStateRef(/** @returns {State} */ () => ({
 
     debugWhilePaused: false,
@@ -55,10 +57,10 @@ export default function WorldMenu(props) {
       state.debugWhilePaused = !state.debugWhilePaused;
       update();
     },
+    update,
   }));
 
   w.menu = state;
-  const update = useUpdate();
 
   return <>
 
@@ -105,10 +107,10 @@ export default function WorldMenu(props) {
     <TouchIndicator/>
 
     <div className={cx(cssTtyDisconnectedMessage, {
-      shown: w.someTtyConnected === false
+      shown: w.disconnected === true
     })}>
-      <h3>[TTY disconnected]</h3>
-      Click or show a TTY tab, then return.
+      <h3>[disconnected]</h3>
+      click or show a TTY tab
     </div>
 
   </>;
@@ -190,4 +192,5 @@ const cssTtyDisconnectedMessage = css`
  * @property {() => void} onOverlayPointerUp
  * @property {() => void} storeTextareaHeight
  * @property {() => void} toggleDebug
+ * @property {() => void} update
  */

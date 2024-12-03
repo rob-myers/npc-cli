@@ -64,7 +64,7 @@ export default function World(props) {
     gmGraph: new GmGraphClass([]),
     gmRoomGraph: new GmRoomGraphClass(),
     hmr: /** @type {*} */ ({}),
-    someTtyConnected: false,
+    disconnected: true,
 
     texFloor: new TexArray({ ctKey: 'floor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texCeil: new TexArray({ ctKey: 'ceil-tex-array', numTextures: 1, width: 0, height: 0 }),
@@ -108,7 +108,15 @@ export default function World(props) {
     d: /** @type {*} */ ({}), // w.door.byKey
 
     isReady() {
-      return state.crowd !== null && state.decor?.queryStatus === 'success';
+      const ready = state.crowd !== null && state.decor?.queryStatus === 'success';
+
+      // World is "connected" when `state.isReady()` returns true
+      if (ready === true && state.disconnected === true) {
+        state.disconnected = false;
+        state.menu.update();
+      }
+
+      return ready;
     },
     loadTiledMesh(exportedNavMesh) {
       const tiledCacheResult = /** @type {NPC.TiledCacheResult} */ (
@@ -421,7 +429,7 @@ export default function World(props) {
  * @property {GmGraphClass} gmGraph
  * @property {GmRoomGraphClass} gmRoomGraph
  * @property {Crowd} crowd
- * @property {boolean} someTtyConnected
+ * @property {boolean} disconnected
  *
  * @property {() => boolean} isReady
  * @property {(exportedNavMesh: Uint8Array) => void} loadTiledMesh
