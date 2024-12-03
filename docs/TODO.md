@@ -108,7 +108,7 @@
       - ℹ️ trigger auto doors in case they've been manually closed
     - ✅ BUG closed auto door
       - ℹ️ trigger auto doors in case they've been manually closed
-    - 🚧 ContextMenu strategy
+    - ✅ ContextMenu strategy
       - ✅ hide when camera normal has +ve dot product with normal
       - ✅ list all npcs ever seen i.e. keep adding
       - ✅ show actions independently of npc distance
@@ -117,14 +117,12 @@
       - ✅ if acts fail/succeed then coloured red/green
       - ❌ can open/close directly from door
         - cannot infer `meta.inner` unlike switches
-      - 🚧 easier for mobile users
       - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
     - ✅ updateFromLastDown -> useHandleEvents
-    - can open/close doors using doors e.g. for mobile users
   - ✅ long press do point: actual nav mesh may be strictly smaller
     - ✅ from off-mesh closest point on nav mesh
     - ✅ still seeing long-press issues on mobile e.g. to bed from floor
-  - meta.doPoint should be defined on all do points
+  - 🚧 meta.doPoint should be defined on all do points
   - World shows closable message until 1st resolved true isReady
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - detect when moving npc is being obstructed by a stationary npc
@@ -205,7 +203,10 @@
   - to avoid being pushed through doors by other npcs
 - ❌ hmr issue with Connector class
   - we don't support it
-- hull door enter-room triggers late?
+- ❌ hull door enter-room triggers late?
+  - stale
+- ContextMenu for door has button redirecting "lastDown" to nearby switch
+  - easier for mobile users
 - towards faster raycast against instancedmesh
   - https://github.com/gkjohnson/three-mesh-bvh
   - https://github.com/pmndrs/drei/blob/master/src/core/Bvh.tsx
