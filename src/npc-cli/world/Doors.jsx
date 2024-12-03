@@ -134,6 +134,10 @@ export default function Doors(props) {
       const { meta } = w.gms[gmId].doors[doorId];
       return { ...w.lib.getGmDoorId(gmId, doorId), ...meta, instanceId };
     },
+    getAdjRoomByDir(gdKey, direction) {// 🚧 unused
+      const { door } = state.byKey[gdKey];
+      return door.normal.dot(direction) > 0 ? door.roomIds[0] : door.roomIds[1];
+    },
     getDoorMat(meta) {
       const { src, dir, ratio, segLength, door, normal } = meta;
       const length = segLength * ratio;
@@ -351,6 +355,7 @@ export default function Doors(props) {
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getDoorMat
  * @property {(meta: Geomorph.DoorState) => THREE.Matrix4} getLockSigMat
  * @property {(gmId: number) => number[]} getOpenIds Get gmDoorKeys of open doors
+ * @property {(gdKey: Geomorph.GmDoorKey, direction: Geom.VectJson) => number | null} getAdjRoomByDir
  * @property {(gmId: number, doorId: number) => boolean} isOpen
  * @property {(door: Geomorph.DoorState, opts?: Geomorph.ToggleDoorOpts) => boolean} toggleDoorRaw
  * Returns `true` iff successful.

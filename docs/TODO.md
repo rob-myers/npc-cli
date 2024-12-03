@@ -115,7 +115,9 @@
       - ✅ acts fail if npc too far
       - ✅ acts fail if npc in another room
       - ✅ if acts fail/succeed then coloured red/green
-      - 🚧 can open/close directly from door (easier for mobile)
+      - ❌ can open/close directly from door
+        - cannot infer `meta.inner` unlike switches
+      - 🚧 easier for mobile users
       - ℹ️ for Player would probably hide ContextMenu on exit room/area (via sensor)
     - ✅ updateFromLastDown -> useHandleEvents
     - can open/close doors using doors e.g. for mobile users

@@ -1397,7 +1397,7 @@ export class Connector {
     /**
      * `[id of room infront, id of room behind]`
      * - a room is *infront* if `normal` is pointing towards it.
-     * - hull doors have exactly one non-null entry.
+     * - hull doors have form `[null, roomId]` because their normal points outwards
      * @type {[null | number, null | number]}
      */
     this.roomIds = [null, null];

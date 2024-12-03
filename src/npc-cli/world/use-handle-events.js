@@ -14,17 +14,17 @@ import useStateRef from "../hooks/use-state-ref";
 export default function useHandleEvents(w) {
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    doorToNpc: {},
+    doorToNpcs: {},
     doorToPolyRefs: {},
     externalNpcs: new Set(),
     npcToAccess: {},
-    npcToDoor: {},
+    npcToDoors: {},
     npcToRoom: new Map(),
     roomToNpcs: [],
     pressMenuFilters: [],
 
     canCloseDoor(door) {
-      const closeNpcs = state.doorToNpc[door.gdKey];
+      const closeNpcs = state.doorToNpcs[door.gdKey];
       if (closeNpcs === undefined) {
         return true;
       } else if (closeNpcs.inside.size > 0) {
@@ -183,9 +183,14 @@ export default function useHandleEvents(w) {
           { def: { key: 'close', gdKey: meta.gdKey, }, label: 'close', meta },
           { def: { key: 'lock', gdKey: meta.gdKey, }, label: 'lock', meta },
           { def: { key: 'unlock', gdKey: meta.gdKey, }, label: 'unlock', meta },
+          // 🚧 ring bell
         ];
       }
-
+      if (meta.door === true) {
+        return [
+          // 🚧 knock
+        ];
+      }
       return [];
     },
     async handleEvents(e) {
@@ -265,8 +270,8 @@ export default function useHandleEvents(w) {
         }
         case "pre-setup-physics":
           // ℹ️ dev should handle partial correctness e.g. by pausing
-          state.doorToNpc = {};
-          state.npcToDoor = {};
+          state.doorToNpcs = {};
+          state.npcToDoors = {};
           break;
         case "update-context-menu":
           state.updateContextMenu();
@@ -332,7 +337,7 @@ export default function useHandleEvents(w) {
         }
         // case "started-moving":
         case "stopped-moving": {
-          const doorMeta = state.npcToDoor[e.npcKey];
+          const doorMeta = state.npcToDoors[e.npcKey];
 
           if (doorMeta?.inside.size > 0) {// npc stays in doorway
             npc.agent?.updateParameters({
@@ -362,7 +367,7 @@ export default function useHandleEvents(w) {
             return;
           }
           
-          for (const gdKey of state.npcToDoor[e.npcKey]?.nearby ?? []) {
+          for (const gdKey of state.npcToDoors[e.npcKey]?.nearby ?? []) {
             const door = w.door.byKey[gdKey];
             if (door.open === true || state.navSegIntersectsDoorway(e, e.next, door) === false) {
               continue;
@@ -428,8 +433,8 @@ export default function useHandleEvents(w) {
     },
     onEnterDoorCollider(e) {
       if (e.type === 'nearby') {
-        (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.gdKey);
-        (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
+        (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.gdKey);
+        (state.doorToNpcs[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).nearby.add(e.npcKey);
 
         const door = w.d[e.gdKey];
         state.ensureDoorPolyRefs(door);
@@ -461,8 +466,8 @@ export default function useHandleEvents(w) {
       }
       
       if (e.type === 'inside') {
-        (state.npcToDoor[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.gdKey);
-        (state.doorToNpc[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
+        (state.npcToDoors[e.npcKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.gdKey);
+        (state.doorToNpcs[e.gdKey] ??= { nearby: new Set(), inside: new Set() }).inside.add(e.npcKey);
 
         const door = w.door.byKey[e.gdKey];
         const npc = w.n[e.npcKey];
@@ -483,8 +488,8 @@ export default function useHandleEvents(w) {
       const npc = w.npc.npc[e.npcKey]; // undefined on removal
 
       if (e.type === 'nearby') {
-        state.npcToDoor[e.npcKey].nearby.delete(e.gdKey);
-        const closeNpcs = state.doorToNpc[e.gdKey];
+        state.npcToDoors[e.npcKey].nearby.delete(e.gdKey);
+        const closeNpcs = state.doorToNpcs[e.gdKey];
         closeNpcs.nearby.delete(e.npcKey);
 
         // ℹ️ try close door under conditions
@@ -505,8 +510,8 @@ export default function useHandleEvents(w) {
         }
 
         // npc entered room
-        state.npcToDoor[e.npcKey].inside.delete(e.gdKey);
-        state.doorToNpc[e.gdKey].inside.delete(e.npcKey);
+        state.npcToDoors[e.npcKey].inside.delete(e.gdKey);
+        state.doorToNpcs[e.gdKey].inside.delete(e.npcKey);
 
         const prev = state.npcToRoom.get(e.npcKey);
         if (door.gmId !== prev?.gmId) {
@@ -546,7 +551,7 @@ export default function useHandleEvents(w) {
       }
     },
     removeFromSensors(npcKey) {
-      const closeDoors = state.npcToDoor[npcKey];
+      const closeDoors = state.npcToDoors[npcKey];
       for (const gdKey of closeDoors?.nearby ?? []) {// npc may never have been close to any door
         const door = w.door.byKey[gdKey];
         state.onExitDoorCollider({ key: 'exit-collider', type: 'nearby', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
@@ -554,14 +559,14 @@ export default function useHandleEvents(w) {
           state.onExitDoorCollider({ key: 'exit-collider', type: 'inside', gdKey, gmId: door.gmId, doorId: door.doorId, npcKey });
         }
       }
-      state.npcToDoor[npcKey]?.nearby.clear();
-      state.npcToDoor[npcKey]?.inside.clear();
+      state.npcToDoors[npcKey]?.nearby.clear();
+      state.npcToDoors[npcKey]?.inside.clear();
     },
     someNpcInsideDoor(gdKey) {
-      return state.doorToNpc[gdKey]?.inside.size > 0;
+      return state.doorToNpcs[gdKey]?.inside.size > 0;
     },
     someNpcNearDoor(gdKey) {
-      return state.doorToNpc[gdKey]?.nearby.size > 0;
+      return state.doorToNpcs[gdKey]?.nearby.size > 0;
     },
     toggleDoor(gdKey, opts) {
       const door = w.door.byKey[gdKey];
@@ -620,7 +625,7 @@ export default function useHandleEvents(w) {
     },
     updateContextMenu() {
       const { lastDown } = w.view;
-      if (lastDown === undefined) {
+      if (lastDown === undefined || lastDown.normal === null) {
         return;
       }
 
@@ -641,7 +646,7 @@ export default function useHandleEvents(w) {
         return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
       }).sort((a, b) => a.length < b.length ? -1 : 1);
   
-      const roomNpcKeys = (typeof meta.gmId === 'number' && typeof meta.roomId === 'number') 
+      const roomNpcKeys = ('gmId' in meta && 'roomId' in meta)
         ? Array.from(state.roomToNpcs[meta.gmId][meta.roomId] ?? [])
         : []
       ;
@@ -671,13 +676,13 @@ export default function useHandleEvents(w) {
 
 /**
  * @typedef State
- * @property {{ [gdKey: Geomorph.GmDoorKey]: Record<'nearby' | 'inside', Set<string>> }} doorToNpc
+ * @property {{ [gdKey: Geomorph.GmDoorKey]: Record<'nearby' | 'inside', Set<string>> }} doorToNpcs
  * Relates `Geomorph.GmDoorKey` to nearby/inside `npcKey`s
  * @property {{ [gdKey: Geomorph.GmDoorKey]: number[] }} doorToPolyRefs
  * Ref of navigation polygons corresponding to the 2 triangles defining the doorway.
  * @property {{ [npcKey: string]: Set<string> }} npcToAccess
  * Relates `npcKey` to strings defining RegExp's matching `Geomorph.GmDoorKey`s
- * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoor
+ * @property {{ [npcKey: string]: Record<'nearby' | 'inside', Set<Geomorph.GmDoorKey>> }} npcToDoors
  * Relate `npcKey` to nearby `Geomorph.GmDoorKey`s
  * @property {((lastDownMeta: Geom.Meta) => boolean)[]} pressMenuFilters
  * Prevent ContextMenu on long press if any of these return `true`.
