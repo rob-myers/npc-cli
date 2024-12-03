@@ -93,7 +93,8 @@ export default function Decor(props) {
       const gm = w.gms[gmId];
       state.addDecor(gm.decor.map(d => state.instantiateDecor(d, gmId, gm))
         // Don't re-instantiate explicitly removed
-        .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
+        // .filter(d => !state.rmKeys.has(d.key) && (d.meta.roomId >= 0 ||
+        .filter(d => (d.meta.roomId >= 0 ||
           warn(`decor "${d.key}" cannot be instantiated: not in any room`, d)
         )
       ), false);
@@ -299,6 +300,9 @@ export default function Decor(props) {
           const orient = (gm.matrix.transformDegrees(d.orient) + 90) % 360;
           instance = gm.matrix.transformPoint(/** @type {Geomorph.DecorPoint} */ ({ ...d, ...base, orient }));
           instance.meta.orient = orient; // update `meta` too
+          if (base.meta.do === true) {
+            instance.meta.doPoint = { x: instance.x, y: instance.y };
+          }
           break;
         }
         case "rect":
@@ -459,9 +463,11 @@ export default function Decor(props) {
         state.seenHash.map = 0; // 🔔 force refresh
         return false; // Avoid query from disposed module
       }
+
       const prev = state.seenHash ?? {};
       const next = w.hash;
       const mapChanged = prev.map !== next.map;
+      console.log({ mapChanged }, prev.map, next.map);
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
@@ -508,7 +514,8 @@ export default function Decor(props) {
       }
 
       w.menu.measure('decor.addGm');
-      state.seenHash = next;
+      // 🔔 must clone for diff detection
+      state.seenHash = { ...w.hash, mapGmHashes: w.hash.mapGmHashes.slice() };
       update();
       return true;
     },
