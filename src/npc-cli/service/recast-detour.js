@@ -42,7 +42,7 @@ export function getTileCacheGeneratorConfig(tileCacheMeshProcess) {
     detailSampleDist: 0,
     walkableClimb: 0,
     tileCacheMeshProcess,
-    maxSimplificationError: 0.5,
+    maxSimplificationError: 0.75,
     walkableRadius: 0,
     // detailSampleMaxError: 0,
     // maxVertsPerPoly: 3,

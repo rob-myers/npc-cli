@@ -130,7 +130,7 @@
     - ℹ️ could use it to reposition stationary npc (via process)
   - stationary npcs should rotate a bit when they move out of the way
     - ℹ️ use desiredVelocity to move ±5deg base direction
-  - auto-open accessible door earlier
+  - ✅ auto-open accessible door earlier
     - e.g. check up to two corners in this case
   - can only spawn onto navigable floor or do point
   - spawn onto do point uses orient
@@ -145,6 +145,7 @@
 
 - try creating nav tiles to see if it avoids "steiner points"
   - `request-nav-tiles` requests tile-by-tile
+- try scaling geometry up, using cs=0.15, then scaling down
 
 - ✅ BUG saw npc stuck with: agent, s.act (Walk), s.target (non-null)
   - ℹ️ by running quickly many times
