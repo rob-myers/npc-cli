@@ -355,7 +355,8 @@ export default function WorldView(props) {
       });
       // renderList.transmissive.forEach(processItem);
       renderList.transparent.forEach(x => {
-        if (hasObjectPickShaderMaterial(x)) {
+        // if (hasObjectPickShaderMaterial(x)) {
+        if (hasObjectPickShaderMaterial(x) && x.object.name !== 'walls') {
           state.renderObjectPickItem(gl, scene, camera, x);
         }
       });
