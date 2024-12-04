@@ -606,7 +606,7 @@ export default function Decor(props) {
         map={state.label.tex}
         transparent
         opacity={0.5}
-        diffuse={new THREE.Vector3(1, 1, 0.5)}
+        diffuse={new THREE.Vector3(0.8, 0.8, 1)}
       />
     </instancedMesh>
   </>;

@@ -144,6 +144,10 @@
   - clean away off-mesh-connection if we don't use them
 
 - can turn transparent walls on/off somehow
+- ContextMenu extras
+  - move "pin" inside pop-up
+  - replace `<select>` with last clicked npc?
+  - shorten buttons e.g. `0` `1` `L` `U`
 - try creating nav tiles to see if it avoids "steiner points"
   - `request-nav-tiles` requests tile-by-tile
 - try scaling geometry up, using cs=0.15, then scaling down
