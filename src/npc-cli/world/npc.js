@@ -120,7 +120,8 @@ export class Npc {
   attachAgent() {
     return this.agent ??= this.w.crowd.addAgent(this.position, {
       ...crowdAgentParams,
-      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed
+      maxSpeed: this.s.run ? helper.defaults.runSpeed : helper.defaults.walkSpeed,
+      queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
   }
 
