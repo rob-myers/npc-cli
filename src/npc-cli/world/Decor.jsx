@@ -469,7 +469,6 @@ export default function Decor(props) {
       const prev = state.seenHash ?? {};
       const next = w.hash;
       const mapChanged = prev.map !== next.map;
-      console.log({ mapChanged }, prev.map, next.map);
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
@@ -598,6 +597,7 @@ export default function Decor(props) {
       ref={instances => void (instances && (state.labelInst = instances))}
       args={[state.labelQuad, undefined, labels.length]}
       frustumCulled={false}
+      renderOrder={2}
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedLabelsMaterial
