@@ -41,8 +41,8 @@ declare namespace Geomorph {
     map: number;
 
     /**
-     * 🔔 `gmHashes[gmId]` is hash of `map.gms[gmId]`
-     * i.e. hashing { gmKey, transform } 
+     * 🔔 `mapGmHashes[gmId]` is hash of `map.gms[gmId]`
+     * i.e. hashes { gmKey, transform } 
      */
     mapGmHashes: number[];
   }

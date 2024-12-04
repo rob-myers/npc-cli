@@ -458,14 +458,14 @@ export default function Decor(props) {
   
   // instantiate geomorph decor
   const query = useQuery({
-    queryKey: ['decor', w.key, w.mapKey, w.hash.decor, w.hash.sheets],
+    queryKey: ['decor', w.key, w.mapKey, w.hash.full],
 
     async queryFn() {
       if (module.hot?.active === false) {
-        state.seenHash.map = 0; // 🔔 force refresh
         return false; // Avoid query from disposed module
       }
 
+      const justHmr = query.data === false;
       const prev = state.seenHash ?? {};
       const next = w.hash;
       const mapChanged = prev.map !== next.map;
@@ -481,7 +481,7 @@ export default function Decor(props) {
 
       w.menu.measure('decor.addGm');
 
-      if (mapChanged) {
+      if (mapChanged || justHmr) {
         // Re-instantiate all cleanly
         state.removeAllInstantiated();
         for (const [gmId, gm] of w.gms.entries()) {
@@ -639,7 +639,7 @@ export default function Decor(props) {
  * @property {import("@tanstack/react-query").QueryStatus} queryStatus
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
  * but yet added back in. This is useful e.g. so can avoid re-instantiating geomorph decor
- * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
+ * @property {Geomorph.GeomorphsHash} seenHash Clone of last seen value of `w.hash`
  * @property {boolean} showLabels
  *
  * @property {(ds: Geomorph.Decor[], removeExisting?: boolean) => void} addDecor

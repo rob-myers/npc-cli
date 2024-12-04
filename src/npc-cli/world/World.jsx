@@ -177,6 +177,7 @@ export default function World(props) {
         return false; // Avoid query from disposed module
       }
 
+      const justHmr = query.data === false;
       const prevGeomorphs = state.geomorphs;
       const geomorphsJson = await fetchGeomorphsJson();
 
@@ -226,14 +227,15 @@ export default function World(props) {
           }
         };
         next.gmsData.computeRoot(next.gms);
-        
+        state.menu.measure('gmsData');
+      }
+
+      if (mapChanged || justHmr) {
         const dimension = floorTextureDimension;
         state.texFloor.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
         state.texCeil.resize({ width: dimension, height: dimension, numTextures: next.gmsData.seenGmKeys.length });
         state.texVs.floor++; // e.g. fix edit const.js
         state.texVs.ceiling++;
-
-        state.menu.measure('gmsData');
       }
       
       if (mapChanged || gmsDataChanged || gmGraphChanged) {
