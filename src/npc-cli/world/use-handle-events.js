@@ -625,7 +625,7 @@ export default function useHandleEvents(w) {
     },
     updateContextMenu() {
       const { lastDown } = w.view;
-      if (lastDown === undefined || lastDown.normal === null) {
+      if (lastDown === undefined) {
         return;
       }
 
@@ -652,6 +652,7 @@ export default function useHandleEvents(w) {
       ;
 
       w.cm.npcKeys = meta.npcKey === undefined ? roomNpcKeys : [meta.npcKey];
+
       if (w.cm.npcKey === null || !roomNpcKeys.includes(w.cm.npcKey)) {
         w.cm.npcKey = w.cm.npcKeys[0] ?? null;
       }
