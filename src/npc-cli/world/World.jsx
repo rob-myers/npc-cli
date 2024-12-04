@@ -70,7 +70,7 @@ export default function World(props) {
     texCeil: new TexArray({ ctKey: 'ceil-tex-array', numTextures: 1, width: 0, height: 0 }),
     texDecor: new TexArray({ ctKey: 'decor-tex-array', numTextures: 1, width: 0, height: 0 }),
     texObs: new TexArray({ ctKey: 'obstacle-tex-array', numTextures: 1, width: 0, height: 0 }),
-    texVs: { floor: 0, ceiling: 0 }, // 🚧
+    texVs: { floor: 0, ceiling: 0 },
 
     crowd: /** @type {*} */ (null),
 
@@ -171,7 +171,7 @@ export default function World(props) {
   useHandleEvents(state);
 
   const query = useQuery({
-    queryKey: [WORLD_QUERY_FIRST_KEY, props.worldKey, props.mapKey],
+    queryKey: [WORLD_QUERY_FIRST_KEY, state.key, props.mapKey],
     queryFn: async () => {
       if (module.hot?.active === false) {
         return false; // Avoid query from disposed module
