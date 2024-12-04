@@ -143,6 +143,7 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
+- can turn transparent walls on/off somehow
 - try creating nav tiles to see if it avoids "steiner points"
   - `request-nav-tiles` requests tile-by-tile
 - try scaling geometry up, using cs=0.15, then scaling down

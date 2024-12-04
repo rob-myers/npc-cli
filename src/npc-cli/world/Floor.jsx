@@ -99,10 +99,7 @@ export default function Floor(props) {
         ct.beginPath(); ct.moveTo(s.x, s.y); ct.lineTo(p.x, p.y); ct.stroke();
       });
 
-      // Walls
       drawPolygons(ct, walls, ['black', null]);
-      // // Doors
-      // drawPolygons(ct, doors.map((x) => x.poly), ["rgba(0, 0, 0, 0)", "black", 0.02]);
 
       // drop shadows (avoid doubling e.g. bunk bed, overlapping tables)
       const shadowColor = 'rgba(0, 0, 0, 0.25)'
