@@ -125,8 +125,9 @@
   - ✅ meta.doPoint should be defined on all do points
   - ✅ World shows closable message until `awaitWorld` resolves
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
-  - 🚧 fix stationary npc trapped next to closed door
-  - fire event onchange agent neighbours
+  - ❌ fix stationary npc without access trapped next to closed door
+    - no repro
+  - 🚧 fire event onchange agent neighbours
     - ℹ️ could use it to reposition stationary npc (via process)
   - stationary npcs should rotate a bit when they move out of the way
     - ℹ️ use desiredVelocity to move ±5deg base direction
