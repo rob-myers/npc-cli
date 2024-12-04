@@ -208,7 +208,7 @@ export default function Decor(props) {
       // });
       return tmpMatFour1.set(
         transform[0], 0, 0, transform[4],
-        0, transform[3], 0, wallHeight + 0.2,
+        0, transform[3], 0, wallHeight - 0.2,
         0, 0, 1, transform[5],
         0, 0, 0, 1
       );
@@ -605,8 +605,8 @@ export default function Decor(props) {
         side={THREE.DoubleSide}
         map={state.label.tex}
         transparent
-        opacity={0.5 }
-        diffuse={new THREE.Vector3(1, 1, 0.8)}
+        opacity={0.5}
+        diffuse={new THREE.Vector3(1, 1, 0.5)}
       />
     </instancedMesh>
   </>;
