@@ -341,7 +341,7 @@ export default function WorldView(props) {
       x.material.uniforms.objectPick.value = false;
       x.material.uniformsNeedUpdate = true;
     },
-    renderObjectPickScene() {
+    renderObjectPickScene() {// 🚧 more efficient approach to render list
       const { gl, scene, camera } = w.r3f;
       // https://github.com/bzztbomb/three_js_gpu_picking/blob/main/src/gpupicker.js
       // This is the magic, these render lists are still filled with valid data.  So we can
@@ -353,10 +353,11 @@ export default function WorldView(props) {
           state.renderObjectPickItem(gl, scene, camera, x);
         }
       });
-      // renderList.transmissive.forEach(processItem);
       renderList.transparent.forEach(x => {
-        // if (hasObjectPickShaderMaterial(x)) {
-        if (hasObjectPickShaderMaterial(x) && x.object.name !== 'walls') {
+        if (x.object.name === 'walls' && w.wall.opacity < 1) {
+          return;
+        }
+        if (hasObjectPickShaderMaterial(x)) {
           state.renderObjectPickItem(gl, scene, camera, x);
         }
       });

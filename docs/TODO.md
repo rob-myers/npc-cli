@@ -144,7 +144,7 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
-- can turn transparent walls on/off somehow
+- ✅ can turn transparent walls on/off
 - ContextMenu: move "pin" inside pop-up
 - ContextMenu: icons for open/close/lock/unlock
 - ContextMenu: replace npc `<select>` with nothing or npcKey

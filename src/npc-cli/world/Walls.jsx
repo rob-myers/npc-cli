@@ -8,6 +8,7 @@ import { InstancedMonochromeShader } from "../service/glsl";
 import { geomorph } from "../service/geomorph";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 
 /**
  * @param {Props} props
@@ -15,9 +16,12 @@ import useStateRef from "../hooks/use-state-ref";
 export default function Walls(props) {
   const w = React.useContext(WorldContext);
 
+  const update = useUpdate();
+
   const state = useStateRef(/** @returns {State} */ () => ({
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXY(`${w.key}-walls-xy`),
+    opacity: 1,
 
     decodeInstanceId(instanceId) {
       // compute gmId, gmData.wallSegs[wallSegsId]
@@ -99,9 +103,15 @@ export default function Walls(props) {
       ws.computeBoundingSphere();
       ws.instanceMatrix.needsUpdate = true;
     },
+    setOpacity(opacity) {
+      state.opacity = Math.min(Math.max(0, opacity), 1);
+      update();
+    },
   }));
 
   w.wall = state;
+
+  const transparent = state.opacity !== 1;
 
   React.useEffect(() => {
     state.positionInstances();
@@ -114,13 +124,17 @@ export default function Walls(props) {
       ref={instances => instances && (state.inst = instances)}
       args={[state.quad, undefined, w.gmsData.wallCount]}
       frustumCulled={false}
-      renderOrder={2} // ℹ️ for partial transparency
+      // ℹ️ for transparency
+      renderOrder={transparent ? 2 : undefined}
     >
       {/* <meshBasicMaterial side={THREE.DoubleSide} color="#866" wireframe /> */}
       <instancedMonochromeShader
         key={InstancedMonochromeShader.key}
         diffuse={[0, 0, 0]}
-        depthWrite={false} transparent opacity={0.5} // ℹ️ for partial transparency
+        // ℹ️ for transparency
+        depthWrite={!transparent}
+        transparent={transparent}
+        opacity={state.opacity}
       />
     </instancedMesh>
   );
@@ -135,6 +149,7 @@ export default function Walls(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} inst
  * @property {THREE.BufferGeometry} quad
+ * @property {number} opacity
  *
  * @property {(instanceId: number) => Geom.Meta} decodeInstanceId
  * @property {(
@@ -145,6 +160,7 @@ export default function Walls(props) {
  *  baseHeight?: number,
  * ) => THREE.Matrix4} getWallMat
  * @property {() => void} positionInstances
+ * @property {(opacity: number) => void} setOpacity
  */
 
 const tmpVec1 = new Vect();
