@@ -726,7 +726,7 @@ export class Npc {
       updateFlags: defaultAgentUpdateFlags,
       radius: helper.defaults.radius,
       collisionQueryRange: 1.5,
-      separationWeight: 1,
+      separationWeight: staticSeparationWeight,
       queryFilterType: this.w.lib.queryFilterType.excludeDoors,
     });
     
@@ -776,6 +776,7 @@ export function hotModuleReloadNpc(npc) {
 }
 
 const maxAcceleration = 10;
+const staticSeparationWeight = 1;
 
 /** @type {Partial<import("@recast-navigation/core").CrowdAgentParams>} */
 export const crowdAgentParams = {
@@ -785,7 +786,7 @@ export const crowdAgentParams = {
   pathOptimizationRange: 10, // 🚧 clarify
   // collisionQueryRange: 0.7,
   collisionQueryRange: 1.5,
-  separationWeight: 4,
+  separationWeight: staticSeparationWeight,
   queryFilterType: 0,
   // obstacleAvoidanceType
   updateFlags: defaultAgentUpdateFlags,
