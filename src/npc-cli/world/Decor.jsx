@@ -208,7 +208,7 @@ export default function Decor(props) {
       // });
       return tmpMatFour1.set(
         transform[0], 0, 0, transform[4],
-        0, transform[3], 0, wallHeight + 0.2,
+        0, transform[3], 0, wallHeight - 0.2,
         0, 0, 1, transform[5],
         0, 0, 0, 1
       );
@@ -458,18 +458,17 @@ export default function Decor(props) {
   
   // instantiate geomorph decor
   const query = useQuery({
-    queryKey: ['decor', w.key, w.mapKey, w.hash.decor, w.hash.sheets],
+    queryKey: ['decor', w.key, w.mapKey, w.hash.full],
 
     async queryFn() {
       if (module.hot?.active === false) {
-        state.seenHash.map = 0; // 🔔 force refresh
         return false; // Avoid query from disposed module
       }
 
+      const justHmr = query.data === false;
       const prev = state.seenHash ?? {};
       const next = w.hash;
       const mapChanged = prev.map !== next.map;
-      console.log({ mapChanged }, prev.map, next.map);
       const fontHeight = gmLabelHeightSgu * spriteSheetDecorExtraScale;
 
       state.labels = w.gms.flatMap((gm, gmId) => gm.labels.map(d => state.instantiateDecor(d, gmId, gm)));
@@ -482,7 +481,7 @@ export default function Decor(props) {
 
       w.menu.measure('decor.addGm');
 
-      if (mapChanged) {
+      if (mapChanged || justHmr) {
         // Re-instantiate all cleanly
         state.removeAllInstantiated();
         for (const [gmId, gm] of w.gms.entries()) {
@@ -598,6 +597,7 @@ export default function Decor(props) {
       ref={instances => void (instances && (state.labelInst = instances))}
       args={[state.labelQuad, undefined, labels.length]}
       frustumCulled={false}
+      renderOrder={2}
     >
       {/* <meshBasicMaterial color="red" /> */}
       <instancedLabelsMaterial
@@ -605,8 +605,8 @@ export default function Decor(props) {
         side={THREE.DoubleSide}
         map={state.label.tex}
         transparent
-        opacity={0.5 }
-        diffuse={new THREE.Vector3(1, 1, 0.8)}
+        opacity={0.5}
+        diffuse={new THREE.Vector3(0.8, 0.8, 1)}
       />
     </instancedMesh>
   </>;
@@ -639,7 +639,7 @@ export default function Decor(props) {
  * @property {import("@tanstack/react-query").QueryStatus} queryStatus
  * @property {Set<string>} rmKeys decorKeys manually removed via `removeDecorFromRoom`,
  * but yet added back in. This is useful e.g. so can avoid re-instantiating geomorph decor
- * @property {Geomorph.GeomorphsHash} seenHash Last seen value of `w.hash`
+ * @property {Geomorph.GeomorphsHash} seenHash Clone of last seen value of `w.hash`
  * @property {boolean} showLabels
  *
  * @property {(ds: Geomorph.Decor[], removeExisting?: boolean) => void} addDecor
