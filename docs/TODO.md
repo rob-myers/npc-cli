@@ -145,8 +145,8 @@
   - clean away off-mesh-connection if we don't use them
 
 - ✅ can turn transparent walls on/off
-- ContextMenu: move "pin" inside pop-up
-- ContextMenu: icons for open/close/lock/unlock
+- ✅ ContextMenu: move "pin" inside pop-up
+- 🚧 ContextMenu: icons for open/close/lock/unlock
 - ContextMenu: replace npc `<select>` with nothing or npcKey
   - by default no npc i.e. no restrictions
   - can programmatically set npcKey
