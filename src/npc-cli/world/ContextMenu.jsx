@@ -164,6 +164,13 @@ export default function ContextMenu() {
             >
               <div className="controls">
                 <button
+                  className={cx({ disabled: !state.persist })}
+                  onClick={state.togglePersist}
+                  title="persist"
+                >
+                  pin
+                </button>
+                <button
                   onClick={state.onToggleResize}
                   className={cx({ disabled: !state.scaled })}
                 >
@@ -182,14 +189,6 @@ export default function ContextMenu() {
 
             </PopUp>
           </div>
-
-          <button
-            className={cx("persist-button", { disabled: !state.persist })}
-            onClick={state.togglePersist}
-            title="persist"
-          >
-            📌
-          </button>
 
           <button className="close-button" onClick={state.hide}>
             x
@@ -322,7 +321,7 @@ const contextMenuCss = css`
     }
   }
 
-  .close-button, .persist-button {
+  .close-button {
     min-width: calc(${closeButtonRadius} + ${closeButtonRadius});
     min-height: calc(${closeButtonRadius} + ${closeButtonRadius});
     display: flex;

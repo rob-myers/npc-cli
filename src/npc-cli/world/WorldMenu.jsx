@@ -57,6 +57,10 @@ export default function WorldMenu(props) {
       state.debugWhilePaused = !state.debugWhilePaused;
       update();
     },
+    toggleXRay() {
+      w.wall.setOpacity(w.wall.opacity === 0.5 ? 1 : 0.5);
+      update();
+    },
     update,
   }));
 
@@ -81,8 +85,14 @@ export default function WorldMenu(props) {
       <button
         onClick={state.toggleDebug}
         className={state.debugWhilePaused ? 'text-green' : undefined}
-      >
+        >
         debug
+      </button>
+      <button
+        onClick={state.toggleXRay}
+        className={w.wall.opacity < 1 ? 'text-green' : undefined}
+      >
+        x-ray
       </button>
     </div>}
 
@@ -192,5 +202,6 @@ const cssTtyDisconnectedMessage = css`
  * @property {() => void} onOverlayPointerUp
  * @property {() => void} storeTextareaHeight
  * @property {() => void} toggleDebug
+ * @property {() => void} toggleXRay
  * @property {() => void} update
  */

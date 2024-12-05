@@ -125,8 +125,9 @@
   - ✅ meta.doPoint should be defined on all do points
   - ✅ World shows closable message until `awaitWorld` resolves
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
-  - 🚧 fix stationary npc trapped next to closed door
-  - fire event onchange agent neighbours
+  - ❌ fix stationary npc without access trapped next to closed door
+    - no repro
+  - 🚧 fire event onchange agent neighbours
     - ℹ️ could use it to reposition stationary npc (via process)
   - stationary npcs should rotate a bit when they move out of the way
     - ℹ️ use desiredVelocity to move ±5deg base direction
@@ -143,9 +144,9 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
-- can turn transparent walls on/off somehow
-- ContextMenu: move "pin" inside pop-up
-- ContextMenu: icons for open/close/lock/unlock
+- ✅ can turn transparent walls on/off
+- ✅ ContextMenu: move "pin" inside pop-up
+- 🚧 ContextMenu: icons for open/close/lock/unlock
 - ContextMenu: replace npc `<select>` with nothing or npcKey
   - by default no npc i.e. no restrictions
   - can programmatically set npcKey
