@@ -218,12 +218,14 @@ export default function ContextMenu() {
               <button
                 key={act.label}
                 className={cx("action", { selected: state.lastAct === act })}
+                data-index={actIndex}
               >
                 <img
                   src={getDecorIconUrl(act.icon)}
                   title={act.label}
-                  width={24}
                   data-index={actIndex}
+                  draggable={false}
+                  // width={24}
                 />
               </button>
             )}
@@ -272,10 +274,12 @@ const contextMenuCss = css`
   @media(max-width: ${700}px) {
     left: 8px;
     top: 8px;
+    --icon-size: 28px;
   }
 
   display: flex;
-  flex-direction: column;
+  align-items: baseline;
+  /* flex-direction: column; */
 
   font-size: 0.8rem;
   color: #ddd;
@@ -354,12 +358,12 @@ const contextMenuCss = css`
 
   .actor-and-actions {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     align-items: start;
 
     select.actor {
       padding: 2px 4px;
-      flex: 1;
+      /* flex: 1; */
       border: 1px solid #aaa;
       background-color: black;
       &.empty {
@@ -369,14 +373,16 @@ const contextMenuCss = css`
     
     .actions {
       display: flex;
-      flex-wrap: wrap;
-      width: calc(24px * 6);
+      /* flex-wrap: wrap; */
+      /* width: calc(var(--icon-size) * 3); */
+      gap: 4px;
+      margin-top: 4px;
+      opacity: 0.75;
     }
 
     .action {
       display: flex;
       align-items: center;
-      margin: 2px 4px;
       width: var(--icon-size);
     }
     
@@ -384,7 +390,9 @@ const contextMenuCss = css`
       &::after {
         content: "";
         position: absolute;
+        pointer-events: none;
         background-color: var(--selected-act-color);
+        border-radius: 4px;
         opacity: 0.25;
         font-size: var(--icon-size);
         width: var(--icon-size);
