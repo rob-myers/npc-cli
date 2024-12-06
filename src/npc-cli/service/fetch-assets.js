@@ -55,6 +55,11 @@ export function getDecorSheetUrl(sheetId) {
   return `${assetsEndpoint}/2d/decor.${sheetId}.${imgExt}${getDevCacheBustQueryParam()}`;
 }
 
+/** @param {Geomorph.DecorImgKey} decorImgKey */
+export function getDecorIconUrl(decorImgKey) {
+  return `${assetsEndpoint}/2d/${decorImgKey}.${imgExt}${getDevCacheBustQueryParam()}`;
+}
+
 /** Override cache in development */
 function getDevCacheBustQueryParam() {
   return isDevelopment() ? `?v=${Date.now()}` : '';

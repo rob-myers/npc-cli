@@ -129,12 +129,14 @@
     - no repro
   - ✅ can turn transparent walls on/off
   - ✅ ContextMenu: move "pin" inside pop-up
+  - ✅ assets.js also converts icon--* directly to PNGs and WEBPs
   - 🚧 ContextMenu: icons for open/close/lock/unlock
   - ContextMenu: replace npc `<select>` with nothing or npcKey
     - by default no npc i.e. no restrictions
     - can programmatically set npcKey (e.g. Player, last selected)
   - Generalise ContextMenu i.e. can have many menus
-    - ℹ️ e.g. ContextMenu + static menus + npc speech bubbles
+    - ℹ️ e.g. ContextMenu + static menus
+    - ℹ️ e.g. npc speech bubbles
   - fire event onchange agent neighbours
     - ℹ️ could use it to reposition stationary npc (via process)
   - stationary npcs should rotate a bit when they move out of the way
