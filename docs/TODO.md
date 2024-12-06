@@ -8,20 +8,11 @@
 
 ## WIP
 
-- 🚧 integrate Viewer into blog
-  - 🚧 screenshots in 1st blog
-    - ✅ screenshot data-url i.e. `w view.toDataURL`
-    - ✅ open in browser i.e. `w view.openSnapshot`
-    - ℹ️ our api only captures the canvas e.g. no ContextMenu, logger, Tabs, tty etc.
-    - ℹ️ chrome devtool supports select node then >capture node screenshot
-    - 🚧 1st image goes after explanation of "underlying problem"
-  - blog has ui to mutate Viewer
-    - can totally overwrite
-    - can change World mapKey
-    - can change tty env (e.g. PROFILE) and reboot
-  - 🚧 clean up profile-1
-    - e.g. `spawn rob $( click 1 ) --degrees=90`
-    - e.g. `npc rob --showSelector=true --setLabel=Robbo`
+- 🚧 ContextMenu rethink
+  - simplify and customise from CLI
+  - links not icons
+    - remove icon generation code from asset.js
+  - generalise: ContextMenu, static panels, speech bubbles
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos
@@ -131,13 +122,6 @@
   - ✅ ContextMenu: move "pin" inside pop-up
   - ✅ assets.js also converts icon--* directly to PNGs and WEBPs
   - ✅ ContextMenu: icons for open/close/lock/unlock
-  - 🚧 ContextMenu: flatten as single row
-  - 🚧 ContextMenu: replace npc `<select>` with nothing or npcKey
-    - by default no npc i.e. no restrictions
-    - can programmatically set npcKey (e.g. Player, last selected)
-  - Generalise ContextMenu i.e. can have many menus
-    - ℹ️ e.g. ContextMenu + static menus
-    - ℹ️ e.g. npc speech bubbles
   - fire event onchange agent neighbours
     - ℹ️ could use it to reposition stationary npc (via process)
   - stationary npcs should rotate a bit when they move out of the way
@@ -154,6 +138,21 @@
   - clean overwritten attributes using patched three.js:
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
+
+- 🚧 integrate Viewer into blog
+  - 🚧 screenshots in 1st blog
+    - ✅ screenshot data-url i.e. `w view.toDataURL`
+    - ✅ open in browser i.e. `w view.openSnapshot`
+    - ℹ️ our api only captures the canvas e.g. no ContextMenu, logger, Tabs, tty etc.
+    - ℹ️ chrome devtool supports select node then >capture node screenshot
+    - 🚧 1st image goes after explanation of "underlying problem"
+  - blog has ui to mutate Viewer
+    - can totally overwrite
+    - can change World mapKey
+    - can change tty env (e.g. PROFILE) and reboot
+  - 🚧 clean up profile-1
+    - e.g. `spawn rob $( click 1 ) --degrees=90`
+    - e.g. `npc rob --showSelector=true --setLabel=Robbo`
 
 - try creating nav tiles to see if it avoids "steiner points"
   - `request-nav-tiles` requests tile-by-tile
