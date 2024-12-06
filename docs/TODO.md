@@ -97,7 +97,7 @@
     - ✅ Doors should be two quads so get correct normal
   - ✅ ContextMenu use circle instead of sphere
   - ✅ fix 301 room 11 i.e. bridge room should be split in two
-  - 🚧 ContextMenu has select with possible actions
+  - ✅ ContextMenu has select with possible actions
     - ✅ switches: can open doors
     - ✅ switches: can close doors
     - ✅ switches: can lock/unlock doors
@@ -127,7 +127,15 @@
     - ℹ️ "connect a tty e.g. by clicking its tab then coming back"
   - ❌ fix stationary npc without access trapped next to closed door
     - no repro
-  - 🚧 fire event onchange agent neighbours
+  - ✅ can turn transparent walls on/off
+  - ✅ ContextMenu: move "pin" inside pop-up
+  - 🚧 ContextMenu: icons for open/close/lock/unlock
+  - ContextMenu: replace npc `<select>` with nothing or npcKey
+    - by default no npc i.e. no restrictions
+    - can programmatically set npcKey (e.g. Player, last selected)
+  - Generalise ContextMenu i.e. can have many menus
+    - ℹ️ e.g. ContextMenu + static menus + npc speech bubbles
+  - fire event onchange agent neighbours
     - ℹ️ could use it to reposition stationary npc (via process)
   - stationary npcs should rotate a bit when they move out of the way
     - ℹ️ use desiredVelocity to move ±5deg base direction
@@ -144,13 +152,6 @@
     > `w.r3f.gl.getAttributes().remove(attribute)`
   - clean away off-mesh-connection if we don't use them
 
-- ✅ can turn transparent walls on/off
-- ✅ ContextMenu: move "pin" inside pop-up
-- 🚧 ContextMenu: icons for open/close/lock/unlock
-- ContextMenu: replace npc `<select>` with nothing or npcKey
-  - by default no npc i.e. no restrictions
-  - can programmatically set npcKey
-    - e.g. Player, or last selected
 - try creating nav tiles to see if it avoids "steiner points"
   - `request-nav-tiles` requests tile-by-tile
 - try scaling geometry up, using cs=0.15, then scaling down
