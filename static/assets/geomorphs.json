@@ -38345,57 +38345,57 @@
         "width": 132,
         "height": 240
       },
+      "icon--warn": {
+        "icon": true,
+        "decorImgKey": "icon--warn",
+        "sheetId": 0,
+        "x": 304,
+        "y": 244,
+        "width": 84,
+        "height": 75
+      },
       "icon--door-closed": {
         "icon": true,
         "decorImgKey": "icon--door-closed",
         "sheetId": 0,
-        "x": 304,
-        "y": 244,
-        "width": 86,
+        "x": 2,
+        "y": 364,
+        "width": 77,
+        "height": 77
+      },
+      "icon--door-locked": {
+        "icon": true,
+        "decorImgKey": "icon--door-locked",
+        "sheetId": 0,
+        "x": 81,
+        "y": 364,
+        "width": 77,
         "height": 77
       },
       "icon--door-open": {
         "icon": true,
         "decorImgKey": "icon--door-open",
         "sheetId": 0,
-        "x": 2,
+        "x": 160,
         "y": 364,
-        "width": 86,
+        "width": 77,
         "height": 77
       },
       "icon--door-unlocked": {
         "icon": true,
         "decorImgKey": "icon--door-unlocked",
         "sheetId": 0,
-        "x": 90,
+        "x": 239,
         "y": 364,
-        "width": 86,
-        "height": 77
-      },
-      "icon--warn": {
-        "icon": true,
-        "decorImgKey": "icon--warn",
-        "sheetId": 0,
-        "x": 178,
-        "y": 364,
-        "width": 84,
-        "height": 75
-      },
-      "icon--door-locked": {
-        "icon": true,
-        "decorImgKey": "icon--door-locked",
-        "sheetId": 0,
-        "x": 264,
-        "y": 364,
-        "width": 67,
+        "width": 77,
         "height": 77
       },
       "icon--doc": {
         "icon": true,
         "decorImgKey": "icon--doc",
         "sheetId": 0,
-        "x": 333,
-        "y": 323,
+        "x": 318,
+        "y": 321,
         "width": 50,
         "height": 72
       },
@@ -38421,8 +38421,8 @@
         "icon": true,
         "decorImgKey": "icon--square",
         "sheetId": 0,
-        "x": 333,
-        "y": 397,
+        "x": 318,
+        "y": 395,
         "width": 38,
         "height": 38
       }
@@ -39203,7 +39203,7 @@
     },
     "obstacleDims": [{"width": 2359, "height": 2098}],
     "maxObstacleDim": {"width": 2359, "height": 2098},
-    "imagesHash": 936998844,
+    "imagesHash": -1721500502,
     "skins": {
       "svgHash": {"cuboid-man": -1087841574, "cuboid-pet": -1224685710},
       "uvMap": {
