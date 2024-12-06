@@ -234,6 +234,8 @@ declare namespace NPC {
     def: MetaActDef;
     /** Label of button */
     label: string;
+    /** `icon--*` key */
+    icon: Geomorph.DecorImgKey;
     /** The meta of ContextMenu (from prior click) when button was clicked */
     meta: Geom.Meta<T>;
   }

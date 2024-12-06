@@ -3,6 +3,7 @@ import { css, cx } from "@emotion/css";
 import * as THREE from "three";
 
 import { pause } from "../service/generic";
+import { getDecorIconUrl } from "../service/fetch-assets";
 import { PopUp } from "../components/PopUp";
 import { Html3d, objectScale } from '../components/Html3d';
 import { WorldContext } from "./world-context";
@@ -63,7 +64,8 @@ export default function ContextMenu() {
       return state.tracked !== null && state.meta.npcKey === npcKey;
     },
     onClickActions(e) {
-      const index = Array.from(e.currentTarget.childNodes).indexOf(/** @type {HTMLElement} */ (e.target));
+      const img = /** @type {HTMLElement} */ (e.target);
+      const index = Number(img.dataset.index);
       const act = state.metaActs[index];
 
       if (act === undefined || state.npcKey === null) {
@@ -212,12 +214,17 @@ export default function ContextMenu() {
             className="actions"
             onClick={state.onClickActions}
           >
-            {state.metaActs.map(act =>
+            {state.metaActs.map((act, actIndex) =>
               <button
                 key={act.label}
                 className={cx("action", { selected: state.lastAct === act })}
               >
-                {act.label}
+                <img
+                  src={getDecorIconUrl(act.icon)}
+                  title={act.label}
+                  width={24}
+                  data-index={actIndex}
+                />
               </button>
             )}
           </div>
@@ -251,6 +258,7 @@ const closeButtonRadius = `${14}px`;
 
 const contextMenuCss = css`
   --selected-act-color: white;
+  --icon-size: 24px;
 
   position: absolute;
   left: 0;
@@ -343,9 +351,6 @@ const contextMenuCss = css`
   .close-button {
     border-color: #d77;
   }
-  .persist-button {
-    border-color: #77d;
-  }
 
   .actor-and-actions {
     display: flex;
@@ -353,7 +358,6 @@ const contextMenuCss = css`
     align-items: start;
 
     select.actor {
-      /* pointer-events: all; */
       padding: 2px 4px;
       flex: 1;
       border: 1px solid #aaa;
@@ -363,22 +367,29 @@ const contextMenuCss = css`
       }
     }
     
-    /* .actions {
+    .actions {
       display: flex;
-    } */
+      flex-wrap: wrap;
+      width: calc(24px * 6);
+    }
 
     .action {
       display: flex;
-      justify-content: center;
-      padding: 2px 4px;
-      &:hover {
-        background-color: #433;
-      }
+      align-items: center;
+      margin: 2px 4px;
+      width: var(--icon-size);
     }
     
     .action.selected {
-      color: var(--selected-act-color);
-      background-color: #00000077;
+      &::after {
+        content: "";
+        position: absolute;
+        background-color: var(--selected-act-color);
+        opacity: 0.25;
+        font-size: var(--icon-size);
+        width: var(--icon-size);
+        height: var(--icon-size);
+      }
     }
   }
 

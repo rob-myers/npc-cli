@@ -130,8 +130,8 @@
   - ✅ can turn transparent walls on/off
   - ✅ ContextMenu: move "pin" inside pop-up
   - ✅ assets.js also converts icon--* directly to PNGs and WEBPs
-  - 🚧 ContextMenu: icons for open/close/lock/unlock
-  - ContextMenu: replace npc `<select>` with nothing or npcKey
+  - ✅ ContextMenu: icons for open/close/lock/unlock
+  - 🚧 ContextMenu: replace npc `<select>` with nothing or npcKey
     - by default no npc i.e. no restrictions
     - can programmatically set npcKey (e.g. Player, last selected)
   - Generalise ContextMenu i.e. can have many menus

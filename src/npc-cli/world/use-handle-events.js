@@ -179,10 +179,10 @@ export default function useHandleEvents(w) {
     getMetaActs(meta) {// 🚧 WIP
       if (typeof meta.switch === 'number') {
         return [
-          { def: { key: 'open', gdKey: meta.gdKey, }, label: 'open', meta },
-          { def: { key: 'close', gdKey: meta.gdKey, }, label: 'close', meta },
-          { def: { key: 'lock', gdKey: meta.gdKey, }, label: 'lock', meta },
-          { def: { key: 'unlock', gdKey: meta.gdKey, }, label: 'unlock', meta },
+          { def: { key: 'open', gdKey: meta.gdKey, }, label: 'open', icon: 'icon--door-open', meta },
+          { def: { key: 'close', gdKey: meta.gdKey, }, label: 'close', icon: 'icon--door-closed', meta },
+          { def: { key: 'lock', gdKey: meta.gdKey, }, label: 'lock', icon: 'icon--door-locked', meta },
+          { def: { key: 'unlock', gdKey: meta.gdKey, }, label: 'unlock', icon: 'icon--door-unlocked', meta },
           // 🚧 ring bell
         ];
       }
