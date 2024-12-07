@@ -1,6 +1,6 @@
 import React from "react";
 import * as THREE from "three";
-import { NavMeshHelper, OffMeshConnectionsHelper } from "@recast-navigation/three";
+import { NavMeshHelper } from "@recast-navigation/three";
 import { Line2, LineGeometry } from "three-stdlib";
 
 import { colliderHeight } from "../service/const";
@@ -16,13 +16,15 @@ import TestNpcs from "./TestNpcs";
 export default function Debug(props) {
   const w = React.useContext(WorldContext);
 
+  const update = useUpdate();
+
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
     npc: /** @type {*} */ (null),
-    selectedNavPolys: new THREE.BufferGeometry(),
-    staticColliders: [],
     physicsLines: new THREE.BufferGeometry(),
+    selectedNavPolys: null,
+    staticColliders: [],
 
     ensureNavPoly(gmKey) {
       if (!w.gmsData[gmKey].navPoly) {
@@ -67,6 +69,10 @@ export default function Debug(props) {
       group.visible = true;
     },
     selectNavPolys(...polyRefs) {
+      if (polyRefs.length === 0) {
+        state.selectedNavPolys = null;
+        return update();
+      }
       const { navMesh } = w.nav;
       const geom = new THREE.BufferGeometry();
       const positions = /** @type {number[]} */ ([]);
@@ -119,6 +125,7 @@ export default function Debug(props) {
       state.selectedNavPolys = geom;
       update();
     },
+    update,
   }));
 
   w.debug = state;
@@ -127,11 +134,6 @@ export default function Debug(props) {
     state.navMesh = new NavMeshHelper(w.nav.navMesh, {
       navMeshMaterial: navPolyMaterial,
     });
-    // 🤔 unclear how to get all off-mesh-connection from navMesh (could store elsewhere)
-    // state.offMeshConnections = new OffMeshConnectionsHelper({
-    //   offMeshConnections: w.nav.offMeshConnections,
-    //   lineMaterial: offMeshConnectionMaterial,
-    // })
   }, [w.nav.navMesh]);
 
   React.useEffect(() => {// debug colliders via physics.worker
@@ -146,36 +148,60 @@ export default function Debug(props) {
     }
   }, [props.showStaticColliders, w.physics.rebuilds]);
 
-  const update = useUpdate();
+  const lastDown = w.view.lastDown ?? { position: undefined, quaternion: undefined, normal: null };
 
   return <>
 
-    <primitive
-      name="NavMeshHelper"
-      position={[0, 0.01, 0]}
-      object={state.navMesh}
-      visible={!!props.showNavMesh}
-    />
+    <group
+      name="object-pick-indicator"
+      position={lastDown.position}
+      quaternion={lastDown.quaternion ?? undefined}
+      visible={lastDown.normal !== null}
+    >
+      <mesh
+        position={[0.01, 0, 0]}
+        rotation={[0, Math.PI/2, 0]}
+        renderOrder={1}
+      >
+        <circleGeometry args={[0.05, 24]} />
+        <meshBasicMaterial color="green" opacity={0.5} transparent wireframe={false} />
+      </mesh>
+    </group>
+    
+    <mesh
+      name="origin"
+      scale={[0.025, 1, 0.025]}
+      position={[0, 0.5 - 0.001, 0]}
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshBasicMaterial color="red" />
+    </mesh>
 
     <group
-      name="NavPathHelper"
-      ref={x => x && (state.navPath = x)}
+      name="nav-path-helper"
+      ref={state.ref('navPath')}
     />
 
-    <mesh
-      name="SelectedNavPolys"
+    {props.showNavMesh === true && <primitive
+      name="nav-mesh-helper"
+      position={[0, 0.01, 0]}
+      object={state.navMesh}
+    />}
+
+    {state.selectedNavPolys !== null && <mesh
+      name="selected-nav-polys"
       args={[state.selectedNavPolys, selectedNavPolysMaterial]}
       renderOrder={0}
-    />
+    />}
 
-    {props.showOrigNavPoly && w.gms.map((gm, gmId) => (
+    {props.showOrigNavPoly === true && w.gms.map((gm, gmId) => (
       <group
         key={`${gm.key} ${gmId} ${gm.transform}`}
         onUpdate={(group) => group.applyMatrix4(gm.mat4)}
         ref={(group) => group && state.ensureNavPoly(gm.key)}
       >
         <mesh
-          name="origNavPoly"
+          name="orig-nav-poly"
           args={[w.gmsData[gm.key].navPoly, origNavPolyMaterial]}
           position={[0, 0.0001, 0]}
           visible={props.showOrigNavPoly}
@@ -183,8 +209,8 @@ export default function Debug(props) {
       </group>
     ))}
     
-    <group
-      name="StaticColliders"
+    {state.staticColliders.length > 0 && <group
+      name="static-colliders"
       visible={state.staticColliders.length > 0}
     >
       <lineSegments geometry={state.physicsLines}>
@@ -194,9 +220,9 @@ export default function Debug(props) {
         staticColliders={state.staticColliders}
         w={w}
       />
-    </group>
+    </group>}
 
-    {props.showTestNpcs && <TestNpcs />}
+    {props.showTestNpcs === true && <TestNpcs />}
   </>;
 }
 
@@ -214,7 +240,7 @@ export default function Debug(props) {
  * @property {NavMeshHelper} navMesh
  * @property {THREE.Group} navPath
  * @property {import('./TestNpcs').State} npc
- * @property {THREE.BufferGeometry} selectedNavPolys
+ * @property {null | THREE.BufferGeometry} selectedNavPolys
  * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
  * @property {THREE.BufferGeometry} physicsLines
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
@@ -222,6 +248,7 @@ export default function Debug(props) {
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
  * @property {(...polyIds: number[]) => void} selectNavPolys
  * https://github.com/isaac-mason/recast-navigation-js/blob/bb3e49af3f4ff274afe84341d4c51a9f5fac609c/apps/navmesh-website/src/features/recast/export/nav-mesh-to-gltf.ts#L31
+ * @property {() => void} update
  */
 
 const origNavPolyMaterial = new THREE.MeshBasicMaterial({
@@ -248,6 +275,8 @@ const selectedNavPolysMaterial = new THREE.MeshBasicMaterial({
 });
 
 const showNavNodes = true;
+
+const MemoizedStaticColliders = React.memo(StaticColliders);
 
 /**
  * 🔔 debug only (inefficient)
@@ -294,8 +323,6 @@ function StaticColliders({ staticColliders, w }) {
     return null;
   });
 }
-
-const MemoizedStaticColliders = React.memo(StaticColliders);
 
 const toColliderMeta = /** @type {Record<string, { color: string; renderOrder: Number; }>} */ ({
   inside: { color: 'green', renderOrder: 1 },

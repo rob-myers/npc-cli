@@ -234,24 +234,6 @@ export default function ContextMenu() {
 
       </div>
     </Html3d>
-
-    {state.quaternion !== null && (
-      <group
-        name="object-pick-circle"
-        position={state.position}
-        quaternion={state.quaternion}
-        visible={state.open}
-      >
-        <mesh
-          position={[0.01, 0, 0]}
-          rotation={[0, Math.PI/2, 0]}
-          renderOrder={1}
-        >
-          <circleGeometry args={[0.05, 24]} />
-          <meshBasicMaterial color="green" opacity={0.5} transparent wireframe={false} />
-        </mesh>
-      </group>
-    )}
   </>;
 
 }

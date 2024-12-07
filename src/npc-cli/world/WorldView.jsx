@@ -9,10 +9,11 @@ import { testNever, debug } from "../service/generic.js";
 import { Rect, Vect } from "../geom/index.js";
 import { dataUrlToBlobUrl, getModifierKeys, getRelativePointer, isRMB, isSmallViewport, isTouchDevice } from "../service/dom.js";
 import { longPressMs, pickedTypesInSomeRoom } from "../service/const.js";
-import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, v3Precision } from "../service/three.js";
+import { emptySceneForPicking, getTempInstanceMesh, hasObjectPickShaderMaterial, pickingRenderTarget, toXZ, unitXVector3, v3Precision } from "../service/three.js";
 import { popUpRootDataAttribute } from "../components/PopUp.jsx";
 import { WorldContext } from "./world-context.js";
-import ContextMenu from "./ContextMenu.jsx";
+import ContextMenu from "./ContextMenu.jsx"; // 🚧 remove
+import ContextMenus from "./ContextMenus.jsx";
 import useStateRef from "../hooks/use-state-ref.js";
 
 /**
@@ -59,15 +60,15 @@ export default function WorldView(props) {
       }
     },
     computeNormal(mesh, intersection) {// 🚧
-      const n = state.normal;
+      const { indices, mat3, tri } = state.normal;
       const output = new THREE.Vector3();
-      n.indices.fromArray(
+      indices.fromArray(
         /** @type {THREE.BufferAttribute} */ (mesh.geometry.index).array,
         /** @type {number} */ (intersection.faceIndex) * 3,
       );
-      n.tri.setFromAttributeAndIndices(mesh.geometry.attributes.position, n.indices.x, n.indices.y, n.indices.z);
-      n.tri.getNormal(output);
-      const normalMatrix = n.mat3.getNormalMatrix(mesh.matrixWorld);
+      tri.setFromAttributeAndIndices(mesh.geometry.attributes.position, indices.x, indices.y, indices.z);
+      tri.getNormal(output);
+      const normalMatrix = mat3.getNormalMatrix(mesh.matrixWorld);
       output.applyNormalMatrix(normalMatrix);
       return output;
     },
@@ -187,7 +188,10 @@ export default function WorldView(props) {
         longDown: false,
         screenPoint: Vect.from(getRelativePointer(e)),
         position: position.clone(),
-        normal,
+        ...normal === null ? { normal: null, quaternion: null } : {
+          normal,
+          quaternion: new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal),
+        },
         meta,
       };
 
@@ -419,9 +423,7 @@ export default function WorldView(props) {
       />
 
       <ContextMenu/>
-
-      <Origin />
-
+      <ContextMenus/>
     </Canvas>
   );
 }
@@ -518,12 +520,3 @@ const statsCss = css`
 
 const pixelBuffer = new Uint8Array(4);
 const tmpVectThree = new THREE.Vector3();
-
-function Origin() {
-  return (
-    <mesh scale={[0.025, 1, 0.025]} position={[0, 0.5 - 0.001, 0]}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color="red" />
-    </mesh>
-  );
-}

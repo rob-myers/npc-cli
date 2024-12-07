@@ -246,6 +246,8 @@ declare namespace NPC {
     position: import('three').Vector3;
     normal: null | import('three').Vector3;
     meta: Geom.Meta;
+    /** Derived from `normal` */
+    quaternion: null | import('three').Quaternion;
   }
 
 }
