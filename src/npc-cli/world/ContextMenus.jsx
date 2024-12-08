@@ -29,7 +29,7 @@ export default function ContextMenus() {
 
   w.c = state;
 
-  React.useEffect(() => {// hmr
+  React.useMemo(() => {// hmr
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = Object.assign(new CMInstance(cm.key), {...cm});
       cm.dispose();
@@ -89,8 +89,6 @@ const contextMenuCss = css`
 
 class CMInstance {
 
-  /** @type {HTMLDivElement} */
-  el = /** @type {*} */ (null);
   /** @type {Html3dState} */
   html3d = /** @type {*} */ (null);
   /** @type {undefined | THREE.Vector3} */
