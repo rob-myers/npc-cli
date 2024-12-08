@@ -10,14 +10,15 @@
 
 - 🚧 ContextMenu rethink
   - ✅ move object-pick-circle into Debug
-  - ✅ w.debug.update -> ✅
+  - ✅ w.debug.update -> w.debug.setPickIndicator
   - 🚧 `ContextMenus`
-  - generalise: rmb/long-press ContextMenu, static panels, speech bubbles
-  - simplify and customise from CLI
-  - links not icons
-    - remove icon generation code from asset.js
-  - remove popup
-  - ContextMenu shows collapsible object-pick meta
+    - generalise: rmb/long-press ContextMenu, static panels, speech bubbles
+    - can customise from CLI
+      - links not icons
+      - links trigger world events
+    - no popup
+    - ContextMenu shows collapsible object-pick meta
+  - remove icon generation code from asset.js
 
 - 🚧 pre next.js migration
   - ✅ finish/close wip todos

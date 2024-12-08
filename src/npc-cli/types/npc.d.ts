@@ -250,4 +250,9 @@ declare namespace NPC {
     quaternion: null | import('three').Quaternion;
   }
 
+  interface ContextMenuData {
+    key: string;
+    // 🚧
+  }
+
 }
