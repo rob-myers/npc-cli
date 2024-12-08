@@ -16,12 +16,11 @@ import TestNpcs from "./TestNpcs";
 export default function Debug(props) {
   const w = React.useContext(WorldContext);
 
-  const update = useUpdate();
-
   const state = useStateRef(/** @returns {State} */ () => ({
     navMesh: /** @type {*} */ (null),
     navPath: /** @type {*} */ (null),
     npc: /** @type {*} */ (null),
+    pick: null,
     physicsLines: new THREE.BufferGeometry(),
     selectedNavPolys: null,
     staticColliders: [],
@@ -125,7 +124,10 @@ export default function Debug(props) {
       state.selectedNavPolys = geom;
       update();
     },
-    update,
+    setPickIndicator(downData) {
+      state.pick = downData || null;
+      update();
+    },
   }));
 
   w.debug = state;
@@ -148,25 +150,10 @@ export default function Debug(props) {
     }
   }, [props.showStaticColliders, w.physics.rebuilds]);
 
-  const lastDown = w.view.lastDown ?? { position: undefined, quaternion: undefined, normal: null };
 
-  return <>
+  const update = useUpdate();
 
-    <group
-      name="object-pick-indicator"
-      position={lastDown.position}
-      quaternion={lastDown.quaternion ?? undefined}
-      visible={lastDown.normal !== null}
-    >
-      <mesh
-        position={[0.01, 0, 0]}
-        rotation={[0, Math.PI/2, 0]}
-        renderOrder={1}
-      >
-        <circleGeometry args={[0.05, 24]} />
-        <meshBasicMaterial color="green" opacity={0.5} transparent wireframe={false} />
-      </mesh>
-    </group>
+  return <> 
     
     <mesh
       name="origin"
@@ -181,6 +168,22 @@ export default function Debug(props) {
       name="nav-path-helper"
       ref={state.ref('navPath')}
     />
+
+    {state.pick !== null && <group
+      name="object-pick-indicator"
+      position={state.pick.position}
+      quaternion={state.pick.quaternion ?? undefined}
+      visible={state.pick.normal !== null}
+    >
+      <mesh
+        position={[0.01, 0, 0]}
+        rotation={[0, Math.PI/2, 0]}
+        renderOrder={1}
+      >
+        <circleGeometry args={[0.05, 24]} />
+        <meshBasicMaterial color="green" opacity={0.5} transparent wireframe={false} />
+      </mesh>
+    </group>}
 
     {props.showNavMesh === true && <primitive
       name="nav-mesh-helper"
@@ -242,13 +245,14 @@ export default function Debug(props) {
  * @property {import('./TestNpcs').State} npc
  * @property {null | THREE.BufferGeometry} selectedNavPolys
  * @property {(WW.PhysicDebugItem & { parsedKey: WW.PhysicsParsedBodyKey })[]} staticColliders
+ * @property {null | NPC.DownData} pick
  * @property {THREE.BufferGeometry} physicsLines
  * @property {(gmKey: Geomorph.GeomorphKey) => void} ensureNavPoly
  * @property {(e: MessageEvent<WW.MsgFromPhysicsWorker>) => void} onPhysicsDebugData
  * @property {(path: THREE.Vector3Like[]) => void} setNavPath
  * @property {(...polyIds: number[]) => void} selectNavPolys
  * https://github.com/isaac-mason/recast-navigation-js/blob/bb3e49af3f4ff274afe84341d4c51a9f5fac609c/apps/navmesh-website/src/features/recast/export/nav-mesh-to-gltf.ts#L31
- * @property {() => void} update
+ * @property {(downData?: NPC.DownData) => void} setPickIndicator
  */
 
 const origNavPolyMaterial = new THREE.MeshBasicMaterial({

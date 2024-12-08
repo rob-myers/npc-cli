@@ -207,17 +207,17 @@ export default function useHandleEvents(w) {
           // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
           break;
         case "long-pointerdown": { // toggle ContextMenu
-          const lastDownMeta = w.view.lastDown?.meta;
-          if (lastDownMeta === undefined) {
+          const { lastDown } = w.view;
+          if (lastDown?.meta === undefined) {
             return; // should be unreachable
           }
-          if (state.pressMenuFilters.some(fltr => fltr(lastDownMeta))) {
+          if (state.pressMenuFilters.some(fltr => fltr(lastDown.meta))) {
             return; // prevent ContextMenu
           }
 
           if (e.distancePx <= (e.touch ? 20 : 5)) {
             w.cm.show(); // 🚧
-            w.debug.update(); // indicator
+            w.debug.setPickIndicator(lastDown);
           }
           break;
         }
@@ -547,7 +547,7 @@ export default function useHandleEvents(w) {
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
         w.cm.show(); // 🚧
-        w.debug.update(); // indicator
+        w.debug.setPickIndicator(w.view.lastDown); // indicator
       }
     },
     removeFromSensors(npcKey) {

@@ -10,6 +10,7 @@
 
 - 🚧 ContextMenu rethink
   - ✅ move object-pick-circle into Debug
+  - ✅ w.debug.update -> ✅
   - 🚧 `ContextMenus`
   - generalise: rmb/long-press ContextMenu, static panels, speech bubbles
   - simplify and customise from CLI
