@@ -66,17 +66,14 @@ function ContextMenu({ cm }) {
     <Html3d
       ref={cm.html3dRef}
       calculatePosition={cm.calculatePosition}
+      className={contextMenuCss}
       distanceFactor={cm.scaled ? cm.scale : undefined}
       position={cm.position}
       normal={cm.normal}
       open={cm.open}
     >
-      <div
-        className={contextMenuCss}
-      >
-        {/* 🚧 */}
-        FooBarBaz
-      </div>
+      {/* 🚧 */}
+      FooBarBaz
     </Html3d>
   );
 }
@@ -85,6 +82,10 @@ function ContextMenu({ cm }) {
  * @typedef ContextMenuProps
  * @property {CMInstance} cm
  */
+
+const contextMenuCss = css`
+  color: red;
+`;
 
 class CMInstance {
 
@@ -139,17 +140,5 @@ class CMInstance {
 /**
  * @typedef {import('../components/Html3d').State} Html3dState
  */
-
-const contextMenuCss = css`
-  --selected-act-color: white;
-  --icon-size: 24px;
-
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  color: red;
-
-`;
 
 const tmpVector1 = new THREE.Vector3();
