@@ -4,6 +4,7 @@ import * as THREE from "three";
 
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
+import useUpdate from "../hooks/use-update";
 import { Html3d } from "../components/Html3d";
 
 export default function ContextMenus() {
@@ -12,7 +13,17 @@ export default function ContextMenus() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {
-      default: new ContextMenuData('default'),
+      default: new CMInstance('default'),
+    },
+    hide(key) {
+      const cm = state.lookup[key];
+      cm.open = false;
+      cm.update();
+    },
+    show(key) {
+      const cm = state.lookup[key];
+      cm.open = true;
+      cm.update();
     },
   }));
 
@@ -20,15 +31,15 @@ export default function ContextMenus() {
 
   React.useEffect(() => {// hmr
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = Object.assign(new ContextMenuData(cm.key), {...cm});
+      state.lookup[cm.key] = Object.assign(new CMInstance(cm.key), {...cm});
       cm.dispose();
     });
   }, []);
 
-  return Object.values(state.lookup).map(cmData =>
+  return Object.values(state.lookup).map(cm =>
     <MemoizedContextMenu
-      key={cmData.key}
-      cmData={cmData}
+      key={cm.key}
+      cm={cm}
       epochMs={0} // never override memo?
     />
   );
@@ -36,7 +47,9 @@ export default function ContextMenus() {
 
 /**
  * @typedef State
- * @property {{ [cmKey: string]: ContextMenuData }} lookup
+ * @property {{ [cmKey: string]: CMInstance }} lookup
+ * @property {(cmKey: string) => void} hide
+ * @property {(cmKey: string) => void} show
  */
 
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
@@ -45,20 +58,21 @@ const MemoizedContextMenu = React.memo(ContextMenu);
 /**
  * @param {ContextMenuProps} props
  */
-function ContextMenu({ cmData }) {
+function ContextMenu({ cm }) {
+
+  cm.update = useUpdate();
+
   return (
     <Html3d
-      ref={cmData.html3dRef}
-      calculatePosition={cmData.calculatePosition}
-      distanceFactor={cmData.scaled ? cmData.scale : undefined}
-      position={cmData.position}
-      normal={cmData.normal} // for hiding
-      visible={cmData.open}
+      ref={cm.html3dRef}
+      calculatePosition={cm.calculatePosition}
+      distanceFactor={cm.scaled ? cm.scale : undefined}
+      position={cm.position}
+      normal={cm.normal}
+      open={cm.open}
     >
       <div
-        ref={cmData.elRef}
         className={contextMenuCss}
-        style={{ visibility: cmData.open ? 'visible' : 'hidden' }}
       >
         {/* 🚧 */}
         FooBarBaz
@@ -69,19 +83,15 @@ function ContextMenu({ cmData }) {
 
 /**
  * @typedef ContextMenuProps
- * @property {ContextMenuData} cmData
+ * @property {CMInstance} cm
  */
 
-const tmpVector1 = new THREE.Vector3();
-
-
-class ContextMenuData {// 🚧
+class CMInstance {
 
   /** @type {HTMLDivElement} */
   el = /** @type {*} */ (null);
   /** @type {Html3dState} */
   html3d = /** @type {*} */ (null);
-
   /** @type {undefined | THREE.Vector3} */
   normal = undefined;
   open = false;
@@ -94,8 +104,7 @@ class ContextMenuData {// 🚧
 
   /** @param {string} key */
   constructor(key) {
-    /** @type {string} */
-    this.key = key;
+    /** @type {string} */ this.key = key;
   }
 
   /**
@@ -116,21 +125,15 @@ class ContextMenuData {// 🚧
 
   dispose() {
     this.tracked = null;
-    this.elRef(null);
     this.html3dRef(null);
   }
 
-  /** @param {null | HTMLDivElement} el */
-  elRef = (el) => el !== null
-    ? this.el = el // @ts-ignore
-    : delete this.el
-  
   /** @param {null | Html3dState} html3d */
   html3dRef = (html3d) => html3d !== null
     ? this.html3d = html3d // @ts-ignore
     : delete this.html3d
-  
 
+  update() {};
 }
 
 /**
@@ -148,3 +151,5 @@ const contextMenuCss = css`
   color: red;
 
 `;
+
+const tmpVector1 = new THREE.Vector3();

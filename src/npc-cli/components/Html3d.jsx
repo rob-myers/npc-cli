@@ -17,6 +17,7 @@ export const Html3d = React.forwardRef(({
   castShadow,
   receiveShadow,
   calculatePosition = defaultCalculatePosition,
+  open,
   ...props
 }, ref) => {
     const { gl, camera, scene, size, events, advance } = useThree();
@@ -59,7 +60,11 @@ export const Html3d = React.forwardRef(({
     }, [target])
 
     /** @type {React.CSSProperties} */
-    const styles = React.useMemo(() => ({ position: 'absolute', ...style, }), [style])
+    const styles = React.useMemo(() => ({
+      position: 'absolute',
+      visibility: open ? 'visible' : 'hidden',
+      ...style,
+    }), [style, open])
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
@@ -127,6 +132,7 @@ export const Html3d = React.forwardRef(({
 *   distanceFactor?: number;
 *   calculatePosition?: CalculatePosition;
 *   normal?: THREE.Vector3;
+*   open?: boolean;
 * }, 'ref'>} Props
 */
 

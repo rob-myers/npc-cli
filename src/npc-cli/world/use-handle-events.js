@@ -216,7 +216,8 @@ export default function useHandleEvents(w) {
           }
 
           if (e.distancePx <= (e.touch ? 20 : 5)) {
-            w.cm.show(); // 🚧
+            w.cm.show(); // 🚧 remove
+            w.c.show('default');
             w.debug.setPickIndicator(lastDown);
           }
           break;
@@ -546,8 +547,9 @@ export default function useHandleEvents(w) {
     },
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
-        w.cm.show(); // 🚧
-        w.debug.setPickIndicator(w.view.lastDown); // indicator
+        w.cm.show(); // 🚧 remove
+        w.c.show('default');
+        w.debug.setPickIndicator(w.view.lastDown);
       }
     },
     removeFromSensors(npcKey) {
