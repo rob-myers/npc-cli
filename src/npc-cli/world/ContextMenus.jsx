@@ -1,4 +1,5 @@
 import React from "react";
+import { css } from "@emotion/css";
 import * as THREE from "three";
 
 import { WorldContext } from "./world-context";
@@ -47,15 +48,21 @@ const MemoizedContextMenu = React.memo(ContextMenu);
 function ContextMenu({ cmData }) {
   return (
     <Html3d
-    // className="context-menu"
-      ref={cmData.ref}
+      ref={cmData.html3dRef}
       calculatePosition={cmData.calculatePosition}
-      
       distanceFactor={cmData.scaled ? cmData.scale : undefined}
       position={cmData.position}
-      // normal={cmData.normal ?? undefined} // for hiding
-      // visible={state.open}
+      normal={cmData.normal} // for hiding
+      visible={cmData.open}
     >
+      <div
+        ref={cmData.elRef}
+        className={contextMenuCss}
+        style={{ visibility: cmData.open ? 'visible' : 'hidden' }}
+      >
+        {/* 🚧 */}
+        FooBarBaz
+      </div>
     </Html3d>
   );
 }
@@ -70,8 +77,14 @@ const tmpVector1 = new THREE.Vector3();
 
 class ContextMenuData {// 🚧
 
+  /** @type {HTMLDivElement} */
+  el = /** @type {*} */ (null);
   /** @type {Html3dState} */
-  html = /** @type {*} */ (null);
+  html3d = /** @type {*} */ (null);
+
+  /** @type {undefined | THREE.Vector3} */
+  normal = undefined;
+  open = false;
   /** @type {[number, number, number]} */
   position = [0, 0, 0];
   scale = 1;
@@ -93,9 +106,8 @@ class ContextMenuData {// 🚧
    */
   calculatePosition = (el, camera, size) => {
     // 🤔 support tracked offset vector?
-    const objectPos = tmpVector1.setFromMatrixPosition(
-      this.tracked === null ? el.matrixWorld : this.tracked.matrixWorld
-    );
+    const matrix = this.tracked === null ? el.matrixWorld : this.tracked.matrixWorld;
+    const objectPos = tmpVector1.setFromMatrixPosition(matrix);
     objectPos.project(camera);
     const widthHalf = size.width / 2;
     const heightHalf = size.height / 2;
@@ -104,16 +116,35 @@ class ContextMenuData {// 🚧
 
   dispose() {
     this.tracked = null;
-    this.ref(null);
+    this.elRef(null);
+    this.html3dRef(null);
   }
 
-  /** @param {null | Html3dState} html */
-  ref = (html) => {
-    Object.assign(this, { html });
-  }
+  /** @param {null | HTMLDivElement} el */
+  elRef = (el) => el !== null
+    ? this.el = el // @ts-ignore
+    : delete this.el
+  
+  /** @param {null | Html3dState} html3d */
+  html3dRef = (html3d) => html3d !== null
+    ? this.html3d = html3d // @ts-ignore
+    : delete this.html3d
+  
 
 }
 
 /**
  * @typedef {import('../components/Html3d').State} Html3dState
  */
+
+const contextMenuCss = css`
+  --selected-act-color: white;
+  --icon-size: 24px;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  color: red;
+
+`;
