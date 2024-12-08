@@ -9,7 +9,7 @@ import { createLabelSpriteSheet, emptyTexture, textureLoader, toV3, toXZ } from 
 import { helper } from "../service/helper";
 import { cmUvService } from "../service/uv";
 import { CuboidManMaterial } from "../service/glsl";
-import { Npc, hotModuleReloadNpc } from "./npc";
+import { Npc } from "./npc";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -246,15 +246,13 @@ export default function Npcs(props) {
   state.gltf["cuboid-man"] = useGLTF(npcClassToMeta["cuboid-man"].url);
   state.gltf["cuboid-pet"] = useGLTF(npcClassToMeta["cuboid-pet"].url);
   
-  React.useEffect(() => {
+  React.useEffect(() => {// init + hmr
     cmUvService.initialize(state.gltf);
-
-    if (process.env.NODE_ENV === 'development') {
-      info('hot-reloading npcs');
-      Object.values(state.npc).forEach(npc =>
-        state.npc[npc.key] = hotModuleReloadNpc(npc)
-      );
-    }
+    process.env.NODE_ENV === 'development' && Object.values(state.npc).forEach(npc => {
+      // 🔔 we simply overwrite non-methods
+      state.npc[npc.key] = Object.assign(new Npc(npc.def, w), {...npc});
+      npc.dispose();
+    });
   }, []);
 
   React.useEffect(() => {// npc textures

@@ -172,8 +172,7 @@ export default function Debug(props) {
     {state.pick !== null && <group
       name="object-pick-indicator"
       position={state.pick.position}
-      quaternion={state.pick.quaternion ?? undefined}
-      visible={state.pick.normal !== null}
+      quaternion={state.pick.quaternion}
     >
       <mesh
         position={[0.01, 0, 0]}

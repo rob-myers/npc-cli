@@ -135,6 +135,10 @@ export class Npc {
     this.w.events.next({ key: 'npc-internal', npcKey: this.key, event: 'cancelled' });
   }
 
+  dispose() {// 🚧
+
+  }
+
   /**
    * Either:
    * - `p.meta.do` i.e. p is a "do point"
@@ -762,17 +766,6 @@ export class Npc {
       this.reject.move = reject; // see w.npc.remove
     });
   }
-}
-
-/**
- * Creates a new NPC loaded with previous one's data.
- * ℹ️ We simply overwrite non-methods
- * @param {NPC.NPC} npc 
- * @returns {NPC.NPC}
- */
-export function hotModuleReloadNpc(npc) {
-  const nextNpc = new Npc(npc.def, npc.w);
-  return Object.assign(nextNpc, {...npc});
 }
 
 const maxAcceleration = 10;

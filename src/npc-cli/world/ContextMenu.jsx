@@ -35,7 +35,7 @@ export default function ContextMenu() {
     kvs: [],
     meta: {},
     metaActs: [],
-    normal: null,
+    normal: new THREE.Vector3(0, 1, 0),
     npcKeys: [],
     position: [0, 0, 0],
     quaternion: null,

@@ -169,14 +169,20 @@ export default function WorldView(props) {
         return;
       }
 
-      const position = v3Precision(intersection.point.clone());
+      const position = v3Precision(decoded.picked === 'npc'
+        ? w.n[decoded.npcKey].position.clone()
+        : intersection.point.clone()
+      );
       
-      const normal = decoded.picked === 'npc' ? null : state.computeNormal(mesh, intersection);
+      const normal = decoded.picked === 'npc'
+        ? new THREE.Vector3(0, 1, 0)
+        : state.computeNormal(mesh, intersection)
+      ;
 
-      if (normal !== null) {
-        // 🔔 fix flipped normals e.g. double-sided decor quad
-        w.r3f.camera.getWorldDirection(tmpVectThree);
-        if (normal.dot(tmpVectThree) > 0) normal.multiplyScalar(-1);
+      // 🔔 fix flipped normals e.g. double-sided decor quad
+      w.r3f.camera.getWorldDirection(tmpVectThree);
+      if (normal.dot(tmpVectThree) > 0) {
+        normal.multiplyScalar(-1);
       }
 
       const meta = {
@@ -188,10 +194,8 @@ export default function WorldView(props) {
         longDown: false,
         screenPoint: Vect.from(getRelativePointer(e)),
         position: position.clone(),
-        ...normal === null ? { normal: null, quaternion: null } : {
-          normal,
-          quaternion: new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal),
-        },
+        normal,
+        quaternion: new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal),
         meta,
       };
 

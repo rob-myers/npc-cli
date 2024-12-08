@@ -10,7 +10,7 @@
 
 - 🚧 ContextMenu rethink
   - ✅ move object-pick-circle into Debug
-  - ✅ w.debug.update -> w.debug.setPickIndicator
+  - ✅ lastDown.{normal,quaternion} always defined
   - 🚧 `ContextMenus`
     - generalise: rmb/long-press ContextMenu, static panels, speech bubbles
     - can customise from CLI

@@ -244,15 +244,10 @@ declare namespace NPC {
     longDown: boolean;
     screenPoint: Geom.Vect;
     position: import('three').Vector3;
-    normal: null | import('three').Vector3;
+    normal: import('three').Vector3;
     meta: Geom.Meta;
     /** Derived from `normal` */
-    quaternion: null | import('three').Quaternion;
-  }
-
-  interface ContextMenuData {
-    key: string;
-    // 🚧
+    quaternion: import('three').Quaternion;
   }
 
 }
