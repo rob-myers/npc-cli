@@ -15,7 +15,7 @@
     - 🚧 default i.e. via rmb/long-press
       - ℹ️ no popup
       - ✅ shows object-pick meta
-      - 🚧 positioned at click
+      - ✅ positioned at click
       - 🚧 object-pick meta collapsible
     - static panels
     - speech bubbles

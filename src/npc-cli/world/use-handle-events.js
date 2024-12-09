@@ -639,10 +639,7 @@ export default function useHandleEvents(w) {
       w.cm.shownDown = lastDown;
       w.cm.meta = meta;
       w.cm.normal = normal;
-      w.cm.quaternion = normal === null
-        ? null
-        : new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal)
-      ;
+      w.cm.quaternion = new THREE.Quaternion().setFromUnitVectors(unitXVector3, normal);
 
       w.cm.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
         const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);

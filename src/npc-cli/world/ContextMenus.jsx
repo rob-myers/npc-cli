@@ -28,8 +28,10 @@ export default function ContextMenus() {
       cm.open = true;
 
       // 🚧 move elsewhere?
-      if (key === 'default' && cm.w.view.lastDown && cm.ui.showMeta === true) {
-        cm.computeKvsFromMeta(cm.w.view.lastDown.meta);
+      const { lastDown } = cm.w.view;
+      if (key === 'default' && lastDown) {
+        cm.computeKvsFromMeta(lastDown.meta);
+        cm.position = lastDown.position.toArray();
       }
 
       cm.update();
