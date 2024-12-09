@@ -230,6 +230,7 @@ export default function useHandleEvents(w) {
         }
         case "pointerdown":
           w.cm.hideUnlessPersisted();
+          w.c.hide('default');
           break;
         case "pointerup":
           !e.touch && state.onPointerUpMenuDesktop(e);

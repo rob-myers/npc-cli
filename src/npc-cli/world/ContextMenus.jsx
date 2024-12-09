@@ -13,16 +13,25 @@ export default function ContextMenus() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {
-      default: new CMInstance('default'),
+      default: new CMInstance('default', w, { showMeta: true }),
     },
-    hide(key) {
+    hide(key, force) {
       const cm = state.lookup[key];
+      if (cm.persist === true && force === false) {
+        return;
+      }
       cm.open = false;
       cm.update();
     },
     show(key) {
       const cm = state.lookup[key];
       cm.open = true;
+
+      // 🚧 move elsewhere?
+      if (key === 'default' && cm.w.view.lastDown && cm.ui.showMeta === true) {
+        cm.computeKvsFromMeta(cm.w.view.lastDown.meta);
+      }
+
       cm.update();
     },
   }));
@@ -31,7 +40,7 @@ export default function ContextMenus() {
 
   React.useMemo(() => {// hmr
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
-      state.lookup[cm.key] = Object.assign(new CMInstance(cm.key), {...cm});
+      state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
       cm.dispose();
     });
   }, []);
@@ -48,9 +57,58 @@ export default function ContextMenus() {
 /**
  * @typedef State
  * @property {{ [cmKey: string]: CMInstance }} lookup
- * @property {(cmKey: string) => void} hide
+ * @property {(cmKey: string, force?: boolean) => void} hide
  * @property {(cmKey: string) => void} show
  */
+
+/**
+ * @param {ContextMenuProps} props 
+ */
+function ContextMenuContent({ cm, cm: { ui } }) {
+  return <>
+  
+    {ui.showMeta && <div className="key-values">
+      {ui.kvs.map(({ k, v }) => (
+        <div key={k} className="key-value">
+          <span className="meta-key">{k}</span>
+          {v !== '' && <span className="meta-value">{v}</span>}
+        </div>
+      ))}
+    </div>}
+
+  </>;
+}
+
+const contextMenuCss = css`
+  
+  width: 200px;
+  background-color: #000;
+  color: #fff;
+
+  .key-values {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .key-value {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    flex: 1;
+    border: 1px solid #555;
+    /* font-family: 'Courier New', Courier, monospace; */
+
+    .meta-key {
+      padding: 2px;
+    }
+    .meta-value {
+      padding: 0 4px;
+      color: #cca;
+      max-width: 128px;
+    }
+  }
+`;
 
 /** @type {React.MemoExoticComponent<(props: ContextMenuProps & { epochMs: number }) => JSX.Element>} */
 const MemoizedContextMenu = React.memo(ContextMenu);
@@ -72,8 +130,7 @@ function ContextMenu({ cm }) {
       normal={cm.normal}
       open={cm.open}
     >
-      {/* 🚧 */}
-      FooBarBaz
+      <ContextMenuContent cm={cm} />
     </Html3d>
   );
 }
@@ -82,28 +139,44 @@ function ContextMenu({ cm }) {
  * @typedef ContextMenuProps
  * @property {CMInstance} cm
  */
-
-const contextMenuCss = css`
-  color: red;
-`;
+/**
+ * @typedef ContextMenuUi
+ * @property {{ k: string; v: string; length: number; }[]} kvs Key values
+ * @property {boolean} showMeta
+ */
 
 class CMInstance {
 
   /** @type {Html3dState} */
   html3d = /** @type {*} */ (null);
-  /** @type {undefined | THREE.Vector3} */
-  normal = undefined;
+  /** Used to hide context menu when camera direction has positive dot product */
+  normal = /** @type {undefined | THREE.Vector3} */ (undefined);
   open = false;
-  /** @type {[number, number, number]} */
-  position = [0, 0, 0];
+  persist = false;
+  position = /** @type {[number, number, number]} */ ([0, 0, 0]);
   scale = 1;
   scaled = false;
-  /** @type {null | THREE.Object3D} */
-  tracked = null;
+  tracked = /** @type {null | THREE.Object3D} */ (null);
 
-  /** @param {string} key */
-  constructor(key) {
+  /** @type {ContextMenuUi} */
+  ui = {
+    kvs: [],
+    showMeta: false,
+  }
+
+  /**
+   * @param {string} key
+   * @param {import('./World').State} w
+   * @param {Partial<ContextMenuUi>} ui
+   */
+  constructor(key, w, ui) {
     /** @type {string} */ this.key = key;
+    /** @type {import('./World').State} */ this.w = w;
+
+    /** @type {ContextMenuUi} */ this.ui = {
+      showMeta: ui.showMeta ?? false,
+      kvs: ui.kvs ?? [],
+    };
   }
 
   /**
@@ -122,8 +195,19 @@ class CMInstance {
     return [objectPos.x * widthHalf + widthHalf, -(objectPos.y * heightHalf) + heightHalf];
   }
 
+  /** @param {Geom.Meta} meta */
+  computeKvsFromMeta(meta) {
+    this.ui.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
+      const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
+      return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
+    }).sort((a, b) => a.length < b.length ? -1 : 1);
+  }
+
   dispose() {
     this.tracked = null;
+    this.update = noop;
+    // @ts-ignore
+    this.w = null;
     this.html3dRef(null);
   }
 
@@ -132,7 +216,7 @@ class CMInstance {
     ? this.html3d = html3d // @ts-ignore
     : delete this.html3d
 
-  update() {};
+  update = noop
 }
 
 /**
@@ -140,3 +224,4 @@ class CMInstance {
  */
 
 const tmpVector1 = new THREE.Vector3();
+function noop() {};

@@ -12,12 +12,17 @@
   - ✅ move object-pick-circle into Debug
   - ✅ lastDown.{normal,quaternion} always defined
   - 🚧 `ContextMenus`
-    - generalise: rmb/long-press ContextMenu, static panels, speech bubbles
+    - 🚧 default i.e. via rmb/long-press
+      - ℹ️ no popup
+      - ✅ shows object-pick meta
+      - 🚧 positioned at click
+      - 🚧 object-pick meta collapsible
+    - static panels
+    - speech bubbles
     - can customise from CLI
       - links not icons
       - links trigger world events
-    - no popup
-    - ContextMenu shows collapsible object-pick meta
+  - remove `ContextMenu`
   - remove icon generation code from asset.js
 
 - 🚧 pre next.js migration
