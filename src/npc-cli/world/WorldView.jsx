@@ -135,8 +135,6 @@ export default function WorldView(props) {
         return;
       }
 
-      /** @type {undefined | THREE.Intersection} */
-      let intersection = undefined;
       /** @type {THREE.Mesh} */
       let mesh;
 
@@ -163,7 +161,7 @@ export default function WorldView(props) {
         default: throw testNever(decoded.picked);
       }
 
-      [intersection] = state.raycaster.intersectObject(mesh);
+      const [intersection] = state.raycaster.intersectObject(mesh);
 
       if (intersection === undefined) {
         return;

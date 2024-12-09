@@ -308,6 +308,7 @@ export default function Doors(props) {
         atlas={w.texDecor.tex}
         diffuse={[.6, .6, .6]}
         objectPickRed={4}
+        // alphaTest={0} opacity={0.7} depthWrite={true}
       />}
     </instancedMesh>
 

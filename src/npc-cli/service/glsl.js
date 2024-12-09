@@ -495,7 +495,6 @@ export const instancedMultiTextureShader = {
   
     void main() {
       gl_FragColor = texture(atlas, vec3(vUv, vTextureId)) * vec4(vColor * diffuse, opacity);
-      // gl_FragColor = vec4(1.0, 0.0, 0.0, gl_FragColor.a);
 
       if (gl_FragColor.a < alphaTest) {
         discard; // stop transparent pixels taking precedence
@@ -506,7 +505,7 @@ export const instancedMultiTextureShader = {
           float(objectPickRed) / 255.0,
           float((int(vInstanceId) >> 8) & 255) / 255.0,
           float(int(vInstanceId) & 255) / 255.0,
-          gl_FragColor.a
+          1
         );
       }
       
