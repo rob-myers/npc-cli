@@ -18,7 +18,8 @@ export default function Floor(props) {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    grid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 110, 110, 0.25)'),
+    grid: getGridPattern(1/5 * geomorphGridMeters * worldToCanvas, 'rgba(100, 110, 110, 0.1)'),
+    largeGrid: getGridPattern(geomorphGridMeters * worldToCanvas, 'rgba(100, 100, 100, 0.2)'),
     inst: /** @type {*} */ (null),
     quad: getQuadGeometryXZ(`${w.key}-multi-tex-floor-xz`),
 
@@ -87,6 +88,8 @@ export default function Floor(props) {
       ct.setTransform(1, 0, 0, 1, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
       ct.fillStyle = state.grid;
       ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
+      ct.fillStyle = state.largeGrid;
+      ct.fillRect(0, 0, ct.canvas.width, ct.canvas.height);
       ct.setTransform(worldToCanvas, 0, 0, worldToCanvas, -pngRect.x * worldToCanvas, -pngRect.y * worldToCanvas);
 
       // cover hull doorway z-fighting (visible from certain angles)
@@ -139,7 +142,7 @@ export default function Floor(props) {
       state.inst.instanceMatrix.needsUpdate = true;
       state.inst.computeBoundingSphere();
     },
-  }), { reset: { grid: true } });
+  }), { reset: { grid: false, largeGrid: false } });
 
   w.floor = state;
   const { tex } = w.texFloor;
@@ -184,6 +187,7 @@ export default function Floor(props) {
  * @typedef State
  * @property {THREE.InstancedMesh} inst
  * @property {CanvasPattern} grid
+ * @property {CanvasPattern} largeGrid
  * @property {THREE.BufferGeometry} quad
  *
  * @property {() => void} addUvs
