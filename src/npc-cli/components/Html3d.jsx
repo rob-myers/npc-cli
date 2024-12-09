@@ -9,15 +9,16 @@ import useStateRef from '../hooks/use-state-ref';
  * @type {React.ForwardRefExoticComponent<Props & React.RefAttributes<State>>}
  */
 export const Html3d = React.forwardRef(({
+  calculatePosition = defaultCalculatePosition,
+  castShadow,
   children,
-  eps = 0.001,
-  style,
   className,
   distanceFactor,
-  castShadow,
-  receiveShadow,
-  calculatePosition = defaultCalculatePosition,
+  eps = 0.001,
   open,
+  receiveShadow,
+  style,
+  tracked,
   ...props
 }, ref) => {
     const { gl, camera, scene, size, events, advance } = useThree();
@@ -41,23 +42,25 @@ export const Html3d = React.forwardRef(({
     React.useImperativeHandle(ref, () => state, []);
 
     // Append to the connected element, which makes HTML work with views
-    const target = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
+    const domTarget = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
+
+    const objTarget = tracked ?? state.group ?? null;
 
     React.useLayoutEffect(() => {
-      if (state.group !== null) {
+      if (objTarget !== null) {
         const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv))
         scene.updateMatrixWorld()
-        const vec = calculatePosition(state.group, camera, size)
+        const vec = calculatePosition(objTarget, camera, size)
         state.rootDiv.style.cssText = `position:absolute;top:0;left:0;transform:translate3d(${vec[0]}px,${vec[1]}px,0);transform-origin:0 0;`
-        if (target) {
-          target.appendChild(state.rootDiv)
+        if (domTarget) {
+          domTarget.appendChild(state.rootDiv)
         }
         return () => {
-          if (target) target.removeChild(state.rootDiv)
+          if (domTarget) domTarget.removeChild(state.rootDiv)
           currentRoot.unmount() // 🔔 breaks HMR of children onchange this file
         }
       }
-    }, [target])
+    }, [domTarget, objTarget])
 
     /** @type {React.CSSProperties} */
     const styles = React.useMemo(() => ({
@@ -78,13 +81,13 @@ export const Html3d = React.forwardRef(({
     });
 
     useFrame((_gl) => {
-      if (state.group === null || state.innerDiv === null) {
+      if (objTarget === null || state.innerDiv === null) {
         return;
       }
 
       camera.updateMatrixWorld()
       state.group.updateWorldMatrix(true, false)
-      const vec = calculatePosition(state.group, camera, size)
+      const vec = calculatePosition(objTarget, camera, size)
 
       // use props.normal to hide when behind
       camera.getWorldDirection(cameraNormal);
@@ -133,6 +136,7 @@ export const Html3d = React.forwardRef(({
 *   calculatePosition?: CalculatePosition;
 *   normal?: THREE.Vector3;
 *   open?: boolean;
+*   tracked?: THREE.Object3D;
 * }, 'ref'>} Props
 */
 

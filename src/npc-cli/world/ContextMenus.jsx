@@ -13,7 +13,13 @@ export default function ContextMenus() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {
-      default: new CMInstance('default', w, { showMeta: true }),
+      default: new CMInstance('default', w, {
+        showKvs: true,
+        links: [
+          { key: 'toggle-kvs', label: 'meta' },
+          { key: 'toggle-persist', label: 'pin' },
+        ],
+      }),
     },
     hide(key, force) {
       const cm = state.lookup[key];
@@ -40,7 +46,7 @@ export default function ContextMenus() {
 
   w.c = state;
 
-  React.useMemo(() => {// hmr
+  React.useMemo(() => {// HMR
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
       cm.dispose();
@@ -69,11 +75,17 @@ export default function ContextMenus() {
 function ContextMenuContent({ cm, cm: { ui } }) {
   return <>
   
-    {ui.showMeta && <div className="key-values">
+    <div className="links" onClick={cm.onClickLink.bind(cm)}>
+      {ui.links.map(({ key, label }) =>
+        <button key={key} data-key={key}>{label}</button>
+      )}
+    </div>
+
+    {ui.showKvs && <div className="kvs">
       {ui.kvs.map(({ k, v }) => (
-        <div key={k} className="key-value">
-          <span className="meta-key">{k}</span>
-          {v !== '' && <span className="meta-value">{v}</span>}
+        <div key={k} className="kv">
+          <span className="key">{k}</span>
+          {v !== '' && <span className="value">{v}</span>}
         </div>
       ))}
     </div>}
@@ -86,13 +98,29 @@ const contextMenuCss = css`
   width: 200px;
   background-color: #000;
   color: #fff;
+  letter-spacing: 1px;
+  font-size: smaller;
+  border: 1px solid #dddddd77;
 
-  .key-values {
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    margin: 2px 0 0 2px;
+
+    button {
+      text-decoration: underline;
+      padding: 0 2px;
+      color: #aaf;
+    }
+  }
+
+  .kvs {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .key-value {
+  .kv {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -101,10 +129,10 @@ const contextMenuCss = css`
     border: 1px solid #555;
     /* font-family: 'Courier New', Courier, monospace; */
 
-    .meta-key {
+    .key {
       padding: 2px;
     }
-    .meta-value {
+    .value {
       padding: 0 4px;
       color: #cca;
       max-width: 128px;
@@ -124,13 +152,14 @@ function ContextMenu({ cm }) {
 
   return (
     <Html3d
-      ref={cm.html3dRef}
+      ref={cm.html3dRef.bind(cm)}
       calculatePosition={cm.calculatePosition}
       className={contextMenuCss}
       distanceFactor={cm.scaled ? cm.scale : undefined}
       position={cm.position}
       normal={cm.normal}
       open={cm.open}
+      tracked={cm.tracked}
     >
       <ContextMenuContent cm={cm} />
     </Html3d>
@@ -141,10 +170,14 @@ function ContextMenu({ cm }) {
  * @typedef ContextMenuProps
  * @property {CMInstance} cm
  */
+
 /**
+ * 🔔 HMR breaks for function-as-property (e.g. for lexical binding)
  * @typedef ContextMenuUi
- * @property {{ k: string; v: string; length: number; }[]} kvs Key values
- * @property {boolean} showMeta
+ * @property {{ k: string; v: string; length: number; }[]} kvs
+ * Key values e.g. of last clicked meta
+ * @property {NPC.ContextMenuLink[]} links
+ * @property {boolean} showKvs
  */
 
 class CMInstance {
@@ -158,12 +191,13 @@ class CMInstance {
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
   scale = 1;
   scaled = false;
-  tracked = /** @type {null | THREE.Object3D} */ (null);
+  tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
 
   /** @type {ContextMenuUi} */
   ui = {
     kvs: [],
-    showMeta: false,
+    links: [],
+    showKvs: false,
   }
 
   /**
@@ -176,8 +210,9 @@ class CMInstance {
     /** @type {import('./World').State} */ this.w = w;
 
     /** @type {ContextMenuUi} */ this.ui = {
-      showMeta: ui.showMeta ?? false,
+      showKvs: ui.showKvs ?? false,
       kvs: ui.kvs ?? [],
+      links: ui.links ?? [],
     };
   }
 
@@ -187,10 +222,9 @@ class CMInstance {
    * @param {{ width: number; height: number }} size 
    * @returns {[number, number]}
    */
-  calculatePosition = (el, camera, size) => {
+  calculatePosition(el, camera, size) {
     // 🤔 support tracked offset vector?
-    const matrix = this.tracked === null ? el.matrixWorld : this.tracked.matrixWorld;
-    const objectPos = tmpVector1.setFromMatrixPosition(matrix);
+    const objectPos = tmpVector1.setFromMatrixPosition(el.matrixWorld);
     objectPos.project(camera);
     const widthHalf = size.width / 2;
     const heightHalf = size.height / 2;
@@ -206,7 +240,7 @@ class CMInstance {
   }
 
   dispose() {
-    this.tracked = null;
+    this.tracked = undefined;
     this.update = noop;
     // @ts-ignore
     this.w = null;
@@ -214,9 +248,16 @@ class CMInstance {
   }
 
   /** @param {null | Html3dState} html3d */
-  html3dRef = (html3d) => html3d !== null
-    ? this.html3d = html3d // @ts-ignore
-    : delete this.html3d
+  html3dRef(html3d) {// @ts-ignore
+    return html3d !== null ? this.html3d = html3d : delete this.html3d;
+  }
+
+  /** @param {React.MouseEvent} e */
+  onClickLink(e) {
+    const button = /** @type {HTMLButtonElement} */ (e.target);
+    const linkKey = button.dataset.key ?? 'unknown';
+    this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey }); // 🚧
+  }
 
   update = noop
 }

@@ -12,11 +12,12 @@
   - ✅ move object-pick-circle into Debug
   - ✅ lastDown.{normal,quaternion} always defined
   - 🚧 `ContextMenus`
+    - ✅ fix HMR by avoiding function-as-property
     - 🚧 default i.e. via rmb/long-press
       - ℹ️ no popup
       - ✅ shows object-pick meta
       - ✅ positioned at click
-      - 🚧 object-pick meta collapsible
+      - 🚧 object-pick meta collapsible (remembered)
     - static panels
     - speech bubbles
     - can customise from CLI
