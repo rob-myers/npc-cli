@@ -498,13 +498,16 @@ export class Npc {
    * `this.onMount` changes on HMR so we rely on idempotence nonetheless.
    * @param {THREE.Group | null} group 
    */
-  onMount = (group) => {
+  onMount(group) {
     if (group !== null) {
       this.m.group = group;
       // Setup shortcut
       this.position = group.position;
       // Resume `w.npc.spawn`
       this.resolve.spawn?.();
+    } else {
+      this.m.group = emptyGroup;
+      this.position = tmpVectThree1;
     }
   }
 

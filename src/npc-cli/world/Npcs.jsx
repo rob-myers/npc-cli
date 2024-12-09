@@ -327,7 +327,7 @@ function NPC({ npc }) {
   return (
     <group
       key={npc.key}
-      ref={npc.onMount}
+      ref={npc.onMount.bind(npc)}
       scale={npc.m.scale}
       // dispose={null}
     >
