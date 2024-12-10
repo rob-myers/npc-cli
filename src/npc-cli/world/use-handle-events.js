@@ -418,6 +418,7 @@ export default function useHandleEvents(w) {
     onClickLink(e) {// 🚧
       const cm = w.c.lookup[e.cmKey];
       switch (e.linkKey) {
+        case 'close': w.c.hide(e.cmKey, true); break;
         case 'toggle-kvs': cm.toggleKvs(); break;
         case 'toggle-pinned': cm.togglePinned(); break;
         case 'toggle-scaled': cm.toggleScaled(); break;

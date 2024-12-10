@@ -14,15 +14,14 @@ export default function ContextMenus() {
 
   const state = useStateRef(/** @returns {State} */ () => ({
     lookup: {
-      default: new CMInstance('default', w, {
-        showKvs: true,
-        links: [
-          { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
-          { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
-          { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
-        ],
-      }),
+      default: new CMInstance('default', w, { showKvs: true }),
     },
+    topLinks: [
+      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+      { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
+      { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
+      { key: 'close', label: 'exit' },
+    ],
     hide(key, force) {
       const cm = state.lookup[key];
       if (cm.pinned === true && force !== true) {
@@ -67,6 +66,7 @@ export default function ContextMenus() {
 /**
  * @typedef State
  * @property {{ [cmKey: string]: CMInstance }} lookup
+ * @property {NPC.ContextMenuLink[]} topLinks
  * @property {(cmKey: string, force?: boolean) => void} hide
  * @property {(cmKey: string) => void} show
  */
@@ -74,9 +74,21 @@ export default function ContextMenus() {
 /**
  * @param {ContextMenuProps} props 
  */
-function ContextMenuContent({ cm, cm: { ui } }) {
+function ContextMenuContent({ cm, cm: { ui, w } }) {
   return <>
   
+    <div className="links top" onClick={cm.onClickLink.bind(cm)}>
+      {w.c.topLinks.map(({ key, label, test }) =>
+        <button
+          key={key}
+          data-key={key}
+          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+        >
+          {label}
+        </button>
+      )}
+    </div>
+
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
       {ui.links.map(({ key, label, test }) =>
         <button
@@ -123,6 +135,11 @@ const contextMenuCss = css`
     button.off {
       filter: brightness(0.7);
     }
+  }
+
+  .links.top {
+    justify-content: right;
+    padding-right: 4px;
   }
 
   .kvs {
