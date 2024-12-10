@@ -413,8 +413,7 @@ export default function WorldView(props) {
       />
 
       <MapControls
-        ref={x => void (state.controls = x ?? state.controls)}
-        key={`${smallViewport}`}
+        ref={state.ref('controls')}
         makeDefault
         zoomToCursor
         onChange={state.onChangeControls}

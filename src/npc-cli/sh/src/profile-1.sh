@@ -38,4 +38,4 @@ click | filter meta.floor | map --forever '(input, { w, home }) => {
 }' &
 
 w update 'w => w.decor.showLabels = true'
-w update 'w => w.view.targetFov = 20'
+w update 'w => w.view.targetFov = w.lib.isSmallViewport() ? 20 : 30'
