@@ -267,7 +267,14 @@ class CMInstance {
 
   /** @param {Geom.Meta} meta */
   computeKvsFromMeta(meta) {
-    this.ui.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
+    const skip = /** @type {Record<string, boolean>} */ ({
+      picked: true,
+      gmId: 'gdKey' in meta || 'grKey' in meta,
+      doorId: 'gdKey' in meta,
+      roomId: 'grKey' in meta,
+    });
+    this.ui.kvs = Object.entries(meta ?? {}).flatMap(([k, v]) => {
+      if (skip[k] === true) return [];
       const vStr = v === true ? '' : typeof v === 'string' ? v : javascriptStringify(v) ?? '';
       return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
     }).sort((a, b) => a.length < b.length ? -1 : 1);
