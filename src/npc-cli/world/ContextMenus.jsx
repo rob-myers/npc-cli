@@ -268,9 +268,10 @@ class CMInstance {
   /** @param {Geom.Meta} meta */
   computeKvsFromMeta(meta) {
     const skip = /** @type {Record<string, boolean>} */ ({
-      picked: true,
-      gmId: 'gdKey' in meta || 'grKey' in meta,
       doorId: 'gdKey' in meta,
+      gmId: 'gdKey' in meta || 'grKey' in meta,
+      obsId: true,
+      picked: true,
       roomId: 'grKey' in meta,
     });
     this.ui.kvs = Object.entries(meta ?? {}).flatMap(([k, v]) => {

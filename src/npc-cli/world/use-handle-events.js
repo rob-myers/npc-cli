@@ -103,7 +103,7 @@ export default function useHandleEvents(w) {
 
       if (r === 6) {// obstacle
         const instanceId = (g << 8) + b;
-        const decoded = w.obs.decodeObstacleId(instanceId);
+        const decoded = w.obs.decodeInstanceId(instanceId);
         return {
           picked: 'obstacle',
           obstacle: true,
@@ -139,6 +139,7 @@ export default function useHandleEvents(w) {
         const door = w.door.decodeInstance(instanceId);
         return {
           picked: 'lock-light',
+          'lock-light': true,
           ...door.meta,
           instanceId,
         };
