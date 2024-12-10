@@ -1,6 +1,7 @@
 import React from "react";
 import { css } from "@emotion/css";
 import * as THREE from "three";
+import { stringify as javascriptStringify } from 'javascript-stringify';
 
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
@@ -247,7 +248,7 @@ class CMInstance {
   /** @param {Geom.Meta} meta */
   computeKvsFromMeta(meta) {
     this.ui.kvs = Object.entries(meta ?? {}).map(([k, v]) => {
-      const vStr = v === true ? '' : typeof v === 'string' ? v : JSON.stringify(v);
+      const vStr = v === true ? '' : typeof v === 'string' ? v : javascriptStringify(v) ?? '';
       return { k, v: vStr, length: k.length + (vStr === '' ? 0 : 1) + vStr.length };
     }).sort((a, b) => a.length < b.length ? -1 : 1);
   }
