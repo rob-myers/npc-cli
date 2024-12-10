@@ -17,32 +17,32 @@ export default function ContextMenus() {
         showKvs: true,
         links: [
           { key: 'toggle-kvs', label: 'meta' },
-          { key: 'toggle-persist', label: 'pin' },
+          { key: 'toggle-pin', label: 'pin' },
         ],
       }),
     },
     hide(key, force) {
       const cm = state.lookup[key];
-      if (cm.persist === true && force === false) {
+      if (cm.persist === true && force !== true) {
         return;
       }
       cm.open = false;
       cm.update();
     },
-    show(key) {
-      const cm = state.lookup[key];
+    show(cmKey) {
+      const cm = state.lookup[cmKey];
       cm.open = true;
 
       // 🚧 move elsewhere?
       const { lastDown } = cm.w.view;
-      if (key === 'default' && lastDown) {
+      if (cmKey === 'default' && lastDown) {
         cm.computeKvsFromMeta(lastDown.meta);
         cm.position = lastDown.position.toArray();
       }
 
       cm.update();
     },
-  }));
+  }), { reset: { lookup: false } });
 
   w.c = state;
 
@@ -79,9 +79,10 @@ function ContextMenuContent({ cm, cm: { ui } }) {
       {ui.links.map(({ key, label }) =>
         <button key={key} data-key={key}>{label}</button>
       )}
+      {cm.persist && <span>📌</span>}
     </div>
 
-    {ui.showKvs && <div className="kvs">
+    {cm.showKvs && <div className="kvs">
       {ui.kvs.map(({ k, v }) => (
         <div key={k} className="kv">
           <span className="key">{k}</span>
@@ -177,7 +178,6 @@ function ContextMenu({ cm }) {
  * @property {{ k: string; v: string; length: number; }[]} kvs
  * Key values e.g. of last clicked meta
  * @property {NPC.ContextMenuLink[]} links
- * @property {boolean} showKvs
  */
 
 class CMInstance {
@@ -191,28 +191,28 @@ class CMInstance {
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
   scale = 1;
   scaled = false;
+  showKvs = false;
   tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
 
   /** @type {ContextMenuUi} */
   ui = {
     kvs: [],
     links: [],
-    showKvs: false,
   }
 
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<ContextMenuUi>} ui
+   * @param {Partial<ContextMenuUi> & { showKvs?: boolean }} opts
    */
-  constructor(key, w, ui) {
+  constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
     /** @type {import('./World').State} */ this.w = w;
 
+    this.showKvs = opts.showKvs ?? false,
     /** @type {ContextMenuUi} */ this.ui = {
-      showKvs: ui.showKvs ?? false,
-      kvs: ui.kvs ?? [],
-      links: ui.links ?? [],
+      kvs: opts.kvs ?? [],
+      links: opts.links ?? [],
     };
   }
 

@@ -17,12 +17,13 @@
       - ℹ️ no popup
       - ✅ shows object-pick meta
       - ✅ positioned at click
-      - 🚧 object-pick meta collapsible (remembered)
+      - ✅ object-pick meta collapsible (remembered)
+      - 🚧 scaled
     - static panels
     - speech bubbles
-    - can customise from CLI
-      - links not icons
-      - links trigger world events
+    - ✅ can customise from CLI
+      - ✅ links not icons
+      - ✅ links trigger world events
   - remove `ContextMenu`
   - remove icon generation code from asset.js
 

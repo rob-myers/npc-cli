@@ -203,6 +203,9 @@ export default function useHandleEvents(w) {
       switch (e.key) {
         case "changed-zoom": // 'near' or 'far'
           break;
+        case "click-link":
+          state.onClickLink(e);
+          break;
         case "updated-gm-decor":
           // NOOP e.g. physics.worker rebuilds entire world onchange geomorphs
           break;
@@ -411,6 +414,14 @@ export default function useHandleEvents(w) {
           });
         // 🚧
       }
+    },
+    onClickLink(e) {// 🚧
+      const cm = w.c.lookup[e.cmKey];
+      switch (e.linkKey) {
+        case 'toggle-kvs': cm.showKvs = !cm.showKvs; break;
+        case 'toggle-pin': cm.persist = !cm.persist; break;
+      }
+      cm.update();
     },
     navSegIntersectsDoorway(u, v, door) {
       // 🤔 more efficient approach?
@@ -626,7 +637,7 @@ export default function useHandleEvents(w) {
         warn(`${npc.key}: no longer inside any room`);
       }
     },
-    updateContextMenu() {
+    updateContextMenu() {// 🚧 remove
       const { lastDown } = w.view;
       if (lastDown === undefined) {
         return;
@@ -695,8 +706,8 @@ export default function useHandleEvents(w) {
  * `npcKey`s not inside any room
  *
  * @property {(door: Geomorph.DoorState) => boolean} canCloseDoor
- * @property {(e: Extract<NPC.Event, { key: 'click-act' }>) => boolean} onClickAct
- * Returns `true` iff successful.
+ * @property {(e: Extract<NPC.Event, { key: 'click-act' }>) => boolean} onClickAct Returns `true` iff successful.
+ * @property {(e: Extract<NPC.Event, { key: 'click-link' }>) => void} onClickLink
  * @property {(u: Geom.VectJson, v: Geom.VectJson, door: Geomorph.DoorState) => boolean} navSegIntersectsDoorway
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcCanAccess
  * @property {(npcKey: string, regexDef: string, act?: '+' | '-') => void} changeNpcAccess
