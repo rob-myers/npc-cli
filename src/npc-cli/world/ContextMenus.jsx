@@ -125,7 +125,10 @@ const contextMenuCss = css`
   .links {
     display: flex;
     flex-wrap: wrap;
+    
+    line-height: normal;
     gap: 4px;
+    padding: 1px 0;
     padding-left: 4px;
 
     button {
