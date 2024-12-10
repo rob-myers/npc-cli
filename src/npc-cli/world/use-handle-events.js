@@ -418,8 +418,9 @@ export default function useHandleEvents(w) {
     onClickLink(e) {// 🚧
       const cm = w.c.lookup[e.cmKey];
       switch (e.linkKey) {
-        case 'toggle-kvs': cm.showKvs = !cm.showKvs; break;
-        case 'toggle-pin': cm.persist = !cm.persist; break;
+        case 'toggle-kvs': cm.toggleKvs(); break;
+        case 'toggle-pinned': cm.togglePinned(); break;
+        case 'toggle-scaled': cm.toggleScaled(); break;
       }
       cm.update();
     },

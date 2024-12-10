@@ -13,17 +13,18 @@
   - ✅ lastDown.{normal,quaternion} always defined
   - 🚧 `ContextMenus`
     - ✅ fix HMR by avoiding function-as-property
-    - 🚧 default i.e. via rmb/long-press
+    - ✅ default i.e. via rmb/long-press
       - ℹ️ no popup
       - ✅ shows object-pick meta
       - ✅ positioned at click
       - ✅ object-pick meta collapsible (remembered)
-      - 🚧 scaled
-    - static panels
-    - speech bubbles
+      - ✅ scaled
     - ✅ can customise from CLI
       - ✅ links not icons
       - ✅ links trigger world events
+    - default: extra links on click switch
+    - speech bubbles
+    - example of static panel
   - remove `ContextMenu`
   - remove icon generation code from asset.js
 

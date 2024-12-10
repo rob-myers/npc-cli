@@ -134,9 +134,6 @@ export default function ContextMenu() {
 
   w.cm = state;
   
-  React.useEffect(() => {// on turn off scaled while paused update style.transform 
-    state.scaled === false && state.html.forceUpdate();
-  }, [state.scaled]);
 
   // 🔔 handle discontinuous window resize
   useOnResize(state.onWindowResize);
@@ -245,8 +242,6 @@ const contextMenuCss = css`
   --icon-size: 24px;
 
   position: absolute;
-  left: 0;
-  top: 0;
   
   pointer-events: none;
   button, select {

@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
-import { Html3d } from "../components/Html3d";
+import { Html3d, objectScale } from "../components/Html3d";
 
 export default function ContextMenus() {
 
@@ -16,14 +16,15 @@ export default function ContextMenus() {
       default: new CMInstance('default', w, {
         showKvs: true,
         links: [
-          { key: 'toggle-kvs', label: 'meta' },
-          { key: 'toggle-pin', label: 'pin' },
+          { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+          { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
+          { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
         ],
       }),
     },
     hide(key, force) {
       const cm = state.lookup[key];
-      if (cm.persist === true && force !== true) {
+      if (cm.pinned === true && force !== true) {
         return;
       }
       cm.open = false;
@@ -76,10 +77,15 @@ function ContextMenuContent({ cm, cm: { ui } }) {
   return <>
   
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
-      {ui.links.map(({ key, label }) =>
-        <button key={key} data-key={key}>{label}</button>
+      {ui.links.map(({ key, label, test }) =>
+        <button
+          key={key}
+          data-key={key}
+          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+        >
+          {label}
+        </button>
       )}
-      {cm.persist && <span>📌</span>}
     </div>
 
     {cm.showKvs && <div className="kvs">
@@ -95,8 +101,8 @@ function ContextMenuContent({ cm, cm: { ui } }) {
 }
 
 const contextMenuCss = css`
-  
   width: 200px;
+
   background-color: #000;
   color: #fff;
   letter-spacing: 1px;
@@ -106,13 +112,15 @@ const contextMenuCss = css`
   .links {
     display: flex;
     flex-wrap: wrap;
-    gap: 2px;
-    margin: 2px 0 0 2px;
+    gap: 4px;
+    padding-left: 4px;
 
     button {
       text-decoration: underline;
-      padding: 0 2px;
       color: #aaf;
+    }
+    button.off {
+      filter: brightness(0.7);
     }
   }
 
@@ -151,6 +159,10 @@ function ContextMenu({ cm }) {
 
   cm.update = useUpdate();
 
+  React.useEffect(() => {// on turn off scaled while paused update style.transform 
+    cm.scaled === false && cm.html3d.forceUpdate();
+  }, [cm.scaled]);
+
   return (
     <Html3d
       ref={cm.html3dRef.bind(cm)}
@@ -186,13 +198,14 @@ class CMInstance {
   html3d = /** @type {*} */ (null);
   /** Used to hide context menu when camera direction has positive dot product */
   normal = /** @type {undefined | THREE.Vector3} */ (undefined);
-  open = false;
-  persist = false;
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);
   scale = 1;
+  tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
+  
+  open = false;
+  pinned = false;
   scaled = false;
   showKvs = false;
-  tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
 
   /** @type {ContextMenuUi} */
   ui = {
@@ -259,11 +272,27 @@ class CMInstance {
     this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey }); // 🚧
   }
 
+  toggleKvs() {
+    this.showKvs = !this.showKvs;
+  }
+  togglePinned() {
+    this.pinned = !this.pinned;
+  }
+  /** Ensure smooth transition when start scaling */
+  toggleScaled() {
+    this.scaled = !this.scaled;
+    this.scale = this.scaled === true ? 1 / objectScale(this.html3d.group, this.w.r3f.camera) : 1;
+  }
+
   update = noop
 }
 
 /**
  * @typedef {import('../components/Html3d').State} Html3dState
+ */
+
+/**
+ * @typedef {typeof CMInstance} CMInstanceType
  */
 
 const tmpVector1 = new THREE.Vector3();
