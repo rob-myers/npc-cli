@@ -65,6 +65,7 @@ export const Html3d = React.forwardRef(({
     /** @type {React.CSSProperties} */
     const styles = React.useMemo(() => ({
       position: 'absolute',
+      transformOrigin: '0 0',
       visibility: open ? 'visible' : 'hidden',
       ...style,
     }), [style, open])
