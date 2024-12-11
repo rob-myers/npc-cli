@@ -23,7 +23,7 @@
       - ✅ links not icons
       - ✅ links trigger world events
     - ✅ can add static menu from default context menu
-    - 🚧 "save" creates static menu with meta.ctKey for api access
+    - ✅ "save" creates static menu with left label `cm.key`
       - "save" and "pin" disappear
       - "exit" deletes
     - no need to refresh all i.e. use cm.epochMs

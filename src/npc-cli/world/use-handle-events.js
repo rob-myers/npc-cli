@@ -395,7 +395,7 @@ export default function useHandleEvents(w) {
           break;
       }
     },
-    onClickAct({ act: { def, meta }, npcKey, point }) {
+    onClickAct({ act: { def, meta }, npcKey, point }) {// 🚧 remove
       if (meta.grKey !== undefined && state.npcToRoom.get(npcKey)?.grKey !== meta.grKey) {
         return false; // acted inside different room
       }
@@ -415,10 +415,11 @@ export default function useHandleEvents(w) {
         // 🚧
       }
     },
-    onClickLink(e) {// 🚧
+    onClickLink(e) {// 🚧 move back to ContextMenus?
       const cm = w.c.lookup[e.cmKey];
       switch (e.linkKey) {
         case 'close': w.c.hide(e.cmKey, true); break;
+        case 'delete': w.c.delete(e.cmKey); break;
         case 'toggle-kvs': cm.toggleKvs(); break;
         case 'toggle-pinned': cm.togglePinned(); break;
         case 'toggle-scaled': cm.toggleScaled(); break;

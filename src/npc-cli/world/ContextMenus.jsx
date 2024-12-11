@@ -17,12 +17,30 @@ export default function ContextMenus() {
     epochMs: 0, // 🚧 remove
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
+    savedTopLinks: [
+      { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
+      { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
+      { key: 'delete', label: 'exit' },
+    ],
     topLinks: [
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
       { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
       { key: 'toggle-scaled', label: 'scale', test: 'scaled' },
       { key: 'close', label: 'exit' },
     ],
+    delete(cmKey) {
+      if (cmKey === 'default') {
+        return false; // Cannot delete default
+      }
+      const success = delete state.lookup[cmKey];
+      update();
+      return success;
+    },
+    getNextKey() {
+      let n = 0;
+      while (n in state.lookup) n++;
+      return `${n}`;
+    },
     hide(key, force) {
       const cm = state.lookup[key];
       if (cm.pinned === true && force !== true) {
@@ -31,22 +49,20 @@ export default function ContextMenus() {
       cm.open = false;
       cm.update();
     },
-    onChange(cmKey, otherKey) {
-      const srcCm = state.lookup[cmKey];
-      if (otherKey === '+') {// create & swap
-        let n = 0; while (n in state.lookup) n++;
-        const dstCm = state.lookup[n] = new CMInstance(`${n}`, w, {});
-        dstCm.setContext({
-          meta: srcCm.meta,
-          position: new THREE.Vector3(...srcCm.position),
-        });
-        srcCm.open = false;
-        state.epochMs = Date.now();
-        dstCm.open = true;
-        update();
-      } else {// swap
-
-      }
+    saveDefault() {
+      const defCm = state.lookup.default;
+      const cmKey = state.getNextKey();
+      const dstCm = state.lookup[cmKey] = new CMInstance(cmKey, w, {
+        showKvs: defCm.showKvs,
+      });
+      dstCm.setContext({
+        meta: defCm.meta,
+        position: new THREE.Vector3(...defCm.position),
+      });
+      defCm.open = false;
+      dstCm.open = true;
+      state.epochMs = Date.now();
+      update();
     },
     saveOpts() {
       tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
@@ -90,9 +106,13 @@ export default function ContextMenus() {
  * @property {number} epochMs
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'pinned' | 'showKvs'> }} savedOpts
+ * @property {NPC.ContextMenuLink[]} savedTopLinks
  * @property {NPC.ContextMenuLink[]} topLinks
+ *
+ * @property {(cmKey: string) => boolean} delete
+ * @property {() => string} getNextKey
  * @property {(cmKey: string, force?: boolean) => void} hide
- * @property {(cmKey: string, otherKey: string) => void} onChange
+ * @property {() => void} saveDefault
  * @property {() => void} saveOpts
  * @property {(cmKey: string, ct?: NPC.ContextMenuContextDef) => void} show
  */
@@ -102,24 +122,17 @@ export default function ContextMenus() {
  */
 function ContextMenuContent({ cm, cm: { ui, w } }) {
 
-  const others = Object.values(w.c.lookup).filter(x => x.key !== 'default' && x.tracked === undefined);
-
   return <>
   
     <div className="top-bar">
 
-      <select
-        className="cm-key"
-        value={cm.key}
-        onChange={e => w.c.onChange(cm.key, e.currentTarget.value)}
-      >
-        <option value="default"></option>
-        {others.map(x => <option key={x.key} value={x.key}>{x.key}</option>)}
-        <option value="+">+</option>
-      </select>
+     {cm.key === 'default'
+        ? <button onClick={w.c.saveDefault}>save</button>
+        : <span className="saved-cm-key">{cm.key}</span>
+     }
 
       <div className="links" onClick={cm.onClickLink.bind(cm)}>
-        {w.c.topLinks.map(({ key, label, test }) =>
+        {(cm.key === 'default' ? w.c.topLinks : w.c.savedTopLinks).map(({ key, label, test }) =>
           <button
             key={key}
             data-key={key}
@@ -143,7 +156,7 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
       )}
     </div>
 
-    {cm.showKvs && <div className="kvs">
+    {cm.showKvs === true && <div className="kvs">
       {ui.kvs.map(({ k, v }) => (
         <div key={k} className="kv">
           <span className="key">{k}</span>
@@ -167,13 +180,11 @@ const contextMenuCss = css`
   .top-bar {
     display: flex;
     justify-content: space-between;
-    padding-right: 4px;
+    padding: 0 4px;
   }
 
-  .top-bar select.cm-key {
-    color: white;
-    background-color: black;
-    direction: rtl;
+  .saved-cm-key {
+    color: #ff7;
   }
 
   .links {
@@ -185,13 +196,14 @@ const contextMenuCss = css`
     padding: 1px 0;
     padding-left: 4px;
 
-    button {
-      text-decoration: underline;
-      color: #aaf;
-    }
-    button.off {
-      filter: brightness(0.7);
-    }
+  }
+
+  button {
+    text-decoration: underline;
+    color: #aaf;
+  }
+  button.off {
+    filter: brightness(0.7);
   }
 
   .kvs {
