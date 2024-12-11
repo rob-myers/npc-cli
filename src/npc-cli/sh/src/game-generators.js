@@ -88,8 +88,8 @@ export async function* click({ api, args, w }) {
  * Examples:
  * ```ts
  * events | filter 'e => e.npcKey'
- * events | filter /show-context-menu/
- * events /show-context-menu/
+ * events | filter /way-point/
+ * events /way-point/
  * ```
  * @param {RunArg} ctxt
  */

@@ -221,8 +221,7 @@ export default function useHandleEvents(w) {
 
           if (e.distancePx <= (e.touch ? 20 : 5)) {
             w.cm.show(); // 🚧 remove
-            w.events.next({ key: 'show-context-menu', cmKey: 'default' });
-            w.debug.setPickIndicator(lastDown);
+            state.showDefaultContextMenu();
           }
           break;
         }
@@ -279,16 +278,6 @@ export default function useHandleEvents(w) {
           // ℹ️ dev should handle partial correctness e.g. by pausing
           state.doorToNpcs = {};
           state.npcToDoors = {};
-          break;
-        case "show-context-menu":
-          if (e.cmKey === 'default' && w.view.lastDown !== undefined) {
-            const { lastDown } = w.view;
-            const cm = w.c.lookup.default;
-            cm.computeKvsFromMeta(lastDown.meta);
-            cm.position = lastDown.position.toArray();
-            cm.open = true;
-            cm.update();
-          }
           break;
         case "update-context-menu":
           state.updateContextMenu();
@@ -574,8 +563,7 @@ export default function useHandleEvents(w) {
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
         w.cm.show(); // 🚧 remove
-        w.events.next({ key: 'show-context-menu', cmKey: 'default' });
-        w.debug.setPickIndicator(w.view.lastDown);
+        state.showDefaultContextMenu();
       }
     },
     removeFromSensors(npcKey) {
@@ -589,6 +577,18 @@ export default function useHandleEvents(w) {
       }
       state.npcToDoors[npcKey]?.nearby.clear();
       state.npcToDoors[npcKey]?.inside.clear();
+    },
+    showDefaultContextMenu() {
+      /**
+       * The default context menu is special, e.g. we
+       * don't set its "context" until we open it.
+       */
+      const { lastDown } = w.view;
+      if (lastDown === undefined) {
+        return;
+      }
+      w.c.show('default', lastDown);
+      w.debug.setPickIndicator(lastDown);  
     },
     someNpcInsideDoor(gdKey) {
       return state.doorToNpcs[gdKey]?.inside.size > 0;
@@ -737,6 +737,7 @@ export default function useHandleEvents(w) {
  * @property {(npcKey: string, gdKey: Geomorph.GmDoorKey) => boolean} npcNearDoor
  * @property {(e: NPC.PointerUpEvent) => void} onPointerUpMenuDesktop
  * @property {(npcKey: string) => void} removeFromSensors
+ * @property {() => void} showDefaultContextMenu
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcInsideDoor
  * @property {(gdKey: Geomorph.GmDoorKey) => boolean} someNpcNearDoor
  * @property {(gdKey: Geomorph.GmDoorKey, opts: { npcKey: string; point?: Geom.VectJson; } & Geomorph.ToggleDoorOpts) => boolean} toggleDoor

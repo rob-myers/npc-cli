@@ -131,7 +131,6 @@ declare namespace NPC {
     | { key: 'update-context-menu' } // 🚧 remove
     | { key: 'click-act', act: NPC.MetaAct; npcKey: string; point: Geom.VectJson } // 🚧 remove
     | { key: 'click-link'; cmKey: string; linkKey: string }
-    | { key: 'show-context-menu'; cmKey: string }
     // ...
   );
 
@@ -260,6 +259,11 @@ declare namespace NPC {
      * For hard-coded links, but could extend class CMInstance.
      */
     test?: string;
+  }
+
+  interface ContextMenuContextDef {
+    position: THREE.Vector3;
+    meta: Geom.Meta;
   }
 
 }

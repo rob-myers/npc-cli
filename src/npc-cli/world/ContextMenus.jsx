@@ -35,6 +35,14 @@ export default function ContextMenus() {
         mapValues(state.lookup, ({ pinned, showKvs }) => ({ pinned, showKvs }))
       ));
     },
+    show(key, ct) {
+      const cm = state.lookup[key];
+      if (ct !== undefined) {
+        cm.setContext(ct);
+      }
+      cm.open = true;
+      cm.update();
+    },
   }), { reset: { lookup: false } });
 
   w.c = state;
@@ -64,6 +72,7 @@ export default function ContextMenus() {
  * @property {NPC.ContextMenuLink[]} topLinks
  * @property {(cmKey: string, force?: boolean) => void} hide
  * @property {() => void} saveOpts
+ * @property {(cmKey: string, ct?: NPC.ContextMenuContextDef) => void} show
  */
 
 /**
@@ -300,12 +309,23 @@ class CMInstance {
     this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey }); // 🚧
   }
 
+  /**
+   * Context is world position and meta concerning said position
+   * @param {NPC.ContextMenuContextDef} ct 
+   */
+  setContext({ position, meta }) {
+    this.computeKvsFromMeta(meta);
+    this.position = position.toArray();
+  }
+
   toggleKvs() {
     this.showKvs = !this.showKvs;
   }
+
   togglePinned() {
     this.pinned = !this.pinned;
   }
+
   /** Ensure smooth transition when start scaling */
   toggleScaled() {
     this.scaled = !this.scaled;
