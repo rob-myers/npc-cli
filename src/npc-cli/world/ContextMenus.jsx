@@ -35,19 +35,6 @@ export default function ContextMenus() {
         mapValues(state.lookup, ({ pinned, showKvs }) => ({ pinned, showKvs }))
       ));
     },
-    show(cmKey) {
-      const cm = state.lookup[cmKey];
-      cm.open = true;
-
-      // 🚧 move elsewhere?
-      const { lastDown } = cm.w.view;
-      if (cmKey === 'default' && lastDown) {
-        cm.computeKvsFromMeta(lastDown.meta);
-        cm.position = lastDown.position.toArray();
-      }
-
-      cm.update();
-    },
   }), { reset: { lookup: false } });
 
   w.c = state;
@@ -77,7 +64,6 @@ export default function ContextMenus() {
  * @property {NPC.ContextMenuLink[]} topLinks
  * @property {(cmKey: string, force?: boolean) => void} hide
  * @property {() => void} saveOpts
- * @property {(cmKey: string) => void} show
  */
 
 /**
@@ -312,7 +298,6 @@ class CMInstance {
     const button = /** @type {HTMLButtonElement} */ (e.target);
     const linkKey = button.dataset.key ?? 'unknown';
     this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey }); // 🚧
-    setTimeout(() => this.w.c.saveOpts(), 30);
   }
 
   toggleKvs() {

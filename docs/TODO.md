@@ -22,8 +22,10 @@
     - ✅ can customise from CLI
       - ✅ links not icons
       - ✅ links trigger world events
-    - extend default via script
+    - 🚧 extend default via script
+      - ✅ show-context-menu event
       - extra links on click switch
+      - extra links on click door
     - speech bubbles
     - example of static panel
   - remove `ContextMenu`

@@ -131,6 +131,7 @@ declare namespace NPC {
     | { key: 'update-context-menu' } // 🚧 remove
     | { key: 'click-act', act: NPC.MetaAct; npcKey: string; point: Geom.VectJson } // 🚧 remove
     | { key: 'click-link'; cmKey: string; linkKey: string }
+    | { key: 'show-context-menu'; cmKey: string }
     // ...
   );
 

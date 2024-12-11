@@ -221,7 +221,7 @@ export default function useHandleEvents(w) {
 
           if (e.distancePx <= (e.touch ? 20 : 5)) {
             w.cm.show(); // 🚧 remove
-            w.c.show('default');
+            w.events.next({ key: 'show-context-menu', cmKey: 'default' });
             w.debug.setPickIndicator(lastDown);
           }
           break;
@@ -279,6 +279,16 @@ export default function useHandleEvents(w) {
           // ℹ️ dev should handle partial correctness e.g. by pausing
           state.doorToNpcs = {};
           state.npcToDoors = {};
+          break;
+        case "show-context-menu":
+          if (e.cmKey === 'default' && w.view.lastDown !== undefined) {
+            const { lastDown } = w.view;
+            const cm = w.c.lookup.default;
+            cm.computeKvsFromMeta(lastDown.meta);
+            cm.position = lastDown.position.toArray();
+            cm.open = true;
+            cm.update();
+          }
           break;
         case "update-context-menu":
           state.updateContextMenu();
@@ -424,6 +434,7 @@ export default function useHandleEvents(w) {
         case 'toggle-pinned': cm.togglePinned(); break;
         case 'toggle-scaled': cm.toggleScaled(); break;
       }
+      w.c.saveOpts();
       cm.update();
     },
     navSegIntersectsDoorway(u, v, door) {
@@ -563,7 +574,7 @@ export default function useHandleEvents(w) {
     onPointerUpMenuDesktop(e) {
       if (e.rmb && e.distancePx <= 5) {
         w.cm.show(); // 🚧 remove
-        w.c.show('default');
+        w.events.next({ key: 'show-context-menu', cmKey: 'default' });
         w.debug.setPickIndicator(w.view.lastDown);
       }
     },
