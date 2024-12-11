@@ -3,6 +3,7 @@ import { css } from "@emotion/css";
 import * as THREE from "three";
 import { stringify as javascriptStringify } from 'javascript-stringify';
 
+import { mapValues, tryLocalStorageGetParsed, tryLocalStorageSet } from "../service/generic";
 import { WorldContext } from "./world-context";
 import useStateRef from "../hooks/use-state-ref";
 import useUpdate from "../hooks/use-update";
@@ -13,9 +14,8 @@ export default function ContextMenus() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    lookup: {
-      default: new CMInstance('default', w, { showKvs: true }),
-    },
+    lookup: {},
+    savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
     topLinks: [
       { key: 'toggle-kvs', label: 'meta', test: 'showKvs' },
       { key: 'toggle-pinned', label: 'pin', test: 'pinned' },
@@ -29,6 +29,11 @@ export default function ContextMenus() {
       }
       cm.open = false;
       cm.update();
+    },
+    saveOpts() {
+      tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
+        mapValues(state.lookup, ({ pinned, showKvs }) => ({ pinned, showKvs }))
+      ));
     },
     show(cmKey) {
       const cm = state.lookup[cmKey];
@@ -48,6 +53,8 @@ export default function ContextMenus() {
   w.c = state;
 
   React.useMemo(() => {// HMR
+    state.lookup.default ??= new CMInstance('default', w, { showKvs: true });
+
     process.env.NODE_ENV === 'development' && Object.values(state.lookup).forEach(cm => {
       state.lookup[cm.key] = Object.assign(new CMInstance(cm.key, cm.w, cm.ui), {...cm});
       cm.dispose();
@@ -66,8 +73,10 @@ export default function ContextMenus() {
 /**
  * @typedef State
  * @property {{ [cmKey: string]: CMInstance }} lookup
+ * @property {{ [cmKey: string]: Pick<CMInstance, 'pinned' | 'showKvs'> }} savedOpts
  * @property {NPC.ContextMenuLink[]} topLinks
  * @property {(cmKey: string, force?: boolean) => void} hide
+ * @property {() => void} saveOpts
  * @property {(cmKey: string) => void} show
  */
 
@@ -237,19 +246,21 @@ class CMInstance {
   /**
    * @param {string} key
    * @param {import('./World').State} w
-   * @param {Partial<ContextMenuUi> & { showKvs?: boolean }} opts
+   * @param {Partial<ContextMenuUi> & { pinned?: boolean; showKvs?: boolean }} opts
    */
   constructor(key, w, opts) {
     /** @type {string} */ this.key = key;
     /** @type {import('./World').State} */ this.w = w;
 
-    this.showKvs = opts.showKvs ?? false,
+    const prevOpts = w.c.savedOpts[key] ?? {};
+    this.pinned = opts.pinned ?? prevOpts.pinned ?? w.smallViewport;
+    this.scaled = false,
+    this.showKvs = opts.showKvs ?? prevOpts.showKvs ?? false,
+
     /** @type {ContextMenuUi} */ this.ui = {
       kvs: opts.kvs ?? [],
       links: opts.links ?? [],
     };
-
-    this.pinned = w.smallViewport;
   }
 
   /**
@@ -301,6 +312,7 @@ class CMInstance {
     const button = /** @type {HTMLButtonElement} */ (e.target);
     const linkKey = button.dataset.key ?? 'unknown';
     this.w.events.next({ key: 'click-link', cmKey: this.key, linkKey }); // 🚧
+    setTimeout(() => this.w.c.saveOpts(), 30);
   }
 
   toggleKvs() {
