@@ -85,15 +85,28 @@ export async function* click({ api, args, w }) {
 }
 
 /**
+ * Examples:
+ * ```ts
+ * events | filter 'e => e.npcKey'
+ * events | filter /show-context-menu/
+ * events /show-context-menu/
+ * ```
  * @param {RunArg} ctxt
  */
-export async function* events({ api, w }) {
+export async function* events({ api, args, w }) {
+  const func = args[0] ? api.generateSelector(
+    api.parseFnOrStr(args[0]),
+    args.slice(1).map((x) => api.parseJsArg(x))
+  ) : undefined;
+  
   const asyncIterable = api.observableToAsyncIterable(w.events);
   // could not catch asyncIterable.throw?.(api.getKillError())
   api.addCleanup(() => asyncIterable.return?.());
+
   for await (const event of asyncIterable) {
-    // if (api.isRunning()) yield event;
-    yield event;
+    if (func === undefined || func?.(event)) {
+      yield event;
+    }
   }
   // get here via ctrl-c or `kill`
   throw api.getKillError();
