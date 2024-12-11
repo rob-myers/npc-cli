@@ -164,6 +164,8 @@ function ContextMenuContent({ cm, cm: { ui, w } }) {
 }
 
 const contextMenuCss = css`
+  left: 0;
+  top: 0;
   width: 200px;
 
   background-color: #000;
