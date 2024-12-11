@@ -116,7 +116,10 @@ export const Html3d = React.forwardRef(({
       );
 
       // Force update for (a) paused, (b) window resize
-      setTimeout(state.onFrame);
+      setTimeout(() => {
+        state.zoom = 0;
+        state.onFrame();
+      });
     });
 
     useFrame(state.onFrame);
