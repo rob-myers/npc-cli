@@ -26,41 +26,76 @@ export const Html3d = React.forwardRef(({
     const state = useStateRef(/** @returns {State} */ () => ({
       delta: [0, 0],
       distanceFactor: 0,
+      domTarget: null,
       group: /** @type {*} */ (null),
       innerDiv: /** @type {*} */ (null),
+      objTarget: null,
       rootDiv: document.createElement('div'),
       reactRoot: /** @type {*} */ (null),
       sign: 0,
       zoom: 0,
 
-      forceUpdate() {
-        state.zoom = 0; // 🔔 violate change detection
-        advance(Date.now());
-      },
-    }));
+      onFrame(_rootState) {
+        if (state.objTarget === null || state.innerDiv === null) {
+          return;
+        }
+  
+        camera.updateMatrixWorld()
+        state.group.updateWorldMatrix(true, false)
+        const vec = calculatePosition(state.objTarget, camera, size)
+  
+        // use props.normal to hide when behind
+        camera.getWorldDirection(cameraNormal);
+        const sign = props.normal !== undefined ? Math.sign(cameraNormal.dot(props.normal)) : -1;
+        if (sign !== state.sign) {
+          state.sign = sign;
+          state.rootDiv.style.display = sign === 1 ? 'none' : 'initial';
+        }
+  
+        if (
+          Math.abs(state.zoom - camera.zoom) > eps ||
+          Math.abs(state.delta[0] - vec[0]) > eps ||
+          Math.abs(state.delta[1] - vec[1]) > eps
+        ) {
+  
+          const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
+          
+          state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
+  
+          if (state.distanceFactor !== distanceFactor) {// 🔔 animate resize on unlock
+            state.innerDiv.style.transition = distanceFactor === undefined ? 'transform 300ms' : '';
+            state.distanceFactor = distanceFactor;
+          }
+  
+          state.innerDiv.style.transform = `scale(${scale})`;
+  
+          state.delta = vec;
+          state.zoom = camera.zoom;
+        }
+      }
+    }), { deps: [distanceFactor, camera, size] });
 
     React.useImperativeHandle(ref, () => state, []);
 
     // Append to the connected element, which makes HTML work with views
-    const domTarget = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
-
-    const objTarget = tracked ?? state.group ?? null;
+    state.domTarget = /** @type {HTMLElement} */ ((events.connected || gl.domElement.parentNode));
+    state.objTarget = tracked ?? state.group ?? null;
 
     React.useLayoutEffect(() => {
-      if (objTarget !== null) {
+      if (state.objTarget !== null) {
         const currentRoot = (state.reactRoot = ReactDOM.createRoot(state.rootDiv))
         scene.updateMatrixWorld()
-        const vec = calculatePosition(objTarget, camera, size)
+        const vec = calculatePosition(state.objTarget, camera, size)
         state.rootDiv.style.cssText = `position:absolute;top:0;left:0;transform:translate3d(${vec[0]}px,${vec[1]}px,0);transform-origin:0 0;`
-        if (domTarget) {
-          domTarget.appendChild(state.rootDiv)
+        if (state.domTarget) {
+          state.domTarget.appendChild(state.rootDiv)
         }
         return () => {
-          if (domTarget) domTarget.removeChild(state.rootDiv)
+          if (state.domTarget) state.domTarget.removeChild(state.rootDiv)
           currentRoot.unmount() // 🔔 breaks HMR of children onchange this file
         }
       }
-    }, [domTarget, objTarget])
+    }, [state.domTarget, state.objTarget])
 
     /** @type {React.CSSProperties} */
     const styles = React.useMemo(() => ({
@@ -78,47 +113,13 @@ export const Html3d = React.forwardRef(({
           className={className}
           children={children}
         />
-      )
+      );
+
+      // Force update for (a) paused, (b) window resize
+      setTimeout(state.onFrame);
     });
 
-    useFrame((_gl) => {
-      if (objTarget === null || state.innerDiv === null) {
-        return;
-      }
-
-      camera.updateMatrixWorld()
-      state.group.updateWorldMatrix(true, false)
-      const vec = calculatePosition(objTarget, camera, size)
-
-      // use props.normal to hide when behind
-      camera.getWorldDirection(cameraNormal);
-      const sign = props.normal !== undefined ? Math.sign(cameraNormal.dot(props.normal)) : -1;
-      if (sign !== state.sign) {
-        state.sign = sign;
-        state.rootDiv.style.display = sign === 1 ? 'none' : 'initial';
-      }
-
-      if (
-        Math.abs(state.zoom - camera.zoom) > eps ||
-        Math.abs(state.delta[0] - vec[0]) > eps ||
-        Math.abs(state.delta[1] - vec[1]) > eps
-      ) {
-
-        const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
-        
-        state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
-
-        if (state.distanceFactor !== distanceFactor) {// 🔔 animate resize on unlock
-          state.innerDiv.style.transition = distanceFactor === undefined ? 'transform 300ms' : '';
-          state.distanceFactor = distanceFactor;
-        }
-
-        state.innerDiv.style.transform = `scale(${scale})`;
-
-        state.delta = vec;
-        state.zoom = camera.zoom;
-      }
-    });
+    useFrame(state.onFrame);
 
     return (
       <group
@@ -144,14 +145,16 @@ export const Html3d = React.forwardRef(({
 /**
 * @typedef State
 * @property {[number, number]} delta 2D translation
+* @property {null | HTMLElement} domTarget
 * @property {number | undefined} distanceFactor
 * @property {THREE.Group} group
 * @property {HTMLDivElement} innerDiv
+* @property {null | THREE.Object3D} objTarget
 * @property {HTMLDivElement} rootDiv
 * @property {ReactDOM.Root} reactRoot
 * @property {number} sign
 * @property {number} zoom
-* @property {() => void} forceUpdate
+* @property {(rootState?: import('@react-three/fiber').RootState) => void} onFrame
 */
 
 const v1 = new THREE.Vector3()

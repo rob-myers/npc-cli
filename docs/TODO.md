@@ -22,10 +22,16 @@
     - ✅ can customise from CLI
       - ✅ links not icons
       - ✅ links trigger world events
+    - ✅ can add static menu from default context menu
+    - 🚧 "save" creates static menu with meta.ctKey for api access
+      - "save" and "pin" disappear
+      - "exit" deletes
+    - no need to refresh all i.e. use cm.epochMs
     - 🚧 extend default via script
       - ✅ show-context-menu event
-      - extra links on click switch
-      - extra links on click door
+      - ❌ show-context-menu event
+      - 🚧 extra links on click switch
+      - 🚧 extra links on click door
     - speech bubbles
     - example of static panel
   - remove `ContextMenu`

@@ -14,6 +14,7 @@ export default function ContextMenus() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
+    epochMs: 0, // 🚧 remove
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
     topLinks: [
@@ -29,6 +30,23 @@ export default function ContextMenus() {
       }
       cm.open = false;
       cm.update();
+    },
+    onChange(cmKey, otherKey) {
+      const srcCm = state.lookup[cmKey];
+      if (otherKey === '+') {// create & swap
+        let n = 0; while (n in state.lookup) n++;
+        const dstCm = state.lookup[n] = new CMInstance(`${n}`, w, {});
+        dstCm.setContext({
+          meta: srcCm.meta,
+          position: new THREE.Vector3(...srcCm.position),
+        });
+        srcCm.open = false;
+        state.epochMs = Date.now();
+        dstCm.open = true;
+        update();
+      } else {// swap
+
+      }
     },
     saveOpts() {
       tryLocalStorageSet(`context-menus@${w.key}`, JSON.stringify(
@@ -56,21 +74,25 @@ export default function ContextMenus() {
     });
   }, []);
 
+  const update = useUpdate();
+
   return Object.values(state.lookup).map(cm =>
     <MemoizedContextMenu
       key={cm.key}
       cm={cm}
-      epochMs={0} // never override memo?
+      epochMs={state.epochMs}
     />
   );
 }
 
 /**
  * @typedef State
+ * @property {number} epochMs
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'pinned' | 'showKvs'> }} savedOpts
  * @property {NPC.ContextMenuLink[]} topLinks
  * @property {(cmKey: string, force?: boolean) => void} hide
+ * @property {(cmKey: string, otherKey: string) => void} onChange
  * @property {() => void} saveOpts
  * @property {(cmKey: string, ct?: NPC.ContextMenuContextDef) => void} show
  */
@@ -79,18 +101,34 @@ export default function ContextMenus() {
  * @param {ContextMenuProps} props 
  */
 function ContextMenuContent({ cm, cm: { ui, w } }) {
+
+  const others = Object.values(w.c.lookup).filter(x => x.key !== 'default' && x.tracked === undefined);
+
   return <>
   
-    <div className="links top" onClick={cm.onClickLink.bind(cm)}>
-      {w.c.topLinks.map(({ key, label, test }) =>
-        <button
-          key={key}
-          data-key={key}
-          className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
-        >
-          {label}
-        </button>
-      )}
+    <div className="top-bar">
+
+      <select
+        className="cm-key"
+        value={cm.key}
+        onChange={e => w.c.onChange(cm.key, e.currentTarget.value)}
+      >
+        <option value="default"></option>
+        {others.map(x => <option key={x.key} value={x.key}>{x.key}</option>)}
+        <option value="+">+</option>
+      </select>
+
+      <div className="links" onClick={cm.onClickLink.bind(cm)}>
+        {w.c.topLinks.map(({ key, label, test }) =>
+          <button
+            key={key}
+            data-key={key}
+            className={test !== undefined && !(/** @type {*} */ (cm)[test]) ? 'off' : undefined}
+          >
+            {label}
+          </button>
+        )}
+      </div>
     </div>
 
     <div className="links" onClick={cm.onClickLink.bind(cm)}>
@@ -126,6 +164,18 @@ const contextMenuCss = css`
   font-size: smaller;
   border: 1px solid #dddddd77;
 
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 4px;
+  }
+
+  .top-bar select.cm-key {
+    color: white;
+    background-color: black;
+    direction: rtl;
+  }
+
   .links {
     display: flex;
     flex-wrap: wrap;
@@ -142,11 +192,6 @@ const contextMenuCss = css`
     button.off {
       filter: brightness(0.7);
     }
-  }
-
-  .links.top {
-    justify-content: right;
-    padding-right: 4px;
   }
 
   .kvs {
@@ -184,9 +229,9 @@ function ContextMenu({ cm }) {
 
   cm.update = useUpdate();
 
-  React.useEffect(() => {// on turn off scaled while paused update style.transform 
-    cm.scaled === false && cm.html3d.forceUpdate();
-  }, [cm.scaled]);
+  React.useEffect(() => {
+    cm.update(); // Need extra initial render e.g. when paused
+  }, []);
 
   return (
     <Html3d
@@ -223,10 +268,12 @@ class CMInstance {
   html3d = /** @type {*} */ (null);
   /** Used to hide context menu when camera direction has positive dot product */
   normal = /** @type {undefined | THREE.Vector3} */ (undefined);
-  position = /** @type {[number, number, number]} */ ([0, 0, 0]);
   scale = 1;
   tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
   
+  meta = /** @type {Geom.Meta} */ ({});
+  position = /** @type {[number, number, number]} */ ([0, 0, 0]);
+
   open = false;
   pinned = false;
   scaled = false;
@@ -314,8 +361,9 @@ class CMInstance {
    * @param {NPC.ContextMenuContextDef} ct 
    */
   setContext({ position, meta }) {
-    this.computeKvsFromMeta(meta);
+    this.meta = meta;
     this.position = position.toArray();
+    this.computeKvsFromMeta(meta);
   }
 
   toggleKvs() {

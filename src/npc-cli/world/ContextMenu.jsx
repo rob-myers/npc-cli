@@ -97,7 +97,7 @@ export default function ContextMenu() {
       update();
     },
     onWindowResize() {
-      setTimeout(state.html.forceUpdate, 30);
+      // setTimeout(state.html.forceUpdate, 30);
     },
     setSelectedActColor(color) {
       state.rootEl.style.setProperty('--selected-act-color', color);
