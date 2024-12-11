@@ -17,8 +17,8 @@ export const Html3d = React.forwardRef(({
   eps = 0.001,
   open,
   receiveShadow,
-  style,
   tracked,
+  zIndex,
   ...props
 }, ref) => {
     const { gl, camera, scene, size, events, advance } = useThree();
@@ -61,6 +61,7 @@ export const Html3d = React.forwardRef(({
           const scale = distanceFactor === undefined ? 1 : objectScale(state.group, camera) * distanceFactor
           
           state.rootDiv.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0)`;
+          state.rootDiv.style.zIndex = `${zIndex ?? ''}`;
   
           if (state.distanceFactor !== distanceFactor) {// 🔔 animate resize on unlock
             state.innerDiv.style.transition = distanceFactor === undefined ? 'transform 300ms' : '';
@@ -102,8 +103,7 @@ export const Html3d = React.forwardRef(({
       position: 'absolute',
       transformOrigin: '0 0',
       visibility: open ? 'visible' : 'hidden',
-      ...style,
-    }), [style, open])
+    }), [open])
 
     React.useLayoutEffect(() => {
       state.reactRoot?.render(
@@ -139,6 +139,7 @@ export const Html3d = React.forwardRef(({
 *   normal?: THREE.Vector3;
 *   open?: boolean;
 *   tracked?: THREE.Object3D;
+*   zIndex?: number;
 * }, 'ref'>} Props
 */
 

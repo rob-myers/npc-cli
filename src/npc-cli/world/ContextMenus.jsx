@@ -14,7 +14,6 @@ export default function ContextMenus() {
   const w = React.useContext(WorldContext);
 
   const state = useStateRef(/** @returns {State} */ () => ({
-    epochMs: 0, // 🚧 remove
     lookup: {},
     savedOpts: tryLocalStorageGetParsed(`context-menus@${w.key}`) ?? {},
     savedTopLinks: [
@@ -61,7 +60,8 @@ export default function ContextMenus() {
       });
       defCm.open = false;
       dstCm.open = true;
-      state.epochMs = Date.now();
+      // violate default memo
+      defCm.epochMs = Date.now();
       update();
     },
     saveOpts() {
@@ -93,17 +93,12 @@ export default function ContextMenus() {
   const update = useUpdate();
 
   return Object.values(state.lookup).map(cm =>
-    <MemoizedContextMenu
-      key={cm.key}
-      cm={cm}
-      epochMs={state.epochMs}
-    />
+    <MemoizedContextMenu key={cm.key} cm={cm} epochMs={cm.epochMs}/>
   );
 }
 
 /**
  * @typedef State
- * @property {number} epochMs
  * @property {{ [cmKey: string]: CMInstance }} lookup
  * @property {{ [cmKey: string]: Pick<CMInstance, 'pinned' | 'showKvs'> }} savedOpts
  * @property {NPC.ContextMenuLink[]} savedTopLinks
@@ -242,8 +237,10 @@ function ContextMenu({ cm }) {
   cm.update = useUpdate();
 
   React.useEffect(() => {
-    cm.update(); // Need extra initial render e.g. when paused
-  }, []);
+    // Need extra initial render e.g. when paused
+    // Also trigger CSS transition on scaled:=false
+    cm.update();
+  }, [cm.scaled]);
 
   return (
     <Html3d
@@ -255,6 +252,7 @@ function ContextMenu({ cm }) {
       normal={cm.normal}
       open={cm.open}
       tracked={cm.tracked}
+      zIndex={cm.key === 'default' ? 1 : undefined}
     >
       <ContextMenuContent cm={cm} />
     </Html3d>
@@ -282,6 +280,8 @@ class CMInstance {
   normal = /** @type {undefined | THREE.Vector3} */ (undefined);
   scale = 1;
   tracked = /** @type {undefined | THREE.Object3D} */ (undefined);
+  /** For violating React.memo */
+  epochMs = 0;
   
   meta = /** @type {Geom.Meta} */ ({});
   position = /** @type {[number, number, number]} */ ([0, 0, 0]);

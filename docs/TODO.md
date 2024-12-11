@@ -26,14 +26,15 @@
     - ✅ "save" creates static menu with left label `cm.key`
       - "save" and "pin" disappear
       - "exit" deletes
-    - no need to refresh all i.e. use cm.epochMs
+    - ✅ no need to refresh all i.e. use cm.epochMs
+    - ✅ show-context-menu event
+    - ❌ show-context-menu event
     - 🚧 extend default via script
-      - ✅ show-context-menu event
-      - ❌ show-context-menu event
+      - 🚧 can add/remove named "matchers"
       - 🚧 extra links on click switch
       - 🚧 extra links on click door
     - speech bubbles
-    - example of static panel
+    - ✅ example of static panel
   - remove `ContextMenu`
   - remove icon generation code from asset.js
 
